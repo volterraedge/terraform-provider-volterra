@@ -2586,6 +2586,15 @@ func (v *ValidateSuggestedValues) Validate(ctx context.Context, pm interface{}, 
 
 	}
 
+	if fv, exists := v.FldValidators["service_slug"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("service_slug"))
+		if err := fv(ctx, m.GetServiceSlug(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	return nil
 }
 

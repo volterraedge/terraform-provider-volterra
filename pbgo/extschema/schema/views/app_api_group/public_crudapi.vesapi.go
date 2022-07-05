@@ -1769,7 +1769,7 @@ var APISwaggerJSON string = `{
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.app_api_group.API.Create"
             },
-            "x-displayname": "API Group",
+            "x-displayname": "App API Group",
             "x-ves-proto-service": "ves.io.schema.views.app_api_group.API",
             "x-ves-proto-service-type": "AUTO_CRUD_PUBLIC"
         },
@@ -1869,7 +1869,7 @@ var APISwaggerJSON string = `{
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.app_api_group.API.Replace"
             },
-            "x-displayname": "API Group",
+            "x-displayname": "App API Group",
             "x-ves-proto-service": "ves.io.schema.views.app_api_group.API",
             "x-ves-proto-service-type": "AUTO_CRUD_PUBLIC"
         },
@@ -1985,7 +1985,7 @@ var APISwaggerJSON string = `{
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.app_api_group.API.List"
             },
-            "x-displayname": "API Group",
+            "x-displayname": "App API Group",
             "x-ves-proto-service": "ves.io.schema.views.app_api_group.API",
             "x-ves-proto-service-type": "AUTO_CRUD_PUBLIC"
         },
@@ -2187,7 +2187,7 @@ var APISwaggerJSON string = `{
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.app_api_group.API.Delete"
             },
-            "x-displayname": "API Group",
+            "x-displayname": "App API Group",
             "x-ves-proto-service": "ves.io.schema.views.app_api_group.API",
             "x-ves-proto-service-type": "AUTO_CRUD_PUBLIC"
         }
@@ -3581,6 +3581,6 @@ var APISwaggerJSON string = `{
             }
         }
     },
-    "x-displayname": "API Group",
+    "x-displayname": "App API Group",
     "x-ves-proto-file": "ves.io/schema/views/app_api_group/public_crudapi.proto"
 }`

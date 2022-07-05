@@ -78,6 +78,15 @@ func (v *ValidateDependencies) Validate(ctx context.Context, pm interface{}, opt
 		return nil
 	}
 
+	if fv, exists := v.FldValidators["for"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("for"))
+		if err := fv(ctx, m.GetFor(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["on"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("on"))
@@ -102,6 +111,87 @@ var DefaultDependenciesValidator = func() *ValidateDependencies {
 
 func DependenciesValidator() db.Validator {
 	return DefaultDependenciesValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *DependenciesSet) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *DependenciesSet) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *DependenciesSet) DeepCopy() *DependenciesSet {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &DependenciesSet{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *DependenciesSet) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *DependenciesSet) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return DependenciesSetValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateDependenciesSet struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateDependenciesSet) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*DependenciesSet)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *DependenciesSet got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["dependencies"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("dependencies"))
+		for idx, item := range m.GetDependencies() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultDependenciesSetValidator = func() *ValidateDependenciesSet {
+	v := &ValidateDependenciesSet{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func DependenciesSetValidator() db.Validator {
+	return DefaultDependenciesSetValidator
 }
 
 // augmented methods on protoc/std generated struct

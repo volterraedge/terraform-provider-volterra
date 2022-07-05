@@ -201,26 +201,6 @@ type ValidateFilterRequest struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
-func (v *ValidateFilterRequest) FilterValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	validatorFn, err := db.NewStringValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for filter")
-	}
-
-	return validatorFn, nil
-}
-
-func (v *ValidateFilterRequest) CountValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	validatorFn, err := db.NewUint64ValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for count")
-	}
-
-	return validatorFn, nil
-}
-
 func (v *ValidateFilterRequest) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*FilterRequest)
 	if !ok {
@@ -253,42 +233,21 @@ func (v *ValidateFilterRequest) Validate(ctx context.Context, pm interface{}, op
 
 	}
 
+	if fv, exists := v.FldValidators["page"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("page"))
+		if err := fv(ctx, m.GetPage(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultFilterRequestValidator = func() *ValidateFilterRequest {
 	v := &ValidateFilterRequest{FldValidators: map[string]db.ValidatorFunc{}}
-
-	var (
-		err error
-		vFn db.ValidatorFunc
-	)
-	_, _ = err, vFn
-	vFnMap := map[string]db.ValidatorFunc{}
-	_ = vFnMap
-
-	vrhFilter := v.FilterValidationRuleHandler
-	rulesFilter := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
-	}
-	vFn, err = vrhFilter(rulesFilter)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for FilterRequest.filter: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["filter"] = vFn
-
-	vrhCount := v.CountValidationRuleHandler
-	rulesCount := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
-	}
-	vFn, err = vrhCount(rulesCount)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for FilterRequest.count: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["count"] = vFn
 
 	return v
 }()
@@ -629,6 +588,102 @@ var DefaultMetaValidator = func() *ValidateMeta {
 
 func MetaValidator() db.Validator {
 	return DefaultMetaValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *PatchOperation) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *PatchOperation) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *PatchOperation) DeepCopy() *PatchOperation {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &PatchOperation{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *PatchOperation) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *PatchOperation) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return PatchOperationValidator().Validate(ctx, m, opts...)
+}
+
+type ValidatePatchOperation struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidatePatchOperation) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*PatchOperation)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *PatchOperation got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["op"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("op"))
+		if err := fv(ctx, m.GetOp(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["path"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("path"))
+		if err := fv(ctx, m.GetPath(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["value"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("value"))
+		if err := fv(ctx, m.GetValue(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultPatchOperationValidator = func() *ValidatePatchOperation {
+	v := &ValidatePatchOperation{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func PatchOperationValidator() db.Validator {
+	return DefaultPatchOperationValidator
 }
 
 // augmented methods on protoc/std generated struct

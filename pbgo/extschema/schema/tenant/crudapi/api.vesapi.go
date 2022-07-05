@@ -3570,6 +3570,16 @@ var APISwaggerJSON string = `{
                     "format": "boolean",
                     "x-displayname": "Deleted"
                 },
+                "direct_connect_asn_offset": {
+                    "type": "integer",
+                    "description": " Starting ASN for automatic allocation of ASNs for AWS Direct Connect GW.\n\nExample: - 4293918720-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.ranges: 0,64512-65471,4200000000-4294963198\n",
+                    "title": "Direct Connect GW ASN Offset",
+                    "format": "int64",
+                    "x-displayname": "Direct Connect GW ASN Offset",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.ranges": "0,64512-65471,4200000000-4294963198"
+                    }
+                },
                 "k8s_server_sub_ca_latest_version": {
                     "type": "integer",
                     "description": " SubCA version which is the latest and will be used for k8s server cert for tenant",

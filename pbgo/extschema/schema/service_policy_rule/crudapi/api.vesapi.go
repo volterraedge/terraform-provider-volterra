@@ -2905,7 +2905,7 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.policy.AppFirewallAttackTypeContext",
             "properties": {
                 "exclude_attack_type": {
-                    "description": " App Firewall Attack type\n\nExample: - \"ATTACK_TYPE_SQL_INJECTION\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "description": "\nExample: - \"ATTACK_TYPE_SQL_INJECTION\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "AttackType",
                     "$ref": "#/definitions/app_firewallAttackType",
                     "x-displayname": "Attack Type",
@@ -2919,7 +2919,7 @@ var APISwaggerJSON string = `{
         },
         "policyAppFirewallDetectionControl": {
             "type": "object",
-            "description": "App Firewall detection changes to be applied for this request",
+            "description": "Define the list of Signature IDs, Violations, Attack Types and Bot Names that should be excluded from triggering on the defined match criteria.",
             "title": "App Firewall Detection Control",
             "x-displayname": "App Firewall Detection Control",
             "x-ves-proto-message": "ves.io.schema.policy.AppFirewallDetectionControl",
@@ -2933,6 +2933,20 @@ var APISwaggerJSON string = `{
                         "$ref": "#/definitions/policyAppFirewallAttackTypeContext"
                     },
                     "x-displayname": "Exclude App Firewall Attack Types Contexts",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "64",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
+                },
+                "exclude_bot_name_contexts": {
+                    "type": "array",
+                    "description": " Bot names contexts to be excluded for this request\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 64\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "title": "Exclude Bot Names Contexts",
+                    "maxItems": 64,
+                    "items": {
+                        "$ref": "#/definitions/policyBotNameContext"
+                    },
+                    "x-displayname": "Exclude Bot Names Contexts",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.repeated.max_items": "64",
                         "ves.io.schema.rules.repeated.unique": "true"
@@ -2977,7 +2991,7 @@ var APISwaggerJSON string = `{
             "properties": {
                 "signature_id": {
                     "type": "integer",
-                    "description": " App Firewall signature ID\n\nExample: - \"10000001\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.uint32.gte: 10000000\n  ves.io.schema.rules.uint32.lte: 300000000\n",
+                    "description": "\nExample: - \"10000001\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.uint32.gte: 10000000\n  ves.io.schema.rules.uint32.lte: 300000000\n",
                     "title": "SignatureID",
                     "format": "int64",
                     "x-displayname": "SignatureID",
@@ -2999,7 +3013,7 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.policy.AppFirewallViolationContext",
             "properties": {
                 "exclude_violation": {
-                    "description": " App Firewall violation type\n\nExample: - \"VIOL_MANDATORY_HEADER\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "description": "\nExample: - \"VIOL_MANDATORY_HEADER\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "ViolationType",
                     "$ref": "#/definitions/app_firewallAppFirewallViolationType",
                     "x-displayname": "Violation Type",
@@ -3126,13 +3140,21 @@ var APISwaggerJSON string = `{
         },
         "policyBotNameContext": {
             "type": "object",
-            "description": "x-displayName: \"Bot Name\"\nSpecifies bot to be excluded by its name.",
+            "description": "Specifies bot to be excluded by its name.",
             "title": "Bot Name Context",
+            "x-displayname": "Bot Name",
+            "x-ves-proto-message": "ves.io.schema.policy.BotNameContext",
             "properties": {
                 "bot_name": {
                     "type": "string",
-                    "description": "x-displayName: \"Bot Name\"\nx-example: \"Hydra\"",
-                    "title": "BotName"
+                    "description": "\nExample: - \"Hydra\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "BotName",
+                    "x-displayname": "Bot Name",
+                    "x-ves-example": "Hydra",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 }
             }
         },
@@ -3434,6 +3456,28 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "policyModifyAction": {
+            "type": "object",
+            "description": "Modify behavior for a matching request. The modification could be to entirely skip processing.",
+            "title": "Select Modification Action",
+            "x-displayname": "Select Modification Action",
+            "x-ves-oneof-field-action_type": "[\"default\",\"skip_processing\"]",
+            "x-ves-proto-message": "ves.io.schema.policy.ModifyAction",
+            "properties": {
+                "default": {
+                    "description": "Exclusive with [skip_processing]\n Perform the default enforcement for this request",
+                    "title": "Do not modify",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Do not modify"
+                },
+                "skip_processing": {
+                    "description": "Exclusive with [default]\n Do not perform enforcement for this request",
+                    "title": "Skip Processing",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Skip Processing"
+                }
+            }
+        },
         "policyPortMatcherType": {
             "type": "object",
             "description": "A port matcher specifies a list of port ranges as match criteria. The match is considered successful if the input port falls within any of the port ranges.\nThe result of the match is inverted if invert_matcher is true.",
@@ -3622,7 +3666,7 @@ var APISwaggerJSON string = `{
             "properties": {
                 "uri": {
                     "type": "string",
-                    "description": "x-displayName: \"URI\"\nx-example: \"Enter URI\"\nURI location for redirect may be relative or absolute.",
+                    "description": "x-displayName: \"URI\"\nx-example: \"Enter URI\"\nx-required\nURI location for redirect may be relative or absolute.",
                     "title": "URI"
                 }
             }
@@ -3816,7 +3860,7 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.policy.WafAction",
             "properties": {
                 "app_firewall_detection_control": {
-                    "description": "Exclusive with [none waf_skip_processing]\n App Firewall detection changes to be applied for this request\n\nValidation Rules:\n  ves.io.schema.rules.message.required_one_nonzero_field: true\n",
+                    "description": "Exclusive with [none waf_skip_processing]\n Define the list of Signature IDs, Violations, Attack Types and Bot Names that should be excluded from triggering on the defined match criteria.\n\nValidation Rules:\n  ves.io.schema.rules.message.required_one_nonzero_field: true\n",
                     "title": "App Firewall Detection control",
                     "$ref": "#/definitions/policyAppFirewallDetectionControl",
                     "x-displayname": "App Firewall Detection Control",
@@ -4924,6 +4968,12 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/policyPrefixMatchList",
                     "x-displayname": "IPv4 Prefix List"
                 },
+                "ip_reputation_action": {
+                    "description": " Specifies how IP Reputation is handled",
+                    "title": "IP Reputation Action",
+                    "$ref": "#/definitions/policyModifyAction",
+                    "x-displayname": "IP Reputation Action"
+                },
                 "ip_threat_category_list": {
                     "description": "Exclusive with [any_client client_name client_name_matcher client_selector]\n IP threat categories to choose from",
                     "title": "IP Threat Category List",
@@ -4936,6 +4986,12 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/schemaLabelMatcherType",
                     "x-displayname": "Label Matcher",
                     "x-ves-example": "['environment', 'location', 'deployment']"
+                },
+                "mum_action": {
+                    "description": " Specifies how Malicious User Mitigation is handled",
+                    "title": "Malicious User Mitigation Action",
+                    "$ref": "#/definitions/policyModifyAction",
+                    "x-displayname": "Malicious User Mitigation Action"
                 },
                 "path": {
                     "description": " A list of exact values, prefixes and regular expressions for the expected value of the HTTP path. The actual value of the HTTP path is the unescaped path\n value extracted from the HTTP URL Resource, excluding any query and fragment information.\n The predicate evaluates to true if the actual path value matches any of the exact or prefix values or regular expressions in the path matcher.",

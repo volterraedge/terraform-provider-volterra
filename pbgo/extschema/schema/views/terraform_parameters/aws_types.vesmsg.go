@@ -652,6 +652,15 @@ func (v *ValidateAWSTGWType) Validate(ctx context.Context, pm interface{}, opts 
 
 	}
 
+	if fv, exists := v.FldValidators["dx_connect"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("dx_connect"))
+		if err := fv(ctx, m.GetDxConnect(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["fleet_label"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("fleet_label"))
@@ -669,6 +678,15 @@ func (v *ValidateAWSTGWType) Validate(ctx context.Context, pm interface{}, opts 
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["multi_node_non_std_az"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("multi_node_non_std_az"))
+		if err := fv(ctx, m.GetMultiNodeNonStdAz(), vOpts...); err != nil {
+			return err
 		}
 
 	}
@@ -820,6 +838,8 @@ var DefaultAWSTGWTypeValidator = func() *ValidateAWSTGWType {
 	v.FldValidators["tunnel_information"] = AWSTGWTunnelInfoTypeValidator().Validate
 
 	v.FldValidators["svcs_tunnel_information"] = AWSTGWTunnelInfoTypeValidator().Validate
+
+	v.FldValidators["dx_connect"] = DirectConnectTypeValidator().Validate
 
 	return v
 }()
@@ -999,6 +1019,15 @@ func (v *ValidateAWSVPCType) Validate(ctx context.Context, pm interface{}, opts 
 
 	}
 
+	if fv, exists := v.FldValidators["dx_connect"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("dx_connect"))
+		if err := fv(ctx, m.GetDxConnect(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["fleet_label"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("fleet_label"))
@@ -1037,6 +1066,15 @@ func (v *ValidateAWSVPCType) Validate(ctx context.Context, pm interface{}, opts 
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["multi_node_non_std_az"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("multi_node_non_std_az"))
+		if err := fv(ctx, m.GetMultiNodeNonStdAz(), vOpts...); err != nil {
+			return err
 		}
 
 	}
@@ -1139,6 +1177,8 @@ var DefaultAWSVPCTypeValidator = func() *ValidateAWSVPCType {
 
 	v.FldValidators["outside_vip_port_config"] = VIPPortConfigValidator().Validate
 
+	v.FldValidators["dx_connect"] = DirectConnectTypeValidator().Validate
+
 	return v
 }()
 
@@ -1233,6 +1273,171 @@ var DefaultCloudSubnetTypeValidator = func() *ValidateCloudSubnetType {
 
 func CloudSubnetTypeValidator() db.Validator {
 	return DefaultCloudSubnetTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *DirectConnectType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *DirectConnectType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *DirectConnectType) DeepCopy() *DirectConnectType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &DirectConnectType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *DirectConnectType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *DirectConnectType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return DirectConnectTypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateDirectConnectType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateDirectConnectType) VifIdsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepStringItemRules(rules)
+	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Item ValidationRuleHandler for vif_ids")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []string, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for vif_ids")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]string)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []string, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal := fmt.Sprintf("%v", elem)
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated vif_ids")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items vif_ids")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateDirectConnectType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*DirectConnectType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *DirectConnectType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["dx_gw_asn"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("dx_gw_asn"))
+		if err := fv(ctx, m.GetDxGwAsn(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["enable"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("enable"))
+		if err := fv(ctx, m.GetEnable(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["manage_dx_gw"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("manage_dx_gw"))
+		if err := fv(ctx, m.GetManageDxGw(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["vif_ids"]; exists {
+		vOpts := append(opts, db.WithValidateField("vif_ids"))
+		if err := fv(ctx, m.GetVifIds(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultDirectConnectTypeValidator = func() *ValidateDirectConnectType {
+	v := &ValidateDirectConnectType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhVifIds := v.VifIdsValidationRuleHandler
+	rulesVifIds := map[string]string{
+		"ves.io.schema.rules.repeated.items.string.max_len": "50",
+	}
+	vFn, err = vrhVifIds(rulesVifIds)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for DirectConnectType.vif_ids: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["vif_ids"] = vFn
+
+	return v
+}()
+
+func DirectConnectTypeValidator() db.Validator {
+	return DefaultDirectConnectTypeValidator
 }
 
 // augmented methods on protoc/std generated struct

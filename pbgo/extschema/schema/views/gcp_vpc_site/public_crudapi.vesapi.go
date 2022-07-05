@@ -5379,7 +5379,7 @@ var APISwaggerJSON string = `{
                 },
                 "gcp_labels": {
                     "type": "object",
-                    "description": " GCP Label is a label consisting of a user-defined key and value.\n It helps to manage, identify, organize, search for, and filter resources in Azure console.\n\nExample: - \"devstaging\"-\n\nValidation Rules:\n  ves.io.schema.rules.map.keys.string.max_len: 127\n  ves.io.schema.rules.map.max_pairs: 5\n  ves.io.schema.rules.map.values.string.max_len: 255\n",
+                    "description": " GCP Label is a label consisting of a user-defined key and value.\n It helps to manage, identify, organize, search for, and filter resources in GCP console.\n\nExample: - \"devstaging\"-\n\nValidation Rules:\n  ves.io.schema.rules.map.keys.string.max_len: 127\n  ves.io.schema.rules.map.max_pairs: 5\n  ves.io.schema.rules.map.values.string.max_len: 255\n",
                     "x-displayname": "GCP Labels",
                     "x-ves-example": "dev: staging",
                     "x-ves-validation-rules": {
@@ -5431,17 +5431,6 @@ var APISwaggerJSON string = `{
                     "description": "Exclusive with [log_receiver]\n Logs Streaming is disabled",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Disable Logs Streaming"
-                },
-                "nodes_per_az": {
-                    "type": "integer",
-                    "description": " Desired Worker Nodes Per AZ. Max limit is up to 21\n\nExample: - \"2\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 0\n  ves.io.schema.rules.uint32.lte: 21\n",
-                    "format": "int64",
-                    "x-displayname": "Desired Worker Nodes Per AZ",
-                    "x-ves-example": "2",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.uint32.gte": "0",
-                        "ves.io.schema.rules.uint32.lte": "21"
-                    }
                 },
                 "os": {
                     "description": " Operating System Details",
@@ -5525,7 +5514,7 @@ var APISwaggerJSON string = `{
                 },
                 "gcp_labels": {
                     "type": "object",
-                    "description": " GCP Label is a label consisting of a user-defined key and value.\n It helps to manage, identify, organize, search for, and filter resources in Azure console.\n\nExample: - \"devstaging\"-\n\nValidation Rules:\n  ves.io.schema.rules.map.keys.string.max_len: 127\n  ves.io.schema.rules.map.max_pairs: 5\n  ves.io.schema.rules.map.values.string.max_len: 255\n",
+                    "description": " GCP Label is a label consisting of a user-defined key and value.\n It helps to manage, identify, organize, search for, and filter resources in GCP console.\n\nExample: - \"devstaging\"-\n\nValidation Rules:\n  ves.io.schema.rules.map.keys.string.max_len: 127\n  ves.io.schema.rules.map.max_pairs: 5\n  ves.io.schema.rules.map.values.string.max_len: 255\n",
                     "x-displayname": "GCP Labels",
                     "x-ves-example": "dev: staging",
                     "x-ves-validation-rules": {
@@ -5577,17 +5566,6 @@ var APISwaggerJSON string = `{
                     "description": "Exclusive with [log_receiver]\n Logs Streaming is disabled",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Disable Logs Streaming"
-                },
-                "nodes_per_az": {
-                    "type": "integer",
-                    "description": " Desired Worker Nodes Per AZ. Max limit is up to 21\n\nExample: - \"2\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 0\n  ves.io.schema.rules.uint32.lte: 21\n",
-                    "format": "int64",
-                    "x-displayname": "Desired Worker Nodes Per AZ",
-                    "x-ves-example": "2",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.uint32.gte": "0",
-                        "ves.io.schema.rules.uint32.lte": "21"
-                    }
                 },
                 "site_state": {
                     "description": "The operational phase of the site state machine.",
@@ -5677,7 +5655,7 @@ var APISwaggerJSON string = `{
                 },
                 "gcp_labels": {
                     "type": "object",
-                    "description": " GCP Label is a label consisting of a user-defined key and value.\n It helps to manage, identify, organize, search for, and filter resources in Azure console.\n\nExample: - \"devstaging\"-\n\nValidation Rules:\n  ves.io.schema.rules.map.keys.string.max_len: 127\n  ves.io.schema.rules.map.max_pairs: 5\n  ves.io.schema.rules.map.values.string.max_len: 255\n",
+                    "description": " GCP Label is a label consisting of a user-defined key and value.\n It helps to manage, identify, organize, search for, and filter resources in GCP console.\n\nExample: - \"devstaging\"-\n\nValidation Rules:\n  ves.io.schema.rules.map.keys.string.max_len: 127\n  ves.io.schema.rules.map.max_pairs: 5\n  ves.io.schema.rules.map.values.string.max_len: 255\n",
                     "title": "GCP Labels",
                     "x-displayname": "GCP Labels",
                     "x-ves-example": "dev: staging",
@@ -5736,18 +5714,6 @@ var APISwaggerJSON string = `{
                     "title": "Disable Logs Receiver",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Disable Logs Streaming"
-                },
-                "nodes_per_az": {
-                    "type": "integer",
-                    "description": " Desired Worker Nodes Per AZ. Max limit is up to 21\n\nExample: - \"2\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 0\n  ves.io.schema.rules.uint32.lte: 21\n",
-                    "title": "Desired Worker Nodes Per AZ",
-                    "format": "int64",
-                    "x-displayname": "Desired Worker Nodes Per AZ",
-                    "x-ves-example": "2",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.uint32.gte": "0",
-                        "ves.io.schema.rules.uint32.lte": "21"
-                    }
                 },
                 "os": {
                     "description": " Operating System Details",

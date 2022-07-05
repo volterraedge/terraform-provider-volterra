@@ -1665,8 +1665,8 @@ func RegisterGwAPIHandler(ctx context.Context, mux *runtime.ServeMux, svc interf
 var APISwaggerJSON string = `{
     "swagger": "2.0",
     "info": {
-        "title": "TCP Proxy",
-        "description": "TCP loadbalancer view defines a required parameters that can be used in CRUD, to create and manage TCP loadbalancer.\nIt can be used to create TCP loadbalancer and TCP loadbalancer with SNI.\n\nView will create following child objects.\n\n* Virtual-host\n* default route\n* clusters\n* endpoints\n* advertise policy",
+        "title": "TCP Load Balancer",
+        "description": "TCP load balancer view defines a required parameters that can be used in CRUD, to create and manage TCP load balancer.\nIt can be used to create TCP load balancer and TCP load balancer with SNI.\n\nView will create following child objects.\n\n* Virtual-host\n* default route\n* clusters\n* endpoints\n* advertise policy",
         "version": "version not set"
     },
     "schemes": [
@@ -1684,7 +1684,7 @@ var APISwaggerJSON string = `{
         "/public/namespaces/{metadata.namespace}/tcp_loadbalancers": {
             "post": {
                 "summary": "CreateSpecType",
-                "description": "Shape of the TCP loadbalancer create specification",
+                "description": "Shape of the TCP load balancer create specification",
                 "operationId": "ves.io.schema.views.tcp_loadbalancer.API.Create",
                 "responses": {
                     "200": {
@@ -1769,14 +1769,14 @@ var APISwaggerJSON string = `{
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.tcp_loadbalancer.API.Create"
             },
-            "x-displayname": "Configure TCP Loadbalancer",
+            "x-displayname": "Configure TCP Load Balancer",
             "x-ves-proto-service": "ves.io.schema.views.tcp_loadbalancer.API",
             "x-ves-proto-service-type": "AUTO_CRUD_PUBLIC"
         },
         "/public/namespaces/{metadata.namespace}/tcp_loadbalancers/{metadata.name}": {
             "put": {
                 "summary": "ReplaceSpecType",
-                "description": "Shape of the TCP loadbalancer replace specification",
+                "description": "Shape of the TCP load balancer replace specification",
                 "operationId": "ves.io.schema.views.tcp_loadbalancer.API.Replace",
                 "responses": {
                     "200": {
@@ -1869,7 +1869,7 @@ var APISwaggerJSON string = `{
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.tcp_loadbalancer.API.Replace"
             },
-            "x-displayname": "Configure TCP Loadbalancer",
+            "x-displayname": "Configure TCP Load Balancer",
             "x-ves-proto-service": "ves.io.schema.views.tcp_loadbalancer.API",
             "x-ves-proto-service-type": "AUTO_CRUD_PUBLIC"
         },
@@ -1985,14 +1985,14 @@ var APISwaggerJSON string = `{
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.tcp_loadbalancer.API.List"
             },
-            "x-displayname": "Configure TCP Loadbalancer",
+            "x-displayname": "Configure TCP Load Balancer",
             "x-ves-proto-service": "ves.io.schema.views.tcp_loadbalancer.API",
             "x-ves-proto-service-type": "AUTO_CRUD_PUBLIC"
         },
         "/public/namespaces/{namespace}/tcp_loadbalancers/{name}": {
             "get": {
                 "summary": "GetSpecType",
-                "description": "Shape of the TCP loadbalancer get specification",
+                "description": "Shape of the TCP load balancer get specification",
                 "operationId": "ves.io.schema.views.tcp_loadbalancer.API.Get",
                 "responses": {
                     "200": {
@@ -2187,7 +2187,7 @@ var APISwaggerJSON string = `{
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.tcp_loadbalancer.API.Delete"
             },
-            "x-displayname": "Configure TCP Loadbalancer",
+            "x-displayname": "Configure TCP Load Balancer",
             "x-ves-proto-service": "ves.io.schema.views.tcp_loadbalancer.API",
             "x-ves-proto-service-type": "AUTO_CRUD_PUBLIC"
         }
@@ -3122,9 +3122,9 @@ var APISwaggerJSON string = `{
         },
         "tcp_loadbalancerCreateSpecType": {
             "type": "object",
-            "description": "Shape of the TCP loadbalancer create specification",
+            "description": "Shape of the TCP load balancer create specification",
             "title": "CreateSpecType",
-            "x-displayname": "Create TCP Loadbalancer",
+            "x-displayname": "Create TCP Load Balancer",
             "x-ves-oneof-field-advertise_choice": "[\"advertise_custom\",\"advertise_on_public\",\"advertise_on_public_default_vip\",\"do_not_advertise\"]",
             "x-ves-oneof-field-cluster_retract_choice": "[\"do_not_retract_cluster\",\"retract_cluster\"]",
             "x-ves-oneof-field-hash_policy_choice": "[\"hash_policy_choice_least_active\",\"hash_policy_choice_random\",\"hash_policy_choice_round_robin\",\"hash_policy_choice_source_ip_stickiness\"]",
@@ -3136,12 +3136,12 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Advertise Custom"
                 },
                 "advertise_on_public": {
-                    "description": "Exclusive with [advertise_custom advertise_on_public_default_vip do_not_advertise]\n Advertise this loadbalancer on public network",
+                    "description": "Exclusive with [advertise_custom advertise_on_public_default_vip do_not_advertise]\n Advertise this load balancer on public network",
                     "$ref": "#/definitions/viewsAdvertisePublic",
                     "x-displayname": "Advertise On Public With Specified VIP"
                 },
                 "advertise_on_public_default_vip": {
-                    "description": "Exclusive with [advertise_custom advertise_on_public do_not_advertise]\n Advertise this loadbalancer on public network with default VIP",
+                    "description": "Exclusive with [advertise_custom advertise_on_public do_not_advertise]\n Advertise this load balancer on public network with default VIP",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Advertise On Public"
                 },
@@ -3152,7 +3152,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Automatically Manage DNS Records"
                 },
                 "do_not_advertise": {
-                    "description": "Exclusive with [advertise_custom advertise_on_public advertise_on_public_default_vip]\n Do not advertise this loadbalancer",
+                    "description": "Exclusive with [advertise_custom advertise_on_public advertise_on_public_default_vip]\n Do not advertise this load balancer",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Do Not Advertise"
                 },
@@ -3163,7 +3163,7 @@ var APISwaggerJSON string = `{
                 },
                 "domains": {
                     "type": "array",
-                    "description": " A list of domains (host/authority header) that will be matched to this loadbalancer.\n\n Domains are also used for SNI matching if the with_sni is true\n Domains also indicate the list of names for which DNS resolution will be done by VER\n\nExample: - \"www.foo.com\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.hostname: true\n  ves.io.schema.rules.repeated.max_items: 32\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " A list of domains (host/authority header) that will be matched to this load balancer.\n\n Domains are also used for SNI matching if the with_sni is true\n Domains also indicate the list of names for which DNS resolution will be done by VER\n\nExample: - \"www.foo.com\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.hostname: true\n  ves.io.schema.rules.repeated.max_items: 32\n  ves.io.schema.rules.repeated.unique: true\n",
                     "maxItems": 32,
                     "items": {
                         "type": "string"
@@ -3208,7 +3208,7 @@ var APISwaggerJSON string = `{
                 },
                 "listen_port": {
                     "type": "integer",
-                    "description": " Listen Port for this TCP proxy\n\nExample: - \"0\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 65535\n",
+                    "description": " Listen Port for this load balancer\n\nExample: - \"0\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 65535\n",
                     "format": "int64",
                     "x-displayname": "Listen Port",
                     "x-ves-example": "0",
@@ -3218,7 +3218,7 @@ var APISwaggerJSON string = `{
                 },
                 "origin_pools_weights": {
                     "type": "array",
-                    "description": " Origin pools and weights used for this loadbalancer.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 16\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " Origin pools and weights used for this load balancer.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 16\n  ves.io.schema.rules.repeated.unique: true\n",
                     "maxItems": 16,
                     "items": {
                         "$ref": "#/definitions/viewsOriginPoolWithWeight"
@@ -3230,13 +3230,13 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "retract_cluster": {
-                    "description": "Exclusive with [do_not_retract_cluster]\n When this option is enabled, weighted cluster will not be considered\n for loadbalancing, if all its endpoints are unhealthy.\n Since the cluster with all unhealthy endpoints is removed, the traffic\n will be distributed among remaining clusters as per their weight.\n Also panic-threshold configuration is ignored for retracted cluster.\n\n This option is ignored when single destination cluster is configured\n for route",
+                    "description": "Exclusive with [do_not_retract_cluster]\n When this option is enabled, weighted cluster will not be considered\n for load balancing, if all its endpoints are unhealthy.\n Since the cluster with all unhealthy endpoints is removed, the traffic\n will be distributed among remaining clusters as per their weight.\n Also panic-threshold configuration is ignored for retracted cluster.\n\n This option is ignored when single destination cluster is configured\n for route",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Retract cluster with no healthy endpoints"
                 },
                 "with_sni": {
                     "type": "boolean",
-                    "description": " Set to true to enable TCP loadbalancer with SNI\n\nExample: - \"true\"-",
+                    "description": " Set to true to enable load balancer with SNI\n\nExample: - \"true\"-",
                     "format": "boolean",
                     "x-displayname": "With SNI",
                     "x-ves-example": "true"
@@ -3352,9 +3352,9 @@ var APISwaggerJSON string = `{
         },
         "tcp_loadbalancerGetSpecType": {
             "type": "object",
-            "description": "Shape of the TCP loadbalancer get specification",
+            "description": "Shape of the TCP load balancer get specification",
             "title": "GetSpecType",
-            "x-displayname": "Get TCP Loadbalancer",
+            "x-displayname": "Get TCP Load Balancer",
             "x-ves-oneof-field-advertise_choice": "[\"advertise_custom\",\"advertise_on_public\",\"advertise_on_public_default_vip\",\"do_not_advertise\"]",
             "x-ves-oneof-field-cluster_retract_choice": "[\"do_not_retract_cluster\",\"retract_cluster\"]",
             "x-ves-oneof-field-hash_policy_choice": "[\"hash_policy_choice_least_active\",\"hash_policy_choice_random\",\"hash_policy_choice_round_robin\",\"hash_policy_choice_source_ip_stickiness\"]",
@@ -3366,12 +3366,12 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Advertise Custom"
                 },
                 "advertise_on_public": {
-                    "description": "Exclusive with [advertise_custom advertise_on_public_default_vip do_not_advertise]\n Advertise this loadbalancer on public network",
+                    "description": "Exclusive with [advertise_custom advertise_on_public_default_vip do_not_advertise]\n Advertise this load balancer on public network",
                     "$ref": "#/definitions/viewsAdvertisePublic",
                     "x-displayname": "Advertise On Public With Specified VIP"
                 },
                 "advertise_on_public_default_vip": {
-                    "description": "Exclusive with [advertise_custom advertise_on_public do_not_advertise]\n Advertise this loadbalancer on public network with default VIP",
+                    "description": "Exclusive with [advertise_custom advertise_on_public do_not_advertise]\n Advertise this load balancer on public network with default VIP",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Advertise On Public"
                 },
@@ -3390,7 +3390,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Automatically Manage DNS Records"
                 },
                 "do_not_advertise": {
-                    "description": "Exclusive with [advertise_custom advertise_on_public advertise_on_public_default_vip]\n Do not advertise this loadbalancer",
+                    "description": "Exclusive with [advertise_custom advertise_on_public advertise_on_public_default_vip]\n Do not advertise this load balancer",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Do Not Advertise"
                 },
@@ -3401,7 +3401,7 @@ var APISwaggerJSON string = `{
                 },
                 "domains": {
                     "type": "array",
-                    "description": " A list of domains (host/authority header) that will be matched to this loadbalancer.\n\n Domains are also used for SNI matching if the with_sni is true\n Domains also indicate the list of names for which DNS resolution will be done by VER\n\nExample: - \"www.foo.com\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.hostname: true\n  ves.io.schema.rules.repeated.max_items: 32\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " A list of domains (host/authority header) that will be matched to this load balancer.\n\n Domains are also used for SNI matching if the with_sni is true\n Domains also indicate the list of names for which DNS resolution will be done by VER\n\nExample: - \"www.foo.com\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.hostname: true\n  ves.io.schema.rules.repeated.max_items: 32\n  ves.io.schema.rules.repeated.unique: true\n",
                     "maxItems": 32,
                     "items": {
                         "type": "string"
@@ -3452,7 +3452,7 @@ var APISwaggerJSON string = `{
                 },
                 "listen_port": {
                     "type": "integer",
-                    "description": " Listen Port for this TCP proxy\n\nExample: - \"0\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 65535\n",
+                    "description": " Listen Port for this load balancer\n\nExample: - \"0\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 65535\n",
                     "format": "int64",
                     "x-displayname": "Listen Port",
                     "x-ves-example": "0",
@@ -3462,7 +3462,7 @@ var APISwaggerJSON string = `{
                 },
                 "origin_pools_weights": {
                     "type": "array",
-                    "description": " Origin pools and weights used for this loadbalancer.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 16\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " Origin pools and weights used for this load balancer.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 16\n  ves.io.schema.rules.repeated.unique: true\n",
                     "maxItems": 16,
                     "items": {
                         "$ref": "#/definitions/viewsOriginPoolWithWeight"
@@ -3474,13 +3474,13 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "retract_cluster": {
-                    "description": "Exclusive with [do_not_retract_cluster]\n When this option is enabled, weighted cluster will not be considered\n for loadbalancing, if all its endpoints are unhealthy.\n Since the cluster with all unhealthy endpoints is removed, the traffic\n will be distributed among remaining clusters as per their weight.\n Also panic-threshold configuration is ignored for retracted cluster.\n\n This option is ignored when single destination cluster is configured\n for route",
+                    "description": "Exclusive with [do_not_retract_cluster]\n When this option is enabled, weighted cluster will not be considered\n for load balancing, if all its endpoints are unhealthy.\n Since the cluster with all unhealthy endpoints is removed, the traffic\n will be distributed among remaining clusters as per their weight.\n Also panic-threshold configuration is ignored for retracted cluster.\n\n This option is ignored when single destination cluster is configured\n for route",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Retract cluster with no healthy endpoints"
                 },
                 "with_sni": {
                     "type": "boolean",
-                    "description": " Set to true to enable TCP loadbalancer with SNI\n\nExample: - \"true\"-",
+                    "description": " Set to true to enable load balancer with SNI\n\nExample: - \"true\"-",
                     "format": "boolean",
                     "x-displayname": "With SNI",
                     "x-ves-example": "true"
@@ -3642,9 +3642,9 @@ var APISwaggerJSON string = `{
         },
         "tcp_loadbalancerReplaceSpecType": {
             "type": "object",
-            "description": "Shape of the TCP loadbalancer replace specification",
+            "description": "Shape of the TCP load balancer replace specification",
             "title": "ReplaceSpecType",
-            "x-displayname": "Replace TCP Loadbalancer",
+            "x-displayname": "Replace TCP Load Balancer",
             "x-ves-oneof-field-advertise_choice": "[\"advertise_custom\",\"advertise_on_public\",\"advertise_on_public_default_vip\",\"do_not_advertise\"]",
             "x-ves-oneof-field-cluster_retract_choice": "[\"do_not_retract_cluster\",\"retract_cluster\"]",
             "x-ves-oneof-field-hash_policy_choice": "[\"hash_policy_choice_least_active\",\"hash_policy_choice_random\",\"hash_policy_choice_round_robin\",\"hash_policy_choice_source_ip_stickiness\"]",
@@ -3656,12 +3656,12 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Advertise Custom"
                 },
                 "advertise_on_public": {
-                    "description": "Exclusive with [advertise_custom advertise_on_public_default_vip do_not_advertise]\n Advertise this loadbalancer on public network",
+                    "description": "Exclusive with [advertise_custom advertise_on_public_default_vip do_not_advertise]\n Advertise this load balancer on public network",
                     "$ref": "#/definitions/viewsAdvertisePublic",
                     "x-displayname": "Advertise On Public With Specified VIP"
                 },
                 "advertise_on_public_default_vip": {
-                    "description": "Exclusive with [advertise_custom advertise_on_public do_not_advertise]\n Advertise this loadbalancer on public network with default VIP",
+                    "description": "Exclusive with [advertise_custom advertise_on_public do_not_advertise]\n Advertise this load balancer on public network with default VIP",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Advertise On Public"
                 },
@@ -3672,7 +3672,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Automatically Manage DNS Records"
                 },
                 "do_not_advertise": {
-                    "description": "Exclusive with [advertise_custom advertise_on_public advertise_on_public_default_vip]\n Do not advertise this loadbalancer",
+                    "description": "Exclusive with [advertise_custom advertise_on_public advertise_on_public_default_vip]\n Do not advertise this load balancer",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Do Not Advertise"
                 },
@@ -3683,7 +3683,7 @@ var APISwaggerJSON string = `{
                 },
                 "domains": {
                     "type": "array",
-                    "description": " A list of domains (host/authority header) that will be matched to this loadbalancer.\n\n Domains are also used for SNI matching if the with_sni is true\n Domains also indicate the list of names for which DNS resolution will be done by VER\n\nExample: - \"www.foo.com\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.hostname: true\n  ves.io.schema.rules.repeated.max_items: 32\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " A list of domains (host/authority header) that will be matched to this load balancer.\n\n Domains are also used for SNI matching if the with_sni is true\n Domains also indicate the list of names for which DNS resolution will be done by VER\n\nExample: - \"www.foo.com\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.hostname: true\n  ves.io.schema.rules.repeated.max_items: 32\n  ves.io.schema.rules.repeated.unique: true\n",
                     "maxItems": 32,
                     "items": {
                         "type": "string"
@@ -3728,7 +3728,7 @@ var APISwaggerJSON string = `{
                 },
                 "listen_port": {
                     "type": "integer",
-                    "description": " Listen Port for this TCP proxy\n\nExample: - \"0\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 65535\n",
+                    "description": " Listen Port for this load balancer\n\nExample: - \"0\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 65535\n",
                     "format": "int64",
                     "x-displayname": "Listen Port",
                     "x-ves-example": "0",
@@ -3738,7 +3738,7 @@ var APISwaggerJSON string = `{
                 },
                 "origin_pools_weights": {
                     "type": "array",
-                    "description": " Origin pools and weights used for this loadbalancer.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 16\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " Origin pools and weights used for this load balancer.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 16\n  ves.io.schema.rules.repeated.unique: true\n",
                     "maxItems": 16,
                     "items": {
                         "$ref": "#/definitions/viewsOriginPoolWithWeight"
@@ -3750,13 +3750,13 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "retract_cluster": {
-                    "description": "Exclusive with [do_not_retract_cluster]\n When this option is enabled, weighted cluster will not be considered\n for loadbalancing, if all its endpoints are unhealthy.\n Since the cluster with all unhealthy endpoints is removed, the traffic\n will be distributed among remaining clusters as per their weight.\n Also panic-threshold configuration is ignored for retracted cluster.\n\n This option is ignored when single destination cluster is configured\n for route",
+                    "description": "Exclusive with [do_not_retract_cluster]\n When this option is enabled, weighted cluster will not be considered\n for load balancing, if all its endpoints are unhealthy.\n Since the cluster with all unhealthy endpoints is removed, the traffic\n will be distributed among remaining clusters as per their weight.\n Also panic-threshold configuration is ignored for retracted cluster.\n\n This option is ignored when single destination cluster is configured\n for route",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Retract cluster with no healthy endpoints"
                 },
                 "with_sni": {
                     "type": "boolean",
-                    "description": " Set to true to enable TCP loadbalancer with SNI\n\nExample: - \"true\"-",
+                    "description": " Set to true to enable load balancer with SNI\n\nExample: - \"true\"-",
                     "format": "boolean",
                     "x-displayname": "With SNI",
                     "x-ves-example": "true"
@@ -3831,7 +3831,7 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.views.AdvertisePublic",
             "properties": {
                 "public_ip": {
-                    "description": " Use dedicated public ip as VIP instead of default public VIP\n\n Dedicated public ip are allocated by volterra on request\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "description": " Dedicated Public IP, which is allocated by F5 Distributed Cloud on request, is used as a VIP.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "Public IP",
                     "$ref": "#/definitions/schemaviewsObjectRefType",
                     "x-displayname": "Public IP",
@@ -4099,7 +4099,7 @@ var APISwaggerJSON string = `{
         },
         "viewstcp_loadbalancerGlobalSpecType": {
             "type": "object",
-            "description": "Shape of the TCP loadbalancer view specification",
+            "description": "Shape of the TCP load balancer view specification",
             "title": "GlobalSpecType",
             "x-displayname": "View Specification",
             "x-ves-oneof-field-advertise_choice": "[\"advertise_custom\",\"advertise_on_public\",\"advertise_on_public_default_vip\",\"do_not_advertise\"]",
@@ -4114,13 +4114,13 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Advertise Custom"
                 },
                 "advertise_on_public": {
-                    "description": "Exclusive with [advertise_custom advertise_on_public_default_vip do_not_advertise]\n Advertise this loadbalancer on public network",
+                    "description": "Exclusive with [advertise_custom advertise_on_public_default_vip do_not_advertise]\n Advertise this load balancer on public network",
                     "title": "Advertise On Public",
                     "$ref": "#/definitions/viewsAdvertisePublic",
                     "x-displayname": "Advertise On Public With Specified VIP"
                 },
                 "advertise_on_public_default_vip": {
-                    "description": "Exclusive with [advertise_custom advertise_on_public do_not_advertise]\n Advertise this loadbalancer on public network with default VIP",
+                    "description": "Exclusive with [advertise_custom advertise_on_public do_not_advertise]\n Advertise this load balancer on public network with default VIP",
                     "title": "Advertise On Public Default VIP",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Advertise On Public"
@@ -4142,7 +4142,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Automatically Manage DNS Records"
                 },
                 "do_not_advertise": {
-                    "description": "Exclusive with [advertise_custom advertise_on_public advertise_on_public_default_vip]\n Do not advertise this loadbalancer",
+                    "description": "Exclusive with [advertise_custom advertise_on_public advertise_on_public_default_vip]\n Do not advertise this load balancer",
                     "title": "Do Not Advertise",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Do Not Advertise"
@@ -4155,7 +4155,7 @@ var APISwaggerJSON string = `{
                 },
                 "domains": {
                     "type": "array",
-                    "description": " A list of domains (host/authority header) that will be matched to this loadbalancer.\n\n Domains are also used for SNI matching if the with_sni is true\n Domains also indicate the list of names for which DNS resolution will be done by VER\n\nExample: - \"www.foo.com\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.hostname: true\n  ves.io.schema.rules.repeated.max_items: 32\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " A list of domains (host/authority header) that will be matched to this load balancer.\n\n Domains are also used for SNI matching if the with_sni is true\n Domains also indicate the list of names for which DNS resolution will be done by VER\n\nExample: - \"www.foo.com\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.hostname: true\n  ves.io.schema.rules.repeated.max_items: 32\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "Domains",
                     "maxItems": 32,
                     "items": {
@@ -4213,7 +4213,7 @@ var APISwaggerJSON string = `{
                 },
                 "listen_port": {
                     "type": "integer",
-                    "description": " Listen Port for this TCP proxy\n\nExample: - \"0\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 65535\n",
+                    "description": " Listen Port for this load balancer\n\nExample: - \"0\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 65535\n",
                     "title": "Listen Port",
                     "format": "int64",
                     "x-displayname": "Listen Port",
@@ -4224,7 +4224,7 @@ var APISwaggerJSON string = `{
                 },
                 "origin_pools_weights": {
                     "type": "array",
-                    "description": " Origin pools and weights used for this loadbalancer.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 16\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " Origin pools and weights used for this load balancer.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 16\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "Origin Pools with Weights",
                     "maxItems": 16,
                     "items": {
@@ -4237,7 +4237,7 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "retract_cluster": {
-                    "description": "Exclusive with [do_not_retract_cluster]\n When this option is enabled, weighted cluster will not be considered\n for loadbalancing, if all its endpoints are unhealthy.\n Since the cluster with all unhealthy endpoints is removed, the traffic\n will be distributed among remaining clusters as per their weight.\n Also panic-threshold configuration is ignored for retracted cluster.\n\n This option is ignored when single destination cluster is configured\n for route",
+                    "description": "Exclusive with [do_not_retract_cluster]\n When this option is enabled, weighted cluster will not be considered\n for load balancing, if all its endpoints are unhealthy.\n Since the cluster with all unhealthy endpoints is removed, the traffic\n will be distributed among remaining clusters as per their weight.\n Also panic-threshold configuration is ignored for retracted cluster.\n\n This option is ignored when single destination cluster is configured\n for route",
                     "title": "retract_cluster",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Retract cluster with no healthy endpoints"
@@ -4250,7 +4250,7 @@ var APISwaggerJSON string = `{
                 },
                 "with_sni": {
                     "type": "boolean",
-                    "description": " Set to true to enable TCP loadbalancer with SNI\n\nExample: - \"true\"-",
+                    "description": " Set to true to enable load balancer with SNI\n\nExample: - \"true\"-",
                     "title": "With SNI",
                     "format": "boolean",
                     "x-displayname": "With SNI",
@@ -4315,6 +4315,6 @@ var APISwaggerJSON string = `{
             }
         }
     },
-    "x-displayname": "Configure TCP Loadbalancer",
+    "x-displayname": "Configure TCP Load Balancer",
     "x-ves-proto-file": "ves.io/schema/views/tcp_loadbalancer/public_crudapi.proto"
 }`

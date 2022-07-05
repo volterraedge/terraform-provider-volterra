@@ -742,6 +742,18 @@ func (v *ValidateCdnServiceType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["service_domains"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("service_domains"))
+		for idx, item := range m.GetServiceDomains() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	return nil
 }
 
@@ -8641,6 +8653,93 @@ func ReplaceSpecTypeValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *ServiceDomain) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *ServiceDomain) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *ServiceDomain) DeepCopy() *ServiceDomain {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &ServiceDomain{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *ServiceDomain) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *ServiceDomain) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return ServiceDomainValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateServiceDomain struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateServiceDomain) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*ServiceDomain)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *ServiceDomain got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["domain"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("domain"))
+		if err := fv(ctx, m.GetDomain(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["service_domain"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("service_domain"))
+		if err := fv(ctx, m.GetServiceDomain(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultServiceDomainValidator = func() *ValidateServiceDomain {
+	v := &ValidateServiceDomain{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func ServiceDomainValidator() db.Validator {
+	return DefaultServiceDomainValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *ShapeBotDefenseConfigType) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -8861,6 +8960,15 @@ func (v *ValidateShapeBotDefenseConfigType) Validate(ctx context.Context, pm int
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["reload_header_name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("reload_header_name"))
+		if err := fv(ctx, m.GetReloadHeaderName(), vOpts...); err != nil {
+			return err
 		}
 
 	}

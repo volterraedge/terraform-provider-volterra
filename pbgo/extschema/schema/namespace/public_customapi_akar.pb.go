@@ -266,7 +266,11 @@ type SetActiveServicePoliciesRequest struct {
 	// service_policies
 	//
 	// x-displayName: "Service Policies"
-	// A list of references to service_policy objects.
+	// Service Policies is a sequential engine where policies (and rules within the policy) are evaluated one after the other. It's important to define the
+	// correct order (policies evaluated from top to bottom in the list) for service policies, to get the intended result.
+	// For each request, its characteristics are evaluated based on the match criteria in each service policy starting at the top. If there is a match in the
+	// current policy, then the policy takes effect, and no more policies are evaluated. Otherwise, the next policy is evaluated.
+	// If all policies are evaluated and none match, then the request will be denied by default.
 	ServicePolicies []*views.ObjectRefType `protobuf:"bytes,2,rep,name=service_policies,json=servicePolicies,proto3" json:"service_policies,omitempty"`
 }
 

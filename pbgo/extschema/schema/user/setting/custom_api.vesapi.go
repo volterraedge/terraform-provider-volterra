@@ -5114,12 +5114,13 @@ var CustomAPISwaggerJSON string = `{
         },
         "tenantOtpStatus": {
             "type": "string",
-            "description": "OtpStatus can be either enabled/disabled or processing.\nApplying new policy can take time, especially if tenant has many users so for this purpose processing state is introduced.\n\n - OTP_DISABLED: OTP_DISABLED\n\nOTP disabled\n - OTP_ENABLED: OTP_ENABLED\n\nOTP enabled\n - OTP_PROCESSING: OTP_PROCESSING\n\nOTP is being updated",
+            "description": "OtpStatus can be either enabled/disabled or processing.\nApplying new policy can take time, especially if tenant has many users so for this purpose processing state is introduced.\n\n - OTP_DISABLED: OTP_DISABLED\n\nOTP disabled\n - OTP_ENABLED: OTP_ENABLED\n\nOTP enabled\n - OTP_PROCESSING: OTP_PROCESSING\n\nOTP is being updated\n - OTP_PROCESS_DISABLING: OTP_PROCESSING\n\nOTP is being updated to be disabled",
             "title": "OtpStatus",
             "enum": [
                 "OTP_DISABLED",
                 "OTP_ENABLED",
-                "OTP_PROCESSING"
+                "OTP_PROCESSING",
+                "OTP_PROCESS_DISABLING"
             ],
             "default": "OTP_DISABLED",
             "x-displayname": "OtpStatus",

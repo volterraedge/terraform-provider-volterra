@@ -2729,6 +2729,133 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "aws_tgw_siteDirectConnectBGPPeerInfo": {
+            "type": "object",
+            "x-ves-proto-message": "ves.io.schema.views.aws_tgw_site.DirectConnectBGPPeerInfo",
+            "properties": {
+                "address_family": {
+                    "type": "string",
+                    "description": " Address Family",
+                    "title": "Address Family",
+                    "x-displayname": "Address Family "
+                },
+                "amazon_address": {
+                    "type": "string",
+                    "description": " Amazon side address",
+                    "title": "Amazon side address",
+                    "x-displayname": "Amazon side address "
+                },
+                "asn": {
+                    "type": "integer",
+                    "description": " ASN",
+                    "title": "ASN",
+                    "format": "int64",
+                    "x-displayname": "ASN"
+                },
+                "bgp_peer_id": {
+                    "type": "string",
+                    "description": " BGP Peer ID",
+                    "title": "BGP Peer ID",
+                    "x-displayname": "BGP Peer ID"
+                },
+                "bgp_peer_state": {
+                    "type": "string",
+                    "description": " BGP Peer State",
+                    "title": "BGP Peer State",
+                    "x-displayname": "BGP Peer State"
+                },
+                "bgp_status": {
+                    "type": "string",
+                    "description": " BGP Status",
+                    "title": "BGP Status",
+                    "x-displayname": "BGP Status"
+                },
+                "customer_address": {
+                    "type": "string",
+                    "description": " Customer side Address",
+                    "title": "Customer side Address",
+                    "x-displayname": "Customer side Address"
+                }
+            }
+        },
+        "aws_tgw_siteDirectConnectStatusInfo": {
+            "type": "object",
+            "x-ves-proto-message": "ves.io.schema.views.aws_tgw_site.DirectConnectStatusInfo",
+            "properties": {
+                "direct_connect_gateway_id": {
+                    "type": "string",
+                    "description": " Direct Connect Gateway ID",
+                    "title": "Direct Connect Gateway ID",
+                    "x-displayname": "Direct Connect Gateway ID"
+                },
+                "direct_connect_gateway_state": {
+                    "type": "string",
+                    "description": " Direct Connect Gateway state",
+                    "title": "Direct Connect Gateway State",
+                    "x-displayname": "Direct Connect Gateway State"
+                },
+                "direct_connect_vgw_association_state": {
+                    "type": "string",
+                    "description": " Virtual Private Gateway association state",
+                    "title": "Virtual Private Gateway association state",
+                    "x-displayname": "Virtual Private Gateway association state"
+                },
+                "vgw_id": {
+                    "type": "string",
+                    "description": " Virtual Private Gateway ID",
+                    "title": "Virtual Private Gateway ID",
+                    "x-displayname": "Virtual Private Gateway ID"
+                },
+                "vgw_state": {
+                    "type": "string",
+                    "description": " Virtual Private Gateway state",
+                    "title": "Virtual Private Gateway state",
+                    "x-displayname": "Virtual Private Gateway state"
+                },
+                "vif_states": {
+                    "type": "array",
+                    "description": " VIF States",
+                    "title": "VIF States",
+                    "items": {
+                        "$ref": "#/definitions/aws_tgw_siteDirectConnectVIFStateInfo"
+                    },
+                    "x-displayname": "VIF States"
+                }
+            }
+        },
+        "aws_tgw_siteDirectConnectVIFStateInfo": {
+            "type": "object",
+            "x-ves-proto-message": "ves.io.schema.views.aws_tgw_site.DirectConnectVIFStateInfo",
+            "properties": {
+                "attachment_state": {
+                    "type": "string",
+                    "description": " VIF Attachment State",
+                    "title": "VIF Attachment State",
+                    "x-displayname": "VIF Attachment State"
+                },
+                "bgp_peers": {
+                    "type": "array",
+                    "description": "  BGP Peers",
+                    "title": "BGP Peers",
+                    "items": {
+                        "$ref": "#/definitions/aws_tgw_siteDirectConnectBGPPeerInfo"
+                    },
+                    "x-displayname": " BGP Peers"
+                },
+                "vif_id": {
+                    "type": "string",
+                    "description": " VIF ID",
+                    "title": "VIF ID",
+                    "x-displayname": "VIF ID"
+                },
+                "vif_state": {
+                    "type": "string",
+                    "description": " VIF State",
+                    "title": "VIF State",
+                    "x-displayname": "VIF State"
+                }
+            }
+        },
         "aws_tgw_siteExistingTGWType": {
             "type": "object",
             "description": "Information needed for existing TGW",
@@ -3013,6 +3140,12 @@ var APISwaggerJSON string = `{
                         "$ref": "#/definitions/schemaConditionType"
                     },
                     "x-displayname": "Conditions"
+                },
+                "direct_connect_status": {
+                    "description": " Direct Connect Status ",
+                    "title": "Direct Connect Status",
+                    "$ref": "#/definitions/aws_tgw_siteDirectConnectStatusInfo",
+                    "x-displayname": "Direct Connect Status"
                 },
                 "metadata": {
                     "description": " Standard status's metadata",
@@ -4938,14 +5071,13 @@ var APISwaggerJSON string = `{
             "properties": {
                 "aws_az_name": {
                     "type": "string",
-                    "description": " AWS availability zone, must be consistent with the selected AWS region.\n\nExample: - \"us-west-2a\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.in: [\\\"ap-northeast-1a\\\",\\\"ap-northeast-1c\\\",\\\"ap-northeast-1d\\\",\\\"ap-southeast-1a\\\",\\\"ap-southeast-1b\\\",\\\"ap-southeast-1c\\\",\\\"eu-central-1a\\\",\\\"eu-central-1b\\\",\\\"eu-central-1c\\\",\\\"eu-west-1a\\\",\\\"eu-west-1b\\\",\\\"eu-west-1c\\\",\\\"eu-west-3a\\\",\\\"eu-west-3b\\\",\\\"eu-west-3c\\\",\\\"sa-east-1a\\\",\\\"sa-east-1b\\\",\\\"sa-east-1c\\\",\\\"us-east-1a\\\",\\\"us-east-1b\\\",\\\"us-east-1c\\\",\\\"us-east-1d\\\",\\\"us-east-1e\\\",\\\"us-east-1f\\\",\\\"us-east-2a\\\",\\\"us-east-2b\\\",\\\"us-east-2c\\\",\\\"us-west-2a\\\",\\\"us-west-2b\\\",\\\"us-west-2c\\\",\\\"us-west-2d\\\",\\\"ca-central-1a\\\",\\\"ca-central-1b\\\",\\\"ca-central-1d\\\",\\\"af-south-1a\\\",\\\"af-south-1b\\\",\\\"af-south-1c\\\",\\\"ap-east-1a\\\",\\\"ap-east-1b\\\",\\\"ap-east-1c\\\",\\\"ap-south-1a\\\",\\\"ap-south-1b\\\",\\\"ap-south-1c\\\",\\\"ap-northeast-2a\\\",\\\"ap-northeast-2b\\\",\\\"ap-northeast-2c\\\",\\\"ap-northeast-2d\\\",\\\"ap-southeast-2a\\\",\\\"ap-southeast-2b\\\",\\\"ap-southeast-2c\\\",\\\"eu-south-1a\\\",\\\"eu-south-1b\\\",\\\"eu-south-1c\\\",\\\"eu-north-1a\\\",\\\"eu-north-1b\\\",\\\"eu-north-1c\\\",\\\"eu-west-2a\\\",\\\"eu-west-2b\\\",\\\"eu-west-2c\\\",\\\"me-south-1a\\\",\\\"me-south-1b\\\",\\\"me-south-1c\\\",\\\"us-west-1a\\\",\\\"us-west-1c\\\"]\n",
+                    "description": " AWS availability zone, must be consistent with the selected AWS region.\n\nExample: - \"us-west-2a\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "AWS AZ",
                     "x-displayname": "AWS AZ Name",
                     "x-ves-example": "us-west-2a",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true",
-                        "ves.io.schema.rules.string.in": "[\\\"ap-northeast-1a\\\",\\\"ap-northeast-1c\\\",\\\"ap-northeast-1d\\\",\\\"ap-southeast-1a\\\",\\\"ap-southeast-1b\\\",\\\"ap-southeast-1c\\\",\\\"eu-central-1a\\\",\\\"eu-central-1b\\\",\\\"eu-central-1c\\\",\\\"eu-west-1a\\\",\\\"eu-west-1b\\\",\\\"eu-west-1c\\\",\\\"eu-west-3a\\\",\\\"eu-west-3b\\\",\\\"eu-west-3c\\\",\\\"sa-east-1a\\\",\\\"sa-east-1b\\\",\\\"sa-east-1c\\\",\\\"us-east-1a\\\",\\\"us-east-1b\\\",\\\"us-east-1c\\\",\\\"us-east-1d\\\",\\\"us-east-1e\\\",\\\"us-east-1f\\\",\\\"us-east-2a\\\",\\\"us-east-2b\\\",\\\"us-east-2c\\\",\\\"us-west-2a\\\",\\\"us-west-2b\\\",\\\"us-west-2c\\\",\\\"us-west-2d\\\",\\\"ca-central-1a\\\",\\\"ca-central-1b\\\",\\\"ca-central-1d\\\",\\\"af-south-1a\\\",\\\"af-south-1b\\\",\\\"af-south-1c\\\",\\\"ap-east-1a\\\",\\\"ap-east-1b\\\",\\\"ap-east-1c\\\",\\\"ap-south-1a\\\",\\\"ap-south-1b\\\",\\\"ap-south-1c\\\",\\\"ap-northeast-2a\\\",\\\"ap-northeast-2b\\\",\\\"ap-northeast-2c\\\",\\\"ap-northeast-2d\\\",\\\"ap-southeast-2a\\\",\\\"ap-southeast-2b\\\",\\\"ap-southeast-2c\\\",\\\"eu-south-1a\\\",\\\"eu-south-1b\\\",\\\"eu-south-1c\\\",\\\"eu-north-1a\\\",\\\"eu-north-1b\\\",\\\"eu-north-1c\\\",\\\"eu-west-2a\\\",\\\"eu-west-2b\\\",\\\"eu-west-2c\\\",\\\"me-south-1a\\\",\\\"me-south-1b\\\",\\\"me-south-1c\\\",\\\"us-west-1a\\\",\\\"us-west-1c\\\"]"
+                        "ves.io.schema.rules.message.required": "true"
                     }
                 },
                 "inside_subnet": {
@@ -5070,39 +5202,23 @@ var APISwaggerJSON string = `{
         },
         "viewsDirectConnectConfigType": {
             "type": "object",
-            "description": "x-displayName: \"Direct Connect Configuration\"\nDirect Connect Configuration",
+            "description": "Direct Connect Configuration",
             "title": "DirectConnectConfigType",
+            "x-displayname": "Direct Connect Configuration",
+            "x-ves-oneof-field-vif_choice": "[\"hosted_vifs\",\"standard_vifs\"]",
+            "x-ves-proto-message": "ves.io.schema.views.DirectConnectConfigType",
             "properties": {
-                "cloud_aggregated_prefix": {
-                    "type": "array",
-                    "description": "x-displayName: \"Cloud Aggregated Prefix\"\nx-example: \"10.0.0.0/20\"\nAggregated prefix from cloud to be advertised for DC side",
-                    "title": "Cloud Aggregated Prefix",
-                    "items": {
-                        "type": "string"
-                    }
-                },
-                "dc_connect_aggregated_prefix": {
-                    "type": "array",
-                    "description": "x-displayName: \"Direct Connect Aggregate Prefixes\"\nx-example: \"20.0.0.0/20\"\nAggregated prefix from direct connect to be advertised for Cloud side",
-                    "title": "Direct Connect Aggregate Prefixes",
-                    "items": {
-                        "type": "string"
-                    }
-                },
                 "hosted_vifs": {
-                    "description": "x-displayName: \"Hosted VIF mode\"\nHosted VIF mode. Volterra provisions an AWS DirectConnect Gateway and a Virtual Private Gateway, \nand automatically associate provided hosted VIF and also setup BGP Peering.",
+                    "description": "Exclusive with [standard_vifs]\n Hosted VIF mode. Volterra provisions an AWS DirectConnect Gateway and a Virtual Private Gateway,\n and automatically associate provided hosted VIF and also setup BGP Peering.",
                     "title": "Hosted VIF mode",
-                    "$ref": "#/definitions/viewsHostedVIFConfigType"
-                },
-                "manual_gw": {
-                    "description": "x-displayName: \"Manual VIF mode\"\nManual Mode. Volterra provisions a Virtual Private Gateway, \nand a user associate AWS DirectConnect Gateway with it.",
-                    "title": "Manual VIF Mode",
-                    "$ref": "#/definitions/schemaEmpty"
+                    "$ref": "#/definitions/viewsHostedVIFConfigType",
+                    "x-displayname": "Hosted VIF mode"
                 },
                 "standard_vifs": {
-                    "description": "x-displayName: \"Standard VIF mode\"\nStandard Non Hosted VIF Mode. Volterra provisions an AWS DirectConnect Gateway and a Virtual Private Gateway, \nand a user associate VIF to the DirectConnect gateway and setup BGP Peering.",
+                    "description": "Exclusive with [hosted_vifs]\n Standard Non Hosted VIF Mode. Volterra provisions an AWS DirectConnect Gateway and a Virtual Private Gateway,\n and a user associate VIF to the DirectConnect gateway and setup BGP Peering.",
                     "title": "Standard VIF mode",
-                    "$ref": "#/definitions/schemaEmpty"
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Standard VIF mode"
                 }
             }
         },
@@ -5113,11 +5229,27 @@ var APISwaggerJSON string = `{
             "x-displayname": "DirectConnect Info",
             "x-ves-proto-message": "ves.io.schema.views.DirectConnectInfo",
             "properties": {
+                "asn": {
+                    "type": "integer",
+                    "description": " The autonomous system (AS) number on the AWS side for Border Gateway Protocol (BGP) configuration\n\nExample: - \"\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 1\n  ves.io.schema.rules.uint32.lte: 2147483647\n",
+                    "title": "AWS Side ASN",
+                    "format": "int64",
+                    "x-displayname": "AWS Side ASN",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.gte": "1",
+                        "ves.io.schema.rules.uint32.lte": "2147483647"
+                    }
+                },
                 "direct_connect_gateway_id": {
                     "type": "string",
-                    "description": " DirectConnect Gateway ID",
+                    "description": " DirectConnect Gateway ID\n\nExample: - \"f2a50c04-xxxx-yyyy-zzzz-00000000a043\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "DirectConnect Gateway ID",
-                    "x-displayname": "DirectConnect Gateway ID"
+                    "x-displayname": "DirectConnect Gateway ID",
+                    "x-ves-example": "f2a50c04-xxxx-yyyy-zzzz-00000000a043",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 },
                 "vgw_id": {
                     "type": "string",
@@ -5203,15 +5335,25 @@ var APISwaggerJSON string = `{
         },
         "viewsHostedVIFConfigType": {
             "type": "object",
-            "description": "x-displayName: \"Hosted VIF Config\"\nHosted VIF Configuration",
+            "description": "Hosted VIF Configuration",
             "title": "HostedVIFConfigType",
+            "x-displayname": "Hosted VIF Config",
+            "x-ves-proto-message": "ves.io.schema.views.HostedVIFConfigType",
             "properties": {
                 "vifs": {
                     "type": "array",
-                    "description": "x-displayName: \"List of VIF IDs\"\nx-example: \"value\"\nVIFs",
+                    "description": " VIFs\n\nExample: - \"value\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 30\n  ves.io.schema.rules.repeated.unique: true\n  ves.io.schema.rules.string.pattern: ^(dxvif-)([a-z0-9]{8}|[a-z0-9]{17})$\n",
                     "title": "Hosted VIFs",
+                    "maxItems": 30,
                     "items": {
                         "type": "string"
+                    },
+                    "x-displayname": "List of VIF IDs",
+                    "x-ves-example": "value",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "30",
+                        "ves.io.schema.rules.repeated.unique": "true",
+                        "ves.io.schema.rules.string.pattern": "^(dxvif-)([a-z0-9]{8}|[a-z0-9]{17})$"
                     }
                 }
             }
@@ -5378,6 +5520,12 @@ var APISwaggerJSON string = `{
                     "title": "Disable Direct Connect",
                     "$ref": "#/definitions/schemaEmpty",
                     "x-displayname": "Disable Direct Connect"
+                },
+                "direct_connect_enabled": {
+                    "description": "Exclusive with [direct_connect_disabled]\n Direct Connect feature is enabled",
+                    "title": "Enable Direct Connect",
+                    "$ref": "#/definitions/viewsDirectConnectConfigType",
+                    "x-displayname": "Enable Direct Connect"
                 },
                 "direct_connect_info": {
                     "description": " Direct Connect information obtained after creating the site and TGW",

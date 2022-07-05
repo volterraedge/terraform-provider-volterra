@@ -167,6 +167,7 @@ func (c *CustomAPIRestClient) doRPCCreateObject(ctx context.Context, callOpts *s
 		q.Add("description", fmt.Sprintf("%v", req.Description))
 		q.Add("name", fmt.Sprintf("%v", req.Name))
 		q.Add("namespace", fmt.Sprintf("%v", req.Namespace))
+		q.Add("object_attributes", fmt.Sprintf("%v", req.ObjectAttributes))
 		q.Add("object_type", fmt.Sprintf("%v", req.ObjectType))
 
 		hReq.URL.RawQuery += q.Encode()
@@ -1361,6 +1362,7 @@ var CustomAPISwaggerJSON string = `{
             "title": "CreateObjectRequest",
             "x-displayname": "Create Object Request",
             "x-ves-oneof-field-contents": "[\"bytes_value\",\"string_value\"]",
+            "x-ves-oneof-field-object_attributes": "[\"mobile_sdk\",\"no_attributes\"]",
             "x-ves-proto-message": "ves.io.schema.stored_object.CreateObjectRequest",
             "properties": {
                 "bytes_value": {
@@ -1395,6 +1397,12 @@ var CustomAPISwaggerJSON string = `{
                         "ves.io.schema.rules.string.max_len": "512"
                     }
                 },
+                "mobile_sdk": {
+                    "description": "Exclusive with [no_attributes]\n Attributes of a object of a type mobile-sdk",
+                    "title": "mobile_sdk",
+                    "$ref": "#/definitions/stored_objectMobileSDKAttributes",
+                    "x-displayname": "Attributes of a object of a type mobile-sdk"
+                },
                 "name": {
                     "type": "string",
                     "description": " Name of the stored_object.\n\nExample: - \"volt-api-specs\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 512\n  ves.io.schema.rules.string.min_len: 1\n  ves.io.schema.rules.string.ves_object_name: true\n",
@@ -1422,16 +1430,22 @@ var CustomAPISwaggerJSON string = `{
                         "ves.io.schema.rules.message.required": "true"
                     }
                 },
+                "no_attributes": {
+                    "description": "Exclusive with [mobile_sdk]\n No special attributes specific to the object type",
+                    "title": "no_attributes",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "No attributes"
+                },
                 "object_type": {
                     "type": "string",
-                    "description": " Type of the stored_object\n\nExample: - \"swagger\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.in: [\\\"swagger\\\", \\\"generic\\\", \\\"big-object\\\"]\n",
+                    "description": " Type of the stored_object\n\nExample: - \"swagger\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.in: [\\\"swagger\\\", \\\"generic\\\", \\\"big-object\\\", \\\"mobile-sdk\\\"]\n",
                     "title": "object_type",
                     "x-displayname": "Object Type",
                     "x-ves-example": "swagger",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true",
-                        "ves.io.schema.rules.string.in": "[\\\"swagger\\\", \\\"generic\\\", \\\"big-object\\\"]"
+                        "ves.io.schema.rules.string.in": "[\\\"swagger\\\", \\\"generic\\\", \\\"big-object\\\", \\\"mobile-sdk\\\"]"
                     }
                 },
                 "string_value": {
@@ -1555,13 +1569,26 @@ var CustomAPISwaggerJSON string = `{
             "description": "A descriptor for list response item.",
             "title": "ListItemDescriptor",
             "x-displayname": "List Item Descriptor",
+            "x-ves-oneof-field-object_attributes": "[\"mobile_sdk\",\"no_attributes\"]",
             "x-ves-proto-message": "ves.io.schema.stored_object.ListItemDescriptor",
             "properties": {
+                "mobile_sdk": {
+                    "description": "Exclusive with [no_attributes]\n Attributes of a object of a type mobile-sdk",
+                    "title": "mobile_sdk",
+                    "$ref": "#/definitions/stored_objectMobileSDKAttributes",
+                    "x-displayname": "Attributes of a object of a type mobile-sdk"
+                },
                 "name": {
                     "type": "string",
                     "description": " Name of the stored object.",
                     "title": "name",
                     "x-displayname": "Object Name"
+                },
+                "no_attributes": {
+                    "description": "Exclusive with [mobile_sdk]\n No special attributes specific to the object type",
+                    "title": "no_attributes",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "No attributes"
                 },
                 "tenant": {
                     "type": "string",
@@ -1598,6 +1625,46 @@ var CustomAPISwaggerJSON string = `{
                     "x-displayname": "Stored Object Descriptors"
                 }
             }
+        },
+        "stored_objectMobileSDKAttributes": {
+            "type": "object",
+            "description": "Describes attributes specific to object type - mobile-sdk",
+            "title": "MobileSDKAttributes",
+            "x-displayname": "mobile-sdk attributes",
+            "x-ves-proto-message": "ves.io.schema.stored_object.MobileSDKAttributes",
+            "properties": {
+                "mobile_sdk_version": {
+                    "type": "string",
+                    "description": " Version of mobile sdk release\n\nExample: - \"v.4.2.1\"-",
+                    "title": "mobile_sdk_version",
+                    "x-displayname": "mobile sdk version",
+                    "x-ves-example": "v.4.2.1"
+                },
+                "os_type": {
+                    "description": " Select the Operating System type for mobile SDK release. \n\nExample: - \"IOS\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.enum.defined_only: true\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "os_type",
+                    "$ref": "#/definitions/stored_objectOSType",
+                    "x-displayname": "Operating System type",
+                    "x-ves-example": "IOS",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.enum.defined_only": "true",
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                }
+            }
+        },
+        "stored_objectOSType": {
+            "type": "string",
+            "description": "Defines a selection for operating system type. Its either ANDROID or IOS\n\n - ANDROID: ANDROID\n\n - IOS: IOS\n",
+            "title": "OSType",
+            "enum": [
+                "ANDROID",
+                "IOS"
+            ],
+            "default": "ANDROID",
+            "x-displayname": "Operating System type",
+            "x-ves-proto-enum": "ves.io.schema.stored_object.OSType"
         },
         "stored_objectPreSignedUrl": {
             "type": "object",
@@ -1651,6 +1718,7 @@ var CustomAPISwaggerJSON string = `{
             "description": "Response for Get, Create APIs",
             "title": "StoredObjectDescriptor",
             "x-displayname": "Object Metadata Response",
+            "x-ves-oneof-field-object_attributes": "[\"mobile_sdk\",\"no_attributes\"]",
             "x-ves-proto-message": "ves.io.schema.stored_object.StoredObjectDescriptor",
             "properties": {
                 "creation_timestamp": {
@@ -1674,6 +1742,12 @@ var CustomAPISwaggerJSON string = `{
                         "ves.io.schema.rules.string.max_len": "512"
                     }
                 },
+                "mobile_sdk": {
+                    "description": "Exclusive with [no_attributes]\n Attributes of a object of a type mobile-sdk",
+                    "title": "mobile_sdk",
+                    "$ref": "#/definitions/stored_objectMobileSDKAttributes",
+                    "x-displayname": "Attributes of a object of a type mobile-sdk"
+                },
                 "name": {
                     "type": "string",
                     "description": " Name of the stored object\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
@@ -1693,6 +1767,12 @@ var CustomAPISwaggerJSON string = `{
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true"
                     }
+                },
+                "no_attributes": {
+                    "description": "Exclusive with [mobile_sdk]\n No special attributes specific to the object type",
+                    "title": "no_attributes",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "No attributes"
                 },
                 "url": {
                     "type": "string",

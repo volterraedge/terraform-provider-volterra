@@ -1795,8 +1795,9 @@ func resourceVolterraOriginPoolCreate(d *schema.ResourceData, meta interface{}) 
 
 					if v, ok := cs["service_name"]; ok && !isIntfNil(v) {
 
-						choiceInt.K8SService.ServiceName = v.(string)
-
+						choiceInt.K8SService.ServiceInfo = &ves_io_schema_views_origin_pool.OriginServerK8SService_ServiceName{
+							ServiceName: v.(string),
+						}
 					}
 
 					if v, ok := cs["site_locator"]; ok && !isIntfNil(v) {
@@ -3412,7 +3413,9 @@ func resourceVolterraOriginPoolUpdate(d *schema.ResourceData, meta interface{}) 
 
 					if v, ok := cs["service_name"]; ok && !isIntfNil(v) {
 
-						choiceInt.K8SService.ServiceName = v.(string)
+						choiceInt.K8SService.ServiceInfo = &ves_io_schema_views_origin_pool.OriginServerK8SService_ServiceName{
+							ServiceName: v.(string),
+						}
 
 					}
 

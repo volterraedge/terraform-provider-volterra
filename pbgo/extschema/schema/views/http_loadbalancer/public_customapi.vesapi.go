@@ -293,8 +293,8 @@ func NewCustomAPIServer(svc svcfw.Service) CustomAPIServer {
 var CustomAPISwaggerJSON string = `{
     "swagger": "2.0",
     "info": {
-        "title": "HTTP loadbalancer",
-        "description": "HTTP Loadbalancer view defines a required parameters that can be used in CRUD, to create and manage HTTP loadbalancer.\nIt can be used to create HTTP loadbalancer and HTTPS loadbalancer.\n\nView will create following child objects.\n\n* Virtual-host\n* routes\n* clusters\n* endpoints\n* advertise policy",
+        "title": "HTTP Load Balancer",
+        "description": "HTTP Load Balancer view defines a required parameters that can be used in CRUD, to create and manage HTTP Load Balancer.\nIt can be used to create HTTP Load Balancer and HTTPS Load Balancer.",
         "version": "version not set"
     },
     "schemes": [
@@ -312,7 +312,7 @@ var CustomAPISwaggerJSON string = `{
         "/public/namespaces/{namespace}/http_loadbalancers/{name}/get-dns-info": {
             "get": {
                 "summary": "GetDnsInfo",
-                "description": "GetDnsInfo is an API to get DNS information for a given HTTP loadbalancer",
+                "description": "GetDnsInfo is an API to get DNS information for a given HTTP load balancer",
                 "operationId": "ves.io.schema.views.http_loadbalancer.CustomAPI.GetDnsInfo",
                 "responses": {
                     "200": {
@@ -373,7 +373,7 @@ var CustomAPISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "namespace",
-                        "description": "Namespace\n\nx-example: \"value\"\nNamespace for the HTTP loadbalancer",
+                        "description": "Namespace\n\nx-example: \"value\"\nNamespace for the HTTP load balancer",
                         "in": "path",
                         "required": true,
                         "type": "string",
@@ -381,7 +381,7 @@ var CustomAPISwaggerJSON string = `{
                     },
                     {
                         "name": "name",
-                        "description": "Name\n\nx-example: \"value\"\nName of the HTTP loadbalancer",
+                        "description": "Name\n\nx-example: \"value\"\nName of the HTTP load balancer",
                         "in": "path",
                         "required": true,
                         "type": "string",
@@ -397,7 +397,7 @@ var CustomAPISwaggerJSON string = `{
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.http_loadbalancer.CustomAPI.GetDnsInfo"
             },
-            "x-displayname": "HTTP loadbalancer Custom API",
+            "x-displayname": "HTTP Load Balancer Custom API",
             "x-ves-proto-service": "ves.io.schema.views.http_loadbalancer.CustomAPI",
             "x-ves-proto-service-type": "CUSTOM_PUBLIC"
         }
@@ -411,7 +411,7 @@ var CustomAPISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.views.http_loadbalancer.GetDnsInfoResponse",
             "properties": {
                 "dns_info": {
-                    "description": " DNS information object for this HTTP loadbalancer",
+                    "description": " DNS information object for this HTTP load balancer",
                     "title": "DNS information",
                     "$ref": "#/definitions/schemavirtual_host_dns_infoGlobalSpecType",
                     "x-displayname": "DNS information"
@@ -515,6 +515,6 @@ var CustomAPISwaggerJSON string = `{
             }
         }
     },
-    "x-displayname": "Configure HTTP Loadbalancer",
+    "x-displayname": "Configure HTTP Load Balancer",
     "x-ves-proto-file": "ves.io/schema/views/http_loadbalancer/public_customapi.proto"
 }`

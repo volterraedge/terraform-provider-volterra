@@ -893,6 +893,28 @@ func (v *ValidateAPIGroupChoice) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
+	case *APIGroupChoice_VoltconsoleNginxMgmtSuiteAdmin:
+		if fv, exists := v.FldValidators["choice.voltconsole_nginx_mgmt_suite_admin"]; exists {
+			val := m.GetChoice().(*APIGroupChoice_VoltconsoleNginxMgmtSuiteAdmin).VoltconsoleNginxMgmtSuiteAdmin
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("voltconsole_nginx_mgmt_suite_admin"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *APIGroupChoice_VoltconsoleNginxMgmtSuiteSubscriptionMgmt:
+		if fv, exists := v.FldValidators["choice.voltconsole_nginx_mgmt_suite_subscription_mgmt"]; exists {
+			val := m.GetChoice().(*APIGroupChoice_VoltconsoleNginxMgmtSuiteSubscriptionMgmt).VoltconsoleNginxMgmtSuiteSubscriptionMgmt
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("voltconsole_nginx_mgmt_suite_subscription_mgmt"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 

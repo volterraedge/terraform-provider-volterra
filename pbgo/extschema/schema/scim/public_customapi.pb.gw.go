@@ -1551,39 +1551,39 @@ func RegisterCustomPublicAPIHandlerClient(ctx context.Context, mux *runtime.Serv
 }
 
 var (
-	pattern_CustomPublicAPI_ListServiceProviderConfig_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"public", "v2", "ServiceProviderConfig"}, "", runtime.AssumeColonVerbOpt(false)))
+	pattern_CustomPublicAPI_ListServiceProviderConfig_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 2, 4}, []string{"public", "namespaces", "system", "v2", "ServiceProviderConfig"}, "", runtime.AssumeColonVerbOpt(false)))
 
-	pattern_CustomPublicAPI_ListResourceTypes_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"public", "v2", "ResourceTypes"}, "", runtime.AssumeColonVerbOpt(false)))
+	pattern_CustomPublicAPI_ListResourceTypes_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 2, 4}, []string{"public", "namespaces", "system", "v2", "ResourceTypes"}, "", runtime.AssumeColonVerbOpt(false)))
 
-	pattern_CustomPublicAPI_GetResourceTypesById_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"public", "v2", "ResourceTypes", "id"}, "", runtime.AssumeColonVerbOpt(false)))
+	pattern_CustomPublicAPI_GetResourceTypesById_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 2, 4, 1, 0, 4, 1, 5, 5}, []string{"public", "namespaces", "system", "v2", "ResourceTypes", "id"}, "", runtime.AssumeColonVerbOpt(false)))
 
-	pattern_CustomPublicAPI_ListSchemas_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"public", "v2", "Schemas"}, "", runtime.AssumeColonVerbOpt(false)))
+	pattern_CustomPublicAPI_ListSchemas_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 2, 4}, []string{"public", "namespaces", "system", "v2", "Schemas"}, "", runtime.AssumeColonVerbOpt(false)))
 
-	pattern_CustomPublicAPI_GetSchemaById_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"public", "v2", "Schemas", "id"}, "", runtime.AssumeColonVerbOpt(false)))
+	pattern_CustomPublicAPI_GetSchemaById_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 2, 4, 1, 0, 4, 1, 5, 5}, []string{"public", "namespaces", "system", "v2", "Schemas", "id"}, "", runtime.AssumeColonVerbOpt(false)))
 
-	pattern_CustomPublicAPI_CreateUser_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"public", "v2", "Users"}, "", runtime.AssumeColonVerbOpt(false)))
+	pattern_CustomPublicAPI_CreateUser_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 2, 4}, []string{"public", "namespaces", "system", "v2", "Users"}, "", runtime.AssumeColonVerbOpt(false)))
 
-	pattern_CustomPublicAPI_ReplaceUserById_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"public", "v2", "Users", "id"}, "", runtime.AssumeColonVerbOpt(false)))
+	pattern_CustomPublicAPI_ReplaceUserById_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 2, 4, 1, 0, 4, 1, 5, 5}, []string{"public", "namespaces", "system", "v2", "Users", "id"}, "", runtime.AssumeColonVerbOpt(false)))
 
-	pattern_CustomPublicAPI_PatchUserById_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"public", "v2", "Users", "id"}, "", runtime.AssumeColonVerbOpt(false)))
+	pattern_CustomPublicAPI_PatchUserById_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 2, 4, 1, 0, 4, 1, 5, 5}, []string{"public", "namespaces", "system", "v2", "Users", "id"}, "", runtime.AssumeColonVerbOpt(false)))
 
-	pattern_CustomPublicAPI_DeleteUserById_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"public", "v2", "Users", "id"}, "", runtime.AssumeColonVerbOpt(false)))
+	pattern_CustomPublicAPI_DeleteUserById_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 2, 4, 1, 0, 4, 1, 5, 5}, []string{"public", "namespaces", "system", "v2", "Users", "id"}, "", runtime.AssumeColonVerbOpt(false)))
 
-	pattern_CustomPublicAPI_ListUsers_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"public", "v2", "Users"}, "", runtime.AssumeColonVerbOpt(false)))
+	pattern_CustomPublicAPI_ListUsers_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 2, 4}, []string{"public", "namespaces", "system", "v2", "Users"}, "", runtime.AssumeColonVerbOpt(false)))
 
-	pattern_CustomPublicAPI_GetUserById_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"public", "v2", "Users", "id"}, "", runtime.AssumeColonVerbOpt(false)))
+	pattern_CustomPublicAPI_GetUserById_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 2, 4, 1, 0, 4, 1, 5, 5}, []string{"public", "namespaces", "system", "v2", "Users", "id"}, "", runtime.AssumeColonVerbOpt(false)))
 
-	pattern_CustomPublicAPI_ListGroups_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"public", "v2", "Groups"}, "", runtime.AssumeColonVerbOpt(false)))
+	pattern_CustomPublicAPI_ListGroups_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 2, 4}, []string{"public", "namespaces", "system", "v2", "Groups"}, "", runtime.AssumeColonVerbOpt(false)))
 
-	pattern_CustomPublicAPI_GetGroupById_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"public", "v2", "Groups", "id"}, "", runtime.AssumeColonVerbOpt(false)))
+	pattern_CustomPublicAPI_GetGroupById_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 2, 4, 1, 0, 4, 1, 5, 5}, []string{"public", "namespaces", "system", "v2", "Groups", "id"}, "", runtime.AssumeColonVerbOpt(false)))
 
-	pattern_CustomPublicAPI_CreateGroup_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"public", "v2", "Groups"}, "", runtime.AssumeColonVerbOpt(false)))
+	pattern_CustomPublicAPI_CreateGroup_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 2, 4}, []string{"public", "namespaces", "system", "v2", "Groups"}, "", runtime.AssumeColonVerbOpt(false)))
 
-	pattern_CustomPublicAPI_ReplaceGroupById_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"public", "v2", "Groups", "id"}, "", runtime.AssumeColonVerbOpt(false)))
+	pattern_CustomPublicAPI_ReplaceGroupById_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 2, 4, 1, 0, 4, 1, 5, 5}, []string{"public", "namespaces", "system", "v2", "Groups", "id"}, "", runtime.AssumeColonVerbOpt(false)))
 
-	pattern_CustomPublicAPI_PatchGroupById_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"public", "v2", "Groups", "id"}, "", runtime.AssumeColonVerbOpt(false)))
+	pattern_CustomPublicAPI_PatchGroupById_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 2, 4, 1, 0, 4, 1, 5, 5}, []string{"public", "namespaces", "system", "v2", "Groups", "id"}, "", runtime.AssumeColonVerbOpt(false)))
 
-	pattern_CustomPublicAPI_DeleteGroupById_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"public", "v2", "Groups", "id"}, "", runtime.AssumeColonVerbOpt(false)))
+	pattern_CustomPublicAPI_DeleteGroupById_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 2, 4, 1, 0, 4, 1, 5, 5}, []string{"public", "namespaces", "system", "v2", "Groups", "id"}, "", runtime.AssumeColonVerbOpt(false)))
 )
 
 var (

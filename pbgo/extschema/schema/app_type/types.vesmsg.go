@@ -151,6 +151,11 @@ func (m *APIEPInfo) Validate(ctx context.Context, opts ...db.ValidateOpt) error 
 	return APIEPInfoValidator().Validate(ctx, m, opts...)
 }
 
+// SetAccessDiscoveryTime sets the field
+func (m *APIEPInfo) SetAccessDiscoveryTime(in *google_protobuf.Timestamp) {
+	m.AccessDiscoveryTime = in
+}
+
 type ValidateAPIEPInfo struct {
 	FldValidators map[string]db.ValidatorFunc
 }
@@ -167,6 +172,24 @@ func (v *ValidateAPIEPInfo) Validate(ctx context.Context, pm interface{}, opts .
 	}
 	if m == nil {
 		return nil
+	}
+
+	if fv, exists := v.FldValidators["access_discovery_time"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("access_discovery_time"))
+		if err := fv(ctx, m.GetAccessDiscoveryTime(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["base_path"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("base_path"))
+		if err := fv(ctx, m.GetBasePath(), vOpts...); err != nil {
+			return err
+		}
+
 	}
 
 	if fv, exists := v.FldValidators["category"]; exists {
@@ -229,10 +252,28 @@ func (v *ValidateAPIEPInfo) Validate(ctx context.Context, pm interface{}, opts .
 
 	}
 
+	if fv, exists := v.FldValidators["pii_level"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("pii_level"))
+		if err := fv(ctx, m.GetPiiLevel(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["request_percentage"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("request_percentage"))
 		if err := fv(ctx, m.GetRequestPercentage(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["security_risk"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("security_risk"))
+		if err := fv(ctx, m.GetSecurityRisk(), vOpts...); err != nil {
 			return err
 		}
 

@@ -171,6 +171,15 @@ func (v *ValidateCreateUserRequest) Validate(ctx context.Context, pm interface{}
 
 	}
 
+	if fv, exists := v.FldValidators["meta"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("meta"))
+		if err := fv(ctx, m.GetMeta(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["name"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("name"))
@@ -243,6 +252,8 @@ var DefaultCreateUserRequestValidator = func() *ValidateCreateUserRequest {
 		panic(errMsg)
 	}
 	v.FldValidators["roles"] = vFn
+
+	v.FldValidators["meta"] = MetaValidator().Validate
 
 	return v
 }()
@@ -452,7 +463,7 @@ func (v *ValidateListUserResponse) ResourcesValidationRuleHandler(rules map[stri
 	}
 	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
 	if err != nil {
-		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for resources")
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for Resources")
 	}
 
 	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
@@ -469,12 +480,32 @@ func (v *ValidateListUserResponse) ResourcesValidationRuleHandler(rules map[stri
 			l = append(l, strVal)
 		}
 		if err := repValFn(ctx, l, opts...); err != nil {
-			return errors.Wrap(err, "repeated resources")
+			return errors.Wrap(err, "repeated Resources")
 		}
 		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
-			return errors.Wrap(err, "items resources")
+			return errors.Wrap(err, "items Resources")
 		}
 		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateListUserResponse) StartIndexValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewUint64ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for startIndex")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateListUserResponse) ItemsPerPageValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewUint64ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for itemsPerPage")
 	}
 
 	return validatorFn, nil
@@ -494,9 +525,18 @@ func (v *ValidateListUserResponse) Validate(ctx context.Context, pm interface{},
 		return nil
 	}
 
-	if fv, exists := v.FldValidators["resources"]; exists {
-		vOpts := append(opts, db.WithValidateField("resources"))
+	if fv, exists := v.FldValidators["Resources"]; exists {
+		vOpts := append(opts, db.WithValidateField("Resources"))
 		if err := fv(ctx, m.GetResources(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["itemsPerPage"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("itemsPerPage"))
+		if err := fv(ctx, m.GetItemsPerPage(), vOpts...); err != nil {
 			return err
 		}
 
@@ -505,6 +545,15 @@ func (v *ValidateListUserResponse) Validate(ctx context.Context, pm interface{},
 	if fv, exists := v.FldValidators["schemas"]; exists {
 		vOpts := append(opts, db.WithValidateField("schemas"))
 		if err := fv(ctx, m.GetSchemas(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["startIndex"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("startIndex"))
+		if err := fv(ctx, m.GetStartIndex(), vOpts...); err != nil {
 			return err
 		}
 
@@ -562,10 +611,32 @@ var DefaultListUserResponseValidator = func() *ValidateListUserResponse {
 	}
 	vFn, err = vrhResources(rulesResources)
 	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for ListUserResponse.resources: %s", err)
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ListUserResponse.Resources: %s", err)
 		panic(errMsg)
 	}
-	v.FldValidators["resources"] = vFn
+	v.FldValidators["Resources"] = vFn
+
+	vrhStartIndex := v.StartIndexValidationRuleHandler
+	rulesStartIndex := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhStartIndex(rulesStartIndex)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ListUserResponse.startIndex: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["startIndex"] = vFn
+
+	vrhItemsPerPage := v.ItemsPerPageValidationRuleHandler
+	rulesItemsPerPage := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhItemsPerPage(rulesItemsPerPage)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ListUserResponse.itemsPerPage: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["itemsPerPage"] = vFn
 
 	return v
 }()
@@ -780,28 +851,51 @@ func (v *ValidatePatchUserRequest) SchemasValidationRuleHandler(rules map[string
 	return validatorFn, nil
 }
 
-func (v *ValidatePatchUserRequest) OperationValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "MessageValidationRuleHandler for operation")
-	}
-	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
-		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
-			return err
-		}
-
-		return nil
-	}
-
-	return validatorFn, nil
-}
-
 func (v *ValidatePatchUserRequest) IdValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for id")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidatePatchUserRequest) OperationsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemsValidatorFn := func(ctx context.Context, elems []*PatchOperation, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := PatchOperationValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for Operations")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*PatchOperation)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*PatchOperation, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated Operations")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items Operations")
+		}
+		return nil
 	}
 
 	return validatorFn, nil
@@ -821,19 +915,18 @@ func (v *ValidatePatchUserRequest) Validate(ctx context.Context, pm interface{},
 		return nil
 	}
 
-	if fv, exists := v.FldValidators["id"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("id"))
-		if err := fv(ctx, m.GetId(), vOpts...); err != nil {
+	if fv, exists := v.FldValidators["Operations"]; exists {
+		vOpts := append(opts, db.WithValidateField("Operations"))
+		if err := fv(ctx, m.GetOperations(), vOpts...); err != nil {
 			return err
 		}
 
 	}
 
-	if fv, exists := v.FldValidators["operation"]; exists {
+	if fv, exists := v.FldValidators["id"]; exists {
 
-		vOpts := append(opts, db.WithValidateField("operation"))
-		if err := fv(ctx, m.GetOperation(), vOpts...); err != nil {
+		vOpts := append(opts, db.WithValidateField("id"))
+		if err := fv(ctx, m.GetId(), vOpts...); err != nil {
 			return err
 		}
 
@@ -873,17 +966,6 @@ var DefaultPatchUserRequestValidator = func() *ValidatePatchUserRequest {
 	}
 	v.FldValidators["schemas"] = vFn
 
-	vrhOperation := v.OperationValidationRuleHandler
-	rulesOperation := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
-	}
-	vFn, err = vrhOperation(rulesOperation)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for PatchUserRequest.operation: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["operation"] = vFn
-
 	vrhId := v.IdValidationRuleHandler
 	rulesId := map[string]string{
 		"ves.io.schema.rules.message.required": "true",
@@ -894,6 +976,17 @@ var DefaultPatchUserRequestValidator = func() *ValidatePatchUserRequest {
 		panic(errMsg)
 	}
 	v.FldValidators["id"] = vFn
+
+	vrhOperations := v.OperationsValidationRuleHandler
+	rulesOperations := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhOperations(rulesOperations)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for PatchUserRequest.Operations: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["Operations"] = vFn
 
 	return v
 }()
@@ -1120,6 +1213,15 @@ func (v *ValidateUser) Validate(ctx context.Context, pm interface{}, opts ...db.
 
 	}
 
+	if fv, exists := v.FldValidators["detail"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("detail"))
+		if err := fv(ctx, m.GetDetail(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["displayName"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("displayName"))
@@ -1205,6 +1307,15 @@ func (v *ValidateUser) Validate(ctx context.Context, pm interface{}, opts ...db.
 	if fv, exists := v.FldValidators["schemas"]; exists {
 		vOpts := append(opts, db.WithValidateField("schemas"))
 		if err := fv(ctx, m.GetSchemas(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["status"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("status"))
+		if err := fv(ctx, m.GetStatus(), vOpts...); err != nil {
 			return err
 		}
 
@@ -1403,102 +1514,4 @@ var DefaultUserGroupValidator = func() *ValidateUserGroup {
 
 func UserGroupValidator() db.Validator {
 	return DefaultUserGroupValidator
-}
-
-// augmented methods on protoc/std generated struct
-
-func (m *UserOperation) ToJSON() (string, error) {
-	return codec.ToJSON(m)
-}
-
-func (m *UserOperation) ToYAML() (string, error) {
-	return codec.ToYAML(m)
-}
-
-func (m *UserOperation) DeepCopy() *UserOperation {
-	if m == nil {
-		return nil
-	}
-	ser, err := m.Marshal()
-	if err != nil {
-		return nil
-	}
-	c := &UserOperation{}
-	err = c.Unmarshal(ser)
-	if err != nil {
-		return nil
-	}
-	return c
-}
-
-func (m *UserOperation) DeepCopyProto() proto.Message {
-	if m == nil {
-		return nil
-	}
-	return m.DeepCopy()
-}
-
-func (m *UserOperation) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
-	return UserOperationValidator().Validate(ctx, m, opts...)
-}
-
-type ValidateUserOperation struct {
-	FldValidators map[string]db.ValidatorFunc
-}
-
-func (v *ValidateUserOperation) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
-	m, ok := pm.(*UserOperation)
-	if !ok {
-		switch t := pm.(type) {
-		case nil:
-			return nil
-		default:
-			return fmt.Errorf("Expected type *UserOperation got type %s", t)
-		}
-	}
-	if m == nil {
-		return nil
-	}
-
-	if fv, exists := v.FldValidators["op"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("op"))
-		if err := fv(ctx, m.GetOp(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
-	if fv, exists := v.FldValidators["path"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("path"))
-		if err := fv(ctx, m.GetPath(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
-	if fv, exists := v.FldValidators["value"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("value"))
-		if err := fv(ctx, m.GetValue(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
-	return nil
-}
-
-// Well-known symbol for default validator implementation
-var DefaultUserOperationValidator = func() *ValidateUserOperation {
-	v := &ValidateUserOperation{FldValidators: map[string]db.ValidatorFunc{}}
-
-	v.FldValidators["value"] = UserValidator().Validate
-
-	return v
-}()
-
-func UserOperationValidator() db.Validator {
-	return DefaultUserOperationValidator
 }

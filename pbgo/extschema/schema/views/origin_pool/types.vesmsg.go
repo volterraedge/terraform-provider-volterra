@@ -2899,14 +2899,16 @@ func (v *ValidateOriginServerK8SService) NetworkChoiceValidationRuleHandler(rule
 	return validatorFn, nil
 }
 
-func (v *ValidateOriginServerK8SService) ServiceNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+func (v *ValidateOriginServerK8SService) ServiceInfoServiceSelectorValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	return ves_io_schema.LabelSelectorTypeValidator().Validate, nil
+}
 
-	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+func (v *ValidateOriginServerK8SService) ServiceInfoServiceNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_ServiceName, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for service_name")
 	}
-
-	return validatorFn, nil
+	return oValidatorFn_ServiceName, nil
 }
 
 func (v *ValidateOriginServerK8SService) SiteLocatorValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
@@ -2991,11 +2993,28 @@ func (v *ValidateOriginServerK8SService) Validate(ctx context.Context, pm interf
 
 	}
 
-	if fv, exists := v.FldValidators["service_name"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("service_name"))
-		if err := fv(ctx, m.GetServiceName(), vOpts...); err != nil {
-			return err
+	switch m.GetServiceInfo().(type) {
+	case *OriginServerK8SService_ServiceName:
+		if fv, exists := v.FldValidators["service_info.service_name"]; exists {
+			val := m.GetServiceInfo().(*OriginServerK8SService_ServiceName).ServiceName
+			vOpts := append(opts,
+				db.WithValidateField("service_info"),
+				db.WithValidateField("service_name"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *OriginServerK8SService_ServiceSelector:
+		if fv, exists := v.FldValidators["service_info.service_selector"]; exists {
+			val := m.GetServiceInfo().(*OriginServerK8SService_ServiceSelector).ServiceSelector
+			vOpts := append(opts,
+				db.WithValidateField("service_info"),
+				db.WithValidateField("service_selector"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
 		}
 
 	}
@@ -3035,16 +3054,27 @@ var DefaultOriginServerK8SServiceValidator = func() *ValidateOriginServerK8SServ
 	}
 	v.FldValidators["network_choice"] = vFn
 
-	vrhServiceName := v.ServiceNameValidationRuleHandler
-	rulesServiceName := map[string]string{
+	vrhServiceInfoServiceName := v.ServiceInfoServiceNameValidationRuleHandler
+	rulesServiceInfoServiceName := map[string]string{
 		"ves.io.schema.rules.message.required": "true",
 	}
-	vFn, err = vrhServiceName(rulesServiceName)
+	vFnMap["service_info.service_name"], err = vrhServiceInfoServiceName(rulesServiceInfoServiceName)
 	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for OriginServerK8SService.service_name: %s", err)
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field OriginServerK8SService.service_info_service_name: %s", err)
 		panic(errMsg)
 	}
-	v.FldValidators["service_name"] = vFn
+	vrhServiceInfoServiceSelector := v.ServiceInfoServiceSelectorValidationRuleHandler
+	rulesServiceInfoServiceSelector := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFnMap["service_info.service_selector"], err = vrhServiceInfoServiceSelector(rulesServiceInfoServiceSelector)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field OriginServerK8SService.service_info_service_selector: %s", err)
+		panic(errMsg)
+	}
+
+	v.FldValidators["service_info.service_name"] = vFnMap["service_info.service_name"]
+	v.FldValidators["service_info.service_selector"] = vFnMap["service_info.service_selector"]
 
 	vrhSiteLocator := v.SiteLocatorValidationRuleHandler
 	rulesSiteLocator := map[string]string{

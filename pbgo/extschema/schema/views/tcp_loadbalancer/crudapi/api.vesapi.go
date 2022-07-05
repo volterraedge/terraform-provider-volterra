@@ -3442,7 +3442,7 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.views.AdvertisePublic",
             "properties": {
                 "public_ip": {
-                    "description": " Use dedicated public ip as VIP instead of default public VIP\n\n Dedicated public ip are allocated by volterra on request\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "description": " Dedicated Public IP, which is allocated by F5 Distributed Cloud on request, is used as a VIP.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "Public IP",
                     "$ref": "#/definitions/schemaviewsObjectRefType",
                     "x-displayname": "Public IP",
@@ -3710,7 +3710,7 @@ var APISwaggerJSON string = `{
         },
         "viewstcp_loadbalancerGlobalSpecType": {
             "type": "object",
-            "description": "Shape of the TCP loadbalancer view specification",
+            "description": "Shape of the TCP load balancer view specification",
             "title": "GlobalSpecType",
             "x-displayname": "View Specification",
             "x-ves-oneof-field-advertise_choice": "[\"advertise_custom\",\"advertise_on_public\",\"advertise_on_public_default_vip\",\"do_not_advertise\"]",
@@ -3725,13 +3725,13 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Advertise Custom"
                 },
                 "advertise_on_public": {
-                    "description": "Exclusive with [advertise_custom advertise_on_public_default_vip do_not_advertise]\n Advertise this loadbalancer on public network",
+                    "description": "Exclusive with [advertise_custom advertise_on_public_default_vip do_not_advertise]\n Advertise this load balancer on public network",
                     "title": "Advertise On Public",
                     "$ref": "#/definitions/viewsAdvertisePublic",
                     "x-displayname": "Advertise On Public With Specified VIP"
                 },
                 "advertise_on_public_default_vip": {
-                    "description": "Exclusive with [advertise_custom advertise_on_public do_not_advertise]\n Advertise this loadbalancer on public network with default VIP",
+                    "description": "Exclusive with [advertise_custom advertise_on_public do_not_advertise]\n Advertise this load balancer on public network with default VIP",
                     "title": "Advertise On Public Default VIP",
                     "$ref": "#/definitions/schemaEmpty",
                     "x-displayname": "Advertise On Public"
@@ -3753,7 +3753,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Automatically Manage DNS Records"
                 },
                 "do_not_advertise": {
-                    "description": "Exclusive with [advertise_custom advertise_on_public advertise_on_public_default_vip]\n Do not advertise this loadbalancer",
+                    "description": "Exclusive with [advertise_custom advertise_on_public advertise_on_public_default_vip]\n Do not advertise this load balancer",
                     "title": "Do Not Advertise",
                     "$ref": "#/definitions/schemaEmpty",
                     "x-displayname": "Do Not Advertise"
@@ -3766,7 +3766,7 @@ var APISwaggerJSON string = `{
                 },
                 "domains": {
                     "type": "array",
-                    "description": " A list of domains (host/authority header) that will be matched to this loadbalancer.\n\n Domains are also used for SNI matching if the with_sni is true\n Domains also indicate the list of names for which DNS resolution will be done by VER\n\nExample: - \"www.foo.com\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.hostname: true\n  ves.io.schema.rules.repeated.max_items: 32\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " A list of domains (host/authority header) that will be matched to this load balancer.\n\n Domains are also used for SNI matching if the with_sni is true\n Domains also indicate the list of names for which DNS resolution will be done by VER\n\nExample: - \"www.foo.com\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.hostname: true\n  ves.io.schema.rules.repeated.max_items: 32\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "Domains",
                     "maxItems": 32,
                     "items": {
@@ -3824,7 +3824,7 @@ var APISwaggerJSON string = `{
                 },
                 "listen_port": {
                     "type": "integer",
-                    "description": " Listen Port for this TCP proxy\n\nExample: - \"0\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 65535\n",
+                    "description": " Listen Port for this load balancer\n\nExample: - \"0\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 65535\n",
                     "title": "Listen Port",
                     "format": "int64",
                     "x-displayname": "Listen Port",
@@ -3835,7 +3835,7 @@ var APISwaggerJSON string = `{
                 },
                 "origin_pools_weights": {
                     "type": "array",
-                    "description": " Origin pools and weights used for this loadbalancer.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 16\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " Origin pools and weights used for this load balancer.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 16\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "Origin Pools with Weights",
                     "maxItems": 16,
                     "items": {
@@ -3848,7 +3848,7 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "retract_cluster": {
-                    "description": "Exclusive with [do_not_retract_cluster]\n When this option is enabled, weighted cluster will not be considered\n for loadbalancing, if all its endpoints are unhealthy.\n Since the cluster with all unhealthy endpoints is removed, the traffic\n will be distributed among remaining clusters as per their weight.\n Also panic-threshold configuration is ignored for retracted cluster.\n\n This option is ignored when single destination cluster is configured\n for route",
+                    "description": "Exclusive with [do_not_retract_cluster]\n When this option is enabled, weighted cluster will not be considered\n for load balancing, if all its endpoints are unhealthy.\n Since the cluster with all unhealthy endpoints is removed, the traffic\n will be distributed among remaining clusters as per their weight.\n Also panic-threshold configuration is ignored for retracted cluster.\n\n This option is ignored when single destination cluster is configured\n for route",
                     "title": "retract_cluster",
                     "$ref": "#/definitions/schemaEmpty",
                     "x-displayname": "Retract cluster with no healthy endpoints"
@@ -3861,7 +3861,7 @@ var APISwaggerJSON string = `{
                 },
                 "with_sni": {
                     "type": "boolean",
-                    "description": " Set to true to enable TCP loadbalancer with SNI\n\nExample: - \"true\"-",
+                    "description": " Set to true to enable load balancer with SNI\n\nExample: - \"true\"-",
                     "title": "With SNI",
                     "format": "boolean",
                     "x-displayname": "With SNI",

@@ -886,7 +886,7 @@ type AppTypeSettings struct {
 	AppTypeRef []*schema.ObjectRefType `protobuf:"bytes,1,rep,name=app_type_ref,json=appTypeRef,proto3" json:"app_type_ref,omitempty"`
 	// Timeseries Analyses Setting
 	//
-	// x-displayName: "Timeseries Analysis Setting"
+	// x-displayName: "DDoS Detection"
 	// Configuration for timeseries analyses
 	TimeseriesAnalysesSetting *TimeseriesAnalysesSetting `protobuf:"bytes,2,opt,name=timeseries_analyses_setting,json=timeseriesAnalysesSetting,proto3" json:"timeseries_analyses_setting,omitempty"`
 	// Business Logic Markup Setting
@@ -896,7 +896,7 @@ type AppTypeSettings struct {
 	BusinessLogicMarkupSetting *BusinessLogicMarkupSetting `protobuf:"bytes,3,opt,name=business_logic_markup_setting,json=businessLogicMarkupSetting,proto3" json:"business_logic_markup_setting,omitempty"`
 	// User Behavior Analysis Setting
 	//
-	// x-displayName: "User Behavior Analysis Setting"
+	// x-displayName: "Malicious User Detection"
 	// Configuration for user behavior analysis in this namespace
 	UserBehaviorAnalysisSetting *UserBehaviorAnalysisSetting `protobuf:"bytes,4,opt,name=user_behavior_analysis_setting,json=userBehaviorAnalysisSetting,proto3" json:"user_behavior_analysis_setting,omitempty"`
 }

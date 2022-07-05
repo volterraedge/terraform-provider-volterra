@@ -156,6 +156,17 @@ func (v *ValidateAddonServiceChoice) Validate(ctx context.Context, pm interface{
 				return err
 			}
 		}
+	case *AddonServiceChoice_NginxMgmtSuite:
+		if fv, exists := v.FldValidators["choice.nginx_mgmt_suite"]; exists {
+			val := m.GetChoice().(*AddonServiceChoice_NginxMgmtSuite).NginxMgmtSuite
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("nginx_mgmt_suite"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 

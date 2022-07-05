@@ -442,6 +442,17 @@ func (v *ValidateServiceChoice) Validate(ctx context.Context, pm interface{}, op
 				return err
 			}
 		}
+	case *ServiceChoice_LilacEdge:
+		if fv, exists := v.FldValidators["choice.lilac_edge"]; exists {
+			val := m.GetChoice().(*ServiceChoice_LilacEdge).LilacEdge
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("lilac_edge"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 

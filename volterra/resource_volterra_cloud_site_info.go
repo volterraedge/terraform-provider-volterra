@@ -62,6 +62,27 @@ func resourceVolterraSetCloudSiteInfo() *schema.Resource {
 					Type: schema.TypeString,
 				},
 			},
+			"direct_connect_info": {
+				Type:     schema.TypeSet,
+				Optional: true,
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+
+						"direct_connect_gateway_id": {
+							Type:     schema.TypeString,
+							Optional: true,
+						},
+						"vgw_id": {
+							Type:     schema.TypeString,
+							Optional: true,
+						},
+						"asn": {
+							Type:     schema.TypeInt,
+							Optional: true,
+						},
+					},
+				},
+			},
 		},
 	}
 }
@@ -102,9 +123,12 @@ func resourceVolterraSetCloudSiteInfoCreate(d *schema.ResourceData, meta interfa
 				PrivateIps: privateIps,
 			},
 		}
+		if dcxInfo := getDirectConnectInfo(d); dcxInfo != nil {
+			req.DirectConnectInfo = dcxInfo
+		}
 		yamlReq, err = codec.ToYAML(req)
 		if err != nil {
-			return fmt.Errorf("Error marshalling rpc response to yaml: %s", err)
+			return fmt.Errorf("error marshalling rpc response to yaml: %s", err)
 		}
 
 	case "azure_vnet_site":
@@ -118,7 +142,7 @@ func resourceVolterraSetCloudSiteInfoCreate(d *schema.ResourceData, meta interfa
 		}
 		yamlReq, err = codec.ToYAML(req)
 		if err != nil {
-			return fmt.Errorf("Error marshalling rpc response to yaml: %s", err)
+			return fmt.Errorf("error marshalling rpc response to yaml: %s", err)
 		}
 	case "gcp_vpc_site":
 		req := &gcp_vpc_site.SetCloudSiteInfoRequest{
@@ -177,7 +201,7 @@ func resourceVolterraSetCloudSiteInfoDelete(d *schema.ResourceData, meta interfa
 		}
 		yamlReq, err = codec.ToYAML(req)
 		if err != nil {
-			return fmt.Errorf("Error marshalling rpc response to yaml: %s", err)
+			return fmt.Errorf("error marshalling rpc response to yaml: %s", err)
 		}
 
 	case "azure_vnet_site":
@@ -191,7 +215,7 @@ func resourceVolterraSetCloudSiteInfoDelete(d *schema.ResourceData, meta interfa
 		}
 		yamlReq, err = codec.ToYAML(req)
 		if err != nil {
-			return fmt.Errorf("Error marshalling rpc response to yaml: %s", err)
+			return fmt.Errorf("error marshalling rpc response to yaml: %s", err)
 		}
 	case "gcp_vpc_site":
 		req := &gcp_vpc_site.SetCloudSiteInfoRequest{
@@ -204,14 +228,14 @@ func resourceVolterraSetCloudSiteInfoDelete(d *schema.ResourceData, meta interfa
 		}
 		yamlReq, err = codec.ToYAML(req)
 		if err != nil {
-			return fmt.Errorf("Error marshalling rpc response to yaml: %s", err)
+			return fmt.Errorf("error marshalling rpc response to yaml: %s", err)
 		}
 	}
 	log.Printf("[DEBUG] Setting %s SetCloudSiteInfo struct: %+v", siteType, yamlReq)
 	if _, err := client.CustomAPI(context.Background(), http.MethodPost,
 		fmt.Sprintf(setCloudInfoURI, siteType, name),
 		fmt.Sprintf(setCloudInfoRPCFQN, siteType), yamlReq); err != nil {
-		return fmt.Errorf("Error Setting %s SetCloudSiteInfo: %s", siteType, err)
+		return fmt.Errorf("error Setting %s SetCloudSiteInfo: %s", siteType, err)
 	}
 	d.SetId("")
 	return nil

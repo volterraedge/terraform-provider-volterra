@@ -4170,6 +4170,19 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.string.ip": "true"
                     }
                 },
+                "ipsec_ssl_nodes_fqdn": {
+                    "type": "array",
+                    "description": " FQDN resolves to responders node IP, if there are multiple nodes at site the resolution will give\n a list of all/some individual node IP. Multiple FQDN for same site is also allowed.\n\nExample: - \"re01-node.ves.io\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.hostname: true\n",
+                    "title": "ipsec_ssl_nodes_fqdn",
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-displayname": "FQDN for IPSEC/SSL resolving to individual node IP",
+                    "x-ves-example": "re01-node.ves.io",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.hostname": "true"
+                    }
+                },
                 "ipsec_ssl_vip_fqdn": {
                     "type": "string",
                     "description": " FQDN resolves in public ip on public network and private ip on private network\n\nExample: - \"re01.ves.io\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.hostname: true\n",
@@ -4199,6 +4212,15 @@ var APISwaggerJSON string = `{
                     "title": "Local K8s Cluster Access Enabled",
                     "format": "boolean",
                     "x-displayname": "Local K8s Cluster Access Enabled"
+                },
+                "main_nodes": {
+                    "type": "array",
+                    "description": " Connectivity information of main/master nodes to create a full mesh of Phobos services across all CEs in a site-mesh-group or dc-cluster-group.",
+                    "title": "main_nodes",
+                    "items": {
+                        "$ref": "#/definitions/siteNode"
+                    },
+                    "x-displayname": "Main Nodes"
                 },
                 "mars_list": {
                     "type": "array",
@@ -4256,6 +4278,15 @@ var APISwaggerJSON string = `{
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.string.ip": "true"
                     }
+                },
+                "phobos_list": {
+                    "type": "array",
+                    "description": " Phobos services in a CE site. This is used to create a full mesh of Phobos services across all CEs in a site-mesh-group or dc-cluster-group.",
+                    "title": "phobos_list",
+                    "items": {
+                        "$ref": "#/definitions/schemaServiceParameters"
+                    },
+                    "x-displayname": "Phobos Services"
                 },
                 "private_ip": {
                     "type": "string",
@@ -4381,14 +4412,14 @@ var APISwaggerJSON string = `{
                 },
                 "vip_params_per_az": {
                     "type": "array",
-                    "description": " Optional Publish VIP Parameters Per AZ for public cloud sites.\n See documentation for \"VIP\" in advertise policy to see when Inside VIP or Outside VIP is used.\n When configured, the VIP(s) defined will be used to publish to external systems like K8s, Consul\n\nValidation Rules:\n  ves.io.schema.rules.repeated.num_items: 0,1,3\n",
+                    "description": " Optional Publish VIP Parameters Per AZ for public cloud sites.\n See documentation for \"VIP\" in advertise policy to see when Inside VIP or Outside VIP is used.\n When configured, the VIP(s) defined will be used to publish to external systems like K8s, Consul\n\nValidation Rules:\n  ves.io.schema.rules.repeated.num_items: 0,1,2,3\n",
                     "title": "vip_params_per_az",
                     "items": {
                         "$ref": "#/definitions/sitePublishVIPParamsPerAz"
                     },
                     "x-displayname": "Publish VIP Params Per AZ",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.repeated.num_items": "0,1,3"
+                        "ves.io.schema.rules.repeated.num_items": "0,1,2,3"
                     }
                 },
                 "vip_vrrp_mode": {
@@ -4673,6 +4704,39 @@ var APISwaggerJSON string = `{
                     "format": "int64",
                     "x-displayname": "Speed",
                     "x-ves-example": "1000"
+                }
+            }
+        },
+        "siteNode": {
+            "type": "object",
+            "description": "Node Information for connectivity across sites.",
+            "title": "Node",
+            "x-displayname": "Node",
+            "x-ves-proto-message": "ves.io.schema.site.Node",
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "description": " Name of the master/main node on the site.",
+                    "title": "name",
+                    "x-displayname": "Node name"
+                },
+                "sli_address": {
+                    "type": "string",
+                    "description": " Site Local Inside IP address.\n\nValidation Rules:\n  ves.io.schema.rules.string.ip: true\n",
+                    "title": "sli_address",
+                    "x-displayname": "Site Local Inside IP addresses",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.ip": "true"
+                    }
+                },
+                "slo_address": {
+                    "type": "string",
+                    "description": " Site Local Outside IP address.\n\nValidation Rules:\n  ves.io.schema.rules.string.ip: true\n",
+                    "title": "slo_address",
+                    "x-displayname": "Site Local Outside IP addresses",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.ip": "true"
+                    }
                 }
             }
         },
@@ -5090,7 +5154,7 @@ var APISwaggerJSON string = `{
         },
         "siteSiteToSiteTunnelConnectivity": {
             "type": "object",
-            "description": "x-displayName: \"Site To Sute Tunnel Connectivity\"\nSiteToSiteTunnelConnectivity is for connecting to a site in site mesh group",
+            "description": "x-displayName: \"Site To Site Tunnel Connectivity\"\nSiteToSiteTunnelConnectivity is for connecting to a site in site mesh group",
             "title": "Site To Site Tunnel Connectivity",
             "properties": {
                 "destination": {

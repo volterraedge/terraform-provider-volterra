@@ -16,6 +16,7 @@ import (
 	"gopkg.volterra.us/stdlib/errors"
 
 	ves_io_schema_site "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/site"
+	ves_io_schema_views "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views"
 )
 
 var (
@@ -80,6 +81,15 @@ func (v *ValidateSetTGWInfoRequest) Validate(ctx context.Context, pm interface{}
 		return nil
 	}
 
+	if fv, exists := v.FldValidators["direct_connect_info"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("direct_connect_info"))
+		if err := fv(ctx, m.GetDirectConnectInfo(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["name"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("name"))
@@ -115,6 +125,8 @@ var DefaultSetTGWInfoRequestValidator = func() *ValidateSetTGWInfoRequest {
 	v := &ValidateSetTGWInfoRequest{FldValidators: map[string]db.ValidatorFunc{}}
 
 	v.FldValidators["tgw_info"] = AWSTGWInfoConfigTypeValidator().Validate
+
+	v.FldValidators["direct_connect_info"] = ves_io_schema_views.DirectConnectInfoValidator().Validate
 
 	return v
 }()
@@ -330,7 +342,7 @@ var DefaultSetVIPInfoRequestValidator = func() *ValidateSetVIPInfoRequest {
 
 	vrhVipParamsPerAz := v.VipParamsPerAzValidationRuleHandler
 	rulesVipParamsPerAz := map[string]string{
-		"ves.io.schema.rules.repeated.num_items": "1,3",
+		"ves.io.schema.rules.repeated.num_items": "1,2,3",
 	}
 	vFn, err = vrhVipParamsPerAz(rulesVipParamsPerAz)
 	if err != nil {

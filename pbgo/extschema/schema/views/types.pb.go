@@ -938,9 +938,7 @@ type AdvertisePublic struct {
 	//
 	// x-displayName: "Public IP"
 	// x-required
-	// Use dedicated public ip as VIP instead of default public VIP
-	//
-	// Dedicated public ip are allocated by volterra on request
+	// Dedicated Public IP, which is allocated by F5 Distributed Cloud on request, is used as a VIP.
 	PublicIp *ObjectRefType `protobuf:"bytes,1,opt,name=public_ip,json=publicIp,proto3" json:"public_ip,omitempty"`
 }
 
@@ -1153,11 +1151,11 @@ func (m *CustomCiphers) GetCipherSuites() []string {
 // x-displayName: "TLS Config"
 // This defines various options to configure TLS configuration parameters
 type TlsConfig struct {
-	// Security Level
+	// TLS Security Level
 	//
 	// x-displayName: "TLS Security Level"
 	// x-required
-	// Security level determines the min/max TLS versions and ciphers.
+	// The security level for TLS handshake between client/server and the platform.
 	//
 	// Types that are valid to be assigned to Choice:
 	//	*TlsConfig_DefaultSecurity

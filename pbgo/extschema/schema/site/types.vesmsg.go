@@ -2850,6 +2850,48 @@ func (v *ValidateGetSpecType) SiteToSiteIpsecConnectivityValidationRuleHandler(r
 	return validatorFn, nil
 }
 
+func (v *ValidateGetSpecType) IpsecSslNodesFqdnValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepStringItemRules(rules)
+	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Item ValidationRuleHandler for ipsec_ssl_nodes_fqdn")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []string, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for ipsec_ssl_nodes_fqdn")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]string)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []string, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal := fmt.Sprintf("%v", elem)
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated ipsec_ssl_nodes_fqdn")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items ipsec_ssl_nodes_fqdn")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*GetSpecType)
 	if !ok {
@@ -2965,6 +3007,14 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 
 		vOpts := append(opts, db.WithValidateField("inside_vip"))
 		if err := fv(ctx, m.GetInsideVip(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["ipsec_ssl_nodes_fqdn"]; exists {
+		vOpts := append(opts, db.WithValidateField("ipsec_ssl_nodes_fqdn"))
+		if err := fv(ctx, m.GetIpsecSslNodesFqdn(), vOpts...); err != nil {
 			return err
 		}
 
@@ -3323,7 +3373,7 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 
 	vrhVipParamsPerAz := v.VipParamsPerAzValidationRuleHandler
 	rulesVipParamsPerAz := map[string]string{
-		"ves.io.schema.rules.repeated.num_items": "0,1,3",
+		"ves.io.schema.rules.repeated.num_items": "0,1,2,3",
 	}
 	vFn, err = vrhVipParamsPerAz(rulesVipParamsPerAz)
 	if err != nil {
@@ -3342,6 +3392,17 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["site_to_site_ipsec_connectivity"] = vFn
+
+	vrhIpsecSslNodesFqdn := v.IpsecSslNodesFqdnValidationRuleHandler
+	rulesIpsecSslNodesFqdn := map[string]string{
+		"ves.io.schema.rules.string.hostname": "true",
+	}
+	vFn, err = vrhIpsecSslNodesFqdn(rulesIpsecSslNodesFqdn)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GetSpecType.ipsec_ssl_nodes_fqdn: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["ipsec_ssl_nodes_fqdn"] = vFn
 
 	v.FldValidators["coordinates"] = CoordinatesValidator().Validate
 
@@ -4247,6 +4308,48 @@ func (v *ValidateGlobalSpecType) SiteToSiteIpsecConnectivityValidationRuleHandle
 	return validatorFn, nil
 }
 
+func (v *ValidateGlobalSpecType) IpsecSslNodesFqdnValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepStringItemRules(rules)
+	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Item ValidationRuleHandler for ipsec_ssl_nodes_fqdn")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []string, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for ipsec_ssl_nodes_fqdn")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]string)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []string, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal := fmt.Sprintf("%v", elem)
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated ipsec_ssl_nodes_fqdn")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items ipsec_ssl_nodes_fqdn")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*GlobalSpecType)
 	if !ok {
@@ -4412,6 +4515,14 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["ipsec_ssl_nodes_fqdn"]; exists {
+		vOpts := append(opts, db.WithValidateField("ipsec_ssl_nodes_fqdn"))
+		if err := fv(ctx, m.GetIpsecSslNodesFqdn(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["ipsec_ssl_vip_fqdn"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("ipsec_ssl_vip_fqdn"))
@@ -4455,6 +4566,18 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 		vOpts := append(opts, db.WithValidateField("local_k8s_access_enabled"))
 		if err := fv(ctx, m.GetLocalK8SAccessEnabled(), vOpts...); err != nil {
 			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["main_nodes"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("main_nodes"))
+		for idx, item := range m.GetMainNodes() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
 		}
 
 	}
@@ -4542,6 +4665,18 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 		vOpts := append(opts, db.WithValidateField("phobos_enabled"))
 		if err := fv(ctx, m.GetPhobosEnabled(), vOpts...); err != nil {
 			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["phobos_list"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("phobos_list"))
+		for idx, item := range m.GetPhobosList() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
 		}
 
 	}
@@ -5030,7 +5165,7 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 
 	vrhVipParamsPerAz := v.VipParamsPerAzValidationRuleHandler
 	rulesVipParamsPerAz := map[string]string{
-		"ves.io.schema.rules.repeated.num_items": "0,1,3",
+		"ves.io.schema.rules.repeated.num_items": "0,1,2,3",
 	}
 	vFn, err = vrhVipParamsPerAz(rulesVipParamsPerAz)
 	if err != nil {
@@ -5061,9 +5196,22 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	}
 	v.FldValidators["site_to_site_ipsec_connectivity"] = vFn
 
+	vrhIpsecSslNodesFqdn := v.IpsecSslNodesFqdnValidationRuleHandler
+	rulesIpsecSslNodesFqdn := map[string]string{
+		"ves.io.schema.rules.string.hostname": "true",
+	}
+	vFn, err = vrhIpsecSslNodesFqdn(rulesIpsecSslNodesFqdn)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.ipsec_ssl_nodes_fqdn: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["ipsec_ssl_nodes_fqdn"] = vFn
+
 	v.FldValidators["coordinates"] = CoordinatesValidator().Validate
 
 	v.FldValidators["default_underlay_network"] = DefaultUnderlayNetworkTypeValidator().Validate
+
+	v.FldValidators["main_nodes"] = NodeValidator().Validate
 
 	return v
 }()
@@ -6223,6 +6371,152 @@ var DefaultNetworkDeviceValidator = func() *ValidateNetworkDevice {
 
 func NetworkDeviceValidator() db.Validator {
 	return DefaultNetworkDeviceValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *Node) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *Node) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *Node) DeepCopy() *Node {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &Node{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *Node) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *Node) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return NodeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateNode struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateNode) SloAddressValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for slo_address")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateNode) SliAddressValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for sli_address")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateNode) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*Node)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *Node got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("name"))
+		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["sli_address"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("sli_address"))
+		if err := fv(ctx, m.GetSliAddress(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["slo_address"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("slo_address"))
+		if err := fv(ctx, m.GetSloAddress(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultNodeValidator = func() *ValidateNode {
+	v := &ValidateNode{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhSloAddress := v.SloAddressValidationRuleHandler
+	rulesSloAddress := map[string]string{
+		"ves.io.schema.rules.string.ip": "true",
+	}
+	vFn, err = vrhSloAddress(rulesSloAddress)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for Node.slo_address: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["slo_address"] = vFn
+
+	vrhSliAddress := v.SliAddressValidationRuleHandler
+	rulesSliAddress := map[string]string{
+		"ves.io.schema.rules.string.ip": "true",
+	}
+	vFn, err = vrhSliAddress(rulesSliAddress)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for Node.sli_address: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["sli_address"] = vFn
+
+	return v
+}()
+
+func NodeValidator() db.Validator {
+	return DefaultNodeValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -9276,6 +9570,7 @@ func (m *GetSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 
 	m.InsideNameserver = f.GetInsideNameserver()
 	m.InsideVip = f.GetInsideVip()
+	m.IpsecSslNodesFqdn = f.GetIpsecSslNodesFqdn()
 
 	m.LocalK8SAccessEnabled = f.GetLocalK8SAccessEnabled()
 	m.OperatingSystemVersion = f.GetOperatingSystemVersion()
@@ -9324,6 +9619,7 @@ func (m *GetSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 
 	f.InsideNameserver = m1.InsideNameserver
 	f.InsideVip = m1.InsideVip
+	f.IpsecSslNodesFqdn = m1.IpsecSslNodesFqdn
 
 	f.LocalK8SAccessEnabled = m1.LocalK8SAccessEnabled
 	f.OperatingSystemVersion = m1.OperatingSystemVersion

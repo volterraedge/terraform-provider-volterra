@@ -16,6 +16,7 @@ import (
 	"gopkg.volterra.us/stdlib/errors"
 
 	ves_io_schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+	ves_io_schema_views "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views"
 )
 
 var (
@@ -74,6 +75,12 @@ func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
+	if fdrInfos, err := m.GetMeshChoiceDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetMeshChoiceDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
 	if fdrInfos, err := m.GetVirtualSiteDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetVirtualSiteDRefInfo() FAILED")
 	} else {
@@ -127,6 +134,37 @@ func (m *CreateSpecType) GetHubDBEntries(ctx context.Context, d db.Interface) ([
 	}
 
 	return entries, nil
+}
+
+// GetDRefInfo for the field's type
+func (m *CreateSpecType) GetMeshChoiceDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetMeshChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetMeshChoice().(type) {
+	case *CreateSpecType_HubMesh:
+
+		return nil, nil
+
+	case *CreateSpecType_SpokeMesh:
+		drInfos, err := m.GetSpokeMesh().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetSpokeMesh().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "spoke_mesh." + dri.DRField
+		}
+		return drInfos, err
+
+	case *CreateSpecType_FullMesh:
+
+		return nil, nil
+
+	default:
+		return nil, nil
+	}
+
 }
 
 func (m *CreateSpecType) GetVirtualSiteDRefInfo() ([]db.DRefInfo, error) {
@@ -312,6 +350,43 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	switch m.GetMeshChoice().(type) {
+	case *CreateSpecType_HubMesh:
+		if fv, exists := v.FldValidators["mesh_choice.hub_mesh"]; exists {
+			val := m.GetMeshChoice().(*CreateSpecType_HubMesh).HubMesh
+			vOpts := append(opts,
+				db.WithValidateField("mesh_choice"),
+				db.WithValidateField("hub_mesh"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CreateSpecType_SpokeMesh:
+		if fv, exists := v.FldValidators["mesh_choice.spoke_mesh"]; exists {
+			val := m.GetMeshChoice().(*CreateSpecType_SpokeMesh).SpokeMesh
+			vOpts := append(opts,
+				db.WithValidateField("mesh_choice"),
+				db.WithValidateField("spoke_mesh"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CreateSpecType_FullMesh:
+		if fv, exists := v.FldValidators["mesh_choice.full_mesh"]; exists {
+			val := m.GetMeshChoice().(*CreateSpecType_FullMesh).FullMesh
+			vOpts := append(opts,
+				db.WithValidateField("mesh_choice"),
+				db.WithValidateField("full_mesh"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["tunnel_type"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("tunnel_type"))
@@ -355,8 +430,7 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 
 	vrhType := v.TypeValidationRuleHandler
 	rulesType := map[string]string{
-		"ves.io.schema.rules.enum.in":          "[1,2,3]",
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.enum.in": "[0,1,2,3]",
 	}
 	vFn, err = vrhType(rulesType)
 	if err != nil {
@@ -367,8 +441,7 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 
 	vrhTunnelType := v.TunnelTypeValidationRuleHandler
 	rulesTunnelType := map[string]string{
-		"ves.io.schema.rules.enum.in":          "[1]",
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.enum.in": "[1]",
 	}
 	vFn, err = vrhTunnelType(rulesTunnelType)
 	if err != nil {
@@ -399,11 +472,108 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	}
 	v.FldValidators["hub"] = vFn
 
+	v.FldValidators["mesh_choice.spoke_mesh"] = SpokeMeshGroupTypeValidator().Validate
+
 	return v
 }()
 
 func CreateSpecTypeValidator() db.Validator {
 	return DefaultCreateSpecTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *FullMeshGroupType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *FullMeshGroupType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *FullMeshGroupType) DeepCopy() *FullMeshGroupType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &FullMeshGroupType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *FullMeshGroupType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *FullMeshGroupType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return FullMeshGroupTypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateFullMeshGroupType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateFullMeshGroupType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*FullMeshGroupType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *FullMeshGroupType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	switch m.GetFullMeshChoice().(type) {
+	case *FullMeshGroupType_DataPlaneMesh:
+		if fv, exists := v.FldValidators["full_mesh_choice.data_plane_mesh"]; exists {
+			val := m.GetFullMeshChoice().(*FullMeshGroupType_DataPlaneMesh).DataPlaneMesh
+			vOpts := append(opts,
+				db.WithValidateField("full_mesh_choice"),
+				db.WithValidateField("data_plane_mesh"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *FullMeshGroupType_ControlAndDataPlaneMesh:
+		if fv, exists := v.FldValidators["full_mesh_choice.control_and_data_plane_mesh"]; exists {
+			val := m.GetFullMeshChoice().(*FullMeshGroupType_ControlAndDataPlaneMesh).ControlAndDataPlaneMesh
+			vOpts := append(opts,
+				db.WithValidateField("full_mesh_choice"),
+				db.WithValidateField("control_and_data_plane_mesh"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultFullMeshGroupTypeValidator = func() *ValidateFullMeshGroupType {
+	v := &ValidateFullMeshGroupType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func FullMeshGroupTypeValidator() db.Validator {
+	return DefaultFullMeshGroupTypeValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -451,6 +621,12 @@ func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	var drInfos []db.DRefInfo
 	if fdrInfos, err := m.GetHubDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetHubDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	if fdrInfos, err := m.GetMeshChoiceDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetMeshChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
@@ -508,6 +684,37 @@ func (m *GetSpecType) GetHubDBEntries(ctx context.Context, d db.Interface) ([]db
 	}
 
 	return entries, nil
+}
+
+// GetDRefInfo for the field's type
+func (m *GetSpecType) GetMeshChoiceDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetMeshChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetMeshChoice().(type) {
+	case *GetSpecType_HubMesh:
+
+		return nil, nil
+
+	case *GetSpecType_SpokeMesh:
+		drInfos, err := m.GetSpokeMesh().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetSpokeMesh().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "spoke_mesh." + dri.DRField
+		}
+		return drInfos, err
+
+	case *GetSpecType_FullMesh:
+
+		return nil, nil
+
+	default:
+		return nil, nil
+	}
+
 }
 
 func (m *GetSpecType) GetVirtualSiteDRefInfo() ([]db.DRefInfo, error) {
@@ -693,6 +900,43 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 
 	}
 
+	switch m.GetMeshChoice().(type) {
+	case *GetSpecType_HubMesh:
+		if fv, exists := v.FldValidators["mesh_choice.hub_mesh"]; exists {
+			val := m.GetMeshChoice().(*GetSpecType_HubMesh).HubMesh
+			vOpts := append(opts,
+				db.WithValidateField("mesh_choice"),
+				db.WithValidateField("hub_mesh"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GetSpecType_SpokeMesh:
+		if fv, exists := v.FldValidators["mesh_choice.spoke_mesh"]; exists {
+			val := m.GetMeshChoice().(*GetSpecType_SpokeMesh).SpokeMesh
+			vOpts := append(opts,
+				db.WithValidateField("mesh_choice"),
+				db.WithValidateField("spoke_mesh"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GetSpecType_FullMesh:
+		if fv, exists := v.FldValidators["mesh_choice.full_mesh"]; exists {
+			val := m.GetMeshChoice().(*GetSpecType_FullMesh).FullMesh
+			vOpts := append(opts,
+				db.WithValidateField("mesh_choice"),
+				db.WithValidateField("full_mesh"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["tunnel_type"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("tunnel_type"))
@@ -736,8 +980,7 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 
 	vrhType := v.TypeValidationRuleHandler
 	rulesType := map[string]string{
-		"ves.io.schema.rules.enum.in":          "[1,2,3]",
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.enum.in": "[0,1,2,3]",
 	}
 	vFn, err = vrhType(rulesType)
 	if err != nil {
@@ -748,8 +991,7 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 
 	vrhTunnelType := v.TunnelTypeValidationRuleHandler
 	rulesTunnelType := map[string]string{
-		"ves.io.schema.rules.enum.in":          "[1]",
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.enum.in": "[1]",
 	}
 	vFn, err = vrhTunnelType(rulesTunnelType)
 	if err != nil {
@@ -779,6 +1021,8 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["hub"] = vFn
+
+	v.FldValidators["mesh_choice.spoke_mesh"] = SpokeMeshGroupTypeValidator().Validate
 
 	return v
 }()
@@ -836,6 +1080,12 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
+	if fdrInfos, err := m.GetMeshChoiceDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetMeshChoiceDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
 	if fdrInfos, err := m.GetVirtualSiteDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetVirtualSiteDRefInfo() FAILED")
 	} else {
@@ -889,6 +1139,37 @@ func (m *GlobalSpecType) GetHubDBEntries(ctx context.Context, d db.Interface) ([
 	}
 
 	return entries, nil
+}
+
+// GetDRefInfo for the field's type
+func (m *GlobalSpecType) GetMeshChoiceDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetMeshChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetMeshChoice().(type) {
+	case *GlobalSpecType_HubMesh:
+
+		return nil, nil
+
+	case *GlobalSpecType_SpokeMesh:
+		drInfos, err := m.GetSpokeMesh().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetSpokeMesh().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "spoke_mesh." + dri.DRField
+		}
+		return drInfos, err
+
+	case *GlobalSpecType_FullMesh:
+
+		return nil, nil
+
+	default:
+		return nil, nil
+	}
+
 }
 
 func (m *GlobalSpecType) GetVirtualSiteDRefInfo() ([]db.DRefInfo, error) {
@@ -1074,6 +1355,43 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	switch m.GetMeshChoice().(type) {
+	case *GlobalSpecType_HubMesh:
+		if fv, exists := v.FldValidators["mesh_choice.hub_mesh"]; exists {
+			val := m.GetMeshChoice().(*GlobalSpecType_HubMesh).HubMesh
+			vOpts := append(opts,
+				db.WithValidateField("mesh_choice"),
+				db.WithValidateField("hub_mesh"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GlobalSpecType_SpokeMesh:
+		if fv, exists := v.FldValidators["mesh_choice.spoke_mesh"]; exists {
+			val := m.GetMeshChoice().(*GlobalSpecType_SpokeMesh).SpokeMesh
+			vOpts := append(opts,
+				db.WithValidateField("mesh_choice"),
+				db.WithValidateField("spoke_mesh"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GlobalSpecType_FullMesh:
+		if fv, exists := v.FldValidators["mesh_choice.full_mesh"]; exists {
+			val := m.GetMeshChoice().(*GlobalSpecType_FullMesh).FullMesh
+			vOpts := append(opts,
+				db.WithValidateField("mesh_choice"),
+				db.WithValidateField("full_mesh"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["tunnel_type"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("tunnel_type"))
@@ -1117,8 +1435,7 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 
 	vrhType := v.TypeValidationRuleHandler
 	rulesType := map[string]string{
-		"ves.io.schema.rules.enum.in":          "[1,2,3]",
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.enum.in": "[0,1,2,3]",
 	}
 	vFn, err = vrhType(rulesType)
 	if err != nil {
@@ -1129,8 +1446,7 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 
 	vrhTunnelType := v.TunnelTypeValidationRuleHandler
 	rulesTunnelType := map[string]string{
-		"ves.io.schema.rules.enum.in":          "[1]",
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.enum.in": "[1]",
 	}
 	vFn, err = vrhTunnelType(rulesTunnelType)
 	if err != nil {
@@ -1160,6 +1476,8 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["hub"] = vFn
+
+	v.FldValidators["mesh_choice.spoke_mesh"] = SpokeMeshGroupTypeValidator().Validate
 
 	return v
 }()
@@ -1217,6 +1535,12 @@ func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
+	if fdrInfos, err := m.GetMeshChoiceDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetMeshChoiceDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
 	if fdrInfos, err := m.GetVirtualSiteDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetVirtualSiteDRefInfo() FAILED")
 	} else {
@@ -1270,6 +1594,37 @@ func (m *ReplaceSpecType) GetHubDBEntries(ctx context.Context, d db.Interface) (
 	}
 
 	return entries, nil
+}
+
+// GetDRefInfo for the field's type
+func (m *ReplaceSpecType) GetMeshChoiceDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetMeshChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetMeshChoice().(type) {
+	case *ReplaceSpecType_HubMesh:
+
+		return nil, nil
+
+	case *ReplaceSpecType_SpokeMesh:
+		drInfos, err := m.GetSpokeMesh().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetSpokeMesh().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "spoke_mesh." + dri.DRField
+		}
+		return drInfos, err
+
+	case *ReplaceSpecType_FullMesh:
+
+		return nil, nil
+
+	default:
+		return nil, nil
+	}
+
 }
 
 func (m *ReplaceSpecType) GetVirtualSiteDRefInfo() ([]db.DRefInfo, error) {
@@ -1455,6 +1810,43 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 
 	}
 
+	switch m.GetMeshChoice().(type) {
+	case *ReplaceSpecType_HubMesh:
+		if fv, exists := v.FldValidators["mesh_choice.hub_mesh"]; exists {
+			val := m.GetMeshChoice().(*ReplaceSpecType_HubMesh).HubMesh
+			vOpts := append(opts,
+				db.WithValidateField("mesh_choice"),
+				db.WithValidateField("hub_mesh"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ReplaceSpecType_SpokeMesh:
+		if fv, exists := v.FldValidators["mesh_choice.spoke_mesh"]; exists {
+			val := m.GetMeshChoice().(*ReplaceSpecType_SpokeMesh).SpokeMesh
+			vOpts := append(opts,
+				db.WithValidateField("mesh_choice"),
+				db.WithValidateField("spoke_mesh"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ReplaceSpecType_FullMesh:
+		if fv, exists := v.FldValidators["mesh_choice.full_mesh"]; exists {
+			val := m.GetMeshChoice().(*ReplaceSpecType_FullMesh).FullMesh
+			vOpts := append(opts,
+				db.WithValidateField("mesh_choice"),
+				db.WithValidateField("full_mesh"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["tunnel_type"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("tunnel_type"))
@@ -1498,8 +1890,7 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 
 	vrhType := v.TypeValidationRuleHandler
 	rulesType := map[string]string{
-		"ves.io.schema.rules.enum.in":          "[1,2,3]",
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.enum.in": "[0,1,2,3]",
 	}
 	vFn, err = vrhType(rulesType)
 	if err != nil {
@@ -1510,8 +1901,7 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 
 	vrhTunnelType := v.TunnelTypeValidationRuleHandler
 	rulesTunnelType := map[string]string{
-		"ves.io.schema.rules.enum.in":          "[1]",
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.enum.in": "[1]",
 	}
 	vFn, err = vrhTunnelType(rulesTunnelType)
 	if err != nil {
@@ -1541,6 +1931,8 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["hub"] = vFn
+
+	v.FldValidators["mesh_choice.spoke_mesh"] = SpokeMeshGroupTypeValidator().Validate
 
 	return v
 }()
@@ -1630,11 +2022,191 @@ func SiteMeshGroupStatusValidator() db.Validator {
 	return DefaultSiteMeshGroupStatusValidator
 }
 
+// augmented methods on protoc/std generated struct
+
+func (m *SpokeMeshGroupType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *SpokeMeshGroupType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *SpokeMeshGroupType) DeepCopy() *SpokeMeshGroupType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &SpokeMeshGroupType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *SpokeMeshGroupType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *SpokeMeshGroupType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return SpokeMeshGroupTypeValidator().Validate(ctx, m, opts...)
+}
+
+func (m *SpokeMeshGroupType) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetHubMeshGroupDRefInfo()
+
+}
+
+func (m *SpokeMeshGroupType) GetHubMeshGroupDRefInfo() ([]db.DRefInfo, error) {
+
+	vref := m.GetHubMeshGroup()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("site_mesh_group.Object")
+	dri := db.DRefInfo{
+		RefdType:   "site_mesh_group.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "hub_mesh_group",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+
+}
+
+// GetHubMeshGroupDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *SpokeMeshGroupType) GetHubMeshGroupDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+	refdType, err := d.TypeForEntryKind("", "", "site_mesh_group.Object")
+	if err != nil {
+		return nil, errors.Wrap(err, "Cannot find type for kind: site_mesh_group")
+	}
+
+	vref := m.GetHubMeshGroup()
+	if vref == nil {
+		return nil, nil
+	}
+	ref := &ves_io_schema.ObjectRefType{
+		Kind:      "site_mesh_group.Object",
+		Tenant:    vref.Tenant,
+		Namespace: vref.Namespace,
+		Name:      vref.Name,
+	}
+	refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+	if err != nil {
+		return nil, errors.Wrap(err, "Getting referred entry")
+	}
+	if refdEnt != nil {
+		entries = append(entries, refdEnt)
+	}
+
+	return entries, nil
+}
+
+type ValidateSpokeMeshGroupType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateSpokeMeshGroupType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*SpokeMeshGroupType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *SpokeMeshGroupType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["hub_mesh_group"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("hub_mesh_group"))
+		if err := fv(ctx, m.GetHubMeshGroup(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultSpokeMeshGroupTypeValidator = func() *ValidateSpokeMeshGroupType {
+	v := &ValidateSpokeMeshGroupType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	v.FldValidators["hub_mesh_group"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
+
+	return v
+}()
+
+func SpokeMeshGroupTypeValidator() db.Validator {
+	return DefaultSpokeMeshGroupTypeValidator
+}
+
+// create setters in CreateSpecType from GlobalSpecType for oneof fields
+func (r *CreateSpecType) SetMeshChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.MeshChoice.(type) {
+	case nil:
+		o.MeshChoice = nil
+
+	case *CreateSpecType_FullMesh:
+		o.MeshChoice = &GlobalSpecType_FullMesh{FullMesh: of.FullMesh}
+
+	case *CreateSpecType_HubMesh:
+		o.MeshChoice = &GlobalSpecType_HubMesh{HubMesh: of.HubMesh}
+
+	case *CreateSpecType_SpokeMesh:
+		o.MeshChoice = &GlobalSpecType_SpokeMesh{SpokeMesh: of.SpokeMesh}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *CreateSpecType) GetMeshChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.MeshChoice.(type) {
+	case nil:
+		r.MeshChoice = nil
+
+	case *GlobalSpecType_FullMesh:
+		r.MeshChoice = &CreateSpecType_FullMesh{FullMesh: of.FullMesh}
+
+	case *GlobalSpecType_HubMesh:
+		r.MeshChoice = &CreateSpecType_HubMesh{HubMesh: of.HubMesh}
+
+	case *GlobalSpecType_SpokeMesh:
+		r.MeshChoice = &CreateSpecType_SpokeMesh{SpokeMesh: of.SpokeMesh}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
 func (m *CreateSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	if f == nil {
 		return
 	}
 	m.Hub = f.GetHub()
+	m.GetMeshChoiceFromGlobalSpecType(f)
 	m.TunnelType = f.GetTunnelType()
 	m.Type = f.GetType()
 	m.VirtualSite = f.GetVirtualSite()
@@ -1656,6 +2228,7 @@ func (m *CreateSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) 
 	_ = m1
 
 	f.Hub = m1.Hub
+	m1.SetMeshChoiceToGlobalSpecType(f)
 	f.TunnelType = m1.TunnelType
 	f.Type = m1.Type
 	f.VirtualSite = m1.VirtualSite
@@ -1669,11 +2242,53 @@ func (m *CreateSpecType) ToGlobalSpecTypeWithoutDeepCopy(f *GlobalSpecType) {
 	m.toGlobalSpecType(f, false)
 }
 
+// create setters in GetSpecType from GlobalSpecType for oneof fields
+func (r *GetSpecType) SetMeshChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.MeshChoice.(type) {
+	case nil:
+		o.MeshChoice = nil
+
+	case *GetSpecType_FullMesh:
+		o.MeshChoice = &GlobalSpecType_FullMesh{FullMesh: of.FullMesh}
+
+	case *GetSpecType_HubMesh:
+		o.MeshChoice = &GlobalSpecType_HubMesh{HubMesh: of.HubMesh}
+
+	case *GetSpecType_SpokeMesh:
+		o.MeshChoice = &GlobalSpecType_SpokeMesh{SpokeMesh: of.SpokeMesh}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *GetSpecType) GetMeshChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.MeshChoice.(type) {
+	case nil:
+		r.MeshChoice = nil
+
+	case *GlobalSpecType_FullMesh:
+		r.MeshChoice = &GetSpecType_FullMesh{FullMesh: of.FullMesh}
+
+	case *GlobalSpecType_HubMesh:
+		r.MeshChoice = &GetSpecType_HubMesh{HubMesh: of.HubMesh}
+
+	case *GlobalSpecType_SpokeMesh:
+		r.MeshChoice = &GetSpecType_SpokeMesh{SpokeMesh: of.SpokeMesh}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
 func (m *GetSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	if f == nil {
 		return
 	}
 	m.Hub = f.GetHub()
+	m.GetMeshChoiceFromGlobalSpecType(f)
 	m.TunnelType = f.GetTunnelType()
 	m.Type = f.GetType()
 	m.VirtualSite = f.GetVirtualSite()
@@ -1695,6 +2310,7 @@ func (m *GetSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	_ = m1
 
 	f.Hub = m1.Hub
+	m1.SetMeshChoiceToGlobalSpecType(f)
 	f.TunnelType = m1.TunnelType
 	f.Type = m1.Type
 	f.VirtualSite = m1.VirtualSite
@@ -1708,11 +2324,53 @@ func (m *GetSpecType) ToGlobalSpecTypeWithoutDeepCopy(f *GlobalSpecType) {
 	m.toGlobalSpecType(f, false)
 }
 
+// create setters in ReplaceSpecType from GlobalSpecType for oneof fields
+func (r *ReplaceSpecType) SetMeshChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.MeshChoice.(type) {
+	case nil:
+		o.MeshChoice = nil
+
+	case *ReplaceSpecType_FullMesh:
+		o.MeshChoice = &GlobalSpecType_FullMesh{FullMesh: of.FullMesh}
+
+	case *ReplaceSpecType_HubMesh:
+		o.MeshChoice = &GlobalSpecType_HubMesh{HubMesh: of.HubMesh}
+
+	case *ReplaceSpecType_SpokeMesh:
+		o.MeshChoice = &GlobalSpecType_SpokeMesh{SpokeMesh: of.SpokeMesh}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *ReplaceSpecType) GetMeshChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.MeshChoice.(type) {
+	case nil:
+		r.MeshChoice = nil
+
+	case *GlobalSpecType_FullMesh:
+		r.MeshChoice = &ReplaceSpecType_FullMesh{FullMesh: of.FullMesh}
+
+	case *GlobalSpecType_HubMesh:
+		r.MeshChoice = &ReplaceSpecType_HubMesh{HubMesh: of.HubMesh}
+
+	case *GlobalSpecType_SpokeMesh:
+		r.MeshChoice = &ReplaceSpecType_SpokeMesh{SpokeMesh: of.SpokeMesh}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
 func (m *ReplaceSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	if f == nil {
 		return
 	}
 	m.Hub = f.GetHub()
+	m.GetMeshChoiceFromGlobalSpecType(f)
 	m.TunnelType = f.GetTunnelType()
 	m.Type = f.GetType()
 	m.VirtualSite = f.GetVirtualSite()
@@ -1734,6 +2392,7 @@ func (m *ReplaceSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool)
 	_ = m1
 
 	f.Hub = m1.Hub
+	m1.SetMeshChoiceToGlobalSpecType(f)
 	f.TunnelType = m1.TunnelType
 	f.Type = m1.Type
 	f.VirtualSite = m1.VirtualSite

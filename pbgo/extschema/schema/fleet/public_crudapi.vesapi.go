@@ -2418,6 +2418,11 @@ var APISwaggerJSON string = `{
                     "description": "x-displayName: \"Peer Address\"\nSpecify peer address.",
                     "title": "address"
                 },
+                "dc_cluster_group": {
+                    "description": "x-displayName: \"DC Cluster Group\"\nthe peer represents a group of peers derived from other sites in the DC Cluster Group",
+                    "title": "dc_cluster_group",
+                    "$ref": "#/definitions/schemaviewsObjectRefType"
+                },
                 "disable_mtls": {
                     "description": "x-displayName: \"Disable MTLS\"\nDisable MTLS",
                     "title": "disable_mtls",
@@ -2458,11 +2463,21 @@ var APISwaggerJSON string = `{
                     "title": "from_site",
                     "$ref": "#/definitions/ioschemaEmpty"
                 },
+                "local": {
+                    "description": "x-displayName: \"local\"\nthe peer is a single, local peer, not a group",
+                    "title": "local",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
                 "port": {
                     "type": "integer",
-                    "description": "x-displayName: \"Peer Port\"\nx-example: \"179\"\nPeer TCP port number.",
+                    "description": "x-displayName: \"Peer Port\"\nx-example: \"179\"\nLocal Peer TCP Port Number (ignored for Site Mesh Groups or DC Cluster Groups).",
                     "title": "port",
                     "format": "int64"
+                },
+                "site_mesh_group": {
+                    "description": "x-displayName: \"Site Mesh Group\"\nthe peer represents a group of peers derived from other sites in the Site Mesh Group",
+                    "title": "site_mesh_group",
+                    "$ref": "#/definitions/schemaviewsObjectRefType"
                 }
             }
         },
@@ -2666,7 +2681,7 @@ var APISwaggerJSON string = `{
             "properties": {
                 "name": {
                     "type": "string",
-                    "description": " Name of the device including the unit number (e.g. eth0 or disk1). The name must match name of device in host-os of node \n\nExample: - \"eth0\"-",
+                    "description": " Name of the device including the unit number (e.g. eth0 or disk1). The name must match name of device in host-os of node\n\nExample: - \"eth0\"-",
                     "title": "Name",
                     "x-displayname": "Device Name",
                     "x-ves-example": "eth0"
@@ -3107,7 +3122,7 @@ var APISwaggerJSON string = `{
                 },
                 "name": {
                     "type": "string",
-                    "description": " Bond device name \n\nExample: - \"bond0\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 64\n",
+                    "description": " Bond device name\n\nExample: - \"bond0\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 64\n",
                     "title": "Bond Device",
                     "maxLength": 64,
                     "x-displayname": "Bond Device Name",
@@ -3240,7 +3255,7 @@ var APISwaggerJSON string = `{
             "description": "Configuration of custom storage class",
             "title": "Custom Storage Class",
             "x-displayname": "Custom Storage Class",
-            "x-ves-oneof-field-device_choice": "[\"custom_storage\",\"netapp_trident\",\"openebs_enterprise\",\"pure_service_orchestrator\"]",
+            "x-ves-oneof-field-device_choice": "[\"custom_storage\",\"netapp_trident\",\"pure_service_orchestrator\"]",
             "x-ves-proto-message": "ves.io.schema.fleet.FleetStorageClassType",
             "properties": {
                 "advanced_storage_parameters": {
@@ -3265,7 +3280,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Allow Volume Expansion"
                 },
                 "custom_storage": {
-                    "description": "Exclusive with [netapp_trident openebs_enterprise pure_service_orchestrator]\n Storage configuration for Custom Storage",
+                    "description": "Exclusive with [netapp_trident pure_service_orchestrator]\n Storage configuration for Custom Storage",
                     "title": "Custom Storage",
                     "$ref": "#/definitions/fleetStorageClassCustomType",
                     "x-displayname": "Custom Storage"
@@ -3289,19 +3304,13 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "netapp_trident": {
-                    "description": "Exclusive with [custom_storage openebs_enterprise pure_service_orchestrator]\n Storage class Device configuration for NetApp Trident",
+                    "description": "Exclusive with [custom_storage pure_service_orchestrator]\n Storage class Device configuration for NetApp Trident",
                     "title": "NetApp Trident",
                     "$ref": "#/definitions/fleetStorageClassNetappTridentType",
                     "x-displayname": "NetApp Trident"
                 },
-                "openebs_enterprise": {
-                    "description": "Exclusive with [custom_storage netapp_trident pure_service_orchestrator]\n Storage class Device configuration for OpenEBS Enterprise",
-                    "title": "OpenEBS Enterprise",
-                    "$ref": "#/definitions/fleetStorageClassOpenebsEnterpriseType",
-                    "x-displayname": "OpenEBS Enterprise"
-                },
                 "pure_service_orchestrator": {
-                    "description": "Exclusive with [custom_storage netapp_trident openebs_enterprise]\n Storage class Device configuration for Pure Service Orchestrator",
+                    "description": "Exclusive with [custom_storage netapp_trident]\n Storage class Device configuration for Pure Service Orchestrator",
                     "title": "Pure Storage Service Orchestrator",
                     "$ref": "#/definitions/fleetStorageClassPureServiceOrchestratorType",
                     "x-displayname": "Pure Storage Service Orchestrator"
@@ -3374,7 +3383,7 @@ var APISwaggerJSON string = `{
             "description": "Configuration of storage device",
             "title": "Storage Device",
             "x-displayname": "Storage Device",
-            "x-ves-oneof-field-device_choice": "[\"custom_storage\",\"netapp_trident\",\"openebs_enterprise\",\"pure_service_orchestrator\"]",
+            "x-ves-oneof-field-device_choice": "[\"custom_storage\",\"netapp_trident\",\"pure_service_orchestrator\"]",
             "x-ves-proto-message": "ves.io.schema.fleet.FleetStorageDeviceType",
             "properties": {
                 "advanced_advanced_parameters": {
@@ -3392,32 +3401,26 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "custom_storage": {
-                    "description": "Exclusive with [netapp_trident openebs_enterprise pure_service_orchestrator]\n Device configuration for Custom Storage",
+                    "description": "Exclusive with [netapp_trident pure_service_orchestrator]\n Device configuration for Custom Storage",
                     "title": "Custom Storage",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Custom Storage"
                 },
                 "netapp_trident": {
-                    "description": "Exclusive with [custom_storage openebs_enterprise pure_service_orchestrator]\n Device configuration for NetApp Trident",
+                    "description": "Exclusive with [custom_storage pure_service_orchestrator]\n Device configuration for NetApp Trident",
                     "title": "NetApp Trident",
                     "$ref": "#/definitions/fleetStorageDeviceNetappTridentType",
                     "x-displayname": "NetApp Trident"
                 },
-                "openebs_enterprise": {
-                    "description": "Exclusive with [custom_storage netapp_trident pure_service_orchestrator]\n Device configuration for Pure Storage Service Orchestrator",
-                    "title": "OpenEBS Enterprise",
-                    "$ref": "#/definitions/fleetStorageDeviceOpenebsEnterpriseType",
-                    "x-displayname": "OpenEBS Enterprise"
-                },
                 "pure_service_orchestrator": {
-                    "description": "Exclusive with [custom_storage netapp_trident openebs_enterprise]\n Device configuration for Pure Storage Service Orchestrator",
+                    "description": "Exclusive with [custom_storage netapp_trident]\n Device configuration for Pure Storage Service Orchestrator",
                     "title": "Pure Storage Service Orchestrator",
                     "$ref": "#/definitions/fleetStorageDevicePureStorageServiceOrchestratorType",
                     "x-displayname": "Pure Storage Service Orchestrator"
                 },
                 "storage_device": {
                     "type": "string",
-                    "description": " Storage device and device unit \n\nExample: - \"DellEMC-isilon-F800-0\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 64\n",
+                    "description": " Storage device and device unit\n\nExample: - \"DellEMC-isilon-F800-0\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 64\n",
                     "title": "Storage Device",
                     "maxLength": 64,
                     "x-displayname": "Storage Device",
@@ -3922,56 +3925,26 @@ var APISwaggerJSON string = `{
         },
         "fleetOpenebsMayastorPoolType": {
             "type": "object",
-            "description": "Configuration for OpenEBS Mayastor Pool. When a Mayastor Node (MSN) allocates storage capacity for a Persistent Volume (PV) it does so from a construct named a Mayastor Pool (MSP).\nEach MSN may have zero, one, or more such pools associated with it.  The ownership of a pool by a MSN is exclusive.\nIn the current version of Mayastor, a pool may have only a single block device member, which constitutes the entire data persistence layer for that pool.\nEach MSP include a unique name for the pool, the host name of the MSN on which it is hosted and a reference to a disk device which is accessible from that node (for inclusion within the pool).\nThe pool definition allows the reference to its member disk to adhere to one of a number of possible schemes, each associated with a specific access\nmechanism/transport/device type and differentiated by corresponding performance and/or attachment locality.",
+            "description": "x-displayName: \"OpenEBS Mayastor Pool\"\nConfiguration for OpenEBS Mayastor Pool. When a Mayastor Node (MSN) allocates storage capacity for a Persistent Volume (PV) it does so from a construct named a Mayastor Pool (MSP).\nEach MSN may have zero, one, or more such pools associated with it.  The ownership of a pool by a MSN is exclusive.\nIn the current version of Mayastor, a pool may have only a single block device member, which constitutes the entire data persistence layer for that pool.\nEach MSP include a unique name for the pool, the host name of the MSN on which it is hosted and a reference to a disk device which is accessible from that node (for inclusion within the pool).\nThe pool definition allows the reference to its member disk to adhere to one of a number of possible schemes, each associated with a specific access\nmechanism/transport/device type and differentiated by corresponding performance and/or attachment locality.",
             "title": "OpenEBS Mayastor Pool",
-            "x-displayname": "OpenEBS Mayastor Pool",
-            "x-ves-proto-message": "ves.io.schema.fleet.OpenebsMayastorPoolType",
             "properties": {
                 "node": {
                     "type": "string",
-                    "description": " Enter k8s node name of Mayastor Node (MSN) where this pool is or going to be located.\n\nExample: - \"master-0\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.hostname: true\n",
-                    "title": "Node Name",
-                    "x-displayname": "Node Name",
-                    "x-ves-example": "master-0",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true",
-                        "ves.io.schema.rules.string.hostname": "true"
-                    }
+                    "description": "x-displayName: \"Node Name\"\nx-required\nx-example: \"master-0\"\nEnter k8s node name of Mayastor Node (MSN) where this pool is or going to be located.",
+                    "title": "Node Name"
                 },
                 "pool_disk_devices": {
                     "type": "array",
-                    "description": " List of Disk Devices on Mayastore Node (MSN). Once Mayastor has created a pool it is assumed that it henceforth has exclusive use of the associated\n disk device; it should not be partitioned, formatted, or shared with another application or process.  Any existing data on the device will be destroyed.\n It supports various types such as \"/dev/sdb\", \"nvme://nqn.2014-08.com.vendor:nvme:nvm-subsystem-sn-d78432\" or \"iscsi://iqn.2000-08.com.datacore.com:cloudvm41-2\".\n\nExample: - \"/dev/sdb\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 10\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": "x-displayName: \"List of  Disk Devices\"\nx-required\nx-example: \"/dev/sdb\"\nList of Disk Devices on Mayastore Node (MSN). Once Mayastor has created a pool it is assumed that it henceforth has exclusive use of the associated\ndisk device; it should not be partitioned, formatted, or shared with another application or process.  Any existing data on the device will be destroyed.\nIt supports various types such as \"/dev/sdb\", \"nvme://nqn.2014-08.com.vendor:nvme:nvm-subsystem-sn-d78432\" or \"iscsi://iqn.2000-08.com.datacore.com:cloudvm41-2\".",
                     "title": "List of Disk Devices",
-                    "minItems": 1,
-                    "maxItems": 10,
                     "items": {
                         "type": "string"
-                    },
-                    "x-displayname": "List of  Disk Devices",
-                    "x-ves-example": "/dev/sdb",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true",
-                        "ves.io.schema.rules.repeated.max_items": "10",
-                        "ves.io.schema.rules.repeated.min_items": "1",
-                        "ves.io.schema.rules.repeated.unique": "true"
                     }
                 },
                 "pool_name": {
                     "type": "string",
-                    "description": " Enter Mayastor Pool Name\n\nExample: - \"maya-pool-01\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_bytes: 64\n  ves.io.schema.rules.string.min_bytes: 1\n",
-                    "title": "Mayastor Pool Name",
-                    "minLength": 1,
-                    "maxLength": 64,
-                    "x-displayname": "Mayastor Pool Name",
-                    "x-ves-example": "maya-pool-01",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true",
-                        "ves.io.schema.rules.string.max_bytes": "64",
-                        "ves.io.schema.rules.string.min_bytes": "1"
-                    }
+                    "description": "x-displayName: \"Mayastor Pool Name\"\nx-example: \"maya-pool-01\"\nx-required\nEnter Mayastor Pool Name",
+                    "title": "Mayastor Pool Name"
                 }
             }
         },
@@ -4119,33 +4092,6 @@ var APISwaggerJSON string = `{
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.string.max_len": "512"
                     }
-                }
-            }
-        },
-        "fleetStorageClassOpenebsEnterpriseType": {
-            "type": "object",
-            "description": "Storage class Device configuration for OpenEBS Enterprise",
-            "title": "OpenEBS Enterprise",
-            "x-displayname": "OpenEBS Enterprise",
-            "x-ves-proto-message": "ves.io.schema.fleet.StorageClassOpenebsEnterpriseType",
-            "properties": {
-                "protocol": {
-                    "type": "string",
-                    "description": " Defines type of transport protocol used to mount the PV to the worker node hosting the associated application pod (NVMe-oF)\n\nExample: - \"nvmf\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.in: [\\\"nvmf\\\"]\n",
-                    "title": "Protocol",
-                    "x-displayname": "Protocol",
-                    "x-ves-example": "nvmf",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.in": "[\\\"nvmf\\\"]"
-                    }
-                },
-                "replication": {
-                    "type": "integer",
-                    "description": " Replication sets the replication factor of the PV, i.e. the number of data replicas to be maintained for it such as 1 or 3.\n\nExample: - \"1\"-",
-                    "title": "Replication",
-                    "format": "int32",
-                    "x-displayname": "Replication",
-                    "x-ves-example": "1"
                 }
             }
         },
@@ -4668,23 +4614,15 @@ var APISwaggerJSON string = `{
         },
         "fleetStorageDeviceOpenebsEnterpriseType": {
             "type": "object",
-            "description": "Device configuration for OpenEBS Enterprise",
+            "description": "x-displayName: \"OpenEBS Enterprise\"\nDevice configuration for OpenEBS Enterprise",
             "title": "OpenEBS Enterprise",
-            "x-displayname": "OpenEBS Enterprise",
-            "x-ves-proto-message": "ves.io.schema.fleet.StorageDeviceOpenebsEnterpriseType",
             "properties": {
                 "mayastor_pools": {
                     "type": "array",
-                    "description": " List of  Mayastor Pools. When a Mayastor Node (MSN) allocates storage capacity for a Persistent Volume (PV) it does so from a construct named a Mayastor Pool (MSP).\n Each MSN may have zero, one, or more such pools associated with it.  The ownership of a pool by a MSN is exclusive.\n In the current version of Mayastor, a pool may have only a single block device member, which constitutes the entire data persistence layer for that pool.\n Each MSP include a unique name for the pool, the host name of the MSN on which it is hosted and a reference to a disk device which is accessible from that node (for inclusion within the pool).\n The pool definition allows the reference to its member disk to adhere to one of a number of possible schemes, each associated with a specific access\n mechanism/transport/device type and differentiated by corresponding performance and/or attachment locality.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 50\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": "x-displayName: \"List of  Mayastor Pools\"\nList of  Mayastor Pools. When a Mayastor Node (MSN) allocates storage capacity for a Persistent Volume (PV) it does so from a construct named a Mayastor Pool (MSP).\nEach MSN may have zero, one, or more such pools associated with it.  The ownership of a pool by a MSN is exclusive.\nIn the current version of Mayastor, a pool may have only a single block device member, which constitutes the entire data persistence layer for that pool.\nEach MSP include a unique name for the pool, the host name of the MSN on which it is hosted and a reference to a disk device which is accessible from that node (for inclusion within the pool).\nThe pool definition allows the reference to its member disk to adhere to one of a number of possible schemes, each associated with a specific access\nmechanism/transport/device type and differentiated by corresponding performance and/or attachment locality.",
                     "title": "List of  Mayastor Pools",
-                    "maxItems": 50,
                     "items": {
                         "$ref": "#/definitions/fleetOpenebsMayastorPoolType"
-                    },
-                    "x-displayname": "List of  Mayastor Pools",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.repeated.max_items": "50",
-                        "ves.io.schema.rules.repeated.unique": "true"
                     }
                 }
             }
@@ -6187,7 +6125,7 @@ var APISwaggerJSON string = `{
                 },
                 "fleet_label": {
                     "type": "string",
-                    "description": " fleet_label value is used to create known_label \"ves.io/fleet=\u003cfleet_label\u003e\"\n The known_label is created in the \"shared\" namespace for the tenant.\n\n A virtual_site object with name \u003cfleet_label\u003e is also created in \"shared\" namespace for tenant. \n The virtual_site object will select all sites configured with the known_label above\n fleet_label with \"sfo\" will create a known_label \"ves.io/fleet=sfo\" in tenant for the fleet\n\nExample: - \"sfo\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.k8s_label_value: true\n",
+                    "description": " fleet_label value is used to create known_label \"ves.io/fleet=\u003cfleet_label\u003e\"\n The known_label is created in the \"shared\" namespace for the tenant.\n\n A virtual_site object with name \u003cfleet_label\u003e is also created in \"shared\" namespace for tenant.\n The virtual_site object will select all sites configured with the known_label above\n fleet_label with \"sfo\" will create a known_label \"ves.io/fleet=sfo\" in tenant for the fleet\n\nExample: - \"sfo\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.k8s_label_value: true\n",
                     "x-displayname": "Fleet Label Value",
                     "x-ves-example": "sfo",
                     "x-ves-required": "true",
@@ -6437,7 +6375,7 @@ var APISwaggerJSON string = `{
                 },
                 "fleet_label": {
                     "type": "string",
-                    "description": " fleet_label value is used to create known_label \"ves.io/fleet=\u003cfleet_label\u003e\"\n The known_label is created in the \"shared\" namespace for the tenant.\n\n A virtual_site object with name \u003cfleet_label\u003e is also created in \"shared\" namespace for tenant. \n The virtual_site object will select all sites configured with the known_label above\n fleet_label with \"sfo\" will create a known_label \"ves.io/fleet=sfo\" in tenant for the fleet\n\nExample: - \"sfo\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.k8s_label_value: true\n",
+                    "description": " fleet_label value is used to create known_label \"ves.io/fleet=\u003cfleet_label\u003e\"\n The known_label is created in the \"shared\" namespace for the tenant.\n\n A virtual_site object with name \u003cfleet_label\u003e is also created in \"shared\" namespace for tenant.\n The virtual_site object will select all sites configured with the known_label above\n fleet_label with \"sfo\" will create a known_label \"ves.io/fleet=sfo\" in tenant for the fleet\n\nExample: - \"sfo\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.k8s_label_value: true\n",
                     "x-displayname": "Fleet Label Value",
                     "x-ves-example": "sfo",
                     "x-ves-required": "true",
@@ -6714,7 +6652,7 @@ var APISwaggerJSON string = `{
                 },
                 "fleet_label": {
                     "type": "string",
-                    "description": " fleet_label value is used to create known_label \"ves.io/fleet=\u003cfleet_label\u003e\"\n The known_label is created in the \"shared\" namespace for the tenant.\n\n A virtual_site object with name \u003cfleet_label\u003e is also created in \"shared\" namespace for tenant. \n The virtual_site object will select all sites configured with the known_label above\n fleet_label with \"sfo\" will create a known_label \"ves.io/fleet=sfo\" in tenant for the fleet\n\nExample: - \"sfo\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.k8s_label_value: true\n",
+                    "description": " fleet_label value is used to create known_label \"ves.io/fleet=\u003cfleet_label\u003e\"\n The known_label is created in the \"shared\" namespace for the tenant.\n\n A virtual_site object with name \u003cfleet_label\u003e is also created in \"shared\" namespace for tenant.\n The virtual_site object will select all sites configured with the known_label above\n fleet_label with \"sfo\" will create a known_label \"ves.io/fleet=sfo\" in tenant for the fleet\n\nExample: - \"sfo\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.k8s_label_value: true\n",
                     "title": "fleet_label",
                     "x-displayname": "Fleet Label Value",
                     "x-ves-example": "sfo",

@@ -2905,7 +2905,7 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.policy.AppFirewallAttackTypeContext",
             "properties": {
                 "exclude_attack_type": {
-                    "description": " App Firewall Attack type\n\nExample: - \"ATTACK_TYPE_SQL_INJECTION\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "description": "\nExample: - \"ATTACK_TYPE_SQL_INJECTION\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "AttackType",
                     "$ref": "#/definitions/app_firewallAttackType",
                     "x-displayname": "Attack Type",
@@ -2919,7 +2919,7 @@ var APISwaggerJSON string = `{
         },
         "policyAppFirewallDetectionControl": {
             "type": "object",
-            "description": "App Firewall detection changes to be applied for this request",
+            "description": "Define the list of Signature IDs, Violations, Attack Types and Bot Names that should be excluded from triggering on the defined match criteria.",
             "title": "App Firewall Detection Control",
             "x-displayname": "App Firewall Detection Control",
             "x-ves-proto-message": "ves.io.schema.policy.AppFirewallDetectionControl",
@@ -2933,6 +2933,20 @@ var APISwaggerJSON string = `{
                         "$ref": "#/definitions/policyAppFirewallAttackTypeContext"
                     },
                     "x-displayname": "Exclude App Firewall Attack Types Contexts",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "64",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
+                },
+                "exclude_bot_name_contexts": {
+                    "type": "array",
+                    "description": " Bot names contexts to be excluded for this request\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 64\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "title": "Exclude Bot Names Contexts",
+                    "maxItems": 64,
+                    "items": {
+                        "$ref": "#/definitions/policyBotNameContext"
+                    },
+                    "x-displayname": "Exclude Bot Names Contexts",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.repeated.max_items": "64",
                         "ves.io.schema.rules.repeated.unique": "true"
@@ -2977,7 +2991,7 @@ var APISwaggerJSON string = `{
             "properties": {
                 "signature_id": {
                     "type": "integer",
-                    "description": " App Firewall signature ID\n\nExample: - \"10000001\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.uint32.gte: 10000000\n  ves.io.schema.rules.uint32.lte: 300000000\n",
+                    "description": "\nExample: - \"10000001\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.uint32.gte: 10000000\n  ves.io.schema.rules.uint32.lte: 300000000\n",
                     "title": "SignatureID",
                     "format": "int64",
                     "x-displayname": "SignatureID",
@@ -2999,7 +3013,7 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.policy.AppFirewallViolationContext",
             "properties": {
                 "exclude_violation": {
-                    "description": " App Firewall violation type\n\nExample: - \"VIOL_MANDATORY_HEADER\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "description": "\nExample: - \"VIOL_MANDATORY_HEADER\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "ViolationType",
                     "$ref": "#/definitions/app_firewallAppFirewallViolationType",
                     "x-displayname": "Violation Type",
@@ -3126,13 +3140,21 @@ var APISwaggerJSON string = `{
         },
         "policyBotNameContext": {
             "type": "object",
-            "description": "x-displayName: \"Bot Name\"\nSpecifies bot to be excluded by its name.",
+            "description": "Specifies bot to be excluded by its name.",
             "title": "Bot Name Context",
+            "x-displayname": "Bot Name",
+            "x-ves-proto-message": "ves.io.schema.policy.BotNameContext",
             "properties": {
                 "bot_name": {
                     "type": "string",
-                    "description": "x-displayName: \"Bot Name\"\nx-example: \"Hydra\"",
-                    "title": "BotName"
+                    "description": "\nExample: - \"Hydra\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "BotName",
+                    "x-displayname": "Bot Name",
+                    "x-ves-example": "Hydra",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 }
             }
         },
@@ -3501,6 +3523,11 @@ var APISwaggerJSON string = `{
             "description": "x-displayName: \"Deny Information\"\nDetailed information including HTTP response code and error message to be sent when the policy or policy set action is DENY.",
             "title": "Deny Information",
             "properties": {
+                "api_sec_event": {
+                    "description": "x-displayName: \"API Security Event\"\nAPI Security Event",
+                    "title": "api_sec_event",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
                 "error_message": {
                     "type": "string",
                     "description": "x-displayName: \"Error Message\"\nx-example: \"Denied because the URL path contains an unknown object type\"\nAn error message associated with a DENY action in a policy or policy set, that is meaningful to the end user. Note that this error message is included\nin the body but does not constitute the entire body.",
@@ -3511,6 +3538,11 @@ var APISwaggerJSON string = `{
                     "description": "x-displayName: \"HTTP Response Code\"\nx-example: 400\nThe HTTP status code to use in the response. The default code is Forbidden (403).",
                     "title": "response_code",
                     "format": "int64"
+                },
+                "undefined_sec_event": {
+                    "description": "x-displayName: \"Undefined security event\"\nundefined",
+                    "title": "undefined_sec_event",
+                    "$ref": "#/definitions/schemaEmpty"
                 }
             }
         },
@@ -3762,6 +3794,28 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "policyModifyAction": {
+            "type": "object",
+            "description": "Modify behavior for a matching request. The modification could be to entirely skip processing.",
+            "title": "Select Modification Action",
+            "x-displayname": "Select Modification Action",
+            "x-ves-oneof-field-action_type": "[\"default\",\"skip_processing\"]",
+            "x-ves-proto-message": "ves.io.schema.policy.ModifyAction",
+            "properties": {
+                "default": {
+                    "description": "Exclusive with [skip_processing]\n Perform the default enforcement for this request",
+                    "title": "Do not modify",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Do not modify"
+                },
+                "skip_processing": {
+                    "description": "Exclusive with [default]\n Do not perform enforcement for this request",
+                    "title": "Skip Processing",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Skip Processing"
+                }
+            }
+        },
         "policyPortMatcherType": {
             "type": "object",
             "description": "A port matcher specifies a list of port ranges as match criteria. The match is considered successful if the input port falls within any of the port ranges.\nThe result of the match is inverted if invert_matcher is true.",
@@ -3961,7 +4015,7 @@ var APISwaggerJSON string = `{
             "properties": {
                 "uri": {
                     "type": "string",
-                    "description": "x-displayName: \"URI\"\nx-example: \"Enter URI\"\nURI location for redirect may be relative or absolute.",
+                    "description": "x-displayName: \"URI\"\nx-example: \"Enter URI\"\nx-required\nURI location for redirect may be relative or absolute.",
                     "title": "URI"
                 }
             }
@@ -4155,7 +4209,7 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.policy.WafAction",
             "properties": {
                 "app_firewall_detection_control": {
-                    "description": "Exclusive with [none waf_skip_processing]\n App Firewall detection changes to be applied for this request\n\nValidation Rules:\n  ves.io.schema.rules.message.required_one_nonzero_field: true\n",
+                    "description": "Exclusive with [none waf_skip_processing]\n Define the list of Signature IDs, Violations, Attack Types and Bot Names that should be excluded from triggering on the defined match criteria.\n\nValidation Rules:\n  ves.io.schema.rules.message.required_one_nonzero_field: true\n",
                     "title": "App Firewall Detection control",
                     "$ref": "#/definitions/policyAppFirewallDetectionControl",
                     "x-displayname": "App Firewall Detection Control",
@@ -5217,13 +5271,13 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.service_policy.GlobalSpecType",
             "properties": {
                 "allow_all_requests": {
-                    "description": "Exclusive with [allow_list deny_all_requests deny_list legacy_rule_list rule_list]\n Allow all requests",
+                    "description": "Exclusive with [allow_list deny_all_requests deny_list legacy_rule_list rule_list]\n",
                     "title": "allow_all_requests",
                     "$ref": "#/definitions/schemaEmpty",
                     "x-displayname": "Allow All Requests"
                 },
                 "allow_list": {
-                    "description": "Exclusive with [allow_all_requests deny_all_requests deny_list legacy_rule_list rule_list]\n List of allowed sources for requests",
+                    "description": "Exclusive with [allow_all_requests deny_all_requests deny_list legacy_rule_list rule_list]\n",
                     "title": "allow_list",
                     "$ref": "#/definitions/service_policySourceList",
                     "x-displayname": "Allowed Sources"
@@ -5235,25 +5289,25 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Any Server"
                 },
                 "deny_all_requests": {
-                    "description": "Exclusive with [allow_all_requests allow_list deny_list legacy_rule_list rule_list]\n Deny all requests",
+                    "description": "Exclusive with [allow_all_requests allow_list deny_list legacy_rule_list rule_list]\n",
                     "title": "deny_all_requests",
                     "$ref": "#/definitions/schemaEmpty",
                     "x-displayname": "Deny All Requests"
                 },
                 "deny_list": {
-                    "description": "Exclusive with [allow_all_requests allow_list deny_all_requests legacy_rule_list rule_list]\n List of denied sources for requests",
+                    "description": "Exclusive with [allow_all_requests allow_list deny_all_requests legacy_rule_list rule_list]\n",
                     "title": "deny_list",
                     "$ref": "#/definitions/service_policySourceList",
                     "x-displayname": "Denied Sources"
                 },
                 "legacy_rule_list": {
-                    "description": "Exclusive with [allow_all_requests allow_list deny_all_requests deny_list rule_list]\n List of references to service_policy_rule objects",
+                    "description": "Exclusive with [allow_all_requests allow_list deny_all_requests deny_list rule_list]\n",
                     "title": "legacy_rule_list",
                     "$ref": "#/definitions/service_policyLegacyRuleList",
                     "x-displayname": "Legacy Rule List"
                 },
                 "rule_list": {
-                    "description": "Exclusive with [allow_all_requests allow_list deny_all_requests deny_list legacy_rule_list]\n List of custom rules",
+                    "description": "Exclusive with [allow_all_requests allow_list deny_all_requests deny_list legacy_rule_list]\n",
                     "title": "rule_list",
                     "$ref": "#/definitions/service_policyRuleList",
                     "x-displayname": "Custom Rule List"
@@ -5447,6 +5501,12 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/policyPrefixMatchList",
                     "x-displayname": "IPv4 Prefix List"
                 },
+                "ip_reputation_action": {
+                    "description": " Specifies how IP Reputation is handled",
+                    "title": "IP Reputation Action",
+                    "$ref": "#/definitions/policyModifyAction",
+                    "x-displayname": "IP Reputation Action"
+                },
                 "ip_threat_category_list": {
                     "description": "Exclusive with [any_client client_name client_name_matcher client_selector]\n IP threat categories to choose from",
                     "title": "IP Threat Category List",
@@ -5459,6 +5519,12 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/schemaLabelMatcherType",
                     "x-displayname": "Label Matcher",
                     "x-ves-example": "['environment', 'location', 'deployment']"
+                },
+                "mum_action": {
+                    "description": " Specifies how Malicious User Mitigation is handled",
+                    "title": "Malicious User Mitigation Action",
+                    "$ref": "#/definitions/policyModifyAction",
+                    "x-displayname": "Malicious User Mitigation Action"
                 },
                 "path": {
                     "description": " A list of exact values, prefixes and regular expressions for the expected value of the HTTP path. The actual value of the HTTP path is the unescaped path\n value extracted from the HTTP URL Resource, excluding any query and fragment information.\n The predicate evaluates to true if the actual path value matches any of the exact or prefix values or regular expressions in the path matcher.",
@@ -5634,7 +5700,7 @@ var APISwaggerJSON string = `{
             "properties": {
                 "rules": {
                     "type": "array",
-                    "description": " A list of rules.\n The order of evaluation of the rules depends on the rule combining algorithm.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 256\n  ves.io.schema.rules.repeated.unique_metadata_name: true\n",
+                    "description": " Define the list of rules (with an order) that should be evaluated by this service policy.\n Rules are evaluated from top to bottom in the list.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 256\n  ves.io.schema.rules.repeated.unique_metadata_name: true\n",
                     "title": "rules",
                     "maxItems": 256,
                     "items": {
@@ -5667,6 +5733,11 @@ var APISwaggerJSON string = `{
                     "description": "x-displayName: \"ASN List\"\nList of 4-byte ASN values.\nThe predicate evaluates to true if the origin ASN is present in the ASN list.",
                     "title": "asn list",
                     "$ref": "#/definitions/policyAsnMatchList"
+                },
+                "asn_matcher": {
+                    "description": "x-displayName: \"ASN Matcher\"\nMatch any AS number contained in the list of bgp_asn_sets. A list of references to bgp_asn_set objects.",
+                    "title": "asn matcher",
+                    "$ref": "#/definitions/policyAsnMatcherType"
                 },
                 "bot_action": {
                     "description": "x-displayName: \"Bot Action\"\nBot action to be enforced if the input request matches the rule.",
@@ -5709,6 +5780,14 @@ var APISwaggerJSON string = `{
                     "title": "expiration timestamp",
                     "format": "date-time"
                 },
+                "goto_policy": {
+                    "type": "array",
+                    "description": "x-displayName: \"Goto Policy\"\nA reference to a service_policy object.\nTarget of the GOTO_POLICY action.\nThe target policy must be part of the current policy set and must be after the current policy in the policy set.",
+                    "title": "goto_policy",
+                    "items": {
+                        "$ref": "#/definitions/ioschemaObjectRefType"
+                    }
+                },
                 "headers": {
                     "type": "array",
                     "description": "x-displayName: \"HTTP Headers\"\nA list of predicates for various HTTP headers that need to match. The criteria for matching each HTTP header are described in individual HeaderMatcherType\ninstances. The actual HTTP header values are extracted from the request API as a list of strings for each HTTP header type.\nNote that all specified header predicates must evaluate to true.",
@@ -5722,10 +5801,20 @@ var APISwaggerJSON string = `{
                     "title": "method",
                     "$ref": "#/definitions/policyHttpMethodMatcherType"
                 },
+                "ip_matcher": {
+                    "description": "x-displayName: \"IP Matcher\"\nMatch any ip prefix contained in the list of ip_prefix_sets.\nThe result of the match is inverted if invert_matcher is true.",
+                    "title": "ip matcher",
+                    "$ref": "#/definitions/policyIpMatcherType"
+                },
                 "ip_prefix_list": {
                     "description": "x-displayName: \"IPv4 Prefix List\"\nList of IPv4 Prefixes values.\nThe predicate evaluates to true if the client IPv4 Address is covered by one or more of the IPv4 Prefixes from the list.",
                     "title": "ip prefix list",
                     "$ref": "#/definitions/policyPrefixMatchList"
+                },
+                "ip_reputation_action": {
+                    "description": "x-displayName: \"IP Reputation Action\"\nSpecifies how IP Reputation is handled",
+                    "title": "IP Reputation Action",
+                    "$ref": "#/definitions/policyModifyAction"
                 },
                 "l4_dest_matcher": {
                     "description": "x-displayName: \"L4 Destination Matcher\"\nA L4 Destination matcher specifies a list of IPv4 prefixes and a TCP port range as match criteria. The match is considered successful if the destination\nIP matches one of the prefixes and the destination port belongs to the port range.",
@@ -5741,6 +5830,11 @@ var APISwaggerJSON string = `{
                     "type": "string",
                     "description": "x-displayName: \"Metric Name Label\"\nName label to use in service policy rule metrics generated for this simple rule.",
                     "title": "metric_name_label"
+                },
+                "mum_action": {
+                    "description": "x-displayName: \"Malicious User Mitigation Action\"\nSpecifies how Malicious User Mitigation is handled",
+                    "title": "Malicious User Mitigation Action",
+                    "$ref": "#/definitions/policyModifyAction"
                 },
                 "name": {
                     "type": "string",

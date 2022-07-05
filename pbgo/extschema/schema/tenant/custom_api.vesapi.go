@@ -5954,12 +5954,13 @@ var CustomAPISwaggerJSON string = `{
         },
         "tenantOtpStatus": {
             "type": "string",
-            "description": "OtpStatus can be either enabled/disabled or processing.\nApplying new policy can take time, especially if tenant has many users so for this purpose processing state is introduced.\n\n - OTP_DISABLED: OTP_DISABLED\n\nOTP disabled\n - OTP_ENABLED: OTP_ENABLED\n\nOTP enabled\n - OTP_PROCESSING: OTP_PROCESSING\n\nOTP is being updated",
+            "description": "OtpStatus can be either enabled/disabled or processing.\nApplying new policy can take time, especially if tenant has many users so for this purpose processing state is introduced.\n\n - OTP_DISABLED: OTP_DISABLED\n\nOTP disabled\n - OTP_ENABLED: OTP_ENABLED\n\nOTP enabled\n - OTP_PROCESSING: OTP_PROCESSING\n\nOTP is being updated\n - OTP_PROCESS_DISABLING: OTP_PROCESSING\n\nOTP is being updated to be disabled",
             "title": "OtpStatus",
             "enum": [
                 "OTP_DISABLED",
                 "OTP_ENABLED",
-                "OTP_PROCESSING"
+                "OTP_PROCESSING",
+                "OTP_PROCESS_DISABLING"
             ],
             "default": "OTP_DISABLED",
             "x-displayname": "OtpStatus",
@@ -6170,9 +6171,16 @@ var CustomAPISwaggerJSON string = `{
                 },
                 "name": {
                     "type": "string",
-                    "description": " Name of the tenant.\n\nExample: - \"tenant1\"-",
+                    "description": " name will represent name of the tenant that is being accessed\n\nExample: - \"tenant1\"-",
                     "title": "Name",
                     "x-displayname": "Name",
+                    "x-ves-example": "tenant1"
+                },
+                "original_tenant": {
+                    "type": "string",
+                    "description": " orginal_tenant represent tenant id where the user belongs to\n\nExample: - \"tenant1\"-",
+                    "title": "Original Tenant",
+                    "x-displayname": "Original Tenant",
                     "x-ves-example": "tenant1"
                 },
                 "otp_enabled": {
@@ -6187,6 +6195,13 @@ var CustomAPISwaggerJSON string = `{
                     "title": "OTP Status",
                     "$ref": "#/definitions/tenantOtpStatus",
                     "x-displayname": "OTP Status"
+                },
+                "scim_enabled": {
+                    "type": "boolean",
+                    "description": " Flag to show SCIM is enabled for specific tenant.",
+                    "title": "scim_enabled",
+                    "format": "boolean",
+                    "x-displayname": "SCIM Enabled"
                 },
                 "sso_enabled": {
                     "type": "boolean",
@@ -6286,6 +6301,13 @@ var CustomAPISwaggerJSON string = `{
                     "title": "OTP Status",
                     "$ref": "#/definitions/tenantOtpStatus",
                     "x-displayname": "OTP Status"
+                },
+                "scim_enabled": {
+                    "type": "boolean",
+                    "description": " Flag to show SCIM is enabled for specific tenant.",
+                    "title": "scim_enabled",
+                    "format": "boolean",
+                    "x-displayname": "SCIM Enabled"
                 },
                 "sso_enabled": {
                     "type": "boolean",

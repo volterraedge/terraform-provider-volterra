@@ -3128,8 +3128,15 @@ func (m *Peer) GetTypeChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return drInfos, err
 
 	case *Peer_Internal:
-
-		return nil, nil
+		drInfos, err := m.GetInternal().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetInternal().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "internal." + dri.DRField
+		}
+		return drInfos, err
 
 	default:
 		return nil, nil
@@ -3856,6 +3863,122 @@ func (m *PeerInternal) Validate(ctx context.Context, opts ...db.ValidateOpt) err
 	return PeerInternalValidator().Validate(ctx, m, opts...)
 }
 
+func (m *PeerInternal) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetGroupChoiceDRefInfo()
+
+}
+
+func (m *PeerInternal) GetGroupChoiceDRefInfo() ([]db.DRefInfo, error) {
+	switch m.GetGroupChoice().(type) {
+	case *PeerInternal_SiteMeshGroup:
+
+		vref := m.GetSiteMeshGroup()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("site_mesh_group.Object")
+		dri := db.DRefInfo{
+			RefdType:   "site_mesh_group.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "site_mesh_group",
+			Ref:        vdRef,
+		}
+		return []db.DRefInfo{dri}, nil
+
+	case *PeerInternal_DcClusterGroup:
+
+		vref := m.GetDcClusterGroup()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("dc_cluster_group.Object")
+		dri := db.DRefInfo{
+			RefdType:   "dc_cluster_group.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "dc_cluster_group",
+			Ref:        vdRef,
+		}
+		return []db.DRefInfo{dri}, nil
+
+	case *PeerInternal_Local:
+
+		return nil, nil
+
+	default:
+		return nil, nil
+	}
+}
+
+// GetGroupChoiceDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *PeerInternal) GetGroupChoiceDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+
+	switch m.GetGroupChoice().(type) {
+	case *PeerInternal_SiteMeshGroup:
+		refdType, err := d.TypeForEntryKind("", "", "site_mesh_group.Object")
+		if err != nil {
+			return nil, errors.Wrap(err, "Cannot find type for kind: site_mesh_group")
+		}
+
+		vref := m.GetSiteMeshGroup()
+		if vref == nil {
+			return nil, nil
+		}
+		ref := &ves_io_schema.ObjectRefType{
+			Kind:      "site_mesh_group.Object",
+			Tenant:    vref.Tenant,
+			Namespace: vref.Namespace,
+			Name:      vref.Name,
+		}
+		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+		if err != nil {
+			return nil, errors.Wrap(err, "Getting referred entry")
+		}
+		if refdEnt != nil {
+			entries = append(entries, refdEnt)
+		}
+
+	case *PeerInternal_DcClusterGroup:
+		refdType, err := d.TypeForEntryKind("", "", "dc_cluster_group.Object")
+		if err != nil {
+			return nil, errors.Wrap(err, "Cannot find type for kind: dc_cluster_group")
+		}
+
+		vref := m.GetDcClusterGroup()
+		if vref == nil {
+			return nil, nil
+		}
+		ref := &ves_io_schema.ObjectRefType{
+			Kind:      "dc_cluster_group.Object",
+			Tenant:    vref.Tenant,
+			Namespace: vref.Namespace,
+			Name:      vref.Name,
+		}
+		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+		if err != nil {
+			return nil, errors.Wrap(err, "Getting referred entry")
+		}
+		if refdEnt != nil {
+			entries = append(entries, refdEnt)
+		}
+
+	case *PeerInternal_Local:
+
+	}
+
+	return entries, nil
+}
+
 type ValidatePeerInternal struct {
 	FldValidators map[string]db.ValidatorFunc
 }
@@ -3990,6 +4113,43 @@ func (v *ValidatePeerInternal) Validate(ctx context.Context, pm interface{}, opt
 
 	}
 
+	switch m.GetGroupChoice().(type) {
+	case *PeerInternal_SiteMeshGroup:
+		if fv, exists := v.FldValidators["group_choice.site_mesh_group"]; exists {
+			val := m.GetGroupChoice().(*PeerInternal_SiteMeshGroup).SiteMeshGroup
+			vOpts := append(opts,
+				db.WithValidateField("group_choice"),
+				db.WithValidateField("site_mesh_group"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *PeerInternal_DcClusterGroup:
+		if fv, exists := v.FldValidators["group_choice.dc_cluster_group"]; exists {
+			val := m.GetGroupChoice().(*PeerInternal_DcClusterGroup).DcClusterGroup
+			vOpts := append(opts,
+				db.WithValidateField("group_choice"),
+				db.WithValidateField("dc_cluster_group"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *PeerInternal_Local:
+		if fv, exists := v.FldValidators["group_choice.local"]; exists {
+			val := m.GetGroupChoice().(*PeerInternal_Local).Local
+			vOpts := append(opts,
+				db.WithValidateField("group_choice"),
+				db.WithValidateField("local"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	switch m.GetMtlsChoice().(type) {
 	case *PeerInternal_DisableMtls:
 		if fv, exists := v.FldValidators["mtls_choice.disable_mtls"]; exists {
@@ -4084,6 +4244,9 @@ var DefaultPeerInternalValidator = func() *ValidatePeerInternal {
 		panic(errMsg)
 	}
 	v.FldValidators["port"] = vFn
+
+	v.FldValidators["group_choice.site_mesh_group"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
+	v.FldValidators["group_choice.dc_cluster_group"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	v.FldValidators["family_inetvpn"] = FamilyInetvpnValidator().Validate
 

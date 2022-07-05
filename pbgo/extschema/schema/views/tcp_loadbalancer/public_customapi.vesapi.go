@@ -294,7 +294,7 @@ var CustomAPISwaggerJSON string = `{
     "swagger": "2.0",
     "info": {
         "title": "TCP Proxy",
-        "description": "TCP loadbalancer view defines a required parameters that can be used in CRUD, to create and manage TCP loadbalancer.\nIt can be used to create TCP loadbalancer and TCP loadbalancer with SNI.\n\nView will create following child objects.\n\n* Virtual-host\n* default route\n* clusters\n* endpoints\n* advertise policy",
+        "description": "TCP Load Balancer view defines a required parameters that can be used in CRUD, to create and manage TCP Load Balancer.\nIt can be used to create TCP Load Balancer and TCP Load Balancer with SNI.\n\nView will create following child objects.\n\n* Virtual-host\n* default route\n* clusters\n* endpoints\n* advertise policy",
         "version": "version not set"
     },
     "schemes": [
@@ -312,7 +312,7 @@ var CustomAPISwaggerJSON string = `{
         "/public/namespaces/{namespace}/tcp_loadbalancers/{name}/get-dns-info": {
             "get": {
                 "summary": "GetDnsInfo",
-                "description": "GetDnsInfo is an API to get DNS information for a given TCP loadbalancer",
+                "description": "GetDnsInfo is an API to get DNS information for a given TCP load balancer",
                 "operationId": "ves.io.schema.views.tcp_loadbalancer.CustomAPI.GetDnsInfo",
                 "responses": {
                     "200": {
@@ -373,7 +373,7 @@ var CustomAPISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "namespace",
-                        "description": "Namespace\n\nx-example: \"value\"\nNamespace for the TCP loadbalancer",
+                        "description": "Namespace\n\nx-example: \"value\"\nNamespace for the TCP load balancer",
                         "in": "path",
                         "required": true,
                         "type": "string",
@@ -381,7 +381,7 @@ var CustomAPISwaggerJSON string = `{
                     },
                     {
                         "name": "name",
-                        "description": "Name\n\nx-example: \"value\"\nName of the TCP loadbalancer",
+                        "description": "Name\n\nx-example: \"value\"\nName of the TCP load balancer",
                         "in": "path",
                         "required": true,
                         "type": "string",
@@ -397,7 +397,7 @@ var CustomAPISwaggerJSON string = `{
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.tcp_loadbalancer.CustomAPI.GetDnsInfo"
             },
-            "x-displayname": "TCP loadbalancer Custom API",
+            "x-displayname": "TCP Load Balancer Custom API",
             "x-ves-proto-service": "ves.io.schema.views.tcp_loadbalancer.CustomAPI",
             "x-ves-proto-service-type": "CUSTOM_PUBLIC"
         }
@@ -489,7 +489,7 @@ var CustomAPISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.views.tcp_loadbalancer.GetDnsInfoResponse",
             "properties": {
                 "dns_info": {
-                    "description": " DNS information object for this TCP loadbalancer",
+                    "description": " DNS information object for this TCP load balancer",
                     "title": "DNS information",
                     "$ref": "#/definitions/schemavirtual_host_dns_infoGlobalSpecType",
                     "x-displayname": "DNS information"
@@ -515,6 +515,6 @@ var CustomAPISwaggerJSON string = `{
             }
         }
     },
-    "x-displayname": "Configure TCP Loadbalancer",
+    "x-displayname": "Configure TCP Load Balancer",
     "x-ves-proto-file": "ves.io/schema/views/tcp_loadbalancer/public_customapi.proto"
 }`

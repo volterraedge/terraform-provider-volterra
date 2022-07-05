@@ -309,6 +309,7 @@ func (c *CustomPublicAPIRestClient) doRPCCreateGroup(ctx context.Context, callOp
 		q := hReq.URL.Query()
 		_ = q
 		q.Add("displayName", fmt.Sprintf("%v", req.DisplayName))
+		q.Add("externalId", fmt.Sprintf("%v", req.ExternalId))
 		q.Add("id", fmt.Sprintf("%v", req.Id))
 		q.Add("members", fmt.Sprintf("%v", req.Members))
 		q.Add("meta", fmt.Sprintf("%v", req.Meta))
@@ -399,6 +400,7 @@ func (c *CustomPublicAPIRestClient) doRPCCreateUser(ctx context.Context, callOpt
 		q.Add("emails", fmt.Sprintf("%v", req.Emails))
 		q.Add("externalId", fmt.Sprintf("%v", req.ExternalId))
 		q.Add("groups", fmt.Sprintf("%v", req.Groups))
+		q.Add("meta", fmt.Sprintf("%v", req.Meta))
 		q.Add("name", fmt.Sprintf("%v", req.Name))
 		q.Add("roles", fmt.Sprintf("%v", req.Roles))
 		q.Add("schemas", fmt.Sprintf("%v", req.Schemas))
@@ -985,6 +987,7 @@ func (c *CustomPublicAPIRestClient) doRPCListGroups(ctx context.Context, callOpt
 		_ = q
 		q.Add("count", fmt.Sprintf("%v", req.Count))
 		q.Add("filter", fmt.Sprintf("%v", req.Filter))
+		q.Add("page", fmt.Sprintf("%v", req.Page))
 
 		hReq.URL.RawQuery += q.Encode()
 	case "delete":
@@ -1313,6 +1316,7 @@ func (c *CustomPublicAPIRestClient) doRPCListUsers(ctx context.Context, callOpts
 		_ = q
 		q.Add("count", fmt.Sprintf("%v", req.Count))
 		q.Add("filter", fmt.Sprintf("%v", req.Filter))
+		q.Add("page", fmt.Sprintf("%v", req.Page))
 
 		hReq.URL.RawQuery += q.Encode()
 	case "delete":
@@ -1394,8 +1398,8 @@ func (c *CustomPublicAPIRestClient) doRPCPatchGroupById(ctx context.Context, cal
 		hReq = newReq
 		q := hReq.URL.Query()
 		_ = q
+		q.Add("Operations", fmt.Sprintf("%v", req.Operations))
 		q.Add("id", fmt.Sprintf("%v", req.Id))
-		q.Add("operation", fmt.Sprintf("%v", req.Operation))
 		q.Add("schemas", fmt.Sprintf("%v", req.Schemas))
 
 		hReq.URL.RawQuery += q.Encode()
@@ -1478,8 +1482,8 @@ func (c *CustomPublicAPIRestClient) doRPCPatchUserById(ctx context.Context, call
 		hReq = newReq
 		q := hReq.URL.Query()
 		_ = q
+		q.Add("Operations", fmt.Sprintf("%v", req.Operations))
 		q.Add("id", fmt.Sprintf("%v", req.Id))
-		q.Add("operation", fmt.Sprintf("%v", req.Operation))
 		q.Add("schemas", fmt.Sprintf("%v", req.Schemas))
 
 		hReq.URL.RawQuery += q.Encode()
@@ -1563,6 +1567,7 @@ func (c *CustomPublicAPIRestClient) doRPCReplaceGroupById(ctx context.Context, c
 		q := hReq.URL.Query()
 		_ = q
 		q.Add("displayName", fmt.Sprintf("%v", req.DisplayName))
+		q.Add("externalId", fmt.Sprintf("%v", req.ExternalId))
 		q.Add("id", fmt.Sprintf("%v", req.Id))
 		q.Add("members", fmt.Sprintf("%v", req.Members))
 		q.Add("meta", fmt.Sprintf("%v", req.Meta))
@@ -1650,6 +1655,7 @@ func (c *CustomPublicAPIRestClient) doRPCReplaceUserById(ctx context.Context, ca
 		q := hReq.URL.Query()
 		_ = q
 		q.Add("active", fmt.Sprintf("%v", req.Active))
+		q.Add("detail", fmt.Sprintf("%v", req.Detail))
 		q.Add("displayName", fmt.Sprintf("%v", req.DisplayName))
 		q.Add("emails", fmt.Sprintf("%v", req.Emails))
 		q.Add("externalId", fmt.Sprintf("%v", req.ExternalId))
@@ -1660,6 +1666,7 @@ func (c *CustomPublicAPIRestClient) doRPCReplaceUserById(ctx context.Context, ca
 		q.Add("nickName", fmt.Sprintf("%v", req.NickName))
 		q.Add("roles", fmt.Sprintf("%v", req.Roles))
 		q.Add("schemas", fmt.Sprintf("%v", req.Schemas))
+		q.Add("status", fmt.Sprintf("%v", req.Status))
 		q.Add("userName", fmt.Sprintf("%v", req.UserName))
 		q.Add("userType", fmt.Sprintf("%v", req.UserType))
 
@@ -2689,7 +2696,7 @@ var CustomPublicAPISwaggerJSON string = `{
     "swagger": "2.0",
     "info": {
         "title": "SCIM",
-        "description": "Volterra System for Cross-domain Identity Management (SCIM) specification\nis designed to make managing user identities in cloud-based applications and services easier.\nThe specification suite seeks to build upon experience with existing schemas and deployments,\nplacing specific emphasis on simplicity of development and integration,\nwhile applying existing authentication, authorization, and privacy models.\nIts intent is to reduce the cost and complexity of user management operations by providing\na common user schema and extension model, as well as binding documents to provide patterns\nfor exchanging this schema using standard protocols. In essence: make it fast,\ncheap, and easy to move users in to, out of, and around the cloud.\n\nSCIM is used for automating the provisioning of user and user groups in the external system\ninto the F5 saas platform.\nVia SCIM we provide support for the following resource types:\nUser and User Groups\nThe synchronization of the these resources would be aided by SCIM from external platform.\nAlso, synchronization filtering is supported.\nSync filtering would enable to synchronize only limited set of Groups and Users.\nSync if enabled would allow to synchronize Groups which have sync_id not empty.\nOnce we have these groups in SCIM, the user synchronization would commence.\nUsers who belong to groups which have sync_id set would be synchronized.",
+        "description": "This schema specification details Volterra's support for SCIM protocol.\nAdmin can use SCIM feature on top of SSO to enable automated provisioning of\nuser and user groups from external identity provider into the F5 saas platform.\nWith this feature, complete life cycle management of user and groups can be\nachieved from single source of truth which is managed by tenant's admin.\n\ncurrent protocol support is using schema version v2.0 https://datatracker.ietf.org/doc/html/rfc7643 \n\nSCIM feature can be enabled part of SSO configuration (using RPC -UpdateScimIntegration- under oidc_provider resource)\nBy default, Volterra will not sync groups and users. Admin is required to set object identifier of group \nin external identity provider to corresponding user_group resource in volterra. Users with corresponding\ngroup membership if exist in external identity provider will be synced.",
         "version": "version not set"
     },
     "schemes": [
@@ -2703,1411 +2710,7 @@ var CustomPublicAPISwaggerJSON string = `{
         "application/json"
     ],
     "tags": [],
-    "paths": {
-        "/public/v2/Groups": {
-            "get": {
-                "summary": "List Group based on filter.",
-                "description": "List groups based on the given filter.",
-                "operationId": "ves.io.schema.scim.CustomPublicAPI.ListGroups",
-                "responses": {
-                    "200": {
-                        "description": "A successful response.",
-                        "schema": {
-                            "$ref": "#/definitions/scimListGroupResources"
-                        }
-                    },
-                    "401": {
-                        "description": "Returned when operation is not authorized",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "403": {
-                        "description": "Returned when there is no permission to access resource",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "404": {
-                        "description": "Returned when resource is not found",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "409": {
-                        "description": "Returned when operation on resource is conflicting with current value",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "429": {
-                        "description": "Returned when operation has been rejected as it is happening too frequently",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "500": {
-                        "description": "Returned when server encountered an error in processing API",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "503": {
-                        "description": "Returned when service is unavailable temporarily",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "504": {
-                        "description": "Returned when server timed out processing request",
-                        "schema": {
-                            "format": "string"
-                        }
-                    }
-                },
-                "parameters": [
-                    {
-                        "name": "filter",
-                        "description": "x-example: \"externalId\"\nx-required\nFilter to be used for filtering objects.",
-                        "in": "query",
-                        "required": false,
-                        "type": "string",
-                        "x-displayname": "filter"
-                    },
-                    {
-                        "name": "count",
-                        "description": "x-example: \"8\"\nx-required\nThe number of entries after filter.",
-                        "in": "query",
-                        "required": false,
-                        "type": "string",
-                        "format": "uint64",
-                        "x-displayname": "count"
-                    }
-                ],
-                "tags": [
-                    "CustomPublicAPI"
-                ],
-                "externalDocs": {
-                    "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-scim-custompublicapi-listgroups"
-                },
-                "x-ves-proto-rpc": "ves.io.schema.scim.CustomPublicAPI.ListGroups"
-            },
-            "post": {
-                "summary": "Create Group with users.",
-                "description": "Create group with given users.",
-                "operationId": "ves.io.schema.scim.CustomPublicAPI.CreateGroup",
-                "responses": {
-                    "200": {
-                        "description": "A successful response.",
-                        "schema": {
-                            "$ref": "#/definitions/scimGroup"
-                        }
-                    },
-                    "401": {
-                        "description": "Returned when operation is not authorized",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "403": {
-                        "description": "Returned when there is no permission to access resource",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "404": {
-                        "description": "Returned when resource is not found",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "409": {
-                        "description": "Returned when operation on resource is conflicting with current value",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "429": {
-                        "description": "Returned when operation has been rejected as it is happening too frequently",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "500": {
-                        "description": "Returned when server encountered an error in processing API",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "503": {
-                        "description": "Returned when service is unavailable temporarily",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "504": {
-                        "description": "Returned when server timed out processing request",
-                        "schema": {
-                            "format": "string"
-                        }
-                    }
-                },
-                "parameters": [
-                    {
-                        "name": "body",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/scimCreateGroupRequest"
-                        }
-                    }
-                ],
-                "tags": [
-                    "CustomPublicAPI"
-                ],
-                "externalDocs": {
-                    "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-scim-custompublicapi-creategroup"
-                },
-                "x-ves-proto-rpc": "ves.io.schema.scim.CustomPublicAPI.CreateGroup"
-            },
-            "x-displayname": "User",
-            "x-ves-proto-service": "ves.io.schema.scim.CustomPublicAPI",
-            "x-ves-proto-service-type": "CUSTOM_PUBLIC"
-        },
-        "/public/v2/Groups/{id}": {
-            "get": {
-                "summary": "List Group based on Id.",
-                "description": "List group based on the given Id.",
-                "operationId": "ves.io.schema.scim.CustomPublicAPI.GetGroupById",
-                "responses": {
-                    "200": {
-                        "description": "A successful response.",
-                        "schema": {
-                            "$ref": "#/definitions/scimGroup"
-                        }
-                    },
-                    "401": {
-                        "description": "Returned when operation is not authorized",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "403": {
-                        "description": "Returned when there is no permission to access resource",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "404": {
-                        "description": "Returned when resource is not found",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "409": {
-                        "description": "Returned when operation on resource is conflicting with current value",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "429": {
-                        "description": "Returned when operation has been rejected as it is happening too frequently",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "500": {
-                        "description": "Returned when server encountered an error in processing API",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "503": {
-                        "description": "Returned when service is unavailable temporarily",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "504": {
-                        "description": "Returned when server timed out processing request",
-                        "schema": {
-                            "format": "string"
-                        }
-                    }
-                },
-                "parameters": [
-                    {
-                        "name": "id",
-                        "description": "Id\n\nx-example: \"sam.smith@gmail.com\"\nx-required\nId with which the request will find entry.",
-                        "in": "path",
-                        "required": true,
-                        "type": "string",
-                        "x-displayname": "Email"
-                    }
-                ],
-                "tags": [
-                    "CustomPublicAPI"
-                ],
-                "externalDocs": {
-                    "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-scim-custompublicapi-getgroupbyid"
-                },
-                "x-ves-proto-rpc": "ves.io.schema.scim.CustomPublicAPI.GetGroupById"
-            },
-            "delete": {
-                "summary": "Delete Group based on Id.",
-                "description": "Delete group based on the given Id.",
-                "operationId": "ves.io.schema.scim.CustomPublicAPI.DeleteGroupById",
-                "responses": {
-                    "200": {
-                        "description": "A successful response.",
-                        "schema": {
-                            "$ref": "#/definitions/apiHttpBody"
-                        }
-                    },
-                    "401": {
-                        "description": "Returned when operation is not authorized",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "403": {
-                        "description": "Returned when there is no permission to access resource",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "404": {
-                        "description": "Returned when resource is not found",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "409": {
-                        "description": "Returned when operation on resource is conflicting with current value",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "429": {
-                        "description": "Returned when operation has been rejected as it is happening too frequently",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "500": {
-                        "description": "Returned when server encountered an error in processing API",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "503": {
-                        "description": "Returned when service is unavailable temporarily",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "504": {
-                        "description": "Returned when server timed out processing request",
-                        "schema": {
-                            "format": "string"
-                        }
-                    }
-                },
-                "parameters": [
-                    {
-                        "name": "id",
-                        "description": "Id\n\nx-example: \"sam.smith@gmail.com\"\nx-required\nId with which the request will find entry.",
-                        "in": "path",
-                        "required": true,
-                        "type": "string",
-                        "x-displayname": "Email"
-                    }
-                ],
-                "tags": [
-                    "CustomPublicAPI"
-                ],
-                "externalDocs": {
-                    "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-scim-custompublicapi-deletegroupbyid"
-                },
-                "x-ves-proto-rpc": "ves.io.schema.scim.CustomPublicAPI.DeleteGroupById"
-            },
-            "put": {
-                "summary": "Replace Group based on Id.",
-                "description": "Replace group based on the given Id.",
-                "operationId": "ves.io.schema.scim.CustomPublicAPI.ReplaceGroupById",
-                "responses": {
-                    "200": {
-                        "description": "A successful response.",
-                        "schema": {
-                            "$ref": "#/definitions/scimGroup"
-                        }
-                    },
-                    "401": {
-                        "description": "Returned when operation is not authorized",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "403": {
-                        "description": "Returned when there is no permission to access resource",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "404": {
-                        "description": "Returned when resource is not found",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "409": {
-                        "description": "Returned when operation on resource is conflicting with current value",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "429": {
-                        "description": "Returned when operation has been rejected as it is happening too frequently",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "500": {
-                        "description": "Returned when server encountered an error in processing API",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "503": {
-                        "description": "Returned when service is unavailable temporarily",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "504": {
-                        "description": "Returned when server timed out processing request",
-                        "schema": {
-                            "format": "string"
-                        }
-                    }
-                },
-                "parameters": [
-                    {
-                        "name": "id",
-                        "description": "id\n\nx-example: \"value\"\nunique Id for the group.",
-                        "in": "path",
-                        "required": true,
-                        "type": "string",
-                        "x-displayname": "id"
-                    },
-                    {
-                        "name": "body",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/scimGroup"
-                        }
-                    }
-                ],
-                "tags": [
-                    "CustomPublicAPI"
-                ],
-                "externalDocs": {
-                    "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-scim-custompublicapi-replacegroupbyid"
-                },
-                "x-ves-proto-rpc": "ves.io.schema.scim.CustomPublicAPI.ReplaceGroupById"
-            },
-            "patch": {
-                "summary": "Patch Group based on Id.",
-                "description": "Patch group based on the given Id.",
-                "operationId": "ves.io.schema.scim.CustomPublicAPI.PatchGroupById",
-                "responses": {
-                    "200": {
-                        "description": "A successful response.",
-                        "schema": {
-                            "$ref": "#/definitions/scimGroup"
-                        }
-                    },
-                    "401": {
-                        "description": "Returned when operation is not authorized",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "403": {
-                        "description": "Returned when there is no permission to access resource",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "404": {
-                        "description": "Returned when resource is not found",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "409": {
-                        "description": "Returned when operation on resource is conflicting with current value",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "429": {
-                        "description": "Returned when operation has been rejected as it is happening too frequently",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "500": {
-                        "description": "Returned when server encountered an error in processing API",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "503": {
-                        "description": "Returned when service is unavailable temporarily",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "504": {
-                        "description": "Returned when server timed out processing request",
-                        "schema": {
-                            "format": "string"
-                        }
-                    }
-                },
-                "parameters": [
-                    {
-                        "name": "id",
-                        "description": "id\n\nx-example: \"value\"\nx-required\nunique Id for the group.",
-                        "in": "path",
-                        "required": true,
-                        "type": "string",
-                        "x-displayname": "id"
-                    },
-                    {
-                        "name": "body",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/scimPatchGroupRequest"
-                        }
-                    }
-                ],
-                "tags": [
-                    "CustomPublicAPI"
-                ],
-                "externalDocs": {
-                    "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-scim-custompublicapi-patchgroupbyid"
-                },
-                "x-ves-proto-rpc": "ves.io.schema.scim.CustomPublicAPI.PatchGroupById"
-            },
-            "x-displayname": "User",
-            "x-ves-proto-service": "ves.io.schema.scim.CustomPublicAPI",
-            "x-ves-proto-service-type": "CUSTOM_PUBLIC"
-        },
-        "/public/v2/ResourceTypes": {
-            "get": {
-                "summary": "GetResourceTypes",
-                "operationId": "ves.io.schema.scim.CustomPublicAPI.ListResourceTypes",
-                "responses": {
-                    "200": {
-                        "description": "A successful response.",
-                        "schema": {
-                            "$ref": "#/definitions/scimResourceTypesResponse"
-                        }
-                    },
-                    "401": {
-                        "description": "Returned when operation is not authorized",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "403": {
-                        "description": "Returned when there is no permission to access resource",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "404": {
-                        "description": "Returned when resource is not found",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "409": {
-                        "description": "Returned when operation on resource is conflicting with current value",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "429": {
-                        "description": "Returned when operation has been rejected as it is happening too frequently",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "500": {
-                        "description": "Returned when server encountered an error in processing API",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "503": {
-                        "description": "Returned when service is unavailable temporarily",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "504": {
-                        "description": "Returned when server timed out processing request",
-                        "schema": {
-                            "format": "string"
-                        }
-                    }
-                },
-                "tags": [
-                    "CustomPublicAPI"
-                ],
-                "externalDocs": {
-                    "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-scim-custompublicapi-listresourcetypes"
-                },
-                "x-ves-proto-rpc": "ves.io.schema.scim.CustomPublicAPI.ListResourceTypes"
-            },
-            "x-displayname": "User",
-            "x-ves-proto-service": "ves.io.schema.scim.CustomPublicAPI",
-            "x-ves-proto-service-type": "CUSTOM_PUBLIC"
-        },
-        "/public/v2/ResourceTypes/{id}": {
-            "get": {
-                "summary": "GetResourceTypes",
-                "operationId": "ves.io.schema.scim.CustomPublicAPI.GetResourceTypesById",
-                "responses": {
-                    "200": {
-                        "description": "A successful response.",
-                        "schema": {
-                            "$ref": "#/definitions/scimResource"
-                        }
-                    },
-                    "401": {
-                        "description": "Returned when operation is not authorized",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "403": {
-                        "description": "Returned when there is no permission to access resource",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "404": {
-                        "description": "Returned when resource is not found",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "409": {
-                        "description": "Returned when operation on resource is conflicting with current value",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "429": {
-                        "description": "Returned when operation has been rejected as it is happening too frequently",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "500": {
-                        "description": "Returned when server encountered an error in processing API",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "503": {
-                        "description": "Returned when service is unavailable temporarily",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "504": {
-                        "description": "Returned when server timed out processing request",
-                        "schema": {
-                            "format": "string"
-                        }
-                    }
-                },
-                "parameters": [
-                    {
-                        "name": "id",
-                        "description": "Id\n\nx-example: \"sam.smith@gmail.com\"\nx-required\nId with which the request will find entry.",
-                        "in": "path",
-                        "required": true,
-                        "type": "string",
-                        "x-displayname": "Email"
-                    }
-                ],
-                "tags": [
-                    "CustomPublicAPI"
-                ],
-                "externalDocs": {
-                    "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-scim-custompublicapi-getresourcetypesbyid"
-                },
-                "x-ves-proto-rpc": "ves.io.schema.scim.CustomPublicAPI.GetResourceTypesById"
-            },
-            "x-displayname": "User",
-            "x-ves-proto-service": "ves.io.schema.scim.CustomPublicAPI",
-            "x-ves-proto-service-type": "CUSTOM_PUBLIC"
-        },
-        "/public/v2/Schemas": {
-            "get": {
-                "summary": "Schemas",
-                "operationId": "ves.io.schema.scim.CustomPublicAPI.ListSchemas",
-                "responses": {
-                    "200": {
-                        "description": "A successful response.",
-                        "schema": {
-                            "$ref": "#/definitions/apiHttpBody"
-                        }
-                    },
-                    "401": {
-                        "description": "Returned when operation is not authorized",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "403": {
-                        "description": "Returned when there is no permission to access resource",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "404": {
-                        "description": "Returned when resource is not found",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "409": {
-                        "description": "Returned when operation on resource is conflicting with current value",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "429": {
-                        "description": "Returned when operation has been rejected as it is happening too frequently",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "500": {
-                        "description": "Returned when server encountered an error in processing API",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "503": {
-                        "description": "Returned when service is unavailable temporarily",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "504": {
-                        "description": "Returned when server timed out processing request",
-                        "schema": {
-                            "format": "string"
-                        }
-                    }
-                },
-                "tags": [
-                    "CustomPublicAPI"
-                ],
-                "externalDocs": {
-                    "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-scim-custompublicapi-listschemas"
-                },
-                "x-ves-proto-rpc": "ves.io.schema.scim.CustomPublicAPI.ListSchemas"
-            },
-            "x-displayname": "User",
-            "x-ves-proto-service": "ves.io.schema.scim.CustomPublicAPI",
-            "x-ves-proto-service-type": "CUSTOM_PUBLIC"
-        },
-        "/public/v2/Schemas/{id}": {
-            "get": {
-                "summary": "SchemasById",
-                "operationId": "ves.io.schema.scim.CustomPublicAPI.GetSchemaById",
-                "responses": {
-                    "200": {
-                        "description": "A successful response.",
-                        "schema": {
-                            "$ref": "#/definitions/apiHttpBody"
-                        }
-                    },
-                    "401": {
-                        "description": "Returned when operation is not authorized",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "403": {
-                        "description": "Returned when there is no permission to access resource",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "404": {
-                        "description": "Returned when resource is not found",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "409": {
-                        "description": "Returned when operation on resource is conflicting with current value",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "429": {
-                        "description": "Returned when operation has been rejected as it is happening too frequently",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "500": {
-                        "description": "Returned when server encountered an error in processing API",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "503": {
-                        "description": "Returned when service is unavailable temporarily",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "504": {
-                        "description": "Returned when server timed out processing request",
-                        "schema": {
-                            "format": "string"
-                        }
-                    }
-                },
-                "parameters": [
-                    {
-                        "name": "id",
-                        "description": "Id\n\nx-example: \"sam.smith@gmail.com\"\nx-required\nId with which the request will find entry.",
-                        "in": "path",
-                        "required": true,
-                        "type": "string",
-                        "x-displayname": "Email"
-                    }
-                ],
-                "tags": [
-                    "CustomPublicAPI"
-                ],
-                "externalDocs": {
-                    "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-scim-custompublicapi-getschemabyid"
-                },
-                "x-ves-proto-rpc": "ves.io.schema.scim.CustomPublicAPI.GetSchemaById"
-            },
-            "x-displayname": "User",
-            "x-ves-proto-service": "ves.io.schema.scim.CustomPublicAPI",
-            "x-ves-proto-service-type": "CUSTOM_PUBLIC"
-        },
-        "/public/v2/ServiceProviderConfig": {
-            "get": {
-                "summary": "ListServiceProviderConfig",
-                "operationId": "ves.io.schema.scim.CustomPublicAPI.ListServiceProviderConfig",
-                "responses": {
-                    "200": {
-                        "description": "A successful response.",
-                        "schema": {
-                            "$ref": "#/definitions/scimServiceProviderConfigResponse"
-                        }
-                    },
-                    "401": {
-                        "description": "Returned when operation is not authorized",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "403": {
-                        "description": "Returned when there is no permission to access resource",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "404": {
-                        "description": "Returned when resource is not found",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "409": {
-                        "description": "Returned when operation on resource is conflicting with current value",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "429": {
-                        "description": "Returned when operation has been rejected as it is happening too frequently",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "500": {
-                        "description": "Returned when server encountered an error in processing API",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "503": {
-                        "description": "Returned when service is unavailable temporarily",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "504": {
-                        "description": "Returned when server timed out processing request",
-                        "schema": {
-                            "format": "string"
-                        }
-                    }
-                },
-                "tags": [
-                    "CustomPublicAPI"
-                ],
-                "externalDocs": {
-                    "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-scim-custompublicapi-listserviceproviderconfig"
-                },
-                "x-ves-proto-rpc": "ves.io.schema.scim.CustomPublicAPI.ListServiceProviderConfig"
-            },
-            "x-displayname": "User",
-            "x-ves-proto-service": "ves.io.schema.scim.CustomPublicAPI",
-            "x-ves-proto-service-type": "CUSTOM_PUBLIC"
-        },
-        "/public/v2/Users": {
-            "get": {
-                "summary": "Get all the Users",
-                "description": "Get all users.",
-                "operationId": "ves.io.schema.scim.CustomPublicAPI.ListUsers",
-                "responses": {
-                    "200": {
-                        "description": "A successful response.",
-                        "schema": {
-                            "$ref": "#/definitions/scimListUserResponse"
-                        }
-                    },
-                    "401": {
-                        "description": "Returned when operation is not authorized",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "403": {
-                        "description": "Returned when there is no permission to access resource",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "404": {
-                        "description": "Returned when resource is not found",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "409": {
-                        "description": "Returned when operation on resource is conflicting with current value",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "429": {
-                        "description": "Returned when operation has been rejected as it is happening too frequently",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "500": {
-                        "description": "Returned when server encountered an error in processing API",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "503": {
-                        "description": "Returned when service is unavailable temporarily",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "504": {
-                        "description": "Returned when server timed out processing request",
-                        "schema": {
-                            "format": "string"
-                        }
-                    }
-                },
-                "parameters": [
-                    {
-                        "name": "filter",
-                        "description": "x-example: \"externalId\"\nx-required\nFilter to be used for filtering objects.",
-                        "in": "query",
-                        "required": false,
-                        "type": "string",
-                        "x-displayname": "filter"
-                    },
-                    {
-                        "name": "count",
-                        "description": "x-example: \"8\"\nx-required\nThe number of entries after filter.",
-                        "in": "query",
-                        "required": false,
-                        "type": "string",
-                        "format": "uint64",
-                        "x-displayname": "count"
-                    }
-                ],
-                "tags": [
-                    "CustomPublicAPI"
-                ],
-                "externalDocs": {
-                    "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-scim-custompublicapi-listusers"
-                },
-                "x-ves-proto-rpc": "ves.io.schema.scim.CustomPublicAPI.ListUsers"
-            },
-            "post": {
-                "summary": "Create User with roles",
-                "description": "Create creates a user and namespace roles binding for this user",
-                "operationId": "ves.io.schema.scim.CustomPublicAPI.CreateUser",
-                "responses": {
-                    "200": {
-                        "description": "A successful response.",
-                        "schema": {
-                            "$ref": "#/definitions/scimUser"
-                        }
-                    },
-                    "401": {
-                        "description": "Returned when operation is not authorized",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "403": {
-                        "description": "Returned when there is no permission to access resource",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "404": {
-                        "description": "Returned when resource is not found",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "409": {
-                        "description": "Returned when operation on resource is conflicting with current value",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "429": {
-                        "description": "Returned when operation has been rejected as it is happening too frequently",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "500": {
-                        "description": "Returned when server encountered an error in processing API",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "503": {
-                        "description": "Returned when service is unavailable temporarily",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "504": {
-                        "description": "Returned when server timed out processing request",
-                        "schema": {
-                            "format": "string"
-                        }
-                    }
-                },
-                "parameters": [
-                    {
-                        "name": "body",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/scimCreateUserRequest"
-                        }
-                    }
-                ],
-                "tags": [
-                    "CustomPublicAPI"
-                ],
-                "externalDocs": {
-                    "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-scim-custompublicapi-createuser"
-                },
-                "x-ves-proto-rpc": "ves.io.schema.scim.CustomPublicAPI.CreateUser"
-            },
-            "x-displayname": "User",
-            "x-ves-proto-service": "ves.io.schema.scim.CustomPublicAPI",
-            "x-ves-proto-service-type": "CUSTOM_PUBLIC"
-        },
-        "/public/v2/Users/{id}": {
-            "get": {
-                "summary": "Get User with id",
-                "description": "Get user by means of ID",
-                "operationId": "ves.io.schema.scim.CustomPublicAPI.GetUserById",
-                "responses": {
-                    "200": {
-                        "description": "A successful response.",
-                        "schema": {
-                            "$ref": "#/definitions/scimUser"
-                        }
-                    },
-                    "401": {
-                        "description": "Returned when operation is not authorized",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "403": {
-                        "description": "Returned when there is no permission to access resource",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "404": {
-                        "description": "Returned when resource is not found",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "409": {
-                        "description": "Returned when operation on resource is conflicting with current value",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "429": {
-                        "description": "Returned when operation has been rejected as it is happening too frequently",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "500": {
-                        "description": "Returned when server encountered an error in processing API",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "503": {
-                        "description": "Returned when service is unavailable temporarily",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "504": {
-                        "description": "Returned when server timed out processing request",
-                        "schema": {
-                            "format": "string"
-                        }
-                    }
-                },
-                "parameters": [
-                    {
-                        "name": "id",
-                        "description": "Id\n\nx-example: \"sam.smith@gmail.com\"\nx-required\nId with which the request will find entry.",
-                        "in": "path",
-                        "required": true,
-                        "type": "string",
-                        "x-displayname": "Email"
-                    }
-                ],
-                "tags": [
-                    "CustomPublicAPI"
-                ],
-                "externalDocs": {
-                    "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-scim-custompublicapi-getuserbyid"
-                },
-                "x-ves-proto-rpc": "ves.io.schema.scim.CustomPublicAPI.GetUserById"
-            },
-            "delete": {
-                "summary": "Delete User by ID",
-                "description": "Delete user by Id.",
-                "operationId": "ves.io.schema.scim.CustomPublicAPI.DeleteUserById",
-                "responses": {
-                    "200": {
-                        "description": "A successful response.",
-                        "schema": {
-                            "$ref": "#/definitions/apiHttpBody"
-                        }
-                    },
-                    "401": {
-                        "description": "Returned when operation is not authorized",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "403": {
-                        "description": "Returned when there is no permission to access resource",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "404": {
-                        "description": "Returned when resource is not found",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "409": {
-                        "description": "Returned when operation on resource is conflicting with current value",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "429": {
-                        "description": "Returned when operation has been rejected as it is happening too frequently",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "500": {
-                        "description": "Returned when server encountered an error in processing API",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "503": {
-                        "description": "Returned when service is unavailable temporarily",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "504": {
-                        "description": "Returned when server timed out processing request",
-                        "schema": {
-                            "format": "string"
-                        }
-                    }
-                },
-                "parameters": [
-                    {
-                        "name": "id",
-                        "description": "Id\n\nx-example: \"sam.smith@gmail.com\"\nx-required\nId with which the request will find entry.",
-                        "in": "path",
-                        "required": true,
-                        "type": "string",
-                        "x-displayname": "Email"
-                    }
-                ],
-                "tags": [
-                    "CustomPublicAPI"
-                ],
-                "externalDocs": {
-                    "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-scim-custompublicapi-deleteuserbyid"
-                },
-                "x-ves-proto-rpc": "ves.io.schema.scim.CustomPublicAPI.DeleteUserById"
-            },
-            "put": {
-                "summary": "Replace User with new values.",
-                "description": "Replace updates user and namespace roles for this user",
-                "operationId": "ves.io.schema.scim.CustomPublicAPI.ReplaceUserById",
-                "responses": {
-                    "200": {
-                        "description": "A successful response.",
-                        "schema": {
-                            "$ref": "#/definitions/scimUser"
-                        }
-                    },
-                    "401": {
-                        "description": "Returned when operation is not authorized",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "403": {
-                        "description": "Returned when there is no permission to access resource",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "404": {
-                        "description": "Returned when resource is not found",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "409": {
-                        "description": "Returned when operation on resource is conflicting with current value",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "429": {
-                        "description": "Returned when operation has been rejected as it is happening too frequently",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "500": {
-                        "description": "Returned when server encountered an error in processing API",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "503": {
-                        "description": "Returned when service is unavailable temporarily",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "504": {
-                        "description": "Returned when server timed out processing request",
-                        "schema": {
-                            "format": "string"
-                        }
-                    }
-                },
-                "parameters": [
-                    {
-                        "name": "id",
-                        "description": "id\n\nx-required\nx-example: \"123-456-789012\"\nid for user object.",
-                        "in": "path",
-                        "required": true,
-                        "type": "string",
-                        "x-displayname": "id"
-                    },
-                    {
-                        "name": "body",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/scimUser"
-                        }
-                    }
-                ],
-                "tags": [
-                    "CustomPublicAPI"
-                ],
-                "externalDocs": {
-                    "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-scim-custompublicapi-replaceuserbyid"
-                },
-                "x-ves-proto-rpc": "ves.io.schema.scim.CustomPublicAPI.ReplaceUserById"
-            },
-            "patch": {
-                "summary": "PatchUserById patches User",
-                "description": "Patch patches the fields for this user",
-                "operationId": "ves.io.schema.scim.CustomPublicAPI.PatchUserById",
-                "responses": {
-                    "200": {
-                        "description": "A successful response.",
-                        "schema": {
-                            "$ref": "#/definitions/scimUser"
-                        }
-                    },
-                    "401": {
-                        "description": "Returned when operation is not authorized",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "403": {
-                        "description": "Returned when there is no permission to access resource",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "404": {
-                        "description": "Returned when resource is not found",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "409": {
-                        "description": "Returned when operation on resource is conflicting with current value",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "429": {
-                        "description": "Returned when operation has been rejected as it is happening too frequently",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "500": {
-                        "description": "Returned when server encountered an error in processing API",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "503": {
-                        "description": "Returned when service is unavailable temporarily",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "504": {
-                        "description": "Returned when server timed out processing request",
-                        "schema": {
-                            "format": "string"
-                        }
-                    }
-                },
-                "parameters": [
-                    {
-                        "name": "id",
-                        "description": "id\n\nx-example: \"\"id\": \"1234-5678-901234\"\"\nx-required\nid of the user object that needs patching.",
-                        "in": "path",
-                        "required": true,
-                        "type": "string",
-                        "x-displayname": "id"
-                    },
-                    {
-                        "name": "body",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/scimPatchUserRequest"
-                        }
-                    }
-                ],
-                "tags": [
-                    "CustomPublicAPI"
-                ],
-                "externalDocs": {
-                    "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-scim-custompublicapi-patchuserbyid"
-                },
-                "x-ves-proto-rpc": "ves.io.schema.scim.CustomPublicAPI.PatchUserById"
-            },
-            "x-displayname": "User",
-            "x-ves-proto-service": "ves.io.schema.scim.CustomPublicAPI",
-            "x-ves-proto-service-type": "CUSTOM_PUBLIC"
-        }
-    },
+    "paths": {},
     "definitions": {
         "apiHttpBody": {
             "type": "object",
@@ -4146,1099 +2749,747 @@ var CustomPublicAPISwaggerJSON string = `{
                 }
             }
         },
+        "protobufNullValue": {
+            "type": "string",
+            "description": "-NullValue- is a singleton enumeration to represent the null value for the\n-Value- type union.\n\n The JSON representation for -NullValue- is JSON -null-.\n\n - NULL_VALUE: Null value.",
+            "enum": [
+                "NULL_VALUE"
+            ],
+            "default": "NULL_VALUE"
+        },
         "scimCreateGroupRequest": {
             "type": "object",
-            "description": "Request for creating group.",
+            "description": "x-displayName: \"CreateGroupRequest\"\nRequest for creating group.",
             "title": "CreateGroupRequest",
-            "x-displayname": "CreateGroupRequest",
-            "x-ves-proto-message": "ves.io.schema.scim.CreateGroupRequest",
             "properties": {
                 "displayName": {
                     "type": "string",
-                    "description": " Group display name.\n\nExample: - \"display name\"-",
-                    "title": "displayName",
-                    "x-displayname": "displayName",
-                    "x-ves-example": "display name"
+                    "description": "x-displayName: \"displayName\"\nx-example: \"display name\"\nGroup display name.",
+                    "title": "displayName"
+                },
+                "externalId": {
+                    "type": "string",
+                    "description": "x-displayName: \"ExternalId\"\nx-example: \"external Id\"\nexternal Id for the group.",
+                    "title": "ExternalId"
                 },
                 "id": {
                     "type": "string",
-                    "description": " Defines id of the obj\n\nExample: - \"id of object in external identity provider\"-",
-                    "title": "Id",
-                    "x-displayname": "id",
-                    "x-ves-example": "id of object in external identity provider"
+                    "description": "x-displayName: \"id\"\nx-example: \"id of object in external identity provider\"\nDefines id of the obj",
+                    "title": "Id"
                 },
                 "members": {
                     "type": "array",
-                    "description": " List of group members reference.\n\nExample: - \"List group members i.e users\"-",
+                    "description": "x-displayName: \"members\"\nx-example: \"List group members i.e users\"\nList of group members reference.",
                     "title": "members",
                     "items": {
                         "$ref": "#/definitions/scimGroupMembers"
-                    },
-                    "x-displayname": "members",
-                    "x-ves-example": "List group members i.e users"
+                    }
                 },
                 "meta": {
-                    "description": " meta information about group.\n\nExample: - \"meta information for the group\"-",
+                    "description": "x-displayName: \"meta\"\nx-example: \"meta information for the group\"\nmeta information about group.",
                     "title": "meta",
-                    "$ref": "#/definitions/scimMeta",
-                    "x-displayname": "meta",
-                    "x-ves-example": "meta information for the group"
+                    "$ref": "#/definitions/scimMeta"
                 },
                 "schemas": {
                     "type": "array",
-                    "description": " schemas defined as per scim spec.\n\nExample: - \"scim spec defined schemas\"-",
+                    "description": "x-displayName: \"schemas\"\nx-example: \"scim spec defined schemas\"\nschemas defined as per scim spec.",
                     "title": "schemas",
                     "items": {
                         "type": "string"
-                    },
-                    "x-displayname": "schemas",
-                    "x-ves-example": "scim spec defined schemas"
+                    }
                 }
             }
         },
         "scimCreateUserRequest": {
             "type": "object",
-            "description": "CreateUserRequest is the request for creating a user.",
+            "description": "x-displayName: \"CreateUserRequest\"\nCreateUserRequest is the request for creating a user.",
             "title": "CreateUserRequest",
-            "x-displayname": "CreateUserRequest",
-            "x-ves-proto-message": "ves.io.schema.scim.CreateUserRequest",
             "properties": {
                 "active": {
                     "type": "boolean",
-                    "description": " active is boolean representing if user is active or not.\n\nExample: - \"true/false\"-",
+                    "description": "x-displayName: \"active\"\nx-example: \"true/false\"\nactive is boolean representing if user is active or not.",
                     "title": "active",
-                    "format": "boolean",
-                    "x-displayname": "active",
-                    "x-ves-example": "true/false"
+                    "format": "boolean"
                 },
                 "displayName": {
                     "type": "string",
-                    "description": " displayName refers to the name to be displayed for the user. default is name.\n\nExample: - \"Rod Rob\"-",
-                    "title": "displayName",
-                    "x-displayname": "displayName",
-                    "x-ves-example": "Rod Rob"
+                    "description": "x-displayName: \"displayName\"\nx-example: \"Rod Rob\"\ndisplayName refers to the name to be displayed for the user. default is name.",
+                    "title": "displayName"
                 },
                 "emails": {
                     "type": "array",
-                    "description": " emails can be list of emails to be used by user work, personal etc.\n\nExample: - \"sam@test.com\"-",
+                    "description": "x-displayName: \"emails\"\nx-example: \"sam@test.com\"\nemails can be list of emails to be used by user work, personal etc.",
                     "title": "emails",
                     "items": {
                         "$ref": "#/definitions/scimEmail"
-                    },
-                    "x-displayname": "emails",
-                    "x-ves-example": "sam@test.com"
+                    }
                 },
                 "externalId": {
                     "type": "string",
-                    "description": " externalId refers to the id for user represented in the external system like azure etc.\n\nExample: - \"rod_123\"-",
-                    "title": "externalId",
-                    "x-displayname": "externalId",
-                    "x-ves-example": "rod_123"
+                    "description": "x-displayName: \"externalId\"\nx-example: \"rod_123\"\nexternalId refers to the id for user represented in the external system like azure etc.",
+                    "title": "externalId"
                 },
                 "groups": {
                     "type": "array",
-                    "description": " groups to which user belongs to.\n\nExample: - \"groupid\"-",
+                    "description": "x-displayName: \"groups\"\nx-example: \"groupid\"\ngroups to which user belongs to.",
                     "title": "groups",
                     "items": {
                         "$ref": "#/definitions/scimUserGroup"
-                    },
-                    "x-displayname": "groups",
-                    "x-ves-example": "groupid"
+                    }
+                },
+                "meta": {
+                    "description": "x-displayName: \"meta\"\nmeta specifies the created date, location, resource type, modified time date and version.",
+                    "title": "meta",
+                    "$ref": "#/definitions/scimMeta"
                 },
                 "name": {
-                    "description": " name of user.\n\nExample: - \"Rodney Robilliard\"-",
+                    "description": "x-displayName: \"name\"\nx-example: \"Rodney Robilliard\"\nname of user.",
                     "title": "name",
-                    "$ref": "#/definitions/scimName",
-                    "x-displayname": "name",
-                    "x-ves-example": "Rodney Robilliard"
+                    "$ref": "#/definitions/scimName"
                 },
                 "roles": {
                     "type": "array",
-                    "description": " roles defined for the user.\n\nExample: - \"roles\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "description": "x-displayName: \"roles\"\nx-required\nx-example: \"roles\"\nroles defined for the user.",
                     "title": "roles",
                     "items": {
                         "type": "string"
-                    },
-                    "x-displayname": "roles",
-                    "x-ves-example": "roles",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
                     }
                 },
                 "schemas": {
                     "type": "array",
-                    "description": " schemas represent the schema from scim spec to be used for creating the user.\n\nExample: - \"urn:ietf:params:scim:schemas:core:2.0:User\"-",
+                    "description": "x-displayName: \"schemas\"\nx-example: \"urn:ietf:params:scim:schemas:core:2.0:User\"\nschemas represent the schema from scim spec to be used for creating the user.",
                     "title": "schemas",
                     "items": {
                         "type": "string"
-                    },
-                    "x-displayname": "schemas",
-                    "x-ves-example": "urn:ietf:params:scim:schemas:core:2.0:User"
+                    }
                 },
                 "userName": {
                     "type": "string",
-                    "description": " userName refers to the unique userName for this user. Can be emailId or username used in yahoo gmail etc.\n\nExample: - \"rod_123\"-",
-                    "title": "userName",
-                    "x-displayname": "userName",
-                    "x-ves-example": "rod_123"
+                    "description": "x-displayName: \"userName\"\nx-example: \"rod_123\"\nuserName refers to the unique userName for this user. Can be emailId or username used in yahoo gmail etc.",
+                    "title": "userName"
                 },
                 "userType": {
-                    "description": " userType represents the type of user can be permanent employee or contractor etc.\n\nExample: - \"Contractor\"-",
+                    "description": "x-displayName: \"userType\"\nx-example: \"Contractor\"\nuserType represents the type of user can be permanent employee or contractor etc.",
                     "title": "userType",
-                    "$ref": "#/definitions/userUserType",
-                    "x-displayname": "userType",
-                    "x-ves-example": "Contractor"
+                    "$ref": "#/definitions/userUserType"
                 }
             }
         },
         "scimEmail": {
             "type": "object",
-            "description": "Email for user can be primary or secondary",
+            "description": "x-displayName: \"Email\"\nEmail for user can be primary or secondary",
             "title": "Email",
-            "x-displayname": "Email",
-            "x-ves-proto-message": "ves.io.schema.scim.Email",
             "properties": {
                 "primary": {
                     "type": "boolean",
-                    "description": " primary boolean describing whether it is primary or not.\n\nExample: - \"true\"-",
+                    "description": "x-displayName: \"primary\"\nx-example: \"true\"\nprimary boolean describing whether it is primary or not.",
                     "title": "primary",
-                    "format": "boolean",
-                    "x-displayname": "primary",
-                    "x-ves-example": "true"
+                    "format": "boolean"
                 },
                 "type": {
                     "type": "string",
-                    "description": " type of email describing whether it is work or personal.\n\nExample: - \"work\"-",
-                    "title": "type",
-                    "x-displayname": "type",
-                    "x-ves-example": "work"
+                    "description": "x-displayName: \"type\"\nx-example: \"work\"\ntype of email describing whether it is work or personal.",
+                    "title": "type"
                 },
                 "value": {
                     "type": "string",
-                    "description": " value.\n\nExample: - \"newEmail@domain.com\"-",
-                    "title": "value",
-                    "x-displayname": "value",
-                    "x-ves-example": "newEmail@domain.com"
+                    "description": "x-displayName: \"value\"\nx-example: \"newEmail@domain.com\"\nvalue.",
+                    "title": "value"
                 }
             }
         },
         "scimFilter": {
             "type": "object",
-            "description": "Filter.",
+            "description": "x-displayName: \"Filter\"\nFilter.",
             "title": "Filter",
-            "x-displayname": "Filter",
-            "x-ves-proto-message": "ves.io.schema.scim.Filter",
             "properties": {
                 "maxResults": {
                     "type": "string",
-                    "description": " maximum results to be displayed.\n\nExample: - \"5\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "description": "x-displayName: \"schemas\"\nx-example: \"5\"\nx-required\nmaximum results to be displayed.",
                     "title": "maxResults",
-                    "format": "uint64",
-                    "x-displayname": "schemas",
-                    "x-ves-example": "5",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
-                    }
+                    "format": "uint64"
                 },
                 "supported": {
                     "type": "boolean",
-                    "description": " is filtering supported.\n\nExample: - \"true/false\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "description": "x-displayName: \"supported\"\nx-example: \"true/false\"\nx-required\nis filtering supported.",
                     "title": "supported",
-                    "format": "boolean",
-                    "x-displayname": "supported",
-                    "x-ves-example": "true/false",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
-                    }
+                    "format": "boolean"
                 }
             }
         },
         "scimGroup": {
             "type": "object",
-            "description": "Group.",
+            "description": "x-displayName: \"Group\"\nGroup.",
             "title": "Group",
-            "x-displayname": "Group",
-            "x-ves-proto-message": "ves.io.schema.scim.Group",
             "properties": {
                 "displayName": {
                     "type": "string",
-                    "description": " display name for the group.\n\nExample: - \"group display name\"-",
-                    "title": "displayName",
-                    "x-displayname": "displayName",
-                    "x-ves-example": "group display name"
+                    "description": "x-displayName: \"displayName\"\nx-example: \"group display name\"\ndisplay name for the group.",
+                    "title": "displayName"
+                },
+                "externalId": {
+                    "type": "string",
+                    "description": "x-displayName: \"ExternalId\"\nx-example: \"external Id\"\nexternal Id for the group.",
+                    "title": "ExternalId"
                 },
                 "id": {
                     "type": "string",
-                    "description": " unique Id for the group.\n\nExample: - \"value\"-",
-                    "title": "id",
-                    "x-displayname": "id",
-                    "x-ves-example": "value"
+                    "description": "x-displayName: \"id\"\nx-example: \"value\"\nunique Id for the group.",
+                    "title": "id"
                 },
                 "members": {
                     "type": "array",
-                    "description": " users with unique Id.\n\nExample: - \"Users with unique Id\"-",
+                    "description": "x-displayName: \"GroupMembers\"\nx-example: \"Users with unique Id\"\nusers with unique Id.",
                     "title": "GroupMembers",
                     "items": {
                         "$ref": "#/definitions/scimGroupMembers"
-                    },
-                    "x-displayname": "GroupMembers",
-                    "x-ves-example": "Users with unique Id"
+                    }
                 },
                 "meta": {
-                    "description": " meta information for the group.\n\nExample: - \"meta information for the group\"-",
+                    "description": "x-displayName: \"meta\"\nx-example: \"meta information for the group\"\nmeta information for the group.",
                     "title": "meta",
-                    "$ref": "#/definitions/scimMeta",
-                    "x-displayname": "meta",
-                    "x-ves-example": "meta information for the group"
+                    "$ref": "#/definitions/scimMeta"
                 },
                 "name": {
                     "type": "string",
-                    "description": " display name for the group.\n\nExample: - \"group name\"-",
-                    "title": "Name",
-                    "x-displayname": "Name",
-                    "x-ves-example": "group name"
+                    "description": "x-displayName: \"Name\"\nx-example: \"group name\"\ndisplay name for the group.",
+                    "title": "Name"
                 },
                 "schemas": {
                     "type": "array",
-                    "description": " schemas per scim spec.\n\nExample: - \"schema per scim spec.\"-",
+                    "description": "x-displayName: \"schemas\"\nx-example: \"schema per scim spec.\"\nschemas per scim spec.",
                     "title": "schemas",
                     "items": {
                         "type": "string"
-                    },
-                    "x-displayname": "schemas",
-                    "x-ves-example": "schema per scim spec."
+                    }
                 }
             }
         },
         "scimGroupMembers": {
             "type": "object",
-            "description": "GroupMembers.",
+            "description": "x-displayName: \"GroupMembers\"\nGroupMembers.",
             "title": "GroupMembers",
-            "x-displayname": "GroupMembers",
-            "x-ves-proto-message": "ves.io.schema.scim.GroupMembers",
             "properties": {
-                "id": {
+                "ref": {
                     "type": "string",
-                    "description": " unique Id of the users\n\nExample: - \"value\"-",
-                    "title": "id",
-                    "x-displayname": "id",
-                    "x-ves-example": "value"
-                }
-            }
-        },
-        "scimGroupOperation": {
-            "type": "object",
-            "description": "x-example: \"value\"\nunique Id for the group.",
-            "title": "id",
-            "x-displayname": "id",
-            "x-ves-proto-message": "ves.io.schema.scim.GroupOperation",
-            "properties": {
-                "op": {
-                    "type": "string",
-                    "description": " unique Id for the group.\n\nExample: - \"add, delete, replace, remove\"-",
-                    "title": "op",
-                    "x-displayname": "op",
-                    "x-ves-example": "add, delete, replace, remove"
-                },
-                "path": {
-                    "type": "string",
-                    "description": " unique path for the group field to be modified.\n\nExample: - \"group field path to be modified\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
-                    "title": "path",
-                    "x-displayname": "path",
-                    "x-ves-example": "group field path to be modified",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
-                    }
+                    "description": "x-displayName: \"$ref\"\nx-example: \"$ref\"\nurl of the users or groups",
+                    "title": "$ref"
                 },
                 "value": {
-                    "description": " value specifying what section of the group needs to be modified.\n\nExample: - \"value to be updated\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
-                    "title": "value",
-                    "$ref": "#/definitions/scimGroup",
-                    "x-displayname": "value",
-                    "x-ves-example": "value to be updated",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
-                    }
+                    "type": "string",
+                    "description": "x-displayName: \"value\"\nx-example: \"value\"\nunique Id of the users or groups",
+                    "title": "value"
                 }
             }
         },
         "scimListGroupResources": {
             "type": "object",
-            "description": "List group objects.",
+            "description": "x-displayName: \"ListGroupResources\"\nList group objects.",
             "title": "ListGroup;resources",
-            "x-displayname": "ListGroupResources",
-            "x-ves-proto-message": "ves.io.schema.scim.ListGroupResources",
             "properties": {
-                "groups": {
+                "Resources": {
                     "type": "array",
-                    "description": " List of available groups.\n\nExample: - \"list of groups\"-",
+                    "description": "x-displayName: \"groups\"\nx-example: \"list of groups\"\nList of available groups.",
                     "title": "groups",
                     "items": {
                         "$ref": "#/definitions/scimGroup"
-                    },
-                    "x-displayname": "groups",
-                    "x-ves-example": "list of groups"
+                    }
+                },
+                "itemsPerPage": {
+                    "type": "string",
+                    "description": "x-displayName: \"itemsPerPage\"\nx-required\nitemsPerPage The number of resources returned in a list response page",
+                    "title": "itemsPerPage",
+                    "format": "uint64"
                 },
                 "schemas": {
                     "type": "array",
-                    "description": " schema defined as per scim spec.\n\nExample: - \"scim spec referred schema\"-",
+                    "description": "x-displayName: \"schemas\"\nx-example: \"scim spec referred schema\"\nschema defined as per scim spec.",
                     "title": "schemas",
                     "items": {
                         "type": "string"
-                    },
-                    "x-displayname": "schemas",
-                    "x-ves-example": "scim spec referred schema"
+                    }
+                },
+                "startIndex": {
+                    "type": "string",
+                    "description": "x-displayName: \"startIndex\"\nx-required\nstartIndex The 1-based index of the first result in the current set of list results.",
+                    "title": "startIndex",
+                    "format": "uint64"
                 },
                 "totalResults": {
                     "type": "string",
-                    "description": " totalGroup objects available.\n\nExample: - \"10 15\"-",
+                    "description": "x-displayName: \"totalResults\"\nx-example: \"10 15\"\ntotalGroup objects available.",
                     "title": "id",
-                    "format": "uint64",
-                    "x-displayname": "totalResults",
-                    "x-ves-example": "10 15"
+                    "format": "uint64"
                 }
             }
         },
         "scimListUserResponse": {
             "type": "object",
-            "description": "ListUserResources list all the user objects.",
+            "description": "x-displayName: \"ListUserResources\"\nListUserResources list all the user objects.",
             "title": "ListUserResources",
-            "x-displayname": "ListUserResources",
-            "x-ves-proto-message": "ves.io.schema.scim.ListUserResponse",
             "properties": {
-                "resources": {
+                "Resources": {
                     "type": "array",
-                    "description": " resources representing all the user objects.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
-                    "title": "resources",
+                    "description": "x-displayName: \"Resources\"\nx-required\nResources representing all the user objects.",
+                    "title": "Resources",
                     "items": {
                         "$ref": "#/definitions/scimUser"
-                    },
-                    "x-displayname": "resources",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
                     }
+                },
+                "itemsPerPage": {
+                    "type": "string",
+                    "description": "x-displayName: \"itemsPerPage\"\nx-required\nitemsPerPage The number of resources returned in a list response page",
+                    "title": "itemsPerPage",
+                    "format": "uint64"
                 },
                 "schemas": {
                     "type": "array",
-                    "description": " schemas for listing the user.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "description": "x-displayName: \"schemas\"\nx-required\nschemas for listing the user.",
                     "title": "schemas",
                     "items": {
                         "type": "string"
-                    },
-                    "x-displayname": "schemas",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
                     }
+                },
+                "startIndex": {
+                    "type": "string",
+                    "description": "x-displayName: \"startIndex\"\nx-required\nstartIndex The 1-based index of the first result in the current set of list results.",
+                    "title": "startIndex",
+                    "format": "uint64"
                 },
                 "totalResults": {
                     "type": "string",
-                    "description": " totalResults for the search criteria.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "description": "x-displayName: \"totalResults\"\nx-required\ntotalResults for the search criteria.",
                     "title": "totalResults",
-                    "format": "uint64",
-                    "x-displayname": "totalResults",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
-                    }
+                    "format": "uint64"
                 }
             }
         },
         "scimMeta": {
             "type": "object",
-            "description": "x-example: \"Meta\"\nx-required\nResource meta information..",
+            "description": "x-displayName: \"Meta\"\nx-example: \"Meta\"\nx-required\nResource meta information..",
             "title": "Meta",
-            "x-displayname": "Meta",
-            "x-ves-proto-message": "ves.io.schema.scim.Meta",
             "properties": {
                 "created": {
                     "type": "string",
-                    "description": " create date.\n\nExample: - \"2011-08-08T04:56:22Z\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
-                    "title": "created",
-                    "x-displayname": "created",
-                    "x-ves-example": "2011-08-08T04:56:22Z",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
-                    }
+                    "description": "x-displayName: \"created\"\nx-example: \"2011-08-08T04:56:22Z\"\nx-required\ncreate date.",
+                    "title": "created"
                 },
                 "lastModified": {
                     "type": "string",
-                    "description": " last modification date and time.\n\nExample: - \"2011-08-08T08:00:12Z\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
-                    "title": "lastModified",
-                    "x-displayname": "lastModified",
-                    "x-ves-example": "2011-08-08T08:00:12Z",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
-                    }
+                    "description": "x-displayName: \"lastModified\"\nx-example: \"2011-08-08T08:00:12Z\"\nx-required\nlast modification date and time.",
+                    "title": "lastModified"
                 },
                 "location": {
                     "type": "string",
-                    "description": " [x-required]\n location for resource.\n\nExample: - \"/ResourceType/Users\"-\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
-                    "title": "location",
-                    "x-displayname": "location",
-                    "x-ves-example": "/ResourceType/Users",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
-                    }
+                    "description": "x-displayName: \"location\"\nx-example: \"/ResourceType/Users\"\n[x-required]\nlocation for resource.",
+                    "title": "location"
                 },
                 "resourceType": {
                     "type": "string",
-                    "description": " type of resource.\n\nExample: - \"User\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
-                    "title": "resourceType",
-                    "x-displayname": "schemas",
-                    "x-ves-example": "User",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
-                    }
+                    "description": "x-displayName: \"schemas\"\nx-example: \"User\"\nx-required\ntype of resource.",
+                    "title": "resourceType"
                 },
                 "version": {
                     "type": "string",
-                    "description": " version for resource type.\n\nExample: - \"2.0\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
-                    "title": "version",
-                    "x-displayname": "version",
-                    "x-ves-example": "2.0",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
-                    }
+                    "description": "x-displayName: \"version\"\nx-example: \"2.0\"\nx-required\nversion for resource type.",
+                    "title": "version"
                 }
             }
         },
         "scimName": {
             "type": "object",
-            "description": "Name is the name of user.",
+            "description": "x-displayName: \"Name\"\nName is the name of user.",
             "title": "Name",
-            "x-displayname": "Name",
-            "x-ves-proto-message": "ves.io.schema.scim.Name",
             "properties": {
                 "familyName": {
                     "type": "string",
-                    "description": " Family name.\n\nExample: - \"Downey\"-",
-                    "title": "familyName",
-                    "x-displayname": "familyName",
-                    "x-ves-example": "Downey"
+                    "description": "x-displayName: \"familyName\"\nx-example: \"Downey\"\nFamily name.",
+                    "title": "familyName"
                 },
                 "formatted": {
                     "type": "string",
-                    "description": " Formatted name is detailed name of person.\n\nExample: - \"R Downey Jr\"-",
-                    "title": "formatted",
-                    "x-displayname": "formatted",
-                    "x-ves-example": "R Downey Jr"
+                    "description": "x-displayName: \"formatted\"\nx-example: \"R Downey Jr\"\nFormatted name is detailed name of person.",
+                    "title": "formatted"
                 },
                 "givenName": {
                     "type": "string",
-                    "description": " Given name of the person.\n\nExample: - \"Robert J Downey Jr\"-",
-                    "title": "givenName",
-                    "x-displayname": "givenName",
-                    "x-ves-example": "Robert J Downey Jr"
+                    "description": "x-displayName: \"givenName\"\nx-example: \"Robert J Downey Jr\"\nGiven name of the person.",
+                    "title": "givenName"
                 },
                 "honorificPrefix": {
                     "type": "string",
-                    "description": " Prefix for the name. Mr Ms. etc.\n\nExample: - \"Mr\"-",
-                    "title": "honorificPrefix",
-                    "x-displayname": "honorificPrefix",
-                    "x-ves-example": "Mr"
+                    "description": "x-displayName: \"honorificPrefix\"\nx-example: \"Mr\"\nPrefix for the name. Mr Ms. etc.",
+                    "title": "honorificPrefix"
                 },
                 "honorificSuffix": {
                     "type": "string",
-                    "description": " Suffix for the name like Jr Sr I II III etc.\n\nExample: - \"IV\"-",
-                    "title": "honorificSuffix",
-                    "x-displayname": "honorificSuffix",
-                    "x-ves-example": "IV"
+                    "description": "x-displayName: \"honorificSuffix\"\nx-example: \"IV\"\nSuffix for the name like Jr Sr I II III etc.",
+                    "title": "honorificSuffix"
                 },
                 "middleName": {
                     "type": "string",
-                    "description": " Middle name of the person.\n\nExample: - \"K\"-",
-                    "title": "middleName",
-                    "x-displayname": "middleName",
-                    "x-ves-example": "K"
+                    "description": "x-displayName: \"middleName\"\nx-example: \"K\"\nMiddle name of the person.",
+                    "title": "middleName"
                 }
             }
         },
         "scimPatchGroupRequest": {
             "type": "object",
-            "description": "Patch operation to modify group.",
+            "description": "x-displayName: \"PatchGroupOperation\"\nPatch operation to modify group.",
             "title": "PatchGroupOperation",
-            "x-displayname": "PatchGroupOperation",
-            "x-ves-proto-message": "ves.io.schema.scim.PatchGroupRequest",
             "properties": {
-                "id": {
-                    "type": "string",
-                    "description": " unique Id for the group.\n\nExample: - \"value\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
-                    "title": "id",
-                    "x-displayname": "id",
-                    "x-ves-example": "value",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
+                "Operations": {
+                    "type": "array",
+                    "description": "x-displayName: \"Operations\"\nx-example: \"add, remove, replace, delete\"\nx-required\nOperations to modify or delete group.",
+                    "title": "Operations",
+                    "items": {
+                        "$ref": "#/definitions/scimPatchOperation"
                     }
                 },
-                "operation": {
-                    "description": " Operation to modify or delete group.\n\nExample: - \"add, remove, replace, delete\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
-                    "title": "Group Operation",
-                    "$ref": "#/definitions/scimGroupOperation",
-                    "x-displayname": "GroupOperation",
-                    "x-ves-example": "add, remove, replace, delete",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
-                    }
+                "id": {
+                    "type": "string",
+                    "description": "x-displayName: \"id\"\nx-example: \"value\"\nx-required\nunique Id for the group.",
+                    "title": "id"
                 },
                 "schemas": {
                     "type": "array",
-                    "description": " schemas as per scim spec.\n\nExample: - \"schemas per scim spec\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "description": "x-displayName: \"schemas\"\nx-example: \"schemas per scim spec\"\nx-required\nschemas as per scim spec.",
                     "title": "schemas",
                     "items": {
                         "type": "string"
-                    },
-                    "x-displayname": "schemas",
-                    "x-ves-example": "schemas per scim spec",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
                     }
+                }
+            }
+        },
+        "scimPatchOperation": {
+            "type": "object",
+            "description": "x-displayName: \"Patch Operation\"\nPatchOperation is the patch operation where user can be  updated replaced or remove..\nsupported op types are add, remove, replace\nremove is remove a specific entry.",
+            "title": "PatchOperation",
+            "properties": {
+                "op": {
+                    "type": "string",
+                    "description": "x-displayName: \"op\"\nx-example: \"\"op\": \"add\"\"\nop \"add\", \"replace\", \"remove\", \"delete\"",
+                    "title": "op"
+                },
+                "path": {
+                    "type": "string",
+                    "description": "x-displayName: \"path\"\nx-example: \"\"path\": \"name.formatted\"\"\npath to the field where the change needs to happen.",
+                    "title": "path"
+                },
+                "value": {
+                    "type": "object",
+                    "description": "x-displayName: \"value\"\nx-example: \"\"value\": \"New Formatted Name\"\"\nvalue to be used for modifying the object. In case of delete nothing needs to be specified.",
+                    "title": "value"
                 }
             }
         },
         "scimPatchUserRequest": {
             "type": "object",
-            "description": "x-example: {\n    \"schemas\": [\n        \"urn:ietf:params:scim:api:messages:2.0:PatchOp\"\n    ],\n   operation\": {\n    \"op\": \"add\",\n    \"path\": \"name.preferredName\",\n    \"value\": {\n        \"name\": {\n            \"preferredName\": \"New preferred Name\"\n        }\n    }\n},\n\"id\": \"1234-5678-901234\"\n\n}\nPatchUserRequest patches the user object or deletes it.",
+            "description": "x-displayName: \"PatchUserRequest\"\nx-example: {\n    \"schemas\": [\n        \"urn:ietf:params:scim:api:messages:2.0:PatchOp\"\n    ],\n   operation\": [{\n    \"op\": \"add\",\n    \"path\": \"name.preferredName\",\n    \"value\": \"New preferred Name\"\n    }]\n},\n\"id\": \"1234-5678-901234\"\n\n}\nPatchUserRequest patches the user object or deletes it.",
             "title": "PatchUserRequest",
-            "x-displayname": "PatchUserRequest",
-            "x-ves-proto-message": "ves.io.schema.scim.PatchUserRequest",
             "properties": {
-                "id": {
-                    "type": "string",
-                    "description": " id of the user object that needs patching.\n\nExample: - \"\"id\"\"1234-5678-901234\"\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
-                    "title": "id",
-                    "x-displayname": "id",
-                    "x-ves-example": "\"id\": \"1234-5678-901234\"",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
+                "Operations": {
+                    "type": "array",
+                    "description": "x-displayName: \"operations\"\nx-example: \"\"operations\": [{\n    \"op\": \"add\",\n    \"path\": \"name.preferredName\",\n    \"value\": \"new name\"\n    }]\n}\"\"\nx-required\noperations that will modify or delete the user object.",
+                    "title": "operations",
+                    "items": {
+                        "$ref": "#/definitions/scimPatchOperation"
                     }
                 },
-                "operation": {
-                    "description": "     \"op\": \"add\",\n     \"path\": \"name.preferredName\",\n     \"value\": {\n         \"name\": {\n             \"preferredName\": \"New preferred Name\"\n         }\n     }\n }\"\"\n operation that will modify or delete the user object.\n\nExample: - \"\"operation\"{-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
-                    "title": "operation",
-                    "$ref": "#/definitions/scimUserOperation",
-                    "x-displayname": "operation",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
-                    }
+                "id": {
+                    "type": "string",
+                    "description": "x-displayName: \"id\"\nx-example: \"\"id\": \"1234-5678-901234\"\"\nx-required\nid of the user object that needs patching.",
+                    "title": "id"
                 },
                 "schemas": {
                     "type": "array",
-                    "description": " schemas for patch.\n\nExample: - \"urn:ietf:params:scim:api:messages:2.0:PatchOp\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "description": "x-displayName: \"schemas\"\nx-example: \"urn:ietf:params:scim:api:messages:2.0:PatchOp\"\nx-required\nschemas for patch.",
                     "title": "schemas",
                     "items": {
                         "type": "string"
-                    },
-                    "x-displayname": "schemas",
-                    "x-ves-example": "urn:ietf:params:scim:api:messages:2.0:PatchOp",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
                     }
                 }
             }
         },
         "scimResource": {
             "type": "object",
-            "description": "Resource",
+            "description": "x-displayName: \"Resource\"\nResource",
             "title": "Resource",
-            "x-displayname": "Resource",
-            "x-ves-proto-message": "ves.io.schema.scim.Resource",
             "properties": {
                 "endpoint": {
                     "type": "string",
-                    "description": " [x-example: \"/Groups\"]\n [x-required]\n endpoint for the resource..\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
-                    "title": "endpoint",
-                    "x-displayname": "endPoint",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
-                    }
+                    "description": "x-displayName: \"endPoint\"\n[x-example: \"/Groups\"]\n[x-required]\nendpoint for the resource..",
+                    "title": "endpoint"
                 },
                 "id": {
                     "type": "string",
-                    "description": " [x-example: \"Group\"]\n [x-required]\n Id of the resource.\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
-                    "title": "Id",
-                    "x-displayname": "id",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
-                    }
+                    "description": "x-displayName: \"id\"\n[x-example: \"Group\"]\n[x-required]\nId of the resource.",
+                    "title": "Id"
                 },
                 "meta": {
-                    "description": " [x-example: \"ResourceType]\n [x-required]\n meta describes the resource type and location.\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "description": "x-displayName: \"meta\"\n[x-example: \"ResourceType]\n[x-required]\nmeta describes the resource type and location.",
                     "title": "meta",
-                    "$ref": "#/definitions/scimResourceMeta",
-                    "x-displayname": "meta",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
-                    }
+                    "$ref": "#/definitions/scimResourceMeta"
                 },
                 "name": {
                     "type": "string",
-                    "description": " [x-example: \"Group\"]\n [x-required]\n name of the resource.\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
-                    "title": "name",
-                    "x-displayname": "name",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
-                    }
+                    "description": "x-displayName: \"name\"\n[x-example: \"Group\"]\n[x-required]\nname of the resource.",
+                    "title": "name"
                 },
                 "schema": {
                     "type": "string",
-                    "description": " [x-example: \"urn:ietf:params:scim:schemas:core:2.0:ResourceType]\n [x-required]\n Schema defined in scim spec..\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
-                    "title": "schema",
-                    "x-displayname": "schema",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
-                    }
+                    "description": "x-displayName: \"schema\"\n[x-example: \"urn:ietf:params:scim:schemas:core:2.0:ResourceType]\n[x-required]\nSchema defined in scim spec..",
+                    "title": "schema"
                 },
                 "schemas": {
                     "type": "array",
-                    "description": " [x-example: \"urn:ietf:params:scim:api:messages:2.0:ListResponse\"]\n [x-required]\n schemas defined in scim spec.\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "description": "x-displayName: \"schemas\"\n[x-example: \"urn:ietf:params:scim:api:messages:2.0:ListResponse\"]\n[x-required]\nschemas defined in scim spec.",
                     "title": "schemas",
                     "items": {
                         "type": "string"
-                    },
-                    "x-displayname": "schemas",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
                     }
                 }
             }
         },
         "scimResourceMeta": {
             "type": "object",
-            "description": "ResourceMeta.",
+            "description": "x-displayName: \"ResourceMeta\"\nResourceMeta.",
             "title": "ResourceMeta",
-            "x-displayname": "ResourceMeta",
-            "x-ves-proto-message": "ves.io.schema.scim.ResourceMeta",
             "properties": {
                 "location": {
                     "type": "string",
-                    "description": " location of resource.\n\nExample: - \"/Resurce/User\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
-                    "title": "location",
-                    "x-displayname": "location",
-                    "x-ves-example": "/Resurce/User",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
-                    }
+                    "description": "x-displayName: \"location\"\nx-example: \"/Resurce/User\"\nx-required\nlocation of resource.",
+                    "title": "location"
                 },
                 "resourceType": {
                     "type": "string",
-                    "description": " resourceType represents resource.\n\nExample: - \"User\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
-                    "title": "resourceType",
-                    "x-displayname": "resourceType",
-                    "x-ves-example": "User",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
-                    }
+                    "description": "x-displayName: \"resourceType\"\nx-example: \"User\"\nx-required\nresourceType represents resource.",
+                    "title": "resourceType"
                 }
             }
         },
         "scimResourceTypesResponse": {
             "type": "object",
-            "description": "ResourceTypesResponse",
+            "description": "x-displayName: \"ResourceTypesResponse\"\nResourceTypesResponse",
             "title": "ResourceTypesResponse",
-            "x-displayname": "ResourceTypesResponse",
-            "x-ves-proto-message": "ves.io.schema.scim.ResourceTypesResponse",
             "properties": {
                 "resources": {
                     "type": "array",
-                    "description": " [x-example: \"resources\"]\n [x-required]\n Resources for the query.\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "description": "x-displayName: \"resources\"\n[x-example: \"resources\"]\n[x-required]\nResources for the query.",
                     "title": "resources",
                     "items": {
                         "$ref": "#/definitions/scimResource"
-                    },
-                    "x-displayname": "resources",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
                     }
                 },
                 "schemas": {
                     "type": "array",
-                    "description": " [x-example: \"urn:ietf:params:scim:schemas:core:2.0:ResourceType\"]\n [x-required]\n schemas defined by scim spec..\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "description": "x-displayName: \"schemas\"\n[x-example: \"urn:ietf:params:scim:schemas:core:2.0:ResourceType\"]\n[x-required]\nschemas defined by scim spec..",
                     "title": "schemas",
                     "items": {
                         "type": "string"
-                    },
-                    "x-displayname": "schemas",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
                     }
                 },
                 "totalResults": {
                     "type": "string",
-                    "description": " [x-example: \"8\"]\n [x-required]\n No of results for the query.\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "description": "x-displayName: \"totalResults\"\n[x-example: \"8\"]\n[x-required]\nNo of results for the query.",
                     "title": "totalResults",
-                    "format": "uint64",
-                    "x-displayname": "totalResults",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
-                    }
+                    "format": "uint64"
                 }
             }
         },
         "scimServiceProviderConfigResponse": {
             "type": "object",
-            "description": "ServiceProviderConfigResponse.",
+            "description": "x-displayName: \"ServiceProviderConfigResponse\"\nServiceProviderConfigResponse.",
             "title": "ServiceProviderConfigResponse",
-            "x-displayname": "ServiceProviderConfigResponse",
-            "x-ves-proto-message": "ves.io.schema.scim.ServiceProviderConfigResponse",
             "properties": {
                 "authenticationSchemes": {
                     "type": "array",
-                    "description": " supported authenticationSchemes for the resource.\n\nExample: - \"--\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "description": "x-displayName: \"authenticationSchemes\"\nx-example: \"--\"\nx-required\nsupported authenticationSchemes for the resource.",
                     "title": "authenticationSchemes",
                     "items": {
                         "type": "string"
-                    },
-                    "x-displayname": "authenticationSchemes",
-                    "x-ves-example": "--",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
                     }
                 },
                 "bulk": {
-                    "description": " bulk for resources..\n\nExample: - \"--\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "description": "x-displayName: \"bulk\"\nx-example: \"--\"\nx-required\nbulk for resources..",
                     "title": "bulk",
-                    "$ref": "#/definitions/scimSupport",
-                    "x-displayname": "bulk",
-                    "x-ves-example": "--",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
-                    }
+                    "$ref": "#/definitions/scimSupport"
                 },
                 "changePassword": {
-                    "description": " changePassword support for changing the password.\n\nExample: - \"true\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "description": "x-displayName: \"changePassword\"\nx-example: \"true\"\nx-required\nchangePassword support for changing the password.",
                     "title": "changePassword",
-                    "$ref": "#/definitions/scimSupport",
-                    "x-displayname": "changePassword",
-                    "x-ves-example": "true",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
-                    }
+                    "$ref": "#/definitions/scimSupport"
                 },
                 "documentationUri": {
                     "type": "string",
-                    "description": " uri for documentation.\n\nExample: - \"https://example.com./scumentation/uri\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
-                    "title": "documentationUri",
-                    "x-displayname": "documentationUri",
-                    "x-ves-example": "https://example.com./scumentation/uri",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
-                    }
+                    "description": "x-displayName: \"documentationUri\"\nx-example: \"https://example.com./scumentation/uri\"\nx-required\nuri for documentation.",
+                    "title": "documentationUri"
                 },
                 "etag": {
-                    "description": " etag for resource.\n\nExample: - \"etag\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "description": "x-displayName: \"etag\"\nx-example: \"etag\"\nx-required\netag for resource.",
                     "title": "etag",
-                    "$ref": "#/definitions/scimSupport",
-                    "x-displayname": "etag",
-                    "x-ves-example": "etag",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
-                    }
+                    "$ref": "#/definitions/scimSupport"
                 },
                 "filter": {
-                    "description": " filter for the resources.\n\nExample: - \"user\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "description": "x-displayName: \"filter\"\nx-example: \"user\"\nx-required\nfilter for the resources.",
                     "title": "filter",
-                    "$ref": "#/definitions/scimFilter",
-                    "x-displayname": "filter",
-                    "x-ves-example": "user",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
-                    }
+                    "$ref": "#/definitions/scimFilter"
                 },
                 "patch": {
-                    "description": " patch for the resource.\n\nExample: - \"--\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "description": "x-displayName: \"patch\"\nx-example: \"--\"\nx-required\npatch for the resource.",
                     "title": "patch",
-                    "$ref": "#/definitions/scimSupport",
-                    "x-displayname": "patch",
-                    "x-ves-example": "--",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
-                    }
+                    "$ref": "#/definitions/scimSupport"
                 },
                 "schemas": {
                     "type": "array",
-                    "description": " schemas scim spec.\n\nExample: - \"urn:ietf:params:scim:schemas:core:2.0:ResourceType\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "description": "x-displayName: \"schemas\"\nx-example: \"urn:ietf:params:scim:schemas:core:2.0:ResourceType\"\nx-required\nschemas scim spec.",
                     "title": "schemas",
                     "items": {
                         "type": "string"
-                    },
-                    "x-displayname": "schemas",
-                    "x-ves-example": "urn:ietf:params:scim:schemas:core:2.0:ResourceType",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
                     }
                 },
                 "sort": {
-                    "description": " sorting support.\n\nExample: - \"true\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "description": "x-displayName: \"sort\"\nx-example: \"true\"\nx-required\nsorting support.",
                     "title": "sort",
-                    "$ref": "#/definitions/scimSupport",
-                    "x-displayname": "sort",
-                    "x-ves-example": "true",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
-                    }
+                    "$ref": "#/definitions/scimSupport"
                 }
             }
         },
         "scimSupport": {
             "type": "object",
-            "description": "Support.",
+            "description": "x-displayName: \"Support\"\nSupport.",
             "title": "Support",
-            "x-displayname": "Support",
-            "x-ves-proto-message": "ves.io.schema.scim.Support",
             "properties": {
                 "supported": {
                     "type": "boolean",
-                    "description": " is support supported.\n\nExample: - \"true/false\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "description": "x-displayName: \"supported\"\nx-example: \"true/false\"\nx-required\nis support supported.",
                     "title": "supported",
-                    "format": "boolean",
-                    "x-displayname": "supported",
-                    "x-ves-example": "true/false",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
-                    }
+                    "format": "boolean"
                 }
             }
         },
         "scimUser": {
             "type": "object",
-            "description": "User object representing the user created.",
+            "description": "x-displayName: \"User\"\nUser object representing the user created.",
             "title": "User",
-            "x-displayname": "User",
-            "x-ves-proto-message": "ves.io.schema.scim.User",
             "properties": {
                 "active": {
                     "type": "boolean",
-                    "description": " active specifies if user is active or not.\n\nExample: - \"true/false\"-",
+                    "description": "x-displayName: \"active\"\nx-example: \"true/false\"\nactive specifies if user is active or not.",
                     "title": "active",
-                    "format": "boolean",
-                    "x-displayname": "active",
-                    "x-ves-example": "true/false"
+                    "format": "boolean"
+                },
+                "detail": {
+                    "type": "string",
+                    "description": "x-displayName: \"detail\"\nx-example: \"detail\"\ndetail provides more information when user not found",
+                    "title": "detail"
                 },
                 "displayName": {
                     "type": "string",
-                    "description": " displayName for the user.\n\nExample: - \"Rodney\"-",
-                    "title": "displayName",
-                    "x-displayname": "displayName",
-                    "x-ves-example": "Rodney"
+                    "description": "x-displayName: \"displayName\"\nx-example: \"Rodney\"\ndisplayName for the user.",
+                    "title": "displayName"
                 },
                 "emails": {
                     "type": "array",
-                    "description": " emails for the user whether primary or secondary.\n\nExample: - \"test@email.com\"-",
+                    "description": "x-displayName: \"emails\"\nx-example: \"test@email.com\"\nemails for the user whether primary or secondary.",
                     "title": "emails",
                     "items": {
                         "$ref": "#/definitions/scimEmail"
-                    },
-                    "x-displayname": "emails",
-                    "x-ves-example": "test@email.com"
+                    }
                 },
                 "externalId": {
                     "type": "string",
-                    "description": " externalId specifies the id for the user object in external system.\n\nExample: - \"rod_1234\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
-                    "title": "externalId",
-                    "x-displayname": "externalId",
-                    "x-ves-example": "rod_1234",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
-                    }
+                    "description": "x-displayName: \"externalId\"\nx-example: \"rod_1234\"\nx-required\nexternalId specifies the id for the user object in external system.",
+                    "title": "externalId"
                 },
                 "groups": {
                     "type": "array",
-                    "description": " groups to which user is part of.\n\nExample: - \"group-id\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "description": "x-displayName: \"groups\"\nx-required\nx-example: \"group-id\"\ngroups to which user is part of.",
                     "title": "groups",
                     "items": {
                         "$ref": "#/definitions/scimUserGroup"
-                    },
-                    "x-displayname": "groups",
-                    "x-ves-example": "group-id",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
                     }
                 },
                 "id": {
                     "type": "string",
-                    "description": " id for user object.\n\nExample: - \"123-456-789012\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
-                    "title": "id",
-                    "x-displayname": "id",
-                    "x-ves-example": "123-456-789012",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
-                    }
+                    "description": "x-displayName: \"id\"\nx-required\nx-example: \"123-456-789012\"\nid for user object.",
+                    "title": "id"
                 },
                 "meta": {
-                    "description": " meta specifies the created date, location, resource type, modified time date and version.",
+                    "description": "x-displayName: \"meta\"\nmeta specifies the created date, location, resource type, modified time date and version.",
                     "title": "meta",
-                    "$ref": "#/definitions/scimMeta",
-                    "x-displayname": "meta"
+                    "$ref": "#/definitions/scimMeta"
                 },
                 "name": {
-                    "description": " name of user.\n\nExample: - \"Rodney Robilliard\"-",
+                    "description": "x-displayName: \"name\"\nx-example: \"Rodney Robilliard\"\nname of user.",
                     "title": "name",
-                    "$ref": "#/definitions/scimName",
-                    "x-displayname": "name",
-                    "x-ves-example": "Rodney Robilliard"
+                    "$ref": "#/definitions/scimName"
                 },
                 "nickName": {
                     "type": "string",
-                    "description": " nickName for the user.\n\nExample: - \"Rod\"-",
-                    "title": "nickName",
-                    "x-displayname": "nickName",
-                    "x-ves-example": "Rod"
+                    "description": "x-displayName: \"nickName\"\nx-example: \"Rod\"\nnickName for the user.",
+                    "title": "nickName"
                 },
                 "roles": {
                     "type": "array",
-                    "description": " roles defined for the user.\n\nExample: - \"roles\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "description": "x-displayName: \"roles\"\nx-required\nx-example: \"roles\"\nroles defined for the user.",
                     "title": "roles",
                     "items": {
                         "type": "string"
-                    },
-                    "x-displayname": "roles",
-                    "x-ves-example": "roles",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
                     }
                 },
                 "schemas": {
                     "type": "array",
-                    "description": " schemas for user object as per scim spec 2.0.\n\nExample: - \"urn:ietf:params:scim:schemas:core:2.0:User\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "description": "x-displayName: \"schemas\"\nx-required\nx-example: \"urn:ietf:params:scim:schemas:core:2.0:User\"\nschemas for user object as per scim spec 2.0.",
                     "title": "schemas",
                     "items": {
                         "type": "string"
-                    },
-                    "x-displayname": "schemas",
-                    "x-ves-example": "urn:ietf:params:scim:schemas:core:2.0:User",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
                     }
+                },
+                "status": {
+                    "type": "string",
+                    "description": "x-displayName: \"status\"\nx-example: \"status\"\nstatus set to 404 when user not found",
+                    "title": "status"
                 },
                 "userName": {
                     "type": "string",
-                    "description": " userName for the user.\n\nExample: - \"rod_1234\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
-                    "title": "userName",
-                    "x-displayname": "userName",
-                    "x-ves-example": "rod_1234",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
-                    }
+                    "description": "x-displayName: \"userName\"\nx-required\nx-example: \"rod_1234\"\nuserName for the user.",
+                    "title": "userName"
                 },
                 "userType": {
-                    "description": " userType type of user.\n\nExample: - \"Employee\"-",
+                    "description": "x-displayName: \"userType\"\nx-example: \"Employee\"\nuserType type of user.",
                     "title": "userType",
-                    "$ref": "#/definitions/userUserType",
-                    "x-displayname": "userType",
-                    "x-ves-example": "Employee"
+                    "$ref": "#/definitions/userUserType"
                 }
             }
         },
         "scimUserGroup": {
             "type": "object",
-            "description": "UserGroup.",
+            "description": "x-displayName: \"UserGroup\"\nUserGroup.",
             "title": "UserGroup",
-            "x-displayname": "UserGroup",
-            "x-ves-proto-message": "ves.io.schema.scim.UserGroup",
             "properties": {
                 "display": {
                     "type": "string",
-                    "description": " display for the user group name.\n\nExample: - \"Group-1\"-",
-                    "title": "display",
-                    "x-displayname": "display",
-                    "x-ves-example": "Group-1"
+                    "description": "x-displayName: \"display\"\nx-example: \"Group-1\"\ndisplay for the user group name.",
+                    "title": "display"
                 },
                 "id": {
                     "type": "string",
-                    "description": " Id of the group to which user belongs.\n\nExample: - \"1234-2345-123456\"-",
-                    "title": "id",
-                    "x-displayname": "id",
-                    "x-ves-example": "1234-2345-123456"
-                }
-            }
-        },
-        "scimUserOperation": {
-            "type": "object",
-            "description": "UserOperation is the patch operation where user can be  updated replaced or remove or delete.\nsupported op types are add, remove, replace, delete\nremove is remove a specific entry.\ndelete is delete user.",
-            "title": "UserOperation",
-            "x-displayname": "Operation",
-            "x-ves-proto-message": "ves.io.schema.scim.UserOperation",
-            "properties": {
-                "op": {
-                    "type": "string",
-                    "description": " op \"add\", \"replace\", \"remove\", \"delete\"\n\nExample: - \"\"op\"\"add\"\"-",
-                    "title": "op",
-                    "x-displayname": "op",
-                    "x-ves-example": "\"op\": \"add\""
-                },
-                "path": {
-                    "type": "string",
-                    "description": " path to the field where the change needs to happen.\n\nExample: - \"\"path\"\"name.formatted\"\"-",
-                    "title": "path",
-                    "x-displayname": "path",
-                    "x-ves-example": "\"path\": \"name.formatted\""
-                },
-                "value": {
-                    "description": " value to be used for modifying the object. In case of delete nothing needs to be specified.\n\nExample: - \"\"value\"\"New Formatted Name\"\"-",
-                    "title": "value",
-                    "$ref": "#/definitions/scimUser",
-                    "x-displayname": "value",
-                    "x-ves-example": "\"value\": \"New Formatted Name\""
+                    "description": "x-displayName: \"id\"\nx-example: \"1234-2345-123456\"\nId of the group to which user belongs.",
+                    "title": "id"
                 }
             }
         },
         "userUserType": {
             "type": "string",
-            "description": "UserType is to identify the type of user\n\n - USER: User\nRegular User\n - SERVICE: Service User\nUser for accessing only APIs/services\n - DEBUG: Debug\nUser which was created by tenant admin for volterra-support team.",
+            "description": "x-displayName: \"User Type\"\nUserType is to identify the type of user\n\n - USER: User\nx-displayName: \"User\"\nRegular User\n - SERVICE: Service User\nx-displayName: \"Service User\"\nUser for accessing only APIs/services\n - DEBUG: Debug\nx-displayName: \"Debug\"\nUser which was created by tenant admin for volterra-support team.",
             "title": "UserType",
             "enum": [
                 "USER",
                 "SERVICE",
                 "DEBUG"
             ],
-            "default": "USER",
-            "x-displayname": "User Type",
-            "x-ves-proto-enum": "ves.io.schema.user.UserType"
+            "default": "USER"
         }
     },
     "x-displayname": "System for Cross-domain Identity Management (SCIM)",

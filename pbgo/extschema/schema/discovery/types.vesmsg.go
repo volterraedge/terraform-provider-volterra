@@ -662,6 +662,22 @@ type ValidateCreateSpecType struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateCreateSpecType) ClusterIdentifierChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for cluster_identifier_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateCreateSpecType) ClusterIdentifierChoiceClusterIdValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_ClusterId, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for cluster_id")
+	}
+	return oValidatorFn_ClusterId, nil
+}
+
 func (v *ValidateCreateSpecType) DiscoveryChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -699,6 +715,42 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 	}
 	if m == nil {
 		return nil
+	}
+
+	if fv, exists := v.FldValidators["cluster_identifier_choice"]; exists {
+		val := m.GetClusterIdentifierChoice()
+		vOpts := append(opts,
+			db.WithValidateField("cluster_identifier_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetClusterIdentifierChoice().(type) {
+	case *CreateSpecType_NoClusterId:
+		if fv, exists := v.FldValidators["cluster_identifier_choice.no_cluster_id"]; exists {
+			val := m.GetClusterIdentifierChoice().(*CreateSpecType_NoClusterId).NoClusterId
+			vOpts := append(opts,
+				db.WithValidateField("cluster_identifier_choice"),
+				db.WithValidateField("no_cluster_id"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CreateSpecType_ClusterId:
+		if fv, exists := v.FldValidators["cluster_identifier_choice.cluster_id"]; exists {
+			val := m.GetClusterIdentifierChoice().(*CreateSpecType_ClusterId).ClusterId
+			vOpts := append(opts,
+				db.WithValidateField("cluster_identifier_choice"),
+				db.WithValidateField("cluster_id"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
 	}
 
 	if fv, exists := v.FldValidators["discovery_choice"]; exists {
@@ -760,6 +812,29 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
+
+	vrhClusterIdentifierChoice := v.ClusterIdentifierChoiceValidationRuleHandler
+	rulesClusterIdentifierChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhClusterIdentifierChoice(rulesClusterIdentifierChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateSpecType.cluster_identifier_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["cluster_identifier_choice"] = vFn
+
+	vrhClusterIdentifierChoiceClusterId := v.ClusterIdentifierChoiceClusterIdValidationRuleHandler
+	rulesClusterIdentifierChoiceClusterId := map[string]string{
+		"ves.io.schema.rules.string.max_len": "256",
+	}
+	vFnMap["cluster_identifier_choice.cluster_id"], err = vrhClusterIdentifierChoiceClusterId(rulesClusterIdentifierChoiceClusterId)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field CreateSpecType.cluster_identifier_choice_cluster_id: %s", err)
+		panic(errMsg)
+	}
+
+	v.FldValidators["cluster_identifier_choice.cluster_id"] = vFnMap["cluster_identifier_choice.cluster_id"]
 
 	vrhDiscoveryChoice := v.DiscoveryChoiceValidationRuleHandler
 	rulesDiscoveryChoice := map[string]string{
@@ -1234,6 +1309,22 @@ type ValidateGetSpecType struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateGetSpecType) ClusterIdentifierChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for cluster_identifier_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateGetSpecType) ClusterIdentifierChoiceClusterIdValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_ClusterId, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for cluster_id")
+	}
+	return oValidatorFn_ClusterId, nil
+}
+
 func (v *ValidateGetSpecType) DiscoveryChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -1287,6 +1378,42 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 	}
 	if m == nil {
 		return nil
+	}
+
+	if fv, exists := v.FldValidators["cluster_identifier_choice"]; exists {
+		val := m.GetClusterIdentifierChoice()
+		vOpts := append(opts,
+			db.WithValidateField("cluster_identifier_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetClusterIdentifierChoice().(type) {
+	case *GetSpecType_NoClusterId:
+		if fv, exists := v.FldValidators["cluster_identifier_choice.no_cluster_id"]; exists {
+			val := m.GetClusterIdentifierChoice().(*GetSpecType_NoClusterId).NoClusterId
+			vOpts := append(opts,
+				db.WithValidateField("cluster_identifier_choice"),
+				db.WithValidateField("no_cluster_id"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GetSpecType_ClusterId:
+		if fv, exists := v.FldValidators["cluster_identifier_choice.cluster_id"]; exists {
+			val := m.GetClusterIdentifierChoice().(*GetSpecType_ClusterId).ClusterId
+			vOpts := append(opts,
+				db.WithValidateField("cluster_identifier_choice"),
+				db.WithValidateField("cluster_id"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
 	}
 
 	if fv, exists := v.FldValidators["discovery_choice"]; exists {
@@ -1366,6 +1493,29 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
+
+	vrhClusterIdentifierChoice := v.ClusterIdentifierChoiceValidationRuleHandler
+	rulesClusterIdentifierChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhClusterIdentifierChoice(rulesClusterIdentifierChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GetSpecType.cluster_identifier_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["cluster_identifier_choice"] = vFn
+
+	vrhClusterIdentifierChoiceClusterId := v.ClusterIdentifierChoiceClusterIdValidationRuleHandler
+	rulesClusterIdentifierChoiceClusterId := map[string]string{
+		"ves.io.schema.rules.string.max_len": "256",
+	}
+	vFnMap["cluster_identifier_choice.cluster_id"], err = vrhClusterIdentifierChoiceClusterId(rulesClusterIdentifierChoiceClusterId)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field GetSpecType.cluster_identifier_choice_cluster_id: %s", err)
+		panic(errMsg)
+	}
+
+	v.FldValidators["cluster_identifier_choice.cluster_id"] = vFnMap["cluster_identifier_choice.cluster_id"]
 
 	vrhDiscoveryChoice := v.DiscoveryChoiceValidationRuleHandler
 	rulesDiscoveryChoice := map[string]string{
@@ -1506,6 +1656,22 @@ type ValidateGlobalSpecType struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateGlobalSpecType) ClusterIdentifierChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for cluster_identifier_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateGlobalSpecType) ClusterIdentifierChoiceClusterIdValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_ClusterId, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for cluster_id")
+	}
+	return oValidatorFn_ClusterId, nil
+}
+
 func (v *ValidateGlobalSpecType) DiscoveryChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -1606,6 +1772,42 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["cluster_identifier_choice"]; exists {
+		val := m.GetClusterIdentifierChoice()
+		vOpts := append(opts,
+			db.WithValidateField("cluster_identifier_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetClusterIdentifierChoice().(type) {
+	case *GlobalSpecType_NoClusterId:
+		if fv, exists := v.FldValidators["cluster_identifier_choice.no_cluster_id"]; exists {
+			val := m.GetClusterIdentifierChoice().(*GlobalSpecType_NoClusterId).NoClusterId
+			vOpts := append(opts,
+				db.WithValidateField("cluster_identifier_choice"),
+				db.WithValidateField("no_cluster_id"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GlobalSpecType_ClusterId:
+		if fv, exists := v.FldValidators["cluster_identifier_choice.cluster_id"]; exists {
+			val := m.GetClusterIdentifierChoice().(*GlobalSpecType_ClusterId).ClusterId
+			vOpts := append(opts,
+				db.WithValidateField("cluster_identifier_choice"),
+				db.WithValidateField("cluster_id"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["discovery_choice"]; exists {
 		val := m.GetDiscoveryChoice()
 		vOpts := append(opts,
@@ -1684,6 +1886,29 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
 
+	vrhClusterIdentifierChoice := v.ClusterIdentifierChoiceValidationRuleHandler
+	rulesClusterIdentifierChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhClusterIdentifierChoice(rulesClusterIdentifierChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.cluster_identifier_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["cluster_identifier_choice"] = vFn
+
+	vrhClusterIdentifierChoiceClusterId := v.ClusterIdentifierChoiceClusterIdValidationRuleHandler
+	rulesClusterIdentifierChoiceClusterId := map[string]string{
+		"ves.io.schema.rules.string.max_len": "256",
+	}
+	vFnMap["cluster_identifier_choice.cluster_id"], err = vrhClusterIdentifierChoiceClusterId(rulesClusterIdentifierChoiceClusterId)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field GlobalSpecType.cluster_identifier_choice_cluster_id: %s", err)
+		panic(errMsg)
+	}
+
+	v.FldValidators["cluster_identifier_choice.cluster_id"] = vFnMap["cluster_identifier_choice.cluster_id"]
+
 	vrhDiscoveryChoice := v.DiscoveryChoiceValidationRuleHandler
 	rulesDiscoveryChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -1719,8 +1944,7 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 
 	vrhClusterIdentifier := v.ClusterIdentifierValidationRuleHandler
 	rulesClusterIdentifier := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
-		"ves.io.schema.rules.string.max_len":   "256",
+		"ves.io.schema.rules.string.max_len": "256",
 	}
 	vFn, err = vrhClusterIdentifier(rulesClusterIdentifier)
 	if err != nil {
@@ -2889,6 +3113,22 @@ type ValidateReplaceSpecType struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateReplaceSpecType) ClusterIdentifierChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for cluster_identifier_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateReplaceSpecType) ClusterIdentifierChoiceClusterIdValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_ClusterId, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for cluster_id")
+	}
+	return oValidatorFn_ClusterId, nil
+}
+
 func (v *ValidateReplaceSpecType) DiscoveryChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -2926,6 +3166,42 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 	}
 	if m == nil {
 		return nil
+	}
+
+	if fv, exists := v.FldValidators["cluster_identifier_choice"]; exists {
+		val := m.GetClusterIdentifierChoice()
+		vOpts := append(opts,
+			db.WithValidateField("cluster_identifier_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetClusterIdentifierChoice().(type) {
+	case *ReplaceSpecType_NoClusterId:
+		if fv, exists := v.FldValidators["cluster_identifier_choice.no_cluster_id"]; exists {
+			val := m.GetClusterIdentifierChoice().(*ReplaceSpecType_NoClusterId).NoClusterId
+			vOpts := append(opts,
+				db.WithValidateField("cluster_identifier_choice"),
+				db.WithValidateField("no_cluster_id"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ReplaceSpecType_ClusterId:
+		if fv, exists := v.FldValidators["cluster_identifier_choice.cluster_id"]; exists {
+			val := m.GetClusterIdentifierChoice().(*ReplaceSpecType_ClusterId).ClusterId
+			vOpts := append(opts,
+				db.WithValidateField("cluster_identifier_choice"),
+				db.WithValidateField("cluster_id"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
 	}
 
 	if fv, exists := v.FldValidators["discovery_choice"]; exists {
@@ -2987,6 +3263,29 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
+
+	vrhClusterIdentifierChoice := v.ClusterIdentifierChoiceValidationRuleHandler
+	rulesClusterIdentifierChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhClusterIdentifierChoice(rulesClusterIdentifierChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ReplaceSpecType.cluster_identifier_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["cluster_identifier_choice"] = vFn
+
+	vrhClusterIdentifierChoiceClusterId := v.ClusterIdentifierChoiceClusterIdValidationRuleHandler
+	rulesClusterIdentifierChoiceClusterId := map[string]string{
+		"ves.io.schema.rules.string.max_len": "256",
+	}
+	vFnMap["cluster_identifier_choice.cluster_id"], err = vrhClusterIdentifierChoiceClusterId(rulesClusterIdentifierChoiceClusterId)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field ReplaceSpecType.cluster_identifier_choice_cluster_id: %s", err)
+		panic(errMsg)
+	}
+
+	v.FldValidators["cluster_identifier_choice.cluster_id"] = vFnMap["cluster_identifier_choice.cluster_id"]
 
 	vrhDiscoveryChoice := v.DiscoveryChoiceValidationRuleHandler
 	rulesDiscoveryChoice := map[string]string{
@@ -3654,6 +3953,41 @@ func VipDiscoveryInfoTypeValidator() db.Validator {
 }
 
 // create setters in CreateSpecType from GlobalSpecType for oneof fields
+func (r *CreateSpecType) SetClusterIdentifierChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.ClusterIdentifierChoice.(type) {
+	case nil:
+		o.ClusterIdentifierChoice = nil
+
+	case *CreateSpecType_ClusterId:
+		o.ClusterIdentifierChoice = &GlobalSpecType_ClusterId{ClusterId: of.ClusterId}
+
+	case *CreateSpecType_NoClusterId:
+		o.ClusterIdentifierChoice = &GlobalSpecType_NoClusterId{NoClusterId: of.NoClusterId}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *CreateSpecType) GetClusterIdentifierChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.ClusterIdentifierChoice.(type) {
+	case nil:
+		r.ClusterIdentifierChoice = nil
+
+	case *GlobalSpecType_ClusterId:
+		r.ClusterIdentifierChoice = &CreateSpecType_ClusterId{ClusterId: of.ClusterId}
+
+	case *GlobalSpecType_NoClusterId:
+		r.ClusterIdentifierChoice = &CreateSpecType_NoClusterId{NoClusterId: of.NoClusterId}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+// create setters in CreateSpecType from GlobalSpecType for oneof fields
 func (r *CreateSpecType) SetDiscoveryChoiceToGlobalSpecType(o *GlobalSpecType) error {
 	switch of := r.DiscoveryChoice.(type) {
 	case nil:
@@ -3692,6 +4026,7 @@ func (m *CreateSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool
 	if f == nil {
 		return
 	}
+	m.GetClusterIdentifierChoiceFromGlobalSpecType(f)
 	m.GetDiscoveryChoiceFromGlobalSpecType(f)
 	m.Where = f.GetWhere()
 }
@@ -3711,6 +4046,7 @@ func (m *CreateSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) 
 	}
 	_ = m1
 
+	m1.SetClusterIdentifierChoiceToGlobalSpecType(f)
 	m1.SetDiscoveryChoiceToGlobalSpecType(f)
 	f.Where = m1.Where
 }
@@ -3721,6 +4057,41 @@ func (m *CreateSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 
 func (m *CreateSpecType) ToGlobalSpecTypeWithoutDeepCopy(f *GlobalSpecType) {
 	m.toGlobalSpecType(f, false)
+}
+
+// create setters in GetSpecType from GlobalSpecType for oneof fields
+func (r *GetSpecType) SetClusterIdentifierChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.ClusterIdentifierChoice.(type) {
+	case nil:
+		o.ClusterIdentifierChoice = nil
+
+	case *GetSpecType_ClusterId:
+		o.ClusterIdentifierChoice = &GlobalSpecType_ClusterId{ClusterId: of.ClusterId}
+
+	case *GetSpecType_NoClusterId:
+		o.ClusterIdentifierChoice = &GlobalSpecType_NoClusterId{NoClusterId: of.NoClusterId}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *GetSpecType) GetClusterIdentifierChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.ClusterIdentifierChoice.(type) {
+	case nil:
+		r.ClusterIdentifierChoice = nil
+
+	case *GlobalSpecType_ClusterId:
+		r.ClusterIdentifierChoice = &GetSpecType_ClusterId{ClusterId: of.ClusterId}
+
+	case *GlobalSpecType_NoClusterId:
+		r.ClusterIdentifierChoice = &GetSpecType_NoClusterId{NoClusterId: of.NoClusterId}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
 }
 
 // create setters in GetSpecType from GlobalSpecType for oneof fields
@@ -3762,6 +4133,7 @@ func (m *GetSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	if f == nil {
 		return
 	}
+	m.GetClusterIdentifierChoiceFromGlobalSpecType(f)
 	m.GetDiscoveryChoiceFromGlobalSpecType(f)
 	m.PublishVip = f.GetPublishVip()
 	m.Type = f.GetType()
@@ -3783,6 +4155,7 @@ func (m *GetSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	}
 	_ = m1
 
+	m1.SetClusterIdentifierChoiceToGlobalSpecType(f)
 	m1.SetDiscoveryChoiceToGlobalSpecType(f)
 	f.PublishVip = m1.PublishVip
 	f.Type = m1.Type
@@ -3795,6 +4168,41 @@ func (m *GetSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 
 func (m *GetSpecType) ToGlobalSpecTypeWithoutDeepCopy(f *GlobalSpecType) {
 	m.toGlobalSpecType(f, false)
+}
+
+// create setters in ReplaceSpecType from GlobalSpecType for oneof fields
+func (r *ReplaceSpecType) SetClusterIdentifierChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.ClusterIdentifierChoice.(type) {
+	case nil:
+		o.ClusterIdentifierChoice = nil
+
+	case *ReplaceSpecType_ClusterId:
+		o.ClusterIdentifierChoice = &GlobalSpecType_ClusterId{ClusterId: of.ClusterId}
+
+	case *ReplaceSpecType_NoClusterId:
+		o.ClusterIdentifierChoice = &GlobalSpecType_NoClusterId{NoClusterId: of.NoClusterId}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *ReplaceSpecType) GetClusterIdentifierChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.ClusterIdentifierChoice.(type) {
+	case nil:
+		r.ClusterIdentifierChoice = nil
+
+	case *GlobalSpecType_ClusterId:
+		r.ClusterIdentifierChoice = &ReplaceSpecType_ClusterId{ClusterId: of.ClusterId}
+
+	case *GlobalSpecType_NoClusterId:
+		r.ClusterIdentifierChoice = &ReplaceSpecType_NoClusterId{NoClusterId: of.NoClusterId}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
 }
 
 // create setters in ReplaceSpecType from GlobalSpecType for oneof fields
@@ -3836,6 +4244,7 @@ func (m *ReplaceSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy boo
 	if f == nil {
 		return
 	}
+	m.GetClusterIdentifierChoiceFromGlobalSpecType(f)
 	m.GetDiscoveryChoiceFromGlobalSpecType(f)
 	m.Where = f.GetWhere()
 }
@@ -3855,6 +4264,7 @@ func (m *ReplaceSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool)
 	}
 	_ = m1
 
+	m1.SetClusterIdentifierChoiceToGlobalSpecType(f)
 	m1.SetDiscoveryChoiceToGlobalSpecType(f)
 	f.Where = m1.Where
 }

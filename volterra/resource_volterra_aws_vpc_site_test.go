@@ -165,6 +165,11 @@ func testAWSVPCSiteIEConfig(resourceName, cloudCred, name string) string {
 			site_type = "aws_vpc_site"
 			public_ips = ["10.0.0.1"]
 			private_ips = ["192.168.0.1"]
+			direct_connect_info {
+				direct_connect_gateway_id = "1234-6789-0987-1234-09876"
+				vgw_id = "vgw-12345678"
+				asn = 64512
+			}
 
 		}`, resourceName, name, cloudCred)
 }

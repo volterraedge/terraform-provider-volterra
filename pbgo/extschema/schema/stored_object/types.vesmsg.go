@@ -163,6 +163,32 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	switch m.GetObjectAttributes().(type) {
+	case *GlobalSpecType_NoAttributes:
+		if fv, exists := v.FldValidators["object_attributes.no_attributes"]; exists {
+			val := m.GetObjectAttributes().(*GlobalSpecType_NoAttributes).NoAttributes
+			vOpts := append(opts,
+				db.WithValidateField("object_attributes"),
+				db.WithValidateField("no_attributes"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GlobalSpecType_MobileSdk:
+		if fv, exists := v.FldValidators["object_attributes.mobile_sdk"]; exists {
+			val := m.GetObjectAttributes().(*GlobalSpecType_MobileSdk).MobileSdk
+			vOpts := append(opts,
+				db.WithValidateField("object_attributes"),
+				db.WithValidateField("mobile_sdk"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["object_type"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("object_type"))
@@ -239,6 +265,8 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["content_hash"] = vFn
+
+	v.FldValidators["object_attributes.mobile_sdk"] = MobileSDKAttributesValidator().Validate
 
 	return v
 }()

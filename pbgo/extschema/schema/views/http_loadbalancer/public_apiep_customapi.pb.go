@@ -3,9 +3,9 @@
 
 // HTTP loadbalancer
 //
-// x-displayName: "Configure HTTP Loadbalancer"
-// HTTP Loadbalancer view defines a required parameters that can be used in CRUD, to create and manage HTTP loadbalancer.
-// It can be used to create HTTP loadbalancer and HTTPS loadbalancer.
+// x-displayName: "Configure HTTP Load Balancer"
+// HTTP Loadbalancer view defines a required parameters that can be used in CRUD, to create and manage HTTP load balancer.
+// It can be used to create HTTP load balancer and HTTPS load balancer.
 //
 // View will create following child objects.
 //
@@ -56,17 +56,17 @@ const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 // x-displayName: "Swagger spec Request"
 // Request shape for GET Swagger Spec API
 type SwaggerSpecReq struct {
-	// Virtual Host Name
+	// Name
 	//
-	// x-displayName: "Virtual Host Name"
+	// x-displayName: "Name"
 	// x-example: "blogging-app"
-	// Http LoadBalancer for current request
+	// HTTP load balancer for current request
 	Name string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
 	// Namespace
 	//
 	// x-displayName: "Namespace"
 	// x-example: "shared"
-	// Namespace of the Http Loadbalancer for current request
+	// Namespace of the HTTP Load Balancer for current request
 	Namespace string `protobuf:"bytes,2,opt,name=namespace,proto3" json:"namespace,omitempty"`
 }
 
@@ -119,7 +119,7 @@ func (m *SwaggerSpecReq) GetNamespace() string {
 // Swagger Spec Response
 //
 // x-displayName: "Swagger Spec Response"
-// Json encoded swagger spec for the given http loadbalancer.
+// JSON encoded swagger spec for the given HTTP load balancer.
 type SwaggerSpecRsp struct {
 	// Swagger Spec
 	//
@@ -315,8 +315,8 @@ const _ = grpc.SupportPackageIsVersion4
 type ApiepLBCustomAPIClient interface {
 	// Get Swagger Spec for App Type
 	//
-	// x-displayName: "Get Swagger Spec for Http Loadbalancer"
-	// Get the corresponding Swagger spec for the given Http Loadbalancer
+	// x-displayName: "Get Swagger Spec for Http Load Balancer"
+	// Get the corresponding Swagger spec for the given HTTP load balancer
 	GetSwaggerSpec(ctx context.Context, in *SwaggerSpecReq, opts ...grpc.CallOption) (*httpbody.HttpBody, error)
 }
 
@@ -341,8 +341,8 @@ func (c *apiepLBCustomAPIClient) GetSwaggerSpec(ctx context.Context, in *Swagger
 type ApiepLBCustomAPIServer interface {
 	// Get Swagger Spec for App Type
 	//
-	// x-displayName: "Get Swagger Spec for Http Loadbalancer"
-	// Get the corresponding Swagger spec for the given Http Loadbalancer
+	// x-displayName: "Get Swagger Spec for Http Load Balancer"
+	// Get the corresponding Swagger spec for the given HTTP load balancer
 	GetSwaggerSpec(context.Context, *SwaggerSpecReq) (*httpbody.HttpBody, error)
 }
 

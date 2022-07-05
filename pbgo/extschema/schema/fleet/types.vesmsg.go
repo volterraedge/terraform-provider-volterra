@@ -2516,8 +2516,8 @@ var DefaultCustomServiceItemValidator = func() *ValidateCustomServiceItem {
 
 	vrhPrefixList := v.PrefixListValidationRuleHandler
 	rulesPrefixList := map[string]string{
-		"ves.io.schema.rules.message.required":   "true",
-		"ves.io.schema.rules.string.ipv4_prefix": "true",
+		"ves.io.schema.rules.message.required":                  "true",
+		"ves.io.schema.rules.repeated.items.string.ipv4_prefix": "true",
 	}
 	vFn, err = vrhPrefixList(rulesPrefixList)
 	if err != nil {
@@ -5313,17 +5313,6 @@ func (v *ValidateFleetStorageClassType) Validate(ctx context.Context, pm interfa
 				return err
 			}
 		}
-	case *FleetStorageClassType_OpenebsEnterprise:
-		if fv, exists := v.FldValidators["device_choice.openebs_enterprise"]; exists {
-			val := m.GetDeviceChoice().(*FleetStorageClassType_OpenebsEnterprise).OpenebsEnterprise
-			vOpts := append(opts,
-				db.WithValidateField("device_choice"),
-				db.WithValidateField("openebs_enterprise"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
 	case *FleetStorageClassType_CustomStorage:
 		if fv, exists := v.FldValidators["device_choice.custom_storage"]; exists {
 			val := m.GetDeviceChoice().(*FleetStorageClassType_CustomStorage).CustomStorage
@@ -5455,7 +5444,6 @@ var DefaultFleetStorageClassTypeValidator = func() *ValidateFleetStorageClassTyp
 
 	v.FldValidators["device_choice.netapp_trident"] = StorageClassNetappTridentTypeValidator().Validate
 	v.FldValidators["device_choice.pure_service_orchestrator"] = StorageClassPureServiceOrchestratorTypeValidator().Validate
-	v.FldValidators["device_choice.openebs_enterprise"] = StorageClassOpenebsEnterpriseTypeValidator().Validate
 	v.FldValidators["device_choice.custom_storage"] = StorageClassCustomTypeValidator().Validate
 
 	return v

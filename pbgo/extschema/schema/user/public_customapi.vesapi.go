@@ -3681,6 +3681,27 @@ var CustomAPISwaggerJSON string = `{
                 }
             }
         },
+        "schemaNamespaceAccessType": {
+            "type": "object",
+            "description": "Access info in the namespaces for the entity",
+            "title": "Namespace Access",
+            "x-displayname": "Namespace Access",
+            "x-ves-proto-message": "ves.io.schema.NamespaceAccessType",
+            "properties": {
+                "namespace_role_map": {
+                    "type": "object",
+                    "description": " List of all the roles for the entity in the namespaces\n\nExample: - '\u003cnamespace\u003e [\u003croles\u003e]'-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.map.keys.string.max_len: 256\n  ves.io.schema.rules.map.keys.string.ves_object_name: true\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "Namespace Role Map",
+                    "x-displayname": "Namespace Role Map",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.map.keys.string.max_len": "256",
+                        "ves.io.schema.rules.map.keys.string.ves_object_name": "true",
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                }
+            }
+        },
         "schemaNamespaceRoleType": {
             "type": "object",
             "description": "Allows linking namespaces and roles",
@@ -3844,6 +3865,21 @@ var CustomAPISwaggerJSON string = `{
             "default": "FREE",
             "x-displayname": "Plan Type",
             "x-ves-proto-enum": "ves.io.schema.PlanType"
+        },
+        "schemaRoleListType": {
+            "type": "object",
+            "description": "x-displayName: \"Role List\"\nRole list",
+            "title": "List of Roles",
+            "properties": {
+                "names": {
+                    "type": "array",
+                    "description": "x-displayName: \"Roles List\"\nx-example: [\"ves-io-monitor-role\", \"ves-io-uam-admin-role\"]\nx-required\nList of all the roles",
+                    "title": "Roles List",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
         },
         "schemaStatusType": {
             "type": "object",
@@ -4541,14 +4577,27 @@ var CustomAPISwaggerJSON string = `{
                     "x-displayname": "Namespace",
                     "x-ves-example": "value"
                 },
+                "namespace_access": {
+                    "description": " Resolved roles for the user within the namespaces.\n This is the union of the directly attached roles to the user and the roles attached to the groups that the user is associated to.",
+                    "title": "Namespace Access",
+                    "$ref": "#/definitions/schemaNamespaceAccessType",
+                    "x-displayname": "namespace access"
+                },
                 "namespace_roles": {
                     "type": "array",
-                    "description": " Namespace roles for the user",
+                    "description": " Directly attached namespace roles for the user\n This field is deprecated, refer to namespace_access field for the access of the user.",
                     "title": "Namespace roles",
                     "items": {
                         "$ref": "#/definitions/schemaNamespaceRoleType"
                     },
                     "x-displayname": "Namespace Roles"
+                },
+                "original_tenant": {
+                    "type": "string",
+                    "description": " returns original tenant id that the user belongs if request header exist for original tenant else regular tenant id\n\nExample: - \"tenant1\"-",
+                    "title": "Original Tenant",
+                    "x-displayname": "Original Tenant",
+                    "x-ves-example": "tenant1"
                 },
                 "plan_type": {
                     "description": " plan type the tenant is subscribed to (FREE, INDIVIDUAL, TEAM, ORGANIZATION, ...)",
@@ -4564,7 +4613,7 @@ var CustomAPISwaggerJSON string = `{
                 },
                 "tenant": {
                     "type": "string",
-                    "description": " tenant that the user belongs to\n\nExample: - \"value\"-",
+                    "description": " tenant will represent id of the tenant that is being accessed\n\nExample: - \"value\"-",
                     "title": "Tenant",
                     "x-displayname": "Tenant",
                     "x-ves-example": "value"
@@ -4813,6 +4862,16 @@ var CustomAPISwaggerJSON string = `{
                     "x-displayname": "First Name",
                     "x-ves-example": "value"
                 },
+                "group_names": {
+                    "type": "array",
+                    "description": " Group list must be associated to this user.\n\nExample: - \"[\"dev-group-1\"]\"-",
+                    "title": "Groups",
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-displayname": "Groups",
+                    "x-ves-example": "[\"dev-group-1\"]"
+                },
                 "idm_type": {
                     "description": " Identity management type of the user (Volterra Managed, SSO)",
                     "title": "IDM type",
@@ -4849,7 +4908,7 @@ var CustomAPISwaggerJSON string = `{
                 },
                 "namespace_roles": {
                     "type": "array",
-                    "description": " List of roles that the user has for each namespace.",
+                    "description": " List of directly attached roles that the user has for each namespace.",
                     "title": "Namespace roles",
                     "items": {
                         "$ref": "#/definitions/schemaNamespaceRoleType"
@@ -5135,7 +5194,7 @@ var CustomAPISwaggerJSON string = `{
                 },
                 "namespace_roles": {
                     "type": "array",
-                    "description": " List of roles that the user has for each namespace.",
+                    "description": " List of directly attached roles that the user has for each namespace.",
                     "title": "Namespace roles",
                     "items": {
                         "$ref": "#/definitions/schemaNamespaceRoleType"

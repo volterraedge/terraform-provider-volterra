@@ -87,6 +87,15 @@ func (v *ValidateCreateGroupRequest) Validate(ctx context.Context, pm interface{
 
 	}
 
+	if fv, exists := v.FldValidators["externalId"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("externalId"))
+		if err := fv(ctx, m.GetExternalId(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["id"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("id"))
@@ -204,6 +213,15 @@ func (v *ValidateGroup) Validate(ctx context.Context, pm interface{}, opts ...db
 
 		vOpts := append(opts, db.WithValidateField("displayName"))
 		if err := fv(ctx, m.GetDisplayName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["externalId"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("externalId"))
+		if err := fv(ctx, m.GetExternalId(), vOpts...); err != nil {
 			return err
 		}
 
@@ -331,124 +349,10 @@ func (v *ValidateGroupMembers) Validate(ctx context.Context, pm interface{}, opt
 		return nil
 	}
 
-	if fv, exists := v.FldValidators["id"]; exists {
+	if fv, exists := v.FldValidators["ref"]; exists {
 
-		vOpts := append(opts, db.WithValidateField("id"))
-		if err := fv(ctx, m.GetId(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
-	return nil
-}
-
-// Well-known symbol for default validator implementation
-var DefaultGroupMembersValidator = func() *ValidateGroupMembers {
-	v := &ValidateGroupMembers{FldValidators: map[string]db.ValidatorFunc{}}
-
-	return v
-}()
-
-func GroupMembersValidator() db.Validator {
-	return DefaultGroupMembersValidator
-}
-
-// augmented methods on protoc/std generated struct
-
-func (m *GroupOperation) ToJSON() (string, error) {
-	return codec.ToJSON(m)
-}
-
-func (m *GroupOperation) ToYAML() (string, error) {
-	return codec.ToYAML(m)
-}
-
-func (m *GroupOperation) DeepCopy() *GroupOperation {
-	if m == nil {
-		return nil
-	}
-	ser, err := m.Marshal()
-	if err != nil {
-		return nil
-	}
-	c := &GroupOperation{}
-	err = c.Unmarshal(ser)
-	if err != nil {
-		return nil
-	}
-	return c
-}
-
-func (m *GroupOperation) DeepCopyProto() proto.Message {
-	if m == nil {
-		return nil
-	}
-	return m.DeepCopy()
-}
-
-func (m *GroupOperation) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
-	return GroupOperationValidator().Validate(ctx, m, opts...)
-}
-
-type ValidateGroupOperation struct {
-	FldValidators map[string]db.ValidatorFunc
-}
-
-func (v *ValidateGroupOperation) PathValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	validatorFn, err := db.NewStringValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for path")
-	}
-
-	return validatorFn, nil
-}
-
-func (v *ValidateGroupOperation) ValueValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "MessageValidationRuleHandler for value")
-	}
-	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
-		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
-			return err
-		}
-
-		return nil
-	}
-
-	return validatorFn, nil
-}
-
-func (v *ValidateGroupOperation) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
-	m, ok := pm.(*GroupOperation)
-	if !ok {
-		switch t := pm.(type) {
-		case nil:
-			return nil
-		default:
-			return fmt.Errorf("Expected type *GroupOperation got type %s", t)
-		}
-	}
-	if m == nil {
-		return nil
-	}
-
-	if fv, exists := v.FldValidators["op"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("op"))
-		if err := fv(ctx, m.GetOp(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
-	if fv, exists := v.FldValidators["path"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("path"))
-		if err := fv(ctx, m.GetPath(), vOpts...); err != nil {
+		vOpts := append(opts, db.WithValidateField("ref"))
+		if err := fv(ctx, m.GetRef(), vOpts...); err != nil {
 			return err
 		}
 
@@ -467,44 +371,14 @@ func (v *ValidateGroupOperation) Validate(ctx context.Context, pm interface{}, o
 }
 
 // Well-known symbol for default validator implementation
-var DefaultGroupOperationValidator = func() *ValidateGroupOperation {
-	v := &ValidateGroupOperation{FldValidators: map[string]db.ValidatorFunc{}}
-
-	var (
-		err error
-		vFn db.ValidatorFunc
-	)
-	_, _ = err, vFn
-	vFnMap := map[string]db.ValidatorFunc{}
-	_ = vFnMap
-
-	vrhPath := v.PathValidationRuleHandler
-	rulesPath := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
-	}
-	vFn, err = vrhPath(rulesPath)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for GroupOperation.path: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["path"] = vFn
-
-	vrhValue := v.ValueValidationRuleHandler
-	rulesValue := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
-	}
-	vFn, err = vrhValue(rulesValue)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for GroupOperation.value: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["value"] = vFn
+var DefaultGroupMembersValidator = func() *ValidateGroupMembers {
+	v := &ValidateGroupMembers{FldValidators: map[string]db.ValidatorFunc{}}
 
 	return v
 }()
 
-func GroupOperationValidator() db.Validator {
-	return DefaultGroupOperationValidator
+func GroupMembersValidator() db.Validator {
+	return DefaultGroupMembersValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -548,6 +422,26 @@ type ValidateListGroupResources struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateListGroupResources) StartIndexValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewUint64ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for startIndex")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateListGroupResources) ItemsPerPageValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewUint64ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for itemsPerPage")
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateListGroupResources) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*ListGroupResources)
 	if !ok {
@@ -562,14 +456,23 @@ func (v *ValidateListGroupResources) Validate(ctx context.Context, pm interface{
 		return nil
 	}
 
-	if fv, exists := v.FldValidators["groups"]; exists {
+	if fv, exists := v.FldValidators["Resources"]; exists {
 
-		vOpts := append(opts, db.WithValidateField("groups"))
-		for idx, item := range m.GetGroups() {
+		vOpts := append(opts, db.WithValidateField("Resources"))
+		for idx, item := range m.GetResources() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["itemsPerPage"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("itemsPerPage"))
+		if err := fv(ctx, m.GetItemsPerPage(), vOpts...); err != nil {
+			return err
 		}
 
 	}
@@ -582,6 +485,15 @@ func (v *ValidateListGroupResources) Validate(ctx context.Context, pm interface{
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["startIndex"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("startIndex"))
+		if err := fv(ctx, m.GetStartIndex(), vOpts...); err != nil {
+			return err
 		}
 
 	}
@@ -602,7 +514,37 @@ func (v *ValidateListGroupResources) Validate(ctx context.Context, pm interface{
 var DefaultListGroupResourcesValidator = func() *ValidateListGroupResources {
 	v := &ValidateListGroupResources{FldValidators: map[string]db.ValidatorFunc{}}
 
-	v.FldValidators["groups"] = GroupValidator().Validate
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhStartIndex := v.StartIndexValidationRuleHandler
+	rulesStartIndex := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhStartIndex(rulesStartIndex)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ListGroupResources.startIndex: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["startIndex"] = vFn
+
+	vrhItemsPerPage := v.ItemsPerPageValidationRuleHandler
+	rulesItemsPerPage := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhItemsPerPage(rulesItemsPerPage)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ListGroupResources.itemsPerPage: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["itemsPerPage"] = vFn
+
+	v.FldValidators["Resources"] = GroupValidator().Validate
 
 	return v
 }()
@@ -694,32 +636,51 @@ func (v *ValidatePatchGroupRequest) SchemasValidationRuleHandler(rules map[strin
 	return validatorFn, nil
 }
 
-func (v *ValidatePatchGroupRequest) OperationValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "MessageValidationRuleHandler for operation")
-	}
-	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
-		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
-			return err
-		}
-
-		if err := GroupOperationValidator().Validate(ctx, val, opts...); err != nil {
-			return err
-		}
-
-		return nil
-	}
-
-	return validatorFn, nil
-}
-
 func (v *ValidatePatchGroupRequest) IdValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for id")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidatePatchGroupRequest) OperationsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemsValidatorFn := func(ctx context.Context, elems []*PatchOperation, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := PatchOperationValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for Operations")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*PatchOperation)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*PatchOperation, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated Operations")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items Operations")
+		}
+		return nil
 	}
 
 	return validatorFn, nil
@@ -739,19 +700,18 @@ func (v *ValidatePatchGroupRequest) Validate(ctx context.Context, pm interface{}
 		return nil
 	}
 
-	if fv, exists := v.FldValidators["id"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("id"))
-		if err := fv(ctx, m.GetId(), vOpts...); err != nil {
+	if fv, exists := v.FldValidators["Operations"]; exists {
+		vOpts := append(opts, db.WithValidateField("Operations"))
+		if err := fv(ctx, m.GetOperations(), vOpts...); err != nil {
 			return err
 		}
 
 	}
 
-	if fv, exists := v.FldValidators["operation"]; exists {
+	if fv, exists := v.FldValidators["id"]; exists {
 
-		vOpts := append(opts, db.WithValidateField("operation"))
-		if err := fv(ctx, m.GetOperation(), vOpts...); err != nil {
+		vOpts := append(opts, db.WithValidateField("id"))
+		if err := fv(ctx, m.GetId(), vOpts...); err != nil {
 			return err
 		}
 
@@ -791,17 +751,6 @@ var DefaultPatchGroupRequestValidator = func() *ValidatePatchGroupRequest {
 	}
 	v.FldValidators["schemas"] = vFn
 
-	vrhOperation := v.OperationValidationRuleHandler
-	rulesOperation := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
-	}
-	vFn, err = vrhOperation(rulesOperation)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for PatchGroupRequest.operation: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["operation"] = vFn
-
 	vrhId := v.IdValidationRuleHandler
 	rulesId := map[string]string{
 		"ves.io.schema.rules.message.required": "true",
@@ -812,6 +761,17 @@ var DefaultPatchGroupRequestValidator = func() *ValidatePatchGroupRequest {
 		panic(errMsg)
 	}
 	v.FldValidators["id"] = vFn
+
+	vrhOperations := v.OperationsValidationRuleHandler
+	rulesOperations := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhOperations(rulesOperations)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for PatchGroupRequest.Operations: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["Operations"] = vFn
 
 	return v
 }()

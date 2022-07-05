@@ -7,7 +7,9 @@ import (
 	fmt "fmt"
 	_ "github.com/gogo/protobuf/gogoproto"
 	proto "github.com/gogo/protobuf/proto"
+	types "github.com/gogo/protobuf/types"
 	golang_proto "github.com/golang/protobuf/proto"
+	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
 	io "io"
 	math "math"
 	math_bits "math/bits"
@@ -318,16 +320,20 @@ type FilterRequest struct {
 	//
 	// x-displayName: "filter"
 	// x-example: "externalId"
-	// x-required
 	// Filter to be used for filtering objects.
 	Filter string `protobuf:"bytes,1,opt,name=filter,proto3" json:"filter,omitempty"`
 	// count
 	//
 	// x-displayName: "count"
 	// x-example: "8"
-	// x-required
 	// The number of entries after filter.
 	Count uint64 `protobuf:"varint,2,opt,name=count,proto3" json:"count,omitempty"`
+	// page
+	//
+	// x-displayName: "page"
+	// x-example: "1"
+	// Start offset
+	Page uint64 `protobuf:"varint,3,opt,name=page,proto3" json:"page,omitempty"`
 }
 
 func (m *FilterRequest) Reset()      { *m = FilterRequest{} }
@@ -368,6 +374,13 @@ func (m *FilterRequest) GetFilter() string {
 func (m *FilterRequest) GetCount() uint64 {
 	if m != nil {
 		return m.Count
+	}
+	return 0
+}
+
+func (m *FilterRequest) GetPage() uint64 {
+	if m != nil {
+		return m.Page
 	}
 	return 0
 }
@@ -421,6 +434,82 @@ func (m *IdRequest) GetId() string {
 	return ""
 }
 
+// PatchOperation
+//
+// x-displayName: "Patch Operation"
+// PatchOperation is the patch operation where user can be  updated replaced or remove..
+// supported op types are add, remove, replace
+// remove is remove a specific entry.
+type PatchOperation struct {
+	// op
+	//
+	// x-displayName: "op"
+	// x-example: ""op": "add""
+	// op "add", "replace", "remove", "delete"
+	Op string `protobuf:"bytes,1,opt,name=op,proto3" json:"op,omitempty"`
+	// path
+	//
+	// x-displayName: "path"
+	// x-example: ""path": "name.formatted""
+	// path to the field where the change needs to happen.
+	Path string `protobuf:"bytes,2,opt,name=path,proto3" json:"path,omitempty"`
+	// value
+	//
+	// x-displayName: "value"
+	// x-example: ""value": "New Formatted Name""
+	// value to be used for modifying the object. In case of delete nothing needs to be specified.
+	Value *types.Value `protobuf:"bytes,3,opt,name=value,proto3" json:"value,omitempty"`
+}
+
+func (m *PatchOperation) Reset()      { *m = PatchOperation{} }
+func (*PatchOperation) ProtoMessage() {}
+func (*PatchOperation) Descriptor() ([]byte, []int) {
+	return fileDescriptor_3a2a7a0a7eef6459, []int{6}
+}
+func (m *PatchOperation) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *PatchOperation) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *PatchOperation) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_PatchOperation.Merge(m, src)
+}
+func (m *PatchOperation) XXX_Size() int {
+	return m.Size()
+}
+func (m *PatchOperation) XXX_DiscardUnknown() {
+	xxx_messageInfo_PatchOperation.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_PatchOperation proto.InternalMessageInfo
+
+func (m *PatchOperation) GetOp() string {
+	if m != nil {
+		return m.Op
+	}
+	return ""
+}
+
+func (m *PatchOperation) GetPath() string {
+	if m != nil {
+		return m.Path
+	}
+	return ""
+}
+
+func (m *PatchOperation) GetValue() *types.Value {
+	if m != nil {
+		return m.Value
+	}
+	return nil
+}
+
 func init() {
 	proto.RegisterType((*Meta)(nil), "ves.io.schema.scim.Meta")
 	golang_proto.RegisterType((*Meta)(nil), "ves.io.schema.scim.Meta")
@@ -434,6 +523,8 @@ func init() {
 	golang_proto.RegisterType((*FilterRequest)(nil), "ves.io.schema.scim.FilterRequest")
 	proto.RegisterType((*IdRequest)(nil), "ves.io.schema.scim.IdRequest")
 	golang_proto.RegisterType((*IdRequest)(nil), "ves.io.schema.scim.IdRequest")
+	proto.RegisterType((*PatchOperation)(nil), "ves.io.schema.scim.PatchOperation")
+	golang_proto.RegisterType((*PatchOperation)(nil), "ves.io.schema.scim.PatchOperation")
 }
 
 func init() { proto.RegisterFile("ves.io/schema/scim/types.proto", fileDescriptor_3a2a7a0a7eef6459) }
@@ -442,34 +533,40 @@ func init() {
 }
 
 var fileDescriptor_3a2a7a0a7eef6459 = []byte{
-	// 419 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x8c, 0x52, 0xb1, 0x8e, 0xd3, 0x40,
-	0x10, 0xf5, 0x86, 0x5c, 0xee, 0x32, 0x3a, 0x28, 0x56, 0x08, 0x59, 0x07, 0x1a, 0x21, 0x37, 0xd0,
-	0xc4, 0x2e, 0xa8, 0x69, 0x28, 0x4e, 0x50, 0x1c, 0x85, 0xa1, 0xa2, 0x73, 0xec, 0x89, 0x6f, 0x45,
-	0x7c, 0x63, 0x76, 0xd7, 0xd1, 0x5d, 0x47, 0x45, 0xcd, 0x17, 0x50, 0xf3, 0x19, 0x94, 0x94, 0x29,
-	0x53, 0x12, 0xbb, 0xa1, 0xbc, 0x4f, 0x40, 0xde, 0x75, 0x42, 0xae, 0x41, 0x74, 0xf3, 0xde, 0xdb,
-	0xf7, 0x3c, 0xcf, 0x1a, 0xc0, 0x15, 0x99, 0x58, 0x71, 0x62, 0xf2, 0x4b, 0xaa, 0xb2, 0xc4, 0xe4,
-	0xaa, 0x4a, 0xec, 0x4d, 0x4d, 0x26, 0xae, 0x35, 0x5b, 0x96, 0xd2, 0xeb, 0xb1, 0xd7, 0xe3, 0x5e,
-	0x3f, 0x9b, 0x95, 0xca, 0x5e, 0x36, 0xf3, 0x38, 0xe7, 0x2a, 0x29, 0xb9, 0xe4, 0xc4, 0x3d, 0x9d,
-	0x37, 0x0b, 0x87, 0x1c, 0x70, 0x93, 0x8f, 0x88, 0xbe, 0x09, 0x18, 0x5f, 0x90, 0xcd, 0x64, 0x04,
-	0xa7, 0x9a, 0x0c, 0x37, 0x3a, 0xa7, 0xf7, 0x37, 0x35, 0x85, 0xe2, 0xa9, 0x78, 0x3e, 0x4d, 0xef,
-	0x70, 0x32, 0x84, 0xe3, 0x5c, 0x53, 0x66, 0xa9, 0x08, 0x47, 0x4e, 0xde, 0xc1, 0xde, 0xbd, 0xcc,
-	0x8c, 0xbd, 0xe0, 0x42, 0x2d, 0x14, 0x15, 0xe1, 0x3d, 0xef, 0x3e, 0xe4, 0xe4, 0x19, 0x9c, 0x2c,
-	0x39, 0xcf, 0xac, 0xe2, 0xab, 0x70, 0xec, 0xf4, 0x3d, 0xee, 0x93, 0x57, 0xa4, 0x4d, 0x2f, 0x1d,
-	0xf9, 0xe4, 0x01, 0x46, 0xcf, 0xe0, 0xf8, 0x5d, 0x53, 0xd7, 0xac, 0xad, 0x7c, 0x02, 0x53, 0xe3,
-	0x47, 0x2a, 0xdc, 0x7e, 0x27, 0xe9, 0x5f, 0x22, 0x3a, 0x87, 0xc9, 0xb9, 0x5a, 0x5a, 0xd2, 0xff,
-	0x7e, 0x27, 0x11, 0xa0, 0xca, 0xae, 0x53, 0x32, 0xcd, 0xd2, 0x1a, 0xd7, 0x63, 0x9c, 0x1e, 0x30,
-	0xd1, 0x5b, 0x38, 0x4d, 0x87, 0xd2, 0xff, 0xfd, 0x63, 0x0e, 0xab, 0x8d, 0xee, 0x56, 0x8b, 0x5e,
-	0xc2, 0x7d, 0xbf, 0x57, 0x4a, 0x9f, 0x1a, 0x32, 0x56, 0x3e, 0x82, 0xc9, 0xc2, 0x11, 0x43, 0xd4,
-	0x80, 0xe4, 0x43, 0x38, 0xca, 0xb9, 0xb9, 0xb2, 0xc3, 0x4e, 0x1e, 0x44, 0x8f, 0x61, 0xfa, 0xa6,
-	0xd8, 0x59, 0x1f, 0xc0, 0x48, 0x15, 0x83, 0x6d, 0xa4, 0x8a, 0x57, 0x5f, 0xc4, 0x7a, 0x8b, 0xc1,
-	0x66, 0x8b, 0xc1, 0xed, 0x16, 0xc5, 0xe7, 0x16, 0xc5, 0xf7, 0x16, 0xc5, 0xcf, 0x16, 0xc5, 0xba,
-	0x45, 0xb1, 0x69, 0x51, 0xfc, 0x6a, 0x51, 0xfc, 0x6e, 0x31, 0xb8, 0x6d, 0x51, 0x7c, 0xed, 0x30,
-	0xf8, 0xd1, 0xa1, 0x58, 0x77, 0x18, 0x6c, 0x3a, 0x0c, 0x3e, 0xbc, 0x2e, 0xb9, 0xfe, 0x58, 0xc6,
-	0x2b, 0xee, 0xbf, 0xaf, 0xb3, 0xb8, 0x31, 0x89, 0x1b, 0x16, 0xac, 0xab, 0x59, 0xad, 0x79, 0xa5,
-	0x0a, 0xd2, 0xb3, 0x9d, 0x9c, 0xd4, 0xf3, 0x92, 0x13, 0xba, 0xb6, 0xfb, 0x73, 0xdc, 0x5f, 0xe5,
-	0x7c, 0xe2, 0xae, 0xe9, 0xc5, 0x9f, 0x00, 0x00, 0x00, 0xff, 0xff, 0xbb, 0xd4, 0x88, 0x36, 0xb2,
-	0x02, 0x00, 0x00,
+	// 526 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x8c, 0x53, 0x3f, 0x8f, 0xd3, 0x4e,
+	0x10, 0xf5, 0xfa, 0x97, 0xcb, 0xdd, 0xed, 0xef, 0x88, 0xd0, 0x0a, 0x9d, 0x42, 0x38, 0xad, 0x4e,
+	0x6e, 0xa0, 0x20, 0xb6, 0x04, 0x1d, 0x25, 0xc5, 0x09, 0x8a, 0xe3, 0x8f, 0x41, 0x14, 0x34, 0xc8,
+	0xb1, 0x27, 0xce, 0x82, 0x73, 0xb3, 0xec, 0xae, 0xcd, 0x5d, 0x47, 0x45, 0xcd, 0x27, 0xa0, 0xe6,
+	0x3b, 0xd0, 0x50, 0x22, 0xaa, 0x94, 0x29, 0x89, 0xd3, 0x50, 0xde, 0x47, 0x40, 0xde, 0x75, 0x72,
+	0x49, 0x83, 0xe8, 0xe6, 0xcd, 0x7b, 0xfb, 0xf6, 0xcd, 0x68, 0x97, 0xf2, 0x0a, 0x74, 0x28, 0x30,
+	0xd2, 0xe9, 0x04, 0xa6, 0x49, 0xa4, 0x53, 0x31, 0x8d, 0xcc, 0x85, 0x04, 0x1d, 0x4a, 0x85, 0x06,
+	0x19, 0x73, 0x7c, 0xe8, 0xf8, 0xb0, 0xe1, 0x07, 0xc3, 0x5c, 0x98, 0x49, 0x39, 0x0a, 0x53, 0x9c,
+	0x46, 0x39, 0xe6, 0x18, 0x59, 0xe9, 0xa8, 0x1c, 0x5b, 0x64, 0x81, 0xad, 0x9c, 0xc5, 0xe0, 0x28,
+	0x47, 0xcc, 0x0b, 0xb8, 0x52, 0x69, 0xa3, 0xca, 0xd4, 0xb4, 0xec, 0xcd, 0xed, 0x00, 0x1b, 0x77,
+	0x0f, 0x8e, 0xb7, 0xa9, 0x4a, 0xc0, 0x87, 0x37, 0x28, 0x8d, 0xc0, 0xb3, 0x56, 0x11, 0x7c, 0x21,
+	0xb4, 0x73, 0x0a, 0x26, 0x61, 0x01, 0x3d, 0x50, 0xa0, 0xb1, 0x54, 0x29, 0xbc, 0xbc, 0x90, 0xd0,
+	0x27, 0xc7, 0xe4, 0xce, 0x7e, 0xbc, 0xd5, 0x63, 0x7d, 0xba, 0x9b, 0x2a, 0x48, 0x0c, 0x64, 0x7d,
+	0xdf, 0xd2, 0x2b, 0xd8, 0x9c, 0x2e, 0x12, 0x6d, 0x4e, 0x31, 0x13, 0x63, 0x01, 0x59, 0xff, 0x3f,
+	0x77, 0x7a, 0xb3, 0xc7, 0x06, 0x74, 0xaf, 0xc0, 0x34, 0x69, 0x6e, 0xef, 0x77, 0x2c, 0xbf, 0xc6,
+	0x8d, 0x73, 0x05, 0x4a, 0x37, 0xd4, 0x8e, 0x73, 0x6e, 0x61, 0x70, 0x9b, 0xee, 0xbe, 0x28, 0xa5,
+	0x44, 0x65, 0xd8, 0x11, 0xdd, 0xd7, 0xae, 0x84, 0xcc, 0xe6, 0xdb, 0x8b, 0xaf, 0x1a, 0xc1, 0x09,
+	0xed, 0x9e, 0x88, 0xc2, 0x80, 0xfa, 0xbb, 0x8e, 0x71, 0x4a, 0xa7, 0xc9, 0x79, 0x0c, 0xba, 0x2c,
+	0x8c, 0xb6, 0x73, 0x74, 0xe2, 0x8d, 0x4e, 0xf0, 0x84, 0x1e, 0xc4, 0xed, 0xd0, 0xff, 0xbc, 0x98,
+	0xcd, 0xd1, 0xfc, 0xed, 0xd1, 0x82, 0xe7, 0xf4, 0x9a, 0xcb, 0x15, 0xc3, 0xfb, 0x12, 0xb4, 0x61,
+	0x87, 0xb4, 0x3b, 0xb6, 0x8d, 0xd6, 0xaa, 0x45, 0xec, 0x06, 0xdd, 0x49, 0xb1, 0x3c, 0x33, 0x6d,
+	0x26, 0x07, 0x18, 0xa3, 0x1d, 0x99, 0xe4, 0x60, 0x37, 0xda, 0x89, 0x6d, 0x1d, 0xdc, 0xa2, 0xfb,
+	0x8f, 0xb3, 0x95, 0x5d, 0x8f, 0xfa, 0x22, 0x6b, 0xad, 0x7c, 0x91, 0x05, 0x6f, 0x69, 0xef, 0x59,
+	0x62, 0xd2, 0xc9, 0x53, 0x09, 0xca, 0x2d, 0xb7, 0x47, 0x7d, 0x94, 0x2b, 0x05, 0x4a, 0x67, 0x69,
+	0x26, 0x6d, 0x52, 0x5b, 0xb3, 0xbb, 0x74, 0xa7, 0x4a, 0x8a, 0xd2, 0xdd, 0xf3, 0xff, 0xbd, 0xc3,
+	0xd0, 0x3d, 0xb9, 0x70, 0xf5, 0xe4, 0xc2, 0x57, 0x0d, 0x1b, 0x3b, 0xd1, 0x83, 0xee, 0xcf, 0x6f,
+	0xc4, 0xbf, 0x4e, 0x1e, 0x7e, 0x22, 0xb3, 0x05, 0xf7, 0xe6, 0x0b, 0xee, 0x5d, 0x2e, 0x38, 0xf9,
+	0x58, 0x73, 0xf2, 0xb5, 0xe6, 0xe4, 0x47, 0xcd, 0xc9, 0xac, 0xe6, 0x64, 0x5e, 0x73, 0xf2, 0xab,
+	0xe6, 0xe4, 0x77, 0xcd, 0xbd, 0xcb, 0x9a, 0x93, 0xcf, 0x4b, 0xee, 0x7d, 0x5f, 0x72, 0x32, 0x5b,
+	0x72, 0x6f, 0xbe, 0xe4, 0xde, 0xeb, 0x47, 0x39, 0xca, 0x77, 0x79, 0x58, 0x61, 0x33, 0xbf, 0x4a,
+	0xc2, 0x52, 0x47, 0xb6, 0x18, 0xa3, 0x9a, 0x0e, 0xa5, 0xc2, 0x4a, 0x64, 0xa0, 0x86, 0x2b, 0x3a,
+	0x92, 0xa3, 0x1c, 0x23, 0x38, 0x37, 0xeb, 0x9f, 0xb6, 0xfe, 0x70, 0xa3, 0xae, 0xcd, 0x79, 0xff,
+	0x4f, 0x00, 0x00, 0x00, 0xff, 0xff, 0x4b, 0x7e, 0x46, 0xea, 0x8d, 0x03, 0x00, 0x00,
 }
 
 func (this *Meta) Equal(that interface{}) bool {
@@ -611,6 +708,9 @@ func (this *FilterRequest) Equal(that interface{}) bool {
 	if this.Count != that1.Count {
 		return false
 	}
+	if this.Page != that1.Page {
+		return false
+	}
 	return true
 }
 func (this *IdRequest) Equal(that interface{}) bool {
@@ -633,6 +733,36 @@ func (this *IdRequest) Equal(that interface{}) bool {
 		return false
 	}
 	if this.Id != that1.Id {
+		return false
+	}
+	return true
+}
+func (this *PatchOperation) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*PatchOperation)
+	if !ok {
+		that2, ok := that.(PatchOperation)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.Op != that1.Op {
+		return false
+	}
+	if this.Path != that1.Path {
+		return false
+	}
+	if !this.Value.Equal(that1.Value) {
 		return false
 	}
 	return true
@@ -687,10 +817,11 @@ func (this *FilterRequest) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 6)
+	s := make([]string, 0, 7)
 	s = append(s, "&scim.FilterRequest{")
 	s = append(s, "Filter: "+fmt.Sprintf("%#v", this.Filter)+",\n")
 	s = append(s, "Count: "+fmt.Sprintf("%#v", this.Count)+",\n")
+	s = append(s, "Page: "+fmt.Sprintf("%#v", this.Page)+",\n")
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
@@ -701,6 +832,20 @@ func (this *IdRequest) GoString() string {
 	s := make([]string, 0, 5)
 	s = append(s, "&scim.IdRequest{")
 	s = append(s, "Id: "+fmt.Sprintf("%#v", this.Id)+",\n")
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *PatchOperation) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 7)
+	s = append(s, "&scim.PatchOperation{")
+	s = append(s, "Op: "+fmt.Sprintf("%#v", this.Op)+",\n")
+	s = append(s, "Path: "+fmt.Sprintf("%#v", this.Path)+",\n")
+	if this.Value != nil {
+		s = append(s, "Value: "+fmt.Sprintf("%#v", this.Value)+",\n")
+	}
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
@@ -898,6 +1043,11 @@ func (m *FilterRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	if m.Page != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.Page))
+		i--
+		dAtA[i] = 0x18
+	}
 	if m.Count != 0 {
 		i = encodeVarintTypes(dAtA, i, uint64(m.Count))
 		i--
@@ -937,6 +1087,55 @@ func (m *IdRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		i -= len(m.Id)
 		copy(dAtA[i:], m.Id)
 		i = encodeVarintTypes(dAtA, i, uint64(len(m.Id)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *PatchOperation) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *PatchOperation) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *PatchOperation) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.Value != nil {
+		{
+			size, err := m.Value.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1a
+	}
+	if len(m.Path) > 0 {
+		i -= len(m.Path)
+		copy(dAtA[i:], m.Path)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.Path)))
+		i--
+		dAtA[i] = 0x12
+	}
+	if len(m.Op) > 0 {
+		i -= len(m.Op)
+		copy(dAtA[i:], m.Op)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.Op)))
 		i--
 		dAtA[i] = 0xa
 	}
@@ -1040,6 +1239,9 @@ func (m *FilterRequest) Size() (n int) {
 	if m.Count != 0 {
 		n += 1 + sovTypes(uint64(m.Count))
 	}
+	if m.Page != 0 {
+		n += 1 + sovTypes(uint64(m.Page))
+	}
 	return n
 }
 
@@ -1051,6 +1253,27 @@ func (m *IdRequest) Size() (n int) {
 	_ = l
 	l = len(m.Id)
 	if l > 0 {
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+
+func (m *PatchOperation) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Op)
+	if l > 0 {
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	l = len(m.Path)
+	if l > 0 {
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.Value != nil {
+		l = m.Value.Size()
 		n += 1 + l + sovTypes(uint64(l))
 	}
 	return n
@@ -1115,6 +1338,7 @@ func (this *FilterRequest) String() string {
 	s := strings.Join([]string{`&FilterRequest{`,
 		`Filter:` + fmt.Sprintf("%v", this.Filter) + `,`,
 		`Count:` + fmt.Sprintf("%v", this.Count) + `,`,
+		`Page:` + fmt.Sprintf("%v", this.Page) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -1125,6 +1349,18 @@ func (this *IdRequest) String() string {
 	}
 	s := strings.Join([]string{`&IdRequest{`,
 		`Id:` + fmt.Sprintf("%v", this.Id) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *PatchOperation) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&PatchOperation{`,
+		`Op:` + fmt.Sprintf("%v", this.Op) + `,`,
+		`Path:` + fmt.Sprintf("%v", this.Path) + `,`,
+		`Value:` + strings.Replace(fmt.Sprintf("%v", this.Value), "Value", "types.Value", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -1712,6 +1948,25 @@ func (m *FilterRequest) Unmarshal(dAtA []byte) error {
 					break
 				}
 			}
+		case 3:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Page", wireType)
+			}
+			m.Page = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.Page |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
 		default:
 			iNdEx = preIndex
 			skippy, err := skipTypes(dAtA[iNdEx:])
@@ -1796,6 +2051,159 @@ func (m *IdRequest) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			m.Id = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *PatchOperation) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: PatchOperation: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: PatchOperation: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Op", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Op = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Path", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Path = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Value", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Value == nil {
+				m.Value = &types.Value{}
+			}
+			if err := m.Value.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex

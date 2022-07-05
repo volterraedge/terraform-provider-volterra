@@ -3,9 +3,9 @@
 
 // TCP Proxy
 //
-// x-displayName: "Configure TCP Loadbalancer"
-// TCP loadbalancer view defines a required parameters that can be used in CRUD, to create and manage TCP loadbalancer.
-// It can be used to create TCP loadbalancer and TCP loadbalancer with SNI.
+// x-displayName: "Configure TCP Load Balancer"
+// TCP Load Balancer view defines a required parameters that can be used in CRUD, to create and manage TCP Load Balancer.
+// It can be used to create TCP Load Balancer and TCP Load Balancer with SNI.
 //
 // View will create following child objects.
 //
@@ -59,13 +59,13 @@ type GetDnsInfoRequest struct {
 	//
 	// x-displayName: "Namespace"
 	// x-example: "value"
-	// Namespace for the TCP loadbalancer
+	// Namespace for the TCP load balancer
 	Namespace string `protobuf:"bytes,1,opt,name=namespace,proto3" json:"namespace,omitempty"`
 	// Name
 	//
 	// x-displayName: "Name"
 	// x-example: "value"
-	// Name of the TCP loadbalancer
+	// Name of the TCP load balancer
 	Name string `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
 }
 
@@ -123,7 +123,7 @@ type GetDnsInfoResponse struct {
 	// DNS information
 	//
 	// x-displayName: "DNS information"
-	// DNS information object for this TCP loadbalancer
+	// DNS information object for this TCP load balancer
 	DnsInfo *virtual_host_dns_info.GlobalSpecType `protobuf:"bytes,1,opt,name=dns_info,json=dnsInfo,proto3" json:"dns_info,omitempty"`
 }
 
@@ -315,7 +315,7 @@ type CustomAPIClient interface {
 	// GetDnsInfo
 	//
 	// x-displayName: "Get DNS Info"
-	// GetDnsInfo is an API to get DNS information for a given TCP loadbalancer
+	// GetDnsInfo is an API to get DNS information for a given TCP load balancer
 	GetDnsInfo(ctx context.Context, in *GetDnsInfoRequest, opts ...grpc.CallOption) (*GetDnsInfoResponse, error)
 }
 
@@ -341,7 +341,7 @@ type CustomAPIServer interface {
 	// GetDnsInfo
 	//
 	// x-displayName: "Get DNS Info"
-	// GetDnsInfo is an API to get DNS information for a given TCP loadbalancer
+	// GetDnsInfo is an API to get DNS information for a given TCP load balancer
 	GetDnsInfo(context.Context, *GetDnsInfoRequest) (*GetDnsInfoResponse, error)
 }
 

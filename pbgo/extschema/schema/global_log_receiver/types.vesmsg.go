@@ -1304,6 +1304,16 @@ func (v *ValidateS3Config) AwsCredValidationRuleHandler(rules map[string]string)
 	return validatorFn, nil
 }
 
+func (v *ValidateS3Config) AwsRegionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for aws_region")
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateS3Config) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*S3Config)
 	if !ok {
@@ -1322,6 +1332,15 @@ func (v *ValidateS3Config) Validate(ctx context.Context, pm interface{}, opts ..
 
 		vOpts := append(opts, db.WithValidateField("aws_cred"))
 		if err := fv(ctx, m.GetAwsCred(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["aws_region"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("aws_region"))
+		if err := fv(ctx, m.GetAwsRegion(), vOpts...); err != nil {
 			return err
 		}
 
@@ -1375,6 +1394,18 @@ var DefaultS3ConfigValidator = func() *ValidateS3Config {
 		panic(errMsg)
 	}
 	v.FldValidators["aws_cred"] = vFn
+
+	vrhAwsRegion := v.AwsRegionValidationRuleHandler
+	rulesAwsRegion := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.in":        "[\"ap-northeast-1\",\"ap-southeast-1\",\"eu-central-1\",\"eu-west-1\",\"eu-west-3\",\"sa-east-1\",\"us-east-1\",\"us-east-2\",\"us-west-2\",\"ca-central-1\",\"af-south-1\",\"ap-east-1\",\"ap-south-1\",\"ap-northeast-2\",\"ap-southeast-2\",\"eu-south-1\",\"eu-north-1\",\"eu-west-2\",\"me-south-1\",\"us-west-1\"]",
+	}
+	vFn, err = vrhAwsRegion(rulesAwsRegion)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for S3Config.aws_region: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["aws_region"] = vFn
 
 	return v
 }()

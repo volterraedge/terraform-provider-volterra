@@ -3180,14 +3180,15 @@ var APISwaggerJSON string = `{
         },
         "network_interfaceInterfaceNetworkType": {
             "type": "string",
-            "description": "Identifies the how to pick the network for Interface.\n\nBackward compatibility to existing config or per site network\nTake site local from from fleet\nTake site local inside from from fleet\nNetwork interface is used to connect to storage network\nNetwork interface is used to connect to storage network",
+            "description": "Identifies the how to pick the network for Interface.\n\nBackward compatibility to existing config or per site network\nTake site local from from fleet\nTake site local inside from from fleet\nNetwork interface is used to connect to storage network\nNetwork interface is used to connect to storage network\nNetwork interface is used to connect to IP Fabric network",
             "title": "Interface Network Type",
             "enum": [
                 "NETWORK_INTERFACE_NETWORK_REF",
                 "NETWORK_INTERFACE_SITE_LOCAL",
                 "NETWORK_INTERFACE_SITE_LOCAL_INSIDE",
                 "NETWORK_INTERFACE_STORAGE",
-                "NETWORK_INTERFACE_MANAGEMENT"
+                "NETWORK_INTERFACE_MANAGEMENT",
+                "NETWORK_INTERFACE_IPFABRIC"
             ],
             "default": "NETWORK_INTERFACE_NETWORK_REF",
             "x-displayname": "Interface Network Type",
@@ -3487,6 +3488,11 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "network_interfaceLoopbackInterfaceType": {
+            "type": "object",
+            "description": "x-displayName: \"Loopback Interface\"\nLoopback Interface Configuration",
+            "title": "Loopback Interface"
+        },
         "network_interfaceNetworkInterfaceDFGW": {
             "type": "object",
             "description": "Controls how the Default Gateway of the Network interface is derived",
@@ -3630,13 +3636,14 @@ var APISwaggerJSON string = `{
         },
         "network_interfaceNetworkInterfaceType": {
             "type": "string",
-            "description": "Identifies the type of the interface.\n\nNetwork interface is an Ethernet interface\nNetwork interface is a VLAN interface\nNetwork interface is a bond interface running LACP\nNetwork interface is a tunnel interface",
+            "description": "Identifies the type of the interface.\n\nNetwork interface is an Ethernet interface\nNetwork interface is a VLAN interface\nNetwork interface is a bond interface running LACP\nNetwork interface is a tunnel interface\nNetwork interface is a loopback interface",
             "title": "Network Interface Type",
             "enum": [
                 "NETWORK_INTERFACE_ETHERNET",
                 "NETWORK_INTERFACE_VLAN_INTERFACE",
                 "NETWORK_INTERFACE_LACP_INTERFACE",
-                "NETWORK_INTERFACE_TUNNEL_INTERFACE"
+                "NETWORK_INTERFACE_TUNNEL_INTERFACE",
+                "NETWORK_INTERFACE_LOOPBACK_INTERFACE"
             ],
             "default": "NETWORK_INTERFACE_ETHERNET",
             "x-displayname": "Network Interface Type",
@@ -3804,13 +3811,13 @@ var APISwaggerJSON string = `{
             "properties": {
                 "interface_ip_map": {
                     "type": "object",
-                    "description": " Map of Node to Static ip configuration value, Key:Node, Value:IP Address\n\nValidation Rules:\n  ves.io.schema.rules.map.keys.string.max_len: 128\n  ves.io.schema.rules.map.keys.string.min_len: 1\n  ves.io.schema.rules.map.max_pairs: 64\n",
+                    "description": " Map of Node to Static ip configuration value, Key:Node, Value:IP Address\n\nValidation Rules:\n  ves.io.schema.rules.map.keys.string.max_len: 128\n  ves.io.schema.rules.map.keys.string.min_len: 1\n  ves.io.schema.rules.map.max_pairs: 128\n",
                     "title": "Site:Node to IP mapping",
                     "x-displayname": "Node to IP Mapping",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.map.keys.string.max_len": "128",
                         "ves.io.schema.rules.map.keys.string.min_len": "1",
-                        "ves.io.schema.rules.map.max_pairs": "64"
+                        "ves.io.schema.rules.map.max_pairs": "128"
                     }
                 }
             }
@@ -3992,6 +3999,28 @@ var APISwaggerJSON string = `{
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true"
                     }
+                }
+            }
+        },
+        "network_interfaceVhostInterfaceType": {
+            "type": "object",
+            "description": "x-displayName: \"Host Interface\"\nHost Interface configuration corresponding to a Network Interface",
+            "title": "Host Interface",
+            "properties": {
+                "no_host": {
+                    "description": "x-displayName: \"No Host Interface\"\nHost Interface is not created for the Network Interface\nSome options like DHCP will not be valid on the Network Interface",
+                    "title": "No Host Interface",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "vhost": {
+                    "description": "x-displayName: \"Create Host Interface\"\nCreate Vhost Interface for the Network Interface. An interface will be\ncreated in host-os for it",
+                    "title": "Create Host Interface",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "virtual": {
+                    "description": "x-displayName: \"Create Virtual Host Interface\"\nCreate a virtual interface for Network Interface. The virtual interface\nis not seen in host-os. This interface will be internal to VER\nSome options like DHCP will not be valid on the Network Interface",
+                    "title": "Create Virtual Interface",
+                    "$ref": "#/definitions/ioschemaEmpty"
                 }
             }
         },

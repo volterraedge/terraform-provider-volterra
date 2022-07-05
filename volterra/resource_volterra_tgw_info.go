@@ -83,6 +83,27 @@ func resourceVolterraSetTGWInfo() *schema.Resource {
 					Type: schema.TypeString,
 				},
 			},
+			"direct_connect_info": {
+				Type:     schema.TypeSet,
+				Optional: true,
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+
+						"direct_connect_gateway_id": {
+							Type:     schema.TypeString,
+							Optional: true,
+						},
+						"vgw_id": {
+							Type:     schema.TypeString,
+							Optional: true,
+						},
+						"asn": {
+							Type:     schema.TypeInt,
+							Optional: true,
+						},
+					},
+				},
+			},
 		},
 	}
 }
@@ -128,16 +149,20 @@ func resourceVolterraSetTGWInfoCreate(d *schema.ResourceData, meta interface{}) 
 			PrivateIps: privateIps,
 		},
 	}
+	if dcxInfo := getDirectConnectInfo(d); dcxInfo != nil {
+		fmt.Printf("Foo Madhukar: %# v\n", dcxInfo)
+		req.DirectConnectInfo = dcxInfo
+	}
 	log.Printf("[INFO] Foo Setting Id %s, %s\n", tgwID, vpcID)
 	yamlReq, err := codec.ToYAML(req)
 	if err != nil {
-		return fmt.Errorf("Error marshalling rpc response to yaml: %s", err)
+		return fmt.Errorf("error marshalling rpc response to yaml: %s", err)
 	}
 
 	log.Printf("[INFO] Setting Volterra TGW Info struct: %+v", req)
 	_, err = client.CustomAPI(context.Background(), http.MethodPost, fmt.Sprintf(setTGWInfoURI, systemNS, name), setTGWInfoRPCFQN, yamlReq)
 	if err != nil {
-		return fmt.Errorf("Error Setting Volterra TGW Info: %s", err)
+		return fmt.Errorf("error Setting Volterra TGW Info: %s", err)
 	}
 
 	d.SetId(uuid.New().String())
@@ -174,6 +199,9 @@ func resourceVolterraSetTGWInfoUpdate(d *schema.ResourceData, meta interface{}) 
 			SubnetIds: subnetIDs,
 		},
 	}
+	if dcxInfo := getDirectConnectInfo(d); dcxInfo != nil {
+		req.DirectConnectInfo = dcxInfo
+	}
 
 	yamlReq, err := codec.ToYAML(req)
 	if err != nil {
@@ -189,6 +217,26 @@ func resourceVolterraSetTGWInfoUpdate(d *schema.ResourceData, meta interface{}) 
 }
 
 func resourceVolterraSetTGWInfoDelete(d *schema.ResourceData, meta interface{}) error {
+	client := meta.(*APIClient)
+	var name string
+	if v, ok := d.GetOk("name"); ok {
+		name = v.(string)
+	}
+	req := &ves_io_schema_tgw_site.SetTGWInfoRequest{
+		Name:      name,
+		Namespace: systemNS,
+		TgwInfo:   &ves_io_schema_tgw_site.AWSTGWInfoConfigType{},
+	}
+	yamlReq, err := codec.ToYAML(req)
+	if err != nil {
+		return fmt.Errorf("Error marshalling rpc response to yaml: %s", err)
+	}
+
+	log.Printf("[INFO] Setting Volterra TGW Info as empty")
+	_, err = client.CustomAPI(context.Background(), http.MethodPost, fmt.Sprintf(setTGWInfoURI, systemNS, name), setTGWInfoRPCFQN, yamlReq)
+	if err != nil {
+		log.Printf("Ignored: Error Setting Volterra TGW Info as empty: %s", err)
+	}
 	d.SetId("")
 	return nil
 }
@@ -216,4 +264,26 @@ func getSubnetIDs(d *schema.ResourceData) []*ves_io_schema_views.AWSSubnetIdsTyp
 		}
 	}
 	return subnetIDs
+}
+
+func getDirectConnectInfo(d *schema.ResourceData) *ves_io_schema_views.DirectConnectInfo {
+	if v, ok := d.GetOk("direct_connect_info"); ok && !isIntfNil(v) {
+		dcxInfo := &ves_io_schema_views.DirectConnectInfo{}
+		sl := v.(*schema.Set).List()
+		for _, set := range sl {
+			cs := set.(map[string]interface{})
+			if v, ok := cs["direct_connect_gateway_id"]; ok && !isIntfNil(v) {
+				dcxInfo.DirectConnectGatewayId = v.(string)
+			}
+			if v, ok := cs["vgw_id"]; ok && !isIntfNil(v) {
+				dcxInfo.VgwId = v.(string)
+			}
+			if v, ok := cs["asn"]; ok && !isIntfNil(v) {
+				dcxInfo.Asn = uint32(v.(int))
+			}
+		}
+		return dcxInfo
+	}
+	return nil
+
 }
