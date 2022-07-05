@@ -76,6 +76,10 @@ func resourceVolterraSetCloudSiteInfo() *schema.Resource {
 							Type:     schema.TypeString,
 							Optional: true,
 						},
+						"asn": {
+							Type:     schema.TypeInt,
+							Optional: true,
+						},
 					},
 				},
 			},

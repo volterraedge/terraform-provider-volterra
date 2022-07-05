@@ -71,6 +71,7 @@ func testTGWInfoWithDirectConnectInfo(name string) string {
 		  direct_connect_info {
 			direct_connect_gateway_id = "1234-6789-0987-1234-09876"
 			vgw_id = "vgw-12345678"
+			asn = 64512
 		  }
 		}
 		`, setTGWInfo, name, name)

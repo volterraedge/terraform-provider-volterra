@@ -97,6 +97,10 @@ func resourceVolterraSetTGWInfo() *schema.Resource {
 							Type:     schema.TypeString,
 							Optional: true,
 						},
+						"asn": {
+							Type:     schema.TypeInt,
+							Optional: true,
+						},
 					},
 				},
 			},
@@ -273,6 +277,9 @@ func getDirectConnectInfo(d *schema.ResourceData) *ves_io_schema_views.DirectCon
 			}
 			if v, ok := cs["vgw_id"]; ok && !isIntfNil(v) {
 				dcxInfo.VgwId = v.(string)
+			}
+			if v, ok := cs["asn"]; ok && !isIntfNil(v) {
+				dcxInfo.Asn = uint32(v.(int))
 			}
 		}
 		return dcxInfo
