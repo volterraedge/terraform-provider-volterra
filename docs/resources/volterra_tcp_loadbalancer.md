@@ -20,13 +20,13 @@ resource "volterra_tcp_loadbalancer" "example" {
   name      = "acmecorp-web"
   namespace = "staging"
 
-  // One of the arguments from this list "advertise_on_public advertise_custom do_not_advertise advertise_on_public_default_vip" must be set
+  // One of the arguments from this list "do_not_advertise advertise_on_public_default_vip advertise_on_public advertise_custom" must be set
   do_not_advertise = true
 
-  // One of the arguments from this list "retract_cluster do_not_retract_cluster" must be set
+  // One of the arguments from this list "do_not_retract_cluster retract_cluster" must be set
   retract_cluster = true
 
-  // One of the arguments from this list "hash_policy_choice_least_active hash_policy_choice_random hash_policy_choice_source_ip_stickiness hash_policy_choice_round_robin" must be set
+  // One of the arguments from this list "hash_policy_choice_random hash_policy_choice_source_ip_stickiness hash_policy_choice_round_robin hash_policy_choice_least_active" must be set
   hash_policy_choice_round_robin = true
 }
 
@@ -53,11 +53,11 @@ Argument Reference
 
 `advertise_custom` - (Optional) Advertise this VIP on specific sites. See [Advertise Custom ](#advertise-custom) below for details.
 
-`advertise_on_public` - (Optional) Advertise this loadbalancer on public network. See [Advertise On Public ](#advertise-on-public) below for details.
+`advertise_on_public` - (Optional) Advertise this load balancer on public network. See [Advertise On Public ](#advertise-on-public) below for details.
 
-`advertise_on_public_default_vip` - (Optional) Advertise this loadbalancer on public network with default VIP (bool).
+`advertise_on_public_default_vip` - (Optional) Advertise this load balancer on public network with default VIP (bool).
 
-`do_not_advertise` - (Optional) Do not advertise this loadbalancer (bool).
+`do_not_advertise` - (Optional) Do not advertise this load balancer (bool).
 
 `do_not_retract_cluster` - (Optional) configuration. (bool).
 
@@ -77,11 +77,11 @@ Argument Reference
 
 `idle_timeout` - (Optional) The amount of time that a stream can exist without upstream or downstream activity, in milliseconds. (`Int`).
 
-`listen_port` - (Optional) Listen Port for this TCP proxy (`Int`).
+`listen_port` - (Optional) Listen Port for this load balancer (`Int`).
 
-`origin_pools_weights` - (Optional) Origin pools and weights used for this loadbalancer.. See [Origin Pools Weights ](#origin-pools-weights) below for details.
+`origin_pools_weights` - (Optional) Origin pools and weights used for this load balancer.. See [Origin Pools Weights ](#origin-pools-weights) below for details.
 
-`with_sni` - (Optional) Set to true to enable TCP loadbalancer with SNI (`Bool`).
+`with_sni` - (Optional) Set to true to enable load balancer with SNI (`Bool`).
 
 ### Advertise Custom
 
@@ -91,15 +91,15 @@ Advertise this VIP on specific sites.
 
 ### Advertise On Public
 
-Advertise this loadbalancer on public network.
+Advertise this load balancer on public network.
 
-`public_ip` - (Required) Dedicated public ip are allocated by volterra on request. See [ref](#ref) below for details.
+`public_ip` - (Required) Dedicated Public IP, which is allocated by F5 Distributed Cloud on request, is used as a VIP.. See [ref](#ref) below for details.
 
 ### Advertise Where
 
 Where should this load balancer be available.
 
-`site` - (Optional) Advertise on a customer site and a given network. . See [Site ](#site) below for details.
+`site` - (Optional) Advertise on a customer site and a given network.. See [Site ](#site) below for details.
 
 `virtual_network` - (Optional) Advertise on a virtual network. See [Virtual Network ](#virtual-network) below for details.
 
@@ -117,7 +117,7 @@ Use the default VIP, system allocated or configured in the virtual network.
 
 ### Origin Pools Weights
 
-Origin pools and weights used for this loadbalancer..
+Origin pools and weights used for this load balancer..
 
 `endpoint_subsets` - (Optional) upstream origin pool which match this metadata will be selected for load balancing (`String`).
 
@@ -141,7 +141,7 @@ tenant - (Optional) then tenant will hold the referred object's(e.g. route's) te
 
 ### Site
 
-Advertise on a customer site and a given network. .
+Advertise on a customer site and a given network..
 
 `ip` - (Optional) Use given IP address as VIP on the site (`String`).
 

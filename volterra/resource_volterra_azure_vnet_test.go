@@ -151,6 +151,11 @@ func testAzureVNETSiteConfig(resourceName, name string) string {
 			site_type = "azure_vnet_site"
 			public_ips = ["10.0.0.1"]
 			private_ips = ["192.168.0.1"]
+			spoke_vnet_prefix_info {
+				vnet_name = "spoke-vnet-1"
+				resource_group = "spoke-rg"
+				prefixes = ["192.168.0.0/22"]
+			}
 
 		}`, resourceName, name)
 }

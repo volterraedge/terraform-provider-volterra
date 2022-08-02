@@ -20,47 +20,24 @@ resource "volterra_fast_acl" "example" {
   name      = "acmecorp-web"
   namespace = "staging"
 
-  // One of the arguments from this list "re_acl legacy_acl site_acl" must be set
+  // One of the arguments from this list "site_acl re_acl legacy_acl" must be set
 
-  site_acl {
-    fast_acl_rules {
-      action {
-        // One of the arguments from this list "simple_action policer_action protocol_policer_action" must be set
-
-        protocol_policer_action {
-          ref {
-            name      = "test1"
-            namespace = "staging"
-            tenant    = "acmecorp"
-          }
-        }
-      }
-
-      metadata {
-        description = "Virtual Host for acmecorp website"
-        disable     = true
-        name        = "acmecorp-web"
-      }
-
-      name = "name"
-
-      port {
-        // One of the arguments from this list "all user_defined dns" must be set
-        all = true
-      }
-
-      // One of the arguments from this list "prefix ip_prefix_set" must be set
-
-      prefix {
-        prefix = ["[192.168.1.0/24, 192.168.2.0/24]\" or \"[2001:db8::1::/112, 2001::db8::2::/112]"]
-      }
+  legacy_acl {
+    destination_type {
+      // One of the arguments from this list "interface_services vip_services all_services destination_ip_address selected_vip_address shared_vip_services" must be set
+      all_services = true
     }
 
-    // One of the arguments from this list "outside_network inside_network" must be set
-    outside_network = true
+    network_type {
+      // One of the arguments from this list "site_local site_local_inside public" must be set
+      public = true
+    }
 
-    // One of the arguments from this list "interface_services vip_services all_services" must be set
-    interface_services = true
+    source_rules {
+      name      = "test1"
+      namespace = "staging"
+      tenant    = "acmecorp"
+    }
   }
 }
 
@@ -159,7 +136,7 @@ Matches dns port 53.
 
 ### Fast Acl Rules
 
-Fast ACL rules to match .
+Fast ACL rules to match.
 
 `action` - (Required) Action to be applied if traffic matched rule (pass, deny or rate limit). See [Action ](#action) below for details.
 
@@ -279,7 +256,7 @@ Indicates use of public network.
 
 ACL will be applied at regional edge sites.
 
-`fast_acl_rules` - (Optional) Fast ACL rules to match . See [Fast Acl Rules ](#fast-acl-rules) below for details.
+`fast_acl_rules` - (Optional) Fast ACL rules to match. See [Fast Acl Rules ](#fast-acl-rules) below for details.
 
 `all_public_vips` - (Optional) Apply this Fast ACL to all public vips (bool).
 
@@ -303,7 +280,7 @@ Apply this Fast ACL to List of some selected public VIP(s).
 
 `default_tenant_vip` - (Optional) Include tenant vip in list of specific VIP(s) (`Bool`).
 
-`public_ip_refs` - (Required) Select additional public VIP(s) . See [ref](#ref) below for details.
+`public_ip_refs` - (Required) Select additional public VIP(s). See [ref](#ref) below for details.
 
 ### Selected Vip Address
 
@@ -319,7 +296,7 @@ Regional Edge: Applies configuration on all shared VIPs used for services.
 
 ACL will be applied at customer edge sites.
 
-`fast_acl_rules` - (Optional) Fast ACL rules to match . See [Fast Acl Rules ](#fast-acl-rules) below for details.
+`fast_acl_rules` - (Optional) Fast ACL rules to match. See [Fast Acl Rules ](#fast-acl-rules) below for details.
 
 `inside_network` - (Optional) Site Local Inside network (bool).
 

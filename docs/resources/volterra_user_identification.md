@@ -21,7 +21,7 @@ resource "volterra_user_identification" "example" {
   namespace = "staging"
 
   rules {
-    // One of the arguments from this list "tls_fingerprint ip_and_http_header_name none client_asn ip_and_tls_fingerprint client_ip query_param_key http_header_name cookie_name" must be set
+    // One of the arguments from this list "cookie_name none client_asn tls_fingerprint ip_and_http_header_name ip_and_tls_fingerprint client_ip query_param_key http_header_name" must be set
     cookie_name = "Session"
   }
 }
@@ -47,7 +47,7 @@ Argument Reference
 
 ### Spec Argument Reference
 
-`rules` - (Required) Evaluation of the rules is terminated once a user identifier has been extracted. . See [Rules ](#rules) below for details.
+`rules` - (Required) Evaluation of the rules is terminated once a user identifier has been extracted.. See [Rules ](#rules) below for details.
 
 ### Client Asn
 
@@ -67,7 +67,7 @@ Do not use any user identifier..
 
 ### Rules
 
-Evaluation of the rules is terminated once a user identifier has been extracted. .
+Evaluation of the rules is terminated once a user identifier has been extracted..
 
 `client_asn` - (Optional) The client ASN is obtained by performing a lookup for the client IP Address in a GeoIP DB. (bool).
 

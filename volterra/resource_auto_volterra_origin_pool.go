@@ -458,8 +458,29 @@ func resourceVolterraOriginPool() *schema.Resource {
 									},
 
 									"service_name": {
+
 										Type:     schema.TypeString,
 										Optional: true,
+									},
+
+									"service_selector": {
+
+										Type:     schema.TypeSet,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"expressions": {
+
+													Type: schema.TypeList,
+
+													Required: true,
+													Elem: &schema.Schema{
+														Type: schema.TypeString,
+													},
+												},
+											},
+										},
 									},
 
 									"site_locator": {
@@ -1793,11 +1814,42 @@ func resourceVolterraOriginPoolCreate(d *schema.ResourceData, meta interface{}) 
 
 					}
 
-					if v, ok := cs["service_name"]; ok && !isIntfNil(v) {
+					serviceInfoTypeFound := false
 
-						choiceInt.K8SService.ServiceInfo = &ves_io_schema_views_origin_pool.OriginServerK8SService_ServiceName{
-							ServiceName: v.(string),
+					if v, ok := cs["service_name"]; ok && !isIntfNil(v) && !serviceInfoTypeFound {
+
+						serviceInfoTypeFound = true
+						serviceInfoInt := &ves_io_schema_views_origin_pool.OriginServerK8SService_ServiceName{}
+
+						choiceInt.K8SService.ServiceInfo = serviceInfoInt
+
+						serviceInfoInt.ServiceName = v.(string)
+
+					}
+
+					if v, ok := cs["service_selector"]; ok && !isIntfNil(v) && !serviceInfoTypeFound {
+
+						serviceInfoTypeFound = true
+						serviceInfoInt := &ves_io_schema_views_origin_pool.OriginServerK8SService_ServiceSelector{}
+						serviceInfoInt.ServiceSelector = &ves_io_schema.LabelSelectorType{}
+						choiceInt.K8SService.ServiceInfo = serviceInfoInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["expressions"]; ok && !isIntfNil(v) {
+
+								ls := make([]string, len(v.([]interface{})))
+								for i, v := range v.([]interface{}) {
+									ls[i] = v.(string)
+								}
+								serviceInfoInt.ServiceSelector.Expressions = ls
+
+							}
+
 						}
+
 					}
 
 					if v, ok := cs["site_locator"]; ok && !isIntfNil(v) {
@@ -3411,10 +3463,40 @@ func resourceVolterraOriginPoolUpdate(d *schema.ResourceData, meta interface{}) 
 
 					}
 
-					if v, ok := cs["service_name"]; ok && !isIntfNil(v) {
+					serviceInfoTypeFound := false
 
-						choiceInt.K8SService.ServiceInfo = &ves_io_schema_views_origin_pool.OriginServerK8SService_ServiceName{
-							ServiceName: v.(string),
+					if v, ok := cs["service_name"]; ok && !isIntfNil(v) && !serviceInfoTypeFound {
+
+						serviceInfoTypeFound = true
+						serviceInfoInt := &ves_io_schema_views_origin_pool.OriginServerK8SService_ServiceName{}
+
+						choiceInt.K8SService.ServiceInfo = serviceInfoInt
+
+						serviceInfoInt.ServiceName = v.(string)
+
+					}
+
+					if v, ok := cs["service_selector"]; ok && !isIntfNil(v) && !serviceInfoTypeFound {
+
+						serviceInfoTypeFound = true
+						serviceInfoInt := &ves_io_schema_views_origin_pool.OriginServerK8SService_ServiceSelector{}
+						serviceInfoInt.ServiceSelector = &ves_io_schema.LabelSelectorType{}
+						choiceInt.K8SService.ServiceInfo = serviceInfoInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["expressions"]; ok && !isIntfNil(v) {
+
+								ls := make([]string, len(v.([]interface{})))
+								for i, v := range v.([]interface{}) {
+									ls[i] = v.(string)
+								}
+								serviceInfoInt.ServiceSelector.Expressions = ls
+
+							}
+
 						}
 
 					}

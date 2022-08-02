@@ -24,7 +24,7 @@ resource "volterra_app_firewall" "example" {
   allow_all_response_codes = true
 
   // One of the arguments from this list "disable_anonymization default_anonymization custom_anonymization" must be set
-  disable_anonymization = true
+  default_anonymization = true
 
   // One of the arguments from this list "use_default_blocking_page blocking_page" must be set
   use_default_blocking_page = true
@@ -36,7 +36,7 @@ resource "volterra_app_firewall" "example" {
   default_detection_settings = true
 
   // One of the arguments from this list "use_loadbalancer_setting blocking monitoring" must be set
-  use_loadbalancer_setting = true
+  blocking = true
 }
 
 ```

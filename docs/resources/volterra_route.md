@@ -29,7 +29,7 @@ resource "volterra_route" "example" {
         invert_match = true
         name         = "Content-Type"
 
-        // One of the arguments from this list "regex presence exact" must be set
+        // One of the arguments from this list "exact regex presence" must be set
         exact = "application/json"
       }
 
@@ -50,143 +50,63 @@ resource "volterra_route" "example" {
 
     request_headers_to_add {
       append = true
-      name   = "name"
+      name   = "value"
 
       // One of the arguments from this list "value secret_value" must be set
-
-      secret_value {
-        blindfold_secret_info_internal {
-          decryption_provider = "decryption_provider"
-          location            = "string:///U2VjcmV0SW5mb3JtYXRpb24="
-          store_provider      = "store_provider"
-        }
-
-        secret_encoding_type = "secret_encoding_type"
-
-        // One of the arguments from this list "blindfold_secret_info vault_secret_info clear_secret_info wingman_secret_info" must be set
-
-        clear_secret_info {
-          provider = "box-provider"
-          url      = "string:///U2VjcmV0SW5mb3JtYXRpb24="
-        }
-      }
+      value = "value"
     }
 
     request_headers_to_remove = ["host"]
 
     response_headers_to_add {
       append = true
-      name   = "name"
+      name   = "value"
 
       // One of the arguments from this list "value secret_value" must be set
-      value = "value"
+
+      secret_value {
+        blindfold_secret_info_internal {
+          decryption_provider = "value"
+          location            = "string:///U2VjcmV0SW5mb3JtYXRpb24="
+          store_provider      = "value"
+        }
+
+        secret_encoding_type = "secret_encoding_type"
+
+        // One of the arguments from this list "blindfold_secret_info vault_secret_info clear_secret_info wingman_secret_info" must be set
+
+        vault_secret_info {
+          key             = "key_pem"
+          location        = "v1/data/vhost_key"
+          provider        = "vault-vh-provider"
+          secret_encoding = "secret_encoding"
+          version         = "1"
+        }
+      }
     }
 
     response_headers_to_remove = ["host"]
 
-    // One of the arguments from this list "route_destination route_redirect route_direct_response" must be set
+    // One of the arguments from this list "route_redirect route_direct_response route_destination" must be set
 
-    route_destination {
-      buffer_policy {
-        disabled          = true
-        max_request_bytes = "2048"
-        max_request_time  = "30"
-      }
+    route_redirect {
+      host_redirect  = "one.ves.io"
+      proto_redirect = "https"
 
-      // One of the arguments from this list "retract_cluster do_not_retract_cluster" must be set
-      retract_cluster = true
+      // One of the arguments from this list "remove_all_params strip_query_params all_params retain_all_params" must be set
+      retain_all_params = true
 
-      cors_policy {
-        allow_credentials = true
-        allow_headers     = "allow_headers"
-        allow_methods     = "allow_methods"
+      // One of the arguments from this list "prefix_rewrite path_redirect" must be set
+      path_redirect = "/api/register"
 
-        allow_origin = ["allow_origin"]
-
-        allow_origin_regex = ["allow_origin_regex"]
-        disabled           = true
-        expose_headers     = "expose_headers"
-        max_age            = "max_age"
-        maximum_age        = "maximum_age"
-      }
-
-      destinations {
-        cluster {
-          name      = "test1"
-          namespace = "staging"
-          tenant    = "acmecorp"
-        }
-
-        endpoint_subsets = {
-          "key1" = "value1"
-        }
-
-        priority = "priority"
-        weight   = "weight"
-      }
-
-      endpoint_subsets = {
-        "key1" = "value1"
-      }
-
-      hash_policy {
-        // One of the arguments from this list "header_name cookie source_ip" must be set
-        header_name = "host"
-
-        terminal = true
-      }
-
-      // One of the arguments from this list "host_rewrite auto_host_rewrite" must be set
-      host_rewrite = "one.volterra.com"
-
-      mirror_policy {
-        cluster {
-          name      = "test1"
-          namespace = "staging"
-          tenant    = "acmecorp"
-        }
-
-        percent {
-          denominator = "denominator"
-          numerator   = "5"
-        }
-      }
-
-      prefix_rewrite = "/"
-      priority       = "priority"
-
-      retry_policy {
-        back_off {
-          base_interval = "base_interval"
-          max_interval  = "max_interval"
-        }
-
-        num_retries     = "num_retries"
-        per_try_timeout = "per_try_timeout"
-
-        retriable_status_codes = ["retriable_status_codes"]
-
-        retry_condition = ["5xx"]
-        retry_on        = "5xx"
-      }
-
-      spdy_config {
-        use_spdy = true
-      }
-
-      timeout = "timeout"
-
-      web_socket_config {
-        idle_timeout         = "idle_timeout"
-        max_connect_attempts = "max_connect_attempts"
-        use_websocket        = true
-      }
+      response_code = "303"
     }
     service_policy {
       disable = true
     }
+    skip_lb_override = true
     waf_type {
-      // One of the arguments from this list "waf_rules app_firewall waf" must be set
+      // One of the arguments from this list "waf waf_rules app_firewall" must be set
 
       waf {
         waf {
@@ -340,7 +260,7 @@ List of (key, value) headers.
 
 `invert_match` - (Optional) Invert the result of the match to detect missing header or non-matching value (`Bool`).
 
-`name` - (Optional) Name of the header (`String`).
+`name` - (Required) Name of the header (`String`).
 
 `exact` - (Optional) Header value to match exactly (`String`).
 
@@ -390,7 +310,7 @@ Percentage of requests to be mirrored.
 
 List of (key, value) query parameters.
 
-`key` - (Optional) In the above example, assignee_username is the key (`String`).
+`key` - (Required) In the above example, assignee_username is the key (`String`).
 
 `exact` - (Optional) Exact match value for the query parameter key (`String`).
 
@@ -549,6 +469,8 @@ List of routes to match for incoming request.
 `route_redirect` - (Optional) Send redirect response. See [Route Redirect ](#route-redirect) below for details.
 
 `service_policy` - (Optional) service policy configuration at route level which overrides configuration at virtual-host level. See [Service Policy ](#service-policy) below for details.
+
+`skip_lb_override` - (Optional) these routes. (`Bool`).
 
 `waf_type` - (Optional) waf_type specified at route level overrides waf configuration at VirtualHost level. See [Waf Type ](#waf-type) below for details.
 

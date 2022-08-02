@@ -21,7 +21,10 @@ resource "volterra_global_log_receiver" "example" {
   namespace = "staging"
 
   // One of the arguments from this list "ns_current ns_all ns_list ns_system" must be set
-  ns_current = true
+
+  ns_list {
+    namespaces = ["default"]
+  }
 
   // One of the arguments from this list "s3_receiver" must be set
 
@@ -32,7 +35,8 @@ resource "volterra_global_log_receiver" "example" {
       tenant    = "acmecorp"
     }
 
-    bucket = "S3 Buket Name"
+    aws_region = "us-east-1"
+    bucket     = "S3 Buket Name"
   }
 }
 
@@ -88,6 +92,8 @@ tenant - (Optional) then tenant will hold the referred object's(e.g. route's) te
 S3 Receiver.
 
 `aws_cred` - (Required) Reference to AWS credentials for access to S3 bucket. See [ref](#ref) below for details.
+
+`aws_region` - (Required) Name for AWS Region. (`String`).
 
 `bucket` - (Required) S3 Bucket Name (`String`).
 

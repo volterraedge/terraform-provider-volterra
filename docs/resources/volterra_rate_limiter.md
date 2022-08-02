@@ -21,8 +21,8 @@ resource "volterra_rate_limiter" "example" {
   namespace = "staging"
 
   limits {
-    burst_multiplier = "burst_multiplier"
-    total_number     = "total_number"
+    burst_multiplier = "1"
+    total_number     = "1"
     unit             = "unit"
   }
 }

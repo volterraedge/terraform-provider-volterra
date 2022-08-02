@@ -1049,6 +1049,11 @@ func resourceVolterraRoute() *schema.Resource {
 							},
 						},
 
+						"skip_lb_override": {
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+
 						"waf_type": {
 
 							Type:     schema.TypeSet,
@@ -2478,6 +2483,10 @@ func resourceVolterraRouteCreate(d *schema.ResourceData, meta interface{}) error
 
 				}
 
+			}
+
+			if w, ok := routesMapStrToI["skip_lb_override"]; ok && !isIntfNil(w) {
+				routes[i].SkipLbOverride = w.(bool)
 			}
 
 			if v, ok := routesMapStrToI["waf_type"]; ok && !isIntfNil(v) {
@@ -3982,6 +3991,10 @@ func resourceVolterraRouteUpdate(d *schema.ResourceData, meta interface{}) error
 
 				}
 
+			}
+
+			if w, ok := routesMapStrToI["skip_lb_override"]; ok && !isIntfNil(w) {
+				routes[i].SkipLbOverride = w.(bool)
 			}
 
 			if v, ok := routesMapStrToI["waf_type"]; ok && !isIntfNil(v) {

@@ -22,9 +22,9 @@ resource "volterra_container_registry" "example" {
 
   password {
     blindfold_secret_info_internal {
-      decryption_provider = "decryption_provider"
+      decryption_provider = "value"
       location            = "string:///U2VjcmV0SW5mb3JtYXRpb24="
-      store_provider      = "store_provider"
+      store_provider      = "value"
     }
 
     secret_encoding_type = "secret_encoding_type"
@@ -32,9 +32,9 @@ resource "volterra_container_registry" "example" {
     // One of the arguments from this list "blindfold_secret_info vault_secret_info clear_secret_info wingman_secret_info" must be set
 
     blindfold_secret_info {
-      decryption_provider = "decryption_provider"
+      decryption_provider = "value"
       location            = "string:///U2VjcmV0SW5mb3JtYXRpb24="
-      store_provider      = "store_provider"
+      store_provider      = "value"
     }
   }
 

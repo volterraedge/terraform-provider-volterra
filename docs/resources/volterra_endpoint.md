@@ -86,13 +86,13 @@ tenant - (Optional) then tenant will hold the referred object's(e.g. route's) te
 
 `discovery_type` - (Required) Specifies whether the discovery is from Kubernetes or Consul cluster (`String`).
 
-`service_name` - (Optional) If namespace is not specified, then discovery is done in "default" namespace. (`String`).
+`service_name` - (Optional) discovery objects of the site. (`String`).
 
-`service_selector` - (Optional) Labels of the service to discover. See [Service Selector ](#service-selector) below for details.
+`service_selector` - (Optional) discovery has to happen. This implicit label is added to service_selector. See [Service Selector ](#service-selector) below for details.
 
 ### Service Selector
 
-Labels of the service to discover.
+discovery has to happen. This implicit label is added to service_selector.
 
 `expressions` - (Required) expressions contains the kubernetes style label expression for selections. (`String`).
 

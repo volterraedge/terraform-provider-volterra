@@ -22,18 +22,33 @@ resource "volterra_log_receiver" "example" {
 
   // One of the arguments from this list "syslog data_dog splunk" must be set
 
-  syslog {
-    // One of the arguments from this list "syslog_rfc3164 syslog_rfc5424" must be set
-    syslog_rfc5424 = "500"
+  splunk {
+    // One of the arguments from this list "splunk_server_name splunk_server_ip splunk_server_tls" must be set
 
-    // One of the arguments from this list "udp_server tcp_server tls_server" must be set
-
-    udp_server {
-      port        = "514"
+    splunk_server_name {
+      port        = "3000"
       server_name = "server.example.com"
     }
+
+    splunk_hec_token {
+      blindfold_secret_info_internal {
+        decryption_provider = "value"
+        location            = "string:///U2VjcmV0SW5mb3JtYXRpb24="
+        store_provider      = "value"
+      }
+
+      secret_encoding_type = "secret_encoding_type"
+
+      // One of the arguments from this list "blindfold_secret_info vault_secret_info clear_secret_info wingman_secret_info" must be set
+
+      blindfold_secret_info {
+        decryption_provider = "value"
+        location            = "string:///U2VjcmV0SW5mb3JtYXRpb24="
+        store_provider      = "value"
+      }
+    }
   }
-  // One of the arguments from this list "log_receiver_sites site_local" must be set
+  // One of the arguments from this list "site_local log_receiver_sites" must be set
   site_local = true
 }
 

@@ -129,6 +129,11 @@ func resourceVolterraGlobalLogReceiver() *schema.Resource {
 							},
 						},
 
+						"aws_region": {
+							Type:     schema.TypeString,
+							Optional: true,
+						},
+
 						"bucket": {
 							Type:     schema.TypeString,
 							Optional: true,
@@ -292,6 +297,12 @@ func resourceVolterraGlobalLogReceiverCreate(d *schema.ResourceData, meta interf
 						awsCredInt.Tenant = val.(string)
 					}
 				}
+
+			}
+
+			if v, ok := cs["aws_region"]; ok && !isIntfNil(v) {
+
+				receiverInt.S3Receiver.AwsRegion = v.(string)
 
 			}
 
@@ -498,6 +509,12 @@ func resourceVolterraGlobalLogReceiverUpdate(d *schema.ResourceData, meta interf
 						awsCredInt.Tenant = val.(string)
 					}
 				}
+
+			}
+
+			if v, ok := cs["aws_region"]; ok && !isIntfNil(v) {
+
+				receiverInt.S3Receiver.AwsRegion = v.(string)
 
 			}
 

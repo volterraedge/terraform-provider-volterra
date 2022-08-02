@@ -21,8 +21,15 @@ resource "volterra_aws_vpc_site" "example" {
   namespace  = "staging"
   aws_region = ["us-east-1"]
 
-  // One of the arguments from this list "default_blocked_services blocked_services" must be set
-  default_blocked_services = true
+  // One of the arguments from this list "blocked_services default_blocked_services" must be set
+
+  blocked_services {
+    blocked_sevice {
+      // One of the arguments from this list "web_user_interface dns ssh" must be set
+      ssh          = true
+      network_type = "network_type"
+    }
+  }
 
   // One of the arguments from this list "aws_cred" must be set
 
@@ -31,15 +38,17 @@ resource "volterra_aws_vpc_site" "example" {
     namespace = "staging"
     tenant    = "acmecorp"
   }
-  instance_type = ["a1.xlarge"]
+  // One of the arguments from this list "direct_connect_disabled direct_connect_enabled" must be set
+  direct_connect_disabled = true
+  instance_type           = ["a1.xlarge"]
   // One of the arguments from this list "logs_streaming_disabled log_receiver" must be set
   logs_streaming_disabled = true
 
-  // One of the arguments from this list "ingress_egress_gw voltstack_cluster ingress_gw" must be set
+  // One of the arguments from this list "voltstack_cluster ingress_gw ingress_egress_gw" must be set
 
   ingress_gw {
     allowed_vip_port {
-      // One of the arguments from this list "use_http_port use_https_port use_http_https_port custom_ports" must be set
+      // One of the arguments from this list "use_http_https_port custom_ports use_http_port use_https_port" must be set
       use_http_https_port = true
     }
 
@@ -51,11 +60,7 @@ resource "volterra_aws_vpc_site" "example" {
 
       local_subnet {
         // One of the arguments from this list "subnet_param existing_subnet_id" must be set
-
-        subnet_param {
-          ipv4 = "10.1.2.0/24"
-          ipv6 = "1234:568:abcd:9100::/64"
-        }
+        existing_subnet_id = "subnet-12345678901234567"
       }
     }
 
@@ -64,8 +69,8 @@ resource "volterra_aws_vpc_site" "example" {
       no_local_control_plane = true
     }
   }
-  // One of the arguments from this list "total_nodes no_worker_nodes nodes_per_az" must be set
-  total_nodes = "1"
+  // One of the arguments from this list "nodes_per_az total_nodes no_worker_nodes" must be set
+  nodes_per_az = "2"
 }
 
 ```
@@ -100,6 +105,10 @@ Argument Reference
 `coordinates` - (Optional) Site longitude and latitude co-ordinates. See [Coordinates ](#coordinates) below for details.
 
 `aws_cred` - (Optional) Reference to AWS credentials for automatic deployment. See [ref](#ref) below for details.
+
+`direct_connect_disabled` - (Optional) Direct Connect feature is disabled (bool).
+
+`direct_connect_enabled` - (Optional) Direct Connect feature is enabled. See [Direct Connect Enabled ](#direct-connect-enabled) below for details.
 
 `disk_size` - (Optional) Disk size to be used for this instance in GiB. 80 is 80 GiB (`Int`).
 
@@ -297,6 +306,20 @@ Use standard storage class configured as AWS EBS.
 
 Will assign latest available SW version.
 
+### Direct Connect Enabled
+
+Direct Connect feature is enabled.
+
+`cloud_aggregated_prefix` - (Optional) Aggregated prefix from cloud to be advertised for DC side (`String`).
+
+`dc_connect_aggregated_prefix` - (Optional) Aggregated prefix from direct connect to be advertised for Cloud side (`String`).
+
+`hosted_vifs` - (Optional) and automatically associate provided hosted VIF and also setup BGP Peering.. See [Hosted Vifs ](#hosted-vifs) below for details.
+
+`manual_gw` - (Optional) and a user associate AWS DirectConnect Gateway with it. (bool).
+
+`standard_vifs` - (Optional) and a user associate VIF to the DirectConnect gateway and setup BGP Peering. (bool).
+
 ### Disable Forward Proxy
 
 Forward Proxy is disabled for this connector.
@@ -368,6 +391,12 @@ Global network connections.
 List of global network connections.
 
 `global_network_connections` - (Required) Global network connections. See [Global Network Connections ](#global-network-connections) below for details.
+
+### Hosted Vifs
+
+and automatically associate provided hosted VIF and also setup BGP Peering..
+
+`vifs` - (Optional) VIFs (`String`).
 
 ### Ingress Egress Gw
 
@@ -470,6 +499,10 @@ Enable/Disable site local control plane.
 `default_local_control_plane` - (Optional) Enable Site Local Control Plane (bool).
 
 `no_local_control_plane` - (Optional) Disable Site Local Control Plane (bool).
+
+### Manual Gw
+
+and a user associate AWS DirectConnect Gateway with it..
 
 ### New Vpc
 
@@ -626,6 +659,10 @@ creating ipsec between two sites which are part of the site mesh group.
 ### Ssh
 
 Matches ssh port 22.
+
+### Standard Vifs
+
+and a user associate VIF to the DirectConnect gateway and setup BGP Peering..
 
 ### Static Route List
 

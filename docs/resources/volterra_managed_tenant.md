@@ -19,6 +19,9 @@ Example Usage
 resource "volterra_managed_tenant" "example" {
   name      = "acmecorp-web"
   namespace = "staging"
+
+  // One of the arguments from this list "tenant_id all_tenants tenant_regex new_tenant_info" must be set
+  tenant_id = "company-s4543dsa"
 }
 
 ```
@@ -46,9 +49,35 @@ Argument Reference
 
 `all_tenants` - (Optional) Internal option only. (bool).
 
+`new_tenant_info` - (Optional) Please contact support for more info.. See [New Tenant Info ](#new-tenant-info) below for details.
+
 `tenant_id` - (Optional) NOTE: this is the name of the tenant configuration obj. not UID. (`String`).
 
 `tenant_regex` - (Optional) Internal option only. (`String`).
+
+### Billing Address
+
+Billing Address for this tenant account.
+
+`address1` - (Optional) address line 1 (`String`).
+
+`address2` - (Optional) address line 2 (`String`).
+
+`city` - (Optional) city / town of the contact (`String`).
+
+`contact_type` - (Optional) type of the contact (snail mail, billing) (`String`).
+
+`country` - (Optional) country of contact (e.g. USA). refer to https://en.wikipedia.org/wiki/ISO_3166-1, column alpha-2 (`String`).
+
+`county` - (Optional) county (optional, for countries where they have counties) (`String`).
+
+`phone_number` - (Optional) phone number of the contact (`String`).
+
+`state` - (Optional) state (optional, for countries where they have states) (`String`).
+
+`state_code` - (Optional) state code (optional, for countries where they have states) (`String`).
+
+`zip_code` - (Optional) zip or postal code (`String`).
 
 ### Groups
 
@@ -57,6 +86,20 @@ List of local user group association to user groups in the managed tenant specif
 `group` - (Optional) User should be member of this group to gain access into managed tenant.. See [ref](#ref) below for details.
 
 `managed_tenant_groups` - (Optional) access managed tenant, underlying roles from managed tenant will be applied to user. (`String`).
+
+### New Tenant Info
+
+Please contact support for more info..
+
+`billing_address` - (Optional) Billing Address for this tenant account. See [Billing Address ](#billing-address) below for details.
+
+`cname` - (Required) A unique tenant id will auto generated based on this value. (`String`).
+
+`company_name` - (Required) Name of the company or organization. (`String`).
+
+`tenant_owner_info` - (Optional) Provide user information of the tenant owner.. See [Tenant Owner Info ](#tenant-owner-info) below for details.
+
+`usage_plan_name` - (Required) Access this link for more info: https://www.f5.com/cloud/pricing (`String`).
 
 ### Ref
 
@@ -67,6 +110,18 @@ name - (Required) then name will hold the referred object's(e.g. route's) name. 
 namespace - (Optional) then namespace will hold the referred object's(e.g. route's) namespace. (String).
 
 tenant - (Optional) then tenant will hold the referred object's(e.g. route's) tenant. (String).
+
+### Tenant Owner Info
+
+Provide user information of the tenant owner..
+
+`contact_number` - (Optional) Contact number of the user in ITU E.164 format [+][country code][subscriber number including area code](`String`).
+
+`email` - (Required) Access details for the new tenant will be sent to this email address. (`String`).
+
+`first_name` - (Required) First name of the user (Tenant Owner) (`String`).
+
+`last_name` - (Required) Last name of the user (Tenant Owner) (`String`).
 
 Attribute Reference
 -------------------

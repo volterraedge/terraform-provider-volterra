@@ -1584,6 +1584,16 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 							Optional: true,
 						},
 
+						"actions": {
+
+							Type: schema.TypeList,
+
+							Optional: true,
+							Elem: &schema.Schema{
+								Type: schema.TypeString,
+							},
+						},
+
 						"as_number": {
 
 							Type:     schema.TypeInt,
@@ -1639,6 +1649,12 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 						},
 
 						"ip_prefix": {
+
+							Type:     schema.TypeString,
+							Optional: true,
+						},
+
+						"user_identifier": {
 
 							Type:     schema.TypeString,
 							Optional: true,
@@ -2038,6 +2054,104 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 										Optional: true,
 									},
 
+									"disable_mobile_sdk": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+
+									"mobile_sdk_config": {
+
+										Type:     schema.TypeSet,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"mobile_identifier": {
+
+													Type:     schema.TypeSet,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"headers": {
+
+																Type:     schema.TypeList,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"check_not_present": {
+
+																			Type:     schema.TypeBool,
+																			Optional: true,
+																		},
+
+																		"check_present": {
+
+																			Type:     schema.TypeBool,
+																			Optional: true,
+																		},
+
+																		"item": {
+
+																			Type:     schema.TypeSet,
+																			Optional: true,
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{
+
+																					"exact_values": {
+
+																						Type: schema.TypeList,
+
+																						Optional: true,
+																						Elem: &schema.Schema{
+																							Type: schema.TypeString,
+																						},
+																					},
+
+																					"regex_values": {
+
+																						Type: schema.TypeList,
+
+																						Optional: true,
+																						Elem: &schema.Schema{
+																							Type: schema.TypeString,
+																						},
+																					},
+
+																					"transformers": {
+
+																						Type: schema.TypeList,
+
+																						Optional: true,
+																						Elem: &schema.Schema{
+																							Type: schema.TypeString,
+																						},
+																					},
+																				},
+																			},
+																		},
+
+																		"name": {
+																			Type:     schema.TypeString,
+																			Optional: true,
+																		},
+																	},
+																},
+															},
+														},
+													},
+												},
+
+												"reload_header_name": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+											},
+										},
+									},
+
 									"protected_app_endpoints": {
 
 										Type:     schema.TypeList,
@@ -2129,6 +2243,78 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 																		},
 																	},
 																},
+															},
+
+															"headers": {
+
+																Type:     schema.TypeList,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"check_not_present": {
+
+																			Type:     schema.TypeBool,
+																			Optional: true,
+																		},
+
+																		"check_present": {
+
+																			Type:     schema.TypeBool,
+																			Optional: true,
+																		},
+
+																		"item": {
+
+																			Type:     schema.TypeSet,
+																			Optional: true,
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{
+
+																					"exact_values": {
+
+																						Type: schema.TypeList,
+
+																						Optional: true,
+																						Elem: &schema.Schema{
+																							Type: schema.TypeString,
+																						},
+																					},
+
+																					"regex_values": {
+
+																						Type: schema.TypeList,
+
+																						Optional: true,
+																						Elem: &schema.Schema{
+																							Type: schema.TypeString,
+																						},
+																					},
+
+																					"transformers": {
+
+																						Type: schema.TypeList,
+
+																						Optional: true,
+																						Elem: &schema.Schema{
+																							Type: schema.TypeString,
+																						},
+																					},
+																				},
+																			},
+																		},
+
+																		"name": {
+																			Type:     schema.TypeString,
+																			Optional: true,
+																		},
+																	},
+																},
+															},
+
+															"mobile_identifier": {
+																Type:     schema.TypeString,
+																Optional: true,
 															},
 														},
 													},
@@ -6810,6 +6996,32 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 				Optional: true,
 			},
 
+			"disable_trust_client_ip_headers": {
+
+				Type:     schema.TypeBool,
+				Optional: true,
+			},
+
+			"enable_trust_client_ip_headers": {
+
+				Type:     schema.TypeSet,
+				Optional: true,
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+
+						"client_ip_headers": {
+
+							Type: schema.TypeList,
+
+							Optional: true,
+							Elem: &schema.Schema{
+								Type: schema.TypeString,
+							},
+						},
+					},
+				},
+			},
+
 			"trusted_clients": {
 
 				Type:     schema.TypeList,
@@ -6833,6 +7045,16 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 
 							Type:     schema.TypeBool,
 							Optional: true,
+						},
+
+						"actions": {
+
+							Type: schema.TypeList,
+
+							Optional: true,
+							Elem: &schema.Schema{
+								Type: schema.TypeString,
+							},
 						},
 
 						"as_number": {
@@ -6890,6 +7112,12 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 						},
 
 						"ip_prefix": {
+
+							Type:     schema.TypeString,
+							Optional: true,
+						},
+
+						"user_identifier": {
 
 							Type:     schema.TypeString,
 							Optional: true,
@@ -9213,6 +9441,16 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 
 			}
 
+			if v, ok := blockedClientsMapStrToI["actions"]; ok && !isIntfNil(v) {
+
+				actionsList := []ves_io_schema_views_http_loadbalancer.ClientSrcRuleAction{}
+				for _, j := range v.([]interface{}) {
+					actionsList = append(actionsList, ves_io_schema_views_http_loadbalancer.ClientSrcRuleAction(ves_io_schema_views_http_loadbalancer.ClientSrcRuleAction_value[j.(string)]))
+				}
+				blockedClients[i].Actions = actionsList
+
+			}
+
 			clientSourceChoiceTypeFound := false
 
 			if v, ok := blockedClientsMapStrToI["as_number"]; ok && !isIntfNil(v) && !clientSourceChoiceTypeFound {
@@ -9305,6 +9543,17 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 				blockedClients[i].ClientSourceChoice = clientSourceChoiceInt
 
 				clientSourceChoiceInt.IpPrefix = v.(string)
+
+			}
+
+			if v, ok := blockedClientsMapStrToI["user_identifier"]; ok && !isIntfNil(v) && !clientSourceChoiceTypeFound {
+
+				clientSourceChoiceTypeFound = true
+				clientSourceChoiceInt := &ves_io_schema_views_http_loadbalancer.SimpleClientSrcRule_UserIdentifier{}
+
+				blockedClients[i].ClientSourceChoice = clientSourceChoiceInt
+
+				clientSourceChoiceInt.UserIdentifier = v.(string)
 
 			}
 
@@ -9892,6 +10141,141 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 						policy.JsDownloadPath = w.(string)
 					}
 
+					mobileSdkChoiceTypeFound := false
+
+					if v, ok := policyMapStrToI["disable_mobile_sdk"]; ok && !isIntfNil(v) && !mobileSdkChoiceTypeFound {
+
+						mobileSdkChoiceTypeFound = true
+
+						if v.(bool) {
+							mobileSdkChoiceInt := &ves_io_schema_views_http_loadbalancer.ShapeBotDefensePolicyType_DisableMobileSdk{}
+							mobileSdkChoiceInt.DisableMobileSdk = &ves_io_schema.Empty{}
+							policy.MobileSdkChoice = mobileSdkChoiceInt
+						}
+
+					}
+
+					if v, ok := policyMapStrToI["mobile_sdk_config"]; ok && !isIntfNil(v) && !mobileSdkChoiceTypeFound {
+
+						mobileSdkChoiceTypeFound = true
+						mobileSdkChoiceInt := &ves_io_schema_views_http_loadbalancer.ShapeBotDefensePolicyType_MobileSdkConfig{}
+						mobileSdkChoiceInt.MobileSdkConfig = &ves_io_schema_views_http_loadbalancer.MobileSDKConfigType{}
+						policy.MobileSdkChoice = mobileSdkChoiceInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["mobile_identifier"]; ok && !isIntfNil(v) {
+
+								sl := v.(*schema.Set).List()
+								mobileIdentifier := &ves_io_schema_views_http_loadbalancer.MobileTrafficIdentifierType{}
+								mobileSdkChoiceInt.MobileSdkConfig.MobileIdentifier = mobileIdentifier
+								for _, set := range sl {
+									mobileIdentifierMapStrToI := set.(map[string]interface{})
+
+									if v, ok := mobileIdentifierMapStrToI["headers"]; ok && !isIntfNil(v) {
+
+										sl := v.([]interface{})
+										headers := make([]*ves_io_schema_policy.HeaderMatcherTypeBasic, len(sl))
+										mobileIdentifier.Headers = headers
+										for i, set := range sl {
+											headers[i] = &ves_io_schema_policy.HeaderMatcherTypeBasic{}
+											headersMapStrToI := set.(map[string]interface{})
+
+											matchTypeFound := false
+
+											if v, ok := headersMapStrToI["check_not_present"]; ok && !isIntfNil(v) && !matchTypeFound {
+
+												matchTypeFound = true
+
+												if v.(bool) {
+													matchInt := &ves_io_schema_policy.HeaderMatcherTypeBasic_CheckNotPresent{}
+													matchInt.CheckNotPresent = &ves_io_schema.Empty{}
+													headers[i].Match = matchInt
+												}
+
+											}
+
+											if v, ok := headersMapStrToI["check_present"]; ok && !isIntfNil(v) && !matchTypeFound {
+
+												matchTypeFound = true
+
+												if v.(bool) {
+													matchInt := &ves_io_schema_policy.HeaderMatcherTypeBasic_CheckPresent{}
+													matchInt.CheckPresent = &ves_io_schema.Empty{}
+													headers[i].Match = matchInt
+												}
+
+											}
+
+											if v, ok := headersMapStrToI["item"]; ok && !isIntfNil(v) && !matchTypeFound {
+
+												matchTypeFound = true
+												matchInt := &ves_io_schema_policy.HeaderMatcherTypeBasic_Item{}
+												matchInt.Item = &ves_io_schema_policy.MatcherType{}
+												headers[i].Match = matchInt
+
+												sl := v.(*schema.Set).List()
+												for _, set := range sl {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["exact_values"]; ok && !isIntfNil(v) {
+
+														ls := make([]string, len(v.([]interface{})))
+														for i, v := range v.([]interface{}) {
+															ls[i] = v.(string)
+														}
+														matchInt.Item.ExactValues = ls
+
+													}
+
+													if v, ok := cs["regex_values"]; ok && !isIntfNil(v) {
+
+														ls := make([]string, len(v.([]interface{})))
+														for i, v := range v.([]interface{}) {
+															ls[i] = v.(string)
+														}
+														matchInt.Item.RegexValues = ls
+
+													}
+
+													if v, ok := cs["transformers"]; ok && !isIntfNil(v) {
+
+														transformersList := []ves_io_schema_policy.Transformer{}
+														for _, j := range v.([]interface{}) {
+															transformersList = append(transformersList, ves_io_schema_policy.Transformer(ves_io_schema_policy.Transformer_value[j.(string)]))
+														}
+														matchInt.Item.Transformers = transformersList
+
+													}
+
+												}
+
+											}
+
+											if w, ok := headersMapStrToI["name"]; ok && !isIntfNil(w) {
+												headers[i].Name = w.(string)
+											}
+
+										}
+
+									}
+
+								}
+
+							}
+
+							if v, ok := cs["reload_header_name"]; ok && !isIntfNil(v) {
+
+								mobileSdkChoiceInt.MobileSdkConfig.ReloadHeaderName = v.(string)
+
+							}
+
+						}
+
+					}
+
 					if v, ok := policyMapStrToI["protected_app_endpoints"]; ok && !isIntfNil(v) {
 
 						sl := v.([]interface{})
@@ -10022,6 +10406,100 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 											}
 
 										}
+
+									}
+
+									if v, ok := cs["headers"]; ok && !isIntfNil(v) {
+
+										sl := v.([]interface{})
+										headers := make([]*ves_io_schema_policy.HeaderMatcherTypeBasic, len(sl))
+										appTrafficTypeChoiceInt.WebMobile.Headers = headers
+										for i, set := range sl {
+											headers[i] = &ves_io_schema_policy.HeaderMatcherTypeBasic{}
+											headersMapStrToI := set.(map[string]interface{})
+
+											matchTypeFound := false
+
+											if v, ok := headersMapStrToI["check_not_present"]; ok && !isIntfNil(v) && !matchTypeFound {
+
+												matchTypeFound = true
+
+												if v.(bool) {
+													matchInt := &ves_io_schema_policy.HeaderMatcherTypeBasic_CheckNotPresent{}
+													matchInt.CheckNotPresent = &ves_io_schema.Empty{}
+													headers[i].Match = matchInt
+												}
+
+											}
+
+											if v, ok := headersMapStrToI["check_present"]; ok && !isIntfNil(v) && !matchTypeFound {
+
+												matchTypeFound = true
+
+												if v.(bool) {
+													matchInt := &ves_io_schema_policy.HeaderMatcherTypeBasic_CheckPresent{}
+													matchInt.CheckPresent = &ves_io_schema.Empty{}
+													headers[i].Match = matchInt
+												}
+
+											}
+
+											if v, ok := headersMapStrToI["item"]; ok && !isIntfNil(v) && !matchTypeFound {
+
+												matchTypeFound = true
+												matchInt := &ves_io_schema_policy.HeaderMatcherTypeBasic_Item{}
+												matchInt.Item = &ves_io_schema_policy.MatcherType{}
+												headers[i].Match = matchInt
+
+												sl := v.(*schema.Set).List()
+												for _, set := range sl {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["exact_values"]; ok && !isIntfNil(v) {
+
+														ls := make([]string, len(v.([]interface{})))
+														for i, v := range v.([]interface{}) {
+															ls[i] = v.(string)
+														}
+														matchInt.Item.ExactValues = ls
+
+													}
+
+													if v, ok := cs["regex_values"]; ok && !isIntfNil(v) {
+
+														ls := make([]string, len(v.([]interface{})))
+														for i, v := range v.([]interface{}) {
+															ls[i] = v.(string)
+														}
+														matchInt.Item.RegexValues = ls
+
+													}
+
+													if v, ok := cs["transformers"]; ok && !isIntfNil(v) {
+
+														transformersList := []ves_io_schema_policy.Transformer{}
+														for _, j := range v.([]interface{}) {
+															transformersList = append(transformersList, ves_io_schema_policy.Transformer(ves_io_schema_policy.Transformer_value[j.(string)]))
+														}
+														matchInt.Item.Transformers = transformersList
+
+													}
+
+												}
+
+											}
+
+											if w, ok := headersMapStrToI["name"]; ok && !isIntfNil(w) {
+												headers[i].Name = w.(string)
+											}
+
+										}
+
+									}
+
+									if v, ok := cs["mobile_identifier"]; ok && !isIntfNil(v) {
+
+										appTrafficTypeChoiceInt.WebMobile.MobileIdentifier = ves_io_schema_views_http_loadbalancer.MobileIdentifier(ves_io_schema_views_http_loadbalancer.MobileIdentifier_value[v.(string)])
 
 									}
 
@@ -16410,6 +16888,47 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 
 	}
 
+	//trust_client_ip_headers_choice
+
+	trustClientIpHeadersChoiceTypeFound := false
+
+	if v, ok := d.GetOk("disable_trust_client_ip_headers"); ok && !trustClientIpHeadersChoiceTypeFound {
+
+		trustClientIpHeadersChoiceTypeFound = true
+
+		if v.(bool) {
+			trustClientIpHeadersChoiceInt := &ves_io_schema_views_http_loadbalancer.CreateSpecType_DisableTrustClientIpHeaders{}
+			trustClientIpHeadersChoiceInt.DisableTrustClientIpHeaders = &ves_io_schema.Empty{}
+			createSpec.TrustClientIpHeadersChoice = trustClientIpHeadersChoiceInt
+		}
+
+	}
+
+	if v, ok := d.GetOk("enable_trust_client_ip_headers"); ok && !trustClientIpHeadersChoiceTypeFound {
+
+		trustClientIpHeadersChoiceTypeFound = true
+		trustClientIpHeadersChoiceInt := &ves_io_schema_views_http_loadbalancer.CreateSpecType_EnableTrustClientIpHeaders{}
+		trustClientIpHeadersChoiceInt.EnableTrustClientIpHeaders = &ves_io_schema_virtual_host.ClientIPHeaders{}
+		createSpec.TrustClientIpHeadersChoice = trustClientIpHeadersChoiceInt
+
+		sl := v.(*schema.Set).List()
+		for _, set := range sl {
+			cs := set.(map[string]interface{})
+
+			if v, ok := cs["client_ip_headers"]; ok && !isIntfNil(v) {
+
+				ls := make([]string, len(v.([]interface{})))
+				for i, v := range v.([]interface{}) {
+					ls[i] = v.(string)
+				}
+				trustClientIpHeadersChoiceInt.EnableTrustClientIpHeaders.ClientIpHeaders = ls
+
+			}
+
+		}
+
+	}
+
 	//trusted_clients
 	if v, ok := d.GetOk("trusted_clients"); ok && !isIntfNil(v) {
 
@@ -16455,6 +16974,16 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 					actionChoiceInt.WafSkipProcessing = &ves_io_schema.Empty{}
 					trustedClients[i].ActionChoice = actionChoiceInt
 				}
+
+			}
+
+			if v, ok := trustedClientsMapStrToI["actions"]; ok && !isIntfNil(v) {
+
+				actionsList := []ves_io_schema_views_http_loadbalancer.ClientSrcRuleAction{}
+				for _, j := range v.([]interface{}) {
+					actionsList = append(actionsList, ves_io_schema_views_http_loadbalancer.ClientSrcRuleAction(ves_io_schema_views_http_loadbalancer.ClientSrcRuleAction_value[j.(string)]))
+				}
+				trustedClients[i].Actions = actionsList
 
 			}
 
@@ -16550,6 +17079,17 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 				trustedClients[i].ClientSourceChoice = clientSourceChoiceInt
 
 				clientSourceChoiceInt.IpPrefix = v.(string)
+
+			}
+
+			if v, ok := trustedClientsMapStrToI["user_identifier"]; ok && !isIntfNil(v) && !clientSourceChoiceTypeFound {
+
+				clientSourceChoiceTypeFound = true
+				clientSourceChoiceInt := &ves_io_schema_views_http_loadbalancer.SimpleClientSrcRule_UserIdentifier{}
+
+				trustedClients[i].ClientSourceChoice = clientSourceChoiceInt
+
+				clientSourceChoiceInt.UserIdentifier = v.(string)
 
 			}
 
@@ -19006,6 +19546,16 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 
 			}
 
+			if v, ok := blockedClientsMapStrToI["actions"]; ok && !isIntfNil(v) {
+
+				actionsList := []ves_io_schema_views_http_loadbalancer.ClientSrcRuleAction{}
+				for _, j := range v.([]interface{}) {
+					actionsList = append(actionsList, ves_io_schema_views_http_loadbalancer.ClientSrcRuleAction(ves_io_schema_views_http_loadbalancer.ClientSrcRuleAction_value[j.(string)]))
+				}
+				blockedClients[i].Actions = actionsList
+
+			}
+
 			clientSourceChoiceTypeFound := false
 
 			if v, ok := blockedClientsMapStrToI["as_number"]; ok && !isIntfNil(v) && !clientSourceChoiceTypeFound {
@@ -19098,6 +19648,17 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 				blockedClients[i].ClientSourceChoice = clientSourceChoiceInt
 
 				clientSourceChoiceInt.IpPrefix = v.(string)
+
+			}
+
+			if v, ok := blockedClientsMapStrToI["user_identifier"]; ok && !isIntfNil(v) && !clientSourceChoiceTypeFound {
+
+				clientSourceChoiceTypeFound = true
+				clientSourceChoiceInt := &ves_io_schema_views_http_loadbalancer.SimpleClientSrcRule_UserIdentifier{}
+
+				blockedClients[i].ClientSourceChoice = clientSourceChoiceInt
+
+				clientSourceChoiceInt.UserIdentifier = v.(string)
 
 			}
 
@@ -19683,6 +20244,141 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 						policy.JsDownloadPath = w.(string)
 					}
 
+					mobileSdkChoiceTypeFound := false
+
+					if v, ok := policyMapStrToI["disable_mobile_sdk"]; ok && !isIntfNil(v) && !mobileSdkChoiceTypeFound {
+
+						mobileSdkChoiceTypeFound = true
+
+						if v.(bool) {
+							mobileSdkChoiceInt := &ves_io_schema_views_http_loadbalancer.ShapeBotDefensePolicyType_DisableMobileSdk{}
+							mobileSdkChoiceInt.DisableMobileSdk = &ves_io_schema.Empty{}
+							policy.MobileSdkChoice = mobileSdkChoiceInt
+						}
+
+					}
+
+					if v, ok := policyMapStrToI["mobile_sdk_config"]; ok && !isIntfNil(v) && !mobileSdkChoiceTypeFound {
+
+						mobileSdkChoiceTypeFound = true
+						mobileSdkChoiceInt := &ves_io_schema_views_http_loadbalancer.ShapeBotDefensePolicyType_MobileSdkConfig{}
+						mobileSdkChoiceInt.MobileSdkConfig = &ves_io_schema_views_http_loadbalancer.MobileSDKConfigType{}
+						policy.MobileSdkChoice = mobileSdkChoiceInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["mobile_identifier"]; ok && !isIntfNil(v) {
+
+								sl := v.(*schema.Set).List()
+								mobileIdentifier := &ves_io_schema_views_http_loadbalancer.MobileTrafficIdentifierType{}
+								mobileSdkChoiceInt.MobileSdkConfig.MobileIdentifier = mobileIdentifier
+								for _, set := range sl {
+									mobileIdentifierMapStrToI := set.(map[string]interface{})
+
+									if v, ok := mobileIdentifierMapStrToI["headers"]; ok && !isIntfNil(v) {
+
+										sl := v.([]interface{})
+										headers := make([]*ves_io_schema_policy.HeaderMatcherTypeBasic, len(sl))
+										mobileIdentifier.Headers = headers
+										for i, set := range sl {
+											headers[i] = &ves_io_schema_policy.HeaderMatcherTypeBasic{}
+											headersMapStrToI := set.(map[string]interface{})
+
+											matchTypeFound := false
+
+											if v, ok := headersMapStrToI["check_not_present"]; ok && !isIntfNil(v) && !matchTypeFound {
+
+												matchTypeFound = true
+
+												if v.(bool) {
+													matchInt := &ves_io_schema_policy.HeaderMatcherTypeBasic_CheckNotPresent{}
+													matchInt.CheckNotPresent = &ves_io_schema.Empty{}
+													headers[i].Match = matchInt
+												}
+
+											}
+
+											if v, ok := headersMapStrToI["check_present"]; ok && !isIntfNil(v) && !matchTypeFound {
+
+												matchTypeFound = true
+
+												if v.(bool) {
+													matchInt := &ves_io_schema_policy.HeaderMatcherTypeBasic_CheckPresent{}
+													matchInt.CheckPresent = &ves_io_schema.Empty{}
+													headers[i].Match = matchInt
+												}
+
+											}
+
+											if v, ok := headersMapStrToI["item"]; ok && !isIntfNil(v) && !matchTypeFound {
+
+												matchTypeFound = true
+												matchInt := &ves_io_schema_policy.HeaderMatcherTypeBasic_Item{}
+												matchInt.Item = &ves_io_schema_policy.MatcherType{}
+												headers[i].Match = matchInt
+
+												sl := v.(*schema.Set).List()
+												for _, set := range sl {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["exact_values"]; ok && !isIntfNil(v) {
+
+														ls := make([]string, len(v.([]interface{})))
+														for i, v := range v.([]interface{}) {
+															ls[i] = v.(string)
+														}
+														matchInt.Item.ExactValues = ls
+
+													}
+
+													if v, ok := cs["regex_values"]; ok && !isIntfNil(v) {
+
+														ls := make([]string, len(v.([]interface{})))
+														for i, v := range v.([]interface{}) {
+															ls[i] = v.(string)
+														}
+														matchInt.Item.RegexValues = ls
+
+													}
+
+													if v, ok := cs["transformers"]; ok && !isIntfNil(v) {
+
+														transformersList := []ves_io_schema_policy.Transformer{}
+														for _, j := range v.([]interface{}) {
+															transformersList = append(transformersList, ves_io_schema_policy.Transformer(ves_io_schema_policy.Transformer_value[j.(string)]))
+														}
+														matchInt.Item.Transformers = transformersList
+
+													}
+
+												}
+
+											}
+
+											if w, ok := headersMapStrToI["name"]; ok && !isIntfNil(w) {
+												headers[i].Name = w.(string)
+											}
+
+										}
+
+									}
+
+								}
+
+							}
+
+							if v, ok := cs["reload_header_name"]; ok && !isIntfNil(v) {
+
+								mobileSdkChoiceInt.MobileSdkConfig.ReloadHeaderName = v.(string)
+
+							}
+
+						}
+
+					}
+
 					if v, ok := policyMapStrToI["protected_app_endpoints"]; ok && !isIntfNil(v) {
 
 						sl := v.([]interface{})
@@ -19813,6 +20509,100 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 											}
 
 										}
+
+									}
+
+									if v, ok := cs["headers"]; ok && !isIntfNil(v) {
+
+										sl := v.([]interface{})
+										headers := make([]*ves_io_schema_policy.HeaderMatcherTypeBasic, len(sl))
+										appTrafficTypeChoiceInt.WebMobile.Headers = headers
+										for i, set := range sl {
+											headers[i] = &ves_io_schema_policy.HeaderMatcherTypeBasic{}
+											headersMapStrToI := set.(map[string]interface{})
+
+											matchTypeFound := false
+
+											if v, ok := headersMapStrToI["check_not_present"]; ok && !isIntfNil(v) && !matchTypeFound {
+
+												matchTypeFound = true
+
+												if v.(bool) {
+													matchInt := &ves_io_schema_policy.HeaderMatcherTypeBasic_CheckNotPresent{}
+													matchInt.CheckNotPresent = &ves_io_schema.Empty{}
+													headers[i].Match = matchInt
+												}
+
+											}
+
+											if v, ok := headersMapStrToI["check_present"]; ok && !isIntfNil(v) && !matchTypeFound {
+
+												matchTypeFound = true
+
+												if v.(bool) {
+													matchInt := &ves_io_schema_policy.HeaderMatcherTypeBasic_CheckPresent{}
+													matchInt.CheckPresent = &ves_io_schema.Empty{}
+													headers[i].Match = matchInt
+												}
+
+											}
+
+											if v, ok := headersMapStrToI["item"]; ok && !isIntfNil(v) && !matchTypeFound {
+
+												matchTypeFound = true
+												matchInt := &ves_io_schema_policy.HeaderMatcherTypeBasic_Item{}
+												matchInt.Item = &ves_io_schema_policy.MatcherType{}
+												headers[i].Match = matchInt
+
+												sl := v.(*schema.Set).List()
+												for _, set := range sl {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["exact_values"]; ok && !isIntfNil(v) {
+
+														ls := make([]string, len(v.([]interface{})))
+														for i, v := range v.([]interface{}) {
+															ls[i] = v.(string)
+														}
+														matchInt.Item.ExactValues = ls
+
+													}
+
+													if v, ok := cs["regex_values"]; ok && !isIntfNil(v) {
+
+														ls := make([]string, len(v.([]interface{})))
+														for i, v := range v.([]interface{}) {
+															ls[i] = v.(string)
+														}
+														matchInt.Item.RegexValues = ls
+
+													}
+
+													if v, ok := cs["transformers"]; ok && !isIntfNil(v) {
+
+														transformersList := []ves_io_schema_policy.Transformer{}
+														for _, j := range v.([]interface{}) {
+															transformersList = append(transformersList, ves_io_schema_policy.Transformer(ves_io_schema_policy.Transformer_value[j.(string)]))
+														}
+														matchInt.Item.Transformers = transformersList
+
+													}
+
+												}
+
+											}
+
+											if w, ok := headersMapStrToI["name"]; ok && !isIntfNil(w) {
+												headers[i].Name = w.(string)
+											}
+
+										}
+
+									}
+
+									if v, ok := cs["mobile_identifier"]; ok && !isIntfNil(v) {
+
+										appTrafficTypeChoiceInt.WebMobile.MobileIdentifier = ves_io_schema_views_http_loadbalancer.MobileIdentifier(ves_io_schema_views_http_loadbalancer.MobileIdentifier_value[v.(string)])
 
 									}
 
@@ -26179,6 +26969,45 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 
 	}
 
+	trustClientIpHeadersChoiceTypeFound := false
+
+	if v, ok := d.GetOk("disable_trust_client_ip_headers"); ok && !trustClientIpHeadersChoiceTypeFound {
+
+		trustClientIpHeadersChoiceTypeFound = true
+
+		if v.(bool) {
+			trustClientIpHeadersChoiceInt := &ves_io_schema_views_http_loadbalancer.ReplaceSpecType_DisableTrustClientIpHeaders{}
+			trustClientIpHeadersChoiceInt.DisableTrustClientIpHeaders = &ves_io_schema.Empty{}
+			updateSpec.TrustClientIpHeadersChoice = trustClientIpHeadersChoiceInt
+		}
+
+	}
+
+	if v, ok := d.GetOk("enable_trust_client_ip_headers"); ok && !trustClientIpHeadersChoiceTypeFound {
+
+		trustClientIpHeadersChoiceTypeFound = true
+		trustClientIpHeadersChoiceInt := &ves_io_schema_views_http_loadbalancer.ReplaceSpecType_EnableTrustClientIpHeaders{}
+		trustClientIpHeadersChoiceInt.EnableTrustClientIpHeaders = &ves_io_schema_virtual_host.ClientIPHeaders{}
+		updateSpec.TrustClientIpHeadersChoice = trustClientIpHeadersChoiceInt
+
+		sl := v.(*schema.Set).List()
+		for _, set := range sl {
+			cs := set.(map[string]interface{})
+
+			if v, ok := cs["client_ip_headers"]; ok && !isIntfNil(v) {
+
+				ls := make([]string, len(v.([]interface{})))
+				for i, v := range v.([]interface{}) {
+					ls[i] = v.(string)
+				}
+				trustClientIpHeadersChoiceInt.EnableTrustClientIpHeaders.ClientIpHeaders = ls
+
+			}
+
+		}
+
+	}
+
 	if v, ok := d.GetOk("trusted_clients"); ok && !isIntfNil(v) {
 
 		sl := v.([]interface{})
@@ -26223,6 +27052,16 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 					actionChoiceInt.WafSkipProcessing = &ves_io_schema.Empty{}
 					trustedClients[i].ActionChoice = actionChoiceInt
 				}
+
+			}
+
+			if v, ok := trustedClientsMapStrToI["actions"]; ok && !isIntfNil(v) {
+
+				actionsList := []ves_io_schema_views_http_loadbalancer.ClientSrcRuleAction{}
+				for _, j := range v.([]interface{}) {
+					actionsList = append(actionsList, ves_io_schema_views_http_loadbalancer.ClientSrcRuleAction(ves_io_schema_views_http_loadbalancer.ClientSrcRuleAction_value[j.(string)]))
+				}
+				trustedClients[i].Actions = actionsList
 
 			}
 
@@ -26318,6 +27157,17 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 				trustedClients[i].ClientSourceChoice = clientSourceChoiceInt
 
 				clientSourceChoiceInt.IpPrefix = v.(string)
+
+			}
+
+			if v, ok := trustedClientsMapStrToI["user_identifier"]; ok && !isIntfNil(v) && !clientSourceChoiceTypeFound {
+
+				clientSourceChoiceTypeFound = true
+				clientSourceChoiceInt := &ves_io_schema_views_http_loadbalancer.SimpleClientSrcRule_UserIdentifier{}
+
+				trustedClients[i].ClientSourceChoice = clientSourceChoiceInt
+
+				clientSourceChoiceInt.UserIdentifier = v.(string)
 
 			}
 

@@ -17,10 +17,8 @@ Example Usage
 
 ```hcl
 resource "volterra_site_mesh_group" "example" {
-  name        = "acmecorp-web"
-  namespace   = "staging"
-  tunnel_type = ["SITE_TO_SITE_TUNNEL_IPSEC"]
-  type        = ["mesh-1"]
+  name      = "acmecorp-web"
+  namespace = "staging"
 }
 
 ```
@@ -46,11 +44,33 @@ Argument Reference
 
 `hub` - (Optional) Hub must be empty when Site Mesh Group type is Hub or Full Mesh. See [ref](#ref) below for details.
 
-`tunnel_type` - (Required) Only tunnels of type IPSec are support currently. (`String`).
+`full_mesh` - (Optional) Full mesh of tunnels are created between all sites. See [Full Mesh ](#full-mesh) below for details.
 
-`type` - (Required) Type of Site to Site connectivity (Spoke, Hub or Full Mesh) (`String`).
+`hub_mesh` - (Optional) Mesh of Type Hub (bool).
+
+`spoke_mesh` - (Optional) Mesh of Type Spoke. See [Spoke Mesh ](#spoke-mesh) below for details.
+
+`tunnel_type` - (Optional) Only tunnels of type IPSec are support currently. (`String`).
+
+`type` - (Optional) Type of Site to Site connectivity (Spoke, Hub or Full Mesh) (`String`).
 
 `virtual_site` - (Optional) If 'Type' is Full Mesh, then it gives set of sites that are connected in full mesh.. See [ref](#ref) below for details.
+
+### Control And Data Plane Mesh
+
+and control plane peering across sites.
+
+### Data Plane Mesh
+
+Full Mesh of data plane tunnels across sites.
+
+### Full Mesh
+
+Full mesh of tunnels are created between all sites.
+
+`control_and_data_plane_mesh` - (Optional) and control plane peering across sites (bool).
+
+`data_plane_mesh` - (Optional) Full Mesh of data plane tunnels across sites (bool).
 
 ### Ref
 
@@ -61,6 +81,12 @@ name - (Required) then name will hold the referred object's(e.g. route's) name. 
 namespace - (Optional) then namespace will hold the referred object's(e.g. route's) namespace. (String).
 
 tenant - (Optional) then tenant will hold the referred object's(e.g. route's) tenant. (String).
+
+### Spoke Mesh
+
+Mesh of Type Spoke.
+
+`hub_mesh_group` - (Required) Spoke sites will connect to all the member sites of Hub Site Mesh Group. See [ref](#ref) below for details.
 
 Attribute Reference
 -------------------

@@ -166,6 +166,74 @@ func resourceVolterraAwsVpcSite() *schema.Resource {
 				},
 			},
 
+			"direct_connect_disabled": {
+
+				Type:     schema.TypeBool,
+				Optional: true,
+			},
+
+			"direct_connect_enabled": {
+
+				Type:     schema.TypeSet,
+				Optional: true,
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+
+						"cloud_aggregated_prefix": {
+
+							Type: schema.TypeList,
+
+							Optional: true,
+							Elem: &schema.Schema{
+								Type: schema.TypeString,
+							},
+						},
+
+						"dc_connect_aggregated_prefix": {
+
+							Type: schema.TypeList,
+
+							Optional: true,
+							Elem: &schema.Schema{
+								Type: schema.TypeString,
+							},
+						},
+
+						"hosted_vifs": {
+
+							Type:     schema.TypeSet,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"vifs": {
+
+										Type: schema.TypeList,
+
+										Optional: true,
+										Elem: &schema.Schema{
+											Type: schema.TypeString,
+										},
+									},
+								},
+							},
+						},
+
+						"manual_gw": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+
+						"standard_vifs": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+					},
+				},
+			},
+
 			"disk_size": {
 				Type:     schema.TypeInt,
 				Optional: true,
@@ -2875,6 +2943,108 @@ func resourceVolterraAwsVpcSiteCreate(d *schema.ResourceData, meta interface{}) 
 			if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
 
 				deploymentInt.AwsCred.Tenant = v.(string)
+
+			}
+
+		}
+
+	}
+
+	//direct_connect_choice
+
+	directConnectChoiceTypeFound := false
+
+	if v, ok := d.GetOk("direct_connect_disabled"); ok && !directConnectChoiceTypeFound {
+
+		directConnectChoiceTypeFound = true
+
+		if v.(bool) {
+			directConnectChoiceInt := &ves_io_schema_views_aws_vpc_site.CreateSpecType_DirectConnectDisabled{}
+			directConnectChoiceInt.DirectConnectDisabled = &ves_io_schema.Empty{}
+			createSpec.DirectConnectChoice = directConnectChoiceInt
+		}
+
+	}
+
+	if v, ok := d.GetOk("direct_connect_enabled"); ok && !directConnectChoiceTypeFound {
+
+		directConnectChoiceTypeFound = true
+		directConnectChoiceInt := &ves_io_schema_views_aws_vpc_site.CreateSpecType_DirectConnectEnabled{}
+		directConnectChoiceInt.DirectConnectEnabled = &ves_io_schema_views.DirectConnectConfigType{}
+		createSpec.DirectConnectChoice = directConnectChoiceInt
+
+		sl := v.(*schema.Set).List()
+		for _, set := range sl {
+			cs := set.(map[string]interface{})
+
+			if v, ok := cs["cloud_aggregated_prefix"]; ok && !isIntfNil(v) {
+
+				ls := make([]string, len(v.([]interface{})))
+				for i, v := range v.([]interface{}) {
+					ls[i] = v.(string)
+				}
+				directConnectChoiceInt.DirectConnectEnabled.CloudAggregatedPrefix = ls
+
+			}
+
+			if v, ok := cs["dc_connect_aggregated_prefix"]; ok && !isIntfNil(v) {
+
+				ls := make([]string, len(v.([]interface{})))
+				for i, v := range v.([]interface{}) {
+					ls[i] = v.(string)
+				}
+				directConnectChoiceInt.DirectConnectEnabled.DcConnectAggregatedPrefix = ls
+
+			}
+
+			vifChoiceTypeFound := false
+
+			if v, ok := cs["hosted_vifs"]; ok && !isIntfNil(v) && !vifChoiceTypeFound {
+
+				vifChoiceTypeFound = true
+				vifChoiceInt := &ves_io_schema_views.DirectConnectConfigType_HostedVifs{}
+				vifChoiceInt.HostedVifs = &ves_io_schema_views.HostedVIFConfigType{}
+				directConnectChoiceInt.DirectConnectEnabled.VifChoice = vifChoiceInt
+
+				sl := v.(*schema.Set).List()
+				for _, set := range sl {
+					cs := set.(map[string]interface{})
+
+					if v, ok := cs["vifs"]; ok && !isIntfNil(v) {
+
+						ls := make([]string, len(v.([]interface{})))
+						for i, v := range v.([]interface{}) {
+							ls[i] = v.(string)
+						}
+						vifChoiceInt.HostedVifs.Vifs = ls
+
+					}
+
+				}
+
+			}
+
+			if v, ok := cs["manual_gw"]; ok && !isIntfNil(v) && !vifChoiceTypeFound {
+
+				vifChoiceTypeFound = true
+
+				if v.(bool) {
+					vifChoiceInt := &ves_io_schema_views.DirectConnectConfigType_ManualGw{}
+					vifChoiceInt.ManualGw = &ves_io_schema.Empty{}
+					directConnectChoiceInt.DirectConnectEnabled.VifChoice = vifChoiceInt
+				}
+
+			}
+
+			if v, ok := cs["standard_vifs"]; ok && !isIntfNil(v) && !vifChoiceTypeFound {
+
+				vifChoiceTypeFound = true
+
+				if v.(bool) {
+					vifChoiceInt := &ves_io_schema_views.DirectConnectConfigType_StandardVifs{}
+					vifChoiceInt.StandardVifs = &ves_io_schema.Empty{}
+					directConnectChoiceInt.DirectConnectEnabled.VifChoice = vifChoiceInt
+				}
 
 			}
 
@@ -6712,6 +6882,106 @@ func resourceVolterraAwsVpcSiteUpdate(d *schema.ResourceData, meta interface{}) 
 
 			if w, ok := coordinatesMapStrToI["longitude"]; ok && !isIntfNil(w) {
 				coordinates.Longitude = float32(w.(float64))
+			}
+
+		}
+
+	}
+
+	directConnectChoiceTypeFound := false
+
+	if v, ok := d.GetOk("direct_connect_disabled"); ok && !directConnectChoiceTypeFound {
+
+		directConnectChoiceTypeFound = true
+
+		if v.(bool) {
+			directConnectChoiceInt := &ves_io_schema_views_aws_vpc_site.ReplaceSpecType_DirectConnectDisabled{}
+			directConnectChoiceInt.DirectConnectDisabled = &ves_io_schema.Empty{}
+			updateSpec.DirectConnectChoice = directConnectChoiceInt
+		}
+
+	}
+
+	if v, ok := d.GetOk("direct_connect_enabled"); ok && !directConnectChoiceTypeFound {
+
+		directConnectChoiceTypeFound = true
+		directConnectChoiceInt := &ves_io_schema_views_aws_vpc_site.ReplaceSpecType_DirectConnectEnabled{}
+		directConnectChoiceInt.DirectConnectEnabled = &ves_io_schema_views.DirectConnectConfigType{}
+		updateSpec.DirectConnectChoice = directConnectChoiceInt
+
+		sl := v.(*schema.Set).List()
+		for _, set := range sl {
+			cs := set.(map[string]interface{})
+
+			if v, ok := cs["cloud_aggregated_prefix"]; ok && !isIntfNil(v) {
+
+				ls := make([]string, len(v.([]interface{})))
+				for i, v := range v.([]interface{}) {
+					ls[i] = v.(string)
+				}
+				directConnectChoiceInt.DirectConnectEnabled.CloudAggregatedPrefix = ls
+
+			}
+
+			if v, ok := cs["dc_connect_aggregated_prefix"]; ok && !isIntfNil(v) {
+
+				ls := make([]string, len(v.([]interface{})))
+				for i, v := range v.([]interface{}) {
+					ls[i] = v.(string)
+				}
+				directConnectChoiceInt.DirectConnectEnabled.DcConnectAggregatedPrefix = ls
+
+			}
+
+			vifChoiceTypeFound := false
+
+			if v, ok := cs["hosted_vifs"]; ok && !isIntfNil(v) && !vifChoiceTypeFound {
+
+				vifChoiceTypeFound = true
+				vifChoiceInt := &ves_io_schema_views.DirectConnectConfigType_HostedVifs{}
+				vifChoiceInt.HostedVifs = &ves_io_schema_views.HostedVIFConfigType{}
+				directConnectChoiceInt.DirectConnectEnabled.VifChoice = vifChoiceInt
+
+				sl := v.(*schema.Set).List()
+				for _, set := range sl {
+					cs := set.(map[string]interface{})
+
+					if v, ok := cs["vifs"]; ok && !isIntfNil(v) {
+
+						ls := make([]string, len(v.([]interface{})))
+						for i, v := range v.([]interface{}) {
+							ls[i] = v.(string)
+						}
+						vifChoiceInt.HostedVifs.Vifs = ls
+
+					}
+
+				}
+
+			}
+
+			if v, ok := cs["manual_gw"]; ok && !isIntfNil(v) && !vifChoiceTypeFound {
+
+				vifChoiceTypeFound = true
+
+				if v.(bool) {
+					vifChoiceInt := &ves_io_schema_views.DirectConnectConfigType_ManualGw{}
+					vifChoiceInt.ManualGw = &ves_io_schema.Empty{}
+					directConnectChoiceInt.DirectConnectEnabled.VifChoice = vifChoiceInt
+				}
+
+			}
+
+			if v, ok := cs["standard_vifs"]; ok && !isIntfNil(v) && !vifChoiceTypeFound {
+
+				vifChoiceTypeFound = true
+
+				if v.(bool) {
+					vifChoiceInt := &ves_io_schema_views.DirectConnectConfigType_StandardVifs{}
+					vifChoiceInt.StandardVifs = &ves_io_schema.Empty{}
+					directConnectChoiceInt.DirectConnectEnabled.VifChoice = vifChoiceInt
+				}
+
 			}
 
 		}

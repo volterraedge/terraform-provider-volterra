@@ -21,21 +21,21 @@ resource "volterra_bgp" "example" {
   namespace = "staging"
 
   bgp_parameters {
-    asn = "asn"
+    asn = "64512"
 
     bgp_router_id {
-      // One of the arguments from this list "ipv6 ipv4" must be set
+      // One of the arguments from this list "ipv4 ipv6" must be set
 
       ipv4 {
         addr = "192.168.1.1"
       }
     }
 
-    bgp_router_id_key  = "bgp_router_id_key"
+    bgp_router_id_key  = "value"
     bgp_router_id_type = "bgp_router_id_type"
 
-    // One of the arguments from this list "ip_address local_address from_site" must be set
-    from_site = true
+    // One of the arguments from this list "local_address from_site ip_address" must be set
+    ip_address = "ip_address"
   }
 
   peers {
@@ -45,28 +45,41 @@ resource "volterra_bgp" "example" {
       name        = "acmecorp-web"
     }
 
-    target_service = "target_service"
+    target_service = "value"
 
     // One of the arguments from this list "external internal" must be set
 
-    external {
-      // One of the arguments from this list "address subnet_begin_offset subnet_end_offset from_site default_gateway" must be set
-      default_gateway = true
-      asn             = "asn"
+    internal {
+      // One of the arguments from this list "address from_site dns_name" must be set
+      from_site = true
 
-      family_inet {
+      family_inet6vpn {
+        // One of the arguments from this list "disable enable" must be set
+        enable = true
+      }
+
+      family_inetvpn {
+        // One of the arguments from this list "enable disable" must be set
+
+        enable {
+          // One of the arguments from this list "enable disable" must be set
+          enable = true
+        }
+      }
+
+      family_rtarget {
         // One of the arguments from this list "enable disable" must be set
         enable = true
       }
 
-      // One of the arguments from this list "inside_interfaces outside_interfaces interface interface_list" must be set
-
-      interface {
-        name      = "test1"
-        namespace = "staging"
-        tenant    = "acmecorp"
+      family_uuidvpn {
+        // One of the arguments from this list "enable disable" must be set
+        enable = true
       }
-      port = "port"
+
+      // One of the arguments from this list "disable_mtls enable_mtls" must be set
+      disable_mtls = true
+      port         = "179"
     }
   }
 
@@ -108,7 +121,7 @@ Argument Reference
 
 `bgp_parameters` - (Required) BGP parameters for local site. See [Bgp Parameters ](#bgp-parameters) below for details.
 
-`peers` - (Required) BGP parameters for peer. See [Peers ](#peers) below for details.
+`peers` - (Required) List of peers. See [Peers ](#peers) below for details.
 
 `where` - (Required) Site or virtual site where this BGP configuration should be applied.. See [Where ](#where) below for details.
 
@@ -262,7 +275,7 @@ External BGP peer..
 
 `enable_mtls` - (Optional) Enable MTLS (bool).
 
-`port` - (Optional) Peer TCP port number. (`Int`).
+`port` - (Optional) Local Peer TCP Port Number. (`Int`).
 
 ### Ipv4
 
@@ -296,7 +309,7 @@ All interfaces in the site local outside network..
 
 ### Peers
 
-BGP parameters for peer.
+List of peers.
 
 `metadata` - (Required) Common attributes for the peer including name and description.. See [Metadata ](#metadata) below for details.
 

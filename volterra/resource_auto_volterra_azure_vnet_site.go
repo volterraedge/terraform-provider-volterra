@@ -937,6 +937,11 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
+												"labels": {
+													Type:     schema.TypeMap,
+													Optional: true,
+												},
+
 												"auto": {
 
 													Type:     schema.TypeBool,
@@ -2000,6 +2005,11 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
+
+												"labels": {
+													Type:     schema.TypeMap,
+													Optional: true,
+												},
 
 												"auto": {
 
@@ -6229,6 +6239,14 @@ func resourceVolterraAzureVnetSiteCreate(d *schema.ResourceData, meta interface{
 							spokeVnets[i] = &ves_io_schema_views_azure_vnet_site.VnetPeeringType{}
 							spokeVnetsMapStrToI := set.(map[string]interface{})
 
+							if w, ok := spokeVnetsMapStrToI["labels"]; ok && !isIntfNil(w) {
+								ms := map[string]string{}
+								for k, v := range w.(map[string]interface{}) {
+									ms[k] = v.(string)
+								}
+								spokeVnets[i].Labels = ms
+							}
+
 							routingChoiceTypeFound := false
 
 							if v, ok := spokeVnetsMapStrToI["auto"]; ok && !isIntfNil(v) && !routingChoiceTypeFound {
@@ -7733,6 +7751,14 @@ func resourceVolterraAzureVnetSiteCreate(d *schema.ResourceData, meta interface{
 						for i, set := range sl {
 							spokeVnets[i] = &ves_io_schema_views_azure_vnet_site.VnetPeeringType{}
 							spokeVnetsMapStrToI := set.(map[string]interface{})
+
+							if w, ok := spokeVnetsMapStrToI["labels"]; ok && !isIntfNil(w) {
+								ms := map[string]string{}
+								for k, v := range w.(map[string]interface{}) {
+									ms[k] = v.(string)
+								}
+								spokeVnets[i].Labels = ms
+							}
 
 							routingChoiceTypeFound := false
 
@@ -12921,6 +12947,14 @@ func resourceVolterraAzureVnetSiteUpdate(d *schema.ResourceData, meta interface{
 							spokeVnets[i] = &ves_io_schema_views_azure_vnet_site.VnetPeeringType{}
 							spokeVnetsMapStrToI := set.(map[string]interface{})
 
+							if w, ok := spokeVnetsMapStrToI["labels"]; ok && !isIntfNil(w) {
+								ms := map[string]string{}
+								for k, v := range w.(map[string]interface{}) {
+									ms[k] = v.(string)
+								}
+								spokeVnets[i].Labels = ms
+							}
+
 							routingChoiceTypeFound := false
 
 							if v, ok := spokeVnetsMapStrToI["auto"]; ok && !isIntfNil(v) && !routingChoiceTypeFound {
@@ -14381,6 +14415,14 @@ func resourceVolterraAzureVnetSiteUpdate(d *schema.ResourceData, meta interface{
 						for i, set := range sl {
 							spokeVnets[i] = &ves_io_schema_views_azure_vnet_site.VnetPeeringType{}
 							spokeVnetsMapStrToI := set.(map[string]interface{})
+
+							if w, ok := spokeVnetsMapStrToI["labels"]; ok && !isIntfNil(w) {
+								ms := map[string]string{}
+								for k, v := range w.(map[string]interface{}) {
+									ms[k] = v.(string)
+								}
+								spokeVnets[i].Labels = ms
+							}
 
 							routingChoiceTypeFound := false
 

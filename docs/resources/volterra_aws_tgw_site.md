@@ -60,12 +60,12 @@ resource "volterra_aws_tgw_site" "example" {
     disk_size     = "80"
     instance_type = "a1.xlarge"
 
-    // One of the arguments from this list "new_vpc vpc_id" must be set
+    // One of the arguments from this list "vpc_id new_vpc" must be set
 
     new_vpc {
       allocate_ipv6 = true
 
-      // One of the arguments from this list "name_tag autogenerate" must be set
+      // One of the arguments from this list "autogenerate name_tag" must be set
       name_tag = "name_tag"
 
       primary_ipv4 = "10.1.0.0/16"
@@ -74,25 +74,28 @@ resource "volterra_aws_tgw_site" "example" {
 
     // One of the arguments from this list "new_tgw existing_tgw" must be set
 
-    new_tgw {
-      // One of the arguments from this list "system_generated user_assigned" must be set
-      system_generated = true
+    existing_tgw {
+      tgw_asn           = "64500"
+      tgw_id            = "tgw-12345678901234567"
+      volterra_site_asn = "64501"
     }
-    // One of the arguments from this list "total_nodes no_worker_nodes nodes_per_az" must be set
-    no_worker_nodes = true
+    // One of the arguments from this list "nodes_per_az total_nodes no_worker_nodes" must be set
+    total_nodes = "1"
   }
 
   // One of the arguments from this list "default_blocked_services blocked_services" must be set
+  default_blocked_services = true
 
-  blocked_services {
-    blocked_sevice {
-      // One of the arguments from this list "web_user_interface dns ssh" must be set
-      web_user_interface = true
-      network_type       = "network_type"
-    }
-  }
   // One of the arguments from this list "direct_connect_disabled direct_connect_enabled" must be set
-  direct_connect_disabled = true
+
+  direct_connect_enabled {
+    cloud_aggregated_prefix = ["10.0.0.0/20"]
+
+    dc_connect_aggregated_prefix = ["20.0.0.0/20"]
+
+    // One of the arguments from this list "hosted_vifs standard_vifs manual_gw" must be set
+    manual_gw = true
+  }
   // One of the arguments from this list "logs_streaming_disabled log_receiver" must be set
   logs_streaming_disabled = true
 }
@@ -352,7 +355,7 @@ Direct Connect feature is enabled.
 
 `dc_connect_aggregated_prefix` - (Optional) Aggregated prefix from direct connect to be advertised for Cloud side (`String`).
 
-`hosted_vifs` - (Optional) and automatically associate provided hosted VIF and also setup BGP Peering. . See [Hosted Vifs ](#hosted-vifs) below for details.
+`hosted_vifs` - (Optional) and automatically associate provided hosted VIF and also setup BGP Peering.. See [Hosted Vifs ](#hosted-vifs) below for details.
 
 `manual_gw` - (Optional) and a user associate AWS DirectConnect Gateway with it. (bool).
 
@@ -446,7 +449,7 @@ List of global network connections.
 
 ### Hosted Vifs
 
-and automatically associate provided hosted VIF and also setup BGP Peering. .
+and automatically associate provided hosted VIF and also setup BGP Peering..
 
 `vifs` - (Optional) VIFs (`String`).
 
