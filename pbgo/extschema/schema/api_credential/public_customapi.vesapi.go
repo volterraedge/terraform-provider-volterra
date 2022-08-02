@@ -81,6 +81,15 @@ func (c *CustomAPIGrpcClient) doRPCGet(ctx context.Context, yamlReq string, opts
 	return rsp, err
 }
 
+func (c *CustomAPIGrpcClient) doRPCGetScimToken(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
+	req := &ScimTokenRequest{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.api_credential.ScimTokenRequest", yamlReq)
+	}
+	rsp, err := c.grpcClient.GetScimToken(ctx, req, opts...)
+	return rsp, err
+}
+
 func (c *CustomAPIGrpcClient) doRPCList(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &ListRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -136,9 +145,9 @@ func (c *CustomAPIGrpcClient) doRPCRevoke(ctx context.Context, yamlReq string, o
 }
 
 func (c *CustomAPIGrpcClient) doRPCRevokeScimToken(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
-	req := &GetRequest{}
+	req := &ScimTokenRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
-		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.api_credential.GetRequest", yamlReq)
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.api_credential.ScimTokenRequest", yamlReq)
 	}
 	rsp, err := c.grpcClient.RevokeScimToken(ctx, req, opts...)
 	return rsp, err
@@ -192,6 +201,8 @@ func NewCustomAPIGrpcClient(cc *grpc.ClientConn) server.CustomClient {
 	rpcFns["CreateServiceCredentials"] = ccl.doRPCCreateServiceCredentials
 
 	rpcFns["Get"] = ccl.doRPCGet
+
+	rpcFns["GetScimToken"] = ccl.doRPCGetScimToken
 
 	rpcFns["List"] = ccl.doRPCList
 
@@ -646,6 +657,88 @@ func (c *CustomAPIRestClient) doRPCGet(ctx context.Context, callOpts *server.Cus
 	return pbRsp, nil
 }
 
+func (c *CustomAPIRestClient) doRPCGetScimToken(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
+	if callOpts.URI == "" {
+		return nil, fmt.Errorf("Error, URI should be specified, got empty")
+	}
+	url := fmt.Sprintf("%s%s", c.baseURL, callOpts.URI)
+
+	yamlReq := callOpts.YAMLReq
+	req := &ScimTokenRequest{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.api_credential.ScimTokenRequest: %s", yamlReq, err)
+	}
+
+	var hReq *http.Request
+	hm := strings.ToLower(callOpts.HTTPMethod)
+	switch hm {
+	case "post", "put":
+		jsn, err := codec.ToJSON(req, codec.ToWithUseProtoFieldName())
+		if err != nil {
+			return nil, errors.Wrap(err, "Custom RestClient converting YAML to JSON")
+		}
+		var op string
+		if hm == "post" {
+			op = http.MethodPost
+		} else {
+			op = http.MethodPut
+		}
+		newReq, err := http.NewRequest(op, url, bytes.NewBuffer([]byte(jsn)))
+		if err != nil {
+			return nil, errors.Wrapf(err, "Creating new HTTP %s request for custom API", op)
+		}
+		hReq = newReq
+	case "get":
+		newReq, err := http.NewRequest(http.MethodGet, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP GET request for custom API")
+		}
+		hReq = newReq
+		q := hReq.URL.Query()
+		_ = q
+		q.Add("namespace", fmt.Sprintf("%v", req.Namespace))
+
+		hReq.URL.RawQuery += q.Encode()
+	case "delete":
+		newReq, err := http.NewRequest(http.MethodDelete, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP DELETE request for custom API")
+		}
+		hReq = newReq
+	default:
+		return nil, fmt.Errorf("Error, invalid/empty HTTPMethod(%s) specified, should be POST|DELETE|GET", callOpts.HTTPMethod)
+	}
+	hReq = hReq.WithContext(ctx)
+	hReq.Header.Set("Content-Type", "application/json")
+	client.AddHdrsToReq(callOpts.Headers, hReq)
+
+	rsp, err := c.client.Do(hReq)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient")
+	}
+	defer rsp.Body.Close()
+
+	if rsp.StatusCode != http.StatusOK {
+		body, err := ioutil.ReadAll(rsp.Body)
+		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
+	}
+
+	body, err := ioutil.ReadAll(rsp.Body)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient read body")
+	}
+	pbRsp := &GetResponse{}
+	if err := codec.FromJSON(string(body), pbRsp); err != nil {
+		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.api_credential.GetResponse", body)
+
+	}
+	if callOpts.OutCallResponse != nil {
+		callOpts.OutCallResponse.ProtoMsg = pbRsp
+		callOpts.OutCallResponse.JSON = string(body)
+	}
+	return pbRsp, nil
+}
+
 func (c *CustomAPIRestClient) doRPCList(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -850,7 +943,6 @@ func (c *CustomAPIRestClient) doRPCRecreateScimToken(ctx context.Context, callOp
 		q := hReq.URL.Query()
 		_ = q
 		q.Add("expiration_days", fmt.Sprintf("%v", req.ExpirationDays))
-		q.Add("name", fmt.Sprintf("%v", req.Name))
 		q.Add("namespace", fmt.Sprintf("%v", req.Namespace))
 
 		hReq.URL.RawQuery += q.Encode()
@@ -1152,9 +1244,9 @@ func (c *CustomAPIRestClient) doRPCRevokeScimToken(ctx context.Context, callOpts
 	url := fmt.Sprintf("%s%s", c.baseURL, callOpts.URI)
 
 	yamlReq := callOpts.YAMLReq
-	req := &GetRequest{}
+	req := &ScimTokenRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
-		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.api_credential.GetRequest: %s", yamlReq, err)
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.api_credential.ScimTokenRequest: %s", yamlReq, err)
 	}
 
 	var hReq *http.Request
@@ -1184,7 +1276,6 @@ func (c *CustomAPIRestClient) doRPCRevokeScimToken(ctx context.Context, callOpts
 		hReq = newReq
 		q := hReq.URL.Query()
 		_ = q
-		q.Add("name", fmt.Sprintf("%v", req.Name))
 		q.Add("namespace", fmt.Sprintf("%v", req.Namespace))
 
 		hReq.URL.RawQuery += q.Encode()
@@ -1345,6 +1436,8 @@ func NewCustomAPIRestClient(baseURL string, hc http.Client) server.CustomClient 
 
 	rpcFns["Get"] = ccl.doRPCGet
 
+	rpcFns["GetScimToken"] = ccl.doRPCGetScimToken
+
 	rpcFns["List"] = ccl.doRPCList
 
 	rpcFns["ListServiceCredentials"] = ccl.doRPCListServiceCredentials
@@ -1388,6 +1481,9 @@ func (c *customAPIInprocClient) CreateServiceCredentials(ctx context.Context, in
 func (c *customAPIInprocClient) Get(ctx context.Context, in *GetRequest, opts ...grpc.CallOption) (*GetResponse, error) {
 	return c.CustomAPIServer.Get(ctx, in)
 }
+func (c *customAPIInprocClient) GetScimToken(ctx context.Context, in *ScimTokenRequest, opts ...grpc.CallOption) (*GetResponse, error) {
+	return c.CustomAPIServer.GetScimToken(ctx, in)
+}
 func (c *customAPIInprocClient) List(ctx context.Context, in *ListRequest, opts ...grpc.CallOption) (*ListResponse, error) {
 	return c.CustomAPIServer.List(ctx, in)
 }
@@ -1406,7 +1502,7 @@ func (c *customAPIInprocClient) RenewServiceCredentials(ctx context.Context, in 
 func (c *customAPIInprocClient) Revoke(ctx context.Context, in *GetRequest, opts ...grpc.CallOption) (*StatusResponse, error) {
 	return c.CustomAPIServer.Revoke(ctx, in)
 }
-func (c *customAPIInprocClient) RevokeScimToken(ctx context.Context, in *GetRequest, opts ...grpc.CallOption) (*StatusResponse, error) {
+func (c *customAPIInprocClient) RevokeScimToken(ctx context.Context, in *ScimTokenRequest, opts ...grpc.CallOption) (*StatusResponse, error) {
 	return c.CustomAPIServer.RevokeScimToken(ctx, in)
 }
 func (c *customAPIInprocClient) RevokeServiceCredentials(ctx context.Context, in *GetRequest, opts ...grpc.CallOption) (*StatusResponse, error) {
@@ -1671,6 +1767,55 @@ func (s *customAPISrv) Get(ctx context.Context, in *GetRequest) (*GetResponse, e
 	}
 
 	rsp, err = cah.Get(ctx, in)
+	if err != nil {
+		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
+	}
+
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.api_credential.GetResponse", rsp)...)
+
+	return rsp, nil
+}
+func (s *customAPISrv) GetScimToken(ctx context.Context, in *ScimTokenRequest) (*GetResponse, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.api_credential.CustomAPI")
+	cah, ok := ah.(CustomAPIServer)
+	if !ok {
+		return nil, fmt.Errorf("ah %v is not of type *CustomAPIServer", ah)
+	}
+
+	var (
+		rsp *GetResponse
+		err error
+	)
+
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.api_credential.ScimTokenRequest", in)
+	defer func() {
+		if len(bodyFields) > 0 {
+			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
+		}
+		userMsg := "The 'CustomAPI.GetScimToken' operation on 'api_credential'"
+		if err == nil {
+			userMsg += " was successfully performed."
+		} else {
+			userMsg += " failed to be performed."
+		}
+		server.AddUserMsgToAPIAudit(ctx, userMsg)
+	}()
+
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
+
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.api_credential.CustomAPI.GetScimToken"); rvFn != nil {
+			if verr := rvFn(ctx, in); verr != nil {
+				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
+				return nil, server.GRPCStatusFromError(err).Err()
+			}
+		}
+	}
+
+	rsp, err = cah.GetScimToken(ctx, in)
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
@@ -1973,7 +2118,7 @@ func (s *customAPISrv) Revoke(ctx context.Context, in *GetRequest) (*StatusRespo
 
 	return rsp, nil
 }
-func (s *customAPISrv) RevokeScimToken(ctx context.Context, in *GetRequest) (*StatusResponse, error) {
+func (s *customAPISrv) RevokeScimToken(ctx context.Context, in *ScimTokenRequest) (*StatusResponse, error) {
 	ah := s.svc.GetAPIHandler("ves.io.schema.api_credential.CustomAPI")
 	cah, ok := ah.(CustomAPIServer)
 	if !ok {
@@ -1985,7 +2130,7 @@ func (s *customAPISrv) RevokeScimToken(ctx context.Context, in *GetRequest) (*St
 		err error
 	)
 
-	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.api_credential.GetRequest", in)
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.api_credential.ScimTokenRequest", in)
 	defer func() {
 		if len(bodyFields) > 0 {
 			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
@@ -2893,7 +3038,7 @@ var CustomAPISwaggerJSON string = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/api_credentialGetRequest"
+                            "$ref": "#/definitions/api_credentialScimTokenRequest"
                         }
                     }
                 ],
@@ -3003,6 +3148,85 @@ var CustomAPISwaggerJSON string = `{
             "x-ves-proto-service-type": "CUSTOM_PUBLIC"
         },
         "/public/namespaces/{namespace}/scim_token": {
+            "get": {
+                "summary": "Get Scim Token",
+                "description": "GetScimToken implements querying of scim token.\nSCIM API token value will be visible only on create API response.\nThis detail RPC will show the current token's expiry. Returns api credential object.",
+                "operationId": "ves.io.schema.api_credential.CustomAPI.GetScimToken",
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/api_credentialGetResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "namespace",
+                        "description": "Namespace\n\nx-required\nx-example: \"system\"\nValue of namespace is always \"system\".",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "x-displayname": "Namespace"
+                    }
+                ],
+                "tags": [
+                    "CustomAPI"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-api_credential-customapi-getscimtoken"
+                },
+                "x-ves-proto-rpc": "ves.io.schema.api_credential.CustomAPI.GetScimToken"
+            },
             "post": {
                 "summary": "Create/Re-create SCIM API token",
                 "description": "request to create/re-create new SCIM API credential.\nNote: Only one valid (non-expired) SCIM token could exist for a tenant, and only if SCIM is enabled for the tenant.\nIf a valid SCIM token is already minted, we would revoke the current one and generate a new one.",
@@ -3356,12 +3580,20 @@ var CustomAPISwaggerJSON string = `{
             "x-ves-displayorder": "1",
             "x-ves-proto-message": "ves.io.schema.api_credential.CreateResponse",
             "properties": {
+                "active": {
+                    "type": "boolean",
+                    "format": "boolean"
+                },
                 "data": {
                     "type": "string",
                     "description": " data is the response format based on the API credential type.\n In case of API_CERTIFICATES, the response is the base64 encoded value of \n certificate in PKCS12 format.\n In case of KUBE_CONFIG, the response is the base64 encoded value of the K8s kubeconfig file\n with contents as requested - cluster,namespace and base64 encoded certificate, key and CA.\n\nExample: - \"value\"-",
                     "title": "Credentials",
                     "x-displayname": "Credentials",
                     "x-ves-example": "value"
+                },
+                "expiration_timestamp": {
+                    "type": "string",
+                    "format": "date-time"
                 },
                 "name": {
                     "type": "string"
@@ -3385,7 +3617,7 @@ var CustomAPISwaggerJSON string = `{
                 "api_token": {
                     "description": "Exclusive with [api_certificate site_kubeconfig vk8s_kubeconfig]\n Service API Token parameters",
                     "title": "api_token",
-                    "$ref": "#/definitions/ioschemaEmpty",
+                    "$ref": "#/definitions/schemaEmpty",
                     "x-displayname": "Service API Token Specification"
                 },
                 "expiration_days": {
@@ -3555,8 +3787,91 @@ var CustomAPISwaggerJSON string = `{
                 "object": {
                     "description": " Contains the information about request to generated certificate , kubeconfig, or api token.",
                     "title": "Credential information",
-                    "$ref": "#/definitions/schemaapi_credentialObject",
+                    "$ref": "#/definitions/api_credentialObject",
                     "x-displayname": "Credential Record"
+                }
+            }
+        },
+        "api_credentialGlobalSpecType": {
+            "type": "object",
+            "description": "Keeps track of user requested API credentials",
+            "title": "API credentials",
+            "x-displayname": "API Credentials",
+            "x-ves-proto-message": "ves.io.schema.api_credential.GlobalSpecType",
+            "properties": {
+                "active": {
+                    "type": "boolean",
+                    "description": " Possibility to deactivate/activate credential with no deletion",
+                    "title": "Active",
+                    "format": "boolean",
+                    "x-displayname": "Active"
+                },
+                "certificate_serial_num": {
+                    "type": "string",
+                    "description": " Serial number of the client certificate part of credential type API Certificate or Kubeconfig\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 32\n",
+                    "title": "Certificate Serial Number",
+                    "maxLength": 32,
+                    "x-displayname": "Certificate Serial Number",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "32"
+                    }
+                },
+                "created_timestamp": {
+                    "type": "string",
+                    "description": " Timestamp of credential creation",
+                    "title": "Created timestamp",
+                    "format": "date-time",
+                    "x-displayname": "Created timestamp"
+                },
+                "digest": {
+                    "type": "string",
+                    "description": " Digest sha1 of credential",
+                    "title": "Digest sha1",
+                    "x-displayname": "Digest sha1"
+                },
+                "expiration_timestamp": {
+                    "type": "string",
+                    "description": " Timestamp of credential expiration",
+                    "title": "Expiry timestamp",
+                    "format": "date-time",
+                    "x-displayname": "Expiry timestamp"
+                },
+                "site_name": {
+                    "type": "string",
+                    "description": " Site name when global kubeconfig is issued for physical k8s site",
+                    "title": "Site Name",
+                    "x-displayname": "Site Name"
+                },
+                "type": {
+                    "description": " Type of API credential",
+                    "title": "API Credential type",
+                    "$ref": "#/definitions/api_credentialAPICredentialType",
+                    "x-displayname": "Credential Type"
+                },
+                "users": {
+                    "type": "array",
+                    "description": " Reference to user for whom API credential is created\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 1\n",
+                    "title": "user requesting credential",
+                    "maxItems": 1,
+                    "items": {
+                        "$ref": "#/definitions/schemaObjectRefType"
+                    },
+                    "x-displayname": "User",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "1"
+                    }
+                },
+                "virtual_k8s_name": {
+                    "type": "string",
+                    "description": " Name of virtual K8s cluster",
+                    "title": "Virtual K8s",
+                    "x-displayname": "Virtual K8s"
+                },
+                "virtual_k8s_namespace": {
+                    "type": "string",
+                    "description": " Namespace of virtual_k8s",
+                    "title": "Virtual K8s namespace",
+                    "x-displayname": "Namespace"
                 }
             }
         },
@@ -3643,6 +3958,33 @@ var CustomAPISwaggerJSON string = `{
                 }
             }
         },
+        "api_credentialObject": {
+            "type": "object",
+            "description": "API Credential object represents the user request to create a certificate.",
+            "title": "API Credentials",
+            "x-displayname": "Credentials",
+            "x-ves-proto-message": "ves.io.schema.api_credential.Object",
+            "properties": {
+                "metadata": {
+                    "description": " Standard object's metadata",
+                    "title": "metadata",
+                    "$ref": "#/definitions/schemaObjectMetaType",
+                    "x-displayname": "Metadata"
+                },
+                "spec": {
+                    "description": " Specification of the desired behavior of the api credential",
+                    "title": "spec",
+                    "$ref": "#/definitions/api_credentialSpecType",
+                    "x-displayname": "Spec"
+                },
+                "system_metadata": {
+                    "description": " System generated object's metadata",
+                    "title": "system_metadata",
+                    "$ref": "#/definitions/schemaSystemObjectMetaType",
+                    "x-displayname": "System Metadata"
+                }
+            }
+        },
         "api_credentialRecreateScimTokenRequest": {
             "type": "object",
             "description": "RecreateScimTokenRequest is the request format for generating SCIM api credential.",
@@ -3652,18 +3994,15 @@ var CustomAPISwaggerJSON string = `{
             "properties": {
                 "expiration_days": {
                     "type": "integer",
-                    "description": " Qty of days of service credential expiration.\n\nExample: - \"value\"-",
+                    "description": " Qty of days of service credential expiration. Default value is 180.\n Expiration days value can range between 1 and 730.\n\nExample: - \"value\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 1\n  ves.io.schema.rules.uint32.lte: 730\n",
                     "title": "Expiry in days",
                     "format": "int64",
                     "x-displayname": "Expiry in days",
-                    "x-ves-example": "value"
-                },
-                "name": {
-                    "type": "string",
-                    "description": " Name of API credential record. It will be saved in metadata.\n\nExample: - \"value\"-",
-                    "title": "Name",
-                    "x-displayname": "Name",
-                    "x-ves-example": "value"
+                    "x-ves-example": "value",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.gte": "1",
+                        "ves.io.schema.rules.uint32.lte": "730"
+                    }
                 },
                 "namespace": {
                     "type": "string",
@@ -3713,6 +4052,26 @@ var CustomAPISwaggerJSON string = `{
                 }
             }
         },
+        "api_credentialScimTokenRequest": {
+            "type": "object",
+            "description": "ScimTokenRequest is used for fetching or revoking scim token",
+            "title": "Scim Token Request",
+            "x-displayname": "Scim Token Request",
+            "x-ves-proto-message": "ves.io.schema.api_credential.ScimTokenRequest",
+            "properties": {
+                "namespace": {
+                    "type": "string",
+                    "description": " Value of namespace is always \"system\".\n\nExample: - \"system\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "Namespace",
+                    "x-displayname": "Namespace",
+                    "x-ves-example": "system",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                }
+            }
+        },
         "api_credentialSiteKubeconfigType": {
             "type": "object",
             "description": "Site Global Kube Config parameters",
@@ -3734,6 +4093,20 @@ var CustomAPISwaggerJSON string = `{
                         "ves.io.schema.rules.string.max_bytes": "64",
                         "ves.io.schema.rules.string.min_bytes": "1"
                     }
+                }
+            }
+        },
+        "api_credentialSpecType": {
+            "type": "object",
+            "description": "Shape of the api credential specification",
+            "title": "Specification for API credentials",
+            "x-displayname": "Specifications",
+            "x-ves-proto-message": "ves.io.schema.api_credential.SpecType",
+            "properties": {
+                "gc_spec": {
+                    "title": "gc_spec",
+                    "$ref": "#/definitions/api_credentialGlobalSpecType",
+                    "x-displayname": "GC Spec"
                 }
             }
         },
@@ -3783,7 +4156,7 @@ var CustomAPISwaggerJSON string = `{
                 }
             }
         },
-        "ioschemaEmpty": {
+        "schemaEmpty": {
             "type": "object",
             "description": "This can be used for messages where no values are needed",
             "title": "Empty",
@@ -4186,130 +4559,6 @@ var CustomAPISwaggerJSON string = `{
                     "title": "uid",
                     "x-displayname": "UID",
                     "x-ves-example": "f3744323-1adf-4aaa-a5dc-0707c1d1bd82"
-                }
-            }
-        },
-        "schemaapi_credentialGlobalSpecType": {
-            "type": "object",
-            "description": "Keeps track of user requested API credentials",
-            "title": "API credentials",
-            "x-displayname": "API Credentials",
-            "x-ves-proto-message": "ves.io.schema.api_credential.GlobalSpecType",
-            "properties": {
-                "active": {
-                    "type": "boolean",
-                    "description": " Possibility to deactivate/activate credential with no deletion",
-                    "title": "Active",
-                    "format": "boolean",
-                    "x-displayname": "Active"
-                },
-                "certificate_serial_num": {
-                    "type": "string",
-                    "description": " Serial number of the client certificate part of credential type API Certificate or Kubeconfig\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 32\n",
-                    "title": "Certificate Serial Number",
-                    "maxLength": 32,
-                    "x-displayname": "Certificate Serial Number",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.max_len": "32"
-                    }
-                },
-                "created_timestamp": {
-                    "type": "string",
-                    "description": " Timestamp of credential creation",
-                    "title": "Created timestamp",
-                    "format": "date-time",
-                    "x-displayname": "Created timestamp"
-                },
-                "digest": {
-                    "type": "string",
-                    "description": " Digest sha1 of credential",
-                    "title": "Digest sha1",
-                    "x-displayname": "Digest sha1"
-                },
-                "expiration_timestamp": {
-                    "type": "string",
-                    "description": " Timestamp of credential expiration",
-                    "title": "Expiry timestamp",
-                    "format": "date-time",
-                    "x-displayname": "Expiry timestamp"
-                },
-                "site_name": {
-                    "type": "string",
-                    "description": " Site name when global kubeconfig is issued for physical k8s site",
-                    "title": "Site Name",
-                    "x-displayname": "Site Name"
-                },
-                "type": {
-                    "description": " Type of API credential",
-                    "title": "API Credential type",
-                    "$ref": "#/definitions/api_credentialAPICredentialType",
-                    "x-displayname": "Credential Type"
-                },
-                "users": {
-                    "type": "array",
-                    "description": " Reference to user for whom API credential is created \n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 1\n",
-                    "title": "user requesting credential",
-                    "maxItems": 1,
-                    "items": {
-                        "$ref": "#/definitions/schemaObjectRefType"
-                    },
-                    "x-displayname": "User",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.repeated.max_items": "1"
-                    }
-                },
-                "virtual_k8s_name": {
-                    "type": "string",
-                    "description": " Name of virtual K8s cluster",
-                    "title": "Virtual K8s",
-                    "x-displayname": "Virtual K8s"
-                },
-                "virtual_k8s_namespace": {
-                    "type": "string",
-                    "description": " Namespace of virtual_k8s",
-                    "title": "Virtual K8s namespace",
-                    "x-displayname": "Namespace"
-                }
-            }
-        },
-        "schemaapi_credentialObject": {
-            "type": "object",
-            "description": "API Credential object represents the user request to create a certificate.",
-            "title": "API Credentials",
-            "x-displayname": "Credentials",
-            "x-ves-proto-message": "ves.io.schema.api_credential.Object",
-            "properties": {
-                "metadata": {
-                    "description": " Standard object's metadata",
-                    "title": "metadata",
-                    "$ref": "#/definitions/schemaObjectMetaType",
-                    "x-displayname": "Metadata"
-                },
-                "spec": {
-                    "description": " Specification of the desired behavior of the api credential",
-                    "title": "spec",
-                    "$ref": "#/definitions/schemaapi_credentialSpecType",
-                    "x-displayname": "Spec"
-                },
-                "system_metadata": {
-                    "description": " System generated object's metadata",
-                    "title": "system_metadata",
-                    "$ref": "#/definitions/schemaSystemObjectMetaType",
-                    "x-displayname": "System Metadata"
-                }
-            }
-        },
-        "schemaapi_credentialSpecType": {
-            "type": "object",
-            "description": "Shape of the api credential specification",
-            "title": "Specification for API credentials",
-            "x-displayname": "Specifications",
-            "x-ves-proto-message": "ves.io.schema.api_credential.SpecType",
-            "properties": {
-                "gc_spec": {
-                    "title": "gc_spec",
-                    "$ref": "#/definitions/schemaapi_credentialGlobalSpecType",
-                    "x-displayname": "GC Spec"
                 }
             }
         }

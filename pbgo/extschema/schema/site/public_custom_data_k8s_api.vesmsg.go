@@ -1300,3 +1300,457 @@ var DefaultStatefulSetListRequestValidator = func() *ValidateStatefulSetListRequ
 func StatefulSetListRequestValidator() db.Validator {
 	return DefaultStatefulSetListRequestValidator
 }
+
+// augmented methods on protoc/std generated struct
+
+func (m *VirtualMachineInstancesMetricData) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *VirtualMachineInstancesMetricData) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *VirtualMachineInstancesMetricData) DeepCopy() *VirtualMachineInstancesMetricData {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &VirtualMachineInstancesMetricData{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *VirtualMachineInstancesMetricData) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *VirtualMachineInstancesMetricData) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return VirtualMachineInstancesMetricDataValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateVirtualMachineInstancesMetricData struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateVirtualMachineInstancesMetricData) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*VirtualMachineInstancesMetricData)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *VirtualMachineInstancesMetricData got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["data"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("data"))
+		for idx, item := range m.GetData() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["type"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("type"))
+		if err := fv(ctx, m.GetType(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["unit"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("unit"))
+		if err := fv(ctx, m.GetUnit(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultVirtualMachineInstancesMetricDataValidator = func() *ValidateVirtualMachineInstancesMetricData {
+	v := &ValidateVirtualMachineInstancesMetricData{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func VirtualMachineInstancesMetricDataValidator() db.Validator {
+	return DefaultVirtualMachineInstancesMetricDataValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *VirtualMachineInstancesMetricTypeData) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *VirtualMachineInstancesMetricTypeData) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *VirtualMachineInstancesMetricTypeData) DeepCopy() *VirtualMachineInstancesMetricTypeData {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &VirtualMachineInstancesMetricTypeData{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *VirtualMachineInstancesMetricTypeData) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *VirtualMachineInstancesMetricTypeData) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return VirtualMachineInstancesMetricTypeDataValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateVirtualMachineInstancesMetricTypeData struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateVirtualMachineInstancesMetricTypeData) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*VirtualMachineInstancesMetricTypeData)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *VirtualMachineInstancesMetricTypeData got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["labels"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("labels"))
+		for key, value := range m.GetLabels() {
+			vOpts := append(vOpts, db.WithValidateMapKey(key))
+			if err := fv(ctx, value, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["values"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("values"))
+		for idx, item := range m.GetValues() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultVirtualMachineInstancesMetricTypeDataValidator = func() *ValidateVirtualMachineInstancesMetricTypeData {
+	v := &ValidateVirtualMachineInstancesMetricTypeData{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func VirtualMachineInstancesMetricTypeDataValidator() db.Validator {
+	return DefaultVirtualMachineInstancesMetricTypeDataValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *VirtualMachineInstancesMetricsRequest) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *VirtualMachineInstancesMetricsRequest) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *VirtualMachineInstancesMetricsRequest) DeepCopy() *VirtualMachineInstancesMetricsRequest {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &VirtualMachineInstancesMetricsRequest{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *VirtualMachineInstancesMetricsRequest) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *VirtualMachineInstancesMetricsRequest) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return VirtualMachineInstancesMetricsRequestValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateVirtualMachineInstancesMetricsRequest struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateVirtualMachineInstancesMetricsRequest) MetricSelectorValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepEnumItemRules(rules)
+	var conv db.EnumConvFn
+	conv = func(v interface{}) int32 {
+		i := v.(VirtualMachineInstancesMetricType)
+		return int32(i)
+	}
+	// VirtualMachineInstancesMetricType_name is generated in .pb.go
+	itemValFn, err := db.NewEnumValidationRuleHandler(itemRules, VirtualMachineInstancesMetricType_name, conv)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for metric_selector")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []VirtualMachineInstancesMetricType, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for metric_selector")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]VirtualMachineInstancesMetricType)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []VirtualMachineInstancesMetricType, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal := fmt.Sprintf("%v", elem)
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated metric_selector")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items metric_selector")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateVirtualMachineInstancesMetricsRequest) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*VirtualMachineInstancesMetricsRequest)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *VirtualMachineInstancesMetricsRequest got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["end_time"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("end_time"))
+		if err := fv(ctx, m.GetEndTime(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["metric_selector"]; exists {
+		vOpts := append(opts, db.WithValidateField("metric_selector"))
+		if err := fv(ctx, m.GetMetricSelector(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["namespace"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("namespace"))
+		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["site"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("site"))
+		if err := fv(ctx, m.GetSite(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["start_time"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("start_time"))
+		if err := fv(ctx, m.GetStartTime(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultVirtualMachineInstancesMetricsRequestValidator = func() *ValidateVirtualMachineInstancesMetricsRequest {
+	v := &ValidateVirtualMachineInstancesMetricsRequest{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhMetricSelector := v.MetricSelectorValidationRuleHandler
+	rulesMetricSelector := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.repeated.unique":  "true",
+	}
+	vFn, err = vrhMetricSelector(rulesMetricSelector)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for VirtualMachineInstancesMetricsRequest.metric_selector: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["metric_selector"] = vFn
+
+	return v
+}()
+
+func VirtualMachineInstancesMetricsRequestValidator() db.Validator {
+	return DefaultVirtualMachineInstancesMetricsRequestValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *VirtualMachineInstancesMetricsResponse) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *VirtualMachineInstancesMetricsResponse) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *VirtualMachineInstancesMetricsResponse) DeepCopy() *VirtualMachineInstancesMetricsResponse {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &VirtualMachineInstancesMetricsResponse{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *VirtualMachineInstancesMetricsResponse) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *VirtualMachineInstancesMetricsResponse) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return VirtualMachineInstancesMetricsResponseValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateVirtualMachineInstancesMetricsResponse struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateVirtualMachineInstancesMetricsResponse) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*VirtualMachineInstancesMetricsResponse)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *VirtualMachineInstancesMetricsResponse got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["data"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("data"))
+		for idx, item := range m.GetData() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultVirtualMachineInstancesMetricsResponseValidator = func() *ValidateVirtualMachineInstancesMetricsResponse {
+	v := &ValidateVirtualMachineInstancesMetricsResponse{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func VirtualMachineInstancesMetricsResponseValidator() db.Validator {
+	return DefaultVirtualMachineInstancesMetricsResponseValidator
+}

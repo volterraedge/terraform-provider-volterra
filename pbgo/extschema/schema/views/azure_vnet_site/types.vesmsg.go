@@ -4334,6 +4334,46 @@ func (v *ValidateAzureVnetSiteInfoType) PrivateIpsValidationRuleHandler(rules ma
 	return validatorFn, nil
 }
 
+func (v *ValidateAzureVnetSiteInfoType) SpokeVnetPrefixInfoValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemsValidatorFn := func(ctx context.Context, elems []*VnetIpPrefixesType, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := VnetIpPrefixesTypeValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for spoke_vnet_prefix_info")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*VnetIpPrefixesType)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*VnetIpPrefixesType, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated spoke_vnet_prefix_info")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items spoke_vnet_prefix_info")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateAzureVnetSiteInfoType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*AzureVnetSiteInfoType)
 	if !ok {
@@ -4359,6 +4399,14 @@ func (v *ValidateAzureVnetSiteInfoType) Validate(ctx context.Context, pm interfa
 	if fv, exists := v.FldValidators["public_ips"]; exists {
 		vOpts := append(opts, db.WithValidateField("public_ips"))
 		if err := fv(ctx, m.GetPublicIps(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["spoke_vnet_prefix_info"]; exists {
+		vOpts := append(opts, db.WithValidateField("spoke_vnet_prefix_info"))
+		if err := fv(ctx, m.GetSpokeVnetPrefixInfo(), vOpts...); err != nil {
 			return err
 		}
 
@@ -4406,6 +4454,17 @@ var DefaultAzureVnetSiteInfoTypeValidator = func() *ValidateAzureVnetSiteInfoTyp
 		panic(errMsg)
 	}
 	v.FldValidators["private_ips"] = vFn
+
+	vrhSpokeVnetPrefixInfo := v.SpokeVnetPrefixInfoValidationRuleHandler
+	rulesSpokeVnetPrefixInfo := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "500",
+	}
+	vFn, err = vrhSpokeVnetPrefixInfo(rulesSpokeVnetPrefixInfo)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for AzureVnetSiteInfoType.spoke_vnet_prefix_info: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["spoke_vnet_prefix_info"] = vFn
 
 	return v
 }()
@@ -9252,6 +9311,15 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 
 	}
 
+	if fv, exists := v.FldValidators["cloud_site_info"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("cloud_site_info"))
+		if err := fv(ctx, m.GetCloudSiteInfo(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["coordinates"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("coordinates"))
@@ -9506,6 +9574,15 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 	if fv, exists := v.FldValidators["tags"]; exists {
 		vOpts := append(opts, db.WithValidateField("tags"))
 		if err := fv(ctx, m.GetTags(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["user_modification_timestamp"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("user_modification_timestamp"))
+		if err := fv(ctx, m.GetUserModificationTimestamp(), vOpts...); err != nil {
 			return err
 		}
 
@@ -9840,6 +9917,8 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v.FldValidators["site_type.voltstack_cluster_ar"] = AzureVnetVoltstackClusterARTypeValidator().Validate
 
 	v.FldValidators["coordinates"] = ves_io_schema_site.CoordinatesValidator().Validate
+
+	v.FldValidators["cloud_site_info"] = AzureVnetSiteInfoTypeValidator().Validate
 
 	return v
 }()
@@ -10855,6 +10934,15 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["user_modification_timestamp"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("user_modification_timestamp"))
+		if err := fv(ctx, m.GetUserModificationTimestamp(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["view_internal"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("view_internal"))
@@ -11831,6 +11919,159 @@ func ReplaceSpecTypeValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *VnetIpPrefixesType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *VnetIpPrefixesType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *VnetIpPrefixesType) DeepCopy() *VnetIpPrefixesType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &VnetIpPrefixesType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *VnetIpPrefixesType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *VnetIpPrefixesType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return VnetIpPrefixesTypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateVnetIpPrefixesType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateVnetIpPrefixesType) PrefixesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepStringItemRules(rules)
+	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Item ValidationRuleHandler for prefixes")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []string, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for prefixes")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]string)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []string, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal := fmt.Sprintf("%v", elem)
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated prefixes")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items prefixes")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateVnetIpPrefixesType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*VnetIpPrefixesType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *VnetIpPrefixesType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["prefixes"]; exists {
+		vOpts := append(opts, db.WithValidateField("prefixes"))
+		if err := fv(ctx, m.GetPrefixes(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["vnet"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("vnet"))
+		if err := fv(ctx, m.GetVnet(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultVnetIpPrefixesTypeValidator = func() *ValidateVnetIpPrefixesType {
+	v := &ValidateVnetIpPrefixesType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhPrefixes := v.PrefixesValidationRuleHandler
+	rulesPrefixes := map[string]string{
+		"ves.io.schema.rules.message.required":                  "true",
+		"ves.io.schema.rules.repeated.items.string.ipv4_prefix": "true",
+		"ves.io.schema.rules.repeated.max_items":                "1024",
+		"ves.io.schema.rules.repeated.min_items":                "1",
+		"ves.io.schema.rules.repeated.unique":                   "true",
+	}
+	vFn, err = vrhPrefixes(rulesPrefixes)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for VnetIpPrefixesType.prefixes: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["prefixes"] = vFn
+
+	v.FldValidators["vnet"] = ves_io_schema_views.AzureVnetTypeValidator().Validate
+
+	return v
+}()
+
+func VnetIpPrefixesTypeValidator() db.Validator {
+	return DefaultVnetIpPrefixesTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *VnetPeeringType) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -11890,6 +12131,18 @@ func (v *ValidateVnetPeeringType) Validate(ctx context.Context, pm interface{}, 
 	}
 	if m == nil {
 		return nil
+	}
+
+	if fv, exists := v.FldValidators["labels"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("labels"))
+		for key, value := range m.GetLabels() {
+			vOpts := append(vOpts, db.WithValidateMapKey(key))
+			if err := fv(ctx, value, vOpts...); err != nil {
+				return err
+			}
+		}
+
 	}
 
 	if fv, exists := v.FldValidators["routing_choice"]; exists {
@@ -13773,6 +14026,7 @@ func (m *GetSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	}
 	m.Address = f.GetAddress()
 	m.GetBlockedServicesChoiceFromGlobalSpecType(f)
+	m.CloudSiteInfo = f.GetCloudSiteInfo()
 	m.Coordinates = f.GetCoordinates()
 	m.GetDeploymentFromGlobalSpecType(f)
 	m.DiskSize = f.GetDiskSize()
@@ -13785,6 +14039,7 @@ func (m *GetSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	m.GetSiteTypeFromGlobalSpecType(f)
 	m.SshKey = f.GetSshKey()
 	m.Tags = f.GetTags()
+	m.UserModificationTimestamp = f.GetUserModificationTimestamp()
 	m.VipParamsPerAz = f.GetVipParamsPerAz()
 	m.Vnet = f.GetVnet()
 	m.VolterraSoftwareVersion = f.GetVolterraSoftwareVersion()
@@ -13808,6 +14063,7 @@ func (m *GetSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 
 	f.Address = m1.Address
 	m1.SetBlockedServicesChoiceToGlobalSpecType(f)
+	f.CloudSiteInfo = m1.CloudSiteInfo
 	f.Coordinates = m1.Coordinates
 	m1.SetDeploymentToGlobalSpecType(f)
 	f.DiskSize = m1.DiskSize
@@ -13820,6 +14076,7 @@ func (m *GetSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	m1.SetSiteTypeToGlobalSpecType(f)
 	f.SshKey = m1.SshKey
 	f.Tags = m1.Tags
+	f.UserModificationTimestamp = m1.UserModificationTimestamp
 	f.VipParamsPerAz = m1.VipParamsPerAz
 	f.Vnet = m1.Vnet
 	f.VolterraSoftwareVersion = m1.VolterraSoftwareVersion

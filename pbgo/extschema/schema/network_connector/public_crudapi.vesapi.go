@@ -2534,7 +2534,7 @@ var APISwaggerJSON string = `{
                 },
                 "inside_network": {
                     "type": "array",
-                    "description": " Reference to inside network. Reference is valid only when the network type is per site virtual network or \n global virtual network. It is ignored for all other network types. public virtual network is not allowed \n as inside network\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 1\n",
+                    "description": " Reference to inside network. Reference is valid only when the network type is per site virtual network or\n global virtual network. It is ignored for all other network types. public virtual network is not allowed\n as inside network\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 1\n",
                     "title": "Inside VN",
                     "maxItems": 1,
                     "items": {
@@ -2558,7 +2558,7 @@ var APISwaggerJSON string = `{
                 },
                 "outside_network": {
                     "type": "array",
-                    "description": " Reference to outside network. Reference is valid only when the network type is per site virtual network or \n global virtual network. It is ignored for all other network types\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 1\n",
+                    "description": " Reference to outside network. Reference is valid only when the network type is per site virtual network or\n global virtual network. It is ignored for all other network types\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 1\n",
                     "title": "Outside VN",
                     "maxItems": 1,
                     "items": {
@@ -2727,7 +2727,7 @@ var APISwaggerJSON string = `{
         },
         "network_connectorNetworkConnectorProxyType": {
             "type": "string",
-            "description": "Type of Proxy to be used while connecting from one virtual network to another\n\nThere is no proxy and only Snat is applied\nVirtualHosts are configured in the inside network and traffic is attracted to these Vhosts. DNS query is performed in\nthe outside network to forward the packets to actual IPs\nDevices in the inside network perform DNS queries to know the actual IPs and all session are terminated to by Ver in \ninside network and re-originated in outside network to original IPs",
+            "description": "Type of Proxy to be used while connecting from one virtual network to another\n\nThere is no proxy and only Snat is applied\nVirtualHosts are configured in the inside network and traffic is attracted to these Vhosts. DNS query is performed in\nthe outside network to forward the packets to actual IPs\nDevices in the inside network perform DNS queries to know the actual IPs and all session are terminated to by Ver in\ninside network and re-originated in outside network to original IPs",
             "title": "Network Connector Proxy Type",
             "enum": [
                 "NETWORK_CONNECTOR_NO_PROXY",

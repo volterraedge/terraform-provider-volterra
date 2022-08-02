@@ -54,12 +54,12 @@ func (c *CustomAPIGrpcClient) doRPCEvaluateAPIAccess(ctx context.Context, yamlRe
 	return rsp, err
 }
 
-func (c *CustomAPIGrpcClient) doRPCUpdateAllowAdvertiseOnPublic(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
-	req := &UpdateAllowAdvertiseOnPublicReq{}
+func (c *CustomAPIGrpcClient) doRPCSuggestValues(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
+	req := &SuggestValuesReq{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
-		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.namespace.UpdateAllowAdvertiseOnPublicReq", yamlReq)
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.namespace.SuggestValuesReq", yamlReq)
 	}
-	rsp, err := c.grpcClient.UpdateAllowAdvertiseOnPublic(ctx, req, opts...)
+	rsp, err := c.grpcClient.SuggestValues(ctx, req, opts...)
 	return rsp, err
 }
 
@@ -97,7 +97,7 @@ func NewCustomAPIGrpcClient(cc *grpc.ClientConn) server.CustomClient {
 
 	rpcFns["EvaluateAPIAccess"] = ccl.doRPCEvaluateAPIAccess
 
-	rpcFns["UpdateAllowAdvertiseOnPublic"] = ccl.doRPCUpdateAllowAdvertiseOnPublic
+	rpcFns["SuggestValues"] = ccl.doRPCSuggestValues
 
 	ccl.rpcFns = rpcFns
 
@@ -277,16 +277,16 @@ func (c *CustomAPIRestClient) doRPCEvaluateAPIAccess(ctx context.Context, callOp
 	return pbRsp, nil
 }
 
-func (c *CustomAPIRestClient) doRPCUpdateAllowAdvertiseOnPublic(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
+func (c *CustomAPIRestClient) doRPCSuggestValues(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
 	}
 	url := fmt.Sprintf("%s%s", c.baseURL, callOpts.URI)
 
 	yamlReq := callOpts.YAMLReq
-	req := &UpdateAllowAdvertiseOnPublicReq{}
+	req := &SuggestValuesReq{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
-		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.namespace.UpdateAllowAdvertiseOnPublicReq: %s", yamlReq, err)
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.namespace.SuggestValuesReq: %s", yamlReq, err)
 	}
 
 	var hReq *http.Request
@@ -316,8 +316,10 @@ func (c *CustomAPIRestClient) doRPCUpdateAllowAdvertiseOnPublic(ctx context.Cont
 		hReq = newReq
 		q := hReq.URL.Query()
 		_ = q
-		q.Add("allow_advertise_on_public", fmt.Sprintf("%v", req.AllowAdvertiseOnPublic))
+		q.Add("field_path", fmt.Sprintf("%v", req.FieldPath))
+		q.Add("match_value", fmt.Sprintf("%v", req.MatchValue))
 		q.Add("namespace", fmt.Sprintf("%v", req.Namespace))
+		q.Add("request_body", fmt.Sprintf("%v", req.RequestBody))
 
 		hReq.URL.RawQuery += q.Encode()
 	case "delete":
@@ -348,9 +350,9 @@ func (c *CustomAPIRestClient) doRPCUpdateAllowAdvertiseOnPublic(ctx context.Cont
 	if err != nil {
 		return nil, errors.Wrap(err, "Custom API RestClient read body")
 	}
-	pbRsp := &UpdateAllowAdvertiseOnPublicResp{}
+	pbRsp := &SuggestValuesResp{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
-		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.namespace.UpdateAllowAdvertiseOnPublicResp", body)
+		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.namespace.SuggestValuesResp", body)
 
 	}
 	if callOpts.OutCallResponse != nil {
@@ -388,7 +390,7 @@ func NewCustomAPIRestClient(baseURL string, hc http.Client) server.CustomClient 
 
 	rpcFns["EvaluateAPIAccess"] = ccl.doRPCEvaluateAPIAccess
 
-	rpcFns["UpdateAllowAdvertiseOnPublic"] = ccl.doRPCUpdateAllowAdvertiseOnPublic
+	rpcFns["SuggestValues"] = ccl.doRPCSuggestValues
 
 	ccl.rpcFns = rpcFns
 
@@ -408,8 +410,8 @@ func (c *customAPIInprocClient) CascadeDelete(ctx context.Context, in *CascadeDe
 func (c *customAPIInprocClient) EvaluateAPIAccess(ctx context.Context, in *EvaluateAPIAccessReq, opts ...grpc.CallOption) (*EvaluateAPIAccessResp, error) {
 	return c.CustomAPIServer.EvaluateAPIAccess(ctx, in)
 }
-func (c *customAPIInprocClient) UpdateAllowAdvertiseOnPublic(ctx context.Context, in *UpdateAllowAdvertiseOnPublicReq, opts ...grpc.CallOption) (*UpdateAllowAdvertiseOnPublicResp, error) {
-	return c.CustomAPIServer.UpdateAllowAdvertiseOnPublic(ctx, in)
+func (c *customAPIInprocClient) SuggestValues(ctx context.Context, in *SuggestValuesReq, opts ...grpc.CallOption) (*SuggestValuesResp, error) {
+	return c.CustomAPIServer.SuggestValues(ctx, in)
 }
 
 func NewCustomAPIInprocClient(svc svcfw.Service) CustomAPIClient {
@@ -531,7 +533,7 @@ func (s *customAPISrv) EvaluateAPIAccess(ctx context.Context, in *EvaluateAPIAcc
 
 	return rsp, nil
 }
-func (s *customAPISrv) UpdateAllowAdvertiseOnPublic(ctx context.Context, in *UpdateAllowAdvertiseOnPublicReq) (*UpdateAllowAdvertiseOnPublicResp, error) {
+func (s *customAPISrv) SuggestValues(ctx context.Context, in *SuggestValuesReq) (*SuggestValuesResp, error) {
 	ah := s.svc.GetAPIHandler("ves.io.schema.namespace.CustomAPI")
 	cah, ok := ah.(CustomAPIServer)
 	if !ok {
@@ -539,16 +541,16 @@ func (s *customAPISrv) UpdateAllowAdvertiseOnPublic(ctx context.Context, in *Upd
 	}
 
 	var (
-		rsp *UpdateAllowAdvertiseOnPublicResp
+		rsp *SuggestValuesResp
 		err error
 	)
 
-	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.namespace.UpdateAllowAdvertiseOnPublicReq", in)
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.namespace.SuggestValuesReq", in)
 	defer func() {
 		if len(bodyFields) > 0 {
 			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
 		}
-		userMsg := "The 'CustomAPI.UpdateAllowAdvertiseOnPublic' operation on 'namespace'"
+		userMsg := "The 'CustomAPI.SuggestValues' operation on 'namespace'"
 		if err == nil {
 			userMsg += " was successfully performed."
 		} else {
@@ -563,7 +565,7 @@ func (s *customAPISrv) UpdateAllowAdvertiseOnPublic(ctx context.Context, in *Upd
 	}
 
 	if s.svc.Config().EnableAPIValidation {
-		if rvFn := s.svc.GetRPCValidator("ves.io.schema.namespace.CustomAPI.UpdateAllowAdvertiseOnPublic"); rvFn != nil {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.namespace.CustomAPI.SuggestValues"); rvFn != nil {
 			if verr := rvFn(ctx, in); verr != nil {
 				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
 				return nil, server.GRPCStatusFromError(err).Err()
@@ -571,12 +573,12 @@ func (s *customAPISrv) UpdateAllowAdvertiseOnPublic(ctx context.Context, in *Upd
 		}
 	}
 
-	rsp, err = cah.UpdateAllowAdvertiseOnPublic(ctx, in)
+	rsp, err = cah.SuggestValues(ctx, in)
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
 
-	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.namespace.UpdateAllowAdvertiseOnPublicResp", rsp)...)
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.namespace.SuggestValuesResp", rsp)...)
 
 	return rsp, nil
 }
@@ -688,16 +690,16 @@ var CustomAPISwaggerJSON string = `{
             "x-ves-proto-service": "ves.io.schema.namespace.CustomAPI",
             "x-ves-proto-service-type": "CUSTOM_PUBLIC"
         },
-        "/public/namespaces/system/update_allow_advertise_on_public": {
+        "/public/namespaces/{namespace}/suggest-values": {
             "post": {
-                "summary": "UpdateAllowAdvertiseOnPublic",
-                "description": "UpdateAllowAdvertiseOnPublic can update a config to allow advertise on public.",
-                "operationId": "ves.io.schema.namespace.CustomAPI.UpdateAllowAdvertiseOnPublic",
+                "summary": "SuggestValues",
+                "description": "SuggestValues returns suggested values for the specified field in the given Create/Replace/Custom request.",
+                "operationId": "ves.io.schema.namespace.CustomAPI.SuggestValues",
                 "responses": {
                     "200": {
                         "description": "A successful response.",
                         "schema": {
-                            "$ref": "#/definitions/namespaceUpdateAllowAdvertiseOnPublicResp"
+                            "$ref": "#/definitions/namespaceSuggestValuesResp"
                         }
                     },
                     "401": {
@@ -751,11 +753,19 @@ var CustomAPISwaggerJSON string = `{
                 },
                 "parameters": [
                     {
+                        "name": "namespace",
+                        "description": "namespace\n\nx-example: \"foobar\"\nNamespace in which the suggestions are scoped.",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "x-displayname": "Namespace"
+                    },
+                    {
                         "name": "body",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/namespaceUpdateAllowAdvertiseOnPublicReq"
+                            "$ref": "#/definitions/namespaceSuggestValuesReq"
                         }
                     }
                 ],
@@ -764,9 +774,9 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-namespace-customapi-updateallowadvertiseonpublic"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-namespace-customapi-suggestvalues"
                 },
-                "x-ves-proto-rpc": "ves.io.schema.namespace.CustomAPI.UpdateAllowAdvertiseOnPublic"
+                "x-ves-proto-rpc": "ves.io.schema.namespace.CustomAPI.SuggestValues"
             },
             "x-displayname": "CustomAPI",
             "x-ves-proto-service": "ves.io.schema.namespace.CustomAPI",
@@ -1042,53 +1052,101 @@ var CustomAPISwaggerJSON string = `{
                 }
             }
         },
-        "namespacePublicAdvertiseChoice": {
-            "type": "string",
-            "description": "Enum for advertisement choise on public.\n\nInherit tenant's default.\nEnable enables advertisement on public.\nDisable disables advertisement on public.",
-            "title": "PublicAdvertiseChoice",
-            "enum": [
-                "Default",
-                "Enable",
-                "Disable"
-            ],
-            "default": "Default",
-            "x-displayname": "PublicAdvertiseChoice",
-            "x-ves-proto-enum": "ves.io.schema.namespace.PublicAdvertiseChoice"
-        },
-        "namespaceUpdateAllowAdvertiseOnPublicReq": {
+        "namespaceSuggestValuesReq": {
             "type": "object",
-            "description": "Request body of UpdateAllowAdvertiseOnPublic request",
-            "title": "UpdateAllowAdvertiseOnPublicReq",
-            "x-displayname": "Request for UpdateAllowAdvertiseOnPublic",
-            "x-ves-proto-message": "ves.io.schema.namespace.UpdateAllowAdvertiseOnPublicReq",
+            "description": "Request body of SuggestValues request",
+            "title": "SuggestValuesReq",
+            "x-displayname": "Request for SuggestValues",
+            "x-ves-proto-message": "ves.io.schema.namespace.SuggestValuesReq",
             "properties": {
-                "allow_advertise_on_public": {
-                    "description": " Config choice to allow advertisement on the public.",
-                    "$ref": "#/definitions/namespacePublicAdvertiseChoice",
-                    "x-displayname": "Allow advertisement on public."
+                "field_path": {
+                    "type": "string",
+                    "description": " JSON path of the field for which the suggested values are being requested.\n\nExample: - \"spec.rule_choice.rule_list.rules[2].spec.api_group_matcher.match\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 1024\n",
+                    "title": "field_path",
+                    "maxLength": 1024,
+                    "x-displayname": "Field Path",
+                    "x-ves-example": "spec.rule_choice.rule_list.rules[2].spec.api_group_matcher.match",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "1024"
+                    }
+                },
+                "match_value": {
+                    "type": "string",
+                    "description": " A substring that must be present in either the value or description of each SuggestedItem in the response.\n\nExample: - \"some-substring\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 256\n",
+                    "title": "match_value",
+                    "maxLength": 256,
+                    "x-displayname": "Match Value",
+                    "x-ves-example": "some-substring",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "256"
+                    }
                 },
                 "namespace": {
                     "type": "string",
-                    "description": " Name of the namespace under which all the URLs in APIItems will be evaluated\n\nExample: - \"value\"-",
+                    "description": " Namespace in which the suggestions are scoped.\n\nExample: - \"foobar\"-",
                     "title": "namespace",
                     "x-displayname": "Namespace",
-                    "x-ves-example": "value"
+                    "x-ves-example": "foobar"
+                },
+                "request_body": {
+                    "description": " Body of the Create/Replace/Custom request in whose context the suggested values for the field are being requested.",
+                    "title": "request_body",
+                    "$ref": "#/definitions/protobufAny",
+                    "x-displayname": "Request Body"
                 }
             }
         },
-        "namespaceUpdateAllowAdvertiseOnPublicResp": {
+        "namespaceSuggestValuesResp": {
             "type": "object",
-            "description": "Response body of UpdateAllowAdvertiseOnPublic request",
-            "title": "UpdateAllowAdvertiseOnPublicResp",
-            "x-displayname": "Response for UpdateAllowAdvertiseOnPublic",
-            "x-ves-proto-message": "ves.io.schema.namespace.UpdateAllowAdvertiseOnPublicResp",
+            "description": "Response body of SuggestValues request",
+            "title": "SuggestValuesResp",
+            "x-displayname": "Response for SuggestValues",
+            "x-ves-proto-message": "ves.io.schema.namespace.SuggestValuesResp",
             "properties": {
-                "result": {
-                    "type": "boolean",
-                    "description": " API result. ",
-                    "title": "result",
-                    "format": "boolean",
-                    "x-displayname": "Result"
+                "items": {
+                    "type": "array",
+                    "description": " List of suggested items.",
+                    "title": "item_lists",
+                    "items": {
+                        "$ref": "#/definitions/namespaceSuggestedItem"
+                    },
+                    "x-displayname": "Suggested Items"
+                }
+            }
+        },
+        "namespaceSuggestedItem": {
+            "type": "object",
+            "description": "A tuple with a suggested value and it's description.",
+            "title": "SuggestedItem",
+            "x-displayname": "Suggested Item",
+            "x-ves-proto-message": "ves.io.schema.namespace.SuggestedItem",
+            "properties": {
+                "description": {
+                    "type": "string",
+                    "description": " Optional description for the suggested value.",
+                    "title": "description",
+                    "x-displayname": "Description"
+                },
+                "value": {
+                    "type": "string",
+                    "description": " Suggested value for the field.",
+                    "title": "value",
+                    "x-displayname": "Value"
+                }
+            }
+        },
+        "protobufAny": {
+            "type": "object",
+            "description": "-Any- contains an arbitrary serialized protocol buffer message along with a\nURL that describes the type of the serialized message.\n\nProtobuf library provides support to pack/unpack Any values in the form\nof utility functions or additional generated methods of the Any type.\n\nExample 1: Pack and unpack a message in C++.\n\n    Foo foo = ...;\n    Any any;\n    any.PackFrom(foo);\n    ...\n    if (any.UnpackTo(\u0026foo)) {\n      ...\n    }\n\nExample 2: Pack and unpack a message in Java.\n\n    Foo foo = ...;\n    Any any = Any.pack(foo);\n    ...\n    if (any.is(Foo.class)) {\n      foo = any.unpack(Foo.class);\n    }\n\n Example 3: Pack and unpack a message in Python.\n\n    foo = Foo(...)\n    any = Any()\n    any.Pack(foo)\n    ...\n    if any.Is(Foo.DESCRIPTOR):\n      any.Unpack(foo)\n      ...\n\n Example 4: Pack and unpack a message in Go\n\n     foo := \u0026pb.Foo{...}\n     any, err := ptypes.MarshalAny(foo)\n     ...\n     foo := \u0026pb.Foo{}\n     if err := ptypes.UnmarshalAny(any, foo); err != nil {\n       ...\n     }\n\nThe pack methods provided by protobuf library will by default use\n'type.googleapis.com/full.type.name' as the type URL and the unpack\nmethods only use the fully qualified type name after the last '/'\nin the type URL, for example \"foo.bar.com/x/y.z\" will yield type\nname \"y.z\".\n\n\nJSON\n====\nThe JSON representation of an -Any- value uses the regular\nrepresentation of the deserialized, embedded message, with an\nadditional field -@type- which contains the type URL. Example:\n\n    package google.profile;\n    message Person {\n      string first_name = 1;\n      string last_name = 2;\n    }\n\n    {\n      \"@type\": \"type.googleapis.com/google.profile.Person\",\n      \"firstName\": \u003cstring\u003e,\n      \"lastName\": \u003cstring\u003e\n    }\n\nIf the embedded message type is well-known and has a custom JSON\nrepresentation, that representation will be embedded adding a field\n-value- which holds the custom JSON in addition to the -@type-\nfield. Example (for message [google.protobuf.Duration][]):\n\n    {\n      \"@type\": \"type.googleapis.com/google.protobuf.Duration\",\n      \"value\": \"1.212s\"\n    }",
+            "properties": {
+                "type_url": {
+                    "type": "string",
+                    "description": "A URL/resource name that uniquely identifies the type of the serialized\nprotocol buffer message. This string must contain at least\none \"/\" character. The last segment of the URL's path must represent\nthe fully qualified name of the type (as in\n-path/google.protobuf.Duration-). The name should be in a canonical form\n(e.g., leading \".\" is not accepted).\n\nIn practice, teams usually precompile into the binary all types that they\nexpect it to use in the context of Any. However, for URLs which use the\nscheme -http-, -https-, or no scheme, one can optionally set up a type\nserver that maps type URLs to message definitions as follows:\n\n* If no scheme is provided, -https- is assumed.\n* An HTTP GET on the URL must yield a [google.protobuf.Type][]\n  value in binary format, or produce an error.\n* Applications are allowed to cache lookup results based on the\n  URL, or have them precompiled into a binary to avoid any\n  lookup. Therefore, binary compatibility needs to be preserved\n  on changes to types. (Use versioned type names to manage\n  breaking changes.)\n\nNote: this functionality is not currently available in the official\nprotobuf release, and it is not used for type URLs beginning with\ntype.googleapis.com.\n\nSchemes other than -http-, -https- (or the empty scheme) might be\nused with implementation specific semantics."
+                },
+                "value": {
+                    "type": "string",
+                    "description": "Must be a valid serialized protocol buffer of the above specified type.",
+                    "format": "byte"
                 }
             }
         }

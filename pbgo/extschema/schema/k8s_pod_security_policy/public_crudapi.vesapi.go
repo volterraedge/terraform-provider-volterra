@@ -1776,7 +1776,7 @@ var APISwaggerJSON string = `{
         "/public/namespaces/{metadata.namespace}/k8s_pod_security_policys/{metadata.name}": {
             "put": {
                 "summary": "Replace k8s_pod_security_policy",
-                "description": "Replacing an k8s_pod_security_policy object will update the object by replacing the existing spec with the provided one. \nFor read-then-write operations a resourceVersion mismatch will occur if the object was modified between the read and write",
+                "description": "Replacing an k8s_pod_security_policy object will update the object by replacing the existing spec with the provided one.\nFor read-then-write operations a resourceVersion mismatch will occur if the object was modified between the read and write",
                 "operationId": "ves.io.schema.k8s_pod_security_policy.API.Replace",
                 "responses": {
                     "200": {
@@ -3030,7 +3030,7 @@ var APISwaggerJSON string = `{
         },
         "k8s_pod_security_policyReplaceSpecType": {
             "type": "object",
-            "description": "Replacing an k8s_pod_security_policy object will update the object by replacing the existing spec with the provided one. \nFor read-then-write operations a resourceVersion mismatch will occur if the object was modified between the read and write",
+            "description": "Replacing an k8s_pod_security_policy object will update the object by replacing the existing spec with the provided one.\nFor read-then-write operations a resourceVersion mismatch will occur if the object was modified between the read and write",
             "title": "Replace k8s_pod_security_policy",
             "x-displayname": "Replace Configuration Specification",
             "x-ves-oneof-field-config_method_choice": "[\"psp_spec\",\"yaml\"]",

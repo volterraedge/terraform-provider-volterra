@@ -3912,6 +3912,18 @@ var CustomAPISwaggerJSON string = `{
                 }
             }
         },
+        "schemaSyncMode": {
+            "type": "string",
+            "description": "Sync mode is to specify where the user details are being synced from.\n\n - SELF: Self\nSystem managed user.\n - SCIM: SCIM\nSCIM synced user. Full user life cycle is managed by the SCIM provider.",
+            "title": "Sync Mode",
+            "enum": [
+                "SELF",
+                "SCIM"
+            ],
+            "default": "SELF",
+            "x-displayname": "Sync Mode",
+            "x-ves-proto-enum": "ves.io.schema.SyncMode"
+        },
         "schemaSystemObjectMetaType": {
             "type": "object",
             "description": "SystemObjectMetaType is metadata generated or populated by the system for all persisted objects and\ncannot be updated directly by users.",
@@ -4611,6 +4623,13 @@ var CustomAPISwaggerJSON string = `{
                     "$ref": "#/definitions/userFSMState",
                     "x-displayname": "State"
                 },
+                "sync_mode": {
+                    "description": " Denotes if this is an externally managed entity imported into UAM by SCIM protocol, or self managed.\n\nExample: - \"self\"-",
+                    "title": "Sync Mode",
+                    "$ref": "#/definitions/schemaSyncMode",
+                    "x-displayname": "Sync Mode",
+                    "x-ves-example": "self"
+                },
                 "tenant": {
                     "type": "string",
                     "description": " tenant will represent id of the tenant that is being accessed\n\nExample: - \"value\"-",
@@ -4758,6 +4777,13 @@ var CustomAPISwaggerJSON string = `{
                     "$ref": "#/definitions/userFSMState",
                     "x-displayname": "State"
                 },
+                "sync_mode": {
+                    "description": " Denotes if this is an externally managed entity imported into UAM by SCIM protocol, or self managed.\n\nExample: - \"self\"-",
+                    "title": "Sync Mode",
+                    "$ref": "#/definitions/schemaSyncMode",
+                    "x-displayname": "Sync Mode",
+                    "x-ves-example": "self"
+                },
                 "tos_accepted": {
                     "type": "string",
                     "description": " tos accepted version, this field is deprecated refer the fields -tos_accepted_at- and -tos_version- instead.\n\nExample: - \"1.0\"-",
@@ -4790,12 +4816,11 @@ var CustomAPISwaggerJSON string = `{
         },
         "userIdmType": {
             "type": "string",
-            "description": "IdmType is to identify who is managing the user.\n\n - SSO: SSO User\nExternally managed Single Sign On based user imported into UAM.\n - VOLTERRA_MANAGED: Volterra Managed Local user\nVolterra managed local user. Full user life cycle is managed by volterra UAM and Identity.\n - SCIM: SCIM User\nExternally managed user imported into UAM by SCIM protocol.",
+            "description": "IdmType is to identify who is managing the user.\n\n - SSO: SSO User\nExternally managed Single Sign On based user imported into UAM.\n - VOLTERRA_MANAGED: Volterra Managed Local user\nVolterra managed local user. Full user life cycle is managed by volterra UAM and Identity.",
             "title": "IDM Type",
             "enum": [
                 "SSO",
-                "VOLTERRA_MANAGED",
-                "SCIM"
+                "VOLTERRA_MANAGED"
             ],
             "default": "SSO",
             "x-displayname": "Identity Management Type",
@@ -4921,6 +4946,13 @@ var CustomAPISwaggerJSON string = `{
                     "title": "OTP Enabled",
                     "format": "boolean",
                     "x-displayname": "OTP Enabled"
+                },
+                "sync_mode": {
+                    "description": " Denotes if this is an externally managed entity imported into UAM by SCIM protocol, or self managed.\n\nExample: - \"self\"-",
+                    "title": "Sync Mode",
+                    "$ref": "#/definitions/schemaSyncMode",
+                    "x-displayname": "Sync Mode",
+                    "x-ves-example": "self"
                 },
                 "tenant": {
                     "type": "string",

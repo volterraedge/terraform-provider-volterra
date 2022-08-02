@@ -3012,7 +3012,7 @@ var APISwaggerJSON string = `{
         },
         "clusterSubsetFallbackPolicy": {
             "type": "string",
-            "description": "Enumeration for SubsetFallbackPolicy if subset match is not found.\n\nThe request fails as if the cluster had no endpoint matching the subset policy\nAny cluster endpoint may be selected if the cluster had no endpoint matching the subset policy\nLoad balancing is done over endpoints matching default_subset if the cluster had no \nendpoint matching the subset policy",
+            "description": "Enumeration for SubsetFallbackPolicy if subset match is not found.\n\nThe request fails as if the cluster had no endpoint matching the subset policy\nAny cluster endpoint may be selected if the cluster had no endpoint matching the subset policy\nLoad balancing is done over endpoints matching default_subset if the cluster had no\nendpoint matching the subset policy",
             "title": "SubsetFallbackPolicy",
             "enum": [
                 "NO_FALLBACK",

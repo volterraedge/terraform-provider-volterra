@@ -27,6 +27,270 @@ var (
 
 // augmented methods on protoc/std generated struct
 
+func (m *CascadeDeleteItemType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *CascadeDeleteItemType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *CascadeDeleteItemType) DeepCopy() *CascadeDeleteItemType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &CascadeDeleteItemType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *CascadeDeleteItemType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *CascadeDeleteItemType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return CascadeDeleteItemTypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateCascadeDeleteItemType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateCascadeDeleteItemType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*CascadeDeleteItemType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *CascadeDeleteItemType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["error_message"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("error_message"))
+		if err := fv(ctx, m.GetErrorMessage(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["object_name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("object_name"))
+		if err := fv(ctx, m.GetObjectName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["object_type"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("object_type"))
+		if err := fv(ctx, m.GetObjectType(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["object_uid"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("object_uid"))
+		if err := fv(ctx, m.GetObjectUid(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultCascadeDeleteItemTypeValidator = func() *ValidateCascadeDeleteItemType {
+	v := &ValidateCascadeDeleteItemType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func CascadeDeleteItemTypeValidator() db.Validator {
+	return DefaultCascadeDeleteItemTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *CascadeDeleteRequest) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *CascadeDeleteRequest) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *CascadeDeleteRequest) DeepCopy() *CascadeDeleteRequest {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &CascadeDeleteRequest{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *CascadeDeleteRequest) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *CascadeDeleteRequest) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return CascadeDeleteRequestValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateCascadeDeleteRequest struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateCascadeDeleteRequest) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*CascadeDeleteRequest)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *CascadeDeleteRequest got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("name"))
+		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultCascadeDeleteRequestValidator = func() *ValidateCascadeDeleteRequest {
+	v := &ValidateCascadeDeleteRequest{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func CascadeDeleteRequestValidator() db.Validator {
+	return DefaultCascadeDeleteRequestValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *CascadeDeleteResponse) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *CascadeDeleteResponse) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *CascadeDeleteResponse) DeepCopy() *CascadeDeleteResponse {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &CascadeDeleteResponse{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *CascadeDeleteResponse) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *CascadeDeleteResponse) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return CascadeDeleteResponseValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateCascadeDeleteResponse struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateCascadeDeleteResponse) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*CascadeDeleteResponse)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *CascadeDeleteResponse got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["items"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("items"))
+		for idx, item := range m.GetItems() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultCascadeDeleteResponseValidator = func() *ValidateCascadeDeleteResponse {
+	v := &ValidateCascadeDeleteResponse{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func CascadeDeleteResponseValidator() db.Validator {
+	return DefaultCascadeDeleteResponseValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *CreateSpecType) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -597,6 +861,329 @@ var DefaultSubCAValidator = func() *ValidateSubCA {
 
 func SubCAValidator() db.Validator {
 	return DefaultSubCAValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *SuggestValuesReq) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *SuggestValuesReq) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *SuggestValuesReq) DeepCopy() *SuggestValuesReq {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &SuggestValuesReq{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *SuggestValuesReq) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *SuggestValuesReq) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return SuggestValuesReqValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateSuggestValuesReq struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateSuggestValuesReq) FieldPathValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for field_path")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateSuggestValuesReq) MatchValueValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for match_value")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateSuggestValuesReq) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*SuggestValuesReq)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *SuggestValuesReq got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["field_path"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("field_path"))
+		if err := fv(ctx, m.GetFieldPath(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["match_value"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("match_value"))
+		if err := fv(ctx, m.GetMatchValue(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["namespace"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("namespace"))
+		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["request_body"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("request_body"))
+		if err := fv(ctx, m.GetRequestBody(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultSuggestValuesReqValidator = func() *ValidateSuggestValuesReq {
+	v := &ValidateSuggestValuesReq{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhFieldPath := v.FieldPathValidationRuleHandler
+	rulesFieldPath := map[string]string{
+		"ves.io.schema.rules.string.max_len": "1024",
+	}
+	vFn, err = vrhFieldPath(rulesFieldPath)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for SuggestValuesReq.field_path: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["field_path"] = vFn
+
+	vrhMatchValue := v.MatchValueValidationRuleHandler
+	rulesMatchValue := map[string]string{
+		"ves.io.schema.rules.string.max_len": "256",
+	}
+	vFn, err = vrhMatchValue(rulesMatchValue)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for SuggestValuesReq.match_value: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["match_value"] = vFn
+
+	return v
+}()
+
+func SuggestValuesReqValidator() db.Validator {
+	return DefaultSuggestValuesReqValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *SuggestValuesResp) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *SuggestValuesResp) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *SuggestValuesResp) DeepCopy() *SuggestValuesResp {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &SuggestValuesResp{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *SuggestValuesResp) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *SuggestValuesResp) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return SuggestValuesRespValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateSuggestValuesResp struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateSuggestValuesResp) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*SuggestValuesResp)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *SuggestValuesResp got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["items"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("items"))
+		for idx, item := range m.GetItems() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultSuggestValuesRespValidator = func() *ValidateSuggestValuesResp {
+	v := &ValidateSuggestValuesResp{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func SuggestValuesRespValidator() db.Validator {
+	return DefaultSuggestValuesRespValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *SuggestedItem) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *SuggestedItem) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *SuggestedItem) DeepCopy() *SuggestedItem {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &SuggestedItem{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *SuggestedItem) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *SuggestedItem) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return SuggestedItemValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateSuggestedItem struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateSuggestedItem) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*SuggestedItem)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *SuggestedItem got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["description"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("description"))
+		if err := fv(ctx, m.GetDescription(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["value"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("value"))
+		if err := fv(ctx, m.GetValue(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultSuggestedItemValidator = func() *ValidateSuggestedItem {
+	v := &ValidateSuggestedItem{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func SuggestedItemValidator() db.Validator {
+	return DefaultSuggestedItemValidator
 }
 
 func (m *CreateSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {

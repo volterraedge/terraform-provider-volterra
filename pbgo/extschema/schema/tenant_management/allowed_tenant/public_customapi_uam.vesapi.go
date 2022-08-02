@@ -462,7 +462,7 @@ var CustomAPISwaggerJSON string = `{
     "definitions": {
         "allowed_tenantAllowedAccessConfig": {
             "type": "object",
-            "description": "x-displayName: \"Access Config\"\nShape for storing access config for a tenant.\ndefault field options - disable, read-only, read_write provided for easy acccess controls \nand underlying allowed groups corresponding to each usecase will be updated accordingly.\nmainly used for storing state for support related tenant access.",
+            "description": "x-displayName: \"Access Config\"\nShape for storing access config for a tenant.\ndefault field options - disable, read-only, read_write provided for easy acccess controls\nand underlying allowed groups corresponding to each usecase will be updated accordingly.\nmainly used for storing state for support related tenant access.",
             "title": "AccessConfig",
             "properties": {
                 "custom": {

@@ -2672,7 +2672,7 @@ var APISwaggerJSON string = `{
                 },
                 "users": {
                     "type": "array",
-                    "description": " Reference to user for whom API credential is created \n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 1\n",
+                    "description": " Reference to user for whom API credential is created\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 1\n",
                     "title": "user requesting credential",
                     "maxItems": 1,
                     "items": {

@@ -1776,7 +1776,7 @@ var APISwaggerJSON string = `{
         "/public/namespaces/{metadata.namespace}/k8s_cluster_role_bindings/{metadata.name}": {
             "put": {
                 "summary": "Replace k8s_cluster_role_binding",
-                "description": "Replacing an k8s_cluster_role_binding object will update the object by replacing the existing spec with the provided one. \nFor read-then-write operations a resourceVersion mismatch will occur if the object was modified between the read and write",
+                "description": "Replacing an k8s_cluster_role_binding object will update the object by replacing the existing spec with the provided one.\nFor read-then-write operations a resourceVersion mismatch will occur if the object was modified between the read and write",
                 "operationId": "ves.io.schema.k8s_cluster_role_binding.API.Replace",
                 "responses": {
                     "200": {
@@ -2678,7 +2678,7 @@ var APISwaggerJSON string = `{
         },
         "k8s_cluster_role_bindingReplaceSpecType": {
             "type": "object",
-            "description": "Replacing an k8s_cluster_role_binding object will update the object by replacing the existing spec with the provided one. \nFor read-then-write operations a resourceVersion mismatch will occur if the object was modified between the read and write",
+            "description": "Replacing an k8s_cluster_role_binding object will update the object by replacing the existing spec with the provided one.\nFor read-then-write operations a resourceVersion mismatch will occur if the object was modified between the read and write",
             "title": "Replace k8s_cluster_role_binding",
             "x-displayname": "Replace Configuration Specification",
             "x-ves-proto-message": "ves.io.schema.k8s_cluster_role_binding.ReplaceSpecType",

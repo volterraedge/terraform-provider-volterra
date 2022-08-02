@@ -3775,7 +3775,7 @@ var APISwaggerJSON string = `{
             "properties": {
                 "addr": {
                     "type": "string",
-                    "description": " IPv6 Address in form of string. IPv6 address must be specified as hexadecimal numbers separated by ':'\n The address can be compacted by suppressing zeros \n e.g. '2001:db8:0:0:0:0:2:1' becomes '2001:db8::2:1' or '2001:db8:0:0:0:2:0:0' becomes '2001:db8::2::'\n\nExample: - \"2001:db8:0:0:0:0:2:1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv6: true\n",
+                    "description": " IPv6 Address in form of string. IPv6 address must be specified as hexadecimal numbers separated by ':'\n The address can be compacted by suppressing zeros\n e.g. '2001:db8:0:0:0:0:2:1' becomes '2001:db8::2:1' or '2001:db8:0:0:0:2:0:0' becomes '2001:db8::2::'\n\nExample: - \"2001:db8:0:0:0:0:2:1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv6: true\n",
                     "title": "IPv6 Address",
                     "x-displayname": "IPv6 Address",
                     "x-ves-example": "2001:db8:0:0:0:0:2:1",
@@ -5491,6 +5491,11 @@ var APISwaggerJSON string = `{
                     "description": "Exclusive with []\n Reference to GCP credentials for automatic deployment",
                     "$ref": "#/definitions/schemaviewsObjectRefType",
                     "x-displayname": "Automatic Deployment"
+                },
+                "cloud_site_info": {
+                    "description": " GCP VPC Site information obtained after creating the site",
+                    "$ref": "#/definitions/gcp_vpc_siteGCPVPCSiteInfoType",
+                    "x-displayname": "GCP VPC Site Info"
                 },
                 "coordinates": {
                     "description": " Site longitude and latitude co-ordinates",

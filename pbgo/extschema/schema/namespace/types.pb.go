@@ -7,6 +7,7 @@ import (
 	fmt "fmt"
 	_ "github.com/gogo/protobuf/gogoproto"
 	proto "github.com/gogo/protobuf/proto"
+	types "github.com/gogo/protobuf/types"
 	golang_proto "github.com/golang/protobuf/proto"
 	schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
 	io "io"
@@ -325,6 +326,383 @@ func (m *GetSpecType) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_GetSpecType proto.InternalMessageInfo
 
+// SuggestValuesReq
+//
+// x-displayName: "Request for SuggestValues"
+// Request body of SuggestValues request
+type SuggestValuesReq struct {
+	// namespace
+	//
+	// x-displayName: "Namespace"
+	// x-example: "foobar"
+	// Namespace in which the suggestions are scoped.
+	Namespace string `protobuf:"bytes,1,opt,name=namespace,proto3" json:"namespace,omitempty"`
+	// field_path
+	//
+	// x-displayName: "Field Path"
+	// x-example: "spec.rule_choice.rule_list.rules[2].spec.api_group_matcher.match"
+	// JSON path of the field for which the suggested values are being requested.
+	FieldPath string `protobuf:"bytes,2,opt,name=field_path,json=fieldPath,proto3" json:"field_path,omitempty"`
+	// request_body
+	//
+	// x-displayName: "Request Body"
+	// Body of the Create/Replace/Custom request in whose context the suggested values for the field are being requested.
+	RequestBody *types.Any `protobuf:"bytes,3,opt,name=request_body,json=requestBody,proto3" json:"request_body,omitempty"`
+	// match_value
+	//
+	// x-displayName: "Match Value"
+	// x-example: "some-substring"
+	// A substring that must be present in either the value or description of each SuggestedItem in the response.
+	MatchValue string `protobuf:"bytes,4,opt,name=match_value,json=matchValue,proto3" json:"match_value,omitempty"`
+}
+
+func (m *SuggestValuesReq) Reset()      { *m = SuggestValuesReq{} }
+func (*SuggestValuesReq) ProtoMessage() {}
+func (*SuggestValuesReq) Descriptor() ([]byte, []int) {
+	return fileDescriptor_6586097a4709ae33, []int{5}
+}
+func (m *SuggestValuesReq) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *SuggestValuesReq) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *SuggestValuesReq) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_SuggestValuesReq.Merge(m, src)
+}
+func (m *SuggestValuesReq) XXX_Size() int {
+	return m.Size()
+}
+func (m *SuggestValuesReq) XXX_DiscardUnknown() {
+	xxx_messageInfo_SuggestValuesReq.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_SuggestValuesReq proto.InternalMessageInfo
+
+func (m *SuggestValuesReq) GetNamespace() string {
+	if m != nil {
+		return m.Namespace
+	}
+	return ""
+}
+
+func (m *SuggestValuesReq) GetFieldPath() string {
+	if m != nil {
+		return m.FieldPath
+	}
+	return ""
+}
+
+func (m *SuggestValuesReq) GetRequestBody() *types.Any {
+	if m != nil {
+		return m.RequestBody
+	}
+	return nil
+}
+
+func (m *SuggestValuesReq) GetMatchValue() string {
+	if m != nil {
+		return m.MatchValue
+	}
+	return ""
+}
+
+// SuggestedItem
+//
+// x-displayName: "Suggested Item"
+// A tuple with a suggested value and it's description.
+type SuggestedItem struct {
+	// value
+	//
+	// x-displayName: "Value"
+	// Suggested value for the field.
+	Value string `protobuf:"bytes,1,opt,name=value,proto3" json:"value,omitempty"`
+	// description
+	//
+	// x-displayName: "Description"
+	// Optional description for the suggested value.
+	Description string `protobuf:"bytes,2,opt,name=description,proto3" json:"description,omitempty"`
+}
+
+func (m *SuggestedItem) Reset()      { *m = SuggestedItem{} }
+func (*SuggestedItem) ProtoMessage() {}
+func (*SuggestedItem) Descriptor() ([]byte, []int) {
+	return fileDescriptor_6586097a4709ae33, []int{6}
+}
+func (m *SuggestedItem) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *SuggestedItem) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *SuggestedItem) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_SuggestedItem.Merge(m, src)
+}
+func (m *SuggestedItem) XXX_Size() int {
+	return m.Size()
+}
+func (m *SuggestedItem) XXX_DiscardUnknown() {
+	xxx_messageInfo_SuggestedItem.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_SuggestedItem proto.InternalMessageInfo
+
+func (m *SuggestedItem) GetValue() string {
+	if m != nil {
+		return m.Value
+	}
+	return ""
+}
+
+func (m *SuggestedItem) GetDescription() string {
+	if m != nil {
+		return m.Description
+	}
+	return ""
+}
+
+// SuggestValuesResp
+//
+// x-displayName: "Response for SuggestValues"
+// Response body of SuggestValues request
+type SuggestValuesResp struct {
+	// item_lists
+	//
+	// x-displayName: "Suggested Items"
+	// List of suggested items.
+	Items []*SuggestedItem `protobuf:"bytes,1,rep,name=items,proto3" json:"items,omitempty"`
+}
+
+func (m *SuggestValuesResp) Reset()      { *m = SuggestValuesResp{} }
+func (*SuggestValuesResp) ProtoMessage() {}
+func (*SuggestValuesResp) Descriptor() ([]byte, []int) {
+	return fileDescriptor_6586097a4709ae33, []int{7}
+}
+func (m *SuggestValuesResp) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *SuggestValuesResp) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *SuggestValuesResp) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_SuggestValuesResp.Merge(m, src)
+}
+func (m *SuggestValuesResp) XXX_Size() int {
+	return m.Size()
+}
+func (m *SuggestValuesResp) XXX_DiscardUnknown() {
+	xxx_messageInfo_SuggestValuesResp.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_SuggestValuesResp proto.InternalMessageInfo
+
+func (m *SuggestValuesResp) GetItems() []*SuggestedItem {
+	if m != nil {
+		return m.Items
+	}
+	return nil
+}
+
+// CascadeDeleteRequest
+//
+// x-displayName: "Cascade Delete Request"
+// CascadeDeleteRequest contains the name of the namespace that has to be deleted
+// along with the objects configured under the namespace
+type CascadeDeleteRequest struct {
+	// name
+	//
+	// x-displayName: "Name"
+	// x-example: "value"
+	// The name of the namespace
+	Name string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
+}
+
+func (m *CascadeDeleteRequest) Reset()      { *m = CascadeDeleteRequest{} }
+func (*CascadeDeleteRequest) ProtoMessage() {}
+func (*CascadeDeleteRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_6586097a4709ae33, []int{8}
+}
+func (m *CascadeDeleteRequest) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *CascadeDeleteRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *CascadeDeleteRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CascadeDeleteRequest.Merge(m, src)
+}
+func (m *CascadeDeleteRequest) XXX_Size() int {
+	return m.Size()
+}
+func (m *CascadeDeleteRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_CascadeDeleteRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_CascadeDeleteRequest proto.InternalMessageInfo
+
+func (m *CascadeDeleteRequest) GetName() string {
+	if m != nil {
+		return m.Name
+	}
+	return ""
+}
+
+// CascadeDeleteResponse
+//
+// x-displayName: "Cascade Delete Response"
+// CascadeDeleteResponse contains a list of objects in the namespace that were
+// deleted (or encountered an error while deleting)
+type CascadeDeleteResponse struct {
+	// items
+	//
+	// x-displayName: "Items"
+	// The objects deleted in namespace
+	Items []*CascadeDeleteItemType `protobuf:"bytes,1,rep,name=items,proto3" json:"items,omitempty"`
+}
+
+func (m *CascadeDeleteResponse) Reset()      { *m = CascadeDeleteResponse{} }
+func (*CascadeDeleteResponse) ProtoMessage() {}
+func (*CascadeDeleteResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_6586097a4709ae33, []int{9}
+}
+func (m *CascadeDeleteResponse) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *CascadeDeleteResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *CascadeDeleteResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CascadeDeleteResponse.Merge(m, src)
+}
+func (m *CascadeDeleteResponse) XXX_Size() int {
+	return m.Size()
+}
+func (m *CascadeDeleteResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_CascadeDeleteResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_CascadeDeleteResponse proto.InternalMessageInfo
+
+func (m *CascadeDeleteResponse) GetItems() []*CascadeDeleteItemType {
+	if m != nil {
+		return m.Items
+	}
+	return nil
+}
+
+// CascadeDeleteItemType
+//
+// x-displayName: "Cascade Delete Item"
+// CascadeDeleteItemType is details of object that was handled as part of cascade delete
+// of namespace and whether it was successfully deleted
+type CascadeDeleteItemType struct {
+	// object_type
+	//
+	// x-displayName: "Type"
+	// x-example: "ves.io.schema.virtual_host.Object"
+	// The type of the contained configuration object in the namespace that was deleted
+	ObjectType string `protobuf:"bytes,1,opt,name=object_type,json=objectType,proto3" json:"object_type,omitempty"`
+	// object_uid
+	//
+	// x-displayName: "UID"
+	// x-example: "value"
+	// The UID identifier of the configuration object that was deleted
+	ObjectUid string `protobuf:"bytes,2,opt,name=object_uid,json=objectUid,proto3" json:"object_uid,omitempty"`
+	// object_name
+	//
+	// x-displayName: "Name"
+	// x-example: "value"
+	// Name of the configuration object that was deleted
+	ObjectName string `protobuf:"bytes,3,opt,name=object_name,json=objectName,proto3" json:"object_name,omitempty"`
+	// error_message
+	//
+	// x-displayName: "Error"
+	// x-example: "value"
+	// A description of the error encountered (if any) in the process of cascade deletion
+	ErrorMessage string `protobuf:"bytes,4,opt,name=error_message,json=errorMessage,proto3" json:"error_message,omitempty"`
+}
+
+func (m *CascadeDeleteItemType) Reset()      { *m = CascadeDeleteItemType{} }
+func (*CascadeDeleteItemType) ProtoMessage() {}
+func (*CascadeDeleteItemType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_6586097a4709ae33, []int{10}
+}
+func (m *CascadeDeleteItemType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *CascadeDeleteItemType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *CascadeDeleteItemType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CascadeDeleteItemType.Merge(m, src)
+}
+func (m *CascadeDeleteItemType) XXX_Size() int {
+	return m.Size()
+}
+func (m *CascadeDeleteItemType) XXX_DiscardUnknown() {
+	xxx_messageInfo_CascadeDeleteItemType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_CascadeDeleteItemType proto.InternalMessageInfo
+
+func (m *CascadeDeleteItemType) GetObjectType() string {
+	if m != nil {
+		return m.ObjectType
+	}
+	return ""
+}
+
+func (m *CascadeDeleteItemType) GetObjectUid() string {
+	if m != nil {
+		return m.ObjectUid
+	}
+	return ""
+}
+
+func (m *CascadeDeleteItemType) GetObjectName() string {
+	if m != nil {
+		return m.ObjectName
+	}
+	return ""
+}
+
+func (m *CascadeDeleteItemType) GetErrorMessage() string {
+	if m != nil {
+		return m.ErrorMessage
+	}
+	return ""
+}
+
 func init() {
 	proto.RegisterEnum("ves.io.schema.namespace.PublicAdvertiseChoice", PublicAdvertiseChoice_name, PublicAdvertiseChoice_value)
 	golang_proto.RegisterEnum("ves.io.schema.namespace.PublicAdvertiseChoice", PublicAdvertiseChoice_name, PublicAdvertiseChoice_value)
@@ -338,6 +716,18 @@ func init() {
 	golang_proto.RegisterType((*ReplaceSpecType)(nil), "ves.io.schema.namespace.ReplaceSpecType")
 	proto.RegisterType((*GetSpecType)(nil), "ves.io.schema.namespace.GetSpecType")
 	golang_proto.RegisterType((*GetSpecType)(nil), "ves.io.schema.namespace.GetSpecType")
+	proto.RegisterType((*SuggestValuesReq)(nil), "ves.io.schema.namespace.SuggestValuesReq")
+	golang_proto.RegisterType((*SuggestValuesReq)(nil), "ves.io.schema.namespace.SuggestValuesReq")
+	proto.RegisterType((*SuggestedItem)(nil), "ves.io.schema.namespace.SuggestedItem")
+	golang_proto.RegisterType((*SuggestedItem)(nil), "ves.io.schema.namespace.SuggestedItem")
+	proto.RegisterType((*SuggestValuesResp)(nil), "ves.io.schema.namespace.SuggestValuesResp")
+	golang_proto.RegisterType((*SuggestValuesResp)(nil), "ves.io.schema.namespace.SuggestValuesResp")
+	proto.RegisterType((*CascadeDeleteRequest)(nil), "ves.io.schema.namespace.CascadeDeleteRequest")
+	golang_proto.RegisterType((*CascadeDeleteRequest)(nil), "ves.io.schema.namespace.CascadeDeleteRequest")
+	proto.RegisterType((*CascadeDeleteResponse)(nil), "ves.io.schema.namespace.CascadeDeleteResponse")
+	golang_proto.RegisterType((*CascadeDeleteResponse)(nil), "ves.io.schema.namespace.CascadeDeleteResponse")
+	proto.RegisterType((*CascadeDeleteItemType)(nil), "ves.io.schema.namespace.CascadeDeleteItemType")
+	golang_proto.RegisterType((*CascadeDeleteItemType)(nil), "ves.io.schema.namespace.CascadeDeleteItemType")
 }
 
 func init() {
@@ -348,46 +738,64 @@ func init() {
 }
 
 var fileDescriptor_6586097a4709ae33 = []byte{
-	// 613 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x7c, 0x53, 0x4d, 0x4f, 0xdb, 0x4c,
-	0x10, 0xf6, 0x92, 0x40, 0xc4, 0xfa, 0x25, 0x2f, 0xb5, 0xda, 0x62, 0x0c, 0x5a, 0x59, 0xa1, 0x87,
-	0xa8, 0x12, 0xb6, 0x44, 0x6f, 0xa8, 0x1f, 0x22, 0x50, 0x51, 0x89, 0x7e, 0x20, 0x53, 0xf5, 0xd0,
-	0x8b, 0xb5, 0x36, 0x43, 0xb0, 0x70, 0xb2, 0xab, 0xf5, 0xda, 0x90, 0x43, 0x25, 0xd4, 0x6b, 0x2f,
-	0xfd, 0x19, 0xfd, 0x0d, 0xed, 0x85, 0x23, 0xe2, 0xc4, 0x91, 0x63, 0x71, 0x2e, 0xed, 0xa5, 0xe2,
-	0x0f, 0x54, 0xaa, 0xb2, 0x4e, 0x52, 0x12, 0x15, 0x6e, 0x3b, 0x7e, 0x3e, 0xe6, 0x99, 0xb1, 0x06,
-	0x2f, 0x65, 0x90, 0x38, 0x11, 0x73, 0x93, 0x70, 0x1f, 0x5a, 0xd4, 0x6d, 0xd3, 0x16, 0x24, 0x9c,
-	0x86, 0xe0, 0xca, 0x0e, 0x87, 0xc4, 0xe1, 0x82, 0x49, 0x66, 0xcc, 0x15, 0x24, 0xa7, 0x20, 0x39,
-	0x43, 0x92, 0xb5, 0xdc, 0x8c, 0xe4, 0x7e, 0x1a, 0x38, 0x21, 0x6b, 0xb9, 0x4d, 0xd6, 0x64, 0xae,
-	0xe2, 0x07, 0xe9, 0x9e, 0xaa, 0x54, 0xa1, 0x5e, 0x85, 0x8f, 0xb5, 0x30, 0xda, 0x8c, 0x71, 0x19,
-	0xb1, 0x76, 0xbf, 0x89, 0x35, 0x3f, 0x0a, 0x5e, 0xeb, 0x6f, 0x2d, 0x8e, 0x42, 0x19, 0x8d, 0xa3,
-	0x5d, 0x2a, 0xa1, 0x8f, 0xda, 0x63, 0x68, 0x04, 0x87, 0xfe, 0x88, 0x75, 0xed, 0x17, 0xc2, 0x93,
-	0x3b, 0x69, 0xb0, 0xbe, 0x66, 0xd8, 0xb8, 0xdc, 0x4b, 0x6f, 0x22, 0x1b, 0xd5, 0xa7, 0x1b, 0xff,
-	0x7d, 0xfd, 0x79, 0x52, 0xaa, 0x88, 0xc9, 0x59, 0x64, 0x7e, 0x2c, 0x7b, 0x0a, 0x31, 0x08, 0x2e,
-	0x71, 0x68, 0x99, 0x13, 0xe3, 0x84, 0xe3, 0x6d, 0xaf, 0x07, 0x18, 0xcf, 0xb0, 0xce, 0x45, 0x94,
-	0x51, 0x09, 0xfe, 0x01, 0x74, 0xcc, 0x92, 0x8d, 0xea, 0xfa, 0xca, 0xbc, 0x33, 0xba, 0xa1, 0x1d,
-	0x08, 0x05, 0xc8, 0xb7, 0x1d, 0x0e, 0x8d, 0xd2, 0xe9, 0x07, 0xe4, 0xe1, 0xbe, 0x64, 0x0b, 0x3a,
-	0x86, 0x89, 0x2b, 0x19, 0x88, 0x24, 0x62, 0x6d, 0xb3, 0x6c, 0xa3, 0xfa, 0x8c, 0x37, 0x28, 0x57,
-	0x5f, 0x9c, 0x7d, 0x43, 0x1b, 0xb8, 0x8a, 0xcb, 0xaf, 0x69, 0x0b, 0xac, 0xa9, 0x22, 0x2a, 0x5e,
-	0xc4, 0xfa, 0x76, 0xa1, 0xb6, 0xb7, 0xa0, 0x63, 0xcd, 0x8c, 0xf4, 0xc7, 0x77, 0x71, 0xe5, 0x5d,
-	0x21, 0xb7, 0xa6, 0x87, 0xc6, 0xb5, 0xdf, 0x08, 0x57, 0x37, 0x63, 0x16, 0xd0, 0x78, 0x87, 0x43,
-	0xd8, 0xcb, 0x61, 0x34, 0xf0, 0x0c, 0x17, 0xec, 0xa8, 0xe3, 0x27, 0x69, 0xe0, 0x87, 0x34, 0x31,
-	0x91, 0x5d, 0xaa, 0xeb, 0x2b, 0xc4, 0xb9, 0xe1, 0xdf, 0x3a, 0x6a, 0x61, 0x9e, 0xae, 0x44, 0xbd,
-	0x37, 0x4d, 0x8c, 0xc7, 0x78, 0xe1, 0xba, 0x87, 0x1f, 0x53, 0x09, 0x89, 0xf4, 0x07, 0xe3, 0x4c,
-	0xa8, 0x71, 0xe6, 0xfe, 0x2a, 0x5e, 0x2a, 0xbc, 0x9f, 0xcf, 0x88, 0xf0, 0x3c, 0x8d, 0x63, 0x76,
-	0xe8, 0xd3, 0xdd, 0x0c, 0x84, 0x8c, 0x12, 0xf0, 0x59, 0xdb, 0xe7, 0x69, 0x10, 0x47, 0xa1, 0xda,
-	0x63, 0x75, 0xc5, 0xb9, 0x31, 0xcd, 0xb6, 0xa2, 0xad, 0x0d, 0x94, 0xeb, 0xfb, 0x2c, 0x0a, 0xc1,
-	0xbb, 0xaf, 0x0c, 0x87, 0x5f, 0xdf, 0xb4, 0x0b, 0x5a, 0x6d, 0x09, 0x57, 0xd7, 0x05, 0x50, 0x09,
-	0x83, 0xf1, 0x57, 0xef, 0x9c, 0x3d, 0x1d, 0xdb, 0x48, 0xed, 0x01, 0xfe, 0xdf, 0x03, 0x1e, 0xd3,
-	0xf0, 0x56, 0x96, 0x8d, 0xf5, 0x4d, 0x90, 0xb7, 0x30, 0x1e, 0x3e, 0xc1, 0xf7, 0xfe, 0x99, 0xce,
-	0xd0, 0x71, 0x65, 0x03, 0xf6, 0x68, 0x1a, 0xcb, 0x59, 0xcd, 0xc0, 0x78, 0xea, 0x79, 0x9b, 0x06,
-	0x31, 0xcc, 0x22, 0x05, 0x44, 0x89, 0x2a, 0x26, 0x1a, 0x9f, 0xd0, 0xf9, 0x25, 0xd1, 0x2e, 0x2e,
-	0x89, 0x76, 0x75, 0x49, 0xd0, 0x71, 0x4e, 0xd0, 0x97, 0x9c, 0xa0, 0xd3, 0x9c, 0xa0, 0xf3, 0x9c,
-	0xa0, 0x8b, 0x9c, 0xa0, 0xef, 0x39, 0x41, 0x3f, 0x72, 0xa2, 0x5d, 0xe5, 0x04, 0x7d, 0xee, 0x12,
-	0xed, 0xa4, 0x4b, 0xd0, 0x79, 0x97, 0x68, 0x17, 0x5d, 0xa2, 0xbd, 0x7f, 0xd5, 0x64, 0xfc, 0xa0,
-	0xe9, 0x64, 0x2c, 0x96, 0x20, 0x04, 0x75, 0xd2, 0xc4, 0x55, 0x8f, 0x3d, 0x26, 0x5a, 0xcb, 0x5c,
-	0xb0, 0x2c, 0xda, 0x05, 0xb1, 0x3c, 0x80, 0x5d, 0x1e, 0x34, 0x99, 0x0b, 0x47, 0xb2, 0x7f, 0x2c,
-	0xe3, 0x67, 0x1f, 0x4c, 0xa9, 0x8b, 0x79, 0xf4, 0x27, 0x00, 0x00, 0xff, 0xff, 0xad, 0x46, 0xe1,
-	0xe7, 0x18, 0x04, 0x00, 0x00,
+	// 905 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x7c, 0x55, 0x41, 0x6f, 0xe3, 0x54,
+	0x10, 0xce, 0x6b, 0x9a, 0x96, 0x8c, 0x9b, 0xd2, 0x7d, 0xea, 0xb2, 0x69, 0xb6, 0x98, 0x28, 0x45,
+	0xa8, 0x2c, 0xaa, 0x23, 0x95, 0x03, 0xd2, 0x6a, 0x01, 0x35, 0x2d, 0x2a, 0x68, 0x59, 0x28, 0x2e,
+	0x70, 0x40, 0x42, 0xd6, 0xb3, 0x3d, 0x75, 0xcc, 0xda, 0x79, 0x5e, 0xbf, 0xe7, 0xec, 0xe6, 0x80,
+	0x54, 0x71, 0xe5, 0xc2, 0x1f, 0xe0, 0xce, 0x6f, 0x80, 0xcb, 0x72, 0x5b, 0xed, 0xa9, 0xc7, 0x1e,
+	0x69, 0x7a, 0x81, 0x0b, 0xea, 0x1f, 0x40, 0x42, 0x7e, 0xcf, 0x6e, 0x93, 0x68, 0xdb, 0x9b, 0x67,
+	0xbe, 0xef, 0x9b, 0x7c, 0x33, 0x9e, 0x71, 0x60, 0x63, 0x88, 0xc2, 0x0a, 0x79, 0x57, 0x78, 0x7d,
+	0x8c, 0x59, 0x77, 0xc0, 0x62, 0x14, 0x09, 0xf3, 0xb0, 0x2b, 0x47, 0x09, 0x0a, 0x2b, 0x49, 0xb9,
+	0xe4, 0xf4, 0x8e, 0x26, 0x59, 0x9a, 0x64, 0x5d, 0x92, 0x5a, 0x5b, 0x41, 0x28, 0xfb, 0x99, 0x6b,
+	0x79, 0x3c, 0xee, 0x06, 0x3c, 0xe0, 0x5d, 0xc5, 0x77, 0xb3, 0x23, 0x15, 0xa9, 0x40, 0x3d, 0xe9,
+	0x3a, 0xad, 0xb5, 0x80, 0xf3, 0x20, 0xc2, 0x2b, 0x16, 0x1b, 0x8c, 0x0a, 0xe8, 0xee, 0xb4, 0x0f,
+	0x9e, 0xc8, 0x90, 0x0f, 0x44, 0xa9, 0x9b, 0x06, 0x27, 0xac, 0xb5, 0xd6, 0xa7, 0xa1, 0x21, 0x8b,
+	0x42, 0x9f, 0x49, 0x2c, 0xd0, 0xf6, 0x0c, 0x1a, 0xe2, 0x53, 0x67, 0xaa, 0x74, 0xe7, 0x5f, 0x02,
+	0xb5, 0xc3, 0xcc, 0xdd, 0xdd, 0xa1, 0x6d, 0x98, 0xcf, 0x1b, 0x6b, 0x92, 0x36, 0xd9, 0xac, 0xf7,
+	0x96, 0x7e, 0xff, 0xe7, 0x79, 0x75, 0x31, 0xad, 0xad, 0x90, 0xe6, 0x4f, 0xf3, 0xb6, 0x42, 0xa8,
+	0x09, 0xd5, 0x04, 0xe3, 0xe6, 0xdc, 0x2c, 0xe1, 0xf8, 0xc0, 0xce, 0x01, 0xfa, 0x31, 0x18, 0x49,
+	0x1a, 0x0e, 0x99, 0x44, 0xe7, 0x31, 0x8e, 0x9a, 0xd5, 0x36, 0xd9, 0x34, 0xb6, 0xd7, 0xac, 0xe9,
+	0xe1, 0x1d, 0xa2, 0x97, 0xa2, 0xfc, 0x7a, 0x94, 0x60, 0xaf, 0xfa, 0xe2, 0x47, 0x62, 0x43, 0x21,
+	0x79, 0x88, 0x23, 0xda, 0x84, 0xc5, 0x21, 0xa6, 0x22, 0xe4, 0x83, 0xe6, 0x7c, 0x9b, 0x6c, 0x36,
+	0xec, 0x32, 0xbc, 0xff, 0xe9, 0xcb, 0x3f, 0xc8, 0x1e, 0x2c, 0xc3, 0xfc, 0x17, 0x2c, 0xc6, 0xd6,
+	0x82, 0xb6, 0x0a, 0xeb, 0x60, 0x1c, 0x68, 0x75, 0xfb, 0x21, 0x8e, 0x5a, 0x8d, 0xa9, 0xdf, 0x87,
+	0x55, 0x58, 0xfc, 0x56, 0xcb, 0x5b, 0xf5, 0xcb, 0xc2, 0x9d, 0xff, 0x08, 0x2c, 0xef, 0x47, 0xdc,
+	0x65, 0xd1, 0x61, 0x82, 0x5e, 0xee, 0x83, 0xf6, 0xa0, 0x91, 0xa4, 0xfc, 0xd9, 0xc8, 0x11, 0x99,
+	0xeb, 0x78, 0x4c, 0x34, 0x49, 0xbb, 0xba, 0x69, 0x6c, 0x9b, 0xd6, 0x35, 0xaf, 0xdd, 0x52, 0x03,
+	0xb3, 0x0d, 0x25, 0xca, 0x9f, 0x99, 0xa0, 0x0f, 0xe0, 0xee, 0x64, 0x0d, 0x27, 0x62, 0x12, 0x85,
+	0x74, 0xca, 0x76, 0xe6, 0x54, 0x3b, 0x77, 0xae, 0x14, 0x9f, 0x2b, 0xbc, 0xf0, 0x47, 0x43, 0x58,
+	0x63, 0x51, 0xc4, 0x9f, 0x3a, 0xcc, 0x1f, 0x62, 0x2a, 0x43, 0x81, 0x0e, 0x1f, 0x38, 0x49, 0xe6,
+	0x46, 0xa1, 0xa7, 0xe6, 0xb8, 0xbc, 0x6d, 0x5d, 0xeb, 0xe6, 0x40, 0xd1, 0x76, 0x4a, 0xe5, 0x6e,
+	0x9f, 0x87, 0x1e, 0xda, 0x6f, 0xa8, 0x82, 0x97, 0xd9, 0x2f, 0x07, 0x9a, 0xd6, 0xd9, 0x80, 0xe5,
+	0xdd, 0x14, 0x99, 0xc4, 0xb2, 0xfd, 0xfb, 0xb7, 0x5e, 0x7e, 0x34, 0x33, 0x91, 0xce, 0xdb, 0xf0,
+	0xba, 0x8d, 0x49, 0xc4, 0xbc, 0x1b, 0x59, 0x6d, 0x30, 0xf6, 0x51, 0xde, 0xc4, 0xf8, 0x93, 0xc0,
+	0xca, 0x61, 0x16, 0x04, 0x79, 0xab, 0x2c, 0xca, 0x50, 0xd8, 0xf8, 0x84, 0xae, 0x43, 0xfd, 0xd2,
+	0xbc, 0xde, 0x36, 0xfb, 0x2a, 0x41, 0xdf, 0x05, 0x38, 0x0a, 0x31, 0xf2, 0x9d, 0x84, 0xc9, 0x7e,
+	0xb1, 0x6b, 0x90, 0xef, 0x5a, 0x2d, 0xad, 0x36, 0x8f, 0x5f, 0xb3, 0xeb, 0x0a, 0x3d, 0x60, 0xb2,
+	0x4f, 0x3f, 0x80, 0xa5, 0x14, 0x9f, 0x64, 0xf9, 0x9c, 0x5d, 0xee, 0x97, 0x0b, 0xb7, 0x6a, 0xe9,
+	0x2b, 0xb3, 0xca, 0x2b, 0xb3, 0x76, 0x06, 0x23, 0xdb, 0x28, 0x98, 0x3d, 0xee, 0x8f, 0xe8, 0x7b,
+	0x60, 0xc4, 0x4c, 0x7a, 0x7d, 0x67, 0x98, 0x9b, 0x52, 0xbb, 0x36, 0xf9, 0x23, 0x73, 0x36, 0x28,
+	0x58, 0x59, 0xee, 0xec, 0x43, 0xa3, 0x68, 0x01, 0xfd, 0xcf, 0x24, 0xc6, 0x74, 0x15, 0x6a, 0x5a,
+	0xa7, 0xbd, 0xeb, 0x80, 0xb6, 0xc1, 0xf0, 0x51, 0x78, 0x69, 0xa8, 0xce, 0x4b, 0x1b, 0xb7, 0x27,
+	0x53, 0x9d, 0xaf, 0xe0, 0xd6, 0xcc, 0x2c, 0x44, 0x42, 0x1f, 0x40, 0x2d, 0x94, 0x18, 0x97, 0x3b,
+	0xf7, 0xce, 0x0d, 0x3b, 0x37, 0xe1, 0xc1, 0xd6, 0xa2, 0xce, 0x3d, 0x58, 0xdd, 0x65, 0xc2, 0x63,
+	0x3e, 0xee, 0x61, 0x84, 0x12, 0x6d, 0xdd, 0x24, 0xa5, 0x93, 0xb7, 0xac, 0xaf, 0xb7, 0xf3, 0x3d,
+	0xdc, 0x9e, 0xe1, 0x8a, 0x84, 0x0f, 0x04, 0xd2, 0xbd, 0x69, 0x0b, 0xd7, 0x2f, 0xda, 0x94, 0x3c,
+	0xb7, 0x91, 0xbf, 0xe3, 0xd2, 0xca, 0xaf, 0x64, 0xa6, 0x7e, 0x49, 0xa0, 0x6f, 0x81, 0xc1, 0xdd,
+	0x1f, 0xd0, 0x93, 0x4e, 0xfe, 0xe1, 0x2a, 0x3c, 0x81, 0x4e, 0x29, 0xc2, 0x9b, 0x50, 0x44, 0x4e,
+	0x16, 0xfa, 0xc5, 0xe4, 0xea, 0x3a, 0xf3, 0x4d, 0xe8, 0x4f, 0xe8, 0x55, 0x4f, 0xd5, 0x49, 0x7d,
+	0xfe, 0x39, 0xa0, 0x1b, 0xd0, 0xc0, 0x34, 0xe5, 0xa9, 0x13, 0xa3, 0x10, 0x2c, 0x28, 0x5e, 0xa8,
+	0xbd, 0xa4, 0x92, 0x8f, 0x74, 0xee, 0xde, 0x87, 0x70, 0xfb, 0x95, 0x87, 0x42, 0x0d, 0x58, 0xdc,
+	0xc3, 0x23, 0x96, 0x45, 0x72, 0xa5, 0x42, 0x01, 0x16, 0x3e, 0x19, 0x30, 0x37, 0xc2, 0x15, 0xa2,
+	0x80, 0x50, 0xa8, 0x60, 0xae, 0xf7, 0x33, 0x39, 0x39, 0x33, 0x2b, 0xa7, 0x67, 0x66, 0xe5, 0xe2,
+	0xcc, 0x24, 0xc7, 0x63, 0x93, 0xfc, 0x36, 0x36, 0xc9, 0x8b, 0xb1, 0x49, 0x4e, 0xc6, 0x26, 0x39,
+	0x1d, 0x9b, 0xe4, 0xaf, 0xb1, 0x49, 0xfe, 0x1e, 0x9b, 0x95, 0x8b, 0xb1, 0x49, 0x7e, 0x39, 0x37,
+	0x2b, 0xcf, 0xcf, 0x4d, 0x72, 0x72, 0x6e, 0x56, 0x4e, 0xcf, 0xcd, 0xca, 0x77, 0x8f, 0x02, 0x9e,
+	0x3c, 0x0e, 0xac, 0x21, 0x8f, 0x24, 0xa6, 0x29, 0xb3, 0x32, 0xd1, 0x55, 0x0f, 0x47, 0x3c, 0x8d,
+	0xb7, 0x92, 0x94, 0x0f, 0x43, 0x1f, 0xd3, 0xad, 0x12, 0xee, 0x26, 0x6e, 0xc0, 0xbb, 0xf8, 0x4c,
+	0x16, 0xdf, 0xed, 0xd9, 0x3f, 0x27, 0x77, 0x41, 0xed, 0xf6, 0xfb, 0xff, 0x07, 0x00, 0x00, 0xff,
+	0xff, 0xa1, 0xe8, 0x55, 0x60, 0xbe, 0x06, 0x00, 0x00,
 }
 
 func (x PublicAdvertiseChoice) String() string {
@@ -528,6 +936,181 @@ func (this *GetSpecType) Equal(that interface{}) bool {
 	}
 	return true
 }
+func (this *SuggestValuesReq) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*SuggestValuesReq)
+	if !ok {
+		that2, ok := that.(SuggestValuesReq)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.Namespace != that1.Namespace {
+		return false
+	}
+	if this.FieldPath != that1.FieldPath {
+		return false
+	}
+	if !this.RequestBody.Equal(that1.RequestBody) {
+		return false
+	}
+	if this.MatchValue != that1.MatchValue {
+		return false
+	}
+	return true
+}
+func (this *SuggestedItem) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*SuggestedItem)
+	if !ok {
+		that2, ok := that.(SuggestedItem)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.Value != that1.Value {
+		return false
+	}
+	if this.Description != that1.Description {
+		return false
+	}
+	return true
+}
+func (this *SuggestValuesResp) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*SuggestValuesResp)
+	if !ok {
+		that2, ok := that.(SuggestValuesResp)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if len(this.Items) != len(that1.Items) {
+		return false
+	}
+	for i := range this.Items {
+		if !this.Items[i].Equal(that1.Items[i]) {
+			return false
+		}
+	}
+	return true
+}
+func (this *CascadeDeleteRequest) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CascadeDeleteRequest)
+	if !ok {
+		that2, ok := that.(CascadeDeleteRequest)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.Name != that1.Name {
+		return false
+	}
+	return true
+}
+func (this *CascadeDeleteResponse) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CascadeDeleteResponse)
+	if !ok {
+		that2, ok := that.(CascadeDeleteResponse)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if len(this.Items) != len(that1.Items) {
+		return false
+	}
+	for i := range this.Items {
+		if !this.Items[i].Equal(that1.Items[i]) {
+			return false
+		}
+	}
+	return true
+}
+func (this *CascadeDeleteItemType) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CascadeDeleteItemType)
+	if !ok {
+		that2, ok := that.(CascadeDeleteItemType)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.ObjectType != that1.ObjectType {
+		return false
+	}
+	if this.ObjectUid != that1.ObjectUid {
+		return false
+	}
+	if this.ObjectName != that1.ObjectName {
+		return false
+	}
+	if this.ErrorMessage != that1.ErrorMessage {
+		return false
+	}
+	return true
+}
 func (this *SubCA) goString() string {
 	if this == nil {
 		return "nil"
@@ -581,6 +1164,79 @@ func (this *GetSpecType) GoString() string {
 	}
 	s := make([]string, 0, 4)
 	s = append(s, "&namespace.GetSpecType{")
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *SuggestValuesReq) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 8)
+	s = append(s, "&namespace.SuggestValuesReq{")
+	s = append(s, "Namespace: "+fmt.Sprintf("%#v", this.Namespace)+",\n")
+	s = append(s, "FieldPath: "+fmt.Sprintf("%#v", this.FieldPath)+",\n")
+	if this.RequestBody != nil {
+		s = append(s, "RequestBody: "+fmt.Sprintf("%#v", this.RequestBody)+",\n")
+	}
+	s = append(s, "MatchValue: "+fmt.Sprintf("%#v", this.MatchValue)+",\n")
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *SuggestedItem) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 6)
+	s = append(s, "&namespace.SuggestedItem{")
+	s = append(s, "Value: "+fmt.Sprintf("%#v", this.Value)+",\n")
+	s = append(s, "Description: "+fmt.Sprintf("%#v", this.Description)+",\n")
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *SuggestValuesResp) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 5)
+	s = append(s, "&namespace.SuggestValuesResp{")
+	if this.Items != nil {
+		s = append(s, "Items: "+fmt.Sprintf("%#v", this.Items)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *CascadeDeleteRequest) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 5)
+	s = append(s, "&namespace.CascadeDeleteRequest{")
+	s = append(s, "Name: "+fmt.Sprintf("%#v", this.Name)+",\n")
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *CascadeDeleteResponse) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 5)
+	s = append(s, "&namespace.CascadeDeleteResponse{")
+	if this.Items != nil {
+		s = append(s, "Items: "+fmt.Sprintf("%#v", this.Items)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *CascadeDeleteItemType) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 8)
+	s = append(s, "&namespace.CascadeDeleteItemType{")
+	s = append(s, "ObjectType: "+fmt.Sprintf("%#v", this.ObjectType)+",\n")
+	s = append(s, "ObjectUid: "+fmt.Sprintf("%#v", this.ObjectUid)+",\n")
+	s = append(s, "ObjectName: "+fmt.Sprintf("%#v", this.ObjectName)+",\n")
+	s = append(s, "ErrorMessage: "+fmt.Sprintf("%#v", this.ErrorMessage)+",\n")
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
@@ -762,6 +1418,254 @@ func (m *GetSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
+func (m *SuggestValuesReq) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *SuggestValuesReq) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *SuggestValuesReq) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.MatchValue) > 0 {
+		i -= len(m.MatchValue)
+		copy(dAtA[i:], m.MatchValue)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.MatchValue)))
+		i--
+		dAtA[i] = 0x22
+	}
+	if m.RequestBody != nil {
+		{
+			size, err := m.RequestBody.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1a
+	}
+	if len(m.FieldPath) > 0 {
+		i -= len(m.FieldPath)
+		copy(dAtA[i:], m.FieldPath)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.FieldPath)))
+		i--
+		dAtA[i] = 0x12
+	}
+	if len(m.Namespace) > 0 {
+		i -= len(m.Namespace)
+		copy(dAtA[i:], m.Namespace)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.Namespace)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *SuggestedItem) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *SuggestedItem) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *SuggestedItem) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.Description) > 0 {
+		i -= len(m.Description)
+		copy(dAtA[i:], m.Description)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.Description)))
+		i--
+		dAtA[i] = 0x12
+	}
+	if len(m.Value) > 0 {
+		i -= len(m.Value)
+		copy(dAtA[i:], m.Value)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.Value)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *SuggestValuesResp) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *SuggestValuesResp) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *SuggestValuesResp) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.Items) > 0 {
+		for iNdEx := len(m.Items) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.Items[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0xa
+		}
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *CascadeDeleteRequest) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *CascadeDeleteRequest) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CascadeDeleteRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.Name) > 0 {
+		i -= len(m.Name)
+		copy(dAtA[i:], m.Name)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.Name)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *CascadeDeleteResponse) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *CascadeDeleteResponse) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CascadeDeleteResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.Items) > 0 {
+		for iNdEx := len(m.Items) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.Items[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0xa
+		}
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *CascadeDeleteItemType) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *CascadeDeleteItemType) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CascadeDeleteItemType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.ErrorMessage) > 0 {
+		i -= len(m.ErrorMessage)
+		copy(dAtA[i:], m.ErrorMessage)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.ErrorMessage)))
+		i--
+		dAtA[i] = 0x22
+	}
+	if len(m.ObjectName) > 0 {
+		i -= len(m.ObjectName)
+		copy(dAtA[i:], m.ObjectName)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.ObjectName)))
+		i--
+		dAtA[i] = 0x1a
+	}
+	if len(m.ObjectUid) > 0 {
+		i -= len(m.ObjectUid)
+		copy(dAtA[i:], m.ObjectUid)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.ObjectUid)))
+		i--
+		dAtA[i] = 0x12
+	}
+	if len(m.ObjectType) > 0 {
+		i -= len(m.ObjectType)
+		copy(dAtA[i:], m.ObjectType)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.ObjectType)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
 func encodeVarintTypes(dAtA []byte, offset int, v uint64) int {
 	offset -= sovTypes(v)
 	base := offset
@@ -845,6 +1749,116 @@ func (m *GetSpecType) Size() (n int) {
 	return n
 }
 
+func (m *SuggestValuesReq) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Namespace)
+	if l > 0 {
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	l = len(m.FieldPath)
+	if l > 0 {
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.RequestBody != nil {
+		l = m.RequestBody.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	l = len(m.MatchValue)
+	if l > 0 {
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+
+func (m *SuggestedItem) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Value)
+	if l > 0 {
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	l = len(m.Description)
+	if l > 0 {
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+
+func (m *SuggestValuesResp) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if len(m.Items) > 0 {
+		for _, e := range m.Items {
+			l = e.Size()
+			n += 1 + l + sovTypes(uint64(l))
+		}
+	}
+	return n
+}
+
+func (m *CascadeDeleteRequest) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Name)
+	if l > 0 {
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+
+func (m *CascadeDeleteResponse) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if len(m.Items) > 0 {
+		for _, e := range m.Items {
+			l = e.Size()
+			n += 1 + l + sovTypes(uint64(l))
+		}
+	}
+	return n
+}
+
+func (m *CascadeDeleteItemType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.ObjectType)
+	if l > 0 {
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	l = len(m.ObjectUid)
+	if l > 0 {
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	l = len(m.ObjectName)
+	if l > 0 {
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	l = len(m.ErrorMessage)
+	if l > 0 {
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+
 func sovTypes(x uint64) (n int) {
 	return (math_bits.Len64(x|1) + 6) / 7
 }
@@ -904,6 +1918,83 @@ func (this *GetSpecType) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GetSpecType{`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *SuggestValuesReq) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&SuggestValuesReq{`,
+		`Namespace:` + fmt.Sprintf("%v", this.Namespace) + `,`,
+		`FieldPath:` + fmt.Sprintf("%v", this.FieldPath) + `,`,
+		`RequestBody:` + strings.Replace(fmt.Sprintf("%v", this.RequestBody), "Any", "types.Any", 1) + `,`,
+		`MatchValue:` + fmt.Sprintf("%v", this.MatchValue) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *SuggestedItem) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&SuggestedItem{`,
+		`Value:` + fmt.Sprintf("%v", this.Value) + `,`,
+		`Description:` + fmt.Sprintf("%v", this.Description) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *SuggestValuesResp) String() string {
+	if this == nil {
+		return "nil"
+	}
+	repeatedStringForItems := "[]*SuggestedItem{"
+	for _, f := range this.Items {
+		repeatedStringForItems += strings.Replace(f.String(), "SuggestedItem", "SuggestedItem", 1) + ","
+	}
+	repeatedStringForItems += "}"
+	s := strings.Join([]string{`&SuggestValuesResp{`,
+		`Items:` + repeatedStringForItems + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *CascadeDeleteRequest) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&CascadeDeleteRequest{`,
+		`Name:` + fmt.Sprintf("%v", this.Name) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *CascadeDeleteResponse) String() string {
+	if this == nil {
+		return "nil"
+	}
+	repeatedStringForItems := "[]*CascadeDeleteItemType{"
+	for _, f := range this.Items {
+		repeatedStringForItems += strings.Replace(f.String(), "CascadeDeleteItemType", "CascadeDeleteItemType", 1) + ","
+	}
+	repeatedStringForItems += "}"
+	s := strings.Join([]string{`&CascadeDeleteResponse{`,
+		`Items:` + repeatedStringForItems + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *CascadeDeleteItemType) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&CascadeDeleteItemType{`,
+		`ObjectType:` + fmt.Sprintf("%v", this.ObjectType) + `,`,
+		`ObjectUid:` + fmt.Sprintf("%v", this.ObjectUid) + `,`,
+		`ObjectName:` + fmt.Sprintf("%v", this.ObjectName) + `,`,
+		`ErrorMessage:` + fmt.Sprintf("%v", this.ErrorMessage) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -1348,6 +2439,748 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 			return fmt.Errorf("proto: GetSpecType: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *SuggestValuesReq) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: SuggestValuesReq: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: SuggestValuesReq: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Namespace", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Namespace = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field FieldPath", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.FieldPath = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field RequestBody", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.RequestBody == nil {
+				m.RequestBody = &types.Any{}
+			}
+			if err := m.RequestBody.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field MatchValue", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.MatchValue = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *SuggestedItem) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: SuggestedItem: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: SuggestedItem: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Value", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Value = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Description", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Description = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *SuggestValuesResp) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: SuggestValuesResp: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: SuggestValuesResp: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Items", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Items = append(m.Items, &SuggestedItem{})
+			if err := m.Items[len(m.Items)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *CascadeDeleteRequest) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: CascadeDeleteRequest: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: CascadeDeleteRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Name", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Name = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *CascadeDeleteResponse) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: CascadeDeleteResponse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: CascadeDeleteResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Items", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Items = append(m.Items, &CascadeDeleteItemType{})
+			if err := m.Items[len(m.Items)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *CascadeDeleteItemType) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: CascadeDeleteItemType: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: CascadeDeleteItemType: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ObjectType", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.ObjectType = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ObjectUid", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.ObjectUid = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ObjectName", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.ObjectName = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ErrorMessage", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.ErrorMessage = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipTypes(dAtA[iNdEx:])

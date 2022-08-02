@@ -2893,7 +2893,7 @@ var APISwaggerJSON string = `{
                 },
                 "network_prefix": {
                     "type": "string",
-                    "description": "Exclusive with []\n Network Prefix for a single site. \n\nExample: - \"10.1.1.0/24\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv4_prefix: true\n",
+                    "description": "Exclusive with []\n Network Prefix for a single site.\n\nExample: - \"10.1.1.0/24\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv4_prefix: true\n",
                     "title": "Network Prefix",
                     "x-displayname": "Network Prefix",
                     "x-ves-example": "10.1.1.0/24",
@@ -2964,7 +2964,7 @@ var APISwaggerJSON string = `{
                 },
                 "start_ip": {
                     "type": "string",
-                    "description": " Starting IP of the pool range. \n In case of address allocator, offset is derived based on network prefix.\n 10.1.1.5 with prefix length of 24, start offset is 0.0.0.5\n\nExample: - \"10.1.1.5\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv4: true\n",
+                    "description": " Starting IP of the pool range.\n In case of address allocator, offset is derived based on network prefix.\n 10.1.1.5 with prefix length of 24, start offset is 0.0.0.5\n\nExample: - \"10.1.1.5\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv4: true\n",
                     "title": "Start IP",
                     "x-displayname": "Starting IP",
                     "x-ves-example": "10.1.1.5",
@@ -3143,6 +3143,11 @@ var APISwaggerJSON string = `{
                     "description": "x-displayName: \"Inside Network\"\nInterface belongs to user configured inside network",
                     "title": "Inside Network",
                     "$ref": "#/definitions/schemaviewsObjectRefType"
+                },
+                "ip_fabric_network": {
+                    "description": "x-displayName: \"IP Fabric Network\"\nInterface belongs to IP Fabric network",
+                    "title": "IP Fabric Network",
+                    "$ref": "#/definitions/schemaEmpty"
                 },
                 "is_primary": {
                     "description": "x-displayName: \"Interface is Primary\"\nThis interface is primary",
@@ -3449,8 +3454,71 @@ var APISwaggerJSON string = `{
         },
         "network_interfaceLoopbackInterfaceType": {
             "type": "object",
-            "description": "x-displayName: \"Loopback Interface\"\nLoopback Interface Configuration",
-            "title": "Loopback Interface"
+            "description": "x-displayName: \"Loopback Device\"\nLoopback Device Configuration",
+            "title": "Loopback Device",
+            "properties": {
+                "cluster": {
+                    "description": "x-displayName: \"Cluster, All Nodes of the Site\"\nConfiguration will apply to given device on all nodes of the site.",
+                    "title": "Node Independent",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "device": {
+                    "type": "string",
+                    "description": "x-displayName: \"Loopback Ethernet Device\"\nx-example: \"eth0\"\nx-required\nInterface configuration for the Loopback Ethernet device",
+                    "title": "Device"
+                },
+                "dhcp_client": {
+                    "description": "x-displayName: \"DHCP Client\"\nInterface gets it IP address from external DHCP server",
+                    "title": "DHCP Client",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "dhcp_server": {
+                    "description": "x-displayName: \"DHCP server\"\nDHCP Server is configured for this interface, Interface IP from DHCP server configuration.",
+                    "title": "DHCP Server",
+                    "$ref": "#/definitions/network_interfaceDHCPServerParametersType"
+                },
+                "ip_fabric_network": {
+                    "description": "x-displayName: \"IP Fabric Network\"\nInterface belongs to IP Fabric network",
+                    "title": "IP Fabric Network",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "mtu": {
+                    "type": "integer",
+                    "description": "x-displayName: \"Maximum Packet Size (MTU)\"\nx-example: \"1450\"\nMaximum packet size (Maximum Transfer Unit) of the interface\nWhen configured, mtu must be between 512 and 16384",
+                    "title": "Maximum Packet Size (MTU)",
+                    "format": "int64"
+                },
+                "no_ipv6_address": {
+                    "description": "x-displayName: \"No IPv6 Address\"\nInterface does not have an IPv6 Address.",
+                    "title": "no_ipv6_address",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "node": {
+                    "type": "string",
+                    "description": "x-displayName: \"Specific Node\"\nConfiguration will apply to a device on the given node.",
+                    "title": "Node"
+                },
+                "site_local_inside_network": {
+                    "description": "x-displayName: \"Site Local Network Inside\"\nInterface belongs to site local network inside",
+                    "title": "Site Local Network Inside",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "site_local_network": {
+                    "description": "x-displayName: \"Site Local Network (Outside)\"\nInterface belongs to site local network (outside)",
+                    "title": "Site Local Network",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "static_ip": {
+                    "description": "x-displayName: \"Static IP\"\nInterface IP is configured statically",
+                    "title": "Static IP",
+                    "$ref": "#/definitions/network_interfaceStaticIPParametersType"
+                },
+                "static_ipv6_address": {
+                    "description": "x-displayName: \"Static IP\"\nInterface IP is configured statically",
+                    "title": "Static IP",
+                    "$ref": "#/definitions/network_interfaceStaticIPParametersType"
+                }
+            }
         },
         "network_interfaceNetworkInterfaceDFGW": {
             "type": "object",
@@ -3595,7 +3663,7 @@ var APISwaggerJSON string = `{
         },
         "network_interfaceNetworkInterfaceType": {
             "type": "string",
-            "description": "Identifies the type of the interface.\n\nNetwork interface is an Ethernet interface\nNetwork interface is a VLAN interface\nNetwork interface is a bond interface running LACP\nNetwork interface is a tunnel interface\nNetwork interface is a loopback interface",
+            "description": "Identifies the type of the interface.\n\nNetwork interface is an Ethernet interface\nNetwork interface is a VLAN interface\nNetwork interface is a bond interface running LACP\nNetwork interface is a tunnel interface\nNetwork interface is a loopback device",
             "title": "Network Interface Type",
             "enum": [
                 "NETWORK_INTERFACE_ETHERNET",

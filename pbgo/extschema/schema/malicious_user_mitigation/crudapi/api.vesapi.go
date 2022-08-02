@@ -2806,19 +2806,19 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.malicious_user_mitigation.MaliciousUserMitigationAction",
             "properties": {
                 "block_temporarily": {
-                    "description": "Exclusive with [captcha_challenge javascript_challenge]\n The user is blocked for the duration, they are in the corresponding threat level \n assigned to this mitigation action",
+                    "description": "Exclusive with [captcha_challenge javascript_challenge]\n The user is blocked for the duration, they are in the corresponding threat level\n assigned to this mitigation action",
                     "title": "Block User Temporarily",
                     "$ref": "#/definitions/schemaEmpty",
                     "x-displayname": "Block Temporarily"
                 },
                 "captcha_challenge": {
-                    "description": "Exclusive with [block_temporarily javascript_challenge]\n Default Captcha Challenge settings will be used, if custom parameters are not \n configured on the corresponding http load balancer",
+                    "description": "Exclusive with [block_temporarily javascript_challenge]\n Default Captcha Challenge settings will be used, if custom parameters are not\n configured on the corresponding http load balancer",
                     "title": "Captcha Challenge",
                     "$ref": "#/definitions/schemaEmpty",
                     "x-displayname": "Captcha Challenge"
                 },
                 "javascript_challenge": {
-                    "description": "Exclusive with [block_temporarily captcha_challenge]\n Default Javascript Challenge settings will be used, if custom parameters are not \n configured on the corresponding http load balancer",
+                    "description": "Exclusive with [block_temporarily captcha_challenge]\n Default Javascript Challenge settings will be used, if custom parameters are not\n configured on the corresponding http load balancer",
                     "title": "Javascript Challenge",
                     "$ref": "#/definitions/schemaEmpty",
                     "x-displayname": "Javascript Challenge"
@@ -2856,7 +2856,7 @@ var APISwaggerJSON string = `{
         },
         "malicious_user_mitigationMaliciousUserMitigationType": {
             "type": "object",
-            "description": "Settings that specify the actions to be taken when malicious users are determined to be at different threat levels. \nUser's activity is monitored and continuously analyzed for malicious behavior. From this analysis, a threat-level \nis assigned to each user. The settings defined in malicious user mitigation specify what mitigation actions to take \nfor user determined to be at different threat levels.",
+            "description": "Settings that specify the actions to be taken when malicious users are determined to be at different threat levels.\nUser's activity is monitored and continuously analyzed for malicious behavior. From this analysis, a threat-level\nis assigned to each user. The settings defined in malicious user mitigation specify what mitigation actions to take\nfor user determined to be at different threat levels.",
             "title": "MaliciousUserMitigationType",
             "x-displayname": "Malicious User Mitigation Settings",
             "x-ves-proto-message": "ves.io.schema.malicious_user_mitigation.MaliciousUserMitigationType",
@@ -2889,19 +2889,19 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.malicious_user_mitigation.MaliciousUserThreatLevel",
             "properties": {
                 "high": {
-                    "description": "Exclusive with [low medium]\n  ",
+                    "description": "Exclusive with [low medium]\n",
                     "title": "High",
                     "$ref": "#/definitions/schemaEmpty",
                     "x-displayname": "High"
                 },
                 "low": {
-                    "description": "Exclusive with [high medium]\n  ",
+                    "description": "Exclusive with [high medium]\n",
                     "title": "Low",
                     "$ref": "#/definitions/schemaEmpty",
                     "x-displayname": "Low"
                 },
                 "medium": {
-                    "description": "Exclusive with [high low]\n  ",
+                    "description": "Exclusive with [high low]\n",
                     "title": "Medium",
                     "$ref": "#/definitions/schemaEmpty",
                     "x-displayname": "Medium"

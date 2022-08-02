@@ -3308,6 +3308,22 @@ func (v *ValidateSimpleRule) GotoPolicyValidationRuleHandler(rules map[string]st
 	return validatorFn, nil
 }
 
+func (v *ValidateSimpleRule) ChallengeActionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	var conv db.EnumConvFn
+	conv = func(v interface{}) int32 {
+		i := v.(ves_io_schema_policy.ChallengeAction)
+		return int32(i)
+	}
+	// ves_io_schema_policy.ChallengeAction_name is generated in .pb.go
+	validatorFn, err := db.NewEnumValidationRuleHandler(rules, ves_io_schema_policy.ChallengeAction_name, conv)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for challenge_action")
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateSimpleRule) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*SimpleRule)
 	if !ok {
@@ -3340,6 +3356,18 @@ func (v *ValidateSimpleRule) Validate(ctx context.Context, pm interface{}, opts 
 
 	}
 
+	if fv, exists := v.FldValidators["arg_matchers"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("arg_matchers"))
+		for idx, item := range m.GetArgMatchers() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["asn_list"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("asn_list"))
@@ -3358,10 +3386,28 @@ func (v *ValidateSimpleRule) Validate(ctx context.Context, pm interface{}, opts 
 
 	}
 
+	if fv, exists := v.FldValidators["body_matcher"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("body_matcher"))
+		if err := fv(ctx, m.GetBodyMatcher(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["bot_action"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("bot_action"))
 		if err := fv(ctx, m.GetBotAction(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["challenge_action"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("challenge_action"))
+		if err := fv(ctx, m.GetChallengeAction(), vOpts...); err != nil {
 			return err
 		}
 
@@ -3390,6 +3436,18 @@ func (v *ValidateSimpleRule) Validate(ctx context.Context, pm interface{}, opts 
 		vOpts := append(opts, db.WithValidateField("content_rewrite_action"))
 		if err := fv(ctx, m.GetContentRewriteAction(), vOpts...); err != nil {
 			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["cookie_matchers"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("cookie_matchers"))
+		for idx, item := range m.GetCookieMatchers() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
 		}
 
 	}
@@ -3545,6 +3603,18 @@ func (v *ValidateSimpleRule) Validate(ctx context.Context, pm interface{}, opts 
 
 	}
 
+	if fv, exists := v.FldValidators["query_params"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("query_params"))
+		for idx, item := range m.GetQueryParams() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["rate_limiter_specs"]; exists {
 		vOpts := append(opts, db.WithValidateField("rate_limiter_specs"))
 		if err := fv(ctx, m.GetRateLimiterSpecs(), vOpts...); err != nil {
@@ -3600,6 +3670,24 @@ func (v *ValidateSimpleRule) Validate(ctx context.Context, pm interface{}, opts 
 
 		vOpts := append(opts, db.WithValidateField("url_matcher"))
 		if err := fv(ctx, m.GetUrlMatcher(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["user_identity_matcher"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("user_identity_matcher"))
+		if err := fv(ctx, m.GetUserIdentityMatcher(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["virtual_host_matcher"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("virtual_host_matcher"))
+		if err := fv(ctx, m.GetVirtualHostMatcher(), vOpts...); err != nil {
 			return err
 		}
 
@@ -3697,6 +3785,17 @@ var DefaultSimpleRuleValidator = func() *ValidateSimpleRule {
 	}
 	v.FldValidators["goto_policy"] = vFn
 
+	vrhChallengeAction := v.ChallengeActionValidationRuleHandler
+	rulesChallengeAction := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhChallengeAction(rulesChallengeAction)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for SimpleRule.challenge_action: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["challenge_action"] = vFn
+
 	v.FldValidators["domain_matcher"] = ves_io_schema_policy.MatcherTypeValidator().Validate
 
 	v.FldValidators["path"] = ves_io_schema_policy.PathMatcherTypeValidator().Validate
@@ -3742,6 +3841,18 @@ var DefaultSimpleRuleValidator = func() *ValidateSimpleRule {
 	v.FldValidators["ip_matcher"] = ves_io_schema_policy.IpMatcherTypeValidator().Validate
 
 	v.FldValidators["asn_matcher"] = ves_io_schema_policy.AsnMatcherTypeValidator().Validate
+
+	v.FldValidators["user_identity_matcher"] = ves_io_schema_policy.MatcherTypeBasicValidator().Validate
+
+	v.FldValidators["body_matcher"] = ves_io_schema_policy.MatcherTypeValidator().Validate
+
+	v.FldValidators["virtual_host_matcher"] = ves_io_schema_policy.MatcherTypeValidator().Validate
+
+	v.FldValidators["query_params"] = ves_io_schema_policy.QueryParameterMatcherTypeValidator().Validate
+
+	v.FldValidators["arg_matchers"] = ves_io_schema_policy.ArgMatcherTypeValidator().Validate
+
+	v.FldValidators["cookie_matchers"] = ves_io_schema_policy.CookieMatcherTypeValidator().Validate
 
 	return v
 }()

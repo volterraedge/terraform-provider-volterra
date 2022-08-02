@@ -1776,7 +1776,7 @@ var APISwaggerJSON string = `{
         "/public/namespaces/{metadata.namespace}/clusters/{metadata.name}": {
             "put": {
                 "summary": "Replace cluster",
-                "description": "Replacing an cluster object will update the object by replacing the existing spec with the provided one. \nFor read-then-write operations a resourceVersion mismatch will occur if the object was modified between the read and write",
+                "description": "Replacing an cluster object will update the object by replacing the existing spec with the provided one.\nFor read-then-write operations a resourceVersion mismatch will occur if the object was modified between the read and write",
                 "operationId": "ves.io.schema.cluster.API.Replace",
                 "responses": {
                     "200": {
@@ -2303,7 +2303,6 @@ var APISwaggerJSON string = `{
             "description": "Create cluster will create the object in the storage backend for namespace metadata.namespace",
             "title": "Create cluster",
             "x-displayname": "Create Cluster",
-            "x-ves-displayorder": "1,2,3,8,13,9,10,4,5,6,7,12",
             "x-ves-oneof-field-panic_threshold_type": "[\"no_panic_threshold\",\"panic_threshold\"]",
             "x-ves-proto-message": "ves.io.schema.cluster.CreateSpecType",
             "properties": {
@@ -2596,7 +2595,6 @@ var APISwaggerJSON string = `{
             "description": "Get cluster will get the object from the storage backend for namespace metadata.namespace",
             "title": "Get cluster",
             "x-displayname": "Get Cluster",
-            "x-ves-displayorder": "1,2,3,8,13,9,10,4,5,6,7,12",
             "x-ves-oneof-field-panic_threshold_type": "[\"no_panic_threshold\",\"panic_threshold\"]",
             "x-ves-proto-message": "ves.io.schema.cluster.GetSpecType",
             "properties": {
@@ -3145,10 +3143,9 @@ var APISwaggerJSON string = `{
         },
         "clusterReplaceSpecType": {
             "type": "object",
-            "description": "Replacing an cluster object will update the object by replacing the existing spec with the provided one. \nFor read-then-write operations a resourceVersion mismatch will occur if the object was modified between the read and write",
+            "description": "Replacing an cluster object will update the object by replacing the existing spec with the provided one.\nFor read-then-write operations a resourceVersion mismatch will occur if the object was modified between the read and write",
             "title": "Replace cluster",
             "x-displayname": "Replace Cluster",
-            "x-ves-displayorder": "1,2,3,8,13,9,10,4,5,6,7,12",
             "x-ves-oneof-field-panic_threshold_type": "[\"no_panic_threshold\",\"panic_threshold\"]",
             "x-ves-proto-message": "ves.io.schema.cluster.ReplaceSpecType",
             "properties": {
@@ -3317,7 +3314,7 @@ var APISwaggerJSON string = `{
         },
         "clusterSubsetFallbackPolicy": {
             "type": "string",
-            "description": "Enumeration for SubsetFallbackPolicy if subset match is not found.\n\nThe request fails as if the cluster had no endpoint matching the subset policy\nAny cluster endpoint may be selected if the cluster had no endpoint matching the subset policy\nLoad balancing is done over endpoints matching default_subset if the cluster had no \nendpoint matching the subset policy",
+            "description": "Enumeration for SubsetFallbackPolicy if subset match is not found.\n\nThe request fails as if the cluster had no endpoint matching the subset policy\nAny cluster endpoint may be selected if the cluster had no endpoint matching the subset policy\nLoad balancing is done over endpoints matching default_subset if the cluster had no\nendpoint matching the subset policy",
             "title": "SubsetFallbackPolicy",
             "enum": [
                 "NO_FALLBACK",

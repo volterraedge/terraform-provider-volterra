@@ -3173,10 +3173,10 @@ var APISwaggerJSON string = `{
                 },
                 "service_name": {
                     "type": "string",
-                    "description": " Consul service name of this origin server\n\nExample: - \"value\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "description": " Consul service name of this origin server, including cluster-id.\n The format is servicename:cluster-id. If the servicename is \"frontend\",\n and cluster-id is \"prod\", then you will enter \"frontend:prod\".\n cluster-id is optional.\n\nExample: - \"matching:production\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "Service Name",
                     "x-displayname": "Service Name",
-                    "x-ves-example": "value",
+                    "x-ves-example": "matching:production",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true"
@@ -3238,10 +3238,10 @@ var APISwaggerJSON string = `{
                 },
                 "service_name": {
                     "type": "string",
-                    "description": "Exclusive with []\n K8s service name of the origin server, including the namespace and cluster-id\n (servicename.namespace.cluster-id). For example, if the servicename is \"frontend\",\n namespace is \"speedtest\" and cluster-id is \"prod\", then you will enter \"frontend.speedtest.prod\".\n Both namespace and cluster-id are optional. cluster-id can be specified only if namespace is\n configured.\n\nExample: - \"value\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "description": "Exclusive with []\n K8s service name of the origin server, including the namespace and cluster-id\n The format is servicename.namespace:cluster-id. If the servicename is \"frontend\",\n namespace is \"speedtest\" and cluster-id is \"prod\", then you will enter \"frontend.speedtest:prod\".\n Both namespace and cluster-id are optional.\n\nExample: - \"matching.default:production\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "Service Name",
                     "x-displayname": "Service Name",
-                    "x-ves-example": "value",
+                    "x-ves-example": "matching.default:production",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true"
@@ -4488,9 +4488,9 @@ var APISwaggerJSON string = `{
             "properties": {
                 "advanced_options": {
                     "description": " Advanced options configuration like timeouts, circuit breaker, subset load balancing",
-                    "title": "Advanced Options",
+                    "title": "More Options",
                     "$ref": "#/definitions/origin_poolOriginPoolAdvancedOptions",
-                    "x-displayname": "Advanced Options"
+                    "x-displayname": "More Options"
                 },
                 "endpoint_selection": {
                     "description": " Policy for selection of endpoints from local site or remote site or both\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",

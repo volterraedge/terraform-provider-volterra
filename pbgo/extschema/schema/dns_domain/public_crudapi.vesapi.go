@@ -1666,7 +1666,7 @@ var APISwaggerJSON string = `{
     "swagger": "2.0",
     "info": {
         "title": "DNS Domain",
-        "description": "DNS Domain object is used for delegating DNS sub domain to volterra. It can also be\nused to just let volterra know about a verified sub domain that can be used for different types of \nload balancers\n\nUser configures domain \"example.com\"\n\nStatus for this object will show following\n\n* TXT RECORD value string\n* Verification Pending\n\nThis TXT record value string is then programed into users DNS provider. Volterra then will verify the DNS sub domain\nAnd status will change to\n\n* List of nameservers\n* Verification successful\n\nUsers can then Program the DNS provided with NS record for the sub domain",
+        "description": "DNS Domain object is used for delegating DNS sub domain to volterra. It can also be\nused to just let volterra know about a verified sub domain that can be used for different types of\nload balancers\n\nUser configures domain \"example.com\"\n\nStatus for this object will show following\n\n* TXT RECORD value string\n* Verification Pending\n\nThis TXT record value string is then programed into users DNS provider. Volterra then will verify the DNS sub domain\nAnd status will change to\n\n* List of nameservers\n* Verification successful\n\nUsers can then Program the DNS provided with NS record for the sub domain",
         "version": "version not set"
     },
     "schemes": [

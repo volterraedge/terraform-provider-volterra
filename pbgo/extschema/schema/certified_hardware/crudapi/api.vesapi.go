@@ -2778,7 +2778,7 @@ var APISwaggerJSON string = `{
                 "HARDWARE_NETWORK_DEVICE_USE_FALLBACK_MANAGEMENT"
             ],
             "default": "HARDWARE_DEVICE_USE_REGULAR",
-            "x-displayname": "",
+            "x-displayname": "Device Use",
             "x-ves-proto-enum": "ves.io.schema.certified_hardware.HardwareDeviceInstanceUseType"
         },
         "certified_hardwareHardwareDeviceType": {

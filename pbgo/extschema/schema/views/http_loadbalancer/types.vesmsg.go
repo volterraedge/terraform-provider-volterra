@@ -4337,6 +4337,14 @@ func (v *ValidateCreateSpecType) ServicePolicyChoiceValidationRuleHandler(rules 
 	return validatorFn, nil
 }
 
+func (v *ValidateCreateSpecType) TrustClientIpHeadersChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for trust_client_ip_headers_choice")
+	}
+	return validatorFn, nil
+}
+
 func (v *ValidateCreateSpecType) UserIdChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -5254,6 +5262,42 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["trust_client_ip_headers_choice"]; exists {
+		val := m.GetTrustClientIpHeadersChoice()
+		vOpts := append(opts,
+			db.WithValidateField("trust_client_ip_headers_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetTrustClientIpHeadersChoice().(type) {
+	case *CreateSpecType_DisableTrustClientIpHeaders:
+		if fv, exists := v.FldValidators["trust_client_ip_headers_choice.disable_trust_client_ip_headers"]; exists {
+			val := m.GetTrustClientIpHeadersChoice().(*CreateSpecType_DisableTrustClientIpHeaders).DisableTrustClientIpHeaders
+			vOpts := append(opts,
+				db.WithValidateField("trust_client_ip_headers_choice"),
+				db.WithValidateField("disable_trust_client_ip_headers"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CreateSpecType_EnableTrustClientIpHeaders:
+		if fv, exists := v.FldValidators["trust_client_ip_headers_choice.enable_trust_client_ip_headers"]; exists {
+			val := m.GetTrustClientIpHeadersChoice().(*CreateSpecType_EnableTrustClientIpHeaders).EnableTrustClientIpHeaders
+			vOpts := append(opts,
+				db.WithValidateField("trust_client_ip_headers_choice"),
+				db.WithValidateField("enable_trust_client_ip_headers"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["trusted_clients"]; exists {
 		vOpts := append(opts, db.WithValidateField("trusted_clients"))
 		if err := fv(ctx, m.GetTrustedClients(), vOpts...); err != nil {
@@ -5467,6 +5511,17 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	}
 	v.FldValidators["service_policy_choice"] = vFn
 
+	vrhTrustClientIpHeadersChoice := v.TrustClientIpHeadersChoiceValidationRuleHandler
+	rulesTrustClientIpHeadersChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhTrustClientIpHeadersChoice(rulesTrustClientIpHeadersChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateSpecType.trust_client_ip_headers_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["trust_client_ip_headers_choice"] = vFn
+
 	vrhUserIdChoice := v.UserIdChoiceValidationRuleHandler
 	rulesUserIdChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -5617,6 +5672,8 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	v.FldValidators["rate_limit_choice.api_rate_limit"] = APIRateLimitValidator().Validate
 
 	v.FldValidators["service_policy_choice.active_service_policies"] = ServicePolicyListValidator().Validate
+
+	v.FldValidators["trust_client_ip_headers_choice.enable_trust_client_ip_headers"] = ves_io_schema_virtual_host.ClientIPHeadersValidator().Validate
 
 	v.FldValidators["user_id_choice.user_identification"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
@@ -7542,6 +7599,14 @@ func (v *ValidateGetSpecType) ServicePolicyChoiceValidationRuleHandler(rules map
 	return validatorFn, nil
 }
 
+func (v *ValidateGetSpecType) TrustClientIpHeadersChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for trust_client_ip_headers_choice")
+	}
+	return validatorFn, nil
+}
+
 func (v *ValidateGetSpecType) UserIdChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -8510,6 +8575,42 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 
 	}
 
+	if fv, exists := v.FldValidators["trust_client_ip_headers_choice"]; exists {
+		val := m.GetTrustClientIpHeadersChoice()
+		vOpts := append(opts,
+			db.WithValidateField("trust_client_ip_headers_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetTrustClientIpHeadersChoice().(type) {
+	case *GetSpecType_DisableTrustClientIpHeaders:
+		if fv, exists := v.FldValidators["trust_client_ip_headers_choice.disable_trust_client_ip_headers"]; exists {
+			val := m.GetTrustClientIpHeadersChoice().(*GetSpecType_DisableTrustClientIpHeaders).DisableTrustClientIpHeaders
+			vOpts := append(opts,
+				db.WithValidateField("trust_client_ip_headers_choice"),
+				db.WithValidateField("disable_trust_client_ip_headers"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GetSpecType_EnableTrustClientIpHeaders:
+		if fv, exists := v.FldValidators["trust_client_ip_headers_choice.enable_trust_client_ip_headers"]; exists {
+			val := m.GetTrustClientIpHeadersChoice().(*GetSpecType_EnableTrustClientIpHeaders).EnableTrustClientIpHeaders
+			vOpts := append(opts,
+				db.WithValidateField("trust_client_ip_headers_choice"),
+				db.WithValidateField("enable_trust_client_ip_headers"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["trusted_clients"]; exists {
 		vOpts := append(opts, db.WithValidateField("trusted_clients"))
 		if err := fv(ctx, m.GetTrustedClients(), vOpts...); err != nil {
@@ -8723,6 +8824,17 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	}
 	v.FldValidators["service_policy_choice"] = vFn
 
+	vrhTrustClientIpHeadersChoice := v.TrustClientIpHeadersChoiceValidationRuleHandler
+	rulesTrustClientIpHeadersChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhTrustClientIpHeadersChoice(rulesTrustClientIpHeadersChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GetSpecType.trust_client_ip_headers_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["trust_client_ip_headers_choice"] = vFn
+
 	vrhUserIdChoice := v.UserIdChoiceValidationRuleHandler
 	rulesUserIdChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -8873,6 +8985,8 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v.FldValidators["rate_limit_choice.api_rate_limit"] = APIRateLimitValidator().Validate
 
 	v.FldValidators["service_policy_choice.active_service_policies"] = ServicePolicyListValidator().Validate
+
+	v.FldValidators["trust_client_ip_headers_choice.enable_trust_client_ip_headers"] = ves_io_schema_virtual_host.ClientIPHeadersValidator().Validate
 
 	v.FldValidators["user_id_choice.user_identification"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
@@ -9731,6 +9845,14 @@ func (v *ValidateGlobalSpecType) ServicePolicyChoiceValidationRuleHandler(rules 
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for service_policy_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateGlobalSpecType) TrustClientIpHeadersChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for trust_client_ip_headers_choice")
 	}
 	return validatorFn, nil
 }
@@ -10749,6 +10871,42 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["trust_client_ip_headers_choice"]; exists {
+		val := m.GetTrustClientIpHeadersChoice()
+		vOpts := append(opts,
+			db.WithValidateField("trust_client_ip_headers_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetTrustClientIpHeadersChoice().(type) {
+	case *GlobalSpecType_DisableTrustClientIpHeaders:
+		if fv, exists := v.FldValidators["trust_client_ip_headers_choice.disable_trust_client_ip_headers"]; exists {
+			val := m.GetTrustClientIpHeadersChoice().(*GlobalSpecType_DisableTrustClientIpHeaders).DisableTrustClientIpHeaders
+			vOpts := append(opts,
+				db.WithValidateField("trust_client_ip_headers_choice"),
+				db.WithValidateField("disable_trust_client_ip_headers"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GlobalSpecType_EnableTrustClientIpHeaders:
+		if fv, exists := v.FldValidators["trust_client_ip_headers_choice.enable_trust_client_ip_headers"]; exists {
+			val := m.GetTrustClientIpHeadersChoice().(*GlobalSpecType_EnableTrustClientIpHeaders).EnableTrustClientIpHeaders
+			vOpts := append(opts,
+				db.WithValidateField("trust_client_ip_headers_choice"),
+				db.WithValidateField("enable_trust_client_ip_headers"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["trusted_clients"]; exists {
 		vOpts := append(opts, db.WithValidateField("trusted_clients"))
 		if err := fv(ctx, m.GetTrustedClients(), vOpts...); err != nil {
@@ -10983,6 +11141,17 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	}
 	v.FldValidators["service_policy_choice"] = vFn
 
+	vrhTrustClientIpHeadersChoice := v.TrustClientIpHeadersChoiceValidationRuleHandler
+	rulesTrustClientIpHeadersChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhTrustClientIpHeadersChoice(rulesTrustClientIpHeadersChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.trust_client_ip_headers_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["trust_client_ip_headers_choice"] = vFn
+
 	vrhUserIdChoice := v.UserIdChoiceValidationRuleHandler
 	rulesUserIdChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -11133,6 +11302,8 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v.FldValidators["rate_limit_choice.api_rate_limit"] = APIRateLimitValidator().Validate
 
 	v.FldValidators["service_policy_choice.active_service_policies"] = ServicePolicyListValidator().Validate
+
+	v.FldValidators["trust_client_ip_headers_choice.enable_trust_client_ip_headers"] = ves_io_schema_virtual_host.ClientIPHeadersValidator().Validate
 
 	v.FldValidators["user_id_choice.user_identification"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
@@ -14572,6 +14743,14 @@ func (v *ValidateReplaceSpecType) ServicePolicyChoiceValidationRuleHandler(rules
 	return validatorFn, nil
 }
 
+func (v *ValidateReplaceSpecType) TrustClientIpHeadersChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for trust_client_ip_headers_choice")
+	}
+	return validatorFn, nil
+}
+
 func (v *ValidateReplaceSpecType) UserIdChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -15489,6 +15668,42 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 
 	}
 
+	if fv, exists := v.FldValidators["trust_client_ip_headers_choice"]; exists {
+		val := m.GetTrustClientIpHeadersChoice()
+		vOpts := append(opts,
+			db.WithValidateField("trust_client_ip_headers_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetTrustClientIpHeadersChoice().(type) {
+	case *ReplaceSpecType_DisableTrustClientIpHeaders:
+		if fv, exists := v.FldValidators["trust_client_ip_headers_choice.disable_trust_client_ip_headers"]; exists {
+			val := m.GetTrustClientIpHeadersChoice().(*ReplaceSpecType_DisableTrustClientIpHeaders).DisableTrustClientIpHeaders
+			vOpts := append(opts,
+				db.WithValidateField("trust_client_ip_headers_choice"),
+				db.WithValidateField("disable_trust_client_ip_headers"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ReplaceSpecType_EnableTrustClientIpHeaders:
+		if fv, exists := v.FldValidators["trust_client_ip_headers_choice.enable_trust_client_ip_headers"]; exists {
+			val := m.GetTrustClientIpHeadersChoice().(*ReplaceSpecType_EnableTrustClientIpHeaders).EnableTrustClientIpHeaders
+			vOpts := append(opts,
+				db.WithValidateField("trust_client_ip_headers_choice"),
+				db.WithValidateField("enable_trust_client_ip_headers"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["trusted_clients"]; exists {
 		vOpts := append(opts, db.WithValidateField("trusted_clients"))
 		if err := fv(ctx, m.GetTrustedClients(), vOpts...); err != nil {
@@ -15702,6 +15917,17 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	}
 	v.FldValidators["service_policy_choice"] = vFn
 
+	vrhTrustClientIpHeadersChoice := v.TrustClientIpHeadersChoiceValidationRuleHandler
+	rulesTrustClientIpHeadersChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhTrustClientIpHeadersChoice(rulesTrustClientIpHeadersChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ReplaceSpecType.trust_client_ip_headers_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["trust_client_ip_headers_choice"] = vFn
+
 	vrhUserIdChoice := v.UserIdChoiceValidationRuleHandler
 	rulesUserIdChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -15852,6 +16078,8 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	v.FldValidators["rate_limit_choice.api_rate_limit"] = APIRateLimitValidator().Validate
 
 	v.FldValidators["service_policy_choice.active_service_policies"] = ServicePolicyListValidator().Validate
+
+	v.FldValidators["trust_client_ip_headers_choice.enable_trust_client_ip_headers"] = ves_io_schema_virtual_host.ClientIPHeadersValidator().Validate
 
 	v.FldValidators["user_id_choice.user_identification"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
@@ -20254,6 +20482,13 @@ func (v *ValidateSimpleClientSrcRule) ClientSourceChoiceAsNumberValidationRuleHa
 	}
 	return oValidatorFn_AsNumber, nil
 }
+func (v *ValidateSimpleClientSrcRule) ClientSourceChoiceUserIdentifierValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_UserIdentifier, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for user_identifier")
+	}
+	return oValidatorFn_UserIdentifier, nil
+}
 
 func (v *ValidateSimpleClientSrcRule) ExpirationTimestampValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
@@ -20447,6 +20682,17 @@ func (v *ValidateSimpleClientSrcRule) Validate(ctx context.Context, pm interface
 				return err
 			}
 		}
+	case *SimpleClientSrcRule_UserIdentifier:
+		if fv, exists := v.FldValidators["client_source_choice.user_identifier"]; exists {
+			val := m.GetClientSourceChoice().(*SimpleClientSrcRule_UserIdentifier).UserIdentifier
+			vOpts := append(opts,
+				db.WithValidateField("client_source_choice"),
+				db.WithValidateField("user_identifier"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 
@@ -20524,10 +20770,20 @@ var DefaultSimpleClientSrcRuleValidator = func() *ValidateSimpleClientSrcRule {
 		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field SimpleClientSrcRule.client_source_choice_http_header: %s", err)
 		panic(errMsg)
 	}
+	vrhClientSourceChoiceUserIdentifier := v.ClientSourceChoiceUserIdentifierValidationRuleHandler
+	rulesClientSourceChoiceUserIdentifier := map[string]string{
+		"ves.io.schema.rules.string.max_len": "256",
+	}
+	vFnMap["client_source_choice.user_identifier"], err = vrhClientSourceChoiceUserIdentifier(rulesClientSourceChoiceUserIdentifier)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field SimpleClientSrcRule.client_source_choice_user_identifier: %s", err)
+		panic(errMsg)
+	}
 
 	v.FldValidators["client_source_choice.ip_prefix"] = vFnMap["client_source_choice.ip_prefix"]
 	v.FldValidators["client_source_choice.as_number"] = vFnMap["client_source_choice.as_number"]
 	v.FldValidators["client_source_choice.http_header"] = vFnMap["client_source_choice.http_header"]
+	v.FldValidators["client_source_choice.user_identifier"] = vFnMap["client_source_choice.user_identifier"]
 
 	vrhExpirationTimestamp := v.ExpirationTimestampValidationRuleHandler
 	rulesExpirationTimestamp := map[string]string{
@@ -21341,6 +21597,41 @@ func (r *CreateSpecType) GetServicePolicyChoiceFromGlobalSpecType(o *GlobalSpecT
 }
 
 // create setters in CreateSpecType from GlobalSpecType for oneof fields
+func (r *CreateSpecType) SetTrustClientIpHeadersChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.TrustClientIpHeadersChoice.(type) {
+	case nil:
+		o.TrustClientIpHeadersChoice = nil
+
+	case *CreateSpecType_DisableTrustClientIpHeaders:
+		o.TrustClientIpHeadersChoice = &GlobalSpecType_DisableTrustClientIpHeaders{DisableTrustClientIpHeaders: of.DisableTrustClientIpHeaders}
+
+	case *CreateSpecType_EnableTrustClientIpHeaders:
+		o.TrustClientIpHeadersChoice = &GlobalSpecType_EnableTrustClientIpHeaders{EnableTrustClientIpHeaders: of.EnableTrustClientIpHeaders}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *CreateSpecType) GetTrustClientIpHeadersChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.TrustClientIpHeadersChoice.(type) {
+	case nil:
+		r.TrustClientIpHeadersChoice = nil
+
+	case *GlobalSpecType_DisableTrustClientIpHeaders:
+		r.TrustClientIpHeadersChoice = &CreateSpecType_DisableTrustClientIpHeaders{DisableTrustClientIpHeaders: of.DisableTrustClientIpHeaders}
+
+	case *GlobalSpecType_EnableTrustClientIpHeaders:
+		r.TrustClientIpHeadersChoice = &CreateSpecType_EnableTrustClientIpHeaders{EnableTrustClientIpHeaders: of.EnableTrustClientIpHeaders}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+// create setters in CreateSpecType from GlobalSpecType for oneof fields
 func (r *CreateSpecType) SetUserIdChoiceToGlobalSpecType(o *GlobalSpecType) error {
 	switch of := r.UserIdChoice.(type) {
 	case nil:
@@ -21447,6 +21738,7 @@ func (m *CreateSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool
 	m.GetRateLimitChoiceFromGlobalSpecType(f)
 	m.Routes = f.GetRoutes()
 	m.GetServicePolicyChoiceFromGlobalSpecType(f)
+	m.GetTrustClientIpHeadersChoiceFromGlobalSpecType(f)
 	m.TrustedClients = f.GetTrustedClients()
 	m.GetUserIdChoiceFromGlobalSpecType(f)
 	m.GetWafChoiceFromGlobalSpecType(f)
@@ -21489,6 +21781,7 @@ func (m *CreateSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) 
 	m1.SetRateLimitChoiceToGlobalSpecType(f)
 	f.Routes = m1.Routes
 	m1.SetServicePolicyChoiceToGlobalSpecType(f)
+	m1.SetTrustClientIpHeadersChoiceToGlobalSpecType(f)
 	f.TrustedClients = m1.TrustedClients
 	m1.SetUserIdChoiceToGlobalSpecType(f)
 	m1.SetWafChoiceToGlobalSpecType(f)
@@ -21926,6 +22219,41 @@ func (r *GetSpecType) GetServicePolicyChoiceFromGlobalSpecType(o *GlobalSpecType
 }
 
 // create setters in GetSpecType from GlobalSpecType for oneof fields
+func (r *GetSpecType) SetTrustClientIpHeadersChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.TrustClientIpHeadersChoice.(type) {
+	case nil:
+		o.TrustClientIpHeadersChoice = nil
+
+	case *GetSpecType_DisableTrustClientIpHeaders:
+		o.TrustClientIpHeadersChoice = &GlobalSpecType_DisableTrustClientIpHeaders{DisableTrustClientIpHeaders: of.DisableTrustClientIpHeaders}
+
+	case *GetSpecType_EnableTrustClientIpHeaders:
+		o.TrustClientIpHeadersChoice = &GlobalSpecType_EnableTrustClientIpHeaders{EnableTrustClientIpHeaders: of.EnableTrustClientIpHeaders}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *GetSpecType) GetTrustClientIpHeadersChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.TrustClientIpHeadersChoice.(type) {
+	case nil:
+		r.TrustClientIpHeadersChoice = nil
+
+	case *GlobalSpecType_DisableTrustClientIpHeaders:
+		r.TrustClientIpHeadersChoice = &GetSpecType_DisableTrustClientIpHeaders{DisableTrustClientIpHeaders: of.DisableTrustClientIpHeaders}
+
+	case *GlobalSpecType_EnableTrustClientIpHeaders:
+		r.TrustClientIpHeadersChoice = &GetSpecType_EnableTrustClientIpHeaders{EnableTrustClientIpHeaders: of.EnableTrustClientIpHeaders}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+// create setters in GetSpecType from GlobalSpecType for oneof fields
 func (r *GetSpecType) SetUserIdChoiceToGlobalSpecType(o *GlobalSpecType) error {
 	switch of := r.UserIdChoice.(type) {
 	case nil:
@@ -22037,6 +22365,7 @@ func (m *GetSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	m.Routes = f.GetRoutes()
 	m.GetServicePolicyChoiceFromGlobalSpecType(f)
 	m.State = f.GetState()
+	m.GetTrustClientIpHeadersChoiceFromGlobalSpecType(f)
 	m.TrustedClients = f.GetTrustedClients()
 	m.GetUserIdChoiceFromGlobalSpecType(f)
 	m.GetWafChoiceFromGlobalSpecType(f)
@@ -22084,6 +22413,7 @@ func (m *GetSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	f.Routes = m1.Routes
 	m1.SetServicePolicyChoiceToGlobalSpecType(f)
 	f.State = m1.State
+	m1.SetTrustClientIpHeadersChoiceToGlobalSpecType(f)
 	f.TrustedClients = m1.TrustedClients
 	m1.SetUserIdChoiceToGlobalSpecType(f)
 	m1.SetWafChoiceToGlobalSpecType(f)
@@ -22521,6 +22851,41 @@ func (r *ReplaceSpecType) GetServicePolicyChoiceFromGlobalSpecType(o *GlobalSpec
 }
 
 // create setters in ReplaceSpecType from GlobalSpecType for oneof fields
+func (r *ReplaceSpecType) SetTrustClientIpHeadersChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.TrustClientIpHeadersChoice.(type) {
+	case nil:
+		o.TrustClientIpHeadersChoice = nil
+
+	case *ReplaceSpecType_DisableTrustClientIpHeaders:
+		o.TrustClientIpHeadersChoice = &GlobalSpecType_DisableTrustClientIpHeaders{DisableTrustClientIpHeaders: of.DisableTrustClientIpHeaders}
+
+	case *ReplaceSpecType_EnableTrustClientIpHeaders:
+		o.TrustClientIpHeadersChoice = &GlobalSpecType_EnableTrustClientIpHeaders{EnableTrustClientIpHeaders: of.EnableTrustClientIpHeaders}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *ReplaceSpecType) GetTrustClientIpHeadersChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.TrustClientIpHeadersChoice.(type) {
+	case nil:
+		r.TrustClientIpHeadersChoice = nil
+
+	case *GlobalSpecType_DisableTrustClientIpHeaders:
+		r.TrustClientIpHeadersChoice = &ReplaceSpecType_DisableTrustClientIpHeaders{DisableTrustClientIpHeaders: of.DisableTrustClientIpHeaders}
+
+	case *GlobalSpecType_EnableTrustClientIpHeaders:
+		r.TrustClientIpHeadersChoice = &ReplaceSpecType_EnableTrustClientIpHeaders{EnableTrustClientIpHeaders: of.EnableTrustClientIpHeaders}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+// create setters in ReplaceSpecType from GlobalSpecType for oneof fields
 func (r *ReplaceSpecType) SetUserIdChoiceToGlobalSpecType(o *GlobalSpecType) error {
 	switch of := r.UserIdChoice.(type) {
 	case nil:
@@ -22627,6 +22992,7 @@ func (m *ReplaceSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy boo
 	m.GetRateLimitChoiceFromGlobalSpecType(f)
 	m.Routes = f.GetRoutes()
 	m.GetServicePolicyChoiceFromGlobalSpecType(f)
+	m.GetTrustClientIpHeadersChoiceFromGlobalSpecType(f)
 	m.TrustedClients = f.GetTrustedClients()
 	m.GetUserIdChoiceFromGlobalSpecType(f)
 	m.GetWafChoiceFromGlobalSpecType(f)
@@ -22669,6 +23035,7 @@ func (m *ReplaceSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool)
 	m1.SetRateLimitChoiceToGlobalSpecType(f)
 	f.Routes = m1.Routes
 	m1.SetServicePolicyChoiceToGlobalSpecType(f)
+	m1.SetTrustClientIpHeadersChoiceToGlobalSpecType(f)
 	f.TrustedClients = m1.TrustedClients
 	m1.SetUserIdChoiceToGlobalSpecType(f)
 	m1.SetWafChoiceToGlobalSpecType(f)

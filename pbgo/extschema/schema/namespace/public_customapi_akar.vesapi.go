@@ -36,6 +36,15 @@ type NamespaceCustomAPIGrpcClient struct {
 	rpcFns map[string]func(context.Context, string, ...grpc.CallOption) (proto.Message, error)
 }
 
+func (c *NamespaceCustomAPIGrpcClient) doRPCCascadeDelete(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
+	req := &CascadeDeleteRequest{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.namespace.CascadeDeleteRequest", yamlReq)
+	}
+	rsp, err := c.grpcClient.CascadeDelete(ctx, req, opts...)
+	return rsp, err
+}
+
 func (c *NamespaceCustomAPIGrpcClient) doRPCGetActiveAlertPolicies(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &GetActiveAlertPoliciesRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -117,6 +126,15 @@ func (c *NamespaceCustomAPIGrpcClient) doRPCSuggestValues(ctx context.Context, y
 	return rsp, err
 }
 
+func (c *NamespaceCustomAPIGrpcClient) doRPCUpdateAllowAdvertiseOnPublic(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
+	req := &UpdateAllowAdvertiseOnPublicReq{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.namespace.UpdateAllowAdvertiseOnPublicReq", yamlReq)
+	}
+	rsp, err := c.grpcClient.UpdateAllowAdvertiseOnPublic(ctx, req, opts...)
+	return rsp, err
+}
+
 func (c *NamespaceCustomAPIGrpcClient) DoRPC(ctx context.Context, rpc string, opts ...server.CustomCallOpt) (proto.Message, error) {
 	rpcFn, exists := c.rpcFns[rpc]
 	if !exists {
@@ -147,6 +165,8 @@ func NewNamespaceCustomAPIGrpcClient(cc *grpc.ClientConn) server.CustomClient {
 		grpcClient: NewNamespaceCustomAPIClient(cc),
 	}
 	rpcFns := make(map[string]func(context.Context, string, ...grpc.CallOption) (proto.Message, error))
+	rpcFns["CascadeDelete"] = ccl.doRPCCascadeDelete
+
 	rpcFns["GetActiveAlertPolicies"] = ccl.doRPCGetActiveAlertPolicies
 
 	rpcFns["GetActiveNetworkPolicies"] = ccl.doRPCGetActiveNetworkPolicies
@@ -165,6 +185,8 @@ func NewNamespaceCustomAPIGrpcClient(cc *grpc.ClientConn) server.CustomClient {
 
 	rpcFns["SuggestValues"] = ccl.doRPCSuggestValues
 
+	rpcFns["UpdateAllowAdvertiseOnPublic"] = ccl.doRPCUpdateAllowAdvertiseOnPublic
+
 	ccl.rpcFns = rpcFns
 
 	return ccl
@@ -176,6 +198,88 @@ type NamespaceCustomAPIRestClient struct {
 	client  http.Client
 	// map of rpc name to its invocation
 	rpcFns map[string]func(context.Context, *server.CustomCallOpts) (proto.Message, error)
+}
+
+func (c *NamespaceCustomAPIRestClient) doRPCCascadeDelete(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
+	if callOpts.URI == "" {
+		return nil, fmt.Errorf("Error, URI should be specified, got empty")
+	}
+	url := fmt.Sprintf("%s%s", c.baseURL, callOpts.URI)
+
+	yamlReq := callOpts.YAMLReq
+	req := &CascadeDeleteRequest{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.namespace.CascadeDeleteRequest: %s", yamlReq, err)
+	}
+
+	var hReq *http.Request
+	hm := strings.ToLower(callOpts.HTTPMethod)
+	switch hm {
+	case "post", "put":
+		jsn, err := codec.ToJSON(req, codec.ToWithUseProtoFieldName())
+		if err != nil {
+			return nil, errors.Wrap(err, "Custom RestClient converting YAML to JSON")
+		}
+		var op string
+		if hm == "post" {
+			op = http.MethodPost
+		} else {
+			op = http.MethodPut
+		}
+		newReq, err := http.NewRequest(op, url, bytes.NewBuffer([]byte(jsn)))
+		if err != nil {
+			return nil, errors.Wrapf(err, "Creating new HTTP %s request for custom API", op)
+		}
+		hReq = newReq
+	case "get":
+		newReq, err := http.NewRequest(http.MethodGet, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP GET request for custom API")
+		}
+		hReq = newReq
+		q := hReq.URL.Query()
+		_ = q
+		q.Add("name", fmt.Sprintf("%v", req.Name))
+
+		hReq.URL.RawQuery += q.Encode()
+	case "delete":
+		newReq, err := http.NewRequest(http.MethodDelete, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP DELETE request for custom API")
+		}
+		hReq = newReq
+	default:
+		return nil, fmt.Errorf("Error, invalid/empty HTTPMethod(%s) specified, should be POST|DELETE|GET", callOpts.HTTPMethod)
+	}
+	hReq = hReq.WithContext(ctx)
+	hReq.Header.Set("Content-Type", "application/json")
+	client.AddHdrsToReq(callOpts.Headers, hReq)
+
+	rsp, err := c.client.Do(hReq)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient")
+	}
+	defer rsp.Body.Close()
+
+	if rsp.StatusCode != http.StatusOK {
+		body, err := ioutil.ReadAll(rsp.Body)
+		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
+	}
+
+	body, err := ioutil.ReadAll(rsp.Body)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient read body")
+	}
+	pbRsp := &CascadeDeleteResponse{}
+	if err := codec.FromJSON(string(body), pbRsp); err != nil {
+		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.namespace.CascadeDeleteResponse", body)
+
+	}
+	if callOpts.OutCallResponse != nil {
+		callOpts.OutCallResponse.ProtoMsg = pbRsp
+		callOpts.OutCallResponse.JSON = string(body)
+	}
+	return pbRsp, nil
 }
 
 func (c *NamespaceCustomAPIRestClient) doRPCGetActiveAlertPolicies(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
@@ -923,6 +1027,89 @@ func (c *NamespaceCustomAPIRestClient) doRPCSuggestValues(ctx context.Context, c
 	return pbRsp, nil
 }
 
+func (c *NamespaceCustomAPIRestClient) doRPCUpdateAllowAdvertiseOnPublic(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
+	if callOpts.URI == "" {
+		return nil, fmt.Errorf("Error, URI should be specified, got empty")
+	}
+	url := fmt.Sprintf("%s%s", c.baseURL, callOpts.URI)
+
+	yamlReq := callOpts.YAMLReq
+	req := &UpdateAllowAdvertiseOnPublicReq{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.namespace.UpdateAllowAdvertiseOnPublicReq: %s", yamlReq, err)
+	}
+
+	var hReq *http.Request
+	hm := strings.ToLower(callOpts.HTTPMethod)
+	switch hm {
+	case "post", "put":
+		jsn, err := codec.ToJSON(req, codec.ToWithUseProtoFieldName())
+		if err != nil {
+			return nil, errors.Wrap(err, "Custom RestClient converting YAML to JSON")
+		}
+		var op string
+		if hm == "post" {
+			op = http.MethodPost
+		} else {
+			op = http.MethodPut
+		}
+		newReq, err := http.NewRequest(op, url, bytes.NewBuffer([]byte(jsn)))
+		if err != nil {
+			return nil, errors.Wrapf(err, "Creating new HTTP %s request for custom API", op)
+		}
+		hReq = newReq
+	case "get":
+		newReq, err := http.NewRequest(http.MethodGet, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP GET request for custom API")
+		}
+		hReq = newReq
+		q := hReq.URL.Query()
+		_ = q
+		q.Add("allow_advertise_on_public", fmt.Sprintf("%v", req.AllowAdvertiseOnPublic))
+		q.Add("namespace", fmt.Sprintf("%v", req.Namespace))
+
+		hReq.URL.RawQuery += q.Encode()
+	case "delete":
+		newReq, err := http.NewRequest(http.MethodDelete, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP DELETE request for custom API")
+		}
+		hReq = newReq
+	default:
+		return nil, fmt.Errorf("Error, invalid/empty HTTPMethod(%s) specified, should be POST|DELETE|GET", callOpts.HTTPMethod)
+	}
+	hReq = hReq.WithContext(ctx)
+	hReq.Header.Set("Content-Type", "application/json")
+	client.AddHdrsToReq(callOpts.Headers, hReq)
+
+	rsp, err := c.client.Do(hReq)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient")
+	}
+	defer rsp.Body.Close()
+
+	if rsp.StatusCode != http.StatusOK {
+		body, err := ioutil.ReadAll(rsp.Body)
+		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
+	}
+
+	body, err := ioutil.ReadAll(rsp.Body)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient read body")
+	}
+	pbRsp := &UpdateAllowAdvertiseOnPublicResp{}
+	if err := codec.FromJSON(string(body), pbRsp); err != nil {
+		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.namespace.UpdateAllowAdvertiseOnPublicResp", body)
+
+	}
+	if callOpts.OutCallResponse != nil {
+		callOpts.OutCallResponse.ProtoMsg = pbRsp
+		callOpts.OutCallResponse.JSON = string(body)
+	}
+	return pbRsp, nil
+}
+
 func (c *NamespaceCustomAPIRestClient) DoRPC(ctx context.Context, rpc string, opts ...server.CustomCallOpt) (proto.Message, error) {
 	rpcFn, exists := c.rpcFns[rpc]
 	if !exists {
@@ -947,6 +1134,8 @@ func NewNamespaceCustomAPIRestClient(baseURL string, hc http.Client) server.Cust
 	}
 
 	rpcFns := make(map[string]func(context.Context, *server.CustomCallOpts) (proto.Message, error))
+	rpcFns["CascadeDelete"] = ccl.doRPCCascadeDelete
+
 	rpcFns["GetActiveAlertPolicies"] = ccl.doRPCGetActiveAlertPolicies
 
 	rpcFns["GetActiveNetworkPolicies"] = ccl.doRPCGetActiveNetworkPolicies
@@ -965,6 +1154,8 @@ func NewNamespaceCustomAPIRestClient(baseURL string, hc http.Client) server.Cust
 
 	rpcFns["SuggestValues"] = ccl.doRPCSuggestValues
 
+	rpcFns["UpdateAllowAdvertiseOnPublic"] = ccl.doRPCUpdateAllowAdvertiseOnPublic
+
 	ccl.rpcFns = rpcFns
 
 	return ccl
@@ -977,6 +1168,9 @@ type namespaceCustomAPIInprocClient struct {
 	NamespaceCustomAPIServer
 }
 
+func (c *namespaceCustomAPIInprocClient) CascadeDelete(ctx context.Context, in *CascadeDeleteRequest, opts ...grpc.CallOption) (*CascadeDeleteResponse, error) {
+	return c.NamespaceCustomAPIServer.CascadeDelete(ctx, in)
+}
 func (c *namespaceCustomAPIInprocClient) GetActiveAlertPolicies(ctx context.Context, in *GetActiveAlertPoliciesRequest, opts ...grpc.CallOption) (*GetActiveAlertPoliciesResponse, error) {
 	return c.NamespaceCustomAPIServer.GetActiveAlertPolicies(ctx, in)
 }
@@ -1004,6 +1198,9 @@ func (c *namespaceCustomAPIInprocClient) SetFastACLsForInternetVIPs(ctx context.
 func (c *namespaceCustomAPIInprocClient) SuggestValues(ctx context.Context, in *SuggestValuesReq, opts ...grpc.CallOption) (*SuggestValuesResp, error) {
 	return c.NamespaceCustomAPIServer.SuggestValues(ctx, in)
 }
+func (c *namespaceCustomAPIInprocClient) UpdateAllowAdvertiseOnPublic(ctx context.Context, in *UpdateAllowAdvertiseOnPublicReq, opts ...grpc.CallOption) (*UpdateAllowAdvertiseOnPublicResp, error) {
+	return c.NamespaceCustomAPIServer.UpdateAllowAdvertiseOnPublic(ctx, in)
+}
 
 func NewNamespaceCustomAPIInprocClient(svc svcfw.Service) NamespaceCustomAPIClient {
 	return &namespaceCustomAPIInprocClient{NamespaceCustomAPIServer: NewNamespaceCustomAPIServer(svc)}
@@ -1026,6 +1223,55 @@ type namespaceCustomAPISrv struct {
 	svc svcfw.Service
 }
 
+func (s *namespaceCustomAPISrv) CascadeDelete(ctx context.Context, in *CascadeDeleteRequest) (*CascadeDeleteResponse, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.namespace.NamespaceCustomAPI")
+	cah, ok := ah.(NamespaceCustomAPIServer)
+	if !ok {
+		return nil, fmt.Errorf("ah %v is not of type *NamespaceCustomAPIServer", ah)
+	}
+
+	var (
+		rsp *CascadeDeleteResponse
+		err error
+	)
+
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.namespace.CascadeDeleteRequest", in)
+	defer func() {
+		if len(bodyFields) > 0 {
+			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
+		}
+		userMsg := "The 'NamespaceCustomAPI.CascadeDelete' operation on 'namespace'"
+		if err == nil {
+			userMsg += " was successfully performed."
+		} else {
+			userMsg += " failed to be performed."
+		}
+		server.AddUserMsgToAPIAudit(ctx, userMsg)
+	}()
+
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
+
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.namespace.NamespaceCustomAPI.CascadeDelete"); rvFn != nil {
+			if verr := rvFn(ctx, in); verr != nil {
+				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
+				return nil, server.GRPCStatusFromError(err).Err()
+			}
+		}
+	}
+
+	rsp, err = cah.CascadeDelete(ctx, in)
+	if err != nil {
+		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
+	}
+
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.namespace.CascadeDeleteResponse", rsp)...)
+
+	return rsp, nil
+}
 func (s *namespaceCustomAPISrv) GetActiveAlertPolicies(ctx context.Context, in *GetActiveAlertPoliciesRequest) (*GetActiveAlertPoliciesResponse, error) {
 	ah := s.svc.GetAPIHandler("ves.io.schema.namespace.NamespaceCustomAPI")
 	cah, ok := ah.(NamespaceCustomAPIServer)
@@ -1479,6 +1725,55 @@ func (s *namespaceCustomAPISrv) SuggestValues(ctx context.Context, in *SuggestVa
 
 	return rsp, nil
 }
+func (s *namespaceCustomAPISrv) UpdateAllowAdvertiseOnPublic(ctx context.Context, in *UpdateAllowAdvertiseOnPublicReq) (*UpdateAllowAdvertiseOnPublicResp, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.namespace.NamespaceCustomAPI")
+	cah, ok := ah.(NamespaceCustomAPIServer)
+	if !ok {
+		return nil, fmt.Errorf("ah %v is not of type *NamespaceCustomAPIServer", ah)
+	}
+
+	var (
+		rsp *UpdateAllowAdvertiseOnPublicResp
+		err error
+	)
+
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.namespace.UpdateAllowAdvertiseOnPublicReq", in)
+	defer func() {
+		if len(bodyFields) > 0 {
+			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
+		}
+		userMsg := "The 'NamespaceCustomAPI.UpdateAllowAdvertiseOnPublic' operation on 'namespace'"
+		if err == nil {
+			userMsg += " was successfully performed."
+		} else {
+			userMsg += " failed to be performed."
+		}
+		server.AddUserMsgToAPIAudit(ctx, userMsg)
+	}()
+
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
+
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.namespace.NamespaceCustomAPI.UpdateAllowAdvertiseOnPublic"); rvFn != nil {
+			if verr := rvFn(ctx, in); verr != nil {
+				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
+				return nil, server.GRPCStatusFromError(err).Err()
+			}
+		}
+	}
+
+	rsp, err = cah.UpdateAllowAdvertiseOnPublic(ctx, in)
+	if err != nil {
+		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
+	}
+
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.namespace.UpdateAllowAdvertiseOnPublicResp", rsp)...)
+
+	return rsp, nil
+}
 
 func NewNamespaceCustomAPIServer(svc svcfw.Service) NamespaceCustomAPIServer {
 	return &namespaceCustomAPISrv{svc: svc}
@@ -1503,6 +1798,90 @@ var NamespaceCustomAPISwaggerJSON string = `{
     ],
     "tags": [],
     "paths": {
+        "/public/namespaces/system/update_allow_advertise_on_public": {
+            "post": {
+                "summary": "UpdateAllowAdvertiseOnPublic",
+                "description": "UpdateAllowAdvertiseOnPublic can update a config to allow advertise on public.",
+                "operationId": "ves.io.schema.namespace.NamespaceCustomAPI.UpdateAllowAdvertiseOnPublic",
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/namespaceUpdateAllowAdvertiseOnPublicResp"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/namespaceUpdateAllowAdvertiseOnPublicReq"
+                        }
+                    }
+                ],
+                "tags": [
+                    "NamespaceCustomAPI"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-namespace-namespacecustomapi-updateallowadvertiseonpublic"
+                },
+                "x-ves-proto-rpc": "ves.io.schema.namespace.NamespaceCustomAPI.UpdateAllowAdvertiseOnPublic"
+            },
+            "x-displayname": "NamespaceCustomAPI",
+            "x-ves-proto-service": "ves.io.schema.namespace.NamespaceCustomAPI",
+            "x-ves-proto-service-type": "CUSTOM_PUBLIC"
+        },
         "/public/namespaces/{namespace}/active_alert_policies": {
             "get": {
                 "summary": "GetActiveAlertPolicies",
@@ -2278,9 +2657,172 @@ var NamespaceCustomAPISwaggerJSON string = `{
             "x-displayname": "NamespaceCustomAPI",
             "x-ves-proto-service": "ves.io.schema.namespace.NamespaceCustomAPI",
             "x-ves-proto-service-type": "CUSTOM_PUBLIC"
+        },
+        "/public/namespaces/{name}/cascade_delete": {
+            "post": {
+                "summary": "CascadeDelete",
+                "description": "CascadeDelete will delete the namespace and all configuration objects like virtual_hosts etc.\nunder it. Use this only if the entire namespace and its contents are to be wiped out.",
+                "operationId": "ves.io.schema.namespace.NamespaceCustomAPI.CascadeDelete",
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/namespaceCascadeDeleteResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "name",
+                        "description": "name\n\nx-example: \"value\"\nThe name of the namespace",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "x-displayname": "Name"
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/namespaceCascadeDeleteRequest"
+                        }
+                    }
+                ],
+                "tags": [
+                    "NamespaceCustomAPI"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-namespace-namespacecustomapi-cascadedelete"
+                },
+                "x-ves-proto-rpc": "ves.io.schema.namespace.NamespaceCustomAPI.CascadeDelete"
+            },
+            "x-displayname": "NamespaceCustomAPI",
+            "x-ves-proto-service": "ves.io.schema.namespace.NamespaceCustomAPI",
+            "x-ves-proto-service-type": "CUSTOM_PUBLIC"
         }
     },
     "definitions": {
+        "namespaceCascadeDeleteItemType": {
+            "type": "object",
+            "description": "CascadeDeleteItemType is details of object that was handled as part of cascade delete\nof namespace and whether it was successfully deleted",
+            "title": "CascadeDeleteItemType",
+            "x-displayname": "Cascade Delete Item",
+            "x-ves-proto-message": "ves.io.schema.namespace.CascadeDeleteItemType",
+            "properties": {
+                "error_message": {
+                    "type": "string",
+                    "description": " A description of the error encountered (if any) in the process of cascade deletion\n\nExample: - \"value\"-",
+                    "title": "error_message",
+                    "x-displayname": "Error",
+                    "x-ves-example": "value"
+                },
+                "object_name": {
+                    "type": "string",
+                    "description": " Name of the configuration object that was deleted\n\nExample: - \"value\"-",
+                    "title": "object_name",
+                    "x-displayname": "Name",
+                    "x-ves-example": "value"
+                },
+                "object_type": {
+                    "type": "string",
+                    "description": " The type of the contained configuration object in the namespace that was deleted\n\nExample: - \"ves.io.schema.virtual_host.Object\"-",
+                    "title": "object_type",
+                    "x-displayname": "Type",
+                    "x-ves-example": "ves.io.schema.virtual_host.Object"
+                },
+                "object_uid": {
+                    "type": "string",
+                    "description": " The UID identifier of the configuration object that was deleted\n\nExample: - \"value\"-",
+                    "title": "object_uid",
+                    "x-displayname": "UID",
+                    "x-ves-example": "value"
+                }
+            }
+        },
+        "namespaceCascadeDeleteRequest": {
+            "type": "object",
+            "description": "CascadeDeleteRequest contains the name of the namespace that has to be deleted\nalong with the objects configured under the namespace",
+            "title": "CascadeDeleteRequest",
+            "x-displayname": "Cascade Delete Request",
+            "x-ves-proto-message": "ves.io.schema.namespace.CascadeDeleteRequest",
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "description": " The name of the namespace\n\nExample: - \"value\"-",
+                    "title": "name",
+                    "x-displayname": "Name",
+                    "x-ves-example": "value"
+                }
+            }
+        },
+        "namespaceCascadeDeleteResponse": {
+            "type": "object",
+            "description": "CascadeDeleteResponse contains a list of objects in the namespace that were\ndeleted (or encountered an error while deleting)",
+            "title": "CascadeDeleteResponse",
+            "x-displayname": "Cascade Delete Response",
+            "x-ves-proto-message": "ves.io.schema.namespace.CascadeDeleteResponse",
+            "properties": {
+                "items": {
+                    "type": "array",
+                    "description": " The objects deleted in namespace",
+                    "title": "items",
+                    "items": {
+                        "$ref": "#/definitions/namespaceCascadeDeleteItemType"
+                    },
+                    "x-displayname": "Items"
+                }
+            }
+        },
         "namespaceGetActiveAlertPoliciesResponse": {
             "type": "object",
             "description": "GetActiveAlertPoliciesResponse is the shape of the response for GetActiveAlertPolicies.",
@@ -2353,6 +2895,19 @@ var NamespaceCustomAPISwaggerJSON string = `{
                     "x-ves-example": "list of refs"
                 }
             }
+        },
+        "namespacePublicAdvertiseChoice": {
+            "type": "string",
+            "description": "Enum for advertisement choise on public.\n\nInherit tenant's default.\nEnable enables advertisement on public.\nDisable disables advertisement on public.",
+            "title": "PublicAdvertiseChoice",
+            "enum": [
+                "Default",
+                "Enable",
+                "Disable"
+            ],
+            "default": "Default",
+            "x-displayname": "PublicAdvertiseChoice",
+            "x-ves-proto-enum": "ves.io.schema.namespace.PublicAdvertiseChoice"
         },
         "namespaceSetActiveAlertPoliciesRequest": {
             "type": "object",
@@ -2579,6 +3134,43 @@ var NamespaceCustomAPISwaggerJSON string = `{
                     "description": " Suggested value for the field.",
                     "title": "value",
                     "x-displayname": "Value"
+                }
+            }
+        },
+        "namespaceUpdateAllowAdvertiseOnPublicReq": {
+            "type": "object",
+            "description": "Request body of UpdateAllowAdvertiseOnPublic request",
+            "title": "UpdateAllowAdvertiseOnPublicReq",
+            "x-displayname": "Request for UpdateAllowAdvertiseOnPublic",
+            "x-ves-proto-message": "ves.io.schema.namespace.UpdateAllowAdvertiseOnPublicReq",
+            "properties": {
+                "allow_advertise_on_public": {
+                    "description": " Config choice to allow advertisement on the public.",
+                    "$ref": "#/definitions/namespacePublicAdvertiseChoice",
+                    "x-displayname": "Allow advertisement on public."
+                },
+                "namespace": {
+                    "type": "string",
+                    "description": " Name of the namespace under which all the URLs in APIItems will be evaluated\n\nExample: - \"value\"-",
+                    "title": "namespace",
+                    "x-displayname": "Namespace",
+                    "x-ves-example": "value"
+                }
+            }
+        },
+        "namespaceUpdateAllowAdvertiseOnPublicResp": {
+            "type": "object",
+            "description": "Response body of UpdateAllowAdvertiseOnPublic request",
+            "title": "UpdateAllowAdvertiseOnPublicResp",
+            "x-displayname": "Response for UpdateAllowAdvertiseOnPublic",
+            "x-ves-proto-message": "ves.io.schema.namespace.UpdateAllowAdvertiseOnPublicResp",
+            "properties": {
+                "result": {
+                    "type": "boolean",
+                    "description": " API result.",
+                    "title": "result",
+                    "format": "boolean",
+                    "x-displayname": "Result"
                 }
             }
         },

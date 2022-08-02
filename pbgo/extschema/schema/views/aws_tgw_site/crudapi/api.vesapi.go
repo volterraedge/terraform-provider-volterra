@@ -2729,133 +2729,6 @@ var APISwaggerJSON string = `{
                 }
             }
         },
-        "aws_tgw_siteDirectConnectBGPPeerInfo": {
-            "type": "object",
-            "x-ves-proto-message": "ves.io.schema.views.aws_tgw_site.DirectConnectBGPPeerInfo",
-            "properties": {
-                "address_family": {
-                    "type": "string",
-                    "description": " Address Family",
-                    "title": "Address Family",
-                    "x-displayname": "Address Family "
-                },
-                "amazon_address": {
-                    "type": "string",
-                    "description": " Amazon side address",
-                    "title": "Amazon side address",
-                    "x-displayname": "Amazon side address "
-                },
-                "asn": {
-                    "type": "integer",
-                    "description": " ASN",
-                    "title": "ASN",
-                    "format": "int64",
-                    "x-displayname": "ASN"
-                },
-                "bgp_peer_id": {
-                    "type": "string",
-                    "description": " BGP Peer ID",
-                    "title": "BGP Peer ID",
-                    "x-displayname": "BGP Peer ID"
-                },
-                "bgp_peer_state": {
-                    "type": "string",
-                    "description": " BGP Peer State",
-                    "title": "BGP Peer State",
-                    "x-displayname": "BGP Peer State"
-                },
-                "bgp_status": {
-                    "type": "string",
-                    "description": " BGP Status",
-                    "title": "BGP Status",
-                    "x-displayname": "BGP Status"
-                },
-                "customer_address": {
-                    "type": "string",
-                    "description": " Customer side Address",
-                    "title": "Customer side Address",
-                    "x-displayname": "Customer side Address"
-                }
-            }
-        },
-        "aws_tgw_siteDirectConnectStatusInfo": {
-            "type": "object",
-            "x-ves-proto-message": "ves.io.schema.views.aws_tgw_site.DirectConnectStatusInfo",
-            "properties": {
-                "direct_connect_gateway_id": {
-                    "type": "string",
-                    "description": " Direct Connect Gateway ID",
-                    "title": "Direct Connect Gateway ID",
-                    "x-displayname": "Direct Connect Gateway ID"
-                },
-                "direct_connect_gateway_state": {
-                    "type": "string",
-                    "description": " Direct Connect Gateway state",
-                    "title": "Direct Connect Gateway State",
-                    "x-displayname": "Direct Connect Gateway State"
-                },
-                "direct_connect_vgw_association_state": {
-                    "type": "string",
-                    "description": " Virtual Private Gateway association state",
-                    "title": "Virtual Private Gateway association state",
-                    "x-displayname": "Virtual Private Gateway association state"
-                },
-                "vgw_id": {
-                    "type": "string",
-                    "description": " Virtual Private Gateway ID",
-                    "title": "Virtual Private Gateway ID",
-                    "x-displayname": "Virtual Private Gateway ID"
-                },
-                "vgw_state": {
-                    "type": "string",
-                    "description": " Virtual Private Gateway state",
-                    "title": "Virtual Private Gateway state",
-                    "x-displayname": "Virtual Private Gateway state"
-                },
-                "vif_states": {
-                    "type": "array",
-                    "description": " VIF States",
-                    "title": "VIF States",
-                    "items": {
-                        "$ref": "#/definitions/aws_tgw_siteDirectConnectVIFStateInfo"
-                    },
-                    "x-displayname": "VIF States"
-                }
-            }
-        },
-        "aws_tgw_siteDirectConnectVIFStateInfo": {
-            "type": "object",
-            "x-ves-proto-message": "ves.io.schema.views.aws_tgw_site.DirectConnectVIFStateInfo",
-            "properties": {
-                "attachment_state": {
-                    "type": "string",
-                    "description": " VIF Attachment State",
-                    "title": "VIF Attachment State",
-                    "x-displayname": "VIF Attachment State"
-                },
-                "bgp_peers": {
-                    "type": "array",
-                    "description": "  BGP Peers",
-                    "title": "BGP Peers",
-                    "items": {
-                        "$ref": "#/definitions/aws_tgw_siteDirectConnectBGPPeerInfo"
-                    },
-                    "x-displayname": " BGP Peers"
-                },
-                "vif_id": {
-                    "type": "string",
-                    "description": " VIF ID",
-                    "title": "VIF ID",
-                    "x-displayname": "VIF ID"
-                },
-                "vif_state": {
-                    "type": "string",
-                    "description": " VIF State",
-                    "title": "VIF State",
-                    "x-displayname": "VIF State"
-                }
-            }
-        },
         "aws_tgw_siteExistingTGWType": {
             "type": "object",
             "description": "Information needed for existing TGW",
@@ -2994,14 +2867,14 @@ var APISwaggerJSON string = `{
                 },
                 "aws_region": {
                     "type": "string",
-                    "description": " Name for AWS Region.\n\nExample: - \"us-east-1\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.in: [\\\"ap-northeast-1\\\",\\\"ap-southeast-1\\\",\\\"eu-central-1\\\",\\\"eu-west-1\\\",\\\"eu-west-3\\\",\\\"sa-east-1\\\",\\\"us-east-1\\\",\\\"us-east-2\\\",\\\"us-west-2\\\",\\\"ca-central-1\\\",\\\"af-south-1\\\",\\\"ap-east-1\\\",\\\"ap-south-1\\\",\\\"ap-northeast-2\\\",\\\"ap-southeast-2\\\",\\\"eu-south-1\\\",\\\"eu-north-1\\\",\\\"eu-west-2\\\",\\\"me-south-1\\\",\\\"us-west-1\\\"]\n",
+                    "description": " Name for AWS Region.\n\nExample: - \"us-east-1\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.in: [\\\"af-south-1\\\",\\\"ap-east-1\\\",\\\"ap-northeast-1\\\",\\\"ap-northeast-2\\\",\\\"ap-south-1\\\",\\\"ap-southeast-1\\\",\\\"ap-southeast-2\\\",\\\"ap-southeast-3\\\",\\\"ca-central-1\\\",\\\"eu-central-1\\\",\\\"eu-north-1\\\",\\\"eu-south-1\\\",\\\"eu-west-1\\\",\\\"eu-west-2\\\",\\\"eu-west-3\\\",\\\"me-south-1\\\",\\\"sa-east-1\\\",\\\"us-east-1\\\",\\\"us-east-2\\\",\\\"us-west-1\\\",\\\"us-west-2\\\"]\n",
                     "title": "AWS Region",
                     "x-displayname": "AWS Region",
                     "x-ves-example": "us-east-1",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true",
-                        "ves.io.schema.rules.string.in": "[\\\"ap-northeast-1\\\",\\\"ap-southeast-1\\\",\\\"eu-central-1\\\",\\\"eu-west-1\\\",\\\"eu-west-3\\\",\\\"sa-east-1\\\",\\\"us-east-1\\\",\\\"us-east-2\\\",\\\"us-west-2\\\",\\\"ca-central-1\\\",\\\"af-south-1\\\",\\\"ap-east-1\\\",\\\"ap-south-1\\\",\\\"ap-northeast-2\\\",\\\"ap-southeast-2\\\",\\\"eu-south-1\\\",\\\"eu-north-1\\\",\\\"eu-west-2\\\",\\\"me-south-1\\\",\\\"us-west-1\\\"]"
+                        "ves.io.schema.rules.string.in": "[\\\"af-south-1\\\",\\\"ap-east-1\\\",\\\"ap-northeast-1\\\",\\\"ap-northeast-2\\\",\\\"ap-south-1\\\",\\\"ap-southeast-1\\\",\\\"ap-southeast-2\\\",\\\"ap-southeast-3\\\",\\\"ca-central-1\\\",\\\"eu-central-1\\\",\\\"eu-north-1\\\",\\\"eu-south-1\\\",\\\"eu-west-1\\\",\\\"eu-west-2\\\",\\\"eu-west-3\\\",\\\"me-south-1\\\",\\\"sa-east-1\\\",\\\"us-east-1\\\",\\\"us-east-2\\\",\\\"us-west-1\\\",\\\"us-west-2\\\"]"
                     }
                 },
                 "az_nodes": {
@@ -3140,12 +3013,6 @@ var APISwaggerJSON string = `{
                         "$ref": "#/definitions/schemaConditionType"
                     },
                     "x-displayname": "Conditions"
-                },
-                "direct_connect_status": {
-                    "description": " Direct Connect Status ",
-                    "title": "Direct Connect Status",
-                    "$ref": "#/definitions/aws_tgw_siteDirectConnectStatusInfo",
-                    "x-displayname": "Direct Connect Status"
                 },
                 "metadata": {
                     "description": " Standard status's metadata",
@@ -4089,7 +3956,7 @@ var APISwaggerJSON string = `{
             "properties": {
                 "addr": {
                     "type": "string",
-                    "description": " IPv6 Address in form of string. IPv6 address must be specified as hexadecimal numbers separated by ':'\n The address can be compacted by suppressing zeros \n e.g. '2001:db8:0:0:0:0:2:1' becomes '2001:db8::2:1' or '2001:db8:0:0:0:2:0:0' becomes '2001:db8::2::'\n\nExample: - \"2001:db8:0:0:0:0:2:1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv6: true\n",
+                    "description": " IPv6 Address in form of string. IPv6 address must be specified as hexadecimal numbers separated by ':'\n The address can be compacted by suppressing zeros\n e.g. '2001:db8:0:0:0:0:2:1' becomes '2001:db8::2:1' or '2001:db8:0:0:0:2:0:0' becomes '2001:db8::2::'\n\nExample: - \"2001:db8:0:0:0:0:2:1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv6: true\n",
                     "title": "IPv6 Address",
                     "x-displayname": "IPv6 Address",
                     "x-ves-example": "2001:db8:0:0:0:0:2:1",
@@ -4971,14 +4838,14 @@ var APISwaggerJSON string = `{
             "properties": {
                 "az_name": {
                     "type": "string",
-                    "description": " AWS availability zone, must be consistent with the selected AWS region.\n\nExample: - \"us-west-2a\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.in: [\\\"ap-northeast-1a\\\",\\\"ap-northeast-1c\\\",\\\"ap-northeast-1d\\\",\\\"ap-southeast-1a\\\",\\\"ap-southeast-1b\\\",\\\"ap-southeast-1c\\\",\\\"eu-central-1a\\\",\\\"eu-central-1b\\\",\\\"eu-central-1c\\\",\\\"eu-west-1a\\\",\\\"eu-west-1b\\\",\\\"eu-west-1c\\\",\\\"eu-west-3a\\\",\\\"eu-west-3b\\\",\\\"eu-west-3c\\\",\\\"sa-east-1a\\\",\\\"sa-east-1b\\\",\\\"sa-east-1c\\\",\\\"us-east-1a\\\",\\\"us-east-1b\\\",\\\"us-east-1c\\\",\\\"us-east-1d\\\",\\\"us-east-1e\\\",\\\"us-east-1f\\\",\\\"us-east-2a\\\",\\\"us-east-2b\\\",\\\"us-east-2c\\\",\\\"us-west-2a\\\",\\\"us-west-2b\\\",\\\"us-west-2c\\\",\\\"us-west-2d\\\",\\\"ca-central-1a\\\",\\\"ca-central-1b\\\",\\\"ca-central-1d\\\",\\\"af-south-1a\\\",\\\"af-south-1b\\\",\\\"af-south-1c\\\",\\\"ap-east-1a\\\",\\\"ap-east-1b\\\",\\\"ap-east-1c\\\",\\\"ap-south-1a\\\",\\\"ap-south-1b\\\",\\\"ap-south-1c\\\",\\\"ap-northeast-2a\\\",\\\"ap-northeast-2b\\\",\\\"ap-northeast-2c\\\",\\\"ap-northeast-2d\\\",\\\"ap-southeast-2a\\\",\\\"ap-southeast-2b\\\",\\\"ap-southeast-2c\\\",\\\"eu-south-1a\\\",\\\"eu-south-1b\\\",\\\"eu-south-1c\\\",\\\"eu-north-1a\\\",\\\"eu-north-1b\\\",\\\"eu-north-1c\\\",\\\"eu-west-2a\\\",\\\"eu-west-2b\\\",\\\"eu-west-2c\\\",\\\"me-south-1a\\\",\\\"me-south-1b\\\",\\\"me-south-1c\\\",\\\"us-west-1a\\\",\\\"us-west-1c\\\"]\n",
+                    "description": " AWS availability zone, must be consistent with the selected AWS region.\n\nExample: - \"us-west-2a\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.in: [\\\"ap-northeast-1a\\\",\\\"ap-northeast-1c\\\",\\\"ap-northeast-1d\\\",\\\"ap-southeast-1a\\\",\\\"ap-southeast-1b\\\",\\\"ap-southeast-1c\\\",\\\"eu-central-1a\\\",\\\"eu-central-1b\\\",\\\"eu-central-1c\\\",\\\"eu-west-1a\\\",\\\"eu-west-1b\\\",\\\"eu-west-1c\\\",\\\"eu-west-3a\\\",\\\"eu-west-3b\\\",\\\"eu-west-3c\\\",\\\"sa-east-1a\\\",\\\"sa-east-1b\\\",\\\"sa-east-1c\\\",\\\"us-east-1a\\\",\\\"us-east-1b\\\",\\\"us-east-1c\\\",\\\"us-east-1d\\\",\\\"us-east-1e\\\",\\\"us-east-1f\\\",\\\"us-east-2a\\\",\\\"us-east-2b\\\",\\\"us-east-2c\\\",\\\"us-west-2a\\\",\\\"us-west-2b\\\",\\\"us-west-2c\\\",\\\"us-west-2d\\\",\\\"ca-central-1a\\\",\\\"ca-central-1b\\\",\\\"ca-central-1d\\\",\\\"af-south-1a\\\",\\\"af-south-1b\\\",\\\"af-south-1c\\\",\\\"ap-east-1a\\\",\\\"ap-east-1b\\\",\\\"ap-east-1c\\\",\\\"ap-south-1a\\\",\\\"ap-south-1b\\\",\\\"ap-south-1c\\\",\\\"ap-northeast-2a\\\",\\\"ap-northeast-2b\\\",\\\"ap-northeast-2c\\\",\\\"ap-northeast-2d\\\",\\\"ap-southeast-2a\\\",\\\"ap-southeast-2b\\\",\\\"ap-southeast-2c\\\",\\\"eu-south-1a\\\",\\\"eu-south-1b\\\",\\\"eu-south-1c\\\",\\\"eu-north-1a\\\",\\\"eu-north-1b\\\",\\\"eu-north-1c\\\",\\\"eu-west-2a\\\",\\\"eu-west-2b\\\",\\\"eu-west-2c\\\",\\\"me-south-1a\\\",\\\"me-south-1b\\\",\\\"me-south-1c\\\",\\\"us-west-1a\\\",\\\"us-west-1b\\\",\\\"us-west-1c\\\",\\\"ap-southeast-3a\\\",\\\"ap-southeast-3b\\\",\\\"ap-southeast-3c\\\"]\n",
                     "title": "AZ Name",
                     "x-displayname": "AZ Name",
                     "x-ves-example": "us-west-2a",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true",
-                        "ves.io.schema.rules.string.in": "[\\\"ap-northeast-1a\\\",\\\"ap-northeast-1c\\\",\\\"ap-northeast-1d\\\",\\\"ap-southeast-1a\\\",\\\"ap-southeast-1b\\\",\\\"ap-southeast-1c\\\",\\\"eu-central-1a\\\",\\\"eu-central-1b\\\",\\\"eu-central-1c\\\",\\\"eu-west-1a\\\",\\\"eu-west-1b\\\",\\\"eu-west-1c\\\",\\\"eu-west-3a\\\",\\\"eu-west-3b\\\",\\\"eu-west-3c\\\",\\\"sa-east-1a\\\",\\\"sa-east-1b\\\",\\\"sa-east-1c\\\",\\\"us-east-1a\\\",\\\"us-east-1b\\\",\\\"us-east-1c\\\",\\\"us-east-1d\\\",\\\"us-east-1e\\\",\\\"us-east-1f\\\",\\\"us-east-2a\\\",\\\"us-east-2b\\\",\\\"us-east-2c\\\",\\\"us-west-2a\\\",\\\"us-west-2b\\\",\\\"us-west-2c\\\",\\\"us-west-2d\\\",\\\"ca-central-1a\\\",\\\"ca-central-1b\\\",\\\"ca-central-1d\\\",\\\"af-south-1a\\\",\\\"af-south-1b\\\",\\\"af-south-1c\\\",\\\"ap-east-1a\\\",\\\"ap-east-1b\\\",\\\"ap-east-1c\\\",\\\"ap-south-1a\\\",\\\"ap-south-1b\\\",\\\"ap-south-1c\\\",\\\"ap-northeast-2a\\\",\\\"ap-northeast-2b\\\",\\\"ap-northeast-2c\\\",\\\"ap-northeast-2d\\\",\\\"ap-southeast-2a\\\",\\\"ap-southeast-2b\\\",\\\"ap-southeast-2c\\\",\\\"eu-south-1a\\\",\\\"eu-south-1b\\\",\\\"eu-south-1c\\\",\\\"eu-north-1a\\\",\\\"eu-north-1b\\\",\\\"eu-north-1c\\\",\\\"eu-west-2a\\\",\\\"eu-west-2b\\\",\\\"eu-west-2c\\\",\\\"me-south-1a\\\",\\\"me-south-1b\\\",\\\"me-south-1c\\\",\\\"us-west-1a\\\",\\\"us-west-1c\\\"]"
+                        "ves.io.schema.rules.string.in": "[\\\"ap-northeast-1a\\\",\\\"ap-northeast-1c\\\",\\\"ap-northeast-1d\\\",\\\"ap-southeast-1a\\\",\\\"ap-southeast-1b\\\",\\\"ap-southeast-1c\\\",\\\"eu-central-1a\\\",\\\"eu-central-1b\\\",\\\"eu-central-1c\\\",\\\"eu-west-1a\\\",\\\"eu-west-1b\\\",\\\"eu-west-1c\\\",\\\"eu-west-3a\\\",\\\"eu-west-3b\\\",\\\"eu-west-3c\\\",\\\"sa-east-1a\\\",\\\"sa-east-1b\\\",\\\"sa-east-1c\\\",\\\"us-east-1a\\\",\\\"us-east-1b\\\",\\\"us-east-1c\\\",\\\"us-east-1d\\\",\\\"us-east-1e\\\",\\\"us-east-1f\\\",\\\"us-east-2a\\\",\\\"us-east-2b\\\",\\\"us-east-2c\\\",\\\"us-west-2a\\\",\\\"us-west-2b\\\",\\\"us-west-2c\\\",\\\"us-west-2d\\\",\\\"ca-central-1a\\\",\\\"ca-central-1b\\\",\\\"ca-central-1d\\\",\\\"af-south-1a\\\",\\\"af-south-1b\\\",\\\"af-south-1c\\\",\\\"ap-east-1a\\\",\\\"ap-east-1b\\\",\\\"ap-east-1c\\\",\\\"ap-south-1a\\\",\\\"ap-south-1b\\\",\\\"ap-south-1c\\\",\\\"ap-northeast-2a\\\",\\\"ap-northeast-2b\\\",\\\"ap-northeast-2c\\\",\\\"ap-northeast-2d\\\",\\\"ap-southeast-2a\\\",\\\"ap-southeast-2b\\\",\\\"ap-southeast-2c\\\",\\\"eu-south-1a\\\",\\\"eu-south-1b\\\",\\\"eu-south-1c\\\",\\\"eu-north-1a\\\",\\\"eu-north-1b\\\",\\\"eu-north-1c\\\",\\\"eu-west-2a\\\",\\\"eu-west-2b\\\",\\\"eu-west-2c\\\",\\\"me-south-1a\\\",\\\"me-south-1b\\\",\\\"me-south-1c\\\",\\\"us-west-1a\\\",\\\"us-west-1b\\\",\\\"us-west-1c\\\",\\\"ap-southeast-3a\\\",\\\"ap-southeast-3b\\\",\\\"ap-southeast-3c\\\"]"
                     }
                 },
                 "inside_subnet_id": {
@@ -5231,13 +5098,13 @@ var APISwaggerJSON string = `{
             "properties": {
                 "asn": {
                     "type": "integer",
-                    "description": " The autonomous system (AS) number on the AWS side for Border Gateway Protocol (BGP) configuration\n\nExample: - \"\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 1\n  ves.io.schema.rules.uint32.lte: 2147483647\n",
+                    "description": " The autonomous system (AS) number on the AWS side for Border Gateway Protocol (BGP) configuration\n\nExample: - \"\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 1\n  ves.io.schema.rules.uint32.lte: 4294967294\n",
                     "title": "AWS Side ASN",
                     "format": "int64",
                     "x-displayname": "AWS Side ASN",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.uint32.gte": "1",
-                        "ves.io.schema.rules.uint32.lte": "2147483647"
+                        "ves.io.schema.rules.uint32.lte": "4294967294"
                     }
                 },
                 "direct_connect_gateway_id": {
@@ -5342,7 +5209,7 @@ var APISwaggerJSON string = `{
             "properties": {
                 "vifs": {
                     "type": "array",
-                    "description": " VIFs\n\nExample: - \"value\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 30\n  ves.io.schema.rules.repeated.unique: true\n  ves.io.schema.rules.string.pattern: ^(dxvif-)([a-z0-9]{8}|[a-z0-9]{17})$\n",
+                    "description": " VIFs\n\nExample: - \"value\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.pattern: ^(dxvif-)([a-z0-9]{8}|[a-z0-9]{17})$\n  ves.io.schema.rules.repeated.max_items: 30\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "Hosted VIFs",
                     "maxItems": 30,
                     "items": {
@@ -5351,9 +5218,9 @@ var APISwaggerJSON string = `{
                     "x-displayname": "List of VIF IDs",
                     "x-ves-example": "value",
                     "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.items.string.pattern": "^(dxvif-)([a-z0-9]{8}|[a-z0-9]{17})$",
                         "ves.io.schema.rules.repeated.max_items": "30",
-                        "ves.io.schema.rules.repeated.unique": "true",
-                        "ves.io.schema.rules.string.pattern": "^(dxvif-)([a-z0-9]{8}|[a-z0-9]{17})$"
+                        "ves.io.schema.rules.repeated.unique": "true"
                     }
                 }
             }

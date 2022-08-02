@@ -3231,6 +3231,7 @@ var APISwaggerJSON string = `{
             "description": "Shape of the USB policy object",
             "title": "Specification for USB policy",
             "x-displayname": "Specification",
+            "x-ves-displayorder": "1",
             "x-ves-proto-message": "ves.io.schema.usb_policy.GlobalSpecType",
             "properties": {
                 "allowed_devices": {

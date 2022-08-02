@@ -1666,7 +1666,7 @@ var APISwaggerJSON string = `{
     "swagger": "2.0",
     "info": {
         "title": "Allowed Tenant object",
-        "description": "\nAllowed tenant object will allow tenant in the name field to manage tenant in which its created.\nAdmin can create allowed_tenant configuration if the tenant needs to be managed by tenant in allowed_tenant\nconfiguration - by \"allow\"ing access to manage.\nAdmin can precisely limit access of allowed tenant via selecting required groups (-user_groups-) which underlying\nhas the namespace and roles configured.\n\nTenant which is creating allowed_tenant configuration is called -Managed Tenant- or -MT- and tenant ID specified\nin the spec configuration is called as -Original Tenant- or -OT-.\n\nAdmin of OT can create a corresponding managed_tenant configuration in their tenant which can be treated as an \nintent to manage and creation of this allowed_tenant configuration in MT grants access for OT into MT.\nBoth configuration - allowed_tenant in MT and managed_tenant in OT, need to exist for managed tenant access to work.\n\nDepending on a tenant's current plan, certain tenant may already have default allowed tenant configurations to provide\naccess for Support Team which can be precisely managed via additional APIs.",
+        "description": "\nAllowed tenant object will allow tenant in the name field to manage tenant in which its created.\nAdmin can create allowed_tenant configuration if the tenant needs to be managed by tenant in allowed_tenant\nconfiguration - by \"allow\"ing access to manage.\nAdmin can precisely limit access of allowed tenant via selecting required groups (-user_groups-) which underlying\nhas the namespace and roles configured.\n\nTenant which is creating allowed_tenant configuration is called -Managed Tenant- or -MT- and tenant ID specified\nin the spec configuration is called as -Original Tenant- or -OT-.\n\nAdmin of OT can create a corresponding managed_tenant configuration in their tenant which can be treated as an\nintent to manage and creation of this allowed_tenant configuration in MT grants access for OT into MT.\nBoth configuration - allowed_tenant in MT and managed_tenant in OT, need to exist for managed tenant access to work.\n\nDepending on a tenant's current plan, certain tenant may already have default allowed tenant configurations to provide\naccess for Support Team which can be precisely managed via additional APIs.",
         "version": "version not set"
     },
     "schemes": [
@@ -1684,7 +1684,7 @@ var APISwaggerJSON string = `{
     "definitions": {
         "allowed_tenantAllowedAccessConfig": {
             "type": "object",
-            "description": "x-displayName: \"Access Config\"\nShape for storing access config for a tenant.\ndefault field options - disable, read-only, read_write provided for easy acccess controls \nand underlying allowed groups corresponding to each usecase will be updated accordingly.\nmainly used for storing state for support related tenant access.",
+            "description": "x-displayName: \"Access Config\"\nShape for storing access config for a tenant.\ndefault field options - disable, read-only, read_write provided for easy acccess controls\nand underlying allowed groups corresponding to each usecase will be updated accordingly.\nmainly used for storing state for support related tenant access.",
             "title": "AccessConfig",
             "properties": {
                 "custom": {

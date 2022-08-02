@@ -3658,6 +3658,15 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["launch_ike_in_namespace"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("launch_ike_in_namespace"))
+		if err := fv(ctx, m.GetLaunchIkeInNamespace(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	switch m.GetLocalControlPlaneChoice().(type) {
 	case *GlobalSpecType_NoLocalControlPlane:
 		if fv, exists := v.FldValidators["local_control_plane_choice.no_local_control_plane"]; exists {
@@ -4225,6 +4234,17 @@ func (m *Interface) GetInterfaceChoiceDRefInfo() ([]db.DRefInfo, error) {
 		}
 		return drInfos, err
 
+	case *Interface_LoopbackInterface:
+		drInfos, err := m.GetLoopbackInterface().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetLoopbackInterface().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "loopback_interface." + dri.DRField
+		}
+		return drInfos, err
+
 	default:
 		return nil, nil
 	}
@@ -4331,6 +4351,17 @@ func (v *ValidateInterface) Validate(ctx context.Context, pm interface{}, opts .
 				return err
 			}
 		}
+	case *Interface_LoopbackInterface:
+		if fv, exists := v.FldValidators["interface_choice.loopback_interface"]; exists {
+			val := m.GetInterfaceChoice().(*Interface_LoopbackInterface).LoopbackInterface
+			vOpts := append(opts,
+				db.WithValidateField("interface_choice"),
+				db.WithValidateField("loopback_interface"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 
@@ -4387,6 +4418,7 @@ var DefaultInterfaceValidator = func() *ValidateInterface {
 	v.FldValidators["interface_choice.dedicated_interface"] = ves_io_schema_network_interface.DedicatedInterfaceTypeValidator().Validate
 	v.FldValidators["interface_choice.dedicated_management_interface"] = ves_io_schema_network_interface.DedicatedManagementInterfaceTypeValidator().Validate
 	v.FldValidators["interface_choice.tunnel_interface"] = ves_io_schema_network_interface.TunnelInterfaceTypeValidator().Validate
+	v.FldValidators["interface_choice.loopback_interface"] = ves_io_schema_network_interface.LoopbackInterfaceTypeValidator().Validate
 
 	return v
 }()
@@ -6465,6 +6497,12 @@ func (m *VnConfiguration) GetDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
+	if fdrInfos, err := m.GetDcClusterGroupInterfaceDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetDcClusterGroupInterfaceDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
 	if fdrInfos, err := m.GetStaticRouteChoiceDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetStaticRouteChoiceDRefInfo() FAILED")
 	} else {
@@ -6540,6 +6578,61 @@ func (m *VnConfiguration) GetDcClusterGroupChoiceDBEntries(ctx context.Context, 
 	return entries, nil
 }
 
+func (m *VnConfiguration) GetDcClusterGroupInterfaceDRefInfo() ([]db.DRefInfo, error) {
+	vrefs := m.GetDcClusterGroupInterface()
+	if len(vrefs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(vrefs))
+	for i, vref := range vrefs {
+		if vref == nil {
+			return nil, fmt.Errorf("VnConfiguration.dc_cluster_group_interface[%d] has a nil value", i)
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("network_interface.Object")
+		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "network_interface.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "dc_cluster_group_interface",
+			Ref:        vdRef,
+		})
+	}
+	return drInfos, nil
+
+}
+
+// GetDcClusterGroupInterfaceDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *VnConfiguration) GetDcClusterGroupInterfaceDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+	refdType, err := d.TypeForEntryKind("", "", "network_interface.Object")
+	if err != nil {
+		return nil, errors.Wrap(err, "Cannot find type for kind: network_interface")
+	}
+	for i, vref := range m.GetDcClusterGroupInterface() {
+		if vref == nil {
+			return nil, fmt.Errorf("VnConfiguration.dc_cluster_group_interface[%d] has a nil value", i)
+		}
+		ref := &ves_io_schema.ObjectRefType{
+			Kind:      "network_interface.Object",
+			Tenant:    vref.Tenant,
+			Namespace: vref.Namespace,
+			Name:      vref.Name,
+		}
+		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+		if err != nil {
+			return nil, errors.Wrap(err, "Getting referred entry")
+		}
+		if refdEnt != nil {
+			entries = append(entries, refdEnt)
+		}
+	}
+
+	return entries, nil
+}
+
 // GetDRefInfo for the field's type
 func (m *VnConfiguration) GetStaticRouteChoiceDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetStaticRouteChoice() == nil {
@@ -6584,6 +6677,46 @@ func (v *ValidateVnConfiguration) StaticRouteChoiceValidationRuleHandler(rules m
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for static_route_choice")
 	}
+	return validatorFn, nil
+}
+
+func (v *ValidateVnConfiguration) DcClusterGroupInterfaceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_views.ObjectRefType, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := ves_io_schema_views.ObjectRefTypeValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for dc_cluster_group_interface")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema_views.ObjectRefType)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema_views.ObjectRefType, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated dc_cluster_group_interface")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items dc_cluster_group_interface")
+		}
+		return nil
+	}
+
 	return validatorFn, nil
 }
 
@@ -6633,6 +6766,14 @@ func (v *ValidateVnConfiguration) Validate(ctx context.Context, pm interface{}, 
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
 			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["dc_cluster_group_interface"]; exists {
+		vOpts := append(opts, db.WithValidateField("dc_cluster_group_interface"))
+		if err := fv(ctx, m.GetDcClusterGroupInterface(), vOpts...); err != nil {
+			return err
 		}
 
 	}
@@ -6721,6 +6862,18 @@ var DefaultVnConfigurationValidator = func() *ValidateVnConfiguration {
 		panic(errMsg)
 	}
 	v.FldValidators["static_route_choice"] = vFn
+
+	vrhDcClusterGroupInterface := v.DcClusterGroupInterfaceValidationRuleHandler
+	rulesDcClusterGroupInterface := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "128",
+		"ves.io.schema.rules.repeated.unique":    "true",
+	}
+	vFn, err = vrhDcClusterGroupInterface(rulesDcClusterGroupInterface)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for VnConfiguration.dc_cluster_group_interface: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["dc_cluster_group_interface"] = vFn
 
 	v.FldValidators["dc_cluster_group_choice.dc_cluster_group"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 

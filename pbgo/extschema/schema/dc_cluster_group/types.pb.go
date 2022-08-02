@@ -8,7 +8,7 @@ import (
 	_ "github.com/gogo/protobuf/gogoproto"
 	proto "github.com/gogo/protobuf/proto"
 	golang_proto "github.com/golang/protobuf/proto"
-	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+	schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
 	io "io"
 	math "math"
 	math_bits "math/bits"
@@ -28,17 +28,114 @@ var _ = math.Inf
 // proto package needs to be updated.
 const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
+// DC Cluster Group Mesh Type
+//
+// x-displayName: "DC Cluster Group Mesh Type"
+// Details of DC Cluster Group Mesh Type
+type DCClusterGroupMeshType struct {
+	// DC Cluster Group Mesh Choice
+	//
+	// x-displayName: "DC Cluster Group Mesh Choice"
+	//
+	// Choice of data plane, data plane and control plane dc cluster mesh
+	//
+	// Types that are valid to be assigned to DcClusterGroupMeshChoice:
+	//	*DCClusterGroupMeshType_DataPlaneMesh
+	//	*DCClusterGroupMeshType_ControlAndDataPlaneMesh
+	DcClusterGroupMeshChoice isDCClusterGroupMeshType_DcClusterGroupMeshChoice `protobuf_oneof:"dc_cluster_group_mesh_choice"`
+}
+
+func (m *DCClusterGroupMeshType) Reset()      { *m = DCClusterGroupMeshType{} }
+func (*DCClusterGroupMeshType) ProtoMessage() {}
+func (*DCClusterGroupMeshType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_a620df2814ae1a05, []int{0}
+}
+func (m *DCClusterGroupMeshType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *DCClusterGroupMeshType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *DCClusterGroupMeshType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_DCClusterGroupMeshType.Merge(m, src)
+}
+func (m *DCClusterGroupMeshType) XXX_Size() int {
+	return m.Size()
+}
+func (m *DCClusterGroupMeshType) XXX_DiscardUnknown() {
+	xxx_messageInfo_DCClusterGroupMeshType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_DCClusterGroupMeshType proto.InternalMessageInfo
+
+type isDCClusterGroupMeshType_DcClusterGroupMeshChoice interface {
+	isDCClusterGroupMeshType_DcClusterGroupMeshChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
+
+type DCClusterGroupMeshType_DataPlaneMesh struct {
+	DataPlaneMesh *schema.Empty `protobuf:"bytes,2,opt,name=data_plane_mesh,json=dataPlaneMesh,proto3,oneof" json:"data_plane_mesh,omitempty"`
+}
+type DCClusterGroupMeshType_ControlAndDataPlaneMesh struct {
+	ControlAndDataPlaneMesh *schema.Empty `protobuf:"bytes,3,opt,name=control_and_data_plane_mesh,json=controlAndDataPlaneMesh,proto3,oneof" json:"control_and_data_plane_mesh,omitempty"`
+}
+
+func (*DCClusterGroupMeshType_DataPlaneMesh) isDCClusterGroupMeshType_DcClusterGroupMeshChoice() {}
+func (*DCClusterGroupMeshType_ControlAndDataPlaneMesh) isDCClusterGroupMeshType_DcClusterGroupMeshChoice() {
+}
+
+func (m *DCClusterGroupMeshType) GetDcClusterGroupMeshChoice() isDCClusterGroupMeshType_DcClusterGroupMeshChoice {
+	if m != nil {
+		return m.DcClusterGroupMeshChoice
+	}
+	return nil
+}
+
+func (m *DCClusterGroupMeshType) GetDataPlaneMesh() *schema.Empty {
+	if x, ok := m.GetDcClusterGroupMeshChoice().(*DCClusterGroupMeshType_DataPlaneMesh); ok {
+		return x.DataPlaneMesh
+	}
+	return nil
+}
+
+func (m *DCClusterGroupMeshType) GetControlAndDataPlaneMesh() *schema.Empty {
+	if x, ok := m.GetDcClusterGroupMeshChoice().(*DCClusterGroupMeshType_ControlAndDataPlaneMesh); ok {
+		return x.ControlAndDataPlaneMesh
+	}
+	return nil
+}
+
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*DCClusterGroupMeshType) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
+		(*DCClusterGroupMeshType_DataPlaneMesh)(nil),
+		(*DCClusterGroupMeshType_ControlAndDataPlaneMesh)(nil),
+	}
+}
+
 // Global Specification
 //
 // x-displayName: "Global Specification"
 // DC Cluster Group specification
 type GlobalSpecType struct {
+	// DC Cluster Group Mesh Choice
+	//
+	// x-displayName: "Mesh Choice"
+	// DC Cluster Group Mesh Choice
+	Type *DCClusterGroupMeshType `protobuf:"bytes,1,opt,name=type,proto3" json:"type,omitempty"`
 }
 
 func (m *GlobalSpecType) Reset()      { *m = GlobalSpecType{} }
 func (*GlobalSpecType) ProtoMessage() {}
 func (*GlobalSpecType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_a620df2814ae1a05, []int{0}
+	return fileDescriptor_a620df2814ae1a05, []int{1}
 }
 func (m *GlobalSpecType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -63,6 +160,13 @@ func (m *GlobalSpecType) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_GlobalSpecType proto.InternalMessageInfo
 
+func (m *GlobalSpecType) GetType() *DCClusterGroupMeshType {
+	if m != nil {
+		return m.Type
+	}
+	return nil
+}
+
 // Create DC Cluster group
 //
 // x-displayName: "Create DC Cluster Group"
@@ -73,7 +177,7 @@ type CreateSpecType struct {
 func (m *CreateSpecType) Reset()      { *m = CreateSpecType{} }
 func (*CreateSpecType) ProtoMessage() {}
 func (*CreateSpecType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_a620df2814ae1a05, []int{1}
+	return fileDescriptor_a620df2814ae1a05, []int{2}
 }
 func (m *CreateSpecType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -108,7 +212,7 @@ type ReplaceSpecType struct {
 func (m *ReplaceSpecType) Reset()      { *m = ReplaceSpecType{} }
 func (*ReplaceSpecType) ProtoMessage() {}
 func (*ReplaceSpecType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_a620df2814ae1a05, []int{2}
+	return fileDescriptor_a620df2814ae1a05, []int{3}
 }
 func (m *ReplaceSpecType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -143,7 +247,7 @@ type GetSpecType struct {
 func (m *GetSpecType) Reset()      { *m = GetSpecType{} }
 func (*GetSpecType) ProtoMessage() {}
 func (*GetSpecType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_a620df2814ae1a05, []int{3}
+	return fileDescriptor_a620df2814ae1a05, []int{4}
 }
 func (m *GetSpecType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -168,7 +272,57 @@ func (m *GetSpecType) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_GetSpecType proto.InternalMessageInfo
 
+// dc cluster group status
+//
+// x-displayName: "Status"
+// Status of the dc cluster group
+type DcClusterGroupStatus struct {
+	// site_info
+	//
+	// x-required
+	// x-displayName: "site info"
+	// The list of sites in the dc cluster group and information about each
+	SiteInfo []*schema.SiteInfo `protobuf:"bytes,1,rep,name=site_info,json=siteInfo,proto3" json:"site_info,omitempty"`
+}
+
+func (m *DcClusterGroupStatus) Reset()      { *m = DcClusterGroupStatus{} }
+func (*DcClusterGroupStatus) ProtoMessage() {}
+func (*DcClusterGroupStatus) Descriptor() ([]byte, []int) {
+	return fileDescriptor_a620df2814ae1a05, []int{5}
+}
+func (m *DcClusterGroupStatus) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *DcClusterGroupStatus) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *DcClusterGroupStatus) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_DcClusterGroupStatus.Merge(m, src)
+}
+func (m *DcClusterGroupStatus) XXX_Size() int {
+	return m.Size()
+}
+func (m *DcClusterGroupStatus) XXX_DiscardUnknown() {
+	xxx_messageInfo_DcClusterGroupStatus.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_DcClusterGroupStatus proto.InternalMessageInfo
+
+func (m *DcClusterGroupStatus) GetSiteInfo() []*schema.SiteInfo {
+	if m != nil {
+		return m.SiteInfo
+	}
+	return nil
+}
+
 func init() {
+	proto.RegisterType((*DCClusterGroupMeshType)(nil), "ves.io.schema.dc_cluster_group.DCClusterGroupMeshType")
+	golang_proto.RegisterType((*DCClusterGroupMeshType)(nil), "ves.io.schema.dc_cluster_group.DCClusterGroupMeshType")
 	proto.RegisterType((*GlobalSpecType)(nil), "ves.io.schema.dc_cluster_group.GlobalSpecType")
 	golang_proto.RegisterType((*GlobalSpecType)(nil), "ves.io.schema.dc_cluster_group.GlobalSpecType")
 	proto.RegisterType((*CreateSpecType)(nil), "ves.io.schema.dc_cluster_group.CreateSpecType")
@@ -177,6 +331,8 @@ func init() {
 	golang_proto.RegisterType((*ReplaceSpecType)(nil), "ves.io.schema.dc_cluster_group.ReplaceSpecType")
 	proto.RegisterType((*GetSpecType)(nil), "ves.io.schema.dc_cluster_group.GetSpecType")
 	golang_proto.RegisterType((*GetSpecType)(nil), "ves.io.schema.dc_cluster_group.GetSpecType")
+	proto.RegisterType((*DcClusterGroupStatus)(nil), "ves.io.schema.dc_cluster_group.DcClusterGroupStatus")
+	golang_proto.RegisterType((*DcClusterGroupStatus)(nil), "ves.io.schema.dc_cluster_group.DcClusterGroupStatus")
 }
 
 func init() {
@@ -187,29 +343,120 @@ func init() {
 }
 
 var fileDescriptor_a620df2814ae1a05 = []byte{
-	// 307 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x7c, 0x91, 0xbf, 0x4e, 0xfb, 0x30,
-	0x10, 0xc7, 0xed, 0xe5, 0x37, 0xe4, 0x27, 0x95, 0x3f, 0x0b, 0xa2, 0x48, 0x27, 0x54, 0x98, 0x90,
-	0x6a, 0x0f, 0x6c, 0x0c, 0x0c, 0x30, 0x74, 0x87, 0x4e, 0x2c, 0x55, 0xe2, 0x5e, 0xdd, 0x88, 0xb4,
-	0x67, 0x39, 0x4e, 0x45, 0x37, 0x1e, 0x01, 0xf1, 0x14, 0x3c, 0x06, 0x23, 0x62, 0xea, 0xd8, 0x91,
-	0x3a, 0x0b, 0x63, 0x1f, 0x01, 0xc9, 0x49, 0x25, 0x52, 0x89, 0x6e, 0x77, 0xfe, 0x7c, 0x6c, 0x9f,
-	0xbe, 0x17, 0x5d, 0xcc, 0x30, 0x17, 0x29, 0xc9, 0x5c, 0x8d, 0x71, 0x12, 0xcb, 0xa1, 0x1a, 0xa8,
-	0xac, 0xc8, 0x1d, 0xda, 0x81, 0xb6, 0x54, 0x18, 0xe9, 0xe6, 0x06, 0x73, 0x61, 0x2c, 0x39, 0x3a,
-	0x84, 0xca, 0x15, 0x95, 0x2b, 0xb6, 0xdd, 0x76, 0x57, 0xa7, 0x6e, 0x5c, 0x24, 0x42, 0xd1, 0x44,
-	0x6a, 0xd2, 0x24, 0xc3, 0xb5, 0xa4, 0x18, 0x85, 0x2e, 0x34, 0xa1, 0xaa, 0x9e, 0x6b, 0x1f, 0x35,
-	0xbf, 0x9e, 0xa2, 0xab, 0xc1, 0x49, 0x13, 0x90, 0x71, 0x29, 0x4d, 0xeb, 0x21, 0xda, 0xc7, 0x4d,
-	0xf8, 0x6b, 0xbe, 0xce, 0x7e, 0xd4, 0xea, 0x65, 0x94, 0xc4, 0xd9, 0xbd, 0x41, 0xd5, 0x9f, 0x1b,
-	0xec, 0x9c, 0x45, 0xad, 0x5b, 0x8b, 0xb1, 0xc3, 0xcd, 0xc9, 0xd5, 0xc1, 0xe7, 0xf5, 0xb6, 0x74,
-	0x1e, 0xed, 0xdd, 0xa1, 0xc9, 0x62, 0xb5, 0xd3, 0x3a, 0x8d, 0xfe, 0xf7, 0xd0, 0xed, 0x30, 0x6e,
-	0x5e, 0xf9, 0x62, 0x05, 0x6c, 0xb9, 0x02, 0xb6, 0x5e, 0x01, 0x7f, 0xf6, 0xc0, 0xdf, 0x3c, 0xf0,
-	0x0f, 0x0f, 0x7c, 0xe1, 0x81, 0x2f, 0x3d, 0xf0, 0x2f, 0x0f, 0xfc, 0xdb, 0x03, 0x5b, 0x7b, 0xe0,
-	0x2f, 0x25, 0xb0, 0xf7, 0x12, 0xf8, 0xa2, 0x04, 0xb6, 0x2c, 0x81, 0x3d, 0xf4, 0x35, 0x99, 0x47,
-	0x2d, 0x66, 0x94, 0x39, 0xb4, 0x36, 0x16, 0x45, 0x2e, 0x43, 0x31, 0x22, 0x3b, 0xe9, 0x1a, 0x4b,
-	0xb3, 0x74, 0x88, 0xb6, 0xbb, 0xc1, 0xd2, 0x24, 0x9a, 0x24, 0x3e, 0xb9, 0x3a, 0x87, 0x3f, 0xf6,
-	0x97, 0xfc, 0x0b, 0xd1, 0x5c, 0xfe, 0x04, 0x00, 0x00, 0xff, 0xff, 0x32, 0xf3, 0x85, 0xc4, 0xe8,
-	0x01, 0x00, 0x00,
+	// 526 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x7c, 0x53, 0x41, 0x8f, 0xd2, 0x40,
+	0x14, 0xee, 0x03, 0x62, 0xd6, 0x21, 0xee, 0x2a, 0x6e, 0x5c, 0x64, 0xd7, 0x09, 0x41, 0x0f, 0x1b,
+	0x23, 0x6d, 0x02, 0xc6, 0x83, 0x87, 0x4d, 0x04, 0x0c, 0x6a, 0x34, 0xd9, 0x00, 0x27, 0x2f, 0xcd,
+	0xb4, 0x7d, 0x94, 0xc6, 0xd2, 0x99, 0xb4, 0x53, 0x94, 0x9b, 0x3f, 0xc1, 0xf8, 0x2b, 0xfc, 0x0f,
+	0x5c, 0xf6, 0x68, 0x3c, 0x71, 0xe4, 0x28, 0xe5, 0xb2, 0xde, 0xf8, 0x09, 0x86, 0xd2, 0x4d, 0x68,
+	0xa3, 0xdc, 0xde, 0xe4, 0xfb, 0xe6, 0xfb, 0xde, 0xf7, 0xe6, 0x0d, 0x79, 0x3a, 0xc1, 0x40, 0x75,
+	0xb8, 0x16, 0x98, 0x23, 0x1c, 0x33, 0xcd, 0x32, 0x75, 0xd3, 0x0d, 0x03, 0x89, 0xbe, 0x6e, 0xfb,
+	0x3c, 0x14, 0x9a, 0x9c, 0x0a, 0x0c, 0x54, 0xe1, 0x73, 0xc9, 0x4b, 0x74, 0xcb, 0x55, 0xb7, 0x5c,
+	0x35, 0xcb, 0xad, 0xd4, 0x6d, 0x47, 0x8e, 0x42, 0x43, 0x35, 0xf9, 0x58, 0xb3, 0xb9, 0xcd, 0xb5,
+	0xf8, 0x9a, 0x11, 0x0e, 0xe3, 0x53, 0x7c, 0x88, 0xab, 0xad, 0x5c, 0xe5, 0x34, 0x6d, 0xcd, 0x85,
+	0x74, 0xb8, 0x97, 0x78, 0x55, 0x1e, 0xa5, 0x41, 0x31, 0x91, 0xfa, 0x4e, 0x2b, 0x95, 0x87, 0x69,
+	0x78, 0x17, 0x3a, 0x4b, 0x43, 0x13, 0xe6, 0x3a, 0x16, 0x93, 0x98, 0xa0, 0xd5, 0x0c, 0xea, 0xe0,
+	0x67, 0x3d, 0xe5, 0x5c, 0xfb, 0x03, 0xe4, 0x41, 0xa7, 0xdd, 0xde, 0x26, 0xeb, 0x6e, 0x82, 0x7d,
+	0xc0, 0x60, 0x34, 0x98, 0x0a, 0x2c, 0x5d, 0x90, 0x23, 0x8b, 0x49, 0xa6, 0x0b, 0x97, 0x79, 0xa8,
+	0x8f, 0x31, 0x18, 0x95, 0x73, 0x55, 0x38, 0x2f, 0x36, 0x8e, 0xd5, 0xf4, 0x68, 0x5e, 0x8f, 0x85,
+	0x9c, 0xbe, 0x51, 0x7a, 0x77, 0x36, 0xf4, 0xcb, 0x0d, 0x7b, 0xa3, 0x51, 0x1a, 0x90, 0x53, 0x93,
+	0x7b, 0xd2, 0xe7, 0xae, 0xce, 0x3c, 0x4b, 0xcf, 0x6a, 0xe5, 0xf7, 0x6a, 0x9d, 0x24, 0x57, 0x5f,
+	0x79, 0x56, 0x67, 0x57, 0xb5, 0xd5, 0x24, 0x67, 0xd9, 0xa7, 0x88, 0xf5, 0x74, 0x73, 0xc4, 0x1d,
+	0x13, 0x4b, 0xf7, 0xaf, 0x66, 0x90, 0x9b, 0xcf, 0x00, 0xa2, 0x19, 0xe4, 0x1b, 0xcf, 0x9a, 0xeb,
+	0x19, 0xc0, 0xbb, 0xc2, 0x01, 0xdc, 0xcd, 0xd5, 0x0c, 0x72, 0xd8, 0x75, 0xb9, 0xc1, 0xdc, 0xbe,
+	0x40, 0x33, 0x8e, 0x78, 0x49, 0x0a, 0x9b, 0x61, 0x96, 0x21, 0xee, 0xe5, 0x85, 0xba, 0xff, 0xc9,
+	0xd5, 0x7f, 0x0f, 0xaa, 0x55, 0xb8, 0x9e, 0x01, 0xf4, 0x62, 0xa5, 0xda, 0x63, 0x72, 0xd8, 0xf6,
+	0x91, 0x49, 0xbc, 0xf1, 0x78, 0x79, 0xef, 0xd7, 0x45, 0xc6, 0xb6, 0xf6, 0x84, 0x1c, 0xf5, 0x50,
+	0xb8, 0xcc, 0xdc, 0xcb, 0xaa, 0x92, 0x62, 0x17, 0xe5, 0x3e, 0xc6, 0x7b, 0x72, 0xdc, 0x31, 0x77,
+	0x5b, 0xea, 0x4b, 0x26, 0xc3, 0xa0, 0xf4, 0x9c, 0xdc, 0x0e, 0x1c, 0x89, 0xba, 0xe3, 0x0d, 0x79,
+	0x19, 0xaa, 0xf9, 0xf3, 0x62, 0xe3, 0x24, 0x93, 0xad, 0xef, 0x48, 0x7c, 0xeb, 0x0d, 0x79, 0xef,
+	0x20, 0x48, 0xaa, 0xd6, 0x77, 0x98, 0x2f, 0xa9, 0xb2, 0x58, 0x52, 0x65, 0xbd, 0xa4, 0xf0, 0x35,
+	0xa2, 0xf0, 0x23, 0xa2, 0xf0, 0x33, 0xa2, 0x30, 0x8f, 0x28, 0x2c, 0x22, 0x0a, 0xbf, 0x23, 0x0a,
+	0xd7, 0x11, 0x55, 0xd6, 0x11, 0x85, 0x6f, 0x2b, 0xaa, 0x5c, 0xad, 0x28, 0xcc, 0x57, 0x54, 0x59,
+	0xac, 0xa8, 0xf2, 0x71, 0x60, 0x73, 0xf1, 0xc9, 0x56, 0x27, 0xdc, 0x95, 0xe8, 0xfb, 0x4c, 0x0d,
+	0x03, 0x2d, 0x2e, 0x86, 0xdc, 0x1f, 0xd7, 0x85, 0xcf, 0x27, 0x8e, 0x85, 0x7e, 0xfd, 0x06, 0xd6,
+	0x84, 0x61, 0x73, 0x0d, 0xbf, 0xc8, 0x64, 0x35, 0xff, 0xf3, 0x23, 0x8d, 0x5b, 0xf1, 0x9a, 0x36,
+	0xff, 0x06, 0x00, 0x00, 0xff, 0xff, 0x56, 0x70, 0x55, 0x5e, 0xba, 0x03, 0x00, 0x00,
 }
 
+func (this *DCClusterGroupMeshType) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*DCClusterGroupMeshType)
+	if !ok {
+		that2, ok := that.(DCClusterGroupMeshType)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if that1.DcClusterGroupMeshChoice == nil {
+		if this.DcClusterGroupMeshChoice != nil {
+			return false
+		}
+	} else if this.DcClusterGroupMeshChoice == nil {
+		return false
+	} else if !this.DcClusterGroupMeshChoice.Equal(that1.DcClusterGroupMeshChoice) {
+		return false
+	}
+	return true
+}
+func (this *DCClusterGroupMeshType_DataPlaneMesh) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*DCClusterGroupMeshType_DataPlaneMesh)
+	if !ok {
+		that2, ok := that.(DCClusterGroupMeshType_DataPlaneMesh)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.DataPlaneMesh.Equal(that1.DataPlaneMesh) {
+		return false
+	}
+	return true
+}
+func (this *DCClusterGroupMeshType_ControlAndDataPlaneMesh) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*DCClusterGroupMeshType_ControlAndDataPlaneMesh)
+	if !ok {
+		that2, ok := that.(DCClusterGroupMeshType_ControlAndDataPlaneMesh)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.ControlAndDataPlaneMesh.Equal(that1.ControlAndDataPlaneMesh) {
+		return false
+	}
+	return true
+}
 func (this *GlobalSpecType) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -227,6 +474,9 @@ func (this *GlobalSpecType) Equal(that interface{}) bool {
 	if that1 == nil {
 		return this == nil
 	} else if this == nil {
+		return false
+	}
+	if !this.Type.Equal(that1.Type) {
 		return false
 	}
 	return true
@@ -294,12 +544,72 @@ func (this *GetSpecType) Equal(that interface{}) bool {
 	}
 	return true
 }
+func (this *DcClusterGroupStatus) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*DcClusterGroupStatus)
+	if !ok {
+		that2, ok := that.(DcClusterGroupStatus)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if len(this.SiteInfo) != len(that1.SiteInfo) {
+		return false
+	}
+	for i := range this.SiteInfo {
+		if !this.SiteInfo[i].Equal(that1.SiteInfo[i]) {
+			return false
+		}
+	}
+	return true
+}
+func (this *DCClusterGroupMeshType) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 6)
+	s = append(s, "&dc_cluster_group.DCClusterGroupMeshType{")
+	if this.DcClusterGroupMeshChoice != nil {
+		s = append(s, "DcClusterGroupMeshChoice: "+fmt.Sprintf("%#v", this.DcClusterGroupMeshChoice)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *DCClusterGroupMeshType_DataPlaneMesh) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&dc_cluster_group.DCClusterGroupMeshType_DataPlaneMesh{` +
+		`DataPlaneMesh:` + fmt.Sprintf("%#v", this.DataPlaneMesh) + `}`}, ", ")
+	return s
+}
+func (this *DCClusterGroupMeshType_ControlAndDataPlaneMesh) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&dc_cluster_group.DCClusterGroupMeshType_ControlAndDataPlaneMesh{` +
+		`ControlAndDataPlaneMesh:` + fmt.Sprintf("%#v", this.ControlAndDataPlaneMesh) + `}`}, ", ")
+	return s
+}
 func (this *GlobalSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 4)
+	s := make([]string, 0, 5)
 	s = append(s, "&dc_cluster_group.GlobalSpecType{")
+	if this.Type != nil {
+		s = append(s, "Type: "+fmt.Sprintf("%#v", this.Type)+",\n")
+	}
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
@@ -330,6 +640,18 @@ func (this *GetSpecType) GoString() string {
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
+func (this *DcClusterGroupStatus) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 5)
+	s = append(s, "&dc_cluster_group.DcClusterGroupStatus{")
+	if this.SiteInfo != nil {
+		s = append(s, "SiteInfo: "+fmt.Sprintf("%#v", this.SiteInfo)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
 func valueToGoStringTypes(v interface{}, typ string) string {
 	rv := reflect.ValueOf(v)
 	if rv.IsNil() {
@@ -337,6 +659,80 @@ func valueToGoStringTypes(v interface{}, typ string) string {
 	}
 	pv := reflect.Indirect(rv).Interface()
 	return fmt.Sprintf("func(v %v) *%v { return &v } ( %#v )", typ, typ, pv)
+}
+func (m *DCClusterGroupMeshType) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *DCClusterGroupMeshType) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *DCClusterGroupMeshType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.DcClusterGroupMeshChoice != nil {
+		{
+			size := m.DcClusterGroupMeshChoice.Size()
+			i -= size
+			if _, err := m.DcClusterGroupMeshChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *DCClusterGroupMeshType_DataPlaneMesh) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *DCClusterGroupMeshType_DataPlaneMesh) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.DataPlaneMesh != nil {
+		{
+			size, err := m.DataPlaneMesh.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x12
+	}
+	return len(dAtA) - i, nil
+}
+func (m *DCClusterGroupMeshType_ControlAndDataPlaneMesh) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *DCClusterGroupMeshType_ControlAndDataPlaneMesh) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.ControlAndDataPlaneMesh != nil {
+		{
+			size, err := m.ControlAndDataPlaneMesh.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1a
+	}
+	return len(dAtA) - i, nil
 }
 func (m *GlobalSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
@@ -358,6 +754,18 @@ func (m *GlobalSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	if m.Type != nil {
+		{
+			size, err := m.Type.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0xa
+	}
 	return len(dAtA) - i, nil
 }
 
@@ -430,6 +838,43 @@ func (m *GetSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
+func (m *DcClusterGroupStatus) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *DcClusterGroupStatus) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *DcClusterGroupStatus) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.SiteInfo) > 0 {
+		for iNdEx := len(m.SiteInfo) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.SiteInfo[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0xa
+		}
+	}
+	return len(dAtA) - i, nil
+}
+
 func encodeVarintTypes(dAtA []byte, offset int, v uint64) int {
 	offset -= sovTypes(v)
 	base := offset
@@ -441,12 +886,52 @@ func encodeVarintTypes(dAtA []byte, offset int, v uint64) int {
 	dAtA[offset] = uint8(v)
 	return base
 }
+func (m *DCClusterGroupMeshType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.DcClusterGroupMeshChoice != nil {
+		n += m.DcClusterGroupMeshChoice.Size()
+	}
+	return n
+}
+
+func (m *DCClusterGroupMeshType_DataPlaneMesh) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.DataPlaneMesh != nil {
+		l = m.DataPlaneMesh.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *DCClusterGroupMeshType_ControlAndDataPlaneMesh) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.ControlAndDataPlaneMesh != nil {
+		l = m.ControlAndDataPlaneMesh.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
 func (m *GlobalSpecType) Size() (n int) {
 	if m == nil {
 		return 0
 	}
 	var l int
 	_ = l
+	if m.Type != nil {
+		l = m.Type.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
 	return n
 }
 
@@ -477,17 +962,63 @@ func (m *GetSpecType) Size() (n int) {
 	return n
 }
 
+func (m *DcClusterGroupStatus) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if len(m.SiteInfo) > 0 {
+		for _, e := range m.SiteInfo {
+			l = e.Size()
+			n += 1 + l + sovTypes(uint64(l))
+		}
+	}
+	return n
+}
+
 func sovTypes(x uint64) (n int) {
 	return (math_bits.Len64(x|1) + 6) / 7
 }
 func sozTypes(x uint64) (n int) {
 	return sovTypes(uint64((x << 1) ^ uint64((int64(x) >> 63))))
 }
+func (this *DCClusterGroupMeshType) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&DCClusterGroupMeshType{`,
+		`DcClusterGroupMeshChoice:` + fmt.Sprintf("%v", this.DcClusterGroupMeshChoice) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *DCClusterGroupMeshType_DataPlaneMesh) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&DCClusterGroupMeshType_DataPlaneMesh{`,
+		`DataPlaneMesh:` + strings.Replace(fmt.Sprintf("%v", this.DataPlaneMesh), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *DCClusterGroupMeshType_ControlAndDataPlaneMesh) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&DCClusterGroupMeshType_ControlAndDataPlaneMesh{`,
+		`ControlAndDataPlaneMesh:` + strings.Replace(fmt.Sprintf("%v", this.ControlAndDataPlaneMesh), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
 func (this *GlobalSpecType) String() string {
 	if this == nil {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GlobalSpecType{`,
+		`Type:` + strings.Replace(this.Type.String(), "DCClusterGroupMeshType", "DCClusterGroupMeshType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -519,6 +1050,21 @@ func (this *GetSpecType) String() string {
 	}, "")
 	return s
 }
+func (this *DcClusterGroupStatus) String() string {
+	if this == nil {
+		return "nil"
+	}
+	repeatedStringForSiteInfo := "[]*SiteInfo{"
+	for _, f := range this.SiteInfo {
+		repeatedStringForSiteInfo += strings.Replace(fmt.Sprintf("%v", f), "SiteInfo", "schema.SiteInfo", 1) + ","
+	}
+	repeatedStringForSiteInfo += "}"
+	s := strings.Join([]string{`&DcClusterGroupStatus{`,
+		`SiteInfo:` + repeatedStringForSiteInfo + `,`,
+		`}`,
+	}, "")
+	return s
+}
 func valueToStringTypes(v interface{}) string {
 	rv := reflect.ValueOf(v)
 	if rv.IsNil() {
@@ -526,6 +1072,129 @@ func valueToStringTypes(v interface{}) string {
 	}
 	pv := reflect.Indirect(rv).Interface()
 	return fmt.Sprintf("*%v", pv)
+}
+func (m *DCClusterGroupMeshType) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: DCClusterGroupMeshType: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: DCClusterGroupMeshType: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DataPlaneMesh", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.DcClusterGroupMeshChoice = &DCClusterGroupMeshType_DataPlaneMesh{v}
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ControlAndDataPlaneMesh", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.DcClusterGroupMeshChoice = &DCClusterGroupMeshType_ControlAndDataPlaneMesh{v}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
 }
 func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
@@ -556,6 +1225,42 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 			return fmt.Errorf("proto: GlobalSpecType: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Type", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Type == nil {
+				m.Type = &DCClusterGroupMeshType{}
+			}
+			if err := m.Type.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipTypes(dAtA[iNdEx:])
@@ -715,6 +1420,93 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 			return fmt.Errorf("proto: GetSpecType: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *DcClusterGroupStatus) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: DcClusterGroupStatus: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: DcClusterGroupStatus: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field SiteInfo", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.SiteInfo = append(m.SiteInfo, &schema.SiteInfo{})
+			if err := m.SiteInfo[len(m.SiteInfo)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipTypes(dAtA[iNdEx:])

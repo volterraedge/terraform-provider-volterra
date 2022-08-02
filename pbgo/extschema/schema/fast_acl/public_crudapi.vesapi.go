@@ -1666,7 +1666,7 @@ var APISwaggerJSON string = `{
     "swagger": "2.0",
     "info": {
         "title": "Fast ACL",
-        "description": "Fast ACL provides destination and specifies rules to protect the site from denial of service attacks.\n  - It is specified in terms of five tuple of the packet {destination ip, destination port, source ip, source port, protocol}.\n  - Fast ACL provides destination IP and port with protocol while Fast ACL rules in ACL provide source IP, port and action\n  - Destination is always provided as a combination of destination IP and port\n\nTypical Usecase(s) are:\n  - Rate-limiting traffic to destination\n  - Accepting traffic from certain source IPs to destination\n  - Ratelimiting or dropping traffic from source IPs to destination\n\nThese ACL rules are applied at very early stage in datapath ingress processing and form\nfirst line of defence against attack. These rules are evaluated for each packet coming in to the system (ingress),\nunlike session based ACL where action is calculated only on first packet in session.\n\nFast ACL picks source based on Longest prefix match for faster processing, which differs\nfrom traditional ACL where rules are evaluated in order. If none of the rule matches\nthen default action is to forward the packet\n\nFast ACL on a customer edge(CE) Site\n\nFast ACL is selected from Fast ACL set on CE Site based on Fleet Configuration. Fast ACL set matching following condition are applied on a CE site\n- Fast ACL set to which this Fast ACL belong is referred to by a Network Firewall\n- Network Firewall is referred to by a Fleet\n- CE site is member of the Fleet\n- Only tenant can configure the set\n- Network type supported are Site Local and Site Local Inside. Any other network type is not valid on CE\n\nSelection of Destination\n- Tenant can choose VIP(s) or interface IP(configured as VIP) via Fast ACL\n\n Fast ACL on RE\n\n- Fast ACL is picked from RE Fast ACL sets and can be defined by tenants for the public VIP(s)\n- Network type supported for RE is Public. Sets with Fast ACL with any other network type will be rejected\n\nSelection of public VIP destination\n- tenant ACL can pick VIP corresponding to tenant only\nSelection of shared VIP destination\n- tenant CANNOT use this option on RE. \nCustom prefixes destination\n- tenant CANNOT use this option on RE. \nShared VIP services\n- tenant CANNOT use this option, is only meant for volterra administrators \n\n Default Protocol Policer \n\n- Is valid on CE and RE and configurable by any tenant\n- Used for rate limiting\n- Applied when none of the source rules match\n- Protocols supported are ICMP, TCP, UDP, DNS",
+        "description": "Fast ACL provides destination and specifies rules to protect the site from denial of service attacks.\n  - It is specified in terms of five tuple of the packet {destination ip, destination port, source ip, source port, protocol}.\n  - Fast ACL provides destination IP and port with protocol while Fast ACL rules in ACL provide source IP, port and action\n  - Destination is always provided as a combination of destination IP and port\n\nTypical Usecase(s) are:\n  - Rate-limiting traffic to destination\n  - Accepting traffic from certain source IPs to destination\n  - Ratelimiting or dropping traffic from source IPs to destination\n\nThese ACL rules are applied at very early stage in datapath ingress processing and form\nfirst line of defence against attack. These rules are evaluated for each packet coming in to the system (ingress),\nunlike session based ACL where action is calculated only on first packet in session.\n\nFast ACL picks source based on Longest prefix match for faster processing, which differs\nfrom traditional ACL where rules are evaluated in order. If none of the rule matches\nthen default action is to forward the packet\n\nFast ACL on a customer edge(CE) Site\n\nFast ACL is selected from Fast ACL set on CE Site based on Fleet Configuration. Fast ACL set matching following condition are applied on a CE site\n- Fast ACL set to which this Fast ACL belong is referred to by a Network Firewall\n- Network Firewall is referred to by a Fleet\n- CE site is member of the Fleet\n- Only tenant can configure the set\n- Network type supported are Site Local and Site Local Inside. Any other network type is not valid on CE\n\nSelection of Destination\n- Tenant can choose VIP(s) or interface IP(configured as VIP) via Fast ACL\n\n Fast ACL on RE\n\n- Fast ACL is picked from RE Fast ACL sets and can be defined by tenants for the public VIP(s)\n- Network type supported for RE is Public. Sets with Fast ACL with any other network type will be rejected\n\nSelection of public VIP destination\n- tenant ACL can pick VIP corresponding to tenant only\nSelection of shared VIP destination\n- tenant CANNOT use this option on RE.\nCustom prefixes destination\n- tenant CANNOT use this option on RE.\nShared VIP services\n- tenant CANNOT use this option, is only meant for volterra administrators\n\n Default Protocol Policer\n\n- Is valid on CE and RE and configurable by any tenant\n- Used for rate limiting\n- Applied when none of the source rules match\n- Protocols supported are ICMP, TCP, UDP, DNS",
         "version": "version not set"
     },
     "schemes": [
@@ -2694,7 +2694,7 @@ var APISwaggerJSON string = `{
                 },
                 "fast_acl_rules": {
                     "type": "array",
-                    "description": " Fast ACL rules to match \n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 128\n  ves.io.schema.rules.repeated.unique_metadata_name: true\n",
+                    "description": " Fast ACL rules to match\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 128\n  ves.io.schema.rules.repeated.unique_metadata_name: true\n",
                     "title": "Rules",
                     "maxItems": 128,
                     "items": {
@@ -2755,7 +2755,7 @@ var APISwaggerJSON string = `{
                 },
                 "public_ip_refs": {
                     "type": "array",
-                    "description": " Select additional public VIP(s) \n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 128\n  ves.io.schema.rules.repeated.min_items: 1\n",
+                    "description": " Select additional public VIP(s)\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 128\n  ves.io.schema.rules.repeated.min_items: 1\n",
                     "title": "Apply to Dedicated Public VIP",
                     "minItems": 1,
                     "maxItems": 128,
@@ -2811,7 +2811,7 @@ var APISwaggerJSON string = `{
                 },
                 "fast_acl_rules": {
                     "type": "array",
-                    "description": " Fast ACL rules to match \n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 128\n  ves.io.schema.rules.repeated.unique_metadata_name: true\n",
+                    "description": " Fast ACL rules to match\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 128\n  ves.io.schema.rules.repeated.unique_metadata_name: true\n",
                     "title": "Rules",
                     "maxItems": 128,
                     "items": {
@@ -3217,7 +3217,7 @@ var APISwaggerJSON string = `{
             "properties": {
                 "addr": {
                     "type": "string",
-                    "description": " IPv6 Address in form of string. IPv6 address must be specified as hexadecimal numbers separated by ':'\n The address can be compacted by suppressing zeros \n e.g. '2001:db8:0:0:0:0:2:1' becomes '2001:db8::2:1' or '2001:db8:0:0:0:2:0:0' becomes '2001:db8::2::'\n\nExample: - \"2001:db8:0:0:0:0:2:1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv6: true\n",
+                    "description": " IPv6 Address in form of string. IPv6 address must be specified as hexadecimal numbers separated by ':'\n The address can be compacted by suppressing zeros\n e.g. '2001:db8:0:0:0:0:2:1' becomes '2001:db8::2:1' or '2001:db8:0:0:0:2:0:0' becomes '2001:db8::2::'\n\nExample: - \"2001:db8:0:0:0:0:2:1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv6: true\n",
                     "title": "IPv6 Address",
                     "x-displayname": "IPv6 Address",
                     "x-ves-example": "2001:db8:0:0:0:0:2:1",

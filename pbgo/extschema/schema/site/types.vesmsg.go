@@ -16,6 +16,7 @@ import (
 	"gopkg.volterra.us/stdlib/errors"
 
 	ves_io_schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+	ves_io_schema_views "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views"
 )
 
 var (
@@ -110,6 +111,306 @@ var DefaultAresConnectionStatusValidator = func() *ValidateAresConnectionStatus 
 
 func AresConnectionStatusValidator() db.Validator {
 	return DefaultAresConnectionStatusValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *AzureHubSpokeVnetPeeringStatusInfo) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *AzureHubSpokeVnetPeeringStatusInfo) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *AzureHubSpokeVnetPeeringStatusInfo) DeepCopy() *AzureHubSpokeVnetPeeringStatusInfo {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &AzureHubSpokeVnetPeeringStatusInfo{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *AzureHubSpokeVnetPeeringStatusInfo) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *AzureHubSpokeVnetPeeringStatusInfo) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return AzureHubSpokeVnetPeeringStatusInfoValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateAzureHubSpokeVnetPeeringStatusInfo struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateAzureHubSpokeVnetPeeringStatusInfo) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*AzureHubSpokeVnetPeeringStatusInfo)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *AzureHubSpokeVnetPeeringStatusInfo got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["hub_vnet"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("hub_vnet"))
+		if err := fv(ctx, m.GetHubVnet(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["spoke_vnets"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("spoke_vnets"))
+		for idx, item := range m.GetSpokeVnets() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultAzureHubSpokeVnetPeeringStatusInfoValidator = func() *ValidateAzureHubSpokeVnetPeeringStatusInfo {
+	v := &ValidateAzureHubSpokeVnetPeeringStatusInfo{FldValidators: map[string]db.ValidatorFunc{}}
+
+	v.FldValidators["hub_vnet"] = AzureVNetToVnetPeeringStatusValidator().Validate
+
+	v.FldValidators["spoke_vnets"] = AzureVNetToVnetPeeringStatusValidator().Validate
+
+	return v
+}()
+
+func AzureHubSpokeVnetPeeringStatusInfoValidator() db.Validator {
+	return DefaultAzureHubSpokeVnetPeeringStatusInfoValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *AzureVNetToVnetPeeringStatus) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *AzureVNetToVnetPeeringStatus) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *AzureVNetToVnetPeeringStatus) DeepCopy() *AzureVNetToVnetPeeringStatus {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &AzureVNetToVnetPeeringStatus{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *AzureVNetToVnetPeeringStatus) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *AzureVNetToVnetPeeringStatus) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return AzureVNetToVnetPeeringStatusValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateAzureVNetToVnetPeeringStatus struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateAzureVNetToVnetPeeringStatus) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*AzureVNetToVnetPeeringStatus)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *AzureVNetToVnetPeeringStatus got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["peers"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("peers"))
+		for idx, item := range m.GetPeers() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["route_association_state"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("route_association_state"))
+		if err := fv(ctx, m.GetRouteAssociationState(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["vnet_info"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("vnet_info"))
+		if err := fv(ctx, m.GetVnetInfo(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultAzureVNetToVnetPeeringStatusValidator = func() *ValidateAzureVNetToVnetPeeringStatus {
+	v := &ValidateAzureVNetToVnetPeeringStatus{FldValidators: map[string]db.ValidatorFunc{}}
+
+	v.FldValidators["vnet_info"] = ves_io_schema_views.AzureVnetTypeValidator().Validate
+
+	return v
+}()
+
+func AzureVNetToVnetPeeringStatusValidator() db.Validator {
+	return DefaultAzureVNetToVnetPeeringStatusValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *AzureVnetPeeringStateType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *AzureVnetPeeringStateType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *AzureVnetPeeringStateType) DeepCopy() *AzureVnetPeeringStateType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &AzureVnetPeeringStateType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *AzureVnetPeeringStateType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *AzureVnetPeeringStateType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return AzureVnetPeeringStateTypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateAzureVnetPeeringStateType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateAzureVnetPeeringStateType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*AzureVnetPeeringStateType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *AzureVnetPeeringStateType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["peering_state"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("peering_state"))
+		if err := fv(ctx, m.GetPeeringState(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["peering_sync_level"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("peering_sync_level"))
+		if err := fv(ctx, m.GetPeeringSyncLevel(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["provisioning_state"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("provisioning_state"))
+		if err := fv(ctx, m.GetProvisioningState(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["remote_vnet_id"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("remote_vnet_id"))
+		if err := fv(ctx, m.GetRemoteVnetId(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultAzureVnetPeeringStateTypeValidator = func() *ValidateAzureVnetPeeringStateType {
+	v := &ValidateAzureVnetPeeringStateType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func AzureVnetPeeringStateTypeValidator() db.Validator {
+	return DefaultAzureVnetPeeringStateTypeValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -1905,6 +2206,372 @@ func DeploymentStateValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *DirectConnectBGPPeerInfo) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *DirectConnectBGPPeerInfo) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *DirectConnectBGPPeerInfo) DeepCopy() *DirectConnectBGPPeerInfo {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &DirectConnectBGPPeerInfo{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *DirectConnectBGPPeerInfo) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *DirectConnectBGPPeerInfo) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return DirectConnectBGPPeerInfoValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateDirectConnectBGPPeerInfo struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateDirectConnectBGPPeerInfo) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*DirectConnectBGPPeerInfo)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *DirectConnectBGPPeerInfo got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["address_family"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("address_family"))
+		if err := fv(ctx, m.GetAddressFamily(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["amazon_address"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("amazon_address"))
+		if err := fv(ctx, m.GetAmazonAddress(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["asn"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("asn"))
+		if err := fv(ctx, m.GetAsn(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["bgp_peer_id"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("bgp_peer_id"))
+		if err := fv(ctx, m.GetBgpPeerId(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["bgp_peer_state"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("bgp_peer_state"))
+		if err := fv(ctx, m.GetBgpPeerState(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["bgp_status"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("bgp_status"))
+		if err := fv(ctx, m.GetBgpStatus(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["customer_address"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("customer_address"))
+		if err := fv(ctx, m.GetCustomerAddress(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultDirectConnectBGPPeerInfoValidator = func() *ValidateDirectConnectBGPPeerInfo {
+	v := &ValidateDirectConnectBGPPeerInfo{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func DirectConnectBGPPeerInfoValidator() db.Validator {
+	return DefaultDirectConnectBGPPeerInfoValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *DirectConnectStatusInfo) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *DirectConnectStatusInfo) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *DirectConnectStatusInfo) DeepCopy() *DirectConnectStatusInfo {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &DirectConnectStatusInfo{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *DirectConnectStatusInfo) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *DirectConnectStatusInfo) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return DirectConnectStatusInfoValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateDirectConnectStatusInfo struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateDirectConnectStatusInfo) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*DirectConnectStatusInfo)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *DirectConnectStatusInfo got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["direct_connect_gateway_id"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("direct_connect_gateway_id"))
+		if err := fv(ctx, m.GetDirectConnectGatewayId(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["direct_connect_gateway_state"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("direct_connect_gateway_state"))
+		if err := fv(ctx, m.GetDirectConnectGatewayState(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["direct_connect_vgw_association_state"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("direct_connect_vgw_association_state"))
+		if err := fv(ctx, m.GetDirectConnectVgwAssociationState(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["vgw_id"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("vgw_id"))
+		if err := fv(ctx, m.GetVgwId(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["vgw_state"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("vgw_state"))
+		if err := fv(ctx, m.GetVgwState(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["vif_states"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("vif_states"))
+		for idx, item := range m.GetVifStates() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultDirectConnectStatusInfoValidator = func() *ValidateDirectConnectStatusInfo {
+	v := &ValidateDirectConnectStatusInfo{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func DirectConnectStatusInfoValidator() db.Validator {
+	return DefaultDirectConnectStatusInfoValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *DirectConnectVIFStateInfo) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *DirectConnectVIFStateInfo) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *DirectConnectVIFStateInfo) DeepCopy() *DirectConnectVIFStateInfo {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &DirectConnectVIFStateInfo{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *DirectConnectVIFStateInfo) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *DirectConnectVIFStateInfo) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return DirectConnectVIFStateInfoValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateDirectConnectVIFStateInfo struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateDirectConnectVIFStateInfo) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*DirectConnectVIFStateInfo)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *DirectConnectVIFStateInfo got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["attachment_state"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("attachment_state"))
+		if err := fv(ctx, m.GetAttachmentState(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["bgp_peers"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("bgp_peers"))
+		for idx, item := range m.GetBgpPeers() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["vif_id"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("vif_id"))
+		if err := fv(ctx, m.GetVifId(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["vif_state"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("vif_state"))
+		if err := fv(ctx, m.GetVifState(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultDirectConnectVIFStateInfoValidator = func() *ValidateDirectConnectVIFStateInfo {
+	v := &ValidateDirectConnectVIFStateInfo{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func DirectConnectVIFStateInfoValidator() db.Validator {
+	return DefaultDirectConnectVIFStateInfoValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *FleetCondition) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -3033,6 +3700,15 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 
 		vOpts := append(opts, db.WithValidateField("local_k8s_access_enabled"))
 		if err := fv(ctx, m.GetLocalK8SAccessEnabled(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["multus_enabled"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("multus_enabled"))
+		if err := fv(ctx, m.GetMultusEnabled(), vOpts...); err != nil {
 			return err
 		}
 
@@ -4552,6 +5228,15 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["launch_ike_in_namespace"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("launch_ike_in_namespace"))
+		if err := fv(ctx, m.GetLaunchIkeInNamespace(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["local_control_plane_enabled"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("local_control_plane_enabled"))
@@ -4602,6 +5287,15 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["multus_enabled"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("multus_enabled"))
+		if err := fv(ctx, m.GetMultusEnabled(), vOpts...); err != nil {
+			return err
 		}
 
 	}
@@ -7418,7 +8112,7 @@ var DefaultPublishVIPParamsPerAzValidator = func() *ValidatePublishVIPParamsPerA
 
 	vrhAzName := v.AzNameValidationRuleHandler
 	rulesAzName := map[string]string{
-		"ves.io.schema.rules.string.in": "[\"ap-northeast-1a\",\"ap-northeast-1c\",\"ap-northeast-1d\",\"ap-southeast-1a\",\"ap-southeast-1b\",\"ap-southeast-1c\",\"eu-central-1a\",\"eu-central-1b\",\"eu-central-1c\",\"eu-west-1a\",\"eu-west-1b\",\"eu-west-1c\",\"eu-west-3a\",\"eu-west-3b\",\"eu-west-3c\",\"sa-east-1a\",\"sa-east-1b\",\"sa-east-1c\",\"us-east-1a\",\"us-east-1b\",\"us-east-1c\",\"us-east-1d\",\"us-east-1e\",\"us-east-1f\",\"us-east-2a\",\"us-east-2b\",\"us-east-2c\",\"us-west-2a\",\"us-west-2b\",\"us-west-2c\",\"us-west-2d\",\"ca-central-1a\",\"ca-central-1b\",\"ca-central-1d\",\"af-south-1a\",\"af-south-1b\",\"af-south-1c\",\"ap-east-1a\",\"ap-east-1b\",\"ap-east-1c\",\"ap-south-1a\",\"ap-south-1b\",\"ap-south-1c\",\"ap-northeast-2a\",\"ap-northeast-2b\",\"ap-northeast-2c\",\"ap-northeast-2d\",\"ap-southeast-2a\",\"ap-southeast-2b\",\"ap-southeast-2c\",\"eu-south-1a\",\"eu-south-1b\",\"eu-south-1c\",\"eu-north-1a\",\"eu-north-1b\",\"eu-north-1c\",\"eu-west-2a\",\"eu-west-2b\",\"eu-west-2c\",\"me-south-1a\",\"me-south-1b\",\"me-south-1c\",\"us-west-1a\",\"us-west-1c\",\"1\",\"2\",\"3\",\"asia-east1-a\",\"asia-east1-b\",\"asia-east1-c\",\"asia-east2-a\",\"asia-east2-b\",\"asia-east2-c\",\"asia-northeast1-a\",\"asia-northeast1-b\",\"asia-northeast1-c\",\"asia-northeast2-a\",\"asia-northeast2-b\",\"asia-northeast2-c\",\"asia-northeast3-a\",\"asia-northeast3-b\",\"asia-northeast3-c\",\"asia-south1-a\",\"asia-south1-b\",\"asia-south1-c\",\"asia-southeast1-a\",\"asia-southeast1-b\",\"asia-southeast1-c\",\"asia-southeast2-a\",\"asia-southeast2-b\",\"asia-southeast2-c\",\"australia-southeast1-a\",\"australia-southeast1-b\",\"australia-southeast1-c\",\"europe-north1-a\",\"europe-north1-b\",\"europe-north1-c\",\"europe-west1-b\",\"europe-west1-c\",\"europe-west1-d\",\"europe-west2-a\",\"europe-west2-b\",\"europe-west2-c\",\"europe-west3-a\",\"europe-west3-b\",\"europe-west3-c\",\"europe-west4-a\",\"europe-west4-b\",\"europe-west4-c\",\"europe-west6-a\",\"europe-west6-b\",\"europe-west6-c\",\"northamerica-northeast1-a\",\"northamerica-northeast1-b\",\"northamerica-northeast1-c\",\"southamerica-east1-a\",\"southamerica-east1-b\",\"southamerica-east1-c\",\"us-central1-a\",\"us-central1-b\",\"us-central1-c\",\"us-central1-f\",\"us-east1-b\",\"us-east1-c\",\"us-east1-d\",\"us-east4-a\",\"us-east4-b\",\"us-east4-c\",\"us-west1-a\",\"us-west1-b\",\"us-west1-c\",\"us-west2-a\",\"us-west2-b\",\"us-west2-c\",\"us-west3-a\",\"us-west3-b\",\"us-west3-c\",\"us-west4-a\",\"us-west4-b\",\"us-west4-c\",\"AzureAlternateRegion\"]",
+		"ves.io.schema.rules.string.in": "[\"ap-northeast-1a\",\"ap-northeast-1c\",\"ap-northeast-1d\",\"ap-southeast-1a\",\"ap-southeast-1b\",\"ap-southeast-1c\",\"eu-central-1a\",\"eu-central-1b\",\"eu-central-1c\",\"eu-west-1a\",\"eu-west-1b\",\"eu-west-1c\",\"eu-west-3a\",\"eu-west-3b\",\"eu-west-3c\",\"sa-east-1a\",\"sa-east-1b\",\"sa-east-1c\",\"us-east-1a\",\"us-east-1b\",\"us-east-1c\",\"us-east-1d\",\"us-east-1e\",\"us-east-1f\",\"us-east-2a\",\"us-east-2b\",\"us-east-2c\",\"us-west-2a\",\"us-west-2b\",\"us-west-2c\",\"us-west-2d\",\"ca-central-1a\",\"ca-central-1b\",\"ca-central-1d\",\"af-south-1a\",\"af-south-1b\",\"af-south-1c\",\"ap-east-1a\",\"ap-east-1b\",\"ap-east-1c\",\"ap-south-1a\",\"ap-south-1b\",\"ap-south-1c\",\"ap-northeast-2a\",\"ap-northeast-2b\",\"ap-northeast-2c\",\"ap-northeast-2d\",\"ap-southeast-2a\",\"ap-southeast-2b\",\"ap-southeast-2c\",\"eu-south-1a\",\"eu-south-1b\",\"eu-south-1c\",\"eu-north-1a\",\"eu-north-1b\",\"eu-north-1c\",\"eu-west-2a\",\"eu-west-2b\",\"eu-west-2c\",\"me-south-1a\",\"me-south-1b\",\"me-south-1c\",\"us-west-1a\",\"us-west-1b\",\"us-west-1c\",\"1\",\"2\",\"3\",\"asia-east1-a\",\"asia-east1-b\",\"asia-east1-c\",\"asia-east2-a\",\"asia-east2-b\",\"asia-east2-c\",\"asia-northeast1-a\",\"asia-northeast1-b\",\"asia-northeast1-c\",\"asia-northeast2-a\",\"asia-northeast2-b\",\"asia-northeast2-c\",\"asia-northeast3-a\",\"asia-northeast3-b\",\"asia-northeast3-c\",\"asia-south1-a\",\"asia-south1-b\",\"asia-south1-c\",\"asia-southeast1-a\",\"asia-southeast1-b\",\"asia-southeast1-c\",\"asia-southeast2-a\",\"asia-southeast2-b\",\"asia-southeast2-c\",\"australia-southeast1-a\",\"australia-southeast1-b\",\"australia-southeast1-c\",\"europe-north1-a\",\"europe-north1-b\",\"europe-north1-c\",\"europe-west1-b\",\"europe-west1-c\",\"europe-west1-d\",\"europe-west2-a\",\"europe-west2-b\",\"europe-west2-c\",\"europe-west3-a\",\"europe-west3-b\",\"europe-west3-c\",\"europe-west4-a\",\"europe-west4-b\",\"europe-west4-c\",\"europe-west6-a\",\"europe-west6-b\",\"europe-west6-c\",\"northamerica-northeast1-a\",\"northamerica-northeast1-b\",\"northamerica-northeast1-c\",\"southamerica-east1-a\",\"southamerica-east1-b\",\"southamerica-east1-c\",\"us-central1-a\",\"us-central1-b\",\"us-central1-c\",\"us-central1-f\",\"us-east1-b\",\"us-east1-c\",\"us-east1-d\",\"us-east4-a\",\"us-east4-b\",\"us-east4-c\",\"us-west1-a\",\"us-west1-b\",\"us-west1-c\",\"us-west2-a\",\"us-west2-b\",\"us-west2-c\",\"us-west3-a\",\"us-west3-b\",\"us-west3-c\",\"us-west4-a\",\"us-west4-b\",\"us-west4-c\",\"ap-southeast-3a\",\"ap-southeast-3b\",\"ap-southeast-3c\",\"AzureAlternateRegion\"]",
 	}
 	vFn, err = vrhAzName(rulesAzName)
 	if err != nil {
@@ -9573,6 +10267,7 @@ func (m *GetSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	m.IpsecSslNodesFqdn = f.GetIpsecSslNodesFqdn()
 
 	m.LocalK8SAccessEnabled = f.GetLocalK8SAccessEnabled()
+	m.MultusEnabled = f.GetMultusEnabled()
 	m.OperatingSystemVersion = f.GetOperatingSystemVersion()
 	m.OutsideNameserver = f.GetOutsideNameserver()
 	m.OutsideVip = f.GetOutsideVip()
@@ -9622,6 +10317,7 @@ func (m *GetSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	f.IpsecSslNodesFqdn = m1.IpsecSslNodesFqdn
 
 	f.LocalK8SAccessEnabled = m1.LocalK8SAccessEnabled
+	f.MultusEnabled = m1.MultusEnabled
 	f.OperatingSystemVersion = m1.OperatingSystemVersion
 	f.OutsideNameserver = m1.OutsideNameserver
 	f.OutsideVip = m1.OutsideVip

@@ -1145,7 +1145,7 @@ var WAFMonitoringAPISwaggerJSON string = `{
     "definitions": {
         "schemawafMetricLabelOp": {
             "type": "string",
-            "description": "The operator to use when querying WAF metrics with labels.\nQuery can choose to either select a label if it matches a given value OR\nif it done not match a given value. This is done by choosing the EQ or NEQ operator \nin MetricLabelFilter\n\nEqual to\nNot Equal to",
+            "description": "The operator to use when querying WAF metrics with labels.\nQuery can choose to either select a label if it matches a given value OR\nif it done not match a given value. This is done by choosing the EQ or NEQ operator\nin MetricLabelFilter\n\nEqual to\nNot Equal to",
             "title": "WAF Metric Label Operator",
             "enum": [
                 "EQ",

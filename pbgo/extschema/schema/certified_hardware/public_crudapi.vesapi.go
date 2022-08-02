@@ -1001,7 +1001,7 @@ var APISwaggerJSON string = `{
     "swagger": "2.0",
     "info": {
         "title": "Certified Hardware",
-        "description": "Certified Hardware object represents physical hardware or cloud instance type that will be used to instantiate \na volterra software appliance instance for the Volterra sites (Customer edge site). It has following information\n  *  Type\n  *  Vendor\n  *  Model\n  *  List of devices supported\n  *  Image name\n  *  Latest image release as status\nCertified Hardware objects are only available in volterra shared namespace (ves-io/shared). \nThese are created by volterra. It serves following purpose. \n \n  *  Let user know supported hardware and devices on given hardware.\n\n  *  How they are used and configured at boot strap\n\n  *  Image in which boot strap config  and any custom scripts are bundled\n\nThis is required so that zero touch provisioning would work. If a generic image is used then, user will have to login into the hardware and \nprovide bootstrap config.",
+        "description": "Certified Hardware object represents physical hardware or cloud instance type that will be used to instantiate\na volterra software appliance instance for the Volterra sites (Customer edge site). It has following information\n  *  Type\n  *  Vendor\n  *  Model\n  *  List of devices supported\n  *  Image name\n  *  Latest image release as status\nCertified Hardware objects are only available in volterra shared namespace (ves-io/shared).\nThese are created by volterra. It serves following purpose.\n\n  *  Let user know supported hardware and devices on given hardware.\n\n  *  How they are used and configured at boot strap\n\n  *  Image in which boot strap config  and any custom scripts are bundled\n\nThis is required so that zero touch provisioning would work. If a generic image is used then, user will have to login into the hardware and\nprovide bootstrap config.",
         "version": "version not set"
     },
     "schemes": [
@@ -1487,7 +1487,7 @@ var APISwaggerJSON string = `{
                 "HARDWARE_NETWORK_DEVICE_USE_FALLBACK_MANAGEMENT"
             ],
             "default": "HARDWARE_DEVICE_USE_REGULAR",
-            "x-displayname": "",
+            "x-displayname": "Device Use",
             "x-ves-proto-enum": "ves.io.schema.certified_hardware.HardwareDeviceInstanceUseType"
         },
         "certified_hardwareHardwareDeviceType": {

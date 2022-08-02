@@ -3383,6 +3383,19 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "schemaTenantType": {
+            "type": "string",
+            "description": "TenantType is the type of the customer\n\nUNKNOWN indicates the field not being set\nFREEMIUM are customer that don't have their domain\nENTERPRiISE customer have their domain",
+            "title": "TenantType",
+            "enum": [
+                "UNKNOWN",
+                "FREEMIUM",
+                "ENTERPRISE"
+            ],
+            "default": "UNKNOWN",
+            "x-displayname": "Tenant type",
+            "x-ves-proto-enum": "ves.io.schema.TenantType"
+        },
         "schemaVaultSecretInfoType": {
             "type": "object",
             "description": "x-displayName: \"Vault Secret\"\nVaultSecretInfoType specifies information about the Secret managed by Hashicorp Vault.",
@@ -3652,6 +3665,12 @@ var APISwaggerJSON string = `{
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.string.max_len": "256"
                     }
+                },
+                "tenant_type": {
+                    "description": " Type of the tenant (FREEMIUM, ENTERPRISE, ...)",
+                    "title": "Tenant Type",
+                    "$ref": "#/definitions/schemaTenantType",
+                    "x-displayname": "Tenant Type"
                 },
                 "tgw_asn_offset": {
                     "type": "integer",

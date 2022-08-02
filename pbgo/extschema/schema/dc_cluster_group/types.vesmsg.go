@@ -14,6 +14,8 @@ import (
 	"gopkg.volterra.us/stdlib/codec"
 	"gopkg.volterra.us/stdlib/db"
 	"gopkg.volterra.us/stdlib/errors"
+
+	ves_io_schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
 )
 
 var (
@@ -90,6 +92,268 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 
 func CreateSpecTypeValidator() db.Validator {
 	return DefaultCreateSpecTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *DCClusterGroupMeshType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *DCClusterGroupMeshType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *DCClusterGroupMeshType) DeepCopy() *DCClusterGroupMeshType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &DCClusterGroupMeshType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *DCClusterGroupMeshType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *DCClusterGroupMeshType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return DCClusterGroupMeshTypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateDCClusterGroupMeshType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateDCClusterGroupMeshType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*DCClusterGroupMeshType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *DCClusterGroupMeshType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	switch m.GetDcClusterGroupMeshChoice().(type) {
+	case *DCClusterGroupMeshType_DataPlaneMesh:
+		if fv, exists := v.FldValidators["dc_cluster_group_mesh_choice.data_plane_mesh"]; exists {
+			val := m.GetDcClusterGroupMeshChoice().(*DCClusterGroupMeshType_DataPlaneMesh).DataPlaneMesh
+			vOpts := append(opts,
+				db.WithValidateField("dc_cluster_group_mesh_choice"),
+				db.WithValidateField("data_plane_mesh"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *DCClusterGroupMeshType_ControlAndDataPlaneMesh:
+		if fv, exists := v.FldValidators["dc_cluster_group_mesh_choice.control_and_data_plane_mesh"]; exists {
+			val := m.GetDcClusterGroupMeshChoice().(*DCClusterGroupMeshType_ControlAndDataPlaneMesh).ControlAndDataPlaneMesh
+			vOpts := append(opts,
+				db.WithValidateField("dc_cluster_group_mesh_choice"),
+				db.WithValidateField("control_and_data_plane_mesh"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultDCClusterGroupMeshTypeValidator = func() *ValidateDCClusterGroupMeshType {
+	v := &ValidateDCClusterGroupMeshType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func DCClusterGroupMeshTypeValidator() db.Validator {
+	return DefaultDCClusterGroupMeshTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *DcClusterGroupStatus) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *DcClusterGroupStatus) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *DcClusterGroupStatus) DeepCopy() *DcClusterGroupStatus {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &DcClusterGroupStatus{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *DcClusterGroupStatus) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *DcClusterGroupStatus) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return DcClusterGroupStatusValidator().Validate(ctx, m, opts...)
+}
+
+func (m *DcClusterGroupStatus) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetSiteInfoDRefInfo()
+
+}
+
+// GetDRefInfo for the field's type
+func (m *DcClusterGroupStatus) GetSiteInfoDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetSiteInfo() == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	for idx, e := range m.GetSiteInfo() {
+		driSet, err := e.GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetSiteInfo() GetDRefInfo() FAILED")
+		}
+		for i := range driSet {
+			dri := &driSet[i]
+			dri.DRField = fmt.Sprintf("site_info[%v].%s", idx, dri.DRField)
+		}
+		drInfos = append(drInfos, driSet...)
+	}
+	return drInfos, nil
+
+}
+
+type ValidateDcClusterGroupStatus struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateDcClusterGroupStatus) SiteInfoValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema.SiteInfo, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := ves_io_schema.SiteInfoValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for site_info")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema.SiteInfo)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema.SiteInfo, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated site_info")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items site_info")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateDcClusterGroupStatus) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*DcClusterGroupStatus)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *DcClusterGroupStatus got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["site_info"]; exists {
+		vOpts := append(opts, db.WithValidateField("site_info"))
+		if err := fv(ctx, m.GetSiteInfo(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultDcClusterGroupStatusValidator = func() *ValidateDcClusterGroupStatus {
+	v := &ValidateDcClusterGroupStatus{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhSiteInfo := v.SiteInfoValidationRuleHandler
+	rulesSiteInfo := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhSiteInfo(rulesSiteInfo)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for DcClusterGroupStatus.site_info: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["site_info"] = vFn
+
+	return v
+}()
+
+func DcClusterGroupStatusValidator() db.Validator {
+	return DefaultDcClusterGroupStatusValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -214,6 +478,15 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 	}
 	if m == nil {
 		return nil
+	}
+
+	if fv, exists := v.FldValidators["type"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("type"))
+		if err := fv(ctx, m.GetType(), vOpts...); err != nil {
+			return err
+		}
+
 	}
 
 	return nil

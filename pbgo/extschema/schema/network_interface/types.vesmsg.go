@@ -2085,6 +2085,10 @@ func (m *EthernetInterfaceType) GetNetworkChoiceDRefInfo() ([]db.DRefInfo, error
 		}
 		return []db.DRefInfo{dri}, nil
 
+	case *EthernetInterfaceType_IpFabricNetwork:
+
+		return nil, nil
+
 	default:
 		return nil, nil
 	}
@@ -2148,6 +2152,8 @@ func (m *EthernetInterfaceType) GetNetworkChoiceDBEntries(ctx context.Context, d
 		if refdEnt != nil {
 			entries = append(entries, refdEnt)
 		}
+
+	case *EthernetInterfaceType_IpFabricNetwork:
 
 	}
 
@@ -2436,6 +2442,17 @@ func (v *ValidateEthernetInterfaceType) Validate(ctx context.Context, pm interfa
 			vOpts := append(opts,
 				db.WithValidateField("network_choice"),
 				db.WithValidateField("srv6_network"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *EthernetInterfaceType_IpFabricNetwork:
+		if fv, exists := v.FldValidators["network_choice.ip_fabric_network"]; exists {
+			val := m.GetNetworkChoice().(*EthernetInterfaceType_IpFabricNetwork).IpFabricNetwork
+			vOpts := append(opts,
+				db.WithValidateField("network_choice"),
+				db.WithValidateField("ip_fabric_network"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
@@ -3134,8 +3151,15 @@ func (m *GlobalSpecType) GetInterfaceChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 
 	case *GlobalSpecType_LoopbackInterface:
-
-		return nil, nil
+		drInfos, err := m.GetLoopbackInterface().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetLoopbackInterface().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "loopback_interface." + dri.DRField
+		}
+		return drInfos, err
 
 	default:
 		return nil, nil
@@ -4046,6 +4070,7 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v.FldValidators["interface_choice.ethernet_interface"] = EthernetInterfaceTypeValidator().Validate
 	v.FldValidators["interface_choice.tunnel_interface"] = TunnelInterfaceTypeValidator().Validate
 	v.FldValidators["interface_choice.dedicated_management_interface"] = DedicatedManagementInterfaceTypeValidator().Validate
+	v.FldValidators["interface_choice.loopback_interface"] = LoopbackInterfaceTypeValidator().Validate
 
 	v.FldValidators["default_gateway"] = NetworkInterfaceDFGWValidator().Validate
 
@@ -4816,8 +4841,147 @@ func (m *LoopbackInterfaceType) Validate(ctx context.Context, opts ...db.Validat
 	return LoopbackInterfaceTypeValidator().Validate(ctx, m, opts...)
 }
 
+func (m *LoopbackInterfaceType) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetAddressChoiceDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetAddressChoiceDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	if fdrInfos, err := m.GetIpv6AddressChoiceDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetIpv6AddressChoiceDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	return drInfos, nil
+
+}
+
+// GetDRefInfo for the field's type
+func (m *LoopbackInterfaceType) GetAddressChoiceDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetAddressChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetAddressChoice().(type) {
+	case *LoopbackInterfaceType_DhcpClient:
+
+		return nil, nil
+
+	case *LoopbackInterfaceType_DhcpServer:
+		drInfos, err := m.GetDhcpServer().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetDhcpServer().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "dhcp_server." + dri.DRField
+		}
+		return drInfos, err
+
+	case *LoopbackInterfaceType_StaticIp:
+		drInfos, err := m.GetStaticIp().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetStaticIp().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "static_ip." + dri.DRField
+		}
+		return drInfos, err
+
+	default:
+		return nil, nil
+	}
+
+}
+
+// GetDRefInfo for the field's type
+func (m *LoopbackInterfaceType) GetIpv6AddressChoiceDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetIpv6AddressChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetIpv6AddressChoice().(type) {
+	case *LoopbackInterfaceType_NoIpv6Address:
+
+		return nil, nil
+
+	case *LoopbackInterfaceType_StaticIpv6Address:
+		drInfos, err := m.GetStaticIpv6Address().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetStaticIpv6Address().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "static_ipv6_address." + dri.DRField
+		}
+		return drInfos, err
+
+	default:
+		return nil, nil
+	}
+
+}
+
 type ValidateLoopbackInterfaceType struct {
 	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateLoopbackInterfaceType) AddressChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for address_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateLoopbackInterfaceType) NetworkChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for network_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateLoopbackInterfaceType) NodeChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for node_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateLoopbackInterfaceType) NodeChoiceNodeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_Node, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for node")
+	}
+	return oValidatorFn_Node, nil
+}
+
+func (v *ValidateLoopbackInterfaceType) DeviceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for device")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateLoopbackInterfaceType) MtuValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for mtu")
+	}
+
+	return validatorFn, nil
 }
 
 func (v *ValidateLoopbackInterfaceType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
@@ -4834,12 +4998,269 @@ func (v *ValidateLoopbackInterfaceType) Validate(ctx context.Context, pm interfa
 		return nil
 	}
 
+	if fv, exists := v.FldValidators["address_choice"]; exists {
+		val := m.GetAddressChoice()
+		vOpts := append(opts,
+			db.WithValidateField("address_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetAddressChoice().(type) {
+	case *LoopbackInterfaceType_DhcpClient:
+		if fv, exists := v.FldValidators["address_choice.dhcp_client"]; exists {
+			val := m.GetAddressChoice().(*LoopbackInterfaceType_DhcpClient).DhcpClient
+			vOpts := append(opts,
+				db.WithValidateField("address_choice"),
+				db.WithValidateField("dhcp_client"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *LoopbackInterfaceType_DhcpServer:
+		if fv, exists := v.FldValidators["address_choice.dhcp_server"]; exists {
+			val := m.GetAddressChoice().(*LoopbackInterfaceType_DhcpServer).DhcpServer
+			vOpts := append(opts,
+				db.WithValidateField("address_choice"),
+				db.WithValidateField("dhcp_server"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *LoopbackInterfaceType_StaticIp:
+		if fv, exists := v.FldValidators["address_choice.static_ip"]; exists {
+			val := m.GetAddressChoice().(*LoopbackInterfaceType_StaticIp).StaticIp
+			vOpts := append(opts,
+				db.WithValidateField("address_choice"),
+				db.WithValidateField("static_ip"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["device"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("device"))
+		if err := fv(ctx, m.GetDevice(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	switch m.GetIpv6AddressChoice().(type) {
+	case *LoopbackInterfaceType_NoIpv6Address:
+		if fv, exists := v.FldValidators["ipv6_address_choice.no_ipv6_address"]; exists {
+			val := m.GetIpv6AddressChoice().(*LoopbackInterfaceType_NoIpv6Address).NoIpv6Address
+			vOpts := append(opts,
+				db.WithValidateField("ipv6_address_choice"),
+				db.WithValidateField("no_ipv6_address"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *LoopbackInterfaceType_StaticIpv6Address:
+		if fv, exists := v.FldValidators["ipv6_address_choice.static_ipv6_address"]; exists {
+			val := m.GetIpv6AddressChoice().(*LoopbackInterfaceType_StaticIpv6Address).StaticIpv6Address
+			vOpts := append(opts,
+				db.WithValidateField("ipv6_address_choice"),
+				db.WithValidateField("static_ipv6_address"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["mtu"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("mtu"))
+		if err := fv(ctx, m.GetMtu(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["network_choice"]; exists {
+		val := m.GetNetworkChoice()
+		vOpts := append(opts,
+			db.WithValidateField("network_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetNetworkChoice().(type) {
+	case *LoopbackInterfaceType_SiteLocalNetwork:
+		if fv, exists := v.FldValidators["network_choice.site_local_network"]; exists {
+			val := m.GetNetworkChoice().(*LoopbackInterfaceType_SiteLocalNetwork).SiteLocalNetwork
+			vOpts := append(opts,
+				db.WithValidateField("network_choice"),
+				db.WithValidateField("site_local_network"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *LoopbackInterfaceType_SiteLocalInsideNetwork:
+		if fv, exists := v.FldValidators["network_choice.site_local_inside_network"]; exists {
+			val := m.GetNetworkChoice().(*LoopbackInterfaceType_SiteLocalInsideNetwork).SiteLocalInsideNetwork
+			vOpts := append(opts,
+				db.WithValidateField("network_choice"),
+				db.WithValidateField("site_local_inside_network"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *LoopbackInterfaceType_IpFabricNetwork:
+		if fv, exists := v.FldValidators["network_choice.ip_fabric_network"]; exists {
+			val := m.GetNetworkChoice().(*LoopbackInterfaceType_IpFabricNetwork).IpFabricNetwork
+			vOpts := append(opts,
+				db.WithValidateField("network_choice"),
+				db.WithValidateField("ip_fabric_network"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["node_choice"]; exists {
+		val := m.GetNodeChoice()
+		vOpts := append(opts,
+			db.WithValidateField("node_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetNodeChoice().(type) {
+	case *LoopbackInterfaceType_Cluster:
+		if fv, exists := v.FldValidators["node_choice.cluster"]; exists {
+			val := m.GetNodeChoice().(*LoopbackInterfaceType_Cluster).Cluster
+			vOpts := append(opts,
+				db.WithValidateField("node_choice"),
+				db.WithValidateField("cluster"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *LoopbackInterfaceType_Node:
+		if fv, exists := v.FldValidators["node_choice.node"]; exists {
+			val := m.GetNodeChoice().(*LoopbackInterfaceType_Node).Node
+			vOpts := append(opts,
+				db.WithValidateField("node_choice"),
+				db.WithValidateField("node"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultLoopbackInterfaceTypeValidator = func() *ValidateLoopbackInterfaceType {
 	v := &ValidateLoopbackInterfaceType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhAddressChoice := v.AddressChoiceValidationRuleHandler
+	rulesAddressChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhAddressChoice(rulesAddressChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for LoopbackInterfaceType.address_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["address_choice"] = vFn
+
+	vrhNetworkChoice := v.NetworkChoiceValidationRuleHandler
+	rulesNetworkChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhNetworkChoice(rulesNetworkChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for LoopbackInterfaceType.network_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["network_choice"] = vFn
+
+	vrhNodeChoice := v.NodeChoiceValidationRuleHandler
+	rulesNodeChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhNodeChoice(rulesNodeChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for LoopbackInterfaceType.node_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["node_choice"] = vFn
+
+	vrhNodeChoiceNode := v.NodeChoiceNodeValidationRuleHandler
+	rulesNodeChoiceNode := map[string]string{
+		"ves.io.schema.rules.string.max_len": "64",
+		"ves.io.schema.rules.string.min_len": "1",
+	}
+	vFnMap["node_choice.node"], err = vrhNodeChoiceNode(rulesNodeChoiceNode)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field LoopbackInterfaceType.node_choice_node: %s", err)
+		panic(errMsg)
+	}
+
+	v.FldValidators["node_choice.node"] = vFnMap["node_choice.node"]
+
+	vrhDevice := v.DeviceValidationRuleHandler
+	rulesDevice := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.max_len":   "64",
+		"ves.io.schema.rules.string.min_len":   "1",
+	}
+	vFn, err = vrhDevice(rulesDevice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for LoopbackInterfaceType.device: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["device"] = vFn
+
+	vrhMtu := v.MtuValidationRuleHandler
+	rulesMtu := map[string]string{
+		"ves.io.schema.rules.uint32.ranges": "0,512-16384",
+	}
+	vFn, err = vrhMtu(rulesMtu)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for LoopbackInterfaceType.mtu: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["mtu"] = vFn
+
+	v.FldValidators["address_choice.dhcp_server"] = DHCPServerParametersTypeValidator().Validate
+	v.FldValidators["address_choice.static_ip"] = StaticIPParametersTypeValidator().Validate
+
+	v.FldValidators["ipv6_address_choice.static_ipv6_address"] = StaticIPParametersTypeValidator().Validate
 
 	return v
 }()

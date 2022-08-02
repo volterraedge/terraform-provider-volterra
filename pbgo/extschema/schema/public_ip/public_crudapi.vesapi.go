@@ -1266,7 +1266,7 @@ var APISwaggerJSON string = `{
         "/public/namespaces/{metadata.namespace}/public_ips/{metadata.name}": {
             "put": {
                 "summary": "Replace public_ip",
-                "description": "Replacing an public_ip object will update the object by replacing the existing spec with the provided one. \nFor read-then-write operations a resourceVersion mismatch will occur if the object was modified between the read and write",
+                "description": "Replacing an public_ip object will update the object by replacing the existing spec with the provided one.\nFor read-then-write operations a resourceVersion mismatch will occur if the object was modified between the read and write",
                 "operationId": "ves.io.schema.public_ip.API.Replace",
                 "responses": {
                     "200": {
@@ -1907,7 +1907,7 @@ var APISwaggerJSON string = `{
         },
         "public_ipReplaceSpecType": {
             "type": "object",
-            "description": "Replacing an public_ip object will update the object by replacing the existing spec with the provided one. \nFor read-then-write operations a resourceVersion mismatch will occur if the object was modified between the read and write",
+            "description": "Replacing an public_ip object will update the object by replacing the existing spec with the provided one.\nFor read-then-write operations a resourceVersion mismatch will occur if the object was modified between the read and write",
             "title": "Replace public_ip",
             "x-displayname": "Replace Public IP",
             "x-ves-proto-message": "ves.io.schema.public_ip.ReplaceSpecType",

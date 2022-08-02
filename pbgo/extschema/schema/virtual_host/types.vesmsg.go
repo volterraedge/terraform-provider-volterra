@@ -789,6 +789,147 @@ func CdnServiceTypeValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *ClientIPHeaders) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *ClientIPHeaders) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *ClientIPHeaders) DeepCopy() *ClientIPHeaders {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &ClientIPHeaders{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *ClientIPHeaders) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *ClientIPHeaders) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return ClientIPHeadersValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateClientIPHeaders struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateClientIPHeaders) ClientIpHeadersValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepStringItemRules(rules)
+	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Item ValidationRuleHandler for client_ip_headers")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []string, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for client_ip_headers")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]string)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []string, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal := fmt.Sprintf("%v", elem)
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated client_ip_headers")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items client_ip_headers")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateClientIPHeaders) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*ClientIPHeaders)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *ClientIPHeaders got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["client_ip_headers"]; exists {
+		vOpts := append(opts, db.WithValidateField("client_ip_headers"))
+		if err := fv(ctx, m.GetClientIpHeaders(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultClientIPHeadersValidator = func() *ValidateClientIPHeaders {
+	v := &ValidateClientIPHeaders{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhClientIpHeaders := v.ClientIpHeadersValidationRuleHandler
+	rulesClientIpHeaders := map[string]string{
+		"ves.io.schema.rules.repeated.items.string.max_bytes": "256",
+		"ves.io.schema.rules.repeated.items.string.min_bytes": "1",
+		"ves.io.schema.rules.repeated.max_items":              "5",
+		"ves.io.schema.rules.repeated.unique":                 "true",
+	}
+	vFn, err = vrhClientIpHeaders(rulesClientIpHeaders)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ClientIPHeaders.client_ip_headers: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["client_ip_headers"] = vFn
+
+	return v
+}()
+
+func ClientIPHeadersValidator() db.Validator {
+	return DefaultClientIPHeadersValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *CompressionType) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -5108,6 +5249,14 @@ func (v *ValidateGlobalSpecType) ServerHeaderChoiceAppendServerNameValidationRul
 	return oValidatorFn_AppendServerName, nil
 }
 
+func (v *ValidateGlobalSpecType) TrustClientIpHeadersChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for trust_client_ip_headers_choice")
+	}
+	return validatorFn, nil
+}
+
 func (v *ValidateGlobalSpecType) DomainsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
 	itemRules := db.GetRepStringItemRules(rules)
@@ -6263,6 +6412,42 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["trust_client_ip_headers_choice"]; exists {
+		val := m.GetTrustClientIpHeadersChoice()
+		vOpts := append(opts,
+			db.WithValidateField("trust_client_ip_headers_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetTrustClientIpHeadersChoice().(type) {
+	case *GlobalSpecType_DisableTrustClientIpHeaders:
+		if fv, exists := v.FldValidators["trust_client_ip_headers_choice.disable_trust_client_ip_headers"]; exists {
+			val := m.GetTrustClientIpHeadersChoice().(*GlobalSpecType_DisableTrustClientIpHeaders).DisableTrustClientIpHeaders
+			vOpts := append(opts,
+				db.WithValidateField("trust_client_ip_headers_choice"),
+				db.WithValidateField("disable_trust_client_ip_headers"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GlobalSpecType_EnableTrustClientIpHeaders:
+		if fv, exists := v.FldValidators["trust_client_ip_headers_choice.enable_trust_client_ip_headers"]; exists {
+			val := m.GetTrustClientIpHeadersChoice().(*GlobalSpecType_EnableTrustClientIpHeaders).EnableTrustClientIpHeaders
+			vOpts := append(opts,
+				db.WithValidateField("trust_client_ip_headers_choice"),
+				db.WithValidateField("enable_trust_client_ip_headers"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["type"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("type"))
@@ -6353,6 +6538,17 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 
 	v.FldValidators["server_header_choice.server_name"] = vFnMap["server_header_choice.server_name"]
 	v.FldValidators["server_header_choice.append_server_name"] = vFnMap["server_header_choice.append_server_name"]
+
+	vrhTrustClientIpHeadersChoice := v.TrustClientIpHeadersChoiceValidationRuleHandler
+	rulesTrustClientIpHeadersChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhTrustClientIpHeadersChoice(rulesTrustClientIpHeadersChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.trust_client_ip_headers_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["trust_client_ip_headers_choice"] = vFn
 
 	vrhDomains := v.DomainsValidationRuleHandler
 	rulesDomains := map[string]string{
@@ -6540,6 +6736,8 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v.FldValidators["challenge_type.policy_based_challenge"] = PolicyBasedChallengeValidator().Validate
 
 	v.FldValidators["strict_sni_host_header_check_choice.additional_domains"] = ves_io_schema.DomainNameListValidator().Validate
+
+	v.FldValidators["trust_client_ip_headers_choice.enable_trust_client_ip_headers"] = ClientIPHeadersValidator().Validate
 
 	v.FldValidators["tls_parameters"] = ves_io_schema.DownstreamTlsParamsTypeValidator().Validate
 

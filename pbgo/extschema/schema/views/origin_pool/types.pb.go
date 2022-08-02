@@ -660,9 +660,12 @@ type OriginServerConsulService struct {
 	// Service Name
 	//
 	// x-displayName: "Service Name"
-	// x-example: "value"
+	// x-example: "matching:production"
 	// x-required
-	// Consul service name of this origin server
+	// Consul service name of this origin server, including cluster-id.
+	// The format is servicename:cluster-id. If the servicename is "frontend",
+	// and cluster-id is "prod", then you will enter "frontend:prod".
+	// cluster-id is optional.
 	ServiceName string `protobuf:"bytes,1,opt,name=service_name,json=serviceName,proto3" json:"service_name,omitempty"`
 	// Site Locator
 	//
@@ -1831,9 +1834,9 @@ type GlobalSpecType struct {
 	// x-required
 	// Policy for selection of endpoints from local site or remote site or both
 	EndpointSelection cluster.EndpointSelectionPolicy `protobuf:"varint,8,opt,name=endpoint_selection,json=endpointSelection,proto3,enum=ves.io.schema.cluster.EndpointSelectionPolicy" json:"endpoint_selection,omitempty"`
-	// Advanced Options
+	// More Options
 	//
-	// x-displayName: "Advanced Options"
+	// x-displayName: "More Options"
 	// Advanced options configuration like timeouts, circuit breaker, subset load balancing
 	AdvancedOptions *OriginPoolAdvancedOptions `protobuf:"bytes,12,opt,name=advanced_options,json=advancedOptions,proto3" json:"advanced_options,omitempty"`
 	// view_internal

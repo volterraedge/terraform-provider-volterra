@@ -14,7 +14,6 @@ import (
 	_ "github.com/gogo/googleapis/google/api"
 	_ "github.com/gogo/protobuf/gogoproto"
 	proto "github.com/gogo/protobuf/proto"
-	types "github.com/gogo/protobuf/types"
 	golang_proto "github.com/golang/protobuf/proto"
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
@@ -874,47 +873,35 @@ func (m *GetActiveAlertPoliciesResponse) GetAlertPolicies() []*views.ObjectRefTy
 	return nil
 }
 
-// SuggestValuesReq
+// UpdateAllowAdvertiseOnPublicReq
 //
-// x-displayName: "Request for SuggestValues"
-// Request body of SuggestValues request
-type SuggestValuesReq struct {
+// x-displayName: "Request for UpdateAllowAdvertiseOnPublic"
+// Request body of UpdateAllowAdvertiseOnPublic request
+type UpdateAllowAdvertiseOnPublicReq struct {
 	// namespace
 	//
 	// x-displayName: "Namespace"
-	// x-example: "foobar"
-	// Namespace in which the suggestions are scoped.
+	// x-example: "value"
+	// Name of the namespace under which all the URLs in APIItems will be evaluated
 	Namespace string `protobuf:"bytes,1,opt,name=namespace,proto3" json:"namespace,omitempty"`
-	// field_path
+	// Allow advertisement on public.
 	//
-	// x-displayName: "Field Path"
-	// x-example: "spec.rule_choice.rule_list.rules[2].spec.api_group_matcher.match"
-	// JSON path of the field for which the suggested values are being requested.
-	FieldPath string `protobuf:"bytes,2,opt,name=field_path,json=fieldPath,proto3" json:"field_path,omitempty"`
-	// request_body
-	//
-	// x-displayName: "Request Body"
-	// Body of the Create/Replace/Custom request in whose context the suggested values for the field are being requested.
-	RequestBody *types.Any `protobuf:"bytes,3,opt,name=request_body,json=requestBody,proto3" json:"request_body,omitempty"`
-	// match_value
-	//
-	// x-displayName: "Match Value"
-	// x-example: "some-substring"
-	// A substring that must be present in either the value or description of each SuggestedItem in the response.
-	MatchValue string `protobuf:"bytes,4,opt,name=match_value,json=matchValue,proto3" json:"match_value,omitempty"`
+	// Config choice to allow advertisement on the public.
+	// x-displayName: "Allow advertisement on public."
+	AllowAdvertiseOnPublic PublicAdvertiseChoice `protobuf:"varint,2,opt,name=allow_advertise_on_public,json=allowAdvertiseOnPublic,proto3,enum=ves.io.schema.namespace.PublicAdvertiseChoice" json:"allow_advertise_on_public,omitempty"`
 }
 
-func (m *SuggestValuesReq) Reset()      { *m = SuggestValuesReq{} }
-func (*SuggestValuesReq) ProtoMessage() {}
-func (*SuggestValuesReq) Descriptor() ([]byte, []int) {
+func (m *UpdateAllowAdvertiseOnPublicReq) Reset()      { *m = UpdateAllowAdvertiseOnPublicReq{} }
+func (*UpdateAllowAdvertiseOnPublicReq) ProtoMessage() {}
+func (*UpdateAllowAdvertiseOnPublicReq) Descriptor() ([]byte, []int) {
 	return fileDescriptor_e3ad0896b746b19a, []int{16}
 }
-func (m *SuggestValuesReq) XXX_Unmarshal(b []byte) error {
+func (m *UpdateAllowAdvertiseOnPublicReq) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *SuggestValuesReq) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *UpdateAllowAdvertiseOnPublicReq) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
-		return xxx_messageInfo_SuggestValuesReq.Marshal(b, m, deterministic)
+		return xxx_messageInfo_UpdateAllowAdvertiseOnPublicReq.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
 		n, err := m.MarshalToSizedBuffer(b)
@@ -924,74 +911,55 @@ func (m *SuggestValuesReq) XXX_Marshal(b []byte, deterministic bool) ([]byte, er
 		return b[:n], nil
 	}
 }
-func (m *SuggestValuesReq) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_SuggestValuesReq.Merge(m, src)
+func (m *UpdateAllowAdvertiseOnPublicReq) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_UpdateAllowAdvertiseOnPublicReq.Merge(m, src)
 }
-func (m *SuggestValuesReq) XXX_Size() int {
+func (m *UpdateAllowAdvertiseOnPublicReq) XXX_Size() int {
 	return m.Size()
 }
-func (m *SuggestValuesReq) XXX_DiscardUnknown() {
-	xxx_messageInfo_SuggestValuesReq.DiscardUnknown(m)
+func (m *UpdateAllowAdvertiseOnPublicReq) XXX_DiscardUnknown() {
+	xxx_messageInfo_UpdateAllowAdvertiseOnPublicReq.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_SuggestValuesReq proto.InternalMessageInfo
+var xxx_messageInfo_UpdateAllowAdvertiseOnPublicReq proto.InternalMessageInfo
 
-func (m *SuggestValuesReq) GetNamespace() string {
+func (m *UpdateAllowAdvertiseOnPublicReq) GetNamespace() string {
 	if m != nil {
 		return m.Namespace
 	}
 	return ""
 }
 
-func (m *SuggestValuesReq) GetFieldPath() string {
+func (m *UpdateAllowAdvertiseOnPublicReq) GetAllowAdvertiseOnPublic() PublicAdvertiseChoice {
 	if m != nil {
-		return m.FieldPath
+		return m.AllowAdvertiseOnPublic
 	}
-	return ""
+	return Default
 }
 
-func (m *SuggestValuesReq) GetRequestBody() *types.Any {
-	if m != nil {
-		return m.RequestBody
-	}
-	return nil
-}
-
-func (m *SuggestValuesReq) GetMatchValue() string {
-	if m != nil {
-		return m.MatchValue
-	}
-	return ""
-}
-
-// SuggestedItem
+// UpdateAllowAdvertiseOnPublicResp
 //
-// x-displayName: "Suggested Item"
-// A tuple with a suggested value and it's description.
-type SuggestedItem struct {
-	// value
+// x-displayName: "Response for UpdateAllowAdvertiseOnPublic"
+// Response body of UpdateAllowAdvertiseOnPublic request
+type UpdateAllowAdvertiseOnPublicResp struct {
+	// result
 	//
-	// x-displayName: "Value"
-	// Suggested value for the field.
-	Value string `protobuf:"bytes,1,opt,name=value,proto3" json:"value,omitempty"`
-	// description
-	//
-	// x-displayName: "Description"
-	// Optional description for the suggested value.
-	Description string `protobuf:"bytes,2,opt,name=description,proto3" json:"description,omitempty"`
+	// x-displayName: "Result"
+	// API result.
+	Result bool `protobuf:"varint,1,opt,name=result,proto3" json:"result,omitempty"`
 }
 
-func (m *SuggestedItem) Reset()      { *m = SuggestedItem{} }
-func (*SuggestedItem) ProtoMessage() {}
-func (*SuggestedItem) Descriptor() ([]byte, []int) {
+func (m *UpdateAllowAdvertiseOnPublicResp) Reset()      { *m = UpdateAllowAdvertiseOnPublicResp{} }
+func (*UpdateAllowAdvertiseOnPublicResp) ProtoMessage() {}
+func (*UpdateAllowAdvertiseOnPublicResp) Descriptor() ([]byte, []int) {
 	return fileDescriptor_e3ad0896b746b19a, []int{17}
 }
-func (m *SuggestedItem) XXX_Unmarshal(b []byte) error {
+func (m *UpdateAllowAdvertiseOnPublicResp) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *SuggestedItem) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *UpdateAllowAdvertiseOnPublicResp) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
-		return xxx_messageInfo_SuggestedItem.Marshal(b, m, deterministic)
+		return xxx_messageInfo_UpdateAllowAdvertiseOnPublicResp.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
 		n, err := m.MarshalToSizedBuffer(b)
@@ -1001,81 +969,23 @@ func (m *SuggestedItem) XXX_Marshal(b []byte, deterministic bool) ([]byte, error
 		return b[:n], nil
 	}
 }
-func (m *SuggestedItem) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_SuggestedItem.Merge(m, src)
+func (m *UpdateAllowAdvertiseOnPublicResp) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_UpdateAllowAdvertiseOnPublicResp.Merge(m, src)
 }
-func (m *SuggestedItem) XXX_Size() int {
+func (m *UpdateAllowAdvertiseOnPublicResp) XXX_Size() int {
 	return m.Size()
 }
-func (m *SuggestedItem) XXX_DiscardUnknown() {
-	xxx_messageInfo_SuggestedItem.DiscardUnknown(m)
+func (m *UpdateAllowAdvertiseOnPublicResp) XXX_DiscardUnknown() {
+	xxx_messageInfo_UpdateAllowAdvertiseOnPublicResp.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_SuggestedItem proto.InternalMessageInfo
+var xxx_messageInfo_UpdateAllowAdvertiseOnPublicResp proto.InternalMessageInfo
 
-func (m *SuggestedItem) GetValue() string {
+func (m *UpdateAllowAdvertiseOnPublicResp) GetResult() bool {
 	if m != nil {
-		return m.Value
+		return m.Result
 	}
-	return ""
-}
-
-func (m *SuggestedItem) GetDescription() string {
-	if m != nil {
-		return m.Description
-	}
-	return ""
-}
-
-// SuggestValuesResp
-//
-// x-displayName: "Response for SuggestValues"
-// Response body of SuggestValues request
-type SuggestValuesResp struct {
-	// item_lists
-	//
-	// x-displayName: "Suggested Items"
-	// List of suggested items.
-	Items []*SuggestedItem `protobuf:"bytes,1,rep,name=items,proto3" json:"items,omitempty"`
-}
-
-func (m *SuggestValuesResp) Reset()      { *m = SuggestValuesResp{} }
-func (*SuggestValuesResp) ProtoMessage() {}
-func (*SuggestValuesResp) Descriptor() ([]byte, []int) {
-	return fileDescriptor_e3ad0896b746b19a, []int{18}
-}
-func (m *SuggestValuesResp) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *SuggestValuesResp) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_SuggestValuesResp.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
-}
-func (m *SuggestValuesResp) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_SuggestValuesResp.Merge(m, src)
-}
-func (m *SuggestValuesResp) XXX_Size() int {
-	return m.Size()
-}
-func (m *SuggestValuesResp) XXX_DiscardUnknown() {
-	xxx_messageInfo_SuggestValuesResp.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_SuggestValuesResp proto.InternalMessageInfo
-
-func (m *SuggestValuesResp) GetItems() []*SuggestedItem {
-	if m != nil {
-		return m.Items
-	}
-	return nil
+	return false
 }
 
 func init() {
@@ -1111,12 +1021,10 @@ func init() {
 	golang_proto.RegisterType((*GetActiveAlertPoliciesRequest)(nil), "ves.io.schema.namespace.GetActiveAlertPoliciesRequest")
 	proto.RegisterType((*GetActiveAlertPoliciesResponse)(nil), "ves.io.schema.namespace.GetActiveAlertPoliciesResponse")
 	golang_proto.RegisterType((*GetActiveAlertPoliciesResponse)(nil), "ves.io.schema.namespace.GetActiveAlertPoliciesResponse")
-	proto.RegisterType((*SuggestValuesReq)(nil), "ves.io.schema.namespace.SuggestValuesReq")
-	golang_proto.RegisterType((*SuggestValuesReq)(nil), "ves.io.schema.namespace.SuggestValuesReq")
-	proto.RegisterType((*SuggestedItem)(nil), "ves.io.schema.namespace.SuggestedItem")
-	golang_proto.RegisterType((*SuggestedItem)(nil), "ves.io.schema.namespace.SuggestedItem")
-	proto.RegisterType((*SuggestValuesResp)(nil), "ves.io.schema.namespace.SuggestValuesResp")
-	golang_proto.RegisterType((*SuggestValuesResp)(nil), "ves.io.schema.namespace.SuggestValuesResp")
+	proto.RegisterType((*UpdateAllowAdvertiseOnPublicReq)(nil), "ves.io.schema.namespace.UpdateAllowAdvertiseOnPublicReq")
+	golang_proto.RegisterType((*UpdateAllowAdvertiseOnPublicReq)(nil), "ves.io.schema.namespace.UpdateAllowAdvertiseOnPublicReq")
+	proto.RegisterType((*UpdateAllowAdvertiseOnPublicResp)(nil), "ves.io.schema.namespace.UpdateAllowAdvertiseOnPublicResp")
+	golang_proto.RegisterType((*UpdateAllowAdvertiseOnPublicResp)(nil), "ves.io.schema.namespace.UpdateAllowAdvertiseOnPublicResp")
 }
 
 func init() {
@@ -1127,84 +1035,87 @@ func init() {
 }
 
 var fileDescriptor_e3ad0896b746b19a = []byte{
-	// 1219 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xa4, 0x98, 0xcd, 0x6f, 0x1b, 0xc5,
-	0x1b, 0xc7, 0x3d, 0xf6, 0xaf, 0x55, 0x33, 0xee, 0x8b, 0x3b, 0xbf, 0xaa, 0x6c, 0xdd, 0x76, 0xeb,
-	0xae, 0x10, 0x6a, 0x0b, 0xde, 0x95, 0x52, 0xd4, 0x77, 0x54, 0x39, 0x95, 0xba, 0x8a, 0x54, 0xda,
-	0xe0, 0x40, 0x2b, 0x7a, 0x71, 0xc7, 0xeb, 0xb1, 0xb3, 0xad, 0xbd, 0xb3, 0xcc, 0x8c, 0x9d, 0x5a,
-	0x10, 0x29, 0xaa, 0x90, 0xb8, 0xa2, 0x72, 0xe3, 0xca, 0x05, 0x85, 0x3f, 0x00, 0x44, 0x2f, 0xe1,
-	0x94, 0x9e, 0x50, 0x04, 0x97, 0x9e, 0x10, 0xd9, 0x20, 0x04, 0x9c, 0xca, 0x19, 0x0e, 0x68, 0x5f,
-	0xec, 0xee, 0x6e, 0xe2, 0xb7, 0xf5, 0x6d, 0x77, 0x9f, 0x79, 0xe6, 0xf9, 0x7e, 0x9e, 0x6f, 0x94,
-	0xe7, 0x91, 0xe1, 0xf9, 0x0e, 0xe1, 0xaa, 0x49, 0x35, 0x6e, 0x2c, 0x91, 0x16, 0xd6, 0x2c, 0xdc,
-	0x22, 0xdc, 0xc6, 0x06, 0xd1, 0xec, 0x76, 0xb5, 0x69, 0x1a, 0x15, 0xa3, 0xcd, 0x05, 0x6d, 0x61,
-	0xdb, 0xac, 0xe0, 0x47, 0x98, 0xa9, 0x36, 0xa3, 0x82, 0xa2, 0xd7, 0xfc, 0x24, 0xd5, 0x4f, 0x52,
-	0xfb, 0x49, 0xf9, 0x62, 0xc3, 0x14, 0x4b, 0xed, 0xaa, 0x6a, 0xd0, 0x96, 0xd6, 0xa0, 0x0d, 0xaa,
-	0x79, 0xe7, 0xab, 0xed, 0xba, 0xf7, 0xe6, 0xbd, 0x78, 0x4f, 0xfe, 0x3d, 0xf9, 0x13, 0x0d, 0x4a,
-	0x1b, 0x4d, 0xa2, 0x61, 0xdb, 0xd4, 0xb0, 0x65, 0x51, 0x81, 0x85, 0x49, 0x2d, 0x1e, 0x44, 0x8f,
-	0x05, 0xd1, 0xfe, 0x1d, 0xd8, 0xea, 0x06, 0xa1, 0xe3, 0x51, 0xd5, 0xd4, 0x0e, 0xe7, 0x9d, 0x88,
-	0x06, 0x3b, 0xb8, 0x69, 0xd6, 0xb0, 0x20, 0x41, 0x54, 0x89, 0x45, 0x09, 0x27, 0x56, 0x27, 0x76,
-	0xc3, 0xa9, 0xd8, 0x19, 0x93, 0x2c, 0x73, 0x4d, 0x74, 0x6d, 0x12, 0x1c, 0x50, 0xbe, 0x04, 0xf0,
-	0xf4, 0x22, 0x11, 0x37, 0x31, 0x17, 0xa5, 0x1b, 0xb7, 0xf8, 0x4d, 0xca, 0xe6, 0x2d, 0x41, 0x98,
-	0x45, 0xc4, 0xdd, 0xf9, 0x05, 0x5e, 0x26, 0x1f, 0xb5, 0x09, 0x17, 0xe8, 0x04, 0x9c, 0xe9, 0xb7,
-	0x46, 0x02, 0x05, 0x70, 0x66, 0xa6, 0xfc, 0xea, 0x03, 0xba, 0x07, 0x67, 0xea, 0x98, 0x8b, 0x0a,
-	0x36, 0x9a, 0x5c, 0x4a, 0x17, 0x32, 0x67, 0xb2, 0xb3, 0x8a, 0x1a, 0x6d, 0xac, 0x57, 0x58, 0xbd,
-	0x53, 0x7d, 0x48, 0x0c, 0x51, 0x26, 0xf5, 0xf7, 0xbb, 0x36, 0x99, 0x3b, 0xba, 0xb6, 0xb2, 0xaf,
-	0x97, 0xf7, 0xfd, 0x9f, 0xeb, 0x99, 0xbd, 0x4f, 0x41, 0x26, 0xb7, 0x0a, 0xca, 0xde, 0xc7, 0x92,
-	0xd1, 0xe4, 0xca, 0xeb, 0x50, 0x19, 0xa6, 0x8d, 0xdb, 0xd4, 0xe2, 0x44, 0x29, 0xc1, 0xd3, 0xfa,
-	0x74, 0x04, 0x0a, 0x83, 0x8a, 0x3e, 0xb2, 0x10, 0xba, 0x15, 0xe6, 0x04, 0x63, 0x73, 0x66, 0x43,
-	0x9c, 0x21, 0xb8, 0x6f, 0x00, 0x3c, 0xb5, 0x48, 0x44, 0xc9, 0x10, 0x66, 0x87, 0x2c, 0x12, 0xd6,
-	0x31, 0x0d, 0xb2, 0x40, 0x9b, 0xa6, 0x61, 0x92, 0x31, 0xfb, 0xfe, 0x10, 0xe6, 0xb8, 0x9f, 0x57,
-	0xb1, 0x83, 0xc4, 0x09, 0xda, 0x7f, 0x7c, 0x6d, 0xe5, 0x60, 0x24, 0xbd, 0xeb, 0x9a, 0xb0, 0xe7,
-	0x29, 0x48, 0xe7, 0x0a, 0xe5, 0x43, 0x3c, 0x2a, 0x48, 0x51, 0x60, 0x61, 0xb0, 0xd8, 0xc0, 0x88,
-	0xeb, 0xf0, 0x94, 0x3e, 0x0d, 0x90, 0xf2, 0x29, 0x80, 0x05, 0x7d, 0x44, 0x15, 0xf4, 0x60, 0x2a,
-	0xea, 0xc3, 0x3b, 0xa8, 0x77, 0xb2, 0x46, 0x9c, 0xb9, 0x4d, 0xc4, 0x32, 0x65, 0x8f, 0x26, 0x76,
-	0xc6, 0xf2, 0xf3, 0x92, 0x3a, 0x13, 0x49, 0x8f, 0x38, 0x63, 0x45, 0x05, 0x45, 0x9c, 0xd9, 0x21,
-	0x76, 0x17, 0x67, 0x92, 0x00, 0x45, 0x9d, 0x19, 0x50, 0xc5, 0x75, 0x66, 0x0a, 0xea, 0xc3, 0x3b,
-	0xa8, 0x77, 0xb2, 0x7e, 0x05, 0xe0, 0xc9, 0x3e, 0x6c, 0xa9, 0x49, 0x98, 0x98, 0xcc, 0x97, 0x1a,
-	0x3c, 0x88, 0xdd, 0xac, 0x24, 0xfa, 0x8e, 0xad, 0xad, 0xec, 0x0f, 0x25, 0x87, 0x3d, 0x39, 0x80,
-	0xc3, 0x52, 0x94, 0x02, 0x94, 0x07, 0x89, 0x0c, 0xfc, 0x78, 0x07, 0x9e, 0xd4, 0x93, 0x63, 0x28,
-	0x9f, 0x40, 0x59, 0x1f, 0x5a, 0x00, 0xdd, 0x9f, 0x02, 0xf4, 0x50, 0x0c, 0x34, 0x8e, 0xf7, 0x03,
-	0x80, 0xb9, 0xc5, 0x76, 0xa3, 0x41, 0xb8, 0xb8, 0x8b, 0x9b, 0x6d, 0x4f, 0xf4, 0x88, 0xbe, 0x9f,
-	0x85, 0xb0, 0x6e, 0x92, 0x66, 0xad, 0x62, 0x63, 0xb1, 0x24, 0xa5, 0xdd, 0xf0, 0x1c, 0xf4, 0x1a,
-	0xc8, 0x32, 0xd2, 0xea, 0xbe, 0xf2, 0x8c, 0x17, 0x5d, 0xc0, 0x62, 0x09, 0x5d, 0x84, 0xfb, 0x99,
-	0xdf, 0x84, 0x4a, 0x95, 0xd6, 0xba, 0x52, 0xa6, 0x00, 0xce, 0x64, 0x67, 0x8f, 0xa8, 0xfe, 0x08,
-	0x55, 0x7b, 0x23, 0x54, 0x2d, 0x59, 0xdd, 0x72, 0x36, 0x38, 0x39, 0x47, 0x6b, 0x5d, 0xf4, 0x26,
-	0xcc, 0xb6, 0xb0, 0x30, 0x96, 0x2a, 0x1d, 0x57, 0x94, 0xf4, 0xbf, 0x58, 0x91, 0x74, 0x19, 0x7a,
-	0x61, 0x4f, 0xb2, 0xa2, 0xc3, 0x03, 0x01, 0x02, 0xa9, 0xcd, 0x0b, 0xd2, 0x42, 0x47, 0xe0, 0x1e,
-	0x3f, 0xcf, 0xd7, 0xee, 0xbf, 0xa0, 0x02, 0xcc, 0xd6, 0x08, 0x37, 0x98, 0xe9, 0x0d, 0x55, 0x5f,
-	0x78, 0x39, 0xfc, 0x49, 0x79, 0x0f, 0x1e, 0x8e, 0xf5, 0x82, 0xdb, 0xe8, 0x1a, 0xdc, 0x63, 0x0a,
-	0xd2, 0xea, 0x0d, 0x89, 0x37, 0xd4, 0x01, 0x5b, 0x86, 0x1a, 0xd1, 0x50, 0xf6, 0x93, 0x66, 0xff,
-	0xcd, 0x41, 0x74, 0xbb, 0x77, 0xe4, 0x86, 0xb7, 0xb5, 0x94, 0x16, 0xe6, 0xd1, 0x3f, 0x00, 0xe6,
-	0x07, 0x4f, 0x43, 0x74, 0x65, 0x70, 0x91, 0x51, 0xc3, 0x31, 0x7f, 0x35, 0x51, 0x6e, 0xf0, 0xb7,
-	0x5c, 0x73, 0x36, 0x24, 0x77, 0x8b, 0x29, 0x9a, 0xb4, 0x68, 0x5a, 0x75, 0x86, 0xb9, 0x60, 0x6d,
-	0x43, 0xb4, 0x19, 0x29, 0x2e, 0x33, 0x53, 0x90, 0x27, 0x3f, 0xff, 0xf6, 0x45, 0xfa, 0xba, 0x72,
-	0x25, 0xd8, 0xc3, 0x5e, 0x2d, 0x66, 0x5c, 0xfb, 0xb8, 0xff, 0xbc, 0xa2, 0xf5, 0x27, 0x6b, 0xa5,
-	0x4e, 0x59, 0xc5, 0x0c, 0x2a, 0x55, 0x3a, 0xa6, 0xcd, 0xaf, 0x80, 0x73, 0x1e, 0xbd, 0x9e, 0x84,
-	0x5e, 0x9f, 0x82, 0x5e, 0x1f, 0x83, 0xfe, 0xf9, 0x77, 0x69, 0xe0, 0x6c, 0x48, 0xf9, 0xdd, 0x3b,
-	0xc0, 0x08, 0xae, 0x79, 0x0d, 0xb8, 0x86, 0xa6, 0x68, 0x00, 0xfa, 0x1b, 0x40, 0x69, 0xd0, 0xf8,
-	0x45, 0x97, 0x86, 0xb9, 0x37, 0x6c, 0x1a, 0xe7, 0x2f, 0x27, 0xc8, 0x0c, 0xb8, 0x1f, 0x84, 0x5c,
-	0xb7, 0x19, 0x7d, 0xdc, 0x2d, 0x72, 0x62, 0xb4, 0x99, 0x29, 0xba, 0x21, 0xd7, 0xaf, 0x2a, 0x17,
-	0x46, 0x40, 0x63, 0xaf, 0x48, 0x25, 0x3e, 0xd0, 0x5d, 0xc7, 0x5d, 0x66, 0x7d, 0x72, 0x66, 0x3d,
-	0x31, 0xb3, 0x3e, 0x92, 0x39, 0xe6, 0x75, 0x8c, 0xbb, 0xef, 0xf5, 0x25, 0x94, 0x10, 0x1b, 0xfd,
-	0x15, 0xf6, 0x39, 0x36, 0x66, 0xc7, 0xf1, 0x79, 0xf7, 0xd9, 0x3e, 0x8e, 0xcf, 0x83, 0x36, 0x87,
-	0x0f, 0x9d, 0x0d, 0xe9, 0x48, 0xc0, 0x1b, 0x4c, 0xe3, 0x24, 0x06, 0xc7, 0xf7, 0x02, 0xd7, 0xe0,
-	0xdf, 0xc3, 0x06, 0x8f, 0x0f, 0xab, 0x27, 0x86, 0x1d, 0xb5, 0xc0, 0x28, 0x1f, 0x38, 0x1b, 0xd2,
-	0xff, 0x63, 0xb0, 0x93, 0xbb, 0x1a, 0x67, 0x45, 0x0e, 0x80, 0x47, 0x77, 0x5f, 0x08, 0xd0, 0x85,
-	0xd1, 0xce, 0xec, 0xb6, 0x1f, 0xe4, 0x2f, 0x4e, 0x9c, 0x17, 0x20, 0xde, 0x0b, 0xf9, 0xd9, 0x20,
-	0x16, 0x61, 0xb8, 0x19, 0xf2, 0xf3, 0xb2, 0xf2, 0xf6, 0x78, 0x8c, 0xd1, 0xe5, 0xc2, 0x75, 0xf3,
-	0x17, 0x00, 0x8f, 0xea, 0x93, 0x42, 0xea, 0x09, 0x21, 0x87, 0x6f, 0x3f, 0xca, 0x62, 0xc8, 0xc7,
-	0x1e, 0x64, 0xdf, 0xc7, 0x0b, 0x28, 0x11, 0x23, 0xfa, 0x16, 0xf4, 0x77, 0x06, 0x7f, 0xd4, 0xa3,
-	0xb3, 0xa3, 0xe6, 0x7a, 0x7f, 0x3d, 0xca, 0x9f, 0x1b, 0xf7, 0x28, 0xb7, 0x95, 0x3b, 0xc3, 0xd4,
-	0xcf, 0x2a, 0xc5, 0x11, 0xea, 0xb9, 0x7f, 0x61, 0xd1, 0xdb, 0x60, 0x5c, 0x6b, 0xf2, 0x6f, 0xad,
-	0x3f, 0x03, 0x99, 0x9f, 0x9e, 0x01, 0x79, 0x90, 0x06, 0x7f, 0xff, 0x7b, 0xf2, 0xa3, 0x94, 0xce,
-	0x81, 0xb9, 0xcf, 0xc0, 0xe6, 0x96, 0x9c, 0x7a, 0xb1, 0x25, 0xa7, 0x5e, 0x6e, 0xc9, 0x60, 0xd5,
-	0x91, 0xc1, 0xd7, 0x8e, 0x0c, 0x9e, 0x3b, 0x32, 0xd8, 0x74, 0x64, 0xf0, 0xab, 0x23, 0x83, 0x3f,
-	0x1c, 0x39, 0xf5, 0xd2, 0x91, 0xc1, 0xe7, 0xdb, 0x72, 0x6a, 0x7d, 0x5b, 0x06, 0x9b, 0xdb, 0x72,
-	0xea, 0xc5, 0xb6, 0x9c, 0xba, 0xff, 0x6e, 0x83, 0xda, 0x8f, 0x1a, 0x6a, 0x87, 0x36, 0x05, 0x61,
-	0x0c, 0xab, 0x6d, 0xae, 0x79, 0x0f, 0x75, 0xca, 0x5a, 0xee, 0x7f, 0xcb, 0x8e, 0x59, 0x23, 0xac,
-	0xd8, 0x0b, 0x6b, 0x76, 0xb5, 0x41, 0x35, 0xf2, 0x58, 0x04, 0x3f, 0x4e, 0xc4, 0x7f, 0xb8, 0xa9,
-	0xee, 0xf5, 0x96, 0xbd, 0xf3, 0xff, 0x05, 0x00, 0x00, 0xff, 0xff, 0x34, 0x4b, 0x7f, 0xa8, 0xda,
-	0x11, 0x00, 0x00,
+	// 1267 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xa4, 0x98, 0xc1, 0x6f, 0xdb, 0x54,
+	0x1c, 0xc7, 0xf3, 0x52, 0x51, 0x6d, 0x6f, 0x6c, 0xeb, 0xcc, 0x54, 0x42, 0xd6, 0xb9, 0x99, 0x99,
+	0x50, 0x99, 0x16, 0x5b, 0xea, 0xd0, 0xd8, 0x3a, 0xd0, 0x94, 0x15, 0xcd, 0x9a, 0x34, 0xd6, 0x2a,
+	0x65, 0x43, 0xec, 0xe2, 0xbd, 0x38, 0x2f, 0xa9, 0x57, 0xc7, 0xcf, 0xf3, 0x7b, 0x4e, 0x17, 0x8d,
+	0x4a, 0xd3, 0x84, 0xc4, 0x15, 0x95, 0xbf, 0x01, 0x09, 0xf5, 0xc0, 0x11, 0x10, 0xe3, 0xd0, 0x0b,
+	0xea, 0x4e, 0xa8, 0x02, 0x21, 0x4d, 0x1c, 0xd0, 0xea, 0x22, 0x04, 0x9c, 0xc6, 0x11, 0x71, 0x41,
+	0x76, 0x9c, 0xcc, 0x76, 0xe2, 0x38, 0x71, 0x6e, 0x76, 0xde, 0xef, 0xe7, 0xdf, 0xf7, 0xf3, 0xbe,
+	0x4f, 0xf1, 0x57, 0x86, 0xe7, 0x9a, 0x98, 0x8a, 0x1a, 0x91, 0xa8, 0xba, 0x8a, 0x1b, 0x48, 0x32,
+	0x50, 0x03, 0x53, 0x13, 0xa9, 0x58, 0x32, 0xed, 0x8a, 0xae, 0xa9, 0x8a, 0x6a, 0x53, 0x46, 0x1a,
+	0xc8, 0xd4, 0x14, 0xb4, 0x86, 0x2c, 0xd1, 0xb4, 0x08, 0x23, 0xdc, 0xab, 0xed, 0x26, 0xb1, 0xdd,
+	0x24, 0x76, 0x9b, 0xf2, 0xc5, 0xba, 0xc6, 0x56, 0xed, 0x8a, 0xa8, 0x92, 0x86, 0x54, 0x27, 0x75,
+	0x22, 0x79, 0xf5, 0x15, 0xbb, 0xe6, 0xdd, 0x79, 0x37, 0xde, 0x55, 0xfb, 0x39, 0xf9, 0x99, 0x3a,
+	0x21, 0x75, 0x1d, 0x4b, 0xc8, 0xd4, 0x24, 0x64, 0x18, 0x84, 0x21, 0xa6, 0x11, 0x83, 0xfa, 0xab,
+	0xaf, 0xc7, 0x49, 0x63, 0x2d, 0x13, 0x77, 0x8a, 0x4e, 0x84, 0x8b, 0x88, 0x19, 0x7c, 0xc2, 0x4c,
+	0x78, 0xb1, 0x89, 0x74, 0xad, 0x8a, 0x18, 0xf6, 0x57, 0x85, 0xc8, 0x2a, 0xa6, 0xd8, 0x68, 0x46,
+	0x9e, 0x50, 0x88, 0xd4, 0x68, 0x78, 0x5d, 0x09, 0x57, 0xcc, 0xf6, 0x56, 0xd0, 0xa0, 0x42, 0xe1,
+	0x0b, 0x00, 0x4f, 0xad, 0x60, 0x76, 0x15, 0x51, 0x56, 0x5a, 0xbc, 0x4e, 0xaf, 0x12, 0xeb, 0x9a,
+	0xc1, 0xb0, 0x65, 0x60, 0x76, 0xeb, 0xda, 0x32, 0x2d, 0xe3, 0x7b, 0x36, 0xa6, 0x8c, 0x9b, 0x81,
+	0x07, 0xbb, 0x80, 0x39, 0x50, 0x00, 0x73, 0x07, 0xcb, 0x2f, 0x7e, 0xe0, 0x2a, 0xf0, 0x60, 0x0d,
+	0x51, 0xa6, 0x20, 0x55, 0xa7, 0xb9, 0x6c, 0x61, 0x62, 0xee, 0xd0, 0xbc, 0x20, 0x86, 0x4d, 0xf0,
+	0x06, 0x8b, 0x4b, 0x95, 0xbb, 0x58, 0x65, 0x65, 0x5c, 0xfb, 0xa0, 0x65, 0xe2, 0x2b, 0xa7, 0xb6,
+	0x36, 0x0e, 0x74, 0xfa, 0xbe, 0xfb, 0x6b, 0x7b, 0x62, 0x72, 0x13, 0x4c, 0x4c, 0x3d, 0x04, 0xce,
+	0xb3, 0x1f, 0x26, 0x26, 0x37, 0xbf, 0x07, 0xd9, 0x29, 0x50, 0xf6, 0xd6, 0x4b, 0xaa, 0x4e, 0x85,
+	0xd3, 0x50, 0x18, 0x24, 0x93, 0x9a, 0xc4, 0xa0, 0x58, 0x28, 0xc1, 0x53, 0xf2, 0x78, 0x30, 0x82,
+	0x05, 0x05, 0x39, 0x71, 0x10, 0x77, 0x3d, 0x88, 0x0c, 0x86, 0x46, 0x3e, 0x14, 0x40, 0x0e, 0xc0,
+	0x7d, 0x0d, 0xe0, 0xec, 0x0a, 0x66, 0x25, 0x95, 0x69, 0x4d, 0xbc, 0x82, 0xad, 0xa6, 0xa6, 0xe2,
+	0x65, 0xa2, 0x6b, 0xaa, 0x86, 0x87, 0xb4, 0xc0, 0x86, 0x53, 0xb4, 0xdd, 0xa7, 0x98, 0x7e, 0xe3,
+	0x08, 0x4e, 0xbc, 0xb1, 0xb5, 0x71, 0x24, 0xd4, 0xde, 0x72, 0xfd, 0x78, 0x69, 0x13, 0x64, 0xa7,
+	0x0a, 0x41, 0x3b, 0x8e, 0xd2, 0xb0, 0x36, 0x41, 0x80, 0x85, 0x78, 0xdd, 0xbe, 0x27, 0x97, 0xe1,
+	0xac, 0x3c, 0x0e, 0x9b, 0xf0, 0x09, 0x80, 0x05, 0x39, 0x61, 0x0a, 0x77, 0x67, 0xac, 0x0d, 0x38,
+	0xd6, 0xb3, 0x01, 0xbd, 0xac, 0x21, 0x93, 0x6e, 0x60, 0xb6, 0x4e, 0xac, 0xb5, 0x91, 0x4d, 0x32,
+	0xda, 0x7d, 0x69, 0x4d, 0x0a, 0xb5, 0xc7, 0x99, 0x64, 0x84, 0xb5, 0x85, 0x4c, 0xea, 0xd1, 0xdd,
+	0xc7, 0xa4, 0x34, 0x6c, 0x61, 0x93, 0x62, 0xa6, 0xb8, 0x26, 0x8d, 0xb1, 0x01, 0xc7, 0x7a, 0x36,
+	0xa0, 0x97, 0xf5, 0x2b, 0x00, 0x4f, 0x76, 0x61, 0x4b, 0x3a, 0xb6, 0xd8, 0x68, 0x16, 0x11, 0x78,
+	0x04, 0xb9, 0x5d, 0x69, 0xf4, 0x9d, 0xde, 0xda, 0x78, 0x39, 0xd0, 0x1c, 0x63, 0xcf, 0x61, 0x14,
+	0x54, 0x25, 0x14, 0x20, 0x1f, 0xa7, 0xd7, 0xb7, 0xe6, 0x5d, 0x78, 0x52, 0x4e, 0x4f, 0x24, 0x7c,
+	0x0c, 0x79, 0x79, 0xe0, 0x00, 0xee, 0xf6, 0x18, 0xcc, 0x47, 0x23, 0xcc, 0x51, 0xbc, 0x2d, 0x00,
+	0x67, 0x6f, 0x9a, 0xee, 0x6b, 0xad, 0xa4, 0xeb, 0x64, 0xbd, 0x54, 0x6d, 0x62, 0x8b, 0x69, 0x14,
+	0x2f, 0x19, 0xcb, 0xde, 0x1b, 0xbc, 0x8c, 0xef, 0x25, 0x38, 0xa2, 0xc1, 0xd7, 0x90, 0xdb, 0xaa,
+	0xa0, 0x4e, 0xaf, 0x42, 0x0c, 0xa5, 0xfd, 0xfe, 0xcf, 0x65, 0x0b, 0x60, 0xee, 0xc8, 0xbc, 0x28,
+	0xc6, 0xbc, 0xf1, 0xc5, 0xf6, 0x90, 0xee, 0xd4, 0xc5, 0x55, 0xa2, 0xa9, 0xb8, 0x3c, 0x8d, 0xfa,
+	0x6a, 0x11, 0x16, 0x60, 0x61, 0xb0, 0x56, 0x6a, 0x72, 0xd3, 0x70, 0xd2, 0xc2, 0xd4, 0xd6, 0x99,
+	0xa7, 0xf4, 0x40, 0xd9, 0xbf, 0x9b, 0xff, 0xe5, 0x38, 0xe4, 0x6e, 0x74, 0xe6, 0x2e, 0x7a, 0xb1,
+	0xa4, 0xb4, 0x7c, 0x8d, 0xfb, 0x15, 0xc0, 0xc3, 0x8b, 0x88, 0xaa, 0xa8, 0x8a, 0xdf, 0xc3, 0x3a,
+	0x66, 0x98, 0x2b, 0xc6, 0x8a, 0x0d, 0xd5, 0xf9, 0xe6, 0xe6, 0xc5, 0x61, 0xcb, 0xfd, 0xd3, 0x72,
+	0xd7, 0xd9, 0xc9, 0xb9, 0xa9, 0xa9, 0xa8, 0x91, 0xa2, 0x66, 0xd4, 0x2c, 0x44, 0x99, 0x65, 0xab,
+	0xcc, 0xb6, 0x70, 0x71, 0xdd, 0xd2, 0x18, 0x3e, 0x5b, 0xf0, 0x17, 0x6d, 0xd4, 0x28, 0xa2, 0x6a,
+	0x43, 0x33, 0xda, 0xbf, 0x3f, 0xfa, 0xf9, 0xf7, 0xcf, 0xb3, 0x45, 0x61, 0xce, 0x4f, 0x56, 0x2f,
+	0xf2, 0x0c, 0x95, 0x1e, 0xb8, 0xd7, 0x1b, 0x92, 0xda, 0x9e, 0xa7, 0x54, 0xbd, 0x81, 0x0b, 0xe0,
+	0x0c, 0xf7, 0x2f, 0x80, 0x33, 0x83, 0x36, 0x8c, 0xbb, 0x10, 0x2b, 0x3e, 0xe1, 0x4c, 0xe4, 0x2f,
+	0xa6, 0xec, 0xa4, 0xa6, 0x50, 0x75, 0x76, 0x72, 0x27, 0x06, 0xec, 0x80, 0x47, 0x7a, 0x59, 0x58,
+	0xe8, 0x43, 0x4a, 0x5b, 0x94, 0xe1, 0x86, 0x64, 0x7b, 0x23, 0x94, 0xd8, 0x63, 0xe7, 0xb2, 0xff,
+	0x07, 0x60, 0x3e, 0x3e, 0x90, 0x70, 0x0b, 0xb1, 0xfa, 0x13, 0xc3, 0x56, 0xfe, 0x52, 0xaa, 0x5e,
+	0xdf, 0xff, 0x31, 0xe8, 0x1f, 0x74, 0xaf, 0x37, 0xa4, 0x6e, 0xb8, 0x51, 0x6a, 0xc4, 0x52, 0x34,
+	0x7f, 0x92, 0xd2, 0xd4, 0x4c, 0xda, 0xa1, 0x97, 0xd3, 0xd0, 0xcb, 0x63, 0xd0, 0xcb, 0x43, 0xd0,
+	0x3f, 0xf9, 0x36, 0x0b, 0x9c, 0x9d, 0x5c, 0xbe, 0xff, 0x0e, 0x58, 0x18, 0x55, 0xbd, 0x0d, 0x78,
+	0x87, 0x1b, 0x63, 0x03, 0xb8, 0x7f, 0x00, 0xcc, 0xc5, 0xc5, 0x9e, 0x01, 0x67, 0x3e, 0x21, 0xe1,
+	0x0d, 0x38, 0xf3, 0x89, 0x19, 0xeb, 0x4e, 0xc0, 0x75, 0xd3, 0x22, 0xf7, 0x5b, 0x45, 0x8a, 0x55,
+	0xdb, 0xd2, 0x58, 0x2b, 0xe0, 0xfa, 0x25, 0xe1, 0x7c, 0x02, 0x34, 0xf2, 0x86, 0x28, 0xd1, 0x20,
+	0xe5, 0x3a, 0xee, 0x32, 0xcb, 0xa3, 0x33, 0xcb, 0xa9, 0x99, 0xe5, 0x44, 0xe6, 0x88, 0xd7, 0x11,
+	0xee, 0xae, 0xd7, 0x17, 0xb8, 0x94, 0xd8, 0xdc, 0xdf, 0x41, 0x9f, 0x23, 0x99, 0x66, 0x18, 0x9f,
+	0xfb, 0x07, 0xa9, 0x61, 0x7c, 0x8e, 0x8b, 0x69, 0x1f, 0x39, 0x3b, 0xb9, 0xe3, 0x3e, 0xaf, 0x1f,
+	0x7d, 0xd2, 0x18, 0x1c, 0x0d, 0x61, 0xae, 0xc1, 0x7f, 0x04, 0x0d, 0x1e, 0x1e, 0x56, 0x4e, 0x0d,
+	0x9b, 0x94, 0x16, 0x85, 0x9b, 0xce, 0x4e, 0xee, 0x95, 0x08, 0xec, 0xe8, 0xae, 0x46, 0x59, 0x39,
+	0x07, 0xc0, 0xe9, 0xfe, 0x91, 0x8b, 0x3b, 0x9f, 0xec, 0x4c, 0xbf, 0x04, 0x96, 0x7f, 0x7b, 0xe4,
+	0x3e, 0x1f, 0xf1, 0xc3, 0x80, 0x9f, 0x75, 0x6c, 0x60, 0x0b, 0xe9, 0x01, 0x3f, 0x2f, 0x0a, 0x6f,
+	0x0d, 0xc7, 0x18, 0x8e, 0x6f, 0xae, 0x9b, 0xbf, 0x01, 0x38, 0x2d, 0x8f, 0x0a, 0x29, 0xa7, 0x84,
+	0x1c, 0x9c, 0x2f, 0x85, 0x95, 0x80, 0x8f, 0x1d, 0xc8, 0xae, 0x8f, 0xe7, 0xb9, 0x54, 0x8c, 0xdc,
+	0x37, 0x00, 0x1e, 0x5e, 0xb1, 0xeb, 0x75, 0x4c, 0xd9, 0x2d, 0xa4, 0xdb, 0x98, 0x72, 0x6f, 0xc6,
+	0x9b, 0x10, 0xac, 0x73, 0xd3, 0xc5, 0x99, 0x61, 0x4b, 0xa9, 0x29, 0x2c, 0x0d, 0x52, 0x3f, 0x2f,
+	0x14, 0x13, 0xd4, 0xd3, 0xf6, 0x03, 0x8b, 0x4d, 0xef, 0x89, 0x0b, 0xe0, 0x4c, 0xfe, 0xec, 0xf6,
+	0x63, 0x30, 0xf1, 0xd3, 0x63, 0xc0, 0xc7, 0x69, 0x68, 0x27, 0xec, 0x47, 0x3f, 0xe6, 0xb2, 0x53,
+	0xe0, 0xca, 0xa7, 0x60, 0x77, 0x8f, 0xcf, 0x3c, 0xdd, 0xe3, 0x33, 0xcf, 0xf7, 0x78, 0xf0, 0xd0,
+	0xe1, 0xc1, 0x97, 0x0e, 0x0f, 0x9e, 0x38, 0x3c, 0xd8, 0x75, 0x78, 0xf0, 0xcc, 0xe1, 0xc1, 0x9f,
+	0x0e, 0x9f, 0x79, 0xee, 0xf0, 0xe0, 0xb3, 0x7d, 0x3e, 0xb3, 0xbd, 0xcf, 0x83, 0xdd, 0x7d, 0x3e,
+	0xf3, 0x74, 0x9f, 0xcf, 0xdc, 0x7e, 0xbf, 0x4e, 0xcc, 0xb5, 0xba, 0xd8, 0x24, 0x3a, 0xc3, 0x96,
+	0x85, 0x44, 0x9b, 0x4a, 0xde, 0x45, 0x8d, 0x58, 0x0d, 0xf7, 0xdf, 0xb2, 0xa9, 0x55, 0xb1, 0x55,
+	0xec, 0x2c, 0x4b, 0x66, 0xa5, 0x4e, 0x24, 0x7c, 0x9f, 0xf9, 0x9f, 0x8a, 0xa2, 0xdf, 0xb5, 0x2a,
+	0x93, 0xde, 0x07, 0xa3, 0x73, 0xff, 0x07, 0x00, 0x00, 0xff, 0xff, 0x01, 0x0b, 0xe5, 0xf1, 0x94,
+	0x13, 0x00, 0x00,
 }
 
 func (this *SetFastACLsForInternetVIPsRequest) Equal(that interface{}) bool {
@@ -1631,14 +1542,14 @@ func (this *GetActiveAlertPoliciesResponse) Equal(that interface{}) bool {
 	}
 	return true
 }
-func (this *SuggestValuesReq) Equal(that interface{}) bool {
+func (this *UpdateAllowAdvertiseOnPublicReq) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
 	}
 
-	that1, ok := that.(*SuggestValuesReq)
+	that1, ok := that.(*UpdateAllowAdvertiseOnPublicReq)
 	if !ok {
-		that2, ok := that.(SuggestValuesReq)
+		that2, ok := that.(UpdateAllowAdvertiseOnPublicReq)
 		if ok {
 			that1 = &that2
 		} else {
@@ -1653,25 +1564,19 @@ func (this *SuggestValuesReq) Equal(that interface{}) bool {
 	if this.Namespace != that1.Namespace {
 		return false
 	}
-	if this.FieldPath != that1.FieldPath {
-		return false
-	}
-	if !this.RequestBody.Equal(that1.RequestBody) {
-		return false
-	}
-	if this.MatchValue != that1.MatchValue {
+	if this.AllowAdvertiseOnPublic != that1.AllowAdvertiseOnPublic {
 		return false
 	}
 	return true
 }
-func (this *SuggestedItem) Equal(that interface{}) bool {
+func (this *UpdateAllowAdvertiseOnPublicResp) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
 	}
 
-	that1, ok := that.(*SuggestedItem)
+	that1, ok := that.(*UpdateAllowAdvertiseOnPublicResp)
 	if !ok {
-		that2, ok := that.(SuggestedItem)
+		that2, ok := that.(UpdateAllowAdvertiseOnPublicResp)
 		if ok {
 			that1 = &that2
 		} else {
@@ -1683,40 +1588,8 @@ func (this *SuggestedItem) Equal(that interface{}) bool {
 	} else if this == nil {
 		return false
 	}
-	if this.Value != that1.Value {
+	if this.Result != that1.Result {
 		return false
-	}
-	if this.Description != that1.Description {
-		return false
-	}
-	return true
-}
-func (this *SuggestValuesResp) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*SuggestValuesResp)
-	if !ok {
-		that2, ok := that.(SuggestValuesResp)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if len(this.Items) != len(that1.Items) {
-		return false
-	}
-	for i := range this.Items {
-		if !this.Items[i].Equal(that1.Items[i]) {
-			return false
-		}
 	}
 	return true
 }
@@ -1896,41 +1769,24 @@ func (this *GetActiveAlertPoliciesResponse) GoString() string {
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
-func (this *SuggestValuesReq) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := make([]string, 0, 8)
-	s = append(s, "&namespace.SuggestValuesReq{")
-	s = append(s, "Namespace: "+fmt.Sprintf("%#v", this.Namespace)+",\n")
-	s = append(s, "FieldPath: "+fmt.Sprintf("%#v", this.FieldPath)+",\n")
-	if this.RequestBody != nil {
-		s = append(s, "RequestBody: "+fmt.Sprintf("%#v", this.RequestBody)+",\n")
-	}
-	s = append(s, "MatchValue: "+fmt.Sprintf("%#v", this.MatchValue)+",\n")
-	s = append(s, "}")
-	return strings.Join(s, "")
-}
-func (this *SuggestedItem) GoString() string {
+func (this *UpdateAllowAdvertiseOnPublicReq) GoString() string {
 	if this == nil {
 		return "nil"
 	}
 	s := make([]string, 0, 6)
-	s = append(s, "&namespace.SuggestedItem{")
-	s = append(s, "Value: "+fmt.Sprintf("%#v", this.Value)+",\n")
-	s = append(s, "Description: "+fmt.Sprintf("%#v", this.Description)+",\n")
+	s = append(s, "&namespace.UpdateAllowAdvertiseOnPublicReq{")
+	s = append(s, "Namespace: "+fmt.Sprintf("%#v", this.Namespace)+",\n")
+	s = append(s, "AllowAdvertiseOnPublic: "+fmt.Sprintf("%#v", this.AllowAdvertiseOnPublic)+",\n")
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
-func (this *SuggestValuesResp) GoString() string {
+func (this *UpdateAllowAdvertiseOnPublicResp) GoString() string {
 	if this == nil {
 		return "nil"
 	}
 	s := make([]string, 0, 5)
-	s = append(s, "&namespace.SuggestValuesResp{")
-	if this.Items != nil {
-		s = append(s, "Items: "+fmt.Sprintf("%#v", this.Items)+",\n")
-	}
+	s = append(s, "&namespace.UpdateAllowAdvertiseOnPublicResp{")
+	s = append(s, "Result: "+fmt.Sprintf("%#v", this.Result)+",\n")
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
@@ -1955,6 +1811,17 @@ const _ = grpc.SupportPackageIsVersion4
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
 type NamespaceCustomAPIClient interface {
+	// CascadeDelete
+	//
+	// x-displayName: "Cascade Delete"
+	// CascadeDelete will delete the namespace and all configuration objects like virtual_hosts etc.
+	// under it. Use this only if the entire namespace and its contents are to be wiped out.
+	CascadeDelete(ctx context.Context, in *CascadeDeleteRequest, opts ...grpc.CallOption) (*CascadeDeleteResponse, error)
+	// UpdateAllowAdvertiseOnPublic
+	//
+	// x-displayName: "Update allow advertise on public."
+	// UpdateAllowAdvertiseOnPublic can update a config to allow advertise on public.
+	UpdateAllowAdvertiseOnPublic(ctx context.Context, in *UpdateAllowAdvertiseOnPublicReq, opts ...grpc.CallOption) (*UpdateAllowAdvertiseOnPublicResp, error)
 	// SetFastACLsForInternetVIPs
 	//
 	// x-displayName: "Set FastACLs For Internet VIPs"
@@ -2012,6 +1879,24 @@ type namespaceCustomAPIClient struct {
 
 func NewNamespaceCustomAPIClient(cc *grpc.ClientConn) NamespaceCustomAPIClient {
 	return &namespaceCustomAPIClient{cc}
+}
+
+func (c *namespaceCustomAPIClient) CascadeDelete(ctx context.Context, in *CascadeDeleteRequest, opts ...grpc.CallOption) (*CascadeDeleteResponse, error) {
+	out := new(CascadeDeleteResponse)
+	err := c.cc.Invoke(ctx, "/ves.io.schema.namespace.NamespaceCustomAPI/CascadeDelete", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *namespaceCustomAPIClient) UpdateAllowAdvertiseOnPublic(ctx context.Context, in *UpdateAllowAdvertiseOnPublicReq, opts ...grpc.CallOption) (*UpdateAllowAdvertiseOnPublicResp, error) {
+	out := new(UpdateAllowAdvertiseOnPublicResp)
+	err := c.cc.Invoke(ctx, "/ves.io.schema.namespace.NamespaceCustomAPI/UpdateAllowAdvertiseOnPublic", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
 }
 
 func (c *namespaceCustomAPIClient) SetFastACLsForInternetVIPs(ctx context.Context, in *SetFastACLsForInternetVIPsRequest, opts ...grpc.CallOption) (*SetFastACLsForInternetVIPsResponse, error) {
@@ -2097,6 +1982,17 @@ func (c *namespaceCustomAPIClient) SuggestValues(ctx context.Context, in *Sugges
 
 // NamespaceCustomAPIServer is the server API for NamespaceCustomAPI service.
 type NamespaceCustomAPIServer interface {
+	// CascadeDelete
+	//
+	// x-displayName: "Cascade Delete"
+	// CascadeDelete will delete the namespace and all configuration objects like virtual_hosts etc.
+	// under it. Use this only if the entire namespace and its contents are to be wiped out.
+	CascadeDelete(context.Context, *CascadeDeleteRequest) (*CascadeDeleteResponse, error)
+	// UpdateAllowAdvertiseOnPublic
+	//
+	// x-displayName: "Update allow advertise on public."
+	// UpdateAllowAdvertiseOnPublic can update a config to allow advertise on public.
+	UpdateAllowAdvertiseOnPublic(context.Context, *UpdateAllowAdvertiseOnPublicReq) (*UpdateAllowAdvertiseOnPublicResp, error)
 	// SetFastACLsForInternetVIPs
 	//
 	// x-displayName: "Set FastACLs For Internet VIPs"
@@ -2152,6 +2048,12 @@ type NamespaceCustomAPIServer interface {
 type UnimplementedNamespaceCustomAPIServer struct {
 }
 
+func (*UnimplementedNamespaceCustomAPIServer) CascadeDelete(ctx context.Context, req *CascadeDeleteRequest) (*CascadeDeleteResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CascadeDelete not implemented")
+}
+func (*UnimplementedNamespaceCustomAPIServer) UpdateAllowAdvertiseOnPublic(ctx context.Context, req *UpdateAllowAdvertiseOnPublicReq) (*UpdateAllowAdvertiseOnPublicResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateAllowAdvertiseOnPublic not implemented")
+}
 func (*UnimplementedNamespaceCustomAPIServer) SetFastACLsForInternetVIPs(ctx context.Context, req *SetFastACLsForInternetVIPsRequest) (*SetFastACLsForInternetVIPsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SetFastACLsForInternetVIPs not implemented")
 }
@@ -2182,6 +2084,42 @@ func (*UnimplementedNamespaceCustomAPIServer) SuggestValues(ctx context.Context,
 
 func RegisterNamespaceCustomAPIServer(s *grpc.Server, srv NamespaceCustomAPIServer) {
 	s.RegisterService(&_NamespaceCustomAPI_serviceDesc, srv)
+}
+
+func _NamespaceCustomAPI_CascadeDelete_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CascadeDeleteRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(NamespaceCustomAPIServer).CascadeDelete(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/ves.io.schema.namespace.NamespaceCustomAPI/CascadeDelete",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(NamespaceCustomAPIServer).CascadeDelete(ctx, req.(*CascadeDeleteRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _NamespaceCustomAPI_UpdateAllowAdvertiseOnPublic_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateAllowAdvertiseOnPublicReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(NamespaceCustomAPIServer).UpdateAllowAdvertiseOnPublic(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/ves.io.schema.namespace.NamespaceCustomAPI/UpdateAllowAdvertiseOnPublic",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(NamespaceCustomAPIServer).UpdateAllowAdvertiseOnPublic(ctx, req.(*UpdateAllowAdvertiseOnPublicReq))
+	}
+	return interceptor(ctx, in, info, handler)
 }
 
 func _NamespaceCustomAPI_SetFastACLsForInternetVIPs_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
@@ -2350,6 +2288,14 @@ var _NamespaceCustomAPI_serviceDesc = grpc.ServiceDesc{
 	ServiceName: "ves.io.schema.namespace.NamespaceCustomAPI",
 	HandlerType: (*NamespaceCustomAPIServer)(nil),
 	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "CascadeDelete",
+			Handler:    _NamespaceCustomAPI_CascadeDelete_Handler,
+		},
+		{
+			MethodName: "UpdateAllowAdvertiseOnPublic",
+			Handler:    _NamespaceCustomAPI_UpdateAllowAdvertiseOnPublic_Handler,
+		},
 		{
 			MethodName: "SetFastACLsForInternetVIPs",
 			Handler:    _NamespaceCustomAPI_SetFastACLsForInternetVIPs_Handler,
@@ -2927,7 +2873,7 @@ func (m *GetActiveAlertPoliciesResponse) MarshalToSizedBuffer(dAtA []byte) (int,
 	return len(dAtA) - i, nil
 }
 
-func (m *SuggestValuesReq) Marshal() (dAtA []byte, err error) {
+func (m *UpdateAllowAdvertiseOnPublicReq) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalToSizedBuffer(dAtA[:size])
@@ -2937,41 +2883,20 @@ func (m *SuggestValuesReq) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *SuggestValuesReq) MarshalTo(dAtA []byte) (int, error) {
+func (m *UpdateAllowAdvertiseOnPublicReq) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *SuggestValuesReq) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *UpdateAllowAdvertiseOnPublicReq) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if len(m.MatchValue) > 0 {
-		i -= len(m.MatchValue)
-		copy(dAtA[i:], m.MatchValue)
-		i = encodeVarintPublicCustomapiAkar(dAtA, i, uint64(len(m.MatchValue)))
+	if m.AllowAdvertiseOnPublic != 0 {
+		i = encodeVarintPublicCustomapiAkar(dAtA, i, uint64(m.AllowAdvertiseOnPublic))
 		i--
-		dAtA[i] = 0x22
-	}
-	if m.RequestBody != nil {
-		{
-			size, err := m.RequestBody.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintPublicCustomapiAkar(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x1a
-	}
-	if len(m.FieldPath) > 0 {
-		i -= len(m.FieldPath)
-		copy(dAtA[i:], m.FieldPath)
-		i = encodeVarintPublicCustomapiAkar(dAtA, i, uint64(len(m.FieldPath)))
-		i--
-		dAtA[i] = 0x12
+		dAtA[i] = 0x10
 	}
 	if len(m.Namespace) > 0 {
 		i -= len(m.Namespace)
@@ -2983,7 +2908,7 @@ func (m *SuggestValuesReq) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
-func (m *SuggestedItem) Marshal() (dAtA []byte, err error) {
+func (m *UpdateAllowAdvertiseOnPublicResp) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalToSizedBuffer(dAtA[:size])
@@ -2993,66 +2918,25 @@ func (m *SuggestedItem) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *SuggestedItem) MarshalTo(dAtA []byte) (int, error) {
+func (m *UpdateAllowAdvertiseOnPublicResp) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *SuggestedItem) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *UpdateAllowAdvertiseOnPublicResp) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if len(m.Description) > 0 {
-		i -= len(m.Description)
-		copy(dAtA[i:], m.Description)
-		i = encodeVarintPublicCustomapiAkar(dAtA, i, uint64(len(m.Description)))
+	if m.Result {
 		i--
-		dAtA[i] = 0x12
-	}
-	if len(m.Value) > 0 {
-		i -= len(m.Value)
-		copy(dAtA[i:], m.Value)
-		i = encodeVarintPublicCustomapiAkar(dAtA, i, uint64(len(m.Value)))
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
-}
-
-func (m *SuggestValuesResp) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *SuggestValuesResp) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *SuggestValuesResp) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if len(m.Items) > 0 {
-		for iNdEx := len(m.Items) - 1; iNdEx >= 0; iNdEx-- {
-			{
-				size, err := m.Items[iNdEx].MarshalToSizedBuffer(dAtA[:i])
-				if err != nil {
-					return 0, err
-				}
-				i -= size
-				i = encodeVarintPublicCustomapiAkar(dAtA, i, uint64(size))
-			}
-			i--
-			dAtA[i] = 0xa
+		if m.Result {
+			dAtA[i] = 1
+		} else {
+			dAtA[i] = 0
 		}
+		i--
+		dAtA[i] = 0x8
 	}
 	return len(dAtA) - i, nil
 }
@@ -3292,7 +3176,7 @@ func (m *GetActiveAlertPoliciesResponse) Size() (n int) {
 	return n
 }
 
-func (m *SuggestValuesReq) Size() (n int) {
+func (m *UpdateAllowAdvertiseOnPublicReq) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -3302,49 +3186,20 @@ func (m *SuggestValuesReq) Size() (n int) {
 	if l > 0 {
 		n += 1 + l + sovPublicCustomapiAkar(uint64(l))
 	}
-	l = len(m.FieldPath)
-	if l > 0 {
-		n += 1 + l + sovPublicCustomapiAkar(uint64(l))
-	}
-	if m.RequestBody != nil {
-		l = m.RequestBody.Size()
-		n += 1 + l + sovPublicCustomapiAkar(uint64(l))
-	}
-	l = len(m.MatchValue)
-	if l > 0 {
-		n += 1 + l + sovPublicCustomapiAkar(uint64(l))
+	if m.AllowAdvertiseOnPublic != 0 {
+		n += 1 + sovPublicCustomapiAkar(uint64(m.AllowAdvertiseOnPublic))
 	}
 	return n
 }
 
-func (m *SuggestedItem) Size() (n int) {
+func (m *UpdateAllowAdvertiseOnPublicResp) Size() (n int) {
 	if m == nil {
 		return 0
 	}
 	var l int
 	_ = l
-	l = len(m.Value)
-	if l > 0 {
-		n += 1 + l + sovPublicCustomapiAkar(uint64(l))
-	}
-	l = len(m.Description)
-	if l > 0 {
-		n += 1 + l + sovPublicCustomapiAkar(uint64(l))
-	}
-	return n
-}
-
-func (m *SuggestValuesResp) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if len(m.Items) > 0 {
-		for _, e := range m.Items {
-			l = e.Size()
-			n += 1 + l + sovPublicCustomapiAkar(uint64(l))
-		}
+	if m.Result {
+		n += 2
 	}
 	return n
 }
@@ -3555,41 +3410,23 @@ func (this *GetActiveAlertPoliciesResponse) String() string {
 	}, "")
 	return s
 }
-func (this *SuggestValuesReq) String() string {
+func (this *UpdateAllowAdvertiseOnPublicReq) String() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings.Join([]string{`&SuggestValuesReq{`,
+	s := strings.Join([]string{`&UpdateAllowAdvertiseOnPublicReq{`,
 		`Namespace:` + fmt.Sprintf("%v", this.Namespace) + `,`,
-		`FieldPath:` + fmt.Sprintf("%v", this.FieldPath) + `,`,
-		`RequestBody:` + strings.Replace(fmt.Sprintf("%v", this.RequestBody), "Any", "types.Any", 1) + `,`,
-		`MatchValue:` + fmt.Sprintf("%v", this.MatchValue) + `,`,
+		`AllowAdvertiseOnPublic:` + fmt.Sprintf("%v", this.AllowAdvertiseOnPublic) + `,`,
 		`}`,
 	}, "")
 	return s
 }
-func (this *SuggestedItem) String() string {
+func (this *UpdateAllowAdvertiseOnPublicResp) String() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings.Join([]string{`&SuggestedItem{`,
-		`Value:` + fmt.Sprintf("%v", this.Value) + `,`,
-		`Description:` + fmt.Sprintf("%v", this.Description) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *SuggestValuesResp) String() string {
-	if this == nil {
-		return "nil"
-	}
-	repeatedStringForItems := "[]*SuggestedItem{"
-	for _, f := range this.Items {
-		repeatedStringForItems += strings.Replace(f.String(), "SuggestedItem", "SuggestedItem", 1) + ","
-	}
-	repeatedStringForItems += "}"
-	s := strings.Join([]string{`&SuggestValuesResp{`,
-		`Items:` + repeatedStringForItems + `,`,
+	s := strings.Join([]string{`&UpdateAllowAdvertiseOnPublicResp{`,
+		`Result:` + fmt.Sprintf("%v", this.Result) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -4978,7 +4815,7 @@ func (m *GetActiveAlertPoliciesResponse) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *SuggestValuesReq) Unmarshal(dAtA []byte) error {
+func (m *UpdateAllowAdvertiseOnPublicReq) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -5001,10 +4838,10 @@ func (m *SuggestValuesReq) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: SuggestValuesReq: wiretype end group for non-group")
+			return fmt.Errorf("proto: UpdateAllowAdvertiseOnPublicReq: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: SuggestValuesReq: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: UpdateAllowAdvertiseOnPublicReq: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:
@@ -5040,10 +4877,10 @@ func (m *SuggestValuesReq) Unmarshal(dAtA []byte) error {
 			m.Namespace = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
 		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field FieldPath", wireType)
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field AllowAdvertiseOnPublic", wireType)
 			}
-			var stringLen uint64
+			m.AllowAdvertiseOnPublic = 0
 			for shift := uint(0); ; shift += 7 {
 				if shift >= 64 {
 					return ErrIntOverflowPublicCustomapiAkar
@@ -5053,92 +4890,11 @@ func (m *SuggestValuesReq) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
+				m.AllowAdvertiseOnPublic |= PublicAdvertiseChoice(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
 			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthPublicCustomapiAkar
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthPublicCustomapiAkar
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.FieldPath = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 3:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field RequestBody", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowPublicCustomapiAkar
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthPublicCustomapiAkar
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthPublicCustomapiAkar
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.RequestBody == nil {
-				m.RequestBody = &types.Any{}
-			}
-			if err := m.RequestBody.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 4:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field MatchValue", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowPublicCustomapiAkar
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthPublicCustomapiAkar
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthPublicCustomapiAkar
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.MatchValue = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipPublicCustomapiAkar(dAtA[iNdEx:])
@@ -5163,7 +4919,7 @@ func (m *SuggestValuesReq) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *SuggestedItem) Unmarshal(dAtA []byte) error {
+func (m *UpdateAllowAdvertiseOnPublicResp) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -5186,17 +4942,17 @@ func (m *SuggestedItem) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: SuggestedItem: wiretype end group for non-group")
+			return fmt.Errorf("proto: UpdateAllowAdvertiseOnPublicResp: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: SuggestedItem: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: UpdateAllowAdvertiseOnPublicResp: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Value", wireType)
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Result", wireType)
 			}
-			var stringLen uint64
+			var v int
 			for shift := uint(0); ; shift += 7 {
 				if shift >= 64 {
 					return ErrIntOverflowPublicCustomapiAkar
@@ -5206,143 +4962,12 @@ func (m *SuggestedItem) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
 			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthPublicCustomapiAkar
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthPublicCustomapiAkar
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Value = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Description", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowPublicCustomapiAkar
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthPublicCustomapiAkar
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthPublicCustomapiAkar
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Description = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipPublicCustomapiAkar(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if skippy < 0 {
-				return ErrInvalidLengthPublicCustomapiAkar
-			}
-			if (iNdEx + skippy) < 0 {
-				return ErrInvalidLengthPublicCustomapiAkar
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *SuggestValuesResp) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowPublicCustomapiAkar
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: SuggestValuesResp: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: SuggestValuesResp: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Items", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowPublicCustomapiAkar
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthPublicCustomapiAkar
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthPublicCustomapiAkar
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Items = append(m.Items, &SuggestedItem{})
-			if err := m.Items[len(m.Items)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
+			m.Result = bool(v != 0)
 		default:
 			iNdEx = preIndex
 			skippy, err := skipPublicCustomapiAkar(dAtA[iNdEx:])

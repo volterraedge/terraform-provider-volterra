@@ -3037,11 +3037,11 @@ var APISwaggerJSON string = `{
                 },
                 "service_name": {
                     "type": "string",
-                    "description": "Exclusive with [service_selector]\n Name of the service to discover with an optional namespace and cluster identifier.\n The format is service_name.namespace_name.cluster_identifier\n Endpoint will be discovered in all discovery objects where the cluster identifier matches.\n The cluster identifier can be specified only when namespace is explicitly specified.\n If cluster identifier is not specified then discovery will be done in all\n discovery objects of the site.\n\nExample: - \"productpage.default.cluster_identifier\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 256\n",
+                    "description": "Exclusive with [service_selector]\n Name of the service to discover with an optional namespace and cluster identifier.\n The format is service_name.namespace_name:cluster_identifier for K8S and\n service_name:cluster_identifier for Consul\n Endpoint will be discovered in all discovery objects where the cluster identifier matches.\n If cluster identifier is not specified then discovery will be done in all\n discovery objects of the site.\n\nExample: - \"productpage.default:staging\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 256\n",
                     "title": "service_name",
                     "maxLength": 256,
                     "x-displayname": "Service Name",
-                    "x-ves-example": "productpage.default.cluster_identifier",
+                    "x-ves-example": "productpage.default:staging",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.string.max_bytes": "256"
                     }
@@ -3397,7 +3397,7 @@ var APISwaggerJSON string = `{
             "properties": {
                 "addr": {
                     "type": "string",
-                    "description": " IPv6 Address in form of string. IPv6 address must be specified as hexadecimal numbers separated by ':'\n The address can be compacted by suppressing zeros \n e.g. '2001:db8:0:0:0:0:2:1' becomes '2001:db8::2:1' or '2001:db8:0:0:0:2:0:0' becomes '2001:db8::2::'\n\nExample: - \"2001:db8:0:0:0:0:2:1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv6: true\n",
+                    "description": " IPv6 Address in form of string. IPv6 address must be specified as hexadecimal numbers separated by ':'\n The address can be compacted by suppressing zeros\n e.g. '2001:db8:0:0:0:0:2:1' becomes '2001:db8::2:1' or '2001:db8:0:0:0:2:0:0' becomes '2001:db8::2::'\n\nExample: - \"2001:db8:0:0:0:0:2:1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv6: true\n",
                     "title": "IPv6 Address",
                     "x-displayname": "IPv6 Address",
                     "x-ves-example": "2001:db8:0:0:0:0:2:1",

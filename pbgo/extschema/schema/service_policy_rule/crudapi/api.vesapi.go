@@ -3456,6 +3456,52 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "policyMatcherTypeBasic": {
+            "type": "object",
+            "description": "A matcher specifies multiple criteria for matching an input string. The match is considered successful if any of the criteria are satisfied. The set\nof supported match criteria includes a list of exact values and a list of regular expressions.",
+            "title": "MatcherTypeBasic",
+            "x-displayname": "Matcher",
+            "x-ves-proto-message": "ves.io.schema.policy.MatcherTypeBasic",
+            "properties": {
+                "exact_values": {
+                    "type": "array",
+                    "description": " A list of exact values to match the input against.\n\nExample: - \"['new york', 'london', 'sydney', 'tokyo', 'cairo']\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.max_bytes: 256\n  ves.io.schema.rules.repeated.items.string.not_empty: true\n  ves.io.schema.rules.repeated.max_items: 16\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "title": "exact values",
+                    "maxItems": 16,
+                    "items": {
+                        "type": "string",
+                        "maxLength": 256
+                    },
+                    "x-displayname": "Exact Values",
+                    "x-ves-example": "['new york', 'london', 'sydney', 'tokyo', 'cairo']",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.items.string.max_bytes": "256",
+                        "ves.io.schema.rules.repeated.items.string.not_empty": "true",
+                        "ves.io.schema.rules.repeated.max_items": "16",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
+                },
+                "regex_values": {
+                    "type": "array",
+                    "description": " A list of regular expressions to match the input against.\n\nExample: - \"['^new .*$', 'san f.*', '.* del .*']\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.max_bytes: 256\n  ves.io.schema.rules.repeated.items.string.not_empty: true\n  ves.io.schema.rules.repeated.items.string.regex: true\n  ves.io.schema.rules.repeated.max_items: 16\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "title": "regex values",
+                    "maxItems": 16,
+                    "items": {
+                        "type": "string",
+                        "maxLength": 256
+                    },
+                    "x-displayname": "Regex Values",
+                    "x-ves-example": "['^new .*$', 'san f.*', '.* del .*']",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.items.string.max_bytes": "256",
+                        "ves.io.schema.rules.repeated.items.string.not_empty": "true",
+                        "ves.io.schema.rules.repeated.items.string.regex": "true",
+                        "ves.io.schema.rules.repeated.max_items": "16",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
+                }
+            }
+        },
         "policyModifyAction": {
             "type": "object",
             "description": "Modify behavior for a matching request. The modification could be to entirely skip processing.",
@@ -5023,6 +5069,13 @@ var APISwaggerJSON string = `{
                     "title": "TLS JA3 fingerprint matcher",
                     "$ref": "#/definitions/policyTlsFingerprintMatcherType",
                     "x-displayname": "TLS Fingerprint Matcher"
+                },
+                "user_identity_matcher": {
+                    "description": " Match the specified user identity. The format is prefixed by the type.\n\nExample: - \"IP-x.x.x.x\"-",
+                    "title": "user identity matcher",
+                    "$ref": "#/definitions/policyMatcherTypeBasic",
+                    "x-displayname": "User Identity Matcher",
+                    "x-ves-example": "IP-x.x.x.x"
                 },
                 "waf_action": {
                     "description": " App Firewall action to be enforced if the input request matches the rule.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",

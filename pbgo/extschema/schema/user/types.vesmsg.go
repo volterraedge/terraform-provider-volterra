@@ -733,6 +733,15 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["sync_mode"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("sync_mode"))
+		if err := fv(ctx, m.GetSyncMode(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["tos_accepted"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("tos_accepted"))

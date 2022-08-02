@@ -849,50 +849,6 @@ func (v *ValidateAPIGroupChoice) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-	case *APIGroupChoice_VoltconsoleLilacCdnRead:
-		if fv, exists := v.FldValidators["choice.voltconsole_lilac_cdn_read"]; exists {
-			val := m.GetChoice().(*APIGroupChoice_VoltconsoleLilacCdnRead).VoltconsoleLilacCdnRead
-			vOpts := append(opts,
-				db.WithValidateField("choice"),
-				db.WithValidateField("voltconsole_lilac_cdn_read"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	case *APIGroupChoice_VoltconsoleLilacCdnWrite:
-		if fv, exists := v.FldValidators["choice.voltconsole_lilac_cdn_write"]; exists {
-			val := m.GetChoice().(*APIGroupChoice_VoltconsoleLilacCdnWrite).VoltconsoleLilacCdnWrite
-			vOpts := append(opts,
-				db.WithValidateField("choice"),
-				db.WithValidateField("voltconsole_lilac_cdn_write"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	case *APIGroupChoice_VoltconsoleLilacCdnAdmin:
-		if fv, exists := v.FldValidators["choice.voltconsole_lilac_cdn_admin"]; exists {
-			val := m.GetChoice().(*APIGroupChoice_VoltconsoleLilacCdnAdmin).VoltconsoleLilacCdnAdmin
-			vOpts := append(opts,
-				db.WithValidateField("choice"),
-				db.WithValidateField("voltconsole_lilac_cdn_admin"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	case *APIGroupChoice_VoltconsoleLilacCdnSubscriptionMgmt:
-		if fv, exists := v.FldValidators["choice.voltconsole_lilac_cdn_subscription_mgmt"]; exists {
-			val := m.GetChoice().(*APIGroupChoice_VoltconsoleLilacCdnSubscriptionMgmt).VoltconsoleLilacCdnSubscriptionMgmt
-			vOpts := append(opts,
-				db.WithValidateField("choice"),
-				db.WithValidateField("voltconsole_lilac_cdn_subscription_mgmt"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
 	case *APIGroupChoice_VoltconsoleNginxMgmtSuiteAdmin:
 		if fv, exists := v.FldValidators["choice.voltconsole_nginx_mgmt_suite_admin"]; exists {
 			val := m.GetChoice().(*APIGroupChoice_VoltconsoleNginxMgmtSuiteAdmin).VoltconsoleNginxMgmtSuiteAdmin
@@ -910,6 +866,50 @@ func (v *ValidateAPIGroupChoice) Validate(ctx context.Context, pm interface{}, o
 			vOpts := append(opts,
 				db.WithValidateField("choice"),
 				db.WithValidateField("voltconsole_nginx_mgmt_suite_subscription_mgmt"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *APIGroupChoice_VoltconsoleCdnRead:
+		if fv, exists := v.FldValidators["choice.voltconsole_cdn_read"]; exists {
+			val := m.GetChoice().(*APIGroupChoice_VoltconsoleCdnRead).VoltconsoleCdnRead
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("voltconsole_cdn_read"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *APIGroupChoice_VoltconsoleCdnWrite:
+		if fv, exists := v.FldValidators["choice.voltconsole_cdn_write"]; exists {
+			val := m.GetChoice().(*APIGroupChoice_VoltconsoleCdnWrite).VoltconsoleCdnWrite
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("voltconsole_cdn_write"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *APIGroupChoice_VoltconsoleCdnAdmin:
+		if fv, exists := v.FldValidators["choice.voltconsole_cdn_admin"]; exists {
+			val := m.GetChoice().(*APIGroupChoice_VoltconsoleCdnAdmin).VoltconsoleCdnAdmin
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("voltconsole_cdn_admin"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *APIGroupChoice_VoltconsoleCdnSubscriptionMgmt:
+		if fv, exists := v.FldValidators["choice.voltconsole_cdn_subscription_mgmt"]; exists {
+			val := m.GetChoice().(*APIGroupChoice_VoltconsoleCdnSubscriptionMgmt).VoltconsoleCdnSubscriptionMgmt
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("voltconsole_cdn_subscription_mgmt"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err

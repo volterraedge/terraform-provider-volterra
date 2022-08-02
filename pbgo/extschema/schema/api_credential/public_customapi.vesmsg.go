@@ -311,6 +311,8 @@ func (m *CreateResponse) Redact(ctx context.Context) error {
 
 	m.Data = ""
 	m.Name = ""
+	m.Active = false
+	m.ExpirationTimestamp = nil
 
 	return nil
 }
@@ -360,10 +362,28 @@ func (v *ValidateCreateResponse) Validate(ctx context.Context, pm interface{}, o
 		return nil
 	}
 
+	if fv, exists := v.FldValidators["active"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("active"))
+		if err := fv(ctx, m.GetActive(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["data"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("data"))
 		if err := fv(ctx, m.GetData(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["expiration_timestamp"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("expiration_timestamp"))
+		if err := fv(ctx, m.GetExpirationTimestamp(), vOpts...); err != nil {
 			return err
 		}
 
@@ -1573,6 +1593,16 @@ type ValidateRecreateScimTokenRequest struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateRecreateScimTokenRequest) ExpirationDaysValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for expiration_days")
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateRecreateScimTokenRequest) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*RecreateScimTokenRequest)
 	if !ok {
@@ -1596,15 +1626,6 @@ func (v *ValidateRecreateScimTokenRequest) Validate(ctx context.Context, pm inte
 
 	}
 
-	if fv, exists := v.FldValidators["name"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("name"))
-		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
 	if fv, exists := v.FldValidators["namespace"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("namespace"))
@@ -1620,6 +1641,26 @@ func (v *ValidateRecreateScimTokenRequest) Validate(ctx context.Context, pm inte
 // Well-known symbol for default validator implementation
 var DefaultRecreateScimTokenRequestValidator = func() *ValidateRecreateScimTokenRequest {
 	v := &ValidateRecreateScimTokenRequest{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhExpirationDays := v.ExpirationDaysValidationRuleHandler
+	rulesExpirationDays := map[string]string{
+		"ves.io.schema.rules.uint32.gte": "1",
+		"ves.io.schema.rules.uint32.lte": "730",
+	}
+	vFn, err = vrhExpirationDays(rulesExpirationDays)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for RecreateScimTokenRequest.expiration_days: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["expiration_days"] = vFn
 
 	return v
 }()
@@ -1772,6 +1813,113 @@ var DefaultRenewRequestValidator = func() *ValidateRenewRequest {
 
 func RenewRequestValidator() db.Validator {
 	return DefaultRenewRequestValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *ScimTokenRequest) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *ScimTokenRequest) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *ScimTokenRequest) DeepCopy() *ScimTokenRequest {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &ScimTokenRequest{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *ScimTokenRequest) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *ScimTokenRequest) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return ScimTokenRequestValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateScimTokenRequest struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateScimTokenRequest) NamespaceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for namespace")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateScimTokenRequest) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*ScimTokenRequest)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *ScimTokenRequest got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["namespace"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("namespace"))
+		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultScimTokenRequestValidator = func() *ValidateScimTokenRequest {
+	v := &ValidateScimTokenRequest{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhNamespace := v.NamespaceValidationRuleHandler
+	rulesNamespace := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhNamespace(rulesNamespace)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ScimTokenRequest.namespace: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["namespace"] = vFn
+
+	return v
+}()
+
+func ScimTokenRequestValidator() db.Validator {
+	return DefaultScimTokenRequestValidator
 }
 
 // augmented methods on protoc/std generated struct

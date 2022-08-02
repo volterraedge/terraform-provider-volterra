@@ -2040,15 +2040,15 @@ func SetFastACLsForInternetVIPsResponseValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
-func (m *SuggestValuesReq) ToJSON() (string, error) {
+func (m *UpdateAllowAdvertiseOnPublicReq) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
 
-func (m *SuggestValuesReq) ToYAML() (string, error) {
+func (m *UpdateAllowAdvertiseOnPublicReq) ToYAML() (string, error) {
 	return codec.ToYAML(m)
 }
 
-func (m *SuggestValuesReq) DeepCopy() *SuggestValuesReq {
+func (m *UpdateAllowAdvertiseOnPublicReq) DeepCopy() *UpdateAllowAdvertiseOnPublicReq {
 	if m == nil {
 		return nil
 	}
@@ -2056,7 +2056,7 @@ func (m *SuggestValuesReq) DeepCopy() *SuggestValuesReq {
 	if err != nil {
 		return nil
 	}
-	c := &SuggestValuesReq{}
+	c := &UpdateAllowAdvertiseOnPublicReq{}
 	err = c.Unmarshal(ser)
 	if err != nil {
 		return nil
@@ -2064,68 +2064,39 @@ func (m *SuggestValuesReq) DeepCopy() *SuggestValuesReq {
 	return c
 }
 
-func (m *SuggestValuesReq) DeepCopyProto() proto.Message {
+func (m *UpdateAllowAdvertiseOnPublicReq) DeepCopyProto() proto.Message {
 	if m == nil {
 		return nil
 	}
 	return m.DeepCopy()
 }
 
-func (m *SuggestValuesReq) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
-	return SuggestValuesReqValidator().Validate(ctx, m, opts...)
+func (m *UpdateAllowAdvertiseOnPublicReq) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return UpdateAllowAdvertiseOnPublicReqValidator().Validate(ctx, m, opts...)
 }
 
-type ValidateSuggestValuesReq struct {
+type ValidateUpdateAllowAdvertiseOnPublicReq struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
-func (v *ValidateSuggestValuesReq) FieldPathValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	validatorFn, err := db.NewStringValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for field_path")
-	}
-
-	return validatorFn, nil
-}
-
-func (v *ValidateSuggestValuesReq) MatchValueValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	validatorFn, err := db.NewStringValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for match_value")
-	}
-
-	return validatorFn, nil
-}
-
-func (v *ValidateSuggestValuesReq) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
-	m, ok := pm.(*SuggestValuesReq)
+func (v *ValidateUpdateAllowAdvertiseOnPublicReq) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*UpdateAllowAdvertiseOnPublicReq)
 	if !ok {
 		switch t := pm.(type) {
 		case nil:
 			return nil
 		default:
-			return fmt.Errorf("Expected type *SuggestValuesReq got type %s", t)
+			return fmt.Errorf("Expected type *UpdateAllowAdvertiseOnPublicReq got type %s", t)
 		}
 	}
 	if m == nil {
 		return nil
 	}
 
-	if fv, exists := v.FldValidators["field_path"]; exists {
+	if fv, exists := v.FldValidators["allow_advertise_on_public"]; exists {
 
-		vOpts := append(opts, db.WithValidateField("field_path"))
-		if err := fv(ctx, m.GetFieldPath(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
-	if fv, exists := v.FldValidators["match_value"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("match_value"))
-		if err := fv(ctx, m.GetMatchValue(), vOpts...); err != nil {
+		vOpts := append(opts, db.WithValidateField("allow_advertise_on_public"))
+		if err := fv(ctx, m.GetAllowAdvertiseOnPublic(), vOpts...); err != nil {
 			return err
 		}
 
@@ -2140,70 +2111,31 @@ func (v *ValidateSuggestValuesReq) Validate(ctx context.Context, pm interface{},
 
 	}
 
-	if fv, exists := v.FldValidators["request_body"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("request_body"))
-		if err := fv(ctx, m.GetRequestBody(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
-var DefaultSuggestValuesReqValidator = func() *ValidateSuggestValuesReq {
-	v := &ValidateSuggestValuesReq{FldValidators: map[string]db.ValidatorFunc{}}
-
-	var (
-		err error
-		vFn db.ValidatorFunc
-	)
-	_, _ = err, vFn
-	vFnMap := map[string]db.ValidatorFunc{}
-	_ = vFnMap
-
-	vrhFieldPath := v.FieldPathValidationRuleHandler
-	rulesFieldPath := map[string]string{
-		"ves.io.schema.rules.string.max_len": "1024",
-	}
-	vFn, err = vrhFieldPath(rulesFieldPath)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for SuggestValuesReq.field_path: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["field_path"] = vFn
-
-	vrhMatchValue := v.MatchValueValidationRuleHandler
-	rulesMatchValue := map[string]string{
-		"ves.io.schema.rules.string.max_len": "256",
-	}
-	vFn, err = vrhMatchValue(rulesMatchValue)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for SuggestValuesReq.match_value: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["match_value"] = vFn
+var DefaultUpdateAllowAdvertiseOnPublicReqValidator = func() *ValidateUpdateAllowAdvertiseOnPublicReq {
+	v := &ValidateUpdateAllowAdvertiseOnPublicReq{FldValidators: map[string]db.ValidatorFunc{}}
 
 	return v
 }()
 
-func SuggestValuesReqValidator() db.Validator {
-	return DefaultSuggestValuesReqValidator
+func UpdateAllowAdvertiseOnPublicReqValidator() db.Validator {
+	return DefaultUpdateAllowAdvertiseOnPublicReqValidator
 }
 
 // augmented methods on protoc/std generated struct
 
-func (m *SuggestValuesResp) ToJSON() (string, error) {
+func (m *UpdateAllowAdvertiseOnPublicResp) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
 
-func (m *SuggestValuesResp) ToYAML() (string, error) {
+func (m *UpdateAllowAdvertiseOnPublicResp) ToYAML() (string, error) {
 	return codec.ToYAML(m)
 }
 
-func (m *SuggestValuesResp) DeepCopy() *SuggestValuesResp {
+func (m *UpdateAllowAdvertiseOnPublicResp) DeepCopy() *UpdateAllowAdvertiseOnPublicResp {
 	if m == nil {
 		return nil
 	}
@@ -2211,7 +2143,7 @@ func (m *SuggestValuesResp) DeepCopy() *SuggestValuesResp {
 	if err != nil {
 		return nil
 	}
-	c := &SuggestValuesResp{}
+	c := &UpdateAllowAdvertiseOnPublicResp{}
 	err = c.Unmarshal(ser)
 	if err != nil {
 		return nil
@@ -2219,129 +2151,39 @@ func (m *SuggestValuesResp) DeepCopy() *SuggestValuesResp {
 	return c
 }
 
-func (m *SuggestValuesResp) DeepCopyProto() proto.Message {
+func (m *UpdateAllowAdvertiseOnPublicResp) DeepCopyProto() proto.Message {
 	if m == nil {
 		return nil
 	}
 	return m.DeepCopy()
 }
 
-func (m *SuggestValuesResp) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
-	return SuggestValuesRespValidator().Validate(ctx, m, opts...)
+func (m *UpdateAllowAdvertiseOnPublicResp) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return UpdateAllowAdvertiseOnPublicRespValidator().Validate(ctx, m, opts...)
 }
 
-type ValidateSuggestValuesResp struct {
+type ValidateUpdateAllowAdvertiseOnPublicResp struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
-func (v *ValidateSuggestValuesResp) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
-	m, ok := pm.(*SuggestValuesResp)
+func (v *ValidateUpdateAllowAdvertiseOnPublicResp) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*UpdateAllowAdvertiseOnPublicResp)
 	if !ok {
 		switch t := pm.(type) {
 		case nil:
 			return nil
 		default:
-			return fmt.Errorf("Expected type *SuggestValuesResp got type %s", t)
+			return fmt.Errorf("Expected type *UpdateAllowAdvertiseOnPublicResp got type %s", t)
 		}
 	}
 	if m == nil {
 		return nil
 	}
 
-	if fv, exists := v.FldValidators["items"]; exists {
+	if fv, exists := v.FldValidators["result"]; exists {
 
-		vOpts := append(opts, db.WithValidateField("items"))
-		for idx, item := range m.GetItems() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
-			if err := fv(ctx, item, vOpts...); err != nil {
-				return err
-			}
-		}
-
-	}
-
-	return nil
-}
-
-// Well-known symbol for default validator implementation
-var DefaultSuggestValuesRespValidator = func() *ValidateSuggestValuesResp {
-	v := &ValidateSuggestValuesResp{FldValidators: map[string]db.ValidatorFunc{}}
-
-	return v
-}()
-
-func SuggestValuesRespValidator() db.Validator {
-	return DefaultSuggestValuesRespValidator
-}
-
-// augmented methods on protoc/std generated struct
-
-func (m *SuggestedItem) ToJSON() (string, error) {
-	return codec.ToJSON(m)
-}
-
-func (m *SuggestedItem) ToYAML() (string, error) {
-	return codec.ToYAML(m)
-}
-
-func (m *SuggestedItem) DeepCopy() *SuggestedItem {
-	if m == nil {
-		return nil
-	}
-	ser, err := m.Marshal()
-	if err != nil {
-		return nil
-	}
-	c := &SuggestedItem{}
-	err = c.Unmarshal(ser)
-	if err != nil {
-		return nil
-	}
-	return c
-}
-
-func (m *SuggestedItem) DeepCopyProto() proto.Message {
-	if m == nil {
-		return nil
-	}
-	return m.DeepCopy()
-}
-
-func (m *SuggestedItem) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
-	return SuggestedItemValidator().Validate(ctx, m, opts...)
-}
-
-type ValidateSuggestedItem struct {
-	FldValidators map[string]db.ValidatorFunc
-}
-
-func (v *ValidateSuggestedItem) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
-	m, ok := pm.(*SuggestedItem)
-	if !ok {
-		switch t := pm.(type) {
-		case nil:
-			return nil
-		default:
-			return fmt.Errorf("Expected type *SuggestedItem got type %s", t)
-		}
-	}
-	if m == nil {
-		return nil
-	}
-
-	if fv, exists := v.FldValidators["description"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("description"))
-		if err := fv(ctx, m.GetDescription(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
-	if fv, exists := v.FldValidators["value"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("value"))
-		if err := fv(ctx, m.GetValue(), vOpts...); err != nil {
+		vOpts := append(opts, db.WithValidateField("result"))
+		if err := fv(ctx, m.GetResult(), vOpts...); err != nil {
 			return err
 		}
 
@@ -2351,12 +2193,12 @@ func (v *ValidateSuggestedItem) Validate(ctx context.Context, pm interface{}, op
 }
 
 // Well-known symbol for default validator implementation
-var DefaultSuggestedItemValidator = func() *ValidateSuggestedItem {
-	v := &ValidateSuggestedItem{FldValidators: map[string]db.ValidatorFunc{}}
+var DefaultUpdateAllowAdvertiseOnPublicRespValidator = func() *ValidateUpdateAllowAdvertiseOnPublicResp {
+	v := &ValidateUpdateAllowAdvertiseOnPublicResp{FldValidators: map[string]db.ValidatorFunc{}}
 
 	return v
 }()
 
-func SuggestedItemValidator() db.Validator {
-	return DefaultSuggestedItemValidator
+func UpdateAllowAdvertiseOnPublicRespValidator() db.Validator {
+	return DefaultUpdateAllowAdvertiseOnPublicRespValidator
 }
