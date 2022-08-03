@@ -7896,6 +7896,12 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
+	if fdrInfos, err := m.GetDcClusterGroupInterfaceDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetDcClusterGroupInterfaceDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
 	if fdrInfos, err := m.GetDevicesDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetDevicesDRefInfo() FAILED")
 	} else {
@@ -8086,6 +8092,51 @@ func (m *GlobalSpecType) GetDcClusterGroupChoiceDBEntries(ctx context.Context, d
 			entries = append(entries, refdEnt)
 		}
 
+	}
+
+	return entries, nil
+}
+
+func (m *GlobalSpecType) GetDcClusterGroupInterfaceDRefInfo() ([]db.DRefInfo, error) {
+	refs := m.GetDcClusterGroupInterface()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(refs))
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("GlobalSpecType.dc_cluster_group_interface[%d] has a nil value", i)
+		}
+		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "network_interface.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "dc_cluster_group_interface",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+
+}
+
+// GetDcClusterGroupInterfaceDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *GlobalSpecType) GetDcClusterGroupInterfaceDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+	refdType, err := d.TypeForEntryKind("", "", "network_interface.Object")
+	if err != nil {
+		return nil, errors.Wrap(err, "Cannot find type for kind: network_interface")
+	}
+	for _, ref := range m.GetDcClusterGroupInterface() {
+		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+		if err != nil {
+			return nil, errors.Wrap(err, "Getting referred entry")
+		}
+		if refdEnt != nil {
+			entries = append(entries, refdEnt)
+		}
 	}
 
 	return entries, nil
@@ -9069,6 +9120,46 @@ func (v *ValidateGlobalSpecType) BlockedServicesValidationRuleHandler(rules map[
 	return validatorFn, nil
 }
 
+func (v *ValidateGlobalSpecType) DcClusterGroupInterfaceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema.ObjectRefType, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := ves_io_schema.ObjectRefTypeValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for dc_cluster_group_interface")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema.ObjectRefType)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema.ObjectRefType, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated dc_cluster_group_interface")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items dc_cluster_group_interface")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateGlobalSpecType) GeneratedYamlsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
 	itemRules := db.GetRepStringItemRules(rules)
@@ -9221,6 +9312,14 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
 			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["dc_cluster_group_interface"]; exists {
+		vOpts := append(opts, db.WithValidateField("dc_cluster_group_interface"))
+		if err := fv(ctx, m.GetDcClusterGroupInterface(), vOpts...); err != nil {
+			return err
 		}
 
 	}
@@ -9970,6 +10069,18 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["blocked_services"] = vFn
+
+	vrhDcClusterGroupInterface := v.DcClusterGroupInterfaceValidationRuleHandler
+	rulesDcClusterGroupInterface := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "128",
+		"ves.io.schema.rules.repeated.unique":    "true",
+	}
+	vFn, err = vrhDcClusterGroupInterface(rulesDcClusterGroupInterface)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.dc_cluster_group_interface: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["dc_cluster_group_interface"] = vFn
 
 	vrhGeneratedYamls := v.GeneratedYamlsValidationRuleHandler
 	rulesGeneratedYamls := map[string]string{

@@ -1666,7 +1666,7 @@ var APISwaggerJSON string = `{
     "swagger": "2.0",
     "info": {
         "title": "managed tenant object",
-        "description": "\nManaged tenant objects are required for declaring intent to manage a tenant.\nThe tenant which is being managed is called a -Managed Tenant- or -MT-- and\nthe tenant which is initiating the management is called -Original Tenant- or -OT-.\n\nA tenant can manage one or more tenants and tenant itself could be managed by other allowed tenant.\nExplicit configuration is required to establish or allow management - ie, request to manage via\nmanaged_tenant object configuration in OT and allowed to manage declaration via allowed_tenant \nconfiguration in MT. This means reflexive and transitive relation are *NOT* supported or\nsuch assumptions cannot be made.\n  Reflexive - tenant A (OT) -\u003e tenant B (MT) ==\u003e Tenant B manage Tenant A\n  Transitive - tenant A (OT) -\u003e tenant B (MT) , tenant B (OT) -\u003e tenant C (MT) ==\u003e Tenant A manage Tenant C\n\nWhile creating a managed_tenant configuration object, admin can choose existing\nuser group instance from the tenant and map it to groups in the managed tenant by specifying\nmanaged tenant's group names. User in original tenant needs to be member of group specified in managed_tenant\nconfiguration. Access into managed tenant will be granted once admin of managed tenant creates an allowed tenant\nconfiguration including one or more groups specified in managed_tenant configuration.\nUntil admin of an MT creates corresponding allowed_tenant configuration, RBAC will deny access.\n\nWhen User from OT tries to access managed tenant, group memberships will be taken from OT and\ncorresponding groups will be identified via the map configuration; and underlying roles for each\nmapped group will be looked up from managed_tenant (MT) and evaluated for the API access.\n\nThis gives admin of managed tenant ability to have granular RBAC(Role Based Access Control) for all\nuser access from original tenant and admin of original tenant to control which user has access into\nwhich managed tenant based on group assignment/membership.\n\nThis feature may not be enabled by default and will require subscribing to additional addon service\n-Tenant Manangement- depending upon the tenant's plan",
+        "description": "\nManaged tenant objects are required for declaring intent to manage a tenant.\nThe tenant which is being managed is called a -Managed Tenant- or -MT-- and\nthe tenant which is initiating the management is called -Original Tenant- or -OT-.\n\nA tenant can manage one or more tenants and tenant itself could be managed by other allowed tenant.\nExplicit configuration is required to establish or allow management - ie, request to manage via\nmanaged_tenant object configuration in OT and allowed to manage declaration via allowed_tenant\nconfiguration in MT. This means reflexive and transitive relation are *NOT* supported or\nsuch assumptions cannot be made.\n  Reflexive - tenant A (OT) -\u003e tenant B (MT) ==\u003e Tenant B manage Tenant A\n  Transitive - tenant A (OT) -\u003e tenant B (MT) , tenant B (OT) -\u003e tenant C (MT) ==\u003e Tenant A manage Tenant C\n\nWhile creating a managed_tenant configuration object, admin can choose existing\nuser group instance from the tenant and map it to groups in the managed tenant by specifying\nmanaged tenant's group names. User in original tenant needs to be member of group specified in managed_tenant\nconfiguration. Access into managed tenant will be granted once admin of managed tenant creates an allowed tenant\nconfiguration including one or more groups specified in managed_tenant configuration.\nUntil admin of an MT creates corresponding allowed_tenant configuration, RBAC will deny access.\n\nWhen User from OT tries to access managed tenant, group memberships will be taken from OT and\ncorresponding groups will be identified via the map configuration; and underlying roles for each\nmapped group will be looked up from managed_tenant (MT) and evaluated for the API access.\n\nThis gives admin of managed tenant ability to have granular RBAC(Role Based Access Control) for all\nuser access from original tenant and admin of original tenant to control which user has access into\nwhich managed tenant based on group assignment/membership.\n\nThis feature may not be enabled by default and will require subscribing to additional addon service\n-Tenant Manangement- depending upon the tenant's plan",
         "version": "version not set"
     },
     "schemes": [
@@ -1682,6 +1682,17 @@ var APISwaggerJSON string = `{
     "tags": [],
     "paths": {},
     "definitions": {
+        "contactContactType": {
+            "type": "string",
+            "description": "x-displayName: \"Contact Type\"\nDetermines the contact type\n\n - MAILING: x-displayName: \"Mailing\"\nIndicates snail mail address (used for correspondence)\n - BILLING: x-displayName: \"Billing\"\nIndicates billing address (this address will appear on invoices)\n - PAYMENT: x-displayName: \"Payment\"\nIndicates contact used for a payment method (this address is used when charging a payment method)",
+            "title": "Contact Type",
+            "enum": [
+                "MAILING",
+                "BILLING",
+                "PAYMENT"
+            ],
+            "default": "MAILING"
+        },
         "ioschemaEmpty": {
             "type": "object",
             "description": "x-displayName: \"Empty\"\nThis can be used for messages where no values are needed",
@@ -1732,7 +1743,7 @@ var APISwaggerJSON string = `{
                 "spec": {
                     "description": "x-displayName: \"Spec\"\nA specification of the configuration object to be created",
                     "title": "spec",
-                    "$ref": "#/definitions/managed_tenantCreateSpecType"
+                    "$ref": "#/definitions/tenant_managementmanaged_tenantCreateSpecType"
                 }
             }
         },
@@ -1747,34 +1758,12 @@ var APISwaggerJSON string = `{
                 "spec": {
                     "description": "x-displayName: \"Spec\"\nA specification of the configuration object created",
                     "title": "spec",
-                    "$ref": "#/definitions/managed_tenantGetSpecType"
+                    "$ref": "#/definitions/tenant_managementmanaged_tenantGetSpecType"
                 },
                 "system_metadata": {
                     "description": "x-displayName: \"System Metadata\"\nSystem generated attributes all this object.",
                     "title": "system metadata",
                     "$ref": "#/definitions/schemaSystemObjectGetMetaType"
-                }
-            }
-        },
-        "managed_tenantCreateSpecType": {
-            "type": "object",
-            "description": "x-displayName: \"Create Managed Tenant\"\nCreates a managed_tenant config instance. Name of the object is name of the tenant that is allowed to manage.",
-            "title": "Create Managed Tenant",
-            "properties": {
-                "all_tenants": {
-                    "$ref": "#/definitions/ioschemaEmpty"
-                },
-                "groups": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/managed_tenantGroupAssignmentType"
-                    }
-                },
-                "tenant_id": {
-                    "type": "string"
-                },
-                "tenant_regex": {
-                    "type": "string"
                 }
             }
         },
@@ -1842,7 +1831,7 @@ var APISwaggerJSON string = `{
                 "spec": {
                     "description": "x-displayName: \"Spec\"\nA specification of the configuration object read",
                     "title": "spec",
-                    "$ref": "#/definitions/managed_tenantGetSpecType"
+                    "$ref": "#/definitions/tenant_managementmanaged_tenantGetSpecType"
                 },
                 "status": {
                     "type": "array",
@@ -1873,58 +1862,6 @@ var APISwaggerJSON string = `{
             ],
             "default": "GET_RSP_FORMAT_DEFAULT"
         },
-        "managed_tenantGetSpecType": {
-            "type": "object",
-            "description": "x-displayName: \"Get Managed Tenant\"\nGet managed_tenant reads a given object from storage backend for metadata.namespace.",
-            "title": "Get managed tenant",
-            "properties": {
-                "all_tenants": {
-                    "$ref": "#/definitions/ioschemaEmpty"
-                },
-                "groups": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/managed_tenantGroupAssignmentType"
-                    }
-                },
-                "tenant_id": {
-                    "type": "string"
-                },
-                "tenant_regex": {
-                    "type": "string"
-                }
-            }
-        },
-        "managed_tenantGlobalSpecType": {
-            "type": "object",
-            "description": "x-displayName: \"Specification\"\nShape of managed_tenant in the storage backend.",
-            "title": "GlobalSpecType",
-            "properties": {
-                "all_tenants": {
-                    "description": "x-displayName: \"All Tenants\"\nChoice to manage all tenants.\nInternal option only.",
-                    "title": "all_tenants",
-                    "$ref": "#/definitions/ioschemaEmpty"
-                },
-                "groups": {
-                    "type": "array",
-                    "description": "x-displayName: \"Groups\"\nList of local user group association to user groups in the managed tenant specified in the tenant_choice.",
-                    "title": "groups",
-                    "items": {
-                        "$ref": "#/definitions/managed_tenantGroupAssignmentType"
-                    }
-                },
-                "tenant_id": {
-                    "type": "string",
-                    "description": "x-displayName: \"Tenant ID\"\nx-example: \"company-s4543dsa\"\nSpecify the Tenant ID of the tenant which needs to be managed. \nNOTE: this is the name of the tenant configuration obj. not UID.",
-                    "title": "tenant_id"
-                },
-                "tenant_regex": {
-                    "type": "string",
-                    "description": "x-displayName: \"Tenant Regex\"\nx-example: \"eu-tenant.*'\"\nSpecify regex pattern to target range of Tenant IDs.\nInternal option only.",
-                    "title": "tenant_regex"
-                }
-            }
-        },
         "managed_tenantGroupAssignmentType": {
             "type": "object",
             "description": "x-displayName: \"Group to Assign\"\nShape for specifying user group assosciation to user groups in a managed tenant.",
@@ -1937,7 +1874,7 @@ var APISwaggerJSON string = `{
                 },
                 "managed_tenant_groups": {
                     "type": "array",
-                    "description": "x-displayName: \"Managed Tenant Groups\"\nx-example: \"user-group1\"\nList of group names in managed tenant (MT).\nNote - To properly establish access, admin of managed tenant need to create corresponding Allowed Tenant\nconfiguration object with access to use same group names. Once it's setup, when user from original tenant \naccess managed tenant, underlying roles from managed tenant will be applied to user.",
+                    "description": "x-displayName: \"Managed Tenant Groups\"\nx-example: \"user-group1\"\nList of group names in managed tenant (MT).\nNote - To properly establish access, admin of managed tenant need to create corresponding Allowed Tenant\nconfiguration object with access to use same group names. Once it's setup, when user from original tenant\naccess managed tenant, underlying roles from managed tenant will be applied to user.",
                     "title": "managed_tenant_groups",
                     "items": {
                         "type": "string"
@@ -1992,7 +1929,7 @@ var APISwaggerJSON string = `{
                 "get_spec": {
                     "description": "x-displayName: \"Get Specification\"\nIf ListRequest has any specified report_fields, it will appear in object",
                     "title": "get_spec",
-                    "$ref": "#/definitions/managed_tenantGetSpecType"
+                    "$ref": "#/definitions/tenant_managementmanaged_tenantGetSpecType"
                 },
                 "labels": {
                     "type": "object",
@@ -2049,6 +1986,38 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "managed_tenantNewTenantInfo": {
+            "type": "object",
+            "description": "x-displayName: \"New Tenant Info\"\nShape for specifying child tenant info.\nBased on this details, new tenant will be created and configuration will be\npushed to allow management by this requesting tenant.",
+            "title": "NewTenantInfo",
+            "properties": {
+                "billing_address": {
+                    "description": "x-displayName: \"Billing Address\"\nBilling Address for this tenant account",
+                    "title": "billing_address",
+                    "$ref": "#/definitions/schemacontactGlobalSpecType"
+                },
+                "cname": {
+                    "type": "string",
+                    "description": "x-displayName: \"Domain Name\"\nx-example: \"xyz\"\nx-required\nSpecial name to access your tenant account via web console.\nChoose this short name to represent your company/organization.\nA unique tenant id will auto generated based on this value.",
+                    "title": "Domain Name"
+                },
+                "company_name": {
+                    "type": "string",
+                    "description": "x-displayName: \"Company Name\"\nx-example: \"Xyz Inc\"\nx-required\nName of the company or organization.",
+                    "title": "company_name"
+                },
+                "tenant_owner_info": {
+                    "description": "x-displayName: \"Tenant Owner User\"\nProvide user information of the tenant owner.",
+                    "title": "tenant_owner_info",
+                    "$ref": "#/definitions/managed_tenantTenantOwnerInfo"
+                },
+                "usage_plan_name": {
+                    "type": "string",
+                    "description": "x-displayName: \"Plan Name\"\nx-example: \"organization\"\nx-required\nName of the plan tenant want to signup for.\nQuota and usage will be provisioned based on this plan selection.\nAccess this link for more info: https://www.f5.com/cloud/pricing",
+                    "title": "usage_plan_name"
+                }
+            }
+        },
         "managed_tenantObject": {
             "type": "object",
             "description": "x-displayName: \"Managed Tenant\"\nManaged Tenant object",
@@ -2089,34 +2058,12 @@ var APISwaggerJSON string = `{
                 "spec": {
                     "description": "x-displayName: \"Spec\"\nA specification of the configuration object to be replaced",
                     "title": "spec",
-                    "$ref": "#/definitions/managed_tenantReplaceSpecType"
+                    "$ref": "#/definitions/tenant_managementmanaged_tenantReplaceSpecType"
                 }
             }
         },
         "managed_tenantReplaceResponse": {
             "type": "object"
-        },
-        "managed_tenantReplaceSpecType": {
-            "type": "object",
-            "description": "x-displayName: \"Replace Managed Tenant\"\nReplaces attributes of a managed_tenant instance including its metadata like labels, description etc.",
-            "title": "Replace Managed Tenant",
-            "properties": {
-                "all_tenants": {
-                    "$ref": "#/definitions/ioschemaEmpty"
-                },
-                "groups": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/managed_tenantGroupAssignmentType"
-                    }
-                },
-                "tenant_id": {
-                    "type": "string"
-                },
-                "tenant_regex": {
-                    "type": "string"
-                }
-            }
         },
         "managed_tenantSpecType": {
             "type": "object",
@@ -2126,9 +2073,21 @@ var APISwaggerJSON string = `{
                 "gc_spec": {
                     "description": "x-displayName: \"GC Spec\"",
                     "title": "gc_spec",
-                    "$ref": "#/definitions/managed_tenantGlobalSpecType"
+                    "$ref": "#/definitions/tenant_managementmanaged_tenantGlobalSpecType"
                 }
             }
+        },
+        "managed_tenantStatus": {
+            "type": "string",
+            "description": "x-displayName: \"Status\"\nStatus is to identify the status of the managed tenant configuration.\n\n - UNKNOWN: UNKNOWN\nx-displayName: \"Unknown\"\nUnknown status of the configuration.\n - NOT_APPLICABLE: Not Applicable\nx-displayName: \"Not Applicable\"\nThe status is not applicable for the managed tenant configuration.\n - PENDING: Pending\nx-displayName: \"Pending\"\nThe configuration is incomplete.\n - ACTIVE: Active\nx-displayName: \"Active\"\nThe tenant configuration is active.",
+            "title": "Status",
+            "enum": [
+                "UNKNOWN",
+                "NOT_APPLICABLE",
+                "PENDING",
+                "ACTIVE"
+            ],
+            "default": "UNKNOWN"
         },
         "managed_tenantStatusObject": {
             "type": "object",
@@ -2155,6 +2114,33 @@ var APISwaggerJSON string = `{
                     "items": {
                         "$ref": "#/definitions/ioschemaObjectRefType"
                     }
+                }
+            }
+        },
+        "managed_tenantTenantOwnerInfo": {
+            "type": "object",
+            "description": "x-displayName: \"Tenant Owner User\"\nShape for specifying tenant owner user info.",
+            "title": "TenantOwnerInfo",
+            "properties": {
+                "contact_number": {
+                    "type": "string",
+                    "description": "x-displayName: \"Contact Number\"\nx-example: \"+14084004001\"\nContact number of the user in ITU E.164 format [+][country code][subscriber number including area code]",
+                    "title": "Contact Number"
+                },
+                "email": {
+                    "type": "string",
+                    "description": "x-displayName: \"Email\"\nx-example: \"john.doe@xyz.com\"\nx-required\nValid email address of tenant owner user.\nAccess details for the new tenant will be sent to this email address.",
+                    "title": "email"
+                },
+                "first_name": {
+                    "type": "string",
+                    "description": "x-displayName: \"First Name\"\nx-example: \"John\"\nx-required\nFirst name of the user (Tenant Owner)",
+                    "title": "first_name"
+                },
+                "last_name": {
+                    "type": "string",
+                    "description": "x-displayName: \"Last Name\"\nx-example: \"Doe\"\nx-required\nLast name of the user (Tenant Owner)",
+                    "title": "last_name"
                 }
             }
         },
@@ -2730,6 +2716,63 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "schemacontactGlobalSpecType": {
+            "type": "object",
+            "description": "x-displayName: \"Contact\"\nInstance of one single contact that can be used to communicate with customers.\nDepending on contact type we use these details to send general communication (regular, physical mail) or invoices.",
+            "title": "Contact",
+            "properties": {
+                "address1": {
+                    "type": "string",
+                    "description": "x-displayName: \"Address Line 1\"\nx-example: \"1234 Main road\"\naddress line 1",
+                    "title": "address1"
+                },
+                "address2": {
+                    "type": "string",
+                    "description": "x-displayName: \"Address Line 2\"\nx-example: \"P.O BOX 56\"\naddress line 2",
+                    "title": "address2"
+                },
+                "city": {
+                    "type": "string",
+                    "description": "x-displayName: \"City\"\nx-example: \"Sunnyvale\"\ncity / town of the contact",
+                    "title": "city"
+                },
+                "contact_type": {
+                    "description": "x-displayName: \"Contact Type\"\ntype of the contact (snail mail, billing)",
+                    "title": "contact_type",
+                    "$ref": "#/definitions/contactContactType"
+                },
+                "country": {
+                    "type": "string",
+                    "description": "x-displayName: \"Country\"\nx-example: \"US\"\ncountry of contact (e.g. USA). refer to https://en.wikipedia.org/wiki/ISO_3166-1, column alpha-2",
+                    "title": "country"
+                },
+                "county": {
+                    "type": "string",
+                    "description": "x-displayName: \"County\"\nx-example: \"Santa Clara\"\ncounty (optional, for countries where they have counties)",
+                    "title": "county"
+                },
+                "phone_number": {
+                    "type": "string",
+                    "description": "x-displayName: \"Phone Number\"\nx-example: \"+11234567890\"\nphone number of the contact",
+                    "title": "phone_number"
+                },
+                "state": {
+                    "type": "string",
+                    "description": "x-displayName: \"State\"\nx-example: \"California\"\nstate (optional, for countries where they have states)",
+                    "title": "state"
+                },
+                "state_code": {
+                    "type": "string",
+                    "description": "x-displayName: \"State Code\"\nx-example: \"CA\"\nstate code (optional, for countries where they have states)",
+                    "title": "state code"
+                },
+                "zip_code": {
+                    "type": "string",
+                    "description": "x-displayName: \"ZIP code\"\nx-example: \"95054\"\nzip or postal code",
+                    "title": "zip_code"
+                }
+            }
+        },
         "schemaviewsObjectRefType": {
             "type": "object",
             "description": "x-displayName: \"Object reference\"\nThis type establishes a direct reference from one object(the referrer) to another(the referred).\nSuch a reference is in form of tenant/namespace/name",
@@ -2749,6 +2792,124 @@ var APISwaggerJSON string = `{
                     "type": "string",
                     "description": "x-displayName: \"Tenant\"\nx-example: \"acmecorp\"\nWhen a configuration object(e.g. virtual_host) refers to another(e.g route)\nthen tenant will hold the referred object's(e.g. route's) tenant.",
                     "title": "tenant"
+                }
+            }
+        },
+        "tenant_managementmanaged_tenantCreateSpecType": {
+            "type": "object",
+            "description": "x-displayName: \"Create Managed Tenant\"\nCreates a managed_tenant config instance. Name of the object is name of the tenant that is allowed to manage.",
+            "title": "Create Managed Tenant",
+            "properties": {
+                "all_tenants": {
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "groups": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/managed_tenantGroupAssignmentType"
+                    }
+                },
+                "new_tenant_info": {
+                    "$ref": "#/definitions/managed_tenantNewTenantInfo"
+                },
+                "tenant_id": {
+                    "type": "string"
+                },
+                "tenant_regex": {
+                    "type": "string"
+                }
+            }
+        },
+        "tenant_managementmanaged_tenantGetSpecType": {
+            "type": "object",
+            "description": "x-displayName: \"Get Managed Tenant\"\nGet managed_tenant reads a given object from storage backend for metadata.namespace.",
+            "title": "Get managed tenant",
+            "properties": {
+                "all_tenants": {
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "groups": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/managed_tenantGroupAssignmentType"
+                    }
+                },
+                "new_tenant_info": {
+                    "$ref": "#/definitions/managed_tenantNewTenantInfo"
+                },
+                "status": {
+                    "$ref": "#/definitions/managed_tenantStatus"
+                },
+                "tenant_id": {
+                    "type": "string"
+                },
+                "tenant_regex": {
+                    "type": "string"
+                }
+            }
+        },
+        "tenant_managementmanaged_tenantGlobalSpecType": {
+            "type": "object",
+            "description": "x-displayName: \"Specification\"\nShape of managed_tenant in the storage backend.",
+            "title": "GlobalSpecType",
+            "properties": {
+                "all_tenants": {
+                    "description": "x-displayName: \"All Tenants\"\nChoice to manage all tenants.\nInternal option only.",
+                    "title": "all_tenants",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "groups": {
+                    "type": "array",
+                    "description": "x-displayName: \"Groups\"\nList of local user group association to user groups in the managed tenant specified in the tenant_choice.",
+                    "title": "groups",
+                    "items": {
+                        "$ref": "#/definitions/managed_tenantGroupAssignmentType"
+                    }
+                },
+                "new_tenant_info": {
+                    "description": "x-displayName: \"New Child Tenant\"\nSpecify information required to signup new child tenant.\nA support ticket will be created on-behalf of the admin with necessary information attached.\nManaged tenant config will remain in pending state until support sucessfully provision the child tenant.\nPlease contact support for more info.",
+                    "title": "new_tenant_info",
+                    "$ref": "#/definitions/managed_tenantNewTenantInfo"
+                },
+                "status": {
+                    "description": "x-displayName: \"Status\"\nStatus is to identify the status of the managed tenant configuration.",
+                    "title": "Status",
+                    "$ref": "#/definitions/managed_tenantStatus"
+                },
+                "tenant_id": {
+                    "type": "string",
+                    "description": "x-displayName: \"Tenant ID (Existing)\"\nx-example: \"company-s4543dsa\"\nSpecify the Tenant ID of the existing tenant which needs to be managed.\nNOTE: this is the name of the tenant configuration obj. not UID.",
+                    "title": "tenant_id"
+                },
+                "tenant_regex": {
+                    "type": "string",
+                    "description": "x-displayName: \"Tenant Regex\"\nx-example: \"eu-tenant.*'\"\nSpecify regex pattern to target range of Tenant IDs.\nInternal option only.",
+                    "title": "tenant_regex"
+                }
+            }
+        },
+        "tenant_managementmanaged_tenantReplaceSpecType": {
+            "type": "object",
+            "description": "x-displayName: \"Replace Managed Tenant\"\nReplaces attributes of a managed_tenant configuration.\nUpdate of existing tenant_choice selection is not supported but user may update existing group assignments.",
+            "title": "Replace Managed Tenant",
+            "properties": {
+                "all_tenants": {
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "groups": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/managed_tenantGroupAssignmentType"
+                    }
+                },
+                "new_tenant_info": {
+                    "$ref": "#/definitions/managed_tenantNewTenantInfo"
+                },
+                "tenant_id": {
+                    "type": "string"
+                },
+                "tenant_regex": {
+                    "type": "string"
                 }
             }
         }

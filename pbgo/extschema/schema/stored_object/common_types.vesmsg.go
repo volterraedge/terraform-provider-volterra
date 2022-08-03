@@ -1621,19 +1621,19 @@ func (v *ValidateMobileSDKAttributes) Validate(ctx context.Context, pm interface
 		return nil
 	}
 
-	if fv, exists := v.FldValidators["mobile_sdk_version"]; exists {
+	if fv, exists := v.FldValidators["os_type"]; exists {
 
-		vOpts := append(opts, db.WithValidateField("mobile_sdk_version"))
-		if err := fv(ctx, m.GetMobileSdkVersion(), vOpts...); err != nil {
+		vOpts := append(opts, db.WithValidateField("os_type"))
+		if err := fv(ctx, m.GetOsType(), vOpts...); err != nil {
 			return err
 		}
 
 	}
 
-	if fv, exists := v.FldValidators["os_type"]; exists {
+	if fv, exists := v.FldValidators["release_version"]; exists {
 
-		vOpts := append(opts, db.WithValidateField("os_type"))
-		if err := fv(ctx, m.GetOsType(), vOpts...); err != nil {
+		vOpts := append(opts, db.WithValidateField("release_version"))
+		if err := fv(ctx, m.GetReleaseVersion(), vOpts...); err != nil {
 			return err
 		}
 

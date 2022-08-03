@@ -5451,6 +5451,13 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/policyTlsFingerprintMatcherType",
                     "x-displayname": "TLS Fingerprint Matcher"
                 },
+                "user_identity_matcher": {
+                    "description": " Match the specified user identity. The format is prefixed by the type.\n\nExample: - \"IP-x.x.x.x\"-",
+                    "title": "user identity matcher",
+                    "$ref": "#/definitions/policyMatcherTypeBasic",
+                    "x-displayname": "User Identity Matcher",
+                    "x-ves-example": "IP-x.x.x.x"
+                },
                 "waf_action": {
                     "description": " App Firewall action to be enforced if the input request matches the rule.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "App Firewall Action",
@@ -5955,6 +5962,14 @@ var APISwaggerJSON string = `{
                     "title": "api group matcher",
                     "$ref": "#/definitions/policyStringMatcherType"
                 },
+                "arg_matchers": {
+                    "type": "array",
+                    "description": "x-displayName: \"Argument Matchers\"\nA list of predicates for all POST args that need to be matched. The criteria for matching each arg are described in individual instances\nof ArgMatcherType. The actual arg values are extracted from the request API as a list of strings for each arg selector name.\nNote that all specified arg matcher predicates must evaluate to true.",
+                    "title": "arg matchers",
+                    "items": {
+                        "$ref": "#/definitions/policyArgMatcherType"
+                    }
+                },
                 "asn_list": {
                     "description": "x-displayName: \"ASN List\"\nList of 4-byte ASN values.\nThe predicate evaluates to true if the origin ASN is present in the ASN list.",
                     "title": "asn list",
@@ -5965,10 +5980,20 @@ var APISwaggerJSON string = `{
                     "title": "asn matcher",
                     "$ref": "#/definitions/policyAsnMatcherType"
                 },
+                "body_matcher": {
+                    "description": "x-displayName: \"Request Body Matcher\"\nPredicate for matching the request body string. The criteria for matching the request body is described in MatcherType.\nThe actual request body value is extracted from the request API as a string.",
+                    "title": "body matcher",
+                    "$ref": "#/definitions/policyMatcherType"
+                },
                 "bot_action": {
                     "description": "x-displayName: \"Bot Action\"\nBot action to be enforced if the input request matches the rule.",
                     "title": "Bot Action",
                     "$ref": "#/definitions/schemapolicyBotAction"
+                },
+                "challenge_action": {
+                    "description": "x-displayName: \"Select Challenge Action Type\"\nx-required\nSelect challenge action, enable javascript/captcha challenge or disable challenge",
+                    "title": "challenge action",
+                    "$ref": "#/definitions/policyChallengeAction"
                 },
                 "client_role": {
                     "description": "x-displayName: \"Client Role\"\nThe expected role(s) of the client invoking the request API. The actual roles for the client are derived from the user and namespace information in the\nAPI request.\nThe predicate evaluates to true if any of the client's roles match the value(s) specified in client role.",
@@ -5984,6 +6009,14 @@ var APISwaggerJSON string = `{
                     "description": "x-displayName: \"Shape Content Rewrite Action Type\"\nRewrite HTML response action to insert HTML content such as Javascript \u003cscript\u003e tags into the HTML document",
                     "title": "Shape Content Rewrite Action",
                     "$ref": "#/definitions/policyContentRewriteAction"
+                },
+                "cookie_matchers": {
+                    "type": "array",
+                    "description": "x-displayName: \"Cookie Matchers\"\nA list of predicates for all cookies that need to be matched. The criteria for matching each cookie is described in individual instances\nof CookieMatcherType. The actual cookie values are extracted from the request API as a list of strings for each cookie name.\nNote that all specified cookie matcher predicates must evaluate to true.",
+                    "title": "cookie matchers",
+                    "items": {
+                        "$ref": "#/definitions/policyCookieMatcherType"
+                    }
                 },
                 "description": {
                     "type": "string",
@@ -6077,6 +6110,14 @@ var APISwaggerJSON string = `{
                     "title": "port matcher",
                     "$ref": "#/definitions/policyPortMatcherType"
                 },
+                "query_params": {
+                    "type": "array",
+                    "description": "x-displayName: \"HTTP Query Parameters\"\nA list of predicates for all query parameters that need to be matched. The criteria for matching each query parameter are described in individual instances\nof QueryParameterMatcherType. The actual query parameter values are extracted from the request API as a list of strings for each query parameter name.\nNote that all specified query parameter predicates must evaluate to true.",
+                    "title": "query params",
+                    "items": {
+                        "$ref": "#/definitions/schemapolicyQueryParameterMatcherType"
+                    }
+                },
                 "rate_limiter_specs": {
                     "type": "array",
                     "description": "x-displayName: \"Rate Limiter Specs\"\nSpecs for rate_limiter objects.\nApply the specified rate_limiters.\nMutually exclusive with rate_limiters.",
@@ -6120,6 +6161,16 @@ var APISwaggerJSON string = `{
                     "description": "x-displayName: \"URL Matcher\"\nA URL matcher specifies a list of URL items as match criteria. The match is considered successful if the domain and path match any of the URL items.",
                     "title": "url matcher",
                     "$ref": "#/definitions/policyURLMatcherType"
+                },
+                "user_identity_matcher": {
+                    "description": "x-displayName: \"User Identity Matcher\"\nx-example: \"IP-x.x.x.x\"\nMatch the specified user identity. The format is prefixed by the type.",
+                    "title": "user identity matcher",
+                    "$ref": "#/definitions/policyMatcherTypeBasic"
+                },
+                "virtual_host_matcher": {
+                    "description": "x-displayName: \"Virtual Host Matcher\"\nA list of exact values and/or regular expressions for the expected name of the virtual_host. The name of the virtual_host is is part of the context in\nwhich a service_policy_set is evaluated. The predicate evaluates to true if the virtual_host name matches any of the exact values or regular expressions\nin the virtual_host matcher.\nHidden because this will be used only in system generated rate limiting service_policy_sets.",
+                    "title": "virtual host matcher",
+                    "$ref": "#/definitions/policyMatcherType"
                 },
                 "waf_action": {
                     "description": "x-displayName: \"App Firewall Action\"\nApp Firewall action to be enforced if the input request matches the rule.",

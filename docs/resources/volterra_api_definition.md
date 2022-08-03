@@ -20,7 +20,7 @@ resource "volterra_api_definition" "example" {
   name      = "acmecorp-web"
   namespace = "staging"
 
-  swagger_specs = ["swagger_specs"]
+  swagger_specs = ["https://my.tenant.domain/api/object_store/namespaces/my-ns/stored_objects/swagger/file-name/v1-22-01-12"]
 }
 
 ```
@@ -44,7 +44,7 @@ Argument Reference
 
 ### Spec Argument Reference
 
-`swagger_specs` - (Required) Swagger Specs for this API Definition. (`List of String`).
+`swagger_specs` - (Required) Notice file versions. If swagger file is updated, need to select a new version here to redefine the API. (`List of String`).
 
 Attribute Reference
 -------------------

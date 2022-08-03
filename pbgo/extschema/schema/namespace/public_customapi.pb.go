@@ -39,203 +39,6 @@ var _ = math.Inf
 // proto package needs to be updated.
 const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
-// CascadeDeleteRequest
-//
-// x-displayName: "Cascade Delete Request"
-// CascadeDeleteRequest contains the name of the namespace that has to be deleted
-// along with the objects configured under the namespace
-type CascadeDeleteRequest struct {
-	// name
-	//
-	// x-displayName: "Name"
-	// x-example: "value"
-	// The name of the namespace
-	Name string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
-}
-
-func (m *CascadeDeleteRequest) Reset()      { *m = CascadeDeleteRequest{} }
-func (*CascadeDeleteRequest) ProtoMessage() {}
-func (*CascadeDeleteRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_ae2cd67c9bbaccbd, []int{0}
-}
-func (m *CascadeDeleteRequest) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *CascadeDeleteRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_CascadeDeleteRequest.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
-}
-func (m *CascadeDeleteRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_CascadeDeleteRequest.Merge(m, src)
-}
-func (m *CascadeDeleteRequest) XXX_Size() int {
-	return m.Size()
-}
-func (m *CascadeDeleteRequest) XXX_DiscardUnknown() {
-	xxx_messageInfo_CascadeDeleteRequest.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_CascadeDeleteRequest proto.InternalMessageInfo
-
-func (m *CascadeDeleteRequest) GetName() string {
-	if m != nil {
-		return m.Name
-	}
-	return ""
-}
-
-// CascadeDeleteResponse
-//
-// x-displayName: "Cascade Delete Response"
-// CascadeDeleteResponse contains a list of objects in the namespace that were
-// deleted (or encountered an error while deleting)
-type CascadeDeleteResponse struct {
-	// items
-	//
-	// x-displayName: "Items"
-	// The objects deleted in namespace
-	Items []*CascadeDeleteItemType `protobuf:"bytes,1,rep,name=items,proto3" json:"items,omitempty"`
-}
-
-func (m *CascadeDeleteResponse) Reset()      { *m = CascadeDeleteResponse{} }
-func (*CascadeDeleteResponse) ProtoMessage() {}
-func (*CascadeDeleteResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_ae2cd67c9bbaccbd, []int{1}
-}
-func (m *CascadeDeleteResponse) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *CascadeDeleteResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_CascadeDeleteResponse.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
-}
-func (m *CascadeDeleteResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_CascadeDeleteResponse.Merge(m, src)
-}
-func (m *CascadeDeleteResponse) XXX_Size() int {
-	return m.Size()
-}
-func (m *CascadeDeleteResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_CascadeDeleteResponse.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_CascadeDeleteResponse proto.InternalMessageInfo
-
-func (m *CascadeDeleteResponse) GetItems() []*CascadeDeleteItemType {
-	if m != nil {
-		return m.Items
-	}
-	return nil
-}
-
-// CascadeDeleteItemType
-//
-// x-displayName: "Cascade Delete Item"
-// CascadeDeleteItemType is details of object that was handled as part of cascade delete
-// of namespace and whether it was successfully deleted
-type CascadeDeleteItemType struct {
-	// object_type
-	//
-	// x-displayName: "Type"
-	// x-example: "ves.io.schema.virtual_host.Object"
-	// The type of the contained configuration object in the namespace that was deleted
-	ObjectType string `protobuf:"bytes,1,opt,name=object_type,json=objectType,proto3" json:"object_type,omitempty"`
-	// object_uid
-	//
-	// x-displayName: "UID"
-	// x-example: "value"
-	// The UID identifier of the configuration object that was deleted
-	ObjectUid string `protobuf:"bytes,2,opt,name=object_uid,json=objectUid,proto3" json:"object_uid,omitempty"`
-	// object_name
-	//
-	// x-displayName: "Name"
-	// x-example: "value"
-	// Name of the configuration object that was deleted
-	ObjectName string `protobuf:"bytes,3,opt,name=object_name,json=objectName,proto3" json:"object_name,omitempty"`
-	// error_message
-	//
-	// x-displayName: "Error"
-	// x-example: "value"
-	// A description of the error encountered (if any) in the process of cascade deletion
-	ErrorMessage string `protobuf:"bytes,4,opt,name=error_message,json=errorMessage,proto3" json:"error_message,omitempty"`
-}
-
-func (m *CascadeDeleteItemType) Reset()      { *m = CascadeDeleteItemType{} }
-func (*CascadeDeleteItemType) ProtoMessage() {}
-func (*CascadeDeleteItemType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_ae2cd67c9bbaccbd, []int{2}
-}
-func (m *CascadeDeleteItemType) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *CascadeDeleteItemType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_CascadeDeleteItemType.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
-}
-func (m *CascadeDeleteItemType) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_CascadeDeleteItemType.Merge(m, src)
-}
-func (m *CascadeDeleteItemType) XXX_Size() int {
-	return m.Size()
-}
-func (m *CascadeDeleteItemType) XXX_DiscardUnknown() {
-	xxx_messageInfo_CascadeDeleteItemType.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_CascadeDeleteItemType proto.InternalMessageInfo
-
-func (m *CascadeDeleteItemType) GetObjectType() string {
-	if m != nil {
-		return m.ObjectType
-	}
-	return ""
-}
-
-func (m *CascadeDeleteItemType) GetObjectUid() string {
-	if m != nil {
-		return m.ObjectUid
-	}
-	return ""
-}
-
-func (m *CascadeDeleteItemType) GetObjectName() string {
-	if m != nil {
-		return m.ObjectName
-	}
-	return ""
-}
-
-func (m *CascadeDeleteItemType) GetErrorMessage() string {
-	if m != nil {
-		return m.ErrorMessage
-	}
-	return ""
-}
-
 // APIItem
 //
 // x-displayName: "API Item"
@@ -264,7 +67,7 @@ type APIItem struct {
 func (m *APIItem) Reset()      { *m = APIItem{} }
 func (*APIItem) ProtoMessage() {}
 func (*APIItem) Descriptor() ([]byte, []int) {
-	return fileDescriptor_ae2cd67c9bbaccbd, []int{3}
+	return fileDescriptor_ae2cd67c9bbaccbd, []int{0}
 }
 func (m *APIItem) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -341,7 +144,7 @@ type APIItemList struct {
 func (m *APIItemList) Reset()      { *m = APIItemList{} }
 func (*APIItemList) ProtoMessage() {}
 func (*APIItemList) Descriptor() ([]byte, []int) {
-	return fileDescriptor_ae2cd67c9bbaccbd, []int{4}
+	return fileDescriptor_ae2cd67c9bbaccbd, []int{1}
 }
 func (m *APIItemList) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -412,7 +215,7 @@ type EvaluateAPIAccessReq struct {
 func (m *EvaluateAPIAccessReq) Reset()      { *m = EvaluateAPIAccessReq{} }
 func (*EvaluateAPIAccessReq) ProtoMessage() {}
 func (*EvaluateAPIAccessReq) Descriptor() ([]byte, []int) {
-	return fileDescriptor_ae2cd67c9bbaccbd, []int{5}
+	return fileDescriptor_ae2cd67c9bbaccbd, []int{2}
 }
 func (m *EvaluateAPIAccessReq) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -470,7 +273,7 @@ type EvaluateAPIAccessResp struct {
 func (m *EvaluateAPIAccessResp) Reset()      { *m = EvaluateAPIAccessResp{} }
 func (*EvaluateAPIAccessResp) ProtoMessage() {}
 func (*EvaluateAPIAccessResp) Descriptor() ([]byte, []int) {
-	return fileDescriptor_ae2cd67c9bbaccbd, []int{6}
+	return fileDescriptor_ae2cd67c9bbaccbd, []int{3}
 }
 func (m *EvaluateAPIAccessResp) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -506,128 +309,7 @@ func (m *EvaluateAPIAccessResp) GetItemLists() []*APIItemList {
 	return nil
 }
 
-// UpdateAllowAdvertiseOnPublicReq
-//
-// x-displayName: "Request for UpdateAllowAdvertiseOnPublic"
-// Request body of UpdateAllowAdvertiseOnPublic request
-type UpdateAllowAdvertiseOnPublicReq struct {
-	// namespace
-	//
-	// x-displayName: "Namespace"
-	// x-example: "value"
-	// Name of the namespace under which all the URLs in APIItems will be evaluated
-	Namespace string `protobuf:"bytes,1,opt,name=namespace,proto3" json:"namespace,omitempty"`
-	// Allow advertisement on public.
-	//
-	// Config choice to allow advertisement on the public.
-	// x-displayName: "Allow advertisement on public."
-	AllowAdvertiseOnPublic PublicAdvertiseChoice `protobuf:"varint,2,opt,name=allow_advertise_on_public,json=allowAdvertiseOnPublic,proto3,enum=ves.io.schema.namespace.PublicAdvertiseChoice" json:"allow_advertise_on_public,omitempty"`
-}
-
-func (m *UpdateAllowAdvertiseOnPublicReq) Reset()      { *m = UpdateAllowAdvertiseOnPublicReq{} }
-func (*UpdateAllowAdvertiseOnPublicReq) ProtoMessage() {}
-func (*UpdateAllowAdvertiseOnPublicReq) Descriptor() ([]byte, []int) {
-	return fileDescriptor_ae2cd67c9bbaccbd, []int{7}
-}
-func (m *UpdateAllowAdvertiseOnPublicReq) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *UpdateAllowAdvertiseOnPublicReq) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_UpdateAllowAdvertiseOnPublicReq.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
-}
-func (m *UpdateAllowAdvertiseOnPublicReq) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_UpdateAllowAdvertiseOnPublicReq.Merge(m, src)
-}
-func (m *UpdateAllowAdvertiseOnPublicReq) XXX_Size() int {
-	return m.Size()
-}
-func (m *UpdateAllowAdvertiseOnPublicReq) XXX_DiscardUnknown() {
-	xxx_messageInfo_UpdateAllowAdvertiseOnPublicReq.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_UpdateAllowAdvertiseOnPublicReq proto.InternalMessageInfo
-
-func (m *UpdateAllowAdvertiseOnPublicReq) GetNamespace() string {
-	if m != nil {
-		return m.Namespace
-	}
-	return ""
-}
-
-func (m *UpdateAllowAdvertiseOnPublicReq) GetAllowAdvertiseOnPublic() PublicAdvertiseChoice {
-	if m != nil {
-		return m.AllowAdvertiseOnPublic
-	}
-	return Default
-}
-
-// UpdateAllowAdvertiseOnPublicResp
-//
-// x-displayName: "Response for UpdateAllowAdvertiseOnPublic"
-// Response body of UpdateAllowAdvertiseOnPublic request
-type UpdateAllowAdvertiseOnPublicResp struct {
-	// result
-	//
-	// x-displayName: "Result"
-	// API result.
-	Result bool `protobuf:"varint,1,opt,name=result,proto3" json:"result,omitempty"`
-}
-
-func (m *UpdateAllowAdvertiseOnPublicResp) Reset()      { *m = UpdateAllowAdvertiseOnPublicResp{} }
-func (*UpdateAllowAdvertiseOnPublicResp) ProtoMessage() {}
-func (*UpdateAllowAdvertiseOnPublicResp) Descriptor() ([]byte, []int) {
-	return fileDescriptor_ae2cd67c9bbaccbd, []int{8}
-}
-func (m *UpdateAllowAdvertiseOnPublicResp) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *UpdateAllowAdvertiseOnPublicResp) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_UpdateAllowAdvertiseOnPublicResp.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
-}
-func (m *UpdateAllowAdvertiseOnPublicResp) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_UpdateAllowAdvertiseOnPublicResp.Merge(m, src)
-}
-func (m *UpdateAllowAdvertiseOnPublicResp) XXX_Size() int {
-	return m.Size()
-}
-func (m *UpdateAllowAdvertiseOnPublicResp) XXX_DiscardUnknown() {
-	xxx_messageInfo_UpdateAllowAdvertiseOnPublicResp.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_UpdateAllowAdvertiseOnPublicResp proto.InternalMessageInfo
-
-func (m *UpdateAllowAdvertiseOnPublicResp) GetResult() bool {
-	if m != nil {
-		return m.Result
-	}
-	return false
-}
-
 func init() {
-	proto.RegisterType((*CascadeDeleteRequest)(nil), "ves.io.schema.namespace.CascadeDeleteRequest")
-	golang_proto.RegisterType((*CascadeDeleteRequest)(nil), "ves.io.schema.namespace.CascadeDeleteRequest")
-	proto.RegisterType((*CascadeDeleteResponse)(nil), "ves.io.schema.namespace.CascadeDeleteResponse")
-	golang_proto.RegisterType((*CascadeDeleteResponse)(nil), "ves.io.schema.namespace.CascadeDeleteResponse")
-	proto.RegisterType((*CascadeDeleteItemType)(nil), "ves.io.schema.namespace.CascadeDeleteItemType")
-	golang_proto.RegisterType((*CascadeDeleteItemType)(nil), "ves.io.schema.namespace.CascadeDeleteItemType")
 	proto.RegisterType((*APIItem)(nil), "ves.io.schema.namespace.APIItem")
 	golang_proto.RegisterType((*APIItem)(nil), "ves.io.schema.namespace.APIItem")
 	proto.RegisterType((*APIItemList)(nil), "ves.io.schema.namespace.APIItemList")
@@ -636,10 +318,6 @@ func init() {
 	golang_proto.RegisterType((*EvaluateAPIAccessReq)(nil), "ves.io.schema.namespace.EvaluateAPIAccessReq")
 	proto.RegisterType((*EvaluateAPIAccessResp)(nil), "ves.io.schema.namespace.EvaluateAPIAccessResp")
 	golang_proto.RegisterType((*EvaluateAPIAccessResp)(nil), "ves.io.schema.namespace.EvaluateAPIAccessResp")
-	proto.RegisterType((*UpdateAllowAdvertiseOnPublicReq)(nil), "ves.io.schema.namespace.UpdateAllowAdvertiseOnPublicReq")
-	golang_proto.RegisterType((*UpdateAllowAdvertiseOnPublicReq)(nil), "ves.io.schema.namespace.UpdateAllowAdvertiseOnPublicReq")
-	proto.RegisterType((*UpdateAllowAdvertiseOnPublicResp)(nil), "ves.io.schema.namespace.UpdateAllowAdvertiseOnPublicResp")
-	golang_proto.RegisterType((*UpdateAllowAdvertiseOnPublicResp)(nil), "ves.io.schema.namespace.UpdateAllowAdvertiseOnPublicResp")
 }
 
 func init() {
@@ -650,152 +328,55 @@ func init() {
 }
 
 var fileDescriptor_ae2cd67c9bbaccbd = []byte{
-	// 905 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x9c, 0x55, 0xcf, 0x6f, 0x1b, 0x45,
-	0x14, 0xf6, 0x38, 0x6d, 0x8a, 0x27, 0x14, 0xc1, 0xaa, 0x4d, 0x5d, 0x37, 0x6c, 0xad, 0x2d, 0x87,
-	0x28, 0xea, 0xee, 0x4a, 0xa9, 0x84, 0xc0, 0x17, 0x64, 0x52, 0x0e, 0x96, 0x08, 0x8d, 0x2c, 0x7a,
-	0x41, 0xa0, 0xd5, 0x78, 0xf7, 0x65, 0x3d, 0x65, 0x77, 0x67, 0xba, 0x33, 0xeb, 0x10, 0x21, 0x10,
-	0xea, 0x85, 0x2b, 0x12, 0x67, 0xee, 0x88, 0x7f, 0x21, 0x97, 0x9e, 0x08, 0xe2, 0x80, 0x22, 0xb8,
-	0x54, 0x70, 0x21, 0x1b, 0x0e, 0x1c, 0x7b, 0xe5, 0x86, 0x76, 0x76, 0xec, 0xda, 0xae, 0xd7, 0xa9,
-	0x7a, 0x9b, 0x99, 0xf7, 0xbd, 0xef, 0x7d, 0xdf, 0x9b, 0x5f, 0xd8, 0x19, 0x81, 0x70, 0x28, 0x73,
-	0x85, 0x3f, 0x84, 0x98, 0xb8, 0x09, 0x89, 0x41, 0x70, 0xe2, 0x83, 0xcb, 0xb3, 0x41, 0x44, 0x7d,
-	0xcf, 0xcf, 0x84, 0x64, 0x31, 0xe1, 0xd4, 0xe1, 0x29, 0x93, 0xcc, 0xb8, 0x56, 0xe2, 0x9d, 0x12,
-	0xef, 0x4c, 0xf0, 0x2d, 0x3b, 0xa4, 0x72, 0x98, 0x0d, 0x1c, 0x9f, 0xc5, 0x6e, 0xc8, 0x42, 0xe6,
-	0x2a, 0xfc, 0x20, 0xdb, 0x57, 0x33, 0x35, 0x51, 0xa3, 0x92, 0xa7, 0xb5, 0x11, 0x32, 0x16, 0x46,
-	0xe0, 0x12, 0x4e, 0x5d, 0x92, 0x24, 0x4c, 0x12, 0x49, 0x59, 0x22, 0x74, 0xf4, 0x56, 0x95, 0x2a,
-	0x79, 0xc8, 0x61, 0x0c, 0xba, 0x31, 0x0b, 0x62, 0x7c, 0x9a, 0xe1, 0xfa, 0x6c, 0x70, 0x3a, 0x6f,
-	0x63, 0x36, 0x34, 0x22, 0x11, 0x0d, 0x88, 0x04, 0x1d, 0xb5, 0xe6, 0xa2, 0x20, 0x20, 0x19, 0xcd,
-	0x91, 0xb7, 0xe7, 0x30, 0x14, 0x0e, 0xbc, 0x19, 0x84, 0xb5, 0x85, 0xaf, 0xec, 0x10, 0xe1, 0x93,
-	0x00, 0xee, 0x42, 0x04, 0x12, 0xfa, 0xf0, 0x30, 0x03, 0x21, 0x0d, 0x03, 0x5f, 0x28, 0xcc, 0x34,
-	0x51, 0x1b, 0x6d, 0x36, 0xfa, 0x6a, 0x6c, 0x7d, 0x86, 0xaf, 0xce, 0x61, 0x05, 0x67, 0x89, 0x00,
-	0xe3, 0x2e, 0xbe, 0x48, 0x25, 0xc4, 0xa2, 0x89, 0xda, 0x2b, 0x9b, 0x6b, 0xdb, 0x8e, 0x53, 0xd1,
-	0x7b, 0x67, 0x26, 0xbd, 0x27, 0x21, 0xfe, 0xf8, 0x90, 0x43, 0xbf, 0x4c, 0xb6, 0x7e, 0x40, 0x73,
-	0xfc, 0x63, 0x80, 0x71, 0x13, 0xaf, 0xb1, 0xc1, 0x03, 0xf0, 0xa5, 0x57, 0xb4, 0x47, 0x6b, 0xc2,
-	0xe5, 0x92, 0x02, 0xbc, 0x89, 0xf5, 0xcc, 0xcb, 0x68, 0xd0, 0xac, 0xab, 0x78, 0xa3, 0x5c, 0xb9,
-	0x4f, 0x83, 0xa9, 0x7c, 0xe5, 0x69, 0x65, 0x3a, 0xff, 0x23, 0x12, 0x83, 0x71, 0x0b, 0x5f, 0x86,
-	0x34, 0x65, 0xa9, 0x17, 0x83, 0x10, 0x24, 0x84, 0xe6, 0x05, 0x05, 0x79, 0x55, 0x2d, 0xee, 0x96,
-	0x6b, 0xd6, 0x2e, 0xbe, 0xd4, 0xdd, 0xeb, 0x15, 0xa2, 0x8c, 0x75, 0xbc, 0x1a, 0x83, 0x1c, 0xb2,
-	0x40, 0x6b, 0xd1, 0xb3, 0xa2, 0x6b, 0x9c, 0xc8, 0xa1, 0x56, 0xa0, 0xc6, 0x05, 0x36, 0x05, 0x91,
-	0x45, 0x52, 0xd5, 0x7d, 0xa5, 0xaf, 0x67, 0xd6, 0xd7, 0x78, 0x4d, 0xd3, 0x7d, 0x48, 0x85, 0x34,
-	0xae, 0xe1, 0x4b, 0x11, 0x15, 0xd2, 0xa3, 0x13, 0xce, 0x62, 0xda, 0x0b, 0x8c, 0xb7, 0xc7, 0xcd,
-	0xad, 0xab, 0xe6, 0xb6, 0x2b, 0x9b, 0xab, 0xd9, 0x74, 0x3b, 0xab, 0xea, 0x76, 0x56, 0x7f, 0x3d,
-	0x42, 0xf5, 0xd7, 0x91, 0x75, 0x88, 0xaf, 0x7c, 0x30, 0x22, 0x51, 0x46, 0x24, 0x74, 0xf7, 0x7a,
-	0x5d, 0xdf, 0x07, 0x21, 0xfa, 0xf0, 0xd0, 0xd8, 0xc0, 0x8d, 0x09, 0xa7, 0x96, 0xf2, 0x6c, 0xc1,
-	0xd8, 0xc1, 0xb8, 0xa0, 0xf7, 0x0a, 0x71, 0x63, 0x49, 0x6f, 0x9d, 0x27, 0xa9, 0x30, 0xd8, 0x6f,
-	0x50, 0x3d, 0x12, 0xd6, 0xa7, 0xf8, 0xea, 0x82, 0xd2, 0x82, 0xcf, 0xb1, 0xa3, 0x97, 0x63, 0xff,
-	0x09, 0xe1, 0x9b, 0xf7, 0x79, 0x71, 0x53, 0xba, 0x51, 0xc4, 0x0e, 0xba, 0xc1, 0x08, 0x52, 0x49,
-	0x05, 0xdc, 0x4b, 0xf6, 0xd4, 0x53, 0x71, 0xbe, 0x49, 0x8a, 0xaf, 0x93, 0x22, 0xd5, 0x23, 0xe3,
-	0x5c, 0x8f, 0x25, 0x5e, 0xf9, 0xd0, 0xa8, 0xbd, 0x7d, 0x6d, 0xc9, 0x19, 0x2f, 0x8b, 0x4c, 0xaa,
-	0xee, 0x0c, 0x19, 0xf5, 0xa1, 0xbf, 0x4e, 0x16, 0x6a, 0xb1, 0x3a, 0xb8, 0xbd, 0x5c, 0xab, 0xe0,
-	0x53, 0x3b, 0x89, 0xa6, 0x77, 0x72, 0xfb, 0xaf, 0x8b, 0xb8, 0xb1, 0xa3, 0x9e, 0xbd, 0xee, 0x5e,
-	0xcf, 0xf8, 0x13, 0xe1, 0xcb, 0x33, 0xd7, 0xc7, 0xb0, 0x5f, 0xec, 0x1e, 0xea, 0x2b, 0xdf, 0x72,
-	0x5e, 0x14, 0x5e, 0xde, 0x7a, 0xeb, 0x41, 0x7e, 0xdc, 0xbc, 0x33, 0x02, 0x61, 0x53, 0x66, 0xd3,
-	0x64, 0x3f, 0x25, 0x42, 0xa6, 0x99, 0x2f, 0xb3, 0x14, 0xec, 0x83, 0x94, 0x4a, 0xb8, 0xdd, 0xd6,
-	0xc1, 0x8c, 0xc4, 0x36, 0x09, 0x62, 0x9a, 0x94, 0xeb, 0x8f, 0xfe, 0xf8, 0xe7, 0xfb, 0xba, 0x6d,
-	0x6d, 0xea, 0x97, 0xfb, 0xd9, 0xa3, 0x29, 0xdc, 0x2f, 0x8b, 0xf1, 0x57, 0xae, 0x5f, 0xd6, 0xf3,
-	0x02, 0x55, 0xb0, 0x83, 0xb6, 0x8c, 0x9f, 0x11, 0x7e, 0xe3, 0xb9, 0x23, 0xb3, 0xc4, 0xe0, 0xa2,
-	0x93, 0xbd, 0xc4, 0xe0, 0xc2, 0xd3, 0x68, 0xf5, 0xf3, 0xe3, 0xe6, 0xba, 0xf6, 0x70, 0x00, 0x03,
-	0x9b, 0xa8, 0x90, 0x9d, 0x02, 0x09, 0x94, 0x87, 0x6d, 0xcb, 0x5e, 0xe0, 0x41, 0x1c, 0x0a, 0x09,
-	0xb1, 0x0b, 0x9a, 0xd2, 0x26, 0x9c, 0xea, 0xcc, 0xc2, 0xc8, 0x7f, 0x08, 0x6f, 0x2c, 0xdb, 0x70,
-	0xe3, 0x9d, 0x4a, 0x91, 0xe7, 0x9c, 0xe9, 0xd6, 0xbb, 0x2f, 0x99, 0x29, 0xb8, 0x15, 0xe4, 0xc7,
-	0xcd, 0x1b, 0x4b, 0xb6, 0x52, 0xd9, 0x7d, 0xcf, 0xea, 0x54, 0xdb, 0xcd, 0x54, 0x09, 0xaf, 0xf2,
-	0xda, 0x74, 0xd0, 0x56, 0xeb, 0xf6, 0xe3, 0x23, 0xb4, 0xf2, 0xfb, 0x11, 0x32, 0xab, 0x74, 0xde,
-	0x53, 0x2f, 0xf2, 0xa3, 0xdf, 0x9a, 0xf5, 0x21, 0x7a, 0xff, 0x5b, 0x74, 0x72, 0x6a, 0xd6, 0x9e,
-	0x9c, 0x9a, 0xb5, 0xa7, 0xa7, 0x26, 0xfa, 0x26, 0x37, 0xd1, 0x8f, 0xb9, 0x89, 0x7e, 0xc9, 0x4d,
-	0x74, 0x92, 0x9b, 0xe8, 0xef, 0xdc, 0x44, 0xff, 0xe6, 0x66, 0xed, 0x69, 0x6e, 0xa2, 0xef, 0xce,
-	0xcc, 0xda, 0xe3, 0x33, 0x13, 0x9d, 0x9c, 0x99, 0xb5, 0x27, 0x67, 0x66, 0xed, 0x93, 0xdd, 0x90,
-	0xf1, 0xcf, 0x43, 0x67, 0xc4, 0x22, 0x09, 0x69, 0x4a, 0x9c, 0x4c, 0xb8, 0x6a, 0xb0, 0xcf, 0xd2,
-	0xd8, 0xe6, 0x29, 0x1b, 0xd1, 0x00, 0x52, 0x7b, 0x1c, 0x76, 0xf9, 0x20, 0x64, 0x2e, 0x7c, 0x21,
-	0xf5, 0x2f, 0x39, 0xff, 0x97, 0x0f, 0x56, 0xd5, 0x57, 0x79, 0xe7, 0xff, 0x00, 0x00, 0x00, 0xff,
-	0xff, 0x3c, 0x8f, 0x81, 0xa5, 0x83, 0x08, 0x00, 0x00,
+	// 734 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x9c, 0x54, 0x41, 0x4f, 0xdb, 0x48,
+	0x18, 0xcd, 0x84, 0x05, 0x36, 0x83, 0x90, 0x76, 0xbd, 0xbb, 0xe0, 0xcd, 0x22, 0x2b, 0xf2, 0xee,
+	0x21, 0x8b, 0xb0, 0x2d, 0x81, 0xd4, 0x03, 0xb7, 0x94, 0xf6, 0x10, 0xa9, 0x08, 0x94, 0x4a, 0x3d,
+	0x54, 0x95, 0xa2, 0x89, 0xfd, 0xe1, 0x0c, 0xb5, 0x3d, 0xc6, 0x33, 0x36, 0x45, 0x88, 0xaa, 0xe2,
+	0xd2, 0x6b, 0xa5, 0x9e, 0xfa, 0x0f, 0xfa, 0x0f, 0x7a, 0xe0, 0xc2, 0xa9, 0x54, 0x3d, 0x54, 0xa8,
+	0xbd, 0xa0, 0x9e, 0x8a, 0xd3, 0x43, 0x8f, 0xfc, 0x84, 0xca, 0xce, 0x10, 0x48, 0x9a, 0x00, 0xea,
+	0xed, 0xfb, 0xe6, 0xbd, 0x79, 0xdf, 0x7b, 0x1e, 0xcf, 0x60, 0x33, 0x01, 0x6e, 0x52, 0x66, 0x71,
+	0xbb, 0x0d, 0x3e, 0xb1, 0x02, 0xe2, 0x03, 0x0f, 0x89, 0x0d, 0x56, 0x18, 0xb7, 0x3c, 0x6a, 0x37,
+	0xed, 0x98, 0x0b, 0xe6, 0x93, 0x90, 0x9a, 0x61, 0xc4, 0x04, 0x53, 0x66, 0xbb, 0x7c, 0xb3, 0xcb,
+	0x37, 0x7b, 0xfc, 0xb2, 0xe1, 0x52, 0xd1, 0x8e, 0x5b, 0xa6, 0xcd, 0x7c, 0xcb, 0x65, 0x2e, 0xb3,
+	0x72, 0x7e, 0x2b, 0xde, 0xc8, 0xbb, 0xbc, 0xc9, 0xab, 0xae, 0x4e, 0x79, 0xce, 0x65, 0xcc, 0xf5,
+	0xc0, 0x22, 0x21, 0xb5, 0x48, 0x10, 0x30, 0x41, 0x04, 0x65, 0x01, 0x97, 0xe8, 0xbf, 0xa3, 0x5c,
+	0x89, 0x9d, 0x10, 0xce, 0x49, 0xff, 0xf4, 0x93, 0x58, 0x78, 0x59, 0xe1, 0xef, 0x7e, 0xf0, 0xf2,
+	0xbe, 0xb9, 0x7e, 0x28, 0x21, 0x1e, 0x75, 0x88, 0x00, 0x89, 0xea, 0x03, 0x28, 0x70, 0x08, 0x92,
+	0x01, 0xf1, 0xca, 0x00, 0x87, 0xc2, 0x76, 0xb3, 0x8f, 0xa1, 0xaf, 0xe2, 0xc9, 0xda, 0x7a, 0xbd,
+	0x2e, 0xc0, 0x57, 0x66, 0xf0, 0x84, 0x0f, 0xa2, 0xcd, 0x1c, 0x15, 0x55, 0x50, 0xb5, 0xd4, 0x90,
+	0x9d, 0xa2, 0xe0, 0x5f, 0x42, 0x22, 0xda, 0x6a, 0x31, 0x5f, 0xcd, 0xeb, 0x8c, 0x1b, 0x01, 0x8f,
+	0x3d, 0xa1, 0x8e, 0x55, 0x50, 0xf5, 0xd7, 0x86, 0xec, 0xf4, 0xa7, 0x78, 0x4a, 0xca, 0xdd, 0xa3,
+	0x5c, 0x28, 0xb3, 0x78, 0xd2, 0xa3, 0x5c, 0x34, 0x69, 0x4f, 0x33, 0x6b, 0xeb, 0x8e, 0x72, 0x0b,
+	0x8f, 0x53, 0x01, 0x3e, 0x57, 0x8b, 0x95, 0xb1, 0xea, 0xd4, 0x62, 0xc5, 0x1c, 0x71, 0x5a, 0xa6,
+	0x54, 0x6b, 0x74, 0xe9, 0xa3, 0xe6, 0x2e, 0x4f, 0xbc, 0x3f, 0x40, 0xc5, 0xdf, 0x90, 0xbe, 0x83,
+	0xff, 0xbc, 0x9b, 0x10, 0x2f, 0x26, 0x02, 0x6a, 0xeb, 0xf5, 0x9a, 0x6d, 0x03, 0xe7, 0x0d, 0xd8,
+	0x52, 0xe6, 0x70, 0xa9, 0xa7, 0x29, 0xad, 0x5c, 0x2c, 0x28, 0x2b, 0x18, 0x67, 0xf2, 0xcd, 0xcc,
+	0xdc, 0xb9, 0xa5, 0xff, 0xae, 0xb3, 0x94, 0x05, 0x6c, 0x94, 0xa8, 0xac, 0xb8, 0xfe, 0x08, 0xff,
+	0x35, 0x64, 0x34, 0x0f, 0x07, 0xd4, 0xd1, 0x4f, 0xa9, 0x2f, 0xbe, 0x1a, 0xc7, 0xa5, 0x95, 0xfc,
+	0x17, 0xaf, 0xad, 0xd7, 0x95, 0xcf, 0x08, 0x4f, 0xaf, 0x10, 0x6e, 0x13, 0x07, 0xee, 0x80, 0x07,
+	0x02, 0x14, 0x63, 0xa4, 0x60, 0x1f, 0xaf, 0x01, 0x5b, 0x31, 0x70, 0x51, 0x36, 0x6f, 0x4a, 0xe7,
+	0x21, 0x0b, 0x38, 0xe8, 0x9b, 0xe9, 0x91, 0xba, 0x94, 0x00, 0x37, 0x28, 0x33, 0x68, 0xb0, 0x11,
+	0x11, 0x2e, 0xa2, 0xd8, 0x16, 0x71, 0x04, 0xc6, 0x76, 0x44, 0x05, 0x2c, 0x54, 0x24, 0x18, 0x13,
+	0xdf, 0x20, 0x8e, 0x4f, 0x83, 0xee, 0xfa, 0xfe, 0xa7, 0xaf, 0x2f, 0x8b, 0x86, 0x5e, 0x95, 0xb7,
+	0xf4, 0xe2, 0x82, 0x70, 0x6b, 0x37, 0xab, 0xf7, 0x2c, 0xbb, 0x3b, 0xaf, 0xe9, 0xe4, 0x03, 0x97,
+	0xd1, 0xbc, 0xf2, 0x16, 0xe1, 0xdf, 0x7f, 0xf8, 0x92, 0x57, 0x04, 0x1c, 0x76, 0xe0, 0x57, 0x04,
+	0x1c, 0x7a, 0x48, 0x7a, 0x23, 0x3d, 0x52, 0x67, 0x64, 0x86, 0x6d, 0x68, 0x19, 0x24, 0x87, 0x8c,
+	0x08, 0x88, 0x93, 0x67, 0x58, 0xd4, 0x8d, 0x21, 0x19, 0xf8, 0x0e, 0x17, 0xe0, 0x5b, 0x20, 0x25,
+	0x0d, 0x12, 0x52, 0xb9, 0x33, 0x0b, 0xf2, 0x06, 0xe1, 0xe9, 0xfb, 0xb1, 0xeb, 0x02, 0x17, 0x0f,
+	0x88, 0x17, 0x03, 0x57, 0xfe, 0x1f, 0xe9, 0xaa, 0x8f, 0x97, 0x05, 0x98, 0xbf, 0x29, 0x95, 0x87,
+	0xfa, 0x5a, 0x7a, 0xa4, 0xfe, 0x21, 0xcd, 0xbb, 0x10, 0x40, 0x44, 0xbc, 0xeb, 0x9c, 0xef, 0xf6,
+	0xea, 0x3d, 0x8b, 0x77, 0x05, 0x8d, 0x24, 0x57, 0x5c, 0x46, 0xf3, 0xe5, 0x85, 0xc3, 0x03, 0x34,
+	0xf6, 0xf1, 0x00, 0x69, 0xa3, 0x3c, 0xac, 0xb5, 0x36, 0xc1, 0x16, 0xfb, 0x1f, 0xd4, 0x62, 0x1b,
+	0xdd, 0x7e, 0x8e, 0x8e, 0x4f, 0xb5, 0xc2, 0xc9, 0xa9, 0x56, 0x38, 0x3b, 0xd5, 0xd0, 0xb3, 0x54,
+	0x43, 0xaf, 0x53, 0x0d, 0xbd, 0x4b, 0x35, 0x74, 0x9c, 0x6a, 0xe8, 0x4b, 0xaa, 0xa1, 0x6f, 0xa9,
+	0x56, 0x38, 0x4b, 0x35, 0xf4, 0xa2, 0xa3, 0x15, 0x0e, 0x3b, 0x1a, 0x3a, 0xee, 0x68, 0x85, 0x93,
+	0x8e, 0x56, 0x78, 0xb8, 0xea, 0xb2, 0xf0, 0xb1, 0x6b, 0x26, 0xcc, 0x13, 0x10, 0x45, 0xc4, 0x8c,
+	0xb9, 0x95, 0x17, 0x1b, 0x2c, 0xf2, 0x8d, 0x30, 0x62, 0x09, 0x75, 0x20, 0x32, 0xce, 0x61, 0x2b,
+	0x6c, 0xb9, 0xcc, 0x82, 0x27, 0x42, 0xbe, 0x67, 0x83, 0xaf, 0x6e, 0x6b, 0x22, 0x7f, 0xd4, 0x96,
+	0xbe, 0x07, 0x00, 0x00, 0xff, 0xff, 0x93, 0xa7, 0x09, 0x0d, 0x2d, 0x06, 0x00, 0x00,
 }
 
-func (this *CascadeDeleteRequest) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*CascadeDeleteRequest)
-	if !ok {
-		that2, ok := that.(CascadeDeleteRequest)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if this.Name != that1.Name {
-		return false
-	}
-	return true
-}
-func (this *CascadeDeleteResponse) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*CascadeDeleteResponse)
-	if !ok {
-		that2, ok := that.(CascadeDeleteResponse)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if len(this.Items) != len(that1.Items) {
-		return false
-	}
-	for i := range this.Items {
-		if !this.Items[i].Equal(that1.Items[i]) {
-			return false
-		}
-	}
-	return true
-}
-func (this *CascadeDeleteItemType) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*CascadeDeleteItemType)
-	if !ok {
-		that2, ok := that.(CascadeDeleteItemType)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if this.ObjectType != that1.ObjectType {
-		return false
-	}
-	if this.ObjectUid != that1.ObjectUid {
-		return false
-	}
-	if this.ObjectName != that1.ObjectName {
-		return false
-	}
-	if this.ErrorMessage != that1.ErrorMessage {
-		return false
-	}
-	return true
-}
 func (this *APIItem) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -922,92 +503,6 @@ func (this *EvaluateAPIAccessResp) Equal(that interface{}) bool {
 	}
 	return true
 }
-func (this *UpdateAllowAdvertiseOnPublicReq) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*UpdateAllowAdvertiseOnPublicReq)
-	if !ok {
-		that2, ok := that.(UpdateAllowAdvertiseOnPublicReq)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if this.Namespace != that1.Namespace {
-		return false
-	}
-	if this.AllowAdvertiseOnPublic != that1.AllowAdvertiseOnPublic {
-		return false
-	}
-	return true
-}
-func (this *UpdateAllowAdvertiseOnPublicResp) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*UpdateAllowAdvertiseOnPublicResp)
-	if !ok {
-		that2, ok := that.(UpdateAllowAdvertiseOnPublicResp)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if this.Result != that1.Result {
-		return false
-	}
-	return true
-}
-func (this *CascadeDeleteRequest) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := make([]string, 0, 5)
-	s = append(s, "&namespace.CascadeDeleteRequest{")
-	s = append(s, "Name: "+fmt.Sprintf("%#v", this.Name)+",\n")
-	s = append(s, "}")
-	return strings.Join(s, "")
-}
-func (this *CascadeDeleteResponse) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := make([]string, 0, 5)
-	s = append(s, "&namespace.CascadeDeleteResponse{")
-	if this.Items != nil {
-		s = append(s, "Items: "+fmt.Sprintf("%#v", this.Items)+",\n")
-	}
-	s = append(s, "}")
-	return strings.Join(s, "")
-}
-func (this *CascadeDeleteItemType) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := make([]string, 0, 8)
-	s = append(s, "&namespace.CascadeDeleteItemType{")
-	s = append(s, "ObjectType: "+fmt.Sprintf("%#v", this.ObjectType)+",\n")
-	s = append(s, "ObjectUid: "+fmt.Sprintf("%#v", this.ObjectUid)+",\n")
-	s = append(s, "ObjectName: "+fmt.Sprintf("%#v", this.ObjectName)+",\n")
-	s = append(s, "ErrorMessage: "+fmt.Sprintf("%#v", this.ErrorMessage)+",\n")
-	s = append(s, "}")
-	return strings.Join(s, "")
-}
 func (this *APIItem) GoString() string {
 	if this == nil {
 		return "nil"
@@ -1059,27 +554,6 @@ func (this *EvaluateAPIAccessResp) GoString() string {
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
-func (this *UpdateAllowAdvertiseOnPublicReq) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := make([]string, 0, 6)
-	s = append(s, "&namespace.UpdateAllowAdvertiseOnPublicReq{")
-	s = append(s, "Namespace: "+fmt.Sprintf("%#v", this.Namespace)+",\n")
-	s = append(s, "AllowAdvertiseOnPublic: "+fmt.Sprintf("%#v", this.AllowAdvertiseOnPublic)+",\n")
-	s = append(s, "}")
-	return strings.Join(s, "")
-}
-func (this *UpdateAllowAdvertiseOnPublicResp) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := make([]string, 0, 5)
-	s = append(s, "&namespace.UpdateAllowAdvertiseOnPublicResp{")
-	s = append(s, "Result: "+fmt.Sprintf("%#v", this.Result)+",\n")
-	s = append(s, "}")
-	return strings.Join(s, "")
-}
 func valueToGoStringPublicCustomapi(v interface{}, typ string) string {
 	rv := reflect.ValueOf(v)
 	if rv.IsNil() {
@@ -1112,11 +586,11 @@ type CustomAPIClient interface {
 	// x-displayName: "Evaluate API Access"
 	// EvaluateAPIAccess can evaluate multiple lists of API url, method under a namespace for a given user of a tenant.
 	EvaluateAPIAccess(ctx context.Context, in *EvaluateAPIAccessReq, opts ...grpc.CallOption) (*EvaluateAPIAccessResp, error)
-	// UpdateAllowAdvertiseOnPublic
+	// SuggestValues
 	//
-	// x-displayName: "Update allow advertise on public."
-	// UpdateAllowAdvertiseOnPublic can update a config to allow advertise on public.
-	UpdateAllowAdvertiseOnPublic(ctx context.Context, in *UpdateAllowAdvertiseOnPublicReq, opts ...grpc.CallOption) (*UpdateAllowAdvertiseOnPublicResp, error)
+	// x-displayName: "Suggest Values"
+	// SuggestValues returns suggested values for the specified field in the given Create/Replace/Custom request.
+	SuggestValues(ctx context.Context, in *SuggestValuesReq, opts ...grpc.CallOption) (*SuggestValuesResp, error)
 }
 
 type customAPIClient struct {
@@ -1145,9 +619,9 @@ func (c *customAPIClient) EvaluateAPIAccess(ctx context.Context, in *EvaluateAPI
 	return out, nil
 }
 
-func (c *customAPIClient) UpdateAllowAdvertiseOnPublic(ctx context.Context, in *UpdateAllowAdvertiseOnPublicReq, opts ...grpc.CallOption) (*UpdateAllowAdvertiseOnPublicResp, error) {
-	out := new(UpdateAllowAdvertiseOnPublicResp)
-	err := c.cc.Invoke(ctx, "/ves.io.schema.namespace.CustomAPI/UpdateAllowAdvertiseOnPublic", in, out, opts...)
+func (c *customAPIClient) SuggestValues(ctx context.Context, in *SuggestValuesReq, opts ...grpc.CallOption) (*SuggestValuesResp, error) {
+	out := new(SuggestValuesResp)
+	err := c.cc.Invoke(ctx, "/ves.io.schema.namespace.CustomAPI/SuggestValues", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -1167,11 +641,11 @@ type CustomAPIServer interface {
 	// x-displayName: "Evaluate API Access"
 	// EvaluateAPIAccess can evaluate multiple lists of API url, method under a namespace for a given user of a tenant.
 	EvaluateAPIAccess(context.Context, *EvaluateAPIAccessReq) (*EvaluateAPIAccessResp, error)
-	// UpdateAllowAdvertiseOnPublic
+	// SuggestValues
 	//
-	// x-displayName: "Update allow advertise on public."
-	// UpdateAllowAdvertiseOnPublic can update a config to allow advertise on public.
-	UpdateAllowAdvertiseOnPublic(context.Context, *UpdateAllowAdvertiseOnPublicReq) (*UpdateAllowAdvertiseOnPublicResp, error)
+	// x-displayName: "Suggest Values"
+	// SuggestValues returns suggested values for the specified field in the given Create/Replace/Custom request.
+	SuggestValues(context.Context, *SuggestValuesReq) (*SuggestValuesResp, error)
 }
 
 // UnimplementedCustomAPIServer can be embedded to have forward compatible implementations.
@@ -1184,8 +658,8 @@ func (*UnimplementedCustomAPIServer) CascadeDelete(ctx context.Context, req *Cas
 func (*UnimplementedCustomAPIServer) EvaluateAPIAccess(ctx context.Context, req *EvaluateAPIAccessReq) (*EvaluateAPIAccessResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method EvaluateAPIAccess not implemented")
 }
-func (*UnimplementedCustomAPIServer) UpdateAllowAdvertiseOnPublic(ctx context.Context, req *UpdateAllowAdvertiseOnPublicReq) (*UpdateAllowAdvertiseOnPublicResp, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method UpdateAllowAdvertiseOnPublic not implemented")
+func (*UnimplementedCustomAPIServer) SuggestValues(ctx context.Context, req *SuggestValuesReq) (*SuggestValuesResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SuggestValues not implemented")
 }
 
 func RegisterCustomAPIServer(s *grpc.Server, srv CustomAPIServer) {
@@ -1228,20 +702,20 @@ func _CustomAPI_EvaluateAPIAccess_Handler(srv interface{}, ctx context.Context, 
 	return interceptor(ctx, in, info, handler)
 }
 
-func _CustomAPI_UpdateAllowAdvertiseOnPublic_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(UpdateAllowAdvertiseOnPublicReq)
+func _CustomAPI_SuggestValues_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SuggestValuesReq)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(CustomAPIServer).UpdateAllowAdvertiseOnPublic(ctx, in)
+		return srv.(CustomAPIServer).SuggestValues(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/ves.io.schema.namespace.CustomAPI/UpdateAllowAdvertiseOnPublic",
+		FullMethod: "/ves.io.schema.namespace.CustomAPI/SuggestValues",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(CustomAPIServer).UpdateAllowAdvertiseOnPublic(ctx, req.(*UpdateAllowAdvertiseOnPublicReq))
+		return srv.(CustomAPIServer).SuggestValues(ctx, req.(*SuggestValuesReq))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -1259,130 +733,12 @@ var _CustomAPI_serviceDesc = grpc.ServiceDesc{
 			Handler:    _CustomAPI_EvaluateAPIAccess_Handler,
 		},
 		{
-			MethodName: "UpdateAllowAdvertiseOnPublic",
-			Handler:    _CustomAPI_UpdateAllowAdvertiseOnPublic_Handler,
+			MethodName: "SuggestValues",
+			Handler:    _CustomAPI_SuggestValues_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
 	Metadata: "ves.io/schema/namespace/public_customapi.proto",
-}
-
-func (m *CascadeDeleteRequest) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *CascadeDeleteRequest) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *CascadeDeleteRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if len(m.Name) > 0 {
-		i -= len(m.Name)
-		copy(dAtA[i:], m.Name)
-		i = encodeVarintPublicCustomapi(dAtA, i, uint64(len(m.Name)))
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
-}
-
-func (m *CascadeDeleteResponse) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *CascadeDeleteResponse) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *CascadeDeleteResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if len(m.Items) > 0 {
-		for iNdEx := len(m.Items) - 1; iNdEx >= 0; iNdEx-- {
-			{
-				size, err := m.Items[iNdEx].MarshalToSizedBuffer(dAtA[:i])
-				if err != nil {
-					return 0, err
-				}
-				i -= size
-				i = encodeVarintPublicCustomapi(dAtA, i, uint64(size))
-			}
-			i--
-			dAtA[i] = 0xa
-		}
-	}
-	return len(dAtA) - i, nil
-}
-
-func (m *CascadeDeleteItemType) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *CascadeDeleteItemType) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *CascadeDeleteItemType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if len(m.ErrorMessage) > 0 {
-		i -= len(m.ErrorMessage)
-		copy(dAtA[i:], m.ErrorMessage)
-		i = encodeVarintPublicCustomapi(dAtA, i, uint64(len(m.ErrorMessage)))
-		i--
-		dAtA[i] = 0x22
-	}
-	if len(m.ObjectName) > 0 {
-		i -= len(m.ObjectName)
-		copy(dAtA[i:], m.ObjectName)
-		i = encodeVarintPublicCustomapi(dAtA, i, uint64(len(m.ObjectName)))
-		i--
-		dAtA[i] = 0x1a
-	}
-	if len(m.ObjectUid) > 0 {
-		i -= len(m.ObjectUid)
-		copy(dAtA[i:], m.ObjectUid)
-		i = encodeVarintPublicCustomapi(dAtA, i, uint64(len(m.ObjectUid)))
-		i--
-		dAtA[i] = 0x12
-	}
-	if len(m.ObjectType) > 0 {
-		i -= len(m.ObjectType)
-		copy(dAtA[i:], m.ObjectType)
-		i = encodeVarintPublicCustomapi(dAtA, i, uint64(len(m.ObjectType)))
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
 }
 
 func (m *APIItem) Marshal() (dAtA []byte, err error) {
@@ -1567,74 +923,6 @@ func (m *EvaluateAPIAccessResp) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
-func (m *UpdateAllowAdvertiseOnPublicReq) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *UpdateAllowAdvertiseOnPublicReq) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *UpdateAllowAdvertiseOnPublicReq) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if m.AllowAdvertiseOnPublic != 0 {
-		i = encodeVarintPublicCustomapi(dAtA, i, uint64(m.AllowAdvertiseOnPublic))
-		i--
-		dAtA[i] = 0x10
-	}
-	if len(m.Namespace) > 0 {
-		i -= len(m.Namespace)
-		copy(dAtA[i:], m.Namespace)
-		i = encodeVarintPublicCustomapi(dAtA, i, uint64(len(m.Namespace)))
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
-}
-
-func (m *UpdateAllowAdvertiseOnPublicResp) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *UpdateAllowAdvertiseOnPublicResp) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *UpdateAllowAdvertiseOnPublicResp) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if m.Result {
-		i--
-		if m.Result {
-			dAtA[i] = 1
-		} else {
-			dAtA[i] = 0
-		}
-		i--
-		dAtA[i] = 0x8
-	}
-	return len(dAtA) - i, nil
-}
-
 func encodeVarintPublicCustomapi(dAtA []byte, offset int, v uint64) int {
 	offset -= sovPublicCustomapi(v)
 	base := offset
@@ -1646,59 +934,6 @@ func encodeVarintPublicCustomapi(dAtA []byte, offset int, v uint64) int {
 	dAtA[offset] = uint8(v)
 	return base
 }
-func (m *CascadeDeleteRequest) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	l = len(m.Name)
-	if l > 0 {
-		n += 1 + l + sovPublicCustomapi(uint64(l))
-	}
-	return n
-}
-
-func (m *CascadeDeleteResponse) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if len(m.Items) > 0 {
-		for _, e := range m.Items {
-			l = e.Size()
-			n += 1 + l + sovPublicCustomapi(uint64(l))
-		}
-	}
-	return n
-}
-
-func (m *CascadeDeleteItemType) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	l = len(m.ObjectType)
-	if l > 0 {
-		n += 1 + l + sovPublicCustomapi(uint64(l))
-	}
-	l = len(m.ObjectUid)
-	if l > 0 {
-		n += 1 + l + sovPublicCustomapi(uint64(l))
-	}
-	l = len(m.ObjectName)
-	if l > 0 {
-		n += 1 + l + sovPublicCustomapi(uint64(l))
-	}
-	l = len(m.ErrorMessage)
-	if l > 0 {
-		n += 1 + l + sovPublicCustomapi(uint64(l))
-	}
-	return n
-}
-
 func (m *APIItem) Size() (n int) {
 	if m == nil {
 		return 0
@@ -1775,77 +1010,11 @@ func (m *EvaluateAPIAccessResp) Size() (n int) {
 	return n
 }
 
-func (m *UpdateAllowAdvertiseOnPublicReq) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	l = len(m.Namespace)
-	if l > 0 {
-		n += 1 + l + sovPublicCustomapi(uint64(l))
-	}
-	if m.AllowAdvertiseOnPublic != 0 {
-		n += 1 + sovPublicCustomapi(uint64(m.AllowAdvertiseOnPublic))
-	}
-	return n
-}
-
-func (m *UpdateAllowAdvertiseOnPublicResp) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.Result {
-		n += 2
-	}
-	return n
-}
-
 func sovPublicCustomapi(x uint64) (n int) {
 	return (math_bits.Len64(x|1) + 6) / 7
 }
 func sozPublicCustomapi(x uint64) (n int) {
 	return sovPublicCustomapi(uint64((x << 1) ^ uint64((int64(x) >> 63))))
-}
-func (this *CascadeDeleteRequest) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&CascadeDeleteRequest{`,
-		`Name:` + fmt.Sprintf("%v", this.Name) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *CascadeDeleteResponse) String() string {
-	if this == nil {
-		return "nil"
-	}
-	repeatedStringForItems := "[]*CascadeDeleteItemType{"
-	for _, f := range this.Items {
-		repeatedStringForItems += strings.Replace(f.String(), "CascadeDeleteItemType", "CascadeDeleteItemType", 1) + ","
-	}
-	repeatedStringForItems += "}"
-	s := strings.Join([]string{`&CascadeDeleteResponse{`,
-		`Items:` + repeatedStringForItems + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *CascadeDeleteItemType) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&CascadeDeleteItemType{`,
-		`ObjectType:` + fmt.Sprintf("%v", this.ObjectType) + `,`,
-		`ObjectUid:` + fmt.Sprintf("%v", this.ObjectUid) + `,`,
-		`ObjectName:` + fmt.Sprintf("%v", this.ObjectName) + `,`,
-		`ErrorMessage:` + fmt.Sprintf("%v", this.ErrorMessage) + `,`,
-		`}`,
-	}, "")
-	return s
 }
 func (this *APIItem) String() string {
 	if this == nil {
@@ -1907,27 +1076,6 @@ func (this *EvaluateAPIAccessResp) String() string {
 	}, "")
 	return s
 }
-func (this *UpdateAllowAdvertiseOnPublicReq) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&UpdateAllowAdvertiseOnPublicReq{`,
-		`Namespace:` + fmt.Sprintf("%v", this.Namespace) + `,`,
-		`AllowAdvertiseOnPublic:` + fmt.Sprintf("%v", this.AllowAdvertiseOnPublic) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *UpdateAllowAdvertiseOnPublicResp) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&UpdateAllowAdvertiseOnPublicResp{`,
-		`Result:` + fmt.Sprintf("%v", this.Result) + `,`,
-		`}`,
-	}, "")
-	return s
-}
 func valueToStringPublicCustomapi(v interface{}) string {
 	rv := reflect.ValueOf(v)
 	if rv.IsNil() {
@@ -1935,359 +1083,6 @@ func valueToStringPublicCustomapi(v interface{}) string {
 	}
 	pv := reflect.Indirect(rv).Interface()
 	return fmt.Sprintf("*%v", pv)
-}
-func (m *CascadeDeleteRequest) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowPublicCustomapi
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: CascadeDeleteRequest: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: CascadeDeleteRequest: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Name", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowPublicCustomapi
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthPublicCustomapi
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthPublicCustomapi
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Name = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipPublicCustomapi(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if skippy < 0 {
-				return ErrInvalidLengthPublicCustomapi
-			}
-			if (iNdEx + skippy) < 0 {
-				return ErrInvalidLengthPublicCustomapi
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *CascadeDeleteResponse) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowPublicCustomapi
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: CascadeDeleteResponse: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: CascadeDeleteResponse: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Items", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowPublicCustomapi
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthPublicCustomapi
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthPublicCustomapi
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Items = append(m.Items, &CascadeDeleteItemType{})
-			if err := m.Items[len(m.Items)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipPublicCustomapi(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if skippy < 0 {
-				return ErrInvalidLengthPublicCustomapi
-			}
-			if (iNdEx + skippy) < 0 {
-				return ErrInvalidLengthPublicCustomapi
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *CascadeDeleteItemType) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowPublicCustomapi
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: CascadeDeleteItemType: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: CascadeDeleteItemType: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ObjectType", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowPublicCustomapi
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthPublicCustomapi
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthPublicCustomapi
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.ObjectType = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ObjectUid", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowPublicCustomapi
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthPublicCustomapi
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthPublicCustomapi
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.ObjectUid = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 3:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ObjectName", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowPublicCustomapi
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthPublicCustomapi
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthPublicCustomapi
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.ObjectName = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 4:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ErrorMessage", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowPublicCustomapi
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthPublicCustomapi
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthPublicCustomapi
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.ErrorMessage = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipPublicCustomapi(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if skippy < 0 {
-				return ErrInvalidLengthPublicCustomapi
-			}
-			if (iNdEx + skippy) < 0 {
-				return ErrInvalidLengthPublicCustomapi
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
 }
 func (m *APIItem) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
@@ -2747,183 +1542,6 @@ func (m *EvaluateAPIAccessResp) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipPublicCustomapi(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if skippy < 0 {
-				return ErrInvalidLengthPublicCustomapi
-			}
-			if (iNdEx + skippy) < 0 {
-				return ErrInvalidLengthPublicCustomapi
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *UpdateAllowAdvertiseOnPublicReq) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowPublicCustomapi
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: UpdateAllowAdvertiseOnPublicReq: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: UpdateAllowAdvertiseOnPublicReq: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Namespace", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowPublicCustomapi
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthPublicCustomapi
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthPublicCustomapi
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Namespace = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 2:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field AllowAdvertiseOnPublic", wireType)
-			}
-			m.AllowAdvertiseOnPublic = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowPublicCustomapi
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.AllowAdvertiseOnPublic |= PublicAdvertiseChoice(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		default:
-			iNdEx = preIndex
-			skippy, err := skipPublicCustomapi(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if skippy < 0 {
-				return ErrInvalidLengthPublicCustomapi
-			}
-			if (iNdEx + skippy) < 0 {
-				return ErrInvalidLengthPublicCustomapi
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *UpdateAllowAdvertiseOnPublicResp) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowPublicCustomapi
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: UpdateAllowAdvertiseOnPublicResp: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: UpdateAllowAdvertiseOnPublicResp: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Result", wireType)
-			}
-			var v int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowPublicCustomapi
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				v |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			m.Result = bool(v != 0)
 		default:
 			iNdEx = preIndex
 			skippy, err := skipPublicCustomapi(dAtA[iNdEx:])

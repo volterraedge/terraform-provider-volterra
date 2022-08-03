@@ -21,26 +21,18 @@ resource "volterra_http_loadbalancer" "example" {
   namespace = "staging"
 
   // One of the arguments from this list "do_not_advertise advertise_on_public_default_vip advertise_on_public advertise_custom" must be set
-  do_not_advertise = true
+  advertise_on_public_default_vip = true
 
   // One of the arguments from this list "disable_api_definition api_definition api_definitions" must be set
   disable_api_definition = true
 
   // One of the arguments from this list "no_challenge js_challenge captcha_challenge policy_based_challenge" must be set
+  no_challenge = true
 
-  captcha_challenge {
-    cookie_expiry = "1000"
-    custom_page   = "string:///PHA+IFBsZWFzZSBXYWl0IDwvcD4="
-  }
   domains = ["www.foo.com"]
 
-  // One of the arguments from this list "least_active random source_ip_stickiness cookie_stickiness ring_hash round_robin" must be set
-
-  cookie_stickiness {
-    name = "userid"
-    path = "/Users/userid/browser/cookies"
-    ttl  = "5000"
-  }
+  // One of the arguments from this list "round_robin least_active random source_ip_stickiness cookie_stickiness ring_hash" must be set
+  round_robin = true
 
   // One of the arguments from this list "http https_auto_cert https" must be set
 
@@ -49,29 +41,44 @@ resource "volterra_http_loadbalancer" "example" {
     port                 = "80"
   }
 
-  // One of the arguments from this list "single_lb_app multi_lb_app" must be set
+  // One of the arguments from this list "multi_lb_app single_lb_app" must be set
 
   single_lb_app {
     // One of the arguments from this list "enable_discovery disable_discovery" must be set
+    disable_discovery = true
 
     enable_discovery {
       // One of the arguments from this list "disable_learn_from_redirect_traffic enable_learn_from_redirect_traffic" must be set
-      disable_learn_from_redirect_traffic = true
+      enable_learn_from_redirect_traffic = true
     }
 
     // One of the arguments from this list "enable_ddos_detection disable_ddos_detection" must be set
     enable_ddos_detection = true
 
     // One of the arguments from this list "enable_malicious_user_detection disable_malicious_user_detection" must be set
-    disable_malicious_user_detection = true
+    enable_malicious_user_detection = true
   }
   // One of the arguments from this list "disable_rate_limit api_rate_limit rate_limit" must be set
   disable_rate_limit = true
-  // One of the arguments from this list "active_service_policies service_policies_from_namespace no_service_policies" must be set
-  no_service_policies = true
+
+  // One of the arguments from this list "service_policies_from_namespace no_service_policies active_service_policies" must be set
+
+  active_service_policies {
+    policies {
+      name      = "test1"
+      namespace = "staging"
+      tenant    = "acmecorp"
+    }
+  }
+
+  // One of the arguments from this list "disable_trust_client_ip_headers enable_trust_client_ip_headers" must be set
+
+  enable_trust_client_ip_headers {
+    client_ip_headers = ["Client-IP-Header"]
+  }
   // One of the arguments from this list "user_id_client_ip user_identification" must be set
   user_id_client_ip = true
-  // One of the arguments from this list "waf_rule app_firewall disable_waf waf" must be set
+  // One of the arguments from this list "app_firewall disable_waf waf waf_rule" must be set
   disable_waf = true
 }
 
@@ -98,13 +105,13 @@ Argument Reference
 
 `add_location` - (Optional) is ignored on CE sites. (`Bool`).
 
-`advertise_custom` - (Optional) Advertise this loadbalancer on specific sites. See [Advertise Custom ](#advertise-custom) below for details.
+`advertise_custom` - (Optional) Advertise this load balancer on specific sites. See [Advertise Custom ](#advertise-custom) below for details.
 
-`advertise_on_public` - (Optional) Advertise this loadbalancer on public network. See [Advertise On Public ](#advertise-on-public) below for details.
+`advertise_on_public` - (Optional) Advertise this load balancer on public network. See [Advertise On Public ](#advertise-on-public) below for details.
 
-`advertise_on_public_default_vip` - (Optional) Advertise this loadbalancer on public network with default VIP (bool).
+`advertise_on_public_default_vip` - (Optional) Advertise this load balancer on public network with default VIP (bool).
 
-`do_not_advertise` - (Optional) Do not advertise this loadbalancer (bool).
+`do_not_advertise` - (Optional) Do not advertise this load balancer (bool).
 
 `api_definition` - (Optional) Specify API definition which includes application API paths and methods derived from swagger files.. See [ref](#ref) below for details.
 
@@ -114,9 +121,9 @@ Argument Reference
 
 `api_protection_rules` - (Optional) Rules can also include additional conditions, for example specific clients can access certain API endpoint or API group.. See [Api Protection Rules ](#api-protection-rules) below for details.
 
-`blocked_clients` - (Optional) Rules that specify the clients to be blocked. See [Blocked Clients ](#blocked-clients) below for details.
+`blocked_clients` - (Optional) Define rules to block IP Prefixes or AS numbers.. See [Blocked Clients ](#blocked-clients) below for details.
 
-`bot_defense` - (Optional) Bot Defense configuration object for Protected App endpoints and JavaScript insertion. See [Bot Defense ](#bot-defense) below for details.
+`bot_defense` - (Optional) Bot Defense configuration for Protected App endpoints and JavaScript insertion. See [Bot Defense ](#bot-defense) below for details.
 
 `disable_bot_defense` - (Optional) No Bot Defense configuration for this load balancer (bool).
 
@@ -154,35 +161,39 @@ Argument Reference
 
 `enable_ip_reputation` - (Optional) x-displayName: "Enable". See [Enable Ip Reputation ](#enable-ip-reputation) below for details.
 
-`http` - (Optional) HTTP Load balancer.. See [Http ](#http) below for details.
+`http` - (Optional) HTTP Load Balancer.. See [Http ](#http) below for details.
 
-`https` - (Optional) User is responsible for managing DNS to this Load Balancer.. See [Https ](#https) below for details.
+`https` - (Optional) User is responsible for managing DNS to this load balancer.. See [Https ](#https) below for details.
 
-`https_auto_cert` - (Optional) DNS records will be managed by Volterra.. See [Https Auto Cert ](#https-auto-cert) below for details.
+`https_auto_cert` - (Optional) or a DNS CNAME record should be created in your DNS provider's portal.. See [Https Auto Cert ](#https-auto-cert) below for details.
 
 `malicious_user_mitigation` - (Optional) The settings defined in malicious user mitigation specify what mitigation actions to take for users determined to be at different threat levels.. See [ref](#ref) below for details.
 
-`multi_lb_app` - (Optional) ML config is shared among multiple HTTP Load Balancers. It should be set externally (bool).
+`multi_lb_app` - (Optional) It should be configured externally using app type feature and label should be added to the HTTP load balancer. (bool).
 
-`single_lb_app` - (Optional) ML Config applied on this Load Balancer. See [Single Lb App ](#single-lb-app) below for details.
+`single_lb_app` - (Optional) ML Config applied on this load balancer. See [Single Lb App ](#single-lb-app) below for details.
 
 `more_option` - (Optional) More options like header manipulation, compression etc.. See [More Option ](#more-option) below for details.
 
-`api_rate_limit` - (Optional) Rate limiting parameters for this loadbalancer. See [Api Rate Limit ](#api-rate-limit) below for details.
+`api_rate_limit` - (Optional) Define rate limiting for one or more API endpoints. See [Api Rate Limit ](#api-rate-limit) below for details.
 
-`disable_rate_limit` - (Optional) Rate limiting is not currently enabled for this loadbalancer (bool).
+`disable_rate_limit` - (Optional) Rate limiting is not currently enabled for this load balancer (bool).
 
-`rate_limit` - (Optional) Rate limiting parameters for this loadbalancer. See [Rate Limit ](#rate-limit) below for details.
+`rate_limit` - (Optional) Define custom rate limiting parameters for this load balancer. See [Rate Limit ](#rate-limit) below for details.
 
-`routes` - (Optional) Routes for this loadbalancer. See [Routes ](#routes) below for details.
+`routes` - (Optional) Routes for this load balancer. See [Routes ](#routes) below for details.
 
 `active_service_policies` - (Optional) Apply the specified list of service policies and bypass the namespace service policy set. See [Active Service Policies ](#active-service-policies) below for details.
 
 `no_service_policies` - (Optional) Do not apply any service policies i.e. bypass the namespace service policy set (bool).
 
-`service_policies_from_namespace` - (Optional) Apply the service policies configured as part of the namespace service policy set (bool).
+`service_policies_from_namespace` - (Optional) Apply the active service policies configured as part of the namespace service policy set (bool).
 
-`trusted_clients` - (Optional) WAF or/and Bot processing can be skipped for trusted clients. See [Trusted Clients ](#trusted-clients) below for details.
+`disable_trust_client_ip_headers` - (Optional) x-displayName: "Disable" (bool).
+
+`enable_trust_client_ip_headers` - (Optional) x-displayName: "Enable". See [Enable Trust Client Ip Headers ](#enable-trust-client-ip-headers) below for details.
+
+`trusted_clients` - (Optional) Define rules to skip processing of one or more features such as WAF, Bot Defense etc. for clients.. See [Trusted Clients ](#trusted-clients) below for details.
 
 `user_id_client_ip` - (Optional) Use the Client IP address as the user identifier. (bool).
 
@@ -196,7 +207,7 @@ Argument Reference
 
 `waf_rule` - (Optional) Reference to WAF Rules configuration object. See [ref](#ref) below for details.
 
-`waf_exclusion_rules` - (Optional) Rules that specify the match conditions and the corresponding WAF_RULE_IDs which should be excluded from WAF evaluation. See [Waf Exclusion Rules ](#waf-exclusion-rules) below for details.
+`waf_exclusion_rules` - (Optional) The match criteria include domain, path and method.. See [Waf Exclusion Rules ](#waf-exclusion-rules) below for details.
 
 ### Action
 
@@ -210,7 +221,7 @@ The action to take if the input request matches the rule..
 
 Apply the specified list of service policies and bypass the namespace service policy set.
 
-`policies` - (Required) An ordered list of references to service_policy objects.. See [ref](#ref) below for details.
+`policies` - (Required) If all policies are evaluated and none match, then the request will be denied by default.. See [ref](#ref) below for details.
 
 ### Additional Domains
 
@@ -236,7 +247,7 @@ Configure Advanced per route options.
 
 `endpoint_subsets` - (Optional) upstream origin pool which match this metadata will be selected for load balancing (`String`).
 
-`common_hash_policy` - (Optional) Use Load balancer hash policy for this route (bool).
+`common_hash_policy` - (Optional) Use load balancer hash policy for this route (bool).
 
 `specific_hash_policy` - (Optional) Configure hash policy specific for this route. See [Specific Hash Policy ](#specific-hash-policy) below for details.
 
@@ -282,15 +293,15 @@ Configure Advanced per route options.
 
 ### Advertise Custom
 
-Advertise this loadbalancer on specific sites.
+Advertise this load balancer on specific sites.
 
 `advertise_where` - (Required) Where should this load balancer be available. See [Advertise Where ](#advertise-where) below for details.
 
 ### Advertise On Public
 
-Advertise this loadbalancer on public network.
+Advertise this load balancer on public network.
 
-`public_ip` - (Required) Dedicated public ip are allocated by volterra on request. See [ref](#ref) below for details.
+`public_ip` - (Required) Dedicated Public IP, which is allocated by F5 Distributed Cloud on request, is used as a VIP.. See [ref](#ref) below for details.
 
 ### Advertise Where
 
@@ -396,7 +407,7 @@ Rules can also include additional conditions, for example specific clients can a
 
 ### Api Rate Limit
 
-Rate limiting parameters for this loadbalancer.
+Define rate limiting for one or more API endpoints.
 
 `api_endpoint_rules` - (Optional) For creating rule that contain a whole domain or group of endpoints, please use the server URL rules above.. See [Api Endpoint Rules ](#api-endpoint-rules) below for details.
 
@@ -410,7 +421,7 @@ Rate limiting parameters for this loadbalancer.
 
 ### App Firewall Detection Control
 
-App Firewall detection changes to be applied for this request.
+Define the list of Signature IDs, Violations, Attack Types and Bot Names that should be excluded from triggering on the defined match criteria..
 
 `exclude_attack_type_contexts` - (Optional) App Firewall attack types contexts to be excluded for this request. See [Exclude Attack Type Contexts ](#exclude-attack-type-contexts) below for details.
 
@@ -488,7 +499,7 @@ Block bot request and send response with custom content..
 
 ### Blocked Clients
 
-Rules that specify the clients to be blocked.
+Define rules to block IP Prefixes or AS numbers..
 
 `bot_skip_processing` - (Optional) Skip Bot Defense processing for clients matching this rule. (bool).
 
@@ -496,11 +507,15 @@ Rules that specify the clients to be blocked.
 
 `waf_skip_processing` - (Optional) Skip WAF processing for clients matching this rule. (bool).
 
+`actions` - (Optional) Action that should be taken when client identifier matches the rule (`List of Strings`).
+
 `as_number` - (Required) RFC 6793 defined 4-byte AS number (`Int`).
 
 `http_header` - (Required) Request header name and value pairs. See [Http Header ](#http-header) below for details.
 
 `ip_prefix` - (Required) IPv4 prefix string. (`String`).
+
+`user_identifier` - (Optional) Identify user based on user identifier. User identifier value needs to be copied from security event. (`String`).
 
 `expiration_timestamp` - (Optional) the configuration but is not applied anymore. (`String`).
 
@@ -508,7 +523,7 @@ Rules that specify the clients to be blocked.
 
 ### Bot Defense
 
-Bot Defense configuration object for Protected App endpoints and JavaScript insertion.
+Bot Defense configuration for Protected App endpoints and JavaScript insertion.
 
 `policy` - (Required) Bot Defense Policy.. See [Policy ](#policy) below for details.
 
@@ -596,7 +611,7 @@ Use common buffering configuration.
 
 ### Common Hash Policy
 
-Use Load balancer hash policy for this route.
+Use load balancer hash policy for this route.
 
 ### Compression Params
 
@@ -744,7 +759,7 @@ Use default parameters.
 
 ### Default Header
 
-Specifies that the default value of "volt-adc" should be used for Server Header.
+Response header name is “server” and value is “volt-adc”.
 
 ### Default Js Challenge Parameters
 
@@ -774,7 +789,7 @@ Origin Pools used when no route is specified (default route).
 
 ### Default Security
 
-TLS v1.2+ with PFS ciphers with strong crypto algorithms..
+TLS v1.2+ with PFS ciphers and strong crypto algorithms..
 
 ### Default Temporary Blocking Parameters
 
@@ -802,11 +817,11 @@ A direct response route matches on path and/or HTTP method and responds directly
 
 ### Disable Ddos Detection
 
-Disable DDoS Detection.
+x-displayName: "Disable".
 
 ### Disable Discovery
 
-Disable API discovery.
+x-displayName: "Disable".
 
 ### Disable Host Rewrite
 
@@ -822,11 +837,15 @@ Disable learning API patterns from traffic with redirect response codes 3xx.
 
 ### Disable Malicious User Detection
 
-Disable malicious user detection.
+x-displayName: "Disable".
 
 ### Disable Mirroring
 
 Disable Mirroring of request.
+
+### Disable Mobile Sdk
+
+Disable Mobile SDK..
 
 ### Disable Ocsp Stapling
 
@@ -834,7 +853,7 @@ This is the default behavior if no choice is selected..
 
 ### Disable Path Normalize
 
-Path normalization is disabled.
+x-displayName: "Disable".
 
 ### Disable Prefix Rewrite
 
@@ -868,11 +887,11 @@ Domain matcher..
 
 ### Enable Ddos Detection
 
-Enable DDoS Detection.
+x-displayName: "Enable".
 
 ### Enable Discovery
 
-Enable API discovery.
+x-displayName: "Enable".
 
 `disable_learn_from_redirect_traffic` - (Optional) Disable learning API patterns from traffic with redirect response codes 3xx (bool).
 
@@ -890,11 +909,11 @@ Enable learning API patterns from traffic with redirect response codes 3xx.
 
 ### Enable Malicious User Detection
 
-Enable malicious user detection.
+x-displayName: "Enable".
 
 ### Enable Path Normalize
 
-Path normalization is enabled.
+x-displayName: "Enable".
 
 ### Enable Spdy
 
@@ -904,17 +923,23 @@ SPDY upgrade is enabled.
 
 Enable strict SNI and Host header check".
 
+### Enable Trust Client Ip Headers
+
+x-displayName: "Enable".
+
+`client_ip_headers` - (Optional) Define the list of one or more Client IP Headers. Headers will be used in order from top to bottom, meaning if the first header is not present in the request, the system will proceed to check for the second header, and so on, until one of the listed headers is found. If none of the defined headers exist, or the value is not an IP address, then the system will use the source IP of the packet. If multiple defined headers with different names are present in the request, the value of the first header name in the configuration will be used. If multiple defined headers with the same name are present in the request, values of all those headers will be combined. The system will read the right-most IP address from header, if there are multiple ip addresses in the header value. (`String`).
+
 ### Exclude Attack Type Contexts
 
 App Firewall attack types contexts to be excluded for this request.
 
-`exclude_attack_type` - (Required) App Firewall Attack type (`String`).
+`exclude_attack_type` - (Required) x-required (`String`).
 
 ### Exclude Bot Name Contexts
 
 Bot names contexts to be excluded for this request.
 
-`bot_name` - (Optional) x-example: "Hydra" (`String`).
+`bot_name` - (Required) x-example: "Hydra" (`String`).
 
 ### Exclude List
 
@@ -932,13 +957,13 @@ Optional JavaScript insertions exclude list of domain and path matchers..
 
 App Firewall signature contexts to be excluded for this request.
 
-`signature_id` - (Required) App Firewall signature ID (`Int`).
+`signature_id` - (Required) x-required (`Int`).
 
 ### Exclude Violation Contexts
 
 App Firewall violation contexts to be excluded for this request.
 
-`exclude_violation` - (Required) App Firewall violation type (`String`).
+`exclude_violation` - (Required) x-required (`String`).
 
 ### Flag
 
@@ -990,11 +1015,11 @@ Note that all specified header predicates must evaluate to true..
 
 ### Http
 
-HTTP Load balancer..
+HTTP Load Balancer..
 
-`dns_volterra_managed` - (Optional) This requires the domain to be delegated to Volterra using the Delegated Domain feature. (`Bool`).
+`dns_volterra_managed` - (Optional) or a DNS CNAME record should be created in your DNS provider's portal. (`Bool`).
 
-`port` - (Optional) Http Port (`Int`).
+`port` - (Optional) x-example: "80" (`Int`).
 
 ### Http Header
 
@@ -1004,55 +1029,55 @@ Request header name and value pairs.
 
 ### Https
 
-User is responsible for managing DNS to this Load Balancer..
+User is responsible for managing DNS to this load balancer..
 
 `add_hsts` - (Optional) Add HTTP Strict-Transport-Security response header (`Bool`).
 
-`http_redirect` - (Optional) Redirect HTTP traffic to corresponding HTTPS (`Bool`).
+`http_redirect` - (Optional) Redirect HTTP traffic to HTTPS (`Bool`).
 
-`disable_path_normalize` - (Optional) Path normalization is disabled (bool).
+`disable_path_normalize` - (Optional) x-displayName: "Disable" (bool).
 
-`enable_path_normalize` - (Optional) Path normalization is enabled (bool).
+`enable_path_normalize` - (Optional) x-displayName: "Enable" (bool).
 
-`port` - (Optional) Https Port (`Int`).
+`port` - (Optional) x-example: "443" (`Int`).
 
-`append_server_name` - (Optional) If Server Header is already present it is not overwritten. It is just passed. (`String`).
+`append_server_name` - (Optional) If header value is already present, it is not overwritten and passed as-is. (`String`).
 
-`default_header` - (Optional) Specifies that the default value of "volt-adc" should be used for Server Header (bool).
+`default_header` - (Optional) Response header name is “server” and value is “volt-adc” (bool).
 
-`pass_through` - (Optional) appended. (bool).
+`pass_through` - (Optional) Pass existing server header as is. If server header is absent, a new header is not appended. (bool).
 
-`server_name` - (Optional) This will overwrite existing values if any for Server Header (`String`).
+`server_name` - (Optional) This will overwrite existing values, if any, for the server header. (`String`).
 
 `tls_parameters` - (Optional) TLS parameters for downstream connections.. See [Tls Parameters ](#tls-parameters) below for details.
 
 ### Https Auto Cert
 
-DNS records will be managed by Volterra..
+or a DNS CNAME record should be created in your DNS provider's portal..
 
 `add_hsts` - (Optional) Add HTTP Strict-Transport-Security response header (`Bool`).
 
-`http_redirect` - (Optional) Redirect HTTP traffic to corresponding HTTPS (`Bool`).
+`http_redirect` - (Optional) Redirect HTTP traffic to HTTPS (`Bool`).
 
-`no_mtls` - (Optional) mTLS with clients is not enabled (bool).
+`no_mtls` - (Optional) x-displayName: "Disable" (bool).
 
-`use_mtls` - (Optional) mTLS with clients is enabled. See [Use Mtls ](#use-mtls) below for details.
+`use_mtls` - (Optional) x-displayName: "Enable". See [Use Mtls ](#use-mtls) below for details.
 
-`disable_path_normalize` - (Optional) Path normalization is disabled (bool).
+`disable_path_normalize` - (Optional) x-displayName: "Disable" (bool).
 
-`enable_path_normalize` - (Optional) Path normalization is enabled (bool).
+`enable_path_normalize` - (Optional) x-displayName: "Enable" (bool).
 
-`port` - (Optional) Https Port (`Int`).
+`port` - (Optional) x-example: "443" (`Int`).
 
-`append_server_name` - (Optional) If Server Header is already present it is not overwritten. It is just passed. (`String`).
+`append_server_name` - (Optional) If header value is already present, it is not overwritten and passed as-is. (`String`).
 
-`default_header` - (Optional) Specifies that the default value of "volt-adc" should be used for Server Header (bool).
+`default_header` - (Optional) Response header name is “server” and value is “volt-adc” (bool).
 
-`pass_through` - (Optional) appended. (bool).
+`pass_through` - (Optional) Pass existing server header as is. If server header is absent, a new header is not appended. (bool).
 
-`server_name` - (Optional) This will overwrite existing values if any for Server Header (`String`).
+`server_name` - (Optional) This will overwrite existing values, if any, for the server header. (`String`).
 
-`tls_config` - (Optional) Configuration for TLS parameters such as min/max TLS version and ciphers. See [Tls Config ](#tls-config) below for details.
+`tls_config` - (Optional) Configuration of TLS settings such as min/max TLS version and ciphersuites. See [Tls Config ](#tls-config) below for details.
 
 ### Inline Rate Limiter
 
@@ -1158,11 +1183,11 @@ Specify custom JavaScript insertion rules..
 
 ### Low Security
 
-Low Security chooses TLS v1.0+ including non-PFS ciphers and weak crypto algorithms..
+TLS v1.0+ including non-PFS ciphers and weak crypto algorithms..
 
 ### Medium Security
 
-Medium Security chooses TLS v1.0+ with only PFS ciphers and medium strength crypto algorithms..
+TLS v1.0+ with PFS ciphers and medium strength crypto algorithms..
 
 ### Metadata
 
@@ -1196,7 +1221,21 @@ Mitigation action..
 
 ### Mobile
 
-Mobile application traffic type..
+Mobile traffic channel..
+
+### Mobile Identifier
+
+Mobile traffic identifier type..
+
+`headers` - (Optional) Headers that can be used to identify mobile traffic.. See [Headers ](#headers) below for details.
+
+### Mobile Sdk Config
+
+Mobile SDK configuration.
+
+`mobile_identifier` - (Optional) Mobile traffic identifier type.. See [Mobile Identifier ](#mobile-identifier) below for details.
+
+`reload_header_name` - (Required) Header that is used for SDK configuration sync. (`String`).
 
 ### More Option
 
@@ -1216,11 +1255,11 @@ More options like header manipulation, compression etc..
 
 `jwt` - (Optional) audiences and issuer. See [ref](#ref) below for details.
 
-`max_request_header_size` - (Optional) such loadbalancers is used for all the loadbalancers in question. (`Int`).
+`max_request_header_size` - (Optional) such load balancers is used for all the load balancers in question. (`Int`).
 
-`disable_path_normalize` - (Optional) Path normalization is disabled (bool).
+`disable_path_normalize` - (Optional) x-displayName: "Disable" (bool).
 
-`enable_path_normalize` - (Optional) Path normalization is enabled (bool).
+`enable_path_normalize` - (Optional) x-displayName: "Enable" (bool).
 
 `request_headers_to_add` - (Optional) Headers specified at this level are applied after headers from matched Route are applied. See [Request Headers To Add ](#request-headers-to-add) below for details.
 
@@ -1252,7 +1291,7 @@ There is no ip allowed list for rate limiting, all clients go through rate limit
 
 ### No Mtls
 
-mTLS with clients is not enabled.
+x-displayName: "Disable".
 
 ### No Policies
 
@@ -1278,7 +1317,7 @@ Origin Pools for this route.
 
 ### Pass Through
 
-appended..
+Pass existing server header as is. If server header is absent, a new header is not appended..
 
 ### Path
 
@@ -1300,7 +1339,7 @@ Percentage of requests to be mirrored.
 
 ### Policies
 
-to the action configured in the rule. If there's no match, the rate limiting configuration for the HTTP loadbalancer is honored..
+to the action configured in the rule. If there's no match, the rate limiting configuration for the HTTP load balancer is honored..
 
 `policies` - (Required) Ordered list of rate limiter policies.. See [ref](#ref) below for details.
 
@@ -1317,6 +1356,10 @@ Bot Defense Policy..
 `js_insertion_rules` - (Optional) Specify custom JavaScript insertion rules.. See [Js Insertion Rules ](#js-insertion-rules) below for details.
 
 `js_download_path` - (Optional) Customize Bot Defense Client JavaScript path. If not specified, default `/common.js` (`String`).
+
+`disable_mobile_sdk` - (Optional) Disable Mobile SDK. (bool).
+
+`mobile_sdk_config` - (Optional) Mobile SDK configuration. See [Mobile Sdk Config ](#mobile-sdk-config) below for details.
 
 `protected_app_endpoints` - (Required) List of protected application endpoints (max 128 items).. See [Protected App Endpoints ](#protected-app-endpoints) below for details.
 
@@ -1368,11 +1411,11 @@ TLS Private Key data in unencrypted PEM format including the PEM headers. The da
 
 List of protected application endpoints (max 128 items)..
 
-`mobile` - (Optional) Mobile application traffic type. (bool).
+`mobile` - (Optional) Mobile traffic channel. (bool).
 
-`web` - (Optional) Web application traffic type. (bool).
+`web` - (Optional) Web traffic channel. (bool).
 
-`web_mobile` - (Optional) Web and mobile Application traffic type.. See [Web Mobile ](#web-mobile) below for details.
+`web_mobile` - (Optional) Web and mobile traffic channel.. See [Web Mobile ](#web-mobile) below for details.
 
 `any_domain` - (Optional) Any Domain. (bool).
 
@@ -1406,7 +1449,7 @@ Note that all specified query parameter predicates must evaluate to true..
 
 ### Rate Limit
 
-Rate limiting parameters for this loadbalancer.
+Define custom rate limiting parameters for this load balancer.
 
 `custom_ip_allowed_list` - (Optional) IP Allowed list using existing ip_prefix_set objects.. See [Custom Ip Allowed List ](#custom-ip-allowed-list) below for details.
 
@@ -1416,7 +1459,7 @@ Rate limiting parameters for this loadbalancer.
 
 `no_policies` - (Optional) Do not apply additional rate limiter policies. (bool).
 
-`policies` - (Optional) to the action configured in the rule. If there's no match, the rate limiting configuration for the HTTP loadbalancer is honored.. See [Policies ](#policies) below for details.
+`policies` - (Optional) to the action configured in the rule. If there's no match, the rate limiting configuration for the HTTP load balancer is honored.. See [Policies ](#policies) below for details.
 
 `rate_limiter` - (Optional) Requests to the virtual_host are rate limited based on the parameters specified in the rate_limiter.. See [Rate Limiter ](#rate-limiter) below for details.
 
@@ -1434,7 +1477,7 @@ Requests to the virtual_host are rate limited based on the parameters specified 
 
 Redirect bot request to a custom URI..
 
-`uri` - (Optional) URI location for redirect may be relative or absolute. (`String`).
+`uri` - (Required) URI location for redirect may be relative or absolute. (`String`).
 
 ### Redirect Route
 
@@ -1558,7 +1601,7 @@ Send redirect response.
 
 ### Routes
 
-Routes for this loadbalancer.
+Routes for this load balancer.
 
 `custom_route_object` - (Optional) A custom route uses a route object created outside of this view.. See [Custom Route Object ](#custom-route-object) below for details.
 
@@ -1640,19 +1683,19 @@ A simple route matches on path and/or HTTP method and forwards the matching traf
 
 ### Single Lb App
 
-ML Config applied on this Load Balancer.
+ML Config applied on this load balancer.
 
-`disable_discovery` - (Optional) Disable API discovery (bool).
+`disable_discovery` - (Optional) x-displayName: "Disable" (bool).
 
-`enable_discovery` - (Optional) Enable API discovery. See [Enable Discovery ](#enable-discovery) below for details.
+`enable_discovery` - (Optional) x-displayName: "Enable". See [Enable Discovery ](#enable-discovery) below for details.
 
-`disable_ddos_detection` - (Optional) Disable DDoS Detection (bool).
+`disable_ddos_detection` - (Optional) x-displayName: "Disable" (bool).
 
-`enable_ddos_detection` - (Optional) Enable DDoS Detection (bool).
+`enable_ddos_detection` - (Optional) x-displayName: "Enable" (bool).
 
-`disable_malicious_user_detection` - (Optional) Disable malicious user detection (bool).
+`disable_malicious_user_detection` - (Optional) x-displayName: "Disable" (bool).
 
-`enable_malicious_user_detection` - (Optional) Enable malicious user detection (bool).
+`enable_malicious_user_detection` - (Optional) x-displayName: "Enable" (bool).
 
 ### Site
 
@@ -1708,15 +1751,15 @@ Set of TLS certificates.
 
 ### Tls Config
 
-Configuration for TLS parameters such as min/max TLS version and ciphers.
+Configuration of TLS settings such as min/max TLS version and ciphersuites.
 
 `custom_security` - (Optional) Custom selection of TLS versions and cipher suites. See [Custom Security ](#custom-security) below for details.
 
-`default_security` - (Optional) TLS v1.2+ with PFS ciphers with strong crypto algorithms. (bool).
+`default_security` - (Optional) TLS v1.2+ with PFS ciphers and strong crypto algorithms. (bool).
 
-`low_security` - (Optional) Low Security chooses TLS v1.0+ including non-PFS ciphers and weak crypto algorithms. (bool).
+`low_security` - (Optional) TLS v1.0+ including non-PFS ciphers and weak crypto algorithms. (bool).
 
-`medium_security` - (Optional) Medium Security chooses TLS v1.0+ with only PFS ciphers and medium strength crypto algorithms. (bool).
+`medium_security` - (Optional) TLS v1.0+ with PFS ciphers and medium strength crypto algorithms. (bool).
 
 ### Tls Fingerprint Matcher
 
@@ -1732,17 +1775,17 @@ The predicate evaluates to true if the TLS fingerprint matches any of the exact 
 
 TLS parameters for downstream connections..
 
-`no_mtls` - (Optional) mTLS with clients is not enabled (bool).
+`no_mtls` - (Optional) x-displayName: "Disable" (bool).
 
-`use_mtls` - (Optional) mTLS with clients is enabled. See [Use Mtls ](#use-mtls) below for details.
+`use_mtls` - (Optional) x-displayName: "Enable". See [Use Mtls ](#use-mtls) below for details.
 
 `tls_certificates` - (Required) Set of TLS certificates. See [Tls Certificates ](#tls-certificates) below for details.
 
-`tls_config` - (Optional) Configuration for TLS parameters such as min/max TLS version and ciphers. See [Tls Config ](#tls-config) below for details.
+`tls_config` - (Optional) Configuration of TLS settings such as min/max TLS version and ciphersuites. See [Tls Config ](#tls-config) below for details.
 
 ### Trusted Clients
 
-WAF or/and Bot processing can be skipped for trusted clients.
+Define rules to skip processing of one or more features such as WAF, Bot Defense etc. for clients..
 
 `bot_skip_processing` - (Optional) Skip Bot Defense processing for clients matching this rule. (bool).
 
@@ -1750,11 +1793,15 @@ WAF or/and Bot processing can be skipped for trusted clients.
 
 `waf_skip_processing` - (Optional) Skip WAF processing for clients matching this rule. (bool).
 
+`actions` - (Optional) Action that should be taken when client identifier matches the rule (`List of Strings`).
+
 `as_number` - (Required) RFC 6793 defined 4-byte AS number (`Int`).
 
 `http_header` - (Required) Request header name and value pairs. See [Http Header ](#http-header) below for details.
 
 `ip_prefix` - (Required) IPv4 prefix string. (`String`).
+
+`user_identifier` - (Optional) Identify user based on user identifier. User identifier value needs to be copied from security event. (`String`).
 
 `expiration_timestamp` - (Optional) the configuration but is not applied anymore. (`String`).
 
@@ -1770,7 +1817,7 @@ Defined in HTTP-LB Security Configuration -> User Identifier..
 
 ### Use Mtls
 
-mTLS with clients is enabled.
+x-displayName: "Enable".
 
 `crl` - (Optional) Specify the CRL server information to download the certificate revocation list. See [ref](#ref) below for details.
 
@@ -1824,9 +1871,9 @@ Advertise on vK8s Service Network on RE..
 
 ### Waf Exclusion Rules
 
-Rules that specify the match conditions and the corresponding WAF_RULE_IDs which should be excluded from WAF evaluation.
+The match criteria include domain, path and method..
 
-`app_firewall_detection_control` - (Optional) App Firewall detection changes to be applied for this request. See [App Firewall Detection Control ](#app-firewall-detection-control) below for details.
+`app_firewall_detection_control` - (Optional) Define the list of Signature IDs, Violations, Attack Types and Bot Names that should be excluded from triggering on the defined match criteria.. See [App Firewall Detection Control ](#app-firewall-detection-control) below for details.
 
 `any_domain` - (Optional) Apply this WAF exclusion rule for any domain (bool).
 
@@ -1850,13 +1897,17 @@ Skip WAF processing for clients matching this rule..
 
 ### Web
 
-Web application traffic type..
+Web traffic channel..
 
 ### Web Mobile
 
-Web and mobile Application traffic type..
+Web and mobile traffic channel..
 
-`header` - (Required) Header that is used by mobile traffic.. See [Header ](#header) below for details.
+`header` - (Optional) Header that is used by mobile traffic.. See [Header ](#header) below for details.
+
+`headers` - (Optional) Headers that can be used to identify mobile traffic.. See [Headers ](#headers) below for details.
+
+`mobile_identifier` - (Optional) Mobile identifier type (`String`).
 
 ### Web Socket Config
 

@@ -4741,7 +4741,7 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	vrhAwsRegion := v.AwsRegionValidationRuleHandler
 	rulesAwsRegion := map[string]string{
 		"ves.io.schema.rules.message.required": "true",
-		"ves.io.schema.rules.string.in":        "[\"ap-northeast-1\",\"ap-southeast-1\",\"eu-central-1\",\"eu-west-1\",\"eu-west-3\",\"sa-east-1\",\"us-east-1\",\"us-east-2\",\"us-west-2\",\"ca-central-1\",\"af-south-1\",\"ap-east-1\",\"ap-south-1\",\"ap-northeast-2\",\"ap-southeast-2\",\"eu-south-1\",\"eu-north-1\",\"eu-west-2\",\"me-south-1\",\"us-west-1\"]",
+		"ves.io.schema.rules.string.in":        "[\"af-south-1\",\"ap-east-1\",\"ap-northeast-1\",\"ap-northeast-2\",\"ap-south-1\",\"ap-southeast-1\",\"ap-southeast-2\",\"ap-southeast-3\",\"ca-central-1\",\"eu-central-1\",\"eu-north-1\",\"eu-south-1\",\"eu-west-1\",\"eu-west-2\",\"eu-west-3\",\"me-south-1\",\"sa-east-1\",\"us-east-1\",\"us-east-2\",\"us-west-1\",\"us-west-2\"]",
 	}
 	vFn, err = vrhAwsRegion(rulesAwsRegion)
 	if err != nil {
@@ -5364,6 +5364,15 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 
 	}
 
+	if fv, exists := v.FldValidators["cloud_site_info"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("cloud_site_info"))
+		if err := fv(ctx, m.GetCloudSiteInfo(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["coordinates"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("coordinates"))
@@ -5814,7 +5823,7 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	vrhAwsRegion := v.AwsRegionValidationRuleHandler
 	rulesAwsRegion := map[string]string{
 		"ves.io.schema.rules.message.required": "true",
-		"ves.io.schema.rules.string.in":        "[\"ap-northeast-1\",\"ap-southeast-1\",\"eu-central-1\",\"eu-west-1\",\"eu-west-3\",\"sa-east-1\",\"us-east-1\",\"us-east-2\",\"us-west-2\",\"ca-central-1\",\"af-south-1\",\"ap-east-1\",\"ap-south-1\",\"ap-northeast-2\",\"ap-southeast-2\",\"eu-south-1\",\"eu-north-1\",\"eu-west-2\",\"me-south-1\",\"us-west-1\"]",
+		"ves.io.schema.rules.string.in":        "[\"af-south-1\",\"ap-east-1\",\"ap-northeast-1\",\"ap-northeast-2\",\"ap-south-1\",\"ap-southeast-1\",\"ap-southeast-2\",\"ap-southeast-3\",\"ca-central-1\",\"eu-central-1\",\"eu-north-1\",\"eu-south-1\",\"eu-west-1\",\"eu-west-2\",\"eu-west-3\",\"me-south-1\",\"sa-east-1\",\"us-east-1\",\"us-east-2\",\"us-west-1\",\"us-west-2\"]",
 	}
 	vFn, err = vrhAwsRegion(rulesAwsRegion)
 	if err != nil {
@@ -5896,6 +5905,8 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v.FldValidators["vpc"] = ves_io_schema_views.AWSVPCchoiceTypeValidator().Validate
 
 	v.FldValidators["coordinates"] = ves_io_schema_site.CoordinatesValidator().Validate
+
+	v.FldValidators["cloud_site_info"] = AWSVPCSiteInfoTypeValidator().Validate
 
 	v.FldValidators["direct_connect_info"] = ves_io_schema_views.DirectConnectInfoValidator().Validate
 
@@ -7052,7 +7063,7 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	vrhAwsRegion := v.AwsRegionValidationRuleHandler
 	rulesAwsRegion := map[string]string{
 		"ves.io.schema.rules.message.required": "true",
-		"ves.io.schema.rules.string.in":        "[\"ap-northeast-1\",\"ap-southeast-1\",\"eu-central-1\",\"eu-west-1\",\"eu-west-3\",\"sa-east-1\",\"us-east-1\",\"us-east-2\",\"us-west-2\",\"ca-central-1\",\"af-south-1\",\"ap-east-1\",\"ap-south-1\",\"ap-northeast-2\",\"ap-southeast-2\",\"eu-south-1\",\"eu-north-1\",\"eu-west-2\",\"me-south-1\",\"us-west-1\"]",
+		"ves.io.schema.rules.string.in":        "[\"af-south-1\",\"ap-east-1\",\"ap-northeast-1\",\"ap-northeast-2\",\"ap-south-1\",\"ap-southeast-1\",\"ap-southeast-2\",\"ap-southeast-3\",\"ca-central-1\",\"eu-central-1\",\"eu-north-1\",\"eu-south-1\",\"eu-west-1\",\"eu-west-2\",\"eu-west-3\",\"me-south-1\",\"sa-east-1\",\"us-east-1\",\"us-east-2\",\"us-west-1\",\"us-west-2\"]",
 	}
 	vFn, err = vrhAwsRegion(rulesAwsRegion)
 	if err != nil {
@@ -8869,6 +8880,7 @@ func (m *GetSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	m.Address = f.GetAddress()
 	m.AwsRegion = f.GetAwsRegion()
 	m.GetBlockedServicesChoiceFromGlobalSpecType(f)
+	m.CloudSiteInfo = f.GetCloudSiteInfo()
 	m.Coordinates = f.GetCoordinates()
 	m.GetDeploymentFromGlobalSpecType(f)
 	m.GetDirectConnectChoiceFromGlobalSpecType(f)
@@ -8906,6 +8918,7 @@ func (m *GetSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	f.Address = m1.Address
 	f.AwsRegion = m1.AwsRegion
 	m1.SetBlockedServicesChoiceToGlobalSpecType(f)
+	f.CloudSiteInfo = m1.CloudSiteInfo
 	f.Coordinates = m1.Coordinates
 	m1.SetDeploymentToGlobalSpecType(f)
 	m1.SetDirectConnectChoiceToGlobalSpecType(f)

@@ -28,7 +28,7 @@ resource "volterra_app_setting" "example" {
     }
 
     business_logic_markup_setting {
-      // One of the arguments from this list "enable disable" must be set
+      // One of the arguments from this list "disable enable" must be set
       enable = true
     }
 
@@ -40,7 +40,7 @@ resource "volterra_app_setting" "example" {
     }
 
     user_behavior_analysis_setting {
-      // One of the arguments from this list "disable_learning enable_learning" must be set
+      // One of the arguments from this list "enable_learning disable_learning" must be set
       enable_learning = true
 
       // One of the arguments from this list "enable_detection disable_detection" must be set
@@ -50,12 +50,15 @@ resource "volterra_app_setting" "example" {
         cooling_off_period = "cooling_off_period"
 
         // One of the arguments from this list "include_failed_login_activity exclude_failed_login_activity" must be set
-        exclude_failed_login_activity = true
+
+        include_failed_login_activity {
+          login_failures_threshold = "10"
+        }
 
         // One of the arguments from this list "include_forbidden_activity exclude_forbidden_activity" must be set
 
         include_forbidden_activity {
-          forbidden_requests_threshold = "forbidden_requests_threshold"
+          forbidden_requests_threshold = "10"
         }
         // One of the arguments from this list "include_ip_reputation exclude_ip_reputation" must be set
         include_ip_reputation = true

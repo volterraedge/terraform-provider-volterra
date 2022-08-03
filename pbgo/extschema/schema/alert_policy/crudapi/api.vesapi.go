@@ -2597,7 +2597,7 @@ var APISwaggerJSON string = `{
     "definitions": {
         "alert_policyAlertName": {
             "type": "string",
-            "description": "List of Alert Names\n\nCustomer tunnel interface down\nPhysical Interface down\nTunnel Interfaces to Customer Site Down\nVirutal Host server error\nVirtual Host client error\nService Health Low\nService Unavailable\nVirtual Host server error\nVirtual Host client error\nEndpoint Healthcheck failure",
+            "description": "List of Alert Names\n\nCustomer tunnel interface down\nPhysical Interface down\nTunnel Interfaces to Customer Site Down\nVirutal Host server error\nVirtual Host client error\nService Health Low\nService Unavailable\nVirtual Host server error\nVirtual Host client error\nEndpoint Healthcheck failure\nSynthetic monitor health critical",
             "title": "AlertName",
             "enum": [
                 "SITE_CUSTOMER_TUNNEL_INTERFACE_DOWN",
@@ -2609,7 +2609,8 @@ var APISwaggerJSON string = `{
                 "SERVICE_UNAVAILABLE",
                 "SERVICE_SERVER_ERROR_PER_SOURCE_SITE",
                 "SERVICE_CLIENT_ERROR_PER_SOURCE_SITE",
-                "SERVICE_ENDPOINT_HEALTHCHECK_FAILURE"
+                "SERVICE_ENDPOINT_HEALTHCHECK_FAILURE",
+                "SYNTHETIC_MONITOR_HEALTH_CRITICAL"
             ],
             "default": "SITE_CUSTOMER_TUNNEL_INTERFACE_DOWN",
             "x-displayname": "AlertName",
@@ -2720,7 +2721,7 @@ var APISwaggerJSON string = `{
         },
         "alert_policyGroup": {
             "type": "string",
-            "description": "List of Groups\n\nInfrastructure alerts\nAlerts related to Infrastructure as a Service/Communication as a Service\nAlerts related to Virtual Host\nAlerts related to the VoltShare feature\nAlerts related to User Access Management\nAlerts related to Application Security\nAlerts related to Timeseries Anomaly\nAlerts related to Shape Security\nAlerts related to CSD Security\nAlerts related to CDN",
+            "description": "List of Groups\n\nInfrastructure alerts\nAlerts related to Infrastructure as a Service/Communication as a Service\nAlerts related to Virtual Host\nAlerts related to the VoltShare feature\nAlerts related to User Access Management\nAlerts related to Application Security\nAlerts related to Timeseries Anomaly\nAlerts related to Shape Security\nAlerts related to CSD Security\nAlerts related to CDN\nAlerts related to Synthetic Monitors",
             "title": "Group",
             "enum": [
                 "INFRASTRUCTURE",
@@ -2732,7 +2733,8 @@ var APISwaggerJSON string = `{
                 "TIMESERIES_ANOMALY",
                 "SHAPE_SECURITY",
                 "SECURITY_CSD",
-                "CDN"
+                "CDN",
+                "SYNTHETIC_MONITORS"
             ],
             "default": "INFRASTRUCTURE",
             "x-displayname": "Group",
@@ -2856,7 +2858,6 @@ var APISwaggerJSON string = `{
             "description": "Route defines the match conditions to match the incoming alert and the receiver to send the alert.",
             "title": "Route",
             "x-displayname": "Route",
-            "x-ves-displayorder": "14,15,13",
             "x-ves-oneof-field-action": "[\"dont_send\",\"send\"]",
             "x-ves-oneof-field-matcher": "[\"alertname\",\"alertname_regex\",\"any\",\"custom\",\"group\",\"severity\"]",
             "x-ves-proto-message": "ves.io.schema.alert_policy.Route",

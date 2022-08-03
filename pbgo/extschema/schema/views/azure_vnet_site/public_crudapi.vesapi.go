@@ -2183,12 +2183,12 @@ var APISwaggerJSON string = `{
                 "spoke_vnets": {
                     "type": "array",
                     "description": " Spoke VNets\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 500\n",
-                    "title": "Spoke Vnets",
+                    "title": "Spoke Vnets Peering",
                     "maxItems": 500,
                     "items": {
                         "$ref": "#/definitions/azure_vnet_siteVnetPeeringType"
                     },
-                    "x-displayname": "Spoke Vnets",
+                    "x-displayname": "Spoke Vnets Peering",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.repeated.max_items": "500"
                     }
@@ -2860,6 +2860,19 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.repeated.items.string.ip": "true",
                         "ves.io.schema.rules.repeated.num_items": "0,1,3",
                         "ves.io.schema.rules.repeated.unique": "true"
+                    }
+                },
+                "spoke_vnet_prefix_info": {
+                    "type": "array",
+                    "description": " Azure Spoke Vnet Prefix Information\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 500\n",
+                    "title": "Azure Spoke Vnet Prefix Information",
+                    "maxItems": 500,
+                    "items": {
+                        "$ref": "#/definitions/azure_vnet_siteVnetIpPrefixesType"
+                    },
+                    "x-displayname": "Azure Spoke vnet Prefix Information",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "500"
                     }
                 }
             }
@@ -3710,6 +3723,41 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "azure_vnet_siteVnetIpPrefixesType": {
+            "type": "object",
+            "description": "Azure Vnet IP prefixes Info",
+            "title": "Azure Vnet IP prefixes Info",
+            "x-displayname": "Azure Vnet IP prefixes Info",
+            "x-ves-proto-message": "ves.io.schema.views.azure_vnet_site.VnetIpPrefixesType",
+            "properties": {
+                "prefixes": {
+                    "type": "array",
+                    "description": " An unordered list of IP prefixes.\n\nExample: - \"['10.2.1.0/24', '192.168.8.0/29', '10.7.64.160/27']\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.items.string.ipv4_prefix: true\n  ves.io.schema.rules.repeated.max_items: 1024\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "title": "Vnet prefixes",
+                    "minItems": 1,
+                    "maxItems": 1024,
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-displayname": "Vnet Prefixes",
+                    "x-ves-example": "['10.2.1.0/24', '192.168.8.0/29', '10.7.64.160/27']",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.items.string.ipv4_prefix": "true",
+                        "ves.io.schema.rules.repeated.max_items": "1024",
+                        "ves.io.schema.rules.repeated.min_items": "1",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
+                },
+                "vnet": {
+                    "description": " Existing Vnet Information",
+                    "title": "Vnet Info",
+                    "$ref": "#/definitions/viewsAzureVnetType",
+                    "x-displayname": "Vnet Info"
+                }
+            }
+        },
         "azure_vnet_siteVnetPeeringType": {
             "type": "object",
             "description": "Vnet peering to azure vnet site",
@@ -3723,6 +3771,13 @@ var APISwaggerJSON string = `{
                     "title": "Auto Routing",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Auto Routing"
+                },
+                "labels": {
+                    "type": "object",
+                    "description": " Add Labels for each of the Vnets peered with transit vnet, these labels can be used in firewall policy\n These labels used must be from known key and label defined in shared namespace\n\nExample: - \"value\"-",
+                    "title": "Labels For Vnets Peering",
+                    "x-displayname": "Labels For Vnets Peering",
+                    "x-ves-example": "value"
                 },
                 "manual": {
                     "description": "Exclusive with [auto]\n Manually setup routing on spoke Vnet",
@@ -4288,7 +4343,7 @@ var APISwaggerJSON string = `{
             "properties": {
                 "addr": {
                     "type": "string",
-                    "description": " IPv6 Address in form of string. IPv6 address must be specified as hexadecimal numbers separated by ':'\n The address can be compacted by suppressing zeros \n e.g. '2001:db8:0:0:0:0:2:1' becomes '2001:db8::2:1' or '2001:db8:0:0:0:2:0:0' becomes '2001:db8::2::'\n\nExample: - \"2001:db8:0:0:0:0:2:1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv6: true\n",
+                    "description": " IPv6 Address in form of string. IPv6 address must be specified as hexadecimal numbers separated by ':'\n The address can be compacted by suppressing zeros\n e.g. '2001:db8:0:0:0:0:2:1' becomes '2001:db8::2:1' or '2001:db8:0:0:0:2:0:0' becomes '2001:db8::2::'\n\nExample: - \"2001:db8:0:0:0:0:2:1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv6: true\n",
                     "title": "IPv6 Address",
                     "x-displayname": "IPv6 Address",
                     "x-ves-example": "2001:db8:0:0:0:0:2:1",
@@ -6341,6 +6396,11 @@ var APISwaggerJSON string = `{
                     "description": "Exclusive with [default_blocked_services]\n Use custom blocked services configuration",
                     "$ref": "#/definitions/fleetBlockedServicesListType",
                     "x-displayname": "Custom Blocked Services Configuration"
+                },
+                "cloud_site_info": {
+                    "description": " Azure Vnet Site information obtained after creating the site",
+                    "$ref": "#/definitions/azure_vnet_siteAzureVnetSiteInfoType",
+                    "x-displayname": "Azure Vnet Site Info"
                 },
                 "coordinates": {
                     "description": " Site longitude and latitude co-ordinates",

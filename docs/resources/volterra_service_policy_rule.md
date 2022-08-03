@@ -21,22 +21,27 @@ resource "volterra_service_policy_rule" "example" {
   namespace = "staging"
   action    = ["action"]
 
-  // One of the arguments from this list "any_asn asn_list asn_matcher" must be set
+  // One of the arguments from this list "asn_matcher any_asn asn_list" must be set
   any_asn          = true
   challenge_action = ["challenge_action"]
 
   // One of the arguments from this list "any_client client_name ip_threat_category_list client_selector client_name_matcher" must be set
+  any_client = true
 
-  ip_threat_category_list {
-    ip_threat_categories = ["ip_threat_categories"]
-  }
   // One of the arguments from this list "any_ip ip_prefix_list ip_matcher" must be set
   any_ip = true
+
   waf_action {
     // One of the arguments from this list "app_firewall_detection_control data_guard_control none waf_skip_processing waf_rule_control waf_inline_rule_control waf_in_monitoring_mode" must be set
 
-    data_guard_control {
-      policy_name = "value"
+    waf_rule_control {
+      exclude_rule_ids {
+        name      = "test1"
+        namespace = "staging"
+        tenant    = "acmecorp"
+      }
+
+      monitoring_mode = true
     }
   }
 }
@@ -124,11 +129,13 @@ Argument Reference
 
 `ip_prefix_list` - (Optional) The predicate evaluates to true if the client IPv4 Address is covered by one or more of the IPv4 Prefixes from the list.. See [Ip Prefix List ](#ip-prefix-list) below for details.
 
+`ip_reputation_action` - (Optional) Specifies how IP Reputation is handled. See [Ip Reputation Action ](#ip-reputation-action) below for details.
+
 `l4_dest_matcher` - (Optional) IP matches one of the prefixes and the destination port belongs to the port range.. See [L4 Dest Matcher ](#l4-dest-matcher) below for details.
 
 `label_matcher` - (Optional) other labels do not matter.. See [Label Matcher ](#label-matcher) below for details.
 
-`malicious_user_mitigation_bypass` - (Optional) the appropriate match conditions in the enclosing policy rule and setting malicious user mitigation bypass flag. (bool).
+`mum_action` - (Optional) Specifies how Malicious User Mitigation is handled. See [Mum Action ](#mum-action) below for details.
 
 `path` - (Optional) The predicate evaluates to true if the actual path value matches any of the exact or prefix values or regular expressions in the path matcher.. See [Path ](#path) below for details.
 
@@ -162,7 +169,7 @@ The predicate evaluates to true if any of the actual API group names for the req
 
 ### App Firewall Detection Control
 
-App Firewall detection changes to be applied for this request.
+Define the list of Signature IDs, Violations, Attack Types and Bot Names that should be excluded from triggering on the defined match criteria..
 
 `exclude_attack_type_contexts` - (Optional) App Firewall attack types contexts to be excluded for this request. See [Exclude Attack Type Contexts ](#exclude-attack-type-contexts) below for details.
 
@@ -300,6 +307,10 @@ Data Guard changes to be applied for this request.
 
 `policy_name` - (Optional) Sets the BD Policy to use (`String`).
 
+### Default
+
+Perform the default enforcement for this request.
+
 ### Domain Matcher
 
 matcher..
@@ -340,25 +351,25 @@ The predicate evaluates to true if the destination address is covered by one or 
 
 App Firewall attack types contexts to be excluded for this request.
 
-`exclude_attack_type` - (Required) App Firewall Attack type (`String`).
+`exclude_attack_type` - (Required) x-required (`String`).
 
 ### Exclude Bot Name Contexts
 
 Bot names contexts to be excluded for this request.
 
-`bot_name` - (Optional) x-example: "Hydra" (`String`).
+`bot_name` - (Required) x-example: "Hydra" (`String`).
 
 ### Exclude Signature Contexts
 
 App Firewall signature contexts to be excluded for this request.
 
-`signature_id` - (Required) App Firewall signature ID (`Int`).
+`signature_id` - (Required) x-required (`Int`).
 
 ### Exclude Violation Contexts
 
 App Firewall violation contexts to be excluded for this request.
 
-`exclude_violation` - (Required) App Firewall violation type (`String`).
+`exclude_violation` - (Required) x-required (`String`).
 
 ### Flag
 
@@ -407,6 +418,14 @@ The predicate evaluates to true if the client IPv4 Address is covered by one or 
 `invert_match` - (Optional) Invert the match result. (`Bool`).
 
 `ip_prefixes` - (Required) List of IPv4 prefix strings. (`String`).
+
+### Ip Reputation Action
+
+Specifies how IP Reputation is handled.
+
+`default` - (Optional) Perform the default enforcement for this request (bool).
+
+`skip_processing` - (Optional) Do not perform enforcement for this request (bool).
 
 ### Ip Threat Category List
 
@@ -458,6 +477,14 @@ Mitigation action for protected endpoint.
 
 `redirect` - (Optional) Redirect bot request to a custom URI.. See [Redirect ](#redirect) below for details.
 
+### Mum Action
+
+Specifies how Malicious User Mitigation is handled.
+
+`default` - (Optional) Perform the default enforcement for this request (bool).
+
+`skip_processing` - (Optional) Do not perform enforcement for this request (bool).
+
 ### No Headers
 
 No mitigation headers..
@@ -508,7 +535,7 @@ Note that all specified query parameter predicates must evaluate to true..
 
 Redirect bot request to a custom URI..
 
-`uri` - (Optional) URI location for redirect may be relative or absolute. (`String`).
+`uri` - (Required) URI location for redirect may be relative or absolute. (`String`).
 
 ### Ref
 
@@ -533,6 +560,10 @@ Shape Protected Endpoint Action that include application traffic type and mitiga
 `app_traffic_type` - (Required) Traffic type (`String`).
 
 `mitigation` - (Required) Mitigation action for protected endpoint. See [Mitigation ](#mitigation) below for details.
+
+### Skip Processing
+
+Do not perform enforcement for this request.
 
 ### Tls Fingerprint Matcher
 
@@ -578,7 +609,7 @@ Hidden because this will be used only in system generated rate limiting service_
 
 App Firewall action to be enforced if the input request matches the rule..
 
-`app_firewall_detection_control` - (Optional) App Firewall detection changes to be applied for this request. See [App Firewall Detection Control ](#app-firewall-detection-control) below for details.
+`app_firewall_detection_control` - (Optional) Define the list of Signature IDs, Violations, Attack Types and Bot Names that should be excluded from triggering on the defined match criteria.. See [App Firewall Detection Control ](#app-firewall-detection-control) below for details.
 
 `data_guard_control` - (Optional) Data Guard changes to be applied for this request. See [Data Guard Control ](#data-guard-control) below for details.
 

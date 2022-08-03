@@ -1666,7 +1666,7 @@ var APISwaggerJSON string = `{
     "swagger": "2.0",
     "info": {
         "title": "Fast ACL rule",
-        "description": " Fast ACL rule \nRule consists of following:\n  1. Protocol to match from packet\n  2. List of source IP prefixes or a reference to IP prefix set, to which\n     source IP in packet should belong to.\n  3. Action to be applied if above fields match\n    -fast_acl- object would refer to -fast_acl_rule-, both objects together provides a\n    five tuple {destination ip, destination port, source ip, source port, protocol} to match\n    and an action to be applied. In five tuple rule provides source IP, source port and action\n\nSupported actions are:\n- Allow\n- Deny\n- Policer - Rate limit using policer defined\n- Protocol Policer - Rate limit for various protocol type. Supported protocols are tcp, udp, icmp, dns",
+        "description": " Fast ACL rule\nRule consists of following:\n  1. Protocol to match from packet\n  2. List of source IP prefixes or a reference to IP prefix set, to which\n     source IP in packet should belong to.\n  3. Action to be applied if above fields match\n    -fast_acl- object would refer to -fast_acl_rule-, both objects together provides a\n    five tuple {destination ip, destination port, source ip, source port, protocol} to match\n    and an action to be applied. In five tuple rule provides source IP, source port and action\n\nSupported actions are:\n- Allow\n- Deny\n- Policer - Rate limit using policer defined\n- Protocol Policer - Rate limit for various protocol type. Supported protocols are tcp, udp, icmp, dns",
         "version": "version not set"
     },
     "schemes": [

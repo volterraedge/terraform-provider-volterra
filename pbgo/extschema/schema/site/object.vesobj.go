@@ -1240,6 +1240,15 @@ func (v *ValidateStatusObject) Validate(ctx context.Context, pm interface{}, opt
 
 	}
 
+	if fv, exists := v.FldValidators["direct_connect_status"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("direct_connect_status"))
+		if err := fv(ctx, e.GetDirectConnectStatus(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["fleet_status"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("fleet_status"))
@@ -1333,6 +1342,15 @@ func (v *ValidateStatusObject) Validate(ctx context.Context, pm interface{}, opt
 
 	}
 
+	if fv, exists := v.FldValidators["vnet_peering_status"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("vnet_peering_status"))
+		if err := fv(ctx, e.GetVnetPeeringStatus(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["volterra_software_status"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("volterra_software_status"))
@@ -1356,6 +1374,8 @@ var DefaultStatusObjectValidator = func() *ValidateStatusObject {
 	v.FldValidators["volterra_software_status"] = VolterraSoftwareStatusValidator().Validate
 
 	v.FldValidators["operating_system_status"] = OperatingSystemStatusValidator().Validate
+
+	v.FldValidators["vnet_peering_status"] = AzureHubSpokeVnetPeeringStatusInfoValidator().Validate
 
 	return v
 }()

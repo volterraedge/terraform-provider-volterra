@@ -2245,6 +2245,45 @@ var APISwaggerJSON string = `{
             "x-displayname": "Create DC Cluster Group",
             "x-ves-proto-message": "ves.io.schema.dc_cluster_group.CreateSpecType"
         },
+        "dc_cluster_groupDCClusterGroupMeshType": {
+            "type": "object",
+            "description": "x-displayName: \"DC Cluster Group Mesh Type\"\nDetails of DC Cluster Group Mesh Type",
+            "title": "DC Cluster Group Mesh Type",
+            "properties": {
+                "control_and_data_plane_mesh": {
+                    "description": "x-displayName: \"Control and Data Plane Mesh\"\nFull Mesh of data plane connectivity across sites\nand control plane peering across sites",
+                    "title": "Control and Data Plane Mesh",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "data_plane_mesh": {
+                    "description": "x-displayName: \"Data Plane Mesh\"\nFull Mesh of Data plane connectivity across sites",
+                    "title": "Data Plane Mesh",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                }
+            }
+        },
+        "dc_cluster_groupDcClusterGroupStatus": {
+            "type": "object",
+            "description": "Status of the dc cluster group",
+            "title": "dc cluster group status",
+            "x-displayname": "Status",
+            "x-ves-proto-message": "ves.io.schema.dc_cluster_group.DcClusterGroupStatus",
+            "properties": {
+                "site_info": {
+                    "type": "array",
+                    "description": " The list of sites in the dc cluster group and information about each\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "site_info",
+                    "items": {
+                        "$ref": "#/definitions/schemaSiteInfo"
+                    },
+                    "x-displayname": "site info",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                }
+            }
+        },
         "dc_cluster_groupDeleteRequest": {
             "type": "object",
             "description": "This is the input message of the 'Delete' RPC.",
@@ -2597,8 +2636,19 @@ var APISwaggerJSON string = `{
                         "$ref": "#/definitions/schemaObjectRefType"
                     },
                     "x-displayname": "Config Object"
+                },
+                "status": {
+                    "description": " Current status of the dc cluster group object",
+                    "title": "status",
+                    "$ref": "#/definitions/dc_cluster_groupDcClusterGroupStatus",
+                    "x-displayname": "Status"
                 }
             }
+        },
+        "ioschemaEmpty": {
+            "type": "object",
+            "description": "x-displayName: \"Empty\"\nThis can be used for messages where no values are needed",
+            "title": "Empty"
         },
         "protobufAny": {
             "type": "object",
@@ -3046,6 +3096,43 @@ var APISwaggerJSON string = `{
                     "title": "namespace",
                     "x-displayname": "Namespace",
                     "x-ves-example": "staging"
+                }
+            }
+        },
+        "schemaSiteInfo": {
+            "type": "object",
+            "description": "Information about a particular site.",
+            "title": "Site Info",
+            "x-displayname": "Site Info",
+            "x-ves-proto-message": "ves.io.schema.SiteInfo",
+            "properties": {
+                "annotations": {
+                    "type": "array",
+                    "description": " The list of annotations providing information about the referenced site.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "annotations",
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-displayname": "annotations",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                },
+                "site": {
+                    "type": "array",
+                    "description": " 'site' refers to a site.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 1\n",
+                    "title": "site",
+                    "maxItems": 1,
+                    "items": {
+                        "$ref": "#/definitions/schemaObjectRefType"
+                    },
+                    "x-displayname": "site",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.max_items": "1"
+                    }
                 }
             }
         },

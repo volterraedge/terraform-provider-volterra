@@ -2782,6 +2782,50 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "ioschemaObjectRefType": {
+            "type": "object",
+            "description": "This type establishes a 'direct reference' from one object(the referrer) to another(the referred).\nSuch a reference is in form of tenant/namespace/name for public API and Uid for private API\nThis type of reference is called direct because the relation is explicit and concrete (as opposed\nto selector reference which builds a group based on labels of selectee objects)",
+            "title": "ObjectRefType",
+            "x-displayname": "Object reference",
+            "x-ves-proto-message": "ves.io.schema.ObjectRefType",
+            "properties": {
+                "kind": {
+                    "type": "string",
+                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then kind will hold the referred object's kind (e.g. \"route\")\n\nExample: - \"virtual_site\"-",
+                    "title": "kind",
+                    "x-displayname": "Kind",
+                    "x-ves-example": "virtual_site"
+                },
+                "name": {
+                    "type": "string",
+                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then name will hold the referred object's(e.g. route's) name.\n\nExample: - \"contactus-route\"-",
+                    "title": "name",
+                    "x-displayname": "Name",
+                    "x-ves-example": "contactus-route"
+                },
+                "namespace": {
+                    "type": "string",
+                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then namespace will hold the referred object's(e.g. route's) namespace.\n\nExample: - \"ns1\"-",
+                    "title": "namespace",
+                    "x-displayname": "Namespace",
+                    "x-ves-example": "ns1"
+                },
+                "tenant": {
+                    "type": "string",
+                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then tenant will hold the referred object's(e.g. route's) tenant.\n\nExample: - \"acmecorp\"-",
+                    "title": "tenant",
+                    "x-displayname": "Tenant",
+                    "x-ves-example": "acmecorp"
+                },
+                "uid": {
+                    "type": "string",
+                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then uid will hold the referred object's(e.g. route's) uid.\n\nExample: - \"d15f1fad-4d37-48c0-8706-df1824d76d31\"-",
+                    "title": "uid",
+                    "x-displayname": "UID",
+                    "x-ves-example": "d15f1fad-4d37-48c0-8706-df1824d76d31"
+                }
+            }
+        },
         "protobufAny": {
             "type": "object",
             "description": "-Any- contains an arbitrary serialized protocol buffer message along with a\nURL that describes the type of the serialized message.\n\nProtobuf library provides support to pack/unpack Any values in the form\nof utility functions or additional generated methods of the Any type.\n\nExample 1: Pack and unpack a message in C++.\n\n    Foo foo = ...;\n    Any any;\n    any.PackFrom(foo);\n    ...\n    if (any.UnpackTo(\u0026foo)) {\n      ...\n    }\n\nExample 2: Pack and unpack a message in Java.\n\n    Foo foo = ...;\n    Any any = Any.pack(foo);\n    ...\n    if (any.is(Foo.class)) {\n      foo = any.unpack(Foo.class);\n    }\n\n Example 3: Pack and unpack a message in Python.\n\n    foo = Foo(...)\n    any = Any()\n    any.Pack(foo)\n    ...\n    if any.Is(Foo.DESCRIPTOR):\n      any.Unpack(foo)\n      ...\n\n Example 4: Pack and unpack a message in Go\n\n     foo := \u0026pb.Foo{...}\n     any, err := ptypes.MarshalAny(foo)\n     ...\n     foo := \u0026pb.Foo{}\n     if err := ptypes.UnmarshalAny(any, foo); err != nil {\n       ...\n     }\n\nThe pack methods provided by protobuf library will by default use\n'type.googleapis.com/full.type.name' as the type URL and the unpack\nmethods only use the fully qualified type name after the last '/'\nin the type URL, for example \"foo.bar.com/x/y.z\" will yield type\nname \"y.z\".\n\n\nJSON\n====\nThe JSON representation of an -Any- value uses the regular\nrepresentation of the deserialized, embedded message, with an\nadditional field -@type- which contains the type URL. Example:\n\n    package google.profile;\n    message Person {\n      string first_name = 1;\n      string last_name = 2;\n    }\n\n    {\n      \"@type\": \"type.googleapis.com/google.profile.Person\",\n      \"firstName\": \u003cstring\u003e,\n      \"lastName\": \u003cstring\u003e\n    }\n\nIf the embedded message type is well-known and has a custom JSON\nrepresentation, that representation will be embedded adding a field\n-value- which holds the custom JSON in addition to the -@type-\nfield. Example (for message [google.protobuf.Duration][]):\n\n    {\n      \"@type\": \"type.googleapis.com/google.protobuf.Duration\",\n      \"value\": \"1.212s\"\n    }",
@@ -3082,50 +3126,6 @@ var APISwaggerJSON string = `{
                 }
             }
         },
-        "schemaObjectRefType": {
-            "type": "object",
-            "description": "This type establishes a 'direct reference' from one object(the referrer) to another(the referred).\nSuch a reference is in form of tenant/namespace/name for public API and Uid for private API\nThis type of reference is called direct because the relation is explicit and concrete (as opposed\nto selector reference which builds a group based on labels of selectee objects)",
-            "title": "ObjectRefType",
-            "x-displayname": "Object reference",
-            "x-ves-proto-message": "ves.io.schema.ObjectRefType",
-            "properties": {
-                "kind": {
-                    "type": "string",
-                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then kind will hold the referred object's kind (e.g. \"route\")\n\nExample: - \"virtual_site\"-",
-                    "title": "kind",
-                    "x-displayname": "Kind",
-                    "x-ves-example": "virtual_site"
-                },
-                "name": {
-                    "type": "string",
-                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then name will hold the referred object's(e.g. route's) name.\n\nExample: - \"contactus-route\"-",
-                    "title": "name",
-                    "x-displayname": "Name",
-                    "x-ves-example": "contactus-route"
-                },
-                "namespace": {
-                    "type": "string",
-                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then namespace will hold the referred object's(e.g. route's) namespace.\n\nExample: - \"ns1\"-",
-                    "title": "namespace",
-                    "x-displayname": "Namespace",
-                    "x-ves-example": "ns1"
-                },
-                "tenant": {
-                    "type": "string",
-                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then tenant will hold the referred object's(e.g. route's) tenant.\n\nExample: - \"acmecorp\"-",
-                    "title": "tenant",
-                    "x-displayname": "Tenant",
-                    "x-ves-example": "acmecorp"
-                },
-                "uid": {
-                    "type": "string",
-                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then uid will hold the referred object's(e.g. route's) uid.\n\nExample: - \"d15f1fad-4d37-48c0-8706-df1824d76d31\"-",
-                    "title": "uid",
-                    "x-displayname": "UID",
-                    "x-ves-example": "d15f1fad-4d37-48c0-8706-df1824d76d31"
-                }
-            }
-        },
         "schemaServiceConnectionType": {
             "type": "string",
             "description": "Only added so codegeneration does not break\n\nOnly added so codegeneration does not break\nOnly added so codegeneration does not break",
@@ -3354,7 +3354,7 @@ var APISwaggerJSON string = `{
                     "title": "namespace",
                     "maxItems": 1,
                     "items": {
-                        "$ref": "#/definitions/schemaObjectRefType"
+                        "$ref": "#/definitions/ioschemaObjectRefType"
                     },
                     "x-displayname": "Namespace Reference",
                     "x-ves-validation-rules": {
@@ -3548,6 +3548,66 @@ var APISwaggerJSON string = `{
                     "description": " url identifies the Ares server",
                     "title": "url",
                     "x-displayname": "URL"
+                }
+            }
+        },
+        "siteAzureHubSpokeVnetPeeringStatusInfo": {
+            "type": "object",
+            "x-ves-proto-message": "ves.io.schema.site.AzureHubSpokeVnetPeeringStatusInfo",
+            "properties": {
+                "hub_vnet": {
+                    "title": "x-displayName: \"Hub VNETs\"\nHub VNETs",
+                    "$ref": "#/definitions/siteAzureVNetToVnetPeeringStatus"
+                },
+                "spoke_vnets": {
+                    "type": "array",
+                    "title": "x-displayName: \"Spoke VNETs\"\nSpoke VNETs",
+                    "items": {
+                        "$ref": "#/definitions/siteAzureVNetToVnetPeeringStatus"
+                    }
+                }
+            }
+        },
+        "siteAzureVNetToVnetPeeringStatus": {
+            "type": "object",
+            "x-ves-proto-message": "ves.io.schema.site.AzureVNetToVnetPeeringStatus",
+            "properties": {
+                "peers": {
+                    "type": "array",
+                    "title": "x-displayName: \"Peers\"\nPeers",
+                    "items": {
+                        "$ref": "#/definitions/siteAzureVnetPeeringStateType"
+                    }
+                },
+                "route_association_state": {
+                    "type": "string",
+                    "title": "x-displayName: \"Route association State\"\nRemote Route association State"
+                },
+                "vnet_info": {
+                    "title": "x-displayName: \"Azure VNET Info\"\nAzure VNET Info",
+                    "$ref": "#/definitions/viewsAzureVnetType"
+                }
+            }
+        },
+        "siteAzureVnetPeeringStateType": {
+            "type": "object",
+            "x-ves-proto-message": "ves.io.schema.site.AzureVnetPeeringStateType",
+            "properties": {
+                "peering_state": {
+                    "type": "string",
+                    "title": "x-displayName: \"Azure VNET Peering State\"\nAzure VNET Peering State"
+                },
+                "peering_sync_level": {
+                    "type": "string",
+                    "title": "x-displayName: \"Azure VNET Peering Sync Level\"\nAzure VNET Peering Sync Level"
+                },
+                "provisioning_state": {
+                    "type": "string",
+                    "title": "x-displayName: \"Provisioning State\"\nProvisioning State"
+                },
+                "remote_vnet_id": {
+                    "type": "string",
+                    "title": "x-displayName: \"Remote VNET ID\"\nRemote VNET ID"
                 }
             }
         },
@@ -3879,6 +3939,133 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "siteDirectConnectBGPPeerInfo": {
+            "type": "object",
+            "x-ves-proto-message": "ves.io.schema.site.DirectConnectBGPPeerInfo",
+            "properties": {
+                "address_family": {
+                    "type": "string",
+                    "description": " Address Family",
+                    "title": "Address Family",
+                    "x-displayname": "Address Family "
+                },
+                "amazon_address": {
+                    "type": "string",
+                    "description": " Amazon side address",
+                    "title": "Amazon side address",
+                    "x-displayname": "Amazon side address "
+                },
+                "asn": {
+                    "type": "integer",
+                    "description": " ASN",
+                    "title": "ASN",
+                    "format": "int64",
+                    "x-displayname": "ASN"
+                },
+                "bgp_peer_id": {
+                    "type": "string",
+                    "description": " BGP Peer ID",
+                    "title": "BGP Peer ID",
+                    "x-displayname": "BGP Peer ID"
+                },
+                "bgp_peer_state": {
+                    "type": "string",
+                    "description": " BGP Peer State",
+                    "title": "BGP Peer State",
+                    "x-displayname": "BGP Peer State"
+                },
+                "bgp_status": {
+                    "type": "string",
+                    "description": " BGP Status",
+                    "title": "BGP Status",
+                    "x-displayname": "BGP Status"
+                },
+                "customer_address": {
+                    "type": "string",
+                    "description": " Customer side Address",
+                    "title": "Customer side Address",
+                    "x-displayname": "Customer side Address"
+                }
+            }
+        },
+        "siteDirectConnectStatusInfo": {
+            "type": "object",
+            "x-ves-proto-message": "ves.io.schema.site.DirectConnectStatusInfo",
+            "properties": {
+                "direct_connect_gateway_id": {
+                    "type": "string",
+                    "description": " Direct Connect Gateway ID",
+                    "title": "Direct Connect Gateway ID",
+                    "x-displayname": "Direct Connect Gateway ID"
+                },
+                "direct_connect_gateway_state": {
+                    "type": "string",
+                    "description": " Direct Connect Gateway state",
+                    "title": "Direct Connect Gateway State",
+                    "x-displayname": "Direct Connect Gateway State"
+                },
+                "direct_connect_vgw_association_state": {
+                    "type": "string",
+                    "description": " Virtual Private Gateway association state",
+                    "title": "Virtual Private Gateway association state",
+                    "x-displayname": "Virtual Private Gateway association state"
+                },
+                "vgw_id": {
+                    "type": "string",
+                    "description": " Virtual Private Gateway ID",
+                    "title": "Virtual Private Gateway ID",
+                    "x-displayname": "Virtual Private Gateway ID"
+                },
+                "vgw_state": {
+                    "type": "string",
+                    "description": " Virtual Private Gateway state",
+                    "title": "Virtual Private Gateway state",
+                    "x-displayname": "Virtual Private Gateway state"
+                },
+                "vif_states": {
+                    "type": "array",
+                    "description": " VIF States",
+                    "title": "VIF States",
+                    "items": {
+                        "$ref": "#/definitions/siteDirectConnectVIFStateInfo"
+                    },
+                    "x-displayname": "VIF States"
+                }
+            }
+        },
+        "siteDirectConnectVIFStateInfo": {
+            "type": "object",
+            "x-ves-proto-message": "ves.io.schema.site.DirectConnectVIFStateInfo",
+            "properties": {
+                "attachment_state": {
+                    "type": "string",
+                    "description": " VIF Attachment State",
+                    "title": "VIF Attachment State",
+                    "x-displayname": "VIF Attachment State"
+                },
+                "bgp_peers": {
+                    "type": "array",
+                    "description": "  BGP Peers",
+                    "title": "BGP Peers",
+                    "items": {
+                        "$ref": "#/definitions/siteDirectConnectBGPPeerInfo"
+                    },
+                    "x-displayname": " BGP Peers"
+                },
+                "vif_id": {
+                    "type": "string",
+                    "description": " VIF ID",
+                    "title": "VIF ID",
+                    "x-displayname": "VIF ID"
+                },
+                "vif_state": {
+                    "type": "string",
+                    "description": " VIF State",
+                    "title": "VIF State",
+                    "x-displayname": "VIF State"
+                }
+            }
+        },
         "siteFleetCondition": {
             "type": "object",
             "x-ves-proto-message": "ves.io.schema.site.FleetCondition",
@@ -4105,7 +4292,7 @@ var APISwaggerJSON string = `{
                     "description": " Following fields are only for customer edge sites\n List of REs to which to which this CE initiates IPSec/SSL connection to\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "Connected REs",
                     "items": {
-                        "$ref": "#/definitions/schemaObjectRefType"
+                        "$ref": "#/definitions/ioschemaObjectRefType"
                     },
                     "x-displayname": "Connected REs",
                     "x-ves-required": "true",
@@ -4118,7 +4305,7 @@ var APISwaggerJSON string = `{
                     "description": " This field is valid only for CE site object\n List of REs which can send config to this CE site\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "connected_re_for_config",
                     "items": {
-                        "$ref": "#/definitions/schemaObjectRefType"
+                        "$ref": "#/definitions/ioschemaObjectRefType"
                     },
                     "x-displayname": "REs for Configuration",
                     "x-ves-required": "true",
@@ -4199,6 +4386,13 @@ var APISwaggerJSON string = `{
                     "title": "k8s_api_servers",
                     "x-displayname": "Kubernetes API Servers"
                 },
+                "launch_ike_in_namespace": {
+                    "type": "boolean",
+                    "description": " identify that the CE needs to run IKE in namespace",
+                    "title": "launch_ike_in_namespace",
+                    "format": "boolean",
+                    "x-displayname": "Identify if CE needs to run IKE in namespace"
+                },
                 "local_control_plane_enabled": {
                     "type": "boolean",
                     "description": " Enable local control plane for L3VPN, SRV6, EVPN, AINs, VK8S, etc",
@@ -4239,6 +4433,13 @@ var APISwaggerJSON string = `{
                         "$ref": "#/definitions/schemaServiceParameters"
                     },
                     "x-displayname": "Mars VTRP Services"
+                },
+                "multus_enabled": {
+                    "type": "boolean",
+                    "description": " Indicates that Multus cni is enabled on the site",
+                    "title": "Multus support enabled",
+                    "format": "boolean",
+                    "x-displayname": "Multus support enabled"
                 },
                 "obelix": {
                     "description": " Obelix in the site",
@@ -4973,12 +5174,12 @@ var APISwaggerJSON string = `{
             "properties": {
                 "az_name": {
                     "type": "string",
-                    "description": " Name of the Availability zone\n\nExample: - \"us-east-2a\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.in: [\\\"ap-northeast-1a\\\",\\\"ap-northeast-1c\\\",\\\"ap-northeast-1d\\\",\\\"ap-southeast-1a\\\",\\\"ap-southeast-1b\\\",\\\"ap-southeast-1c\\\",\\\"eu-central-1a\\\",\\\"eu-central-1b\\\",\\\"eu-central-1c\\\",\\\"eu-west-1a\\\",\\\"eu-west-1b\\\",\\\"eu-west-1c\\\",\\\"eu-west-3a\\\",\\\"eu-west-3b\\\",\\\"eu-west-3c\\\",\\\"sa-east-1a\\\",\\\"sa-east-1b\\\",\\\"sa-east-1c\\\",\\\"us-east-1a\\\",\\\"us-east-1b\\\",\\\"us-east-1c\\\",\\\"us-east-1d\\\",\\\"us-east-1e\\\",\\\"us-east-1f\\\",\\\"us-east-2a\\\",\\\"us-east-2b\\\",\\\"us-east-2c\\\",\\\"us-west-2a\\\",\\\"us-west-2b\\\",\\\"us-west-2c\\\",\\\"us-west-2d\\\",\\\"ca-central-1a\\\",\\\"ca-central-1b\\\",\\\"ca-central-1d\\\",\\\"af-south-1a\\\",\\\"af-south-1b\\\",\\\"af-south-1c\\\",\\\"ap-east-1a\\\",\\\"ap-east-1b\\\",\\\"ap-east-1c\\\",\\\"ap-south-1a\\\",\\\"ap-south-1b\\\",\\\"ap-south-1c\\\",\\\"ap-northeast-2a\\\",\\\"ap-northeast-2b\\\",\\\"ap-northeast-2c\\\",\\\"ap-northeast-2d\\\",\\\"ap-southeast-2a\\\",\\\"ap-southeast-2b\\\",\\\"ap-southeast-2c\\\",\\\"eu-south-1a\\\",\\\"eu-south-1b\\\",\\\"eu-south-1c\\\",\\\"eu-north-1a\\\",\\\"eu-north-1b\\\",\\\"eu-north-1c\\\",\\\"eu-west-2a\\\",\\\"eu-west-2b\\\",\\\"eu-west-2c\\\",\\\"me-south-1a\\\",\\\"me-south-1b\\\",\\\"me-south-1c\\\",\\\"us-west-1a\\\",\\\"us-west-1c\\\",\\\"1\\\",\\\"2\\\",\\\"3\\\",\\\"asia-east1-a\\\",\\\"asia-east1-b\\\",\\\"asia-east1-c\\\",\\\"asia-east2-a\\\",\\\"asia-east2-b\\\",\\\"asia-east2-c\\\",\\\"asia-northeast1-a\\\",\\\"asia-northeast1-b\\\",\\\"asia-northeast1-c\\\",\\\"asia-northeast2-a\\\",\\\"asia-northeast2-b\\\",\\\"asia-northeast2-c\\\",\\\"asia-northeast3-a\\\",\\\"asia-northeast3-b\\\",\\\"asia-northeast3-c\\\",\\\"asia-south1-a\\\",\\\"asia-south1-b\\\",\\\"asia-south1-c\\\",\\\"asia-southeast1-a\\\",\\\"asia-southeast1-b\\\",\\\"asia-southeast1-c\\\",\\\"asia-southeast2-a\\\",\\\"asia-southeast2-b\\\",\\\"asia-southeast2-c\\\",\\\"australia-southeast1-a\\\",\\\"australia-southeast1-b\\\",\\\"australia-southeast1-c\\\",\\\"europe-north1-a\\\",\\\"europe-north1-b\\\",\\\"europe-north1-c\\\",\\\"europe-west1-b\\\",\\\"europe-west1-c\\\",\\\"europe-west1-d\\\",\\\"europe-west2-a\\\",\\\"europe-west2-b\\\",\\\"europe-west2-c\\\",\\\"europe-west3-a\\\",\\\"europe-west3-b\\\",\\\"europe-west3-c\\\",\\\"europe-west4-a\\\",\\\"europe-west4-b\\\",\\\"europe-west4-c\\\",\\\"europe-west6-a\\\",\\\"europe-west6-b\\\",\\\"europe-west6-c\\\",\\\"northamerica-northeast1-a\\\",\\\"northamerica-northeast1-b\\\",\\\"northamerica-northeast1-c\\\",\\\"southamerica-east1-a\\\",\\\"southamerica-east1-b\\\",\\\"southamerica-east1-c\\\",\\\"us-central1-a\\\",\\\"us-central1-b\\\",\\\"us-central1-c\\\",\\\"us-central1-f\\\",\\\"us-east1-b\\\",\\\"us-east1-c\\\",\\\"us-east1-d\\\",\\\"us-east4-a\\\",\\\"us-east4-b\\\",\\\"us-east4-c\\\",\\\"us-west1-a\\\",\\\"us-west1-b\\\",\\\"us-west1-c\\\",\\\"us-west2-a\\\",\\\"us-west2-b\\\",\\\"us-west2-c\\\",\\\"us-west3-a\\\",\\\"us-west3-b\\\",\\\"us-west3-c\\\",\\\"us-west4-a\\\",\\\"us-west4-b\\\",\\\"us-west4-c\\\",\\\"AzureAlternateRegion\\\"]\n",
+                    "description": " Name of the Availability zone\n\nExample: - \"us-east-2a\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.in: [\\\"ap-northeast-1a\\\",\\\"ap-northeast-1c\\\",\\\"ap-northeast-1d\\\",\\\"ap-southeast-1a\\\",\\\"ap-southeast-1b\\\",\\\"ap-southeast-1c\\\",\\\"eu-central-1a\\\",\\\"eu-central-1b\\\",\\\"eu-central-1c\\\",\\\"eu-west-1a\\\",\\\"eu-west-1b\\\",\\\"eu-west-1c\\\",\\\"eu-west-3a\\\",\\\"eu-west-3b\\\",\\\"eu-west-3c\\\",\\\"sa-east-1a\\\",\\\"sa-east-1b\\\",\\\"sa-east-1c\\\",\\\"us-east-1a\\\",\\\"us-east-1b\\\",\\\"us-east-1c\\\",\\\"us-east-1d\\\",\\\"us-east-1e\\\",\\\"us-east-1f\\\",\\\"us-east-2a\\\",\\\"us-east-2b\\\",\\\"us-east-2c\\\",\\\"us-west-2a\\\",\\\"us-west-2b\\\",\\\"us-west-2c\\\",\\\"us-west-2d\\\",\\\"ca-central-1a\\\",\\\"ca-central-1b\\\",\\\"ca-central-1d\\\",\\\"af-south-1a\\\",\\\"af-south-1b\\\",\\\"af-south-1c\\\",\\\"ap-east-1a\\\",\\\"ap-east-1b\\\",\\\"ap-east-1c\\\",\\\"ap-south-1a\\\",\\\"ap-south-1b\\\",\\\"ap-south-1c\\\",\\\"ap-northeast-2a\\\",\\\"ap-northeast-2b\\\",\\\"ap-northeast-2c\\\",\\\"ap-northeast-2d\\\",\\\"ap-southeast-2a\\\",\\\"ap-southeast-2b\\\",\\\"ap-southeast-2c\\\",\\\"eu-south-1a\\\",\\\"eu-south-1b\\\",\\\"eu-south-1c\\\",\\\"eu-north-1a\\\",\\\"eu-north-1b\\\",\\\"eu-north-1c\\\",\\\"eu-west-2a\\\",\\\"eu-west-2b\\\",\\\"eu-west-2c\\\",\\\"me-south-1a\\\",\\\"me-south-1b\\\",\\\"me-south-1c\\\",\\\"us-west-1a\\\",\\\"us-west-1b\\\",\\\"us-west-1c\\\",\\\"1\\\",\\\"2\\\",\\\"3\\\",\\\"asia-east1-a\\\",\\\"asia-east1-b\\\",\\\"asia-east1-c\\\",\\\"asia-east2-a\\\",\\\"asia-east2-b\\\",\\\"asia-east2-c\\\",\\\"asia-northeast1-a\\\",\\\"asia-northeast1-b\\\",\\\"asia-northeast1-c\\\",\\\"asia-northeast2-a\\\",\\\"asia-northeast2-b\\\",\\\"asia-northeast2-c\\\",\\\"asia-northeast3-a\\\",\\\"asia-northeast3-b\\\",\\\"asia-northeast3-c\\\",\\\"asia-south1-a\\\",\\\"asia-south1-b\\\",\\\"asia-south1-c\\\",\\\"asia-southeast1-a\\\",\\\"asia-southeast1-b\\\",\\\"asia-southeast1-c\\\",\\\"asia-southeast2-a\\\",\\\"asia-southeast2-b\\\",\\\"asia-southeast2-c\\\",\\\"australia-southeast1-a\\\",\\\"australia-southeast1-b\\\",\\\"australia-southeast1-c\\\",\\\"europe-north1-a\\\",\\\"europe-north1-b\\\",\\\"europe-north1-c\\\",\\\"europe-west1-b\\\",\\\"europe-west1-c\\\",\\\"europe-west1-d\\\",\\\"europe-west2-a\\\",\\\"europe-west2-b\\\",\\\"europe-west2-c\\\",\\\"europe-west3-a\\\",\\\"europe-west3-b\\\",\\\"europe-west3-c\\\",\\\"europe-west4-a\\\",\\\"europe-west4-b\\\",\\\"europe-west4-c\\\",\\\"europe-west6-a\\\",\\\"europe-west6-b\\\",\\\"europe-west6-c\\\",\\\"northamerica-northeast1-a\\\",\\\"northamerica-northeast1-b\\\",\\\"northamerica-northeast1-c\\\",\\\"southamerica-east1-a\\\",\\\"southamerica-east1-b\\\",\\\"southamerica-east1-c\\\",\\\"us-central1-a\\\",\\\"us-central1-b\\\",\\\"us-central1-c\\\",\\\"us-central1-f\\\",\\\"us-east1-b\\\",\\\"us-east1-c\\\",\\\"us-east1-d\\\",\\\"us-east4-a\\\",\\\"us-east4-b\\\",\\\"us-east4-c\\\",\\\"us-west1-a\\\",\\\"us-west1-b\\\",\\\"us-west1-c\\\",\\\"us-west2-a\\\",\\\"us-west2-b\\\",\\\"us-west2-c\\\",\\\"us-west3-a\\\",\\\"us-west3-b\\\",\\\"us-west3-c\\\",\\\"us-west4-a\\\",\\\"us-west4-b\\\",\\\"us-west4-c\\\",\\\"ap-southeast-3a\\\",\\\"ap-southeast-3b\\\",\\\"ap-southeast-3c\\\",\\\"AzureAlternateRegion\\\"]\n",
                     "title": "AZ Name",
                     "x-displayname": "AZ Name",
                     "x-ves-example": "us-east-2a",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.in": "[\\\"ap-northeast-1a\\\",\\\"ap-northeast-1c\\\",\\\"ap-northeast-1d\\\",\\\"ap-southeast-1a\\\",\\\"ap-southeast-1b\\\",\\\"ap-southeast-1c\\\",\\\"eu-central-1a\\\",\\\"eu-central-1b\\\",\\\"eu-central-1c\\\",\\\"eu-west-1a\\\",\\\"eu-west-1b\\\",\\\"eu-west-1c\\\",\\\"eu-west-3a\\\",\\\"eu-west-3b\\\",\\\"eu-west-3c\\\",\\\"sa-east-1a\\\",\\\"sa-east-1b\\\",\\\"sa-east-1c\\\",\\\"us-east-1a\\\",\\\"us-east-1b\\\",\\\"us-east-1c\\\",\\\"us-east-1d\\\",\\\"us-east-1e\\\",\\\"us-east-1f\\\",\\\"us-east-2a\\\",\\\"us-east-2b\\\",\\\"us-east-2c\\\",\\\"us-west-2a\\\",\\\"us-west-2b\\\",\\\"us-west-2c\\\",\\\"us-west-2d\\\",\\\"ca-central-1a\\\",\\\"ca-central-1b\\\",\\\"ca-central-1d\\\",\\\"af-south-1a\\\",\\\"af-south-1b\\\",\\\"af-south-1c\\\",\\\"ap-east-1a\\\",\\\"ap-east-1b\\\",\\\"ap-east-1c\\\",\\\"ap-south-1a\\\",\\\"ap-south-1b\\\",\\\"ap-south-1c\\\",\\\"ap-northeast-2a\\\",\\\"ap-northeast-2b\\\",\\\"ap-northeast-2c\\\",\\\"ap-northeast-2d\\\",\\\"ap-southeast-2a\\\",\\\"ap-southeast-2b\\\",\\\"ap-southeast-2c\\\",\\\"eu-south-1a\\\",\\\"eu-south-1b\\\",\\\"eu-south-1c\\\",\\\"eu-north-1a\\\",\\\"eu-north-1b\\\",\\\"eu-north-1c\\\",\\\"eu-west-2a\\\",\\\"eu-west-2b\\\",\\\"eu-west-2c\\\",\\\"me-south-1a\\\",\\\"me-south-1b\\\",\\\"me-south-1c\\\",\\\"us-west-1a\\\",\\\"us-west-1c\\\",\\\"1\\\",\\\"2\\\",\\\"3\\\",\\\"asia-east1-a\\\",\\\"asia-east1-b\\\",\\\"asia-east1-c\\\",\\\"asia-east2-a\\\",\\\"asia-east2-b\\\",\\\"asia-east2-c\\\",\\\"asia-northeast1-a\\\",\\\"asia-northeast1-b\\\",\\\"asia-northeast1-c\\\",\\\"asia-northeast2-a\\\",\\\"asia-northeast2-b\\\",\\\"asia-northeast2-c\\\",\\\"asia-northeast3-a\\\",\\\"asia-northeast3-b\\\",\\\"asia-northeast3-c\\\",\\\"asia-south1-a\\\",\\\"asia-south1-b\\\",\\\"asia-south1-c\\\",\\\"asia-southeast1-a\\\",\\\"asia-southeast1-b\\\",\\\"asia-southeast1-c\\\",\\\"asia-southeast2-a\\\",\\\"asia-southeast2-b\\\",\\\"asia-southeast2-c\\\",\\\"australia-southeast1-a\\\",\\\"australia-southeast1-b\\\",\\\"australia-southeast1-c\\\",\\\"europe-north1-a\\\",\\\"europe-north1-b\\\",\\\"europe-north1-c\\\",\\\"europe-west1-b\\\",\\\"europe-west1-c\\\",\\\"europe-west1-d\\\",\\\"europe-west2-a\\\",\\\"europe-west2-b\\\",\\\"europe-west2-c\\\",\\\"europe-west3-a\\\",\\\"europe-west3-b\\\",\\\"europe-west3-c\\\",\\\"europe-west4-a\\\",\\\"europe-west4-b\\\",\\\"europe-west4-c\\\",\\\"europe-west6-a\\\",\\\"europe-west6-b\\\",\\\"europe-west6-c\\\",\\\"northamerica-northeast1-a\\\",\\\"northamerica-northeast1-b\\\",\\\"northamerica-northeast1-c\\\",\\\"southamerica-east1-a\\\",\\\"southamerica-east1-b\\\",\\\"southamerica-east1-c\\\",\\\"us-central1-a\\\",\\\"us-central1-b\\\",\\\"us-central1-c\\\",\\\"us-central1-f\\\",\\\"us-east1-b\\\",\\\"us-east1-c\\\",\\\"us-east1-d\\\",\\\"us-east4-a\\\",\\\"us-east4-b\\\",\\\"us-east4-c\\\",\\\"us-west1-a\\\",\\\"us-west1-b\\\",\\\"us-west1-c\\\",\\\"us-west2-a\\\",\\\"us-west2-b\\\",\\\"us-west2-c\\\",\\\"us-west3-a\\\",\\\"us-west3-b\\\",\\\"us-west3-c\\\",\\\"us-west4-a\\\",\\\"us-west4-b\\\",\\\"us-west4-c\\\",\\\"AzureAlternateRegion\\\"]"
+                        "ves.io.schema.rules.string.in": "[\\\"ap-northeast-1a\\\",\\\"ap-northeast-1c\\\",\\\"ap-northeast-1d\\\",\\\"ap-southeast-1a\\\",\\\"ap-southeast-1b\\\",\\\"ap-southeast-1c\\\",\\\"eu-central-1a\\\",\\\"eu-central-1b\\\",\\\"eu-central-1c\\\",\\\"eu-west-1a\\\",\\\"eu-west-1b\\\",\\\"eu-west-1c\\\",\\\"eu-west-3a\\\",\\\"eu-west-3b\\\",\\\"eu-west-3c\\\",\\\"sa-east-1a\\\",\\\"sa-east-1b\\\",\\\"sa-east-1c\\\",\\\"us-east-1a\\\",\\\"us-east-1b\\\",\\\"us-east-1c\\\",\\\"us-east-1d\\\",\\\"us-east-1e\\\",\\\"us-east-1f\\\",\\\"us-east-2a\\\",\\\"us-east-2b\\\",\\\"us-east-2c\\\",\\\"us-west-2a\\\",\\\"us-west-2b\\\",\\\"us-west-2c\\\",\\\"us-west-2d\\\",\\\"ca-central-1a\\\",\\\"ca-central-1b\\\",\\\"ca-central-1d\\\",\\\"af-south-1a\\\",\\\"af-south-1b\\\",\\\"af-south-1c\\\",\\\"ap-east-1a\\\",\\\"ap-east-1b\\\",\\\"ap-east-1c\\\",\\\"ap-south-1a\\\",\\\"ap-south-1b\\\",\\\"ap-south-1c\\\",\\\"ap-northeast-2a\\\",\\\"ap-northeast-2b\\\",\\\"ap-northeast-2c\\\",\\\"ap-northeast-2d\\\",\\\"ap-southeast-2a\\\",\\\"ap-southeast-2b\\\",\\\"ap-southeast-2c\\\",\\\"eu-south-1a\\\",\\\"eu-south-1b\\\",\\\"eu-south-1c\\\",\\\"eu-north-1a\\\",\\\"eu-north-1b\\\",\\\"eu-north-1c\\\",\\\"eu-west-2a\\\",\\\"eu-west-2b\\\",\\\"eu-west-2c\\\",\\\"me-south-1a\\\",\\\"me-south-1b\\\",\\\"me-south-1c\\\",\\\"us-west-1a\\\",\\\"us-west-1b\\\",\\\"us-west-1c\\\",\\\"1\\\",\\\"2\\\",\\\"3\\\",\\\"asia-east1-a\\\",\\\"asia-east1-b\\\",\\\"asia-east1-c\\\",\\\"asia-east2-a\\\",\\\"asia-east2-b\\\",\\\"asia-east2-c\\\",\\\"asia-northeast1-a\\\",\\\"asia-northeast1-b\\\",\\\"asia-northeast1-c\\\",\\\"asia-northeast2-a\\\",\\\"asia-northeast2-b\\\",\\\"asia-northeast2-c\\\",\\\"asia-northeast3-a\\\",\\\"asia-northeast3-b\\\",\\\"asia-northeast3-c\\\",\\\"asia-south1-a\\\",\\\"asia-south1-b\\\",\\\"asia-south1-c\\\",\\\"asia-southeast1-a\\\",\\\"asia-southeast1-b\\\",\\\"asia-southeast1-c\\\",\\\"asia-southeast2-a\\\",\\\"asia-southeast2-b\\\",\\\"asia-southeast2-c\\\",\\\"australia-southeast1-a\\\",\\\"australia-southeast1-b\\\",\\\"australia-southeast1-c\\\",\\\"europe-north1-a\\\",\\\"europe-north1-b\\\",\\\"europe-north1-c\\\",\\\"europe-west1-b\\\",\\\"europe-west1-c\\\",\\\"europe-west1-d\\\",\\\"europe-west2-a\\\",\\\"europe-west2-b\\\",\\\"europe-west2-c\\\",\\\"europe-west3-a\\\",\\\"europe-west3-b\\\",\\\"europe-west3-c\\\",\\\"europe-west4-a\\\",\\\"europe-west4-b\\\",\\\"europe-west4-c\\\",\\\"europe-west6-a\\\",\\\"europe-west6-b\\\",\\\"europe-west6-c\\\",\\\"northamerica-northeast1-a\\\",\\\"northamerica-northeast1-b\\\",\\\"northamerica-northeast1-c\\\",\\\"southamerica-east1-a\\\",\\\"southamerica-east1-b\\\",\\\"southamerica-east1-c\\\",\\\"us-central1-a\\\",\\\"us-central1-b\\\",\\\"us-central1-c\\\",\\\"us-central1-f\\\",\\\"us-east1-b\\\",\\\"us-east1-c\\\",\\\"us-east1-d\\\",\\\"us-east4-a\\\",\\\"us-east4-b\\\",\\\"us-east4-c\\\",\\\"us-west1-a\\\",\\\"us-west1-b\\\",\\\"us-west1-c\\\",\\\"us-west2-a\\\",\\\"us-west2-b\\\",\\\"us-west2-c\\\",\\\"us-west3-a\\\",\\\"us-west3-b\\\",\\\"us-west3-c\\\",\\\"us-west4-a\\\",\\\"us-west4-b\\\",\\\"us-west4-c\\\",\\\"ap-southeast-3a\\\",\\\"ap-southeast-3b\\\",\\\"ap-southeast-3c\\\",\\\"AzureAlternateRegion\\\"]"
                     }
                 },
                 "inside_vip": {
@@ -5238,6 +5439,12 @@ var APISwaggerJSON string = `{
                     },
                     "x-displayname": "Conditions"
                 },
+                "direct_connect_status": {
+                    "description": " Direct Connect Status",
+                    "title": "Direct Connect Status",
+                    "$ref": "#/definitions/siteDirectConnectStatusInfo",
+                    "x-displayname": "Direct Connect Status"
+                },
                 "fleet_status": {
                     "description": " Fleet status shows fleet deployment status of last fleet default config on the node",
                     "title": "Fleet Status",
@@ -5274,7 +5481,7 @@ var APISwaggerJSON string = `{
                     "description": " Site object reference for which this status object is generated",
                     "title": "object_refs",
                     "items": {
-                        "$ref": "#/definitions/schemaObjectRefType"
+                        "$ref": "#/definitions/ioschemaObjectRefType"
                     },
                     "x-displayname": "Config Object"
                 },
@@ -5301,6 +5508,12 @@ var APISwaggerJSON string = `{
                     "title": "Ver Status",
                     "$ref": "#/definitions/siteVerStatusType",
                     "x-displayname": "VER Status"
+                },
+                "vnet_peering_status": {
+                    "description": " Azure Hub Spoke Vnet Peering Status",
+                    "title": "Azure Hub Spoke Vnet Peering Status\nx-displayName: \"Azure Hub Spoke Vnet Peering Status\"\nAzure Hub Spoke Vnet Peering Status",
+                    "$ref": "#/definitions/siteAzureHubSpokeVnetPeeringStatusInfo",
+                    "x-displayname": "Azure Hub Spoke Vnet Peering Status"
                 },
                 "volterra_software_status": {
                     "description": " VolterraSoftware status shows deployment status of last version in site and available\n version for upgrade.",
@@ -5769,6 +5982,45 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Nonconforming State",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.string.max_len": "256"
+                    }
+                }
+            }
+        },
+        "viewsAzureVnetType": {
+            "type": "object",
+            "description": "Resource group and name of existing Azure Vnet",
+            "title": "Azure Existing Vnet Type",
+            "x-displayname": "Azure Existing Vnet Type",
+            "x-ves-proto-message": "ves.io.schema.views.AzureVnetType",
+            "properties": {
+                "resource_group": {
+                    "type": "string",
+                    "description": " Resource group of existing Vnet\n\nExample: - \"MyResourceGroup\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 64\n  ves.io.schema.rules.string.min_len: 1\n",
+                    "title": "Existing Vnet Resource Group",
+                    "minLength": 1,
+                    "maxLength": 64,
+                    "x-displayname": "Existing Vnet Resource Group",
+                    "x-ves-example": "MyResourceGroup",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.max_len": "64",
+                        "ves.io.schema.rules.string.min_len": "1"
+                    }
+                },
+                "vnet_name": {
+                    "type": "string",
+                    "description": " Name of existing Vnet\n\nExample: - \"MyVnet\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 64\n  ves.io.schema.rules.string.min_len: 1\n",
+                    "title": "Existing Vnet Name",
+                    "minLength": 1,
+                    "maxLength": 64,
+                    "x-displayname": "Existing Vnet Name",
+                    "x-ves-example": "MyVnet",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.max_len": "64",
+                        "ves.io.schema.rules.string.min_len": "1"
                     }
                 }
             }

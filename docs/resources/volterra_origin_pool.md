@@ -23,12 +23,10 @@ resource "volterra_origin_pool" "example" {
   loadbalancer_algorithm = ["loadbalancer_algorithm"]
 
   origin_servers {
-    // One of the arguments from this list "custom_endpoint_object vn_private_ip vn_private_name public_name k8s_service consul_service public_ip private_ip private_name" must be set
+    // One of the arguments from this list "public_ip public_name private_name custom_endpoint_object vn_private_name private_ip k8s_service consul_service vn_private_ip" must be set
 
-    vn_private_name {
-      dns_name = "dns_name"
-
-      private_network {
+    custom_endpoint_object {
+      endpoint {
         name      = "test1"
         namespace = "staging"
         tenant    = "acmecorp"
@@ -83,9 +81,9 @@ Argument Reference
 
 `port` - (Required) Endpoint service is available on this port (`Int`).
 
-`no_tls` - (Optional) Origin servers do not use TLS (bool).
+`no_tls` - (Optional) x-displayName: "Disable" (bool).
 
-`use_tls` - (Optional) Origin servers use TLS. See [Use Tls ](#use-tls) below for details.
+`use_tls` - (Optional) x-displayName: "Enable". See [Use Tls ](#use-tls) below for details.
 
 ### Advanced Options
 
@@ -167,7 +165,7 @@ Specify origin server with Hashi Corp Consul service name and site information.
 
 `outside_network` - (Optional) Outside network on the site (bool).
 
-`service_name` - (Required) Consul service name of this origin server (`String`).
+`service_name` - (Required) cluster-id is optional. (`String`).
 
 `site_locator` - (Required) Site or Virtual site where this origin server is located. See [Site Locator ](#site-locator) below for details.
 
@@ -195,7 +193,7 @@ Custom selection of TLS versions and cipher suites.
 
 ### Default Security
 
-TLS v1.2+ with PFS ciphers with strong crypto algorithms..
+TLS v1.2+ with PFS ciphers and strong crypto algorithms..
 
 ### Default Subset
 
@@ -265,21 +263,23 @@ Specify origin server with K8s service name and site information.
 
 `vk8s_networks` - (Optional) origin server are on vK8s network on the site (bool).
 
-`service_name` - (Required) K8s service name of the origin server, including the namespace (servicename.namespace). For example, if the servicename is "frontend" and namespace is "speedtest", then you will enter "frontend.speedtest". (`String`).
+`service_name` - (Required) Both namespace and cluster-id are optional. (`String`).
+
+`service_selector` - (Required) discovery has to happen. This implicit label is added to service_selector. See [Service Selector ](#service-selector) below for details.
 
 `site_locator` - (Required) Site or Virtual site where this origin server is located. See [Site Locator ](#site-locator) below for details.
 
 ### Low Security
 
-Low Security chooses TLS v1.0+ including non-PFS ciphers and weak crypto algorithms..
+TLS v1.0+ including non-PFS ciphers and weak crypto algorithms..
 
 ### Medium Security
 
-Medium Security chooses TLS v1.0+ with only PFS ciphers and medium strength crypto algorithms..
+TLS v1.0+ with PFS ciphers and medium strength crypto algorithms..
 
 ### No Mtls
 
-Do not use MTLS for this pool.
+x-displayName: "Disable".
 
 ### No Panic Threshold
 
@@ -389,6 +389,12 @@ namespace - (Optional) then namespace will hold the referred object's(e.g. route
 
 tenant - (Optional) then tenant will hold the referred object's(e.g. route's) tenant. (String).
 
+### Service Selector
+
+discovery has to happen. This implicit label is added to service_selector.
+
+`expressions` - (Required) expressions contains the kubernetes style label expression for selections. (`String`).
+
 ### Site Locator
 
 Site or Virtual site where this origin server is located.
@@ -423,11 +429,11 @@ TLS parameters such as min/max TLS version and ciphers.
 
 `custom_security` - (Optional) Custom selection of TLS versions and cipher suites. See [Custom Security ](#custom-security) below for details.
 
-`default_security` - (Optional) TLS v1.2+ with PFS ciphers with strong crypto algorithms. (bool).
+`default_security` - (Optional) TLS v1.2+ with PFS ciphers and strong crypto algorithms. (bool).
 
-`low_security` - (Optional) Low Security chooses TLS v1.0+ including non-PFS ciphers and weak crypto algorithms. (bool).
+`low_security` - (Optional) TLS v1.0+ including non-PFS ciphers and weak crypto algorithms. (bool).
 
-`medium_security` - (Optional) Medium Security chooses TLS v1.0+ with only PFS ciphers and medium strength crypto algorithms. (bool).
+`medium_security` - (Optional) TLS v1.0+ with PFS ciphers and medium strength crypto algorithms. (bool).
 
 ### Use Host Header As Sni
 
@@ -435,7 +441,7 @@ Use the host header as SNI. The host header value is extracted after any configu
 
 ### Use Mtls
 
-Use MTLS for this pool using provided certificates.
+x-displayName: "Enable".
 
 `tls_certificates` - (Required) TLS Certificates. See [Tls Certificates ](#tls-certificates) below for details.
 
@@ -451,11 +457,11 @@ Volterra will try to fetch OCSPResponse with sha256 and sha1 as HashAlgorithm, i
 
 ### Use Tls
 
-Origin servers use TLS.
+x-displayName: "Enable".
 
-`no_mtls` - (Optional) Do not use MTLS for this pool (bool).
+`no_mtls` - (Optional) x-displayName: "Disable" (bool).
 
-`use_mtls` - (Optional) Use MTLS for this pool using provided certificates. See [Use Mtls ](#use-mtls) below for details.
+`use_mtls` - (Optional) x-displayName: "Enable". See [Use Mtls ](#use-mtls) below for details.
 
 `skip_server_verification` - (Optional) Skip origin server verification (bool).
 

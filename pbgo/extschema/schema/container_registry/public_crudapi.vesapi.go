@@ -2207,7 +2207,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Metadata"
                 },
                 "spec": {
-                    "description": " Specification of the Container Registry ",
+                    "description": " Specification of the Container Registry",
                     "title": "spec",
                     "$ref": "#/definitions/container_registryCreateSpecType",
                     "x-displayname": "Spec"
@@ -2225,7 +2225,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Metadata"
                 },
                 "spec": {
-                    "description": " Specification of the Container Registry ",
+                    "description": " Specification of the Container Registry",
                     "title": "spec",
                     "$ref": "#/definitions/container_registryGetSpecType",
                     "x-displayname": "Spec"
@@ -2359,7 +2359,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "ReplaceRequest Format"
                 },
                 "spec": {
-                    "description": " Specification of the Container Registry ",
+                    "description": " Specification of the Container Registry",
                     "title": "spec",
                     "$ref": "#/definitions/container_registryGetSpecType",
                     "x-displayname": "Spec"
@@ -2641,7 +2641,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Metadata"
                 },
                 "spec": {
-                    "description": " Specification of the Container Registry ",
+                    "description": " Specification of the Container Registry",
                     "title": "spec",
                     "$ref": "#/definitions/container_registrySpecType",
                     "x-displayname": "Spec"
@@ -2668,7 +2668,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Metadata"
                 },
                 "spec": {
-                    "description": " Specification of the Container Registry ",
+                    "description": " Specification of the Container Registry",
                     "title": "spec",
                     "$ref": "#/definitions/container_registryReplaceSpecType",
                     "x-displayname": "Spec"

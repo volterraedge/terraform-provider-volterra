@@ -32,15 +32,32 @@ resource "volterra_fleet" "example" {
 
   // One of the arguments from this list "interface_list default_config device_list" must be set
 
-  interface_list {
-    interfaces {
-      name      = "test1"
-      namespace = "staging"
-      tenant    = "acmecorp"
+  device_list {
+    devices {
+      // One of the arguments from this list "network_device" must be set
+
+      network_device {
+        interface {
+          name      = "test1"
+          namespace = "staging"
+          tenant    = "acmecorp"
+        }
+
+        use = "use"
+      }
+
+      name  = "eth0"
+      owner = "owner"
     }
   }
+
   // One of the arguments from this list "logs_streaming_disabled log_receiver" must be set
-  logs_streaming_disabled = true
+
+  log_receiver {
+    name      = "test1"
+    namespace = "staging"
+    tenant    = "acmecorp"
+  }
   // One of the arguments from this list "default_storage_class storage_class_list" must be set
   default_storage_class = true
   // One of the arguments from this list "no_storage_device storage_device_list" must be set
@@ -246,6 +263,16 @@ Configure LACP (802.3ad) based bond device.
 
 `rate` - (Optional) Interval in seconds to transmit LACP packets (`Int`).
 
+### Mayastor Pools
+
+mechanism/transport/device type and differentiated by corresponding performance and/or attachment locality..
+
+`node` - (Required) Enter k8s node name of Mayastor Node (MSN) where this pool is or going to be located. (`String`).
+
+`pool_disk_devices` - (Required) It supports various types such as "/dev/sdb", "nvme://nqn.2014-08.com.vendor:nvme:nvm-subsystem-sn-d78432" or "iscsi://iqn.2000-08.com.datacore.com:cloudvm41-2". (`String`).
+
+`pool_name` - (Required) Enter Mayastor Pool Name (`String`).
+
 ### Netapp Trident
 
 Storage class Device configuration for NetApp Trident.
@@ -282,11 +309,9 @@ Nexthop address when type is "Use-Configured".
 
 ### Openebs Enterprise
 
-Storage class Device configuration for OpenEBS Enterprise.
+Device configuration for Pure Storage Service Orchestrator.
 
-`protocol` - (Optional) Defines type of transport protocol used to mount the PV to the worker node hosting the associated application pod (NVMe-oF) (`String`).
-
-`replication` - (Optional) Replication sets the replication factor of the PV, i.e. the number of data replicas to be maintained for it such as 1 or 3. (`Int`).
+`mayastor_pools` - (Optional) mechanism/transport/device type and differentiated by corresponding performance and/or attachment locality.. See [Mayastor Pools ](#mayastor-pools) below for details.
 
 ### Pure Service Orchestrator
 
@@ -333,8 +358,6 @@ List of custom storage classes.
 `custom_storage` - (Optional) Storage configuration for Custom Storage. See [Custom Storage ](#custom-storage) below for details.
 
 `netapp_trident` - (Optional) Storage class Device configuration for NetApp Trident. See [Netapp Trident ](#netapp-trident) below for details.
-
-`openebs_enterprise` - (Optional) Storage class Device configuration for OpenEBS Enterprise. See [Openebs Enterprise ](#openebs-enterprise) below for details.
 
 `pure_service_orchestrator` - (Optional) Storage class Device configuration for Pure Service Orchestrator. See [Pure Service Orchestrator ](#pure-service-orchestrator) below for details.
 

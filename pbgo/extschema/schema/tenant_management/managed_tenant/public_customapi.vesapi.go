@@ -506,7 +506,7 @@ var CustomAPISwaggerJSON string = `{
                 },
                 "managed_tenant_groups": {
                     "type": "array",
-                    "description": "x-displayName: \"Managed Tenant Groups\"\nx-example: \"user-group1\"\nList of group names in managed tenant (MT).\nNote - To properly establish access, admin of managed tenant need to create corresponding Allowed Tenant\nconfiguration object with access to use same group names. Once it's setup, when user from original tenant \naccess managed tenant, underlying roles from managed tenant will be applied to user.",
+                    "description": "x-displayName: \"Managed Tenant Groups\"\nx-example: \"user-group1\"\nList of group names in managed tenant (MT).\nNote - To properly establish access, admin of managed tenant need to create corresponding Allowed Tenant\nconfiguration object with access to use same group names. Once it's setup, when user from original tenant\naccess managed tenant, underlying roles from managed tenant will be applied to user.",
                     "title": "managed_tenant_groups",
                     "items": {
                         "type": "string"

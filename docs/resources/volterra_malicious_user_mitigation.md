@@ -42,7 +42,7 @@ Argument Reference
 
 ### Spec Argument Reference
 
-`mitigation_type` - (Optional) A threat level is calculated for every user identified using config specified in user_identification by analyzing their activity and reputation.. See [Mitigation Type ](#mitigation-type) below for details.
+`mitigation_type` - (Optional) Malicious user mitigation rules specifies the actions to be taken for users to different threat levels. See [Mitigation Type ](#mitigation-type) below for details.
 
 ### Alert Only
 
@@ -50,27 +50,27 @@ Generate alert while not taking any invasive actions.
 
 ### Block Temporarily
 
-If temporary blocking is not configured for the virtual host, a software default configuration is used.
+assigned to this mitigation action.
 
 ### Captcha Challenge
 
-If Captcha Challenge is not configured for the virtual host, a software default configuration is used.
+configured on the corresponding http load balancer.
 
 ### High
 
-User estimated to be high threat.
+.
 
 ### Javascript Challenge
 
-If Javascript Challenge is not configured for the virtual host, a software default configuration is used.
+configured on the corresponding http load balancer.
 
 ### Low
 
-User estimated to be low threat.
+.
 
 ### Medium
 
-User estimated to be medium threat.
+.
 
 ### Mitigation Action
 
@@ -78,19 +78,19 @@ The action to be taken at the specified threat level.
 
 `alert_only` - (Optional) Generate alert while not taking any invasive actions (bool).
 
-`block_temporarily` - (Optional) If temporary blocking is not configured for the virtual host, a software default configuration is used (bool).
+`block_temporarily` - (Optional) assigned to this mitigation action (bool).
 
-`captcha_challenge` - (Optional) If Captcha Challenge is not configured for the virtual host, a software default configuration is used (bool).
+`captcha_challenge` - (Optional) configured on the corresponding http load balancer (bool).
 
-`javascript_challenge` - (Optional) If Javascript Challenge is not configured for the virtual host, a software default configuration is used (bool).
+`javascript_challenge` - (Optional) configured on the corresponding http load balancer (bool).
 
 `none` - (Optional) No mitigation actions (bool).
 
 ### Mitigation Type
 
-A threat level is calculated for every user identified using config specified in user_identification by analyzing their activity and reputation..
+Malicious user mitigation rules specifies the actions to be taken for users to different threat levels.
 
-`rules` - (Required) A threat level is calculated for every user identified using config specified in user_identification by analyzing their activity and reputation.. See [Rules ](#rules) below for details.
+`rules` - (Required) Define the threat levels and the corresponding mitigation actions to be taken. See [Rules ](#rules) below for details.
 
 ### None
 
@@ -98,7 +98,7 @@ No mitigation actions.
 
 ### Rules
 
-A threat level is calculated for every user identified using config specified in user_identification by analyzing their activity and reputation..
+Define the threat levels and the corresponding mitigation actions to be taken.
 
 `mitigation_action` - (Required) The action to be taken at the specified threat level. See [Mitigation Action ](#mitigation-action) below for details.
 
@@ -108,11 +108,11 @@ A threat level is calculated for every user identified using config specified in
 
 The threat level at which mitigation actions will be taken.
 
-`high` - (Optional) User estimated to be high threat (bool).
+`high` - (Optional) (bool).
 
-`low` - (Optional) User estimated to be low threat (bool).
+`low` - (Optional) (bool).
 
-`medium` - (Optional) User estimated to be medium threat (bool).
+`medium` - (Optional) (bool).
 
 Attribute Reference
 -------------------

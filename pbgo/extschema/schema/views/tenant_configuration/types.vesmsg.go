@@ -802,7 +802,8 @@ var DefaultPasswordPolicyValidator = func() *ValidatePasswordPolicy {
 
 	vrhMinimumLength := v.MinimumLengthValidationRuleHandler
 	rulesMinimumLength := map[string]string{
-		"ves.io.schema.rules.uint32.gte": "7",
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.uint32.gte":       "7",
 	}
 	vFn, err = vrhMinimumLength(rulesMinimumLength)
 	if err != nil {

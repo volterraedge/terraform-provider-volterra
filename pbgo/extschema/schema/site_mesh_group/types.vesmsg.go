@@ -1978,6 +1978,37 @@ func (m *SiteMeshGroupStatus) Validate(ctx context.Context, opts ...db.ValidateO
 	return SiteMeshGroupStatusValidator().Validate(ctx, m, opts...)
 }
 
+func (m *SiteMeshGroupStatus) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetSiteInfoDRefInfo()
+
+}
+
+// GetDRefInfo for the field's type
+func (m *SiteMeshGroupStatus) GetSiteInfoDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetSiteInfo() == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	for idx, e := range m.GetSiteInfo() {
+		driSet, err := e.GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetSiteInfo() GetDRefInfo() FAILED")
+		}
+		for i := range driSet {
+			dri := &driSet[i]
+			dri.DRField = fmt.Sprintf("site_info[%v].%s", idx, dri.DRField)
+		}
+		drInfos = append(drInfos, driSet...)
+	}
+	return drInfos, nil
+
+}
+
 type ValidateSiteMeshGroupStatus struct {
 	FldValidators map[string]db.ValidatorFunc
 }
@@ -2008,12 +2039,26 @@ func (v *ValidateSiteMeshGroupStatus) Validate(ctx context.Context, pm interface
 
 	}
 
+	if fv, exists := v.FldValidators["site_info"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("site_info"))
+		for idx, item := range m.GetSiteInfo() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultSiteMeshGroupStatusValidator = func() *ValidateSiteMeshGroupStatus {
 	v := &ValidateSiteMeshGroupStatus{FldValidators: map[string]db.ValidatorFunc{}}
+
+	v.FldValidators["site_info"] = ves_io_schema.SiteInfoValidator().Validate
 
 	return v
 }()
@@ -2121,6 +2166,27 @@ type ValidateSpokeMeshGroupType struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateSpokeMeshGroupType) HubMeshGroupValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "MessageValidationRuleHandler for hub_mesh_group")
+	}
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		if err := ves_io_schema_views.ObjectRefTypeValidator().Validate(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateSpokeMeshGroupType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*SpokeMeshGroupType)
 	if !ok {
@@ -2151,7 +2217,24 @@ func (v *ValidateSpokeMeshGroupType) Validate(ctx context.Context, pm interface{
 var DefaultSpokeMeshGroupTypeValidator = func() *ValidateSpokeMeshGroupType {
 	v := &ValidateSpokeMeshGroupType{FldValidators: map[string]db.ValidatorFunc{}}
 
-	v.FldValidators["hub_mesh_group"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhHubMeshGroup := v.HubMeshGroupValidationRuleHandler
+	rulesHubMeshGroup := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhHubMeshGroup(rulesHubMeshGroup)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for SpokeMeshGroupType.hub_mesh_group: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["hub_mesh_group"] = vFn
 
 	return v
 }()

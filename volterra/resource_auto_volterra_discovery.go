@@ -60,6 +60,18 @@ func resourceVolterraDiscovery() *schema.Resource {
 				ForceNew: true,
 			},
 
+			"cluster_id": {
+
+				Type:     schema.TypeString,
+				Optional: true,
+			},
+
+			"no_cluster_id": {
+
+				Type:     schema.TypeBool,
+				Optional: true,
+			},
+
 			"discovery_consul": {
 
 				Type:     schema.TypeSet,
@@ -1565,6 +1577,33 @@ func resourceVolterraDiscoveryCreate(d *schema.ResourceData, meta interface{}) e
 	if v, ok := d.GetOk("namespace"); ok && !isIntfNil(v) {
 		createMeta.Namespace =
 			v.(string)
+	}
+
+	//cluster_identifier_choice
+
+	clusterIdentifierChoiceTypeFound := false
+
+	if v, ok := d.GetOk("cluster_id"); ok && !clusterIdentifierChoiceTypeFound {
+
+		clusterIdentifierChoiceTypeFound = true
+		clusterIdentifierChoiceInt := &ves_io_schema_discovery.CreateSpecType_ClusterId{}
+
+		createSpec.ClusterIdentifierChoice = clusterIdentifierChoiceInt
+
+		clusterIdentifierChoiceInt.ClusterId = v.(string)
+
+	}
+
+	if v, ok := d.GetOk("no_cluster_id"); ok && !clusterIdentifierChoiceTypeFound {
+
+		clusterIdentifierChoiceTypeFound = true
+
+		if v.(bool) {
+			clusterIdentifierChoiceInt := &ves_io_schema_discovery.CreateSpecType_NoClusterId{}
+			clusterIdentifierChoiceInt.NoClusterId = &ves_io_schema.Empty{}
+			createSpec.ClusterIdentifierChoice = clusterIdentifierChoiceInt
+		}
+
 	}
 
 	//discovery_choice
@@ -3522,6 +3561,31 @@ func resourceVolterraDiscoveryUpdate(d *schema.ResourceData, meta interface{}) e
 	if v, ok := d.GetOk("namespace"); ok && !isIntfNil(v) {
 		updateMeta.Namespace =
 			v.(string)
+	}
+
+	clusterIdentifierChoiceTypeFound := false
+
+	if v, ok := d.GetOk("cluster_id"); ok && !clusterIdentifierChoiceTypeFound {
+
+		clusterIdentifierChoiceTypeFound = true
+		clusterIdentifierChoiceInt := &ves_io_schema_discovery.ReplaceSpecType_ClusterId{}
+
+		updateSpec.ClusterIdentifierChoice = clusterIdentifierChoiceInt
+
+		clusterIdentifierChoiceInt.ClusterId = v.(string)
+
+	}
+
+	if v, ok := d.GetOk("no_cluster_id"); ok && !clusterIdentifierChoiceTypeFound {
+
+		clusterIdentifierChoiceTypeFound = true
+
+		if v.(bool) {
+			clusterIdentifierChoiceInt := &ves_io_schema_discovery.ReplaceSpecType_NoClusterId{}
+			clusterIdentifierChoiceInt.NoClusterId = &ves_io_schema.Empty{}
+			updateSpec.ClusterIdentifierChoice = clusterIdentifierChoiceInt
+		}
+
 	}
 
 	discoveryChoiceTypeFound := false

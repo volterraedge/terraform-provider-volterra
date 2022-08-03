@@ -20,8 +20,8 @@ resource "volterra_virtual_network" "example" {
   name      = "acmecorp-web"
   namespace = "staging"
 
-  // One of the arguments from this list "global_network site_local_network site_local_inside_network legacy_type srv6_network" must be set
-  site_local_inside_network = true
+  // One of the arguments from this list "site_local_network site_local_inside_network legacy_type srv6_network global_network" must be set
+  global_network = true
 }
 
 ```
@@ -85,7 +85,7 @@ Four-Octet AS Specific Route Target..
 
 ### Default Gateway
 
-Traffic matching the ip prefixes is sent to default gateway .
+Traffic matching the ip prefixes is sent to default gateway.
 
 ### Enterprise Network Rtargets
 

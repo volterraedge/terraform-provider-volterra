@@ -1816,7 +1816,8 @@ type APIClient interface {
 	// Replace Managed Tenant
 	//
 	// x-displayName: "Replace Managed Tenant"
-	// Replaces attributes of a managed_tenant instance including its metadata like labels, description etc.
+	// Replaces attributes of a managed_tenant configuration.
+	// Update of existing tenant_choice selection is not supported but user may update existing group assignments.
 	Replace(ctx context.Context, in *ReplaceRequest, opts ...grpc.CallOption) (*ReplaceResponse, error)
 	// Delete
 	//
@@ -1898,7 +1899,8 @@ type APIServer interface {
 	// Replace Managed Tenant
 	//
 	// x-displayName: "Replace Managed Tenant"
-	// Replaces attributes of a managed_tenant instance including its metadata like labels, description etc.
+	// Replaces attributes of a managed_tenant configuration.
+	// Update of existing tenant_choice selection is not supported but user may update existing group assignments.
 	Replace(context.Context, *ReplaceRequest) (*ReplaceResponse, error)
 	// Delete
 	//

@@ -174,6 +174,7 @@ type PasswordPolicy struct {
 	// Minimum Length
 	//
 	// x-displayName: "Minimum Length"
+	// x-required
 	// x-example: "12"
 	// Minimum length of password.
 	MinimumLength uint32 `protobuf:"varint,8,opt,name=minimum_length,json=minimumLength,proto3" json:"minimum_length,omitempty"`

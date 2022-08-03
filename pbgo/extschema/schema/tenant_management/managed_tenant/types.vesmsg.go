@@ -232,6 +232,14 @@ type ValidateCreateSpecType struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateCreateSpecType) TenantChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for tenant_choice")
+	}
+	return validatorFn, nil
+}
+
 func (v *ValidateCreateSpecType) TenantChoiceTenantIdValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	oValidatorFn_TenantId, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
@@ -309,6 +317,16 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["tenant_choice"]; exists {
+		val := m.GetTenantChoice()
+		vOpts := append(opts,
+			db.WithValidateField("tenant_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
 	switch m.GetTenantChoice().(type) {
 	case *CreateSpecType_TenantId:
 		if fv, exists := v.FldValidators["tenant_choice.tenant_id"]; exists {
@@ -343,6 +361,17 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
+	case *CreateSpecType_NewTenantInfo:
+		if fv, exists := v.FldValidators["tenant_choice.new_tenant_info"]; exists {
+			val := m.GetTenantChoice().(*CreateSpecType_NewTenantInfo).NewTenantInfo
+			vOpts := append(opts,
+				db.WithValidateField("tenant_choice"),
+				db.WithValidateField("new_tenant_info"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 
@@ -360,6 +389,17 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
+
+	vrhTenantChoice := v.TenantChoiceValidationRuleHandler
+	rulesTenantChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhTenantChoice(rulesTenantChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateSpecType.tenant_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["tenant_choice"] = vFn
 
 	vrhTenantChoiceTenantId := v.TenantChoiceTenantIdValidationRuleHandler
 	rulesTenantChoiceTenantId := map[string]string{
@@ -395,6 +435,8 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["groups"] = vFn
+
+	v.FldValidators["tenant_choice.new_tenant_info"] = NewTenantInfoValidator().Validate
 
 	return v
 }()
@@ -475,6 +517,14 @@ type ValidateGetSpecType struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateGetSpecType) TenantChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for tenant_choice")
+	}
+	return validatorFn, nil
+}
+
 func (v *ValidateGetSpecType) TenantChoiceTenantIdValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	oValidatorFn_TenantId, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
@@ -552,6 +602,25 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 
 	}
 
+	if fv, exists := v.FldValidators["status"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("status"))
+		if err := fv(ctx, m.GetStatus(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["tenant_choice"]; exists {
+		val := m.GetTenantChoice()
+		vOpts := append(opts,
+			db.WithValidateField("tenant_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
 	switch m.GetTenantChoice().(type) {
 	case *GetSpecType_TenantId:
 		if fv, exists := v.FldValidators["tenant_choice.tenant_id"]; exists {
@@ -586,6 +655,17 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
+	case *GetSpecType_NewTenantInfo:
+		if fv, exists := v.FldValidators["tenant_choice.new_tenant_info"]; exists {
+			val := m.GetTenantChoice().(*GetSpecType_NewTenantInfo).NewTenantInfo
+			vOpts := append(opts,
+				db.WithValidateField("tenant_choice"),
+				db.WithValidateField("new_tenant_info"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 
@@ -603,6 +683,17 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
+
+	vrhTenantChoice := v.TenantChoiceValidationRuleHandler
+	rulesTenantChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhTenantChoice(rulesTenantChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GetSpecType.tenant_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["tenant_choice"] = vFn
 
 	vrhTenantChoiceTenantId := v.TenantChoiceTenantIdValidationRuleHandler
 	rulesTenantChoiceTenantId := map[string]string{
@@ -638,6 +729,8 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["groups"] = vFn
+
+	v.FldValidators["tenant_choice.new_tenant_info"] = NewTenantInfoValidator().Validate
 
 	return v
 }()
@@ -718,6 +811,14 @@ type ValidateGlobalSpecType struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateGlobalSpecType) TenantChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for tenant_choice")
+	}
+	return validatorFn, nil
+}
+
 func (v *ValidateGlobalSpecType) TenantChoiceTenantIdValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	oValidatorFn_TenantId, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
@@ -795,6 +896,25 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["status"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("status"))
+		if err := fv(ctx, m.GetStatus(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["tenant_choice"]; exists {
+		val := m.GetTenantChoice()
+		vOpts := append(opts,
+			db.WithValidateField("tenant_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
 	switch m.GetTenantChoice().(type) {
 	case *GlobalSpecType_TenantId:
 		if fv, exists := v.FldValidators["tenant_choice.tenant_id"]; exists {
@@ -829,6 +949,17 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
+	case *GlobalSpecType_NewTenantInfo:
+		if fv, exists := v.FldValidators["tenant_choice.new_tenant_info"]; exists {
+			val := m.GetTenantChoice().(*GlobalSpecType_NewTenantInfo).NewTenantInfo
+			vOpts := append(opts,
+				db.WithValidateField("tenant_choice"),
+				db.WithValidateField("new_tenant_info"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 
@@ -846,6 +977,17 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
+
+	vrhTenantChoice := v.TenantChoiceValidationRuleHandler
+	rulesTenantChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhTenantChoice(rulesTenantChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.tenant_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["tenant_choice"] = vFn
 
 	vrhTenantChoiceTenantId := v.TenantChoiceTenantIdValidationRuleHandler
 	rulesTenantChoiceTenantId := map[string]string{
@@ -881,6 +1023,8 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["groups"] = vFn
+
+	v.FldValidators["tenant_choice.new_tenant_info"] = NewTenantInfoValidator().Validate
 
 	return v
 }()
@@ -1099,6 +1243,196 @@ func GroupAssignmentTypeValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *NewTenantInfo) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *NewTenantInfo) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *NewTenantInfo) DeepCopy() *NewTenantInfo {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &NewTenantInfo{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *NewTenantInfo) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *NewTenantInfo) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return NewTenantInfoValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateNewTenantInfo struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateNewTenantInfo) CnameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for cname")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateNewTenantInfo) CompanyNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for company_name")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateNewTenantInfo) UsagePlanNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for usage_plan_name")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateNewTenantInfo) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*NewTenantInfo)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *NewTenantInfo got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["billing_address"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("billing_address"))
+		if err := fv(ctx, m.GetBillingAddress(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["cname"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("cname"))
+		if err := fv(ctx, m.GetCname(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["company_name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("company_name"))
+		if err := fv(ctx, m.GetCompanyName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["tenant_owner_info"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("tenant_owner_info"))
+		if err := fv(ctx, m.GetTenantOwnerInfo(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["usage_plan_name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("usage_plan_name"))
+		if err := fv(ctx, m.GetUsagePlanName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultNewTenantInfoValidator = func() *ValidateNewTenantInfo {
+	v := &ValidateNewTenantInfo{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhCname := v.CnameValidationRuleHandler
+	rulesCname := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.max_len":   "17",
+	}
+	vFn, err = vrhCname(rulesCname)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for NewTenantInfo.cname: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["cname"] = vFn
+
+	vrhCompanyName := v.CompanyNameValidationRuleHandler
+	rulesCompanyName := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.max_len":   "256",
+	}
+	vFn, err = vrhCompanyName(rulesCompanyName)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for NewTenantInfo.company_name: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["company_name"] = vFn
+
+	vrhUsagePlanName := v.UsagePlanNameValidationRuleHandler
+	rulesUsagePlanName := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.max_len":   "256",
+	}
+	vFn, err = vrhUsagePlanName(rulesUsagePlanName)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for NewTenantInfo.usage_plan_name: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["usage_plan_name"] = vFn
+
+	v.FldValidators["tenant_owner_info"] = TenantOwnerInfoValidator().Validate
+
+	return v
+}()
+
+func NewTenantInfoValidator() db.Validator {
+	return DefaultNewTenantInfoValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *ReplaceSpecType) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -1167,6 +1501,14 @@ func (m *ReplaceSpecType) GetGroupsDRefInfo() ([]db.DRefInfo, error) {
 
 type ValidateReplaceSpecType struct {
 	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateReplaceSpecType) TenantChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for tenant_choice")
+	}
+	return validatorFn, nil
 }
 
 func (v *ValidateReplaceSpecType) TenantChoiceTenantIdValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
@@ -1246,6 +1588,16 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 
 	}
 
+	if fv, exists := v.FldValidators["tenant_choice"]; exists {
+		val := m.GetTenantChoice()
+		vOpts := append(opts,
+			db.WithValidateField("tenant_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
 	switch m.GetTenantChoice().(type) {
 	case *ReplaceSpecType_TenantId:
 		if fv, exists := v.FldValidators["tenant_choice.tenant_id"]; exists {
@@ -1280,6 +1632,17 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
+	case *ReplaceSpecType_NewTenantInfo:
+		if fv, exists := v.FldValidators["tenant_choice.new_tenant_info"]; exists {
+			val := m.GetTenantChoice().(*ReplaceSpecType_NewTenantInfo).NewTenantInfo
+			vOpts := append(opts,
+				db.WithValidateField("tenant_choice"),
+				db.WithValidateField("new_tenant_info"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 
@@ -1297,6 +1660,17 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
+
+	vrhTenantChoice := v.TenantChoiceValidationRuleHandler
+	rulesTenantChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhTenantChoice(rulesTenantChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ReplaceSpecType.tenant_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["tenant_choice"] = vFn
 
 	vrhTenantChoiceTenantId := v.TenantChoiceTenantIdValidationRuleHandler
 	rulesTenantChoiceTenantId := map[string]string{
@@ -1333,11 +1707,213 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	}
 	v.FldValidators["groups"] = vFn
 
+	v.FldValidators["tenant_choice.new_tenant_info"] = NewTenantInfoValidator().Validate
+
 	return v
 }()
 
 func ReplaceSpecTypeValidator() db.Validator {
 	return DefaultReplaceSpecTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *TenantOwnerInfo) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *TenantOwnerInfo) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *TenantOwnerInfo) DeepCopy() *TenantOwnerInfo {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &TenantOwnerInfo{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *TenantOwnerInfo) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *TenantOwnerInfo) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return TenantOwnerInfoValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateTenantOwnerInfo struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateTenantOwnerInfo) FirstNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for first_name")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateTenantOwnerInfo) LastNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for last_name")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateTenantOwnerInfo) EmailValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for email")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateTenantOwnerInfo) ContactNumberValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for contact_number")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateTenantOwnerInfo) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*TenantOwnerInfo)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *TenantOwnerInfo got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["contact_number"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("contact_number"))
+		if err := fv(ctx, m.GetContactNumber(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["email"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("email"))
+		if err := fv(ctx, m.GetEmail(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["first_name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("first_name"))
+		if err := fv(ctx, m.GetFirstName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["last_name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("last_name"))
+		if err := fv(ctx, m.GetLastName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultTenantOwnerInfoValidator = func() *ValidateTenantOwnerInfo {
+	v := &ValidateTenantOwnerInfo{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhFirstName := v.FirstNameValidationRuleHandler
+	rulesFirstName := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.max_len":   "256",
+	}
+	vFn, err = vrhFirstName(rulesFirstName)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for TenantOwnerInfo.first_name: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["first_name"] = vFn
+
+	vrhLastName := v.LastNameValidationRuleHandler
+	rulesLastName := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.max_len":   "256",
+	}
+	vFn, err = vrhLastName(rulesLastName)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for TenantOwnerInfo.last_name: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["last_name"] = vFn
+
+	vrhEmail := v.EmailValidationRuleHandler
+	rulesEmail := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.email":     "true",
+	}
+	vFn, err = vrhEmail(rulesEmail)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for TenantOwnerInfo.email: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["email"] = vFn
+
+	vrhContactNumber := v.ContactNumberValidationRuleHandler
+	rulesContactNumber := map[string]string{
+		"ves.io.schema.rules.string.phone_number": "true",
+	}
+	vFn, err = vrhContactNumber(rulesContactNumber)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for TenantOwnerInfo.contact_number: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["contact_number"] = vFn
+
+	return v
+}()
+
+func TenantOwnerInfoValidator() db.Validator {
+	return DefaultTenantOwnerInfoValidator
 }
 
 // create setters in CreateSpecType from GlobalSpecType for oneof fields
@@ -1348,6 +1924,9 @@ func (r *CreateSpecType) SetTenantChoiceToGlobalSpecType(o *GlobalSpecType) erro
 
 	case *CreateSpecType_AllTenants:
 		o.TenantChoice = &GlobalSpecType_AllTenants{AllTenants: of.AllTenants}
+
+	case *CreateSpecType_NewTenantInfo:
+		o.TenantChoice = &GlobalSpecType_NewTenantInfo{NewTenantInfo: of.NewTenantInfo}
 
 	case *CreateSpecType_TenantId:
 		o.TenantChoice = &GlobalSpecType_TenantId{TenantId: of.TenantId}
@@ -1368,6 +1947,9 @@ func (r *CreateSpecType) GetTenantChoiceFromGlobalSpecType(o *GlobalSpecType) er
 
 	case *GlobalSpecType_AllTenants:
 		r.TenantChoice = &CreateSpecType_AllTenants{AllTenants: of.AllTenants}
+
+	case *GlobalSpecType_NewTenantInfo:
+		r.TenantChoice = &CreateSpecType_NewTenantInfo{NewTenantInfo: of.NewTenantInfo}
 
 	case *GlobalSpecType_TenantId:
 		r.TenantChoice = &CreateSpecType_TenantId{TenantId: of.TenantId}
@@ -1425,6 +2007,9 @@ func (r *GetSpecType) SetTenantChoiceToGlobalSpecType(o *GlobalSpecType) error {
 	case *GetSpecType_AllTenants:
 		o.TenantChoice = &GlobalSpecType_AllTenants{AllTenants: of.AllTenants}
 
+	case *GetSpecType_NewTenantInfo:
+		o.TenantChoice = &GlobalSpecType_NewTenantInfo{NewTenantInfo: of.NewTenantInfo}
+
 	case *GetSpecType_TenantId:
 		o.TenantChoice = &GlobalSpecType_TenantId{TenantId: of.TenantId}
 
@@ -1445,6 +2030,9 @@ func (r *GetSpecType) GetTenantChoiceFromGlobalSpecType(o *GlobalSpecType) error
 	case *GlobalSpecType_AllTenants:
 		r.TenantChoice = &GetSpecType_AllTenants{AllTenants: of.AllTenants}
 
+	case *GlobalSpecType_NewTenantInfo:
+		r.TenantChoice = &GetSpecType_NewTenantInfo{NewTenantInfo: of.NewTenantInfo}
+
 	case *GlobalSpecType_TenantId:
 		r.TenantChoice = &GetSpecType_TenantId{TenantId: of.TenantId}
 
@@ -1462,6 +2050,7 @@ func (m *GetSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 		return
 	}
 	m.Groups = f.GetGroups()
+	m.Status = f.GetStatus()
 	m.GetTenantChoiceFromGlobalSpecType(f)
 }
 
@@ -1481,6 +2070,7 @@ func (m *GetSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	_ = m1
 
 	f.Groups = m1.Groups
+	f.Status = m1.Status
 	m1.SetTenantChoiceToGlobalSpecType(f)
 }
 
@@ -1501,6 +2091,9 @@ func (r *ReplaceSpecType) SetTenantChoiceToGlobalSpecType(o *GlobalSpecType) err
 	case *ReplaceSpecType_AllTenants:
 		o.TenantChoice = &GlobalSpecType_AllTenants{AllTenants: of.AllTenants}
 
+	case *ReplaceSpecType_NewTenantInfo:
+		o.TenantChoice = &GlobalSpecType_NewTenantInfo{NewTenantInfo: of.NewTenantInfo}
+
 	case *ReplaceSpecType_TenantId:
 		o.TenantChoice = &GlobalSpecType_TenantId{TenantId: of.TenantId}
 
@@ -1520,6 +2113,9 @@ func (r *ReplaceSpecType) GetTenantChoiceFromGlobalSpecType(o *GlobalSpecType) e
 
 	case *GlobalSpecType_AllTenants:
 		r.TenantChoice = &ReplaceSpecType_AllTenants{AllTenants: of.AllTenants}
+
+	case *GlobalSpecType_NewTenantInfo:
+		r.TenantChoice = &ReplaceSpecType_NewTenantInfo{NewTenantInfo: of.NewTenantInfo}
 
 	case *GlobalSpecType_TenantId:
 		r.TenantChoice = &ReplaceSpecType_TenantId{TenantId: of.TenantId}

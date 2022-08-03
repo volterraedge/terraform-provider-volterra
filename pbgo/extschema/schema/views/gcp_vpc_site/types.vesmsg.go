@@ -5256,6 +5256,15 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 
 	}
 
+	if fv, exists := v.FldValidators["cloud_site_info"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("cloud_site_info"))
+		if err := fv(ctx, m.GetCloudSiteInfo(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["coordinates"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("coordinates"))
@@ -5638,6 +5647,8 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v.FldValidators["site_type.voltstack_cluster"] = GCPVPCVoltstackClusterTypeValidator().Validate
 
 	v.FldValidators["coordinates"] = ves_io_schema_site.CoordinatesValidator().Validate
+
+	v.FldValidators["cloud_site_info"] = GCPVPCSiteInfoTypeValidator().Validate
 
 	return v
 }()
@@ -8059,6 +8070,7 @@ func (m *GetSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	}
 	m.Address = f.GetAddress()
 	m.GetBlockedServicesChoiceFromGlobalSpecType(f)
+	m.CloudSiteInfo = f.GetCloudSiteInfo()
 	m.Coordinates = f.GetCoordinates()
 	m.GetDeploymentFromGlobalSpecType(f)
 	m.DiskSize = f.GetDiskSize()
@@ -8091,6 +8103,7 @@ func (m *GetSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 
 	f.Address = m1.Address
 	m1.SetBlockedServicesChoiceToGlobalSpecType(f)
+	f.CloudSiteInfo = m1.CloudSiteInfo
 	f.Coordinates = m1.Coordinates
 	m1.SetDeploymentToGlobalSpecType(f)
 	f.DiskSize = m1.DiskSize

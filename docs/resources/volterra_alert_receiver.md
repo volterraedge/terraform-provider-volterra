@@ -20,24 +20,26 @@ resource "volterra_alert_receiver" "example" {
   name      = "acmecorp-web"
   namespace = "staging"
 
-  // One of the arguments from this list "slack pagerduty opsgenie email sms" must be set
+  // One of the arguments from this list "opsgenie email sms slack pagerduty" must be set
 
   slack {
-    channel = "channel"
+    channel = "value"
 
     url {
       blindfold_secret_info_internal {
-        decryption_provider = "decryption_provider"
+        decryption_provider = "value"
         location            = "string:///U2VjcmV0SW5mb3JtYXRpb24="
-        store_provider      = "store_provider"
+        store_provider      = "value"
       }
 
       secret_encoding_type = "secret_encoding_type"
 
-      // One of the arguments from this list "blindfold_secret_info vault_secret_info clear_secret_info wingman_secret_info" must be set
+      // One of the arguments from this list "vault_secret_info clear_secret_info wingman_secret_info blindfold_secret_info" must be set
 
-      wingman_secret_info {
-        name = "ChargeBack-API-Key"
+      blindfold_secret_info {
+        decryption_provider = "value"
+        location            = "string:///U2VjcmV0SW5mb3JtYXRpb24="
+        store_provider      = "value"
       }
     }
   }

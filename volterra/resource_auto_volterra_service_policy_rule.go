@@ -880,6 +880,28 @@ func resourceVolterraServicePolicyRule() *schema.Resource {
 				},
 			},
 
+			"ip_reputation_action": {
+
+				Type:     schema.TypeSet,
+				Optional: true,
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+
+						"default": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+
+						"skip_processing": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+					},
+				},
+			},
+
 			"l4_dest_matcher": {
 
 				Type:     schema.TypeSet,
@@ -940,9 +962,26 @@ func resourceVolterraServicePolicyRule() *schema.Resource {
 				},
 			},
 
-			"malicious_user_mitigation_bypass": {
-				Type:     schema.TypeBool,
+			"mum_action": {
+
+				Type:     schema.TypeSet,
 				Optional: true,
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+
+						"default": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+
+						"skip_processing": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+					},
+				},
 			},
 
 			"path": {
@@ -2696,6 +2735,45 @@ func resourceVolterraServicePolicyRuleCreate(d *schema.ResourceData, meta interf
 
 	}
 
+	//ip_reputation_action
+	if v, ok := d.GetOk("ip_reputation_action"); ok && !isIntfNil(v) {
+
+		sl := v.(*schema.Set).List()
+		ipReputationAction := &ves_io_schema_policy.ModifyAction{}
+		createSpec.IpReputationAction = ipReputationAction
+		for _, set := range sl {
+			ipReputationActionMapStrToI := set.(map[string]interface{})
+
+			actionTypeTypeFound := false
+
+			if v, ok := ipReputationActionMapStrToI["default"]; ok && !isIntfNil(v) && !actionTypeTypeFound {
+
+				actionTypeTypeFound = true
+
+				if v.(bool) {
+					actionTypeInt := &ves_io_schema_policy.ModifyAction_Default{}
+					actionTypeInt.Default = &ves_io_schema.Empty{}
+					ipReputationAction.ActionType = actionTypeInt
+				}
+
+			}
+
+			if v, ok := ipReputationActionMapStrToI["skip_processing"]; ok && !isIntfNil(v) && !actionTypeTypeFound {
+
+				actionTypeTypeFound = true
+
+				if v.(bool) {
+					actionTypeInt := &ves_io_schema_policy.ModifyAction_SkipProcessing{}
+					actionTypeInt.SkipProcessing = &ves_io_schema.Empty{}
+					ipReputationAction.ActionType = actionTypeInt
+				}
+
+			}
+
+		}
+
+	}
+
 	//l4_dest_matcher
 	if v, ok := d.GetOk("l4_dest_matcher"); ok && !isIntfNil(v) {
 
@@ -2759,11 +2837,41 @@ func resourceVolterraServicePolicyRuleCreate(d *schema.ResourceData, meta interf
 
 	}
 
-	//malicious_user_mitigation_bypass
-	if v, ok := d.GetOk("malicious_user_mitigation_bypass"); ok && !isIntfNil(v) {
+	//mum_action
+	if v, ok := d.GetOk("mum_action"); ok && !isIntfNil(v) {
 
-		if v.(bool) {
-			createSpec.MaliciousUserMitigationBypass = &ves_io_schema.Empty{}
+		sl := v.(*schema.Set).List()
+		mumAction := &ves_io_schema_policy.ModifyAction{}
+		createSpec.MumAction = mumAction
+		for _, set := range sl {
+			mumActionMapStrToI := set.(map[string]interface{})
+
+			actionTypeTypeFound := false
+
+			if v, ok := mumActionMapStrToI["default"]; ok && !isIntfNil(v) && !actionTypeTypeFound {
+
+				actionTypeTypeFound = true
+
+				if v.(bool) {
+					actionTypeInt := &ves_io_schema_policy.ModifyAction_Default{}
+					actionTypeInt.Default = &ves_io_schema.Empty{}
+					mumAction.ActionType = actionTypeInt
+				}
+
+			}
+
+			if v, ok := mumActionMapStrToI["skip_processing"]; ok && !isIntfNil(v) && !actionTypeTypeFound {
+
+				actionTypeTypeFound = true
+
+				if v.(bool) {
+					actionTypeInt := &ves_io_schema_policy.ModifyAction_SkipProcessing{}
+					actionTypeInt.SkipProcessing = &ves_io_schema.Empty{}
+					mumAction.ActionType = actionTypeInt
+				}
+
+			}
+
 		}
 
 	}
@@ -4707,6 +4815,44 @@ func resourceVolterraServicePolicyRuleUpdate(d *schema.ResourceData, meta interf
 
 	}
 
+	if v, ok := d.GetOk("ip_reputation_action"); ok && !isIntfNil(v) {
+
+		sl := v.(*schema.Set).List()
+		ipReputationAction := &ves_io_schema_policy.ModifyAction{}
+		updateSpec.IpReputationAction = ipReputationAction
+		for _, set := range sl {
+			ipReputationActionMapStrToI := set.(map[string]interface{})
+
+			actionTypeTypeFound := false
+
+			if v, ok := ipReputationActionMapStrToI["default"]; ok && !isIntfNil(v) && !actionTypeTypeFound {
+
+				actionTypeTypeFound = true
+
+				if v.(bool) {
+					actionTypeInt := &ves_io_schema_policy.ModifyAction_Default{}
+					actionTypeInt.Default = &ves_io_schema.Empty{}
+					ipReputationAction.ActionType = actionTypeInt
+				}
+
+			}
+
+			if v, ok := ipReputationActionMapStrToI["skip_processing"]; ok && !isIntfNil(v) && !actionTypeTypeFound {
+
+				actionTypeTypeFound = true
+
+				if v.(bool) {
+					actionTypeInt := &ves_io_schema_policy.ModifyAction_SkipProcessing{}
+					actionTypeInt.SkipProcessing = &ves_io_schema.Empty{}
+					ipReputationAction.ActionType = actionTypeInt
+				}
+
+			}
+
+		}
+
+	}
+
 	if v, ok := d.GetOk("l4_dest_matcher"); ok && !isIntfNil(v) {
 
 		sl := v.(*schema.Set).List()
@@ -4768,10 +4914,40 @@ func resourceVolterraServicePolicyRuleUpdate(d *schema.ResourceData, meta interf
 
 	}
 
-	if v, ok := d.GetOk("malicious_user_mitigation_bypass"); ok && !isIntfNil(v) {
+	if v, ok := d.GetOk("mum_action"); ok && !isIntfNil(v) {
 
-		if v.(bool) {
-			updateSpec.MaliciousUserMitigationBypass = &ves_io_schema.Empty{}
+		sl := v.(*schema.Set).List()
+		mumAction := &ves_io_schema_policy.ModifyAction{}
+		updateSpec.MumAction = mumAction
+		for _, set := range sl {
+			mumActionMapStrToI := set.(map[string]interface{})
+
+			actionTypeTypeFound := false
+
+			if v, ok := mumActionMapStrToI["default"]; ok && !isIntfNil(v) && !actionTypeTypeFound {
+
+				actionTypeTypeFound = true
+
+				if v.(bool) {
+					actionTypeInt := &ves_io_schema_policy.ModifyAction_Default{}
+					actionTypeInt.Default = &ves_io_schema.Empty{}
+					mumAction.ActionType = actionTypeInt
+				}
+
+			}
+
+			if v, ok := mumActionMapStrToI["skip_processing"]; ok && !isIntfNil(v) && !actionTypeTypeFound {
+
+				actionTypeTypeFound = true
+
+				if v.(bool) {
+					actionTypeInt := &ves_io_schema_policy.ModifyAction_SkipProcessing{}
+					actionTypeInt.SkipProcessing = &ves_io_schema.Empty{}
+					mumAction.ActionType = actionTypeInt
+				}
+
+			}
+
 		}
 
 	}

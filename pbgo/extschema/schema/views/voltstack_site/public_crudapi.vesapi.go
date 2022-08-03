@@ -2451,11 +2451,6 @@ var APISwaggerJSON string = `{
                     "description": "x-displayName: \"Peer Address\"\nSpecify peer address.",
                     "title": "address"
                 },
-                "dc_cluster_group": {
-                    "description": "x-displayName: \"DC Cluster Group\"\nthe peer represents a group of peers derived from other sites in the DC Cluster Group",
-                    "title": "dc_cluster_group",
-                    "$ref": "#/definitions/schemaviewsObjectRefType"
-                },
                 "disable_mtls": {
                     "description": "x-displayName: \"Disable MTLS\"\nDisable MTLS",
                     "title": "disable_mtls",
@@ -2496,21 +2491,11 @@ var APISwaggerJSON string = `{
                     "title": "from_site",
                     "$ref": "#/definitions/ioschemaEmpty"
                 },
-                "local": {
-                    "description": "x-displayName: \"local\"\nthe peer is a single, local peer, not a group",
-                    "title": "local",
-                    "$ref": "#/definitions/ioschemaEmpty"
-                },
                 "port": {
                     "type": "integer",
-                    "description": "x-displayName: \"Peer Port\"\nx-example: \"179\"\nLocal Peer TCP Port Number (ignored for Site Mesh Groups or DC Cluster Groups).",
+                    "description": "x-displayName: \"Peer Port\"\nx-example: \"179\"\nLocal Peer TCP Port Number.",
                     "title": "port",
                     "format": "int64"
-                },
-                "site_mesh_group": {
-                    "description": "x-displayName: \"Site Mesh Group\"\nthe peer represents a group of peers derived from other sites in the Site Mesh Group",
-                    "title": "site_mesh_group",
-                    "$ref": "#/definitions/schemaviewsObjectRefType"
                 }
             }
         },
@@ -4323,7 +4308,7 @@ var APISwaggerJSON string = `{
                 },
                 "network_prefix": {
                     "type": "string",
-                    "description": "Exclusive with []\n Network Prefix for a single site. \n\nExample: - \"10.1.1.0/24\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv4_prefix: true\n",
+                    "description": "Exclusive with []\n Network Prefix for a single site.\n\nExample: - \"10.1.1.0/24\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv4_prefix: true\n",
                     "title": "Network Prefix",
                     "x-displayname": "Network Prefix",
                     "x-ves-example": "10.1.1.0/24",
@@ -4394,7 +4379,7 @@ var APISwaggerJSON string = `{
                 },
                 "start_ip": {
                     "type": "string",
-                    "description": " Starting IP of the pool range. \n In case of address allocator, offset is derived based on network prefix.\n 10.1.1.5 with prefix length of 24, start offset is 0.0.0.5\n\nExample: - \"10.1.1.5\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv4: true\n",
+                    "description": " Starting IP of the pool range.\n In case of address allocator, offset is derived based on network prefix.\n 10.1.1.5 with prefix length of 24, start offset is 0.0.0.5\n\nExample: - \"10.1.1.5\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv4: true\n",
                     "title": "Start IP",
                     "x-displayname": "Starting IP",
                     "x-ves-example": "10.1.1.5",
@@ -4570,7 +4555,7 @@ var APISwaggerJSON string = `{
                 },
                 "device": {
                     "type": "string",
-                    "description": " Name of the device for which interface is configured \n\nExample: - \"eth0\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 64\n  ves.io.schema.rules.string.min_len: 1\n",
+                    "description": " Name of the device for which interface is configured\n\nExample: - \"eth0\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 64\n  ves.io.schema.rules.string.min_len: 1\n",
                     "title": "Device",
                     "minLength": 1,
                     "maxLength": 64,
@@ -4630,7 +4615,7 @@ var APISwaggerJSON string = `{
                 },
                 "device": {
                     "type": "string",
-                    "description": " Interface configuration for the ethernet device \n\nExample: - \"eth0\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 64\n  ves.io.schema.rules.string.min_len: 1\n",
+                    "description": " Interface configuration for the ethernet device\n\nExample: - \"eth0\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 64\n  ves.io.schema.rules.string.min_len: 1\n",
                     "title": "Device",
                     "minLength": 1,
                     "maxLength": 64,
@@ -4775,6 +4760,74 @@ var APISwaggerJSON string = `{
             "title": "Link Quality Monitoring Configuration",
             "x-displayname": "Link Quality Monitoring Configuration",
             "x-ves-proto-message": "ves.io.schema.network_interface.LinkQualityMonitorConfig"
+        },
+        "network_interfaceLoopbackInterfaceType": {
+            "type": "object",
+            "description": "x-displayName: \"Loopback Device\"\nLoopback Device Configuration",
+            "title": "Loopback Device",
+            "properties": {
+                "cluster": {
+                    "description": "x-displayName: \"Cluster, All Nodes of the Site\"\nConfiguration will apply to given device on all nodes of the site.",
+                    "title": "Node Independent",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "device": {
+                    "type": "string",
+                    "description": "x-displayName: \"Loopback Ethernet Device\"\nx-example: \"eth0\"\nx-required\nInterface configuration for the Loopback Ethernet device",
+                    "title": "Device"
+                },
+                "dhcp_client": {
+                    "description": "x-displayName: \"DHCP Client\"\nInterface gets it IP address from external DHCP server",
+                    "title": "DHCP Client",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "dhcp_server": {
+                    "description": "x-displayName: \"DHCP server\"\nDHCP Server is configured for this interface, Interface IP from DHCP server configuration.",
+                    "title": "DHCP Server",
+                    "$ref": "#/definitions/network_interfaceDHCPServerParametersType"
+                },
+                "ip_fabric_network": {
+                    "description": "x-displayName: \"IP Fabric Network\"\nInterface belongs to IP Fabric network",
+                    "title": "IP Fabric Network",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "mtu": {
+                    "type": "integer",
+                    "description": "x-displayName: \"Maximum Packet Size (MTU)\"\nx-example: \"1450\"\nMaximum packet size (Maximum Transfer Unit) of the interface\nWhen configured, mtu must be between 512 and 16384",
+                    "title": "Maximum Packet Size (MTU)",
+                    "format": "int64"
+                },
+                "no_ipv6_address": {
+                    "description": "x-displayName: \"No IPv6 Address\"\nInterface does not have an IPv6 Address.",
+                    "title": "no_ipv6_address",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "node": {
+                    "type": "string",
+                    "description": "x-displayName: \"Specific Node\"\nConfiguration will apply to a device on the given node.",
+                    "title": "Node"
+                },
+                "site_local_inside_network": {
+                    "description": "x-displayName: \"Site Local Network Inside\"\nInterface belongs to site local network inside",
+                    "title": "Site Local Network Inside",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "site_local_network": {
+                    "description": "x-displayName: \"Site Local Network (Outside)\"\nInterface belongs to site local network (outside)",
+                    "title": "Site Local Network",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "static_ip": {
+                    "description": "x-displayName: \"Static IP\"\nInterface IP is configured statically",
+                    "title": "Static IP",
+                    "$ref": "#/definitions/network_interfaceStaticIPParametersType"
+                },
+                "static_ipv6_address": {
+                    "description": "x-displayName: \"Static IP\"\nInterface IP is configured statically",
+                    "title": "Static IP",
+                    "$ref": "#/definitions/network_interfaceStaticIPParametersType"
+                }
+            }
         },
         "network_interfaceStaticIPParametersType": {
             "type": "object",
@@ -6994,6 +7047,13 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/schemaviewsObjectRefType",
                     "x-displayname": "Enable Site Local K8s API access"
                 },
+                "launch_ike_in_namespace": {
+                    "type": "boolean",
+                    "description": " Identify that the CE needs to run IKE in namespace",
+                    "title": "launch_ike_in_namespace",
+                    "format": "boolean",
+                    "x-displayname": "Identify if CE needs to run IKE in namespace"
+                },
                 "local_control_plane": {
                     "description": "Exclusive with [no_local_control_plane]\n Site Local control plane is enabled",
                     "title": "Enable Site Local Control Plane",
@@ -7317,7 +7377,7 @@ var APISwaggerJSON string = `{
             "properties": {
                 "attrs": {
                     "type": "array",
-                    "description": " List of attributes that control forwarding, dynamic routing and control plane(host) reachability \n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 4\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " List of attributes that control forwarding, dynamic routing and control plane(host) reachability\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 4\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "Attributes",
                     "maxItems": 4,
                     "items": {
@@ -7330,7 +7390,7 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "default_gateway": {
-                    "description": "Exclusive with [interface ip_address]\n Traffic matching the ip prefixes is sent to default gateway  ",
+                    "description": "Exclusive with [interface ip_address]\n Traffic matching the ip prefixes is sent to default gateway",
                     "title": "Default Gateway",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Default Gateway"
@@ -7954,6 +8014,20 @@ var APISwaggerJSON string = `{
                     "title": "Member of DC cluster Group",
                     "$ref": "#/definitions/schemaviewsObjectRefType",
                     "x-displayname": "Member of DC Cluster Group"
+                },
+                "dc_cluster_group_interface": {
+                    "type": "array",
+                    "description": " This App Stack is member of dc cluster group and connected to network over this interface. By default it takes default gateway interface.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 128\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "title": "DC Cluster group connectivity interface",
+                    "maxItems": 128,
+                    "items": {
+                        "$ref": "#/definitions/schemaviewsObjectRefType"
+                    },
+                    "x-displayname": "DC cluster Group connectivity interface",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "128",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
                 },
                 "labels": {
                     "type": "object",

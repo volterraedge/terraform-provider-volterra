@@ -3887,14 +3887,18 @@ var APISwaggerJSON string = `{
                 },
                 "name": {
                     "type": "string",
-                    "description": " Name of the header\n\nExample: - \"Content-Type\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.http_header_field: true\n  ves.io.schema.rules.string.max_bytes: 256\n",
+                    "description": " Name of the header\n\nExample: - \"Content-Type\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.http_header_field: true\n  ves.io.schema.rules.string.max_bytes: 256\n  ves.io.schema.rules.string.min_bytes: 1\n",
                     "title": "name",
+                    "minLength": 1,
                     "maxLength": 256,
                     "x-displayname": "Name",
                     "x-ves-example": "Content-Type",
+                    "x-ves-required": "true",
                     "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
                         "ves.io.schema.rules.string.http_header_field": "true",
-                        "ves.io.schema.rules.string.max_bytes": "256"
+                        "ves.io.schema.rules.string.max_bytes": "256",
+                        "ves.io.schema.rules.string.min_bytes": "1"
                     }
                 },
                 "presence": {
@@ -4161,10 +4165,18 @@ var APISwaggerJSON string = `{
                 },
                 "key": {
                     "type": "string",
-                    "description": " Query parameter key\n In the above example, assignee_username is the key\n\nExample: - \"assignee_username\"-",
+                    "description": " Query parameter key\n In the above example, assignee_username is the key\n\nExample: - \"assignee_username\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_bytes: 256\n  ves.io.schema.rules.string.min_bytes: 1\n",
                     "title": "key",
+                    "minLength": 1,
+                    "maxLength": 256,
                     "x-displayname": "Key",
-                    "x-ves-example": "assignee_username"
+                    "x-ves-example": "assignee_username",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.max_bytes": "256",
+                        "ves.io.schema.rules.string.min_bytes": "1"
+                    }
                 },
                 "regex": {
                     "type": "string",

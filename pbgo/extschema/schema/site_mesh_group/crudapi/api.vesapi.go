@@ -3043,6 +3043,43 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "schemaSiteInfo": {
+            "type": "object",
+            "description": "Information about a particular site.",
+            "title": "Site Info",
+            "x-displayname": "Site Info",
+            "x-ves-proto-message": "ves.io.schema.SiteInfo",
+            "properties": {
+                "annotations": {
+                    "type": "array",
+                    "description": " The list of annotations providing information about the referenced site.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "annotations",
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-displayname": "annotations",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                },
+                "site": {
+                    "type": "array",
+                    "description": " 'site' refers to a site.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 1\n",
+                    "title": "site",
+                    "maxItems": 1,
+                    "items": {
+                        "$ref": "#/definitions/ioschemaObjectRefType"
+                    },
+                    "x-displayname": "site",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.max_items": "1"
+                    }
+                }
+            }
+        },
         "schemaSiteToSiteTunnelType": {
             "type": "string",
             "description": "x-displayName: \"Tunnel type\"\nTunnel encapsulation to be used between sites\n\n - SITE_TO_SITE_TUNNEL_IPSEC_OR_SSL: x-displayName: \"IPSEC or SSL\"\nSite to site tunnel can operate in both ipsec and ssl\nipsec takes precedence over ssl\n - SITE_TO_SITE_TUNNEL_IPSEC: x-displayName: \"IPSEC\"\nSite to site tunnel is of type ipsec\n - SITE_TO_SITE_TUNNEL_SSL: x-displayName: \"SSL\"\nSite to site tunnel is of type ssl",
@@ -3464,6 +3501,15 @@ var APISwaggerJSON string = `{
                     },
                     "x-displayname": "Other Connected Sites",
                     "x-ves-example": "[ce01-sfo, ce01-nyc]"
+                },
+                "site_info": {
+                    "type": "array",
+                    "description": " The list of sites in the site mesh group and information about each",
+                    "title": "site_info",
+                    "items": {
+                        "$ref": "#/definitions/schemaSiteInfo"
+                    },
+                    "x-displayname": "site info"
                 }
             }
         },
@@ -3500,10 +3546,14 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.site_mesh_group.SpokeMeshGroupType",
             "properties": {
                 "hub_mesh_group": {
-                    "description": " 'hub_mesh_group' refers to a Site Mesh Group of 'type' Hub.\n Spoke sites will connect to all the member sites of Hub Site Mesh Group",
+                    "description": " 'hub_mesh_group' refers to a Site Mesh Group of 'type' Hub.\n Spoke sites will connect to all the member sites of Hub Site Mesh Group\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "hub_mesh_group",
                     "$ref": "#/definitions/schemaviewsObjectRefType",
-                    "x-displayname": "hub_mesh_group (site mesh group)"
+                    "x-displayname": "hub_mesh_group (site mesh group)",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 }
             }
         },

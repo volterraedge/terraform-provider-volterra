@@ -1390,6 +1390,15 @@ func (v *ValidateGetUserRoleResponse) Validate(ctx context.Context, pm interface
 
 	}
 
+	if fv, exists := v.FldValidators["sync_mode"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("sync_mode"))
+		if err := fv(ctx, m.GetSyncMode(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["tenant"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("tenant"))
@@ -1838,6 +1847,15 @@ func (v *ValidateListUserRoleResponseItem) Validate(ctx context.Context, pm inte
 
 		vOpts := append(opts, db.WithValidateField("otp_enabled"))
 		if err := fv(ctx, m.GetOtpEnabled(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["sync_mode"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("sync_mode"))
+		if err := fv(ctx, m.GetSyncMode(), vOpts...); err != nil {
 			return err
 		}
 

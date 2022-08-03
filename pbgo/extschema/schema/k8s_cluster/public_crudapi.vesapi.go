@@ -1776,7 +1776,7 @@ var APISwaggerJSON string = `{
         "/public/namespaces/{metadata.namespace}/k8s_clusters/{metadata.name}": {
             "put": {
                 "summary": "Replace k8s_cluster",
-                "description": "Replacing an k8s_cluster object will update the object by replacing the existing spec with the provided one. \nFor read-then-write operations a resourceVersion mismatch will occur if the object was modified between the read and write",
+                "description": "Replacing an k8s_cluster object will update the object by replacing the existing spec with the provided one.\nFor read-then-write operations a resourceVersion mismatch will occur if the object was modified between the read and write",
                 "operationId": "ves.io.schema.k8s_cluster.API.Replace",
                 "responses": {
                     "200": {
@@ -3231,7 +3231,7 @@ var APISwaggerJSON string = `{
         },
         "k8s_clusterReplaceSpecType": {
             "type": "object",
-            "description": "Replacing an k8s_cluster object will update the object by replacing the existing spec with the provided one. \nFor read-then-write operations a resourceVersion mismatch will occur if the object was modified between the read and write",
+            "description": "Replacing an k8s_cluster object will update the object by replacing the existing spec with the provided one.\nFor read-then-write operations a resourceVersion mismatch will occur if the object was modified between the read and write",
             "title": "Replace k8s_cluster",
             "x-displayname": "Replace Configuration Specification",
             "x-ves-oneof-field-apps_choice": "[\"cluster_wide_app_list\",\"no_cluster_wide_apps\"]",

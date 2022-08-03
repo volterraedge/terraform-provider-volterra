@@ -1224,6 +1224,18 @@ func (v *ValidateAzureVnetSiteType) Validate(ctx context.Context, pm interface{}
 
 	}
 
+	if fv, exists := v.FldValidators["spoke_vnets"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("spoke_vnets"))
+		for idx, item := range m.GetSpokeVnets() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["ssh_key"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("ssh_key"))
@@ -1306,4 +1318,100 @@ var DefaultAzureVnetSiteTypeValidator = func() *ValidateAzureVnetSiteType {
 
 func AzureVnetSiteTypeValidator() db.Validator {
 	return DefaultAzureVnetSiteTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *SpokeVnetsInfoType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *SpokeVnetsInfoType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *SpokeVnetsInfoType) DeepCopy() *SpokeVnetsInfoType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &SpokeVnetsInfoType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *SpokeVnetsInfoType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *SpokeVnetsInfoType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return SpokeVnetsInfoTypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateSpokeVnetsInfoType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateSpokeVnetsInfoType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*SpokeVnetsInfoType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *SpokeVnetsInfoType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["auto_routing"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("auto_routing"))
+		if err := fv(ctx, m.GetAutoRouting(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["vnet_name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("vnet_name"))
+		if err := fv(ctx, m.GetVnetName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["vnet_resource_group"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("vnet_resource_group"))
+		if err := fv(ctx, m.GetVnetResourceGroup(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultSpokeVnetsInfoTypeValidator = func() *ValidateSpokeVnetsInfoType {
+	v := &ValidateSpokeVnetsInfoType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func SpokeVnetsInfoTypeValidator() db.Validator {
+	return DefaultSpokeVnetsInfoTypeValidator
 }

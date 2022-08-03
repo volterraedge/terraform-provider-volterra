@@ -2820,11 +2820,6 @@ var APISwaggerJSON string = `{
                     "description": "x-displayName: \"Peer Address\"\nSpecify peer address.",
                     "title": "address"
                 },
-                "dc_cluster_group": {
-                    "description": "x-displayName: \"DC Cluster Group\"\nthe peer represents a group of peers derived from other sites in the DC Cluster Group",
-                    "title": "dc_cluster_group",
-                    "$ref": "#/definitions/schemaviewsObjectRefType"
-                },
                 "disable_mtls": {
                     "description": "x-displayName: \"Disable MTLS\"\nDisable MTLS",
                     "title": "disable_mtls",
@@ -2865,21 +2860,11 @@ var APISwaggerJSON string = `{
                     "title": "from_site",
                     "$ref": "#/definitions/schemaEmpty"
                 },
-                "local": {
-                    "description": "x-displayName: \"local\"\nthe peer is a single, local peer, not a group",
-                    "title": "local",
-                    "$ref": "#/definitions/schemaEmpty"
-                },
                 "port": {
                     "type": "integer",
-                    "description": "x-displayName: \"Peer Port\"\nx-example: \"179\"\nLocal Peer TCP Port Number (ignored for Site Mesh Groups or DC Cluster Groups).",
+                    "description": "x-displayName: \"Peer Port\"\nx-example: \"179\"\nLocal Peer TCP Port Number.",
                     "title": "port",
                     "format": "int64"
-                },
-                "site_mesh_group": {
-                    "description": "x-displayName: \"Site Mesh Group\"\nthe peer represents a group of peers derived from other sites in the Site Mesh Group",
-                    "title": "site_mesh_group",
-                    "$ref": "#/definitions/schemaviewsObjectRefType"
                 }
             }
         },
@@ -5328,7 +5313,7 @@ var APISwaggerJSON string = `{
             "properties": {
                 "addr": {
                     "type": "string",
-                    "description": " IPv6 Address in form of string. IPv6 address must be specified as hexadecimal numbers separated by ':'\n The address can be compacted by suppressing zeros \n e.g. '2001:db8:0:0:0:0:2:1' becomes '2001:db8::2:1' or '2001:db8:0:0:0:2:0:0' becomes '2001:db8::2::'\n\nExample: - \"2001:db8:0:0:0:0:2:1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv6: true\n",
+                    "description": " IPv6 Address in form of string. IPv6 address must be specified as hexadecimal numbers separated by ':'\n The address can be compacted by suppressing zeros\n e.g. '2001:db8:0:0:0:0:2:1' becomes '2001:db8::2:1' or '2001:db8:0:0:0:2:0:0' becomes '2001:db8::2::'\n\nExample: - \"2001:db8:0:0:0:0:2:1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv6: true\n",
                     "title": "IPv6 Address",
                     "x-displayname": "IPv6 Address",
                     "x-ves-example": "2001:db8:0:0:0:0:2:1",

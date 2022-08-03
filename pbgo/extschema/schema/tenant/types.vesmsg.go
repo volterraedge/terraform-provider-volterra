@@ -789,6 +789,15 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["tenant_type"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("tenant_type"))
+		if err := fv(ctx, m.GetTenantType(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["tgw_asn_offset"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("tgw_asn_offset"))

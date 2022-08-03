@@ -15,6 +15,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/helper/validation"
 	"gopkg.volterra.us/stdlib/codec"
 
+	"github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views"
 	"github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/aws_vpc_site"
 	"github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/azure_vnet_site"
 	"github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/gcp_vpc_site"
@@ -83,6 +84,29 @@ func resourceVolterraSetCloudSiteInfo() *schema.Resource {
 					},
 				},
 			},
+			"spoke_vnet_prefix_info": {
+				Type:     schema.TypeList,
+				Optional: true,
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+						"vnet_name": {
+							Type:     schema.TypeString,
+							Required: true,
+						},
+						"resource_group": {
+							Type:     schema.TypeString,
+							Required: true,
+						},
+						"prefixes": {
+							Type:     schema.TypeList,
+							Required: true,
+							Elem: &schema.Schema{
+								Type: schema.TypeString,
+							},
+						},
+					},
+				},
+			},
 		},
 	}
 }
@@ -139,6 +163,9 @@ func resourceVolterraSetCloudSiteInfoCreate(d *schema.ResourceData, meta interfa
 				PublicIps:  publicIps,
 				PrivateIps: privateIps,
 			},
+		}
+		if spokeVnetInfo := getSpokeVnetPrefixInfo(d); spokeVnetInfo != nil {
+			req.AzureVnetInfo.SpokeVnetPrefixInfo = spokeVnetInfo
 		}
 		yamlReq, err = codec.ToYAML(req)
 		if err != nil {
@@ -239,4 +266,32 @@ func resourceVolterraSetCloudSiteInfoDelete(d *schema.ResourceData, meta interfa
 	}
 	d.SetId("")
 	return nil
+}
+
+func getSpokeVnetPrefixInfo(d *schema.ResourceData) []*azure_vnet_site.VnetIpPrefixesType {
+	if v, ok := d.GetOk("spoke_vnet_prefix_info"); ok && !isIntfNil(v) {
+		sl := v.([]interface{})
+		spokeVnetList := []*azure_vnet_site.VnetIpPrefixesType{}
+		for _, set := range sl {
+			vnetPrefixConfig := &azure_vnet_site.VnetIpPrefixesType{
+				Vnet: &views.AzureVnetType{},
+			}
+			vnetPrefixData := set.(map[string]interface{})
+			if v, ok := vnetPrefixData["vnet_name"]; ok && !isIntfNil(v) {
+				vnetPrefixConfig.Vnet.VnetName = v.(string)
+			}
+			if v, ok := vnetPrefixData["resource_group"]; ok && !isIntfNil(v) {
+				vnetPrefixConfig.Vnet.ResourceGroup = v.(string)
+			}
+			if val, ok := vnetPrefixData["prefixes"]; ok && !isIntfNil(v) {
+				for _, v := range val.([]interface{}) {
+					vnetPrefixConfig.Prefixes = append(vnetPrefixConfig.Prefixes, v.(string))
+				}
+			}
+			spokeVnetList = append(spokeVnetList, vnetPrefixConfig)
+		}
+		return spokeVnetList
+	}
+	return nil
+
 }

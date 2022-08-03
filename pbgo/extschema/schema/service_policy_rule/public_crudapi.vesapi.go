@@ -5177,6 +5177,13 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/policyTlsFingerprintMatcherType",
                     "x-displayname": "TLS Fingerprint Matcher"
                 },
+                "user_identity_matcher": {
+                    "description": " Match the specified user identity. The format is prefixed by the type.\n\nExample: - \"IP-x.x.x.x\"-",
+                    "title": "user identity matcher",
+                    "$ref": "#/definitions/policyMatcherTypeBasic",
+                    "x-displayname": "User Identity Matcher",
+                    "x-ves-example": "IP-x.x.x.x"
+                },
                 "waf_action": {
                     "description": " App Firewall action to be enforced if the input request matches the rule.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "App Firewall Action",

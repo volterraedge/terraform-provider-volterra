@@ -20,12 +20,15 @@ resource "volterra_network_firewall" "example" {
   name      = "acmecorp-web"
   namespace = "staging"
 
-  // One of the arguments from this list "disable_fast_acl active_fast_acls fast_acl_set" must be set
-  disable_fast_acl = true
+  // One of the arguments from this list "fast_acl_set disable_fast_acl active_fast_acls" must be set
 
+  fast_acl_set {
+    name      = "test1"
+    namespace = "staging"
+    tenant    = "acmecorp"
+  }
   // One of the arguments from this list "active_forward_proxy_policies forward_proxy_policy_set disable_forward_proxy_policy" must be set
   disable_forward_proxy_policy = true
-
   // One of the arguments from this list "active_network_policies network_policy_set disable_network_policy" must be set
   disable_network_policy = true
 }
@@ -57,15 +60,15 @@ Argument Reference
 
 `fast_acl_set` - (Optional) The list of Virtual Networks / Interfaces is selected by the Fast ACL set object. See [ref](#ref) below for details.
 
-`active_forward_proxy_policies` - (Optional) L7 firewall for forward proxy. . See [Active Forward Proxy Policies ](#active-forward-proxy-policies) below for details.
+`active_forward_proxy_policies` - (Optional) L7 firewall for forward proxy.. See [Active Forward Proxy Policies ](#active-forward-proxy-policies) below for details.
 
 `disable_forward_proxy_policy` - (Optional) Forward Proxy Policy is disabled for this network firewall (bool).
 
 `forward_proxy_policy_set` - (Optional) L7 firewall for forward proxy. Assign service_policy_set to be used for forward proxies in this firewall.. See [ref](#ref) below for details.
 
-`active_network_policies` - (Optional) Active network policies for this network firewall(L3/L4 firewall).. See [Active Network Policies ](#active-network-policies) below for details.
+`active_network_policies` - (Optional) Active firewall policies for this network firewall(L3/L4 firewall).. See [Active Network Policies ](#active-network-policies) below for details.
 
-`disable_network_policy` - (Optional) Network Policy is disabled for this network firewall (bool).
+`disable_network_policy` - (Optional) Firewall Policy is disabled for this network firewall (bool).
 
 `network_policy_set` - (Optional) - Site Local. See [ref](#ref) below for details.
 
@@ -77,15 +80,15 @@ Fast ACL Active for ths network firewall..
 
 ### Active Forward Proxy Policies
 
-L7 firewall for forward proxy. .
+L7 firewall for forward proxy..
 
 `forward_proxy_policies` - (Required) List of Forward Proxy Policies. See [ref](#ref) below for details.
 
 ### Active Network Policies
 
-Active network policies for this network firewall(L3/L4 firewall)..
+Active firewall policies for this network firewall(L3/L4 firewall)..
 
-`network_policies` - (Required) Ordered List of Network Policies active for this network firewall. See [ref](#ref) below for details.
+`network_policies` - (Required) Ordered List of Firewall Policies active for this network firewall. See [ref](#ref) below for details.
 
 ### Ref
 

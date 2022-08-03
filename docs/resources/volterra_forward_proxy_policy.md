@@ -20,45 +20,11 @@ resource "volterra_forward_proxy_policy" "example" {
   name      = "acmecorp-web"
   namespace = "staging"
 
-  // One of the arguments from this list "drp_http_connect any_proxy network_connector proxy_label_selector" must be set
-  drp_http_connect = true
+  // One of the arguments from this list "proxy_label_selector drp_http_connect any_proxy network_connector" must be set
+  any_proxy = true
 
-  // One of the arguments from this list "allow_all allow_list deny_list rule_list" must be set
-
-  rule_list {
-    rules {
-      action = "action"
-
-      // One of the arguments from this list "all_destinations tls_list dst_asn_set dst_asn_list http_list dst_ip_prefix_set dst_prefix_list url_category_list dst_label_selector" must be set
-
-      http_list {
-        http_list {
-          // One of the arguments from this list "suffix_value regex_value exact_value" must be set
-          exact_value = "abc.zyz.com"
-
-          // One of the arguments from this list "path_exact_value path_prefix_value path_regex_value any_path" must be set
-          path_prefix_value = "/abc/xyz/"
-        }
-      }
-      // One of the arguments from this list "no_http_connect_port port_matcher" must be set
-      no_http_connect_port = true
-      metadata {
-        description = "Virtual Host for acmecorp website"
-        disable     = true
-        name        = "acmecorp-web"
-      }
-      rule_description = "Rule to block example.com"
-      rule_name        = "my-policy-allow-github.com"
-
-      // One of the arguments from this list "inside_sources interface namespace label_selector ip_prefix_set all_sources prefix_list" must be set
-
-      ip_prefix_set {
-        name      = "test1"
-        namespace = "staging"
-        tenant    = "acmecorp"
-      }
-    }
-  }
+  // One of the arguments from this list "allow_list deny_list rule_list allow_all" must be set
+  allow_all = true
 }
 
 ```

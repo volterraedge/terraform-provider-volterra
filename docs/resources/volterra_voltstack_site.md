@@ -23,28 +23,35 @@ resource "volterra_voltstack_site" "example" {
   // One of the arguments from this list "default_blocked_services blocked_services" must be set
   default_blocked_services = true
 
-  // One of the arguments from this list "bond_device_list no_bond_devices" must be set
-  no_bond_devices = true
+  // One of the arguments from this list "no_bond_devices bond_device_list" must be set
 
-  // One of the arguments from this list "enable_gpu enable_vgpu disable_gpu" must be set
+  bond_device_list {
+    bond_devices {
+      devices = ["eth0"]
+
+      // One of the arguments from this list "lacp active_backup" must be set
+
+      lacp {
+        rate = "30"
+      }
+      link_polling_interval = "1000"
+      link_up_delay         = "200"
+      name                  = "bond0"
+    }
+  }
+  // One of the arguments from this list "disable_gpu enable_gpu enable_vgpu" must be set
   disable_gpu = true
-
   // One of the arguments from this list "no_k8s_cluster k8s_cluster" must be set
   no_k8s_cluster = true
-
   // One of the arguments from this list "logs_streaming_disabled log_receiver" must be set
   logs_streaming_disabled = true
-
   master_nodes = ["master-0"]
-
   // One of the arguments from this list "default_network_config custom_network_config" must be set
   default_network_config = true
-
   // One of the arguments from this list "default_storage_config custom_storage_config" must be set
   default_storage_config = true
-
   // One of the arguments from this list "deny_all_usb allow_all_usb usb_policy" must be set
-  allow_all_usb         = true
+  deny_all_usb          = true
   volterra_certified_hw = ["isv-8000-series-voltstack-combo"]
 }
 
@@ -525,6 +532,8 @@ Ethernet interface configuration..
 
 `inside_network` - (Optional) Interface belongs to user configured inside network. See [ref](#ref) below for details.
 
+`ip_fabric_network` - (Optional) Interface belongs to IP Fabric network (bool).
+
 `site_local_inside_network` - (Optional) Interface belongs to site local network inside (bool).
 
 `site_local_network` - (Optional) Interface belongs to site local network (outside) (bool).
@@ -621,9 +630,15 @@ Configure network interfaces for this App Stack site.
 
 `ethernet_interface` - (Optional) Ethernet interface configuration.. See [Ethernet Interface ](#ethernet-interface) below for details.
 
+`loopback_interface` - (Optional) Loopback device.. See [Loopback Interface ](#loopback-interface) below for details.
+
 `tunnel_interface` - (Optional) Tunnel interface, Ipsec tunnels to other networking devices.. See [Tunnel Interface ](#tunnel-interface) below for details.
 
 `labels` - (Optional) Add Labels for this Interface, these labels can be used in firewall policy (`String`).
+
+### Ip Fabric Network
+
+Interface belongs to IP Fabric network.
 
 ### Is Primary
 
@@ -648,6 +663,44 @@ Site Local control plane is enabled.
 `inside_vn` - (Optional) Local control plane will work on inside network (bool).
 
 `outside_vn` - (Optional) Local control plane will work on outside network (bool).
+
+### Loopback Interface
+
+Loopback device..
+
+`dhcp_client` - (Optional) Interface gets it IP address from external DHCP server (bool).
+
+`dhcp_server` - (Optional) DHCP Server is configured for this interface, Interface IP from DHCP server configuration.. See [Dhcp Server ](#dhcp-server) below for details.
+
+`static_ip` - (Optional) Interface IP is configured statically. See [Static Ip ](#static-ip) below for details.
+
+`device` - (Required) Interface configuration for the Loopback Ethernet device (`String`).
+
+`no_ipv6_address` - (Optional) Interface does not have an IPv6 Address. (bool).
+
+`static_ipv6_address` - (Optional) Interface IP is configured statically. See [Static Ipv6 Address ](#static-ipv6-address) below for details.
+
+`mtu` - (Optional) When configured, mtu must be between 512 and 16384 (`Int`).
+
+`ip_fabric_network` - (Optional) Interface belongs to IP Fabric network (bool).
+
+`site_local_inside_network` - (Optional) Interface belongs to site local network inside (bool).
+
+`site_local_network` - (Optional) Interface belongs to site local network (outside) (bool).
+
+`cluster` - (Optional) Configuration will apply to given device on all nodes of the site. (bool).
+
+`node` - (Optional) Configuration will apply to a device on the given node. (`String`).
+
+### Mayastor Pools
+
+mechanism/transport/device type and differentiated by corresponding performance and/or attachment locality..
+
+`node` - (Required) Enter k8s node name of Mayastor Node (MSN) where this pool is or going to be located. (`String`).
+
+`pool_disk_devices` - (Required) It supports various types such as "/dev/sdb", "nvme://nqn.2014-08.com.vendor:nvme:nvm-subsystem-sn-d78432" or "iscsi://iqn.2000-08.com.datacore.com:cloudvm41-2". (`String`).
+
+`pool_name` - (Required) Enter Mayastor Pool Name (`String`).
 
 ### Monitor
 
@@ -717,11 +770,9 @@ This interface is not primary.
 
 ### Openebs Enterprise
 
-Storage class Device configuration for OpenEBS Enterprise.
+Device configuration for Pure Storage Service Orchestrator.
 
-`protocol` - (Optional) Defines type of transport protocol used to mount the PV to the worker node hosting the associated application pod (NVMe-oF) (`String`).
-
-`replication` - (Optional) Replication sets the replication factor of the PV, i.e. the number of data replicas to be maintained for it such as 1 or 3. (`Int`).
+`mayastor_pools` - (Optional) mechanism/transport/device type and differentiated by corresponding performance and/or attachment locality.. See [Mayastor Pools ](#mayastor-pools) below for details.
 
 ### Os
 
@@ -825,6 +876,8 @@ Configuration for site local network.
 
 `no_dc_cluster_group` - (Optional) This site is not a member of dc cluster group (bool).
 
+`dc_cluster_group_interface` - (Optional) This App Stack is member of dc cluster group and connected to network over this interface. By default it takes default gateway interface.. See [ref](#ref) below for details.
+
 `labels` - (Optional) Add Labels for this network, these labels can be used in firewall policy (`String`).
 
 `no_static_routes` - (Optional) Static Routes disabled for site local network. (bool).
@@ -889,8 +942,6 @@ List of custom storage classes.
 
 `netapp_trident` - (Optional) Storage class Device configuration for NetApp Trident. See [Netapp Trident ](#netapp-trident) below for details.
 
-`openebs_enterprise` - (Optional) Storage class Device configuration for OpenEBS Enterprise. See [Openebs Enterprise ](#openebs-enterprise) below for details.
-
 `pure_service_orchestrator` - (Optional) Storage class Device configuration for Pure Service Orchestrator. See [Pure Service Orchestrator ](#pure-service-orchestrator) below for details.
 
 `reclaim_policy` - (Optional) Reclaim Policy (`String`).
@@ -944,6 +995,8 @@ Configure storage interface for this App Stack site.
 `mtu` - (Optional) When configured, mtu must be between 512 and 16384 (`Int`).
 
 `inside_network` - (Optional) Interface belongs to user configured inside network. See [ref](#ref) below for details.
+
+`ip_fabric_network` - (Optional) Interface belongs to IP Fabric network (bool).
 
 `site_local_inside_network` - (Optional) Interface belongs to site local network inside (bool).
 

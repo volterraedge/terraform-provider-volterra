@@ -2393,7 +2393,7 @@ var APISwaggerJSON string = `{
         },
         "app_settingForbiddenActivitySetting": {
             "type": "object",
-            "description": "When L7 policy rules are set up to disallow certain types of requests, the system monitors \npersistent attempts from a user to send requests which result in policy denies.\nThese settings specify how to use disallowed request activity from a user to determine suspicious behavior",
+            "description": "When L7 policy rules are set up to disallow certain types of requests, the system monitors\npersistent attempts from a user to send requests which result in policy denies.\nThese settings specify how to use disallowed request activity from a user to determine suspicious behavior",
             "title": "Forbidden Activity Setting",
             "x-displayname": "Forbidden Activity Setting",
             "x-ves-proto-message": "ves.io.schema.app_setting.ForbiddenActivitySetting",
@@ -2684,7 +2684,7 @@ var APISwaggerJSON string = `{
             "properties": {
                 "cooling_off_period": {
                     "type": "integer",
-                    "description": "Exclusive with []\n Malicious user detection assigns a threat level to each user based on their activity. \n Once a threat level is assigned, the system continues tracking activity from this user\n and if no further malicious activity is seen, it gradually reduces the threat assesment to lower levels.\n This field specifies the time period, in minutes, used by the system to decay a user's threat level from \n a high to medium or medium to low or low to none. \n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.uint32.gt: 0\n  ves.io.schema.rules.uint32.lte: 120\n",
+                    "description": "Exclusive with []\n Malicious user detection assigns a threat level to each user based on their activity.\n Once a threat level is assigned, the system continues tracking activity from this user\n and if no further malicious activity is seen, it gradually reduces the threat assesment to lower levels.\n This field specifies the time period, in minutes, used by the system to decay a user's threat level from\n a high to medium or medium to low or low to none.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.uint32.gt: 0\n  ves.io.schema.rules.uint32.lte: 120\n",
                     "title": "Cooling Off Period",
                     "format": "int64",
                     "x-displayname": "Cooling off period (minutes)",

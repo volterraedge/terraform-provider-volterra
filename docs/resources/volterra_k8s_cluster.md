@@ -23,29 +23,25 @@ resource "volterra_k8s_cluster" "example" {
   // One of the arguments from this list "no_cluster_wide_apps cluster_wide_app_list" must be set
   no_cluster_wide_apps = true
 
-  // One of the arguments from this list "use_default_cluster_role_bindings use_custom_cluster_role_bindings" must be set
+  // One of the arguments from this list "use_custom_cluster_role_bindings use_default_cluster_role_bindings" must be set
   use_default_cluster_role_bindings = true
 
   // One of the arguments from this list "use_default_cluster_roles use_custom_cluster_role_list" must be set
   use_default_cluster_roles = true
 
-  // One of the arguments from this list "cluster_scoped_access_permit cluster_scoped_access_deny" must be set
+  // One of the arguments from this list "cluster_scoped_access_deny cluster_scoped_access_permit" must be set
   cluster_scoped_access_deny = true
 
   // One of the arguments from this list "no_global_access global_access_enable" must be set
   no_global_access = true
 
   // One of the arguments from this list "no_insecure_registries insecure_registry_list" must be set
-  no_insecure_registries = true
 
-  // One of the arguments from this list "no_local_access local_access_config" must be set
-
-  local_access_config {
-    local_domain = "example.com"
-
-    // One of the arguments from this list "default_port port" must be set
-    default_port = true
+  insecure_registry_list {
+    insecure_registries = ["example.com:5000"]
   }
+  // One of the arguments from this list "no_local_access local_access_config" must be set
+  no_local_access = true
   // One of the arguments from this list "use_default_psp use_custom_psp_list" must be set
   use_default_psp = true
 }
@@ -75,7 +71,7 @@ Argument Reference
 
 `no_cluster_wide_apps` - (Optional) There are no cluster wide applications to be deployed (bool).
 
-`use_custom_cluster_role_bindings` - (Optional) Select K8s cluster role bindings for this K8s cluster. See [Use Custom Cluster Role Bindings ](#use-custom-cluster-role-bindings) below for details.
+`use_custom_cluster_role_bindings` - (Optional) Select custom K8s cluster role bindings for this K8s cluster. See [Use Custom Cluster Role Bindings ](#use-custom-cluster-role-bindings) below for details.
 
 `use_default_cluster_role_bindings` - (Optional) Select default K8s cluster role bindings for this K8s cluster (bool).
 
@@ -83,9 +79,9 @@ Argument Reference
 
 `use_default_cluster_roles` - (Optional) Select default K8s cluster roles for this K8s cluster (bool).
 
-`cluster_scoped_access_deny` - (Optional) Access to Create, Patch, Replace, Update and Delete for ClusterRoles and ClusterRoleBindings will not be allowed through K8s cluster API. It can be managed only through VoltConsole. (bool).
+`cluster_scoped_access_deny` - (Optional) Access to Create, Patch, Replace, Update and Delete for ClusterRoles, ClusterRoleBindings, MutatingWebhookConfiguration and ValidatingWebhookConfiguration will not be allowed through K8s cluster API. It can be managed only through VoltConsole. (bool).
 
-`cluster_scoped_access_permit` - (Optional) Access to Create, Patch, Replace, Update and Delete for ClusterRoles and ClusterRoleBindings will be allowed through K8s cluster API. This allows native k8s API operation with ClusterRoles and ClusterRoleBindings. (bool).
+`cluster_scoped_access_permit` - (Optional) Access to Create, Patch, Replace, Update and Delete for ClusterRoles, ClusterRoleBindings, MutatingWebhookConfiguration and ValidatingWebhookConfiguration will be allowed through K8s cluster API. This allows native k8s API operation with ClusterRoles and ClusterRoleBindings. (bool).
 
 `global_access_enable` - (Optional) Access via VoltConsole to site K8s API server is enabled (bool).
 
@@ -235,7 +231,7 @@ tenant - (Optional) then tenant will hold the referred object's(e.g. route's) te
 
 ### Use Custom Cluster Role Bindings
 
-Select K8s cluster role bindings for this K8s cluster.
+Select custom K8s cluster role bindings for this K8s cluster.
 
 `cluster_role_bindings` - (Required) List of active cluster role binding list for a K8s cluster. See [ref](#ref) below for details.
 

@@ -125,7 +125,6 @@ import (
 	ves_io_schema_role_crudapi "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/role/crudapi"
 	ves_io_schema_route "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/route"
 	ves_io_schema_route_crudapi "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/route/crudapi"
-	ves_io_schema_scim "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/scim"
 	ves_io_schema_secret_policy "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/secret_policy"
 	ves_io_schema_secret_policy_crudapi "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/secret_policy/crudapi"
 	ves_io_schema_secret_policy_rule "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/secret_policy_rule"
@@ -140,8 +139,6 @@ import (
 	ves_io_schema_site_mesh_group_crudapi "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/site_mesh_group/crudapi"
 	ves_io_schema_stored_object "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/stored_object"
 	ves_io_schema_stored_object_crudapi "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/stored_object/crudapi"
-	ves_io_schema_subnet "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/subnet"
-	ves_io_schema_subnet_crudapi "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/subnet/crudapi"
 	ves_io_schema_tenant "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/tenant"
 	ves_io_schema_tenant_crudapi "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/tenant/crudapi"
 	ves_io_schema_tenant_management "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/tenant_management"
@@ -334,6 +331,7 @@ func init() {
 	MDR.ValidatorRegistry["ves.io.schema.RouteTarget4ByteAsn"] = ves_io_schema.RouteTarget4ByteAsnValidator()
 	MDR.ValidatorRegistry["ves.io.schema.RouteTargetIPv4Addr"] = ves_io_schema.RouteTargetIPv4AddrValidator()
 	MDR.ValidatorRegistry["ves.io.schema.SecretType"] = ves_io_schema.SecretTypeValidator()
+	MDR.ValidatorRegistry["ves.io.schema.SiteInfo"] = ves_io_schema.SiteInfoValidator()
 	MDR.ValidatorRegistry["ves.io.schema.SiteRefType"] = ves_io_schema.SiteRefTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.SiteVirtualSiteRefSelector"] = ves_io_schema.SiteVirtualSiteRefSelectorValidator()
 	MDR.ValidatorRegistry["ves.io.schema.StaticRouteType"] = ves_io_schema.StaticRouteTypeValidator()
@@ -570,6 +568,7 @@ func init() {
 	MDR.ValidatorRegistry["ves.io.schema.api_credential.ListResponseItem"] = ves_io_schema_api_credential.ListResponseItemValidator()
 	MDR.ValidatorRegistry["ves.io.schema.api_credential.RecreateScimTokenRequest"] = ves_io_schema_api_credential.RecreateScimTokenRequestValidator()
 	MDR.ValidatorRegistry["ves.io.schema.api_credential.RenewRequest"] = ves_io_schema_api_credential.RenewRequestValidator()
+	MDR.ValidatorRegistry["ves.io.schema.api_credential.ScimTokenRequest"] = ves_io_schema_api_credential.ScimTokenRequestValidator()
 	MDR.ValidatorRegistry["ves.io.schema.api_credential.SiteKubeconfigType"] = ves_io_schema_api_credential.SiteKubeconfigTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.api_credential.StatusResponse"] = ves_io_schema_api_credential.StatusResponseValidator()
 	MDR.ValidatorRegistry["ves.io.schema.api_credential.Vk8sKubeconfigType"] = ves_io_schema_api_credential.Vk8SKubeconfigTypeValidator()
@@ -1049,6 +1048,8 @@ func init() {
 	MDR.ValidatorRegistry["ves.io.schema.dc_cluster_group.MetricsResponse"] = ves_io_schema_dc_cluster_group.MetricsResponseValidator()
 
 	MDR.ValidatorRegistry["ves.io.schema.dc_cluster_group.CreateSpecType"] = ves_io_schema_dc_cluster_group.CreateSpecTypeValidator()
+	MDR.ValidatorRegistry["ves.io.schema.dc_cluster_group.DCClusterGroupMeshType"] = ves_io_schema_dc_cluster_group.DCClusterGroupMeshTypeValidator()
+	MDR.ValidatorRegistry["ves.io.schema.dc_cluster_group.DcClusterGroupStatus"] = ves_io_schema_dc_cluster_group.DcClusterGroupStatusValidator()
 	MDR.ValidatorRegistry["ves.io.schema.dc_cluster_group.GetSpecType"] = ves_io_schema_dc_cluster_group.GetSpecTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.dc_cluster_group.GlobalSpecType"] = ves_io_schema_dc_cluster_group.GlobalSpecTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.dc_cluster_group.ReplaceSpecType"] = ves_io_schema_dc_cluster_group.ReplaceSpecTypeValidator()
@@ -1744,13 +1745,8 @@ func init() {
 
 	MDR.ValidatorRegistry["ves.io.schema.namespace.APIItem"] = ves_io_schema_namespace.APIItemValidator()
 	MDR.ValidatorRegistry["ves.io.schema.namespace.APIItemList"] = ves_io_schema_namespace.APIItemListValidator()
-	MDR.ValidatorRegistry["ves.io.schema.namespace.CascadeDeleteItemType"] = ves_io_schema_namespace.CascadeDeleteItemTypeValidator()
-	MDR.ValidatorRegistry["ves.io.schema.namespace.CascadeDeleteRequest"] = ves_io_schema_namespace.CascadeDeleteRequestValidator()
-	MDR.ValidatorRegistry["ves.io.schema.namespace.CascadeDeleteResponse"] = ves_io_schema_namespace.CascadeDeleteResponseValidator()
 	MDR.ValidatorRegistry["ves.io.schema.namespace.EvaluateAPIAccessReq"] = ves_io_schema_namespace.EvaluateAPIAccessReqValidator()
 	MDR.ValidatorRegistry["ves.io.schema.namespace.EvaluateAPIAccessResp"] = ves_io_schema_namespace.EvaluateAPIAccessRespValidator()
-	MDR.ValidatorRegistry["ves.io.schema.namespace.UpdateAllowAdvertiseOnPublicReq"] = ves_io_schema_namespace.UpdateAllowAdvertiseOnPublicReqValidator()
-	MDR.ValidatorRegistry["ves.io.schema.namespace.UpdateAllowAdvertiseOnPublicResp"] = ves_io_schema_namespace.UpdateAllowAdvertiseOnPublicRespValidator()
 
 	MDR.ValidatorRegistry["ves.io.schema.namespace.GetActiveAlertPoliciesRequest"] = ves_io_schema_namespace.GetActiveAlertPoliciesRequestValidator()
 	MDR.ValidatorRegistry["ves.io.schema.namespace.GetActiveAlertPoliciesResponse"] = ves_io_schema_namespace.GetActiveAlertPoliciesResponseValidator()
@@ -1768,15 +1764,20 @@ func init() {
 	MDR.ValidatorRegistry["ves.io.schema.namespace.SetActiveServicePoliciesResponse"] = ves_io_schema_namespace.SetActiveServicePoliciesResponseValidator()
 	MDR.ValidatorRegistry["ves.io.schema.namespace.SetFastACLsForInternetVIPsRequest"] = ves_io_schema_namespace.SetFastACLsForInternetVIPsRequestValidator()
 	MDR.ValidatorRegistry["ves.io.schema.namespace.SetFastACLsForInternetVIPsResponse"] = ves_io_schema_namespace.SetFastACLsForInternetVIPsResponseValidator()
-	MDR.ValidatorRegistry["ves.io.schema.namespace.SuggestValuesReq"] = ves_io_schema_namespace.SuggestValuesReqValidator()
-	MDR.ValidatorRegistry["ves.io.schema.namespace.SuggestValuesResp"] = ves_io_schema_namespace.SuggestValuesRespValidator()
-	MDR.ValidatorRegistry["ves.io.schema.namespace.SuggestedItem"] = ves_io_schema_namespace.SuggestedItemValidator()
+	MDR.ValidatorRegistry["ves.io.schema.namespace.UpdateAllowAdvertiseOnPublicReq"] = ves_io_schema_namespace.UpdateAllowAdvertiseOnPublicReqValidator()
+	MDR.ValidatorRegistry["ves.io.schema.namespace.UpdateAllowAdvertiseOnPublicResp"] = ves_io_schema_namespace.UpdateAllowAdvertiseOnPublicRespValidator()
 
+	MDR.ValidatorRegistry["ves.io.schema.namespace.CascadeDeleteItemType"] = ves_io_schema_namespace.CascadeDeleteItemTypeValidator()
+	MDR.ValidatorRegistry["ves.io.schema.namespace.CascadeDeleteRequest"] = ves_io_schema_namespace.CascadeDeleteRequestValidator()
+	MDR.ValidatorRegistry["ves.io.schema.namespace.CascadeDeleteResponse"] = ves_io_schema_namespace.CascadeDeleteResponseValidator()
 	MDR.ValidatorRegistry["ves.io.schema.namespace.CreateSpecType"] = ves_io_schema_namespace.CreateSpecTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.namespace.GetSpecType"] = ves_io_schema_namespace.GetSpecTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.namespace.GlobalSpecType"] = ves_io_schema_namespace.GlobalSpecTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.namespace.ReplaceSpecType"] = ves_io_schema_namespace.ReplaceSpecTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.namespace.SubCA"] = ves_io_schema_namespace.SubCAValidator()
+	MDR.ValidatorRegistry["ves.io.schema.namespace.SuggestValuesReq"] = ves_io_schema_namespace.SuggestValuesReqValidator()
+	MDR.ValidatorRegistry["ves.io.schema.namespace.SuggestValuesResp"] = ves_io_schema_namespace.SuggestValuesRespValidator()
+	MDR.ValidatorRegistry["ves.io.schema.namespace.SuggestedItem"] = ves_io_schema_namespace.SuggestedItemValidator()
 
 	MDR.ValidatorRegistry["ves.io.schema.namespace.crudapi.ObjectCreateReq"] = ves_io_schema_namespace_crudapi.ObjectCreateReqValidator()
 	MDR.ValidatorRegistry["ves.io.schema.namespace.crudapi.ObjectCreateRsp"] = ves_io_schema_namespace_crudapi.ObjectCreateRspValidator()
@@ -2285,33 +2286,6 @@ func init() {
 	MDR.ValidatorRegistry["ves.io.schema.route.crudapi.ObjectReplaceReq"] = ves_io_schema_route_crudapi.ObjectReplaceReqValidator()
 	MDR.ValidatorRegistry["ves.io.schema.route.crudapi.ObjectReplaceRsp"] = ves_io_schema_route_crudapi.ObjectReplaceRspValidator()
 
-	MDR.ValidatorRegistry["ves.io.schema.scim.CreateGroupRequest"] = ves_io_schema_scim.CreateGroupRequestValidator()
-	MDR.ValidatorRegistry["ves.io.schema.scim.Group"] = ves_io_schema_scim.GroupValidator()
-	MDR.ValidatorRegistry["ves.io.schema.scim.GroupMembers"] = ves_io_schema_scim.GroupMembersValidator()
-	MDR.ValidatorRegistry["ves.io.schema.scim.ListGroupResources"] = ves_io_schema_scim.ListGroupResourcesValidator()
-	MDR.ValidatorRegistry["ves.io.schema.scim.PatchGroupRequest"] = ves_io_schema_scim.PatchGroupRequestValidator()
-
-	MDR.ValidatorRegistry["ves.io.schema.scim.Resource"] = ves_io_schema_scim.ResourceValidator()
-	MDR.ValidatorRegistry["ves.io.schema.scim.ResourceTypesResponse"] = ves_io_schema_scim.ResourceTypesResponseValidator()
-
-	MDR.ValidatorRegistry["ves.io.schema.scim.ServiceProviderConfigResponse"] = ves_io_schema_scim.ServiceProviderConfigResponseValidator()
-
-	MDR.ValidatorRegistry["ves.io.schema.scim.Filter"] = ves_io_schema_scim.FilterValidator()
-	MDR.ValidatorRegistry["ves.io.schema.scim.FilterRequest"] = ves_io_schema_scim.FilterRequestValidator()
-	MDR.ValidatorRegistry["ves.io.schema.scim.IdRequest"] = ves_io_schema_scim.IdRequestValidator()
-	MDR.ValidatorRegistry["ves.io.schema.scim.Meta"] = ves_io_schema_scim.MetaValidator()
-	MDR.ValidatorRegistry["ves.io.schema.scim.PatchOperation"] = ves_io_schema_scim.PatchOperationValidator()
-	MDR.ValidatorRegistry["ves.io.schema.scim.ResourceMeta"] = ves_io_schema_scim.ResourceMetaValidator()
-	MDR.ValidatorRegistry["ves.io.schema.scim.Support"] = ves_io_schema_scim.SupportValidator()
-
-	MDR.ValidatorRegistry["ves.io.schema.scim.CreateUserRequest"] = ves_io_schema_scim.CreateUserRequestValidator()
-	MDR.ValidatorRegistry["ves.io.schema.scim.Email"] = ves_io_schema_scim.EmailValidator()
-	MDR.ValidatorRegistry["ves.io.schema.scim.ListUserResponse"] = ves_io_schema_scim.ListUserResponseValidator()
-	MDR.ValidatorRegistry["ves.io.schema.scim.Name"] = ves_io_schema_scim.NameValidator()
-	MDR.ValidatorRegistry["ves.io.schema.scim.PatchUserRequest"] = ves_io_schema_scim.PatchUserRequestValidator()
-	MDR.ValidatorRegistry["ves.io.schema.scim.User"] = ves_io_schema_scim.UserValidator()
-	MDR.ValidatorRegistry["ves.io.schema.scim.UserGroup"] = ves_io_schema_scim.UserGroupValidator()
-
 	MDR.ValidatorRegistry["ves.io.schema.secret_policy.SpecType"] = ves_io_schema_secret_policy.SpecTypeValidator()
 
 	MDR.ValidatorRegistry["ves.io.schema.secret_policy.CreateRequest"] = ves_io_schema_secret_policy.CreateRequestValidator()
@@ -2479,6 +2453,10 @@ func init() {
 	MDR.ValidatorRegistry["ves.io.schema.site.SecretListRequest"] = ves_io_schema_site.SecretListRequestValidator()
 	MDR.ValidatorRegistry["ves.io.schema.site.ServiceListRequest"] = ves_io_schema_site.ServiceListRequestValidator()
 	MDR.ValidatorRegistry["ves.io.schema.site.StatefulSetListRequest"] = ves_io_schema_site.StatefulSetListRequestValidator()
+	MDR.ValidatorRegistry["ves.io.schema.site.VirtualMachineInstancesMetricData"] = ves_io_schema_site.VirtualMachineInstancesMetricDataValidator()
+	MDR.ValidatorRegistry["ves.io.schema.site.VirtualMachineInstancesMetricTypeData"] = ves_io_schema_site.VirtualMachineInstancesMetricTypeDataValidator()
+	MDR.ValidatorRegistry["ves.io.schema.site.VirtualMachineInstancesMetricsRequest"] = ves_io_schema_site.VirtualMachineInstancesMetricsRequestValidator()
+	MDR.ValidatorRegistry["ves.io.schema.site.VirtualMachineInstancesMetricsResponse"] = ves_io_schema_site.VirtualMachineInstancesMetricsResponseValidator()
 
 	MDR.ValidatorRegistry["ves.io.schema.site.SetStateReq"] = ves_io_schema_site.SetStateReqValidator()
 	MDR.ValidatorRegistry["ves.io.schema.site.SetStateResp"] = ves_io_schema_site.SetStateRespValidator()
@@ -2492,6 +2470,9 @@ func init() {
 	MDR.ValidatorRegistry["ves.io.schema.site.SiteStatusMetricsResponse"] = ves_io_schema_site.SiteStatusMetricsResponseValidator()
 
 	MDR.ValidatorRegistry["ves.io.schema.site.AresConnectionStatus"] = ves_io_schema_site.AresConnectionStatusValidator()
+	MDR.ValidatorRegistry["ves.io.schema.site.AzureHubSpokeVnetPeeringStatusInfo"] = ves_io_schema_site.AzureHubSpokeVnetPeeringStatusInfoValidator()
+	MDR.ValidatorRegistry["ves.io.schema.site.AzureVNetToVnetPeeringStatus"] = ves_io_schema_site.AzureVNetToVnetPeeringStatusValidator()
+	MDR.ValidatorRegistry["ves.io.schema.site.AzureVnetPeeringStateType"] = ves_io_schema_site.AzureVnetPeeringStateTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.site.Bios"] = ves_io_schema_site.BiosValidator()
 	MDR.ValidatorRegistry["ves.io.schema.site.Board"] = ves_io_schema_site.BoardValidator()
 	MDR.ValidatorRegistry["ves.io.schema.site.BondMembersType"] = ves_io_schema_site.BondMembersTypeValidator()
@@ -2503,6 +2484,9 @@ func init() {
 	MDR.ValidatorRegistry["ves.io.schema.site.CreateSpecType"] = ves_io_schema_site.CreateSpecTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.site.DefaultUnderlayNetworkType"] = ves_io_schema_site.DefaultUnderlayNetworkTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.site.DeploymentState"] = ves_io_schema_site.DeploymentStateValidator()
+	MDR.ValidatorRegistry["ves.io.schema.site.DirectConnectBGPPeerInfo"] = ves_io_schema_site.DirectConnectBGPPeerInfoValidator()
+	MDR.ValidatorRegistry["ves.io.schema.site.DirectConnectStatusInfo"] = ves_io_schema_site.DirectConnectStatusInfoValidator()
+	MDR.ValidatorRegistry["ves.io.schema.site.DirectConnectVIFStateInfo"] = ves_io_schema_site.DirectConnectVIFStateInfoValidator()
 	MDR.ValidatorRegistry["ves.io.schema.site.FleetCondition"] = ves_io_schema_site.FleetConditionValidator()
 	MDR.ValidatorRegistry["ves.io.schema.site.FleetDeploymentState"] = ves_io_schema_site.FleetDeploymentStateValidator()
 	MDR.ValidatorRegistry["ves.io.schema.site.FleetStatus"] = ves_io_schema_site.FleetStatusValidator()
@@ -2620,40 +2604,6 @@ func init() {
 	MDR.ValidatorRegistry["ves.io.schema.stored_object.crudapi.ObjectReplaceReq"] = ves_io_schema_stored_object_crudapi.ObjectReplaceReqValidator()
 	MDR.ValidatorRegistry["ves.io.schema.stored_object.crudapi.ObjectReplaceRsp"] = ves_io_schema_stored_object_crudapi.ObjectReplaceRspValidator()
 
-	MDR.ValidatorRegistry["ves.io.schema.subnet.SpecType"] = ves_io_schema_subnet.SpecTypeValidator()
-
-	MDR.ValidatorRegistry["ves.io.schema.subnet.CreateRequest"] = ves_io_schema_subnet.CreateRequestValidator()
-	MDR.ValidatorRegistry["ves.io.schema.subnet.CreateResponse"] = ves_io_schema_subnet.CreateResponseValidator()
-	MDR.ValidatorRegistry["ves.io.schema.subnet.DeleteRequest"] = ves_io_schema_subnet.DeleteRequestValidator()
-	MDR.ValidatorRegistry["ves.io.schema.subnet.GetRequest"] = ves_io_schema_subnet.GetRequestValidator()
-	MDR.ValidatorRegistry["ves.io.schema.subnet.GetResponse"] = ves_io_schema_subnet.GetResponseValidator()
-	MDR.ValidatorRegistry["ves.io.schema.subnet.ListRequest"] = ves_io_schema_subnet.ListRequestValidator()
-	MDR.ValidatorRegistry["ves.io.schema.subnet.ListResponse"] = ves_io_schema_subnet.ListResponseValidator()
-	MDR.ValidatorRegistry["ves.io.schema.subnet.ListResponseItem"] = ves_io_schema_subnet.ListResponseItemValidator()
-	MDR.ValidatorRegistry["ves.io.schema.subnet.ReplaceRequest"] = ves_io_schema_subnet.ReplaceRequestValidator()
-	MDR.ValidatorRegistry["ves.io.schema.subnet.ReplaceResponse"] = ves_io_schema_subnet.ReplaceResponseValidator()
-
-	MDR.ValidatorRegistry["ves.io.schema.subnet.CreateSpecType"] = ves_io_schema_subnet.CreateSpecTypeValidator()
-	MDR.ValidatorRegistry["ves.io.schema.subnet.DHCPNetworkType"] = ves_io_schema_subnet.DHCPNetworkTypeValidator()
-	MDR.ValidatorRegistry["ves.io.schema.subnet.DHCPServerParametersType"] = ves_io_schema_subnet.DHCPServerParametersTypeValidator()
-	MDR.ValidatorRegistry["ves.io.schema.subnet.GetSpecType"] = ves_io_schema_subnet.GetSpecTypeValidator()
-	MDR.ValidatorRegistry["ves.io.schema.subnet.GlobalSpecType"] = ves_io_schema_subnet.GlobalSpecTypeValidator()
-	MDR.ValidatorRegistry["ves.io.schema.subnet.ReplaceSpecType"] = ves_io_schema_subnet.ReplaceSpecTypeValidator()
-	MDR.ValidatorRegistry["ves.io.schema.subnet.SiteSubnetParametersType"] = ves_io_schema_subnet.SiteSubnetParametersTypeValidator()
-	MDR.ValidatorRegistry["ves.io.schema.subnet.SubnetDHCPServerParametersType"] = ves_io_schema_subnet.SubnetDHCPServerParametersTypeValidator()
-
-	MDR.ValidatorRegistry["ves.io.schema.subnet.crudapi.ObjectCreateReq"] = ves_io_schema_subnet_crudapi.ObjectCreateReqValidator()
-	MDR.ValidatorRegistry["ves.io.schema.subnet.crudapi.ObjectCreateRsp"] = ves_io_schema_subnet_crudapi.ObjectCreateRspValidator()
-	MDR.ValidatorRegistry["ves.io.schema.subnet.crudapi.ObjectDeleteReq"] = ves_io_schema_subnet_crudapi.ObjectDeleteReqValidator()
-	MDR.ValidatorRegistry["ves.io.schema.subnet.crudapi.ObjectDeleteRsp"] = ves_io_schema_subnet_crudapi.ObjectDeleteRspValidator()
-	MDR.ValidatorRegistry["ves.io.schema.subnet.crudapi.ObjectGetReq"] = ves_io_schema_subnet_crudapi.ObjectGetReqValidator()
-	MDR.ValidatorRegistry["ves.io.schema.subnet.crudapi.ObjectGetRsp"] = ves_io_schema_subnet_crudapi.ObjectGetRspValidator()
-	MDR.ValidatorRegistry["ves.io.schema.subnet.crudapi.ObjectListReq"] = ves_io_schema_subnet_crudapi.ObjectListReqValidator()
-	MDR.ValidatorRegistry["ves.io.schema.subnet.crudapi.ObjectListRsp"] = ves_io_schema_subnet_crudapi.ObjectListRspValidator()
-	MDR.ValidatorRegistry["ves.io.schema.subnet.crudapi.ObjectListRspItem"] = ves_io_schema_subnet_crudapi.ObjectListRspItemValidator()
-	MDR.ValidatorRegistry["ves.io.schema.subnet.crudapi.ObjectReplaceReq"] = ves_io_schema_subnet_crudapi.ObjectReplaceReqValidator()
-	MDR.ValidatorRegistry["ves.io.schema.subnet.crudapi.ObjectReplaceRsp"] = ves_io_schema_subnet_crudapi.ObjectReplaceRspValidator()
-
 	MDR.ValidatorRegistry["ves.io.schema.tenant.AssignDomainOwnerRequest"] = ves_io_schema_tenant.AssignDomainOwnerRequestValidator()
 	MDR.ValidatorRegistry["ves.io.schema.tenant.CreateDebugUserRequest"] = ves_io_schema_tenant.CreateDebugUserRequestValidator()
 	MDR.ValidatorRegistry["ves.io.schema.tenant.DebugUser"] = ves_io_schema_tenant.DebugUserValidator()
@@ -2765,7 +2715,9 @@ func init() {
 	MDR.ValidatorRegistry["ves.io.schema.tenant_management.managed_tenant.GetSpecType"] = ves_io_schema_tenant_management_managed_tenant.GetSpecTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.tenant_management.managed_tenant.GlobalSpecType"] = ves_io_schema_tenant_management_managed_tenant.GlobalSpecTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.tenant_management.managed_tenant.GroupAssignmentType"] = ves_io_schema_tenant_management_managed_tenant.GroupAssignmentTypeValidator()
+	MDR.ValidatorRegistry["ves.io.schema.tenant_management.managed_tenant.NewTenantInfo"] = ves_io_schema_tenant_management_managed_tenant.NewTenantInfoValidator()
 	MDR.ValidatorRegistry["ves.io.schema.tenant_management.managed_tenant.ReplaceSpecType"] = ves_io_schema_tenant_management_managed_tenant.ReplaceSpecTypeValidator()
+	MDR.ValidatorRegistry["ves.io.schema.tenant_management.managed_tenant.TenantOwnerInfo"] = ves_io_schema_tenant_management_managed_tenant.TenantOwnerInfoValidator()
 
 	MDR.ValidatorRegistry["ves.io.schema.tenant_management.managed_tenant.crudapi.ObjectCreateReq"] = ves_io_schema_tenant_management_managed_tenant_crudapi.ObjectCreateReqValidator()
 	MDR.ValidatorRegistry["ves.io.schema.tenant_management.managed_tenant.crudapi.ObjectCreateRsp"] = ves_io_schema_tenant_management_managed_tenant_crudapi.ObjectCreateRspValidator()
@@ -3185,9 +3137,6 @@ func init() {
 	MDR.ValidatorRegistry["ves.io.schema.views.aws_tgw_site.AWSVPNTunnelConfigType"] = ves_io_schema_views_aws_tgw_site.AWSVPNTunnelConfigTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.views.aws_tgw_site.ActiveServicePoliciesType"] = ves_io_schema_views_aws_tgw_site.ActiveServicePoliciesTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.views.aws_tgw_site.CreateSpecType"] = ves_io_schema_views_aws_tgw_site.CreateSpecTypeValidator()
-	MDR.ValidatorRegistry["ves.io.schema.views.aws_tgw_site.DirectConnectBGPPeerInfo"] = ves_io_schema_views_aws_tgw_site.DirectConnectBGPPeerInfoValidator()
-	MDR.ValidatorRegistry["ves.io.schema.views.aws_tgw_site.DirectConnectStatusInfo"] = ves_io_schema_views_aws_tgw_site.DirectConnectStatusInfoValidator()
-	MDR.ValidatorRegistry["ves.io.schema.views.aws_tgw_site.DirectConnectVIFStateInfo"] = ves_io_schema_views_aws_tgw_site.DirectConnectVIFStateInfoValidator()
 	MDR.ValidatorRegistry["ves.io.schema.views.aws_tgw_site.ExistingTGWType"] = ves_io_schema_views_aws_tgw_site.ExistingTGWTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.views.aws_tgw_site.GetSpecType"] = ves_io_schema_views_aws_tgw_site.GetSpecTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.views.aws_tgw_site.GlobalSpecType"] = ves_io_schema_views_aws_tgw_site.GlobalSpecTypeValidator()
@@ -3294,6 +3243,7 @@ func init() {
 	MDR.ValidatorRegistry["ves.io.schema.views.azure_vnet_site.GetSpecType"] = ves_io_schema_views_azure_vnet_site.GetSpecTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.views.azure_vnet_site.GlobalSpecType"] = ves_io_schema_views_azure_vnet_site.GlobalSpecTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.views.azure_vnet_site.ReplaceSpecType"] = ves_io_schema_views_azure_vnet_site.ReplaceSpecTypeValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.azure_vnet_site.VnetIpPrefixesType"] = ves_io_schema_views_azure_vnet_site.VnetIpPrefixesTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.views.azure_vnet_site.VnetPeeringType"] = ves_io_schema_views_azure_vnet_site.VnetPeeringTypeValidator()
 
 	MDR.ValidatorRegistry["ves.io.schema.views.azure_vnet_site.crudapi.ObjectCreateReq"] = ves_io_schema_views_azure_vnet_site_crudapi.ObjectCreateReqValidator()
@@ -3674,6 +3624,7 @@ func init() {
 	MDR.ValidatorRegistry["ves.io.schema.views.terraform_parameters.AzureVnetInfoType"] = ves_io_schema_views_terraform_parameters.AzureVnetInfoTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.views.terraform_parameters.AzureVnetParamsType"] = ves_io_schema_views_terraform_parameters.AzureVnetParamsTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.views.terraform_parameters.AzureVnetSiteType"] = ves_io_schema_views_terraform_parameters.AzureVnetSiteTypeValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.terraform_parameters.SpokeVnetsInfoType"] = ves_io_schema_views_terraform_parameters.SpokeVnetsInfoTypeValidator()
 
 	MDR.ValidatorRegistry["ves.io.schema.views.terraform_parameters.BigIPAWSType"] = ves_io_schema_views_terraform_parameters.BigIPAWSTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.views.terraform_parameters.BigIPDeviceType"] = ves_io_schema_views_terraform_parameters.BigIPDeviceTypeValidator()
@@ -3785,6 +3736,7 @@ func init() {
 	MDR.ValidatorRegistry["ves.io.schema.virtual_host.AutoCertInfoType"] = ves_io_schema_virtual_host.AutoCertInfoTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.virtual_host.CaptchaChallengeType"] = ves_io_schema_virtual_host.CaptchaChallengeTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.virtual_host.CdnServiceType"] = ves_io_schema_virtual_host.CdnServiceTypeValidator()
+	MDR.ValidatorRegistry["ves.io.schema.virtual_host.ClientIPHeaders"] = ves_io_schema_virtual_host.ClientIPHeadersValidator()
 	MDR.ValidatorRegistry["ves.io.schema.virtual_host.CompressionType"] = ves_io_schema_virtual_host.CompressionTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.virtual_host.CreateSpecType"] = ves_io_schema_virtual_host.CreateSpecTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.virtual_host.DNSRecord"] = ves_io_schema_virtual_host.DNSRecordValidator()
@@ -4591,7 +4543,6 @@ func init() {
 			},
 			"spec.peers.internal": []sets.String{
 				sets.NewString([]string{"address", "dns_name", "from_site"}...),
-				sets.NewString([]string{"dc_cluster_group", "local", "site_mesh_group"}...),
 				sets.NewString([]string{"disable_mtls", "enable_mtls"}...),
 			},
 			"spec.peers.internal.family_inet6vpn": []sets.String{
@@ -4635,7 +4586,6 @@ func init() {
 			},
 			"spec.peers.internal": []sets.String{
 				sets.NewString([]string{"address", "dns_name", "from_site"}...),
-				sets.NewString([]string{"dc_cluster_group", "local", "site_mesh_group"}...),
 				sets.NewString([]string{"disable_mtls", "enable_mtls"}...),
 			},
 			"spec.peers.internal.family_inet6vpn": []sets.String{
@@ -4682,7 +4632,6 @@ func init() {
 			},
 			"spec.gc_spec.peers.internal": []sets.String{
 				sets.NewString([]string{"address", "dns_name", "from_site"}...),
-				sets.NewString([]string{"dc_cluster_group", "local", "site_mesh_group"}...),
 				sets.NewString([]string{"disable_mtls", "enable_mtls"}...),
 			},
 			"spec.gc_spec.peers.internal.family_inet6vpn": []sets.String{
@@ -4729,7 +4678,6 @@ func init() {
 			},
 			"spec.gc_spec.peers.internal": []sets.String{
 				sets.NewString([]string{"address", "dns_name", "from_site"}...),
-				sets.NewString([]string{"dc_cluster_group", "local", "site_mesh_group"}...),
 				sets.NewString([]string{"disable_mtls", "enable_mtls"}...),
 			},
 			"spec.gc_spec.peers.internal.family_inet6vpn": []sets.String{
@@ -4963,6 +4911,22 @@ func init() {
 		FieldsByAncestor: map[string][]sets.String{
 			"spec.gc_spec.password": []sets.String{
 				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.dc_cluster_group.crudapi.API.Create"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec.gc_spec.type": []sets.String{
+				sets.NewString([]string{"control_and_data_plane_mesh", "data_plane_mesh"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.dc_cluster_group.crudapi.API.Replace"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec.gc_spec.type": []sets.String{
+				sets.NewString([]string{"control_and_data_plane_mesh", "data_plane_mesh"}...),
 			},
 		},
 	}
@@ -5785,7 +5749,6 @@ func init() {
 			},
 			"spec.gc_spec.local_control_plane.bgp_config.peers.internal": []sets.String{
 				sets.NewString([]string{"address", "dns_name", "from_site"}...),
-				sets.NewString([]string{"dc_cluster_group", "local", "site_mesh_group"}...),
 				sets.NewString([]string{"disable_mtls", "enable_mtls"}...),
 			},
 			"spec.gc_spec.local_control_plane.bgp_config.peers.internal.family_inet6vpn": []sets.String{
@@ -5913,7 +5876,6 @@ func init() {
 			},
 			"spec.gc_spec.local_control_plane.bgp_config.peers.internal": []sets.String{
 				sets.NewString([]string{"address", "dns_name", "from_site"}...),
-				sets.NewString([]string{"dc_cluster_group", "local", "site_mesh_group"}...),
 				sets.NewString([]string{"disable_mtls", "enable_mtls"}...),
 			},
 			"spec.gc_spec.local_control_plane.bgp_config.peers.internal.family_inet6vpn": []sets.String{
@@ -6919,7 +6881,7 @@ func init() {
 			"spec.ethernet_interface": []sets.String{
 				sets.NewString([]string{"cluster", "node"}...),
 				sets.NewString([]string{"dhcp_client", "dhcp_server", "static_ip"}...),
-				sets.NewString([]string{"inside_network", "site_local_inside_network", "site_local_network", "srv6_network", "storage_network"}...),
+				sets.NewString([]string{"inside_network", "ip_fabric_network", "site_local_inside_network", "site_local_network", "srv6_network", "storage_network"}...),
 				sets.NewString([]string{"is_primary", "not_primary"}...),
 				sets.NewString([]string{"monitor", "monitor_disabled"}...),
 				sets.NewString([]string{"no_ipv6_address", "static_ipv6_address"}...),
@@ -6968,7 +6930,7 @@ func init() {
 			"spec.ethernet_interface": []sets.String{
 				sets.NewString([]string{"cluster", "node"}...),
 				sets.NewString([]string{"dhcp_client", "dhcp_server", "static_ip"}...),
-				sets.NewString([]string{"inside_network", "site_local_inside_network", "site_local_network", "srv6_network", "storage_network"}...),
+				sets.NewString([]string{"inside_network", "ip_fabric_network", "site_local_inside_network", "site_local_network", "srv6_network", "storage_network"}...),
 				sets.NewString([]string{"is_primary", "not_primary"}...),
 				sets.NewString([]string{"monitor", "monitor_disabled"}...),
 				sets.NewString([]string{"no_ipv6_address", "static_ipv6_address"}...),
@@ -7026,7 +6988,7 @@ func init() {
 			"spec.gc_spec.ethernet_interface": []sets.String{
 				sets.NewString([]string{"cluster", "node"}...),
 				sets.NewString([]string{"dhcp_client", "dhcp_server", "static_ip"}...),
-				sets.NewString([]string{"inside_network", "site_local_inside_network", "site_local_network", "srv6_network", "storage_network"}...),
+				sets.NewString([]string{"inside_network", "ip_fabric_network", "site_local_inside_network", "site_local_network", "srv6_network", "storage_network"}...),
 				sets.NewString([]string{"is_primary", "not_primary"}...),
 				sets.NewString([]string{"monitor", "monitor_disabled"}...),
 				sets.NewString([]string{"no_ipv6_address", "static_ipv6_address"}...),
@@ -7047,6 +7009,26 @@ func init() {
 				sets.NewString([]string{"cluster_static_ip", "fleet_static_ip", "node_static_ip"}...),
 			},
 			"spec.gc_spec.ipv6_static_addresses": []sets.String{
+				sets.NewString([]string{"cluster_static_ip", "fleet_static_ip", "node_static_ip"}...),
+			},
+			"spec.gc_spec.loopback_interface": []sets.String{
+				sets.NewString([]string{"cluster", "node"}...),
+				sets.NewString([]string{"dhcp_client", "dhcp_server", "static_ip"}...),
+				sets.NewString([]string{"ip_fabric_network", "site_local_inside_network", "site_local_network"}...),
+				sets.NewString([]string{"no_ipv6_address", "static_ipv6_address"}...),
+			},
+			"spec.gc_spec.loopback_interface.dhcp_server": []sets.String{
+				sets.NewString([]string{"automatic_from_end", "automatic_from_start", "interface_ip_map"}...),
+			},
+			"spec.gc_spec.loopback_interface.dhcp_server.dhcp_networks": []sets.String{
+				sets.NewString([]string{"dgw_address", "first_address", "last_address"}...),
+				sets.NewString([]string{"dns_address", "same_as_dgw"}...),
+				sets.NewString([]string{"network_prefix", "network_prefix_allocator"}...),
+			},
+			"spec.gc_spec.loopback_interface.static_ip": []sets.String{
+				sets.NewString([]string{"cluster_static_ip", "fleet_static_ip", "node_static_ip"}...),
+			},
+			"spec.gc_spec.loopback_interface.static_ipv6_address": []sets.String{
 				sets.NewString([]string{"cluster_static_ip", "fleet_static_ip", "node_static_ip"}...),
 			},
 			"spec.gc_spec.tunnel_interface": []sets.String{
@@ -7087,7 +7069,7 @@ func init() {
 			"spec.gc_spec.ethernet_interface": []sets.String{
 				sets.NewString([]string{"cluster", "node"}...),
 				sets.NewString([]string{"dhcp_client", "dhcp_server", "static_ip"}...),
-				sets.NewString([]string{"inside_network", "site_local_inside_network", "site_local_network", "srv6_network", "storage_network"}...),
+				sets.NewString([]string{"inside_network", "ip_fabric_network", "site_local_inside_network", "site_local_network", "srv6_network", "storage_network"}...),
 				sets.NewString([]string{"is_primary", "not_primary"}...),
 				sets.NewString([]string{"monitor", "monitor_disabled"}...),
 				sets.NewString([]string{"no_ipv6_address", "static_ipv6_address"}...),
@@ -7108,6 +7090,26 @@ func init() {
 				sets.NewString([]string{"cluster_static_ip", "fleet_static_ip", "node_static_ip"}...),
 			},
 			"spec.gc_spec.ipv6_static_addresses": []sets.String{
+				sets.NewString([]string{"cluster_static_ip", "fleet_static_ip", "node_static_ip"}...),
+			},
+			"spec.gc_spec.loopback_interface": []sets.String{
+				sets.NewString([]string{"cluster", "node"}...),
+				sets.NewString([]string{"dhcp_client", "dhcp_server", "static_ip"}...),
+				sets.NewString([]string{"ip_fabric_network", "site_local_inside_network", "site_local_network"}...),
+				sets.NewString([]string{"no_ipv6_address", "static_ipv6_address"}...),
+			},
+			"spec.gc_spec.loopback_interface.dhcp_server": []sets.String{
+				sets.NewString([]string{"automatic_from_end", "automatic_from_start", "interface_ip_map"}...),
+			},
+			"spec.gc_spec.loopback_interface.dhcp_server.dhcp_networks": []sets.String{
+				sets.NewString([]string{"dgw_address", "first_address", "last_address"}...),
+				sets.NewString([]string{"dns_address", "same_as_dgw"}...),
+				sets.NewString([]string{"network_prefix", "network_prefix_allocator"}...),
+			},
+			"spec.gc_spec.loopback_interface.static_ip": []sets.String{
+				sets.NewString([]string{"cluster_static_ip", "fleet_static_ip", "node_static_ip"}...),
+			},
+			"spec.gc_spec.loopback_interface.static_ipv6_address": []sets.String{
 				sets.NewString([]string{"cluster_static_ip", "fleet_static_ip", "node_static_ip"}...),
 			},
 			"spec.gc_spec.tunnel_interface": []sets.String{
@@ -7679,8 +7681,14 @@ func init() {
 			"spec.gc_spec.rule_list.rules.spec.waf_action": []sets.String{
 				sets.NewString([]string{"app_firewall_detection_control", "data_guard_control", "none", "waf_in_monitoring_mode", "waf_inline_rule_control", "waf_rule_control", "waf_skip_processing"}...),
 			},
+			"spec.gc_spec.simple_rules.arg_matchers": []sets.String{
+				sets.NewString([]string{"check_not_present", "check_present", "item", "presence"}...),
+			},
 			"spec.gc_spec.simple_rules.bot_action": []sets.String{
 				sets.NewString([]string{"bot_skip_processing", "none"}...),
+			},
+			"spec.gc_spec.simple_rules.cookie_matchers": []sets.String{
+				sets.NewString([]string{"check_not_present", "check_present", "item", "presence"}...),
 			},
 			"spec.gc_spec.simple_rules.headers": []sets.String{
 				sets.NewString([]string{"check_not_present", "check_present", "item", "presence"}...),
@@ -7690,6 +7698,9 @@ func init() {
 			},
 			"spec.gc_spec.simple_rules.mum_action": []sets.String{
 				sets.NewString([]string{"default", "skip_processing"}...),
+			},
+			"spec.gc_spec.simple_rules.query_params": []sets.String{
+				sets.NewString([]string{"check_not_present", "check_present", "item", "presence"}...),
 			},
 			"spec.gc_spec.simple_rules.shape_protected_endpoint_action.mitigation": []sets.String{
 				sets.NewString([]string{"block", "flag", "none", "redirect"}...),
@@ -7763,8 +7774,14 @@ func init() {
 			"spec.gc_spec.rule_list.rules.spec.waf_action": []sets.String{
 				sets.NewString([]string{"app_firewall_detection_control", "data_guard_control", "none", "waf_in_monitoring_mode", "waf_inline_rule_control", "waf_rule_control", "waf_skip_processing"}...),
 			},
+			"spec.gc_spec.simple_rules.arg_matchers": []sets.String{
+				sets.NewString([]string{"check_not_present", "check_present", "item", "presence"}...),
+			},
 			"spec.gc_spec.simple_rules.bot_action": []sets.String{
 				sets.NewString([]string{"bot_skip_processing", "none"}...),
+			},
+			"spec.gc_spec.simple_rules.cookie_matchers": []sets.String{
+				sets.NewString([]string{"check_not_present", "check_present", "item", "presence"}...),
 			},
 			"spec.gc_spec.simple_rules.headers": []sets.String{
 				sets.NewString([]string{"check_not_present", "check_present", "item", "presence"}...),
@@ -7774,6 +7791,9 @@ func init() {
 			},
 			"spec.gc_spec.simple_rules.mum_action": []sets.String{
 				sets.NewString([]string{"default", "skip_processing"}...),
+			},
+			"spec.gc_spec.simple_rules.query_params": []sets.String{
+				sets.NewString([]string{"check_not_present", "check_present", "item", "presence"}...),
 			},
 			"spec.gc_spec.simple_rules.shape_protected_endpoint_action.mitigation": []sets.String{
 				sets.NewString([]string{"block", "flag", "none", "redirect"}...),
@@ -8083,66 +8103,6 @@ func init() {
 		},
 	}
 
-	MDR.RPCOneofExclusiveRegistry["ves.io.schema.subnet.API.Create"] = svcfw.OOExclusiveSet{
-		FieldsByAncestor: map[string][]sets.String{
-			"spec": []sets.String{
-				sets.NewString([]string{"connect_to_sli", "connect_to_slo", "isolated_nw"}...),
-			},
-			"spec.site_subnet_params.subnet_dhcp_server_params.dhcp_networks": []sets.String{
-				sets.NewString([]string{"network_prefix"}...),
-			},
-		},
-	}
-
-	MDR.RPCOneofExclusiveRegistry["ves.io.schema.subnet.API.Replace"] = svcfw.OOExclusiveSet{
-		FieldsByAncestor: map[string][]sets.String{
-			"spec": []sets.String{
-				sets.NewString([]string{"connect_to_sli", "connect_to_slo", "isolated_nw"}...),
-			},
-			"spec.site_subnet_params.subnet_dhcp_server_params.dhcp_networks": []sets.String{
-				sets.NewString([]string{"network_prefix"}...),
-			},
-		},
-	}
-
-	MDR.RPCOneofExclusiveRegistry["ves.io.schema.subnet.crudapi.API.Create"] = svcfw.OOExclusiveSet{
-		FieldsByAncestor: map[string][]sets.String{
-			"spec.gc_spec": []sets.String{
-				sets.NewString([]string{"connect_to_sli", "connect_to_slo", "isolated_nw"}...),
-			},
-			"spec.gc_spec.site_dhcp_server_params_internal.subnet_dhcp_server_params": []sets.String{
-				sets.NewString([]string{"automatic_from_end", "automatic_from_start", "interface_ip_map"}...),
-			},
-			"spec.gc_spec.site_dhcp_server_params_internal.subnet_dhcp_server_params.dhcp_networks": []sets.String{
-				sets.NewString([]string{"dgw_address", "first_address", "last_address"}...),
-				sets.NewString([]string{"dns_address", "same_as_dgw"}...),
-				sets.NewString([]string{"network_prefix", "network_prefix_allocator"}...),
-			},
-			"spec.gc_spec.site_subnet_params.subnet_dhcp_server_params.dhcp_networks": []sets.String{
-				sets.NewString([]string{"network_prefix"}...),
-			},
-		},
-	}
-
-	MDR.RPCOneofExclusiveRegistry["ves.io.schema.subnet.crudapi.API.Replace"] = svcfw.OOExclusiveSet{
-		FieldsByAncestor: map[string][]sets.String{
-			"spec.gc_spec": []sets.String{
-				sets.NewString([]string{"connect_to_sli", "connect_to_slo", "isolated_nw"}...),
-			},
-			"spec.gc_spec.site_dhcp_server_params_internal.subnet_dhcp_server_params": []sets.String{
-				sets.NewString([]string{"automatic_from_end", "automatic_from_start", "interface_ip_map"}...),
-			},
-			"spec.gc_spec.site_dhcp_server_params_internal.subnet_dhcp_server_params.dhcp_networks": []sets.String{
-				sets.NewString([]string{"dgw_address", "first_address", "last_address"}...),
-				sets.NewString([]string{"dns_address", "same_as_dgw"}...),
-				sets.NewString([]string{"network_prefix", "network_prefix_allocator"}...),
-			},
-			"spec.gc_spec.site_subnet_params.subnet_dhcp_server_params.dhcp_networks": []sets.String{
-				sets.NewString([]string{"network_prefix"}...),
-			},
-		},
-	}
-
 	MDR.RPCOneofExclusiveRegistry["ves.io.schema.tenant.crudapi.API.Create"] = svcfw.OOExclusiveSet{
 		FieldsByAncestor: map[string][]sets.String{
 			"spec.gc_spec.shape_shared_instance_auth_key": []sets.String{
@@ -8192,7 +8152,7 @@ func init() {
 	MDR.RPCOneofExclusiveRegistry["ves.io.schema.tenant_management.managed_tenant.API.Create"] = svcfw.OOExclusiveSet{
 		FieldsByAncestor: map[string][]sets.String{
 			"spec": []sets.String{
-				sets.NewString([]string{"all_tenants", "tenant_id", "tenant_regex"}...),
+				sets.NewString([]string{"all_tenants", "new_tenant_info", "tenant_id", "tenant_regex"}...),
 			},
 		},
 	}
@@ -8200,7 +8160,7 @@ func init() {
 	MDR.RPCOneofExclusiveRegistry["ves.io.schema.tenant_management.managed_tenant.API.Replace"] = svcfw.OOExclusiveSet{
 		FieldsByAncestor: map[string][]sets.String{
 			"spec": []sets.String{
-				sets.NewString([]string{"all_tenants", "tenant_id", "tenant_regex"}...),
+				sets.NewString([]string{"all_tenants", "new_tenant_info", "tenant_id", "tenant_regex"}...),
 			},
 		},
 	}
@@ -8208,7 +8168,7 @@ func init() {
 	MDR.RPCOneofExclusiveRegistry["ves.io.schema.tenant_management.managed_tenant.crudapi.API.Create"] = svcfw.OOExclusiveSet{
 		FieldsByAncestor: map[string][]sets.String{
 			"spec.gc_spec": []sets.String{
-				sets.NewString([]string{"all_tenants", "tenant_id", "tenant_regex"}...),
+				sets.NewString([]string{"all_tenants", "new_tenant_info", "tenant_id", "tenant_regex"}...),
 			},
 		},
 	}
@@ -8216,7 +8176,7 @@ func init() {
 	MDR.RPCOneofExclusiveRegistry["ves.io.schema.tenant_management.managed_tenant.crudapi.API.Replace"] = svcfw.OOExclusiveSet{
 		FieldsByAncestor: map[string][]sets.String{
 			"spec.gc_spec": []sets.String{
-				sets.NewString([]string{"all_tenants", "tenant_id", "tenant_regex"}...),
+				sets.NewString([]string{"all_tenants", "new_tenant_info", "tenant_id", "tenant_regex"}...),
 			},
 		},
 	}
@@ -11229,6 +11189,7 @@ func init() {
 				sets.NewString([]string{"captcha_challenge", "js_challenge", "no_challenge", "policy_based_challenge"}...),
 				sets.NewString([]string{"cookie_stickiness", "least_active", "random", "ring_hash", "round_robin", "source_ip_stickiness"}...),
 				sets.NewString([]string{"disable_ip_reputation", "enable_ip_reputation"}...),
+				sets.NewString([]string{"disable_trust_client_ip_headers", "enable_trust_client_ip_headers"}...),
 				sets.NewString([]string{"http", "https", "https_auto_cert"}...),
 				sets.NewString([]string{"multi_lb_app", "single_lb_app"}...),
 				sets.NewString([]string{"user_id_client_ip", "user_identification"}...),
@@ -11299,7 +11260,7 @@ func init() {
 				sets.NewString([]string{"ref_user_id", "use_http_lb_user_id"}...),
 			},
 			"spec.blocked_clients": []sets.String{
-				sets.NewString([]string{"as_number", "http_header", "ip_prefix"}...),
+				sets.NewString([]string{"as_number", "http_header", "ip_prefix", "user_identifier"}...),
 				sets.NewString([]string{"bot_skip_processing", "skip_processing", "waf_skip_processing"}...),
 			},
 			"spec.blocked_clients.http_header.headers": []sets.String{
@@ -11519,7 +11480,7 @@ func init() {
 				sets.NewString([]string{"disable_learn_from_redirect_traffic", "enable_learn_from_redirect_traffic"}...),
 			},
 			"spec.trusted_clients": []sets.String{
-				sets.NewString([]string{"as_number", "http_header", "ip_prefix"}...),
+				sets.NewString([]string{"as_number", "http_header", "ip_prefix", "user_identifier"}...),
 				sets.NewString([]string{"bot_skip_processing", "skip_processing", "waf_skip_processing"}...),
 			},
 			"spec.trusted_clients.http_header.headers": []sets.String{
@@ -11543,6 +11504,7 @@ func init() {
 				sets.NewString([]string{"captcha_challenge", "js_challenge", "no_challenge", "policy_based_challenge"}...),
 				sets.NewString([]string{"cookie_stickiness", "least_active", "random", "ring_hash", "round_robin", "source_ip_stickiness"}...),
 				sets.NewString([]string{"disable_ip_reputation", "enable_ip_reputation"}...),
+				sets.NewString([]string{"disable_trust_client_ip_headers", "enable_trust_client_ip_headers"}...),
 				sets.NewString([]string{"http", "https", "https_auto_cert"}...),
 				sets.NewString([]string{"multi_lb_app", "single_lb_app"}...),
 				sets.NewString([]string{"user_id_client_ip", "user_identification"}...),
@@ -11613,7 +11575,7 @@ func init() {
 				sets.NewString([]string{"ref_user_id", "use_http_lb_user_id"}...),
 			},
 			"spec.blocked_clients": []sets.String{
-				sets.NewString([]string{"as_number", "http_header", "ip_prefix"}...),
+				sets.NewString([]string{"as_number", "http_header", "ip_prefix", "user_identifier"}...),
 				sets.NewString([]string{"bot_skip_processing", "skip_processing", "waf_skip_processing"}...),
 			},
 			"spec.blocked_clients.http_header.headers": []sets.String{
@@ -11833,7 +11795,7 @@ func init() {
 				sets.NewString([]string{"disable_learn_from_redirect_traffic", "enable_learn_from_redirect_traffic"}...),
 			},
 			"spec.trusted_clients": []sets.String{
-				sets.NewString([]string{"as_number", "http_header", "ip_prefix"}...),
+				sets.NewString([]string{"as_number", "http_header", "ip_prefix", "user_identifier"}...),
 				sets.NewString([]string{"bot_skip_processing", "skip_processing", "waf_skip_processing"}...),
 			},
 			"spec.trusted_clients.http_header.headers": []sets.String{
@@ -11858,6 +11820,7 @@ func init() {
 				sets.NewString([]string{"captcha_challenge", "js_challenge", "no_challenge", "policy_based_challenge"}...),
 				sets.NewString([]string{"cookie_stickiness", "least_active", "random", "ring_hash", "round_robin", "source_ip_stickiness"}...),
 				sets.NewString([]string{"disable_ip_reputation", "enable_ip_reputation"}...),
+				sets.NewString([]string{"disable_trust_client_ip_headers", "enable_trust_client_ip_headers"}...),
 				sets.NewString([]string{"http", "https", "https_auto_cert"}...),
 				sets.NewString([]string{"multi_lb_app", "single_lb_app"}...),
 				sets.NewString([]string{"user_id_client_ip", "user_identification"}...),
@@ -11928,7 +11891,7 @@ func init() {
 				sets.NewString([]string{"ref_user_id", "use_http_lb_user_id"}...),
 			},
 			"spec.gc_spec.blocked_clients": []sets.String{
-				sets.NewString([]string{"as_number", "http_header", "ip_prefix"}...),
+				sets.NewString([]string{"as_number", "http_header", "ip_prefix", "user_identifier"}...),
 				sets.NewString([]string{"bot_skip_processing", "skip_processing", "waf_skip_processing"}...),
 			},
 			"spec.gc_spec.blocked_clients.http_header.headers": []sets.String{
@@ -12148,7 +12111,7 @@ func init() {
 				sets.NewString([]string{"disable_learn_from_redirect_traffic", "enable_learn_from_redirect_traffic"}...),
 			},
 			"spec.gc_spec.trusted_clients": []sets.String{
-				sets.NewString([]string{"as_number", "http_header", "ip_prefix"}...),
+				sets.NewString([]string{"as_number", "http_header", "ip_prefix", "user_identifier"}...),
 				sets.NewString([]string{"bot_skip_processing", "skip_processing", "waf_skip_processing"}...),
 			},
 			"spec.gc_spec.trusted_clients.http_header.headers": []sets.String{
@@ -12173,6 +12136,7 @@ func init() {
 				sets.NewString([]string{"captcha_challenge", "js_challenge", "no_challenge", "policy_based_challenge"}...),
 				sets.NewString([]string{"cookie_stickiness", "least_active", "random", "ring_hash", "round_robin", "source_ip_stickiness"}...),
 				sets.NewString([]string{"disable_ip_reputation", "enable_ip_reputation"}...),
+				sets.NewString([]string{"disable_trust_client_ip_headers", "enable_trust_client_ip_headers"}...),
 				sets.NewString([]string{"http", "https", "https_auto_cert"}...),
 				sets.NewString([]string{"multi_lb_app", "single_lb_app"}...),
 				sets.NewString([]string{"user_id_client_ip", "user_identification"}...),
@@ -12243,7 +12207,7 @@ func init() {
 				sets.NewString([]string{"ref_user_id", "use_http_lb_user_id"}...),
 			},
 			"spec.gc_spec.blocked_clients": []sets.String{
-				sets.NewString([]string{"as_number", "http_header", "ip_prefix"}...),
+				sets.NewString([]string{"as_number", "http_header", "ip_prefix", "user_identifier"}...),
 				sets.NewString([]string{"bot_skip_processing", "skip_processing", "waf_skip_processing"}...),
 			},
 			"spec.gc_spec.blocked_clients.http_header.headers": []sets.String{
@@ -12463,7 +12427,7 @@ func init() {
 				sets.NewString([]string{"disable_learn_from_redirect_traffic", "enable_learn_from_redirect_traffic"}...),
 			},
 			"spec.gc_spec.trusted_clients": []sets.String{
-				sets.NewString([]string{"as_number", "http_header", "ip_prefix"}...),
+				sets.NewString([]string{"as_number", "http_header", "ip_prefix", "user_identifier"}...),
 				sets.NewString([]string{"bot_skip_processing", "skip_processing", "waf_skip_processing"}...),
 			},
 			"spec.gc_spec.trusted_clients.http_header.headers": []sets.String{
@@ -12980,7 +12944,7 @@ func init() {
 				sets.NewString([]string{"exact_value", "regex_value", "suffix_value"}...),
 			},
 			"spec.custom_network_config.interface_list.interfaces": []sets.String{
-				sets.NewString([]string{"dedicated_interface", "dedicated_management_interface", "ethernet_interface", "tunnel_interface"}...),
+				sets.NewString([]string{"dedicated_interface", "dedicated_management_interface", "ethernet_interface", "loopback_interface", "tunnel_interface"}...),
 			},
 			"spec.custom_network_config.interface_list.interfaces.dedicated_interface": []sets.String{
 				sets.NewString([]string{"cluster", "node"}...),
@@ -12993,7 +12957,7 @@ func init() {
 			"spec.custom_network_config.interface_list.interfaces.ethernet_interface": []sets.String{
 				sets.NewString([]string{"cluster", "node"}...),
 				sets.NewString([]string{"dhcp_client", "dhcp_server", "static_ip"}...),
-				sets.NewString([]string{"inside_network", "site_local_inside_network", "site_local_network", "srv6_network", "storage_network"}...),
+				sets.NewString([]string{"inside_network", "ip_fabric_network", "site_local_inside_network", "site_local_network", "srv6_network", "storage_network"}...),
 				sets.NewString([]string{"is_primary", "not_primary"}...),
 				sets.NewString([]string{"monitor", "monitor_disabled"}...),
 				sets.NewString([]string{"no_ipv6_address", "static_ipv6_address"}...),
@@ -13011,6 +12975,26 @@ func init() {
 				sets.NewString([]string{"cluster_static_ip", "fleet_static_ip", "node_static_ip"}...),
 			},
 			"spec.custom_network_config.interface_list.interfaces.ethernet_interface.static_ipv6_address": []sets.String{
+				sets.NewString([]string{"cluster_static_ip", "fleet_static_ip", "node_static_ip"}...),
+			},
+			"spec.custom_network_config.interface_list.interfaces.loopback_interface": []sets.String{
+				sets.NewString([]string{"cluster", "node"}...),
+				sets.NewString([]string{"dhcp_client", "dhcp_server", "static_ip"}...),
+				sets.NewString([]string{"ip_fabric_network", "site_local_inside_network", "site_local_network"}...),
+				sets.NewString([]string{"no_ipv6_address", "static_ipv6_address"}...),
+			},
+			"spec.custom_network_config.interface_list.interfaces.loopback_interface.dhcp_server": []sets.String{
+				sets.NewString([]string{"automatic_from_end", "automatic_from_start", "interface_ip_map"}...),
+			},
+			"spec.custom_network_config.interface_list.interfaces.loopback_interface.dhcp_server.dhcp_networks": []sets.String{
+				sets.NewString([]string{"dgw_address", "first_address", "last_address"}...),
+				sets.NewString([]string{"dns_address", "same_as_dgw"}...),
+				sets.NewString([]string{"network_prefix", "network_prefix_allocator"}...),
+			},
+			"spec.custom_network_config.interface_list.interfaces.loopback_interface.static_ip": []sets.String{
+				sets.NewString([]string{"cluster_static_ip", "fleet_static_ip", "node_static_ip"}...),
+			},
+			"spec.custom_network_config.interface_list.interfaces.loopback_interface.static_ipv6_address": []sets.String{
 				sets.NewString([]string{"cluster_static_ip", "fleet_static_ip", "node_static_ip"}...),
 			},
 			"spec.custom_network_config.interface_list.interfaces.tunnel_interface": []sets.String{
@@ -13106,7 +13090,7 @@ func init() {
 			"spec.custom_storage_config.storage_interface_list.storage_interfaces.storage_interface": []sets.String{
 				sets.NewString([]string{"cluster", "node"}...),
 				sets.NewString([]string{"dhcp_client", "dhcp_server", "static_ip"}...),
-				sets.NewString([]string{"inside_network", "site_local_inside_network", "site_local_network", "srv6_network", "storage_network"}...),
+				sets.NewString([]string{"inside_network", "ip_fabric_network", "site_local_inside_network", "site_local_network", "srv6_network", "storage_network"}...),
 				sets.NewString([]string{"is_primary", "not_primary"}...),
 				sets.NewString([]string{"monitor", "monitor_disabled"}...),
 				sets.NewString([]string{"no_ipv6_address", "static_ipv6_address"}...),
@@ -13141,7 +13125,6 @@ func init() {
 			},
 			"spec.local_control_plane.bgp_config.peers.internal": []sets.String{
 				sets.NewString([]string{"address", "dns_name", "from_site"}...),
-				sets.NewString([]string{"dc_cluster_group", "local", "site_mesh_group"}...),
 				sets.NewString([]string{"disable_mtls", "enable_mtls"}...),
 			},
 			"spec.local_control_plane.bgp_config.peers.internal.family_inet6vpn": []sets.String{
@@ -13221,7 +13204,7 @@ func init() {
 				sets.NewString([]string{"exact_value", "regex_value", "suffix_value"}...),
 			},
 			"spec.custom_network_config.interface_list.interfaces": []sets.String{
-				sets.NewString([]string{"dedicated_interface", "dedicated_management_interface", "ethernet_interface", "tunnel_interface"}...),
+				sets.NewString([]string{"dedicated_interface", "dedicated_management_interface", "ethernet_interface", "loopback_interface", "tunnel_interface"}...),
 			},
 			"spec.custom_network_config.interface_list.interfaces.dedicated_interface": []sets.String{
 				sets.NewString([]string{"cluster", "node"}...),
@@ -13234,7 +13217,7 @@ func init() {
 			"spec.custom_network_config.interface_list.interfaces.ethernet_interface": []sets.String{
 				sets.NewString([]string{"cluster", "node"}...),
 				sets.NewString([]string{"dhcp_client", "dhcp_server", "static_ip"}...),
-				sets.NewString([]string{"inside_network", "site_local_inside_network", "site_local_network", "srv6_network", "storage_network"}...),
+				sets.NewString([]string{"inside_network", "ip_fabric_network", "site_local_inside_network", "site_local_network", "srv6_network", "storage_network"}...),
 				sets.NewString([]string{"is_primary", "not_primary"}...),
 				sets.NewString([]string{"monitor", "monitor_disabled"}...),
 				sets.NewString([]string{"no_ipv6_address", "static_ipv6_address"}...),
@@ -13252,6 +13235,26 @@ func init() {
 				sets.NewString([]string{"cluster_static_ip", "fleet_static_ip", "node_static_ip"}...),
 			},
 			"spec.custom_network_config.interface_list.interfaces.ethernet_interface.static_ipv6_address": []sets.String{
+				sets.NewString([]string{"cluster_static_ip", "fleet_static_ip", "node_static_ip"}...),
+			},
+			"spec.custom_network_config.interface_list.interfaces.loopback_interface": []sets.String{
+				sets.NewString([]string{"cluster", "node"}...),
+				sets.NewString([]string{"dhcp_client", "dhcp_server", "static_ip"}...),
+				sets.NewString([]string{"ip_fabric_network", "site_local_inside_network", "site_local_network"}...),
+				sets.NewString([]string{"no_ipv6_address", "static_ipv6_address"}...),
+			},
+			"spec.custom_network_config.interface_list.interfaces.loopback_interface.dhcp_server": []sets.String{
+				sets.NewString([]string{"automatic_from_end", "automatic_from_start", "interface_ip_map"}...),
+			},
+			"spec.custom_network_config.interface_list.interfaces.loopback_interface.dhcp_server.dhcp_networks": []sets.String{
+				sets.NewString([]string{"dgw_address", "first_address", "last_address"}...),
+				sets.NewString([]string{"dns_address", "same_as_dgw"}...),
+				sets.NewString([]string{"network_prefix", "network_prefix_allocator"}...),
+			},
+			"spec.custom_network_config.interface_list.interfaces.loopback_interface.static_ip": []sets.String{
+				sets.NewString([]string{"cluster_static_ip", "fleet_static_ip", "node_static_ip"}...),
+			},
+			"spec.custom_network_config.interface_list.interfaces.loopback_interface.static_ipv6_address": []sets.String{
 				sets.NewString([]string{"cluster_static_ip", "fleet_static_ip", "node_static_ip"}...),
 			},
 			"spec.custom_network_config.interface_list.interfaces.tunnel_interface": []sets.String{
@@ -13347,7 +13350,7 @@ func init() {
 			"spec.custom_storage_config.storage_interface_list.storage_interfaces.storage_interface": []sets.String{
 				sets.NewString([]string{"cluster", "node"}...),
 				sets.NewString([]string{"dhcp_client", "dhcp_server", "static_ip"}...),
-				sets.NewString([]string{"inside_network", "site_local_inside_network", "site_local_network", "srv6_network", "storage_network"}...),
+				sets.NewString([]string{"inside_network", "ip_fabric_network", "site_local_inside_network", "site_local_network", "srv6_network", "storage_network"}...),
 				sets.NewString([]string{"is_primary", "not_primary"}...),
 				sets.NewString([]string{"monitor", "monitor_disabled"}...),
 				sets.NewString([]string{"no_ipv6_address", "static_ipv6_address"}...),
@@ -13382,7 +13385,6 @@ func init() {
 			},
 			"spec.local_control_plane.bgp_config.peers.internal": []sets.String{
 				sets.NewString([]string{"address", "dns_name", "from_site"}...),
-				sets.NewString([]string{"dc_cluster_group", "local", "site_mesh_group"}...),
 				sets.NewString([]string{"disable_mtls", "enable_mtls"}...),
 			},
 			"spec.local_control_plane.bgp_config.peers.internal.family_inet6vpn": []sets.String{
@@ -13456,7 +13458,7 @@ func init() {
 				sets.NewString([]string{"exact_value", "regex_value", "suffix_value"}...),
 			},
 			"spec.gc_spec.custom_network_config.interface_list.interfaces": []sets.String{
-				sets.NewString([]string{"dedicated_interface", "dedicated_management_interface", "ethernet_interface", "tunnel_interface"}...),
+				sets.NewString([]string{"dedicated_interface", "dedicated_management_interface", "ethernet_interface", "loopback_interface", "tunnel_interface"}...),
 			},
 			"spec.gc_spec.custom_network_config.interface_list.interfaces.dedicated_interface": []sets.String{
 				sets.NewString([]string{"cluster", "node"}...),
@@ -13469,7 +13471,7 @@ func init() {
 			"spec.gc_spec.custom_network_config.interface_list.interfaces.ethernet_interface": []sets.String{
 				sets.NewString([]string{"cluster", "node"}...),
 				sets.NewString([]string{"dhcp_client", "dhcp_server", "static_ip"}...),
-				sets.NewString([]string{"inside_network", "site_local_inside_network", "site_local_network", "srv6_network", "storage_network"}...),
+				sets.NewString([]string{"inside_network", "ip_fabric_network", "site_local_inside_network", "site_local_network", "srv6_network", "storage_network"}...),
 				sets.NewString([]string{"is_primary", "not_primary"}...),
 				sets.NewString([]string{"monitor", "monitor_disabled"}...),
 				sets.NewString([]string{"no_ipv6_address", "static_ipv6_address"}...),
@@ -13487,6 +13489,26 @@ func init() {
 				sets.NewString([]string{"cluster_static_ip", "fleet_static_ip", "node_static_ip"}...),
 			},
 			"spec.gc_spec.custom_network_config.interface_list.interfaces.ethernet_interface.static_ipv6_address": []sets.String{
+				sets.NewString([]string{"cluster_static_ip", "fleet_static_ip", "node_static_ip"}...),
+			},
+			"spec.gc_spec.custom_network_config.interface_list.interfaces.loopback_interface": []sets.String{
+				sets.NewString([]string{"cluster", "node"}...),
+				sets.NewString([]string{"dhcp_client", "dhcp_server", "static_ip"}...),
+				sets.NewString([]string{"ip_fabric_network", "site_local_inside_network", "site_local_network"}...),
+				sets.NewString([]string{"no_ipv6_address", "static_ipv6_address"}...),
+			},
+			"spec.gc_spec.custom_network_config.interface_list.interfaces.loopback_interface.dhcp_server": []sets.String{
+				sets.NewString([]string{"automatic_from_end", "automatic_from_start", "interface_ip_map"}...),
+			},
+			"spec.gc_spec.custom_network_config.interface_list.interfaces.loopback_interface.dhcp_server.dhcp_networks": []sets.String{
+				sets.NewString([]string{"dgw_address", "first_address", "last_address"}...),
+				sets.NewString([]string{"dns_address", "same_as_dgw"}...),
+				sets.NewString([]string{"network_prefix", "network_prefix_allocator"}...),
+			},
+			"spec.gc_spec.custom_network_config.interface_list.interfaces.loopback_interface.static_ip": []sets.String{
+				sets.NewString([]string{"cluster_static_ip", "fleet_static_ip", "node_static_ip"}...),
+			},
+			"spec.gc_spec.custom_network_config.interface_list.interfaces.loopback_interface.static_ipv6_address": []sets.String{
 				sets.NewString([]string{"cluster_static_ip", "fleet_static_ip", "node_static_ip"}...),
 			},
 			"spec.gc_spec.custom_network_config.interface_list.interfaces.tunnel_interface": []sets.String{
@@ -13582,7 +13604,7 @@ func init() {
 			"spec.gc_spec.custom_storage_config.storage_interface_list.storage_interfaces.storage_interface": []sets.String{
 				sets.NewString([]string{"cluster", "node"}...),
 				sets.NewString([]string{"dhcp_client", "dhcp_server", "static_ip"}...),
-				sets.NewString([]string{"inside_network", "site_local_inside_network", "site_local_network", "srv6_network", "storage_network"}...),
+				sets.NewString([]string{"inside_network", "ip_fabric_network", "site_local_inside_network", "site_local_network", "srv6_network", "storage_network"}...),
 				sets.NewString([]string{"is_primary", "not_primary"}...),
 				sets.NewString([]string{"monitor", "monitor_disabled"}...),
 				sets.NewString([]string{"no_ipv6_address", "static_ipv6_address"}...),
@@ -13617,7 +13639,6 @@ func init() {
 			},
 			"spec.gc_spec.local_control_plane.bgp_config.peers.internal": []sets.String{
 				sets.NewString([]string{"address", "dns_name", "from_site"}...),
-				sets.NewString([]string{"dc_cluster_group", "local", "site_mesh_group"}...),
 				sets.NewString([]string{"disable_mtls", "enable_mtls"}...),
 			},
 			"spec.gc_spec.local_control_plane.bgp_config.peers.internal.family_inet6vpn": []sets.String{
@@ -13697,7 +13718,7 @@ func init() {
 				sets.NewString([]string{"exact_value", "regex_value", "suffix_value"}...),
 			},
 			"spec.gc_spec.custom_network_config.interface_list.interfaces": []sets.String{
-				sets.NewString([]string{"dedicated_interface", "dedicated_management_interface", "ethernet_interface", "tunnel_interface"}...),
+				sets.NewString([]string{"dedicated_interface", "dedicated_management_interface", "ethernet_interface", "loopback_interface", "tunnel_interface"}...),
 			},
 			"spec.gc_spec.custom_network_config.interface_list.interfaces.dedicated_interface": []sets.String{
 				sets.NewString([]string{"cluster", "node"}...),
@@ -13710,7 +13731,7 @@ func init() {
 			"spec.gc_spec.custom_network_config.interface_list.interfaces.ethernet_interface": []sets.String{
 				sets.NewString([]string{"cluster", "node"}...),
 				sets.NewString([]string{"dhcp_client", "dhcp_server", "static_ip"}...),
-				sets.NewString([]string{"inside_network", "site_local_inside_network", "site_local_network", "srv6_network", "storage_network"}...),
+				sets.NewString([]string{"inside_network", "ip_fabric_network", "site_local_inside_network", "site_local_network", "srv6_network", "storage_network"}...),
 				sets.NewString([]string{"is_primary", "not_primary"}...),
 				sets.NewString([]string{"monitor", "monitor_disabled"}...),
 				sets.NewString([]string{"no_ipv6_address", "static_ipv6_address"}...),
@@ -13728,6 +13749,26 @@ func init() {
 				sets.NewString([]string{"cluster_static_ip", "fleet_static_ip", "node_static_ip"}...),
 			},
 			"spec.gc_spec.custom_network_config.interface_list.interfaces.ethernet_interface.static_ipv6_address": []sets.String{
+				sets.NewString([]string{"cluster_static_ip", "fleet_static_ip", "node_static_ip"}...),
+			},
+			"spec.gc_spec.custom_network_config.interface_list.interfaces.loopback_interface": []sets.String{
+				sets.NewString([]string{"cluster", "node"}...),
+				sets.NewString([]string{"dhcp_client", "dhcp_server", "static_ip"}...),
+				sets.NewString([]string{"ip_fabric_network", "site_local_inside_network", "site_local_network"}...),
+				sets.NewString([]string{"no_ipv6_address", "static_ipv6_address"}...),
+			},
+			"spec.gc_spec.custom_network_config.interface_list.interfaces.loopback_interface.dhcp_server": []sets.String{
+				sets.NewString([]string{"automatic_from_end", "automatic_from_start", "interface_ip_map"}...),
+			},
+			"spec.gc_spec.custom_network_config.interface_list.interfaces.loopback_interface.dhcp_server.dhcp_networks": []sets.String{
+				sets.NewString([]string{"dgw_address", "first_address", "last_address"}...),
+				sets.NewString([]string{"dns_address", "same_as_dgw"}...),
+				sets.NewString([]string{"network_prefix", "network_prefix_allocator"}...),
+			},
+			"spec.gc_spec.custom_network_config.interface_list.interfaces.loopback_interface.static_ip": []sets.String{
+				sets.NewString([]string{"cluster_static_ip", "fleet_static_ip", "node_static_ip"}...),
+			},
+			"spec.gc_spec.custom_network_config.interface_list.interfaces.loopback_interface.static_ipv6_address": []sets.String{
 				sets.NewString([]string{"cluster_static_ip", "fleet_static_ip", "node_static_ip"}...),
 			},
 			"spec.gc_spec.custom_network_config.interface_list.interfaces.tunnel_interface": []sets.String{
@@ -13823,7 +13864,7 @@ func init() {
 			"spec.gc_spec.custom_storage_config.storage_interface_list.storage_interfaces.storage_interface": []sets.String{
 				sets.NewString([]string{"cluster", "node"}...),
 				sets.NewString([]string{"dhcp_client", "dhcp_server", "static_ip"}...),
-				sets.NewString([]string{"inside_network", "site_local_inside_network", "site_local_network", "srv6_network", "storage_network"}...),
+				sets.NewString([]string{"inside_network", "ip_fabric_network", "site_local_inside_network", "site_local_network", "srv6_network", "storage_network"}...),
 				sets.NewString([]string{"is_primary", "not_primary"}...),
 				sets.NewString([]string{"monitor", "monitor_disabled"}...),
 				sets.NewString([]string{"no_ipv6_address", "static_ipv6_address"}...),
@@ -13858,7 +13899,6 @@ func init() {
 			},
 			"spec.gc_spec.local_control_plane.bgp_config.peers.internal": []sets.String{
 				sets.NewString([]string{"address", "dns_name", "from_site"}...),
-				sets.NewString([]string{"dc_cluster_group", "local", "site_mesh_group"}...),
 				sets.NewString([]string{"disable_mtls", "enable_mtls"}...),
 			},
 			"spec.gc_spec.local_control_plane.bgp_config.peers.internal.family_inet6vpn": []sets.String{
@@ -13986,6 +14026,7 @@ func init() {
 				sets.NewString([]string{"bot_defense", "disable_bot_defense"}...),
 				sets.NewString([]string{"captcha_challenge", "js_challenge", "no_challenge", "policy_based_challenge"}...),
 				sets.NewString([]string{"disable_path_normalize", "enable_path_normalize"}...),
+				sets.NewString([]string{"disable_trust_client_ip_headers", "enable_trust_client_ip_headers"}...),
 			},
 			"spec.gc_spec.authentication": []sets.String{
 				sets.NewString([]string{"cookie_params", "use_auth_object_config"}...),
@@ -14059,6 +14100,7 @@ func init() {
 				sets.NewString([]string{"bot_defense", "disable_bot_defense"}...),
 				sets.NewString([]string{"captcha_challenge", "js_challenge", "no_challenge", "policy_based_challenge"}...),
 				sets.NewString([]string{"disable_path_normalize", "enable_path_normalize"}...),
+				sets.NewString([]string{"disable_trust_client_ip_headers", "enable_trust_client_ip_headers"}...),
 			},
 			"spec.gc_spec.authentication": []sets.String{
 				sets.NewString([]string{"cookie_params", "use_auth_object_config"}...),
@@ -15987,6 +16029,18 @@ func init() {
 			GoType:    reflect.TypeOf(ves_io_schema_network_interface.EthernetInterfaceType_Untagged{}),
 		},
 		{
+			FieldPath: "ves.io.schema.network_interface.crudapi.ObjectCreateReq.spec.gc_spec.interface_choice.loopback_interface.address_choice.dhcp_client",
+			GoType:    reflect.TypeOf(ves_io_schema_network_interface.LoopbackInterfaceType_DhcpClient{}),
+		},
+		{
+			FieldPath: "ves.io.schema.network_interface.crudapi.ObjectCreateReq.spec.gc_spec.interface_choice.loopback_interface.network_choice.site_local_network",
+			GoType:    reflect.TypeOf(ves_io_schema_network_interface.LoopbackInterfaceType_SiteLocalNetwork{}),
+		},
+		{
+			FieldPath: "ves.io.schema.network_interface.crudapi.ObjectCreateReq.spec.gc_spec.interface_choice.loopback_interface.node_choice.cluster",
+			GoType:    reflect.TypeOf(ves_io_schema_network_interface.LoopbackInterfaceType_Cluster{}),
+		},
+		{
 			FieldPath: "ves.io.schema.network_interface.crudapi.ObjectCreateReq.spec.gc_spec.interface_choice.tunnel_interface.network_choice.site_local_network",
 			GoType:    reflect.TypeOf(ves_io_schema_network_interface.TunnelInterfaceType_SiteLocalNetwork{}),
 		},
@@ -16040,6 +16094,18 @@ func init() {
 		{
 			FieldPath: "ves.io.schema.network_interface.crudapi.ObjectReplaceReq.spec.gc_spec.interface_choice.ethernet_interface.vlan_choice.untagged",
 			GoType:    reflect.TypeOf(ves_io_schema_network_interface.EthernetInterfaceType_Untagged{}),
+		},
+		{
+			FieldPath: "ves.io.schema.network_interface.crudapi.ObjectReplaceReq.spec.gc_spec.interface_choice.loopback_interface.address_choice.dhcp_client",
+			GoType:    reflect.TypeOf(ves_io_schema_network_interface.LoopbackInterfaceType_DhcpClient{}),
+		},
+		{
+			FieldPath: "ves.io.schema.network_interface.crudapi.ObjectReplaceReq.spec.gc_spec.interface_choice.loopback_interface.network_choice.site_local_network",
+			GoType:    reflect.TypeOf(ves_io_schema_network_interface.LoopbackInterfaceType_SiteLocalNetwork{}),
+		},
+		{
+			FieldPath: "ves.io.schema.network_interface.crudapi.ObjectReplaceReq.spec.gc_spec.interface_choice.loopback_interface.node_choice.cluster",
+			GoType:    reflect.TypeOf(ves_io_schema_network_interface.LoopbackInterfaceType_Cluster{}),
 		},
 		{
 			FieldPath: "ves.io.schema.network_interface.crudapi.ObjectReplaceReq.spec.gc_spec.interface_choice.tunnel_interface.network_choice.site_local_network",
@@ -16458,40 +16524,6 @@ func init() {
 
 	MDR.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.site_mesh_group.API.Get"] = []string{
 		"object",
-	}
-
-	MDR.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.subnet.API.Get"] = []string{
-		"object",
-	}
-
-	MDR.RPCOneofDefaultChoiceFieldsRegistry["ves.io.schema.subnet.crudapi.API.Create"] = []svcfw.OneofDefaultChoiceField{
-		{
-			FieldPath: "ves.io.schema.subnet.crudapi.ObjectCreateReq.spec.gc_spec.site_dhcp_server_params_internal.subnet_dhcp_server_params.dhcp_networks.dns_choice.same_as_dgw",
-			GoType:    reflect.TypeOf(ves_io_schema_network_interface.DHCPNetworkType_SameAsDgw{}),
-		},
-		{
-			FieldPath: "ves.io.schema.subnet.crudapi.ObjectCreateReq.spec.gc_spec.site_dhcp_server_params_internal.subnet_dhcp_server_params.dhcp_networks.gateway_choice.first_address",
-			GoType:    reflect.TypeOf(ves_io_schema_network_interface.DHCPNetworkType_FirstAddress{}),
-		},
-		{
-			FieldPath: "ves.io.schema.subnet.crudapi.ObjectCreateReq.spec.gc_spec.site_dhcp_server_params_internal.subnet_dhcp_server_params.interfaces_addressing_choice.automatic_from_start",
-			GoType:    reflect.TypeOf(ves_io_schema_network_interface.DHCPServerParametersType_AutomaticFromStart{}),
-		},
-	}
-
-	MDR.RPCOneofDefaultChoiceFieldsRegistry["ves.io.schema.subnet.crudapi.API.Replace"] = []svcfw.OneofDefaultChoiceField{
-		{
-			FieldPath: "ves.io.schema.subnet.crudapi.ObjectReplaceReq.spec.gc_spec.site_dhcp_server_params_internal.subnet_dhcp_server_params.dhcp_networks.dns_choice.same_as_dgw",
-			GoType:    reflect.TypeOf(ves_io_schema_network_interface.DHCPNetworkType_SameAsDgw{}),
-		},
-		{
-			FieldPath: "ves.io.schema.subnet.crudapi.ObjectReplaceReq.spec.gc_spec.site_dhcp_server_params_internal.subnet_dhcp_server_params.dhcp_networks.gateway_choice.first_address",
-			GoType:    reflect.TypeOf(ves_io_schema_network_interface.DHCPNetworkType_FirstAddress{}),
-		},
-		{
-			FieldPath: "ves.io.schema.subnet.crudapi.ObjectReplaceReq.spec.gc_spec.site_dhcp_server_params_internal.subnet_dhcp_server_params.interfaces_addressing_choice.automatic_from_start",
-			GoType:    reflect.TypeOf(ves_io_schema_network_interface.DHCPServerParametersType_AutomaticFromStart{}),
-		},
 	}
 
 	MDR.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.tenant_management.allowed_tenant.API.Get"] = []string{
@@ -18461,6 +18493,10 @@ func init() {
 			GoType:    reflect.TypeOf(ves_io_schema_views_http_loadbalancer.CreateSpecType_ServicePoliciesFromNamespace{}),
 		},
 		{
+			FieldPath: "ves.io.schema.views.http_loadbalancer.CreateRequest.spec.trust_client_ip_headers_choice.disable_trust_client_ip_headers",
+			GoType:    reflect.TypeOf(ves_io_schema_views_http_loadbalancer.CreateSpecType_DisableTrustClientIpHeaders{}),
+		},
+		{
 			FieldPath: "ves.io.schema.views.http_loadbalancer.CreateRequest.spec.user_id_choice.user_id_client_ip",
 			GoType:    reflect.TypeOf(ves_io_schema_views_http_loadbalancer.CreateSpecType_UserIdClientIp{}),
 		},
@@ -18639,6 +18675,10 @@ func init() {
 			GoType:    reflect.TypeOf(ves_io_schema_views_http_loadbalancer.ReplaceSpecType_ServicePoliciesFromNamespace{}),
 		},
 		{
+			FieldPath: "ves.io.schema.views.http_loadbalancer.ReplaceRequest.spec.trust_client_ip_headers_choice.disable_trust_client_ip_headers",
+			GoType:    reflect.TypeOf(ves_io_schema_views_http_loadbalancer.ReplaceSpecType_DisableTrustClientIpHeaders{}),
+		},
+		{
 			FieldPath: "ves.io.schema.views.http_loadbalancer.ReplaceRequest.spec.user_id_choice.user_id_client_ip",
 			GoType:    reflect.TypeOf(ves_io_schema_views_http_loadbalancer.ReplaceSpecType_UserIdClientIp{}),
 		},
@@ -18806,6 +18846,10 @@ func init() {
 			GoType:    reflect.TypeOf(ves_io_schema_views_http_loadbalancer.GlobalSpecType_ServicePoliciesFromNamespace{}),
 		},
 		{
+			FieldPath: "ves.io.schema.views.http_loadbalancer.crudapi.ObjectCreateReq.spec.gc_spec.trust_client_ip_headers_choice.disable_trust_client_ip_headers",
+			GoType:    reflect.TypeOf(ves_io_schema_views_http_loadbalancer.GlobalSpecType_DisableTrustClientIpHeaders{}),
+		},
+		{
 			FieldPath: "ves.io.schema.views.http_loadbalancer.crudapi.ObjectCreateReq.spec.gc_spec.user_id_choice.user_id_client_ip",
 			GoType:    reflect.TypeOf(ves_io_schema_views_http_loadbalancer.GlobalSpecType_UserIdClientIp{}),
 		},
@@ -18971,6 +19015,10 @@ func init() {
 		{
 			FieldPath: "ves.io.schema.views.http_loadbalancer.crudapi.ObjectReplaceReq.spec.gc_spec.service_policy_choice.service_policies_from_namespace",
 			GoType:    reflect.TypeOf(ves_io_schema_views_http_loadbalancer.GlobalSpecType_ServicePoliciesFromNamespace{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.http_loadbalancer.crudapi.ObjectReplaceReq.spec.gc_spec.trust_client_ip_headers_choice.disable_trust_client_ip_headers",
+			GoType:    reflect.TypeOf(ves_io_schema_views_http_loadbalancer.GlobalSpecType_DisableTrustClientIpHeaders{}),
 		},
 		{
 			FieldPath: "ves.io.schema.views.http_loadbalancer.crudapi.ObjectReplaceReq.spec.gc_spec.user_id_choice.user_id_client_ip",
@@ -19549,6 +19597,10 @@ func init() {
 			FieldPath: "ves.io.schema.virtual_host.crudapi.ObjectCreateReq.spec.gc_spec.tls_intercept.trusted_ca_choice.volterra_trusted_ca",
 			GoType:    reflect.TypeOf(ves_io_schema.TlsInterceptionType_VolterraTrustedCa{}),
 		},
+		{
+			FieldPath: "ves.io.schema.virtual_host.crudapi.ObjectCreateReq.spec.gc_spec.trust_client_ip_headers_choice.disable_trust_client_ip_headers",
+			GoType:    reflect.TypeOf(ves_io_schema_virtual_host.GlobalSpecType_DisableTrustClientIpHeaders{}),
+		},
 	}
 
 	MDR.RPCOneofDefaultChoiceFieldsRegistry["ves.io.schema.virtual_host.crudapi.API.Replace"] = []svcfw.OneofDefaultChoiceField{
@@ -19567,6 +19619,10 @@ func init() {
 		{
 			FieldPath: "ves.io.schema.virtual_host.crudapi.ObjectReplaceReq.spec.gc_spec.tls_intercept.trusted_ca_choice.volterra_trusted_ca",
 			GoType:    reflect.TypeOf(ves_io_schema.TlsInterceptionType_VolterraTrustedCa{}),
+		},
+		{
+			FieldPath: "ves.io.schema.virtual_host.crudapi.ObjectReplaceReq.spec.gc_spec.trust_client_ip_headers_choice.disable_trust_client_ip_headers",
+			GoType:    reflect.TypeOf(ves_io_schema_virtual_host.GlobalSpecType_DisableTrustClientIpHeaders{}),
 		},
 	}
 
@@ -21761,19 +21817,6 @@ func init() {
 
 	csr.CRUDSwaggerRegistry["ves.io.schema.route.Object"] = ves_io_schema_route_crudapi.APISwaggerJSON
 
-	customCSR = MDR.PubCustomServiceRegistry
-	customCSR.GrpcClientRegistry["ves.io.schema.scim.CustomPublicAPI"] = ves_io_schema_scim.NewCustomPublicAPIGrpcClient
-	customCSR.RestClientRegistry["ves.io.schema.scim.CustomPublicAPI"] = ves_io_schema_scim.NewCustomPublicAPIRestClient
-	customCSR.ServerRegistry["ves.io.schema.scim.CustomPublicAPI"] = func(svc svcfw.Service) server.APIHandler {
-		return ves_io_schema_scim.NewCustomPublicAPIServer(svc)
-	}
-
-	// Generate Service register handlers
-	MDR.SvcRegisterHandlers["ves.io.schema.scim.CustomPublicAPI"] = ves_io_schema_scim.RegisterCustomPublicAPIServer
-	MDR.SvcGwRegisterHandlers["ves.io.schema.scim.CustomPublicAPI"] = ves_io_schema_scim.RegisterGwCustomPublicAPIHandler
-
-	customCSR.SwaggerRegistry["ves.io.schema.scim.CustomPublicAPI"] = ves_io_schema_scim.CustomPublicAPISwaggerJSON
-
 	// Generate Entry registry and factory
 	MDR.EntryFactory["ves.io.schema.secret_policy.Object"] = ves_io_schema_secret_policy.NewEntryObject
 	MDR.EntryStoreMap["ves.io.schema.secret_policy.Object"] = store.InMemory
@@ -22189,47 +22232,6 @@ func init() {
 	csr.AllowedInNSTypes["ves.io.schema.stored_object.Object"] = nil
 
 	csr.CRUDSwaggerRegistry["ves.io.schema.stored_object.Object"] = ves_io_schema_stored_object_crudapi.APISwaggerJSON
-
-	// Generate Entry registry and factory
-	MDR.EntryFactory["ves.io.schema.subnet.Object"] = ves_io_schema_subnet.NewEntryObject
-	MDR.EntryStoreMap["ves.io.schema.subnet.Object"] = store.InMemory
-	MDR.EntryRegistry["ves.io.schema.subnet.Object"] = reflect.TypeOf(&ves_io_schema_subnet.DBObject{})
-	MDR.EntryIndexers["ves.io.schema.subnet.Object"] = ves_io_schema_subnet.GetObjectIndexers
-	MDR.ValidatorRegistry["ves.io.schema.subnet.Object"] = ves_io_schema_subnet.ObjectValidator()
-	// Generate Entry registry and factory
-	MDR.EntryFactory["ves.io.schema.subnet.StatusObject"] = ves_io_schema_subnet.NewEntryStatusObject
-	MDR.EntryStoreMap["ves.io.schema.subnet.StatusObject"] = store.InMemory
-	MDR.EntryRegistry["ves.io.schema.subnet.StatusObject"] = reflect.TypeOf(&ves_io_schema_subnet.DBStatusObject{})
-	MDR.EntryIndexers["ves.io.schema.subnet.StatusObject"] = ves_io_schema_subnet.GetStatusObjectIndexers
-	MDR.ValidatorRegistry["ves.io.schema.subnet.StatusObject"] = ves_io_schema_subnet.StatusObjectValidator()
-
-	csr = MDR.PubCRUDServiceRegistry
-
-	// Generate Service register handlers
-	MDR.SvcRegisterHandlers["ves.io.schema.subnet.API"] = ves_io_schema_subnet.RegisterAPIServer
-	MDR.SvcGwRegisterHandlers["ves.io.schema.subnet.API"] = ves_io_schema_subnet.RegisterGwAPIHandler
-
-	csr.CRUDGrpcClientRegistry["ves.io.schema.subnet.Object"] = ves_io_schema_subnet.NewCRUDAPIGrpcClient
-	csr.CRUDRestClientRegistry["ves.io.schema.subnet.Object"] = ves_io_schema_subnet.NewCRUDAPIRestClient
-	csr.CRUDInprocClientRegistry["ves.io.schema.subnet.Object"] = ves_io_schema_subnet.NewCRUDAPIInprocClient
-	csr.CRUDServerRegistry["ves.io.schema.subnet.Object"] = ves_io_schema_subnet.NewCRUDAPIServer
-	csr.AllowedInNSTypes["ves.io.schema.subnet.Object"] = []svcfw.NamespaceType{svcfw.SharedNSType, svcfw.UserNSType}
-
-	csr.CRUDSwaggerRegistry["ves.io.schema.subnet.Object"] = ves_io_schema_subnet.APISwaggerJSON
-
-	csr = MDR.PvtCRUDServiceRegistry
-
-	// Generate Service register handlers
-	MDR.SvcRegisterHandlers["ves.io.schema.subnet.crudapi.API"] = ves_io_schema_subnet_crudapi.RegisterAPIServer
-	MDR.SvcGwRegisterHandlers["ves.io.schema.subnet.crudapi.API"] = ves_io_schema_subnet_crudapi.RegisterGwAPIHandler
-
-	csr.CRUDGrpcClientRegistry["ves.io.schema.subnet.Object"] = ves_io_schema_subnet_crudapi.NewCRUDAPIGrpcClient
-	csr.CRUDRestClientRegistry["ves.io.schema.subnet.Object"] = ves_io_schema_subnet_crudapi.NewCRUDAPIRestClient
-	csr.CRUDInprocClientRegistry["ves.io.schema.subnet.Object"] = ves_io_schema_subnet_crudapi.NewCRUDAPIInprocClient
-	csr.CRUDServerRegistry["ves.io.schema.subnet.Object"] = ves_io_schema_subnet_crudapi.NewCRUDAPIServer
-	csr.AllowedInNSTypes["ves.io.schema.subnet.Object"] = []svcfw.NamespaceType{svcfw.SharedNSType, svcfw.UserNSType}
-
-	csr.CRUDSwaggerRegistry["ves.io.schema.subnet.Object"] = ves_io_schema_subnet_crudapi.APISwaggerJSON
 
 	customCSR = MDR.PubCustomServiceRegistry
 	customCSR.GrpcClientRegistry["ves.io.schema.tenant.CustomAPI"] = ves_io_schema_tenant.NewCustomAPIGrpcClient
@@ -25180,18 +25182,6 @@ func RegisterGrpcAPI(api string, gSrv *grpc.Server, srv interface{}) error {
 		}
 		h(gSrv, s)
 
-	case "ves.io.schema.scim.CustomPublicAPI":
-		gh, _ := MDR.SvcRegisterHandlers[api]
-		h, ok := gh.(func(*grpc.Server, ves_io_schema_scim.CustomPublicAPIServer))
-		if !ok {
-			return fmt.Errorf("gRPC API reg expected func(*grpc.Server, ves_io_schema_scim.CustomPublicAPIServer), got %T", gh)
-		}
-		s, ok := srv.(ves_io_schema_scim.CustomPublicAPIServer)
-		if !ok {
-			panic(fmt.Sprintf("%T does not satisfy interface ves_io_schema_scim.CustomPublicAPIServer", srv))
-		}
-		h(gSrv, s)
-
 	case "ves.io.schema.secret_policy.API":
 		gh, _ := MDR.SvcRegisterHandlers[api]
 		h, ok := gh.(func(*grpc.Server, ves_io_schema_secret_policy.APIServer))
@@ -25477,30 +25467,6 @@ func RegisterGrpcAPI(api string, gSrv *grpc.Server, srv interface{}) error {
 		s, ok := srv.(ves_io_schema_stored_object_crudapi.APIServer)
 		if !ok {
 			panic(fmt.Sprintf("%T does not satisfy interface ves_io_schema_stored_object_crudapi.APIServer", srv))
-		}
-		h(gSrv, s)
-
-	case "ves.io.schema.subnet.API":
-		gh, _ := MDR.SvcRegisterHandlers[api]
-		h, ok := gh.(func(*grpc.Server, ves_io_schema_subnet.APIServer))
-		if !ok {
-			return fmt.Errorf("gRPC API reg expected func(*grpc.Server, ves_io_schema_subnet.APIServer), got %T", gh)
-		}
-		s, ok := srv.(ves_io_schema_subnet.APIServer)
-		if !ok {
-			panic(fmt.Sprintf("%T does not satisfy interface ves_io_schema_subnet.APIServer", srv))
-		}
-		h(gSrv, s)
-
-	case "ves.io.schema.subnet.crudapi.API":
-		gh, _ := MDR.SvcRegisterHandlers[api]
-		h, ok := gh.(func(*grpc.Server, ves_io_schema_subnet_crudapi.APIServer))
-		if !ok {
-			return fmt.Errorf("gRPC API reg expected func(*grpc.Server, ves_io_schema_subnet_crudapi.APIServer), got %T", gh)
-		}
-		s, ok := srv.(ves_io_schema_subnet_crudapi.APIServer)
-		if !ok {
-			panic(fmt.Sprintf("%T does not satisfy interface ves_io_schema_subnet_crudapi.APIServer", srv))
 		}
 		h(gSrv, s)
 

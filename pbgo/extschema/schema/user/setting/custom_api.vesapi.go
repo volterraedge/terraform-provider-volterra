@@ -6,7 +6,7 @@
 package setting
 
 import (
-	"bytes"
+	bytes "bytes"
 	"context"
 	"fmt"
 	"io/ioutil"

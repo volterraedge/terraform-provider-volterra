@@ -20,7 +20,7 @@ resource "volterra_dns_domain" "example" {
   name      = "acmecorp-web"
   namespace = "staging"
 
-  // One of the arguments from this list "volterra_managed route53 verification_only" must be set
+  // One of the arguments from this list "verification_only volterra_managed route53" must be set
   volterra_managed = true
 }
 

@@ -46,9 +46,11 @@ resource "volterra_azure_vnet_site" "example" {
       local_subnet {
         // One of the arguments from this list "subnet_param subnet" must be set
 
-        subnet_param {
-          ipv4 = "10.1.2.0/24"
-          ipv6 = "1234:568:abcd:9100::/64"
+        subnet {
+          // One of the arguments from this list "vnet_resource_group subnet_resource_grp" must be set
+          subnet_resource_grp = "subnet_resource_grp"
+
+          subnet_name = "MySubnet"
         }
       }
     }
@@ -70,7 +72,7 @@ resource "volterra_azure_vnet_site" "example" {
       primary_ipv4 = "10.1.0.0/16"
     }
   }
-  // One of the arguments from this list "total_nodes no_worker_nodes nodes_per_az" must be set
+  // One of the arguments from this list "nodes_per_az total_nodes no_worker_nodes" must be set
   nodes_per_az = "2"
 }
 
@@ -696,6 +698,8 @@ creating ipsec between two sites which are part of the site mesh group.
 ### Spoke Vnets
 
 Spoke VNets.
+
+`labels` - (Optional) These labels used must be from known key and label defined in shared namespace (`String`).
 
 `auto` - (Optional) setup routing for all existing subnets on spoke vnet (bool).
 

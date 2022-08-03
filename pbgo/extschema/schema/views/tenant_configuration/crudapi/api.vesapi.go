@@ -3427,12 +3427,14 @@ var APISwaggerJSON string = `{
                 },
                 "minimum_length": {
                     "type": "integer",
-                    "description": " Minimum length of password.\n\nExample: - \"12\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 7\n",
+                    "description": " Minimum length of password.\n\nExample: - \"12\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.uint32.gte: 7\n",
                     "title": "Minimum Length",
                     "format": "int64",
                     "x-displayname": "Minimum Length",
                     "x-ves-example": "12",
+                    "x-ves-required": "true",
                     "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
                         "ves.io.schema.rules.uint32.gte": "7"
                     }
                 },

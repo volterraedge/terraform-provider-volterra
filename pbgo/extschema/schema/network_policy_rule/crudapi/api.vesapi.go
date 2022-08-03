@@ -2853,7 +2853,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "IP Prefix Set"
                 },
                 "label_matcher": {
-                    "description": " \n List of label keys to be matched in prefix_selector configured in remote_endpoint\n\nExample: - label_matcher is \"app\" and say prefix_selector is \"app == web, site in (abc, xyz)\" then only label app will be matched and not site-",
+                    "description": "\n List of label keys to be matched in prefix_selector configured in remote_endpoint\n\nExample: - label_matcher is \"app\" and say prefix_selector is \"app == web, site in (abc, xyz)\" then only label app will be matched and not site-",
                     "title": "label matcher",
                     "$ref": "#/definitions/schemaLabelMatcherType",
                     "x-displayname": "Label Matcher"

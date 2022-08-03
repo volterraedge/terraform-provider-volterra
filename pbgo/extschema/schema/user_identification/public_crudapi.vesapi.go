@@ -3063,7 +3063,7 @@ var APISwaggerJSON string = `{
             "properties": {
                 "rules": {
                     "type": "array",
-                    "description": " An ordered list of rules that are evaluated sequentially against the input fields extracted from an API request in order to determine a user identifier.\n Evaluation of the rules is terminated once a user identifier has been extracted. \n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 4\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " An ordered list of rules that are evaluated sequentially against the input fields extracted from an API request in order to determine a user identifier.\n Evaluation of the rules is terminated once a user identifier has been extracted.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 4\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
                     "minItems": 1,
                     "maxItems": 4,
                     "items": {
@@ -3196,7 +3196,7 @@ var APISwaggerJSON string = `{
             "properties": {
                 "rules": {
                     "type": "array",
-                    "description": " An ordered list of rules that are evaluated sequentially against the input fields extracted from an API request in order to determine a user identifier.\n Evaluation of the rules is terminated once a user identifier has been extracted. \n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 4\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " An ordered list of rules that are evaluated sequentially against the input fields extracted from an API request in order to determine a user identifier.\n Evaluation of the rules is terminated once a user identifier has been extracted.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 4\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
                     "minItems": 1,
                     "maxItems": 4,
                     "items": {
@@ -3222,7 +3222,7 @@ var APISwaggerJSON string = `{
             "properties": {
                 "rules": {
                     "type": "array",
-                    "description": " An ordered list of rules that are evaluated sequentially against the input fields extracted from an API request in order to determine a user identifier.\n Evaluation of the rules is terminated once a user identifier has been extracted. \n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 4\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " An ordered list of rules that are evaluated sequentially against the input fields extracted from an API request in order to determine a user identifier.\n Evaluation of the rules is terminated once a user identifier has been extracted.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 4\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "rules",
                     "minItems": 1,
                     "maxItems": 4,
@@ -3429,7 +3429,7 @@ var APISwaggerJSON string = `{
             "properties": {
                 "rules": {
                     "type": "array",
-                    "description": " An ordered list of rules that are evaluated sequentially against the input fields extracted from an API request in order to determine a user identifier.\n Evaluation of the rules is terminated once a user identifier has been extracted. \n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 4\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " An ordered list of rules that are evaluated sequentially against the input fields extracted from an API request in order to determine a user identifier.\n Evaluation of the rules is terminated once a user identifier has been extracted.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 4\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
                     "minItems": 1,
                     "maxItems": 4,
                     "items": {

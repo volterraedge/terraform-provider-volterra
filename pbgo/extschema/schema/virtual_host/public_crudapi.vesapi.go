@@ -4756,6 +4756,7 @@ var APISwaggerJSON string = `{
             "x-ves-oneof-field-path_normalize_choice": "[\"disable_path_normalize\",\"enable_path_normalize\"]",
             "x-ves-oneof-field-server_header_choice": "[\"append_server_name\",\"default_header\",\"pass_through\",\"server_name\"]",
             "x-ves-oneof-field-strict_sni_host_header_check_choice": "[]",
+            "x-ves-oneof-field-trust_client_ip_headers_choice": "[\"disable_trust_client_ip_headers\",\"enable_trust_client_ip_headers\"]",
             "x-ves-proto-message": "ves.io.schema.virtual_host.GlobalSpecType",
             "properties": {
                 "add_location": {
@@ -4882,6 +4883,12 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Disable path normalization"
                 },
+                "disable_trust_client_ip_headers": {
+                    "description": "Exclusive with [enable_trust_client_ip_headers]\n",
+                    "title": "Disable",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disable"
+                },
                 "dns_domains": {
                     "type": "array",
                     "description": " Internal reference to dns_domain object\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 256\n",
@@ -4938,6 +4945,12 @@ var APISwaggerJSON string = `{
                     "title": "Enable Path normalization",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Enable path normalization"
+                },
+                "enable_trust_client_ip_headers": {
+                    "description": "Exclusive with [disable_trust_client_ip_headers]\n",
+                    "title": "Enable",
+                    "$ref": "#/definitions/virtual_hostClientIPHeaders",
+                    "x-displayname": "Enable"
                 },
                 "host_name": {
                     "type": "string",
@@ -5715,6 +5728,34 @@ var APISwaggerJSON string = `{
             "default": "AutoCertDisabled",
             "x-displayname": "Certification State",
             "x-ves-proto-enum": "ves.io.schema.virtual_host.CertificationState"
+        },
+        "virtual_hostClientIPHeaders": {
+            "type": "object",
+            "description": "List of Client IP Headers",
+            "title": "Trust Client IP Headers List Type",
+            "x-displayname": "Trust Client IP Headers List",
+            "x-ves-proto-message": "ves.io.schema.virtual_host.ClientIPHeaders",
+            "properties": {
+                "client_ip_headers": {
+                    "type": "array",
+                    "description": " Define the list of one or more Client IP Headers.  Headers will be used in order from top to bottom, meaning if the first header is not present in the request, the system will proceed to check for the second header, and so on, until one of the listed headers is found. If none of the defined headers exist, or the value is not an IP address, then the system will use the source IP of the packet. If multiple defined headers with different names are present in the request, the value of the first header name in the configuration will be used. If multiple defined headers with the same name are present in the request, values of all those headers will be combined. The system will read the right-most IP address from header, if there are multiple ip addresses in the header value.\n\nExample: - \"Client-IP-Header\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.max_bytes: 256\n  ves.io.schema.rules.repeated.items.string.min_bytes: 1\n  ves.io.schema.rules.repeated.max_items: 5\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "title": "Client IP Headers",
+                    "maxItems": 5,
+                    "items": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 256
+                    },
+                    "x-displayname": "Client IP Headers",
+                    "x-ves-example": "Client-IP-Header",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.items.string.max_bytes": "256",
+                        "ves.io.schema.rules.repeated.items.string.min_bytes": "1",
+                        "ves.io.schema.rules.repeated.max_items": "5",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
+                }
+            }
         },
         "virtual_hostCompressionType": {
             "type": "object",

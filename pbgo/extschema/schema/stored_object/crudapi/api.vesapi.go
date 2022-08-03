@@ -3406,15 +3406,8 @@ var APISwaggerJSON string = `{
             "x-displayname": "mobile-sdk attributes",
             "x-ves-proto-message": "ves.io.schema.stored_object.MobileSDKAttributes",
             "properties": {
-                "mobile_sdk_version": {
-                    "type": "string",
-                    "description": " Version of mobile sdk release\n\nExample: - \"v.4.2.1\"-",
-                    "title": "mobile_sdk_version",
-                    "x-displayname": "mobile sdk version",
-                    "x-ves-example": "v.4.2.1"
-                },
                 "os_type": {
-                    "description": " Select the Operating System type for mobile SDK release. \n\nExample: - \"IOS\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.enum.defined_only: true\n  ves.io.schema.rules.message.required: true\n",
+                    "description": " Select the Operating System type for mobile SDK release.\n\nExample: - \"IOS\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.enum.defined_only: true\n  ves.io.schema.rules.message.required: true\n",
                     "title": "os_type",
                     "$ref": "#/definitions/stored_objectOSType",
                     "x-displayname": "Operating System type",
@@ -3424,6 +3417,13 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.enum.defined_only": "true",
                         "ves.io.schema.rules.message.required": "true"
                     }
+                },
+                "release_version": {
+                    "type": "string",
+                    "description": " Version of mobile sdk release\n\nExample: - \"v.4.2.1\"-",
+                    "title": "release_version",
+                    "x-displayname": "mobile sdk release version",
+                    "x-ves-example": "v.4.2.1"
                 }
             }
         },

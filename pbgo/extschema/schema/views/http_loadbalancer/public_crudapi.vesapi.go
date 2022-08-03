@@ -2910,13 +2910,14 @@ var APISwaggerJSON string = `{
         },
         "http_loadbalancerClientSrcRuleAction": {
             "type": "string",
-            "description": "Action that should be taken when client identifier matches the rule\n\nSkip WAF Detection\nSkip Bot Detection\nSkip Malicious User Detection\nSkip IP Reputation Detection",
+            "description": "Action that should be taken when client identifier matches the rule\n",
             "title": "action",
             "enum": [
                 "SKIP_PROCESSING_WAF",
                 "SKIP_PROCESSING_BOT",
                 "SKIP_PROCESSING_MUM",
-                "SKIP_PROCESSING_IP_REPUTATION"
+                "SKIP_PROCESSING_IP_REPUTATION",
+                "SKIP_PROCESSING_API_PROTECTION"
             ],
             "default": "SKIP_PROCESSING_WAF",
             "x-displayname": "Action",
@@ -4501,9 +4502,8 @@ var APISwaggerJSON string = `{
             "description": "Simple client source rule specifies the sources to be blocked or trusted (skip WAF)",
             "title": "SimpleClientSrcRule",
             "x-displayname": "Client Rule",
-            "x-ves-displayorder": "10,3,11,16,9",
             "x-ves-oneof-field-action_choice": "[\"bot_skip_processing\",\"skip_processing\",\"waf_skip_processing\"]",
-            "x-ves-oneof-field-client_source_choice": "[\"as_number\",\"http_header\",\"ip_prefix\"]",
+            "x-ves-oneof-field-client_source_choice": "[\"as_number\",\"http_header\",\"ip_prefix\",\"user_identifier\"]",
             "x-ves-proto-message": "ves.io.schema.views.http_loadbalancer.SimpleClientSrcRule",
             "properties": {
                 "actions": {
@@ -4523,7 +4523,7 @@ var APISwaggerJSON string = `{
                 },
                 "as_number": {
                     "type": "integer",
-                    "description": "Exclusive with [http_header ip_prefix]\n RFC 6793 defined 4-byte AS number\n\nExample: - \"4683\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.uint32.gte: 1\n  ves.io.schema.rules.uint32.lte: 401308\n",
+                    "description": "Exclusive with [http_header ip_prefix user_identifier]\n RFC 6793 defined 4-byte AS number\n\nExample: - \"4683\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.uint32.gte: 1\n  ves.io.schema.rules.uint32.lte: 401308\n",
                     "title": "as number",
                     "format": "int64",
                     "x-displayname": "AS Number",
@@ -4553,7 +4553,7 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "http_header": {
-                    "description": "Exclusive with [as_number ip_prefix]\n Request header name and value pairs\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "description": "Exclusive with [as_number ip_prefix user_identifier]\n Request header name and value pairs\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "HTTP Header",
                     "$ref": "#/definitions/http_loadbalancerHttpHeaderMatcherList",
                     "x-displayname": "HTTP Headers",
@@ -4564,7 +4564,7 @@ var APISwaggerJSON string = `{
                 },
                 "ip_prefix": {
                     "type": "string",
-                    "description": "Exclusive with [as_number http_header]\n IPv4 prefix string.\n\nExample: - \"192.168.20.0/24\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.ipv4_prefix: true\n",
+                    "description": "Exclusive with [as_number http_header user_identifier]\n IPv4 prefix string.\n\nExample: - \"192.168.20.0/24\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.ipv4_prefix: true\n",
                     "title": "ip prefix",
                     "x-displayname": "IP Prefix",
                     "x-ves-example": "192.168.20.0/24",
@@ -4589,6 +4589,16 @@ var APISwaggerJSON string = `{
                     "title": "Skip Both",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Skip Both"
+                },
+                "user_identifier": {
+                    "type": "string",
+                    "description": "Exclusive with [as_number http_header ip_prefix]\n Identify user based on user identifier. User identifier value needs to be copied from security event.\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 256\n",
+                    "title": "user identifier",
+                    "maxLength": 256,
+                    "x-displayname": "User Identifier",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "256"
+                    }
                 },
                 "waf_skip_processing": {
                     "description": "Exclusive with [bot_skip_processing skip_processing]\n Skip WAF processing for clients matching this rule.",
@@ -4751,14 +4761,18 @@ var APISwaggerJSON string = `{
                 },
                 "name": {
                     "type": "string",
-                    "description": " Name of the header\n\nExample: - \"Content-Type\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.http_header_field: true\n  ves.io.schema.rules.string.max_bytes: 256\n",
+                    "description": " Name of the header\n\nExample: - \"Content-Type\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.http_header_field: true\n  ves.io.schema.rules.string.max_bytes: 256\n  ves.io.schema.rules.string.min_bytes: 1\n",
                     "title": "name",
+                    "minLength": 1,
                     "maxLength": 256,
                     "x-displayname": "Name",
                     "x-ves-example": "Content-Type",
+                    "x-ves-required": "true",
                     "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
                         "ves.io.schema.rules.string.http_header_field": "true",
-                        "ves.io.schema.rules.string.max_bytes": "256"
+                        "ves.io.schema.rules.string.max_bytes": "256",
+                        "ves.io.schema.rules.string.min_bytes": "1"
                     }
                 },
                 "presence": {
@@ -8869,6 +8883,7 @@ var APISwaggerJSON string = `{
             "x-ves-oneof-field-ml_config_choice": "[\"multi_lb_app\",\"single_lb_app\"]",
             "x-ves-oneof-field-rate_limit_choice": "[\"api_rate_limit\",\"disable_rate_limit\",\"rate_limit\"]",
             "x-ves-oneof-field-service_policy_choice": "[\"active_service_policies\",\"no_service_policies\",\"service_policies_from_namespace\"]",
+            "x-ves-oneof-field-trust_client_ip_headers_choice": "[\"disable_trust_client_ip_headers\",\"enable_trust_client_ip_headers\"]",
             "x-ves-oneof-field-user_id_choice": "[\"user_id_client_ip\",\"user_identification\"]",
             "x-ves-oneof-field-waf_choice": "[\"app_firewall\",\"disable_waf\"]",
             "x-ves-proto-message": "ves.io.schema.views.http_loadbalancer.CreateSpecType",
@@ -9002,6 +9017,11 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Disable"
                 },
+                "disable_trust_client_ip_headers": {
+                    "description": "Exclusive with [enable_trust_client_ip_headers]\n",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disable"
+                },
                 "disable_waf": {
                     "description": "Exclusive with [app_firewall]\n No WAF configuration for this load balancer",
                     "$ref": "#/definitions/ioschemaEmpty",
@@ -9038,6 +9058,11 @@ var APISwaggerJSON string = `{
                 "enable_ip_reputation": {
                     "description": "Exclusive with [disable_ip_reputation]\n",
                     "$ref": "#/definitions/viewshttp_loadbalancerIPThreatCategoryListType",
+                    "x-displayname": "Enable"
+                },
+                "enable_trust_client_ip_headers": {
+                    "description": "Exclusive with [disable_trust_client_ip_headers]\n",
+                    "$ref": "#/definitions/virtual_hostClientIPHeaders",
                     "x-displayname": "Enable"
                 },
                 "http": {
@@ -9078,7 +9103,7 @@ var APISwaggerJSON string = `{
                 "no_challenge": {
                     "description": "Exclusive with [captcha_challenge js_challenge policy_based_challenge]\n No challenge is enabled for this load balancer",
                     "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "No Challenge"
+                    "x-displayname": "None"
                 },
                 "no_service_policies": {
                     "description": "Exclusive with [active_service_policies service_policies_from_namespace]\n Do not apply any service policies i.e. bypass the namespace service policy set",
@@ -9236,6 +9261,7 @@ var APISwaggerJSON string = `{
             "x-ves-oneof-field-ml_config_choice": "[\"multi_lb_app\",\"single_lb_app\"]",
             "x-ves-oneof-field-rate_limit_choice": "[\"api_rate_limit\",\"disable_rate_limit\",\"rate_limit\"]",
             "x-ves-oneof-field-service_policy_choice": "[\"active_service_policies\",\"no_service_policies\",\"service_policies_from_namespace\"]",
+            "x-ves-oneof-field-trust_client_ip_headers_choice": "[\"disable_trust_client_ip_headers\",\"enable_trust_client_ip_headers\"]",
             "x-ves-oneof-field-user_id_choice": "[\"user_id_client_ip\",\"user_identification\"]",
             "x-ves-oneof-field-waf_choice": "[\"app_firewall\",\"disable_waf\"]",
             "x-ves-proto-message": "ves.io.schema.views.http_loadbalancer.GetSpecType",
@@ -9374,6 +9400,11 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Disable"
                 },
+                "disable_trust_client_ip_headers": {
+                    "description": "Exclusive with [enable_trust_client_ip_headers]\n",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disable"
+                },
                 "disable_waf": {
                     "description": "Exclusive with [app_firewall]\n No WAF configuration for this load balancer",
                     "$ref": "#/definitions/ioschemaEmpty",
@@ -9420,6 +9451,11 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/viewshttp_loadbalancerIPThreatCategoryListType",
                     "x-displayname": "Enable"
                 },
+                "enable_trust_client_ip_headers": {
+                    "description": "Exclusive with [disable_trust_client_ip_headers]\n",
+                    "$ref": "#/definitions/virtual_hostClientIPHeaders",
+                    "x-displayname": "Enable"
+                },
                 "host_name": {
                     "type": "string",
                     "description": " Internally generated host name to be used for the virtual host\n\nExample: - \"ves-io-cf8684b9-a18f-4843-a24f-1f9ee8ea2776.ac.vh.ves.io\"-",
@@ -9464,7 +9500,7 @@ var APISwaggerJSON string = `{
                 "no_challenge": {
                     "description": "Exclusive with [captcha_challenge js_challenge policy_based_challenge]\n No challenge is enabled for this load balancer",
                     "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "No Challenge"
+                    "x-displayname": "None"
                 },
                 "no_service_policies": {
                     "description": "Exclusive with [active_service_policies service_policies_from_namespace]\n Do not apply any service policies i.e. bypass the namespace service policy set",
@@ -9583,6 +9619,7 @@ var APISwaggerJSON string = `{
             "x-ves-oneof-field-ml_config_choice": "[\"multi_lb_app\",\"single_lb_app\"]",
             "x-ves-oneof-field-rate_limit_choice": "[\"api_rate_limit\",\"disable_rate_limit\",\"rate_limit\"]",
             "x-ves-oneof-field-service_policy_choice": "[\"active_service_policies\",\"no_service_policies\",\"service_policies_from_namespace\"]",
+            "x-ves-oneof-field-trust_client_ip_headers_choice": "[\"disable_trust_client_ip_headers\",\"enable_trust_client_ip_headers\"]",
             "x-ves-oneof-field-user_id_choice": "[\"user_id_client_ip\",\"user_identification\"]",
             "x-ves-oneof-field-waf_choice": "[\"app_firewall\",\"disable_waf\"]",
             "x-ves-proto-message": "ves.io.schema.views.http_loadbalancer.GlobalSpecType",
@@ -9753,6 +9790,12 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Disable"
                 },
+                "disable_trust_client_ip_headers": {
+                    "description": "Exclusive with [enable_trust_client_ip_headers]\n",
+                    "title": "Disable",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disable"
+                },
                 "disable_waf": {
                     "description": "Exclusive with [app_firewall]\n No WAF configuration for this load balancer",
                     "title": "Disable WAF",
@@ -9802,6 +9845,12 @@ var APISwaggerJSON string = `{
                     "description": "Exclusive with [disable_ip_reputation]\n",
                     "title": "enable_ip_reputation",
                     "$ref": "#/definitions/viewshttp_loadbalancerIPThreatCategoryListType",
+                    "x-displayname": "Enable"
+                },
+                "enable_trust_client_ip_headers": {
+                    "description": "Exclusive with [disable_trust_client_ip_headers]\n",
+                    "title": "Enable",
+                    "$ref": "#/definitions/virtual_hostClientIPHeaders",
                     "x-displayname": "Enable"
                 },
                 "host_name": {
@@ -9865,9 +9914,9 @@ var APISwaggerJSON string = `{
                 },
                 "no_challenge": {
                     "description": "Exclusive with [captcha_challenge js_challenge policy_based_challenge]\n No challenge is enabled for this load balancer",
-                    "title": "No Challenge",
+                    "title": "None",
                     "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "No Challenge"
+                    "x-displayname": "None"
                 },
                 "no_service_policies": {
                     "description": "Exclusive with [active_service_policies service_policies_from_namespace]\n Do not apply any service policies i.e. bypass the namespace service policy set",
@@ -10167,6 +10216,7 @@ var APISwaggerJSON string = `{
             "x-ves-oneof-field-ml_config_choice": "[\"multi_lb_app\",\"single_lb_app\"]",
             "x-ves-oneof-field-rate_limit_choice": "[\"api_rate_limit\",\"disable_rate_limit\",\"rate_limit\"]",
             "x-ves-oneof-field-service_policy_choice": "[\"active_service_policies\",\"no_service_policies\",\"service_policies_from_namespace\"]",
+            "x-ves-oneof-field-trust_client_ip_headers_choice": "[\"disable_trust_client_ip_headers\",\"enable_trust_client_ip_headers\"]",
             "x-ves-oneof-field-user_id_choice": "[\"user_id_client_ip\",\"user_identification\"]",
             "x-ves-oneof-field-waf_choice": "[\"app_firewall\",\"disable_waf\"]",
             "x-ves-proto-message": "ves.io.schema.views.http_loadbalancer.ReplaceSpecType",
@@ -10300,6 +10350,11 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Disable"
                 },
+                "disable_trust_client_ip_headers": {
+                    "description": "Exclusive with [enable_trust_client_ip_headers]\n",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disable"
+                },
                 "disable_waf": {
                     "description": "Exclusive with [app_firewall]\n No WAF configuration for this load balancer",
                     "$ref": "#/definitions/ioschemaEmpty",
@@ -10336,6 +10391,11 @@ var APISwaggerJSON string = `{
                 "enable_ip_reputation": {
                     "description": "Exclusive with [disable_ip_reputation]\n",
                     "$ref": "#/definitions/viewshttp_loadbalancerIPThreatCategoryListType",
+                    "x-displayname": "Enable"
+                },
+                "enable_trust_client_ip_headers": {
+                    "description": "Exclusive with [disable_trust_client_ip_headers]\n",
+                    "$ref": "#/definitions/virtual_hostClientIPHeaders",
                     "x-displayname": "Enable"
                 },
                 "http": {
@@ -10376,7 +10436,7 @@ var APISwaggerJSON string = `{
                 "no_challenge": {
                     "description": "Exclusive with [captcha_challenge js_challenge policy_based_challenge]\n No challenge is enabled for this load balancer",
                     "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "No Challenge"
+                    "x-displayname": "None"
                 },
                 "no_service_policies": {
                     "description": "Exclusive with [active_service_policies service_policies_from_namespace]\n Do not apply any service policies i.e. bypass the namespace service policy set",
@@ -10616,6 +10676,34 @@ var APISwaggerJSON string = `{
             "default": "AutoCertDisabled",
             "x-displayname": "Certification State",
             "x-ves-proto-enum": "ves.io.schema.virtual_host.CertificationState"
+        },
+        "virtual_hostClientIPHeaders": {
+            "type": "object",
+            "description": "List of Client IP Headers",
+            "title": "Trust Client IP Headers List Type",
+            "x-displayname": "Trust Client IP Headers List",
+            "x-ves-proto-message": "ves.io.schema.virtual_host.ClientIPHeaders",
+            "properties": {
+                "client_ip_headers": {
+                    "type": "array",
+                    "description": " Define the list of one or more Client IP Headers.  Headers will be used in order from top to bottom, meaning if the first header is not present in the request, the system will proceed to check for the second header, and so on, until one of the listed headers is found. If none of the defined headers exist, or the value is not an IP address, then the system will use the source IP of the packet. If multiple defined headers with different names are present in the request, the value of the first header name in the configuration will be used. If multiple defined headers with the same name are present in the request, values of all those headers will be combined. The system will read the right-most IP address from header, if there are multiple ip addresses in the header value.\n\nExample: - \"Client-IP-Header\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.max_bytes: 256\n  ves.io.schema.rules.repeated.items.string.min_bytes: 1\n  ves.io.schema.rules.repeated.max_items: 5\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "title": "Client IP Headers",
+                    "maxItems": 5,
+                    "items": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 256
+                    },
+                    "x-displayname": "Client IP Headers",
+                    "x-ves-example": "Client-IP-Header",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.items.string.max_bytes": "256",
+                        "ves.io.schema.rules.repeated.items.string.min_bytes": "1",
+                        "ves.io.schema.rules.repeated.max_items": "5",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
+                }
+            }
         },
         "virtual_hostCompressionType": {
             "type": "object",
