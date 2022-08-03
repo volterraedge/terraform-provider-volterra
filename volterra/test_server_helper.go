@@ -109,8 +109,12 @@ func (s *apiCredentialCustomAPIServer) RecreateScimToken(ctx context.Context, re
 	return &ves_io_schema_api_credential.CreateResponse{}, nil
 }
 
-func (s *apiCredentialCustomAPIServer) RevokeScimToken(ctx context.Context, req *ves_io_schema_api_credential.GetRequest) (*ves_io_schema_api_credential.StatusResponse, error) {
+func (s *apiCredentialCustomAPIServer) RevokeScimToken(ctx context.Context, req *ves_io_schema_api_credential.ScimTokenRequest) (*ves_io_schema_api_credential.StatusResponse, error) {
 	return &ves_io_schema_api_credential.StatusResponse{}, nil
+}
+
+func (s *apiCredentialCustomAPIServer) GetScimToken(ctx context.Context, req *ves_io_schema_api_credential.ScimTokenRequest) (*ves_io_schema_api_credential.GetResponse, error) {
+	return &ves_io_schema_api_credential.GetResponse{}, nil
 }
 
 var _ ves_io_schema_api_credential.CustomAPIServer = &apiCredentialCustomAPIServer{}
@@ -172,9 +176,9 @@ func (n *nsCustomAPIServer) EvaluateAPIAccess(context.Context,
 	return &ves_io_schema_ns.EvaluateAPIAccessResp{}, nil
 }
 
-func (n *nsCustomAPIServer) UpdateAllowAdvertiseOnPublic(context.Context,
-	*ves_io_schema_ns.UpdateAllowAdvertiseOnPublicReq) (*ves_io_schema_ns.UpdateAllowAdvertiseOnPublicResp, error) {
-	return &ves_io_schema_ns.UpdateAllowAdvertiseOnPublicResp{}, nil
+func (n *nsCustomAPIServer) SuggestValues(context.Context,
+	*ves_io_schema_ns.SuggestValuesReq) (*ves_io_schema_ns.SuggestValuesResp, error) {
+	return &ves_io_schema_ns.SuggestValuesResp{}, nil
 }
 
 var _ ves_io_schema_ns.CustomAPIServer = &nsCustomAPIServer{}
@@ -373,8 +377,17 @@ func (t *namespaceCustomAPIServer) GetActiveAlertPolicies(ctx context.Context, r
 	return &ves_io_schema_ns.GetActiveAlertPoliciesResponse{}, nil
 }
 
+func (t *namespaceCustomAPIServer) CascadeDelete(ctx context.Context, req *ves_io_schema_ns.CascadeDeleteRequest) (*ves_io_schema_ns.CascadeDeleteResponse, error) {
+	return &ves_io_schema_ns.CascadeDeleteResponse{}, nil
+}
+
 func (t *namespaceCustomAPIServer) SuggestValues(ctx context.Context, req *ves_io_schema_ns.SuggestValuesReq) (*ves_io_schema_ns.SuggestValuesResp, error) {
 	return &ves_io_schema_ns.SuggestValuesResp{}, nil
+}
+
+func (n *namespaceCustomAPIServer) UpdateAllowAdvertiseOnPublic(context.Context,
+	*ves_io_schema_ns.UpdateAllowAdvertiseOnPublicReq) (*ves_io_schema_ns.UpdateAllowAdvertiseOnPublicResp, error) {
+	return &ves_io_schema_ns.UpdateAllowAdvertiseOnPublicResp{}, nil
 }
 
 var _ ves_io_schema_ns.NamespaceCustomAPIServer = &namespaceCustomAPIServer{}
