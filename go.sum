@@ -1257,6 +1257,8 @@ gopkg.in/yaml.v3 v3.0.0-20210107192922-496545a6307b h1:h8qDotaEPuJATrMmW04NCwg7v
 gopkg.in/yaml.v3 v3.0.0-20210107192922-496545a6307b/go.mod h1:K4uyk7z7BCEPqu6E+C64Yfv1cQ7kz7rIZviUmN+EgEM=
 gopkg.volterra.us/codegen v0.0.0-20220422010731-e92dc81a3064 h1:aTVhbiX4FA8AVqgBqhzWFLkmhVhgoVifi6E3d/W1Ttw=
 gopkg.volterra.us/codegen v0.0.0-20220422010731-e92dc81a3064/go.mod h1:I/VDdyaMMNISNLG4bxTHilStd/c5uTRVLP0qkdqFyQ4=
+gopkg.volterra.us/codegen v0.0.0-20220516142222-13a5b2ae6c98 h1:nL5Bu3NNK8ylRA1WTBBoka3sG6+ufQx6Clg1Z54Dqu4=
+gopkg.volterra.us/codegen v0.0.0-20220516142222-13a5b2ae6c98/go.mod h1:I/VDdyaMMNISNLG4bxTHilStd/c5uTRVLP0qkdqFyQ4=
 gopkg.volterra.us/gft v0.0.0-20201007201245-b62825346a32/go.mod h1:+PIqOGFRanphMj1nIlefu3zorjFZJNmOMzv2G2fyB0Q=
 gopkg.volterra.us/stdlib v0.0.0-20220325025208-7a45c9586b4c h1:M4u8veeO2GSq2WQSFFR9k18gkORSYNIxckXrlx30B6Q=
 gopkg.volterra.us/stdlib v0.0.0-20220325025208-7a45c9586b4c/go.mod h1:mMOXmVGs6CQhgon3RmCVx1hUb121r/48wj+fxS+x7jE=
