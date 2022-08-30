@@ -35,8 +35,8 @@ require (
 	google.golang.org/genproto v0.0.0-20210831024726-fe130286e0e2
 	google.golang.org/grpc v1.40.0
 	gopkg.in/ini.v1 v1.55.0 // indirect
-	gopkg.volterra.us/codegen v0.0.0-20220516142222-13a5b2ae6c98 // indirect
-	gopkg.volterra.us/stdlib v0.0.0-20220519215901-b4a66f7f3a87
+	gopkg.volterra.us/codegen v0.0.0-20220810232906-02e9b1175e0d // indirect
+	gopkg.volterra.us/stdlib v0.0.0-20220803190611-702b84d0a899
 	honnef.co/go/tools v0.0.1-2020.1.5 // indirect
 	k8s.io/api v0.22.1
 	software.sslmate.com/src/go-pkcs12 v0.0.0-20201103104416-57fc603b7f52 // indirect
