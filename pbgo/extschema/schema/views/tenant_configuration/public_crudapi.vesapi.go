@@ -1595,16 +1595,7 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 		item.Disabled = o.GetMetadata().GetDisable()
 
 		if len(req.ReportFields) > 0 {
-			noDBForm, _ := flags.GetEnvGetRspNoDBForm()
-			if !noDBForm {
-				item.Object = o.Object
-				sf.Logger().Alert(svcfw.GetResponseInDBForm,
-					log.MinorAlert,
-					zap.String("user", server.UserFromContext(ctx)),
-					zap.String("useragent", server.UseragentStrFromContext(ctx)),
-					zap.String("operation", "List"),
-				)
-			}
+			item.Object = o.Object
 
 			item.Metadata = &ves_io_schema.ObjectGetMetaType{}
 			item.Metadata.FromObjectMetaType(o.Metadata)
@@ -1683,7 +1674,7 @@ var APISwaggerJSON string = `{
     "paths": {
         "/public/namespaces/{metadata.namespace}/tenant_configurations": {
             "post": {
-                "summary": "CreateSpecType",
+                "summary": "Create tenant configuration",
                 "description": "Shape of the tenant configuration specification",
                 "operationId": "ves.io.schema.views.tenant_configuration.API.Create",
                 "responses": {
@@ -1775,7 +1766,7 @@ var APISwaggerJSON string = `{
         },
         "/public/namespaces/{metadata.namespace}/tenant_configurations/{metadata.name}": {
             "put": {
-                "summary": "ReplaceSpecType",
+                "summary": "Replace tenant configuration",
                 "description": "Shape of the tenant configuration specification",
                 "operationId": "ves.io.schema.views.tenant_configuration.API.Replace",
                 "responses": {
@@ -1875,7 +1866,7 @@ var APISwaggerJSON string = `{
         },
         "/public/namespaces/{namespace}/tenant_configurations": {
             "get": {
-                "summary": "List",
+                "summary": "List Tenant Configuration",
                 "description": "List the set of tenant_configuration in a namespace",
                 "operationId": "ves.io.schema.views.tenant_configuration.API.List",
                 "responses": {
@@ -1991,7 +1982,7 @@ var APISwaggerJSON string = `{
         },
         "/public/namespaces/{namespace}/tenant_configurations/{name}": {
             "get": {
-                "summary": "GetSpecType",
+                "summary": "Get tenant configuration",
                 "description": "Shape of the tenant configuration specification",
                 "operationId": "ves.io.schema.views.tenant_configuration.API.Get",
                 "responses": {
@@ -2095,7 +2086,7 @@ var APISwaggerJSON string = `{
                 "x-ves-proto-rpc": "ves.io.schema.views.tenant_configuration.API.Get"
             },
             "delete": {
-                "summary": "Delete",
+                "summary": "Delete Tenant Configuration",
                 "description": "Delete the specified tenant_configuration",
                 "operationId": "ves.io.schema.views.tenant_configuration.API.Delete",
                 "responses": {

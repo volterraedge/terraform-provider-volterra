@@ -1547,6 +1547,43 @@ func (v *ValidateMaliciousUserDetectionSetting) Validate(ctx context.Context, pm
 
 	}
 
+	switch m.GetNonExistentUrlActivityChoice().(type) {
+	case *MaliciousUserDetectionSetting_ExcludeNonExistentUrlActivity:
+		if fv, exists := v.FldValidators["non_existent_url_activity_choice.exclude_non_existent_url_activity"]; exists {
+			val := m.GetNonExistentUrlActivityChoice().(*MaliciousUserDetectionSetting_ExcludeNonExistentUrlActivity).ExcludeNonExistentUrlActivity
+			vOpts := append(opts,
+				db.WithValidateField("non_existent_url_activity_choice"),
+				db.WithValidateField("exclude_non_existent_url_activity"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *MaliciousUserDetectionSetting_IncludeNonExistentUrlActivityCustom:
+		if fv, exists := v.FldValidators["non_existent_url_activity_choice.include_non_existent_url_activity_custom"]; exists {
+			val := m.GetNonExistentUrlActivityChoice().(*MaliciousUserDetectionSetting_IncludeNonExistentUrlActivityCustom).IncludeNonExistentUrlActivityCustom
+			vOpts := append(opts,
+				db.WithValidateField("non_existent_url_activity_choice"),
+				db.WithValidateField("include_non_existent_url_activity_custom"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *MaliciousUserDetectionSetting_IncludeNonExistentUrlActivityAutomatic:
+		if fv, exists := v.FldValidators["non_existent_url_activity_choice.include_non_existent_url_activity_automatic"]; exists {
+			val := m.GetNonExistentUrlActivityChoice().(*MaliciousUserDetectionSetting_IncludeNonExistentUrlActivityAutomatic).IncludeNonExistentUrlActivityAutomatic
+			vOpts := append(opts,
+				db.WithValidateField("non_existent_url_activity_choice"),
+				db.WithValidateField("include_non_existent_url_activity_automatic"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["waf_activity_choice"]; exists {
 		val := m.GetWafActivityChoice()
 		vOpts := append(opts,
@@ -1670,6 +1707,9 @@ var DefaultMaliciousUserDetectionSettingValidator = func() *ValidateMaliciousUse
 	v.FldValidators["failed_login_activity_choice.include_failed_login_activity"] = FailedLoginActivitySettingValidator().Validate
 
 	v.FldValidators["forbidden_activity_choice.include_forbidden_activity"] = ForbiddenActivitySettingValidator().Validate
+
+	v.FldValidators["non_existent_url_activity_choice.include_non_existent_url_activity_custom"] = NonexistentUrlCustomActivitySettingValidator().Validate
+	v.FldValidators["non_existent_url_activity_choice.include_non_existent_url_activity_automatic"] = NonexistentUrlAutomaticActivitySettingValidator().Validate
 
 	return v
 }()
@@ -1829,6 +1869,258 @@ var DefaultMetricSelectorValidator = func() *ValidateMetricSelector {
 
 func MetricSelectorValidator() db.Validator {
 	return DefaultMetricSelectorValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *NonexistentUrlAutomaticActivitySetting) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *NonexistentUrlAutomaticActivitySetting) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *NonexistentUrlAutomaticActivitySetting) DeepCopy() *NonexistentUrlAutomaticActivitySetting {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &NonexistentUrlAutomaticActivitySetting{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *NonexistentUrlAutomaticActivitySetting) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *NonexistentUrlAutomaticActivitySetting) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return NonexistentUrlAutomaticActivitySettingValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateNonexistentUrlAutomaticActivitySetting struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateNonexistentUrlAutomaticActivitySetting) SensitivityValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for sensitivity")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateNonexistentUrlAutomaticActivitySetting) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*NonexistentUrlAutomaticActivitySetting)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *NonexistentUrlAutomaticActivitySetting got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["sensitivity"]; exists {
+		val := m.GetSensitivity()
+		vOpts := append(opts,
+			db.WithValidateField("sensitivity"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetSensitivity().(type) {
+	case *NonexistentUrlAutomaticActivitySetting_Low:
+		if fv, exists := v.FldValidators["sensitivity.low"]; exists {
+			val := m.GetSensitivity().(*NonexistentUrlAutomaticActivitySetting_Low).Low
+			vOpts := append(opts,
+				db.WithValidateField("sensitivity"),
+				db.WithValidateField("low"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *NonexistentUrlAutomaticActivitySetting_Medium:
+		if fv, exists := v.FldValidators["sensitivity.medium"]; exists {
+			val := m.GetSensitivity().(*NonexistentUrlAutomaticActivitySetting_Medium).Medium
+			vOpts := append(opts,
+				db.WithValidateField("sensitivity"),
+				db.WithValidateField("medium"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *NonexistentUrlAutomaticActivitySetting_High:
+		if fv, exists := v.FldValidators["sensitivity.high"]; exists {
+			val := m.GetSensitivity().(*NonexistentUrlAutomaticActivitySetting_High).High
+			vOpts := append(opts,
+				db.WithValidateField("sensitivity"),
+				db.WithValidateField("high"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultNonexistentUrlAutomaticActivitySettingValidator = func() *ValidateNonexistentUrlAutomaticActivitySetting {
+	v := &ValidateNonexistentUrlAutomaticActivitySetting{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhSensitivity := v.SensitivityValidationRuleHandler
+	rulesSensitivity := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhSensitivity(rulesSensitivity)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for NonexistentUrlAutomaticActivitySetting.sensitivity: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["sensitivity"] = vFn
+
+	return v
+}()
+
+func NonexistentUrlAutomaticActivitySettingValidator() db.Validator {
+	return DefaultNonexistentUrlAutomaticActivitySettingValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *NonexistentUrlCustomActivitySetting) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *NonexistentUrlCustomActivitySetting) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *NonexistentUrlCustomActivitySetting) DeepCopy() *NonexistentUrlCustomActivitySetting {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &NonexistentUrlCustomActivitySetting{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *NonexistentUrlCustomActivitySetting) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *NonexistentUrlCustomActivitySetting) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return NonexistentUrlCustomActivitySettingValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateNonexistentUrlCustomActivitySetting struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateNonexistentUrlCustomActivitySetting) NonexistentRequestsThresholdValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for nonexistent_requests_threshold")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateNonexistentUrlCustomActivitySetting) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*NonexistentUrlCustomActivitySetting)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *NonexistentUrlCustomActivitySetting got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["nonexistent_requests_threshold"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("nonexistent_requests_threshold"))
+		if err := fv(ctx, m.GetNonexistentRequestsThreshold(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultNonexistentUrlCustomActivitySettingValidator = func() *ValidateNonexistentUrlCustomActivitySetting {
+	v := &ValidateNonexistentUrlCustomActivitySetting{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhNonexistentRequestsThreshold := v.NonexistentRequestsThresholdValidationRuleHandler
+	rulesNonexistentRequestsThreshold := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.uint32.gt":        "0",
+		"ves.io.schema.rules.uint32.lte":       "100",
+	}
+	vFn, err = vrhNonexistentRequestsThreshold(rulesNonexistentRequestsThreshold)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for NonexistentUrlCustomActivitySetting.nonexistent_requests_threshold: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["nonexistent_requests_threshold"] = vFn
+
+	return v
+}()
+
+func NonexistentUrlCustomActivitySettingValidator() db.Validator {
+	return DefaultNonexistentUrlCustomActivitySettingValidator
 }
 
 // augmented methods on protoc/std generated struct

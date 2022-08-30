@@ -3101,26 +3101,30 @@ var APISwaggerJSON string = `{
                 },
                 "latitude": {
                     "type": "number",
-                    "description": " Geographic location of this site\n\nExample: - \"49.3156733\"-\n\nValidation Rules:\n  ves.io.schema.rules.float.gte: -90.0\n  ves.io.schema.rules.float.lte: 90.0\n",
+                    "description": " Geographic location of this site\n\nExample: - \"49.3156733\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.float.gte: -90.0\n  ves.io.schema.rules.float.lte: 90.0\n  ves.io.schema.rules.message.required: true\n",
                     "title": "Latitude",
                     "format": "float",
                     "x-displayname": "Latitude",
                     "x-ves-example": "49.3156733",
+                    "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.float.gte": "-90.0",
-                        "ves.io.schema.rules.float.lte": "90.0"
+                        "ves.io.schema.rules.float.lte": "90.0",
+                        "ves.io.schema.rules.message.required": "true"
                     }
                 },
                 "longitude": {
                     "type": "number",
-                    "description": " Geographic location of this site\n\nExample: - \"14.2484333\"-\n\nValidation Rules:\n  ves.io.schema.rules.float.gte: -180.0\n  ves.io.schema.rules.float.lte: 180.0\n",
+                    "description": " Geographic location of this site\n\nExample: - \"14.2484333\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.float.gte: -180.0\n  ves.io.schema.rules.float.lte: 180.0\n  ves.io.schema.rules.message.required: true\n",
                     "title": "Longitude",
                     "format": "float",
                     "x-displayname": "Longitude",
                     "x-ves-example": "14.2484333",
+                    "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.float.gte": "-180.0",
-                        "ves.io.schema.rules.float.lte": "180.0"
+                        "ves.io.schema.rules.float.lte": "180.0",
+                        "ves.io.schema.rules.message.required": "true"
                     }
                 },
                 "operating_system_version": {

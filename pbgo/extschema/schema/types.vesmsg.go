@@ -4833,6 +4833,15 @@ func (v *ValidateListMetaType) Validate(ctx context.Context, pm interface{}, opt
 		return nil
 	}
 
+	if fv, exists := v.FldValidators["next_page"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("next_page"))
+		if err := fv(ctx, m.GetNextPage(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["resource_version"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("resource_version"))

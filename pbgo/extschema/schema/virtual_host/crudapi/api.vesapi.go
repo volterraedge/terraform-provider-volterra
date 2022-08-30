@@ -2908,6 +2908,28 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "ioschemaDownstreamTlsParamsType": {
+            "type": "object",
+            "description": "TLS configuration for downstream connections",
+            "title": "DownstreamTlsParamsType",
+            "x-displayname": "Downstream TLS Parameters",
+            "x-ves-proto-message": "ves.io.schema.DownstreamTlsParamsType",
+            "properties": {
+                "common_params": {
+                    "description": " Common TLS parameters used in both upstream and downstream connections",
+                    "title": "common_params",
+                    "$ref": "#/definitions/schemaTlsParamsType",
+                    "x-displayname": "Common Parameters"
+                },
+                "require_client_certificate": {
+                    "type": "boolean",
+                    "description": " If true, Volterra will reject connections without a valid client\n certificate.",
+                    "title": "require_client_certificate",
+                    "format": "boolean",
+                    "x-displayname": "Require Client Certificate(enable mTLS)"
+                }
+            }
+        },
         "ioschemaObjectRefType": {
             "type": "object",
             "description": "This type establishes a 'direct reference' from one object(the referrer) to another(the referred).\nSuch a reference is in form of tenant/namespace/name for public API and Uid for private API\nThis type of reference is called direct because the relation is explicit and concrete (as opposed\nto selector reference which builds a group based on labels of selectee objects)",
@@ -3332,28 +3354,6 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.string.max_len": "256",
                         "ves.io.schema.rules.string.min_len": "1"
                     }
-                }
-            }
-        },
-        "schemaDownstreamTlsParamsType": {
-            "type": "object",
-            "description": "TLS configuration for downstream connections",
-            "title": "DownstreamTlsParamsType",
-            "x-displayname": "Downstream TLS Parameters",
-            "x-ves-proto-message": "ves.io.schema.DownstreamTlsParamsType",
-            "properties": {
-                "common_params": {
-                    "description": " Common TLS parameters used in both upstream and downstream connections",
-                    "title": "common_params",
-                    "$ref": "#/definitions/schemaTlsParamsType",
-                    "x-displayname": "Common Parameters"
-                },
-                "require_client_certificate": {
-                    "type": "boolean",
-                    "description": " If true, Volterra will reject connections without a valid client\n certificate.",
-                    "title": "require_client_certificate",
-                    "format": "boolean",
-                    "x-displayname": "Require Client Certificate(enable mTLS)"
                 }
             }
         },
@@ -4425,6 +4425,7 @@ var APISwaggerJSON string = `{
             "x-ves-oneof-field-authentication_choice": "[\"authentication\",\"no_authentication\"]",
             "x-ves-oneof-field-bot_defense_choice": "[]",
             "x-ves-oneof-field-challenge_type": "[\"captcha_challenge\",\"js_challenge\",\"no_challenge\"]",
+            "x-ves-oneof-field-default_lb_choice": "[\"default_loadbalancer\",\"non_default_loadbalancer\"]",
             "x-ves-oneof-field-path_normalize_choice": "[\"disable_path_normalize\",\"enable_path_normalize\"]",
             "x-ves-oneof-field-server_header_choice": "[\"append_server_name\",\"default_header\",\"pass_through\",\"server_name\"]",
             "x-ves-oneof-field-strict_sni_host_header_check_choice": "[]",
@@ -4533,6 +4534,12 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/schemaEmpty",
                     "x-displayname": "Default value for Server header"
                 },
+                "default_loadbalancer": {
+                    "description": "Exclusive with [non_default_loadbalancer]\n\n Default loadbalancer for Non SNI clients",
+                    "title": "Default loadbalancer",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Default loadbalancer"
+                },
                 "disable_default_error_pages": {
                     "type": "boolean",
                     "description": "\n An option to specify whether to disable using default Volterra error pages\n\nExample: - \"true\"-",
@@ -4592,9 +4599,9 @@ var APISwaggerJSON string = `{
                 },
                 "domains": {
                     "type": "array",
-                    "description": " A list of domains (host/authority header) that will be matched to this virtual host.\n Wildcard hosts are supported in the suffix or prefix form\n\n Domain search order:\n  1. Exact domain names: www.foo.com.\n  2. Prefix domain wildcards: *.foo.com or *-bar.foo.com.\n  3. Special wildcard * matching any domain.\n\n Wildcard will not match empty string.\n e.g. *-bar.foo.com will match baz-bar.foo.com but not -bar.foo.com.\n The longest wildcards match first.\n Only a single virtual host in the entire route configuration can match on *.\n Also a domain must be unique across all virtual hosts within an advertise policy.\n\n Domains are also used for SNI matching if the virtual host proxy type is TCP_PROXY_WITH_SNI/HTTPS_PROXY\n Domains also indicate the list of names for which DNS resolution will be done by VER\n\nExample: - \"www.foo.com\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.vh_domain: true\n  ves.io.schema.rules.repeated.max_items: 16\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " A list of domains (host/authority header) that will be matched to this virtual host.\n Wildcard hosts are supported in the suffix or prefix form\n\n Domain search order:\n  1. Exact domain names: www.foo.com.\n  2. Prefix domain wildcards: *.foo.com or *-bar.foo.com.\n  3. Special wildcard * matching any domain.\n\n Wildcard will not match empty string.\n e.g. *-bar.foo.com will match baz-bar.foo.com but not -bar.foo.com.\n The longest wildcards match first.\n Only a single virtual host in the entire route configuration can match on *.\n Also a domain must be unique across all virtual hosts within an advertise policy.\n\n Domains are also used for SNI matching if the virtual host proxy type is TCP_PROXY_WITH_SNI/HTTPS_PROXY\n Domains also indicate the list of names for which DNS resolution will be done by VER\n\nExample: - \"www.foo.com\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.vh_domain: true\n  ves.io.schema.rules.repeated.max_items: 33\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "domains",
-                    "maxItems": 16,
+                    "maxItems": 33,
                     "items": {
                         "type": "string"
                     },
@@ -4602,7 +4609,7 @@ var APISwaggerJSON string = `{
                     "x-ves-example": "www.foo.com",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.repeated.items.string.vh_domain": "true",
-                        "ves.io.schema.rules.repeated.max_items": "16",
+                        "ves.io.schema.rules.repeated.max_items": "33",
                         "ves.io.schema.rules.repeated.unique": "true"
                     }
                 },
@@ -4682,6 +4689,12 @@ var APISwaggerJSON string = `{
                     "title": "No Challenge",
                     "$ref": "#/definitions/schemaEmpty",
                     "x-displayname": "No Challenge"
+                },
+                "non_default_loadbalancer": {
+                    "description": "Exclusive with [default_loadbalancer]\n\n Do not use as default loadbalancer for Non SNI clients",
+                    "title": "Not a default loadbalancer",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Not default loadbalancer"
                 },
                 "pass_through": {
                     "description": "Exclusive with [append_server_name default_header server_name]\n Passes existing Server Header as is. If server header is absent, nothing is\n appended.",
@@ -4822,7 +4835,7 @@ var APISwaggerJSON string = `{
                 },
                 "tls_parameters": {
                     "description": " TLS parameters for downstream connections. These parameters are used if not specified\n in advertise policy",
-                    "$ref": "#/definitions/schemaDownstreamTlsParamsType",
+                    "$ref": "#/definitions/ioschemaDownstreamTlsParamsType",
                     "x-displayname": "TLS Parameters"
                 },
                 "type": {
@@ -5354,12 +5367,8 @@ var APISwaggerJSON string = `{
         },
         "virtual_hostProxyType": {
             "type": "string",
-            "description": "ProxyType tells the type of proxy to install for the virtual host.\n\nOnly the following combination of VirtualHosts within same AdvertisePolicy is permitted\n(None of them should have \"*\" in domains when used with other VirtualHosts in same AdvertisePolicy)\n1. Multiple TCP_PROXY_WITH_SNI and multiple HTTPS_PROXY\n2. Multiple HTTP_PROXY\n3. Multiple HTTPS_PROXY\n4. Multiple TCP_PROXY_WITH_SNI\n\nHTTPS_PROXY without TLS parameters is not permitted\nHTTP_PROXY/HTTPS_PROXY/TCP_PROXY_WITH_SNI/SMA_PROXY with empty domains is not permitted\nTCP_PROXY_WITH_SNI/SMA_PROXY should not have \"*\" in domains\n\n - HTTP_PROXY: HTTP_PROXY\n\nInstall HTTP proxy. HTTP Proxy is the default proxy installed.\n - TCP_PROXY: TCP_PROXY\n\nInstall TCP proxy\n - TCP_PROXY_WITH_SNI: TCP_PROXY_WITH_SNI\n\nInstall TCP proxy with SNI Routing\n - HTTPS_PROXY: HTTPS_PROXY\n\nInstall HTTPS proxy\n - UDP_PROXY: UDP_PROXY\n\nInstall UDP proxy\n - SMA_PROXY: SMA_PROXY\n\nInstall Secret Management Access proxy",
+            "description": "ProxyType tells the type of proxy to install for the virtual host.\n\nOnly the following combination of VirtualHosts within same AdvertisePolicy is permitted\n(None of them should have \"*\" in domains when used with other VirtualHosts in same AdvertisePolicy)\n1. Multiple TCP_PROXY_WITH_SNI and multiple HTTPS_PROXY\n2. Multiple HTTP_PROXY\n3. Multiple HTTPS_PROXY\n4. Multiple TCP_PROXY_WITH_SNI\n\nHTTPS_PROXY without TLS parameters is not permitted\nHTTP_PROXY/HTTPS_PROXY/TCP_PROXY_WITH_SNI/SMA_PROXY with empty domains is not permitted\nTCP_PROXY_WITH_SNI/SMA_PROXY should not have \"*\" in domains\n\n - HTTP_PROXY: HTTP_PROXY\n\nInstall HTTP proxy. HTTP Proxy is the default proxy installed.\n - TCP_PROXY: TCP_PROXY\n\nInstall TCP proxy\n - TCP_PROXY_WITH_SNI: TCP_PROXY_WITH_SNI\n\nInstall TCP proxy with SNI Routing\n - TLS_TCP_PROXY: TCP_PROXY\n\nInstall TCP proxy\n - TLS_TCP_PROXY_WITH_SNI: TCP_PROXY_WITH_SNI\n\nInstall TCP proxy with SNI Routing\n - HTTPS_PROXY: HTTPS_PROXY\n\nInstall HTTPS proxy\n - UDP_PROXY: UDP_PROXY\n\nInstall UDP proxy\n - SMA_PROXY: SMA_PROXY\n\nInstall Secret Management Access proxy",
             "enum": [
-                "HTTP_PROXY",
-                "TCP_PROXY",
-                "TCP_PROXY_WITH_SNI",
-                "HTTPS_PROXY",
                 "UDP_PROXY",
                 "SMA_PROXY"
             ],
@@ -5373,15 +5382,17 @@ var APISwaggerJSON string = `{
             "properties": {
                 "domain": {
                     "type": "string",
-                    "description": " Domain Name",
+                    "description": " Domain Name\n\nExample: - \"cdn.acmecorp.com\"-",
                     "title": "Domain Name",
-                    "x-displayname": "Domain Name"
+                    "x-displayname": "Domain Name",
+                    "x-ves-example": "cdn.acmecorp.com"
                 },
                 "service_domain": {
                     "type": "string",
-                    "description": " Serivce Domain",
-                    "title": "Serivce Domain",
-                    "x-displayname": "Serivce Domain"
+                    "description": " Service Domain\n\nExample: - \"ves-io-cdn-cdn-acmecorp-com.demo1.ac.vh.volterra.us\"-",
+                    "title": "Service Domain",
+                    "x-displayname": "Service Domain",
+                    "x-ves-example": "ves-io-cdn-cdn-acmecorp-com.demo1.ac.vh.volterra.us"
                 }
             }
         },
@@ -5569,7 +5580,6 @@ var APISwaggerJSON string = `{
                 "API_GATEWAY",
                 "TCP_LOAD_BALANCER",
                 "PROXY",
-                "LOCAL_K8S_API_GATEWAY",
                 "CDN_LOAD_BALANCER"
             ],
             "default": "VIRTUAL_SERVICE",

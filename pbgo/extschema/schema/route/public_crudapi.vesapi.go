@@ -1595,16 +1595,7 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 		item.Disabled = o.GetMetadata().GetDisable()
 
 		if len(req.ReportFields) > 0 {
-			noDBForm, _ := flags.GetEnvGetRspNoDBForm()
-			if !noDBForm {
-				item.Object = o.Object
-				sf.Logger().Alert(svcfw.GetResponseInDBForm,
-					log.MinorAlert,
-					zap.String("user", server.UserFromContext(ctx)),
-					zap.String("useragent", server.UseragentStrFromContext(ctx)),
-					zap.String("operation", "List"),
-				)
-			}
+			item.Object = o.Object
 
 			item.Metadata = &ves_io_schema.ObjectGetMetaType{}
 			item.Metadata.FromObjectMetaType(o.Metadata)
@@ -1683,7 +1674,7 @@ var APISwaggerJSON string = `{
     "paths": {
         "/public/namespaces/{metadata.namespace}/routes": {
             "post": {
-                "summary": "CreateSpecType",
+                "summary": "Create Route",
                 "description": "Create route object in a given namespace. Route object is list of route rules.\nEach rule has match condition to match incoming requests and actions to take on matching requests.\nVirtual host object has reference to route object",
                 "operationId": "ves.io.schema.route.API.Create",
                 "responses": {
@@ -1775,7 +1766,7 @@ var APISwaggerJSON string = `{
         },
         "/public/namespaces/{metadata.namespace}/routes/{metadata.name}": {
             "put": {
-                "summary": "ReplaceSpecType",
+                "summary": "Replace Route",
                 "description": "Replace route object in a given namespace. Route object is list of route rules.\nEach rule has match condition to match incoming requests and actions to take on matching requests.\nVirtual host object has reference to route object",
                 "operationId": "ves.io.schema.route.API.Replace",
                 "responses": {
@@ -1875,7 +1866,7 @@ var APISwaggerJSON string = `{
         },
         "/public/namespaces/{namespace}/routes": {
             "get": {
-                "summary": "List",
+                "summary": "List Route",
                 "description": "List the set of route in a namespace",
                 "operationId": "ves.io.schema.route.API.List",
                 "responses": {
@@ -1991,7 +1982,7 @@ var APISwaggerJSON string = `{
         },
         "/public/namespaces/{namespace}/routes/{name}": {
             "get": {
-                "summary": "GetSpecType",
+                "summary": "Get Route",
                 "description": "Get route object in a given namespace. Route object is list of route rules.\nEach rule has match condition to match incoming requests and actions to take on matching requests.\nVirtual host object has reference to route object",
                 "operationId": "ves.io.schema.route.API.Get",
                 "responses": {
@@ -2095,7 +2086,7 @@ var APISwaggerJSON string = `{
                 "x-ves-proto-rpc": "ves.io.schema.route.API.Get"
             },
             "delete": {
-                "summary": "Delete",
+                "summary": "Delete Route",
                 "description": "Delete the specified route",
                 "operationId": "ves.io.schema.route.API.Delete",
                 "responses": {

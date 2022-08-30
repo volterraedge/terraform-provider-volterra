@@ -153,7 +153,8 @@ func (c *CustomAPIRestClient) doRPCTokenState(ctx context.Context, callOpts *ser
 	}
 	defer rsp.Body.Close()
 
-	if rsp.StatusCode != http.StatusOK {
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
 		body, err := ioutil.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
 	}
@@ -164,7 +165,7 @@ func (c *CustomAPIRestClient) doRPCTokenState(ctx context.Context, callOpts *ser
 	}
 	pbRsp := &ObjectChangeResp{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
-		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.token.ObjectChangeResp", body)
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.token.ObjectChangeResp", body)
 
 	}
 	if callOpts.OutCallResponse != nil {
@@ -312,7 +313,7 @@ var CustomAPISwaggerJSON string = `{
     "paths": {
         "/public/namespaces/{namespace}/tokens/{name}/state": {
             "post": {
-                "summary": "Token states",
+                "summary": "Set Token State",
                 "description": "TokenState changes token status, it can be used to disable token.",
                 "operationId": "ves.io.schema.token.CustomAPI.TokenState",
                 "responses": {

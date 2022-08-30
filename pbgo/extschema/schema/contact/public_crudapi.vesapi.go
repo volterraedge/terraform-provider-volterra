@@ -1595,16 +1595,7 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 		item.Disabled = o.GetMetadata().GetDisable()
 
 		if len(req.ReportFields) > 0 {
-			noDBForm, _ := flags.GetEnvGetRspNoDBForm()
-			if !noDBForm {
-				item.Object = o.Object
-				sf.Logger().Alert(svcfw.GetResponseInDBForm,
-					log.MinorAlert,
-					zap.String("user", server.UserFromContext(ctx)),
-					zap.String("useragent", server.UseragentStrFromContext(ctx)),
-					zap.String("operation", "List"),
-				)
-			}
+			item.Object = o.Object
 
 			item.Metadata = &ves_io_schema.ObjectGetMetaType{}
 			item.Metadata.FromObjectMetaType(o.Metadata)
@@ -1683,7 +1674,7 @@ var APISwaggerJSON string = `{
     "paths": {
         "/public/namespaces/{metadata.namespace}/contacts": {
             "post": {
-                "summary": "Contact",
+                "summary": "Create Contact",
                 "description": "Creates a new customer's contact detail record with us, including address and phone number.",
                 "operationId": "ves.io.schema.contact.API.Create",
                 "responses": {
@@ -1775,7 +1766,7 @@ var APISwaggerJSON string = `{
         },
         "/public/namespaces/{metadata.namespace}/contacts/{metadata.name}": {
             "put": {
-                "summary": "Contact",
+                "summary": "Replace Contact",
                 "description": "Updates existing customer's contact details, including address and phone number.",
                 "operationId": "ves.io.schema.contact.API.Replace",
                 "responses": {
@@ -1875,7 +1866,7 @@ var APISwaggerJSON string = `{
         },
         "/public/namespaces/{namespace}/contacts": {
             "get": {
-                "summary": "List",
+                "summary": "List Contact",
                 "description": "List the set of contact in a namespace",
                 "operationId": "ves.io.schema.contact.API.List",
                 "responses": {
@@ -1991,7 +1982,7 @@ var APISwaggerJSON string = `{
         },
         "/public/namespaces/{namespace}/contacts/{name}": {
             "get": {
-                "summary": "Contact",
+                "summary": "Get Contact",
                 "description": "Retrieves existing customer's contact details, including address and phone number.",
                 "operationId": "ves.io.schema.contact.API.Get",
                 "responses": {
@@ -2095,7 +2086,7 @@ var APISwaggerJSON string = `{
                 "x-ves-proto-rpc": "ves.io.schema.contact.API.Get"
             },
             "delete": {
-                "summary": "Delete",
+                "summary": "Delete Contact",
                 "description": "Delete the specified contact",
                 "operationId": "ves.io.schema.contact.API.Delete",
                 "responses": {

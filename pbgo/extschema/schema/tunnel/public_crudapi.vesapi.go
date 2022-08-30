@@ -1595,16 +1595,7 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 		item.Disabled = o.GetMetadata().GetDisable()
 
 		if len(req.ReportFields) > 0 {
-			noDBForm, _ := flags.GetEnvGetRspNoDBForm()
-			if !noDBForm {
-				item.Object = o.Object
-				sf.Logger().Alert(svcfw.GetResponseInDBForm,
-					log.MinorAlert,
-					zap.String("user", server.UserFromContext(ctx)),
-					zap.String("useragent", server.UseragentStrFromContext(ctx)),
-					zap.String("operation", "List"),
-				)
-			}
+			item.Object = o.Object
 
 			item.Metadata = &ves_io_schema.ObjectGetMetaType{}
 			item.Metadata.FromObjectMetaType(o.Metadata)
@@ -1683,7 +1674,7 @@ var APISwaggerJSON string = `{
     "paths": {
         "/public/namespaces/{metadata.namespace}/tunnels": {
             "post": {
-                "summary": "Create tunnel",
+                "summary": "Create Tunnel",
                 "description": "Create tunnel in a given namespace. If one already exist it will give a error.",
                 "operationId": "ves.io.schema.tunnel.API.Create",
                 "responses": {
@@ -1775,7 +1766,7 @@ var APISwaggerJSON string = `{
         },
         "/public/namespaces/{metadata.namespace}/tunnels/{metadata.name}": {
             "put": {
-                "summary": "Replace tunnel",
+                "summary": "Replace Tunnel",
                 "description": "Replace tunnel in a given namespace.",
                 "operationId": "ves.io.schema.tunnel.API.Replace",
                 "responses": {
@@ -1875,7 +1866,7 @@ var APISwaggerJSON string = `{
         },
         "/public/namespaces/{namespace}/tunnels": {
             "get": {
-                "summary": "List",
+                "summary": "List Tunnel",
                 "description": "List the set of tunnel in a namespace",
                 "operationId": "ves.io.schema.tunnel.API.List",
                 "responses": {
@@ -1991,7 +1982,7 @@ var APISwaggerJSON string = `{
         },
         "/public/namespaces/{namespace}/tunnels/{name}": {
             "get": {
-                "summary": "Get tunnel",
+                "summary": "Get Tunnel",
                 "description": "Get Tunnel in a given namespace.",
                 "operationId": "ves.io.schema.tunnel.API.Get",
                 "responses": {
@@ -2095,7 +2086,7 @@ var APISwaggerJSON string = `{
                 "x-ves-proto-rpc": "ves.io.schema.tunnel.API.Get"
             },
             "delete": {
-                "summary": "Delete",
+                "summary": "Delete Tunnel",
                 "description": "Delete the specified tunnel",
                 "operationId": "ves.io.schema.tunnel.API.Delete",
                 "responses": {

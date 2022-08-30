@@ -164,7 +164,8 @@ func (c *CustomAPIRestClient) doRPCGet(ctx context.Context, callOpts *server.Cus
 	}
 	defer rsp.Body.Close()
 
-	if rsp.StatusCode != http.StatusOK {
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
 		body, err := ioutil.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
 	}
@@ -175,7 +176,7 @@ func (c *CustomAPIRestClient) doRPCGet(ctx context.Context, callOpts *server.Cus
 	}
 	pbRsp := &GetResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
-		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.views.terraform_parameters.GetResponse", body)
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.views.terraform_parameters.GetResponse", body)
 
 	}
 	if callOpts.OutCallResponse != nil {
@@ -248,7 +249,8 @@ func (c *CustomAPIRestClient) doRPCGetStatus(ctx context.Context, callOpts *serv
 	}
 	defer rsp.Body.Close()
 
-	if rsp.StatusCode != http.StatusOK {
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
 		body, err := ioutil.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
 	}
@@ -259,7 +261,7 @@ func (c *CustomAPIRestClient) doRPCGetStatus(ctx context.Context, callOpts *serv
 	}
 	pbRsp := &GetStatusResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
-		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.views.terraform_parameters.GetStatusResponse", body)
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.views.terraform_parameters.GetStatusResponse", body)
 
 	}
 	if callOpts.OutCallResponse != nil {
@@ -461,7 +463,7 @@ var CustomAPISwaggerJSON string = `{
     "paths": {
         "/public/namespaces/{namespace}/terraform_parameters/{view_kind}/{view_name}": {
             "get": {
-                "summary": "Get Terraform Parameters for a View",
+                "summary": "Get Terraform Parameters for view",
                 "description": "returned from list of terraform parameter objects for a given view.",
                 "operationId": "ves.io.schema.views.terraform_parameters.CustomAPI.Get",
                 "responses": {
@@ -561,7 +563,7 @@ var CustomAPISwaggerJSON string = `{
         },
         "/public/namespaces/{namespace}/terraform_parameters/{view_kind}/{view_name}/status": {
             "get": {
-                "summary": "Get Status of Terraform for a View",
+                "summary": "Get Status of Terraform for view",
                 "description": "returned from list of terraform parameter status objects for a given view.",
                 "operationId": "ves.io.schema.views.terraform_parameters.CustomAPI.GetStatus",
                 "responses": {

@@ -1350,16 +1350,7 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 		item.Disabled = o.GetMetadata().GetDisable()
 
 		if len(req.ReportFields) > 0 {
-			noDBForm, _ := flags.GetEnvGetRspNoDBForm()
-			if !noDBForm {
-				item.Object = o.Object
-				sf.Logger().Alert(svcfw.GetResponseInDBForm,
-					log.MinorAlert,
-					zap.String("user", server.UserFromContext(ctx)),
-					zap.String("useragent", server.UseragentStrFromContext(ctx)),
-					zap.String("operation", "List"),
-				)
-			}
+			item.Object = o.Object
 
 			item.Metadata = &ves_io_schema.ObjectGetMetaType{}
 			item.Metadata.FromObjectMetaType(o.Metadata)
@@ -1526,7 +1517,7 @@ var APISwaggerJSON string = `{
         },
         "/public/namespaces/{namespace}/address_allocators": {
             "get": {
-                "summary": "List",
+                "summary": "List Address Allocator",
                 "description": "List the set of address_allocator in a namespace",
                 "operationId": "ves.io.schema.address_allocator.API.List",
                 "responses": {
@@ -1737,7 +1728,7 @@ var APISwaggerJSON string = `{
                 "x-ves-proto-rpc": "ves.io.schema.address_allocator.API.Get"
             },
             "delete": {
-                "summary": "Delete",
+                "summary": "Delete Address Allocator",
                 "description": "Delete the specified address_allocator",
                 "operationId": "ves.io.schema.address_allocator.API.Delete",
                 "responses": {

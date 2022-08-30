@@ -1595,16 +1595,7 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 		item.Disabled = o.GetMetadata().GetDisable()
 
 		if len(req.ReportFields) > 0 {
-			noDBForm, _ := flags.GetEnvGetRspNoDBForm()
-			if !noDBForm {
-				item.Object = o.Object
-				sf.Logger().Alert(svcfw.GetResponseInDBForm,
-					log.MinorAlert,
-					zap.String("user", server.UserFromContext(ctx)),
-					zap.String("useragent", server.UseragentStrFromContext(ctx)),
-					zap.String("operation", "List"),
-				)
-			}
+			item.Object = o.Object
 
 			item.Metadata = &ves_io_schema.ObjectGetMetaType{}
 			item.Metadata.FromObjectMetaType(o.Metadata)
@@ -1775,7 +1766,7 @@ var APISwaggerJSON string = `{
         },
         "/public/namespaces/{metadata.namespace}/fleets/{metadata.name}": {
             "put": {
-                "summary": "Replace fleet",
+                "summary": "Replace Fleet",
                 "description": "Replace fleet will replace the contents of given fleet object",
                 "operationId": "ves.io.schema.fleet.API.Replace",
                 "responses": {
@@ -1875,7 +1866,7 @@ var APISwaggerJSON string = `{
         },
         "/public/namespaces/{namespace}/fleets": {
             "get": {
-                "summary": "List",
+                "summary": "List Fleet",
                 "description": "List the set of fleet in a namespace",
                 "operationId": "ves.io.schema.fleet.API.List",
                 "responses": {
@@ -1991,7 +1982,7 @@ var APISwaggerJSON string = `{
         },
         "/public/namespaces/{namespace}/fleets/{name}": {
             "get": {
-                "summary": "Get fleet",
+                "summary": "Get Fleet",
                 "description": "Get fleet will get fleet object from system namespace",
                 "operationId": "ves.io.schema.fleet.API.Get",
                 "responses": {
@@ -2095,7 +2086,7 @@ var APISwaggerJSON string = `{
                 "x-ves-proto-rpc": "ves.io.schema.fleet.API.Get"
             },
             "delete": {
-                "summary": "Delete",
+                "summary": "Delete Fleet",
                 "description": "Delete the specified fleet",
                 "operationId": "ves.io.schema.fleet.API.Delete",
                 "responses": {
@@ -2329,6 +2320,16 @@ var APISwaggerJSON string = `{
                     "description": "x-displayName: \"Metadata\"\nx-required\nCommon attributes for the peer including name and description.",
                     "title": "metadata",
                     "$ref": "#/definitions/schemaMessageMetaType"
+                },
+                "passive_mode_disabled": {
+                    "description": "x-displayName: \"Disabled\"",
+                    "title": "passive_mode_disabled",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "passive_mode_enabled": {
+                    "description": "x-displayName: \"Enabled\"",
+                    "title": "passive_mode_enabled",
+                    "$ref": "#/definitions/ioschemaEmpty"
                 },
                 "target_service": {
                     "type": "string",
@@ -3657,28 +3658,6 @@ var APISwaggerJSON string = `{
                     "title": "uid",
                     "x-displayname": "UID",
                     "x-ves-example": "d27938ba-967e-40a7-9709-57b8627f9f75"
-                }
-            }
-        },
-        "fleetLocalControlPlaneType": {
-            "type": "object",
-            "description": "x-displayName: \"Local Control Plane\"\nEnable local control plane for L3VPN, SRV6, EVPN etc",
-            "title": "Local Control Plane",
-            "properties": {
-                "bgp_config": {
-                    "description": "x-displayName: \"BGP Configuration\"\nBGP configuration for local control plane",
-                    "title": "BGP configuration",
-                    "$ref": "#/definitions/fleetBGPConfiguration"
-                },
-                "inside_vn": {
-                    "description": "x-displayName: \"Inside Network\"\nLocal control plane will work on inside network",
-                    "title": "Inside Network",
-                    "$ref": "#/definitions/ioschemaEmpty"
-                },
-                "outside_vn": {
-                    "description": "x-displayName: \"Outside Network\"\nLocal control plane will work on outside network",
-                    "title": "Outside Network",
-                    "$ref": "#/definitions/ioschemaEmpty"
                 }
             }
         },
@@ -5204,9 +5183,7 @@ var APISwaggerJSON string = `{
             "enum": [
                 "NEXT_HOP_DEFAULT_GATEWAY",
                 "NEXT_HOP_USE_CONFIGURED",
-                "NEXT_HOP_NETWORK_INTERFACE",
-                "NEXT_HOP_DISCARD",
-                "NEXT_HOP_SNAT_TO_PUBLIC"
+                "NEXT_HOP_NETWORK_INTERFACE"
             ],
             "default": "NEXT_HOP_DEFAULT_GATEWAY",
             "x-displayname": "Nexthop Types",
@@ -6196,6 +6173,11 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "No Storage Static Routes"
                 },
+                "offline_survivability_mode": {
+                    "description": " Enable/Disable offline survivability mode",
+                    "$ref": "#/definitions/viewsOfflineSurvivabilityModeType",
+                    "x-displayname": "Offline Survivability Mode"
+                },
                 "operating_system_version": {
                     "type": "string",
                     "description": " Desired Operating System version that is applied to all sites that are member of the fleet.\n Current Operating System version can be overridden via site config.\n\nExample: - \"value\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 256\n",
@@ -6445,6 +6427,11 @@ var APISwaggerJSON string = `{
                     "description": "Exclusive with [storage_static_routes]\n This fleet does not have any storage static routes",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "No Storage Static Routes"
+                },
+                "offline_survivability_mode": {
+                    "description": " Enable/Disable offline survivability mode",
+                    "$ref": "#/definitions/viewsOfflineSurvivabilityModeType",
+                    "x-displayname": "Offline Survivability Mode"
                 },
                 "operating_system_version": {
                     "type": "string",
@@ -6740,6 +6727,12 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "No Storage Static Routes"
                 },
+                "offline_survivability_mode": {
+                    "description": " Enable/Disable offline survivability mode",
+                    "title": "Offline Survivability Mode",
+                    "$ref": "#/definitions/viewsOfflineSurvivabilityModeType",
+                    "x-displayname": "Offline Survivability Mode"
+                },
                 "operating_system_version": {
                     "type": "string",
                     "description": " Desired Operating System version that is applied to all sites that are member of the fleet.\n Current Operating System version can be overridden via site config.\n\nExample: - \"value\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 256\n",
@@ -6804,6 +6797,28 @@ var APISwaggerJSON string = `{
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.string.max_len": "256"
                     }
+                }
+            }
+        },
+        "schemafleetLocalControlPlaneType": {
+            "type": "object",
+            "description": "x-displayName: \"Local Control Plane\"\nEnable local control plane for L3VPN, SRV6, EVPN etc",
+            "title": "Local Control Plane",
+            "properties": {
+                "bgp_config": {
+                    "description": "x-displayName: \"BGP Configuration\"\nBGP configuration for local control plane",
+                    "title": "BGP configuration",
+                    "$ref": "#/definitions/fleetBGPConfiguration"
+                },
+                "inside_vn": {
+                    "description": "x-displayName: \"Inside Network\"\nLocal control plane will work on inside network",
+                    "title": "Inside Network",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "outside_vn": {
+                    "description": "x-displayName: \"Outside Network\"\nLocal control plane will work on outside network",
+                    "title": "Outside Network",
+                    "$ref": "#/definitions/ioschemaEmpty"
                 }
             }
         },
@@ -7089,6 +7104,28 @@ var APISwaggerJSON string = `{
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.string.max_bytes": "64"
                     }
+                }
+            }
+        },
+        "viewsOfflineSurvivabilityModeType": {
+            "type": "object",
+            "description": "Offline Survivability Mode",
+            "title": "Offline Survivability Mode",
+            "x-displayname": "Offline Survivability Mode Type",
+            "x-ves-oneof-field-offline_survivability_mode_choice": "[\"enable_offline_survivability_mode\",\"no_offline_survivability_mode\"]",
+            "x-ves-proto-message": "ves.io.schema.views.OfflineSurvivabilityModeType",
+            "properties": {
+                "enable_offline_survivability_mode": {
+                    "description": "Exclusive with [no_offline_survivability_mode]\n Enable Offline Survivability Mode.\n When it is enabled, a CE can work without internet connection for upto 3 days.\n This can only be enabled at site creation time. But once enabled, offline survivability mode cannot be disabled later.\n Enabling offline survivability reduces default security of a CE.",
+                    "title": "Enable Offline Survivability Mode",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Enable Offline Survivability Mode"
+                },
+                "no_offline_survivability_mode": {
+                    "description": "Exclusive with [enable_offline_survivability_mode]\n Disable Offline Survivability Mode",
+                    "title": "Disable Offline Survivability Mode",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disable Offline Survivability Mode"
                 }
             }
         },

@@ -1595,16 +1595,7 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 		item.Disabled = o.GetMetadata().GetDisable()
 
 		if len(req.ReportFields) > 0 {
-			noDBForm, _ := flags.GetEnvGetRspNoDBForm()
-			if !noDBForm {
-				item.Object = o.Object
-				sf.Logger().Alert(svcfw.GetResponseInDBForm,
-					log.MinorAlert,
-					zap.String("user", server.UserFromContext(ctx)),
-					zap.String("useragent", server.UseragentStrFromContext(ctx)),
-					zap.String("operation", "List"),
-				)
-			}
+			item.Object = o.Object
 
 			item.Metadata = &ves_io_schema.ObjectGetMetaType{}
 			item.Metadata.FromObjectMetaType(o.Metadata)
@@ -1683,7 +1674,7 @@ var APISwaggerJSON string = `{
     "paths": {
         "/public/namespaces/{metadata.namespace}/virtual_sites": {
             "post": {
-                "summary": "CreateSpecType",
+                "summary": "Create Virtual Site",
                 "description": "Create a virtual site object in given namespace",
                 "operationId": "ves.io.schema.virtual_site.API.Create",
                 "responses": {
@@ -1775,7 +1766,7 @@ var APISwaggerJSON string = `{
         },
         "/public/namespaces/{metadata.namespace}/virtual_sites/{metadata.name}": {
             "put": {
-                "summary": "Replace virtual site",
+                "summary": "Replace Virtual Site",
                 "description": "Replace a given virtual site object in a given namespace",
                 "operationId": "ves.io.schema.virtual_site.API.Replace",
                 "responses": {
@@ -1875,7 +1866,7 @@ var APISwaggerJSON string = `{
         },
         "/public/namespaces/{namespace}/virtual_sites": {
             "get": {
-                "summary": "List",
+                "summary": "List Virtual Site",
                 "description": "List the set of virtual_site in a namespace",
                 "operationId": "ves.io.schema.virtual_site.API.List",
                 "responses": {
@@ -1991,7 +1982,7 @@ var APISwaggerJSON string = `{
         },
         "/public/namespaces/{namespace}/virtual_sites/{name}": {
             "get": {
-                "summary": "Get virtual site",
+                "summary": "Get Virtual Site",
                 "description": "Get a virtual site object in given namespace",
                 "operationId": "ves.io.schema.virtual_site.API.Get",
                 "responses": {
@@ -2095,7 +2086,7 @@ var APISwaggerJSON string = `{
                 "x-ves-proto-rpc": "ves.io.schema.virtual_site.API.Get"
             },
             "delete": {
-                "summary": "Delete",
+                "summary": "Delete Virtual Site",
                 "description": "Delete the specified virtual_site",
                 "operationId": "ves.io.schema.virtual_site.API.Delete",
                 "responses": {

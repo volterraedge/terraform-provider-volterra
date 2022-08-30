@@ -1446,16 +1446,7 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 		item.Disabled = o.GetMetadata().GetDisable()
 
 		if len(req.ReportFields) > 0 {
-			noDBForm, _ := flags.GetEnvGetRspNoDBForm()
-			if !noDBForm {
-				item.Object = o.Object
-				sf.Logger().Alert(svcfw.GetResponseInDBForm,
-					log.MinorAlert,
-					zap.String("user", server.UserFromContext(ctx)),
-					zap.String("useragent", server.UseragentStrFromContext(ctx)),
-					zap.String("operation", "List"),
-				)
-			}
+			item.Object = o.Object
 
 			item.Metadata = &ves_io_schema.ObjectGetMetaType{}
 			item.Metadata.FromObjectMetaType(o.Metadata)
@@ -1534,7 +1525,7 @@ var APISwaggerJSON string = `{
     "paths": {
         "/public/namespaces": {
             "get": {
-                "summary": "List",
+                "summary": "List Namespace",
                 "description": "List the set of namespace in a namespace",
                 "operationId": "ves.io.schema.namespace.API.List",
                 "responses": {
@@ -1645,7 +1636,7 @@ var APISwaggerJSON string = `{
                 "x-ves-proto-rpc": "ves.io.schema.namespace.API.List"
             },
             "post": {
-                "summary": "Create namespace",
+                "summary": "Create Namespace",
                 "description": "Creates a new namespace. Name of the object is name of the name space.",
                 "operationId": "ves.io.schema.namespace.API.Create",
                 "responses": {
@@ -1729,7 +1720,7 @@ var APISwaggerJSON string = `{
         },
         "/public/namespaces/{metadata.name}": {
             "put": {
-                "summary": "Replace namespace",
+                "summary": "Replace Namespace",
                 "description": "Replaces attributes of a namespace including its metadata like labels, description etc.",
                 "operationId": "ves.io.schema.namespace.API.Replace",
                 "responses": {
@@ -1821,7 +1812,7 @@ var APISwaggerJSON string = `{
         },
         "/public/namespaces/{name}": {
             "get": {
-                "summary": "Get namespace",
+                "summary": "Get Namespace",
                 "description": "This is the read representation of the namespace object.",
                 "operationId": "ves.io.schema.namespace.API.Get",
                 "responses": {

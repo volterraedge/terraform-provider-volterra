@@ -1595,16 +1595,7 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 		item.Disabled = o.GetMetadata().GetDisable()
 
 		if len(req.ReportFields) > 0 {
-			noDBForm, _ := flags.GetEnvGetRspNoDBForm()
-			if !noDBForm {
-				item.Object = o.Object
-				sf.Logger().Alert(svcfw.GetResponseInDBForm,
-					log.MinorAlert,
-					zap.String("user", server.UserFromContext(ctx)),
-					zap.String("useragent", server.UseragentStrFromContext(ctx)),
-					zap.String("operation", "List"),
-				)
-			}
+			item.Object = o.Object
 
 			item.Metadata = &ves_io_schema.ObjectGetMetaType{}
 			item.Metadata.FromObjectMetaType(o.Metadata)
@@ -1683,7 +1674,7 @@ var APISwaggerJSON string = `{
     "paths": {
         "/public/namespaces/{metadata.namespace}/tokens": {
             "post": {
-                "summary": "Create token",
+                "summary": "Create Token",
                 "description": "Creates new token. token object is used to manage site admission. User must generate token before provisioning and pass this\ntoken to site during it's registration.",
                 "operationId": "ves.io.schema.token.API.Create",
                 "responses": {
@@ -1775,7 +1766,7 @@ var APISwaggerJSON string = `{
         },
         "/public/namespaces/{metadata.namespace}/tokens/{metadata.name}": {
             "put": {
-                "summary": "Replace token",
+                "summary": "Replace Token",
                 "description": "Replaces token. token object is used to manage site admission. User must generate token before provisioning and pass this\ntoken to site during it's registration.",
                 "operationId": "ves.io.schema.token.API.Replace",
                 "responses": {
@@ -1875,7 +1866,7 @@ var APISwaggerJSON string = `{
         },
         "/public/namespaces/{namespace}/tokens": {
             "get": {
-                "summary": "List",
+                "summary": "List Token",
                 "description": "List the set of token in a namespace",
                 "operationId": "ves.io.schema.token.API.List",
                 "responses": {
@@ -1991,7 +1982,7 @@ var APISwaggerJSON string = `{
         },
         "/public/namespaces/{namespace}/tokens/{name}": {
             "get": {
-                "summary": "Get token",
+                "summary": "Get Token",
                 "description": "Get token. token object is used to manage site admission. User must generate token before provisioning and pass this\ntoken to site during it's registration.",
                 "operationId": "ves.io.schema.token.API.Get",
                 "responses": {
@@ -2095,7 +2086,7 @@ var APISwaggerJSON string = `{
                 "x-ves-proto-rpc": "ves.io.schema.token.API.Get"
             },
             "delete": {
-                "summary": "Delete",
+                "summary": "Delete Token",
                 "description": "Delete the specified token",
                 "operationId": "ves.io.schema.token.API.Delete",
                 "responses": {

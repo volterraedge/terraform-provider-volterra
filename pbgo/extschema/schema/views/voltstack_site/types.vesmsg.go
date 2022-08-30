@@ -879,10 +879,28 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["offline_survivability_mode"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("offline_survivability_mode"))
+		if err := fv(ctx, m.GetOfflineSurvivabilityMode(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["os"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("os"))
 		if err := fv(ctx, m.GetOs(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["site_local_control_plane"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("site_local_control_plane"))
+		if err := fv(ctx, m.GetSiteLocalControlPlane(), vOpts...); err != nil {
 			return err
 		}
 
@@ -1199,6 +1217,10 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	v.FldValidators["sw"] = ves_io_schema_views.VolterraSoftwareTypeValidator().Validate
 
 	v.FldValidators["os"] = ves_io_schema_views.OperatingSystemTypeValidator().Validate
+
+	v.FldValidators["site_local_control_plane"] = ves_io_schema_views.LocalControlPlaneTypeValidator().Validate
+
+	v.FldValidators["offline_survivability_mode"] = ves_io_schema_views.OfflineSurvivabilityModeTypeValidator().Validate
 
 	return v
 }()
@@ -2075,10 +2097,28 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 
 	}
 
+	if fv, exists := v.FldValidators["offline_survivability_mode"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("offline_survivability_mode"))
+		if err := fv(ctx, m.GetOfflineSurvivabilityMode(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["operating_system_version"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("operating_system_version"))
 		if err := fv(ctx, m.GetOperatingSystemVersion(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["site_local_control_plane"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("site_local_control_plane"))
+		if err := fv(ctx, m.GetSiteLocalControlPlane(), vOpts...); err != nil {
 			return err
 		}
 
@@ -2422,6 +2462,10 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v.FldValidators["usb_policy_choice.usb_policy"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	v.FldValidators["coordinates"] = ves_io_schema_site.CoordinatesValidator().Validate
+
+	v.FldValidators["site_local_control_plane"] = ves_io_schema_views.LocalControlPlaneTypeValidator().Validate
+
+	v.FldValidators["offline_survivability_mode"] = ves_io_schema_views.OfflineSurvivabilityModeTypeValidator().Validate
 
 	return v
 }()
@@ -3471,6 +3515,46 @@ func (v *ValidateGlobalSpecType) AddressValidationRuleHandler(rules map[string]s
 	return validatorFn, nil
 }
 
+func (v *ValidateGlobalSpecType) IpfabricMeshGroupValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_site.ReMeshGroup, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := ves_io_schema_site.ReMeshGroupValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for ipfabric_mesh_group")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema_site.ReMeshGroup)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema_site.ReMeshGroup, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated ipfabric_mesh_group")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items ipfabric_mesh_group")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*GlobalSpecType)
 	if !ok {
@@ -3618,6 +3702,14 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
 			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["ipfabric_mesh_group"]; exists {
+		vOpts := append(opts, db.WithValidateField("ipfabric_mesh_group"))
+		if err := fv(ctx, m.GetIpfabricMeshGroup(), vOpts...); err != nil {
+			return err
 		}
 
 	}
@@ -3773,6 +3865,15 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["offline_survivability_mode"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("offline_survivability_mode"))
+		if err := fv(ctx, m.GetOfflineSurvivabilityMode(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["operating_system_version"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("operating_system_version"))
@@ -3786,6 +3887,15 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 		vOpts := append(opts, db.WithValidateField("os"))
 		if err := fv(ctx, m.GetOs(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["site_local_control_plane"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("site_local_control_plane"))
+		if err := fv(ctx, m.GetSiteLocalControlPlane(), vOpts...); err != nil {
 			return err
 		}
 
@@ -4119,6 +4229,17 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	}
 	v.FldValidators["address"] = vFn
 
+	vrhIpfabricMeshGroup := v.IpfabricMeshGroupValidationRuleHandler
+	rulesIpfabricMeshGroup := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "1",
+	}
+	vFn, err = vrhIpfabricMeshGroup(rulesIpfabricMeshGroup)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.ipfabric_mesh_group: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["ipfabric_mesh_group"] = vFn
+
 	v.FldValidators["blocked_services_choice.blocked_services"] = ves_io_schema_fleet.BlockedServicesListTypeValidator().Validate
 
 	v.FldValidators["bond_choice.bond_device_list"] = ves_io_schema_fleet.FleetBondDevicesListTypeValidator().Validate
@@ -4142,6 +4263,10 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v.FldValidators["sw"] = ves_io_schema_views.VolterraSoftwareTypeValidator().Validate
 
 	v.FldValidators["os"] = ves_io_schema_views.OperatingSystemTypeValidator().Validate
+
+	v.FldValidators["site_local_control_plane"] = ves_io_schema_views.LocalControlPlaneTypeValidator().Validate
+
+	v.FldValidators["offline_survivability_mode"] = ves_io_schema_views.OfflineSurvivabilityModeTypeValidator().Validate
 
 	v.FldValidators["view_internal"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
@@ -5445,6 +5570,15 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 
 	}
 
+	if fv, exists := v.FldValidators["site_local_control_plane"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("site_local_control_plane"))
+		if err := fv(ctx, m.GetSiteLocalControlPlane(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["storage_cfg_choice"]; exists {
 		val := m.GetStorageCfgChoice()
 		vOpts := append(opts,
@@ -5743,6 +5877,8 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	v.FldValidators["usb_policy_choice.usb_policy"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	v.FldValidators["coordinates"] = ves_io_schema_site.CoordinatesValidator().Validate
+
+	v.FldValidators["site_local_control_plane"] = ves_io_schema_views.LocalControlPlaneTypeValidator().Validate
 
 	return v
 }()
@@ -8474,7 +8610,9 @@ func (m *CreateSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool
 	m.GetLogsReceiverChoiceFromGlobalSpecType(f)
 	m.MasterNodes = f.GetMasterNodes()
 	m.GetNetworkCfgChoiceFromGlobalSpecType(f)
+	m.OfflineSurvivabilityMode = f.GetOfflineSurvivabilityMode()
 	m.Os = f.GetOs()
+	m.SiteLocalControlPlane = f.GetSiteLocalControlPlane()
 	m.GetStorageCfgChoiceFromGlobalSpecType(f)
 	m.Sw = f.GetSw()
 	m.GetUsbPolicyChoiceFromGlobalSpecType(f)
@@ -8508,7 +8646,9 @@ func (m *CreateSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) 
 	m1.SetLogsReceiverChoiceToGlobalSpecType(f)
 	f.MasterNodes = m1.MasterNodes
 	m1.SetNetworkCfgChoiceToGlobalSpecType(f)
+	f.OfflineSurvivabilityMode = m1.OfflineSurvivabilityMode
 	f.Os = m1.Os
+	f.SiteLocalControlPlane = m1.SiteLocalControlPlane
 	m1.SetStorageCfgChoiceToGlobalSpecType(f)
 	f.Sw = m1.Sw
 	m1.SetUsbPolicyChoiceToGlobalSpecType(f)
@@ -8901,7 +9041,9 @@ func (m *GetSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	m.GetLogsReceiverChoiceFromGlobalSpecType(f)
 	m.MasterNodes = f.GetMasterNodes()
 	m.GetNetworkCfgChoiceFromGlobalSpecType(f)
+	m.OfflineSurvivabilityMode = f.GetOfflineSurvivabilityMode()
 	m.OperatingSystemVersion = f.GetOperatingSystemVersion()
+	m.SiteLocalControlPlane = f.GetSiteLocalControlPlane()
 
 	m.GetStorageCfgChoiceFromGlobalSpecType(f)
 	m.GetUsbPolicyChoiceFromGlobalSpecType(f)
@@ -8936,7 +9078,9 @@ func (m *GetSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	m1.SetLogsReceiverChoiceToGlobalSpecType(f)
 	f.MasterNodes = m1.MasterNodes
 	m1.SetNetworkCfgChoiceToGlobalSpecType(f)
+	f.OfflineSurvivabilityMode = m1.OfflineSurvivabilityMode
 	f.OperatingSystemVersion = m1.OperatingSystemVersion
+	f.SiteLocalControlPlane = m1.SiteLocalControlPlane
 
 	m1.SetStorageCfgChoiceToGlobalSpecType(f)
 	m1.SetUsbPolicyChoiceToGlobalSpecType(f)
@@ -9330,6 +9474,7 @@ func (m *ReplaceSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy boo
 	m.GetLogsReceiverChoiceFromGlobalSpecType(f)
 	m.MasterNodes = f.GetMasterNodes()
 	m.GetNetworkCfgChoiceFromGlobalSpecType(f)
+	m.SiteLocalControlPlane = f.GetSiteLocalControlPlane()
 	m.GetStorageCfgChoiceFromGlobalSpecType(f)
 	m.GetUsbPolicyChoiceFromGlobalSpecType(f)
 	m.GetVmChoiceFromGlobalSpecType(f)
@@ -9362,6 +9507,7 @@ func (m *ReplaceSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool)
 	m1.SetLogsReceiverChoiceToGlobalSpecType(f)
 	f.MasterNodes = m1.MasterNodes
 	m1.SetNetworkCfgChoiceToGlobalSpecType(f)
+	f.SiteLocalControlPlane = m1.SiteLocalControlPlane
 	m1.SetStorageCfgChoiceToGlobalSpecType(f)
 	m1.SetUsbPolicyChoiceToGlobalSpecType(f)
 	m1.SetVmChoiceToGlobalSpecType(f)

@@ -1595,16 +1595,7 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 		item.Disabled = o.GetMetadata().GetDisable()
 
 		if len(req.ReportFields) > 0 {
-			noDBForm, _ := flags.GetEnvGetRspNoDBForm()
-			if !noDBForm {
-				item.Object = o.Object
-				sf.Logger().Alert(svcfw.GetResponseInDBForm,
-					log.MinorAlert,
-					zap.String("user", server.UserFromContext(ctx)),
-					zap.String("useragent", server.UseragentStrFromContext(ctx)),
-					zap.String("operation", "List"),
-				)
-			}
+			item.Object = o.Object
 
 			item.Metadata = &ves_io_schema.ObjectGetMetaType{}
 			item.Metadata.FromObjectMetaType(o.Metadata)
@@ -1683,7 +1674,7 @@ var APISwaggerJSON string = `{
     "paths": {
         "/public/namespaces/{metadata.namespace}/k8s_cluster_role_bindings": {
             "post": {
-                "summary": "Create k8s_cluster_role_binding",
+                "summary": "Create Configuration Specification",
                 "description": "Create k8s_cluster_role_binding will create the object in the storage backend for namespace metadata.namespace",
                 "operationId": "ves.io.schema.k8s_cluster_role_binding.API.Create",
                 "responses": {
@@ -1775,7 +1766,7 @@ var APISwaggerJSON string = `{
         },
         "/public/namespaces/{metadata.namespace}/k8s_cluster_role_bindings/{metadata.name}": {
             "put": {
-                "summary": "Replace k8s_cluster_role_binding",
+                "summary": "Replace Configuration Specification",
                 "description": "Replacing an k8s_cluster_role_binding object will update the object by replacing the existing spec with the provided one.\nFor read-then-write operations a resourceVersion mismatch will occur if the object was modified between the read and write",
                 "operationId": "ves.io.schema.k8s_cluster_role_binding.API.Replace",
                 "responses": {
@@ -1875,7 +1866,7 @@ var APISwaggerJSON string = `{
         },
         "/public/namespaces/{namespace}/k8s_cluster_role_bindings": {
             "get": {
-                "summary": "List",
+                "summary": "List K8s Cluster Role Binding",
                 "description": "List the set of k8s_cluster_role_binding in a namespace",
                 "operationId": "ves.io.schema.k8s_cluster_role_binding.API.List",
                 "responses": {
@@ -1991,7 +1982,7 @@ var APISwaggerJSON string = `{
         },
         "/public/namespaces/{namespace}/k8s_cluster_role_bindings/{name}": {
             "get": {
-                "summary": "Get k8s_cluster_role_binding",
+                "summary": "Get Configuration Specification",
                 "description": "Get k8s_cluster_role_binding will get the object from the storage backend for namespace metadata.namespace",
                 "operationId": "ves.io.schema.k8s_cluster_role_binding.API.Get",
                 "responses": {
@@ -2095,7 +2086,7 @@ var APISwaggerJSON string = `{
                 "x-ves-proto-rpc": "ves.io.schema.k8s_cluster_role_binding.API.Get"
             },
             "delete": {
-                "summary": "Delete",
+                "summary": "Delete K8s Cluster Role Binding",
                 "description": "Delete the specified k8s_cluster_role_binding",
                 "operationId": "ves.io.schema.k8s_cluster_role_binding.API.Delete",
                 "responses": {

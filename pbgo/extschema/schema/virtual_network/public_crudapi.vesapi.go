@@ -1595,16 +1595,7 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 		item.Disabled = o.GetMetadata().GetDisable()
 
 		if len(req.ReportFields) > 0 {
-			noDBForm, _ := flags.GetEnvGetRspNoDBForm()
-			if !noDBForm {
-				item.Object = o.Object
-				sf.Logger().Alert(svcfw.GetResponseInDBForm,
-					log.MinorAlert,
-					zap.String("user", server.UserFromContext(ctx)),
-					zap.String("useragent", server.UseragentStrFromContext(ctx)),
-					zap.String("operation", "List"),
-				)
-			}
+			item.Object = o.Object
 
 			item.Metadata = &ves_io_schema.ObjectGetMetaType{}
 			item.Metadata.FromObjectMetaType(o.Metadata)
@@ -1683,7 +1674,7 @@ var APISwaggerJSON string = `{
     "paths": {
         "/public/namespaces/{metadata.namespace}/virtual_networks": {
             "post": {
-                "summary": "Create virtual network",
+                "summary": "Create Virtual Network",
                 "description": "Create virtual network in given namespace",
                 "operationId": "ves.io.schema.virtual_network.API.Create",
                 "responses": {
@@ -1775,7 +1766,7 @@ var APISwaggerJSON string = `{
         },
         "/public/namespaces/{metadata.namespace}/virtual_networks/{metadata.name}": {
             "put": {
-                "summary": "Replace virtual network",
+                "summary": "Replace Virtual Network",
                 "description": "Replace given virtual network in given namespace",
                 "operationId": "ves.io.schema.virtual_network.API.Replace",
                 "responses": {
@@ -1875,7 +1866,7 @@ var APISwaggerJSON string = `{
         },
         "/public/namespaces/{namespace}/virtual_networks": {
             "get": {
-                "summary": "List",
+                "summary": "List Virtual Network",
                 "description": "List the set of virtual_network in a namespace",
                 "operationId": "ves.io.schema.virtual_network.API.List",
                 "responses": {
@@ -1991,7 +1982,7 @@ var APISwaggerJSON string = `{
         },
         "/public/namespaces/{namespace}/virtual_networks/{name}": {
             "get": {
-                "summary": "Get virtual network",
+                "summary": "Get Virtual Network",
                 "description": "Gets virtual network in given namespace",
                 "operationId": "ves.io.schema.virtual_network.API.Get",
                 "responses": {
@@ -2095,7 +2086,7 @@ var APISwaggerJSON string = `{
                 "x-ves-proto-rpc": "ves.io.schema.virtual_network.API.Get"
             },
             "delete": {
-                "summary": "Delete",
+                "summary": "Delete Virtual Network",
                 "description": "Delete the specified virtual_network",
                 "operationId": "ves.io.schema.virtual_network.API.Delete",
                 "responses": {
@@ -2599,9 +2590,7 @@ var APISwaggerJSON string = `{
             "enum": [
                 "NEXT_HOP_DEFAULT_GATEWAY",
                 "NEXT_HOP_USE_CONFIGURED",
-                "NEXT_HOP_NETWORK_INTERFACE",
-                "NEXT_HOP_DISCARD",
-                "NEXT_HOP_SNAT_TO_PUBLIC"
+                "NEXT_HOP_NETWORK_INTERFACE"
             ],
             "default": "NEXT_HOP_DEFAULT_GATEWAY",
             "x-displayname": "Nexthop Types",
@@ -3537,15 +3526,15 @@ var APISwaggerJSON string = `{
                 },
                 "static_routes": {
                     "type": "array",
-                    "description": " List of static routes on the virtual network\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 16\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " List of static routes on the virtual network\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 165\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "static_routes",
-                    "maxItems": 16,
+                    "maxItems": 165,
                     "items": {
                         "$ref": "#/definitions/virtual_networkStaticRouteViewType"
                     },
                     "x-displayname": "Static Routes",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.repeated.max_items": "16",
+                        "ves.io.schema.rules.repeated.max_items": "165",
                         "ves.io.schema.rules.repeated.unique": "true"
                     }
                 }
@@ -3706,15 +3695,15 @@ var APISwaggerJSON string = `{
                 },
                 "static_routes": {
                     "type": "array",
-                    "description": " List of static routes on the virtual network\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 16\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " List of static routes on the virtual network\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 165\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "static_routes",
-                    "maxItems": 16,
+                    "maxItems": 165,
                     "items": {
                         "$ref": "#/definitions/virtual_networkStaticRouteViewType"
                     },
                     "x-displayname": "Static Routes",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.repeated.max_items": "16",
+                        "ves.io.schema.rules.repeated.max_items": "165",
                         "ves.io.schema.rules.repeated.unique": "true"
                     }
                 }
@@ -3771,15 +3760,15 @@ var APISwaggerJSON string = `{
                 },
                 "static_routes": {
                     "type": "array",
-                    "description": " List of static routes on the virtual network\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 16\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " List of static routes on the virtual network\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 165\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "static_routes",
-                    "maxItems": 16,
+                    "maxItems": 165,
                     "items": {
                         "$ref": "#/definitions/schemaStaticRouteType"
                     },
                     "x-displayname": "Static Routes",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.repeated.max_items": "16",
+                        "ves.io.schema.rules.repeated.max_items": "165",
                         "ves.io.schema.rules.repeated.unique": "true"
                     }
                 },
@@ -4132,15 +4121,15 @@ var APISwaggerJSON string = `{
                 },
                 "static_routes": {
                     "type": "array",
-                    "description": " List of static routes on the virtual network\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 16\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " List of static routes on the virtual network\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 165\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "static_routes",
-                    "maxItems": 16,
+                    "maxItems": 165,
                     "items": {
                         "$ref": "#/definitions/virtual_networkStaticRouteViewType"
                     },
                     "x-displayname": "Static Routes",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.repeated.max_items": "16",
+                        "ves.io.schema.rules.repeated.max_items": "165",
                         "ves.io.schema.rules.repeated.unique": "true"
                     }
                 }

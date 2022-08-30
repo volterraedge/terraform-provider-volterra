@@ -1595,16 +1595,7 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 		item.Disabled = o.GetMetadata().GetDisable()
 
 		if len(req.ReportFields) > 0 {
-			noDBForm, _ := flags.GetEnvGetRspNoDBForm()
-			if !noDBForm {
-				item.Object = o.Object
-				sf.Logger().Alert(svcfw.GetResponseInDBForm,
-					log.MinorAlert,
-					zap.String("user", server.UserFromContext(ctx)),
-					zap.String("useragent", server.UseragentStrFromContext(ctx)),
-					zap.String("operation", "List"),
-				)
-			}
+			item.Object = o.Object
 
 			item.Metadata = &ves_io_schema.ObjectGetMetaType{}
 			item.Metadata.FromObjectMetaType(o.Metadata)
@@ -1683,7 +1674,7 @@ var APISwaggerJSON string = `{
     "paths": {
         "/public/namespaces/{metadata.namespace}/rate_limiters": {
             "post": {
-                "summary": "Create rate limiter",
+                "summary": "Create Rate Limiter",
                 "description": "Create rate_limiter creates a new object in the storage backend for metadata.namespace.",
                 "operationId": "ves.io.schema.rate_limiter.API.Create",
                 "responses": {
@@ -1775,7 +1766,7 @@ var APISwaggerJSON string = `{
         },
         "/public/namespaces/{metadata.namespace}/rate_limiters/{metadata.name}": {
             "put": {
-                "summary": "Replace rate limiter",
+                "summary": "Replace Rate Limiter",
                 "description": "Replace rate_limiter replaces an existing object in the storage backend for metadata.namespace.",
                 "operationId": "ves.io.schema.rate_limiter.API.Replace",
                 "responses": {
@@ -1875,7 +1866,7 @@ var APISwaggerJSON string = `{
         },
         "/public/namespaces/{namespace}/rate_limiters": {
             "get": {
-                "summary": "List",
+                "summary": "List Rate Limiter",
                 "description": "List the set of rate_limiter in a namespace",
                 "operationId": "ves.io.schema.rate_limiter.API.List",
                 "responses": {
@@ -1991,7 +1982,7 @@ var APISwaggerJSON string = `{
         },
         "/public/namespaces/{namespace}/rate_limiters/{name}": {
             "get": {
-                "summary": "Get rate limiter",
+                "summary": "Get Rate Limiter",
                 "description": "Get rate_limiter reads a given object from storage backend for metadata.namespace.",
                 "operationId": "ves.io.schema.rate_limiter.API.Get",
                 "responses": {
@@ -2095,7 +2086,7 @@ var APISwaggerJSON string = `{
                 "x-ves-proto-rpc": "ves.io.schema.rate_limiter.API.Get"
             },
             "delete": {
-                "summary": "Delete",
+                "summary": "Delete Rate Limiter",
                 "description": "Delete the specified rate_limiter",
                 "operationId": "ves.io.schema.rate_limiter.API.Delete",
                 "responses": {
@@ -2628,9 +2619,7 @@ var APISwaggerJSON string = `{
             "title": "RateLimitPeriodUnit",
             "enum": [
                 "SECOND",
-                "MINUTE",
-                "HOUR",
-                "DAY"
+                "MINUTE"
             ],
             "default": "SECOND",
             "x-displayname": "Rate Limit Period Unit",

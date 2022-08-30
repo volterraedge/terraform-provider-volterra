@@ -1595,16 +1595,7 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 		item.Disabled = o.GetMetadata().GetDisable()
 
 		if len(req.ReportFields) > 0 {
-			noDBForm, _ := flags.GetEnvGetRspNoDBForm()
-			if !noDBForm {
-				item.Object = o.Object
-				sf.Logger().Alert(svcfw.GetResponseInDBForm,
-					log.MinorAlert,
-					zap.String("user", server.UserFromContext(ctx)),
-					zap.String("useragent", server.UseragentStrFromContext(ctx)),
-					zap.String("operation", "List"),
-				)
-			}
+			item.Object = o.Object
 
 			item.Metadata = &ves_io_schema.ObjectGetMetaType{}
 			item.Metadata.FromObjectMetaType(o.Metadata)
@@ -1683,7 +1674,7 @@ var APISwaggerJSON string = `{
     "paths": {
         "/public/namespaces/{metadata.namespace}/fast_acl_rules": {
             "post": {
-                "summary": "Create Fast ACL rule",
+                "summary": "Create Fast ACL Rule",
                 "description": "Create a new Fast ACL rule, -fast_acl_rule- has specification to match source IP, source port and action to apply",
                 "operationId": "ves.io.schema.fast_acl_rule.API.Create",
                 "responses": {
@@ -1775,7 +1766,7 @@ var APISwaggerJSON string = `{
         },
         "/public/namespaces/{metadata.namespace}/fast_acl_rules/{metadata.name}": {
             "put": {
-                "summary": "Replace Fast ACL rule",
+                "summary": "Replace Fast ACL Rule",
                 "description": "Replace a given Fast ACL rule, -fast_acl_rule- has specification to match source IP, source port, protocol and action to apply",
                 "operationId": "ves.io.schema.fast_acl_rule.API.Replace",
                 "responses": {
@@ -1875,7 +1866,7 @@ var APISwaggerJSON string = `{
         },
         "/public/namespaces/{namespace}/fast_acl_rules": {
             "get": {
-                "summary": "List",
+                "summary": "List Fast ACL Rule",
                 "description": "List the set of fast_acl_rule in a namespace",
                 "operationId": "ves.io.schema.fast_acl_rule.API.List",
                 "responses": {
@@ -1991,7 +1982,7 @@ var APISwaggerJSON string = `{
         },
         "/public/namespaces/{namespace}/fast_acl_rules/{name}": {
             "get": {
-                "summary": "Get Fast ACL rule",
+                "summary": "Get Fast ACL Rule",
                 "description": "Get a Fast ACL rule",
                 "operationId": "ves.io.schema.fast_acl_rule.API.Get",
                 "responses": {
@@ -2095,7 +2086,7 @@ var APISwaggerJSON string = `{
                 "x-ves-proto-rpc": "ves.io.schema.fast_acl_rule.API.Get"
             },
             "delete": {
-                "summary": "Delete",
+                "summary": "Delete Fast ACL Rule",
                 "description": "Delete the specified fast_acl_rule",
                 "operationId": "ves.io.schema.fast_acl_rule.API.Delete",
                 "responses": {

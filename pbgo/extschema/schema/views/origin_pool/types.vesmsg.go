@@ -1828,6 +1828,17 @@ func (v *ValidateOriginPoolAdvancedOptions) Validate(ctx context.Context, pm int
 				return err
 			}
 		}
+	case *OriginPoolAdvancedOptions_DefaultCircuitBreaker:
+		if fv, exists := v.FldValidators["circuit_breaker_choice.default_circuit_breaker"]; exists {
+			val := m.GetCircuitBreakerChoice().(*OriginPoolAdvancedOptions_DefaultCircuitBreaker).DefaultCircuitBreaker
+			vOpts := append(opts,
+				db.WithValidateField("circuit_breaker_choice"),
+				db.WithValidateField("default_circuit_breaker"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 
@@ -3298,7 +3309,7 @@ var DefaultOriginServerPrivateIPValidator = func() *ValidateOriginServerPrivateI
 	vrhIp := v.IpValidationRuleHandler
 	rulesIp := map[string]string{
 		"ves.io.schema.rules.message.required": "true",
-		"ves.io.schema.rules.string.ip":        "true",
+		"ves.io.schema.rules.string.ipv4":      "true",
 	}
 	vFn, err = vrhIp(rulesIp)
 	if err != nil {
@@ -3647,7 +3658,7 @@ var DefaultOriginServerPublicIPValidator = func() *ValidateOriginServerPublicIP 
 	vrhIp := v.IpValidationRuleHandler
 	rulesIp := map[string]string{
 		"ves.io.schema.rules.message.required": "true",
-		"ves.io.schema.rules.string.ip":        "true",
+		"ves.io.schema.rules.string.ipv4":      "true",
 	}
 	vFn, err = vrhIp(rulesIp)
 	if err != nil {
@@ -4290,7 +4301,7 @@ var DefaultOriginServerVirtualNetworkIPValidator = func() *ValidateOriginServerV
 	vrhIp := v.IpValidationRuleHandler
 	rulesIp := map[string]string{
 		"ves.io.schema.rules.message.required": "true",
-		"ves.io.schema.rules.string.ip":        "true",
+		"ves.io.schema.rules.string.ipv4":      "true",
 	}
 	vFn, err = vrhIp(rulesIp)
 	if err != nil {

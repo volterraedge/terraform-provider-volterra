@@ -1595,16 +1595,7 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 		item.Disabled = o.GetMetadata().GetDisable()
 
 		if len(req.ReportFields) > 0 {
-			noDBForm, _ := flags.GetEnvGetRspNoDBForm()
-			if !noDBForm {
-				item.Object = o.Object
-				sf.Logger().Alert(svcfw.GetResponseInDBForm,
-					log.MinorAlert,
-					zap.String("user", server.UserFromContext(ctx)),
-					zap.String("useragent", server.UseragentStrFromContext(ctx)),
-					zap.String("operation", "List"),
-				)
-			}
+			item.Object = o.Object
 
 			item.Metadata = &ves_io_schema.ObjectGetMetaType{}
 			item.Metadata.FromObjectMetaType(o.Metadata)
@@ -1683,7 +1674,7 @@ var APISwaggerJSON string = `{
     "paths": {
         "/public/namespaces/{metadata.namespace}/gcp_vpc_sites": {
             "post": {
-                "summary": "CreateSpecType",
+                "summary": "Create GCP VPC site",
                 "description": "Shape of the GCP VPC site specification",
                 "operationId": "ves.io.schema.views.gcp_vpc_site.API.Create",
                 "responses": {
@@ -1771,7 +1762,7 @@ var APISwaggerJSON string = `{
         },
         "/public/namespaces/{metadata.namespace}/gcp_vpc_sites/{metadata.name}": {
             "put": {
-                "summary": "ReplaceSpecType",
+                "summary": "Replace GCP VPC site",
                 "description": "Shape of the GCP VPC site replace specification",
                 "operationId": "ves.io.schema.views.gcp_vpc_site.API.Replace",
                 "responses": {
@@ -1867,7 +1858,7 @@ var APISwaggerJSON string = `{
         },
         "/public/namespaces/{namespace}/gcp_vpc_sites": {
             "get": {
-                "summary": "List",
+                "summary": "List Configure GCP VPC Site",
                 "description": "List the set of gcp_vpc_site in a namespace",
                 "operationId": "ves.io.schema.views.gcp_vpc_site.API.List",
                 "responses": {
@@ -1979,7 +1970,7 @@ var APISwaggerJSON string = `{
         },
         "/public/namespaces/{namespace}/gcp_vpc_sites/{name}": {
             "get": {
-                "summary": "GetSpecType",
+                "summary": "Get GCP VPC site",
                 "description": "Shape of the GCP VPC site specification",
                 "operationId": "ves.io.schema.views.gcp_vpc_site.API.Get",
                 "responses": {
@@ -2079,7 +2070,7 @@ var APISwaggerJSON string = `{
                 "x-ves-proto-rpc": "ves.io.schema.views.gcp_vpc_site.API.Get"
             },
             "delete": {
-                "summary": "Delete",
+                "summary": "Delete Configure GCP VPC Site",
                 "description": "Delete the specified gcp_vpc_site",
                 "operationId": "ves.io.schema.views.gcp_vpc_site.API.Delete",
                 "responses": {
@@ -2607,7 +2598,6 @@ var APISwaggerJSON string = `{
             "description": "Single interface GCP ingress site",
             "title": "GCP Ingress Gateway",
             "x-displayname": "GCP Ingress Gateway",
-            "x-ves-displayorder": "1,4,6,2,5,7",
             "x-ves-proto-message": "ves.io.schema.views.gcp_vpc_site.GCPVPCIngressGwType",
             "properties": {
                 "gcp_certified_hw": {
@@ -3856,9 +3846,7 @@ var APISwaggerJSON string = `{
             "enum": [
                 "NEXT_HOP_DEFAULT_GATEWAY",
                 "NEXT_HOP_USE_CONFIGURED",
-                "NEXT_HOP_NETWORK_INTERFACE",
-                "NEXT_HOP_DISCARD",
-                "NEXT_HOP_SNAT_TO_PUBLIC"
+                "NEXT_HOP_NETWORK_INTERFACE"
             ],
             "default": "NEXT_HOP_DEFAULT_GATEWAY",
             "x-displayname": "Nexthop Types",
@@ -5157,6 +5145,23 @@ var APISwaggerJSON string = `{
                     "title": "Site Local Outside to a Global Network\"",
                     "$ref": "#/definitions/viewsGlobalConnectorType",
                     "x-displayname": "Direct, Site Local Outside to a Global Network"
+                }
+            }
+        },
+        "viewsOfflineSurvivabilityModeType": {
+            "type": "object",
+            "description": "x-displayName: \"Offline Survivability Mode Type\"\nOffline Survivability Mode",
+            "title": "Offline Survivability Mode",
+            "properties": {
+                "enable_offline_survivability_mode": {
+                    "description": "x-displayName: \"Enable Offline Survivability Mode\"\nEnable Offline Survivability Mode.\nWhen it is enabled, a CE can work without internet connection for upto 3 days.\nThis can only be enabled at site creation time. But once enabled, offline survivability mode cannot be disabled later.\nEnabling offline survivability reduces default security of a CE.",
+                    "title": "Enable Offline Survivability Mode",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "no_offline_survivability_mode": {
+                    "description": "x-displayName: \"Disable Offline Survivability Mode\"\nDisable Offline Survivability Mode",
+                    "title": "Disable Offline Survivability Mode",
+                    "$ref": "#/definitions/ioschemaEmpty"
                 }
             }
         },

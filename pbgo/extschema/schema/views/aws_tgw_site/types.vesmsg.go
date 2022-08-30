@@ -1220,15 +1220,6 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
-	if fv, exists := v.FldValidators["local_control_plane"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("local_control_plane"))
-		if err := fv(ctx, m.GetLocalControlPlane(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
 	if fv, exists := v.FldValidators["logs_receiver_choice"]; exists {
 		val := m.GetLogsReceiverChoice()
 		vOpts := append(opts,
@@ -1265,10 +1256,28 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["offline_survivability_mode"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("offline_survivability_mode"))
+		if err := fv(ctx, m.GetOfflineSurvivabilityMode(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["os"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("os"))
 		if err := fv(ctx, m.GetOs(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["site_local_control_plane"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("site_local_control_plane"))
+		if err := fv(ctx, m.GetSiteLocalControlPlane(), vOpts...); err != nil {
 			return err
 		}
 
@@ -1419,7 +1428,9 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 
 	v.FldValidators["os"] = ves_io_schema_views.OperatingSystemTypeValidator().Validate
 
-	v.FldValidators["local_control_plane"] = ves_io_schema_views.LocalControlPlaneTypeValidator().Validate
+	v.FldValidators["site_local_control_plane"] = ves_io_schema_views.LocalControlPlaneTypeValidator().Validate
+
+	v.FldValidators["offline_survivability_mode"] = ves_io_schema_views.OfflineSurvivabilityModeTypeValidator().Validate
 
 	return v
 }()
@@ -2164,10 +2175,28 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 
 	}
 
+	if fv, exists := v.FldValidators["offline_survivability_mode"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("offline_survivability_mode"))
+		if err := fv(ctx, m.GetOfflineSurvivabilityMode(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["operating_system_version"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("operating_system_version"))
 		if err := fv(ctx, m.GetOperatingSystemVersion(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["site_local_control_plane"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("site_local_control_plane"))
+		if err := fv(ctx, m.GetSiteLocalControlPlane(), vOpts...); err != nil {
 			return err
 		}
 
@@ -2418,6 +2447,10 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v.FldValidators["coordinates"] = ves_io_schema_site.CoordinatesValidator().Validate
 
 	v.FldValidators["tgw_info"] = AWSTGWInfoConfigTypeValidator().Validate
+
+	v.FldValidators["site_local_control_plane"] = ves_io_schema_views.LocalControlPlaneTypeValidator().Validate
+
+	v.FldValidators["offline_survivability_mode"] = ves_io_schema_views.OfflineSurvivabilityModeTypeValidator().Validate
 
 	v.FldValidators["direct_connect_info"] = ves_io_schema_views.DirectConnectInfoValidator().Validate
 
@@ -3068,15 +3101,6 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
-	if fv, exists := v.FldValidators["local_control_plane"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("local_control_plane"))
-		if err := fv(ctx, m.GetLocalControlPlane(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
 	if fv, exists := v.FldValidators["logs_receiver_choice"]; exists {
 		val := m.GetLogsReceiverChoice()
 		vOpts := append(opts,
@@ -3113,6 +3137,15 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["offline_survivability_mode"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("offline_survivability_mode"))
+		if err := fv(ctx, m.GetOfflineSurvivabilityMode(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["operating_system_version"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("operating_system_version"))
@@ -3126,6 +3159,15 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 		vOpts := append(opts, db.WithValidateField("os"))
 		if err := fv(ctx, m.GetOs(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["site_local_control_plane"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("site_local_control_plane"))
+		if err := fv(ctx, m.GetSiteLocalControlPlane(), vOpts...); err != nil {
 			return err
 		}
 
@@ -3408,7 +3450,9 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 
 	v.FldValidators["os"] = ves_io_schema_views.OperatingSystemTypeValidator().Validate
 
-	v.FldValidators["local_control_plane"] = ves_io_schema_views.LocalControlPlaneTypeValidator().Validate
+	v.FldValidators["site_local_control_plane"] = ves_io_schema_views.LocalControlPlaneTypeValidator().Validate
+
+	v.FldValidators["offline_survivability_mode"] = ves_io_schema_views.OfflineSurvivabilityModeTypeValidator().Validate
 
 	v.FldValidators["tf_params"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
@@ -3811,6 +3855,15 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 
 	}
 
+	if fv, exists := v.FldValidators["site_local_control_plane"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("site_local_control_plane"))
+		if err := fv(ctx, m.GetSiteLocalControlPlane(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["tgw_security"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("tgw_security"))
@@ -3921,6 +3974,8 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	v.FldValidators["vn_config"] = VnConfigurationValidator().Validate
 
 	v.FldValidators["coordinates"] = ves_io_schema_site.CoordinatesValidator().Validate
+
+	v.FldValidators["site_local_control_plane"] = ves_io_schema_views.LocalControlPlaneTypeValidator().Validate
 
 	return v
 }()
@@ -6564,9 +6619,10 @@ func (m *CreateSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool
 	m.GetBlockedServicesChoiceFromGlobalSpecType(f)
 	m.Coordinates = f.GetCoordinates()
 	m.GetDirectConnectChoiceFromGlobalSpecType(f)
-	m.LocalControlPlane = f.GetLocalControlPlane()
 	m.GetLogsReceiverChoiceFromGlobalSpecType(f)
+	m.OfflineSurvivabilityMode = f.GetOfflineSurvivabilityMode()
 	m.Os = f.GetOs()
+	m.SiteLocalControlPlane = f.GetSiteLocalControlPlane()
 	m.Sw = f.GetSw()
 	m.Tags = f.GetTags()
 	m.TgwSecurity = f.GetTgwSecurity()
@@ -6594,9 +6650,10 @@ func (m *CreateSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) 
 	m1.SetBlockedServicesChoiceToGlobalSpecType(f)
 	f.Coordinates = m1.Coordinates
 	m1.SetDirectConnectChoiceToGlobalSpecType(f)
-	f.LocalControlPlane = m1.LocalControlPlane
 	m1.SetLogsReceiverChoiceToGlobalSpecType(f)
+	f.OfflineSurvivabilityMode = m1.OfflineSurvivabilityMode
 	f.Os = m1.Os
+	f.SiteLocalControlPlane = m1.SiteLocalControlPlane
 	f.Sw = m1.Sw
 	f.Tags = m1.Tags
 	f.TgwSecurity = m1.TgwSecurity
@@ -6728,7 +6785,9 @@ func (m *GetSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	m.GetDirectConnectChoiceFromGlobalSpecType(f)
 	m.DirectConnectInfo = f.GetDirectConnectInfo()
 	m.GetLogsReceiverChoiceFromGlobalSpecType(f)
+	m.OfflineSurvivabilityMode = f.GetOfflineSurvivabilityMode()
 	m.OperatingSystemVersion = f.GetOperatingSystemVersion()
+	m.SiteLocalControlPlane = f.GetSiteLocalControlPlane()
 
 	m.Tags = f.GetTags()
 	m.TgwInfo = f.GetTgwInfo()
@@ -6764,7 +6823,9 @@ func (m *GetSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	m1.SetDirectConnectChoiceToGlobalSpecType(f)
 	f.DirectConnectInfo = m1.DirectConnectInfo
 	m1.SetLogsReceiverChoiceToGlobalSpecType(f)
+	f.OfflineSurvivabilityMode = m1.OfflineSurvivabilityMode
 	f.OperatingSystemVersion = m1.OperatingSystemVersion
+	f.SiteLocalControlPlane = m1.SiteLocalControlPlane
 
 	f.Tags = m1.Tags
 	f.TgwInfo = m1.TgwInfo
@@ -6910,6 +6971,7 @@ func (m *ReplaceSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy boo
 	m.Coordinates = f.GetCoordinates()
 	m.GetDirectConnectChoiceFromGlobalSpecType(f)
 	m.GetLogsReceiverChoiceFromGlobalSpecType(f)
+	m.SiteLocalControlPlane = f.GetSiteLocalControlPlane()
 	m.TgwSecurity = f.GetTgwSecurity()
 	m.VnConfig = f.GetVnConfig()
 	m.VpcAttachments = f.GetVpcAttachments()
@@ -6948,6 +7010,7 @@ func (m *ReplaceSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool)
 	f.Coordinates = m1.Coordinates
 	m1.SetDirectConnectChoiceToGlobalSpecType(f)
 	m1.SetLogsReceiverChoiceToGlobalSpecType(f)
+	f.SiteLocalControlPlane = m1.SiteLocalControlPlane
 	f.TgwSecurity = m1.TgwSecurity
 	f.VnConfig = m1.VnConfig
 	f.VpcAttachments = m1.VpcAttachments

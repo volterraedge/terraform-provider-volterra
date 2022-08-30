@@ -1595,16 +1595,7 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 		item.Disabled = o.GetMetadata().GetDisable()
 
 		if len(req.ReportFields) > 0 {
-			noDBForm, _ := flags.GetEnvGetRspNoDBForm()
-			if !noDBForm {
-				item.Object = o.Object
-				sf.Logger().Alert(svcfw.GetResponseInDBForm,
-					log.MinorAlert,
-					zap.String("user", server.UserFromContext(ctx)),
-					zap.String("useragent", server.UseragentStrFromContext(ctx)),
-					zap.String("operation", "List"),
-				)
-			}
+			item.Object = o.Object
 
 			item.Metadata = &ves_io_schema.ObjectGetMetaType{}
 			item.Metadata.FromObjectMetaType(o.Metadata)
@@ -1875,7 +1866,7 @@ var APISwaggerJSON string = `{
         },
         "/public/namespaces/{namespace}/alert_receivers": {
             "get": {
-                "summary": "List",
+                "summary": "List Alert Receiver",
                 "description": "List the set of alert_receiver in a namespace",
                 "operationId": "ves.io.schema.alert_receiver.API.List",
                 "responses": {
@@ -2095,7 +2086,7 @@ var APISwaggerJSON string = `{
                 "x-ves-proto-rpc": "ves.io.schema.alert_receiver.API.Get"
             },
             "delete": {
-                "summary": "Delete",
+                "summary": "Delete Alert Receiver",
                 "description": "Delete the specified alert_receiver",
                 "operationId": "ves.io.schema.alert_receiver.API.Delete",
                 "responses": {

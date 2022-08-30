@@ -1777,13 +1777,13 @@ const _ = grpc.SupportPackageIsVersion4
 type APIClient interface {
 	// CreateSpecType
 	//
-	// x-displayName: "Create Azure Vnet site"
-	// Shape of the Azure Vnet site specification
+	// x-displayName: "Create Azure VNet site"
+	// Shape of the Azure VNet site specification
 	Create(ctx context.Context, in *CreateRequest, opts ...grpc.CallOption) (*CreateResponse, error)
 	// GetSpecType
 	//
-	// x-displayName: "Get Azure Vnet site"
-	// Shape of the Azure Vnet site specification
+	// x-displayName: "Get Azure VNet site"
+	// Shape of the Azure VNet site specification
 	Get(ctx context.Context, in *GetRequest, opts ...grpc.CallOption) (*GetResponse, error)
 	// List
 	//
@@ -1792,8 +1792,8 @@ type APIClient interface {
 	List(ctx context.Context, in *ListRequest, opts ...grpc.CallOption) (*ListResponse, error)
 	// ReplaceSpecType
 	//
-	// x-displayName: "Replace Azure Vnet site"
-	// Shape of the Azure Vnet site replace specification
+	// x-displayName: "Replace Azure VNet site"
+	// Shape of the Azure VNet site replace specification
 	Replace(ctx context.Context, in *ReplaceRequest, opts ...grpc.CallOption) (*ReplaceResponse, error)
 	// Delete
 	//
@@ -1859,13 +1859,13 @@ func (c *aPIClient) Delete(ctx context.Context, in *DeleteRequest, opts ...grpc.
 type APIServer interface {
 	// CreateSpecType
 	//
-	// x-displayName: "Create Azure Vnet site"
-	// Shape of the Azure Vnet site specification
+	// x-displayName: "Create Azure VNet site"
+	// Shape of the Azure VNet site specification
 	Create(context.Context, *CreateRequest) (*CreateResponse, error)
 	// GetSpecType
 	//
-	// x-displayName: "Get Azure Vnet site"
-	// Shape of the Azure Vnet site specification
+	// x-displayName: "Get Azure VNet site"
+	// Shape of the Azure VNet site specification
 	Get(context.Context, *GetRequest) (*GetResponse, error)
 	// List
 	//
@@ -1874,8 +1874,8 @@ type APIServer interface {
 	List(context.Context, *ListRequest) (*ListResponse, error)
 	// ReplaceSpecType
 	//
-	// x-displayName: "Replace Azure Vnet site"
-	// Shape of the Azure Vnet site replace specification
+	// x-displayName: "Replace Azure VNet site"
+	// Shape of the Azure VNet site replace specification
 	Replace(context.Context, *ReplaceRequest) (*ReplaceResponse, error)
 	// Delete
 	//

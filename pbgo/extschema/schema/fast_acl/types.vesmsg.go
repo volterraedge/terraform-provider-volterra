@@ -647,6 +647,17 @@ func (v *ValidateDestinationType) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
+	case *DestinationType_Vhost:
+		if fv, exists := v.FldValidators["destination_type_choice.vhost"]; exists {
+			val := m.GetDestinationTypeChoice().(*DestinationType_Vhost).Vhost
+			vOpts := append(opts,
+				db.WithValidateField("destination_type_choice"),
+				db.WithValidateField("vhost"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 

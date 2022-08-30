@@ -1595,16 +1595,7 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 		item.Disabled = o.GetMetadata().GetDisable()
 
 		if len(req.ReportFields) > 0 {
-			noDBForm, _ := flags.GetEnvGetRspNoDBForm()
-			if !noDBForm {
-				item.Object = o.Object
-				sf.Logger().Alert(svcfw.GetResponseInDBForm,
-					log.MinorAlert,
-					zap.String("user", server.UserFromContext(ctx)),
-					zap.String("useragent", server.UseragentStrFromContext(ctx)),
-					zap.String("operation", "List"),
-				)
-			}
+			item.Object = o.Object
 
 			item.Metadata = &ves_io_schema.ObjectGetMetaType{}
 			item.Metadata.FromObjectMetaType(o.Metadata)
@@ -1683,7 +1674,7 @@ var APISwaggerJSON string = `{
     "paths": {
         "/public/namespaces/{metadata.namespace}/advertise_policys": {
             "post": {
-                "summary": "Create advertise policy",
+                "summary": "Create Advertise Policy",
                 "description": "advertise_policy object controls how and where a service represented by a given virtual_host object is advertised to consumers.",
                 "operationId": "ves.io.schema.advertise_policy.API.Create",
                 "responses": {
@@ -1775,7 +1766,7 @@ var APISwaggerJSON string = `{
         },
         "/public/namespaces/{metadata.namespace}/advertise_policys/{metadata.name}": {
             "put": {
-                "summary": "Replace advertise policy",
+                "summary": "Replace Advertise Policy",
                 "description": "advertise_policy object controls how and where a service represented by a given virtual_host object is advertised to consumers.",
                 "operationId": "ves.io.schema.advertise_policy.API.Replace",
                 "responses": {
@@ -1875,7 +1866,7 @@ var APISwaggerJSON string = `{
         },
         "/public/namespaces/{namespace}/advertise_policys": {
             "get": {
-                "summary": "List",
+                "summary": "List Advertise Policy",
                 "description": "List the set of advertise_policy in a namespace",
                 "operationId": "ves.io.schema.advertise_policy.API.List",
                 "responses": {
@@ -1991,7 +1982,7 @@ var APISwaggerJSON string = `{
         },
         "/public/namespaces/{namespace}/advertise_policys/{name}": {
             "get": {
-                "summary": "Get advertise policy",
+                "summary": "Get Advertise Policy",
                 "description": "Get advertise_policy read a given object from storage backend for metadata.namespace",
                 "operationId": "ves.io.schema.advertise_policy.API.Get",
                 "responses": {
@@ -2095,7 +2086,7 @@ var APISwaggerJSON string = `{
                 "x-ves-proto-rpc": "ves.io.schema.advertise_policy.API.Get"
             },
             "delete": {
-                "summary": "Delete",
+                "summary": "Delete Advertise Policy",
                 "description": "Delete the specified advertise_policy",
                 "operationId": "ves.io.schema.advertise_policy.API.Delete",
                 "responses": {

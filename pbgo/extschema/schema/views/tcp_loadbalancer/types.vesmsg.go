@@ -37,6 +37,20 @@ func (m *CreateSpecType) ToYAML() (string, error) {
 	return codec.ToYAML(m)
 }
 
+// Redact squashes sensitive info in m (in-place)
+func (m *CreateSpecType) Redact(ctx context.Context) error {
+	// clear fields with confidential option set (at message or field level)
+	if m == nil {
+		return nil
+	}
+
+	if err := m.GetTlsTcp().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting CreateSpecType.tls_tcp")
+	}
+
+	return nil
+}
+
 func (m *CreateSpecType) DeepCopy() *CreateSpecType {
 	if m == nil {
 		return nil
@@ -72,6 +86,12 @@ func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	var drInfos []db.DRefInfo
 	if fdrInfos, err := m.GetAdvertiseChoiceDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetAdvertiseChoiceDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	if fdrInfos, err := m.GetLoadbalancerTypeDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetLoadbalancerTypeDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
@@ -129,6 +149,44 @@ func (m *CreateSpecType) GetAdvertiseChoiceDRefInfo() ([]db.DRefInfo, error) {
 }
 
 // GetDRefInfo for the field's type
+func (m *CreateSpecType) GetLoadbalancerTypeDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetLoadbalancerType() == nil {
+		return nil, nil
+	}
+	switch m.GetLoadbalancerType().(type) {
+	case *CreateSpecType_Tcp:
+
+		return nil, nil
+
+	case *CreateSpecType_TlsTcpAutoCert:
+		drInfos, err := m.GetTlsTcpAutoCert().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetTlsTcpAutoCert().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "tls_tcp_auto_cert." + dri.DRField
+		}
+		return drInfos, err
+
+	case *CreateSpecType_TlsTcp:
+		drInfos, err := m.GetTlsTcp().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetTlsTcp().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "tls_tcp." + dri.DRField
+		}
+		return drInfos, err
+
+	default:
+		return nil, nil
+	}
+
+}
+
+// GetDRefInfo for the field's type
 func (m *CreateSpecType) GetOriginPoolsWeightsDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetOriginPoolsWeights() == nil {
 		return nil, nil
@@ -174,6 +232,22 @@ func (v *ValidateCreateSpecType) HashPolicyChoiceValidationRuleHandler(rules map
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for hash_policy_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateCreateSpecType) LoadbalancerTypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for loadbalancer_type")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateCreateSpecType) SniDefaultLbChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for sni_default_lb_choice")
 	}
 	return validatorFn, nil
 }
@@ -481,6 +555,53 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["loadbalancer_type"]; exists {
+		val := m.GetLoadbalancerType()
+		vOpts := append(opts,
+			db.WithValidateField("loadbalancer_type"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetLoadbalancerType().(type) {
+	case *CreateSpecType_Tcp:
+		if fv, exists := v.FldValidators["loadbalancer_type.tcp"]; exists {
+			val := m.GetLoadbalancerType().(*CreateSpecType_Tcp).Tcp
+			vOpts := append(opts,
+				db.WithValidateField("loadbalancer_type"),
+				db.WithValidateField("tcp"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CreateSpecType_TlsTcpAutoCert:
+		if fv, exists := v.FldValidators["loadbalancer_type.tls_tcp_auto_cert"]; exists {
+			val := m.GetLoadbalancerType().(*CreateSpecType_TlsTcpAutoCert).TlsTcpAutoCert
+			vOpts := append(opts,
+				db.WithValidateField("loadbalancer_type"),
+				db.WithValidateField("tls_tcp_auto_cert"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CreateSpecType_TlsTcp:
+		if fv, exists := v.FldValidators["loadbalancer_type.tls_tcp"]; exists {
+			val := m.GetLoadbalancerType().(*CreateSpecType_TlsTcp).TlsTcp
+			vOpts := append(opts,
+				db.WithValidateField("loadbalancer_type"),
+				db.WithValidateField("tls_tcp"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["origin_pools_weights"]; exists {
 		vOpts := append(opts, db.WithValidateField("origin_pools_weights"))
 		if err := fv(ctx, m.GetOriginPoolsWeights(), vOpts...); err != nil {
@@ -489,11 +610,49 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
-	if fv, exists := v.FldValidators["with_sni"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("with_sni"))
-		if err := fv(ctx, m.GetWithSni(), vOpts...); err != nil {
+	if fv, exists := v.FldValidators["sni_default_lb_choice"]; exists {
+		val := m.GetSniDefaultLbChoice()
+		vOpts := append(opts,
+			db.WithValidateField("sni_default_lb_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
 			return err
+		}
+	}
+
+	switch m.GetSniDefaultLbChoice().(type) {
+	case *CreateSpecType_NoSni:
+		if fv, exists := v.FldValidators["sni_default_lb_choice.no_sni"]; exists {
+			val := m.GetSniDefaultLbChoice().(*CreateSpecType_NoSni).NoSni
+			vOpts := append(opts,
+				db.WithValidateField("sni_default_lb_choice"),
+				db.WithValidateField("no_sni"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CreateSpecType_Sni:
+		if fv, exists := v.FldValidators["sni_default_lb_choice.sni"]; exists {
+			val := m.GetSniDefaultLbChoice().(*CreateSpecType_Sni).Sni
+			vOpts := append(opts,
+				db.WithValidateField("sni_default_lb_choice"),
+				db.WithValidateField("sni"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CreateSpecType_DefaultLbWithSni:
+		if fv, exists := v.FldValidators["sni_default_lb_choice.default_lb_with_sni"]; exists {
+			val := m.GetSniDefaultLbChoice().(*CreateSpecType_DefaultLbWithSni).DefaultLbWithSni
+			vOpts := append(opts,
+				db.WithValidateField("sni_default_lb_choice"),
+				db.WithValidateField("default_lb_with_sni"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
 		}
 
 	}
@@ -546,6 +705,28 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	}
 	v.FldValidators["hash_policy_choice"] = vFn
 
+	vrhLoadbalancerType := v.LoadbalancerTypeValidationRuleHandler
+	rulesLoadbalancerType := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhLoadbalancerType(rulesLoadbalancerType)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateSpecType.loadbalancer_type: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["loadbalancer_type"] = vFn
+
+	vrhSniDefaultLbChoice := v.SniDefaultLbChoiceValidationRuleHandler
+	rulesSniDefaultLbChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhSniDefaultLbChoice(rulesSniDefaultLbChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateSpecType.sni_default_lb_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["sni_default_lb_choice"] = vFn
+
 	vrhDomains := v.DomainsValidationRuleHandler
 	rulesDomains := map[string]string{
 		"ves.io.schema.rules.repeated.items.string.hostname": "true",
@@ -596,6 +777,9 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	v.FldValidators["advertise_choice.advertise_on_public"] = ves_io_schema_views.AdvertisePublicValidator().Validate
 	v.FldValidators["advertise_choice.advertise_custom"] = ves_io_schema_views.AdvertiseCustomValidator().Validate
 
+	v.FldValidators["loadbalancer_type.tls_tcp_auto_cert"] = ProxyTypeTLSTCPAutoCertsValidator().Validate
+	v.FldValidators["loadbalancer_type.tls_tcp"] = ProxyTypeTLSTCPValidator().Validate
+
 	return v
 }()
 
@@ -611,6 +795,20 @@ func (m *GetSpecType) ToJSON() (string, error) {
 
 func (m *GetSpecType) ToYAML() (string, error) {
 	return codec.ToYAML(m)
+}
+
+// Redact squashes sensitive info in m (in-place)
+func (m *GetSpecType) Redact(ctx context.Context) error {
+	// clear fields with confidential option set (at message or field level)
+	if m == nil {
+		return nil
+	}
+
+	if err := m.GetTlsTcp().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting GetSpecType.tls_tcp")
+	}
+
+	return nil
 }
 
 func (m *GetSpecType) DeepCopy() *GetSpecType {
@@ -648,6 +846,12 @@ func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	var drInfos []db.DRefInfo
 	if fdrInfos, err := m.GetAdvertiseChoiceDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetAdvertiseChoiceDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	if fdrInfos, err := m.GetLoadbalancerTypeDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetLoadbalancerTypeDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
@@ -703,6 +907,44 @@ func (m *GetSpecType) GetAdvertiseChoiceDRefInfo() ([]db.DRefInfo, error) {
 	case *GetSpecType_AdvertiseOnPublicDefaultVip:
 
 		return nil, nil
+
+	default:
+		return nil, nil
+	}
+
+}
+
+// GetDRefInfo for the field's type
+func (m *GetSpecType) GetLoadbalancerTypeDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetLoadbalancerType() == nil {
+		return nil, nil
+	}
+	switch m.GetLoadbalancerType().(type) {
+	case *GetSpecType_Tcp:
+
+		return nil, nil
+
+	case *GetSpecType_TlsTcpAutoCert:
+		drInfos, err := m.GetTlsTcpAutoCert().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetTlsTcpAutoCert().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "tls_tcp_auto_cert." + dri.DRField
+		}
+		return drInfos, err
+
+	case *GetSpecType_TlsTcp:
+		drInfos, err := m.GetTlsTcp().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetTlsTcp().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "tls_tcp." + dri.DRField
+		}
+		return drInfos, err
 
 	default:
 		return nil, nil
@@ -811,6 +1053,22 @@ func (v *ValidateGetSpecType) HashPolicyChoiceValidationRuleHandler(rules map[st
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for hash_policy_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateGetSpecType) LoadbalancerTypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for loadbalancer_type")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateGetSpecType) SniDefaultLbChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for sni_default_lb_choice")
 	}
 	return validatorFn, nil
 }
@@ -1029,6 +1287,15 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 
 	}
 
+	if fv, exists := v.FldValidators["auto_cert_info"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("auto_cert_info"))
+		if err := fv(ctx, m.GetAutoCertInfo(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["cluster_retract_choice"]; exists {
 		val := m.GetClusterRetractChoice()
 		vOpts := append(opts,
@@ -1179,6 +1446,53 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 
 	}
 
+	if fv, exists := v.FldValidators["loadbalancer_type"]; exists {
+		val := m.GetLoadbalancerType()
+		vOpts := append(opts,
+			db.WithValidateField("loadbalancer_type"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetLoadbalancerType().(type) {
+	case *GetSpecType_Tcp:
+		if fv, exists := v.FldValidators["loadbalancer_type.tcp"]; exists {
+			val := m.GetLoadbalancerType().(*GetSpecType_Tcp).Tcp
+			vOpts := append(opts,
+				db.WithValidateField("loadbalancer_type"),
+				db.WithValidateField("tcp"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GetSpecType_TlsTcpAutoCert:
+		if fv, exists := v.FldValidators["loadbalancer_type.tls_tcp_auto_cert"]; exists {
+			val := m.GetLoadbalancerType().(*GetSpecType_TlsTcpAutoCert).TlsTcpAutoCert
+			vOpts := append(opts,
+				db.WithValidateField("loadbalancer_type"),
+				db.WithValidateField("tls_tcp_auto_cert"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GetSpecType_TlsTcp:
+		if fv, exists := v.FldValidators["loadbalancer_type.tls_tcp"]; exists {
+			val := m.GetLoadbalancerType().(*GetSpecType_TlsTcp).TlsTcp
+			vOpts := append(opts,
+				db.WithValidateField("loadbalancer_type"),
+				db.WithValidateField("tls_tcp"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["origin_pools"]; exists {
 		vOpts := append(opts, db.WithValidateField("origin_pools"))
 		if err := fv(ctx, m.GetOriginPools(), vOpts...); err != nil {
@@ -1195,11 +1509,49 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 
 	}
 
-	if fv, exists := v.FldValidators["with_sni"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("with_sni"))
-		if err := fv(ctx, m.GetWithSni(), vOpts...); err != nil {
+	if fv, exists := v.FldValidators["sni_default_lb_choice"]; exists {
+		val := m.GetSniDefaultLbChoice()
+		vOpts := append(opts,
+			db.WithValidateField("sni_default_lb_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
 			return err
+		}
+	}
+
+	switch m.GetSniDefaultLbChoice().(type) {
+	case *GetSpecType_NoSni:
+		if fv, exists := v.FldValidators["sni_default_lb_choice.no_sni"]; exists {
+			val := m.GetSniDefaultLbChoice().(*GetSpecType_NoSni).NoSni
+			vOpts := append(opts,
+				db.WithValidateField("sni_default_lb_choice"),
+				db.WithValidateField("no_sni"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GetSpecType_Sni:
+		if fv, exists := v.FldValidators["sni_default_lb_choice.sni"]; exists {
+			val := m.GetSniDefaultLbChoice().(*GetSpecType_Sni).Sni
+			vOpts := append(opts,
+				db.WithValidateField("sni_default_lb_choice"),
+				db.WithValidateField("sni"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GetSpecType_DefaultLbWithSni:
+		if fv, exists := v.FldValidators["sni_default_lb_choice.default_lb_with_sni"]; exists {
+			val := m.GetSniDefaultLbChoice().(*GetSpecType_DefaultLbWithSni).DefaultLbWithSni
+			vOpts := append(opts,
+				db.WithValidateField("sni_default_lb_choice"),
+				db.WithValidateField("default_lb_with_sni"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
 		}
 
 	}
@@ -1251,6 +1603,28 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["hash_policy_choice"] = vFn
+
+	vrhLoadbalancerType := v.LoadbalancerTypeValidationRuleHandler
+	rulesLoadbalancerType := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhLoadbalancerType(rulesLoadbalancerType)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GetSpecType.loadbalancer_type: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["loadbalancer_type"] = vFn
+
+	vrhSniDefaultLbChoice := v.SniDefaultLbChoiceValidationRuleHandler
+	rulesSniDefaultLbChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhSniDefaultLbChoice(rulesSniDefaultLbChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GetSpecType.sni_default_lb_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["sni_default_lb_choice"] = vFn
 
 	vrhDomains := v.DomainsValidationRuleHandler
 	rulesDomains := map[string]string{
@@ -1314,6 +1688,9 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v.FldValidators["advertise_choice.advertise_on_public"] = ves_io_schema_views.AdvertisePublicValidator().Validate
 	v.FldValidators["advertise_choice.advertise_custom"] = ves_io_schema_views.AdvertiseCustomValidator().Validate
 
+	v.FldValidators["loadbalancer_type.tls_tcp_auto_cert"] = ProxyTypeTLSTCPAutoCertsValidator().Validate
+	v.FldValidators["loadbalancer_type.tls_tcp"] = ProxyTypeTLSTCPValidator().Validate
+
 	v.FldValidators["dns_info"] = ves_io_schema_virtual_host_dns_info.DnsInfoValidator().Validate
 
 	return v
@@ -1331,6 +1708,20 @@ func (m *GlobalSpecType) ToJSON() (string, error) {
 
 func (m *GlobalSpecType) ToYAML() (string, error) {
 	return codec.ToYAML(m)
+}
+
+// Redact squashes sensitive info in m (in-place)
+func (m *GlobalSpecType) Redact(ctx context.Context) error {
+	// clear fields with confidential option set (at message or field level)
+	if m == nil {
+		return nil
+	}
+
+	if err := m.GetTlsTcp().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting GlobalSpecType.tls_tcp")
+	}
+
+	return nil
 }
 
 func (m *GlobalSpecType) DeepCopy() *GlobalSpecType {
@@ -1368,6 +1759,12 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	var drInfos []db.DRefInfo
 	if fdrInfos, err := m.GetAdvertiseChoiceDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetAdvertiseChoiceDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	if fdrInfos, err := m.GetLoadbalancerTypeDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetLoadbalancerTypeDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
@@ -1429,6 +1826,44 @@ func (m *GlobalSpecType) GetAdvertiseChoiceDRefInfo() ([]db.DRefInfo, error) {
 	case *GlobalSpecType_AdvertiseOnPublicDefaultVip:
 
 		return nil, nil
+
+	default:
+		return nil, nil
+	}
+
+}
+
+// GetDRefInfo for the field's type
+func (m *GlobalSpecType) GetLoadbalancerTypeDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetLoadbalancerType() == nil {
+		return nil, nil
+	}
+	switch m.GetLoadbalancerType().(type) {
+	case *GlobalSpecType_Tcp:
+
+		return nil, nil
+
+	case *GlobalSpecType_TlsTcpAutoCert:
+		drInfos, err := m.GetTlsTcpAutoCert().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetTlsTcpAutoCert().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "tls_tcp_auto_cert." + dri.DRField
+		}
+		return drInfos, err
+
+	case *GlobalSpecType_TlsTcp:
+		drInfos, err := m.GetTlsTcp().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetTlsTcp().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "tls_tcp." + dri.DRField
+		}
+		return drInfos, err
 
 	default:
 		return nil, nil
@@ -1586,6 +2021,22 @@ func (v *ValidateGlobalSpecType) HashPolicyChoiceValidationRuleHandler(rules map
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for hash_policy_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateGlobalSpecType) LoadbalancerTypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for loadbalancer_type")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateGlobalSpecType) SniDefaultLbChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for sni_default_lb_choice")
 	}
 	return validatorFn, nil
 }
@@ -1804,6 +2255,15 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["auto_cert_info"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("auto_cert_info"))
+		if err := fv(ctx, m.GetAutoCertInfo(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["cluster_retract_choice"]; exists {
 		val := m.GetClusterRetractChoice()
 		vOpts := append(opts,
@@ -1954,6 +2414,53 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["loadbalancer_type"]; exists {
+		val := m.GetLoadbalancerType()
+		vOpts := append(opts,
+			db.WithValidateField("loadbalancer_type"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetLoadbalancerType().(type) {
+	case *GlobalSpecType_Tcp:
+		if fv, exists := v.FldValidators["loadbalancer_type.tcp"]; exists {
+			val := m.GetLoadbalancerType().(*GlobalSpecType_Tcp).Tcp
+			vOpts := append(opts,
+				db.WithValidateField("loadbalancer_type"),
+				db.WithValidateField("tcp"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GlobalSpecType_TlsTcpAutoCert:
+		if fv, exists := v.FldValidators["loadbalancer_type.tls_tcp_auto_cert"]; exists {
+			val := m.GetLoadbalancerType().(*GlobalSpecType_TlsTcpAutoCert).TlsTcpAutoCert
+			vOpts := append(opts,
+				db.WithValidateField("loadbalancer_type"),
+				db.WithValidateField("tls_tcp_auto_cert"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GlobalSpecType_TlsTcp:
+		if fv, exists := v.FldValidators["loadbalancer_type.tls_tcp"]; exists {
+			val := m.GetLoadbalancerType().(*GlobalSpecType_TlsTcp).TlsTcp
+			vOpts := append(opts,
+				db.WithValidateField("loadbalancer_type"),
+				db.WithValidateField("tls_tcp"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["origin_pools"]; exists {
 		vOpts := append(opts, db.WithValidateField("origin_pools"))
 		if err := fv(ctx, m.GetOriginPools(), vOpts...); err != nil {
@@ -1966,6 +2473,53 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 		vOpts := append(opts, db.WithValidateField("origin_pools_weights"))
 		if err := fv(ctx, m.GetOriginPoolsWeights(), vOpts...); err != nil {
 			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["sni_default_lb_choice"]; exists {
+		val := m.GetSniDefaultLbChoice()
+		vOpts := append(opts,
+			db.WithValidateField("sni_default_lb_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetSniDefaultLbChoice().(type) {
+	case *GlobalSpecType_NoSni:
+		if fv, exists := v.FldValidators["sni_default_lb_choice.no_sni"]; exists {
+			val := m.GetSniDefaultLbChoice().(*GlobalSpecType_NoSni).NoSni
+			vOpts := append(opts,
+				db.WithValidateField("sni_default_lb_choice"),
+				db.WithValidateField("no_sni"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GlobalSpecType_Sni:
+		if fv, exists := v.FldValidators["sni_default_lb_choice.sni"]; exists {
+			val := m.GetSniDefaultLbChoice().(*GlobalSpecType_Sni).Sni
+			vOpts := append(opts,
+				db.WithValidateField("sni_default_lb_choice"),
+				db.WithValidateField("sni"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GlobalSpecType_DefaultLbWithSni:
+		if fv, exists := v.FldValidators["sni_default_lb_choice.default_lb_with_sni"]; exists {
+			val := m.GetSniDefaultLbChoice().(*GlobalSpecType_DefaultLbWithSni).DefaultLbWithSni
+			vOpts := append(opts,
+				db.WithValidateField("sni_default_lb_choice"),
+				db.WithValidateField("default_lb_with_sni"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
 		}
 
 	}
@@ -2036,6 +2590,28 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	}
 	v.FldValidators["hash_policy_choice"] = vFn
 
+	vrhLoadbalancerType := v.LoadbalancerTypeValidationRuleHandler
+	rulesLoadbalancerType := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhLoadbalancerType(rulesLoadbalancerType)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.loadbalancer_type: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["loadbalancer_type"] = vFn
+
+	vrhSniDefaultLbChoice := v.SniDefaultLbChoiceValidationRuleHandler
+	rulesSniDefaultLbChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhSniDefaultLbChoice(rulesSniDefaultLbChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.sni_default_lb_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["sni_default_lb_choice"] = vFn
+
 	vrhDomains := v.DomainsValidationRuleHandler
 	rulesDomains := map[string]string{
 		"ves.io.schema.rules.repeated.items.string.hostname": "true",
@@ -2098,6 +2674,9 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v.FldValidators["advertise_choice.advertise_on_public"] = ves_io_schema_views.AdvertisePublicValidator().Validate
 	v.FldValidators["advertise_choice.advertise_custom"] = ves_io_schema_views.AdvertiseCustomValidator().Validate
 
+	v.FldValidators["loadbalancer_type.tls_tcp_auto_cert"] = ProxyTypeTLSTCPAutoCertsValidator().Validate
+	v.FldValidators["loadbalancer_type.tls_tcp"] = ProxyTypeTLSTCPValidator().Validate
+
 	v.FldValidators["view_internal"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	v.FldValidators["dns_info"] = ves_io_schema_virtual_host_dns_info.DnsInfoValidator().Validate
@@ -2111,12 +2690,328 @@ func GlobalSpecTypeValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *ProxyTypeTLSTCP) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *ProxyTypeTLSTCP) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+// Redact squashes sensitive info in m (in-place)
+func (m *ProxyTypeTLSTCP) Redact(ctx context.Context) error {
+	// clear fields with confidential option set (at message or field level)
+	if m == nil {
+		return nil
+	}
+
+	if err := m.GetTlsParameters().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting ProxyTypeTLSTCP.tls_parameters")
+	}
+
+	return nil
+}
+
+func (m *ProxyTypeTLSTCP) DeepCopy() *ProxyTypeTLSTCP {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &ProxyTypeTLSTCP{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *ProxyTypeTLSTCP) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *ProxyTypeTLSTCP) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return ProxyTypeTLSTCPValidator().Validate(ctx, m, opts...)
+}
+
+func (m *ProxyTypeTLSTCP) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetTlsParametersDRefInfo()
+
+}
+
+// GetDRefInfo for the field's type
+func (m *ProxyTypeTLSTCP) GetTlsParametersDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetTlsParameters() == nil {
+		return nil, nil
+	}
+
+	drInfos, err := m.GetTlsParameters().GetDRefInfo()
+	if err != nil {
+		return nil, errors.Wrap(err, "GetTlsParameters().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "tls_parameters." + dri.DRField
+	}
+	return drInfos, err
+
+}
+
+type ValidateProxyTypeTLSTCP struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateProxyTypeTLSTCP) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*ProxyTypeTLSTCP)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *ProxyTypeTLSTCP got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["tls_parameters"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("tls_parameters"))
+		if err := fv(ctx, m.GetTlsParameters(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultProxyTypeTLSTCPValidator = func() *ValidateProxyTypeTLSTCP {
+	v := &ValidateProxyTypeTLSTCP{FldValidators: map[string]db.ValidatorFunc{}}
+
+	v.FldValidators["tls_parameters"] = ves_io_schema_views.DownstreamTlsParamsTypeValidator().Validate
+
+	return v
+}()
+
+func ProxyTypeTLSTCPValidator() db.Validator {
+	return DefaultProxyTypeTLSTCPValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *ProxyTypeTLSTCPAutoCerts) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *ProxyTypeTLSTCPAutoCerts) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *ProxyTypeTLSTCPAutoCerts) DeepCopy() *ProxyTypeTLSTCPAutoCerts {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &ProxyTypeTLSTCPAutoCerts{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *ProxyTypeTLSTCPAutoCerts) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *ProxyTypeTLSTCPAutoCerts) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return ProxyTypeTLSTCPAutoCertsValidator().Validate(ctx, m, opts...)
+}
+
+func (m *ProxyTypeTLSTCPAutoCerts) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetMtlsChoiceDRefInfo()
+
+}
+
+// GetDRefInfo for the field's type
+func (m *ProxyTypeTLSTCPAutoCerts) GetMtlsChoiceDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetMtlsChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetMtlsChoice().(type) {
+	case *ProxyTypeTLSTCPAutoCerts_NoMtls:
+
+		return nil, nil
+
+	case *ProxyTypeTLSTCPAutoCerts_UseMtls:
+		drInfos, err := m.GetUseMtls().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetUseMtls().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "use_mtls." + dri.DRField
+		}
+		return drInfos, err
+
+	default:
+		return nil, nil
+	}
+
+}
+
+type ValidateProxyTypeTLSTCPAutoCerts struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateProxyTypeTLSTCPAutoCerts) MtlsChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for mtls_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateProxyTypeTLSTCPAutoCerts) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*ProxyTypeTLSTCPAutoCerts)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *ProxyTypeTLSTCPAutoCerts got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["mtls_choice"]; exists {
+		val := m.GetMtlsChoice()
+		vOpts := append(opts,
+			db.WithValidateField("mtls_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetMtlsChoice().(type) {
+	case *ProxyTypeTLSTCPAutoCerts_NoMtls:
+		if fv, exists := v.FldValidators["mtls_choice.no_mtls"]; exists {
+			val := m.GetMtlsChoice().(*ProxyTypeTLSTCPAutoCerts_NoMtls).NoMtls
+			vOpts := append(opts,
+				db.WithValidateField("mtls_choice"),
+				db.WithValidateField("no_mtls"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ProxyTypeTLSTCPAutoCerts_UseMtls:
+		if fv, exists := v.FldValidators["mtls_choice.use_mtls"]; exists {
+			val := m.GetMtlsChoice().(*ProxyTypeTLSTCPAutoCerts_UseMtls).UseMtls
+			vOpts := append(opts,
+				db.WithValidateField("mtls_choice"),
+				db.WithValidateField("use_mtls"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["tls_config"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("tls_config"))
+		if err := fv(ctx, m.GetTlsConfig(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultProxyTypeTLSTCPAutoCertsValidator = func() *ValidateProxyTypeTLSTCPAutoCerts {
+	v := &ValidateProxyTypeTLSTCPAutoCerts{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhMtlsChoice := v.MtlsChoiceValidationRuleHandler
+	rulesMtlsChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhMtlsChoice(rulesMtlsChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ProxyTypeTLSTCPAutoCerts.mtls_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["mtls_choice"] = vFn
+
+	v.FldValidators["mtls_choice.use_mtls"] = ves_io_schema_views.DownstreamTlsValidationContextValidator().Validate
+
+	v.FldValidators["tls_config"] = ves_io_schema_views.TlsConfigValidator().Validate
+
+	return v
+}()
+
+func ProxyTypeTLSTCPAutoCertsValidator() db.Validator {
+	return DefaultProxyTypeTLSTCPAutoCertsValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *ReplaceSpecType) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
 
 func (m *ReplaceSpecType) ToYAML() (string, error) {
 	return codec.ToYAML(m)
+}
+
+// Redact squashes sensitive info in m (in-place)
+func (m *ReplaceSpecType) Redact(ctx context.Context) error {
+	// clear fields with confidential option set (at message or field level)
+	if m == nil {
+		return nil
+	}
+
+	if err := m.GetTlsTcp().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting ReplaceSpecType.tls_tcp")
+	}
+
+	return nil
 }
 
 func (m *ReplaceSpecType) DeepCopy() *ReplaceSpecType {
@@ -2154,6 +3049,12 @@ func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	var drInfos []db.DRefInfo
 	if fdrInfos, err := m.GetAdvertiseChoiceDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetAdvertiseChoiceDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	if fdrInfos, err := m.GetLoadbalancerTypeDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetLoadbalancerTypeDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
@@ -2209,6 +3110,44 @@ func (m *ReplaceSpecType) GetAdvertiseChoiceDRefInfo() ([]db.DRefInfo, error) {
 	case *ReplaceSpecType_AdvertiseOnPublicDefaultVip:
 
 		return nil, nil
+
+	default:
+		return nil, nil
+	}
+
+}
+
+// GetDRefInfo for the field's type
+func (m *ReplaceSpecType) GetLoadbalancerTypeDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetLoadbalancerType() == nil {
+		return nil, nil
+	}
+	switch m.GetLoadbalancerType().(type) {
+	case *ReplaceSpecType_Tcp:
+
+		return nil, nil
+
+	case *ReplaceSpecType_TlsTcpAutoCert:
+		drInfos, err := m.GetTlsTcpAutoCert().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetTlsTcpAutoCert().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "tls_tcp_auto_cert." + dri.DRField
+		}
+		return drInfos, err
+
+	case *ReplaceSpecType_TlsTcp:
+		drInfos, err := m.GetTlsTcp().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetTlsTcp().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "tls_tcp." + dri.DRField
+		}
+		return drInfos, err
 
 	default:
 		return nil, nil
@@ -2317,6 +3256,22 @@ func (v *ValidateReplaceSpecType) HashPolicyChoiceValidationRuleHandler(rules ma
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for hash_policy_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateReplaceSpecType) LoadbalancerTypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for loadbalancer_type")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateReplaceSpecType) SniDefaultLbChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for sni_default_lb_choice")
 	}
 	return validatorFn, nil
 }
@@ -2664,6 +3619,53 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 
 	}
 
+	if fv, exists := v.FldValidators["loadbalancer_type"]; exists {
+		val := m.GetLoadbalancerType()
+		vOpts := append(opts,
+			db.WithValidateField("loadbalancer_type"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetLoadbalancerType().(type) {
+	case *ReplaceSpecType_Tcp:
+		if fv, exists := v.FldValidators["loadbalancer_type.tcp"]; exists {
+			val := m.GetLoadbalancerType().(*ReplaceSpecType_Tcp).Tcp
+			vOpts := append(opts,
+				db.WithValidateField("loadbalancer_type"),
+				db.WithValidateField("tcp"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ReplaceSpecType_TlsTcpAutoCert:
+		if fv, exists := v.FldValidators["loadbalancer_type.tls_tcp_auto_cert"]; exists {
+			val := m.GetLoadbalancerType().(*ReplaceSpecType_TlsTcpAutoCert).TlsTcpAutoCert
+			vOpts := append(opts,
+				db.WithValidateField("loadbalancer_type"),
+				db.WithValidateField("tls_tcp_auto_cert"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ReplaceSpecType_TlsTcp:
+		if fv, exists := v.FldValidators["loadbalancer_type.tls_tcp"]; exists {
+			val := m.GetLoadbalancerType().(*ReplaceSpecType_TlsTcp).TlsTcp
+			vOpts := append(opts,
+				db.WithValidateField("loadbalancer_type"),
+				db.WithValidateField("tls_tcp"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["origin_pools"]; exists {
 		vOpts := append(opts, db.WithValidateField("origin_pools"))
 		if err := fv(ctx, m.GetOriginPools(), vOpts...); err != nil {
@@ -2680,11 +3682,49 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 
 	}
 
-	if fv, exists := v.FldValidators["with_sni"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("with_sni"))
-		if err := fv(ctx, m.GetWithSni(), vOpts...); err != nil {
+	if fv, exists := v.FldValidators["sni_default_lb_choice"]; exists {
+		val := m.GetSniDefaultLbChoice()
+		vOpts := append(opts,
+			db.WithValidateField("sni_default_lb_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
 			return err
+		}
+	}
+
+	switch m.GetSniDefaultLbChoice().(type) {
+	case *ReplaceSpecType_NoSni:
+		if fv, exists := v.FldValidators["sni_default_lb_choice.no_sni"]; exists {
+			val := m.GetSniDefaultLbChoice().(*ReplaceSpecType_NoSni).NoSni
+			vOpts := append(opts,
+				db.WithValidateField("sni_default_lb_choice"),
+				db.WithValidateField("no_sni"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ReplaceSpecType_Sni:
+		if fv, exists := v.FldValidators["sni_default_lb_choice.sni"]; exists {
+			val := m.GetSniDefaultLbChoice().(*ReplaceSpecType_Sni).Sni
+			vOpts := append(opts,
+				db.WithValidateField("sni_default_lb_choice"),
+				db.WithValidateField("sni"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ReplaceSpecType_DefaultLbWithSni:
+		if fv, exists := v.FldValidators["sni_default_lb_choice.default_lb_with_sni"]; exists {
+			val := m.GetSniDefaultLbChoice().(*ReplaceSpecType_DefaultLbWithSni).DefaultLbWithSni
+			vOpts := append(opts,
+				db.WithValidateField("sni_default_lb_choice"),
+				db.WithValidateField("default_lb_with_sni"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
 		}
 
 	}
@@ -2736,6 +3776,28 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["hash_policy_choice"] = vFn
+
+	vrhLoadbalancerType := v.LoadbalancerTypeValidationRuleHandler
+	rulesLoadbalancerType := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhLoadbalancerType(rulesLoadbalancerType)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ReplaceSpecType.loadbalancer_type: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["loadbalancer_type"] = vFn
+
+	vrhSniDefaultLbChoice := v.SniDefaultLbChoiceValidationRuleHandler
+	rulesSniDefaultLbChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhSniDefaultLbChoice(rulesSniDefaultLbChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ReplaceSpecType.sni_default_lb_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["sni_default_lb_choice"] = vFn
 
 	vrhDomains := v.DomainsValidationRuleHandler
 	rulesDomains := map[string]string{
@@ -2798,6 +3860,9 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 
 	v.FldValidators["advertise_choice.advertise_on_public"] = ves_io_schema_views.AdvertisePublicValidator().Validate
 	v.FldValidators["advertise_choice.advertise_custom"] = ves_io_schema_views.AdvertiseCustomValidator().Validate
+
+	v.FldValidators["loadbalancer_type.tls_tcp_auto_cert"] = ProxyTypeTLSTCPAutoCertsValidator().Validate
+	v.FldValidators["loadbalancer_type.tls_tcp"] = ProxyTypeTLSTCPValidator().Validate
 
 	return v
 }()
@@ -2935,6 +4000,88 @@ func (r *CreateSpecType) GetHashPolicyChoiceFromGlobalSpecType(o *GlobalSpecType
 	return nil
 }
 
+// create setters in CreateSpecType from GlobalSpecType for oneof fields
+func (r *CreateSpecType) SetLoadbalancerTypeToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.LoadbalancerType.(type) {
+	case nil:
+		o.LoadbalancerType = nil
+
+	case *CreateSpecType_Tcp:
+		o.LoadbalancerType = &GlobalSpecType_Tcp{Tcp: of.Tcp}
+
+	case *CreateSpecType_TlsTcp:
+		o.LoadbalancerType = &GlobalSpecType_TlsTcp{TlsTcp: of.TlsTcp}
+
+	case *CreateSpecType_TlsTcpAutoCert:
+		o.LoadbalancerType = &GlobalSpecType_TlsTcpAutoCert{TlsTcpAutoCert: of.TlsTcpAutoCert}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *CreateSpecType) GetLoadbalancerTypeFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.LoadbalancerType.(type) {
+	case nil:
+		r.LoadbalancerType = nil
+
+	case *GlobalSpecType_Tcp:
+		r.LoadbalancerType = &CreateSpecType_Tcp{Tcp: of.Tcp}
+
+	case *GlobalSpecType_TlsTcp:
+		r.LoadbalancerType = &CreateSpecType_TlsTcp{TlsTcp: of.TlsTcp}
+
+	case *GlobalSpecType_TlsTcpAutoCert:
+		r.LoadbalancerType = &CreateSpecType_TlsTcpAutoCert{TlsTcpAutoCert: of.TlsTcpAutoCert}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+// create setters in CreateSpecType from GlobalSpecType for oneof fields
+func (r *CreateSpecType) SetSniDefaultLbChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.SniDefaultLbChoice.(type) {
+	case nil:
+		o.SniDefaultLbChoice = nil
+
+	case *CreateSpecType_DefaultLbWithSni:
+		o.SniDefaultLbChoice = &GlobalSpecType_DefaultLbWithSni{DefaultLbWithSni: of.DefaultLbWithSni}
+
+	case *CreateSpecType_NoSni:
+		o.SniDefaultLbChoice = &GlobalSpecType_NoSni{NoSni: of.NoSni}
+
+	case *CreateSpecType_Sni:
+		o.SniDefaultLbChoice = &GlobalSpecType_Sni{Sni: of.Sni}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *CreateSpecType) GetSniDefaultLbChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.SniDefaultLbChoice.(type) {
+	case nil:
+		r.SniDefaultLbChoice = nil
+
+	case *GlobalSpecType_DefaultLbWithSni:
+		r.SniDefaultLbChoice = &CreateSpecType_DefaultLbWithSni{DefaultLbWithSni: of.DefaultLbWithSni}
+
+	case *GlobalSpecType_NoSni:
+		r.SniDefaultLbChoice = &CreateSpecType_NoSni{NoSni: of.NoSni}
+
+	case *GlobalSpecType_Sni:
+		r.SniDefaultLbChoice = &CreateSpecType_Sni{Sni: of.Sni}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
 func (m *CreateSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	if f == nil {
 		return
@@ -2946,8 +4093,9 @@ func (m *CreateSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool
 	m.GetHashPolicyChoiceFromGlobalSpecType(f)
 	m.IdleTimeout = f.GetIdleTimeout()
 	m.ListenPort = f.GetListenPort()
+	m.GetLoadbalancerTypeFromGlobalSpecType(f)
 	m.OriginPoolsWeights = f.GetOriginPoolsWeights()
-	m.WithSni = f.GetWithSni()
+	m.GetSniDefaultLbChoiceFromGlobalSpecType(f)
 }
 
 func (m *CreateSpecType) FromGlobalSpecType(f *GlobalSpecType) {
@@ -2972,8 +4120,9 @@ func (m *CreateSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) 
 	m1.SetHashPolicyChoiceToGlobalSpecType(f)
 	f.IdleTimeout = m1.IdleTimeout
 	f.ListenPort = m1.ListenPort
+	m1.SetLoadbalancerTypeToGlobalSpecType(f)
 	f.OriginPoolsWeights = m1.OriginPoolsWeights
-	f.WithSni = m1.WithSni
+	m1.SetSniDefaultLbChoiceToGlobalSpecType(f)
 }
 
 func (m *CreateSpecType) ToGlobalSpecType(f *GlobalSpecType) {
@@ -3113,11 +4262,94 @@ func (r *GetSpecType) GetHashPolicyChoiceFromGlobalSpecType(o *GlobalSpecType) e
 	return nil
 }
 
+// create setters in GetSpecType from GlobalSpecType for oneof fields
+func (r *GetSpecType) SetLoadbalancerTypeToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.LoadbalancerType.(type) {
+	case nil:
+		o.LoadbalancerType = nil
+
+	case *GetSpecType_Tcp:
+		o.LoadbalancerType = &GlobalSpecType_Tcp{Tcp: of.Tcp}
+
+	case *GetSpecType_TlsTcp:
+		o.LoadbalancerType = &GlobalSpecType_TlsTcp{TlsTcp: of.TlsTcp}
+
+	case *GetSpecType_TlsTcpAutoCert:
+		o.LoadbalancerType = &GlobalSpecType_TlsTcpAutoCert{TlsTcpAutoCert: of.TlsTcpAutoCert}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *GetSpecType) GetLoadbalancerTypeFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.LoadbalancerType.(type) {
+	case nil:
+		r.LoadbalancerType = nil
+
+	case *GlobalSpecType_Tcp:
+		r.LoadbalancerType = &GetSpecType_Tcp{Tcp: of.Tcp}
+
+	case *GlobalSpecType_TlsTcp:
+		r.LoadbalancerType = &GetSpecType_TlsTcp{TlsTcp: of.TlsTcp}
+
+	case *GlobalSpecType_TlsTcpAutoCert:
+		r.LoadbalancerType = &GetSpecType_TlsTcpAutoCert{TlsTcpAutoCert: of.TlsTcpAutoCert}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+// create setters in GetSpecType from GlobalSpecType for oneof fields
+func (r *GetSpecType) SetSniDefaultLbChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.SniDefaultLbChoice.(type) {
+	case nil:
+		o.SniDefaultLbChoice = nil
+
+	case *GetSpecType_DefaultLbWithSni:
+		o.SniDefaultLbChoice = &GlobalSpecType_DefaultLbWithSni{DefaultLbWithSni: of.DefaultLbWithSni}
+
+	case *GetSpecType_NoSni:
+		o.SniDefaultLbChoice = &GlobalSpecType_NoSni{NoSni: of.NoSni}
+
+	case *GetSpecType_Sni:
+		o.SniDefaultLbChoice = &GlobalSpecType_Sni{Sni: of.Sni}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *GetSpecType) GetSniDefaultLbChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.SniDefaultLbChoice.(type) {
+	case nil:
+		r.SniDefaultLbChoice = nil
+
+	case *GlobalSpecType_DefaultLbWithSni:
+		r.SniDefaultLbChoice = &GetSpecType_DefaultLbWithSni{DefaultLbWithSni: of.DefaultLbWithSni}
+
+	case *GlobalSpecType_NoSni:
+		r.SniDefaultLbChoice = &GetSpecType_NoSni{NoSni: of.NoSni}
+
+	case *GlobalSpecType_Sni:
+		r.SniDefaultLbChoice = &GetSpecType_Sni{Sni: of.Sni}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
 func (m *GetSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	if f == nil {
 		return
 	}
 	m.GetAdvertiseChoiceFromGlobalSpecType(f)
+	m.AutoCertInfo = f.GetAutoCertInfo()
 	m.GetClusterRetractChoiceFromGlobalSpecType(f)
 	m.DnsInfo = f.GetDnsInfo()
 	m.DnsVolterraManaged = f.GetDnsVolterraManaged()
@@ -3126,9 +4358,10 @@ func (m *GetSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	m.HostName = f.GetHostName()
 	m.IdleTimeout = f.GetIdleTimeout()
 	m.ListenPort = f.GetListenPort()
+	m.GetLoadbalancerTypeFromGlobalSpecType(f)
 	m.OriginPools = f.GetOriginPools()
 	m.OriginPoolsWeights = f.GetOriginPoolsWeights()
-	m.WithSni = f.GetWithSni()
+	m.GetSniDefaultLbChoiceFromGlobalSpecType(f)
 }
 
 func (m *GetSpecType) FromGlobalSpecType(f *GlobalSpecType) {
@@ -3147,6 +4380,7 @@ func (m *GetSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	_ = m1
 
 	m1.SetAdvertiseChoiceToGlobalSpecType(f)
+	f.AutoCertInfo = m1.AutoCertInfo
 	m1.SetClusterRetractChoiceToGlobalSpecType(f)
 	f.DnsInfo = m1.DnsInfo
 	f.DnsVolterraManaged = m1.DnsVolterraManaged
@@ -3155,9 +4389,10 @@ func (m *GetSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	f.HostName = m1.HostName
 	f.IdleTimeout = m1.IdleTimeout
 	f.ListenPort = m1.ListenPort
+	m1.SetLoadbalancerTypeToGlobalSpecType(f)
 	f.OriginPools = m1.OriginPools
 	f.OriginPoolsWeights = m1.OriginPoolsWeights
-	f.WithSni = m1.WithSni
+	m1.SetSniDefaultLbChoiceToGlobalSpecType(f)
 }
 
 func (m *GetSpecType) ToGlobalSpecType(f *GlobalSpecType) {
@@ -3297,6 +4532,88 @@ func (r *ReplaceSpecType) GetHashPolicyChoiceFromGlobalSpecType(o *GlobalSpecTyp
 	return nil
 }
 
+// create setters in ReplaceSpecType from GlobalSpecType for oneof fields
+func (r *ReplaceSpecType) SetLoadbalancerTypeToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.LoadbalancerType.(type) {
+	case nil:
+		o.LoadbalancerType = nil
+
+	case *ReplaceSpecType_Tcp:
+		o.LoadbalancerType = &GlobalSpecType_Tcp{Tcp: of.Tcp}
+
+	case *ReplaceSpecType_TlsTcp:
+		o.LoadbalancerType = &GlobalSpecType_TlsTcp{TlsTcp: of.TlsTcp}
+
+	case *ReplaceSpecType_TlsTcpAutoCert:
+		o.LoadbalancerType = &GlobalSpecType_TlsTcpAutoCert{TlsTcpAutoCert: of.TlsTcpAutoCert}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *ReplaceSpecType) GetLoadbalancerTypeFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.LoadbalancerType.(type) {
+	case nil:
+		r.LoadbalancerType = nil
+
+	case *GlobalSpecType_Tcp:
+		r.LoadbalancerType = &ReplaceSpecType_Tcp{Tcp: of.Tcp}
+
+	case *GlobalSpecType_TlsTcp:
+		r.LoadbalancerType = &ReplaceSpecType_TlsTcp{TlsTcp: of.TlsTcp}
+
+	case *GlobalSpecType_TlsTcpAutoCert:
+		r.LoadbalancerType = &ReplaceSpecType_TlsTcpAutoCert{TlsTcpAutoCert: of.TlsTcpAutoCert}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+// create setters in ReplaceSpecType from GlobalSpecType for oneof fields
+func (r *ReplaceSpecType) SetSniDefaultLbChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.SniDefaultLbChoice.(type) {
+	case nil:
+		o.SniDefaultLbChoice = nil
+
+	case *ReplaceSpecType_DefaultLbWithSni:
+		o.SniDefaultLbChoice = &GlobalSpecType_DefaultLbWithSni{DefaultLbWithSni: of.DefaultLbWithSni}
+
+	case *ReplaceSpecType_NoSni:
+		o.SniDefaultLbChoice = &GlobalSpecType_NoSni{NoSni: of.NoSni}
+
+	case *ReplaceSpecType_Sni:
+		o.SniDefaultLbChoice = &GlobalSpecType_Sni{Sni: of.Sni}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *ReplaceSpecType) GetSniDefaultLbChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.SniDefaultLbChoice.(type) {
+	case nil:
+		r.SniDefaultLbChoice = nil
+
+	case *GlobalSpecType_DefaultLbWithSni:
+		r.SniDefaultLbChoice = &ReplaceSpecType_DefaultLbWithSni{DefaultLbWithSni: of.DefaultLbWithSni}
+
+	case *GlobalSpecType_NoSni:
+		r.SniDefaultLbChoice = &ReplaceSpecType_NoSni{NoSni: of.NoSni}
+
+	case *GlobalSpecType_Sni:
+		r.SniDefaultLbChoice = &ReplaceSpecType_Sni{Sni: of.Sni}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
 func (m *ReplaceSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	if f == nil {
 		return
@@ -3308,9 +4625,10 @@ func (m *ReplaceSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy boo
 	m.GetHashPolicyChoiceFromGlobalSpecType(f)
 	m.IdleTimeout = f.GetIdleTimeout()
 	m.ListenPort = f.GetListenPort()
+	m.GetLoadbalancerTypeFromGlobalSpecType(f)
 	m.OriginPools = f.GetOriginPools()
 	m.OriginPoolsWeights = f.GetOriginPoolsWeights()
-	m.WithSni = f.GetWithSni()
+	m.GetSniDefaultLbChoiceFromGlobalSpecType(f)
 }
 
 func (m *ReplaceSpecType) FromGlobalSpecType(f *GlobalSpecType) {
@@ -3335,9 +4653,10 @@ func (m *ReplaceSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool)
 	m1.SetHashPolicyChoiceToGlobalSpecType(f)
 	f.IdleTimeout = m1.IdleTimeout
 	f.ListenPort = m1.ListenPort
+	m1.SetLoadbalancerTypeToGlobalSpecType(f)
 	f.OriginPools = m1.OriginPools
 	f.OriginPoolsWeights = m1.OriginPoolsWeights
-	f.WithSni = m1.WithSni
+	m1.SetSniDefaultLbChoiceToGlobalSpecType(f)
 }
 
 func (m *ReplaceSpecType) ToGlobalSpecType(f *GlobalSpecType) {

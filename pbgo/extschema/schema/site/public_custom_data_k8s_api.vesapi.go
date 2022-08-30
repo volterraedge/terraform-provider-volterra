@@ -322,7 +322,8 @@ func (c *CustomDataK8SAPIRestClient) doRPCConfigMapList(ctx context.Context, cal
 	}
 	defer rsp.Body.Close()
 
-	if rsp.StatusCode != http.StatusOK {
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
 		body, err := ioutil.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
 	}
@@ -333,7 +334,7 @@ func (c *CustomDataK8SAPIRestClient) doRPCConfigMapList(ctx context.Context, cal
 	}
 	pbRsp := &k8s_io_api_core_v1.ConfigMapList{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
-		return nil, fmt.Errorf("JSON Response %s is not of type *k8s.io.api.core.v1.ConfigMapList", body)
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *k8s.io.api.core.v1.ConfigMapList", body)
 
 	}
 	if callOpts.OutCallResponse != nil {
@@ -405,7 +406,8 @@ func (c *CustomDataK8SAPIRestClient) doRPCCronJobList(ctx context.Context, callO
 	}
 	defer rsp.Body.Close()
 
-	if rsp.StatusCode != http.StatusOK {
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
 		body, err := ioutil.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
 	}
@@ -416,7 +418,7 @@ func (c *CustomDataK8SAPIRestClient) doRPCCronJobList(ctx context.Context, callO
 	}
 	pbRsp := &k8s_io_api_batch_v1beta1.CronJobList{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
-		return nil, fmt.Errorf("JSON Response %s is not of type *k8s.io.api.batch.v1beta1.CronJobList", body)
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *k8s.io.api.batch.v1beta1.CronJobList", body)
 
 	}
 	if callOpts.OutCallResponse != nil {
@@ -488,7 +490,8 @@ func (c *CustomDataK8SAPIRestClient) doRPCDaemonSetList(ctx context.Context, cal
 	}
 	defer rsp.Body.Close()
 
-	if rsp.StatusCode != http.StatusOK {
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
 		body, err := ioutil.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
 	}
@@ -499,7 +502,7 @@ func (c *CustomDataK8SAPIRestClient) doRPCDaemonSetList(ctx context.Context, cal
 	}
 	pbRsp := &k8s_io_api_apps_v1.DaemonSetList{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
-		return nil, fmt.Errorf("JSON Response %s is not of type *k8s.io.api.apps.v1.DaemonSetList", body)
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *k8s.io.api.apps.v1.DaemonSetList", body)
 
 	}
 	if callOpts.OutCallResponse != nil {
@@ -571,7 +574,8 @@ func (c *CustomDataK8SAPIRestClient) doRPCDeploymentList(ctx context.Context, ca
 	}
 	defer rsp.Body.Close()
 
-	if rsp.StatusCode != http.StatusOK {
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
 		body, err := ioutil.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
 	}
@@ -582,7 +586,7 @@ func (c *CustomDataK8SAPIRestClient) doRPCDeploymentList(ctx context.Context, ca
 	}
 	pbRsp := &k8s_io_api_apps_v1.DeploymentList{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
-		return nil, fmt.Errorf("JSON Response %s is not of type *k8s.io.api.apps.v1.DeploymentList", body)
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *k8s.io.api.apps.v1.DeploymentList", body)
 
 	}
 	if callOpts.OutCallResponse != nil {
@@ -654,7 +658,8 @@ func (c *CustomDataK8SAPIRestClient) doRPCEndpointsList(ctx context.Context, cal
 	}
 	defer rsp.Body.Close()
 
-	if rsp.StatusCode != http.StatusOK {
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
 		body, err := ioutil.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
 	}
@@ -665,7 +670,7 @@ func (c *CustomDataK8SAPIRestClient) doRPCEndpointsList(ctx context.Context, cal
 	}
 	pbRsp := &k8s_io_api_core_v1.EndpointsList{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
-		return nil, fmt.Errorf("JSON Response %s is not of type *k8s.io.api.core.v1.EndpointsList", body)
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *k8s.io.api.core.v1.EndpointsList", body)
 
 	}
 	if callOpts.OutCallResponse != nil {
@@ -737,7 +742,8 @@ func (c *CustomDataK8SAPIRestClient) doRPCJobList(ctx context.Context, callOpts 
 	}
 	defer rsp.Body.Close()
 
-	if rsp.StatusCode != http.StatusOK {
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
 		body, err := ioutil.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
 	}
@@ -748,7 +754,7 @@ func (c *CustomDataK8SAPIRestClient) doRPCJobList(ctx context.Context, callOpts 
 	}
 	pbRsp := &k8s_io_api_batch_v1.JobList{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
-		return nil, fmt.Errorf("JSON Response %s is not of type *k8s.io.api.batch.v1.JobList", body)
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *k8s.io.api.batch.v1.JobList", body)
 
 	}
 	if callOpts.OutCallResponse != nil {
@@ -819,7 +825,8 @@ func (c *CustomDataK8SAPIRestClient) doRPCNamespaceList(ctx context.Context, cal
 	}
 	defer rsp.Body.Close()
 
-	if rsp.StatusCode != http.StatusOK {
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
 		body, err := ioutil.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
 	}
@@ -830,7 +837,7 @@ func (c *CustomDataK8SAPIRestClient) doRPCNamespaceList(ctx context.Context, cal
 	}
 	pbRsp := &k8s_io_api_core_v1.NamespaceList{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
-		return nil, fmt.Errorf("JSON Response %s is not of type *k8s.io.api.core.v1.NamespaceList", body)
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *k8s.io.api.core.v1.NamespaceList", body)
 
 	}
 	if callOpts.OutCallResponse != nil {
@@ -901,7 +908,8 @@ func (c *CustomDataK8SAPIRestClient) doRPCNodeList(ctx context.Context, callOpts
 	}
 	defer rsp.Body.Close()
 
-	if rsp.StatusCode != http.StatusOK {
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
 		body, err := ioutil.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
 	}
@@ -912,7 +920,7 @@ func (c *CustomDataK8SAPIRestClient) doRPCNodeList(ctx context.Context, callOpts
 	}
 	pbRsp := &k8s_io_api_core_v1.NodeList{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
-		return nil, fmt.Errorf("JSON Response %s is not of type *k8s.io.api.core.v1.NodeList", body)
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *k8s.io.api.core.v1.NodeList", body)
 
 	}
 	if callOpts.OutCallResponse != nil {
@@ -984,7 +992,8 @@ func (c *CustomDataK8SAPIRestClient) doRPCPersistentVolumeClaimList(ctx context.
 	}
 	defer rsp.Body.Close()
 
-	if rsp.StatusCode != http.StatusOK {
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
 		body, err := ioutil.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
 	}
@@ -995,7 +1004,7 @@ func (c *CustomDataK8SAPIRestClient) doRPCPersistentVolumeClaimList(ctx context.
 	}
 	pbRsp := &k8s_io_api_core_v1.PersistentVolumeClaimList{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
-		return nil, fmt.Errorf("JSON Response %s is not of type *k8s.io.api.core.v1.PersistentVolumeClaimList", body)
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *k8s.io.api.core.v1.PersistentVolumeClaimList", body)
 
 	}
 	if callOpts.OutCallResponse != nil {
@@ -1066,7 +1075,8 @@ func (c *CustomDataK8SAPIRestClient) doRPCPersistentVolumeList(ctx context.Conte
 	}
 	defer rsp.Body.Close()
 
-	if rsp.StatusCode != http.StatusOK {
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
 		body, err := ioutil.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
 	}
@@ -1077,7 +1087,7 @@ func (c *CustomDataK8SAPIRestClient) doRPCPersistentVolumeList(ctx context.Conte
 	}
 	pbRsp := &k8s_io_api_core_v1.PersistentVolumeList{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
-		return nil, fmt.Errorf("JSON Response %s is not of type *k8s.io.api.core.v1.PersistentVolumeList", body)
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *k8s.io.api.core.v1.PersistentVolumeList", body)
 
 	}
 	if callOpts.OutCallResponse != nil {
@@ -1149,7 +1159,8 @@ func (c *CustomDataK8SAPIRestClient) doRPCPodList(ctx context.Context, callOpts 
 	}
 	defer rsp.Body.Close()
 
-	if rsp.StatusCode != http.StatusOK {
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
 		body, err := ioutil.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
 	}
@@ -1160,7 +1171,7 @@ func (c *CustomDataK8SAPIRestClient) doRPCPodList(ctx context.Context, callOpts 
 	}
 	pbRsp := &k8s_io_api_core_v1.PodList{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
-		return nil, fmt.Errorf("JSON Response %s is not of type *k8s.io.api.core.v1.PodList", body)
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *k8s.io.api.core.v1.PodList", body)
 
 	}
 	if callOpts.OutCallResponse != nil {
@@ -1232,7 +1243,8 @@ func (c *CustomDataK8SAPIRestClient) doRPCReplicaSetList(ctx context.Context, ca
 	}
 	defer rsp.Body.Close()
 
-	if rsp.StatusCode != http.StatusOK {
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
 		body, err := ioutil.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
 	}
@@ -1243,7 +1255,7 @@ func (c *CustomDataK8SAPIRestClient) doRPCReplicaSetList(ctx context.Context, ca
 	}
 	pbRsp := &k8s_io_api_apps_v1.ReplicaSetList{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
-		return nil, fmt.Errorf("JSON Response %s is not of type *k8s.io.api.apps.v1.ReplicaSetList", body)
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *k8s.io.api.apps.v1.ReplicaSetList", body)
 
 	}
 	if callOpts.OutCallResponse != nil {
@@ -1315,7 +1327,8 @@ func (c *CustomDataK8SAPIRestClient) doRPCSecretList(ctx context.Context, callOp
 	}
 	defer rsp.Body.Close()
 
-	if rsp.StatusCode != http.StatusOK {
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
 		body, err := ioutil.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
 	}
@@ -1326,7 +1339,7 @@ func (c *CustomDataK8SAPIRestClient) doRPCSecretList(ctx context.Context, callOp
 	}
 	pbRsp := &k8s_io_api_core_v1.SecretList{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
-		return nil, fmt.Errorf("JSON Response %s is not of type *k8s.io.api.core.v1.SecretList", body)
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *k8s.io.api.core.v1.SecretList", body)
 
 	}
 	if callOpts.OutCallResponse != nil {
@@ -1398,7 +1411,8 @@ func (c *CustomDataK8SAPIRestClient) doRPCServiceList(ctx context.Context, callO
 	}
 	defer rsp.Body.Close()
 
-	if rsp.StatusCode != http.StatusOK {
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
 		body, err := ioutil.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
 	}
@@ -1409,7 +1423,7 @@ func (c *CustomDataK8SAPIRestClient) doRPCServiceList(ctx context.Context, callO
 	}
 	pbRsp := &k8s_io_api_core_v1.ServiceList{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
-		return nil, fmt.Errorf("JSON Response %s is not of type *k8s.io.api.core.v1.ServiceList", body)
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *k8s.io.api.core.v1.ServiceList", body)
 
 	}
 	if callOpts.OutCallResponse != nil {
@@ -1481,7 +1495,8 @@ func (c *CustomDataK8SAPIRestClient) doRPCStatefulSetList(ctx context.Context, c
 	}
 	defer rsp.Body.Close()
 
-	if rsp.StatusCode != http.StatusOK {
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
 		body, err := ioutil.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
 	}
@@ -1492,7 +1507,7 @@ func (c *CustomDataK8SAPIRestClient) doRPCStatefulSetList(ctx context.Context, c
 	}
 	pbRsp := &k8s_io_api_apps_v1.StatefulSetList{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
-		return nil, fmt.Errorf("JSON Response %s is not of type *k8s.io.api.apps.v1.StatefulSetList", body)
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *k8s.io.api.apps.v1.StatefulSetList", body)
 
 	}
 	if callOpts.OutCallResponse != nil {
@@ -1567,7 +1582,8 @@ func (c *CustomDataK8SAPIRestClient) doRPCVirtualMachineInstancesMetrics(ctx con
 	}
 	defer rsp.Body.Close()
 
-	if rsp.StatusCode != http.StatusOK {
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
 		body, err := ioutil.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
 	}
@@ -1578,7 +1594,7 @@ func (c *CustomDataK8SAPIRestClient) doRPCVirtualMachineInstancesMetrics(ctx con
 	}
 	pbRsp := &VirtualMachineInstancesMetricsResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
-		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.site.VirtualMachineInstancesMetricsResponse", body)
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.site.VirtualMachineInstancesMetricsResponse", body)
 
 	}
 	if callOpts.OutCallResponse != nil {
@@ -2536,7 +2552,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
     "paths": {
         "/public/namespaces/system/site/{site}/api/v1/configmaps": {
             "get": {
-                "summary": "ConfigMapList",
+                "summary": "ConfigMap List",
                 "description": "API to get list of configmaps for a given namespace in a site.",
                 "operationId": "ves.io.schema.site.CustomDataK8SAPI.ConfigMapList",
                 "responses": {
@@ -2628,7 +2644,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
         },
         "/public/namespaces/system/site/{site}/api/v1/endpoints": {
             "get": {
-                "summary": "EndpointsList",
+                "summary": "Endpoints List",
                 "description": "API to get list of endpoints for a given namespace in a site.",
                 "operationId": "ves.io.schema.site.CustomDataK8SAPI.EndpointsList",
                 "responses": {
@@ -2720,7 +2736,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
         },
         "/public/namespaces/system/site/{site}/api/v1/namespaces": {
             "get": {
-                "summary": "NamespaceList",
+                "summary": "Namespace List",
                 "description": "API to get list of namespaces in a site.",
                 "operationId": "ves.io.schema.site.CustomDataK8SAPI.NamespaceList",
                 "responses": {
@@ -2804,7 +2820,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
         },
         "/public/namespaces/system/site/{site}/api/v1/namespaces/{namespace}/configmaps": {
             "get": {
-                "summary": "ConfigMapList",
+                "summary": "ConfigMap List",
                 "description": "API to get list of configmaps for a given namespace in a site.",
                 "operationId": "ves.io.schema.site.CustomDataK8SAPI.ConfigMapList",
                 "responses": {
@@ -2896,7 +2912,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
         },
         "/public/namespaces/system/site/{site}/api/v1/namespaces/{namespace}/endpoints": {
             "get": {
-                "summary": "EndpointsList",
+                "summary": "Endpoints List",
                 "description": "API to get list of endpoints for a given namespace in a site.",
                 "operationId": "ves.io.schema.site.CustomDataK8SAPI.EndpointsList",
                 "responses": {
@@ -2988,7 +3004,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
         },
         "/public/namespaces/system/site/{site}/api/v1/namespaces/{namespace}/persistentvolumeclaims": {
             "get": {
-                "summary": "PersistentVolumeClaimList",
+                "summary": "PersistentVolumeClaim List",
                 "description": "API to get list of PVCs for a given namespace in a site.",
                 "operationId": "ves.io.schema.site.CustomDataK8SAPI.PersistentVolumeClaimList",
                 "responses": {
@@ -3080,7 +3096,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
         },
         "/public/namespaces/system/site/{site}/api/v1/namespaces/{namespace}/pods": {
             "get": {
-                "summary": "PodList",
+                "summary": "Pod List",
                 "description": "API to get list of pods in a site for a given namespace.",
                 "operationId": "ves.io.schema.site.CustomDataK8SAPI.PodList",
                 "responses": {
@@ -3172,7 +3188,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
         },
         "/public/namespaces/system/site/{site}/api/v1/namespaces/{namespace}/secrets": {
             "get": {
-                "summary": "SecretList",
+                "summary": "Secret List",
                 "description": "API to get list of secrets for a given namespace in a site.",
                 "operationId": "ves.io.schema.site.CustomDataK8SAPI.SecretList",
                 "responses": {
@@ -3264,7 +3280,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
         },
         "/public/namespaces/system/site/{site}/api/v1/namespaces/{namespace}/services": {
             "get": {
-                "summary": "ServiceList",
+                "summary": "Service List",
                 "description": "API to get list of services for a given namespace in a site.",
                 "operationId": "ves.io.schema.site.CustomDataK8SAPI.ServiceList",
                 "responses": {
@@ -3356,7 +3372,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
         },
         "/public/namespaces/system/site/{site}/api/v1/nodes": {
             "get": {
-                "summary": "NodeList",
+                "summary": "Namespace List",
                 "description": "API to get list of nodes in a site.",
                 "operationId": "ves.io.schema.site.CustomDataK8SAPI.NodeList",
                 "responses": {
@@ -3440,7 +3456,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
         },
         "/public/namespaces/system/site/{site}/api/v1/persistentvolumeclaims": {
             "get": {
-                "summary": "PersistentVolumeClaimList",
+                "summary": "PersistentVolumeClaim List",
                 "description": "API to get list of PVCs for a given namespace in a site.",
                 "operationId": "ves.io.schema.site.CustomDataK8SAPI.PersistentVolumeClaimList",
                 "responses": {
@@ -3532,7 +3548,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
         },
         "/public/namespaces/system/site/{site}/api/v1/persistentvolumes": {
             "get": {
-                "summary": "PersistentVolumeList",
+                "summary": "PersistentVolume List",
                 "description": "API to get list of Persistent Volumes in a site.",
                 "operationId": "ves.io.schema.site.CustomDataK8SAPI.PersistentVolumeList",
                 "responses": {
@@ -3616,7 +3632,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
         },
         "/public/namespaces/system/site/{site}/api/v1/pods": {
             "get": {
-                "summary": "PodList",
+                "summary": "Pod List",
                 "description": "API to get list of pods in a site for a given namespace.",
                 "operationId": "ves.io.schema.site.CustomDataK8SAPI.PodList",
                 "responses": {
@@ -3708,7 +3724,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
         },
         "/public/namespaces/system/site/{site}/api/v1/secrets": {
             "get": {
-                "summary": "SecretList",
+                "summary": "Secret List",
                 "description": "API to get list of secrets for a given namespace in a site.",
                 "operationId": "ves.io.schema.site.CustomDataK8SAPI.SecretList",
                 "responses": {
@@ -3800,7 +3816,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
         },
         "/public/namespaces/system/site/{site}/api/v1/services": {
             "get": {
-                "summary": "ServiceList",
+                "summary": "Service List",
                 "description": "API to get list of services for a given namespace in a site.",
                 "operationId": "ves.io.schema.site.CustomDataK8SAPI.ServiceList",
                 "responses": {
@@ -3892,7 +3908,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
         },
         "/public/namespaces/system/site/{site}/apis/apps/v1/daemonsets": {
             "get": {
-                "summary": "DaemonSetList",
+                "summary": "DaemonSet List",
                 "description": "API to get list of daemon sets for a given namespace in a site.",
                 "operationId": "ves.io.schema.site.CustomDataK8SAPI.DaemonSetList",
                 "responses": {
@@ -3984,7 +4000,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
         },
         "/public/namespaces/system/site/{site}/apis/apps/v1/deployments": {
             "get": {
-                "summary": "DeploymentList",
+                "summary": "Deployment List",
                 "description": "API to get list of deployments for a given namespace in a site.",
                 "operationId": "ves.io.schema.site.CustomDataK8SAPI.DeploymentList",
                 "responses": {
@@ -4076,7 +4092,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
         },
         "/public/namespaces/system/site/{site}/apis/apps/v1/namespaces/{namespace}/daemonsets": {
             "get": {
-                "summary": "DaemonSetList",
+                "summary": "DaemonSet List",
                 "description": "API to get list of daemon sets for a given namespace in a site.",
                 "operationId": "ves.io.schema.site.CustomDataK8SAPI.DaemonSetList",
                 "responses": {
@@ -4168,7 +4184,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
         },
         "/public/namespaces/system/site/{site}/apis/apps/v1/namespaces/{namespace}/deployments": {
             "get": {
-                "summary": "DeploymentList",
+                "summary": "Deployment List",
                 "description": "API to get list of deployments for a given namespace in a site.",
                 "operationId": "ves.io.schema.site.CustomDataK8SAPI.DeploymentList",
                 "responses": {
@@ -4260,7 +4276,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
         },
         "/public/namespaces/system/site/{site}/apis/apps/v1/namespaces/{namespace}/replicasets": {
             "get": {
-                "summary": "ReplicaSetList",
+                "summary": "ReplicaSet List",
                 "description": "API to get list of replica sets for a given namespace in a site.",
                 "operationId": "ves.io.schema.site.CustomDataK8SAPI.ReplicaSetList",
                 "responses": {
@@ -4352,7 +4368,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
         },
         "/public/namespaces/system/site/{site}/apis/apps/v1/namespaces/{namespace}/statefulsets": {
             "get": {
-                "summary": "StatefulSetList",
+                "summary": "StatefulSet List",
                 "description": "API to get list of stateful sets for a given namespace in a site.",
                 "operationId": "ves.io.schema.site.CustomDataK8SAPI.StatefulSetList",
                 "responses": {
@@ -4444,7 +4460,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
         },
         "/public/namespaces/system/site/{site}/apis/apps/v1/replicasets": {
             "get": {
-                "summary": "ReplicaSetList",
+                "summary": "ReplicaSet List",
                 "description": "API to get list of replica sets for a given namespace in a site.",
                 "operationId": "ves.io.schema.site.CustomDataK8SAPI.ReplicaSetList",
                 "responses": {
@@ -4536,7 +4552,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
         },
         "/public/namespaces/system/site/{site}/apis/apps/v1/statefulsets": {
             "get": {
-                "summary": "StatefulSetList",
+                "summary": "StatefulSet List",
                 "description": "API to get list of stateful sets for a given namespace in a site.",
                 "operationId": "ves.io.schema.site.CustomDataK8SAPI.StatefulSetList",
                 "responses": {
@@ -4628,7 +4644,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
         },
         "/public/namespaces/system/site/{site}/apis/batch/v1/jobs": {
             "get": {
-                "summary": "JobList",
+                "summary": "Job List",
                 "description": "API to get list of jobs for a given namespace in a site.",
                 "operationId": "ves.io.schema.site.CustomDataK8SAPI.JobList",
                 "responses": {
@@ -4720,7 +4736,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
         },
         "/public/namespaces/system/site/{site}/apis/batch/v1/namespaces/{namespace}/jobs": {
             "get": {
-                "summary": "JobList",
+                "summary": "Job List",
                 "description": "API to get list of jobs for a given namespace in a site.",
                 "operationId": "ves.io.schema.site.CustomDataK8SAPI.JobList",
                 "responses": {
@@ -4812,7 +4828,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
         },
         "/public/namespaces/system/site/{site}/apis/batch/v1beta1/cronjobs": {
             "get": {
-                "summary": "CronJobList",
+                "summary": "CronJob List",
                 "description": "API to get list of cronjobs for a given namespace in a site.",
                 "operationId": "ves.io.schema.site.CustomDataK8SAPI.CronJobList",
                 "responses": {
@@ -4904,7 +4920,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
         },
         "/public/namespaces/system/site/{site}/apis/batch/v1beta1/namespaces/{namespace}/cronjobs": {
             "get": {
-                "summary": "CronJobList",
+                "summary": "CronJob List",
                 "description": "API to get list of cronjobs for a given namespace in a site.",
                 "operationId": "ves.io.schema.site.CustomDataK8SAPI.CronJobList",
                 "responses": {
@@ -4996,7 +5012,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
         },
         "/public/namespaces/system/site/{site}/namespaces/{namespace}/virtualmachineinstances/metrics": {
             "post": {
-                "summary": "VirtualMachineInstancesMetrics",
+                "summary": "VirtualMachineInstances Metrics",
                 "description": "API to get virtual machine instances metrics for a given namespace in a site.",
                 "operationId": "ves.io.schema.site.CustomDataK8SAPI.VirtualMachineInstancesMetrics",
                 "responses": {
@@ -5096,7 +5112,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
         },
         "/public/namespaces/system/site/{site}/virtualmachineinstances/metrics": {
             "post": {
-                "summary": "VirtualMachineInstancesMetrics",
+                "summary": "VirtualMachineInstances Metrics",
                 "description": "API to get virtual machine instances metrics for a given namespace in a site.",
                 "operationId": "ves.io.schema.site.CustomDataK8SAPI.VirtualMachineInstancesMetrics",
                 "responses": {
@@ -5290,7 +5306,8 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 "UNIT_ERRORS_PER_SECOND",
                 "UNIT_PACKETS_PER_SECOND",
                 "UNIT_REQUESTS_PER_SECOND",
-                "UNIT_PACKETS"
+                "UNIT_PACKETS",
+                "UNIT_PERCENTAGE"
             ],
             "default": "UNIT_MILLISECONDS",
             "x-displayname": "Unit",

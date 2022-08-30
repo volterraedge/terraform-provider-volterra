@@ -1595,16 +1595,7 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 		item.Disabled = o.GetMetadata().GetDisable()
 
 		if len(req.ReportFields) > 0 {
-			noDBForm, _ := flags.GetEnvGetRspNoDBForm()
-			if !noDBForm {
-				item.Object = o.Object
-				sf.Logger().Alert(svcfw.GetResponseInDBForm,
-					log.MinorAlert,
-					zap.String("user", server.UserFromContext(ctx)),
-					zap.String("useragent", server.UseragentStrFromContext(ctx)),
-					zap.String("operation", "List"),
-				)
-			}
+			item.Object = o.Object
 
 			item.Metadata = &ves_io_schema.ObjectGetMetaType{}
 			item.Metadata.FromObjectMetaType(o.Metadata)
@@ -1683,7 +1674,7 @@ var APISwaggerJSON string = `{
     "paths": {
         "/public/namespaces/{metadata.namespace}/voltstack_sites": {
             "post": {
-                "summary": "CreateSpecType",
+                "summary": "Create App Stack site",
                 "description": "Shape of the App Stack site specification",
                 "operationId": "ves.io.schema.views.voltstack_site.API.Create",
                 "responses": {
@@ -1775,7 +1766,7 @@ var APISwaggerJSON string = `{
         },
         "/public/namespaces/{metadata.namespace}/voltstack_sites/{metadata.name}": {
             "put": {
-                "summary": "ReplaceSpecType",
+                "summary": "Replace App Stack site",
                 "description": "Shape of the App Stack site replace specification",
                 "operationId": "ves.io.schema.views.voltstack_site.API.Replace",
                 "responses": {
@@ -1875,7 +1866,7 @@ var APISwaggerJSON string = `{
         },
         "/public/namespaces/{namespace}/voltstack_sites": {
             "get": {
-                "summary": "List",
+                "summary": "List Configure App Stack Site",
                 "description": "List the set of voltstack_site in a namespace",
                 "operationId": "ves.io.schema.views.voltstack_site.API.List",
                 "responses": {
@@ -1991,7 +1982,7 @@ var APISwaggerJSON string = `{
         },
         "/public/namespaces/{namespace}/voltstack_sites/{name}": {
             "get": {
-                "summary": "GetSpecType",
+                "summary": "Get App Stack site",
                 "description": "Shape of the App Stack site specification",
                 "operationId": "ves.io.schema.views.voltstack_site.API.Get",
                 "responses": {
@@ -2095,7 +2086,7 @@ var APISwaggerJSON string = `{
                 "x-ves-proto-rpc": "ves.io.schema.views.voltstack_site.API.Get"
             },
             "delete": {
-                "summary": "Delete",
+                "summary": "Delete Configure App Stack Site",
                 "description": "Delete the specified voltstack_site",
                 "operationId": "ves.io.schema.views.voltstack_site.API.Delete",
                 "responses": {
@@ -2327,7 +2318,8 @@ var APISwaggerJSON string = `{
             "description": "BGP Peer parameters",
             "title": "Peer",
             "x-displayname": "BGP Peer",
-            "x-ves-displayorder": "1,2",
+            "x-ves-displayorder": "1,2,5",
+            "x-ves-oneof-field-passive_choice": "[\"passive_mode_disabled\",\"passive_mode_enabled\"]",
             "x-ves-oneof-field-type_choice": "[\"external\"]",
             "x-ves-proto-message": "ves.io.schema.bgp.Peer",
             "properties": {
@@ -2346,6 +2338,18 @@ var APISwaggerJSON string = `{
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true"
                     }
+                },
+                "passive_mode_disabled": {
+                    "description": "Exclusive with [passive_mode_enabled]\n",
+                    "title": "passive_mode_disabled",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disabled"
+                },
+                "passive_mode_enabled": {
+                    "description": "Exclusive with [passive_mode_disabled]\n",
+                    "title": "passive_mode_enabled",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Enabled"
                 }
             }
         },
@@ -6307,6 +6311,23 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "schemaviewsLocalControlPlaneType": {
+            "type": "object",
+            "description": "x-displayName: \"Site Local Control Plane\"\nSite Local Control Plane",
+            "title": "LocalControlPlaneType",
+            "properties": {
+                "default_local_control_plane": {
+                    "description": "x-displayName: \"Enable Site Local Control Plane\"\nEnable Site Local Control Plane",
+                    "title": "Disable Site Local Control Plane",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "no_local_control_plane": {
+                    "description": "x-displayName: \"Disable Site Local Control Plane\"\nDisable Site Local Control Plane",
+                    "title": "Disable Site Local Control Plane",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                }
+            }
+        },
         "schemaviewsObjectRefType": {
             "type": "object",
             "description": "This type establishes a direct reference from one object(the referrer) to another(the referred).\nSuch a reference is in form of tenant/namespace/name",
@@ -6386,6 +6407,23 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "siteReMeshGroup": {
+            "type": "object",
+            "description": "x-displayName: \"RE Mesh Group\"\nConfigures how ip-fabric network is connected between the RE sites.\nRE sites in same group are connected using connection-type configured for the group\nDefault connection-type between RE sites is IPSec",
+            "title": "RE Mesh Group",
+            "properties": {
+                "ipsec_group": {
+                    "type": "string",
+                    "description": "x-displayName: \"IPSec Connection\"\nSites with same ipsec_group are connected using IPSec tunnels",
+                    "title": "IPSec Connection"
+                },
+                "l3vpn_group": {
+                    "type": "string",
+                    "description": "x-displayName: \"L3VPN Connection\"\nSites with same l3vpn_group are connected using L3VPN",
+                    "title": "L3VPN Connection"
+                }
+            }
+        },
         "siteSiteState": {
             "type": "string",
             "description": "State of Site defines in which operational state site itself is.\n\nSite is online and operational.\nSite is in provisioning state. For instance during site deployment or switching to different connected Regional Edge.\nSite is in process of upgrade. It transition to ONLINE or FAILED state.\nSite is in Standby before goes to ONLINE. This is mainly for Regional Edge sites to do their verification before they go to ONLINE state.\nSite is in failed state. It failed during provisioning or upgrade phase. Site Status Objects contain more details.\nReregistration was requested\nReregistration is in progress and maurice is waiting for nodes\nSite deletion is in progress\nSite is waiting for registration",
@@ -6421,6 +6459,23 @@ var APISwaggerJSON string = `{
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true"
                     }
+                }
+            }
+        },
+        "viewsOfflineSurvivabilityModeType": {
+            "type": "object",
+            "description": "x-displayName: \"Offline Survivability Mode Type\"\nOffline Survivability Mode",
+            "title": "Offline Survivability Mode",
+            "properties": {
+                "enable_offline_survivability_mode": {
+                    "description": "x-displayName: \"Enable Offline Survivability Mode\"\nEnable Offline Survivability Mode.\nWhen it is enabled, a CE can work without internet connection for upto 3 days.\nThis can only be enabled at site creation time. But once enabled, offline survivability mode cannot be disabled later.\nEnabling offline survivability reduces default security of a CE.",
+                    "title": "Enable Offline Survivability Mode",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "no_offline_survivability_mode": {
+                    "description": "x-displayName: \"Disable Offline Survivability Mode\"\nDisable Offline Survivability Mode",
+                    "title": "Disable Offline Survivability Mode",
+                    "$ref": "#/definitions/ioschemaEmpty"
                 }
             }
         },

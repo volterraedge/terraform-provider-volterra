@@ -36,6 +36,7 @@ type GlobalSpecType struct {
 	// ip_address
 	//
 	// x-displayName: "IP address"
+	// x-required
 	// x-example: "10.1.1.1"
 	// IP address for this object
 	Ip string `protobuf:"bytes,1,opt,name=ip,proto3" json:"ip,omitempty"`

@@ -396,7 +396,8 @@ func (c *CustomAPIRestClient) doRPCAssignDomainOwner(ctx context.Context, callOp
 	}
 	defer rsp.Body.Close()
 
-	if rsp.StatusCode != http.StatusOK {
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
 		body, err := ioutil.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
 	}
@@ -407,7 +408,7 @@ func (c *CustomAPIRestClient) doRPCAssignDomainOwner(ctx context.Context, callOp
 	}
 	pbRsp := &Empty{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
-		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.tenant.Empty", body)
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.tenant.Empty", body)
 
 	}
 	if callOpts.OutCallResponse != nil {
@@ -478,7 +479,8 @@ func (c *CustomAPIRestClient) doRPCCreateDebugUser(ctx context.Context, callOpts
 	}
 	defer rsp.Body.Close()
 
-	if rsp.StatusCode != http.StatusOK {
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
 		body, err := ioutil.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
 	}
@@ -489,7 +491,7 @@ func (c *CustomAPIRestClient) doRPCCreateDebugUser(ctx context.Context, callOpts
 	}
 	pbRsp := &Empty{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
-		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.tenant.Empty", body)
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.tenant.Empty", body)
 
 	}
 	if callOpts.OutCallResponse != nil {
@@ -559,7 +561,8 @@ func (c *CustomAPIRestClient) doRPCDeleteDebugUser(ctx context.Context, callOpts
 	}
 	defer rsp.Body.Close()
 
-	if rsp.StatusCode != http.StatusOK {
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
 		body, err := ioutil.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
 	}
@@ -570,7 +573,7 @@ func (c *CustomAPIRestClient) doRPCDeleteDebugUser(ctx context.Context, callOpts
 	}
 	pbRsp := &Empty{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
-		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.tenant.Empty", body)
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.tenant.Empty", body)
 
 	}
 	if callOpts.OutCallResponse != nil {
@@ -640,7 +643,8 @@ func (c *CustomAPIRestClient) doRPCDeleteImage(ctx context.Context, callOpts *se
 	}
 	defer rsp.Body.Close()
 
-	if rsp.StatusCode != http.StatusOK {
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
 		body, err := ioutil.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
 	}
@@ -651,7 +655,7 @@ func (c *CustomAPIRestClient) doRPCDeleteImage(ctx context.Context, callOpts *se
 	}
 	pbRsp := &Empty{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
-		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.tenant.Empty", body)
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.tenant.Empty", body)
 
 	}
 	if callOpts.OutCallResponse != nil {
@@ -725,7 +729,8 @@ func (c *CustomAPIRestClient) doRPCDeleteTenant(ctx context.Context, callOpts *s
 	}
 	defer rsp.Body.Close()
 
-	if rsp.StatusCode != http.StatusOK {
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
 		body, err := ioutil.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
 	}
@@ -736,7 +741,7 @@ func (c *CustomAPIRestClient) doRPCDeleteTenant(ctx context.Context, callOpts *s
 	}
 	pbRsp := &StatusResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
-		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.tenant.StatusResponse", body)
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.tenant.StatusResponse", body)
 
 	}
 	if callOpts.OutCallResponse != nil {
@@ -806,7 +811,8 @@ func (c *CustomAPIRestClient) doRPCDisableTenantLevelOTP(ctx context.Context, ca
 	}
 	defer rsp.Body.Close()
 
-	if rsp.StatusCode != http.StatusOK {
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
 		body, err := ioutil.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
 	}
@@ -817,7 +823,7 @@ func (c *CustomAPIRestClient) doRPCDisableTenantLevelOTP(ctx context.Context, ca
 	}
 	pbRsp := &Empty{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
-		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.tenant.Empty", body)
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.tenant.Empty", body)
 
 	}
 	if callOpts.OutCallResponse != nil {
@@ -887,7 +893,8 @@ func (c *CustomAPIRestClient) doRPCEnableTenantLevelOTP(ctx context.Context, cal
 	}
 	defer rsp.Body.Close()
 
-	if rsp.StatusCode != http.StatusOK {
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
 		body, err := ioutil.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
 	}
@@ -898,7 +905,7 @@ func (c *CustomAPIRestClient) doRPCEnableTenantLevelOTP(ctx context.Context, cal
 	}
 	pbRsp := &Empty{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
-		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.tenant.Empty", body)
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.tenant.Empty", body)
 
 	}
 	if callOpts.OutCallResponse != nil {
@@ -968,7 +975,8 @@ func (c *CustomAPIRestClient) doRPCGetDebugUser(ctx context.Context, callOpts *s
 	}
 	defer rsp.Body.Close()
 
-	if rsp.StatusCode != http.StatusOK {
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
 		body, err := ioutil.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
 	}
@@ -979,7 +987,7 @@ func (c *CustomAPIRestClient) doRPCGetDebugUser(ctx context.Context, callOpts *s
 	}
 	pbRsp := &DebugUser{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
-		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.tenant.DebugUser", body)
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.tenant.DebugUser", body)
 
 	}
 	if callOpts.OutCallResponse != nil {
@@ -1049,7 +1057,8 @@ func (c *CustomAPIRestClient) doRPCGetIDMSettings(ctx context.Context, callOpts 
 	}
 	defer rsp.Body.Close()
 
-	if rsp.StatusCode != http.StatusOK {
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
 		body, err := ioutil.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
 	}
@@ -1060,7 +1069,7 @@ func (c *CustomAPIRestClient) doRPCGetIDMSettings(ctx context.Context, callOpts 
 	}
 	pbRsp := &ves_io_schema_views_tenant_configuration.GlobalSpecType{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
-		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.views.tenant_configuration.GlobalSpecType", body)
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.views.tenant_configuration.GlobalSpecType", body)
 
 	}
 	if callOpts.OutCallResponse != nil {
@@ -1130,7 +1139,8 @@ func (c *CustomAPIRestClient) doRPCGetImage(ctx context.Context, callOpts *serve
 	}
 	defer rsp.Body.Close()
 
-	if rsp.StatusCode != http.StatusOK {
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
 		body, err := ioutil.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
 	}
@@ -1213,7 +1223,8 @@ func (c *CustomAPIRestClient) doRPCGetLastLoginMap(ctx context.Context, callOpts
 	}
 	defer rsp.Body.Close()
 
-	if rsp.StatusCode != http.StatusOK {
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
 		body, err := ioutil.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
 	}
@@ -1224,7 +1235,7 @@ func (c *CustomAPIRestClient) doRPCGetLastLoginMap(ctx context.Context, callOpts
 	}
 	pbRsp := &LastLoginMap{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
-		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.tenant.LastLoginMap", body)
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.tenant.LastLoginMap", body)
 
 	}
 	if callOpts.OutCallResponse != nil {
@@ -1296,7 +1307,8 @@ func (c *CustomAPIRestClient) doRPCGetLoginEvents(ctx context.Context, callOpts 
 	}
 	defer rsp.Body.Close()
 
-	if rsp.StatusCode != http.StatusOK {
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
 		body, err := ioutil.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
 	}
@@ -1307,7 +1319,7 @@ func (c *CustomAPIRestClient) doRPCGetLoginEvents(ctx context.Context, callOpts 
 	}
 	pbRsp := &LoginEventsMap{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
-		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.tenant.LoginEventsMap", body)
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.tenant.LoginEventsMap", body)
 
 	}
 	if callOpts.OutCallResponse != nil {
@@ -1381,7 +1393,8 @@ func (c *CustomAPIRestClient) doRPCGetLoginEventsInTimeFrame(ctx context.Context
 	}
 	defer rsp.Body.Close()
 
-	if rsp.StatusCode != http.StatusOK {
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
 		body, err := ioutil.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
 	}
@@ -1392,7 +1405,7 @@ func (c *CustomAPIRestClient) doRPCGetLoginEventsInTimeFrame(ctx context.Context
 	}
 	pbRsp := &LoginEventsMap{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
-		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.tenant.LoginEventsMap", body)
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.tenant.LoginEventsMap", body)
 
 	}
 	if callOpts.OutCallResponse != nil {
@@ -1463,7 +1476,8 @@ func (c *CustomAPIRestClient) doRPCGetPasswordPolicy(ctx context.Context, callOp
 	}
 	defer rsp.Body.Close()
 
-	if rsp.StatusCode != http.StatusOK {
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
 		body, err := ioutil.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
 	}
@@ -1474,7 +1488,7 @@ func (c *CustomAPIRestClient) doRPCGetPasswordPolicy(ctx context.Context, callOp
 	}
 	pbRsp := &PasswordPolicyPublicAccess{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
-		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.tenant.PasswordPolicyPublicAccess", body)
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.tenant.PasswordPolicyPublicAccess", body)
 
 	}
 	if callOpts.OutCallResponse != nil {
@@ -1544,7 +1558,8 @@ func (c *CustomAPIRestClient) doRPCGetTenantEscalationDoc(ctx context.Context, c
 	}
 	defer rsp.Body.Close()
 
-	if rsp.StatusCode != http.StatusOK {
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
 		body, err := ioutil.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
 	}
@@ -1627,7 +1642,8 @@ func (c *CustomAPIRestClient) doRPCGetTenantSettings(ctx context.Context, callOp
 	}
 	defer rsp.Body.Close()
 
-	if rsp.StatusCode != http.StatusOK {
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
 		body, err := ioutil.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
 	}
@@ -1638,7 +1654,7 @@ func (c *CustomAPIRestClient) doRPCGetTenantSettings(ctx context.Context, callOp
 	}
 	pbRsp := &TenantSettingsResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
-		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.tenant.TenantSettingsResponse", body)
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.tenant.TenantSettingsResponse", body)
 
 	}
 	if callOpts.OutCallResponse != nil {
@@ -1708,7 +1724,8 @@ func (c *CustomAPIRestClient) doRPCListInactiveUsers(ctx context.Context, callOp
 	}
 	defer rsp.Body.Close()
 
-	if rsp.StatusCode != http.StatusOK {
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
 		body, err := ioutil.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
 	}
@@ -1719,7 +1736,7 @@ func (c *CustomAPIRestClient) doRPCListInactiveUsers(ctx context.Context, callOp
 	}
 	pbRsp := &UserList{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
-		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.tenant.UserList", body)
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.tenant.UserList", body)
 
 	}
 	if callOpts.OutCallResponse != nil {
@@ -1791,7 +1808,8 @@ func (c *CustomAPIRestClient) doRPCLookupCname(ctx context.Context, callOpts *se
 	}
 	defer rsp.Body.Close()
 
-	if rsp.StatusCode != http.StatusOK {
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
 		body, err := ioutil.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
 	}
@@ -1802,7 +1820,7 @@ func (c *CustomAPIRestClient) doRPCLookupCname(ctx context.Context, callOpts *se
 	}
 	pbRsp := &StatusResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
-		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.tenant.StatusResponse", body)
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.tenant.StatusResponse", body)
 
 	}
 	if callOpts.OutCallResponse != nil {
@@ -1885,7 +1903,8 @@ func (c *CustomAPIRestClient) doRPCSetBillingInfo(ctx context.Context, callOpts 
 	}
 	defer rsp.Body.Close()
 
-	if rsp.StatusCode != http.StatusOK {
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
 		body, err := ioutil.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
 	}
@@ -1896,7 +1915,7 @@ func (c *CustomAPIRestClient) doRPCSetBillingInfo(ctx context.Context, callOpts 
 	}
 	pbRsp := &StatusResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
-		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.tenant.StatusResponse", body)
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.tenant.StatusResponse", body)
 
 	}
 	if callOpts.OutCallResponse != nil {
@@ -1967,7 +1986,8 @@ func (c *CustomAPIRestClient) doRPCUnassignDomainOwner(ctx context.Context, call
 	}
 	defer rsp.Body.Close()
 
-	if rsp.StatusCode != http.StatusOK {
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
 		body, err := ioutil.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
 	}
@@ -1978,7 +1998,7 @@ func (c *CustomAPIRestClient) doRPCUnassignDomainOwner(ctx context.Context, call
 	}
 	pbRsp := &Empty{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
-		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.tenant.Empty", body)
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.tenant.Empty", body)
 
 	}
 	if callOpts.OutCallResponse != nil {
@@ -2051,7 +2071,8 @@ func (c *CustomAPIRestClient) doRPCUpdateIDMSettings(ctx context.Context, callOp
 	}
 	defer rsp.Body.Close()
 
-	if rsp.StatusCode != http.StatusOK {
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
 		body, err := ioutil.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
 	}
@@ -2062,7 +2083,7 @@ func (c *CustomAPIRestClient) doRPCUpdateIDMSettings(ctx context.Context, callOp
 	}
 	pbRsp := &Empty{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
-		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.tenant.Empty", body)
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.tenant.Empty", body)
 
 	}
 	if callOpts.OutCallResponse != nil {
@@ -2134,7 +2155,8 @@ func (c *CustomAPIRestClient) doRPCUpdateImage(ctx context.Context, callOpts *se
 	}
 	defer rsp.Body.Close()
 
-	if rsp.StatusCode != http.StatusOK {
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
 		body, err := ioutil.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
 	}
@@ -2145,7 +2167,7 @@ func (c *CustomAPIRestClient) doRPCUpdateImage(ctx context.Context, callOpts *se
 	}
 	pbRsp := &Empty{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
-		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.tenant.Empty", body)
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.tenant.Empty", body)
 
 	}
 	if callOpts.OutCallResponse != nil {
@@ -2217,7 +2239,8 @@ func (c *CustomAPIRestClient) doRPCUpdateTenantSettings(ctx context.Context, cal
 	}
 	defer rsp.Body.Close()
 
-	if rsp.StatusCode != http.StatusOK {
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
 		body, err := ioutil.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
 	}
@@ -2228,7 +2251,7 @@ func (c *CustomAPIRestClient) doRPCUpdateTenantSettings(ctx context.Context, cal
 	}
 	pbRsp := &UpdateTenantSettingsResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
-		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.tenant.UpdateTenantSettingsResponse", body)
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.tenant.UpdateTenantSettingsResponse", body)
 
 	}
 	if callOpts.OutCallResponse != nil {
@@ -3740,7 +3763,7 @@ var CustomAPISwaggerJSON string = `{
         },
         "/public/namespaces/system/tenant/billing-info": {
             "put": {
-                "summary": "Tenant Billing Plan Update",
+                "summary": "Update billing plan for the tenant",
                 "description": "Updates billing plan for the specific tenant.",
                 "operationId": "ves.io.schema.tenant.CustomAPI.SetBillingInfo",
                 "responses": {
@@ -5190,7 +5213,7 @@ var CustomAPISwaggerJSON string = `{
         },
         "/public/namespaces/system/tenant/settings/tenant/image": {
             "get": {
-                "summary": "Tenant profile image.",
+                "summary": "Tenant profile image",
                 "description": "Receive current tenant profile image.",
                 "operationId": "ves.io.schema.tenant.CustomAPI.GetImage",
                 "responses": {
@@ -5259,7 +5282,7 @@ var CustomAPISwaggerJSON string = `{
                 "x-ves-proto-rpc": "ves.io.schema.tenant.CustomAPI.GetImage"
             },
             "delete": {
-                "summary": "Delete tenant profile image.",
+                "summary": "Delete tenant profile image",
                 "description": "Delete profile image for the tenant entity.",
                 "operationId": "ves.io.schema.tenant.CustomAPI.DeleteImage",
                 "responses": {
@@ -5328,7 +5351,7 @@ var CustomAPISwaggerJSON string = `{
                 "x-ves-proto-rpc": "ves.io.schema.tenant.CustomAPI.DeleteImage"
             },
             "put": {
-                "summary": "Update tenant profile image.",
+                "summary": "Update tenant profile image",
                 "description": "Uploads new profile image for the tenant entity.",
                 "operationId": "ves.io.schema.tenant.CustomAPI.UpdateImage",
                 "responses": {

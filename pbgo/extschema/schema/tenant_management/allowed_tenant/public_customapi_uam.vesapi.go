@@ -162,7 +162,8 @@ func (c *CustomAPIRestClient) doRPCGetSupportTenantAccess(ctx context.Context, c
 	}
 	defer rsp.Body.Close()
 
-	if rsp.StatusCode != http.StatusOK {
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
 		body, err := ioutil.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
 	}
@@ -173,7 +174,7 @@ func (c *CustomAPIRestClient) doRPCGetSupportTenantAccess(ctx context.Context, c
 	}
 	pbRsp := &GetSupportTenantAccessResp{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
-		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.tenant_management.allowed_tenant.GetSupportTenantAccessResp", body)
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.tenant_management.allowed_tenant.GetSupportTenantAccessResp", body)
 
 	}
 	if callOpts.OutCallResponse != nil {
@@ -245,7 +246,8 @@ func (c *CustomAPIRestClient) doRPCUpdateSupportTenantAccess(ctx context.Context
 	}
 	defer rsp.Body.Close()
 
-	if rsp.StatusCode != http.StatusOK {
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
 		body, err := ioutil.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
 	}
@@ -256,7 +258,7 @@ func (c *CustomAPIRestClient) doRPCUpdateSupportTenantAccess(ctx context.Context
 	}
 	pbRsp := &UpdateSupportTenantAccessResp{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
-		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.tenant_management.allowed_tenant.UpdateSupportTenantAccessResp", body)
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.tenant_management.allowed_tenant.UpdateSupportTenantAccessResp", body)
 
 	}
 	if callOpts.OutCallResponse != nil {
@@ -458,136 +460,369 @@ var CustomAPISwaggerJSON string = `{
         "application/json"
     ],
     "tags": [],
-    "paths": {},
+    "paths": {
+        "/public/namespaces/system/allowed_tenants/{name}/access": {
+            "get": {
+                "summary": "Get Support Tenant Access",
+                "description": "Get current access details for the support tenant.\nName is well-known identifier for a specific support related tenant.",
+                "operationId": "ves.io.schema.tenant_management.allowed_tenant.CustomAPI.GetSupportTenantAccess",
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/allowed_tenantGetSupportTenantAccessResp"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "name",
+                        "description": "Name\n\nx-example: \"l1-support\"\nwell-known name of the support tenant config object.",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "x-displayname": "Name"
+                    }
+                ],
+                "tags": [
+                    "CustomAPI"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-tenant_management-allowed_tenant-customapi-getsupporttenantaccess"
+                },
+                "x-ves-proto-rpc": "ves.io.schema.tenant_management.allowed_tenant.CustomAPI.GetSupportTenantAccess"
+            },
+            "post": {
+                "summary": "Update Support Tenant Access",
+                "description": "This RPC can be used to manage user access for all flavors of support tenants currently\nsupported by the platform. Use read-only, read-write with specific namespaces or\nadmin can specify custom groups to control access by the support tenant user.\nName is well-known identifier for a specific support related tenant.",
+                "operationId": "ves.io.schema.tenant_management.allowed_tenant.CustomAPI.UpdateSupportTenantAccess",
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/allowed_tenantUpdateSupportTenantAccessResp"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "name",
+                        "description": "Name\n\nx-example: \"l1-support\"\nwell-known name of the support tenant config object.",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "x-displayname": "Name"
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/allowed_tenantUpdateSupportTenantAccessReq"
+                        }
+                    }
+                ],
+                "tags": [
+                    "CustomAPI"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-tenant_management-allowed_tenant-customapi-updatesupporttenantaccess"
+                },
+                "x-ves-proto-rpc": "ves.io.schema.tenant_management.allowed_tenant.CustomAPI.UpdateSupportTenantAccess"
+            },
+            "x-displayname": "Allowed Tenant - UAM Manager Custom APIs",
+            "x-ves-proto-service": "ves.io.schema.tenant_management.allowed_tenant.CustomAPI",
+            "x-ves-proto-service-type": "CUSTOM_PUBLIC"
+        }
+    },
     "definitions": {
         "allowed_tenantAllowedAccessConfig": {
             "type": "object",
-            "description": "x-displayName: \"Access Config\"\nShape for storing access config for a tenant.\ndefault field options - disable, read-only, read_write provided for easy acccess controls\nand underlying allowed groups corresponding to each usecase will be updated accordingly.\nmainly used for storing state for support related tenant access.",
+            "description": "Shape for storing access config for a tenant.\ndefault field options - disable, read-only, read_write provided for easy acccess controls\nand underlying allowed groups corresponding to each usecase will be updated accordingly.\nmainly used for storing state for support related tenant access.",
             "title": "AccessConfig",
+            "x-displayname": "Access Config",
+            "x-ves-oneof-field-access_type_choice": "[\"custom\",\"read_only\",\"read_write_all\",\"read_write_ns\"]",
+            "x-ves-proto-message": "ves.io.schema.tenant_management.allowed_tenant.AllowedAccessConfig",
             "properties": {
                 "custom": {
-                    "description": "x-displayName: \"Custom Access\"\nUse custom if more granular access control is required.\nadmin has option to choose specific namespaces and corresponding roles that are allowed in that namespace.",
+                    "description": "Exclusive with [read_only read_write_all read_write_ns]\n Use custom if more granular access control is required.\n admin has option to choose specific namespaces and corresponding roles that are allowed in that namespace.",
                     "title": "custom",
-                    "$ref": "#/definitions/allowed_tenantCustomAccess"
+                    "$ref": "#/definitions/allowed_tenantCustomAccess",
+                    "x-displayname": "Custom Access"
                 },
                 "disable": {
                     "type": "boolean",
-                    "description": "x-displayName: \"Disable Access\"\nby default access will be enabled.",
+                    "description": " by default access will be enabled.",
                     "title": "Disable",
-                    "format": "boolean"
+                    "format": "boolean",
+                    "x-displayname": "Disable Access"
                 },
                 "read_only": {
-                    "description": "x-displayName: \"Read Only\"\nUser will be able perform read operations into tenant in all namespaces.",
+                    "description": "Exclusive with [custom read_write_all read_write_ns]\n User will be able perform read operations into tenant in all namespaces.",
                     "title": "read_only",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Read Only"
                 },
                 "read_write_all": {
-                    "description": "x-displayName: \"Read Write All\"\nUser will be able perform read and write operations into tenant in all namespaces.",
+                    "description": "Exclusive with [custom read_only read_write_ns]\n User will be able perform read and write operations into tenant in all namespaces.",
                     "title": "read_write_all",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Read Write All"
                 },
                 "read_write_ns": {
-                    "description": "x-displayName: \"Namespace Read Write Access\"\nSet list of namespaces if read write access needs to be retricted exact list of namesapces provided.",
+                    "description": "Exclusive with [custom read_only read_write_all]\n Set list of namespaces if read write access needs to be retricted exact list of namesapces provided.",
                     "title": "read_write_ns",
-                    "$ref": "#/definitions/allowed_tenantNsReadWriteAccess"
+                    "$ref": "#/definitions/allowed_tenantNsReadWriteAccess",
+                    "x-displayname": "Namespace Read Write Access"
                 }
             }
         },
         "allowed_tenantCustomAccess": {
             "type": "object",
-            "description": "x-displayName: \"Custom Access\"\nshape of custom read write access control for support tenant access",
+            "description": "shape of custom read write access control for support tenant access",
             "title": "CustomAccess",
+            "x-displayname": "Custom Access",
+            "x-ves-proto-message": "ves.io.schema.tenant_management.allowed_tenant.CustomAccess",
             "properties": {
                 "groups": {
                     "type": "array",
-                    "description": "x-displayName: \"Groups\"\nList of references to groups entries.\nAdmin can use this option to set any custom user group thats already created under the tenant.",
+                    "description": " List of references to groups entries.\n Admin can use this option to set any custom user group thats already created under the tenant.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 32\n",
                     "title": "groups",
+                    "maxItems": 32,
                     "items": {
                         "$ref": "#/definitions/schemaviewsObjectRefType"
+                    },
+                    "x-displayname": "Groups",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "32"
                     }
                 }
             }
         },
         "allowed_tenantGetSupportTenantAccessResp": {
             "type": "object",
-            "description": "x-displayName: \"Get Support Tenant Access Response\"\nResponse to get access control configurations for a support tenant.",
+            "description": "Response to get access control configurations for a support tenant.",
             "title": "GetSupportTenantAccessResp",
+            "x-displayname": "Get Support Tenant Access Response",
+            "x-ves-proto-message": "ves.io.schema.tenant_management.allowed_tenant.GetSupportTenantAccessResp",
             "properties": {
                 "access_config": {
-                    "description": "x-displayName: \"Access Config\"\nAllowed access configuration details for the tenant.",
+                    "description": " Allowed access configuration details for the tenant.",
                     "title": "access_config",
-                    "$ref": "#/definitions/allowed_tenantAllowedAccessConfig"
+                    "$ref": "#/definitions/allowed_tenantAllowedAccessConfig",
+                    "x-displayname": "Access Config"
                 }
             }
         },
         "allowed_tenantNsReadWriteAccess": {
             "type": "object",
-            "description": "x-displayName: \"Namespce Read Write Access\"\nshape of read write access control for namespaces",
+            "description": "shape of read write access control for namespaces",
             "title": "NsReadWriteAccess",
+            "x-displayname": "Namespce Read Write Access",
+            "x-ves-proto-message": "ves.io.schema.tenant_management.allowed_tenant.NsReadWriteAccess",
             "properties": {
                 "namespaces": {
                     "type": "array",
-                    "description": "x-displayName: \"List of namespaces\"\nx-example: \"ns1\"\nList of namespace name read/write access needs to be restricted to.",
+                    "description": " List of namespace name read/write access needs to be restricted to.\n\nExample: - \"ns1\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.max_len: 256\n  ves.io.schema.rules.repeated.items.string.ves_object_name: true\n",
                     "title": "namespaces",
                     "items": {
-                        "type": "string"
+                        "type": "string",
+                        "maxLength": 256
+                    },
+                    "x-displayname": "List of namespaces",
+                    "x-ves-example": "ns1",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.items.string.max_len": "256",
+                        "ves.io.schema.rules.repeated.items.string.ves_object_name": "true"
                     }
                 }
             }
         },
         "allowed_tenantUpdateSupportTenantAccessReq": {
             "type": "object",
-            "description": "x-displayName: \"Support Tenant Access Update Request\"\nRequest to update access control configurations for a support tenant.",
+            "description": "Request to update access control configurations for a support tenant.",
             "title": "UpdateSupportTenantAccessReq",
+            "x-displayname": "Support Tenant Access Update Request",
+            "x-ves-proto-message": "ves.io.schema.tenant_management.allowed_tenant.UpdateSupportTenantAccessReq",
             "properties": {
                 "access_config": {
-                    "description": "x-displayName: \"Access Config\"\nAllowed access configuration details for the tenant.",
+                    "description": " Allowed access configuration details for the tenant.",
                     "title": "access_config",
-                    "$ref": "#/definitions/allowed_tenantAllowedAccessConfig"
+                    "$ref": "#/definitions/allowed_tenantAllowedAccessConfig",
+                    "x-displayname": "Access Config"
                 },
                 "name": {
                     "type": "string",
-                    "description": "x-displayName: \"Name\"\nx-example: \"l1-support\"\nwell-known name of the support tenant config object.",
-                    "title": "Name"
+                    "description": " well-known name of the support tenant config object.\n\nExample: - \"l1-support\"-",
+                    "title": "Name",
+                    "x-displayname": "Name",
+                    "x-ves-example": "l1-support"
                 }
             }
         },
         "allowed_tenantUpdateSupportTenantAccessResp": {
             "type": "object",
-            "description": "x-displayName: \"Support Tenant Access Update Response\"\nResponse to update access control configurations for a support tenant.",
+            "description": "Response to update access control configurations for a support tenant.",
             "title": "UpdateSupportTenantAccessResp",
+            "x-displayname": "Support Tenant Access Update Response",
+            "x-ves-proto-message": "ves.io.schema.tenant_management.allowed_tenant.UpdateSupportTenantAccessResp",
             "properties": {
                 "access_config": {
-                    "description": "x-displayName: \"Access Config\"\nAllowed access configuration details for the tenant.",
+                    "description": " Allowed access configuration details for the tenant.",
                     "title": "access_config",
-                    "$ref": "#/definitions/allowed_tenantAllowedAccessConfig"
+                    "$ref": "#/definitions/allowed_tenantAllowedAccessConfig",
+                    "x-displayname": "Access Config"
                 }
             }
         },
         "ioschemaEmpty": {
             "type": "object",
-            "description": "x-displayName: \"Empty\"\nThis can be used for messages where no values are needed",
-            "title": "Empty"
+            "description": "This can be used for messages where no values are needed",
+            "title": "Empty",
+            "x-displayname": "Empty",
+            "x-ves-proto-message": "ves.io.schema.Empty"
         },
         "schemaviewsObjectRefType": {
             "type": "object",
-            "description": "x-displayName: \"Object reference\"\nThis type establishes a direct reference from one object(the referrer) to another(the referred).\nSuch a reference is in form of tenant/namespace/name",
+            "description": "This type establishes a direct reference from one object(the referrer) to another(the referred).\nSuch a reference is in form of tenant/namespace/name",
             "title": "ObjectRefType",
+            "x-displayname": "Object reference",
+            "x-ves-proto-message": "ves.io.schema.views.ObjectRefType",
             "properties": {
                 "name": {
                     "type": "string",
-                    "description": "x-displayName: \"Name\"\nx-example: \"contacts-route\"\nx-required\nWhen a configuration object(e.g. virtual_host) refers to another(e.g route)\nthen name will hold the referred object's(e.g. route's) name.",
-                    "title": "name"
+                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then name will hold the referred object's(e.g. route's) name.\n\nExample: - \"contacts-route\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_bytes: 64\n  ves.io.schema.rules.string.min_bytes: 1\n",
+                    "title": "name",
+                    "minLength": 1,
+                    "maxLength": 64,
+                    "x-displayname": "Name",
+                    "x-ves-example": "contacts-route",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.max_bytes": "64",
+                        "ves.io.schema.rules.string.min_bytes": "1"
+                    }
                 },
                 "namespace": {
                     "type": "string",
-                    "description": "x-displayName: \"Namespace\"\nx-example: \"ns1\"\nWhen a configuration object(e.g. virtual_host) refers to another(e.g route)\nthen namespace will hold the referred object's(e.g. route's) namespace.",
-                    "title": "namespace"
+                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then namespace will hold the referred object's(e.g. route's) namespace.\n\nExample: - \"ns1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 64\n",
+                    "title": "namespace",
+                    "maxLength": 64,
+                    "x-displayname": "Namespace",
+                    "x-ves-example": "ns1",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_bytes": "64"
+                    }
                 },
                 "tenant": {
                     "type": "string",
-                    "description": "x-displayName: \"Tenant\"\nx-example: \"acmecorp\"\nWhen a configuration object(e.g. virtual_host) refers to another(e.g route)\nthen tenant will hold the referred object's(e.g. route's) tenant.",
-                    "title": "tenant"
+                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then tenant will hold the referred object's(e.g. route's) tenant.\n\nExample: - \"acmecorp\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 64\n",
+                    "title": "tenant",
+                    "maxLength": 64,
+                    "x-displayname": "Tenant",
+                    "x-ves-example": "acmecorp",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_bytes": "64"
+                    }
                 }
             }
         }

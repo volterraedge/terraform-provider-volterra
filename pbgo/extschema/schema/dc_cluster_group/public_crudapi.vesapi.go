@@ -1595,16 +1595,7 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 		item.Disabled = o.GetMetadata().GetDisable()
 
 		if len(req.ReportFields) > 0 {
-			noDBForm, _ := flags.GetEnvGetRspNoDBForm()
-			if !noDBForm {
-				item.Object = o.Object
-				sf.Logger().Alert(svcfw.GetResponseInDBForm,
-					log.MinorAlert,
-					zap.String("user", server.UserFromContext(ctx)),
-					zap.String("useragent", server.UseragentStrFromContext(ctx)),
-					zap.String("operation", "List"),
-				)
-			}
+			item.Object = o.Object
 
 			item.Metadata = &ves_io_schema.ObjectGetMetaType{}
 			item.Metadata.FromObjectMetaType(o.Metadata)
@@ -1683,7 +1674,7 @@ var APISwaggerJSON string = `{
     "paths": {
         "/public/namespaces/{metadata.namespace}/dc_cluster_groups": {
             "post": {
-                "summary": "Create DC Cluster group",
+                "summary": "Create DC Cluster Group",
                 "description": "Create DC Cluster group in given namespace",
                 "operationId": "ves.io.schema.dc_cluster_group.API.Create",
                 "responses": {
@@ -1875,7 +1866,7 @@ var APISwaggerJSON string = `{
         },
         "/public/namespaces/{namespace}/dc_cluster_groups": {
             "get": {
-                "summary": "List",
+                "summary": "List DC Cluster Group",
                 "description": "List the set of dc_cluster_group in a namespace",
                 "operationId": "ves.io.schema.dc_cluster_group.API.List",
                 "responses": {
@@ -2095,7 +2086,7 @@ var APISwaggerJSON string = `{
                 "x-ves-proto-rpc": "ves.io.schema.dc_cluster_group.API.Get"
             },
             "delete": {
-                "summary": "Delete",
+                "summary": "Delete DC Cluster Group",
                 "description": "Delete the specified dc_cluster_group",
                 "operationId": "ves.io.schema.dc_cluster_group.API.Delete",
                 "responses": {

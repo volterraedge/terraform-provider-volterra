@@ -841,7 +841,7 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 
 	vrhStaticRoutes := v.StaticRoutesValidationRuleHandler
 	rulesStaticRoutes := map[string]string{
-		"ves.io.schema.rules.repeated.max_items": "16",
+		"ves.io.schema.rules.repeated.max_items": "165",
 		"ves.io.schema.rules.repeated.unique":    "true",
 	}
 	vFn, err = vrhStaticRoutes(rulesStaticRoutes)
@@ -1328,7 +1328,7 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 
 	vrhStaticRoutes := v.StaticRoutesValidationRuleHandler
 	rulesStaticRoutes := map[string]string{
-		"ves.io.schema.rules.repeated.max_items": "16",
+		"ves.io.schema.rules.repeated.max_items": "165",
 		"ves.io.schema.rules.repeated.unique":    "true",
 	}
 	vFn, err = vrhStaticRoutes(rulesStaticRoutes)
@@ -2225,7 +2225,7 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 
 	vrhStaticRoutes := v.StaticRoutesValidationRuleHandler
 	rulesStaticRoutes := map[string]string{
-		"ves.io.schema.rules.repeated.max_items": "16",
+		"ves.io.schema.rules.repeated.max_items": "165",
 		"ves.io.schema.rules.repeated.unique":    "true",
 	}
 	vFn, err = vrhStaticRoutes(rulesStaticRoutes)
@@ -3831,7 +3831,7 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 
 	vrhStaticRoutes := v.StaticRoutesValidationRuleHandler
 	rulesStaticRoutes := map[string]string{
-		"ves.io.schema.rules.repeated.max_items": "16",
+		"ves.io.schema.rules.repeated.max_items": "165",
 		"ves.io.schema.rules.repeated.unique":    "true",
 	}
 	vFn, err = vrhStaticRoutes(rulesStaticRoutes)

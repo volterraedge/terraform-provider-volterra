@@ -1595,16 +1595,7 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 		item.Disabled = o.GetMetadata().GetDisable()
 
 		if len(req.ReportFields) > 0 {
-			noDBForm, _ := flags.GetEnvGetRspNoDBForm()
-			if !noDBForm {
-				item.Object = o.Object
-				sf.Logger().Alert(svcfw.GetResponseInDBForm,
-					log.MinorAlert,
-					zap.String("user", server.UserFromContext(ctx)),
-					zap.String("useragent", server.UseragentStrFromContext(ctx)),
-					zap.String("operation", "List"),
-				)
-			}
+			item.Object = o.Object
 
 			item.Metadata = &ves_io_schema.ObjectGetMetaType{}
 			item.Metadata.FromObjectMetaType(o.Metadata)
@@ -1875,7 +1866,7 @@ var APISwaggerJSON string = `{
         },
         "/public/namespaces/{namespace}/network_policy_rules": {
             "get": {
-                "summary": "List",
+                "summary": "List Network Policy Rule",
                 "description": "List the set of network_policy_rule in a namespace",
                 "operationId": "ves.io.schema.network_policy_rule.API.List",
                 "responses": {
@@ -2095,7 +2086,7 @@ var APISwaggerJSON string = `{
                 "x-ves-proto-rpc": "ves.io.schema.network_policy_rule.API.Get"
             },
             "delete": {
-                "summary": "Delete",
+                "summary": "Delete Network Policy Rule",
                 "description": "Delete the specified network_policy_rule",
                 "operationId": "ves.io.schema.network_policy_rule.API.Delete",
                 "responses": {

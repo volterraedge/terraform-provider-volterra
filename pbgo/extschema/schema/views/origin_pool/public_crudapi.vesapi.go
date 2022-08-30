@@ -1570,16 +1570,7 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 		item.Disabled = o.GetMetadata().GetDisable()
 
 		if len(req.ReportFields) > 0 {
-			noDBForm, _ := flags.GetEnvGetRspNoDBForm()
-			if !noDBForm {
-				item.Object = o.Object
-				sf.Logger().Alert(svcfw.GetResponseInDBForm,
-					log.MinorAlert,
-					zap.String("user", server.UserFromContext(ctx)),
-					zap.String("useragent", server.UseragentStrFromContext(ctx)),
-					zap.String("operation", "List"),
-				)
-			}
+			item.Object = o.Object
 
 			item.Metadata = &ves_io_schema.ObjectGetMetaType{}
 			item.Metadata.FromObjectMetaType(o.Metadata)
@@ -1643,7 +1634,7 @@ var APISwaggerJSON string = `{
     "paths": {
         "/public/namespaces/{metadata.namespace}/origin_pools": {
             "post": {
-                "summary": "CreateSpecType",
+                "summary": "Create Origin Pool",
                 "description": "Shape of the origin pool create specification",
                 "operationId": "ves.io.schema.views.origin_pool.API.Create",
                 "responses": {
@@ -1735,7 +1726,7 @@ var APISwaggerJSON string = `{
         },
         "/public/namespaces/{metadata.namespace}/origin_pools/{metadata.name}": {
             "put": {
-                "summary": "ReplaceSpecType",
+                "summary": "Replace Origin Pool",
                 "description": "Shape of the origin pool create specification",
                 "operationId": "ves.io.schema.views.origin_pool.API.Replace",
                 "responses": {
@@ -1835,7 +1826,7 @@ var APISwaggerJSON string = `{
         },
         "/public/namespaces/{namespace}/origin_pools": {
             "get": {
-                "summary": "List",
+                "summary": "List Origin Pool",
                 "description": "List the set of origin_pool in a namespace",
                 "operationId": "ves.io.schema.views.origin_pool.API.List",
                 "responses": {
@@ -1951,7 +1942,7 @@ var APISwaggerJSON string = `{
         },
         "/public/namespaces/{namespace}/origin_pools/{name}": {
             "get": {
-                "summary": "GetSpecType",
+                "summary": "Get Origin Pool",
                 "description": "Shape of the origin pool get specification",
                 "operationId": "ves.io.schema.views.origin_pool.API.Get",
                 "responses": {
@@ -2054,7 +2045,7 @@ var APISwaggerJSON string = `{
                 "x-ves-proto-rpc": "ves.io.schema.views.origin_pool.API.Get"
             },
             "delete": {
-                "summary": "Delete",
+                "summary": "Delete Origin Pool",
                 "description": "Delete the specified origin_pool",
                 "operationId": "ves.io.schema.views.origin_pool.API.Delete",
                 "responses": {
@@ -2688,14 +2679,14 @@ var APISwaggerJSON string = `{
             "description": "Configure Advanced options for origin pool",
             "title": "Origin Pool Advanced Options",
             "x-displayname": "Origin Pool Advanced Options",
-            "x-ves-oneof-field-circuit_breaker_choice": "[\"circuit_breaker\",\"disable_circuit_breaker\"]",
+            "x-ves-oneof-field-circuit_breaker_choice": "[\"circuit_breaker\",\"default_circuit_breaker\",\"disable_circuit_breaker\"]",
             "x-ves-oneof-field-outlier_detection_choice": "[\"disable_outlier_detection\",\"outlier_detection\"]",
             "x-ves-oneof-field-panic_threshold_type": "[\"no_panic_threshold\",\"panic_threshold\"]",
             "x-ves-oneof-field-subset_choice": "[\"disable_subsets\",\"enable_subsets\"]",
             "x-ves-proto-message": "ves.io.schema.views.origin_pool.OriginPoolAdvancedOptions",
             "properties": {
                 "circuit_breaker": {
-                    "description": "Exclusive with [disable_circuit_breaker]\n CircuitBreaker provides a mechanism for watching failures in upstream connections or requests\n and if the failures reach a certain threshold, automatically fail subsequent requests which\n allows to apply back pressure on downstream quickly.",
+                    "description": "Exclusive with [default_circuit_breaker disable_circuit_breaker]\n CircuitBreaker provides a mechanism for watching failures in upstream connections or requests\n and if the failures reach a certain threshold, automatically fail subsequent requests which\n allows to apply back pressure on downstream quickly.",
                     "title": "circuit_breaker",
                     "$ref": "#/definitions/clusterCircuitBreaker",
                     "x-displayname": "Enable Circuit Breaker"
@@ -2711,8 +2702,14 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.uint32.lte": "1800000"
                     }
                 },
+                "default_circuit_breaker": {
+                    "description": "Exclusive with [circuit_breaker disable_circuit_breaker]\n Circuit Breaker is enabled with default values\n The default values used for connections and\n requests are 1024 and the default value for retries is 3",
+                    "title": "Default Circuit Breaker",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Default Circuit Breaker"
+                },
                 "disable_circuit_breaker": {
-                    "description": "Exclusive with [circuit_breaker]\n Circuit Breaker is disabled",
+                    "description": "Exclusive with [circuit_breaker default_circuit_breaker]\n Circuit Breaker is disabled",
                     "title": "Disable Circuit Breaker",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Disable Circuit Breaker"
@@ -2968,14 +2965,14 @@ var APISwaggerJSON string = `{
                 },
                 "ip": {
                     "type": "string",
-                    "description": " IP address\n\nExample: - \"8.8.8.8\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.ip: true\n",
+                    "description": " IP address\n\nExample: - \"8.8.8.8\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.ipv4: true\n",
                     "title": "IP",
                     "x-displayname": "IP",
                     "x-ves-example": "8.8.8.8",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true",
-                        "ves.io.schema.rules.string.ip": "true"
+                        "ves.io.schema.rules.string.ipv4": "true"
                     }
                 },
                 "outside_network": {
@@ -3050,14 +3047,14 @@ var APISwaggerJSON string = `{
             "properties": {
                 "ip": {
                     "type": "string",
-                    "description": " Public IP address\n\nExample: - \"8.8.8.8\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.ip: true\n",
+                    "description": " Public IP address\n\nExample: - \"8.8.8.8\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.ipv4: true\n",
                     "title": "IP",
                     "x-displayname": "Public IP",
                     "x-ves-example": "8.8.8.8",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true",
-                        "ves.io.schema.rules.string.ip": "true"
+                        "ves.io.schema.rules.string.ipv4": "true"
                     }
                 }
             }
@@ -3169,14 +3166,14 @@ var APISwaggerJSON string = `{
             "properties": {
                 "ip": {
                     "type": "string",
-                    "description": " IP address\n\nExample: - \"1.1.1.1\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.ip: true\n",
+                    "description": " IP address\n\nExample: - \"1.1.1.1\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.ipv4: true\n",
                     "title": "IP",
                     "x-displayname": "IP",
                     "x-ves-example": "1.1.1.1",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true",
-                        "ves.io.schema.rules.string.ip": "true"
+                        "ves.io.schema.rules.string.ipv4": "true"
                     }
                 },
                 "virtual_network": {

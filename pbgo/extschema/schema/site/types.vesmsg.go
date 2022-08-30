@@ -2418,6 +2418,18 @@ func (v *ValidateDirectConnectStatusInfo) Validate(ctx context.Context, pm inter
 
 	}
 
+	if fv, exists := v.FldValidators["propagated_routes_from_direct_connect_connection"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("propagated_routes_from_direct_connect_connection"))
+		for idx, item := range m.GetPropagatedRoutesFromDirectConnectConnection() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["vgw_id"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("vgw_id"))
@@ -5870,7 +5882,7 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 
 	vrhReMeshGroup := v.ReMeshGroupValidationRuleHandler
 	rulesReMeshGroup := map[string]string{
-		"ves.io.schema.rules.repeated.max_items": "1",
+		"ves.io.schema.rules.repeated.max_items": "2",
 	}
 	vFn, err = vrhReMeshGroup(rulesReMeshGroup)
 	if err != nil {
@@ -5904,8 +5916,6 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v.FldValidators["coordinates"] = CoordinatesValidator().Validate
 
 	v.FldValidators["default_underlay_network"] = DefaultUnderlayNetworkTypeValidator().Validate
-
-	v.FldValidators["main_nodes"] = NodeValidator().Validate
 
 	return v
 }()
@@ -7108,26 +7118,6 @@ type ValidateNode struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
-func (v *ValidateNode) SloAddressValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	validatorFn, err := db.NewStringValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for slo_address")
-	}
-
-	return validatorFn, nil
-}
-
-func (v *ValidateNode) SliAddressValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	validatorFn, err := db.NewStringValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for sli_address")
-	}
-
-	return validatorFn, nil
-}
-
 func (v *ValidateNode) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*Node)
 	if !ok {
@@ -7175,36 +7165,6 @@ func (v *ValidateNode) Validate(ctx context.Context, pm interface{}, opts ...db.
 // Well-known symbol for default validator implementation
 var DefaultNodeValidator = func() *ValidateNode {
 	v := &ValidateNode{FldValidators: map[string]db.ValidatorFunc{}}
-
-	var (
-		err error
-		vFn db.ValidatorFunc
-	)
-	_, _ = err, vFn
-	vFnMap := map[string]db.ValidatorFunc{}
-	_ = vFnMap
-
-	vrhSloAddress := v.SloAddressValidationRuleHandler
-	rulesSloAddress := map[string]string{
-		"ves.io.schema.rules.string.ip": "true",
-	}
-	vFn, err = vrhSloAddress(rulesSloAddress)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for Node.slo_address: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["slo_address"] = vFn
-
-	vrhSliAddress := v.SliAddressValidationRuleHandler
-	rulesSliAddress := map[string]string{
-		"ves.io.schema.rules.string.ip": "true",
-	}
-	vFn, err = vrhSliAddress(rulesSliAddress)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for Node.sli_address: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["sli_address"] = vFn
 
 	return v
 }()
@@ -8112,7 +8072,7 @@ var DefaultPublishVIPParamsPerAzValidator = func() *ValidatePublishVIPParamsPerA
 
 	vrhAzName := v.AzNameValidationRuleHandler
 	rulesAzName := map[string]string{
-		"ves.io.schema.rules.string.in": "[\"ap-northeast-1a\",\"ap-northeast-1c\",\"ap-northeast-1d\",\"ap-southeast-1a\",\"ap-southeast-1b\",\"ap-southeast-1c\",\"eu-central-1a\",\"eu-central-1b\",\"eu-central-1c\",\"eu-west-1a\",\"eu-west-1b\",\"eu-west-1c\",\"eu-west-3a\",\"eu-west-3b\",\"eu-west-3c\",\"sa-east-1a\",\"sa-east-1b\",\"sa-east-1c\",\"us-east-1a\",\"us-east-1b\",\"us-east-1c\",\"us-east-1d\",\"us-east-1e\",\"us-east-1f\",\"us-east-2a\",\"us-east-2b\",\"us-east-2c\",\"us-west-2a\",\"us-west-2b\",\"us-west-2c\",\"us-west-2d\",\"ca-central-1a\",\"ca-central-1b\",\"ca-central-1d\",\"af-south-1a\",\"af-south-1b\",\"af-south-1c\",\"ap-east-1a\",\"ap-east-1b\",\"ap-east-1c\",\"ap-south-1a\",\"ap-south-1b\",\"ap-south-1c\",\"ap-northeast-2a\",\"ap-northeast-2b\",\"ap-northeast-2c\",\"ap-northeast-2d\",\"ap-southeast-2a\",\"ap-southeast-2b\",\"ap-southeast-2c\",\"eu-south-1a\",\"eu-south-1b\",\"eu-south-1c\",\"eu-north-1a\",\"eu-north-1b\",\"eu-north-1c\",\"eu-west-2a\",\"eu-west-2b\",\"eu-west-2c\",\"me-south-1a\",\"me-south-1b\",\"me-south-1c\",\"us-west-1a\",\"us-west-1b\",\"us-west-1c\",\"1\",\"2\",\"3\",\"asia-east1-a\",\"asia-east1-b\",\"asia-east1-c\",\"asia-east2-a\",\"asia-east2-b\",\"asia-east2-c\",\"asia-northeast1-a\",\"asia-northeast1-b\",\"asia-northeast1-c\",\"asia-northeast2-a\",\"asia-northeast2-b\",\"asia-northeast2-c\",\"asia-northeast3-a\",\"asia-northeast3-b\",\"asia-northeast3-c\",\"asia-south1-a\",\"asia-south1-b\",\"asia-south1-c\",\"asia-southeast1-a\",\"asia-southeast1-b\",\"asia-southeast1-c\",\"asia-southeast2-a\",\"asia-southeast2-b\",\"asia-southeast2-c\",\"australia-southeast1-a\",\"australia-southeast1-b\",\"australia-southeast1-c\",\"europe-north1-a\",\"europe-north1-b\",\"europe-north1-c\",\"europe-west1-b\",\"europe-west1-c\",\"europe-west1-d\",\"europe-west2-a\",\"europe-west2-b\",\"europe-west2-c\",\"europe-west3-a\",\"europe-west3-b\",\"europe-west3-c\",\"europe-west4-a\",\"europe-west4-b\",\"europe-west4-c\",\"europe-west6-a\",\"europe-west6-b\",\"europe-west6-c\",\"northamerica-northeast1-a\",\"northamerica-northeast1-b\",\"northamerica-northeast1-c\",\"southamerica-east1-a\",\"southamerica-east1-b\",\"southamerica-east1-c\",\"us-central1-a\",\"us-central1-b\",\"us-central1-c\",\"us-central1-f\",\"us-east1-b\",\"us-east1-c\",\"us-east1-d\",\"us-east4-a\",\"us-east4-b\",\"us-east4-c\",\"us-west1-a\",\"us-west1-b\",\"us-west1-c\",\"us-west2-a\",\"us-west2-b\",\"us-west2-c\",\"us-west3-a\",\"us-west3-b\",\"us-west3-c\",\"us-west4-a\",\"us-west4-b\",\"us-west4-c\",\"ap-southeast-3a\",\"ap-southeast-3b\",\"ap-southeast-3c\",\"AzureAlternateRegion\"]",
+		"ves.io.schema.rules.string.pattern": "^[1-5]{1}$|^AzureAlternateRegion$|^[a-z]{2}-[a-z0-9]{4,20}-[a-z0-9]{2}$|^[a-z]{4,15}-[a-z0-9]{4,20}-[a-z]{1}$",
 	}
 	vFn, err = vrhAzName(rulesAzName)
 	if err != nil {

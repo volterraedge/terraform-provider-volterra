@@ -1498,7 +1498,1102 @@ var APISwaggerJSON string = `{
         "application/json"
     ],
     "tags": [],
-    "paths": {},
+    "paths": {
+        "/ves.io.schema.tenant_management.managed_tenant/Object/{object_uid}": {
+            "get": {
+                "operationId": "ves.io.schema.tenant_management.managed_tenant.crudapi.API.Get",
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/crudapiObjectGetRsp"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "object_uid",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "all_backrefs",
+                        "in": "query",
+                        "required": false,
+                        "type": "boolean",
+                        "format": "boolean"
+                    },
+                    {
+                        "name": "backref_types",
+                        "in": "query",
+                        "required": false,
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "collectionFormat": "multi"
+                    },
+                    {
+                        "name": "include_referred_id",
+                        "description": "in case of ref-by-name whether to report referred's uid.",
+                        "in": "query",
+                        "required": false,
+                        "type": "boolean",
+                        "format": "boolean"
+                    }
+                ],
+                "tags": [
+                    "API"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-tenant_management-managed_tenant-crudapi-api-get"
+                },
+                "x-ves-proto-rpc": "ves.io.schema.tenant_management.managed_tenant.crudapi.API.Get"
+            },
+            "delete": {
+                "operationId": "ves.io.schema.tenant_management.managed_tenant.crudapi.API.Delete",
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/crudapiObjectDeleteRsp"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "object_uid",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "tags": [
+                    "API"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-tenant_management-managed_tenant-crudapi-api-delete"
+                },
+                "x-ves-proto-rpc": "ves.io.schema.tenant_management.managed_tenant.crudapi.API.Delete"
+            },
+            "put": {
+                "operationId": "ves.io.schema.tenant_management.managed_tenant.crudapi.API.Replace",
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/crudapiObjectReplaceRsp"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "object_uid",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/crudapiObjectReplaceReq"
+                        }
+                    }
+                ],
+                "tags": [
+                    "API"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-tenant_management-managed_tenant-crudapi-api-replace"
+                },
+                "x-ves-proto-rpc": "ves.io.schema.tenant_management.managed_tenant.crudapi.API.Replace"
+            },
+            "x-displayname": "",
+            "x-ves-object-kind": "managed_tenant",
+            "x-ves-object-type": "ves.io.schema.tenant_management.managed_tenant.Object",
+            "x-ves-proto-service": "ves.io.schema.tenant_management.managed_tenant.crudapi.API",
+            "x-ves-proto-service-type": "AUTO_CRUD"
+        },
+        "/ves.io.schema.tenant_management.managed_tenant/Objects": {
+            "get": {
+                "operationId": "ves.io.schema.tenant_management.managed_tenant.crudapi.API.List",
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/crudapiObjectListRsp"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "tenant_filter",
+                        "description": "Filters executed on server-side - all types of filters ANDed\nTenants to scope the listing of objects - if empty all tenants considered.",
+                        "in": "query",
+                        "required": false,
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "collectionFormat": "multi"
+                    },
+                    {
+                        "name": "namespace_filter",
+                        "description": "Namespaces to scope the listing of objects - if empty all namespaces considered.",
+                        "in": "query",
+                        "required": false,
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "collectionFormat": "multi"
+                    },
+                    {
+                        "name": "label_filter",
+                        "description": "k8s style label selector expression.",
+                        "in": "query",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "report_fields",
+                        "description": "TODO: currently even if one specified implementation will return all fields.",
+                        "in": "query",
+                        "required": false,
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "collectionFormat": "multi"
+                    },
+                    {
+                        "name": "resource_version",
+                        "description": "Get the resource_version associated with the list.",
+                        "in": "query",
+                        "required": false,
+                        "type": "boolean",
+                        "format": "boolean"
+                    },
+                    {
+                        "name": "include_referred_id",
+                        "description": "in case of ref-by-name whether to report referred's uid.",
+                        "in": "query",
+                        "required": false,
+                        "type": "boolean",
+                        "format": "boolean"
+                    }
+                ],
+                "tags": [
+                    "API"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-tenant_management-managed_tenant-crudapi-api-list"
+                },
+                "x-ves-proto-rpc": "ves.io.schema.tenant_management.managed_tenant.crudapi.API.List"
+            },
+            "post": {
+                "operationId": "ves.io.schema.tenant_management.managed_tenant.crudapi.API.Create",
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/crudapiObjectCreateRsp"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/crudapiObjectCreateReq"
+                        }
+                    }
+                ],
+                "tags": [
+                    "API"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-tenant_management-managed_tenant-crudapi-api-create"
+                },
+                "x-ves-proto-rpc": "ves.io.schema.tenant_management.managed_tenant.crudapi.API.Create"
+            },
+            "x-displayname": "",
+            "x-ves-object-kind": "managed_tenant",
+            "x-ves-object-type": "ves.io.schema.tenant_management.managed_tenant.Object",
+            "x-ves-proto-service": "ves.io.schema.tenant_management.managed_tenant.crudapi.API",
+            "x-ves-proto-service-type": "AUTO_CRUD"
+        },
+        "/ves.io.schema.tenant_management.managed_tenant/Objects/stream": {
+            "get": {
+                "operationId": "ves.io.schema.tenant_management.managed_tenant.crudapi.API.ListStream",
+                "responses": {
+                    "200": {
+                        "description": "A successful response.(streaming responses)",
+                        "schema": {
+                            "$ref": "#/x-stream-definitions/crudapiObjectListRsp"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "tenant_filter",
+                        "description": "Filters executed on server-side - all types of filters ANDed\nTenants to scope the listing of objects - if empty all tenants considered.",
+                        "in": "query",
+                        "required": false,
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "collectionFormat": "multi"
+                    },
+                    {
+                        "name": "namespace_filter",
+                        "description": "Namespaces to scope the listing of objects - if empty all namespaces considered.",
+                        "in": "query",
+                        "required": false,
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "collectionFormat": "multi"
+                    },
+                    {
+                        "name": "label_filter",
+                        "description": "k8s style label selector expression.",
+                        "in": "query",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "report_fields",
+                        "description": "TODO: currently even if one specified implementation will return all fields.",
+                        "in": "query",
+                        "required": false,
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "collectionFormat": "multi"
+                    },
+                    {
+                        "name": "resource_version",
+                        "description": "Get the resource_version associated with the list.",
+                        "in": "query",
+                        "required": false,
+                        "type": "boolean",
+                        "format": "boolean"
+                    },
+                    {
+                        "name": "include_referred_id",
+                        "description": "in case of ref-by-name whether to report referred's uid.",
+                        "in": "query",
+                        "required": false,
+                        "type": "boolean",
+                        "format": "boolean"
+                    }
+                ],
+                "tags": [
+                    "API"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-tenant_management-managed_tenant-crudapi-api-liststream"
+                },
+                "x-ves-proto-rpc": "ves.io.schema.tenant_management.managed_tenant.crudapi.API.ListStream"
+            },
+            "x-displayname": "",
+            "x-ves-object-kind": "managed_tenant",
+            "x-ves-object-type": "ves.io.schema.tenant_management.managed_tenant.Object",
+            "x-ves-proto-service": "ves.io.schema.tenant_management.managed_tenant.crudapi.API",
+            "x-ves-proto-service-type": "AUTO_CRUD"
+        },
+        "/ves.io.schema.tenant_management.managed_tenant/introspect/read/Object/{object_uid}": {
+            "get": {
+                "operationId": "ves.io.schema.tenant_management.managed_tenant.crudapi.API.Get",
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/crudapiObjectGetRsp"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "object_uid",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "all_backrefs",
+                        "in": "query",
+                        "required": false,
+                        "type": "boolean",
+                        "format": "boolean"
+                    },
+                    {
+                        "name": "backref_types",
+                        "in": "query",
+                        "required": false,
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "collectionFormat": "multi"
+                    },
+                    {
+                        "name": "include_referred_id",
+                        "description": "in case of ref-by-name whether to report referred's uid.",
+                        "in": "query",
+                        "required": false,
+                        "type": "boolean",
+                        "format": "boolean"
+                    }
+                ],
+                "tags": [
+                    "API"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-tenant_management-managed_tenant-crudapi-api-get"
+                },
+                "x-ves-proto-rpc": "ves.io.schema.tenant_management.managed_tenant.crudapi.API.Get"
+            },
+            "x-displayname": "",
+            "x-ves-object-kind": "managed_tenant",
+            "x-ves-object-type": "ves.io.schema.tenant_management.managed_tenant.Object",
+            "x-ves-proto-service": "ves.io.schema.tenant_management.managed_tenant.crudapi.API",
+            "x-ves-proto-service-type": "AUTO_CRUD"
+        },
+        "/ves.io.schema.tenant_management.managed_tenant/introspect/read/Objects": {
+            "get": {
+                "operationId": "ves.io.schema.tenant_management.managed_tenant.crudapi.API.List",
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/crudapiObjectListRsp"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "tenant_filter",
+                        "description": "Filters executed on server-side - all types of filters ANDed\nTenants to scope the listing of objects - if empty all tenants considered.",
+                        "in": "query",
+                        "required": false,
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "collectionFormat": "multi"
+                    },
+                    {
+                        "name": "namespace_filter",
+                        "description": "Namespaces to scope the listing of objects - if empty all namespaces considered.",
+                        "in": "query",
+                        "required": false,
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "collectionFormat": "multi"
+                    },
+                    {
+                        "name": "label_filter",
+                        "description": "k8s style label selector expression.",
+                        "in": "query",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "report_fields",
+                        "description": "TODO: currently even if one specified implementation will return all fields.",
+                        "in": "query",
+                        "required": false,
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "collectionFormat": "multi"
+                    },
+                    {
+                        "name": "resource_version",
+                        "description": "Get the resource_version associated with the list.",
+                        "in": "query",
+                        "required": false,
+                        "type": "boolean",
+                        "format": "boolean"
+                    },
+                    {
+                        "name": "include_referred_id",
+                        "description": "in case of ref-by-name whether to report referred's uid.",
+                        "in": "query",
+                        "required": false,
+                        "type": "boolean",
+                        "format": "boolean"
+                    }
+                ],
+                "tags": [
+                    "API"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-tenant_management-managed_tenant-crudapi-api-list"
+                },
+                "x-ves-proto-rpc": "ves.io.schema.tenant_management.managed_tenant.crudapi.API.List"
+            },
+            "x-displayname": "",
+            "x-ves-object-kind": "managed_tenant",
+            "x-ves-object-type": "ves.io.schema.tenant_management.managed_tenant.Object",
+            "x-ves-proto-service": "ves.io.schema.tenant_management.managed_tenant.crudapi.API",
+            "x-ves-proto-service-type": "AUTO_CRUD"
+        },
+        "/ves.io.schema.tenant_management.managed_tenant/introspect/write/Object/{object_uid}": {
+            "delete": {
+                "operationId": "ves.io.schema.tenant_management.managed_tenant.crudapi.API.Delete",
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/crudapiObjectDeleteRsp"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "object_uid",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "tags": [
+                    "API"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-tenant_management-managed_tenant-crudapi-api-delete"
+                },
+                "x-ves-proto-rpc": "ves.io.schema.tenant_management.managed_tenant.crudapi.API.Delete"
+            },
+            "put": {
+                "operationId": "ves.io.schema.tenant_management.managed_tenant.crudapi.API.Replace",
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/crudapiObjectReplaceRsp"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "object_uid",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/crudapiObjectReplaceReq"
+                        }
+                    }
+                ],
+                "tags": [
+                    "API"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-tenant_management-managed_tenant-crudapi-api-replace"
+                },
+                "x-ves-proto-rpc": "ves.io.schema.tenant_management.managed_tenant.crudapi.API.Replace"
+            },
+            "x-displayname": "",
+            "x-ves-object-kind": "managed_tenant",
+            "x-ves-object-type": "ves.io.schema.tenant_management.managed_tenant.Object",
+            "x-ves-proto-service": "ves.io.schema.tenant_management.managed_tenant.crudapi.API",
+            "x-ves-proto-service-type": "AUTO_CRUD"
+        },
+        "/ves.io.schema.tenant_management.managed_tenant/introspect/write/Objects": {
+            "post": {
+                "operationId": "ves.io.schema.tenant_management.managed_tenant.crudapi.API.Create",
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/crudapiObjectCreateRsp"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/crudapiObjectCreateReq"
+                        }
+                    }
+                ],
+                "tags": [
+                    "API"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-tenant_management-managed_tenant-crudapi-api-create"
+                },
+                "x-ves-proto-rpc": "ves.io.schema.tenant_management.managed_tenant.crudapi.API.Create"
+            },
+            "x-displayname": "",
+            "x-ves-object-kind": "managed_tenant",
+            "x-ves-object-type": "ves.io.schema.tenant_management.managed_tenant.Object",
+            "x-ves-proto-service": "ves.io.schema.tenant_management.managed_tenant.crudapi.API",
+            "x-ves-proto-service-type": "AUTO_CRUD"
+        }
+    },
     "definitions": {
         "contactContactType": {
             "type": "string",
@@ -1519,10 +2614,13 @@ var APISwaggerJSON string = `{
                 "EEXISTS",
                 "EUNKNOWN"
             ],
-            "default": "EOK"
+            "default": "EOK",
+            "x-displayname": "",
+            "x-ves-proto-enum": "ves.io.schema.tenant_management.managed_tenant.crudapi.ErrorCode"
         },
         "crudapiObjectCreateReq": {
             "type": "object",
+            "x-ves-proto-message": "ves.io.schema.tenant_management.managed_tenant.crudapi.ObjectCreateReq",
             "properties": {
                 "metadata": {
                     "$ref": "#/definitions/schemaObjectMetaType"
@@ -1537,6 +2635,7 @@ var APISwaggerJSON string = `{
         },
         "crudapiObjectCreateRsp": {
             "type": "object",
+            "x-ves-proto-message": "ves.io.schema.tenant_management.managed_tenant.crudapi.ObjectCreateRsp",
             "properties": {
                 "err": {
                     "$ref": "#/definitions/crudapiErrorCode"
@@ -1557,6 +2656,7 @@ var APISwaggerJSON string = `{
         },
         "crudapiObjectDeleteRsp": {
             "type": "object",
+            "x-ves-proto-message": "ves.io.schema.tenant_management.managed_tenant.crudapi.ObjectDeleteRsp",
             "properties": {
                 "err": {
                     "$ref": "#/definitions/crudapiErrorCode"
@@ -1565,6 +2665,7 @@ var APISwaggerJSON string = `{
         },
         "crudapiObjectGetRsp": {
             "type": "object",
+            "x-ves-proto-message": "ves.io.schema.tenant_management.managed_tenant.crudapi.ObjectGetRsp",
             "properties": {
                 "ent_backrefs": {
                     "type": "array",
@@ -1597,6 +2698,7 @@ var APISwaggerJSON string = `{
         },
         "crudapiObjectListRsp": {
             "type": "object",
+            "x-ves-proto-message": "ves.io.schema.tenant_management.managed_tenant.crudapi.ObjectListRsp",
             "properties": {
                 "err": {
                     "$ref": "#/definitions/crudapiErrorCode"
@@ -1620,6 +2722,7 @@ var APISwaggerJSON string = `{
         },
         "crudapiObjectListRspItem": {
             "type": "object",
+            "x-ves-proto-message": "ves.io.schema.tenant_management.managed_tenant.crudapi.ObjectListRspItem",
             "properties": {
                 "labels": {
                     "type": "object"
@@ -1656,6 +2759,7 @@ var APISwaggerJSON string = `{
         },
         "crudapiObjectReplaceReq": {
             "type": "object",
+            "x-ves-proto-message": "ves.io.schema.tenant_management.managed_tenant.crudapi.ObjectReplaceReq",
             "properties": {
                 "metadata": {
                     "$ref": "#/definitions/schemaObjectMetaType"
@@ -1673,6 +2777,7 @@ var APISwaggerJSON string = `{
         },
         "crudapiObjectReplaceRsp": {
             "type": "object",
+            "x-ves-proto-message": "ves.io.schema.tenant_management.managed_tenant.crudapi.ObjectReplaceRsp",
             "properties": {
                 "err": {
                     "$ref": "#/definitions/crudapiErrorCode"
@@ -1690,103 +2795,149 @@ var APISwaggerJSON string = `{
         },
         "ioschemaObjectRefType": {
             "type": "object",
-            "description": "x-displayName: \"Object reference\"\nThis type establishes a 'direct reference' from one object(the referrer) to another(the referred).\nSuch a reference is in form of tenant/namespace/name for public API and Uid for private API\nThis type of reference is called direct because the relation is explicit and concrete (as opposed\nto selector reference which builds a group based on labels of selectee objects)",
+            "description": "This type establishes a 'direct reference' from one object(the referrer) to another(the referred).\nSuch a reference is in form of tenant/namespace/name for public API and Uid for private API\nThis type of reference is called direct because the relation is explicit and concrete (as opposed\nto selector reference which builds a group based on labels of selectee objects)",
             "title": "ObjectRefType",
+            "x-displayname": "Object reference",
+            "x-ves-proto-message": "ves.io.schema.ObjectRefType",
             "properties": {
                 "kind": {
                     "type": "string",
-                    "description": "x-displayName: \"Kind\"\nx-example: \"virtual_site\"\nWhen a configuration object(e.g. virtual_host) refers to another(e.g route)\nthen kind will hold the referred object's kind (e.g. \"route\")",
-                    "title": "kind"
+                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then kind will hold the referred object's kind (e.g. \"route\")\n\nExample: - \"virtual_site\"-",
+                    "title": "kind",
+                    "x-displayname": "Kind",
+                    "x-ves-example": "virtual_site"
                 },
                 "name": {
                     "type": "string",
-                    "description": "x-displayName: \"Name\"\nx-example: \"contactus-route\"\nWhen a configuration object(e.g. virtual_host) refers to another(e.g route)\nthen name will hold the referred object's(e.g. route's) name.",
-                    "title": "name"
+                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then name will hold the referred object's(e.g. route's) name.\n\nExample: - \"contactus-route\"-",
+                    "title": "name",
+                    "x-displayname": "Name",
+                    "x-ves-example": "contactus-route"
                 },
                 "namespace": {
                     "type": "string",
-                    "description": "x-displayName: \"Namespace\"\nx-example: \"ns1\"\nWhen a configuration object(e.g. virtual_host) refers to another(e.g route)\nthen namespace will hold the referred object's(e.g. route's) namespace.",
-                    "title": "namespace"
+                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then namespace will hold the referred object's(e.g. route's) namespace.\n\nExample: - \"ns1\"-",
+                    "title": "namespace",
+                    "x-displayname": "Namespace",
+                    "x-ves-example": "ns1"
                 },
                 "tenant": {
                     "type": "string",
-                    "description": "x-displayName: \"Tenant\"\nx-example: \"acmecorp\"\nWhen a configuration object(e.g. virtual_host) refers to another(e.g route)\nthen tenant will hold the referred object's(e.g. route's) tenant.",
-                    "title": "tenant"
+                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then tenant will hold the referred object's(e.g. route's) tenant.\n\nExample: - \"acmecorp\"-",
+                    "title": "tenant",
+                    "x-displayname": "Tenant",
+                    "x-ves-example": "acmecorp"
                 },
                 "uid": {
                     "type": "string",
-                    "description": "x-displayName: \"UID\"\nx-example: \"d15f1fad-4d37-48c0-8706-df1824d76d31\"\nWhen a configuration object(e.g. virtual_host) refers to another(e.g route)\nthen uid will hold the referred object's(e.g. route's) uid.",
-                    "title": "uid"
+                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then uid will hold the referred object's(e.g. route's) uid.\n\nExample: - \"d15f1fad-4d37-48c0-8706-df1824d76d31\"-",
+                    "title": "uid",
+                    "x-displayname": "UID",
+                    "x-ves-example": "d15f1fad-4d37-48c0-8706-df1824d76d31"
                 }
             }
         },
         "managed_tenantGroupAssignmentType": {
             "type": "object",
-            "description": "x-displayName: \"Group to Assign\"\nShape for specifying user group assosciation to user groups in a managed tenant.",
+            "description": "Shape for specifying user group assosciation to user groups in a managed tenant.",
             "title": "GroupAssignmentType",
+            "x-displayname": "Group to Assign",
+            "x-ves-proto-message": "ves.io.schema.tenant_management.managed_tenant.GroupAssignmentType",
             "properties": {
                 "group": {
-                    "description": "x-displayName: \"Group\"\nAssosciate existing local user group which will be used to map groups in managed tenant.\nUser should be member of this group to gain access into managed tenant.",
+                    "description": " Assosciate existing local user group which will be used to map groups in managed tenant.\n User should be member of this group to gain access into managed tenant.",
                     "title": "group",
-                    "$ref": "#/definitions/schemaviewsObjectRefType"
+                    "$ref": "#/definitions/schemaviewsObjectRefType",
+                    "x-displayname": "Group"
                 },
                 "managed_tenant_groups": {
                     "type": "array",
-                    "description": "x-displayName: \"Managed Tenant Groups\"\nx-example: \"user-group1\"\nList of group names in managed tenant (MT).\nNote - To properly establish access, admin of managed tenant need to create corresponding Allowed Tenant\nconfiguration object with access to use same group names. Once it's setup, when user from original tenant\naccess managed tenant, underlying roles from managed tenant will be applied to user.",
+                    "description": " List of group names in managed tenant (MT).\n Note - To properly establish access, admin of managed tenant need to create corresponding Allowed Tenant\n configuration object with access to use same group names. Once it's setup, when user from original tenant\n access managed tenant, underlying roles from managed tenant will be applied to user.\n\nExample: - \"user-group1\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 32\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "managed_tenant_groups",
+                    "maxItems": 32,
                     "items": {
                         "type": "string"
+                    },
+                    "x-displayname": "Managed Tenant Groups",
+                    "x-ves-example": "user-group1",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "32",
+                        "ves.io.schema.rules.repeated.unique": "true"
                     }
                 }
             }
         },
         "managed_tenantNewTenantInfo": {
             "type": "object",
-            "description": "x-displayName: \"New Tenant Info\"\nShape for specifying child tenant info.\nBased on this details, new tenant will be created and configuration will be\npushed to allow management by this requesting tenant.",
+            "description": "Shape for specifying child tenant info.\nBased on this details, new tenant will be created and configuration will be\npushed to allow management by this requesting tenant.",
             "title": "NewTenantInfo",
+            "x-displayname": "New Tenant Info",
+            "x-ves-proto-message": "ves.io.schema.tenant_management.managed_tenant.NewTenantInfo",
             "properties": {
-                "billing_address": {
-                    "description": "x-displayName: \"Billing Address\"\nBilling Address for this tenant account",
-                    "title": "billing_address",
-                    "$ref": "#/definitions/schemacontactGlobalSpecType"
-                },
                 "cname": {
                     "type": "string",
-                    "description": "x-displayName: \"Domain Name\"\nx-example: \"xyz\"\nx-required\nSpecial name to access your tenant account via web console.\nChoose this short name to represent your company/organization.\nA unique tenant id will auto generated based on this value.",
-                    "title": "Domain Name"
+                    "description": " Special name to access your tenant account via web console.\n Choose this short name to represent your company/organization.\n A unique tenant id will auto generated based on this value.\n\nExample: - \"xyz\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 17\n",
+                    "title": "Domain Name",
+                    "maxLength": 17,
+                    "x-displayname": "Domain Name",
+                    "x-ves-example": "xyz",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.max_len": "17"
+                    }
                 },
                 "company_name": {
                     "type": "string",
-                    "description": "x-displayName: \"Company Name\"\nx-example: \"Xyz Inc\"\nx-required\nName of the company or organization.",
-                    "title": "company_name"
+                    "description": " Name of the company or organization.\n\nExample: - \"Xyz Inc\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 256\n",
+                    "title": "company_name",
+                    "maxLength": 256,
+                    "x-displayname": "Company Name",
+                    "x-ves-example": "Xyz Inc",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.max_len": "256"
+                    }
                 },
                 "tenant_owner_info": {
-                    "description": "x-displayName: \"Tenant Owner User\"\nProvide user information of the tenant owner.",
+                    "description": " Provide user information of the tenant owner.",
                     "title": "tenant_owner_info",
-                    "$ref": "#/definitions/managed_tenantTenantOwnerInfo"
+                    "$ref": "#/definitions/managed_tenantTenantOwnerInfo",
+                    "x-displayname": "Tenant Owner User"
                 },
                 "usage_plan_name": {
                     "type": "string",
-                    "description": "x-displayName: \"Plan Name\"\nx-example: \"organization\"\nx-required\nName of the plan tenant want to signup for.\nQuota and usage will be provisioned based on this plan selection.\nAccess this link for more info: https://www.f5.com/cloud/pricing",
-                    "title": "usage_plan_name"
+                    "description": " Name of the plan tenant want to signup for.\n Quota and usage will be provisioned based on this plan selection.\n Access this link for more info: https://www.f5.com/cloud/pricing\n\nExample: - \"organization\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 256\n",
+                    "title": "usage_plan_name",
+                    "maxLength": 256,
+                    "x-displayname": "Plan Name",
+                    "x-ves-example": "organization",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.max_len": "256"
+                    }
                 }
             }
         },
         "managed_tenantSpecType": {
             "type": "object",
-            "description": "x-displayName: \"Specification\"\nShape of the managed_tenant specification",
+            "description": "Shape of the managed_tenant specification",
             "title": "Specification for Managed Tenant",
+            "x-displayname": "Specification",
+            "x-ves-proto-message": "ves.io.schema.tenant_management.managed_tenant.SpecType",
             "properties": {
                 "gc_spec": {
-                    "description": "x-displayName: \"GC Spec\"",
                     "title": "gc_spec",
-                    "$ref": "#/definitions/tenant_managementmanaged_tenantGlobalSpecType"
+                    "$ref": "#/definitions/tenant_managementmanaged_tenantGlobalSpecType",
+                    "x-displayname": "GC Spec"
                 }
             }
         },
         "managed_tenantStatus": {
             "type": "string",
-            "description": "x-displayName: \"Status\"\nStatus is to identify the status of the managed tenant configuration.\n\n - UNKNOWN: UNKNOWN\nx-displayName: \"Unknown\"\nUnknown status of the configuration.\n - NOT_APPLICABLE: Not Applicable\nx-displayName: \"Not Applicable\"\nThe status is not applicable for the managed tenant configuration.\n - PENDING: Pending\nx-displayName: \"Pending\"\nThe configuration is incomplete.\n - ACTIVE: Active\nx-displayName: \"Active\"\nThe tenant configuration is active.",
+            "description": "Status is to identify the status of the managed tenant configuration.\n\n - UNKNOWN: UNKNOWN\nUnknown status of the configuration.\n - NOT_APPLICABLE: Not Applicable\nThe status is not applicable for the managed tenant configuration.\n - PENDING: Pending\nThe configuration is incomplete.\n - ACTIVE: Active\nThe tenant configuration is active.",
             "title": "Status",
             "enum": [
                 "UNKNOWN",
@@ -1794,60 +2945,97 @@ var APISwaggerJSON string = `{
                 "PENDING",
                 "ACTIVE"
             ],
-            "default": "UNKNOWN"
+            "default": "UNKNOWN",
+            "x-displayname": "Status",
+            "x-ves-proto-enum": "ves.io.schema.tenant_management.managed_tenant.Status"
         },
         "managed_tenantStatusObject": {
             "type": "object",
-            "description": "x-displayName: \"Managed Tenant\"\nMost recently observed status of object",
+            "description": "Most recently observed status of object",
             "title": "Status for Managed Tenant",
+            "x-displayname": "Managed Tenant",
+            "x-ves-proto-message": "ves.io.schema.tenant_management.managed_tenant.StatusObject",
             "properties": {
                 "conditions": {
                     "type": "array",
-                    "description": "x-displayName: \"Conditions\"\nConditions",
+                    "description": " Conditions",
                     "title": "conditions",
                     "items": {
                         "$ref": "#/definitions/schemaConditionType"
-                    }
+                    },
+                    "x-displayname": "Conditions"
                 },
                 "metadata": {
-                    "description": "x-displayName: \"Metadata\"\nStandard status's metadata",
+                    "description": " Standard status's metadata",
                     "title": "metadata",
-                    "$ref": "#/definitions/schemaStatusMetaType"
+                    "$ref": "#/definitions/schemaStatusMetaType",
+                    "x-displayname": "Metadata"
                 },
                 "object_refs": {
                     "type": "array",
-                    "description": "x-displayName: \"Config Object\"\nObject reference",
+                    "description": " Object reference",
                     "title": "object_refs",
                     "items": {
                         "$ref": "#/definitions/ioschemaObjectRefType"
-                    }
+                    },
+                    "x-displayname": "Config Object"
                 }
             }
         },
         "managed_tenantTenantOwnerInfo": {
             "type": "object",
-            "description": "x-displayName: \"Tenant Owner User\"\nShape for specifying tenant owner user info.",
+            "description": "Shape for specifying tenant owner user info.",
             "title": "TenantOwnerInfo",
+            "x-displayname": "Tenant Owner User",
+            "x-ves-proto-message": "ves.io.schema.tenant_management.managed_tenant.TenantOwnerInfo",
             "properties": {
                 "contact_number": {
                     "type": "string",
-                    "description": "x-displayName: \"Contact Number\"\nx-example: \"+14084004001\"\nContact number of the user in ITU E.164 format [+][country code][subscriber number including area code]",
-                    "title": "Contact Number"
+                    "description": " Contact number of the user in ITU E.164 format [+][country code][subscriber number including area code]\n\nExample: - \"+14084004001\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.phone_number: true\n",
+                    "title": "Contact Number",
+                    "x-displayname": "Contact Number",
+                    "x-ves-example": "+14084004001",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.phone_number": "true"
+                    }
                 },
                 "email": {
                     "type": "string",
-                    "description": "x-displayName: \"Email\"\nx-example: \"john.doe@xyz.com\"\nx-required\nValid email address of tenant owner user.\nAccess details for the new tenant will be sent to this email address.",
-                    "title": "email"
+                    "description": " Valid email address of tenant owner user.\n Access details for the new tenant will be sent to this email address.\n\nExample: - \"john.doe@xyz.com\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.email: true\n",
+                    "title": "email",
+                    "x-displayname": "Email",
+                    "x-ves-example": "john.doe@xyz.com",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.email": "true"
+                    }
                 },
                 "first_name": {
                     "type": "string",
-                    "description": "x-displayName: \"First Name\"\nx-example: \"John\"\nx-required\nFirst name of the user (Tenant Owner)",
-                    "title": "first_name"
+                    "description": " First name of the user (Tenant Owner)\n\nExample: - \"John\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 256\n",
+                    "title": "first_name",
+                    "maxLength": 256,
+                    "x-displayname": "First Name",
+                    "x-ves-example": "John",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.max_len": "256"
+                    }
                 },
                 "last_name": {
                     "type": "string",
-                    "description": "x-displayName: \"Last Name\"\nx-example: \"Doe\"\nx-required\nLast name of the user (Tenant Owner)",
-                    "title": "last_name"
+                    "description": " Last name of the user (Tenant Owner)\n\nExample: - \"Doe\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 256\n",
+                    "title": "last_name",
+                    "maxLength": 256,
+                    "x-displayname": "Last Name",
+                    "x-ves-example": "Doe",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.max_len": "256"
+                    }
                 }
             }
         },
@@ -1893,39 +3081,56 @@ var APISwaggerJSON string = `{
         },
         "schemaConditionType": {
             "type": "object",
-            "description": "x-displayName: \"Status Condition\"\nConditions are used in the object status to describe the current state of the\nobject, e.g. Ready, Succeeded, etc.",
+            "description": "Conditions are used in the object status to describe the current state of the\nobject, e.g. Ready, Succeeded, etc.",
             "title": "ConditionType",
+            "x-displayname": "Status Condition",
+            "x-ves-proto-message": "ves.io.schema.ConditionType",
             "properties": {
                 "hostname": {
                     "type": "string",
-                    "description": "x-displayName: \"Hostname\"\nHostname of the instance of the site that sent the status",
-                    "title": "hostname"
+                    "description": " Hostname of the instance of the site that sent the status",
+                    "title": "hostname",
+                    "x-displayname": "Hostname"
                 },
                 "last_update_time": {
                     "type": "string",
-                    "description": "x-displayName: \"Last Updated\"\nLast time the condition was updated",
+                    "description": " Last time the condition was updated",
                     "title": "last_update_time",
-                    "format": "date-time"
+                    "format": "date-time",
+                    "x-displayname": "Last Updated"
                 },
                 "reason": {
                     "type": "string",
-                    "description": "x-displayName: \"Reason\"\nx-example: \"value\"\nx-reason: \"Insufficient memory in data plane\"\nA human readable string explaining the reason for reaching this condition",
-                    "title": "reason"
+                    "description": " x-reason: \"Insufficient memory in data plane\"\n A human readable string explaining the reason for reaching this condition\n\nExample: - \"value\"-",
+                    "title": "reason",
+                    "x-displayname": "Reason",
+                    "x-ves-example": "value"
                 },
                 "service_name": {
                     "type": "string",
-                    "description": "x-displayName: \"Service Name\"\nName of the service that sent the status",
-                    "title": "service name"
+                    "description": " Name of the service that sent the status",
+                    "title": "service name",
+                    "x-displayname": "Service Name"
                 },
                 "status": {
                     "type": "string",
-                    "description": "x-displayName: \"Status\"\nx-example: \"Failed\"\nStatus of the condition\n\"Success\" Validtion has succeded. Requested operation was successful.\n\"Failed\"  Validation has failed.\n\"Incomplete\" Validation of configuration has failed due to missing configuration.\n\"Installed\" Validation has passed and configuration has been installed in data path or K8s\n\"Down\" Configuration is operationally down. e.g. down interface\n\"Disabled\" Configuration is administratively disabled i.e. ObjectMetaType.Disable = true.\n\"NotApplicable\" Configuration is not applicable e.g. tenant service_policy_set(s) in system namespace are not applicable on REs",
-                    "title": "status"
+                    "description": " Status of the condition\n \"Success\" Validtion has succeded. Requested operation was successful.\n \"Failed\"  Validation has failed.\n \"Incomplete\" Validation of configuration has failed due to missing configuration.\n \"Installed\" Validation has passed and configuration has been installed in data path or K8s\n \"Down\" Configuration is operationally down. e.g. down interface\n \"Disabled\" Configuration is administratively disabled i.e. ObjectMetaType.Disable = true.\n \"NotApplicable\" Configuration is not applicable e.g. tenant service_policy_set(s) in system namespace are not applicable on REs\n\nExample: - \"Failed\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.in: [\\\"Success\\\",\\\"Failed\\\",\\\"Incomplete\\\",\\\"Installed\\\",\\\"Down\\\",\\\"Disabled\\\",\\\"NotApplicable\\\"]\n",
+                    "title": "status",
+                    "x-displayname": "Status",
+                    "x-ves-example": "Failed",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.in": "[\\\"Success\\\",\\\"Failed\\\",\\\"Incomplete\\\",\\\"Installed\\\",\\\"Down\\\",\\\"Disabled\\\",\\\"NotApplicable\\\"]"
+                    }
                 },
                 "type": {
                     "type": "string",
-                    "description": "x-displayName: \"Type\"\nx-example: \"Operational\"\nType of the condition\n\"Validation\" represents validation user given configuration object\n\"Operational\" represents operational status of a given configuration object",
-                    "title": "type"
+                    "description": " Type of the condition\n \"Validation\" represents validation user given configuration object\n \"Operational\" represents operational status of a given configuration object\n\nExample: - \"Operational\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.in: [\\\"Validation\\\",\\\"Operational\\\"]\n",
+                    "title": "type",
+                    "x-displayname": "Type",
+                    "x-ves-example": "Operational",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.in": "[\\\"Validation\\\",\\\"Operational\\\"]"
+                    }
                 }
             }
         },
@@ -1936,306 +3141,401 @@ var APISwaggerJSON string = `{
         },
         "schemaInitializerType": {
             "type": "object",
-            "description": "x-displayName: \"Initializer\"\nInitializer is information about an initializer that has not yet completed.",
+            "description": "Initializer is information about an initializer that has not yet completed.",
             "title": "InitializerType",
+            "x-displayname": "Initializer",
+            "x-ves-proto-message": "ves.io.schema.InitializerType",
             "properties": {
                 "name": {
                     "type": "string",
-                    "description": "x-displayName: \"Name\"\nname of the service that is responsible for initializing this object.",
-                    "title": "name"
+                    "description": " name of the service that is responsible for initializing this object.",
+                    "title": "name",
+                    "x-displayname": "Name"
                 }
             }
         },
         "schemaInitializersType": {
             "type": "object",
-            "description": "x-displayName: \"Initializers\"\nInitializers tracks the progress of initialization of a configuration object",
+            "description": "Initializers tracks the progress of initialization of a configuration object",
             "title": "InitializersType",
+            "x-displayname": "Initializers",
+            "x-ves-proto-message": "ves.io.schema.InitializersType",
             "properties": {
                 "pending": {
                     "type": "array",
-                    "description": "x-displayName: \"Pending\"\nPending is a list of initializers that must execute in order before this object is initialized.\nWhen the last pending initializer is removed, and no failing result is set, the initializers\nstruct will be set to nil and the object is considered as initialized and visible to all\nclients.",
+                    "description": " Pending is a list of initializers that must execute in order before this object is initialized.\n When the last pending initializer is removed, and no failing result is set, the initializers\n struct will be set to nil and the object is considered as initialized and visible to all\n clients.",
                     "title": "pending",
                     "items": {
                         "$ref": "#/definitions/schemaInitializerType"
-                    }
+                    },
+                    "x-displayname": "Pending"
                 },
                 "result": {
-                    "description": "x-displayName: \"Result\"\nIf result is set with the Failure field, the object will be persisted to storage and then deleted,\nensuring that other clients can observe the deletion.",
+                    "description": " If result is set with the Failure field, the object will be persisted to storage and then deleted,\n ensuring that other clients can observe the deletion.",
                     "title": "result",
-                    "$ref": "#/definitions/schemaStatusType"
+                    "$ref": "#/definitions/schemaStatusType",
+                    "x-displayname": "Result"
                 }
             }
         },
         "schemaListMetaType": {
             "type": "object",
-            "description": "x-displayName: \"List Metadata\"\nListMetaType is metadata that all lists must have.",
+            "description": "ListMetaType is metadata that all lists must have.",
             "title": "ListMetaType",
-            "properties": {
-                "resource_version": {
-                    "type": "string",
-                    "description": "x-displayName: \"Resource Version\"\nx-example: \"181255\"\nAn opaque value that represents the revision of the store at the time the list API is\nperformed. It can be used in subsequent watch API to receive all changes after the list\nAPI, or in a replace API to make the replace conditional on the object still being at\nthat revision",
-                    "title": "resource_version"
-                }
-            }
+            "x-displayname": "List Metadata",
+            "x-ves-proto-message": "ves.io.schema.ListMetaType"
         },
         "schemaObjectMetaType": {
             "type": "object",
-            "description": "x-displayName: \"Metadata\"\nObjectMetaType is metadata(common attributes) of an object that all configuration objects will have.\nThe information in this type can be specified by user during create and replace APIs.",
+            "description": "ObjectMetaType is metadata(common attributes) of an object that all configuration objects will have.\nThe information in this type can be specified by user during create and replace APIs.",
             "title": "ObjectMetaType",
+            "x-displayname": "Metadata",
+            "x-ves-proto-message": "ves.io.schema.ObjectMetaType",
             "properties": {
                 "annotations": {
                     "type": "object",
-                    "description": "x-displayName: \"Annotations\"\nx-example: \"value\"\nAnnotations is an unstructured key value map stored with a resource that may be\nset by external tools to store and retrieve arbitrary metadata. They are not\nqueryable and should be preserved when modifying objects.",
-                    "title": "annotations"
+                    "description": " Annotations is an unstructured key value map stored with a resource that may be\n set by external tools to store and retrieve arbitrary metadata. They are not\n queryable and should be preserved when modifying objects.\n\nExample: - \"value\"-\n\nValidation Rules:\n  ves.io.schema.rules.map.keys.string.max_len: 64\n  ves.io.schema.rules.map.keys.string.min_len: 1\n  ves.io.schema.rules.map.values.string.max_len: 1024\n  ves.io.schema.rules.map.values.string.min_len: 1\n",
+                    "title": "annotations",
+                    "x-displayname": "Annotations",
+                    "x-ves-example": "value",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.map.keys.string.max_len": "64",
+                        "ves.io.schema.rules.map.keys.string.min_len": "1",
+                        "ves.io.schema.rules.map.values.string.max_len": "1024",
+                        "ves.io.schema.rules.map.values.string.min_len": "1"
+                    }
                 },
                 "description": {
                     "type": "string",
-                    "description": "x-displayName: \"Description\"\nx-example: \"Virtual Host for acmecorp website\"\nHuman readable description for the object",
-                    "title": "description"
+                    "description": " Human readable description for the object\n\nExample: - \"Virtual Host for acmecorp website\"-",
+                    "title": "description",
+                    "x-displayname": "Description",
+                    "x-ves-example": "Virtual Host for acmecorp website"
                 },
                 "disable": {
                     "type": "boolean",
-                    "description": "x-displayName: \"Disable\"\nx-example: \"true\"\nA value of true will administratively disable the object",
+                    "description": " A value of true will administratively disable the object\n\nExample: - \"true\"-",
                     "title": "disable",
-                    "format": "boolean"
+                    "format": "boolean",
+                    "x-displayname": "Disable",
+                    "x-ves-example": "true"
                 },
                 "labels": {
                     "type": "object",
-                    "description": "x-displayName: \"Labels\"\nx-example: \"value\"\nMap of string keys and values that can be used to organize and categorize\n(scope and select) objects as chosen by the user. Values specified here will be used\nby selector expression",
-                    "title": "labels"
+                    "description": " Map of string keys and values that can be used to organize and categorize\n (scope and select) objects as chosen by the user. Values specified here will be used\n by selector expression\n\nExample: - \"value\"-",
+                    "title": "labels",
+                    "x-displayname": "Labels",
+                    "x-ves-example": "value"
                 },
                 "name": {
                     "type": "string",
-                    "description": "x-displayName: \"Name\"\nx-example: \"acmecorp-web\"\nx-required\nThis is the name of configuration object. It has to be unique within the namespace.\nIt can only be specified during create API and cannot be changed during replace API.\nThe value of name has to follow DNS-1035 format.",
-                    "title": "name"
+                    "description": " This is the name of configuration object. It has to be unique within the namespace.\n It can only be specified during create API and cannot be changed during replace API.\n The value of name has to follow DNS-1035 format.\n\nExample: - \"acmecorp-web\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "name",
+                    "x-displayname": "Name",
+                    "x-ves-example": "acmecorp-web",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 },
                 "namespace": {
                     "type": "string",
-                    "description": "x-displayName: \"Namespace\"\nx-example: \"staging\"\nThis defines the workspace within which each the configuration object is to be created.\nMust be a DNS_LABEL format. For a namespace object itself, namespace value will be \"\"",
-                    "title": "namespace"
+                    "description": " This defines the workspace within which each the configuration object is to be created.\n Must be a DNS_LABEL format. For a namespace object itself, namespace value will be \"\"\n\nExample: - \"staging\"-",
+                    "title": "namespace",
+                    "x-displayname": "Namespace",
+                    "x-ves-example": "staging"
                 },
                 "uid": {
                     "type": "string",
-                    "description": "x-displayName: \"UID\"\nx-example: \"d15f1fad-4d37-48c0-8706-df1824d76d31\"\nuid is the unique in time and space value for this object. Object create will fail if\nprovided by the client and the value exists in the system. Typically generated by the\nserver on successful creation of an object and is not allowed to change once populated.\nShadowed by SystemObjectMeta's uid field.",
-                    "title": "uid"
+                    "description": " uid is the unique in time and space value for this object. Object create will fail if\n provided by the client and the value exists in the system. Typically generated by the\n server on successful creation of an object and is not allowed to change once populated.\n Shadowed by SystemObjectMeta's uid field.\n\nExample: - \"d15f1fad-4d37-48c0-8706-df1824d76d31\"-",
+                    "title": "uid",
+                    "x-displayname": "UID",
+                    "x-ves-example": "d15f1fad-4d37-48c0-8706-df1824d76d31"
                 }
             }
         },
         "schemaStatusMetaType": {
             "type": "object",
-            "description": "x-displayName: \"Metadata\"\nStatusMetaType is metadata that all status must have.",
+            "description": "StatusMetaType is metadata that all status must have.",
             "title": "StatusMetaType",
+            "x-displayname": "Metadata",
+            "x-ves-proto-message": "ves.io.schema.StatusMetaType",
             "properties": {
                 "creation_timestamp": {
                     "type": "string",
-                    "description": "x-displayName: \"Creation Timestamp\"\ncreation_timestamp is when the status object was created. It is used to find/tie-break\nfor latest status object from same origin",
+                    "description": " creation_timestamp is when the status object was created. It is used to find/tie-break\n for latest status object from same origin",
                     "title": "creation_timestamp",
-                    "format": "date-time"
+                    "format": "date-time",
+                    "x-displayname": "Creation Timestamp"
                 },
                 "creator_class": {
                     "type": "string",
-                    "description": "x-displayName: \"Creator Class\"\nx-example: \"ver.re1.int.ves.io\"\nClass of creator which created this StatusObject. This will be service's DNS FQDN.\nThis will be set by the system based on client certificate information.",
-                    "title": "creator_class"
+                    "description": " Class of creator which created this StatusObject. This will be service's DNS FQDN.\n This will be set by the system based on client certificate information.\n\nExample: - \"ver.re1.int.ves.io\"-",
+                    "title": "creator_class",
+                    "x-displayname": "Creator Class",
+                    "x-ves-example": "ver.re1.int.ves.io"
                 },
                 "creator_id": {
                     "type": "string",
-                    "description": "x-displayName: \"Creator ID\"\nx-example: \"ver-instance-1\"\nID of creator which created this StatusObject. This will be a concrete identifier for service (e.g.\nidentifying the environment also). This will be set by the system based on client certificate\ninformation",
-                    "title": "creator_id"
+                    "description": " ID of creator which created this StatusObject. This will be a concrete identifier for service (e.g.\n identifying the environment also). This will be set by the system based on client certificate\n information\n\nExample: - \"ver-instance-1\"-",
+                    "title": "creator_id",
+                    "x-displayname": "Creator ID",
+                    "x-ves-example": "ver-instance-1"
                 },
                 "publish": {
-                    "description": "x-displayName: \"Publish\"\nDecides wether this status object will be propagated to user.",
+                    "description": " Decides wether this status object will be propagated to user.",
                     "title": "publish",
-                    "$ref": "#/definitions/schemaStatusPublishType"
+                    "$ref": "#/definitions/schemaStatusPublishType",
+                    "x-displayname": "Publish"
                 },
                 "status_id": {
                     "type": "string",
-                    "description": "x-displayName: \"Status ID\"\nstatus_id is a field used by the generator to distinguish (if necessary) between two status\nobjects for the same config object from the same site and same service and potentially same\ndaemon(creator-id)",
-                    "title": "status_id"
+                    "description": " status_id is a field used by the generator to distinguish (if necessary) between two status\n objects for the same config object from the same site and same service and potentially same\n daemon(creator-id)",
+                    "title": "status_id",
+                    "x-displayname": "Status ID"
                 },
                 "uid": {
                     "type": "string",
-                    "description": "x-displayName: \"UID\"\nx-example: \"d15f1fad-4d37-48c0-8706-df1824d76d31\"\nuid is the unique in time and space value for a StatusObject.",
-                    "title": "uid"
+                    "description": " uid is the unique in time and space value for a StatusObject.\n\nExample: - \"d15f1fad-4d37-48c0-8706-df1824d76d31\"-",
+                    "title": "uid",
+                    "x-displayname": "UID",
+                    "x-ves-example": "d15f1fad-4d37-48c0-8706-df1824d76d31"
                 },
                 "vtrp_id": {
                     "type": "string",
-                    "description": "x-displayName: \"VTRP ID\"\nOrigin of this status exchanged by VTRP.",
-                    "title": "vtrp_id"
+                    "description": " Origin of this status exchanged by VTRP.",
+                    "title": "vtrp_id",
+                    "x-displayname": "VTRP ID"
                 },
                 "vtrp_stale": {
                     "type": "boolean",
-                    "description": "x-displayName: \"VTRP Stale\"\nIndicate whether mars deems this object to be stale via graceful restart timer information",
+                    "description": " Indicate whether mars deems this object to be stale via graceful restart timer information",
                     "title": "vtrp_stale",
-                    "format": "boolean"
+                    "format": "boolean",
+                    "x-displayname": "VTRP Stale"
                 }
             }
         },
         "schemaStatusPublishType": {
             "type": "string",
-            "description": "x-displayName: \"Status Publish Type\"\nStatusPublishType is all possible publish operations on a StatusObject\n\n - STATUS_DO_NOT_PUBLISH: Do Not Publish\n\nx-displayName: \"Do Not Publish\"\nDo not propagate this status to user. This could be because status is only informational\n - STATUS_PUBLISH: Publish\n\nx-displayName: \"Publish\"\nPropagate this status up to user as it might be actionable",
+            "description": "StatusPublishType is all possible publish operations on a StatusObject\n\n - STATUS_DO_NOT_PUBLISH: Do Not Publish\n\nDo not propagate this status to user. This could be because status is only informational\n - STATUS_PUBLISH: Publish\n\nPropagate this status up to user as it might be actionable",
             "title": "StatusPublishType",
             "enum": [
                 "STATUS_DO_NOT_PUBLISH",
                 "STATUS_PUBLISH"
             ],
-            "default": "STATUS_DO_NOT_PUBLISH"
+            "default": "STATUS_DO_NOT_PUBLISH",
+            "x-displayname": "Status Publish Type",
+            "x-ves-proto-enum": "ves.io.schema.StatusPublishType"
         },
         "schemaStatusType": {
             "type": "object",
-            "description": "x-displayName: \"Status\"\nStatus is a return value for calls that don't return other objects.",
+            "description": "Status is a return value for calls that don't return other objects.",
             "title": "StatusType",
+            "x-displayname": "Status",
+            "x-ves-proto-message": "ves.io.schema.StatusType",
             "properties": {
                 "code": {
                     "type": "integer",
-                    "description": "x-displayName: \"Code\"\nx-example: \"0\"\nSuggested HTTP return code for this status, 0 if not set.",
+                    "description": " Suggested HTTP return code for this status, 0 if not set.\n\nExample: - \"0\"-",
                     "title": "code",
-                    "format": "int32"
+                    "format": "int32",
+                    "x-displayname": "Code",
+                    "x-ves-example": "0"
                 },
                 "reason": {
                     "type": "string",
-                    "description": "x-displayName: \"Reason\"\nx-example: \"value\"\nA human-readable description of why this operation is in the\n\"Failure\" status. If this value is empty there\nis no information available.",
-                    "title": "reason"
+                    "description": " A human-readable description of why this operation is in the\n \"Failure\" status. If this value is empty there\n is no information available.\n\nExample: - \"value\"-",
+                    "title": "reason",
+                    "x-displayname": "Reason",
+                    "x-ves-example": "value"
                 },
                 "status": {
                     "type": "string",
-                    "description": "x-displayName: \"Status\"\nx-example: \"value\"\nStatus of the operation.\nOne of: \"Success\" or \"Failure\".",
-                    "title": "status"
+                    "description": " Status of the operation.\n One of: \"Success\" or \"Failure\".\n\nExample: - \"value\"-",
+                    "title": "status",
+                    "x-displayname": "Status",
+                    "x-ves-example": "value"
                 }
             }
         },
         "schemaSystemObjectMetaType": {
             "type": "object",
-            "description": "x-displayName: \"System Metadata\"\nSystemObjectMetaType is metadata generated or populated by the system for all persisted objects and\ncannot be updated directly by users.",
+            "description": "SystemObjectMetaType is metadata generated or populated by the system for all persisted objects and\ncannot be updated directly by users.",
             "title": "SystemObjectMetaType",
+            "x-displayname": "System Metadata",
+            "x-ves-proto-message": "ves.io.schema.SystemObjectMetaType",
             "properties": {
                 "creation_timestamp": {
                     "type": "string",
-                    "description": "x-displayName: \"Creation Timestamp\"\nCreationTimestamp is a timestamp representing the server time when this object was\ncreated. It is not guaranteed to be set in happens-before order across separate operations.\nClients may not set this value. It is represented in RFC3339 form and is in UTC.",
+                    "description": " CreationTimestamp is a timestamp representing the server time when this object was\n created. It is not guaranteed to be set in happens-before order across separate operations.\n Clients may not set this value. It is represented in RFC3339 form and is in UTC.",
                     "title": "creation_timestamp",
-                    "format": "date-time"
+                    "format": "date-time",
+                    "x-displayname": "Creation Timestamp"
                 },
                 "creator_class": {
                     "type": "string",
-                    "description": "x-displayName: \"Creator Class\"\nx-example: \"value\"\nA value identifying the class of the user or service which created this configuration object.",
-                    "title": "creator_class"
+                    "description": " A value identifying the class of the user or service which created this configuration object.\n\nExample: - \"value\"-",
+                    "title": "creator_class",
+                    "x-displayname": "Creator Class",
+                    "x-ves-example": "value"
                 },
                 "creator_cookie": {
                     "type": "string",
-                    "description": "x-displayName: \"Creator Cookie\"\nx-example: \"value\"\nThis can used by the creator of the object for later audit for e.g. by storing the\nversion identifying information of the object so at future it can be determined if\nversion present at remote end is current or stale.",
-                    "title": "creator_cookie"
+                    "description": " This can used by the creator of the object for later audit for e.g. by storing the\n version identifying information of the object so at future it can be determined if\n version present at remote end is current or stale.\n\nExample: - \"value\"-",
+                    "title": "creator_cookie",
+                    "x-displayname": "Creator Cookie",
+                    "x-ves-example": "value"
                 },
                 "creator_id": {
                     "type": "string",
-                    "description": "x-displayName: \"Creator ID\"\nx-example: \"value\"\nA value identifying the exact user or service that created this configuration object",
-                    "title": "creator_id"
+                    "description": " A value identifying the exact user or service that created this configuration object\n\nExample: - \"value\"-",
+                    "title": "creator_id",
+                    "x-displayname": "Creator ID",
+                    "x-ves-example": "value"
                 },
                 "deletion_timestamp": {
                     "type": "string",
-                    "description": "x-displayName: \"Deletion Timestamp\"\nDeletionTimestamp is RFC 3339 date and time at which this resource will be deleted. This\nfield is set by the server when a graceful deletion is requested by the user, and is not\ndirectly settable by a client. The resource is expected to be deleted (no longer visible\nfrom resource lists, and not reachable by name) after the time in this field, once the\nfinalizers list is empty. As long as the finalizers list contains items, deletion is blocked.\nOnce the deletionTimestamp is set, this value may not be unset or be set further into the\nfuture, although it may be shortened or the resource may be deleted prior to this time.\nFor example, a user may request that a pod is deleted in 30 seconds. The Kubelet will react\nby sending a graceful termination signal to the containers in the pod. After that 30 seconds,\nthe Kubelet will send a hard termination signal (SIGKILL) to the container and after cleanup,\nremove the pod from the API. In the presence of network partitions, this object may still\nexist after this timestamp, until an administrator or automated process can determine the\nresource is fully terminated.\nIf not set, graceful deletion of the object has not been requested.\n\nPopulated by the system when a graceful deletion is requested.\nRead-only.",
+                    "description": " DeletionTimestamp is RFC 3339 date and time at which this resource will be deleted. This\n field is set by the server when a graceful deletion is requested by the user, and is not\n directly settable by a client. The resource is expected to be deleted (no longer visible\n from resource lists, and not reachable by name) after the time in this field, once the\n finalizers list is empty. As long as the finalizers list contains items, deletion is blocked.\n Once the deletionTimestamp is set, this value may not be unset or be set further into the\n future, although it may be shortened or the resource may be deleted prior to this time.\n For example, a user may request that a pod is deleted in 30 seconds. The Kubelet will react\n by sending a graceful termination signal to the containers in the pod. After that 30 seconds,\n the Kubelet will send a hard termination signal (SIGKILL) to the container and after cleanup,\n remove the pod from the API. In the presence of network partitions, this object may still\n exist after this timestamp, until an administrator or automated process can determine the\n resource is fully terminated.\n If not set, graceful deletion of the object has not been requested.\n\n Populated by the system when a graceful deletion is requested.\n Read-only.",
                     "title": "deletion_timestamp",
-                    "format": "date-time"
+                    "format": "date-time",
+                    "x-displayname": "Deletion Timestamp"
                 },
                 "finalizers": {
                     "type": "array",
-                    "description": "x-displayName: \"Finalizers\"\nx-example: \"value\"\nMust be empty before the object is deleted from the registry. Each entry\nis an identifier for the responsible component that will remove the entry\nfrom the list. If the deletionTimestamp of the object is non-nil, entries\nin this list can only be removed.",
+                    "description": " Must be empty before the object is deleted from the registry. Each entry\n is an identifier for the responsible component that will remove the entry\n from the list. If the deletionTimestamp of the object is non-nil, entries\n in this list can only be removed.\n\nExample: - \"value\"-",
                     "title": "finalizers",
                     "items": {
                         "type": "string"
-                    }
+                    },
+                    "x-displayname": "Finalizers",
+                    "x-ves-example": "value"
                 },
                 "initializers": {
-                    "description": "x-displayName: \"Initializers\"\nAn initializer is a controller which enforces some system invariant at object creation time.\nThis field is a list of initializers that have not yet acted on this object. If nil or empty,\nthis object has been completely initialized. Otherwise, the object is considered uninitialized\nand is hidden (in list/watch and get calls) from clients that haven't explicitly asked to\nobserve uninitialized objects.\n\nWhen an object is created, the system will populate this list with the current set of initializers.\nOnly privileged users may set or modify this list. Once it is empty, it may not be modified further\nby any user.",
+                    "description": " An initializer is a controller which enforces some system invariant at object creation time.\n This field is a list of initializers that have not yet acted on this object. If nil or empty,\n this object has been completely initialized. Otherwise, the object is considered uninitialized\n and is hidden (in list/watch and get calls) from clients that haven't explicitly asked to\n observe uninitialized objects.\n\n When an object is created, the system will populate this list with the current set of initializers.\n Only privileged users may set or modify this list. Once it is empty, it may not be modified further\n by any user.",
                     "title": "initializers",
-                    "$ref": "#/definitions/schemaInitializersType"
+                    "$ref": "#/definitions/schemaInitializersType",
+                    "x-displayname": "Initializers"
                 },
                 "labels": {
                     "type": "object",
-                    "description": "x-displayName: \"Labels\"\nx-example: \"'ves.io/soft-deleted': 'true'\"\nMap of string keys and values that can be used to organize and categorize\n(scope and select) objects as chosen by the operator or software. Values here can be interpreted\nby software(backend or frontend) to enable certain behavior e.g. things marked as soft-deleted(restorable).",
-                    "title": "labels"
+                    "description": " Map of string keys and values that can be used to organize and categorize\n (scope and select) objects as chosen by the operator or software. Values here can be interpreted\n by software(backend or frontend) to enable certain behavior e.g. things marked as soft-deleted(restorable).\n\nExample: - \"'ves.io/soft-deleted''true'\"-",
+                    "title": "labels",
+                    "x-displayname": "Labels",
+                    "x-ves-example": "'ves.io/soft-deleted': 'true'"
                 },
                 "modification_timestamp": {
                     "type": "string",
-                    "description": "x-displayName: \"Modification Timestamp\"\nModificationTimestamp is a timestamp representing the server time when this object was\nlast modified.",
+                    "description": " ModificationTimestamp is a timestamp representing the server time when this object was\n last modified.",
                     "title": "modification_timestamp",
-                    "format": "date-time"
+                    "format": "date-time",
+                    "x-displayname": "Modification Timestamp"
                 },
                 "namespace": {
                     "type": "array",
-                    "description": "x-displayName: \"Namespace Reference\"\nThe namespace this object belongs to. This is populated by the service based on the\nmetadata.namespace field when an object is created.",
+                    "description": " The namespace this object belongs to. This is populated by the service based on the\n metadata.namespace field when an object is created.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 1\n",
                     "title": "namespace",
+                    "maxItems": 1,
                     "items": {
                         "$ref": "#/definitions/ioschemaObjectRefType"
+                    },
+                    "x-displayname": "Namespace Reference",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "1"
                     }
                 },
                 "object_index": {
                     "type": "integer",
-                    "description": "x-displayName: \"Object Index\"\nx-example: \"0\"\nUnique index for the object. Some objects need a unique integer index to be allocated\nfor each object type. This field will be populated for all objects that need it and will\nbe zero otherwise.",
+                    "description": " Unique index for the object. Some objects need a unique integer index to be allocated\n for each object type. This field will be populated for all objects that need it and will\n be zero otherwise.\n\nExample: - \"0\"-",
                     "title": "object_index",
-                    "format": "int64"
+                    "format": "int64",
+                    "x-displayname": "Object Index",
+                    "x-ves-example": "0"
                 },
                 "owner_view": {
-                    "description": "x-displayName: \"Owner View\"\nReference to the view object that owns this object.\nIf there is no view owner, this field will be nil.\nIf not nil, this object can only be edited/deleted through the view",
+                    "description": " Reference to the view object that owns this object.\n If there is no view owner, this field will be nil.\n If not nil, this object can only be edited/deleted through the view",
                     "title": "owner_view",
-                    "$ref": "#/definitions/schemaViewRefType"
+                    "$ref": "#/definitions/schemaViewRefType",
+                    "x-displayname": "Owner View"
                 },
                 "sre_disable": {
                     "type": "boolean",
-                    "description": "x-displayName: \"SRE Disable\"\nx-example: \"true\"\nThis should be set to true If VES/SRE operator wants to suppress an object from being\npresented to business-logic of a daemon(e.g. due to bad-form/issue-causing Object).\nThis is meant only to be used in temporary situations for operational continuity till\na fix is rolled out in business-logic.",
+                    "description": " This should be set to true If VES/SRE operator wants to suppress an object from being\n presented to business-logic of a daemon(e.g. due to bad-form/issue-causing Object).\n This is meant only to be used in temporary situations for operational continuity till\n a fix is rolled out in business-logic.\n\nExample: - \"true\"-",
                     "title": "sre_disable",
-                    "format": "boolean"
+                    "format": "boolean",
+                    "x-displayname": "SRE Disable",
+                    "x-ves-example": "true"
                 },
                 "tenant": {
                     "type": "string",
-                    "description": "x-displayName: \"Tenant\"\nx-example: \"acmecorp\"\nTenant to which this configuration object belongs to. The value for this is found from\npresented credentials.",
-                    "title": "tenant"
+                    "description": " Tenant to which this configuration object belongs to. The value for this is found from\n presented credentials.\n\nExample: - \"acmecorp\"-",
+                    "title": "tenant",
+                    "x-displayname": "Tenant",
+                    "x-ves-example": "acmecorp"
                 },
                 "trace_info": {
                     "type": "string",
-                    "description": "x-displayName: \"Trace Info\"\nx-example: \"value\"\ntrace_info holds information(\u003ctrace-id\u003e:\u003cspan-id\u003e:\u003cparent-span-id\u003e) of the request doing\nthe object modification. This can be used on the watch side to create subsequent spans.\nThis information can be used to co-relate activities across services (modulo state compression)\nfor a synchronous API.",
-                    "title": "trace_info"
+                    "description": " trace_info holds information(\u003ctrace-id\u003e:\u003cspan-id\u003e:\u003cparent-span-id\u003e) of the request doing\n the object modification. This can be used on the watch side to create subsequent spans.\n This information can be used to co-relate activities across services (modulo state compression)\n for a synchronous API.\n\nExample: - \"value\"-",
+                    "title": "trace_info",
+                    "x-displayname": "Trace Info",
+                    "x-ves-example": "value"
                 },
                 "uid": {
                     "type": "string",
-                    "description": "x-displayName: \"UID\"\nx-example: \"d15f1fad-4d37-48c0-8706-df1824d76d31\"\nuid is the unique in time and space value for this object. It is generated by\nthe server on successful creation of an object and is not allowed to change on Replace\nAPI. The value of is taken from uid field of ObjectMetaType, if provided.",
-                    "title": "uid"
+                    "description": " uid is the unique in time and space value for this object. It is generated by\n the server on successful creation of an object and is not allowed to change on Replace\n API. The value of is taken from uid field of ObjectMetaType, if provided.\n\nExample: - \"d15f1fad-4d37-48c0-8706-df1824d76d31\"-",
+                    "title": "uid",
+                    "x-displayname": "UID",
+                    "x-ves-example": "d15f1fad-4d37-48c0-8706-df1824d76d31"
                 },
                 "vtrp_id": {
                     "type": "string",
-                    "description": "x-displayName: \"VTRP ID\"\nIndicate origin of this object.",
-                    "title": "vtrp_id"
+                    "description": " Indicate origin of this object.",
+                    "title": "vtrp_id",
+                    "x-displayname": "VTRP ID"
                 },
                 "vtrp_stale": {
                     "type": "boolean",
-                    "description": "x-displayName: \"VTRP Stale\"\nIndicate whether mars deems this object to be stale via graceful restart timer information",
+                    "description": " Indicate whether mars deems this object to be stale via graceful restart timer information",
                     "title": "vtrp_stale",
-                    "format": "boolean"
+                    "format": "boolean",
+                    "x-displayname": "VTRP Stale"
                 }
             }
         },
         "schemaViewRefType": {
             "type": "object",
-            "description": "x-displayName: \"View Reference\"\nViewRefType represents a reference to a view",
+            "description": "ViewRefType represents a reference to a view",
             "title": "ViewRefType",
+            "x-displayname": "View Reference",
+            "x-ves-proto-message": "ves.io.schema.ViewRefType",
             "properties": {
                 "kind": {
                     "type": "string",
-                    "description": "x-displayName: \"Kind\"\nx-example: \"http_proxy\"\nKind of the view object",
-                    "title": "kind"
+                    "description": " Kind of the view object\n\nExample: - \"http_proxy\"-",
+                    "title": "kind",
+                    "x-displayname": "Kind",
+                    "x-ves-example": "http_proxy"
                 },
                 "name": {
                     "type": "string",
-                    "description": "x-displayName: \"Name\"\nx-example: \"contactus-route\"\nWhen a configuration object(e.g. virtual_host) refers to another(e.g route)\nthen name will hold the referred object's(e.g. route's) name.",
-                    "title": "name"
+                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then name will hold the referred object's(e.g. route's) name.\n\nExample: - \"contactus-route\"-",
+                    "title": "name",
+                    "x-displayname": "Name",
+                    "x-ves-example": "contactus-route"
                 },
                 "namespace": {
                     "type": "string",
-                    "description": "x-displayName: \"Namespace\"\nx-example: \"ns1\"\nWhen a configuration object(e.g. virtual_host) refers to another(e.g route)\nthen namespace will hold the referred object's(e.g. route's) namespace.",
-                    "title": "namespace"
+                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then namespace will hold the referred object's(e.g. route's) namespace.\n\nExample: - \"ns1\"-",
+                    "title": "namespace",
+                    "x-displayname": "Namespace",
+                    "x-ves-example": "ns1"
                 },
                 "uid": {
                     "type": "string",
-                    "description": "x-displayName: \"UID\"\nx-example: \"f3744323-1adf-4aaa-a5dc-0707c1d1bd82\"\nUID of the view object",
-                    "title": "uid"
+                    "description": " UID of the view object\n\nExample: - \"f3744323-1adf-4aaa-a5dc-0707c1d1bd82\"-",
+                    "title": "uid",
+                    "x-displayname": "UID",
+                    "x-ves-example": "f3744323-1adf-4aaa-a5dc-0707c1d1bd82"
                 }
             }
         },
@@ -2298,63 +3598,94 @@ var APISwaggerJSON string = `{
         },
         "schemaviewsObjectRefType": {
             "type": "object",
-            "description": "x-displayName: \"Object reference\"\nThis type establishes a direct reference from one object(the referrer) to another(the referred).\nSuch a reference is in form of tenant/namespace/name",
+            "description": "This type establishes a direct reference from one object(the referrer) to another(the referred).\nSuch a reference is in form of tenant/namespace/name",
             "title": "ObjectRefType",
+            "x-displayname": "Object reference",
+            "x-ves-proto-message": "ves.io.schema.views.ObjectRefType",
             "properties": {
                 "name": {
                     "type": "string",
-                    "description": "x-displayName: \"Name\"\nx-example: \"contacts-route\"\nx-required\nWhen a configuration object(e.g. virtual_host) refers to another(e.g route)\nthen name will hold the referred object's(e.g. route's) name.",
-                    "title": "name"
+                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then name will hold the referred object's(e.g. route's) name.\n\nExample: - \"contacts-route\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_bytes: 64\n  ves.io.schema.rules.string.min_bytes: 1\n",
+                    "title": "name",
+                    "minLength": 1,
+                    "maxLength": 64,
+                    "x-displayname": "Name",
+                    "x-ves-example": "contacts-route",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.max_bytes": "64",
+                        "ves.io.schema.rules.string.min_bytes": "1"
+                    }
                 },
                 "namespace": {
                     "type": "string",
-                    "description": "x-displayName: \"Namespace\"\nx-example: \"ns1\"\nWhen a configuration object(e.g. virtual_host) refers to another(e.g route)\nthen namespace will hold the referred object's(e.g. route's) namespace.",
-                    "title": "namespace"
+                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then namespace will hold the referred object's(e.g. route's) namespace.\n\nExample: - \"ns1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 64\n",
+                    "title": "namespace",
+                    "maxLength": 64,
+                    "x-displayname": "Namespace",
+                    "x-ves-example": "ns1",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_bytes": "64"
+                    }
                 },
                 "tenant": {
                     "type": "string",
-                    "description": "x-displayName: \"Tenant\"\nx-example: \"acmecorp\"\nWhen a configuration object(e.g. virtual_host) refers to another(e.g route)\nthen tenant will hold the referred object's(e.g. route's) tenant.",
-                    "title": "tenant"
+                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then tenant will hold the referred object's(e.g. route's) tenant.\n\nExample: - \"acmecorp\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 64\n",
+                    "title": "tenant",
+                    "maxLength": 64,
+                    "x-displayname": "Tenant",
+                    "x-ves-example": "acmecorp",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_bytes": "64"
+                    }
                 }
             }
         },
         "tenant_managementmanaged_tenantGlobalSpecType": {
             "type": "object",
-            "description": "x-displayName: \"Specification\"\nShape of managed_tenant in the storage backend.",
+            "description": "Shape of managed_tenant in the storage backend.",
             "title": "GlobalSpecType",
+            "x-displayname": "Specification",
+            "x-ves-oneof-field-tenant_choice": "[\"new_tenant_info\",\"tenant_id\"]",
+            "x-ves-proto-message": "ves.io.schema.tenant_management.managed_tenant.GlobalSpecType",
             "properties": {
-                "all_tenants": {
-                    "description": "x-displayName: \"All Tenants\"\nChoice to manage all tenants.\nInternal option only.",
-                    "title": "all_tenants",
-                    "$ref": "#/definitions/schemaEmpty"
-                },
                 "groups": {
                     "type": "array",
-                    "description": "x-displayName: \"Groups\"\nList of local user group association to user groups in the managed tenant specified in the tenant_choice.",
+                    "description": " List of local user group association to user groups in the managed tenant specified in the tenant_choice.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 16\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "groups",
+                    "maxItems": 16,
                     "items": {
                         "$ref": "#/definitions/managed_tenantGroupAssignmentType"
+                    },
+                    "x-displayname": "Groups",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "16",
+                        "ves.io.schema.rules.repeated.unique": "true"
                     }
                 },
                 "new_tenant_info": {
-                    "description": "x-displayName: \"New Child Tenant\"\nSpecify information required to signup new child tenant.\nA support ticket will be created on-behalf of the admin with necessary information attached.\nManaged tenant config will remain in pending state until support sucessfully provision the child tenant.\nPlease contact support for more info.",
+                    "description": "Exclusive with [tenant_id]\n Specify information required to signup new child tenant.\n A support ticket will be created on-behalf of the admin with necessary information attached.\n Managed tenant config will remain in pending state until support sucessfully provision the child tenant.\n Please contact support for more info.",
                     "title": "new_tenant_info",
-                    "$ref": "#/definitions/managed_tenantNewTenantInfo"
+                    "$ref": "#/definitions/managed_tenantNewTenantInfo",
+                    "x-displayname": "New Child Tenant"
                 },
                 "status": {
-                    "description": "x-displayName: \"Status\"\nStatus is to identify the status of the managed tenant configuration.",
+                    "description": " Status is to identify the status of the managed tenant configuration.",
                     "title": "Status",
-                    "$ref": "#/definitions/managed_tenantStatus"
+                    "$ref": "#/definitions/managed_tenantStatus",
+                    "x-displayname": "Status"
                 },
                 "tenant_id": {
                     "type": "string",
-                    "description": "x-displayName: \"Tenant ID (Existing)\"\nx-example: \"company-s4543dsa\"\nSpecify the Tenant ID of the existing tenant which needs to be managed.\nNOTE: this is the name of the tenant configuration obj. not UID.",
-                    "title": "tenant_id"
-                },
-                "tenant_regex": {
-                    "type": "string",
-                    "description": "x-displayName: \"Tenant Regex\"\nx-example: \"eu-tenant.*'\"\nSpecify regex pattern to target range of Tenant IDs.\nInternal option only.",
-                    "title": "tenant_regex"
+                    "description": "Exclusive with [new_tenant_info]\n Specify the Tenant ID of the existing tenant which needs to be managed.\n NOTE: this is the name of the tenant configuration obj. not UID.\n\nExample: - \"company-s4543dsa\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 256\n",
+                    "title": "tenant_id",
+                    "maxLength": 256,
+                    "x-displayname": "Tenant ID (Existing)",
+                    "x-ves-example": "company-s4543dsa",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "256"
+                    }
                 }
             }
         }

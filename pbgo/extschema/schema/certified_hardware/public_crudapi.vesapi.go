@@ -930,16 +930,7 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 		item.Disabled = o.GetMetadata().GetDisable()
 
 		if len(req.ReportFields) > 0 {
-			noDBForm, _ := flags.GetEnvGetRspNoDBForm()
-			if !noDBForm {
-				item.Object = o.Object
-				sf.Logger().Alert(svcfw.GetResponseInDBForm,
-					log.MinorAlert,
-					zap.String("user", server.UserFromContext(ctx)),
-					zap.String("useragent", server.UseragentStrFromContext(ctx)),
-					zap.String("operation", "List"),
-				)
-			}
+			item.Object = o.Object
 
 			item.Metadata = &ves_io_schema.ObjectGetMetaType{}
 			item.Metadata.FromObjectMetaType(o.Metadata)
@@ -1018,7 +1009,7 @@ var APISwaggerJSON string = `{
     "paths": {
         "/public/namespaces/{namespace}/certified_hardwares": {
             "get": {
-                "summary": "List",
+                "summary": "List Certified Hardware",
                 "description": "List the set of certified_hardware in a namespace",
                 "operationId": "ves.io.schema.certified_hardware.API.List",
                 "responses": {
@@ -1134,7 +1125,7 @@ var APISwaggerJSON string = `{
         },
         "/public/namespaces/{namespace}/certified_hardwares/{name}": {
             "get": {
-                "summary": "Get certified hardware",
+                "summary": "Get Certified Hardware",
                 "description": "Get Certified Hardware object",
                 "operationId": "ves.io.schema.certified_hardware.API.Get",
                 "responses": {

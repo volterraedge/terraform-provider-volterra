@@ -1595,16 +1595,7 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 		item.Disabled = o.GetMetadata().GetDisable()
 
 		if len(req.ReportFields) > 0 {
-			noDBForm, _ := flags.GetEnvGetRspNoDBForm()
-			if !noDBForm {
-				item.Object = o.Object
-				sf.Logger().Alert(svcfw.GetResponseInDBForm,
-					log.MinorAlert,
-					zap.String("user", server.UserFromContext(ctx)),
-					zap.String("useragent", server.UseragentStrFromContext(ctx)),
-					zap.String("operation", "List"),
-				)
-			}
+			item.Object = o.Object
 
 			item.Metadata = &ves_io_schema.ObjectGetMetaType{}
 			item.Metadata.FromObjectMetaType(o.Metadata)
@@ -1683,7 +1674,7 @@ var APISwaggerJSON string = `{
     "paths": {
         "/public/namespaces/{metadata.namespace}/bgps": {
             "post": {
-                "summary": "Create bgp",
+                "summary": "Create BGP",
                 "description": "BGP object is the configuration for peering with external BGP servers.\nIt is created by users in system namespace.",
                 "operationId": "ves.io.schema.bgp.API.Create",
                 "responses": {
@@ -1775,7 +1766,7 @@ var APISwaggerJSON string = `{
         },
         "/public/namespaces/{metadata.namespace}/bgps/{metadata.name}": {
             "put": {
-                "summary": "Replace bgp",
+                "summary": "Replace BGP",
                 "description": "BGP object is the configuration for peering with external BGP servers.\nReplace bgp will replace the contents of given BGP object.",
                 "operationId": "ves.io.schema.bgp.API.Replace",
                 "responses": {
@@ -1875,7 +1866,7 @@ var APISwaggerJSON string = `{
         },
         "/public/namespaces/{namespace}/bgps": {
             "get": {
-                "summary": "List",
+                "summary": "List BGP",
                 "description": "List the set of bgp in a namespace",
                 "operationId": "ves.io.schema.bgp.API.List",
                 "responses": {
@@ -1991,7 +1982,7 @@ var APISwaggerJSON string = `{
         },
         "/public/namespaces/{namespace}/bgps/{name}": {
             "get": {
-                "summary": "Get bgp",
+                "summary": "Get BGP",
                 "description": "BGP object is the configuration for peering with external BGP servers.\nGet bgp reads from system namespace.",
                 "operationId": "ves.io.schema.bgp.API.Get",
                 "responses": {
@@ -2095,7 +2086,7 @@ var APISwaggerJSON string = `{
                 "x-ves-proto-rpc": "ves.io.schema.bgp.API.Get"
             },
             "delete": {
-                "summary": "Delete",
+                "summary": "Delete BGP",
                 "description": "Delete the specified bgp",
                 "operationId": "ves.io.schema.bgp.API.Delete",
                 "responses": {
@@ -2297,6 +2288,12 @@ var APISwaggerJSON string = `{
                     "items": {
                         "$ref": "#/definitions/ioschemaObjectRefType"
                     }
+                },
+                "passive": {
+                    "type": "boolean",
+                    "description": "x-displayName: \"Passive\"\nIndicates if the peer is passive or not. When set, VER will not send open messages to this peer.",
+                    "title": "passive",
+                    "format": "boolean"
                 },
                 "port": {
                     "type": "integer",
@@ -3038,7 +3035,8 @@ var APISwaggerJSON string = `{
             "description": "BGP Peer parameters",
             "title": "Peer",
             "x-displayname": "BGP Peer",
-            "x-ves-displayorder": "1,2",
+            "x-ves-displayorder": "1,2,5",
+            "x-ves-oneof-field-passive_choice": "[\"passive_mode_disabled\",\"passive_mode_enabled\"]",
             "x-ves-oneof-field-type_choice": "[\"external\"]",
             "x-ves-proto-message": "ves.io.schema.bgp.Peer",
             "properties": {
@@ -3057,6 +3055,18 @@ var APISwaggerJSON string = `{
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true"
                     }
+                },
+                "passive_mode_disabled": {
+                    "description": "Exclusive with [passive_mode_enabled]\n",
+                    "title": "passive_mode_disabled",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disabled"
+                },
+                "passive_mode_enabled": {
+                    "description": "Exclusive with [passive_mode_disabled]\n",
+                    "title": "passive_mode_enabled",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Enabled"
                 }
             }
         },

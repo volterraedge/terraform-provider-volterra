@@ -739,6 +739,28 @@ func (v *ValidateAPIGroupChoice) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
+	case *APIGroupChoice_VoltconsoleSyntheticMonitorAdmin:
+		if fv, exists := v.FldValidators["choice.voltconsole_synthetic_monitor_admin"]; exists {
+			val := m.GetChoice().(*APIGroupChoice_VoltconsoleSyntheticMonitorAdmin).VoltconsoleSyntheticMonitorAdmin
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("voltconsole_synthetic_monitor_admin"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *APIGroupChoice_VoltconsoleSyntheticMonitorSubscriptionMgmt:
+		if fv, exists := v.FldValidators["choice.voltconsole_synthetic_monitor_subscription_mgmt"]; exists {
+			val := m.GetChoice().(*APIGroupChoice_VoltconsoleSyntheticMonitorSubscriptionMgmt).VoltconsoleSyntheticMonitorSubscriptionMgmt
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("voltconsole_synthetic_monitor_subscription_mgmt"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 	case *APIGroupChoice_VoltconsoleTenantMgmtRead:
 		if fv, exists := v.FldValidators["choice.voltconsole_tenant_mgmt_read"]; exists {
 			val := m.GetChoice().(*APIGroupChoice_VoltconsoleTenantMgmtRead).VoltconsoleTenantMgmtRead
@@ -866,6 +888,17 @@ func (v *ValidateAPIGroupChoice) Validate(ctx context.Context, pm interface{}, o
 			vOpts := append(opts,
 				db.WithValidateField("choice"),
 				db.WithValidateField("voltconsole_nginx_mgmt_suite_subscription_mgmt"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *APIGroupChoice_VoltconsoleNginxMgmtSuiteApplication:
+		if fv, exists := v.FldValidators["choice.voltconsole_nginx_mgmt_suite_application"]; exists {
+			val := m.GetChoice().(*APIGroupChoice_VoltconsoleNginxMgmtSuiteApplication).VoltconsoleNginxMgmtSuiteApplication
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("voltconsole_nginx_mgmt_suite_application"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err

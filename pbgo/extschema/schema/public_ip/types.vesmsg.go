@@ -218,7 +218,8 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 
 	vrhIp := v.IpValidationRuleHandler
 	rulesIp := map[string]string{
-		"ves.io.schema.rules.string.ip": "true",
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.ip":        "true",
 	}
 	vFn, err = vrhIp(rulesIp)
 	if err != nil {
@@ -465,7 +466,8 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 
 	vrhIp := v.IpValidationRuleHandler
 	rulesIp := map[string]string{
-		"ves.io.schema.rules.string.ip": "true",
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.ip":        "true",
 	}
 	vFn, err = vrhIp(rulesIp)
 	if err != nil {

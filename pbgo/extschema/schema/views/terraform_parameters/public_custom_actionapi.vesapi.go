@@ -164,7 +164,8 @@ func (c *CustomActionAPIRestClient) doRPCForceDelete(ctx context.Context, callOp
 	}
 	defer rsp.Body.Close()
 
-	if rsp.StatusCode != http.StatusOK {
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
 		body, err := ioutil.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
 	}
@@ -175,7 +176,7 @@ func (c *CustomActionAPIRestClient) doRPCForceDelete(ctx context.Context, callOp
 	}
 	pbRsp := &ForceDeleteResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
-		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.views.terraform_parameters.ForceDeleteResponse", body)
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.views.terraform_parameters.ForceDeleteResponse", body)
 
 	}
 	if callOpts.OutCallResponse != nil {
@@ -249,7 +250,8 @@ func (c *CustomActionAPIRestClient) doRPCRun(ctx context.Context, callOpts *serv
 	}
 	defer rsp.Body.Close()
 
-	if rsp.StatusCode != http.StatusOK {
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
 		body, err := ioutil.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
 	}
@@ -260,7 +262,7 @@ func (c *CustomActionAPIRestClient) doRPCRun(ctx context.Context, callOpts *serv
 	}
 	pbRsp := &RunResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
-		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.views.terraform_parameters.RunResponse", body)
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.views.terraform_parameters.RunResponse", body)
 
 	}
 	if callOpts.OutCallResponse != nil {

@@ -1595,16 +1595,7 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 		item.Disabled = o.GetMetadata().GetDisable()
 
 		if len(req.ReportFields) > 0 {
-			noDBForm, _ := flags.GetEnvGetRspNoDBForm()
-			if !noDBForm {
-				item.Object = o.Object
-				sf.Logger().Alert(svcfw.GetResponseInDBForm,
-					log.MinorAlert,
-					zap.String("user", server.UserFromContext(ctx)),
-					zap.String("useragent", server.UseragentStrFromContext(ctx)),
-					zap.String("operation", "List"),
-				)
-			}
+			item.Object = o.Object
 
 			item.Metadata = &ves_io_schema.ObjectGetMetaType{}
 			item.Metadata.FromObjectMetaType(o.Metadata)
@@ -1683,7 +1674,7 @@ var APISwaggerJSON string = `{
     "paths": {
         "/public/namespaces/{metadata.namespace}/clusters": {
             "post": {
-                "summary": "Create cluster",
+                "summary": "Create Cluster",
                 "description": "Create cluster will create the object in the storage backend for namespace metadata.namespace",
                 "operationId": "ves.io.schema.cluster.API.Create",
                 "responses": {
@@ -1775,7 +1766,7 @@ var APISwaggerJSON string = `{
         },
         "/public/namespaces/{metadata.namespace}/clusters/{metadata.name}": {
             "put": {
-                "summary": "Replace cluster",
+                "summary": "Replace Cluster",
                 "description": "Replacing an cluster object will update the object by replacing the existing spec with the provided one.\nFor read-then-write operations a resourceVersion mismatch will occur if the object was modified between the read and write",
                 "operationId": "ves.io.schema.cluster.API.Replace",
                 "responses": {
@@ -1875,7 +1866,7 @@ var APISwaggerJSON string = `{
         },
         "/public/namespaces/{namespace}/clusters": {
             "get": {
-                "summary": "List",
+                "summary": "List Cluster",
                 "description": "List the set of cluster in a namespace",
                 "operationId": "ves.io.schema.cluster.API.List",
                 "responses": {
@@ -1991,7 +1982,7 @@ var APISwaggerJSON string = `{
         },
         "/public/namespaces/{namespace}/clusters/{name}": {
             "get": {
-                "summary": "Get cluster",
+                "summary": "Get Cluster",
                 "description": "Get cluster will get the object from the storage backend for namespace metadata.namespace",
                 "operationId": "ves.io.schema.cluster.API.Get",
                 "responses": {
@@ -2095,7 +2086,7 @@ var APISwaggerJSON string = `{
                 "x-ves-proto-rpc": "ves.io.schema.cluster.API.Get"
             },
             "delete": {
-                "summary": "Delete",
+                "summary": "Delete Cluster",
                 "description": "Delete the specified cluster",
                 "operationId": "ves.io.schema.cluster.API.Delete",
                 "responses": {

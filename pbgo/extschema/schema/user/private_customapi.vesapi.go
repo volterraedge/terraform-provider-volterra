@@ -164,7 +164,8 @@ func (c *CustomPrivateAPIRestClient) doRPCCascadeDelete(ctx context.Context, cal
 	}
 	defer rsp.Body.Close()
 
-	if rsp.StatusCode != http.StatusOK {
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
 		body, err := ioutil.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
 	}
@@ -175,7 +176,7 @@ func (c *CustomPrivateAPIRestClient) doRPCCascadeDelete(ctx context.Context, cal
 	}
 	pbRsp := &CascadeDeleteResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
-		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.user.CascadeDeleteResponse", body)
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.user.CascadeDeleteResponse", body)
 
 	}
 	if callOpts.OutCallResponse != nil {
@@ -248,7 +249,8 @@ func (c *CustomPrivateAPIRestClient) doRPCUpdateLastLogin(ctx context.Context, c
 	}
 	defer rsp.Body.Close()
 
-	if rsp.StatusCode != http.StatusOK {
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
 		body, err := ioutil.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
 	}
@@ -259,7 +261,7 @@ func (c *CustomPrivateAPIRestClient) doRPCUpdateLastLogin(ctx context.Context, c
 	}
 	pbRsp := &LastLoginUpdateResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
-		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.user.LastLoginUpdateResponse", body)
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.user.LastLoginUpdateResponse", body)
 
 	}
 	if callOpts.OutCallResponse != nil {
@@ -429,7 +431,7 @@ var CustomPrivateAPISwaggerJSON string = `{
     "paths": {
         "/ves.io.schema/introspect/write/namespaces/{namespace}/users/cascade_delete": {
             "post": {
-                "summary": "CascadeDelete",
+                "summary": "Delete User and Related Objects",
                 "description": "CascadeDelete deletes the user and associated namespace roles for this user.\nUse this only if the user and its referenced objects need to be wiped out altogether.\nNote: users will always be in the system namespace.",
                 "operationId": "ves.io.schema.user.CustomPrivateAPI.CascadeDelete",
                 "responses": {
