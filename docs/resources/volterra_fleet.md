@@ -23,51 +23,52 @@ resource "volterra_fleet" "example" {
   // One of the arguments from this list "no_bond_devices bond_device_list" must be set
   no_bond_devices = true
 
-  // One of the arguments from this list "no_dc_cluster_group dc_cluster_group dc_cluster_group_inside" must be set
+  // One of the arguments from this list "dc_cluster_group_inside no_dc_cluster_group dc_cluster_group" must be set
   no_dc_cluster_group = true
   fleet_label         = ["sfo"]
 
   // One of the arguments from this list "disable_gpu enable_gpu enable_vgpu" must be set
-  disable_gpu = true
+  enable_gpu = true
 
   // One of the arguments from this list "interface_list default_config device_list" must be set
 
-  device_list {
-    devices {
-      // One of the arguments from this list "network_device" must be set
-
-      network_device {
-        interface {
-          name      = "test1"
-          namespace = "staging"
-          tenant    = "acmecorp"
-        }
-
-        use = "use"
-      }
-
-      name  = "eth0"
-      owner = "owner"
+  interface_list {
+    interfaces {
+      name      = "test1"
+      namespace = "staging"
+      tenant    = "acmecorp"
     }
   }
-
   // One of the arguments from this list "logs_streaming_disabled log_receiver" must be set
-
-  log_receiver {
-    name      = "test1"
-    namespace = "staging"
-    tenant    = "acmecorp"
-  }
+  logs_streaming_disabled = true
   // One of the arguments from this list "default_storage_class storage_class_list" must be set
   default_storage_class = true
+
   // One of the arguments from this list "no_storage_device storage_device_list" must be set
-  no_storage_device = true
+
+  storage_device_list {
+    storage_devices {
+      advanced_advanced_parameters = {
+        "key1" = "value1"
+      }
+
+      // One of the arguments from this list "netapp_trident pure_service_orchestrator openebs_enterprise custom_storage" must be set
+      custom_storage = true
+      storage_device = "DellEMC-isilon-F800-0"
+    }
+  }
   // One of the arguments from this list "no_storage_interfaces storage_interface_list" must be set
   no_storage_interfaces = true
   // One of the arguments from this list "no_storage_static_routes storage_static_routes" must be set
   no_storage_static_routes = true
+
   // One of the arguments from this list "deny_all_usb allow_all_usb usb_policy" must be set
-  deny_all_usb = true
+
+  usb_policy {
+    name      = "test1"
+    namespace = "staging"
+    tenant    = "acmecorp"
+  }
 }
 
 ```
@@ -128,6 +129,8 @@ Argument Reference
 `network_connectors` - (Optional) The network connectors configuration is applied on all sites that are member of the fleet.. See [ref](#ref) below for details.
 
 `network_firewall` - (Optional) The Network Firewall is applied on Virtual Networks of type site local network and site local inside network. See [ref](#ref) below for details.
+
+`offline_survivability_mode` - (Optional) Enable/Disable offline survivability mode. See [Offline Survivability Mode ](#offline-survivability-mode) below for details.
 
 `operating_system_version` - (Optional) Current Operating System version can be overridden via site config. (`String`).
 
@@ -225,6 +228,10 @@ device instance specific sections.
 
 Matches ssh port 53.
 
+### Enable Offline Survivability Mode
+
+Enabling offline survivability reduces default security of a CE..
+
 ### Enable Vgpu
 
 Enable NVIDIA vGPU hosted on VMware.
@@ -306,6 +313,18 @@ Nexthop address when type is "Use-Configured".
 `ipv4` - (Optional) IPv4 Address. See [Ipv4 ](#ipv4) below for details.
 
 `ipv6` - (Optional) IPv6 Address. See [Ipv6 ](#ipv6) below for details.
+
+### No Offline Survivability Mode
+
+Disable Offline Survivability Mode.
+
+### Offline Survivability Mode
+
+Enable/Disable offline survivability mode.
+
+`enable_offline_survivability_mode` - (Optional) Enabling offline survivability reduces default security of a CE. (bool).
+
+`no_offline_survivability_mode` - (Optional) Disable Offline Survivability Mode (bool).
 
 ### Openebs Enterprise
 

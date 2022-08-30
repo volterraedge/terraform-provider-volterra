@@ -250,6 +250,12 @@ func resourceVolterraFastAcl() *schema.Resource {
 										Optional: true,
 									},
 
+									"vhost": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+
 									"vip_services": {
 
 										Type:     schema.TypeBool,
@@ -1184,6 +1190,18 @@ func resourceVolterraFastAclCreate(d *schema.ResourceData, meta interface{}) err
 						if v.(bool) {
 							destinationTypeChoiceInt := &ves_io_schema_fast_acl.DestinationType_SharedVipServices{}
 							destinationTypeChoiceInt.SharedVipServices = &ves_io_schema.Empty{}
+							destinationType.DestinationTypeChoice = destinationTypeChoiceInt
+						}
+
+					}
+
+					if v, ok := destinationTypeMapStrToI["vhost"]; ok && !isIntfNil(v) && !destinationTypeChoiceTypeFound {
+
+						destinationTypeChoiceTypeFound = true
+
+						if v.(bool) {
+							destinationTypeChoiceInt := &ves_io_schema_fast_acl.DestinationType_Vhost{}
+							destinationTypeChoiceInt.Vhost = &ves_io_schema.Empty{}
 							destinationType.DestinationTypeChoice = destinationTypeChoiceInt
 						}
 
@@ -2394,6 +2412,18 @@ func resourceVolterraFastAclUpdate(d *schema.ResourceData, meta interface{}) err
 						if v.(bool) {
 							destinationTypeChoiceInt := &ves_io_schema_fast_acl.DestinationType_SharedVipServices{}
 							destinationTypeChoiceInt.SharedVipServices = &ves_io_schema.Empty{}
+							destinationType.DestinationTypeChoice = destinationTypeChoiceInt
+						}
+
+					}
+
+					if v, ok := destinationTypeMapStrToI["vhost"]; ok && !isIntfNil(v) && !destinationTypeChoiceTypeFound {
+
+						destinationTypeChoiceTypeFound = true
+
+						if v.(bool) {
+							destinationTypeChoiceInt := &ves_io_schema_fast_acl.DestinationType_Vhost{}
+							destinationTypeChoiceInt.Vhost = &ves_io_schema.Empty{}
 							destinationType.DestinationTypeChoice = destinationTypeChoiceInt
 						}
 

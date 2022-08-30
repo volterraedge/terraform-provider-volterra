@@ -51,21 +51,16 @@ resource "volterra_aws_tgw_site" "example" {
     }
 
     // One of the arguments from this list "aws_cred assisted" must be set
-
-    aws_cred {
-      name      = "test1"
-      namespace = "staging"
-      tenant    = "acmecorp"
-    }
+    assisted      = true
     disk_size     = "80"
     instance_type = "a1.xlarge"
 
-    // One of the arguments from this list "vpc_id new_vpc" must be set
+    // One of the arguments from this list "new_vpc vpc_id" must be set
 
     new_vpc {
       allocate_ipv6 = true
 
-      // One of the arguments from this list "autogenerate name_tag" must be set
+      // One of the arguments from this list "name_tag autogenerate" must be set
       name_tag = "name_tag"
 
       primary_ipv4 = "10.1.0.0/16"
@@ -74,10 +69,9 @@ resource "volterra_aws_tgw_site" "example" {
 
     // One of the arguments from this list "new_tgw existing_tgw" must be set
 
-    existing_tgw {
-      tgw_asn           = "64500"
-      tgw_id            = "tgw-12345678901234567"
-      volterra_site_asn = "64501"
+    new_tgw {
+      // One of the arguments from this list "user_assigned system_generated" must be set
+      system_generated = true
     }
     // One of the arguments from this list "nodes_per_az total_nodes no_worker_nodes" must be set
     total_nodes = "1"
@@ -87,15 +81,8 @@ resource "volterra_aws_tgw_site" "example" {
   default_blocked_services = true
 
   // One of the arguments from this list "direct_connect_disabled direct_connect_enabled" must be set
+  direct_connect_disabled = true
 
-  direct_connect_enabled {
-    cloud_aggregated_prefix = ["10.0.0.0/20"]
-
-    dc_connect_aggregated_prefix = ["20.0.0.0/20"]
-
-    // One of the arguments from this list "hosted_vifs standard_vifs manual_gw" must be set
-    manual_gw = true
-  }
   // One of the arguments from this list "logs_streaming_disabled log_receiver" must be set
   logs_streaming_disabled = true
 }
@@ -135,13 +122,15 @@ Argument Reference
 
 `direct_connect_enabled` - (Optional) Direct Connect feature is enabled. See [Direct Connect Enabled ](#direct-connect-enabled) below for details.
 
-`local_control_plane` - (Optional) Enable/Disable site local control plane. See [Local Control Plane ](#local-control-plane) below for details.
-
 `log_receiver` - (Optional) Select log receiver for logs streaming. See [ref](#ref) below for details.
 
 `logs_streaming_disabled` - (Optional) Logs Streaming is disabled (bool).
 
+`offline_survivability_mode` - (Optional) Enable/Disable offline survivability mode. See [Offline Survivability Mode ](#offline-survivability-mode) below for details.
+
 `os` - (Optional) Operating System Details. See [Os ](#os) below for details.
+
+`site_local_control_plane` - (Optional) Enable/Disable site local control plane. See [Site Local Control Plane ](#site-local-control-plane) below for details.
 
 `sw` - (Optional) Volterra Software Details. See [Sw ](#sw) below for details.
 
@@ -186,6 +175,10 @@ Allowed VIP Port Configuration.
 ### Assisted
 
 In assisted deployment get AWS parameters generated in status of this objects and run volterra provided terraform script..
+
+### Auto Asn
+
+Automatically set ASN.
 
 ### Autogenerate
 
@@ -351,6 +344,10 @@ Will assign latest available SW version.
 
 Direct Connect feature is enabled.
 
+`auto_asn` - (Optional) Automatically set ASN (bool).
+
+`custom_asn` - (Optional) Custom Autonomous System Number (`Int`).
+
 `cloud_aggregated_prefix` - (Optional) Aggregated prefix from cloud to be advertised for DC side (`String`).
 
 `dc_connect_aggregated_prefix` - (Optional) Aggregated prefix from direct connect to be advertised for Cloud side (`String`).
@@ -414,6 +411,10 @@ Forward Proxy is enabled for this connector.
 ### Enable Interception
 
 Enable Interception.
+
+### Enable Offline Survivability Mode
+
+Enabling offline survivability reduces default security of a CE..
 
 ### Existing Tgw
 
@@ -489,14 +490,6 @@ IPv6 Address.
 
 `addr` - (Optional) e.g. '2001:db8:0:0:0:0:2:1' becomes '2001:db8::2:1' or '2001:db8:0:0:0:2:0:0' becomes '2001:db8::2::' (`String`).
 
-### Local Control Plane
-
-Enable/Disable site local control plane.
-
-`default_local_control_plane` - (Optional) Enable Site Local Control Plane (bool).
-
-`no_local_control_plane` - (Optional) Disable Site Local Control Plane (bool).
-
 ### Manual Gw
 
 and a user associate AWS DirectConnect Gateway with it..
@@ -571,6 +564,10 @@ Disable Site Local Control Plane.
 
 Firewall Policy is disabled for this site..
 
+### No Offline Survivability Mode
+
+Disable Offline Survivability Mode.
+
 ### No Outside Static Routes
 
 Static Routes disabled for outside network..
@@ -578,6 +575,14 @@ Static Routes disabled for outside network..
 ### No Worker Nodes
 
 Worker nodes is set to zero.
+
+### Offline Survivability Mode
+
+Enable/Disable offline survivability mode.
+
+`enable_offline_survivability_mode` - (Optional) Enabling offline survivability reduces default security of a CE. (bool).
+
+`no_offline_survivability_mode` - (Optional) Disable Offline Survivability Mode (bool).
 
 ### Os
 
@@ -636,6 +641,14 @@ tenant - (Optional) then tenant will hold the referred object's(e.g. route's) te
 ### Reserved Inside Subnet
 
 Autogenerate and reserve a subnet from the Primary CIDR.
+
+### Site Local Control Plane
+
+Enable/Disable site local control plane.
+
+`default_local_control_plane` - (Optional) Enable Site Local Control Plane (bool).
+
+`no_local_control_plane` - (Optional) Disable Site Local Control Plane (bool).
 
 ### Sli To Global Dr
 

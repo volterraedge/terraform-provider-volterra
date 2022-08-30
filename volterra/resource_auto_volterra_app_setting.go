@@ -282,6 +282,55 @@ func resourceVolterraAppSetting() *schema.Resource {
 													Optional: true,
 												},
 
+												"exclude_non_existent_url_activity": {
+
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
+
+												"include_non_existent_url_activity_automatic": {
+
+													Type:     schema.TypeSet,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"high": {
+
+																Type:     schema.TypeBool,
+																Optional: true,
+															},
+
+															"low": {
+
+																Type:     schema.TypeBool,
+																Optional: true,
+															},
+
+															"medium": {
+
+																Type:     schema.TypeBool,
+																Optional: true,
+															},
+														},
+													},
+												},
+
+												"include_non_existent_url_activity_custom": {
+
+													Type:     schema.TypeSet,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"nonexistent_requests_threshold": {
+																Type:     schema.TypeInt,
+																Optional: true,
+															},
+														},
+													},
+												},
+
 												"exclude_waf_activity": {
 
 													Type:     schema.TypeBool,
@@ -688,6 +737,94 @@ func resourceVolterraAppSettingCreate(d *schema.ResourceData, meta interface{}) 
 									ipReputationChoiceInt := &ves_io_schema_app_setting.MaliciousUserDetectionSetting_IncludeIpReputation{}
 									ipReputationChoiceInt.IncludeIpReputation = &ves_io_schema.Empty{}
 									maliciousUserDetectionInt.EnableDetection.IpReputationChoice = ipReputationChoiceInt
+								}
+
+							}
+
+							nonExistentUrlActivityChoiceTypeFound := false
+
+							if v, ok := cs["exclude_non_existent_url_activity"]; ok && !isIntfNil(v) && !nonExistentUrlActivityChoiceTypeFound {
+
+								nonExistentUrlActivityChoiceTypeFound = true
+
+								if v.(bool) {
+									nonExistentUrlActivityChoiceInt := &ves_io_schema_app_setting.MaliciousUserDetectionSetting_ExcludeNonExistentUrlActivity{}
+									nonExistentUrlActivityChoiceInt.ExcludeNonExistentUrlActivity = &ves_io_schema.Empty{}
+									maliciousUserDetectionInt.EnableDetection.NonExistentUrlActivityChoice = nonExistentUrlActivityChoiceInt
+								}
+
+							}
+
+							if v, ok := cs["include_non_existent_url_activity_automatic"]; ok && !isIntfNil(v) && !nonExistentUrlActivityChoiceTypeFound {
+
+								nonExistentUrlActivityChoiceTypeFound = true
+								nonExistentUrlActivityChoiceInt := &ves_io_schema_app_setting.MaliciousUserDetectionSetting_IncludeNonExistentUrlActivityAutomatic{}
+								nonExistentUrlActivityChoiceInt.IncludeNonExistentUrlActivityAutomatic = &ves_io_schema_app_setting.NonexistentUrlAutomaticActivitySetting{}
+								maliciousUserDetectionInt.EnableDetection.NonExistentUrlActivityChoice = nonExistentUrlActivityChoiceInt
+
+								sl := v.(*schema.Set).List()
+								for _, set := range sl {
+									cs := set.(map[string]interface{})
+
+									sensitivityTypeFound := false
+
+									if v, ok := cs["high"]; ok && !isIntfNil(v) && !sensitivityTypeFound {
+
+										sensitivityTypeFound = true
+
+										if v.(bool) {
+											sensitivityInt := &ves_io_schema_app_setting.NonexistentUrlAutomaticActivitySetting_High{}
+											sensitivityInt.High = &ves_io_schema.Empty{}
+											nonExistentUrlActivityChoiceInt.IncludeNonExistentUrlActivityAutomatic.Sensitivity = sensitivityInt
+										}
+
+									}
+
+									if v, ok := cs["low"]; ok && !isIntfNil(v) && !sensitivityTypeFound {
+
+										sensitivityTypeFound = true
+
+										if v.(bool) {
+											sensitivityInt := &ves_io_schema_app_setting.NonexistentUrlAutomaticActivitySetting_Low{}
+											sensitivityInt.Low = &ves_io_schema.Empty{}
+											nonExistentUrlActivityChoiceInt.IncludeNonExistentUrlActivityAutomatic.Sensitivity = sensitivityInt
+										}
+
+									}
+
+									if v, ok := cs["medium"]; ok && !isIntfNil(v) && !sensitivityTypeFound {
+
+										sensitivityTypeFound = true
+
+										if v.(bool) {
+											sensitivityInt := &ves_io_schema_app_setting.NonexistentUrlAutomaticActivitySetting_Medium{}
+											sensitivityInt.Medium = &ves_io_schema.Empty{}
+											nonExistentUrlActivityChoiceInt.IncludeNonExistentUrlActivityAutomatic.Sensitivity = sensitivityInt
+										}
+
+									}
+
+								}
+
+							}
+
+							if v, ok := cs["include_non_existent_url_activity_custom"]; ok && !isIntfNil(v) && !nonExistentUrlActivityChoiceTypeFound {
+
+								nonExistentUrlActivityChoiceTypeFound = true
+								nonExistentUrlActivityChoiceInt := &ves_io_schema_app_setting.MaliciousUserDetectionSetting_IncludeNonExistentUrlActivityCustom{}
+								nonExistentUrlActivityChoiceInt.IncludeNonExistentUrlActivityCustom = &ves_io_schema_app_setting.NonexistentUrlCustomActivitySetting{}
+								maliciousUserDetectionInt.EnableDetection.NonExistentUrlActivityChoice = nonExistentUrlActivityChoiceInt
+
+								sl := v.(*schema.Set).List()
+								for _, set := range sl {
+									cs := set.(map[string]interface{})
+
+									if v, ok := cs["nonexistent_requests_threshold"]; ok && !isIntfNil(v) {
+
+										nonExistentUrlActivityChoiceInt.IncludeNonExistentUrlActivityCustom.NonexistentRequestsThreshold = uint32(v.(int))
+
+									}
+
 								}
 
 							}
@@ -1154,6 +1291,94 @@ func resourceVolterraAppSettingUpdate(d *schema.ResourceData, meta interface{}) 
 									ipReputationChoiceInt := &ves_io_schema_app_setting.MaliciousUserDetectionSetting_IncludeIpReputation{}
 									ipReputationChoiceInt.IncludeIpReputation = &ves_io_schema.Empty{}
 									maliciousUserDetectionInt.EnableDetection.IpReputationChoice = ipReputationChoiceInt
+								}
+
+							}
+
+							nonExistentUrlActivityChoiceTypeFound := false
+
+							if v, ok := cs["exclude_non_existent_url_activity"]; ok && !isIntfNil(v) && !nonExistentUrlActivityChoiceTypeFound {
+
+								nonExistentUrlActivityChoiceTypeFound = true
+
+								if v.(bool) {
+									nonExistentUrlActivityChoiceInt := &ves_io_schema_app_setting.MaliciousUserDetectionSetting_ExcludeNonExistentUrlActivity{}
+									nonExistentUrlActivityChoiceInt.ExcludeNonExistentUrlActivity = &ves_io_schema.Empty{}
+									maliciousUserDetectionInt.EnableDetection.NonExistentUrlActivityChoice = nonExistentUrlActivityChoiceInt
+								}
+
+							}
+
+							if v, ok := cs["include_non_existent_url_activity_automatic"]; ok && !isIntfNil(v) && !nonExistentUrlActivityChoiceTypeFound {
+
+								nonExistentUrlActivityChoiceTypeFound = true
+								nonExistentUrlActivityChoiceInt := &ves_io_schema_app_setting.MaliciousUserDetectionSetting_IncludeNonExistentUrlActivityAutomatic{}
+								nonExistentUrlActivityChoiceInt.IncludeNonExistentUrlActivityAutomatic = &ves_io_schema_app_setting.NonexistentUrlAutomaticActivitySetting{}
+								maliciousUserDetectionInt.EnableDetection.NonExistentUrlActivityChoice = nonExistentUrlActivityChoiceInt
+
+								sl := v.(*schema.Set).List()
+								for _, set := range sl {
+									cs := set.(map[string]interface{})
+
+									sensitivityTypeFound := false
+
+									if v, ok := cs["high"]; ok && !isIntfNil(v) && !sensitivityTypeFound {
+
+										sensitivityTypeFound = true
+
+										if v.(bool) {
+											sensitivityInt := &ves_io_schema_app_setting.NonexistentUrlAutomaticActivitySetting_High{}
+											sensitivityInt.High = &ves_io_schema.Empty{}
+											nonExistentUrlActivityChoiceInt.IncludeNonExistentUrlActivityAutomatic.Sensitivity = sensitivityInt
+										}
+
+									}
+
+									if v, ok := cs["low"]; ok && !isIntfNil(v) && !sensitivityTypeFound {
+
+										sensitivityTypeFound = true
+
+										if v.(bool) {
+											sensitivityInt := &ves_io_schema_app_setting.NonexistentUrlAutomaticActivitySetting_Low{}
+											sensitivityInt.Low = &ves_io_schema.Empty{}
+											nonExistentUrlActivityChoiceInt.IncludeNonExistentUrlActivityAutomatic.Sensitivity = sensitivityInt
+										}
+
+									}
+
+									if v, ok := cs["medium"]; ok && !isIntfNil(v) && !sensitivityTypeFound {
+
+										sensitivityTypeFound = true
+
+										if v.(bool) {
+											sensitivityInt := &ves_io_schema_app_setting.NonexistentUrlAutomaticActivitySetting_Medium{}
+											sensitivityInt.Medium = &ves_io_schema.Empty{}
+											nonExistentUrlActivityChoiceInt.IncludeNonExistentUrlActivityAutomatic.Sensitivity = sensitivityInt
+										}
+
+									}
+
+								}
+
+							}
+
+							if v, ok := cs["include_non_existent_url_activity_custom"]; ok && !isIntfNil(v) && !nonExistentUrlActivityChoiceTypeFound {
+
+								nonExistentUrlActivityChoiceTypeFound = true
+								nonExistentUrlActivityChoiceInt := &ves_io_schema_app_setting.MaliciousUserDetectionSetting_IncludeNonExistentUrlActivityCustom{}
+								nonExistentUrlActivityChoiceInt.IncludeNonExistentUrlActivityCustom = &ves_io_schema_app_setting.NonexistentUrlCustomActivitySetting{}
+								maliciousUserDetectionInt.EnableDetection.NonExistentUrlActivityChoice = nonExistentUrlActivityChoiceInt
+
+								sl := v.(*schema.Set).List()
+								for _, set := range sl {
+									cs := set.(map[string]interface{})
+
+									if v, ok := cs["nonexistent_requests_threshold"]; ok && !isIntfNil(v) {
+
+										nonExistentUrlActivityChoiceInt.IncludeNonExistentUrlActivityCustom.NonexistentRequestsThreshold = uint32(v.(int))
+
+									}
+
 								}
 
 							}

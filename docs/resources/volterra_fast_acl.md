@@ -22,22 +22,38 @@ resource "volterra_fast_acl" "example" {
 
   // One of the arguments from this list "site_acl re_acl legacy_acl" must be set
 
-  legacy_acl {
-    destination_type {
-      // One of the arguments from this list "interface_services vip_services all_services destination_ip_address selected_vip_address shared_vip_services" must be set
-      all_services = true
+  site_acl {
+    fast_acl_rules {
+      action {
+        // One of the arguments from this list "simple_action policer_action protocol_policer_action" must be set
+        simple_action = "simple_action"
+      }
+
+      metadata {
+        description = "Virtual Host for acmecorp website"
+        disable     = true
+        name        = "acmecorp-web"
+      }
+
+      name = "value"
+
+      port {
+        // One of the arguments from this list "all user_defined dns" must be set
+        all = true
+      }
+
+      // One of the arguments from this list "ip_prefix_set prefix" must be set
+
+      prefix {
+        prefix = ["[192.168.1.0/24, 192.168.2.0/24]\" or \"[2001:db8::1::/112, 2001::db8::2::/112]"]
+      }
     }
 
-    network_type {
-      // One of the arguments from this list "site_local site_local_inside public" must be set
-      public = true
-    }
+    // One of the arguments from this list "outside_network inside_network" must be set
+    outside_network = true
 
-    source_rules {
-      name      = "test1"
-      namespace = "staging"
-      tenant    = "acmecorp"
-    }
+    // One of the arguments from this list "interface_services vip_services all_services" must be set
+    all_services = true
   }
 }
 
@@ -127,6 +143,8 @@ Regional Edge : Tenant can not configure it.
 `selected_vip_address` - (Optional) Valid only for RE.. See [Selected Vip Address ](#selected-vip-address) below for details.
 
 `shared_vip_services` - (Optional) Regional Edge: Applies configuration on all shared VIPs used for services (bool).
+
+`vhost` - (Optional) Regional Edge: Allowed (bool).
 
 `vip_services` - (Optional) Regional Edge: Applies the configuration to VIP which has been assigned by default to tenant. Not applicable for shared VIP(s) (bool).
 
@@ -315,6 +333,10 @@ Indicates use of site local network.
 ### Site Local Inside
 
 Indicates use of site local inside network.
+
+### Vhost
+
+Regional Edge: Allowed.
 
 ### Vip Services
 

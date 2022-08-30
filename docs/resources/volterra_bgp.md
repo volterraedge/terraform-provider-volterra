@@ -35,7 +35,7 @@ resource "volterra_bgp" "example" {
     bgp_router_id_type = "bgp_router_id_type"
 
     // One of the arguments from this list "local_address from_site ip_address" must be set
-    ip_address = "ip_address"
+    local_address = true
   }
 
   peers {
@@ -45,16 +45,18 @@ resource "volterra_bgp" "example" {
       name        = "acmecorp-web"
     }
 
-    target_service = "value"
+    // One of the arguments from this list "passive_mode_disabled passive_mode_enabled" must be set
+    passive_mode_disabled = true
+    target_service        = "value"
 
     // One of the arguments from this list "external internal" must be set
 
     internal {
       // One of the arguments from this list "address from_site dns_name" must be set
-      from_site = true
+      address = "address"
 
       family_inet6vpn {
-        // One of the arguments from this list "disable enable" must be set
+        // One of the arguments from this list "enable disable" must be set
         enable = true
       }
 
@@ -78,13 +80,13 @@ resource "volterra_bgp" "example" {
       }
 
       // One of the arguments from this list "disable_mtls enable_mtls" must be set
-      disable_mtls = true
-      port         = "179"
+      enable_mtls = true
+      port        = "179"
     }
   }
 
   where {
-    // One of the arguments from this list "site virtual_site" must be set
+    // One of the arguments from this list "virtual_site site" must be set
 
     site {
       network_type = "network_type"
@@ -307,11 +309,23 @@ Common attributes for the peer including name and description..
 
 All interfaces in the site local outside network..
 
+### Passive Mode Disabled
+
+x-displayName: "Disabled".
+
+### Passive Mode Enabled
+
+x-displayName: "Enabled".
+
 ### Peers
 
 List of peers.
 
 `metadata` - (Required) Common attributes for the peer including name and description.. See [Metadata ](#metadata) below for details.
+
+`passive_mode_disabled` - (Optional) x-displayName: "Disabled" (bool).
+
+`passive_mode_enabled` - (Optional) x-displayName: "Enabled" (bool).
 
 `target_service` - (Optional) Specify whether this peer should be configured in "phobos" or "frr". (`String`).
 

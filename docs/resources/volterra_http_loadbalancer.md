@@ -21,18 +21,153 @@ resource "volterra_http_loadbalancer" "example" {
   namespace = "staging"
 
   // One of the arguments from this list "do_not_advertise advertise_on_public_default_vip advertise_on_public advertise_custom" must be set
-  advertise_on_public_default_vip = true
 
-  // One of the arguments from this list "disable_api_definition api_definition api_definitions" must be set
-  disable_api_definition = true
+  advertise_on_public {
+    public_ip {
+      name      = "test1"
+      namespace = "staging"
+      tenant    = "acmecorp"
+    }
+  }
+
+  // One of the arguments from this list "api_definitions disable_api_definition api_definition" must be set
+
+  api_definition {
+    name      = "test1"
+    namespace = "staging"
+    tenant    = "acmecorp"
+  }
 
   // One of the arguments from this list "no_challenge js_challenge captcha_challenge policy_based_challenge" must be set
-  no_challenge = true
 
+  policy_based_challenge {
+    // One of the arguments from this list "default_captcha_challenge_parameters captcha_challenge_parameters" must be set
+    default_captcha_challenge_parameters = true
+
+    // One of the arguments from this list "no_challenge always_enable_js_challenge always_enable_captcha_challenge" must be set
+    always_enable_captcha_challenge = true
+
+    // One of the arguments from this list "js_challenge_parameters default_js_challenge_parameters" must be set
+    default_js_challenge_parameters = true
+
+    // One of the arguments from this list "default_mitigation_settings malicious_user_mitigation" must be set
+    default_mitigation_settings = true
+
+    rule_list {
+      rules {
+        metadata {
+          description = "Virtual Host for acmecorp website"
+          disable     = true
+          name        = "acmecorp-web"
+        }
+
+        spec {
+          arg_matchers {
+            invert_matcher = true
+
+            // One of the arguments from this list "check_not_present item presence check_present" must be set
+            presence = true
+
+            name = "name"
+          }
+
+          // One of the arguments from this list "asn_matcher any_asn asn_list" must be set
+          any_asn = true
+
+          body_matcher {
+            exact_values = ["['new york', 'london', 'sydney', 'tokyo', 'cairo']"]
+
+            regex_values = ["['^new .*$', 'san f.*', '.* del .*']"]
+
+            transformers = ["transformers"]
+          }
+
+          // One of the arguments from this list "disable_challenge enable_javascript_challenge enable_captcha_challenge" must be set
+          enable_javascript_challenge = true
+
+          // One of the arguments from this list "client_name client_selector client_name_matcher any_client" must be set
+          any_client = true
+
+          cookie_matchers {
+            invert_matcher = true
+
+            // One of the arguments from this list "presence check_present check_not_present item" must be set
+            check_present = true
+            name          = "Session"
+          }
+
+          domain_matcher {
+            exact_values = ["['new york', 'london', 'sydney', 'tokyo', 'cairo']"]
+
+            regex_values = ["['^new .*$', 'san f.*', '.* del .*']"]
+          }
+
+          expiration_timestamp = "0001-01-01T00:00:00Z"
+
+          headers {
+            invert_matcher = true
+
+            // One of the arguments from this list "presence check_present check_not_present item" must be set
+            presence = true
+
+            name = "Accept-Encoding"
+          }
+
+          http_method {
+            invert_matcher = true
+
+            methods = ["['GET', 'POST', 'DELETE']"]
+          }
+
+          // One of the arguments from this list "any_ip ip_prefix_list ip_matcher" must be set
+          any_ip = true
+
+          path {
+            exact_values = ["['/api/web/namespaces/project179/users/user1', '/api/config/namespaces/accounting/bgps', '/api/data/namespaces/project443/virtual_host_101']"]
+
+            prefix_values = ["['/api/web/namespaces/project179/users/', '/api/config/namespaces/', '/api/data/namespaces/']"]
+
+            regex_values = ["['^/api/web/namespaces/abc/users/([a-z]([-a-z0-9]*[a-z0-9])?)$', '/api/data/namespaces/proj404/virtual_hosts/([a-z]([-a-z0-9]*[a-z0-9])?)$']"]
+
+            suffix_values = ["['.exe', '.shtml', '.wmz']"]
+
+            transformers = ["transformers"]
+          }
+
+          query_params {
+            invert_matcher = true
+            key            = "sourceid"
+
+            // One of the arguments from this list "presence check_present check_not_present item" must be set
+            check_present = true
+          }
+
+          tls_fingerprint_matcher {
+            classes = ["classes"]
+
+            exact_values = ["['ed6dfd54b01ebe31b7a65b88abfa7297', '16efcf0e00504ddfedde13bfea997952', 'de364c46b0dfc283b5e38c79ceae3f8f']"]
+
+            excluded_values = ["['fb00055a1196aeea8d1bc609885ba953', 'b386946a5a44d1ddcc843bc75336dfce']"]
+          }
+        }
+      }
+    }
+
+    // One of the arguments from this list "default_temporary_blocking_parameters temporary_user_blocking" must be set
+    default_temporary_blocking_parameters = true
+  }
   domains = ["www.foo.com"]
 
-  // One of the arguments from this list "round_robin least_active random source_ip_stickiness cookie_stickiness ring_hash" must be set
-  round_robin = true
+  // One of the arguments from this list "source_ip_stickiness cookie_stickiness ring_hash round_robin least_active random" must be set
+
+  ring_hash {
+    hash_policy {
+      // One of the arguments from this list "header_name cookie source_ip" must be set
+      header_name = "host"
+
+      terminal = true
+    }
+  }
 
   // One of the arguments from this list "http https_auto_cert https" must be set
 
@@ -41,15 +176,14 @@ resource "volterra_http_loadbalancer" "example" {
     port                 = "80"
   }
 
-  // One of the arguments from this list "multi_lb_app single_lb_app" must be set
+  // One of the arguments from this list "single_lb_app multi_lb_app" must be set
 
   single_lb_app {
     // One of the arguments from this list "enable_discovery disable_discovery" must be set
-    disable_discovery = true
 
     enable_discovery {
       // One of the arguments from this list "disable_learn_from_redirect_traffic enable_learn_from_redirect_traffic" must be set
-      enable_learn_from_redirect_traffic = true
+      disable_learn_from_redirect_traffic = true
     }
 
     // One of the arguments from this list "enable_ddos_detection disable_ddos_detection" must be set
@@ -60,26 +194,20 @@ resource "volterra_http_loadbalancer" "example" {
   }
   // One of the arguments from this list "disable_rate_limit api_rate_limit rate_limit" must be set
   disable_rate_limit = true
-
   // One of the arguments from this list "service_policies_from_namespace no_service_policies active_service_policies" must be set
-
-  active_service_policies {
-    policies {
-      name      = "test1"
-      namespace = "staging"
-      tenant    = "acmecorp"
-    }
-  }
-
+  service_policies_from_namespace = true
   // One of the arguments from this list "disable_trust_client_ip_headers enable_trust_client_ip_headers" must be set
-
-  enable_trust_client_ip_headers {
-    client_ip_headers = ["Client-IP-Header"]
-  }
+  disable_trust_client_ip_headers = true
   // One of the arguments from this list "user_id_client_ip user_identification" must be set
   user_id_client_ip = true
-  // One of the arguments from this list "app_firewall disable_waf waf waf_rule" must be set
-  disable_waf = true
+
+  // One of the arguments from this list "disable_waf waf waf_rule app_firewall" must be set
+
+  app_firewall {
+    name      = "test1"
+    namespace = "staging"
+    tenant    = "acmecorp"
+  }
 }
 
 ```
@@ -281,7 +409,7 @@ Configure Advanced per route options.
 
 `app_firewall` - (Optional) Reference to App Firewall configuration object. See [ref](#ref) below for details.
 
-`disable_waf` - (Optional) No WAF configuration for this load balancer (bool).
+`inherited_waf` - (Optional) Hence no custom configuration is applied on the route (bool).
 
 `waf` - (Optional) Reference to WAF intent configuration object. See [ref](#ref) below for details.
 
@@ -765,6 +893,10 @@ Response header name is “server” and value is “volt-adc”.
 
 Use default parameters.
 
+### Default Loadbalancer
+
+x-displayName: "Yes".
+
 ### Default Mitigation Settings
 
 For high level, users will be temporarily blocked..
@@ -863,10 +995,6 @@ Do not rewrite the path prefix..
 
 SPDY upgrade is disabled.
 
-### Disable Waf
-
-No WAF configuration for this load balancer.
-
 ### Disable Web Socket Config
 
 Websocket upgrade is disabled.
@@ -921,7 +1049,7 @@ SPDY upgrade is enabled.
 
 ### Enable Strict Sni Host Header Check
 
-Enable strict SNI and Host header check".
+Enable strict SNI and Host header check.
 
 ### Enable Trust Client Ip Headers
 
@@ -1033,6 +1161,10 @@ User is responsible for managing DNS to this load balancer..
 
 `add_hsts` - (Optional) Add HTTP Strict-Transport-Security response header (`Bool`).
 
+`default_loadbalancer` - (Optional) x-displayName: "Yes" (bool).
+
+`non_default_loadbalancer` - (Optional) x-displayName: "No" (bool).
+
 `http_redirect` - (Optional) Redirect HTTP traffic to HTTPS (`Bool`).
 
 `disable_path_normalize` - (Optional) x-displayName: "Disable" (bool).
@@ -1057,6 +1189,10 @@ or a DNS CNAME record should be created in your DNS provider's portal..
 
 `add_hsts` - (Optional) Add HTTP Strict-Transport-Security response header (`Bool`).
 
+`default_loadbalancer` - (Optional) x-displayName: "Yes" (bool).
+
+`non_default_loadbalancer` - (Optional) x-displayName: "No" (bool).
+
 `http_redirect` - (Optional) Redirect HTTP traffic to HTTPS (`Bool`).
 
 `no_mtls` - (Optional) x-displayName: "Disable" (bool).
@@ -1078,6 +1214,10 @@ or a DNS CNAME record should be created in your DNS provider's portal..
 `server_name` - (Optional) This will overwrite existing values, if any, for the server header. (`String`).
 
 `tls_config` - (Optional) Configuration of TLS settings such as min/max TLS version and ciphersuites. See [Tls Config ](#tls-config) below for details.
+
+### Inherited Waf
+
+Hence no custom configuration is applied on the route.
 
 ### Inline Rate Limiter
 
@@ -1271,7 +1411,7 @@ More options like header manipulation, compression etc..
 
 `additional_domains` - (Optional) Wildcard names are supported in the suffix or prefix form. See [Additional Domains ](#additional-domains) below for details.
 
-`enable_strict_sni_host_header_check` - (Optional) Enable strict SNI and Host header check" (bool).
+`enable_strict_sni_host_header_check` - (Optional) Enable strict SNI and Host header check (bool).
 
 ### No Challenge
 
@@ -1296,6 +1436,10 @@ x-displayName: "Disable".
 ### No Policies
 
 Do not apply additional rate limiter policies..
+
+### Non Default Loadbalancer
+
+x-displayName: "No".
 
 ### None
 

@@ -32,35 +32,64 @@ resource "volterra_azure_vnet_site" "example" {
   }
   // One of the arguments from this list "logs_streaming_disabled log_receiver" must be set
   logs_streaming_disabled = true
-  // One of the arguments from this list "azure_region alternate_region" must be set
+  // One of the arguments from this list "alternate_region azure_region" must be set
   azure_region = "eastus"
   resource_group = ["my-resources"]
 
-  // One of the arguments from this list "ingress_gw ingress_egress_gw voltstack_cluster ingress_gw_ar ingress_egress_gw_ar voltstack_cluster_ar" must be set
+  // One of the arguments from this list "ingress_gw_ar ingress_egress_gw_ar voltstack_cluster_ar ingress_gw ingress_egress_gw voltstack_cluster" must be set
 
-  ingress_gw {
-    az_nodes {
-      azure_az  = "1"
-      disk_size = "80"
+  ingress_egress_gw_ar {
+    azure_certified_hw = "azure-byol-multi-nic-voltmesh"
 
-      local_subnet {
+    // One of the arguments from this list "no_dc_cluster_group dc_cluster_group_outside_vn dc_cluster_group_inside_vn" must be set
+    no_dc_cluster_group = true
+
+    // One of the arguments from this list "no_forward_proxy active_forward_proxy_policies forward_proxy_allow_all" must be set
+    no_forward_proxy = true
+
+    // One of the arguments from this list "no_global_network global_network_list" must be set
+    no_global_network = true
+
+    // One of the arguments from this list "not_hub hub" must be set
+    not_hub = true
+
+    // One of the arguments from this list "no_inside_static_routes inside_static_routes" must be set
+    no_inside_static_routes = true
+
+    // One of the arguments from this list "no_network_policy active_network_policies" must be set
+    no_network_policy = true
+
+    node {
+      fault_domain = "1"
+
+      inside_subnet {
         // One of the arguments from this list "subnet_param subnet" must be set
 
-        subnet {
-          // One of the arguments from this list "vnet_resource_group subnet_resource_grp" must be set
-          subnet_resource_grp = "subnet_resource_grp"
-
-          subnet_name = "MySubnet"
+        subnet_param {
+          ipv4 = "10.1.2.0/24"
+          ipv6 = "1234:568:abcd:9100::/64"
         }
       }
+
+      node_number = "1"
+
+      outside_subnet {
+        // One of the arguments from this list "subnet_param subnet" must be set
+
+        subnet_param {
+          ipv4 = "10.1.2.0/24"
+          ipv6 = "1234:568:abcd:9100::/64"
+        }
+      }
+
+      update_domain = "1"
     }
 
-    azure_certified_hw = "azure-byol-voltmesh"
+    // One of the arguments from this list "no_outside_static_routes outside_static_routes" must be set
+    no_outside_static_routes = true
 
-    local_control_plane {
-      // One of the arguments from this list "no_local_control_plane default_local_control_plane" must be set
-      no_local_control_plane = true
-    }
+    // One of the arguments from this list "sm_connection_public_ip sm_connection_pvt_ip" must be set
+    sm_connection_public_ip = true
   }
   vnet {
     // One of the arguments from this list "new_vnet existing_vnet" must be set
@@ -115,6 +144,8 @@ Argument Reference
 
 `machine_type` - (Optional) Select Instance size based on performance needed (`String`).
 
+`offline_survivability_mode` - (Optional) Enable/Disable offline survivability mode. See [Offline Survivability Mode ](#offline-survivability-mode) below for details.
+
 `os` - (Optional) Operating System Details. See [Os ](#os) below for details.
 
 `alternate_region` - (Optional) Name of the azure region which does not support availability zones. (`String`).
@@ -123,13 +154,15 @@ Argument Reference
 
 `resource_group` - (Required) Azure resource group for resources that will be created (`String`).
 
-`ingress_egress_gw` - (Optional) Two interface site is useful when site is used as ingress/egress gateway to the Vnet.. See [Ingress Egress Gw ](#ingress-egress-gw) below for details.
+`site_local_control_plane` - (Optional) Enable/Disable site local control plane. See [Site Local Control Plane ](#site-local-control-plane) below for details.
 
-`ingress_egress_gw_ar` - (Optional) Two interface site is useful when site is used as ingress/egress gateway to the Vnet.. See [Ingress Egress Gw Ar ](#ingress-egress-gw-ar) below for details.
+`ingress_egress_gw` - (Optional) Two interface site is useful when site is used as ingress/egress gateway to the VNet.. See [Ingress Egress Gw ](#ingress-egress-gw) below for details.
 
-`ingress_gw` - (Optional) One interface site is useful when site is only used as ingress gateway to the Vnet.. See [Ingress Gw ](#ingress-gw) below for details.
+`ingress_egress_gw_ar` - (Optional) Two interface site is useful when site is used as ingress/egress gateway to the VNet.. See [Ingress Egress Gw Ar ](#ingress-egress-gw-ar) below for details.
 
-`ingress_gw_ar` - (Optional) One interface site is useful when site is only used as ingress gateway to the Vnet.. See [Ingress Gw Ar ](#ingress-gw-ar) below for details.
+`ingress_gw` - (Optional) One interface site is useful when site is only used as ingress gateway to the VNet.. See [Ingress Gw ](#ingress-gw) below for details.
+
+`ingress_gw_ar` - (Optional) One interface site is useful when site is only used as ingress gateway to the VNet.. See [Ingress Gw Ar ](#ingress-gw-ar) below for details.
 
 `voltstack_cluster` - (Optional) App Stack Cluster using single interface, useful for deploying K8s cluster.. See [Voltstack Cluster ](#voltstack-cluster) below for details.
 
@@ -141,7 +174,7 @@ Argument Reference
 
 `tags` - (Optional) It helps to manage, identify, organize, search for, and filter resources in Azure console. (`String`).
 
-`vnet` - (Required) Choice of using existing Vnet or create new Vnet. See [Vnet ](#vnet) below for details.
+`vnet` - (Required) Choice of using existing VNet or create new VNet. See [Vnet ](#vnet) below for details.
 
 `no_worker_nodes` - (Optional) Worker nodes is set to zero (bool).
 
@@ -163,7 +196,7 @@ Firewall Policies active for this site..
 
 ### Auto
 
-setup routing for all existing subnets on spoke vnet.
+setup routing for all existing subnets on spoke VNet.
 
 ### Autogenerate
 
@@ -335,6 +368,10 @@ Forward Proxy is enabled for this connector.
 
 Enable Interception.
 
+### Enable Offline Survivability Mode
+
+Enabling offline survivability reduces default security of a CE..
+
 ### Existing Vnet
 
 Information about existing Vnet.
@@ -367,13 +404,13 @@ List of global network connections.
 
 ### Hub
 
-This Vnet is a hub vnet.
+This VNet is a hub VNet.
 
-`spoke_vnets` - (Optional) Spoke VNets. See [Spoke Vnets ](#spoke-vnets) below for details.
+`spoke_vnets` - (Optional) Spoke VNet Peering. See [Spoke Vnets ](#spoke-vnets) below for details.
 
 ### Ingress Egress Gw
 
-Two interface site is useful when site is used as ingress/egress gateway to the Vnet..
+Two interface site is useful when site is used as ingress/egress gateway to the VNet..
 
 `az_nodes` - (Optional) Only Single AZ or Three AZ(s) nodes are supported currently.. See [Az Nodes ](#az-nodes) below for details.
 
@@ -395,15 +432,13 @@ Two interface site is useful when site is used as ingress/egress gateway to the 
 
 `no_global_network` - (Optional) No global network to connect (bool).
 
-`hub` - (Optional) This Vnet is a hub vnet. See [Hub ](#hub) below for details.
+`hub` - (Optional) This VNet is a hub VNet. See [Hub ](#hub) below for details.
 
-`not_hub` - (Optional) This Vnet isn't a hub vnet (bool).
+`not_hub` - (Optional) This VNet is a standalone VNet (bool).
 
 `inside_static_routes` - (Optional) Manage static routes for inside network.. See [Inside Static Routes ](#inside-static-routes) below for details.
 
 `no_inside_static_routes` - (Optional) Static Routes disabled for inside network. (bool).
-
-`local_control_plane` - (Optional) Enable/Disable site local control plane. See [Local Control Plane ](#local-control-plane) below for details.
 
 `active_network_policies` - (Optional) Firewall Policies active for this site.. See [Active Network Policies ](#active-network-policies) below for details.
 
@@ -419,7 +454,7 @@ Two interface site is useful when site is used as ingress/egress gateway to the 
 
 ### Ingress Egress Gw Ar
 
-Two interface site is useful when site is used as ingress/egress gateway to the Vnet..
+Two interface site is useful when site is used as ingress/egress gateway to the VNet..
 
 `azure_certified_hw` - (Required) Name for Azure certified hardware. (`String`).
 
@@ -439,15 +474,13 @@ Two interface site is useful when site is used as ingress/egress gateway to the 
 
 `no_global_network` - (Optional) No global network to connect (bool).
 
-`hub` - (Optional) This Vnet is a hub vnet. See [Hub ](#hub) below for details.
+`hub` - (Optional) This VNet is a hub VNet. See [Hub ](#hub) below for details.
 
-`not_hub` - (Optional) This Vnet isn't a hub vnet (bool).
+`not_hub` - (Optional) This VNet is a standalone VNet (bool).
 
 `inside_static_routes` - (Optional) Manage static routes for inside network.. See [Inside Static Routes ](#inside-static-routes) below for details.
 
 `no_inside_static_routes` - (Optional) Static Routes disabled for inside network. (bool).
-
-`local_control_plane` - (Optional) Enable/Disable site local control plane. See [Local Control Plane ](#local-control-plane) below for details.
 
 `active_network_policies` - (Optional) Firewall Policies active for this site.. See [Active Network Policies ](#active-network-policies) below for details.
 
@@ -465,21 +498,17 @@ Two interface site is useful when site is used as ingress/egress gateway to the 
 
 ### Ingress Gw
 
-One interface site is useful when site is only used as ingress gateway to the Vnet..
+One interface site is useful when site is only used as ingress gateway to the VNet..
 
 `az_nodes` - (Optional) Only Single AZ or Three AZ(s) nodes are supported currently.. See [Az Nodes ](#az-nodes) below for details.
 
 `azure_certified_hw` - (Required) Name for Azure certified hardware. (`String`).
 
-`local_control_plane` - (Optional) Enable/Disable site local control plane. See [Local Control Plane ](#local-control-plane) below for details.
-
 ### Ingress Gw Ar
 
-One interface site is useful when site is only used as ingress gateway to the Vnet..
+One interface site is useful when site is only used as ingress gateway to the VNet..
 
 `azure_certified_hw` - (Required) Name for Azure certified hardware. (`String`).
-
-`local_control_plane` - (Optional) Enable/Disable site local control plane. See [Local Control Plane ](#local-control-plane) below for details.
 
 `node` - (Optional) Ingress Gateway (One Interface) Node information. See [Node ](#node) below for details.
 
@@ -519,17 +548,9 @@ IPv6 Address.
 
 `addr` - (Optional) e.g. '2001:db8:0:0:0:0:2:1' becomes '2001:db8::2:1' or '2001:db8:0:0:0:2:0:0' becomes '2001:db8::2::' (`String`).
 
-### Local Control Plane
-
-Enable/Disable site local control plane.
-
-`default_local_control_plane` - (Optional) Enable Site Local Control Plane (bool).
-
-`no_local_control_plane` - (Optional) Disable Site Local Control Plane (bool).
-
 ### Manual
 
-Manually setup routing on spoke Vnet.
+Manually setup routing on spoke VNet.
 
 ### New Vnet
 
@@ -591,6 +612,10 @@ Disable Site Local Control Plane.
 
 Firewall Policy is disabled for this site..
 
+### No Offline Survivability Mode
+
+Disable Offline Survivability Mode.
+
 ### No Outside Static Routes
 
 Static Routes disabled for outside network..
@@ -611,7 +636,15 @@ Ingress/Egress Gateway (Two Interface) Node information..
 
 ### Not Hub
 
-This Vnet isn't a hub vnet.
+This VNet is a standalone VNet.
+
+### Offline Survivability Mode
+
+Enable/Disable offline survivability mode.
+
+`enable_offline_survivability_mode` - (Optional) Enabling offline survivability reduces default security of a CE. (bool).
+
+`no_offline_survivability_mode` - (Optional) Disable Offline Survivability Mode (bool).
 
 ### Openebs Enterprise
 
@@ -675,6 +708,14 @@ namespace - (Optional) then namespace will hold the referred object's(e.g. route
 
 tenant - (Optional) then tenant will hold the referred object's(e.g. route's) tenant. (String).
 
+### Site Local Control Plane
+
+Enable/Disable site local control plane.
+
+`default_local_control_plane` - (Optional) Enable Site Local Control Plane (bool).
+
+`no_local_control_plane` - (Optional) Disable Site Local Control Plane (bool).
+
 ### Sli To Global Dr
 
 Site local inside is connected directly to a given global network.
@@ -697,15 +738,15 @@ creating ipsec between two sites which are part of the site mesh group.
 
 ### Spoke Vnets
 
-Spoke VNets.
+Spoke VNet Peering.
 
 `labels` - (Optional) These labels used must be from known key and label defined in shared namespace (`String`).
 
-`auto` - (Optional) setup routing for all existing subnets on spoke vnet (bool).
+`auto` - (Optional) setup routing for all existing subnets on spoke VNet (bool).
 
-`manual` - (Optional) Manually setup routing on spoke Vnet (bool).
+`manual` - (Optional) Manually setup routing on spoke VNet (bool).
 
-`vnet` - (Optional) Information about existing Vnet. See [Vnet ](#vnet) below for details.
+`vnet` - (Optional) Information about existing VNet. See [Vnet ](#vnet) below for details.
 
 ### Ssh
 
@@ -805,7 +846,7 @@ Vault Secret is used for the secrets managed by Hashicorp Vault.
 
 ### Vnet
 
-Information about existing Vnet.
+Information about existing VNet.
 
 `resource_group` - (Required) Resource group of existing Vnet (`String`).
 
@@ -849,8 +890,6 @@ App Stack Cluster using single interface, useful for deploying K8s cluster..
 
 `no_k8s_cluster` - (Optional) Site Local K8s API access is disabled (bool).
 
-`local_control_plane` - (Optional) Enable/Disable site local control plane. See [Local Control Plane ](#local-control-plane) below for details.
-
 `active_network_policies` - (Optional) Firewall Policies active for this site.. See [Active Network Policies ](#active-network-policies) below for details.
 
 `no_network_policy` - (Optional) Firewall Policy is disabled for this site. (bool).
@@ -890,8 +929,6 @@ App Stack Cluster using single interface, useful for deploying K8s cluster..
 `k8s_cluster` - (Optional) Site Local K8s API access is enabled, using k8s_cluster object. See [ref](#ref) below for details.
 
 `no_k8s_cluster` - (Optional) Site Local K8s API access is disabled (bool).
-
-`local_control_plane` - (Optional) Enable/Disable site local control plane. See [Local Control Plane ](#local-control-plane) below for details.
 
 `active_network_policies` - (Optional) Firewall Policies active for this site.. See [Active Network Policies ](#active-network-policies) below for details.
 

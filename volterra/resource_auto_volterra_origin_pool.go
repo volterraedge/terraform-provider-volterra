@@ -104,6 +104,12 @@ func resourceVolterraOriginPool() *schema.Resource {
 							},
 						},
 
+						"default_circuit_breaker": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+
 						"disable_circuit_breaker": {
 
 							Type:     schema.TypeBool,
@@ -1293,6 +1299,18 @@ func resourceVolterraOriginPoolCreate(d *schema.ResourceData, meta interface{}) 
 
 					}
 
+				}
+
+			}
+
+			if v, ok := advancedOptionsMapStrToI["default_circuit_breaker"]; ok && !isIntfNil(v) && !circuitBreakerChoiceTypeFound {
+
+				circuitBreakerChoiceTypeFound = true
+
+				if v.(bool) {
+					circuitBreakerChoiceInt := &ves_io_schema_views_origin_pool.OriginPoolAdvancedOptions_DefaultCircuitBreaker{}
+					circuitBreakerChoiceInt.DefaultCircuitBreaker = &ves_io_schema.Empty{}
+					advancedOptions.CircuitBreakerChoice = circuitBreakerChoiceInt
 				}
 
 			}
@@ -2948,6 +2966,18 @@ func resourceVolterraOriginPoolUpdate(d *schema.ResourceData, meta interface{}) 
 
 					}
 
+				}
+
+			}
+
+			if v, ok := advancedOptionsMapStrToI["default_circuit_breaker"]; ok && !isIntfNil(v) && !circuitBreakerChoiceTypeFound {
+
+				circuitBreakerChoiceTypeFound = true
+
+				if v.(bool) {
+					circuitBreakerChoiceInt := &ves_io_schema_views_origin_pool.OriginPoolAdvancedOptions_DefaultCircuitBreaker{}
+					circuitBreakerChoiceInt.DefaultCircuitBreaker = &ves_io_schema.Empty{}
+					advancedOptions.CircuitBreakerChoice = circuitBreakerChoiceInt
 				}
 
 			}

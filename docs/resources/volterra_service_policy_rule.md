@@ -25,24 +25,15 @@ resource "volterra_service_policy_rule" "example" {
   any_asn          = true
   challenge_action = ["challenge_action"]
 
-  // One of the arguments from this list "any_client client_name ip_threat_category_list client_selector client_name_matcher" must be set
-  any_client = true
+  // One of the arguments from this list "client_selector client_name_matcher any_client client_name ip_threat_category_list" must be set
+  client_name = "backend.production.customer.volterra.us"
 
   // One of the arguments from this list "any_ip ip_prefix_list ip_matcher" must be set
   any_ip = true
 
   waf_action {
-    // One of the arguments from this list "app_firewall_detection_control data_guard_control none waf_skip_processing waf_rule_control waf_inline_rule_control waf_in_monitoring_mode" must be set
-
-    waf_rule_control {
-      exclude_rule_ids {
-        name      = "test1"
-        namespace = "staging"
-        tenant    = "acmecorp"
-      }
-
-      monitoring_mode = true
-    }
+    // One of the arguments from this list "data_guard_control none waf_skip_processing waf_rule_control waf_inline_rule_control waf_in_monitoring_mode app_firewall_detection_control" must be set
+    none = true
   }
 }
 
@@ -560,6 +551,8 @@ Shape Protected Endpoint Action that include application traffic type and mitiga
 `app_traffic_type` - (Required) Traffic type (`String`).
 
 `mitigation` - (Required) Mitigation action for protected endpoint. See [Mitigation ](#mitigation) below for details.
+
+`web_scraping` - (Required) Web scraping protection enabled for protected endpoint (`Bool`).
 
 ### Skip Processing
 

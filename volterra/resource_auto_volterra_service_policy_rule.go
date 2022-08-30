@@ -1308,6 +1308,11 @@ func resourceVolterraServicePolicyRule() *schema.Resource {
 								},
 							},
 						},
+
+						"web_scraping": {
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
 					},
 				},
 			},
@@ -3274,6 +3279,10 @@ func resourceVolterraServicePolicyRuleCreate(d *schema.ResourceData, meta interf
 
 				}
 
+			}
+
+			if w, ok := shapeProtectedEndpointActionMapStrToI["web_scraping"]; ok && !isIntfNil(w) {
+				shapeProtectedEndpointAction.WebScraping = w.(bool)
 			}
 
 		}
@@ -5343,6 +5352,10 @@ func resourceVolterraServicePolicyRuleUpdate(d *schema.ResourceData, meta interf
 
 				}
 
+			}
+
+			if w, ok := shapeProtectedEndpointActionMapStrToI["web_scraping"]; ok && !isIntfNil(w) {
+				shapeProtectedEndpointAction.WebScraping = w.(bool)
 			}
 
 		}

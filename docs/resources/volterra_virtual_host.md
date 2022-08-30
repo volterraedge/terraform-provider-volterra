@@ -21,7 +21,12 @@ resource "volterra_virtual_host" "example" {
   namespace = "staging"
 
   // One of the arguments from this list "no_challenge js_challenge captcha_challenge" must be set
-  no_challenge = true
+
+  js_challenge {
+    cookie_expiry   = "1000"
+    custom_page     = "string:///PHA+IFBsZWFzZSBXYWl0IDwvcD4="
+    js_script_delay = "1000"
+  }
 }
 
 ```
@@ -66,6 +71,10 @@ Argument Reference
 `cors_policy` - (Optional) resources from a server at a different origin. See [Cors Policy ](#cors-policy) below for details.
 
 `custom_errors` - (Optional) these pages are not editable. User has an option to disable the use of default Volterra error pages (`String`).
+
+`default_loadbalancer` - (Optional) Default loadbalancer for Non SNI clients (bool).
+
+`non_default_loadbalancer` - (Optional) Do not use as default loadbalancer for Non SNI clients (bool).
 
 `disable_default_error_pages` - (Optional) An option to specify whether to disable using default Volterra error pages (`Bool`).
 
