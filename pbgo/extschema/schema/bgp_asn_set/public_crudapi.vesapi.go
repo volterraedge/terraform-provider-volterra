@@ -1595,16 +1595,7 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 		item.Disabled = o.GetMetadata().GetDisable()
 
 		if len(req.ReportFields) > 0 {
-			noDBForm, _ := flags.GetEnvGetRspNoDBForm()
-			if !noDBForm {
-				item.Object = o.Object
-				sf.Logger().Alert(svcfw.GetResponseInDBForm,
-					log.MinorAlert,
-					zap.String("user", server.UserFromContext(ctx)),
-					zap.String("useragent", server.UseragentStrFromContext(ctx)),
-					zap.String("operation", "List"),
-				)
-			}
+			item.Object = o.Object
 
 			item.Metadata = &ves_io_schema.ObjectGetMetaType{}
 			item.Metadata.FromObjectMetaType(o.Metadata)
@@ -1683,7 +1674,7 @@ var APISwaggerJSON string = `{
     "paths": {
         "/public/namespaces/{metadata.namespace}/bgp_asn_sets": {
             "post": {
-                "summary": "Create bgp asn set",
+                "summary": "Create BGP ASN Set",
                 "description": "Create bgp_asn_set creates a new object in the storage backend for metadata.namespace.",
                 "operationId": "ves.io.schema.bgp_asn_set.API.Create",
                 "responses": {
@@ -1775,7 +1766,7 @@ var APISwaggerJSON string = `{
         },
         "/public/namespaces/{metadata.namespace}/bgp_asn_sets/{metadata.name}": {
             "put": {
-                "summary": "Replace bgp asn set",
+                "summary": "Replace BGP ASN Set",
                 "description": "Replace bgp_asn_set replaces an existing object in the storage backend for metadata.namespace.",
                 "operationId": "ves.io.schema.bgp_asn_set.API.Replace",
                 "responses": {
@@ -1875,7 +1866,7 @@ var APISwaggerJSON string = `{
         },
         "/public/namespaces/{namespace}/bgp_asn_sets": {
             "get": {
-                "summary": "List",
+                "summary": "List BGP ASN Set",
                 "description": "List the set of bgp_asn_set in a namespace",
                 "operationId": "ves.io.schema.bgp_asn_set.API.List",
                 "responses": {
@@ -1991,7 +1982,7 @@ var APISwaggerJSON string = `{
         },
         "/public/namespaces/{namespace}/bgp_asn_sets/{name}": {
             "get": {
-                "summary": "Get bgp asn set",
+                "summary": "Get BGP ASN Set",
                 "description": "Get bgp_asn_set reads a given object from storage backend for metadata.namespace.",
                 "operationId": "ves.io.schema.bgp_asn_set.API.Get",
                 "responses": {
@@ -2095,7 +2086,7 @@ var APISwaggerJSON string = `{
                 "x-ves-proto-rpc": "ves.io.schema.bgp_asn_set.API.Get"
             },
             "delete": {
-                "summary": "Delete",
+                "summary": "Delete BGP ASN Set",
                 "description": "Delete the specified bgp_asn_set",
                 "operationId": "ves.io.schema.bgp_asn_set.API.Delete",
                 "responses": {

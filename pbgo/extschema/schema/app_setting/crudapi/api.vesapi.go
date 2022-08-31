@@ -2751,6 +2751,7 @@ var APISwaggerJSON string = `{
             "x-ves-oneof-field-failed_login_activity_choice": "[\"exclude_failed_login_activity\",\"include_failed_login_activity\"]",
             "x-ves-oneof-field-forbidden_activity_choice": "[\"exclude_forbidden_activity\",\"include_forbidden_activity\"]",
             "x-ves-oneof-field-ip_reputation_choice": "[\"exclude_ip_reputation\",\"include_ip_reputation\"]",
+            "x-ves-oneof-field-non_existent_url_activity_choice": "[\"exclude_non_existent_url_activity\",\"include_non_existent_url_activity_automatic\",\"include_non_existent_url_activity_custom\"]",
             "x-ves-oneof-field-waf_activity_choice": "[\"exclude_waf_activity\",\"include_waf_activity\"]",
             "x-ves-proto-message": "ves.io.schema.app_setting.MaliciousUserDetectionSetting",
             "properties": {
@@ -2785,6 +2786,12 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/schemaEmpty",
                     "x-displayname": "Exclude IP Reputation"
                 },
+                "exclude_non_existent_url_activity": {
+                    "description": "Exclusive with [include_non_existent_url_activity_automatic include_non_existent_url_activity_custom]\n Exclude Non-Existent URL activity in malicious user detection",
+                    "title": "exclude non-existent url activity",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Exclude Non-Existent URL Activity"
+                },
                 "exclude_waf_activity": {
                     "description": "Exclusive with [include_waf_activity]\n Exclude WAF activity in malicious user detection",
                     "title": "exclude WAF activity",
@@ -2808,6 +2815,18 @@ var APISwaggerJSON string = `{
                     "title": "include IP Reputation",
                     "$ref": "#/definitions/schemaEmpty",
                     "x-displayname": "Include IP Reputation"
+                },
+                "include_non_existent_url_activity_automatic": {
+                    "description": "Exclusive with [exclude_non_existent_url_activity include_non_existent_url_activity_custom]\n Include Non-Existent URL Activity using automatic threshold in malicious user detection",
+                    "title": "include non-existent url activity using automatic threshold",
+                    "$ref": "#/definitions/app_settingNonexistentUrlAutomaticActivitySetting",
+                    "x-displayname": "Include Non-Existent URL Activity using automatic threshold"
+                },
+                "include_non_existent_url_activity_custom": {
+                    "description": "Exclusive with [exclude_non_existent_url_activity include_non_existent_url_activity_automatic]\n Include Non-Existent URL Activity using custom threshold in malicious user detection",
+                    "title": "include non-existent url activity using custom threshold",
+                    "$ref": "#/definitions/app_settingNonexistentUrlCustomActivitySetting",
+                    "x-displayname": "Include Non-Existent URL Activity using custom threshold"
                 },
                 "include_waf_activity": {
                     "description": "Exclusive with [exclude_waf_activity]\n Include WAF activity in malicious user detection",
@@ -2872,6 +2891,55 @@ var APISwaggerJSON string = `{
             "default": "NONE",
             "x-displayname": "Metrics Source",
             "x-ves-proto-enum": "ves.io.schema.app_setting.MetricsSource"
+        },
+        "app_settingNonexistentUrlAutomaticActivitySetting": {
+            "type": "object",
+            "title": "Non-existent URL Activity Setting for Automatic Threshold",
+            "x-displayname": "Non-existent URL Automatic Activity Setting",
+            "x-ves-oneof-field-sensitivity": "[\"high\",\"low\",\"medium\"]",
+            "x-ves-proto-message": "ves.io.schema.app_setting.NonexistentUrlAutomaticActivitySetting",
+            "properties": {
+                "high": {
+                    "description": "Exclusive with [low medium]\n High sensitivity\n High : learnt threshold - 15 %",
+                    "title": "High",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "High sensitivity"
+                },
+                "low": {
+                    "description": "Exclusive with [high medium]\n Low sensitivity\n Low : learnt threshold + 15 %",
+                    "title": "Low",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Low sensitivity"
+                },
+                "medium": {
+                    "description": "Exclusive with [high low]\n Medium sensitivity\n Medium : using learnt threshold derived from statistics per given app_type/tenant.",
+                    "title": "Medium",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Medium sensitivity"
+                }
+            }
+        },
+        "app_settingNonexistentUrlCustomActivitySetting": {
+            "type": "object",
+            "title": "Non-existent URL Activity Setting for Custom Threshold",
+            "x-displayname": "Non-existent URL Custom Activity Setting",
+            "x-ves-proto-message": "ves.io.schema.app_setting.NonexistentUrlCustomActivitySetting",
+            "properties": {
+                "nonexistent_requests_threshold": {
+                    "type": "integer",
+                    "description": " The percentage of non-existent requests beyond which the system will flag this user as malicious\n\nExample: - \"50\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.uint32.gt: 0\n  ves.io.schema.rules.uint32.lte: 100\n",
+                    "title": "non-existent url custom threshold",
+                    "format": "int64",
+                    "x-displayname": "Non-existent URL Custom Threshold",
+                    "x-ves-example": "50",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.uint32.gt": "0",
+                        "ves.io.schema.rules.uint32.lte": "100"
+                    }
+                }
+            }
         },
         "app_settingSpecType": {
             "type": "object",

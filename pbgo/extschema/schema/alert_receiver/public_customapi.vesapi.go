@@ -175,7 +175,8 @@ func (c *CustomAPIRestClient) doRPCConfirmAlertReceiver(ctx context.Context, cal
 	}
 	defer rsp.Body.Close()
 
-	if rsp.StatusCode != http.StatusOK {
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
 		body, err := ioutil.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
 	}
@@ -186,7 +187,7 @@ func (c *CustomAPIRestClient) doRPCConfirmAlertReceiver(ctx context.Context, cal
 	}
 	pbRsp := &ConfirmAlertReceiverResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
-		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.alert_receiver.ConfirmAlertReceiverResponse", body)
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.alert_receiver.ConfirmAlertReceiverResponse", body)
 
 	}
 	if callOpts.OutCallResponse != nil {
@@ -258,7 +259,8 @@ func (c *CustomAPIRestClient) doRPCTestAlertReceiver(ctx context.Context, callOp
 	}
 	defer rsp.Body.Close()
 
-	if rsp.StatusCode != http.StatusOK {
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
 		body, err := ioutil.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
 	}
@@ -269,7 +271,7 @@ func (c *CustomAPIRestClient) doRPCTestAlertReceiver(ctx context.Context, callOp
 	}
 	pbRsp := &TestAlertReceiverResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
-		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.alert_receiver.TestAlertReceiverResponse", body)
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.alert_receiver.TestAlertReceiverResponse", body)
 
 	}
 	if callOpts.OutCallResponse != nil {
@@ -341,7 +343,8 @@ func (c *CustomAPIRestClient) doRPCVerifyAlertReceiver(ctx context.Context, call
 	}
 	defer rsp.Body.Close()
 
-	if rsp.StatusCode != http.StatusOK {
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
 		body, err := ioutil.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
 	}
@@ -352,7 +355,7 @@ func (c *CustomAPIRestClient) doRPCVerifyAlertReceiver(ctx context.Context, call
 	}
 	pbRsp := &VerifyAlertReceiverResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
-		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.alert_receiver.VerifyAlertReceiverResponse", body)
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.alert_receiver.VerifyAlertReceiverResponse", body)
 
 	}
 	if callOpts.OutCallResponse != nil {

@@ -15,6 +15,7 @@ import (
 	"gopkg.volterra.us/stdlib/client/vesapi"
 
 	ves_io_schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+	ves_io_schema_bgp "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/bgp"
 	ves_io_schema_fleet "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/fleet"
 	ves_io_schema_network_firewall "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/network_firewall"
 	ves_io_schema_network_interface "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/network_interface"
@@ -2560,6 +2561,28 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 				Optional: true,
 			},
 
+			"offline_survivability_mode": {
+
+				Type:     schema.TypeSet,
+				Optional: true,
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+
+						"enable_offline_survivability_mode": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+
+						"no_offline_survivability_mode": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+					},
+				},
+			},
+
 			"os": {
 
 				Type:     schema.TypeSet,
@@ -2576,6 +2599,28 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 						"operating_system_version": {
 
 							Type:     schema.TypeString,
+							Optional: true,
+						},
+					},
+				},
+			},
+
+			"site_local_control_plane": {
+
+				Type:     schema.TypeSet,
+				Optional: true,
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+
+						"default_local_control_plane": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+
+						"no_local_control_plane": {
+
+							Type:     schema.TypeBool,
 							Optional: true,
 						},
 					},
@@ -5380,7 +5425,6 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 			},
 
 			"enable_vm": {
-
 				// manually edited changes
 				Type:     schema.TypeBool,
 				Optional: true,
@@ -5798,34 +5842,28 @@ func resourceVolterraVoltstackSiteCreate(d *schema.ResourceData, meta interface{
 		for _, set := range sl {
 			cs := set.(map[string]interface{})
 
-			//if v, ok := cs["bgp_config"]; ok && !isIntfNil(v) {
+			if v, ok := cs["bgp_config"]; ok && !isIntfNil(v) {
 
-			//	sl := v.(*schema.Set).List()
-			//	bgpConfig := &ves_io_schema_fleet.BGPConfiguration{}
-			//	localControlPlaneChoiceInt.LocalControlPlane.BgpConfig = bgpConfig
-			//	for _, set := range sl {
-			//		bgpConfigMapStrToI := set.(map[string]interface{})
+				sl := v.(*schema.Set).List()
+				bgpConfig := &ves_io_schema_fleet.BGPConfiguration{}
+				localControlPlaneChoiceInt.LocalControlPlane.BgpConfig = bgpConfig
+				for _, set := range sl {
+					bgpConfigMapStrToI := set.(map[string]interface{})
 
-			//		if w, ok := bgpConfigMapStrToI["asn"]; ok && !isIntfNil(w) {
-			//			bgpConfig.Asn = uint32(w.(int))
-			//		}
+					if w, ok := bgpConfigMapStrToI["asn"]; ok && !isIntfNil(w) {
+						bgpConfig.Asn = uint32(w.(int))
+					}
 
-			//		if v, ok := bgpConfigMapStrToI["peers"]; ok && !isIntfNil(v) {
+					if v, ok := bgpConfigMapStrToI["peers"]; ok && !isIntfNil(v) {
 
-			//			sl := v.([]interface{})
-			//			peers := make([]*ves_io_schema_bgp.Peer, len(sl))
-			//			bgpConfig.Peers = peers
-			//			for i, set := range sl {
-			//				peers[i] = &ves_io_schema_bgp.Peer{}
-			//				peersMapStrToI := set.(map[string]interface{})
+						sl := v.([]interface{})
+						peers := make([]*ves_io_schema_bgp.Peer, len(sl))
+						bgpConfig.Peers = peers
+					}
 
-			//			}
+				}
 
-			//		}
-
-			//	}
-
-			//}
+			}
 
 			networkChoiceTypeFound := false
 
@@ -9054,6 +9092,45 @@ func resourceVolterraVoltstackSiteCreate(d *schema.ResourceData, meta interface{
 
 	}
 
+	//offline_survivability_mode
+	if v, ok := d.GetOk("offline_survivability_mode"); ok && !isIntfNil(v) {
+
+		sl := v.(*schema.Set).List()
+		offlineSurvivabilityMode := &ves_io_schema_views.OfflineSurvivabilityModeType{}
+		createSpec.OfflineSurvivabilityMode = offlineSurvivabilityMode
+		for _, set := range sl {
+			offlineSurvivabilityModeMapStrToI := set.(map[string]interface{})
+
+			offlineSurvivabilityModeChoiceTypeFound := false
+
+			if v, ok := offlineSurvivabilityModeMapStrToI["enable_offline_survivability_mode"]; ok && !isIntfNil(v) && !offlineSurvivabilityModeChoiceTypeFound {
+
+				offlineSurvivabilityModeChoiceTypeFound = true
+
+				if v.(bool) {
+					offlineSurvivabilityModeChoiceInt := &ves_io_schema_views.OfflineSurvivabilityModeType_EnableOfflineSurvivabilityMode{}
+					offlineSurvivabilityModeChoiceInt.EnableOfflineSurvivabilityMode = &ves_io_schema.Empty{}
+					offlineSurvivabilityMode.OfflineSurvivabilityModeChoice = offlineSurvivabilityModeChoiceInt
+				}
+
+			}
+
+			if v, ok := offlineSurvivabilityModeMapStrToI["no_offline_survivability_mode"]; ok && !isIntfNil(v) && !offlineSurvivabilityModeChoiceTypeFound {
+
+				offlineSurvivabilityModeChoiceTypeFound = true
+
+				if v.(bool) {
+					offlineSurvivabilityModeChoiceInt := &ves_io_schema_views.OfflineSurvivabilityModeType_NoOfflineSurvivabilityMode{}
+					offlineSurvivabilityModeChoiceInt.NoOfflineSurvivabilityMode = &ves_io_schema.Empty{}
+					offlineSurvivabilityMode.OfflineSurvivabilityModeChoice = offlineSurvivabilityModeChoiceInt
+				}
+
+			}
+
+		}
+
+	}
+
 	//os
 	if v, ok := d.GetOk("os"); ok && !isIntfNil(v) {
 
@@ -9085,6 +9162,45 @@ func resourceVolterraVoltstackSiteCreate(d *schema.ResourceData, meta interface{
 				os.OperatingSystemVersionChoice = operatingSystemVersionChoiceInt
 
 				operatingSystemVersionChoiceInt.OperatingSystemVersion = v.(string)
+
+			}
+
+		}
+
+	}
+
+	//site_local_control_plane
+	if v, ok := d.GetOk("site_local_control_plane"); ok && !isIntfNil(v) {
+
+		sl := v.(*schema.Set).List()
+		siteLocalControlPlane := &ves_io_schema_views.LocalControlPlaneType{}
+		createSpec.SiteLocalControlPlane = siteLocalControlPlane
+		for _, set := range sl {
+			siteLocalControlPlaneMapStrToI := set.(map[string]interface{})
+
+			localControlPlaneChoiceTypeFound := false
+
+			if v, ok := siteLocalControlPlaneMapStrToI["default_local_control_plane"]; ok && !isIntfNil(v) && !localControlPlaneChoiceTypeFound {
+
+				localControlPlaneChoiceTypeFound = true
+
+				if v.(bool) {
+					localControlPlaneChoiceInt := &ves_io_schema_views.LocalControlPlaneType_DefaultLocalControlPlane{}
+					localControlPlaneChoiceInt.DefaultLocalControlPlane = &ves_io_schema.Empty{}
+					siteLocalControlPlane.LocalControlPlaneChoice = localControlPlaneChoiceInt
+				}
+
+			}
+
+			if v, ok := siteLocalControlPlaneMapStrToI["no_local_control_plane"]; ok && !isIntfNil(v) && !localControlPlaneChoiceTypeFound {
+
+				localControlPlaneChoiceTypeFound = true
+
+				if v.(bool) {
+					localControlPlaneChoiceInt := &ves_io_schema_views.LocalControlPlaneType_NoLocalControlPlane{}
+					localControlPlaneChoiceInt.NoLocalControlPlane = &ves_io_schema.Empty{}
+					siteLocalControlPlane.LocalControlPlaneChoice = localControlPlaneChoiceInt
+				}
 
 			}
 
@@ -12818,7 +12934,6 @@ func resourceVolterraVoltstackSiteCreate(d *schema.ResourceData, meta interface{
 	if v, ok := d.GetOk("enable_vm"); ok && !vmChoiceTypeFound {
 
 		vmChoiceTypeFound = true
-
 		// manually edited changes
 		if v.(bool) {
 			vmChoiceInt := &ves_io_schema_views_voltstack_site.CreateSpecType_EnableVm{}
@@ -13273,34 +13388,28 @@ func resourceVolterraVoltstackSiteUpdate(d *schema.ResourceData, meta interface{
 		for _, set := range sl {
 			cs := set.(map[string]interface{})
 
-			//if v, ok := cs["bgp_config"]; ok && !isIntfNil(v) {
+			if v, ok := cs["bgp_config"]; ok && !isIntfNil(v) {
 
-			//	sl := v.(*schema.Set).List()
-			//	bgpConfig := &ves_io_schema_fleet.BGPConfiguration{}
-			//	localControlPlaneChoiceInt.LocalControlPlane.BgpConfig = bgpConfig
-			//	for _, set := range sl {
-			//		bgpConfigMapStrToI := set.(map[string]interface{})
+				sl := v.(*schema.Set).List()
+				bgpConfig := &ves_io_schema_fleet.BGPConfiguration{}
+				localControlPlaneChoiceInt.LocalControlPlane.BgpConfig = bgpConfig
+				for _, set := range sl {
+					bgpConfigMapStrToI := set.(map[string]interface{})
 
-			//		if w, ok := bgpConfigMapStrToI["asn"]; ok && !isIntfNil(w) {
-			//			bgpConfig.Asn = uint32(w.(int))
-			//		}
+					if w, ok := bgpConfigMapStrToI["asn"]; ok && !isIntfNil(w) {
+						bgpConfig.Asn = uint32(w.(int))
+					}
 
-			//		if v, ok := bgpConfigMapStrToI["peers"]; ok && !isIntfNil(v) {
+					if v, ok := bgpConfigMapStrToI["peers"]; ok && !isIntfNil(v) {
 
-			//			sl := v.([]interface{})
-			//			peers := make([]*ves_io_schema_bgp.Peer, len(sl))
-			//			bgpConfig.Peers = peers
-			//			for i, set := range sl {
-			//				peers[i] = &ves_io_schema_bgp.Peer{}
-			//				peersMapStrToI := set.(map[string]interface{})
+						sl := v.([]interface{})
+						peers := make([]*ves_io_schema_bgp.Peer, len(sl))
+						bgpConfig.Peers = peers
+					}
 
-			//			}
+				}
 
-			//		}
-
-			//	}
-
-			//}
+			}
 
 			networkChoiceTypeFound := false
 
@@ -16520,6 +16629,44 @@ func resourceVolterraVoltstackSiteUpdate(d *schema.ResourceData, meta interface{
 			networkCfgChoiceInt := &ves_io_schema_views_voltstack_site.ReplaceSpecType_DefaultNetworkConfig{}
 			networkCfgChoiceInt.DefaultNetworkConfig = &ves_io_schema.Empty{}
 			updateSpec.NetworkCfgChoice = networkCfgChoiceInt
+		}
+
+	}
+
+	if v, ok := d.GetOk("site_local_control_plane"); ok && !isIntfNil(v) {
+
+		sl := v.(*schema.Set).List()
+		siteLocalControlPlane := &ves_io_schema_views.LocalControlPlaneType{}
+		updateSpec.SiteLocalControlPlane = siteLocalControlPlane
+		for _, set := range sl {
+			siteLocalControlPlaneMapStrToI := set.(map[string]interface{})
+
+			localControlPlaneChoiceTypeFound := false
+
+			if v, ok := siteLocalControlPlaneMapStrToI["default_local_control_plane"]; ok && !isIntfNil(v) && !localControlPlaneChoiceTypeFound {
+
+				localControlPlaneChoiceTypeFound = true
+
+				if v.(bool) {
+					localControlPlaneChoiceInt := &ves_io_schema_views.LocalControlPlaneType_DefaultLocalControlPlane{}
+					localControlPlaneChoiceInt.DefaultLocalControlPlane = &ves_io_schema.Empty{}
+					siteLocalControlPlane.LocalControlPlaneChoice = localControlPlaneChoiceInt
+				}
+
+			}
+
+			if v, ok := siteLocalControlPlaneMapStrToI["no_local_control_plane"]; ok && !isIntfNil(v) && !localControlPlaneChoiceTypeFound {
+
+				localControlPlaneChoiceTypeFound = true
+
+				if v.(bool) {
+					localControlPlaneChoiceInt := &ves_io_schema_views.LocalControlPlaneType_NoLocalControlPlane{}
+					localControlPlaneChoiceInt.NoLocalControlPlane = &ves_io_schema.Empty{}
+					siteLocalControlPlane.LocalControlPlaneChoice = localControlPlaneChoiceInt
+				}
+
+			}
+
 		}
 
 	}

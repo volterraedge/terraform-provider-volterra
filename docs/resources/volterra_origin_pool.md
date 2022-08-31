@@ -23,13 +23,22 @@ resource "volterra_origin_pool" "example" {
   loadbalancer_algorithm = ["loadbalancer_algorithm"]
 
   origin_servers {
-    // One of the arguments from this list "public_ip public_name private_name custom_endpoint_object vn_private_name private_ip k8s_service consul_service vn_private_ip" must be set
+    // One of the arguments from this list "public_name k8s_service vn_private_ip public_ip private_name consul_service custom_endpoint_object vn_private_name private_ip" must be set
 
-    custom_endpoint_object {
-      endpoint {
-        name      = "test1"
-        namespace = "staging"
-        tenant    = "acmecorp"
+    private_ip {
+      ip = "8.8.8.8"
+
+      // One of the arguments from this list "inside_network outside_network" must be set
+      outside_network = true
+
+      site_locator {
+        // One of the arguments from this list "site virtual_site" must be set
+
+        site {
+          name      = "test1"
+          namespace = "staging"
+          tenant    = "acmecorp"
+        }
       }
     }
 
@@ -90,6 +99,8 @@ Argument Reference
 Advanced options configuration like timeouts, circuit breaker, subset load balancing.
 
 `circuit_breaker` - (Optional) allows to apply back pressure on downstream quickly.. See [Circuit Breaker ](#circuit-breaker) below for details.
+
+`default_circuit_breaker` - (Optional) requests are 1024 and the default value for retries is 3 (bool).
 
 `disable_circuit_breaker` - (Optional) Circuit Breaker is disabled (bool).
 
@@ -190,6 +201,10 @@ Custom selection of TLS versions and cipher suites.
 `max_version` - (Optional) Maximum TLS protocol version. (`String`).
 
 `min_version` - (Optional) Minimum TLS protocol version. (`String`).
+
+### Default Circuit Breaker
+
+requests are 1024 and the default value for retries is 3.
 
 ### Default Security
 

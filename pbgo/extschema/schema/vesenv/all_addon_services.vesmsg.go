@@ -167,6 +167,17 @@ func (v *ValidateAddonServiceChoice) Validate(ctx context.Context, pm interface{
 				return err
 			}
 		}
+	case *AddonServiceChoice_SyntheticMonitor:
+		if fv, exists := v.FldValidators["choice.synthetic_monitor"]; exists {
+			val := m.GetChoice().(*AddonServiceChoice_SyntheticMonitor).SyntheticMonitor
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("synthetic_monitor"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 

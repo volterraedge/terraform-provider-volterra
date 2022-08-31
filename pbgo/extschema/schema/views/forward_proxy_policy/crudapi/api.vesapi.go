@@ -3334,10 +3334,7 @@ var APISwaggerJSON string = `{
             "enum": [
                 "DENY",
                 "ALLOW",
-                "NEXT_POLICY_SET",
-                "NEXT_POLICY",
-                "LAST_POLICY",
-                "GOTO_POLICY"
+                "NEXT_POLICY"
             ],
             "default": "DENY",
             "x-displayname": "Rule Action",

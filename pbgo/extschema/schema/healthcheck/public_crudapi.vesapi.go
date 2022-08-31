@@ -1595,16 +1595,7 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 		item.Disabled = o.GetMetadata().GetDisable()
 
 		if len(req.ReportFields) > 0 {
-			noDBForm, _ := flags.GetEnvGetRspNoDBForm()
-			if !noDBForm {
-				item.Object = o.Object
-				sf.Logger().Alert(svcfw.GetResponseInDBForm,
-					log.MinorAlert,
-					zap.String("user", server.UserFromContext(ctx)),
-					zap.String("useragent", server.UseragentStrFromContext(ctx)),
-					zap.String("operation", "List"),
-				)
-			}
+			item.Object = o.Object
 
 			item.Metadata = &ves_io_schema.ObjectGetMetaType{}
 			item.Metadata.FromObjectMetaType(o.Metadata)
@@ -1683,7 +1674,7 @@ var APISwaggerJSON string = `{
     "paths": {
         "/public/namespaces/{metadata.namespace}/healthchecks": {
             "post": {
-                "summary": "Create healthcheck",
+                "summary": "Create Health Check",
                 "description": "Healthcheck object defines method to determine if the given Endpoint is healthy.\nSingle Healthcheck object can be referred to by one or many Cluster objects.",
                 "operationId": "ves.io.schema.healthcheck.API.Create",
                 "responses": {
@@ -1775,7 +1766,7 @@ var APISwaggerJSON string = `{
         },
         "/public/namespaces/{metadata.namespace}/healthchecks/{metadata.name}": {
             "put": {
-                "summary": "replace healthcheck",
+                "summary": "Replace Health Check",
                 "description": "Healthcheck object defines method to determine if the given Endpoint is healthy.\nSingle Healthcheck object can be referred to by one or many Cluster objects.",
                 "operationId": "ves.io.schema.healthcheck.API.Replace",
                 "responses": {
@@ -1875,7 +1866,7 @@ var APISwaggerJSON string = `{
         },
         "/public/namespaces/{namespace}/healthchecks": {
             "get": {
-                "summary": "List",
+                "summary": "List Health Check",
                 "description": "List the set of healthcheck in a namespace",
                 "operationId": "ves.io.schema.healthcheck.API.List",
                 "responses": {
@@ -1991,7 +1982,7 @@ var APISwaggerJSON string = `{
         },
         "/public/namespaces/{namespace}/healthchecks/{name}": {
             "get": {
-                "summary": "Get healthcheck",
+                "summary": "Get Health Check",
                 "description": "Healthcheck object defines method to determine if the given Endpoint is healthy.\nSingle Healthcheck object can be referred to by one or many Cluster objects.",
                 "operationId": "ves.io.schema.healthcheck.API.Get",
                 "responses": {
@@ -2095,7 +2086,7 @@ var APISwaggerJSON string = `{
                 "x-ves-proto-rpc": "ves.io.schema.healthcheck.API.Get"
             },
             "delete": {
-                "summary": "Delete",
+                "summary": "Delete Health Check",
                 "description": "Delete the specified healthcheck",
                 "operationId": "ves.io.schema.healthcheck.API.Delete",
                 "responses": {

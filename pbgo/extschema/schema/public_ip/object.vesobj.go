@@ -553,6 +553,37 @@ func (o *StatusObject) SetStatusObjMetadata(md sro.StatusObjectMetadata) {
 	o.Metadata = md.(*ves_io_schema.StatusMetaType)
 }
 
+// GenerateUuidv5() returns a deterministic UUIDv5 based on the unique semantic key of status object
+func (o *StatusObject) GenerateUuidV5() (string, error) {
+	statusObjectMetaData := o.GetStatusObjMetadata()
+	creatorClass := statusObjectMetaData.GetCreatorClass()
+	creatorId := statusObjectMetaData.GetCreatorId()
+	statusId := statusObjectMetaData.GetStatusId()
+	objectRefArray := o.GetObjectRefs()
+	if len(objectRefArray) == 0 {
+		return "", fmt.Errorf("StatusObject does not have a reference to config object.")
+	}
+	configObjectUuid := objectRefArray[0].Uid
+	configObjectKind := objectRefArray[0].Kind
+	keyFields := []string{creatorClass, creatorId, statusId, configObjectKind, configObjectUuid}
+	secKey := strings.Join(keyFields, "::")
+	newUuid := uuid.NewSHA1(uuid.NameSpaceOID, []byte(secKey)).String()
+	return newUuid, nil
+}
+
+// SetUuidV5 sets deterministic uuid for a status object.
+func (o *StatusObject) SetUuidV5() error {
+	if o == nil {
+		return fmt.Errorf("Status object is nil")
+	}
+	uuidV5, err := o.GenerateUuidV5()
+	if err != nil {
+		return err
+	}
+	o.GetMetadata().SetUid(uuidV5)
+	return nil
+}
+
 // GetVtrpId returns vtrpId of the status object.
 func (o *StatusObject) GetVtrpId() string {
 	return o.GetMetadata().GetVtrpId()

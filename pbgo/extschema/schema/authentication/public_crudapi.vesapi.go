@@ -1595,16 +1595,7 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 		item.Disabled = o.GetMetadata().GetDisable()
 
 		if len(req.ReportFields) > 0 {
-			noDBForm, _ := flags.GetEnvGetRspNoDBForm()
-			if !noDBForm {
-				item.Object = o.Object
-				sf.Logger().Alert(svcfw.GetResponseInDBForm,
-					log.MinorAlert,
-					zap.String("user", server.UserFromContext(ctx)),
-					zap.String("useragent", server.UseragentStrFromContext(ctx)),
-					zap.String("operation", "List"),
-				)
-			}
+			item.Object = o.Object
 
 			item.Metadata = &ves_io_schema.ObjectGetMetaType{}
 			item.Metadata.FromObjectMetaType(o.Metadata)
@@ -1683,7 +1674,7 @@ var APISwaggerJSON string = `{
     "paths": {
         "/public/namespaces/{metadata.namespace}/authentications": {
             "post": {
-                "summary": "Create Authentication Object",
+                "summary": "Create Authentication",
                 "operationId": "ves.io.schema.authentication.API.Create",
                 "responses": {
                     "200": {
@@ -1873,7 +1864,7 @@ var APISwaggerJSON string = `{
         },
         "/public/namespaces/{namespace}/authentications": {
             "get": {
-                "summary": "List",
+                "summary": "List Authentication",
                 "description": "List the set of authentication in a namespace",
                 "operationId": "ves.io.schema.authentication.API.List",
                 "responses": {
@@ -2092,7 +2083,7 @@ var APISwaggerJSON string = `{
                 "x-ves-proto-rpc": "ves.io.schema.authentication.API.Get"
             },
             "delete": {
-                "summary": "Delete",
+                "summary": "Delete Authentication",
                 "description": "Delete the specified authentication",
                 "operationId": "ves.io.schema.authentication.API.Delete",
                 "responses": {

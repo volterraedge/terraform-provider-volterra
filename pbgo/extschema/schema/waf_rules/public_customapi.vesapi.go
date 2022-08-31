@@ -173,7 +173,8 @@ func (c *CustomAPIRestClient) doRPCRules(ctx context.Context, callOpts *server.C
 	}
 	defer rsp.Body.Close()
 
-	if rsp.StatusCode != http.StatusOK {
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
 		body, err := ioutil.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
 	}
@@ -184,7 +185,7 @@ func (c *CustomAPIRestClient) doRPCRules(ctx context.Context, callOpts *server.C
 	}
 	pbRsp := &RulesRsp{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
-		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.waf_rules.RulesRsp", body)
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.waf_rules.RulesRsp", body)
 
 	}
 	if callOpts.OutCallResponse != nil {
@@ -256,7 +257,8 @@ func (c *CustomAPIRestClient) doRPCVirtualHostWafRulesStatus(ctx context.Context
 	}
 	defer rsp.Body.Close()
 
-	if rsp.StatusCode != http.StatusOK {
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
 		body, err := ioutil.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
 	}
@@ -267,7 +269,7 @@ func (c *CustomAPIRestClient) doRPCVirtualHostWafRulesStatus(ctx context.Context
 	}
 	pbRsp := &VirtualHostWafRulesStatusRsp{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
-		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.waf_rules.VirtualHostWafRulesStatusRsp", body)
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.waf_rules.VirtualHostWafRulesStatusRsp", body)
 
 	}
 	if callOpts.OutCallResponse != nil {
@@ -339,7 +341,8 @@ func (c *CustomAPIRestClient) doRPCWafRulesStatus(ctx context.Context, callOpts 
 	}
 	defer rsp.Body.Close()
 
-	if rsp.StatusCode != http.StatusOK {
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
 		body, err := ioutil.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
 	}
@@ -350,7 +353,7 @@ func (c *CustomAPIRestClient) doRPCWafRulesStatus(ctx context.Context, callOpts 
 	}
 	pbRsp := &WafRulesStatusRsp{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
-		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.waf_rules.WafRulesStatusRsp", body)
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.waf_rules.WafRulesStatusRsp", body)
 
 	}
 	if callOpts.OutCallResponse != nil {

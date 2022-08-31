@@ -708,12 +708,14 @@ type Passport struct {
 	//
 	// x-displayName: "Latitude"
 	// x-example: "49.3156733"
+	// x-required
 	// Geographic location of this site
 	Latitude float32 `protobuf:"fixed32,7,opt,name=latitude,proto3" json:"latitude,omitempty"`
 	// Longitude
 	//
 	// x-displayName: "Longitude"
 	// x-example: "14.2484333"
+	// x-required
 	// Geographic location of this site
 	Longitude float32 `protobuf:"fixed32,8,opt,name=longitude,proto3" json:"longitude,omitempty"`
 	// Cluster size

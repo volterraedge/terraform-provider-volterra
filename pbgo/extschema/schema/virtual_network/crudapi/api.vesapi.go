@@ -3174,9 +3174,7 @@ var APISwaggerJSON string = `{
             "enum": [
                 "NEXT_HOP_DEFAULT_GATEWAY",
                 "NEXT_HOP_USE_CONFIGURED",
-                "NEXT_HOP_NETWORK_INTERFACE",
-                "NEXT_HOP_DISCARD",
-                "NEXT_HOP_SNAT_TO_PUBLIC"
+                "NEXT_HOP_NETWORK_INTERFACE"
             ],
             "default": "NEXT_HOP_DEFAULT_GATEWAY",
             "x-displayname": "Nexthop Types",
@@ -3800,15 +3798,15 @@ var APISwaggerJSON string = `{
                 },
                 "static_routes": {
                     "type": "array",
-                    "description": " List of static routes on the virtual network\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 16\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " List of static routes on the virtual network\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 165\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "static_routes",
-                    "maxItems": 16,
+                    "maxItems": 165,
                     "items": {
                         "$ref": "#/definitions/schemaStaticRouteType"
                     },
                     "x-displayname": "Static Routes",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.repeated.max_items": "16",
+                        "ves.io.schema.rules.repeated.max_items": "165",
                         "ves.io.schema.rules.repeated.unique": "true"
                     }
                 },

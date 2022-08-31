@@ -21,13 +21,13 @@ resource "volterra_aws_vpc_site" "example" {
   namespace  = "staging"
   aws_region = ["us-east-1"]
 
-  // One of the arguments from this list "blocked_services default_blocked_services" must be set
+  // One of the arguments from this list "default_blocked_services blocked_services" must be set
 
   blocked_services {
     blocked_sevice {
-      // One of the arguments from this list "web_user_interface dns ssh" must be set
-      ssh          = true
-      network_type = "network_type"
+      // One of the arguments from this list "ssh web_user_interface dns" must be set
+      web_user_interface = true
+      network_type       = "network_type"
     }
   }
 
@@ -44,12 +44,15 @@ resource "volterra_aws_vpc_site" "example" {
   // One of the arguments from this list "logs_streaming_disabled log_receiver" must be set
   logs_streaming_disabled = true
 
-  // One of the arguments from this list "voltstack_cluster ingress_gw ingress_egress_gw" must be set
+  // One of the arguments from this list "ingress_gw ingress_egress_gw voltstack_cluster" must be set
 
   ingress_gw {
     allowed_vip_port {
-      // One of the arguments from this list "use_http_https_port custom_ports use_http_port use_https_port" must be set
-      use_http_https_port = true
+      // One of the arguments from this list "use_http_port use_https_port use_http_https_port custom_ports" must be set
+
+      custom_ports {
+        port_ranges = "80, 8080-8085"
+      }
     }
 
     aws_certified_hw = "aws-byol-voltmesh"
@@ -60,13 +63,12 @@ resource "volterra_aws_vpc_site" "example" {
 
       local_subnet {
         // One of the arguments from this list "subnet_param existing_subnet_id" must be set
-        existing_subnet_id = "subnet-12345678901234567"
-      }
-    }
 
-    local_control_plane {
-      // One of the arguments from this list "no_local_control_plane default_local_control_plane" must be set
-      no_local_control_plane = true
+        subnet_param {
+          ipv4 = "10.1.2.0/24"
+          ipv6 = "1234:568:abcd:9100::/64"
+        }
+      }
     }
   }
   // One of the arguments from this list "nodes_per_az total_nodes no_worker_nodes" must be set
@@ -118,7 +120,11 @@ Argument Reference
 
 `logs_streaming_disabled` - (Optional) Logs Streaming is disabled (bool).
 
+`offline_survivability_mode` - (Optional) Enable/Disable offline survivability mode. See [Offline Survivability Mode ](#offline-survivability-mode) below for details.
+
 `os` - (Optional) Operating System Details. See [Os ](#os) below for details.
+
+`site_local_control_plane` - (Optional) Enable/Disable site local control plane. See [Site Local Control Plane ](#site-local-control-plane) below for details.
 
 `ingress_egress_gw` - (Optional) Two interface site is useful when site is used as ingress/egress gateway to the VPC.. See [Ingress Egress Gw ](#ingress-egress-gw) below for details.
 
@@ -175,6 +181,10 @@ Allowed VIP Port Configuration for Inside Network.
 `use_http_port` - (Optional) Only HTTP Port (80) will be allowed. (bool).
 
 `use_https_port` - (Optional) Only HTTPS Port (443) will be allowed. (bool).
+
+### Auto Asn
+
+Automatically set ASN.
 
 ### Autogenerate
 
@@ -310,6 +320,10 @@ Will assign latest available SW version.
 
 Direct Connect feature is enabled.
 
+`auto_asn` - (Optional) Automatically set ASN (bool).
+
+`custom_asn` - (Optional) Custom Autonomous System Number (`Int`).
+
 `cloud_aggregated_prefix` - (Optional) Aggregated prefix from cloud to be advertised for DC side (`String`).
 
 `dc_connect_aggregated_prefix` - (Optional) Aggregated prefix from direct connect to be advertised for Cloud side (`String`).
@@ -369,6 +383,10 @@ Forward Proxy is enabled for this connector.
 ### Enable Interception
 
 Enable Interception.
+
+### Enable Offline Survivability Mode
+
+Enabling offline survivability reduces default security of a CE..
 
 ### Forward Proxy Allow All
 
@@ -430,8 +448,6 @@ Two interface site is useful when site is used as ingress/egress gateway to the 
 
 `no_inside_static_routes` - (Optional) Static Routes disabled for inside network. (bool).
 
-`local_control_plane` - (Optional) Enable/Disable site local control plane. See [Local Control Plane ](#local-control-plane) below for details.
-
 `active_network_policies` - (Optional) Firewall Policies active for this site.. See [Active Network Policies ](#active-network-policies) below for details.
 
 `no_network_policy` - (Optional) Firewall Policy is disabled for this site. (bool).
@@ -453,8 +469,6 @@ One interface site is useful when site is only used as ingress gateway to the VP
 `aws_certified_hw` - (Required) Name for AWS certified hardware. (`String`).
 
 `az_nodes` - (Required) Only Single AZ or Three AZ(s) nodes are supported currently.. See [Az Nodes ](#az-nodes) below for details.
-
-`local_control_plane` - (Optional) Enable/Disable site local control plane. See [Local Control Plane ](#local-control-plane) below for details.
 
 ### Inside Static Routes
 
@@ -491,14 +505,6 @@ IPv4 Address.
 IPv6 Address.
 
 `addr` - (Optional) e.g. '2001:db8:0:0:0:0:2:1' becomes '2001:db8::2:1' or '2001:db8:0:0:0:2:0:0' becomes '2001:db8::2::' (`String`).
-
-### Local Control Plane
-
-Enable/Disable site local control plane.
-
-`default_local_control_plane` - (Optional) Enable Site Local Control Plane (bool).
-
-`no_local_control_plane` - (Optional) Disable Site Local Control Plane (bool).
 
 ### Manual Gw
 
@@ -566,9 +572,21 @@ Disable Site Local Control Plane.
 
 Firewall Policy is disabled for this site..
 
+### No Offline Survivability Mode
+
+Disable Offline Survivability Mode.
+
 ### No Outside Static Routes
 
 Static Routes disabled for outside network..
+
+### Offline Survivability Mode
+
+Enable/Disable offline survivability mode.
+
+`enable_offline_survivability_mode` - (Optional) Enabling offline survivability reduces default security of a CE. (bool).
+
+`no_offline_survivability_mode` - (Optional) Disable Offline Survivability Mode (bool).
 
 ### Openebs Enterprise
 
@@ -635,6 +653,14 @@ tenant - (Optional) then tenant will hold the referred object's(e.g. route's) te
 ### Reserved Inside Subnet
 
 Autogenerate and reserve a subnet from the Primary CIDR.
+
+### Site Local Control Plane
+
+Enable/Disable site local control plane.
+
+`default_local_control_plane` - (Optional) Enable Site Local Control Plane (bool).
+
+`no_local_control_plane` - (Optional) Disable Site Local Control Plane (bool).
 
 ### Sli To Global Dr
 
@@ -793,8 +819,6 @@ App Stack Cluster using single interface, useful for deploying K8s cluster..
 `k8s_cluster` - (Optional) Site Local K8s API access is enabled, using k8s_cluster object. See [ref](#ref) below for details.
 
 `no_k8s_cluster` - (Optional) Site Local K8s API access is disabled (bool).
-
-`local_control_plane` - (Optional) Enable/Disable site local control plane. See [Local Control Plane ](#local-control-plane) below for details.
 
 `active_network_policies` - (Optional) Firewall Policies active for this site.. See [Active Network Policies ](#active-network-policies) below for details.
 

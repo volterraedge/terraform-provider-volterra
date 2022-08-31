@@ -54,16 +54,14 @@ resource "volterra_app_setting" "example" {
         include_failed_login_activity {
           login_failures_threshold = "10"
         }
-
         // One of the arguments from this list "include_forbidden_activity exclude_forbidden_activity" must be set
-
-        include_forbidden_activity {
-          forbidden_requests_threshold = "10"
-        }
-        // One of the arguments from this list "include_ip_reputation exclude_ip_reputation" must be set
+        exclude_forbidden_activity = true
+        // One of the arguments from this list "exclude_ip_reputation include_ip_reputation" must be set
         include_ip_reputation = true
+        // One of the arguments from this list "exclude_non_existent_url_activity include_non_existent_url_activity_custom include_non_existent_url_activity_automatic" must be set
+        exclude_non_existent_url_activity = true
         // One of the arguments from this list "include_waf_activity exclude_waf_activity" must be set
-        exclude_waf_activity = true
+        include_waf_activity = true
       }
     }
   }
@@ -150,6 +148,12 @@ Enable AI based malicious user detection.
 
 `include_ip_reputation` - (Optional) Include IP Reputation by policy in malicious user detection (bool).
 
+`exclude_non_existent_url_activity` - (Optional) Exclude Non-Existent URL activity in malicious user detection (bool).
+
+`include_non_existent_url_activity_automatic` - (Optional) Include Non-Existent URL Activity using automatic threshold in malicious user detection. See [Include Non Existent Url Activity Automatic ](#include-non-existent-url-activity-automatic) below for details.
+
+`include_non_existent_url_activity_custom` - (Optional) Include Non-Existent URL Activity using custom threshold in malicious user detection. See [Include Non Existent Url Activity Custom ](#include-non-existent-url-activity-custom) below for details.
+
 `exclude_waf_activity` - (Optional) Exclude WAF activity in malicious user detection (bool).
 
 `include_waf_activity` - (Optional) Include WAF activity in malicious user detection (bool).
@@ -170,9 +174,17 @@ Exclude forbidden activity by policy in malicious user detection.
 
 Exclude IP Reputation by policy in malicious user detection.
 
+### Exclude Non Existent Url Activity
+
+Exclude Non-Existent URL activity in malicious user detection.
+
 ### Exclude Waf Activity
 
 Exclude WAF activity in malicious user detection.
+
+### High
+
+High : learnt threshold - 15 %.
 
 ### Include Failed Login Activity
 
@@ -190,9 +202,33 @@ Include forbidden activity by policy in malicious user detection.
 
 Include IP Reputation by policy in malicious user detection.
 
+### Include Non Existent Url Activity Automatic
+
+Include Non-Existent URL Activity using automatic threshold in malicious user detection.
+
+`high` - (Optional) High : learnt threshold - 15 % (bool).
+
+`low` - (Optional) Low : learnt threshold + 15 % (bool).
+
+`medium` - (Optional) Medium : using learnt threshold derived from statistics per given app_type/tenant. (bool).
+
+### Include Non Existent Url Activity Custom
+
+Include Non-Existent URL Activity using custom threshold in malicious user detection.
+
+`nonexistent_requests_threshold` - (Required) The percentage of non-existent requests beyond which the system will flag this user as malicious (`Int`).
+
 ### Include Waf Activity
 
 Include WAF activity in malicious user detection.
+
+### Low
+
+Low : learnt threshold + 15 %.
+
+### Medium
+
+Medium : using learnt threshold derived from statistics per given app_type/tenant..
 
 ### Metric Selectors
 

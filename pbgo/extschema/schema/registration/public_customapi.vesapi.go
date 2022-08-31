@@ -196,7 +196,8 @@ func (c *CustomAPIRestClient) doRPCListRegistrationsBySite(ctx context.Context, 
 	}
 	defer rsp.Body.Close()
 
-	if rsp.StatusCode != http.StatusOK {
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
 		body, err := ioutil.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
 	}
@@ -207,7 +208,7 @@ func (c *CustomAPIRestClient) doRPCListRegistrationsBySite(ctx context.Context, 
 	}
 	pbRsp := &ListResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
-		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.registration.ListResponse", body)
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.registration.ListResponse", body)
 
 	}
 	if callOpts.OutCallResponse != nil {
@@ -279,7 +280,8 @@ func (c *CustomAPIRestClient) doRPCListRegistrationsByState(ctx context.Context,
 	}
 	defer rsp.Body.Close()
 
-	if rsp.StatusCode != http.StatusOK {
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
 		body, err := ioutil.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
 	}
@@ -290,7 +292,7 @@ func (c *CustomAPIRestClient) doRPCListRegistrationsByState(ctx context.Context,
 	}
 	pbRsp := &ListResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
-		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.registration.ListResponse", body)
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.registration.ListResponse", body)
 
 	}
 	if callOpts.OutCallResponse != nil {
@@ -368,7 +370,8 @@ func (c *CustomAPIRestClient) doRPCRegistrationApprove(ctx context.Context, call
 	}
 	defer rsp.Body.Close()
 
-	if rsp.StatusCode != http.StatusOK {
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
 		body, err := ioutil.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
 	}
@@ -379,7 +382,7 @@ func (c *CustomAPIRestClient) doRPCRegistrationApprove(ctx context.Context, call
 	}
 	pbRsp := &ObjectChangeResp{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
-		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.registration.ObjectChangeResp", body)
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.registration.ObjectChangeResp", body)
 
 	}
 	if callOpts.OutCallResponse != nil {
@@ -452,7 +455,8 @@ func (c *CustomAPIRestClient) doRPCRegistrationConfig(ctx context.Context, callO
 	}
 	defer rsp.Body.Close()
 
-	if rsp.StatusCode != http.StatusOK {
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
 		body, err := ioutil.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
 	}
@@ -463,7 +467,7 @@ func (c *CustomAPIRestClient) doRPCRegistrationConfig(ctx context.Context, callO
 	}
 	pbRsp := &ConfigResp{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
-		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.registration.ConfigResp", body)
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.registration.ConfigResp", body)
 
 	}
 	if callOpts.OutCallResponse != nil {
@@ -535,7 +539,8 @@ func (c *CustomAPIRestClient) doRPCRegistrationCreate(ctx context.Context, callO
 	}
 	defer rsp.Body.Close()
 
-	if rsp.StatusCode != http.StatusOK {
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
 		body, err := ioutil.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
 	}
@@ -546,7 +551,7 @@ func (c *CustomAPIRestClient) doRPCRegistrationCreate(ctx context.Context, callO
 	}
 	pbRsp := &Object{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
-		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.registration.Object", body)
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.registration.Object", body)
 
 	}
 	if callOpts.OutCallResponse != nil {
@@ -910,7 +915,7 @@ var CustomAPISwaggerJSON string = `{
     "paths": {
         "/public/namespaces/{namespace}/listregistrationsbystate": {
             "post": {
-                "summary": "List Registrations By Status",
+                "summary": "List Registrations By State",
                 "description": "API endpoint for returning Registrations by status, e.g APPROVED, NEW, or RETIRED",
                 "operationId": "ves.io.schema.registration.CustomAPI.ListRegistrationsByState",
                 "responses": {
@@ -1002,7 +1007,7 @@ var CustomAPISwaggerJSON string = `{
         },
         "/public/namespaces/{namespace}/registration/{name}/approve": {
             "post": {
-                "summary": "Change registration state",
+                "summary": "Registration Approve",
                 "description": "RegistrationApprove approved pending registration and it can also decommission by changing state to RETIRED.",
                 "operationId": "ves.io.schema.registration.CustomAPI.RegistrationApprove",
                 "responses": {
@@ -1102,7 +1107,7 @@ var CustomAPISwaggerJSON string = `{
         },
         "/public/namespaces/{namespace}/registrations_by_site/{site_name}": {
             "get": {
-                "summary": "List Registrations by site",
+                "summary": "List registrations by site",
                 "description": "List all registration in site",
                 "operationId": "ves.io.schema.registration.CustomAPI.ListRegistrationsBySite",
                 "responses": {
@@ -1194,7 +1199,7 @@ var CustomAPISwaggerJSON string = `{
         },
         "/public/registerBootstrap": {
             "post": {
-                "summary": "Create registration",
+                "summary": "Registration Create",
                 "description": "Registration request to create registration is sent by the node on first boot. User never creates registration on her own.",
                 "operationId": "ves.io.schema.registration.CustomAPI.RegistrationCreate",
                 "responses": {
@@ -1278,7 +1283,7 @@ var CustomAPISwaggerJSON string = `{
         },
         "/public/requestConfig": {
             "post": {
-                "summary": "Get configuration for registration",
+                "summary": "Registration Config",
                 "description": "API endpoint for returning configuration for admitted registrations.\nIt will fail with known error for non-ADMITTED registration",
                 "operationId": "ves.io.schema.registration.CustomAPI.RegistrationConfig",
                 "responses": {
@@ -2017,26 +2022,30 @@ var CustomAPISwaggerJSON string = `{
                 },
                 "latitude": {
                     "type": "number",
-                    "description": " Geographic location of this site\n\nExample: - \"49.3156733\"-\n\nValidation Rules:\n  ves.io.schema.rules.float.gte: -90.0\n  ves.io.schema.rules.float.lte: 90.0\n",
+                    "description": " Geographic location of this site\n\nExample: - \"49.3156733\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.float.gte: -90.0\n  ves.io.schema.rules.float.lte: 90.0\n  ves.io.schema.rules.message.required: true\n",
                     "title": "Latitude",
                     "format": "float",
                     "x-displayname": "Latitude",
                     "x-ves-example": "49.3156733",
+                    "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.float.gte": "-90.0",
-                        "ves.io.schema.rules.float.lte": "90.0"
+                        "ves.io.schema.rules.float.lte": "90.0",
+                        "ves.io.schema.rules.message.required": "true"
                     }
                 },
                 "longitude": {
                     "type": "number",
-                    "description": " Geographic location of this site\n\nExample: - \"14.2484333\"-\n\nValidation Rules:\n  ves.io.schema.rules.float.gte: -180.0\n  ves.io.schema.rules.float.lte: 180.0\n",
+                    "description": " Geographic location of this site\n\nExample: - \"14.2484333\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.float.gte: -180.0\n  ves.io.schema.rules.float.lte: 180.0\n  ves.io.schema.rules.message.required: true\n",
                     "title": "Longitude",
                     "format": "float",
                     "x-displayname": "Longitude",
                     "x-ves-example": "14.2484333",
+                    "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.float.gte": "-180.0",
-                        "ves.io.schema.rules.float.lte": "180.0"
+                        "ves.io.schema.rules.float.lte": "180.0",
+                        "ves.io.schema.rules.message.required": "true"
                     }
                 },
                 "operating_system_version": {

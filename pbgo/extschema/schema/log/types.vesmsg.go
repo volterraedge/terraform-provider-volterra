@@ -267,6 +267,15 @@ func (v *ValidateDateAggregationData) Validate(ctx context.Context, pm interface
 
 	}
 
+	if fv, exists := v.FldValidators["step"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("step"))
+		if err := fv(ctx, m.GetStep(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	return nil
 }
 
@@ -699,6 +708,15 @@ func (v *ValidateLogAggregationData) Validate(ctx context.Context, pm interface{
 
 	}
 
+	if fv, exists := v.FldValidators["multi_field_aggregation"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("multi_field_aggregation"))
+		if err := fv(ctx, m.GetMultiFieldAggregation(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	return nil
 }
 
@@ -711,4 +729,175 @@ var DefaultLogAggregationDataValidator = func() *ValidateLogAggregationData {
 
 func LogAggregationDataValidator() db.Validator {
 	return DefaultLogAggregationDataValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *MultiFieldAggregationBucket) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *MultiFieldAggregationBucket) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *MultiFieldAggregationBucket) DeepCopy() *MultiFieldAggregationBucket {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &MultiFieldAggregationBucket{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *MultiFieldAggregationBucket) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *MultiFieldAggregationBucket) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return MultiFieldAggregationBucketValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateMultiFieldAggregationBucket struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateMultiFieldAggregationBucket) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*MultiFieldAggregationBucket)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *MultiFieldAggregationBucket got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["count"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("count"))
+		if err := fv(ctx, m.GetCount(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["keys"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("keys"))
+		for key, value := range m.GetKeys() {
+			vOpts := append(vOpts, db.WithValidateMapKey(key))
+			if err := fv(ctx, value, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultMultiFieldAggregationBucketValidator = func() *ValidateMultiFieldAggregationBucket {
+	v := &ValidateMultiFieldAggregationBucket{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func MultiFieldAggregationBucketValidator() db.Validator {
+	return DefaultMultiFieldAggregationBucketValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *MultiFieldAggregationData) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *MultiFieldAggregationData) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *MultiFieldAggregationData) DeepCopy() *MultiFieldAggregationData {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &MultiFieldAggregationData{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *MultiFieldAggregationData) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *MultiFieldAggregationData) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return MultiFieldAggregationDataValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateMultiFieldAggregationData struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateMultiFieldAggregationData) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*MultiFieldAggregationData)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *MultiFieldAggregationData got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["buckets"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("buckets"))
+		for idx, item := range m.GetBuckets() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultMultiFieldAggregationDataValidator = func() *ValidateMultiFieldAggregationData {
+	v := &ValidateMultiFieldAggregationData{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func MultiFieldAggregationDataValidator() db.Validator {
+	return DefaultMultiFieldAggregationDataValidator
 }

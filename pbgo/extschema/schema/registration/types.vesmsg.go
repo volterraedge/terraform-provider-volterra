@@ -1472,8 +1472,9 @@ var DefaultPassportValidator = func() *ValidatePassport {
 
 	vrhLatitude := v.LatitudeValidationRuleHandler
 	rulesLatitude := map[string]string{
-		"ves.io.schema.rules.float.gte": "-90.0",
-		"ves.io.schema.rules.float.lte": "90.0",
+		"ves.io.schema.rules.float.gte":        "-90.0",
+		"ves.io.schema.rules.float.lte":        "90.0",
+		"ves.io.schema.rules.message.required": "true",
 	}
 	vFn, err = vrhLatitude(rulesLatitude)
 	if err != nil {
@@ -1484,8 +1485,9 @@ var DefaultPassportValidator = func() *ValidatePassport {
 
 	vrhLongitude := v.LongitudeValidationRuleHandler
 	rulesLongitude := map[string]string{
-		"ves.io.schema.rules.float.gte": "-180.0",
-		"ves.io.schema.rules.float.lte": "180.0",
+		"ves.io.schema.rules.float.gte":        "-180.0",
+		"ves.io.schema.rules.float.lte":        "180.0",
+		"ves.io.schema.rules.message.required": "true",
 	}
 	vFn, err = vrhLongitude(rulesLongitude)
 	if err != nil {

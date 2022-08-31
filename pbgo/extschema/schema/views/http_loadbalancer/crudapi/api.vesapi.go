@@ -3405,7 +3405,7 @@ var APISwaggerJSON string = `{
                     "description": "x-displayName: \"HTTP Methods\"\nx-required\nList of HTTP methods.",
                     "title": "HTTP Methods",
                     "items": {
-                        "$ref": "#/definitions/schemaHttpMethod"
+                        "$ref": "#/definitions/schemaBotHttpMethod"
                     }
                 },
                 "metadata": {
@@ -3636,44 +3636,6 @@ var APISwaggerJSON string = `{
                 }
             }
         },
-        "http_loadbalancerDownstreamTlsValidationContext": {
-            "type": "object",
-            "description": "Validation context for downstream client TLS connections",
-            "title": "DownstreamTlsValidationContext",
-            "x-displayname": "Clients TLS validation context",
-            "x-ves-oneof-field-crl_choice": "[\"crl\",\"no_crl\"]",
-            "x-ves-proto-message": "ves.io.schema.views.http_loadbalancer.DownstreamTlsValidationContext",
-            "properties": {
-                "crl": {
-                    "description": "Exclusive with [no_crl]\n\n Client certificate is verified against CRL.\n Specify the CRL server information to download the certificate revocation list",
-                    "title": "Verify client certificate with CRL",
-                    "$ref": "#/definitions/schemaviewsObjectRefType",
-                    "x-displayname": "CRL"
-                },
-                "no_crl": {
-                    "description": "Exclusive with [crl]\n Client certificate revocation status is not verified",
-                    "title": "No client certificate verification with CRL",
-                    "$ref": "#/definitions/schemaEmpty",
-                    "x-displayname": "No CRL"
-                },
-                "trusted_ca_url": {
-                    "type": "string",
-                    "description": " The URL for a trust store\n\nExample: - \"value\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_bytes: 131072\n  ves.io.schema.rules.string.min_bytes: 1\n  ves.io.schema.rules.string.truststore_url: true\n",
-                    "title": "trusted_ca_url",
-                    "minLength": 1,
-                    "maxLength": 131072,
-                    "x-displayname": "Trusted CA",
-                    "x-ves-example": "value",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true",
-                        "ves.io.schema.rules.string.max_bytes": "131072",
-                        "ves.io.schema.rules.string.min_bytes": "1",
-                        "ves.io.schema.rules.string.truststore_url": "true"
-                    }
-                }
-            }
-        },
         "http_loadbalancerHashPolicyListType": {
             "type": "object",
             "description": "List of hash policy rules",
@@ -3853,7 +3815,8 @@ var APISwaggerJSON string = `{
             "description": "Choice for selecting HTTP proxy with bring your own certificates",
             "title": "BYOC HTTPS Choice",
             "x-displayname": "BYOC HTTPS Choice",
-            "x-ves-displayorder": "1,2,15,3,4,9",
+            "x-ves-displayorder": "1,2,15,3,4,9,16",
+            "x-ves-oneof-field-default_lb_choice": "[\"default_loadbalancer\",\"non_default_loadbalancer\"]",
             "x-ves-oneof-field-path_normalize_choice": "[\"disable_path_normalize\",\"enable_path_normalize\"]",
             "x-ves-oneof-field-server_header_choice": "[\"append_server_name\",\"default_header\",\"pass_through\",\"server_name\"]",
             "x-ves-proto-message": "ves.io.schema.views.http_loadbalancer.ProxyTypeHttps",
@@ -3881,6 +3844,12 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/schemaEmpty",
                     "x-displayname": "Default"
                 },
+                "default_loadbalancer": {
+                    "description": "Exclusive with [non_default_loadbalancer]\n",
+                    "title": "Default loadbalancer",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Yes"
+                },
                 "disable_path_normalize": {
                     "description": "Exclusive with [enable_path_normalize]\n",
                     "title": "Disable Path normalization",
@@ -3899,6 +3868,12 @@ var APISwaggerJSON string = `{
                     "title": "HTTP Redirect",
                     "format": "boolean",
                     "x-displayname": "HTTP Redirect to HTTPS"
+                },
+                "non_default_loadbalancer": {
+                    "description": "Exclusive with [default_loadbalancer]\n",
+                    "title": "Not a default loadbalancer",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "No"
                 },
                 "pass_through": {
                     "description": "Exclusive with [append_server_name default_header server_name]\n Pass existing server header as is. If server header is absent, a new header is not appended.",
@@ -3929,7 +3904,7 @@ var APISwaggerJSON string = `{
                 },
                 "tls_parameters": {
                     "description": " TLS parameters for downstream connections.",
-                    "$ref": "#/definitions/viewshttp_loadbalancerDownstreamTlsParamsType",
+                    "$ref": "#/definitions/schemaviewsDownstreamTlsParamsType",
                     "x-displayname": "TLS Parameters"
                 }
             }
@@ -3939,7 +3914,8 @@ var APISwaggerJSON string = `{
             "description": "Choice for selecting HTTP proxy with bring your own certificates",
             "title": "HTTPS with Auto Certs Choice",
             "x-displayname": "HTTPS with Auto Certs Choice",
-            "x-ves-displayorder": "1,2,18,3,4,7,12",
+            "x-ves-displayorder": "1,2,18,3,4,7,12,19",
+            "x-ves-oneof-field-default_lb_choice": "[\"default_loadbalancer\",\"non_default_loadbalancer\"]",
             "x-ves-oneof-field-mtls_choice": "[\"no_mtls\",\"use_mtls\"]",
             "x-ves-oneof-field-path_normalize_choice": "[\"disable_path_normalize\",\"enable_path_normalize\"]",
             "x-ves-oneof-field-server_header_choice": "[\"append_server_name\",\"default_header\",\"pass_through\",\"server_name\"]",
@@ -3968,6 +3944,12 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/schemaEmpty",
                     "x-displayname": "Default"
                 },
+                "default_loadbalancer": {
+                    "description": "Exclusive with [non_default_loadbalancer]\n",
+                    "title": "Default loadbalancer",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Yes"
+                },
                 "disable_path_normalize": {
                     "description": "Exclusive with [enable_path_normalize]\n",
                     "title": "Disable Path normalization",
@@ -3992,6 +3974,12 @@ var APISwaggerJSON string = `{
                     "title": "No mTLS",
                     "$ref": "#/definitions/schemaEmpty",
                     "x-displayname": "Disable"
+                },
+                "non_default_loadbalancer": {
+                    "description": "Exclusive with [default_loadbalancer]\n",
+                    "title": "Not a default loadbalancer",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "No"
                 },
                 "pass_through": {
                     "description": "Exclusive with [append_server_name default_header server_name]\n Pass existing server header as is. If server header is absent, a new header is not appended.",
@@ -4029,7 +4017,7 @@ var APISwaggerJSON string = `{
                 "use_mtls": {
                     "description": "Exclusive with [no_mtls]\n",
                     "title": "Use mTLS",
-                    "$ref": "#/definitions/http_loadbalancerDownstreamTlsValidationContext",
+                    "$ref": "#/definitions/viewsDownstreamTlsValidationContext",
                     "x-displayname": "Enable"
                 }
             }
@@ -4092,12 +4080,12 @@ var APISwaggerJSON string = `{
             "x-ves-oneof-field-retry_policy_choice": "[\"default_retry_policy\",\"retry_policy\"]",
             "x-ves-oneof-field-rewrite_choice": "[\"disable_prefix_rewrite\",\"prefix_rewrite\"]",
             "x-ves-oneof-field-spdy_choice": "[\"disable_spdy\",\"enable_spdy\"]",
-            "x-ves-oneof-field-waf_choice": "[\"app_firewall\",\"disable_waf\"]",
+            "x-ves-oneof-field-waf_choice": "[\"app_firewall\",\"inherited_waf\"]",
             "x-ves-oneof-field-websocket_choice": "[\"disable_web_socket_config\",\"web_socket_config\"]",
             "x-ves-proto-message": "ves.io.schema.views.http_loadbalancer.RouteSimpleAdvancedOptions",
             "properties": {
                 "app_firewall": {
-                    "description": "Exclusive with [disable_waf]\n Reference to App Firewall configuration object",
+                    "description": "Exclusive with [inherited_waf]\n Reference to App Firewall configuration object",
                     "title": "app_firewall",
                     "$ref": "#/definitions/schemaviewsObjectRefType",
                     "x-displayname": "App Firewall"
@@ -4157,12 +4145,6 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/schemaEmpty",
                     "x-displayname": "Disable SPDY"
                 },
-                "disable_waf": {
-                    "description": "Exclusive with [app_firewall]\n No WAF configuration for this load balancer",
-                    "title": "Disable WAF",
-                    "$ref": "#/definitions/schemaEmpty",
-                    "x-displayname": "Disable WAF"
-                },
                 "disable_web_socket_config": {
                     "description": "Exclusive with [web_socket_config]\n Websocket upgrade is disabled",
                     "title": "Disable Websocket",
@@ -4190,6 +4172,12 @@ var APISwaggerJSON string = `{
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.map.max_pairs": "16"
                     }
+                },
+                "inherited_waf": {
+                    "description": "Exclusive with [app_firewall]\n App Firewall configuration is taken from Load Balancer. \n Hence no custom configuration is applied on the route",
+                    "title": "Inherited WAF",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Inherit App Firewall"
                 },
                 "mirror_policy": {
                     "description": "Exclusive with [disable_mirroring]\n MirrorPolicy is used for shadowing traffic from one cluster to another. The current\n implementation is \"fire and forget,\" meaning it will not wait for the shadow cluster to\n respond before returning the response from the primary cluster. All normal statistics are\n collected for the shadow cluster making this feature useful for testing.\n\n During shadowing, the host/authority header is altered such that *-shadow* is appended. This is\n useful for logging. For example, *cluster1* becomes *cluster1-shadow*.",
@@ -4792,16 +4780,16 @@ var APISwaggerJSON string = `{
             "properties": {
                 "actions": {
                     "type": "array",
-                    "description": " Action that should be taken when client identifier matches the rule\n\nValidation Rules:\n  ves.io.schema.rules.enum.defined_only: true\n  ves.io.schema.rules.repeated.max_items: 4\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " Action that should be taken when client identifier matches the rule\n\nValidation Rules:\n  ves.io.schema.rules.enum.defined_only: true\n  ves.io.schema.rules.repeated.max_items: 5\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "action",
-                    "maxItems": 4,
+                    "maxItems": 5,
                     "items": {
                         "$ref": "#/definitions/http_loadbalancerClientSrcRuleAction"
                     },
                     "x-displayname": "Action",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.enum.defined_only": "true",
-                        "ves.io.schema.rules.repeated.max_items": "4",
+                        "ves.io.schema.rules.repeated.max_items": "5",
                         "ves.io.schema.rules.repeated.unique": "true"
                     }
                 },
@@ -5939,9 +5927,9 @@ var APISwaggerJSON string = `{
             "properties": {
                 "exact_values": {
                     "type": "array",
-                    "description": " A list of exact values to match the input against.\n\nExample: - \"['new york', 'london', 'sydney', 'tokyo', 'cairo']\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.max_bytes: 256\n  ves.io.schema.rules.repeated.items.string.not_empty: true\n  ves.io.schema.rules.repeated.max_items: 16\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " A list of exact values to match the input against.\n\nExample: - \"['new york', 'london', 'sydney', 'tokyo', 'cairo']\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.max_bytes: 256\n  ves.io.schema.rules.repeated.items.string.not_empty: true\n  ves.io.schema.rules.repeated.max_items: 64\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "exact values",
-                    "maxItems": 16,
+                    "maxItems": 64,
                     "items": {
                         "type": "string",
                         "maxLength": 256
@@ -5951,7 +5939,7 @@ var APISwaggerJSON string = `{
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.repeated.items.string.max_bytes": "256",
                         "ves.io.schema.rules.repeated.items.string.not_empty": "true",
-                        "ves.io.schema.rules.repeated.max_items": "16",
+                        "ves.io.schema.rules.repeated.max_items": "64",
                         "ves.io.schema.rules.repeated.unique": "true"
                     }
                 },
@@ -5999,9 +5987,9 @@ var APISwaggerJSON string = `{
             "properties": {
                 "exact_values": {
                     "type": "array",
-                    "description": " A list of exact values to match the input against.\n\nExample: - \"['new york', 'london', 'sydney', 'tokyo', 'cairo']\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.max_bytes: 256\n  ves.io.schema.rules.repeated.items.string.not_empty: true\n  ves.io.schema.rules.repeated.max_items: 16\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " A list of exact values to match the input against.\n\nExample: - \"['new york', 'london', 'sydney', 'tokyo', 'cairo']\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.max_bytes: 256\n  ves.io.schema.rules.repeated.items.string.not_empty: true\n  ves.io.schema.rules.repeated.max_items: 64\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "exact values",
-                    "maxItems": 16,
+                    "maxItems": 64,
                     "items": {
                         "type": "string",
                         "maxLength": 256
@@ -6011,7 +5999,7 @@ var APISwaggerJSON string = `{
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.repeated.items.string.max_bytes": "256",
                         "ves.io.schema.rules.repeated.items.string.not_empty": "true",
-                        "ves.io.schema.rules.repeated.max_items": "16",
+                        "ves.io.schema.rules.repeated.max_items": "64",
                         "ves.io.schema.rules.repeated.unique": "true"
                     }
                 },
@@ -6455,7 +6443,6 @@ var APISwaggerJSON string = `{
             "description": "Transformers to be applied on the part of the request before matching.\n\n - TRANSFORMER_NONE: transformer none\n\nNo transformers enabled\n - LOWER_CASE: lower case\n\nConvert string to lower case\n - UPPER_CASE: upper case\n\nConvert string to upper case\n - BASE64_DECODE: base64 decode\n\nDecode string assuming base64 encoding\n - NORMALIZE_PATH: normalize path\n\nNormalize URL path so that /a/b/../c will be transformed to /a/c\n - REMOVE_WHITESPACE: remove whitespace\n\nRemove whitespaces\n - URL_DECODE: URL decode\n\nDecode string assuming URL encoding as per rfc1738\n - TRIM_LEFT: trim left\n\nRemove whitespace from the left side of the input string\n - TRIM_RIGHT: trim right\n\nRemove whitespace from the right side of the input string\n - TRIM: trim\n\nRemove whitespace from the both sides of the input string",
             "title": "Transformer",
             "enum": [
-                "TRANSFORMER_NONE",
                 "LOWER_CASE",
                 "UPPER_CASE",
                 "BASE64_DECODE",
@@ -6499,9 +6486,7 @@ var APISwaggerJSON string = `{
             "title": "RateLimitPeriodUnit",
             "enum": [
                 "SECOND",
-                "MINUTE",
-                "HOUR",
-                "DAY"
+                "MINUTE"
             ],
             "default": "SECOND",
             "x-displayname": "Rate Limit Period Unit",
@@ -6860,6 +6845,19 @@ var APISwaggerJSON string = `{
                     "x-ves-example": "value"
                 }
             }
+        },
+        "schemaBotHttpMethod": {
+            "type": "string",
+            "description": "x-displayName: \"HTTP Method\"\nSpecifies the HTTP method used to access a resource.\n\n - METHOD_ANY: x-displayName: \"ANY\"\nAny HTTP Method\n - METHOD_GET: x-displayName: \"GET(XHR/Fetch)\"\nGET method for XMLHttpRequest or Fetch\n - METHOD_POST: x-displayName: \"POST\"\nPOST method\n - METHOD_PUT: x-displayName: \"PUT\"\nPUT method\n - METHOD_GET_DOCUMENT: x-displayName: \"GET(Document)\"\nGET method for HTML document",
+            "title": "BotHttpMethod",
+            "enum": [
+                "METHOD_ANY",
+                "METHOD_GET",
+                "METHOD_POST",
+                "METHOD_PUT",
+                "METHOD_GET_DOCUMENT"
+            ],
+            "default": "METHOD_ANY"
         },
         "schemaBufferConfigType": {
             "type": "object",
@@ -8281,6 +8279,51 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "schemaviewsDownstreamTlsParamsType": {
+            "type": "object",
+            "description": "TLS parameters",
+            "title": "DownstreamTlsParamsType",
+            "x-displayname": "TLS Parameters",
+            "x-ves-oneof-field-mtls_choice": "[\"no_mtls\",\"use_mtls\"]",
+            "x-ves-proto-message": "ves.io.schema.views.DownstreamTlsParamsType",
+            "properties": {
+                "no_mtls": {
+                    "description": "Exclusive with [use_mtls]\n",
+                    "title": "No mTLS",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Disable"
+                },
+                "tls_certificates": {
+                    "type": "array",
+                    "description": " Set of TLS certificates\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 16\n  ves.io.schema.rules.repeated.min_items: 1\n",
+                    "title": "tls_certificates",
+                    "minItems": 1,
+                    "maxItems": 16,
+                    "items": {
+                        "$ref": "#/definitions/schemaTlsCertificateType"
+                    },
+                    "x-displayname": "TLS Certificates",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.max_items": "16",
+                        "ves.io.schema.rules.repeated.min_items": "1"
+                    }
+                },
+                "tls_config": {
+                    "description": " Configuration of TLS settings such as min/max TLS version and ciphersuites",
+                    "title": "TLS Config",
+                    "$ref": "#/definitions/viewsTlsConfig",
+                    "x-displayname": "TLS"
+                },
+                "use_mtls": {
+                    "description": "Exclusive with [no_mtls]\n",
+                    "title": "Use mTLS",
+                    "$ref": "#/definitions/viewsDownstreamTlsValidationContext",
+                    "x-displayname": "Enable"
+                }
+            }
+        },
         "schemaviewsObjectRefType": {
             "type": "object",
             "description": "This type establishes a direct reference from one object(the referrer) to another(the referred).\nSuch a reference is in form of tenant/namespace/name",
@@ -8540,6 +8583,44 @@ var APISwaggerJSON string = `{
                     "title": "minimum_protocol_version",
                     "$ref": "#/definitions/schemaTlsProtocol",
                     "x-displayname": "Minimum TLS version"
+                }
+            }
+        },
+        "viewsDownstreamTlsValidationContext": {
+            "type": "object",
+            "description": "Validation context for downstream client TLS connections",
+            "title": "DownstreamTlsValidationContext",
+            "x-displayname": "Clients TLS validation context",
+            "x-ves-oneof-field-crl_choice": "[\"crl\",\"no_crl\"]",
+            "x-ves-proto-message": "ves.io.schema.views.DownstreamTlsValidationContext",
+            "properties": {
+                "crl": {
+                    "description": "Exclusive with [no_crl]\n\n Client certificate is verified against CRL.\n Specify the CRL server information to download the certificate revocation list",
+                    "title": "Verify client certificate with CRL",
+                    "$ref": "#/definitions/schemaviewsObjectRefType",
+                    "x-displayname": "CRL"
+                },
+                "no_crl": {
+                    "description": "Exclusive with [crl]\n Client certificate revocation status is not verified",
+                    "title": "No client certificate verification with CRL",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "No CRL"
+                },
+                "trusted_ca_url": {
+                    "type": "string",
+                    "description": " The URL for a trust store\n\nExample: - \"value\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_bytes: 131072\n  ves.io.schema.rules.string.min_bytes: 1\n  ves.io.schema.rules.string.truststore_url: true\n",
+                    "title": "trusted_ca_url",
+                    "minLength": 1,
+                    "maxLength": 131072,
+                    "x-displayname": "Trusted CA",
+                    "x-ves-example": "value",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.max_bytes": "131072",
+                        "ves.io.schema.rules.string.min_bytes": "1",
+                        "ves.io.schema.rules.string.truststore_url": "true"
+                    }
                 }
             }
         },
@@ -8859,51 +8940,6 @@ var APISwaggerJSON string = `{
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true"
                     }
-                }
-            }
-        },
-        "viewshttp_loadbalancerDownstreamTlsParamsType": {
-            "type": "object",
-            "description": "TLS parameters for HTTP load balancer.",
-            "title": "DownstreamTlsParamsType",
-            "x-displayname": "TLS Parameters",
-            "x-ves-oneof-field-mtls_choice": "[\"no_mtls\",\"use_mtls\"]",
-            "x-ves-proto-message": "ves.io.schema.views.http_loadbalancer.DownstreamTlsParamsType",
-            "properties": {
-                "no_mtls": {
-                    "description": "Exclusive with [use_mtls]\n",
-                    "title": "No mTLS",
-                    "$ref": "#/definitions/schemaEmpty",
-                    "x-displayname": "Disable"
-                },
-                "tls_certificates": {
-                    "type": "array",
-                    "description": " Set of TLS certificates\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 16\n  ves.io.schema.rules.repeated.min_items: 1\n",
-                    "title": "tls_certificates",
-                    "minItems": 1,
-                    "maxItems": 16,
-                    "items": {
-                        "$ref": "#/definitions/schemaTlsCertificateType"
-                    },
-                    "x-displayname": "TLS Certificates",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true",
-                        "ves.io.schema.rules.repeated.max_items": "16",
-                        "ves.io.schema.rules.repeated.min_items": "1"
-                    }
-                },
-                "tls_config": {
-                    "description": " Configuration of TLS settings such as min/max TLS version and ciphersuites",
-                    "title": "TLS Config",
-                    "$ref": "#/definitions/viewsTlsConfig",
-                    "x-displayname": "TLS"
-                },
-                "use_mtls": {
-                    "description": "Exclusive with [no_mtls]\n",
-                    "title": "Use mTLS",
-                    "$ref": "#/definitions/http_loadbalancerDownstreamTlsValidationContext",
-                    "x-displayname": "Enable"
                 }
             }
         },

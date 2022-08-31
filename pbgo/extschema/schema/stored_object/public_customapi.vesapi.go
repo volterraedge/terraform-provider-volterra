@@ -190,7 +190,8 @@ func (c *CustomAPIRestClient) doRPCCreateObject(ctx context.Context, callOpts *s
 	}
 	defer rsp.Body.Close()
 
-	if rsp.StatusCode != http.StatusOK {
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
 		body, err := ioutil.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
 	}
@@ -201,7 +202,7 @@ func (c *CustomAPIRestClient) doRPCCreateObject(ctx context.Context, callOpts *s
 	}
 	pbRsp := &CreateObjectResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
-		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.stored_object.CreateObjectResponse", body)
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.stored_object.CreateObjectResponse", body)
 
 	}
 	if callOpts.OutCallResponse != nil {
@@ -276,7 +277,8 @@ func (c *CustomAPIRestClient) doRPCDeleteObject(ctx context.Context, callOpts *s
 	}
 	defer rsp.Body.Close()
 
-	if rsp.StatusCode != http.StatusOK {
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
 		body, err := ioutil.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
 	}
@@ -287,7 +289,7 @@ func (c *CustomAPIRestClient) doRPCDeleteObject(ctx context.Context, callOpts *s
 	}
 	pbRsp := &DeleteObjectResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
-		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.stored_object.DeleteObjectResponse", body)
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.stored_object.DeleteObjectResponse", body)
 
 	}
 	if callOpts.OutCallResponse != nil {
@@ -361,7 +363,8 @@ func (c *CustomAPIRestClient) doRPCGetObject(ctx context.Context, callOpts *serv
 	}
 	defer rsp.Body.Close()
 
-	if rsp.StatusCode != http.StatusOK {
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
 		body, err := ioutil.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
 	}
@@ -372,7 +375,7 @@ func (c *CustomAPIRestClient) doRPCGetObject(ctx context.Context, callOpts *serv
 	}
 	pbRsp := &GetObjectResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
-		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.stored_object.GetObjectResponse", body)
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.stored_object.GetObjectResponse", body)
 
 	}
 	if callOpts.OutCallResponse != nil {
@@ -447,7 +450,8 @@ func (c *CustomAPIRestClient) doRPCListObjects(ctx context.Context, callOpts *se
 	}
 	defer rsp.Body.Close()
 
-	if rsp.StatusCode != http.StatusOK {
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
 		body, err := ioutil.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
 	}
@@ -458,7 +462,7 @@ func (c *CustomAPIRestClient) doRPCListObjects(ctx context.Context, callOpts *se
 	}
 	pbRsp := &ListObjectsResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
-		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.stored_object.ListObjectsResponse", body)
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.stored_object.ListObjectsResponse", body)
 
 	}
 	if callOpts.OutCallResponse != nil {
@@ -767,7 +771,7 @@ var CustomAPISwaggerJSON string = `{
     "paths": {
         "/public/namespaces/{namespace}/stored_objects/{object_type}": {
             "get": {
-                "summary": "ListObjects",
+                "summary": "Get List Of Stored Objects",
                 "description": "ListObjects is an API to list objects in object store",
                 "operationId": "ves.io.schema.stored_object.CustomAPI.ListObjects",
                 "responses": {
@@ -889,7 +893,7 @@ var CustomAPISwaggerJSON string = `{
         },
         "/public/namespaces/{namespace}/stored_objects/{object_type}/{name}": {
             "delete": {
-                "summary": "DeleteObjects",
+                "summary": "Delete Stored Object(s)",
                 "description": "DeleteObjects is an API to delete object(s) in object store",
                 "operationId": "ves.io.schema.stored_object.CustomAPI.DeleteObject",
                 "responses": {
@@ -1001,7 +1005,7 @@ var CustomAPISwaggerJSON string = `{
                 "x-ves-proto-rpc": "ves.io.schema.stored_object.CustomAPI.DeleteObject"
             },
             "put": {
-                "summary": "CreateObject",
+                "summary": "Create Stored Object",
                 "description": "CreateObject is an API to upload an object to generic object store. Objects are immutable, a new version is created when the content is updated.",
                 "operationId": "ves.io.schema.stored_object.CustomAPI.CreateObject",
                 "responses": {
@@ -1109,7 +1113,7 @@ var CustomAPISwaggerJSON string = `{
         },
         "/public/namespaces/{namespace}/stored_objects/{object_type}/{name}/{version}": {
             "get": {
-                "summary": "GetObject",
+                "summary": "Get Stored Object",
                 "description": "GetObject is an API to download an object from object store",
                 "operationId": "ves.io.schema.stored_object.CustomAPI.GetObject",
                 "responses": {
@@ -1212,7 +1216,7 @@ var CustomAPISwaggerJSON string = `{
                 "x-ves-proto-rpc": "ves.io.schema.stored_object.CustomAPI.GetObject"
             },
             "delete": {
-                "summary": "DeleteObjects",
+                "summary": "Delete Stored Object(s)",
                 "description": "DeleteObjects is an API to delete object(s) in object store",
                 "operationId": "ves.io.schema.stored_object.CustomAPI.DeleteObject",
                 "responses": {

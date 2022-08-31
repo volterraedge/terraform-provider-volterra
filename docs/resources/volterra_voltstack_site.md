@@ -24,32 +24,25 @@ resource "volterra_voltstack_site" "example" {
   default_blocked_services = true
 
   // One of the arguments from this list "no_bond_devices bond_device_list" must be set
+  no_bond_devices = true
 
-  bond_device_list {
-    bond_devices {
-      devices = ["eth0"]
-
-      // One of the arguments from this list "lacp active_backup" must be set
-
-      lacp {
-        rate = "30"
-      }
-      link_polling_interval = "1000"
-      link_up_delay         = "200"
-      name                  = "bond0"
-    }
-  }
   // One of the arguments from this list "disable_gpu enable_gpu enable_vgpu" must be set
   disable_gpu = true
+
   // One of the arguments from this list "no_k8s_cluster k8s_cluster" must be set
   no_k8s_cluster = true
+
   // One of the arguments from this list "logs_streaming_disabled log_receiver" must be set
   logs_streaming_disabled = true
+
   master_nodes = ["master-0"]
+
   // One of the arguments from this list "default_network_config custom_network_config" must be set
   default_network_config = true
+
   // One of the arguments from this list "default_storage_config custom_storage_config" must be set
   default_storage_config = true
+
   // One of the arguments from this list "deny_all_usb allow_all_usb usb_policy" must be set
   deny_all_usb          = true
   volterra_certified_hw = ["isv-8000-series-voltstack-combo"]
@@ -112,7 +105,11 @@ Argument Reference
 
 `default_network_config` - (Optional) Use default networking configuration based on certified hardware. (bool).
 
+`offline_survivability_mode` - (Optional) Enable/Disable offline survivability mode. See [Offline Survivability Mode ](#offline-survivability-mode) below for details.
+
 `os` - (Optional) Operating System Details. See [Os ](#os) below for details.
+
+`site_local_control_plane` - (Optional) Enable/Disable site local control plane. See [Site Local Control Plane ](#site-local-control-plane) below for details.
 
 `custom_storage_config` - (Optional) Use custom storage configuration. See [Custom Storage Config ](#custom-storage-config) below for details.
 
@@ -386,6 +383,10 @@ Use default configuration for site local network.
 
 Interface configuration is done based on certified hardware for this site.
 
+### Default Local Control Plane
+
+Enable Site Local Control Plane.
+
 ### Default Os Version
 
 Will assign latest available OS version.
@@ -493,6 +494,10 @@ Forward Proxy is enabled for this connector.
 ### Enable Interception
 
 Enable Interception.
+
+### Enable Offline Survivability Mode
+
+Enabling offline survivability reduces default security of a CE..
 
 ### Enable Vgpu
 
@@ -738,9 +743,17 @@ No TLS interception is enabled for this network connector.
 
 Interface does not have an IPv6 Address..
 
+### No Local Control Plane
+
+Disable Site Local Control Plane.
+
 ### No Network Policy
 
 Firewall Policy is disabled for this site..
+
+### No Offline Survivability Mode
+
+Disable Offline Survivability Mode.
 
 ### No Static Routes
 
@@ -767,6 +780,14 @@ Static IP configuration for the Node.
 ### Not Primary
 
 This interface is not primary.
+
+### Offline Survivability Mode
+
+Enable/Disable offline survivability mode.
+
+`enable_offline_survivability_mode` - (Optional) Enabling offline survivability reduces default security of a CE. (bool).
+
+`no_offline_survivability_mode` - (Optional) Disable Offline Survivability Mode (bool).
 
 ### Openebs Enterprise
 
@@ -845,6 +866,14 @@ tenant - (Optional) then tenant will hold the referred object's(e.g. route's) te
 ### Same As Dgw
 
 DNS server address is same as default gateway address.
+
+### Site Local Control Plane
+
+Enable/Disable site local control plane.
+
+`default_local_control_plane` - (Optional) Enable Site Local Control Plane (bool).
+
+`no_local_control_plane` - (Optional) Disable Site Local Control Plane (bool).
 
 ### Site Local Inside Network
 

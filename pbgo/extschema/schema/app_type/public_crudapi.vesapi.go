@@ -1595,16 +1595,7 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 		item.Disabled = o.GetMetadata().GetDisable()
 
 		if len(req.ReportFields) > 0 {
-			noDBForm, _ := flags.GetEnvGetRspNoDBForm()
-			if !noDBForm {
-				item.Object = o.Object
-				sf.Logger().Alert(svcfw.GetResponseInDBForm,
-					log.MinorAlert,
-					zap.String("user", server.UserFromContext(ctx)),
-					zap.String("useragent", server.UseragentStrFromContext(ctx)),
-					zap.String("operation", "List"),
-				)
-			}
+			item.Object = o.Object
 
 			item.Metadata = &ves_io_schema.ObjectGetMetaType{}
 			item.Metadata.FromObjectMetaType(o.Metadata)
@@ -1683,7 +1674,7 @@ var APISwaggerJSON string = `{
     "paths": {
         "/public/namespaces/{metadata.namespace}/app_types": {
             "post": {
-                "summary": "Create App type",
+                "summary": "Create App Type",
                 "description": "Create App type will create the configuration in namespace metadata.namespace",
                 "operationId": "ves.io.schema.app_type.API.Create",
                 "responses": {
@@ -1775,7 +1766,7 @@ var APISwaggerJSON string = `{
         },
         "/public/namespaces/{metadata.namespace}/app_types/{metadata.name}": {
             "put": {
-                "summary": "Replace App type",
+                "summary": "Replace App Type",
                 "description": "Update the configuration by replacing the existing spec with the provided one.\nFor read-then-write operations a resourceVersion mismatch will occur if the object was modified between the read and write.",
                 "operationId": "ves.io.schema.app_type.API.Replace",
                 "responses": {
@@ -1875,7 +1866,7 @@ var APISwaggerJSON string = `{
         },
         "/public/namespaces/{namespace}/app_types": {
             "get": {
-                "summary": "List",
+                "summary": "List App Type",
                 "description": "List the set of app_type in a namespace",
                 "operationId": "ves.io.schema.app_type.API.List",
                 "responses": {
@@ -1991,7 +1982,7 @@ var APISwaggerJSON string = `{
         },
         "/public/namespaces/{namespace}/app_types/{name}": {
             "get": {
-                "summary": "Get App type",
+                "summary": "Get App Type",
                 "description": "Get App type will read the configuration from namespace metadata.namespace",
                 "operationId": "ves.io.schema.app_type.API.Get",
                 "responses": {
@@ -2095,7 +2086,7 @@ var APISwaggerJSON string = `{
                 "x-ves-proto-rpc": "ves.io.schema.app_type.API.Get"
             },
             "delete": {
-                "summary": "Delete",
+                "summary": "Delete App Type",
                 "description": "Delete the specified app_type",
                 "operationId": "ves.io.schema.app_type.API.Delete",
                 "responses": {

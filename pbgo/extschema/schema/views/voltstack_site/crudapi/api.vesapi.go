@@ -2729,7 +2729,8 @@ var APISwaggerJSON string = `{
             "description": "BGP Peer parameters",
             "title": "Peer",
             "x-displayname": "BGP Peer",
-            "x-ves-displayorder": "1,2",
+            "x-ves-displayorder": "1,2,5",
+            "x-ves-oneof-field-passive_choice": "[\"passive_mode_disabled\",\"passive_mode_enabled\"]",
             "x-ves-oneof-field-type_choice": "[\"external\"]",
             "x-ves-proto-message": "ves.io.schema.bgp.Peer",
             "properties": {
@@ -2748,6 +2749,18 @@ var APISwaggerJSON string = `{
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true"
                     }
+                },
+                "passive_mode_disabled": {
+                    "description": "Exclusive with [passive_mode_enabled]\n",
+                    "title": "passive_mode_disabled",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Disabled"
+                },
+                "passive_mode_enabled": {
+                    "description": "Exclusive with [passive_mode_disabled]\n",
+                    "title": "passive_mode_enabled",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Enabled"
                 }
             }
         },
@@ -6606,6 +6619,23 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "schemaviewsLocalControlPlaneType": {
+            "type": "object",
+            "description": "x-displayName: \"Site Local Control Plane\"\nSite Local Control Plane",
+            "title": "LocalControlPlaneType",
+            "properties": {
+                "default_local_control_plane": {
+                    "description": "x-displayName: \"Enable Site Local Control Plane\"\nEnable Site Local Control Plane",
+                    "title": "Disable Site Local Control Plane",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "no_local_control_plane": {
+                    "description": "x-displayName: \"Disable Site Local Control Plane\"\nDisable Site Local Control Plane",
+                    "title": "Disable Site Local Control Plane",
+                    "$ref": "#/definitions/schemaEmpty"
+                }
+            }
+        },
         "schemaviewsObjectRefType": {
             "type": "object",
             "description": "This type establishes a direct reference from one object(the referrer) to another(the referred).\nSuch a reference is in form of tenant/namespace/name",
@@ -6685,6 +6715,23 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "siteReMeshGroup": {
+            "type": "object",
+            "description": "x-displayName: \"RE Mesh Group\"\nConfigures how ip-fabric network is connected between the RE sites.\nRE sites in same group are connected using connection-type configured for the group\nDefault connection-type between RE sites is IPSec",
+            "title": "RE Mesh Group",
+            "properties": {
+                "ipsec_group": {
+                    "type": "string",
+                    "description": "x-displayName: \"IPSec Connection\"\nSites with same ipsec_group are connected using IPSec tunnels",
+                    "title": "IPSec Connection"
+                },
+                "l3vpn_group": {
+                    "type": "string",
+                    "description": "x-displayName: \"L3VPN Connection\"\nSites with same l3vpn_group are connected using L3VPN",
+                    "title": "L3VPN Connection"
+                }
+            }
+        },
         "viewsGlobalConnectorType": {
             "type": "object",
             "description": "Global network reference for direct connection",
@@ -6701,6 +6748,23 @@ var APISwaggerJSON string = `{
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true"
                     }
+                }
+            }
+        },
+        "viewsOfflineSurvivabilityModeType": {
+            "type": "object",
+            "description": "x-displayName: \"Offline Survivability Mode Type\"\nOffline Survivability Mode",
+            "title": "Offline Survivability Mode",
+            "properties": {
+                "enable_offline_survivability_mode": {
+                    "description": "x-displayName: \"Enable Offline Survivability Mode\"\nEnable Offline Survivability Mode.\nWhen it is enabled, a CE can work without internet connection for upto 3 days.\nThis can only be enabled at site creation time. But once enabled, offline survivability mode cannot be disabled later.\nEnabling offline survivability reduces default security of a CE.",
+                    "title": "Enable Offline Survivability Mode",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "no_offline_survivability_mode": {
+                    "description": "x-displayName: \"Disable Offline Survivability Mode\"\nDisable Offline Survivability Mode",
+                    "title": "Disable Offline Survivability Mode",
+                    "$ref": "#/definitions/schemaEmpty"
                 }
             }
         },

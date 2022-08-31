@@ -2598,21 +2598,22 @@ var APISwaggerJSON string = `{
         "azure_vnet_siteAzureHubVnetType": {
             "type": "object",
             "description": "Hub VNet type",
-            "title": "Azure Hub Vnet Type",
+            "title": "Azure Hub VNet Type",
             "x-displayname": "Hub VNet type",
             "x-ves-proto-message": "ves.io.schema.views.azure_vnet_site.AzureHubVnetType",
             "properties": {
                 "spoke_vnets": {
                     "type": "array",
-                    "description": " Spoke VNets\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 500\n",
-                    "title": "Spoke Vnets Peering",
-                    "maxItems": 500,
+                    "description": " Spoke VNet Peering\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 100\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "title": "Spoke VNet Peering",
+                    "maxItems": 100,
                     "items": {
                         "$ref": "#/definitions/azure_vnet_siteVnetPeeringType"
                     },
-                    "x-displayname": "Spoke Vnets Peering",
+                    "x-displayname": "Spoke VNet Peering",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.repeated.max_items": "500"
+                        "ves.io.schema.rules.repeated.max_items": "100",
+                        "ves.io.schema.rules.repeated.unique": "true"
                     }
                 }
             }
@@ -2683,10 +2684,10 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Connect Global Networks"
                 },
                 "hub": {
-                    "description": "Exclusive with [not_hub]\n This Vnet is a hub vnet",
-                    "title": "Hub",
+                    "description": "Exclusive with [not_hub]\n This VNet is a hub VNet",
+                    "title": "Hub VNet",
                     "$ref": "#/definitions/azure_vnet_siteAzureHubVnetType",
-                    "x-displayname": "Hub"
+                    "x-displayname": "Hub VNet"
                 },
                 "inside_static_routes": {
                     "description": "Exclusive with [no_inside_static_routes]\n Manage static routes for inside network.",
@@ -2737,10 +2738,10 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Ingress/Egress Gateway (Two Interface) Node information"
                 },
                 "not_hub": {
-                    "description": "Exclusive with [hub]\n This Vnet isn't a hub vnet",
-                    "title": "Not hub",
+                    "description": "Exclusive with [hub]\n This VNet is a standalone VNet",
+                    "title": "Standalone VNet",
                     "$ref": "#/definitions/schemaEmpty",
-                    "x-displayname": "Not hub"
+                    "x-displayname": "Standalone VNet"
                 },
                 "outside_static_routes": {
                     "description": "Exclusive with [no_outside_static_routes]\n Manage static routes for outside network.",
@@ -2840,10 +2841,10 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Connect Global Networks"
                 },
                 "hub": {
-                    "description": "Exclusive with [not_hub]\n This Vnet is a hub vnet",
-                    "title": "Hub",
+                    "description": "Exclusive with [not_hub]\n This VNet is a hub VNet",
+                    "title": "Hub VNet",
                     "$ref": "#/definitions/azure_vnet_siteAzureHubVnetType",
-                    "x-displayname": "Hub"
+                    "x-displayname": "Hub VNet"
                 },
                 "inside_static_routes": {
                     "description": "Exclusive with [no_inside_static_routes]\n Manage static routes for inside network.",
@@ -2888,10 +2889,10 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Disable Static Routes"
                 },
                 "not_hub": {
-                    "description": "Exclusive with [hub]\n This Vnet isn't a hub vnet",
-                    "title": "Not hub",
+                    "description": "Exclusive with [hub]\n This VNet is a standalone VNet",
+                    "title": "Standalone VNet",
                     "$ref": "#/definitions/schemaEmpty",
-                    "x-displayname": "Not hub"
+                    "x-displayname": "Standalone VNet"
                 },
                 "outside_static_routes": {
                     "description": "Exclusive with [no_outside_static_routes]\n Manage static routes for outside network.",
@@ -2918,7 +2919,6 @@ var APISwaggerJSON string = `{
             "description": "Single interface Azure ingress site",
             "title": "Azure Ingress Gateway on Alternate Region",
             "x-displayname": "Azure Ingress Gateway on Alternate Region",
-            "x-ves-displayorder": "2,1",
             "x-ves-proto-message": "ves.io.schema.views.azure_vnet_site.AzureVnetIngressGwARType",
             "properties": {
                 "azure_certified_hw": {
@@ -2948,7 +2948,6 @@ var APISwaggerJSON string = `{
             "description": "Single interface Azure ingress site on on Recommended Region",
             "title": "Azure Ingress Gateway on Recommended Region",
             "x-displayname": "Azure Ingress Gateway on Recommended Region",
-            "x-ves-displayorder": "2,1,3",
             "x-ves-proto-message": "ves.io.schema.views.azure_vnet_site.AzureVnetIngressGwType",
             "properties": {
                 "az_nodes": {
@@ -2981,9 +2980,9 @@ var APISwaggerJSON string = `{
         },
         "azure_vnet_siteAzureVnetSiteInfoType": {
             "type": "object",
-            "description": "Azure Vnet Site information like",
-            "title": "Azure Vnet Site Information Config",
-            "x-displayname": "Azure Vnet Site Information Config",
+            "description": "Azure VNet Site information like",
+            "title": "Azure VNet Site Information Config",
+            "x-displayname": "Azure VNet Site Information Config",
             "x-ves-proto-message": "ves.io.schema.views.azure_vnet_site.AzureVnetSiteInfoType",
             "properties": {
                 "private_ips": {
@@ -3022,13 +3021,13 @@ var APISwaggerJSON string = `{
                 },
                 "spoke_vnet_prefix_info": {
                     "type": "array",
-                    "description": " Azure Spoke Vnet Prefix Information\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 500\n",
-                    "title": "Azure Spoke Vnet Prefix Information",
+                    "description": " Azure Spoke VNet Prefix Information\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 500\n",
+                    "title": "Azure Spoke VNet Prefix Information",
                     "maxItems": 500,
                     "items": {
                         "$ref": "#/definitions/azure_vnet_siteVnetIpPrefixesType"
                     },
-                    "x-displayname": "Azure Spoke vnet Prefix Information",
+                    "x-displayname": "Azure Spoke VNet Prefix Information",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.repeated.max_items": "500"
                     }
@@ -3365,21 +3364,21 @@ var APISwaggerJSON string = `{
         },
         "azure_vnet_siteVnetIpPrefixesType": {
             "type": "object",
-            "description": "Azure Vnet IP prefixes Info",
-            "title": "Azure Vnet IP prefixes Info",
-            "x-displayname": "Azure Vnet IP prefixes Info",
+            "description": "Azure VNet IP prefixes Info",
+            "title": "Azure VNet IP prefixes Info",
+            "x-displayname": "Azure VNet IP prefixes Info",
             "x-ves-proto-message": "ves.io.schema.views.azure_vnet_site.VnetIpPrefixesType",
             "properties": {
                 "prefixes": {
                     "type": "array",
                     "description": " An unordered list of IP prefixes.\n\nExample: - \"['10.2.1.0/24', '192.168.8.0/29', '10.7.64.160/27']\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.items.string.ipv4_prefix: true\n  ves.io.schema.rules.repeated.max_items: 1024\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
-                    "title": "Vnet prefixes",
+                    "title": "VNet prefixes",
                     "minItems": 1,
                     "maxItems": 1024,
                     "items": {
                         "type": "string"
                     },
-                    "x-displayname": "Vnet Prefixes",
+                    "x-displayname": "VNet Prefixes",
                     "x-ves-example": "['10.2.1.0/24', '192.168.8.0/29', '10.7.64.160/27']",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
@@ -3391,45 +3390,45 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "vnet": {
-                    "description": " Existing Vnet Information",
-                    "title": "Vnet Info",
+                    "description": " Existing VNet Information",
+                    "title": "VNet Info",
                     "$ref": "#/definitions/viewsAzureVnetType",
-                    "x-displayname": "Vnet Info"
+                    "x-displayname": "VNet Info"
                 }
             }
         },
         "azure_vnet_siteVnetPeeringType": {
             "type": "object",
-            "description": "Vnet peering to azure vnet site",
-            "title": "Vnet Peering",
-            "x-displayname": "Vnet Peering",
+            "description": "VNet peering to azure VNet site",
+            "title": "VNet Peering",
+            "x-displayname": "VNet Peering",
             "x-ves-oneof-field-routing_choice": "[\"auto\",\"manual\"]",
             "x-ves-proto-message": "ves.io.schema.views.azure_vnet_site.VnetPeeringType",
             "properties": {
                 "auto": {
-                    "description": "Exclusive with [manual]\n setup routing for all existing subnets on spoke vnet",
+                    "description": "Exclusive with [manual]\n setup routing for all existing subnets on spoke VNet",
                     "title": "Auto Routing",
                     "$ref": "#/definitions/schemaEmpty",
                     "x-displayname": "Auto Routing"
                 },
                 "labels": {
                     "type": "object",
-                    "description": " Add Labels for each of the Vnets peered with transit vnet, these labels can be used in firewall policy\n These labels used must be from known key and label defined in shared namespace\n\nExample: - \"value\"-",
-                    "title": "Labels For Vnets Peering",
-                    "x-displayname": "Labels For Vnets Peering",
+                    "description": " Add Labels for each of the VNets peered with transit VNet, these labels can be used in firewall policy\n These labels used must be from known key and label defined in shared namespace\n\nExample: - \"value\"-",
+                    "title": "Labels For VNet's Peering",
+                    "x-displayname": "Labels For VNets Peering",
                     "x-ves-example": "value"
                 },
                 "manual": {
-                    "description": "Exclusive with [auto]\n Manually setup routing on spoke Vnet",
+                    "description": "Exclusive with [auto]\n Manually setup routing on spoke VNet",
                     "title": "Manual Routing",
                     "$ref": "#/definitions/schemaEmpty",
                     "x-displayname": "Manual Routing"
                 },
                 "vnet": {
-                    "description": " Information about existing Vnet",
-                    "title": "Vnet ID",
+                    "description": " Information about existing VNet",
+                    "title": "VNet ID",
                     "$ref": "#/definitions/viewsAzureVnetType",
-                    "x-displayname": "Vnet ID"
+                    "x-displayname": "VNet ID"
                 }
             }
         },
@@ -4237,9 +4236,7 @@ var APISwaggerJSON string = `{
             "enum": [
                 "NEXT_HOP_DEFAULT_GATEWAY",
                 "NEXT_HOP_USE_CONFIGURED",
-                "NEXT_HOP_NETWORK_INTERFACE",
-                "NEXT_HOP_DISCARD",
-                "NEXT_HOP_SNAT_TO_PUBLIC"
+                "NEXT_HOP_NETWORK_INTERFACE"
             ],
             "default": "NEXT_HOP_DEFAULT_GATEWAY",
             "x-displayname": "Nexthop Types",
@@ -5488,6 +5485,23 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "viewsOfflineSurvivabilityModeType": {
+            "type": "object",
+            "description": "x-displayName: \"Offline Survivability Mode Type\"\nOffline Survivability Mode",
+            "title": "Offline Survivability Mode",
+            "properties": {
+                "enable_offline_survivability_mode": {
+                    "description": "x-displayName: \"Enable Offline Survivability Mode\"\nEnable Offline Survivability Mode.\nWhen it is enabled, a CE can work without internet connection for upto 3 days.\nThis can only be enabled at site creation time. But once enabled, offline survivability mode cannot be disabled later.\nEnabling offline survivability reduces default security of a CE.",
+                    "title": "Enable Offline Survivability Mode",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "no_offline_survivability_mode": {
+                    "description": "x-displayName: \"Disable Offline Survivability Mode\"\nDisable Offline Survivability Mode",
+                    "title": "Disable Offline Survivability Mode",
+                    "$ref": "#/definitions/schemaEmpty"
+                }
+            }
+        },
         "viewsOperatingSystemType": {
             "type": "object",
             "description": "This is to specify volterra operating version choice",
@@ -5656,7 +5670,7 @@ var APISwaggerJSON string = `{
         },
         "viewsazure_vnet_siteGlobalSpecType": {
             "type": "object",
-            "description": "Shape of the Azure Vnet site specification",
+            "description": "Shape of the Azure VNet site specification",
             "title": "GlobalSpecType",
             "x-displayname": "Global Specification",
             "x-ves-oneof-field-blocked_services_choice": "[\"blocked_services\",\"default_blocked_services\"]",
@@ -5713,10 +5727,10 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Custom Blocked Services Configuration"
                 },
                 "cloud_site_info": {
-                    "description": " Azure Vnet Site information obtained after creating the site",
-                    "title": "Azure Vnet Site Info",
+                    "description": " Azure VNet Site information obtained after creating the site",
+                    "title": "Azure VNet Site Info",
                     "$ref": "#/definitions/azure_vnet_siteAzureVnetSiteInfoType",
-                    "x-displayname": "Azure Vnet Site Info"
+                    "x-displayname": "Azure VNet Site Info"
                 },
                 "coordinates": {
                     "description": " Site longitude and latitude co-ordinates",
@@ -5742,25 +5756,25 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "ingress_egress_gw": {
-                    "description": "Exclusive with [ingress_egress_gw_ar ingress_gw ingress_gw_ar voltstack_cluster voltstack_cluster_ar]\n Two interface site is useful when site is used as ingress/egress gateway to the Vnet.",
+                    "description": "Exclusive with [ingress_egress_gw_ar ingress_gw ingress_gw_ar voltstack_cluster voltstack_cluster_ar]\n Two interface site is useful when site is used as ingress/egress gateway to the VNet.",
                     "title": "Ingress/Egress Gateway on Recommended Region",
                     "$ref": "#/definitions/azure_vnet_siteAzureVnetIngressEgressGwType",
                     "x-displayname": "Ingress/Egress Gateway (Two Interface) on Recommended Region"
                 },
                 "ingress_egress_gw_ar": {
-                    "description": "Exclusive with [ingress_egress_gw ingress_gw ingress_gw_ar voltstack_cluster voltstack_cluster_ar]\n Two interface site is useful when site is used as ingress/egress gateway to the Vnet.",
+                    "description": "Exclusive with [ingress_egress_gw ingress_gw ingress_gw_ar voltstack_cluster voltstack_cluster_ar]\n Two interface site is useful when site is used as ingress/egress gateway to the VNet.",
                     "title": "Ingress/Egress Gateway on Alternate Region",
                     "$ref": "#/definitions/azure_vnet_siteAzureVnetIngressEgressGwARType",
                     "x-displayname": "Ingress/Egress Gateway (Two Interface) on Alternate Region"
                 },
                 "ingress_gw": {
-                    "description": "Exclusive with [ingress_egress_gw ingress_egress_gw_ar ingress_gw_ar voltstack_cluster voltstack_cluster_ar]\n One interface site is useful when site is only used as ingress gateway to the Vnet.",
+                    "description": "Exclusive with [ingress_egress_gw ingress_egress_gw_ar ingress_gw_ar voltstack_cluster voltstack_cluster_ar]\n One interface site is useful when site is only used as ingress gateway to the VNet.",
                     "title": "Ingress Gateway on Recommended Region",
                     "$ref": "#/definitions/azure_vnet_siteAzureVnetIngressGwType",
                     "x-displayname": "Ingress Gateway (One Interface) on Recommended Region"
                 },
                 "ingress_gw_ar": {
-                    "description": "Exclusive with [ingress_egress_gw ingress_egress_gw_ar ingress_gw voltstack_cluster voltstack_cluster_ar]\n One interface site is useful when site is only used as ingress gateway to the Vnet.",
+                    "description": "Exclusive with [ingress_egress_gw ingress_egress_gw_ar ingress_gw voltstack_cluster voltstack_cluster_ar]\n One interface site is useful when site is only used as ingress gateway to the VNet.",
                     "title": "Ingress Gateway on Alternate Region",
                     "$ref": "#/definitions/azure_vnet_siteAzureVnetIngressGwARType",
                     "x-displayname": "Ingress Gateway (One Interface) on Alternate Region"
@@ -5869,7 +5883,7 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "vnet": {
-                    "description": " Choice of using existing Vnet or create new Vnet\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "description": " Choice of using existing VNet or create new VNet\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "Vnet",
                     "$ref": "#/definitions/viewsAzureVnetChoiceType",
                     "x-displayname": "Vnet",

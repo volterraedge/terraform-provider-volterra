@@ -1595,16 +1595,7 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 		item.Disabled = o.GetMetadata().GetDisable()
 
 		if len(req.ReportFields) > 0 {
-			noDBForm, _ := flags.GetEnvGetRspNoDBForm()
-			if !noDBForm {
-				item.Object = o.Object
-				sf.Logger().Alert(svcfw.GetResponseInDBForm,
-					log.MinorAlert,
-					zap.String("user", server.UserFromContext(ctx)),
-					zap.String("useragent", server.UseragentStrFromContext(ctx)),
-					zap.String("operation", "List"),
-				)
-			}
+			item.Object = o.Object
 
 			item.Metadata = &ves_io_schema.ObjectGetMetaType{}
 			item.Metadata.FromObjectMetaType(o.Metadata)
@@ -1775,7 +1766,7 @@ var APISwaggerJSON string = `{
         },
         "/public/namespaces/{metadata.namespace}/global_log_receivers/{metadata.name}": {
             "put": {
-                "summary": "Replace Log Receiver",
+                "summary": "Replace Global Log Receiver",
                 "description": "Replaces the content of an Global Log Receiver object",
                 "operationId": "ves.io.schema.global_log_receiver.API.Replace",
                 "responses": {
@@ -1875,7 +1866,7 @@ var APISwaggerJSON string = `{
         },
         "/public/namespaces/{namespace}/global_log_receivers": {
             "get": {
-                "summary": "List",
+                "summary": "List Global Log Receiver",
                 "description": "List the set of global_log_receiver in a namespace",
                 "operationId": "ves.io.schema.global_log_receiver.API.List",
                 "responses": {
@@ -2095,7 +2086,7 @@ var APISwaggerJSON string = `{
                 "x-ves-proto-rpc": "ves.io.schema.global_log_receiver.API.Get"
             },
             "delete": {
-                "summary": "Delete",
+                "summary": "Delete Global Log Receiver",
                 "description": "Delete the specified global_log_receiver",
                 "operationId": "ves.io.schema.global_log_receiver.API.Delete",
                 "responses": {
@@ -2193,6 +2184,209 @@ var APISwaggerJSON string = `{
         }
     },
     "definitions": {
+        "global_log_receiverAuthToken": {
+            "type": "object",
+            "description": "Authentication Token for access",
+            "title": "Token Authentication",
+            "x-displayname": "Access Token",
+            "x-ves-proto-message": "ves.io.schema.global_log_receiver.AuthToken",
+            "properties": {
+                "token": {
+                    "description": " Volterra Secret. URL for token, needs to be fetched from this path",
+                    "title": "token",
+                    "$ref": "#/definitions/schemaSecretType",
+                    "x-displayname": "Token"
+                }
+            }
+        },
+        "global_log_receiverAzureBlobConfig": {
+            "type": "object",
+            "description": "Azure Blob Configuration for Global Log Receiver",
+            "title": "Azur Blob Configuration",
+            "x-displayname": "Azure Blob Configuration",
+            "x-ves-proto-message": "ves.io.schema.global_log_receiver.AzureBlobConfig",
+            "properties": {
+                "batch": {
+                    "description": " Batch Options allow tuning of the conditions for how batches of logs are sent to the endpoint",
+                    "title": "Batch Options",
+                    "$ref": "#/definitions/global_log_receiverBatchOptionType",
+                    "x-displayname": "Batch Options"
+                },
+                "compression": {
+                    "description": " Compression Options allows selection of how data should be compressed when sent to the endpoint",
+                    "title": "Compression Options",
+                    "$ref": "#/definitions/global_log_receiverCompressionType",
+                    "x-displayname": "Compression Options"
+                },
+                "connection_string": {
+                    "description": " Azure Blob Storate Connection String.  Note that this field must contain: -AccountKey-, -AccountName- and should contain -DefaultEndpointsProtocol-\n\nExample: - \"DefaultEndpointsProtocol=https;AccountName=mylogstorage;AccountKey=SECRET;EndpointSuffix=core.windows.net\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "Azure Blob Storage Connection String",
+                    "$ref": "#/definitions/schemaSecretType",
+                    "x-displayname": "Azure Blob Storage Connection String",
+                    "x-ves-example": "DefaultEndpointsProtocol=https;AccountName=mylogstorage;AccountKey=SECRET;EndpointSuffix=core.windows.net",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                },
+                "container_name": {
+                    "type": "string",
+                    "description": " Container Name is the name of the container into which logs should be stored\n\nExample: - \"logs\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 63\n  ves.io.schema.rules.string.min_len: 3\n  ves.io.schema.rules.string.pattern: ^[A-Za-z0-9][A-Za-z0-9-]+[A-Za-z0-9]$\n",
+                    "title": "Container Name",
+                    "minLength": 3,
+                    "maxLength": 63,
+                    "x-displayname": "Container Name",
+                    "x-ves-example": "logs",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.max_len": "63",
+                        "ves.io.schema.rules.string.min_len": "3",
+                        "ves.io.schema.rules.string.pattern": "^[A-Za-z0-9][A-Za-z0-9-]+[A-Za-z0-9]$"
+                    }
+                }
+            }
+        },
+        "global_log_receiverAzureEventHubsConfig": {
+            "type": "object",
+            "description": "Azure Event Hubs Configuration for Global Log Receiver",
+            "title": "Azure Event Hubgs Configuration",
+            "x-displayname": "Azure Event Hubs Configuration",
+            "x-ves-proto-message": "ves.io.schema.global_log_receiver.AzureEventHubsConfig",
+            "properties": {
+                "connection_string": {
+                    "description": " Azure Event Hubs Connection String.\n\nExample: - \"Endpoint=sb://myhub.servicebus.windows.net/;SharedAccessKeyName=log-producer;SharedAccessKey=SECRET;EntityPath=vector\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "Azure Event Hubs Connection String",
+                    "$ref": "#/definitions/schemaSecretType",
+                    "x-displayname": "Connection String",
+                    "x-ves-example": "Endpoint=sb://myhub.servicebus.windows.net/;SharedAccessKeyName=log-producer;SharedAccessKey=SECRET;EntityPath=vector",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                },
+                "instance": {
+                    "type": "string",
+                    "description": " Event Hubs Instance name into which logs should be stored\n\nExample: - \"logs\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 63\n  ves.io.schema.rules.string.min_len: 3\n  ves.io.schema.rules.string.pattern: ^[A-Za-z0-9][A-Za-z0-9-]+[A-Za-z0-9]$\n",
+                    "title": "Event Hubs Instance",
+                    "minLength": 3,
+                    "maxLength": 63,
+                    "x-displayname": "Event Hubs Instance",
+                    "x-ves-example": "logs",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.max_len": "63",
+                        "ves.io.schema.rules.string.min_len": "3",
+                        "ves.io.schema.rules.string.pattern": "^[A-Za-z0-9][A-Za-z0-9-]+[A-Za-z0-9]$"
+                    }
+                },
+                "namespace": {
+                    "type": "string",
+                    "description": " Event Hubs Namespace is namespace with instance into which logs should be stored\n\nExample: - \"myhub\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 63\n  ves.io.schema.rules.string.min_len: 3\n  ves.io.schema.rules.string.pattern: ^[A-Za-z0-9][A-Za-z0-9-]+[A-Za-z0-9]$\n",
+                    "title": "Event Hubs Namespace",
+                    "minLength": 3,
+                    "maxLength": 63,
+                    "x-displayname": "Event Hubs Namespace",
+                    "x-ves-example": "myhub",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.max_len": "63",
+                        "ves.io.schema.rules.string.min_len": "3",
+                        "ves.io.schema.rules.string.pattern": "^[A-Za-z0-9][A-Za-z0-9-]+[A-Za-z0-9]$"
+                    }
+                }
+            }
+        },
+        "global_log_receiverBatchOptionType": {
+            "type": "object",
+            "description": "Batch Options allow tuning for how batches of logs are sent to an endpoint",
+            "title": "Batch Options",
+            "x-displayname": "Batch Options",
+            "x-ves-oneof-field-batch_bytes": "[\"max_bytes\",\"max_bytes_disabled\"]",
+            "x-ves-oneof-field-batch_events": "[\"max_events\",\"max_events_disabled\"]",
+            "x-ves-oneof-field-batch_timeout": "[\"timeout_seconds\",\"timeout_seconds_default\"]",
+            "x-ves-proto-message": "ves.io.schema.global_log_receiver.BatchOptionType",
+            "properties": {
+                "max_bytes": {
+                    "type": "integer",
+                    "description": "Exclusive with [max_bytes_disabled]\n Send batch to endpoint after the batch is equal to or larger than this many bytes\n\nExample: - \"16384\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 4096\n  ves.io.schema.rules.uint32.lte: 1048576\n",
+                    "title": "Max Bytes",
+                    "format": "int64",
+                    "x-displayname": "Max Bytes",
+                    "x-ves-example": "16384",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.gte": "4096",
+                        "ves.io.schema.rules.uint32.lte": "1048576"
+                    }
+                },
+                "max_bytes_disabled": {
+                    "description": "Exclusive with [max_bytes]\n Batch Bytes Disabled",
+                    "title": "Batch Bytes Disabled",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Batch Bytes Disabled"
+                },
+                "max_events": {
+                    "type": "integer",
+                    "description": "Exclusive with [max_events_disabled]\n Send batch to endpoint after this many log messages are in the batch\n\nExample: - \"200\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 32\n  ves.io.schema.rules.uint32.lte: 2000\n",
+                    "title": "Max Events",
+                    "format": "int64",
+                    "x-displayname": "Max Events",
+                    "x-ves-example": "200",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.gte": "32",
+                        "ves.io.schema.rules.uint32.lte": "2000"
+                    }
+                },
+                "max_events_disabled": {
+                    "description": "Exclusive with [max_events]\n Max Events Disabled",
+                    "title": "Max Events Disabled",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Max Events Disabled"
+                },
+                "timeout_seconds": {
+                    "type": "string",
+                    "description": "Exclusive with [timeout_seconds_default]\n Send batch to the endpoint after this many seconds\n\nExample: - \"600\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint64.gte: 300\n  ves.io.schema.rules.uint64.lte: 3600\n",
+                    "title": "Timeout Seconds",
+                    "format": "uint64",
+                    "x-displayname": "Timeout Seconds",
+                    "x-ves-example": "600",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint64.gte": "300",
+                        "ves.io.schema.rules.uint64.lte": "3600"
+                    }
+                },
+                "timeout_seconds_default": {
+                    "description": "Exclusive with [timeout_seconds]\n Use Default Timeout (300 seconds)",
+                    "title": "Default Timeout Seconds",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Default Timeout Seconds"
+                }
+            }
+        },
+        "global_log_receiverCompressionType": {
+            "type": "object",
+            "description": "Compression Type",
+            "title": "CompressionType",
+            "x-displayname": "Compression Type",
+            "x-ves-oneof-field-compression_choice": "[\"compression_gzip\",\"compression_none\"]",
+            "x-ves-proto-message": "ves.io.schema.global_log_receiver.CompressionType",
+            "properties": {
+                "compression_gzip": {
+                    "description": "Exclusive with [compression_none]\n Gzip Compression",
+                    "title": "Gzip Compression",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "gzip"
+                },
+                "compression_none": {
+                    "description": "Exclusive with [compression_gzip]\n No Compression",
+                    "title": "No Compression",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "none"
+                }
+            }
+        },
         "global_log_receiverCreateRequest": {
             "type": "object",
             "description": "This is the input message of the 'Create' RPC",
@@ -2243,24 +2437,116 @@ var APISwaggerJSON string = `{
             "description": "Creates a new Global Log Receiver object",
             "title": "Create Global Log Receiver",
             "x-displayname": "Create Global Log Receiver",
-            "x-ves-oneof-field-filter_choice": "[\"ns_all\",\"ns_current\"]",
-            "x-ves-oneof-field-receiver": "[\"s3_receiver\"]",
+            "x-ves-oneof-field-filter_choice": "[\"ns_all\",\"ns_current\",\"ns_list\"]",
+            "x-ves-oneof-field-receiver": "[\"azure_event_hubs_receiver\",\"azure_receiver\",\"datadog_receiver\",\"http_receiver\",\"s3_receiver\",\"splunk_receiver\"]",
             "x-ves-proto-message": "ves.io.schema.global_log_receiver.CreateSpecType",
             "properties": {
+                "azure_event_hubs_receiver": {
+                    "description": "Exclusive with [azure_receiver datadog_receiver http_receiver s3_receiver splunk_receiver]\n Send logs to Azure Event Hubs",
+                    "$ref": "#/definitions/global_log_receiverAzureEventHubsConfig",
+                    "x-displayname": "Azure Event Hubs"
+                },
+                "azure_receiver": {
+                    "description": "Exclusive with [azure_event_hubs_receiver datadog_receiver http_receiver s3_receiver splunk_receiver]\n Send logs to Azure Blob Storage",
+                    "$ref": "#/definitions/global_log_receiverAzureBlobConfig",
+                    "x-displayname": "Azure Blob Storage"
+                },
+                "datadog_receiver": {
+                    "description": "Exclusive with [azure_event_hubs_receiver azure_receiver http_receiver s3_receiver splunk_receiver]\n Send logs to a Datadog service",
+                    "$ref": "#/definitions/global_log_receiverDatadogConfig",
+                    "x-displayname": "Datadog Receiver"
+                },
+                "http_receiver": {
+                    "description": "Exclusive with [azure_event_hubs_receiver azure_receiver datadog_receiver s3_receiver splunk_receiver]\n Send logs to a generic HTTP(s) server",
+                    "$ref": "#/definitions/global_log_receiverHTTPConfig",
+                    "x-displayname": "HTTP Receiver"
+                },
                 "ns_all": {
-                    "description": "Exclusive with [ns_current]\n Select logs from all namespaces",
+                    "description": "Exclusive with [ns_current ns_list]\n Select logs from all namespaces",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Select logs from all namespaces"
                 },
                 "ns_current": {
-                    "description": "Exclusive with [ns_all]\n Select logs from current namespace",
+                    "description": "Exclusive with [ns_all ns_list]\n Select logs from current namespace",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Select logs from current namespace"
                 },
+                "ns_list": {
+                    "description": "Exclusive with [ns_all ns_current]\n Select logs in specific namespaces",
+                    "$ref": "#/definitions/global_log_receiverNSList",
+                    "x-displayname": "Select logs in specific namespaces"
+                },
                 "s3_receiver": {
-                    "description": "Exclusive with []\n S3 Receiver",
+                    "description": "Exclusive with [azure_event_hubs_receiver azure_receiver datadog_receiver http_receiver splunk_receiver]\n Send logs to an AWS S3 bucket",
                     "$ref": "#/definitions/global_log_receiverS3Config",
                     "x-displayname": "S3 Receiver"
+                },
+                "splunk_receiver": {
+                    "description": "Exclusive with [azure_event_hubs_receiver azure_receiver datadog_receiver http_receiver s3_receiver]\n Send logs to a Splunk HEC Logs service",
+                    "$ref": "#/definitions/global_log_receiverSplunkConfig",
+                    "x-displayname": "Splunk Receiver"
+                }
+            }
+        },
+        "global_log_receiverDatadogConfig": {
+            "type": "object",
+            "description": "Configuration for Datadog endpoint",
+            "title": "Datadog Configuration",
+            "x-displayname": "Datadog Configuration",
+            "x-ves-oneof-field-endpoint_choice": "[\"endpoint\",\"site\"]",
+            "x-ves-oneof-field-tls_choice": "[\"no_tls\",\"use_tls\"]",
+            "x-ves-proto-message": "ves.io.schema.global_log_receiver.DatadogConfig",
+            "properties": {
+                "batch": {
+                    "description": " Batch Options allow tuning of the conditions for how batches of logs are sent to the endpoint",
+                    "title": "Batch Options",
+                    "$ref": "#/definitions/global_log_receiverBatchOptionType",
+                    "x-displayname": "Batch Options"
+                },
+                "compression": {
+                    "description": " Compression Options allows selection of how data should be compressed when sent to the endpoint",
+                    "title": "Compression Options",
+                    "$ref": "#/definitions/global_log_receiverCompressionType",
+                    "x-displayname": "Compression Options"
+                },
+                "datadog_api_key": {
+                    "description": " Secret API key to access the datadog server\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "Datadog API Key",
+                    "$ref": "#/definitions/schemaSecretType",
+                    "x-displayname": "Datadog API Key",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                },
+                "endpoint": {
+                    "type": "string",
+                    "description": "Exclusive with [site]\n Datadog Endpoint, example: -example.com:9000-\n\nExample: - \"example.com:9000\"-",
+                    "title": "Datadog Endpoint",
+                    "x-displayname": "Datadog Endpoint",
+                    "x-ves-example": "example.com:9000"
+                },
+                "no_tls": {
+                    "description": "Exclusive with [use_tls]\n Do not use TLS for the client connection",
+                    "title": "No TLS",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disable"
+                },
+                "site": {
+                    "type": "string",
+                    "description": "Exclusive with [endpoint]\n Datadog Site, example: -datadoghq.com-\n\nExample: - \"datadoghq.com\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.hostname_or_ip: true\n",
+                    "title": "Datadog Site",
+                    "x-displayname": "Datadog Site",
+                    "x-ves-example": "datadoghq.com",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.hostname_or_ip": "true"
+                    }
+                },
+                "use_tls": {
+                    "description": "Exclusive with [no_tls]\n Use TLS for client connections to the endpoint",
+                    "title": "Use TLS",
+                    "$ref": "#/definitions/global_log_receiverTLSConfigType",
+                    "x-displayname": "Use TLS"
                 }
             }
         },
@@ -2291,6 +2577,53 @@ var APISwaggerJSON string = `{
                     "title": "namespace",
                     "x-displayname": "Namespace",
                     "x-ves-example": "ns1"
+                }
+            }
+        },
+        "global_log_receiverElasticConfig": {
+            "type": "object",
+            "description": "x-displayName: \"Splunk HEC Logs Configuration\"\nConfiguration for Elasticsearch",
+            "title": "Elasticsearch Config",
+            "properties": {
+                "auth_aws": {
+                    "description": "x-displayName: \"AWS Authentication\"\nReference to AWS Cloud Credentials for Authentication when connecting to the Elasticsearch Endpoint",
+                    "title": "AWS Authentication",
+                    "$ref": "#/definitions/schemaviewsObjectRefType"
+                },
+                "auth_basic": {
+                    "description": "x-displayName: \"Basic Authentication\"\nBasic Authentication specify that HTTP Basic Authentication should be used when connecting to the Elasticsearch endpoint",
+                    "title": "Basic Authentication",
+                    "$ref": "#/definitions/global_log_receiverHttpAuthBasic"
+                },
+                "auth_none": {
+                    "description": "x-displayName: \"None\"\nNo Authentication for the Elasticsearch endpoint",
+                    "title": "No Authentication",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "batch": {
+                    "description": "x-displayName: \"Batch Options\"\nBatch Options allow tuning of the conditions for how batches of logs are sent to the endpoint",
+                    "title": "Batch Options",
+                    "$ref": "#/definitions/global_log_receiverBatchOptionType"
+                },
+                "compression": {
+                    "description": "x-displayName: \"Compression Options\"\nCompression Options allows selection of how data should be compressed when sent to the endpoint",
+                    "title": "Compression Options",
+                    "$ref": "#/definitions/global_log_receiverCompressionType"
+                },
+                "endpoint": {
+                    "type": "string",
+                    "description": "x-displayName: \"Elasticsearch Endpoint\"\nx-required\nx-example: \"http://10.9.8.7:9000\"\nElasticsearch Endpoint URL, example -http://10.9.8.7:9000-",
+                    "title": "Elasticsearch Endpoint"
+                },
+                "no_tls": {
+                    "description": "x-displayName: \"Disable\"\nDo not use TLS for the client connection",
+                    "title": "No TLS",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "use_tls": {
+                    "description": "x-displayName: \"Use TLS\"\nUse TLS for client connections to the endpoint",
+                    "title": "Use TLS",
+                    "$ref": "#/definitions/global_log_receiverTLSConfigType"
                 }
             }
         },
@@ -2376,24 +2709,54 @@ var APISwaggerJSON string = `{
             "description": "Get the Global Log Receiver object",
             "title": "Get Global Log Receiver",
             "x-displayname": "Get Global Log Receiver",
-            "x-ves-oneof-field-filter_choice": "[\"ns_all\",\"ns_current\"]",
-            "x-ves-oneof-field-receiver": "[\"s3_receiver\"]",
+            "x-ves-oneof-field-filter_choice": "[\"ns_all\",\"ns_current\",\"ns_list\"]",
+            "x-ves-oneof-field-receiver": "[\"azure_event_hubs_receiver\",\"azure_receiver\",\"datadog_receiver\",\"http_receiver\",\"s3_receiver\",\"splunk_receiver\"]",
             "x-ves-proto-message": "ves.io.schema.global_log_receiver.GetSpecType",
             "properties": {
+                "azure_event_hubs_receiver": {
+                    "description": "Exclusive with [azure_receiver datadog_receiver http_receiver s3_receiver splunk_receiver]\n Send logs to Azure Event Hubs",
+                    "$ref": "#/definitions/global_log_receiverAzureEventHubsConfig",
+                    "x-displayname": "Azure Event Hubs"
+                },
+                "azure_receiver": {
+                    "description": "Exclusive with [azure_event_hubs_receiver datadog_receiver http_receiver s3_receiver splunk_receiver]\n Send logs to Azure Blob Storage",
+                    "$ref": "#/definitions/global_log_receiverAzureBlobConfig",
+                    "x-displayname": "Azure Blob Storage"
+                },
+                "datadog_receiver": {
+                    "description": "Exclusive with [azure_event_hubs_receiver azure_receiver http_receiver s3_receiver splunk_receiver]\n Send logs to a Datadog service",
+                    "$ref": "#/definitions/global_log_receiverDatadogConfig",
+                    "x-displayname": "Datadog Receiver"
+                },
+                "http_receiver": {
+                    "description": "Exclusive with [azure_event_hubs_receiver azure_receiver datadog_receiver s3_receiver splunk_receiver]\n Send logs to a generic HTTP(s) server",
+                    "$ref": "#/definitions/global_log_receiverHTTPConfig",
+                    "x-displayname": "HTTP Receiver"
+                },
                 "ns_all": {
-                    "description": "Exclusive with [ns_current]\n Select logs from all namespaces",
+                    "description": "Exclusive with [ns_current ns_list]\n Select logs from all namespaces",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Select logs from all namespaces"
                 },
                 "ns_current": {
-                    "description": "Exclusive with [ns_all]\n Select logs from current namespace",
+                    "description": "Exclusive with [ns_all ns_list]\n Select logs from current namespace",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Select logs from current namespace"
                 },
+                "ns_list": {
+                    "description": "Exclusive with [ns_all ns_current]\n Select logs in specific namespaces",
+                    "$ref": "#/definitions/global_log_receiverNSList",
+                    "x-displayname": "Select logs in specific namespaces"
+                },
                 "s3_receiver": {
-                    "description": "Exclusive with []\n S3 Receiver",
+                    "description": "Exclusive with [azure_event_hubs_receiver azure_receiver datadog_receiver http_receiver splunk_receiver]\n Send logs to an AWS S3 bucket",
                     "$ref": "#/definitions/global_log_receiverS3Config",
                     "x-displayname": "S3 Receiver"
+                },
+                "splunk_receiver": {
+                    "description": "Exclusive with [azure_event_hubs_receiver azure_receiver datadog_receiver http_receiver s3_receiver]\n Send logs to a Splunk HEC Logs service",
+                    "$ref": "#/definitions/global_log_receiverSplunkConfig",
+                    "x-displayname": "Splunk Receiver"
                 }
             }
         },
@@ -2402,27 +2765,154 @@ var APISwaggerJSON string = `{
             "description": "Shape of the Global Log Receiver object",
             "title": "Specification for Global Log Receiver",
             "x-displayname": "Specification",
-            "x-ves-oneof-field-filter_choice": "[\"ns_all\",\"ns_current\"]",
-            "x-ves-oneof-field-receiver": "[\"s3_receiver\"]",
+            "x-ves-oneof-field-filter_choice": "[\"ns_all\",\"ns_current\",\"ns_list\"]",
+            "x-ves-oneof-field-receiver": "[\"azure_event_hubs_receiver\",\"azure_receiver\",\"datadog_receiver\",\"http_receiver\",\"s3_receiver\",\"splunk_receiver\"]",
             "x-ves-proto-message": "ves.io.schema.global_log_receiver.GlobalSpecType",
             "properties": {
+                "azure_event_hubs_receiver": {
+                    "description": "Exclusive with [azure_receiver datadog_receiver http_receiver s3_receiver splunk_receiver]\n Send logs to Azure Event Hubs",
+                    "title": "Azure Event Hubs Receiver",
+                    "$ref": "#/definitions/global_log_receiverAzureEventHubsConfig",
+                    "x-displayname": "Azure Event Hubs"
+                },
+                "azure_receiver": {
+                    "description": "Exclusive with [azure_event_hubs_receiver datadog_receiver http_receiver s3_receiver splunk_receiver]\n Send logs to Azure Blob Storage",
+                    "title": "Azure Blob Storage Receiver",
+                    "$ref": "#/definitions/global_log_receiverAzureBlobConfig",
+                    "x-displayname": "Azure Blob Storage"
+                },
+                "datadog_receiver": {
+                    "description": "Exclusive with [azure_event_hubs_receiver azure_receiver http_receiver s3_receiver splunk_receiver]\n Send logs to a Datadog service",
+                    "title": "Datadog Receiver",
+                    "$ref": "#/definitions/global_log_receiverDatadogConfig",
+                    "x-displayname": "Datadog Receiver"
+                },
+                "http_receiver": {
+                    "description": "Exclusive with [azure_event_hubs_receiver azure_receiver datadog_receiver s3_receiver splunk_receiver]\n Send logs to a generic HTTP(s) server",
+                    "title": "HTTP Receiver",
+                    "$ref": "#/definitions/global_log_receiverHTTPConfig",
+                    "x-displayname": "HTTP Receiver"
+                },
                 "ns_all": {
-                    "description": "Exclusive with [ns_current]\n Select logs from all namespaces",
+                    "description": "Exclusive with [ns_current ns_list]\n Select logs from all namespaces",
                     "title": "Select logs from all namespaces",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Select logs from all namespaces"
                 },
                 "ns_current": {
-                    "description": "Exclusive with [ns_all]\n Select logs from current namespace",
+                    "description": "Exclusive with [ns_all ns_list]\n Select logs from current namespace",
                     "title": "Select logs from current namespace",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Select logs from current namespace"
                 },
+                "ns_list": {
+                    "description": "Exclusive with [ns_all ns_current]\n Select logs in specific namespaces",
+                    "title": "Select logs in specific namespaces",
+                    "$ref": "#/definitions/global_log_receiverNSList",
+                    "x-displayname": "Select logs in specific namespaces"
+                },
                 "s3_receiver": {
-                    "description": "Exclusive with []\n S3 Receiver",
+                    "description": "Exclusive with [azure_event_hubs_receiver azure_receiver datadog_receiver http_receiver splunk_receiver]\n Send logs to an AWS S3 bucket",
                     "title": "S3 Receiver",
                     "$ref": "#/definitions/global_log_receiverS3Config",
                     "x-displayname": "S3 Receiver"
+                },
+                "splunk_receiver": {
+                    "description": "Exclusive with [azure_event_hubs_receiver azure_receiver datadog_receiver http_receiver s3_receiver]\n Send logs to a Splunk HEC Logs service",
+                    "title": "Splunk Receiver",
+                    "$ref": "#/definitions/global_log_receiverSplunkConfig",
+                    "x-displayname": "Splunk Receiver"
+                }
+            }
+        },
+        "global_log_receiverHTTPConfig": {
+            "type": "object",
+            "description": "Configuration for HTTP endpoint",
+            "title": "HTTP Configuration",
+            "x-displayname": "HTTP Configuration",
+            "x-ves-oneof-field-auth_choice": "[\"auth_basic\",\"auth_none\",\"auth_token\"]",
+            "x-ves-oneof-field-tls_choice": "[\"no_tls\",\"use_tls\"]",
+            "x-ves-proto-message": "ves.io.schema.global_log_receiver.HTTPConfig",
+            "properties": {
+                "auth_basic": {
+                    "description": "Exclusive with [auth_none auth_token]\n Use HTTP Basic Auth for authentication to the HTPP(s) server",
+                    "title": "Basic Authentication",
+                    "$ref": "#/definitions/global_log_receiverHttpAuthBasic",
+                    "x-displayname": "Basic Authentication"
+                },
+                "auth_none": {
+                    "description": "Exclusive with [auth_basic auth_token]\n No Authentication",
+                    "title": "No Authentication",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "None"
+                },
+                "auth_token": {
+                    "description": "Exclusive with [auth_basic auth_none]\n Configure an Access Token for authentication to the HTTP(s) server (such as a Bearer Token)",
+                    "title": "Token Authentication",
+                    "$ref": "#/definitions/global_log_receiverAuthToken",
+                    "x-displayname": "Token Authentication"
+                },
+                "batch": {
+                    "description": " Batch Options allow tuning of the conditions for how batches of logs are sent to the endpoint",
+                    "title": "Batch Options",
+                    "$ref": "#/definitions/global_log_receiverBatchOptionType",
+                    "x-displayname": "Batch Options"
+                },
+                "compression": {
+                    "description": " Compression Options allows selection of how data should be compressed when sent to the endpoint",
+                    "title": "Compression Options",
+                    "$ref": "#/definitions/global_log_receiverCompressionType",
+                    "x-displayname": "Compression Options"
+                },
+                "no_tls": {
+                    "description": "Exclusive with [use_tls]\n Do not use TLS for the client connection",
+                    "title": "No TLS",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disable"
+                },
+                "uri": {
+                    "type": "string",
+                    "description": " HTTP Uri is the Uri of the HTTP endpoint to send logs to, example: -http://example.com:9000/logs-\n\nExample: - \"http://example.com:9000/logs\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.uri_ref: true\n",
+                    "title": "HTTP Uri",
+                    "x-displayname": "HTTP Uri",
+                    "x-ves-example": "http://example.com:9000/logs",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.uri_ref": "true"
+                    }
+                },
+                "use_tls": {
+                    "description": "Exclusive with [no_tls]\n Use TLS for client connections to the endpoint",
+                    "title": "Use TLS",
+                    "$ref": "#/definitions/global_log_receiverTLSConfigType",
+                    "x-displayname": "Use TLS"
+                }
+            }
+        },
+        "global_log_receiverHttpAuthBasic": {
+            "type": "object",
+            "description": "Authentication parameters to access HTPP Log Receiver Endpoint.",
+            "title": "HTTP Basic Authentication",
+            "x-displayname": "Basic Authentication Credentials",
+            "x-ves-proto-message": "ves.io.schema.global_log_receiver.HttpAuthBasic",
+            "properties": {
+                "password": {
+                    "description": " HTTP Basic Auth Password",
+                    "title": "password",
+                    "$ref": "#/definitions/schemaSecretType",
+                    "x-displayname": "Password"
+                },
+                "user_name": {
+                    "type": "string",
+                    "description": " HTTP Basic Auth User Name\n\nExample: - \"Joe\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 64\n",
+                    "title": "username",
+                    "maxLength": 64,
+                    "x-displayname": "User Name",
+                    "x-ves-example": "Joe",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "64"
+                    }
                 }
             }
         },
@@ -2556,15 +3046,25 @@ var APISwaggerJSON string = `{
         },
         "global_log_receiverNSList": {
             "type": "object",
-            "description": "x-displayName: \"NSList\"",
+            "description": "Namespace List",
             "title": "NSList",
+            "x-displayname": "Namespace List",
+            "x-ves-proto-message": "ves.io.schema.global_log_receiver.NSList",
             "properties": {
                 "namespaces": {
                     "type": "array",
-                    "description": "x-displayName: \"namespaces\"\nx-example: \"default\"\nx-required\nList of namespaces to stream logs for",
+                    "description": " List of namespaces to stream logs for\n\nExample: - \"default\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 16\n",
                     "title": "Namespaces",
+                    "maxItems": 16,
                     "items": {
                         "type": "string"
+                    },
+                    "x-displayname": "namespaces",
+                    "x-ves-example": "default",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.max_items": "16"
                     }
                 }
             }
@@ -2626,24 +3126,54 @@ var APISwaggerJSON string = `{
             "description": "Replaces the content of an Global Log Receiver object",
             "title": "Replace Log Receiver",
             "x-displayname": "Replace Global Log Receiver",
-            "x-ves-oneof-field-filter_choice": "[\"ns_all\",\"ns_current\"]",
-            "x-ves-oneof-field-receiver": "[\"s3_receiver\"]",
+            "x-ves-oneof-field-filter_choice": "[\"ns_all\",\"ns_current\",\"ns_list\"]",
+            "x-ves-oneof-field-receiver": "[\"azure_event_hubs_receiver\",\"azure_receiver\",\"datadog_receiver\",\"http_receiver\",\"s3_receiver\",\"splunk_receiver\"]",
             "x-ves-proto-message": "ves.io.schema.global_log_receiver.ReplaceSpecType",
             "properties": {
+                "azure_event_hubs_receiver": {
+                    "description": "Exclusive with [azure_receiver datadog_receiver http_receiver s3_receiver splunk_receiver]\n Send logs to Azure Event Hubs",
+                    "$ref": "#/definitions/global_log_receiverAzureEventHubsConfig",
+                    "x-displayname": "Azure Event Hubs"
+                },
+                "azure_receiver": {
+                    "description": "Exclusive with [azure_event_hubs_receiver datadog_receiver http_receiver s3_receiver splunk_receiver]\n Send logs to Azure Blob Storage",
+                    "$ref": "#/definitions/global_log_receiverAzureBlobConfig",
+                    "x-displayname": "Azure Blob Storage"
+                },
+                "datadog_receiver": {
+                    "description": "Exclusive with [azure_event_hubs_receiver azure_receiver http_receiver s3_receiver splunk_receiver]\n Send logs to a Datadog service",
+                    "$ref": "#/definitions/global_log_receiverDatadogConfig",
+                    "x-displayname": "Datadog Receiver"
+                },
+                "http_receiver": {
+                    "description": "Exclusive with [azure_event_hubs_receiver azure_receiver datadog_receiver s3_receiver splunk_receiver]\n Send logs to a generic HTTP(s) server",
+                    "$ref": "#/definitions/global_log_receiverHTTPConfig",
+                    "x-displayname": "HTTP Receiver"
+                },
                 "ns_all": {
-                    "description": "Exclusive with [ns_current]\n Select logs from all namespaces",
+                    "description": "Exclusive with [ns_current ns_list]\n Select logs from all namespaces",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Select logs from all namespaces"
                 },
                 "ns_current": {
-                    "description": "Exclusive with [ns_all]\n Select logs from current namespace",
+                    "description": "Exclusive with [ns_all ns_list]\n Select logs from current namespace",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Select logs from current namespace"
                 },
+                "ns_list": {
+                    "description": "Exclusive with [ns_all ns_current]\n Select logs in specific namespaces",
+                    "$ref": "#/definitions/global_log_receiverNSList",
+                    "x-displayname": "Select logs in specific namespaces"
+                },
                 "s3_receiver": {
-                    "description": "Exclusive with []\n S3 Receiver",
+                    "description": "Exclusive with [azure_event_hubs_receiver azure_receiver datadog_receiver http_receiver splunk_receiver]\n Send logs to an AWS S3 bucket",
                     "$ref": "#/definitions/global_log_receiverS3Config",
                     "x-displayname": "S3 Receiver"
+                },
+                "splunk_receiver": {
+                    "description": "Exclusive with [azure_event_hubs_receiver azure_receiver datadog_receiver http_receiver s3_receiver]\n Send logs to a Splunk HEC Logs service",
+                    "$ref": "#/definitions/global_log_receiverSplunkConfig",
+                    "x-displayname": "Splunk Receiver"
                 }
             }
         },
@@ -2655,7 +3185,7 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.global_log_receiver.S3Config",
             "properties": {
                 "aws_cred": {
-                    "description": " Reference to AWS credentials for access to S3 bucket\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "description": " Reference to AWS Cloud Credentials for access to the S3 bucket\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "AWS Cloud Credentials",
                     "$ref": "#/definitions/schemaviewsObjectRefType",
                     "x-displayname": "AWS Cloud Credentials",
@@ -2666,7 +3196,7 @@ var APISwaggerJSON string = `{
                 },
                 "aws_region": {
                     "type": "string",
-                    "description": " Name for AWS Region.\n\nExample: - \"us-east-1\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.in: [\\\"ap-northeast-1\\\",\\\"ap-southeast-1\\\",\\\"eu-central-1\\\",\\\"eu-west-1\\\",\\\"eu-west-3\\\",\\\"sa-east-1\\\",\\\"us-east-1\\\",\\\"us-east-2\\\",\\\"us-west-2\\\",\\\"ca-central-1\\\",\\\"af-south-1\\\",\\\"ap-east-1\\\",\\\"ap-south-1\\\",\\\"ap-northeast-2\\\",\\\"ap-southeast-2\\\",\\\"eu-south-1\\\",\\\"eu-north-1\\\",\\\"eu-west-2\\\",\\\"me-south-1\\\",\\\"us-west-1\\\",\\\"ap-southeast-3\\\"]\n",
+                    "description": " AWS Region Name\n\nExample: - \"us-east-1\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.in: [\\\"ap-northeast-1\\\",\\\"ap-southeast-1\\\",\\\"eu-central-1\\\",\\\"eu-west-1\\\",\\\"eu-west-3\\\",\\\"sa-east-1\\\",\\\"us-east-1\\\",\\\"us-east-2\\\",\\\"us-west-2\\\",\\\"ca-central-1\\\",\\\"af-south-1\\\",\\\"ap-east-1\\\",\\\"ap-south-1\\\",\\\"ap-northeast-2\\\",\\\"ap-southeast-2\\\",\\\"eu-south-1\\\",\\\"eu-north-1\\\",\\\"eu-west-2\\\",\\\"me-south-1\\\",\\\"us-west-1\\\",\\\"ap-southeast-3\\\"]\n",
                     "title": "AWS Region",
                     "x-displayname": "AWS Region",
                     "x-ves-example": "us-east-1",
@@ -2676,21 +3206,33 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.string.in": "[\\\"ap-northeast-1\\\",\\\"ap-southeast-1\\\",\\\"eu-central-1\\\",\\\"eu-west-1\\\",\\\"eu-west-3\\\",\\\"sa-east-1\\\",\\\"us-east-1\\\",\\\"us-east-2\\\",\\\"us-west-2\\\",\\\"ca-central-1\\\",\\\"af-south-1\\\",\\\"ap-east-1\\\",\\\"ap-south-1\\\",\\\"ap-northeast-2\\\",\\\"ap-southeast-2\\\",\\\"eu-south-1\\\",\\\"eu-north-1\\\",\\\"eu-west-2\\\",\\\"me-south-1\\\",\\\"us-west-1\\\",\\\"ap-southeast-3\\\"]"
                     }
                 },
+                "batch": {
+                    "description": " Batch Options allow tuning of the conditions for how batches of logs are sent to the endpoint",
+                    "title": "Batch Options",
+                    "$ref": "#/definitions/global_log_receiverBatchOptionType",
+                    "x-displayname": "Batch Options"
+                },
                 "bucket": {
                     "type": "string",
-                    "description": " S3 Bucket Name\n\nExample: - \"S3 Buket Name\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 63\n  ves.io.schema.rules.string.min_len: 3\n  ves.io.schema.rules.string.pattern: ^[a-z0-9]+[a-z0-9\\\\.-]+[a-z0-9]$\n",
+                    "description": " S3 Bucket Name\n\nExample: - \"S3 Bucket Name\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 128\n  ves.io.schema.rules.string.min_len: 3\n  ves.io.schema.rules.string.pattern: ^[a-z0-9]+[a-z0-9\\\\.-]+[a-z0-9]$\n",
                     "title": "S3 Bucket Name",
                     "minLength": 3,
-                    "maxLength": 63,
+                    "maxLength": 128,
                     "x-displayname": "S3 Bucket Name",
-                    "x-ves-example": "S3 Buket Name",
+                    "x-ves-example": "S3 Bucket Name",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true",
-                        "ves.io.schema.rules.string.max_len": "63",
+                        "ves.io.schema.rules.string.max_len": "128",
                         "ves.io.schema.rules.string.min_len": "3",
                         "ves.io.schema.rules.string.pattern": "^[a-z0-9]+[a-z0-9\\\\.-]+[a-z0-9]$"
                     }
+                },
+                "compression": {
+                    "description": " Compression Options allows selection of how data should be compressed when sent to the endpoint",
+                    "title": "Compression Options",
+                    "$ref": "#/definitions/global_log_receiverCompressionType",
+                    "x-displayname": "Compression Options"
                 }
             }
         },
@@ -2705,6 +3247,61 @@ var APISwaggerJSON string = `{
                     "title": "gc_spec",
                     "$ref": "#/definitions/global_log_receiverGlobalSpecType",
                     "x-displayname": "GC Spec"
+                }
+            }
+        },
+        "global_log_receiverSplunkConfig": {
+            "type": "object",
+            "description": "Configuration for Splunk HEC Logs endpoint",
+            "title": "Splunk HEC Logs Configuration",
+            "x-displayname": "Splunk HEC Logs Configuration",
+            "x-ves-oneof-field-tls_choice": "[\"no_tls\",\"use_tls\"]",
+            "x-ves-proto-message": "ves.io.schema.global_log_receiver.SplunkConfig",
+            "properties": {
+                "batch": {
+                    "description": " Batch Options allow tuning of the conditions for how batches of logs are sent to the endpoint",
+                    "title": "Batch Options",
+                    "$ref": "#/definitions/global_log_receiverBatchOptionType",
+                    "x-displayname": "Batch Options"
+                },
+                "compression": {
+                    "description": " Compression Options allows selection of how data should be compressed when sent to the endpoint",
+                    "title": "Compression Options",
+                    "$ref": "#/definitions/global_log_receiverCompressionType",
+                    "x-displayname": "Compression Options"
+                },
+                "endpoint": {
+                    "type": "string",
+                    "description": " Splunk HEC Logs Endpoint, example: -https://http-input-hec.splunkcloud.com-\n\nExample: - \"https://http-inputs-hec.splunkcloud.com\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "Splunk HEC Logs Endpoint",
+                    "x-displayname": "Splunk HEC Logs Endpoint",
+                    "x-ves-example": "https://http-inputs-hec.splunkcloud.com",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                },
+                "no_tls": {
+                    "description": "Exclusive with [use_tls]\n Do not use TLS for the client connection",
+                    "title": "No TLS",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disable"
+                },
+                "splunk_hec_token": {
+                    "description": " Splunk HEC Logs secret Token\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "Splunk HEC token",
+                    "$ref": "#/definitions/schemaSecretType",
+                    "x-displayname": "Splunk HEC token",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                },
+                "use_tls": {
+                    "description": "Exclusive with [no_tls]\n Use TLS for client connections to the endpoint",
+                    "title": "Use TLS",
+                    "$ref": "#/definitions/global_log_receiverTLSConfigType",
+                    "x-displayname": "Use TLS"
                 }
             }
         },
@@ -2738,6 +3335,98 @@ var APISwaggerJSON string = `{
                         "$ref": "#/definitions/ioschemaObjectRefType"
                     },
                     "x-displayname": "Config Object"
+                }
+            }
+        },
+        "global_log_receiverTLSClientConfigType": {
+            "type": "object",
+            "description": "mTLS Client config allows configuration of mtls client options",
+            "title": "mTLS Client config",
+            "x-displayname": "mTLS Client Config",
+            "x-ves-proto-message": "ves.io.schema.global_log_receiver.TLSClientConfigType",
+            "properties": {
+                "certificate": {
+                    "type": "string",
+                    "description": " Client  certificate is PEM-encoded certificate or certificate-chain.\n\nExample: - \"value\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 131072\n  ves.io.schema.rules.string.uri_ref: true\n",
+                    "maxLength": 131072,
+                    "x-displayname": "Client Certificate",
+                    "x-ves-example": "value",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_bytes": "131072",
+                        "ves.io.schema.rules.string.uri_ref": "true"
+                    }
+                },
+                "key_url": {
+                    "description": " Client private key file containing data in PEM format including the PEM headers.\n The data in this key file has to match accompanying certificate.\n The data may be optionally secured using BlindFold.",
+                    "title": "Private Key",
+                    "$ref": "#/definitions/schemaSecretType",
+                    "x-displayname": "Client Private Key"
+                }
+            }
+        },
+        "global_log_receiverTLSConfigType": {
+            "type": "object",
+            "description": "TLS Parameters for client connection to the endpoint",
+            "title": "Endpoint TLS Parameters",
+            "x-displayname": "TLS Parameters Endpoint",
+            "x-ves-oneof-field-ca_choice": "[\"no_ca\",\"trusted_ca_url\"]",
+            "x-ves-oneof-field-mtls_choice": "[\"mtls_disabled\",\"mtls_enable\"]",
+            "x-ves-oneof-field-verify_certificate": "[\"disable_verify_certificate\",\"enable_verify_certificate\"]",
+            "x-ves-oneof-field-verify_hostname": "[\"disable_verify_hostname\",\"enable_verify_hostname\"]",
+            "x-ves-proto-message": "ves.io.schema.global_log_receiver.TLSConfigType",
+            "properties": {
+                "disable_verify_certificate": {
+                    "description": "Exclusive with [enable_verify_certificate]\n",
+                    "title": "Skip Server Certificate Verification",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Skip Server Certificate Verification"
+                },
+                "disable_verify_hostname": {
+                    "description": "Exclusive with [enable_verify_hostname]\n",
+                    "title": "Skip Verify Server Hostname",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Skip Server Hostname Verification"
+                },
+                "enable_verify_certificate": {
+                    "description": "Exclusive with [disable_verify_certificate]\n",
+                    "title": "Use Server Certificate Verification",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Perform Server Certificate Verification"
+                },
+                "enable_verify_hostname": {
+                    "description": "Exclusive with [disable_verify_hostname]\n",
+                    "title": "Enable Server Hostname Verification",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Enable Server Hostname Verification"
+                },
+                "mtls_disabled": {
+                    "description": "Exclusive with [mtls_enable]\n mTLS is disabled",
+                    "title": "mTLS is Disabled",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "mTLS is Disabled"
+                },
+                "mtls_enable": {
+                    "description": "Exclusive with [mtls_disabled]\n Enable mTLS configuration",
+                    "title": "Enable mTLS configuration",
+                    "$ref": "#/definitions/global_log_receiverTLSClientConfigType",
+                    "x-displayname": "Enable mTLS"
+                },
+                "no_ca": {
+                    "description": "Exclusive with [trusted_ca_url]\n Do not use a CA Certificate",
+                    "title": "No CA Certificate",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "No CA Certificate"
+                },
+                "trusted_ca_url": {
+                    "type": "string",
+                    "description": "Exclusive with [no_ca]\n The URL or value for trusted Server CA certificate or certificate chain\n Certificates in PEM format including the PEM headers.\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 131072\n  ves.io.schema.rules.string.uri_ref: true\n",
+                    "title": "Server CA certificates",
+                    "maxLength": 131072,
+                    "x-displayname": "Server CA Certificates",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_bytes": "131072",
+                        "ves.io.schema.rules.string.uri_ref": "true"
+                    }
                 }
             }
         },
@@ -2804,6 +3493,73 @@ var APISwaggerJSON string = `{
                     "type": "string",
                     "description": "Must be a valid serialized protocol buffer of the above specified type.",
                     "format": "byte"
+                }
+            }
+        },
+        "schemaBlindfoldSecretInfoType": {
+            "type": "object",
+            "description": "BlindfoldSecretInfoType specifies information about the Secret managed by Volterra Secret Management",
+            "title": "BlindfoldSecretInfoType",
+            "x-displayname": "Blindfold Secret",
+            "x-ves-displayorder": "3,1,2",
+            "x-ves-proto-message": "ves.io.schema.BlindfoldSecretInfoType",
+            "properties": {
+                "decryption_provider": {
+                    "type": "string",
+                    "description": " Name of the Secret Management Access object that contains information about the backend Secret Management service.\n\nExample: - \"value\"-",
+                    "title": "Decryption Provider",
+                    "x-displayname": "Decryption Provider",
+                    "x-ves-example": "value"
+                },
+                "location": {
+                    "type": "string",
+                    "description": " Location is the uri_ref. It could be in url format for string:///\n Or it could be a path if the store provider is an http/https location\n\nExample: - \"string:///U2VjcmV0SW5mb3JtYXRpb24=\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.uri_ref: true\n",
+                    "title": "Location",
+                    "x-displayname": "Location",
+                    "x-ves-example": "string:///U2VjcmV0SW5mb3JtYXRpb24=",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.uri_ref": "true"
+                    }
+                },
+                "store_provider": {
+                    "type": "string",
+                    "description": " Name of the Secret Management Access object that contains information about the store to get encrypted bytes\n This field needs to be provided only if the url scheme is not string:///\n\nExample: - \"value\"-",
+                    "title": "Store Provider",
+                    "x-displayname": "Store Provider",
+                    "x-ves-example": "value"
+                }
+            }
+        },
+        "schemaClearSecretInfoType": {
+            "type": "object",
+            "description": "ClearSecretInfoType specifies information about the Secret that is not encrypted.",
+            "title": "ClearSecretInfoType",
+            "x-displayname": "In-Clear Secret",
+            "x-ves-displayorder": "2,1",
+            "x-ves-proto-message": "ves.io.schema.ClearSecretInfoType",
+            "properties": {
+                "provider": {
+                    "type": "string",
+                    "description": " Name of the Secret Management Access object that contains information about the store to get encrypted bytes\n This field needs to be provided only if the url scheme is not string:///\n\nExample: - \"box-provider\"-",
+                    "title": "Provider",
+                    "x-displayname": "Provider",
+                    "x-ves-example": "box-provider"
+                },
+                "url": {
+                    "type": "string",
+                    "description": " URL of the secret. Currently supported URL schemes is string:///.\n For string:/// scheme, Secret needs to be encoded Base64 format.\n When asked for this secret, caller will get Secret bytes after Base64 decoding.\n\nExample: - \"string:///U2VjcmV0SW5mb3JtYXRpb24=\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_bytes: 131072\n  ves.io.schema.rules.string.uri_ref: true\n",
+                    "title": "URL",
+                    "maxLength": 131072,
+                    "x-displayname": "URL",
+                    "x-ves-example": "string:///U2VjcmV0SW5mb3JtYXRpb24=",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.max_bytes": "131072",
+                        "ves.io.schema.rules.string.uri_ref": "true"
+                    }
                 }
             }
         },
@@ -3197,6 +3953,38 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "schemaSecretEncodingType": {
+            "type": "string",
+            "description": "x-displayName: \"Secret Encoding\"\nSecretEncodingType defines the encoding type of the secret before handled by the Secret Management Service.\n\n - EncodingNone: x-displayName: \"None\"\nNo Encoding\n - EncodingBase64: Base64\n\nx-displayName: \"Base64\"\nBase64 encoding",
+            "title": "SecretEncodingType",
+            "enum": [
+                "EncodingNone",
+                "EncodingBase64"
+            ],
+            "default": "EncodingNone"
+        },
+        "schemaSecretType": {
+            "type": "object",
+            "description": "SecretType is used in an object to indicate a sensitive/confidential field",
+            "title": "SecretType",
+            "x-displayname": "Secret",
+            "x-ves-oneof-field-secret_info_oneof": "[\"blindfold_secret_info\",\"clear_secret_info\"]",
+            "x-ves-proto-message": "ves.io.schema.SecretType",
+            "properties": {
+                "blindfold_secret_info": {
+                    "description": "Exclusive with [clear_secret_info]\n Blindfold Secret is used for the secrets managed by Volterra Secret Management Service",
+                    "title": "Blindfold Secret",
+                    "$ref": "#/definitions/schemaBlindfoldSecretInfoType",
+                    "x-displayname": "Blindfold Secret"
+                },
+                "clear_secret_info": {
+                    "description": "Exclusive with [blindfold_secret_info]\n Clear Secret is used for the secrets that are not encrypted",
+                    "title": "Clear Secret",
+                    "$ref": "#/definitions/schemaClearSecretInfoType",
+                    "x-displayname": "Clear Secret"
+                }
+            }
+        },
         "schemaStatusMetaType": {
             "type": "object",
             "description": "StatusMetaType is metadata that all status must have.",
@@ -3540,6 +4328,39 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "schemaVaultSecretInfoType": {
+            "type": "object",
+            "description": "x-displayName: \"Vault Secret\"\nVaultSecretInfoType specifies information about the Secret managed by Hashicorp Vault.",
+            "title": "VaultSecretInfoType",
+            "properties": {
+                "key": {
+                    "type": "string",
+                    "description": "x-displayName: \"Key\"\nx-example: \"key_pem\"\nKey of the individual secret. Vault Secrets are stored as key-value pair.\nIf user is only interested in one value from the map, this field should be set to the corresponding key.\nIf not provided entire secret will be returned.",
+                    "title": "Key"
+                },
+                "location": {
+                    "type": "string",
+                    "description": "x-displayName: \"Location\"\nx-required\nx-example: \"v1/data/vhost_key\"\nPath to secret in Vault.",
+                    "title": "Location"
+                },
+                "provider": {
+                    "type": "string",
+                    "description": "x-displayName: \"Provider\"\nx-required\nx-example: \"vault-vh-provider\"\nName of the Secret Management Access object that contains information about the backend Vault.",
+                    "title": "Provider"
+                },
+                "secret_encoding": {
+                    "description": "x-displayName: \"Secret Encoding\"\nThis field defines the encoding type of the secret BEFORE the secret is put into Hashicorp Vault.",
+                    "title": "secret_encoding",
+                    "$ref": "#/definitions/schemaSecretEncodingType"
+                },
+                "version": {
+                    "type": "integer",
+                    "description": "x-displayName: \"Version\"\nx-example: \"1\"\nVersion of the secret to be fetched. As vault secrets are versioned, user can specify this field to fetch specific version.\nIf not provided latest version will be returned.",
+                    "title": "Version",
+                    "format": "int64"
+                }
+            }
+        },
         "schemaViewRefType": {
             "type": "object",
             "description": "ViewRefType represents a reference to a view",
@@ -3574,6 +4395,18 @@ var APISwaggerJSON string = `{
                     "title": "uid",
                     "x-displayname": "UID",
                     "x-ves-example": "f3744323-1adf-4aaa-a5dc-0707c1d1bd82"
+                }
+            }
+        },
+        "schemaWingmanSecretInfoType": {
+            "type": "object",
+            "description": "x-displayName: \"Wingman Secret\"\nWingmanSecretInfoType specifies the handle to the wingman secret",
+            "title": "WingmanSecretInfoType",
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "description": "x-displayName: \"Name\"\nx-required\nx-example: \"ChargeBack-API-Key\"\nName of the secret.",
+                    "title": "Name"
                 }
             }
         },

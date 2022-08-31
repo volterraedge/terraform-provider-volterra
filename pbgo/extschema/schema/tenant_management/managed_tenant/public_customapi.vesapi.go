@@ -161,7 +161,8 @@ func (c *CustomAPIRestClient) doRPCGetManagedTenantList(ctx context.Context, cal
 	}
 	defer rsp.Body.Close()
 
-	if rsp.StatusCode != http.StatusOK {
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
 		body, err := ioutil.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
 	}
@@ -172,7 +173,7 @@ func (c *CustomAPIRestClient) doRPCGetManagedTenantList(ctx context.Context, cal
 	}
 	pbRsp := &GetManagedTenantListResp{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
-		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.tenant_management.managed_tenant.GetManagedTenantListResp", body)
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.tenant_management.managed_tenant.GetManagedTenantListResp", body)
 
 	}
 	if callOpts.OutCallResponse != nil {
@@ -242,7 +243,8 @@ func (c *CustomAPIRestClient) doRPCGetManagedTenantListByUser(ctx context.Contex
 	}
 	defer rsp.Body.Close()
 
-	if rsp.StatusCode != http.StatusOK {
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
 		body, err := ioutil.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
 	}
@@ -253,7 +255,7 @@ func (c *CustomAPIRestClient) doRPCGetManagedTenantListByUser(ctx context.Contex
 	}
 	pbRsp := &GetManagedTenantListResp{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
-		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.tenant_management.managed_tenant.GetManagedTenantListResp", body)
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.tenant_management.managed_tenant.GetManagedTenantListResp", body)
 
 	}
 	if callOpts.OutCallResponse != nil {
@@ -452,103 +454,312 @@ var CustomAPISwaggerJSON string = `{
         "application/json"
     ],
     "tags": [],
-    "paths": {},
+    "paths": {
+        "/public/namespaces/system/managed_tenants_by_user": {
+            "get": {
+                "summary": "Get List of Managed Tenant By User",
+                "description": "Get list of managed tenants that user have access to based on assingned membership.\nThis is an optimized list generated based on the requesting user's current group assignments\nthat will allow access to managed tenant.",
+                "operationId": "ves.io.schema.tenant_management.managed_tenant.CustomAPI.GetManagedTenantListByUser",
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/managed_tenantGetManagedTenantListResp"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "tags": [
+                    "CustomAPI"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-tenant_management-managed_tenant-customapi-getmanagedtenantlistbyuser"
+                },
+                "x-ves-proto-rpc": "ves.io.schema.tenant_management.managed_tenant.CustomAPI.GetManagedTenantListByUser"
+            },
+            "x-displayname": "Managed Tenant - UAM Manager Custom APIs",
+            "x-ves-proto-service": "ves.io.schema.tenant_management.managed_tenant.CustomAPI",
+            "x-ves-proto-service-type": "CUSTOM_PUBLIC"
+        },
+        "/public/namespaces/system/managed_tenants_list": {
+            "get": {
+                "summary": "Get List of Managed Tenant",
+                "description": "Get full list of managed tenants access details.\nThis response will contain full list of managed tenant based on the configuration\nand is not filtered by requesting user's group membership that enable access.",
+                "operationId": "ves.io.schema.tenant_management.managed_tenant.CustomAPI.GetManagedTenantList",
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/managed_tenantGetManagedTenantListResp"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "tags": [
+                    "CustomAPI"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-tenant_management-managed_tenant-customapi-getmanagedtenantlist"
+                },
+                "x-ves-proto-rpc": "ves.io.schema.tenant_management.managed_tenant.CustomAPI.GetManagedTenantList"
+            },
+            "x-displayname": "Managed Tenant - UAM Manager Custom APIs",
+            "x-ves-proto-service": "ves.io.schema.tenant_management.managed_tenant.CustomAPI",
+            "x-ves-proto-service-type": "CUSTOM_PUBLIC"
+        }
+    },
     "definitions": {
         "managed_tenantAccessInfo": {
             "type": "object",
-            "description": "x-displayName: \"Access Info\"\nAccess details of a managed tenant.",
+            "description": "Access details of a managed tenant.",
             "title": "AccessInfo",
+            "x-displayname": "Access Info",
+            "x-ves-proto-message": "ves.io.schema.tenant_management.managed_tenant.AccessInfo",
             "properties": {
                 "groups": {
                     "type": "array",
-                    "description": "x-displayName: \"Groups\"\nList of local user group association to user groups in the managed tenant.",
+                    "description": " List of local user group association to user groups in the managed tenant.",
                     "title": "groups",
                     "items": {
                         "$ref": "#/definitions/managed_tenantGroupAssignmentType"
-                    }
+                    },
+                    "x-displayname": "Groups"
                 },
                 "link": {
-                    "description": "x-displayName: \"Link\"\nInfo about hyperlink to access the managed tenant.",
+                    "description": " Info about hyperlink to access the managed tenant.",
                     "title": "Link",
-                    "$ref": "#/definitions/viewsLinkRefType"
+                    "$ref": "#/definitions/viewsLinkRefType",
+                    "x-displayname": "Link"
                 },
                 "name": {
                     "type": "string",
-                    "description": "x-displayName: \"Name\"\nx-example: \"l1-support\"\nName of the managed tenant config object. it can be used as known identifier.",
-                    "title": "Name"
+                    "description": " Name of the managed tenant config object. it can be used as known identifier.\n\nExample: - \"l1-support\"-",
+                    "title": "Name",
+                    "x-displayname": "Name",
+                    "x-ves-example": "l1-support"
                 }
             }
         },
         "managed_tenantGetManagedTenantListResp": {
             "type": "object",
-            "description": "x-displayName: \"Get Managed Tenant Access Response\"\nResponse to get list of managed tenant access.",
+            "description": "Response to get list of managed tenant access.",
             "title": "GetManagedTenantListResp",
+            "x-displayname": "Get Managed Tenant Access Response",
+            "x-ves-proto-message": "ves.io.schema.tenant_management.managed_tenant.GetManagedTenantListResp",
             "properties": {
                 "access_config": {
                     "type": "array",
-                    "description": "x-displayName: \"Access Config\"\nAllowed access configuration details for the tenant.",
+                    "description": " Allowed access configuration details for the tenant.",
                     "title": "access_config",
                     "items": {
                         "$ref": "#/definitions/managed_tenantAccessInfo"
-                    }
+                    },
+                    "x-displayname": "Access Config"
                 }
             }
         },
         "managed_tenantGroupAssignmentType": {
             "type": "object",
-            "description": "x-displayName: \"Group to Assign\"\nShape for specifying user group assosciation to user groups in a managed tenant.",
+            "description": "Shape for specifying user group assosciation to user groups in a managed tenant.",
             "title": "GroupAssignmentType",
+            "x-displayname": "Group to Assign",
+            "x-ves-proto-message": "ves.io.schema.tenant_management.managed_tenant.GroupAssignmentType",
             "properties": {
                 "group": {
-                    "description": "x-displayName: \"Group\"\nAssosciate existing local user group which will be used to map groups in managed tenant.\nUser should be member of this group to gain access into managed tenant.",
+                    "description": " Assosciate existing local user group which will be used to map groups in managed tenant.\n User should be member of this group to gain access into managed tenant.",
                     "title": "group",
-                    "$ref": "#/definitions/schemaviewsObjectRefType"
+                    "$ref": "#/definitions/schemaviewsObjectRefType",
+                    "x-displayname": "Group"
                 },
                 "managed_tenant_groups": {
                     "type": "array",
-                    "description": "x-displayName: \"Managed Tenant Groups\"\nx-example: \"user-group1\"\nList of group names in managed tenant (MT).\nNote - To properly establish access, admin of managed tenant need to create corresponding Allowed Tenant\nconfiguration object with access to use same group names. Once it's setup, when user from original tenant\naccess managed tenant, underlying roles from managed tenant will be applied to user.",
+                    "description": " List of group names in managed tenant (MT).\n Note - To properly establish access, admin of managed tenant need to create corresponding Allowed Tenant\n configuration object with access to use same group names. Once it's setup, when user from original tenant\n access managed tenant, underlying roles from managed tenant will be applied to user.\n\nExample: - \"user-group1\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 32\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "managed_tenant_groups",
+                    "maxItems": 32,
                     "items": {
                         "type": "string"
+                    },
+                    "x-displayname": "Managed Tenant Groups",
+                    "x-ves-example": "user-group1",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "32",
+                        "ves.io.schema.rules.repeated.unique": "true"
                     }
                 }
             }
         },
         "schemaviewsObjectRefType": {
             "type": "object",
-            "description": "x-displayName: \"Object reference\"\nThis type establishes a direct reference from one object(the referrer) to another(the referred).\nSuch a reference is in form of tenant/namespace/name",
+            "description": "This type establishes a direct reference from one object(the referrer) to another(the referred).\nSuch a reference is in form of tenant/namespace/name",
             "title": "ObjectRefType",
+            "x-displayname": "Object reference",
+            "x-ves-proto-message": "ves.io.schema.views.ObjectRefType",
             "properties": {
                 "name": {
                     "type": "string",
-                    "description": "x-displayName: \"Name\"\nx-example: \"contacts-route\"\nx-required\nWhen a configuration object(e.g. virtual_host) refers to another(e.g route)\nthen name will hold the referred object's(e.g. route's) name.",
-                    "title": "name"
+                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then name will hold the referred object's(e.g. route's) name.\n\nExample: - \"contacts-route\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_bytes: 64\n  ves.io.schema.rules.string.min_bytes: 1\n",
+                    "title": "name",
+                    "minLength": 1,
+                    "maxLength": 64,
+                    "x-displayname": "Name",
+                    "x-ves-example": "contacts-route",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.max_bytes": "64",
+                        "ves.io.schema.rules.string.min_bytes": "1"
+                    }
                 },
                 "namespace": {
                     "type": "string",
-                    "description": "x-displayName: \"Namespace\"\nx-example: \"ns1\"\nWhen a configuration object(e.g. virtual_host) refers to another(e.g route)\nthen namespace will hold the referred object's(e.g. route's) namespace.",
-                    "title": "namespace"
+                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then namespace will hold the referred object's(e.g. route's) namespace.\n\nExample: - \"ns1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 64\n",
+                    "title": "namespace",
+                    "maxLength": 64,
+                    "x-displayname": "Namespace",
+                    "x-ves-example": "ns1",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_bytes": "64"
+                    }
                 },
                 "tenant": {
                     "type": "string",
-                    "description": "x-displayName: \"Tenant\"\nx-example: \"acmecorp\"\nWhen a configuration object(e.g. virtual_host) refers to another(e.g route)\nthen tenant will hold the referred object's(e.g. route's) tenant.",
-                    "title": "tenant"
+                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then tenant will hold the referred object's(e.g. route's) tenant.\n\nExample: - \"acmecorp\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 64\n",
+                    "title": "tenant",
+                    "maxLength": 64,
+                    "x-displayname": "Tenant",
+                    "x-ves-example": "acmecorp",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_bytes": "64"
+                    }
                 }
             }
         },
         "viewsLinkRefType": {
             "type": "object",
             "description": "LinkRefType\nThis message defines a reference to hyperlink that can be accessed via web.",
+            "x-ves-proto-message": "ves.io.schema.views.LinkRefType",
             "properties": {
                 "href": {
                     "type": "string",
-                    "description": "x-displayName: \"Hyperlink reference\"\nx-example: \"https://f5.com/link/resource_a\"\nReferred link's location. This can be treated as equivalent of href in html.",
-                    "title": "HyperlinkRef"
+                    "description": " Referred link's location. This can be treated as equivalent of href in html.\n\nExample: - \"https://f5.com/link/resource_a\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 512\n  ves.io.schema.rules.string.min_len: 1\n",
+                    "title": "HyperlinkRef",
+                    "minLength": 1,
+                    "maxLength": 512,
+                    "x-displayname": "Hyperlink reference",
+                    "x-ves-example": "https://f5.com/link/resource_a",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "512",
+                        "ves.io.schema.rules.string.min_len": "1"
+                    }
                 },
                 "name": {
                     "type": "string",
-                    "description": "x-displayName: \"Link Name\"\nx-example: \"Resource A\"\nName to use for displaying above link in href",
-                    "title": "Name"
+                    "description": " Name to use for displaying above link in href\n\nExample: - \"Resource A\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 256\n  ves.io.schema.rules.string.min_len: 1\n",
+                    "title": "Name",
+                    "minLength": 1,
+                    "maxLength": 256,
+                    "x-displayname": "Link Name",
+                    "x-ves-example": "Resource A",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "256",
+                        "ves.io.schema.rules.string.min_len": "1"
+                    }
                 }
             }
         }

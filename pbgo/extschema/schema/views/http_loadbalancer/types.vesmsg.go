@@ -2910,15 +2910,15 @@ func (v *ValidateAppEndpointType) HttpMethodsValidationRuleHandler(rules map[str
 	itemRules := db.GetRepEnumItemRules(rules)
 	var conv db.EnumConvFn
 	conv = func(v interface{}) int32 {
-		i := v.(ves_io_schema.HttpMethod)
+		i := v.(ves_io_schema.BotHttpMethod)
 		return int32(i)
 	}
-	// ves_io_schema.HttpMethod_name is generated in .pb.go
-	itemValFn, err := db.NewEnumValidationRuleHandler(itemRules, ves_io_schema.HttpMethod_name, conv)
+	// ves_io_schema.BotHttpMethod_name is generated in .pb.go
+	itemValFn, err := db.NewEnumValidationRuleHandler(itemRules, ves_io_schema.BotHttpMethod_name, conv)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for http_methods")
 	}
-	itemsValidatorFn := func(ctx context.Context, elems []ves_io_schema.HttpMethod, opts ...db.ValidateOpt) error {
+	itemsValidatorFn := func(ctx context.Context, elems []ves_io_schema.BotHttpMethod, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
 			if err := itemValFn(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
@@ -2932,9 +2932,9 @@ func (v *ValidateAppEndpointType) HttpMethodsValidationRuleHandler(rules map[str
 	}
 
 	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
-		elems, ok := val.([]ves_io_schema.HttpMethod)
+		elems, ok := val.([]ves_io_schema.BotHttpMethod)
 		if !ok {
-			return fmt.Errorf("Repeated validation expected []ves_io_schema.HttpMethod, got %T", val)
+			return fmt.Errorf("Repeated validation expected []ves_io_schema.BotHttpMethod, got %T", val)
 		}
 		l := []string{}
 		for _, elem := range elems {
@@ -3163,8 +3163,8 @@ var DefaultAppEndpointTypeValidator = func() *ValidateAppEndpointType {
 	rulesHttpMethods := map[string]string{
 		"ves.io.schema.rules.message.required":                 "true",
 		"ves.io.schema.rules.repeated.items.enum.defined_only": "true",
-		"ves.io.schema.rules.repeated.items.enum.in":           "[0,1,3,4]",
-		"ves.io.schema.rules.repeated.max_items":               "4",
+		"ves.io.schema.rules.repeated.items.enum.in":           "[0,1,3,4,10]",
+		"ves.io.schema.rules.repeated.max_items":               "5",
 		"ves.io.schema.rules.repeated.min_items":               "1",
 		"ves.io.schema.rules.repeated.unique":                  "true",
 	}
@@ -6352,476 +6352,6 @@ var DefaultDDoSMitigationRuleValidator = func() *ValidateDDoSMitigationRule {
 
 func DDoSMitigationRuleValidator() db.Validator {
 	return DefaultDDoSMitigationRuleValidator
-}
-
-// augmented methods on protoc/std generated struct
-
-func (m *DownstreamTlsParamsType) ToJSON() (string, error) {
-	return codec.ToJSON(m)
-}
-
-func (m *DownstreamTlsParamsType) ToYAML() (string, error) {
-	return codec.ToYAML(m)
-}
-
-// Redact squashes sensitive info in m (in-place)
-func (m *DownstreamTlsParamsType) Redact(ctx context.Context) error {
-	// clear fields with confidential option set (at message or field level)
-	if m == nil {
-		return nil
-	}
-
-	for idx, e := range m.GetTlsCertificates() {
-		if err := e.Redact(ctx); err != nil {
-			return errors.Wrapf(err, "Redacting DownstreamTlsParamsType.tls_certificates idx %v", idx)
-		}
-	}
-
-	return nil
-}
-
-func (m *DownstreamTlsParamsType) DeepCopy() *DownstreamTlsParamsType {
-	if m == nil {
-		return nil
-	}
-	ser, err := m.Marshal()
-	if err != nil {
-		return nil
-	}
-	c := &DownstreamTlsParamsType{}
-	err = c.Unmarshal(ser)
-	if err != nil {
-		return nil
-	}
-	return c
-}
-
-func (m *DownstreamTlsParamsType) DeepCopyProto() proto.Message {
-	if m == nil {
-		return nil
-	}
-	return m.DeepCopy()
-}
-
-func (m *DownstreamTlsParamsType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
-	return DownstreamTlsParamsTypeValidator().Validate(ctx, m, opts...)
-}
-
-func (m *DownstreamTlsParamsType) GetDRefInfo() ([]db.DRefInfo, error) {
-	if m == nil {
-		return nil, nil
-	}
-
-	return m.GetMtlsChoiceDRefInfo()
-
-}
-
-// GetDRefInfo for the field's type
-func (m *DownstreamTlsParamsType) GetMtlsChoiceDRefInfo() ([]db.DRefInfo, error) {
-	if m.GetMtlsChoice() == nil {
-		return nil, nil
-	}
-	switch m.GetMtlsChoice().(type) {
-	case *DownstreamTlsParamsType_NoMtls:
-
-		return nil, nil
-
-	case *DownstreamTlsParamsType_UseMtls:
-		drInfos, err := m.GetUseMtls().GetDRefInfo()
-		if err != nil {
-			return nil, errors.Wrap(err, "GetUseMtls().GetDRefInfo() FAILED")
-		}
-		for i := range drInfos {
-			dri := &drInfos[i]
-			dri.DRField = "use_mtls." + dri.DRField
-		}
-		return drInfos, err
-
-	default:
-		return nil, nil
-	}
-
-}
-
-type ValidateDownstreamTlsParamsType struct {
-	FldValidators map[string]db.ValidatorFunc
-}
-
-func (v *ValidateDownstreamTlsParamsType) MtlsChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for mtls_choice")
-	}
-	return validatorFn, nil
-}
-
-func (v *ValidateDownstreamTlsParamsType) TlsCertificatesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema.TlsCertificateType, opts ...db.ValidateOpt) error {
-		for i, el := range elems {
-			if err := ves_io_schema.TlsCertificateTypeValidator().Validate(ctx, el, opts...); err != nil {
-				return errors.Wrap(err, fmt.Sprintf("element %d", i))
-			}
-		}
-		return nil
-	}
-	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for tls_certificates")
-	}
-
-	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
-		elems, ok := val.([]*ves_io_schema.TlsCertificateType)
-		if !ok {
-			return fmt.Errorf("Repeated validation expected []*ves_io_schema.TlsCertificateType, got %T", val)
-		}
-		l := []string{}
-		for _, elem := range elems {
-			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
-			if err != nil {
-				return errors.Wrapf(err, "Converting %v to JSON", elem)
-			}
-			l = append(l, strVal)
-		}
-		if err := repValFn(ctx, l, opts...); err != nil {
-			return errors.Wrap(err, "repeated tls_certificates")
-		}
-		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
-			return errors.Wrap(err, "items tls_certificates")
-		}
-		return nil
-	}
-
-	return validatorFn, nil
-}
-
-func (v *ValidateDownstreamTlsParamsType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
-	m, ok := pm.(*DownstreamTlsParamsType)
-	if !ok {
-		switch t := pm.(type) {
-		case nil:
-			return nil
-		default:
-			return fmt.Errorf("Expected type *DownstreamTlsParamsType got type %s", t)
-		}
-	}
-	if m == nil {
-		return nil
-	}
-
-	if fv, exists := v.FldValidators["mtls_choice"]; exists {
-		val := m.GetMtlsChoice()
-		vOpts := append(opts,
-			db.WithValidateField("mtls_choice"),
-		)
-		if err := fv(ctx, val, vOpts...); err != nil {
-			return err
-		}
-	}
-
-	switch m.GetMtlsChoice().(type) {
-	case *DownstreamTlsParamsType_NoMtls:
-		if fv, exists := v.FldValidators["mtls_choice.no_mtls"]; exists {
-			val := m.GetMtlsChoice().(*DownstreamTlsParamsType_NoMtls).NoMtls
-			vOpts := append(opts,
-				db.WithValidateField("mtls_choice"),
-				db.WithValidateField("no_mtls"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	case *DownstreamTlsParamsType_UseMtls:
-		if fv, exists := v.FldValidators["mtls_choice.use_mtls"]; exists {
-			val := m.GetMtlsChoice().(*DownstreamTlsParamsType_UseMtls).UseMtls
-			vOpts := append(opts,
-				db.WithValidateField("mtls_choice"),
-				db.WithValidateField("use_mtls"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-
-	}
-
-	if fv, exists := v.FldValidators["tls_certificates"]; exists {
-		vOpts := append(opts, db.WithValidateField("tls_certificates"))
-		if err := fv(ctx, m.GetTlsCertificates(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
-	if fv, exists := v.FldValidators["tls_config"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("tls_config"))
-		if err := fv(ctx, m.GetTlsConfig(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
-	return nil
-}
-
-// Well-known symbol for default validator implementation
-var DefaultDownstreamTlsParamsTypeValidator = func() *ValidateDownstreamTlsParamsType {
-	v := &ValidateDownstreamTlsParamsType{FldValidators: map[string]db.ValidatorFunc{}}
-
-	var (
-		err error
-		vFn db.ValidatorFunc
-	)
-	_, _ = err, vFn
-	vFnMap := map[string]db.ValidatorFunc{}
-	_ = vFnMap
-
-	vrhMtlsChoice := v.MtlsChoiceValidationRuleHandler
-	rulesMtlsChoice := map[string]string{
-		"ves.io.schema.rules.message.required_oneof": "true",
-	}
-	vFn, err = vrhMtlsChoice(rulesMtlsChoice)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for DownstreamTlsParamsType.mtls_choice: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["mtls_choice"] = vFn
-
-	vrhTlsCertificates := v.TlsCertificatesValidationRuleHandler
-	rulesTlsCertificates := map[string]string{
-		"ves.io.schema.rules.message.required":   "true",
-		"ves.io.schema.rules.repeated.max_items": "16",
-		"ves.io.schema.rules.repeated.min_items": "1",
-	}
-	vFn, err = vrhTlsCertificates(rulesTlsCertificates)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for DownstreamTlsParamsType.tls_certificates: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["tls_certificates"] = vFn
-
-	v.FldValidators["mtls_choice.use_mtls"] = DownstreamTlsValidationContextValidator().Validate
-
-	v.FldValidators["tls_config"] = ves_io_schema_views.TlsConfigValidator().Validate
-
-	return v
-}()
-
-func DownstreamTlsParamsTypeValidator() db.Validator {
-	return DefaultDownstreamTlsParamsTypeValidator
-}
-
-// augmented methods on protoc/std generated struct
-
-func (m *DownstreamTlsValidationContext) ToJSON() (string, error) {
-	return codec.ToJSON(m)
-}
-
-func (m *DownstreamTlsValidationContext) ToYAML() (string, error) {
-	return codec.ToYAML(m)
-}
-
-func (m *DownstreamTlsValidationContext) DeepCopy() *DownstreamTlsValidationContext {
-	if m == nil {
-		return nil
-	}
-	ser, err := m.Marshal()
-	if err != nil {
-		return nil
-	}
-	c := &DownstreamTlsValidationContext{}
-	err = c.Unmarshal(ser)
-	if err != nil {
-		return nil
-	}
-	return c
-}
-
-func (m *DownstreamTlsValidationContext) DeepCopyProto() proto.Message {
-	if m == nil {
-		return nil
-	}
-	return m.DeepCopy()
-}
-
-func (m *DownstreamTlsValidationContext) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
-	return DownstreamTlsValidationContextValidator().Validate(ctx, m, opts...)
-}
-
-func (m *DownstreamTlsValidationContext) GetDRefInfo() ([]db.DRefInfo, error) {
-	if m == nil {
-		return nil, nil
-	}
-
-	return m.GetCrlChoiceDRefInfo()
-
-}
-
-func (m *DownstreamTlsValidationContext) GetCrlChoiceDRefInfo() ([]db.DRefInfo, error) {
-	switch m.GetCrlChoice().(type) {
-	case *DownstreamTlsValidationContext_NoCrl:
-
-		return nil, nil
-
-	case *DownstreamTlsValidationContext_Crl:
-
-		vref := m.GetCrl()
-		if vref == nil {
-			return nil, nil
-		}
-		vdRef := db.NewDirectRefForView(vref)
-		vdRef.SetKind("crl.Object")
-		dri := db.DRefInfo{
-			RefdType:   "crl.Object",
-			RefdTenant: vref.Tenant,
-			RefdNS:     vref.Namespace,
-			RefdName:   vref.Name,
-			DRField:    "crl",
-			Ref:        vdRef,
-		}
-		return []db.DRefInfo{dri}, nil
-
-	default:
-		return nil, nil
-	}
-}
-
-// GetCrlChoiceDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
-func (m *DownstreamTlsValidationContext) GetCrlChoiceDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
-	var entries []db.Entry
-
-	switch m.GetCrlChoice().(type) {
-	case *DownstreamTlsValidationContext_NoCrl:
-
-	case *DownstreamTlsValidationContext_Crl:
-		refdType, err := d.TypeForEntryKind("", "", "crl.Object")
-		if err != nil {
-			return nil, errors.Wrap(err, "Cannot find type for kind: crl")
-		}
-
-		vref := m.GetCrl()
-		if vref == nil {
-			return nil, nil
-		}
-		ref := &ves_io_schema.ObjectRefType{
-			Kind:      "crl.Object",
-			Tenant:    vref.Tenant,
-			Namespace: vref.Namespace,
-			Name:      vref.Name,
-		}
-		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
-		if err != nil {
-			return nil, errors.Wrap(err, "Getting referred entry")
-		}
-		if refdEnt != nil {
-			entries = append(entries, refdEnt)
-		}
-
-	}
-
-	return entries, nil
-}
-
-type ValidateDownstreamTlsValidationContext struct {
-	FldValidators map[string]db.ValidatorFunc
-}
-
-func (v *ValidateDownstreamTlsValidationContext) TrustedCaUrlValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	validatorFn, err := db.NewStringValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for trusted_ca_url")
-	}
-
-	return validatorFn, nil
-}
-
-func (v *ValidateDownstreamTlsValidationContext) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
-	m, ok := pm.(*DownstreamTlsValidationContext)
-	if !ok {
-		switch t := pm.(type) {
-		case nil:
-			return nil
-		default:
-			return fmt.Errorf("Expected type *DownstreamTlsValidationContext got type %s", t)
-		}
-	}
-	if m == nil {
-		return nil
-	}
-
-	switch m.GetCrlChoice().(type) {
-	case *DownstreamTlsValidationContext_NoCrl:
-		if fv, exists := v.FldValidators["crl_choice.no_crl"]; exists {
-			val := m.GetCrlChoice().(*DownstreamTlsValidationContext_NoCrl).NoCrl
-			vOpts := append(opts,
-				db.WithValidateField("crl_choice"),
-				db.WithValidateField("no_crl"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	case *DownstreamTlsValidationContext_Crl:
-		if fv, exists := v.FldValidators["crl_choice.crl"]; exists {
-			val := m.GetCrlChoice().(*DownstreamTlsValidationContext_Crl).Crl
-			vOpts := append(opts,
-				db.WithValidateField("crl_choice"),
-				db.WithValidateField("crl"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-
-	}
-
-	if fv, exists := v.FldValidators["trusted_ca_url"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("trusted_ca_url"))
-		if err := fv(ctx, m.GetTrustedCaUrl(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
-	return nil
-}
-
-// Well-known symbol for default validator implementation
-var DefaultDownstreamTlsValidationContextValidator = func() *ValidateDownstreamTlsValidationContext {
-	v := &ValidateDownstreamTlsValidationContext{FldValidators: map[string]db.ValidatorFunc{}}
-
-	var (
-		err error
-		vFn db.ValidatorFunc
-	)
-	_, _ = err, vFn
-	vFnMap := map[string]db.ValidatorFunc{}
-	_ = vFnMap
-
-	vrhTrustedCaUrl := v.TrustedCaUrlValidationRuleHandler
-	rulesTrustedCaUrl := map[string]string{
-		"ves.io.schema.rules.message.required":      "true",
-		"ves.io.schema.rules.string.max_bytes":      "131072",
-		"ves.io.schema.rules.string.min_bytes":      "1",
-		"ves.io.schema.rules.string.truststore_url": "true",
-	}
-	vFn, err = vrhTrustedCaUrl(rulesTrustedCaUrl)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for DownstreamTlsValidationContext.trusted_ca_url: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["trusted_ca_url"] = vFn
-
-	v.FldValidators["crl_choice.crl"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
-
-	return v
-}()
-
-func DownstreamTlsValidationContextValidator() db.Validator {
-	return DefaultDownstreamTlsValidationContextValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -13126,6 +12656,32 @@ func (v *ValidateProxyTypeHttps) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	switch m.GetDefaultLbChoice().(type) {
+	case *ProxyTypeHttps_NonDefaultLoadbalancer:
+		if fv, exists := v.FldValidators["default_lb_choice.non_default_loadbalancer"]; exists {
+			val := m.GetDefaultLbChoice().(*ProxyTypeHttps_NonDefaultLoadbalancer).NonDefaultLoadbalancer
+			vOpts := append(opts,
+				db.WithValidateField("default_lb_choice"),
+				db.WithValidateField("non_default_loadbalancer"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ProxyTypeHttps_DefaultLoadbalancer:
+		if fv, exists := v.FldValidators["default_lb_choice.default_loadbalancer"]; exists {
+			val := m.GetDefaultLbChoice().(*ProxyTypeHttps_DefaultLoadbalancer).DefaultLoadbalancer
+			vOpts := append(opts,
+				db.WithValidateField("default_lb_choice"),
+				db.WithValidateField("default_loadbalancer"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["http_redirect"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("http_redirect"))
@@ -13296,7 +12852,7 @@ var DefaultProxyTypeHttpsValidator = func() *ValidateProxyTypeHttps {
 	}
 	v.FldValidators["port"] = vFn
 
-	v.FldValidators["tls_parameters"] = DownstreamTlsParamsTypeValidator().Validate
+	v.FldValidators["tls_parameters"] = ves_io_schema_views.DownstreamTlsParamsTypeValidator().Validate
 
 	return v
 }()
@@ -13442,6 +12998,32 @@ func (v *ValidateProxyTypeHttpsAutoCerts) Validate(ctx context.Context, pm inter
 		vOpts := append(opts, db.WithValidateField("add_hsts"))
 		if err := fv(ctx, m.GetAddHsts(), vOpts...); err != nil {
 			return err
+		}
+
+	}
+
+	switch m.GetDefaultLbChoice().(type) {
+	case *ProxyTypeHttpsAutoCerts_NonDefaultLoadbalancer:
+		if fv, exists := v.FldValidators["default_lb_choice.non_default_loadbalancer"]; exists {
+			val := m.GetDefaultLbChoice().(*ProxyTypeHttpsAutoCerts_NonDefaultLoadbalancer).NonDefaultLoadbalancer
+			vOpts := append(opts,
+				db.WithValidateField("default_lb_choice"),
+				db.WithValidateField("non_default_loadbalancer"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ProxyTypeHttpsAutoCerts_DefaultLoadbalancer:
+		if fv, exists := v.FldValidators["default_lb_choice.default_loadbalancer"]; exists {
+			val := m.GetDefaultLbChoice().(*ProxyTypeHttpsAutoCerts_DefaultLoadbalancer).DefaultLoadbalancer
+			vOpts := append(opts,
+				db.WithValidateField("default_lb_choice"),
+				db.WithValidateField("default_loadbalancer"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
 		}
 
 	}
@@ -13663,7 +13245,7 @@ var DefaultProxyTypeHttpsAutoCertsValidator = func() *ValidateProxyTypeHttpsAuto
 	}
 	v.FldValidators["port"] = vFn
 
-	v.FldValidators["mtls_choice.use_mtls"] = DownstreamTlsValidationContextValidator().Validate
+	v.FldValidators["mtls_choice.use_mtls"] = ves_io_schema_views.DownstreamTlsValidationContextValidator().Validate
 
 	v.FldValidators["tls_config"] = ves_io_schema_views.TlsConfigValidator().Validate
 
@@ -16212,7 +15794,7 @@ func (m *RouteSimpleAdvancedOptions) GetMirroringChoiceDRefInfo() ([]db.DRefInfo
 
 func (m *RouteSimpleAdvancedOptions) GetWafChoiceDRefInfo() ([]db.DRefInfo, error) {
 	switch m.GetWafChoice().(type) {
-	case *RouteSimpleAdvancedOptions_DisableWaf:
+	case *RouteSimpleAdvancedOptions_InheritedWaf:
 
 		return nil, nil
 
@@ -16280,7 +15862,7 @@ func (m *RouteSimpleAdvancedOptions) GetWafChoiceDBEntries(ctx context.Context, 
 	var entries []db.Entry
 
 	switch m.GetWafChoice().(type) {
-	case *RouteSimpleAdvancedOptions_DisableWaf:
+	case *RouteSimpleAdvancedOptions_InheritedWaf:
 
 	case *RouteSimpleAdvancedOptions_Waf:
 		refdType, err := d.TypeForEntryKind("", "", "waf.Object")
@@ -16997,12 +16579,12 @@ func (v *ValidateRouteSimpleAdvancedOptions) Validate(ctx context.Context, pm in
 	}
 
 	switch m.GetWafChoice().(type) {
-	case *RouteSimpleAdvancedOptions_DisableWaf:
-		if fv, exists := v.FldValidators["waf_choice.disable_waf"]; exists {
-			val := m.GetWafChoice().(*RouteSimpleAdvancedOptions_DisableWaf).DisableWaf
+	case *RouteSimpleAdvancedOptions_InheritedWaf:
+		if fv, exists := v.FldValidators["waf_choice.inherited_waf"]; exists {
+			val := m.GetWafChoice().(*RouteSimpleAdvancedOptions_InheritedWaf).InheritedWaf
 			vOpts := append(opts,
 				db.WithValidateField("waf_choice"),
-				db.WithValidateField("disable_waf"),
+				db.WithValidateField("inherited_waf"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
@@ -20810,7 +20392,7 @@ var DefaultSimpleClientSrcRuleValidator = func() *ValidateSimpleClientSrcRule {
 	vrhActions := v.ActionsValidationRuleHandler
 	rulesActions := map[string]string{
 		"ves.io.schema.rules.enum.defined_only":  "true",
-		"ves.io.schema.rules.repeated.max_items": "4",
+		"ves.io.schema.rules.repeated.max_items": "5",
 		"ves.io.schema.rules.repeated.unique":    "true",
 	}
 	vFn, err = vrhActions(rulesActions)

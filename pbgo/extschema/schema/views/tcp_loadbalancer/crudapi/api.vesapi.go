@@ -2866,6 +2866,73 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "schemaBlindfoldSecretInfoType": {
+            "type": "object",
+            "description": "BlindfoldSecretInfoType specifies information about the Secret managed by Volterra Secret Management",
+            "title": "BlindfoldSecretInfoType",
+            "x-displayname": "Blindfold Secret",
+            "x-ves-displayorder": "3,1,2",
+            "x-ves-proto-message": "ves.io.schema.BlindfoldSecretInfoType",
+            "properties": {
+                "decryption_provider": {
+                    "type": "string",
+                    "description": " Name of the Secret Management Access object that contains information about the backend Secret Management service.\n\nExample: - \"value\"-",
+                    "title": "Decryption Provider",
+                    "x-displayname": "Decryption Provider",
+                    "x-ves-example": "value"
+                },
+                "location": {
+                    "type": "string",
+                    "description": " Location is the uri_ref. It could be in url format for string:///\n Or it could be a path if the store provider is an http/https location\n\nExample: - \"string:///U2VjcmV0SW5mb3JtYXRpb24=\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.uri_ref: true\n",
+                    "title": "Location",
+                    "x-displayname": "Location",
+                    "x-ves-example": "string:///U2VjcmV0SW5mb3JtYXRpb24=",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.uri_ref": "true"
+                    }
+                },
+                "store_provider": {
+                    "type": "string",
+                    "description": " Name of the Secret Management Access object that contains information about the store to get encrypted bytes\n This field needs to be provided only if the url scheme is not string:///\n\nExample: - \"value\"-",
+                    "title": "Store Provider",
+                    "x-displayname": "Store Provider",
+                    "x-ves-example": "value"
+                }
+            }
+        },
+        "schemaClearSecretInfoType": {
+            "type": "object",
+            "description": "ClearSecretInfoType specifies information about the Secret that is not encrypted.",
+            "title": "ClearSecretInfoType",
+            "x-displayname": "In-Clear Secret",
+            "x-ves-displayorder": "2,1",
+            "x-ves-proto-message": "ves.io.schema.ClearSecretInfoType",
+            "properties": {
+                "provider": {
+                    "type": "string",
+                    "description": " Name of the Secret Management Access object that contains information about the store to get encrypted bytes\n This field needs to be provided only if the url scheme is not string:///\n\nExample: - \"box-provider\"-",
+                    "title": "Provider",
+                    "x-displayname": "Provider",
+                    "x-ves-example": "box-provider"
+                },
+                "url": {
+                    "type": "string",
+                    "description": " URL of the secret. Currently supported URL schemes is string:///.\n For string:/// scheme, Secret needs to be encoded Base64 format.\n When asked for this secret, caller will get Secret bytes after Base64 decoding.\n\nExample: - \"string:///U2VjcmV0SW5mb3JtYXRpb24=\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_bytes: 131072\n  ves.io.schema.rules.string.uri_ref: true\n",
+                    "title": "URL",
+                    "maxLength": 131072,
+                    "x-displayname": "URL",
+                    "x-ves-example": "string:///U2VjcmV0SW5mb3JtYXRpb24=",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.max_bytes": "131072",
+                        "ves.io.schema.rules.string.uri_ref": "true"
+                    }
+                }
+            }
+        },
         "schemaConditionType": {
             "type": "object",
             "description": "Conditions are used in the object status to describe the current state of the\nobject, e.g. Ready, Succeeded, etc.",
@@ -2927,6 +2994,46 @@ var APISwaggerJSON string = `{
             "title": "Empty",
             "x-displayname": "Empty",
             "x-ves-proto-message": "ves.io.schema.Empty"
+        },
+        "schemaHashAlgorithm": {
+            "type": "string",
+            "description": "Specifies the Hash Algorithm to be used\n\nInvalid hash algorithm\nsha256 hash algorithm\nsha1 hash algorithm",
+            "title": "HashAlgoritm",
+            "enum": [
+                "INVALID_HASH_ALGORITHM",
+                "SHA256",
+                "SHA1"
+            ],
+            "default": "INVALID_HASH_ALGORITHM",
+            "x-displayname": "Hash Algorithm",
+            "x-ves-proto-enum": "ves.io.schema.HashAlgorithm"
+        },
+        "schemaHashAlgorithms": {
+            "type": "object",
+            "description": "Specifies the hash algorithms to be used",
+            "title": "HashAlgorithms",
+            "x-displayname": "Hash Algorithms",
+            "x-ves-proto-message": "ves.io.schema.HashAlgorithms",
+            "properties": {
+                "hash_algorithms": {
+                    "type": "array",
+                    "description": " Ordered list of hash algorithms to be used.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 4\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "title": "Hash Algorithms",
+                    "minItems": 1,
+                    "maxItems": 4,
+                    "items": {
+                        "$ref": "#/definitions/schemaHashAlgorithm"
+                    },
+                    "x-displayname": "Hash Algorithms",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.max_items": "4",
+                        "ves.io.schema.rules.repeated.min_items": "1",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
+                }
+            }
         },
         "schemaInitializerType": {
             "type": "object",
@@ -3040,6 +3147,38 @@ var APISwaggerJSON string = `{
                     "title": "uid",
                     "x-displayname": "UID",
                     "x-ves-example": "d15f1fad-4d37-48c0-8706-df1824d76d31"
+                }
+            }
+        },
+        "schemaSecretEncodingType": {
+            "type": "string",
+            "description": "x-displayName: \"Secret Encoding\"\nSecretEncodingType defines the encoding type of the secret before handled by the Secret Management Service.\n\n - EncodingNone: x-displayName: \"None\"\nNo Encoding\n - EncodingBase64: Base64\n\nx-displayName: \"Base64\"\nBase64 encoding",
+            "title": "SecretEncodingType",
+            "enum": [
+                "EncodingNone",
+                "EncodingBase64"
+            ],
+            "default": "EncodingNone"
+        },
+        "schemaSecretType": {
+            "type": "object",
+            "description": "SecretType is used in an object to indicate a sensitive/confidential field",
+            "title": "SecretType",
+            "x-displayname": "Secret",
+            "x-ves-oneof-field-secret_info_oneof": "[\"blindfold_secret_info\",\"clear_secret_info\"]",
+            "x-ves-proto-message": "ves.io.schema.SecretType",
+            "properties": {
+                "blindfold_secret_info": {
+                    "description": "Exclusive with [clear_secret_info]\n Blindfold Secret is used for the secrets managed by Volterra Secret Management Service",
+                    "title": "Blindfold Secret",
+                    "$ref": "#/definitions/schemaBlindfoldSecretInfoType",
+                    "x-displayname": "Blindfold Secret"
+                },
+                "clear_secret_info": {
+                    "description": "Exclusive with [blindfold_secret_info]\n Clear Secret is used for the secrets that are not encrypted",
+                    "title": "Clear Secret",
+                    "$ref": "#/definitions/schemaClearSecretInfoType",
+                    "x-displayname": "Clear Secret"
                 }
             }
         },
@@ -3291,6 +3430,115 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "schemaTlsCertificateType": {
+            "type": "object",
+            "description": "Handle to fetch certificate and key",
+            "title": "TlsCertificateType",
+            "x-displayname": "TLS Certificate",
+            "x-ves-oneof-field-ocsp_stapling_choice": "[\"custom_hash_algorithms\",\"disable_ocsp_stapling\",\"use_system_defaults\"]",
+            "x-ves-proto-message": "ves.io.schema.TlsCertificateType",
+            "properties": {
+                "certificate_url": {
+                    "type": "string",
+                    "description": " TLS certificate.\n Certificate or certificate chain in PEM format including the PEM headers.\n\nExample: - \"value\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.certificate_url: true\n  ves.io.schema.rules.string.max_bytes: 131072\n  ves.io.schema.rules.string.min_bytes: 1\n",
+                    "title": "certificate_url",
+                    "minLength": 1,
+                    "maxLength": 131072,
+                    "x-displayname": "Certificate URL",
+                    "x-ves-example": "value",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.certificate_url": "true",
+                        "ves.io.schema.rules.string.max_bytes": "131072",
+                        "ves.io.schema.rules.string.min_bytes": "1"
+                    }
+                },
+                "custom_hash_algorithms": {
+                    "description": "Exclusive with [disable_ocsp_stapling use_system_defaults]\n Use hash algorithms in the custom order. Volterra will try to fetch ocsp response from the CA in the given order. Additionally, LoadBalancer will not become active until ocspResponse cannot be fetched if the certificate has MustStaple extension set.",
+                    "title": "Use Custom Order for Hash Algorithms",
+                    "$ref": "#/definitions/schemaHashAlgorithms",
+                    "x-displayname": "Use hash algorithms in custom order"
+                },
+                "description": {
+                    "type": "string",
+                    "description": " Description for the certificate\n\nExample: - \"Certificate used in production environment\"-",
+                    "title": "description",
+                    "x-displayname": "Description",
+                    "x-ves-example": "Certificate used in production environment"
+                },
+                "disable_ocsp_stapling": {
+                    "description": "Exclusive with [custom_hash_algorithms use_system_defaults]\n Disable OCSP Stapling. Volterra will not fetch and staple OCSP Response for this certificate.\n This is the default behavior if no choice is selected.",
+                    "title": "Disable OCSP Stapling",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Disable OCSP Stapling"
+                },
+                "private_key": {
+                    "description": " TLS Private Key data in unencrypted PEM format including the PEM headers. The data may be optionally secured using BlindFold. TLS key has to match the accompanying certificate.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "private_key",
+                    "$ref": "#/definitions/schemaSecretType",
+                    "x-displayname": "Private Key",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                },
+                "use_system_defaults": {
+                    "description": "Exclusive with [custom_hash_algorithms disable_ocsp_stapling]\n Use Volterra Default Settings to fetch and staple OCSP Response.\n OCSP Response will be stapled if it can be fetched. Additionally, LoadBalancer will not become active until ocspResponse cannot be fetched if the certificate has MustStaple extension set.\n Volterra will try to fetch OCSPResponse with sha256 and sha1 as HashAlgorithm, in that order.",
+                    "title": "Fetch with Volterra default settings",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Fetch with Volterra default settings"
+                }
+            }
+        },
+        "schemaTlsProtocol": {
+            "type": "string",
+            "description": "TlsProtocol is enumeration of supported TLS versions\n\nF5 Distributed Cloud will choose the optimal TLS version.",
+            "title": "TlsProtocol",
+            "enum": [
+                "TLS_AUTO",
+                "TLSv1_0",
+                "TLSv1_1",
+                "TLSv1_2",
+                "TLSv1_3"
+            ],
+            "default": "TLS_AUTO",
+            "x-displayname": "TLS Protocol",
+            "x-ves-proto-enum": "ves.io.schema.TlsProtocol"
+        },
+        "schemaVaultSecretInfoType": {
+            "type": "object",
+            "description": "x-displayName: \"Vault Secret\"\nVaultSecretInfoType specifies information about the Secret managed by Hashicorp Vault.",
+            "title": "VaultSecretInfoType",
+            "properties": {
+                "key": {
+                    "type": "string",
+                    "description": "x-displayName: \"Key\"\nx-example: \"key_pem\"\nKey of the individual secret. Vault Secrets are stored as key-value pair.\nIf user is only interested in one value from the map, this field should be set to the corresponding key.\nIf not provided entire secret will be returned.",
+                    "title": "Key"
+                },
+                "location": {
+                    "type": "string",
+                    "description": "x-displayName: \"Location\"\nx-required\nx-example: \"v1/data/vhost_key\"\nPath to secret in Vault.",
+                    "title": "Location"
+                },
+                "provider": {
+                    "type": "string",
+                    "description": "x-displayName: \"Provider\"\nx-required\nx-example: \"vault-vh-provider\"\nName of the Secret Management Access object that contains information about the backend Vault.",
+                    "title": "Provider"
+                },
+                "secret_encoding": {
+                    "description": "x-displayName: \"Secret Encoding\"\nThis field defines the encoding type of the secret BEFORE the secret is put into Hashicorp Vault.",
+                    "title": "secret_encoding",
+                    "$ref": "#/definitions/schemaSecretEncodingType"
+                },
+                "version": {
+                    "type": "integer",
+                    "description": "x-displayName: \"Version\"\nx-example: \"1\"\nVersion of the secret to be fetched. As vault secrets are versioned, user can specify this field to fetch specific version.\nIf not provided latest version will be returned.",
+                    "title": "Version",
+                    "format": "int64"
+                }
+            }
+        },
         "schemaViewRefType": {
             "type": "object",
             "description": "ViewRefType represents a reference to a view",
@@ -3325,6 +3573,63 @@ var APISwaggerJSON string = `{
                     "title": "uid",
                     "x-displayname": "UID",
                     "x-ves-example": "f3744323-1adf-4aaa-a5dc-0707c1d1bd82"
+                }
+            }
+        },
+        "schemaWingmanSecretInfoType": {
+            "type": "object",
+            "description": "x-displayName: \"Wingman Secret\"\nWingmanSecretInfoType specifies the handle to the wingman secret",
+            "title": "WingmanSecretInfoType",
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "description": "x-displayName: \"Name\"\nx-required\nx-example: \"ChargeBack-API-Key\"\nName of the secret.",
+                    "title": "Name"
+                }
+            }
+        },
+        "schemaviewsDownstreamTlsParamsType": {
+            "type": "object",
+            "description": "TLS parameters",
+            "title": "DownstreamTlsParamsType",
+            "x-displayname": "TLS Parameters",
+            "x-ves-oneof-field-mtls_choice": "[\"no_mtls\",\"use_mtls\"]",
+            "x-ves-proto-message": "ves.io.schema.views.DownstreamTlsParamsType",
+            "properties": {
+                "no_mtls": {
+                    "description": "Exclusive with [use_mtls]\n",
+                    "title": "No mTLS",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Disable"
+                },
+                "tls_certificates": {
+                    "type": "array",
+                    "description": " Set of TLS certificates\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 16\n  ves.io.schema.rules.repeated.min_items: 1\n",
+                    "title": "tls_certificates",
+                    "minItems": 1,
+                    "maxItems": 16,
+                    "items": {
+                        "$ref": "#/definitions/schemaTlsCertificateType"
+                    },
+                    "x-displayname": "TLS Certificates",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.max_items": "16",
+                        "ves.io.schema.rules.repeated.min_items": "1"
+                    }
+                },
+                "tls_config": {
+                    "description": " Configuration of TLS settings such as min/max TLS version and ciphersuites",
+                    "title": "TLS Config",
+                    "$ref": "#/definitions/viewsTlsConfig",
+                    "x-displayname": "TLS"
+                },
+                "use_mtls": {
+                    "description": "Exclusive with [no_mtls]\n",
+                    "title": "Use mTLS",
+                    "$ref": "#/definitions/viewsDownstreamTlsValidationContext",
+                    "x-displayname": "Enable"
                 }
             }
         },
@@ -3371,6 +3676,49 @@ var APISwaggerJSON string = `{
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.string.max_bytes": "64"
                     }
+                }
+            }
+        },
+        "tcp_loadbalancerProxyTypeTLSTCP": {
+            "type": "object",
+            "description": "Choice for selecting TLS over TCP proxy with bring your own certificates",
+            "title": "BYOC TLS over TCP Choice",
+            "x-displayname": "BYOC TLS over TCP Choice",
+            "x-ves-proto-message": "ves.io.schema.views.tcp_loadbalancer.ProxyTypeTLSTCP",
+            "properties": {
+                "tls_parameters": {
+                    "description": " TLS parameters for downstream connections.",
+                    "$ref": "#/definitions/schemaviewsDownstreamTlsParamsType",
+                    "x-displayname": "TLS Parameters"
+                }
+            }
+        },
+        "tcp_loadbalancerProxyTypeTLSTCPAutoCerts": {
+            "type": "object",
+            "description": "Choice for selecting TLS over TCP proxy with automatic certificates",
+            "title": "TLS over TCP with Auto Certs Choice",
+            "x-displayname": "TLS over TCP with Auto Certs Choice",
+            "x-ves-displayorder": "3,4",
+            "x-ves-oneof-field-mtls_choice": "[\"no_mtls\",\"use_mtls\"]",
+            "x-ves-proto-message": "ves.io.schema.views.tcp_loadbalancer.ProxyTypeTLSTCPAutoCerts",
+            "properties": {
+                "no_mtls": {
+                    "description": "Exclusive with [use_mtls]\n",
+                    "title": "No mTLS",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Disable"
+                },
+                "tls_config": {
+                    "description": " Configuration of TLS settings such as min/max TLS version and ciphersuites",
+                    "title": "TLS Config",
+                    "$ref": "#/definitions/viewsTlsConfig",
+                    "x-displayname": "TLS"
+                },
+                "use_mtls": {
+                    "description": "Exclusive with [no_mtls]\n",
+                    "title": "Use mTLS",
+                    "$ref": "#/definitions/viewsDownstreamTlsValidationContext",
+                    "x-displayname": "Enable"
                 }
             }
         },
@@ -3453,6 +3801,82 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "viewsCustomCiphers": {
+            "type": "object",
+            "description": "This defines TLS protocol config including min/max versions and allowed ciphers",
+            "title": "CustomCiphers",
+            "x-displayname": "Custom Ciphers",
+            "x-ves-displayorder": "1,2,3",
+            "x-ves-proto-message": "ves.io.schema.views.CustomCiphers",
+            "properties": {
+                "cipher_suites": {
+                    "type": "array",
+                    "description": " The TLS listener will only support the specified cipher list.\n\nExample: - \"TLS_AES_128_GCM_SHA256\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.items.string.in: [\\\"TLS_AES_128_GCM_SHA256\\\",\\\"TLS_AES_256_GCM_SHA384\\\",\\\"TLS_CHACHA20_POLY1305_SHA256\\\",\\\"TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256\\\",\\\"TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384\\\",\\\"TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305_SHA256\\\",\\\"TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256\\\",\\\"TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384\\\",\\\"TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305_SHA256\\\",\\\"TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA\\\",\\\"TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA\\\",\\\"TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA\\\",\\\"TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA\\\",\\\"TLS_RSA_WITH_AES_128_CBC_SHA\\\",\\\"TLS_RSA_WITH_AES_128_GCM_SHA256\\\",\\\"TLS_RSA_WITH_AES_256_CBC_SHA\\\",\\\"TLS_RSA_WITH_AES_256_GCM_SHA384\\\"]\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "title": "cipher_suites",
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-displayname": "Cipher Suites",
+                    "x-ves-example": "TLS_AES_128_GCM_SHA256",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.items.string.in": "[\\\"TLS_AES_128_GCM_SHA256\\\",\\\"TLS_AES_256_GCM_SHA384\\\",\\\"TLS_CHACHA20_POLY1305_SHA256\\\",\\\"TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256\\\",\\\"TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384\\\",\\\"TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305_SHA256\\\",\\\"TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256\\\",\\\"TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384\\\",\\\"TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305_SHA256\\\",\\\"TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA\\\",\\\"TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA\\\",\\\"TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA\\\",\\\"TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA\\\",\\\"TLS_RSA_WITH_AES_128_CBC_SHA\\\",\\\"TLS_RSA_WITH_AES_128_GCM_SHA256\\\",\\\"TLS_RSA_WITH_AES_256_CBC_SHA\\\",\\\"TLS_RSA_WITH_AES_256_GCM_SHA384\\\"]",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
+                },
+                "max_version": {
+                    "description": " Maximum TLS protocol version.",
+                    "title": "maximum_protocol_version",
+                    "$ref": "#/definitions/schemaTlsProtocol",
+                    "x-displayname": "Maximum TLS version"
+                },
+                "min_version": {
+                    "description": " Minimum TLS protocol version.",
+                    "title": "minimum_protocol_version",
+                    "$ref": "#/definitions/schemaTlsProtocol",
+                    "x-displayname": "Minimum TLS version"
+                }
+            }
+        },
+        "viewsDownstreamTlsValidationContext": {
+            "type": "object",
+            "description": "Validation context for downstream client TLS connections",
+            "title": "DownstreamTlsValidationContext",
+            "x-displayname": "Clients TLS validation context",
+            "x-ves-oneof-field-crl_choice": "[\"crl\",\"no_crl\"]",
+            "x-ves-proto-message": "ves.io.schema.views.DownstreamTlsValidationContext",
+            "properties": {
+                "crl": {
+                    "description": "Exclusive with [no_crl]\n\n Client certificate is verified against CRL.\n Specify the CRL server information to download the certificate revocation list",
+                    "title": "Verify client certificate with CRL",
+                    "$ref": "#/definitions/schemaviewsObjectRefType",
+                    "x-displayname": "CRL"
+                },
+                "no_crl": {
+                    "description": "Exclusive with [crl]\n Client certificate revocation status is not verified",
+                    "title": "No client certificate verification with CRL",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "No CRL"
+                },
+                "trusted_ca_url": {
+                    "type": "string",
+                    "description": " The URL for a trust store\n\nExample: - \"value\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_bytes: 131072\n  ves.io.schema.rules.string.min_bytes: 1\n  ves.io.schema.rules.string.truststore_url: true\n",
+                    "title": "trusted_ca_url",
+                    "minLength": 1,
+                    "maxLength": 131072,
+                    "x-displayname": "Trusted CA",
+                    "x-ves-example": "value",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.max_bytes": "131072",
+                        "ves.io.schema.rules.string.min_bytes": "1",
+                        "ves.io.schema.rules.string.truststore_url": "true"
+                    }
+                }
+            }
+        },
         "viewsOriginPoolWithWeight": {
             "type": "object",
             "description": "This defines a combination of origin pool with weight and priority",
@@ -3525,6 +3949,41 @@ var APISwaggerJSON string = `{
             "default": "SITE_NETWORK_INSIDE_AND_OUTSIDE",
             "x-displayname": "Site Network",
             "x-ves-proto-enum": "ves.io.schema.views.SiteNetwork"
+        },
+        "viewsTlsConfig": {
+            "type": "object",
+            "description": "This defines various options to configure TLS configuration parameters",
+            "title": "TlsConfig",
+            "x-displayname": "TLS Config",
+            "x-ves-displayorder": "5",
+            "x-ves-oneof-field-choice": "[\"custom_security\",\"default_security\",\"low_security\",\"medium_security\"]",
+            "x-ves-proto-message": "ves.io.schema.views.TlsConfig",
+            "properties": {
+                "custom_security": {
+                    "description": "Exclusive with [default_security low_security medium_security]\n Custom selection of TLS versions and cipher suites",
+                    "title": "Custom Security",
+                    "$ref": "#/definitions/viewsCustomCiphers",
+                    "x-displayname": "Custom"
+                },
+                "default_security": {
+                    "description": "Exclusive with [custom_security low_security medium_security]\n TLS v1.2+ with PFS ciphers and strong crypto algorithms.",
+                    "title": "Default Security",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "High"
+                },
+                "low_security": {
+                    "description": "Exclusive with [custom_security default_security medium_security]\n TLS v1.0+ including non-PFS ciphers and weak crypto algorithms.",
+                    "title": "Low Security",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Low"
+                },
+                "medium_security": {
+                    "description": "Exclusive with [custom_security default_security low_security]\n TLS v1.0+ with PFS ciphers and medium strength crypto algorithms.",
+                    "title": "Medium Security",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Medium"
+                }
+            }
         },
         "viewsWhereSite": {
             "type": "object",
@@ -3716,6 +4175,8 @@ var APISwaggerJSON string = `{
             "x-ves-oneof-field-advertise_choice": "[\"advertise_custom\",\"advertise_on_public\",\"advertise_on_public_default_vip\",\"do_not_advertise\"]",
             "x-ves-oneof-field-cluster_retract_choice": "[\"do_not_retract_cluster\",\"retract_cluster\"]",
             "x-ves-oneof-field-hash_policy_choice": "[\"hash_policy_choice_least_active\",\"hash_policy_choice_random\",\"hash_policy_choice_round_robin\",\"hash_policy_choice_source_ip_stickiness\"]",
+            "x-ves-oneof-field-loadbalancer_type": "[\"tcp\",\"tls_tcp\",\"tls_tcp_auto_cert\"]",
+            "x-ves-oneof-field-sni_default_lb_choice": "[\"default_lb_with_sni\",\"no_sni\",\"sni\"]",
             "x-ves-proto-message": "ves.io.schema.views.tcp_loadbalancer.GlobalSpecType",
             "properties": {
                 "advertise_custom": {
@@ -3735,6 +4196,18 @@ var APISwaggerJSON string = `{
                     "title": "Advertise On Public Default VIP",
                     "$ref": "#/definitions/schemaEmpty",
                     "x-displayname": "Advertise On Public"
+                },
+                "auto_cert_info": {
+                    "description": " Auto certificate related information",
+                    "title": "Auto Cert Information",
+                    "$ref": "#/definitions/virtual_hostAutoCertInfoType",
+                    "x-displayname": "Auto Cert Information"
+                },
+                "default_lb_with_sni": {
+                    "description": "Exclusive with [no_sni sni]\n Enables Server Name Indication for Loadbalancer\n Also enables usage as Default LB for Non SNI Clients",
+                    "title": "SNI and Default LB",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "SNI and Default LB"
                 },
                 "dns_info": {
                     "type": "array",
@@ -3833,6 +4306,12 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.uint32.lte": "65535"
                     }
                 },
+                "no_sni": {
+                    "description": "Exclusive with [default_lb_with_sni sni]\n Loadbalancer without Server Name Indication support",
+                    "title": "No SNI",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "No SNI"
+                },
                 "origin_pools_weights": {
                     "type": "array",
                     "description": " Origin pools and weights used for this load balancer.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 16\n  ves.io.schema.rules.repeated.unique: true\n",
@@ -3853,19 +4332,35 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/schemaEmpty",
                     "x-displayname": "Retract cluster with no healthy endpoints"
                 },
+                "sni": {
+                    "description": "Exclusive with [default_lb_with_sni no_sni]\n Enables Server Name Indication for Loadbalancer",
+                    "title": "With SNI",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "SNI"
+                },
+                "tcp": {
+                    "description": "Exclusive with [tls_tcp tls_tcp_auto_cert]\n TCP Load Balancer.",
+                    "title": "TCP",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "TCP"
+                },
+                "tls_tcp": {
+                    "description": "Exclusive with [tcp tls_tcp_auto_cert]\n TLS over TCP load balancer with a custom public/private certificate.\n This is also known as BYOC (Bring Your Own Certificate).\n User is responsible for managing DNS to this load balancer.",
+                    "title": "TLS over TCP",
+                    "$ref": "#/definitions/tcp_loadbalancerProxyTypeTLSTCP",
+                    "x-displayname": "TLS over TCP with Custom Certificate"
+                },
+                "tls_tcp_auto_cert": {
+                    "description": "Exclusive with [tcp tls_tcp]\n TLS over TCP load balancer with automatic public certificate provisioning.\n DNS records for the domains will be automatically managed by F5 Distributed Cloud.\n As a prerequisite, the domain must be delegated to F5 Distributed Cloud using Delegated domain feature\n or a DNS CNAME record should be created in your DNS provider's portal.",
+                    "title": "TLS over TCP with automatic certificate",
+                    "$ref": "#/definitions/tcp_loadbalancerProxyTypeTLSTCPAutoCerts",
+                    "x-displayname": "TLS over TCP with Automatic Certificate"
+                },
                 "view_internal": {
                     "description": " Reference to view internal object",
                     "title": "view_internal",
                     "$ref": "#/definitions/schemaviewsObjectRefType",
                     "x-displayname": "View Internal"
-                },
-                "with_sni": {
-                    "type": "boolean",
-                    "description": " Set to true to enable load balancer with SNI\n\nExample: - \"true\"-",
-                    "title": "With SNI",
-                    "format": "boolean",
-                    "x-displayname": "With SNI",
-                    "x-ves-example": "true"
                 }
             }
         },
@@ -3877,6 +4372,99 @@ var APISwaggerJSON string = `{
                     "title": "gc_spec",
                     "$ref": "#/definitions/viewstcp_loadbalancerGlobalSpecType",
                     "x-displayname": "GC Spec"
+                }
+            }
+        },
+        "virtual_hostAutoCertInfoType": {
+            "type": "object",
+            "description": "Information related to auto certificate",
+            "title": "AutoCertInfoType",
+            "x-displayname": "Auto Cert Information",
+            "x-ves-proto-message": "ves.io.schema.virtual_host.AutoCertInfoType",
+            "properties": {
+                "auto_cert_expiry": {
+                    "type": "string",
+                    "description": " Auto certificate expiry timestamp",
+                    "title": "Auto Cert Expiry Timestamp",
+                    "format": "date-time",
+                    "x-displayname": "Auto Cert Expiry Timestamp"
+                },
+                "auto_cert_issuer": {
+                    "type": "string",
+                    "description": " Issuer of the auto certificate",
+                    "title": "Auto Cert Issuer",
+                    "x-displayname": "Auto Cert Issuer"
+                },
+                "auto_cert_state": {
+                    "description": " State of auto certificate generation.",
+                    "title": "Auto Cert State",
+                    "$ref": "#/definitions/virtual_hostCertificationState",
+                    "x-displayname": "Auto Cert State"
+                },
+                "auto_cert_subject": {
+                    "type": "string",
+                    "description": " Subject of the auto certificate",
+                    "title": "Auto Cert Subject",
+                    "x-displayname": "Auto Cert Subject"
+                },
+                "dns_records": {
+                    "type": "array",
+                    "description": " DNS Records that are to be added by user in their DNS domain.\n Currently, this will be populated when auto certificates are\n desired but DNS delegation is not enabled.",
+                    "title": "DNS Records",
+                    "items": {
+                        "$ref": "#/definitions/virtual_hostDNSRecord"
+                    },
+                    "x-displayname": "DNS Records"
+                }
+            }
+        },
+        "virtual_hostCertificationState": {
+            "type": "string",
+            "description": "State of auto certification generation for the virtual host\n\n - AutoCertDisabled: Auto Cert Disabled\n\nAuto Certification is disabled.\n - DnsDomainVerification: Dns Domain Verification\n\nAuto Certification is waiting for domain verification.\n - AutoCertStarted: Auto Cert Started\n\nAuto Certificate generation action has started.\n - DomainChallengePending: Domain Challenge Pending\n\nThe domains in the virtual host configuration are being verified. This requires\nthe _acme-challenge TXT record in the domain to have the correct TXT.\n - DomainChallengeVerified: Domain Challenge Verified\n\nAll the domains in the virtual host have been verified.\n - AutoCertFinalize: Auto Cert Finalize\n\nCertificate generation order is Ready and Finalized.\n - CertificateInvalid: Certificate Invalid\n\nCertificate is invalid\n - CertificateValid: Certificate Valid\n\nValid certificate generated and tls_parameters are updated\n - AutoCertNotApplicable: Auto Cert Not Applicable\n\nAuto certificate not applicable because virtual host does not use TLS\n - AutoCertRateLimited: Auto Cert Rate Limited\n\nAuto certificate not available because CA has rate limited the request\n - AutoCertGenerationRetry: Auto Cert Generation Retry\n\nAuto certificate generate failed in the previous attempt, will be retried automatically\n - AutoCertError: Auto Cert Error\n\nError in Certificate generation",
+            "title": "Certification State",
+            "enum": [
+                "AutoCertDisabled",
+                "DnsDomainVerification",
+                "AutoCertStarted",
+                "DomainChallengePending",
+                "DomainChallengeVerified",
+                "AutoCertFinalize",
+                "CertificateInvalid",
+                "CertificateValid",
+                "AutoCertNotApplicable",
+                "AutoCertRateLimited",
+                "AutoCertGenerationRetry",
+                "AutoCertError"
+            ],
+            "default": "AutoCertDisabled",
+            "x-displayname": "Certification State",
+            "x-ves-proto-enum": "ves.io.schema.virtual_host.CertificationState"
+        },
+        "virtual_hostDNSRecord": {
+            "type": "object",
+            "description": "Defines a DNS record",
+            "title": "DNSRecord",
+            "x-displayname": "DNS Record",
+            "x-ves-proto-message": "ves.io.schema.virtual_host.DNSRecord",
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "description": " Name of the DNS record",
+                    "title": "Name",
+                    "x-displayname": "Name"
+                },
+                "type": {
+                    "type": "string",
+                    "description": " Type of the DNS record\n\nExample: - \"CNAME\"-",
+                    "title": "Type",
+                    "x-displayname": "Type",
+                    "x-ves-example": "CNAME"
+                },
+                "value": {
+                    "type": "string",
+                    "description": " DNS record Value",
+                    "title": "Value",
+                    "x-displayname": "Value"
                 }
             }
         },

@@ -261,7 +261,8 @@ func (c *NamespaceCustomAPIRestClient) doRPCCascadeDelete(ctx context.Context, c
 	}
 	defer rsp.Body.Close()
 
-	if rsp.StatusCode != http.StatusOK {
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
 		body, err := ioutil.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
 	}
@@ -272,7 +273,7 @@ func (c *NamespaceCustomAPIRestClient) doRPCCascadeDelete(ctx context.Context, c
 	}
 	pbRsp := &CascadeDeleteResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
-		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.namespace.CascadeDeleteResponse", body)
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.namespace.CascadeDeleteResponse", body)
 
 	}
 	if callOpts.OutCallResponse != nil {
@@ -343,7 +344,8 @@ func (c *NamespaceCustomAPIRestClient) doRPCGetActiveAlertPolicies(ctx context.C
 	}
 	defer rsp.Body.Close()
 
-	if rsp.StatusCode != http.StatusOK {
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
 		body, err := ioutil.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
 	}
@@ -354,7 +356,7 @@ func (c *NamespaceCustomAPIRestClient) doRPCGetActiveAlertPolicies(ctx context.C
 	}
 	pbRsp := &GetActiveAlertPoliciesResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
-		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.namespace.GetActiveAlertPoliciesResponse", body)
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.namespace.GetActiveAlertPoliciesResponse", body)
 
 	}
 	if callOpts.OutCallResponse != nil {
@@ -425,7 +427,8 @@ func (c *NamespaceCustomAPIRestClient) doRPCGetActiveNetworkPolicies(ctx context
 	}
 	defer rsp.Body.Close()
 
-	if rsp.StatusCode != http.StatusOK {
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
 		body, err := ioutil.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
 	}
@@ -436,7 +439,7 @@ func (c *NamespaceCustomAPIRestClient) doRPCGetActiveNetworkPolicies(ctx context
 	}
 	pbRsp := &GetActiveNetworkPoliciesResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
-		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.namespace.GetActiveNetworkPoliciesResponse", body)
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.namespace.GetActiveNetworkPoliciesResponse", body)
 
 	}
 	if callOpts.OutCallResponse != nil {
@@ -507,7 +510,8 @@ func (c *NamespaceCustomAPIRestClient) doRPCGetActiveServicePolicies(ctx context
 	}
 	defer rsp.Body.Close()
 
-	if rsp.StatusCode != http.StatusOK {
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
 		body, err := ioutil.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
 	}
@@ -518,7 +522,7 @@ func (c *NamespaceCustomAPIRestClient) doRPCGetActiveServicePolicies(ctx context
 	}
 	pbRsp := &GetActiveServicePoliciesResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
-		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.namespace.GetActiveServicePoliciesResponse", body)
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.namespace.GetActiveServicePoliciesResponse", body)
 
 	}
 	if callOpts.OutCallResponse != nil {
@@ -589,7 +593,8 @@ func (c *NamespaceCustomAPIRestClient) doRPCGetFastACLsForInternetVIPs(ctx conte
 	}
 	defer rsp.Body.Close()
 
-	if rsp.StatusCode != http.StatusOK {
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
 		body, err := ioutil.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
 	}
@@ -600,7 +605,7 @@ func (c *NamespaceCustomAPIRestClient) doRPCGetFastACLsForInternetVIPs(ctx conte
 	}
 	pbRsp := &GetFastACLsForInternetVIPsResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
-		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.namespace.GetFastACLsForInternetVIPsResponse", body)
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.namespace.GetFastACLsForInternetVIPsResponse", body)
 
 	}
 	if callOpts.OutCallResponse != nil {
@@ -672,7 +677,8 @@ func (c *NamespaceCustomAPIRestClient) doRPCSetActiveAlertPolicies(ctx context.C
 	}
 	defer rsp.Body.Close()
 
-	if rsp.StatusCode != http.StatusOK {
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
 		body, err := ioutil.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
 	}
@@ -683,7 +689,7 @@ func (c *NamespaceCustomAPIRestClient) doRPCSetActiveAlertPolicies(ctx context.C
 	}
 	pbRsp := &SetActiveAlertPoliciesResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
-		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.namespace.SetActiveAlertPoliciesResponse", body)
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.namespace.SetActiveAlertPoliciesResponse", body)
 
 	}
 	if callOpts.OutCallResponse != nil {
@@ -755,7 +761,8 @@ func (c *NamespaceCustomAPIRestClient) doRPCSetActiveNetworkPolicies(ctx context
 	}
 	defer rsp.Body.Close()
 
-	if rsp.StatusCode != http.StatusOK {
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
 		body, err := ioutil.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
 	}
@@ -766,7 +773,7 @@ func (c *NamespaceCustomAPIRestClient) doRPCSetActiveNetworkPolicies(ctx context
 	}
 	pbRsp := &SetActiveNetworkPoliciesResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
-		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.namespace.SetActiveNetworkPoliciesResponse", body)
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.namespace.SetActiveNetworkPoliciesResponse", body)
 
 	}
 	if callOpts.OutCallResponse != nil {
@@ -838,7 +845,8 @@ func (c *NamespaceCustomAPIRestClient) doRPCSetActiveServicePolicies(ctx context
 	}
 	defer rsp.Body.Close()
 
-	if rsp.StatusCode != http.StatusOK {
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
 		body, err := ioutil.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
 	}
@@ -849,7 +857,7 @@ func (c *NamespaceCustomAPIRestClient) doRPCSetActiveServicePolicies(ctx context
 	}
 	pbRsp := &SetActiveServicePoliciesResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
-		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.namespace.SetActiveServicePoliciesResponse", body)
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.namespace.SetActiveServicePoliciesResponse", body)
 
 	}
 	if callOpts.OutCallResponse != nil {
@@ -921,7 +929,8 @@ func (c *NamespaceCustomAPIRestClient) doRPCSetFastACLsForInternetVIPs(ctx conte
 	}
 	defer rsp.Body.Close()
 
-	if rsp.StatusCode != http.StatusOK {
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
 		body, err := ioutil.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
 	}
@@ -932,7 +941,7 @@ func (c *NamespaceCustomAPIRestClient) doRPCSetFastACLsForInternetVIPs(ctx conte
 	}
 	pbRsp := &SetFastACLsForInternetVIPsResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
-		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.namespace.SetFastACLsForInternetVIPsResponse", body)
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.namespace.SetFastACLsForInternetVIPsResponse", body)
 
 	}
 	if callOpts.OutCallResponse != nil {
@@ -1006,7 +1015,8 @@ func (c *NamespaceCustomAPIRestClient) doRPCSuggestValues(ctx context.Context, c
 	}
 	defer rsp.Body.Close()
 
-	if rsp.StatusCode != http.StatusOK {
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
 		body, err := ioutil.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
 	}
@@ -1017,7 +1027,7 @@ func (c *NamespaceCustomAPIRestClient) doRPCSuggestValues(ctx context.Context, c
 	}
 	pbRsp := &SuggestValuesResp{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
-		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.namespace.SuggestValuesResp", body)
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.namespace.SuggestValuesResp", body)
 
 	}
 	if callOpts.OutCallResponse != nil {
@@ -1089,7 +1099,8 @@ func (c *NamespaceCustomAPIRestClient) doRPCUpdateAllowAdvertiseOnPublic(ctx con
 	}
 	defer rsp.Body.Close()
 
-	if rsp.StatusCode != http.StatusOK {
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
 		body, err := ioutil.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
 	}
@@ -1100,7 +1111,7 @@ func (c *NamespaceCustomAPIRestClient) doRPCUpdateAllowAdvertiseOnPublic(ctx con
 	}
 	pbRsp := &UpdateAllowAdvertiseOnPublicResp{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
-		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.namespace.UpdateAllowAdvertiseOnPublicResp", body)
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.namespace.UpdateAllowAdvertiseOnPublicResp", body)
 
 	}
 	if callOpts.OutCallResponse != nil {
@@ -1800,7 +1811,7 @@ var NamespaceCustomAPISwaggerJSON string = `{
     "paths": {
         "/public/namespaces/system/update_allow_advertise_on_public": {
             "post": {
-                "summary": "UpdateAllowAdvertiseOnPublic",
+                "summary": "Update allow advertise on public.",
                 "description": "UpdateAllowAdvertiseOnPublic can update a config to allow advertise on public.",
                 "operationId": "ves.io.schema.namespace.NamespaceCustomAPI.UpdateAllowAdvertiseOnPublic",
                 "responses": {
@@ -1884,7 +1895,7 @@ var NamespaceCustomAPISwaggerJSON string = `{
         },
         "/public/namespaces/{namespace}/active_alert_policies": {
             "get": {
-                "summary": "GetActiveAlertPolicies",
+                "summary": "Get Active Aelrt Policies",
                 "description": "GetActiveAlertPolicies resturn the list of active alert policies for the namespace",
                 "operationId": "ves.io.schema.namespace.NamespaceCustomAPI.GetActiveAlertPolicies",
                 "responses": {
@@ -1963,7 +1974,7 @@ var NamespaceCustomAPISwaggerJSON string = `{
                 "x-ves-proto-rpc": "ves.io.schema.namespace.NamespaceCustomAPI.GetActiveAlertPolicies"
             },
             "post": {
-                "summary": "SetActiveAlertPolicies",
+                "summary": "Set Active Alert Policies",
                 "description": "SetActiveAlertPolicies sets the active alert policies for the namespace\nAn emtpy list in the request will clear the active alert policies for the namespace",
                 "operationId": "ves.io.schema.namespace.NamespaceCustomAPI.SetActiveAlertPolicies",
                 "responses": {
@@ -2055,7 +2066,7 @@ var NamespaceCustomAPISwaggerJSON string = `{
         },
         "/public/namespaces/{namespace}/active_network_policies": {
             "get": {
-                "summary": "GetActiveNetworkPolicies",
+                "summary": "Get Active Network Policies",
                 "description": "GetActiveNetworkPolicies resturn the list of active network policies for the namespace",
                 "operationId": "ves.io.schema.namespace.NamespaceCustomAPI.GetActiveNetworkPolicies",
                 "responses": {
@@ -2134,7 +2145,7 @@ var NamespaceCustomAPISwaggerJSON string = `{
                 "x-ves-proto-rpc": "ves.io.schema.namespace.NamespaceCustomAPI.GetActiveNetworkPolicies"
             },
             "post": {
-                "summary": "SetActiveNetworkPolicies",
+                "summary": "Set Active Network Policies",
                 "description": "SetActiveNetworkPolicies sets the active network policies for the namespace\nAn emtpy list in the request will clear the active network policies for the namespace",
                 "operationId": "ves.io.schema.namespace.NamespaceCustomAPI.SetActiveNetworkPolicies",
                 "responses": {
@@ -2226,7 +2237,7 @@ var NamespaceCustomAPISwaggerJSON string = `{
         },
         "/public/namespaces/{namespace}/active_service_policies": {
             "get": {
-                "summary": "GetActiveServicePolicies",
+                "summary": "Get Active Service Policies",
                 "description": "GetActiveServicePolicies resturn the list of active service policies for the namespace",
                 "operationId": "ves.io.schema.namespace.NamespaceCustomAPI.GetActiveServicePolicies",
                 "responses": {
@@ -2305,7 +2316,7 @@ var NamespaceCustomAPISwaggerJSON string = `{
                 "x-ves-proto-rpc": "ves.io.schema.namespace.NamespaceCustomAPI.GetActiveServicePolicies"
             },
             "post": {
-                "summary": "SetActiveServicePolicies",
+                "summary": "Set Active Service Policies",
                 "description": "SetActiveServicePolicies sets the active service policies for the namespace\nAn emtpy list in the request will clear the active service policies for the namespace",
                 "operationId": "ves.io.schema.namespace.NamespaceCustomAPI.SetActiveServicePolicies",
                 "responses": {
@@ -2397,7 +2408,7 @@ var NamespaceCustomAPISwaggerJSON string = `{
         },
         "/public/namespaces/{namespace}/fast_acls_for_internet_vips": {
             "get": {
-                "summary": "GetFastACLsForInternetVIPs",
+                "summary": "Get FastACLs For Internet VIPs",
                 "description": "GetFastACLsForInternetVIPs Returns the list of Active FastACLs for Internet VIPs.",
                 "operationId": "ves.io.schema.namespace.NamespaceCustomAPI.GetFastACLsForInternetVIPs",
                 "responses": {
@@ -2476,7 +2487,7 @@ var NamespaceCustomAPISwaggerJSON string = `{
                 "x-ves-proto-rpc": "ves.io.schema.namespace.NamespaceCustomAPI.GetFastACLsForInternetVIPs"
             },
             "post": {
-                "summary": "SetFastACLsForInternetVIPs",
+                "summary": "Set FastACLs For Internet VIPs",
                 "description": "SetFastACLsForInternetVIPs activates the passed list of FastACLs for Internet VIPs.\nAn emtpy list in the request will clear FastACLs for Internet VIPs.",
                 "operationId": "ves.io.schema.namespace.NamespaceCustomAPI.SetFastACLsForInternetVIPs",
                 "responses": {
@@ -2568,7 +2579,7 @@ var NamespaceCustomAPISwaggerJSON string = `{
         },
         "/public/namespaces/{namespace}/suggest-values": {
             "post": {
-                "summary": "SuggestValues",
+                "summary": "Suggest Values",
                 "description": "SuggestValues returns suggested values for the specified field in the given Create/Replace/Custom request.",
                 "operationId": "ves.io.schema.namespace.NamespaceCustomAPI.SuggestValues",
                 "responses": {
@@ -2660,7 +2671,7 @@ var NamespaceCustomAPISwaggerJSON string = `{
         },
         "/public/namespaces/{name}/cascade_delete": {
             "post": {
-                "summary": "CascadeDelete",
+                "summary": "Cascade Delete",
                 "description": "CascadeDelete will delete the namespace and all configuration objects like virtual_hosts etc.\nunder it. Use this only if the entire namespace and its contents are to be wiped out.",
                 "operationId": "ves.io.schema.namespace.NamespaceCustomAPI.CascadeDelete",
                 "responses": {

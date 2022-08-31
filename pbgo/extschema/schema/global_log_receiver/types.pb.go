@@ -27,9 +27,280 @@ var _ = math.Inf
 // proto package needs to be updated.
 const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
+// CompressionType
+//
+// x-displayName: "Compression Type"
+// Compression Type
+type CompressionType struct {
+	// Compression Type
+	//
+	// x-displayName: "Compression Type"
+	// Compression Type
+	//
+	// Types that are valid to be assigned to CompressionChoice:
+	//	*CompressionType_CompressionNone
+	//	*CompressionType_CompressionGzip
+	CompressionChoice isCompressionType_CompressionChoice `protobuf_oneof:"compression_choice"`
+}
+
+func (m *CompressionType) Reset()      { *m = CompressionType{} }
+func (*CompressionType) ProtoMessage() {}
+func (*CompressionType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_2ef22f1dd0dc1f3e, []int{0}
+}
+func (m *CompressionType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *CompressionType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *CompressionType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CompressionType.Merge(m, src)
+}
+func (m *CompressionType) XXX_Size() int {
+	return m.Size()
+}
+func (m *CompressionType) XXX_DiscardUnknown() {
+	xxx_messageInfo_CompressionType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_CompressionType proto.InternalMessageInfo
+
+type isCompressionType_CompressionChoice interface {
+	isCompressionType_CompressionChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
+
+type CompressionType_CompressionNone struct {
+	CompressionNone *schema.Empty `protobuf:"bytes,2,opt,name=compression_none,json=compressionNone,proto3,oneof" json:"compression_none,omitempty"`
+}
+type CompressionType_CompressionGzip struct {
+	CompressionGzip *schema.Empty `protobuf:"bytes,3,opt,name=compression_gzip,json=compressionGzip,proto3,oneof" json:"compression_gzip,omitempty"`
+}
+
+func (*CompressionType_CompressionNone) isCompressionType_CompressionChoice() {}
+func (*CompressionType_CompressionGzip) isCompressionType_CompressionChoice() {}
+
+func (m *CompressionType) GetCompressionChoice() isCompressionType_CompressionChoice {
+	if m != nil {
+		return m.CompressionChoice
+	}
+	return nil
+}
+
+func (m *CompressionType) GetCompressionNone() *schema.Empty {
+	if x, ok := m.GetCompressionChoice().(*CompressionType_CompressionNone); ok {
+		return x.CompressionNone
+	}
+	return nil
+}
+
+func (m *CompressionType) GetCompressionGzip() *schema.Empty {
+	if x, ok := m.GetCompressionChoice().(*CompressionType_CompressionGzip); ok {
+		return x.CompressionGzip
+	}
+	return nil
+}
+
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*CompressionType) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
+		(*CompressionType_CompressionNone)(nil),
+		(*CompressionType_CompressionGzip)(nil),
+	}
+}
+
+// Batch Options
+//
+// x-displayName: "Batch Options"
+// Batch Options allow tuning for how batches of logs are sent to an endpoint
+type BatchOptionType struct {
+	// Batch Timeout
+	//
+	// x-displayName: "Batch Timeout Options"
+	// Batch Timeout is the maximum age of a batch before being sent to the endpoint
+	//
+	// Types that are valid to be assigned to BatchTimeout:
+	//	*BatchOptionType_TimeoutSecondsDefault
+	//	*BatchOptionType_TimeoutSeconds
+	BatchTimeout isBatchOptionType_BatchTimeout `protobuf_oneof:"batch_timeout"`
+	// Batch Events
+	//
+	// x-displayName: "Batch Max Events"
+	// Batch Events is the maximum number of log messages in a batch before it is sent to the endpoint
+	//
+	// Types that are valid to be assigned to BatchEvents:
+	//	*BatchOptionType_MaxEventsDisabled
+	//	*BatchOptionType_MaxEvents
+	BatchEvents isBatchOptionType_BatchEvents `protobuf_oneof:"batch_events"`
+	// Batch Bytes
+	//
+	// x-displayName: "Batch Bytes"
+	// Batch Bytes is the maximum size (in bytes) of a batch before it is sent to the endpoint
+	//
+	// Types that are valid to be assigned to BatchBytes:
+	//	*BatchOptionType_MaxBytesDisabled
+	//	*BatchOptionType_MaxBytes
+	BatchBytes isBatchOptionType_BatchBytes `protobuf_oneof:"batch_bytes"`
+}
+
+func (m *BatchOptionType) Reset()      { *m = BatchOptionType{} }
+func (*BatchOptionType) ProtoMessage() {}
+func (*BatchOptionType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_2ef22f1dd0dc1f3e, []int{1}
+}
+func (m *BatchOptionType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *BatchOptionType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *BatchOptionType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_BatchOptionType.Merge(m, src)
+}
+func (m *BatchOptionType) XXX_Size() int {
+	return m.Size()
+}
+func (m *BatchOptionType) XXX_DiscardUnknown() {
+	xxx_messageInfo_BatchOptionType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_BatchOptionType proto.InternalMessageInfo
+
+type isBatchOptionType_BatchTimeout interface {
+	isBatchOptionType_BatchTimeout()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
+type isBatchOptionType_BatchEvents interface {
+	isBatchOptionType_BatchEvents()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
+type isBatchOptionType_BatchBytes interface {
+	isBatchOptionType_BatchBytes()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
+
+type BatchOptionType_TimeoutSecondsDefault struct {
+	TimeoutSecondsDefault *schema.Empty `protobuf:"bytes,2,opt,name=timeout_seconds_default,json=timeoutSecondsDefault,proto3,oneof" json:"timeout_seconds_default,omitempty"`
+}
+type BatchOptionType_TimeoutSeconds struct {
+	TimeoutSeconds uint64 `protobuf:"varint,3,opt,name=timeout_seconds,json=timeoutSeconds,proto3,oneof" json:"timeout_seconds,omitempty"`
+}
+type BatchOptionType_MaxEventsDisabled struct {
+	MaxEventsDisabled *schema.Empty `protobuf:"bytes,5,opt,name=max_events_disabled,json=maxEventsDisabled,proto3,oneof" json:"max_events_disabled,omitempty"`
+}
+type BatchOptionType_MaxEvents struct {
+	MaxEvents uint32 `protobuf:"varint,6,opt,name=max_events,json=maxEvents,proto3,oneof" json:"max_events,omitempty"`
+}
+type BatchOptionType_MaxBytesDisabled struct {
+	MaxBytesDisabled *schema.Empty `protobuf:"bytes,8,opt,name=max_bytes_disabled,json=maxBytesDisabled,proto3,oneof" json:"max_bytes_disabled,omitempty"`
+}
+type BatchOptionType_MaxBytes struct {
+	MaxBytes uint32 `protobuf:"varint,9,opt,name=max_bytes,json=maxBytes,proto3,oneof" json:"max_bytes,omitempty"`
+}
+
+func (*BatchOptionType_TimeoutSecondsDefault) isBatchOptionType_BatchTimeout() {}
+func (*BatchOptionType_TimeoutSeconds) isBatchOptionType_BatchTimeout()        {}
+func (*BatchOptionType_MaxEventsDisabled) isBatchOptionType_BatchEvents()      {}
+func (*BatchOptionType_MaxEvents) isBatchOptionType_BatchEvents()              {}
+func (*BatchOptionType_MaxBytesDisabled) isBatchOptionType_BatchBytes()        {}
+func (*BatchOptionType_MaxBytes) isBatchOptionType_BatchBytes()                {}
+
+func (m *BatchOptionType) GetBatchTimeout() isBatchOptionType_BatchTimeout {
+	if m != nil {
+		return m.BatchTimeout
+	}
+	return nil
+}
+func (m *BatchOptionType) GetBatchEvents() isBatchOptionType_BatchEvents {
+	if m != nil {
+		return m.BatchEvents
+	}
+	return nil
+}
+func (m *BatchOptionType) GetBatchBytes() isBatchOptionType_BatchBytes {
+	if m != nil {
+		return m.BatchBytes
+	}
+	return nil
+}
+
+func (m *BatchOptionType) GetTimeoutSecondsDefault() *schema.Empty {
+	if x, ok := m.GetBatchTimeout().(*BatchOptionType_TimeoutSecondsDefault); ok {
+		return x.TimeoutSecondsDefault
+	}
+	return nil
+}
+
+func (m *BatchOptionType) GetTimeoutSeconds() uint64 {
+	if x, ok := m.GetBatchTimeout().(*BatchOptionType_TimeoutSeconds); ok {
+		return x.TimeoutSeconds
+	}
+	return 0
+}
+
+func (m *BatchOptionType) GetMaxEventsDisabled() *schema.Empty {
+	if x, ok := m.GetBatchEvents().(*BatchOptionType_MaxEventsDisabled); ok {
+		return x.MaxEventsDisabled
+	}
+	return nil
+}
+
+func (m *BatchOptionType) GetMaxEvents() uint32 {
+	if x, ok := m.GetBatchEvents().(*BatchOptionType_MaxEvents); ok {
+		return x.MaxEvents
+	}
+	return 0
+}
+
+func (m *BatchOptionType) GetMaxBytesDisabled() *schema.Empty {
+	if x, ok := m.GetBatchBytes().(*BatchOptionType_MaxBytesDisabled); ok {
+		return x.MaxBytesDisabled
+	}
+	return nil
+}
+
+func (m *BatchOptionType) GetMaxBytes() uint32 {
+	if x, ok := m.GetBatchBytes().(*BatchOptionType_MaxBytes); ok {
+		return x.MaxBytes
+	}
+	return 0
+}
+
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*BatchOptionType) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
+		(*BatchOptionType_TimeoutSecondsDefault)(nil),
+		(*BatchOptionType_TimeoutSeconds)(nil),
+		(*BatchOptionType_MaxEventsDisabled)(nil),
+		(*BatchOptionType_MaxEvents)(nil),
+		(*BatchOptionType_MaxBytesDisabled)(nil),
+		(*BatchOptionType_MaxBytes)(nil),
+	}
+}
+
 // NSList
 //
-// x-displayName: "NSList"
+// x-displayName: "Namespace List"
+// Namespace List
 type NSList struct {
 	// Namespaces
 	//
@@ -43,7 +314,7 @@ type NSList struct {
 func (m *NSList) Reset()      { *m = NSList{} }
 func (*NSList) ProtoMessage() {}
 func (*NSList) Descriptor() ([]byte, []int) {
-	return fileDescriptor_2ef22f1dd0dc1f3e, []int{0}
+	return fileDescriptor_2ef22f1dd0dc1f3e, []int{2}
 }
 func (m *NSList) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -83,7 +354,7 @@ type S3Config struct {
 	// S3 Bucket Name
 	//
 	// x-displayName: "S3 Bucket Name"
-	// x-example: "S3 Buket Name"
+	// x-example: "S3 Bucket Name"
 	// x-required
 	// S3 Bucket Name
 	Bucket string `protobuf:"bytes,1,opt,name=bucket,proto3" json:"bucket,omitempty"`
@@ -91,21 +362,31 @@ type S3Config struct {
 	//
 	// x-displayName: "AWS Cloud Credentials"
 	// x-required
-	// Reference to AWS credentials for access to S3 bucket
+	// Reference to AWS Cloud Credentials for access to the S3 bucket
 	AwsCred *views.ObjectRefType `protobuf:"bytes,2,opt,name=aws_cred,json=awsCred,proto3" json:"aws_cred,omitempty"`
 	// AWS Region
 	//
 	// x-displayName: "AWS Region"
 	// x-example: "us-east-1"
 	// x-required
-	// Name for AWS Region.
+	// AWS Region Name
 	AwsRegion string `protobuf:"bytes,3,opt,name=aws_region,json=awsRegion,proto3" json:"aws_region,omitempty"`
+	// Compression Options
+	//
+	// x-displayName: "Compression Options"
+	// Compression Options allows selection of how data should be compressed when sent to the endpoint
+	Compression *CompressionType `protobuf:"bytes,4,opt,name=compression,proto3" json:"compression,omitempty"`
+	// Batch Options
+	//
+	// x-displayName: "Batch Options"
+	// Batch Options allow tuning of the conditions for how batches of logs are sent to the endpoint
+	Batch *BatchOptionType `protobuf:"bytes,5,opt,name=batch,proto3" json:"batch,omitempty"`
 }
 
 func (m *S3Config) Reset()      { *m = S3Config{} }
 func (*S3Config) ProtoMessage() {}
 func (*S3Config) Descriptor() ([]byte, []int) {
-	return fileDescriptor_2ef22f1dd0dc1f3e, []int{1}
+	return fileDescriptor_2ef22f1dd0dc1f3e, []int{3}
 }
 func (m *S3Config) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -151,6 +432,1268 @@ func (m *S3Config) GetAwsRegion() string {
 	return ""
 }
 
+func (m *S3Config) GetCompression() *CompressionType {
+	if m != nil {
+		return m.Compression
+	}
+	return nil
+}
+
+func (m *S3Config) GetBatch() *BatchOptionType {
+	if m != nil {
+		return m.Batch
+	}
+	return nil
+}
+
+// mTLS Client config
+//
+// x-displayName: "mTLS Client Config"
+// mTLS Client config allows configuration of mtls client options
+type TLSClientConfigType struct {
+	// The TLS certificate URL.
+	//
+	// x-displayName: "Client Certificate"
+	// x-example: "value"
+	// Client  certificate is PEM-encoded certificate or certificate-chain.
+	Certificate string `protobuf:"bytes,1,opt,name=certificate,proto3" json:"certificate,omitempty"`
+	// Private Key
+	//
+	// x-displayName: "Client Private Key"
+	// Client private key file containing data in PEM format including the PEM headers.
+	// The data in this key file has to match accompanying certificate.
+	// The data may be optionally secured using BlindFold.
+	KeyUrl *schema.SecretType `protobuf:"bytes,2,opt,name=key_url,json=keyUrl,proto3" json:"key_url,omitempty"`
+}
+
+func (m *TLSClientConfigType) Reset()      { *m = TLSClientConfigType{} }
+func (*TLSClientConfigType) ProtoMessage() {}
+func (*TLSClientConfigType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_2ef22f1dd0dc1f3e, []int{4}
+}
+func (m *TLSClientConfigType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *TLSClientConfigType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *TLSClientConfigType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_TLSClientConfigType.Merge(m, src)
+}
+func (m *TLSClientConfigType) XXX_Size() int {
+	return m.Size()
+}
+func (m *TLSClientConfigType) XXX_DiscardUnknown() {
+	xxx_messageInfo_TLSClientConfigType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_TLSClientConfigType proto.InternalMessageInfo
+
+func (m *TLSClientConfigType) GetCertificate() string {
+	if m != nil {
+		return m.Certificate
+	}
+	return ""
+}
+
+func (m *TLSClientConfigType) GetKeyUrl() *schema.SecretType {
+	if m != nil {
+		return m.KeyUrl
+	}
+	return nil
+}
+
+// Endpoint TLS Parameters
+//
+// x-displayName: "TLS Parameters Endpoint"
+// TLS Parameters for client connection to the endpoint
+type TLSConfigType struct {
+	// Server verification choice
+	//
+	// x-displayName: "Verify Server Certificate"
+	// Choose whether to perform certificate verifaction for the endpoint server.
+	//
+	// Types that are valid to be assigned to VerifyCertificate:
+	//	*TLSConfigType_EnableVerifyCertificate
+	//	*TLSConfigType_DisableVerifyCertificate
+	VerifyCertificate isTLSConfigType_VerifyCertificate `protobuf_oneof:"verify_certificate"`
+	// Verify Server Hostname
+	//
+	// x-displayName: "Verify Server Hostname"
+	// Verify Server Hostname
+	//
+	// Types that are valid to be assigned to VerifyHostname:
+	//	*TLSConfigType_EnableVerifyHostname
+	//	*TLSConfigType_DisableVerifyHostname
+	VerifyHostname isTLSConfigType_VerifyHostname `protobuf_oneof:"verify_hostname"`
+	// Trusted CA
+	//
+	// x-displayName: "Trusted CA"
+	// x-required
+	// Trusted CA for TLS server
+	//
+	// Types that are valid to be assigned to CaChoice:
+	//	*TLSConfigType_NoCa
+	//	*TLSConfigType_TrustedCaUrl
+	CaChoice isTLSConfigType_CaChoice `protobuf_oneof:"ca_choice"`
+	// mTLS config
+	//
+	// x-displayName: "mTLS config"
+	// x-required
+	// Select to enable mTLS configuration
+	//
+	// Types that are valid to be assigned to MtlsChoice:
+	//	*TLSConfigType_MtlsDisabled
+	//	*TLSConfigType_MtlsEnable
+	MtlsChoice isTLSConfigType_MtlsChoice `protobuf_oneof:"mtls_choice"`
+}
+
+func (m *TLSConfigType) Reset()      { *m = TLSConfigType{} }
+func (*TLSConfigType) ProtoMessage() {}
+func (*TLSConfigType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_2ef22f1dd0dc1f3e, []int{5}
+}
+func (m *TLSConfigType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *TLSConfigType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *TLSConfigType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_TLSConfigType.Merge(m, src)
+}
+func (m *TLSConfigType) XXX_Size() int {
+	return m.Size()
+}
+func (m *TLSConfigType) XXX_DiscardUnknown() {
+	xxx_messageInfo_TLSConfigType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_TLSConfigType proto.InternalMessageInfo
+
+type isTLSConfigType_VerifyCertificate interface {
+	isTLSConfigType_VerifyCertificate()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
+type isTLSConfigType_VerifyHostname interface {
+	isTLSConfigType_VerifyHostname()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
+type isTLSConfigType_CaChoice interface {
+	isTLSConfigType_CaChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
+type isTLSConfigType_MtlsChoice interface {
+	isTLSConfigType_MtlsChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
+
+type TLSConfigType_EnableVerifyCertificate struct {
+	EnableVerifyCertificate *schema.Empty `protobuf:"bytes,2,opt,name=enable_verify_certificate,json=enableVerifyCertificate,proto3,oneof" json:"enable_verify_certificate,omitempty"`
+}
+type TLSConfigType_DisableVerifyCertificate struct {
+	DisableVerifyCertificate *schema.Empty `protobuf:"bytes,3,opt,name=disable_verify_certificate,json=disableVerifyCertificate,proto3,oneof" json:"disable_verify_certificate,omitempty"`
+}
+type TLSConfigType_EnableVerifyHostname struct {
+	EnableVerifyHostname *schema.Empty `protobuf:"bytes,5,opt,name=enable_verify_hostname,json=enableVerifyHostname,proto3,oneof" json:"enable_verify_hostname,omitempty"`
+}
+type TLSConfigType_DisableVerifyHostname struct {
+	DisableVerifyHostname *schema.Empty `protobuf:"bytes,6,opt,name=disable_verify_hostname,json=disableVerifyHostname,proto3,oneof" json:"disable_verify_hostname,omitempty"`
+}
+type TLSConfigType_NoCa struct {
+	NoCa *schema.Empty `protobuf:"bytes,8,opt,name=no_ca,json=noCa,proto3,oneof" json:"no_ca,omitempty"`
+}
+type TLSConfigType_TrustedCaUrl struct {
+	TrustedCaUrl string `protobuf:"bytes,9,opt,name=trusted_ca_url,json=trustedCaUrl,proto3,oneof" json:"trusted_ca_url,omitempty"`
+}
+type TLSConfigType_MtlsDisabled struct {
+	MtlsDisabled *schema.Empty `protobuf:"bytes,11,opt,name=mtls_disabled,json=mtlsDisabled,proto3,oneof" json:"mtls_disabled,omitempty"`
+}
+type TLSConfigType_MtlsEnable struct {
+	MtlsEnable *TLSClientConfigType `protobuf:"bytes,12,opt,name=mtls_enable,json=mtlsEnable,proto3,oneof" json:"mtls_enable,omitempty"`
+}
+
+func (*TLSConfigType_EnableVerifyCertificate) isTLSConfigType_VerifyCertificate()  {}
+func (*TLSConfigType_DisableVerifyCertificate) isTLSConfigType_VerifyCertificate() {}
+func (*TLSConfigType_EnableVerifyHostname) isTLSConfigType_VerifyHostname()        {}
+func (*TLSConfigType_DisableVerifyHostname) isTLSConfigType_VerifyHostname()       {}
+func (*TLSConfigType_NoCa) isTLSConfigType_CaChoice()                              {}
+func (*TLSConfigType_TrustedCaUrl) isTLSConfigType_CaChoice()                      {}
+func (*TLSConfigType_MtlsDisabled) isTLSConfigType_MtlsChoice()                    {}
+func (*TLSConfigType_MtlsEnable) isTLSConfigType_MtlsChoice()                      {}
+
+func (m *TLSConfigType) GetVerifyCertificate() isTLSConfigType_VerifyCertificate {
+	if m != nil {
+		return m.VerifyCertificate
+	}
+	return nil
+}
+func (m *TLSConfigType) GetVerifyHostname() isTLSConfigType_VerifyHostname {
+	if m != nil {
+		return m.VerifyHostname
+	}
+	return nil
+}
+func (m *TLSConfigType) GetCaChoice() isTLSConfigType_CaChoice {
+	if m != nil {
+		return m.CaChoice
+	}
+	return nil
+}
+func (m *TLSConfigType) GetMtlsChoice() isTLSConfigType_MtlsChoice {
+	if m != nil {
+		return m.MtlsChoice
+	}
+	return nil
+}
+
+func (m *TLSConfigType) GetEnableVerifyCertificate() *schema.Empty {
+	if x, ok := m.GetVerifyCertificate().(*TLSConfigType_EnableVerifyCertificate); ok {
+		return x.EnableVerifyCertificate
+	}
+	return nil
+}
+
+func (m *TLSConfigType) GetDisableVerifyCertificate() *schema.Empty {
+	if x, ok := m.GetVerifyCertificate().(*TLSConfigType_DisableVerifyCertificate); ok {
+		return x.DisableVerifyCertificate
+	}
+	return nil
+}
+
+func (m *TLSConfigType) GetEnableVerifyHostname() *schema.Empty {
+	if x, ok := m.GetVerifyHostname().(*TLSConfigType_EnableVerifyHostname); ok {
+		return x.EnableVerifyHostname
+	}
+	return nil
+}
+
+func (m *TLSConfigType) GetDisableVerifyHostname() *schema.Empty {
+	if x, ok := m.GetVerifyHostname().(*TLSConfigType_DisableVerifyHostname); ok {
+		return x.DisableVerifyHostname
+	}
+	return nil
+}
+
+func (m *TLSConfigType) GetNoCa() *schema.Empty {
+	if x, ok := m.GetCaChoice().(*TLSConfigType_NoCa); ok {
+		return x.NoCa
+	}
+	return nil
+}
+
+func (m *TLSConfigType) GetTrustedCaUrl() string {
+	if x, ok := m.GetCaChoice().(*TLSConfigType_TrustedCaUrl); ok {
+		return x.TrustedCaUrl
+	}
+	return ""
+}
+
+func (m *TLSConfigType) GetMtlsDisabled() *schema.Empty {
+	if x, ok := m.GetMtlsChoice().(*TLSConfigType_MtlsDisabled); ok {
+		return x.MtlsDisabled
+	}
+	return nil
+}
+
+func (m *TLSConfigType) GetMtlsEnable() *TLSClientConfigType {
+	if x, ok := m.GetMtlsChoice().(*TLSConfigType_MtlsEnable); ok {
+		return x.MtlsEnable
+	}
+	return nil
+}
+
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*TLSConfigType) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
+		(*TLSConfigType_EnableVerifyCertificate)(nil),
+		(*TLSConfigType_DisableVerifyCertificate)(nil),
+		(*TLSConfigType_EnableVerifyHostname)(nil),
+		(*TLSConfigType_DisableVerifyHostname)(nil),
+		(*TLSConfigType_NoCa)(nil),
+		(*TLSConfigType_TrustedCaUrl)(nil),
+		(*TLSConfigType_MtlsDisabled)(nil),
+		(*TLSConfigType_MtlsEnable)(nil),
+	}
+}
+
+// HTTP Basic Authentication
+//
+// x-displayName: "Basic Authentication Credentials"
+// Authentication parameters to access HTPP Log Receiver Endpoint.
+type HttpAuthBasic struct {
+	// username
+	//
+	// x-displayName: "User Name"
+	// x-example: "Joe"
+	// HTTP Basic Auth User Name
+	UserName string `protobuf:"bytes,1,opt,name=user_name,json=userName,proto3" json:"user_name,omitempty"`
+	// password
+	//
+	// x-displayName: "Password"
+	// HTTP Basic Auth Password
+	Password *schema.SecretType `protobuf:"bytes,2,opt,name=password,proto3" json:"password,omitempty"`
+}
+
+func (m *HttpAuthBasic) Reset()      { *m = HttpAuthBasic{} }
+func (*HttpAuthBasic) ProtoMessage() {}
+func (*HttpAuthBasic) Descriptor() ([]byte, []int) {
+	return fileDescriptor_2ef22f1dd0dc1f3e, []int{6}
+}
+func (m *HttpAuthBasic) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *HttpAuthBasic) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *HttpAuthBasic) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_HttpAuthBasic.Merge(m, src)
+}
+func (m *HttpAuthBasic) XXX_Size() int {
+	return m.Size()
+}
+func (m *HttpAuthBasic) XXX_DiscardUnknown() {
+	xxx_messageInfo_HttpAuthBasic.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_HttpAuthBasic proto.InternalMessageInfo
+
+func (m *HttpAuthBasic) GetUserName() string {
+	if m != nil {
+		return m.UserName
+	}
+	return ""
+}
+
+func (m *HttpAuthBasic) GetPassword() *schema.SecretType {
+	if m != nil {
+		return m.Password
+	}
+	return nil
+}
+
+// Token Authentication
+//
+// x-displayName: "Access Token"
+// Authentication Token for access
+type AuthToken struct {
+	// token
+	//
+	// x-displayName: "Token"
+	// Volterra Secret. URL for token, needs to be fetched from this path
+	Token *schema.SecretType `protobuf:"bytes,1,opt,name=token,proto3" json:"token,omitempty"`
+}
+
+func (m *AuthToken) Reset()      { *m = AuthToken{} }
+func (*AuthToken) ProtoMessage() {}
+func (*AuthToken) Descriptor() ([]byte, []int) {
+	return fileDescriptor_2ef22f1dd0dc1f3e, []int{7}
+}
+func (m *AuthToken) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *AuthToken) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *AuthToken) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_AuthToken.Merge(m, src)
+}
+func (m *AuthToken) XXX_Size() int {
+	return m.Size()
+}
+func (m *AuthToken) XXX_DiscardUnknown() {
+	xxx_messageInfo_AuthToken.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_AuthToken proto.InternalMessageInfo
+
+func (m *AuthToken) GetToken() *schema.SecretType {
+	if m != nil {
+		return m.Token
+	}
+	return nil
+}
+
+// HTTP Configuration
+//
+// x-displayName: "HTTP Configuration"
+// Configuration for HTTP endpoint
+type HTTPConfig struct {
+	// HTTP Uri
+	//
+	// x-displayName: "HTTP Uri"
+	// x-example: "http://example.com:9000/logs"
+	// x-required
+	// HTTP Uri is the Uri of the HTTP endpoint to send logs to, example: `http://example.com:9000/logs`
+	Uri string `protobuf:"bytes,1,opt,name=uri,proto3" json:"uri,omitempty"`
+	// HTTP Authentication Method
+	//
+	// x-displayName: "Authentication"
+	// x-required
+	// HTTP Authentication Method controls how to authenticate to the HTTP endpoint
+	//
+	// Types that are valid to be assigned to AuthChoice:
+	//	*HTTPConfig_AuthNone
+	//	*HTTPConfig_AuthBasic
+	//	*HTTPConfig_AuthToken
+	AuthChoice isHTTPConfig_AuthChoice `protobuf_oneof:"auth_choice"`
+	// Compression Options
+	//
+	// x-displayName: "Compression Options"
+	// Compression Options allows selection of how data should be compressed when sent to the endpoint
+	Compression *CompressionType `protobuf:"bytes,6,opt,name=compression,proto3" json:"compression,omitempty"`
+	// Batch Options
+	//
+	// x-displayName: "Batch Options"
+	// Batch Options allow tuning of the conditions for how batches of logs are sent to the endpoint
+	Batch *BatchOptionType `protobuf:"bytes,7,opt,name=batch,proto3" json:"batch,omitempty"`
+	// Enable TLS
+	//
+	// x-displayName: "TLS"
+	// x-required
+	//
+	// Types that are valid to be assigned to TlsChoice:
+	//	*HTTPConfig_NoTls
+	//	*HTTPConfig_UseTls
+	TlsChoice isHTTPConfig_TlsChoice `protobuf_oneof:"tls_choice"`
+}
+
+func (m *HTTPConfig) Reset()      { *m = HTTPConfig{} }
+func (*HTTPConfig) ProtoMessage() {}
+func (*HTTPConfig) Descriptor() ([]byte, []int) {
+	return fileDescriptor_2ef22f1dd0dc1f3e, []int{8}
+}
+func (m *HTTPConfig) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *HTTPConfig) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *HTTPConfig) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_HTTPConfig.Merge(m, src)
+}
+func (m *HTTPConfig) XXX_Size() int {
+	return m.Size()
+}
+func (m *HTTPConfig) XXX_DiscardUnknown() {
+	xxx_messageInfo_HTTPConfig.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_HTTPConfig proto.InternalMessageInfo
+
+type isHTTPConfig_AuthChoice interface {
+	isHTTPConfig_AuthChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
+type isHTTPConfig_TlsChoice interface {
+	isHTTPConfig_TlsChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
+
+type HTTPConfig_AuthNone struct {
+	AuthNone *schema.Empty `protobuf:"bytes,3,opt,name=auth_none,json=authNone,proto3,oneof" json:"auth_none,omitempty"`
+}
+type HTTPConfig_AuthBasic struct {
+	AuthBasic *HttpAuthBasic `protobuf:"bytes,4,opt,name=auth_basic,json=authBasic,proto3,oneof" json:"auth_basic,omitempty"`
+}
+type HTTPConfig_AuthToken struct {
+	AuthToken *AuthToken `protobuf:"bytes,5,opt,name=auth_token,json=authToken,proto3,oneof" json:"auth_token,omitempty"`
+}
+type HTTPConfig_NoTls struct {
+	NoTls *schema.Empty `protobuf:"bytes,9,opt,name=no_tls,json=noTls,proto3,oneof" json:"no_tls,omitempty"`
+}
+type HTTPConfig_UseTls struct {
+	UseTls *TLSConfigType `protobuf:"bytes,10,opt,name=use_tls,json=useTls,proto3,oneof" json:"use_tls,omitempty"`
+}
+
+func (*HTTPConfig_AuthNone) isHTTPConfig_AuthChoice()  {}
+func (*HTTPConfig_AuthBasic) isHTTPConfig_AuthChoice() {}
+func (*HTTPConfig_AuthToken) isHTTPConfig_AuthChoice() {}
+func (*HTTPConfig_NoTls) isHTTPConfig_TlsChoice()      {}
+func (*HTTPConfig_UseTls) isHTTPConfig_TlsChoice()     {}
+
+func (m *HTTPConfig) GetAuthChoice() isHTTPConfig_AuthChoice {
+	if m != nil {
+		return m.AuthChoice
+	}
+	return nil
+}
+func (m *HTTPConfig) GetTlsChoice() isHTTPConfig_TlsChoice {
+	if m != nil {
+		return m.TlsChoice
+	}
+	return nil
+}
+
+func (m *HTTPConfig) GetUri() string {
+	if m != nil {
+		return m.Uri
+	}
+	return ""
+}
+
+func (m *HTTPConfig) GetAuthNone() *schema.Empty {
+	if x, ok := m.GetAuthChoice().(*HTTPConfig_AuthNone); ok {
+		return x.AuthNone
+	}
+	return nil
+}
+
+func (m *HTTPConfig) GetAuthBasic() *HttpAuthBasic {
+	if x, ok := m.GetAuthChoice().(*HTTPConfig_AuthBasic); ok {
+		return x.AuthBasic
+	}
+	return nil
+}
+
+func (m *HTTPConfig) GetAuthToken() *AuthToken {
+	if x, ok := m.GetAuthChoice().(*HTTPConfig_AuthToken); ok {
+		return x.AuthToken
+	}
+	return nil
+}
+
+func (m *HTTPConfig) GetCompression() *CompressionType {
+	if m != nil {
+		return m.Compression
+	}
+	return nil
+}
+
+func (m *HTTPConfig) GetBatch() *BatchOptionType {
+	if m != nil {
+		return m.Batch
+	}
+	return nil
+}
+
+func (m *HTTPConfig) GetNoTls() *schema.Empty {
+	if x, ok := m.GetTlsChoice().(*HTTPConfig_NoTls); ok {
+		return x.NoTls
+	}
+	return nil
+}
+
+func (m *HTTPConfig) GetUseTls() *TLSConfigType {
+	if x, ok := m.GetTlsChoice().(*HTTPConfig_UseTls); ok {
+		return x.UseTls
+	}
+	return nil
+}
+
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*HTTPConfig) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
+		(*HTTPConfig_AuthNone)(nil),
+		(*HTTPConfig_AuthBasic)(nil),
+		(*HTTPConfig_AuthToken)(nil),
+		(*HTTPConfig_NoTls)(nil),
+		(*HTTPConfig_UseTls)(nil),
+	}
+}
+
+// Datadog Configuration
+//
+// x-displayName: "Datadog Configuration"
+// Configuration for Datadog endpoint
+type DatadogConfig struct {
+	// Datadog Endpoint Selection
+	//
+	// x-displayName: "Endpoint Selection"
+	// x-required
+	// Datadog Endpoint Selection
+	//
+	// Types that are valid to be assigned to EndpointChoice:
+	//	*DatadogConfig_Site
+	//	*DatadogConfig_Endpoint
+	EndpointChoice isDatadogConfig_EndpointChoice `protobuf_oneof:"endpoint_choice"`
+	// Datadog API Key
+	//
+	// x-displayName: "Datadog API Key"
+	// x-required
+	// Secret API key to access the datadog server
+	DatadogApiKey *schema.SecretType `protobuf:"bytes,4,opt,name=datadog_api_key,json=datadogApiKey,proto3" json:"datadog_api_key,omitempty"`
+	// Compression Options
+	//
+	// x-displayName: "Compression Options"
+	// Compression Options allows selection of how data should be compressed when sent to the endpoint
+	Compression *CompressionType `protobuf:"bytes,5,opt,name=compression,proto3" json:"compression,omitempty"`
+	// Batch Options
+	//
+	// x-displayName: "Batch Options"
+	// Batch Options allow tuning of the conditions for how batches of logs are sent to the endpoint
+	Batch *BatchOptionType `protobuf:"bytes,6,opt,name=batch,proto3" json:"batch,omitempty"`
+	// Enable TLS
+	//
+	// x-displayName: "TLS"
+	// x-required
+	//
+	// Types that are valid to be assigned to TlsChoice:
+	//	*DatadogConfig_NoTls
+	//	*DatadogConfig_UseTls
+	TlsChoice isDatadogConfig_TlsChoice `protobuf_oneof:"tls_choice"`
+}
+
+func (m *DatadogConfig) Reset()      { *m = DatadogConfig{} }
+func (*DatadogConfig) ProtoMessage() {}
+func (*DatadogConfig) Descriptor() ([]byte, []int) {
+	return fileDescriptor_2ef22f1dd0dc1f3e, []int{9}
+}
+func (m *DatadogConfig) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *DatadogConfig) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *DatadogConfig) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_DatadogConfig.Merge(m, src)
+}
+func (m *DatadogConfig) XXX_Size() int {
+	return m.Size()
+}
+func (m *DatadogConfig) XXX_DiscardUnknown() {
+	xxx_messageInfo_DatadogConfig.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_DatadogConfig proto.InternalMessageInfo
+
+type isDatadogConfig_EndpointChoice interface {
+	isDatadogConfig_EndpointChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
+type isDatadogConfig_TlsChoice interface {
+	isDatadogConfig_TlsChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
+
+type DatadogConfig_Site struct {
+	Site string `protobuf:"bytes,2,opt,name=site,proto3,oneof" json:"site,omitempty"`
+}
+type DatadogConfig_Endpoint struct {
+	Endpoint string `protobuf:"bytes,3,opt,name=endpoint,proto3,oneof" json:"endpoint,omitempty"`
+}
+type DatadogConfig_NoTls struct {
+	NoTls *schema.Empty `protobuf:"bytes,8,opt,name=no_tls,json=noTls,proto3,oneof" json:"no_tls,omitempty"`
+}
+type DatadogConfig_UseTls struct {
+	UseTls *TLSConfigType `protobuf:"bytes,9,opt,name=use_tls,json=useTls,proto3,oneof" json:"use_tls,omitempty"`
+}
+
+func (*DatadogConfig_Site) isDatadogConfig_EndpointChoice()     {}
+func (*DatadogConfig_Endpoint) isDatadogConfig_EndpointChoice() {}
+func (*DatadogConfig_NoTls) isDatadogConfig_TlsChoice()         {}
+func (*DatadogConfig_UseTls) isDatadogConfig_TlsChoice()        {}
+
+func (m *DatadogConfig) GetEndpointChoice() isDatadogConfig_EndpointChoice {
+	if m != nil {
+		return m.EndpointChoice
+	}
+	return nil
+}
+func (m *DatadogConfig) GetTlsChoice() isDatadogConfig_TlsChoice {
+	if m != nil {
+		return m.TlsChoice
+	}
+	return nil
+}
+
+func (m *DatadogConfig) GetSite() string {
+	if x, ok := m.GetEndpointChoice().(*DatadogConfig_Site); ok {
+		return x.Site
+	}
+	return ""
+}
+
+func (m *DatadogConfig) GetEndpoint() string {
+	if x, ok := m.GetEndpointChoice().(*DatadogConfig_Endpoint); ok {
+		return x.Endpoint
+	}
+	return ""
+}
+
+func (m *DatadogConfig) GetDatadogApiKey() *schema.SecretType {
+	if m != nil {
+		return m.DatadogApiKey
+	}
+	return nil
+}
+
+func (m *DatadogConfig) GetCompression() *CompressionType {
+	if m != nil {
+		return m.Compression
+	}
+	return nil
+}
+
+func (m *DatadogConfig) GetBatch() *BatchOptionType {
+	if m != nil {
+		return m.Batch
+	}
+	return nil
+}
+
+func (m *DatadogConfig) GetNoTls() *schema.Empty {
+	if x, ok := m.GetTlsChoice().(*DatadogConfig_NoTls); ok {
+		return x.NoTls
+	}
+	return nil
+}
+
+func (m *DatadogConfig) GetUseTls() *TLSConfigType {
+	if x, ok := m.GetTlsChoice().(*DatadogConfig_UseTls); ok {
+		return x.UseTls
+	}
+	return nil
+}
+
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*DatadogConfig) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
+		(*DatadogConfig_Site)(nil),
+		(*DatadogConfig_Endpoint)(nil),
+		(*DatadogConfig_NoTls)(nil),
+		(*DatadogConfig_UseTls)(nil),
+	}
+}
+
+// Splunk HEC Logs Configuration
+//
+// x-displayName: "Splunk HEC Logs Configuration"
+// Configuration for Splunk HEC Logs endpoint
+type SplunkConfig struct {
+	// Splunk HEC Logs Endpoint
+	//
+	// x-displayName: "Splunk HEC Logs Endpoint"
+	// x-required
+	// x-example: "https://http-inputs-hec.splunkcloud.com"
+	// Splunk HEC Logs Endpoint, example: `https://http-input-hec.splunkcloud.com`
+	Endpoint string `protobuf:"bytes,1,opt,name=endpoint,proto3" json:"endpoint,omitempty"`
+	// Splunk HEC token
+	//
+	// x-displayName: "Splunk HEC token"
+	// x-required
+	// Splunk HEC Logs secret Token
+	SplunkHecToken *schema.SecretType `protobuf:"bytes,2,opt,name=splunk_hec_token,json=splunkHecToken,proto3" json:"splunk_hec_token,omitempty"`
+	// Compression Options
+	//
+	// x-displayName: "Compression Options"
+	// Compression Options allows selection of how data should be compressed when sent to the endpoint
+	Compression *CompressionType `protobuf:"bytes,3,opt,name=compression,proto3" json:"compression,omitempty"`
+	// Batch Options
+	//
+	// x-displayName: "Batch Options"
+	// Batch Options allow tuning of the conditions for how batches of logs are sent to the endpoint
+	Batch *BatchOptionType `protobuf:"bytes,4,opt,name=batch,proto3" json:"batch,omitempty"`
+	// Enable TLS
+	//
+	// x-displayName: "TLS"
+	// x-required
+	//
+	// Types that are valid to be assigned to TlsChoice:
+	//	*SplunkConfig_NoTls
+	//	*SplunkConfig_UseTls
+	TlsChoice isSplunkConfig_TlsChoice `protobuf_oneof:"tls_choice"`
+}
+
+func (m *SplunkConfig) Reset()      { *m = SplunkConfig{} }
+func (*SplunkConfig) ProtoMessage() {}
+func (*SplunkConfig) Descriptor() ([]byte, []int) {
+	return fileDescriptor_2ef22f1dd0dc1f3e, []int{10}
+}
+func (m *SplunkConfig) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *SplunkConfig) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *SplunkConfig) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_SplunkConfig.Merge(m, src)
+}
+func (m *SplunkConfig) XXX_Size() int {
+	return m.Size()
+}
+func (m *SplunkConfig) XXX_DiscardUnknown() {
+	xxx_messageInfo_SplunkConfig.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_SplunkConfig proto.InternalMessageInfo
+
+type isSplunkConfig_TlsChoice interface {
+	isSplunkConfig_TlsChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
+
+type SplunkConfig_NoTls struct {
+	NoTls *schema.Empty `protobuf:"bytes,6,opt,name=no_tls,json=noTls,proto3,oneof" json:"no_tls,omitempty"`
+}
+type SplunkConfig_UseTls struct {
+	UseTls *TLSConfigType `protobuf:"bytes,7,opt,name=use_tls,json=useTls,proto3,oneof" json:"use_tls,omitempty"`
+}
+
+func (*SplunkConfig_NoTls) isSplunkConfig_TlsChoice()  {}
+func (*SplunkConfig_UseTls) isSplunkConfig_TlsChoice() {}
+
+func (m *SplunkConfig) GetTlsChoice() isSplunkConfig_TlsChoice {
+	if m != nil {
+		return m.TlsChoice
+	}
+	return nil
+}
+
+func (m *SplunkConfig) GetEndpoint() string {
+	if m != nil {
+		return m.Endpoint
+	}
+	return ""
+}
+
+func (m *SplunkConfig) GetSplunkHecToken() *schema.SecretType {
+	if m != nil {
+		return m.SplunkHecToken
+	}
+	return nil
+}
+
+func (m *SplunkConfig) GetCompression() *CompressionType {
+	if m != nil {
+		return m.Compression
+	}
+	return nil
+}
+
+func (m *SplunkConfig) GetBatch() *BatchOptionType {
+	if m != nil {
+		return m.Batch
+	}
+	return nil
+}
+
+func (m *SplunkConfig) GetNoTls() *schema.Empty {
+	if x, ok := m.GetTlsChoice().(*SplunkConfig_NoTls); ok {
+		return x.NoTls
+	}
+	return nil
+}
+
+func (m *SplunkConfig) GetUseTls() *TLSConfigType {
+	if x, ok := m.GetTlsChoice().(*SplunkConfig_UseTls); ok {
+		return x.UseTls
+	}
+	return nil
+}
+
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*SplunkConfig) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
+		(*SplunkConfig_NoTls)(nil),
+		(*SplunkConfig_UseTls)(nil),
+	}
+}
+
+// Elasticsearch Config
+//
+// x-displayName: "Splunk HEC Logs Configuration"
+// Configuration for Elasticsearch
+type ElasticConfig struct {
+	// Elasticsearch Endpoint
+	//
+	// x-displayName: "Elasticsearch Endpoint"
+	// x-required
+	// x-example: "http://10.9.8.7:9000"
+	// Elasticsearch Endpoint URL, example `http://10.9.8.7:9000`
+	Endpoint string `protobuf:"bytes,1,opt,name=endpoint,proto3" json:"endpoint,omitempty"`
+	// Authentication
+	//
+	// x-displayName: "Authentication"
+	// x-required
+	// Authentication options for the connection to the Elasticsearch endpoint
+	//
+	// Types that are valid to be assigned to AuthChoice:
+	//	*ElasticConfig_AuthNone
+	//	*ElasticConfig_AuthBasic
+	//	*ElasticConfig_AuthAws
+	AuthChoice isElasticConfig_AuthChoice `protobuf_oneof:"auth_choice"`
+	// Compression Options
+	//
+	// x-displayName: "Compression Options"
+	// Compression Options allows selection of how data should be compressed when sent to the endpoint
+	Compression *CompressionType `protobuf:"bytes,6,opt,name=compression,proto3" json:"compression,omitempty"`
+	// Batch Options
+	//
+	// x-displayName: "Batch Options"
+	// Batch Options allow tuning of the conditions for how batches of logs are sent to the endpoint
+	Batch *BatchOptionType `protobuf:"bytes,7,opt,name=batch,proto3" json:"batch,omitempty"`
+	// Enable TLS
+	//
+	// x-displayName: "TLS"
+	// x-required
+	//
+	// Types that are valid to be assigned to TlsChoice:
+	//	*ElasticConfig_NoTls
+	//	*ElasticConfig_UseTls
+	TlsChoice isElasticConfig_TlsChoice `protobuf_oneof:"tls_choice"`
+}
+
+func (m *ElasticConfig) Reset()      { *m = ElasticConfig{} }
+func (*ElasticConfig) ProtoMessage() {}
+func (*ElasticConfig) Descriptor() ([]byte, []int) {
+	return fileDescriptor_2ef22f1dd0dc1f3e, []int{11}
+}
+func (m *ElasticConfig) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *ElasticConfig) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *ElasticConfig) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ElasticConfig.Merge(m, src)
+}
+func (m *ElasticConfig) XXX_Size() int {
+	return m.Size()
+}
+func (m *ElasticConfig) XXX_DiscardUnknown() {
+	xxx_messageInfo_ElasticConfig.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ElasticConfig proto.InternalMessageInfo
+
+type isElasticConfig_AuthChoice interface {
+	isElasticConfig_AuthChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
+type isElasticConfig_TlsChoice interface {
+	isElasticConfig_TlsChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
+
+type ElasticConfig_AuthNone struct {
+	AuthNone *schema.Empty `protobuf:"bytes,3,opt,name=auth_none,json=authNone,proto3,oneof" json:"auth_none,omitempty"`
+}
+type ElasticConfig_AuthBasic struct {
+	AuthBasic *HttpAuthBasic `protobuf:"bytes,4,opt,name=auth_basic,json=authBasic,proto3,oneof" json:"auth_basic,omitempty"`
+}
+type ElasticConfig_AuthAws struct {
+	AuthAws *views.ObjectRefType `protobuf:"bytes,5,opt,name=auth_aws,json=authAws,proto3,oneof" json:"auth_aws,omitempty"`
+}
+type ElasticConfig_NoTls struct {
+	NoTls *schema.Empty `protobuf:"bytes,9,opt,name=no_tls,json=noTls,proto3,oneof" json:"no_tls,omitempty"`
+}
+type ElasticConfig_UseTls struct {
+	UseTls *TLSConfigType `protobuf:"bytes,10,opt,name=use_tls,json=useTls,proto3,oneof" json:"use_tls,omitempty"`
+}
+
+func (*ElasticConfig_AuthNone) isElasticConfig_AuthChoice()  {}
+func (*ElasticConfig_AuthBasic) isElasticConfig_AuthChoice() {}
+func (*ElasticConfig_AuthAws) isElasticConfig_AuthChoice()   {}
+func (*ElasticConfig_NoTls) isElasticConfig_TlsChoice()      {}
+func (*ElasticConfig_UseTls) isElasticConfig_TlsChoice()     {}
+
+func (m *ElasticConfig) GetAuthChoice() isElasticConfig_AuthChoice {
+	if m != nil {
+		return m.AuthChoice
+	}
+	return nil
+}
+func (m *ElasticConfig) GetTlsChoice() isElasticConfig_TlsChoice {
+	if m != nil {
+		return m.TlsChoice
+	}
+	return nil
+}
+
+func (m *ElasticConfig) GetEndpoint() string {
+	if m != nil {
+		return m.Endpoint
+	}
+	return ""
+}
+
+func (m *ElasticConfig) GetAuthNone() *schema.Empty {
+	if x, ok := m.GetAuthChoice().(*ElasticConfig_AuthNone); ok {
+		return x.AuthNone
+	}
+	return nil
+}
+
+func (m *ElasticConfig) GetAuthBasic() *HttpAuthBasic {
+	if x, ok := m.GetAuthChoice().(*ElasticConfig_AuthBasic); ok {
+		return x.AuthBasic
+	}
+	return nil
+}
+
+func (m *ElasticConfig) GetAuthAws() *views.ObjectRefType {
+	if x, ok := m.GetAuthChoice().(*ElasticConfig_AuthAws); ok {
+		return x.AuthAws
+	}
+	return nil
+}
+
+func (m *ElasticConfig) GetCompression() *CompressionType {
+	if m != nil {
+		return m.Compression
+	}
+	return nil
+}
+
+func (m *ElasticConfig) GetBatch() *BatchOptionType {
+	if m != nil {
+		return m.Batch
+	}
+	return nil
+}
+
+func (m *ElasticConfig) GetNoTls() *schema.Empty {
+	if x, ok := m.GetTlsChoice().(*ElasticConfig_NoTls); ok {
+		return x.NoTls
+	}
+	return nil
+}
+
+func (m *ElasticConfig) GetUseTls() *TLSConfigType {
+	if x, ok := m.GetTlsChoice().(*ElasticConfig_UseTls); ok {
+		return x.UseTls
+	}
+	return nil
+}
+
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*ElasticConfig) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
+		(*ElasticConfig_AuthNone)(nil),
+		(*ElasticConfig_AuthBasic)(nil),
+		(*ElasticConfig_AuthAws)(nil),
+		(*ElasticConfig_NoTls)(nil),
+		(*ElasticConfig_UseTls)(nil),
+	}
+}
+
+// Azur Blob Configuration
+//
+// x-displayName: "Azure Blob Configuration"
+// Azure Blob Configuration for Global Log Receiver
+type AzureBlobConfig struct {
+	// Azure Blob Storage Connection String
+	//
+	// x-displayName: "Azure Blob Storage Connection String"
+	// x-example: "DefaultEndpointsProtocol=https;AccountName=mylogstorage;AccountKey=SECRET;EndpointSuffix=core.windows.net"
+	// x-required
+	// Azure Blob Storate Connection String.  Note that this field must contain: `AccountKey`, `AccountName` and should contain `DefaultEndpointsProtocol`
+	ConnectionString *schema.SecretType `protobuf:"bytes,1,opt,name=connection_string,json=connectionString,proto3" json:"connection_string,omitempty"`
+	// Container Name
+	//
+	// x-displayName: "Container Name"
+	// x-required
+	// x-example: "logs"
+	// Container Name is the name of the container into which logs should be stored
+	ContainerName string `protobuf:"bytes,2,opt,name=container_name,json=containerName,proto3" json:"container_name,omitempty"`
+	// Compression Options
+	//
+	// x-displayName: "Compression Options"
+	// Compression Options allows selection of how data should be compressed when sent to the endpoint
+	Compression *CompressionType `protobuf:"bytes,3,opt,name=compression,proto3" json:"compression,omitempty"`
+	// Batch Options
+	//
+	// x-displayName: "Batch Options"
+	// Batch Options allow tuning of the conditions for how batches of logs are sent to the endpoint
+	Batch *BatchOptionType `protobuf:"bytes,4,opt,name=batch,proto3" json:"batch,omitempty"`
+}
+
+func (m *AzureBlobConfig) Reset()      { *m = AzureBlobConfig{} }
+func (*AzureBlobConfig) ProtoMessage() {}
+func (*AzureBlobConfig) Descriptor() ([]byte, []int) {
+	return fileDescriptor_2ef22f1dd0dc1f3e, []int{12}
+}
+func (m *AzureBlobConfig) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *AzureBlobConfig) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *AzureBlobConfig) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_AzureBlobConfig.Merge(m, src)
+}
+func (m *AzureBlobConfig) XXX_Size() int {
+	return m.Size()
+}
+func (m *AzureBlobConfig) XXX_DiscardUnknown() {
+	xxx_messageInfo_AzureBlobConfig.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_AzureBlobConfig proto.InternalMessageInfo
+
+func (m *AzureBlobConfig) GetConnectionString() *schema.SecretType {
+	if m != nil {
+		return m.ConnectionString
+	}
+	return nil
+}
+
+func (m *AzureBlobConfig) GetContainerName() string {
+	if m != nil {
+		return m.ContainerName
+	}
+	return ""
+}
+
+func (m *AzureBlobConfig) GetCompression() *CompressionType {
+	if m != nil {
+		return m.Compression
+	}
+	return nil
+}
+
+func (m *AzureBlobConfig) GetBatch() *BatchOptionType {
+	if m != nil {
+		return m.Batch
+	}
+	return nil
+}
+
+// Azure Event Hubgs Configuration
+//
+// x-displayName: "Azure Event Hubs Configuration"
+// Azure Event Hubs Configuration for Global Log Receiver
+type AzureEventHubsConfig struct {
+	// Azure Event Hubs Connection String
+	//
+	// x-displayName: "Connection String"
+	// x-example: "Endpoint=sb://myhub.servicebus.windows.net/;SharedAccessKeyName=log-producer;SharedAccessKey=SECRET;EntityPath=vector"
+	// x-required
+	// Azure Event Hubs Connection String.
+	ConnectionString *schema.SecretType `protobuf:"bytes,1,opt,name=connection_string,json=connectionString,proto3" json:"connection_string,omitempty"`
+	// Event Hubs Namespace
+	//
+	// x-displayName: "Event Hubs Namespace"
+	// x-required
+	// x-example: "myhub"
+	// Event Hubs Namespace is namespace with instance into which logs should be stored
+	Namespace string `protobuf:"bytes,2,opt,name=namespace,proto3" json:"namespace,omitempty"`
+	// Event Hubs Instance
+	//
+	// x-displayName: "Event Hubs Instance"
+	// x-required
+	// x-example: "logs"
+	// Event Hubs Instance name into which logs should be stored
+	Instance string `protobuf:"bytes,3,opt,name=instance,proto3" json:"instance,omitempty"`
+}
+
+func (m *AzureEventHubsConfig) Reset()      { *m = AzureEventHubsConfig{} }
+func (*AzureEventHubsConfig) ProtoMessage() {}
+func (*AzureEventHubsConfig) Descriptor() ([]byte, []int) {
+	return fileDescriptor_2ef22f1dd0dc1f3e, []int{13}
+}
+func (m *AzureEventHubsConfig) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *AzureEventHubsConfig) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *AzureEventHubsConfig) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_AzureEventHubsConfig.Merge(m, src)
+}
+func (m *AzureEventHubsConfig) XXX_Size() int {
+	return m.Size()
+}
+func (m *AzureEventHubsConfig) XXX_DiscardUnknown() {
+	xxx_messageInfo_AzureEventHubsConfig.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_AzureEventHubsConfig proto.InternalMessageInfo
+
+func (m *AzureEventHubsConfig) GetConnectionString() *schema.SecretType {
+	if m != nil {
+		return m.ConnectionString
+	}
+	return nil
+}
+
+func (m *AzureEventHubsConfig) GetNamespace() string {
+	if m != nil {
+		return m.Namespace
+	}
+	return ""
+}
+
+func (m *AzureEventHubsConfig) GetInstance() string {
+	if m != nil {
+		return m.Instance
+	}
+	return ""
+}
+
 // Specification for Global Log Receiver
 //
 // x-displayName: "Specification"
@@ -176,6 +1719,12 @@ type GlobalSpecType struct {
 	//
 	// Types that are valid to be assigned to Receiver:
 	//	*GlobalSpecType_S3Receiver
+	//	*GlobalSpecType_HttpReceiver
+	//	*GlobalSpecType_DatadogReceiver
+	//	*GlobalSpecType_SplunkReceiver
+	//	*GlobalSpecType_ElasticReceiver
+	//	*GlobalSpecType_AzureReceiver
+	//	*GlobalSpecType_AzureEventHubsReceiver
 	Receiver isGlobalSpecType_Receiver `protobuf_oneof:"receiver"`
 	// view_internal
 	//
@@ -187,7 +1736,7 @@ type GlobalSpecType struct {
 func (m *GlobalSpecType) Reset()      { *m = GlobalSpecType{} }
 func (*GlobalSpecType) ProtoMessage() {}
 func (*GlobalSpecType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_2ef22f1dd0dc1f3e, []int{2}
+	return fileDescriptor_2ef22f1dd0dc1f3e, []int{14}
 }
 func (m *GlobalSpecType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -240,12 +1789,36 @@ type GlobalSpecType_NsSystem struct {
 type GlobalSpecType_S3Receiver struct {
 	S3Receiver *S3Config `protobuf:"bytes,7,opt,name=s3_receiver,json=s3Receiver,proto3,oneof" json:"s3_receiver,omitempty"`
 }
+type GlobalSpecType_HttpReceiver struct {
+	HttpReceiver *HTTPConfig `protobuf:"bytes,8,opt,name=http_receiver,json=httpReceiver,proto3,oneof" json:"http_receiver,omitempty"`
+}
+type GlobalSpecType_DatadogReceiver struct {
+	DatadogReceiver *DatadogConfig `protobuf:"bytes,9,opt,name=datadog_receiver,json=datadogReceiver,proto3,oneof" json:"datadog_receiver,omitempty"`
+}
+type GlobalSpecType_SplunkReceiver struct {
+	SplunkReceiver *SplunkConfig `protobuf:"bytes,10,opt,name=splunk_receiver,json=splunkReceiver,proto3,oneof" json:"splunk_receiver,omitempty"`
+}
+type GlobalSpecType_ElasticReceiver struct {
+	ElasticReceiver *ElasticConfig `protobuf:"bytes,11,opt,name=elastic_receiver,json=elasticReceiver,proto3,oneof" json:"elastic_receiver,omitempty"`
+}
+type GlobalSpecType_AzureReceiver struct {
+	AzureReceiver *AzureBlobConfig `protobuf:"bytes,12,opt,name=azure_receiver,json=azureReceiver,proto3,oneof" json:"azure_receiver,omitempty"`
+}
+type GlobalSpecType_AzureEventHubsReceiver struct {
+	AzureEventHubsReceiver *AzureEventHubsConfig `protobuf:"bytes,13,opt,name=azure_event_hubs_receiver,json=azureEventHubsReceiver,proto3,oneof" json:"azure_event_hubs_receiver,omitempty"`
+}
 
-func (*GlobalSpecType_NsCurrent) isGlobalSpecType_FilterChoice() {}
-func (*GlobalSpecType_NsAll) isGlobalSpecType_FilterChoice()     {}
-func (*GlobalSpecType_NsList) isGlobalSpecType_FilterChoice()    {}
-func (*GlobalSpecType_NsSystem) isGlobalSpecType_FilterChoice()  {}
-func (*GlobalSpecType_S3Receiver) isGlobalSpecType_Receiver()    {}
+func (*GlobalSpecType_NsCurrent) isGlobalSpecType_FilterChoice()          {}
+func (*GlobalSpecType_NsAll) isGlobalSpecType_FilterChoice()              {}
+func (*GlobalSpecType_NsList) isGlobalSpecType_FilterChoice()             {}
+func (*GlobalSpecType_NsSystem) isGlobalSpecType_FilterChoice()           {}
+func (*GlobalSpecType_S3Receiver) isGlobalSpecType_Receiver()             {}
+func (*GlobalSpecType_HttpReceiver) isGlobalSpecType_Receiver()           {}
+func (*GlobalSpecType_DatadogReceiver) isGlobalSpecType_Receiver()        {}
+func (*GlobalSpecType_SplunkReceiver) isGlobalSpecType_Receiver()         {}
+func (*GlobalSpecType_ElasticReceiver) isGlobalSpecType_Receiver()        {}
+func (*GlobalSpecType_AzureReceiver) isGlobalSpecType_Receiver()          {}
+func (*GlobalSpecType_AzureEventHubsReceiver) isGlobalSpecType_Receiver() {}
 
 func (m *GlobalSpecType) GetFilterChoice() isGlobalSpecType_FilterChoice {
 	if m != nil {
@@ -295,6 +1868,48 @@ func (m *GlobalSpecType) GetS3Receiver() *S3Config {
 	return nil
 }
 
+func (m *GlobalSpecType) GetHttpReceiver() *HTTPConfig {
+	if x, ok := m.GetReceiver().(*GlobalSpecType_HttpReceiver); ok {
+		return x.HttpReceiver
+	}
+	return nil
+}
+
+func (m *GlobalSpecType) GetDatadogReceiver() *DatadogConfig {
+	if x, ok := m.GetReceiver().(*GlobalSpecType_DatadogReceiver); ok {
+		return x.DatadogReceiver
+	}
+	return nil
+}
+
+func (m *GlobalSpecType) GetSplunkReceiver() *SplunkConfig {
+	if x, ok := m.GetReceiver().(*GlobalSpecType_SplunkReceiver); ok {
+		return x.SplunkReceiver
+	}
+	return nil
+}
+
+func (m *GlobalSpecType) GetElasticReceiver() *ElasticConfig {
+	if x, ok := m.GetReceiver().(*GlobalSpecType_ElasticReceiver); ok {
+		return x.ElasticReceiver
+	}
+	return nil
+}
+
+func (m *GlobalSpecType) GetAzureReceiver() *AzureBlobConfig {
+	if x, ok := m.GetReceiver().(*GlobalSpecType_AzureReceiver); ok {
+		return x.AzureReceiver
+	}
+	return nil
+}
+
+func (m *GlobalSpecType) GetAzureEventHubsReceiver() *AzureEventHubsConfig {
+	if x, ok := m.GetReceiver().(*GlobalSpecType_AzureEventHubsReceiver); ok {
+		return x.AzureEventHubsReceiver
+	}
+	return nil
+}
+
 func (m *GlobalSpecType) GetViewInternal() *views.ObjectRefType {
 	if m != nil {
 		return m.ViewInternal
@@ -310,6 +1925,12 @@ func (*GlobalSpecType) XXX_OneofWrappers() []interface{} {
 		(*GlobalSpecType_NsList)(nil),
 		(*GlobalSpecType_NsSystem)(nil),
 		(*GlobalSpecType_S3Receiver)(nil),
+		(*GlobalSpecType_HttpReceiver)(nil),
+		(*GlobalSpecType_DatadogReceiver)(nil),
+		(*GlobalSpecType_SplunkReceiver)(nil),
+		(*GlobalSpecType_ElasticReceiver)(nil),
+		(*GlobalSpecType_AzureReceiver)(nil),
+		(*GlobalSpecType_AzureEventHubsReceiver)(nil),
 	}
 }
 
@@ -326,13 +1947,19 @@ type CreateSpecType struct {
 	FilterChoice isCreateSpecType_FilterChoice `protobuf_oneof:"filter_choice"`
 	// Types that are valid to be assigned to Receiver:
 	//	*CreateSpecType_S3Receiver
+	//	*CreateSpecType_HttpReceiver
+	//	*CreateSpecType_DatadogReceiver
+	//	*CreateSpecType_SplunkReceiver
+	//	*CreateSpecType_ElasticReceiver
+	//	*CreateSpecType_AzureReceiver
+	//	*CreateSpecType_AzureEventHubsReceiver
 	Receiver isCreateSpecType_Receiver `protobuf_oneof:"receiver"`
 }
 
 func (m *CreateSpecType) Reset()      { *m = CreateSpecType{} }
 func (*CreateSpecType) ProtoMessage() {}
 func (*CreateSpecType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_2ef22f1dd0dc1f3e, []int{3}
+	return fileDescriptor_2ef22f1dd0dc1f3e, []int{15}
 }
 func (m *CreateSpecType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -385,12 +2012,36 @@ type CreateSpecType_NsSystem struct {
 type CreateSpecType_S3Receiver struct {
 	S3Receiver *S3Config `protobuf:"bytes,7,opt,name=s3_receiver,json=s3Receiver,proto3,oneof" json:"s3_receiver,omitempty"`
 }
+type CreateSpecType_HttpReceiver struct {
+	HttpReceiver *HTTPConfig `protobuf:"bytes,8,opt,name=http_receiver,json=httpReceiver,proto3,oneof" json:"http_receiver,omitempty"`
+}
+type CreateSpecType_DatadogReceiver struct {
+	DatadogReceiver *DatadogConfig `protobuf:"bytes,9,opt,name=datadog_receiver,json=datadogReceiver,proto3,oneof" json:"datadog_receiver,omitempty"`
+}
+type CreateSpecType_SplunkReceiver struct {
+	SplunkReceiver *SplunkConfig `protobuf:"bytes,10,opt,name=splunk_receiver,json=splunkReceiver,proto3,oneof" json:"splunk_receiver,omitempty"`
+}
+type CreateSpecType_ElasticReceiver struct {
+	ElasticReceiver *ElasticConfig `protobuf:"bytes,11,opt,name=elastic_receiver,json=elasticReceiver,proto3,oneof" json:"elastic_receiver,omitempty"`
+}
+type CreateSpecType_AzureReceiver struct {
+	AzureReceiver *AzureBlobConfig `protobuf:"bytes,12,opt,name=azure_receiver,json=azureReceiver,proto3,oneof" json:"azure_receiver,omitempty"`
+}
+type CreateSpecType_AzureEventHubsReceiver struct {
+	AzureEventHubsReceiver *AzureEventHubsConfig `protobuf:"bytes,13,opt,name=azure_event_hubs_receiver,json=azureEventHubsReceiver,proto3,oneof" json:"azure_event_hubs_receiver,omitempty"`
+}
 
-func (*CreateSpecType_NsCurrent) isCreateSpecType_FilterChoice() {}
-func (*CreateSpecType_NsAll) isCreateSpecType_FilterChoice()     {}
-func (*CreateSpecType_NsList) isCreateSpecType_FilterChoice()    {}
-func (*CreateSpecType_NsSystem) isCreateSpecType_FilterChoice()  {}
-func (*CreateSpecType_S3Receiver) isCreateSpecType_Receiver()    {}
+func (*CreateSpecType_NsCurrent) isCreateSpecType_FilterChoice()          {}
+func (*CreateSpecType_NsAll) isCreateSpecType_FilterChoice()              {}
+func (*CreateSpecType_NsList) isCreateSpecType_FilterChoice()             {}
+func (*CreateSpecType_NsSystem) isCreateSpecType_FilterChoice()           {}
+func (*CreateSpecType_S3Receiver) isCreateSpecType_Receiver()             {}
+func (*CreateSpecType_HttpReceiver) isCreateSpecType_Receiver()           {}
+func (*CreateSpecType_DatadogReceiver) isCreateSpecType_Receiver()        {}
+func (*CreateSpecType_SplunkReceiver) isCreateSpecType_Receiver()         {}
+func (*CreateSpecType_ElasticReceiver) isCreateSpecType_Receiver()        {}
+func (*CreateSpecType_AzureReceiver) isCreateSpecType_Receiver()          {}
+func (*CreateSpecType_AzureEventHubsReceiver) isCreateSpecType_Receiver() {}
 
 func (m *CreateSpecType) GetFilterChoice() isCreateSpecType_FilterChoice {
 	if m != nil {
@@ -440,6 +2091,48 @@ func (m *CreateSpecType) GetS3Receiver() *S3Config {
 	return nil
 }
 
+func (m *CreateSpecType) GetHttpReceiver() *HTTPConfig {
+	if x, ok := m.GetReceiver().(*CreateSpecType_HttpReceiver); ok {
+		return x.HttpReceiver
+	}
+	return nil
+}
+
+func (m *CreateSpecType) GetDatadogReceiver() *DatadogConfig {
+	if x, ok := m.GetReceiver().(*CreateSpecType_DatadogReceiver); ok {
+		return x.DatadogReceiver
+	}
+	return nil
+}
+
+func (m *CreateSpecType) GetSplunkReceiver() *SplunkConfig {
+	if x, ok := m.GetReceiver().(*CreateSpecType_SplunkReceiver); ok {
+		return x.SplunkReceiver
+	}
+	return nil
+}
+
+func (m *CreateSpecType) GetElasticReceiver() *ElasticConfig {
+	if x, ok := m.GetReceiver().(*CreateSpecType_ElasticReceiver); ok {
+		return x.ElasticReceiver
+	}
+	return nil
+}
+
+func (m *CreateSpecType) GetAzureReceiver() *AzureBlobConfig {
+	if x, ok := m.GetReceiver().(*CreateSpecType_AzureReceiver); ok {
+		return x.AzureReceiver
+	}
+	return nil
+}
+
+func (m *CreateSpecType) GetAzureEventHubsReceiver() *AzureEventHubsConfig {
+	if x, ok := m.GetReceiver().(*CreateSpecType_AzureEventHubsReceiver); ok {
+		return x.AzureEventHubsReceiver
+	}
+	return nil
+}
+
 // XXX_OneofWrappers is for the internal use of the proto package.
 func (*CreateSpecType) XXX_OneofWrappers() []interface{} {
 	return []interface{}{
@@ -448,6 +2141,12 @@ func (*CreateSpecType) XXX_OneofWrappers() []interface{} {
 		(*CreateSpecType_NsList)(nil),
 		(*CreateSpecType_NsSystem)(nil),
 		(*CreateSpecType_S3Receiver)(nil),
+		(*CreateSpecType_HttpReceiver)(nil),
+		(*CreateSpecType_DatadogReceiver)(nil),
+		(*CreateSpecType_SplunkReceiver)(nil),
+		(*CreateSpecType_ElasticReceiver)(nil),
+		(*CreateSpecType_AzureReceiver)(nil),
+		(*CreateSpecType_AzureEventHubsReceiver)(nil),
 	}
 }
 
@@ -464,13 +2163,19 @@ type ReplaceSpecType struct {
 	FilterChoice isReplaceSpecType_FilterChoice `protobuf_oneof:"filter_choice"`
 	// Types that are valid to be assigned to Receiver:
 	//	*ReplaceSpecType_S3Receiver
+	//	*ReplaceSpecType_HttpReceiver
+	//	*ReplaceSpecType_DatadogReceiver
+	//	*ReplaceSpecType_SplunkReceiver
+	//	*ReplaceSpecType_ElasticReceiver
+	//	*ReplaceSpecType_AzureReceiver
+	//	*ReplaceSpecType_AzureEventHubsReceiver
 	Receiver isReplaceSpecType_Receiver `protobuf_oneof:"receiver"`
 }
 
 func (m *ReplaceSpecType) Reset()      { *m = ReplaceSpecType{} }
 func (*ReplaceSpecType) ProtoMessage() {}
 func (*ReplaceSpecType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_2ef22f1dd0dc1f3e, []int{4}
+	return fileDescriptor_2ef22f1dd0dc1f3e, []int{16}
 }
 func (m *ReplaceSpecType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -523,12 +2228,36 @@ type ReplaceSpecType_NsSystem struct {
 type ReplaceSpecType_S3Receiver struct {
 	S3Receiver *S3Config `protobuf:"bytes,7,opt,name=s3_receiver,json=s3Receiver,proto3,oneof" json:"s3_receiver,omitempty"`
 }
+type ReplaceSpecType_HttpReceiver struct {
+	HttpReceiver *HTTPConfig `protobuf:"bytes,8,opt,name=http_receiver,json=httpReceiver,proto3,oneof" json:"http_receiver,omitempty"`
+}
+type ReplaceSpecType_DatadogReceiver struct {
+	DatadogReceiver *DatadogConfig `protobuf:"bytes,9,opt,name=datadog_receiver,json=datadogReceiver,proto3,oneof" json:"datadog_receiver,omitempty"`
+}
+type ReplaceSpecType_SplunkReceiver struct {
+	SplunkReceiver *SplunkConfig `protobuf:"bytes,10,opt,name=splunk_receiver,json=splunkReceiver,proto3,oneof" json:"splunk_receiver,omitempty"`
+}
+type ReplaceSpecType_ElasticReceiver struct {
+	ElasticReceiver *ElasticConfig `protobuf:"bytes,11,opt,name=elastic_receiver,json=elasticReceiver,proto3,oneof" json:"elastic_receiver,omitempty"`
+}
+type ReplaceSpecType_AzureReceiver struct {
+	AzureReceiver *AzureBlobConfig `protobuf:"bytes,12,opt,name=azure_receiver,json=azureReceiver,proto3,oneof" json:"azure_receiver,omitempty"`
+}
+type ReplaceSpecType_AzureEventHubsReceiver struct {
+	AzureEventHubsReceiver *AzureEventHubsConfig `protobuf:"bytes,13,opt,name=azure_event_hubs_receiver,json=azureEventHubsReceiver,proto3,oneof" json:"azure_event_hubs_receiver,omitempty"`
+}
 
-func (*ReplaceSpecType_NsCurrent) isReplaceSpecType_FilterChoice() {}
-func (*ReplaceSpecType_NsAll) isReplaceSpecType_FilterChoice()     {}
-func (*ReplaceSpecType_NsList) isReplaceSpecType_FilterChoice()    {}
-func (*ReplaceSpecType_NsSystem) isReplaceSpecType_FilterChoice()  {}
-func (*ReplaceSpecType_S3Receiver) isReplaceSpecType_Receiver()    {}
+func (*ReplaceSpecType_NsCurrent) isReplaceSpecType_FilterChoice()          {}
+func (*ReplaceSpecType_NsAll) isReplaceSpecType_FilterChoice()              {}
+func (*ReplaceSpecType_NsList) isReplaceSpecType_FilterChoice()             {}
+func (*ReplaceSpecType_NsSystem) isReplaceSpecType_FilterChoice()           {}
+func (*ReplaceSpecType_S3Receiver) isReplaceSpecType_Receiver()             {}
+func (*ReplaceSpecType_HttpReceiver) isReplaceSpecType_Receiver()           {}
+func (*ReplaceSpecType_DatadogReceiver) isReplaceSpecType_Receiver()        {}
+func (*ReplaceSpecType_SplunkReceiver) isReplaceSpecType_Receiver()         {}
+func (*ReplaceSpecType_ElasticReceiver) isReplaceSpecType_Receiver()        {}
+func (*ReplaceSpecType_AzureReceiver) isReplaceSpecType_Receiver()          {}
+func (*ReplaceSpecType_AzureEventHubsReceiver) isReplaceSpecType_Receiver() {}
 
 func (m *ReplaceSpecType) GetFilterChoice() isReplaceSpecType_FilterChoice {
 	if m != nil {
@@ -578,6 +2307,48 @@ func (m *ReplaceSpecType) GetS3Receiver() *S3Config {
 	return nil
 }
 
+func (m *ReplaceSpecType) GetHttpReceiver() *HTTPConfig {
+	if x, ok := m.GetReceiver().(*ReplaceSpecType_HttpReceiver); ok {
+		return x.HttpReceiver
+	}
+	return nil
+}
+
+func (m *ReplaceSpecType) GetDatadogReceiver() *DatadogConfig {
+	if x, ok := m.GetReceiver().(*ReplaceSpecType_DatadogReceiver); ok {
+		return x.DatadogReceiver
+	}
+	return nil
+}
+
+func (m *ReplaceSpecType) GetSplunkReceiver() *SplunkConfig {
+	if x, ok := m.GetReceiver().(*ReplaceSpecType_SplunkReceiver); ok {
+		return x.SplunkReceiver
+	}
+	return nil
+}
+
+func (m *ReplaceSpecType) GetElasticReceiver() *ElasticConfig {
+	if x, ok := m.GetReceiver().(*ReplaceSpecType_ElasticReceiver); ok {
+		return x.ElasticReceiver
+	}
+	return nil
+}
+
+func (m *ReplaceSpecType) GetAzureReceiver() *AzureBlobConfig {
+	if x, ok := m.GetReceiver().(*ReplaceSpecType_AzureReceiver); ok {
+		return x.AzureReceiver
+	}
+	return nil
+}
+
+func (m *ReplaceSpecType) GetAzureEventHubsReceiver() *AzureEventHubsConfig {
+	if x, ok := m.GetReceiver().(*ReplaceSpecType_AzureEventHubsReceiver); ok {
+		return x.AzureEventHubsReceiver
+	}
+	return nil
+}
+
 // XXX_OneofWrappers is for the internal use of the proto package.
 func (*ReplaceSpecType) XXX_OneofWrappers() []interface{} {
 	return []interface{}{
@@ -586,6 +2357,12 @@ func (*ReplaceSpecType) XXX_OneofWrappers() []interface{} {
 		(*ReplaceSpecType_NsList)(nil),
 		(*ReplaceSpecType_NsSystem)(nil),
 		(*ReplaceSpecType_S3Receiver)(nil),
+		(*ReplaceSpecType_HttpReceiver)(nil),
+		(*ReplaceSpecType_DatadogReceiver)(nil),
+		(*ReplaceSpecType_SplunkReceiver)(nil),
+		(*ReplaceSpecType_ElasticReceiver)(nil),
+		(*ReplaceSpecType_AzureReceiver)(nil),
+		(*ReplaceSpecType_AzureEventHubsReceiver)(nil),
 	}
 }
 
@@ -602,13 +2379,19 @@ type GetSpecType struct {
 	FilterChoice isGetSpecType_FilterChoice `protobuf_oneof:"filter_choice"`
 	// Types that are valid to be assigned to Receiver:
 	//	*GetSpecType_S3Receiver
+	//	*GetSpecType_HttpReceiver
+	//	*GetSpecType_DatadogReceiver
+	//	*GetSpecType_SplunkReceiver
+	//	*GetSpecType_ElasticReceiver
+	//	*GetSpecType_AzureReceiver
+	//	*GetSpecType_AzureEventHubsReceiver
 	Receiver isGetSpecType_Receiver `protobuf_oneof:"receiver"`
 }
 
 func (m *GetSpecType) Reset()      { *m = GetSpecType{} }
 func (*GetSpecType) ProtoMessage() {}
 func (*GetSpecType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_2ef22f1dd0dc1f3e, []int{5}
+	return fileDescriptor_2ef22f1dd0dc1f3e, []int{17}
 }
 func (m *GetSpecType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -661,12 +2444,36 @@ type GetSpecType_NsSystem struct {
 type GetSpecType_S3Receiver struct {
 	S3Receiver *S3Config `protobuf:"bytes,7,opt,name=s3_receiver,json=s3Receiver,proto3,oneof" json:"s3_receiver,omitempty"`
 }
+type GetSpecType_HttpReceiver struct {
+	HttpReceiver *HTTPConfig `protobuf:"bytes,8,opt,name=http_receiver,json=httpReceiver,proto3,oneof" json:"http_receiver,omitempty"`
+}
+type GetSpecType_DatadogReceiver struct {
+	DatadogReceiver *DatadogConfig `protobuf:"bytes,9,opt,name=datadog_receiver,json=datadogReceiver,proto3,oneof" json:"datadog_receiver,omitempty"`
+}
+type GetSpecType_SplunkReceiver struct {
+	SplunkReceiver *SplunkConfig `protobuf:"bytes,10,opt,name=splunk_receiver,json=splunkReceiver,proto3,oneof" json:"splunk_receiver,omitempty"`
+}
+type GetSpecType_ElasticReceiver struct {
+	ElasticReceiver *ElasticConfig `protobuf:"bytes,11,opt,name=elastic_receiver,json=elasticReceiver,proto3,oneof" json:"elastic_receiver,omitempty"`
+}
+type GetSpecType_AzureReceiver struct {
+	AzureReceiver *AzureBlobConfig `protobuf:"bytes,12,opt,name=azure_receiver,json=azureReceiver,proto3,oneof" json:"azure_receiver,omitempty"`
+}
+type GetSpecType_AzureEventHubsReceiver struct {
+	AzureEventHubsReceiver *AzureEventHubsConfig `protobuf:"bytes,13,opt,name=azure_event_hubs_receiver,json=azureEventHubsReceiver,proto3,oneof" json:"azure_event_hubs_receiver,omitempty"`
+}
 
-func (*GetSpecType_NsCurrent) isGetSpecType_FilterChoice() {}
-func (*GetSpecType_NsAll) isGetSpecType_FilterChoice()     {}
-func (*GetSpecType_NsList) isGetSpecType_FilterChoice()    {}
-func (*GetSpecType_NsSystem) isGetSpecType_FilterChoice()  {}
-func (*GetSpecType_S3Receiver) isGetSpecType_Receiver()    {}
+func (*GetSpecType_NsCurrent) isGetSpecType_FilterChoice()          {}
+func (*GetSpecType_NsAll) isGetSpecType_FilterChoice()              {}
+func (*GetSpecType_NsList) isGetSpecType_FilterChoice()             {}
+func (*GetSpecType_NsSystem) isGetSpecType_FilterChoice()           {}
+func (*GetSpecType_S3Receiver) isGetSpecType_Receiver()             {}
+func (*GetSpecType_HttpReceiver) isGetSpecType_Receiver()           {}
+func (*GetSpecType_DatadogReceiver) isGetSpecType_Receiver()        {}
+func (*GetSpecType_SplunkReceiver) isGetSpecType_Receiver()         {}
+func (*GetSpecType_ElasticReceiver) isGetSpecType_Receiver()        {}
+func (*GetSpecType_AzureReceiver) isGetSpecType_Receiver()          {}
+func (*GetSpecType_AzureEventHubsReceiver) isGetSpecType_Receiver() {}
 
 func (m *GetSpecType) GetFilterChoice() isGetSpecType_FilterChoice {
 	if m != nil {
@@ -716,6 +2523,48 @@ func (m *GetSpecType) GetS3Receiver() *S3Config {
 	return nil
 }
 
+func (m *GetSpecType) GetHttpReceiver() *HTTPConfig {
+	if x, ok := m.GetReceiver().(*GetSpecType_HttpReceiver); ok {
+		return x.HttpReceiver
+	}
+	return nil
+}
+
+func (m *GetSpecType) GetDatadogReceiver() *DatadogConfig {
+	if x, ok := m.GetReceiver().(*GetSpecType_DatadogReceiver); ok {
+		return x.DatadogReceiver
+	}
+	return nil
+}
+
+func (m *GetSpecType) GetSplunkReceiver() *SplunkConfig {
+	if x, ok := m.GetReceiver().(*GetSpecType_SplunkReceiver); ok {
+		return x.SplunkReceiver
+	}
+	return nil
+}
+
+func (m *GetSpecType) GetElasticReceiver() *ElasticConfig {
+	if x, ok := m.GetReceiver().(*GetSpecType_ElasticReceiver); ok {
+		return x.ElasticReceiver
+	}
+	return nil
+}
+
+func (m *GetSpecType) GetAzureReceiver() *AzureBlobConfig {
+	if x, ok := m.GetReceiver().(*GetSpecType_AzureReceiver); ok {
+		return x.AzureReceiver
+	}
+	return nil
+}
+
+func (m *GetSpecType) GetAzureEventHubsReceiver() *AzureEventHubsConfig {
+	if x, ok := m.GetReceiver().(*GetSpecType_AzureEventHubsReceiver); ok {
+		return x.AzureEventHubsReceiver
+	}
+	return nil
+}
+
 // XXX_OneofWrappers is for the internal use of the proto package.
 func (*GetSpecType) XXX_OneofWrappers() []interface{} {
 	return []interface{}{
@@ -724,12 +2573,30 @@ func (*GetSpecType) XXX_OneofWrappers() []interface{} {
 		(*GetSpecType_NsList)(nil),
 		(*GetSpecType_NsSystem)(nil),
 		(*GetSpecType_S3Receiver)(nil),
+		(*GetSpecType_HttpReceiver)(nil),
+		(*GetSpecType_DatadogReceiver)(nil),
+		(*GetSpecType_SplunkReceiver)(nil),
+		(*GetSpecType_ElasticReceiver)(nil),
+		(*GetSpecType_AzureReceiver)(nil),
+		(*GetSpecType_AzureEventHubsReceiver)(nil),
 	}
 }
 
 func init() {
+	proto.RegisterType((*CompressionType)(nil), "ves.io.schema.global_log_receiver.CompressionType")
+	proto.RegisterType((*BatchOptionType)(nil), "ves.io.schema.global_log_receiver.BatchOptionType")
 	proto.RegisterType((*NSList)(nil), "ves.io.schema.global_log_receiver.NSList")
 	proto.RegisterType((*S3Config)(nil), "ves.io.schema.global_log_receiver.S3Config")
+	proto.RegisterType((*TLSClientConfigType)(nil), "ves.io.schema.global_log_receiver.TLSClientConfigType")
+	proto.RegisterType((*TLSConfigType)(nil), "ves.io.schema.global_log_receiver.TLSConfigType")
+	proto.RegisterType((*HttpAuthBasic)(nil), "ves.io.schema.global_log_receiver.HttpAuthBasic")
+	proto.RegisterType((*AuthToken)(nil), "ves.io.schema.global_log_receiver.AuthToken")
+	proto.RegisterType((*HTTPConfig)(nil), "ves.io.schema.global_log_receiver.HTTPConfig")
+	proto.RegisterType((*DatadogConfig)(nil), "ves.io.schema.global_log_receiver.DatadogConfig")
+	proto.RegisterType((*SplunkConfig)(nil), "ves.io.schema.global_log_receiver.SplunkConfig")
+	proto.RegisterType((*ElasticConfig)(nil), "ves.io.schema.global_log_receiver.ElasticConfig")
+	proto.RegisterType((*AzureBlobConfig)(nil), "ves.io.schema.global_log_receiver.AzureBlobConfig")
+	proto.RegisterType((*AzureEventHubsConfig)(nil), "ves.io.schema.global_log_receiver.AzureEventHubsConfig")
 	proto.RegisterType((*GlobalSpecType)(nil), "ves.io.schema.global_log_receiver.GlobalSpecType")
 	proto.RegisterType((*CreateSpecType)(nil), "ves.io.schema.global_log_receiver.CreateSpecType")
 	proto.RegisterType((*ReplaceSpecType)(nil), "ves.io.schema.global_log_receiver.ReplaceSpecType")
@@ -741,70 +2608,431 @@ func init() {
 }
 
 var fileDescriptor_2ef22f1dd0dc1f3e = []byte{
-	// 962 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x56, 0xcf, 0x8f, 0xdb, 0xc4,
-	0x17, 0xf7, 0xc4, 0xd9, 0xfc, 0x98, 0xfd, 0xd1, 0xac, 0xb7, 0x07, 0x37, 0xdf, 0xca, 0x4d, 0xf3,
-	0xed, 0x61, 0x51, 0xd7, 0x0e, 0x9b, 0x50, 0xa0, 0x3d, 0x14, 0xe1, 0x05, 0x75, 0x29, 0x55, 0x91,
-	0x1c, 0x24, 0xc4, 0x8f, 0x36, 0x9a, 0x38, 0x13, 0xc7, 0xd4, 0xf1, 0x58, 0x33, 0xe3, 0x84, 0x45,
-	0x42, 0x42, 0xbd, 0x22, 0x21, 0xe0, 0x84, 0x40, 0x82, 0x2b, 0xe2, 0x2f, 0x40, 0xa4, 0x87, 0x15,
-	0x12, 0x12, 0xe2, 0x94, 0xe3, 0x1e, 0xbb, 0xde, 0x03, 0xcb, 0xad, 0x47, 0xd4, 0x13, 0xf2, 0xc4,
-	0xc9, 0x26, 0x59, 0x0a, 0x0b, 0x08, 0xa9, 0x87, 0xde, 0xde, 0x9b, 0xf7, 0x79, 0xef, 0x7d, 0x66,
-	0x3e, 0xef, 0x49, 0x03, 0xf5, 0x1e, 0x66, 0x86, 0x4b, 0x2a, 0xcc, 0xee, 0xe0, 0x2e, 0xaa, 0x38,
-	0x1e, 0x69, 0x22, 0xaf, 0xe1, 0x11, 0xa7, 0x41, 0xb1, 0x8d, 0xdd, 0x1e, 0xa6, 0x15, 0xbe, 0x13,
-	0x60, 0x66, 0x04, 0x94, 0x70, 0xa2, 0x9c, 0x1f, 0xc1, 0x8d, 0x11, 0xdc, 0xf8, 0x03, 0x78, 0x51,
-	0x77, 0x5c, 0xde, 0x09, 0x9b, 0x86, 0x4d, 0xba, 0x15, 0x87, 0x38, 0xa4, 0x22, 0x32, 0x9b, 0x61,
-	0x5b, 0x78, 0xc2, 0x11, 0xd6, 0xa8, 0x62, 0xf1, 0x7f, 0xb3, 0x04, 0x48, 0xc0, 0x5d, 0xe2, 0x27,
-	0xed, 0x8a, 0x67, 0x66, 0x83, 0x53, 0x4c, 0x8a, 0x67, 0x67, 0x43, 0x3d, 0xe4, 0xb9, 0x2d, 0xc4,
-	0x71, 0x12, 0x2d, 0xcd, 0x45, 0x5d, 0xdc, 0x6f, 0xcc, 0x96, 0x3e, 0x77, 0x1c, 0xc1, 0xa6, 0x1b,
-	0x94, 0x9f, 0x87, 0x99, 0x9b, 0xf5, 0x1b, 0x2e, 0xe3, 0x8a, 0x01, 0xa1, 0x8f, 0xba, 0x98, 0x05,
-	0xc8, 0xc6, 0x4c, 0x05, 0x25, 0x79, 0x3d, 0x6f, 0xae, 0xfc, 0x36, 0x00, 0xd2, 0xf7, 0xbf, 0xee,
-	0xca, 0x0b, 0x9f, 0x81, 0x54, 0xa1, 0x60, 0x4d, 0x21, 0xca, 0xbf, 0xc8, 0x30, 0x57, 0xaf, 0x6d,
-	0x11, 0xbf, 0xed, 0x3a, 0xca, 0xab, 0x30, 0xd3, 0x0c, 0xed, 0x3b, 0x98, 0xab, 0xa0, 0x04, 0xd6,
-	0xf3, 0x66, 0x2d, 0x4e, 0xca, 0xd0, 0x74, 0x41, 0x56, 0x5f, 0x88, 0xcd, 0xff, 0xd3, 0xf3, 0xd5,
-	0x73, 0xb7, 0xdf, 0x46, 0xfa, 0xfb, 0x4f, 0xeb, 0x97, 0x6f, 0x5d, 0x4c, 0x8c, 0x77, 0x0c, 0x7d,
-	0x62, 0xdf, 0xba, 0x60, 0x25, 0x25, 0x94, 0x3a, 0xcc, 0xa1, 0x3e, 0x6b, 0xd8, 0x14, 0xb7, 0xd4,
-	0x54, 0x09, 0xac, 0x2f, 0x56, 0xcb, 0xc6, 0xac, 0x22, 0xe2, 0x1e, 0xc6, 0x6b, 0xcd, 0x77, 0xb1,
-	0xcd, 0x2d, 0xdc, 0x7e, 0x7d, 0x27, 0xc0, 0xe6, 0xe9, 0x6f, 0x3f, 0x58, 0xb5, 0x3d, 0x12, 0xb6,
-	0x44, 0x22, 0xf6, 0xb9, 0x8b, 0x3c, 0x66, 0x65, 0x51, 0x9f, 0x6d, 0x51, 0xdc, 0x52, 0xbe, 0x4b,
-	0x41, 0x18, 0x57, 0xa5, 0xd8, 0x71, 0x89, 0xaf, 0xca, 0x82, 0xe6, 0xe7, 0xa9, 0xf1, 0x05, 0x3f,
-	0x4e, 0xd1, 0x8f, 0x52, 0xd6, 0x0a, 0x0a, 0x74, 0x9f, 0x50, 0xde, 0xc1, 0x88, 0x71, 0x7d, 0x53,
-	0xf8, 0x8c, 0x84, 0x13, 0x7f, 0x09, 0x87, 0xba, 0x8d, 0x7d, 0x4e, 0x91, 0xa7, 0x6f, 0x5a, 0x79,
-	0x1c, 0xea, 0x7d, 0x2c, 0x02, 0x13, 0xb3, 0x66, 0xe5, 0x19, 0xd2, 0x13, 0x78, 0x3e, 0x64, 0xc7,
-	0xcc, 0xaa, 0x30, 0x05, 0xb6, 0x6a, 0x2d, 0xd9, 0x68, 0xaa, 0x1e, 0x44, 0xed, 0x51, 0xb7, 0x18,
-	0x8f, 0x82, 0x71, 0x2a, 0x1c, 0x93, 0x48, 0x08, 0x1d, 0x11, 0xac, 0xce, 0x11, 0xac, 0x5a, 0x10,
-	0x87, 0x13, 0x6c, 0x6c, 0x0b, 0xec, 0x34, 0xbf, 0xaa, 0x05, 0xbb, 0xf8, 0xa8, 0xcb, 0x98, 0xca,
-	0xfc, 0x55, 0x6b, 0x56, 0x1e, 0xf5, 0x99, 0x25, 0xde, 0xaa, 0x7c, 0x2f, 0x0d, 0x57, 0xae, 0x89,
-	0x1d, 0xa8, 0x07, 0xd8, 0x8e, 0x1f, 0x5b, 0xb9, 0x04, 0xa1, 0xcf, 0x1a, 0x76, 0x48, 0x29, 0xf6,
-	0x79, 0x22, 0xd2, 0xe9, 0x39, 0x91, 0x5e, 0xee, 0x06, 0x7c, 0x67, 0x5b, 0xb2, 0xf2, 0x3e, 0xdb,
-	0x1a, 0x01, 0x95, 0xab, 0x30, 0xe3, 0xb3, 0x06, 0xf2, 0x3c, 0xf1, 0xfe, 0x8f, 0x48, 0x31, 0x4f,
-	0x45, 0xf7, 0x7f, 0x94, 0xe1, 0x17, 0xf7, 0x40, 0x86, 0x75, 0x10, 0xc5, 0xad, 0x6d, 0xc9, 0x5a,
-	0xf0, 0xd9, 0x8b, 0x9e, 0xa7, 0xbc, 0x09, 0xb3, 0x3e, 0x6b, 0x78, 0x2e, 0xe3, 0x6a, 0x5a, 0x14,
-	0x78, 0xca, 0xf8, 0xcb, 0x55, 0x35, 0x46, 0xf3, 0x6d, 0xae, 0x1d, 0x0e, 0x00, 0x38, 0x5e, 0x39,
-	0xe3, 0x33, 0x31, 0xfe, 0x97, 0x61, 0xde, 0x67, 0x0d, 0xb6, 0xc3, 0x38, 0xee, 0xaa, 0x0b, 0x7f,
-	0xc2, 0x2e, 0x1d, 0xd7, 0xd9, 0x96, 0xac, 0x9c, 0xcf, 0xea, 0x02, 0xad, 0xdc, 0x84, 0x8b, 0xac,
-	0x36, 0xe9, 0xa7, 0x66, 0x45, 0xf2, 0xc5, 0x13, 0x30, 0x1b, 0xaf, 0xcf, 0x36, 0xb0, 0x20, 0xab,
-	0x59, 0xc9, 0xb1, 0x72, 0x1b, 0x2e, 0x8b, 0x55, 0x76, 0x7d, 0x8e, 0xa9, 0x8f, 0x3c, 0xf5, 0x30,
-	0xfb, 0x77, 0xb6, 0x60, 0x36, 0x39, 0x66, 0x6b, 0x2d, 0xc5, 0x47, 0xaf, 0x24, 0x27, 0x57, 0x4a,
-	0x3f, 0x0c, 0xc0, 0x59, 0x58, 0x84, 0x6b, 0x23, 0x51, 0x4b, 0x37, 0x88, 0x53, 0x9a, 0x34, 0x97,
-	0x37, 0x37, 0x9e, 0x35, 0x2f, 0xc0, 0xe5, 0xb6, 0xeb, 0x71, 0x4c, 0x1b, 0x76, 0x87, 0xb8, 0x36,
-	0x56, 0xd6, 0x76, 0x07, 0x20, 0x35, 0x8c, 0x1f, 0x70, 0x00, 0xb2, 0xd5, 0x8d, 0xda, 0xc6, 0x33,
-	0x1b, 0x97, 0xcc, 0x33, 0x30, 0x37, 0xbe, 0x8a, 0xb2, 0xbc, 0x3b, 0x00, 0xd9, 0xe1, 0x00, 0x64,
-	0xa2, 0x01, 0x00, 0xcf, 0x5d, 0x4f, 0xe7, 0x40, 0x21, 0x75, 0x3d, 0x9d, 0xcb, 0x14, 0xb2, 0xe5,
-	0xaf, 0x64, 0xb8, 0xb2, 0x45, 0x31, 0xe2, 0xf8, 0xdf, 0x8e, 0x8f, 0x7e, 0x92, 0xf1, 0x39, 0x9a,
-	0x96, 0x97, 0xfe, 0xf9, 0xb4, 0x4c, 0x0d, 0x46, 0xed, 0x84, 0x83, 0xf1, 0x5f, 0x8e, 0xc4, 0x95,
-	0xd5, 0x9f, 0xaf, 0xce, 0xad, 0xa0, 0x59, 0x9e, 0xd7, 0x68, 0xf5, 0xee, 0x43, 0x30, 0x7b, 0x64,
-	0xaa, 0x53, 0x0a, 0x2d, 0xdd, 0x7d, 0x08, 0x26, 0xde, 0x8c, 0x40, 0x5f, 0xcb, 0xf0, 0x94, 0x85,
-	0x03, 0x0f, 0xd9, 0x4f, 0x14, 0x7a, 0x3c, 0x15, 0xfa, 0x52, 0x86, 0x8b, 0xd7, 0x30, 0x7f, 0xa2,
-	0xce, 0xe3, 0xa8, 0x8e, 0xf9, 0x29, 0x18, 0xee, 0x6b, 0xd2, 0xde, 0xbe, 0x26, 0x3d, 0xd8, 0xd7,
-	0xc0, 0x87, 0x91, 0x06, 0xbe, 0x89, 0x34, 0xf0, 0x53, 0xa4, 0x81, 0x61, 0xa4, 0x81, 0xbd, 0x48,
-	0x03, 0xf7, 0x23, 0x0d, 0x1c, 0x46, 0x9a, 0xf4, 0x20, 0xd2, 0xc0, 0x27, 0x07, 0x9a, 0x34, 0x3c,
-	0xd0, 0xa4, 0xbd, 0x03, 0x4d, 0x7a, 0xeb, 0x0d, 0x87, 0x04, 0x77, 0x1c, 0xa3, 0x47, 0xe2, 0xae,
-	0x14, 0x19, 0x21, 0xab, 0x08, 0xa3, 0x4d, 0x68, 0x57, 0x0f, 0x28, 0xe9, 0xb9, 0x2d, 0x4c, 0xf5,
-	0x71, 0xb8, 0x12, 0x34, 0x1d, 0x52, 0xc1, 0xef, 0xf1, 0xe4, 0x3b, 0xf7, 0xe8, 0xef, 0x6c, 0x33,
-	0x23, 0xbe, 0x77, 0xb5, 0xdf, 0x03, 0x00, 0x00, 0xff, 0xff, 0x51, 0x60, 0x82, 0xc5, 0xfa, 0x0a,
-	0x00, 0x00,
+	// 2428 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x5a, 0xcf, 0x6f, 0x1b, 0xc7,
+	0xf5, 0xe7, 0xf0, 0xe7, 0xf2, 0x91, 0x14, 0xe9, 0xb5, 0x93, 0xd0, 0xfa, 0x1a, 0x0c, 0xc3, 0x38,
+	0xdf, 0x2a, 0x31, 0x49, 0x45, 0x54, 0xec, 0xd8, 0x29, 0x90, 0x46, 0x2b, 0xbb, 0x66, 0x14, 0xd7,
+	0x49, 0x57, 0x72, 0x83, 0x26, 0xb5, 0xb7, 0xc3, 0xe5, 0x88, 0xdc, 0x6a, 0xb9, 0xbb, 0xd8, 0x99,
+	0x95, 0x2c, 0x03, 0x05, 0x84, 0x5c, 0x53, 0x14, 0x69, 0xd1, 0x43, 0xd0, 0xa2, 0x97, 0x9e, 0xda,
+	0xa2, 0x7f, 0x40, 0x51, 0xe6, 0x20, 0x14, 0x2d, 0x10, 0xe4, 0xa4, 0xa3, 0x4f, 0x45, 0xcc, 0x5c,
+	0xd2, 0x5b, 0x7a, 0x0b, 0x82, 0x02, 0x2d, 0x76, 0x76, 0xb9, 0x5c, 0x52, 0xb6, 0x44, 0xc7, 0x76,
+	0x7f, 0xa4, 0xba, 0x0d, 0x77, 0xde, 0xfb, 0xbc, 0xb7, 0xf3, 0xde, 0xfb, 0xbc, 0xb7, 0x23, 0x41,
+	0x6d, 0x93, 0xd0, 0xba, 0x66, 0xce, 0x53, 0xb5, 0x4b, 0x7a, 0x78, 0xbe, 0xa3, 0x9b, 0x2d, 0xac,
+	0x2b, 0xba, 0xd9, 0x51, 0x6c, 0xa2, 0x12, 0x6d, 0x93, 0xd8, 0xf3, 0x6c, 0xdb, 0x22, 0xb4, 0x6e,
+	0xd9, 0x26, 0x33, 0xc5, 0xa7, 0x3c, 0xf1, 0xba, 0x27, 0x5e, 0xbf, 0x8b, 0xf8, 0x6c, 0xad, 0xa3,
+	0xb1, 0xae, 0xd3, 0xaa, 0xab, 0x66, 0x6f, 0xbe, 0x63, 0x76, 0xcc, 0x79, 0xae, 0xd9, 0x72, 0xd6,
+	0xf9, 0x2f, 0xfe, 0x83, 0xaf, 0x3c, 0xc4, 0xd9, 0xff, 0x1b, 0x77, 0xc0, 0xb4, 0x98, 0x66, 0x1a,
+	0xbe, 0xb9, 0xd9, 0x93, 0xe3, 0x9b, 0x21, 0x4f, 0x66, 0x4f, 0x8d, 0x6f, 0x6d, 0x62, 0x5d, 0x6b,
+	0x63, 0x46, 0xfc, 0xdd, 0xf2, 0xc4, 0xae, 0x46, 0xb6, 0x94, 0x71, 0xe8, 0x27, 0xf7, 0x4b, 0xd0,
+	0xb0, 0x81, 0xca, 0x9f, 0x10, 0xe4, 0x97, 0xcd, 0x9e, 0x65, 0x13, 0x4a, 0x35, 0xd3, 0x58, 0xdb,
+	0xb6, 0x88, 0xb8, 0x04, 0x05, 0x75, 0xf4, 0x48, 0x31, 0x4c, 0x83, 0x14, 0xa3, 0x65, 0x34, 0x97,
+	0x69, 0x9c, 0xa8, 0x8f, 0x9f, 0xcc, 0xa5, 0x9e, 0xc5, 0xb6, 0x9b, 0x11, 0x39, 0x1f, 0x92, 0xbf,
+	0x6a, 0x1a, 0xfb, 0x20, 0x3a, 0xb7, 0x34, 0xab, 0x18, 0x9b, 0x1a, 0xe2, 0xf2, 0x2d, 0xcd, 0x92,
+	0x9e, 0x01, 0x31, 0x0c, 0xa1, 0x76, 0x4d, 0x4d, 0x25, 0x62, 0x7e, 0xb7, 0x8f, 0xa2, 0x7b, 0x7d,
+	0x84, 0x06, 0x7d, 0x14, 0x6b, 0x54, 0x17, 0x57, 0xe2, 0x02, 0x2a, 0x44, 0x2b, 0x7f, 0x8f, 0x41,
+	0x5e, 0xc2, 0x4c, 0xed, 0xbe, 0xce, 0x5f, 0x9f, 0xbf, 0xc6, 0x55, 0x78, 0x82, 0x69, 0x3d, 0x62,
+	0x3a, 0x4c, 0xa1, 0x44, 0x35, 0x8d, 0x36, 0x55, 0xda, 0x64, 0x1d, 0x3b, 0x3a, 0x3b, 0xe4, 0x6d,
+	0x1e, 0xf3, 0xd5, 0x56, 0x3d, 0xad, 0x8b, 0x9e, 0x92, 0x78, 0x1e, 0xf2, 0x13, 0x78, 0xfc, 0x95,
+	0xe2, 0x52, 0xee, 0x0f, 0x7f, 0xdd, 0x8d, 0x09, 0x8d, 0x64, 0xf1, 0xbd, 0x53, 0x73, 0xbf, 0x8b,
+	0x36, 0x23, 0xf2, 0xcc, 0x38, 0x80, 0xf8, 0x4d, 0x38, 0xde, 0xc3, 0x37, 0x15, 0xb2, 0x49, 0x0c,
+	0x46, 0x95, 0xb6, 0x46, 0x71, 0x4b, 0x27, 0xed, 0x62, 0xe2, 0x00, 0x2f, 0x90, 0x7c, 0xac, 0x87,
+	0x6f, 0x5e, 0xe2, 0x1a, 0x17, 0x7d, 0x05, 0xb1, 0x06, 0x30, 0xc2, 0x29, 0x26, 0xcb, 0x68, 0x2e,
+	0x27, 0x65, 0x5d, 0xe3, 0xa9, 0xe7, 0x12, 0xc5, 0xbd, 0xfc, 0x5c, 0xb9, 0x89, 0xe4, 0x74, 0xa0,
+	0x26, 0x5e, 0x04, 0xd1, 0x15, 0x6f, 0x6d, 0x33, 0x12, 0xb2, 0x2a, 0x1c, 0x60, 0x35, 0x2a, 0x17,
+	0x7a, 0xf8, 0xa6, 0xe4, 0x2a, 0x84, 0x8c, 0xa6, 0x03, 0x94, 0x62, 0x9a, 0xdb, 0x9c, 0x71, 0x6d,
+	0xa6, 0x9f, 0x4b, 0x15, 0x77, 0x76, 0x5e, 0x99, 0xdb, 0x29, 0x37, 0xa3, 0xb2, 0x30, 0x54, 0x93,
+	0xca, 0x90, 0x6b, 0xb9, 0x81, 0x50, 0xfc, 0x33, 0xd8, 0x17, 0x31, 0xe9, 0x49, 0xc8, 0x7a, 0x12,
+	0xde, 0x7b, 0x70, 0x81, 0xc4, 0x5e, 0x1f, 0xc5, 0x5d, 0x81, 0xb3, 0xd5, 0x73, 0x52, 0x09, 0x32,
+	0x9e, 0x00, 0xb7, 0xc9, 0xf7, 0x85, 0xbd, 0x3e, 0x4a, 0xb9, 0xfb, 0xe7, 0xab, 0x17, 0xbc, 0x90,
+	0xaf, 0xc4, 0x85, 0x78, 0x21, 0xb1, 0x12, 0x17, 0x52, 0x05, 0xa1, 0x72, 0x1e, 0x92, 0x57, 0x57,
+	0xaf, 0x68, 0x94, 0x89, 0x75, 0x00, 0x03, 0xf7, 0x08, 0xb5, 0xb0, 0x4a, 0x68, 0x11, 0x95, 0x63,
+	0x73, 0x69, 0x69, 0xe6, 0xf3, 0x3e, 0x8a, 0xb8, 0x2e, 0x27, 0x7e, 0x8a, 0xa2, 0x85, 0x82, 0x1c,
+	0x92, 0xa8, 0xbc, 0x9f, 0x00, 0x61, 0x75, 0x71, 0xd9, 0x34, 0xd6, 0xb5, 0x8e, 0x78, 0x05, 0x92,
+	0x2d, 0x47, 0xdd, 0x20, 0xac, 0x88, 0xca, 0x68, 0x2e, 0x2d, 0xbd, 0xc0, 0xcf, 0xd6, 0x4e, 0x14,
+	0x62, 0xc5, 0x1d, 0xe4, 0xae, 0x9f, 0xb6, 0x9f, 0x6a, 0x3c, 0x79, 0xe3, 0x6d, 0x5c, 0xbb, 0xf5,
+	0x7c, 0xed, 0xc2, 0xf5, 0x33, 0xfe, 0xe2, 0x7b, 0xf5, 0x5a, 0xb0, 0xbe, 0x7e, 0x5a, 0xf6, 0x31,
+	0xc4, 0x55, 0x10, 0xf0, 0x16, 0x55, 0x54, 0x9b, 0xb4, 0xfd, 0x84, 0xab, 0x4c, 0x1c, 0x3a, 0x2f,
+	0xc7, 0xfa, 0xeb, 0xad, 0x1f, 0x10, 0x95, 0xc9, 0x64, 0xdd, 0xcd, 0x5a, 0xe9, 0xc4, 0x6f, 0x7f,
+	0x78, 0x4c, 0xd5, 0x4d, 0xa7, 0xcd, 0x15, 0x89, 0xc1, 0x34, 0xac, 0x53, 0x39, 0x85, 0xb7, 0xe8,
+	0xb2, 0x4d, 0xda, 0xe2, 0xef, 0xa3, 0x00, 0x2e, 0xaa, 0x4d, 0x3a, 0x9a, 0x69, 0xf0, 0x04, 0x4c,
+	0x4b, 0xef, 0x47, 0x87, 0x6f, 0xf8, 0xe3, 0xa8, 0xfd, 0x6e, 0x54, 0x9e, 0xc1, 0x56, 0xcd, 0x30,
+	0x6d, 0xd6, 0x25, 0x98, 0xb2, 0xda, 0x02, 0xff, 0x4d, 0x4d, 0x27, 0xf8, 0x9d, 0x25, 0x4e, 0x4d,
+	0x25, 0x06, 0xb3, 0xb1, 0x5e, 0x5b, 0x90, 0xd3, 0xc4, 0xa9, 0x6d, 0x11, 0xbe, 0x11, 0x2c, 0x17,
+	0xe5, 0x34, 0xc5, 0x35, 0x5f, 0x3c, 0xed, 0xd0, 0x7d, 0xcb, 0x06, 0x5f, 0x72, 0xd9, 0x86, 0x9c,
+	0x55, 0x71, 0x08, 0x0f, 0xf0, 0xba, 0x67, 0xcd, 0x95, 0xc7, 0xd6, 0x50, 0x15, 0x86, 0x4e, 0xf8,
+	0x0e, 0x8d, 0x1c, 0x6c, 0x4c, 0x38, 0xd8, 0x90, 0x81, 0x38, 0x81, 0xac, 0xbb, 0xe6, 0xb2, 0x61,
+	0xff, 0x1a, 0x32, 0xf4, 0xc8, 0xc8, 0xca, 0xd0, 0x95, 0xc9, 0x57, 0x5d, 0x94, 0xd3, 0x78, 0x8b,
+	0xca, 0xfc, 0xac, 0xc4, 0x1b, 0x90, 0x09, 0x11, 0x4a, 0x31, 0xce, 0x43, 0xd2, 0xa8, 0x1f, 0xca,
+	0xf5, 0xf5, 0x09, 0x7e, 0x94, 0x84, 0xdd, 0x3e, 0x42, 0x9f, 0xf5, 0x11, 0x92, 0xc3, 0x80, 0xe2,
+	0x55, 0x48, 0xf0, 0xb4, 0xf5, 0xeb, 0x7a, 0x1a, 0xe4, 0x09, 0xca, 0x92, 0xe2, 0x2e, 0xb2, 0xec,
+	0xc1, 0x54, 0x7e, 0x81, 0xe0, 0xf8, 0xda, 0x95, 0xd5, 0x65, 0x5d, 0x23, 0x06, 0xf3, 0x32, 0x94,
+	0xf3, 0xda, 0x0a, 0x64, 0x54, 0x62, 0x33, 0x6d, 0x5d, 0x53, 0x31, 0x23, 0x7e, 0xaa, 0xce, 0x7d,
+	0xde, 0x47, 0xf1, 0x5f, 0x7d, 0x80, 0x32, 0x16, 0xe9, 0x55, 0xcb, 0x2d, 0x4c, 0xc9, 0x39, 0x9e,
+	0xbd, 0x49, 0x3b, 0x3e, 0xb7, 0xb3, 0x23, 0xf0, 0xec, 0xb7, 0x63, 0xef, 0x71, 0x9f, 0x47, 0xca,
+	0xe2, 0x79, 0x48, 0x6d, 0x90, 0x6d, 0xc5, 0xb1, 0x75, 0x3f, 0x45, 0x4f, 0x4e, 0x78, 0xbd, 0x4a,
+	0x54, 0x9b, 0x30, 0xcf, 0x39, 0xb7, 0x88, 0xe5, 0xe4, 0x06, 0xd9, 0xbe, 0x66, 0xeb, 0x95, 0xdf,
+	0x24, 0x21, 0xe7, 0x7a, 0x37, 0xf2, 0x4b, 0x86, 0x93, 0xc4, 0x70, 0x39, 0x43, 0xd9, 0x24, 0xb6,
+	0xb6, 0xbe, 0xad, 0x84, 0xbd, 0x3c, 0x98, 0x71, 0x9f, 0xf0, 0x14, 0xbf, 0xc3, 0xf5, 0x96, 0x43,
+	0xfe, 0xad, 0xc1, 0xac, 0x4f, 0x5c, 0x77, 0x03, 0x3d, 0xb8, 0xa3, 0x14, 0x7d, 0xcd, 0xfd, 0xa8,
+	0x57, 0xe0, 0xf1, 0x71, 0x4f, 0xbb, 0x26, 0x65, 0x2e, 0x29, 0x1c, 0x42, 0xc9, 0x27, 0xc2, 0x6e,
+	0x36, 0x7d, 0x1d, 0xb7, 0xcf, 0x4c, 0xf8, 0x18, 0xc0, 0x25, 0x0f, 0x84, 0x7b, 0x6c, 0xcc, 0xc1,
+	0x00, 0xef, 0x0c, 0x24, 0x0c, 0x53, 0x51, 0xf1, 0x21, 0x4c, 0x1d, 0x37, 0xcc, 0x65, 0x2c, 0xbe,
+	0x01, 0x33, 0xcc, 0x76, 0x28, 0x23, 0x6d, 0x45, 0xc5, 0x3c, 0x8e, 0xe9, 0xfb, 0xcb, 0x87, 0x66,
+	0x54, 0xce, 0xfa, 0x08, 0xcb, 0xf8, 0x9a, 0xad, 0x8b, 0x4b, 0x90, 0xeb, 0x31, 0x3d, 0xd4, 0x30,
+	0x32, 0xf7, 0x76, 0xc3, 0x4b, 0xd8, 0x66, 0x4c, 0xce, 0xba, 0x2a, 0x41, 0xcb, 0x50, 0x20, 0xc3,
+	0x21, 0xbc, 0xe3, 0x2a, 0x66, 0x39, 0xc0, 0xb9, 0x29, 0xea, 0xe1, 0x2e, 0xe9, 0x1e, 0x98, 0x00,
+	0x17, 0xf2, 0x12, 0x47, 0x94, 0x9e, 0x05, 0x71, 0x7f, 0x3a, 0x88, 0xc7, 0x27, 0x3a, 0x8d, 0x5b,
+	0xa2, 0xd2, 0xff, 0x43, 0x7e, 0x22, 0x2a, 0x5c, 0x2e, 0xdc, 0x70, 0xb8, 0xdc, 0x29, 0x48, 0xab,
+	0x38, 0x3c, 0x65, 0x84, 0x5b, 0x8e, 0x74, 0xda, 0x7f, 0x23, 0x7f, 0xff, 0xb1, 0xdd, 0x3e, 0xca,
+	0x7c, 0xd8, 0x47, 0x68, 0xaf, 0x8f, 0x60, 0xd0, 0x47, 0x89, 0x85, 0x85, 0xea, 0x42, 0x63, 0x7f,
+	0x63, 0x5a, 0x89, 0x0b, 0x50, 0xc8, 0x54, 0x6e, 0x42, 0xae, 0xc9, 0x98, 0xb5, 0xe4, 0xb0, 0xae,
+	0x84, 0xa9, 0xa6, 0x8a, 0xcf, 0x41, 0xda, 0xa1, 0xc4, 0x56, 0x78, 0x92, 0x78, 0x05, 0x9c, 0x1b,
+	0x52, 0x78, 0xdc, 0x8e, 0x16, 0x5f, 0x91, 0x05, 0x77, 0xff, 0xaa, 0xeb, 0xed, 0xd7, 0x41, 0xb0,
+	0x30, 0xa5, 0x5b, 0xa6, 0xdd, 0x9e, 0xb6, 0x46, 0x03, 0x85, 0x8a, 0x04, 0x69, 0xd7, 0xea, 0x9a,
+	0xb9, 0x41, 0x0c, 0xf1, 0x2c, 0x24, 0x98, 0xbb, 0xe0, 0x16, 0xa7, 0x80, 0xf1, 0xa4, 0x2b, 0xff,
+	0x88, 0x03, 0x34, 0xd7, 0xd6, 0xde, 0xf0, 0x9b, 0xe4, 0x29, 0x88, 0x39, 0xb6, 0xe6, 0x7b, 0x0d,
+	0x21, 0x62, 0x71, 0x1f, 0x8b, 0x8b, 0x90, 0xc6, 0x0e, 0xeb, 0x7a, 0x43, 0xe3, 0xc1, 0xf5, 0x29,
+	0xb8, 0x82, 0x7c, 0x5a, 0xfc, 0x36, 0x00, 0x57, 0x6a, 0xb9, 0x87, 0xe3, 0x13, 0xf3, 0xf3, 0x53,
+	0xa4, 0xcb, 0xd8, 0xa1, 0x36, 0x23, 0x32, 0x37, 0xed, 0x9d, 0xf0, 0xb7, 0x7c, 0x48, 0xef, 0x85,
+	0xbd, 0xb2, 0xae, 0x4e, 0x01, 0x19, 0x9c, 0xd6, 0x10, 0xce, 0x3b, 0xba, 0x89, 0xde, 0x91, 0x7c,
+	0x64, 0xbd, 0x23, 0xf5, 0x50, 0x7a, 0x87, 0x58, 0x83, 0xa4, 0x61, 0x2a, 0x4c, 0xf7, 0x26, 0xb6,
+	0x7b, 0x53, 0x50, 0xc2, 0x30, 0xd7, 0x74, 0x2a, 0xbe, 0x06, 0x29, 0x87, 0x12, 0x2e, 0x0f, 0x53,
+	0x9f, 0xfe, 0x18, 0xfb, 0x37, 0x91, 0x9c, 0x74, 0x28, 0x59, 0xd3, 0xdd, 0x09, 0x30, 0xc3, 0x8f,
+	0xde, 0xaf, 0x95, 0x63, 0xbb, 0x7d, 0x14, 0xdb, 0xeb, 0xa3, 0xa8, 0x5b, 0x27, 0x8b, 0xd5, 0x17,
+	0xaa, 0x67, 0xa5, 0x0a, 0x40, 0xa8, 0x98, 0x4e, 0xec, 0xf6, 0x51, 0xda, 0x2f, 0x26, 0x61, 0xd0,
+	0x47, 0xf1, 0x0b, 0xd5, 0x85, 0xe7, 0x57, 0xe2, 0x42, 0xb4, 0x10, 0x5b, 0x89, 0x0b, 0x42, 0x21,
+	0x5d, 0xf9, 0x65, 0x1c, 0x72, 0x17, 0x31, 0xc3, 0x6d, 0xb3, 0xe3, 0x27, 0x61, 0x19, 0xe2, 0x54,
+	0xf3, 0xdb, 0xca, 0x28, 0x0b, 0x6f, 0x47, 0x51, 0x33, 0x22, 0xf3, 0x1d, 0xb1, 0x02, 0x02, 0x31,
+	0xda, 0x96, 0xa9, 0x19, 0xcc, 0x9f, 0x92, 0x3c, 0x22, 0x89, 0xc8, 0xc1, 0x73, 0xf1, 0x32, 0xe4,
+	0xdb, 0x1e, 0xac, 0x82, 0x2d, 0x4d, 0xd9, 0x20, 0xdb, 0x7e, 0xf2, 0x1d, 0x5a, 0x1a, 0x39, 0x5f,
+	0x6f, 0xc9, 0xd2, 0x5e, 0x23, 0xdb, 0x93, 0xe9, 0x91, 0x78, 0x64, 0xe9, 0x91, 0x7c, 0xd8, 0xe9,
+	0x21, 0xdc, 0x67, 0x7a, 0xa4, 0x1f, 0x38, 0x3d, 0x2a, 0x90, 0x1f, 0x06, 0xe0, 0x5e, 0x1f, 0x75,
+	0xd2, 0x53, 0x63, 0x09, 0xe2, 0xf2, 0xb5, 0xe0, 0x27, 0xc8, 0xbe, 0x8f, 0x00, 0x77, 0xfc, 0xff,
+	0x28, 0x06, 0xd9, 0x55, 0x4b, 0x77, 0x8c, 0x0d, 0x3f, 0x3d, 0x66, 0x43, 0xc1, 0xe7, 0x44, 0x15,
+	0x0a, 0xfa, 0xab, 0x50, 0xa0, 0x5c, 0x56, 0xe9, 0x12, 0xd5, 0xe7, 0x87, 0x29, 0x79, 0x75, 0xc6,
+	0x53, 0x6c, 0x12, 0xf5, 0xae, 0xac, 0x10, 0x7b, 0x64, 0x61, 0x8f, 0x3f, 0xec, 0xb0, 0x27, 0x0f,
+	0x64, 0xe6, 0xfd, 0x61, 0x4f, 0x7d, 0xc9, 0xb0, 0x47, 0x82, 0xb0, 0xef, 0x0f, 0x69, 0xd2, 0x0f,
+	0x69, 0xc2, 0x0d, 0xe9, 0xb9, 0xea, 0x8b, 0x2b, 0x71, 0x21, 0x51, 0x48, 0x56, 0x7e, 0x94, 0x80,
+	0xdc, 0x25, 0x1d, 0x53, 0xa6, 0xa9, 0x53, 0x44, 0xf3, 0x3f, 0xa5, 0xdf, 0x7c, 0x17, 0x38, 0xbc,
+	0x82, 0xb7, 0xa8, 0x5f, 0xfe, 0xd3, 0x7c, 0xec, 0x15, 0xef, 0xf6, 0xb1, 0xf7, 0xa9, 0x47, 0x53,
+	0x29, 0x17, 0x6f, 0x69, 0x8b, 0x1e, 0xf5, 0x9e, 0x7f, 0x6b, 0xef, 0xf9, 0x5b, 0x14, 0xf2, 0x4b,
+	0xb7, 0x1c, 0x9b, 0x48, 0xba, 0xd9, 0x0a, 0xee, 0x09, 0x8e, 0xa9, 0xa6, 0x61, 0x10, 0xd5, 0x3d,
+	0x00, 0x85, 0x32, 0x5b, 0x33, 0x3a, 0xd3, 0x0e, 0x55, 0x85, 0x91, 0xe6, 0x2a, 0x57, 0x14, 0xbf,
+	0x0f, 0x33, 0xaa, 0x69, 0x30, 0xac, 0x19, 0xc3, 0x89, 0xd0, 0xeb, 0x6a, 0x17, 0xfc, 0x79, 0xbd,
+	0x10, 0x2b, 0x7e, 0xc3, 0x5d, 0x3e, 0x6b, 0x7f, 0xad, 0xf1, 0xcc, 0x8d, 0xb7, 0x97, 0x6a, 0x6f,
+	0xf9, 0x57, 0x0d, 0xa3, 0x65, 0xed, 0xfa, 0x99, 0xd0, 0xf3, 0xd3, 0x72, 0x2e, 0x00, 0xe4, 0x23,
+	0xe4, 0x7f, 0x19, 0x4f, 0x55, 0x7e, 0x16, 0x85, 0x13, 0xfc, 0xcc, 0xf9, 0x45, 0x56, 0xd3, 0x69,
+	0xd1, 0x47, 0x72, 0xf0, 0x6f, 0x42, 0x3a, 0xb8, 0x09, 0x7a, 0xf0, 0x33, 0x1f, 0x61, 0x89, 0xd7,
+	0x40, 0xd0, 0x0c, 0xca, 0xb0, 0xa1, 0x12, 0x7f, 0xf6, 0x78, 0x00, 0xdc, 0x00, 0xaa, 0xf2, 0x6e,
+	0x1a, 0x66, 0x2e, 0xf3, 0xb3, 0x5c, 0xb5, 0x88, 0xca, 0xbf, 0xb9, 0xcf, 0x02, 0x18, 0x54, 0x51,
+	0x1d, 0xdb, 0x26, 0xc6, 0x61, 0xd7, 0x9a, 0x69, 0x83, 0x2e, 0x7b, 0x82, 0xe2, 0xcb, 0x90, 0x34,
+	0xa8, 0x82, 0x75, 0xfd, 0x20, 0xca, 0x94, 0xf2, 0x83, 0x8f, 0xff, 0x1c, 0x83, 0x9f, 0x7f, 0x80,
+	0x92, 0xb4, 0x8b, 0x6d, 0xd2, 0xe6, 0x9d, 0x81, 0x2e, 0xe9, 0xba, 0x78, 0x0d, 0x52, 0x06, 0x55,
+	0x74, 0x8d, 0x32, 0x3f, 0xe4, 0xcf, 0x4e, 0x11, 0x72, 0xef, 0x86, 0xee, 0x6e, 0xa8, 0x49, 0x83,
+	0xf2, 0xcb, 0xbb, 0x0b, 0x90, 0x36, 0xa8, 0x42, 0xb7, 0x29, 0x23, 0xbd, 0x83, 0x3e, 0xc5, 0xa5,
+	0xb8, 0xcf, 0x91, 0x82, 0x41, 0x57, 0xb9, 0xb4, 0x78, 0x15, 0x32, 0x74, 0x31, 0xb0, 0xe5, 0x53,
+	0xd9, 0x99, 0x29, 0xbc, 0x1a, 0x5e, 0xfe, 0x35, 0x91, 0x0c, 0x74, 0x51, 0xf6, 0x1f, 0x8b, 0x6b,
+	0x90, 0xeb, 0x32, 0x66, 0x8d, 0x10, 0xbd, 0x41, 0xa9, 0x36, 0x4d, 0x97, 0x08, 0xbe, 0x95, 0x9a,
+	0x48, 0xce, 0xba, 0x28, 0x01, 0xea, 0x75, 0x28, 0x0c, 0x07, 0xce, 0x00, 0x78, 0xfa, 0x89, 0x6a,
+	0x6c, 0x04, 0x6e, 0x22, 0x79, 0x38, 0xbc, 0x06, 0xf0, 0x6f, 0x41, 0xde, 0x1f, 0x6d, 0x02, 0x74,
+	0x8f, 0x52, 0xe7, 0xa7, 0x39, 0x88, 0xd0, 0x00, 0xd5, 0x0c, 0x66, 0x9d, 0x00, 0x5b, 0x85, 0x02,
+	0xf1, 0xba, 0xf2, 0x08, 0x3c, 0x33, 0xb5, 0xeb, 0x63, 0x0d, 0xdd, 0x0f, 0x1f, 0x92, 0xf3, 0x3e,
+	0x62, 0x60, 0xe4, 0x6d, 0x98, 0xc1, 0x6e, 0xdd, 0x8f, 0x4c, 0x64, 0xa7, 0x66, 0x94, 0x09, 0x92,
+	0x6e, 0x22, 0x39, 0xc7, 0xb1, 0x02, 0x70, 0x06, 0x27, 0x3d, 0x70, 0x7e, 0xef, 0xac, 0x74, 0x9d,
+	0x16, 0x1d, 0xd9, 0xc9, 0x71, 0x3b, 0x2f, 0x4e, 0x6b, 0x67, 0x82, 0x98, 0x9a, 0x48, 0x7e, 0x1c,
+	0x8f, 0x3d, 0x0f, 0xac, 0xde, 0x80, 0x1c, 0xff, 0xbb, 0x8c, 0x66, 0x30, 0x62, 0x1b, 0x58, 0x2f,
+	0x7e, 0x9a, 0xba, 0x9f, 0xbb, 0xe0, 0x71, 0x65, 0xf7, 0xdc, 0xe4, 0xac, 0xfb, 0xe8, 0x55, 0xff,
+	0xc9, 0x4b, 0xe5, 0x3f, 0xf6, 0xd1, 0x29, 0x98, 0x85, 0xe3, 0x1e, 0x33, 0x94, 0xaf, 0x98, 0x9d,
+	0x72, 0x60, 0x3c, 0xb6, 0x50, 0x3d, 0x27, 0x9d, 0x86, 0xdc, 0xba, 0xa6, 0x33, 0x62, 0x87, 0x87,
+	0xaf, 0xe1, 0xb8, 0x9d, 0x6a, 0x54, 0xbd, 0xbe, 0xf8, 0x34, 0x08, 0xc3, 0x57, 0x14, 0x9f, 0xd8,
+	0xed, 0xa3, 0xd4, 0x5e, 0x1f, 0x25, 0x07, 0x7d, 0x94, 0x79, 0xb1, 0x7a, 0xbe, 0xea, 0x76, 0xc5,
+	0xea, 0xc2, 0x42, 0x30, 0x74, 0x27, 0x0b, 0xa9, 0xca, 0x9d, 0x14, 0xcc, 0x2c, 0xdb, 0x04, 0x33,
+	0xf2, 0xa0, 0x6c, 0x54, 0x9b, 0x86, 0x8d, 0x46, 0xe4, 0x73, 0xf1, 0xcb, 0x93, 0x4f, 0x88, 0x6b,
+	0x16, 0xa7, 0xe4, 0x9a, 0x23, 0x96, 0xf9, 0x57, 0xb2, 0xcc, 0xf5, 0x87, 0xc7, 0x32, 0xff, 0x1b,
+	0xfc, 0xf2, 0xd2, 0xb1, 0x8f, 0x5e, 0x9e, 0x18, 0x0a, 0xa4, 0xca, 0x64, 0xc1, 0x1f, 0x7b, 0xe7,
+	0x0b, 0x34, 0xfe, 0x48, 0x2a, 0x86, 0xca, 0x3d, 0xfb, 0xce, 0x17, 0x28, 0xf8, 0x35, 0x56, 0xe3,
+	0x83, 0x14, 0xe4, 0x65, 0x62, 0xe9, 0x58, 0x3d, 0x2a, 0xf2, 0xa3, 0x22, 0x3f, 0x2a, 0xf2, 0xaf,
+	0x64, 0x91, 0xff, 0x25, 0x05, 0x99, 0xcb, 0x84, 0x1d, 0x15, 0xf8, 0x51, 0x81, 0x1f, 0x15, 0xf8,
+	0x57, 0xb0, 0xc0, 0xa5, 0x9f, 0xa0, 0xbd, 0x3b, 0xa5, 0xc8, 0xed, 0x3b, 0xa5, 0xc8, 0x67, 0x77,
+	0x4a, 0x68, 0x67, 0x50, 0x42, 0xbf, 0x1e, 0x94, 0xd0, 0x87, 0x83, 0x12, 0xda, 0x1b, 0x94, 0xd0,
+	0xed, 0x41, 0x09, 0x7d, 0x3c, 0x28, 0xa1, 0x4f, 0x07, 0xa5, 0xc8, 0x67, 0x83, 0x12, 0x7a, 0xef,
+	0x93, 0x52, 0x64, 0xef, 0x93, 0x52, 0xe4, 0xf6, 0x27, 0xa5, 0xc8, 0x5b, 0x6f, 0x76, 0x4c, 0x6b,
+	0xa3, 0x53, 0xdf, 0x34, 0x5d, 0xab, 0x36, 0xae, 0x3b, 0x74, 0x9e, 0x2f, 0xd6, 0x4d, 0xbb, 0x57,
+	0xb3, 0x6c, 0x73, 0x53, 0x6b, 0x13, 0xbb, 0x36, 0xdc, 0x9e, 0xb7, 0x5a, 0x1d, 0x73, 0x9e, 0xdc,
+	0x64, 0xfe, 0xbf, 0x9b, 0xdd, 0xfb, 0xdf, 0xed, 0x5a, 0x49, 0xfe, 0xef, 0x67, 0x8b, 0xff, 0x0c,
+	0x00, 0x00, 0xff, 0xff, 0xbc, 0xd3, 0x6c, 0xc1, 0x9a, 0x27, 0x00, 0x00,
 }
 
+func (this *CompressionType) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CompressionType)
+	if !ok {
+		that2, ok := that.(CompressionType)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if that1.CompressionChoice == nil {
+		if this.CompressionChoice != nil {
+			return false
+		}
+	} else if this.CompressionChoice == nil {
+		return false
+	} else if !this.CompressionChoice.Equal(that1.CompressionChoice) {
+		return false
+	}
+	return true
+}
+func (this *CompressionType_CompressionNone) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CompressionType_CompressionNone)
+	if !ok {
+		that2, ok := that.(CompressionType_CompressionNone)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.CompressionNone.Equal(that1.CompressionNone) {
+		return false
+	}
+	return true
+}
+func (this *CompressionType_CompressionGzip) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CompressionType_CompressionGzip)
+	if !ok {
+		that2, ok := that.(CompressionType_CompressionGzip)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.CompressionGzip.Equal(that1.CompressionGzip) {
+		return false
+	}
+	return true
+}
+func (this *BatchOptionType) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*BatchOptionType)
+	if !ok {
+		that2, ok := that.(BatchOptionType)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if that1.BatchTimeout == nil {
+		if this.BatchTimeout != nil {
+			return false
+		}
+	} else if this.BatchTimeout == nil {
+		return false
+	} else if !this.BatchTimeout.Equal(that1.BatchTimeout) {
+		return false
+	}
+	if that1.BatchEvents == nil {
+		if this.BatchEvents != nil {
+			return false
+		}
+	} else if this.BatchEvents == nil {
+		return false
+	} else if !this.BatchEvents.Equal(that1.BatchEvents) {
+		return false
+	}
+	if that1.BatchBytes == nil {
+		if this.BatchBytes != nil {
+			return false
+		}
+	} else if this.BatchBytes == nil {
+		return false
+	} else if !this.BatchBytes.Equal(that1.BatchBytes) {
+		return false
+	}
+	return true
+}
+func (this *BatchOptionType_TimeoutSecondsDefault) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*BatchOptionType_TimeoutSecondsDefault)
+	if !ok {
+		that2, ok := that.(BatchOptionType_TimeoutSecondsDefault)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.TimeoutSecondsDefault.Equal(that1.TimeoutSecondsDefault) {
+		return false
+	}
+	return true
+}
+func (this *BatchOptionType_TimeoutSeconds) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*BatchOptionType_TimeoutSeconds)
+	if !ok {
+		that2, ok := that.(BatchOptionType_TimeoutSeconds)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.TimeoutSeconds != that1.TimeoutSeconds {
+		return false
+	}
+	return true
+}
+func (this *BatchOptionType_MaxEventsDisabled) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*BatchOptionType_MaxEventsDisabled)
+	if !ok {
+		that2, ok := that.(BatchOptionType_MaxEventsDisabled)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.MaxEventsDisabled.Equal(that1.MaxEventsDisabled) {
+		return false
+	}
+	return true
+}
+func (this *BatchOptionType_MaxEvents) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*BatchOptionType_MaxEvents)
+	if !ok {
+		that2, ok := that.(BatchOptionType_MaxEvents)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.MaxEvents != that1.MaxEvents {
+		return false
+	}
+	return true
+}
+func (this *BatchOptionType_MaxBytesDisabled) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*BatchOptionType_MaxBytesDisabled)
+	if !ok {
+		that2, ok := that.(BatchOptionType_MaxBytesDisabled)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.MaxBytesDisabled.Equal(that1.MaxBytesDisabled) {
+		return false
+	}
+	return true
+}
+func (this *BatchOptionType_MaxBytes) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*BatchOptionType_MaxBytes)
+	if !ok {
+		that2, ok := that.(BatchOptionType_MaxBytes)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.MaxBytes != that1.MaxBytes {
+		return false
+	}
+	return true
+}
 func (this *NSList) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -860,6 +3088,972 @@ func (this *S3Config) Equal(that interface{}) bool {
 		return false
 	}
 	if this.AwsRegion != that1.AwsRegion {
+		return false
+	}
+	if !this.Compression.Equal(that1.Compression) {
+		return false
+	}
+	if !this.Batch.Equal(that1.Batch) {
+		return false
+	}
+	return true
+}
+func (this *TLSClientConfigType) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*TLSClientConfigType)
+	if !ok {
+		that2, ok := that.(TLSClientConfigType)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.Certificate != that1.Certificate {
+		return false
+	}
+	if !this.KeyUrl.Equal(that1.KeyUrl) {
+		return false
+	}
+	return true
+}
+func (this *TLSConfigType) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*TLSConfigType)
+	if !ok {
+		that2, ok := that.(TLSConfigType)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if that1.VerifyCertificate == nil {
+		if this.VerifyCertificate != nil {
+			return false
+		}
+	} else if this.VerifyCertificate == nil {
+		return false
+	} else if !this.VerifyCertificate.Equal(that1.VerifyCertificate) {
+		return false
+	}
+	if that1.VerifyHostname == nil {
+		if this.VerifyHostname != nil {
+			return false
+		}
+	} else if this.VerifyHostname == nil {
+		return false
+	} else if !this.VerifyHostname.Equal(that1.VerifyHostname) {
+		return false
+	}
+	if that1.CaChoice == nil {
+		if this.CaChoice != nil {
+			return false
+		}
+	} else if this.CaChoice == nil {
+		return false
+	} else if !this.CaChoice.Equal(that1.CaChoice) {
+		return false
+	}
+	if that1.MtlsChoice == nil {
+		if this.MtlsChoice != nil {
+			return false
+		}
+	} else if this.MtlsChoice == nil {
+		return false
+	} else if !this.MtlsChoice.Equal(that1.MtlsChoice) {
+		return false
+	}
+	return true
+}
+func (this *TLSConfigType_EnableVerifyCertificate) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*TLSConfigType_EnableVerifyCertificate)
+	if !ok {
+		that2, ok := that.(TLSConfigType_EnableVerifyCertificate)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.EnableVerifyCertificate.Equal(that1.EnableVerifyCertificate) {
+		return false
+	}
+	return true
+}
+func (this *TLSConfigType_DisableVerifyCertificate) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*TLSConfigType_DisableVerifyCertificate)
+	if !ok {
+		that2, ok := that.(TLSConfigType_DisableVerifyCertificate)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.DisableVerifyCertificate.Equal(that1.DisableVerifyCertificate) {
+		return false
+	}
+	return true
+}
+func (this *TLSConfigType_EnableVerifyHostname) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*TLSConfigType_EnableVerifyHostname)
+	if !ok {
+		that2, ok := that.(TLSConfigType_EnableVerifyHostname)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.EnableVerifyHostname.Equal(that1.EnableVerifyHostname) {
+		return false
+	}
+	return true
+}
+func (this *TLSConfigType_DisableVerifyHostname) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*TLSConfigType_DisableVerifyHostname)
+	if !ok {
+		that2, ok := that.(TLSConfigType_DisableVerifyHostname)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.DisableVerifyHostname.Equal(that1.DisableVerifyHostname) {
+		return false
+	}
+	return true
+}
+func (this *TLSConfigType_NoCa) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*TLSConfigType_NoCa)
+	if !ok {
+		that2, ok := that.(TLSConfigType_NoCa)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.NoCa.Equal(that1.NoCa) {
+		return false
+	}
+	return true
+}
+func (this *TLSConfigType_TrustedCaUrl) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*TLSConfigType_TrustedCaUrl)
+	if !ok {
+		that2, ok := that.(TLSConfigType_TrustedCaUrl)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.TrustedCaUrl != that1.TrustedCaUrl {
+		return false
+	}
+	return true
+}
+func (this *TLSConfigType_MtlsDisabled) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*TLSConfigType_MtlsDisabled)
+	if !ok {
+		that2, ok := that.(TLSConfigType_MtlsDisabled)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.MtlsDisabled.Equal(that1.MtlsDisabled) {
+		return false
+	}
+	return true
+}
+func (this *TLSConfigType_MtlsEnable) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*TLSConfigType_MtlsEnable)
+	if !ok {
+		that2, ok := that.(TLSConfigType_MtlsEnable)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.MtlsEnable.Equal(that1.MtlsEnable) {
+		return false
+	}
+	return true
+}
+func (this *HttpAuthBasic) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*HttpAuthBasic)
+	if !ok {
+		that2, ok := that.(HttpAuthBasic)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.UserName != that1.UserName {
+		return false
+	}
+	if !this.Password.Equal(that1.Password) {
+		return false
+	}
+	return true
+}
+func (this *AuthToken) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*AuthToken)
+	if !ok {
+		that2, ok := that.(AuthToken)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.Token.Equal(that1.Token) {
+		return false
+	}
+	return true
+}
+func (this *HTTPConfig) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*HTTPConfig)
+	if !ok {
+		that2, ok := that.(HTTPConfig)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.Uri != that1.Uri {
+		return false
+	}
+	if that1.AuthChoice == nil {
+		if this.AuthChoice != nil {
+			return false
+		}
+	} else if this.AuthChoice == nil {
+		return false
+	} else if !this.AuthChoice.Equal(that1.AuthChoice) {
+		return false
+	}
+	if !this.Compression.Equal(that1.Compression) {
+		return false
+	}
+	if !this.Batch.Equal(that1.Batch) {
+		return false
+	}
+	if that1.TlsChoice == nil {
+		if this.TlsChoice != nil {
+			return false
+		}
+	} else if this.TlsChoice == nil {
+		return false
+	} else if !this.TlsChoice.Equal(that1.TlsChoice) {
+		return false
+	}
+	return true
+}
+func (this *HTTPConfig_AuthNone) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*HTTPConfig_AuthNone)
+	if !ok {
+		that2, ok := that.(HTTPConfig_AuthNone)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.AuthNone.Equal(that1.AuthNone) {
+		return false
+	}
+	return true
+}
+func (this *HTTPConfig_AuthBasic) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*HTTPConfig_AuthBasic)
+	if !ok {
+		that2, ok := that.(HTTPConfig_AuthBasic)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.AuthBasic.Equal(that1.AuthBasic) {
+		return false
+	}
+	return true
+}
+func (this *HTTPConfig_AuthToken) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*HTTPConfig_AuthToken)
+	if !ok {
+		that2, ok := that.(HTTPConfig_AuthToken)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.AuthToken.Equal(that1.AuthToken) {
+		return false
+	}
+	return true
+}
+func (this *HTTPConfig_NoTls) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*HTTPConfig_NoTls)
+	if !ok {
+		that2, ok := that.(HTTPConfig_NoTls)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.NoTls.Equal(that1.NoTls) {
+		return false
+	}
+	return true
+}
+func (this *HTTPConfig_UseTls) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*HTTPConfig_UseTls)
+	if !ok {
+		that2, ok := that.(HTTPConfig_UseTls)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.UseTls.Equal(that1.UseTls) {
+		return false
+	}
+	return true
+}
+func (this *DatadogConfig) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*DatadogConfig)
+	if !ok {
+		that2, ok := that.(DatadogConfig)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if that1.EndpointChoice == nil {
+		if this.EndpointChoice != nil {
+			return false
+		}
+	} else if this.EndpointChoice == nil {
+		return false
+	} else if !this.EndpointChoice.Equal(that1.EndpointChoice) {
+		return false
+	}
+	if !this.DatadogApiKey.Equal(that1.DatadogApiKey) {
+		return false
+	}
+	if !this.Compression.Equal(that1.Compression) {
+		return false
+	}
+	if !this.Batch.Equal(that1.Batch) {
+		return false
+	}
+	if that1.TlsChoice == nil {
+		if this.TlsChoice != nil {
+			return false
+		}
+	} else if this.TlsChoice == nil {
+		return false
+	} else if !this.TlsChoice.Equal(that1.TlsChoice) {
+		return false
+	}
+	return true
+}
+func (this *DatadogConfig_Site) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*DatadogConfig_Site)
+	if !ok {
+		that2, ok := that.(DatadogConfig_Site)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.Site != that1.Site {
+		return false
+	}
+	return true
+}
+func (this *DatadogConfig_Endpoint) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*DatadogConfig_Endpoint)
+	if !ok {
+		that2, ok := that.(DatadogConfig_Endpoint)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.Endpoint != that1.Endpoint {
+		return false
+	}
+	return true
+}
+func (this *DatadogConfig_NoTls) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*DatadogConfig_NoTls)
+	if !ok {
+		that2, ok := that.(DatadogConfig_NoTls)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.NoTls.Equal(that1.NoTls) {
+		return false
+	}
+	return true
+}
+func (this *DatadogConfig_UseTls) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*DatadogConfig_UseTls)
+	if !ok {
+		that2, ok := that.(DatadogConfig_UseTls)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.UseTls.Equal(that1.UseTls) {
+		return false
+	}
+	return true
+}
+func (this *SplunkConfig) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*SplunkConfig)
+	if !ok {
+		that2, ok := that.(SplunkConfig)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.Endpoint != that1.Endpoint {
+		return false
+	}
+	if !this.SplunkHecToken.Equal(that1.SplunkHecToken) {
+		return false
+	}
+	if !this.Compression.Equal(that1.Compression) {
+		return false
+	}
+	if !this.Batch.Equal(that1.Batch) {
+		return false
+	}
+	if that1.TlsChoice == nil {
+		if this.TlsChoice != nil {
+			return false
+		}
+	} else if this.TlsChoice == nil {
+		return false
+	} else if !this.TlsChoice.Equal(that1.TlsChoice) {
+		return false
+	}
+	return true
+}
+func (this *SplunkConfig_NoTls) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*SplunkConfig_NoTls)
+	if !ok {
+		that2, ok := that.(SplunkConfig_NoTls)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.NoTls.Equal(that1.NoTls) {
+		return false
+	}
+	return true
+}
+func (this *SplunkConfig_UseTls) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*SplunkConfig_UseTls)
+	if !ok {
+		that2, ok := that.(SplunkConfig_UseTls)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.UseTls.Equal(that1.UseTls) {
+		return false
+	}
+	return true
+}
+func (this *ElasticConfig) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ElasticConfig)
+	if !ok {
+		that2, ok := that.(ElasticConfig)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.Endpoint != that1.Endpoint {
+		return false
+	}
+	if that1.AuthChoice == nil {
+		if this.AuthChoice != nil {
+			return false
+		}
+	} else if this.AuthChoice == nil {
+		return false
+	} else if !this.AuthChoice.Equal(that1.AuthChoice) {
+		return false
+	}
+	if !this.Compression.Equal(that1.Compression) {
+		return false
+	}
+	if !this.Batch.Equal(that1.Batch) {
+		return false
+	}
+	if that1.TlsChoice == nil {
+		if this.TlsChoice != nil {
+			return false
+		}
+	} else if this.TlsChoice == nil {
+		return false
+	} else if !this.TlsChoice.Equal(that1.TlsChoice) {
+		return false
+	}
+	return true
+}
+func (this *ElasticConfig_AuthNone) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ElasticConfig_AuthNone)
+	if !ok {
+		that2, ok := that.(ElasticConfig_AuthNone)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.AuthNone.Equal(that1.AuthNone) {
+		return false
+	}
+	return true
+}
+func (this *ElasticConfig_AuthBasic) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ElasticConfig_AuthBasic)
+	if !ok {
+		that2, ok := that.(ElasticConfig_AuthBasic)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.AuthBasic.Equal(that1.AuthBasic) {
+		return false
+	}
+	return true
+}
+func (this *ElasticConfig_AuthAws) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ElasticConfig_AuthAws)
+	if !ok {
+		that2, ok := that.(ElasticConfig_AuthAws)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.AuthAws.Equal(that1.AuthAws) {
+		return false
+	}
+	return true
+}
+func (this *ElasticConfig_NoTls) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ElasticConfig_NoTls)
+	if !ok {
+		that2, ok := that.(ElasticConfig_NoTls)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.NoTls.Equal(that1.NoTls) {
+		return false
+	}
+	return true
+}
+func (this *ElasticConfig_UseTls) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ElasticConfig_UseTls)
+	if !ok {
+		that2, ok := that.(ElasticConfig_UseTls)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.UseTls.Equal(that1.UseTls) {
+		return false
+	}
+	return true
+}
+func (this *AzureBlobConfig) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*AzureBlobConfig)
+	if !ok {
+		that2, ok := that.(AzureBlobConfig)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.ConnectionString.Equal(that1.ConnectionString) {
+		return false
+	}
+	if this.ContainerName != that1.ContainerName {
+		return false
+	}
+	if !this.Compression.Equal(that1.Compression) {
+		return false
+	}
+	if !this.Batch.Equal(that1.Batch) {
+		return false
+	}
+	return true
+}
+func (this *AzureEventHubsConfig) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*AzureEventHubsConfig)
+	if !ok {
+		that2, ok := that.(AzureEventHubsConfig)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.ConnectionString.Equal(that1.ConnectionString) {
+		return false
+	}
+	if this.Namespace != that1.Namespace {
+		return false
+	}
+	if this.Instance != that1.Instance {
 		return false
 	}
 	return true
@@ -1026,6 +4220,150 @@ func (this *GlobalSpecType_S3Receiver) Equal(that interface{}) bool {
 	}
 	return true
 }
+func (this *GlobalSpecType_HttpReceiver) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GlobalSpecType_HttpReceiver)
+	if !ok {
+		that2, ok := that.(GlobalSpecType_HttpReceiver)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.HttpReceiver.Equal(that1.HttpReceiver) {
+		return false
+	}
+	return true
+}
+func (this *GlobalSpecType_DatadogReceiver) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GlobalSpecType_DatadogReceiver)
+	if !ok {
+		that2, ok := that.(GlobalSpecType_DatadogReceiver)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.DatadogReceiver.Equal(that1.DatadogReceiver) {
+		return false
+	}
+	return true
+}
+func (this *GlobalSpecType_SplunkReceiver) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GlobalSpecType_SplunkReceiver)
+	if !ok {
+		that2, ok := that.(GlobalSpecType_SplunkReceiver)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.SplunkReceiver.Equal(that1.SplunkReceiver) {
+		return false
+	}
+	return true
+}
+func (this *GlobalSpecType_ElasticReceiver) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GlobalSpecType_ElasticReceiver)
+	if !ok {
+		that2, ok := that.(GlobalSpecType_ElasticReceiver)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.ElasticReceiver.Equal(that1.ElasticReceiver) {
+		return false
+	}
+	return true
+}
+func (this *GlobalSpecType_AzureReceiver) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GlobalSpecType_AzureReceiver)
+	if !ok {
+		that2, ok := that.(GlobalSpecType_AzureReceiver)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.AzureReceiver.Equal(that1.AzureReceiver) {
+		return false
+	}
+	return true
+}
+func (this *GlobalSpecType_AzureEventHubsReceiver) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GlobalSpecType_AzureEventHubsReceiver)
+	if !ok {
+		that2, ok := that.(GlobalSpecType_AzureEventHubsReceiver)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.AzureEventHubsReceiver.Equal(that1.AzureEventHubsReceiver) {
+		return false
+	}
+	return true
+}
 func (this *CreateSpecType) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -1181,6 +4519,150 @@ func (this *CreateSpecType_S3Receiver) Equal(that interface{}) bool {
 		return false
 	}
 	if !this.S3Receiver.Equal(that1.S3Receiver) {
+		return false
+	}
+	return true
+}
+func (this *CreateSpecType_HttpReceiver) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CreateSpecType_HttpReceiver)
+	if !ok {
+		that2, ok := that.(CreateSpecType_HttpReceiver)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.HttpReceiver.Equal(that1.HttpReceiver) {
+		return false
+	}
+	return true
+}
+func (this *CreateSpecType_DatadogReceiver) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CreateSpecType_DatadogReceiver)
+	if !ok {
+		that2, ok := that.(CreateSpecType_DatadogReceiver)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.DatadogReceiver.Equal(that1.DatadogReceiver) {
+		return false
+	}
+	return true
+}
+func (this *CreateSpecType_SplunkReceiver) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CreateSpecType_SplunkReceiver)
+	if !ok {
+		that2, ok := that.(CreateSpecType_SplunkReceiver)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.SplunkReceiver.Equal(that1.SplunkReceiver) {
+		return false
+	}
+	return true
+}
+func (this *CreateSpecType_ElasticReceiver) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CreateSpecType_ElasticReceiver)
+	if !ok {
+		that2, ok := that.(CreateSpecType_ElasticReceiver)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.ElasticReceiver.Equal(that1.ElasticReceiver) {
+		return false
+	}
+	return true
+}
+func (this *CreateSpecType_AzureReceiver) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CreateSpecType_AzureReceiver)
+	if !ok {
+		that2, ok := that.(CreateSpecType_AzureReceiver)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.AzureReceiver.Equal(that1.AzureReceiver) {
+		return false
+	}
+	return true
+}
+func (this *CreateSpecType_AzureEventHubsReceiver) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CreateSpecType_AzureEventHubsReceiver)
+	if !ok {
+		that2, ok := that.(CreateSpecType_AzureEventHubsReceiver)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.AzureEventHubsReceiver.Equal(that1.AzureEventHubsReceiver) {
 		return false
 	}
 	return true
@@ -1344,6 +4826,150 @@ func (this *ReplaceSpecType_S3Receiver) Equal(that interface{}) bool {
 	}
 	return true
 }
+func (this *ReplaceSpecType_HttpReceiver) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ReplaceSpecType_HttpReceiver)
+	if !ok {
+		that2, ok := that.(ReplaceSpecType_HttpReceiver)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.HttpReceiver.Equal(that1.HttpReceiver) {
+		return false
+	}
+	return true
+}
+func (this *ReplaceSpecType_DatadogReceiver) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ReplaceSpecType_DatadogReceiver)
+	if !ok {
+		that2, ok := that.(ReplaceSpecType_DatadogReceiver)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.DatadogReceiver.Equal(that1.DatadogReceiver) {
+		return false
+	}
+	return true
+}
+func (this *ReplaceSpecType_SplunkReceiver) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ReplaceSpecType_SplunkReceiver)
+	if !ok {
+		that2, ok := that.(ReplaceSpecType_SplunkReceiver)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.SplunkReceiver.Equal(that1.SplunkReceiver) {
+		return false
+	}
+	return true
+}
+func (this *ReplaceSpecType_ElasticReceiver) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ReplaceSpecType_ElasticReceiver)
+	if !ok {
+		that2, ok := that.(ReplaceSpecType_ElasticReceiver)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.ElasticReceiver.Equal(that1.ElasticReceiver) {
+		return false
+	}
+	return true
+}
+func (this *ReplaceSpecType_AzureReceiver) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ReplaceSpecType_AzureReceiver)
+	if !ok {
+		that2, ok := that.(ReplaceSpecType_AzureReceiver)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.AzureReceiver.Equal(that1.AzureReceiver) {
+		return false
+	}
+	return true
+}
+func (this *ReplaceSpecType_AzureEventHubsReceiver) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ReplaceSpecType_AzureEventHubsReceiver)
+	if !ok {
+		that2, ok := that.(ReplaceSpecType_AzureEventHubsReceiver)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.AzureEventHubsReceiver.Equal(that1.AzureEventHubsReceiver) {
+		return false
+	}
+	return true
+}
 func (this *GetSpecType) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -1503,6 +5129,244 @@ func (this *GetSpecType_S3Receiver) Equal(that interface{}) bool {
 	}
 	return true
 }
+func (this *GetSpecType_HttpReceiver) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GetSpecType_HttpReceiver)
+	if !ok {
+		that2, ok := that.(GetSpecType_HttpReceiver)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.HttpReceiver.Equal(that1.HttpReceiver) {
+		return false
+	}
+	return true
+}
+func (this *GetSpecType_DatadogReceiver) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GetSpecType_DatadogReceiver)
+	if !ok {
+		that2, ok := that.(GetSpecType_DatadogReceiver)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.DatadogReceiver.Equal(that1.DatadogReceiver) {
+		return false
+	}
+	return true
+}
+func (this *GetSpecType_SplunkReceiver) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GetSpecType_SplunkReceiver)
+	if !ok {
+		that2, ok := that.(GetSpecType_SplunkReceiver)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.SplunkReceiver.Equal(that1.SplunkReceiver) {
+		return false
+	}
+	return true
+}
+func (this *GetSpecType_ElasticReceiver) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GetSpecType_ElasticReceiver)
+	if !ok {
+		that2, ok := that.(GetSpecType_ElasticReceiver)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.ElasticReceiver.Equal(that1.ElasticReceiver) {
+		return false
+	}
+	return true
+}
+func (this *GetSpecType_AzureReceiver) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GetSpecType_AzureReceiver)
+	if !ok {
+		that2, ok := that.(GetSpecType_AzureReceiver)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.AzureReceiver.Equal(that1.AzureReceiver) {
+		return false
+	}
+	return true
+}
+func (this *GetSpecType_AzureEventHubsReceiver) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GetSpecType_AzureEventHubsReceiver)
+	if !ok {
+		that2, ok := that.(GetSpecType_AzureEventHubsReceiver)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.AzureEventHubsReceiver.Equal(that1.AzureEventHubsReceiver) {
+		return false
+	}
+	return true
+}
+func (this *CompressionType) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 6)
+	s = append(s, "&global_log_receiver.CompressionType{")
+	if this.CompressionChoice != nil {
+		s = append(s, "CompressionChoice: "+fmt.Sprintf("%#v", this.CompressionChoice)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *CompressionType_CompressionNone) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&global_log_receiver.CompressionType_CompressionNone{` +
+		`CompressionNone:` + fmt.Sprintf("%#v", this.CompressionNone) + `}`}, ", ")
+	return s
+}
+func (this *CompressionType_CompressionGzip) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&global_log_receiver.CompressionType_CompressionGzip{` +
+		`CompressionGzip:` + fmt.Sprintf("%#v", this.CompressionGzip) + `}`}, ", ")
+	return s
+}
+func (this *BatchOptionType) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 10)
+	s = append(s, "&global_log_receiver.BatchOptionType{")
+	if this.BatchTimeout != nil {
+		s = append(s, "BatchTimeout: "+fmt.Sprintf("%#v", this.BatchTimeout)+",\n")
+	}
+	if this.BatchEvents != nil {
+		s = append(s, "BatchEvents: "+fmt.Sprintf("%#v", this.BatchEvents)+",\n")
+	}
+	if this.BatchBytes != nil {
+		s = append(s, "BatchBytes: "+fmt.Sprintf("%#v", this.BatchBytes)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *BatchOptionType_TimeoutSecondsDefault) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&global_log_receiver.BatchOptionType_TimeoutSecondsDefault{` +
+		`TimeoutSecondsDefault:` + fmt.Sprintf("%#v", this.TimeoutSecondsDefault) + `}`}, ", ")
+	return s
+}
+func (this *BatchOptionType_TimeoutSeconds) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&global_log_receiver.BatchOptionType_TimeoutSeconds{` +
+		`TimeoutSeconds:` + fmt.Sprintf("%#v", this.TimeoutSeconds) + `}`}, ", ")
+	return s
+}
+func (this *BatchOptionType_MaxEventsDisabled) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&global_log_receiver.BatchOptionType_MaxEventsDisabled{` +
+		`MaxEventsDisabled:` + fmt.Sprintf("%#v", this.MaxEventsDisabled) + `}`}, ", ")
+	return s
+}
+func (this *BatchOptionType_MaxEvents) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&global_log_receiver.BatchOptionType_MaxEvents{` +
+		`MaxEvents:` + fmt.Sprintf("%#v", this.MaxEvents) + `}`}, ", ")
+	return s
+}
+func (this *BatchOptionType_MaxBytesDisabled) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&global_log_receiver.BatchOptionType_MaxBytesDisabled{` +
+		`MaxBytesDisabled:` + fmt.Sprintf("%#v", this.MaxBytesDisabled) + `}`}, ", ")
+	return s
+}
+func (this *BatchOptionType_MaxBytes) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&global_log_receiver.BatchOptionType_MaxBytes{` +
+		`MaxBytes:` + fmt.Sprintf("%#v", this.MaxBytes) + `}`}, ", ")
+	return s
+}
 func (this *NSList) GoString() string {
 	if this == nil {
 		return "nil"
@@ -1517,13 +5381,393 @@ func (this *S3Config) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 7)
+	s := make([]string, 0, 9)
 	s = append(s, "&global_log_receiver.S3Config{")
 	s = append(s, "Bucket: "+fmt.Sprintf("%#v", this.Bucket)+",\n")
 	if this.AwsCred != nil {
 		s = append(s, "AwsCred: "+fmt.Sprintf("%#v", this.AwsCred)+",\n")
 	}
 	s = append(s, "AwsRegion: "+fmt.Sprintf("%#v", this.AwsRegion)+",\n")
+	if this.Compression != nil {
+		s = append(s, "Compression: "+fmt.Sprintf("%#v", this.Compression)+",\n")
+	}
+	if this.Batch != nil {
+		s = append(s, "Batch: "+fmt.Sprintf("%#v", this.Batch)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *TLSClientConfigType) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 6)
+	s = append(s, "&global_log_receiver.TLSClientConfigType{")
+	s = append(s, "Certificate: "+fmt.Sprintf("%#v", this.Certificate)+",\n")
+	if this.KeyUrl != nil {
+		s = append(s, "KeyUrl: "+fmt.Sprintf("%#v", this.KeyUrl)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *TLSConfigType) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 12)
+	s = append(s, "&global_log_receiver.TLSConfigType{")
+	if this.VerifyCertificate != nil {
+		s = append(s, "VerifyCertificate: "+fmt.Sprintf("%#v", this.VerifyCertificate)+",\n")
+	}
+	if this.VerifyHostname != nil {
+		s = append(s, "VerifyHostname: "+fmt.Sprintf("%#v", this.VerifyHostname)+",\n")
+	}
+	if this.CaChoice != nil {
+		s = append(s, "CaChoice: "+fmt.Sprintf("%#v", this.CaChoice)+",\n")
+	}
+	if this.MtlsChoice != nil {
+		s = append(s, "MtlsChoice: "+fmt.Sprintf("%#v", this.MtlsChoice)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *TLSConfigType_EnableVerifyCertificate) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&global_log_receiver.TLSConfigType_EnableVerifyCertificate{` +
+		`EnableVerifyCertificate:` + fmt.Sprintf("%#v", this.EnableVerifyCertificate) + `}`}, ", ")
+	return s
+}
+func (this *TLSConfigType_DisableVerifyCertificate) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&global_log_receiver.TLSConfigType_DisableVerifyCertificate{` +
+		`DisableVerifyCertificate:` + fmt.Sprintf("%#v", this.DisableVerifyCertificate) + `}`}, ", ")
+	return s
+}
+func (this *TLSConfigType_EnableVerifyHostname) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&global_log_receiver.TLSConfigType_EnableVerifyHostname{` +
+		`EnableVerifyHostname:` + fmt.Sprintf("%#v", this.EnableVerifyHostname) + `}`}, ", ")
+	return s
+}
+func (this *TLSConfigType_DisableVerifyHostname) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&global_log_receiver.TLSConfigType_DisableVerifyHostname{` +
+		`DisableVerifyHostname:` + fmt.Sprintf("%#v", this.DisableVerifyHostname) + `}`}, ", ")
+	return s
+}
+func (this *TLSConfigType_NoCa) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&global_log_receiver.TLSConfigType_NoCa{` +
+		`NoCa:` + fmt.Sprintf("%#v", this.NoCa) + `}`}, ", ")
+	return s
+}
+func (this *TLSConfigType_TrustedCaUrl) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&global_log_receiver.TLSConfigType_TrustedCaUrl{` +
+		`TrustedCaUrl:` + fmt.Sprintf("%#v", this.TrustedCaUrl) + `}`}, ", ")
+	return s
+}
+func (this *TLSConfigType_MtlsDisabled) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&global_log_receiver.TLSConfigType_MtlsDisabled{` +
+		`MtlsDisabled:` + fmt.Sprintf("%#v", this.MtlsDisabled) + `}`}, ", ")
+	return s
+}
+func (this *TLSConfigType_MtlsEnable) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&global_log_receiver.TLSConfigType_MtlsEnable{` +
+		`MtlsEnable:` + fmt.Sprintf("%#v", this.MtlsEnable) + `}`}, ", ")
+	return s
+}
+func (this *HttpAuthBasic) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 6)
+	s = append(s, "&global_log_receiver.HttpAuthBasic{")
+	s = append(s, "UserName: "+fmt.Sprintf("%#v", this.UserName)+",\n")
+	if this.Password != nil {
+		s = append(s, "Password: "+fmt.Sprintf("%#v", this.Password)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *AuthToken) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 5)
+	s = append(s, "&global_log_receiver.AuthToken{")
+	if this.Token != nil {
+		s = append(s, "Token: "+fmt.Sprintf("%#v", this.Token)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *HTTPConfig) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 12)
+	s = append(s, "&global_log_receiver.HTTPConfig{")
+	s = append(s, "Uri: "+fmt.Sprintf("%#v", this.Uri)+",\n")
+	if this.AuthChoice != nil {
+		s = append(s, "AuthChoice: "+fmt.Sprintf("%#v", this.AuthChoice)+",\n")
+	}
+	if this.Compression != nil {
+		s = append(s, "Compression: "+fmt.Sprintf("%#v", this.Compression)+",\n")
+	}
+	if this.Batch != nil {
+		s = append(s, "Batch: "+fmt.Sprintf("%#v", this.Batch)+",\n")
+	}
+	if this.TlsChoice != nil {
+		s = append(s, "TlsChoice: "+fmt.Sprintf("%#v", this.TlsChoice)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *HTTPConfig_AuthNone) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&global_log_receiver.HTTPConfig_AuthNone{` +
+		`AuthNone:` + fmt.Sprintf("%#v", this.AuthNone) + `}`}, ", ")
+	return s
+}
+func (this *HTTPConfig_AuthBasic) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&global_log_receiver.HTTPConfig_AuthBasic{` +
+		`AuthBasic:` + fmt.Sprintf("%#v", this.AuthBasic) + `}`}, ", ")
+	return s
+}
+func (this *HTTPConfig_AuthToken) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&global_log_receiver.HTTPConfig_AuthToken{` +
+		`AuthToken:` + fmt.Sprintf("%#v", this.AuthToken) + `}`}, ", ")
+	return s
+}
+func (this *HTTPConfig_NoTls) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&global_log_receiver.HTTPConfig_NoTls{` +
+		`NoTls:` + fmt.Sprintf("%#v", this.NoTls) + `}`}, ", ")
+	return s
+}
+func (this *HTTPConfig_UseTls) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&global_log_receiver.HTTPConfig_UseTls{` +
+		`UseTls:` + fmt.Sprintf("%#v", this.UseTls) + `}`}, ", ")
+	return s
+}
+func (this *DatadogConfig) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 11)
+	s = append(s, "&global_log_receiver.DatadogConfig{")
+	if this.EndpointChoice != nil {
+		s = append(s, "EndpointChoice: "+fmt.Sprintf("%#v", this.EndpointChoice)+",\n")
+	}
+	if this.DatadogApiKey != nil {
+		s = append(s, "DatadogApiKey: "+fmt.Sprintf("%#v", this.DatadogApiKey)+",\n")
+	}
+	if this.Compression != nil {
+		s = append(s, "Compression: "+fmt.Sprintf("%#v", this.Compression)+",\n")
+	}
+	if this.Batch != nil {
+		s = append(s, "Batch: "+fmt.Sprintf("%#v", this.Batch)+",\n")
+	}
+	if this.TlsChoice != nil {
+		s = append(s, "TlsChoice: "+fmt.Sprintf("%#v", this.TlsChoice)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *DatadogConfig_Site) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&global_log_receiver.DatadogConfig_Site{` +
+		`Site:` + fmt.Sprintf("%#v", this.Site) + `}`}, ", ")
+	return s
+}
+func (this *DatadogConfig_Endpoint) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&global_log_receiver.DatadogConfig_Endpoint{` +
+		`Endpoint:` + fmt.Sprintf("%#v", this.Endpoint) + `}`}, ", ")
+	return s
+}
+func (this *DatadogConfig_NoTls) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&global_log_receiver.DatadogConfig_NoTls{` +
+		`NoTls:` + fmt.Sprintf("%#v", this.NoTls) + `}`}, ", ")
+	return s
+}
+func (this *DatadogConfig_UseTls) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&global_log_receiver.DatadogConfig_UseTls{` +
+		`UseTls:` + fmt.Sprintf("%#v", this.UseTls) + `}`}, ", ")
+	return s
+}
+func (this *SplunkConfig) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 10)
+	s = append(s, "&global_log_receiver.SplunkConfig{")
+	s = append(s, "Endpoint: "+fmt.Sprintf("%#v", this.Endpoint)+",\n")
+	if this.SplunkHecToken != nil {
+		s = append(s, "SplunkHecToken: "+fmt.Sprintf("%#v", this.SplunkHecToken)+",\n")
+	}
+	if this.Compression != nil {
+		s = append(s, "Compression: "+fmt.Sprintf("%#v", this.Compression)+",\n")
+	}
+	if this.Batch != nil {
+		s = append(s, "Batch: "+fmt.Sprintf("%#v", this.Batch)+",\n")
+	}
+	if this.TlsChoice != nil {
+		s = append(s, "TlsChoice: "+fmt.Sprintf("%#v", this.TlsChoice)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *SplunkConfig_NoTls) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&global_log_receiver.SplunkConfig_NoTls{` +
+		`NoTls:` + fmt.Sprintf("%#v", this.NoTls) + `}`}, ", ")
+	return s
+}
+func (this *SplunkConfig_UseTls) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&global_log_receiver.SplunkConfig_UseTls{` +
+		`UseTls:` + fmt.Sprintf("%#v", this.UseTls) + `}`}, ", ")
+	return s
+}
+func (this *ElasticConfig) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 12)
+	s = append(s, "&global_log_receiver.ElasticConfig{")
+	s = append(s, "Endpoint: "+fmt.Sprintf("%#v", this.Endpoint)+",\n")
+	if this.AuthChoice != nil {
+		s = append(s, "AuthChoice: "+fmt.Sprintf("%#v", this.AuthChoice)+",\n")
+	}
+	if this.Compression != nil {
+		s = append(s, "Compression: "+fmt.Sprintf("%#v", this.Compression)+",\n")
+	}
+	if this.Batch != nil {
+		s = append(s, "Batch: "+fmt.Sprintf("%#v", this.Batch)+",\n")
+	}
+	if this.TlsChoice != nil {
+		s = append(s, "TlsChoice: "+fmt.Sprintf("%#v", this.TlsChoice)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *ElasticConfig_AuthNone) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&global_log_receiver.ElasticConfig_AuthNone{` +
+		`AuthNone:` + fmt.Sprintf("%#v", this.AuthNone) + `}`}, ", ")
+	return s
+}
+func (this *ElasticConfig_AuthBasic) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&global_log_receiver.ElasticConfig_AuthBasic{` +
+		`AuthBasic:` + fmt.Sprintf("%#v", this.AuthBasic) + `}`}, ", ")
+	return s
+}
+func (this *ElasticConfig_AuthAws) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&global_log_receiver.ElasticConfig_AuthAws{` +
+		`AuthAws:` + fmt.Sprintf("%#v", this.AuthAws) + `}`}, ", ")
+	return s
+}
+func (this *ElasticConfig_NoTls) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&global_log_receiver.ElasticConfig_NoTls{` +
+		`NoTls:` + fmt.Sprintf("%#v", this.NoTls) + `}`}, ", ")
+	return s
+}
+func (this *ElasticConfig_UseTls) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&global_log_receiver.ElasticConfig_UseTls{` +
+		`UseTls:` + fmt.Sprintf("%#v", this.UseTls) + `}`}, ", ")
+	return s
+}
+func (this *AzureBlobConfig) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 8)
+	s = append(s, "&global_log_receiver.AzureBlobConfig{")
+	if this.ConnectionString != nil {
+		s = append(s, "ConnectionString: "+fmt.Sprintf("%#v", this.ConnectionString)+",\n")
+	}
+	s = append(s, "ContainerName: "+fmt.Sprintf("%#v", this.ContainerName)+",\n")
+	if this.Compression != nil {
+		s = append(s, "Compression: "+fmt.Sprintf("%#v", this.Compression)+",\n")
+	}
+	if this.Batch != nil {
+		s = append(s, "Batch: "+fmt.Sprintf("%#v", this.Batch)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *AzureEventHubsConfig) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 7)
+	s = append(s, "&global_log_receiver.AzureEventHubsConfig{")
+	if this.ConnectionString != nil {
+		s = append(s, "ConnectionString: "+fmt.Sprintf("%#v", this.ConnectionString)+",\n")
+	}
+	s = append(s, "Namespace: "+fmt.Sprintf("%#v", this.Namespace)+",\n")
+	s = append(s, "Instance: "+fmt.Sprintf("%#v", this.Instance)+",\n")
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
@@ -1531,7 +5775,7 @@ func (this *GlobalSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 10)
+	s := make([]string, 0, 16)
 	s = append(s, "&global_log_receiver.GlobalSpecType{")
 	if this.FilterChoice != nil {
 		s = append(s, "FilterChoice: "+fmt.Sprintf("%#v", this.FilterChoice)+",\n")
@@ -1585,11 +5829,59 @@ func (this *GlobalSpecType_S3Receiver) GoString() string {
 		`S3Receiver:` + fmt.Sprintf("%#v", this.S3Receiver) + `}`}, ", ")
 	return s
 }
+func (this *GlobalSpecType_HttpReceiver) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&global_log_receiver.GlobalSpecType_HttpReceiver{` +
+		`HttpReceiver:` + fmt.Sprintf("%#v", this.HttpReceiver) + `}`}, ", ")
+	return s
+}
+func (this *GlobalSpecType_DatadogReceiver) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&global_log_receiver.GlobalSpecType_DatadogReceiver{` +
+		`DatadogReceiver:` + fmt.Sprintf("%#v", this.DatadogReceiver) + `}`}, ", ")
+	return s
+}
+func (this *GlobalSpecType_SplunkReceiver) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&global_log_receiver.GlobalSpecType_SplunkReceiver{` +
+		`SplunkReceiver:` + fmt.Sprintf("%#v", this.SplunkReceiver) + `}`}, ", ")
+	return s
+}
+func (this *GlobalSpecType_ElasticReceiver) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&global_log_receiver.GlobalSpecType_ElasticReceiver{` +
+		`ElasticReceiver:` + fmt.Sprintf("%#v", this.ElasticReceiver) + `}`}, ", ")
+	return s
+}
+func (this *GlobalSpecType_AzureReceiver) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&global_log_receiver.GlobalSpecType_AzureReceiver{` +
+		`AzureReceiver:` + fmt.Sprintf("%#v", this.AzureReceiver) + `}`}, ", ")
+	return s
+}
+func (this *GlobalSpecType_AzureEventHubsReceiver) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&global_log_receiver.GlobalSpecType_AzureEventHubsReceiver{` +
+		`AzureEventHubsReceiver:` + fmt.Sprintf("%#v", this.AzureEventHubsReceiver) + `}`}, ", ")
+	return s
+}
 func (this *CreateSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 9)
+	s := make([]string, 0, 15)
 	s = append(s, "&global_log_receiver.CreateSpecType{")
 	if this.FilterChoice != nil {
 		s = append(s, "FilterChoice: "+fmt.Sprintf("%#v", this.FilterChoice)+",\n")
@@ -1640,11 +5932,59 @@ func (this *CreateSpecType_S3Receiver) GoString() string {
 		`S3Receiver:` + fmt.Sprintf("%#v", this.S3Receiver) + `}`}, ", ")
 	return s
 }
+func (this *CreateSpecType_HttpReceiver) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&global_log_receiver.CreateSpecType_HttpReceiver{` +
+		`HttpReceiver:` + fmt.Sprintf("%#v", this.HttpReceiver) + `}`}, ", ")
+	return s
+}
+func (this *CreateSpecType_DatadogReceiver) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&global_log_receiver.CreateSpecType_DatadogReceiver{` +
+		`DatadogReceiver:` + fmt.Sprintf("%#v", this.DatadogReceiver) + `}`}, ", ")
+	return s
+}
+func (this *CreateSpecType_SplunkReceiver) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&global_log_receiver.CreateSpecType_SplunkReceiver{` +
+		`SplunkReceiver:` + fmt.Sprintf("%#v", this.SplunkReceiver) + `}`}, ", ")
+	return s
+}
+func (this *CreateSpecType_ElasticReceiver) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&global_log_receiver.CreateSpecType_ElasticReceiver{` +
+		`ElasticReceiver:` + fmt.Sprintf("%#v", this.ElasticReceiver) + `}`}, ", ")
+	return s
+}
+func (this *CreateSpecType_AzureReceiver) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&global_log_receiver.CreateSpecType_AzureReceiver{` +
+		`AzureReceiver:` + fmt.Sprintf("%#v", this.AzureReceiver) + `}`}, ", ")
+	return s
+}
+func (this *CreateSpecType_AzureEventHubsReceiver) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&global_log_receiver.CreateSpecType_AzureEventHubsReceiver{` +
+		`AzureEventHubsReceiver:` + fmt.Sprintf("%#v", this.AzureEventHubsReceiver) + `}`}, ", ")
+	return s
+}
 func (this *ReplaceSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 9)
+	s := make([]string, 0, 15)
 	s = append(s, "&global_log_receiver.ReplaceSpecType{")
 	if this.FilterChoice != nil {
 		s = append(s, "FilterChoice: "+fmt.Sprintf("%#v", this.FilterChoice)+",\n")
@@ -1695,11 +6035,59 @@ func (this *ReplaceSpecType_S3Receiver) GoString() string {
 		`S3Receiver:` + fmt.Sprintf("%#v", this.S3Receiver) + `}`}, ", ")
 	return s
 }
+func (this *ReplaceSpecType_HttpReceiver) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&global_log_receiver.ReplaceSpecType_HttpReceiver{` +
+		`HttpReceiver:` + fmt.Sprintf("%#v", this.HttpReceiver) + `}`}, ", ")
+	return s
+}
+func (this *ReplaceSpecType_DatadogReceiver) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&global_log_receiver.ReplaceSpecType_DatadogReceiver{` +
+		`DatadogReceiver:` + fmt.Sprintf("%#v", this.DatadogReceiver) + `}`}, ", ")
+	return s
+}
+func (this *ReplaceSpecType_SplunkReceiver) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&global_log_receiver.ReplaceSpecType_SplunkReceiver{` +
+		`SplunkReceiver:` + fmt.Sprintf("%#v", this.SplunkReceiver) + `}`}, ", ")
+	return s
+}
+func (this *ReplaceSpecType_ElasticReceiver) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&global_log_receiver.ReplaceSpecType_ElasticReceiver{` +
+		`ElasticReceiver:` + fmt.Sprintf("%#v", this.ElasticReceiver) + `}`}, ", ")
+	return s
+}
+func (this *ReplaceSpecType_AzureReceiver) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&global_log_receiver.ReplaceSpecType_AzureReceiver{` +
+		`AzureReceiver:` + fmt.Sprintf("%#v", this.AzureReceiver) + `}`}, ", ")
+	return s
+}
+func (this *ReplaceSpecType_AzureEventHubsReceiver) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&global_log_receiver.ReplaceSpecType_AzureEventHubsReceiver{` +
+		`AzureEventHubsReceiver:` + fmt.Sprintf("%#v", this.AzureEventHubsReceiver) + `}`}, ", ")
+	return s
+}
 func (this *GetSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 9)
+	s := make([]string, 0, 15)
 	s = append(s, "&global_log_receiver.GetSpecType{")
 	if this.FilterChoice != nil {
 		s = append(s, "FilterChoice: "+fmt.Sprintf("%#v", this.FilterChoice)+",\n")
@@ -1750,6 +6138,54 @@ func (this *GetSpecType_S3Receiver) GoString() string {
 		`S3Receiver:` + fmt.Sprintf("%#v", this.S3Receiver) + `}`}, ", ")
 	return s
 }
+func (this *GetSpecType_HttpReceiver) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&global_log_receiver.GetSpecType_HttpReceiver{` +
+		`HttpReceiver:` + fmt.Sprintf("%#v", this.HttpReceiver) + `}`}, ", ")
+	return s
+}
+func (this *GetSpecType_DatadogReceiver) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&global_log_receiver.GetSpecType_DatadogReceiver{` +
+		`DatadogReceiver:` + fmt.Sprintf("%#v", this.DatadogReceiver) + `}`}, ", ")
+	return s
+}
+func (this *GetSpecType_SplunkReceiver) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&global_log_receiver.GetSpecType_SplunkReceiver{` +
+		`SplunkReceiver:` + fmt.Sprintf("%#v", this.SplunkReceiver) + `}`}, ", ")
+	return s
+}
+func (this *GetSpecType_ElasticReceiver) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&global_log_receiver.GetSpecType_ElasticReceiver{` +
+		`ElasticReceiver:` + fmt.Sprintf("%#v", this.ElasticReceiver) + `}`}, ", ")
+	return s
+}
+func (this *GetSpecType_AzureReceiver) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&global_log_receiver.GetSpecType_AzureReceiver{` +
+		`AzureReceiver:` + fmt.Sprintf("%#v", this.AzureReceiver) + `}`}, ", ")
+	return s
+}
+func (this *GetSpecType_AzureEventHubsReceiver) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&global_log_receiver.GetSpecType_AzureEventHubsReceiver{` +
+		`AzureEventHubsReceiver:` + fmt.Sprintf("%#v", this.AzureEventHubsReceiver) + `}`}, ", ")
+	return s
+}
 func valueToGoStringTypes(v interface{}, typ string) string {
 	rv := reflect.ValueOf(v)
 	if rv.IsNil() {
@@ -1757,6 +6193,229 @@ func valueToGoStringTypes(v interface{}, typ string) string {
 	}
 	pv := reflect.Indirect(rv).Interface()
 	return fmt.Sprintf("func(v %v) *%v { return &v } ( %#v )", typ, typ, pv)
+}
+func (m *CompressionType) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *CompressionType) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CompressionType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.CompressionChoice != nil {
+		{
+			size := m.CompressionChoice.Size()
+			i -= size
+			if _, err := m.CompressionChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *CompressionType_CompressionNone) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CompressionType_CompressionNone) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.CompressionNone != nil {
+		{
+			size, err := m.CompressionNone.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x12
+	}
+	return len(dAtA) - i, nil
+}
+func (m *CompressionType_CompressionGzip) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CompressionType_CompressionGzip) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.CompressionGzip != nil {
+		{
+			size, err := m.CompressionGzip.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1a
+	}
+	return len(dAtA) - i, nil
+}
+func (m *BatchOptionType) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *BatchOptionType) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *BatchOptionType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.BatchBytes != nil {
+		{
+			size := m.BatchBytes.Size()
+			i -= size
+			if _, err := m.BatchBytes.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	if m.BatchEvents != nil {
+		{
+			size := m.BatchEvents.Size()
+			i -= size
+			if _, err := m.BatchEvents.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	if m.BatchTimeout != nil {
+		{
+			size := m.BatchTimeout.Size()
+			i -= size
+			if _, err := m.BatchTimeout.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *BatchOptionType_TimeoutSecondsDefault) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *BatchOptionType_TimeoutSecondsDefault) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.TimeoutSecondsDefault != nil {
+		{
+			size, err := m.TimeoutSecondsDefault.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x12
+	}
+	return len(dAtA) - i, nil
+}
+func (m *BatchOptionType_TimeoutSeconds) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *BatchOptionType_TimeoutSeconds) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i = encodeVarintTypes(dAtA, i, uint64(m.TimeoutSeconds))
+	i--
+	dAtA[i] = 0x18
+	return len(dAtA) - i, nil
+}
+func (m *BatchOptionType_MaxEventsDisabled) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *BatchOptionType_MaxEventsDisabled) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.MaxEventsDisabled != nil {
+		{
+			size, err := m.MaxEventsDisabled.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x2a
+	}
+	return len(dAtA) - i, nil
+}
+func (m *BatchOptionType_MaxEvents) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *BatchOptionType_MaxEvents) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i = encodeVarintTypes(dAtA, i, uint64(m.MaxEvents))
+	i--
+	dAtA[i] = 0x30
+	return len(dAtA) - i, nil
+}
+func (m *BatchOptionType_MaxBytesDisabled) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *BatchOptionType_MaxBytesDisabled) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.MaxBytesDisabled != nil {
+		{
+			size, err := m.MaxBytesDisabled.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x42
+	}
+	return len(dAtA) - i, nil
+}
+func (m *BatchOptionType_MaxBytes) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *BatchOptionType_MaxBytes) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i = encodeVarintTypes(dAtA, i, uint64(m.MaxBytes))
+	i--
+	dAtA[i] = 0x48
+	return len(dAtA) - i, nil
 }
 func (m *NSList) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
@@ -1810,6 +6469,30 @@ func (m *S3Config) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	if m.Batch != nil {
+		{
+			size, err := m.Batch.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x2a
+	}
+	if m.Compression != nil {
+		{
+			size, err := m.Compression.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x22
+	}
 	if len(m.AwsRegion) > 0 {
 		i -= len(m.AwsRegion)
 		copy(dAtA[i:], m.AwsRegion)
@@ -1833,6 +6516,1078 @@ func (m *S3Config) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		i -= len(m.Bucket)
 		copy(dAtA[i:], m.Bucket)
 		i = encodeVarintTypes(dAtA, i, uint64(len(m.Bucket)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *TLSClientConfigType) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *TLSClientConfigType) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *TLSClientConfigType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.KeyUrl != nil {
+		{
+			size, err := m.KeyUrl.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x12
+	}
+	if len(m.Certificate) > 0 {
+		i -= len(m.Certificate)
+		copy(dAtA[i:], m.Certificate)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.Certificate)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *TLSConfigType) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *TLSConfigType) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *TLSConfigType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.MtlsChoice != nil {
+		{
+			size := m.MtlsChoice.Size()
+			i -= size
+			if _, err := m.MtlsChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	if m.CaChoice != nil {
+		{
+			size := m.CaChoice.Size()
+			i -= size
+			if _, err := m.CaChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	if m.VerifyHostname != nil {
+		{
+			size := m.VerifyHostname.Size()
+			i -= size
+			if _, err := m.VerifyHostname.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	if m.VerifyCertificate != nil {
+		{
+			size := m.VerifyCertificate.Size()
+			i -= size
+			if _, err := m.VerifyCertificate.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *TLSConfigType_EnableVerifyCertificate) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *TLSConfigType_EnableVerifyCertificate) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.EnableVerifyCertificate != nil {
+		{
+			size, err := m.EnableVerifyCertificate.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x12
+	}
+	return len(dAtA) - i, nil
+}
+func (m *TLSConfigType_DisableVerifyCertificate) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *TLSConfigType_DisableVerifyCertificate) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.DisableVerifyCertificate != nil {
+		{
+			size, err := m.DisableVerifyCertificate.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1a
+	}
+	return len(dAtA) - i, nil
+}
+func (m *TLSConfigType_EnableVerifyHostname) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *TLSConfigType_EnableVerifyHostname) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.EnableVerifyHostname != nil {
+		{
+			size, err := m.EnableVerifyHostname.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x2a
+	}
+	return len(dAtA) - i, nil
+}
+func (m *TLSConfigType_DisableVerifyHostname) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *TLSConfigType_DisableVerifyHostname) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.DisableVerifyHostname != nil {
+		{
+			size, err := m.DisableVerifyHostname.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x32
+	}
+	return len(dAtA) - i, nil
+}
+func (m *TLSConfigType_NoCa) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *TLSConfigType_NoCa) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.NoCa != nil {
+		{
+			size, err := m.NoCa.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x42
+	}
+	return len(dAtA) - i, nil
+}
+func (m *TLSConfigType_TrustedCaUrl) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *TLSConfigType_TrustedCaUrl) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i -= len(m.TrustedCaUrl)
+	copy(dAtA[i:], m.TrustedCaUrl)
+	i = encodeVarintTypes(dAtA, i, uint64(len(m.TrustedCaUrl)))
+	i--
+	dAtA[i] = 0x4a
+	return len(dAtA) - i, nil
+}
+func (m *TLSConfigType_MtlsDisabled) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *TLSConfigType_MtlsDisabled) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.MtlsDisabled != nil {
+		{
+			size, err := m.MtlsDisabled.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x5a
+	}
+	return len(dAtA) - i, nil
+}
+func (m *TLSConfigType_MtlsEnable) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *TLSConfigType_MtlsEnable) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.MtlsEnable != nil {
+		{
+			size, err := m.MtlsEnable.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x62
+	}
+	return len(dAtA) - i, nil
+}
+func (m *HttpAuthBasic) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *HttpAuthBasic) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *HttpAuthBasic) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.Password != nil {
+		{
+			size, err := m.Password.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x12
+	}
+	if len(m.UserName) > 0 {
+		i -= len(m.UserName)
+		copy(dAtA[i:], m.UserName)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.UserName)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *AuthToken) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *AuthToken) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *AuthToken) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.Token != nil {
+		{
+			size, err := m.Token.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *HTTPConfig) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *HTTPConfig) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *HTTPConfig) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.TlsChoice != nil {
+		{
+			size := m.TlsChoice.Size()
+			i -= size
+			if _, err := m.TlsChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	if m.Batch != nil {
+		{
+			size, err := m.Batch.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x3a
+	}
+	if m.Compression != nil {
+		{
+			size, err := m.Compression.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x32
+	}
+	if m.AuthChoice != nil {
+		{
+			size := m.AuthChoice.Size()
+			i -= size
+			if _, err := m.AuthChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	if len(m.Uri) > 0 {
+		i -= len(m.Uri)
+		copy(dAtA[i:], m.Uri)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.Uri)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *HTTPConfig_AuthNone) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *HTTPConfig_AuthNone) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.AuthNone != nil {
+		{
+			size, err := m.AuthNone.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1a
+	}
+	return len(dAtA) - i, nil
+}
+func (m *HTTPConfig_AuthBasic) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *HTTPConfig_AuthBasic) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.AuthBasic != nil {
+		{
+			size, err := m.AuthBasic.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x22
+	}
+	return len(dAtA) - i, nil
+}
+func (m *HTTPConfig_AuthToken) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *HTTPConfig_AuthToken) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.AuthToken != nil {
+		{
+			size, err := m.AuthToken.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x2a
+	}
+	return len(dAtA) - i, nil
+}
+func (m *HTTPConfig_NoTls) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *HTTPConfig_NoTls) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.NoTls != nil {
+		{
+			size, err := m.NoTls.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x4a
+	}
+	return len(dAtA) - i, nil
+}
+func (m *HTTPConfig_UseTls) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *HTTPConfig_UseTls) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.UseTls != nil {
+		{
+			size, err := m.UseTls.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x52
+	}
+	return len(dAtA) - i, nil
+}
+func (m *DatadogConfig) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *DatadogConfig) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *DatadogConfig) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.TlsChoice != nil {
+		{
+			size := m.TlsChoice.Size()
+			i -= size
+			if _, err := m.TlsChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	if m.Batch != nil {
+		{
+			size, err := m.Batch.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x32
+	}
+	if m.Compression != nil {
+		{
+			size, err := m.Compression.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x2a
+	}
+	if m.DatadogApiKey != nil {
+		{
+			size, err := m.DatadogApiKey.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x22
+	}
+	if m.EndpointChoice != nil {
+		{
+			size := m.EndpointChoice.Size()
+			i -= size
+			if _, err := m.EndpointChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *DatadogConfig_Site) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *DatadogConfig_Site) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i -= len(m.Site)
+	copy(dAtA[i:], m.Site)
+	i = encodeVarintTypes(dAtA, i, uint64(len(m.Site)))
+	i--
+	dAtA[i] = 0x12
+	return len(dAtA) - i, nil
+}
+func (m *DatadogConfig_Endpoint) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *DatadogConfig_Endpoint) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i -= len(m.Endpoint)
+	copy(dAtA[i:], m.Endpoint)
+	i = encodeVarintTypes(dAtA, i, uint64(len(m.Endpoint)))
+	i--
+	dAtA[i] = 0x1a
+	return len(dAtA) - i, nil
+}
+func (m *DatadogConfig_NoTls) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *DatadogConfig_NoTls) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.NoTls != nil {
+		{
+			size, err := m.NoTls.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x42
+	}
+	return len(dAtA) - i, nil
+}
+func (m *DatadogConfig_UseTls) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *DatadogConfig_UseTls) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.UseTls != nil {
+		{
+			size, err := m.UseTls.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x4a
+	}
+	return len(dAtA) - i, nil
+}
+func (m *SplunkConfig) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *SplunkConfig) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *SplunkConfig) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.TlsChoice != nil {
+		{
+			size := m.TlsChoice.Size()
+			i -= size
+			if _, err := m.TlsChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	if m.Batch != nil {
+		{
+			size, err := m.Batch.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x22
+	}
+	if m.Compression != nil {
+		{
+			size, err := m.Compression.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1a
+	}
+	if m.SplunkHecToken != nil {
+		{
+			size, err := m.SplunkHecToken.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x12
+	}
+	if len(m.Endpoint) > 0 {
+		i -= len(m.Endpoint)
+		copy(dAtA[i:], m.Endpoint)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.Endpoint)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *SplunkConfig_NoTls) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *SplunkConfig_NoTls) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.NoTls != nil {
+		{
+			size, err := m.NoTls.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x32
+	}
+	return len(dAtA) - i, nil
+}
+func (m *SplunkConfig_UseTls) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *SplunkConfig_UseTls) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.UseTls != nil {
+		{
+			size, err := m.UseTls.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x3a
+	}
+	return len(dAtA) - i, nil
+}
+func (m *ElasticConfig) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *ElasticConfig) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ElasticConfig) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.TlsChoice != nil {
+		{
+			size := m.TlsChoice.Size()
+			i -= size
+			if _, err := m.TlsChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	if m.Batch != nil {
+		{
+			size, err := m.Batch.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x3a
+	}
+	if m.Compression != nil {
+		{
+			size, err := m.Compression.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x32
+	}
+	if m.AuthChoice != nil {
+		{
+			size := m.AuthChoice.Size()
+			i -= size
+			if _, err := m.AuthChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	if len(m.Endpoint) > 0 {
+		i -= len(m.Endpoint)
+		copy(dAtA[i:], m.Endpoint)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.Endpoint)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *ElasticConfig_AuthNone) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ElasticConfig_AuthNone) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.AuthNone != nil {
+		{
+			size, err := m.AuthNone.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1a
+	}
+	return len(dAtA) - i, nil
+}
+func (m *ElasticConfig_AuthBasic) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ElasticConfig_AuthBasic) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.AuthBasic != nil {
+		{
+			size, err := m.AuthBasic.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x22
+	}
+	return len(dAtA) - i, nil
+}
+func (m *ElasticConfig_AuthAws) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ElasticConfig_AuthAws) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.AuthAws != nil {
+		{
+			size, err := m.AuthAws.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x2a
+	}
+	return len(dAtA) - i, nil
+}
+func (m *ElasticConfig_NoTls) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ElasticConfig_NoTls) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.NoTls != nil {
+		{
+			size, err := m.NoTls.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x4a
+	}
+	return len(dAtA) - i, nil
+}
+func (m *ElasticConfig_UseTls) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ElasticConfig_UseTls) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.UseTls != nil {
+		{
+			size, err := m.UseTls.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x52
+	}
+	return len(dAtA) - i, nil
+}
+func (m *AzureBlobConfig) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *AzureBlobConfig) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *AzureBlobConfig) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.Batch != nil {
+		{
+			size, err := m.Batch.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x22
+	}
+	if m.Compression != nil {
+		{
+			size, err := m.Compression.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1a
+	}
+	if len(m.ContainerName) > 0 {
+		i -= len(m.ContainerName)
+		copy(dAtA[i:], m.ContainerName)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.ContainerName)))
+		i--
+		dAtA[i] = 0x12
+	}
+	if m.ConnectionString != nil {
+		{
+			size, err := m.ConnectionString.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *AzureEventHubsConfig) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *AzureEventHubsConfig) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *AzureEventHubsConfig) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.Instance) > 0 {
+		i -= len(m.Instance)
+		copy(dAtA[i:], m.Instance)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.Instance)))
+		i--
+		dAtA[i] = 0x1a
+	}
+	if len(m.Namespace) > 0 {
+		i -= len(m.Namespace)
+		copy(dAtA[i:], m.Namespace)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.Namespace)))
+		i--
+		dAtA[i] = 0x12
+	}
+	if m.ConnectionString != nil {
+		{
+			size, err := m.ConnectionString.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
 		i--
 		dAtA[i] = 0xa
 	}
@@ -1999,6 +7754,132 @@ func (m *GlobalSpecType_S3Receiver) MarshalToSizedBuffer(dAtA []byte) (int, erro
 	}
 	return len(dAtA) - i, nil
 }
+func (m *GlobalSpecType_HttpReceiver) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType_HttpReceiver) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.HttpReceiver != nil {
+		{
+			size, err := m.HttpReceiver.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x42
+	}
+	return len(dAtA) - i, nil
+}
+func (m *GlobalSpecType_DatadogReceiver) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType_DatadogReceiver) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.DatadogReceiver != nil {
+		{
+			size, err := m.DatadogReceiver.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x4a
+	}
+	return len(dAtA) - i, nil
+}
+func (m *GlobalSpecType_SplunkReceiver) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType_SplunkReceiver) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.SplunkReceiver != nil {
+		{
+			size, err := m.SplunkReceiver.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x52
+	}
+	return len(dAtA) - i, nil
+}
+func (m *GlobalSpecType_ElasticReceiver) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType_ElasticReceiver) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.ElasticReceiver != nil {
+		{
+			size, err := m.ElasticReceiver.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x5a
+	}
+	return len(dAtA) - i, nil
+}
+func (m *GlobalSpecType_AzureReceiver) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType_AzureReceiver) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.AzureReceiver != nil {
+		{
+			size, err := m.AzureReceiver.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x62
+	}
+	return len(dAtA) - i, nil
+}
+func (m *GlobalSpecType_AzureEventHubsReceiver) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType_AzureEventHubsReceiver) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.AzureEventHubsReceiver != nil {
+		{
+			size, err := m.AzureEventHubsReceiver.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x6a
+	}
+	return len(dAtA) - i, nil
+}
 func (m *CreateSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -2142,6 +8023,132 @@ func (m *CreateSpecType_S3Receiver) MarshalToSizedBuffer(dAtA []byte) (int, erro
 		}
 		i--
 		dAtA[i] = 0x3a
+	}
+	return len(dAtA) - i, nil
+}
+func (m *CreateSpecType_HttpReceiver) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType_HttpReceiver) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.HttpReceiver != nil {
+		{
+			size, err := m.HttpReceiver.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x42
+	}
+	return len(dAtA) - i, nil
+}
+func (m *CreateSpecType_DatadogReceiver) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType_DatadogReceiver) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.DatadogReceiver != nil {
+		{
+			size, err := m.DatadogReceiver.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x4a
+	}
+	return len(dAtA) - i, nil
+}
+func (m *CreateSpecType_SplunkReceiver) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType_SplunkReceiver) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.SplunkReceiver != nil {
+		{
+			size, err := m.SplunkReceiver.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x52
+	}
+	return len(dAtA) - i, nil
+}
+func (m *CreateSpecType_ElasticReceiver) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType_ElasticReceiver) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.ElasticReceiver != nil {
+		{
+			size, err := m.ElasticReceiver.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x5a
+	}
+	return len(dAtA) - i, nil
+}
+func (m *CreateSpecType_AzureReceiver) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType_AzureReceiver) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.AzureReceiver != nil {
+		{
+			size, err := m.AzureReceiver.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x62
+	}
+	return len(dAtA) - i, nil
+}
+func (m *CreateSpecType_AzureEventHubsReceiver) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType_AzureEventHubsReceiver) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.AzureEventHubsReceiver != nil {
+		{
+			size, err := m.AzureEventHubsReceiver.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x6a
 	}
 	return len(dAtA) - i, nil
 }
@@ -2291,6 +8298,132 @@ func (m *ReplaceSpecType_S3Receiver) MarshalToSizedBuffer(dAtA []byte) (int, err
 	}
 	return len(dAtA) - i, nil
 }
+func (m *ReplaceSpecType_HttpReceiver) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType_HttpReceiver) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.HttpReceiver != nil {
+		{
+			size, err := m.HttpReceiver.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x42
+	}
+	return len(dAtA) - i, nil
+}
+func (m *ReplaceSpecType_DatadogReceiver) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType_DatadogReceiver) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.DatadogReceiver != nil {
+		{
+			size, err := m.DatadogReceiver.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x4a
+	}
+	return len(dAtA) - i, nil
+}
+func (m *ReplaceSpecType_SplunkReceiver) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType_SplunkReceiver) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.SplunkReceiver != nil {
+		{
+			size, err := m.SplunkReceiver.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x52
+	}
+	return len(dAtA) - i, nil
+}
+func (m *ReplaceSpecType_ElasticReceiver) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType_ElasticReceiver) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.ElasticReceiver != nil {
+		{
+			size, err := m.ElasticReceiver.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x5a
+	}
+	return len(dAtA) - i, nil
+}
+func (m *ReplaceSpecType_AzureReceiver) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType_AzureReceiver) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.AzureReceiver != nil {
+		{
+			size, err := m.AzureReceiver.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x62
+	}
+	return len(dAtA) - i, nil
+}
+func (m *ReplaceSpecType_AzureEventHubsReceiver) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType_AzureEventHubsReceiver) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.AzureEventHubsReceiver != nil {
+		{
+			size, err := m.AzureEventHubsReceiver.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x6a
+	}
+	return len(dAtA) - i, nil
+}
 func (m *GetSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -2437,6 +8570,132 @@ func (m *GetSpecType_S3Receiver) MarshalToSizedBuffer(dAtA []byte) (int, error) 
 	}
 	return len(dAtA) - i, nil
 }
+func (m *GetSpecType_HttpReceiver) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType_HttpReceiver) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.HttpReceiver != nil {
+		{
+			size, err := m.HttpReceiver.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x42
+	}
+	return len(dAtA) - i, nil
+}
+func (m *GetSpecType_DatadogReceiver) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType_DatadogReceiver) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.DatadogReceiver != nil {
+		{
+			size, err := m.DatadogReceiver.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x4a
+	}
+	return len(dAtA) - i, nil
+}
+func (m *GetSpecType_SplunkReceiver) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType_SplunkReceiver) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.SplunkReceiver != nil {
+		{
+			size, err := m.SplunkReceiver.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x52
+	}
+	return len(dAtA) - i, nil
+}
+func (m *GetSpecType_ElasticReceiver) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType_ElasticReceiver) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.ElasticReceiver != nil {
+		{
+			size, err := m.ElasticReceiver.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x5a
+	}
+	return len(dAtA) - i, nil
+}
+func (m *GetSpecType_AzureReceiver) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType_AzureReceiver) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.AzureReceiver != nil {
+		{
+			size, err := m.AzureReceiver.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x62
+	}
+	return len(dAtA) - i, nil
+}
+func (m *GetSpecType_AzureEventHubsReceiver) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType_AzureEventHubsReceiver) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.AzureEventHubsReceiver != nil {
+		{
+			size, err := m.AzureEventHubsReceiver.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x6a
+	}
+	return len(dAtA) - i, nil
+}
 func encodeVarintTypes(dAtA []byte, offset int, v uint64) int {
 	offset -= sovTypes(v)
 	base := offset
@@ -2447,6 +8706,123 @@ func encodeVarintTypes(dAtA []byte, offset int, v uint64) int {
 	}
 	dAtA[offset] = uint8(v)
 	return base
+}
+func (m *CompressionType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.CompressionChoice != nil {
+		n += m.CompressionChoice.Size()
+	}
+	return n
+}
+
+func (m *CompressionType_CompressionNone) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.CompressionNone != nil {
+		l = m.CompressionNone.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *CompressionType_CompressionGzip) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.CompressionGzip != nil {
+		l = m.CompressionGzip.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *BatchOptionType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.BatchTimeout != nil {
+		n += m.BatchTimeout.Size()
+	}
+	if m.BatchEvents != nil {
+		n += m.BatchEvents.Size()
+	}
+	if m.BatchBytes != nil {
+		n += m.BatchBytes.Size()
+	}
+	return n
+}
+
+func (m *BatchOptionType_TimeoutSecondsDefault) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.TimeoutSecondsDefault != nil {
+		l = m.TimeoutSecondsDefault.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *BatchOptionType_TimeoutSeconds) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	n += 1 + sovTypes(uint64(m.TimeoutSeconds))
+	return n
+}
+func (m *BatchOptionType_MaxEventsDisabled) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.MaxEventsDisabled != nil {
+		l = m.MaxEventsDisabled.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *BatchOptionType_MaxEvents) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	n += 1 + sovTypes(uint64(m.MaxEvents))
+	return n
+}
+func (m *BatchOptionType_MaxBytesDisabled) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.MaxBytesDisabled != nil {
+		l = m.MaxBytesDisabled.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *BatchOptionType_MaxBytes) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	n += 1 + sovTypes(uint64(m.MaxBytes))
+	return n
 }
 func (m *NSList) Size() (n int) {
 	if m == nil {
@@ -2478,6 +8854,519 @@ func (m *S3Config) Size() (n int) {
 		n += 1 + l + sovTypes(uint64(l))
 	}
 	l = len(m.AwsRegion)
+	if l > 0 {
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.Compression != nil {
+		l = m.Compression.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.Batch != nil {
+		l = m.Batch.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+
+func (m *TLSClientConfigType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Certificate)
+	if l > 0 {
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.KeyUrl != nil {
+		l = m.KeyUrl.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+
+func (m *TLSConfigType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.VerifyCertificate != nil {
+		n += m.VerifyCertificate.Size()
+	}
+	if m.VerifyHostname != nil {
+		n += m.VerifyHostname.Size()
+	}
+	if m.CaChoice != nil {
+		n += m.CaChoice.Size()
+	}
+	if m.MtlsChoice != nil {
+		n += m.MtlsChoice.Size()
+	}
+	return n
+}
+
+func (m *TLSConfigType_EnableVerifyCertificate) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.EnableVerifyCertificate != nil {
+		l = m.EnableVerifyCertificate.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *TLSConfigType_DisableVerifyCertificate) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.DisableVerifyCertificate != nil {
+		l = m.DisableVerifyCertificate.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *TLSConfigType_EnableVerifyHostname) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.EnableVerifyHostname != nil {
+		l = m.EnableVerifyHostname.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *TLSConfigType_DisableVerifyHostname) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.DisableVerifyHostname != nil {
+		l = m.DisableVerifyHostname.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *TLSConfigType_NoCa) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.NoCa != nil {
+		l = m.NoCa.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *TLSConfigType_TrustedCaUrl) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.TrustedCaUrl)
+	n += 1 + l + sovTypes(uint64(l))
+	return n
+}
+func (m *TLSConfigType_MtlsDisabled) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.MtlsDisabled != nil {
+		l = m.MtlsDisabled.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *TLSConfigType_MtlsEnable) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.MtlsEnable != nil {
+		l = m.MtlsEnable.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *HttpAuthBasic) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.UserName)
+	if l > 0 {
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.Password != nil {
+		l = m.Password.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+
+func (m *AuthToken) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Token != nil {
+		l = m.Token.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+
+func (m *HTTPConfig) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Uri)
+	if l > 0 {
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.AuthChoice != nil {
+		n += m.AuthChoice.Size()
+	}
+	if m.Compression != nil {
+		l = m.Compression.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.Batch != nil {
+		l = m.Batch.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.TlsChoice != nil {
+		n += m.TlsChoice.Size()
+	}
+	return n
+}
+
+func (m *HTTPConfig_AuthNone) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.AuthNone != nil {
+		l = m.AuthNone.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *HTTPConfig_AuthBasic) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.AuthBasic != nil {
+		l = m.AuthBasic.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *HTTPConfig_AuthToken) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.AuthToken != nil {
+		l = m.AuthToken.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *HTTPConfig_NoTls) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.NoTls != nil {
+		l = m.NoTls.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *HTTPConfig_UseTls) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.UseTls != nil {
+		l = m.UseTls.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *DatadogConfig) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.EndpointChoice != nil {
+		n += m.EndpointChoice.Size()
+	}
+	if m.DatadogApiKey != nil {
+		l = m.DatadogApiKey.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.Compression != nil {
+		l = m.Compression.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.Batch != nil {
+		l = m.Batch.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.TlsChoice != nil {
+		n += m.TlsChoice.Size()
+	}
+	return n
+}
+
+func (m *DatadogConfig_Site) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Site)
+	n += 1 + l + sovTypes(uint64(l))
+	return n
+}
+func (m *DatadogConfig_Endpoint) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Endpoint)
+	n += 1 + l + sovTypes(uint64(l))
+	return n
+}
+func (m *DatadogConfig_NoTls) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.NoTls != nil {
+		l = m.NoTls.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *DatadogConfig_UseTls) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.UseTls != nil {
+		l = m.UseTls.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *SplunkConfig) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Endpoint)
+	if l > 0 {
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.SplunkHecToken != nil {
+		l = m.SplunkHecToken.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.Compression != nil {
+		l = m.Compression.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.Batch != nil {
+		l = m.Batch.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.TlsChoice != nil {
+		n += m.TlsChoice.Size()
+	}
+	return n
+}
+
+func (m *SplunkConfig_NoTls) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.NoTls != nil {
+		l = m.NoTls.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *SplunkConfig_UseTls) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.UseTls != nil {
+		l = m.UseTls.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *ElasticConfig) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Endpoint)
+	if l > 0 {
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.AuthChoice != nil {
+		n += m.AuthChoice.Size()
+	}
+	if m.Compression != nil {
+		l = m.Compression.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.Batch != nil {
+		l = m.Batch.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.TlsChoice != nil {
+		n += m.TlsChoice.Size()
+	}
+	return n
+}
+
+func (m *ElasticConfig_AuthNone) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.AuthNone != nil {
+		l = m.AuthNone.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *ElasticConfig_AuthBasic) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.AuthBasic != nil {
+		l = m.AuthBasic.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *ElasticConfig_AuthAws) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.AuthAws != nil {
+		l = m.AuthAws.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *ElasticConfig_NoTls) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.NoTls != nil {
+		l = m.NoTls.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *ElasticConfig_UseTls) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.UseTls != nil {
+		l = m.UseTls.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *AzureBlobConfig) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.ConnectionString != nil {
+		l = m.ConnectionString.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	l = len(m.ContainerName)
+	if l > 0 {
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.Compression != nil {
+		l = m.Compression.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.Batch != nil {
+		l = m.Batch.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+
+func (m *AzureEventHubsConfig) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.ConnectionString != nil {
+		l = m.ConnectionString.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	l = len(m.Namespace)
+	if l > 0 {
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	l = len(m.Instance)
 	if l > 0 {
 		n += 1 + l + sovTypes(uint64(l))
 	}
@@ -2563,6 +9452,78 @@ func (m *GlobalSpecType_S3Receiver) Size() (n int) {
 	}
 	return n
 }
+func (m *GlobalSpecType_HttpReceiver) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.HttpReceiver != nil {
+		l = m.HttpReceiver.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *GlobalSpecType_DatadogReceiver) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.DatadogReceiver != nil {
+		l = m.DatadogReceiver.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *GlobalSpecType_SplunkReceiver) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.SplunkReceiver != nil {
+		l = m.SplunkReceiver.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *GlobalSpecType_ElasticReceiver) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.ElasticReceiver != nil {
+		l = m.ElasticReceiver.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *GlobalSpecType_AzureReceiver) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.AzureReceiver != nil {
+		l = m.AzureReceiver.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *GlobalSpecType_AzureEventHubsReceiver) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.AzureEventHubsReceiver != nil {
+		l = m.AzureEventHubsReceiver.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
 func (m *CreateSpecType) Size() (n int) {
 	if m == nil {
 		return 0
@@ -2634,6 +9595,78 @@ func (m *CreateSpecType_S3Receiver) Size() (n int) {
 	_ = l
 	if m.S3Receiver != nil {
 		l = m.S3Receiver.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *CreateSpecType_HttpReceiver) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.HttpReceiver != nil {
+		l = m.HttpReceiver.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *CreateSpecType_DatadogReceiver) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.DatadogReceiver != nil {
+		l = m.DatadogReceiver.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *CreateSpecType_SplunkReceiver) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.SplunkReceiver != nil {
+		l = m.SplunkReceiver.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *CreateSpecType_ElasticReceiver) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.ElasticReceiver != nil {
+		l = m.ElasticReceiver.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *CreateSpecType_AzureReceiver) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.AzureReceiver != nil {
+		l = m.AzureReceiver.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *CreateSpecType_AzureEventHubsReceiver) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.AzureEventHubsReceiver != nil {
+		l = m.AzureEventHubsReceiver.Size()
 		n += 1 + l + sovTypes(uint64(l))
 	}
 	return n
@@ -2713,6 +9746,78 @@ func (m *ReplaceSpecType_S3Receiver) Size() (n int) {
 	}
 	return n
 }
+func (m *ReplaceSpecType_HttpReceiver) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.HttpReceiver != nil {
+		l = m.HttpReceiver.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *ReplaceSpecType_DatadogReceiver) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.DatadogReceiver != nil {
+		l = m.DatadogReceiver.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *ReplaceSpecType_SplunkReceiver) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.SplunkReceiver != nil {
+		l = m.SplunkReceiver.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *ReplaceSpecType_ElasticReceiver) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.ElasticReceiver != nil {
+		l = m.ElasticReceiver.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *ReplaceSpecType_AzureReceiver) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.AzureReceiver != nil {
+		l = m.AzureReceiver.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *ReplaceSpecType_AzureEventHubsReceiver) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.AzureEventHubsReceiver != nil {
+		l = m.AzureEventHubsReceiver.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
 func (m *GetSpecType) Size() (n int) {
 	if m == nil {
 		return 0
@@ -2788,12 +9893,186 @@ func (m *GetSpecType_S3Receiver) Size() (n int) {
 	}
 	return n
 }
+func (m *GetSpecType_HttpReceiver) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.HttpReceiver != nil {
+		l = m.HttpReceiver.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *GetSpecType_DatadogReceiver) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.DatadogReceiver != nil {
+		l = m.DatadogReceiver.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *GetSpecType_SplunkReceiver) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.SplunkReceiver != nil {
+		l = m.SplunkReceiver.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *GetSpecType_ElasticReceiver) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.ElasticReceiver != nil {
+		l = m.ElasticReceiver.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *GetSpecType_AzureReceiver) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.AzureReceiver != nil {
+		l = m.AzureReceiver.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *GetSpecType_AzureEventHubsReceiver) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.AzureEventHubsReceiver != nil {
+		l = m.AzureEventHubsReceiver.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
 
 func sovTypes(x uint64) (n int) {
 	return (math_bits.Len64(x|1) + 6) / 7
 }
 func sozTypes(x uint64) (n int) {
 	return sovTypes(uint64((x << 1) ^ uint64((int64(x) >> 63))))
+}
+func (this *CompressionType) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&CompressionType{`,
+		`CompressionChoice:` + fmt.Sprintf("%v", this.CompressionChoice) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *CompressionType_CompressionNone) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&CompressionType_CompressionNone{`,
+		`CompressionNone:` + strings.Replace(fmt.Sprintf("%v", this.CompressionNone), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *CompressionType_CompressionGzip) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&CompressionType_CompressionGzip{`,
+		`CompressionGzip:` + strings.Replace(fmt.Sprintf("%v", this.CompressionGzip), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *BatchOptionType) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&BatchOptionType{`,
+		`BatchTimeout:` + fmt.Sprintf("%v", this.BatchTimeout) + `,`,
+		`BatchEvents:` + fmt.Sprintf("%v", this.BatchEvents) + `,`,
+		`BatchBytes:` + fmt.Sprintf("%v", this.BatchBytes) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *BatchOptionType_TimeoutSecondsDefault) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&BatchOptionType_TimeoutSecondsDefault{`,
+		`TimeoutSecondsDefault:` + strings.Replace(fmt.Sprintf("%v", this.TimeoutSecondsDefault), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *BatchOptionType_TimeoutSeconds) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&BatchOptionType_TimeoutSeconds{`,
+		`TimeoutSeconds:` + fmt.Sprintf("%v", this.TimeoutSeconds) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *BatchOptionType_MaxEventsDisabled) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&BatchOptionType_MaxEventsDisabled{`,
+		`MaxEventsDisabled:` + strings.Replace(fmt.Sprintf("%v", this.MaxEventsDisabled), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *BatchOptionType_MaxEvents) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&BatchOptionType_MaxEvents{`,
+		`MaxEvents:` + fmt.Sprintf("%v", this.MaxEvents) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *BatchOptionType_MaxBytesDisabled) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&BatchOptionType_MaxBytesDisabled{`,
+		`MaxBytesDisabled:` + strings.Replace(fmt.Sprintf("%v", this.MaxBytesDisabled), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *BatchOptionType_MaxBytes) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&BatchOptionType_MaxBytes{`,
+		`MaxBytes:` + fmt.Sprintf("%v", this.MaxBytes) + `,`,
+		`}`,
+	}, "")
+	return s
 }
 func (this *NSList) String() string {
 	if this == nil {
@@ -2813,6 +10092,374 @@ func (this *S3Config) String() string {
 		`Bucket:` + fmt.Sprintf("%v", this.Bucket) + `,`,
 		`AwsCred:` + strings.Replace(fmt.Sprintf("%v", this.AwsCred), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
 		`AwsRegion:` + fmt.Sprintf("%v", this.AwsRegion) + `,`,
+		`Compression:` + strings.Replace(this.Compression.String(), "CompressionType", "CompressionType", 1) + `,`,
+		`Batch:` + strings.Replace(this.Batch.String(), "BatchOptionType", "BatchOptionType", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *TLSClientConfigType) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&TLSClientConfigType{`,
+		`Certificate:` + fmt.Sprintf("%v", this.Certificate) + `,`,
+		`KeyUrl:` + strings.Replace(fmt.Sprintf("%v", this.KeyUrl), "SecretType", "schema.SecretType", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *TLSConfigType) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&TLSConfigType{`,
+		`VerifyCertificate:` + fmt.Sprintf("%v", this.VerifyCertificate) + `,`,
+		`VerifyHostname:` + fmt.Sprintf("%v", this.VerifyHostname) + `,`,
+		`CaChoice:` + fmt.Sprintf("%v", this.CaChoice) + `,`,
+		`MtlsChoice:` + fmt.Sprintf("%v", this.MtlsChoice) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *TLSConfigType_EnableVerifyCertificate) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&TLSConfigType_EnableVerifyCertificate{`,
+		`EnableVerifyCertificate:` + strings.Replace(fmt.Sprintf("%v", this.EnableVerifyCertificate), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *TLSConfigType_DisableVerifyCertificate) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&TLSConfigType_DisableVerifyCertificate{`,
+		`DisableVerifyCertificate:` + strings.Replace(fmt.Sprintf("%v", this.DisableVerifyCertificate), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *TLSConfigType_EnableVerifyHostname) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&TLSConfigType_EnableVerifyHostname{`,
+		`EnableVerifyHostname:` + strings.Replace(fmt.Sprintf("%v", this.EnableVerifyHostname), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *TLSConfigType_DisableVerifyHostname) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&TLSConfigType_DisableVerifyHostname{`,
+		`DisableVerifyHostname:` + strings.Replace(fmt.Sprintf("%v", this.DisableVerifyHostname), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *TLSConfigType_NoCa) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&TLSConfigType_NoCa{`,
+		`NoCa:` + strings.Replace(fmt.Sprintf("%v", this.NoCa), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *TLSConfigType_TrustedCaUrl) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&TLSConfigType_TrustedCaUrl{`,
+		`TrustedCaUrl:` + fmt.Sprintf("%v", this.TrustedCaUrl) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *TLSConfigType_MtlsDisabled) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&TLSConfigType_MtlsDisabled{`,
+		`MtlsDisabled:` + strings.Replace(fmt.Sprintf("%v", this.MtlsDisabled), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *TLSConfigType_MtlsEnable) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&TLSConfigType_MtlsEnable{`,
+		`MtlsEnable:` + strings.Replace(fmt.Sprintf("%v", this.MtlsEnable), "TLSClientConfigType", "TLSClientConfigType", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *HttpAuthBasic) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&HttpAuthBasic{`,
+		`UserName:` + fmt.Sprintf("%v", this.UserName) + `,`,
+		`Password:` + strings.Replace(fmt.Sprintf("%v", this.Password), "SecretType", "schema.SecretType", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *AuthToken) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&AuthToken{`,
+		`Token:` + strings.Replace(fmt.Sprintf("%v", this.Token), "SecretType", "schema.SecretType", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *HTTPConfig) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&HTTPConfig{`,
+		`Uri:` + fmt.Sprintf("%v", this.Uri) + `,`,
+		`AuthChoice:` + fmt.Sprintf("%v", this.AuthChoice) + `,`,
+		`Compression:` + strings.Replace(this.Compression.String(), "CompressionType", "CompressionType", 1) + `,`,
+		`Batch:` + strings.Replace(this.Batch.String(), "BatchOptionType", "BatchOptionType", 1) + `,`,
+		`TlsChoice:` + fmt.Sprintf("%v", this.TlsChoice) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *HTTPConfig_AuthNone) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&HTTPConfig_AuthNone{`,
+		`AuthNone:` + strings.Replace(fmt.Sprintf("%v", this.AuthNone), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *HTTPConfig_AuthBasic) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&HTTPConfig_AuthBasic{`,
+		`AuthBasic:` + strings.Replace(fmt.Sprintf("%v", this.AuthBasic), "HttpAuthBasic", "HttpAuthBasic", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *HTTPConfig_AuthToken) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&HTTPConfig_AuthToken{`,
+		`AuthToken:` + strings.Replace(fmt.Sprintf("%v", this.AuthToken), "AuthToken", "AuthToken", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *HTTPConfig_NoTls) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&HTTPConfig_NoTls{`,
+		`NoTls:` + strings.Replace(fmt.Sprintf("%v", this.NoTls), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *HTTPConfig_UseTls) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&HTTPConfig_UseTls{`,
+		`UseTls:` + strings.Replace(fmt.Sprintf("%v", this.UseTls), "TLSConfigType", "TLSConfigType", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *DatadogConfig) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&DatadogConfig{`,
+		`EndpointChoice:` + fmt.Sprintf("%v", this.EndpointChoice) + `,`,
+		`DatadogApiKey:` + strings.Replace(fmt.Sprintf("%v", this.DatadogApiKey), "SecretType", "schema.SecretType", 1) + `,`,
+		`Compression:` + strings.Replace(this.Compression.String(), "CompressionType", "CompressionType", 1) + `,`,
+		`Batch:` + strings.Replace(this.Batch.String(), "BatchOptionType", "BatchOptionType", 1) + `,`,
+		`TlsChoice:` + fmt.Sprintf("%v", this.TlsChoice) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *DatadogConfig_Site) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&DatadogConfig_Site{`,
+		`Site:` + fmt.Sprintf("%v", this.Site) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *DatadogConfig_Endpoint) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&DatadogConfig_Endpoint{`,
+		`Endpoint:` + fmt.Sprintf("%v", this.Endpoint) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *DatadogConfig_NoTls) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&DatadogConfig_NoTls{`,
+		`NoTls:` + strings.Replace(fmt.Sprintf("%v", this.NoTls), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *DatadogConfig_UseTls) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&DatadogConfig_UseTls{`,
+		`UseTls:` + strings.Replace(fmt.Sprintf("%v", this.UseTls), "TLSConfigType", "TLSConfigType", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *SplunkConfig) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&SplunkConfig{`,
+		`Endpoint:` + fmt.Sprintf("%v", this.Endpoint) + `,`,
+		`SplunkHecToken:` + strings.Replace(fmt.Sprintf("%v", this.SplunkHecToken), "SecretType", "schema.SecretType", 1) + `,`,
+		`Compression:` + strings.Replace(this.Compression.String(), "CompressionType", "CompressionType", 1) + `,`,
+		`Batch:` + strings.Replace(this.Batch.String(), "BatchOptionType", "BatchOptionType", 1) + `,`,
+		`TlsChoice:` + fmt.Sprintf("%v", this.TlsChoice) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *SplunkConfig_NoTls) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&SplunkConfig_NoTls{`,
+		`NoTls:` + strings.Replace(fmt.Sprintf("%v", this.NoTls), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *SplunkConfig_UseTls) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&SplunkConfig_UseTls{`,
+		`UseTls:` + strings.Replace(fmt.Sprintf("%v", this.UseTls), "TLSConfigType", "TLSConfigType", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ElasticConfig) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ElasticConfig{`,
+		`Endpoint:` + fmt.Sprintf("%v", this.Endpoint) + `,`,
+		`AuthChoice:` + fmt.Sprintf("%v", this.AuthChoice) + `,`,
+		`Compression:` + strings.Replace(this.Compression.String(), "CompressionType", "CompressionType", 1) + `,`,
+		`Batch:` + strings.Replace(this.Batch.String(), "BatchOptionType", "BatchOptionType", 1) + `,`,
+		`TlsChoice:` + fmt.Sprintf("%v", this.TlsChoice) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ElasticConfig_AuthNone) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ElasticConfig_AuthNone{`,
+		`AuthNone:` + strings.Replace(fmt.Sprintf("%v", this.AuthNone), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ElasticConfig_AuthBasic) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ElasticConfig_AuthBasic{`,
+		`AuthBasic:` + strings.Replace(fmt.Sprintf("%v", this.AuthBasic), "HttpAuthBasic", "HttpAuthBasic", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ElasticConfig_AuthAws) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ElasticConfig_AuthAws{`,
+		`AuthAws:` + strings.Replace(fmt.Sprintf("%v", this.AuthAws), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ElasticConfig_NoTls) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ElasticConfig_NoTls{`,
+		`NoTls:` + strings.Replace(fmt.Sprintf("%v", this.NoTls), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ElasticConfig_UseTls) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ElasticConfig_UseTls{`,
+		`UseTls:` + strings.Replace(fmt.Sprintf("%v", this.UseTls), "TLSConfigType", "TLSConfigType", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *AzureBlobConfig) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&AzureBlobConfig{`,
+		`ConnectionString:` + strings.Replace(fmt.Sprintf("%v", this.ConnectionString), "SecretType", "schema.SecretType", 1) + `,`,
+		`ContainerName:` + fmt.Sprintf("%v", this.ContainerName) + `,`,
+		`Compression:` + strings.Replace(this.Compression.String(), "CompressionType", "CompressionType", 1) + `,`,
+		`Batch:` + strings.Replace(this.Batch.String(), "BatchOptionType", "BatchOptionType", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *AzureEventHubsConfig) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&AzureEventHubsConfig{`,
+		`ConnectionString:` + strings.Replace(fmt.Sprintf("%v", this.ConnectionString), "SecretType", "schema.SecretType", 1) + `,`,
+		`Namespace:` + fmt.Sprintf("%v", this.Namespace) + `,`,
+		`Instance:` + fmt.Sprintf("%v", this.Instance) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2879,6 +10526,66 @@ func (this *GlobalSpecType_S3Receiver) String() string {
 	}, "")
 	return s
 }
+func (this *GlobalSpecType_HttpReceiver) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GlobalSpecType_HttpReceiver{`,
+		`HttpReceiver:` + strings.Replace(fmt.Sprintf("%v", this.HttpReceiver), "HTTPConfig", "HTTPConfig", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GlobalSpecType_DatadogReceiver) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GlobalSpecType_DatadogReceiver{`,
+		`DatadogReceiver:` + strings.Replace(fmt.Sprintf("%v", this.DatadogReceiver), "DatadogConfig", "DatadogConfig", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GlobalSpecType_SplunkReceiver) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GlobalSpecType_SplunkReceiver{`,
+		`SplunkReceiver:` + strings.Replace(fmt.Sprintf("%v", this.SplunkReceiver), "SplunkConfig", "SplunkConfig", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GlobalSpecType_ElasticReceiver) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GlobalSpecType_ElasticReceiver{`,
+		`ElasticReceiver:` + strings.Replace(fmt.Sprintf("%v", this.ElasticReceiver), "ElasticConfig", "ElasticConfig", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GlobalSpecType_AzureReceiver) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GlobalSpecType_AzureReceiver{`,
+		`AzureReceiver:` + strings.Replace(fmt.Sprintf("%v", this.AzureReceiver), "AzureBlobConfig", "AzureBlobConfig", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GlobalSpecType_AzureEventHubsReceiver) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GlobalSpecType_AzureEventHubsReceiver{`,
+		`AzureEventHubsReceiver:` + strings.Replace(fmt.Sprintf("%v", this.AzureEventHubsReceiver), "AzureEventHubsConfig", "AzureEventHubsConfig", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
 func (this *CreateSpecType) String() string {
 	if this == nil {
 		return "nil"
@@ -2936,6 +10643,66 @@ func (this *CreateSpecType_S3Receiver) String() string {
 	}
 	s := strings.Join([]string{`&CreateSpecType_S3Receiver{`,
 		`S3Receiver:` + strings.Replace(fmt.Sprintf("%v", this.S3Receiver), "S3Config", "S3Config", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *CreateSpecType_HttpReceiver) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&CreateSpecType_HttpReceiver{`,
+		`HttpReceiver:` + strings.Replace(fmt.Sprintf("%v", this.HttpReceiver), "HTTPConfig", "HTTPConfig", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *CreateSpecType_DatadogReceiver) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&CreateSpecType_DatadogReceiver{`,
+		`DatadogReceiver:` + strings.Replace(fmt.Sprintf("%v", this.DatadogReceiver), "DatadogConfig", "DatadogConfig", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *CreateSpecType_SplunkReceiver) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&CreateSpecType_SplunkReceiver{`,
+		`SplunkReceiver:` + strings.Replace(fmt.Sprintf("%v", this.SplunkReceiver), "SplunkConfig", "SplunkConfig", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *CreateSpecType_ElasticReceiver) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&CreateSpecType_ElasticReceiver{`,
+		`ElasticReceiver:` + strings.Replace(fmt.Sprintf("%v", this.ElasticReceiver), "ElasticConfig", "ElasticConfig", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *CreateSpecType_AzureReceiver) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&CreateSpecType_AzureReceiver{`,
+		`AzureReceiver:` + strings.Replace(fmt.Sprintf("%v", this.AzureReceiver), "AzureBlobConfig", "AzureBlobConfig", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *CreateSpecType_AzureEventHubsReceiver) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&CreateSpecType_AzureEventHubsReceiver{`,
+		`AzureEventHubsReceiver:` + strings.Replace(fmt.Sprintf("%v", this.AzureEventHubsReceiver), "AzureEventHubsConfig", "AzureEventHubsConfig", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -3001,6 +10768,66 @@ func (this *ReplaceSpecType_S3Receiver) String() string {
 	}, "")
 	return s
 }
+func (this *ReplaceSpecType_HttpReceiver) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ReplaceSpecType_HttpReceiver{`,
+		`HttpReceiver:` + strings.Replace(fmt.Sprintf("%v", this.HttpReceiver), "HTTPConfig", "HTTPConfig", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ReplaceSpecType_DatadogReceiver) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ReplaceSpecType_DatadogReceiver{`,
+		`DatadogReceiver:` + strings.Replace(fmt.Sprintf("%v", this.DatadogReceiver), "DatadogConfig", "DatadogConfig", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ReplaceSpecType_SplunkReceiver) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ReplaceSpecType_SplunkReceiver{`,
+		`SplunkReceiver:` + strings.Replace(fmt.Sprintf("%v", this.SplunkReceiver), "SplunkConfig", "SplunkConfig", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ReplaceSpecType_ElasticReceiver) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ReplaceSpecType_ElasticReceiver{`,
+		`ElasticReceiver:` + strings.Replace(fmt.Sprintf("%v", this.ElasticReceiver), "ElasticConfig", "ElasticConfig", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ReplaceSpecType_AzureReceiver) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ReplaceSpecType_AzureReceiver{`,
+		`AzureReceiver:` + strings.Replace(fmt.Sprintf("%v", this.AzureReceiver), "AzureBlobConfig", "AzureBlobConfig", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ReplaceSpecType_AzureEventHubsReceiver) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ReplaceSpecType_AzureEventHubsReceiver{`,
+		`AzureEventHubsReceiver:` + strings.Replace(fmt.Sprintf("%v", this.AzureEventHubsReceiver), "AzureEventHubsConfig", "AzureEventHubsConfig", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
 func (this *GetSpecType) String() string {
 	if this == nil {
 		return "nil"
@@ -3062,6 +10889,66 @@ func (this *GetSpecType_S3Receiver) String() string {
 	}, "")
 	return s
 }
+func (this *GetSpecType_HttpReceiver) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GetSpecType_HttpReceiver{`,
+		`HttpReceiver:` + strings.Replace(fmt.Sprintf("%v", this.HttpReceiver), "HTTPConfig", "HTTPConfig", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GetSpecType_DatadogReceiver) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GetSpecType_DatadogReceiver{`,
+		`DatadogReceiver:` + strings.Replace(fmt.Sprintf("%v", this.DatadogReceiver), "DatadogConfig", "DatadogConfig", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GetSpecType_SplunkReceiver) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GetSpecType_SplunkReceiver{`,
+		`SplunkReceiver:` + strings.Replace(fmt.Sprintf("%v", this.SplunkReceiver), "SplunkConfig", "SplunkConfig", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GetSpecType_ElasticReceiver) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GetSpecType_ElasticReceiver{`,
+		`ElasticReceiver:` + strings.Replace(fmt.Sprintf("%v", this.ElasticReceiver), "ElasticConfig", "ElasticConfig", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GetSpecType_AzureReceiver) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GetSpecType_AzureReceiver{`,
+		`AzureReceiver:` + strings.Replace(fmt.Sprintf("%v", this.AzureReceiver), "AzureBlobConfig", "AzureBlobConfig", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GetSpecType_AzureEventHubsReceiver) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GetSpecType_AzureEventHubsReceiver{`,
+		`AzureEventHubsReceiver:` + strings.Replace(fmt.Sprintf("%v", this.AzureEventHubsReceiver), "AzureEventHubsConfig", "AzureEventHubsConfig", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
 func valueToStringTypes(v interface{}) string {
 	rv := reflect.ValueOf(v)
 	if rv.IsNil() {
@@ -3069,6 +10956,347 @@ func valueToStringTypes(v interface{}) string {
 	}
 	pv := reflect.Indirect(rv).Interface()
 	return fmt.Sprintf("*%v", pv)
+}
+func (m *CompressionType) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: CompressionType: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: CompressionType: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field CompressionNone", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.CompressionChoice = &CompressionType_CompressionNone{v}
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field CompressionGzip", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.CompressionChoice = &CompressionType_CompressionGzip{v}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *BatchOptionType) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: BatchOptionType: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: BatchOptionType: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field TimeoutSecondsDefault", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.BatchTimeout = &BatchOptionType_TimeoutSecondsDefault{v}
+			iNdEx = postIndex
+		case 3:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field TimeoutSeconds", wireType)
+			}
+			var v uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				v |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			m.BatchTimeout = &BatchOptionType_TimeoutSeconds{v}
+		case 5:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field MaxEventsDisabled", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.BatchEvents = &BatchOptionType_MaxEventsDisabled{v}
+			iNdEx = postIndex
+		case 6:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field MaxEvents", wireType)
+			}
+			var v uint32
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				v |= uint32(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			m.BatchEvents = &BatchOptionType_MaxEvents{v}
+		case 8:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field MaxBytesDisabled", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.BatchBytes = &BatchOptionType_MaxBytesDisabled{v}
+			iNdEx = postIndex
+		case 9:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field MaxBytes", wireType)
+			}
+			var v uint32
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				v |= uint32(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			m.BatchBytes = &BatchOptionType_MaxBytes{v}
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
 }
 func (m *NSList) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
@@ -3283,6 +11511,2307 @@ func (m *S3Config) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			m.AwsRegion = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Compression", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Compression == nil {
+				m.Compression = &CompressionType{}
+			}
+			if err := m.Compression.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 5:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Batch", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Batch == nil {
+				m.Batch = &BatchOptionType{}
+			}
+			if err := m.Batch.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *TLSClientConfigType) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: TLSClientConfigType: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: TLSClientConfigType: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Certificate", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Certificate = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field KeyUrl", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.KeyUrl == nil {
+				m.KeyUrl = &schema.SecretType{}
+			}
+			if err := m.KeyUrl.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *TLSConfigType) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: TLSConfigType: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: TLSConfigType: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field EnableVerifyCertificate", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.VerifyCertificate = &TLSConfigType_EnableVerifyCertificate{v}
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DisableVerifyCertificate", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.VerifyCertificate = &TLSConfigType_DisableVerifyCertificate{v}
+			iNdEx = postIndex
+		case 5:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field EnableVerifyHostname", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.VerifyHostname = &TLSConfigType_EnableVerifyHostname{v}
+			iNdEx = postIndex
+		case 6:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DisableVerifyHostname", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.VerifyHostname = &TLSConfigType_DisableVerifyHostname{v}
+			iNdEx = postIndex
+		case 8:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field NoCa", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.CaChoice = &TLSConfigType_NoCa{v}
+			iNdEx = postIndex
+		case 9:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field TrustedCaUrl", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.CaChoice = &TLSConfigType_TrustedCaUrl{string(dAtA[iNdEx:postIndex])}
+			iNdEx = postIndex
+		case 11:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field MtlsDisabled", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.MtlsChoice = &TLSConfigType_MtlsDisabled{v}
+			iNdEx = postIndex
+		case 12:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field MtlsEnable", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &TLSClientConfigType{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.MtlsChoice = &TLSConfigType_MtlsEnable{v}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *HttpAuthBasic) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: HttpAuthBasic: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: HttpAuthBasic: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field UserName", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.UserName = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Password", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Password == nil {
+				m.Password = &schema.SecretType{}
+			}
+			if err := m.Password.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *AuthToken) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: AuthToken: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: AuthToken: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Token", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Token == nil {
+				m.Token = &schema.SecretType{}
+			}
+			if err := m.Token.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *HTTPConfig) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: HTTPConfig: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: HTTPConfig: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Uri", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Uri = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field AuthNone", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.AuthChoice = &HTTPConfig_AuthNone{v}
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field AuthBasic", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &HttpAuthBasic{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.AuthChoice = &HTTPConfig_AuthBasic{v}
+			iNdEx = postIndex
+		case 5:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field AuthToken", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &AuthToken{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.AuthChoice = &HTTPConfig_AuthToken{v}
+			iNdEx = postIndex
+		case 6:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Compression", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Compression == nil {
+				m.Compression = &CompressionType{}
+			}
+			if err := m.Compression.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 7:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Batch", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Batch == nil {
+				m.Batch = &BatchOptionType{}
+			}
+			if err := m.Batch.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 9:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field NoTls", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.TlsChoice = &HTTPConfig_NoTls{v}
+			iNdEx = postIndex
+		case 10:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field UseTls", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &TLSConfigType{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.TlsChoice = &HTTPConfig_UseTls{v}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *DatadogConfig) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: DatadogConfig: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: DatadogConfig: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Site", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.EndpointChoice = &DatadogConfig_Site{string(dAtA[iNdEx:postIndex])}
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Endpoint", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.EndpointChoice = &DatadogConfig_Endpoint{string(dAtA[iNdEx:postIndex])}
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DatadogApiKey", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.DatadogApiKey == nil {
+				m.DatadogApiKey = &schema.SecretType{}
+			}
+			if err := m.DatadogApiKey.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 5:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Compression", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Compression == nil {
+				m.Compression = &CompressionType{}
+			}
+			if err := m.Compression.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 6:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Batch", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Batch == nil {
+				m.Batch = &BatchOptionType{}
+			}
+			if err := m.Batch.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 8:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field NoTls", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.TlsChoice = &DatadogConfig_NoTls{v}
+			iNdEx = postIndex
+		case 9:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field UseTls", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &TLSConfigType{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.TlsChoice = &DatadogConfig_UseTls{v}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *SplunkConfig) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: SplunkConfig: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: SplunkConfig: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Endpoint", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Endpoint = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field SplunkHecToken", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.SplunkHecToken == nil {
+				m.SplunkHecToken = &schema.SecretType{}
+			}
+			if err := m.SplunkHecToken.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Compression", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Compression == nil {
+				m.Compression = &CompressionType{}
+			}
+			if err := m.Compression.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Batch", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Batch == nil {
+				m.Batch = &BatchOptionType{}
+			}
+			if err := m.Batch.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 6:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field NoTls", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.TlsChoice = &SplunkConfig_NoTls{v}
+			iNdEx = postIndex
+		case 7:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field UseTls", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &TLSConfigType{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.TlsChoice = &SplunkConfig_UseTls{v}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *ElasticConfig) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: ElasticConfig: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: ElasticConfig: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Endpoint", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Endpoint = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field AuthNone", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.AuthChoice = &ElasticConfig_AuthNone{v}
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field AuthBasic", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &HttpAuthBasic{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.AuthChoice = &ElasticConfig_AuthBasic{v}
+			iNdEx = postIndex
+		case 5:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field AuthAws", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &views.ObjectRefType{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.AuthChoice = &ElasticConfig_AuthAws{v}
+			iNdEx = postIndex
+		case 6:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Compression", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Compression == nil {
+				m.Compression = &CompressionType{}
+			}
+			if err := m.Compression.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 7:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Batch", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Batch == nil {
+				m.Batch = &BatchOptionType{}
+			}
+			if err := m.Batch.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 9:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field NoTls", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.TlsChoice = &ElasticConfig_NoTls{v}
+			iNdEx = postIndex
+		case 10:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field UseTls", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &TLSConfigType{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.TlsChoice = &ElasticConfig_UseTls{v}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *AzureBlobConfig) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: AzureBlobConfig: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: AzureBlobConfig: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ConnectionString", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.ConnectionString == nil {
+				m.ConnectionString = &schema.SecretType{}
+			}
+			if err := m.ConnectionString.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ContainerName", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.ContainerName = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Compression", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Compression == nil {
+				m.Compression = &CompressionType{}
+			}
+			if err := m.Compression.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Batch", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Batch == nil {
+				m.Batch = &BatchOptionType{}
+			}
+			if err := m.Batch.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *AzureEventHubsConfig) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: AzureEventHubsConfig: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: AzureEventHubsConfig: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ConnectionString", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.ConnectionString == nil {
+				m.ConnectionString = &schema.SecretType{}
+			}
+			if err := m.ConnectionString.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Namespace", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Namespace = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Instance", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Instance = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
@@ -3511,6 +14040,216 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			m.Receiver = &GlobalSpecType_S3Receiver{v}
+			iNdEx = postIndex
+		case 8:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field HttpReceiver", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &HTTPConfig{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.Receiver = &GlobalSpecType_HttpReceiver{v}
+			iNdEx = postIndex
+		case 9:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DatadogReceiver", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &DatadogConfig{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.Receiver = &GlobalSpecType_DatadogReceiver{v}
+			iNdEx = postIndex
+		case 10:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field SplunkReceiver", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &SplunkConfig{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.Receiver = &GlobalSpecType_SplunkReceiver{v}
+			iNdEx = postIndex
+		case 11:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ElasticReceiver", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &ElasticConfig{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.Receiver = &GlobalSpecType_ElasticReceiver{v}
+			iNdEx = postIndex
+		case 12:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field AzureReceiver", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &AzureBlobConfig{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.Receiver = &GlobalSpecType_AzureReceiver{v}
+			iNdEx = postIndex
+		case 13:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field AzureEventHubsReceiver", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &AzureEventHubsConfig{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.Receiver = &GlobalSpecType_AzureEventHubsReceiver{v}
 			iNdEx = postIndex
 		case 1000:
 			if wireType != 2 {
@@ -3776,6 +14515,216 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 			}
 			m.Receiver = &CreateSpecType_S3Receiver{v}
 			iNdEx = postIndex
+		case 8:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field HttpReceiver", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &HTTPConfig{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.Receiver = &CreateSpecType_HttpReceiver{v}
+			iNdEx = postIndex
+		case 9:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DatadogReceiver", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &DatadogConfig{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.Receiver = &CreateSpecType_DatadogReceiver{v}
+			iNdEx = postIndex
+		case 10:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field SplunkReceiver", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &SplunkConfig{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.Receiver = &CreateSpecType_SplunkReceiver{v}
+			iNdEx = postIndex
+		case 11:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ElasticReceiver", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &ElasticConfig{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.Receiver = &CreateSpecType_ElasticReceiver{v}
+			iNdEx = postIndex
+		case 12:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field AzureReceiver", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &AzureBlobConfig{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.Receiver = &CreateSpecType_AzureReceiver{v}
+			iNdEx = postIndex
+		case 13:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field AzureEventHubsReceiver", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &AzureEventHubsConfig{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.Receiver = &CreateSpecType_AzureEventHubsReceiver{v}
+			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipTypes(dAtA[iNdEx:])
@@ -4004,6 +14953,216 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 			}
 			m.Receiver = &ReplaceSpecType_S3Receiver{v}
 			iNdEx = postIndex
+		case 8:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field HttpReceiver", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &HTTPConfig{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.Receiver = &ReplaceSpecType_HttpReceiver{v}
+			iNdEx = postIndex
+		case 9:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DatadogReceiver", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &DatadogConfig{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.Receiver = &ReplaceSpecType_DatadogReceiver{v}
+			iNdEx = postIndex
+		case 10:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field SplunkReceiver", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &SplunkConfig{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.Receiver = &ReplaceSpecType_SplunkReceiver{v}
+			iNdEx = postIndex
+		case 11:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ElasticReceiver", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &ElasticConfig{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.Receiver = &ReplaceSpecType_ElasticReceiver{v}
+			iNdEx = postIndex
+		case 12:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field AzureReceiver", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &AzureBlobConfig{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.Receiver = &ReplaceSpecType_AzureReceiver{v}
+			iNdEx = postIndex
+		case 13:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field AzureEventHubsReceiver", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &AzureEventHubsConfig{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.Receiver = &ReplaceSpecType_AzureEventHubsReceiver{v}
+			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipTypes(dAtA[iNdEx:])
@@ -4231,6 +15390,216 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			m.Receiver = &GetSpecType_S3Receiver{v}
+			iNdEx = postIndex
+		case 8:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field HttpReceiver", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &HTTPConfig{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.Receiver = &GetSpecType_HttpReceiver{v}
+			iNdEx = postIndex
+		case 9:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DatadogReceiver", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &DatadogConfig{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.Receiver = &GetSpecType_DatadogReceiver{v}
+			iNdEx = postIndex
+		case 10:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field SplunkReceiver", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &SplunkConfig{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.Receiver = &GetSpecType_SplunkReceiver{v}
+			iNdEx = postIndex
+		case 11:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ElasticReceiver", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &ElasticConfig{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.Receiver = &GetSpecType_ElasticReceiver{v}
+			iNdEx = postIndex
+		case 12:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field AzureReceiver", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &AzureBlobConfig{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.Receiver = &GetSpecType_AzureReceiver{v}
+			iNdEx = postIndex
+		case 13:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field AzureEventHubsReceiver", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &AzureEventHubsConfig{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.Receiver = &GetSpecType_AzureEventHubsReceiver{v}
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex

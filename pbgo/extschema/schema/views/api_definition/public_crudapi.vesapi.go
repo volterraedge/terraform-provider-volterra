@@ -1595,16 +1595,7 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 		item.Disabled = o.GetMetadata().GetDisable()
 
 		if len(req.ReportFields) > 0 {
-			noDBForm, _ := flags.GetEnvGetRspNoDBForm()
-			if !noDBForm {
-				item.Object = o.Object
-				sf.Logger().Alert(svcfw.GetResponseInDBForm,
-					log.MinorAlert,
-					zap.String("user", server.UserFromContext(ctx)),
-					zap.String("useragent", server.UseragentStrFromContext(ctx)),
-					zap.String("operation", "List"),
-				)
-			}
+			item.Object = o.Object
 
 			item.Metadata = &ves_io_schema.ObjectGetMetaType{}
 			item.Metadata.FromObjectMetaType(o.Metadata)
@@ -1683,7 +1674,7 @@ var APISwaggerJSON string = `{
     "paths": {
         "/public/namespaces/{metadata.namespace}/api_definitions": {
             "post": {
-                "summary": "CreateSpecType",
+                "summary": "Create API Definition",
                 "description": "x-required\nCreate API Definition.",
                 "operationId": "ves.io.schema.views.api_definition.API.Create",
                 "responses": {
@@ -1775,7 +1766,7 @@ var APISwaggerJSON string = `{
         },
         "/public/namespaces/{metadata.namespace}/api_definitions/{metadata.name}": {
             "put": {
-                "summary": "ReplaceSpecType",
+                "summary": "Replace API Definition",
                 "description": "x-required\nReplace API Definition.",
                 "operationId": "ves.io.schema.views.api_definition.API.Replace",
                 "responses": {
@@ -1875,7 +1866,7 @@ var APISwaggerJSON string = `{
         },
         "/public/namespaces/{namespace}/api_definitions": {
             "get": {
-                "summary": "List",
+                "summary": "List API Definition",
                 "description": "List the set of api_definition in a namespace",
                 "operationId": "ves.io.schema.views.api_definition.API.List",
                 "responses": {
@@ -1991,7 +1982,7 @@ var APISwaggerJSON string = `{
         },
         "/public/namespaces/{namespace}/api_definitions/{name}": {
             "get": {
-                "summary": "GetSpecType",
+                "summary": "Get API Definition",
                 "description": "Get API Definition.",
                 "operationId": "ves.io.schema.views.api_definition.API.Get",
                 "responses": {
@@ -2095,7 +2086,7 @@ var APISwaggerJSON string = `{
                 "x-ves-proto-rpc": "ves.io.schema.views.api_definition.API.Get"
             },
             "delete": {
-                "summary": "Delete",
+                "summary": "Delete API Definition",
                 "description": "Delete the specified api_definition",
                 "operationId": "ves.io.schema.views.api_definition.API.Delete",
                 "responses": {

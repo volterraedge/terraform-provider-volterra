@@ -295,7 +295,8 @@ func (c *CustomAPIRestClient) doRPCActivate(ctx context.Context, callOpts *serve
 	}
 	defer rsp.Body.Close()
 
-	if rsp.StatusCode != http.StatusOK {
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
 		body, err := ioutil.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
 	}
@@ -306,7 +307,7 @@ func (c *CustomAPIRestClient) doRPCActivate(ctx context.Context, callOpts *serve
 	}
 	pbRsp := &StatusResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
-		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.api_credential.StatusResponse", body)
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.api_credential.StatusResponse", body)
 
 	}
 	if callOpts.OutCallResponse != nil {
@@ -378,7 +379,8 @@ func (c *CustomAPIRestClient) doRPCActivateServiceCredentials(ctx context.Contex
 	}
 	defer rsp.Body.Close()
 
-	if rsp.StatusCode != http.StatusOK {
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
 		body, err := ioutil.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
 	}
@@ -389,7 +391,7 @@ func (c *CustomAPIRestClient) doRPCActivateServiceCredentials(ctx context.Contex
 	}
 	pbRsp := &StatusResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
-		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.api_credential.StatusResponse", body)
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.api_credential.StatusResponse", body)
 
 	}
 	if callOpts.OutCallResponse != nil {
@@ -463,7 +465,8 @@ func (c *CustomAPIRestClient) doRPCCreate(ctx context.Context, callOpts *server.
 	}
 	defer rsp.Body.Close()
 
-	if rsp.StatusCode != http.StatusOK {
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
 		body, err := ioutil.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
 	}
@@ -474,7 +477,7 @@ func (c *CustomAPIRestClient) doRPCCreate(ctx context.Context, callOpts *server.
 	}
 	pbRsp := &CreateResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
-		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.api_credential.CreateResponse", body)
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.api_credential.CreateResponse", body)
 
 	}
 	if callOpts.OutCallResponse != nil {
@@ -553,7 +556,8 @@ func (c *CustomAPIRestClient) doRPCCreateServiceCredentials(ctx context.Context,
 	}
 	defer rsp.Body.Close()
 
-	if rsp.StatusCode != http.StatusOK {
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
 		body, err := ioutil.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
 	}
@@ -564,7 +568,7 @@ func (c *CustomAPIRestClient) doRPCCreateServiceCredentials(ctx context.Context,
 	}
 	pbRsp := &CreateResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
-		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.api_credential.CreateResponse", body)
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.api_credential.CreateResponse", body)
 
 	}
 	if callOpts.OutCallResponse != nil {
@@ -636,7 +640,8 @@ func (c *CustomAPIRestClient) doRPCGet(ctx context.Context, callOpts *server.Cus
 	}
 	defer rsp.Body.Close()
 
-	if rsp.StatusCode != http.StatusOK {
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
 		body, err := ioutil.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
 	}
@@ -647,7 +652,7 @@ func (c *CustomAPIRestClient) doRPCGet(ctx context.Context, callOpts *server.Cus
 	}
 	pbRsp := &GetResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
-		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.api_credential.GetResponse", body)
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.api_credential.GetResponse", body)
 
 	}
 	if callOpts.OutCallResponse != nil {
@@ -718,7 +723,8 @@ func (c *CustomAPIRestClient) doRPCGetScimToken(ctx context.Context, callOpts *s
 	}
 	defer rsp.Body.Close()
 
-	if rsp.StatusCode != http.StatusOK {
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
 		body, err := ioutil.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
 	}
@@ -729,7 +735,7 @@ func (c *CustomAPIRestClient) doRPCGetScimToken(ctx context.Context, callOpts *s
 	}
 	pbRsp := &GetResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
-		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.api_credential.GetResponse", body)
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.api_credential.GetResponse", body)
 
 	}
 	if callOpts.OutCallResponse != nil {
@@ -800,7 +806,8 @@ func (c *CustomAPIRestClient) doRPCList(ctx context.Context, callOpts *server.Cu
 	}
 	defer rsp.Body.Close()
 
-	if rsp.StatusCode != http.StatusOK {
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
 		body, err := ioutil.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
 	}
@@ -811,7 +818,7 @@ func (c *CustomAPIRestClient) doRPCList(ctx context.Context, callOpts *server.Cu
 	}
 	pbRsp := &ListResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
-		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.api_credential.ListResponse", body)
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.api_credential.ListResponse", body)
 
 	}
 	if callOpts.OutCallResponse != nil {
@@ -882,7 +889,8 @@ func (c *CustomAPIRestClient) doRPCListServiceCredentials(ctx context.Context, c
 	}
 	defer rsp.Body.Close()
 
-	if rsp.StatusCode != http.StatusOK {
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
 		body, err := ioutil.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
 	}
@@ -893,7 +901,7 @@ func (c *CustomAPIRestClient) doRPCListServiceCredentials(ctx context.Context, c
 	}
 	pbRsp := &ListResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
-		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.api_credential.ListResponse", body)
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.api_credential.ListResponse", body)
 
 	}
 	if callOpts.OutCallResponse != nil {
@@ -965,7 +973,8 @@ func (c *CustomAPIRestClient) doRPCRecreateScimToken(ctx context.Context, callOp
 	}
 	defer rsp.Body.Close()
 
-	if rsp.StatusCode != http.StatusOK {
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
 		body, err := ioutil.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
 	}
@@ -976,7 +985,7 @@ func (c *CustomAPIRestClient) doRPCRecreateScimToken(ctx context.Context, callOp
 	}
 	pbRsp := &CreateResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
-		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.api_credential.CreateResponse", body)
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.api_credential.CreateResponse", body)
 
 	}
 	if callOpts.OutCallResponse != nil {
@@ -1049,7 +1058,8 @@ func (c *CustomAPIRestClient) doRPCRenew(ctx context.Context, callOpts *server.C
 	}
 	defer rsp.Body.Close()
 
-	if rsp.StatusCode != http.StatusOK {
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
 		body, err := ioutil.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
 	}
@@ -1060,7 +1070,7 @@ func (c *CustomAPIRestClient) doRPCRenew(ctx context.Context, callOpts *server.C
 	}
 	pbRsp := &StatusResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
-		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.api_credential.StatusResponse", body)
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.api_credential.StatusResponse", body)
 
 	}
 	if callOpts.OutCallResponse != nil {
@@ -1133,7 +1143,8 @@ func (c *CustomAPIRestClient) doRPCRenewServiceCredentials(ctx context.Context, 
 	}
 	defer rsp.Body.Close()
 
-	if rsp.StatusCode != http.StatusOK {
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
 		body, err := ioutil.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
 	}
@@ -1144,7 +1155,7 @@ func (c *CustomAPIRestClient) doRPCRenewServiceCredentials(ctx context.Context, 
 	}
 	pbRsp := &StatusResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
-		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.api_credential.StatusResponse", body)
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.api_credential.StatusResponse", body)
 
 	}
 	if callOpts.OutCallResponse != nil {
@@ -1216,7 +1227,8 @@ func (c *CustomAPIRestClient) doRPCRevoke(ctx context.Context, callOpts *server.
 	}
 	defer rsp.Body.Close()
 
-	if rsp.StatusCode != http.StatusOK {
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
 		body, err := ioutil.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
 	}
@@ -1227,7 +1239,7 @@ func (c *CustomAPIRestClient) doRPCRevoke(ctx context.Context, callOpts *server.
 	}
 	pbRsp := &StatusResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
-		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.api_credential.StatusResponse", body)
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.api_credential.StatusResponse", body)
 
 	}
 	if callOpts.OutCallResponse != nil {
@@ -1298,7 +1310,8 @@ func (c *CustomAPIRestClient) doRPCRevokeScimToken(ctx context.Context, callOpts
 	}
 	defer rsp.Body.Close()
 
-	if rsp.StatusCode != http.StatusOK {
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
 		body, err := ioutil.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
 	}
@@ -1309,7 +1322,7 @@ func (c *CustomAPIRestClient) doRPCRevokeScimToken(ctx context.Context, callOpts
 	}
 	pbRsp := &StatusResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
-		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.api_credential.StatusResponse", body)
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.api_credential.StatusResponse", body)
 
 	}
 	if callOpts.OutCallResponse != nil {
@@ -1381,7 +1394,8 @@ func (c *CustomAPIRestClient) doRPCRevokeServiceCredentials(ctx context.Context,
 	}
 	defer rsp.Body.Close()
 
-	if rsp.StatusCode != http.StatusOK {
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
 		body, err := ioutil.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
 	}
@@ -1392,7 +1406,7 @@ func (c *CustomAPIRestClient) doRPCRevokeServiceCredentials(ctx context.Context,
 	}
 	pbRsp := &StatusResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
-		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.api_credential.StatusResponse", body)
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.api_credential.StatusResponse", body)
 
 	}
 	if callOpts.OutCallResponse != nil {
@@ -2426,7 +2440,7 @@ var CustomAPISwaggerJSON string = `{
         },
         "/public/namespaces/{namespace}/api_credentials": {
             "get": {
-                "summary": "List API credential",
+                "summary": "List API Credentials",
                 "description": "Returns list of api credential of all types created by the user.\nQuery will look into tenants system namespace.",
                 "operationId": "ves.io.schema.api_credential.CustomAPI.List",
                 "responses": {
@@ -2505,7 +2519,7 @@ var CustomAPISwaggerJSON string = `{
                 "x-ves-proto-rpc": "ves.io.schema.api_credential.CustomAPI.List"
             },
             "post": {
-                "summary": "Create API credential",
+                "summary": "Create API Credentials",
                 "description": "user can request 3 types of credential for themselves. \nAPI_TOKEN, API_CERTIFICATE and KUBE_CONFIG.\n\nan API_TOKEN is an easy to use secret that can be send part of HTTP request header Authorization: APIToken \u003cvalue\u003e\nin the create request expiry can be set additionally. Volterra also supports renew and revoke of API_TOKENs.\nan API_CERTIFICATE is a password protected P12 certificate bundle document and can be used as client certificate.\nwhen sending create request, user can request with an expiry and password. Volterra Identity Authority (IA)\nmints new certificate with required credentials and is shared in the response as API Certificate. \na virtual K8s kubeconfig can be generate with type KUBE_CONFIG. Create request can specify cluster, namespace and expiry\nwith embedded user access with client certificate.\n\nrequest can specify name, expiry and type of credential required. since this credential inherits the creator's RBAC\nservice will determine the user from request context.",
                 "operationId": "ves.io.schema.api_credential.CustomAPI.Create",
                 "responses": {
@@ -2597,7 +2611,7 @@ var CustomAPISwaggerJSON string = `{
         },
         "/public/namespaces/{namespace}/api_credentials/{name}": {
             "get": {
-                "summary": "Get API credential",
+                "summary": "Get API Credentials",
                 "description": "Get implements api credential query by name.\nReturns api credential object. Query will look into tenants system namespace for api credential by name.",
                 "operationId": "ves.io.schema.api_credential.CustomAPI.Get",
                 "responses": {
@@ -2689,7 +2703,7 @@ var CustomAPISwaggerJSON string = `{
         },
         "/public/namespaces/{namespace}/renew/api_credentials": {
             "post": {
-                "summary": "Renew API user credential.",
+                "summary": "Renew API credential",
                 "description": "Renew user's my credential expiry.",
                 "operationId": "ves.io.schema.api_credential.CustomAPI.Renew",
                 "responses": {
@@ -2781,7 +2795,7 @@ var CustomAPISwaggerJSON string = `{
         },
         "/public/namespaces/{namespace}/renew/service_credentials": {
             "post": {
-                "summary": "Renew Service credential.",
+                "summary": "Renew API service credential",
                 "description": "Renew service credential's expiry.",
                 "operationId": "ves.io.schema.api_credential.CustomAPI.RenewServiceCredentials",
                 "responses": {
@@ -3320,7 +3334,7 @@ var CustomAPISwaggerJSON string = `{
         },
         "/public/namespaces/{namespace}/service_credentials": {
             "get": {
-                "summary": "List Service credentials",
+                "summary": "List service credentials",
                 "description": "request to list service credentials created by user.",
                 "operationId": "ves.io.schema.api_credential.CustomAPI.ListServiceCredentials",
                 "responses": {
@@ -3399,7 +3413,7 @@ var CustomAPISwaggerJSON string = `{
                 "x-ves-proto-rpc": "ves.io.schema.api_credential.CustomAPI.ListServiceCredentials"
             },
             "post": {
-                "summary": "Create Service credentials",
+                "summary": "Create service credentials",
                 "description": "request to create new service credentials.\nuser can specify name, expiry and list of namespce and allowed role of the service user.",
                 "operationId": "ves.io.schema.api_credential.CustomAPI.CreateServiceCredentials",
                 "responses": {

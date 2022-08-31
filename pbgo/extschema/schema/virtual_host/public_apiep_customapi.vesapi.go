@@ -64,6 +64,15 @@ func (c *ApiepCustomAPIGrpcClient) doRPCGetAPIEndpoints(ctx context.Context, yam
 	return rsp, err
 }
 
+func (c *ApiepCustomAPIGrpcClient) doRPCGetApiEndpointsStats(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
+	req := &ApiEndpointsStatsReq{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.virtual_host.ApiEndpointsStatsReq", yamlReq)
+	}
+	rsp, err := c.grpcClient.GetApiEndpointsStats(ctx, req, opts...)
+	return rsp, err
+}
+
 func (c *ApiepCustomAPIGrpcClient) doRPCGetSwaggerSpec(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &SwaggerSpecReq{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -108,6 +117,8 @@ func NewApiepCustomAPIGrpcClient(cc *grpc.ClientConn) server.CustomClient {
 	rpcFns["GetAPIEndpointPDF"] = ccl.doRPCGetAPIEndpointPDF
 
 	rpcFns["GetAPIEndpoints"] = ccl.doRPCGetAPIEndpoints
+
+	rpcFns["GetApiEndpointsStats"] = ccl.doRPCGetApiEndpointsStats
 
 	rpcFns["GetSwaggerSpec"] = ccl.doRPCGetSwaggerSpec
 
@@ -188,7 +199,8 @@ func (c *ApiepCustomAPIRestClient) doRPCGetAPIEndpointLearntSchema(ctx context.C
 	}
 	defer rsp.Body.Close()
 
-	if rsp.StatusCode != http.StatusOK {
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
 		body, err := ioutil.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
 	}
@@ -199,7 +211,7 @@ func (c *ApiepCustomAPIRestClient) doRPCGetAPIEndpointLearntSchema(ctx context.C
 	}
 	pbRsp := &APIEndpointLearntSchemaRsp{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
-		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.virtual_host.APIEndpointLearntSchemaRsp", body)
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.virtual_host.APIEndpointLearntSchemaRsp", body)
 
 	}
 	if callOpts.OutCallResponse != nil {
@@ -273,7 +285,8 @@ func (c *ApiepCustomAPIRestClient) doRPCGetAPIEndpointPDF(ctx context.Context, c
 	}
 	defer rsp.Body.Close()
 
-	if rsp.StatusCode != http.StatusOK {
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
 		body, err := ioutil.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
 	}
@@ -284,7 +297,7 @@ func (c *ApiepCustomAPIRestClient) doRPCGetAPIEndpointPDF(ctx context.Context, c
 	}
 	pbRsp := &APIEndpointPDFRsp{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
-		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.virtual_host.APIEndpointPDFRsp", body)
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.virtual_host.APIEndpointPDFRsp", body)
 
 	}
 	if callOpts.OutCallResponse != nil {
@@ -357,7 +370,8 @@ func (c *ApiepCustomAPIRestClient) doRPCGetAPIEndpoints(ctx context.Context, cal
 	}
 	defer rsp.Body.Close()
 
-	if rsp.StatusCode != http.StatusOK {
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
 		body, err := ioutil.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
 	}
@@ -368,7 +382,91 @@ func (c *ApiepCustomAPIRestClient) doRPCGetAPIEndpoints(ctx context.Context, cal
 	}
 	pbRsp := &APIEndpointsRsp{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
-		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.virtual_host.APIEndpointsRsp", body)
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.virtual_host.APIEndpointsRsp", body)
+
+	}
+	if callOpts.OutCallResponse != nil {
+		callOpts.OutCallResponse.ProtoMsg = pbRsp
+		callOpts.OutCallResponse.JSON = string(body)
+	}
+	return pbRsp, nil
+}
+
+func (c *ApiepCustomAPIRestClient) doRPCGetApiEndpointsStats(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
+	if callOpts.URI == "" {
+		return nil, fmt.Errorf("Error, URI should be specified, got empty")
+	}
+	url := fmt.Sprintf("%s%s", c.baseURL, callOpts.URI)
+
+	yamlReq := callOpts.YAMLReq
+	req := &ApiEndpointsStatsReq{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.virtual_host.ApiEndpointsStatsReq: %s", yamlReq, err)
+	}
+
+	var hReq *http.Request
+	hm := strings.ToLower(callOpts.HTTPMethod)
+	switch hm {
+	case "post", "put":
+		jsn, err := codec.ToJSON(req, codec.ToWithUseProtoFieldName())
+		if err != nil {
+			return nil, errors.Wrap(err, "Custom RestClient converting YAML to JSON")
+		}
+		var op string
+		if hm == "post" {
+			op = http.MethodPost
+		} else {
+			op = http.MethodPut
+		}
+		newReq, err := http.NewRequest(op, url, bytes.NewBuffer([]byte(jsn)))
+		if err != nil {
+			return nil, errors.Wrapf(err, "Creating new HTTP %s request for custom API", op)
+		}
+		hReq = newReq
+	case "get":
+		newReq, err := http.NewRequest(http.MethodGet, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP GET request for custom API")
+		}
+		hReq = newReq
+		q := hReq.URL.Query()
+		_ = q
+		q.Add("name", fmt.Sprintf("%v", req.Name))
+		q.Add("namespace", fmt.Sprintf("%v", req.Namespace))
+
+		hReq.URL.RawQuery += q.Encode()
+	case "delete":
+		newReq, err := http.NewRequest(http.MethodDelete, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP DELETE request for custom API")
+		}
+		hReq = newReq
+	default:
+		return nil, fmt.Errorf("Error, invalid/empty HTTPMethod(%s) specified, should be POST|DELETE|GET", callOpts.HTTPMethod)
+	}
+	hReq = hReq.WithContext(ctx)
+	hReq.Header.Set("Content-Type", "application/json")
+	client.AddHdrsToReq(callOpts.Headers, hReq)
+
+	rsp, err := c.client.Do(hReq)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient")
+	}
+	defer rsp.Body.Close()
+
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
+		body, err := ioutil.ReadAll(rsp.Body)
+		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
+	}
+
+	body, err := ioutil.ReadAll(rsp.Body)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient read body")
+	}
+	pbRsp := &ApiEndpointsStatsRsp{}
+	if err := codec.FromJSON(string(body), pbRsp); err != nil {
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.virtual_host.ApiEndpointsStatsRsp", body)
 
 	}
 	if callOpts.OutCallResponse != nil {
@@ -440,7 +538,8 @@ func (c *ApiepCustomAPIRestClient) doRPCGetSwaggerSpec(ctx context.Context, call
 	}
 	defer rsp.Body.Close()
 
-	if rsp.StatusCode != http.StatusOK {
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
 		body, err := ioutil.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
 	}
@@ -493,6 +592,8 @@ func NewApiepCustomAPIRestClient(baseURL string, hc http.Client) server.CustomCl
 
 	rpcFns["GetAPIEndpoints"] = ccl.doRPCGetAPIEndpoints
 
+	rpcFns["GetApiEndpointsStats"] = ccl.doRPCGetApiEndpointsStats
+
 	rpcFns["GetSwaggerSpec"] = ccl.doRPCGetSwaggerSpec
 
 	ccl.rpcFns = rpcFns
@@ -515,6 +616,9 @@ func (c *apiepCustomAPIInprocClient) GetAPIEndpointPDF(ctx context.Context, in *
 }
 func (c *apiepCustomAPIInprocClient) GetAPIEndpoints(ctx context.Context, in *APIEndpointsReq, opts ...grpc.CallOption) (*APIEndpointsRsp, error) {
 	return c.ApiepCustomAPIServer.GetAPIEndpoints(ctx, in)
+}
+func (c *apiepCustomAPIInprocClient) GetApiEndpointsStats(ctx context.Context, in *ApiEndpointsStatsReq, opts ...grpc.CallOption) (*ApiEndpointsStatsRsp, error) {
+	return c.ApiepCustomAPIServer.GetApiEndpointsStats(ctx, in)
 }
 func (c *apiepCustomAPIInprocClient) GetSwaggerSpec(ctx context.Context, in *SwaggerSpecReq, opts ...grpc.CallOption) (*google_api.HttpBody, error) {
 	return c.ApiepCustomAPIServer.GetSwaggerSpec(ctx, in)
@@ -688,6 +792,55 @@ func (s *apiepCustomAPISrv) GetAPIEndpoints(ctx context.Context, in *APIEndpoint
 
 	return rsp, nil
 }
+func (s *apiepCustomAPISrv) GetApiEndpointsStats(ctx context.Context, in *ApiEndpointsStatsReq) (*ApiEndpointsStatsRsp, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.virtual_host.ApiepCustomAPI")
+	cah, ok := ah.(ApiepCustomAPIServer)
+	if !ok {
+		return nil, fmt.Errorf("ah %v is not of type *ApiepCustomAPIServer", ah)
+	}
+
+	var (
+		rsp *ApiEndpointsStatsRsp
+		err error
+	)
+
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.virtual_host.ApiEndpointsStatsReq", in)
+	defer func() {
+		if len(bodyFields) > 0 {
+			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
+		}
+		userMsg := "The 'ApiepCustomAPI.GetApiEndpointsStats' operation on 'virtual_host'"
+		if err == nil {
+			userMsg += " was successfully performed."
+		} else {
+			userMsg += " failed to be performed."
+		}
+		server.AddUserMsgToAPIAudit(ctx, userMsg)
+	}()
+
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
+
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.virtual_host.ApiepCustomAPI.GetApiEndpointsStats"); rvFn != nil {
+			if verr := rvFn(ctx, in); verr != nil {
+				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
+				return nil, server.GRPCStatusFromError(err).Err()
+			}
+		}
+	}
+
+	rsp, err = cah.GetApiEndpointsStats(ctx, in)
+	if err != nil {
+		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
+	}
+
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.virtual_host.ApiEndpointsStatsRsp", rsp)...)
+
+	return rsp, nil
+}
 func (s *apiepCustomAPISrv) GetSwaggerSpec(ctx context.Context, in *SwaggerSpecReq) (*google_api.HttpBody, error) {
 	ah := s.svc.GetAPIHandler("ves.io.schema.virtual_host.ApiepCustomAPI")
 	cah, ok := ah.(ApiepCustomAPIServer)
@@ -763,7 +916,7 @@ var ApiepCustomAPISwaggerJSON string = `{
     "paths": {
         "/public/namespaces/{namespace}/virtual_hosts/{name}/api_endpoint/learnt_schema": {
             "get": {
-                "summary": "Get Learnt Schema per API endpoint",
+                "summary": "Get Get Learnt Schema per API endpoint",
                 "description": "Get Learnt Schema per API endpoint for a given auto discovered API endpoint for Virtual Host",
                 "operationId": "ves.io.schema.virtual_host.ApiepCustomAPI.GetAPIEndpointLearntSchema",
                 "responses": {
@@ -871,7 +1024,7 @@ var ApiepCustomAPISwaggerJSON string = `{
         },
         "/public/namespaces/{namespace}/virtual_hosts/{name}/api_endpoint/pdf": {
             "get": {
-                "summary": "Get PDF for API endpoint Per Virtual Host",
+                "summary": "Get API Endpoint PDF",
                 "description": "Get PDF of all metrics for a given auto discovered API endpoint for Virtual Host",
                 "operationId": "ves.io.schema.virtual_host.ApiepCustomAPI.GetAPIEndpointPDF",
                 "responses": {
@@ -979,7 +1132,7 @@ var ApiepCustomAPISwaggerJSON string = `{
         },
         "/public/namespaces/{namespace}/virtual_hosts/{name}/api_endpoints": {
             "get": {
-                "summary": "Get API endpoints Per Virtual Host",
+                "summary": "Get API Endpoints",
                 "description": "Get all autodiscovered API endpoints for Virtual Host",
                 "operationId": "ves.io.schema.virtual_host.ApiepCustomAPI.GetAPIEndpoints",
                 "responses": {
@@ -1076,6 +1229,98 @@ var ApiepCustomAPISwaggerJSON string = `{
                     "ApiepCustomAPI"
                 ],
                 "x-ves-proto-rpc": "ves.io.schema.virtual_host.ApiepCustomAPI.GetAPIEndpoints"
+            },
+            "x-displayname": "API Endpoints by Virtual Host Custom API",
+            "x-ves-proto-service": "ves.io.schema.virtual_host.ApiepCustomAPI",
+            "x-ves-proto-service-type": "CUSTOM_PUBLIC"
+        },
+        "/public/namespaces/{namespace}/virtual_hosts/{name}/api_endpoints/stats": {
+            "get": {
+                "summary": "Get Api Endpoints Stats for Virtual Host",
+                "description": "Get api endpoints stats for the given Virtual Host",
+                "operationId": "ves.io.schema.virtual_host.ApiepCustomAPI.GetApiEndpointsStats",
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/virtual_hostApiEndpointsStatsRsp"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "namespace",
+                        "description": "Namespace\n\nx-example: \"shared\"\nNamespace of the App type for current request",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "x-displayname": "Namespace"
+                    },
+                    {
+                        "name": "name",
+                        "description": "Virtual Host Name\n\nx-example: \"blogging-app\"\nVirtual Host for current request",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "x-displayname": "Virtual Host Name"
+                    }
+                ],
+                "tags": [
+                    "ApiepCustomAPI"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-virtual_host-apiepcustomapi-getapiendpointsstats"
+                },
+                "x-ves-proto-rpc": "ves.io.schema.virtual_host.ApiepCustomAPI.GetApiEndpointsStats"
             },
             "x-displayname": "API Endpoints by Virtual Host Custom API",
             "x-ves-proto-service": "ves.io.schema.virtual_host.ApiepCustomAPI",
@@ -1623,6 +1868,50 @@ var ApiepCustomAPISwaggerJSON string = `{
                         "$ref": "#/definitions/app_typeAPIEPInfo"
                     },
                     "x-displayname": "API Endpoints"
+                }
+            }
+        },
+        "virtual_hostApiEndpointsStatsRsp": {
+            "type": "object",
+            "description": "Response shape for GET API endpoints Stats.",
+            "title": "Api Endpoints stats Response",
+            "x-displayname": "Api Endpoints Stats Response",
+            "x-ves-proto-message": "ves.io.schema.virtual_host.ApiEndpointsStatsRsp",
+            "properties": {
+                "discovered": {
+                    "type": "integer",
+                    "description": " number of endpoints that categorized as discover",
+                    "title": "number of discovered endpoints",
+                    "format": "int32",
+                    "x-displayname": "Discovered"
+                },
+                "inventory": {
+                    "type": "integer",
+                    "description": " number of endpoints that categorized as inventory",
+                    "title": "number of inventory endpoints",
+                    "format": "int32",
+                    "x-displayname": "Inventory"
+                },
+                "pii_detected": {
+                    "type": "integer",
+                    "description": "number of endpoints that detected with pii",
+                    "title": "number of pii endpoints",
+                    "format": "int32",
+                    "x-displayname": "PII Detected"
+                },
+                "shadow": {
+                    "type": "integer",
+                    "description": " number of endpoints that categorized as shadow",
+                    "title": "number of shadow endpoints",
+                    "format": "int32",
+                    "x-displayname": "Shadow"
+                },
+                "total_endpoints": {
+                    "type": "integer",
+                    "description": " total endpoints",
+                    "title": "number of endpoints",
+                    "format": "int32",
+                    "x-displayname": "Total Endpoints"
                 }
             }
         }

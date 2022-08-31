@@ -1177,16 +1177,7 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 		item.Disabled = o.GetMetadata().GetDisable()
 
 		if len(req.ReportFields) > 0 {
-			noDBForm, _ := flags.GetEnvGetRspNoDBForm()
-			if !noDBForm {
-				item.Object = o.Object
-				sf.Logger().Alert(svcfw.GetResponseInDBForm,
-					log.MinorAlert,
-					zap.String("user", server.UserFromContext(ctx)),
-					zap.String("useragent", server.UseragentStrFromContext(ctx)),
-					zap.String("operation", "List"),
-				)
-			}
+			item.Object = o.Object
 
 			item.Metadata = &ves_io_schema.ObjectGetMetaType{}
 			item.Metadata.FromObjectMetaType(o.Metadata)
@@ -1265,7 +1256,7 @@ var APISwaggerJSON string = `{
     "paths": {
         "/public/namespaces/{metadata.namespace}/public_ips/{metadata.name}": {
             "put": {
-                "summary": "Replace public_ip",
+                "summary": "Replace Public IP",
                 "description": "Replacing an public_ip object will update the object by replacing the existing spec with the provided one.\nFor read-then-write operations a resourceVersion mismatch will occur if the object was modified between the read and write",
                 "operationId": "ves.io.schema.public_ip.API.Replace",
                 "responses": {
@@ -1361,7 +1352,7 @@ var APISwaggerJSON string = `{
         },
         "/public/namespaces/{namespace}/public_ips": {
             "get": {
-                "summary": "List",
+                "summary": "List Public IP",
                 "description": "List the set of public_ip in a namespace",
                 "operationId": "ves.io.schema.public_ip.API.List",
                 "responses": {
@@ -1473,7 +1464,7 @@ var APISwaggerJSON string = `{
         },
         "/public/namespaces/{namespace}/public_ips/{name}": {
             "get": {
-                "summary": "Get public_ip",
+                "summary": "Get Public IP",
                 "description": "Get public_ip will get the object from the storage backend for namespace metadata.namespace",
                 "operationId": "ves.io.schema.public_ip.API.Get",
                 "responses": {
@@ -1672,10 +1663,12 @@ var APISwaggerJSON string = `{
             "properties": {
                 "ip": {
                     "type": "string",
-                    "description": " IP address for this object\n\nExample: - \"10.1.1.1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ip: true\n",
+                    "description": " IP address for this object\n\nExample: - \"10.1.1.1\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.ip: true\n",
                     "x-displayname": "IP address",
                     "x-ves-example": "10.1.1.1",
+                    "x-ves-required": "true",
                     "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
                         "ves.io.schema.rules.string.ip": "true"
                     }
                 },
@@ -1702,11 +1695,13 @@ var APISwaggerJSON string = `{
             "properties": {
                 "ip": {
                     "type": "string",
-                    "description": " IP address for this object\n\nExample: - \"10.1.1.1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ip: true\n",
+                    "description": " IP address for this object\n\nExample: - \"10.1.1.1\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.ip: true\n",
                     "title": "ip_address",
                     "x-displayname": "IP address",
                     "x-ves-example": "10.1.1.1",
+                    "x-ves-required": "true",
                     "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
                         "ves.io.schema.rules.string.ip": "true"
                     }
                 },

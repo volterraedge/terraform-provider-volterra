@@ -174,7 +174,7 @@ var DefaultAWSSubnetIdsTypeValidator = func() *ValidateAWSSubnetIdsType {
 	vrhAzName := v.AzNameValidationRuleHandler
 	rulesAzName := map[string]string{
 		"ves.io.schema.rules.message.required": "true",
-		"ves.io.schema.rules.string.in":        "[\"ap-northeast-1a\",\"ap-northeast-1c\",\"ap-northeast-1d\",\"ap-southeast-1a\",\"ap-southeast-1b\",\"ap-southeast-1c\",\"eu-central-1a\",\"eu-central-1b\",\"eu-central-1c\",\"eu-west-1a\",\"eu-west-1b\",\"eu-west-1c\",\"eu-west-3a\",\"eu-west-3b\",\"eu-west-3c\",\"sa-east-1a\",\"sa-east-1b\",\"sa-east-1c\",\"us-east-1a\",\"us-east-1b\",\"us-east-1c\",\"us-east-1d\",\"us-east-1e\",\"us-east-1f\",\"us-east-2a\",\"us-east-2b\",\"us-east-2c\",\"us-west-2a\",\"us-west-2b\",\"us-west-2c\",\"us-west-2d\",\"ca-central-1a\",\"ca-central-1b\",\"ca-central-1d\",\"af-south-1a\",\"af-south-1b\",\"af-south-1c\",\"ap-east-1a\",\"ap-east-1b\",\"ap-east-1c\",\"ap-south-1a\",\"ap-south-1b\",\"ap-south-1c\",\"ap-northeast-2a\",\"ap-northeast-2b\",\"ap-northeast-2c\",\"ap-northeast-2d\",\"ap-southeast-2a\",\"ap-southeast-2b\",\"ap-southeast-2c\",\"eu-south-1a\",\"eu-south-1b\",\"eu-south-1c\",\"eu-north-1a\",\"eu-north-1b\",\"eu-north-1c\",\"eu-west-2a\",\"eu-west-2b\",\"eu-west-2c\",\"me-south-1a\",\"me-south-1b\",\"me-south-1c\",\"us-west-1a\",\"us-west-1b\",\"us-west-1c\",\"ap-southeast-3a\",\"ap-southeast-3b\",\"ap-southeast-3c\"]",
+		"ves.io.schema.rules.string.pattern":   "^([a-z]{2})-([a-z0-9]{4,20})-([a-z0-9]{2})$",
 	}
 	vFn, err = vrhAzName(rulesAzName)
 	if err != nil {
@@ -3217,6 +3217,22 @@ type ValidateDirectConnectConfigType struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateDirectConnectConfigType) AsnChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for asn_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateDirectConnectConfigType) AsnChoiceCustomAsnValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_CustomAsn, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for custom_asn")
+	}
+	return oValidatorFn_CustomAsn, nil
+}
+
 func (v *ValidateDirectConnectConfigType) VifChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -3323,6 +3339,42 @@ func (v *ValidateDirectConnectConfigType) Validate(ctx context.Context, pm inter
 		return nil
 	}
 
+	if fv, exists := v.FldValidators["asn_choice"]; exists {
+		val := m.GetAsnChoice()
+		vOpts := append(opts,
+			db.WithValidateField("asn_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetAsnChoice().(type) {
+	case *DirectConnectConfigType_AutoAsn:
+		if fv, exists := v.FldValidators["asn_choice.auto_asn"]; exists {
+			val := m.GetAsnChoice().(*DirectConnectConfigType_AutoAsn).AutoAsn
+			vOpts := append(opts,
+				db.WithValidateField("asn_choice"),
+				db.WithValidateField("auto_asn"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *DirectConnectConfigType_CustomAsn:
+		if fv, exists := v.FldValidators["asn_choice.custom_asn"]; exists {
+			val := m.GetAsnChoice().(*DirectConnectConfigType_CustomAsn).CustomAsn
+			vOpts := append(opts,
+				db.WithValidateField("asn_choice"),
+				db.WithValidateField("custom_asn"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["cloud_aggregated_prefix"]; exists {
 		vOpts := append(opts, db.WithValidateField("cloud_aggregated_prefix"))
 		if err := fv(ctx, m.GetCloudAggregatedPrefix(), vOpts...); err != nil {
@@ -3400,6 +3452,29 @@ var DefaultDirectConnectConfigTypeValidator = func() *ValidateDirectConnectConfi
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
+
+	vrhAsnChoice := v.AsnChoiceValidationRuleHandler
+	rulesAsnChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhAsnChoice(rulesAsnChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for DirectConnectConfigType.asn_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["asn_choice"] = vFn
+
+	vrhAsnChoiceCustomAsn := v.AsnChoiceCustomAsnValidationRuleHandler
+	rulesAsnChoiceCustomAsn := map[string]string{
+		"ves.io.schema.rules.uint32.gte": "1",
+	}
+	vFnMap["asn_choice.custom_asn"], err = vrhAsnChoiceCustomAsn(rulesAsnChoiceCustomAsn)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field DirectConnectConfigType.asn_choice_custom_asn: %s", err)
+		panic(errMsg)
+	}
+
+	v.FldValidators["asn_choice.custom_asn"] = vFnMap["asn_choice.custom_asn"]
 
 	vrhVifChoice := v.VifChoiceValidationRuleHandler
 	rulesVifChoice := map[string]string{
@@ -5117,6 +5192,138 @@ var DefaultLocalControlPlaneTypeValidator = func() *ValidateLocalControlPlaneTyp
 
 func LocalControlPlaneTypeValidator() db.Validator {
 	return DefaultLocalControlPlaneTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *OfflineSurvivabilityModeType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *OfflineSurvivabilityModeType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *OfflineSurvivabilityModeType) DeepCopy() *OfflineSurvivabilityModeType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &OfflineSurvivabilityModeType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *OfflineSurvivabilityModeType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *OfflineSurvivabilityModeType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return OfflineSurvivabilityModeTypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateOfflineSurvivabilityModeType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateOfflineSurvivabilityModeType) OfflineSurvivabilityModeChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for offline_survivability_mode_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateOfflineSurvivabilityModeType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*OfflineSurvivabilityModeType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *OfflineSurvivabilityModeType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["offline_survivability_mode_choice"]; exists {
+		val := m.GetOfflineSurvivabilityModeChoice()
+		vOpts := append(opts,
+			db.WithValidateField("offline_survivability_mode_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetOfflineSurvivabilityModeChoice().(type) {
+	case *OfflineSurvivabilityModeType_NoOfflineSurvivabilityMode:
+		if fv, exists := v.FldValidators["offline_survivability_mode_choice.no_offline_survivability_mode"]; exists {
+			val := m.GetOfflineSurvivabilityModeChoice().(*OfflineSurvivabilityModeType_NoOfflineSurvivabilityMode).NoOfflineSurvivabilityMode
+			vOpts := append(opts,
+				db.WithValidateField("offline_survivability_mode_choice"),
+				db.WithValidateField("no_offline_survivability_mode"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *OfflineSurvivabilityModeType_EnableOfflineSurvivabilityMode:
+		if fv, exists := v.FldValidators["offline_survivability_mode_choice.enable_offline_survivability_mode"]; exists {
+			val := m.GetOfflineSurvivabilityModeChoice().(*OfflineSurvivabilityModeType_EnableOfflineSurvivabilityMode).EnableOfflineSurvivabilityMode
+			vOpts := append(opts,
+				db.WithValidateField("offline_survivability_mode_choice"),
+				db.WithValidateField("enable_offline_survivability_mode"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultOfflineSurvivabilityModeTypeValidator = func() *ValidateOfflineSurvivabilityModeType {
+	v := &ValidateOfflineSurvivabilityModeType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhOfflineSurvivabilityModeChoice := v.OfflineSurvivabilityModeChoiceValidationRuleHandler
+	rulesOfflineSurvivabilityModeChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhOfflineSurvivabilityModeChoice(rulesOfflineSurvivabilityModeChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for OfflineSurvivabilityModeType.offline_survivability_mode_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["offline_survivability_mode_choice"] = vFn
+
+	return v
+}()
+
+func OfflineSurvivabilityModeTypeValidator() db.Validator {
+	return DefaultOfflineSurvivabilityModeTypeValidator
 }
 
 // augmented methods on protoc/std generated struct

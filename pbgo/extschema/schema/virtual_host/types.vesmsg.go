@@ -2161,6 +2161,32 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	switch m.GetDefaultLbChoice().(type) {
+	case *CreateSpecType_NonDefaultLoadbalancer:
+		if fv, exists := v.FldValidators["default_lb_choice.non_default_loadbalancer"]; exists {
+			val := m.GetDefaultLbChoice().(*CreateSpecType_NonDefaultLoadbalancer).NonDefaultLoadbalancer
+			vOpts := append(opts,
+				db.WithValidateField("default_lb_choice"),
+				db.WithValidateField("non_default_loadbalancer"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CreateSpecType_DefaultLoadbalancer:
+		if fv, exists := v.FldValidators["default_lb_choice.default_loadbalancer"]; exists {
+			val := m.GetDefaultLbChoice().(*CreateSpecType_DefaultLoadbalancer).DefaultLoadbalancer
+			vOpts := append(opts,
+				db.WithValidateField("default_lb_choice"),
+				db.WithValidateField("default_loadbalancer"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["disable_default_error_pages"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("disable_default_error_pages"))
@@ -2474,7 +2500,7 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	vrhDomains := v.DomainsValidationRuleHandler
 	rulesDomains := map[string]string{
 		"ves.io.schema.rules.repeated.items.string.vh_domain": "true",
-		"ves.io.schema.rules.repeated.max_items":              "16",
+		"ves.io.schema.rules.repeated.max_items":              "33",
 		"ves.io.schema.rules.repeated.unique":                 "true",
 	}
 	vFn, err = vrhDomains(rulesDomains)
@@ -3885,15 +3911,6 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 
 	}
 
-	if fv, exists := v.FldValidators["auto_cert_state"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("auto_cert_state"))
-		if err := fv(ctx, m.GetAutoCertState(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
 	if fv, exists := v.FldValidators["buffer_policy"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("buffer_policy"))
@@ -3981,6 +3998,32 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 		vOpts := append(opts, db.WithValidateField("custom_errors"))
 		if err := fv(ctx, m.GetCustomErrors(), vOpts...); err != nil {
 			return err
+		}
+
+	}
+
+	switch m.GetDefaultLbChoice().(type) {
+	case *GetSpecType_NonDefaultLoadbalancer:
+		if fv, exists := v.FldValidators["default_lb_choice.non_default_loadbalancer"]; exists {
+			val := m.GetDefaultLbChoice().(*GetSpecType_NonDefaultLoadbalancer).NonDefaultLoadbalancer
+			vOpts := append(opts,
+				db.WithValidateField("default_lb_choice"),
+				db.WithValidateField("non_default_loadbalancer"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GetSpecType_DefaultLoadbalancer:
+		if fv, exists := v.FldValidators["default_lb_choice.default_loadbalancer"]; exists {
+			val := m.GetDefaultLbChoice().(*GetSpecType_DefaultLoadbalancer).DefaultLoadbalancer
+			vOpts := append(opts,
+				db.WithValidateField("default_lb_choice"),
+				db.WithValidateField("default_loadbalancer"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
 		}
 
 	}
@@ -4337,7 +4380,7 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	vrhDomains := v.DomainsValidationRuleHandler
 	rulesDomains := map[string]string{
 		"ves.io.schema.rules.repeated.items.string.vh_domain": "true",
-		"ves.io.schema.rules.repeated.max_items":              "16",
+		"ves.io.schema.rules.repeated.max_items":              "33",
 		"ves.io.schema.rules.repeated.unique":                 "true",
 	}
 	vFn, err = vrhDomains(rulesDomains)
@@ -4616,6 +4659,12 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
+	if fdrInfos, err := m.GetFastAclDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetFastAclDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
 	if fdrInfos, err := m.GetJwtDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetJwtDRefInfo() FAILED")
 	} else {
@@ -4869,6 +4918,51 @@ func (m *GlobalSpecType) GetDynamicReverseProxyDRefInfo() ([]db.DRefInfo, error)
 	}
 	return drInfos, err
 
+}
+
+func (m *GlobalSpecType) GetFastAclDRefInfo() ([]db.DRefInfo, error) {
+	refs := m.GetFastAcl()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(refs))
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("GlobalSpecType.fast_acl[%d] has a nil value", i)
+		}
+		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "fast_acl.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "fast_acl",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+
+}
+
+// GetFastAclDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *GlobalSpecType) GetFastAclDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+	refdType, err := d.TypeForEntryKind("", "", "fast_acl.Object")
+	if err != nil {
+		return nil, errors.Wrap(err, "Cannot find type for kind: fast_acl")
+	}
+	for _, ref := range m.GetFastAcl() {
+		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+		if err != nil {
+			return nil, errors.Wrap(err, "Getting referred entry")
+		}
+		if refdEnt != nil {
+			entries = append(entries, refdEnt)
+		}
+	}
+
+	return entries, nil
 }
 
 func (m *GlobalSpecType) GetJwtDRefInfo() ([]db.DRefInfo, error) {
@@ -5840,6 +5934,46 @@ func (v *ValidateGlobalSpecType) ServicePolicySetsValidationRuleHandler(rules ma
 	return validatorFn, nil
 }
 
+func (v *ValidateGlobalSpecType) FastAclValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema.ObjectRefType, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := ves_io_schema.ObjectRefTypeValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for fast_acl")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema.ObjectRefType)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema.ObjectRefType, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated fast_acl")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items fast_acl")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*GlobalSpecType)
 	if !ok {
@@ -6065,6 +6199,32 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	switch m.GetDefaultLbChoice().(type) {
+	case *GlobalSpecType_NonDefaultLoadbalancer:
+		if fv, exists := v.FldValidators["default_lb_choice.non_default_loadbalancer"]; exists {
+			val := m.GetDefaultLbChoice().(*GlobalSpecType_NonDefaultLoadbalancer).NonDefaultLoadbalancer
+			vOpts := append(opts,
+				db.WithValidateField("default_lb_choice"),
+				db.WithValidateField("non_default_loadbalancer"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GlobalSpecType_DefaultLoadbalancer:
+		if fv, exists := v.FldValidators["default_lb_choice.default_loadbalancer"]; exists {
+			val := m.GetDefaultLbChoice().(*GlobalSpecType_DefaultLoadbalancer).DefaultLoadbalancer
+			vOpts := append(opts,
+				db.WithValidateField("default_lb_choice"),
+				db.WithValidateField("default_loadbalancer"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["disable_default_error_pages"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("disable_default_error_pages"))
@@ -6124,6 +6284,14 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 		vOpts := append(opts, db.WithValidateField("dynamic_reverse_proxy"))
 		if err := fv(ctx, m.GetDynamicReverseProxy(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["fast_acl"]; exists {
+		vOpts := append(opts, db.WithValidateField("fast_acl"))
+		if err := fv(ctx, m.GetFastAcl(), vOpts...); err != nil {
 			return err
 		}
 
@@ -6553,7 +6721,7 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	vrhDomains := v.DomainsValidationRuleHandler
 	rulesDomains := map[string]string{
 		"ves.io.schema.rules.repeated.items.string.vh_domain": "true",
-		"ves.io.schema.rules.repeated.max_items":              "16",
+		"ves.io.schema.rules.repeated.max_items":              "33",
 		"ves.io.schema.rules.repeated.unique":                 "true",
 	}
 	vFn, err = vrhDomains(rulesDomains)
@@ -6726,6 +6894,17 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["service_policy_sets"] = vFn
+
+	vrhFastAcl := v.FastAclValidationRuleHandler
+	rulesFastAcl := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "1",
+	}
+	vFn, err = vrhFastAcl(rulesFastAcl)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.fast_acl: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["fast_acl"] = vFn
 
 	v.FldValidators["authentication_choice.authentication"] = AuthenticationDetailsValidator().Validate
 
@@ -8367,6 +8546,32 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 
 	}
 
+	switch m.GetDefaultLbChoice().(type) {
+	case *ReplaceSpecType_NonDefaultLoadbalancer:
+		if fv, exists := v.FldValidators["default_lb_choice.non_default_loadbalancer"]; exists {
+			val := m.GetDefaultLbChoice().(*ReplaceSpecType_NonDefaultLoadbalancer).NonDefaultLoadbalancer
+			vOpts := append(opts,
+				db.WithValidateField("default_lb_choice"),
+				db.WithValidateField("non_default_loadbalancer"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ReplaceSpecType_DefaultLoadbalancer:
+		if fv, exists := v.FldValidators["default_lb_choice.default_loadbalancer"]; exists {
+			val := m.GetDefaultLbChoice().(*ReplaceSpecType_DefaultLoadbalancer).DefaultLoadbalancer
+			vOpts := append(opts,
+				db.WithValidateField("default_lb_choice"),
+				db.WithValidateField("default_loadbalancer"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["disable_default_error_pages"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("disable_default_error_pages"))
@@ -8680,7 +8885,7 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	vrhDomains := v.DomainsValidationRuleHandler
 	rulesDomains := map[string]string{
 		"ves.io.schema.rules.repeated.items.string.vh_domain": "true",
-		"ves.io.schema.rules.repeated.max_items":              "16",
+		"ves.io.schema.rules.repeated.max_items":              "33",
 		"ves.io.schema.rules.repeated.unique":                 "true",
 	}
 	vFn, err = vrhDomains(rulesDomains)
@@ -8908,6 +9113,15 @@ func (v *ValidateServiceDomain) Validate(ctx context.Context, pm interface{}, op
 
 		vOpts := append(opts, db.WithValidateField("domain"))
 		if err := fv(ctx, m.GetDomain(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["internal_service_domain"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("internal_service_domain"))
+		if err := fv(ctx, m.GetInternalServiceDomain(), vOpts...); err != nil {
 			return err
 		}
 
@@ -9846,6 +10060,41 @@ func (r *CreateSpecType) GetChallengeTypeFromGlobalSpecType(o *GlobalSpecType) e
 }
 
 // create setters in CreateSpecType from GlobalSpecType for oneof fields
+func (r *CreateSpecType) SetDefaultLbChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.DefaultLbChoice.(type) {
+	case nil:
+		o.DefaultLbChoice = nil
+
+	case *CreateSpecType_DefaultLoadbalancer:
+		o.DefaultLbChoice = &GlobalSpecType_DefaultLoadbalancer{DefaultLoadbalancer: of.DefaultLoadbalancer}
+
+	case *CreateSpecType_NonDefaultLoadbalancer:
+		o.DefaultLbChoice = &GlobalSpecType_NonDefaultLoadbalancer{NonDefaultLoadbalancer: of.NonDefaultLoadbalancer}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *CreateSpecType) GetDefaultLbChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.DefaultLbChoice.(type) {
+	case nil:
+		r.DefaultLbChoice = nil
+
+	case *GlobalSpecType_DefaultLoadbalancer:
+		r.DefaultLbChoice = &CreateSpecType_DefaultLoadbalancer{DefaultLoadbalancer: of.DefaultLoadbalancer}
+
+	case *GlobalSpecType_NonDefaultLoadbalancer:
+		r.DefaultLbChoice = &CreateSpecType_NonDefaultLoadbalancer{NonDefaultLoadbalancer: of.NonDefaultLoadbalancer}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+// create setters in CreateSpecType from GlobalSpecType for oneof fields
 func (r *CreateSpecType) SetPathNormalizeChoiceToGlobalSpecType(o *GlobalSpecType) error {
 	switch of := r.PathNormalizeChoice.(type) {
 	case nil:
@@ -9974,6 +10223,7 @@ func (m *CreateSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool
 	m.CompressionParams = f.GetCompressionParams()
 	m.CorsPolicy = f.GetCorsPolicy()
 	m.CustomErrors = f.GetCustomErrors()
+	m.GetDefaultLbChoiceFromGlobalSpecType(f)
 	m.DisableDefaultErrorPages = f.GetDisableDefaultErrorPages()
 	m.DisableDnsResolve = f.GetDisableDnsResolve()
 	m.Domains = f.GetDomains()
@@ -10021,6 +10271,7 @@ func (m *CreateSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) 
 	f.CompressionParams = m1.CompressionParams
 	f.CorsPolicy = m1.CorsPolicy
 	f.CustomErrors = m1.CustomErrors
+	m1.SetDefaultLbChoiceToGlobalSpecType(f)
 	f.DisableDefaultErrorPages = m1.DisableDefaultErrorPages
 	f.DisableDnsResolve = m1.DisableDnsResolve
 	f.Domains = m1.Domains
@@ -10122,6 +10373,41 @@ func (r *GetSpecType) GetChallengeTypeFromGlobalSpecType(o *GlobalSpecType) erro
 
 	case *GlobalSpecType_NoChallenge:
 		r.ChallengeType = &GetSpecType_NoChallenge{NoChallenge: of.NoChallenge}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+// create setters in GetSpecType from GlobalSpecType for oneof fields
+func (r *GetSpecType) SetDefaultLbChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.DefaultLbChoice.(type) {
+	case nil:
+		o.DefaultLbChoice = nil
+
+	case *GetSpecType_DefaultLoadbalancer:
+		o.DefaultLbChoice = &GlobalSpecType_DefaultLoadbalancer{DefaultLoadbalancer: of.DefaultLoadbalancer}
+
+	case *GetSpecType_NonDefaultLoadbalancer:
+		o.DefaultLbChoice = &GlobalSpecType_NonDefaultLoadbalancer{NonDefaultLoadbalancer: of.NonDefaultLoadbalancer}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *GetSpecType) GetDefaultLbChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.DefaultLbChoice.(type) {
+	case nil:
+		r.DefaultLbChoice = nil
+
+	case *GlobalSpecType_DefaultLoadbalancer:
+		r.DefaultLbChoice = &GetSpecType_DefaultLoadbalancer{DefaultLoadbalancer: of.DefaultLoadbalancer}
+
+	case *GlobalSpecType_NonDefaultLoadbalancer:
+		r.DefaultLbChoice = &GetSpecType_NonDefaultLoadbalancer{NonDefaultLoadbalancer: of.NonDefaultLoadbalancer}
 
 	default:
 		return fmt.Errorf("Unknown oneof field %T", of)
@@ -10254,13 +10540,13 @@ func (m *GetSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	m.AdvertisePolicies = f.GetAdvertisePolicies()
 	m.GetAuthenticationChoiceFromGlobalSpecType(f)
 	m.AutoCertInfo = f.GetAutoCertInfo()
-	m.AutoCertState = f.GetAutoCertState()
 	m.BufferPolicy = f.GetBufferPolicy()
 	m.CdnService = f.GetCdnService()
 	m.GetChallengeTypeFromGlobalSpecType(f)
 	m.CompressionParams = f.GetCompressionParams()
 	m.CorsPolicy = f.GetCorsPolicy()
 	m.CustomErrors = f.GetCustomErrors()
+	m.GetDefaultLbChoiceFromGlobalSpecType(f)
 	m.DisableDefaultErrorPages = f.GetDisableDefaultErrorPages()
 	m.DisableDnsResolve = f.GetDisableDnsResolve()
 	m.DnsInfo = f.GetDnsInfo()
@@ -10308,13 +10594,13 @@ func (m *GetSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	f.AdvertisePolicies = m1.AdvertisePolicies
 	m1.SetAuthenticationChoiceToGlobalSpecType(f)
 	f.AutoCertInfo = m1.AutoCertInfo
-	f.AutoCertState = m1.AutoCertState
 	f.BufferPolicy = m1.BufferPolicy
 	f.CdnService = m1.CdnService
 	m1.SetChallengeTypeToGlobalSpecType(f)
 	f.CompressionParams = m1.CompressionParams
 	f.CorsPolicy = m1.CorsPolicy
 	f.CustomErrors = m1.CustomErrors
+	m1.SetDefaultLbChoiceToGlobalSpecType(f)
 	f.DisableDefaultErrorPages = m1.DisableDefaultErrorPages
 	f.DisableDnsResolve = m1.DisableDnsResolve
 	f.DnsInfo = m1.DnsInfo
@@ -10420,6 +10706,41 @@ func (r *ReplaceSpecType) GetChallengeTypeFromGlobalSpecType(o *GlobalSpecType) 
 
 	case *GlobalSpecType_NoChallenge:
 		r.ChallengeType = &ReplaceSpecType_NoChallenge{NoChallenge: of.NoChallenge}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+// create setters in ReplaceSpecType from GlobalSpecType for oneof fields
+func (r *ReplaceSpecType) SetDefaultLbChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.DefaultLbChoice.(type) {
+	case nil:
+		o.DefaultLbChoice = nil
+
+	case *ReplaceSpecType_DefaultLoadbalancer:
+		o.DefaultLbChoice = &GlobalSpecType_DefaultLoadbalancer{DefaultLoadbalancer: of.DefaultLoadbalancer}
+
+	case *ReplaceSpecType_NonDefaultLoadbalancer:
+		o.DefaultLbChoice = &GlobalSpecType_NonDefaultLoadbalancer{NonDefaultLoadbalancer: of.NonDefaultLoadbalancer}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *ReplaceSpecType) GetDefaultLbChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.DefaultLbChoice.(type) {
+	case nil:
+		r.DefaultLbChoice = nil
+
+	case *GlobalSpecType_DefaultLoadbalancer:
+		r.DefaultLbChoice = &ReplaceSpecType_DefaultLoadbalancer{DefaultLoadbalancer: of.DefaultLoadbalancer}
+
+	case *GlobalSpecType_NonDefaultLoadbalancer:
+		r.DefaultLbChoice = &ReplaceSpecType_NonDefaultLoadbalancer{NonDefaultLoadbalancer: of.NonDefaultLoadbalancer}
 
 	default:
 		return fmt.Errorf("Unknown oneof field %T", of)
@@ -10556,6 +10877,7 @@ func (m *ReplaceSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy boo
 	m.CompressionParams = f.GetCompressionParams()
 	m.CorsPolicy = f.GetCorsPolicy()
 	m.CustomErrors = f.GetCustomErrors()
+	m.GetDefaultLbChoiceFromGlobalSpecType(f)
 	m.DisableDefaultErrorPages = f.GetDisableDefaultErrorPages()
 	m.DisableDnsResolve = f.GetDisableDnsResolve()
 	m.Domains = f.GetDomains()
@@ -10603,6 +10925,7 @@ func (m *ReplaceSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool)
 	f.CompressionParams = m1.CompressionParams
 	f.CorsPolicy = m1.CorsPolicy
 	f.CustomErrors = m1.CustomErrors
+	m1.SetDefaultLbChoiceToGlobalSpecType(f)
 	f.DisableDefaultErrorPages = m1.DisableDefaultErrorPages
 	f.DisableDnsResolve = m1.DisableDnsResolve
 	f.Domains = m1.Domains

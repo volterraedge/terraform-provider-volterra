@@ -2988,8 +2988,8 @@ var APISwaggerJSON string = `{
                 "PSH",
                 "ACK",
                 "URG",
-                "KEEPALIVE",
-                "ALL_TCP_FLAGS"
+                "ALL_TCP_FLAGS",
+                "KEEPALIVE"
             ],
             "default": "FIN",
             "x-displayname": "TCP Flags",

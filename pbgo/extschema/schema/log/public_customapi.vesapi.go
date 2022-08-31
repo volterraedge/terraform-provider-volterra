@@ -375,7 +375,8 @@ func (c *CustomAPIRestClient) doRPCAccessLogAggregationQuery(ctx context.Context
 	}
 	defer rsp.Body.Close()
 
-	if rsp.StatusCode != http.StatusOK {
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
 		body, err := ioutil.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
 	}
@@ -386,7 +387,7 @@ func (c *CustomAPIRestClient) doRPCAccessLogAggregationQuery(ctx context.Context
 	}
 	pbRsp := &LogAggregationResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
-		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.log.LogAggregationResponse", body)
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.log.LogAggregationResponse", body)
 
 	}
 	if callOpts.OutCallResponse != nil {
@@ -464,7 +465,8 @@ func (c *CustomAPIRestClient) doRPCAccessLogQueryV2(ctx context.Context, callOpt
 	}
 	defer rsp.Body.Close()
 
-	if rsp.StatusCode != http.StatusOK {
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
 		body, err := ioutil.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
 	}
@@ -475,7 +477,7 @@ func (c *CustomAPIRestClient) doRPCAccessLogQueryV2(ctx context.Context, callOpt
 	}
 	pbRsp := &LogResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
-		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.log.LogResponse", body)
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.log.LogResponse", body)
 
 	}
 	if callOpts.OutCallResponse != nil {
@@ -547,7 +549,8 @@ func (c *CustomAPIRestClient) doRPCAccessLogScrollQuery(ctx context.Context, cal
 	}
 	defer rsp.Body.Close()
 
-	if rsp.StatusCode != http.StatusOK {
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
 		body, err := ioutil.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
 	}
@@ -558,7 +561,7 @@ func (c *CustomAPIRestClient) doRPCAccessLogScrollQuery(ctx context.Context, cal
 	}
 	pbRsp := &LogResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
-		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.log.LogResponse", body)
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.log.LogResponse", body)
 
 	}
 	if callOpts.OutCallResponse != nil {
@@ -633,7 +636,8 @@ func (c *CustomAPIRestClient) doRPCAuditLogAggregationQuery(ctx context.Context,
 	}
 	defer rsp.Body.Close()
 
-	if rsp.StatusCode != http.StatusOK {
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
 		body, err := ioutil.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
 	}
@@ -644,7 +648,7 @@ func (c *CustomAPIRestClient) doRPCAuditLogAggregationQuery(ctx context.Context,
 	}
 	pbRsp := &LogAggregationResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
-		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.log.LogAggregationResponse", body)
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.log.LogAggregationResponse", body)
 
 	}
 	if callOpts.OutCallResponse != nil {
@@ -722,7 +726,8 @@ func (c *CustomAPIRestClient) doRPCAuditLogQueryV2(ctx context.Context, callOpts
 	}
 	defer rsp.Body.Close()
 
-	if rsp.StatusCode != http.StatusOK {
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
 		body, err := ioutil.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
 	}
@@ -733,7 +738,7 @@ func (c *CustomAPIRestClient) doRPCAuditLogQueryV2(ctx context.Context, callOpts
 	}
 	pbRsp := &LogResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
-		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.log.LogResponse", body)
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.log.LogResponse", body)
 
 	}
 	if callOpts.OutCallResponse != nil {
@@ -805,7 +810,8 @@ func (c *CustomAPIRestClient) doRPCAuditLogScrollQuery(ctx context.Context, call
 	}
 	defer rsp.Body.Close()
 
-	if rsp.StatusCode != http.StatusOK {
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
 		body, err := ioutil.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
 	}
@@ -816,7 +822,7 @@ func (c *CustomAPIRestClient) doRPCAuditLogScrollQuery(ctx context.Context, call
 	}
 	pbRsp := &LogResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
-		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.log.LogResponse", body)
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.log.LogResponse", body)
 
 	}
 	if callOpts.OutCallResponse != nil {
@@ -891,7 +897,8 @@ func (c *CustomAPIRestClient) doRPCFirewallLogAggregationQuery(ctx context.Conte
 	}
 	defer rsp.Body.Close()
 
-	if rsp.StatusCode != http.StatusOK {
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
 		body, err := ioutil.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
 	}
@@ -902,7 +909,7 @@ func (c *CustomAPIRestClient) doRPCFirewallLogAggregationQuery(ctx context.Conte
 	}
 	pbRsp := &LogAggregationResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
-		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.log.LogAggregationResponse", body)
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.log.LogAggregationResponse", body)
 
 	}
 	if callOpts.OutCallResponse != nil {
@@ -980,7 +987,8 @@ func (c *CustomAPIRestClient) doRPCFirewallLogQuery(ctx context.Context, callOpt
 	}
 	defer rsp.Body.Close()
 
-	if rsp.StatusCode != http.StatusOK {
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
 		body, err := ioutil.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
 	}
@@ -991,7 +999,7 @@ func (c *CustomAPIRestClient) doRPCFirewallLogQuery(ctx context.Context, callOpt
 	}
 	pbRsp := &LogResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
-		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.log.LogResponse", body)
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.log.LogResponse", body)
 
 	}
 	if callOpts.OutCallResponse != nil {
@@ -1063,7 +1071,8 @@ func (c *CustomAPIRestClient) doRPCFirewallLogScrollQuery(ctx context.Context, c
 	}
 	defer rsp.Body.Close()
 
-	if rsp.StatusCode != http.StatusOK {
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
 		body, err := ioutil.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
 	}
@@ -1074,7 +1083,7 @@ func (c *CustomAPIRestClient) doRPCFirewallLogScrollQuery(ctx context.Context, c
 	}
 	pbRsp := &LogResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
-		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.log.LogResponse", body)
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.log.LogResponse", body)
 
 	}
 	if callOpts.OutCallResponse != nil {
@@ -1150,7 +1159,8 @@ func (c *CustomAPIRestClient) doRPCK8SAuditLogAggregationQuery(ctx context.Conte
 	}
 	defer rsp.Body.Close()
 
-	if rsp.StatusCode != http.StatusOK {
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
 		body, err := ioutil.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
 	}
@@ -1161,7 +1171,7 @@ func (c *CustomAPIRestClient) doRPCK8SAuditLogAggregationQuery(ctx context.Conte
 	}
 	pbRsp := &LogAggregationResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
-		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.log.LogAggregationResponse", body)
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.log.LogAggregationResponse", body)
 
 	}
 	if callOpts.OutCallResponse != nil {
@@ -1240,7 +1250,8 @@ func (c *CustomAPIRestClient) doRPCK8SAuditLogQuery(ctx context.Context, callOpt
 	}
 	defer rsp.Body.Close()
 
-	if rsp.StatusCode != http.StatusOK {
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
 		body, err := ioutil.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
 	}
@@ -1251,7 +1262,7 @@ func (c *CustomAPIRestClient) doRPCK8SAuditLogQuery(ctx context.Context, callOpt
 	}
 	pbRsp := &LogResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
-		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.log.LogResponse", body)
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.log.LogResponse", body)
 
 	}
 	if callOpts.OutCallResponse != nil {
@@ -1323,7 +1334,8 @@ func (c *CustomAPIRestClient) doRPCK8SAuditLogScrollQuery(ctx context.Context, c
 	}
 	defer rsp.Body.Close()
 
-	if rsp.StatusCode != http.StatusOK {
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
 		body, err := ioutil.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
 	}
@@ -1334,7 +1346,7 @@ func (c *CustomAPIRestClient) doRPCK8SAuditLogScrollQuery(ctx context.Context, c
 	}
 	pbRsp := &LogResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
-		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.log.LogResponse", body)
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.log.LogResponse", body)
 
 	}
 	if callOpts.OutCallResponse != nil {
@@ -1410,7 +1422,8 @@ func (c *CustomAPIRestClient) doRPCK8SEventsAggregationQuery(ctx context.Context
 	}
 	defer rsp.Body.Close()
 
-	if rsp.StatusCode != http.StatusOK {
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
 		body, err := ioutil.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
 	}
@@ -1421,7 +1434,7 @@ func (c *CustomAPIRestClient) doRPCK8SEventsAggregationQuery(ctx context.Context
 	}
 	pbRsp := &LogAggregationResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
-		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.log.LogAggregationResponse", body)
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.log.LogAggregationResponse", body)
 
 	}
 	if callOpts.OutCallResponse != nil {
@@ -1500,7 +1513,8 @@ func (c *CustomAPIRestClient) doRPCK8SEventsQuery(ctx context.Context, callOpts 
 	}
 	defer rsp.Body.Close()
 
-	if rsp.StatusCode != http.StatusOK {
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
 		body, err := ioutil.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
 	}
@@ -1511,7 +1525,7 @@ func (c *CustomAPIRestClient) doRPCK8SEventsQuery(ctx context.Context, callOpts 
 	}
 	pbRsp := &LogResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
-		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.log.LogResponse", body)
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.log.LogResponse", body)
 
 	}
 	if callOpts.OutCallResponse != nil {
@@ -1583,7 +1597,8 @@ func (c *CustomAPIRestClient) doRPCK8SEventsScrollQuery(ctx context.Context, cal
 	}
 	defer rsp.Body.Close()
 
-	if rsp.StatusCode != http.StatusOK {
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
 		body, err := ioutil.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
 	}
@@ -1594,7 +1609,7 @@ func (c *CustomAPIRestClient) doRPCK8SEventsScrollQuery(ctx context.Context, cal
 	}
 	pbRsp := &LogResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
-		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.log.LogResponse", body)
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.log.LogResponse", body)
 
 	}
 	if callOpts.OutCallResponse != nil {
@@ -1669,7 +1684,8 @@ func (c *CustomAPIRestClient) doRPCVK8SAuditLogAggregationQuery(ctx context.Cont
 	}
 	defer rsp.Body.Close()
 
-	if rsp.StatusCode != http.StatusOK {
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
 		body, err := ioutil.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
 	}
@@ -1680,7 +1696,7 @@ func (c *CustomAPIRestClient) doRPCVK8SAuditLogAggregationQuery(ctx context.Cont
 	}
 	pbRsp := &LogAggregationResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
-		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.log.LogAggregationResponse", body)
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.log.LogAggregationResponse", body)
 
 	}
 	if callOpts.OutCallResponse != nil {
@@ -1758,7 +1774,8 @@ func (c *CustomAPIRestClient) doRPCVK8SAuditLogQuery(ctx context.Context, callOp
 	}
 	defer rsp.Body.Close()
 
-	if rsp.StatusCode != http.StatusOK {
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
 		body, err := ioutil.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
 	}
@@ -1769,7 +1786,7 @@ func (c *CustomAPIRestClient) doRPCVK8SAuditLogQuery(ctx context.Context, callOp
 	}
 	pbRsp := &LogResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
-		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.log.LogResponse", body)
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.log.LogResponse", body)
 
 	}
 	if callOpts.OutCallResponse != nil {
@@ -1841,7 +1858,8 @@ func (c *CustomAPIRestClient) doRPCVK8SAuditLogScrollQuery(ctx context.Context, 
 	}
 	defer rsp.Body.Close()
 
-	if rsp.StatusCode != http.StatusOK {
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
 		body, err := ioutil.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
 	}
@@ -1852,7 +1870,7 @@ func (c *CustomAPIRestClient) doRPCVK8SAuditLogScrollQuery(ctx context.Context, 
 	}
 	pbRsp := &LogResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
-		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.log.LogResponse", body)
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.log.LogResponse", body)
 
 	}
 	if callOpts.OutCallResponse != nil {
@@ -1927,7 +1945,8 @@ func (c *CustomAPIRestClient) doRPCVK8SEventsAggregationQuery(ctx context.Contex
 	}
 	defer rsp.Body.Close()
 
-	if rsp.StatusCode != http.StatusOK {
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
 		body, err := ioutil.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
 	}
@@ -1938,7 +1957,7 @@ func (c *CustomAPIRestClient) doRPCVK8SEventsAggregationQuery(ctx context.Contex
 	}
 	pbRsp := &LogAggregationResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
-		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.log.LogAggregationResponse", body)
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.log.LogAggregationResponse", body)
 
 	}
 	if callOpts.OutCallResponse != nil {
@@ -2016,7 +2035,8 @@ func (c *CustomAPIRestClient) doRPCVK8SEventsQuery(ctx context.Context, callOpts
 	}
 	defer rsp.Body.Close()
 
-	if rsp.StatusCode != http.StatusOK {
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
 		body, err := ioutil.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
 	}
@@ -2027,7 +2047,7 @@ func (c *CustomAPIRestClient) doRPCVK8SEventsQuery(ctx context.Context, callOpts
 	}
 	pbRsp := &LogResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
-		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.log.LogResponse", body)
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.log.LogResponse", body)
 
 	}
 	if callOpts.OutCallResponse != nil {
@@ -2099,7 +2119,8 @@ func (c *CustomAPIRestClient) doRPCVK8SEventsScrollQuery(ctx context.Context, ca
 	}
 	defer rsp.Body.Close()
 
-	if rsp.StatusCode != http.StatusOK {
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
 		body, err := ioutil.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
 	}
@@ -2110,7 +2131,7 @@ func (c *CustomAPIRestClient) doRPCVK8SEventsScrollQuery(ctx context.Context, ca
 	}
 	pbRsp := &LogResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
-		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.log.LogResponse", body)
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.log.LogResponse", body)
 
 	}
 	if callOpts.OutCallResponse != nil {
@@ -5567,6 +5588,11 @@ var CustomAPISwaggerJSON string = `{
                     "items": {
                         "$ref": "#/definitions/logDateAggregationBucket"
                     }
+                },
+                "step": {
+                    "type": "string",
+                    "description": "x-displayName: \"Step\"\nx-example: \"30m\"\nActual step size in the response. It could be higher than the requested step depending on the query duration and/or the log rollups.\nFormat: [0-9][smhd], where s - seconds, m - minutes, h - hours, d - days",
+                    "title": "step"
                 }
             }
         },
@@ -6003,6 +6029,11 @@ var CustomAPISwaggerJSON string = `{
                     "description": "Field aggregation data",
                     "title": "field aggregation\nx-displayName: \"Field Aggregation\"",
                     "$ref": "#/definitions/logFieldAggregationData"
+                },
+                "multi_field_aggregation": {
+                    "description": "Multi-Field aggregation data",
+                    "title": "multi-field aggregation\nx-displayName: \"Multi-Field Aggregation\"",
+                    "$ref": "#/definitions/logMultiFieldAggregationData"
                 }
             }
         },
@@ -6066,6 +6097,39 @@ var CustomAPISwaggerJSON string = `{
                     "format": "uint64",
                     "x-displayname": "Total Hits",
                     "x-ves-example": "0"
+                }
+            }
+        },
+        "logMultiFieldAggregationBucket": {
+            "type": "object",
+            "description": "x-displayName: \"Multi-Field Aggregation Bucket\"\nMulti-Field aggregation bucket containing field values and the number of logs.",
+            "title": "MultiFieldAggregationBucket",
+            "properties": {
+                "count": {
+                    "type": "string",
+                    "description": "x-displayName: \"Count\"\nx-example: 45\n\nnumber of logs in this bucket",
+                    "title": "count",
+                    "format": "uint64"
+                },
+                "keys": {
+                    "type": "object",
+                    "description": "x-displayName: \"Keys\"\nKeys contain the name/value pair that identifies the unique combination of multiple key fields\nx-example: \"{\"SRC_IP\": \"10.10.10.1\", \"COUNTRY\": \"US\"}\"",
+                    "title": "keys"
+                }
+            }
+        },
+        "logMultiFieldAggregationData": {
+            "type": "object",
+            "description": "x-displayName: \"Multi-Field Aggregation Data\"\nMulti-Field Aggregation data",
+            "title": "MultiFieldAggregationData",
+            "properties": {
+                "buckets": {
+                    "type": "array",
+                    "description": "x-displayName: \"Buckets\"\nLists of buckets containing field values and the corresponding log count",
+                    "title": "buckets",
+                    "items": {
+                        "$ref": "#/definitions/logMultiFieldAggregationBucket"
+                    }
                 }
             }
         },

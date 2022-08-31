@@ -4217,7 +4217,7 @@ var DefaultMatcherTypeValidator = func() *ValidateMatcherType {
 	rulesExactValues := map[string]string{
 		"ves.io.schema.rules.repeated.items.string.max_bytes": "256",
 		"ves.io.schema.rules.repeated.items.string.not_empty": "true",
-		"ves.io.schema.rules.repeated.max_items":              "16",
+		"ves.io.schema.rules.repeated.max_items":              "64",
 		"ves.io.schema.rules.repeated.unique":                 "true",
 	}
 	vFn, err = vrhExactValues(rulesExactValues)
@@ -6579,6 +6579,16 @@ func (v *ValidateShapeProtectedEndpointAction) MitigationValidationRuleHandler(r
 	return validatorFn, nil
 }
 
+func (v *ValidateShapeProtectedEndpointAction) WebScrapingValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewBoolValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for web_scraping")
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateShapeProtectedEndpointAction) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*ShapeProtectedEndpointAction)
 	if !ok {
@@ -6606,6 +6616,15 @@ func (v *ValidateShapeProtectedEndpointAction) Validate(ctx context.Context, pm 
 
 		vOpts := append(opts, db.WithValidateField("mitigation"))
 		if err := fv(ctx, m.GetMitigation(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["web_scraping"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("web_scraping"))
+		if err := fv(ctx, m.GetWebScraping(), vOpts...); err != nil {
 			return err
 		}
 
@@ -6647,6 +6666,17 @@ var DefaultShapeProtectedEndpointActionValidator = func() *ValidateShapeProtecte
 		panic(errMsg)
 	}
 	v.FldValidators["mitigation"] = vFn
+
+	vrhWebScraping := v.WebScrapingValidationRuleHandler
+	rulesWebScraping := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhWebScraping(rulesWebScraping)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ShapeProtectedEndpointAction.web_scraping: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["web_scraping"] = vFn
 
 	return v
 }()

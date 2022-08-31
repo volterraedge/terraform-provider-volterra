@@ -1794,6 +1794,15 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["offline_survivability_mode"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("offline_survivability_mode"))
+		if err := fv(ctx, m.GetOfflineSurvivabilityMode(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["operating_system_version"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("operating_system_version"))
@@ -2272,6 +2281,8 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	v.FldValidators["storage_static_routes_choice.storage_static_routes"] = FleetStorageStaticRoutesListTypeValidator().Validate
 
 	v.FldValidators["usb_policy_choice.usb_policy"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
+
+	v.FldValidators["offline_survivability_mode"] = ves_io_schema_views.OfflineSurvivabilityModeTypeValidator().Validate
 
 	return v
 }()
@@ -7347,6 +7358,15 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 
 	}
 
+	if fv, exists := v.FldValidators["offline_survivability_mode"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("offline_survivability_mode"))
+		if err := fv(ctx, m.GetOfflineSurvivabilityMode(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["operating_system_version"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("operating_system_version"))
@@ -7825,6 +7845,8 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v.FldValidators["storage_static_routes_choice.storage_static_routes"] = FleetStorageStaticRoutesListTypeValidator().Validate
 
 	v.FldValidators["usb_policy_choice.usb_policy"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
+
+	v.FldValidators["offline_survivability_mode"] = ves_io_schema_views.OfflineSurvivabilityModeTypeValidator().Validate
 
 	return v
 }()
@@ -9574,6 +9596,15 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["offline_survivability_mode"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("offline_survivability_mode"))
+		if err := fv(ctx, m.GetOfflineSurvivabilityMode(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["operating_system_version"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("operating_system_version"))
@@ -10118,6 +10149,8 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v.FldValidators["k8s_cluster"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	v.FldValidators["local_control_plane"] = LocalControlPlaneTypeValidator().Validate
+
+	v.FldValidators["offline_survivability_mode"] = ves_io_schema_views.OfflineSurvivabilityModeTypeValidator().Validate
 
 	v.FldValidators["view_internal"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
@@ -17019,6 +17052,7 @@ func (m *CreateSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool
 	m.GetLogsReceiverChoiceFromGlobalSpecType(f)
 	m.NetworkConnectors = f.GetNetworkConnectors()
 	m.NetworkFirewall = f.GetNetworkFirewall()
+	m.OfflineSurvivabilityMode = f.GetOfflineSurvivabilityMode()
 	m.OperatingSystemVersion = f.GetOperatingSystemVersion()
 	m.OutsideVirtualNetwork = f.GetOutsideVirtualNetwork()
 	m.GetStorageClassChoiceFromGlobalSpecType(f)
@@ -17056,6 +17090,7 @@ func (m *CreateSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) 
 	m1.SetLogsReceiverChoiceToGlobalSpecType(f)
 	f.NetworkConnectors = m1.NetworkConnectors
 	f.NetworkFirewall = m1.NetworkFirewall
+	f.OfflineSurvivabilityMode = m1.OfflineSurvivabilityMode
 	f.OperatingSystemVersion = m1.OperatingSystemVersion
 	f.OutsideVirtualNetwork = m1.OutsideVirtualNetwork
 	m1.SetStorageClassChoiceToGlobalSpecType(f)
@@ -17458,6 +17493,7 @@ func (m *GetSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	m.GetLogsReceiverChoiceFromGlobalSpecType(f)
 	m.NetworkConnectors = f.GetNetworkConnectors()
 	m.NetworkFirewall = f.GetNetworkFirewall()
+	m.OfflineSurvivabilityMode = f.GetOfflineSurvivabilityMode()
 	m.OperatingSystemVersion = f.GetOperatingSystemVersion()
 	m.OutsideVirtualNetwork = f.GetOutsideVirtualNetwork()
 	m.GetStorageClassChoiceFromGlobalSpecType(f)
@@ -17495,6 +17531,7 @@ func (m *GetSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	m1.SetLogsReceiverChoiceToGlobalSpecType(f)
 	f.NetworkConnectors = m1.NetworkConnectors
 	f.NetworkFirewall = m1.NetworkFirewall
+	f.OfflineSurvivabilityMode = m1.OfflineSurvivabilityMode
 	f.OperatingSystemVersion = m1.OperatingSystemVersion
 	f.OutsideVirtualNetwork = m1.OutsideVirtualNetwork
 	m1.SetStorageClassChoiceToGlobalSpecType(f)

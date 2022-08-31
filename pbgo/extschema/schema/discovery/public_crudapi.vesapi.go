@@ -1595,16 +1595,7 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 		item.Disabled = o.GetMetadata().GetDisable()
 
 		if len(req.ReportFields) > 0 {
-			noDBForm, _ := flags.GetEnvGetRspNoDBForm()
-			if !noDBForm {
-				item.Object = o.Object
-				sf.Logger().Alert(svcfw.GetResponseInDBForm,
-					log.MinorAlert,
-					zap.String("user", server.UserFromContext(ctx)),
-					zap.String("useragent", server.UseragentStrFromContext(ctx)),
-					zap.String("operation", "List"),
-				)
-			}
+			item.Object = o.Object
 
 			item.Metadata = &ves_io_schema.ObjectGetMetaType{}
 			item.Metadata.FromObjectMetaType(o.Metadata)
@@ -1683,7 +1674,7 @@ var APISwaggerJSON string = `{
     "paths": {
         "/public/namespaces/{metadata.namespace}/discoverys": {
             "post": {
-                "summary": "Create discovery",
+                "summary": "Create Discovery",
                 "description": "API to create discovery object for a site or virtual site in system namespace",
                 "operationId": "ves.io.schema.discovery.API.Create",
                 "responses": {
@@ -1775,7 +1766,7 @@ var APISwaggerJSON string = `{
         },
         "/public/namespaces/{metadata.namespace}/discoverys/{metadata.name}": {
             "put": {
-                "summary": "Replace discovery",
+                "summary": "Replace Discovery",
                 "description": "API to replace discovery object for a site or virtual site in system namespace",
                 "operationId": "ves.io.schema.discovery.API.Replace",
                 "responses": {
@@ -1875,7 +1866,7 @@ var APISwaggerJSON string = `{
         },
         "/public/namespaces/{namespace}/discoverys": {
             "get": {
-                "summary": "List",
+                "summary": "List Discovery",
                 "description": "List the set of discovery in a namespace",
                 "operationId": "ves.io.schema.discovery.API.List",
                 "responses": {
@@ -1991,7 +1982,7 @@ var APISwaggerJSON string = `{
         },
         "/public/namespaces/{namespace}/discoverys/{name}": {
             "get": {
-                "summary": "Get discovery",
+                "summary": "Get Discovery",
                 "description": "API to Get discovery object for a site or virtual site in system namespace",
                 "operationId": "ves.io.schema.discovery.API.Get",
                 "responses": {
@@ -2095,7 +2086,7 @@ var APISwaggerJSON string = `{
                 "x-ves-proto-rpc": "ves.io.schema.discovery.API.Get"
             },
             "delete": {
-                "summary": "Delete",
+                "summary": "Delete Discovery",
                 "description": "Delete the specified discovery",
                 "operationId": "ves.io.schema.discovery.API.Delete",
                 "responses": {

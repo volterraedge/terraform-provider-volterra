@@ -1595,16 +1595,7 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 		item.Disabled = o.GetMetadata().GetDisable()
 
 		if len(req.ReportFields) > 0 {
-			noDBForm, _ := flags.GetEnvGetRspNoDBForm()
-			if !noDBForm {
-				item.Object = o.Object
-				sf.Logger().Alert(svcfw.GetResponseInDBForm,
-					log.MinorAlert,
-					zap.String("user", server.UserFromContext(ctx)),
-					zap.String("useragent", server.UseragentStrFromContext(ctx)),
-					zap.String("operation", "List"),
-				)
-			}
+			item.Object = o.Object
 
 			item.Metadata = &ves_io_schema.ObjectGetMetaType{}
 			item.Metadata.FromObjectMetaType(o.Metadata)
@@ -1683,7 +1674,7 @@ var APISwaggerJSON string = `{
     "paths": {
         "/public/namespaces/{metadata.namespace}/protocol_policers": {
             "post": {
-                "summary": "Create a Protocol policer object",
+                "summary": "Create Protocol Policer",
                 "description": "Create a protocol_policer object, protocol_policer object contains list\nof L4 protocol match condition and corresponding traffic rate limits",
                 "operationId": "ves.io.schema.protocol_policer.API.Create",
                 "responses": {
@@ -1775,7 +1766,7 @@ var APISwaggerJSON string = `{
         },
         "/public/namespaces/{metadata.namespace}/protocol_policers/{metadata.name}": {
             "put": {
-                "summary": "Replace a Protocol policer object",
+                "summary": "Replace Protocol Policer",
                 "description": "Replace a protocol_policer object with new L4 protocol match condition and\ncorresponding traffic rate limits",
                 "operationId": "ves.io.schema.protocol_policer.API.Replace",
                 "responses": {
@@ -1875,7 +1866,7 @@ var APISwaggerJSON string = `{
         },
         "/public/namespaces/{namespace}/protocol_policers": {
             "get": {
-                "summary": "List",
+                "summary": "List Protocol Policer",
                 "description": "List the set of protocol_policer in a namespace",
                 "operationId": "ves.io.schema.protocol_policer.API.List",
                 "responses": {
@@ -1991,7 +1982,7 @@ var APISwaggerJSON string = `{
         },
         "/public/namespaces/{namespace}/protocol_policers/{name}": {
             "get": {
-                "summary": "Get a Protocol policer object",
+                "summary": "Get Protocol Policer",
                 "description": "Get specification of a protocol_policer object with L4 protocol match condition and\ncorresponding traffic rate limits",
                 "operationId": "ves.io.schema.protocol_policer.API.Get",
                 "responses": {
@@ -2095,7 +2086,7 @@ var APISwaggerJSON string = `{
                 "x-ves-proto-rpc": "ves.io.schema.protocol_policer.API.Get"
             },
             "delete": {
-                "summary": "Delete",
+                "summary": "Delete Protocol Policer",
                 "description": "Delete the specified protocol_policer",
                 "operationId": "ves.io.schema.protocol_policer.API.Delete",
                 "responses": {
@@ -2801,8 +2792,8 @@ var APISwaggerJSON string = `{
                 "PSH",
                 "ACK",
                 "URG",
-                "KEEPALIVE",
-                "ALL_TCP_FLAGS"
+                "ALL_TCP_FLAGS",
+                "KEEPALIVE"
             ],
             "default": "FIN",
             "x-displayname": "TCP Flags",

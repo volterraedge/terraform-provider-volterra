@@ -1595,16 +1595,7 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 		item.Disabled = o.GetMetadata().GetDisable()
 
 		if len(req.ReportFields) > 0 {
-			noDBForm, _ := flags.GetEnvGetRspNoDBForm()
-			if !noDBForm {
-				item.Object = o.Object
-				sf.Logger().Alert(svcfw.GetResponseInDBForm,
-					log.MinorAlert,
-					zap.String("user", server.UserFromContext(ctx)),
-					zap.String("useragent", server.UseragentStrFromContext(ctx)),
-					zap.String("operation", "List"),
-				)
-			}
+			item.Object = o.Object
 
 			item.Metadata = &ves_io_schema.ObjectGetMetaType{}
 			item.Metadata.FromObjectMetaType(o.Metadata)
@@ -1683,7 +1674,7 @@ var APISwaggerJSON string = `{
     "paths": {
         "/public/namespaces/{metadata.namespace}/policers": {
             "post": {
-                "summary": "Create a policer",
+                "summary": "Create Policer",
                 "description": "Create a new policer with traffic rate limits",
                 "operationId": "ves.io.schema.policer.API.Create",
                 "responses": {
@@ -1775,7 +1766,7 @@ var APISwaggerJSON string = `{
         },
         "/public/namespaces/{metadata.namespace}/policers/{metadata.name}": {
             "put": {
-                "summary": "Replace a policer",
+                "summary": "Replace Policer",
                 "description": "Replace a given policer with changed traffic rate limits",
                 "operationId": "ves.io.schema.policer.API.Replace",
                 "responses": {
@@ -1875,7 +1866,7 @@ var APISwaggerJSON string = `{
         },
         "/public/namespaces/{namespace}/policers": {
             "get": {
-                "summary": "List",
+                "summary": "List Policer",
                 "description": "List the set of policer in a namespace",
                 "operationId": "ves.io.schema.policer.API.List",
                 "responses": {
@@ -1991,7 +1982,7 @@ var APISwaggerJSON string = `{
         },
         "/public/namespaces/{namespace}/policers/{name}": {
             "get": {
-                "summary": "Get a policer",
+                "summary": "Get Policer",
                 "description": "Get specification of policer object",
                 "operationId": "ves.io.schema.policer.API.Get",
                 "responses": {
@@ -2095,7 +2086,7 @@ var APISwaggerJSON string = `{
                 "x-ves-proto-rpc": "ves.io.schema.policer.API.Get"
             },
             "delete": {
-                "summary": "Delete",
+                "summary": "Delete Policer",
                 "description": "Delete the specified policer",
                 "operationId": "ves.io.schema.policer.API.Delete",
                 "responses": {

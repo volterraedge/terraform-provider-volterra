@@ -617,6 +617,17 @@ func (v *ValidateBFSecretChoice) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
+	case *BFSecretChoice_VesGlobalLogReceiverSecret:
+		if fv, exists := v.FldValidators["choice.ves_global_log_receiver_secret"]; exists {
+			val := m.GetChoice().(*BFSecretChoice_VesGlobalLogReceiverSecret).VesGlobalLogReceiverSecret
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("ves_global_log_receiver_secret"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 

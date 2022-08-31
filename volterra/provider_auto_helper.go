@@ -25,6 +25,7 @@ import (
 	ves_io_schema_dc_cluster_group "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/dc_cluster_group"
 	ves_io_schema_discovery "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/discovery"
 	ves_io_schema_dns_domain "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/dns_domain"
+	ves_io_schema_dns_zone "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/dns_zone"
 	ves_io_schema_endpoint "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/endpoint"
 	ves_io_schema_fast_acl "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/fast_acl"
 	ves_io_schema_fast_acl_rule "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/fast_acl_rule"
@@ -89,6 +90,7 @@ func getVolterraResourceMap() map[string]*schema.Resource {
 		"volterra_dc_cluster_group":          resourceVolterraDcClusterGroup(),
 		"volterra_discovery":                 resourceVolterraDiscovery(),
 		"volterra_dns_domain":                resourceVolterraDnsDomain(),
+		"volterra_dns_zone":                  resourceVolterraDnsZone(),
 		"volterra_endpoint":                  resourceVolterraEndpoint(),
 		"volterra_fast_acl":                  resourceVolterraFastAcl(),
 		"volterra_fast_acl_rule":             resourceVolterraFastAclRule(),
@@ -155,6 +157,7 @@ func getAllAkarObjectTypes() sets.String {
 		ves_io_schema_dc_cluster_group.ObjectType,
 		ves_io_schema_discovery.ObjectType,
 		ves_io_schema_dns_domain.ObjectType,
+		ves_io_schema_dns_zone.ObjectType,
 		ves_io_schema_endpoint.ObjectType,
 		ves_io_schema_fast_acl.ObjectType,
 		ves_io_schema_fast_acl_rule.ObjectType,

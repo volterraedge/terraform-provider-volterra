@@ -2840,9 +2840,7 @@ var APISwaggerJSON string = `{
             "title": "RateLimitPeriodUnit",
             "enum": [
                 "SECOND",
-                "MINUTE",
-                "HOUR",
-                "DAY"
+                "MINUTE"
             ],
             "default": "SECOND",
             "x-displayname": "Rate Limit Period Unit",

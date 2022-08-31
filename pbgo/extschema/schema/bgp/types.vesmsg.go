@@ -578,6 +578,15 @@ func (v *ValidateBgpPeer) Validate(ctx context.Context, pm interface{}, opts ...
 
 	}
 
+	if fv, exists := v.FldValidators["passive"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("passive"))
+		if err := fv(ctx, m.GetPassive(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["port"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("port"))
@@ -3141,6 +3150,14 @@ type ValidatePeer struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidatePeer) PassiveChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for passive_choice")
+	}
+	return validatorFn, nil
+}
+
 func (v *ValidatePeer) TypeChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -3189,6 +3206,42 @@ func (v *ValidatePeer) Validate(ctx context.Context, pm interface{}, opts ...db.
 		vOpts := append(opts, db.WithValidateField("metadata"))
 		if err := fv(ctx, m.GetMetadata(), vOpts...); err != nil {
 			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["passive_choice"]; exists {
+		val := m.GetPassiveChoice()
+		vOpts := append(opts,
+			db.WithValidateField("passive_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetPassiveChoice().(type) {
+	case *Peer_PassiveModeDisabled:
+		if fv, exists := v.FldValidators["passive_choice.passive_mode_disabled"]; exists {
+			val := m.GetPassiveChoice().(*Peer_PassiveModeDisabled).PassiveModeDisabled
+			vOpts := append(opts,
+				db.WithValidateField("passive_choice"),
+				db.WithValidateField("passive_mode_disabled"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *Peer_PassiveModeEnabled:
+		if fv, exists := v.FldValidators["passive_choice.passive_mode_enabled"]; exists {
+			val := m.GetPassiveChoice().(*Peer_PassiveModeEnabled).PassiveModeEnabled
+			vOpts := append(opts,
+				db.WithValidateField("passive_choice"),
+				db.WithValidateField("passive_mode_enabled"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
 		}
 
 	}
@@ -3252,6 +3305,17 @@ var DefaultPeerValidator = func() *ValidatePeer {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
+
+	vrhPassiveChoice := v.PassiveChoiceValidationRuleHandler
+	rulesPassiveChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhPassiveChoice(rulesPassiveChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for Peer.passive_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["passive_choice"] = vFn
 
 	vrhTypeChoice := v.TypeChoiceValidationRuleHandler
 	rulesTypeChoice := map[string]string{

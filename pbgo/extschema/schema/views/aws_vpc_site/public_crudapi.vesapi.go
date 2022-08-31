@@ -1595,16 +1595,7 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 		item.Disabled = o.GetMetadata().GetDisable()
 
 		if len(req.ReportFields) > 0 {
-			noDBForm, _ := flags.GetEnvGetRspNoDBForm()
-			if !noDBForm {
-				item.Object = o.Object
-				sf.Logger().Alert(svcfw.GetResponseInDBForm,
-					log.MinorAlert,
-					zap.String("user", server.UserFromContext(ctx)),
-					zap.String("useragent", server.UseragentStrFromContext(ctx)),
-					zap.String("operation", "List"),
-				)
-			}
+			item.Object = o.Object
 
 			item.Metadata = &ves_io_schema.ObjectGetMetaType{}
 			item.Metadata.FromObjectMetaType(o.Metadata)
@@ -1683,7 +1674,7 @@ var APISwaggerJSON string = `{
     "paths": {
         "/public/namespaces/{metadata.namespace}/aws_vpc_sites": {
             "post": {
-                "summary": "CreateSpecType",
+                "summary": "Create AWS VPC site",
                 "description": "Shape of the AWS VPC site specification",
                 "operationId": "ves.io.schema.views.aws_vpc_site.API.Create",
                 "responses": {
@@ -1775,7 +1766,7 @@ var APISwaggerJSON string = `{
         },
         "/public/namespaces/{metadata.namespace}/aws_vpc_sites/{metadata.name}": {
             "put": {
-                "summary": "ReplaceSpecType",
+                "summary": "Replace AWS VPC site",
                 "description": "Shape of the AWS VPC site replace specification",
                 "operationId": "ves.io.schema.views.aws_vpc_site.API.Replace",
                 "responses": {
@@ -1875,7 +1866,7 @@ var APISwaggerJSON string = `{
         },
         "/public/namespaces/{namespace}/aws_vpc_sites": {
             "get": {
-                "summary": "List",
+                "summary": "List Configure AWS VPC Site",
                 "description": "List the set of aws_vpc_site in a namespace",
                 "operationId": "ves.io.schema.views.aws_vpc_site.API.List",
                 "responses": {
@@ -1991,7 +1982,7 @@ var APISwaggerJSON string = `{
         },
         "/public/namespaces/{namespace}/aws_vpc_sites/{name}": {
             "get": {
-                "summary": "GetSpecType",
+                "summary": "Get AWS VPC site",
                 "description": "Shape of the AWS VPC site specification",
                 "operationId": "ves.io.schema.views.aws_vpc_site.API.Get",
                 "responses": {
@@ -2095,7 +2086,7 @@ var APISwaggerJSON string = `{
                 "x-ves-proto-rpc": "ves.io.schema.views.aws_vpc_site.API.Get"
             },
             "delete": {
-                "summary": "Delete",
+                "summary": "Delete Configure AWS VPC Site",
                 "description": "Delete the specified aws_vpc_site",
                 "operationId": "ves.io.schema.views.aws_vpc_site.API.Delete",
                 "responses": {
@@ -2487,7 +2478,6 @@ var APISwaggerJSON string = `{
             "description": "Single interface AWS ingress site",
             "title": "AWS Ingress Gateway",
             "x-displayname": "AWS Ingress Gateway",
-            "x-ves-displayorder": "2,1,4,3",
             "x-ves-proto-message": "ves.io.schema.views.aws_vpc_site.AWSVPCIngressGwType",
             "properties": {
                 "allowed_vip_port": {
@@ -3827,9 +3817,7 @@ var APISwaggerJSON string = `{
             "enum": [
                 "NEXT_HOP_DEFAULT_GATEWAY",
                 "NEXT_HOP_USE_CONFIGURED",
-                "NEXT_HOP_NETWORK_INTERFACE",
-                "NEXT_HOP_DISCARD",
-                "NEXT_HOP_SNAT_TO_PUBLIC"
+                "NEXT_HOP_NETWORK_INTERFACE"
             ],
             "default": "NEXT_HOP_DEFAULT_GATEWAY",
             "x-displayname": "Nexthop Types",
@@ -5009,7 +4997,7 @@ var APISwaggerJSON string = `{
             "description": "Parameters for creating two interface Node in one AZ",
             "title": "Two Interface Node",
             "x-displayname": "Two Interface Node",
-            "x-ves-displayorder": "1,5,7,3,8",
+            "x-ves-displayorder": "1,7,3,5",
             "x-ves-oneof-field-choice": "[\"inside_subnet\",\"reserved_inside_subnet\"]",
             "x-ves-proto-message": "ves.io.schema.views.AWSVPCTwoInterfaceNodeType",
             "properties": {
@@ -5197,9 +5185,27 @@ var APISwaggerJSON string = `{
             "description": "Direct Connect Configuration",
             "title": "DirectConnectConfigType",
             "x-displayname": "Direct Connect Configuration",
+            "x-ves-oneof-field-asn_choice": "[\"auto_asn\",\"custom_asn\"]",
             "x-ves-oneof-field-vif_choice": "[\"hosted_vifs\",\"standard_vifs\"]",
             "x-ves-proto-message": "ves.io.schema.views.DirectConnectConfigType",
             "properties": {
+                "auto_asn": {
+                    "description": "Exclusive with [custom_asn]\n Automatically set ASN",
+                    "title": "Auto",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Auto"
+                },
+                "custom_asn": {
+                    "type": "integer",
+                    "description": "Exclusive with [auto_asn]\n Custom Autonomous System Number\n\nExample: - \"64512\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 1\n",
+                    "title": "Custom ASN",
+                    "format": "int64",
+                    "x-displayname": "Custom ASN",
+                    "x-ves-example": "64512",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.gte": "1"
+                    }
+                },
                 "hosted_vifs": {
                     "description": "Exclusive with [standard_vifs]\n Hosted VIF mode. Volterra provisions an AWS DirectConnect Gateway and a Virtual Private Gateway,\n and automatically associate provided hosted VIF and also setup BGP Peering.",
                     "title": "Hosted VIF mode",
@@ -5347,6 +5353,23 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.repeated.max_items": "30",
                         "ves.io.schema.rules.repeated.unique": "true"
                     }
+                }
+            }
+        },
+        "viewsOfflineSurvivabilityModeType": {
+            "type": "object",
+            "description": "x-displayName: \"Offline Survivability Mode Type\"\nOffline Survivability Mode",
+            "title": "Offline Survivability Mode",
+            "properties": {
+                "enable_offline_survivability_mode": {
+                    "description": "x-displayName: \"Enable Offline Survivability Mode\"\nEnable Offline Survivability Mode.\nWhen it is enabled, a CE can work without internet connection for upto 3 days.\nThis can only be enabled at site creation time. But once enabled, offline survivability mode cannot be disabled later.\nEnabling offline survivability reduces default security of a CE.",
+                    "title": "Enable Offline Survivability Mode",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "no_offline_survivability_mode": {
+                    "description": "x-displayName: \"Disable Offline Survivability Mode\"\nDisable Offline Survivability Mode",
+                    "title": "Disable Offline Survivability Mode",
+                    "$ref": "#/definitions/ioschemaEmpty"
                 }
             }
         },

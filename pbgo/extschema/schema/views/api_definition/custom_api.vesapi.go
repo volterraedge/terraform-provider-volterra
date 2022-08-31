@@ -178,7 +178,8 @@ func (c *CustomAPIRestClient) doRPCGetApiEndpointPathsSuggestions(ctx context.Co
 	}
 	defer rsp.Body.Close()
 
-	if rsp.StatusCode != http.StatusOK {
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
 		body, err := ioutil.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
 	}
@@ -189,7 +190,7 @@ func (c *CustomAPIRestClient) doRPCGetApiEndpointPathsSuggestions(ctx context.Co
 	}
 	pbRsp := &ves_io_schema.SuggestValuesResp{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
-		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.SuggestValuesResp", body)
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.SuggestValuesResp", body)
 
 	}
 	if callOpts.OutCallResponse != nil {
@@ -262,7 +263,8 @@ func (c *CustomAPIRestClient) doRPCGetBasePathSuggestions(ctx context.Context, c
 	}
 	defer rsp.Body.Close()
 
-	if rsp.StatusCode != http.StatusOK {
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
 		body, err := ioutil.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
 	}
@@ -273,7 +275,7 @@ func (c *CustomAPIRestClient) doRPCGetBasePathSuggestions(ctx context.Context, c
 	}
 	pbRsp := &ves_io_schema.SuggestValuesResp{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
-		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.SuggestValuesResp", body)
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.SuggestValuesResp", body)
 
 	}
 	if callOpts.OutCallResponse != nil {
@@ -347,7 +349,8 @@ func (c *CustomAPIRestClient) doRPCGetMethodsSuggestions(ctx context.Context, ca
 	}
 	defer rsp.Body.Close()
 
-	if rsp.StatusCode != http.StatusOK {
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
 		body, err := ioutil.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
 	}
@@ -358,7 +361,7 @@ func (c *CustomAPIRestClient) doRPCGetMethodsSuggestions(ctx context.Context, ca
 	}
 	pbRsp := &ves_io_schema.SuggestValuesResp{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
-		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.SuggestValuesResp", body)
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.SuggestValuesResp", body)
 
 	}
 	if callOpts.OutCallResponse != nil {
@@ -565,7 +568,7 @@ var CustomAPISwaggerJSON string = `{
     "paths": {
         "/private/namespaces/{namespace}/api_definitions/{name}/api_endpoint_method/suggestion": {
             "post": {
-                "summary": "Get methods suggestions",
+                "summary": "Get Methods Suggestions",
                 "description": "Get the suggestions for methods for specific api endpoint path (and base path)",
                 "operationId": "ves.io.schema.views.api_definition.CustomAPI.GetMethodsSuggestions",
                 "responses": {
@@ -665,7 +668,7 @@ var CustomAPISwaggerJSON string = `{
         },
         "/private/namespaces/{namespace}/api_definitions/{name}/api_endpoint_path/suggestion": {
             "post": {
-                "summary": "Get ApiEndpointPaths suggestions",
+                "summary": "Get Api Endpoint Paths Suggestions",
                 "description": "Get the suggestions for api endpoint paths for specific base path",
                 "operationId": "ves.io.schema.views.api_definition.CustomAPI.GetApiEndpointPathsSuggestions",
                 "responses": {
@@ -765,7 +768,7 @@ var CustomAPISwaggerJSON string = `{
         },
         "/private/namespaces/{namespace}/api_definitions/{name}/base_path/suggestion": {
             "post": {
-                "summary": "Get base-path suggestions",
+                "summary": "Get Base Path Suggestions",
                 "description": "Get the suggestions for base paths",
                 "operationId": "ves.io.schema.views.api_definition.CustomAPI.GetBasePathSuggestions",
                 "responses": {

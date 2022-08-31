@@ -176,6 +176,18 @@ func resourceVolterraBgp() *schema.Resource {
 							},
 						},
 
+						"passive_mode_disabled": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+
+						"passive_mode_enabled": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+
 						"target_service": {
 							Type:     schema.TypeString,
 							Optional: true,
@@ -775,6 +787,32 @@ func resourceVolterraBgpCreate(d *schema.ResourceData, meta interface{}) error {
 						metadata.Name = w.(string)
 					}
 
+				}
+
+			}
+
+			passiveChoiceTypeFound := false
+
+			if v, ok := peersMapStrToI["passive_mode_disabled"]; ok && !isIntfNil(v) && !passiveChoiceTypeFound {
+
+				passiveChoiceTypeFound = true
+
+				if v.(bool) {
+					passiveChoiceInt := &ves_io_schema_bgp.Peer_PassiveModeDisabled{}
+					passiveChoiceInt.PassiveModeDisabled = &ves_io_schema.Empty{}
+					peers[i].PassiveChoice = passiveChoiceInt
+				}
+
+			}
+
+			if v, ok := peersMapStrToI["passive_mode_enabled"]; ok && !isIntfNil(v) && !passiveChoiceTypeFound {
+
+				passiveChoiceTypeFound = true
+
+				if v.(bool) {
+					passiveChoiceInt := &ves_io_schema_bgp.Peer_PassiveModeEnabled{}
+					passiveChoiceInt.PassiveModeEnabled = &ves_io_schema.Empty{}
+					peers[i].PassiveChoice = passiveChoiceInt
 				}
 
 			}
@@ -1644,6 +1682,32 @@ func resourceVolterraBgpUpdate(d *schema.ResourceData, meta interface{}) error {
 						metadata.Name = w.(string)
 					}
 
+				}
+
+			}
+
+			passiveChoiceTypeFound := false
+
+			if v, ok := peersMapStrToI["passive_mode_disabled"]; ok && !isIntfNil(v) && !passiveChoiceTypeFound {
+
+				passiveChoiceTypeFound = true
+
+				if v.(bool) {
+					passiveChoiceInt := &ves_io_schema_bgp.Peer_PassiveModeDisabled{}
+					passiveChoiceInt.PassiveModeDisabled = &ves_io_schema.Empty{}
+					peers[i].PassiveChoice = passiveChoiceInt
+				}
+
+			}
+
+			if v, ok := peersMapStrToI["passive_mode_enabled"]; ok && !isIntfNil(v) && !passiveChoiceTypeFound {
+
+				passiveChoiceTypeFound = true
+
+				if v.(bool) {
+					passiveChoiceInt := &ves_io_schema_bgp.Peer_PassiveModeEnabled{}
+					passiveChoiceInt.PassiveModeEnabled = &ves_io_schema.Empty{}
+					peers[i].PassiveChoice = passiveChoiceInt
 				}
 
 			}

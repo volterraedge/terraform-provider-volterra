@@ -2700,6 +2700,12 @@ var APISwaggerJSON string = `{
                         "$ref": "#/definitions/ioschemaObjectRefType"
                     }
                 },
+                "passive": {
+                    "type": "boolean",
+                    "description": "x-displayName: \"Passive\"\nIndicates if the peer is passive or not. When set, VER will not send open messages to this peer.",
+                    "title": "passive",
+                    "format": "boolean"
+                },
                 "port": {
                     "type": "integer",
                     "description": "x-displayName: \"Peer Port\"\nx-example: 179\nPeer's port number, defaults to port 179 when not set",
@@ -3049,7 +3055,8 @@ var APISwaggerJSON string = `{
             "description": "BGP Peer parameters",
             "title": "Peer",
             "x-displayname": "BGP Peer",
-            "x-ves-displayorder": "1,2",
+            "x-ves-displayorder": "1,2,5",
+            "x-ves-oneof-field-passive_choice": "[\"passive_mode_disabled\",\"passive_mode_enabled\"]",
             "x-ves-oneof-field-type_choice": "[\"external\"]",
             "x-ves-proto-message": "ves.io.schema.bgp.Peer",
             "properties": {
@@ -3068,6 +3075,18 @@ var APISwaggerJSON string = `{
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true"
                     }
+                },
+                "passive_mode_disabled": {
+                    "description": "Exclusive with [passive_mode_enabled]\n",
+                    "title": "passive_mode_disabled",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Disabled"
+                },
+                "passive_mode_enabled": {
+                    "description": "Exclusive with [passive_mode_disabled]\n",
+                    "title": "passive_mode_enabled",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Enabled"
                 }
             }
         },

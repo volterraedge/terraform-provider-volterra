@@ -930,16 +930,7 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 		item.Disabled = o.GetMetadata().GetDisable()
 
 		if len(req.ReportFields) > 0 {
-			noDBForm, _ := flags.GetEnvGetRspNoDBForm()
-			if !noDBForm {
-				item.Object = o.Object
-				sf.Logger().Alert(svcfw.GetResponseInDBForm,
-					log.MinorAlert,
-					zap.String("user", server.UserFromContext(ctx)),
-					zap.String("useragent", server.UseragentStrFromContext(ctx)),
-					zap.String("operation", "List"),
-				)
-			}
+			item.Object = o.Object
 
 			item.Metadata = &ves_io_schema.ObjectGetMetaType{}
 			item.Metadata.FromObjectMetaType(o.Metadata)
@@ -1018,7 +1009,7 @@ var APISwaggerJSON string = `{
     "paths": {
         "/public/namespaces/{namespace}/api_group_elements": {
             "get": {
-                "summary": "List",
+                "summary": "List API Group Element",
                 "description": "List the set of api_group_element in a namespace",
                 "operationId": "ves.io.schema.api_group_element.API.List",
                 "responses": {
@@ -1134,7 +1125,7 @@ var APISwaggerJSON string = `{
         },
         "/public/namespaces/{namespace}/api_group_elements/{name}": {
             "get": {
-                "summary": "Get api group element",
+                "summary": "Get API Group Element",
                 "description": "Get api_group_element reads a given object from storage backend for metadata.namespace.",
                 "operationId": "ves.io.schema.api_group_element.API.Get",
                 "responses": {

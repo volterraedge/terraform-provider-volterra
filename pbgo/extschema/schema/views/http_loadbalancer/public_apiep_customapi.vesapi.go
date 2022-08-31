@@ -153,7 +153,8 @@ func (c *ApiepLBCustomAPIRestClient) doRPCGetSwaggerSpec(ctx context.Context, ca
 	}
 	defer rsp.Body.Close()
 
-	if rsp.StatusCode != http.StatusOK {
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
 		body, err := ioutil.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
 	}
@@ -314,7 +315,7 @@ var ApiepLBCustomAPISwaggerJSON string = `{
     "paths": {
         "/public/namespaces/{namespace}/http_loadbalancers/{name}/api_endpoints/swagger_spec": {
             "get": {
-                "summary": "Get Swagger Spec for App Type",
+                "summary": "Get Swagger Spec for Http Load Balancer",
                 "description": "Get the corresponding Swagger spec for the given HTTP load balancer",
                 "operationId": "ves.io.schema.views.http_loadbalancer.ApiepLBCustomAPI.GetSwaggerSpec",
                 "responses": {

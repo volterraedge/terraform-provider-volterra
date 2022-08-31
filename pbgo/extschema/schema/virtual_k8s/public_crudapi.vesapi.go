@@ -1595,16 +1595,7 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 		item.Disabled = o.GetMetadata().GetDisable()
 
 		if len(req.ReportFields) > 0 {
-			noDBForm, _ := flags.GetEnvGetRspNoDBForm()
-			if !noDBForm {
-				item.Object = o.Object
-				sf.Logger().Alert(svcfw.GetResponseInDBForm,
-					log.MinorAlert,
-					zap.String("user", server.UserFromContext(ctx)),
-					zap.String("useragent", server.UseragentStrFromContext(ctx)),
-					zap.String("operation", "List"),
-				)
-			}
+			item.Object = o.Object
 
 			item.Metadata = &ves_io_schema.ObjectGetMetaType{}
 			item.Metadata.FromObjectMetaType(o.Metadata)
@@ -1683,7 +1674,7 @@ var APISwaggerJSON string = `{
     "paths": {
         "/public/namespaces/{metadata.namespace}/virtual_k8ss": {
             "post": {
-                "summary": "Create Virtual K8s",
+                "summary": "Create Virtual Kubernetes",
                 "description": "Create virtual_k8s will create the object in the storage backend for namespace metadata.namespace",
                 "operationId": "ves.io.schema.virtual_k8s.API.Create",
                 "responses": {
@@ -1775,7 +1766,7 @@ var APISwaggerJSON string = `{
         },
         "/public/namespaces/{metadata.namespace}/virtual_k8ss/{metadata.name}": {
             "put": {
-                "summary": "Replace Virtual K8s",
+                "summary": "Replace Virtual Kubernetes",
                 "description": "Replacing an endpoint object will update the object by replacing the existing spec with the provided one.\nFor read-then-write operations a resourceVersion mismatch will occur if the object was modified between the read and write.",
                 "operationId": "ves.io.schema.virtual_k8s.API.Replace",
                 "responses": {
@@ -1875,7 +1866,7 @@ var APISwaggerJSON string = `{
         },
         "/public/namespaces/{namespace}/virtual_k8ss": {
             "get": {
-                "summary": "List",
+                "summary": "List Virtual Kubernetes",
                 "description": "List the set of virtual_k8s in a namespace",
                 "operationId": "ves.io.schema.virtual_k8s.API.List",
                 "responses": {
@@ -1991,7 +1982,7 @@ var APISwaggerJSON string = `{
         },
         "/public/namespaces/{namespace}/virtual_k8ss/{name}": {
             "get": {
-                "summary": "Get Virtual K8s",
+                "summary": "Get Virtual Kubernetes",
                 "description": "Get virtual_k8s will get the object from the storage backend for namesapce metadata.namespace",
                 "operationId": "ves.io.schema.virtual_k8s.API.Get",
                 "responses": {
@@ -2095,7 +2086,7 @@ var APISwaggerJSON string = `{
                 "x-ves-proto-rpc": "ves.io.schema.virtual_k8s.API.Get"
             },
             "delete": {
-                "summary": "Delete",
+                "summary": "Delete Virtual Kubernetes",
                 "description": "Delete the specified virtual_k8s",
                 "operationId": "ves.io.schema.virtual_k8s.API.Delete",
                 "responses": {

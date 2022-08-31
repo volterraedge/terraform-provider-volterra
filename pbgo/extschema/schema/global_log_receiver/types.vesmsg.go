@@ -28,12 +28,836 @@ var (
 
 // augmented methods on protoc/std generated struct
 
+func (m *AuthToken) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *AuthToken) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+// Redact squashes sensitive info in m (in-place)
+func (m *AuthToken) Redact(ctx context.Context) error {
+	// clear fields with confidential option set (at message or field level)
+	if m == nil {
+		return nil
+	}
+
+	if err := m.GetToken().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting AuthToken.token")
+	}
+
+	return nil
+}
+
+func (m *AuthToken) DeepCopy() *AuthToken {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &AuthToken{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *AuthToken) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *AuthToken) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return AuthTokenValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateAuthToken struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateAuthToken) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*AuthToken)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *AuthToken got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["token"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("token"))
+		if err := fv(ctx, m.GetToken(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultAuthTokenValidator = func() *ValidateAuthToken {
+	v := &ValidateAuthToken{FldValidators: map[string]db.ValidatorFunc{}}
+
+	v.FldValidators["token"] = ves_io_schema.SecretTypeValidator().Validate
+
+	return v
+}()
+
+func AuthTokenValidator() db.Validator {
+	return DefaultAuthTokenValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *AzureBlobConfig) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *AzureBlobConfig) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+// Redact squashes sensitive info in m (in-place)
+func (m *AzureBlobConfig) Redact(ctx context.Context) error {
+	// clear fields with confidential option set (at message or field level)
+	if m == nil {
+		return nil
+	}
+
+	if err := m.GetConnectionString().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting AzureBlobConfig.connection_string")
+	}
+
+	return nil
+}
+
+func (m *AzureBlobConfig) DeepCopy() *AzureBlobConfig {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &AzureBlobConfig{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *AzureBlobConfig) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *AzureBlobConfig) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return AzureBlobConfigValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateAzureBlobConfig struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateAzureBlobConfig) ConnectionStringValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "MessageValidationRuleHandler for connection_string")
+	}
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		if err := ves_io_schema.SecretTypeValidator().Validate(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateAzureBlobConfig) ContainerNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for container_name")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateAzureBlobConfig) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*AzureBlobConfig)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *AzureBlobConfig got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["batch"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("batch"))
+		if err := fv(ctx, m.GetBatch(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["compression"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("compression"))
+		if err := fv(ctx, m.GetCompression(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["connection_string"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("connection_string"))
+		if err := fv(ctx, m.GetConnectionString(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["container_name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("container_name"))
+		if err := fv(ctx, m.GetContainerName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultAzureBlobConfigValidator = func() *ValidateAzureBlobConfig {
+	v := &ValidateAzureBlobConfig{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhConnectionString := v.ConnectionStringValidationRuleHandler
+	rulesConnectionString := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhConnectionString(rulesConnectionString)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for AzureBlobConfig.connection_string: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["connection_string"] = vFn
+
+	vrhContainerName := v.ContainerNameValidationRuleHandler
+	rulesContainerName := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.max_len":   "63",
+		"ves.io.schema.rules.string.min_len":   "3",
+		"ves.io.schema.rules.string.pattern":   "^[A-Za-z0-9][A-Za-z0-9-]+[A-Za-z0-9]$",
+	}
+	vFn, err = vrhContainerName(rulesContainerName)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for AzureBlobConfig.container_name: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["container_name"] = vFn
+
+	v.FldValidators["batch"] = BatchOptionTypeValidator().Validate
+
+	return v
+}()
+
+func AzureBlobConfigValidator() db.Validator {
+	return DefaultAzureBlobConfigValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *AzureEventHubsConfig) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *AzureEventHubsConfig) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+// Redact squashes sensitive info in m (in-place)
+func (m *AzureEventHubsConfig) Redact(ctx context.Context) error {
+	// clear fields with confidential option set (at message or field level)
+	if m == nil {
+		return nil
+	}
+
+	if err := m.GetConnectionString().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting AzureEventHubsConfig.connection_string")
+	}
+
+	return nil
+}
+
+func (m *AzureEventHubsConfig) DeepCopy() *AzureEventHubsConfig {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &AzureEventHubsConfig{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *AzureEventHubsConfig) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *AzureEventHubsConfig) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return AzureEventHubsConfigValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateAzureEventHubsConfig struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateAzureEventHubsConfig) ConnectionStringValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "MessageValidationRuleHandler for connection_string")
+	}
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		if err := ves_io_schema.SecretTypeValidator().Validate(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateAzureEventHubsConfig) NamespaceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for namespace")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateAzureEventHubsConfig) InstanceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for instance")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateAzureEventHubsConfig) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*AzureEventHubsConfig)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *AzureEventHubsConfig got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["connection_string"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("connection_string"))
+		if err := fv(ctx, m.GetConnectionString(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["instance"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("instance"))
+		if err := fv(ctx, m.GetInstance(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["namespace"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("namespace"))
+		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultAzureEventHubsConfigValidator = func() *ValidateAzureEventHubsConfig {
+	v := &ValidateAzureEventHubsConfig{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhConnectionString := v.ConnectionStringValidationRuleHandler
+	rulesConnectionString := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhConnectionString(rulesConnectionString)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for AzureEventHubsConfig.connection_string: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["connection_string"] = vFn
+
+	vrhNamespace := v.NamespaceValidationRuleHandler
+	rulesNamespace := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.max_len":   "63",
+		"ves.io.schema.rules.string.min_len":   "3",
+		"ves.io.schema.rules.string.pattern":   "^[A-Za-z0-9][A-Za-z0-9-]+[A-Za-z0-9]$",
+	}
+	vFn, err = vrhNamespace(rulesNamespace)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for AzureEventHubsConfig.namespace: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["namespace"] = vFn
+
+	vrhInstance := v.InstanceValidationRuleHandler
+	rulesInstance := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.max_len":   "63",
+		"ves.io.schema.rules.string.min_len":   "3",
+		"ves.io.schema.rules.string.pattern":   "^[A-Za-z0-9][A-Za-z0-9-]+[A-Za-z0-9]$",
+	}
+	vFn, err = vrhInstance(rulesInstance)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for AzureEventHubsConfig.instance: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["instance"] = vFn
+
+	return v
+}()
+
+func AzureEventHubsConfigValidator() db.Validator {
+	return DefaultAzureEventHubsConfigValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *BatchOptionType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *BatchOptionType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *BatchOptionType) DeepCopy() *BatchOptionType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &BatchOptionType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *BatchOptionType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *BatchOptionType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return BatchOptionTypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateBatchOptionType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateBatchOptionType) BatchBytesMaxBytesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_MaxBytes, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for max_bytes")
+	}
+	return oValidatorFn_MaxBytes, nil
+}
+
+func (v *ValidateBatchOptionType) BatchEventsMaxEventsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_MaxEvents, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for max_events")
+	}
+	return oValidatorFn_MaxEvents, nil
+}
+
+func (v *ValidateBatchOptionType) BatchTimeoutTimeoutSecondsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_TimeoutSeconds, err := db.NewUint64ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for timeout_seconds")
+	}
+	return oValidatorFn_TimeoutSeconds, nil
+}
+
+func (v *ValidateBatchOptionType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*BatchOptionType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *BatchOptionType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	switch m.GetBatchBytes().(type) {
+	case *BatchOptionType_MaxBytesDisabled:
+		if fv, exists := v.FldValidators["batch_bytes.max_bytes_disabled"]; exists {
+			val := m.GetBatchBytes().(*BatchOptionType_MaxBytesDisabled).MaxBytesDisabled
+			vOpts := append(opts,
+				db.WithValidateField("batch_bytes"),
+				db.WithValidateField("max_bytes_disabled"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *BatchOptionType_MaxBytes:
+		if fv, exists := v.FldValidators["batch_bytes.max_bytes"]; exists {
+			val := m.GetBatchBytes().(*BatchOptionType_MaxBytes).MaxBytes
+			vOpts := append(opts,
+				db.WithValidateField("batch_bytes"),
+				db.WithValidateField("max_bytes"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	switch m.GetBatchEvents().(type) {
+	case *BatchOptionType_MaxEventsDisabled:
+		if fv, exists := v.FldValidators["batch_events.max_events_disabled"]; exists {
+			val := m.GetBatchEvents().(*BatchOptionType_MaxEventsDisabled).MaxEventsDisabled
+			vOpts := append(opts,
+				db.WithValidateField("batch_events"),
+				db.WithValidateField("max_events_disabled"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *BatchOptionType_MaxEvents:
+		if fv, exists := v.FldValidators["batch_events.max_events"]; exists {
+			val := m.GetBatchEvents().(*BatchOptionType_MaxEvents).MaxEvents
+			vOpts := append(opts,
+				db.WithValidateField("batch_events"),
+				db.WithValidateField("max_events"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	switch m.GetBatchTimeout().(type) {
+	case *BatchOptionType_TimeoutSecondsDefault:
+		if fv, exists := v.FldValidators["batch_timeout.timeout_seconds_default"]; exists {
+			val := m.GetBatchTimeout().(*BatchOptionType_TimeoutSecondsDefault).TimeoutSecondsDefault
+			vOpts := append(opts,
+				db.WithValidateField("batch_timeout"),
+				db.WithValidateField("timeout_seconds_default"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *BatchOptionType_TimeoutSeconds:
+		if fv, exists := v.FldValidators["batch_timeout.timeout_seconds"]; exists {
+			val := m.GetBatchTimeout().(*BatchOptionType_TimeoutSeconds).TimeoutSeconds
+			vOpts := append(opts,
+				db.WithValidateField("batch_timeout"),
+				db.WithValidateField("timeout_seconds"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultBatchOptionTypeValidator = func() *ValidateBatchOptionType {
+	v := &ValidateBatchOptionType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhBatchBytesMaxBytes := v.BatchBytesMaxBytesValidationRuleHandler
+	rulesBatchBytesMaxBytes := map[string]string{
+		"ves.io.schema.rules.uint32.gte": "4096",
+		"ves.io.schema.rules.uint32.lte": "1048576",
+	}
+	vFnMap["batch_bytes.max_bytes"], err = vrhBatchBytesMaxBytes(rulesBatchBytesMaxBytes)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field BatchOptionType.batch_bytes_max_bytes: %s", err)
+		panic(errMsg)
+	}
+
+	v.FldValidators["batch_bytes.max_bytes"] = vFnMap["batch_bytes.max_bytes"]
+
+	vrhBatchEventsMaxEvents := v.BatchEventsMaxEventsValidationRuleHandler
+	rulesBatchEventsMaxEvents := map[string]string{
+		"ves.io.schema.rules.uint32.gte": "32",
+		"ves.io.schema.rules.uint32.lte": "2000",
+	}
+	vFnMap["batch_events.max_events"], err = vrhBatchEventsMaxEvents(rulesBatchEventsMaxEvents)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field BatchOptionType.batch_events_max_events: %s", err)
+		panic(errMsg)
+	}
+
+	v.FldValidators["batch_events.max_events"] = vFnMap["batch_events.max_events"]
+
+	vrhBatchTimeoutTimeoutSeconds := v.BatchTimeoutTimeoutSecondsValidationRuleHandler
+	rulesBatchTimeoutTimeoutSeconds := map[string]string{
+		"ves.io.schema.rules.uint64.gte": "300",
+		"ves.io.schema.rules.uint64.lte": "3600",
+	}
+	vFnMap["batch_timeout.timeout_seconds"], err = vrhBatchTimeoutTimeoutSeconds(rulesBatchTimeoutTimeoutSeconds)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field BatchOptionType.batch_timeout_timeout_seconds: %s", err)
+		panic(errMsg)
+	}
+
+	v.FldValidators["batch_timeout.timeout_seconds"] = vFnMap["batch_timeout.timeout_seconds"]
+
+	return v
+}()
+
+func BatchOptionTypeValidator() db.Validator {
+	return DefaultBatchOptionTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *CompressionType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *CompressionType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *CompressionType) DeepCopy() *CompressionType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &CompressionType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *CompressionType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *CompressionType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return CompressionTypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateCompressionType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateCompressionType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*CompressionType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *CompressionType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	switch m.GetCompressionChoice().(type) {
+	case *CompressionType_CompressionNone:
+		if fv, exists := v.FldValidators["compression_choice.compression_none"]; exists {
+			val := m.GetCompressionChoice().(*CompressionType_CompressionNone).CompressionNone
+			vOpts := append(opts,
+				db.WithValidateField("compression_choice"),
+				db.WithValidateField("compression_none"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CompressionType_CompressionGzip:
+		if fv, exists := v.FldValidators["compression_choice.compression_gzip"]; exists {
+			val := m.GetCompressionChoice().(*CompressionType_CompressionGzip).CompressionGzip
+			vOpts := append(opts,
+				db.WithValidateField("compression_choice"),
+				db.WithValidateField("compression_gzip"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultCompressionTypeValidator = func() *ValidateCompressionType {
+	v := &ValidateCompressionType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func CompressionTypeValidator() db.Validator {
+	return DefaultCompressionTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *CreateSpecType) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
 
 func (m *CreateSpecType) ToYAML() (string, error) {
 	return codec.ToYAML(m)
+}
+
+// Redact squashes sensitive info in m (in-place)
+func (m *CreateSpecType) Redact(ctx context.Context) error {
+	// clear fields with confidential option set (at message or field level)
+	if m == nil {
+		return nil
+	}
+
+	if err := m.GetHttpReceiver().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting CreateSpecType.http_receiver")
+	}
+
+	if err := m.GetDatadogReceiver().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting CreateSpecType.datadog_receiver")
+	}
+
+	if err := m.GetSplunkReceiver().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting CreateSpecType.splunk_receiver")
+	}
+
+	if err := m.GetElasticReceiver().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting CreateSpecType.elastic_receiver")
+	}
+
+	if err := m.GetAzureReceiver().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting CreateSpecType.azure_receiver")
+	}
+
+	if err := m.GetAzureEventHubsReceiver().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting CreateSpecType.azure_event_hubs_receiver")
+	}
+
+	return nil
 }
 
 func (m *CreateSpecType) DeepCopy() *CreateSpecType {
@@ -88,6 +912,37 @@ func (m *CreateSpecType) GetReceiverDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "s3_receiver." + dri.DRField
 		}
 		return drInfos, err
+
+	case *CreateSpecType_HttpReceiver:
+
+		return nil, nil
+
+	case *CreateSpecType_DatadogReceiver:
+
+		return nil, nil
+
+	case *CreateSpecType_SplunkReceiver:
+
+		return nil, nil
+
+	case *CreateSpecType_ElasticReceiver:
+		drInfos, err := m.GetElasticReceiver().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetElasticReceiver().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "elastic_receiver." + dri.DRField
+		}
+		return drInfos, err
+
+	case *CreateSpecType_AzureReceiver:
+
+		return nil, nil
+
+	case *CreateSpecType_AzureEventHubsReceiver:
+
+		return nil, nil
 
 	default:
 		return nil, nil
@@ -209,6 +1064,72 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
+	case *CreateSpecType_HttpReceiver:
+		if fv, exists := v.FldValidators["receiver.http_receiver"]; exists {
+			val := m.GetReceiver().(*CreateSpecType_HttpReceiver).HttpReceiver
+			vOpts := append(opts,
+				db.WithValidateField("receiver"),
+				db.WithValidateField("http_receiver"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CreateSpecType_DatadogReceiver:
+		if fv, exists := v.FldValidators["receiver.datadog_receiver"]; exists {
+			val := m.GetReceiver().(*CreateSpecType_DatadogReceiver).DatadogReceiver
+			vOpts := append(opts,
+				db.WithValidateField("receiver"),
+				db.WithValidateField("datadog_receiver"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CreateSpecType_SplunkReceiver:
+		if fv, exists := v.FldValidators["receiver.splunk_receiver"]; exists {
+			val := m.GetReceiver().(*CreateSpecType_SplunkReceiver).SplunkReceiver
+			vOpts := append(opts,
+				db.WithValidateField("receiver"),
+				db.WithValidateField("splunk_receiver"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CreateSpecType_ElasticReceiver:
+		if fv, exists := v.FldValidators["receiver.elastic_receiver"]; exists {
+			val := m.GetReceiver().(*CreateSpecType_ElasticReceiver).ElasticReceiver
+			vOpts := append(opts,
+				db.WithValidateField("receiver"),
+				db.WithValidateField("elastic_receiver"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CreateSpecType_AzureReceiver:
+		if fv, exists := v.FldValidators["receiver.azure_receiver"]; exists {
+			val := m.GetReceiver().(*CreateSpecType_AzureReceiver).AzureReceiver
+			vOpts := append(opts,
+				db.WithValidateField("receiver"),
+				db.WithValidateField("azure_receiver"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CreateSpecType_AzureEventHubsReceiver:
+		if fv, exists := v.FldValidators["receiver.azure_event_hubs_receiver"]; exists {
+			val := m.GetReceiver().(*CreateSpecType_AzureEventHubsReceiver).AzureEventHubsReceiver
+			vOpts := append(opts,
+				db.WithValidateField("receiver"),
+				db.WithValidateField("azure_event_hubs_receiver"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 
@@ -252,6 +1173,12 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	v.FldValidators["filter_choice.ns_list"] = NSListValidator().Validate
 
 	v.FldValidators["receiver.s3_receiver"] = S3ConfigValidator().Validate
+	v.FldValidators["receiver.http_receiver"] = HTTPConfigValidator().Validate
+	v.FldValidators["receiver.datadog_receiver"] = DatadogConfigValidator().Validate
+	v.FldValidators["receiver.splunk_receiver"] = SplunkConfigValidator().Validate
+	v.FldValidators["receiver.elastic_receiver"] = ElasticConfigValidator().Validate
+	v.FldValidators["receiver.azure_receiver"] = AzureBlobConfigValidator().Validate
+	v.FldValidators["receiver.azure_event_hubs_receiver"] = AzureEventHubsConfigValidator().Validate
 
 	return v
 }()
@@ -262,12 +1189,685 @@ func CreateSpecTypeValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *DatadogConfig) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *DatadogConfig) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+// Redact squashes sensitive info in m (in-place)
+func (m *DatadogConfig) Redact(ctx context.Context) error {
+	// clear fields with confidential option set (at message or field level)
+	if m == nil {
+		return nil
+	}
+
+	if err := m.GetDatadogApiKey().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting DatadogConfig.datadog_api_key")
+	}
+
+	if err := m.GetUseTls().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting DatadogConfig.use_tls")
+	}
+
+	return nil
+}
+
+func (m *DatadogConfig) DeepCopy() *DatadogConfig {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &DatadogConfig{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *DatadogConfig) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *DatadogConfig) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return DatadogConfigValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateDatadogConfig struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateDatadogConfig) EndpointChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for endpoint_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateDatadogConfig) EndpointChoiceSiteValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_Site, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for site")
+	}
+	return oValidatorFn_Site, nil
+}
+
+func (v *ValidateDatadogConfig) TlsChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for tls_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateDatadogConfig) DatadogApiKeyValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "MessageValidationRuleHandler for datadog_api_key")
+	}
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		if err := ves_io_schema.SecretTypeValidator().Validate(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateDatadogConfig) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*DatadogConfig)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *DatadogConfig got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["batch"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("batch"))
+		if err := fv(ctx, m.GetBatch(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["compression"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("compression"))
+		if err := fv(ctx, m.GetCompression(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["datadog_api_key"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("datadog_api_key"))
+		if err := fv(ctx, m.GetDatadogApiKey(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["endpoint_choice"]; exists {
+		val := m.GetEndpointChoice()
+		vOpts := append(opts,
+			db.WithValidateField("endpoint_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetEndpointChoice().(type) {
+	case *DatadogConfig_Site:
+		if fv, exists := v.FldValidators["endpoint_choice.site"]; exists {
+			val := m.GetEndpointChoice().(*DatadogConfig_Site).Site
+			vOpts := append(opts,
+				db.WithValidateField("endpoint_choice"),
+				db.WithValidateField("site"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *DatadogConfig_Endpoint:
+		if fv, exists := v.FldValidators["endpoint_choice.endpoint"]; exists {
+			val := m.GetEndpointChoice().(*DatadogConfig_Endpoint).Endpoint
+			vOpts := append(opts,
+				db.WithValidateField("endpoint_choice"),
+				db.WithValidateField("endpoint"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["tls_choice"]; exists {
+		val := m.GetTlsChoice()
+		vOpts := append(opts,
+			db.WithValidateField("tls_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetTlsChoice().(type) {
+	case *DatadogConfig_NoTls:
+		if fv, exists := v.FldValidators["tls_choice.no_tls"]; exists {
+			val := m.GetTlsChoice().(*DatadogConfig_NoTls).NoTls
+			vOpts := append(opts,
+				db.WithValidateField("tls_choice"),
+				db.WithValidateField("no_tls"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *DatadogConfig_UseTls:
+		if fv, exists := v.FldValidators["tls_choice.use_tls"]; exists {
+			val := m.GetTlsChoice().(*DatadogConfig_UseTls).UseTls
+			vOpts := append(opts,
+				db.WithValidateField("tls_choice"),
+				db.WithValidateField("use_tls"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultDatadogConfigValidator = func() *ValidateDatadogConfig {
+	v := &ValidateDatadogConfig{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhEndpointChoice := v.EndpointChoiceValidationRuleHandler
+	rulesEndpointChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhEndpointChoice(rulesEndpointChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for DatadogConfig.endpoint_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["endpoint_choice"] = vFn
+
+	vrhEndpointChoiceSite := v.EndpointChoiceSiteValidationRuleHandler
+	rulesEndpointChoiceSite := map[string]string{
+		"ves.io.schema.rules.string.hostname_or_ip": "true",
+	}
+	vFnMap["endpoint_choice.site"], err = vrhEndpointChoiceSite(rulesEndpointChoiceSite)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field DatadogConfig.endpoint_choice_site: %s", err)
+		panic(errMsg)
+	}
+
+	v.FldValidators["endpoint_choice.site"] = vFnMap["endpoint_choice.site"]
+
+	vrhTlsChoice := v.TlsChoiceValidationRuleHandler
+	rulesTlsChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhTlsChoice(rulesTlsChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for DatadogConfig.tls_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["tls_choice"] = vFn
+
+	vrhDatadogApiKey := v.DatadogApiKeyValidationRuleHandler
+	rulesDatadogApiKey := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhDatadogApiKey(rulesDatadogApiKey)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for DatadogConfig.datadog_api_key: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["datadog_api_key"] = vFn
+
+	v.FldValidators["tls_choice.use_tls"] = TLSConfigTypeValidator().Validate
+
+	v.FldValidators["batch"] = BatchOptionTypeValidator().Validate
+
+	return v
+}()
+
+func DatadogConfigValidator() db.Validator {
+	return DefaultDatadogConfigValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *ElasticConfig) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *ElasticConfig) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+// Redact squashes sensitive info in m (in-place)
+func (m *ElasticConfig) Redact(ctx context.Context) error {
+	// clear fields with confidential option set (at message or field level)
+	if m == nil {
+		return nil
+	}
+
+	if err := m.GetAuthBasic().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting ElasticConfig.auth_basic")
+	}
+
+	if err := m.GetUseTls().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting ElasticConfig.use_tls")
+	}
+
+	return nil
+}
+
+func (m *ElasticConfig) DeepCopy() *ElasticConfig {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &ElasticConfig{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *ElasticConfig) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *ElasticConfig) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return ElasticConfigValidator().Validate(ctx, m, opts...)
+}
+
+func (m *ElasticConfig) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetAuthChoiceDRefInfo()
+
+}
+
+func (m *ElasticConfig) GetAuthChoiceDRefInfo() ([]db.DRefInfo, error) {
+	switch m.GetAuthChoice().(type) {
+	case *ElasticConfig_AuthNone:
+
+		return nil, nil
+
+	case *ElasticConfig_AuthBasic:
+
+		return nil, nil
+
+	case *ElasticConfig_AuthAws:
+
+		vref := m.GetAuthAws()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("cloud_credentials.Object")
+		dri := db.DRefInfo{
+			RefdType:   "cloud_credentials.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "auth_aws",
+			Ref:        vdRef,
+		}
+		return []db.DRefInfo{dri}, nil
+
+	default:
+		return nil, nil
+	}
+}
+
+// GetAuthChoiceDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *ElasticConfig) GetAuthChoiceDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+
+	switch m.GetAuthChoice().(type) {
+	case *ElasticConfig_AuthNone:
+
+	case *ElasticConfig_AuthBasic:
+
+	case *ElasticConfig_AuthAws:
+		refdType, err := d.TypeForEntryKind("", "", "cloud_credentials.Object")
+		if err != nil {
+			return nil, errors.Wrap(err, "Cannot find type for kind: cloud_credentials")
+		}
+
+		vref := m.GetAuthAws()
+		if vref == nil {
+			return nil, nil
+		}
+		ref := &ves_io_schema.ObjectRefType{
+			Kind:      "cloud_credentials.Object",
+			Tenant:    vref.Tenant,
+			Namespace: vref.Namespace,
+			Name:      vref.Name,
+		}
+		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+		if err != nil {
+			return nil, errors.Wrap(err, "Getting referred entry")
+		}
+		if refdEnt != nil {
+			entries = append(entries, refdEnt)
+		}
+
+	}
+
+	return entries, nil
+}
+
+type ValidateElasticConfig struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateElasticConfig) AuthChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for auth_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateElasticConfig) TlsChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for tls_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateElasticConfig) EndpointValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for endpoint")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateElasticConfig) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*ElasticConfig)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *ElasticConfig got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["auth_choice"]; exists {
+		val := m.GetAuthChoice()
+		vOpts := append(opts,
+			db.WithValidateField("auth_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetAuthChoice().(type) {
+	case *ElasticConfig_AuthNone:
+		if fv, exists := v.FldValidators["auth_choice.auth_none"]; exists {
+			val := m.GetAuthChoice().(*ElasticConfig_AuthNone).AuthNone
+			vOpts := append(opts,
+				db.WithValidateField("auth_choice"),
+				db.WithValidateField("auth_none"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ElasticConfig_AuthBasic:
+		if fv, exists := v.FldValidators["auth_choice.auth_basic"]; exists {
+			val := m.GetAuthChoice().(*ElasticConfig_AuthBasic).AuthBasic
+			vOpts := append(opts,
+				db.WithValidateField("auth_choice"),
+				db.WithValidateField("auth_basic"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ElasticConfig_AuthAws:
+		if fv, exists := v.FldValidators["auth_choice.auth_aws"]; exists {
+			val := m.GetAuthChoice().(*ElasticConfig_AuthAws).AuthAws
+			vOpts := append(opts,
+				db.WithValidateField("auth_choice"),
+				db.WithValidateField("auth_aws"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["batch"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("batch"))
+		if err := fv(ctx, m.GetBatch(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["compression"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("compression"))
+		if err := fv(ctx, m.GetCompression(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["endpoint"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("endpoint"))
+		if err := fv(ctx, m.GetEndpoint(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["tls_choice"]; exists {
+		val := m.GetTlsChoice()
+		vOpts := append(opts,
+			db.WithValidateField("tls_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetTlsChoice().(type) {
+	case *ElasticConfig_NoTls:
+		if fv, exists := v.FldValidators["tls_choice.no_tls"]; exists {
+			val := m.GetTlsChoice().(*ElasticConfig_NoTls).NoTls
+			vOpts := append(opts,
+				db.WithValidateField("tls_choice"),
+				db.WithValidateField("no_tls"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ElasticConfig_UseTls:
+		if fv, exists := v.FldValidators["tls_choice.use_tls"]; exists {
+			val := m.GetTlsChoice().(*ElasticConfig_UseTls).UseTls
+			vOpts := append(opts,
+				db.WithValidateField("tls_choice"),
+				db.WithValidateField("use_tls"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultElasticConfigValidator = func() *ValidateElasticConfig {
+	v := &ValidateElasticConfig{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhAuthChoice := v.AuthChoiceValidationRuleHandler
+	rulesAuthChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhAuthChoice(rulesAuthChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ElasticConfig.auth_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["auth_choice"] = vFn
+
+	vrhTlsChoice := v.TlsChoiceValidationRuleHandler
+	rulesTlsChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhTlsChoice(rulesTlsChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ElasticConfig.tls_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["tls_choice"] = vFn
+
+	vrhEndpoint := v.EndpointValidationRuleHandler
+	rulesEndpoint := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhEndpoint(rulesEndpoint)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ElasticConfig.endpoint: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["endpoint"] = vFn
+
+	v.FldValidators["auth_choice.auth_basic"] = HttpAuthBasicValidator().Validate
+	v.FldValidators["auth_choice.auth_aws"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
+
+	v.FldValidators["tls_choice.use_tls"] = TLSConfigTypeValidator().Validate
+
+	v.FldValidators["batch"] = BatchOptionTypeValidator().Validate
+
+	return v
+}()
+
+func ElasticConfigValidator() db.Validator {
+	return DefaultElasticConfigValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *GetSpecType) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
 
 func (m *GetSpecType) ToYAML() (string, error) {
 	return codec.ToYAML(m)
+}
+
+// Redact squashes sensitive info in m (in-place)
+func (m *GetSpecType) Redact(ctx context.Context) error {
+	// clear fields with confidential option set (at message or field level)
+	if m == nil {
+		return nil
+	}
+
+	if err := m.GetHttpReceiver().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting GetSpecType.http_receiver")
+	}
+
+	if err := m.GetDatadogReceiver().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting GetSpecType.datadog_receiver")
+	}
+
+	if err := m.GetSplunkReceiver().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting GetSpecType.splunk_receiver")
+	}
+
+	if err := m.GetElasticReceiver().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting GetSpecType.elastic_receiver")
+	}
+
+	if err := m.GetAzureReceiver().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting GetSpecType.azure_receiver")
+	}
+
+	if err := m.GetAzureEventHubsReceiver().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting GetSpecType.azure_event_hubs_receiver")
+	}
+
+	return nil
 }
 
 func (m *GetSpecType) DeepCopy() *GetSpecType {
@@ -322,6 +1922,37 @@ func (m *GetSpecType) GetReceiverDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "s3_receiver." + dri.DRField
 		}
 		return drInfos, err
+
+	case *GetSpecType_HttpReceiver:
+
+		return nil, nil
+
+	case *GetSpecType_DatadogReceiver:
+
+		return nil, nil
+
+	case *GetSpecType_SplunkReceiver:
+
+		return nil, nil
+
+	case *GetSpecType_ElasticReceiver:
+		drInfos, err := m.GetElasticReceiver().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetElasticReceiver().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "elastic_receiver." + dri.DRField
+		}
+		return drInfos, err
+
+	case *GetSpecType_AzureReceiver:
+
+		return nil, nil
+
+	case *GetSpecType_AzureEventHubsReceiver:
+
+		return nil, nil
 
 	default:
 		return nil, nil
@@ -443,6 +2074,72 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
+	case *GetSpecType_HttpReceiver:
+		if fv, exists := v.FldValidators["receiver.http_receiver"]; exists {
+			val := m.GetReceiver().(*GetSpecType_HttpReceiver).HttpReceiver
+			vOpts := append(opts,
+				db.WithValidateField("receiver"),
+				db.WithValidateField("http_receiver"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GetSpecType_DatadogReceiver:
+		if fv, exists := v.FldValidators["receiver.datadog_receiver"]; exists {
+			val := m.GetReceiver().(*GetSpecType_DatadogReceiver).DatadogReceiver
+			vOpts := append(opts,
+				db.WithValidateField("receiver"),
+				db.WithValidateField("datadog_receiver"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GetSpecType_SplunkReceiver:
+		if fv, exists := v.FldValidators["receiver.splunk_receiver"]; exists {
+			val := m.GetReceiver().(*GetSpecType_SplunkReceiver).SplunkReceiver
+			vOpts := append(opts,
+				db.WithValidateField("receiver"),
+				db.WithValidateField("splunk_receiver"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GetSpecType_ElasticReceiver:
+		if fv, exists := v.FldValidators["receiver.elastic_receiver"]; exists {
+			val := m.GetReceiver().(*GetSpecType_ElasticReceiver).ElasticReceiver
+			vOpts := append(opts,
+				db.WithValidateField("receiver"),
+				db.WithValidateField("elastic_receiver"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GetSpecType_AzureReceiver:
+		if fv, exists := v.FldValidators["receiver.azure_receiver"]; exists {
+			val := m.GetReceiver().(*GetSpecType_AzureReceiver).AzureReceiver
+			vOpts := append(opts,
+				db.WithValidateField("receiver"),
+				db.WithValidateField("azure_receiver"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GetSpecType_AzureEventHubsReceiver:
+		if fv, exists := v.FldValidators["receiver.azure_event_hubs_receiver"]; exists {
+			val := m.GetReceiver().(*GetSpecType_AzureEventHubsReceiver).AzureEventHubsReceiver
+			vOpts := append(opts,
+				db.WithValidateField("receiver"),
+				db.WithValidateField("azure_event_hubs_receiver"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 
@@ -486,6 +2183,12 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v.FldValidators["filter_choice.ns_list"] = NSListValidator().Validate
 
 	v.FldValidators["receiver.s3_receiver"] = S3ConfigValidator().Validate
+	v.FldValidators["receiver.http_receiver"] = HTTPConfigValidator().Validate
+	v.FldValidators["receiver.datadog_receiver"] = DatadogConfigValidator().Validate
+	v.FldValidators["receiver.splunk_receiver"] = SplunkConfigValidator().Validate
+	v.FldValidators["receiver.elastic_receiver"] = ElasticConfigValidator().Validate
+	v.FldValidators["receiver.azure_receiver"] = AzureBlobConfigValidator().Validate
+	v.FldValidators["receiver.azure_event_hubs_receiver"] = AzureEventHubsConfigValidator().Validate
 
 	return v
 }()
@@ -502,6 +2205,40 @@ func (m *GlobalSpecType) ToJSON() (string, error) {
 
 func (m *GlobalSpecType) ToYAML() (string, error) {
 	return codec.ToYAML(m)
+}
+
+// Redact squashes sensitive info in m (in-place)
+func (m *GlobalSpecType) Redact(ctx context.Context) error {
+	// clear fields with confidential option set (at message or field level)
+	if m == nil {
+		return nil
+	}
+
+	if err := m.GetHttpReceiver().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting GlobalSpecType.http_receiver")
+	}
+
+	if err := m.GetDatadogReceiver().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting GlobalSpecType.datadog_receiver")
+	}
+
+	if err := m.GetSplunkReceiver().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting GlobalSpecType.splunk_receiver")
+	}
+
+	if err := m.GetElasticReceiver().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting GlobalSpecType.elastic_receiver")
+	}
+
+	if err := m.GetAzureReceiver().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting GlobalSpecType.azure_receiver")
+	}
+
+	if err := m.GetAzureEventHubsReceiver().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting GlobalSpecType.azure_event_hubs_receiver")
+	}
+
+	return nil
 }
 
 func (m *GlobalSpecType) DeepCopy() *GlobalSpecType {
@@ -569,6 +2306,37 @@ func (m *GlobalSpecType) GetReceiverDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "s3_receiver." + dri.DRField
 		}
 		return drInfos, err
+
+	case *GlobalSpecType_HttpReceiver:
+
+		return nil, nil
+
+	case *GlobalSpecType_DatadogReceiver:
+
+		return nil, nil
+
+	case *GlobalSpecType_SplunkReceiver:
+
+		return nil, nil
+
+	case *GlobalSpecType_ElasticReceiver:
+		drInfos, err := m.GetElasticReceiver().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetElasticReceiver().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "elastic_receiver." + dri.DRField
+		}
+		return drInfos, err
+
+	case *GlobalSpecType_AzureReceiver:
+
+		return nil, nil
+
+	case *GlobalSpecType_AzureEventHubsReceiver:
+
+		return nil, nil
 
 	default:
 		return nil, nil
@@ -739,6 +2507,72 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
+	case *GlobalSpecType_HttpReceiver:
+		if fv, exists := v.FldValidators["receiver.http_receiver"]; exists {
+			val := m.GetReceiver().(*GlobalSpecType_HttpReceiver).HttpReceiver
+			vOpts := append(opts,
+				db.WithValidateField("receiver"),
+				db.WithValidateField("http_receiver"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GlobalSpecType_DatadogReceiver:
+		if fv, exists := v.FldValidators["receiver.datadog_receiver"]; exists {
+			val := m.GetReceiver().(*GlobalSpecType_DatadogReceiver).DatadogReceiver
+			vOpts := append(opts,
+				db.WithValidateField("receiver"),
+				db.WithValidateField("datadog_receiver"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GlobalSpecType_SplunkReceiver:
+		if fv, exists := v.FldValidators["receiver.splunk_receiver"]; exists {
+			val := m.GetReceiver().(*GlobalSpecType_SplunkReceiver).SplunkReceiver
+			vOpts := append(opts,
+				db.WithValidateField("receiver"),
+				db.WithValidateField("splunk_receiver"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GlobalSpecType_ElasticReceiver:
+		if fv, exists := v.FldValidators["receiver.elastic_receiver"]; exists {
+			val := m.GetReceiver().(*GlobalSpecType_ElasticReceiver).ElasticReceiver
+			vOpts := append(opts,
+				db.WithValidateField("receiver"),
+				db.WithValidateField("elastic_receiver"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GlobalSpecType_AzureReceiver:
+		if fv, exists := v.FldValidators["receiver.azure_receiver"]; exists {
+			val := m.GetReceiver().(*GlobalSpecType_AzureReceiver).AzureReceiver
+			vOpts := append(opts,
+				db.WithValidateField("receiver"),
+				db.WithValidateField("azure_receiver"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GlobalSpecType_AzureEventHubsReceiver:
+		if fv, exists := v.FldValidators["receiver.azure_event_hubs_receiver"]; exists {
+			val := m.GetReceiver().(*GlobalSpecType_AzureEventHubsReceiver).AzureEventHubsReceiver
+			vOpts := append(opts,
+				db.WithValidateField("receiver"),
+				db.WithValidateField("azure_event_hubs_receiver"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 
@@ -791,6 +2625,12 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v.FldValidators["filter_choice.ns_list"] = NSListValidator().Validate
 
 	v.FldValidators["receiver.s3_receiver"] = S3ConfigValidator().Validate
+	v.FldValidators["receiver.http_receiver"] = HTTPConfigValidator().Validate
+	v.FldValidators["receiver.datadog_receiver"] = DatadogConfigValidator().Validate
+	v.FldValidators["receiver.splunk_receiver"] = SplunkConfigValidator().Validate
+	v.FldValidators["receiver.elastic_receiver"] = ElasticConfigValidator().Validate
+	v.FldValidators["receiver.azure_receiver"] = AzureBlobConfigValidator().Validate
+	v.FldValidators["receiver.azure_event_hubs_receiver"] = AzureEventHubsConfigValidator().Validate
 
 	v.FldValidators["view_internal"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
@@ -799,6 +2639,414 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 
 func GlobalSpecTypeValidator() db.Validator {
 	return DefaultGlobalSpecTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *HTTPConfig) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *HTTPConfig) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+// Redact squashes sensitive info in m (in-place)
+func (m *HTTPConfig) Redact(ctx context.Context) error {
+	// clear fields with confidential option set (at message or field level)
+	if m == nil {
+		return nil
+	}
+
+	if err := m.GetAuthBasic().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting HTTPConfig.auth_basic")
+	}
+
+	if err := m.GetAuthToken().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting HTTPConfig.auth_token")
+	}
+
+	if err := m.GetUseTls().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting HTTPConfig.use_tls")
+	}
+
+	return nil
+}
+
+func (m *HTTPConfig) DeepCopy() *HTTPConfig {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &HTTPConfig{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *HTTPConfig) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *HTTPConfig) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return HTTPConfigValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateHTTPConfig struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateHTTPConfig) AuthChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for auth_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateHTTPConfig) TlsChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for tls_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateHTTPConfig) UriValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for uri")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateHTTPConfig) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*HTTPConfig)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *HTTPConfig got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["auth_choice"]; exists {
+		val := m.GetAuthChoice()
+		vOpts := append(opts,
+			db.WithValidateField("auth_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetAuthChoice().(type) {
+	case *HTTPConfig_AuthNone:
+		if fv, exists := v.FldValidators["auth_choice.auth_none"]; exists {
+			val := m.GetAuthChoice().(*HTTPConfig_AuthNone).AuthNone
+			vOpts := append(opts,
+				db.WithValidateField("auth_choice"),
+				db.WithValidateField("auth_none"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *HTTPConfig_AuthBasic:
+		if fv, exists := v.FldValidators["auth_choice.auth_basic"]; exists {
+			val := m.GetAuthChoice().(*HTTPConfig_AuthBasic).AuthBasic
+			vOpts := append(opts,
+				db.WithValidateField("auth_choice"),
+				db.WithValidateField("auth_basic"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *HTTPConfig_AuthToken:
+		if fv, exists := v.FldValidators["auth_choice.auth_token"]; exists {
+			val := m.GetAuthChoice().(*HTTPConfig_AuthToken).AuthToken
+			vOpts := append(opts,
+				db.WithValidateField("auth_choice"),
+				db.WithValidateField("auth_token"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["batch"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("batch"))
+		if err := fv(ctx, m.GetBatch(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["compression"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("compression"))
+		if err := fv(ctx, m.GetCompression(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["tls_choice"]; exists {
+		val := m.GetTlsChoice()
+		vOpts := append(opts,
+			db.WithValidateField("tls_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetTlsChoice().(type) {
+	case *HTTPConfig_NoTls:
+		if fv, exists := v.FldValidators["tls_choice.no_tls"]; exists {
+			val := m.GetTlsChoice().(*HTTPConfig_NoTls).NoTls
+			vOpts := append(opts,
+				db.WithValidateField("tls_choice"),
+				db.WithValidateField("no_tls"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *HTTPConfig_UseTls:
+		if fv, exists := v.FldValidators["tls_choice.use_tls"]; exists {
+			val := m.GetTlsChoice().(*HTTPConfig_UseTls).UseTls
+			vOpts := append(opts,
+				db.WithValidateField("tls_choice"),
+				db.WithValidateField("use_tls"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["uri"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("uri"))
+		if err := fv(ctx, m.GetUri(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultHTTPConfigValidator = func() *ValidateHTTPConfig {
+	v := &ValidateHTTPConfig{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhAuthChoice := v.AuthChoiceValidationRuleHandler
+	rulesAuthChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhAuthChoice(rulesAuthChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for HTTPConfig.auth_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["auth_choice"] = vFn
+
+	vrhTlsChoice := v.TlsChoiceValidationRuleHandler
+	rulesTlsChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhTlsChoice(rulesTlsChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for HTTPConfig.tls_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["tls_choice"] = vFn
+
+	vrhUri := v.UriValidationRuleHandler
+	rulesUri := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.uri_ref":   "true",
+	}
+	vFn, err = vrhUri(rulesUri)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for HTTPConfig.uri: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["uri"] = vFn
+
+	v.FldValidators["auth_choice.auth_basic"] = HttpAuthBasicValidator().Validate
+	v.FldValidators["auth_choice.auth_token"] = AuthTokenValidator().Validate
+
+	v.FldValidators["tls_choice.use_tls"] = TLSConfigTypeValidator().Validate
+
+	v.FldValidators["batch"] = BatchOptionTypeValidator().Validate
+
+	return v
+}()
+
+func HTTPConfigValidator() db.Validator {
+	return DefaultHTTPConfigValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *HttpAuthBasic) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *HttpAuthBasic) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+// Redact squashes sensitive info in m (in-place)
+func (m *HttpAuthBasic) Redact(ctx context.Context) error {
+	// clear fields with confidential option set (at message or field level)
+	if m == nil {
+		return nil
+	}
+
+	if err := m.GetPassword().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting HttpAuthBasic.password")
+	}
+
+	return nil
+}
+
+func (m *HttpAuthBasic) DeepCopy() *HttpAuthBasic {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &HttpAuthBasic{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *HttpAuthBasic) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *HttpAuthBasic) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return HttpAuthBasicValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateHttpAuthBasic struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateHttpAuthBasic) UserNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for user_name")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateHttpAuthBasic) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*HttpAuthBasic)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *HttpAuthBasic got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["password"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("password"))
+		if err := fv(ctx, m.GetPassword(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["user_name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("user_name"))
+		if err := fv(ctx, m.GetUserName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultHttpAuthBasicValidator = func() *ValidateHttpAuthBasic {
+	v := &ValidateHttpAuthBasic{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhUserName := v.UserNameValidationRuleHandler
+	rulesUserName := map[string]string{
+		"ves.io.schema.rules.string.max_len": "64",
+	}
+	vFn, err = vrhUserName(rulesUserName)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for HttpAuthBasic.user_name: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["user_name"] = vFn
+
+	v.FldValidators["password"] = ves_io_schema.SecretTypeValidator().Validate
+
+	return v
+}()
+
+func HttpAuthBasicValidator() db.Validator {
+	return DefaultHttpAuthBasicValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -950,6 +3198,40 @@ func (m *ReplaceSpecType) ToYAML() (string, error) {
 	return codec.ToYAML(m)
 }
 
+// Redact squashes sensitive info in m (in-place)
+func (m *ReplaceSpecType) Redact(ctx context.Context) error {
+	// clear fields with confidential option set (at message or field level)
+	if m == nil {
+		return nil
+	}
+
+	if err := m.GetHttpReceiver().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting ReplaceSpecType.http_receiver")
+	}
+
+	if err := m.GetDatadogReceiver().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting ReplaceSpecType.datadog_receiver")
+	}
+
+	if err := m.GetSplunkReceiver().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting ReplaceSpecType.splunk_receiver")
+	}
+
+	if err := m.GetElasticReceiver().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting ReplaceSpecType.elastic_receiver")
+	}
+
+	if err := m.GetAzureReceiver().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting ReplaceSpecType.azure_receiver")
+	}
+
+	if err := m.GetAzureEventHubsReceiver().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting ReplaceSpecType.azure_event_hubs_receiver")
+	}
+
+	return nil
+}
+
 func (m *ReplaceSpecType) DeepCopy() *ReplaceSpecType {
 	if m == nil {
 		return nil
@@ -1002,6 +3284,37 @@ func (m *ReplaceSpecType) GetReceiverDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "s3_receiver." + dri.DRField
 		}
 		return drInfos, err
+
+	case *ReplaceSpecType_HttpReceiver:
+
+		return nil, nil
+
+	case *ReplaceSpecType_DatadogReceiver:
+
+		return nil, nil
+
+	case *ReplaceSpecType_SplunkReceiver:
+
+		return nil, nil
+
+	case *ReplaceSpecType_ElasticReceiver:
+		drInfos, err := m.GetElasticReceiver().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetElasticReceiver().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "elastic_receiver." + dri.DRField
+		}
+		return drInfos, err
+
+	case *ReplaceSpecType_AzureReceiver:
+
+		return nil, nil
+
+	case *ReplaceSpecType_AzureEventHubsReceiver:
+
+		return nil, nil
 
 	default:
 		return nil, nil
@@ -1123,6 +3436,72 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
+	case *ReplaceSpecType_HttpReceiver:
+		if fv, exists := v.FldValidators["receiver.http_receiver"]; exists {
+			val := m.GetReceiver().(*ReplaceSpecType_HttpReceiver).HttpReceiver
+			vOpts := append(opts,
+				db.WithValidateField("receiver"),
+				db.WithValidateField("http_receiver"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ReplaceSpecType_DatadogReceiver:
+		if fv, exists := v.FldValidators["receiver.datadog_receiver"]; exists {
+			val := m.GetReceiver().(*ReplaceSpecType_DatadogReceiver).DatadogReceiver
+			vOpts := append(opts,
+				db.WithValidateField("receiver"),
+				db.WithValidateField("datadog_receiver"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ReplaceSpecType_SplunkReceiver:
+		if fv, exists := v.FldValidators["receiver.splunk_receiver"]; exists {
+			val := m.GetReceiver().(*ReplaceSpecType_SplunkReceiver).SplunkReceiver
+			vOpts := append(opts,
+				db.WithValidateField("receiver"),
+				db.WithValidateField("splunk_receiver"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ReplaceSpecType_ElasticReceiver:
+		if fv, exists := v.FldValidators["receiver.elastic_receiver"]; exists {
+			val := m.GetReceiver().(*ReplaceSpecType_ElasticReceiver).ElasticReceiver
+			vOpts := append(opts,
+				db.WithValidateField("receiver"),
+				db.WithValidateField("elastic_receiver"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ReplaceSpecType_AzureReceiver:
+		if fv, exists := v.FldValidators["receiver.azure_receiver"]; exists {
+			val := m.GetReceiver().(*ReplaceSpecType_AzureReceiver).AzureReceiver
+			vOpts := append(opts,
+				db.WithValidateField("receiver"),
+				db.WithValidateField("azure_receiver"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ReplaceSpecType_AzureEventHubsReceiver:
+		if fv, exists := v.FldValidators["receiver.azure_event_hubs_receiver"]; exists {
+			val := m.GetReceiver().(*ReplaceSpecType_AzureEventHubsReceiver).AzureEventHubsReceiver
+			vOpts := append(opts,
+				db.WithValidateField("receiver"),
+				db.WithValidateField("azure_event_hubs_receiver"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 
@@ -1166,6 +3545,12 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	v.FldValidators["filter_choice.ns_list"] = NSListValidator().Validate
 
 	v.FldValidators["receiver.s3_receiver"] = S3ConfigValidator().Validate
+	v.FldValidators["receiver.http_receiver"] = HTTPConfigValidator().Validate
+	v.FldValidators["receiver.datadog_receiver"] = DatadogConfigValidator().Validate
+	v.FldValidators["receiver.splunk_receiver"] = SplunkConfigValidator().Validate
+	v.FldValidators["receiver.elastic_receiver"] = ElasticConfigValidator().Validate
+	v.FldValidators["receiver.azure_receiver"] = AzureBlobConfigValidator().Validate
+	v.FldValidators["receiver.azure_event_hubs_receiver"] = AzureEventHubsConfigValidator().Validate
 
 	return v
 }()
@@ -1346,10 +3731,28 @@ func (v *ValidateS3Config) Validate(ctx context.Context, pm interface{}, opts ..
 
 	}
 
+	if fv, exists := v.FldValidators["batch"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("batch"))
+		if err := fv(ctx, m.GetBatch(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["bucket"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("bucket"))
 		if err := fv(ctx, m.GetBucket(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["compression"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("compression"))
+		if err := fv(ctx, m.GetCompression(), vOpts...); err != nil {
 			return err
 		}
 
@@ -1373,7 +3776,7 @@ var DefaultS3ConfigValidator = func() *ValidateS3Config {
 	vrhBucket := v.BucketValidationRuleHandler
 	rulesBucket := map[string]string{
 		"ves.io.schema.rules.message.required": "true",
-		"ves.io.schema.rules.string.max_len":   "63",
+		"ves.io.schema.rules.string.max_len":   "128",
 		"ves.io.schema.rules.string.min_len":   "3",
 		"ves.io.schema.rules.string.pattern":   "^[a-z0-9]+[a-z0-9\\.-]+[a-z0-9]$",
 	}
@@ -1407,11 +3810,665 @@ var DefaultS3ConfigValidator = func() *ValidateS3Config {
 	}
 	v.FldValidators["aws_region"] = vFn
 
+	v.FldValidators["batch"] = BatchOptionTypeValidator().Validate
+
 	return v
 }()
 
 func S3ConfigValidator() db.Validator {
 	return DefaultS3ConfigValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *SplunkConfig) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *SplunkConfig) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+// Redact squashes sensitive info in m (in-place)
+func (m *SplunkConfig) Redact(ctx context.Context) error {
+	// clear fields with confidential option set (at message or field level)
+	if m == nil {
+		return nil
+	}
+
+	if err := m.GetSplunkHecToken().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting SplunkConfig.splunk_hec_token")
+	}
+
+	if err := m.GetUseTls().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting SplunkConfig.use_tls")
+	}
+
+	return nil
+}
+
+func (m *SplunkConfig) DeepCopy() *SplunkConfig {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &SplunkConfig{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *SplunkConfig) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *SplunkConfig) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return SplunkConfigValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateSplunkConfig struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateSplunkConfig) TlsChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for tls_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateSplunkConfig) EndpointValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for endpoint")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateSplunkConfig) SplunkHecTokenValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "MessageValidationRuleHandler for splunk_hec_token")
+	}
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		if err := ves_io_schema.SecretTypeValidator().Validate(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateSplunkConfig) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*SplunkConfig)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *SplunkConfig got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["batch"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("batch"))
+		if err := fv(ctx, m.GetBatch(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["compression"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("compression"))
+		if err := fv(ctx, m.GetCompression(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["endpoint"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("endpoint"))
+		if err := fv(ctx, m.GetEndpoint(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["splunk_hec_token"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("splunk_hec_token"))
+		if err := fv(ctx, m.GetSplunkHecToken(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["tls_choice"]; exists {
+		val := m.GetTlsChoice()
+		vOpts := append(opts,
+			db.WithValidateField("tls_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetTlsChoice().(type) {
+	case *SplunkConfig_NoTls:
+		if fv, exists := v.FldValidators["tls_choice.no_tls"]; exists {
+			val := m.GetTlsChoice().(*SplunkConfig_NoTls).NoTls
+			vOpts := append(opts,
+				db.WithValidateField("tls_choice"),
+				db.WithValidateField("no_tls"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *SplunkConfig_UseTls:
+		if fv, exists := v.FldValidators["tls_choice.use_tls"]; exists {
+			val := m.GetTlsChoice().(*SplunkConfig_UseTls).UseTls
+			vOpts := append(opts,
+				db.WithValidateField("tls_choice"),
+				db.WithValidateField("use_tls"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultSplunkConfigValidator = func() *ValidateSplunkConfig {
+	v := &ValidateSplunkConfig{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhTlsChoice := v.TlsChoiceValidationRuleHandler
+	rulesTlsChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhTlsChoice(rulesTlsChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for SplunkConfig.tls_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["tls_choice"] = vFn
+
+	vrhEndpoint := v.EndpointValidationRuleHandler
+	rulesEndpoint := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhEndpoint(rulesEndpoint)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for SplunkConfig.endpoint: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["endpoint"] = vFn
+
+	vrhSplunkHecToken := v.SplunkHecTokenValidationRuleHandler
+	rulesSplunkHecToken := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhSplunkHecToken(rulesSplunkHecToken)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for SplunkConfig.splunk_hec_token: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["splunk_hec_token"] = vFn
+
+	v.FldValidators["tls_choice.use_tls"] = TLSConfigTypeValidator().Validate
+
+	v.FldValidators["batch"] = BatchOptionTypeValidator().Validate
+
+	return v
+}()
+
+func SplunkConfigValidator() db.Validator {
+	return DefaultSplunkConfigValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *TLSClientConfigType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *TLSClientConfigType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+// Redact squashes sensitive info in m (in-place)
+func (m *TLSClientConfigType) Redact(ctx context.Context) error {
+	// clear fields with confidential option set (at message or field level)
+	if m == nil {
+		return nil
+	}
+
+	if err := m.GetKeyUrl().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting TLSClientConfigType.key_url")
+	}
+
+	return nil
+}
+
+func (m *TLSClientConfigType) DeepCopy() *TLSClientConfigType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &TLSClientConfigType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *TLSClientConfigType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *TLSClientConfigType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return TLSClientConfigTypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateTLSClientConfigType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateTLSClientConfigType) CertificateValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for certificate")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateTLSClientConfigType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*TLSClientConfigType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *TLSClientConfigType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["certificate"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("certificate"))
+		if err := fv(ctx, m.GetCertificate(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["key_url"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("key_url"))
+		if err := fv(ctx, m.GetKeyUrl(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultTLSClientConfigTypeValidator = func() *ValidateTLSClientConfigType {
+	v := &ValidateTLSClientConfigType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhCertificate := v.CertificateValidationRuleHandler
+	rulesCertificate := map[string]string{
+		"ves.io.schema.rules.string.max_bytes": "131072",
+		"ves.io.schema.rules.string.uri_ref":   "true",
+	}
+	vFn, err = vrhCertificate(rulesCertificate)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for TLSClientConfigType.certificate: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["certificate"] = vFn
+
+	v.FldValidators["key_url"] = ves_io_schema.SecretTypeValidator().Validate
+
+	return v
+}()
+
+func TLSClientConfigTypeValidator() db.Validator {
+	return DefaultTLSClientConfigTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *TLSConfigType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *TLSConfigType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+// Redact squashes sensitive info in m (in-place)
+func (m *TLSConfigType) Redact(ctx context.Context) error {
+	// clear fields with confidential option set (at message or field level)
+	if m == nil {
+		return nil
+	}
+
+	if err := m.GetMtlsEnable().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting TLSConfigType.mtls_enable")
+	}
+
+	return nil
+}
+
+func (m *TLSConfigType) DeepCopy() *TLSConfigType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &TLSConfigType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *TLSConfigType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *TLSConfigType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return TLSConfigTypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateTLSConfigType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateTLSConfigType) CaChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for ca_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateTLSConfigType) CaChoiceTrustedCaUrlValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_TrustedCaUrl, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for trusted_ca_url")
+	}
+	return oValidatorFn_TrustedCaUrl, nil
+}
+
+func (v *ValidateTLSConfigType) MtlsChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for mtls_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateTLSConfigType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*TLSConfigType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *TLSConfigType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["ca_choice"]; exists {
+		val := m.GetCaChoice()
+		vOpts := append(opts,
+			db.WithValidateField("ca_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetCaChoice().(type) {
+	case *TLSConfigType_NoCa:
+		if fv, exists := v.FldValidators["ca_choice.no_ca"]; exists {
+			val := m.GetCaChoice().(*TLSConfigType_NoCa).NoCa
+			vOpts := append(opts,
+				db.WithValidateField("ca_choice"),
+				db.WithValidateField("no_ca"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *TLSConfigType_TrustedCaUrl:
+		if fv, exists := v.FldValidators["ca_choice.trusted_ca_url"]; exists {
+			val := m.GetCaChoice().(*TLSConfigType_TrustedCaUrl).TrustedCaUrl
+			vOpts := append(opts,
+				db.WithValidateField("ca_choice"),
+				db.WithValidateField("trusted_ca_url"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["mtls_choice"]; exists {
+		val := m.GetMtlsChoice()
+		vOpts := append(opts,
+			db.WithValidateField("mtls_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetMtlsChoice().(type) {
+	case *TLSConfigType_MtlsDisabled:
+		if fv, exists := v.FldValidators["mtls_choice.mtls_disabled"]; exists {
+			val := m.GetMtlsChoice().(*TLSConfigType_MtlsDisabled).MtlsDisabled
+			vOpts := append(opts,
+				db.WithValidateField("mtls_choice"),
+				db.WithValidateField("mtls_disabled"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *TLSConfigType_MtlsEnable:
+		if fv, exists := v.FldValidators["mtls_choice.mtls_enable"]; exists {
+			val := m.GetMtlsChoice().(*TLSConfigType_MtlsEnable).MtlsEnable
+			vOpts := append(opts,
+				db.WithValidateField("mtls_choice"),
+				db.WithValidateField("mtls_enable"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	switch m.GetVerifyCertificate().(type) {
+	case *TLSConfigType_EnableVerifyCertificate:
+		if fv, exists := v.FldValidators["verify_certificate.enable_verify_certificate"]; exists {
+			val := m.GetVerifyCertificate().(*TLSConfigType_EnableVerifyCertificate).EnableVerifyCertificate
+			vOpts := append(opts,
+				db.WithValidateField("verify_certificate"),
+				db.WithValidateField("enable_verify_certificate"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *TLSConfigType_DisableVerifyCertificate:
+		if fv, exists := v.FldValidators["verify_certificate.disable_verify_certificate"]; exists {
+			val := m.GetVerifyCertificate().(*TLSConfigType_DisableVerifyCertificate).DisableVerifyCertificate
+			vOpts := append(opts,
+				db.WithValidateField("verify_certificate"),
+				db.WithValidateField("disable_verify_certificate"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	switch m.GetVerifyHostname().(type) {
+	case *TLSConfigType_EnableVerifyHostname:
+		if fv, exists := v.FldValidators["verify_hostname.enable_verify_hostname"]; exists {
+			val := m.GetVerifyHostname().(*TLSConfigType_EnableVerifyHostname).EnableVerifyHostname
+			vOpts := append(opts,
+				db.WithValidateField("verify_hostname"),
+				db.WithValidateField("enable_verify_hostname"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *TLSConfigType_DisableVerifyHostname:
+		if fv, exists := v.FldValidators["verify_hostname.disable_verify_hostname"]; exists {
+			val := m.GetVerifyHostname().(*TLSConfigType_DisableVerifyHostname).DisableVerifyHostname
+			vOpts := append(opts,
+				db.WithValidateField("verify_hostname"),
+				db.WithValidateField("disable_verify_hostname"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultTLSConfigTypeValidator = func() *ValidateTLSConfigType {
+	v := &ValidateTLSConfigType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhCaChoice := v.CaChoiceValidationRuleHandler
+	rulesCaChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhCaChoice(rulesCaChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for TLSConfigType.ca_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["ca_choice"] = vFn
+
+	vrhCaChoiceTrustedCaUrl := v.CaChoiceTrustedCaUrlValidationRuleHandler
+	rulesCaChoiceTrustedCaUrl := map[string]string{
+		"ves.io.schema.rules.string.max_bytes": "131072",
+		"ves.io.schema.rules.string.uri_ref":   "true",
+	}
+	vFnMap["ca_choice.trusted_ca_url"], err = vrhCaChoiceTrustedCaUrl(rulesCaChoiceTrustedCaUrl)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field TLSConfigType.ca_choice_trusted_ca_url: %s", err)
+		panic(errMsg)
+	}
+
+	v.FldValidators["ca_choice.trusted_ca_url"] = vFnMap["ca_choice.trusted_ca_url"]
+
+	vrhMtlsChoice := v.MtlsChoiceValidationRuleHandler
+	rulesMtlsChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhMtlsChoice(rulesMtlsChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for TLSConfigType.mtls_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["mtls_choice"] = vFn
+
+	v.FldValidators["mtls_choice.mtls_enable"] = TLSClientConfigTypeValidator().Validate
+
+	return v
+}()
+
+func TLSConfigTypeValidator() db.Validator {
+	return DefaultTLSConfigTypeValidator
 }
 
 // create setters in CreateSpecType from GlobalSpecType for oneof fields
@@ -1467,8 +4524,26 @@ func (r *CreateSpecType) SetReceiverToGlobalSpecType(o *GlobalSpecType) error {
 	case nil:
 		o.Receiver = nil
 
+	case *CreateSpecType_AzureEventHubsReceiver:
+		o.Receiver = &GlobalSpecType_AzureEventHubsReceiver{AzureEventHubsReceiver: of.AzureEventHubsReceiver}
+
+	case *CreateSpecType_AzureReceiver:
+		o.Receiver = &GlobalSpecType_AzureReceiver{AzureReceiver: of.AzureReceiver}
+
+	case *CreateSpecType_DatadogReceiver:
+		o.Receiver = &GlobalSpecType_DatadogReceiver{DatadogReceiver: of.DatadogReceiver}
+
+	case *CreateSpecType_ElasticReceiver:
+		o.Receiver = &GlobalSpecType_ElasticReceiver{ElasticReceiver: of.ElasticReceiver}
+
+	case *CreateSpecType_HttpReceiver:
+		o.Receiver = &GlobalSpecType_HttpReceiver{HttpReceiver: of.HttpReceiver}
+
 	case *CreateSpecType_S3Receiver:
 		o.Receiver = &GlobalSpecType_S3Receiver{S3Receiver: of.S3Receiver}
+
+	case *CreateSpecType_SplunkReceiver:
+		o.Receiver = &GlobalSpecType_SplunkReceiver{SplunkReceiver: of.SplunkReceiver}
 
 	default:
 		return fmt.Errorf("Unknown oneof field %T", of)
@@ -1481,8 +4556,26 @@ func (r *CreateSpecType) GetReceiverFromGlobalSpecType(o *GlobalSpecType) error 
 	case nil:
 		r.Receiver = nil
 
+	case *GlobalSpecType_AzureEventHubsReceiver:
+		r.Receiver = &CreateSpecType_AzureEventHubsReceiver{AzureEventHubsReceiver: of.AzureEventHubsReceiver}
+
+	case *GlobalSpecType_AzureReceiver:
+		r.Receiver = &CreateSpecType_AzureReceiver{AzureReceiver: of.AzureReceiver}
+
+	case *GlobalSpecType_DatadogReceiver:
+		r.Receiver = &CreateSpecType_DatadogReceiver{DatadogReceiver: of.DatadogReceiver}
+
+	case *GlobalSpecType_ElasticReceiver:
+		r.Receiver = &CreateSpecType_ElasticReceiver{ElasticReceiver: of.ElasticReceiver}
+
+	case *GlobalSpecType_HttpReceiver:
+		r.Receiver = &CreateSpecType_HttpReceiver{HttpReceiver: of.HttpReceiver}
+
 	case *GlobalSpecType_S3Receiver:
 		r.Receiver = &CreateSpecType_S3Receiver{S3Receiver: of.S3Receiver}
+
+	case *GlobalSpecType_SplunkReceiver:
+		r.Receiver = &CreateSpecType_SplunkReceiver{SplunkReceiver: of.SplunkReceiver}
 
 	default:
 		return fmt.Errorf("Unknown oneof field %T", of)
@@ -1578,8 +4671,26 @@ func (r *GetSpecType) SetReceiverToGlobalSpecType(o *GlobalSpecType) error {
 	case nil:
 		o.Receiver = nil
 
+	case *GetSpecType_AzureEventHubsReceiver:
+		o.Receiver = &GlobalSpecType_AzureEventHubsReceiver{AzureEventHubsReceiver: of.AzureEventHubsReceiver}
+
+	case *GetSpecType_AzureReceiver:
+		o.Receiver = &GlobalSpecType_AzureReceiver{AzureReceiver: of.AzureReceiver}
+
+	case *GetSpecType_DatadogReceiver:
+		o.Receiver = &GlobalSpecType_DatadogReceiver{DatadogReceiver: of.DatadogReceiver}
+
+	case *GetSpecType_ElasticReceiver:
+		o.Receiver = &GlobalSpecType_ElasticReceiver{ElasticReceiver: of.ElasticReceiver}
+
+	case *GetSpecType_HttpReceiver:
+		o.Receiver = &GlobalSpecType_HttpReceiver{HttpReceiver: of.HttpReceiver}
+
 	case *GetSpecType_S3Receiver:
 		o.Receiver = &GlobalSpecType_S3Receiver{S3Receiver: of.S3Receiver}
+
+	case *GetSpecType_SplunkReceiver:
+		o.Receiver = &GlobalSpecType_SplunkReceiver{SplunkReceiver: of.SplunkReceiver}
 
 	default:
 		return fmt.Errorf("Unknown oneof field %T", of)
@@ -1592,8 +4703,26 @@ func (r *GetSpecType) GetReceiverFromGlobalSpecType(o *GlobalSpecType) error {
 	case nil:
 		r.Receiver = nil
 
+	case *GlobalSpecType_AzureEventHubsReceiver:
+		r.Receiver = &GetSpecType_AzureEventHubsReceiver{AzureEventHubsReceiver: of.AzureEventHubsReceiver}
+
+	case *GlobalSpecType_AzureReceiver:
+		r.Receiver = &GetSpecType_AzureReceiver{AzureReceiver: of.AzureReceiver}
+
+	case *GlobalSpecType_DatadogReceiver:
+		r.Receiver = &GetSpecType_DatadogReceiver{DatadogReceiver: of.DatadogReceiver}
+
+	case *GlobalSpecType_ElasticReceiver:
+		r.Receiver = &GetSpecType_ElasticReceiver{ElasticReceiver: of.ElasticReceiver}
+
+	case *GlobalSpecType_HttpReceiver:
+		r.Receiver = &GetSpecType_HttpReceiver{HttpReceiver: of.HttpReceiver}
+
 	case *GlobalSpecType_S3Receiver:
 		r.Receiver = &GetSpecType_S3Receiver{S3Receiver: of.S3Receiver}
+
+	case *GlobalSpecType_SplunkReceiver:
+		r.Receiver = &GetSpecType_SplunkReceiver{SplunkReceiver: of.SplunkReceiver}
 
 	default:
 		return fmt.Errorf("Unknown oneof field %T", of)
@@ -1689,8 +4818,26 @@ func (r *ReplaceSpecType) SetReceiverToGlobalSpecType(o *GlobalSpecType) error {
 	case nil:
 		o.Receiver = nil
 
+	case *ReplaceSpecType_AzureEventHubsReceiver:
+		o.Receiver = &GlobalSpecType_AzureEventHubsReceiver{AzureEventHubsReceiver: of.AzureEventHubsReceiver}
+
+	case *ReplaceSpecType_AzureReceiver:
+		o.Receiver = &GlobalSpecType_AzureReceiver{AzureReceiver: of.AzureReceiver}
+
+	case *ReplaceSpecType_DatadogReceiver:
+		o.Receiver = &GlobalSpecType_DatadogReceiver{DatadogReceiver: of.DatadogReceiver}
+
+	case *ReplaceSpecType_ElasticReceiver:
+		o.Receiver = &GlobalSpecType_ElasticReceiver{ElasticReceiver: of.ElasticReceiver}
+
+	case *ReplaceSpecType_HttpReceiver:
+		o.Receiver = &GlobalSpecType_HttpReceiver{HttpReceiver: of.HttpReceiver}
+
 	case *ReplaceSpecType_S3Receiver:
 		o.Receiver = &GlobalSpecType_S3Receiver{S3Receiver: of.S3Receiver}
+
+	case *ReplaceSpecType_SplunkReceiver:
+		o.Receiver = &GlobalSpecType_SplunkReceiver{SplunkReceiver: of.SplunkReceiver}
 
 	default:
 		return fmt.Errorf("Unknown oneof field %T", of)
@@ -1703,8 +4850,26 @@ func (r *ReplaceSpecType) GetReceiverFromGlobalSpecType(o *GlobalSpecType) error
 	case nil:
 		r.Receiver = nil
 
+	case *GlobalSpecType_AzureEventHubsReceiver:
+		r.Receiver = &ReplaceSpecType_AzureEventHubsReceiver{AzureEventHubsReceiver: of.AzureEventHubsReceiver}
+
+	case *GlobalSpecType_AzureReceiver:
+		r.Receiver = &ReplaceSpecType_AzureReceiver{AzureReceiver: of.AzureReceiver}
+
+	case *GlobalSpecType_DatadogReceiver:
+		r.Receiver = &ReplaceSpecType_DatadogReceiver{DatadogReceiver: of.DatadogReceiver}
+
+	case *GlobalSpecType_ElasticReceiver:
+		r.Receiver = &ReplaceSpecType_ElasticReceiver{ElasticReceiver: of.ElasticReceiver}
+
+	case *GlobalSpecType_HttpReceiver:
+		r.Receiver = &ReplaceSpecType_HttpReceiver{HttpReceiver: of.HttpReceiver}
+
 	case *GlobalSpecType_S3Receiver:
 		r.Receiver = &ReplaceSpecType_S3Receiver{S3Receiver: of.S3Receiver}
+
+	case *GlobalSpecType_SplunkReceiver:
+		r.Receiver = &ReplaceSpecType_SplunkReceiver{SplunkReceiver: of.SplunkReceiver}
 
 	default:
 		return fmt.Errorf("Unknown oneof field %T", of)

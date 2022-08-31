@@ -161,7 +161,8 @@ func (c *CustomAPIRestClient) doRPCSubscribe(ctx context.Context, callOpts *serv
 	}
 	defer rsp.Body.Close()
 
-	if rsp.StatusCode != http.StatusOK {
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
 		body, err := ioutil.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
 	}
@@ -172,7 +173,7 @@ func (c *CustomAPIRestClient) doRPCSubscribe(ctx context.Context, callOpts *serv
 	}
 	pbRsp := &SubscribeResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
-		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.tenant_management.SubscribeResponse", body)
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.tenant_management.SubscribeResponse", body)
 
 	}
 	if callOpts.OutCallResponse != nil {
@@ -242,7 +243,8 @@ func (c *CustomAPIRestClient) doRPCUnsubscribe(ctx context.Context, callOpts *se
 	}
 	defer rsp.Body.Close()
 
-	if rsp.StatusCode != http.StatusOK {
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
 		body, err := ioutil.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
 	}
@@ -253,7 +255,7 @@ func (c *CustomAPIRestClient) doRPCUnsubscribe(ctx context.Context, callOpts *se
 	}
 	pbRsp := &UnsubscribeResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
-		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.tenant_management.UnsubscribeResponse", body)
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.tenant_management.UnsubscribeResponse", body)
 
 	}
 	if callOpts.OutCallResponse != nil {
@@ -452,27 +454,204 @@ var CustomAPISwaggerJSON string = `{
         "application/json"
     ],
     "tags": [],
-    "paths": {},
+    "paths": {
+        "/public/namespaces/system/tenant_management/subscribe": {
+            "post": {
+                "summary": "Subscribe MSP Addon Service",
+                "description": "Subscribe Management Service Provider addon service feature.",
+                "operationId": "ves.io.schema.tenant_management.CustomAPI.Subscribe",
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/tenant_managementSubscribeResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/tenant_managementSubscribeRequest"
+                        }
+                    }
+                ],
+                "tags": [
+                    "CustomAPI"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-tenant_management-customapi-subscribe"
+                },
+                "x-ves-proto-rpc": "ves.io.schema.tenant_management.CustomAPI.Subscribe"
+            },
+            "x-displayname": "Allowed Tenant - UAM Manager Custom APIs",
+            "x-ves-proto-service": "ves.io.schema.tenant_management.CustomAPI",
+            "x-ves-proto-service-type": "CUSTOM_PUBLIC"
+        },
+        "/public/namespaces/system/tenant_management/unsubscribe": {
+            "post": {
+                "summary": "Unsubscribe MSP Addon Service",
+                "description": "unsubscribe Management Service Provider addon service feature.",
+                "operationId": "ves.io.schema.tenant_management.CustomAPI.Unsubscribe",
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/tenant_managementUnsubscribeResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/tenant_managementUnsubscribeRequest"
+                        }
+                    }
+                ],
+                "tags": [
+                    "CustomAPI"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-tenant_management-customapi-unsubscribe"
+                },
+                "x-ves-proto-rpc": "ves.io.schema.tenant_management.CustomAPI.Unsubscribe"
+            },
+            "x-displayname": "Allowed Tenant - UAM Manager Custom APIs",
+            "x-ves-proto-service": "ves.io.schema.tenant_management.CustomAPI",
+            "x-ves-proto-service-type": "CUSTOM_PUBLIC"
+        }
+    },
     "definitions": {
         "tenant_managementSubscribeRequest": {
             "type": "object",
-            "description": "x-displayName: \"Subscribe Request\"\nRequest to subscribe to Tenant Manangement Service",
-            "title": "SubscribeRequest"
+            "description": "Request to subscribe to Tenant Manangement Service",
+            "title": "SubscribeRequest",
+            "x-displayname": "Subscribe Request",
+            "x-ves-proto-message": "ves.io.schema.tenant_management.SubscribeRequest"
         },
         "tenant_managementSubscribeResponse": {
             "type": "object",
-            "description": "x-displayName: \"Subscribe Response\"\nResponse of subscribe to Tenant Manangement Service",
-            "title": "SubscribeResponse"
+            "description": "Response of subscribe to Tenant Manangement Service",
+            "title": "SubscribeResponse",
+            "x-displayname": "Subscribe Response",
+            "x-ves-proto-message": "ves.io.schema.tenant_management.SubscribeResponse"
         },
         "tenant_managementUnsubscribeRequest": {
             "type": "object",
-            "description": "x-displayName: \"Unsubscribe Request\"\nRequest to unsubscribe to Tenant Manangement Service",
-            "title": "UnsubscribeRequest"
+            "description": "Request to unsubscribe to Tenant Manangement Service",
+            "title": "UnsubscribeRequest",
+            "x-displayname": "Unsubscribe Request",
+            "x-ves-proto-message": "ves.io.schema.tenant_management.UnsubscribeRequest"
         },
         "tenant_managementUnsubscribeResponse": {
             "type": "object",
-            "description": "x-displayName: \"Unsubscribe Response\"\nResponse of unsubscribe to Tenant Manangement Service",
-            "title": "UnsubscribeResponse"
+            "description": "Response of unsubscribe to Tenant Manangement Service",
+            "title": "UnsubscribeResponse",
+            "x-displayname": "Unsubscribe Response",
+            "x-ves-proto-message": "ves.io.schema.tenant_management.UnsubscribeResponse"
         }
     },
     "x-displayname": "Tenant Manangement",

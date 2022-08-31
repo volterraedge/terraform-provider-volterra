@@ -3022,7 +3022,6 @@ var APISwaggerJSON string = `{
             "description": "Single interface GCP ingress site",
             "title": "GCP Ingress Gateway",
             "x-displayname": "GCP Ingress Gateway",
-            "x-ves-displayorder": "1,4,6,2,5,7",
             "x-ves-proto-message": "ves.io.schema.views.gcp_vpc_site.GCPVPCIngressGwType",
             "properties": {
                 "gcp_certified_hw": {
@@ -3907,9 +3906,7 @@ var APISwaggerJSON string = `{
             "enum": [
                 "NEXT_HOP_DEFAULT_GATEWAY",
                 "NEXT_HOP_USE_CONFIGURED",
-                "NEXT_HOP_NETWORK_INTERFACE",
-                "NEXT_HOP_DISCARD",
-                "NEXT_HOP_SNAT_TO_PUBLIC"
+                "NEXT_HOP_NETWORK_INTERFACE"
             ],
             "default": "NEXT_HOP_DEFAULT_GATEWAY",
             "x-displayname": "Nexthop Types",
@@ -4913,6 +4910,23 @@ var APISwaggerJSON string = `{
                     "title": "Site Local Outside to a Global Network\"",
                     "$ref": "#/definitions/viewsGlobalConnectorType",
                     "x-displayname": "Direct, Site Local Outside to a Global Network"
+                }
+            }
+        },
+        "viewsOfflineSurvivabilityModeType": {
+            "type": "object",
+            "description": "x-displayName: \"Offline Survivability Mode Type\"\nOffline Survivability Mode",
+            "title": "Offline Survivability Mode",
+            "properties": {
+                "enable_offline_survivability_mode": {
+                    "description": "x-displayName: \"Enable Offline Survivability Mode\"\nEnable Offline Survivability Mode.\nWhen it is enabled, a CE can work without internet connection for upto 3 days.\nThis can only be enabled at site creation time. But once enabled, offline survivability mode cannot be disabled later.\nEnabling offline survivability reduces default security of a CE.",
+                    "title": "Enable Offline Survivability Mode",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "no_offline_survivability_mode": {
+                    "description": "x-displayName: \"Disable Offline Survivability Mode\"\nDisable Offline Survivability Mode",
+                    "title": "Disable Offline Survivability Mode",
+                    "$ref": "#/definitions/schemaEmpty"
                 }
             }
         },

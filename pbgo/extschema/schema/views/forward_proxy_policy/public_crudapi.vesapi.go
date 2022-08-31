@@ -1595,16 +1595,7 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 		item.Disabled = o.GetMetadata().GetDisable()
 
 		if len(req.ReportFields) > 0 {
-			noDBForm, _ := flags.GetEnvGetRspNoDBForm()
-			if !noDBForm {
-				item.Object = o.Object
-				sf.Logger().Alert(svcfw.GetResponseInDBForm,
-					log.MinorAlert,
-					zap.String("user", server.UserFromContext(ctx)),
-					zap.String("useragent", server.UseragentStrFromContext(ctx)),
-					zap.String("operation", "List"),
-				)
-			}
+			item.Object = o.Object
 
 			item.Metadata = &ves_io_schema.ObjectGetMetaType{}
 			item.Metadata.FromObjectMetaType(o.Metadata)
@@ -1683,7 +1674,7 @@ var APISwaggerJSON string = `{
     "paths": {
         "/public/namespaces/{metadata.namespace}/forward_proxy_policys": {
             "post": {
-                "summary": "CreateSpecType",
+                "summary": "Create Forward Proxy Policy",
                 "description": "Shape of the Forward Proxy Policy specification",
                 "operationId": "ves.io.schema.views.forward_proxy_policy.API.Create",
                 "responses": {
@@ -1771,7 +1762,7 @@ var APISwaggerJSON string = `{
         },
         "/public/namespaces/{metadata.namespace}/forward_proxy_policys/{metadata.name}": {
             "put": {
-                "summary": "ReplaceSpecType",
+                "summary": "Replace Forward Proxy Policy",
                 "description": "Shape of the Forward Proxy Policy replace specification",
                 "operationId": "ves.io.schema.views.forward_proxy_policy.API.Replace",
                 "responses": {
@@ -1867,7 +1858,7 @@ var APISwaggerJSON string = `{
         },
         "/public/namespaces/{namespace}/forward_proxy_policys": {
             "get": {
-                "summary": "List",
+                "summary": "List Configure Forward Proxy Policy",
                 "description": "List the set of forward_proxy_policy in a namespace",
                 "operationId": "ves.io.schema.views.forward_proxy_policy.API.List",
                 "responses": {
@@ -1979,7 +1970,7 @@ var APISwaggerJSON string = `{
         },
         "/public/namespaces/{namespace}/forward_proxy_policys/{name}": {
             "get": {
-                "summary": "GetSpecType",
+                "summary": "Get Forward Proxy Policy",
                 "description": "Shape of the Forward Proxy Policy specification",
                 "operationId": "ves.io.schema.views.forward_proxy_policy.API.Get",
                 "responses": {
@@ -2079,7 +2070,7 @@ var APISwaggerJSON string = `{
                 "x-ves-proto-rpc": "ves.io.schema.views.forward_proxy_policy.API.Get"
             },
             "delete": {
-                "summary": "Delete",
+                "summary": "Delete Configure Forward Proxy Policy",
                 "description": "Delete the specified forward_proxy_policy",
                 "operationId": "ves.io.schema.views.forward_proxy_policy.API.Delete",
                 "responses": {
@@ -3064,10 +3055,7 @@ var APISwaggerJSON string = `{
             "enum": [
                 "DENY",
                 "ALLOW",
-                "NEXT_POLICY_SET",
-                "NEXT_POLICY",
-                "LAST_POLICY",
-                "GOTO_POLICY"
+                "NEXT_POLICY"
             ],
             "default": "DENY",
             "x-displayname": "Rule Action",

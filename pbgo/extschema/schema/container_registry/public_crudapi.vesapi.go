@@ -1595,16 +1595,7 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 		item.Disabled = o.GetMetadata().GetDisable()
 
 		if len(req.ReportFields) > 0 {
-			noDBForm, _ := flags.GetEnvGetRspNoDBForm()
-			if !noDBForm {
-				item.Object = o.Object
-				sf.Logger().Alert(svcfw.GetResponseInDBForm,
-					log.MinorAlert,
-					zap.String("user", server.UserFromContext(ctx)),
-					zap.String("useragent", server.UseragentStrFromContext(ctx)),
-					zap.String("operation", "List"),
-				)
-			}
+			item.Object = o.Object
 
 			item.Metadata = &ves_io_schema.ObjectGetMetaType{}
 			item.Metadata.FromObjectMetaType(o.Metadata)
@@ -1683,7 +1674,7 @@ var APISwaggerJSON string = `{
     "paths": {
         "/public/namespaces/{metadata.namespace}/container_registrys": {
             "post": {
-                "summary": "CreateSpecType",
+                "summary": "Create Container Registry",
                 "description": "Shape of Container Registry",
                 "operationId": "ves.io.schema.container_registry.API.Create",
                 "responses": {
@@ -1775,7 +1766,7 @@ var APISwaggerJSON string = `{
         },
         "/public/namespaces/{metadata.namespace}/container_registrys/{metadata.name}": {
             "put": {
-                "summary": "ReplaceSpecType",
+                "summary": "Replace Container Registry",
                 "description": "Shape of Container Registry",
                 "operationId": "ves.io.schema.container_registry.API.Replace",
                 "responses": {
@@ -1875,7 +1866,7 @@ var APISwaggerJSON string = `{
         },
         "/public/namespaces/{namespace}/container_registrys": {
             "get": {
-                "summary": "List",
+                "summary": "List Container Registry",
                 "description": "List the set of container_registry in a namespace",
                 "operationId": "ves.io.schema.container_registry.API.List",
                 "responses": {
@@ -1991,7 +1982,7 @@ var APISwaggerJSON string = `{
         },
         "/public/namespaces/{namespace}/container_registrys/{name}": {
             "get": {
-                "summary": "GetSpecType",
+                "summary": "Get Container Registry",
                 "description": "Shape of Container Registry",
                 "operationId": "ves.io.schema.container_registry.API.Get",
                 "responses": {
@@ -2095,7 +2086,7 @@ var APISwaggerJSON string = `{
                 "x-ves-proto-rpc": "ves.io.schema.container_registry.API.Get"
             },
             "delete": {
-                "summary": "Delete",
+                "summary": "Delete Container Registry",
                 "description": "Delete the specified container_registry",
                 "operationId": "ves.io.schema.container_registry.API.Delete",
                 "responses": {

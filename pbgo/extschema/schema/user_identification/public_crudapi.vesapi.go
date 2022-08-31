@@ -1595,16 +1595,7 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 		item.Disabled = o.GetMetadata().GetDisable()
 
 		if len(req.ReportFields) > 0 {
-			noDBForm, _ := flags.GetEnvGetRspNoDBForm()
-			if !noDBForm {
-				item.Object = o.Object
-				sf.Logger().Alert(svcfw.GetResponseInDBForm,
-					log.MinorAlert,
-					zap.String("user", server.UserFromContext(ctx)),
-					zap.String("useragent", server.UseragentStrFromContext(ctx)),
-					zap.String("operation", "List"),
-				)
-			}
+			item.Object = o.Object
 
 			item.Metadata = &ves_io_schema.ObjectGetMetaType{}
 			item.Metadata.FromObjectMetaType(o.Metadata)
@@ -1683,7 +1674,7 @@ var APISwaggerJSON string = `{
     "paths": {
         "/public/namespaces/{metadata.namespace}/user_identifications": {
             "post": {
-                "summary": "Create user identification",
+                "summary": "Create User Identification",
                 "description": "Create user_identification creates a new object in the storage backend for metadata.namespace.",
                 "operationId": "ves.io.schema.user_identification.API.Create",
                 "responses": {
@@ -1771,7 +1762,7 @@ var APISwaggerJSON string = `{
         },
         "/public/namespaces/{metadata.namespace}/user_identifications/{metadata.name}": {
             "put": {
-                "summary": "Replace user identification",
+                "summary": "Replace User Identification",
                 "description": "Replace user_identification replaces an existing object in the storage backend for metadata.namespace.",
                 "operationId": "ves.io.schema.user_identification.API.Replace",
                 "responses": {
@@ -1867,7 +1858,7 @@ var APISwaggerJSON string = `{
         },
         "/public/namespaces/{namespace}/user_identifications": {
             "get": {
-                "summary": "List",
+                "summary": "List User Identification",
                 "description": "List the set of user_identification in a namespace",
                 "operationId": "ves.io.schema.user_identification.API.List",
                 "responses": {
@@ -1979,7 +1970,7 @@ var APISwaggerJSON string = `{
         },
         "/public/namespaces/{namespace}/user_identifications/{name}": {
             "get": {
-                "summary": "Get user identification",
+                "summary": "Get User Identification",
                 "description": "Get user_identification reads a given object from storage backend for metadata.namespace.",
                 "operationId": "ves.io.schema.user_identification.API.Get",
                 "responses": {
@@ -2079,7 +2070,7 @@ var APISwaggerJSON string = `{
                 "x-ves-proto-rpc": "ves.io.schema.user_identification.API.Get"
             },
             "delete": {
-                "summary": "Delete",
+                "summary": "Delete User Identification",
                 "description": "Delete the specified user_identification",
                 "operationId": "ves.io.schema.user_identification.API.Delete",
                 "responses": {

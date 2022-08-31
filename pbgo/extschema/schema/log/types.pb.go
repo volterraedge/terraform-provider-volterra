@@ -160,6 +160,13 @@ type DateAggregationData struct {
 	// x-displayName: "Buckets"
 	// Lists of buckets containing timestamp and the corresponding log count
 	Buckets []*DateAggregationBucket `protobuf:"bytes,2,rep,name=buckets,proto3" json:"buckets,omitempty"`
+	// step
+	//
+	// x-displayName: "Step"
+	// x-example: "30m"
+	// Actual step size in the response. It could be higher than the requested step depending on the query duration and/or the log rollups.
+	// Format: [0-9][smhd], where s - seconds, m - minutes, h - hours, d - days
+	Step string `protobuf:"bytes,3,opt,name=step,proto3" json:"step,omitempty"`
 }
 
 func (m *DateAggregationData) Reset()      { *m = DateAggregationData{} }
@@ -195,6 +202,13 @@ func (m *DateAggregationData) GetBuckets() []*DateAggregationBucket {
 		return m.Buckets
 	}
 	return nil
+}
+
+func (m *DateAggregationData) GetStep() string {
+	if m != nil {
+		return m.Step
+	}
+	return ""
 }
 
 // FieldAggregationBucket
@@ -364,6 +378,115 @@ func (m *FieldAggregationData) GetBuckets() []*FieldAggregationBucket {
 	return nil
 }
 
+// MultiFieldAggregationBucket
+//
+// x-displayName: "Multi-Field Aggregation Bucket"
+// Multi-Field aggregation bucket containing field values and the number of logs.
+type MultiFieldAggregationBucket struct {
+	// keys
+	//
+	// x-displayName: "Keys"
+	// Keys contain the name/value pair that identifies the unique combination of multiple key fields
+	// x-example: "{"SRC_IP": "10.10.10.1", "COUNTRY": "US"}"
+	Keys map[string]string `protobuf:"bytes,1,rep,name=keys,proto3" json:"keys,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
+	// count
+	//
+	// x-displayName: "Count"
+	// x-example: 45
+	//
+	// number of logs in this bucket
+	Count uint64 `protobuf:"varint,2,opt,name=count,proto3" json:"count,omitempty"`
+}
+
+func (m *MultiFieldAggregationBucket) Reset()      { *m = MultiFieldAggregationBucket{} }
+func (*MultiFieldAggregationBucket) ProtoMessage() {}
+func (*MultiFieldAggregationBucket) Descriptor() ([]byte, []int) {
+	return fileDescriptor_18e467d5ba8b30ac, []int{6}
+}
+func (m *MultiFieldAggregationBucket) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MultiFieldAggregationBucket) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *MultiFieldAggregationBucket) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MultiFieldAggregationBucket.Merge(m, src)
+}
+func (m *MultiFieldAggregationBucket) XXX_Size() int {
+	return m.Size()
+}
+func (m *MultiFieldAggregationBucket) XXX_DiscardUnknown() {
+	xxx_messageInfo_MultiFieldAggregationBucket.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MultiFieldAggregationBucket proto.InternalMessageInfo
+
+func (m *MultiFieldAggregationBucket) GetKeys() map[string]string {
+	if m != nil {
+		return m.Keys
+	}
+	return nil
+}
+
+func (m *MultiFieldAggregationBucket) GetCount() uint64 {
+	if m != nil {
+		return m.Count
+	}
+	return 0
+}
+
+// MultiFieldAggregationData
+//
+// x-displayName: "Multi-Field Aggregation Data"
+// Multi-Field Aggregation data
+type MultiFieldAggregationData struct {
+	// buckets
+	//
+	// x-displayName: "Buckets"
+	// Lists of buckets containing field values and the corresponding log count
+	Buckets []*MultiFieldAggregationBucket `protobuf:"bytes,2,rep,name=buckets,proto3" json:"buckets,omitempty"`
+}
+
+func (m *MultiFieldAggregationData) Reset()      { *m = MultiFieldAggregationData{} }
+func (*MultiFieldAggregationData) ProtoMessage() {}
+func (*MultiFieldAggregationData) Descriptor() ([]byte, []int) {
+	return fileDescriptor_18e467d5ba8b30ac, []int{7}
+}
+func (m *MultiFieldAggregationData) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MultiFieldAggregationData) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *MultiFieldAggregationData) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MultiFieldAggregationData.Merge(m, src)
+}
+func (m *MultiFieldAggregationData) XXX_Size() int {
+	return m.Size()
+}
+func (m *MultiFieldAggregationData) XXX_DiscardUnknown() {
+	xxx_messageInfo_MultiFieldAggregationData.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MultiFieldAggregationData proto.InternalMessageInfo
+
+func (m *MultiFieldAggregationData) GetBuckets() []*MultiFieldAggregationBucket {
+	if m != nil {
+		return m.Buckets
+	}
+	return nil
+}
+
 // CardinalityAggregationData
 //
 // x-displayName: "Cardinality Aggregation Data"
@@ -380,7 +503,7 @@ type CardinalityAggregationData struct {
 func (m *CardinalityAggregationData) Reset()      { *m = CardinalityAggregationData{} }
 func (*CardinalityAggregationData) ProtoMessage() {}
 func (*CardinalityAggregationData) Descriptor() ([]byte, []int) {
-	return fileDescriptor_18e467d5ba8b30ac, []int{6}
+	return fileDescriptor_18e467d5ba8b30ac, []int{8}
 }
 func (m *CardinalityAggregationData) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -427,6 +550,11 @@ type LogAggregationData struct {
 	//
 	// Field aggregation data
 	FieldAggregation *FieldAggregationData `protobuf:"bytes,4,opt,name=field_aggregation,json=fieldAggregation,proto3" json:"field_aggregation,omitempty"`
+	// multi-field aggregation
+	// x-displayName: "Multi-Field Aggregation"
+	//
+	// Multi-Field aggregation data
+	MultiFieldAggregation *MultiFieldAggregationData `protobuf:"bytes,6,opt,name=multi_field_aggregation,json=multiFieldAggregation,proto3" json:"multi_field_aggregation,omitempty"`
 	// cardinality aggregation
 	// x-displayName: "Cardinality Aggregation"
 	//
@@ -437,7 +565,7 @@ type LogAggregationData struct {
 func (m *LogAggregationData) Reset()      { *m = LogAggregationData{} }
 func (*LogAggregationData) ProtoMessage() {}
 func (*LogAggregationData) Descriptor() ([]byte, []int) {
-	return fileDescriptor_18e467d5ba8b30ac, []int{7}
+	return fileDescriptor_18e467d5ba8b30ac, []int{9}
 }
 func (m *LogAggregationData) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -476,6 +604,13 @@ func (m *LogAggregationData) GetFieldAggregation() *FieldAggregationData {
 	return nil
 }
 
+func (m *LogAggregationData) GetMultiFieldAggregation() *MultiFieldAggregationData {
+	if m != nil {
+		return m.MultiFieldAggregation
+	}
+	return nil
+}
+
 func (m *LogAggregationData) GetCardinalityAggregation() *CardinalityAggregationData {
 	if m != nil {
 		return m.CardinalityAggregation
@@ -492,6 +627,9 @@ func init() {
 	proto.RegisterMapType((map[string]*FieldSubAggregationData)(nil), "ves.io.schema.log.FieldAggregationBucket.SubAggsEntry")
 	proto.RegisterType((*FieldSubAggregationData)(nil), "ves.io.schema.log.FieldSubAggregationData")
 	proto.RegisterType((*FieldAggregationData)(nil), "ves.io.schema.log.FieldAggregationData")
+	proto.RegisterType((*MultiFieldAggregationBucket)(nil), "ves.io.schema.log.MultiFieldAggregationBucket")
+	proto.RegisterMapType((map[string]string)(nil), "ves.io.schema.log.MultiFieldAggregationBucket.KeysEntry")
+	proto.RegisterType((*MultiFieldAggregationData)(nil), "ves.io.schema.log.MultiFieldAggregationData")
 	proto.RegisterType((*CardinalityAggregationData)(nil), "ves.io.schema.log.CardinalityAggregationData")
 	proto.RegisterType((*LogAggregationData)(nil), "ves.io.schema.log.LogAggregationData")
 }
@@ -499,44 +637,50 @@ func init() {
 func init() { proto.RegisterFile("ves.io/schema/log/types.proto", fileDescriptor_18e467d5ba8b30ac) }
 
 var fileDescriptor_18e467d5ba8b30ac = []byte{
-	// 580 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xac, 0x55, 0x3f, 0x6f, 0xd3, 0x4e,
-	0x18, 0xf6, 0xe5, 0xcf, 0xaf, 0x3f, 0x2e, 0x48, 0xa4, 0x47, 0x49, 0xa3, 0x20, 0x4e, 0x91, 0x07,
-	0x48, 0x91, 0x62, 0x4b, 0x41, 0x20, 0xc4, 0x02, 0x4d, 0x0b, 0x2c, 0x0c, 0x34, 0xb0, 0x00, 0x43,
-	0x75, 0x76, 0xce, 0x57, 0x2b, 0x4e, 0xce, 0xb2, 0xcf, 0x86, 0x6c, 0xf4, 0x1b, 0xf0, 0x25, 0x90,
-	0xf8, 0x28, 0x8c, 0x19, 0x33, 0x12, 0x67, 0x61, 0xec, 0x0c, 0x0b, 0xca, 0x39, 0x51, 0x6a, 0xc7,
-	0x49, 0x23, 0xc1, 0xf6, 0xbe, 0xf7, 0xbc, 0x77, 0xcf, 0xfb, 0x3e, 0x8f, 0xef, 0x0c, 0xef, 0x84,
-	0xd4, 0xd7, 0x6c, 0xae, 0xfb, 0xe6, 0x19, 0xed, 0x13, 0xdd, 0xe1, 0x4c, 0x17, 0x43, 0x97, 0xfa,
-	0x9a, 0xeb, 0x71, 0xc1, 0xd1, 0x6e, 0x0c, 0x6b, 0x31, 0xac, 0x39, 0x9c, 0xd5, 0x9a, 0xcc, 0x16,
-	0x67, 0x81, 0xa1, 0x99, 0xbc, 0xaf, 0x33, 0xce, 0xb8, 0x2e, 0x2b, 0x8d, 0xc0, 0x92, 0x99, 0x4c,
-	0x64, 0x14, 0x9f, 0x50, 0xbb, 0x9d, 0x24, 0xe0, 0xae, 0xb0, 0xf9, 0x60, 0x7e, 0x7c, 0xad, 0x9e,
-	0x04, 0x43, 0x9b, 0x7e, 0x3c, 0x4d, 0x54, 0xa8, 0xbf, 0x00, 0xbc, 0x75, 0x4c, 0x04, 0x3d, 0x64,
-	0xcc, 0xa3, 0x8c, 0xcc, 0xa0, 0x76, 0x60, 0xf6, 0xa8, 0x40, 0x08, 0x16, 0x84, 0xdd, 0xa7, 0x55,
-	0x50, 0x07, 0x8d, 0x42, 0x47, 0xc6, 0x68, 0x0f, 0x16, 0x4d, 0x1e, 0x0c, 0x44, 0x35, 0x27, 0x17,
-	0xe3, 0x04, 0xbd, 0x86, 0xff, 0xfb, 0x81, 0x71, 0x4a, 0x18, 0xf3, 0xab, 0xf9, 0x7a, 0xbe, 0x51,
-	0x6a, 0x3d, 0xd4, 0x56, 0xe6, 0xd2, 0x32, 0x59, 0xb4, 0x37, 0x81, 0x71, 0xc8, 0x98, 0xff, 0x7c,
-	0x20, 0xbc, 0x61, 0x67, 0xc7, 0x8f, 0xb3, 0x1a, 0x85, 0xd7, 0x2f, 0x03, 0xa8, 0x0c, 0xf3, 0x3d,
-	0x3a, 0x94, 0xad, 0x5c, 0xeb, 0xcc, 0x42, 0xf4, 0x14, 0x16, 0x43, 0xe2, 0x04, 0x54, 0x76, 0x52,
-	0x6a, 0x1d, 0xac, 0x21, 0x8c, 0x4f, 0x59, 0x70, 0x1e, 0x13, 0x41, 0x3a, 0xf1, 0xbe, 0x27, 0xb9,
-	0xc7, 0x40, 0x1d, 0xc0, 0x4a, 0x76, 0x11, 0x7a, 0x0b, 0x77, 0x2d, 0x9b, 0x3a, 0xdd, 0xd9, 0x50,
-	0x0b, 0x40, 0xd2, 0x97, 0x5a, 0xf7, 0x32, 0xa8, 0x5e, 0xcc, 0x6a, 0xd3, 0x44, 0x65, 0x2b, 0xb5,
-	0xaa, 0xbe, 0x83, 0x37, 0x53, 0x2a, 0x48, 0xb2, 0x36, 0xdc, 0x31, 0xa4, 0x1a, 0x7e, 0x35, 0x27,
-	0xe5, 0x6b, 0x6c, 0x2b, 0x5f, 0x67, 0xb1, 0x51, 0xfd, 0x0d, 0x60, 0x25, 0xdd, 0xc5, 0xdc, 0xc8,
-	0x55, 0xf1, 0xb2, 0x6d, 0x3c, 0x59, 0xb1, 0xf1, 0xd1, 0x16, 0xa3, 0x6e, 0xf4, 0xd1, 0xba, 0xd2,
-	0xc7, 0x67, 0x49, 0x1f, 0xef, 0xaf, 0x63, 0xdc, 0x6c, 0xe4, 0x39, 0x80, 0xfb, 0x6b, 0xca, 0x90,
-	0x05, 0xf7, 0x4d, 0xe2, 0x75, 0xed, 0x01, 0x71, 0x6c, 0x31, 0xcc, 0x30, 0xb4, 0x99, 0xc1, 0x79,
-	0xb4, 0xdc, 0x91, 0xa6, 0xad, 0x98, 0x99, 0x98, 0xfa, 0x01, 0xee, 0x65, 0x7d, 0x06, 0xe8, 0x28,
-	0xed, 0xee, 0xc1, 0xd6, 0xaa, 0x2e, 0xed, 0x6d, 0xc1, 0xda, 0xfa, 0x96, 0x96, 0x7e, 0x82, 0x4b,
-	0x7e, 0xaa, 0x5f, 0x73, 0x10, 0xbd, 0xe2, 0x2c, 0x5d, 0x7c, 0x02, 0xcb, 0x5d, 0x22, 0x68, 0x42,
-	0x88, 0xbc, 0x14, 0xe2, 0xee, 0xd5, 0x9f, 0x9d, 0x54, 0xe0, 0x46, 0x37, 0xb9, 0x98, 0x7d, 0x5b,
-	0x0a, 0x7f, 0x79, 0x5b, 0x36, 0x19, 0x57, 0xfc, 0x87, 0xc6, 0xb5, 0xcf, 0xc1, 0x68, 0x82, 0x95,
-	0xf1, 0x04, 0x2b, 0x17, 0x13, 0x0c, 0x3e, 0x47, 0x18, 0x7c, 0x8b, 0x30, 0xf8, 0x1e, 0x61, 0x30,
-	0x8a, 0x30, 0x18, 0x47, 0x18, 0xfc, 0x88, 0x30, 0xf8, 0x19, 0x61, 0xe5, 0x22, 0xc2, 0xe0, 0xcb,
-	0x14, 0x2b, 0xa3, 0x29, 0x56, 0xc6, 0x53, 0xac, 0xbc, 0x7f, 0xc9, 0xb8, 0xdb, 0x63, 0x5a, 0xc8,
-	0x1d, 0x41, 0x3d, 0x8f, 0x68, 0x81, 0xaf, 0xcb, 0xc0, 0xe2, 0x5e, 0xbf, 0xe9, 0x7a, 0x3c, 0xb4,
-	0xbb, 0xd4, 0x6b, 0x2e, 0x60, 0xdd, 0x35, 0x18, 0xd7, 0xe9, 0x27, 0x31, 0x7f, 0x8e, 0x97, 0xff,
-	0x04, 0xe3, 0x3f, 0xf9, 0x1a, 0x3f, 0xf8, 0x13, 0x00, 0x00, 0xff, 0xff, 0x5b, 0x11, 0xa4, 0x59,
-	0x2f, 0x06, 0x00, 0x00,
+	// 679 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xac, 0x55, 0x4d, 0x6f, 0xd3, 0x40,
+	0x10, 0xcd, 0x36, 0x69, 0x4b, 0xa7, 0x48, 0xb4, 0x4b, 0x3f, 0x42, 0x2a, 0x56, 0x95, 0x0f, 0xd0,
+	0x22, 0xb2, 0x96, 0x82, 0x80, 0x8a, 0x0b, 0xf4, 0x83, 0x0f, 0x89, 0x22, 0xd1, 0xc0, 0x09, 0x0e,
+	0x95, 0x9d, 0x6c, 0xb6, 0x56, 0xec, 0xac, 0x65, 0xaf, 0x03, 0xb9, 0xd1, 0x33, 0x17, 0x7e, 0x06,
+	0xbf, 0x81, 0x5f, 0xc0, 0xb1, 0xc7, 0x1e, 0xa9, 0x7b, 0xe1, 0xd8, 0x33, 0x5c, 0x50, 0xd6, 0x49,
+	0xd3, 0x38, 0x9b, 0x34, 0x08, 0x6e, 0xb3, 0x7e, 0xb3, 0xf3, 0x76, 0xde, 0x9b, 0xf5, 0xc2, 0xcd,
+	0x26, 0x0b, 0xa9, 0x23, 0xcc, 0xb0, 0x72, 0xc0, 0x3c, 0xcb, 0x74, 0x05, 0x37, 0x65, 0xcb, 0x67,
+	0x21, 0xf5, 0x03, 0x21, 0x05, 0x9e, 0x4f, 0x60, 0x9a, 0xc0, 0xd4, 0x15, 0xbc, 0x50, 0xe4, 0x8e,
+	0x3c, 0x88, 0x6c, 0x5a, 0x11, 0x9e, 0xc9, 0x05, 0x17, 0xa6, 0xca, 0xb4, 0xa3, 0x9a, 0x5a, 0xa9,
+	0x85, 0x8a, 0x92, 0x0a, 0x85, 0x95, 0x7e, 0x02, 0xe1, 0x4b, 0x47, 0x34, 0x3a, 0xe5, 0x0b, 0xab,
+	0xfd, 0x60, 0xd3, 0x61, 0x1f, 0xf6, 0xfb, 0x32, 0x8c, 0x5f, 0x08, 0x16, 0x77, 0x2c, 0xc9, 0x36,
+	0x39, 0x0f, 0x18, 0xb7, 0xda, 0xd0, 0x56, 0x54, 0xa9, 0x33, 0x89, 0x31, 0xe4, 0xa4, 0xe3, 0xb1,
+	0x3c, 0x5a, 0x45, 0x6b, 0xb9, 0xb2, 0x8a, 0xf1, 0x02, 0x4c, 0x56, 0x44, 0xd4, 0x90, 0xf9, 0x09,
+	0xf5, 0x31, 0x59, 0xe0, 0xd7, 0x70, 0x25, 0x8c, 0xec, 0x7d, 0x8b, 0xf3, 0x30, 0x9f, 0x5d, 0xcd,
+	0xae, 0xcd, 0x96, 0xee, 0xd3, 0x81, 0xbe, 0xa8, 0x96, 0x85, 0xbe, 0x89, 0xec, 0x4d, 0xce, 0xc3,
+	0xa7, 0x0d, 0x19, 0xb4, 0xca, 0xd3, 0x61, 0xb2, 0x2a, 0x30, 0xb8, 0x7a, 0x11, 0xc0, 0x73, 0x90,
+	0xad, 0xb3, 0x96, 0x3a, 0xca, 0x4c, 0xb9, 0x1d, 0xe2, 0xc7, 0x30, 0xd9, 0xb4, 0xdc, 0x88, 0xa9,
+	0x93, 0xcc, 0x96, 0xd6, 0x87, 0x10, 0x26, 0x55, 0xba, 0x9c, 0x3b, 0x96, 0xb4, 0xca, 0xc9, 0xbe,
+	0x47, 0x13, 0x1b, 0xc8, 0x68, 0xc0, 0x92, 0x3e, 0x09, 0xbf, 0x85, 0xf9, 0x9a, 0xc3, 0xdc, 0x6a,
+	0xbb, 0xa9, 0x2e, 0xa0, 0xe8, 0x67, 0x4b, 0xb7, 0x35, 0x54, 0xcf, 0xda, 0xb9, 0x69, 0xa2, 0xb9,
+	0x5a, 0xea, 0xab, 0xe1, 0xc1, 0xf5, 0x94, 0x0a, 0x8a, 0x6c, 0x0b, 0xa6, 0x6d, 0xa5, 0x46, 0x98,
+	0x9f, 0x50, 0xf2, 0xad, 0x8d, 0x2b, 0x5f, 0xb9, 0xbb, 0xb1, 0xed, 0x56, 0x28, 0x99, 0x9f, 0xcf,
+	0x2a, 0x89, 0x54, 0x6c, 0xfc, 0x46, 0xb0, 0x94, 0x3e, 0x59, 0xc7, 0xdc, 0x41, 0x41, 0xf5, 0xd6,
+	0xee, 0x0d, 0x58, 0xfb, 0x60, 0x8c, 0xf6, 0x47, 0x7a, 0x5b, 0xbb, 0xd4, 0xdb, 0x27, 0xfd, 0xde,
+	0xde, 0x19, 0xc6, 0x38, 0xda, 0xdc, 0x43, 0x04, 0xcb, 0x43, 0xd2, 0x70, 0x0d, 0x96, 0x2b, 0x56,
+	0x50, 0x75, 0x1a, 0x96, 0xeb, 0xc8, 0x96, 0xc6, 0xe4, 0xa2, 0x86, 0x73, 0xbb, 0xb7, 0x23, 0x4d,
+	0xbb, 0x54, 0xd1, 0x62, 0xc6, 0x7b, 0x58, 0xd0, 0x8d, 0x06, 0xde, 0x4e, 0x3b, 0xbe, 0x3e, 0xb6,
+	0xaa, 0xe7, 0x96, 0x1b, 0xdf, 0x10, 0xac, 0xbc, 0x8a, 0x5c, 0xe9, 0x0c, 0xf1, 0x78, 0x17, 0x72,
+	0x75, 0xd6, 0x0a, 0xf3, 0x48, 0x31, 0x6c, 0x68, 0x18, 0x46, 0xec, 0xa6, 0x2f, 0x59, 0xab, 0xe3,
+	0x9c, 0xaa, 0xa2, 0x9f, 0x8f, 0xc2, 0x43, 0x98, 0x39, 0x4f, 0xd4, 0x0f, 0x55, 0xcf, 0xc9, 0x99,
+	0x8b, 0xee, 0x30, 0xb8, 0xa1, 0x65, 0x57, 0xf2, 0xbc, 0x48, 0xcb, 0x43, 0xff, 0xee, 0xf0, 0x3d,
+	0x8d, 0x4a, 0x50, 0x18, 0x6e, 0x5b, 0xaf, 0x27, 0x74, 0xa1, 0x27, 0xe3, 0x73, 0x16, 0xf0, 0xae,
+	0xe0, 0xe9, 0xe4, 0x3d, 0x98, 0xab, 0x5a, 0x92, 0xf5, 0x0d, 0x4b, 0x56, 0x0d, 0xcb, 0xad, 0xcb,
+	0xaf, 0xab, 0x9a, 0x92, 0x6b, 0xd5, 0xfe, 0x8f, 0xfa, 0xbf, 0x4c, 0xee, 0x1f, 0xff, 0x32, 0xb8,
+	0x0a, 0xcb, 0x5e, 0x5b, 0x9b, 0xfd, 0xc1, 0xda, 0x53, 0xaa, 0xf6, 0xdd, 0x71, 0xd5, 0x54, 0x04,
+	0x8b, 0x9e, 0x0e, 0x1a, 0x75, 0x85, 0x26, 0xff, 0xe3, 0x15, 0xda, 0x3a, 0x44, 0x47, 0x27, 0x24,
+	0x73, 0x7c, 0x42, 0x32, 0x67, 0x27, 0x04, 0x7d, 0x8a, 0x09, 0xfa, 0x1a, 0x13, 0xf4, 0x3d, 0x26,
+	0xe8, 0x28, 0x26, 0xe8, 0x38, 0x26, 0xe8, 0x47, 0x4c, 0xd0, 0xcf, 0x98, 0x64, 0xce, 0x62, 0x82,
+	0xbe, 0x9c, 0x92, 0xcc, 0xd1, 0x29, 0xc9, 0x1c, 0x9f, 0x92, 0xcc, 0xbb, 0xe7, 0x5c, 0xf8, 0x75,
+	0x4e, 0x9b, 0xc2, 0x95, 0x2c, 0x08, 0x2c, 0x1a, 0x85, 0xa6, 0x0a, 0x6a, 0x22, 0xf0, 0x8a, 0x7e,
+	0x20, 0x9a, 0x4e, 0x95, 0x05, 0xc5, 0x2e, 0x6c, 0xfa, 0x36, 0x17, 0x26, 0xfb, 0x28, 0x3b, 0x8f,
+	0x65, 0xef, 0xc5, 0xb6, 0xa7, 0xd4, 0x5b, 0x79, 0xef, 0x4f, 0x00, 0x00, 0x00, 0xff, 0xff, 0x5e,
+	0x42, 0x6e, 0x8c, 0xcd, 0x07, 0x00, 0x00,
 }
 
 func (this *DateAggregationBucket) Equal(that interface{}) bool {
@@ -624,6 +768,9 @@ func (this *DateAggregationData) Equal(that interface{}) bool {
 		if !this.Buckets[i].Equal(that1.Buckets[i]) {
 			return false
 		}
+	}
+	if this.Step != that1.Step {
+		return false
 	}
 	return true
 }
@@ -715,6 +862,67 @@ func (this *FieldAggregationData) Equal(that interface{}) bool {
 	}
 	return true
 }
+func (this *MultiFieldAggregationBucket) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*MultiFieldAggregationBucket)
+	if !ok {
+		that2, ok := that.(MultiFieldAggregationBucket)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if len(this.Keys) != len(that1.Keys) {
+		return false
+	}
+	for i := range this.Keys {
+		if this.Keys[i] != that1.Keys[i] {
+			return false
+		}
+	}
+	if this.Count != that1.Count {
+		return false
+	}
+	return true
+}
+func (this *MultiFieldAggregationData) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*MultiFieldAggregationData)
+	if !ok {
+		that2, ok := that.(MultiFieldAggregationData)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if len(this.Buckets) != len(that1.Buckets) {
+		return false
+	}
+	for i := range this.Buckets {
+		if !this.Buckets[i].Equal(that1.Buckets[i]) {
+			return false
+		}
+	}
+	return true
+}
 func (this *CardinalityAggregationData) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -764,6 +972,9 @@ func (this *LogAggregationData) Equal(that interface{}) bool {
 	if !this.FieldAggregation.Equal(that1.FieldAggregation) {
 		return false
 	}
+	if !this.MultiFieldAggregation.Equal(that1.MultiFieldAggregation) {
+		return false
+	}
 	if !this.CardinalityAggregation.Equal(that1.CardinalityAggregation) {
 		return false
 	}
@@ -809,11 +1020,12 @@ func (this *DateAggregationData) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 5)
+	s := make([]string, 0, 6)
 	s = append(s, "&log.DateAggregationData{")
 	if this.Buckets != nil {
 		s = append(s, "Buckets: "+fmt.Sprintf("%#v", this.Buckets)+",\n")
 	}
+	s = append(s, "Step: "+fmt.Sprintf("%#v", this.Step)+",\n")
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
@@ -865,6 +1077,41 @@ func (this *FieldAggregationData) GoString() string {
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
+func (this *MultiFieldAggregationBucket) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 6)
+	s = append(s, "&log.MultiFieldAggregationBucket{")
+	keysForKeys := make([]string, 0, len(this.Keys))
+	for k, _ := range this.Keys {
+		keysForKeys = append(keysForKeys, k)
+	}
+	github_com_gogo_protobuf_sortkeys.Strings(keysForKeys)
+	mapStringForKeys := "map[string]string{"
+	for _, k := range keysForKeys {
+		mapStringForKeys += fmt.Sprintf("%#v: %#v,", k, this.Keys[k])
+	}
+	mapStringForKeys += "}"
+	if this.Keys != nil {
+		s = append(s, "Keys: "+mapStringForKeys+",\n")
+	}
+	s = append(s, "Count: "+fmt.Sprintf("%#v", this.Count)+",\n")
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *MultiFieldAggregationData) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 5)
+	s = append(s, "&log.MultiFieldAggregationData{")
+	if this.Buckets != nil {
+		s = append(s, "Buckets: "+fmt.Sprintf("%#v", this.Buckets)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
 func (this *CardinalityAggregationData) GoString() string {
 	if this == nil {
 		return "nil"
@@ -879,13 +1126,16 @@ func (this *LogAggregationData) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 7)
+	s := make([]string, 0, 8)
 	s = append(s, "&log.LogAggregationData{")
 	if this.DateAggregation != nil {
 		s = append(s, "DateAggregation: "+fmt.Sprintf("%#v", this.DateAggregation)+",\n")
 	}
 	if this.FieldAggregation != nil {
 		s = append(s, "FieldAggregation: "+fmt.Sprintf("%#v", this.FieldAggregation)+",\n")
+	}
+	if this.MultiFieldAggregation != nil {
+		s = append(s, "MultiFieldAggregation: "+fmt.Sprintf("%#v", this.MultiFieldAggregation)+",\n")
 	}
 	if this.CardinalityAggregation != nil {
 		s = append(s, "CardinalityAggregation: "+fmt.Sprintf("%#v", this.CardinalityAggregation)+",\n")
@@ -1020,6 +1270,13 @@ func (m *DateAggregationData) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	if len(m.Step) > 0 {
+		i -= len(m.Step)
+		copy(dAtA[i:], m.Step)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.Step)))
+		i--
+		dAtA[i] = 0x1a
+	}
 	if len(m.Buckets) > 0 {
 		for iNdEx := len(m.Buckets) - 1; iNdEx >= 0; iNdEx-- {
 			{
@@ -1175,6 +1432,95 @@ func (m *FieldAggregationData) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
+func (m *MultiFieldAggregationBucket) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MultiFieldAggregationBucket) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MultiFieldAggregationBucket) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.Count != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.Count))
+		i--
+		dAtA[i] = 0x10
+	}
+	if len(m.Keys) > 0 {
+		keysForKeys := make([]string, 0, len(m.Keys))
+		for k := range m.Keys {
+			keysForKeys = append(keysForKeys, string(k))
+		}
+		github_com_gogo_protobuf_sortkeys.Strings(keysForKeys)
+		for iNdEx := len(keysForKeys) - 1; iNdEx >= 0; iNdEx-- {
+			v := m.Keys[string(keysForKeys[iNdEx])]
+			baseI := i
+			i -= len(v)
+			copy(dAtA[i:], v)
+			i = encodeVarintTypes(dAtA, i, uint64(len(v)))
+			i--
+			dAtA[i] = 0x12
+			i -= len(keysForKeys[iNdEx])
+			copy(dAtA[i:], keysForKeys[iNdEx])
+			i = encodeVarintTypes(dAtA, i, uint64(len(keysForKeys[iNdEx])))
+			i--
+			dAtA[i] = 0xa
+			i = encodeVarintTypes(dAtA, i, uint64(baseI-i))
+			i--
+			dAtA[i] = 0xa
+		}
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *MultiFieldAggregationData) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MultiFieldAggregationData) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MultiFieldAggregationData) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.Buckets) > 0 {
+		for iNdEx := len(m.Buckets) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.Buckets[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x12
+		}
+	}
+	return len(dAtA) - i, nil
+}
+
 func (m *CardinalityAggregationData) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -1223,6 +1569,18 @@ func (m *LogAggregationData) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	if m.MultiFieldAggregation != nil {
+		{
+			size, err := m.MultiFieldAggregation.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x32
+	}
 	if m.CardinalityAggregation != nil {
 		{
 			size, err := m.CardinalityAggregation.MarshalToSizedBuffer(dAtA[:i])
@@ -1326,6 +1684,10 @@ func (m *DateAggregationData) Size() (n int) {
 			n += 1 + l + sovTypes(uint64(l))
 		}
 	}
+	l = len(m.Step)
+	if l > 0 {
+		n += 1 + l + sovTypes(uint64(l))
+	}
 	return n
 }
 
@@ -1386,6 +1748,41 @@ func (m *FieldAggregationData) Size() (n int) {
 	return n
 }
 
+func (m *MultiFieldAggregationBucket) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if len(m.Keys) > 0 {
+		for k, v := range m.Keys {
+			_ = k
+			_ = v
+			mapEntrySize := 1 + len(k) + sovTypes(uint64(len(k))) + 1 + len(v) + sovTypes(uint64(len(v)))
+			n += mapEntrySize + 1 + sovTypes(uint64(mapEntrySize))
+		}
+	}
+	if m.Count != 0 {
+		n += 1 + sovTypes(uint64(m.Count))
+	}
+	return n
+}
+
+func (m *MultiFieldAggregationData) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if len(m.Buckets) > 0 {
+		for _, e := range m.Buckets {
+			l = e.Size()
+			n += 1 + l + sovTypes(uint64(l))
+		}
+	}
+	return n
+}
+
 func (m *CardinalityAggregationData) Size() (n int) {
 	if m == nil {
 		return 0
@@ -1414,6 +1811,10 @@ func (m *LogAggregationData) Size() (n int) {
 	}
 	if m.CardinalityAggregation != nil {
 		l = m.CardinalityAggregation.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.MultiFieldAggregation != nil {
+		l = m.MultiFieldAggregation.Size()
 		n += 1 + l + sovTypes(uint64(l))
 	}
 	return n
@@ -1468,6 +1869,7 @@ func (this *DateAggregationData) String() string {
 	repeatedStringForBuckets += "}"
 	s := strings.Join([]string{`&DateAggregationData{`,
 		`Buckets:` + repeatedStringForBuckets + `,`,
+		`Step:` + fmt.Sprintf("%v", this.Step) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -1519,6 +1921,42 @@ func (this *FieldAggregationData) String() string {
 	}, "")
 	return s
 }
+func (this *MultiFieldAggregationBucket) String() string {
+	if this == nil {
+		return "nil"
+	}
+	keysForKeys := make([]string, 0, len(this.Keys))
+	for k, _ := range this.Keys {
+		keysForKeys = append(keysForKeys, k)
+	}
+	github_com_gogo_protobuf_sortkeys.Strings(keysForKeys)
+	mapStringForKeys := "map[string]string{"
+	for _, k := range keysForKeys {
+		mapStringForKeys += fmt.Sprintf("%v: %v,", k, this.Keys[k])
+	}
+	mapStringForKeys += "}"
+	s := strings.Join([]string{`&MultiFieldAggregationBucket{`,
+		`Keys:` + mapStringForKeys + `,`,
+		`Count:` + fmt.Sprintf("%v", this.Count) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *MultiFieldAggregationData) String() string {
+	if this == nil {
+		return "nil"
+	}
+	repeatedStringForBuckets := "[]*MultiFieldAggregationBucket{"
+	for _, f := range this.Buckets {
+		repeatedStringForBuckets += strings.Replace(f.String(), "MultiFieldAggregationBucket", "MultiFieldAggregationBucket", 1) + ","
+	}
+	repeatedStringForBuckets += "}"
+	s := strings.Join([]string{`&MultiFieldAggregationData{`,
+		`Buckets:` + repeatedStringForBuckets + `,`,
+		`}`,
+	}, "")
+	return s
+}
 func (this *CardinalityAggregationData) String() string {
 	if this == nil {
 		return "nil"
@@ -1537,6 +1975,7 @@ func (this *LogAggregationData) String() string {
 		`DateAggregation:` + strings.Replace(this.DateAggregation.String(), "DateAggregationData", "DateAggregationData", 1) + `,`,
 		`FieldAggregation:` + strings.Replace(this.FieldAggregation.String(), "FieldAggregationData", "FieldAggregationData", 1) + `,`,
 		`CardinalityAggregation:` + strings.Replace(this.CardinalityAggregation.String(), "CardinalityAggregationData", "CardinalityAggregationData", 1) + `,`,
+		`MultiFieldAggregation:` + strings.Replace(this.MultiFieldAggregation.String(), "MultiFieldAggregationData", "MultiFieldAggregationData", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -1920,6 +2359,38 @@ func (m *DateAggregationData) Unmarshal(dAtA []byte) error {
 			if err := m.Buckets[len(m.Buckets)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Step", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Step = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
@@ -2354,6 +2825,292 @@ func (m *FieldAggregationData) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
+func (m *MultiFieldAggregationBucket) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MultiFieldAggregationBucket: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MultiFieldAggregationBucket: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Keys", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Keys == nil {
+				m.Keys = make(map[string]string)
+			}
+			var mapkey string
+			var mapvalue string
+			for iNdEx < postIndex {
+				entryPreIndex := iNdEx
+				var wire uint64
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return ErrIntOverflowTypes
+					}
+					if iNdEx >= l {
+						return io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					wire |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				fieldNum := int32(wire >> 3)
+				if fieldNum == 1 {
+					var stringLenmapkey uint64
+					for shift := uint(0); ; shift += 7 {
+						if shift >= 64 {
+							return ErrIntOverflowTypes
+						}
+						if iNdEx >= l {
+							return io.ErrUnexpectedEOF
+						}
+						b := dAtA[iNdEx]
+						iNdEx++
+						stringLenmapkey |= uint64(b&0x7F) << shift
+						if b < 0x80 {
+							break
+						}
+					}
+					intStringLenmapkey := int(stringLenmapkey)
+					if intStringLenmapkey < 0 {
+						return ErrInvalidLengthTypes
+					}
+					postStringIndexmapkey := iNdEx + intStringLenmapkey
+					if postStringIndexmapkey < 0 {
+						return ErrInvalidLengthTypes
+					}
+					if postStringIndexmapkey > l {
+						return io.ErrUnexpectedEOF
+					}
+					mapkey = string(dAtA[iNdEx:postStringIndexmapkey])
+					iNdEx = postStringIndexmapkey
+				} else if fieldNum == 2 {
+					var stringLenmapvalue uint64
+					for shift := uint(0); ; shift += 7 {
+						if shift >= 64 {
+							return ErrIntOverflowTypes
+						}
+						if iNdEx >= l {
+							return io.ErrUnexpectedEOF
+						}
+						b := dAtA[iNdEx]
+						iNdEx++
+						stringLenmapvalue |= uint64(b&0x7F) << shift
+						if b < 0x80 {
+							break
+						}
+					}
+					intStringLenmapvalue := int(stringLenmapvalue)
+					if intStringLenmapvalue < 0 {
+						return ErrInvalidLengthTypes
+					}
+					postStringIndexmapvalue := iNdEx + intStringLenmapvalue
+					if postStringIndexmapvalue < 0 {
+						return ErrInvalidLengthTypes
+					}
+					if postStringIndexmapvalue > l {
+						return io.ErrUnexpectedEOF
+					}
+					mapvalue = string(dAtA[iNdEx:postStringIndexmapvalue])
+					iNdEx = postStringIndexmapvalue
+				} else {
+					iNdEx = entryPreIndex
+					skippy, err := skipTypes(dAtA[iNdEx:])
+					if err != nil {
+						return err
+					}
+					if skippy < 0 {
+						return ErrInvalidLengthTypes
+					}
+					if (iNdEx + skippy) > postIndex {
+						return io.ErrUnexpectedEOF
+					}
+					iNdEx += skippy
+				}
+			}
+			m.Keys[mapkey] = mapvalue
+			iNdEx = postIndex
+		case 2:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Count", wireType)
+			}
+			m.Count = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.Count |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MultiFieldAggregationData) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MultiFieldAggregationData: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MultiFieldAggregationData: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Buckets", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Buckets = append(m.Buckets, &MultiFieldAggregationBucket{})
+			if err := m.Buckets[len(m.Buckets)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
 func (m *CardinalityAggregationData) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
@@ -2560,6 +3317,42 @@ func (m *LogAggregationData) Unmarshal(dAtA []byte) error {
 				m.CardinalityAggregation = &CardinalityAggregationData{}
 			}
 			if err := m.CardinalityAggregation.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 6:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field MultiFieldAggregation", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.MultiFieldAggregation == nil {
+				m.MultiFieldAggregation = &MultiFieldAggregationData{}
+			}
+			if err := m.MultiFieldAggregation.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex

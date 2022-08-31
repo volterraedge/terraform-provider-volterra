@@ -174,7 +174,8 @@ func (c *CustomAPIRestClient) doRPCDeletePolicy(ctx context.Context, callOpts *s
 	}
 	defer rsp.Body.Close()
 
-	if rsp.StatusCode != http.StatusOK {
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
 		body, err := ioutil.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
 	}
@@ -185,7 +186,7 @@ func (c *CustomAPIRestClient) doRPCDeletePolicy(ctx context.Context, callOpts *s
 	}
 	pbRsp := &SoftDeleteResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
-		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.secret_policy.SoftDeleteResponse", body)
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.secret_policy.SoftDeleteResponse", body)
 
 	}
 	if callOpts.OutCallResponse != nil {
@@ -257,7 +258,8 @@ func (c *CustomAPIRestClient) doRPCListPolicy(ctx context.Context, callOpts *ser
 	}
 	defer rsp.Body.Close()
 
-	if rsp.StatusCode != http.StatusOK {
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
 		body, err := ioutil.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
 	}
@@ -268,7 +270,7 @@ func (c *CustomAPIRestClient) doRPCListPolicy(ctx context.Context, callOpts *ser
 	}
 	pbRsp := &ListPolicyResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
-		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.secret_policy.ListPolicyResponse", body)
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.secret_policy.ListPolicyResponse", body)
 
 	}
 	if callOpts.OutCallResponse != nil {
@@ -340,7 +342,8 @@ func (c *CustomAPIRestClient) doRPCRecoverPolicy(ctx context.Context, callOpts *
 	}
 	defer rsp.Body.Close()
 
-	if rsp.StatusCode != http.StatusOK {
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
 		body, err := ioutil.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
 	}
@@ -351,7 +354,7 @@ func (c *CustomAPIRestClient) doRPCRecoverPolicy(ctx context.Context, callOpts *
 	}
 	pbRsp := &RecoverResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
-		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.secret_policy.RecoverResponse", body)
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.secret_policy.RecoverResponse", body)
 
 	}
 	if callOpts.OutCallResponse != nil {
@@ -607,7 +610,7 @@ var CustomAPISwaggerJSON string = `{
     "paths": {
         "/public/namespaces/{namespace}/secret_policy/list_policy/{policy_state}": {
             "get": {
-                "summary": "ListPolicy",
+                "summary": "List secret policy",
                 "operationId": "ves.io.schema.secret_policy.CustomAPI.ListPolicy",
                 "responses": {
                     "200": {
@@ -698,7 +701,7 @@ var CustomAPISwaggerJSON string = `{
         },
         "/public/namespaces/{namespace}/secret_policy/{name}/recover": {
             "post": {
-                "summary": "RecoverPolicy",
+                "summary": "Recover secret policy with given policy name",
                 "operationId": "ves.io.schema.secret_policy.CustomAPI.RecoverPolicy",
                 "responses": {
                     "200": {
@@ -797,7 +800,7 @@ var CustomAPISwaggerJSON string = `{
         },
         "/public/namespaces/{namespace}/secret_policy/{name}/softdelete": {
             "post": {
-                "summary": "DeletePolicy",
+                "summary": "Delete secret policy with given policy name",
                 "operationId": "ves.io.schema.secret_policy.CustomAPI.DeletePolicy",
                 "responses": {
                     "200": {

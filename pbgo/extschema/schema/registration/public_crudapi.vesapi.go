@@ -1570,16 +1570,7 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 		item.Disabled = o.GetMetadata().GetDisable()
 
 		if len(req.ReportFields) > 0 {
-			noDBForm, _ := flags.GetEnvGetRspNoDBForm()
-			if !noDBForm {
-				item.Object = o.Object
-				sf.Logger().Alert(svcfw.GetResponseInDBForm,
-					log.MinorAlert,
-					zap.String("user", server.UserFromContext(ctx)),
-					zap.String("useragent", server.UseragentStrFromContext(ctx)),
-					zap.String("operation", "List"),
-				)
-			}
+			item.Object = o.Object
 
 			item.Metadata = &ves_io_schema.ObjectGetMetaType{}
 			item.Metadata.FromObjectMetaType(o.Metadata)
@@ -1643,7 +1634,7 @@ var APISwaggerJSON string = `{
     "paths": {
         "/public/namespaces/{metadata.namespace}/registrations": {
             "post": {
-                "summary": "Create registration",
+                "summary": "Create Registration",
                 "description": "VPM creates registration using this message, never used by users.",
                 "operationId": "ves.io.schema.registration.API.Create",
                 "responses": {
@@ -1735,7 +1726,7 @@ var APISwaggerJSON string = `{
         },
         "/public/namespaces/{metadata.namespace}/registrations/{metadata.name}": {
             "put": {
-                "summary": "Replace registration",
+                "summary": "Replace Registration",
                 "description": "NO fields are allowed to be replaced",
                 "operationId": "ves.io.schema.registration.API.Replace",
                 "responses": {
@@ -1835,7 +1826,7 @@ var APISwaggerJSON string = `{
         },
         "/public/namespaces/{namespace}/registrations": {
             "get": {
-                "summary": "List",
+                "summary": "List Registration",
                 "description": "List the set of registration in a namespace",
                 "operationId": "ves.io.schema.registration.API.List",
                 "responses": {
@@ -1951,7 +1942,7 @@ var APISwaggerJSON string = `{
         },
         "/public/namespaces/{namespace}/registrations/{name}": {
             "get": {
-                "summary": "Get registration",
+                "summary": "Get Registration",
                 "description": "Get registration specification",
                 "operationId": "ves.io.schema.registration.API.Get",
                 "responses": {
@@ -2054,7 +2045,7 @@ var APISwaggerJSON string = `{
                 "x-ves-proto-rpc": "ves.io.schema.registration.API.Get"
             },
             "delete": {
-                "summary": "Delete",
+                "summary": "Delete Registration",
                 "description": "Delete the specified registration",
                 "operationId": "ves.io.schema.registration.API.Delete",
                 "responses": {
@@ -2779,26 +2770,30 @@ var APISwaggerJSON string = `{
                 },
                 "latitude": {
                     "type": "number",
-                    "description": " Geographic location of this site\n\nExample: - \"49.3156733\"-\n\nValidation Rules:\n  ves.io.schema.rules.float.gte: -90.0\n  ves.io.schema.rules.float.lte: 90.0\n",
+                    "description": " Geographic location of this site\n\nExample: - \"49.3156733\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.float.gte: -90.0\n  ves.io.schema.rules.float.lte: 90.0\n  ves.io.schema.rules.message.required: true\n",
                     "title": "Latitude",
                     "format": "float",
                     "x-displayname": "Latitude",
                     "x-ves-example": "49.3156733",
+                    "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.float.gte": "-90.0",
-                        "ves.io.schema.rules.float.lte": "90.0"
+                        "ves.io.schema.rules.float.lte": "90.0",
+                        "ves.io.schema.rules.message.required": "true"
                     }
                 },
                 "longitude": {
                     "type": "number",
-                    "description": " Geographic location of this site\n\nExample: - \"14.2484333\"-\n\nValidation Rules:\n  ves.io.schema.rules.float.gte: -180.0\n  ves.io.schema.rules.float.lte: 180.0\n",
+                    "description": " Geographic location of this site\n\nExample: - \"14.2484333\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.float.gte: -180.0\n  ves.io.schema.rules.float.lte: 180.0\n  ves.io.schema.rules.message.required: true\n",
                     "title": "Longitude",
                     "format": "float",
                     "x-displayname": "Longitude",
                     "x-ves-example": "14.2484333",
+                    "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.float.gte": "-180.0",
-                        "ves.io.schema.rules.float.lte": "180.0"
+                        "ves.io.schema.rules.float.lte": "180.0",
+                        "ves.io.schema.rules.message.required": "true"
                     }
                 },
                 "operating_system_version": {

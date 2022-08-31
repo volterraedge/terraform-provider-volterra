@@ -1595,16 +1595,7 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 		item.Disabled = o.GetMetadata().GetDisable()
 
 		if len(req.ReportFields) > 0 {
-			noDBForm, _ := flags.GetEnvGetRspNoDBForm()
-			if !noDBForm {
-				item.Object = o.Object
-				sf.Logger().Alert(svcfw.GetResponseInDBForm,
-					log.MinorAlert,
-					zap.String("user", server.UserFromContext(ctx)),
-					zap.String("useragent", server.UseragentStrFromContext(ctx)),
-					zap.String("operation", "List"),
-				)
-			}
+			item.Object = o.Object
 
 			item.Metadata = &ves_io_schema.ObjectGetMetaType{}
 			item.Metadata.FromObjectMetaType(o.Metadata)
@@ -1683,7 +1674,7 @@ var APISwaggerJSON string = `{
     "paths": {
         "/public/namespaces/{metadata.namespace}/app_api_groups": {
             "post": {
-                "summary": "Create app api group",
+                "summary": "Create API Group",
                 "description": "Create app_api_group creates a new object in the storage backend for metadata.namespace.",
                 "operationId": "ves.io.schema.views.app_api_group.API.Create",
                 "responses": {
@@ -1775,7 +1766,7 @@ var APISwaggerJSON string = `{
         },
         "/public/namespaces/{metadata.namespace}/app_api_groups/{metadata.name}": {
             "put": {
-                "summary": "Replace app api group",
+                "summary": "Replace API Group",
                 "description": "Replace app_api_group replaces an existing object in the storage backend for metadata.namespace.",
                 "operationId": "ves.io.schema.views.app_api_group.API.Replace",
                 "responses": {
@@ -1875,7 +1866,7 @@ var APISwaggerJSON string = `{
         },
         "/public/namespaces/{namespace}/app_api_groups": {
             "get": {
-                "summary": "List",
+                "summary": "List App API Group",
                 "description": "List the set of app_api_group in a namespace",
                 "operationId": "ves.io.schema.views.app_api_group.API.List",
                 "responses": {
@@ -1991,7 +1982,7 @@ var APISwaggerJSON string = `{
         },
         "/public/namespaces/{namespace}/app_api_groups/{name}": {
             "get": {
-                "summary": "Get app api group",
+                "summary": "Get API Group",
                 "description": "Get app_api_group reads a given object from storage backend for metadata.namespace.",
                 "operationId": "ves.io.schema.views.app_api_group.API.Get",
                 "responses": {
@@ -2095,7 +2086,7 @@ var APISwaggerJSON string = `{
                 "x-ves-proto-rpc": "ves.io.schema.views.app_api_group.API.Get"
             },
             "delete": {
-                "summary": "Delete",
+                "summary": "Delete App API Group",
                 "description": "Delete the specified app_api_group",
                 "operationId": "ves.io.schema.views.app_api_group.API.Delete",
                 "responses": {

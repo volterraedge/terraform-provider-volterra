@@ -190,7 +190,8 @@ func (c *WAFMonitoringAPIRestClient) doRPCClientRuleHitsMetrics(ctx context.Cont
 	}
 	defer rsp.Body.Close()
 
-	if rsp.StatusCode != http.StatusOK {
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
 		body, err := ioutil.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
 	}
@@ -201,7 +202,7 @@ func (c *WAFMonitoringAPIRestClient) doRPCClientRuleHitsMetrics(ctx context.Cont
 	}
 	pbRsp := &RuleHitsCountResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
-		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.waf.RuleHitsCountResponse", body)
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.waf.RuleHitsCountResponse", body)
 
 	}
 	if callOpts.OutCallResponse != nil {
@@ -278,7 +279,8 @@ func (c *WAFMonitoringAPIRestClient) doRPCClientSecurityEventsMetrics(ctx contex
 	}
 	defer rsp.Body.Close()
 
-	if rsp.StatusCode != http.StatusOK {
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
 		body, err := ioutil.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
 	}
@@ -289,7 +291,7 @@ func (c *WAFMonitoringAPIRestClient) doRPCClientSecurityEventsMetrics(ctx contex
 	}
 	pbRsp := &SecurityEventsCountResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
-		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.waf.SecurityEventsCountResponse", body)
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.waf.SecurityEventsCountResponse", body)
 
 	}
 	if callOpts.OutCallResponse != nil {
@@ -366,7 +368,8 @@ func (c *WAFMonitoringAPIRestClient) doRPCServerRuleHitsMetrics(ctx context.Cont
 	}
 	defer rsp.Body.Close()
 
-	if rsp.StatusCode != http.StatusOK {
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
 		body, err := ioutil.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
 	}
@@ -377,7 +380,7 @@ func (c *WAFMonitoringAPIRestClient) doRPCServerRuleHitsMetrics(ctx context.Cont
 	}
 	pbRsp := &RuleHitsCountResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
-		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.waf.RuleHitsCountResponse", body)
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.waf.RuleHitsCountResponse", body)
 
 	}
 	if callOpts.OutCallResponse != nil {
@@ -454,7 +457,8 @@ func (c *WAFMonitoringAPIRestClient) doRPCServerSecurityEventsMetrics(ctx contex
 	}
 	defer rsp.Body.Close()
 
-	if rsp.StatusCode != http.StatusOK {
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
 		body, err := ioutil.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
 	}
@@ -465,7 +469,7 @@ func (c *WAFMonitoringAPIRestClient) doRPCServerSecurityEventsMetrics(ctx contex
 	}
 	pbRsp := &SecurityEventsCountResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
-		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.waf.SecurityEventsCountResponse", body)
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.waf.SecurityEventsCountResponse", body)
 
 	}
 	if callOpts.OutCallResponse != nil {
@@ -775,7 +779,7 @@ var WAFMonitoringAPISwaggerJSON string = `{
     "paths": {
         "/public/namespaces/{namespace}/wafs/metrics/client/rule_hits": {
             "post": {
-                "summary": "ClientRuleHitsMetrics",
+                "summary": "Client Rule Hits Metrics",
                 "description": "Get number of rule hits per client for a given namespace.\nThe rule hits counter can be aggregated based on one or more labels listed here.\nNAMESPACE, APP_TYPE, VIRTUAL_HOST, SITE, SERVICE, INSTANCE, WAF_INSTANCE_ID, RULE_ID, RULE_SEVERITY, RULE_TAG.",
                 "operationId": "ves.io.schema.waf.WAFMonitoringAPI.ClientRuleHitsMetrics",
                 "responses": {
@@ -867,7 +871,7 @@ var WAFMonitoringAPISwaggerJSON string = `{
         },
         "/public/namespaces/{namespace}/wafs/metrics/client/security_events": {
             "post": {
-                "summary": "ClientSecurityEventsMetrics",
+                "summary": "Client Security Events Metrics",
                 "description": "Get number of security events per client for a given namespace.\nThe security events counter can be aggregated based on one or more labels listed here.\nNAMESPACE, APP_TYPE, VIRTUAL_HOST, SITE, SERVICE, INSTANCE, WAF_INSTANCE_ID, WAF_MODE.",
                 "operationId": "ves.io.schema.waf.WAFMonitoringAPI.ClientSecurityEventsMetrics",
                 "responses": {
@@ -959,7 +963,7 @@ var WAFMonitoringAPISwaggerJSON string = `{
         },
         "/public/namespaces/{namespace}/wafs/metrics/server/rule_hits": {
             "post": {
-                "summary": "ServerRuleHitsMetrics",
+                "summary": "Server Rule Hits Metrics",
                 "description": "Get number of rule hits per server for a given namespace.\nThe rule hits counter can be aggregated based on one or more labels listed here.\nNAMESPACE, APP_TYPE, VIRTUAL_HOST, SITE, SERVICE, INSTANCE, WAF_INSTANCE_ID, RULE_ID, RULE_SEVERITY, RULE_TAG.",
                 "operationId": "ves.io.schema.waf.WAFMonitoringAPI.ServerRuleHitsMetrics",
                 "responses": {
@@ -1051,7 +1055,7 @@ var WAFMonitoringAPISwaggerJSON string = `{
         },
         "/public/namespaces/{namespace}/wafs/metrics/server/security_events": {
             "post": {
-                "summary": "ServerSecurityEventsMetrics",
+                "summary": "Server Security Events Metrics",
                 "description": "Get number of security events per server for a given namespace.\nThe security events counter can be aggregated based on one or more labels listed here.\nNAMESPACE, APP_TYPE, VIRTUAL_HOST, SITE, SERVICE, INSTANCE, WAF_INSTANCE_ID, WAF_MODE.",
                 "operationId": "ves.io.schema.waf.WAFMonitoringAPI.ServerSecurityEventsMetrics",
                 "responses": {

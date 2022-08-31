@@ -4089,6 +4089,18 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 							Optional: true,
 						},
 
+						"default_loadbalancer": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+
+						"non_default_loadbalancer": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+
 						"http_redirect": {
 							Type:     schema.TypeBool,
 							Optional: true,
@@ -4161,6 +4173,11 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 													Optional: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
+
+															"kind": {
+																Type:     schema.TypeString,
+																Computed: true,
+															},
 
 															"name": {
 																Type:     schema.TypeString,
@@ -4461,6 +4478,18 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 							Optional: true,
 						},
 
+						"default_loadbalancer": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+
+						"non_default_loadbalancer": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+
 						"http_redirect": {
 							Type:     schema.TypeBool,
 							Optional: true,
@@ -4485,6 +4514,11 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
+
+												"kind": {
+													Type:     schema.TypeString,
+													Computed: true,
+												},
 
 												"name": {
 													Type:     schema.TypeString,
@@ -6689,7 +6723,7 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 													},
 												},
 
-												"disable_waf": {
+												"inherited_waf": {
 
 													Type:     schema.TypeBool,
 													Optional: true,
@@ -10573,9 +10607,9 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 
 							if v, ok := protectedAppEndpointsMapStrToI["http_methods"]; ok && !isIntfNil(v) {
 
-								http_methodsList := []ves_io_schema.HttpMethod{}
+								http_methodsList := []ves_io_schema.BotHttpMethod{}
 								for _, j := range v.([]interface{}) {
-									http_methodsList = append(http_methodsList, ves_io_schema.HttpMethod(ves_io_schema.HttpMethod_value[j.(string)]))
+									http_methodsList = append(http_methodsList, ves_io_schema.BotHttpMethod(ves_io_schema.BotHttpMethod_value[j.(string)]))
 								}
 								protectedAppEndpoints[i].HttpMethods = http_methodsList
 
@@ -12863,6 +12897,32 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 
 			}
 
+			defaultLbChoiceTypeFound := false
+
+			if v, ok := cs["default_loadbalancer"]; ok && !isIntfNil(v) && !defaultLbChoiceTypeFound {
+
+				defaultLbChoiceTypeFound = true
+
+				if v.(bool) {
+					defaultLbChoiceInt := &ves_io_schema_views_http_loadbalancer.ProxyTypeHttps_DefaultLoadbalancer{}
+					defaultLbChoiceInt.DefaultLoadbalancer = &ves_io_schema.Empty{}
+					loadbalancerTypeInt.Https.DefaultLbChoice = defaultLbChoiceInt
+				}
+
+			}
+
+			if v, ok := cs["non_default_loadbalancer"]; ok && !isIntfNil(v) && !defaultLbChoiceTypeFound {
+
+				defaultLbChoiceTypeFound = true
+
+				if v.(bool) {
+					defaultLbChoiceInt := &ves_io_schema_views_http_loadbalancer.ProxyTypeHttps_NonDefaultLoadbalancer{}
+					defaultLbChoiceInt.NonDefaultLoadbalancer = &ves_io_schema.Empty{}
+					loadbalancerTypeInt.Https.DefaultLbChoice = defaultLbChoiceInt
+				}
+
+			}
+
 			if v, ok := cs["http_redirect"]; ok && !isIntfNil(v) {
 
 				loadbalancerTypeInt.Https.HttpRedirect = v.(bool)
@@ -12952,7 +13012,7 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 			if v, ok := cs["tls_parameters"]; ok && !isIntfNil(v) {
 
 				sl := v.(*schema.Set).List()
-				tlsParameters := &ves_io_schema_views_http_loadbalancer.DownstreamTlsParamsType{}
+				tlsParameters := &ves_io_schema_views.DownstreamTlsParamsType{}
 				loadbalancerTypeInt.Https.TlsParameters = tlsParameters
 				for _, set := range sl {
 					tlsParametersMapStrToI := set.(map[string]interface{})
@@ -12964,7 +13024,7 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 						mtlsChoiceTypeFound = true
 
 						if v.(bool) {
-							mtlsChoiceInt := &ves_io_schema_views_http_loadbalancer.DownstreamTlsParamsType_NoMtls{}
+							mtlsChoiceInt := &ves_io_schema_views.DownstreamTlsParamsType_NoMtls{}
 							mtlsChoiceInt.NoMtls = &ves_io_schema.Empty{}
 							tlsParameters.MtlsChoice = mtlsChoiceInt
 						}
@@ -12974,8 +13034,8 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 					if v, ok := tlsParametersMapStrToI["use_mtls"]; ok && !isIntfNil(v) && !mtlsChoiceTypeFound {
 
 						mtlsChoiceTypeFound = true
-						mtlsChoiceInt := &ves_io_schema_views_http_loadbalancer.DownstreamTlsParamsType_UseMtls{}
-						mtlsChoiceInt.UseMtls = &ves_io_schema_views_http_loadbalancer.DownstreamTlsValidationContext{}
+						mtlsChoiceInt := &ves_io_schema_views.DownstreamTlsParamsType_UseMtls{}
+						mtlsChoiceInt.UseMtls = &ves_io_schema_views.DownstreamTlsValidationContext{}
 						tlsParameters.MtlsChoice = mtlsChoiceInt
 
 						sl := v.(*schema.Set).List()
@@ -12987,7 +13047,7 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 							if v, ok := cs["crl"]; ok && !isIntfNil(v) && !crlChoiceTypeFound {
 
 								crlChoiceTypeFound = true
-								crlChoiceInt := &ves_io_schema_views_http_loadbalancer.DownstreamTlsValidationContext_Crl{}
+								crlChoiceInt := &ves_io_schema_views.DownstreamTlsValidationContext_Crl{}
 								crlChoiceInt.Crl = &ves_io_schema_views.ObjectRefType{}
 								mtlsChoiceInt.UseMtls.CrlChoice = crlChoiceInt
 
@@ -13022,7 +13082,7 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 								crlChoiceTypeFound = true
 
 								if v.(bool) {
-									crlChoiceInt := &ves_io_schema_views_http_loadbalancer.DownstreamTlsValidationContext_NoCrl{}
+									crlChoiceInt := &ves_io_schema_views.DownstreamTlsValidationContext_NoCrl{}
 									crlChoiceInt.NoCrl = &ves_io_schema.Empty{}
 									mtlsChoiceInt.UseMtls.CrlChoice = crlChoiceInt
 								}
@@ -13381,6 +13441,32 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 
 			}
 
+			defaultLbChoiceTypeFound := false
+
+			if v, ok := cs["default_loadbalancer"]; ok && !isIntfNil(v) && !defaultLbChoiceTypeFound {
+
+				defaultLbChoiceTypeFound = true
+
+				if v.(bool) {
+					defaultLbChoiceInt := &ves_io_schema_views_http_loadbalancer.ProxyTypeHttpsAutoCerts_DefaultLoadbalancer{}
+					defaultLbChoiceInt.DefaultLoadbalancer = &ves_io_schema.Empty{}
+					loadbalancerTypeInt.HttpsAutoCert.DefaultLbChoice = defaultLbChoiceInt
+				}
+
+			}
+
+			if v, ok := cs["non_default_loadbalancer"]; ok && !isIntfNil(v) && !defaultLbChoiceTypeFound {
+
+				defaultLbChoiceTypeFound = true
+
+				if v.(bool) {
+					defaultLbChoiceInt := &ves_io_schema_views_http_loadbalancer.ProxyTypeHttpsAutoCerts_NonDefaultLoadbalancer{}
+					defaultLbChoiceInt.NonDefaultLoadbalancer = &ves_io_schema.Empty{}
+					loadbalancerTypeInt.HttpsAutoCert.DefaultLbChoice = defaultLbChoiceInt
+				}
+
+			}
+
 			if v, ok := cs["http_redirect"]; ok && !isIntfNil(v) {
 
 				loadbalancerTypeInt.HttpsAutoCert.HttpRedirect = v.(bool)
@@ -13405,7 +13491,7 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 
 				mtlsChoiceTypeFound = true
 				mtlsChoiceInt := &ves_io_schema_views_http_loadbalancer.ProxyTypeHttpsAutoCerts_UseMtls{}
-				mtlsChoiceInt.UseMtls = &ves_io_schema_views_http_loadbalancer.DownstreamTlsValidationContext{}
+				mtlsChoiceInt.UseMtls = &ves_io_schema_views.DownstreamTlsValidationContext{}
 				loadbalancerTypeInt.HttpsAutoCert.MtlsChoice = mtlsChoiceInt
 
 				sl := v.(*schema.Set).List()
@@ -13417,7 +13503,7 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 					if v, ok := cs["crl"]; ok && !isIntfNil(v) && !crlChoiceTypeFound {
 
 						crlChoiceTypeFound = true
-						crlChoiceInt := &ves_io_schema_views_http_loadbalancer.DownstreamTlsValidationContext_Crl{}
+						crlChoiceInt := &ves_io_schema_views.DownstreamTlsValidationContext_Crl{}
 						crlChoiceInt.Crl = &ves_io_schema_views.ObjectRefType{}
 						mtlsChoiceInt.UseMtls.CrlChoice = crlChoiceInt
 
@@ -13452,7 +13538,7 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 						crlChoiceTypeFound = true
 
 						if v.(bool) {
-							crlChoiceInt := &ves_io_schema_views_http_loadbalancer.DownstreamTlsValidationContext_NoCrl{}
+							crlChoiceInt := &ves_io_schema_views.DownstreamTlsValidationContext_NoCrl{}
 							crlChoiceInt.NoCrl = &ves_io_schema.Empty{}
 							mtlsChoiceInt.UseMtls.CrlChoice = crlChoiceInt
 						}
@@ -16439,13 +16525,13 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 
 							}
 
-							if v, ok := advancedOptionsMapStrToI["disable_waf"]; ok && !isIntfNil(v) && !wafChoiceTypeFound {
+							if v, ok := advancedOptionsMapStrToI["inherited_waf"]; ok && !isIntfNil(v) && !wafChoiceTypeFound {
 
 								wafChoiceTypeFound = true
 
 								if v.(bool) {
-									wafChoiceInt := &ves_io_schema_views_http_loadbalancer.RouteSimpleAdvancedOptions_DisableWaf{}
-									wafChoiceInt.DisableWaf = &ves_io_schema.Empty{}
+									wafChoiceInt := &ves_io_schema_views_http_loadbalancer.RouteSimpleAdvancedOptions_InheritedWaf{}
+									wafChoiceInt.InheritedWaf = &ves_io_schema.Empty{}
 									advancedOptions.WafChoice = wafChoiceInt
 								}
 
@@ -20676,9 +20762,9 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 
 							if v, ok := protectedAppEndpointsMapStrToI["http_methods"]; ok && !isIntfNil(v) {
 
-								http_methodsList := []ves_io_schema.HttpMethod{}
+								http_methodsList := []ves_io_schema.BotHttpMethod{}
 								for _, j := range v.([]interface{}) {
-									http_methodsList = append(http_methodsList, ves_io_schema.HttpMethod(ves_io_schema.HttpMethod_value[j.(string)]))
+									http_methodsList = append(http_methodsList, ves_io_schema.BotHttpMethod(ves_io_schema.BotHttpMethod_value[j.(string)]))
 								}
 								protectedAppEndpoints[i].HttpMethods = http_methodsList
 
@@ -22953,6 +23039,32 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 
 			}
 
+			defaultLbChoiceTypeFound := false
+
+			if v, ok := cs["default_loadbalancer"]; ok && !isIntfNil(v) && !defaultLbChoiceTypeFound {
+
+				defaultLbChoiceTypeFound = true
+
+				if v.(bool) {
+					defaultLbChoiceInt := &ves_io_schema_views_http_loadbalancer.ProxyTypeHttps_DefaultLoadbalancer{}
+					defaultLbChoiceInt.DefaultLoadbalancer = &ves_io_schema.Empty{}
+					loadbalancerTypeInt.Https.DefaultLbChoice = defaultLbChoiceInt
+				}
+
+			}
+
+			if v, ok := cs["non_default_loadbalancer"]; ok && !isIntfNil(v) && !defaultLbChoiceTypeFound {
+
+				defaultLbChoiceTypeFound = true
+
+				if v.(bool) {
+					defaultLbChoiceInt := &ves_io_schema_views_http_loadbalancer.ProxyTypeHttps_NonDefaultLoadbalancer{}
+					defaultLbChoiceInt.NonDefaultLoadbalancer = &ves_io_schema.Empty{}
+					loadbalancerTypeInt.Https.DefaultLbChoice = defaultLbChoiceInt
+				}
+
+			}
+
 			if v, ok := cs["http_redirect"]; ok && !isIntfNil(v) {
 
 				loadbalancerTypeInt.Https.HttpRedirect = v.(bool)
@@ -23042,7 +23154,7 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 			if v, ok := cs["tls_parameters"]; ok && !isIntfNil(v) {
 
 				sl := v.(*schema.Set).List()
-				tlsParameters := &ves_io_schema_views_http_loadbalancer.DownstreamTlsParamsType{}
+				tlsParameters := &ves_io_schema_views.DownstreamTlsParamsType{}
 				loadbalancerTypeInt.Https.TlsParameters = tlsParameters
 				for _, set := range sl {
 					tlsParametersMapStrToI := set.(map[string]interface{})
@@ -23054,7 +23166,7 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 						mtlsChoiceTypeFound = true
 
 						if v.(bool) {
-							mtlsChoiceInt := &ves_io_schema_views_http_loadbalancer.DownstreamTlsParamsType_NoMtls{}
+							mtlsChoiceInt := &ves_io_schema_views.DownstreamTlsParamsType_NoMtls{}
 							mtlsChoiceInt.NoMtls = &ves_io_schema.Empty{}
 							tlsParameters.MtlsChoice = mtlsChoiceInt
 						}
@@ -23064,8 +23176,8 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 					if v, ok := tlsParametersMapStrToI["use_mtls"]; ok && !isIntfNil(v) && !mtlsChoiceTypeFound {
 
 						mtlsChoiceTypeFound = true
-						mtlsChoiceInt := &ves_io_schema_views_http_loadbalancer.DownstreamTlsParamsType_UseMtls{}
-						mtlsChoiceInt.UseMtls = &ves_io_schema_views_http_loadbalancer.DownstreamTlsValidationContext{}
+						mtlsChoiceInt := &ves_io_schema_views.DownstreamTlsParamsType_UseMtls{}
+						mtlsChoiceInt.UseMtls = &ves_io_schema_views.DownstreamTlsValidationContext{}
 						tlsParameters.MtlsChoice = mtlsChoiceInt
 
 						sl := v.(*schema.Set).List()
@@ -23077,7 +23189,7 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 							if v, ok := cs["crl"]; ok && !isIntfNil(v) && !crlChoiceTypeFound {
 
 								crlChoiceTypeFound = true
-								crlChoiceInt := &ves_io_schema_views_http_loadbalancer.DownstreamTlsValidationContext_Crl{}
+								crlChoiceInt := &ves_io_schema_views.DownstreamTlsValidationContext_Crl{}
 								crlChoiceInt.Crl = &ves_io_schema_views.ObjectRefType{}
 								mtlsChoiceInt.UseMtls.CrlChoice = crlChoiceInt
 
@@ -23112,7 +23224,7 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 								crlChoiceTypeFound = true
 
 								if v.(bool) {
-									crlChoiceInt := &ves_io_schema_views_http_loadbalancer.DownstreamTlsValidationContext_NoCrl{}
+									crlChoiceInt := &ves_io_schema_views.DownstreamTlsValidationContext_NoCrl{}
 									crlChoiceInt.NoCrl = &ves_io_schema.Empty{}
 									mtlsChoiceInt.UseMtls.CrlChoice = crlChoiceInt
 								}
@@ -23471,6 +23583,32 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 
 			}
 
+			defaultLbChoiceTypeFound := false
+
+			if v, ok := cs["default_loadbalancer"]; ok && !isIntfNil(v) && !defaultLbChoiceTypeFound {
+
+				defaultLbChoiceTypeFound = true
+
+				if v.(bool) {
+					defaultLbChoiceInt := &ves_io_schema_views_http_loadbalancer.ProxyTypeHttpsAutoCerts_DefaultLoadbalancer{}
+					defaultLbChoiceInt.DefaultLoadbalancer = &ves_io_schema.Empty{}
+					loadbalancerTypeInt.HttpsAutoCert.DefaultLbChoice = defaultLbChoiceInt
+				}
+
+			}
+
+			if v, ok := cs["non_default_loadbalancer"]; ok && !isIntfNil(v) && !defaultLbChoiceTypeFound {
+
+				defaultLbChoiceTypeFound = true
+
+				if v.(bool) {
+					defaultLbChoiceInt := &ves_io_schema_views_http_loadbalancer.ProxyTypeHttpsAutoCerts_NonDefaultLoadbalancer{}
+					defaultLbChoiceInt.NonDefaultLoadbalancer = &ves_io_schema.Empty{}
+					loadbalancerTypeInt.HttpsAutoCert.DefaultLbChoice = defaultLbChoiceInt
+				}
+
+			}
+
 			if v, ok := cs["http_redirect"]; ok && !isIntfNil(v) {
 
 				loadbalancerTypeInt.HttpsAutoCert.HttpRedirect = v.(bool)
@@ -23495,7 +23633,7 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 
 				mtlsChoiceTypeFound = true
 				mtlsChoiceInt := &ves_io_schema_views_http_loadbalancer.ProxyTypeHttpsAutoCerts_UseMtls{}
-				mtlsChoiceInt.UseMtls = &ves_io_schema_views_http_loadbalancer.DownstreamTlsValidationContext{}
+				mtlsChoiceInt.UseMtls = &ves_io_schema_views.DownstreamTlsValidationContext{}
 				loadbalancerTypeInt.HttpsAutoCert.MtlsChoice = mtlsChoiceInt
 
 				sl := v.(*schema.Set).List()
@@ -23507,7 +23645,7 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 					if v, ok := cs["crl"]; ok && !isIntfNil(v) && !crlChoiceTypeFound {
 
 						crlChoiceTypeFound = true
-						crlChoiceInt := &ves_io_schema_views_http_loadbalancer.DownstreamTlsValidationContext_Crl{}
+						crlChoiceInt := &ves_io_schema_views.DownstreamTlsValidationContext_Crl{}
 						crlChoiceInt.Crl = &ves_io_schema_views.ObjectRefType{}
 						mtlsChoiceInt.UseMtls.CrlChoice = crlChoiceInt
 
@@ -23542,7 +23680,7 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 						crlChoiceTypeFound = true
 
 						if v.(bool) {
-							crlChoiceInt := &ves_io_schema_views_http_loadbalancer.DownstreamTlsValidationContext_NoCrl{}
+							crlChoiceInt := &ves_io_schema_views.DownstreamTlsValidationContext_NoCrl{}
 							crlChoiceInt.NoCrl = &ves_io_schema.Empty{}
 							mtlsChoiceInt.UseMtls.CrlChoice = crlChoiceInt
 						}
@@ -26522,13 +26660,13 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 
 							}
 
-							if v, ok := advancedOptionsMapStrToI["disable_waf"]; ok && !isIntfNil(v) && !wafChoiceTypeFound {
+							if v, ok := advancedOptionsMapStrToI["inherited_waf"]; ok && !isIntfNil(v) && !wafChoiceTypeFound {
 
 								wafChoiceTypeFound = true
 
 								if v.(bool) {
-									wafChoiceInt := &ves_io_schema_views_http_loadbalancer.RouteSimpleAdvancedOptions_DisableWaf{}
-									wafChoiceInt.DisableWaf = &ves_io_schema.Empty{}
+									wafChoiceInt := &ves_io_schema_views_http_loadbalancer.RouteSimpleAdvancedOptions_InheritedWaf{}
+									wafChoiceInt.InheritedWaf = &ves_io_schema.Empty{}
 									advancedOptions.WafChoice = wafChoiceInt
 								}
 

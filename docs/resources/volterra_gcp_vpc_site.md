@@ -37,34 +37,53 @@ resource "volterra_gcp_vpc_site" "example" {
 
   // One of the arguments from this list "ingress_gw ingress_egress_gw voltstack_cluster" must be set
 
-  ingress_gw {
-    gcp_certified_hw = "gcp-byol-voltmesh"
+  voltstack_cluster {
+    // One of the arguments from this list "no_dc_cluster_group dc_cluster_group" must be set
+    no_dc_cluster_group = true
+
+    // One of the arguments from this list "no_forward_proxy active_forward_proxy_policies forward_proxy_allow_all" must be set
+    forward_proxy_allow_all = true
+    gcp_certified_hw        = "gcp-byol-voltstack-combo"
 
     gcp_zone_names = ["us-west1-a, us-west1-b, us-west1-c"]
 
-    local_control_plane {
-      // One of the arguments from this list "default_local_control_plane no_local_control_plane" must be set
-      no_local_control_plane = true
-    }
+    // One of the arguments from this list "no_global_network global_network_list" must be set
+    no_global_network = true
 
-    local_network {
-      // One of the arguments from this list "new_network_autogenerate new_network existing_network" must be set
+    // One of the arguments from this list "no_k8s_cluster k8s_cluster" must be set
+    no_k8s_cluster = true
 
-      existing_network {
-        name = "network1"
+    // One of the arguments from this list "no_network_policy active_network_policies" must be set
+    no_network_policy = true
+    node_number       = "1"
+
+    // One of the arguments from this list "no_outside_static_routes outside_static_routes" must be set
+
+    outside_static_routes {
+      static_route_list {
+        // One of the arguments from this list "simple_static_route custom_static_route" must be set
+        simple_static_route = "10.5.1.0/24"
       }
     }
+    site_local_network {
+      // One of the arguments from this list "new_network_autogenerate new_network existing_network" must be set
 
-    local_subnet {
-      // One of the arguments from this list "existing_subnet new_subnet" must be set
+      new_network_autogenerate {
+        autogenerate = true
+      }
+    }
+    site_local_subnet {
+      // One of the arguments from this list "new_subnet existing_subnet" must be set
 
       new_subnet {
         primary_ipv4 = "10.1.0.0/16"
         subnet_name  = "subnet1-in-network1"
       }
     }
-
-    node_number = "1"
+    // One of the arguments from this list "sm_connection_public_ip sm_connection_pvt_ip" must be set
+    sm_connection_public_ip = true
+    // One of the arguments from this list "default_storage storage_class_list" must be set
+    default_storage = true
   }
 }
 
@@ -113,7 +132,11 @@ Argument Reference
 
 `nodes_per_az` - (Optional) Desired Worker Nodes Per AZ. Max limit is up to 21 (`Int`).
 
+`offline_survivability_mode` - (Optional) Enable/Disable offline survivability mode. See [Offline Survivability Mode ](#offline-survivability-mode) below for details.
+
 `os` - (Optional) Operating System Details. See [Os ](#os) below for details.
+
+`site_local_control_plane` - (Optional) Enable/Disable site local control plane. See [Site Local Control Plane ](#site-local-control-plane) below for details.
 
 `ingress_egress_gw` - (Optional) Two interface site is useful when site is used as ingress/egress gateway to the VPC network.. See [Ingress Egress Gw ](#ingress-egress-gw) below for details.
 
@@ -291,6 +314,10 @@ Forward Proxy is enabled for this connector.
 
 Enable Interception.
 
+### Enable Offline Survivability Mode
+
+Enabling offline survivability reduces default security of a CE..
+
 ### Existing Network
 
 Name of existing VPC network..
@@ -357,8 +384,6 @@ Two interface site is useful when site is used as ingress/egress gateway to the 
 
 `inside_subnet` - (Optional) Subnet for the inside interface of the node.. See [Inside Subnet ](#inside-subnet) below for details.
 
-`local_control_plane` - (Optional) Enable/Disable site local control plane. See [Local Control Plane ](#local-control-plane) below for details.
-
 `active_network_policies` - (Optional) Firewall Policies active for this site.. See [Active Network Policies ](#active-network-policies) below for details.
 
 `no_network_policy` - (Optional) Firewall Policy is disabled for this site. (bool).
@@ -384,8 +409,6 @@ One interface site is useful when site is only used as ingress gateway to the VP
 `gcp_certified_hw` - (Required) Name for GCP certified hardware. (`String`).
 
 `gcp_zone_names` - (Required) List of zones when instances will be created, needs to match with region selected. (`String`).
-
-`local_control_plane` - (Optional) Enable/Disable site local control plane. See [Local Control Plane ](#local-control-plane) below for details.
 
 `local_network` - (Optional) Network for the local interface of the node. See [Local Network ](#local-network) below for details.
 
@@ -438,14 +461,6 @@ IPv4 Address.
 IPv6 Address.
 
 `addr` - (Optional) e.g. '2001:db8:0:0:0:0:2:1' becomes '2001:db8::2:1' or '2001:db8:0:0:0:2:0:0' becomes '2001:db8::2::' (`String`).
-
-### Local Control Plane
-
-Enable/Disable site local control plane.
-
-`default_local_control_plane` - (Optional) Enable Site Local Control Plane (bool).
-
-`no_local_control_plane` - (Optional) Disable Site Local Control Plane (bool).
 
 ### Local Network
 
@@ -535,9 +550,21 @@ Disable Site Local Control Plane.
 
 Firewall Policy is disabled for this site..
 
+### No Offline Survivability Mode
+
+Disable Offline Survivability Mode.
+
 ### No Outside Static Routes
 
 Static Routes disabled for outside network..
+
+### Offline Survivability Mode
+
+Enable/Disable offline survivability mode.
+
+`enable_offline_survivability_mode` - (Optional) Enabling offline survivability reduces default security of a CE. (bool).
+
+`no_offline_survivability_mode` - (Optional) Disable Offline Survivability Mode (bool).
 
 ### Openebs Enterprise
 
@@ -610,6 +637,14 @@ name - (Required) then name will hold the referred object's(e.g. route's) name. 
 namespace - (Optional) then namespace will hold the referred object's(e.g. route's) namespace. (String).
 
 tenant - (Optional) then tenant will hold the referred object's(e.g. route's) tenant. (String).
+
+### Site Local Control Plane
+
+Enable/Disable site local control plane.
+
+`default_local_control_plane` - (Optional) Enable Site Local Control Plane (bool).
+
+`no_local_control_plane` - (Optional) Disable Site Local Control Plane (bool).
 
 ### Site Local Network
 
@@ -760,8 +795,6 @@ App Stack Cluster using single interface, useful for deploying K8s cluster..
 `k8s_cluster` - (Optional) Site Local K8s API access is enabled, using k8s_cluster object. See [ref](#ref) below for details.
 
 `no_k8s_cluster` - (Optional) Site Local K8s API access is disabled (bool).
-
-`local_control_plane` - (Optional) Enable/Disable site local control plane. See [Local Control Plane ](#local-control-plane) below for details.
 
 `active_network_policies` - (Optional) Firewall Policies active for this site.. See [Active Network Policies ](#active-network-policies) below for details.
 

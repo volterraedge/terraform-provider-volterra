@@ -175,7 +175,8 @@ func (c *ConfigCustomAPIRestClient) doRPCGetApiGroup(ctx context.Context, callOp
 	}
 	defer rsp.Body.Close()
 
-	if rsp.StatusCode != http.StatusOK {
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
 		body, err := ioutil.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
 	}
@@ -186,7 +187,7 @@ func (c *ConfigCustomAPIRestClient) doRPCGetApiGroup(ctx context.Context, callOp
 	}
 	pbRsp := &GetApiGroupRsp{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
-		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.views.api_inventory.GetApiGroupRsp", body)
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.views.api_inventory.GetApiGroupRsp", body)
 
 	}
 	if callOpts.OutCallResponse != nil {
@@ -259,7 +260,8 @@ func (c *ConfigCustomAPIRestClient) doRPCListApiGroups(ctx context.Context, call
 	}
 	defer rsp.Body.Close()
 
-	if rsp.StatusCode != http.StatusOK {
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
 		body, err := ioutil.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
 	}
@@ -270,7 +272,7 @@ func (c *ConfigCustomAPIRestClient) doRPCListApiGroups(ctx context.Context, call
 	}
 	pbRsp := &ListApiGroupsRsp{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
-		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.views.api_inventory.ListApiGroupsRsp", body)
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.views.api_inventory.ListApiGroupsRsp", body)
 
 	}
 	if callOpts.OutCallResponse != nil {
@@ -344,7 +346,8 @@ func (c *ConfigCustomAPIRestClient) doRPCUpdateApiGroup(ctx context.Context, cal
 	}
 	defer rsp.Body.Close()
 
-	if rsp.StatusCode != http.StatusOK {
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
 		body, err := ioutil.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
 	}
@@ -355,7 +358,7 @@ func (c *ConfigCustomAPIRestClient) doRPCUpdateApiGroup(ctx context.Context, cal
 	}
 	pbRsp := &UpdateApiGroupRsp{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
-		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.views.api_inventory.UpdateApiGroupRsp", body)
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.views.api_inventory.UpdateApiGroupRsp", body)
 
 	}
 	if callOpts.OutCallResponse != nil {
@@ -715,7 +718,7 @@ var ConfigCustomAPISwaggerJSON string = `{
         },
         "/public/namespaces/{namespace}/http_loadbalancers/{name}/api_inventory/api_groups/{group_name}": {
             "get": {
-                "summary": "Get an API Group from the API Inventory",
+                "summary": "Get API Group",
                 "description": "Get the API Group and the API Group Builder object from the API Inventory object.",
                 "operationId": "ves.io.schema.views.api_inventory.ConfigCustomAPI.GetApiGroup",
                 "responses": {
@@ -810,7 +813,7 @@ var ConfigCustomAPISwaggerJSON string = `{
                 "x-ves-proto-rpc": "ves.io.schema.views.api_inventory.ConfigCustomAPI.GetApiGroup"
             },
             "put": {
-                "summary": "Update Api Group in the API Inventory",
+                "summary": "Update Api Group",
                 "description": "Update the API Group and the Api Group Builder object in the API Inventory.",
                 "operationId": "ves.io.schema.views.api_inventory.ConfigCustomAPI.UpdateApiGroup",
                 "responses": {

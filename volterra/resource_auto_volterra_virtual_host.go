@@ -686,6 +686,18 @@ func resourceVolterraVirtualHost() *schema.Resource {
 				Optional: true,
 			},
 
+			"default_loadbalancer": {
+
+				Type:     schema.TypeBool,
+				Optional: true,
+			},
+
+			"non_default_loadbalancer": {
+
+				Type:     schema.TypeBool,
+				Optional: true,
+			},
+
 			"disable_default_error_pages": {
 				Type:     schema.TypeBool,
 				Optional: true,
@@ -2636,6 +2648,34 @@ func resourceVolterraVirtualHostCreate(d *schema.ResourceData, meta interface{})
 	}
 
 	//custom_errors
+
+	//default_lb_choice
+
+	defaultLbChoiceTypeFound := false
+
+	if v, ok := d.GetOk("default_loadbalancer"); ok && !defaultLbChoiceTypeFound {
+
+		defaultLbChoiceTypeFound = true
+
+		if v.(bool) {
+			defaultLbChoiceInt := &ves_io_schema_virtual_host.CreateSpecType_DefaultLoadbalancer{}
+			defaultLbChoiceInt.DefaultLoadbalancer = &ves_io_schema.Empty{}
+			createSpec.DefaultLbChoice = defaultLbChoiceInt
+		}
+
+	}
+
+	if v, ok := d.GetOk("non_default_loadbalancer"); ok && !defaultLbChoiceTypeFound {
+
+		defaultLbChoiceTypeFound = true
+
+		if v.(bool) {
+			defaultLbChoiceInt := &ves_io_schema_virtual_host.CreateSpecType_NonDefaultLoadbalancer{}
+			defaultLbChoiceInt.NonDefaultLoadbalancer = &ves_io_schema.Empty{}
+			createSpec.DefaultLbChoice = defaultLbChoiceInt
+		}
+
+	}
 
 	//disable_default_error_pages
 	if v, ok := d.GetOk("disable_default_error_pages"); ok && !isIntfNil(v) {
@@ -4880,6 +4920,32 @@ func resourceVolterraVirtualHostUpdate(d *schema.ResourceData, meta interface{})
 				corsPolicy.MaximumAge = int32(w.(int))
 			}
 
+		}
+
+	}
+
+	defaultLbChoiceTypeFound := false
+
+	if v, ok := d.GetOk("default_loadbalancer"); ok && !defaultLbChoiceTypeFound {
+
+		defaultLbChoiceTypeFound = true
+
+		if v.(bool) {
+			defaultLbChoiceInt := &ves_io_schema_virtual_host.ReplaceSpecType_DefaultLoadbalancer{}
+			defaultLbChoiceInt.DefaultLoadbalancer = &ves_io_schema.Empty{}
+			updateSpec.DefaultLbChoice = defaultLbChoiceInt
+		}
+
+	}
+
+	if v, ok := d.GetOk("non_default_loadbalancer"); ok && !defaultLbChoiceTypeFound {
+
+		defaultLbChoiceTypeFound = true
+
+		if v.(bool) {
+			defaultLbChoiceInt := &ves_io_schema_virtual_host.ReplaceSpecType_NonDefaultLoadbalancer{}
+			defaultLbChoiceInt.NonDefaultLoadbalancer = &ves_io_schema.Empty{}
+			updateSpec.DefaultLbChoice = defaultLbChoiceInt
 		}
 
 	}

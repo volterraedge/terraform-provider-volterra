@@ -1595,16 +1595,7 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 		item.Disabled = o.GetMetadata().GetDisable()
 
 		if len(req.ReportFields) > 0 {
-			noDBForm, _ := flags.GetEnvGetRspNoDBForm()
-			if !noDBForm {
-				item.Object = o.Object
-				sf.Logger().Alert(svcfw.GetResponseInDBForm,
-					log.MinorAlert,
-					zap.String("user", server.UserFromContext(ctx)),
-					zap.String("useragent", server.UseragentStrFromContext(ctx)),
-					zap.String("operation", "List"),
-				)
-			}
+			item.Object = o.Object
 
 			item.Metadata = &ves_io_schema.ObjectGetMetaType{}
 			item.Metadata.FromObjectMetaType(o.Metadata)
@@ -1683,7 +1674,7 @@ var APISwaggerJSON string = `{
     "paths": {
         "/public/namespaces/{metadata.namespace}/network_policy_views": {
             "post": {
-                "summary": "CreateSpecType",
+                "summary": "Create Network policy View",
                 "description": "Shape of the Network policy view specification",
                 "operationId": "ves.io.schema.views.network_policy_view.API.Create",
                 "responses": {
@@ -1771,7 +1762,7 @@ var APISwaggerJSON string = `{
         },
         "/public/namespaces/{metadata.namespace}/network_policy_views/{metadata.name}": {
             "put": {
-                "summary": "ReplaceSpecType",
+                "summary": "Replace Network policy View",
                 "description": "Shape of the Network policy view replace specification",
                 "operationId": "ves.io.schema.views.network_policy_view.API.Replace",
                 "responses": {
@@ -1867,7 +1858,7 @@ var APISwaggerJSON string = `{
         },
         "/public/namespaces/{namespace}/network_policy_views": {
             "get": {
-                "summary": "List",
+                "summary": "List Configure Network policy View",
                 "description": "List the set of network_policy_view in a namespace",
                 "operationId": "ves.io.schema.views.network_policy_view.API.List",
                 "responses": {
@@ -1979,7 +1970,7 @@ var APISwaggerJSON string = `{
         },
         "/public/namespaces/{namespace}/network_policy_views/{name}": {
             "get": {
-                "summary": "GetSpecType",
+                "summary": "Get Network policy View",
                 "description": "Shape of the Network policy view specification",
                 "operationId": "ves.io.schema.views.network_policy_view.API.Get",
                 "responses": {
@@ -2079,7 +2070,7 @@ var APISwaggerJSON string = `{
                 "x-ves-proto-rpc": "ves.io.schema.views.network_policy_view.API.Get"
             },
             "delete": {
-                "summary": "Delete",
+                "summary": "Delete Configure Network policy View",
                 "description": "Delete the specified network_policy_view",
                 "operationId": "ves.io.schema.views.network_policy_view.API.Delete",
                 "responses": {

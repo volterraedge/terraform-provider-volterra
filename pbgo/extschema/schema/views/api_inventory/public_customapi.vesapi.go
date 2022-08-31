@@ -165,7 +165,8 @@ func (c *CustomAPIRestClient) doRPCEvaluateApiGroup(ctx context.Context, callOpt
 	}
 	defer rsp.Body.Close()
 
-	if rsp.StatusCode != http.StatusOK {
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
 		body, err := ioutil.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
 	}
@@ -176,7 +177,7 @@ func (c *CustomAPIRestClient) doRPCEvaluateApiGroup(ctx context.Context, callOpt
 	}
 	pbRsp := &EvaluateApiGroupRsp{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
-		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.views.api_inventory.EvaluateApiGroupRsp", body)
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.views.api_inventory.EvaluateApiGroupRsp", body)
 
 	}
 	if callOpts.OutCallResponse != nil {
@@ -248,7 +249,8 @@ func (c *CustomAPIRestClient) doRPCGetContent(ctx context.Context, callOpts *ser
 	}
 	defer rsp.Body.Close()
 
-	if rsp.StatusCode != http.StatusOK {
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
 		body, err := ioutil.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
 	}
@@ -259,7 +261,7 @@ func (c *CustomAPIRestClient) doRPCGetContent(ctx context.Context, callOpts *ser
 	}
 	pbRsp := &GetContentRsp{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
-		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.views.api_inventory.GetContentRsp", body)
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.views.api_inventory.GetContentRsp", body)
 
 	}
 	if callOpts.OutCallResponse != nil {

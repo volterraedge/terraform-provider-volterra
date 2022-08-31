@@ -243,7 +243,8 @@ func (c *CustomAPIRestClient) doRPCAPIEndpointPDF(ctx context.Context, callOpts 
 	}
 	defer rsp.Body.Close()
 
-	if rsp.StatusCode != http.StatusOK {
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
 		body, err := ioutil.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
 	}
@@ -254,7 +255,7 @@ func (c *CustomAPIRestClient) doRPCAPIEndpointPDF(ctx context.Context, callOpts 
 	}
 	pbRsp := &APIEndpointPDFRsp{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
-		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.app_type.APIEndpointPDFRsp", body)
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.app_type.APIEndpointPDFRsp", body)
 
 	}
 	if callOpts.OutCallResponse != nil {
@@ -327,7 +328,8 @@ func (c *CustomAPIRestClient) doRPCAPIEndpoints(ctx context.Context, callOpts *s
 	}
 	defer rsp.Body.Close()
 
-	if rsp.StatusCode != http.StatusOK {
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
 		body, err := ioutil.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
 	}
@@ -338,7 +340,7 @@ func (c *CustomAPIRestClient) doRPCAPIEndpoints(ctx context.Context, callOpts *s
 	}
 	pbRsp := &APIEndpointsRsp{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
-		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.app_type.APIEndpointsRsp", body)
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.app_type.APIEndpointsRsp", body)
 
 	}
 	if callOpts.OutCallResponse != nil {
@@ -412,7 +414,8 @@ func (c *CustomAPIRestClient) doRPCGetAPIEndpointLearntSchema(ctx context.Contex
 	}
 	defer rsp.Body.Close()
 
-	if rsp.StatusCode != http.StatusOK {
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
 		body, err := ioutil.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
 	}
@@ -423,7 +426,7 @@ func (c *CustomAPIRestClient) doRPCGetAPIEndpointLearntSchema(ctx context.Contex
 	}
 	pbRsp := &APIEndpointLearntSchemaRsp{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
-		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.app_type.APIEndpointLearntSchemaRsp", body)
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.app_type.APIEndpointLearntSchemaRsp", body)
 
 	}
 	if callOpts.OutCallResponse != nil {
@@ -498,7 +501,8 @@ func (c *CustomAPIRestClient) doRPCGetServiceAPIEndpointPDF(ctx context.Context,
 	}
 	defer rsp.Body.Close()
 
-	if rsp.StatusCode != http.StatusOK {
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
 		body, err := ioutil.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
 	}
@@ -509,7 +513,7 @@ func (c *CustomAPIRestClient) doRPCGetServiceAPIEndpointPDF(ctx context.Context,
 	}
 	pbRsp := &APIEndpointPDFRsp{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
-		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.app_type.APIEndpointPDFRsp", body)
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.app_type.APIEndpointPDFRsp", body)
 
 	}
 	if callOpts.OutCallResponse != nil {
@@ -583,7 +587,8 @@ func (c *CustomAPIRestClient) doRPCGetServiceAPIEndpoints(ctx context.Context, c
 	}
 	defer rsp.Body.Close()
 
-	if rsp.StatusCode != http.StatusOK {
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
 		body, err := ioutil.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
 	}
@@ -594,7 +599,7 @@ func (c *CustomAPIRestClient) doRPCGetServiceAPIEndpoints(ctx context.Context, c
 	}
 	pbRsp := &APIEndpointsRsp{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
-		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.app_type.APIEndpointsRsp", body)
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.app_type.APIEndpointsRsp", body)
 
 	}
 	if callOpts.OutCallResponse != nil {
@@ -666,7 +671,8 @@ func (c *CustomAPIRestClient) doRPCGetSwaggerSpec(ctx context.Context, callOpts 
 	}
 	defer rsp.Body.Close()
 
-	if rsp.StatusCode != http.StatusOK {
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
 		body, err := ioutil.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
 	}
@@ -751,7 +757,8 @@ func (c *CustomAPIRestClient) doRPCOverridePop(ctx context.Context, callOpts *se
 	}
 	defer rsp.Body.Close()
 
-	if rsp.StatusCode != http.StatusOK {
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
 		body, err := ioutil.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
 	}
@@ -762,7 +769,7 @@ func (c *CustomAPIRestClient) doRPCOverridePop(ctx context.Context, callOpts *se
 	}
 	pbRsp := &OverridePopRsp{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
-		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.app_type.OverridePopRsp", body)
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.app_type.OverridePopRsp", body)
 
 	}
 	if callOpts.OutCallResponse != nil {
@@ -835,7 +842,8 @@ func (c *CustomAPIRestClient) doRPCOverridePush(ctx context.Context, callOpts *s
 	}
 	defer rsp.Body.Close()
 
-	if rsp.StatusCode != http.StatusOK {
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
 		body, err := ioutil.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
 	}
@@ -846,7 +854,7 @@ func (c *CustomAPIRestClient) doRPCOverridePush(ctx context.Context, callOpts *s
 	}
 	pbRsp := &OverridePushRsp{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
-		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.app_type.OverridePushRsp", body)
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.app_type.OverridePushRsp", body)
 
 	}
 	if callOpts.OutCallResponse != nil {
@@ -918,7 +926,8 @@ func (c *CustomAPIRestClient) doRPCOverrides(ctx context.Context, callOpts *serv
 	}
 	defer rsp.Body.Close()
 
-	if rsp.StatusCode != http.StatusOK {
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
 		body, err := ioutil.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
 	}
@@ -929,7 +938,7 @@ func (c *CustomAPIRestClient) doRPCOverrides(ctx context.Context, callOpts *serv
 	}
 	pbRsp := &OverridesRsp{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
-		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.app_type.OverridesRsp", body)
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.app_type.OverridesRsp", body)
 
 	}
 	if callOpts.OutCallResponse != nil {
@@ -1609,7 +1618,7 @@ var CustomAPISwaggerJSON string = `{
         },
         "/public/namespaces/{namespace}/app_types/{app_type_name}/api_endpoint/pdf": {
             "get": {
-                "summary": "Get PDF for API endpoint",
+                "summary": "Get PDF",
                 "description": "Get PDF of all metrics for a given auto discovered API endpoint for App type",
                 "operationId": "ves.io.schema.app_type.CustomAPI.APIEndpointPDF",
                 "responses": {
@@ -1913,7 +1922,7 @@ var CustomAPISwaggerJSON string = `{
         },
         "/public/namespaces/{namespace}/app_types/{app_type_name}/override/pop": {
             "post": {
-                "summary": "remove override for dynamic endpoint",
+                "summary": "Remove Override",
                 "description": "remove override for dynamic component for API endpoints discovered for this App type",
                 "operationId": "ves.io.schema.app_type.CustomAPI.OverridePop",
                 "responses": {
@@ -2013,7 +2022,7 @@ var CustomAPISwaggerJSON string = `{
         },
         "/public/namespaces/{namespace}/app_types/{app_type_name}/override/push": {
             "post": {
-                "summary": "Add override for dynamic endpoint",
+                "summary": "Add Override",
                 "description": "Add override for dynamic component for API endpoints discovered for this App type",
                 "operationId": "ves.io.schema.app_type.CustomAPI.OverridePush",
                 "responses": {
@@ -2113,7 +2122,7 @@ var CustomAPISwaggerJSON string = `{
         },
         "/public/namespaces/{namespace}/app_types/{app_type_name}/overrides": {
             "get": {
-                "summary": "Get override for all endpoints",
+                "summary": "Get Override",
                 "description": "Get all override for API endpoints configured for this App type",
                 "operationId": "ves.io.schema.app_type.CustomAPI.Overrides",
                 "responses": {
@@ -2205,7 +2214,7 @@ var CustomAPISwaggerJSON string = `{
         },
         "/public/namespaces/{namespace}/app_types/{app_type_name}/services/{service_name}/api_endpoint/pdf": {
             "post": {
-                "summary": "Get PDF for API endpoint Per Service",
+                "summary": "Get Service API Endpoint PDF",
                 "description": "Get PDF of all metrics for a given auto discovered API endpoint for Service",
                 "operationId": "ves.io.schema.app_type.CustomAPI.GetServiceAPIEndpointPDF",
                 "responses": {
@@ -2313,7 +2322,7 @@ var CustomAPISwaggerJSON string = `{
         },
         "/public/namespaces/{namespace}/app_types/{app_type_name}/services/{service_name}/api_endpoints": {
             "post": {
-                "summary": "Get API endpoints Per Service",
+                "summary": "Get Service API Endpoints",
                 "description": "Get all autodiscovered API endpoints for Service",
                 "operationId": "ves.io.schema.app_type.CustomAPI.GetServiceAPIEndpoints",
                 "responses": {

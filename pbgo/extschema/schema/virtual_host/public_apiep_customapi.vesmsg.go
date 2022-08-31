@@ -672,6 +672,207 @@ func APIEndpointsRspValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *ApiEndpointsStatsReq) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *ApiEndpointsStatsReq) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *ApiEndpointsStatsReq) DeepCopy() *ApiEndpointsStatsReq {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &ApiEndpointsStatsReq{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *ApiEndpointsStatsReq) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *ApiEndpointsStatsReq) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return ApiEndpointsStatsReqValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateApiEndpointsStatsReq struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateApiEndpointsStatsReq) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*ApiEndpointsStatsReq)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *ApiEndpointsStatsReq got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("name"))
+		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["namespace"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("namespace"))
+		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultApiEndpointsStatsReqValidator = func() *ValidateApiEndpointsStatsReq {
+	v := &ValidateApiEndpointsStatsReq{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func ApiEndpointsStatsReqValidator() db.Validator {
+	return DefaultApiEndpointsStatsReqValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *ApiEndpointsStatsRsp) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *ApiEndpointsStatsRsp) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *ApiEndpointsStatsRsp) DeepCopy() *ApiEndpointsStatsRsp {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &ApiEndpointsStatsRsp{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *ApiEndpointsStatsRsp) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *ApiEndpointsStatsRsp) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return ApiEndpointsStatsRspValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateApiEndpointsStatsRsp struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateApiEndpointsStatsRsp) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*ApiEndpointsStatsRsp)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *ApiEndpointsStatsRsp got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["discovered"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("discovered"))
+		if err := fv(ctx, m.GetDiscovered(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["inventory"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("inventory"))
+		if err := fv(ctx, m.GetInventory(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["pii_detected"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("pii_detected"))
+		if err := fv(ctx, m.GetPiiDetected(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["shadow"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("shadow"))
+		if err := fv(ctx, m.GetShadow(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["total_endpoints"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("total_endpoints"))
+		if err := fv(ctx, m.GetTotalEndpoints(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultApiEndpointsStatsRspValidator = func() *ValidateApiEndpointsStatsRsp {
+	v := &ValidateApiEndpointsStatsRsp{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func ApiEndpointsStatsRspValidator() db.Validator {
+	return DefaultApiEndpointsStatsRspValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *SwaggerSpecReq) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }

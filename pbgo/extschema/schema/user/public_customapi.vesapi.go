@@ -297,7 +297,8 @@ func (c *CustomAPIRestClient) doRPCAcceptTOS(ctx context.Context, callOpts *serv
 	}
 	defer rsp.Body.Close()
 
-	if rsp.StatusCode != http.StatusOK {
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
 		body, err := ioutil.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
 	}
@@ -308,7 +309,7 @@ func (c *CustomAPIRestClient) doRPCAcceptTOS(ctx context.Context, callOpts *serv
 	}
 	pbRsp := &AcceptTOSResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
-		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.user.AcceptTOSResponse", body)
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.user.AcceptTOSResponse", body)
 
 	}
 	if callOpts.OutCallResponse != nil {
@@ -380,7 +381,8 @@ func (c *CustomAPIRestClient) doRPCAddUserToGroup(ctx context.Context, callOpts 
 	}
 	defer rsp.Body.Close()
 
-	if rsp.StatusCode != http.StatusOK {
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
 		body, err := ioutil.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
 	}
@@ -391,7 +393,7 @@ func (c *CustomAPIRestClient) doRPCAddUserToGroup(ctx context.Context, callOpts 
 	}
 	pbRsp := &UserGroupResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
-		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.user.UserGroupResponse", body)
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.user.UserGroupResponse", body)
 
 	}
 	if callOpts.OutCallResponse != nil {
@@ -464,7 +466,8 @@ func (c *CustomAPIRestClient) doRPCAssignRole(ctx context.Context, callOpts *ser
 	}
 	defer rsp.Body.Close()
 
-	if rsp.StatusCode != http.StatusOK {
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
 		body, err := ioutil.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
 	}
@@ -475,7 +478,7 @@ func (c *CustomAPIRestClient) doRPCAssignRole(ctx context.Context, callOpts *ser
 	}
 	pbRsp := &Empty{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
-		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.user.Empty", body)
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.user.Empty", body)
 
 	}
 	if callOpts.OutCallResponse != nil {
@@ -547,7 +550,8 @@ func (c *CustomAPIRestClient) doRPCCascadeDelete(ctx context.Context, callOpts *
 	}
 	defer rsp.Body.Close()
 
-	if rsp.StatusCode != http.StatusOK {
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
 		body, err := ioutil.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
 	}
@@ -558,7 +562,7 @@ func (c *CustomAPIRestClient) doRPCCascadeDelete(ctx context.Context, callOpts *
 	}
 	pbRsp := &CascadeDeleteResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
-		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.user.CascadeDeleteResponse", body)
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.user.CascadeDeleteResponse", body)
 
 	}
 	if callOpts.OutCallResponse != nil {
@@ -637,7 +641,8 @@ func (c *CustomAPIRestClient) doRPCCreate(ctx context.Context, callOpts *server.
 	}
 	defer rsp.Body.Close()
 
-	if rsp.StatusCode != http.StatusOK {
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
 		body, err := ioutil.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
 	}
@@ -648,7 +653,7 @@ func (c *CustomAPIRestClient) doRPCCreate(ctx context.Context, callOpts *server.
 	}
 	pbRsp := &Object{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
-		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.user.Object", body)
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.user.Object", body)
 
 	}
 	if callOpts.OutCallResponse != nil {
@@ -719,7 +724,8 @@ func (c *CustomAPIRestClient) doRPCGet(ctx context.Context, callOpts *server.Cus
 	}
 	defer rsp.Body.Close()
 
-	if rsp.StatusCode != http.StatusOK {
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
 		body, err := ioutil.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
 	}
@@ -730,7 +736,7 @@ func (c *CustomAPIRestClient) doRPCGet(ctx context.Context, callOpts *server.Cus
 	}
 	pbRsp := &GetUserRoleResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
-		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.user.GetUserRoleResponse", body)
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.user.GetUserRoleResponse", body)
 
 	}
 	if callOpts.OutCallResponse != nil {
@@ -801,7 +807,8 @@ func (c *CustomAPIRestClient) doRPCGetTOS(ctx context.Context, callOpts *server.
 	}
 	defer rsp.Body.Close()
 
-	if rsp.StatusCode != http.StatusOK {
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
 		body, err := ioutil.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
 	}
@@ -812,7 +819,7 @@ func (c *CustomAPIRestClient) doRPCGetTOS(ctx context.Context, callOpts *server.
 	}
 	pbRsp := &GetTOSResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
-		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.user.GetTOSResponse", body)
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.user.GetTOSResponse", body)
 
 	}
 	if callOpts.OutCallResponse != nil {
@@ -883,7 +890,8 @@ func (c *CustomAPIRestClient) doRPCList(ctx context.Context, callOpts *server.Cu
 	}
 	defer rsp.Body.Close()
 
-	if rsp.StatusCode != http.StatusOK {
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
 		body, err := ioutil.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
 	}
@@ -894,7 +902,7 @@ func (c *CustomAPIRestClient) doRPCList(ctx context.Context, callOpts *server.Cu
 	}
 	pbRsp := &ListUserRoleResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
-		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.user.ListUserRoleResponse", body)
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.user.ListUserRoleResponse", body)
 
 	}
 	if callOpts.OutCallResponse != nil {
@@ -966,7 +974,8 @@ func (c *CustomAPIRestClient) doRPCRemoveUserFromGroup(ctx context.Context, call
 	}
 	defer rsp.Body.Close()
 
-	if rsp.StatusCode != http.StatusOK {
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
 		body, err := ioutil.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
 	}
@@ -977,7 +986,7 @@ func (c *CustomAPIRestClient) doRPCRemoveUserFromGroup(ctx context.Context, call
 	}
 	pbRsp := &UserGroupResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
-		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.user.UserGroupResponse", body)
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.user.UserGroupResponse", body)
 
 	}
 	if callOpts.OutCallResponse != nil {
@@ -1056,7 +1065,8 @@ func (c *CustomAPIRestClient) doRPCReplace(ctx context.Context, callOpts *server
 	}
 	defer rsp.Body.Close()
 
-	if rsp.StatusCode != http.StatusOK {
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
 		body, err := ioutil.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
 	}
@@ -1067,7 +1077,7 @@ func (c *CustomAPIRestClient) doRPCReplace(ctx context.Context, callOpts *server
 	}
 	pbRsp := &Object{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
-		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.user.Object", body)
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.user.Object", body)
 
 	}
 	if callOpts.OutCallResponse != nil {
@@ -1137,7 +1147,8 @@ func (c *CustomAPIRestClient) doRPCResetPassword(ctx context.Context, callOpts *
 	}
 	defer rsp.Body.Close()
 
-	if rsp.StatusCode != http.StatusOK {
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
 		body, err := ioutil.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
 	}
@@ -1148,7 +1159,7 @@ func (c *CustomAPIRestClient) doRPCResetPassword(ctx context.Context, callOpts *
 	}
 	pbRsp := &Empty{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
-		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.user.Empty", body)
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.user.Empty", body)
 
 	}
 	if callOpts.OutCallResponse != nil {
@@ -1219,7 +1230,8 @@ func (c *CustomAPIRestClient) doRPCResetPasswordByAdmin(ctx context.Context, cal
 	}
 	defer rsp.Body.Close()
 
-	if rsp.StatusCode != http.StatusOK {
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
 		body, err := ioutil.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
 	}
@@ -1230,7 +1242,7 @@ func (c *CustomAPIRestClient) doRPCResetPasswordByAdmin(ctx context.Context, cal
 	}
 	pbRsp := &Empty{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
-		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.user.Empty", body)
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.user.Empty", body)
 
 	}
 	if callOpts.OutCallResponse != nil {
@@ -1302,7 +1314,8 @@ func (c *CustomAPIRestClient) doRPCSendPasswordEmail(ctx context.Context, callOp
 	}
 	defer rsp.Body.Close()
 
-	if rsp.StatusCode != http.StatusOK {
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
 		body, err := ioutil.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
 	}
@@ -1313,7 +1326,7 @@ func (c *CustomAPIRestClient) doRPCSendPasswordEmail(ctx context.Context, callOp
 	}
 	pbRsp := &SendPasswordEmailResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
-		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.user.SendPasswordEmailResponse", body)
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.user.SendPasswordEmailResponse", body)
 
 	}
 	if callOpts.OutCallResponse != nil {
@@ -1383,7 +1396,8 @@ func (c *CustomAPIRestClient) doRPCSyncUser(ctx context.Context, callOpts *serve
 	}
 	defer rsp.Body.Close()
 
-	if rsp.StatusCode != http.StatusOK {
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
 		body, err := ioutil.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
 	}
@@ -1394,7 +1408,7 @@ func (c *CustomAPIRestClient) doRPCSyncUser(ctx context.Context, callOpts *serve
 	}
 	pbRsp := &Empty{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
-		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.user.Empty", body)
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.user.Empty", body)
 
 	}
 	if callOpts.OutCallResponse != nil {
@@ -2244,7 +2258,7 @@ var CustomAPISwaggerJSON string = `{
     "paths": {
         "/public/custom/idm/user/sync": {
             "post": {
-                "summary": "Sync user from identity provider",
+                "summary": "Sync user",
                 "description": "In case when user created initially from identity provider we need to sync the user data.",
                 "operationId": "ves.io.schema.user.CustomAPI.SyncUser",
                 "responses": {
@@ -2328,7 +2342,7 @@ var CustomAPISwaggerJSON string = `{
         },
         "/public/custom/namespaces/system/users/group_add": {
             "put": {
-                "summary": "Add user to the groups",
+                "summary": "Add user to groups",
                 "description": "Assign existing user to specific groups.",
                 "operationId": "ves.io.schema.user.CustomAPI.AddUserToGroup",
                 "responses": {
@@ -2412,7 +2426,7 @@ var CustomAPISwaggerJSON string = `{
         },
         "/public/custom/namespaces/system/users/group_remove": {
             "put": {
-                "summary": "Remove user from groups",
+                "summary": "remove user from groups",
                 "description": "remove existing user from specific groups.",
                 "operationId": "ves.io.schema.user.CustomAPI.RemoveUserFromGroup",
                 "responses": {
@@ -2496,7 +2510,7 @@ var CustomAPISwaggerJSON string = `{
         },
         "/public/custom/namespaces/{namespace}/accept_tos": {
             "post": {
-                "summary": "Accept TOS request",
+                "summary": "Accept TOS",
                 "description": "Accept TOS updates version of accepted terms of service.",
                 "operationId": "ves.io.schema.user.CustomAPI.AcceptTOS",
                 "responses": {
@@ -2588,7 +2602,7 @@ var CustomAPISwaggerJSON string = `{
         },
         "/public/custom/namespaces/{namespace}/role_users": {
             "post": {
-                "summary": "Role assignment request",
+                "summary": "Assign role to User",
                 "description": "AssignRole allows customers to assign a namespace/role pair to multiple users",
                 "operationId": "ves.io.schema.user.CustomAPI.AssignRole",
                 "responses": {
@@ -2680,7 +2694,7 @@ var CustomAPISwaggerJSON string = `{
         },
         "/public/custom/namespaces/{namespace}/send_password_email": {
             "post": {
-                "summary": "Send password email",
+                "summary": "Send Password Email",
                 "description": "SendPasswordEmail allows admin user to trigger send password email for a user to update user's password.\nDeprecated: use ResetPasswordByAdmin RPC instead",
                 "operationId": "ves.io.schema.user.CustomAPI.SendPasswordEmail",
                 "responses": {
@@ -2772,7 +2786,7 @@ var CustomAPISwaggerJSON string = `{
         },
         "/public/custom/namespaces/{namespace}/tos": {
             "get": {
-                "summary": "TOS request",
+                "summary": "Get TOS",
                 "description": "Get TOS provides TOS version with text",
                 "operationId": "ves.io.schema.user.CustomAPI.GetTOS",
                 "responses": {
@@ -2856,7 +2870,7 @@ var CustomAPISwaggerJSON string = `{
         },
         "/public/custom/namespaces/{namespace}/user_roles": {
             "get": {
-                "summary": "List User with roles",
+                "summary": "Get User and Role Assignments",
                 "description": "List enumerates users and their namespace roles for this tenant",
                 "operationId": "ves.io.schema.user.CustomAPI.List",
                 "responses": {
@@ -2935,7 +2949,7 @@ var CustomAPISwaggerJSON string = `{
                 "x-ves-proto-rpc": "ves.io.schema.user.CustomAPI.List"
             },
             "post": {
-                "summary": "Create User with roles",
+                "summary": "Create User with Role Assignment",
                 "description": "Create creates a user and namespace roles binding for this user",
                 "operationId": "ves.io.schema.user.CustomAPI.Create",
                 "responses": {
@@ -3022,7 +3036,7 @@ var CustomAPISwaggerJSON string = `{
                 "x-ves-proto-rpc": "ves.io.schema.user.CustomAPI.Create"
             },
             "put": {
-                "summary": "Update User with roles",
+                "summary": "Update User and Role Assignments",
                 "description": "Replace updates user and namespace roles for this user",
                 "operationId": "ves.io.schema.user.CustomAPI.Replace",
                 "responses": {
@@ -3114,7 +3128,7 @@ var CustomAPISwaggerJSON string = `{
         },
         "/public/custom/namespaces/{namespace}/user_roles/{name}": {
             "post": {
-                "summary": "Update User with roles",
+                "summary": "Update User and Role Assignments",
                 "description": "Replace updates user and namespace roles for this user",
                 "operationId": "ves.io.schema.user.CustomAPI.Replace",
                 "responses": {
@@ -3214,7 +3228,7 @@ var CustomAPISwaggerJSON string = `{
         },
         "/public/custom/namespaces/{namespace}/users/cascade_delete": {
             "post": {
-                "summary": "CascadeDelete User",
+                "summary": "Delete User and Related Objects",
                 "description": "CascadeDelete deletes the user and associated namespace roles for this user.\nUse this only if the user and its referenced objects need to be wiped out altogether.\nNote: users will always be in the system namespace.",
                 "operationId": "ves.io.schema.user.CustomAPI.CascadeDelete",
                 "responses": {
@@ -3306,7 +3320,7 @@ var CustomAPISwaggerJSON string = `{
         },
         "/public/custom/namespaces/{namespace}/whoami": {
             "get": {
-                "summary": "Get User information details",
+                "summary": "Get User Details",
                 "description": "Get fetches user information based on the username header from the request context\nthis API is also called as WhoAmI",
                 "operationId": "ves.io.schema.user.CustomAPI.Get",
                 "responses": {
