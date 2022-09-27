@@ -562,8 +562,16 @@ func (v *ValidateDHCPNetworkType) NetworkPrefixChoiceNetworkPrefixValidationRule
 
 func (v *ValidateDHCPNetworkType) PoolsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for pools")
+	}
 	itemsValidatorFn := func(ctx context.Context, elems []*DHCPPoolType, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
 			if err := DHCPPoolTypeValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
@@ -1110,8 +1118,16 @@ func (v *ValidateDHCPServerParametersType) InterfacesAddressingChoiceValidationR
 
 func (v *ValidateDHCPServerParametersType) DhcpNetworksValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for dhcp_networks")
+	}
 	itemsValidatorFn := func(ctx context.Context, elems []*DHCPNetworkType, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
 			if err := DHCPNetworkTypeValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
@@ -3333,8 +3349,16 @@ func (v *ValidateGlobalSpecType) MtuValidationRuleHandler(rules map[string]strin
 
 func (v *ValidateGlobalSpecType) VirtualNetworkValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for virtual_network")
+	}
 	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema.ObjectRefType, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
 			if err := ves_io_schema.ObjectRefTypeValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
@@ -3389,8 +3413,16 @@ func (v *ValidateGlobalSpecType) DhcpAddressValidationRuleHandler(rules map[stri
 
 func (v *ValidateGlobalSpecType) StaticAddressesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for static_addresses")
+	}
 	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema.Ipv4SubnetType, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
 			if err := ves_io_schema.Ipv4SubnetTypeValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
@@ -3455,8 +3487,16 @@ func (v *ValidateGlobalSpecType) DeviceNameValidationRuleHandler(rules map[strin
 
 func (v *ValidateGlobalSpecType) ParentNetworkInterfaceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for parent_network_interface")
+	}
 	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema.ObjectRefType, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
 			if err := ves_io_schema.ObjectRefTypeValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
@@ -3515,8 +3555,16 @@ func (v *ValidateGlobalSpecType) PriorityValidationRuleHandler(rules map[string]
 
 func (v *ValidateGlobalSpecType) AddressAllocatorValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for address_allocator")
+	}
 	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema.ObjectRefType, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
 			if err := ves_io_schema.ObjectRefTypeValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
@@ -4296,8 +4344,16 @@ func (v *ValidateLegacyInterfaceType) MtuValidationRuleHandler(rules map[string]
 
 func (v *ValidateLegacyInterfaceType) VirtualNetworkValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for virtual_network")
+	}
 	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema.ObjectRefType, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
 			if err := ves_io_schema.ObjectRefTypeValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
@@ -4398,8 +4454,16 @@ func (v *ValidateLegacyInterfaceType) PriorityValidationRuleHandler(rules map[st
 
 func (v *ValidateLegacyInterfaceType) AddressAllocatorValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for address_allocator")
+	}
 	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema.ObjectRefType, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
 			if err := ves_io_schema.ObjectRefTypeValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
@@ -5695,8 +5759,16 @@ type ValidateNetworkInterfaceTunnel struct {
 
 func (v *ValidateNetworkInterfaceTunnel) TunnelValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for tunnel")
+	}
 	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema.ObjectRefType, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
 			if err := ves_io_schema.ObjectRefTypeValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}

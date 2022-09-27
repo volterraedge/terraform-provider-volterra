@@ -2791,6 +2791,15 @@ func (v *ValidateStringRules) Validate(ctx context.Context, pm interface{}, opts
 
 	}
 
+	if fv, exists := v.FldValidators["glob_pattern"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("glob_pattern"))
+		if err := fv(ctx, m.GetGlobPattern(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["in"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("in"))
@@ -3313,6 +3322,28 @@ func (v *ValidateStringRules) Validate(ctx context.Context, pm interface{}, opts
 			vOpts := append(opts,
 				db.WithValidateField("well_known"),
 				db.WithValidateField("templated_http_path"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *StringRules_Glob:
+		if fv, exists := v.FldValidators["well_known.glob"]; exists {
+			val := m.GetWellKnown().(*StringRules_Glob).Glob
+			vOpts := append(opts,
+				db.WithValidateField("well_known"),
+				db.WithValidateField("glob"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *StringRules_StrictUriRef:
+		if fv, exists := v.FldValidators["well_known.strict_uri_ref"]; exists {
+			val := m.GetWellKnown().(*StringRules_StrictUriRef).StrictUriRef
+			vOpts := append(opts,
+				db.WithValidateField("well_known"),
+				db.WithValidateField("strict_uri_ref"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err

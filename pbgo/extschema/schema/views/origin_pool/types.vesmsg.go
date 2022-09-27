@@ -189,6 +189,22 @@ func (v *ValidateCreateSpecType) HealthCheckPortChoiceHealthCheckPortValidationR
 	return oValidatorFn_HealthCheckPort, nil
 }
 
+func (v *ValidateCreateSpecType) PortChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for port_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateCreateSpecType) PortChoicePortValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_Port, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for port")
+	}
+	return oValidatorFn_Port, nil
+}
+
 func (v *ValidateCreateSpecType) TlsChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -199,8 +215,16 @@ func (v *ValidateCreateSpecType) TlsChoiceValidationRuleHandler(rules map[string
 
 func (v *ValidateCreateSpecType) OriginServersValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for origin_servers")
+	}
 	itemsValidatorFn := func(ctx context.Context, elems []*OriginServerType, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
 			if err := OriginServerTypeValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
@@ -237,20 +261,18 @@ func (v *ValidateCreateSpecType) OriginServersValidationRuleHandler(rules map[st
 	return validatorFn, nil
 }
 
-func (v *ValidateCreateSpecType) PortValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for port")
-	}
-
-	return validatorFn, nil
-}
-
 func (v *ValidateCreateSpecType) HealthcheckValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for healthcheck")
+	}
 	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_views.ObjectRefType, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
 			if err := ves_io_schema_views.ObjectRefTypeValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
@@ -402,11 +424,38 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
-	if fv, exists := v.FldValidators["port"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("port"))
-		if err := fv(ctx, m.GetPort(), vOpts...); err != nil {
+	if fv, exists := v.FldValidators["port_choice"]; exists {
+		val := m.GetPortChoice()
+		vOpts := append(opts,
+			db.WithValidateField("port_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
 			return err
+		}
+	}
+
+	switch m.GetPortChoice().(type) {
+	case *CreateSpecType_Port:
+		if fv, exists := v.FldValidators["port_choice.port"]; exists {
+			val := m.GetPortChoice().(*CreateSpecType_Port).Port
+			vOpts := append(opts,
+				db.WithValidateField("port_choice"),
+				db.WithValidateField("port"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CreateSpecType_AutomaticPort:
+		if fv, exists := v.FldValidators["port_choice.automatic_port"]; exists {
+			val := m.GetPortChoice().(*CreateSpecType_AutomaticPort).AutomaticPort
+			vOpts := append(opts,
+				db.WithValidateField("port_choice"),
+				db.WithValidateField("automatic_port"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
 		}
 
 	}
@@ -474,6 +523,30 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 
 	v.FldValidators["health_check_port_choice.health_check_port"] = vFnMap["health_check_port_choice.health_check_port"]
 
+	vrhPortChoice := v.PortChoiceValidationRuleHandler
+	rulesPortChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhPortChoice(rulesPortChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateSpecType.port_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["port_choice"] = vFn
+
+	vrhPortChoicePort := v.PortChoicePortValidationRuleHandler
+	rulesPortChoicePort := map[string]string{
+		"ves.io.schema.rules.uint32.gte": "1",
+		"ves.io.schema.rules.uint32.lte": "65535",
+	}
+	vFnMap["port_choice.port"], err = vrhPortChoicePort(rulesPortChoicePort)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field CreateSpecType.port_choice_port: %s", err)
+		panic(errMsg)
+	}
+
+	v.FldValidators["port_choice.port"] = vFnMap["port_choice.port"]
+
 	vrhTlsChoice := v.TlsChoiceValidationRuleHandler
 	rulesTlsChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -498,19 +571,6 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["origin_servers"] = vFn
-
-	vrhPort := v.PortValidationRuleHandler
-	rulesPort := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
-		"ves.io.schema.rules.uint32.gte":       "1",
-		"ves.io.schema.rules.uint32.lte":       "65535",
-	}
-	vFn, err = vrhPort(rulesPort)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateSpecType.port: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["port"] = vFn
 
 	vrhHealthcheck := v.HealthcheckValidationRuleHandler
 	rulesHealthcheck := map[string]string{
@@ -718,6 +778,22 @@ func (v *ValidateGetSpecType) HealthCheckPortChoiceHealthCheckPortValidationRule
 	return oValidatorFn_HealthCheckPort, nil
 }
 
+func (v *ValidateGetSpecType) PortChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for port_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateGetSpecType) PortChoicePortValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_Port, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for port")
+	}
+	return oValidatorFn_Port, nil
+}
+
 func (v *ValidateGetSpecType) TlsChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -728,8 +804,16 @@ func (v *ValidateGetSpecType) TlsChoiceValidationRuleHandler(rules map[string]st
 
 func (v *ValidateGetSpecType) OriginServersValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for origin_servers")
+	}
 	itemsValidatorFn := func(ctx context.Context, elems []*OriginServerType, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
 			if err := OriginServerTypeValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
@@ -766,20 +850,18 @@ func (v *ValidateGetSpecType) OriginServersValidationRuleHandler(rules map[strin
 	return validatorFn, nil
 }
 
-func (v *ValidateGetSpecType) PortValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for port")
-	}
-
-	return validatorFn, nil
-}
-
 func (v *ValidateGetSpecType) HealthcheckValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for healthcheck")
+	}
 	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_views.ObjectRefType, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
 			if err := ves_io_schema_views.ObjectRefTypeValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
@@ -931,11 +1013,38 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 
 	}
 
-	if fv, exists := v.FldValidators["port"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("port"))
-		if err := fv(ctx, m.GetPort(), vOpts...); err != nil {
+	if fv, exists := v.FldValidators["port_choice"]; exists {
+		val := m.GetPortChoice()
+		vOpts := append(opts,
+			db.WithValidateField("port_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
 			return err
+		}
+	}
+
+	switch m.GetPortChoice().(type) {
+	case *GetSpecType_Port:
+		if fv, exists := v.FldValidators["port_choice.port"]; exists {
+			val := m.GetPortChoice().(*GetSpecType_Port).Port
+			vOpts := append(opts,
+				db.WithValidateField("port_choice"),
+				db.WithValidateField("port"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GetSpecType_AutomaticPort:
+		if fv, exists := v.FldValidators["port_choice.automatic_port"]; exists {
+			val := m.GetPortChoice().(*GetSpecType_AutomaticPort).AutomaticPort
+			vOpts := append(opts,
+				db.WithValidateField("port_choice"),
+				db.WithValidateField("automatic_port"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
 		}
 
 	}
@@ -1003,6 +1112,30 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 
 	v.FldValidators["health_check_port_choice.health_check_port"] = vFnMap["health_check_port_choice.health_check_port"]
 
+	vrhPortChoice := v.PortChoiceValidationRuleHandler
+	rulesPortChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhPortChoice(rulesPortChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GetSpecType.port_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["port_choice"] = vFn
+
+	vrhPortChoicePort := v.PortChoicePortValidationRuleHandler
+	rulesPortChoicePort := map[string]string{
+		"ves.io.schema.rules.uint32.gte": "1",
+		"ves.io.schema.rules.uint32.lte": "65535",
+	}
+	vFnMap["port_choice.port"], err = vrhPortChoicePort(rulesPortChoicePort)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field GetSpecType.port_choice_port: %s", err)
+		panic(errMsg)
+	}
+
+	v.FldValidators["port_choice.port"] = vFnMap["port_choice.port"]
+
 	vrhTlsChoice := v.TlsChoiceValidationRuleHandler
 	rulesTlsChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -1027,19 +1160,6 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["origin_servers"] = vFn
-
-	vrhPort := v.PortValidationRuleHandler
-	rulesPort := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
-		"ves.io.schema.rules.uint32.gte":       "1",
-		"ves.io.schema.rules.uint32.lte":       "65535",
-	}
-	vFn, err = vrhPort(rulesPort)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for GetSpecType.port: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["port"] = vFn
 
 	vrhHealthcheck := v.HealthcheckValidationRuleHandler
 	rulesHealthcheck := map[string]string{
@@ -1302,6 +1422,22 @@ func (v *ValidateGlobalSpecType) HealthCheckPortChoiceHealthCheckPortValidationR
 	return oValidatorFn_HealthCheckPort, nil
 }
 
+func (v *ValidateGlobalSpecType) PortChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for port_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateGlobalSpecType) PortChoicePortValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_Port, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for port")
+	}
+	return oValidatorFn_Port, nil
+}
+
 func (v *ValidateGlobalSpecType) TlsChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -1312,8 +1448,16 @@ func (v *ValidateGlobalSpecType) TlsChoiceValidationRuleHandler(rules map[string
 
 func (v *ValidateGlobalSpecType) OriginServersValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for origin_servers")
+	}
 	itemsValidatorFn := func(ctx context.Context, elems []*OriginServerType, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
 			if err := OriginServerTypeValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
@@ -1350,20 +1494,18 @@ func (v *ValidateGlobalSpecType) OriginServersValidationRuleHandler(rules map[st
 	return validatorFn, nil
 }
 
-func (v *ValidateGlobalSpecType) PortValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for port")
-	}
-
-	return validatorFn, nil
-}
-
 func (v *ValidateGlobalSpecType) HealthcheckValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for healthcheck")
+	}
 	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_views.ObjectRefType, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
 			if err := ves_io_schema_views.ObjectRefTypeValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
@@ -1515,11 +1657,38 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
-	if fv, exists := v.FldValidators["port"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("port"))
-		if err := fv(ctx, m.GetPort(), vOpts...); err != nil {
+	if fv, exists := v.FldValidators["port_choice"]; exists {
+		val := m.GetPortChoice()
+		vOpts := append(opts,
+			db.WithValidateField("port_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
 			return err
+		}
+	}
+
+	switch m.GetPortChoice().(type) {
+	case *GlobalSpecType_Port:
+		if fv, exists := v.FldValidators["port_choice.port"]; exists {
+			val := m.GetPortChoice().(*GlobalSpecType_Port).Port
+			vOpts := append(opts,
+				db.WithValidateField("port_choice"),
+				db.WithValidateField("port"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GlobalSpecType_AutomaticPort:
+		if fv, exists := v.FldValidators["port_choice.automatic_port"]; exists {
+			val := m.GetPortChoice().(*GlobalSpecType_AutomaticPort).AutomaticPort
+			vOpts := append(opts,
+				db.WithValidateField("port_choice"),
+				db.WithValidateField("automatic_port"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
 		}
 
 	}
@@ -1596,6 +1765,30 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 
 	v.FldValidators["health_check_port_choice.health_check_port"] = vFnMap["health_check_port_choice.health_check_port"]
 
+	vrhPortChoice := v.PortChoiceValidationRuleHandler
+	rulesPortChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhPortChoice(rulesPortChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.port_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["port_choice"] = vFn
+
+	vrhPortChoicePort := v.PortChoicePortValidationRuleHandler
+	rulesPortChoicePort := map[string]string{
+		"ves.io.schema.rules.uint32.gte": "1",
+		"ves.io.schema.rules.uint32.lte": "65535",
+	}
+	vFnMap["port_choice.port"], err = vrhPortChoicePort(rulesPortChoicePort)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field GlobalSpecType.port_choice_port: %s", err)
+		panic(errMsg)
+	}
+
+	v.FldValidators["port_choice.port"] = vFnMap["port_choice.port"]
+
 	vrhTlsChoice := v.TlsChoiceValidationRuleHandler
 	rulesTlsChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -1620,19 +1813,6 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["origin_servers"] = vFn
-
-	vrhPort := v.PortValidationRuleHandler
-	rulesPort := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
-		"ves.io.schema.rules.uint32.gte":       "1",
-		"ves.io.schema.rules.uint32.lte":       "65535",
-	}
-	vFn, err = vrhPort(rulesPort)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.port: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["port"] = vFn
 
 	vrhHealthcheck := v.HealthcheckValidationRuleHandler
 	rulesHealthcheck := map[string]string{
@@ -1846,6 +2026,15 @@ func (v *ValidateOriginPoolAdvancedOptions) Validate(ctx context.Context, pm int
 
 		vOpts := append(opts, db.WithValidateField("connection_timeout"))
 		if err := fv(ctx, m.GetConnectionTimeout(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["header_transformation_type"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("header_transformation_type"))
+		if err := fv(ctx, m.GetHeaderTransformationType(), vOpts...); err != nil {
 			return err
 		}
 
@@ -2076,6 +2265,8 @@ var DefaultOriginPoolAdvancedOptionsValidator = func() *ValidateOriginPoolAdvanc
 
 	v.FldValidators["subset_choice.enable_subsets"] = OriginPoolSubsetsValidator().Validate
 
+	v.FldValidators["header_transformation_type"] = ves_io_schema.HeaderTransformationTypeValidator().Validate
+
 	return v
 }()
 
@@ -2275,8 +2466,16 @@ func (v *ValidateOriginPoolSubsets) FallbackPolicyChoiceValidationRuleHandler(ru
 
 func (v *ValidateOriginPoolSubsets) EndpointSubsetsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for endpoint_subsets")
+	}
 	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_cluster.EndpointSubsetSelectorType, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
 			if err := ves_io_schema_cluster.EndpointSubsetSelectorTypeValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
@@ -4696,6 +4895,22 @@ func (v *ValidateReplaceSpecType) HealthCheckPortChoiceHealthCheckPortValidation
 	return oValidatorFn_HealthCheckPort, nil
 }
 
+func (v *ValidateReplaceSpecType) PortChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for port_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateReplaceSpecType) PortChoicePortValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_Port, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for port")
+	}
+	return oValidatorFn_Port, nil
+}
+
 func (v *ValidateReplaceSpecType) TlsChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -4706,8 +4921,16 @@ func (v *ValidateReplaceSpecType) TlsChoiceValidationRuleHandler(rules map[strin
 
 func (v *ValidateReplaceSpecType) OriginServersValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for origin_servers")
+	}
 	itemsValidatorFn := func(ctx context.Context, elems []*OriginServerType, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
 			if err := OriginServerTypeValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
@@ -4744,20 +4967,18 @@ func (v *ValidateReplaceSpecType) OriginServersValidationRuleHandler(rules map[s
 	return validatorFn, nil
 }
 
-func (v *ValidateReplaceSpecType) PortValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for port")
-	}
-
-	return validatorFn, nil
-}
-
 func (v *ValidateReplaceSpecType) HealthcheckValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for healthcheck")
+	}
 	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_views.ObjectRefType, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
 			if err := ves_io_schema_views.ObjectRefTypeValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
@@ -4909,11 +5130,38 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 
 	}
 
-	if fv, exists := v.FldValidators["port"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("port"))
-		if err := fv(ctx, m.GetPort(), vOpts...); err != nil {
+	if fv, exists := v.FldValidators["port_choice"]; exists {
+		val := m.GetPortChoice()
+		vOpts := append(opts,
+			db.WithValidateField("port_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
 			return err
+		}
+	}
+
+	switch m.GetPortChoice().(type) {
+	case *ReplaceSpecType_Port:
+		if fv, exists := v.FldValidators["port_choice.port"]; exists {
+			val := m.GetPortChoice().(*ReplaceSpecType_Port).Port
+			vOpts := append(opts,
+				db.WithValidateField("port_choice"),
+				db.WithValidateField("port"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ReplaceSpecType_AutomaticPort:
+		if fv, exists := v.FldValidators["port_choice.automatic_port"]; exists {
+			val := m.GetPortChoice().(*ReplaceSpecType_AutomaticPort).AutomaticPort
+			vOpts := append(opts,
+				db.WithValidateField("port_choice"),
+				db.WithValidateField("automatic_port"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
 		}
 
 	}
@@ -4981,6 +5229,30 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 
 	v.FldValidators["health_check_port_choice.health_check_port"] = vFnMap["health_check_port_choice.health_check_port"]
 
+	vrhPortChoice := v.PortChoiceValidationRuleHandler
+	rulesPortChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhPortChoice(rulesPortChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ReplaceSpecType.port_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["port_choice"] = vFn
+
+	vrhPortChoicePort := v.PortChoicePortValidationRuleHandler
+	rulesPortChoicePort := map[string]string{
+		"ves.io.schema.rules.uint32.gte": "1",
+		"ves.io.schema.rules.uint32.lte": "65535",
+	}
+	vFnMap["port_choice.port"], err = vrhPortChoicePort(rulesPortChoicePort)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field ReplaceSpecType.port_choice_port: %s", err)
+		panic(errMsg)
+	}
+
+	v.FldValidators["port_choice.port"] = vFnMap["port_choice.port"]
+
 	vrhTlsChoice := v.TlsChoiceValidationRuleHandler
 	rulesTlsChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -5005,19 +5277,6 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["origin_servers"] = vFn
-
-	vrhPort := v.PortValidationRuleHandler
-	rulesPort := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
-		"ves.io.schema.rules.uint32.gte":       "1",
-		"ves.io.schema.rules.uint32.lte":       "65535",
-	}
-	vFn, err = vrhPort(rulesPort)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for ReplaceSpecType.port: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["port"] = vFn
 
 	vrhHealthcheck := v.HealthcheckValidationRuleHandler
 	rulesHealthcheck := map[string]string{
@@ -5122,8 +5381,16 @@ type ValidateTlsCertificatesType struct {
 
 func (v *ValidateTlsCertificatesType) TlsCertificatesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for tls_certificates")
+	}
 	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema.TlsCertificateType, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
 			if err := ves_io_schema.TlsCertificateTypeValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
@@ -5707,6 +5974,41 @@ func (r *CreateSpecType) GetHealthCheckPortChoiceFromGlobalSpecType(o *GlobalSpe
 }
 
 // create setters in CreateSpecType from GlobalSpecType for oneof fields
+func (r *CreateSpecType) SetPortChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.PortChoice.(type) {
+	case nil:
+		o.PortChoice = nil
+
+	case *CreateSpecType_AutomaticPort:
+		o.PortChoice = &GlobalSpecType_AutomaticPort{AutomaticPort: of.AutomaticPort}
+
+	case *CreateSpecType_Port:
+		o.PortChoice = &GlobalSpecType_Port{Port: of.Port}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *CreateSpecType) GetPortChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.PortChoice.(type) {
+	case nil:
+		r.PortChoice = nil
+
+	case *GlobalSpecType_AutomaticPort:
+		r.PortChoice = &CreateSpecType_AutomaticPort{AutomaticPort: of.AutomaticPort}
+
+	case *GlobalSpecType_Port:
+		r.PortChoice = &CreateSpecType_Port{Port: of.Port}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+// create setters in CreateSpecType from GlobalSpecType for oneof fields
 func (r *CreateSpecType) SetTlsChoiceToGlobalSpecType(o *GlobalSpecType) error {
 	switch of := r.TlsChoice.(type) {
 	case nil:
@@ -5751,7 +6053,7 @@ func (m *CreateSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool
 	m.Healthcheck = f.GetHealthcheck()
 	m.LoadbalancerAlgorithm = f.GetLoadbalancerAlgorithm()
 	m.OriginServers = f.GetOriginServers()
-	m.Port = f.GetPort()
+	m.GetPortChoiceFromGlobalSpecType(f)
 	m.GetTlsChoiceFromGlobalSpecType(f)
 }
 
@@ -5776,7 +6078,7 @@ func (m *CreateSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) 
 	f.Healthcheck = m1.Healthcheck
 	f.LoadbalancerAlgorithm = m1.LoadbalancerAlgorithm
 	f.OriginServers = m1.OriginServers
-	f.Port = m1.Port
+	m1.SetPortChoiceToGlobalSpecType(f)
 	m1.SetTlsChoiceToGlobalSpecType(f)
 }
 
@@ -5816,6 +6118,41 @@ func (r *GetSpecType) GetHealthCheckPortChoiceFromGlobalSpecType(o *GlobalSpecTy
 
 	case *GlobalSpecType_SameAsEndpointPort:
 		r.HealthCheckPortChoice = &GetSpecType_SameAsEndpointPort{SameAsEndpointPort: of.SameAsEndpointPort}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+// create setters in GetSpecType from GlobalSpecType for oneof fields
+func (r *GetSpecType) SetPortChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.PortChoice.(type) {
+	case nil:
+		o.PortChoice = nil
+
+	case *GetSpecType_AutomaticPort:
+		o.PortChoice = &GlobalSpecType_AutomaticPort{AutomaticPort: of.AutomaticPort}
+
+	case *GetSpecType_Port:
+		o.PortChoice = &GlobalSpecType_Port{Port: of.Port}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *GetSpecType) GetPortChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.PortChoice.(type) {
+	case nil:
+		r.PortChoice = nil
+
+	case *GlobalSpecType_AutomaticPort:
+		r.PortChoice = &GetSpecType_AutomaticPort{AutomaticPort: of.AutomaticPort}
+
+	case *GlobalSpecType_Port:
+		r.PortChoice = &GetSpecType_Port{Port: of.Port}
 
 	default:
 		return fmt.Errorf("Unknown oneof field %T", of)
@@ -5868,7 +6205,7 @@ func (m *GetSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	m.Healthcheck = f.GetHealthcheck()
 	m.LoadbalancerAlgorithm = f.GetLoadbalancerAlgorithm()
 	m.OriginServers = f.GetOriginServers()
-	m.Port = f.GetPort()
+	m.GetPortChoiceFromGlobalSpecType(f)
 	m.GetTlsChoiceFromGlobalSpecType(f)
 }
 
@@ -5893,7 +6230,7 @@ func (m *GetSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	f.Healthcheck = m1.Healthcheck
 	f.LoadbalancerAlgorithm = m1.LoadbalancerAlgorithm
 	f.OriginServers = m1.OriginServers
-	f.Port = m1.Port
+	m1.SetPortChoiceToGlobalSpecType(f)
 	m1.SetTlsChoiceToGlobalSpecType(f)
 }
 
@@ -5933,6 +6270,41 @@ func (r *ReplaceSpecType) GetHealthCheckPortChoiceFromGlobalSpecType(o *GlobalSp
 
 	case *GlobalSpecType_SameAsEndpointPort:
 		r.HealthCheckPortChoice = &ReplaceSpecType_SameAsEndpointPort{SameAsEndpointPort: of.SameAsEndpointPort}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+// create setters in ReplaceSpecType from GlobalSpecType for oneof fields
+func (r *ReplaceSpecType) SetPortChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.PortChoice.(type) {
+	case nil:
+		o.PortChoice = nil
+
+	case *ReplaceSpecType_AutomaticPort:
+		o.PortChoice = &GlobalSpecType_AutomaticPort{AutomaticPort: of.AutomaticPort}
+
+	case *ReplaceSpecType_Port:
+		o.PortChoice = &GlobalSpecType_Port{Port: of.Port}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *ReplaceSpecType) GetPortChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.PortChoice.(type) {
+	case nil:
+		r.PortChoice = nil
+
+	case *GlobalSpecType_AutomaticPort:
+		r.PortChoice = &ReplaceSpecType_AutomaticPort{AutomaticPort: of.AutomaticPort}
+
+	case *GlobalSpecType_Port:
+		r.PortChoice = &ReplaceSpecType_Port{Port: of.Port}
 
 	default:
 		return fmt.Errorf("Unknown oneof field %T", of)
@@ -5985,7 +6357,7 @@ func (m *ReplaceSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy boo
 	m.Healthcheck = f.GetHealthcheck()
 	m.LoadbalancerAlgorithm = f.GetLoadbalancerAlgorithm()
 	m.OriginServers = f.GetOriginServers()
-	m.Port = f.GetPort()
+	m.GetPortChoiceFromGlobalSpecType(f)
 	m.GetTlsChoiceFromGlobalSpecType(f)
 }
 
@@ -6010,7 +6382,7 @@ func (m *ReplaceSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool)
 	f.Healthcheck = m1.Healthcheck
 	f.LoadbalancerAlgorithm = m1.LoadbalancerAlgorithm
 	f.OriginServers = m1.OriginServers
-	f.Port = m1.Port
+	m1.SetPortChoiceToGlobalSpecType(f)
 	m1.SetTlsChoiceToGlobalSpecType(f)
 }
 

@@ -1595,7 +1595,10 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 		item.Disabled = o.GetMetadata().GetDisable()
 
 		if len(req.ReportFields) > 0 {
-			item.Object = o.Object
+			noDBForm, _ := flags.GetEnvGetRspNoDBForm()
+			if !noDBForm {
+				item.Object = o.Object
+			}
 
 			item.Metadata = &ves_io_schema.ObjectGetMetaType{}
 			item.Metadata.FromObjectMetaType(o.Metadata)
@@ -2253,13 +2256,15 @@ var APISwaggerJSON string = `{
                 },
                 "port": {
                     "type": "array",
-                    "description": " L4 port numbers to match\n\nExample: - ALL / DNS / 1234-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 128\n",
+                    "description": " L4 port numbers to match\n\nExample: - ALL / DNS / 1234-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 128\n",
                     "maxItems": 128,
                     "items": {
                         "$ref": "#/definitions/schemaPortValueType"
                     },
                     "x-displayname": "Source Ports",
+                    "x-ves-required": "true",
                     "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
                         "ves.io.schema.rules.repeated.max_items": "128"
                     }
                 },
@@ -2441,13 +2446,15 @@ var APISwaggerJSON string = `{
                 },
                 "port": {
                     "type": "array",
-                    "description": " L4 port numbers to match\n\nExample: - ALL / DNS / 1234-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 128\n",
+                    "description": " L4 port numbers to match\n\nExample: - ALL / DNS / 1234-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 128\n",
                     "maxItems": 128,
                     "items": {
                         "$ref": "#/definitions/schemaPortValueType"
                     },
                     "x-displayname": "Source Ports",
+                    "x-ves-required": "true",
                     "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
                         "ves.io.schema.rules.repeated.max_items": "128"
                     }
                 },
@@ -2485,14 +2492,16 @@ var APISwaggerJSON string = `{
                 },
                 "port": {
                     "type": "array",
-                    "description": " L4 port numbers to match\n\nExample: - ALL / DNS / 1234-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 128\n",
+                    "description": " L4 port numbers to match\n\nExample: - ALL / DNS / 1234-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 128\n",
                     "title": "ports",
                     "maxItems": 128,
                     "items": {
                         "$ref": "#/definitions/schemaPortValueType"
                     },
                     "x-displayname": "Source Ports",
+                    "x-ves-required": "true",
                     "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
                         "ves.io.schema.rules.repeated.max_items": "128"
                     }
                 },
@@ -2709,13 +2718,15 @@ var APISwaggerJSON string = `{
                 },
                 "port": {
                     "type": "array",
-                    "description": " L4 port numbers to match\n\nExample: - ALL / DNS / 1234-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 128\n",
+                    "description": " L4 port numbers to match\n\nExample: - ALL / DNS / 1234-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 128\n",
                     "maxItems": 128,
                     "items": {
                         "$ref": "#/definitions/schemaPortValueType"
                     },
                     "x-displayname": "Source Ports",
+                    "x-ves-required": "true",
                     "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
                         "ves.io.schema.rules.repeated.max_items": "128"
                     }
                 },
@@ -3297,11 +3308,12 @@ var APISwaggerJSON string = `{
                 },
                 "user_defined": {
                     "type": "integer",
-                    "description": "Exclusive with [all dns]\n Matches the user defined port\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 65535\n",
+                    "description": "Exclusive with [all dns]\n Matches the user defined port\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 1\n  ves.io.schema.rules.uint32.lte: 65535\n",
                     "title": "User defined Port",
                     "format": "int64",
                     "x-displayname": "User defined port",
                     "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.gte": "1",
                         "ves.io.schema.rules.uint32.lte": "65535"
                     }
                 }

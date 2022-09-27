@@ -23,13 +23,13 @@ resource "volterra_origin_pool" "example" {
   loadbalancer_algorithm = ["loadbalancer_algorithm"]
 
   origin_servers {
-    // One of the arguments from this list "public_name k8s_service vn_private_ip public_ip private_name consul_service custom_endpoint_object vn_private_name private_ip" must be set
+    // One of the arguments from this list "custom_endpoint_object private_name k8s_service private_ip consul_service vn_private_ip vn_private_name public_ip public_name" must be set
 
-    private_ip {
-      ip = "8.8.8.8"
+    private_name {
+      dns_name = "value"
 
       // One of the arguments from this list "inside_network outside_network" must be set
-      outside_network = true
+      inside_network = true
 
       site_locator {
         // One of the arguments from this list "site virtual_site" must be set
@@ -47,7 +47,8 @@ resource "volterra_origin_pool" "example" {
     }
   }
 
-  port = ["9080"]
+  // One of the arguments from this list "port automatic_port" must be set
+  port = "9080"
 
   // One of the arguments from this list "no_tls use_tls" must be set
   no_tls = true
@@ -88,7 +89,9 @@ Argument Reference
 
 `origin_servers` - (Required) List of origin servers in this pool. See [Origin Servers ](#origin-servers) below for details.
 
-`port` - (Required) Endpoint service is available on this port (`Int`).
+`automatic_port` - (Optional) For other origin server types, port will be automatically set as 443 if TLS is enabled at Origin Pool and 80 if TLS is disabled (bool).
+
+`port` - (Optional) Endpoint service is available on this port (`Int`).
 
 `no_tls` - (Optional) x-displayName: "Disable" (bool).
 
@@ -105,6 +108,8 @@ Advanced options configuration like timeouts, circuit breaker, subset load balan
 `disable_circuit_breaker` - (Optional) Circuit Breaker is disabled (bool).
 
 `connection_timeout` - (Optional) This is specified in milliseconds. The default value is 2 seconds (`Int`).
+
+`header_transformation_type` - (Optional) Header transformation options for upstream request headers. See [Header Transformation Type ](#header-transformation-type) below for details.
 
 `http2_options` - (Optional) Http2 Protocol options for upstream connections. See [Http2 Options ](#http2-options) below for details.
 
@@ -206,6 +211,10 @@ Custom selection of TLS versions and cipher suites.
 
 requests are 1024 and the default value for retries is 3.
 
+### Default Header Transformation
+
+Normalize the headers to lower case.
+
 ### Default Security
 
 TLS v1.2+ with PFS ciphers and strong crypto algorithms..
@@ -257,6 +266,14 @@ List of subset class. Subsets class is defined using list of keys. Every unique 
 ### Fail Request
 
 Request will be failed and error returned, as if cluster has no origin servers..
+
+### Header Transformation Type
+
+Header transformation options for upstream request headers.
+
+`default_header_transformation` - (Optional) Normalize the headers to lower case (bool).
+
+`proper_case_header_transformation` - (Optional) For example, “content-type” becomes “Content-Type”, and “foo$b#$are” becomes “Foo$B#$Are” (bool).
 
 ### Http2 Options
 
@@ -381,6 +398,10 @@ Specify origin server with private or public DNS name and site information.
 `outside_network` - (Optional) Outside network on the site (bool).
 
 `site_locator` - (Required) Site or Virtual site where this origin server is located. See [Site Locator ](#site-locator) below for details.
+
+### Proper Case Header Transformation
+
+For example, “content-type” becomes “Content-Type”, and “foo$b#$are” becomes “Foo$B#$Are”.
 
 ### Public Ip
 

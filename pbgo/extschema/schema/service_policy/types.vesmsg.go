@@ -691,8 +691,16 @@ func (v *ValidateGetSpecType) AlgoValidationRuleHandler(rules map[string]string)
 
 func (v *ValidateGetSpecType) RulesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for rules")
+	}
 	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema.ObjectRefType, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
 			if err := ves_io_schema.ObjectRefTypeValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
@@ -731,8 +739,16 @@ func (v *ValidateGetSpecType) RulesValidationRuleHandler(rules map[string]string
 
 func (v *ValidateGetSpecType) SimpleRulesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for simple_rules")
+	}
 	itemsValidatorFn := func(ctx context.Context, elems []*SimpleRule, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
 			if err := SimpleRuleValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
@@ -1417,8 +1433,16 @@ func (v *ValidateGlobalSpecType) AlgoValidationRuleHandler(rules map[string]stri
 
 func (v *ValidateGlobalSpecType) RulesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for rules")
+	}
 	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema.ObjectRefType, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
 			if err := ves_io_schema.ObjectRefTypeValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
@@ -1457,8 +1481,16 @@ func (v *ValidateGlobalSpecType) RulesValidationRuleHandler(rules map[string]str
 
 func (v *ValidateGlobalSpecType) DefaultForwardingClassesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for default_forwarding_classes")
+	}
 	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema.ObjectRefType, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
 			if err := ves_io_schema.ObjectRefTypeValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
@@ -1497,8 +1529,16 @@ func (v *ValidateGlobalSpecType) DefaultForwardingClassesValidationRuleHandler(r
 
 func (v *ValidateGlobalSpecType) SimpleRulesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for simple_rules")
+	}
 	itemsValidatorFn := func(ctx context.Context, elems []*SimpleRule, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
 			if err := SimpleRuleValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
@@ -1980,8 +2020,16 @@ type ValidateLegacyRuleList struct {
 
 func (v *ValidateLegacyRuleList) RulesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for rules")
+	}
 	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema.ObjectRefType, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
 			if err := ves_io_schema.ObjectRefTypeValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
@@ -2749,8 +2797,16 @@ type ValidateRuleList struct {
 
 func (v *ValidateRuleList) RulesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for rules")
+	}
 	itemsValidatorFn := func(ctx context.Context, elems []*Rule, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
 			if err := RuleValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
@@ -3098,8 +3154,16 @@ type ValidateSimpleRule struct {
 
 func (v *ValidateSimpleRule) HeadersValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for headers")
+	}
 	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_policy.HeaderMatcherType, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
 			if err := ves_io_schema_policy.HeaderMatcherTypeValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
@@ -3190,8 +3254,16 @@ func (v *ValidateSimpleRule) SchemeValidationRuleHandler(rules map[string]string
 
 func (v *ValidateSimpleRule) RateLimitersValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for rate_limiters")
+	}
 	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema.ObjectRefType, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
 			if err := ves_io_schema.ObjectRefTypeValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
@@ -3230,8 +3302,16 @@ func (v *ValidateSimpleRule) RateLimitersValidationRuleHandler(rules map[string]
 
 func (v *ValidateSimpleRule) RateLimiterSpecsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for rate_limiter_specs")
+	}
 	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_rate_limiter.GlobalSpecType, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
 			if err := ves_io_schema_rate_limiter.GlobalSpecTypeValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
@@ -3270,8 +3350,16 @@ func (v *ValidateSimpleRule) RateLimiterSpecsValidationRuleHandler(rules map[str
 
 func (v *ValidateSimpleRule) GotoPolicyValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for goto_policy")
+	}
 	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema.ObjectRefType, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
 			if err := ves_io_schema.ObjectRefTypeValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
@@ -4044,8 +4132,16 @@ func (v *ValidateSourceList) DefaultActionChoiceValidationRuleHandler(rules map[
 
 func (v *ValidateSourceList) IpPrefixSetValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for ip_prefix_set")
+	}
 	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_views.ObjectRefType, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
 			if err := ves_io_schema_views.ObjectRefTypeValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
@@ -4084,8 +4180,16 @@ func (v *ValidateSourceList) IpPrefixSetValidationRuleHandler(rules map[string]s
 
 func (v *ValidateSourceList) AsnSetValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for asn_set")
+	}
 	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_views.ObjectRefType, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
 			if err := ves_io_schema_views.ObjectRefTypeValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}

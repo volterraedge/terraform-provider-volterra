@@ -408,8 +408,16 @@ func (v *ValidateCreateSpecType) PanicThresholdTypePanicThresholdValidationRuleH
 
 func (v *ValidateCreateSpecType) EndpointsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for endpoints")
+	}
 	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema.ObjectRefType, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
 			if err := ves_io_schema.ObjectRefTypeValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
@@ -448,8 +456,16 @@ func (v *ValidateCreateSpecType) EndpointsValidationRuleHandler(rules map[string
 
 func (v *ValidateCreateSpecType) HealthChecksValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for health_checks")
+	}
 	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema.ObjectRefType, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
 			if err := ves_io_schema.ObjectRefTypeValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
@@ -488,8 +504,16 @@ func (v *ValidateCreateSpecType) HealthChecksValidationRuleHandler(rules map[str
 
 func (v *ValidateCreateSpecType) EndpointSubsetsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for endpoint_subsets")
+	}
 	itemsValidatorFn := func(ctx context.Context, elems []*EndpointSubsetSelectorType, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
 			if err := EndpointSubsetSelectorTypeValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
@@ -660,6 +684,15 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 
 		vOpts := append(opts, db.WithValidateField("fallback_policy"))
 		if err := fv(ctx, m.GetFallbackPolicy(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["header_transformation_type"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("header_transformation_type"))
+		if err := fv(ctx, m.GetHeaderTransformationType(), vOpts...); err != nil {
 			return err
 		}
 
@@ -842,6 +875,8 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	v.FldValidators["tls_parameters"] = ves_io_schema.UpstreamTlsParamsTypeValidator().Validate
 
 	v.FldValidators["outlier_detection"] = OutlierDetectionTypeValidator().Validate
+
+	v.FldValidators["header_transformation_type"] = ves_io_schema.HeaderTransformationTypeValidator().Validate
 
 	return v
 }()
@@ -1165,8 +1200,16 @@ func (v *ValidateGetSpecType) PanicThresholdTypePanicThresholdValidationRuleHand
 
 func (v *ValidateGetSpecType) EndpointsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for endpoints")
+	}
 	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema.ObjectRefType, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
 			if err := ves_io_schema.ObjectRefTypeValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
@@ -1205,8 +1248,16 @@ func (v *ValidateGetSpecType) EndpointsValidationRuleHandler(rules map[string]st
 
 func (v *ValidateGetSpecType) HealthChecksValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for health_checks")
+	}
 	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema.ObjectRefType, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
 			if err := ves_io_schema.ObjectRefTypeValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
@@ -1245,8 +1296,16 @@ func (v *ValidateGetSpecType) HealthChecksValidationRuleHandler(rules map[string
 
 func (v *ValidateGetSpecType) EndpointSubsetsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for endpoint_subsets")
+	}
 	itemsValidatorFn := func(ctx context.Context, elems []*EndpointSubsetSelectorType, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
 			if err := EndpointSubsetSelectorTypeValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
@@ -1417,6 +1476,15 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 
 		vOpts := append(opts, db.WithValidateField("fallback_policy"))
 		if err := fv(ctx, m.GetFallbackPolicy(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["header_transformation_type"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("header_transformation_type"))
+		if err := fv(ctx, m.GetHeaderTransformationType(), vOpts...); err != nil {
 			return err
 		}
 
@@ -1599,6 +1667,8 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v.FldValidators["tls_parameters"] = ves_io_schema.UpstreamTlsParamsTypeValidator().Validate
 
 	v.FldValidators["outlier_detection"] = OutlierDetectionTypeValidator().Validate
+
+	v.FldValidators["header_transformation_type"] = ves_io_schema.HeaderTransformationTypeValidator().Validate
 
 	return v
 }()
@@ -1784,8 +1854,16 @@ func (v *ValidateGlobalSpecType) PanicThresholdTypePanicThresholdValidationRuleH
 
 func (v *ValidateGlobalSpecType) EndpointsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for endpoints")
+	}
 	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema.ObjectRefType, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
 			if err := ves_io_schema.ObjectRefTypeValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
@@ -1824,8 +1902,16 @@ func (v *ValidateGlobalSpecType) EndpointsValidationRuleHandler(rules map[string
 
 func (v *ValidateGlobalSpecType) HealthChecksValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for health_checks")
+	}
 	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema.ObjectRefType, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
 			if err := ves_io_schema.ObjectRefTypeValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
@@ -1864,8 +1950,16 @@ func (v *ValidateGlobalSpecType) HealthChecksValidationRuleHandler(rules map[str
 
 func (v *ValidateGlobalSpecType) EndpointSubsetsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for endpoint_subsets")
+	}
 	itemsValidatorFn := func(ctx context.Context, elems []*EndpointSubsetSelectorType, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
 			if err := EndpointSubsetSelectorTypeValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
@@ -2059,6 +2153,15 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["header_transformation_type"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("header_transformation_type"))
+		if err := fv(ctx, m.GetHeaderTransformationType(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["health_checks"]; exists {
 		vOpts := append(opts, db.WithValidateField("health_checks"))
 		if err := fv(ctx, m.GetHealthChecks(), vOpts...); err != nil {
@@ -2236,6 +2339,8 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v.FldValidators["tls_parameters"] = ves_io_schema.UpstreamTlsParamsTypeValidator().Validate
 
 	v.FldValidators["outlier_detection"] = OutlierDetectionTypeValidator().Validate
+
+	v.FldValidators["header_transformation_type"] = ves_io_schema.HeaderTransformationTypeValidator().Validate
 
 	return v
 }()
@@ -2726,8 +2831,16 @@ func (v *ValidateReplaceSpecType) PanicThresholdTypePanicThresholdValidationRule
 
 func (v *ValidateReplaceSpecType) EndpointsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for endpoints")
+	}
 	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema.ObjectRefType, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
 			if err := ves_io_schema.ObjectRefTypeValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
@@ -2766,8 +2879,16 @@ func (v *ValidateReplaceSpecType) EndpointsValidationRuleHandler(rules map[strin
 
 func (v *ValidateReplaceSpecType) HealthChecksValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for health_checks")
+	}
 	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema.ObjectRefType, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
 			if err := ves_io_schema.ObjectRefTypeValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
@@ -2806,8 +2927,16 @@ func (v *ValidateReplaceSpecType) HealthChecksValidationRuleHandler(rules map[st
 
 func (v *ValidateReplaceSpecType) EndpointSubsetsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for endpoint_subsets")
+	}
 	itemsValidatorFn := func(ctx context.Context, elems []*EndpointSubsetSelectorType, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
 			if err := EndpointSubsetSelectorTypeValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
@@ -2978,6 +3107,15 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 
 		vOpts := append(opts, db.WithValidateField("fallback_policy"))
 		if err := fv(ctx, m.GetFallbackPolicy(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["header_transformation_type"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("header_transformation_type"))
+		if err := fv(ctx, m.GetHeaderTransformationType(), vOpts...); err != nil {
 			return err
 		}
 
@@ -3161,6 +3299,8 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 
 	v.FldValidators["outlier_detection"] = OutlierDetectionTypeValidator().Validate
 
+	v.FldValidators["header_transformation_type"] = ves_io_schema.HeaderTransformationTypeValidator().Validate
+
 	return v
 }()
 
@@ -3214,6 +3354,7 @@ func (m *CreateSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool
 	m.EndpointSubsets = f.GetEndpointSubsets()
 	m.Endpoints = f.GetEndpoints()
 	m.FallbackPolicy = f.GetFallbackPolicy()
+	m.HeaderTransformationType = f.GetHeaderTransformationType()
 	m.HealthChecks = f.GetHealthChecks()
 	m.Http2Options = f.GetHttp2Options()
 	m.HttpIdleTimeout = f.GetHttpIdleTimeout()
@@ -3245,6 +3386,7 @@ func (m *CreateSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) 
 	f.EndpointSubsets = m1.EndpointSubsets
 	f.Endpoints = m1.Endpoints
 	f.FallbackPolicy = m1.FallbackPolicy
+	f.HeaderTransformationType = m1.HeaderTransformationType
 	f.HealthChecks = m1.HealthChecks
 	f.Http2Options = m1.Http2Options
 	f.HttpIdleTimeout = m1.HttpIdleTimeout
@@ -3308,6 +3450,7 @@ func (m *GetSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	m.EndpointSubsets = f.GetEndpointSubsets()
 	m.Endpoints = f.GetEndpoints()
 	m.FallbackPolicy = f.GetFallbackPolicy()
+	m.HeaderTransformationType = f.GetHeaderTransformationType()
 	m.HealthChecks = f.GetHealthChecks()
 	m.Http2Options = f.GetHttp2Options()
 	m.HttpIdleTimeout = f.GetHttpIdleTimeout()
@@ -3339,6 +3482,7 @@ func (m *GetSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	f.EndpointSubsets = m1.EndpointSubsets
 	f.Endpoints = m1.Endpoints
 	f.FallbackPolicy = m1.FallbackPolicy
+	f.HeaderTransformationType = m1.HeaderTransformationType
 	f.HealthChecks = m1.HealthChecks
 	f.Http2Options = m1.Http2Options
 	f.HttpIdleTimeout = m1.HttpIdleTimeout
@@ -3402,6 +3546,7 @@ func (m *ReplaceSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy boo
 	m.EndpointSubsets = f.GetEndpointSubsets()
 	m.Endpoints = f.GetEndpoints()
 	m.FallbackPolicy = f.GetFallbackPolicy()
+	m.HeaderTransformationType = f.GetHeaderTransformationType()
 	m.HealthChecks = f.GetHealthChecks()
 	m.Http2Options = f.GetHttp2Options()
 	m.HttpIdleTimeout = f.GetHttpIdleTimeout()
@@ -3433,6 +3578,7 @@ func (m *ReplaceSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool)
 	f.EndpointSubsets = m1.EndpointSubsets
 	f.Endpoints = m1.Endpoints
 	f.FallbackPolicy = m1.FallbackPolicy
+	f.HeaderTransformationType = m1.HeaderTransformationType
 	f.HealthChecks = m1.HealthChecks
 	f.Http2Options = m1.Http2Options
 	f.HttpIdleTimeout = m1.HttpIdleTimeout

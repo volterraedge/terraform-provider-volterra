@@ -48,7 +48,7 @@ type APIClient struct {
 
 // CreateObject populates the correct slug and calls volt's CreateObject
 func (a *APIClient) CreateObject(ctx context.Context, objType string, req vesapi.CreateObjectRequest, opts ...vesapi.CallOpt) (vesapi.CreateObjectResponse, error) {
-	ctx, err := addSvcSlugToContext(ctx, objType)
+	ctx, err := addSvcSlugToContextForCRUD(ctx, objType)
 	if err != nil {
 		return nil, err
 	}
@@ -57,7 +57,7 @@ func (a *APIClient) CreateObject(ctx context.Context, objType string, req vesapi
 
 // GetObject populates the correct slug and calls volt's GetObject
 func (a *APIClient) GetObject(ctx context.Context, objType, namespace, name string, opts ...vesapi.CallOpt) (vesapi.GetObjectResponse, error) {
-	ctx, err := addSvcSlugToContext(ctx, objType)
+	ctx, err := addSvcSlugToContextForCRUD(ctx, objType)
 	if err != nil {
 		return nil, err
 	}
@@ -66,7 +66,7 @@ func (a *APIClient) GetObject(ctx context.Context, objType, namespace, name stri
 
 // ReplaceObject populates the correct slug and calls volt's ReplaceObject
 func (a *APIClient) ReplaceObject(ctx context.Context, objType string, req vesapi.ReplaceObjectRequest, opts ...vesapi.CallOpt) error {
-	ctx, err := addSvcSlugToContext(ctx, objType)
+	ctx, err := addSvcSlugToContextForCRUD(ctx, objType)
 	if err != nil {
 		return err
 	}
@@ -76,7 +76,7 @@ func (a *APIClient) ReplaceObject(ctx context.Context, objType string, req vesap
 
 // DeleteObject populates the correct slug and calls volt's DeleteObject
 func (a *APIClient) DeleteObject(ctx context.Context, objType string, namespace, name string, opts ...vesapi.CallOpt) error {
-	ctx, err := addSvcSlugToContext(ctx, objType)
+	ctx, err := addSvcSlugToContextForCRUD(ctx, objType)
 	if err != nil {
 		return err
 	}
@@ -85,7 +85,7 @@ func (a *APIClient) DeleteObject(ctx context.Context, objType string, namespace,
 
 // ListObjects populates the correct slug and calls volt's ListObjects
 func (a *APIClient) ListObjects(ctx context.Context, objType, namespace string, opts ...vesapi.CallOpt) ([]vesapi.ListObjectItem, error) {
-	ctx, err := addSvcSlugToContext(ctx, objType)
+	ctx, err := addSvcSlugToContextForCRUD(ctx, objType)
 	if err != nil {
 		return nil, err
 	}
@@ -94,7 +94,7 @@ func (a *APIClient) ListObjects(ctx context.Context, objType, namespace string, 
 
 // CustomAPI populates the correct slug and calls volt's custom API
 func (a *APIClient) CustomAPI(ctx context.Context, method, uri, rpcFQN, reqYml string, opts ...vesapi.CallOpt) (proto.Message, error) {
-	ctx, err := addSvcSlugToContext(ctx, rpcFQN)
+	ctx, err := addSvcSlugToContextForCustom(ctx, rpcFQN)
 	if err != nil {
 		return nil, err
 	}

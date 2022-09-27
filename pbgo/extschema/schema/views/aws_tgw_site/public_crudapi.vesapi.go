@@ -1595,7 +1595,10 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 		item.Disabled = o.GetMetadata().GetDisable()
 
 		if len(req.ReportFields) > 0 {
-			item.Object = o.Object
+			noDBForm, _ := flags.GetEnvGetRspNoDBForm()
+			if !noDBForm {
+				item.Object = o.Object
+			}
 
 			item.Metadata = &ves_io_schema.ObjectGetMetaType{}
 			item.Metadata.FromObjectMetaType(o.Metadata)
@@ -2227,7 +2230,7 @@ var APISwaggerJSON string = `{
                 },
                 "subnet_ids": {
                     "type": "array",
-                    "description": " AWS Subnet Ids used by volterra site\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.num_items: 0, 1,3\n",
+                    "description": " AWS Subnet Ids used by volterra site\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.num_items: 0,1,3\n",
                     "title": "AWS Subnet Ids Info",
                     "items": {
                         "$ref": "#/definitions/viewsAWSSubnetIdsType"
@@ -2236,7 +2239,7 @@ var APISwaggerJSON string = `{
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true",
-                        "ves.io.schema.rules.repeated.num_items": "0, 1,3"
+                        "ves.io.schema.rules.repeated.num_items": "0,1,3"
                     }
                 },
                 "tgw_id": {
@@ -2840,14 +2843,16 @@ var APISwaggerJSON string = `{
                 },
                 "az_nodes": {
                     "type": "array",
-                    "description": " Only Single AZ or Three AZ(s) nodes are supported currently.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.num_items: 0,1,3\n",
+                    "description": " Only Single AZ or Three AZ(s) nodes are supported currently.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.num_items: 1,3\n",
                     "title": "Nodes",
                     "items": {
                         "$ref": "#/definitions/viewsAWSVPCTwoInterfaceNodeType"
                     },
                     "x-displayname": "Ingress/Egress Gateway (two Interface) Nodes in AZ",
+                    "x-ves-required": "true",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.repeated.num_items": "0,1,3"
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.num_items": "1,3"
                     }
                 },
                 "disk_size": {
@@ -4759,18 +4764,23 @@ var APISwaggerJSON string = `{
         },
         "schemaviewsLocalControlPlaneType": {
             "type": "object",
-            "description": "x-displayName: \"Site Local Control Plane\"\nSite Local Control Plane",
+            "description": "Site Local Control Plane",
             "title": "LocalControlPlaneType",
+            "x-displayname": "Site Local Control Plane",
+            "x-ves-oneof-field-local_control_plane_choice": "[\"default_local_control_plane\",\"no_local_control_plane\"]",
+            "x-ves-proto-message": "ves.io.schema.views.LocalControlPlaneType",
             "properties": {
                 "default_local_control_plane": {
-                    "description": "x-displayName: \"Enable Site Local Control Plane\"\nEnable Site Local Control Plane",
+                    "description": "Exclusive with [no_local_control_plane]\n Enable Site Local Control Plane",
                     "title": "Disable Site Local Control Plane",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Enable Site Local Control Plane"
                 },
                 "no_local_control_plane": {
-                    "description": "x-displayName: \"Disable Site Local Control Plane\"\nDisable Site Local Control Plane",
+                    "description": "Exclusive with [default_local_control_plane]\n Disable Site Local Control Plane",
                     "title": "Disable Site Local Control Plane",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disable Site Local Control Plane"
                 }
             }
         },
@@ -5519,6 +5529,12 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/viewsOperatingSystemType",
                     "x-displayname": "Operating System"
                 },
+                "site_local_control_plane": {
+                    "description": " Enable/Disable site local control plane",
+                    "title": "Site Local Control Plane",
+                    "$ref": "#/definitions/schemaviewsLocalControlPlaneType",
+                    "x-displayname": "Site Local Control Plane"
+                },
                 "sw": {
                     "description": " Volterra Software Details",
                     "title": "Volterra Software",
@@ -5621,6 +5637,11 @@ var APISwaggerJSON string = `{
                     "description": "Exclusive with [log_receiver]\n Logs Streaming is disabled",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Disable Logs Streaming"
+                },
+                "site_local_control_plane": {
+                    "description": " Enable/Disable site local control plane",
+                    "$ref": "#/definitions/schemaviewsLocalControlPlaneType",
+                    "x-displayname": "Site Local Control Plane"
                 },
                 "site_state": {
                     "description": "The operational phase of the site state machine.",
@@ -5746,6 +5767,12 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/viewsOperatingSystemType",
                     "x-displayname": "Operating System"
                 },
+                "site_local_control_plane": {
+                    "description": " Enable/Disable site local control plane",
+                    "title": "Site Local Control Plane",
+                    "$ref": "#/definitions/schemaviewsLocalControlPlaneType",
+                    "x-displayname": "Site Local Control Plane"
+                },
                 "sw": {
                     "description": " Volterra Software Details",
                     "title": "Volterra Software",
@@ -5853,6 +5880,11 @@ var APISwaggerJSON string = `{
                     "description": "Exclusive with [log_receiver]\n Logs Streaming is disabled",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Disable Logs Streaming"
+                },
+                "site_local_control_plane": {
+                    "description": " Enable/Disable site local control plane",
+                    "$ref": "#/definitions/schemaviewsLocalControlPlaneType",
+                    "x-displayname": "Site Local Control Plane"
                 },
                 "tgw_security": {
                     "description": " Security Configuration for transit gateway",

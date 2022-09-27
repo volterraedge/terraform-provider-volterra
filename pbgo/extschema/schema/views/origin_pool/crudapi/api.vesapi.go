@@ -100,14 +100,29 @@ func NewObjectGetReq(uid string, opts ...server.CRUDCallOpt) *ObjectGetReq {
 	for _, o := range opts {
 		o(ccOpts)
 	}
-
 	req := &ObjectGetReq{ObjectUid: uid, AllBackrefs: ccOpts.AllBR, BackrefTypes: ccOpts.TypesBR}
 	req.IncludeReferredId = ccOpts.IncludeReferredID
 	return req
 }
 
-func NewObjectListReq(opts ...server.CRUDCallOpt) *ObjectListReq {
-	return &ObjectListReq{}
+func newObjectListReqFrom(cco *server.CrudCallOpts) (*ObjectListReq, error) {
+	r := &ObjectListReq{
+		TenantFilter:      cco.TenantFilter,
+		NamespaceFilter:   cco.NamespaceFilter,
+		ReportFields:      cco.ReportFields,
+		IncludeReferredId: cco.IncludeReferredID,
+	}
+	switch len(cco.LabelFilter) {
+	case 0:
+	case 1:
+		r.LabelFilter = cco.LabelFilter[0]
+	default:
+		return nil, fmt.Errorf("Only one label selector expression can be provided, got %d: %s", len(cco.LabelFilter), cco.LabelFilter)
+	}
+	if cco.OutResourceVersion != nil {
+		r.ResourceVersion = true
+	}
+	return r, nil
 }
 
 func NewObjectDeleteReq(uid string) *ObjectDeleteReq {
@@ -252,29 +267,16 @@ func (c *crudAPIGrpcClient) ListItems(ctx context.Context, opts ...server.CRUDCa
 }
 
 func (c *crudAPIGrpcClient) List(ctx context.Context, opts ...server.CRUDCallOpt) (*ObjectListRsp, error) {
-	req := NewObjectListReq()
 	cco := server.NewCRUDCallOpts()
 	for _, opt := range opts {
 		opt(cco)
 	}
+	req, err := newObjectListReqFrom(cco)
+	if err != nil {
+		return nil, err
+	}
 	ctx = client.AddHdrsToCtx(cco.Headers, ctx)
-	req.TenantFilter = cco.TenantFilter
-	req.NamespaceFilter = cco.NamespaceFilter
-	switch len(cco.LabelFilter) {
-	case 0:
-	case 1:
-		req.LabelFilter = cco.LabelFilter[0]
-	default:
-		return nil, fmt.Errorf("Only one label selector expression can be provided, got %d: %s", len(cco.LabelFilter), cco.LabelFilter)
-	}
-	req.ReportFields = cco.ReportFields
-
-	req.IncludeReferredId = cco.IncludeReferredID
-	if cco.OutResourceVersion != nil {
-		req.ResourceVersion = true
-	}
 	rsp, err := c.grpcClient.List(ctx, req, cco.GrpcCallOpts...)
-
 	if cco.OutCallResponse != nil {
 		cco.OutCallResponse.ProtoMsg = rsp
 	}
@@ -286,24 +288,15 @@ func (c *crudAPIGrpcClient) List(ctx context.Context, opts ...server.CRUDCallOpt
 
 func (c *crudAPIGrpcClient) ListStream(ctx context.Context, opts ...server.CRUDCallOpt) (server.ListStreamRsp, error) {
 
-	req := NewObjectListReq()
 	cco := server.NewCRUDCallOpts()
 	for _, opt := range opts {
 		opt(cco)
 	}
-	ctx = client.AddHdrsToCtx(cco.Headers, ctx)
-	req.TenantFilter = cco.TenantFilter
-	req.NamespaceFilter = cco.NamespaceFilter
-	switch len(cco.LabelFilter) {
-	case 0:
-	case 1:
-		req.LabelFilter = cco.LabelFilter[0]
-	default:
-		return nil, fmt.Errorf("Only one label selector expression can be provided, got %d: %s", len(cco.LabelFilter), cco.LabelFilter)
+	req, err := newObjectListReqFrom(cco)
+	if err != nil {
+		return nil, err
 	}
-	req.ReportFields = cco.ReportFields
-
-	req.IncludeReferredId = cco.IncludeReferredID
+	ctx = client.AddHdrsToCtx(cco.Headers, ctx)
 	stream, err := c.grpcClient.ListStream(ctx, req, cco.GrpcCallOpts...)
 	if err != nil {
 		return nil, errors.Wrap(err, "Listing with grpc client")
@@ -674,6 +667,7 @@ func (c *crudAPIRestClient) List(ctx context.Context, opts ...server.CRUDCallOpt
 	if cco.OutResourceVersion != nil {
 		q.Add("resource_version", "true")
 	}
+
 	hReq.URL.RawQuery += q.Encode()
 	rsp, err := c.client.Do(hReq)
 	if err != nil {
@@ -979,28 +973,15 @@ func (c *crudAPIInprocClient) List(ctx context.Context, opts ...server.CRUDCallO
 	if !ok {
 		return nil, fmt.Errorf("No CRUD Server for ves.io.schema.views.origin_pool.crudapi")
 	}
-
 	cco := server.NewCRUDCallOpts()
 	for _, opt := range opts {
 		opt(cco)
 	}
-
-	req := NewObjectListReq()
-	req.TenantFilter = cco.TenantFilter
-	req.NamespaceFilter = cco.NamespaceFilter
-	switch len(cco.LabelFilter) {
-	case 0:
-	case 1:
-		req.LabelFilter = cco.LabelFilter[0]
-	default:
-		return nil, fmt.Errorf("Only one label selector expression can be provided, got %d: %s", len(cco.LabelFilter), cco.LabelFilter)
-	}
-
-	if cco.OutResourceVersion != nil {
-		req.ResourceVersion = true
+	req, err := newObjectListReqFrom(cco)
+	if err != nil {
+		return nil, err
 	}
 	rsp, err := oah.List(ctx, req)
-
 	if cco.OutCallResponse != nil {
 		cco.OutCallResponse.ProtoMsg = rsp
 	}
@@ -1167,7 +1148,7 @@ func (s *APISrv) List(ctx context.Context, req *ObjectListReq) (*ObjectListRsp, 
 			}
 		}
 	}
-	var merr *multierror.Error
+	var merr error
 	rsrcReq := &server.ResourceListRequest{
 		TenantFilter:       req.TenantFilter,
 		NamespaceFilter:    req.NamespaceFilter,
@@ -1185,7 +1166,7 @@ func (s *APISrv) List(ctx context.Context, req *ObjectListReq) (*ObjectListRsp, 
 		merr = multierror.Append(merr, err)
 	}
 	rsp.Metadata.ResourceVersion = rsrcRsp.ResourceVersion
-	return rsp, errors.ErrOrNil(merr)
+	return rsp, merr
 }
 
 func (s *APISrv) ListStream(req *ObjectListReq, stream API_ListStreamServer) error {
@@ -3055,6 +3036,12 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/origin_poolOriginPoolSubsets",
                     "x-displayname": "Enable Subset Load Balancing"
                 },
+                "header_transformation_type": {
+                    "description": " Header transformation options for upstream request headers",
+                    "title": "Header transformation",
+                    "$ref": "#/definitions/schemaHeaderTransformationType",
+                    "x-displayname": "Header Transformation Configuration"
+                },
                 "http2_options": {
                     "description": " Http2 Protocol options for upstream connections",
                     "title": "http2_options",
@@ -3836,6 +3823,29 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "schemaHeaderTransformationType": {
+            "type": "object",
+            "description": "Header Transformation options for HTTP request/response headers",
+            "title": "HeaderTransformationType",
+            "x-displayname": "Header Transformation",
+            "x-ves-displayorder": "1",
+            "x-ves-oneof-field-header_transformation_choice": "[\"default_header_transformation\",\"proper_case_header_transformation\"]",
+            "x-ves-proto-message": "ves.io.schema.HeaderTransformationType",
+            "properties": {
+                "default_header_transformation": {
+                    "description": "Exclusive with [proper_case_header_transformation]\n Normalize the headers to lower case",
+                    "title": "Default header transformation",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Default"
+                },
+                "proper_case_header_transformation": {
+                    "description": "Exclusive with [default_header_transformation]\n Normalize the headers to proper case words. The fist character and any character\n following a special character will be capitalized if it’s an alpha character.\n For example, “content-type” becomes “Content-Type”, and “foo$b#$are” becomes “Foo$B#$Are”",
+                    "title": "Proper case header transformation",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Proper Case"
+                }
+            }
+        },
         "schemaInitializerType": {
             "type": "object",
             "description": "Initializer is information about an initializer that has not yet completed.",
@@ -4489,6 +4499,7 @@ var APISwaggerJSON string = `{
             "title": "GlobalSpecType",
             "x-displayname": "Global Specification",
             "x-ves-oneof-field-health_check_port_choice": "[\"health_check_port\",\"same_as_endpoint_port\"]",
+            "x-ves-oneof-field-port_choice": "[\"automatic_port\",\"port\"]",
             "x-ves-oneof-field-tls_choice": "[\"no_tls\",\"use_tls\"]",
             "x-ves-proto-message": "ves.io.schema.views.origin_pool.GlobalSpecType",
             "properties": {
@@ -4497,6 +4508,12 @@ var APISwaggerJSON string = `{
                     "title": "More Options",
                     "$ref": "#/definitions/origin_poolOriginPoolAdvancedOptions",
                     "x-displayname": "More Options"
+                },
+                "automatic_port": {
+                    "description": "Exclusive with [port]\n\n Automatic selection of port for endpoint\n\n For Consul service discovery, port will be discovered as part of service discovery.\n For other origin server types, port will be automatically set as 443 if TLS is enabled at Origin Pool and 80 if TLS is disabled",
+                    "title": "Automatic selection of endpoint port",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Automatic port"
                 },
                 "endpoint_selection": {
                     "description": " Policy for selection of endpoints from local site or remote site or both\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
@@ -4567,14 +4584,12 @@ var APISwaggerJSON string = `{
                 },
                 "port": {
                     "type": "integer",
-                    "description": " Endpoint service is available on this port\n\nExample: - \"9080\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.uint32.gte: 1\n  ves.io.schema.rules.uint32.lte: 65535\n",
+                    "description": "Exclusive with [automatic_port]\n Endpoint service is available on this port\n\nExample: - \"9080\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 1\n  ves.io.schema.rules.uint32.lte: 65535\n",
                     "title": "Port",
                     "format": "int64",
                     "x-displayname": "Port",
                     "x-ves-example": "9080",
-                    "x-ves-required": "true",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true",
                         "ves.io.schema.rules.uint32.gte": "1",
                         "ves.io.schema.rules.uint32.lte": "65535"
                     }

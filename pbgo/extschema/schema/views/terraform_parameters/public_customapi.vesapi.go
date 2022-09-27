@@ -878,6 +878,12 @@ var CustomAPISwaggerJSON string = `{
                     "$ref": "#/definitions/terraform_parametersApplyStageState",
                     "x-displayname": "Apply State"
                 },
+                "container_version": {
+                    "type": "string",
+                    "description": " Container image version",
+                    "title": "container_version",
+                    "x-displayname": "Container image version"
+                },
                 "destroy_state": {
                     "description": "Exclusive with [apply_state infra_state]\n Terraform state during destroy stage",
                     "title": "destroy_state",

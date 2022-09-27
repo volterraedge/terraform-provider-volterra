@@ -64,6 +64,16 @@ type ValidateAddonServiceStatus struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateAddonServiceStatus) DisplayNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for display_name")
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateAddonServiceStatus) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*AddonServiceStatus)
 	if !ok {
@@ -87,6 +97,15 @@ func (v *ValidateAddonServiceStatus) Validate(ctx context.Context, pm interface{
 
 	}
 
+	if fv, exists := v.FldValidators["display_name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("display_name"))
+		if err := fv(ctx, m.GetDisplayName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["state"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("state"))
@@ -102,6 +121,25 @@ func (v *ValidateAddonServiceStatus) Validate(ctx context.Context, pm interface{
 // Well-known symbol for default validator implementation
 var DefaultAddonServiceStatusValidator = func() *ValidateAddonServiceStatus {
 	v := &ValidateAddonServiceStatus{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhDisplayName := v.DisplayNameValidationRuleHandler
+	rulesDisplayName := map[string]string{
+		"ves.io.schema.rules.string.max_len": "256",
+	}
+	vFn, err = vrhDisplayName(rulesDisplayName)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for AddonServiceStatus.display_name: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["display_name"] = vFn
 
 	return v
 }()
@@ -995,6 +1033,16 @@ type ValidateTileAccess struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateTileAccess) DisplayNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for display_name")
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateTileAccess) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*TileAccess)
 	if !ok {
@@ -1007,6 +1055,15 @@ func (v *ValidateTileAccess) Validate(ctx context.Context, pm interface{}, opts 
 	}
 	if m == nil {
 		return nil
+	}
+
+	if fv, exists := v.FldValidators["display_name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("display_name"))
+		if err := fv(ctx, m.GetDisplayName(), vOpts...); err != nil {
+			return err
+		}
+
 	}
 
 	if fv, exists := v.FldValidators["state"]; exists {
@@ -1024,6 +1081,25 @@ func (v *ValidateTileAccess) Validate(ctx context.Context, pm interface{}, opts 
 // Well-known symbol for default validator implementation
 var DefaultTileAccessValidator = func() *ValidateTileAccess {
 	v := &ValidateTileAccess{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhDisplayName := v.DisplayNameValidationRuleHandler
+	rulesDisplayName := map[string]string{
+		"ves.io.schema.rules.string.max_len": "256",
+	}
+	vFn, err = vrhDisplayName(rulesDisplayName)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for TileAccess.display_name: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["display_name"] = vFn
 
 	return v
 }()

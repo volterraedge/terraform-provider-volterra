@@ -1595,7 +1595,10 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 		item.Disabled = o.GetMetadata().GetDisable()
 
 		if len(req.ReportFields) > 0 {
-			item.Object = o.Object
+			noDBForm, _ := flags.GetEnvGetRspNoDBForm()
+			if !noDBForm {
+				item.Object = o.Object
+			}
 
 			item.Metadata = &ves_io_schema.ObjectGetMetaType{}
 			item.Metadata.FromObjectMetaType(o.Metadata)
@@ -2186,7 +2189,7 @@ var APISwaggerJSON string = `{
     "definitions": {
         "app_firewallAppFirewallViolationType": {
             "type": "string",
-            "description": "List of all supported Violation Types\n\nVIOL_NONE\nVIOL_FILETYPE\nVIOL_METHOD\nVIOL_MANDATORY_HEADER\nVIOL_HTTP_RESPONSE_STATUS\nVIOL_REQUEST_MAX_LENGTH\nVIOL_FILE_UPLOAD\nVIOL_FILE_UPLOAD_IN_BODY\nVIOL_XML_MALFORMED\nVIOL_JSON_MALFORMED\nVIOL_ASM_COOKIE_MODIFIED\nVIOL_HTTP_PROTOCOL_MULTIPLE_HOST_HEADERS\nVIOL_HTTP_PROTOCOL_BAD_HOST_HEADER_VALUE\nVIOL_HTTP_PROTOCOL_UNPARSABLE_REQUEST_CONTENT\nVIOL_HTTP_PROTOCOL_NULL_IN_REQUEST\nVIOL_HTTP_PROTOCOL_BAD_HTTP_VERSION\nVIOL_HTTP_PROTOCOL_CRLF_CHARACTERS_BEFORE_REQUEST_START\nVIOL_HTTP_PROTOCOL_NO_HOST_HEADER_IN_HTTP_1_1_REQUEST\nVIOL_HTTP_PROTOCOL_BAD_MULTIPART_PARAMETERS_PARSING\nVIOL_HTTP_PROTOCOL_SEVERAL_CONTENT_LENGTH_HEADERS\nVIOL_HTTP_PROTOCOL_CONTENT_LENGTH_SHOULD_BE_A_POSITIVE_NUMBER\nVIOL_EVASION_DIRECTORY_TRAVERSALS\nVIOL_MALFORMED_REQUEST\nVIOL_EVASION_MULTIPLE_DECODING\nVIOL_DATA_GUARD\nVIOL_EVASION_APACHE_WHITESPACE\nVIOL_COOKIE_MODIFIED",
+            "description": "List of all supported Violation Types\n\nVIOL_NONE\nVIOL_FILETYPE\nVIOL_METHOD\nVIOL_MANDATORY_HEADER\nVIOL_HTTP_RESPONSE_STATUS\nVIOL_REQUEST_MAX_LENGTH\nVIOL_FILE_UPLOAD\nVIOL_FILE_UPLOAD_IN_BODY\nVIOL_XML_MALFORMED\nVIOL_JSON_MALFORMED\nVIOL_ASM_COOKIE_MODIFIED\nVIOL_HTTP_PROTOCOL_MULTIPLE_HOST_HEADERS\nVIOL_HTTP_PROTOCOL_BAD_HOST_HEADER_VALUE\nVIOL_HTTP_PROTOCOL_UNPARSABLE_REQUEST_CONTENT\nVIOL_HTTP_PROTOCOL_NULL_IN_REQUEST\nVIOL_HTTP_PROTOCOL_BAD_HTTP_VERSION\nVIOL_HTTP_PROTOCOL_CRLF_CHARACTERS_BEFORE_REQUEST_START\nVIOL_HTTP_PROTOCOL_NO_HOST_HEADER_IN_HTTP_1_1_REQUEST\nVIOL_HTTP_PROTOCOL_BAD_MULTIPART_PARAMETERS_PARSING\nVIOL_HTTP_PROTOCOL_SEVERAL_CONTENT_LENGTH_HEADERS\nVIOL_HTTP_PROTOCOL_CONTENT_LENGTH_SHOULD_BE_A_POSITIVE_NUMBER\nVIOL_EVASION_DIRECTORY_TRAVERSALS\nVIOL_MALFORMED_REQUEST\nVIOL_EVASION_MULTIPLE_DECODING\nVIOL_DATA_GUARD\nVIOL_EVASION_APACHE_WHITESPACE\nVIOL_COOKIE_MODIFIED\nVIOL_EVASION_IIS_UNICODE_CODEPOINTS\nVIOL_EVASION_IIS_BACKSLASHES\nVIOL_EVASION_PERCENT_U_DECODING\nVIOL_EVASION_BARE_BYTE_DECODING\nVIOL_EVASION_BAD_UNESCAPE",
             "title": "App Firewall Violation Type",
             "enum": [
                 "VIOL_NONE",
@@ -2215,7 +2218,12 @@ var APISwaggerJSON string = `{
                 "VIOL_EVASION_MULTIPLE_DECODING",
                 "VIOL_DATA_GUARD",
                 "VIOL_EVASION_APACHE_WHITESPACE",
-                "VIOL_COOKIE_MODIFIED"
+                "VIOL_COOKIE_MODIFIED",
+                "VIOL_EVASION_IIS_UNICODE_CODEPOINTS",
+                "VIOL_EVASION_IIS_BACKSLASHES",
+                "VIOL_EVASION_PERCENT_U_DECODING",
+                "VIOL_EVASION_BARE_BYTE_DECODING",
+                "VIOL_EVASION_BAD_UNESCAPE"
             ],
             "default": "VIOL_NONE",
             "x-displayname": "App Firewall Violation Type",
@@ -2847,6 +2855,112 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "http_loadbalancerCSDJavaScriptInsertAllWithExceptionsType": {
+            "type": "object",
+            "description": "Insert Client-Side Defense JavaScript in all pages  with the exceptions",
+            "title": "CSDJavaScriptInsertAllWithExceptionsType",
+            "x-displayname": "Insert JavaScript in All Pages with the Exceptions",
+            "x-ves-proto-message": "ves.io.schema.views.http_loadbalancer.CSDJavaScriptInsertAllWithExceptionsType",
+            "properties": {
+                "exclude_list": {
+                    "type": "array",
+                    "description": " Optional JavaScript insertions exclude list of domain and path matchers.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 128\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "title": "exclude_list",
+                    "maxItems": 128,
+                    "items": {
+                        "$ref": "#/definitions/http_loadbalancerShapeJavaScriptExclusionRule"
+                    },
+                    "x-displayname": "Exclude Pages",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "128",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
+                }
+            }
+        },
+        "http_loadbalancerCSDJavaScriptInsertType": {
+            "type": "object",
+            "description": "This defines custom JavaScript insertion rules for Client-Side Defense Policy.",
+            "title": "CSDJavaScriptInsertType",
+            "x-displayname": "JavaScript Custom Insertion Rules",
+            "x-ves-proto-message": "ves.io.schema.views.http_loadbalancer.CSDJavaScriptInsertType",
+            "properties": {
+                "exclude_list": {
+                    "type": "array",
+                    "description": " Optional JavaScript insertions exclude list of domain and path matchers.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 128\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "title": "exclude_list",
+                    "maxItems": 128,
+                    "items": {
+                        "$ref": "#/definitions/http_loadbalancerShapeJavaScriptExclusionRule"
+                    },
+                    "x-displayname": "Exclude Paths",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "128",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
+                },
+                "rules": {
+                    "type": "array",
+                    "description": " Required list of pages to insert Client-Side Defense client JavaScript.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 128\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "title": "rules",
+                    "minItems": 1,
+                    "maxItems": 128,
+                    "items": {
+                        "$ref": "#/definitions/http_loadbalancerCSDJavaScriptInsertionRule"
+                    },
+                    "x-displayname": "JavaScript Insertions",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.max_items": "128",
+                        "ves.io.schema.rules.repeated.min_items": "1",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
+                }
+            }
+        },
+        "http_loadbalancerCSDJavaScriptInsertionRule": {
+            "type": "object",
+            "description": "This defines a rule for Client-Side Defense JavaScript insertion.",
+            "title": "CSDJavaScriptInsertionRule",
+            "x-displayname": "JavaScript Insertion Rule",
+            "x-ves-oneof-field-domain_matcher_choice": "[\"any_domain\",\"domain\"]",
+            "x-ves-proto-message": "ves.io.schema.views.http_loadbalancer.CSDJavaScriptInsertionRule",
+            "properties": {
+                "any_domain": {
+                    "description": "Exclusive with [domain]\n Any Domain.",
+                    "title": "Any domain",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Any Domain"
+                },
+                "domain": {
+                    "description": "Exclusive with [any_domain]\n Domain matcher.",
+                    "title": "Domain",
+                    "$ref": "#/definitions/schemaDomainType",
+                    "x-displayname": "Domain"
+                },
+                "metadata": {
+                    "description": " Common attributes for the rule including name and description.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "metadata",
+                    "$ref": "#/definitions/schemaMessageMetaType",
+                    "x-displayname": "Metadata",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                },
+                "path": {
+                    "description": " URI path matcher.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "Path",
+                    "$ref": "#/definitions/ioschemaPathMatcherType",
+                    "x-displayname": "Path",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                }
+            }
+        },
         "http_loadbalancerChallengeRule": {
             "type": "object",
             "description": "Challenge rule",
@@ -2895,6 +3009,59 @@ var APISwaggerJSON string = `{
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.repeated.max_items": "64",
                         "ves.io.schema.rules.repeated.unique_metadata_name": "true"
+                    }
+                }
+            }
+        },
+        "http_loadbalancerClientSideDefensePolicyType": {
+            "type": "object",
+            "description": "This defines various configuration options for Client-Side Defense policy.",
+            "title": "ClientSideDefensePolicyType",
+            "x-displayname": "Client-Side Defense Policy",
+            "x-ves-oneof-field-java_script_choice": "[\"disable_js_insert\",\"js_insert_all_pages\",\"js_insert_all_pages_except\",\"js_insertion_rules\"]",
+            "x-ves-proto-message": "ves.io.schema.views.http_loadbalancer.ClientSideDefensePolicyType",
+            "properties": {
+                "disable_js_insert": {
+                    "description": "Exclusive with [js_insert_all_pages js_insert_all_pages_except js_insertion_rules]\n Disable JavaScript insertion.",
+                    "title": "Disable JavaScript Insertion",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disable JavaScript Insertion"
+                },
+                "js_insert_all_pages": {
+                    "description": "Exclusive with [disable_js_insert js_insert_all_pages_except js_insertion_rules]\n Insert Client-Side Defense JavaScript in all pages.",
+                    "title": "Insert JavaScript in All Pages",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Insert JavaScript in All Pages"
+                },
+                "js_insert_all_pages_except": {
+                    "description": "Exclusive with [disable_js_insert js_insert_all_pages js_insertion_rules]\n Insert Client-Side Defense JavaScript in all pages with the exceptions.",
+                    "title": "Insert JavaScript in All Pages with the Exceptions",
+                    "$ref": "#/definitions/http_loadbalancerCSDJavaScriptInsertAllWithExceptionsType",
+                    "x-displayname": "Insert JavaScript in All Pages with the Exceptions"
+                },
+                "js_insertion_rules": {
+                    "description": "Exclusive with [disable_js_insert js_insert_all_pages js_insert_all_pages_except]\n Specify custom JavaScript insertion rules.",
+                    "title": "Custom JavaScript Insertion Rules",
+                    "$ref": "#/definitions/http_loadbalancerCSDJavaScriptInsertType",
+                    "x-displayname": "Custom JavaScript Insertion Rules"
+                }
+            }
+        },
+        "http_loadbalancerClientSideDefenseType": {
+            "type": "object",
+            "description": "This defines various configuration options for Client-Side Defense Policy.",
+            "title": "ClientSideDefenseType",
+            "x-displayname": "Client-Side Defense",
+            "x-ves-proto-message": "ves.io.schema.views.http_loadbalancer.ClientSideDefenseType",
+            "properties": {
+                "policy": {
+                    "description": " Client-Side Defense Policy.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "ClientSideDefensePolicyType",
+                    "$ref": "#/definitions/http_loadbalancerClientSideDefensePolicyType",
+                    "x-displayname": "Client Side-Defense Policy",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
                     }
                 }
             }
@@ -3497,7 +3664,7 @@ var APISwaggerJSON string = `{
             "description": "Choice for selecting HTTP proxy with bring your own certificates",
             "title": "BYOC HTTPS Choice",
             "x-displayname": "BYOC HTTPS Choice",
-            "x-ves-displayorder": "1,2,15,3,4,9,16",
+            "x-ves-displayorder": "1,2,15,3,4,9,16,19",
             "x-ves-oneof-field-default_lb_choice": "[\"default_loadbalancer\",\"non_default_loadbalancer\"]",
             "x-ves-oneof-field-path_normalize_choice": "[\"disable_path_normalize\",\"enable_path_normalize\"]",
             "x-ves-oneof-field-server_header_choice": "[\"append_server_name\",\"default_header\",\"pass_through\",\"server_name\"]",
@@ -3528,7 +3695,7 @@ var APISwaggerJSON string = `{
                 },
                 "default_loadbalancer": {
                     "description": "Exclusive with [non_default_loadbalancer]\n",
-                    "title": "Default loadbalancer",
+                    "title": "Default load balancer",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Yes"
                 },
@@ -3544,6 +3711,12 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Enable"
                 },
+                "header_transformation_type": {
+                    "description": " Header transformation options for response headers to the client",
+                    "title": "Header transformation",
+                    "$ref": "#/definitions/schemaHeaderTransformationType",
+                    "x-displayname": "Header Transformation Configuration"
+                },
                 "http_redirect": {
                     "type": "boolean",
                     "description": " Redirect HTTP traffic to HTTPS",
@@ -3553,7 +3726,7 @@ var APISwaggerJSON string = `{
                 },
                 "non_default_loadbalancer": {
                     "description": "Exclusive with [default_loadbalancer]\n",
-                    "title": "Not a default loadbalancer",
+                    "title": "Not a default load balancer",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "No"
                 },
@@ -3596,7 +3769,7 @@ var APISwaggerJSON string = `{
             "description": "Choice for selecting HTTP proxy with bring your own certificates",
             "title": "HTTPS with Auto Certs Choice",
             "x-displayname": "HTTPS with Auto Certs Choice",
-            "x-ves-displayorder": "1,2,18,3,4,7,12,19",
+            "x-ves-displayorder": "1,2,18,3,4,7,12,19,22",
             "x-ves-oneof-field-default_lb_choice": "[\"default_loadbalancer\",\"non_default_loadbalancer\"]",
             "x-ves-oneof-field-mtls_choice": "[\"no_mtls\",\"use_mtls\"]",
             "x-ves-oneof-field-path_normalize_choice": "[\"disable_path_normalize\",\"enable_path_normalize\"]",
@@ -3628,7 +3801,7 @@ var APISwaggerJSON string = `{
                 },
                 "default_loadbalancer": {
                     "description": "Exclusive with [non_default_loadbalancer]\n",
-                    "title": "Default loadbalancer",
+                    "title": "Default load balancer",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Yes"
                 },
@@ -3643,6 +3816,12 @@ var APISwaggerJSON string = `{
                     "title": "Enable Path normalization",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Enable"
+                },
+                "header_transformation_type": {
+                    "description": " Header transformation options for response headers to the client",
+                    "title": "Header transformation",
+                    "$ref": "#/definitions/schemaHeaderTransformationType",
+                    "x-displayname": "Header Transformation Configuration"
                 },
                 "http_redirect": {
                     "type": "boolean",
@@ -3659,7 +3838,7 @@ var APISwaggerJSON string = `{
                 },
                 "non_default_loadbalancer": {
                     "description": "Exclusive with [default_loadbalancer]\n",
-                    "title": "Not a default loadbalancer",
+                    "title": "Not a default load balancer",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "No"
                 },
@@ -4364,28 +4543,43 @@ var APISwaggerJSON string = `{
         },
         "http_loadbalancerShapeJavaScriptExclusionRule": {
             "type": "object",
-            "description": "x-displayName: \"JavaScript Insertion Exclusion Rule\"\nDefine JavaScript insertion exclusion rule",
+            "description": "Define JavaScript insertion exclusion rule",
             "title": "ShapeJavaScriptExclusionRule",
+            "x-displayname": "JavaScript Insertion Exclusion Rule",
+            "x-ves-oneof-field-domain_matcher_choice": "[\"any_domain\",\"domain\"]",
+            "x-ves-proto-message": "ves.io.schema.views.http_loadbalancer.ShapeJavaScriptExclusionRule",
             "properties": {
                 "any_domain": {
-                    "description": "x-displayName: \"Any Domain\"\nAny Domain.",
+                    "description": "Exclusive with [domain]\n Any Domain.",
                     "title": "Any domain",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Any Domain"
                 },
                 "domain": {
-                    "description": "x-displayName: \"Domain\"\nDomain matcher.",
+                    "description": "Exclusive with [any_domain]\n Domain matcher.",
                     "title": "Domain",
-                    "$ref": "#/definitions/schemaDomainType"
+                    "$ref": "#/definitions/schemaDomainType",
+                    "x-displayname": "Domain"
                 },
                 "metadata": {
-                    "description": "x-displayName: \"Metadata\"\nx-required\nCommon attributes for the rule including name and description.",
+                    "description": " Common attributes for the rule including name and description.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "metadata",
-                    "$ref": "#/definitions/schemaMessageMetaType"
+                    "$ref": "#/definitions/schemaMessageMetaType",
+                    "x-displayname": "Metadata",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 },
                 "path": {
-                    "description": "x-displayName: \"Path\"\nx-required\nURI path matcher.",
+                    "description": " URI path matcher.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "Path",
-                    "$ref": "#/definitions/ioschemaPathMatcherType"
+                    "$ref": "#/definitions/ioschemaPathMatcherType",
+                    "x-displayname": "Path",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 }
             }
         },
@@ -6413,7 +6607,7 @@ var APISwaggerJSON string = `{
             "title": "RouteRedirect",
             "x-displayname": "Redirect",
             "x-ves-displayorder": "3,1,10,6,7",
-            "x-ves-oneof-field-query_params": "[\"remove_all_params\",\"retain_all_params\"]",
+            "x-ves-oneof-field-query_params": "[\"remove_all_params\",\"replace_params\",\"retain_all_params\"]",
             "x-ves-oneof-field-redirect_path_choice": "[\"path_redirect\",\"prefix_rewrite\"]",
             "x-ves-proto-message": "ves.io.schema.route.RouteRedirect",
             "properties": {
@@ -6459,14 +6653,26 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "remove_all_params": {
-                    "description": "Exclusive with [retain_all_params]\n Remove all query parameters",
+                    "description": "Exclusive with [replace_params retain_all_params]\n",
                     "title": "Remove All Params",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Remove All Parameters"
                 },
+                "replace_params": {
+                    "type": "string",
+                    "description": "Exclusive with [remove_all_params retain_all_params]\n\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 256\n  ves.io.schema.rules.string.min_len: 1\n",
+                    "title": "Replace All Params",
+                    "minLength": 1,
+                    "maxLength": 256,
+                    "x-displayname": "Replace All Parameters",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "256",
+                        "ves.io.schema.rules.string.min_len": "1"
+                    }
+                },
                 "response_code": {
                     "type": "integer",
-                    "description": " The HTTP status code to use in the redirect response. The default response\n code is MOVED_PERMANENTLY (301).\n\nExample: - \"303\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 599\n",
+                    "description": " The HTTP status code to use in the redirect response.\n\nExample: - \"303\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 599\n",
                     "title": "response_code",
                     "format": "int64",
                     "x-displayname": "Response Code",
@@ -6476,7 +6682,7 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "retain_all_params": {
-                    "description": "Exclusive with [remove_all_params]\n Retain all query parameters",
+                    "description": "Exclusive with [remove_all_params replace_params]\n",
                     "title": "Retain All Params",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Retain All Parameters"
@@ -6788,23 +6994,53 @@ var APISwaggerJSON string = `{
         },
         "schemaDomainType": {
             "type": "object",
-            "description": "x-displayName: \"Domains\"\nDomains names",
+            "description": "Domains names",
             "title": "Domains",
+            "x-displayname": "Domains",
+            "x-ves-oneof-field-domain_choice": "[\"exact_value\",\"regex_value\",\"suffix_value\"]",
+            "x-ves-proto-message": "ves.io.schema.DomainType",
             "properties": {
                 "exact_value": {
                     "type": "string",
-                    "description": "x-displayName: \"Exact Value\"\nx-example: \"abc.zyz.com\"\nExact domain name.",
-                    "title": "exact value"
+                    "description": "Exclusive with [regex_value suffix_value]\n Exact domain name.\n\nExample: - \"abc.zyz.com\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.hostname: true\n  ves.io.schema.rules.string.max_len: 256\n  ves.io.schema.rules.string.min_len: 1\n",
+                    "title": "exact value",
+                    "minLength": 1,
+                    "maxLength": 256,
+                    "x-displayname": "Exact Value",
+                    "x-ves-example": "abc.zyz.com",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.hostname": "true",
+                        "ves.io.schema.rules.string.max_len": "256",
+                        "ves.io.schema.rules.string.min_len": "1"
+                    }
                 },
                 "regex_value": {
                     "type": "string",
-                    "description": "x-displayName: \"Regex Values of Domains\"\nx-example: \"([a-z]([-a-z0-9]*[a-z0-9])?)\\.com$'\"\nRegular Expression value for the domain name",
-                    "title": "regex values of Domains"
+                    "description": "Exclusive with [exact_value suffix_value]\n Regular Expression value for the domain name\n\nExample: - \"([a-z]([-a-z0-9]*[a-z0-9])?)\\.com$'\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 256\n  ves.io.schema.rules.string.min_len: 1\n  ves.io.schema.rules.string.regex: true\n",
+                    "title": "regex values of Domains",
+                    "minLength": 1,
+                    "maxLength": 256,
+                    "x-displayname": "Regex Values of Domains",
+                    "x-ves-example": "([a-z]([-a-z0-9]*[a-z0-9])?)\\.com$'",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "256",
+                        "ves.io.schema.rules.string.min_len": "1",
+                        "ves.io.schema.rules.string.regex": "true"
+                    }
                 },
                 "suffix_value": {
                     "type": "string",
-                    "description": "x-displayName: \"Suffix Value\"\nx-example: \"xyz.com\"\nSuffix of domain name e.g \"xyz.com\" will match \"*.xyz.com\" and \"xyz.com\"",
-                    "title": "suffix value"
+                    "description": "Exclusive with [exact_value regex_value]\n Suffix of domain name e.g \"xyz.com\" will match \"*.xyz.com\" and \"xyz.com\"\n\nExample: - \"xyz.com\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.hostname: true\n  ves.io.schema.rules.string.max_len: 256\n  ves.io.schema.rules.string.min_len: 1\n",
+                    "title": "suffix value",
+                    "minLength": 1,
+                    "maxLength": 256,
+                    "x-displayname": "Suffix Value",
+                    "x-ves-example": "xyz.com",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.hostname": "true",
+                        "ves.io.schema.rules.string.max_len": "256",
+                        "ves.io.schema.rules.string.min_len": "1"
+                    }
                 }
             }
         },
@@ -6969,6 +7205,29 @@ var APISwaggerJSON string = `{
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.string.max_len": "8096"
                     }
+                }
+            }
+        },
+        "schemaHeaderTransformationType": {
+            "type": "object",
+            "description": "Header Transformation options for HTTP request/response headers",
+            "title": "HeaderTransformationType",
+            "x-displayname": "Header Transformation",
+            "x-ves-displayorder": "1",
+            "x-ves-oneof-field-header_transformation_choice": "[\"default_header_transformation\",\"proper_case_header_transformation\"]",
+            "x-ves-proto-message": "ves.io.schema.HeaderTransformationType",
+            "properties": {
+                "default_header_transformation": {
+                    "description": "Exclusive with [proper_case_header_transformation]\n Normalize the headers to lower case",
+                    "title": "Default header transformation",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Default"
+                },
+                "proper_case_header_transformation": {
+                    "description": "Exclusive with [default_header_transformation]\n Normalize the headers to proper case words. The fist character and any character\n following a special character will be capitalized if it’s an alpha character.\n For example, “content-type” becomes “Content-Type”, and “foo$b#$are” becomes “Foo$B#$Are”",
+                    "title": "Proper case header transformation",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Proper Case"
                 }
             }
         },
@@ -8947,11 +9206,15 @@ var APISwaggerJSON string = `{
             "x-displayname": "Create HTTP Load Balancer",
             "x-ves-oneof-field-advertise_choice": "[\"advertise_custom\",\"advertise_on_public\",\"advertise_on_public_default_vip\",\"do_not_advertise\"]",
             "x-ves-oneof-field-api_definition_choice": "[\"api_definition\",\"disable_api_definition\"]",
+            "x-ves-oneof-field-api_discovery_choice": "[\"disable_api_discovery\",\"enable_api_discovery\"]",
             "x-ves-oneof-field-bot_defense_choice": "[]",
             "x-ves-oneof-field-challenge_type": "[\"captcha_challenge\",\"js_challenge\",\"no_challenge\",\"policy_based_challenge\"]",
+            "x-ves-oneof-field-client_side_defense_choice": "[\"client_side_defense\",\"disable_client_side_defense\"]",
+            "x-ves-oneof-field-ddos_detection_choice": "[\"disable_ddos_detection\",\"enable_ddos_detection\"]",
             "x-ves-oneof-field-hash_policy_choice": "[\"cookie_stickiness\",\"least_active\",\"random\",\"ring_hash\",\"round_robin\",\"source_ip_stickiness\"]",
             "x-ves-oneof-field-ip_reputation_choice": "[\"disable_ip_reputation\",\"enable_ip_reputation\"]",
             "x-ves-oneof-field-loadbalancer_type": "[\"http\",\"https\",\"https_auto_cert\"]",
+            "x-ves-oneof-field-malicious_user_detection_choice": "[\"disable_malicious_user_detection\",\"enable_malicious_user_detection\"]",
             "x-ves-oneof-field-ml_config_choice": "[\"multi_lb_app\",\"single_lb_app\"]",
             "x-ves-oneof-field-rate_limit_choice": "[\"api_rate_limit\",\"disable_rate_limit\",\"rate_limit\"]",
             "x-ves-oneof-field-service_policy_choice": "[\"active_service_policies\",\"no_service_policies\",\"service_policies_from_namespace\"]",
@@ -9025,6 +9288,11 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/virtual_hostCaptchaChallengeType",
                     "x-displayname": "Captcha Challenge"
                 },
+                "client_side_defense": {
+                    "description": "Exclusive with [disable_client_side_defense]\n Client-Side Defense configuration for JavaScript insertion",
+                    "$ref": "#/definitions/http_loadbalancerClientSideDefenseType",
+                    "x-displayname": "Enable"
+                },
                 "cookie_stickiness": {
                     "description": "Exclusive with [least_active random ring_hash round_robin source_ip_stickiness]\n Request are sent to all eligible origin servers using hash of source ip. Consistent hashing algorithm, ring hash, is used to select origin server",
                     "$ref": "#/definitions/routeCookieForHashing",
@@ -9079,8 +9347,28 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Disable"
                 },
+                "disable_api_discovery": {
+                    "description": "Exclusive with [enable_api_discovery]\n",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disable"
+                },
+                "disable_client_side_defense": {
+                    "description": "Exclusive with [client_side_defense]\n No Client-Side Defense configuration for this load balancer",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disable"
+                },
+                "disable_ddos_detection": {
+                    "description": "Exclusive with [enable_ddos_detection]\n",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disable"
+                },
                 "disable_ip_reputation": {
                     "description": "Exclusive with [enable_ip_reputation]\n",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disable"
+                },
+                "disable_malicious_user_detection": {
+                    "description": "Exclusive with [enable_malicious_user_detection]\n",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Disable"
                 },
@@ -9127,9 +9415,24 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.repeated.unique": "true"
                     }
                 },
+                "enable_api_discovery": {
+                    "description": "Exclusive with [disable_api_discovery]\n",
+                    "$ref": "#/definitions/http_loadbalancerApiDiscoverySetting",
+                    "x-displayname": "Enable"
+                },
+                "enable_ddos_detection": {
+                    "description": "Exclusive with [disable_ddos_detection]\n",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Enable"
+                },
                 "enable_ip_reputation": {
                     "description": "Exclusive with [disable_ip_reputation]\n",
                     "$ref": "#/definitions/viewshttp_loadbalancerIPThreatCategoryListType",
+                    "x-displayname": "Enable"
+                },
+                "enable_malicious_user_detection": {
+                    "description": "Exclusive with [disable_malicious_user_detection]\n",
+                    "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Enable"
                 },
                 "enable_trust_client_ip_headers": {
@@ -9280,11 +9583,15 @@ var APISwaggerJSON string = `{
             "x-displayname": "Get HTTP Load Balancer",
             "x-ves-oneof-field-advertise_choice": "[\"advertise_custom\",\"advertise_on_public\",\"advertise_on_public_default_vip\",\"do_not_advertise\"]",
             "x-ves-oneof-field-api_definition_choice": "[\"api_definition\",\"disable_api_definition\"]",
+            "x-ves-oneof-field-api_discovery_choice": "[\"disable_api_discovery\",\"enable_api_discovery\"]",
             "x-ves-oneof-field-bot_defense_choice": "[]",
             "x-ves-oneof-field-challenge_type": "[\"captcha_challenge\",\"js_challenge\",\"no_challenge\",\"policy_based_challenge\"]",
+            "x-ves-oneof-field-client_side_defense_choice": "[\"client_side_defense\",\"disable_client_side_defense\"]",
+            "x-ves-oneof-field-ddos_detection_choice": "[\"disable_ddos_detection\",\"enable_ddos_detection\"]",
             "x-ves-oneof-field-hash_policy_choice": "[\"cookie_stickiness\",\"least_active\",\"random\",\"ring_hash\",\"round_robin\",\"source_ip_stickiness\"]",
             "x-ves-oneof-field-ip_reputation_choice": "[\"disable_ip_reputation\",\"enable_ip_reputation\"]",
             "x-ves-oneof-field-loadbalancer_type": "[\"http\",\"https\",\"https_auto_cert\"]",
+            "x-ves-oneof-field-malicious_user_detection_choice": "[\"disable_malicious_user_detection\",\"enable_malicious_user_detection\"]",
             "x-ves-oneof-field-ml_config_choice": "[\"multi_lb_app\",\"single_lb_app\"]",
             "x-ves-oneof-field-rate_limit_choice": "[\"api_rate_limit\",\"disable_rate_limit\",\"rate_limit\"]",
             "x-ves-oneof-field-service_policy_choice": "[\"active_service_policies\",\"no_service_policies\",\"service_policies_from_namespace\"]",
@@ -9363,6 +9670,11 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/virtual_hostCaptchaChallengeType",
                     "x-displayname": "Captcha Challenge"
                 },
+                "client_side_defense": {
+                    "description": "Exclusive with [disable_client_side_defense]\n Client-Side Defense configuration for JavaScript insertion",
+                    "$ref": "#/definitions/http_loadbalancerClientSideDefenseType",
+                    "x-displayname": "Enable"
+                },
                 "cookie_stickiness": {
                     "description": "Exclusive with [least_active random ring_hash round_robin source_ip_stickiness]\n Request are sent to all eligible origin servers using hash of source ip. Consistent hashing algorithm, ring hash, is used to select origin server",
                     "$ref": "#/definitions/routeCookieForHashing",
@@ -9417,8 +9729,28 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Disable"
                 },
+                "disable_api_discovery": {
+                    "description": "Exclusive with [enable_api_discovery]\n",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disable"
+                },
+                "disable_client_side_defense": {
+                    "description": "Exclusive with [client_side_defense]\n No Client-Side Defense configuration for this load balancer",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disable"
+                },
+                "disable_ddos_detection": {
+                    "description": "Exclusive with [enable_ddos_detection]\n",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disable"
+                },
                 "disable_ip_reputation": {
                     "description": "Exclusive with [enable_ip_reputation]\n",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disable"
+                },
+                "disable_malicious_user_detection": {
+                    "description": "Exclusive with [enable_malicious_user_detection]\n",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Disable"
                 },
@@ -9473,9 +9805,24 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.repeated.unique": "true"
                     }
                 },
+                "enable_api_discovery": {
+                    "description": "Exclusive with [disable_api_discovery]\n",
+                    "$ref": "#/definitions/http_loadbalancerApiDiscoverySetting",
+                    "x-displayname": "Enable"
+                },
+                "enable_ddos_detection": {
+                    "description": "Exclusive with [disable_ddos_detection]\n",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Enable"
+                },
                 "enable_ip_reputation": {
                     "description": "Exclusive with [disable_ip_reputation]\n",
                     "$ref": "#/definitions/viewshttp_loadbalancerIPThreatCategoryListType",
+                    "x-displayname": "Enable"
+                },
+                "enable_malicious_user_detection": {
+                    "description": "Exclusive with [disable_malicious_user_detection]\n",
+                    "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Enable"
                 },
                 "enable_trust_client_ip_headers": {
@@ -9637,12 +9984,16 @@ var APISwaggerJSON string = `{
             "x-displayname": "Global Specification",
             "x-ves-oneof-field-advertise_choice": "[\"advertise_custom\",\"advertise_on_public\",\"advertise_on_public_default_vip\",\"do_not_advertise\"]",
             "x-ves-oneof-field-api_definition_choice": "[\"api_definition\",\"disable_api_definition\"]",
+            "x-ves-oneof-field-api_discovery_choice": "[\"disable_api_discovery\",\"enable_api_discovery\"]",
             "x-ves-oneof-field-bot_defense_choice": "[]",
             "x-ves-oneof-field-challenge_type": "[\"captcha_challenge\",\"js_challenge\",\"no_challenge\",\"policy_based_challenge\"]",
+            "x-ves-oneof-field-client_side_defense_choice": "[\"client_side_defense\",\"disable_client_side_defense\"]",
+            "x-ves-oneof-field-ddos_detection_choice": "[\"disable_ddos_detection\",\"enable_ddos_detection\"]",
             "x-ves-oneof-field-hash_policy_choice": "[\"cookie_stickiness\",\"least_active\",\"random\",\"ring_hash\",\"round_robin\",\"source_ip_stickiness\"]",
             "x-ves-oneof-field-host_rewrite_params": "[\"auto_host_rewrite\",\"disable_host_rewrite\",\"host_rewrite\"]",
             "x-ves-oneof-field-ip_reputation_choice": "[\"disable_ip_reputation\",\"enable_ip_reputation\"]",
             "x-ves-oneof-field-loadbalancer_type": "[\"http\",\"https\",\"https_auto_cert\"]",
+            "x-ves-oneof-field-malicious_user_detection_choice": "[\"disable_malicious_user_detection\",\"enable_malicious_user_detection\"]",
             "x-ves-oneof-field-ml_config_choice": "[\"multi_lb_app\",\"single_lb_app\"]",
             "x-ves-oneof-field-rate_limit_choice": "[\"api_rate_limit\",\"disable_rate_limit\",\"rate_limit\"]",
             "x-ves-oneof-field-service_policy_choice": "[\"active_service_policies\",\"no_service_policies\",\"service_policies_from_namespace\"]",
@@ -9739,6 +10090,12 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/virtual_hostCaptchaChallengeType",
                     "x-displayname": "Captcha Challenge"
                 },
+                "client_side_defense": {
+                    "description": "Exclusive with [disable_client_side_defense]\n Client-Side Defense configuration for JavaScript insertion",
+                    "title": "Client-Side Defense",
+                    "$ref": "#/definitions/http_loadbalancerClientSideDefenseType",
+                    "x-displayname": "Enable"
+                },
                 "cookie_stickiness": {
                     "description": "Exclusive with [least_active random ring_hash round_robin source_ip_stickiness]\n Request are sent to all eligible origin servers using hash of source ip. Consistent hashing algorithm, ring hash, is used to select origin server",
                     "title": "Cookie Based Stickiness",
@@ -9799,6 +10156,24 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Disable"
                 },
+                "disable_api_discovery": {
+                    "description": "Exclusive with [enable_api_discovery]\n",
+                    "title": "Disable API discovery",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disable"
+                },
+                "disable_client_side_defense": {
+                    "description": "Exclusive with [client_side_defense]\n No Client-Side Defense configuration for this load balancer",
+                    "title": "Disable Client-Side Defense",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disable"
+                },
+                "disable_ddos_detection": {
+                    "description": "Exclusive with [enable_ddos_detection]\n",
+                    "title": "Disable DDoS detection",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disable"
+                },
                 "disable_host_rewrite": {
                     "description": "Exclusive with [auto_host_rewrite host_rewrite]\n Host header is not modified",
                     "title": "Disable Host Rewrite",
@@ -9808,6 +10183,12 @@ var APISwaggerJSON string = `{
                 "disable_ip_reputation": {
                     "description": "Exclusive with [enable_ip_reputation]\n",
                     "title": "disable_ip_reputation",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disable"
+                },
+                "disable_malicious_user_detection": {
+                    "description": "Exclusive with [enable_malicious_user_detection]\n",
+                    "title": "Disable malicious user detection",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Disable"
                 },
@@ -9868,10 +10249,28 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.repeated.unique": "true"
                     }
                 },
+                "enable_api_discovery": {
+                    "description": "Exclusive with [disable_api_discovery]\n",
+                    "title": "Enable API discovery",
+                    "$ref": "#/definitions/http_loadbalancerApiDiscoverySetting",
+                    "x-displayname": "Enable"
+                },
+                "enable_ddos_detection": {
+                    "description": "Exclusive with [disable_ddos_detection]\n",
+                    "title": "Enable DDoS detection",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Enable"
+                },
                 "enable_ip_reputation": {
                     "description": "Exclusive with [disable_ip_reputation]\n",
                     "title": "enable_ip_reputation",
                     "$ref": "#/definitions/viewshttp_loadbalancerIPThreatCategoryListType",
+                    "x-displayname": "Enable"
+                },
+                "enable_malicious_user_detection": {
+                    "description": "Exclusive with [disable_malicious_user_detection]\n",
+                    "title": "Enable malicious user detection",
+                    "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Enable"
                 },
                 "enable_trust_client_ip_headers": {
@@ -10235,11 +10634,15 @@ var APISwaggerJSON string = `{
             "x-displayname": "Replace HTTP Load Balancer",
             "x-ves-oneof-field-advertise_choice": "[\"advertise_custom\",\"advertise_on_public\",\"advertise_on_public_default_vip\",\"do_not_advertise\"]",
             "x-ves-oneof-field-api_definition_choice": "[\"api_definition\",\"disable_api_definition\"]",
+            "x-ves-oneof-field-api_discovery_choice": "[\"disable_api_discovery\",\"enable_api_discovery\"]",
             "x-ves-oneof-field-bot_defense_choice": "[]",
             "x-ves-oneof-field-challenge_type": "[\"captcha_challenge\",\"js_challenge\",\"no_challenge\",\"policy_based_challenge\"]",
+            "x-ves-oneof-field-client_side_defense_choice": "[\"client_side_defense\",\"disable_client_side_defense\"]",
+            "x-ves-oneof-field-ddos_detection_choice": "[\"disable_ddos_detection\",\"enable_ddos_detection\"]",
             "x-ves-oneof-field-hash_policy_choice": "[\"cookie_stickiness\",\"least_active\",\"random\",\"ring_hash\",\"round_robin\",\"source_ip_stickiness\"]",
             "x-ves-oneof-field-ip_reputation_choice": "[\"disable_ip_reputation\",\"enable_ip_reputation\"]",
             "x-ves-oneof-field-loadbalancer_type": "[\"http\",\"https\",\"https_auto_cert\"]",
+            "x-ves-oneof-field-malicious_user_detection_choice": "[\"disable_malicious_user_detection\",\"enable_malicious_user_detection\"]",
             "x-ves-oneof-field-ml_config_choice": "[\"multi_lb_app\",\"single_lb_app\"]",
             "x-ves-oneof-field-rate_limit_choice": "[\"api_rate_limit\",\"disable_rate_limit\",\"rate_limit\"]",
             "x-ves-oneof-field-service_policy_choice": "[\"active_service_policies\",\"no_service_policies\",\"service_policies_from_namespace\"]",
@@ -10313,6 +10716,11 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/virtual_hostCaptchaChallengeType",
                     "x-displayname": "Captcha Challenge"
                 },
+                "client_side_defense": {
+                    "description": "Exclusive with [disable_client_side_defense]\n Client-Side Defense configuration for JavaScript insertion",
+                    "$ref": "#/definitions/http_loadbalancerClientSideDefenseType",
+                    "x-displayname": "Enable"
+                },
                 "cookie_stickiness": {
                     "description": "Exclusive with [least_active random ring_hash round_robin source_ip_stickiness]\n Request are sent to all eligible origin servers using hash of source ip. Consistent hashing algorithm, ring hash, is used to select origin server",
                     "$ref": "#/definitions/routeCookieForHashing",
@@ -10367,8 +10775,28 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Disable"
                 },
+                "disable_api_discovery": {
+                    "description": "Exclusive with [enable_api_discovery]\n",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disable"
+                },
+                "disable_client_side_defense": {
+                    "description": "Exclusive with [client_side_defense]\n No Client-Side Defense configuration for this load balancer",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disable"
+                },
+                "disable_ddos_detection": {
+                    "description": "Exclusive with [enable_ddos_detection]\n",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disable"
+                },
                 "disable_ip_reputation": {
                     "description": "Exclusive with [enable_ip_reputation]\n",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disable"
+                },
+                "disable_malicious_user_detection": {
+                    "description": "Exclusive with [enable_malicious_user_detection]\n",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Disable"
                 },
@@ -10415,9 +10843,24 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.repeated.unique": "true"
                     }
                 },
+                "enable_api_discovery": {
+                    "description": "Exclusive with [disable_api_discovery]\n",
+                    "$ref": "#/definitions/http_loadbalancerApiDiscoverySetting",
+                    "x-displayname": "Enable"
+                },
+                "enable_ddos_detection": {
+                    "description": "Exclusive with [disable_ddos_detection]\n",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Enable"
+                },
                 "enable_ip_reputation": {
                     "description": "Exclusive with [disable_ip_reputation]\n",
                     "$ref": "#/definitions/viewshttp_loadbalancerIPThreatCategoryListType",
+                    "x-displayname": "Enable"
+                },
+                "enable_malicious_user_detection": {
+                    "description": "Exclusive with [disable_malicious_user_detection]\n",
+                    "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Enable"
                 },
                 "enable_trust_client_ip_headers": {

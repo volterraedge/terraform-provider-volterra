@@ -242,8 +242,16 @@ type ValidateCreateSpecType struct {
 
 func (v *ValidateCreateSpecType) RoutesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for routes")
+	}
 	itemsValidatorFn := func(ctx context.Context, elems []*RouteType, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
 			if err := RouteTypeValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
@@ -426,8 +434,16 @@ type ValidateGetSpecType struct {
 
 func (v *ValidateGetSpecType) RoutesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for routes")
+	}
 	itemsValidatorFn := func(ctx context.Context, elems []*RouteType, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
 			if err := RouteTypeValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
@@ -610,8 +626,16 @@ type ValidateGlobalSpecType struct {
 
 func (v *ValidateGlobalSpecType) RoutesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for routes")
+	}
 	itemsValidatorFn := func(ctx context.Context, elems []*RouteType, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
 			if err := RouteTypeValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
@@ -976,8 +1000,16 @@ type ValidateMirrorPolicyType struct {
 
 func (v *ValidateMirrorPolicyType) ClusterValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for cluster")
+	}
 	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema.ObjectRefType, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
 			if err := ves_io_schema.ObjectRefTypeValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
@@ -1171,8 +1203,16 @@ type ValidateReplaceSpecType struct {
 
 func (v *ValidateReplaceSpecType) RoutesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for routes")
+	}
 	itemsValidatorFn := func(ctx context.Context, elems []*RouteType, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
 			if err := RouteTypeValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
@@ -1362,8 +1402,16 @@ type ValidateRouteDestination struct {
 
 func (v *ValidateRouteDestination) ClusterValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for cluster")
+	}
 	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema.ObjectRefType, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
 			if err := ves_io_schema.ObjectRefTypeValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
@@ -1672,8 +1720,16 @@ func (v *ValidateRouteDestinationList) HostRewriteParamsValidationRuleHandler(ru
 
 func (v *ValidateRouteDestinationList) DestinationsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for destinations")
+	}
 	itemsValidatorFn := func(ctx context.Context, elems []*RouteDestination, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
 			if err := RouteDestinationValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
@@ -1767,8 +1823,16 @@ func (v *ValidateRouteDestinationList) EndpointSubsetsValidationRuleHandler(rule
 
 func (v *ValidateRouteDestinationList) HashPolicyValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for hash_policy")
+	}
 	itemsValidatorFn := func(ctx context.Context, elems []*HashPolicyType, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
 			if err := HashPolicyTypeValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
@@ -2391,6 +2455,14 @@ type ValidateRouteRedirect struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateRouteRedirect) QueryParamsReplaceParamsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_ReplaceParams, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for replace_params")
+	}
+	return oValidatorFn_ReplaceParams, nil
+}
+
 func (v *ValidateRouteRedirect) RedirectPathChoicePathRedirectValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	oValidatorFn_PathRedirect, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
@@ -2503,6 +2575,17 @@ func (v *ValidateRouteRedirect) Validate(ctx context.Context, pm interface{}, op
 				return err
 			}
 		}
+	case *RouteRedirect_ReplaceParams:
+		if fv, exists := v.FldValidators["query_params.replace_params"]; exists {
+			val := m.GetQueryParams().(*RouteRedirect_ReplaceParams).ReplaceParams
+			vOpts := append(opts,
+				db.WithValidateField("query_params"),
+				db.WithValidateField("replace_params"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 
@@ -2555,6 +2638,19 @@ var DefaultRouteRedirectValidator = func() *ValidateRouteRedirect {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
+
+	vrhQueryParamsReplaceParams := v.QueryParamsReplaceParamsValidationRuleHandler
+	rulesQueryParamsReplaceParams := map[string]string{
+		"ves.io.schema.rules.string.max_len": "256",
+		"ves.io.schema.rules.string.min_len": "1",
+	}
+	vFnMap["query_params.replace_params"], err = vrhQueryParamsReplaceParams(rulesQueryParamsReplaceParams)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field RouteRedirect.query_params_replace_params: %s", err)
+		panic(errMsg)
+	}
+
+	v.FldValidators["query_params.replace_params"] = vFnMap["query_params.replace_params"]
 
 	vrhRedirectPathChoicePathRedirect := v.RedirectPathChoicePathRedirectValidationRuleHandler
 	rulesRedirectPathChoicePathRedirect := map[string]string{
@@ -2755,8 +2851,16 @@ func (v *ValidateRouteType) RouteActionValidationRuleHandler(rules map[string]st
 
 func (v *ValidateRouteType) MatchValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for match")
+	}
 	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema.RouteMatch, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
 			if err := ves_io_schema.RouteMatchValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
@@ -2795,8 +2899,16 @@ func (v *ValidateRouteType) MatchValidationRuleHandler(rules map[string]string) 
 
 func (v *ValidateRouteType) RequestHeadersToAddValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for request_headers_to_add")
+	}
 	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema.HeaderManipulationOptionType, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
 			if err := ves_io_schema.HeaderManipulationOptionTypeValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
@@ -2835,8 +2947,16 @@ func (v *ValidateRouteType) RequestHeadersToAddValidationRuleHandler(rules map[s
 
 func (v *ValidateRouteType) ResponseHeadersToAddValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for response_headers_to_add")
+	}
 	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema.HeaderManipulationOptionType, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
 			if err := ves_io_schema.HeaderManipulationOptionTypeValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}

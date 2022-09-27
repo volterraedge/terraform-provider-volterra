@@ -914,8 +914,16 @@ func (v *ValidateDNSCAAResourceRecord) NameValidationRuleHandler(rules map[strin
 
 func (v *ValidateDNSCAAResourceRecord) ValuesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for values")
+	}
 	itemsValidatorFn := func(ctx context.Context, elems []*CertificationAuthorityAuthorization, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
 			if err := CertificationAuthorityAuthorizationValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
@@ -1394,8 +1402,16 @@ func (v *ValidateDNSMXResourceRecord) NameValidationRuleHandler(rules map[string
 
 func (v *ValidateDNSMXResourceRecord) ValuesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for values")
+	}
 	itemsValidatorFn := func(ctx context.Context, elems []*MailExchanger, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
 			if err := MailExchangerValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
@@ -1905,8 +1921,16 @@ func (v *ValidateDNSSRVResourceRecord) NameValidationRuleHandler(rules map[strin
 
 func (v *ValidateDNSSRVResourceRecord) ValuesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for values")
+	}
 	itemsValidatorFn := func(ctx context.Context, elems []*SRVService, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
 			if err := SRVServiceValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
@@ -2845,8 +2869,16 @@ func (v *ValidatePrimaryDNSConfig) SoaRecordParametersChoiceValidationRuleHandle
 
 func (v *ValidatePrimaryDNSConfig) RrSetGroupValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for rr_set_group")
+	}
 	itemsValidatorFn := func(ctx context.Context, elems []*RRSetGroup, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
 			if err := RRSetGroupValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
@@ -2885,8 +2917,16 @@ func (v *ValidatePrimaryDNSConfig) RrSetGroupValidationRuleHandler(rules map[str
 
 func (v *ValidatePrimaryDNSConfig) DefaultRrSetGroupValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for default_rr_set_group")
+	}
 	itemsValidatorFn := func(ctx context.Context, elems []*RRSet, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
 			if err := RRSetValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
@@ -3185,8 +3225,16 @@ type ValidatePrimaryDNSCreateSpecType struct {
 
 func (v *ValidatePrimaryDNSCreateSpecType) RrSetGroupValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for rr_set_group")
+	}
 	itemsValidatorFn := func(ctx context.Context, elems []*RRSetGroup, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
 			if err := RRSetGroupValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
@@ -3225,8 +3273,16 @@ func (v *ValidatePrimaryDNSCreateSpecType) RrSetGroupValidationRuleHandler(rules
 
 func (v *ValidatePrimaryDNSCreateSpecType) DefaultRrSetGroupValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for default_rr_set_group")
+	}
 	itemsValidatorFn := func(ctx context.Context, elems []*RRSet, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
 			if err := RRSetValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
@@ -3486,8 +3542,16 @@ type ValidatePrimaryDNSGetSpecType struct {
 
 func (v *ValidatePrimaryDNSGetSpecType) RrSetGroupValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for rr_set_group")
+	}
 	itemsValidatorFn := func(ctx context.Context, elems []*RRSetGroup, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
 			if err := RRSetGroupValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
@@ -3526,8 +3590,16 @@ func (v *ValidatePrimaryDNSGetSpecType) RrSetGroupValidationRuleHandler(rules ma
 
 func (v *ValidatePrimaryDNSGetSpecType) DefaultRrSetGroupValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for default_rr_set_group")
+	}
 	itemsValidatorFn := func(ctx context.Context, elems []*RRSet, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
 			if err := RRSetValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
@@ -4014,6 +4086,7 @@ var DefaultRRSetValidator = func() *ValidateRRSet {
 	vrhTtl := v.TtlValidationRuleHandler
 	rulesTtl := map[string]string{
 		"ves.io.schema.rules.uint32.gte": "60",
+		"ves.io.schema.rules.uint32.lte": "2147483647",
 	}
 	vFn, err = vrhTtl(rulesTtl)
 	if err != nil {
@@ -4136,8 +4209,16 @@ func (v *ValidateRRSetGroup) MetadataValidationRuleHandler(rules map[string]stri
 
 func (v *ValidateRRSetGroup) RrSetValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for rr_set")
+	}
 	itemsValidatorFn := func(ctx context.Context, elems []*RRSet, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
 			if err := RRSetValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
@@ -4602,6 +4683,7 @@ var DefaultSOARecordParameterConfigValidator = func() *ValidateSOARecordParamete
 	vrhRefresh := v.RefreshValidationRuleHandler
 	rulesRefresh := map[string]string{
 		"ves.io.schema.rules.uint32.gte": "3600",
+		"ves.io.schema.rules.uint32.lte": "2147483647",
 	}
 	vFn, err = vrhRefresh(rulesRefresh)
 	if err != nil {
@@ -4613,6 +4695,7 @@ var DefaultSOARecordParameterConfigValidator = func() *ValidateSOARecordParamete
 	vrhRetry := v.RetryValidationRuleHandler
 	rulesRetry := map[string]string{
 		"ves.io.schema.rules.uint32.gte": "60",
+		"ves.io.schema.rules.uint32.lte": "2147483647",
 	}
 	vFn, err = vrhRetry(rulesRetry)
 	if err != nil {
@@ -4624,6 +4707,7 @@ var DefaultSOARecordParameterConfigValidator = func() *ValidateSOARecordParamete
 	vrhExpire := v.ExpireValidationRuleHandler
 	rulesExpire := map[string]string{
 		"ves.io.schema.rules.uint32.gte": "0",
+		"ves.io.schema.rules.uint32.lte": "2147483647",
 	}
 	vFn, err = vrhExpire(rulesExpire)
 	if err != nil {
@@ -4635,6 +4719,7 @@ var DefaultSOARecordParameterConfigValidator = func() *ValidateSOARecordParamete
 	vrhNegativeTtl := v.NegativeTtlValidationRuleHandler
 	rulesNegativeTtl := map[string]string{
 		"ves.io.schema.rules.uint32.gte": "0",
+		"ves.io.schema.rules.uint32.lte": "2147483647",
 	}
 	vFn, err = vrhNegativeTtl(rulesNegativeTtl)
 	if err != nil {
@@ -4646,6 +4731,7 @@ var DefaultSOARecordParameterConfigValidator = func() *ValidateSOARecordParamete
 	vrhTtl := v.TtlValidationRuleHandler
 	rulesTtl := map[string]string{
 		"ves.io.schema.rules.uint32.gte": "0",
+		"ves.io.schema.rules.uint32.lte": "2147483647",
 	}
 	vFn, err = vrhTtl(rulesTtl)
 	if err != nil {

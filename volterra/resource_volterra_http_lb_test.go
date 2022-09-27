@@ -69,7 +69,9 @@ func TestHTTPLB(t *testing.T) {
 					},
 				},
 			},
-			Port: 80,
+			PortChoice: &origin_pool.GlobalSpecType_Port{
+				Port: 80,
+			},
 			TlsChoice: &origin_pool.GlobalSpecType_NoTls{
 				NoTls: &ves_io_schema.Empty{},
 			},

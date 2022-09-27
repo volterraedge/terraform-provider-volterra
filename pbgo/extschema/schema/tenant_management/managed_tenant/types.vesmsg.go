@@ -257,8 +257,16 @@ func (v *ValidateCreateSpecType) TenantChoiceTenantRegexValidationRuleHandler(ru
 
 func (v *ValidateCreateSpecType) GroupsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for groups")
+	}
 	itemsValidatorFn := func(ctx context.Context, elems []*GroupAssignmentType, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
 			if err := GroupAssignmentTypeValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
@@ -542,8 +550,16 @@ func (v *ValidateGetSpecType) TenantChoiceTenantRegexValidationRuleHandler(rules
 
 func (v *ValidateGetSpecType) GroupsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for groups")
+	}
 	itemsValidatorFn := func(ctx context.Context, elems []*GroupAssignmentType, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
 			if err := GroupAssignmentTypeValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
@@ -836,8 +852,16 @@ func (v *ValidateGlobalSpecType) TenantChoiceTenantRegexValidationRuleHandler(ru
 
 func (v *ValidateGlobalSpecType) GroupsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for groups")
+	}
 	itemsValidatorFn := func(ctx context.Context, elems []*GroupAssignmentType, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
 			if err := GroupAssignmentTypeValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
@@ -1528,8 +1552,16 @@ func (v *ValidateReplaceSpecType) TenantChoiceTenantRegexValidationRuleHandler(r
 
 func (v *ValidateReplaceSpecType) GroupsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for groups")
+	}
 	itemsValidatorFn := func(ctx context.Context, elems []*GroupAssignmentType, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
 			if err := GroupAssignmentTypeValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}

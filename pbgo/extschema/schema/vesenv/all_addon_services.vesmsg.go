@@ -79,6 +79,28 @@ func (v *ValidateAddonServiceChoice) Validate(ctx context.Context, pm interface{
 	}
 
 	switch m.GetChoice().(type) {
+	case *AddonServiceChoice_F5XcBase:
+		if fv, exists := v.FldValidators["choice.f5xc_base"]; exists {
+			val := m.GetChoice().(*AddonServiceChoice_F5XcBase).F5XcBase
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("f5xc_base"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *AddonServiceChoice_VesIoSupportManagement:
+		if fv, exists := v.FldValidators["choice.ves_io_support_management"]; exists {
+			val := m.GetChoice().(*AddonServiceChoice_VesIoSupportManagement).VesIoSupportManagement
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("ves_io_support_management"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 	case *AddonServiceChoice_VesIoVolterraDefault:
 		if fv, exists := v.FldValidators["choice.ves_io_volterra_default"]; exists {
 			val := m.GetChoice().(*AddonServiceChoice_VesIoVolterraDefault).VesIoVolterraDefault
@@ -173,6 +195,39 @@ func (v *ValidateAddonServiceChoice) Validate(ctx context.Context, pm interface{
 			vOpts := append(opts,
 				db.WithValidateField("choice"),
 				db.WithValidateField("synthetic_monitor"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *AddonServiceChoice_Safeap:
+		if fv, exists := v.FldValidators["choice.safeap"]; exists {
+			val := m.GetChoice().(*AddonServiceChoice_Safeap).Safeap
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("safeap"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *AddonServiceChoice_AipConnector:
+		if fv, exists := v.FldValidators["choice.aip_connector"]; exists {
+			val := m.GetChoice().(*AddonServiceChoice_AipConnector).AipConnector
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("aip_connector"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *AddonServiceChoice_ClientSideDefense:
+		if fv, exists := v.FldValidators["choice.client_side_defense"]; exists {
+			val := m.GetChoice().(*AddonServiceChoice_ClientSideDefense).ClientSideDefense
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("client_side_defense"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err

@@ -429,6 +429,306 @@ func APIEndpointPDFRspValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *APIEndpointReq) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *APIEndpointReq) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *APIEndpointReq) DeepCopy() *APIEndpointReq {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &APIEndpointReq{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *APIEndpointReq) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *APIEndpointReq) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return APIEndpointReqValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateAPIEndpointReq struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateAPIEndpointReq) ApiEndpointInfoRequestValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepEnumItemRules(rules)
+	var conv db.EnumConvFn
+	conv = func(v interface{}) int32 {
+		i := v.(ves_io_schema_app_type.ApiEndpointInfoRequest)
+		return int32(i)
+	}
+	// ves_io_schema_app_type.ApiEndpointInfoRequest_name is generated in .pb.go
+	itemValFn, err := db.NewEnumValidationRuleHandler(itemRules, ves_io_schema_app_type.ApiEndpointInfoRequest_name, conv)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for api_endpoint_info_request")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []ves_io_schema_app_type.ApiEndpointInfoRequest, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for api_endpoint_info_request")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]ves_io_schema_app_type.ApiEndpointInfoRequest)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []ves_io_schema_app_type.ApiEndpointInfoRequest, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal := fmt.Sprintf("%v", elem)
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated api_endpoint_info_request")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items api_endpoint_info_request")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateAPIEndpointReq) CollapsedUrlValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for collapsed_url")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateAPIEndpointReq) MethodValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for method")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateAPIEndpointReq) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*APIEndpointReq)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *APIEndpointReq got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["api_endpoint_info_request"]; exists {
+		vOpts := append(opts, db.WithValidateField("api_endpoint_info_request"))
+		if err := fv(ctx, m.GetApiEndpointInfoRequest(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["collapsed_url"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("collapsed_url"))
+		if err := fv(ctx, m.GetCollapsedUrl(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["method"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("method"))
+		if err := fv(ctx, m.GetMethod(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("name"))
+		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["namespace"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("namespace"))
+		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultAPIEndpointReqValidator = func() *ValidateAPIEndpointReq {
+	v := &ValidateAPIEndpointReq{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhApiEndpointInfoRequest := v.ApiEndpointInfoRequestValidationRuleHandler
+	rulesApiEndpointInfoRequest := map[string]string{
+		"ves.io.schema.rules.repeated.unique": "true",
+	}
+	vFn, err = vrhApiEndpointInfoRequest(rulesApiEndpointInfoRequest)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for APIEndpointReq.api_endpoint_info_request: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["api_endpoint_info_request"] = vFn
+
+	vrhCollapsedUrl := v.CollapsedUrlValidationRuleHandler
+	rulesCollapsedUrl := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhCollapsedUrl(rulesCollapsedUrl)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for APIEndpointReq.collapsed_url: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["collapsed_url"] = vFn
+
+	vrhMethod := v.MethodValidationRuleHandler
+	rulesMethod := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhMethod(rulesMethod)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for APIEndpointReq.method: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["method"] = vFn
+
+	return v
+}()
+
+func APIEndpointReqValidator() db.Validator {
+	return DefaultAPIEndpointReqValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *APIEndpointRsp) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *APIEndpointRsp) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *APIEndpointRsp) DeepCopy() *APIEndpointRsp {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &APIEndpointRsp{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *APIEndpointRsp) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *APIEndpointRsp) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return APIEndpointRspValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateAPIEndpointRsp struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateAPIEndpointRsp) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*APIEndpointRsp)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *APIEndpointRsp got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["apiep"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("apiep"))
+		if err := fv(ctx, m.GetApiep(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultAPIEndpointRspValidator = func() *ValidateAPIEndpointRsp {
+	v := &ValidateAPIEndpointRsp{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func APIEndpointRspValidator() db.Validator {
+	return DefaultAPIEndpointRspValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *APIEndpointsReq) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }

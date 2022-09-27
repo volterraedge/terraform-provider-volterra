@@ -156,6 +156,18 @@ func testAzureVNETSiteConfig(resourceName, name string) string {
 				resource_group = "spoke-rg"
 				prefixes = ["192.168.0.0/22"]
 			}
+			express_route_info {
+				route_server_ips = ["10.1.1.1", "10.1.1.2"]
+				route_server_asn = 64512
+			}
+			node_info {
+				node_instance_name = "name1"
+				node_id = "id1"
+			}
+			node_info {
+				node_instance_name = "name2"
+				node_id = "id2"
+			}
 
 		}`, resourceName, name)
 }

@@ -30,39 +30,21 @@ resource "volterra_azure_vnet_site" "example" {
     namespace = "staging"
     tenant    = "acmecorp"
   }
-  // One of the arguments from this list "logs_streaming_disabled log_receiver" must be set
+  // One of the arguments from this list "log_receiver logs_streaming_disabled" must be set
   logs_streaming_disabled = true
-  // One of the arguments from this list "alternate_region azure_region" must be set
+  // One of the arguments from this list "azure_region alternate_region" must be set
   azure_region = "eastus"
   resource_group = ["my-resources"]
 
-  // One of the arguments from this list "ingress_gw_ar ingress_egress_gw_ar voltstack_cluster_ar ingress_gw ingress_egress_gw voltstack_cluster" must be set
+  // One of the arguments from this list "ingress_gw ingress_egress_gw voltstack_cluster ingress_gw_ar ingress_egress_gw_ar voltstack_cluster_ar" must be set
 
-  ingress_egress_gw_ar {
-    azure_certified_hw = "azure-byol-multi-nic-voltmesh"
-
-    // One of the arguments from this list "no_dc_cluster_group dc_cluster_group_outside_vn dc_cluster_group_inside_vn" must be set
-    no_dc_cluster_group = true
-
-    // One of the arguments from this list "no_forward_proxy active_forward_proxy_policies forward_proxy_allow_all" must be set
-    no_forward_proxy = true
-
-    // One of the arguments from this list "no_global_network global_network_list" must be set
-    no_global_network = true
-
-    // One of the arguments from this list "not_hub hub" must be set
-    not_hub = true
-
-    // One of the arguments from this list "no_inside_static_routes inside_static_routes" must be set
-    no_inside_static_routes = true
-
-    // One of the arguments from this list "no_network_policy active_network_policies" must be set
-    no_network_policy = true
+  ingress_gw_ar {
+    azure_certified_hw = "azure-byol-voltmesh"
 
     node {
       fault_domain = "1"
 
-      inside_subnet {
+      local_subnet {
         // One of the arguments from this list "subnet_param subnet" must be set
 
         subnet_param {
@@ -71,25 +53,9 @@ resource "volterra_azure_vnet_site" "example" {
         }
       }
 
-      node_number = "1"
-
-      outside_subnet {
-        // One of the arguments from this list "subnet_param subnet" must be set
-
-        subnet_param {
-          ipv4 = "10.1.2.0/24"
-          ipv6 = "1234:568:abcd:9100::/64"
-        }
-      }
-
+      node_number   = "1"
       update_domain = "1"
     }
-
-    // One of the arguments from this list "no_outside_static_routes outside_static_routes" must be set
-    no_outside_static_routes = true
-
-    // One of the arguments from this list "sm_connection_public_ip sm_connection_pvt_ip" must be set
-    sm_connection_public_ip = true
   }
   vnet {
     // One of the arguments from this list "new_vnet existing_vnet" must be set
@@ -194,9 +160,25 @@ Firewall Policies active for this site..
 
 `network_policies` - (Required) Ordered List of Firewall Policies active for this network firewall. See [ref](#ref) below for details.
 
+### Authorized Key
+
+Use Custom Authorized Key.
+
+`blindfold_secret_info_internal` - (Optional) Blindfold Secret Internal is used for the putting re-encrypted blindfold secret. See [Blindfold Secret Info Internal ](#blindfold-secret-info-internal) below for details.
+
+`secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).
+
+`blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by Volterra Secret Management Service. See [Blindfold Secret Info ](#blindfold-secret-info) below for details.
+
+`clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Clear Secret Info ](#clear-secret-info) below for details.
+
+`vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Vault Secret Info ](#vault-secret-info) below for details.
+
+`wingman_secret_info` - (Optional) Secret is given as bootstrap secret in Volterra Security Sidecar. See [Wingman Secret Info ](#wingman-secret-info) below for details.
+
 ### Auto
 
-setup routing for all existing subnets on spoke VNet.
+Parameters for creating new subnet automatically.
 
 ### Autogenerate
 
@@ -259,6 +241,18 @@ Clear Secret is used for the secrets that are not encrypted.
 `provider` - (Optional) This field needs to be provided only if the url scheme is not string:/// (`String`).
 
 `url` - (Required) When asked for this secret, caller will get Secret bytes after Base64 decoding. (`String`).
+
+### Connections
+
+List of connections.
+
+`metadata` - (Required) Common attributes for the rule including name and description.. See [Metadata ](#metadata) below for details.
+
+`other_subscription` - (Optional) Circuit ID. See [Other Subscription ](#other-subscription) below for details.
+
+`same_subscription` - (Optional) Same subscription. See [Same Subscription ](#same-subscription) below for details.
+
+`weight` - (Optional) Route weight (`Int`).
 
 ### Coordinates
 
@@ -380,9 +374,41 @@ Information about existing Vnet.
 
 `vnet_name` - (Required) Name of existing Vnet (`String`).
 
+### Express Route Disabled
+
+Express Route feature disabled.
+
+### Express Route Enabled
+
+Express Route feature enabled.
+
+`connections` - (Optional) List of connections. See [Connections ](#connections) below for details.
+
+`gateway_subnet` - (Optional) Gateway subnet. See [Gateway Subnet ](#gateway-subnet) below for details.
+
+`route_server_subnet` - (Optional) Route Server Subnet. See [Route Server Subnet ](#route-server-subnet) below for details.
+
+`sku_ergw1az` - (Optional) ErGw1Az SKU (Standard + Zone protection) (bool).
+
+`sku_ergw2az` - (Optional) ErGw2Az SKU (High Perf + Zone protection) (bool).
+
+`sku_high_perf` - (Optional) High Perf SKU (bool).
+
+`sku_standard` - (Optional) Standard SKU (bool).
+
 ### Forward Proxy Allow All
 
 Enable Forward Proxy for this site and allow all requests..
+
+### Gateway Subnet
+
+Gateway subnet.
+
+`auto` - (Optional) Parameters for creating new subnet automatically (bool).
+
+`subnet` - (Optional) Information about existing subnet.. See [Subnet ](#subnet) below for details.
+
+`subnet_param` - (Optional) Parameters for creating new subnet.. See [Subnet Param ](#subnet-param) below for details.
 
 ### Global Network Connections
 
@@ -406,13 +432,17 @@ List of global network connections.
 
 This VNet is a hub VNet.
 
+`express_route_disabled` - (Optional) Express Route feature disabled (bool).
+
+`express_route_enabled` - (Optional) Express Route feature enabled. See [Express Route Enabled ](#express-route-enabled) below for details.
+
 `spoke_vnets` - (Optional) Spoke VNet Peering. See [Spoke Vnets ](#spoke-vnets) below for details.
 
 ### Ingress Egress Gw
 
 Two interface site is useful when site is used as ingress/egress gateway to the VNet..
 
-`az_nodes` - (Optional) Only Single AZ or Three AZ(s) nodes are supported currently.. See [Az Nodes ](#az-nodes) below for details.
+`az_nodes` - (Required) Only Single AZ or Three AZ(s) nodes are supported currently.. See [Az Nodes ](#az-nodes) below for details.
 
 `azure_certified_hw` - (Required) Name for Azure certified hardware. (`String`).
 
@@ -500,7 +530,7 @@ Two interface site is useful when site is used as ingress/egress gateway to the 
 
 One interface site is useful when site is only used as ingress gateway to the VNet..
 
-`az_nodes` - (Optional) Only Single AZ or Three AZ(s) nodes are supported currently.. See [Az Nodes ](#az-nodes) below for details.
+`az_nodes` - (Required) Only Single AZ or Three AZ(s) nodes are supported currently.. See [Az Nodes ](#az-nodes) below for details.
 
 `azure_certified_hw` - (Required) Name for Azure certified hardware. (`String`).
 
@@ -551,6 +581,16 @@ IPv6 Address.
 ### Manual
 
 Manually setup routing on spoke VNet.
+
+### Metadata
+
+Common attributes for the rule including name and description..
+
+`description` - (Optional) Human readable description. (`String`).
+
+`disable` - (Optional) A value of true will administratively disable the object that corresponds to the containing message. (`Bool`).
+
+`name` - (Required) The value of name has to follow DNS-1035 format. (`String`).
 
 ### New Vnet
 
@@ -662,6 +702,14 @@ Operating System Details.
 
 `operating_system_version` - (Optional) Operating System Version is optional parameter, which allows to specify target OS version for particular site e.g. 7.2009.10. (`String`).
 
+### Other Subscription
+
+Circuit ID.
+
+`authorized_key` - (Optional) Use Custom Authorized Key. See [Authorized Key ](#authorized-key) below for details.
+
+`circuit_id` - (Optional) Circuit ID (`String`).
+
 ### Outside Static Routes
 
 Manage static routes for outside network..
@@ -708,6 +756,24 @@ namespace - (Optional) then namespace will hold the referred object's(e.g. route
 
 tenant - (Optional) then tenant will hold the referred object's(e.g. route's) tenant. (String).
 
+### Route Server Subnet
+
+Route Server Subnet.
+
+`auto` - (Optional) Parameters for creating new subnet automatically (bool).
+
+`subnet` - (Optional) Information about existing subnet.. See [Subnet ](#subnet) below for details.
+
+`subnet_param` - (Optional) Parameters for creating new subnet.. See [Subnet Param ](#subnet-param) below for details.
+
+### Same Subscription
+
+Same subscription.
+
+`name` - (Required) Name of connection (`String`).
+
+`resource_group` - (Required) Resource group of connection (`String`).
+
 ### Site Local Control Plane
 
 Enable/Disable site local control plane.
@@ -715,6 +781,22 @@ Enable/Disable site local control plane.
 `default_local_control_plane` - (Optional) Enable Site Local Control Plane (bool).
 
 `no_local_control_plane` - (Optional) Disable Site Local Control Plane (bool).
+
+### Sku Ergw1az
+
+ErGw1Az SKU (Standard + Zone protection).
+
+### Sku Ergw2az
+
+ErGw2Az SKU (High Perf + Zone protection).
+
+### Sku High Perf
+
+High Perf SKU.
+
+### Sku Standard
+
+Standard SKU.
 
 ### Sli To Global Dr
 
@@ -868,7 +950,7 @@ Default volterra trusted CA list for validating upstream server certificate.
 
 App Stack Cluster using single interface, useful for deploying K8s cluster..
 
-`az_nodes` - (Optional) Only Single AZ or Three AZ(s) nodes are supported currently.. See [Az Nodes ](#az-nodes) below for details.
+`az_nodes` - (Required) Only Single AZ or Three AZ(s) nodes are supported currently.. See [Az Nodes ](#az-nodes) below for details.
 
 `azure_certified_hw` - (Required) Name for Azure certified hardware. (`String`).
 

@@ -1595,7 +1595,10 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 		item.Disabled = o.GetMetadata().GetDisable()
 
 		if len(req.ReportFields) > 0 {
-			item.Object = o.Object
+			noDBForm, _ := flags.GetEnvGetRspNoDBForm()
+			if !noDBForm {
+				item.Object = o.Object
+			}
 
 			item.Metadata = &ves_io_schema.ObjectGetMetaType{}
 			item.Metadata.FromObjectMetaType(o.Metadata)
@@ -2665,7 +2668,7 @@ var APISwaggerJSON string = `{
             "description": "Various factors abour user activity are monitored and analysed to determine malicious users.\nThese settings allow tuning those factors used by the system to detect malicious users.",
             "title": "Malicious User Detection Setting",
             "x-displayname": "Malicious User Detection Setting",
-            "x-ves-displayorder": "1,4,7,12,10",
+            "x-ves-displayorder": "1,4,7,12,15,10",
             "x-ves-oneof-field-cooling_off_period_setting": "[\"cooling_off_period\"]",
             "x-ves-oneof-field-failed_login_activity_choice": "[\"exclude_failed_login_activity\",\"include_failed_login_activity\"]",
             "x-ves-oneof-field-forbidden_activity_choice": "[\"exclude_forbidden_activity\",\"include_forbidden_activity\"]",
@@ -2819,19 +2822,19 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.app_setting.NonexistentUrlAutomaticActivitySetting",
             "properties": {
                 "high": {
-                    "description": "Exclusive with [low medium]\n High sensitivity\n High : learnt threshold - 15 %",
+                    "description": "Exclusive with [low medium]\n Use auto-calculated threshold decreased by margin for more sensitive detection",
                     "title": "High",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "High sensitivity"
                 },
                 "low": {
-                    "description": "Exclusive with [high medium]\n Low sensitivity\n Low : learnt threshold + 15 %",
+                    "description": "Exclusive with [high medium]\n Use auto-calculated threshold with margin for less sensitive detection",
                     "title": "Low",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Low sensitivity"
                 },
                 "medium": {
-                    "description": "Exclusive with [high low]\n Medium sensitivity\n Medium : using learnt threshold derived from statistics per given app_type/tenant.",
+                    "description": "Exclusive with [high low]\n Use auto-calculated threshold learnt from statistics per given application",
                     "title": "Medium",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Medium sensitivity"

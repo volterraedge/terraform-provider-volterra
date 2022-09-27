@@ -1259,8 +1259,16 @@ func (v *ValidateAWSVPCIngressEgressGwType) SiteMeshGroupChoiceValidationRuleHan
 
 func (v *ValidateAWSVPCIngressEgressGwType) AzNodesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for az_nodes")
+	}
 	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_views.AWSVPCTwoInterfaceNodeType, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
 			if err := ves_io_schema_views.AWSVPCTwoInterfaceNodeTypeValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
@@ -1724,6 +1732,7 @@ var DefaultAWSVPCIngressEgressGwTypeValidator = func() *ValidateAWSVPCIngressEgr
 
 	vrhAzNodes := v.AzNodesValidationRuleHandler
 	rulesAzNodes := map[string]string{
+		"ves.io.schema.rules.message.required":   "true",
 		"ves.io.schema.rules.repeated.num_items": "1,3",
 	}
 	vFn, err = vrhAzNodes(rulesAzNodes)
@@ -1893,8 +1902,16 @@ type ValidateAWSVPCIngressGwType struct {
 
 func (v *ValidateAWSVPCIngressGwType) AzNodesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for az_nodes")
+	}
 	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_views.AWSVPCOneInterfaceNodeType, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
 			if err := ves_io_schema_views.AWSVPCOneInterfaceNodeTypeValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
@@ -3324,8 +3341,16 @@ func (v *ValidateAWSVPCVoltstackClusterType) AwsCertifiedHwValidationRuleHandler
 
 func (v *ValidateAWSVPCVoltstackClusterType) AzNodesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for az_nodes")
+	}
 	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_views.AWSVPCOneInterfaceNodeType, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
 			if err := ves_io_schema_views.AWSVPCOneInterfaceNodeTypeValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
@@ -3819,6 +3844,7 @@ var DefaultAWSVPCVoltstackClusterTypeValidator = func() *ValidateAWSVPCVoltstack
 
 	vrhAzNodes := v.AzNodesValidationRuleHandler
 	rulesAzNodes := map[string]string{
+		"ves.io.schema.rules.message.required":   "true",
 		"ves.io.schema.rules.repeated.num_items": "1,3",
 	}
 	vFn, err = vrhAzNodes(rulesAzNodes)
@@ -5202,8 +5228,16 @@ func (v *ValidateGetSpecType) AddressValidationRuleHandler(rules map[string]stri
 
 func (v *ValidateGetSpecType) VipParamsPerAzValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for vip_params_per_az")
+	}
 	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_site.PublishVIPParamsPerAz, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
 			if err := ves_io_schema_site.PublishVIPParamsPerAzValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
@@ -6428,8 +6462,16 @@ func (v *ValidateGlobalSpecType) AddressValidationRuleHandler(rules map[string]s
 
 func (v *ValidateGlobalSpecType) VipParamsPerAzValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for vip_params_per_az")
+	}
 	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_site.PublishVIPParamsPerAz, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
 			if err := ves_io_schema_site.PublishVIPParamsPerAzValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}

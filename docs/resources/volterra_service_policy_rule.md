@@ -21,19 +21,36 @@ resource "volterra_service_policy_rule" "example" {
   namespace = "staging"
   action    = ["action"]
 
-  // One of the arguments from this list "asn_matcher any_asn asn_list" must be set
+  // One of the arguments from this list "any_asn asn_list asn_matcher" must be set
   any_asn          = true
   challenge_action = ["challenge_action"]
 
-  // One of the arguments from this list "client_selector client_name_matcher any_client client_name ip_threat_category_list" must be set
-  client_name = "backend.production.customer.volterra.us"
+  // One of the arguments from this list "any_client client_name ip_threat_category_list client_selector client_name_matcher" must be set
+  any_client = true
 
   // One of the arguments from this list "any_ip ip_prefix_list ip_matcher" must be set
   any_ip = true
 
   waf_action {
-    // One of the arguments from this list "data_guard_control none waf_skip_processing waf_rule_control waf_inline_rule_control waf_in_monitoring_mode app_firewall_detection_control" must be set
-    none = true
+    // One of the arguments from this list "waf_in_monitoring_mode app_firewall_detection_control data_guard_control none waf_skip_processing waf_rule_control waf_inline_rule_control" must be set
+
+    app_firewall_detection_control {
+      exclude_attack_type_contexts {
+        exclude_attack_type = "ATTACK_TYPE_SQL_INJECTION"
+      }
+
+      exclude_bot_name_contexts {
+        bot_name = "Hydra"
+      }
+
+      exclude_signature_contexts {
+        signature_id = "10000001"
+      }
+
+      exclude_violation_contexts {
+        exclude_violation = "VIOL_MANDATORY_HEADER"
+      }
+    }
   }
 }
 
@@ -273,6 +290,8 @@ Rewrite HTML response action to insert HTML content such as Javascript <script> 
 `element_selector` - (Required) Element selector to insert into. (`String`).
 
 `insert_content` - (Optional) HTML content to insert. (`String`).
+
+`inserted_types` - (Optional) Inserted types of security configuration like Bot Defense, Client Side Defense. (`Bool`).
 
 `position` - (Optional) Position of HTML content to be inserted within HTML tag. (`String`).
 

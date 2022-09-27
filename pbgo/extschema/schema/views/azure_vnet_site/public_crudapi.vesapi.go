@@ -1595,7 +1595,10 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 		item.Disabled = o.GetMetadata().GetDisable()
 
 		if len(req.ReportFields) > 0 {
-			item.Object = o.Object
+			noDBForm, _ := flags.GetEnvGetRspNoDBForm()
+			if !noDBForm {
+				item.Object = o.Object
+			}
 
 			item.Metadata = &ves_io_schema.ObjectGetMetaType{}
 			item.Metadata.FromObjectMetaType(o.Metadata)
@@ -2169,8 +2172,21 @@ var APISwaggerJSON string = `{
             "description": "Hub VNet type",
             "title": "Azure Hub VNet Type",
             "x-displayname": "Hub VNet type",
+            "x-ves-oneof-field-express_route_choice": "[\"express_route_disabled\",\"express_route_enabled\"]",
             "x-ves-proto-message": "ves.io.schema.views.azure_vnet_site.AzureHubVnetType",
             "properties": {
+                "express_route_disabled": {
+                    "description": "Exclusive with [express_route_enabled]\n Express Route feature disabled",
+                    "title": "Diabled",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disabled"
+                },
+                "express_route_enabled": {
+                    "description": "Exclusive with [express_route_disabled]\n Express Route feature enabled",
+                    "title": "Enabled",
+                    "$ref": "#/definitions/azure_vnet_siteExpressRouteConfigType",
+                    "x-displayname": "Enabled"
+                },
                 "spoke_vnets": {
                     "type": "array",
                     "description": " Spoke VNet Peering\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 100\n  ves.io.schema.rules.repeated.unique: true\n",
@@ -2611,13 +2627,15 @@ var APISwaggerJSON string = `{
                 },
                 "az_nodes": {
                     "type": "array",
-                    "description": " Only Single AZ or Three AZ(s) nodes are supported currently.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.num_items: 1,3\n",
+                    "description": " Only Single AZ or Three AZ(s) nodes are supported currently.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.num_items: 1,3\n",
                     "title": "Nodes",
                     "items": {
                         "$ref": "#/definitions/viewsAzureVnetTwoInterfaceNodeType"
                     },
                     "x-displayname": "Ingress/Egress Gateway (two Interface) Nodes in AZ",
+                    "x-ves-required": "true",
                     "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
                         "ves.io.schema.rules.repeated.num_items": "1,3"
                     }
                 },
@@ -2785,13 +2803,15 @@ var APISwaggerJSON string = `{
             "properties": {
                 "az_nodes": {
                     "type": "array",
-                    "description": " Only Single AZ or Three AZ(s) nodes are supported currently.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.num_items: 1,3\n",
+                    "description": " Only Single AZ or Three AZ(s) nodes are supported currently.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.num_items: 1,3\n",
                     "title": "Nodes",
                     "items": {
                         "$ref": "#/definitions/viewsAzureVnetOneInterfaceNodeType"
                     },
                     "x-displayname": "Ingress Gateway (One Interface) Nodes in AZ",
+                    "x-ves-required": "true",
                     "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
                         "ves.io.schema.rules.repeated.num_items": "1,3"
                     }
                 },
@@ -2818,6 +2838,21 @@ var APISwaggerJSON string = `{
             "x-displayname": "Azure VNet Site Information Config",
             "x-ves-proto-message": "ves.io.schema.views.azure_vnet_site.AzureVnetSiteInfoType",
             "properties": {
+                "express_route_info": {
+                    "description": " Express Route Info",
+                    "title": "Express Route Info",
+                    "$ref": "#/definitions/azure_vnet_siteExpressRouteInfo",
+                    "x-displayname": "Express Route Info"
+                },
+                "node_info": {
+                    "type": "array",
+                    "description": " Azure Node Name",
+                    "title": "Azure Node Name",
+                    "items": {
+                        "$ref": "#/definitions/azure_vnet_siteNodeInstanceNameType"
+                    },
+                    "x-displayname": "Azure Node Name"
+                },
                 "private_ips": {
                     "type": "array",
                     "description": " Azure VM Private IPs used by the nodes\n\nExample: - \"10.0.0.1, 10.0.0.2, 10.0.0.3\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.items.string.ip: true\n  ves.io.schema.rules.repeated.num_items: 0,1,3\n  ves.io.schema.rules.repeated.unique: true\n",
@@ -3221,13 +3256,15 @@ var APISwaggerJSON string = `{
                 },
                 "az_nodes": {
                     "type": "array",
-                    "description": " Only Single AZ or Three AZ(s) nodes are supported currently.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.num_items: 1,3\n",
+                    "description": " Only Single AZ or Three AZ(s) nodes are supported currently.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.num_items: 1,3\n",
                     "title": "Nodes",
                     "items": {
                         "$ref": "#/definitions/viewsAzureVnetOneInterfaceNodeType"
                     },
                     "x-displayname": "App Stack Cluster (One Interface) Nodes in AZ",
+                    "x-ves-required": "true",
                     "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
                         "ves.io.schema.rules.repeated.num_items": "1,3"
                     }
                 },
@@ -3409,6 +3446,164 @@ var APISwaggerJSON string = `{
                     "title": "namespace",
                     "x-displayname": "Namespace",
                     "x-ves-example": "ns1"
+                }
+            }
+        },
+        "azure_vnet_siteExpressRouteConfigType": {
+            "type": "object",
+            "description": "Express Route Configuration",
+            "title": "Express Route Configuration",
+            "x-displayname": "Express Route Configuration",
+            "x-ves-oneof-field-sku_choice": "[\"sku_ergw1az\",\"sku_ergw2az\",\"sku_high_perf\",\"sku_standard\"]",
+            "x-ves-proto-message": "ves.io.schema.views.azure_vnet_site.ExpressRouteConfigType",
+            "properties": {
+                "connections": {
+                    "type": "array",
+                    "description": " List of connections\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 8\n",
+                    "title": "Connections",
+                    "maxItems": 8,
+                    "items": {
+                        "$ref": "#/definitions/azure_vnet_siteExpressRouteConnectionType"
+                    },
+                    "x-displayname": "Connections",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "8"
+                    }
+                },
+                "gateway_subnet": {
+                    "description": " Gateway subnet",
+                    "title": "Gateway Subnet",
+                    "$ref": "#/definitions/viewsAzureSubnetChoiceWithAutoType",
+                    "x-displayname": "Subnet for Gateway"
+                },
+                "route_server_subnet": {
+                    "description": " Route Server Subnet",
+                    "title": "Route Server Subnet",
+                    "$ref": "#/definitions/viewsAzureSubnetChoiceWithAutoType",
+                    "x-displayname": "Subnet for Route Server"
+                },
+                "sku_ergw1az": {
+                    "description": "Exclusive with [sku_ergw2az sku_high_perf sku_standard]\n ErGw1Az SKU (Standard + Zone protection)",
+                    "title": "ErGw1Az SKU",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "ErGw1Az SKU"
+                },
+                "sku_ergw2az": {
+                    "description": "Exclusive with [sku_ergw1az sku_high_perf sku_standard]\n ErGw2Az SKU (High Perf + Zone protection)",
+                    "title": "ErGw2Az SKU",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "ErGw2Az SKU"
+                },
+                "sku_high_perf": {
+                    "description": "Exclusive with [sku_ergw1az sku_ergw2az sku_standard]\n High Perf SKU",
+                    "title": "High Perf SKU",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "High Perf SKU"
+                },
+                "sku_standard": {
+                    "description": "Exclusive with [sku_ergw1az sku_ergw2az sku_high_perf]\n Standard SKU",
+                    "title": "Standard SKU",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Standard SKU"
+                }
+            }
+        },
+        "azure_vnet_siteExpressRouteConnectionType": {
+            "type": "object",
+            "description": "Express Route Connection Configuration",
+            "title": "Express Route Connection Configuration",
+            "x-displayname": "Express Route Connection Configuration",
+            "x-ves-displayorder": "3",
+            "x-ves-oneof-field-subscription_choice": "[\"other_subscription\",\"same_subscription\"]",
+            "x-ves-proto-message": "ves.io.schema.views.azure_vnet_site.ExpressRouteConnectionType",
+            "properties": {
+                "metadata": {
+                    "description": " Common attributes for the rule including name and description.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "metadata",
+                    "$ref": "#/definitions/schemaMessageMetaType",
+                    "x-displayname": "Metadata",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                },
+                "other_subscription": {
+                    "description": "Exclusive with [same_subscription]\n Circuit ID\n\nExample: - \"/subscriptions/81ab786c-56eb-4a4d-bb5f-f60329772466/resourceGroups/ExpressRouteResourceGroup/providers/Microsoft.Network/expressRouteCircuits/MyCircuit\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 512\n",
+                    "title": "Circuit ID",
+                    "$ref": "#/definitions/azure_vnet_siteExpressRouteOtherSubscriptionConnection",
+                    "maximum": 512,
+                    "x-displayname": "Circuit ID",
+                    "x-ves-example": "/subscriptions/81ab786c-56eb-4a4d-bb5f-f60329772466/resourceGroups/ExpressRouteResourceGroup/providers/Microsoft.Network/expressRouteCircuits/MyCircuit",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "512"
+                    }
+                },
+                "same_subscription": {
+                    "description": "Exclusive with [other_subscription]\n Same subscription",
+                    "title": "Same subscription",
+                    "$ref": "#/definitions/viewsAzureExpressRouteConnectionType",
+                    "x-displayname": "Same subscription"
+                },
+                "weight": {
+                    "type": "integer",
+                    "description": " Route weight\n\nExample: - \"100\"-",
+                    "title": "Route weight",
+                    "format": "int64",
+                    "x-displayname": "Route weight",
+                    "x-ves-example": "100"
+                }
+            }
+        },
+        "azure_vnet_siteExpressRouteInfo": {
+            "type": "object",
+            "description": "Express Route Info",
+            "title": "Express Route Info",
+            "x-displayname": "Express Route Info",
+            "x-ves-proto-message": "ves.io.schema.views.azure_vnet_site.ExpressRouteInfo",
+            "properties": {
+                "route_server_asn": {
+                    "type": "integer",
+                    "description": " Route Server ASN\n\nExample: - \"65441\"-",
+                    "title": "Route Server ASN",
+                    "format": "int64",
+                    "x-displayname": "Route Server ASN",
+                    "x-ves-example": "65441"
+                },
+                "route_server_ips": {
+                    "type": "array",
+                    "description": " Route Server IPs\n\nExample: - \"10.0.0.1\"-",
+                    "title": "Route Server IPs",
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-displayname": "Route Server IPs",
+                    "x-ves-example": "10.0.0.1"
+                }
+            }
+        },
+        "azure_vnet_siteExpressRouteOtherSubscriptionConnection": {
+            "type": "object",
+            "description": "Express Route Connection from other subscription",
+            "title": "Express Route Connection from other subscription",
+            "x-displayname": "Express Route Connection from other subscription ",
+            "x-ves-proto-message": "ves.io.schema.views.azure_vnet_site.ExpressRouteOtherSubscriptionConnection",
+            "properties": {
+                "authorized_key": {
+                    "description": " Use Custom Authorized Key",
+                    "title": "Authorized Key",
+                    "$ref": "#/definitions/schemaSecretType",
+                    "x-displayname": "Custom Authorized Key"
+                },
+                "circuit_id": {
+                    "type": "string",
+                    "description": " Circuit ID\n\nExample: - \"/subscriptions/81ab786c-56eb-4a4d-bb5f-f60329772466/resourceGroups/ExpressRouteResourceGroup/providers/Microsoft.Network/expressRouteCircuits/MyCircuit\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 512\n",
+                    "title": "Circuit ID",
+                    "maxLength": 512,
+                    "x-displayname": "Circuit ID",
+                    "x-ves-example": "/subscriptions/81ab786c-56eb-4a4d-bb5f-f60329772466/resourceGroups/ExpressRouteResourceGroup/providers/Microsoft.Network/expressRouteCircuits/MyCircuit",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "512"
+                    }
                 }
             }
         },
@@ -3614,6 +3809,43 @@ var APISwaggerJSON string = `{
                     "title": "uid",
                     "x-displayname": "UID",
                     "x-ves-example": "d27938ba-967e-40a7-9709-57b8627f9f75"
+                }
+            }
+        },
+        "azure_vnet_siteNodeInstanceNameType": {
+            "type": "object",
+            "description": "Node Instance Name",
+            "title": "Node Instance Name",
+            "x-displayname": "Node Instance Name",
+            "x-ves-proto-message": "ves.io.schema.views.azure_vnet_site.NodeInstanceNameType",
+            "properties": {
+                "node_id": {
+                    "type": "string",
+                    "description": " Node ID Information\n\nExample: - \"ves-node-id-xxxxxx\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 64\n  ves.io.schema.rules.string.min_len: 1\n",
+                    "title": "Node ID",
+                    "minLength": 1,
+                    "maxLength": 64,
+                    "x-displayname": "Node ID",
+                    "x-ves-example": "ves-node-id-xxxxxx",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.max_len": "64",
+                        "ves.io.schema.rules.string.min_len": "1"
+                    }
+                },
+                "node_instance_name": {
+                    "type": "string",
+                    "description": " Node Instance Name used by dataplane\n\nExample: - \"ip-1-2-3-4-site1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 64\n  ves.io.schema.rules.string.min_len: 1\n",
+                    "title": "Node Instance Name",
+                    "minLength": 1,
+                    "maxLength": 64,
+                    "x-displayname": "Node Instance Name",
+                    "x-ves-example": "ip-1-2-3-4-site1",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "64",
+                        "ves.io.schema.rules.string.min_len": "1"
+                    }
                 }
             }
         },
@@ -3958,40 +4190,68 @@ var APISwaggerJSON string = `{
         },
         "schemaBlindfoldSecretInfoType": {
             "type": "object",
-            "description": "x-displayName: \"Blindfold Secret\"\nBlindfoldSecretInfoType specifies information about the Secret managed by Volterra Secret Management",
+            "description": "BlindfoldSecretInfoType specifies information about the Secret managed by Volterra Secret Management",
             "title": "BlindfoldSecretInfoType",
+            "x-displayname": "Blindfold Secret",
+            "x-ves-displayorder": "3,1,2",
+            "x-ves-proto-message": "ves.io.schema.BlindfoldSecretInfoType",
             "properties": {
                 "decryption_provider": {
                     "type": "string",
-                    "description": "x-displayName: \"Decryption Provider\"\nx-example: \"value\"\nName of the Secret Management Access object that contains information about the backend Secret Management service.",
-                    "title": "Decryption Provider"
+                    "description": " Name of the Secret Management Access object that contains information about the backend Secret Management service.\n\nExample: - \"value\"-",
+                    "title": "Decryption Provider",
+                    "x-displayname": "Decryption Provider",
+                    "x-ves-example": "value"
                 },
                 "location": {
                     "type": "string",
-                    "description": "x-displayName: \"Location\"\nx-required\nx-example: \"string:///U2VjcmV0SW5mb3JtYXRpb24=\"\nLocation is the uri_ref. It could be in url format for string:///\nOr it could be a path if the store provider is an http/https location",
-                    "title": "Location"
+                    "description": " Location is the uri_ref. It could be in url format for string:///\n Or it could be a path if the store provider is an http/https location\n\nExample: - \"string:///U2VjcmV0SW5mb3JtYXRpb24=\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.uri_ref: true\n",
+                    "title": "Location",
+                    "x-displayname": "Location",
+                    "x-ves-example": "string:///U2VjcmV0SW5mb3JtYXRpb24=",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.uri_ref": "true"
+                    }
                 },
                 "store_provider": {
                     "type": "string",
-                    "description": "x-displayName: \"Store Provider\"\nx-example: \"value\"\nName of the Secret Management Access object that contains information about the store to get encrypted bytes\nThis field needs to be provided only if the url scheme is not string:///",
-                    "title": "Store Provider"
+                    "description": " Name of the Secret Management Access object that contains information about the store to get encrypted bytes\n This field needs to be provided only if the url scheme is not string:///\n\nExample: - \"value\"-",
+                    "title": "Store Provider",
+                    "x-displayname": "Store Provider",
+                    "x-ves-example": "value"
                 }
             }
         },
         "schemaClearSecretInfoType": {
             "type": "object",
-            "description": "x-displayName: \"In-Clear Secret\"\nClearSecretInfoType specifies information about the Secret that is not encrypted.",
+            "description": "ClearSecretInfoType specifies information about the Secret that is not encrypted.",
             "title": "ClearSecretInfoType",
+            "x-displayname": "In-Clear Secret",
+            "x-ves-displayorder": "2,1",
+            "x-ves-proto-message": "ves.io.schema.ClearSecretInfoType",
             "properties": {
                 "provider": {
                     "type": "string",
-                    "description": "x-displayName: \"Provider\"\nx-example: \"box-provider\"\nName of the Secret Management Access object that contains information about the store to get encrypted bytes\nThis field needs to be provided only if the url scheme is not string:///",
-                    "title": "Provider"
+                    "description": " Name of the Secret Management Access object that contains information about the store to get encrypted bytes\n This field needs to be provided only if the url scheme is not string:///\n\nExample: - \"box-provider\"-",
+                    "title": "Provider",
+                    "x-displayname": "Provider",
+                    "x-ves-example": "box-provider"
                 },
                 "url": {
                     "type": "string",
-                    "description": "x-displayName: \"URL\"\nx-required\nx-example: \"string:///U2VjcmV0SW5mb3JtYXRpb24=\"\nURL of the secret. Currently supported URL schemes is string:///.\nFor string:/// scheme, Secret needs to be encoded Base64 format.\nWhen asked for this secret, caller will get Secret bytes after Base64 decoding.",
-                    "title": "URL"
+                    "description": " URL of the secret. Currently supported URL schemes is string:///.\n For string:/// scheme, Secret needs to be encoded Base64 format.\n When asked for this secret, caller will get Secret bytes after Base64 decoding.\n\nExample: - \"string:///U2VjcmV0SW5mb3JtYXRpb24=\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_bytes: 131072\n  ves.io.schema.rules.string.uri_ref: true\n",
+                    "title": "URL",
+                    "maxLength": 131072,
+                    "x-displayname": "URL",
+                    "x-ves-example": "string:///U2VjcmV0SW5mb3JtYXRpb24=",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.max_bytes": "131072",
+                        "ves.io.schema.rules.string.uri_ref": "true"
+                    }
                 }
             }
         },
@@ -4373,6 +4633,40 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "schemaMessageMetaType": {
+            "type": "object",
+            "description": "MessageMetaType is metadata (common attributes) of a message that only certain messages\nhave. This information is propagated to the metadata of a child object that gets created\nfrom the containing message during view processing.\nThe information in this type can be specified by user during create and replace APIs.",
+            "title": "MessageMetaType",
+            "x-displayname": "Message Metadata",
+            "x-ves-proto-message": "ves.io.schema.MessageMetaType",
+            "properties": {
+                "description": {
+                    "type": "string",
+                    "description": " Human readable description.\n\nExample: - \"Virtual Host for acmecorp website\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 256\n",
+                    "title": "description",
+                    "maxLength": 256,
+                    "x-displayname": "Description",
+                    "x-ves-example": "Virtual Host for acmecorp website",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "256"
+                    }
+                },
+                "name": {
+                    "type": "string",
+                    "description": " This is the name of the message.\n The value of name has to follow DNS-1035 format.\n\nExample: - \"acmecorp-web\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.min_len: 1\n  ves.io.schema.rules.string.ves_object_name: true\n",
+                    "title": "name",
+                    "minLength": 1,
+                    "x-displayname": "Name",
+                    "x-ves-example": "acmecorp-web",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.min_len": "1",
+                        "ves.io.schema.rules.string.ves_object_name": "true"
+                    }
+                }
+            }
+        },
         "schemaNextHopType": {
             "type": "object",
             "description": "Identifies the next-hop for a route",
@@ -4697,38 +4991,23 @@ var APISwaggerJSON string = `{
         },
         "schemaSecretType": {
             "type": "object",
-            "description": "x-displayName: \"Secret\"\nSecretType is used in an object to indicate a sensitive/confidential field",
+            "description": "SecretType is used in an object to indicate a sensitive/confidential field",
             "title": "SecretType",
+            "x-displayname": "Secret",
+            "x-ves-oneof-field-secret_info_oneof": "[\"blindfold_secret_info\",\"clear_secret_info\"]",
+            "x-ves-proto-message": "ves.io.schema.SecretType",
             "properties": {
                 "blindfold_secret_info": {
-                    "description": "x-displayName: \"Blindfold Secret\"\nBlindfold Secret is used for the secrets managed by Volterra Secret Management Service",
+                    "description": "Exclusive with [clear_secret_info]\n Blindfold Secret is used for the secrets managed by Volterra Secret Management Service",
                     "title": "Blindfold Secret",
-                    "$ref": "#/definitions/schemaBlindfoldSecretInfoType"
-                },
-                "blindfold_secret_info_internal": {
-                    "description": "x-displayName: \"Blindfold Secret Internal\"\nBlindfold Secret Internal is used for the putting re-encrypted blindfold secret",
-                    "title": "Blindfold Secret Internal",
-                    "$ref": "#/definitions/schemaBlindfoldSecretInfoType"
+                    "$ref": "#/definitions/schemaBlindfoldSecretInfoType",
+                    "x-displayname": "Blindfold Secret"
                 },
                 "clear_secret_info": {
-                    "description": "x-displayName: \"Clear Secret\"\nClear Secret is used for the secrets that are not encrypted",
+                    "description": "Exclusive with [blindfold_secret_info]\n Clear Secret is used for the secrets that are not encrypted",
                     "title": "Clear Secret",
-                    "$ref": "#/definitions/schemaClearSecretInfoType"
-                },
-                "secret_encoding_type": {
-                    "description": "x-displayName: \"Secret Encoding\"\nThis field defines the encoding type of the secret BEFORE the secret is given to any Secret Management System.\nthis will be set if the secret is encoded and not plaintext BEFORE it is encrypted and put it in SecretType.\nNote - Do NOT set this field for Clear Secret with string:/// scheme.\ne.g. if a secret is base64 encoded and then put into vault.",
-                    "title": "secret_encoding_type",
-                    "$ref": "#/definitions/schemaSecretEncodingType"
-                },
-                "vault_secret_info": {
-                    "description": "x-displayName: \"Vault Secret\"\nVault Secret is used for the secrets managed by Hashicorp Vault",
-                    "title": "Vault Secret",
-                    "$ref": "#/definitions/schemaVaultSecretInfoType"
-                },
-                "wingman_secret_info": {
-                    "description": "x-displayName: \"Bootstrap Secret\"\nSecret is given as bootstrap secret in Volterra Security Sidecar",
-                    "title": "Wingman Secret",
-                    "$ref": "#/definitions/schemaWingmanSecretInfoType"
+                    "$ref": "#/definitions/schemaClearSecretInfoType",
+                    "x-displayname": "Clear Secret"
                 }
             }
         },
@@ -5341,18 +5620,23 @@ var APISwaggerJSON string = `{
         },
         "schemaviewsLocalControlPlaneType": {
             "type": "object",
-            "description": "x-displayName: \"Site Local Control Plane\"\nSite Local Control Plane",
+            "description": "Site Local Control Plane",
             "title": "LocalControlPlaneType",
+            "x-displayname": "Site Local Control Plane",
+            "x-ves-oneof-field-local_control_plane_choice": "[\"default_local_control_plane\",\"no_local_control_plane\"]",
+            "x-ves-proto-message": "ves.io.schema.views.LocalControlPlaneType",
             "properties": {
                 "default_local_control_plane": {
-                    "description": "x-displayName: \"Enable Site Local Control Plane\"\nEnable Site Local Control Plane",
+                    "description": "Exclusive with [no_local_control_plane]\n Enable Site Local Control Plane",
                     "title": "Disable Site Local Control Plane",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Enable Site Local Control Plane"
                 },
                 "no_local_control_plane": {
-                    "description": "x-displayName: \"Disable Site Local Control Plane\"\nDisable Site Local Control Plane",
+                    "description": "Exclusive with [default_local_control_plane]\n Disable Site Local Control Plane",
                     "title": "Disable Site Local Control Plane",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disable Site Local Control Plane"
                 }
             }
         },
@@ -5521,6 +5805,71 @@ var APISwaggerJSON string = `{
             "x-displayname": "Site State",
             "x-ves-proto-enum": "ves.io.schema.site.SiteState"
         },
+        "viewsAzureExpressRouteConnectionType": {
+            "type": "object",
+            "description": "Azure Express Route Connection Type",
+            "title": "Azure Express Route Connection Type",
+            "x-displayname": "Azure Express Route Connection Type",
+            "x-ves-proto-message": "ves.io.schema.views.AzureExpressRouteConnectionType",
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "description": " Name of connection\n\nExample: - \"MyConnection\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 64\n  ves.io.schema.rules.string.min_len: 1\n",
+                    "title": "Name",
+                    "minLength": 1,
+                    "maxLength": 64,
+                    "x-displayname": "Name",
+                    "x-ves-example": "MyConnection",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.max_len": "64",
+                        "ves.io.schema.rules.string.min_len": "1"
+                    }
+                },
+                "resource_group": {
+                    "type": "string",
+                    "description": " Resource group of connection\n\nExample: - \"MyResourceGroup\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 64\n  ves.io.schema.rules.string.min_len: 1\n",
+                    "title": "Resource Group",
+                    "minLength": 1,
+                    "maxLength": 64,
+                    "x-displayname": "Resource Group",
+                    "x-ves-example": "MyResourceGroup",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.max_len": "64",
+                        "ves.io.schema.rules.string.min_len": "1"
+                    }
+                }
+            }
+        },
+        "viewsAzureSpecialSubnetType": {
+            "type": "object",
+            "description": "Parameters for Azure special subnet which name is reserved. (i.e GatewaySubnet or RouteServerSubnet)",
+            "title": "Azure Cloud Special Subnet",
+            "x-displayname": "Azure Cloud Special Subnet",
+            "x-ves-oneof-field-resource_group_choice": "[\"subnet_resource_grp\",\"vnet_resource_group\"]",
+            "x-ves-proto-message": "ves.io.schema.views.AzureSpecialSubnetType",
+            "properties": {
+                "subnet_resource_grp": {
+                    "type": "string",
+                    "description": "Exclusive with [vnet_resource_group]\n Specify name of Resource Group\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 64\n",
+                    "title": "subnet_resource_grp",
+                    "maxLength": 64,
+                    "x-displayname": "Resource Group Name",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "64"
+                    }
+                },
+                "vnet_resource_group": {
+                    "description": "Exclusive with [subnet_resource_grp]\n Use the same Resource Group as the Vnet",
+                    "title": "vnet_resource_group",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Vnet Resource Group"
+                }
+            }
+        },
         "viewsAzureSubnetChoiceType": {
             "type": "object",
             "description": "Parameters for Azure subnet",
@@ -5546,6 +5895,34 @@ var APISwaggerJSON string = `{
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true"
                     }
+                }
+            }
+        },
+        "viewsAzureSubnetChoiceWithAutoType": {
+            "type": "object",
+            "description": "Parameters for Azure subnet",
+            "title": "Azure Cloud Subnet",
+            "x-displayname": "Azure Subnet",
+            "x-ves-oneof-field-choice": "[\"auto\",\"subnet\",\"subnet_param\"]",
+            "x-ves-proto-message": "ves.io.schema.views.AzureSubnetChoiceWithAutoType",
+            "properties": {
+                "auto": {
+                    "description": "Exclusive with [subnet subnet_param]\n Parameters for creating new subnet automatically",
+                    "title": "Auto Subnet",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Auto Subnet"
+                },
+                "subnet": {
+                    "description": "Exclusive with [auto subnet_param]\n Information about existing subnet.",
+                    "title": "Existing Subnet",
+                    "$ref": "#/definitions/viewsAzureSpecialSubnetType",
+                    "x-displayname": "Existing Subnet"
+                },
+                "subnet_param": {
+                    "description": "Exclusive with [auto subnet]\n Parameters for creating new subnet.",
+                    "title": "New Subnet",
+                    "$ref": "#/definitions/viewsCloudSubnetParamType",
+                    "x-displayname": "New Subnet"
                 }
             }
         },
@@ -6290,6 +6667,11 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.string.min_len": "1"
                     }
                 },
+                "site_local_control_plane": {
+                    "description": " Enable/Disable site local control plane",
+                    "$ref": "#/definitions/schemaviewsLocalControlPlaneType",
+                    "x-displayname": "Site Local Control Plane"
+                },
                 "ssh_key": {
                     "type": "string",
                     "description": " Public SSH key for accessing the site.\n\nExample: - \"ssh-rsa AAAAB...\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 8192\n",
@@ -6496,6 +6878,11 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.string.max_len": "64",
                         "ves.io.schema.rules.string.min_len": "1"
                     }
+                },
+                "site_local_control_plane": {
+                    "description": " Enable/Disable site local control plane",
+                    "$ref": "#/definitions/schemaviewsLocalControlPlaneType",
+                    "x-displayname": "Site Local Control Plane"
                 },
                 "site_state": {
                     "description": "The operational phase of the site state machine.",
@@ -6729,6 +7116,12 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.string.min_len": "1"
                     }
                 },
+                "site_local_control_plane": {
+                    "description": " Enable/Disable site local control plane",
+                    "title": "Site Local Control Plane",
+                    "$ref": "#/definitions/schemaviewsLocalControlPlaneType",
+                    "x-displayname": "Site Local Control Plane"
+                },
                 "ssh_key": {
                     "type": "string",
                     "description": " Public SSH key for accessing the site.\n\nExample: - \"ssh-rsa AAAAB...\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 8192\n",
@@ -6879,6 +7272,11 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.uint32.gte": "0",
                         "ves.io.schema.rules.uint32.lte": "21"
                     }
+                },
+                "site_local_control_plane": {
+                    "description": " Enable/Disable site local control plane",
+                    "$ref": "#/definitions/schemaviewsLocalControlPlaneType",
+                    "x-displayname": "Site Local Control Plane"
                 },
                 "total_nodes": {
                     "type": "integer",

@@ -1595,7 +1595,10 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 		item.Disabled = o.GetMetadata().GetDisable()
 
 		if len(req.ReportFields) > 0 {
-			item.Object = o.Object
+			noDBForm, _ := flags.GetEnvGetRspNoDBForm()
+			if !noDBForm {
+				item.Object = o.Object
+			}
 
 			item.Metadata = &ves_io_schema.ObjectGetMetaType{}
 			item.Metadata.FromObjectMetaType(o.Metadata)
@@ -2873,6 +2876,29 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "schemaHeaderTransformationType": {
+            "type": "object",
+            "description": "Header Transformation options for HTTP request/response headers",
+            "title": "HeaderTransformationType",
+            "x-displayname": "Header Transformation",
+            "x-ves-displayorder": "1",
+            "x-ves-oneof-field-header_transformation_choice": "[\"default_header_transformation\",\"proper_case_header_transformation\"]",
+            "x-ves-proto-message": "ves.io.schema.HeaderTransformationType",
+            "properties": {
+                "default_header_transformation": {
+                    "description": "Exclusive with [proper_case_header_transformation]\n Normalize the headers to lower case",
+                    "title": "Default header transformation",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Default"
+                },
+                "proper_case_header_transformation": {
+                    "description": "Exclusive with [default_header_transformation]\n Normalize the headers to proper case words. The fist character and any character\n following a special character will be capitalized if it’s an alpha character.\n For example, “content-type” becomes “Content-Type”, and “foo$b#$are” becomes “Foo$B#$Are”",
+                    "title": "Proper case header transformation",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Proper Case"
+                }
+            }
+        },
         "schemaInitializerType": {
             "type": "object",
             "description": "Initializer is information about an initializer that has not yet completed.",
@@ -4114,7 +4140,7 @@ var APISwaggerJSON string = `{
             "description": "Creates virtual host in a given namespace.",
             "title": "Create virtual host",
             "x-displayname": "Create Virtual Host",
-            "x-ves-displayorder": "15,2,3,5,9,18,19,38,6,17,7,8,12,13,20,28,21,22,33,23,30,35,26,27,25,32,34,76",
+            "x-ves-displayorder": "15,2,3,5,9,18,19,38,6,17,7,8,12,13,20,28,21,22,33,23,30,35,26,27,25,32,34,76,79",
             "x-ves-oneof-field-authentication_choice": "[\"authentication\",\"no_authentication\"]",
             "x-ves-oneof-field-challenge_type": "[\"captcha_challenge\",\"js_challenge\",\"no_challenge\"]",
             "x-ves-oneof-field-default_lb_choice": "[\"default_loadbalancer\",\"non_default_loadbalancer\"]",
@@ -4191,9 +4217,9 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Default value for Server header"
                 },
                 "default_loadbalancer": {
-                    "description": "Exclusive with [non_default_loadbalancer]\n\n Default loadbalancer for Non SNI clients",
+                    "description": "Exclusive with [non_default_loadbalancer]\n",
                     "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "Default loadbalancer"
+                    "x-displayname": "Yes"
                 },
                 "disable_default_error_pages": {
                     "type": "boolean",
@@ -4239,6 +4265,11 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Enable path normalization"
                 },
+                "header_transformation_type": {
+                    "description": " Header transformation options for response headers to the client",
+                    "$ref": "#/definitions/schemaHeaderTransformationType",
+                    "x-displayname": "Header Transformation Configuration"
+                },
                 "idle_timeout": {
                     "type": "integer",
                     "description": " Idle timeout is the amount of time that the loadbalancer will allow a stream to exist with\n no upstream or downstream activity.\n\n Idle timeout and Proxy Type:\n\n HTTP_PROXY, HTTPS_PROXY:\n Idle timer is started when the first byte is received on the connection.\n Each time an encode/decode event for headers or data is processed for the stream,\n the timer will be reset.\n If the timeout fires, the stream is terminated with a 408 (Request Timeout) error code if\n no upstream response header has been received, otherwise a stream reset occurs.\n The default idle timeout is 30 seconds\n\n TCP PROXY, TCP_PROXY_WITH_SNI, SMA_PROXY:\n The idle timeout is defined as the period in which there are no bytes sent or received on\n either the upstream or downstream connection.\n The default idle timeout is 1 hour.\n\n UDP PROXY:\n The idle timeout for sessions. Idle timeout is defined as the period in which there are no\n datagrams sent or received on the session.\n The default if not specified is 1 minute.\n\nExample: - \"2000\"-",
@@ -4272,9 +4303,9 @@ var APISwaggerJSON string = `{
                     "x-displayname": "No Challenge"
                 },
                 "non_default_loadbalancer": {
-                    "description": "Exclusive with [default_loadbalancer]\n\n Do not use as default loadbalancer for Non SNI clients",
+                    "description": "Exclusive with [default_loadbalancer]\n",
                     "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "Not default loadbalancer"
+                    "x-displayname": "No"
                 },
                 "pass_through": {
                     "description": "Exclusive with [append_server_name default_header server_name]\n Passes existing Server Header as is. If server header is absent, nothing is\n appended.",
@@ -4419,7 +4450,7 @@ var APISwaggerJSON string = `{
             "description": "Get virtual host from a given namespace.",
             "title": "Get virtual host",
             "x-displayname": "Get Virtual Host",
-            "x-ves-displayorder": "10,15,2,3,5,9,18,19,38,6,17,7,8,12,13,20,28,21,22,33,23,30,35,26,27,25,32,34,76",
+            "x-ves-displayorder": "10,15,2,3,5,9,18,19,38,6,17,7,8,12,13,20,28,21,22,33,23,30,35,26,27,25,32,34,76,79",
             "x-ves-oneof-field-authentication_choice": "[\"authentication\",\"no_authentication\"]",
             "x-ves-oneof-field-challenge_type": "[\"captcha_challenge\",\"js_challenge\",\"no_challenge\"]",
             "x-ves-oneof-field-default_lb_choice": "[\"default_loadbalancer\",\"non_default_loadbalancer\"]",
@@ -4506,9 +4537,9 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Default value for Server header"
                 },
                 "default_loadbalancer": {
-                    "description": "Exclusive with [non_default_loadbalancer]\n\n Default loadbalancer for Non SNI clients",
+                    "description": "Exclusive with [non_default_loadbalancer]\n",
                     "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "Default loadbalancer"
+                    "x-displayname": "Yes"
                 },
                 "disable_default_error_pages": {
                     "type": "boolean",
@@ -4562,6 +4593,11 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Enable path normalization"
                 },
+                "header_transformation_type": {
+                    "description": " Header transformation options for response headers to the client",
+                    "$ref": "#/definitions/schemaHeaderTransformationType",
+                    "x-displayname": "Header Transformation Configuration"
+                },
                 "host_name": {
                     "type": "string",
                     "description": " Internally generated host name to be used for the virtual host\n\nExample: - \"ves-io-cf8684b9-a18f-4843-a24f-1f9ee8ea2776.ac.vh.ves.io\"-",
@@ -4601,9 +4637,9 @@ var APISwaggerJSON string = `{
                     "x-displayname": "No Challenge"
                 },
                 "non_default_loadbalancer": {
-                    "description": "Exclusive with [default_loadbalancer]\n\n Do not use as default loadbalancer for Non SNI clients",
+                    "description": "Exclusive with [default_loadbalancer]\n",
                     "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "Not default loadbalancer"
+                    "x-displayname": "No"
                 },
                 "pass_through": {
                     "description": "Exclusive with [append_server_name default_header server_name]\n Passes existing Server Header as is. If server header is absent, nothing is\n appended.",
@@ -4871,10 +4907,10 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Default value for Server header"
                 },
                 "default_loadbalancer": {
-                    "description": "Exclusive with [non_default_loadbalancer]\n\n Default loadbalancer for Non SNI clients",
-                    "title": "Default loadbalancer",
+                    "description": "Exclusive with [non_default_loadbalancer]\n",
+                    "title": "Default load balancer",
                     "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "Default loadbalancer"
+                    "x-displayname": "Yes"
                 },
                 "disable_default_error_pages": {
                     "type": "boolean",
@@ -4967,6 +5003,12 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/virtual_hostClientIPHeaders",
                     "x-displayname": "Enable"
                 },
+                "header_transformation_type": {
+                    "description": " Header transformation options for response headers to the client",
+                    "title": "Header transformation",
+                    "$ref": "#/definitions/schemaHeaderTransformationType",
+                    "x-displayname": "Header Transformation Configuration"
+                },
                 "host_name": {
                     "type": "string",
                     "description": " Internally generated host name to be used for the virtual host\n\nExample: - \"ves-io-cf8684b9-a18f-4843-a24f-1f9ee8ea2776.ac.vh.ves.io\"-",
@@ -5027,10 +5069,10 @@ var APISwaggerJSON string = `{
                     "x-displayname": "No Challenge"
                 },
                 "non_default_loadbalancer": {
-                    "description": "Exclusive with [default_loadbalancer]\n\n Do not use as default loadbalancer for Non SNI clients",
-                    "title": "Not a default loadbalancer",
+                    "description": "Exclusive with [default_loadbalancer]\n",
+                    "title": "Not a default load balancer",
                     "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "Not default loadbalancer"
+                    "x-displayname": "No"
                 },
                 "pass_through": {
                     "description": "Exclusive with [append_server_name default_header server_name]\n Passes existing Server Header as is. If server header is absent, nothing is\n appended.",
@@ -5256,7 +5298,7 @@ var APISwaggerJSON string = `{
             "description": "Replace a given virtual host in a given namespace.",
             "title": "Replace virtual host",
             "x-displayname": "Replace Virtual Host",
-            "x-ves-displayorder": "15,2,3,5,9,18,19,38,6,17,7,8,12,13,20,28,21,22,33,23,30,35,26,27,25,32,34,76",
+            "x-ves-displayorder": "15,2,3,5,9,18,19,38,6,17,7,8,12,13,20,28,21,22,33,23,30,35,26,27,25,32,34,76,79",
             "x-ves-oneof-field-authentication_choice": "[\"authentication\",\"no_authentication\"]",
             "x-ves-oneof-field-challenge_type": "[\"captcha_challenge\",\"js_challenge\",\"no_challenge\"]",
             "x-ves-oneof-field-default_lb_choice": "[\"default_loadbalancer\",\"non_default_loadbalancer\"]",
@@ -5333,9 +5375,9 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Default value for Server header"
                 },
                 "default_loadbalancer": {
-                    "description": "Exclusive with [non_default_loadbalancer]\n\n Default loadbalancer for Non SNI clients",
+                    "description": "Exclusive with [non_default_loadbalancer]\n",
                     "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "Default loadbalancer"
+                    "x-displayname": "Yes"
                 },
                 "disable_default_error_pages": {
                     "type": "boolean",
@@ -5381,6 +5423,11 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Enable path normalization"
                 },
+                "header_transformation_type": {
+                    "description": " Header transformation options for response headers to the client",
+                    "$ref": "#/definitions/schemaHeaderTransformationType",
+                    "x-displayname": "Header Transformation Configuration"
+                },
                 "idle_timeout": {
                     "type": "integer",
                     "description": " Idle timeout is the amount of time that the loadbalancer will allow a stream to exist with\n no upstream or downstream activity.\n\n Idle timeout and Proxy Type:\n\n HTTP_PROXY, HTTPS_PROXY:\n Idle timer is started when the first byte is received on the connection.\n Each time an encode/decode event for headers or data is processed for the stream,\n the timer will be reset.\n If the timeout fires, the stream is terminated with a 408 (Request Timeout) error code if\n no upstream response header has been received, otherwise a stream reset occurs.\n The default idle timeout is 30 seconds\n\n TCP PROXY, TCP_PROXY_WITH_SNI, SMA_PROXY:\n The idle timeout is defined as the period in which there are no bytes sent or received on\n either the upstream or downstream connection.\n The default idle timeout is 1 hour.\n\n UDP PROXY:\n The idle timeout for sessions. Idle timeout is defined as the period in which there are no\n datagrams sent or received on the session.\n The default if not specified is 1 minute.\n\nExample: - \"2000\"-",
@@ -5414,9 +5461,9 @@ var APISwaggerJSON string = `{
                     "x-displayname": "No Challenge"
                 },
                 "non_default_loadbalancer": {
-                    "description": "Exclusive with [default_loadbalancer]\n\n Do not use as default loadbalancer for Non SNI clients",
+                    "description": "Exclusive with [default_loadbalancer]\n",
                     "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "Not default loadbalancer"
+                    "x-displayname": "No"
                 },
                 "pass_through": {
                     "description": "Exclusive with [append_server_name default_header server_name]\n Passes existing Server Header as is. If server header is absent, nothing is\n appended.",

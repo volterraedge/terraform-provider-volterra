@@ -63,43 +63,16 @@ resource "volterra_route" "example" {
       name   = "value"
 
       // One of the arguments from this list "value secret_value" must be set
-
-      secret_value {
-        blindfold_secret_info_internal {
-          decryption_provider = "value"
-          location            = "string:///U2VjcmV0SW5mb3JtYXRpb24="
-          store_provider      = "value"
-        }
-
-        secret_encoding_type = "secret_encoding_type"
-
-        // One of the arguments from this list "blindfold_secret_info vault_secret_info clear_secret_info wingman_secret_info" must be set
-
-        vault_secret_info {
-          key             = "key_pem"
-          location        = "v1/data/vhost_key"
-          provider        = "vault-vh-provider"
-          secret_encoding = "secret_encoding"
-          version         = "1"
-        }
-      }
+      value = "value"
     }
 
     response_headers_to_remove = ["host"]
 
-    // One of the arguments from this list "route_redirect route_direct_response route_destination" must be set
+    // One of the arguments from this list "route_destination route_redirect route_direct_response" must be set
 
-    route_redirect {
-      host_redirect  = "one.ves.io"
-      proto_redirect = "https"
-
-      // One of the arguments from this list "remove_all_params strip_query_params all_params retain_all_params" must be set
-      retain_all_params = true
-
-      // One of the arguments from this list "prefix_rewrite path_redirect" must be set
-      path_redirect = "/api/register"
-
-      response_code = "303"
+    route_direct_response {
+      response_body = "OK"
+      response_code = "200"
     }
     service_policy {
       disable = true
@@ -328,7 +301,7 @@ tenant - (Optional) then tenant will hold the referred object's(e.g. route's) te
 
 ### Remove All Params
 
-Remove all query parameters.
+x-displayName: "Remove All Parameters".
 
 ### Request Headers To Add
 
@@ -356,7 +329,7 @@ enclosing VirtualHost object level.
 
 ### Retain All Params
 
-Retain all query parameters.
+x-displayName: "Retain All Parameters".
 
 ### Retract Cluster
 
@@ -432,9 +405,11 @@ Send redirect response.
 
 `all_params` - (Optional) be removed. Default value is false, which means query portion of the URL will NOT be removed (`Bool`).
 
-`remove_all_params` - (Optional) Remove all query parameters (bool).
+`remove_all_params` - (Optional) x-displayName: "Remove All Parameters" (bool).
 
-`retain_all_params` - (Optional) Retain all query parameters (bool).
+`replace_params` - (Optional) x-displayName: "Replace All Parameters" (`String`).
+
+`retain_all_params` - (Optional) x-displayName: "Retain All Parameters" (bool).
 
 `strip_query_params` - (Optional) Specifies the list of query params to be removed. Not supported. See [Strip Query Params ](#strip-query-params) below for details.
 
@@ -442,7 +417,7 @@ Send redirect response.
 
 `prefix_rewrite` - (Optional) This option allows redirect URLs be dynamically created based on the request (`String`).
 
-`response_code` - (Optional) code is MOVED_PERMANENTLY (301). (`Int`).
+`response_code` - (Optional) The HTTP status code to use in the redirect response. (`Int`).
 
 ### Routes
 

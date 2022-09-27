@@ -1570,7 +1570,10 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 		item.Disabled = o.GetMetadata().GetDisable()
 
 		if len(req.ReportFields) > 0 {
-			item.Object = o.Object
+			noDBForm, _ := flags.GetEnvGetRspNoDBForm()
+			if !noDBForm {
+				item.Object = o.Object
+			}
 
 			item.Metadata = &ves_io_schema.ObjectGetMetaType{}
 			item.Metadata.FromObjectMetaType(o.Metadata)
@@ -2732,6 +2735,12 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/origin_poolOriginPoolSubsets",
                     "x-displayname": "Enable Subset Load Balancing"
                 },
+                "header_transformation_type": {
+                    "description": " Header transformation options for upstream request headers",
+                    "title": "Header transformation",
+                    "$ref": "#/definitions/schemaHeaderTransformationType",
+                    "x-displayname": "Header Transformation Configuration"
+                },
                 "http2_options": {
                     "description": " Http2 Protocol options for upstream connections",
                     "title": "http2_options",
@@ -3549,6 +3558,29 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.repeated.min_items": "1",
                         "ves.io.schema.rules.repeated.unique": "true"
                     }
+                }
+            }
+        },
+        "schemaHeaderTransformationType": {
+            "type": "object",
+            "description": "Header Transformation options for HTTP request/response headers",
+            "title": "HeaderTransformationType",
+            "x-displayname": "Header Transformation",
+            "x-ves-displayorder": "1",
+            "x-ves-oneof-field-header_transformation_choice": "[\"default_header_transformation\",\"proper_case_header_transformation\"]",
+            "x-ves-proto-message": "ves.io.schema.HeaderTransformationType",
+            "properties": {
+                "default_header_transformation": {
+                    "description": "Exclusive with [proper_case_header_transformation]\n Normalize the headers to lower case",
+                    "title": "Default header transformation",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Default"
+                },
+                "proper_case_header_transformation": {
+                    "description": "Exclusive with [default_header_transformation]\n Normalize the headers to proper case words. The fist character and any character\n following a special character will be capitalized if it’s an alpha character.\n For example, “content-type” becomes “Content-Type”, and “foo$b#$are” becomes “Foo$B#$Are”",
+                    "title": "Proper case header transformation",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Proper Case"
                 }
             }
         },
@@ -4474,6 +4506,7 @@ var APISwaggerJSON string = `{
             "title": "CreateSpecType",
             "x-displayname": "Create Origin Pool",
             "x-ves-oneof-field-health_check_port_choice": "[\"health_check_port\",\"same_as_endpoint_port\"]",
+            "x-ves-oneof-field-port_choice": "[\"automatic_port\",\"port\"]",
             "x-ves-oneof-field-tls_choice": "[\"no_tls\",\"use_tls\"]",
             "x-ves-proto-message": "ves.io.schema.views.origin_pool.CreateSpecType",
             "properties": {
@@ -4481,6 +4514,11 @@ var APISwaggerJSON string = `{
                     "description": " Advanced options configuration like timeouts, circuit breaker, subset load balancing",
                     "$ref": "#/definitions/origin_poolOriginPoolAdvancedOptions",
                     "x-displayname": "More Options"
+                },
+                "automatic_port": {
+                    "description": "Exclusive with [port]\n\n Automatic selection of port for endpoint\n\n For Consul service discovery, port will be discovered as part of service discovery.\n For other origin server types, port will be automatically set as 443 if TLS is enabled at Origin Pool and 80 if TLS is disabled",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Automatic port"
                 },
                 "endpoint_selection": {
                     "description": " Policy for selection of endpoints from local site or remote site or both\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
@@ -4545,13 +4583,11 @@ var APISwaggerJSON string = `{
                 },
                 "port": {
                     "type": "integer",
-                    "description": " Endpoint service is available on this port\n\nExample: - \"9080\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.uint32.gte: 1\n  ves.io.schema.rules.uint32.lte: 65535\n",
+                    "description": "Exclusive with [automatic_port]\n Endpoint service is available on this port\n\nExample: - \"9080\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 1\n  ves.io.schema.rules.uint32.lte: 65535\n",
                     "format": "int64",
                     "x-displayname": "Port",
                     "x-ves-example": "9080",
-                    "x-ves-required": "true",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true",
                         "ves.io.schema.rules.uint32.gte": "1",
                         "ves.io.schema.rules.uint32.lte": "65535"
                     }
@@ -4574,6 +4610,7 @@ var APISwaggerJSON string = `{
             "title": "GetSpecType",
             "x-displayname": "Get Origin Pool",
             "x-ves-oneof-field-health_check_port_choice": "[\"health_check_port\",\"same_as_endpoint_port\"]",
+            "x-ves-oneof-field-port_choice": "[\"automatic_port\",\"port\"]",
             "x-ves-oneof-field-tls_choice": "[\"no_tls\",\"use_tls\"]",
             "x-ves-proto-message": "ves.io.schema.views.origin_pool.GetSpecType",
             "properties": {
@@ -4581,6 +4618,11 @@ var APISwaggerJSON string = `{
                     "description": " Advanced options configuration like timeouts, circuit breaker, subset load balancing",
                     "$ref": "#/definitions/origin_poolOriginPoolAdvancedOptions",
                     "x-displayname": "More Options"
+                },
+                "automatic_port": {
+                    "description": "Exclusive with [port]\n\n Automatic selection of port for endpoint\n\n For Consul service discovery, port will be discovered as part of service discovery.\n For other origin server types, port will be automatically set as 443 if TLS is enabled at Origin Pool and 80 if TLS is disabled",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Automatic port"
                 },
                 "endpoint_selection": {
                     "description": " Policy for selection of endpoints from local site or remote site or both\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
@@ -4645,13 +4687,11 @@ var APISwaggerJSON string = `{
                 },
                 "port": {
                     "type": "integer",
-                    "description": " Endpoint service is available on this port\n\nExample: - \"9080\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.uint32.gte: 1\n  ves.io.schema.rules.uint32.lte: 65535\n",
+                    "description": "Exclusive with [automatic_port]\n Endpoint service is available on this port\n\nExample: - \"9080\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 1\n  ves.io.schema.rules.uint32.lte: 65535\n",
                     "format": "int64",
                     "x-displayname": "Port",
                     "x-ves-example": "9080",
-                    "x-ves-required": "true",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true",
                         "ves.io.schema.rules.uint32.gte": "1",
                         "ves.io.schema.rules.uint32.lte": "65535"
                     }
@@ -4674,6 +4714,7 @@ var APISwaggerJSON string = `{
             "title": "GlobalSpecType",
             "x-displayname": "Global Specification",
             "x-ves-oneof-field-health_check_port_choice": "[\"health_check_port\",\"same_as_endpoint_port\"]",
+            "x-ves-oneof-field-port_choice": "[\"automatic_port\",\"port\"]",
             "x-ves-oneof-field-tls_choice": "[\"no_tls\",\"use_tls\"]",
             "x-ves-proto-message": "ves.io.schema.views.origin_pool.GlobalSpecType",
             "properties": {
@@ -4682,6 +4723,12 @@ var APISwaggerJSON string = `{
                     "title": "More Options",
                     "$ref": "#/definitions/origin_poolOriginPoolAdvancedOptions",
                     "x-displayname": "More Options"
+                },
+                "automatic_port": {
+                    "description": "Exclusive with [port]\n\n Automatic selection of port for endpoint\n\n For Consul service discovery, port will be discovered as part of service discovery.\n For other origin server types, port will be automatically set as 443 if TLS is enabled at Origin Pool and 80 if TLS is disabled",
+                    "title": "Automatic selection of endpoint port",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Automatic port"
                 },
                 "endpoint_selection": {
                     "description": " Policy for selection of endpoints from local site or remote site or both\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
@@ -4752,14 +4799,12 @@ var APISwaggerJSON string = `{
                 },
                 "port": {
                     "type": "integer",
-                    "description": " Endpoint service is available on this port\n\nExample: - \"9080\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.uint32.gte: 1\n  ves.io.schema.rules.uint32.lte: 65535\n",
+                    "description": "Exclusive with [automatic_port]\n Endpoint service is available on this port\n\nExample: - \"9080\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 1\n  ves.io.schema.rules.uint32.lte: 65535\n",
                     "title": "Port",
                     "format": "int64",
                     "x-displayname": "Port",
                     "x-ves-example": "9080",
-                    "x-ves-required": "true",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true",
                         "ves.io.schema.rules.uint32.gte": "1",
                         "ves.io.schema.rules.uint32.lte": "65535"
                     }
@@ -4790,6 +4835,7 @@ var APISwaggerJSON string = `{
             "title": "ReplaceSpecType",
             "x-displayname": "Replace Origin Pool",
             "x-ves-oneof-field-health_check_port_choice": "[\"health_check_port\",\"same_as_endpoint_port\"]",
+            "x-ves-oneof-field-port_choice": "[\"automatic_port\",\"port\"]",
             "x-ves-oneof-field-tls_choice": "[\"no_tls\",\"use_tls\"]",
             "x-ves-proto-message": "ves.io.schema.views.origin_pool.ReplaceSpecType",
             "properties": {
@@ -4797,6 +4843,11 @@ var APISwaggerJSON string = `{
                     "description": " Advanced options configuration like timeouts, circuit breaker, subset load balancing",
                     "$ref": "#/definitions/origin_poolOriginPoolAdvancedOptions",
                     "x-displayname": "More Options"
+                },
+                "automatic_port": {
+                    "description": "Exclusive with [port]\n\n Automatic selection of port for endpoint\n\n For Consul service discovery, port will be discovered as part of service discovery.\n For other origin server types, port will be automatically set as 443 if TLS is enabled at Origin Pool and 80 if TLS is disabled",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Automatic port"
                 },
                 "endpoint_selection": {
                     "description": " Policy for selection of endpoints from local site or remote site or both\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
@@ -4861,13 +4912,11 @@ var APISwaggerJSON string = `{
                 },
                 "port": {
                     "type": "integer",
-                    "description": " Endpoint service is available on this port\n\nExample: - \"9080\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.uint32.gte: 1\n  ves.io.schema.rules.uint32.lte: 65535\n",
+                    "description": "Exclusive with [automatic_port]\n Endpoint service is available on this port\n\nExample: - \"9080\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 1\n  ves.io.schema.rules.uint32.lte: 65535\n",
                     "format": "int64",
                     "x-displayname": "Port",
                     "x-ves-example": "9080",
-                    "x-ves-required": "true",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true",
                         "ves.io.schema.rules.uint32.gte": "1",
                         "ves.io.schema.rules.uint32.lte": "65535"
                     }

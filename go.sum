@@ -1283,6 +1283,8 @@ gopkg.volterra.us/codegen v0.0.0-20220516142222-13a5b2ae6c98 h1:nL5Bu3NNK8ylRA1W
 gopkg.volterra.us/codegen v0.0.0-20220516142222-13a5b2ae6c98/go.mod h1:I/VDdyaMMNISNLG4bxTHilStd/c5uTRVLP0qkdqFyQ4=
 gopkg.volterra.us/codegen v0.0.0-20220810232906-02e9b1175e0d h1:620TXnzZvxZkDnzIZzX/Gb4+cW3ON5jhELTtzMQqju0=
 gopkg.volterra.us/codegen v0.0.0-20220810232906-02e9b1175e0d/go.mod h1:I/VDdyaMMNISNLG4bxTHilStd/c5uTRVLP0qkdqFyQ4=
+gopkg.volterra.us/codegen v0.0.0-20220822203300-2da895bba6cb h1:BOcu5ytMmg4TsRHRj5XgaRtejP6oSG6nniOynTin1wc=
+gopkg.volterra.us/codegen v0.0.0-20220822203300-2da895bba6cb/go.mod h1:I/VDdyaMMNISNLG4bxTHilStd/c5uTRVLP0qkdqFyQ4=
 gopkg.volterra.us/gft v0.0.0-20201007201245-b62825346a32/go.mod h1:+PIqOGFRanphMj1nIlefu3zorjFZJNmOMzv2G2fyB0Q=
 gopkg.volterra.us/stdlib v0.0.0-20220325025208-7a45c9586b4c h1:M4u8veeO2GSq2WQSFFR9k18gkORSYNIxckXrlx30B6Q=
 gopkg.volterra.us/stdlib v0.0.0-20220325025208-7a45c9586b4c/go.mod h1:mMOXmVGs6CQhgon3RmCVx1hUb121r/48wj+fxS+x7jE=
@@ -1292,6 +1294,8 @@ gopkg.volterra.us/stdlib v0.0.0-20220519215901-b4a66f7f3a87 h1:Azf3SLqdiDE3HoRzV
 gopkg.volterra.us/stdlib v0.0.0-20220519215901-b4a66f7f3a87/go.mod h1:moACdfsG3AiKtawNMTBn4G8nvCaxBbrhd6OvCCarj/g=
 gopkg.volterra.us/stdlib v0.0.0-20220803190611-702b84d0a899 h1:7bLGvSEmVKuLZyswD+GsnrwcyKYe2Ab5A2PixMLvgs0=
 gopkg.volterra.us/stdlib v0.0.0-20220803190611-702b84d0a899/go.mod h1:9ErjjKXBzDsSxlsWeL+CDc1fnKoWswWlL1wPPVf4nSY=
+gopkg.volterra.us/stdlib v0.0.0-20220820154611-cb7fb2127de4 h1:maEtXauiyUTo+r3L5u/oKAq6CJRxlA3r3ZXqMmDbzgU=
+gopkg.volterra.us/stdlib v0.0.0-20220820154611-cb7fb2127de4/go.mod h1:9ErjjKXBzDsSxlsWeL+CDc1fnKoWswWlL1wPPVf4nSY=
 gopkg.volterra.us/stdlib v0.0.0-20220824152018-babc843811f6/go.mod h1:9ErjjKXBzDsSxlsWeL+CDc1fnKoWswWlL1wPPVf4nSY=
 gotest.tools v2.2.0+incompatible/go.mod h1:DsYFclhRJ6vuDpmuTbkuFWG+y2sxOXAzmJt81HFBacw=
 honnef.co/go/tools v0.0.0-20180728063816-88497007e858/go.mod h1:rf3lG4BRIbNafJWhAfAdb/ePZxsR/4RtNHQocxwk9r4=

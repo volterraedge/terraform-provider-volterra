@@ -163,6 +163,28 @@ func resourceVolterraCluster() *schema.Resource {
 				Optional: true,
 			},
 
+			"header_transformation_type": {
+
+				Type:     schema.TypeSet,
+				Optional: true,
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+
+						"default_header_transformation": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+
+						"proper_case_header_transformation": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+					},
+				},
+			},
+
 			"health_checks": {
 
 				Type:     schema.TypeList,
@@ -729,6 +751,45 @@ func resourceVolterraClusterCreate(d *schema.ResourceData, meta interface{}) err
 	if v, ok := d.GetOk("fallback_policy"); ok && !isIntfNil(v) {
 
 		createSpec.FallbackPolicy = ves_io_schema_cluster.SubsetFallbackPolicy(ves_io_schema_cluster.SubsetFallbackPolicy_value[v.(string)])
+
+	}
+
+	//header_transformation_type
+	if v, ok := d.GetOk("header_transformation_type"); ok && !isIntfNil(v) {
+
+		sl := v.(*schema.Set).List()
+		headerTransformationType := &ves_io_schema.HeaderTransformationType{}
+		createSpec.HeaderTransformationType = headerTransformationType
+		for _, set := range sl {
+			headerTransformationTypeMapStrToI := set.(map[string]interface{})
+
+			headerTransformationChoiceTypeFound := false
+
+			if v, ok := headerTransformationTypeMapStrToI["default_header_transformation"]; ok && !isIntfNil(v) && !headerTransformationChoiceTypeFound {
+
+				headerTransformationChoiceTypeFound = true
+
+				if v.(bool) {
+					headerTransformationChoiceInt := &ves_io_schema.HeaderTransformationType_DefaultHeaderTransformation{}
+					headerTransformationChoiceInt.DefaultHeaderTransformation = &ves_io_schema.Empty{}
+					headerTransformationType.HeaderTransformationChoice = headerTransformationChoiceInt
+				}
+
+			}
+
+			if v, ok := headerTransformationTypeMapStrToI["proper_case_header_transformation"]; ok && !isIntfNil(v) && !headerTransformationChoiceTypeFound {
+
+				headerTransformationChoiceTypeFound = true
+
+				if v.(bool) {
+					headerTransformationChoiceInt := &ves_io_schema.HeaderTransformationType_ProperCaseHeaderTransformation{}
+					headerTransformationChoiceInt.ProperCaseHeaderTransformation = &ves_io_schema.Empty{}
+					headerTransformationType.HeaderTransformationChoice = headerTransformationChoiceInt
+				}
+
+			}
+
+		}
 
 	}
 
@@ -1415,6 +1476,44 @@ func resourceVolterraClusterUpdate(d *schema.ResourceData, meta interface{}) err
 	if v, ok := d.GetOk("fallback_policy"); ok && !isIntfNil(v) {
 
 		updateSpec.FallbackPolicy = ves_io_schema_cluster.SubsetFallbackPolicy(ves_io_schema_cluster.SubsetFallbackPolicy_value[v.(string)])
+
+	}
+
+	if v, ok := d.GetOk("header_transformation_type"); ok && !isIntfNil(v) {
+
+		sl := v.(*schema.Set).List()
+		headerTransformationType := &ves_io_schema.HeaderTransformationType{}
+		updateSpec.HeaderTransformationType = headerTransformationType
+		for _, set := range sl {
+			headerTransformationTypeMapStrToI := set.(map[string]interface{})
+
+			headerTransformationChoiceTypeFound := false
+
+			if v, ok := headerTransformationTypeMapStrToI["default_header_transformation"]; ok && !isIntfNil(v) && !headerTransformationChoiceTypeFound {
+
+				headerTransformationChoiceTypeFound = true
+
+				if v.(bool) {
+					headerTransformationChoiceInt := &ves_io_schema.HeaderTransformationType_DefaultHeaderTransformation{}
+					headerTransformationChoiceInt.DefaultHeaderTransformation = &ves_io_schema.Empty{}
+					headerTransformationType.HeaderTransformationChoice = headerTransformationChoiceInt
+				}
+
+			}
+
+			if v, ok := headerTransformationTypeMapStrToI["proper_case_header_transformation"]; ok && !isIntfNil(v) && !headerTransformationChoiceTypeFound {
+
+				headerTransformationChoiceTypeFound = true
+
+				if v.(bool) {
+					headerTransformationChoiceInt := &ves_io_schema.HeaderTransformationType_ProperCaseHeaderTransformation{}
+					headerTransformationChoiceInt.ProperCaseHeaderTransformation = &ves_io_schema.Empty{}
+					headerTransformationType.HeaderTransformationChoice = headerTransformationChoiceInt
+				}
+
+			}
+
+		}
 
 	}
 

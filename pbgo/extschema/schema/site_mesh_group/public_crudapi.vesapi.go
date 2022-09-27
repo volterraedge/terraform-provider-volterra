@@ -1595,7 +1595,10 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 		item.Disabled = o.GetMetadata().GetDisable()
 
 		if len(req.ReportFields) > 0 {
-			item.Object = o.Object
+			noDBForm, _ := flags.GetEnvGetRspNoDBForm()
+			if !noDBForm {
+				item.Object = o.Object
+			}
 
 			item.Metadata = &ves_io_schema.ObjectGetMetaType{}
 			item.Metadata.FromObjectMetaType(o.Metadata)
@@ -3349,11 +3352,17 @@ var APISwaggerJSON string = `{
             "description": "Details of Full Mesh Group Type",
             "title": "Full Mesh Group Type",
             "x-displayname": "Full Mesh",
-            "x-ves-oneof-field-full_mesh_choice": "[\"data_plane_mesh\"]",
+            "x-ves-oneof-field-full_mesh_choice": "[\"control_and_data_plane_mesh\",\"data_plane_mesh\"]",
             "x-ves-proto-message": "ves.io.schema.site_mesh_group.FullMeshGroupType",
             "properties": {
+                "control_and_data_plane_mesh": {
+                    "description": "Exclusive with [data_plane_mesh]\n Full mesh of data plane tunnels across sites\n and control plane peering across sites",
+                    "title": "Control and Data Plane Mesh",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Control and Data Plane Mesh"
+                },
                 "data_plane_mesh": {
-                    "description": "Exclusive with []\n Full Mesh of data plane tunnels across sites",
+                    "description": "Exclusive with [control_and_data_plane_mesh]\n Full Mesh of data plane tunnels across sites",
                     "title": "Data Plane Mesh",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Data Plane Mesh"

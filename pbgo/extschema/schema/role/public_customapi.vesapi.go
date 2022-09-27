@@ -1335,13 +1335,13 @@ var CustomAPISwaggerJSON string = `{
             "properties": {
                 "api_groups": {
                     "type": "array",
-                    "description": " The API groups that the role can access.\n\nExample: - \"[ves-io-uam-read]\"-",
+                    "description": " The API groups that the role can access.\n\nExample: - \"[f5xc-billing]\"-",
                     "title": "API Group",
                     "items": {
                         "type": "string"
                     },
                     "x-displayname": "API Groups",
-                    "x-ves-example": "[ves-io-uam-read]"
+                    "x-ves-example": "[f5xc-billing]"
                 },
                 "disabled": {
                     "type": "boolean",

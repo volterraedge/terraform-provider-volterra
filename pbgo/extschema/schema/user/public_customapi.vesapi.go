@@ -4205,6 +4205,11 @@ var CustomAPISwaggerJSON string = `{
                     "title": "access",
                     "$ref": "#/definitions/schemaAddonServiceAccess"
                 },
+                "display_name": {
+                    "type": "string",
+                    "description": "x-displayName: \"Display Name\"\nName to use for display purposes",
+                    "title": "display_name"
+                },
                 "state": {
                     "description": "x-displayName: \"Addon Service State\"\nAddon service current state",
                     "title": "state",
@@ -5115,6 +5120,11 @@ var CustomAPISwaggerJSON string = `{
             "description": "x-displayName: \"Tile Access\"\nDefines access of primary navigation tile.",
             "title": "TileAccess",
             "properties": {
+                "display_name": {
+                    "type": "string",
+                    "description": "x-displayName: \"Display Name\"\nName to use for display purposes",
+                    "title": "display_name"
+                },
                 "state": {
                     "description": "x-displayName: \"Addon Service State\"\nAddon service current state",
                     "title": "state",

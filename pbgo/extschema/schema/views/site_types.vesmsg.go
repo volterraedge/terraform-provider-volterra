@@ -1090,6 +1090,270 @@ func AllowedVIPPortsValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *AzureExpressRouteConnectionType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *AzureExpressRouteConnectionType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *AzureExpressRouteConnectionType) DeepCopy() *AzureExpressRouteConnectionType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &AzureExpressRouteConnectionType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *AzureExpressRouteConnectionType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *AzureExpressRouteConnectionType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return AzureExpressRouteConnectionTypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateAzureExpressRouteConnectionType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateAzureExpressRouteConnectionType) ResourceGroupValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for resource_group")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateAzureExpressRouteConnectionType) NameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for name")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateAzureExpressRouteConnectionType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*AzureExpressRouteConnectionType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *AzureExpressRouteConnectionType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("name"))
+		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["resource_group"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("resource_group"))
+		if err := fv(ctx, m.GetResourceGroup(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultAzureExpressRouteConnectionTypeValidator = func() *ValidateAzureExpressRouteConnectionType {
+	v := &ValidateAzureExpressRouteConnectionType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhResourceGroup := v.ResourceGroupValidationRuleHandler
+	rulesResourceGroup := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.max_len":   "64",
+		"ves.io.schema.rules.string.min_len":   "1",
+	}
+	vFn, err = vrhResourceGroup(rulesResourceGroup)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for AzureExpressRouteConnectionType.resource_group: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["resource_group"] = vFn
+
+	vrhName := v.NameValidationRuleHandler
+	rulesName := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.max_len":   "64",
+		"ves.io.schema.rules.string.min_len":   "1",
+	}
+	vFn, err = vrhName(rulesName)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for AzureExpressRouteConnectionType.name: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["name"] = vFn
+
+	return v
+}()
+
+func AzureExpressRouteConnectionTypeValidator() db.Validator {
+	return DefaultAzureExpressRouteConnectionTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *AzureSpecialSubnetType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *AzureSpecialSubnetType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *AzureSpecialSubnetType) DeepCopy() *AzureSpecialSubnetType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &AzureSpecialSubnetType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *AzureSpecialSubnetType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *AzureSpecialSubnetType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return AzureSpecialSubnetTypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateAzureSpecialSubnetType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateAzureSpecialSubnetType) ResourceGroupChoiceSubnetResourceGrpValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_SubnetResourceGrp, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for subnet_resource_grp")
+	}
+	return oValidatorFn_SubnetResourceGrp, nil
+}
+
+func (v *ValidateAzureSpecialSubnetType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*AzureSpecialSubnetType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *AzureSpecialSubnetType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	switch m.GetResourceGroupChoice().(type) {
+	case *AzureSpecialSubnetType_SubnetResourceGrp:
+		if fv, exists := v.FldValidators["resource_group_choice.subnet_resource_grp"]; exists {
+			val := m.GetResourceGroupChoice().(*AzureSpecialSubnetType_SubnetResourceGrp).SubnetResourceGrp
+			vOpts := append(opts,
+				db.WithValidateField("resource_group_choice"),
+				db.WithValidateField("subnet_resource_grp"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *AzureSpecialSubnetType_VnetResourceGroup:
+		if fv, exists := v.FldValidators["resource_group_choice.vnet_resource_group"]; exists {
+			val := m.GetResourceGroupChoice().(*AzureSpecialSubnetType_VnetResourceGroup).VnetResourceGroup
+			vOpts := append(opts,
+				db.WithValidateField("resource_group_choice"),
+				db.WithValidateField("vnet_resource_group"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultAzureSpecialSubnetTypeValidator = func() *ValidateAzureSpecialSubnetType {
+	v := &ValidateAzureSpecialSubnetType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhResourceGroupChoiceSubnetResourceGrp := v.ResourceGroupChoiceSubnetResourceGrpValidationRuleHandler
+	rulesResourceGroupChoiceSubnetResourceGrp := map[string]string{
+		"ves.io.schema.rules.string.max_len": "64",
+	}
+	vFnMap["resource_group_choice.subnet_resource_grp"], err = vrhResourceGroupChoiceSubnetResourceGrp(rulesResourceGroupChoiceSubnetResourceGrp)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field AzureSpecialSubnetType.resource_group_choice_subnet_resource_grp: %s", err)
+		panic(errMsg)
+	}
+
+	v.FldValidators["resource_group_choice.subnet_resource_grp"] = vFnMap["resource_group_choice.subnet_resource_grp"]
+
+	return v
+}()
+
+func AzureSpecialSubnetTypeValidator() db.Validator {
+	return DefaultAzureSpecialSubnetTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *AzureSubnetChoiceType) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -1247,6 +1511,152 @@ var DefaultAzureSubnetChoiceTypeValidator = func() *ValidateAzureSubnetChoiceTyp
 
 func AzureSubnetChoiceTypeValidator() db.Validator {
 	return DefaultAzureSubnetChoiceTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *AzureSubnetChoiceWithAutoType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *AzureSubnetChoiceWithAutoType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *AzureSubnetChoiceWithAutoType) DeepCopy() *AzureSubnetChoiceWithAutoType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &AzureSubnetChoiceWithAutoType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *AzureSubnetChoiceWithAutoType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *AzureSubnetChoiceWithAutoType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return AzureSubnetChoiceWithAutoTypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateAzureSubnetChoiceWithAutoType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateAzureSubnetChoiceWithAutoType) ChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateAzureSubnetChoiceWithAutoType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*AzureSubnetChoiceWithAutoType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *AzureSubnetChoiceWithAutoType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["choice"]; exists {
+		val := m.GetChoice()
+		vOpts := append(opts,
+			db.WithValidateField("choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetChoice().(type) {
+	case *AzureSubnetChoiceWithAutoType_Auto:
+		if fv, exists := v.FldValidators["choice.auto"]; exists {
+			val := m.GetChoice().(*AzureSubnetChoiceWithAutoType_Auto).Auto
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("auto"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *AzureSubnetChoiceWithAutoType_SubnetParam:
+		if fv, exists := v.FldValidators["choice.subnet_param"]; exists {
+			val := m.GetChoice().(*AzureSubnetChoiceWithAutoType_SubnetParam).SubnetParam
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("subnet_param"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *AzureSubnetChoiceWithAutoType_Subnet:
+		if fv, exists := v.FldValidators["choice.subnet"]; exists {
+			val := m.GetChoice().(*AzureSubnetChoiceWithAutoType_Subnet).Subnet
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("subnet"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultAzureSubnetChoiceWithAutoTypeValidator = func() *ValidateAzureSubnetChoiceWithAutoType {
+	v := &ValidateAzureSubnetChoiceWithAutoType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhChoice := v.ChoiceValidationRuleHandler
+	rulesChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhChoice(rulesChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for AzureSubnetChoiceWithAutoType.choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["choice"] = vFn
+
+	v.FldValidators["choice.subnet_param"] = CloudSubnetParamTypeValidator().Validate
+	v.FldValidators["choice.subnet"] = AzureSpecialSubnetTypeValidator().Validate
+
+	return v
+}()
+
+func AzureSubnetChoiceWithAutoTypeValidator() db.Validator {
+	return DefaultAzureSubnetChoiceWithAutoTypeValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -4607,8 +5017,16 @@ type ValidateGlobalNetworkConnectionListType struct {
 
 func (v *ValidateGlobalNetworkConnectionListType) GlobalNetworkConnectionsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for global_network_connections")
+	}
 	itemsValidatorFn := func(ctx context.Context, elems []*GlobalNetworkConnectionType, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
 			if err := GlobalNetworkConnectionTypeValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
@@ -5400,8 +5818,16 @@ type ValidateSiteStaticRoutesListType struct {
 
 func (v *ValidateSiteStaticRoutesListType) StaticRouteListValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for static_route_list")
+	}
 	itemsValidatorFn := func(ctx context.Context, elems []*SiteStaticRoutesType, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
 			if err := SiteStaticRoutesTypeValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}

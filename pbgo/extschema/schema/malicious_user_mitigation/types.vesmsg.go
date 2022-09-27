@@ -630,8 +630,16 @@ type ValidateMaliciousUserMitigationType struct {
 
 func (v *ValidateMaliciousUserMitigationType) RulesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for rules")
+	}
 	itemsValidatorFn := func(ctx context.Context, elems []*MaliciousUserMitigationRule, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
 			if err := MaliciousUserMitigationRuleValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
