@@ -107,6 +107,41 @@ func resourceVolterraSetCloudSiteInfo() *schema.Resource {
 					},
 				},
 			},
+			"express_route_info": {
+				Type:     schema.TypeSet,
+				Optional: true,
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+						"route_server_ips": {
+							Type:     schema.TypeList,
+							Required: true,
+							Elem: &schema.Schema{
+								Type: schema.TypeString,
+							},
+						},
+						"route_server_asn": {
+							Type:     schema.TypeInt,
+							Required: true,
+						},
+					},
+				},
+			},
+			"node_info": {
+				Type:     schema.TypeList,
+				Optional: true,
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+						"node_instance_name": {
+							Type:     schema.TypeString,
+							Required: true,
+						},
+						"node_id": {
+							Type:     schema.TypeString,
+							Required: true,
+						},
+					},
+				},
+			},
 		},
 	}
 }
@@ -166,6 +201,12 @@ func resourceVolterraSetCloudSiteInfoCreate(d *schema.ResourceData, meta interfa
 		}
 		if spokeVnetInfo := getSpokeVnetPrefixInfo(d); spokeVnetInfo != nil {
 			req.AzureVnetInfo.SpokeVnetPrefixInfo = spokeVnetInfo
+		}
+		if expressRouteInfo := getExpressRouteInfo(d); expressRouteInfo != nil {
+			req.AzureVnetInfo.ExpressRouteInfo = expressRouteInfo
+		}
+		if nodeInstanceNames := getNodeInstanceNames(d); nodeInstanceNames != nil {
+			req.AzureVnetInfo.NodeInfo = nodeInstanceNames
 		}
 		yamlReq, err = codec.ToYAML(req)
 		if err != nil {
@@ -294,4 +335,47 @@ func getSpokeVnetPrefixInfo(d *schema.ResourceData) []*azure_vnet_site.VnetIpPre
 	}
 	return nil
 
+}
+
+func getExpressRouteInfo(d *schema.ResourceData) *azure_vnet_site.ExpressRouteInfo {
+	if v, ok := d.GetOk("express_route_info"); ok && !isIntfNil(v) {
+		sl := v.(*schema.Set).List()
+		erInfo := &azure_vnet_site.ExpressRouteInfo{}
+		for _, set := range sl {
+			erMapStrToIntf := set.(map[string]interface{})
+			if w, ok := erMapStrToIntf["route_server_ips"]; ok && !isIntfNil(w) {
+				ls := make([]string, len(w.([]interface{})))
+				for i, v := range w.([]interface{}) {
+					ls[i] = v.(string)
+				}
+				erInfo.RouteServerIps = ls
+			}
+			if val, ok := erMapStrToIntf["route_server_asn"]; ok && !isIntfNil(val) {
+				erInfo.RouteServerAsn = uint32(val.(int))
+			}
+		}
+		return erInfo
+
+	}
+	return nil
+}
+
+func getNodeInstanceNames(d *schema.ResourceData) []*azure_vnet_site.NodeInstanceNameType {
+	if v, ok := d.GetOk("node_info"); ok && !isIntfNil(v) {
+		sl := v.([]interface{})
+		nodeInfo := []*azure_vnet_site.NodeInstanceNameType{}
+		for _, set := range sl {
+			instanceNameConfig := &azure_vnet_site.NodeInstanceNameType{}
+			nodeInstanceData := set.(map[string]interface{})
+			if v, ok := nodeInstanceData["node_instance_name"]; ok && !isIntfNil(v) {
+				instanceNameConfig.NodeInstanceName = v.(string)
+			}
+			if v, ok := nodeInstanceData["node_id"]; ok && !isIntfNil(v) {
+				instanceNameConfig.NodeId = v.(string)
+			}
+			nodeInfo = append(nodeInfo, instanceNameConfig)
+		}
+		return nodeInfo
+	}
+	return nil
 }
