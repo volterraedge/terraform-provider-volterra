@@ -988,6 +988,12 @@ func resourceVolterraRoute() *schema.Resource {
 										Optional: true,
 									},
 
+									"replace_params": {
+
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+
 									"retain_all_params": {
 
 										Type:     schema.TypeBool,
@@ -2395,6 +2401,17 @@ func resourceVolterraRouteCreate(d *schema.ResourceData, meta interface{}) error
 							queryParamsInt.RemoveAllParams = &ves_io_schema.Empty{}
 							routeActionInt.RouteRedirect.QueryParams = queryParamsInt
 						}
+
+					}
+
+					if v, ok := cs["replace_params"]; ok && !isIntfNil(v) && !queryParamsTypeFound {
+
+						queryParamsTypeFound = true
+						queryParamsInt := &ves_io_schema_route.RouteRedirect_ReplaceParams{}
+
+						routeActionInt.RouteRedirect.QueryParams = queryParamsInt
+
+						queryParamsInt.ReplaceParams = v.(string)
 
 					}
 
@@ -3903,6 +3920,17 @@ func resourceVolterraRouteUpdate(d *schema.ResourceData, meta interface{}) error
 							queryParamsInt.RemoveAllParams = &ves_io_schema.Empty{}
 							routeActionInt.RouteRedirect.QueryParams = queryParamsInt
 						}
+
+					}
+
+					if v, ok := cs["replace_params"]; ok && !isIntfNil(v) && !queryParamsTypeFound {
+
+						queryParamsTypeFound = true
+						queryParamsInt := &ves_io_schema_route.RouteRedirect_ReplaceParams{}
+
+						routeActionInt.RouteRedirect.QueryParams = queryParamsInt
+
+						queryParamsInt.ReplaceParams = v.(string)
 
 					}
 

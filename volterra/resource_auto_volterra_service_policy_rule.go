@@ -416,6 +416,11 @@ func resourceVolterraServicePolicyRule() *schema.Resource {
 							Optional: true,
 						},
 
+						"inserted_types": {
+							Type:     schema.TypeMap,
+							Optional: true,
+						},
+
 						"position": {
 							Type:     schema.TypeString,
 							Optional: true,
@@ -2132,6 +2137,14 @@ func resourceVolterraServicePolicyRuleCreate(d *schema.ResourceData, meta interf
 
 			if w, ok := contentRewriteActionMapStrToI["insert_content"]; ok && !isIntfNil(w) {
 				contentRewriteAction.InsertContent = w.(string)
+			}
+
+			if w, ok := contentRewriteActionMapStrToI["inserted_types"]; ok && !isIntfNil(w) {
+				ms := map[string]bool{}
+				for k, v := range w.(map[string]interface{}) {
+					ms[k] = v.(bool)
+				}
+				contentRewriteAction.InsertedTypes = ms
 			}
 
 			if v, ok := contentRewriteActionMapStrToI["position"]; ok && !isIntfNil(v) {
@@ -4228,6 +4241,14 @@ func resourceVolterraServicePolicyRuleUpdate(d *schema.ResourceData, meta interf
 
 			if w, ok := contentRewriteActionMapStrToI["insert_content"]; ok && !isIntfNil(w) {
 				contentRewriteAction.InsertContent = w.(string)
+			}
+
+			if w, ok := contentRewriteActionMapStrToI["inserted_types"]; ok && !isIntfNil(w) {
+				ms := map[string]bool{}
+				for k, v := range w.(map[string]interface{}) {
+					ms[k] = v.(bool)
+				}
+				contentRewriteAction.InsertedTypes = ms
 			}
 
 			if v, ok := contentRewriteActionMapStrToI["position"]; ok && !isIntfNil(v) {

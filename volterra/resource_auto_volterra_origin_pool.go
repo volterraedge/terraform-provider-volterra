@@ -121,6 +121,28 @@ func resourceVolterraOriginPool() *schema.Resource {
 							Optional: true,
 						},
 
+						"header_transformation_type": {
+
+							Type:     schema.TypeSet,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"default_header_transformation": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+
+									"proper_case_header_transformation": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+								},
+							},
+						},
+
 						"http2_options": {
 
 							Type:     schema.TypeSet,
@@ -858,9 +880,16 @@ func resourceVolterraOriginPool() *schema.Resource {
 				},
 			},
 
+			"automatic_port": {
+
+				Type:     schema.TypeBool,
+				Optional: true,
+			},
+
 			"port": {
+
 				Type:     schema.TypeInt,
-				Required: true,
+				Optional: true,
 			},
 
 			"no_tls": {
@@ -1329,6 +1358,44 @@ func resourceVolterraOriginPoolCreate(d *schema.ResourceData, meta interface{}) 
 
 			if w, ok := advancedOptionsMapStrToI["connection_timeout"]; ok && !isIntfNil(w) {
 				advancedOptions.ConnectionTimeout = uint32(w.(int))
+			}
+
+			if v, ok := advancedOptionsMapStrToI["header_transformation_type"]; ok && !isIntfNil(v) {
+
+				sl := v.(*schema.Set).List()
+				headerTransformationType := &ves_io_schema.HeaderTransformationType{}
+				advancedOptions.HeaderTransformationType = headerTransformationType
+				for _, set := range sl {
+					headerTransformationTypeMapStrToI := set.(map[string]interface{})
+
+					headerTransformationChoiceTypeFound := false
+
+					if v, ok := headerTransformationTypeMapStrToI["default_header_transformation"]; ok && !isIntfNil(v) && !headerTransformationChoiceTypeFound {
+
+						headerTransformationChoiceTypeFound = true
+
+						if v.(bool) {
+							headerTransformationChoiceInt := &ves_io_schema.HeaderTransformationType_DefaultHeaderTransformation{}
+							headerTransformationChoiceInt.DefaultHeaderTransformation = &ves_io_schema.Empty{}
+							headerTransformationType.HeaderTransformationChoice = headerTransformationChoiceInt
+						}
+
+					}
+
+					if v, ok := headerTransformationTypeMapStrToI["proper_case_header_transformation"]; ok && !isIntfNil(v) && !headerTransformationChoiceTypeFound {
+
+						headerTransformationChoiceTypeFound = true
+
+						if v.(bool) {
+							headerTransformationChoiceInt := &ves_io_schema.HeaderTransformationType_ProperCaseHeaderTransformation{}
+							headerTransformationChoiceInt.ProperCaseHeaderTransformation = &ves_io_schema.Empty{}
+							headerTransformationType.HeaderTransformationChoice = headerTransformationChoiceInt
+						}
+
+					}
+
+				}
+
 			}
 
 			if v, ok := advancedOptionsMapStrToI["http2_options"]; ok && !isIntfNil(v) {
@@ -2348,11 +2415,30 @@ func resourceVolterraOriginPoolCreate(d *schema.ResourceData, meta interface{}) 
 
 	}
 
-	//port
-	if v, ok := d.GetOk("port"); ok && !isIntfNil(v) {
+	//port_choice
 
-		createSpec.Port =
-			uint32(v.(int))
+	portChoiceTypeFound := false
+
+	if v, ok := d.GetOk("automatic_port"); ok && !portChoiceTypeFound {
+
+		portChoiceTypeFound = true
+
+		if v.(bool) {
+			portChoiceInt := &ves_io_schema_views_origin_pool.CreateSpecType_AutomaticPort{}
+			portChoiceInt.AutomaticPort = &ves_io_schema.Empty{}
+			createSpec.PortChoice = portChoiceInt
+		}
+
+	}
+
+	if v, ok := d.GetOk("port"); ok && !portChoiceTypeFound {
+
+		portChoiceTypeFound = true
+		portChoiceInt := &ves_io_schema_views_origin_pool.CreateSpecType_Port{}
+
+		createSpec.PortChoice = portChoiceInt
+
+		portChoiceInt.Port = uint32(v.(int))
 
 	}
 
@@ -2996,6 +3082,44 @@ func resourceVolterraOriginPoolUpdate(d *schema.ResourceData, meta interface{}) 
 
 			if w, ok := advancedOptionsMapStrToI["connection_timeout"]; ok && !isIntfNil(w) {
 				advancedOptions.ConnectionTimeout = uint32(w.(int))
+			}
+
+			if v, ok := advancedOptionsMapStrToI["header_transformation_type"]; ok && !isIntfNil(v) {
+
+				sl := v.(*schema.Set).List()
+				headerTransformationType := &ves_io_schema.HeaderTransformationType{}
+				advancedOptions.HeaderTransformationType = headerTransformationType
+				for _, set := range sl {
+					headerTransformationTypeMapStrToI := set.(map[string]interface{})
+
+					headerTransformationChoiceTypeFound := false
+
+					if v, ok := headerTransformationTypeMapStrToI["default_header_transformation"]; ok && !isIntfNil(v) && !headerTransformationChoiceTypeFound {
+
+						headerTransformationChoiceTypeFound = true
+
+						if v.(bool) {
+							headerTransformationChoiceInt := &ves_io_schema.HeaderTransformationType_DefaultHeaderTransformation{}
+							headerTransformationChoiceInt.DefaultHeaderTransformation = &ves_io_schema.Empty{}
+							headerTransformationType.HeaderTransformationChoice = headerTransformationChoiceInt
+						}
+
+					}
+
+					if v, ok := headerTransformationTypeMapStrToI["proper_case_header_transformation"]; ok && !isIntfNil(v) && !headerTransformationChoiceTypeFound {
+
+						headerTransformationChoiceTypeFound = true
+
+						if v.(bool) {
+							headerTransformationChoiceInt := &ves_io_schema.HeaderTransformationType_ProperCaseHeaderTransformation{}
+							headerTransformationChoiceInt.ProperCaseHeaderTransformation = &ves_io_schema.Empty{}
+							headerTransformationType.HeaderTransformationChoice = headerTransformationChoiceInt
+						}
+
+					}
+
+				}
+
 			}
 
 			if v, ok := advancedOptionsMapStrToI["http2_options"]; ok && !isIntfNil(v) {
@@ -4009,10 +4133,28 @@ func resourceVolterraOriginPoolUpdate(d *schema.ResourceData, meta interface{}) 
 
 	}
 
-	if v, ok := d.GetOk("port"); ok && !isIntfNil(v) {
+	portChoiceTypeFound := false
 
-		updateSpec.Port =
-			uint32(v.(int))
+	if v, ok := d.GetOk("automatic_port"); ok && !portChoiceTypeFound {
+
+		portChoiceTypeFound = true
+
+		if v.(bool) {
+			portChoiceInt := &ves_io_schema_views_origin_pool.ReplaceSpecType_AutomaticPort{}
+			portChoiceInt.AutomaticPort = &ves_io_schema.Empty{}
+			updateSpec.PortChoice = portChoiceInt
+		}
+
+	}
+
+	if v, ok := d.GetOk("port"); ok && !portChoiceTypeFound {
+
+		portChoiceTypeFound = true
+		portChoiceInt := &ves_io_schema_views_origin_pool.ReplaceSpecType_Port{}
+
+		updateSpec.PortChoice = portChoiceInt
+
+		portChoiceInt.Port = uint32(v.(int))
 
 	}
 

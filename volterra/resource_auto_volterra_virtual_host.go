@@ -771,6 +771,28 @@ func resourceVolterraVirtualHost() *schema.Resource {
 				},
 			},
 
+			"header_transformation_type": {
+
+				Type:     schema.TypeSet,
+				Optional: true,
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+
+						"default_header_transformation": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+
+						"proper_case_header_transformation": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+					},
+				},
+			},
+
 			"idle_timeout": {
 				Type:     schema.TypeInt,
 				Optional: true,
@@ -2757,6 +2779,45 @@ func resourceVolterraVirtualHostCreate(d *schema.ResourceData, meta interface{})
 
 			if w, ok := dynamicReverseProxyMapStrToI["resolve_endpoint_dynamically"]; ok && !isIntfNil(w) {
 				dynamicReverseProxy.ResolveEndpointDynamically = w.(bool)
+			}
+
+		}
+
+	}
+
+	//header_transformation_type
+	if v, ok := d.GetOk("header_transformation_type"); ok && !isIntfNil(v) {
+
+		sl := v.(*schema.Set).List()
+		headerTransformationType := &ves_io_schema.HeaderTransformationType{}
+		createSpec.HeaderTransformationType = headerTransformationType
+		for _, set := range sl {
+			headerTransformationTypeMapStrToI := set.(map[string]interface{})
+
+			headerTransformationChoiceTypeFound := false
+
+			if v, ok := headerTransformationTypeMapStrToI["default_header_transformation"]; ok && !isIntfNil(v) && !headerTransformationChoiceTypeFound {
+
+				headerTransformationChoiceTypeFound = true
+
+				if v.(bool) {
+					headerTransformationChoiceInt := &ves_io_schema.HeaderTransformationType_DefaultHeaderTransformation{}
+					headerTransformationChoiceInt.DefaultHeaderTransformation = &ves_io_schema.Empty{}
+					headerTransformationType.HeaderTransformationChoice = headerTransformationChoiceInt
+				}
+
+			}
+
+			if v, ok := headerTransformationTypeMapStrToI["proper_case_header_transformation"]; ok && !isIntfNil(v) && !headerTransformationChoiceTypeFound {
+
+				headerTransformationChoiceTypeFound = true
+
+				if v.(bool) {
+					headerTransformationChoiceInt := &ves_io_schema.HeaderTransformationType_ProperCaseHeaderTransformation{}
+					headerTransformationChoiceInt.ProperCaseHeaderTransformation = &ves_io_schema.Empty{}
+					headerTransformationType.HeaderTransformationChoice = headerTransformationChoiceInt
+				}
+
 			}
 
 		}
@@ -5026,6 +5087,44 @@ func resourceVolterraVirtualHostUpdate(d *schema.ResourceData, meta interface{})
 
 			if w, ok := dynamicReverseProxyMapStrToI["resolve_endpoint_dynamically"]; ok && !isIntfNil(w) {
 				dynamicReverseProxy.ResolveEndpointDynamically = w.(bool)
+			}
+
+		}
+
+	}
+
+	if v, ok := d.GetOk("header_transformation_type"); ok && !isIntfNil(v) {
+
+		sl := v.(*schema.Set).List()
+		headerTransformationType := &ves_io_schema.HeaderTransformationType{}
+		updateSpec.HeaderTransformationType = headerTransformationType
+		for _, set := range sl {
+			headerTransformationTypeMapStrToI := set.(map[string]interface{})
+
+			headerTransformationChoiceTypeFound := false
+
+			if v, ok := headerTransformationTypeMapStrToI["default_header_transformation"]; ok && !isIntfNil(v) && !headerTransformationChoiceTypeFound {
+
+				headerTransformationChoiceTypeFound = true
+
+				if v.(bool) {
+					headerTransformationChoiceInt := &ves_io_schema.HeaderTransformationType_DefaultHeaderTransformation{}
+					headerTransformationChoiceInt.DefaultHeaderTransformation = &ves_io_schema.Empty{}
+					headerTransformationType.HeaderTransformationChoice = headerTransformationChoiceInt
+				}
+
+			}
+
+			if v, ok := headerTransformationTypeMapStrToI["proper_case_header_transformation"]; ok && !isIntfNil(v) && !headerTransformationChoiceTypeFound {
+
+				headerTransformationChoiceTypeFound = true
+
+				if v.(bool) {
+					headerTransformationChoiceInt := &ves_io_schema.HeaderTransformationType_ProperCaseHeaderTransformation{}
+					headerTransformationChoiceInt.ProperCaseHeaderTransformation = &ves_io_schema.Empty{}
+					headerTransformationType.HeaderTransformationChoice = headerTransformationChoiceInt
+				}
+
 			}
 
 		}

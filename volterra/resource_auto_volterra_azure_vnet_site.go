@@ -974,6 +974,372 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
+									"express_route_disabled": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+
+									"express_route_enabled": {
+
+										Type:     schema.TypeSet,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"connections": {
+
+													Type:     schema.TypeList,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"metadata": {
+
+																Type:     schema.TypeSet,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"description": {
+																			Type:     schema.TypeString,
+																			Optional: true,
+																		},
+
+																		"disable": {
+																			Type:     schema.TypeBool,
+																			Optional: true,
+																		},
+
+																		"name": {
+																			Type:     schema.TypeString,
+																			Optional: true,
+																		},
+																	},
+																},
+															},
+
+															"other_subscription": {
+
+																Type:     schema.TypeSet,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"authorized_key": {
+
+																			Type:     schema.TypeSet,
+																			Optional: true,
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{
+
+																					"blindfold_secret_info_internal": {
+
+																						Type:     schema.TypeSet,
+																						Optional: true,
+																						Elem: &schema.Resource{
+																							Schema: map[string]*schema.Schema{
+
+																								"decryption_provider": {
+																									Type:     schema.TypeString,
+																									Optional: true,
+																								},
+
+																								"location": {
+																									Type:     schema.TypeString,
+																									Optional: true,
+																								},
+
+																								"store_provider": {
+																									Type:     schema.TypeString,
+																									Optional: true,
+																								},
+																							},
+																						},
+																					},
+
+																					"secret_encoding_type": {
+																						Type:     schema.TypeString,
+																						Optional: true,
+																					},
+
+																					"blindfold_secret_info": {
+
+																						Type:     schema.TypeSet,
+																						Optional: true,
+																						Elem: &schema.Resource{
+																							Schema: map[string]*schema.Schema{
+
+																								"decryption_provider": {
+																									Type:     schema.TypeString,
+																									Optional: true,
+																								},
+
+																								"location": {
+																									Type:     schema.TypeString,
+																									Optional: true,
+																								},
+
+																								"store_provider": {
+																									Type:     schema.TypeString,
+																									Optional: true,
+																								},
+																							},
+																						},
+																					},
+
+																					"clear_secret_info": {
+
+																						Type:     schema.TypeSet,
+																						Optional: true,
+																						Elem: &schema.Resource{
+																							Schema: map[string]*schema.Schema{
+
+																								"provider": {
+																									Type:     schema.TypeString,
+																									Optional: true,
+																								},
+
+																								"url": {
+																									Type:     schema.TypeString,
+																									Optional: true,
+																								},
+																							},
+																						},
+																					},
+
+																					"vault_secret_info": {
+
+																						Type:     schema.TypeSet,
+																						Optional: true,
+																						Elem: &schema.Resource{
+																							Schema: map[string]*schema.Schema{
+
+																								"key": {
+																									Type:     schema.TypeString,
+																									Optional: true,
+																								},
+
+																								"location": {
+																									Type:     schema.TypeString,
+																									Optional: true,
+																								},
+
+																								"provider": {
+																									Type:     schema.TypeString,
+																									Optional: true,
+																								},
+
+																								"secret_encoding": {
+																									Type:     schema.TypeString,
+																									Optional: true,
+																								},
+
+																								"version": {
+																									Type:     schema.TypeInt,
+																									Optional: true,
+																								},
+																							},
+																						},
+																					},
+
+																					"wingman_secret_info": {
+
+																						Type:     schema.TypeSet,
+																						Optional: true,
+																						Elem: &schema.Resource{
+																							Schema: map[string]*schema.Schema{
+
+																								"name": {
+																									Type:     schema.TypeString,
+																									Optional: true,
+																								},
+																							},
+																						},
+																					},
+																				},
+																			},
+																		},
+
+																		"circuit_id": {
+																			Type:     schema.TypeString,
+																			Optional: true,
+																		},
+																	},
+																},
+															},
+
+															"same_subscription": {
+
+																Type:     schema.TypeSet,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"name": {
+																			Type:     schema.TypeString,
+																			Optional: true,
+																		},
+
+																		"resource_group": {
+																			Type:     schema.TypeString,
+																			Optional: true,
+																		},
+																	},
+																},
+															},
+
+															"weight": {
+																Type:     schema.TypeInt,
+																Optional: true,
+															},
+														},
+													},
+												},
+
+												"gateway_subnet": {
+
+													Type:     schema.TypeSet,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"auto": {
+
+																Type:     schema.TypeBool,
+																Optional: true,
+															},
+
+															"subnet": {
+
+																Type:     schema.TypeSet,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"subnet_resource_grp": {
+
+																			Type:     schema.TypeString,
+																			Optional: true,
+																		},
+
+																		"vnet_resource_group": {
+
+																			Type:     schema.TypeBool,
+																			Optional: true,
+																		},
+																	},
+																},
+															},
+
+															"subnet_param": {
+
+																Type:     schema.TypeSet,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"ipv4": {
+																			Type:     schema.TypeString,
+																			Optional: true,
+																		},
+
+																		"ipv6": {
+																			Type:     schema.TypeString,
+																			Optional: true,
+																		},
+																	},
+																},
+															},
+														},
+													},
+												},
+
+												"route_server_subnet": {
+
+													Type:     schema.TypeSet,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"auto": {
+
+																Type:     schema.TypeBool,
+																Optional: true,
+															},
+
+															"subnet": {
+
+																Type:     schema.TypeSet,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"subnet_resource_grp": {
+
+																			Type:     schema.TypeString,
+																			Optional: true,
+																		},
+
+																		"vnet_resource_group": {
+
+																			Type:     schema.TypeBool,
+																			Optional: true,
+																		},
+																	},
+																},
+															},
+
+															"subnet_param": {
+
+																Type:     schema.TypeSet,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"ipv4": {
+																			Type:     schema.TypeString,
+																			Optional: true,
+																		},
+
+																		"ipv6": {
+																			Type:     schema.TypeString,
+																			Optional: true,
+																		},
+																	},
+																},
+															},
+														},
+													},
+												},
+
+												"sku_ergw1az": {
+
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
+
+												"sku_ergw2az": {
+
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
+
+												"sku_high_perf": {
+
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
+
+												"sku_standard": {
+
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
+											},
+										},
+									},
+
 									"spoke_vnets": {
 
 										Type:     schema.TypeList,
@@ -2020,6 +2386,372 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 							Optional: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
+
+									"express_route_disabled": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+
+									"express_route_enabled": {
+
+										Type:     schema.TypeSet,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"connections": {
+
+													Type:     schema.TypeList,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"metadata": {
+
+																Type:     schema.TypeSet,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"description": {
+																			Type:     schema.TypeString,
+																			Optional: true,
+																		},
+
+																		"disable": {
+																			Type:     schema.TypeBool,
+																			Optional: true,
+																		},
+
+																		"name": {
+																			Type:     schema.TypeString,
+																			Optional: true,
+																		},
+																	},
+																},
+															},
+
+															"other_subscription": {
+
+																Type:     schema.TypeSet,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"authorized_key": {
+
+																			Type:     schema.TypeSet,
+																			Optional: true,
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{
+
+																					"blindfold_secret_info_internal": {
+
+																						Type:     schema.TypeSet,
+																						Optional: true,
+																						Elem: &schema.Resource{
+																							Schema: map[string]*schema.Schema{
+
+																								"decryption_provider": {
+																									Type:     schema.TypeString,
+																									Optional: true,
+																								},
+
+																								"location": {
+																									Type:     schema.TypeString,
+																									Optional: true,
+																								},
+
+																								"store_provider": {
+																									Type:     schema.TypeString,
+																									Optional: true,
+																								},
+																							},
+																						},
+																					},
+
+																					"secret_encoding_type": {
+																						Type:     schema.TypeString,
+																						Optional: true,
+																					},
+
+																					"blindfold_secret_info": {
+
+																						Type:     schema.TypeSet,
+																						Optional: true,
+																						Elem: &schema.Resource{
+																							Schema: map[string]*schema.Schema{
+
+																								"decryption_provider": {
+																									Type:     schema.TypeString,
+																									Optional: true,
+																								},
+
+																								"location": {
+																									Type:     schema.TypeString,
+																									Optional: true,
+																								},
+
+																								"store_provider": {
+																									Type:     schema.TypeString,
+																									Optional: true,
+																								},
+																							},
+																						},
+																					},
+
+																					"clear_secret_info": {
+
+																						Type:     schema.TypeSet,
+																						Optional: true,
+																						Elem: &schema.Resource{
+																							Schema: map[string]*schema.Schema{
+
+																								"provider": {
+																									Type:     schema.TypeString,
+																									Optional: true,
+																								},
+
+																								"url": {
+																									Type:     schema.TypeString,
+																									Optional: true,
+																								},
+																							},
+																						},
+																					},
+
+																					"vault_secret_info": {
+
+																						Type:     schema.TypeSet,
+																						Optional: true,
+																						Elem: &schema.Resource{
+																							Schema: map[string]*schema.Schema{
+
+																								"key": {
+																									Type:     schema.TypeString,
+																									Optional: true,
+																								},
+
+																								"location": {
+																									Type:     schema.TypeString,
+																									Optional: true,
+																								},
+
+																								"provider": {
+																									Type:     schema.TypeString,
+																									Optional: true,
+																								},
+
+																								"secret_encoding": {
+																									Type:     schema.TypeString,
+																									Optional: true,
+																								},
+
+																								"version": {
+																									Type:     schema.TypeInt,
+																									Optional: true,
+																								},
+																							},
+																						},
+																					},
+
+																					"wingman_secret_info": {
+
+																						Type:     schema.TypeSet,
+																						Optional: true,
+																						Elem: &schema.Resource{
+																							Schema: map[string]*schema.Schema{
+
+																								"name": {
+																									Type:     schema.TypeString,
+																									Optional: true,
+																								},
+																							},
+																						},
+																					},
+																				},
+																			},
+																		},
+
+																		"circuit_id": {
+																			Type:     schema.TypeString,
+																			Optional: true,
+																		},
+																	},
+																},
+															},
+
+															"same_subscription": {
+
+																Type:     schema.TypeSet,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"name": {
+																			Type:     schema.TypeString,
+																			Optional: true,
+																		},
+
+																		"resource_group": {
+																			Type:     schema.TypeString,
+																			Optional: true,
+																		},
+																	},
+																},
+															},
+
+															"weight": {
+																Type:     schema.TypeInt,
+																Optional: true,
+															},
+														},
+													},
+												},
+
+												"gateway_subnet": {
+
+													Type:     schema.TypeSet,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"auto": {
+
+																Type:     schema.TypeBool,
+																Optional: true,
+															},
+
+															"subnet": {
+
+																Type:     schema.TypeSet,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"subnet_resource_grp": {
+
+																			Type:     schema.TypeString,
+																			Optional: true,
+																		},
+
+																		"vnet_resource_group": {
+
+																			Type:     schema.TypeBool,
+																			Optional: true,
+																		},
+																	},
+																},
+															},
+
+															"subnet_param": {
+
+																Type:     schema.TypeSet,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"ipv4": {
+																			Type:     schema.TypeString,
+																			Optional: true,
+																		},
+
+																		"ipv6": {
+																			Type:     schema.TypeString,
+																			Optional: true,
+																		},
+																	},
+																},
+															},
+														},
+													},
+												},
+
+												"route_server_subnet": {
+
+													Type:     schema.TypeSet,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"auto": {
+
+																Type:     schema.TypeBool,
+																Optional: true,
+															},
+
+															"subnet": {
+
+																Type:     schema.TypeSet,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"subnet_resource_grp": {
+
+																			Type:     schema.TypeString,
+																			Optional: true,
+																		},
+
+																		"vnet_resource_group": {
+
+																			Type:     schema.TypeBool,
+																			Optional: true,
+																		},
+																	},
+																},
+															},
+
+															"subnet_param": {
+
+																Type:     schema.TypeSet,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"ipv4": {
+																			Type:     schema.TypeString,
+																			Optional: true,
+																		},
+
+																		"ipv6": {
+																			Type:     schema.TypeString,
+																			Optional: true,
+																		},
+																	},
+																},
+															},
+														},
+													},
+												},
+
+												"sku_ergw1az": {
+
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
+
+												"sku_ergw2az": {
+
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
+
+												"sku_high_perf": {
+
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
+
+												"sku_standard": {
+
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
+											},
+										},
+									},
 
 									"spoke_vnets": {
 
@@ -6220,6 +6952,532 @@ func resourceVolterraAzureVnetSiteCreate(d *schema.ResourceData, meta interface{
 				for _, set := range sl {
 					cs := set.(map[string]interface{})
 
+					expressRouteChoiceTypeFound := false
+
+					if v, ok := cs["express_route_disabled"]; ok && !isIntfNil(v) && !expressRouteChoiceTypeFound {
+
+						expressRouteChoiceTypeFound = true
+
+						if v.(bool) {
+							expressRouteChoiceInt := &ves_io_schema_views_azure_vnet_site.AzureHubVnetType_ExpressRouteDisabled{}
+							expressRouteChoiceInt.ExpressRouteDisabled = &ves_io_schema.Empty{}
+							hubChoiceInt.Hub.ExpressRouteChoice = expressRouteChoiceInt
+						}
+
+					}
+
+					if v, ok := cs["express_route_enabled"]; ok && !isIntfNil(v) && !expressRouteChoiceTypeFound {
+
+						expressRouteChoiceTypeFound = true
+						expressRouteChoiceInt := &ves_io_schema_views_azure_vnet_site.AzureHubVnetType_ExpressRouteEnabled{}
+						expressRouteChoiceInt.ExpressRouteEnabled = &ves_io_schema_views_azure_vnet_site.ExpressRouteConfigType{}
+						hubChoiceInt.Hub.ExpressRouteChoice = expressRouteChoiceInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["connections"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								connections := make([]*ves_io_schema_views_azure_vnet_site.ExpressRouteConnectionType, len(sl))
+								expressRouteChoiceInt.ExpressRouteEnabled.Connections = connections
+								for i, set := range sl {
+									connections[i] = &ves_io_schema_views_azure_vnet_site.ExpressRouteConnectionType{}
+									connectionsMapStrToI := set.(map[string]interface{})
+
+									if v, ok := connectionsMapStrToI["metadata"]; ok && !isIntfNil(v) {
+
+										sl := v.(*schema.Set).List()
+										metadata := &ves_io_schema.MessageMetaType{}
+										connections[i].Metadata = metadata
+										for _, set := range sl {
+											metadataMapStrToI := set.(map[string]interface{})
+
+											if w, ok := metadataMapStrToI["description"]; ok && !isIntfNil(w) {
+												metadata.Description = w.(string)
+											}
+
+											if w, ok := metadataMapStrToI["disable"]; ok && !isIntfNil(w) {
+												metadata.Disable = w.(bool)
+											}
+
+											if w, ok := metadataMapStrToI["name"]; ok && !isIntfNil(w) {
+												metadata.Name = w.(string)
+											}
+
+										}
+
+									}
+
+									subscriptionChoiceTypeFound := false
+
+									if v, ok := connectionsMapStrToI["other_subscription"]; ok && !isIntfNil(v) && !subscriptionChoiceTypeFound {
+
+										subscriptionChoiceTypeFound = true
+										subscriptionChoiceInt := &ves_io_schema_views_azure_vnet_site.ExpressRouteConnectionType_OtherSubscription{}
+										subscriptionChoiceInt.OtherSubscription = &ves_io_schema_views_azure_vnet_site.ExpressRouteOtherSubscriptionConnection{}
+										connections[i].SubscriptionChoice = subscriptionChoiceInt
+
+										sl := v.(*schema.Set).List()
+										for _, set := range sl {
+											cs := set.(map[string]interface{})
+
+											if v, ok := cs["authorized_key"]; ok && !isIntfNil(v) {
+
+												sl := v.(*schema.Set).List()
+												authorizedKey := &ves_io_schema.SecretType{}
+												subscriptionChoiceInt.OtherSubscription.AuthorizedKey = authorizedKey
+												for _, set := range sl {
+													authorizedKeyMapStrToI := set.(map[string]interface{})
+
+													if v, ok := authorizedKeyMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
+
+														sl := v.(*schema.Set).List()
+														blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
+														authorizedKey.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
+														for _, set := range sl {
+															blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
+
+															if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
+																blindfoldSecretInfoInternal.DecryptionProvider = w.(string)
+															}
+
+															if w, ok := blindfoldSecretInfoInternalMapStrToI["location"]; ok && !isIntfNil(w) {
+																blindfoldSecretInfoInternal.Location = w.(string)
+															}
+
+															if w, ok := blindfoldSecretInfoInternalMapStrToI["store_provider"]; ok && !isIntfNil(w) {
+																blindfoldSecretInfoInternal.StoreProvider = w.(string)
+															}
+
+														}
+
+													}
+
+													if v, ok := authorizedKeyMapStrToI["secret_encoding_type"]; ok && !isIntfNil(v) {
+
+														authorizedKey.SecretEncodingType = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+													}
+
+													secretInfoOneofTypeFound := false
+
+													if v, ok := authorizedKeyMapStrToI["blindfold_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+														secretInfoOneofTypeFound = true
+														secretInfoOneofInt := &ves_io_schema.SecretType_BlindfoldSecretInfo{}
+														secretInfoOneofInt.BlindfoldSecretInfo = &ves_io_schema.BlindfoldSecretInfoType{}
+														authorizedKey.SecretInfoOneof = secretInfoOneofInt
+
+														sl := v.(*schema.Set).List()
+														for _, set := range sl {
+															cs := set.(map[string]interface{})
+
+															if v, ok := cs["decryption_provider"]; ok && !isIntfNil(v) {
+
+																secretInfoOneofInt.BlindfoldSecretInfo.DecryptionProvider = v.(string)
+
+															}
+
+															if v, ok := cs["location"]; ok && !isIntfNil(v) {
+
+																secretInfoOneofInt.BlindfoldSecretInfo.Location = v.(string)
+
+															}
+
+															if v, ok := cs["store_provider"]; ok && !isIntfNil(v) {
+
+																secretInfoOneofInt.BlindfoldSecretInfo.StoreProvider = v.(string)
+
+															}
+
+														}
+
+													}
+
+													if v, ok := authorizedKeyMapStrToI["clear_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+														secretInfoOneofTypeFound = true
+														secretInfoOneofInt := &ves_io_schema.SecretType_ClearSecretInfo{}
+														secretInfoOneofInt.ClearSecretInfo = &ves_io_schema.ClearSecretInfoType{}
+														authorizedKey.SecretInfoOneof = secretInfoOneofInt
+
+														sl := v.(*schema.Set).List()
+														for _, set := range sl {
+															cs := set.(map[string]interface{})
+
+															if v, ok := cs["provider"]; ok && !isIntfNil(v) {
+
+																secretInfoOneofInt.ClearSecretInfo.Provider = v.(string)
+
+															}
+
+															if v, ok := cs["url"]; ok && !isIntfNil(v) {
+
+																secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
+
+															}
+
+														}
+
+													}
+
+													if v, ok := authorizedKeyMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+														secretInfoOneofTypeFound = true
+														secretInfoOneofInt := &ves_io_schema.SecretType_VaultSecretInfo{}
+														secretInfoOneofInt.VaultSecretInfo = &ves_io_schema.VaultSecretInfoType{}
+														authorizedKey.SecretInfoOneof = secretInfoOneofInt
+
+														sl := v.(*schema.Set).List()
+														for _, set := range sl {
+															cs := set.(map[string]interface{})
+
+															if v, ok := cs["key"]; ok && !isIntfNil(v) {
+
+																secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
+
+															}
+
+															if v, ok := cs["location"]; ok && !isIntfNil(v) {
+
+																secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
+
+															}
+
+															if v, ok := cs["provider"]; ok && !isIntfNil(v) {
+
+																secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
+
+															}
+
+															if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
+
+																secretInfoOneofInt.VaultSecretInfo.SecretEncoding = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+															}
+
+															if v, ok := cs["version"]; ok && !isIntfNil(v) {
+
+																secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
+
+															}
+
+														}
+
+													}
+
+													if v, ok := authorizedKeyMapStrToI["wingman_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+														secretInfoOneofTypeFound = true
+														secretInfoOneofInt := &ves_io_schema.SecretType_WingmanSecretInfo{}
+														secretInfoOneofInt.WingmanSecretInfo = &ves_io_schema.WingmanSecretInfoType{}
+														authorizedKey.SecretInfoOneof = secretInfoOneofInt
+
+														sl := v.(*schema.Set).List()
+														for _, set := range sl {
+															cs := set.(map[string]interface{})
+
+															if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+																secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
+
+															}
+
+														}
+
+													}
+
+												}
+
+											}
+
+											if v, ok := cs["circuit_id"]; ok && !isIntfNil(v) {
+
+												subscriptionChoiceInt.OtherSubscription.CircuitId = v.(string)
+
+											}
+
+										}
+
+									}
+
+									if v, ok := connectionsMapStrToI["same_subscription"]; ok && !isIntfNil(v) && !subscriptionChoiceTypeFound {
+
+										subscriptionChoiceTypeFound = true
+										subscriptionChoiceInt := &ves_io_schema_views_azure_vnet_site.ExpressRouteConnectionType_SameSubscription{}
+										subscriptionChoiceInt.SameSubscription = &ves_io_schema_views.AzureExpressRouteConnectionType{}
+										connections[i].SubscriptionChoice = subscriptionChoiceInt
+
+										sl := v.(*schema.Set).List()
+										for _, set := range sl {
+											cs := set.(map[string]interface{})
+
+											if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+												subscriptionChoiceInt.SameSubscription.Name = v.(string)
+
+											}
+
+											if v, ok := cs["resource_group"]; ok && !isIntfNil(v) {
+
+												subscriptionChoiceInt.SameSubscription.ResourceGroup = v.(string)
+
+											}
+
+										}
+
+									}
+
+									if w, ok := connectionsMapStrToI["weight"]; ok && !isIntfNil(w) {
+										connections[i].Weight = uint32(w.(int))
+									}
+
+								}
+
+							}
+
+							if v, ok := cs["gateway_subnet"]; ok && !isIntfNil(v) {
+
+								sl := v.(*schema.Set).List()
+								gatewaySubnet := &ves_io_schema_views.AzureSubnetChoiceWithAutoType{}
+								expressRouteChoiceInt.ExpressRouteEnabled.GatewaySubnet = gatewaySubnet
+								for _, set := range sl {
+									gatewaySubnetMapStrToI := set.(map[string]interface{})
+
+									choiceTypeFound := false
+
+									if v, ok := gatewaySubnetMapStrToI["auto"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+										choiceTypeFound = true
+
+										if v.(bool) {
+											choiceInt := &ves_io_schema_views.AzureSubnetChoiceWithAutoType_Auto{}
+											choiceInt.Auto = &ves_io_schema.Empty{}
+											gatewaySubnet.Choice = choiceInt
+										}
+
+									}
+
+									if v, ok := gatewaySubnetMapStrToI["subnet"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+										choiceTypeFound = true
+										choiceInt := &ves_io_schema_views.AzureSubnetChoiceWithAutoType_Subnet{}
+										choiceInt.Subnet = &ves_io_schema_views.AzureSpecialSubnetType{}
+										gatewaySubnet.Choice = choiceInt
+
+										sl := v.(*schema.Set).List()
+										for _, set := range sl {
+											cs := set.(map[string]interface{})
+
+											resourceGroupChoiceTypeFound := false
+
+											if v, ok := cs["subnet_resource_grp"]; ok && !isIntfNil(v) && !resourceGroupChoiceTypeFound {
+
+												resourceGroupChoiceTypeFound = true
+												resourceGroupChoiceInt := &ves_io_schema_views.AzureSpecialSubnetType_SubnetResourceGrp{}
+
+												choiceInt.Subnet.ResourceGroupChoice = resourceGroupChoiceInt
+
+												resourceGroupChoiceInt.SubnetResourceGrp = v.(string)
+
+											}
+
+											if v, ok := cs["vnet_resource_group"]; ok && !isIntfNil(v) && !resourceGroupChoiceTypeFound {
+
+												resourceGroupChoiceTypeFound = true
+
+												if v.(bool) {
+													resourceGroupChoiceInt := &ves_io_schema_views.AzureSpecialSubnetType_VnetResourceGroup{}
+													resourceGroupChoiceInt.VnetResourceGroup = &ves_io_schema.Empty{}
+													choiceInt.Subnet.ResourceGroupChoice = resourceGroupChoiceInt
+												}
+
+											}
+
+										}
+
+									}
+
+									if v, ok := gatewaySubnetMapStrToI["subnet_param"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+										choiceTypeFound = true
+										choiceInt := &ves_io_schema_views.AzureSubnetChoiceWithAutoType_SubnetParam{}
+										choiceInt.SubnetParam = &ves_io_schema_views.CloudSubnetParamType{}
+										gatewaySubnet.Choice = choiceInt
+
+										sl := v.(*schema.Set).List()
+										for _, set := range sl {
+											cs := set.(map[string]interface{})
+
+											if v, ok := cs["ipv4"]; ok && !isIntfNil(v) {
+
+												choiceInt.SubnetParam.Ipv4 = v.(string)
+
+											}
+
+											if v, ok := cs["ipv6"]; ok && !isIntfNil(v) {
+
+												choiceInt.SubnetParam.Ipv6 = v.(string)
+
+											}
+
+										}
+
+									}
+
+								}
+
+							}
+
+							if v, ok := cs["route_server_subnet"]; ok && !isIntfNil(v) {
+
+								sl := v.(*schema.Set).List()
+								routeServerSubnet := &ves_io_schema_views.AzureSubnetChoiceWithAutoType{}
+								expressRouteChoiceInt.ExpressRouteEnabled.RouteServerSubnet = routeServerSubnet
+								for _, set := range sl {
+									routeServerSubnetMapStrToI := set.(map[string]interface{})
+
+									choiceTypeFound := false
+
+									if v, ok := routeServerSubnetMapStrToI["auto"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+										choiceTypeFound = true
+
+										if v.(bool) {
+											choiceInt := &ves_io_schema_views.AzureSubnetChoiceWithAutoType_Auto{}
+											choiceInt.Auto = &ves_io_schema.Empty{}
+											routeServerSubnet.Choice = choiceInt
+										}
+
+									}
+
+									if v, ok := routeServerSubnetMapStrToI["subnet"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+										choiceTypeFound = true
+										choiceInt := &ves_io_schema_views.AzureSubnetChoiceWithAutoType_Subnet{}
+										choiceInt.Subnet = &ves_io_schema_views.AzureSpecialSubnetType{}
+										routeServerSubnet.Choice = choiceInt
+
+										sl := v.(*schema.Set).List()
+										for _, set := range sl {
+											cs := set.(map[string]interface{})
+
+											resourceGroupChoiceTypeFound := false
+
+											if v, ok := cs["subnet_resource_grp"]; ok && !isIntfNil(v) && !resourceGroupChoiceTypeFound {
+
+												resourceGroupChoiceTypeFound = true
+												resourceGroupChoiceInt := &ves_io_schema_views.AzureSpecialSubnetType_SubnetResourceGrp{}
+
+												choiceInt.Subnet.ResourceGroupChoice = resourceGroupChoiceInt
+
+												resourceGroupChoiceInt.SubnetResourceGrp = v.(string)
+
+											}
+
+											if v, ok := cs["vnet_resource_group"]; ok && !isIntfNil(v) && !resourceGroupChoiceTypeFound {
+
+												resourceGroupChoiceTypeFound = true
+
+												if v.(bool) {
+													resourceGroupChoiceInt := &ves_io_schema_views.AzureSpecialSubnetType_VnetResourceGroup{}
+													resourceGroupChoiceInt.VnetResourceGroup = &ves_io_schema.Empty{}
+													choiceInt.Subnet.ResourceGroupChoice = resourceGroupChoiceInt
+												}
+
+											}
+
+										}
+
+									}
+
+									if v, ok := routeServerSubnetMapStrToI["subnet_param"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+										choiceTypeFound = true
+										choiceInt := &ves_io_schema_views.AzureSubnetChoiceWithAutoType_SubnetParam{}
+										choiceInt.SubnetParam = &ves_io_schema_views.CloudSubnetParamType{}
+										routeServerSubnet.Choice = choiceInt
+
+										sl := v.(*schema.Set).List()
+										for _, set := range sl {
+											cs := set.(map[string]interface{})
+
+											if v, ok := cs["ipv4"]; ok && !isIntfNil(v) {
+
+												choiceInt.SubnetParam.Ipv4 = v.(string)
+
+											}
+
+											if v, ok := cs["ipv6"]; ok && !isIntfNil(v) {
+
+												choiceInt.SubnetParam.Ipv6 = v.(string)
+
+											}
+
+										}
+
+									}
+
+								}
+
+							}
+
+							skuChoiceTypeFound := false
+
+							if v, ok := cs["sku_ergw1az"]; ok && !isIntfNil(v) && !skuChoiceTypeFound {
+
+								skuChoiceTypeFound = true
+
+								if v.(bool) {
+									skuChoiceInt := &ves_io_schema_views_azure_vnet_site.ExpressRouteConfigType_SkuErgw1Az{}
+									skuChoiceInt.SkuErgw1Az = &ves_io_schema.Empty{}
+									expressRouteChoiceInt.ExpressRouteEnabled.SkuChoice = skuChoiceInt
+								}
+
+							}
+
+							if v, ok := cs["sku_ergw2az"]; ok && !isIntfNil(v) && !skuChoiceTypeFound {
+
+								skuChoiceTypeFound = true
+
+								if v.(bool) {
+									skuChoiceInt := &ves_io_schema_views_azure_vnet_site.ExpressRouteConfigType_SkuErgw2Az{}
+									skuChoiceInt.SkuErgw2Az = &ves_io_schema.Empty{}
+									expressRouteChoiceInt.ExpressRouteEnabled.SkuChoice = skuChoiceInt
+								}
+
+							}
+
+							if v, ok := cs["sku_high_perf"]; ok && !isIntfNil(v) && !skuChoiceTypeFound {
+
+								skuChoiceTypeFound = true
+
+								if v.(bool) {
+									skuChoiceInt := &ves_io_schema_views_azure_vnet_site.ExpressRouteConfigType_SkuHighPerf{}
+									skuChoiceInt.SkuHighPerf = &ves_io_schema.Empty{}
+									expressRouteChoiceInt.ExpressRouteEnabled.SkuChoice = skuChoiceInt
+								}
+
+							}
+
+							if v, ok := cs["sku_standard"]; ok && !isIntfNil(v) && !skuChoiceTypeFound {
+
+								skuChoiceTypeFound = true
+
+								if v.(bool) {
+									skuChoiceInt := &ves_io_schema_views_azure_vnet_site.ExpressRouteConfigType_SkuStandard{}
+									skuChoiceInt.SkuStandard = &ves_io_schema.Empty{}
+									expressRouteChoiceInt.ExpressRouteEnabled.SkuChoice = skuChoiceInt
+								}
+
+							}
+
+						}
+
+					}
+
 					if v, ok := cs["spoke_vnets"]; ok && !isIntfNil(v) {
 
 						sl := v.([]interface{})
@@ -7694,6 +8952,532 @@ func resourceVolterraAzureVnetSiteCreate(d *schema.ResourceData, meta interface{
 				sl := v.(*schema.Set).List()
 				for _, set := range sl {
 					cs := set.(map[string]interface{})
+
+					expressRouteChoiceTypeFound := false
+
+					if v, ok := cs["express_route_disabled"]; ok && !isIntfNil(v) && !expressRouteChoiceTypeFound {
+
+						expressRouteChoiceTypeFound = true
+
+						if v.(bool) {
+							expressRouteChoiceInt := &ves_io_schema_views_azure_vnet_site.AzureHubVnetType_ExpressRouteDisabled{}
+							expressRouteChoiceInt.ExpressRouteDisabled = &ves_io_schema.Empty{}
+							hubChoiceInt.Hub.ExpressRouteChoice = expressRouteChoiceInt
+						}
+
+					}
+
+					if v, ok := cs["express_route_enabled"]; ok && !isIntfNil(v) && !expressRouteChoiceTypeFound {
+
+						expressRouteChoiceTypeFound = true
+						expressRouteChoiceInt := &ves_io_schema_views_azure_vnet_site.AzureHubVnetType_ExpressRouteEnabled{}
+						expressRouteChoiceInt.ExpressRouteEnabled = &ves_io_schema_views_azure_vnet_site.ExpressRouteConfigType{}
+						hubChoiceInt.Hub.ExpressRouteChoice = expressRouteChoiceInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["connections"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								connections := make([]*ves_io_schema_views_azure_vnet_site.ExpressRouteConnectionType, len(sl))
+								expressRouteChoiceInt.ExpressRouteEnabled.Connections = connections
+								for i, set := range sl {
+									connections[i] = &ves_io_schema_views_azure_vnet_site.ExpressRouteConnectionType{}
+									connectionsMapStrToI := set.(map[string]interface{})
+
+									if v, ok := connectionsMapStrToI["metadata"]; ok && !isIntfNil(v) {
+
+										sl := v.(*schema.Set).List()
+										metadata := &ves_io_schema.MessageMetaType{}
+										connections[i].Metadata = metadata
+										for _, set := range sl {
+											metadataMapStrToI := set.(map[string]interface{})
+
+											if w, ok := metadataMapStrToI["description"]; ok && !isIntfNil(w) {
+												metadata.Description = w.(string)
+											}
+
+											if w, ok := metadataMapStrToI["disable"]; ok && !isIntfNil(w) {
+												metadata.Disable = w.(bool)
+											}
+
+											if w, ok := metadataMapStrToI["name"]; ok && !isIntfNil(w) {
+												metadata.Name = w.(string)
+											}
+
+										}
+
+									}
+
+									subscriptionChoiceTypeFound := false
+
+									if v, ok := connectionsMapStrToI["other_subscription"]; ok && !isIntfNil(v) && !subscriptionChoiceTypeFound {
+
+										subscriptionChoiceTypeFound = true
+										subscriptionChoiceInt := &ves_io_schema_views_azure_vnet_site.ExpressRouteConnectionType_OtherSubscription{}
+										subscriptionChoiceInt.OtherSubscription = &ves_io_schema_views_azure_vnet_site.ExpressRouteOtherSubscriptionConnection{}
+										connections[i].SubscriptionChoice = subscriptionChoiceInt
+
+										sl := v.(*schema.Set).List()
+										for _, set := range sl {
+											cs := set.(map[string]interface{})
+
+											if v, ok := cs["authorized_key"]; ok && !isIntfNil(v) {
+
+												sl := v.(*schema.Set).List()
+												authorizedKey := &ves_io_schema.SecretType{}
+												subscriptionChoiceInt.OtherSubscription.AuthorizedKey = authorizedKey
+												for _, set := range sl {
+													authorizedKeyMapStrToI := set.(map[string]interface{})
+
+													if v, ok := authorizedKeyMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
+
+														sl := v.(*schema.Set).List()
+														blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
+														authorizedKey.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
+														for _, set := range sl {
+															blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
+
+															if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
+																blindfoldSecretInfoInternal.DecryptionProvider = w.(string)
+															}
+
+															if w, ok := blindfoldSecretInfoInternalMapStrToI["location"]; ok && !isIntfNil(w) {
+																blindfoldSecretInfoInternal.Location = w.(string)
+															}
+
+															if w, ok := blindfoldSecretInfoInternalMapStrToI["store_provider"]; ok && !isIntfNil(w) {
+																blindfoldSecretInfoInternal.StoreProvider = w.(string)
+															}
+
+														}
+
+													}
+
+													if v, ok := authorizedKeyMapStrToI["secret_encoding_type"]; ok && !isIntfNil(v) {
+
+														authorizedKey.SecretEncodingType = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+													}
+
+													secretInfoOneofTypeFound := false
+
+													if v, ok := authorizedKeyMapStrToI["blindfold_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+														secretInfoOneofTypeFound = true
+														secretInfoOneofInt := &ves_io_schema.SecretType_BlindfoldSecretInfo{}
+														secretInfoOneofInt.BlindfoldSecretInfo = &ves_io_schema.BlindfoldSecretInfoType{}
+														authorizedKey.SecretInfoOneof = secretInfoOneofInt
+
+														sl := v.(*schema.Set).List()
+														for _, set := range sl {
+															cs := set.(map[string]interface{})
+
+															if v, ok := cs["decryption_provider"]; ok && !isIntfNil(v) {
+
+																secretInfoOneofInt.BlindfoldSecretInfo.DecryptionProvider = v.(string)
+
+															}
+
+															if v, ok := cs["location"]; ok && !isIntfNil(v) {
+
+																secretInfoOneofInt.BlindfoldSecretInfo.Location = v.(string)
+
+															}
+
+															if v, ok := cs["store_provider"]; ok && !isIntfNil(v) {
+
+																secretInfoOneofInt.BlindfoldSecretInfo.StoreProvider = v.(string)
+
+															}
+
+														}
+
+													}
+
+													if v, ok := authorizedKeyMapStrToI["clear_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+														secretInfoOneofTypeFound = true
+														secretInfoOneofInt := &ves_io_schema.SecretType_ClearSecretInfo{}
+														secretInfoOneofInt.ClearSecretInfo = &ves_io_schema.ClearSecretInfoType{}
+														authorizedKey.SecretInfoOneof = secretInfoOneofInt
+
+														sl := v.(*schema.Set).List()
+														for _, set := range sl {
+															cs := set.(map[string]interface{})
+
+															if v, ok := cs["provider"]; ok && !isIntfNil(v) {
+
+																secretInfoOneofInt.ClearSecretInfo.Provider = v.(string)
+
+															}
+
+															if v, ok := cs["url"]; ok && !isIntfNil(v) {
+
+																secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
+
+															}
+
+														}
+
+													}
+
+													if v, ok := authorizedKeyMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+														secretInfoOneofTypeFound = true
+														secretInfoOneofInt := &ves_io_schema.SecretType_VaultSecretInfo{}
+														secretInfoOneofInt.VaultSecretInfo = &ves_io_schema.VaultSecretInfoType{}
+														authorizedKey.SecretInfoOneof = secretInfoOneofInt
+
+														sl := v.(*schema.Set).List()
+														for _, set := range sl {
+															cs := set.(map[string]interface{})
+
+															if v, ok := cs["key"]; ok && !isIntfNil(v) {
+
+																secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
+
+															}
+
+															if v, ok := cs["location"]; ok && !isIntfNil(v) {
+
+																secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
+
+															}
+
+															if v, ok := cs["provider"]; ok && !isIntfNil(v) {
+
+																secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
+
+															}
+
+															if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
+
+																secretInfoOneofInt.VaultSecretInfo.SecretEncoding = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+															}
+
+															if v, ok := cs["version"]; ok && !isIntfNil(v) {
+
+																secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
+
+															}
+
+														}
+
+													}
+
+													if v, ok := authorizedKeyMapStrToI["wingman_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+														secretInfoOneofTypeFound = true
+														secretInfoOneofInt := &ves_io_schema.SecretType_WingmanSecretInfo{}
+														secretInfoOneofInt.WingmanSecretInfo = &ves_io_schema.WingmanSecretInfoType{}
+														authorizedKey.SecretInfoOneof = secretInfoOneofInt
+
+														sl := v.(*schema.Set).List()
+														for _, set := range sl {
+															cs := set.(map[string]interface{})
+
+															if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+																secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
+
+															}
+
+														}
+
+													}
+
+												}
+
+											}
+
+											if v, ok := cs["circuit_id"]; ok && !isIntfNil(v) {
+
+												subscriptionChoiceInt.OtherSubscription.CircuitId = v.(string)
+
+											}
+
+										}
+
+									}
+
+									if v, ok := connectionsMapStrToI["same_subscription"]; ok && !isIntfNil(v) && !subscriptionChoiceTypeFound {
+
+										subscriptionChoiceTypeFound = true
+										subscriptionChoiceInt := &ves_io_schema_views_azure_vnet_site.ExpressRouteConnectionType_SameSubscription{}
+										subscriptionChoiceInt.SameSubscription = &ves_io_schema_views.AzureExpressRouteConnectionType{}
+										connections[i].SubscriptionChoice = subscriptionChoiceInt
+
+										sl := v.(*schema.Set).List()
+										for _, set := range sl {
+											cs := set.(map[string]interface{})
+
+											if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+												subscriptionChoiceInt.SameSubscription.Name = v.(string)
+
+											}
+
+											if v, ok := cs["resource_group"]; ok && !isIntfNil(v) {
+
+												subscriptionChoiceInt.SameSubscription.ResourceGroup = v.(string)
+
+											}
+
+										}
+
+									}
+
+									if w, ok := connectionsMapStrToI["weight"]; ok && !isIntfNil(w) {
+										connections[i].Weight = uint32(w.(int))
+									}
+
+								}
+
+							}
+
+							if v, ok := cs["gateway_subnet"]; ok && !isIntfNil(v) {
+
+								sl := v.(*schema.Set).List()
+								gatewaySubnet := &ves_io_schema_views.AzureSubnetChoiceWithAutoType{}
+								expressRouteChoiceInt.ExpressRouteEnabled.GatewaySubnet = gatewaySubnet
+								for _, set := range sl {
+									gatewaySubnetMapStrToI := set.(map[string]interface{})
+
+									choiceTypeFound := false
+
+									if v, ok := gatewaySubnetMapStrToI["auto"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+										choiceTypeFound = true
+
+										if v.(bool) {
+											choiceInt := &ves_io_schema_views.AzureSubnetChoiceWithAutoType_Auto{}
+											choiceInt.Auto = &ves_io_schema.Empty{}
+											gatewaySubnet.Choice = choiceInt
+										}
+
+									}
+
+									if v, ok := gatewaySubnetMapStrToI["subnet"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+										choiceTypeFound = true
+										choiceInt := &ves_io_schema_views.AzureSubnetChoiceWithAutoType_Subnet{}
+										choiceInt.Subnet = &ves_io_schema_views.AzureSpecialSubnetType{}
+										gatewaySubnet.Choice = choiceInt
+
+										sl := v.(*schema.Set).List()
+										for _, set := range sl {
+											cs := set.(map[string]interface{})
+
+											resourceGroupChoiceTypeFound := false
+
+											if v, ok := cs["subnet_resource_grp"]; ok && !isIntfNil(v) && !resourceGroupChoiceTypeFound {
+
+												resourceGroupChoiceTypeFound = true
+												resourceGroupChoiceInt := &ves_io_schema_views.AzureSpecialSubnetType_SubnetResourceGrp{}
+
+												choiceInt.Subnet.ResourceGroupChoice = resourceGroupChoiceInt
+
+												resourceGroupChoiceInt.SubnetResourceGrp = v.(string)
+
+											}
+
+											if v, ok := cs["vnet_resource_group"]; ok && !isIntfNil(v) && !resourceGroupChoiceTypeFound {
+
+												resourceGroupChoiceTypeFound = true
+
+												if v.(bool) {
+													resourceGroupChoiceInt := &ves_io_schema_views.AzureSpecialSubnetType_VnetResourceGroup{}
+													resourceGroupChoiceInt.VnetResourceGroup = &ves_io_schema.Empty{}
+													choiceInt.Subnet.ResourceGroupChoice = resourceGroupChoiceInt
+												}
+
+											}
+
+										}
+
+									}
+
+									if v, ok := gatewaySubnetMapStrToI["subnet_param"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+										choiceTypeFound = true
+										choiceInt := &ves_io_schema_views.AzureSubnetChoiceWithAutoType_SubnetParam{}
+										choiceInt.SubnetParam = &ves_io_schema_views.CloudSubnetParamType{}
+										gatewaySubnet.Choice = choiceInt
+
+										sl := v.(*schema.Set).List()
+										for _, set := range sl {
+											cs := set.(map[string]interface{})
+
+											if v, ok := cs["ipv4"]; ok && !isIntfNil(v) {
+
+												choiceInt.SubnetParam.Ipv4 = v.(string)
+
+											}
+
+											if v, ok := cs["ipv6"]; ok && !isIntfNil(v) {
+
+												choiceInt.SubnetParam.Ipv6 = v.(string)
+
+											}
+
+										}
+
+									}
+
+								}
+
+							}
+
+							if v, ok := cs["route_server_subnet"]; ok && !isIntfNil(v) {
+
+								sl := v.(*schema.Set).List()
+								routeServerSubnet := &ves_io_schema_views.AzureSubnetChoiceWithAutoType{}
+								expressRouteChoiceInt.ExpressRouteEnabled.RouteServerSubnet = routeServerSubnet
+								for _, set := range sl {
+									routeServerSubnetMapStrToI := set.(map[string]interface{})
+
+									choiceTypeFound := false
+
+									if v, ok := routeServerSubnetMapStrToI["auto"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+										choiceTypeFound = true
+
+										if v.(bool) {
+											choiceInt := &ves_io_schema_views.AzureSubnetChoiceWithAutoType_Auto{}
+											choiceInt.Auto = &ves_io_schema.Empty{}
+											routeServerSubnet.Choice = choiceInt
+										}
+
+									}
+
+									if v, ok := routeServerSubnetMapStrToI["subnet"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+										choiceTypeFound = true
+										choiceInt := &ves_io_schema_views.AzureSubnetChoiceWithAutoType_Subnet{}
+										choiceInt.Subnet = &ves_io_schema_views.AzureSpecialSubnetType{}
+										routeServerSubnet.Choice = choiceInt
+
+										sl := v.(*schema.Set).List()
+										for _, set := range sl {
+											cs := set.(map[string]interface{})
+
+											resourceGroupChoiceTypeFound := false
+
+											if v, ok := cs["subnet_resource_grp"]; ok && !isIntfNil(v) && !resourceGroupChoiceTypeFound {
+
+												resourceGroupChoiceTypeFound = true
+												resourceGroupChoiceInt := &ves_io_schema_views.AzureSpecialSubnetType_SubnetResourceGrp{}
+
+												choiceInt.Subnet.ResourceGroupChoice = resourceGroupChoiceInt
+
+												resourceGroupChoiceInt.SubnetResourceGrp = v.(string)
+
+											}
+
+											if v, ok := cs["vnet_resource_group"]; ok && !isIntfNil(v) && !resourceGroupChoiceTypeFound {
+
+												resourceGroupChoiceTypeFound = true
+
+												if v.(bool) {
+													resourceGroupChoiceInt := &ves_io_schema_views.AzureSpecialSubnetType_VnetResourceGroup{}
+													resourceGroupChoiceInt.VnetResourceGroup = &ves_io_schema.Empty{}
+													choiceInt.Subnet.ResourceGroupChoice = resourceGroupChoiceInt
+												}
+
+											}
+
+										}
+
+									}
+
+									if v, ok := routeServerSubnetMapStrToI["subnet_param"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+										choiceTypeFound = true
+										choiceInt := &ves_io_schema_views.AzureSubnetChoiceWithAutoType_SubnetParam{}
+										choiceInt.SubnetParam = &ves_io_schema_views.CloudSubnetParamType{}
+										routeServerSubnet.Choice = choiceInt
+
+										sl := v.(*schema.Set).List()
+										for _, set := range sl {
+											cs := set.(map[string]interface{})
+
+											if v, ok := cs["ipv4"]; ok && !isIntfNil(v) {
+
+												choiceInt.SubnetParam.Ipv4 = v.(string)
+
+											}
+
+											if v, ok := cs["ipv6"]; ok && !isIntfNil(v) {
+
+												choiceInt.SubnetParam.Ipv6 = v.(string)
+
+											}
+
+										}
+
+									}
+
+								}
+
+							}
+
+							skuChoiceTypeFound := false
+
+							if v, ok := cs["sku_ergw1az"]; ok && !isIntfNil(v) && !skuChoiceTypeFound {
+
+								skuChoiceTypeFound = true
+
+								if v.(bool) {
+									skuChoiceInt := &ves_io_schema_views_azure_vnet_site.ExpressRouteConfigType_SkuErgw1Az{}
+									skuChoiceInt.SkuErgw1Az = &ves_io_schema.Empty{}
+									expressRouteChoiceInt.ExpressRouteEnabled.SkuChoice = skuChoiceInt
+								}
+
+							}
+
+							if v, ok := cs["sku_ergw2az"]; ok && !isIntfNil(v) && !skuChoiceTypeFound {
+
+								skuChoiceTypeFound = true
+
+								if v.(bool) {
+									skuChoiceInt := &ves_io_schema_views_azure_vnet_site.ExpressRouteConfigType_SkuErgw2Az{}
+									skuChoiceInt.SkuErgw2Az = &ves_io_schema.Empty{}
+									expressRouteChoiceInt.ExpressRouteEnabled.SkuChoice = skuChoiceInt
+								}
+
+							}
+
+							if v, ok := cs["sku_high_perf"]; ok && !isIntfNil(v) && !skuChoiceTypeFound {
+
+								skuChoiceTypeFound = true
+
+								if v.(bool) {
+									skuChoiceInt := &ves_io_schema_views_azure_vnet_site.ExpressRouteConfigType_SkuHighPerf{}
+									skuChoiceInt.SkuHighPerf = &ves_io_schema.Empty{}
+									expressRouteChoiceInt.ExpressRouteEnabled.SkuChoice = skuChoiceInt
+								}
+
+							}
+
+							if v, ok := cs["sku_standard"]; ok && !isIntfNil(v) && !skuChoiceTypeFound {
+
+								skuChoiceTypeFound = true
+
+								if v.(bool) {
+									skuChoiceInt := &ves_io_schema_views_azure_vnet_site.ExpressRouteConfigType_SkuStandard{}
+									skuChoiceInt.SkuStandard = &ves_io_schema.Empty{}
+									expressRouteChoiceInt.ExpressRouteEnabled.SkuChoice = skuChoiceInt
+								}
+
+							}
+
+						}
+
+					}
 
 					if v, ok := cs["spoke_vnets"]; ok && !isIntfNil(v) {
 
@@ -12738,6 +14522,532 @@ func resourceVolterraAzureVnetSiteUpdate(d *schema.ResourceData, meta interface{
 				for _, set := range sl {
 					cs := set.(map[string]interface{})
 
+					expressRouteChoiceTypeFound := false
+
+					if v, ok := cs["express_route_disabled"]; ok && !isIntfNil(v) && !expressRouteChoiceTypeFound {
+
+						expressRouteChoiceTypeFound = true
+
+						if v.(bool) {
+							expressRouteChoiceInt := &ves_io_schema_views_azure_vnet_site.AzureHubVnetType_ExpressRouteDisabled{}
+							expressRouteChoiceInt.ExpressRouteDisabled = &ves_io_schema.Empty{}
+							hubChoiceInt.Hub.ExpressRouteChoice = expressRouteChoiceInt
+						}
+
+					}
+
+					if v, ok := cs["express_route_enabled"]; ok && !isIntfNil(v) && !expressRouteChoiceTypeFound {
+
+						expressRouteChoiceTypeFound = true
+						expressRouteChoiceInt := &ves_io_schema_views_azure_vnet_site.AzureHubVnetType_ExpressRouteEnabled{}
+						expressRouteChoiceInt.ExpressRouteEnabled = &ves_io_schema_views_azure_vnet_site.ExpressRouteConfigType{}
+						hubChoiceInt.Hub.ExpressRouteChoice = expressRouteChoiceInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["connections"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								connections := make([]*ves_io_schema_views_azure_vnet_site.ExpressRouteConnectionType, len(sl))
+								expressRouteChoiceInt.ExpressRouteEnabled.Connections = connections
+								for i, set := range sl {
+									connections[i] = &ves_io_schema_views_azure_vnet_site.ExpressRouteConnectionType{}
+									connectionsMapStrToI := set.(map[string]interface{})
+
+									if v, ok := connectionsMapStrToI["metadata"]; ok && !isIntfNil(v) {
+
+										sl := v.(*schema.Set).List()
+										metadata := &ves_io_schema.MessageMetaType{}
+										connections[i].Metadata = metadata
+										for _, set := range sl {
+											metadataMapStrToI := set.(map[string]interface{})
+
+											if w, ok := metadataMapStrToI["description"]; ok && !isIntfNil(w) {
+												metadata.Description = w.(string)
+											}
+
+											if w, ok := metadataMapStrToI["disable"]; ok && !isIntfNil(w) {
+												metadata.Disable = w.(bool)
+											}
+
+											if w, ok := metadataMapStrToI["name"]; ok && !isIntfNil(w) {
+												metadata.Name = w.(string)
+											}
+
+										}
+
+									}
+
+									subscriptionChoiceTypeFound := false
+
+									if v, ok := connectionsMapStrToI["other_subscription"]; ok && !isIntfNil(v) && !subscriptionChoiceTypeFound {
+
+										subscriptionChoiceTypeFound = true
+										subscriptionChoiceInt := &ves_io_schema_views_azure_vnet_site.ExpressRouteConnectionType_OtherSubscription{}
+										subscriptionChoiceInt.OtherSubscription = &ves_io_schema_views_azure_vnet_site.ExpressRouteOtherSubscriptionConnection{}
+										connections[i].SubscriptionChoice = subscriptionChoiceInt
+
+										sl := v.(*schema.Set).List()
+										for _, set := range sl {
+											cs := set.(map[string]interface{})
+
+											if v, ok := cs["authorized_key"]; ok && !isIntfNil(v) {
+
+												sl := v.(*schema.Set).List()
+												authorizedKey := &ves_io_schema.SecretType{}
+												subscriptionChoiceInt.OtherSubscription.AuthorizedKey = authorizedKey
+												for _, set := range sl {
+													authorizedKeyMapStrToI := set.(map[string]interface{})
+
+													if v, ok := authorizedKeyMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
+
+														sl := v.(*schema.Set).List()
+														blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
+														authorizedKey.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
+														for _, set := range sl {
+															blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
+
+															if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
+																blindfoldSecretInfoInternal.DecryptionProvider = w.(string)
+															}
+
+															if w, ok := blindfoldSecretInfoInternalMapStrToI["location"]; ok && !isIntfNil(w) {
+																blindfoldSecretInfoInternal.Location = w.(string)
+															}
+
+															if w, ok := blindfoldSecretInfoInternalMapStrToI["store_provider"]; ok && !isIntfNil(w) {
+																blindfoldSecretInfoInternal.StoreProvider = w.(string)
+															}
+
+														}
+
+													}
+
+													if v, ok := authorizedKeyMapStrToI["secret_encoding_type"]; ok && !isIntfNil(v) {
+
+														authorizedKey.SecretEncodingType = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+													}
+
+													secretInfoOneofTypeFound := false
+
+													if v, ok := authorizedKeyMapStrToI["blindfold_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+														secretInfoOneofTypeFound = true
+														secretInfoOneofInt := &ves_io_schema.SecretType_BlindfoldSecretInfo{}
+														secretInfoOneofInt.BlindfoldSecretInfo = &ves_io_schema.BlindfoldSecretInfoType{}
+														authorizedKey.SecretInfoOneof = secretInfoOneofInt
+
+														sl := v.(*schema.Set).List()
+														for _, set := range sl {
+															cs := set.(map[string]interface{})
+
+															if v, ok := cs["decryption_provider"]; ok && !isIntfNil(v) {
+
+																secretInfoOneofInt.BlindfoldSecretInfo.DecryptionProvider = v.(string)
+
+															}
+
+															if v, ok := cs["location"]; ok && !isIntfNil(v) {
+
+																secretInfoOneofInt.BlindfoldSecretInfo.Location = v.(string)
+
+															}
+
+															if v, ok := cs["store_provider"]; ok && !isIntfNil(v) {
+
+																secretInfoOneofInt.BlindfoldSecretInfo.StoreProvider = v.(string)
+
+															}
+
+														}
+
+													}
+
+													if v, ok := authorizedKeyMapStrToI["clear_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+														secretInfoOneofTypeFound = true
+														secretInfoOneofInt := &ves_io_schema.SecretType_ClearSecretInfo{}
+														secretInfoOneofInt.ClearSecretInfo = &ves_io_schema.ClearSecretInfoType{}
+														authorizedKey.SecretInfoOneof = secretInfoOneofInt
+
+														sl := v.(*schema.Set).List()
+														for _, set := range sl {
+															cs := set.(map[string]interface{})
+
+															if v, ok := cs["provider"]; ok && !isIntfNil(v) {
+
+																secretInfoOneofInt.ClearSecretInfo.Provider = v.(string)
+
+															}
+
+															if v, ok := cs["url"]; ok && !isIntfNil(v) {
+
+																secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
+
+															}
+
+														}
+
+													}
+
+													if v, ok := authorizedKeyMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+														secretInfoOneofTypeFound = true
+														secretInfoOneofInt := &ves_io_schema.SecretType_VaultSecretInfo{}
+														secretInfoOneofInt.VaultSecretInfo = &ves_io_schema.VaultSecretInfoType{}
+														authorizedKey.SecretInfoOneof = secretInfoOneofInt
+
+														sl := v.(*schema.Set).List()
+														for _, set := range sl {
+															cs := set.(map[string]interface{})
+
+															if v, ok := cs["key"]; ok && !isIntfNil(v) {
+
+																secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
+
+															}
+
+															if v, ok := cs["location"]; ok && !isIntfNil(v) {
+
+																secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
+
+															}
+
+															if v, ok := cs["provider"]; ok && !isIntfNil(v) {
+
+																secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
+
+															}
+
+															if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
+
+																secretInfoOneofInt.VaultSecretInfo.SecretEncoding = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+															}
+
+															if v, ok := cs["version"]; ok && !isIntfNil(v) {
+
+																secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
+
+															}
+
+														}
+
+													}
+
+													if v, ok := authorizedKeyMapStrToI["wingman_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+														secretInfoOneofTypeFound = true
+														secretInfoOneofInt := &ves_io_schema.SecretType_WingmanSecretInfo{}
+														secretInfoOneofInt.WingmanSecretInfo = &ves_io_schema.WingmanSecretInfoType{}
+														authorizedKey.SecretInfoOneof = secretInfoOneofInt
+
+														sl := v.(*schema.Set).List()
+														for _, set := range sl {
+															cs := set.(map[string]interface{})
+
+															if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+																secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
+
+															}
+
+														}
+
+													}
+
+												}
+
+											}
+
+											if v, ok := cs["circuit_id"]; ok && !isIntfNil(v) {
+
+												subscriptionChoiceInt.OtherSubscription.CircuitId = v.(string)
+
+											}
+
+										}
+
+									}
+
+									if v, ok := connectionsMapStrToI["same_subscription"]; ok && !isIntfNil(v) && !subscriptionChoiceTypeFound {
+
+										subscriptionChoiceTypeFound = true
+										subscriptionChoiceInt := &ves_io_schema_views_azure_vnet_site.ExpressRouteConnectionType_SameSubscription{}
+										subscriptionChoiceInt.SameSubscription = &ves_io_schema_views.AzureExpressRouteConnectionType{}
+										connections[i].SubscriptionChoice = subscriptionChoiceInt
+
+										sl := v.(*schema.Set).List()
+										for _, set := range sl {
+											cs := set.(map[string]interface{})
+
+											if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+												subscriptionChoiceInt.SameSubscription.Name = v.(string)
+
+											}
+
+											if v, ok := cs["resource_group"]; ok && !isIntfNil(v) {
+
+												subscriptionChoiceInt.SameSubscription.ResourceGroup = v.(string)
+
+											}
+
+										}
+
+									}
+
+									if w, ok := connectionsMapStrToI["weight"]; ok && !isIntfNil(w) {
+										connections[i].Weight = uint32(w.(int))
+									}
+
+								}
+
+							}
+
+							if v, ok := cs["gateway_subnet"]; ok && !isIntfNil(v) {
+
+								sl := v.(*schema.Set).List()
+								gatewaySubnet := &ves_io_schema_views.AzureSubnetChoiceWithAutoType{}
+								expressRouteChoiceInt.ExpressRouteEnabled.GatewaySubnet = gatewaySubnet
+								for _, set := range sl {
+									gatewaySubnetMapStrToI := set.(map[string]interface{})
+
+									choiceTypeFound := false
+
+									if v, ok := gatewaySubnetMapStrToI["auto"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+										choiceTypeFound = true
+
+										if v.(bool) {
+											choiceInt := &ves_io_schema_views.AzureSubnetChoiceWithAutoType_Auto{}
+											choiceInt.Auto = &ves_io_schema.Empty{}
+											gatewaySubnet.Choice = choiceInt
+										}
+
+									}
+
+									if v, ok := gatewaySubnetMapStrToI["subnet"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+										choiceTypeFound = true
+										choiceInt := &ves_io_schema_views.AzureSubnetChoiceWithAutoType_Subnet{}
+										choiceInt.Subnet = &ves_io_schema_views.AzureSpecialSubnetType{}
+										gatewaySubnet.Choice = choiceInt
+
+										sl := v.(*schema.Set).List()
+										for _, set := range sl {
+											cs := set.(map[string]interface{})
+
+											resourceGroupChoiceTypeFound := false
+
+											if v, ok := cs["subnet_resource_grp"]; ok && !isIntfNil(v) && !resourceGroupChoiceTypeFound {
+
+												resourceGroupChoiceTypeFound = true
+												resourceGroupChoiceInt := &ves_io_schema_views.AzureSpecialSubnetType_SubnetResourceGrp{}
+
+												choiceInt.Subnet.ResourceGroupChoice = resourceGroupChoiceInt
+
+												resourceGroupChoiceInt.SubnetResourceGrp = v.(string)
+
+											}
+
+											if v, ok := cs["vnet_resource_group"]; ok && !isIntfNil(v) && !resourceGroupChoiceTypeFound {
+
+												resourceGroupChoiceTypeFound = true
+
+												if v.(bool) {
+													resourceGroupChoiceInt := &ves_io_schema_views.AzureSpecialSubnetType_VnetResourceGroup{}
+													resourceGroupChoiceInt.VnetResourceGroup = &ves_io_schema.Empty{}
+													choiceInt.Subnet.ResourceGroupChoice = resourceGroupChoiceInt
+												}
+
+											}
+
+										}
+
+									}
+
+									if v, ok := gatewaySubnetMapStrToI["subnet_param"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+										choiceTypeFound = true
+										choiceInt := &ves_io_schema_views.AzureSubnetChoiceWithAutoType_SubnetParam{}
+										choiceInt.SubnetParam = &ves_io_schema_views.CloudSubnetParamType{}
+										gatewaySubnet.Choice = choiceInt
+
+										sl := v.(*schema.Set).List()
+										for _, set := range sl {
+											cs := set.(map[string]interface{})
+
+											if v, ok := cs["ipv4"]; ok && !isIntfNil(v) {
+
+												choiceInt.SubnetParam.Ipv4 = v.(string)
+
+											}
+
+											if v, ok := cs["ipv6"]; ok && !isIntfNil(v) {
+
+												choiceInt.SubnetParam.Ipv6 = v.(string)
+
+											}
+
+										}
+
+									}
+
+								}
+
+							}
+
+							if v, ok := cs["route_server_subnet"]; ok && !isIntfNil(v) {
+
+								sl := v.(*schema.Set).List()
+								routeServerSubnet := &ves_io_schema_views.AzureSubnetChoiceWithAutoType{}
+								expressRouteChoiceInt.ExpressRouteEnabled.RouteServerSubnet = routeServerSubnet
+								for _, set := range sl {
+									routeServerSubnetMapStrToI := set.(map[string]interface{})
+
+									choiceTypeFound := false
+
+									if v, ok := routeServerSubnetMapStrToI["auto"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+										choiceTypeFound = true
+
+										if v.(bool) {
+											choiceInt := &ves_io_schema_views.AzureSubnetChoiceWithAutoType_Auto{}
+											choiceInt.Auto = &ves_io_schema.Empty{}
+											routeServerSubnet.Choice = choiceInt
+										}
+
+									}
+
+									if v, ok := routeServerSubnetMapStrToI["subnet"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+										choiceTypeFound = true
+										choiceInt := &ves_io_schema_views.AzureSubnetChoiceWithAutoType_Subnet{}
+										choiceInt.Subnet = &ves_io_schema_views.AzureSpecialSubnetType{}
+										routeServerSubnet.Choice = choiceInt
+
+										sl := v.(*schema.Set).List()
+										for _, set := range sl {
+											cs := set.(map[string]interface{})
+
+											resourceGroupChoiceTypeFound := false
+
+											if v, ok := cs["subnet_resource_grp"]; ok && !isIntfNil(v) && !resourceGroupChoiceTypeFound {
+
+												resourceGroupChoiceTypeFound = true
+												resourceGroupChoiceInt := &ves_io_schema_views.AzureSpecialSubnetType_SubnetResourceGrp{}
+
+												choiceInt.Subnet.ResourceGroupChoice = resourceGroupChoiceInt
+
+												resourceGroupChoiceInt.SubnetResourceGrp = v.(string)
+
+											}
+
+											if v, ok := cs["vnet_resource_group"]; ok && !isIntfNil(v) && !resourceGroupChoiceTypeFound {
+
+												resourceGroupChoiceTypeFound = true
+
+												if v.(bool) {
+													resourceGroupChoiceInt := &ves_io_schema_views.AzureSpecialSubnetType_VnetResourceGroup{}
+													resourceGroupChoiceInt.VnetResourceGroup = &ves_io_schema.Empty{}
+													choiceInt.Subnet.ResourceGroupChoice = resourceGroupChoiceInt
+												}
+
+											}
+
+										}
+
+									}
+
+									if v, ok := routeServerSubnetMapStrToI["subnet_param"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+										choiceTypeFound = true
+										choiceInt := &ves_io_schema_views.AzureSubnetChoiceWithAutoType_SubnetParam{}
+										choiceInt.SubnetParam = &ves_io_schema_views.CloudSubnetParamType{}
+										routeServerSubnet.Choice = choiceInt
+
+										sl := v.(*schema.Set).List()
+										for _, set := range sl {
+											cs := set.(map[string]interface{})
+
+											if v, ok := cs["ipv4"]; ok && !isIntfNil(v) {
+
+												choiceInt.SubnetParam.Ipv4 = v.(string)
+
+											}
+
+											if v, ok := cs["ipv6"]; ok && !isIntfNil(v) {
+
+												choiceInt.SubnetParam.Ipv6 = v.(string)
+
+											}
+
+										}
+
+									}
+
+								}
+
+							}
+
+							skuChoiceTypeFound := false
+
+							if v, ok := cs["sku_ergw1az"]; ok && !isIntfNil(v) && !skuChoiceTypeFound {
+
+								skuChoiceTypeFound = true
+
+								if v.(bool) {
+									skuChoiceInt := &ves_io_schema_views_azure_vnet_site.ExpressRouteConfigType_SkuErgw1Az{}
+									skuChoiceInt.SkuErgw1Az = &ves_io_schema.Empty{}
+									expressRouteChoiceInt.ExpressRouteEnabled.SkuChoice = skuChoiceInt
+								}
+
+							}
+
+							if v, ok := cs["sku_ergw2az"]; ok && !isIntfNil(v) && !skuChoiceTypeFound {
+
+								skuChoiceTypeFound = true
+
+								if v.(bool) {
+									skuChoiceInt := &ves_io_schema_views_azure_vnet_site.ExpressRouteConfigType_SkuErgw2Az{}
+									skuChoiceInt.SkuErgw2Az = &ves_io_schema.Empty{}
+									expressRouteChoiceInt.ExpressRouteEnabled.SkuChoice = skuChoiceInt
+								}
+
+							}
+
+							if v, ok := cs["sku_high_perf"]; ok && !isIntfNil(v) && !skuChoiceTypeFound {
+
+								skuChoiceTypeFound = true
+
+								if v.(bool) {
+									skuChoiceInt := &ves_io_schema_views_azure_vnet_site.ExpressRouteConfigType_SkuHighPerf{}
+									skuChoiceInt.SkuHighPerf = &ves_io_schema.Empty{}
+									expressRouteChoiceInt.ExpressRouteEnabled.SkuChoice = skuChoiceInt
+								}
+
+							}
+
+							if v, ok := cs["sku_standard"]; ok && !isIntfNil(v) && !skuChoiceTypeFound {
+
+								skuChoiceTypeFound = true
+
+								if v.(bool) {
+									skuChoiceInt := &ves_io_schema_views_azure_vnet_site.ExpressRouteConfigType_SkuStandard{}
+									skuChoiceInt.SkuStandard = &ves_io_schema.Empty{}
+									expressRouteChoiceInt.ExpressRouteEnabled.SkuChoice = skuChoiceInt
+								}
+
+							}
+
+						}
+
+					}
+
 					if v, ok := cs["spoke_vnets"]; ok && !isIntfNil(v) {
 
 						sl := v.([]interface{})
@@ -14206,6 +16516,532 @@ func resourceVolterraAzureVnetSiteUpdate(d *schema.ResourceData, meta interface{
 				sl := v.(*schema.Set).List()
 				for _, set := range sl {
 					cs := set.(map[string]interface{})
+
+					expressRouteChoiceTypeFound := false
+
+					if v, ok := cs["express_route_disabled"]; ok && !isIntfNil(v) && !expressRouteChoiceTypeFound {
+
+						expressRouteChoiceTypeFound = true
+
+						if v.(bool) {
+							expressRouteChoiceInt := &ves_io_schema_views_azure_vnet_site.AzureHubVnetType_ExpressRouteDisabled{}
+							expressRouteChoiceInt.ExpressRouteDisabled = &ves_io_schema.Empty{}
+							hubChoiceInt.Hub.ExpressRouteChoice = expressRouteChoiceInt
+						}
+
+					}
+
+					if v, ok := cs["express_route_enabled"]; ok && !isIntfNil(v) && !expressRouteChoiceTypeFound {
+
+						expressRouteChoiceTypeFound = true
+						expressRouteChoiceInt := &ves_io_schema_views_azure_vnet_site.AzureHubVnetType_ExpressRouteEnabled{}
+						expressRouteChoiceInt.ExpressRouteEnabled = &ves_io_schema_views_azure_vnet_site.ExpressRouteConfigType{}
+						hubChoiceInt.Hub.ExpressRouteChoice = expressRouteChoiceInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["connections"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								connections := make([]*ves_io_schema_views_azure_vnet_site.ExpressRouteConnectionType, len(sl))
+								expressRouteChoiceInt.ExpressRouteEnabled.Connections = connections
+								for i, set := range sl {
+									connections[i] = &ves_io_schema_views_azure_vnet_site.ExpressRouteConnectionType{}
+									connectionsMapStrToI := set.(map[string]interface{})
+
+									if v, ok := connectionsMapStrToI["metadata"]; ok && !isIntfNil(v) {
+
+										sl := v.(*schema.Set).List()
+										metadata := &ves_io_schema.MessageMetaType{}
+										connections[i].Metadata = metadata
+										for _, set := range sl {
+											metadataMapStrToI := set.(map[string]interface{})
+
+											if w, ok := metadataMapStrToI["description"]; ok && !isIntfNil(w) {
+												metadata.Description = w.(string)
+											}
+
+											if w, ok := metadataMapStrToI["disable"]; ok && !isIntfNil(w) {
+												metadata.Disable = w.(bool)
+											}
+
+											if w, ok := metadataMapStrToI["name"]; ok && !isIntfNil(w) {
+												metadata.Name = w.(string)
+											}
+
+										}
+
+									}
+
+									subscriptionChoiceTypeFound := false
+
+									if v, ok := connectionsMapStrToI["other_subscription"]; ok && !isIntfNil(v) && !subscriptionChoiceTypeFound {
+
+										subscriptionChoiceTypeFound = true
+										subscriptionChoiceInt := &ves_io_schema_views_azure_vnet_site.ExpressRouteConnectionType_OtherSubscription{}
+										subscriptionChoiceInt.OtherSubscription = &ves_io_schema_views_azure_vnet_site.ExpressRouteOtherSubscriptionConnection{}
+										connections[i].SubscriptionChoice = subscriptionChoiceInt
+
+										sl := v.(*schema.Set).List()
+										for _, set := range sl {
+											cs := set.(map[string]interface{})
+
+											if v, ok := cs["authorized_key"]; ok && !isIntfNil(v) {
+
+												sl := v.(*schema.Set).List()
+												authorizedKey := &ves_io_schema.SecretType{}
+												subscriptionChoiceInt.OtherSubscription.AuthorizedKey = authorizedKey
+												for _, set := range sl {
+													authorizedKeyMapStrToI := set.(map[string]interface{})
+
+													if v, ok := authorizedKeyMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
+
+														sl := v.(*schema.Set).List()
+														blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
+														authorizedKey.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
+														for _, set := range sl {
+															blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
+
+															if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
+																blindfoldSecretInfoInternal.DecryptionProvider = w.(string)
+															}
+
+															if w, ok := blindfoldSecretInfoInternalMapStrToI["location"]; ok && !isIntfNil(w) {
+																blindfoldSecretInfoInternal.Location = w.(string)
+															}
+
+															if w, ok := blindfoldSecretInfoInternalMapStrToI["store_provider"]; ok && !isIntfNil(w) {
+																blindfoldSecretInfoInternal.StoreProvider = w.(string)
+															}
+
+														}
+
+													}
+
+													if v, ok := authorizedKeyMapStrToI["secret_encoding_type"]; ok && !isIntfNil(v) {
+
+														authorizedKey.SecretEncodingType = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+													}
+
+													secretInfoOneofTypeFound := false
+
+													if v, ok := authorizedKeyMapStrToI["blindfold_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+														secretInfoOneofTypeFound = true
+														secretInfoOneofInt := &ves_io_schema.SecretType_BlindfoldSecretInfo{}
+														secretInfoOneofInt.BlindfoldSecretInfo = &ves_io_schema.BlindfoldSecretInfoType{}
+														authorizedKey.SecretInfoOneof = secretInfoOneofInt
+
+														sl := v.(*schema.Set).List()
+														for _, set := range sl {
+															cs := set.(map[string]interface{})
+
+															if v, ok := cs["decryption_provider"]; ok && !isIntfNil(v) {
+
+																secretInfoOneofInt.BlindfoldSecretInfo.DecryptionProvider = v.(string)
+
+															}
+
+															if v, ok := cs["location"]; ok && !isIntfNil(v) {
+
+																secretInfoOneofInt.BlindfoldSecretInfo.Location = v.(string)
+
+															}
+
+															if v, ok := cs["store_provider"]; ok && !isIntfNil(v) {
+
+																secretInfoOneofInt.BlindfoldSecretInfo.StoreProvider = v.(string)
+
+															}
+
+														}
+
+													}
+
+													if v, ok := authorizedKeyMapStrToI["clear_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+														secretInfoOneofTypeFound = true
+														secretInfoOneofInt := &ves_io_schema.SecretType_ClearSecretInfo{}
+														secretInfoOneofInt.ClearSecretInfo = &ves_io_schema.ClearSecretInfoType{}
+														authorizedKey.SecretInfoOneof = secretInfoOneofInt
+
+														sl := v.(*schema.Set).List()
+														for _, set := range sl {
+															cs := set.(map[string]interface{})
+
+															if v, ok := cs["provider"]; ok && !isIntfNil(v) {
+
+																secretInfoOneofInt.ClearSecretInfo.Provider = v.(string)
+
+															}
+
+															if v, ok := cs["url"]; ok && !isIntfNil(v) {
+
+																secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
+
+															}
+
+														}
+
+													}
+
+													if v, ok := authorizedKeyMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+														secretInfoOneofTypeFound = true
+														secretInfoOneofInt := &ves_io_schema.SecretType_VaultSecretInfo{}
+														secretInfoOneofInt.VaultSecretInfo = &ves_io_schema.VaultSecretInfoType{}
+														authorizedKey.SecretInfoOneof = secretInfoOneofInt
+
+														sl := v.(*schema.Set).List()
+														for _, set := range sl {
+															cs := set.(map[string]interface{})
+
+															if v, ok := cs["key"]; ok && !isIntfNil(v) {
+
+																secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
+
+															}
+
+															if v, ok := cs["location"]; ok && !isIntfNil(v) {
+
+																secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
+
+															}
+
+															if v, ok := cs["provider"]; ok && !isIntfNil(v) {
+
+																secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
+
+															}
+
+															if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
+
+																secretInfoOneofInt.VaultSecretInfo.SecretEncoding = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+															}
+
+															if v, ok := cs["version"]; ok && !isIntfNil(v) {
+
+																secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
+
+															}
+
+														}
+
+													}
+
+													if v, ok := authorizedKeyMapStrToI["wingman_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+														secretInfoOneofTypeFound = true
+														secretInfoOneofInt := &ves_io_schema.SecretType_WingmanSecretInfo{}
+														secretInfoOneofInt.WingmanSecretInfo = &ves_io_schema.WingmanSecretInfoType{}
+														authorizedKey.SecretInfoOneof = secretInfoOneofInt
+
+														sl := v.(*schema.Set).List()
+														for _, set := range sl {
+															cs := set.(map[string]interface{})
+
+															if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+																secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
+
+															}
+
+														}
+
+													}
+
+												}
+
+											}
+
+											if v, ok := cs["circuit_id"]; ok && !isIntfNil(v) {
+
+												subscriptionChoiceInt.OtherSubscription.CircuitId = v.(string)
+
+											}
+
+										}
+
+									}
+
+									if v, ok := connectionsMapStrToI["same_subscription"]; ok && !isIntfNil(v) && !subscriptionChoiceTypeFound {
+
+										subscriptionChoiceTypeFound = true
+										subscriptionChoiceInt := &ves_io_schema_views_azure_vnet_site.ExpressRouteConnectionType_SameSubscription{}
+										subscriptionChoiceInt.SameSubscription = &ves_io_schema_views.AzureExpressRouteConnectionType{}
+										connections[i].SubscriptionChoice = subscriptionChoiceInt
+
+										sl := v.(*schema.Set).List()
+										for _, set := range sl {
+											cs := set.(map[string]interface{})
+
+											if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+												subscriptionChoiceInt.SameSubscription.Name = v.(string)
+
+											}
+
+											if v, ok := cs["resource_group"]; ok && !isIntfNil(v) {
+
+												subscriptionChoiceInt.SameSubscription.ResourceGroup = v.(string)
+
+											}
+
+										}
+
+									}
+
+									if w, ok := connectionsMapStrToI["weight"]; ok && !isIntfNil(w) {
+										connections[i].Weight = uint32(w.(int))
+									}
+
+								}
+
+							}
+
+							if v, ok := cs["gateway_subnet"]; ok && !isIntfNil(v) {
+
+								sl := v.(*schema.Set).List()
+								gatewaySubnet := &ves_io_schema_views.AzureSubnetChoiceWithAutoType{}
+								expressRouteChoiceInt.ExpressRouteEnabled.GatewaySubnet = gatewaySubnet
+								for _, set := range sl {
+									gatewaySubnetMapStrToI := set.(map[string]interface{})
+
+									choiceTypeFound := false
+
+									if v, ok := gatewaySubnetMapStrToI["auto"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+										choiceTypeFound = true
+
+										if v.(bool) {
+											choiceInt := &ves_io_schema_views.AzureSubnetChoiceWithAutoType_Auto{}
+											choiceInt.Auto = &ves_io_schema.Empty{}
+											gatewaySubnet.Choice = choiceInt
+										}
+
+									}
+
+									if v, ok := gatewaySubnetMapStrToI["subnet"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+										choiceTypeFound = true
+										choiceInt := &ves_io_schema_views.AzureSubnetChoiceWithAutoType_Subnet{}
+										choiceInt.Subnet = &ves_io_schema_views.AzureSpecialSubnetType{}
+										gatewaySubnet.Choice = choiceInt
+
+										sl := v.(*schema.Set).List()
+										for _, set := range sl {
+											cs := set.(map[string]interface{})
+
+											resourceGroupChoiceTypeFound := false
+
+											if v, ok := cs["subnet_resource_grp"]; ok && !isIntfNil(v) && !resourceGroupChoiceTypeFound {
+
+												resourceGroupChoiceTypeFound = true
+												resourceGroupChoiceInt := &ves_io_schema_views.AzureSpecialSubnetType_SubnetResourceGrp{}
+
+												choiceInt.Subnet.ResourceGroupChoice = resourceGroupChoiceInt
+
+												resourceGroupChoiceInt.SubnetResourceGrp = v.(string)
+
+											}
+
+											if v, ok := cs["vnet_resource_group"]; ok && !isIntfNil(v) && !resourceGroupChoiceTypeFound {
+
+												resourceGroupChoiceTypeFound = true
+
+												if v.(bool) {
+													resourceGroupChoiceInt := &ves_io_schema_views.AzureSpecialSubnetType_VnetResourceGroup{}
+													resourceGroupChoiceInt.VnetResourceGroup = &ves_io_schema.Empty{}
+													choiceInt.Subnet.ResourceGroupChoice = resourceGroupChoiceInt
+												}
+
+											}
+
+										}
+
+									}
+
+									if v, ok := gatewaySubnetMapStrToI["subnet_param"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+										choiceTypeFound = true
+										choiceInt := &ves_io_schema_views.AzureSubnetChoiceWithAutoType_SubnetParam{}
+										choiceInt.SubnetParam = &ves_io_schema_views.CloudSubnetParamType{}
+										gatewaySubnet.Choice = choiceInt
+
+										sl := v.(*schema.Set).List()
+										for _, set := range sl {
+											cs := set.(map[string]interface{})
+
+											if v, ok := cs["ipv4"]; ok && !isIntfNil(v) {
+
+												choiceInt.SubnetParam.Ipv4 = v.(string)
+
+											}
+
+											if v, ok := cs["ipv6"]; ok && !isIntfNil(v) {
+
+												choiceInt.SubnetParam.Ipv6 = v.(string)
+
+											}
+
+										}
+
+									}
+
+								}
+
+							}
+
+							if v, ok := cs["route_server_subnet"]; ok && !isIntfNil(v) {
+
+								sl := v.(*schema.Set).List()
+								routeServerSubnet := &ves_io_schema_views.AzureSubnetChoiceWithAutoType{}
+								expressRouteChoiceInt.ExpressRouteEnabled.RouteServerSubnet = routeServerSubnet
+								for _, set := range sl {
+									routeServerSubnetMapStrToI := set.(map[string]interface{})
+
+									choiceTypeFound := false
+
+									if v, ok := routeServerSubnetMapStrToI["auto"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+										choiceTypeFound = true
+
+										if v.(bool) {
+											choiceInt := &ves_io_schema_views.AzureSubnetChoiceWithAutoType_Auto{}
+											choiceInt.Auto = &ves_io_schema.Empty{}
+											routeServerSubnet.Choice = choiceInt
+										}
+
+									}
+
+									if v, ok := routeServerSubnetMapStrToI["subnet"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+										choiceTypeFound = true
+										choiceInt := &ves_io_schema_views.AzureSubnetChoiceWithAutoType_Subnet{}
+										choiceInt.Subnet = &ves_io_schema_views.AzureSpecialSubnetType{}
+										routeServerSubnet.Choice = choiceInt
+
+										sl := v.(*schema.Set).List()
+										for _, set := range sl {
+											cs := set.(map[string]interface{})
+
+											resourceGroupChoiceTypeFound := false
+
+											if v, ok := cs["subnet_resource_grp"]; ok && !isIntfNil(v) && !resourceGroupChoiceTypeFound {
+
+												resourceGroupChoiceTypeFound = true
+												resourceGroupChoiceInt := &ves_io_schema_views.AzureSpecialSubnetType_SubnetResourceGrp{}
+
+												choiceInt.Subnet.ResourceGroupChoice = resourceGroupChoiceInt
+
+												resourceGroupChoiceInt.SubnetResourceGrp = v.(string)
+
+											}
+
+											if v, ok := cs["vnet_resource_group"]; ok && !isIntfNil(v) && !resourceGroupChoiceTypeFound {
+
+												resourceGroupChoiceTypeFound = true
+
+												if v.(bool) {
+													resourceGroupChoiceInt := &ves_io_schema_views.AzureSpecialSubnetType_VnetResourceGroup{}
+													resourceGroupChoiceInt.VnetResourceGroup = &ves_io_schema.Empty{}
+													choiceInt.Subnet.ResourceGroupChoice = resourceGroupChoiceInt
+												}
+
+											}
+
+										}
+
+									}
+
+									if v, ok := routeServerSubnetMapStrToI["subnet_param"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+										choiceTypeFound = true
+										choiceInt := &ves_io_schema_views.AzureSubnetChoiceWithAutoType_SubnetParam{}
+										choiceInt.SubnetParam = &ves_io_schema_views.CloudSubnetParamType{}
+										routeServerSubnet.Choice = choiceInt
+
+										sl := v.(*schema.Set).List()
+										for _, set := range sl {
+											cs := set.(map[string]interface{})
+
+											if v, ok := cs["ipv4"]; ok && !isIntfNil(v) {
+
+												choiceInt.SubnetParam.Ipv4 = v.(string)
+
+											}
+
+											if v, ok := cs["ipv6"]; ok && !isIntfNil(v) {
+
+												choiceInt.SubnetParam.Ipv6 = v.(string)
+
+											}
+
+										}
+
+									}
+
+								}
+
+							}
+
+							skuChoiceTypeFound := false
+
+							if v, ok := cs["sku_ergw1az"]; ok && !isIntfNil(v) && !skuChoiceTypeFound {
+
+								skuChoiceTypeFound = true
+
+								if v.(bool) {
+									skuChoiceInt := &ves_io_schema_views_azure_vnet_site.ExpressRouteConfigType_SkuErgw1Az{}
+									skuChoiceInt.SkuErgw1Az = &ves_io_schema.Empty{}
+									expressRouteChoiceInt.ExpressRouteEnabled.SkuChoice = skuChoiceInt
+								}
+
+							}
+
+							if v, ok := cs["sku_ergw2az"]; ok && !isIntfNil(v) && !skuChoiceTypeFound {
+
+								skuChoiceTypeFound = true
+
+								if v.(bool) {
+									skuChoiceInt := &ves_io_schema_views_azure_vnet_site.ExpressRouteConfigType_SkuErgw2Az{}
+									skuChoiceInt.SkuErgw2Az = &ves_io_schema.Empty{}
+									expressRouteChoiceInt.ExpressRouteEnabled.SkuChoice = skuChoiceInt
+								}
+
+							}
+
+							if v, ok := cs["sku_high_perf"]; ok && !isIntfNil(v) && !skuChoiceTypeFound {
+
+								skuChoiceTypeFound = true
+
+								if v.(bool) {
+									skuChoiceInt := &ves_io_schema_views_azure_vnet_site.ExpressRouteConfigType_SkuHighPerf{}
+									skuChoiceInt.SkuHighPerf = &ves_io_schema.Empty{}
+									expressRouteChoiceInt.ExpressRouteEnabled.SkuChoice = skuChoiceInt
+								}
+
+							}
+
+							if v, ok := cs["sku_standard"]; ok && !isIntfNil(v) && !skuChoiceTypeFound {
+
+								skuChoiceTypeFound = true
+
+								if v.(bool) {
+									skuChoiceInt := &ves_io_schema_views_azure_vnet_site.ExpressRouteConfigType_SkuStandard{}
+									skuChoiceInt.SkuStandard = &ves_io_schema.Empty{}
+									expressRouteChoiceInt.ExpressRouteEnabled.SkuChoice = skuChoiceInt
+								}
+
+							}
+
+						}
+
+					}
 
 					if v, ok := cs["spoke_vnets"]; ok && !isIntfNil(v) {
 
