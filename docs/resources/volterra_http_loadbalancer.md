@@ -21,21 +21,16 @@ resource "volterra_http_loadbalancer" "example" {
   namespace = "staging"
 
   // One of the arguments from this list "do_not_advertise advertise_on_public_default_vip advertise_on_public advertise_custom" must be set
+  do_not_advertise = true
 
-  advertise_on_public {
-    public_ip {
-      name      = "test1"
-      namespace = "staging"
-      tenant    = "acmecorp"
-    }
-  }
+  // One of the arguments from this list "disable_api_definition api_definition api_definitions" must be set
+  disable_api_definition = true
 
-  // One of the arguments from this list "api_definitions disable_api_definition api_definition" must be set
+  // One of the arguments from this list "enable_api_discovery disable_api_discovery" must be set
 
-  api_definition {
-    name      = "test1"
-    namespace = "staging"
-    tenant    = "acmecorp"
+  enable_api_discovery {
+    // One of the arguments from this list "disable_learn_from_redirect_traffic enable_learn_from_redirect_traffic" must be set
+    disable_learn_from_redirect_traffic = true
   }
 
   // One of the arguments from this list "no_challenge js_challenge captcha_challenge policy_based_challenge" must be set
@@ -45,14 +40,17 @@ resource "volterra_http_loadbalancer" "example" {
     default_captcha_challenge_parameters = true
 
     // One of the arguments from this list "no_challenge always_enable_js_challenge always_enable_captcha_challenge" must be set
-    always_enable_captcha_challenge = true
+    no_challenge = true
 
     // One of the arguments from this list "js_challenge_parameters default_js_challenge_parameters" must be set
-    default_js_challenge_parameters = true
 
+    js_challenge_parameters {
+      cookie_expiry   = "1000"
+      custom_page     = "string:///PHA+IFBsZWFzZSBXYWl0IDwvcD4="
+      js_script_delay = "1000"
+    }
     // One of the arguments from this list "default_mitigation_settings malicious_user_mitigation" must be set
     default_mitigation_settings = true
-
     rule_list {
       rules {
         metadata {
@@ -65,13 +63,12 @@ resource "volterra_http_loadbalancer" "example" {
           arg_matchers {
             invert_matcher = true
 
-            // One of the arguments from this list "check_not_present item presence check_present" must be set
-            presence = true
-
-            name = "name"
+            // One of the arguments from this list "check_present check_not_present item presence" must be set
+            check_not_present = true
+            name              = "name"
           }
 
-          // One of the arguments from this list "asn_matcher any_asn asn_list" must be set
+          // One of the arguments from this list "any_asn asn_list asn_matcher" must be set
           any_asn = true
 
           body_matcher {
@@ -83,17 +80,18 @@ resource "volterra_http_loadbalancer" "example" {
           }
 
           // One of the arguments from this list "disable_challenge enable_javascript_challenge enable_captcha_challenge" must be set
-          enable_javascript_challenge = true
+          disable_challenge = true
 
-          // One of the arguments from this list "client_name client_selector client_name_matcher any_client" must be set
+          // One of the arguments from this list "client_selector client_name_matcher any_client client_name" must be set
           any_client = true
 
           cookie_matchers {
             invert_matcher = true
 
             // One of the arguments from this list "presence check_present check_not_present item" must be set
-            check_present = true
-            name          = "Session"
+            presence = true
+
+            name = "Session"
           }
 
           domain_matcher {
@@ -138,8 +136,8 @@ resource "volterra_http_loadbalancer" "example" {
             invert_matcher = true
             key            = "sourceid"
 
-            // One of the arguments from this list "presence check_present check_not_present item" must be set
-            check_present = true
+            // One of the arguments from this list "check_not_present item presence check_present" must be set
+            presence = true
           }
 
           tls_fingerprint_matcher {
@@ -152,22 +150,14 @@ resource "volterra_http_loadbalancer" "example" {
         }
       }
     }
-
     // One of the arguments from this list "default_temporary_blocking_parameters temporary_user_blocking" must be set
     default_temporary_blocking_parameters = true
   }
+  // One of the arguments from this list "enable_ddos_detection disable_ddos_detection" must be set
+  enable_ddos_detection = true
   domains = ["www.foo.com"]
-
-  // One of the arguments from this list "source_ip_stickiness cookie_stickiness ring_hash round_robin least_active random" must be set
-
-  ring_hash {
-    hash_policy {
-      // One of the arguments from this list "header_name cookie source_ip" must be set
-      header_name = "host"
-
-      terminal = true
-    }
-  }
+  // One of the arguments from this list "least_active random source_ip_stickiness cookie_stickiness ring_hash round_robin" must be set
+  random = true
 
   // One of the arguments from this list "http https_auto_cert https" must be set
 
@@ -175,35 +165,28 @@ resource "volterra_http_loadbalancer" "example" {
     dns_volterra_managed = true
     port                 = "80"
   }
-
-  // One of the arguments from this list "single_lb_app multi_lb_app" must be set
-
-  single_lb_app {
-    // One of the arguments from this list "enable_discovery disable_discovery" must be set
-
-    enable_discovery {
-      // One of the arguments from this list "disable_learn_from_redirect_traffic enable_learn_from_redirect_traffic" must be set
-      disable_learn_from_redirect_traffic = true
-    }
-
-    // One of the arguments from this list "enable_ddos_detection disable_ddos_detection" must be set
-    enable_ddos_detection = true
-
-    // One of the arguments from this list "enable_malicious_user_detection disable_malicious_user_detection" must be set
-    enable_malicious_user_detection = true
-  }
-  // One of the arguments from this list "disable_rate_limit api_rate_limit rate_limit" must be set
+  // One of the arguments from this list "enable_malicious_user_detection disable_malicious_user_detection" must be set
+  enable_malicious_user_detection = true
+  // One of the arguments from this list "rate_limit disable_rate_limit api_rate_limit" must be set
   disable_rate_limit = true
+
   // One of the arguments from this list "service_policies_from_namespace no_service_policies active_service_policies" must be set
-  service_policies_from_namespace = true
+
+  active_service_policies {
+    policies {
+      name      = "test1"
+      namespace = "staging"
+      tenant    = "acmecorp"
+    }
+  }
   // One of the arguments from this list "disable_trust_client_ip_headers enable_trust_client_ip_headers" must be set
   disable_trust_client_ip_headers = true
   // One of the arguments from this list "user_id_client_ip user_identification" must be set
   user_id_client_ip = true
 
-  // One of the arguments from this list "disable_waf waf waf_rule app_firewall" must be set
+  // One of the arguments from this list "app_firewall disable_waf waf waf_rule" must be set
 
-  app_firewall {
+  waf {
     name      = "test1"
     namespace = "staging"
     tenant    = "acmecorp"
@@ -247,6 +230,10 @@ Argument Reference
 
 `disable_api_definition` - (Optional) API Definition is not currently used for this load balancer (bool).
 
+`disable_api_discovery` - (Optional) x-displayName: "Disable" (bool).
+
+`enable_api_discovery` - (Optional) x-displayName: "Enable". See [Enable Api Discovery ](#enable-api-discovery) below for details.
+
 `api_protection_rules` - (Optional) Rules can also include additional conditions, for example specific clients can access certain API endpoint or API group.. See [Api Protection Rules ](#api-protection-rules) below for details.
 
 `blocked_clients` - (Optional) Define rules to block IP Prefixes or AS numbers.. See [Blocked Clients ](#blocked-clients) below for details.
@@ -263,9 +250,17 @@ Argument Reference
 
 `policy_based_challenge` - (Optional) Specifies the settings for policy rule based challenge. See [Policy Based Challenge ](#policy-based-challenge) below for details.
 
+`client_side_defense` - (Optional) Client-Side Defense configuration for JavaScript insertion. See [Client Side Defense ](#client-side-defense) below for details.
+
+`disable_client_side_defense` - (Optional) No Client-Side Defense configuration for this load balancer (bool).
+
 `cors_policy` - (Optional) resources from a server at a different origin. See [Cors Policy ](#cors-policy) below for details.
 
 `data_guard_rules` - (Optional) Note: App Firewall should be enabled, to use Data Guard feature.. See [Data Guard Rules ](#data-guard-rules) below for details.
+
+`disable_ddos_detection` - (Optional) x-displayName: "Disable" (bool).
+
+`enable_ddos_detection` - (Optional) x-displayName: "Enable" (bool).
 
 `ddos_mitigation_rules` - (Optional) Rules that specify the DDoS clients to be blocked. See [Ddos Mitigation Rules ](#ddos-mitigation-rules) below for details.
 
@@ -294,6 +289,10 @@ Argument Reference
 `https` - (Optional) User is responsible for managing DNS to this load balancer.. See [Https ](#https) below for details.
 
 `https_auto_cert` - (Optional) or a DNS CNAME record should be created in your DNS provider's portal.. See [Https Auto Cert ](#https-auto-cert) below for details.
+
+`disable_malicious_user_detection` - (Optional) x-displayName: "Disable" (bool).
+
+`enable_malicious_user_detection` - (Optional) x-displayName: "Enable" (bool).
 
 `malicious_user_mitigation` - (Optional) The settings defined in malicious user mitigation specify what mitigation actions to take for users determined to be at different threat levels.. See [ref](#ref) below for details.
 
@@ -733,6 +732,12 @@ The predicate evaluates to true if the expressions in the label selector are tru
 
 `expressions` - (Required) expressions contains the kubernetes style label expression for selections. (`String`).
 
+### Client Side Defense
+
+Client-Side Defense configuration for JavaScript insertion.
+
+`policy` - (Required) Client-Side Defense Policy.. See [Policy ](#policy) below for details.
+
 ### Common Buffering
 
 Use common buffering configuration.
@@ -889,6 +894,10 @@ Use default parameters.
 
 Response header name is “server” and value is “volt-adc”.
 
+### Default Header Transformation
+
+Normalize the headers to lower case.
+
 ### Default Js Challenge Parameters
 
 Use default parameters.
@@ -1013,6 +1022,14 @@ Domain matcher..
 
 `suffix_value` - (Optional) Suffix of domain name e.g "xyz.com" will match "*.xyz.com" and "xyz.com" (`String`).
 
+### Enable Api Discovery
+
+x-displayName: "Enable".
+
+`disable_learn_from_redirect_traffic` - (Optional) Disable learning API patterns from traffic with redirect response codes 3xx (bool).
+
+`enable_learn_from_redirect_traffic` - (Optional) Enable learning API patterns from traffic with redirect response codes 3xx (bool).
+
 ### Enable Ddos Detection
 
 x-displayName: "Enable".
@@ -1125,6 +1142,14 @@ Header that is used by mobile traffic..
 
 `name` - (Required) A case-insensitive HTTP header name. (`String`).
 
+### Header Transformation Type
+
+Header transformation options for response headers to the client.
+
+`default_header_transformation` - (Optional) Normalize the headers to lower case (bool).
+
+`proper_case_header_transformation` - (Optional) For example, “content-type” becomes “Content-Type”, and “foo$b#$are” becomes “Foo$B#$Are” (bool).
+
 ### Headers
 
 Note that all specified header predicates must evaluate to true..
@@ -1165,6 +1190,8 @@ User is responsible for managing DNS to this load balancer..
 
 `non_default_loadbalancer` - (Optional) x-displayName: "No" (bool).
 
+`header_transformation_type` - (Optional) Header transformation options for response headers to the client. See [Header Transformation Type ](#header-transformation-type) below for details.
+
 `http_redirect` - (Optional) Redirect HTTP traffic to HTTPS (`Bool`).
 
 `disable_path_normalize` - (Optional) x-displayName: "Disable" (bool).
@@ -1192,6 +1219,8 @@ or a DNS CNAME record should be created in your DNS provider's portal..
 `default_loadbalancer` - (Optional) x-displayName: "Yes" (bool).
 
 `non_default_loadbalancer` - (Optional) x-displayName: "No" (bool).
+
+`header_transformation_type` - (Optional) Header transformation options for response headers to the client. See [Header Transformation Type ](#header-transformation-type) below for details.
 
 `http_redirect` - (Optional) Redirect HTTP traffic to HTTPS (`Bool`).
 
@@ -1551,6 +1580,10 @@ TLS Private Key data in unencrypted PEM format including the PEM headers. The da
 
 `wingman_secret_info` - (Optional) Secret is given as bootstrap secret in Volterra Security Sidecar. See [Wingman Secret Info ](#wingman-secret-info) below for details.
 
+### Proper Case Header Transformation
+
+For example, “content-type” becomes “Content-Type”, and “foo$b#$are” becomes “Foo$B#$Are”.
+
 ### Protected App Endpoints
 
 List of protected application endpoints (max 128 items)..
@@ -1647,7 +1680,7 @@ tenant - (Optional) then tenant will hold the referred object's(e.g. route's) te
 
 ### Remove All Params
 
-Remove all query parameters.
+x-displayName: "Remove All Parameters".
 
 ### Request Headers To Add
 
@@ -1685,7 +1718,7 @@ Headers specified at this level are applied after headers from matched Route are
 
 ### Retain All Params
 
-Retain all query parameters.
+x-displayName: "Retain All Parameters".
 
 ### Retract Cluster
 
@@ -1731,9 +1764,11 @@ Send redirect response.
 
 `all_params` - (Optional) be removed. Default value is false, which means query portion of the URL will NOT be removed (`Bool`).
 
-`remove_all_params` - (Optional) Remove all query parameters (bool).
+`remove_all_params` - (Optional) x-displayName: "Remove All Parameters" (bool).
 
-`retain_all_params` - (Optional) Retain all query parameters (bool).
+`replace_params` - (Optional) x-displayName: "Replace All Parameters" (`String`).
+
+`retain_all_params` - (Optional) x-displayName: "Retain All Parameters" (bool).
 
 `strip_query_params` - (Optional) Specifies the list of query params to be removed. Not supported. See [Strip Query Params ](#strip-query-params) below for details.
 
@@ -1741,7 +1776,7 @@ Send redirect response.
 
 `prefix_rewrite` - (Optional) This option allows redirect URLs be dynamically created based on the request (`String`).
 
-`response_code` - (Optional) code is MOVED_PERMANENTLY (301). (`Int`).
+`response_code` - (Optional) The HTTP status code to use in the redirect response. (`Int`).
 
 ### Routes
 

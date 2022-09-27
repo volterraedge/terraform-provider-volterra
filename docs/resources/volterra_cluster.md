@@ -56,6 +56,8 @@ Argument Reference
 
 `fallback_policy` - (Optional) metadata defined as default_set (`String`).
 
+`header_transformation_type` - (Optional) Header transformation options for upstream request headers. See [Header Transformation Type ](#header-transformation-type) below for details.
+
 `health_checks` - (Optional) List of references to healthcheck object for this cluster.. See [ref](#ref) below for details.
 
 `http2_options` - (Optional) Http2 Protocol options for upstream connections. See [Http2 Options ](#http2-options) below for details.
@@ -136,6 +138,10 @@ Use hash algorithms in the custom order. Volterra will try to fetch ocsp respons
 
 `hash_algorithms` - (Required) Ordered list of hash algorithms to be used. (`List of Strings`).
 
+### Default Header Transformation
+
+Normalize the headers to lower case.
+
 ### Disable Ocsp Stapling
 
 This is the default behavior if no choice is selected..
@@ -149,6 +155,14 @@ Do not use SNI..
 .
 
 `keys` - (Optional) List of keys that define a cluster subset class. (`String`).
+
+### Header Transformation Type
+
+Header transformation options for upstream request headers.
+
+`default_header_transformation` - (Optional) Normalize the headers to lower case (bool).
+
+`proper_case_header_transformation` - (Optional) For example, “content-type” becomes “Content-Type”, and “foo$b#$are” becomes “Foo$B#$Are” (bool).
 
 ### Http2 Options
 
@@ -185,6 +199,10 @@ TLS Private Key data in unencrypted PEM format including the PEM headers. The da
 `vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Vault Secret Info ](#vault-secret-info) below for details.
 
 `wingman_secret_info` - (Optional) Secret is given as bootstrap secret in Volterra Security Sidecar. See [Wingman Secret Info ](#wingman-secret-info) below for details.
+
+### Proper Case Header Transformation
+
+For example, “content-type” becomes “Content-Type”, and “foo$b#$are” becomes “Foo$B#$Are”.
 
 ### Ref
 

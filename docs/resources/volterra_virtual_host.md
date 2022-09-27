@@ -21,12 +21,7 @@ resource "volterra_virtual_host" "example" {
   namespace = "staging"
 
   // One of the arguments from this list "no_challenge js_challenge captcha_challenge" must be set
-
-  js_challenge {
-    cookie_expiry   = "1000"
-    custom_page     = "string:///PHA+IFBsZWFzZSBXYWl0IDwvcD4="
-    js_script_delay = "1000"
-  }
+  no_challenge = true
 }
 
 ```
@@ -72,9 +67,9 @@ Argument Reference
 
 `custom_errors` - (Optional) these pages are not editable. User has an option to disable the use of default Volterra error pages (`String`).
 
-`default_loadbalancer` - (Optional) Default loadbalancer for Non SNI clients (bool).
+`default_loadbalancer` - (Optional) x-displayName: "Yes" (bool).
 
-`non_default_loadbalancer` - (Optional) Do not use as default loadbalancer for Non SNI clients (bool).
+`non_default_loadbalancer` - (Optional) x-displayName: "No" (bool).
 
 `disable_default_error_pages` - (Optional) An option to specify whether to disable using default Volterra error pages (`Bool`).
 
@@ -83,6 +78,8 @@ Argument Reference
 `domains` - (Optional) Domains also indicate the list of names for which DNS resolution will be done by VER (`List of String`).
 
 `dynamic_reverse_proxy` - (Optional) request. The DNS response is cached for 60s by default.. See [Dynamic Reverse Proxy ](#dynamic-reverse-proxy) below for details.
+
+`header_transformation_type` - (Optional) Header transformation options for response headers to the client. See [Header Transformation Type ](#header-transformation-type) below for details.
 
 `idle_timeout` - (Optional) The default if not specified is 1 minute. (`Int`).
 
@@ -292,6 +289,10 @@ Use hash algorithms in the custom order. Volterra will try to fetch ocsp respons
 
 `hash_algorithms` - (Required) Ordered list of hash algorithms to be used. (`List of Strings`).
 
+### Default Header Transformation
+
+Normalize the headers to lower case.
+
 ### Disable Ocsp Stapling
 
 This is the default behavior if no choice is selected..
@@ -307,6 +308,14 @@ request. The DNS response is cached for 60s by default..
 `resolution_network_type` - (Optional) Type of the network to resolve the destination (`String`).
 
 `resolve_endpoint_dynamically` - (Optional) request. The DNS response is cached for 60s by default. (`Bool`).
+
+### Header Transformation Type
+
+Header transformation options for response headers to the client.
+
+`default_header_transformation` - (Optional) Normalize the headers to lower case (bool).
+
+`proper_case_header_transformation` - (Optional) For example, “content-type” becomes “Content-Type”, and “foo$b#$are” becomes “Foo$B#$Are” (bool).
 
 ### Js Challenge
 
@@ -355,6 +364,10 @@ TLS Private Key data in unencrypted PEM format including the PEM headers. The da
 `vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Vault Secret Info ](#vault-secret-info) below for details.
 
 `wingman_secret_info` - (Optional) Secret is given as bootstrap secret in Volterra Security Sidecar. See [Wingman Secret Info ](#wingman-secret-info) below for details.
+
+### Proper Case Header Transformation
+
+For example, “content-type” becomes “Content-Type”, and “foo$b#$are” becomes “Foo$B#$Are”.
 
 ### Redirect Dynamic
 
