@@ -39,6 +39,20 @@ func (m *AzureHubVnetType) ToYAML() (string, error) {
 	return codec.ToYAML(m)
 }
 
+// Redact squashes sensitive info in m (in-place)
+func (m *AzureHubVnetType) Redact(ctx context.Context) error {
+	// clear fields with confidential option set (at message or field level)
+	if m == nil {
+		return nil
+	}
+
+	if err := m.GetExpressRouteEnabled().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting AzureHubVnetType.express_route_enabled")
+	}
+
+	return nil
+}
+
 func (m *AzureHubVnetType) DeepCopy() *AzureHubVnetType {
 	if m == nil {
 		return nil
@@ -70,10 +84,26 @@ type ValidateAzureHubVnetType struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateAzureHubVnetType) ExpressRouteChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for express_route_choice")
+	}
+	return validatorFn, nil
+}
+
 func (v *ValidateAzureHubVnetType) SpokeVnetsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for spoke_vnets")
+	}
 	itemsValidatorFn := func(ctx context.Context, elems []*VnetPeeringType, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
 			if err := VnetPeeringTypeValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
@@ -124,6 +154,42 @@ func (v *ValidateAzureHubVnetType) Validate(ctx context.Context, pm interface{},
 		return nil
 	}
 
+	if fv, exists := v.FldValidators["express_route_choice"]; exists {
+		val := m.GetExpressRouteChoice()
+		vOpts := append(opts,
+			db.WithValidateField("express_route_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetExpressRouteChoice().(type) {
+	case *AzureHubVnetType_ExpressRouteDisabled:
+		if fv, exists := v.FldValidators["express_route_choice.express_route_disabled"]; exists {
+			val := m.GetExpressRouteChoice().(*AzureHubVnetType_ExpressRouteDisabled).ExpressRouteDisabled
+			vOpts := append(opts,
+				db.WithValidateField("express_route_choice"),
+				db.WithValidateField("express_route_disabled"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *AzureHubVnetType_ExpressRouteEnabled:
+		if fv, exists := v.FldValidators["express_route_choice.express_route_enabled"]; exists {
+			val := m.GetExpressRouteChoice().(*AzureHubVnetType_ExpressRouteEnabled).ExpressRouteEnabled
+			vOpts := append(opts,
+				db.WithValidateField("express_route_choice"),
+				db.WithValidateField("express_route_enabled"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["spoke_vnets"]; exists {
 		vOpts := append(opts, db.WithValidateField("spoke_vnets"))
 		if err := fv(ctx, m.GetSpokeVnets(), vOpts...); err != nil {
@@ -147,6 +213,17 @@ var DefaultAzureHubVnetTypeValidator = func() *ValidateAzureHubVnetType {
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
 
+	vrhExpressRouteChoice := v.ExpressRouteChoiceValidationRuleHandler
+	rulesExpressRouteChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhExpressRouteChoice(rulesExpressRouteChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for AzureHubVnetType.express_route_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["express_route_choice"] = vFn
+
 	vrhSpokeVnets := v.SpokeVnetsValidationRuleHandler
 	rulesSpokeVnets := map[string]string{
 		"ves.io.schema.rules.repeated.max_items": "100",
@@ -158,6 +235,8 @@ var DefaultAzureHubVnetTypeValidator = func() *ValidateAzureHubVnetType {
 		panic(errMsg)
 	}
 	v.FldValidators["spoke_vnets"] = vFn
+
+	v.FldValidators["express_route_choice.express_route_enabled"] = ExpressRouteConfigTypeValidator().Validate
 
 	return v
 }()
@@ -185,6 +264,10 @@ func (m *AzureVnetIngressEgressGwARReplaceType) Redact(ctx context.Context) erro
 
 	if err := m.GetGlobalNetworkList().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting AzureVnetIngressEgressGwARReplaceType.global_network_list")
+	}
+
+	if err := m.GetHub().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting AzureVnetIngressEgressGwARReplaceType.hub")
 	}
 
 	return nil
@@ -1045,6 +1128,10 @@ func (m *AzureVnetIngressEgressGwARType) Redact(ctx context.Context) error {
 
 	if err := m.GetGlobalNetworkList().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting AzureVnetIngressEgressGwARType.global_network_list")
+	}
+
+	if err := m.GetHub().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting AzureVnetIngressEgressGwARType.hub")
 	}
 
 	return nil
@@ -1950,6 +2037,10 @@ func (m *AzureVnetIngressEgressGwReplaceType) Redact(ctx context.Context) error 
 		return errors.Wrapf(err, "Redacting AzureVnetIngressEgressGwReplaceType.global_network_list")
 	}
 
+	if err := m.GetHub().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting AzureVnetIngressEgressGwReplaceType.hub")
+	}
+
 	return nil
 }
 
@@ -2810,6 +2901,10 @@ func (m *AzureVnetIngressEgressGwType) Redact(ctx context.Context) error {
 		return errors.Wrapf(err, "Redacting AzureVnetIngressEgressGwType.global_network_list")
 	}
 
+	if err := m.GetHub().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting AzureVnetIngressEgressGwType.hub")
+	}
+
 	return nil
 }
 
@@ -3202,8 +3297,16 @@ func (v *ValidateAzureVnetIngressEgressGwType) SiteMeshGroupChoiceValidationRule
 
 func (v *ValidateAzureVnetIngressEgressGwType) AzNodesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for az_nodes")
+	}
 	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_views.AzureVnetTwoInterfaceNodeType, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
 			if err := ves_io_schema_views.AzureVnetTwoInterfaceNodeTypeValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
@@ -3696,6 +3799,7 @@ var DefaultAzureVnetIngressEgressGwTypeValidator = func() *ValidateAzureVnetIngr
 
 	vrhAzNodes := v.AzNodesValidationRuleHandler
 	rulesAzNodes := map[string]string{
+		"ves.io.schema.rules.message.required":   "true",
 		"ves.io.schema.rules.repeated.num_items": "1,3",
 	}
 	vFn, err = vrhAzNodes(rulesAzNodes)
@@ -4041,8 +4145,16 @@ type ValidateAzureVnetIngressGwType struct {
 
 func (v *ValidateAzureVnetIngressGwType) AzNodesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for az_nodes")
+	}
 	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_views.AzureVnetOneInterfaceNodeType, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
 			if err := ves_io_schema_views.AzureVnetOneInterfaceNodeTypeValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
@@ -4137,6 +4249,7 @@ var DefaultAzureVnetIngressGwTypeValidator = func() *ValidateAzureVnetIngressGwT
 
 	vrhAzNodes := v.AzNodesValidationRuleHandler
 	rulesAzNodes := map[string]string{
+		"ves.io.schema.rules.message.required":   "true",
 		"ves.io.schema.rules.repeated.num_items": "1,3",
 	}
 	vFn, err = vrhAzNodes(rulesAzNodes)
@@ -4293,8 +4406,16 @@ func (v *ValidateAzureVnetSiteInfoType) PrivateIpsValidationRuleHandler(rules ma
 
 func (v *ValidateAzureVnetSiteInfoType) SpokeVnetPrefixInfoValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for spoke_vnet_prefix_info")
+	}
 	itemsValidatorFn := func(ctx context.Context, elems []*VnetIpPrefixesType, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
 			if err := VnetIpPrefixesTypeValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
@@ -4343,6 +4464,27 @@ func (v *ValidateAzureVnetSiteInfoType) Validate(ctx context.Context, pm interfa
 	}
 	if m == nil {
 		return nil
+	}
+
+	if fv, exists := v.FldValidators["express_route_info"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("express_route_info"))
+		if err := fv(ctx, m.GetExpressRouteInfo(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["node_info"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("node_info"))
+		for idx, item := range m.GetNodeInfo() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
 	}
 
 	if fv, exists := v.FldValidators["private_ips"]; exists {
@@ -4422,6 +4564,8 @@ var DefaultAzureVnetSiteInfoTypeValidator = func() *ValidateAzureVnetSiteInfoTyp
 		panic(errMsg)
 	}
 	v.FldValidators["spoke_vnet_prefix_info"] = vFn
+
+	v.FldValidators["node_info"] = NodeInstanceNameTypeValidator().Validate
 
 	return v
 }()
@@ -7054,8 +7198,16 @@ func (v *ValidateAzureVnetVoltstackClusterType) AzureCertifiedHwValidationRuleHa
 
 func (v *ValidateAzureVnetVoltstackClusterType) AzNodesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for az_nodes")
+	}
 	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_views.AzureVnetOneInterfaceNodeType, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
 			if err := ves_io_schema_views.AzureVnetOneInterfaceNodeTypeValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
@@ -7540,6 +7692,7 @@ var DefaultAzureVnetVoltstackClusterTypeValidator = func() *ValidateAzureVnetVol
 
 	vrhAzNodes := v.AzNodesValidationRuleHandler
 	rulesAzNodes := map[string]string{
+		"ves.io.schema.rules.message.required":   "true",
 		"ves.io.schema.rules.repeated.num_items": "1,3",
 	}
 	vFn, err = vrhAzNodes(rulesAzNodes)
@@ -8668,6 +8821,643 @@ func CreateSpecTypeValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *ExpressRouteConfigType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *ExpressRouteConfigType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+// Redact squashes sensitive info in m (in-place)
+func (m *ExpressRouteConfigType) Redact(ctx context.Context) error {
+	// clear fields with confidential option set (at message or field level)
+	if m == nil {
+		return nil
+	}
+
+	for idx, e := range m.GetConnections() {
+		if err := e.Redact(ctx); err != nil {
+			return errors.Wrapf(err, "Redacting ExpressRouteConfigType.connections idx %v", idx)
+		}
+	}
+
+	return nil
+}
+
+func (m *ExpressRouteConfigType) DeepCopy() *ExpressRouteConfigType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &ExpressRouteConfigType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *ExpressRouteConfigType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *ExpressRouteConfigType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return ExpressRouteConfigTypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateExpressRouteConfigType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateExpressRouteConfigType) ConnectionsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for connections")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*ExpressRouteConnectionType, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := ExpressRouteConnectionTypeValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for connections")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ExpressRouteConnectionType)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ExpressRouteConnectionType, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated connections")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items connections")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateExpressRouteConfigType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*ExpressRouteConfigType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *ExpressRouteConfigType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["connections"]; exists {
+		vOpts := append(opts, db.WithValidateField("connections"))
+		if err := fv(ctx, m.GetConnections(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["gateway_subnet"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("gateway_subnet"))
+		if err := fv(ctx, m.GetGatewaySubnet(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["route_server_subnet"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("route_server_subnet"))
+		if err := fv(ctx, m.GetRouteServerSubnet(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	switch m.GetSkuChoice().(type) {
+	case *ExpressRouteConfigType_SkuStandard:
+		if fv, exists := v.FldValidators["sku_choice.sku_standard"]; exists {
+			val := m.GetSkuChoice().(*ExpressRouteConfigType_SkuStandard).SkuStandard
+			vOpts := append(opts,
+				db.WithValidateField("sku_choice"),
+				db.WithValidateField("sku_standard"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ExpressRouteConfigType_SkuErgw1Az:
+		if fv, exists := v.FldValidators["sku_choice.sku_ergw1az"]; exists {
+			val := m.GetSkuChoice().(*ExpressRouteConfigType_SkuErgw1Az).SkuErgw1Az
+			vOpts := append(opts,
+				db.WithValidateField("sku_choice"),
+				db.WithValidateField("sku_ergw1az"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ExpressRouteConfigType_SkuHighPerf:
+		if fv, exists := v.FldValidators["sku_choice.sku_high_perf"]; exists {
+			val := m.GetSkuChoice().(*ExpressRouteConfigType_SkuHighPerf).SkuHighPerf
+			vOpts := append(opts,
+				db.WithValidateField("sku_choice"),
+				db.WithValidateField("sku_high_perf"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ExpressRouteConfigType_SkuErgw2Az:
+		if fv, exists := v.FldValidators["sku_choice.sku_ergw2az"]; exists {
+			val := m.GetSkuChoice().(*ExpressRouteConfigType_SkuErgw2Az).SkuErgw2Az
+			vOpts := append(opts,
+				db.WithValidateField("sku_choice"),
+				db.WithValidateField("sku_ergw2az"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultExpressRouteConfigTypeValidator = func() *ValidateExpressRouteConfigType {
+	v := &ValidateExpressRouteConfigType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhConnections := v.ConnectionsValidationRuleHandler
+	rulesConnections := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "8",
+	}
+	vFn, err = vrhConnections(rulesConnections)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ExpressRouteConfigType.connections: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["connections"] = vFn
+
+	v.FldValidators["gateway_subnet"] = ves_io_schema_views.AzureSubnetChoiceWithAutoTypeValidator().Validate
+
+	v.FldValidators["route_server_subnet"] = ves_io_schema_views.AzureSubnetChoiceWithAutoTypeValidator().Validate
+
+	return v
+}()
+
+func ExpressRouteConfigTypeValidator() db.Validator {
+	return DefaultExpressRouteConfigTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *ExpressRouteConnectionType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *ExpressRouteConnectionType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+// Redact squashes sensitive info in m (in-place)
+func (m *ExpressRouteConnectionType) Redact(ctx context.Context) error {
+	// clear fields with confidential option set (at message or field level)
+	if m == nil {
+		return nil
+	}
+
+	if err := m.GetOtherSubscription().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting ExpressRouteConnectionType.other_subscription")
+	}
+
+	return nil
+}
+
+func (m *ExpressRouteConnectionType) DeepCopy() *ExpressRouteConnectionType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &ExpressRouteConnectionType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *ExpressRouteConnectionType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *ExpressRouteConnectionType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return ExpressRouteConnectionTypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateExpressRouteConnectionType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateExpressRouteConnectionType) SubscriptionChoiceOtherSubscriptionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	return ExpressRouteOtherSubscriptionConnectionValidator().Validate, nil
+}
+
+func (v *ValidateExpressRouteConnectionType) MetadataValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "MessageValidationRuleHandler for metadata")
+	}
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		if err := ves_io_schema.MessageMetaTypeValidator().Validate(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateExpressRouteConnectionType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*ExpressRouteConnectionType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *ExpressRouteConnectionType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["metadata"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("metadata"))
+		if err := fv(ctx, m.GetMetadata(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	switch m.GetSubscriptionChoice().(type) {
+	case *ExpressRouteConnectionType_SameSubscription:
+		if fv, exists := v.FldValidators["subscription_choice.same_subscription"]; exists {
+			val := m.GetSubscriptionChoice().(*ExpressRouteConnectionType_SameSubscription).SameSubscription
+			vOpts := append(opts,
+				db.WithValidateField("subscription_choice"),
+				db.WithValidateField("same_subscription"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ExpressRouteConnectionType_OtherSubscription:
+		if fv, exists := v.FldValidators["subscription_choice.other_subscription"]; exists {
+			val := m.GetSubscriptionChoice().(*ExpressRouteConnectionType_OtherSubscription).OtherSubscription
+			vOpts := append(opts,
+				db.WithValidateField("subscription_choice"),
+				db.WithValidateField("other_subscription"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["weight"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("weight"))
+		if err := fv(ctx, m.GetWeight(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultExpressRouteConnectionTypeValidator = func() *ValidateExpressRouteConnectionType {
+	v := &ValidateExpressRouteConnectionType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhSubscriptionChoiceOtherSubscription := v.SubscriptionChoiceOtherSubscriptionValidationRuleHandler
+	rulesSubscriptionChoiceOtherSubscription := map[string]string{
+		"ves.io.schema.rules.string.max_len": "512",
+	}
+	vFnMap["subscription_choice.other_subscription"], err = vrhSubscriptionChoiceOtherSubscription(rulesSubscriptionChoiceOtherSubscription)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field ExpressRouteConnectionType.subscription_choice_other_subscription: %s", err)
+		panic(errMsg)
+	}
+
+	v.FldValidators["subscription_choice.other_subscription"] = vFnMap["subscription_choice.other_subscription"]
+
+	vrhMetadata := v.MetadataValidationRuleHandler
+	rulesMetadata := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhMetadata(rulesMetadata)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ExpressRouteConnectionType.metadata: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["metadata"] = vFn
+
+	v.FldValidators["subscription_choice.same_subscription"] = ves_io_schema_views.AzureExpressRouteConnectionTypeValidator().Validate
+
+	return v
+}()
+
+func ExpressRouteConnectionTypeValidator() db.Validator {
+	return DefaultExpressRouteConnectionTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *ExpressRouteInfo) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *ExpressRouteInfo) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *ExpressRouteInfo) DeepCopy() *ExpressRouteInfo {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &ExpressRouteInfo{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *ExpressRouteInfo) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *ExpressRouteInfo) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return ExpressRouteInfoValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateExpressRouteInfo struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateExpressRouteInfo) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*ExpressRouteInfo)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *ExpressRouteInfo got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["route_server_asn"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("route_server_asn"))
+		if err := fv(ctx, m.GetRouteServerAsn(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["route_server_ips"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("route_server_ips"))
+		for idx, item := range m.GetRouteServerIps() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultExpressRouteInfoValidator = func() *ValidateExpressRouteInfo {
+	v := &ValidateExpressRouteInfo{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func ExpressRouteInfoValidator() db.Validator {
+	return DefaultExpressRouteInfoValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *ExpressRouteOtherSubscriptionConnection) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *ExpressRouteOtherSubscriptionConnection) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+// Redact squashes sensitive info in m (in-place)
+func (m *ExpressRouteOtherSubscriptionConnection) Redact(ctx context.Context) error {
+	// clear fields with confidential option set (at message or field level)
+	if m == nil {
+		return nil
+	}
+
+	if err := m.GetAuthorizedKey().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting ExpressRouteOtherSubscriptionConnection.authorized_key")
+	}
+
+	return nil
+}
+
+func (m *ExpressRouteOtherSubscriptionConnection) DeepCopy() *ExpressRouteOtherSubscriptionConnection {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &ExpressRouteOtherSubscriptionConnection{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *ExpressRouteOtherSubscriptionConnection) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *ExpressRouteOtherSubscriptionConnection) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return ExpressRouteOtherSubscriptionConnectionValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateExpressRouteOtherSubscriptionConnection struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateExpressRouteOtherSubscriptionConnection) CircuitIdValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for circuit_id")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateExpressRouteOtherSubscriptionConnection) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*ExpressRouteOtherSubscriptionConnection)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *ExpressRouteOtherSubscriptionConnection got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["authorized_key"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("authorized_key"))
+		if err := fv(ctx, m.GetAuthorizedKey(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["circuit_id"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("circuit_id"))
+		if err := fv(ctx, m.GetCircuitId(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultExpressRouteOtherSubscriptionConnectionValidator = func() *ValidateExpressRouteOtherSubscriptionConnection {
+	v := &ValidateExpressRouteOtherSubscriptionConnection{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhCircuitId := v.CircuitIdValidationRuleHandler
+	rulesCircuitId := map[string]string{
+		"ves.io.schema.rules.string.max_len": "512",
+	}
+	vFn, err = vrhCircuitId(rulesCircuitId)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ExpressRouteOtherSubscriptionConnection.circuit_id: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["circuit_id"] = vFn
+
+	v.FldValidators["authorized_key"] = ves_io_schema.SecretTypeValidator().Validate
+
+	return v
+}()
+
+func ExpressRouteOtherSubscriptionConnectionValidator() db.Validator {
+	return DefaultExpressRouteOtherSubscriptionConnectionValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *GetSpecType) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -9126,8 +9916,16 @@ func (v *ValidateGetSpecType) AddressValidationRuleHandler(rules map[string]stri
 
 func (v *ValidateGetSpecType) VipParamsPerAzValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for vip_params_per_az")
+	}
 	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_site.PublishVIPParamsPerAz, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
 			if err := ves_io_schema_site.PublishVIPParamsPerAzValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
@@ -10476,8 +11274,16 @@ func (v *ValidateGlobalSpecType) AddressValidationRuleHandler(rules map[string]s
 
 func (v *ValidateGlobalSpecType) VipParamsPerAzValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for vip_params_per_az")
+	}
 	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_site.PublishVIPParamsPerAz, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
 			if err := ves_io_schema_site.PublishVIPParamsPerAzValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
@@ -11298,6 +12104,146 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 
 func GlobalSpecTypeValidator() db.Validator {
 	return DefaultGlobalSpecTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *NodeInstanceNameType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *NodeInstanceNameType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *NodeInstanceNameType) DeepCopy() *NodeInstanceNameType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &NodeInstanceNameType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *NodeInstanceNameType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *NodeInstanceNameType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return NodeInstanceNameTypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateNodeInstanceNameType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateNodeInstanceNameType) NodeInstanceNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for node_instance_name")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateNodeInstanceNameType) NodeIdValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for node_id")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateNodeInstanceNameType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*NodeInstanceNameType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *NodeInstanceNameType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["node_id"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("node_id"))
+		if err := fv(ctx, m.GetNodeId(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["node_instance_name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("node_instance_name"))
+		if err := fv(ctx, m.GetNodeInstanceName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultNodeInstanceNameTypeValidator = func() *ValidateNodeInstanceNameType {
+	v := &ValidateNodeInstanceNameType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhNodeInstanceName := v.NodeInstanceNameValidationRuleHandler
+	rulesNodeInstanceName := map[string]string{
+		"ves.io.schema.rules.string.max_len": "64",
+		"ves.io.schema.rules.string.min_len": "1",
+	}
+	vFn, err = vrhNodeInstanceName(rulesNodeInstanceName)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for NodeInstanceNameType.node_instance_name: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["node_instance_name"] = vFn
+
+	vrhNodeId := v.NodeIdValidationRuleHandler
+	rulesNodeId := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.max_len":   "64",
+		"ves.io.schema.rules.string.min_len":   "1",
+	}
+	vFn, err = vrhNodeId(rulesNodeId)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for NodeInstanceNameType.node_id: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["node_id"] = vFn
+
+	return v
+}()
+
+func NodeInstanceNameTypeValidator() db.Validator {
+	return DefaultNodeInstanceNameTypeValidator
 }
 
 // augmented methods on protoc/std generated struct

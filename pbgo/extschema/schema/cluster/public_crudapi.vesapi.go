@@ -1595,7 +1595,10 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 		item.Disabled = o.GetMetadata().GetDisable()
 
 		if len(req.ReportFields) > 0 {
-			item.Object = o.Object
+			noDBForm, _ := flags.GetEnvGetRspNoDBForm()
+			if !noDBForm {
+				item.Object = o.Object
+			}
 
 			item.Metadata = &ves_io_schema.ObjectGetMetaType{}
 			item.Metadata.FromObjectMetaType(o.Metadata)
@@ -2355,6 +2358,11 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/clusterSubsetFallbackPolicy",
                     "x-displayname": "Fallback Policy"
                 },
+                "header_transformation_type": {
+                    "description": " Header transformation options for upstream request headers",
+                    "$ref": "#/definitions/schemaHeaderTransformationType",
+                    "x-displayname": "Header Transformation Configuration"
+                },
                 "health_checks": {
                     "type": "array",
                     "description": " List of references to healthcheck object for this cluster.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 4\n",
@@ -2647,6 +2655,11 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/clusterSubsetFallbackPolicy",
                     "x-displayname": "Fallback Policy"
                 },
+                "header_transformation_type": {
+                    "description": " Header transformation options for upstream request headers",
+                    "$ref": "#/definitions/schemaHeaderTransformationType",
+                    "x-displayname": "Header Transformation Configuration"
+                },
                 "health_checks": {
                     "type": "array",
                     "description": " List of references to healthcheck object for this cluster.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 4\n",
@@ -2789,6 +2802,12 @@ var APISwaggerJSON string = `{
                     "title": "fallback_policy",
                     "$ref": "#/definitions/clusterSubsetFallbackPolicy",
                     "x-displayname": "Fallback Policy"
+                },
+                "header_transformation_type": {
+                    "description": " Header transformation options for upstream request headers",
+                    "title": "Header transformation",
+                    "$ref": "#/definitions/schemaHeaderTransformationType",
+                    "x-displayname": "Header Transformation Configuration"
                 },
                 "health_checks": {
                     "type": "array",
@@ -3198,6 +3217,11 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/clusterSubsetFallbackPolicy",
                     "x-displayname": "Fallback Policy"
                 },
+                "header_transformation_type": {
+                    "description": " Header transformation options for upstream request headers",
+                    "$ref": "#/definitions/schemaHeaderTransformationType",
+                    "x-displayname": "Header Transformation Configuration"
+                },
                 "health_checks": {
                     "type": "array",
                     "description": " List of references to healthcheck object for this cluster.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 4\n",
@@ -3543,6 +3567,29 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.repeated.min_items": "1",
                         "ves.io.schema.rules.repeated.unique": "true"
                     }
+                }
+            }
+        },
+        "schemaHeaderTransformationType": {
+            "type": "object",
+            "description": "Header Transformation options for HTTP request/response headers",
+            "title": "HeaderTransformationType",
+            "x-displayname": "Header Transformation",
+            "x-ves-displayorder": "1",
+            "x-ves-oneof-field-header_transformation_choice": "[\"default_header_transformation\",\"proper_case_header_transformation\"]",
+            "x-ves-proto-message": "ves.io.schema.HeaderTransformationType",
+            "properties": {
+                "default_header_transformation": {
+                    "description": "Exclusive with [proper_case_header_transformation]\n Normalize the headers to lower case",
+                    "title": "Default header transformation",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Default"
+                },
+                "proper_case_header_transformation": {
+                    "description": "Exclusive with [default_header_transformation]\n Normalize the headers to proper case words. The fist character and any character\n following a special character will be capitalized if it’s an alpha character.\n For example, “content-type” becomes “Content-Type”, and “foo$b#$are” becomes “Foo$B#$Are”",
+                    "title": "Proper case header transformation",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Proper Case"
                 }
             }
         },

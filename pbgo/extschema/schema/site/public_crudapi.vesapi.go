@@ -1177,7 +1177,10 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 		item.Disabled = o.GetMetadata().GetDisable()
 
 		if len(req.ReportFields) > 0 {
-			item.Object = o.Object
+			noDBForm, _ := flags.GetEnvGetRspNoDBForm()
+			if !noDBForm {
+				item.Object = o.Object
+			}
 
 			item.Metadata = &ves_io_schema.ObjectGetMetaType{}
 			item.Metadata.FromObjectMetaType(o.Metadata)
@@ -2607,6 +2610,49 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "siteAzureExpressRouteCircuitStatusType": {
+            "type": "object",
+            "x-ves-proto-message": "ves.io.schema.site.AzureExpressRouteCircuitStatusType",
+            "properties": {
+                "express_route_circuit_id": {
+                    "type": "string",
+                    "title": "x-displayName: \"Express Route Circuit ID\"\nExpress Route Circuit ID"
+                },
+                "express_route_circuit_name": {
+                    "type": "string",
+                    "title": "x-displayName: \"Express Route Circuit Name\"\nExpress Route Circuit Name"
+                },
+                "express_route_circuit_state": {
+                    "type": "string",
+                    "title": "x-displayName: \"Express Route Circuit Provisioning State\"\nExpress Route Provisioning State"
+                },
+                "peer": {
+                    "title": "x-displayName: \"Express Route Private Peering Status\"\nExpress Route Private Peering Status",
+                    "$ref": "#/definitions/siteExpressRoutePeeringStatusType"
+                }
+            }
+        },
+        "siteAzureExpressRouteStatusType": {
+            "type": "object",
+            "x-ves-proto-message": "ves.io.schema.site.AzureExpressRouteStatusType",
+            "properties": {
+                "propagated_routes_from_azure_express_route": {
+                    "type": "array",
+                    "title": "x-displayName: \"Propagated Routes from Azure Express Route\"\nPropagated Routes from Azure Express Route",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "route_server_status": {
+                    "title": "x-displayName: \"Route Server State\"\nRoute Server State",
+                    "$ref": "#/definitions/siteRouteServerStatusType"
+                },
+                "vnet_gateway_status": {
+                    "title": "x-displayName: \"VNET Gateway State\"\nVNET Gateway State",
+                    "$ref": "#/definitions/siteVnetGatewayStatusType"
+                }
+            }
+        },
         "siteAzureHubSpokeVnetPeeringStatusInfo": {
             "type": "object",
             "x-ves-proto-message": "ves.io.schema.site.AzureHubSpokeVnetPeeringStatusInfo",
@@ -3128,6 +3174,32 @@ var APISwaggerJSON string = `{
                     "description": " VIF State",
                     "title": "VIF State",
                     "x-displayname": "VIF State"
+                }
+            }
+        },
+        "siteExpressRoutePeeringStatusType": {
+            "type": "object",
+            "x-ves-proto-message": "ves.io.schema.site.ExpressRoutePeeringStatusType",
+            "properties": {
+                "azure_asn": {
+                    "type": "string",
+                    "title": "x-displayName: \"Express Route Azure ASN\"\nExpress Route Azure ASN"
+                },
+                "peer_asn": {
+                    "type": "string",
+                    "title": "x-displayName: \"Express Route Peer ASN\"\nExpress Route Peer ASN"
+                },
+                "peering_type": {
+                    "type": "string",
+                    "title": "x-displayName: \"Express Route Peering Type\"\nExpress Route Peering Type"
+                },
+                "provisioningState": {
+                    "type": "string",
+                    "title": "x-displayName: \"Provisioning Status\"\nProvisioning Status"
+                },
+                "state": {
+                    "type": "string",
+                    "title": "x-displayName: \"Express Route Peering Status\"\nExpress Route Peering Status"
                 }
             }
         },
@@ -4947,6 +5019,45 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "siteRouteServerPeeringStatusType": {
+            "type": "object",
+            "x-ves-proto-message": "ves.io.schema.site.RouteServerPeeringStatusType",
+            "properties": {
+                "connection_state": {
+                    "type": "string",
+                    "title": "x-displayName: \"Route Server Connection State\"\nRoute Server Connection State"
+                },
+                "peerIP": {
+                    "type": "string",
+                    "title": "x-displayName: \"Route Server Peer IP\"\nRoute Server Peer IP"
+                },
+                "peer_asn": {
+                    "type": "string",
+                    "title": "x-displayName: \"Route Server Peer ASN\"\nRoute Server Peer ASN"
+                },
+                "provisioningState": {
+                    "type": "string",
+                    "title": "x-displayName: \"Provisioning Status\"\nProvisioning Status"
+                }
+            }
+        },
+        "siteRouteServerStatusType": {
+            "type": "object",
+            "x-ves-proto-message": "ves.io.schema.site.RouteServerStatusType",
+            "properties": {
+                "peers": {
+                    "type": "array",
+                    "title": "x-displayName: \"Route Server Peering State\"\nRoute Server Peering State",
+                    "items": {
+                        "$ref": "#/definitions/siteRouteServerPeeringStatusType"
+                    }
+                },
+                "route_server_name": {
+                    "type": "string",
+                    "title": "x-displayName: \"Route Server Name\"\nRoute Server Name"
+                }
+            }
+        },
         "siteScalingPhase": {
             "type": "string",
             "description": "State of Scaling phase in site\n\nInvalid scaling phase\nSite scaling is in progress\nSite scaling failed\nSite scaling is done. Site is in desired number of nodes",
@@ -5132,6 +5243,12 @@ var APISwaggerJSON string = `{
                     "title": "Direct Connect Status",
                     "$ref": "#/definitions/siteDirectConnectStatusInfo",
                     "x-displayname": "Direct Connect Status"
+                },
+                "express_route_status": {
+                    "description": " Azure Express Route Status",
+                    "title": "Azure Express Route Status\nx-displayName: \"Azure Express Route Status\"\nAzure Express Route Status",
+                    "$ref": "#/definitions/siteAzureExpressRouteStatusType",
+                    "x-displayname": "Azure Express Route Status"
                 },
                 "fleet_status": {
                     "description": " Fleet status shows fleet deployment status of last fleet default config on the node",
@@ -5640,6 +5757,31 @@ var APISwaggerJSON string = `{
                     "description": " name of the ver instance that created this site status",
                     "title": "ver_instance_name",
                     "x-displayname": "VER Instance"
+                }
+            }
+        },
+        "siteVnetGatewayStatusType": {
+            "type": "object",
+            "x-ves-proto-message": "ves.io.schema.site.VnetGatewayStatusType",
+            "properties": {
+                "connection_status": {
+                    "type": "array",
+                    "title": "x-displayName: \"Azure Express Route Circuit Connection Status\"\nAzure Express Route Circuit Connection Status",
+                    "items": {
+                        "$ref": "#/definitions/siteAzureExpressRouteCircuitStatusType"
+                    }
+                },
+                "vgw_id": {
+                    "type": "string",
+                    "title": "x-displayName: \"VNET Gateway ID\"\nVNET Gateway ID"
+                },
+                "vgw_name": {
+                    "type": "string",
+                    "title": "x-displayName: \"VNET Gateway Name\"\nVNET Gateway Name"
+                },
+                "vgw_state": {
+                    "type": "string",
+                    "title": "x-displayName: \"VNET Gateway State\"\nVNET Gateway State"
                 }
             }
         },

@@ -1595,7 +1595,10 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 		item.Disabled = o.GetMetadata().GetDisable()
 
 		if len(req.ReportFields) > 0 {
-			item.Object = o.Object
+			noDBForm, _ := flags.GetEnvGetRspNoDBForm()
+			if !noDBForm {
+				item.Object = o.Object
+			}
 
 			item.Metadata = &ves_io_schema.ObjectGetMetaType{}
 			item.Metadata.FromObjectMetaType(o.Metadata)
@@ -4773,18 +4776,23 @@ var APISwaggerJSON string = `{
         },
         "schemaviewsLocalControlPlaneType": {
             "type": "object",
-            "description": "x-displayName: \"Site Local Control Plane\"\nSite Local Control Plane",
+            "description": "Site Local Control Plane",
             "title": "LocalControlPlaneType",
+            "x-displayname": "Site Local Control Plane",
+            "x-ves-oneof-field-local_control_plane_choice": "[\"default_local_control_plane\",\"no_local_control_plane\"]",
+            "x-ves-proto-message": "ves.io.schema.views.LocalControlPlaneType",
             "properties": {
                 "default_local_control_plane": {
-                    "description": "x-displayName: \"Enable Site Local Control Plane\"\nEnable Site Local Control Plane",
+                    "description": "Exclusive with [no_local_control_plane]\n Enable Site Local Control Plane",
                     "title": "Disable Site Local Control Plane",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Enable Site Local Control Plane"
                 },
                 "no_local_control_plane": {
-                    "description": "x-displayName: \"Disable Site Local Control Plane\"\nDisable Site Local Control Plane",
+                    "description": "Exclusive with [default_local_control_plane]\n Disable Site Local Control Plane",
                     "title": "Disable Site Local Control Plane",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disable Site Local Control Plane"
                 }
             }
         },
@@ -5443,6 +5451,11 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/viewsOperatingSystemType",
                     "x-displayname": "Operating System"
                 },
+                "site_local_control_plane": {
+                    "description": " Enable/Disable site local control plane",
+                    "$ref": "#/definitions/schemaviewsLocalControlPlaneType",
+                    "x-displayname": "Site Local Control Plane"
+                },
                 "ssh_key": {
                     "type": "string",
                     "description": " Public SSH key for accessing the site.\n\nExample: - \"ssh-rsa AAAAB...\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 8192\n",
@@ -5576,6 +5589,11 @@ var APISwaggerJSON string = `{
                     "description": "Exclusive with [log_receiver]\n Logs Streaming is disabled",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Disable Logs Streaming"
+                },
+                "site_local_control_plane": {
+                    "description": " Enable/Disable site local control plane",
+                    "$ref": "#/definitions/schemaviewsLocalControlPlaneType",
+                    "x-displayname": "Site Local Control Plane"
                 },
                 "site_state": {
                     "description": "The operational phase of the site state machine.",
@@ -5731,6 +5749,12 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/viewsOperatingSystemType",
                     "x-displayname": "Operating System"
                 },
+                "site_local_control_plane": {
+                    "description": " Enable/Disable site local control plane",
+                    "title": "Site Local Control Plane",
+                    "$ref": "#/definitions/schemaviewsLocalControlPlaneType",
+                    "x-displayname": "Site Local Control Plane"
+                },
                 "ssh_key": {
                     "type": "string",
                     "description": " Public SSH key for accessing the site.\n\nExample: - \"ssh-rsa AAAAB...\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 8192\n",
@@ -5812,6 +5836,11 @@ var APISwaggerJSON string = `{
                     "description": "Exclusive with [log_receiver]\n Logs Streaming is disabled",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Disable Logs Streaming"
+                },
+                "site_local_control_plane": {
+                    "description": " Enable/Disable site local control plane",
+                    "$ref": "#/definitions/schemaviewsLocalControlPlaneType",
+                    "x-displayname": "Site Local Control Plane"
                 },
                 "voltstack_cluster": {
                     "description": "Exclusive with [ingress_egress_gw ingress_gw]\n App Stack Cluster using single interface, useful for deploying K8s cluster.",

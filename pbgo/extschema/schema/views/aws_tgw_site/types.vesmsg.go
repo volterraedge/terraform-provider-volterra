@@ -92,8 +92,16 @@ func (v *ValidateAWSTGWInfoConfigType) VpcIdValidationRuleHandler(rules map[stri
 
 func (v *ValidateAWSTGWInfoConfigType) SubnetIdsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for subnet_ids")
+	}
 	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_views.AWSSubnetIdsType, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
 			if err := ves_io_schema_views.AWSSubnetIdsTypeValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
@@ -312,7 +320,7 @@ var DefaultAWSTGWInfoConfigTypeValidator = func() *ValidateAWSTGWInfoConfigType 
 	vrhSubnetIds := v.SubnetIdsValidationRuleHandler
 	rulesSubnetIds := map[string]string{
 		"ves.io.schema.rules.message.required":   "true",
-		"ves.io.schema.rules.repeated.num_items": "0, 1,3",
+		"ves.io.schema.rules.repeated.num_items": "0,1,3",
 	}
 	vFn, err = vrhSubnetIds(rulesSubnetIds)
 	if err != nil {
@@ -705,8 +713,16 @@ type ValidateActiveServicePoliciesType struct {
 
 func (v *ValidateActiveServicePoliciesType) ServicePoliciesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for service_policies")
+	}
 	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_views.ObjectRefType, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
 			if err := ves_io_schema_views.ObjectRefTypeValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
@@ -1894,8 +1910,16 @@ func (v *ValidateGetSpecType) AddressValidationRuleHandler(rules map[string]stri
 
 func (v *ValidateGetSpecType) VipParamsPerAzValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for vip_params_per_az")
+	}
 	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_site.PublishVIPParamsPerAz, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
 			if err := ves_io_schema_site.PublishVIPParamsPerAzValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
@@ -1979,8 +2003,16 @@ func (v *ValidateGetSpecType) TagsValidationRuleHandler(rules map[string]string)
 
 func (v *ValidateGetSpecType) TunnelsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for tunnels")
+	}
 	itemsValidatorFn := func(ctx context.Context, elems []*AWSVPNTunnelConfigType, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
 			if err := AWSVPNTunnelConfigTypeValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
@@ -2856,8 +2888,16 @@ func (v *ValidateGlobalSpecType) AddressValidationRuleHandler(rules map[string]s
 
 func (v *ValidateGlobalSpecType) VipParamsPerAzValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for vip_params_per_az")
+	}
 	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_site.PublishVIPParamsPerAz, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
 			if err := ves_io_schema_site.PublishVIPParamsPerAzValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
@@ -2941,8 +2981,16 @@ func (v *ValidateGlobalSpecType) TagsValidationRuleHandler(rules map[string]stri
 
 func (v *ValidateGlobalSpecType) TunnelsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for tunnels")
+	}
 	itemsValidatorFn := func(ctx context.Context, elems []*AWSVPNTunnelConfigType, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
 			if err := AWSVPNTunnelConfigTypeValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
@@ -4765,8 +4813,16 @@ func (v *ValidateServicesVPCType) SshKeyValidationRuleHandler(rules map[string]s
 
 func (v *ValidateServicesVPCType) AzNodesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for az_nodes")
+	}
 	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_views.AWSVPCTwoInterfaceNodeType, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
 			if err := ves_io_schema_views.AWSVPCTwoInterfaceNodeTypeValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
@@ -5181,7 +5237,8 @@ var DefaultServicesVPCTypeValidator = func() *ValidateServicesVPCType {
 
 	vrhAzNodes := v.AzNodesValidationRuleHandler
 	rulesAzNodes := map[string]string{
-		"ves.io.schema.rules.repeated.num_items": "0,1,3",
+		"ves.io.schema.rules.message.required":   "true",
+		"ves.io.schema.rules.repeated.num_items": "1,3",
 	}
 	vFn, err = vrhAzNodes(rulesAzNodes)
 	if err != nil {
@@ -5531,8 +5588,16 @@ type ValidateVPCAttachmentListType struct {
 
 func (v *ValidateVPCAttachmentListType) VpcListValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for vpc_list")
+	}
 	itemsValidatorFn := func(ctx context.Context, elems []*VPCAttachmentType, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
 			if err := VPCAttachmentTypeValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}

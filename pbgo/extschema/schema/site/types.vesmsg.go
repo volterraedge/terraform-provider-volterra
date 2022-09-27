@@ -115,6 +115,210 @@ func AresConnectionStatusValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *AzureExpressRouteCircuitStatusType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *AzureExpressRouteCircuitStatusType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *AzureExpressRouteCircuitStatusType) DeepCopy() *AzureExpressRouteCircuitStatusType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &AzureExpressRouteCircuitStatusType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *AzureExpressRouteCircuitStatusType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *AzureExpressRouteCircuitStatusType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return AzureExpressRouteCircuitStatusTypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateAzureExpressRouteCircuitStatusType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateAzureExpressRouteCircuitStatusType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*AzureExpressRouteCircuitStatusType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *AzureExpressRouteCircuitStatusType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["express_route_circuit_id"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("express_route_circuit_id"))
+		if err := fv(ctx, m.GetExpressRouteCircuitId(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["express_route_circuit_name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("express_route_circuit_name"))
+		if err := fv(ctx, m.GetExpressRouteCircuitName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["express_route_circuit_state"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("express_route_circuit_state"))
+		if err := fv(ctx, m.GetExpressRouteCircuitState(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["peer"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("peer"))
+		if err := fv(ctx, m.GetPeer(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultAzureExpressRouteCircuitStatusTypeValidator = func() *ValidateAzureExpressRouteCircuitStatusType {
+	v := &ValidateAzureExpressRouteCircuitStatusType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func AzureExpressRouteCircuitStatusTypeValidator() db.Validator {
+	return DefaultAzureExpressRouteCircuitStatusTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *AzureExpressRouteStatusType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *AzureExpressRouteStatusType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *AzureExpressRouteStatusType) DeepCopy() *AzureExpressRouteStatusType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &AzureExpressRouteStatusType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *AzureExpressRouteStatusType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *AzureExpressRouteStatusType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return AzureExpressRouteStatusTypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateAzureExpressRouteStatusType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateAzureExpressRouteStatusType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*AzureExpressRouteStatusType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *AzureExpressRouteStatusType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["propagated_routes_from_azure_express_route"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("propagated_routes_from_azure_express_route"))
+		for idx, item := range m.GetPropagatedRoutesFromAzureExpressRoute() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["route_server_status"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("route_server_status"))
+		if err := fv(ctx, m.GetRouteServerStatus(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["vnet_gateway_status"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("vnet_gateway_status"))
+		if err := fv(ctx, m.GetVnetGatewayStatus(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultAzureExpressRouteStatusTypeValidator = func() *ValidateAzureExpressRouteStatusType {
+	v := &ValidateAzureExpressRouteStatusType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func AzureExpressRouteStatusTypeValidator() db.Validator {
+	return DefaultAzureExpressRouteStatusTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *AzureHubSpokeVnetPeeringStatusInfo) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -2584,6 +2788,120 @@ func DirectConnectVIFStateInfoValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *ExpressRoutePeeringStatusType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *ExpressRoutePeeringStatusType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *ExpressRoutePeeringStatusType) DeepCopy() *ExpressRoutePeeringStatusType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &ExpressRoutePeeringStatusType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *ExpressRoutePeeringStatusType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *ExpressRoutePeeringStatusType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return ExpressRoutePeeringStatusTypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateExpressRoutePeeringStatusType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateExpressRoutePeeringStatusType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*ExpressRoutePeeringStatusType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *ExpressRoutePeeringStatusType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["azure_asn"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("azure_asn"))
+		if err := fv(ctx, m.GetAzureAsn(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["peer_asn"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("peer_asn"))
+		if err := fv(ctx, m.GetPeerAsn(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["peering_type"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("peering_type"))
+		if err := fv(ctx, m.GetPeeringType(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["provisioningState"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("provisioningState"))
+		if err := fv(ctx, m.GetProvisioningState(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["state"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("state"))
+		if err := fv(ctx, m.GetState(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultExpressRoutePeeringStatusTypeValidator = func() *ValidateExpressRoutePeeringStatusType {
+	v := &ValidateExpressRoutePeeringStatusType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func ExpressRoutePeeringStatusTypeValidator() db.Validator {
+	return DefaultExpressRoutePeeringStatusTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *FleetCondition) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -3249,8 +3567,16 @@ func (v *ValidateGetSpecType) AddressValidationRuleHandler(rules map[string]stri
 
 func (v *ValidateGetSpecType) ConnectedReValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for connected_re")
+	}
 	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema.ObjectRefType, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
 			if err := ves_io_schema.ObjectRefTypeValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
@@ -3289,8 +3615,16 @@ func (v *ValidateGetSpecType) ConnectedReValidationRuleHandler(rules map[string]
 
 func (v *ValidateGetSpecType) ConnectedReForConfigValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for connected_re_for_config")
+	}
 	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema.ObjectRefType, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
 			if err := ves_io_schema.ObjectRefTypeValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
@@ -3451,8 +3785,16 @@ func (v *ValidateGetSpecType) TunnelDeadTimeoutValidationRuleHandler(rules map[s
 
 func (v *ValidateGetSpecType) VipParamsPerAzValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for vip_params_per_az")
+	}
 	itemsValidatorFn := func(ctx context.Context, elems []*PublishVIPParamsPerAz, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
 			if err := PublishVIPParamsPerAzValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
@@ -3491,8 +3833,16 @@ func (v *ValidateGetSpecType) VipParamsPerAzValidationRuleHandler(rules map[stri
 
 func (v *ValidateGetSpecType) SiteToSiteIpsecConnectivityValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for site_to_site_ipsec_connectivity")
+	}
 	itemsValidatorFn := func(ctx context.Context, elems []*SiteToSiteTunnelConnectivity, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
 			if err := SiteToSiteTunnelConnectivityValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
@@ -4554,8 +4904,16 @@ func (v *ValidateGlobalSpecType) AddressValidationRuleHandler(rules map[string]s
 
 func (v *ValidateGlobalSpecType) ConnectedReValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for connected_re")
+	}
 	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema.ObjectRefType, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
 			if err := ves_io_schema.ObjectRefTypeValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
@@ -4594,8 +4952,16 @@ func (v *ValidateGlobalSpecType) ConnectedReValidationRuleHandler(rules map[stri
 
 func (v *ValidateGlobalSpecType) ConnectedReForConfigValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for connected_re_for_config")
+	}
 	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema.ObjectRefType, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
 			if err := ves_io_schema.ObjectRefTypeValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
@@ -4818,8 +5184,16 @@ func (v *ValidateGlobalSpecType) TunnelDeadTimeoutValidationRuleHandler(rules ma
 
 func (v *ValidateGlobalSpecType) K8SClusterApiGwValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for k8s_cluster_api_gw")
+	}
 	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema.ObjectRefType, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
 			if err := ves_io_schema.ObjectRefTypeValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
@@ -4878,8 +5252,16 @@ func (v *ValidateGlobalSpecType) IpsecSslVipFqdnValidationRuleHandler(rules map[
 
 func (v *ValidateGlobalSpecType) VipParamsPerAzValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for vip_params_per_az")
+	}
 	itemsValidatorFn := func(ctx context.Context, elems []*PublishVIPParamsPerAz, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
 			if err := PublishVIPParamsPerAzValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
@@ -4918,8 +5300,16 @@ func (v *ValidateGlobalSpecType) VipParamsPerAzValidationRuleHandler(rules map[s
 
 func (v *ValidateGlobalSpecType) ReMeshGroupValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for re_mesh_group")
+	}
 	itemsValidatorFn := func(ctx context.Context, elems []*ReMeshGroup, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
 			if err := ReMeshGroupValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
@@ -4958,8 +5348,16 @@ func (v *ValidateGlobalSpecType) ReMeshGroupValidationRuleHandler(rules map[stri
 
 func (v *ValidateGlobalSpecType) SiteToSiteIpsecConnectivityValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for site_to_site_ipsec_connectivity")
+	}
 	itemsValidatorFn := func(ctx context.Context, elems []*SiteToSiteTunnelConnectivity, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
 			if err := SiteToSiteTunnelConnectivityValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
@@ -8812,6 +9210,201 @@ func RevokeKubeConfigReqValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *RouteServerPeeringStatusType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *RouteServerPeeringStatusType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *RouteServerPeeringStatusType) DeepCopy() *RouteServerPeeringStatusType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &RouteServerPeeringStatusType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *RouteServerPeeringStatusType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *RouteServerPeeringStatusType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return RouteServerPeeringStatusTypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateRouteServerPeeringStatusType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateRouteServerPeeringStatusType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*RouteServerPeeringStatusType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *RouteServerPeeringStatusType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["connection_state"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("connection_state"))
+		if err := fv(ctx, m.GetConnectionState(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["peerIP"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("peerIP"))
+		if err := fv(ctx, m.GetPeerIP(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["peer_asn"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("peer_asn"))
+		if err := fv(ctx, m.GetPeerAsn(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["provisioningState"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("provisioningState"))
+		if err := fv(ctx, m.GetProvisioningState(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultRouteServerPeeringStatusTypeValidator = func() *ValidateRouteServerPeeringStatusType {
+	v := &ValidateRouteServerPeeringStatusType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func RouteServerPeeringStatusTypeValidator() db.Validator {
+	return DefaultRouteServerPeeringStatusTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *RouteServerStatusType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *RouteServerStatusType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *RouteServerStatusType) DeepCopy() *RouteServerStatusType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &RouteServerStatusType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *RouteServerStatusType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *RouteServerStatusType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return RouteServerStatusTypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateRouteServerStatusType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateRouteServerStatusType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*RouteServerStatusType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *RouteServerStatusType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["peers"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("peers"))
+		for idx, item := range m.GetPeers() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["route_server_name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("route_server_name"))
+		if err := fv(ctx, m.GetRouteServerName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultRouteServerStatusTypeValidator = func() *ValidateRouteServerStatusType {
+	v := &ValidateRouteServerStatusType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func RouteServerStatusTypeValidator() db.Validator {
+	return DefaultRouteServerStatusTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *ScalingStatus) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -10010,6 +10603,114 @@ var DefaultVerStatusTypeValidator = func() *ValidateVerStatusType {
 
 func VerStatusTypeValidator() db.Validator {
 	return DefaultVerStatusTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *VnetGatewayStatusType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *VnetGatewayStatusType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *VnetGatewayStatusType) DeepCopy() *VnetGatewayStatusType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &VnetGatewayStatusType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *VnetGatewayStatusType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *VnetGatewayStatusType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return VnetGatewayStatusTypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateVnetGatewayStatusType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateVnetGatewayStatusType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*VnetGatewayStatusType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *VnetGatewayStatusType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["connection_status"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("connection_status"))
+		for idx, item := range m.GetConnectionStatus() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["vgw_id"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("vgw_id"))
+		if err := fv(ctx, m.GetVgwId(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["vgw_name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("vgw_name"))
+		if err := fv(ctx, m.GetVgwName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["vgw_state"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("vgw_state"))
+		if err := fv(ctx, m.GetVgwState(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultVnetGatewayStatusTypeValidator = func() *ValidateVnetGatewayStatusType {
+	v := &ValidateVnetGatewayStatusType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func VnetGatewayStatusTypeValidator() db.Validator {
+	return DefaultVnetGatewayStatusTypeValidator
 }
 
 // augmented methods on protoc/std generated struct

@@ -306,8 +306,16 @@ func (v *ValidateCreateSpecType) ListenPortValidationRuleHandler(rules map[strin
 
 func (v *ValidateCreateSpecType) OriginPoolsWeightsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for origin_pools_weights")
+	}
 	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_views.OriginPoolWithWeight, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
 			if err := ves_io_schema_views.OriginPoolWithWeightValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
@@ -1127,8 +1135,16 @@ func (v *ValidateGetSpecType) ListenPortValidationRuleHandler(rules map[string]s
 
 func (v *ValidateGetSpecType) OriginPoolsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for origin_pools")
+	}
 	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_views.ObjectRefType, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
 			if err := ves_io_schema_views.ObjectRefTypeValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
@@ -1167,8 +1183,16 @@ func (v *ValidateGetSpecType) OriginPoolsValidationRuleHandler(rules map[string]
 
 func (v *ValidateGetSpecType) OriginPoolsWeightsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for origin_pools_weights")
+	}
 	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_views.OriginPoolWithWeight, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
 			if err := ves_io_schema_views.OriginPoolWithWeightValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
@@ -1357,6 +1381,18 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 		vOpts := append(opts, db.WithValidateField("domains"))
 		if err := fv(ctx, m.GetDomains(), vOpts...); err != nil {
 			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["downstream_tls_certificate_expiration_timestamps"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("downstream_tls_certificate_expiration_timestamps"))
+		for idx, item := range m.GetDownstreamTlsCertificateExpirationTimestamps() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
 		}
 
 	}
@@ -2095,8 +2131,16 @@ func (v *ValidateGlobalSpecType) ListenPortValidationRuleHandler(rules map[strin
 
 func (v *ValidateGlobalSpecType) OriginPoolsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for origin_pools")
+	}
 	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_views.ObjectRefType, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
 			if err := ves_io_schema_views.ObjectRefTypeValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
@@ -2135,8 +2179,16 @@ func (v *ValidateGlobalSpecType) OriginPoolsValidationRuleHandler(rules map[stri
 
 func (v *ValidateGlobalSpecType) OriginPoolsWeightsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for origin_pools_weights")
+	}
 	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_views.OriginPoolWithWeight, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
 			if err := ves_io_schema_views.OriginPoolWithWeightValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
@@ -2325,6 +2377,18 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 		vOpts := append(opts, db.WithValidateField("domains"))
 		if err := fv(ctx, m.GetDomains(), vOpts...); err != nil {
 			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["downstream_tls_certificate_expiration_timestamps"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("downstream_tls_certificate_expiration_timestamps"))
+		for idx, item := range m.GetDownstreamTlsCertificateExpirationTimestamps() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
 		}
 
 	}
@@ -3330,8 +3394,16 @@ func (v *ValidateReplaceSpecType) ListenPortValidationRuleHandler(rules map[stri
 
 func (v *ValidateReplaceSpecType) OriginPoolsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for origin_pools")
+	}
 	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_views.ObjectRefType, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
 			if err := ves_io_schema_views.ObjectRefTypeValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
@@ -3370,8 +3442,16 @@ func (v *ValidateReplaceSpecType) OriginPoolsValidationRuleHandler(rules map[str
 
 func (v *ValidateReplaceSpecType) OriginPoolsWeightsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for origin_pools_weights")
+	}
 	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_views.OriginPoolWithWeight, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
 			if err := ves_io_schema_views.OriginPoolWithWeightValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
@@ -4354,6 +4434,7 @@ func (m *GetSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	m.DnsInfo = f.GetDnsInfo()
 	m.DnsVolterraManaged = f.GetDnsVolterraManaged()
 	m.Domains = f.GetDomains()
+	m.DownstreamTlsCertificateExpirationTimestamps = f.GetDownstreamTlsCertificateExpirationTimestamps()
 	m.GetHashPolicyChoiceFromGlobalSpecType(f)
 	m.HostName = f.GetHostName()
 	m.IdleTimeout = f.GetIdleTimeout()
@@ -4385,6 +4466,7 @@ func (m *GetSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	f.DnsInfo = m1.DnsInfo
 	f.DnsVolterraManaged = m1.DnsVolterraManaged
 	f.Domains = m1.Domains
+	f.DownstreamTlsCertificateExpirationTimestamps = m1.DownstreamTlsCertificateExpirationTimestamps
 	m1.SetHashPolicyChoiceToGlobalSpecType(f)
 	f.HostName = m1.HostName
 	f.IdleTimeout = m1.IdleTimeout

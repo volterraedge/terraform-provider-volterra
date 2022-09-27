@@ -426,6 +426,13 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		mdr.MsgIdx["ves.io.schema.HeaderMatcherType"] = mInfo
 	}
 	mInfo = &svcfw.MsgInfo{
+		Name:     "HeaderTransformationType",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.HeaderTransformationType"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
 		Name:     "HostAccessInfoType",
 		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
 	}
@@ -21880,6 +21887,62 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	}
 
 	fInfo = &svcfw.FileInfo{
+		Name:        "ves.io/schema/namespace/public_customapi_asterix.proto",
+		MetricsInfo: make(map[svcfw.MetricName]*svcfw.MetricInfo),
+		ConfsInfo:   make(map[svcfw.ConfName]*svcfw.ConfInfo),
+		ObjsInfo:    make(map[svcfw.ObjType]*svcfw.ObjInfo),
+		APIsInfo:    make(map[svcfw.APIName]*svcfw.APIInfo),
+		MsgsInfo:    make(map[string]*svcfw.MsgInfo),
+	}
+	pInfo.FilesInfo["ves.io/schema/namespace/public_customapi_asterix.proto"] = fInfo
+	if mdr.FileIdx != nil {
+		mdr.FileIdx["ves.io/schema/namespace/public_customapi_asterix.proto"] = fInfo
+	}
+
+	aInfo = &svcfw.APIInfo{
+		Name:        "NamespaceMLCustomAPI",
+		ServiceType: "CUSTOM_PUBLIC",
+		IsSDRO:      false,
+		ObjType:     "ves.io.schema.namespace.Object",
+		RPCsInfo:    make(map[svcfw.RPCName]*svcfw.RPCInfo),
+	}
+
+	rpcInfo = &svcfw.RPCInfo{
+		Name:         "GetApiEndpointsStats",
+		InMsgType:    "ves.io.schema.namespace.ApiEndpointsStatsNSReq",
+		InStreaming:  false,
+		OutMsgType:   "ves.io.schema.namespace.ApiEndpointsStatsNSRsp",
+		OutStreaming: false,
+		IsImmutable:  true,
+		IsDeprecated: false,
+	}
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{namespace}/api_endpoints/stats"}}
+	aInfo.RPCsInfo[svcfw.RPCName("GetApiEndpointsStats")] = rpcInfo
+	if mdr.RPCIdx != nil {
+		mdr.RPCIdx["ves.io.schema.namespace.NamespaceMLCustomAPI.GetApiEndpointsStats"] = rpcInfo
+	}
+
+	fInfo.APIsInfo["NamespaceMLCustomAPI"] = aInfo
+	if mdr.APIIdx != nil {
+		mdr.APIIdx["ves.io.schema.namespace.NamespaceMLCustomAPI"] = aInfo
+	}
+
+	mInfo = &svcfw.MsgInfo{
+		Name:     "ApiEndpointsStatsNSReq",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.namespace.ApiEndpointsStatsNSReq"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "ApiEndpointsStatsNSRsp",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.namespace.ApiEndpointsStatsNSRsp"] = mInfo
+	}
+
+	fInfo = &svcfw.FileInfo{
 		Name:        "ves.io/schema/namespace/types.proto",
 		MetricsInfo: make(map[svcfw.MetricName]*svcfw.MetricInfo),
 		ConfsInfo:   make(map[svcfw.ConfName]*svcfw.ConfInfo),
@@ -32232,6 +32295,20 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		mdr.MsgIdx["ves.io.schema.site.AresConnectionStatus"] = mInfo
 	}
 	mInfo = &svcfw.MsgInfo{
+		Name:     "AzureExpressRouteCircuitStatusType",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.site.AzureExpressRouteCircuitStatusType"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "AzureExpressRouteStatusType",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.site.AzureExpressRouteStatusType"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
 		Name:     "AzureHubSpokeVnetPeeringStatusInfo",
 		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
 	}
@@ -32349,6 +32426,13 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	}
 	if mdr.MsgIdx != nil {
 		mdr.MsgIdx["ves.io.schema.site.DirectConnectVIFStateInfo"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "ExpressRoutePeeringStatusType",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.site.ExpressRoutePeeringStatusType"] = mInfo
 	}
 	mInfo = &svcfw.MsgInfo{
 		Name:     "FleetCondition",
@@ -32554,6 +32638,20 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		mdr.MsgIdx["ves.io.schema.site.RevokeKubeConfigReq"] = mInfo
 	}
 	mInfo = &svcfw.MsgInfo{
+		Name:     "RouteServerPeeringStatusType",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.site.RouteServerPeeringStatusType"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "RouteServerStatusType",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.site.RouteServerStatusType"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
 		Name:     "ScalingStatus",
 		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
 	}
@@ -32622,6 +32720,13 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	}
 	if mdr.MsgIdx != nil {
 		mdr.MsgIdx["ves.io.schema.site.VerStatusType"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "VnetGatewayStatusType",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.site.VnetGatewayStatusType"] = mInfo
 	}
 	mInfo = &svcfw.MsgInfo{
 		Name:     "VolterraSoftwareStatus",
@@ -35093,15 +35198,29 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	}
 
 	rpcInfo = &svcfw.RPCInfo{
-		Name:         "GetSupportTenantAccess",
-		InMsgType:    "ves.io.schema.tenant_management.allowed_tenant.GetSupportTenantAccessReq",
+		Name:         "GetAllowedTenantAccess",
+		InMsgType:    "ves.io.schema.tenant_management.allowed_tenant.GetTenantAccessReq",
 		InStreaming:  false,
-		OutMsgType:   "ves.io.schema.tenant_management.allowed_tenant.GetSupportTenantAccessResp",
+		OutMsgType:   "ves.io.schema.tenant_management.allowed_tenant.GetTenantAccessResp",
 		OutStreaming: false,
 		IsImmutable:  false,
 		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/system/allowed_tenants/{name}/access"}}
+	aInfo.RPCsInfo[svcfw.RPCName("GetAllowedTenantAccess")] = rpcInfo
+	if mdr.RPCIdx != nil {
+		mdr.RPCIdx["ves.io.schema.tenant_management.allowed_tenant.CustomAPI.GetAllowedTenantAccess"] = rpcInfo
+	}
+	rpcInfo = &svcfw.RPCInfo{
+		Name:         "GetSupportTenantAccess",
+		InMsgType:    "ves.io.schema.tenant_management.allowed_tenant.GetTenantAccessReq",
+		InStreaming:  false,
+		OutMsgType:   "ves.io.schema.tenant_management.allowed_tenant.GetTenantAccessResp",
+		OutStreaming: false,
+		IsImmutable:  false,
+		IsDeprecated: false,
+	}
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/system/allowed_tenants/support-tenant/access"}}
 	aInfo.RPCsInfo[svcfw.RPCName("GetSupportTenantAccess")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.tenant_management.allowed_tenant.CustomAPI.GetSupportTenantAccess"] = rpcInfo
@@ -35115,7 +35234,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		IsImmutable:  false,
 		IsDeprecated: false,
 	}
-	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/system/allowed_tenants/{name}/access"}}
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/system/allowed_tenants/support-tenant/access"}}
 	aInfo.RPCsInfo[svcfw.RPCName("UpdateSupportTenantAccess")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.tenant_management.allowed_tenant.CustomAPI.UpdateSupportTenantAccess"] = rpcInfo
@@ -35127,18 +35246,18 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	}
 
 	mInfo = &svcfw.MsgInfo{
-		Name:     "GetSupportTenantAccessReq",
+		Name:     "GetTenantAccessReq",
 		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
 	}
 	if mdr.MsgIdx != nil {
-		mdr.MsgIdx["ves.io.schema.tenant_management.allowed_tenant.GetSupportTenantAccessReq"] = mInfo
+		mdr.MsgIdx["ves.io.schema.tenant_management.allowed_tenant.GetTenantAccessReq"] = mInfo
 	}
 	mInfo = &svcfw.MsgInfo{
-		Name:     "GetSupportTenantAccessResp",
+		Name:     "GetTenantAccessResp",
 		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
 	}
 	if mdr.MsgIdx != nil {
-		mdr.MsgIdx["ves.io.schema.tenant_management.allowed_tenant.GetSupportTenantAccessResp"] = mInfo
+		mdr.MsgIdx["ves.io.schema.tenant_management.allowed_tenant.GetTenantAccessResp"] = mInfo
 	}
 	mInfo = &svcfw.MsgInfo{
 		Name:     "UpdateSupportTenantAccessReq",
@@ -39518,11 +39637,32 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		mdr.MsgIdx["ves.io.schema.views.AllowedVIPPorts"] = mInfo
 	}
 	mInfo = &svcfw.MsgInfo{
+		Name:     "AzureExpressRouteConnectionType",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.views.AzureExpressRouteConnectionType"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "AzureSpecialSubnetType",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.views.AzureSpecialSubnetType"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
 		Name:     "AzureSubnetChoiceType",
 		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
 	}
 	if mdr.MsgIdx != nil {
 		mdr.MsgIdx["ves.io.schema.views.AzureSubnetChoiceType"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "AzureSubnetChoiceWithAutoType",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.views.AzureSubnetChoiceWithAutoType"] = mInfo
 	}
 	mInfo = &svcfw.MsgInfo{
 		Name:     "AzureSubnetType",
@@ -43238,6 +43378,34 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		mdr.MsgIdx["ves.io.schema.views.azure_vnet_site.CreateSpecType"] = mInfo
 	}
 	mInfo = &svcfw.MsgInfo{
+		Name:     "ExpressRouteConfigType",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.views.azure_vnet_site.ExpressRouteConfigType"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "ExpressRouteConnectionType",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.views.azure_vnet_site.ExpressRouteConnectionType"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "ExpressRouteInfo",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.views.azure_vnet_site.ExpressRouteInfo"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "ExpressRouteOtherSubscriptionConnection",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.views.azure_vnet_site.ExpressRouteOtherSubscriptionConnection"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
 		Name:     "GetSpecType",
 		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
 	}
@@ -43250,6 +43418,13 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	}
 	if mdr.MsgIdx != nil {
 		mdr.MsgIdx["ves.io.schema.views.azure_vnet_site.GlobalSpecType"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "NodeInstanceNameType",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.views.azure_vnet_site.NodeInstanceNameType"] = mInfo
 	}
 	mInfo = &svcfw.MsgInfo{
 		Name:     "ReplaceSpecType",
@@ -45074,6 +45249,27 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		mdr.MsgIdx["ves.io.schema.views.http_loadbalancer.AppEndpointType"] = mInfo
 	}
 	mInfo = &svcfw.MsgInfo{
+		Name:     "CSDJavaScriptInsertAllWithExceptionsType",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.views.http_loadbalancer.CSDJavaScriptInsertAllWithExceptionsType"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "CSDJavaScriptInsertType",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.views.http_loadbalancer.CSDJavaScriptInsertType"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "CSDJavaScriptInsertionRule",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.views.http_loadbalancer.CSDJavaScriptInsertionRule"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
 		Name:     "ChallengeRule",
 		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
 	}
@@ -45086,6 +45282,20 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	}
 	if mdr.MsgIdx != nil {
 		mdr.MsgIdx["ves.io.schema.views.http_loadbalancer.ChallengeRuleList"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "ClientSideDefensePolicyType",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.views.http_loadbalancer.ClientSideDefensePolicyType"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "ClientSideDefenseType",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.views.http_loadbalancer.ClientSideDefenseType"] = mInfo
 	}
 	mInfo = &svcfw.MsgInfo{
 		Name:     "CreateSpecType",
@@ -48296,6 +48506,13 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		mdr.MsgIdx["ves.io.schema.views.terraform_parameters.AzureExistingSubnetParamType"] = mInfo
 	}
 	mInfo = &svcfw.MsgInfo{
+		Name:     "AzureExpressRouteType",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.views.terraform_parameters.AzureExpressRouteType"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
 		Name:     "AzureInstanceType",
 		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
 	}
@@ -48343,6 +48560,13 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	}
 	if mdr.MsgIdx != nil {
 		mdr.MsgIdx["ves.io.schema.views.terraform_parameters.AzureVnetSiteType"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "ExpressRouteCircuitInfo",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.views.terraform_parameters.ExpressRouteCircuitInfo"] = mInfo
 	}
 	mInfo = &svcfw.MsgInfo{
 		Name:     "SpokeVnetsInfoType",
@@ -49584,6 +49808,20 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	}
 
 	rpcInfo = &svcfw.RPCInfo{
+		Name:         "GetAPIEndpoint",
+		InMsgType:    "ves.io.schema.virtual_host.APIEndpointReq",
+		InStreaming:  false,
+		OutMsgType:   "ves.io.schema.virtual_host.APIEndpointRsp",
+		OutStreaming: false,
+		IsImmutable:  true,
+		IsDeprecated: false,
+	}
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{namespace}/virtual_hosts/{name}/api_endpoint"}}
+	aInfo.RPCsInfo[svcfw.RPCName("GetAPIEndpoint")] = rpcInfo
+	if mdr.RPCIdx != nil {
+		mdr.RPCIdx["ves.io.schema.virtual_host.ApiepCustomAPI.GetAPIEndpoint"] = rpcInfo
+	}
+	rpcInfo = &svcfw.RPCInfo{
 		Name:         "GetAPIEndpointLearntSchema",
 		InMsgType:    "ves.io.schema.virtual_host.APIEndpointLearntSchemaReq",
 		InStreaming:  false,
@@ -49686,6 +49924,20 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	}
 	if mdr.MsgIdx != nil {
 		mdr.MsgIdx["ves.io.schema.virtual_host.APIEndpointPDFRsp"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "APIEndpointReq",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.virtual_host.APIEndpointReq"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "APIEndpointRsp",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.virtual_host.APIEndpointRsp"] = mInfo
 	}
 	mInfo = &svcfw.MsgInfo{
 		Name:     "APIEndpointsReq",

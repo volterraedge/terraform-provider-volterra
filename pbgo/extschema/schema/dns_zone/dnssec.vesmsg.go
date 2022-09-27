@@ -569,6 +569,7 @@ var DefaultDSRecordValidator = func() *ValidateDSRecord {
 	vrhTtl := v.TtlValidationRuleHandler
 	rulesTtl := map[string]string{
 		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.uint32.lte":       "2147483647",
 	}
 	vFn, err = vrhTtl(rulesTtl)
 	if err != nil {

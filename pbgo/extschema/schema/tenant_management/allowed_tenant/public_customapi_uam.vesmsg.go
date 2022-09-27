@@ -25,15 +25,15 @@ var (
 
 // augmented methods on protoc/std generated struct
 
-func (m *GetSupportTenantAccessReq) ToJSON() (string, error) {
+func (m *GetTenantAccessReq) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
 
-func (m *GetSupportTenantAccessReq) ToYAML() (string, error) {
+func (m *GetTenantAccessReq) ToYAML() (string, error) {
 	return codec.ToYAML(m)
 }
 
-func (m *GetSupportTenantAccessReq) DeepCopy() *GetSupportTenantAccessReq {
+func (m *GetTenantAccessReq) DeepCopy() *GetTenantAccessReq {
 	if m == nil {
 		return nil
 	}
@@ -41,7 +41,7 @@ func (m *GetSupportTenantAccessReq) DeepCopy() *GetSupportTenantAccessReq {
 	if err != nil {
 		return nil
 	}
-	c := &GetSupportTenantAccessReq{}
+	c := &GetTenantAccessReq{}
 	err = c.Unmarshal(ser)
 	if err != nil {
 		return nil
@@ -49,29 +49,29 @@ func (m *GetSupportTenantAccessReq) DeepCopy() *GetSupportTenantAccessReq {
 	return c
 }
 
-func (m *GetSupportTenantAccessReq) DeepCopyProto() proto.Message {
+func (m *GetTenantAccessReq) DeepCopyProto() proto.Message {
 	if m == nil {
 		return nil
 	}
 	return m.DeepCopy()
 }
 
-func (m *GetSupportTenantAccessReq) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
-	return GetSupportTenantAccessReqValidator().Validate(ctx, m, opts...)
+func (m *GetTenantAccessReq) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return GetTenantAccessReqValidator().Validate(ctx, m, opts...)
 }
 
-type ValidateGetSupportTenantAccessReq struct {
+type ValidateGetTenantAccessReq struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
-func (v *ValidateGetSupportTenantAccessReq) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
-	m, ok := pm.(*GetSupportTenantAccessReq)
+func (v *ValidateGetTenantAccessReq) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*GetTenantAccessReq)
 	if !ok {
 		switch t := pm.(type) {
 		case nil:
 			return nil
 		default:
-			return fmt.Errorf("Expected type *GetSupportTenantAccessReq got type %s", t)
+			return fmt.Errorf("Expected type *GetTenantAccessReq got type %s", t)
 		}
 	}
 	if m == nil {
@@ -91,27 +91,27 @@ func (v *ValidateGetSupportTenantAccessReq) Validate(ctx context.Context, pm int
 }
 
 // Well-known symbol for default validator implementation
-var DefaultGetSupportTenantAccessReqValidator = func() *ValidateGetSupportTenantAccessReq {
-	v := &ValidateGetSupportTenantAccessReq{FldValidators: map[string]db.ValidatorFunc{}}
+var DefaultGetTenantAccessReqValidator = func() *ValidateGetTenantAccessReq {
+	v := &ValidateGetTenantAccessReq{FldValidators: map[string]db.ValidatorFunc{}}
 
 	return v
 }()
 
-func GetSupportTenantAccessReqValidator() db.Validator {
-	return DefaultGetSupportTenantAccessReqValidator
+func GetTenantAccessReqValidator() db.Validator {
+	return DefaultGetTenantAccessReqValidator
 }
 
 // augmented methods on protoc/std generated struct
 
-func (m *GetSupportTenantAccessResp) ToJSON() (string, error) {
+func (m *GetTenantAccessResp) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
 
-func (m *GetSupportTenantAccessResp) ToYAML() (string, error) {
+func (m *GetTenantAccessResp) ToYAML() (string, error) {
 	return codec.ToYAML(m)
 }
 
-func (m *GetSupportTenantAccessResp) DeepCopy() *GetSupportTenantAccessResp {
+func (m *GetTenantAccessResp) DeepCopy() *GetTenantAccessResp {
 	if m == nil {
 		return nil
 	}
@@ -119,7 +119,7 @@ func (m *GetSupportTenantAccessResp) DeepCopy() *GetSupportTenantAccessResp {
 	if err != nil {
 		return nil
 	}
-	c := &GetSupportTenantAccessResp{}
+	c := &GetTenantAccessResp{}
 	err = c.Unmarshal(ser)
 	if err != nil {
 		return nil
@@ -127,18 +127,18 @@ func (m *GetSupportTenantAccessResp) DeepCopy() *GetSupportTenantAccessResp {
 	return c
 }
 
-func (m *GetSupportTenantAccessResp) DeepCopyProto() proto.Message {
+func (m *GetTenantAccessResp) DeepCopyProto() proto.Message {
 	if m == nil {
 		return nil
 	}
 	return m.DeepCopy()
 }
 
-func (m *GetSupportTenantAccessResp) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
-	return GetSupportTenantAccessRespValidator().Validate(ctx, m, opts...)
+func (m *GetTenantAccessResp) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return GetTenantAccessRespValidator().Validate(ctx, m, opts...)
 }
 
-func (m *GetSupportTenantAccessResp) GetDRefInfo() ([]db.DRefInfo, error) {
+func (m *GetTenantAccessResp) GetDRefInfo() ([]db.DRefInfo, error) {
 	if m == nil {
 		return nil, nil
 	}
@@ -148,7 +148,7 @@ func (m *GetSupportTenantAccessResp) GetDRefInfo() ([]db.DRefInfo, error) {
 }
 
 // GetDRefInfo for the field's type
-func (m *GetSupportTenantAccessResp) GetAccessConfigDRefInfo() ([]db.DRefInfo, error) {
+func (m *GetTenantAccessResp) GetAccessConfigDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetAccessConfig() == nil {
 		return nil, nil
 	}
@@ -165,18 +165,18 @@ func (m *GetSupportTenantAccessResp) GetAccessConfigDRefInfo() ([]db.DRefInfo, e
 
 }
 
-type ValidateGetSupportTenantAccessResp struct {
+type ValidateGetTenantAccessResp struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
-func (v *ValidateGetSupportTenantAccessResp) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
-	m, ok := pm.(*GetSupportTenantAccessResp)
+func (v *ValidateGetTenantAccessResp) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*GetTenantAccessResp)
 	if !ok {
 		switch t := pm.(type) {
 		case nil:
 			return nil
 		default:
-			return fmt.Errorf("Expected type *GetSupportTenantAccessResp got type %s", t)
+			return fmt.Errorf("Expected type *GetTenantAccessResp got type %s", t)
 		}
 	}
 	if m == nil {
@@ -196,16 +196,16 @@ func (v *ValidateGetSupportTenantAccessResp) Validate(ctx context.Context, pm in
 }
 
 // Well-known symbol for default validator implementation
-var DefaultGetSupportTenantAccessRespValidator = func() *ValidateGetSupportTenantAccessResp {
-	v := &ValidateGetSupportTenantAccessResp{FldValidators: map[string]db.ValidatorFunc{}}
+var DefaultGetTenantAccessRespValidator = func() *ValidateGetTenantAccessResp {
+	v := &ValidateGetTenantAccessResp{FldValidators: map[string]db.ValidatorFunc{}}
 
 	v.FldValidators["access_config"] = AllowedAccessConfigValidator().Validate
 
 	return v
 }()
 
-func GetSupportTenantAccessRespValidator() db.Validator {
-	return DefaultGetSupportTenantAccessRespValidator
+func GetTenantAccessRespValidator() db.Validator {
+	return DefaultGetTenantAccessRespValidator
 }
 
 // augmented methods on protoc/std generated struct

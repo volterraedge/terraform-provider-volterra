@@ -140,6 +140,9 @@ func (c *CustomAPIRestClient) doRPCGetManagedTenantList(ctx context.Context, cal
 		hReq = newReq
 		q := hReq.URL.Query()
 		_ = q
+		q.Add("page_limit", fmt.Sprintf("%v", req.PageLimit))
+		q.Add("page_start", fmt.Sprintf("%v", req.PageStart))
+		q.Add("search_keyword", fmt.Sprintf("%v", req.SearchKeyword))
 
 		hReq.URL.RawQuery += q.Encode()
 	case "delete":
@@ -222,6 +225,9 @@ func (c *CustomAPIRestClient) doRPCGetManagedTenantListByUser(ctx context.Contex
 		hReq = newReq
 		q := hReq.URL.Query()
 		_ = q
+		q.Add("page_limit", fmt.Sprintf("%v", req.PageLimit))
+		q.Add("page_start", fmt.Sprintf("%v", req.PageStart))
+		q.Add("search_keyword", fmt.Sprintf("%v", req.SearchKeyword))
 
 		hReq.URL.RawQuery += q.Encode()
 	case "delete":
@@ -516,6 +522,33 @@ var CustomAPISwaggerJSON string = `{
                         }
                     }
                 },
+                "parameters": [
+                    {
+                        "name": "search_keyword",
+                        "description": "x-example: \"value\"\nSearch Keyword for filtering the Managed Tenant List.",
+                        "in": "query",
+                        "required": false,
+                        "type": "string",
+                        "x-displayname": "SearchKeyword"
+                    },
+                    {
+                        "name": "page_start",
+                        "description": "x-example: \"c5776a8e-bcae-4392-98d3-3556f4b9df1b\"\nPageStart will hold the UUID of the first item in the requested page.\nResponse will contain items upto count specified in PageLimit starting from  PageStart.\nIf this is empty then first page will be served.",
+                        "in": "query",
+                        "required": false,
+                        "type": "string",
+                        "x-displayname": "PageStart"
+                    },
+                    {
+                        "name": "page_limit",
+                        "description": "x-example: \"100\"\nPageLimit will hold the limit of items required per query.\nDefault value is set as 100",
+                        "in": "query",
+                        "required": false,
+                        "type": "integer",
+                        "format": "int32",
+                        "x-displayname": "PageLimit"
+                    }
+                ],
                 "tags": [
                     "CustomAPI"
                 ],
@@ -590,6 +623,33 @@ var CustomAPISwaggerJSON string = `{
                         }
                     }
                 },
+                "parameters": [
+                    {
+                        "name": "search_keyword",
+                        "description": "x-example: \"value\"\nSearch Keyword for filtering the Managed Tenant List.",
+                        "in": "query",
+                        "required": false,
+                        "type": "string",
+                        "x-displayname": "SearchKeyword"
+                    },
+                    {
+                        "name": "page_start",
+                        "description": "x-example: \"c5776a8e-bcae-4392-98d3-3556f4b9df1b\"\nPageStart will hold the UUID of the first item in the requested page.\nResponse will contain items upto count specified in PageLimit starting from  PageStart.\nIf this is empty then first page will be served.",
+                        "in": "query",
+                        "required": false,
+                        "type": "string",
+                        "x-displayname": "PageStart"
+                    },
+                    {
+                        "name": "page_limit",
+                        "description": "x-example: \"100\"\nPageLimit will hold the limit of items required per query.\nDefault value is set as 100",
+                        "in": "query",
+                        "required": false,
+                        "type": "integer",
+                        "format": "int32",
+                        "x-displayname": "PageLimit"
+                    }
+                ],
                 "tags": [
                     "CustomAPI"
                 ],
@@ -651,6 +711,19 @@ var CustomAPISwaggerJSON string = `{
                         "$ref": "#/definitions/managed_tenantAccessInfo"
                     },
                     "x-displayname": "Access Config"
+                },
+                "next_page": {
+                    "type": "string",
+                    "description": " NextPage contains the UUID of the first item of the next page.\n This value can be passed back as the PageStart in the next request.\n If this empty means current one is the last page.",
+                    "title": "next_page",
+                    "x-displayname": "NextPage"
+                },
+                "total_access_config_count": {
+                    "type": "integer",
+                    "description": " TotalAccessConfigCount holds total count of access config.",
+                    "title": "total_access_config_count",
+                    "format": "int32",
+                    "x-displayname": "TotalAccessConfigCount"
                 }
             }
         },

@@ -1595,7 +1595,10 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 		item.Disabled = o.GetMetadata().GetDisable()
 
 		if len(req.ReportFields) > 0 {
-			item.Object = o.Object
+			noDBForm, _ := flags.GetEnvGetRspNoDBForm()
+			if !noDBForm {
+				item.Object = o.Object
+			}
 
 			item.Metadata = &ves_io_schema.ObjectGetMetaType{}
 			item.Metadata.FromObjectMetaType(o.Metadata)
@@ -2989,7 +2992,7 @@ var APISwaggerJSON string = `{
             "title": "RouteRedirect",
             "x-displayname": "Redirect",
             "x-ves-displayorder": "3,1,10,6,7",
-            "x-ves-oneof-field-query_params": "[\"remove_all_params\",\"retain_all_params\"]",
+            "x-ves-oneof-field-query_params": "[\"remove_all_params\",\"replace_params\",\"retain_all_params\"]",
             "x-ves-oneof-field-redirect_path_choice": "[\"path_redirect\",\"prefix_rewrite\"]",
             "x-ves-proto-message": "ves.io.schema.route.RouteRedirect",
             "properties": {
@@ -3035,14 +3038,26 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "remove_all_params": {
-                    "description": "Exclusive with [retain_all_params]\n Remove all query parameters",
+                    "description": "Exclusive with [replace_params retain_all_params]\n",
                     "title": "Remove All Params",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Remove All Parameters"
                 },
+                "replace_params": {
+                    "type": "string",
+                    "description": "Exclusive with [remove_all_params retain_all_params]\n\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 256\n  ves.io.schema.rules.string.min_len: 1\n",
+                    "title": "Replace All Params",
+                    "minLength": 1,
+                    "maxLength": 256,
+                    "x-displayname": "Replace All Parameters",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "256",
+                        "ves.io.schema.rules.string.min_len": "1"
+                    }
+                },
                 "response_code": {
                     "type": "integer",
-                    "description": " The HTTP status code to use in the redirect response. The default response\n code is MOVED_PERMANENTLY (301).\n\nExample: - \"303\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 599\n",
+                    "description": " The HTTP status code to use in the redirect response.\n\nExample: - \"303\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 599\n",
                     "title": "response_code",
                     "format": "int64",
                     "x-displayname": "Response Code",
@@ -3052,7 +3067,7 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "retain_all_params": {
-                    "description": "Exclusive with [remove_all_params]\n Retain all query parameters",
+                    "description": "Exclusive with [remove_all_params replace_params]\n",
                     "title": "Retain All Params",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Retain All Parameters"

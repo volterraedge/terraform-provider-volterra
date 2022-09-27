@@ -37,6 +37,15 @@ type ApiepCustomAPIGrpcClient struct {
 	rpcFns map[string]func(context.Context, string, ...grpc.CallOption) (proto.Message, error)
 }
 
+func (c *ApiepCustomAPIGrpcClient) doRPCGetAPIEndpoint(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
+	req := &APIEndpointReq{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.virtual_host.APIEndpointReq", yamlReq)
+	}
+	rsp, err := c.grpcClient.GetAPIEndpoint(ctx, req, opts...)
+	return rsp, err
+}
+
 func (c *ApiepCustomAPIGrpcClient) doRPCGetAPIEndpointLearntSchema(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &APIEndpointLearntSchemaReq{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -112,6 +121,8 @@ func NewApiepCustomAPIGrpcClient(cc *grpc.ClientConn) server.CustomClient {
 		grpcClient: NewApiepCustomAPIClient(cc),
 	}
 	rpcFns := make(map[string]func(context.Context, string, ...grpc.CallOption) (proto.Message, error))
+	rpcFns["GetAPIEndpoint"] = ccl.doRPCGetAPIEndpoint
+
 	rpcFns["GetAPIEndpointLearntSchema"] = ccl.doRPCGetAPIEndpointLearntSchema
 
 	rpcFns["GetAPIEndpointPDF"] = ccl.doRPCGetAPIEndpointPDF
@@ -133,6 +144,93 @@ type ApiepCustomAPIRestClient struct {
 	client  http.Client
 	// map of rpc name to its invocation
 	rpcFns map[string]func(context.Context, *server.CustomCallOpts) (proto.Message, error)
+}
+
+func (c *ApiepCustomAPIRestClient) doRPCGetAPIEndpoint(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
+	if callOpts.URI == "" {
+		return nil, fmt.Errorf("Error, URI should be specified, got empty")
+	}
+	url := fmt.Sprintf("%s%s", c.baseURL, callOpts.URI)
+
+	yamlReq := callOpts.YAMLReq
+	req := &APIEndpointReq{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.virtual_host.APIEndpointReq: %s", yamlReq, err)
+	}
+
+	var hReq *http.Request
+	hm := strings.ToLower(callOpts.HTTPMethod)
+	switch hm {
+	case "post", "put":
+		jsn, err := codec.ToJSON(req, codec.ToWithUseProtoFieldName())
+		if err != nil {
+			return nil, errors.Wrap(err, "Custom RestClient converting YAML to JSON")
+		}
+		var op string
+		if hm == "post" {
+			op = http.MethodPost
+		} else {
+			op = http.MethodPut
+		}
+		newReq, err := http.NewRequest(op, url, bytes.NewBuffer([]byte(jsn)))
+		if err != nil {
+			return nil, errors.Wrapf(err, "Creating new HTTP %s request for custom API", op)
+		}
+		hReq = newReq
+	case "get":
+		newReq, err := http.NewRequest(http.MethodGet, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP GET request for custom API")
+		}
+		hReq = newReq
+		q := hReq.URL.Query()
+		_ = q
+		q.Add("api_endpoint_info_request", fmt.Sprintf("%v", req.ApiEndpointInfoRequest))
+		q.Add("collapsed_url", fmt.Sprintf("%v", req.CollapsedUrl))
+		q.Add("method", fmt.Sprintf("%v", req.Method))
+		q.Add("name", fmt.Sprintf("%v", req.Name))
+		q.Add("namespace", fmt.Sprintf("%v", req.Namespace))
+
+		hReq.URL.RawQuery += q.Encode()
+	case "delete":
+		newReq, err := http.NewRequest(http.MethodDelete, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP DELETE request for custom API")
+		}
+		hReq = newReq
+	default:
+		return nil, fmt.Errorf("Error, invalid/empty HTTPMethod(%s) specified, should be POST|DELETE|GET", callOpts.HTTPMethod)
+	}
+	hReq = hReq.WithContext(ctx)
+	hReq.Header.Set("Content-Type", "application/json")
+	client.AddHdrsToReq(callOpts.Headers, hReq)
+
+	rsp, err := c.client.Do(hReq)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient")
+	}
+	defer rsp.Body.Close()
+
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
+		body, err := ioutil.ReadAll(rsp.Body)
+		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
+	}
+
+	body, err := ioutil.ReadAll(rsp.Body)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient read body")
+	}
+	pbRsp := &APIEndpointRsp{}
+	if err := codec.FromJSON(string(body), pbRsp); err != nil {
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.virtual_host.APIEndpointRsp", body)
+
+	}
+	if callOpts.OutCallResponse != nil {
+		callOpts.OutCallResponse.ProtoMsg = pbRsp
+		callOpts.OutCallResponse.JSON = string(body)
+	}
+	return pbRsp, nil
 }
 
 func (c *ApiepCustomAPIRestClient) doRPCGetAPIEndpointLearntSchema(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
@@ -586,6 +684,8 @@ func NewApiepCustomAPIRestClient(baseURL string, hc http.Client) server.CustomCl
 	}
 
 	rpcFns := make(map[string]func(context.Context, *server.CustomCallOpts) (proto.Message, error))
+	rpcFns["GetAPIEndpoint"] = ccl.doRPCGetAPIEndpoint
+
 	rpcFns["GetAPIEndpointLearntSchema"] = ccl.doRPCGetAPIEndpointLearntSchema
 
 	rpcFns["GetAPIEndpointPDF"] = ccl.doRPCGetAPIEndpointPDF
@@ -608,6 +708,9 @@ type apiepCustomAPIInprocClient struct {
 	ApiepCustomAPIServer
 }
 
+func (c *apiepCustomAPIInprocClient) GetAPIEndpoint(ctx context.Context, in *APIEndpointReq, opts ...grpc.CallOption) (*APIEndpointRsp, error) {
+	return c.ApiepCustomAPIServer.GetAPIEndpoint(ctx, in)
+}
 func (c *apiepCustomAPIInprocClient) GetAPIEndpointLearntSchema(ctx context.Context, in *APIEndpointLearntSchemaReq, opts ...grpc.CallOption) (*APIEndpointLearntSchemaRsp, error) {
 	return c.ApiepCustomAPIServer.GetAPIEndpointLearntSchema(ctx, in)
 }
@@ -645,6 +748,55 @@ type apiepCustomAPISrv struct {
 	svc svcfw.Service
 }
 
+func (s *apiepCustomAPISrv) GetAPIEndpoint(ctx context.Context, in *APIEndpointReq) (*APIEndpointRsp, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.virtual_host.ApiepCustomAPI")
+	cah, ok := ah.(ApiepCustomAPIServer)
+	if !ok {
+		return nil, fmt.Errorf("ah %v is not of type *ApiepCustomAPIServer", ah)
+	}
+
+	var (
+		rsp *APIEndpointRsp
+		err error
+	)
+
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.virtual_host.APIEndpointReq", in)
+	defer func() {
+		if len(bodyFields) > 0 {
+			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
+		}
+		userMsg := "The 'ApiepCustomAPI.GetAPIEndpoint' operation on 'virtual_host'"
+		if err == nil {
+			userMsg += " was successfully performed."
+		} else {
+			userMsg += " failed to be performed."
+		}
+		server.AddUserMsgToAPIAudit(ctx, userMsg)
+	}()
+
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
+
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.virtual_host.ApiepCustomAPI.GetAPIEndpoint"); rvFn != nil {
+			if verr := rvFn(ctx, in); verr != nil {
+				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
+				return nil, server.GRPCStatusFromError(err).Err()
+			}
+		}
+	}
+
+	rsp, err = cah.GetAPIEndpoint(ctx, in)
+	if err != nil {
+		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
+	}
+
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.virtual_host.APIEndpointRsp", rsp)...)
+
+	return rsp, nil
+}
 func (s *apiepCustomAPISrv) GetAPIEndpointLearntSchema(ctx context.Context, in *APIEndpointLearntSchemaReq) (*APIEndpointLearntSchemaRsp, error) {
 	ah := s.svc.GetAPIHandler("ves.io.schema.virtual_host.ApiepCustomAPI")
 	cah, ok := ah.(ApiepCustomAPIServer)
@@ -914,6 +1066,106 @@ var ApiepCustomAPISwaggerJSON string = `{
     ],
     "tags": [],
     "paths": {
+        "/public/namespaces/{namespace}/virtual_hosts/{name}/api_endpoint": {
+            "post": {
+                "summary": "Get API Endpoint",
+                "description": "Get API endpoint for Virtual Host",
+                "operationId": "ves.io.schema.virtual_host.ApiepCustomAPI.GetAPIEndpoint",
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/virtual_hostAPIEndpointRsp"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "namespace",
+                        "description": "Namespace\n\nx-example: \"blogging-app\"\nNamespace of the virtual host for current request",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "x-displayname": "Namespace"
+                    },
+                    {
+                        "name": "name",
+                        "description": "Virtual Host Name\n\nx-example: \"blogging-app-vhost\"\nVirtual Host name for current request",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "x-displayname": "Virtual Host Name"
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/virtual_hostAPIEndpointReq"
+                        }
+                    }
+                ],
+                "tags": [
+                    "ApiepCustomAPI"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-virtual_host-apiepcustomapi-getapiendpoint"
+                },
+                "x-ves-proto-rpc": "ves.io.schema.virtual_host.ApiepCustomAPI.GetAPIEndpoint"
+            },
+            "x-displayname": "API Endpoints by Virtual Host Custom API",
+            "x-ves-proto-service": "ves.io.schema.virtual_host.ApiepCustomAPI",
+            "x-ves-proto-service-type": "CUSTOM_PUBLIC"
+        },
         "/public/namespaces/{namespace}/virtual_hosts/{name}/api_endpoint/learnt_schema": {
             "get": {
                 "summary": "Get Get Learnt Schema per API endpoint",
@@ -1721,13 +1973,15 @@ var ApiepCustomAPISwaggerJSON string = `{
         },
         "app_typeApiEndpointInfoRequest": {
             "type": "string",
-            "description": "x-displayName: \"API Endpoint Info Request\"\nThis is the various forms that can be requested to be sent in the ApiEndpointInfoRequest\n\n - API_ENDPOINT_INFO_NONE: x-displayName: \"API Endpoint Info None\"\nAPI ENDPOINT INFO NONE option is used to disable any additional info request per api endpoint response\n - API_ENDPOINT_INFO_PDF_SPARKLINES: x-displayName: \"API Endpoint Info PDF Sparklines\"\nAPI ENDPOINT INFO PDF SPARKLINES option is used to enable pdf sparkline info along with the api endpoint response",
+            "description": "This is the various forms that can be requested to be sent in the ApiEndpointInfoRequest\n\nAPI ENDPOINT INFO NONE option is used to disable any additional info request per api endpoint response\nAPI ENDPOINT INFO PDF SPARKLINES option is used to enable pdf sparkline info along with the api endpoint response",
             "title": "ApiEndpointInfoRequest",
             "enum": [
                 "API_ENDPOINT_INFO_NONE",
                 "API_ENDPOINT_INFO_PDF_SPARKLINES"
             ],
-            "default": "API_ENDPOINT_INFO_NONE"
+            "default": "API_ENDPOINT_INFO_NONE",
+            "x-displayname": "API Endpoint Info Request",
+            "x-ves-proto-enum": "ves.io.schema.app_type.ApiEndpointInfoRequest"
         },
         "app_typePDFSpec": {
             "type": "object",
@@ -1850,6 +2104,78 @@ var ApiepCustomAPISwaggerJSON string = `{
                     "title": "PDF data",
                     "$ref": "#/definitions/app_typeAPIEPPDFInfo",
                     "x-displayname": "PDF Data"
+                }
+            }
+        },
+        "virtual_hostAPIEndpointReq": {
+            "type": "object",
+            "description": "Request shape for GET API endpoint API",
+            "title": "API endpoint GET request Per Virtual Host",
+            "x-displayname": "API Endpoint Request per Virtual Host",
+            "x-ves-proto-message": "ves.io.schema.virtual_host.APIEndpointReq",
+            "properties": {
+                "api_endpoint_info_request": {
+                    "type": "array",
+                    "description": " List of additional things that needs to be sent as part of the request\n\nValidation Rules:\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "title": "Api Endpoint Info Request",
+                    "items": {
+                        "$ref": "#/definitions/app_typeApiEndpointInfoRequest"
+                    },
+                    "x-displayname": "Api Endpoint Info Request",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
+                },
+                "collapsed_url": {
+                    "type": "string",
+                    "description": " Requested API endPoint for api url.\n\nExample: - \"api/v1/user_id/DYN/vehicle_id/DYN\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "API URL",
+                    "x-displayname": "API URL",
+                    "x-ves-example": "api/v1/user_id/DYN/vehicle_id/DYN",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                },
+                "method": {
+                    "type": "string",
+                    "description": " Requested API endPoint for method.\n\nExample: - \"GET\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "Method of current API URL",
+                    "x-displayname": "Method",
+                    "x-ves-example": "GET",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                },
+                "name": {
+                    "type": "string",
+                    "description": " Virtual Host name for current request\n\nExample: - \"blogging-app-vhost\"-",
+                    "title": "Virtual Host Name",
+                    "x-displayname": "Virtual Host Name",
+                    "x-ves-example": "blogging-app-vhost"
+                },
+                "namespace": {
+                    "type": "string",
+                    "description": " Namespace of the virtual host for current request\n\nExample: - \"blogging-app\"-",
+                    "title": "Namespace",
+                    "x-displayname": "Namespace",
+                    "x-ves-example": "blogging-app"
+                }
+            }
+        },
+        "virtual_hostAPIEndpointRsp": {
+            "type": "object",
+            "description": "Response shape for GET API endpoint API.",
+            "title": "API endpoint GET response",
+            "x-displayname": "API Endpoint Response",
+            "x-ves-proto-message": "ves.io.schema.virtual_host.APIEndpointRsp",
+            "properties": {
+                "apiep": {
+                    "description": " API endpoint",
+                    "title": "API endpoint",
+                    "$ref": "#/definitions/app_typeAPIEPInfo",
+                    "x-displayname": "API Endpoint"
                 }
             }
         },

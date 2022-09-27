@@ -977,8 +977,16 @@ type ValidateAPIProtectionRules struct {
 
 func (v *ValidateAPIProtectionRules) ApiEndpointRulesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for api_endpoint_rules")
+	}
 	itemsValidatorFn := func(ctx context.Context, elems []*APIEndpointProtectionRule, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
 			if err := APIEndpointProtectionRuleValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
@@ -1017,8 +1025,16 @@ func (v *ValidateAPIProtectionRules) ApiEndpointRulesValidationRuleHandler(rules
 
 func (v *ValidateAPIProtectionRules) ApiGroupsRulesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for api_groups_rules")
+	}
 	itemsValidatorFn := func(ctx context.Context, elems []*APIGroupProtectionRule, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
 			if err := APIGroupProtectionRuleValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
@@ -1283,8 +1299,16 @@ func (v *ValidateAPIRateLimit) IpAllowedListChoiceValidationRuleHandler(rules ma
 
 func (v *ValidateAPIRateLimit) ServerUrlRulesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for server_url_rules")
+	}
 	itemsValidatorFn := func(ctx context.Context, elems []*ServerUrlRule, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
 			if err := ServerUrlRuleValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
@@ -1323,8 +1347,16 @@ func (v *ValidateAPIRateLimit) ServerUrlRulesValidationRuleHandler(rules map[str
 
 func (v *ValidateAPIRateLimit) ApiEndpointRulesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for api_endpoint_rules")
+	}
 	itemsValidatorFn := func(ctx context.Context, elems []*ApiEndpointRule, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
 			if err := ApiEndpointRuleValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
@@ -1625,8 +1657,16 @@ type ValidateAdvancedOptionsType struct {
 
 func (v *ValidateAdvancedOptionsType) RequestHeadersToAddValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for request_headers_to_add")
+	}
 	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema.HeaderManipulationOptionType, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
 			if err := ves_io_schema.HeaderManipulationOptionTypeValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
@@ -1707,8 +1747,16 @@ func (v *ValidateAdvancedOptionsType) RequestHeadersToRemoveValidationRuleHandle
 
 func (v *ValidateAdvancedOptionsType) ResponseHeadersToAddValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for response_headers_to_add")
+	}
 	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema.HeaderManipulationOptionType, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
 			if err := ves_io_schema.HeaderManipulationOptionTypeValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
@@ -1844,8 +1892,16 @@ func (v *ValidateAdvancedOptionsType) CustomErrorsValidationRuleHandler(rules ma
 
 func (v *ValidateAdvancedOptionsType) JwtValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for jwt")
+	}
 	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_views.ObjectRefType, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
 			if err := ves_io_schema_views.ObjectRefTypeValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
@@ -2295,8 +2351,16 @@ type ValidateApiDefinitionList struct {
 
 func (v *ValidateApiDefinitionList) ApiDefinitionsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for api_definitions")
+	}
 	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_views.ObjectRefType, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
 			if err := ves_io_schema_views.ObjectRefTypeValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
@@ -3210,6 +3274,582 @@ func AppEndpointTypeValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *CSDJavaScriptInsertAllWithExceptionsType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *CSDJavaScriptInsertAllWithExceptionsType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *CSDJavaScriptInsertAllWithExceptionsType) DeepCopy() *CSDJavaScriptInsertAllWithExceptionsType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &CSDJavaScriptInsertAllWithExceptionsType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *CSDJavaScriptInsertAllWithExceptionsType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *CSDJavaScriptInsertAllWithExceptionsType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return CSDJavaScriptInsertAllWithExceptionsTypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateCSDJavaScriptInsertAllWithExceptionsType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateCSDJavaScriptInsertAllWithExceptionsType) ExcludeListValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for exclude_list")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*ShapeJavaScriptExclusionRule, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := ShapeJavaScriptExclusionRuleValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for exclude_list")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ShapeJavaScriptExclusionRule)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ShapeJavaScriptExclusionRule, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated exclude_list")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items exclude_list")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateCSDJavaScriptInsertAllWithExceptionsType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*CSDJavaScriptInsertAllWithExceptionsType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *CSDJavaScriptInsertAllWithExceptionsType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["exclude_list"]; exists {
+		vOpts := append(opts, db.WithValidateField("exclude_list"))
+		if err := fv(ctx, m.GetExcludeList(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultCSDJavaScriptInsertAllWithExceptionsTypeValidator = func() *ValidateCSDJavaScriptInsertAllWithExceptionsType {
+	v := &ValidateCSDJavaScriptInsertAllWithExceptionsType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhExcludeList := v.ExcludeListValidationRuleHandler
+	rulesExcludeList := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "128",
+		"ves.io.schema.rules.repeated.unique":    "true",
+	}
+	vFn, err = vrhExcludeList(rulesExcludeList)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CSDJavaScriptInsertAllWithExceptionsType.exclude_list: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["exclude_list"] = vFn
+
+	return v
+}()
+
+func CSDJavaScriptInsertAllWithExceptionsTypeValidator() db.Validator {
+	return DefaultCSDJavaScriptInsertAllWithExceptionsTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *CSDJavaScriptInsertType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *CSDJavaScriptInsertType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *CSDJavaScriptInsertType) DeepCopy() *CSDJavaScriptInsertType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &CSDJavaScriptInsertType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *CSDJavaScriptInsertType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *CSDJavaScriptInsertType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return CSDJavaScriptInsertTypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateCSDJavaScriptInsertType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateCSDJavaScriptInsertType) RulesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for rules")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*CSDJavaScriptInsertionRule, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := CSDJavaScriptInsertionRuleValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for rules")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*CSDJavaScriptInsertionRule)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*CSDJavaScriptInsertionRule, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated rules")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items rules")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateCSDJavaScriptInsertType) ExcludeListValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for exclude_list")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*ShapeJavaScriptExclusionRule, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := ShapeJavaScriptExclusionRuleValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for exclude_list")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ShapeJavaScriptExclusionRule)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ShapeJavaScriptExclusionRule, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated exclude_list")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items exclude_list")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateCSDJavaScriptInsertType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*CSDJavaScriptInsertType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *CSDJavaScriptInsertType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["exclude_list"]; exists {
+		vOpts := append(opts, db.WithValidateField("exclude_list"))
+		if err := fv(ctx, m.GetExcludeList(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["rules"]; exists {
+		vOpts := append(opts, db.WithValidateField("rules"))
+		if err := fv(ctx, m.GetRules(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultCSDJavaScriptInsertTypeValidator = func() *ValidateCSDJavaScriptInsertType {
+	v := &ValidateCSDJavaScriptInsertType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhRules := v.RulesValidationRuleHandler
+	rulesRules := map[string]string{
+		"ves.io.schema.rules.message.required":   "true",
+		"ves.io.schema.rules.repeated.max_items": "128",
+		"ves.io.schema.rules.repeated.min_items": "1",
+		"ves.io.schema.rules.repeated.unique":    "true",
+	}
+	vFn, err = vrhRules(rulesRules)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CSDJavaScriptInsertType.rules: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["rules"] = vFn
+
+	vrhExcludeList := v.ExcludeListValidationRuleHandler
+	rulesExcludeList := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "128",
+		"ves.io.schema.rules.repeated.unique":    "true",
+	}
+	vFn, err = vrhExcludeList(rulesExcludeList)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CSDJavaScriptInsertType.exclude_list: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["exclude_list"] = vFn
+
+	return v
+}()
+
+func CSDJavaScriptInsertTypeValidator() db.Validator {
+	return DefaultCSDJavaScriptInsertTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *CSDJavaScriptInsertionRule) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *CSDJavaScriptInsertionRule) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *CSDJavaScriptInsertionRule) DeepCopy() *CSDJavaScriptInsertionRule {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &CSDJavaScriptInsertionRule{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *CSDJavaScriptInsertionRule) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *CSDJavaScriptInsertionRule) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return CSDJavaScriptInsertionRuleValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateCSDJavaScriptInsertionRule struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateCSDJavaScriptInsertionRule) DomainMatcherChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for domain_matcher_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateCSDJavaScriptInsertionRule) MetadataValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "MessageValidationRuleHandler for metadata")
+	}
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		if err := ves_io_schema.MessageMetaTypeValidator().Validate(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateCSDJavaScriptInsertionRule) PathValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "MessageValidationRuleHandler for path")
+	}
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		if err := ves_io_schema.PathMatcherTypeValidator().Validate(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateCSDJavaScriptInsertionRule) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*CSDJavaScriptInsertionRule)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *CSDJavaScriptInsertionRule got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["domain_matcher_choice"]; exists {
+		val := m.GetDomainMatcherChoice()
+		vOpts := append(opts,
+			db.WithValidateField("domain_matcher_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetDomainMatcherChoice().(type) {
+	case *CSDJavaScriptInsertionRule_AnyDomain:
+		if fv, exists := v.FldValidators["domain_matcher_choice.any_domain"]; exists {
+			val := m.GetDomainMatcherChoice().(*CSDJavaScriptInsertionRule_AnyDomain).AnyDomain
+			vOpts := append(opts,
+				db.WithValidateField("domain_matcher_choice"),
+				db.WithValidateField("any_domain"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CSDJavaScriptInsertionRule_Domain:
+		if fv, exists := v.FldValidators["domain_matcher_choice.domain"]; exists {
+			val := m.GetDomainMatcherChoice().(*CSDJavaScriptInsertionRule_Domain).Domain
+			vOpts := append(opts,
+				db.WithValidateField("domain_matcher_choice"),
+				db.WithValidateField("domain"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["metadata"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("metadata"))
+		if err := fv(ctx, m.GetMetadata(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["path"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("path"))
+		if err := fv(ctx, m.GetPath(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultCSDJavaScriptInsertionRuleValidator = func() *ValidateCSDJavaScriptInsertionRule {
+	v := &ValidateCSDJavaScriptInsertionRule{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhDomainMatcherChoice := v.DomainMatcherChoiceValidationRuleHandler
+	rulesDomainMatcherChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhDomainMatcherChoice(rulesDomainMatcherChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CSDJavaScriptInsertionRule.domain_matcher_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["domain_matcher_choice"] = vFn
+
+	vrhMetadata := v.MetadataValidationRuleHandler
+	rulesMetadata := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhMetadata(rulesMetadata)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CSDJavaScriptInsertionRule.metadata: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["metadata"] = vFn
+
+	vrhPath := v.PathValidationRuleHandler
+	rulesPath := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhPath(rulesPath)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CSDJavaScriptInsertionRule.path: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["path"] = vFn
+
+	v.FldValidators["domain_matcher_choice.domain"] = ves_io_schema.DomainTypeValidator().Validate
+
+	return v
+}()
+
+func CSDJavaScriptInsertionRuleValidator() db.Validator {
+	return DefaultCSDJavaScriptInsertionRuleValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *ChallengeRule) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -3468,8 +4108,16 @@ type ValidateChallengeRuleList struct {
 
 func (v *ValidateChallengeRuleList) RulesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for rules")
+	}
 	itemsValidatorFn := func(ctx context.Context, elems []*ChallengeRule, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
 			if err := ChallengeRuleValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
@@ -3560,6 +4208,281 @@ var DefaultChallengeRuleListValidator = func() *ValidateChallengeRuleList {
 
 func ChallengeRuleListValidator() db.Validator {
 	return DefaultChallengeRuleListValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *ClientSideDefensePolicyType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *ClientSideDefensePolicyType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *ClientSideDefensePolicyType) DeepCopy() *ClientSideDefensePolicyType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &ClientSideDefensePolicyType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *ClientSideDefensePolicyType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *ClientSideDefensePolicyType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return ClientSideDefensePolicyTypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateClientSideDefensePolicyType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateClientSideDefensePolicyType) JavaScriptChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for java_script_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateClientSideDefensePolicyType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*ClientSideDefensePolicyType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *ClientSideDefensePolicyType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["java_script_choice"]; exists {
+		val := m.GetJavaScriptChoice()
+		vOpts := append(opts,
+			db.WithValidateField("java_script_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetJavaScriptChoice().(type) {
+	case *ClientSideDefensePolicyType_DisableJsInsert:
+		if fv, exists := v.FldValidators["java_script_choice.disable_js_insert"]; exists {
+			val := m.GetJavaScriptChoice().(*ClientSideDefensePolicyType_DisableJsInsert).DisableJsInsert
+			vOpts := append(opts,
+				db.WithValidateField("java_script_choice"),
+				db.WithValidateField("disable_js_insert"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ClientSideDefensePolicyType_JsInsertAllPages:
+		if fv, exists := v.FldValidators["java_script_choice.js_insert_all_pages"]; exists {
+			val := m.GetJavaScriptChoice().(*ClientSideDefensePolicyType_JsInsertAllPages).JsInsertAllPages
+			vOpts := append(opts,
+				db.WithValidateField("java_script_choice"),
+				db.WithValidateField("js_insert_all_pages"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ClientSideDefensePolicyType_JsInsertAllPagesExcept:
+		if fv, exists := v.FldValidators["java_script_choice.js_insert_all_pages_except"]; exists {
+			val := m.GetJavaScriptChoice().(*ClientSideDefensePolicyType_JsInsertAllPagesExcept).JsInsertAllPagesExcept
+			vOpts := append(opts,
+				db.WithValidateField("java_script_choice"),
+				db.WithValidateField("js_insert_all_pages_except"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ClientSideDefensePolicyType_JsInsertionRules:
+		if fv, exists := v.FldValidators["java_script_choice.js_insertion_rules"]; exists {
+			val := m.GetJavaScriptChoice().(*ClientSideDefensePolicyType_JsInsertionRules).JsInsertionRules
+			vOpts := append(opts,
+				db.WithValidateField("java_script_choice"),
+				db.WithValidateField("js_insertion_rules"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultClientSideDefensePolicyTypeValidator = func() *ValidateClientSideDefensePolicyType {
+	v := &ValidateClientSideDefensePolicyType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhJavaScriptChoice := v.JavaScriptChoiceValidationRuleHandler
+	rulesJavaScriptChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhJavaScriptChoice(rulesJavaScriptChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ClientSideDefensePolicyType.java_script_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["java_script_choice"] = vFn
+
+	v.FldValidators["java_script_choice.js_insert_all_pages_except"] = CSDJavaScriptInsertAllWithExceptionsTypeValidator().Validate
+	v.FldValidators["java_script_choice.js_insertion_rules"] = CSDJavaScriptInsertTypeValidator().Validate
+
+	return v
+}()
+
+func ClientSideDefensePolicyTypeValidator() db.Validator {
+	return DefaultClientSideDefensePolicyTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *ClientSideDefenseType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *ClientSideDefenseType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *ClientSideDefenseType) DeepCopy() *ClientSideDefenseType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &ClientSideDefenseType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *ClientSideDefenseType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *ClientSideDefenseType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return ClientSideDefenseTypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateClientSideDefenseType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateClientSideDefenseType) PolicyValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "MessageValidationRuleHandler for policy")
+	}
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		if err := ClientSideDefensePolicyTypeValidator().Validate(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateClientSideDefenseType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*ClientSideDefenseType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *ClientSideDefenseType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["policy"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("policy"))
+		if err := fv(ctx, m.GetPolicy(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultClientSideDefenseTypeValidator = func() *ValidateClientSideDefenseType {
+	v := &ValidateClientSideDefenseType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhPolicy := v.PolicyValidationRuleHandler
+	rulesPolicy := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhPolicy(rulesPolicy)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ClientSideDefenseType.policy: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["policy"] = vFn
+
+	return v
+}()
+
+func ClientSideDefenseTypeValidator() db.Validator {
+	return DefaultClientSideDefenseTypeValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -4289,10 +5212,26 @@ func (v *ValidateCreateSpecType) ApiDefinitionChoiceValidationRuleHandler(rules 
 	return validatorFn, nil
 }
 
+func (v *ValidateCreateSpecType) ApiDiscoveryChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for api_discovery_choice")
+	}
+	return validatorFn, nil
+}
+
 func (v *ValidateCreateSpecType) ChallengeTypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for challenge_type")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateCreateSpecType) DdosDetectionChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for ddos_detection_choice")
 	}
 	return validatorFn, nil
 }
@@ -4313,10 +5252,10 @@ func (v *ValidateCreateSpecType) LoadbalancerTypeValidationRuleHandler(rules map
 	return validatorFn, nil
 }
 
-func (v *ValidateCreateSpecType) MlConfigChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+func (v *ValidateCreateSpecType) MaliciousUserDetectionChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for ml_config_choice")
+		return nil, errors.Wrap(err, "ValidationRuleHandler for malicious_user_detection_choice")
 	}
 	return validatorFn, nil
 }
@@ -4405,8 +5344,16 @@ func (v *ValidateCreateSpecType) DomainsValidationRuleHandler(rules map[string]s
 
 func (v *ValidateCreateSpecType) DefaultRoutePoolsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for default_route_pools")
+	}
 	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_views.OriginPoolWithWeight, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
 			if err := ves_io_schema_views.OriginPoolWithWeightValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
@@ -4445,8 +5392,16 @@ func (v *ValidateCreateSpecType) DefaultRoutePoolsValidationRuleHandler(rules ma
 
 func (v *ValidateCreateSpecType) RoutesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for routes")
+	}
 	itemsValidatorFn := func(ctx context.Context, elems []*RouteType, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
 			if err := RouteTypeValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
@@ -4485,8 +5440,16 @@ func (v *ValidateCreateSpecType) RoutesValidationRuleHandler(rules map[string]st
 
 func (v *ValidateCreateSpecType) WafExclusionRulesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for waf_exclusion_rules")
+	}
 	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_policy.SimpleWafExclusionRule, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
 			if err := ves_io_schema_policy.SimpleWafExclusionRuleValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
@@ -4525,8 +5488,16 @@ func (v *ValidateCreateSpecType) WafExclusionRulesValidationRuleHandler(rules ma
 
 func (v *ValidateCreateSpecType) BlockedClientsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for blocked_clients")
+	}
 	itemsValidatorFn := func(ctx context.Context, elems []*SimpleClientSrcRule, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
 			if err := SimpleClientSrcRuleValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
@@ -4565,8 +5536,16 @@ func (v *ValidateCreateSpecType) BlockedClientsValidationRuleHandler(rules map[s
 
 func (v *ValidateCreateSpecType) TrustedClientsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for trusted_clients")
+	}
 	itemsValidatorFn := func(ctx context.Context, elems []*SimpleClientSrcRule, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
 			if err := SimpleClientSrcRuleValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
@@ -4605,8 +5584,16 @@ func (v *ValidateCreateSpecType) TrustedClientsValidationRuleHandler(rules map[s
 
 func (v *ValidateCreateSpecType) DdosMitigationRulesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for ddos_mitigation_rules")
+	}
 	itemsValidatorFn := func(ctx context.Context, elems []*DDoSMitigationRule, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
 			if err := DDoSMitigationRuleValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
@@ -4645,8 +5632,16 @@ func (v *ValidateCreateSpecType) DdosMitigationRulesValidationRuleHandler(rules 
 
 func (v *ValidateCreateSpecType) DataGuardRulesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for data_guard_rules")
+	}
 	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_policy.SimpleDataGuardRule, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
 			if err := ves_io_schema_policy.SimpleDataGuardRuleValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
@@ -4811,6 +5806,42 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["api_discovery_choice"]; exists {
+		val := m.GetApiDiscoveryChoice()
+		vOpts := append(opts,
+			db.WithValidateField("api_discovery_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetApiDiscoveryChoice().(type) {
+	case *CreateSpecType_EnableApiDiscovery:
+		if fv, exists := v.FldValidators["api_discovery_choice.enable_api_discovery"]; exists {
+			val := m.GetApiDiscoveryChoice().(*CreateSpecType_EnableApiDiscovery).EnableApiDiscovery
+			vOpts := append(opts,
+				db.WithValidateField("api_discovery_choice"),
+				db.WithValidateField("enable_api_discovery"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CreateSpecType_DisableApiDiscovery:
+		if fv, exists := v.FldValidators["api_discovery_choice.disable_api_discovery"]; exists {
+			val := m.GetApiDiscoveryChoice().(*CreateSpecType_DisableApiDiscovery).DisableApiDiscovery
+			vOpts := append(opts,
+				db.WithValidateField("api_discovery_choice"),
+				db.WithValidateField("disable_api_discovery"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["api_protection_rules"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("api_protection_rules"))
@@ -4912,6 +5943,32 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	switch m.GetClientSideDefenseChoice().(type) {
+	case *CreateSpecType_DisableClientSideDefense:
+		if fv, exists := v.FldValidators["client_side_defense_choice.disable_client_side_defense"]; exists {
+			val := m.GetClientSideDefenseChoice().(*CreateSpecType_DisableClientSideDefense).DisableClientSideDefense
+			vOpts := append(opts,
+				db.WithValidateField("client_side_defense_choice"),
+				db.WithValidateField("disable_client_side_defense"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CreateSpecType_ClientSideDefense:
+		if fv, exists := v.FldValidators["client_side_defense_choice.client_side_defense"]; exists {
+			val := m.GetClientSideDefenseChoice().(*CreateSpecType_ClientSideDefense).ClientSideDefense
+			vOpts := append(opts,
+				db.WithValidateField("client_side_defense_choice"),
+				db.WithValidateField("client_side_defense"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["cors_policy"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("cors_policy"))
@@ -4925,6 +5982,42 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 		vOpts := append(opts, db.WithValidateField("data_guard_rules"))
 		if err := fv(ctx, m.GetDataGuardRules(), vOpts...); err != nil {
 			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["ddos_detection_choice"]; exists {
+		val := m.GetDdosDetectionChoice()
+		vOpts := append(opts,
+			db.WithValidateField("ddos_detection_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetDdosDetectionChoice().(type) {
+	case *CreateSpecType_EnableDdosDetection:
+		if fv, exists := v.FldValidators["ddos_detection_choice.enable_ddos_detection"]; exists {
+			val := m.GetDdosDetectionChoice().(*CreateSpecType_EnableDdosDetection).EnableDdosDetection
+			vOpts := append(opts,
+				db.WithValidateField("ddos_detection_choice"),
+				db.WithValidateField("enable_ddos_detection"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CreateSpecType_DisableDdosDetection:
+		if fv, exists := v.FldValidators["ddos_detection_choice.disable_ddos_detection"]; exists {
+			val := m.GetDdosDetectionChoice().(*CreateSpecType_DisableDdosDetection).DisableDdosDetection
+			vOpts := append(opts,
+				db.WithValidateField("ddos_detection_choice"),
+				db.WithValidateField("disable_ddos_detection"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
 		}
 
 	}
@@ -5106,6 +6199,42 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["malicious_user_detection_choice"]; exists {
+		val := m.GetMaliciousUserDetectionChoice()
+		vOpts := append(opts,
+			db.WithValidateField("malicious_user_detection_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetMaliciousUserDetectionChoice().(type) {
+	case *CreateSpecType_EnableMaliciousUserDetection:
+		if fv, exists := v.FldValidators["malicious_user_detection_choice.enable_malicious_user_detection"]; exists {
+			val := m.GetMaliciousUserDetectionChoice().(*CreateSpecType_EnableMaliciousUserDetection).EnableMaliciousUserDetection
+			vOpts := append(opts,
+				db.WithValidateField("malicious_user_detection_choice"),
+				db.WithValidateField("enable_malicious_user_detection"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CreateSpecType_DisableMaliciousUserDetection:
+		if fv, exists := v.FldValidators["malicious_user_detection_choice.disable_malicious_user_detection"]; exists {
+			val := m.GetMaliciousUserDetectionChoice().(*CreateSpecType_DisableMaliciousUserDetection).DisableMaliciousUserDetection
+			vOpts := append(opts,
+				db.WithValidateField("malicious_user_detection_choice"),
+				db.WithValidateField("disable_malicious_user_detection"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["malicious_user_mitigation"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("malicious_user_mitigation"))
@@ -5113,16 +6242,6 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 			return err
 		}
 
-	}
-
-	if fv, exists := v.FldValidators["ml_config_choice"]; exists {
-		val := m.GetMlConfigChoice()
-		vOpts := append(opts,
-			db.WithValidateField("ml_config_choice"),
-		)
-		if err := fv(ctx, val, vOpts...); err != nil {
-			return err
-		}
 	}
 
 	switch m.GetMlConfigChoice().(type) {
@@ -5445,6 +6564,17 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	}
 	v.FldValidators["api_definition_choice"] = vFn
 
+	vrhApiDiscoveryChoice := v.ApiDiscoveryChoiceValidationRuleHandler
+	rulesApiDiscoveryChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhApiDiscoveryChoice(rulesApiDiscoveryChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateSpecType.api_discovery_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["api_discovery_choice"] = vFn
+
 	vrhChallengeType := v.ChallengeTypeValidationRuleHandler
 	rulesChallengeType := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -5455,6 +6585,17 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["challenge_type"] = vFn
+
+	vrhDdosDetectionChoice := v.DdosDetectionChoiceValidationRuleHandler
+	rulesDdosDetectionChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhDdosDetectionChoice(rulesDdosDetectionChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateSpecType.ddos_detection_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["ddos_detection_choice"] = vFn
 
 	vrhHashPolicyChoice := v.HashPolicyChoiceValidationRuleHandler
 	rulesHashPolicyChoice := map[string]string{
@@ -5478,16 +6619,16 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	}
 	v.FldValidators["loadbalancer_type"] = vFn
 
-	vrhMlConfigChoice := v.MlConfigChoiceValidationRuleHandler
-	rulesMlConfigChoice := map[string]string{
+	vrhMaliciousUserDetectionChoice := v.MaliciousUserDetectionChoiceValidationRuleHandler
+	rulesMaliciousUserDetectionChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
 	}
-	vFn, err = vrhMlConfigChoice(rulesMlConfigChoice)
+	vFn, err = vrhMaliciousUserDetectionChoice(rulesMaliciousUserDetectionChoice)
 	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateSpecType.ml_config_choice: %s", err)
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateSpecType.malicious_user_detection_choice: %s", err)
 		panic(errMsg)
 	}
-	v.FldValidators["ml_config_choice"] = vFn
+	v.FldValidators["malicious_user_detection_choice"] = vFn
 
 	vrhRateLimitChoice := v.RateLimitChoiceValidationRuleHandler
 	rulesRateLimitChoice := map[string]string{
@@ -5651,11 +6792,15 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	v.FldValidators["api_definition_choice.api_definitions"] = ApiDefinitionListValidator().Validate
 	v.FldValidators["api_definition_choice.api_definition"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
+	v.FldValidators["api_discovery_choice.enable_api_discovery"] = ApiDiscoverySettingValidator().Validate
+
 	v.FldValidators["bot_defense_choice.bot_defense"] = ShapeBotDefenseTypeValidator().Validate
 
 	v.FldValidators["challenge_type.js_challenge"] = ves_io_schema_virtual_host.JavascriptChallengeTypeValidator().Validate
 	v.FldValidators["challenge_type.captcha_challenge"] = ves_io_schema_virtual_host.CaptchaChallengeTypeValidator().Validate
 	v.FldValidators["challenge_type.policy_based_challenge"] = PolicyBasedChallengeValidator().Validate
+
+	v.FldValidators["client_side_defense_choice.client_side_defense"] = ClientSideDefenseTypeValidator().Validate
 
 	v.FldValidators["hash_policy_choice.cookie_stickiness"] = ves_io_schema_route.CookieForHashingValidator().Validate
 	v.FldValidators["hash_policy_choice.ring_hash"] = HashPolicyListTypeValidator().Validate
@@ -5803,8 +6948,16 @@ type ValidateCustomIpAllowedList struct {
 
 func (v *ValidateCustomIpAllowedList) RateLimiterAllowedPrefixesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for rate_limiter_allowed_prefixes")
+	}
 	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_views.ObjectRefType, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
 			if err := ves_io_schema_views.ObjectRefTypeValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
@@ -7081,10 +8234,26 @@ func (v *ValidateGetSpecType) ApiDefinitionChoiceValidationRuleHandler(rules map
 	return validatorFn, nil
 }
 
+func (v *ValidateGetSpecType) ApiDiscoveryChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for api_discovery_choice")
+	}
+	return validatorFn, nil
+}
+
 func (v *ValidateGetSpecType) ChallengeTypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for challenge_type")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateGetSpecType) DdosDetectionChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for ddos_detection_choice")
 	}
 	return validatorFn, nil
 }
@@ -7105,10 +8274,10 @@ func (v *ValidateGetSpecType) LoadbalancerTypeValidationRuleHandler(rules map[st
 	return validatorFn, nil
 }
 
-func (v *ValidateGetSpecType) MlConfigChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+func (v *ValidateGetSpecType) MaliciousUserDetectionChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for ml_config_choice")
+		return nil, errors.Wrap(err, "ValidationRuleHandler for malicious_user_detection_choice")
 	}
 	return validatorFn, nil
 }
@@ -7197,8 +8366,16 @@ func (v *ValidateGetSpecType) DomainsValidationRuleHandler(rules map[string]stri
 
 func (v *ValidateGetSpecType) DefaultRoutePoolsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for default_route_pools")
+	}
 	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_views.OriginPoolWithWeight, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
 			if err := ves_io_schema_views.OriginPoolWithWeightValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
@@ -7237,8 +8414,16 @@ func (v *ValidateGetSpecType) DefaultRoutePoolsValidationRuleHandler(rules map[s
 
 func (v *ValidateGetSpecType) RoutesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for routes")
+	}
 	itemsValidatorFn := func(ctx context.Context, elems []*RouteType, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
 			if err := RouteTypeValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
@@ -7277,8 +8462,16 @@ func (v *ValidateGetSpecType) RoutesValidationRuleHandler(rules map[string]strin
 
 func (v *ValidateGetSpecType) WafExclusionRulesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for waf_exclusion_rules")
+	}
 	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_policy.SimpleWafExclusionRule, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
 			if err := ves_io_schema_policy.SimpleWafExclusionRuleValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
@@ -7317,8 +8510,16 @@ func (v *ValidateGetSpecType) WafExclusionRulesValidationRuleHandler(rules map[s
 
 func (v *ValidateGetSpecType) BlockedClientsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for blocked_clients")
+	}
 	itemsValidatorFn := func(ctx context.Context, elems []*SimpleClientSrcRule, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
 			if err := SimpleClientSrcRuleValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
@@ -7357,8 +8558,16 @@ func (v *ValidateGetSpecType) BlockedClientsValidationRuleHandler(rules map[stri
 
 func (v *ValidateGetSpecType) TrustedClientsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for trusted_clients")
+	}
 	itemsValidatorFn := func(ctx context.Context, elems []*SimpleClientSrcRule, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
 			if err := SimpleClientSrcRuleValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
@@ -7397,8 +8606,16 @@ func (v *ValidateGetSpecType) TrustedClientsValidationRuleHandler(rules map[stri
 
 func (v *ValidateGetSpecType) DdosMitigationRulesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for ddos_mitigation_rules")
+	}
 	itemsValidatorFn := func(ctx context.Context, elems []*DDoSMitigationRule, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
 			if err := DDoSMitigationRuleValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
@@ -7437,8 +8654,16 @@ func (v *ValidateGetSpecType) DdosMitigationRulesValidationRuleHandler(rules map
 
 func (v *ValidateGetSpecType) DataGuardRulesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for data_guard_rules")
+	}
 	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_policy.SimpleDataGuardRule, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
 			if err := ves_io_schema_policy.SimpleDataGuardRuleValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
@@ -7603,6 +8828,42 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 
 	}
 
+	if fv, exists := v.FldValidators["api_discovery_choice"]; exists {
+		val := m.GetApiDiscoveryChoice()
+		vOpts := append(opts,
+			db.WithValidateField("api_discovery_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetApiDiscoveryChoice().(type) {
+	case *GetSpecType_EnableApiDiscovery:
+		if fv, exists := v.FldValidators["api_discovery_choice.enable_api_discovery"]; exists {
+			val := m.GetApiDiscoveryChoice().(*GetSpecType_EnableApiDiscovery).EnableApiDiscovery
+			vOpts := append(opts,
+				db.WithValidateField("api_discovery_choice"),
+				db.WithValidateField("enable_api_discovery"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GetSpecType_DisableApiDiscovery:
+		if fv, exists := v.FldValidators["api_discovery_choice.disable_api_discovery"]; exists {
+			val := m.GetApiDiscoveryChoice().(*GetSpecType_DisableApiDiscovery).DisableApiDiscovery
+			vOpts := append(opts,
+				db.WithValidateField("api_discovery_choice"),
+				db.WithValidateField("disable_api_discovery"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["api_protection_rules"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("api_protection_rules"))
@@ -7713,6 +8974,32 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 
 	}
 
+	switch m.GetClientSideDefenseChoice().(type) {
+	case *GetSpecType_DisableClientSideDefense:
+		if fv, exists := v.FldValidators["client_side_defense_choice.disable_client_side_defense"]; exists {
+			val := m.GetClientSideDefenseChoice().(*GetSpecType_DisableClientSideDefense).DisableClientSideDefense
+			vOpts := append(opts,
+				db.WithValidateField("client_side_defense_choice"),
+				db.WithValidateField("disable_client_side_defense"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GetSpecType_ClientSideDefense:
+		if fv, exists := v.FldValidators["client_side_defense_choice.client_side_defense"]; exists {
+			val := m.GetClientSideDefenseChoice().(*GetSpecType_ClientSideDefense).ClientSideDefense
+			vOpts := append(opts,
+				db.WithValidateField("client_side_defense_choice"),
+				db.WithValidateField("client_side_defense"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["cors_policy"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("cors_policy"))
@@ -7726,6 +9013,42 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 		vOpts := append(opts, db.WithValidateField("data_guard_rules"))
 		if err := fv(ctx, m.GetDataGuardRules(), vOpts...); err != nil {
 			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["ddos_detection_choice"]; exists {
+		val := m.GetDdosDetectionChoice()
+		vOpts := append(opts,
+			db.WithValidateField("ddos_detection_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetDdosDetectionChoice().(type) {
+	case *GetSpecType_EnableDdosDetection:
+		if fv, exists := v.FldValidators["ddos_detection_choice.enable_ddos_detection"]; exists {
+			val := m.GetDdosDetectionChoice().(*GetSpecType_EnableDdosDetection).EnableDdosDetection
+			vOpts := append(opts,
+				db.WithValidateField("ddos_detection_choice"),
+				db.WithValidateField("enable_ddos_detection"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GetSpecType_DisableDdosDetection:
+		if fv, exists := v.FldValidators["ddos_detection_choice.disable_ddos_detection"]; exists {
+			val := m.GetDdosDetectionChoice().(*GetSpecType_DisableDdosDetection).DisableDdosDetection
+			vOpts := append(opts,
+				db.WithValidateField("ddos_detection_choice"),
+				db.WithValidateField("disable_ddos_detection"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
 		}
 
 	}
@@ -7940,6 +9263,42 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 
 	}
 
+	if fv, exists := v.FldValidators["malicious_user_detection_choice"]; exists {
+		val := m.GetMaliciousUserDetectionChoice()
+		vOpts := append(opts,
+			db.WithValidateField("malicious_user_detection_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetMaliciousUserDetectionChoice().(type) {
+	case *GetSpecType_EnableMaliciousUserDetection:
+		if fv, exists := v.FldValidators["malicious_user_detection_choice.enable_malicious_user_detection"]; exists {
+			val := m.GetMaliciousUserDetectionChoice().(*GetSpecType_EnableMaliciousUserDetection).EnableMaliciousUserDetection
+			vOpts := append(opts,
+				db.WithValidateField("malicious_user_detection_choice"),
+				db.WithValidateField("enable_malicious_user_detection"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GetSpecType_DisableMaliciousUserDetection:
+		if fv, exists := v.FldValidators["malicious_user_detection_choice.disable_malicious_user_detection"]; exists {
+			val := m.GetMaliciousUserDetectionChoice().(*GetSpecType_DisableMaliciousUserDetection).DisableMaliciousUserDetection
+			vOpts := append(opts,
+				db.WithValidateField("malicious_user_detection_choice"),
+				db.WithValidateField("disable_malicious_user_detection"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["malicious_user_mitigation"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("malicious_user_mitigation"))
@@ -7947,16 +9306,6 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 			return err
 		}
 
-	}
-
-	if fv, exists := v.FldValidators["ml_config_choice"]; exists {
-		val := m.GetMlConfigChoice()
-		vOpts := append(opts,
-			db.WithValidateField("ml_config_choice"),
-		)
-		if err := fv(ctx, val, vOpts...); err != nil {
-			return err
-		}
 	}
 
 	switch m.GetMlConfigChoice().(type) {
@@ -8288,6 +9637,17 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	}
 	v.FldValidators["api_definition_choice"] = vFn
 
+	vrhApiDiscoveryChoice := v.ApiDiscoveryChoiceValidationRuleHandler
+	rulesApiDiscoveryChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhApiDiscoveryChoice(rulesApiDiscoveryChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GetSpecType.api_discovery_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["api_discovery_choice"] = vFn
+
 	vrhChallengeType := v.ChallengeTypeValidationRuleHandler
 	rulesChallengeType := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -8298,6 +9658,17 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["challenge_type"] = vFn
+
+	vrhDdosDetectionChoice := v.DdosDetectionChoiceValidationRuleHandler
+	rulesDdosDetectionChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhDdosDetectionChoice(rulesDdosDetectionChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GetSpecType.ddos_detection_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["ddos_detection_choice"] = vFn
 
 	vrhHashPolicyChoice := v.HashPolicyChoiceValidationRuleHandler
 	rulesHashPolicyChoice := map[string]string{
@@ -8321,16 +9692,16 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	}
 	v.FldValidators["loadbalancer_type"] = vFn
 
-	vrhMlConfigChoice := v.MlConfigChoiceValidationRuleHandler
-	rulesMlConfigChoice := map[string]string{
+	vrhMaliciousUserDetectionChoice := v.MaliciousUserDetectionChoiceValidationRuleHandler
+	rulesMaliciousUserDetectionChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
 	}
-	vFn, err = vrhMlConfigChoice(rulesMlConfigChoice)
+	vFn, err = vrhMaliciousUserDetectionChoice(rulesMaliciousUserDetectionChoice)
 	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for GetSpecType.ml_config_choice: %s", err)
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GetSpecType.malicious_user_detection_choice: %s", err)
 		panic(errMsg)
 	}
-	v.FldValidators["ml_config_choice"] = vFn
+	v.FldValidators["malicious_user_detection_choice"] = vFn
 
 	vrhRateLimitChoice := v.RateLimitChoiceValidationRuleHandler
 	rulesRateLimitChoice := map[string]string{
@@ -8494,11 +9865,15 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v.FldValidators["api_definition_choice.api_definitions"] = ApiDefinitionListValidator().Validate
 	v.FldValidators["api_definition_choice.api_definition"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
+	v.FldValidators["api_discovery_choice.enable_api_discovery"] = ApiDiscoverySettingValidator().Validate
+
 	v.FldValidators["bot_defense_choice.bot_defense"] = ShapeBotDefenseTypeValidator().Validate
 
 	v.FldValidators["challenge_type.js_challenge"] = ves_io_schema_virtual_host.JavascriptChallengeTypeValidator().Validate
 	v.FldValidators["challenge_type.captcha_challenge"] = ves_io_schema_virtual_host.CaptchaChallengeTypeValidator().Validate
 	v.FldValidators["challenge_type.policy_based_challenge"] = PolicyBasedChallengeValidator().Validate
+
+	v.FldValidators["client_side_defense_choice.client_side_defense"] = ClientSideDefenseTypeValidator().Validate
 
 	v.FldValidators["hash_policy_choice.cookie_stickiness"] = ves_io_schema_route.CookieForHashingValidator().Validate
 	v.FldValidators["hash_policy_choice.ring_hash"] = HashPolicyListTypeValidator().Validate
@@ -9323,10 +10698,26 @@ func (v *ValidateGlobalSpecType) ApiDefinitionChoiceValidationRuleHandler(rules 
 	return validatorFn, nil
 }
 
+func (v *ValidateGlobalSpecType) ApiDiscoveryChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for api_discovery_choice")
+	}
+	return validatorFn, nil
+}
+
 func (v *ValidateGlobalSpecType) ChallengeTypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for challenge_type")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateGlobalSpecType) DdosDetectionChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for ddos_detection_choice")
 	}
 	return validatorFn, nil
 }
@@ -9355,10 +10746,10 @@ func (v *ValidateGlobalSpecType) LoadbalancerTypeValidationRuleHandler(rules map
 	return validatorFn, nil
 }
 
-func (v *ValidateGlobalSpecType) MlConfigChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+func (v *ValidateGlobalSpecType) MaliciousUserDetectionChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for ml_config_choice")
+		return nil, errors.Wrap(err, "ValidationRuleHandler for malicious_user_detection_choice")
 	}
 	return validatorFn, nil
 }
@@ -9447,8 +10838,16 @@ func (v *ValidateGlobalSpecType) DomainsValidationRuleHandler(rules map[string]s
 
 func (v *ValidateGlobalSpecType) DefaultRoutePoolsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for default_route_pools")
+	}
 	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_views.OriginPoolWithWeight, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
 			if err := ves_io_schema_views.OriginPoolWithWeightValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
@@ -9487,8 +10886,16 @@ func (v *ValidateGlobalSpecType) DefaultRoutePoolsValidationRuleHandler(rules ma
 
 func (v *ValidateGlobalSpecType) RoutesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for routes")
+	}
 	itemsValidatorFn := func(ctx context.Context, elems []*RouteType, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
 			if err := RouteTypeValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
@@ -9527,8 +10934,16 @@ func (v *ValidateGlobalSpecType) RoutesValidationRuleHandler(rules map[string]st
 
 func (v *ValidateGlobalSpecType) WafExclusionRulesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for waf_exclusion_rules")
+	}
 	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_policy.SimpleWafExclusionRule, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
 			if err := ves_io_schema_policy.SimpleWafExclusionRuleValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
@@ -9567,8 +10982,16 @@ func (v *ValidateGlobalSpecType) WafExclusionRulesValidationRuleHandler(rules ma
 
 func (v *ValidateGlobalSpecType) BlockedClientsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for blocked_clients")
+	}
 	itemsValidatorFn := func(ctx context.Context, elems []*SimpleClientSrcRule, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
 			if err := SimpleClientSrcRuleValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
@@ -9607,8 +11030,16 @@ func (v *ValidateGlobalSpecType) BlockedClientsValidationRuleHandler(rules map[s
 
 func (v *ValidateGlobalSpecType) TrustedClientsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for trusted_clients")
+	}
 	itemsValidatorFn := func(ctx context.Context, elems []*SimpleClientSrcRule, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
 			if err := SimpleClientSrcRuleValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
@@ -9647,8 +11078,16 @@ func (v *ValidateGlobalSpecType) TrustedClientsValidationRuleHandler(rules map[s
 
 func (v *ValidateGlobalSpecType) DdosMitigationRulesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for ddos_mitigation_rules")
+	}
 	itemsValidatorFn := func(ctx context.Context, elems []*DDoSMitigationRule, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
 			if err := DDoSMitigationRuleValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
@@ -9687,8 +11126,16 @@ func (v *ValidateGlobalSpecType) DdosMitigationRulesValidationRuleHandler(rules 
 
 func (v *ValidateGlobalSpecType) DataGuardRulesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for data_guard_rules")
+	}
 	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_policy.SimpleDataGuardRule, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
 			if err := ves_io_schema_policy.SimpleDataGuardRuleValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
@@ -9853,6 +11300,42 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["api_discovery_choice"]; exists {
+		val := m.GetApiDiscoveryChoice()
+		vOpts := append(opts,
+			db.WithValidateField("api_discovery_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetApiDiscoveryChoice().(type) {
+	case *GlobalSpecType_EnableApiDiscovery:
+		if fv, exists := v.FldValidators["api_discovery_choice.enable_api_discovery"]; exists {
+			val := m.GetApiDiscoveryChoice().(*GlobalSpecType_EnableApiDiscovery).EnableApiDiscovery
+			vOpts := append(opts,
+				db.WithValidateField("api_discovery_choice"),
+				db.WithValidateField("enable_api_discovery"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GlobalSpecType_DisableApiDiscovery:
+		if fv, exists := v.FldValidators["api_discovery_choice.disable_api_discovery"]; exists {
+			val := m.GetApiDiscoveryChoice().(*GlobalSpecType_DisableApiDiscovery).DisableApiDiscovery
+			vOpts := append(opts,
+				db.WithValidateField("api_discovery_choice"),
+				db.WithValidateField("disable_api_discovery"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["api_protection_rules"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("api_protection_rules"))
@@ -9972,6 +11455,32 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	switch m.GetClientSideDefenseChoice().(type) {
+	case *GlobalSpecType_DisableClientSideDefense:
+		if fv, exists := v.FldValidators["client_side_defense_choice.disable_client_side_defense"]; exists {
+			val := m.GetClientSideDefenseChoice().(*GlobalSpecType_DisableClientSideDefense).DisableClientSideDefense
+			vOpts := append(opts,
+				db.WithValidateField("client_side_defense_choice"),
+				db.WithValidateField("disable_client_side_defense"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GlobalSpecType_ClientSideDefense:
+		if fv, exists := v.FldValidators["client_side_defense_choice.client_side_defense"]; exists {
+			val := m.GetClientSideDefenseChoice().(*GlobalSpecType_ClientSideDefense).ClientSideDefense
+			vOpts := append(opts,
+				db.WithValidateField("client_side_defense_choice"),
+				db.WithValidateField("client_side_defense"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["cors_policy"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("cors_policy"))
@@ -9985,6 +11494,42 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 		vOpts := append(opts, db.WithValidateField("data_guard_rules"))
 		if err := fv(ctx, m.GetDataGuardRules(), vOpts...); err != nil {
 			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["ddos_detection_choice"]; exists {
+		val := m.GetDdosDetectionChoice()
+		vOpts := append(opts,
+			db.WithValidateField("ddos_detection_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetDdosDetectionChoice().(type) {
+	case *GlobalSpecType_EnableDdosDetection:
+		if fv, exists := v.FldValidators["ddos_detection_choice.enable_ddos_detection"]; exists {
+			val := m.GetDdosDetectionChoice().(*GlobalSpecType_EnableDdosDetection).EnableDdosDetection
+			vOpts := append(opts,
+				db.WithValidateField("ddos_detection_choice"),
+				db.WithValidateField("enable_ddos_detection"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GlobalSpecType_DisableDdosDetection:
+		if fv, exists := v.FldValidators["ddos_detection_choice.disable_ddos_detection"]; exists {
+			val := m.GetDdosDetectionChoice().(*GlobalSpecType_DisableDdosDetection).DisableDdosDetection
+			vOpts := append(opts,
+				db.WithValidateField("ddos_detection_choice"),
+				db.WithValidateField("disable_ddos_detection"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
 		}
 
 	}
@@ -10236,6 +11781,42 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["malicious_user_detection_choice"]; exists {
+		val := m.GetMaliciousUserDetectionChoice()
+		vOpts := append(opts,
+			db.WithValidateField("malicious_user_detection_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetMaliciousUserDetectionChoice().(type) {
+	case *GlobalSpecType_EnableMaliciousUserDetection:
+		if fv, exists := v.FldValidators["malicious_user_detection_choice.enable_malicious_user_detection"]; exists {
+			val := m.GetMaliciousUserDetectionChoice().(*GlobalSpecType_EnableMaliciousUserDetection).EnableMaliciousUserDetection
+			vOpts := append(opts,
+				db.WithValidateField("malicious_user_detection_choice"),
+				db.WithValidateField("enable_malicious_user_detection"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GlobalSpecType_DisableMaliciousUserDetection:
+		if fv, exists := v.FldValidators["malicious_user_detection_choice.disable_malicious_user_detection"]; exists {
+			val := m.GetMaliciousUserDetectionChoice().(*GlobalSpecType_DisableMaliciousUserDetection).DisableMaliciousUserDetection
+			vOpts := append(opts,
+				db.WithValidateField("malicious_user_detection_choice"),
+				db.WithValidateField("disable_malicious_user_detection"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["malicious_user_mitigation"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("malicious_user_mitigation"))
@@ -10243,16 +11824,6 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 			return err
 		}
 
-	}
-
-	if fv, exists := v.FldValidators["ml_config_choice"]; exists {
-		val := m.GetMlConfigChoice()
-		vOpts := append(opts,
-			db.WithValidateField("ml_config_choice"),
-		)
-		if err := fv(ctx, val, vOpts...); err != nil {
-			return err
-		}
 	}
 
 	switch m.GetMlConfigChoice().(type) {
@@ -10593,6 +12164,17 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	}
 	v.FldValidators["api_definition_choice"] = vFn
 
+	vrhApiDiscoveryChoice := v.ApiDiscoveryChoiceValidationRuleHandler
+	rulesApiDiscoveryChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhApiDiscoveryChoice(rulesApiDiscoveryChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.api_discovery_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["api_discovery_choice"] = vFn
+
 	vrhChallengeType := v.ChallengeTypeValidationRuleHandler
 	rulesChallengeType := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -10603,6 +12185,17 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["challenge_type"] = vFn
+
+	vrhDdosDetectionChoice := v.DdosDetectionChoiceValidationRuleHandler
+	rulesDdosDetectionChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhDdosDetectionChoice(rulesDdosDetectionChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.ddos_detection_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["ddos_detection_choice"] = vFn
 
 	vrhHashPolicyChoice := v.HashPolicyChoiceValidationRuleHandler
 	rulesHashPolicyChoice := map[string]string{
@@ -10638,16 +12231,16 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	}
 	v.FldValidators["loadbalancer_type"] = vFn
 
-	vrhMlConfigChoice := v.MlConfigChoiceValidationRuleHandler
-	rulesMlConfigChoice := map[string]string{
+	vrhMaliciousUserDetectionChoice := v.MaliciousUserDetectionChoiceValidationRuleHandler
+	rulesMaliciousUserDetectionChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
 	}
-	vFn, err = vrhMlConfigChoice(rulesMlConfigChoice)
+	vFn, err = vrhMaliciousUserDetectionChoice(rulesMaliciousUserDetectionChoice)
 	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.ml_config_choice: %s", err)
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.malicious_user_detection_choice: %s", err)
 		panic(errMsg)
 	}
-	v.FldValidators["ml_config_choice"] = vFn
+	v.FldValidators["malicious_user_detection_choice"] = vFn
 
 	vrhRateLimitChoice := v.RateLimitChoiceValidationRuleHandler
 	rulesRateLimitChoice := map[string]string{
@@ -10811,11 +12404,15 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v.FldValidators["api_definition_choice.api_definitions"] = ApiDefinitionListValidator().Validate
 	v.FldValidators["api_definition_choice.api_definition"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
+	v.FldValidators["api_discovery_choice.enable_api_discovery"] = ApiDiscoverySettingValidator().Validate
+
 	v.FldValidators["bot_defense_choice.bot_defense"] = ShapeBotDefenseTypeValidator().Validate
 
 	v.FldValidators["challenge_type.js_challenge"] = ves_io_schema_virtual_host.JavascriptChallengeTypeValidator().Validate
 	v.FldValidators["challenge_type.captcha_challenge"] = ves_io_schema_virtual_host.CaptchaChallengeTypeValidator().Validate
 	v.FldValidators["challenge_type.policy_based_challenge"] = PolicyBasedChallengeValidator().Validate
+
+	v.FldValidators["client_side_defense_choice.client_side_defense"] = ClientSideDefenseTypeValidator().Validate
 
 	v.FldValidators["hash_policy_choice.cookie_stickiness"] = ves_io_schema_route.CookieForHashingValidator().Validate
 	v.FldValidators["hash_policy_choice.ring_hash"] = HashPolicyListTypeValidator().Validate
@@ -10903,8 +12500,16 @@ type ValidateHashPolicyListType struct {
 
 func (v *ValidateHashPolicyListType) HashPolicyValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for hash_policy")
+	}
 	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_route.HashPolicyType, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
 			if err := ves_io_schema_route.HashPolicyTypeValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
@@ -11041,8 +12646,16 @@ type ValidateHttpHeaderMatcherList struct {
 
 func (v *ValidateHttpHeaderMatcherList) HeadersValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for headers")
+	}
 	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema.HeaderMatcherType, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
 			if err := ves_io_schema.HeaderMatcherTypeValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
@@ -11937,8 +13550,16 @@ type ValidateMobileTrafficIdentifierType struct {
 
 func (v *ValidateMobileTrafficIdentifierType) HeadersValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for headers")
+	}
 	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_policy.HeaderMatcherTypeBasic, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
 			if err := ves_io_schema_policy.HeaderMatcherTypeBasicValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
@@ -12682,6 +14303,15 @@ func (v *ValidateProxyTypeHttps) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["header_transformation_type"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("header_transformation_type"))
+		if err := fv(ctx, m.GetHeaderTransformationType(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["http_redirect"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("http_redirect"))
@@ -12854,6 +14484,8 @@ var DefaultProxyTypeHttpsValidator = func() *ValidateProxyTypeHttps {
 
 	v.FldValidators["tls_parameters"] = ves_io_schema_views.DownstreamTlsParamsTypeValidator().Validate
 
+	v.FldValidators["header_transformation_type"] = ves_io_schema.HeaderTransformationTypeValidator().Validate
+
 	return v
 }()
 
@@ -13024,6 +14656,15 @@ func (v *ValidateProxyTypeHttpsAutoCerts) Validate(ctx context.Context, pm inter
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
 			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["header_transformation_type"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("header_transformation_type"))
+		if err := fv(ctx, m.GetHeaderTransformationType(), vOpts...); err != nil {
+			return err
 		}
 
 	}
@@ -13248,6 +14889,8 @@ var DefaultProxyTypeHttpsAutoCertsValidator = func() *ValidateProxyTypeHttpsAuto
 	v.FldValidators["mtls_choice.use_mtls"] = ves_io_schema_views.DownstreamTlsValidationContextValidator().Validate
 
 	v.FldValidators["tls_config"] = ves_io_schema_views.TlsConfigValidator().Validate
+
+	v.FldValidators["header_transformation_type"] = ves_io_schema.HeaderTransformationTypeValidator().Validate
 
 	return v
 }()
@@ -14277,10 +15920,26 @@ func (v *ValidateReplaceSpecType) ApiDefinitionChoiceValidationRuleHandler(rules
 	return validatorFn, nil
 }
 
+func (v *ValidateReplaceSpecType) ApiDiscoveryChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for api_discovery_choice")
+	}
+	return validatorFn, nil
+}
+
 func (v *ValidateReplaceSpecType) ChallengeTypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for challenge_type")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateReplaceSpecType) DdosDetectionChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for ddos_detection_choice")
 	}
 	return validatorFn, nil
 }
@@ -14301,10 +15960,10 @@ func (v *ValidateReplaceSpecType) LoadbalancerTypeValidationRuleHandler(rules ma
 	return validatorFn, nil
 }
 
-func (v *ValidateReplaceSpecType) MlConfigChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+func (v *ValidateReplaceSpecType) MaliciousUserDetectionChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for ml_config_choice")
+		return nil, errors.Wrap(err, "ValidationRuleHandler for malicious_user_detection_choice")
 	}
 	return validatorFn, nil
 }
@@ -14393,8 +16052,16 @@ func (v *ValidateReplaceSpecType) DomainsValidationRuleHandler(rules map[string]
 
 func (v *ValidateReplaceSpecType) DefaultRoutePoolsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for default_route_pools")
+	}
 	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_views.OriginPoolWithWeight, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
 			if err := ves_io_schema_views.OriginPoolWithWeightValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
@@ -14433,8 +16100,16 @@ func (v *ValidateReplaceSpecType) DefaultRoutePoolsValidationRuleHandler(rules m
 
 func (v *ValidateReplaceSpecType) RoutesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for routes")
+	}
 	itemsValidatorFn := func(ctx context.Context, elems []*RouteType, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
 			if err := RouteTypeValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
@@ -14473,8 +16148,16 @@ func (v *ValidateReplaceSpecType) RoutesValidationRuleHandler(rules map[string]s
 
 func (v *ValidateReplaceSpecType) WafExclusionRulesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for waf_exclusion_rules")
+	}
 	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_policy.SimpleWafExclusionRule, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
 			if err := ves_io_schema_policy.SimpleWafExclusionRuleValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
@@ -14513,8 +16196,16 @@ func (v *ValidateReplaceSpecType) WafExclusionRulesValidationRuleHandler(rules m
 
 func (v *ValidateReplaceSpecType) BlockedClientsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for blocked_clients")
+	}
 	itemsValidatorFn := func(ctx context.Context, elems []*SimpleClientSrcRule, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
 			if err := SimpleClientSrcRuleValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
@@ -14553,8 +16244,16 @@ func (v *ValidateReplaceSpecType) BlockedClientsValidationRuleHandler(rules map[
 
 func (v *ValidateReplaceSpecType) TrustedClientsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for trusted_clients")
+	}
 	itemsValidatorFn := func(ctx context.Context, elems []*SimpleClientSrcRule, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
 			if err := SimpleClientSrcRuleValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
@@ -14593,8 +16292,16 @@ func (v *ValidateReplaceSpecType) TrustedClientsValidationRuleHandler(rules map[
 
 func (v *ValidateReplaceSpecType) DdosMitigationRulesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for ddos_mitigation_rules")
+	}
 	itemsValidatorFn := func(ctx context.Context, elems []*DDoSMitigationRule, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
 			if err := DDoSMitigationRuleValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
@@ -14633,8 +16340,16 @@ func (v *ValidateReplaceSpecType) DdosMitigationRulesValidationRuleHandler(rules
 
 func (v *ValidateReplaceSpecType) DataGuardRulesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for data_guard_rules")
+	}
 	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_policy.SimpleDataGuardRule, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
 			if err := ves_io_schema_policy.SimpleDataGuardRuleValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
@@ -14799,6 +16514,42 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 
 	}
 
+	if fv, exists := v.FldValidators["api_discovery_choice"]; exists {
+		val := m.GetApiDiscoveryChoice()
+		vOpts := append(opts,
+			db.WithValidateField("api_discovery_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetApiDiscoveryChoice().(type) {
+	case *ReplaceSpecType_EnableApiDiscovery:
+		if fv, exists := v.FldValidators["api_discovery_choice.enable_api_discovery"]; exists {
+			val := m.GetApiDiscoveryChoice().(*ReplaceSpecType_EnableApiDiscovery).EnableApiDiscovery
+			vOpts := append(opts,
+				db.WithValidateField("api_discovery_choice"),
+				db.WithValidateField("enable_api_discovery"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ReplaceSpecType_DisableApiDiscovery:
+		if fv, exists := v.FldValidators["api_discovery_choice.disable_api_discovery"]; exists {
+			val := m.GetApiDiscoveryChoice().(*ReplaceSpecType_DisableApiDiscovery).DisableApiDiscovery
+			vOpts := append(opts,
+				db.WithValidateField("api_discovery_choice"),
+				db.WithValidateField("disable_api_discovery"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["api_protection_rules"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("api_protection_rules"))
@@ -14900,6 +16651,32 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 
 	}
 
+	switch m.GetClientSideDefenseChoice().(type) {
+	case *ReplaceSpecType_DisableClientSideDefense:
+		if fv, exists := v.FldValidators["client_side_defense_choice.disable_client_side_defense"]; exists {
+			val := m.GetClientSideDefenseChoice().(*ReplaceSpecType_DisableClientSideDefense).DisableClientSideDefense
+			vOpts := append(opts,
+				db.WithValidateField("client_side_defense_choice"),
+				db.WithValidateField("disable_client_side_defense"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ReplaceSpecType_ClientSideDefense:
+		if fv, exists := v.FldValidators["client_side_defense_choice.client_side_defense"]; exists {
+			val := m.GetClientSideDefenseChoice().(*ReplaceSpecType_ClientSideDefense).ClientSideDefense
+			vOpts := append(opts,
+				db.WithValidateField("client_side_defense_choice"),
+				db.WithValidateField("client_side_defense"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["cors_policy"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("cors_policy"))
@@ -14913,6 +16690,42 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 		vOpts := append(opts, db.WithValidateField("data_guard_rules"))
 		if err := fv(ctx, m.GetDataGuardRules(), vOpts...); err != nil {
 			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["ddos_detection_choice"]; exists {
+		val := m.GetDdosDetectionChoice()
+		vOpts := append(opts,
+			db.WithValidateField("ddos_detection_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetDdosDetectionChoice().(type) {
+	case *ReplaceSpecType_EnableDdosDetection:
+		if fv, exists := v.FldValidators["ddos_detection_choice.enable_ddos_detection"]; exists {
+			val := m.GetDdosDetectionChoice().(*ReplaceSpecType_EnableDdosDetection).EnableDdosDetection
+			vOpts := append(opts,
+				db.WithValidateField("ddos_detection_choice"),
+				db.WithValidateField("enable_ddos_detection"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ReplaceSpecType_DisableDdosDetection:
+		if fv, exists := v.FldValidators["ddos_detection_choice.disable_ddos_detection"]; exists {
+			val := m.GetDdosDetectionChoice().(*ReplaceSpecType_DisableDdosDetection).DisableDdosDetection
+			vOpts := append(opts,
+				db.WithValidateField("ddos_detection_choice"),
+				db.WithValidateField("disable_ddos_detection"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
 		}
 
 	}
@@ -15094,6 +16907,42 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 
 	}
 
+	if fv, exists := v.FldValidators["malicious_user_detection_choice"]; exists {
+		val := m.GetMaliciousUserDetectionChoice()
+		vOpts := append(opts,
+			db.WithValidateField("malicious_user_detection_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetMaliciousUserDetectionChoice().(type) {
+	case *ReplaceSpecType_EnableMaliciousUserDetection:
+		if fv, exists := v.FldValidators["malicious_user_detection_choice.enable_malicious_user_detection"]; exists {
+			val := m.GetMaliciousUserDetectionChoice().(*ReplaceSpecType_EnableMaliciousUserDetection).EnableMaliciousUserDetection
+			vOpts := append(opts,
+				db.WithValidateField("malicious_user_detection_choice"),
+				db.WithValidateField("enable_malicious_user_detection"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ReplaceSpecType_DisableMaliciousUserDetection:
+		if fv, exists := v.FldValidators["malicious_user_detection_choice.disable_malicious_user_detection"]; exists {
+			val := m.GetMaliciousUserDetectionChoice().(*ReplaceSpecType_DisableMaliciousUserDetection).DisableMaliciousUserDetection
+			vOpts := append(opts,
+				db.WithValidateField("malicious_user_detection_choice"),
+				db.WithValidateField("disable_malicious_user_detection"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["malicious_user_mitigation"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("malicious_user_mitigation"))
@@ -15101,16 +16950,6 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 			return err
 		}
 
-	}
-
-	if fv, exists := v.FldValidators["ml_config_choice"]; exists {
-		val := m.GetMlConfigChoice()
-		vOpts := append(opts,
-			db.WithValidateField("ml_config_choice"),
-		)
-		if err := fv(ctx, val, vOpts...); err != nil {
-			return err
-		}
 	}
 
 	switch m.GetMlConfigChoice().(type) {
@@ -15433,6 +17272,17 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	}
 	v.FldValidators["api_definition_choice"] = vFn
 
+	vrhApiDiscoveryChoice := v.ApiDiscoveryChoiceValidationRuleHandler
+	rulesApiDiscoveryChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhApiDiscoveryChoice(rulesApiDiscoveryChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ReplaceSpecType.api_discovery_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["api_discovery_choice"] = vFn
+
 	vrhChallengeType := v.ChallengeTypeValidationRuleHandler
 	rulesChallengeType := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -15443,6 +17293,17 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["challenge_type"] = vFn
+
+	vrhDdosDetectionChoice := v.DdosDetectionChoiceValidationRuleHandler
+	rulesDdosDetectionChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhDdosDetectionChoice(rulesDdosDetectionChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ReplaceSpecType.ddos_detection_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["ddos_detection_choice"] = vFn
 
 	vrhHashPolicyChoice := v.HashPolicyChoiceValidationRuleHandler
 	rulesHashPolicyChoice := map[string]string{
@@ -15466,16 +17327,16 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	}
 	v.FldValidators["loadbalancer_type"] = vFn
 
-	vrhMlConfigChoice := v.MlConfigChoiceValidationRuleHandler
-	rulesMlConfigChoice := map[string]string{
+	vrhMaliciousUserDetectionChoice := v.MaliciousUserDetectionChoiceValidationRuleHandler
+	rulesMaliciousUserDetectionChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
 	}
-	vFn, err = vrhMlConfigChoice(rulesMlConfigChoice)
+	vFn, err = vrhMaliciousUserDetectionChoice(rulesMaliciousUserDetectionChoice)
 	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for ReplaceSpecType.ml_config_choice: %s", err)
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ReplaceSpecType.malicious_user_detection_choice: %s", err)
 		panic(errMsg)
 	}
-	v.FldValidators["ml_config_choice"] = vFn
+	v.FldValidators["malicious_user_detection_choice"] = vFn
 
 	vrhRateLimitChoice := v.RateLimitChoiceValidationRuleHandler
 	rulesRateLimitChoice := map[string]string{
@@ -15639,11 +17500,15 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	v.FldValidators["api_definition_choice.api_definitions"] = ApiDefinitionListValidator().Validate
 	v.FldValidators["api_definition_choice.api_definition"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
+	v.FldValidators["api_discovery_choice.enable_api_discovery"] = ApiDiscoverySettingValidator().Validate
+
 	v.FldValidators["bot_defense_choice.bot_defense"] = ShapeBotDefenseTypeValidator().Validate
 
 	v.FldValidators["challenge_type.js_challenge"] = ves_io_schema_virtual_host.JavascriptChallengeTypeValidator().Validate
 	v.FldValidators["challenge_type.captcha_challenge"] = ves_io_schema_virtual_host.CaptchaChallengeTypeValidator().Validate
 	v.FldValidators["challenge_type.policy_based_challenge"] = PolicyBasedChallengeValidator().Validate
+
+	v.FldValidators["client_side_defense_choice.client_side_defense"] = ClientSideDefenseTypeValidator().Validate
 
 	v.FldValidators["hash_policy_choice.cookie_stickiness"] = ves_io_schema_route.CookieForHashingValidator().Validate
 	v.FldValidators["hash_policy_choice.ring_hash"] = HashPolicyListTypeValidator().Validate
@@ -16064,8 +17929,16 @@ func (v *ValidateRouteSimpleAdvancedOptions) EndpointSubsetsValidationRuleHandle
 
 func (v *ValidateRouteSimpleAdvancedOptions) RequestHeadersToAddValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for request_headers_to_add")
+	}
 	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema.HeaderManipulationOptionType, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
 			if err := ves_io_schema.HeaderManipulationOptionTypeValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
@@ -16146,8 +18019,16 @@ func (v *ValidateRouteSimpleAdvancedOptions) RequestHeadersToRemoveValidationRul
 
 func (v *ValidateRouteSimpleAdvancedOptions) ResponseHeadersToAddValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for response_headers_to_add")
+	}
 	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema.HeaderManipulationOptionType, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
 			if err := ves_io_schema.HeaderManipulationOptionTypeValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
@@ -17278,8 +19159,16 @@ type ValidateRouteTypeDirectResponse struct {
 
 func (v *ValidateRouteTypeDirectResponse) HeadersValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for headers")
+	}
 	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema.HeaderMatcherType, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
 			if err := ves_io_schema.HeaderMatcherTypeValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
@@ -17446,8 +19335,16 @@ type ValidateRouteTypeRedirect struct {
 
 func (v *ValidateRouteTypeRedirect) HeadersValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for headers")
+	}
 	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema.HeaderMatcherType, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
 			if err := ves_io_schema.HeaderMatcherTypeValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
@@ -17706,8 +19603,16 @@ func (v *ValidateRouteTypeSimple) HostRewriteParamsHostRewriteValidationRuleHand
 
 func (v *ValidateRouteTypeSimple) OriginPoolsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for origin_pools")
+	}
 	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_views.OriginPoolWithWeight, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
 			if err := ves_io_schema_views.OriginPoolWithWeightValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
@@ -17746,8 +19651,16 @@ func (v *ValidateRouteTypeSimple) OriginPoolsValidationRuleHandler(rules map[str
 
 func (v *ValidateRouteTypeSimple) HeadersValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for headers")
+	}
 	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema.HeaderMatcherType, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
 			if err := ves_io_schema.HeaderMatcherTypeValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
@@ -18545,8 +20458,16 @@ type ValidateServicePolicyList struct {
 
 func (v *ValidateServicePolicyList) PoliciesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for policies")
+	}
 	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_views.ObjectRefType, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
 			if err := ves_io_schema_views.ObjectRefTypeValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
@@ -18700,8 +20621,16 @@ func (v *ValidateShapeBotDefensePolicyType) MobileSdkChoiceValidationRuleHandler
 
 func (v *ValidateShapeBotDefensePolicyType) ProtectedAppEndpointsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for protected_app_endpoints")
+	}
 	itemsValidatorFn := func(ctx context.Context, elems []*AppEndpointType, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
 			if err := AppEndpointTypeValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
@@ -19470,8 +21399,16 @@ type ValidateShapeJavaScriptInsertAllWithExceptionsType struct {
 
 func (v *ValidateShapeJavaScriptInsertAllWithExceptionsType) ExcludeListValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for exclude_list")
+	}
 	itemsValidatorFn := func(ctx context.Context, elems []*ShapeJavaScriptExclusionRule, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
 			if err := ShapeJavaScriptExclusionRuleValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
@@ -19616,8 +21553,16 @@ type ValidateShapeJavaScriptInsertType struct {
 
 func (v *ValidateShapeJavaScriptInsertType) RulesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for rules")
+	}
 	itemsValidatorFn := func(ctx context.Context, elems []*ShapeJavaScriptInsertionRule, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
 			if err := ShapeJavaScriptInsertionRuleValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
@@ -19656,8 +21601,16 @@ func (v *ValidateShapeJavaScriptInsertType) RulesValidationRuleHandler(rules map
 
 func (v *ValidateShapeJavaScriptInsertType) ExcludeListValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for exclude_list")
+	}
 	itemsValidatorFn := func(ctx context.Context, elems []*ShapeJavaScriptExclusionRule, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
 			if err := ShapeJavaScriptExclusionRuleValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
@@ -20845,6 +22798,41 @@ func (r *CreateSpecType) GetApiDefinitionChoiceFromGlobalSpecType(o *GlobalSpecT
 }
 
 // create setters in CreateSpecType from GlobalSpecType for oneof fields
+func (r *CreateSpecType) SetApiDiscoveryChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.ApiDiscoveryChoice.(type) {
+	case nil:
+		o.ApiDiscoveryChoice = nil
+
+	case *CreateSpecType_DisableApiDiscovery:
+		o.ApiDiscoveryChoice = &GlobalSpecType_DisableApiDiscovery{DisableApiDiscovery: of.DisableApiDiscovery}
+
+	case *CreateSpecType_EnableApiDiscovery:
+		o.ApiDiscoveryChoice = &GlobalSpecType_EnableApiDiscovery{EnableApiDiscovery: of.EnableApiDiscovery}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *CreateSpecType) GetApiDiscoveryChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.ApiDiscoveryChoice.(type) {
+	case nil:
+		r.ApiDiscoveryChoice = nil
+
+	case *GlobalSpecType_DisableApiDiscovery:
+		r.ApiDiscoveryChoice = &CreateSpecType_DisableApiDiscovery{DisableApiDiscovery: of.DisableApiDiscovery}
+
+	case *GlobalSpecType_EnableApiDiscovery:
+		r.ApiDiscoveryChoice = &CreateSpecType_EnableApiDiscovery{EnableApiDiscovery: of.EnableApiDiscovery}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+// create setters in CreateSpecType from GlobalSpecType for oneof fields
 func (r *CreateSpecType) SetBotDefenseChoiceToGlobalSpecType(o *GlobalSpecType) error {
 	switch of := r.BotDefenseChoice.(type) {
 	case nil:
@@ -20919,6 +22907,76 @@ func (r *CreateSpecType) GetChallengeTypeFromGlobalSpecType(o *GlobalSpecType) e
 
 	case *GlobalSpecType_PolicyBasedChallenge:
 		r.ChallengeType = &CreateSpecType_PolicyBasedChallenge{PolicyBasedChallenge: of.PolicyBasedChallenge}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+// create setters in CreateSpecType from GlobalSpecType for oneof fields
+func (r *CreateSpecType) SetClientSideDefenseChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.ClientSideDefenseChoice.(type) {
+	case nil:
+		o.ClientSideDefenseChoice = nil
+
+	case *CreateSpecType_ClientSideDefense:
+		o.ClientSideDefenseChoice = &GlobalSpecType_ClientSideDefense{ClientSideDefense: of.ClientSideDefense}
+
+	case *CreateSpecType_DisableClientSideDefense:
+		o.ClientSideDefenseChoice = &GlobalSpecType_DisableClientSideDefense{DisableClientSideDefense: of.DisableClientSideDefense}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *CreateSpecType) GetClientSideDefenseChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.ClientSideDefenseChoice.(type) {
+	case nil:
+		r.ClientSideDefenseChoice = nil
+
+	case *GlobalSpecType_ClientSideDefense:
+		r.ClientSideDefenseChoice = &CreateSpecType_ClientSideDefense{ClientSideDefense: of.ClientSideDefense}
+
+	case *GlobalSpecType_DisableClientSideDefense:
+		r.ClientSideDefenseChoice = &CreateSpecType_DisableClientSideDefense{DisableClientSideDefense: of.DisableClientSideDefense}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+// create setters in CreateSpecType from GlobalSpecType for oneof fields
+func (r *CreateSpecType) SetDdosDetectionChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.DdosDetectionChoice.(type) {
+	case nil:
+		o.DdosDetectionChoice = nil
+
+	case *CreateSpecType_DisableDdosDetection:
+		o.DdosDetectionChoice = &GlobalSpecType_DisableDdosDetection{DisableDdosDetection: of.DisableDdosDetection}
+
+	case *CreateSpecType_EnableDdosDetection:
+		o.DdosDetectionChoice = &GlobalSpecType_EnableDdosDetection{EnableDdosDetection: of.EnableDdosDetection}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *CreateSpecType) GetDdosDetectionChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.DdosDetectionChoice.(type) {
+	case nil:
+		r.DdosDetectionChoice = nil
+
+	case *GlobalSpecType_DisableDdosDetection:
+		r.DdosDetectionChoice = &CreateSpecType_DisableDdosDetection{DisableDdosDetection: of.DisableDdosDetection}
+
+	case *GlobalSpecType_EnableDdosDetection:
+		r.DdosDetectionChoice = &CreateSpecType_EnableDdosDetection{EnableDdosDetection: of.EnableDdosDetection}
 
 	default:
 		return fmt.Errorf("Unknown oneof field %T", of)
@@ -21054,6 +23112,41 @@ func (r *CreateSpecType) GetLoadbalancerTypeFromGlobalSpecType(o *GlobalSpecType
 
 	case *GlobalSpecType_HttpsAutoCert:
 		r.LoadbalancerType = &CreateSpecType_HttpsAutoCert{HttpsAutoCert: of.HttpsAutoCert}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+// create setters in CreateSpecType from GlobalSpecType for oneof fields
+func (r *CreateSpecType) SetMaliciousUserDetectionChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.MaliciousUserDetectionChoice.(type) {
+	case nil:
+		o.MaliciousUserDetectionChoice = nil
+
+	case *CreateSpecType_DisableMaliciousUserDetection:
+		o.MaliciousUserDetectionChoice = &GlobalSpecType_DisableMaliciousUserDetection{DisableMaliciousUserDetection: of.DisableMaliciousUserDetection}
+
+	case *CreateSpecType_EnableMaliciousUserDetection:
+		o.MaliciousUserDetectionChoice = &GlobalSpecType_EnableMaliciousUserDetection{EnableMaliciousUserDetection: of.EnableMaliciousUserDetection}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *CreateSpecType) GetMaliciousUserDetectionChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.MaliciousUserDetectionChoice.(type) {
+	case nil:
+		r.MaliciousUserDetectionChoice = nil
+
+	case *GlobalSpecType_DisableMaliciousUserDetection:
+		r.MaliciousUserDetectionChoice = &CreateSpecType_DisableMaliciousUserDetection{DisableMaliciousUserDetection: of.DisableMaliciousUserDetection}
+
+	case *GlobalSpecType_EnableMaliciousUserDetection:
+		r.MaliciousUserDetectionChoice = &CreateSpecType_EnableMaliciousUserDetection{EnableMaliciousUserDetection: of.EnableMaliciousUserDetection}
 
 	default:
 		return fmt.Errorf("Unknown oneof field %T", of)
@@ -21302,18 +23395,22 @@ func (m *CreateSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool
 	m.AddLocation = f.GetAddLocation()
 	m.GetAdvertiseChoiceFromGlobalSpecType(f)
 	m.GetApiDefinitionChoiceFromGlobalSpecType(f)
+	m.GetApiDiscoveryChoiceFromGlobalSpecType(f)
 	m.ApiProtectionRules = f.GetApiProtectionRules()
 	m.BlockedClients = f.GetBlockedClients()
 	m.GetBotDefenseChoiceFromGlobalSpecType(f)
 	m.GetChallengeTypeFromGlobalSpecType(f)
+	m.GetClientSideDefenseChoiceFromGlobalSpecType(f)
 	m.CorsPolicy = f.GetCorsPolicy()
 	m.DataGuardRules = f.GetDataGuardRules()
+	m.GetDdosDetectionChoiceFromGlobalSpecType(f)
 	m.DdosMitigationRules = f.GetDdosMitigationRules()
 	m.DefaultRoutePools = f.GetDefaultRoutePools()
 	m.Domains = f.GetDomains()
 	m.GetHashPolicyChoiceFromGlobalSpecType(f)
 	m.GetIpReputationChoiceFromGlobalSpecType(f)
 	m.GetLoadbalancerTypeFromGlobalSpecType(f)
+	m.GetMaliciousUserDetectionChoiceFromGlobalSpecType(f)
 	m.MaliciousUserMitigation = f.GetMaliciousUserMitigation()
 	m.GetMlConfigChoiceFromGlobalSpecType(f)
 	m.MoreOption = f.GetMoreOption()
@@ -21345,18 +23442,22 @@ func (m *CreateSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) 
 	f.AddLocation = m1.AddLocation
 	m1.SetAdvertiseChoiceToGlobalSpecType(f)
 	m1.SetApiDefinitionChoiceToGlobalSpecType(f)
+	m1.SetApiDiscoveryChoiceToGlobalSpecType(f)
 	f.ApiProtectionRules = m1.ApiProtectionRules
 	f.BlockedClients = m1.BlockedClients
 	m1.SetBotDefenseChoiceToGlobalSpecType(f)
 	m1.SetChallengeTypeToGlobalSpecType(f)
+	m1.SetClientSideDefenseChoiceToGlobalSpecType(f)
 	f.CorsPolicy = m1.CorsPolicy
 	f.DataGuardRules = m1.DataGuardRules
+	m1.SetDdosDetectionChoiceToGlobalSpecType(f)
 	f.DdosMitigationRules = m1.DdosMitigationRules
 	f.DefaultRoutePools = m1.DefaultRoutePools
 	f.Domains = m1.Domains
 	m1.SetHashPolicyChoiceToGlobalSpecType(f)
 	m1.SetIpReputationChoiceToGlobalSpecType(f)
 	m1.SetLoadbalancerTypeToGlobalSpecType(f)
+	m1.SetMaliciousUserDetectionChoiceToGlobalSpecType(f)
 	f.MaliciousUserMitigation = m1.MaliciousUserMitigation
 	m1.SetMlConfigChoiceToGlobalSpecType(f)
 	f.MoreOption = m1.MoreOption
@@ -21467,6 +23568,41 @@ func (r *GetSpecType) GetApiDefinitionChoiceFromGlobalSpecType(o *GlobalSpecType
 }
 
 // create setters in GetSpecType from GlobalSpecType for oneof fields
+func (r *GetSpecType) SetApiDiscoveryChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.ApiDiscoveryChoice.(type) {
+	case nil:
+		o.ApiDiscoveryChoice = nil
+
+	case *GetSpecType_DisableApiDiscovery:
+		o.ApiDiscoveryChoice = &GlobalSpecType_DisableApiDiscovery{DisableApiDiscovery: of.DisableApiDiscovery}
+
+	case *GetSpecType_EnableApiDiscovery:
+		o.ApiDiscoveryChoice = &GlobalSpecType_EnableApiDiscovery{EnableApiDiscovery: of.EnableApiDiscovery}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *GetSpecType) GetApiDiscoveryChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.ApiDiscoveryChoice.(type) {
+	case nil:
+		r.ApiDiscoveryChoice = nil
+
+	case *GlobalSpecType_DisableApiDiscovery:
+		r.ApiDiscoveryChoice = &GetSpecType_DisableApiDiscovery{DisableApiDiscovery: of.DisableApiDiscovery}
+
+	case *GlobalSpecType_EnableApiDiscovery:
+		r.ApiDiscoveryChoice = &GetSpecType_EnableApiDiscovery{EnableApiDiscovery: of.EnableApiDiscovery}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+// create setters in GetSpecType from GlobalSpecType for oneof fields
 func (r *GetSpecType) SetBotDefenseChoiceToGlobalSpecType(o *GlobalSpecType) error {
 	switch of := r.BotDefenseChoice.(type) {
 	case nil:
@@ -21541,6 +23677,76 @@ func (r *GetSpecType) GetChallengeTypeFromGlobalSpecType(o *GlobalSpecType) erro
 
 	case *GlobalSpecType_PolicyBasedChallenge:
 		r.ChallengeType = &GetSpecType_PolicyBasedChallenge{PolicyBasedChallenge: of.PolicyBasedChallenge}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+// create setters in GetSpecType from GlobalSpecType for oneof fields
+func (r *GetSpecType) SetClientSideDefenseChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.ClientSideDefenseChoice.(type) {
+	case nil:
+		o.ClientSideDefenseChoice = nil
+
+	case *GetSpecType_ClientSideDefense:
+		o.ClientSideDefenseChoice = &GlobalSpecType_ClientSideDefense{ClientSideDefense: of.ClientSideDefense}
+
+	case *GetSpecType_DisableClientSideDefense:
+		o.ClientSideDefenseChoice = &GlobalSpecType_DisableClientSideDefense{DisableClientSideDefense: of.DisableClientSideDefense}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *GetSpecType) GetClientSideDefenseChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.ClientSideDefenseChoice.(type) {
+	case nil:
+		r.ClientSideDefenseChoice = nil
+
+	case *GlobalSpecType_ClientSideDefense:
+		r.ClientSideDefenseChoice = &GetSpecType_ClientSideDefense{ClientSideDefense: of.ClientSideDefense}
+
+	case *GlobalSpecType_DisableClientSideDefense:
+		r.ClientSideDefenseChoice = &GetSpecType_DisableClientSideDefense{DisableClientSideDefense: of.DisableClientSideDefense}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+// create setters in GetSpecType from GlobalSpecType for oneof fields
+func (r *GetSpecType) SetDdosDetectionChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.DdosDetectionChoice.(type) {
+	case nil:
+		o.DdosDetectionChoice = nil
+
+	case *GetSpecType_DisableDdosDetection:
+		o.DdosDetectionChoice = &GlobalSpecType_DisableDdosDetection{DisableDdosDetection: of.DisableDdosDetection}
+
+	case *GetSpecType_EnableDdosDetection:
+		o.DdosDetectionChoice = &GlobalSpecType_EnableDdosDetection{EnableDdosDetection: of.EnableDdosDetection}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *GetSpecType) GetDdosDetectionChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.DdosDetectionChoice.(type) {
+	case nil:
+		r.DdosDetectionChoice = nil
+
+	case *GlobalSpecType_DisableDdosDetection:
+		r.DdosDetectionChoice = &GetSpecType_DisableDdosDetection{DisableDdosDetection: of.DisableDdosDetection}
+
+	case *GlobalSpecType_EnableDdosDetection:
+		r.DdosDetectionChoice = &GetSpecType_EnableDdosDetection{EnableDdosDetection: of.EnableDdosDetection}
 
 	default:
 		return fmt.Errorf("Unknown oneof field %T", of)
@@ -21676,6 +23882,41 @@ func (r *GetSpecType) GetLoadbalancerTypeFromGlobalSpecType(o *GlobalSpecType) e
 
 	case *GlobalSpecType_HttpsAutoCert:
 		r.LoadbalancerType = &GetSpecType_HttpsAutoCert{HttpsAutoCert: of.HttpsAutoCert}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+// create setters in GetSpecType from GlobalSpecType for oneof fields
+func (r *GetSpecType) SetMaliciousUserDetectionChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.MaliciousUserDetectionChoice.(type) {
+	case nil:
+		o.MaliciousUserDetectionChoice = nil
+
+	case *GetSpecType_DisableMaliciousUserDetection:
+		o.MaliciousUserDetectionChoice = &GlobalSpecType_DisableMaliciousUserDetection{DisableMaliciousUserDetection: of.DisableMaliciousUserDetection}
+
+	case *GetSpecType_EnableMaliciousUserDetection:
+		o.MaliciousUserDetectionChoice = &GlobalSpecType_EnableMaliciousUserDetection{EnableMaliciousUserDetection: of.EnableMaliciousUserDetection}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *GetSpecType) GetMaliciousUserDetectionChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.MaliciousUserDetectionChoice.(type) {
+	case nil:
+		r.MaliciousUserDetectionChoice = nil
+
+	case *GlobalSpecType_DisableMaliciousUserDetection:
+		r.MaliciousUserDetectionChoice = &GetSpecType_DisableMaliciousUserDetection{DisableMaliciousUserDetection: of.DisableMaliciousUserDetection}
+
+	case *GlobalSpecType_EnableMaliciousUserDetection:
+		r.MaliciousUserDetectionChoice = &GetSpecType_EnableMaliciousUserDetection{EnableMaliciousUserDetection: of.EnableMaliciousUserDetection}
 
 	default:
 		return fmt.Errorf("Unknown oneof field %T", of)
@@ -21924,13 +24165,16 @@ func (m *GetSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	m.AddLocation = f.GetAddLocation()
 	m.GetAdvertiseChoiceFromGlobalSpecType(f)
 	m.GetApiDefinitionChoiceFromGlobalSpecType(f)
+	m.GetApiDiscoveryChoiceFromGlobalSpecType(f)
 	m.ApiProtectionRules = f.GetApiProtectionRules()
 	m.AutoCertInfo = f.GetAutoCertInfo()
 	m.BlockedClients = f.GetBlockedClients()
 	m.GetBotDefenseChoiceFromGlobalSpecType(f)
 	m.GetChallengeTypeFromGlobalSpecType(f)
+	m.GetClientSideDefenseChoiceFromGlobalSpecType(f)
 	m.CorsPolicy = f.GetCorsPolicy()
 	m.DataGuardRules = f.GetDataGuardRules()
+	m.GetDdosDetectionChoiceFromGlobalSpecType(f)
 	m.DdosMitigationRules = f.GetDdosMitigationRules()
 	m.DefaultRoutePools = f.GetDefaultRoutePools()
 	m.DnsInfo = f.GetDnsInfo()
@@ -21940,6 +24184,7 @@ func (m *GetSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	m.HostName = f.GetHostName()
 	m.GetIpReputationChoiceFromGlobalSpecType(f)
 	m.GetLoadbalancerTypeFromGlobalSpecType(f)
+	m.GetMaliciousUserDetectionChoiceFromGlobalSpecType(f)
 	m.MaliciousUserMitigation = f.GetMaliciousUserMitigation()
 	m.GetMlConfigChoiceFromGlobalSpecType(f)
 	m.MoreOption = f.GetMoreOption()
@@ -21972,13 +24217,16 @@ func (m *GetSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	f.AddLocation = m1.AddLocation
 	m1.SetAdvertiseChoiceToGlobalSpecType(f)
 	m1.SetApiDefinitionChoiceToGlobalSpecType(f)
+	m1.SetApiDiscoveryChoiceToGlobalSpecType(f)
 	f.ApiProtectionRules = m1.ApiProtectionRules
 	f.AutoCertInfo = m1.AutoCertInfo
 	f.BlockedClients = m1.BlockedClients
 	m1.SetBotDefenseChoiceToGlobalSpecType(f)
 	m1.SetChallengeTypeToGlobalSpecType(f)
+	m1.SetClientSideDefenseChoiceToGlobalSpecType(f)
 	f.CorsPolicy = m1.CorsPolicy
 	f.DataGuardRules = m1.DataGuardRules
+	m1.SetDdosDetectionChoiceToGlobalSpecType(f)
 	f.DdosMitigationRules = m1.DdosMitigationRules
 	f.DefaultRoutePools = m1.DefaultRoutePools
 	f.DnsInfo = m1.DnsInfo
@@ -21988,6 +24236,7 @@ func (m *GetSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	f.HostName = m1.HostName
 	m1.SetIpReputationChoiceToGlobalSpecType(f)
 	m1.SetLoadbalancerTypeToGlobalSpecType(f)
+	m1.SetMaliciousUserDetectionChoiceToGlobalSpecType(f)
 	f.MaliciousUserMitigation = m1.MaliciousUserMitigation
 	m1.SetMlConfigChoiceToGlobalSpecType(f)
 	f.MoreOption = m1.MoreOption
@@ -22099,6 +24348,41 @@ func (r *ReplaceSpecType) GetApiDefinitionChoiceFromGlobalSpecType(o *GlobalSpec
 }
 
 // create setters in ReplaceSpecType from GlobalSpecType for oneof fields
+func (r *ReplaceSpecType) SetApiDiscoveryChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.ApiDiscoveryChoice.(type) {
+	case nil:
+		o.ApiDiscoveryChoice = nil
+
+	case *ReplaceSpecType_DisableApiDiscovery:
+		o.ApiDiscoveryChoice = &GlobalSpecType_DisableApiDiscovery{DisableApiDiscovery: of.DisableApiDiscovery}
+
+	case *ReplaceSpecType_EnableApiDiscovery:
+		o.ApiDiscoveryChoice = &GlobalSpecType_EnableApiDiscovery{EnableApiDiscovery: of.EnableApiDiscovery}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *ReplaceSpecType) GetApiDiscoveryChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.ApiDiscoveryChoice.(type) {
+	case nil:
+		r.ApiDiscoveryChoice = nil
+
+	case *GlobalSpecType_DisableApiDiscovery:
+		r.ApiDiscoveryChoice = &ReplaceSpecType_DisableApiDiscovery{DisableApiDiscovery: of.DisableApiDiscovery}
+
+	case *GlobalSpecType_EnableApiDiscovery:
+		r.ApiDiscoveryChoice = &ReplaceSpecType_EnableApiDiscovery{EnableApiDiscovery: of.EnableApiDiscovery}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+// create setters in ReplaceSpecType from GlobalSpecType for oneof fields
 func (r *ReplaceSpecType) SetBotDefenseChoiceToGlobalSpecType(o *GlobalSpecType) error {
 	switch of := r.BotDefenseChoice.(type) {
 	case nil:
@@ -22173,6 +24457,76 @@ func (r *ReplaceSpecType) GetChallengeTypeFromGlobalSpecType(o *GlobalSpecType) 
 
 	case *GlobalSpecType_PolicyBasedChallenge:
 		r.ChallengeType = &ReplaceSpecType_PolicyBasedChallenge{PolicyBasedChallenge: of.PolicyBasedChallenge}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+// create setters in ReplaceSpecType from GlobalSpecType for oneof fields
+func (r *ReplaceSpecType) SetClientSideDefenseChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.ClientSideDefenseChoice.(type) {
+	case nil:
+		o.ClientSideDefenseChoice = nil
+
+	case *ReplaceSpecType_ClientSideDefense:
+		o.ClientSideDefenseChoice = &GlobalSpecType_ClientSideDefense{ClientSideDefense: of.ClientSideDefense}
+
+	case *ReplaceSpecType_DisableClientSideDefense:
+		o.ClientSideDefenseChoice = &GlobalSpecType_DisableClientSideDefense{DisableClientSideDefense: of.DisableClientSideDefense}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *ReplaceSpecType) GetClientSideDefenseChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.ClientSideDefenseChoice.(type) {
+	case nil:
+		r.ClientSideDefenseChoice = nil
+
+	case *GlobalSpecType_ClientSideDefense:
+		r.ClientSideDefenseChoice = &ReplaceSpecType_ClientSideDefense{ClientSideDefense: of.ClientSideDefense}
+
+	case *GlobalSpecType_DisableClientSideDefense:
+		r.ClientSideDefenseChoice = &ReplaceSpecType_DisableClientSideDefense{DisableClientSideDefense: of.DisableClientSideDefense}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+// create setters in ReplaceSpecType from GlobalSpecType for oneof fields
+func (r *ReplaceSpecType) SetDdosDetectionChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.DdosDetectionChoice.(type) {
+	case nil:
+		o.DdosDetectionChoice = nil
+
+	case *ReplaceSpecType_DisableDdosDetection:
+		o.DdosDetectionChoice = &GlobalSpecType_DisableDdosDetection{DisableDdosDetection: of.DisableDdosDetection}
+
+	case *ReplaceSpecType_EnableDdosDetection:
+		o.DdosDetectionChoice = &GlobalSpecType_EnableDdosDetection{EnableDdosDetection: of.EnableDdosDetection}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *ReplaceSpecType) GetDdosDetectionChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.DdosDetectionChoice.(type) {
+	case nil:
+		r.DdosDetectionChoice = nil
+
+	case *GlobalSpecType_DisableDdosDetection:
+		r.DdosDetectionChoice = &ReplaceSpecType_DisableDdosDetection{DisableDdosDetection: of.DisableDdosDetection}
+
+	case *GlobalSpecType_EnableDdosDetection:
+		r.DdosDetectionChoice = &ReplaceSpecType_EnableDdosDetection{EnableDdosDetection: of.EnableDdosDetection}
 
 	default:
 		return fmt.Errorf("Unknown oneof field %T", of)
@@ -22308,6 +24662,41 @@ func (r *ReplaceSpecType) GetLoadbalancerTypeFromGlobalSpecType(o *GlobalSpecTyp
 
 	case *GlobalSpecType_HttpsAutoCert:
 		r.LoadbalancerType = &ReplaceSpecType_HttpsAutoCert{HttpsAutoCert: of.HttpsAutoCert}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+// create setters in ReplaceSpecType from GlobalSpecType for oneof fields
+func (r *ReplaceSpecType) SetMaliciousUserDetectionChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.MaliciousUserDetectionChoice.(type) {
+	case nil:
+		o.MaliciousUserDetectionChoice = nil
+
+	case *ReplaceSpecType_DisableMaliciousUserDetection:
+		o.MaliciousUserDetectionChoice = &GlobalSpecType_DisableMaliciousUserDetection{DisableMaliciousUserDetection: of.DisableMaliciousUserDetection}
+
+	case *ReplaceSpecType_EnableMaliciousUserDetection:
+		o.MaliciousUserDetectionChoice = &GlobalSpecType_EnableMaliciousUserDetection{EnableMaliciousUserDetection: of.EnableMaliciousUserDetection}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *ReplaceSpecType) GetMaliciousUserDetectionChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.MaliciousUserDetectionChoice.(type) {
+	case nil:
+		r.MaliciousUserDetectionChoice = nil
+
+	case *GlobalSpecType_DisableMaliciousUserDetection:
+		r.MaliciousUserDetectionChoice = &ReplaceSpecType_DisableMaliciousUserDetection{DisableMaliciousUserDetection: of.DisableMaliciousUserDetection}
+
+	case *GlobalSpecType_EnableMaliciousUserDetection:
+		r.MaliciousUserDetectionChoice = &ReplaceSpecType_EnableMaliciousUserDetection{EnableMaliciousUserDetection: of.EnableMaliciousUserDetection}
 
 	default:
 		return fmt.Errorf("Unknown oneof field %T", of)
@@ -22556,18 +24945,22 @@ func (m *ReplaceSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy boo
 	m.AddLocation = f.GetAddLocation()
 	m.GetAdvertiseChoiceFromGlobalSpecType(f)
 	m.GetApiDefinitionChoiceFromGlobalSpecType(f)
+	m.GetApiDiscoveryChoiceFromGlobalSpecType(f)
 	m.ApiProtectionRules = f.GetApiProtectionRules()
 	m.BlockedClients = f.GetBlockedClients()
 	m.GetBotDefenseChoiceFromGlobalSpecType(f)
 	m.GetChallengeTypeFromGlobalSpecType(f)
+	m.GetClientSideDefenseChoiceFromGlobalSpecType(f)
 	m.CorsPolicy = f.GetCorsPolicy()
 	m.DataGuardRules = f.GetDataGuardRules()
+	m.GetDdosDetectionChoiceFromGlobalSpecType(f)
 	m.DdosMitigationRules = f.GetDdosMitigationRules()
 	m.DefaultRoutePools = f.GetDefaultRoutePools()
 	m.Domains = f.GetDomains()
 	m.GetHashPolicyChoiceFromGlobalSpecType(f)
 	m.GetIpReputationChoiceFromGlobalSpecType(f)
 	m.GetLoadbalancerTypeFromGlobalSpecType(f)
+	m.GetMaliciousUserDetectionChoiceFromGlobalSpecType(f)
 	m.MaliciousUserMitigation = f.GetMaliciousUserMitigation()
 	m.GetMlConfigChoiceFromGlobalSpecType(f)
 	m.MoreOption = f.GetMoreOption()
@@ -22599,18 +24992,22 @@ func (m *ReplaceSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool)
 	f.AddLocation = m1.AddLocation
 	m1.SetAdvertiseChoiceToGlobalSpecType(f)
 	m1.SetApiDefinitionChoiceToGlobalSpecType(f)
+	m1.SetApiDiscoveryChoiceToGlobalSpecType(f)
 	f.ApiProtectionRules = m1.ApiProtectionRules
 	f.BlockedClients = m1.BlockedClients
 	m1.SetBotDefenseChoiceToGlobalSpecType(f)
 	m1.SetChallengeTypeToGlobalSpecType(f)
+	m1.SetClientSideDefenseChoiceToGlobalSpecType(f)
 	f.CorsPolicy = m1.CorsPolicy
 	f.DataGuardRules = m1.DataGuardRules
+	m1.SetDdosDetectionChoiceToGlobalSpecType(f)
 	f.DdosMitigationRules = m1.DdosMitigationRules
 	f.DefaultRoutePools = m1.DefaultRoutePools
 	f.Domains = m1.Domains
 	m1.SetHashPolicyChoiceToGlobalSpecType(f)
 	m1.SetIpReputationChoiceToGlobalSpecType(f)
 	m1.SetLoadbalancerTypeToGlobalSpecType(f)
+	m1.SetMaliciousUserDetectionChoiceToGlobalSpecType(f)
 	f.MaliciousUserMitigation = m1.MaliciousUserMitigation
 	m1.SetMlConfigChoiceToGlobalSpecType(f)
 	f.MoreOption = m1.MoreOption

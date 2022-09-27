@@ -101,8 +101,16 @@ func (v *ValidateApiGroupBuilder) PathFilterValidationRuleHandler(rules map[stri
 
 func (v *ValidateApiGroupBuilder) IncludedOperationsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for included_operations")
+	}
 	itemsValidatorFn := func(ctx context.Context, elems []*ApiOperation, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
 			if err := ApiOperationValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
@@ -141,8 +149,16 @@ func (v *ValidateApiGroupBuilder) IncludedOperationsValidationRuleHandler(rules 
 
 func (v *ValidateApiGroupBuilder) ExcludedOperationsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for excluded_operations")
+	}
 	itemsValidatorFn := func(ctx context.Context, elems []*ApiOperation, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
 			if err := ApiOperationValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
@@ -360,8 +376,16 @@ func (v *ValidateApiGroupSummary) NameValidationRuleHandler(rules map[string]str
 
 func (v *ValidateApiGroupSummary) ElementsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for elements")
+	}
 	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_api_group_element.GlobalSpecType, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
 			if err := ves_io_schema_api_group_element.GlobalSpecTypeValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}

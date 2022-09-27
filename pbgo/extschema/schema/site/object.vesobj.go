@@ -1280,6 +1280,15 @@ func (v *ValidateStatusObject) Validate(ctx context.Context, pm interface{}, opt
 
 	}
 
+	if fv, exists := v.FldValidators["express_route_status"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("express_route_status"))
+		if err := fv(ctx, e.GetExpressRouteStatus(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["fleet_status"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("fleet_status"))

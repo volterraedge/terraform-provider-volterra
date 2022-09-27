@@ -283,6 +283,138 @@ func AzureExistingSubnetParamTypeValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *AzureExpressRouteType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *AzureExpressRouteType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *AzureExpressRouteType) DeepCopy() *AzureExpressRouteType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &AzureExpressRouteType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *AzureExpressRouteType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *AzureExpressRouteType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return AzureExpressRouteTypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateAzureExpressRouteType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateAzureExpressRouteType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*AzureExpressRouteType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *AzureExpressRouteType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["existing_gateway_subnet"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("existing_gateway_subnet"))
+		if err := fv(ctx, m.GetExistingGatewaySubnet(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["existing_route_server_subnet"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("existing_route_server_subnet"))
+		if err := fv(ctx, m.GetExistingRouteServerSubnet(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["express_route_circuit_info"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("express_route_circuit_info"))
+		for idx, item := range m.GetExpressRouteCircuitInfo() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["new_gateway_subnet"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("new_gateway_subnet"))
+		if err := fv(ctx, m.GetNewGatewaySubnet(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["new_route_server_subnet"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("new_route_server_subnet"))
+		if err := fv(ctx, m.GetNewRouteServerSubnet(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["virtual_network_gateway_sku"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("virtual_network_gateway_sku"))
+		if err := fv(ctx, m.GetVirtualNetworkGatewaySku(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultAzureExpressRouteTypeValidator = func() *ValidateAzureExpressRouteType {
+	v := &ValidateAzureExpressRouteType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	v.FldValidators["new_gateway_subnet"] = AzureSubnetParamTypeValidator().Validate
+
+	v.FldValidators["new_route_server_subnet"] = AzureSubnetParamTypeValidator().Validate
+
+	v.FldValidators["express_route_circuit_info"] = ExpressRouteCircuitInfoValidator().Validate
+
+	return v
+}()
+
+func AzureExpressRouteTypeValidator() db.Validator {
+	return DefaultAzureExpressRouteTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *AzureInstanceType) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -1152,6 +1284,15 @@ func (v *ValidateAzureVnetSiteType) Validate(ctx context.Context, pm interface{}
 
 	}
 
+	if fv, exists := v.FldValidators["express_route"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("express_route"))
+		if err := fv(ctx, m.GetExpressRoute(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["fleet_label"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("fleet_label"))
@@ -1313,11 +1454,147 @@ var DefaultAzureVnetSiteTypeValidator = func() *ValidateAzureVnetSiteType {
 
 	v.FldValidators["availability_set"] = AvailabilitySetsInfoTypeValidator().Validate
 
+	v.FldValidators["express_route"] = AzureExpressRouteTypeValidator().Validate
+
 	return v
 }()
 
 func AzureVnetSiteTypeValidator() db.Validator {
 	return DefaultAzureVnetSiteTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *ExpressRouteCircuitInfo) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *ExpressRouteCircuitInfo) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *ExpressRouteCircuitInfo) DeepCopy() *ExpressRouteCircuitInfo {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &ExpressRouteCircuitInfo{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *ExpressRouteCircuitInfo) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *ExpressRouteCircuitInfo) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return ExpressRouteCircuitInfoValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateExpressRouteCircuitInfo struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateExpressRouteCircuitInfo) ExpressRouteCircuitResourceGroupValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for express_route_circuit_resource_group")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateExpressRouteCircuitInfo) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*ExpressRouteCircuitInfo)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *ExpressRouteCircuitInfo got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["authorization_key"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("authorization_key"))
+		if err := fv(ctx, m.GetAuthorizationKey(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["express_route_circuit_id"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("express_route_circuit_id"))
+		if err := fv(ctx, m.GetExpressRouteCircuitId(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["express_route_circuit_name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("express_route_circuit_name"))
+		if err := fv(ctx, m.GetExpressRouteCircuitName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["express_route_circuit_resource_group"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("express_route_circuit_resource_group"))
+		if err := fv(ctx, m.GetExpressRouteCircuitResourceGroup(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultExpressRouteCircuitInfoValidator = func() *ValidateExpressRouteCircuitInfo {
+	v := &ValidateExpressRouteCircuitInfo{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhExpressRouteCircuitResourceGroup := v.ExpressRouteCircuitResourceGroupValidationRuleHandler
+	rulesExpressRouteCircuitResourceGroup := map[string]string{
+		"ves.io.schema.rules.string.max_len": "64",
+	}
+	vFn, err = vrhExpressRouteCircuitResourceGroup(rulesExpressRouteCircuitResourceGroup)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ExpressRouteCircuitInfo.express_route_circuit_resource_group: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["express_route_circuit_resource_group"] = vFn
+
+	return v
+}()
+
+func ExpressRouteCircuitInfoValidator() db.Validator {
+	return DefaultExpressRouteCircuitInfoValidator
 }
 
 // augmented methods on protoc/std generated struct

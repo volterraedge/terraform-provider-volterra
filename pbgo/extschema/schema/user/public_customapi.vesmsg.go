@@ -1504,6 +1504,10 @@ var DefaultGetUserRoleResponseValidator = func() *ValidateGetUserRoleResponse {
 
 	v.FldValidators["namespace_roles"] = ves_io_schema.NamespaceRoleTypeValidator().Validate
 
+	v.FldValidators["tile_access"] = TileAccessValidator().Validate
+
+	v.FldValidators["addon_service_status"] = AddonServiceStatusValidator().Validate
+
 	v.FldValidators["namespace_access"] = ves_io_schema.NamespaceAccessTypeValidator().Validate
 
 	return v

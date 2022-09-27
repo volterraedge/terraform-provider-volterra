@@ -1260,13 +1260,14 @@ var CustomAPISwaggerJSON string = `{
                 },
                 "ttl": {
                     "type": "integer",
-                    "description": "\n\nExample: - \"3600\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 60\n",
+                    "description": "\n\nExample: - \"3600\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 60\n  ves.io.schema.rules.uint32.lte: 2147483647\n",
                     "title": "TTL",
                     "format": "int64",
                     "x-displayname": "Time to live",
                     "x-ves-example": "3600",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.uint32.gte": "60"
+                        "ves.io.schema.rules.uint32.gte": "60",
+                        "ves.io.schema.rules.uint32.lte": "2147483647"
                     }
                 },
                 "txt_record": {
@@ -1316,57 +1317,62 @@ var CustomAPISwaggerJSON string = `{
             "properties": {
                 "expire": {
                     "type": "integer",
-                    "description": " expire value indicates when secondary nameservers should stop answering request for this zone if primary does not respond\n\nExample: - \"360000\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 0\n",
+                    "description": " expire value indicates when secondary nameservers should stop answering request for this zone if primary does not respond\n\nExample: - \"360000\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 0\n  ves.io.schema.rules.uint32.lte: 2147483647\n",
                     "title": "Expire (in seconds)",
                     "format": "int64",
                     "x-displayname": "Expire",
                     "x-ves-example": "360000",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.uint32.gte": "0"
+                        "ves.io.schema.rules.uint32.gte": "0",
+                        "ves.io.schema.rules.uint32.lte": "2147483647"
                     }
                 },
                 "negative_ttl": {
                     "type": "integer",
-                    "description": " negative ttl value indicates how long to cache non-existent resource record for this zone\n\nExample: - \"1800\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 0\n",
+                    "description": " negative ttl value indicates how long to cache non-existent resource record for this zone\n\nExample: - \"1800\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 0\n  ves.io.schema.rules.uint32.lte: 2147483647\n",
                     "title": "Negative TTL (in seconds)",
                     "format": "int64",
                     "x-displayname": "Negative TTL",
                     "x-ves-example": "1800",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.uint32.gte": "0"
+                        "ves.io.schema.rules.uint32.gte": "0",
+                        "ves.io.schema.rules.uint32.lte": "2147483647"
                     }
                 },
                 "refresh": {
                     "type": "integer",
-                    "description": " refresh value indicates when secondary nameservers should query for the SOA record to detect zone changes\n\nExample: - \"86400\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 3600\n",
+                    "description": " refresh value indicates when secondary nameservers should query for the SOA record to detect zone changes\n\nExample: - \"86400\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 3600\n  ves.io.schema.rules.uint32.lte: 2147483647\n",
                     "title": "Refresh (in seconds)",
                     "format": "int64",
                     "x-displayname": "Refresh interval",
                     "x-ves-example": "86400",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.uint32.gte": "3600"
+                        "ves.io.schema.rules.uint32.gte": "3600",
+                        "ves.io.schema.rules.uint32.lte": "2147483647"
                     }
                 },
                 "retry": {
                     "type": "integer",
-                    "description": " retry value indicates when secondary nameservers should retry to request the serial number if primary does not respond\n\nExample: - \"7200\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 60\n",
+                    "description": " retry value indicates when secondary nameservers should retry to request the serial number if primary does not respond\n\nExample: - \"7200\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 60\n  ves.io.schema.rules.uint32.lte: 2147483647\n",
                     "title": "Retry (in seconds)",
                     "format": "int64",
                     "x-displayname": "Retry interval",
                     "x-ves-example": "7200",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.uint32.gte": "60"
+                        "ves.io.schema.rules.uint32.gte": "60",
+                        "ves.io.schema.rules.uint32.lte": "2147483647"
                     }
                 },
                 "ttl": {
                     "type": "integer",
-                    "description": " SOA record time to live (in seconds)\n\nExample: - \"86400\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 0\n",
+                    "description": " SOA record time to live (in seconds)\n\nExample: - \"86400\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 0\n  ves.io.schema.rules.uint32.lte: 2147483647\n",
                     "title": "TTL",
                     "format": "int64",
                     "x-displayname": "TTL",
                     "x-ves-example": "86400",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.uint32.gte": "0"
+                        "ves.io.schema.rules.uint32.gte": "0",
+                        "ves.io.schema.rules.uint32.lte": "2147483647"
                     }
                 }
             }

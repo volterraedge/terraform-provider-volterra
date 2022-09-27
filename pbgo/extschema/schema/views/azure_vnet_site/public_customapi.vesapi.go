@@ -670,6 +670,21 @@ var CustomAPISwaggerJSON string = `{
             "x-displayname": "Azure VNet Site Information Config",
             "x-ves-proto-message": "ves.io.schema.views.azure_vnet_site.AzureVnetSiteInfoType",
             "properties": {
+                "express_route_info": {
+                    "description": " Express Route Info",
+                    "title": "Express Route Info",
+                    "$ref": "#/definitions/azure_vnet_siteExpressRouteInfo",
+                    "x-displayname": "Express Route Info"
+                },
+                "node_info": {
+                    "type": "array",
+                    "description": " Azure Node Name",
+                    "title": "Azure Node Name",
+                    "items": {
+                        "$ref": "#/definitions/azure_vnet_siteNodeInstanceNameType"
+                    },
+                    "x-displayname": "Azure Node Name"
+                },
                 "private_ips": {
                     "type": "array",
                     "description": " Azure VM Private IPs used by the nodes\n\nExample: - \"10.0.0.1, 10.0.0.2, 10.0.0.3\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.items.string.ip: true\n  ves.io.schema.rules.repeated.num_items: 0,1,3\n  ves.io.schema.rules.repeated.unique: true\n",
@@ -715,6 +730,70 @@ var CustomAPISwaggerJSON string = `{
                     "x-displayname": "Azure Spoke VNet Prefix Information",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.repeated.max_items": "500"
+                    }
+                }
+            }
+        },
+        "azure_vnet_siteExpressRouteInfo": {
+            "type": "object",
+            "description": "Express Route Info",
+            "title": "Express Route Info",
+            "x-displayname": "Express Route Info",
+            "x-ves-proto-message": "ves.io.schema.views.azure_vnet_site.ExpressRouteInfo",
+            "properties": {
+                "route_server_asn": {
+                    "type": "integer",
+                    "description": " Route Server ASN\n\nExample: - \"65441\"-",
+                    "title": "Route Server ASN",
+                    "format": "int64",
+                    "x-displayname": "Route Server ASN",
+                    "x-ves-example": "65441"
+                },
+                "route_server_ips": {
+                    "type": "array",
+                    "description": " Route Server IPs\n\nExample: - \"10.0.0.1\"-",
+                    "title": "Route Server IPs",
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-displayname": "Route Server IPs",
+                    "x-ves-example": "10.0.0.1"
+                }
+            }
+        },
+        "azure_vnet_siteNodeInstanceNameType": {
+            "type": "object",
+            "description": "Node Instance Name",
+            "title": "Node Instance Name",
+            "x-displayname": "Node Instance Name",
+            "x-ves-proto-message": "ves.io.schema.views.azure_vnet_site.NodeInstanceNameType",
+            "properties": {
+                "node_id": {
+                    "type": "string",
+                    "description": " Node ID Information\n\nExample: - \"ves-node-id-xxxxxx\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 64\n  ves.io.schema.rules.string.min_len: 1\n",
+                    "title": "Node ID",
+                    "minLength": 1,
+                    "maxLength": 64,
+                    "x-displayname": "Node ID",
+                    "x-ves-example": "ves-node-id-xxxxxx",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.max_len": "64",
+                        "ves.io.schema.rules.string.min_len": "1"
+                    }
+                },
+                "node_instance_name": {
+                    "type": "string",
+                    "description": " Node Instance Name used by dataplane\n\nExample: - \"ip-1-2-3-4-site1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 64\n  ves.io.schema.rules.string.min_len: 1\n",
+                    "title": "Node Instance Name",
+                    "minLength": 1,
+                    "maxLength": 64,
+                    "x-displayname": "Node Instance Name",
+                    "x-ves-example": "ip-1-2-3-4-site1",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "64",
+                        "ves.io.schema.rules.string.min_len": "1"
                     }
                 }
             }

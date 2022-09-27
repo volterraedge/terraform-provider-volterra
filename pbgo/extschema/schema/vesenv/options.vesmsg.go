@@ -1676,6 +1676,28 @@ func (v *ValidateServiceSlugChoice) Validate(ctx context.Context, pm interface{}
 				return err
 			}
 		}
+	case *ServiceSlugChoice_Safeap:
+		if fv, exists := v.FldValidators["choice.safeap"]; exists {
+			val := m.GetChoice().(*ServiceSlugChoice_Safeap).Safeap
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("safeap"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ServiceSlugChoice_Aip:
+		if fv, exists := v.FldValidators["choice.aip"]; exists {
+			val := m.GetChoice().(*ServiceSlugChoice_Aip).Aip
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("aip"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 

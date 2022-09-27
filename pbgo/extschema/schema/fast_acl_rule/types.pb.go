@@ -177,6 +177,7 @@ type GlobalSpecType struct {
 	//
 	// x-displayName: "Source Ports"
 	// x-example: ALL / DNS / 1234
+	// x-required
 	// L4 port numbers to match
 	Port []*schema.PortValueType `protobuf:"bytes,3,rep,name=port,proto3" json:"port,omitempty"`
 	// source

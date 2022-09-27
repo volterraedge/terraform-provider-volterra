@@ -78,6 +78,33 @@ func (v *ValidateGetManagedTenantListReq) Validate(ctx context.Context, pm inter
 		return nil
 	}
 
+	if fv, exists := v.FldValidators["page_limit"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("page_limit"))
+		if err := fv(ctx, m.GetPageLimit(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["page_start"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("page_start"))
+		if err := fv(ctx, m.GetPageStart(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["search_keyword"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("search_keyword"))
+		if err := fv(ctx, m.GetSearchKeyword(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	return nil
 }
 
@@ -186,6 +213,24 @@ func (v *ValidateGetManagedTenantListResp) Validate(ctx context.Context, pm inte
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["next_page"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("next_page"))
+		if err := fv(ctx, m.GetNextPage(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["total_access_config_count"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("total_access_config_count"))
+		if err := fv(ctx, m.GetTotalAccessConfigCount(), vOpts...); err != nil {
+			return err
 		}
 
 	}

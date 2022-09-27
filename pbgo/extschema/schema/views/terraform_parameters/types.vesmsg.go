@@ -78,6 +78,15 @@ func (v *ValidateApplyStatus) Validate(ctx context.Context, pm interface{}, opts
 		return nil
 	}
 
+	if fv, exists := v.FldValidators["container_version"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("container_version"))
+		if err := fv(ctx, m.GetContainerVersion(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["error_output"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("error_output"))

@@ -1207,7 +1207,7 @@ var CustomAPISwaggerJSON string = `{
                 },
                 "subnet_ids": {
                     "type": "array",
-                    "description": " AWS Subnet Ids used by volterra site\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.num_items: 0, 1,3\n",
+                    "description": " AWS Subnet Ids used by volterra site\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.num_items: 0,1,3\n",
                     "title": "AWS Subnet Ids Info",
                     "items": {
                         "$ref": "#/definitions/viewsAWSSubnetIdsType"
@@ -1216,7 +1216,7 @@ var CustomAPISwaggerJSON string = `{
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true",
-                        "ves.io.schema.rules.repeated.num_items": "0, 1,3"
+                        "ves.io.schema.rules.repeated.num_items": "0,1,3"
                     }
                 },
                 "tgw_id": {

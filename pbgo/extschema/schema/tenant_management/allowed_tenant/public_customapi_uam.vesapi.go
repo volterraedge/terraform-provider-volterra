@@ -36,10 +36,19 @@ type CustomAPIGrpcClient struct {
 	rpcFns map[string]func(context.Context, string, ...grpc.CallOption) (proto.Message, error)
 }
 
-func (c *CustomAPIGrpcClient) doRPCGetSupportTenantAccess(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
-	req := &GetSupportTenantAccessReq{}
+func (c *CustomAPIGrpcClient) doRPCGetAllowedTenantAccess(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
+	req := &GetTenantAccessReq{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
-		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.tenant_management.allowed_tenant.GetSupportTenantAccessReq", yamlReq)
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.tenant_management.allowed_tenant.GetTenantAccessReq", yamlReq)
+	}
+	rsp, err := c.grpcClient.GetAllowedTenantAccess(ctx, req, opts...)
+	return rsp, err
+}
+
+func (c *CustomAPIGrpcClient) doRPCGetSupportTenantAccess(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
+	req := &GetTenantAccessReq{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.tenant_management.allowed_tenant.GetTenantAccessReq", yamlReq)
 	}
 	rsp, err := c.grpcClient.GetSupportTenantAccess(ctx, req, opts...)
 	return rsp, err
@@ -84,6 +93,8 @@ func NewCustomAPIGrpcClient(cc *grpc.ClientConn) server.CustomClient {
 		grpcClient: NewCustomAPIClient(cc),
 	}
 	rpcFns := make(map[string]func(context.Context, string, ...grpc.CallOption) (proto.Message, error))
+	rpcFns["GetAllowedTenantAccess"] = ccl.doRPCGetAllowedTenantAccess
+
 	rpcFns["GetSupportTenantAccess"] = ccl.doRPCGetSupportTenantAccess
 
 	rpcFns["UpdateSupportTenantAccess"] = ccl.doRPCUpdateSupportTenantAccess
@@ -101,16 +112,16 @@ type CustomAPIRestClient struct {
 	rpcFns map[string]func(context.Context, *server.CustomCallOpts) (proto.Message, error)
 }
 
-func (c *CustomAPIRestClient) doRPCGetSupportTenantAccess(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
+func (c *CustomAPIRestClient) doRPCGetAllowedTenantAccess(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
 	}
 	url := fmt.Sprintf("%s%s", c.baseURL, callOpts.URI)
 
 	yamlReq := callOpts.YAMLReq
-	req := &GetSupportTenantAccessReq{}
+	req := &GetTenantAccessReq{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
-		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.tenant_management.allowed_tenant.GetSupportTenantAccessReq: %s", yamlReq, err)
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.tenant_management.allowed_tenant.GetTenantAccessReq: %s", yamlReq, err)
 	}
 
 	var hReq *http.Request
@@ -172,9 +183,92 @@ func (c *CustomAPIRestClient) doRPCGetSupportTenantAccess(ctx context.Context, c
 	if err != nil {
 		return nil, errors.Wrap(err, "Custom API RestClient read body")
 	}
-	pbRsp := &GetSupportTenantAccessResp{}
+	pbRsp := &GetTenantAccessResp{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
-		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.tenant_management.allowed_tenant.GetSupportTenantAccessResp", body)
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.tenant_management.allowed_tenant.GetTenantAccessResp", body)
+
+	}
+	if callOpts.OutCallResponse != nil {
+		callOpts.OutCallResponse.ProtoMsg = pbRsp
+		callOpts.OutCallResponse.JSON = string(body)
+	}
+	return pbRsp, nil
+}
+
+func (c *CustomAPIRestClient) doRPCGetSupportTenantAccess(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
+	if callOpts.URI == "" {
+		return nil, fmt.Errorf("Error, URI should be specified, got empty")
+	}
+	url := fmt.Sprintf("%s%s", c.baseURL, callOpts.URI)
+
+	yamlReq := callOpts.YAMLReq
+	req := &GetTenantAccessReq{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.tenant_management.allowed_tenant.GetTenantAccessReq: %s", yamlReq, err)
+	}
+
+	var hReq *http.Request
+	hm := strings.ToLower(callOpts.HTTPMethod)
+	switch hm {
+	case "post", "put":
+		jsn, err := codec.ToJSON(req, codec.ToWithUseProtoFieldName())
+		if err != nil {
+			return nil, errors.Wrap(err, "Custom RestClient converting YAML to JSON")
+		}
+		var op string
+		if hm == "post" {
+			op = http.MethodPost
+		} else {
+			op = http.MethodPut
+		}
+		newReq, err := http.NewRequest(op, url, bytes.NewBuffer([]byte(jsn)))
+		if err != nil {
+			return nil, errors.Wrapf(err, "Creating new HTTP %s request for custom API", op)
+		}
+		hReq = newReq
+	case "get":
+		newReq, err := http.NewRequest(http.MethodGet, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP GET request for custom API")
+		}
+		hReq = newReq
+		q := hReq.URL.Query()
+		_ = q
+		q.Add("name", fmt.Sprintf("%v", req.Name))
+
+		hReq.URL.RawQuery += q.Encode()
+	case "delete":
+		newReq, err := http.NewRequest(http.MethodDelete, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP DELETE request for custom API")
+		}
+		hReq = newReq
+	default:
+		return nil, fmt.Errorf("Error, invalid/empty HTTPMethod(%s) specified, should be POST|DELETE|GET", callOpts.HTTPMethod)
+	}
+	hReq = hReq.WithContext(ctx)
+	hReq.Header.Set("Content-Type", "application/json")
+	client.AddHdrsToReq(callOpts.Headers, hReq)
+
+	rsp, err := c.client.Do(hReq)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient")
+	}
+	defer rsp.Body.Close()
+
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
+		body, err := ioutil.ReadAll(rsp.Body)
+		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
+	}
+
+	body, err := ioutil.ReadAll(rsp.Body)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient read body")
+	}
+	pbRsp := &GetTenantAccessResp{}
+	if err := codec.FromJSON(string(body), pbRsp); err != nil {
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.tenant_management.allowed_tenant.GetTenantAccessResp", body)
 
 	}
 	if callOpts.OutCallResponse != nil {
@@ -292,6 +386,8 @@ func NewCustomAPIRestClient(baseURL string, hc http.Client) server.CustomClient 
 	}
 
 	rpcFns := make(map[string]func(context.Context, *server.CustomCallOpts) (proto.Message, error))
+	rpcFns["GetAllowedTenantAccess"] = ccl.doRPCGetAllowedTenantAccess
+
 	rpcFns["GetSupportTenantAccess"] = ccl.doRPCGetSupportTenantAccess
 
 	rpcFns["UpdateSupportTenantAccess"] = ccl.doRPCUpdateSupportTenantAccess
@@ -308,7 +404,10 @@ type customAPIInprocClient struct {
 	CustomAPIServer
 }
 
-func (c *customAPIInprocClient) GetSupportTenantAccess(ctx context.Context, in *GetSupportTenantAccessReq, opts ...grpc.CallOption) (*GetSupportTenantAccessResp, error) {
+func (c *customAPIInprocClient) GetAllowedTenantAccess(ctx context.Context, in *GetTenantAccessReq, opts ...grpc.CallOption) (*GetTenantAccessResp, error) {
+	return c.CustomAPIServer.GetAllowedTenantAccess(ctx, in)
+}
+func (c *customAPIInprocClient) GetSupportTenantAccess(ctx context.Context, in *GetTenantAccessReq, opts ...grpc.CallOption) (*GetTenantAccessResp, error) {
 	return c.CustomAPIServer.GetSupportTenantAccess(ctx, in)
 }
 func (c *customAPIInprocClient) UpdateSupportTenantAccess(ctx context.Context, in *UpdateSupportTenantAccessReq, opts ...grpc.CallOption) (*UpdateSupportTenantAccessResp, error) {
@@ -336,7 +435,7 @@ type customAPISrv struct {
 	svc svcfw.Service
 }
 
-func (s *customAPISrv) GetSupportTenantAccess(ctx context.Context, in *GetSupportTenantAccessReq) (*GetSupportTenantAccessResp, error) {
+func (s *customAPISrv) GetAllowedTenantAccess(ctx context.Context, in *GetTenantAccessReq) (*GetTenantAccessResp, error) {
 	ah := s.svc.GetAPIHandler("ves.io.schema.tenant_management.allowed_tenant.CustomAPI")
 	cah, ok := ah.(CustomAPIServer)
 	if !ok {
@@ -344,11 +443,60 @@ func (s *customAPISrv) GetSupportTenantAccess(ctx context.Context, in *GetSuppor
 	}
 
 	var (
-		rsp *GetSupportTenantAccessResp
+		rsp *GetTenantAccessResp
 		err error
 	)
 
-	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.tenant_management.allowed_tenant.GetSupportTenantAccessReq", in)
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.tenant_management.allowed_tenant.GetTenantAccessReq", in)
+	defer func() {
+		if len(bodyFields) > 0 {
+			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
+		}
+		userMsg := "The 'CustomAPI.GetAllowedTenantAccess' operation on 'allowed_tenant'"
+		if err == nil {
+			userMsg += " was successfully performed."
+		} else {
+			userMsg += " failed to be performed."
+		}
+		server.AddUserMsgToAPIAudit(ctx, userMsg)
+	}()
+
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
+
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.tenant_management.allowed_tenant.CustomAPI.GetAllowedTenantAccess"); rvFn != nil {
+			if verr := rvFn(ctx, in); verr != nil {
+				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
+				return nil, server.GRPCStatusFromError(err).Err()
+			}
+		}
+	}
+
+	rsp, err = cah.GetAllowedTenantAccess(ctx, in)
+	if err != nil {
+		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
+	}
+
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.tenant_management.allowed_tenant.GetTenantAccessResp", rsp)...)
+
+	return rsp, nil
+}
+func (s *customAPISrv) GetSupportTenantAccess(ctx context.Context, in *GetTenantAccessReq) (*GetTenantAccessResp, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.tenant_management.allowed_tenant.CustomAPI")
+	cah, ok := ah.(CustomAPIServer)
+	if !ok {
+		return nil, fmt.Errorf("ah %v is not of type *CustomAPIServer", ah)
+	}
+
+	var (
+		rsp *GetTenantAccessResp
+		err error
+	)
+
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.tenant_management.allowed_tenant.GetTenantAccessReq", in)
 	defer func() {
 		if len(bodyFields) > 0 {
 			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
@@ -381,7 +529,7 @@ func (s *customAPISrv) GetSupportTenantAccess(ctx context.Context, in *GetSuppor
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
 
-	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.tenant_management.allowed_tenant.GetSupportTenantAccessResp", rsp)...)
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.tenant_management.allowed_tenant.GetTenantAccessResp", rsp)...)
 
 	return rsp, nil
 }
@@ -461,7 +609,7 @@ var CustomAPISwaggerJSON string = `{
     ],
     "tags": [],
     "paths": {
-        "/public/namespaces/system/allowed_tenants/{name}/access": {
+        "/public/namespaces/system/allowed_tenants/support-tenant/access": {
             "get": {
                 "summary": "Get Support Tenant Access",
                 "description": "Get current access details for the support tenant.\nName is well-known identifier for a specific support related tenant.",
@@ -470,7 +618,7 @@ var CustomAPISwaggerJSON string = `{
                     "200": {
                         "description": "A successful response.",
                         "schema": {
-                            "$ref": "#/definitions/allowed_tenantGetSupportTenantAccessResp"
+                            "$ref": "#/definitions/allowed_tenantGetTenantAccessResp"
                         }
                     },
                     "401": {
@@ -525,9 +673,9 @@ var CustomAPISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "name",
-                        "description": "Name\n\nx-example: \"l1-support\"\nwell-known name of the support tenant config object.",
-                        "in": "path",
-                        "required": true,
+                        "description": "x-example: \"l1-support\"\nwell-known name of the support tenant config object.",
+                        "in": "query",
+                        "required": false,
                         "type": "string",
                         "x-displayname": "Name"
                     }
@@ -603,14 +751,6 @@ var CustomAPISwaggerJSON string = `{
                 },
                 "parameters": [
                     {
-                        "name": "name",
-                        "description": "Name\n\nx-example: \"l1-support\"\nwell-known name of the support tenant config object.",
-                        "in": "path",
-                        "required": true,
-                        "type": "string",
-                        "x-displayname": "Name"
-                    },
-                    {
                         "name": "body",
                         "in": "body",
                         "required": true,
@@ -627,6 +767,90 @@ var CustomAPISwaggerJSON string = `{
                     "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-tenant_management-allowed_tenant-customapi-updatesupporttenantaccess"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.tenant_management.allowed_tenant.CustomAPI.UpdateSupportTenantAccess"
+            },
+            "x-displayname": "Allowed Tenant - UAM Manager Custom APIs",
+            "x-ves-proto-service": "ves.io.schema.tenant_management.allowed_tenant.CustomAPI",
+            "x-ves-proto-service-type": "CUSTOM_PUBLIC"
+        },
+        "/public/namespaces/system/allowed_tenants/{name}/access": {
+            "get": {
+                "summary": "Get Allowed Tenant Access",
+                "description": "Get current access details for the allowed tenant.\nName is well-known identifier for a specific allowed related tenant.",
+                "operationId": "ves.io.schema.tenant_management.allowed_tenant.CustomAPI.GetAllowedTenantAccess",
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/allowed_tenantGetTenantAccessResp"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "name",
+                        "description": "Name\n\nx-example: \"l1-support\"\nwell-known name of the support tenant config object.",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "x-displayname": "Name"
+                    }
+                ],
+                "tags": [
+                    "CustomAPI"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-tenant_management-allowed_tenant-customapi-getallowedtenantaccess"
+                },
+                "x-ves-proto-rpc": "ves.io.schema.tenant_management.allowed_tenant.CustomAPI.GetAllowedTenantAccess"
             },
             "x-displayname": "Allowed Tenant - UAM Manager Custom APIs",
             "x-ves-proto-service": "ves.io.schema.tenant_management.allowed_tenant.CustomAPI",
@@ -697,12 +921,12 @@ var CustomAPISwaggerJSON string = `{
                 }
             }
         },
-        "allowed_tenantGetSupportTenantAccessResp": {
+        "allowed_tenantGetTenantAccessResp": {
             "type": "object",
-            "description": "Response to get access control configurations for a support tenant.",
-            "title": "GetSupportTenantAccessResp",
-            "x-displayname": "Get Support Tenant Access Response",
-            "x-ves-proto-message": "ves.io.schema.tenant_management.allowed_tenant.GetSupportTenantAccessResp",
+            "description": "Response to get access control configurations for a allowed/support tenant.",
+            "title": "GetTenantAccessResp",
+            "x-displayname": "Get Tenant Access Response",
+            "x-ves-proto-message": "ves.io.schema.tenant_management.allowed_tenant.GetTenantAccessResp",
             "properties": {
                 "access_config": {
                     "description": " Allowed access configuration details for the tenant.",

@@ -100,14 +100,29 @@ func NewObjectGetReq(uid string, opts ...server.CRUDCallOpt) *ObjectGetReq {
 	for _, o := range opts {
 		o(ccOpts)
 	}
-
 	req := &ObjectGetReq{ObjectUid: uid, AllBackrefs: ccOpts.AllBR, BackrefTypes: ccOpts.TypesBR}
 	req.IncludeReferredId = ccOpts.IncludeReferredID
 	return req
 }
 
-func NewObjectListReq(opts ...server.CRUDCallOpt) *ObjectListReq {
-	return &ObjectListReq{}
+func newObjectListReqFrom(cco *server.CrudCallOpts) (*ObjectListReq, error) {
+	r := &ObjectListReq{
+		TenantFilter:      cco.TenantFilter,
+		NamespaceFilter:   cco.NamespaceFilter,
+		ReportFields:      cco.ReportFields,
+		IncludeReferredId: cco.IncludeReferredID,
+	}
+	switch len(cco.LabelFilter) {
+	case 0:
+	case 1:
+		r.LabelFilter = cco.LabelFilter[0]
+	default:
+		return nil, fmt.Errorf("Only one label selector expression can be provided, got %d: %s", len(cco.LabelFilter), cco.LabelFilter)
+	}
+	if cco.OutResourceVersion != nil {
+		r.ResourceVersion = true
+	}
+	return r, nil
 }
 
 func NewObjectDeleteReq(uid string) *ObjectDeleteReq {
@@ -252,29 +267,16 @@ func (c *crudAPIGrpcClient) ListItems(ctx context.Context, opts ...server.CRUDCa
 }
 
 func (c *crudAPIGrpcClient) List(ctx context.Context, opts ...server.CRUDCallOpt) (*ObjectListRsp, error) {
-	req := NewObjectListReq()
 	cco := server.NewCRUDCallOpts()
 	for _, opt := range opts {
 		opt(cco)
 	}
+	req, err := newObjectListReqFrom(cco)
+	if err != nil {
+		return nil, err
+	}
 	ctx = client.AddHdrsToCtx(cco.Headers, ctx)
-	req.TenantFilter = cco.TenantFilter
-	req.NamespaceFilter = cco.NamespaceFilter
-	switch len(cco.LabelFilter) {
-	case 0:
-	case 1:
-		req.LabelFilter = cco.LabelFilter[0]
-	default:
-		return nil, fmt.Errorf("Only one label selector expression can be provided, got %d: %s", len(cco.LabelFilter), cco.LabelFilter)
-	}
-	req.ReportFields = cco.ReportFields
-
-	req.IncludeReferredId = cco.IncludeReferredID
-	if cco.OutResourceVersion != nil {
-		req.ResourceVersion = true
-	}
 	rsp, err := c.grpcClient.List(ctx, req, cco.GrpcCallOpts...)
-
 	if cco.OutCallResponse != nil {
 		cco.OutCallResponse.ProtoMsg = rsp
 	}
@@ -286,24 +288,15 @@ func (c *crudAPIGrpcClient) List(ctx context.Context, opts ...server.CRUDCallOpt
 
 func (c *crudAPIGrpcClient) ListStream(ctx context.Context, opts ...server.CRUDCallOpt) (server.ListStreamRsp, error) {
 
-	req := NewObjectListReq()
 	cco := server.NewCRUDCallOpts()
 	for _, opt := range opts {
 		opt(cco)
 	}
-	ctx = client.AddHdrsToCtx(cco.Headers, ctx)
-	req.TenantFilter = cco.TenantFilter
-	req.NamespaceFilter = cco.NamespaceFilter
-	switch len(cco.LabelFilter) {
-	case 0:
-	case 1:
-		req.LabelFilter = cco.LabelFilter[0]
-	default:
-		return nil, fmt.Errorf("Only one label selector expression can be provided, got %d: %s", len(cco.LabelFilter), cco.LabelFilter)
+	req, err := newObjectListReqFrom(cco)
+	if err != nil {
+		return nil, err
 	}
-	req.ReportFields = cco.ReportFields
-
-	req.IncludeReferredId = cco.IncludeReferredID
+	ctx = client.AddHdrsToCtx(cco.Headers, ctx)
 	stream, err := c.grpcClient.ListStream(ctx, req, cco.GrpcCallOpts...)
 	if err != nil {
 		return nil, errors.Wrap(err, "Listing with grpc client")
@@ -674,6 +667,7 @@ func (c *crudAPIRestClient) List(ctx context.Context, opts ...server.CRUDCallOpt
 	if cco.OutResourceVersion != nil {
 		q.Add("resource_version", "true")
 	}
+
 	hReq.URL.RawQuery += q.Encode()
 	rsp, err := c.client.Do(hReq)
 	if err != nil {
@@ -979,28 +973,15 @@ func (c *crudAPIInprocClient) List(ctx context.Context, opts ...server.CRUDCallO
 	if !ok {
 		return nil, fmt.Errorf("No CRUD Server for ves.io.schema.dns_zone.crudapi")
 	}
-
 	cco := server.NewCRUDCallOpts()
 	for _, opt := range opts {
 		opt(cco)
 	}
-
-	req := NewObjectListReq()
-	req.TenantFilter = cco.TenantFilter
-	req.NamespaceFilter = cco.NamespaceFilter
-	switch len(cco.LabelFilter) {
-	case 0:
-	case 1:
-		req.LabelFilter = cco.LabelFilter[0]
-	default:
-		return nil, fmt.Errorf("Only one label selector expression can be provided, got %d: %s", len(cco.LabelFilter), cco.LabelFilter)
-	}
-
-	if cco.OutResourceVersion != nil {
-		req.ResourceVersion = true
+	req, err := newObjectListReqFrom(cco)
+	if err != nil {
+		return nil, err
 	}
 	rsp, err := oah.List(ctx, req)
-
 	if cco.OutCallResponse != nil {
 		cco.OutCallResponse.ProtoMsg = rsp
 	}
@@ -1167,7 +1148,7 @@ func (s *APISrv) List(ctx context.Context, req *ObjectListReq) (*ObjectListRsp, 
 			}
 		}
 	}
-	var merr *multierror.Error
+	var merr error
 	rsrcReq := &server.ResourceListRequest{
 		TenantFilter:       req.TenantFilter,
 		NamespaceFilter:    req.NamespaceFilter,
@@ -1185,7 +1166,7 @@ func (s *APISrv) List(ctx context.Context, req *ObjectListReq) (*ObjectListRsp, 
 		merr = multierror.Append(merr, err)
 	}
 	rsp.Metadata.ResourceVersion = rsrcRsp.ResourceVersion
-	return rsp, errors.ErrOrNil(merr)
+	return rsp, merr
 }
 
 func (s *APISrv) ListStream(req *ObjectListReq, stream API_ListStreamServer) error {
@@ -3345,13 +3326,14 @@ var APISwaggerJSON string = `{
                 },
                 "ttl": {
                     "type": "integer",
-                    "description": " DNSSEC TTL https://datatracker.ietf.org/doc/html/rfc4034#section-5.1.4\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "description": " DNSSEC TTL https://datatracker.ietf.org/doc/html/rfc4034#section-5.1.4\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.uint32.lte: 2147483647\n",
                     "title": "DNSSEC TTL",
                     "format": "int64",
                     "x-displayname": "DNSSEC TTL",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.uint32.lte": "2147483647"
                     }
                 }
             }
@@ -3550,13 +3532,14 @@ var APISwaggerJSON string = `{
                 },
                 "ttl": {
                     "type": "integer",
-                    "description": "\n\nExample: - \"3600\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 60\n",
+                    "description": "\n\nExample: - \"3600\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 60\n  ves.io.schema.rules.uint32.lte: 2147483647\n",
                     "title": "TTL",
                     "format": "int64",
                     "x-displayname": "Time to live",
                     "x-ves-example": "3600",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.uint32.gte": "60"
+                        "ves.io.schema.rules.uint32.gte": "60",
+                        "ves.io.schema.rules.uint32.lte": "2147483647"
                     }
                 },
                 "txt_record": {
@@ -3606,57 +3589,62 @@ var APISwaggerJSON string = `{
             "properties": {
                 "expire": {
                     "type": "integer",
-                    "description": " expire value indicates when secondary nameservers should stop answering request for this zone if primary does not respond\n\nExample: - \"360000\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 0\n",
+                    "description": " expire value indicates when secondary nameservers should stop answering request for this zone if primary does not respond\n\nExample: - \"360000\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 0\n  ves.io.schema.rules.uint32.lte: 2147483647\n",
                     "title": "Expire (in seconds)",
                     "format": "int64",
                     "x-displayname": "Expire",
                     "x-ves-example": "360000",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.uint32.gte": "0"
+                        "ves.io.schema.rules.uint32.gte": "0",
+                        "ves.io.schema.rules.uint32.lte": "2147483647"
                     }
                 },
                 "negative_ttl": {
                     "type": "integer",
-                    "description": " negative ttl value indicates how long to cache non-existent resource record for this zone\n\nExample: - \"1800\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 0\n",
+                    "description": " negative ttl value indicates how long to cache non-existent resource record for this zone\n\nExample: - \"1800\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 0\n  ves.io.schema.rules.uint32.lte: 2147483647\n",
                     "title": "Negative TTL (in seconds)",
                     "format": "int64",
                     "x-displayname": "Negative TTL",
                     "x-ves-example": "1800",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.uint32.gte": "0"
+                        "ves.io.schema.rules.uint32.gte": "0",
+                        "ves.io.schema.rules.uint32.lte": "2147483647"
                     }
                 },
                 "refresh": {
                     "type": "integer",
-                    "description": " refresh value indicates when secondary nameservers should query for the SOA record to detect zone changes\n\nExample: - \"86400\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 3600\n",
+                    "description": " refresh value indicates when secondary nameservers should query for the SOA record to detect zone changes\n\nExample: - \"86400\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 3600\n  ves.io.schema.rules.uint32.lte: 2147483647\n",
                     "title": "Refresh (in seconds)",
                     "format": "int64",
                     "x-displayname": "Refresh interval",
                     "x-ves-example": "86400",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.uint32.gte": "3600"
+                        "ves.io.schema.rules.uint32.gte": "3600",
+                        "ves.io.schema.rules.uint32.lte": "2147483647"
                     }
                 },
                 "retry": {
                     "type": "integer",
-                    "description": " retry value indicates when secondary nameservers should retry to request the serial number if primary does not respond\n\nExample: - \"7200\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 60\n",
+                    "description": " retry value indicates when secondary nameservers should retry to request the serial number if primary does not respond\n\nExample: - \"7200\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 60\n  ves.io.schema.rules.uint32.lte: 2147483647\n",
                     "title": "Retry (in seconds)",
                     "format": "int64",
                     "x-displayname": "Retry interval",
                     "x-ves-example": "7200",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.uint32.gte": "60"
+                        "ves.io.schema.rules.uint32.gte": "60",
+                        "ves.io.schema.rules.uint32.lte": "2147483647"
                     }
                 },
                 "ttl": {
                     "type": "integer",
-                    "description": " SOA record time to live (in seconds)\n\nExample: - \"86400\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 0\n",
+                    "description": " SOA record time to live (in seconds)\n\nExample: - \"86400\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 0\n  ves.io.schema.rules.uint32.lte: 2147483647\n",
                     "title": "TTL",
                     "format": "int64",
                     "x-displayname": "TTL",
                     "x-ves-example": "86400",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.uint32.gte": "0"
+                        "ves.io.schema.rules.uint32.gte": "0",
+                        "ves.io.schema.rules.uint32.lte": "2147483647"
                     }
                 }
             }
