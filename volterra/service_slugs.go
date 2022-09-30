@@ -39,7 +39,7 @@ func addSvcSlugToContextForCRUD(ctx context.Context, objType string) (context.Co
 func addSvcSlugToContextForCustom(ctx context.Context, rpcFQN string) (context.Context, error) {
 	var pbSvc string
 	rpcFQNList := strings.Split(rpcFQN, ".")
-	pbSvc = strings.Join(rpcFQNList[:len(rpcFQNList)-2], ".")
+	pbSvc = strings.Join(rpcFQNList[:len(rpcFQNList)-1], ".")
 	if slug, exists := apiGWServiceSlugs[pbSvc]; exists {
 		ctx = contextFromServiceSlug(ctx, slug)
 	}
