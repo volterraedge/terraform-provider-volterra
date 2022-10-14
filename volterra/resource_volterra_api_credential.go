@@ -135,7 +135,7 @@ func resourceVolterraAPICredentialCreate(d *schema.ResourceData, meta interface{
 	}
 
 	rspAPICred := rspProto.(*ves_io_schema_api_credential.CreateResponse)
-	d.SetId(apiCredParams.name)
+	d.SetId(rspAPICred.Name)
 	d.Set("data", rspAPICred.Data)
 	return resourceVolterraAPICredentialRead(d, meta)
 }
