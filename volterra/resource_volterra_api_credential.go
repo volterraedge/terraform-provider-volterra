@@ -12,14 +12,15 @@ import (
 	"strings"
 
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
+	ves_io_schema_api_credential "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/api_credential"
 	"gopkg.volterra.us/stdlib/codec"
 	"gopkg.volterra.us/stdlib/svcfw"
-	ves_io_schema_api_credential "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/api_credential"
 )
 
 const (
-	apiCredRPCFQN = "ves.io.schema.api_credential.CustomAPI"
-	uri           = "/public/namespaces/system/api_credentials"
+	apiCredRPCFQN    = "ves.io.schema.api_credential.CustomAPI"
+	apiCredURI       = "/public/namespaces/system/api_credentials"
+	deleteAPICredURI = "/web/namespaces/system/revoke/api_credentials"
 )
 
 type apiCredentialParams struct {
@@ -129,7 +130,7 @@ func resourceVolterraAPICredentialCreate(d *schema.ResourceData, meta interface{
 	if err != nil {
 		return fmt.Errorf("Error marshalling rpc response to yaml: %s", err)
 	}
-	rspProto, err := client.CustomAPI(context.Background(), http.MethodPost, uri, fmt.Sprintf("%s.%s", apiCredRPCFQN, "Create"), yamlReq)
+	rspProto, err := client.CustomAPI(context.Background(), http.MethodPost, apiCredURI, fmt.Sprintf("%s.%s", apiCredRPCFQN, "Create"), yamlReq)
 	if err != nil {
 		return fmt.Errorf("Error creating API Credential: %s", err)
 	}
@@ -151,10 +152,10 @@ func resourceVolterraAPICredentialRead(d *schema.ResourceData, meta interface{})
 	if err != nil {
 		return fmt.Errorf("Error marshalling rpc response to yaml: %s", err)
 	}
-	_, err = client.CustomAPI(context.Background(), http.MethodGet, uri, fmt.Sprintf("%s.%s", apiCredRPCFQN, "Get"), yamlReq)
+	_, err = client.CustomAPI(context.Background(), http.MethodGet, apiCredURI, fmt.Sprintf("%s.%s", apiCredRPCFQN, "Get"), yamlReq)
 	if err != nil {
 		if strings.Contains(err.Error(), "status code 404") {
-			log.Printf("[INFO] Registration %s no longer exists", d.Id())
+			log.Printf("[INFO] API Credential %s no longer exists", d.Id())
 			d.SetId("")
 			return nil
 		}
@@ -169,9 +170,24 @@ func resourceVolterraAPICredentialUpdate(d *schema.ResourceData, meta interface{
 }
 
 func resourceVolterraAPICredentialDelete(d *schema.ResourceData, meta interface{}) error {
-	// cannot delete api credential object
+	client := meta.(*APIClient)
+	apiCredReq := &ves_io_schema_api_credential.GetRequest{
+		Name:      d.Id(),
+		Namespace: svcfw.SystemNSVal,
+	}
 
-	log.Printf("[DEBUG] Deleting Volterra API Credential obj with name %+v", d.Id())
-	d.SetId("")
-	return nil
+	log.Printf("[DEBUG] Deleting/Revoking Volterra API credential obj %+v ", d.Id())
+	yamlReq, err := codec.ToYAML(apiCredReq)
+	if err != nil {
+		return fmt.Errorf("Error marshalling rpc response to yaml: %s", err)
+	}
+	_, err = client.CustomAPI(context.Background(), http.MethodPost, deleteAPICredURI, fmt.Sprintf("%s.%s", apiCredRPCFQN, "Revoke"), yamlReq)
+	if err != nil {
+		if strings.Contains(err.Error(), "status code 404") {
+			log.Printf("[INFO] API Credential %s no longer exists", d.Id())
+			d.SetId("")
+			return nil
+		}
+	}
+	return err
 }
