@@ -23,6 +23,8 @@ resource "volterra_healthcheck" "example" {
   // One of the arguments from this list "http_health_check tcp_health_check" must be set
 
   http_health_check {
+    expected_status_codes = ["200-250"]
+
     headers = {
       "key1" = "value1"
     }
@@ -78,6 +80,8 @@ Argument Reference
 ### Http Health Check
 
 1.	Request headers to remove.
+
+`expected_status_codes` - (Optional) of which is single HTTP status code or a range with start and end values separated by "-". (`String`).
 
 `headers` - (Optional) health checked cluster. This is a list of key-value pairs. (`String`).
 

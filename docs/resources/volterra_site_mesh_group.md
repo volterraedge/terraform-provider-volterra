@@ -50,8 +50,6 @@ Argument Reference
 
 `spoke_mesh` - (Optional) Mesh of Type Spoke. See [Spoke Mesh ](#spoke-mesh) below for details.
 
-`tunnel_type` - (Optional) Only tunnels of type IPSec are support currently. (`String`).
-
 `type` - (Optional) Type of Site to Site connectivity (Spoke, Hub or Full Mesh) (`String`).
 
 `virtual_site` - (Optional) If 'Type' is Full Mesh, then it gives set of sites that are connected in full mesh.. See [ref](#ref) below for details.

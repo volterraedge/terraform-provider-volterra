@@ -37,7 +37,7 @@ resource "volterra_route" "example" {
 
       path {
         // One of the arguments from this list "prefix path regex" must be set
-        prefix = "/register/"
+        regex = "regex"
       }
 
       query_params {
@@ -70,11 +70,21 @@ resource "volterra_route" "example" {
 
     // One of the arguments from this list "route_destination route_redirect route_direct_response" must be set
 
-    route_direct_response {
-      response_body = "OK"
-      response_code = "200"
+    route_redirect {
+      host_redirect  = "one.ves.io"
+      proto_redirect = "https"
+
+      // One of the arguments from this list "replace_params strip_query_params all_params retain_all_params remove_all_params" must be set
+
+      strip_query_params {
+        query_params = ["userid"]
+      }
+      // One of the arguments from this list "path_redirect prefix_rewrite" must be set
+      path_redirect = "/api/register"
+      response_code = "303"
     }
     service_policy {
+      // One of the arguments from this list "disable context_extensions" must be set
       disable = true
     }
     skip_lb_override = true
@@ -166,6 +176,12 @@ Clear Secret is used for the secrets that are not encrypted.
 `provider` - (Optional) This field needs to be provided only if the url scheme is not string:/// (`String`).
 
 `url` - (Required) When asked for this secret, caller will get Secret bytes after Base64 decoding. (`String`).
+
+### Context Extensions
+
+sending additional information to the external authorization server..
+
+`context_extensions` - (Optional) provide extra context for the external authorization server on specific virtual hosts or routes. (`String`).
 
 ### Cookie
 
@@ -468,6 +484,8 @@ Secret Value of the HTTP header..
 ### Service Policy
 
 service policy configuration at route level which overrides configuration at virtual-host level.
+
+`context_extensions` - (Optional) sending additional information to the external authorization server.. See [Context Extensions ](#context-extensions) below for details.
 
 `disable` - (Optional) disable service policy at route level, if it is configured at virtual-host level (`Bool`).
 

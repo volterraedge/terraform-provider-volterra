@@ -30,21 +30,54 @@ resource "volterra_azure_vnet_site" "example" {
     namespace = "staging"
     tenant    = "acmecorp"
   }
-  // One of the arguments from this list "log_receiver logs_streaming_disabled" must be set
+  // One of the arguments from this list "logs_streaming_disabled log_receiver" must be set
   logs_streaming_disabled = true
   // One of the arguments from this list "azure_region alternate_region" must be set
   azure_region = "eastus"
   resource_group = ["my-resources"]
 
-  // One of the arguments from this list "ingress_gw ingress_egress_gw voltstack_cluster ingress_gw_ar ingress_egress_gw_ar voltstack_cluster_ar" must be set
+  // One of the arguments from this list "voltstack_cluster_ar ingress_gw ingress_egress_gw voltstack_cluster ingress_gw_ar ingress_egress_gw_ar" must be set
 
-  ingress_gw_ar {
-    azure_certified_hw = "azure-byol-voltmesh"
+  ingress_egress_gw_ar {
+    azure_certified_hw = "azure-byol-multi-nic-voltmesh"
 
+    // One of the arguments from this list "no_dc_cluster_group dc_cluster_group_outside_vn dc_cluster_group_inside_vn" must be set
+    no_dc_cluster_group = true
+
+    // One of the arguments from this list "no_forward_proxy active_forward_proxy_policies forward_proxy_allow_all" must be set
+    no_forward_proxy = true
+
+    // One of the arguments from this list "no_global_network global_network_list" must be set
+    no_global_network = true
+
+    // One of the arguments from this list "hub not_hub" must be set
+
+    hub {
+      // One of the arguments from this list "express_route_enabled express_route_disabled" must be set
+      express_route_disabled = true
+
+      spoke_vnets {
+        labels = {
+          "key1" = "value1"
+        }
+
+        // One of the arguments from this list "auto manual" must be set
+        auto = true
+
+        vnet {
+          resource_group = "MyResourceGroup"
+          vnet_name      = "MyVnet"
+        }
+      }
+    }
+    // One of the arguments from this list "no_inside_static_routes inside_static_routes" must be set
+    no_inside_static_routes = true
+    // One of the arguments from this list "active_network_policies active_enhanced_firewall_policies no_network_policy" must be set
+    no_network_policy = true
     node {
       fault_domain = "1"
 
-      local_subnet {
+      inside_subnet {
         // One of the arguments from this list "subnet_param subnet" must be set
 
         subnet_param {
@@ -53,9 +86,23 @@ resource "volterra_azure_vnet_site" "example" {
         }
       }
 
-      node_number   = "1"
+      node_number = "1"
+
+      outside_subnet {
+        // One of the arguments from this list "subnet_param subnet" must be set
+
+        subnet_param {
+          ipv4 = "10.1.2.0/24"
+          ipv6 = "1234:568:abcd:9100::/64"
+        }
+      }
+
       update_domain = "1"
     }
+    // One of the arguments from this list "no_outside_static_routes outside_static_routes" must be set
+    no_outside_static_routes = true
+    // One of the arguments from this list "sm_connection_public_ip sm_connection_pvt_ip" must be set
+    sm_connection_public_ip = true
   }
   vnet {
     // One of the arguments from this list "new_vnet existing_vnet" must be set
@@ -67,7 +114,7 @@ resource "volterra_azure_vnet_site" "example" {
       primary_ipv4 = "10.1.0.0/16"
     }
   }
-  // One of the arguments from this list "nodes_per_az total_nodes no_worker_nodes" must be set
+  // One of the arguments from this list "total_nodes no_worker_nodes nodes_per_az" must be set
   nodes_per_az = "2"
 }
 
@@ -120,8 +167,6 @@ Argument Reference
 
 `resource_group` - (Required) Azure resource group for resources that will be created (`String`).
 
-`site_local_control_plane` - (Optional) Enable/Disable site local control plane. See [Site Local Control Plane ](#site-local-control-plane) below for details.
-
 `ingress_egress_gw` - (Optional) Two interface site is useful when site is used as ingress/egress gateway to the VNet.. See [Ingress Egress Gw ](#ingress-egress-gw) below for details.
 
 `ingress_egress_gw_ar` - (Optional) Two interface site is useful when site is used as ingress/egress gateway to the VNet.. See [Ingress Egress Gw Ar ](#ingress-egress-gw-ar) below for details.
@@ -148,6 +193,12 @@ Argument Reference
 
 `total_nodes` - (Optional) Total number of worker nodes to be deployed across all AZ's used in the Site (`Int`).
 
+### Active Enhanced Firewall Policies
+
+Enhanced Firewall Policies active for this site..
+
+`enhanced_firewall_policies` - (Required) Ordered List of Enhaned Firewall Policy active for this network firewall. See [ref](#ref) below for details.
+
 ### Active Forward Proxy Policies
 
 Enable Forward Proxy for this site and manage policies.
@@ -162,7 +213,7 @@ Firewall Policies active for this site..
 
 ### Authorized Key
 
-Use Custom Authorized Key.
+Authorization Key created by the circuit owner.
 
 `blindfold_secret_info_internal` - (Optional) Blindfold Secret Internal is used for the putting re-encrypted blindfold secret. See [Blindfold Secret Info Internal ](#blindfold-secret-info-internal) below for details.
 
@@ -179,6 +230,10 @@ Use Custom Authorized Key.
 ### Auto
 
 Parameters for creating new subnet automatically.
+
+### Auto Asn
+
+Automatically set ASN.
 
 ### Autogenerate
 
@@ -244,13 +299,13 @@ Clear Secret is used for the secrets that are not encrypted.
 
 ### Connections
 
-List of connections.
+List of connections from hub VNet gateway to express route circuit.
 
-`metadata` - (Required) Common attributes for the rule including name and description.. See [Metadata ](#metadata) below for details.
+`metadata` - (Required) Connection Metadata like name and description. See [Metadata ](#metadata) below for details.
 
-`other_subscription` - (Optional) Circuit ID. See [Other Subscription ](#other-subscription) below for details.
+`circuit_id` - (Optional) Circuit ID in Same Subscription (`String`).
 
-`same_subscription` - (Optional) Same subscription. See [Same Subscription ](#same-subscription) below for details.
+`other_subscription` - (Optional) Circuit in Other Subscription. See [Other Subscription ](#other-subscription) below for details.
 
 `weight` - (Optional) Route weight (`Int`).
 
@@ -295,10 +350,6 @@ Use Custom static route to configure all advanced options.
 `nexthop` - (Optional) Nexthop for the route. See [Nexthop ](#nexthop) below for details.
 
 `subnets` - (Optional) List of route prefixes. See [Subnets ](#subnets) below for details.
-
-### Default Local Control Plane
-
-Enable Site Local Control Plane.
 
 ### Default Os Version
 
@@ -364,7 +415,7 @@ Enable Interception.
 
 ### Enable Offline Survivability Mode
 
-Enabling offline survivability reduces default security of a CE..
+When this feature is enabled on an existing site, the pods/services on this site will be restarted..
 
 ### Existing Vnet
 
@@ -382,7 +433,11 @@ Express Route feature disabled.
 
 Express Route feature enabled.
 
-`connections` - (Optional) List of connections. See [Connections ](#connections) below for details.
+`auto_asn` - (Optional) Automatically set ASN (bool).
+
+`custom_asn` - (Optional) Custom Autonomous System Number (`Int`).
+
+`connections` - (Optional) List of connections from hub VNet gateway to express route circuit. See [Connections ](#connections) below for details.
 
 `gateway_subnet` - (Optional) Gateway subnet. See [Gateway Subnet ](#gateway-subnet) below for details.
 
@@ -470,6 +525,8 @@ Two interface site is useful when site is used as ingress/egress gateway to the 
 
 `no_inside_static_routes` - (Optional) Static Routes disabled for inside network. (bool).
 
+`active_enhanced_firewall_policies` - (Optional) Enhanced Firewall Policies active for this site.. See [Active Enhanced Firewall Policies ](#active-enhanced-firewall-policies) below for details.
+
 `active_network_policies` - (Optional) Firewall Policies active for this site.. See [Active Network Policies ](#active-network-policies) below for details.
 
 `no_network_policy` - (Optional) Firewall Policy is disabled for this site. (bool).
@@ -511,6 +568,8 @@ Two interface site is useful when site is used as ingress/egress gateway to the 
 `inside_static_routes` - (Optional) Manage static routes for inside network.. See [Inside Static Routes ](#inside-static-routes) below for details.
 
 `no_inside_static_routes` - (Optional) Static Routes disabled for inside network. (bool).
+
+`active_enhanced_firewall_policies` - (Optional) Enhanced Firewall Policies active for this site.. See [Active Enhanced Firewall Policies ](#active-enhanced-firewall-policies) below for details.
 
 `active_network_policies` - (Optional) Firewall Policies active for this site.. See [Active Network Policies ](#active-network-policies) below for details.
 
@@ -584,7 +643,7 @@ Manually setup routing on spoke VNet.
 
 ### Metadata
 
-Common attributes for the rule including name and description..
+Connection Metadata like name and description.
 
 `description` - (Optional) Human readable description. (`String`).
 
@@ -644,17 +703,13 @@ No TLS interception is enabled for this network connector.
 
 Site Local K8s API access is disabled.
 
-### No Local Control Plane
-
-Disable Site Local Control Plane.
-
 ### No Network Policy
 
 Firewall Policy is disabled for this site..
 
 ### No Offline Survivability Mode
 
-Disable Offline Survivability Mode.
+When this feature is disabled on an existing site, the pods/services on this site will be restarted..
 
 ### No Outside Static Routes
 
@@ -682,9 +737,9 @@ This VNet is a standalone VNet.
 
 Enable/Disable offline survivability mode.
 
-`enable_offline_survivability_mode` - (Optional) Enabling offline survivability reduces default security of a CE. (bool).
+`enable_offline_survivability_mode` - (Optional) When this feature is enabled on an existing site, the pods/services on this site will be restarted. (bool).
 
-`no_offline_survivability_mode` - (Optional) Disable Offline Survivability Mode (bool).
+`no_offline_survivability_mode` - (Optional) When this feature is disabled on an existing site, the pods/services on this site will be restarted. (bool).
 
 ### Openebs Enterprise
 
@@ -704,9 +759,9 @@ Operating System Details.
 
 ### Other Subscription
 
-Circuit ID.
+Circuit in Other Subscription.
 
-`authorized_key` - (Optional) Use Custom Authorized Key. See [Authorized Key ](#authorized-key) below for details.
+`authorized_key` - (Optional) Authorization Key created by the circuit owner. See [Authorized Key ](#authorized-key) below for details.
 
 `circuit_id` - (Optional) Circuit ID (`String`).
 
@@ -765,22 +820,6 @@ Route Server Subnet.
 `subnet` - (Optional) Information about existing subnet.. See [Subnet ](#subnet) below for details.
 
 `subnet_param` - (Optional) Parameters for creating new subnet.. See [Subnet Param ](#subnet-param) below for details.
-
-### Same Subscription
-
-Same subscription.
-
-`name` - (Required) Name of connection (`String`).
-
-`resource_group` - (Required) Resource group of connection (`String`).
-
-### Site Local Control Plane
-
-Enable/Disable site local control plane.
-
-`default_local_control_plane` - (Optional) Enable Site Local Control Plane (bool).
-
-`no_local_control_plane` - (Optional) Disable Site Local Control Plane (bool).
 
 ### Sku Ergw1az
 
@@ -972,6 +1011,8 @@ App Stack Cluster using single interface, useful for deploying K8s cluster..
 
 `no_k8s_cluster` - (Optional) Site Local K8s API access is disabled (bool).
 
+`active_enhanced_firewall_policies` - (Optional) Enhanced Firewall Policies active for this site.. See [Active Enhanced Firewall Policies ](#active-enhanced-firewall-policies) below for details.
+
 `active_network_policies` - (Optional) Firewall Policies active for this site.. See [Active Network Policies ](#active-network-policies) below for details.
 
 `no_network_policy` - (Optional) Firewall Policy is disabled for this site. (bool).
@@ -1011,6 +1052,8 @@ App Stack Cluster using single interface, useful for deploying K8s cluster..
 `k8s_cluster` - (Optional) Site Local K8s API access is enabled, using k8s_cluster object. See [ref](#ref) below for details.
 
 `no_k8s_cluster` - (Optional) Site Local K8s API access is disabled (bool).
+
+`active_enhanced_firewall_policies` - (Optional) Enhanced Firewall Policies active for this site.. See [Active Enhanced Firewall Policies ](#active-enhanced-firewall-policies) below for details.
 
 `active_network_policies` - (Optional) Firewall Policies active for this site.. See [Active Network Policies ](#active-network-policies) below for details.
 

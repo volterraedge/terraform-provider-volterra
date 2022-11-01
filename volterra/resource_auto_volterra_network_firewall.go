@@ -224,6 +224,34 @@ func resourceVolterraNetworkFirewall() *schema.Resource {
 				Optional: true,
 			},
 
+			"enhanced_firewall_policies": {
+
+				Type:     schema.TypeSet,
+				Optional: true,
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+
+						"kind": {
+							Type:     schema.TypeString,
+							Computed: true,
+						},
+
+						"name": {
+							Type:     schema.TypeString,
+							Optional: true,
+						},
+						"namespace": {
+							Type:     schema.TypeString,
+							Optional: true,
+						},
+						"tenant": {
+							Type:     schema.TypeString,
+							Optional: true,
+						},
+					},
+				},
+			},
+
 			"network_policy_set": {
 
 				Type:     schema.TypeSet,
@@ -536,6 +564,47 @@ func resourceVolterraNetworkFirewallCreate(d *schema.ResourceData, meta interfac
 			networkPolicyChoiceInt := &ves_io_schema_network_firewall.CreateSpecType_DisableNetworkPolicy{}
 			networkPolicyChoiceInt.DisableNetworkPolicy = &ves_io_schema.Empty{}
 			createSpec.NetworkPolicyChoice = networkPolicyChoiceInt
+		}
+
+	}
+
+	if v, ok := d.GetOk("enhanced_firewall_policies"); ok && !networkPolicyChoiceTypeFound {
+
+		networkPolicyChoiceTypeFound = true
+		networkPolicyChoiceInt := &ves_io_schema_network_firewall.CreateSpecType_EnhancedFirewallPolicies{}
+		networkPolicyChoiceInt.EnhancedFirewallPolicies = &ves_io_schema_network_firewall.ActiveEnhancedFirewallPoliciesType{}
+		createSpec.NetworkPolicyChoice = networkPolicyChoiceInt
+
+		sl := v.(*schema.Set).List()
+		for _, set := range sl {
+			cs := set.(map[string]interface{})
+
+			if v, ok := cs["enhanced_firewall_policies"]; ok && !isIntfNil(v) {
+
+				sl := v.([]interface{})
+				enhancedFirewallPoliciesInt := make([]*ves_io_schema_views.ObjectRefType, len(sl))
+				networkPolicyChoiceInt.EnhancedFirewallPolicies.EnhancedFirewallPolicies = enhancedFirewallPoliciesInt
+				for i, ps := range sl {
+
+					efpMapToStrVal := ps.(map[string]interface{})
+					enhancedFirewallPoliciesInt[i] = &ves_io_schema_views.ObjectRefType{}
+
+					if v, ok := efpMapToStrVal["name"]; ok && !isIntfNil(v) {
+						enhancedFirewallPoliciesInt[i].Name = v.(string)
+					}
+
+					if v, ok := efpMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+						enhancedFirewallPoliciesInt[i].Namespace = v.(string)
+					}
+
+					if v, ok := efpMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+						enhancedFirewallPoliciesInt[i].Tenant = v.(string)
+					}
+
+				}
+
+			}
+
 		}
 
 	}
@@ -898,6 +967,47 @@ func resourceVolterraNetworkFirewallUpdate(d *schema.ResourceData, meta interfac
 			networkPolicyChoiceInt := &ves_io_schema_network_firewall.ReplaceSpecType_DisableNetworkPolicy{}
 			networkPolicyChoiceInt.DisableNetworkPolicy = &ves_io_schema.Empty{}
 			updateSpec.NetworkPolicyChoice = networkPolicyChoiceInt
+		}
+
+	}
+
+	if v, ok := d.GetOk("enhanced_firewall_policies"); ok && !networkPolicyChoiceTypeFound {
+
+		networkPolicyChoiceTypeFound = true
+		networkPolicyChoiceInt := &ves_io_schema_network_firewall.ReplaceSpecType_EnhancedFirewallPolicies{}
+		networkPolicyChoiceInt.EnhancedFirewallPolicies = &ves_io_schema_network_firewall.ActiveEnhancedFirewallPoliciesType{}
+		updateSpec.NetworkPolicyChoice = networkPolicyChoiceInt
+
+		sl := v.(*schema.Set).List()
+		for _, set := range sl {
+			cs := set.(map[string]interface{})
+
+			if v, ok := cs["enhanced_firewall_policies"]; ok && !isIntfNil(v) {
+
+				sl := v.([]interface{})
+				enhancedFirewallPoliciesInt := make([]*ves_io_schema_views.ObjectRefType, len(sl))
+				networkPolicyChoiceInt.EnhancedFirewallPolicies.EnhancedFirewallPolicies = enhancedFirewallPoliciesInt
+				for i, ps := range sl {
+
+					efpMapToStrVal := ps.(map[string]interface{})
+					enhancedFirewallPoliciesInt[i] = &ves_io_schema_views.ObjectRefType{}
+
+					if v, ok := efpMapToStrVal["name"]; ok && !isIntfNil(v) {
+						enhancedFirewallPoliciesInt[i].Name = v.(string)
+					}
+
+					if v, ok := efpMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+						enhancedFirewallPoliciesInt[i].Namespace = v.(string)
+					}
+
+					if v, ok := efpMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+						enhancedFirewallPoliciesInt[i].Tenant = v.(string)
+					}
+
+				}
+
+			}
+
 		}
 
 	}

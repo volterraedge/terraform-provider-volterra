@@ -21,8 +21,14 @@ resource "volterra_http_loadbalancer" "example" {
   namespace = "staging"
 
   // One of the arguments from this list "do_not_advertise advertise_on_public_default_vip advertise_on_public advertise_custom" must be set
-  do_not_advertise = true
 
+  advertise_on_public {
+    public_ip {
+      name      = "test1"
+      namespace = "staging"
+      tenant    = "acmecorp"
+    }
+  }
   // One of the arguments from this list "disable_api_definition api_definition api_definitions" must be set
   disable_api_definition = true
 
@@ -32,132 +38,22 @@ resource "volterra_http_loadbalancer" "example" {
     // One of the arguments from this list "disable_learn_from_redirect_traffic enable_learn_from_redirect_traffic" must be set
     disable_learn_from_redirect_traffic = true
   }
-
   // One of the arguments from this list "no_challenge js_challenge captcha_challenge policy_based_challenge" must be set
-
-  policy_based_challenge {
-    // One of the arguments from this list "default_captcha_challenge_parameters captcha_challenge_parameters" must be set
-    default_captcha_challenge_parameters = true
-
-    // One of the arguments from this list "no_challenge always_enable_js_challenge always_enable_captcha_challenge" must be set
-    no_challenge = true
-
-    // One of the arguments from this list "js_challenge_parameters default_js_challenge_parameters" must be set
-
-    js_challenge_parameters {
-      cookie_expiry   = "1000"
-      custom_page     = "string:///PHA+IFBsZWFzZSBXYWl0IDwvcD4="
-      js_script_delay = "1000"
-    }
-    // One of the arguments from this list "default_mitigation_settings malicious_user_mitigation" must be set
-    default_mitigation_settings = true
-    rule_list {
-      rules {
-        metadata {
-          description = "Virtual Host for acmecorp website"
-          disable     = true
-          name        = "acmecorp-web"
-        }
-
-        spec {
-          arg_matchers {
-            invert_matcher = true
-
-            // One of the arguments from this list "check_present check_not_present item presence" must be set
-            check_not_present = true
-            name              = "name"
-          }
-
-          // One of the arguments from this list "any_asn asn_list asn_matcher" must be set
-          any_asn = true
-
-          body_matcher {
-            exact_values = ["['new york', 'london', 'sydney', 'tokyo', 'cairo']"]
-
-            regex_values = ["['^new .*$', 'san f.*', '.* del .*']"]
-
-            transformers = ["transformers"]
-          }
-
-          // One of the arguments from this list "disable_challenge enable_javascript_challenge enable_captcha_challenge" must be set
-          disable_challenge = true
-
-          // One of the arguments from this list "client_selector client_name_matcher any_client client_name" must be set
-          any_client = true
-
-          cookie_matchers {
-            invert_matcher = true
-
-            // One of the arguments from this list "presence check_present check_not_present item" must be set
-            presence = true
-
-            name = "Session"
-          }
-
-          domain_matcher {
-            exact_values = ["['new york', 'london', 'sydney', 'tokyo', 'cairo']"]
-
-            regex_values = ["['^new .*$', 'san f.*', '.* del .*']"]
-          }
-
-          expiration_timestamp = "0001-01-01T00:00:00Z"
-
-          headers {
-            invert_matcher = true
-
-            // One of the arguments from this list "presence check_present check_not_present item" must be set
-            presence = true
-
-            name = "Accept-Encoding"
-          }
-
-          http_method {
-            invert_matcher = true
-
-            methods = ["['GET', 'POST', 'DELETE']"]
-          }
-
-          // One of the arguments from this list "any_ip ip_prefix_list ip_matcher" must be set
-          any_ip = true
-
-          path {
-            exact_values = ["['/api/web/namespaces/project179/users/user1', '/api/config/namespaces/accounting/bgps', '/api/data/namespaces/project443/virtual_host_101']"]
-
-            prefix_values = ["['/api/web/namespaces/project179/users/', '/api/config/namespaces/', '/api/data/namespaces/']"]
-
-            regex_values = ["['^/api/web/namespaces/abc/users/([a-z]([-a-z0-9]*[a-z0-9])?)$', '/api/data/namespaces/proj404/virtual_hosts/([a-z]([-a-z0-9]*[a-z0-9])?)$']"]
-
-            suffix_values = ["['.exe', '.shtml', '.wmz']"]
-
-            transformers = ["transformers"]
-          }
-
-          query_params {
-            invert_matcher = true
-            key            = "sourceid"
-
-            // One of the arguments from this list "check_not_present item presence check_present" must be set
-            presence = true
-          }
-
-          tls_fingerprint_matcher {
-            classes = ["classes"]
-
-            exact_values = ["['ed6dfd54b01ebe31b7a65b88abfa7297', '16efcf0e00504ddfedde13bfea997952', 'de364c46b0dfc283b5e38c79ceae3f8f']"]
-
-            excluded_values = ["['fb00055a1196aeea8d1bc609885ba953', 'b386946a5a44d1ddcc843bc75336dfce']"]
-          }
-        }
-      }
-    }
-    // One of the arguments from this list "default_temporary_blocking_parameters temporary_user_blocking" must be set
-    default_temporary_blocking_parameters = true
-  }
+  no_challenge = true
   // One of the arguments from this list "enable_ddos_detection disable_ddos_detection" must be set
   enable_ddos_detection = true
   domains = ["www.foo.com"]
+
   // One of the arguments from this list "least_active random source_ip_stickiness cookie_stickiness ring_hash round_robin" must be set
-  random = true
+
+  ring_hash {
+    hash_policy {
+      // One of the arguments from this list "header_name cookie source_ip" must be set
+      header_name = "host"
+
+      terminal = true
+    }
+  }
 
   // One of the arguments from this list "http https_auto_cert https" must be set
 
@@ -167,26 +63,18 @@ resource "volterra_http_loadbalancer" "example" {
   }
   // One of the arguments from this list "enable_malicious_user_detection disable_malicious_user_detection" must be set
   enable_malicious_user_detection = true
-  // One of the arguments from this list "rate_limit disable_rate_limit api_rate_limit" must be set
+  // One of the arguments from this list "disable_rate_limit api_rate_limit rate_limit" must be set
   disable_rate_limit = true
-
   // One of the arguments from this list "service_policies_from_namespace no_service_policies active_service_policies" must be set
-
-  active_service_policies {
-    policies {
-      name      = "test1"
-      namespace = "staging"
-      tenant    = "acmecorp"
-    }
-  }
+  service_policies_from_namespace = true
   // One of the arguments from this list "disable_trust_client_ip_headers enable_trust_client_ip_headers" must be set
   disable_trust_client_ip_headers = true
   // One of the arguments from this list "user_id_client_ip user_identification" must be set
   user_id_client_ip = true
 
-  // One of the arguments from this list "app_firewall disable_waf waf waf_rule" must be set
+  // One of the arguments from this list "disable_waf waf waf_rule app_firewall" must be set
 
-  waf {
+  app_firewall {
     name      = "test1"
     namespace = "staging"
     tenant    = "acmecorp"
@@ -302,13 +190,17 @@ Argument Reference
 
 `more_option` - (Optional) More options like header manipulation, compression etc.. See [More Option ](#more-option) below for details.
 
+`default_pool` - (Optional) Single Origin Pool. See [Default Pool ](#default-pool) below for details.
+
+`default_pool_list` - (Optional) Multiple Origin Pools with weights and priorities. See [Default Pool List ](#default-pool-list) below for details.
+
 `api_rate_limit` - (Optional) Define rate limiting for one or more API endpoints. See [Api Rate Limit ](#api-rate-limit) below for details.
 
 `disable_rate_limit` - (Optional) Rate limiting is not currently enabled for this load balancer (bool).
 
 `rate_limit` - (Optional) Define custom rate limiting parameters for this load balancer. See [Rate Limit ](#rate-limit) below for details.
 
-`routes` - (Optional) Routes for this load balancer. See [Routes ](#routes) below for details.
+`routes` - (Optional) to origin pool or redirect matching traffic to a different URL or respond directly to matching traffic. See [Routes ](#routes) below for details.
 
 `active_service_policies` - (Optional) Apply the specified list of service policies and bypass the namespace service policy set. See [Active Service Policies ](#active-service-policies) below for details.
 
@@ -358,65 +250,33 @@ Wildcard names are supported in the suffix or prefix form.
 
 ### Advanced Options
 
-Configure Advanced per route options.
+Advanced options configuration like timeouts, circuit breaker, subset load balancing.
 
-`buffer_policy` - (Optional) Route level buffer configuration overrides any configuration at VirtualHost level.. See [Buffer Policy ](#buffer-policy) below for details.
+`circuit_breaker` - (Optional) allows to apply back pressure on downstream quickly.. See [Circuit Breaker ](#circuit-breaker) below for details.
 
-`common_buffering` - (Optional) Use common buffering configuration (bool).
+`default_circuit_breaker` - (Optional) requests are 1024 and the default value for retries is 3 (bool).
 
-`do_not_retract_cluster` - (Optional) configuration. (bool).
+`disable_circuit_breaker` - (Optional) Circuit Breaker is disabled (bool).
 
-`retract_cluster` - (Optional) for route (bool).
+`connection_timeout` - (Optional) This is specified in milliseconds. The default value is 2 seconds (`Int`).
 
-`cors_policy` - (Optional) resources from a server at a different origin. See [Cors Policy ](#cors-policy) below for details.
+`header_transformation_type` - (Optional) Settings to normalize the headers of upstream requests.. See [Header Transformation Type ](#header-transformation-type) below for details.
 
-`disable_location_add` - (Optional) virtual-host level. This configuration is ignored on CE sites. (`Bool`).
+`http2_options` - (Optional) Http2 Protocol options for upstream connections. See [Http2 Options ](#http2-options) below for details.
 
-`endpoint_subsets` - (Optional) upstream origin pool which match this metadata will be selected for load balancing (`String`).
+`http_idle_timeout` - (Optional) This is specified in milliseconds. The default value is 5 minutes. (`Int`).
 
-`common_hash_policy` - (Optional) Use load balancer hash policy for this route (bool).
+`disable_outlier_detection` - (Optional) Outlier detection is disabled (bool).
 
-`specific_hash_policy` - (Optional) Configure hash policy specific for this route. See [Specific Hash Policy ](#specific-hash-policy) below for details.
+`outlier_detection` - (Optional) healthy load balancing set. Outlier detection is a form of passive health checking.. See [Outlier Detection ](#outlier-detection) below for details.
 
-`disable_mirroring` - (Optional) Disable Mirroring of request (bool).
+`no_panic_threshold` - (Optional) Disable panic threshold. Only healthy endpoints are considered for load balancing. (bool).
 
-`mirror_policy` - (Optional) useful for logging. For example, *cluster1* becomes *cluster1-shadow*.. See [Mirror Policy ](#mirror-policy) below for details.
+`panic_threshold` - (Optional) all endpoints will be considered for load balancing ignoring its health status. (`Int`).
 
-`priority` - (Optional) Also, circuit-breaker configuration at destination cluster is chosen based on the route priority. (`String`).
+`disable_subsets` - (Optional) Subset load balancing is disabled. All eligible origin servers will be considered for load balancing. (bool).
 
-`request_headers_to_add` - (Optional) Headers are key-value pairs to be added to HTTP request being routed towards upstream.. See [Request Headers To Add ](#request-headers-to-add) below for details.
-
-`request_headers_to_remove` - (Optional) List of keys of Headers to be removed from the HTTP request being sent towards upstream. (`String`).
-
-`response_headers_to_add` - (Optional) Headers are key-value pairs to be added to HTTP response being sent towards downstream.. See [Response Headers To Add ](#response-headers-to-add) below for details.
-
-`response_headers_to_remove` - (Optional) List of keys of Headers to be removed from the HTTP response being sent towards downstream. (`String`).
-
-`default_retry_policy` - (Optional) Use system default retry policy (bool).
-
-`retry_policy` - (Optional) Configure custom retry policy. See [Retry Policy ](#retry-policy) below for details.
-
-`disable_prefix_rewrite` - (Optional) Do not rewrite the path prefix. (bool).
-
-`prefix_rewrite` - (Optional) the query string) will be swapped with this value. (`String`).
-
-`disable_spdy` - (Optional) SPDY upgrade is disabled (bool).
-
-`enable_spdy` - (Optional) SPDY upgrade is enabled (bool).
-
-`timeout` - (Optional) Should be set to a high value or 0 (infinite timeout) for server-side streaming. (`Int`).
-
-`app_firewall` - (Optional) Reference to App Firewall configuration object. See [ref](#ref) below for details.
-
-`inherited_waf` - (Optional) Hence no custom configuration is applied on the route (bool).
-
-`waf` - (Optional) Reference to WAF intent configuration object. See [ref](#ref) below for details.
-
-`waf_rule` - (Optional) Reference to WAF Rules configuration object. See [ref](#ref) below for details.
-
-`disable_web_socket_config` - (Optional) Websocket upgrade is disabled (bool).
-
-`web_socket_config` - (Optional) Upgrade to Websocket for this route. See [Web Socket Config ](#web-socket-config) below for details.
+`enable_subsets` - (Optional) Subset load balancing is enabled. Based on route, subset of origin servers will be considered for load balancing.. See [Enable Subsets ](#enable-subsets) below for details.
 
 ### Advertise Custom
 
@@ -465,6 +325,10 @@ Any Client.
 ### Any Domain
 
 The rule will apply for all domains..
+
+### Any Endpoint
+
+Select any origin server from available healthy origin servers in this pool.
 
 ### Any Ip
 
@@ -586,13 +450,9 @@ The predicate evaluates to true if the origin ASN is present in one of the BGP A
 
 Host header will be swapped with hostname of upstream host chosen by the cluster.
 
-### Back Off
+### Automatic Port
 
-10 times the base interval.
-
-`base_interval` - (Optional) Specifies the base interval between retries in milliseconds (`Int`).
-
-`max_interval` - (Optional) to the base_interval if set. The default is 10 times the base_interval. (`Int`).
+For other origin server types, port will be automatically set as 443 if TLS is enabled at Origin Pool and 80 if TLS is disabled.
 
 ### Blindfold Secret Info
 
@@ -696,6 +556,10 @@ Check that the cookie is not present..
 
 Check that the cookie is present..
 
+### Circuit Breaker
+
+allows to apply back pressure on downstream quickly..
+
 ### Clear Secret Info
 
 Clear Secret is used for the secrets that are not encrypted.
@@ -736,15 +600,7 @@ The predicate evaluates to true if the expressions in the label selector are tru
 
 Client-Side Defense configuration for JavaScript insertion.
 
-`policy` - (Required) Client-Side Defense Policy.. See [Policy ](#policy) below for details.
-
-### Common Buffering
-
-Use common buffering configuration.
-
-### Common Hash Policy
-
-Use load balancer hash policy for this route.
+`policy` - (Required) Please ensure that the same domains are configured in the Client-Side Defense configuration.. See [Policy ](#policy) below for details.
 
 ### Compression Params
 
@@ -757,6 +613,18 @@ Only GZIP compression is supported.
 `disable_on_etag_header` - (Optional) weak etags will be preserved and the ones that require strong validation will be removed. (`Bool`).
 
 `remove_accept_encoding_header` - (Optional) so that responses do not get compressed before reaching the filter. (`Bool`).
+
+### Consul Service
+
+Specify origin server with Hashi Corp Consul service name and site information.
+
+`inside_network` - (Optional) Inside network on the site (bool).
+
+`outside_network` - (Optional) Outside network on the site (bool).
+
+`service_name` - (Required) cluster-id is optional. (`String`).
+
+`site_locator` - (Required) Site or Virtual site where this origin server is located. See [Site Locator ](#site-locator) below for details.
 
 ### Cookie
 
@@ -815,6 +683,12 @@ resources from a server at a different origin.
 `max_age` - (Optional) Specifies the content for the access-control-max-age header (`String`).
 
 `maximum_age` - (Optional) Maximum permitted value is 86400 seconds (24 hours) (`Int`).
+
+### Custom Endpoint Object
+
+Specify origin server with a reference to endpoint object.
+
+`endpoint` - (Required) Reference to an endpoint object. See [ref](#ref) below for details.
 
 ### Custom Hash Algorithms
 
@@ -890,6 +764,10 @@ Rules that specify the DDoS clients to be blocked.
 
 Use default parameters.
 
+### Default Circuit Breaker
+
+requests are 1024 and the default value for retries is 3.
+
 ### Default Header
 
 Response header name is “server” and value is “volt-adc”.
@@ -910,9 +788,39 @@ x-displayName: "Yes".
 
 For high level, users will be temporarily blocked..
 
-### Default Retry Policy
+### Default Pool
 
-Use system default retry policy.
+Single Origin Pool.
+
+`advanced_options` - (Optional) Advanced options configuration like timeouts, circuit breaker, subset load balancing. See [Advanced Options ](#advanced-options) below for details.
+
+`endpoint_selection` - (Required) Policy for selection of endpoints from local site or remote site or both (`String`).
+
+`health_check_port` - (Optional) Port used for performing health check (`Int`).
+
+`same_as_endpoint_port` - (Optional) Health check is performed on endpoint port itself (bool).
+
+`healthcheck` - (Optional) Reference to healthcheck configuration objects. See [ref](#ref) below for details.
+
+`loadbalancer_algorithm` - (Required) loadbalancer_algorithm to determine which host is selected. (`String`).
+
+`origin_servers` - (Required) List of origin servers in this pool. See [Origin Servers ](#origin-servers) below for details.
+
+`automatic_port` - (Optional) For other origin server types, port will be automatically set as 443 if TLS is enabled at Origin Pool and 80 if TLS is disabled (bool).
+
+`port` - (Optional) Endpoint service is available on this port (`Int`).
+
+`no_tls` - (Optional) x-displayName: "Disable" (bool).
+
+`use_tls` - (Optional) x-displayName: "Enable". See [Use Tls ](#use-tls) below for details.
+
+`view_internal` - (Optional) Reference to view internal object. See [ref](#ref) below for details.
+
+### Default Pool List
+
+Multiple Origin Pools with weights and priorities.
+
+`pools` - (Optional) List of Origin Pools. See [Pools ](#pools) below for details.
 
 ### Default Route Pools
 
@@ -931,6 +839,12 @@ Origin Pools used when no route is specified (default route).
 ### Default Security
 
 TLS v1.2+ with PFS ciphers and strong crypto algorithms..
+
+### Default Subset
+
+Use the default subset provided here. Select endpoints matching default subset..
+
+`default_subset` - (Optional) which gets used when route specifies no metadata or no subset matching the metadata exists. (`String`).
 
 ### Default Temporary Blocking Parameters
 
@@ -956,6 +870,10 @@ A direct response route matches on path and/or HTTP method and responds directly
 
 `route_direct_response` - (Optional) Send direct response. See [Route Direct Response ](#route-direct-response) below for details.
 
+### Disable Circuit Breaker
+
+Circuit Breaker is disabled.
+
 ### Disable Ddos Detection
 
 x-displayName: "Disable".
@@ -980,10 +898,6 @@ Disable learning API patterns from traffic with redirect response codes 3xx.
 
 x-displayName: "Disable".
 
-### Disable Mirroring
-
-Disable Mirroring of request.
-
 ### Disable Mobile Sdk
 
 Disable Mobile SDK..
@@ -992,25 +906,21 @@ Disable Mobile SDK..
 
 This is the default behavior if no choice is selected..
 
+### Disable Outlier Detection
+
+Outlier detection is disabled.
+
 ### Disable Path Normalize
 
 x-displayName: "Disable".
 
-### Disable Prefix Rewrite
+### Disable Sni
 
-Do not rewrite the path prefix..
+Do not use SNI..
 
-### Disable Spdy
+### Disable Subsets
 
-SPDY upgrade is disabled.
-
-### Disable Web Socket Config
-
-Websocket upgrade is disabled.
-
-### Do Not Retract Cluster
-
-configuration..
+Subset load balancing is disabled. All eligible origin servers will be considered for load balancing..
 
 ### Domain
 
@@ -1060,19 +970,31 @@ x-displayName: "Enable".
 
 x-displayName: "Enable".
 
-### Enable Spdy
-
-SPDY upgrade is enabled.
-
 ### Enable Strict Sni Host Header Check
 
 Enable strict SNI and Host header check.
+
+### Enable Subsets
+
+Subset load balancing is enabled. Based on route, subset of origin servers will be considered for load balancing..
+
+`endpoint_subsets` - (Optional) List of subset class. Subsets class is defined using list of keys. Every unique combination of values of these keys form a subset withing the class.. See [Endpoint Subsets ](#endpoint-subsets) below for details.
+
+`any_endpoint` - (Optional) Select any origin server from available healthy origin servers in this pool (bool).
+
+`default_subset` - (Optional) Use the default subset provided here. Select endpoints matching default subset.. See [Default Subset ](#default-subset) below for details.
+
+`fail_request` - (Optional) Request will be failed and error returned, as if cluster has no origin servers. (bool).
 
 ### Enable Trust Client Ip Headers
 
 x-displayName: "Enable".
 
-`client_ip_headers` - (Optional) Define the list of one or more Client IP Headers. Headers will be used in order from top to bottom, meaning if the first header is not present in the request, the system will proceed to check for the second header, and so on, until one of the listed headers is found. If none of the defined headers exist, or the value is not an IP address, then the system will use the source IP of the packet. If multiple defined headers with different names are present in the request, the value of the first header name in the configuration will be used. If multiple defined headers with the same name are present in the request, values of all those headers will be combined. The system will read the right-most IP address from header, if there are multiple ip addresses in the header value. (`String`).
+`client_ip_headers` - (Optional) For X-Forwarded-For header, the system will read the IP address(rightmost - 1), as the client ip (`String`).
+
+### Endpoint Subsets
+
+List of subset class. Subsets class is defined using list of keys. Every unique combination of values of these keys form a subset withing the class..
 
 ### Exclude Attack Type Contexts
 
@@ -1109,6 +1031,10 @@ App Firewall signature contexts to be excluded for this request.
 App Firewall violation contexts to be excluded for this request.
 
 `exclude_violation` - (Required) x-required (`String`).
+
+### Fail Request
+
+Request will be failed and error returned, as if cluster has no origin servers..
 
 ### Flag
 
@@ -1173,6 +1099,10 @@ HTTP Load Balancer..
 `dns_volterra_managed` - (Optional) or a DNS CNAME record should be created in your DNS provider's portal. (`Bool`).
 
 `port` - (Optional) x-example: "80" (`Int`).
+
+### Http2 Options
+
+Http2 Protocol options for upstream connections.
 
 ### Http Header
 
@@ -1244,10 +1174,6 @@ or a DNS CNAME record should be created in your DNS provider's portal..
 
 `tls_config` - (Optional) Configuration of TLS settings such as min/max TLS version and ciphersuites. See [Tls Config ](#tls-config) below for details.
 
-### Inherited Waf
-
-Hence no custom configuration is applied on the route.
-
 ### Inline Rate Limiter
 
 Specify rate values for the rule..
@@ -1259,6 +1185,10 @@ Specify rate values for the rule..
 `threshold` - (Required) The total number of allowed requests for 1 unit (e.g. SECOND/MINUTE/HOUR etc.) of the specified period. (`Int`).
 
 `unit` - (Required) Unit for the period per which the rate limit is applied. (`String`).
+
+### Inside Network
+
+Inside network on the site.
 
 ### Ip Allowed List
 
@@ -1350,6 +1280,22 @@ Specify custom JavaScript insertion rules..
 
 `rules` - (Required) Required list of pages to insert Bot Defense client JavaScript.. See [Rules ](#rules) below for details.
 
+### K8s Service
+
+Specify origin server with K8s service name and site information.
+
+`inside_network` - (Optional) Inside network on the site (bool).
+
+`outside_network` - (Optional) Outside network on the site (bool).
+
+`vk8s_networks` - (Optional) origin server are on vK8s network on the site (bool).
+
+`service_name` - (Required) Both namespace and cluster-id are optional. (`String`).
+
+`service_selector` - (Required) discovery has to happen. This implicit label is added to service_selector. See [Service Selector ](#service-selector) below for details.
+
+`site_locator` - (Required) Site or Virtual site where this origin server is located. See [Site Locator ](#site-locator) below for details.
+
 ### Low Security
 
 TLS v1.0+ including non-PFS ciphers and weak crypto algorithms..
@@ -1367,14 +1313,6 @@ Common attributes for the rule including name and description..
 `disable` - (Optional) A value of true will administratively disable the object that corresponds to the containing message. (`Bool`).
 
 `name` - (Required) The value of name has to follow DNS-1035 format. (`String`).
-
-### Mirror Policy
-
-useful for logging. For example, *cluster1* becomes *cluster1-shadow*..
-
-`origin_pool` - (Required) referred here must be present.. See [ref](#ref) below for details.
-
-`percent` - (Required) Percentage of requests to be mirrored. See [Percent ](#percent) below for details.
 
 ### Mitigation
 
@@ -1462,9 +1400,17 @@ There is no ip allowed list for rate limiting, all clients go through rate limit
 
 x-displayName: "Disable".
 
+### No Panic Threshold
+
+Disable panic threshold. Only healthy endpoints are considered for load balancing..
+
 ### No Policies
 
 Do not apply additional rate limiter policies..
+
+### No Tls
+
+x-displayName: "Disable".
 
 ### Non Default Loadbalancer
 
@@ -1488,6 +1434,38 @@ Origin Pools for this route.
 
 `weight` - (Optional) Weight of this origin pool, valid only with multiple origin pool. Value of 0 will disable the pool (`Int`).
 
+### Origin Servers
+
+List of origin servers in this pool.
+
+`consul_service` - (Optional) Specify origin server with Hashi Corp Consul service name and site information. See [Consul Service ](#consul-service) below for details.
+
+`custom_endpoint_object` - (Optional) Specify origin server with a reference to endpoint object. See [Custom Endpoint Object ](#custom-endpoint-object) below for details.
+
+`k8s_service` - (Optional) Specify origin server with K8s service name and site information. See [K8s Service ](#k8s-service) below for details.
+
+`private_ip` - (Optional) Specify origin server with private or public IP address and site information. See [Private Ip ](#private-ip) below for details.
+
+`private_name` - (Optional) Specify origin server with private or public DNS name and site information. See [Private Name ](#private-name) below for details.
+
+`public_ip` - (Optional) Specify origin server with public IP. See [Public Ip ](#public-ip) below for details.
+
+`public_name` - (Optional) Specify origin server with public DNS name. See [Public Name ](#public-name) below for details.
+
+`vn_private_ip` - (Optional) Specify origin server IP address on virtual network other than inside or outside network. See [Vn Private Ip ](#vn-private-ip) below for details.
+
+`vn_private_name` - (Optional) Specify origin server name on virtual network other than inside or outside network. See [Vn Private Name ](#vn-private-name) below for details.
+
+`labels` - (Optional) Add Labels for this origin server, these labels can be used to form subset. (`String`).
+
+### Outlier Detection
+
+healthy load balancing set. Outlier detection is a form of passive health checking..
+
+### Outside Network
+
+Outside network on the site.
+
 ### Pass Through
 
 Pass existing server header as is. If server header is absent, a new header is not appended..
@@ -1501,14 +1479,6 @@ URI path matcher..
 `prefix` - (Optional) Path prefix to match (`String`).
 
 `regex` - (Optional) Regular expression of path match (`String`).
-
-### Percent
-
-Percentage of requests to be mirrored.
-
-`denominator` - (Required) Samples per denominator. numerator part per 100 or 10000 ro 1000000 (`String`).
-
-`numerator` - (Required) sampled parts per denominator. If denominator was 10000, then value of 5 will be 5 in 10000 (`Int`).
 
 ### Policies
 
@@ -1564,6 +1534,32 @@ Specifies the settings for policy rule based challenge.
 
 `temporary_user_blocking` - (Optional) Specifies configuration for temporary user blocking resulting from malicious user detection. See [Temporary User Blocking ](#temporary-user-blocking) below for details.
 
+### Pools
+
+List of Origin Pools.
+
+`endpoint_subsets` - (Optional) upstream origin pool which match this metadata will be selected for load balancing (`String`).
+
+`cluster` - (Required) More flexible, advanced feature control with cluster. See [ref](#ref) below for details.
+
+`pool` - (Required) Simple, commonly used pool parameters with origin pool. See [ref](#ref) below for details.
+
+`priority` - (Optional) made active as per the increasing priority. (`Int`).
+
+`weight` - (Optional) Weight of this origin pool, valid only with multiple origin pool. Value of 0 will disable the pool (`Int`).
+
+### Private Ip
+
+Specify origin server with private or public IP address and site information.
+
+`ip` - (Required) IP address (`String`).
+
+`inside_network` - (Optional) Inside network on the site (bool).
+
+`outside_network` - (Optional) Outside network on the site (bool).
+
+`site_locator` - (Required) Site or Virtual site where this origin server is located. See [Site Locator ](#site-locator) below for details.
+
 ### Private Key
 
 TLS Private Key data in unencrypted PEM format including the PEM headers. The data may be optionally secured using BlindFold. TLS key has to match the accompanying certificate..
@@ -1579,6 +1575,18 @@ TLS Private Key data in unencrypted PEM format including the PEM headers. The da
 `vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Vault Secret Info ](#vault-secret-info) below for details.
 
 `wingman_secret_info` - (Optional) Secret is given as bootstrap secret in Volterra Security Sidecar. See [Wingman Secret Info ](#wingman-secret-info) below for details.
+
+### Private Name
+
+Specify origin server with private or public DNS name and site information.
+
+`dns_name` - (Required) DNS Name (`String`).
+
+`inside_network` - (Optional) Inside network on the site (bool).
+
+`outside_network` - (Optional) Outside network on the site (bool).
+
+`site_locator` - (Required) Site or Virtual site where this origin server is located. See [Site Locator ](#site-locator) below for details.
 
 ### Proper Case Header Transformation
 
@@ -1607,6 +1615,18 @@ List of protected application endpoints (max 128 items)..
 `path` - (Required) Matching URI path of the route.. See [Path ](#path) below for details.
 
 `protocol` - (Optional) Protocol. (`String`).
+
+### Public Ip
+
+Specify origin server with public IP.
+
+`ip` - (Required) Public IP address (`String`).
+
+### Public Name
+
+Specify origin server with public DNS name.
+
+`dns_name` - (Required) DNS Name (`String`).
 
 ### Query Params
 
@@ -1720,26 +1740,6 @@ Headers specified at this level are applied after headers from matched Route are
 
 x-displayName: "Retain All Parameters".
 
-### Retract Cluster
-
-for route.
-
-### Retry Policy
-
-Configure custom retry policy.
-
-`back_off` - (Optional) 10 times the base interval. See [Back Off ](#back-off) below for details.
-
-`num_retries` - (Optional) is used between each retry (`Int`).
-
-`per_try_timeout` - (Optional) Specifies a non-zero timeout per retry attempt. In milliseconds (`Int`).
-
-`retriable_status_codes` - (Optional) HTTP status codes that should trigger a retry in addition to those specified by retry_on. (`Int`).
-
-`retry_condition` - (Optional) matching one defined in retriable_status_codes field (`String`).
-
-`retry_on` - (Optional) matching one defined in retriable_status_codes field (`String`).
-
 ### Ring Hash
 
 Request are sent to all eligible origin servers using hash of request based on hash policy. Consistent hashing algorithm, ring hash, is used to select origin server.
@@ -1780,7 +1780,7 @@ Send redirect response.
 
 ### Routes
 
-Routes for this load balancer.
+to origin pool or redirect matching traffic to a different URL or respond directly to matching traffic.
 
 `custom_route_object` - (Optional) A custom route uses a route object created outside of this view.. See [Custom Route Object ](#custom-route-object) below for details.
 
@@ -1809,6 +1809,10 @@ Required list of pages to insert Bot Defense client JavaScript..
 `metadata` - (Required) Common attributes for the rule including name and description.. See [Metadata ](#metadata) below for details.
 
 `path` - (Required) URI path matcher.. See [Path ](#path) below for details.
+
+### Same As Endpoint Port
+
+Health check is performed on endpoint port itself.
 
 ### Secret Value
 
@@ -1839,6 +1843,12 @@ For matching also specific endpoints you can use the API endpoint rules set bell
 `inline_rate_limiter` - (Optional) Specify rate values for the rule.. See [Inline Rate Limiter ](#inline-rate-limiter) below for details.
 
 `ref_rate_limiter` - (Optional) Use external rate limiter.. See [ref](#ref) below for details.
+
+### Service Selector
+
+discovery has to happen. This implicit label is added to service_selector.
+
+`expressions` - (Required) expressions contains the kubernetes style label expression for selections. (`String`).
 
 ### Simple Route
 
@@ -1886,6 +1896,14 @@ Advertise on a customer site and a given network..
 
 `site` - (Required) Reference to site object. See [ref](#ref) below for details.
 
+### Site Locator
+
+Site or Virtual site where this origin server is located.
+
+`site` - (Optional) Reference to site object. See [ref](#ref) below for details.
+
+`virtual_site` - (Optional) Reference to virtual site object. See [ref](#ref) below for details.
+
 ### Skip Data Guard
 
 x-displayName: "Skip".
@@ -1894,11 +1912,9 @@ x-displayName: "Skip".
 
 Skip both WAF and Bot Defense processing for clients matching this rule..
 
-### Specific Hash Policy
+### Skip Server Verification
 
-Configure hash policy specific for this route.
-
-`hash_policy` - (Required) route the request. See [Hash Policy ](#hash-policy) below for details.
+Skip origin server verification.
 
 ### Strip Query Params
 
@@ -1990,6 +2006,10 @@ Define rules to skip processing of one or more features such as WAF, Bot Defense
 
 For HTTP, default is 80. For HTTPS/SNI, default is 443..
 
+### Use Host Header As Sni
+
+Use the host header as SNI. The host header value is extracted after any configured rewrites have been applied..
+
 ### Use Http Lb User Id
 
 Defined in HTTP-LB Security Configuration -> User Identifier..
@@ -2004,9 +2024,37 @@ x-displayName: "Enable".
 
 `trusted_ca_url` - (Required) The URL for a trust store (`String`).
 
+### Use Server Verification
+
+Perform origin server verification using the provided trusted CA list.
+
+`trusted_ca_url` - (Required) Trusted CA certificates for verification of Server's certificate (`String`).
+
 ### Use System Defaults
 
 Volterra will try to fetch OCSPResponse with sha256 and sha1 as HashAlgorithm, in that order..
+
+### Use Tls
+
+x-displayName: "Enable".
+
+`no_mtls` - (Optional) x-displayName: "Disable" (bool).
+
+`use_mtls` - (Optional) x-displayName: "Enable". See [Use Mtls ](#use-mtls) below for details.
+
+`skip_server_verification` - (Optional) Skip origin server verification (bool).
+
+`use_server_verification` - (Optional) Perform origin server verification using the provided trusted CA list. See [Use Server Verification ](#use-server-verification) below for details.
+
+`volterra_trusted_ca` - (Optional) Perform origin server verification using Volterra default trusted CA list (bool).
+
+`disable_sni` - (Optional) Do not use SNI. (bool).
+
+`sni` - (Optional) SNI value to be used. (`String`).
+
+`use_host_header_as_sni` - (Optional) Use the host header as SNI. The host header value is extracted after any configured rewrites have been applied. (bool).
+
+`tls_config` - (Required) TLS parameters such as min/max TLS version and ciphers. See [Tls Config ](#tls-config) below for details.
 
 ### Vault Secret Info
 
@@ -2040,6 +2088,10 @@ Advertise on a customer virtual site and a given network..
 
 `virtual_site` - (Required) Reference to virtual site object. See [ref](#ref) below for details.
 
+### Vk8s Networks
+
+origin server are on vK8s network on the site.
+
 ### Vk8s Service
 
 Advertise on vK8s Service Network on RE..
@@ -2047,6 +2099,26 @@ Advertise on vK8s Service Network on RE..
 `site` - (Optional) Reference to site object. See [ref](#ref) below for details.
 
 `virtual_site` - (Optional) Reference to virtual site object. See [ref](#ref) below for details.
+
+### Vn Private Ip
+
+Specify origin server IP address on virtual network other than inside or outside network.
+
+`ip` - (Required) IP address (`String`).
+
+`virtual_network` - (Required) Virtual Network where this IP will be present. See [ref](#ref) below for details.
+
+### Vn Private Name
+
+Specify origin server name on virtual network other than inside or outside network.
+
+`dns_name` - (Required) DNS Name (`String`).
+
+`private_network` - (Required) Virtual Network where this Name will be present. See [ref](#ref) below for details.
+
+### Volterra Trusted Ca
+
+Perform origin server verification using Volterra default trusted CA list.
 
 ### Waf Exclusion Rules
 
@@ -2087,16 +2159,6 @@ Web and mobile traffic channel..
 `headers` - (Optional) Headers that can be used to identify mobile traffic.. See [Headers ](#headers) below for details.
 
 `mobile_identifier` - (Optional) Mobile identifier type (`String`).
-
-### Web Socket Config
-
-Upgrade to Websocket for this route.
-
-`idle_timeout` - (Optional) Idle Timeout for Websocket in milli seconds. After timeout, connection will be closed (`Int`).
-
-`max_connect_attempts` - (Optional) giving up. Default is 1 (`Int`).
-
-`use_websocket` - (Optional) a WebSocket connection (`Bool`).
 
 ### Wingman Secret Info
 

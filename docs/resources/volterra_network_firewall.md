@@ -20,16 +20,13 @@ resource "volterra_network_firewall" "example" {
   name      = "acmecorp-web"
   namespace = "staging"
 
-  // One of the arguments from this list "fast_acl_set disable_fast_acl active_fast_acls" must be set
+  // One of the arguments from this list "disable_fast_acl active_fast_acls fast_acl_set" must be set
+  disable_fast_acl = true
 
-  fast_acl_set {
-    name      = "test1"
-    namespace = "staging"
-    tenant    = "acmecorp"
-  }
-  // One of the arguments from this list "active_forward_proxy_policies forward_proxy_policy_set disable_forward_proxy_policy" must be set
+  // One of the arguments from this list "disable_forward_proxy_policy active_forward_proxy_policies forward_proxy_policy_set" must be set
   disable_forward_proxy_policy = true
-  // One of the arguments from this list "active_network_policies network_policy_set disable_network_policy" must be set
+
+  // One of the arguments from this list "disable_network_policy active_network_policies network_policy_set enhanced_firewall_policies" must be set
   disable_network_policy = true
 }
 
@@ -69,6 +66,8 @@ Argument Reference
 `active_network_policies` - (Optional) Active firewall policies for this network firewall(L3/L4 firewall).. See [Active Network Policies ](#active-network-policies) below for details.
 
 `disable_network_policy` - (Optional) Firewall Policy is disabled for this network firewall (bool).
+
+`enhanced_firewall_policies` - (Optional) - Site Local. See [ref](#ref) below for details.
 
 `network_policy_set` - (Optional) - Site Local. See [ref](#ref) below for details.
 

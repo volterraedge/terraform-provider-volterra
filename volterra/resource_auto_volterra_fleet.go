@@ -490,28 +490,6 @@ func resourceVolterraFleet() *schema.Resource {
 				},
 			},
 
-			"offline_survivability_mode": {
-
-				Type:     schema.TypeSet,
-				Optional: true,
-				Elem: &schema.Resource{
-					Schema: map[string]*schema.Schema{
-
-						"enable_offline_survivability_mode": {
-
-							Type:     schema.TypeBool,
-							Optional: true,
-						},
-
-						"no_offline_survivability_mode": {
-
-							Type:     schema.TypeBool,
-							Optional: true,
-						},
-					},
-				},
-			},
-
 			"operating_system_version": {
 				Type:     schema.TypeString,
 				Optional: true,
@@ -3522,45 +3500,6 @@ func resourceVolterraFleetCreate(d *schema.ResourceData, meta interface{}) error
 
 			if v, ok := nfMapToStrVal["uid"]; ok && !isIntfNil(v) {
 				networkFirewallInt[i].Uid = v.(string)
-			}
-
-		}
-
-	}
-
-	//offline_survivability_mode
-	if v, ok := d.GetOk("offline_survivability_mode"); ok && !isIntfNil(v) {
-
-		sl := v.(*schema.Set).List()
-		offlineSurvivabilityMode := &ves_io_schema_views.OfflineSurvivabilityModeType{}
-		createSpec.OfflineSurvivabilityMode = offlineSurvivabilityMode
-		for _, set := range sl {
-			offlineSurvivabilityModeMapStrToI := set.(map[string]interface{})
-
-			offlineSurvivabilityModeChoiceTypeFound := false
-
-			if v, ok := offlineSurvivabilityModeMapStrToI["enable_offline_survivability_mode"]; ok && !isIntfNil(v) && !offlineSurvivabilityModeChoiceTypeFound {
-
-				offlineSurvivabilityModeChoiceTypeFound = true
-
-				if v.(bool) {
-					offlineSurvivabilityModeChoiceInt := &ves_io_schema_views.OfflineSurvivabilityModeType_EnableOfflineSurvivabilityMode{}
-					offlineSurvivabilityModeChoiceInt.EnableOfflineSurvivabilityMode = &ves_io_schema.Empty{}
-					offlineSurvivabilityMode.OfflineSurvivabilityModeChoice = offlineSurvivabilityModeChoiceInt
-				}
-
-			}
-
-			if v, ok := offlineSurvivabilityModeMapStrToI["no_offline_survivability_mode"]; ok && !isIntfNil(v) && !offlineSurvivabilityModeChoiceTypeFound {
-
-				offlineSurvivabilityModeChoiceTypeFound = true
-
-				if v.(bool) {
-					offlineSurvivabilityModeChoiceInt := &ves_io_schema_views.OfflineSurvivabilityModeType_NoOfflineSurvivabilityMode{}
-					offlineSurvivabilityModeChoiceInt.NoOfflineSurvivabilityMode = &ves_io_schema.Empty{}
-					offlineSurvivabilityMode.OfflineSurvivabilityModeChoice = offlineSurvivabilityModeChoiceInt
-				}
-
 			}
 
 		}

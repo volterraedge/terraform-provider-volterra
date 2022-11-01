@@ -50,8 +50,13 @@ resource "volterra_aws_tgw_site" "example" {
       }
     }
 
-    // One of the arguments from this list "aws_cred assisted" must be set
-    assisted      = true
+    // One of the arguments from this list "assisted aws_cred" must be set
+
+    aws_cred {
+      name      = "test1"
+      namespace = "staging"
+      tenant    = "acmecorp"
+    }
     disk_size     = "80"
     instance_type = "a1.xlarge"
 
@@ -70,11 +75,11 @@ resource "volterra_aws_tgw_site" "example" {
     // One of the arguments from this list "new_tgw existing_tgw" must be set
 
     new_tgw {
-      // One of the arguments from this list "user_assigned system_generated" must be set
+      // One of the arguments from this list "system_generated user_assigned" must be set
       system_generated = true
     }
     // One of the arguments from this list "nodes_per_az total_nodes no_worker_nodes" must be set
-    total_nodes = "1"
+    nodes_per_az = "2"
   }
 
   // One of the arguments from this list "default_blocked_services blocked_services" must be set
@@ -130,8 +135,6 @@ Argument Reference
 
 `os` - (Optional) Operating System Details. See [Os ](#os) below for details.
 
-`site_local_control_plane` - (Optional) Enable/Disable site local control plane. See [Site Local Control Plane ](#site-local-control-plane) below for details.
-
 `sw` - (Optional) Volterra Software Details. See [Sw ](#sw) below for details.
 
 `tags` - (Optional) It helps to manage, identify, organize, search for, and filter resources in AWS console. (`String`).
@@ -147,6 +150,12 @@ Argument Reference
 Enable service policy so east-west traffic goes via proxy.
 
 `service_policies` - (Optional) A list of references to service_policy objects.. See [ref](#ref) below for details.
+
+### Active Enhanced Firewall Policies
+
+Enhanced Firewall Policies active for this site..
+
+`enhanced_firewall_policies` - (Required) Ordered List of Enhaned Firewall Policy active for this network firewall. See [ref](#ref) below for details.
 
 ### Active Forward Proxy Policies
 
@@ -192,7 +201,7 @@ Configure AWS TGW, services VPC and site nodes parameters..
 
 `aws_region` - (Required) Name for AWS Region. (`String`).
 
-`az_nodes` - (Optional) Only Single AZ or Three AZ(s) nodes are supported currently.. See [Az Nodes ](#az-nodes) below for details.
+`az_nodes` - (Required) Only Single AZ or Three AZ(s) nodes are supported currently.. See [Az Nodes ](#az-nodes) below for details.
 
 `assisted` - (Optional) In assisted deployment get AWS parameters generated in status of this objects and run volterra provided terraform script. (bool).
 
@@ -328,10 +337,6 @@ Use Custom static route to configure all advanced options.
 
 `subnets` - (Optional) List of route prefixes. See [Subnets ](#subnets) below for details.
 
-### Default Local Control Plane
-
-Enable Site Local Control Plane.
-
 ### Default Os Version
 
 Will assign latest available OS version.
@@ -414,7 +419,7 @@ Enable Interception.
 
 ### Enable Offline Survivability Mode
 
-Enabling offline survivability reduces default security of a CE..
+When this feature is enabled on an existing site, the pods/services on this site will be restarted..
 
 ### Existing Tgw
 
@@ -556,17 +561,13 @@ Static Routes disabled for inside network..
 
 No TLS interception is enabled for this network connector.
 
-### No Local Control Plane
-
-Disable Site Local Control Plane.
-
 ### No Network Policy
 
 Firewall Policy is disabled for this site..
 
 ### No Offline Survivability Mode
 
-Disable Offline Survivability Mode.
+When this feature is disabled on an existing site, the pods/services on this site will be restarted..
 
 ### No Outside Static Routes
 
@@ -580,9 +581,9 @@ Worker nodes is set to zero.
 
 Enable/Disable offline survivability mode.
 
-`enable_offline_survivability_mode` - (Optional) Enabling offline survivability reduces default security of a CE. (bool).
+`enable_offline_survivability_mode` - (Optional) When this feature is enabled on an existing site, the pods/services on this site will be restarted. (bool).
 
-`no_offline_survivability_mode` - (Optional) Disable Offline Survivability Mode (bool).
+`no_offline_survivability_mode` - (Optional) When this feature is disabled on an existing site, the pods/services on this site will be restarted. (bool).
 
 ### Os
 
@@ -641,14 +642,6 @@ tenant - (Optional) then tenant will hold the referred object's(e.g. route's) te
 ### Reserved Inside Subnet
 
 Autogenerate and reserve a subnet from the Primary CIDR.
-
-### Site Local Control Plane
-
-Enable/Disable site local control plane.
-
-`default_local_control_plane` - (Optional) Enable Site Local Control Plane (bool).
-
-`no_local_control_plane` - (Optional) Disable Site Local Control Plane (bool).
 
 ### Sli To Global Dr
 
@@ -729,6 +722,8 @@ Security Configuration for transit gateway.
 `forward_proxy_allow_all` - (Optional) Enable Forward Proxy for this site and allow all requests. (bool).
 
 `no_forward_proxy` - (Optional) Disable Forward Proxy for this site (bool).
+
+`active_enhanced_firewall_policies` - (Optional) Enhanced Firewall Policies active for this site.. See [Active Enhanced Firewall Policies ](#active-enhanced-firewall-policies) below for details.
 
 `active_network_policies` - (Optional) Firewall Policies active for this site.. See [Active Network Policies ](#active-network-policies) below for details.
 
