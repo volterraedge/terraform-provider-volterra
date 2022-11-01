@@ -20,29 +20,42 @@ resource "volterra_voltstack_site" "example" {
   name      = "acmecorp-web"
   namespace = "staging"
 
-  // One of the arguments from this list "default_blocked_services blocked_services" must be set
+  // One of the arguments from this list "blocked_services default_blocked_services" must be set
   default_blocked_services = true
 
-  // One of the arguments from this list "no_bond_devices bond_device_list" must be set
-  no_bond_devices = true
+  // One of the arguments from this list "bond_device_list no_bond_devices" must be set
+
+  bond_device_list {
+    bond_devices {
+      devices = ["eth0"]
+
+      // One of the arguments from this list "lacp active_backup" must be set
+
+      lacp {
+        rate = "30"
+      }
+      link_polling_interval = "1000"
+      link_up_delay         = "200"
+      name                  = "bond0"
+    }
+  }
 
   // One of the arguments from this list "disable_gpu enable_gpu enable_vgpu" must be set
-  disable_gpu = true
 
+  enable_vgpu {
+    feature_type   = "feature_type"
+    server_address = "gridlicense1.example.com"
+    server_port    = "7070"
+  }
   // One of the arguments from this list "no_k8s_cluster k8s_cluster" must be set
   no_k8s_cluster = true
-
   // One of the arguments from this list "logs_streaming_disabled log_receiver" must be set
   logs_streaming_disabled = true
-
   master_nodes = ["master-0"]
-
   // One of the arguments from this list "default_network_config custom_network_config" must be set
   default_network_config = true
-
   // One of the arguments from this list "default_storage_config custom_storage_config" must be set
   default_storage_config = true
-
   // One of the arguments from this list "deny_all_usb allow_all_usb usb_policy" must be set
   deny_all_usb          = true
   volterra_certified_hw = ["isv-8000-series-voltstack-combo"]
@@ -109,8 +122,6 @@ Argument Reference
 
 `os` - (Optional) Operating System Details. See [Os ](#os) below for details.
 
-`site_local_control_plane` - (Optional) Enable/Disable site local control plane. See [Site Local Control Plane ](#site-local-control-plane) below for details.
-
 `custom_storage_config` - (Optional) Use custom storage configuration. See [Custom Storage Config ](#custom-storage-config) below for details.
 
 `default_storage_config` - (Optional) Use default storage configuration (bool).
@@ -134,6 +145,12 @@ Argument Reference
 ### Active Backup
 
 Configure active/backup based bond device.
+
+### Active Enhanced Firewall Policies
+
+Enhanced Firewall Policies active for this site..
+
+`enhanced_firewall_policies` - (Required) Ordered List of Enhaned Firewall Policy active for this network firewall. See [ref](#ref) below for details.
 
 ### Active Forward Proxy Policies
 
@@ -293,6 +310,8 @@ Use custom networking configuration.
 
 `interface_list` - (Optional) Add all interfaces belonging to this site. See [Interface List ](#interface-list) below for details.
 
+`active_enhanced_firewall_policies` - (Optional) Enhanced Firewall Policies active for this site.. See [Active Enhanced Firewall Policies ](#active-enhanced-firewall-policies) below for details.
+
 `active_network_policies` - (Optional) Firewall Policies active for this site.. See [Active Network Policies ](#active-network-policies) below for details.
 
 `no_network_policy` - (Optional) Firewall Policy is disabled for this site. (bool).
@@ -382,10 +401,6 @@ Use default configuration for site local network.
 ### Default Interface Config
 
 Interface configuration is done based on certified hardware for this site.
-
-### Default Local Control Plane
-
-Enable Site Local Control Plane.
 
 ### Default Os Version
 
@@ -497,7 +512,7 @@ Enable Interception.
 
 ### Enable Offline Survivability Mode
 
-Enabling offline survivability reduces default security of a CE..
+When this feature is enabled on an existing site, the pods/services on this site will be restarted..
 
 ### Enable Vgpu
 
@@ -743,17 +758,13 @@ No TLS interception is enabled for this network connector.
 
 Interface does not have an IPv6 Address..
 
-### No Local Control Plane
-
-Disable Site Local Control Plane.
-
 ### No Network Policy
 
 Firewall Policy is disabled for this site..
 
 ### No Offline Survivability Mode
 
-Disable Offline Survivability Mode.
+When this feature is disabled on an existing site, the pods/services on this site will be restarted..
 
 ### No Static Routes
 
@@ -785,9 +796,9 @@ This interface is not primary.
 
 Enable/Disable offline survivability mode.
 
-`enable_offline_survivability_mode` - (Optional) Enabling offline survivability reduces default security of a CE. (bool).
+`enable_offline_survivability_mode` - (Optional) When this feature is enabled on an existing site, the pods/services on this site will be restarted. (bool).
 
-`no_offline_survivability_mode` - (Optional) Disable Offline Survivability Mode (bool).
+`no_offline_survivability_mode` - (Optional) When this feature is disabled on an existing site, the pods/services on this site will be restarted. (bool).
 
 ### Openebs Enterprise
 
@@ -866,14 +877,6 @@ tenant - (Optional) then tenant will hold the referred object's(e.g. route's) te
 ### Same As Dgw
 
 DNS server address is same as default gateway address.
-
-### Site Local Control Plane
-
-Enable/Disable site local control plane.
-
-`default_local_control_plane` - (Optional) Enable Site Local Control Plane (bool).
-
-`no_local_control_plane` - (Optional) Disable Site Local Control Plane (bool).
 
 ### Site Local Inside Network
 

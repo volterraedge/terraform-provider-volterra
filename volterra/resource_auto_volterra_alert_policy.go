@@ -195,6 +195,41 @@ func resourceVolterraAlertPolicy() *schema.Resource {
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
+									"alertlabel": {
+
+										Type:     schema.TypeSet,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"name": {
+													Type:     schema.TypeString,
+													Required: true,
+												},
+												"value": {
+													Type:     schema.TypeSet,
+													Required: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"exact_match": {
+
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+
+															"regex_match": {
+
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+														},
+													},
+												},
+											},
+										},
+									},
+
 									"alertname": {
 
 										Type:     schema.TypeSet,
@@ -629,6 +664,35 @@ func resourceVolterraAlertPolicyCreate(d *schema.ResourceData, meta interface{})
 				sl := v.(*schema.Set).List()
 				for _, set := range sl {
 					cs := set.(map[string]interface{})
+
+					if v, ok := cs["alertlabel"]; ok && !isIntfNil(v) {
+
+						sl := v.(*schema.Set).List()
+						alertlabel := make(map[string]*ves_io_schema_alert_policy.LabelMatcher)
+						matcherInt.Custom.Alertlabel = alertlabel
+						for _, set := range sl {
+							alertlabelMapStrToI := set.(map[string]interface{})
+							key, ok := alertlabelMapStrToI["name"]
+							if ok && !isIntfNil(key) {
+								alertlabel[key.(string)] = &ves_io_schema_alert_policy.LabelMatcher{}
+								val, _ := alertlabelMapStrToI["value"]
+
+								alertlabelVals := val.(*schema.Set).List()
+								for _, intVal := range alertlabelVals {
+
+									_ = intVal.(map[string]interface{})
+
+									//if w, ok := alertlabelStaticMap["matcher_type"]; ok && !isIntfNil(w) {
+									//	alertlabel[key.(string)].MatcherType = w.(string)
+									//}
+
+									// break after one loop
+									break
+								}
+							}
+						}
+
+					}
 
 					if v, ok := cs["alertname"]; ok && !isIntfNil(v) {
 
@@ -1181,6 +1245,35 @@ func resourceVolterraAlertPolicyUpdate(d *schema.ResourceData, meta interface{})
 				sl := v.(*schema.Set).List()
 				for _, set := range sl {
 					cs := set.(map[string]interface{})
+
+					if v, ok := cs["alertlabel"]; ok && !isIntfNil(v) {
+
+						sl := v.(*schema.Set).List()
+						alertlabel := make(map[string]*ves_io_schema_alert_policy.LabelMatcher)
+						matcherInt.Custom.Alertlabel = alertlabel
+						for _, set := range sl {
+							alertlabelMapStrToI := set.(map[string]interface{})
+							key, ok := alertlabelMapStrToI["name"]
+							if ok && !isIntfNil(key) {
+								alertlabel[key.(string)] = &ves_io_schema_alert_policy.LabelMatcher{}
+								val, _ := alertlabelMapStrToI["value"]
+
+								alertlabelVals := val.(*schema.Set).List()
+								for _, intVal := range alertlabelVals {
+
+									_ = intVal.(map[string]interface{})
+
+									//if w, ok := alertlabelStaticMap["matcher_type"]; ok && !isIntfNil(w) {
+									//	alertlabel[key.(string)].MatcherType = w.(string)
+									//}
+
+									// break after one loop
+									break
+								}
+							}
+						}
+
+					}
 
 					if v, ok := cs["alertname"]; ok && !isIntfNil(v) {
 

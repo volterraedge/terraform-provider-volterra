@@ -1047,7 +1047,23 @@ func resourceVolterraRoute() *schema.Resource {
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
+									"context_extensions": {
+
+										Type:     schema.TypeSet,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"context_extensions": {
+													Type:     schema.TypeMap,
+													Optional: true,
+												},
+											},
+										},
+									},
+
 									"disable": {
+
 										Type:     schema.TypeBool,
 										Optional: true,
 									},
@@ -2494,8 +2510,41 @@ func resourceVolterraRouteCreate(d *schema.ResourceData, meta interface{}) error
 				for _, set := range sl {
 					servicePolicyMapStrToI := set.(map[string]interface{})
 
-					if w, ok := servicePolicyMapStrToI["disable"]; ok && !isIntfNil(w) {
-						servicePolicy.Disable = w.(bool)
+					servicePolicyChoiceTypeFound := false
+
+					if v, ok := servicePolicyMapStrToI["context_extensions"]; ok && !isIntfNil(v) && !servicePolicyChoiceTypeFound {
+
+						servicePolicyChoiceTypeFound = true
+						servicePolicyChoiceInt := &ves_io_schema_route.ServicePolicyInfo_ContextExtensions{}
+						servicePolicyChoiceInt.ContextExtensions = &ves_io_schema_route.ContextExtensionInfo{}
+						servicePolicy.ServicePolicyChoice = servicePolicyChoiceInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["context_extensions"]; ok && !isIntfNil(v) {
+
+								ms := map[string]string{}
+								for k, v := range v.(map[string]interface{}) {
+									ms[k] = v.(string)
+								}
+								servicePolicyChoiceInt.ContextExtensions.ContextExtensions = ms
+							}
+
+						}
+
+					}
+
+					if v, ok := servicePolicyMapStrToI["disable"]; ok && !isIntfNil(v) && !servicePolicyChoiceTypeFound {
+
+						servicePolicyChoiceTypeFound = true
+						servicePolicyChoiceInt := &ves_io_schema_route.ServicePolicyInfo_Disable{}
+
+						servicePolicy.ServicePolicyChoice = servicePolicyChoiceInt
+
+						servicePolicyChoiceInt.Disable = v.(bool)
+
 					}
 
 				}
@@ -4013,8 +4062,41 @@ func resourceVolterraRouteUpdate(d *schema.ResourceData, meta interface{}) error
 				for _, set := range sl {
 					servicePolicyMapStrToI := set.(map[string]interface{})
 
-					if w, ok := servicePolicyMapStrToI["disable"]; ok && !isIntfNil(w) {
-						servicePolicy.Disable = w.(bool)
+					servicePolicyChoiceTypeFound := false
+
+					if v, ok := servicePolicyMapStrToI["context_extensions"]; ok && !isIntfNil(v) && !servicePolicyChoiceTypeFound {
+
+						servicePolicyChoiceTypeFound = true
+						servicePolicyChoiceInt := &ves_io_schema_route.ServicePolicyInfo_ContextExtensions{}
+						servicePolicyChoiceInt.ContextExtensions = &ves_io_schema_route.ContextExtensionInfo{}
+						servicePolicy.ServicePolicyChoice = servicePolicyChoiceInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["context_extensions"]; ok && !isIntfNil(v) {
+
+								ms := map[string]string{}
+								for k, v := range v.(map[string]interface{}) {
+									ms[k] = v.(string)
+								}
+								servicePolicyChoiceInt.ContextExtensions.ContextExtensions = ms
+							}
+
+						}
+
+					}
+
+					if v, ok := servicePolicyMapStrToI["disable"]; ok && !isIntfNil(v) && !servicePolicyChoiceTypeFound {
+
+						servicePolicyChoiceTypeFound = true
+						servicePolicyChoiceInt := &ves_io_schema_route.ServicePolicyInfo_Disable{}
+
+						servicePolicy.ServicePolicyChoice = servicePolicyChoiceInt
+
+						servicePolicyChoiceInt.Disable = v.(bool)
+
 					}
 
 				}

@@ -261,28 +261,6 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 				Required: true,
 			},
 
-			"site_local_control_plane": {
-
-				Type:     schema.TypeSet,
-				Optional: true,
-				Elem: &schema.Resource{
-					Schema: map[string]*schema.Schema{
-
-						"default_local_control_plane": {
-
-							Type:     schema.TypeBool,
-							Optional: true,
-						},
-
-						"no_local_control_plane": {
-
-							Type:     schema.TypeBool,
-							Optional: true,
-						},
-					},
-				},
-			},
-
 			"ingress_egress_gw": {
 
 				Type:     schema.TypeSet,
@@ -987,6 +965,18 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
+												"auto_asn": {
+
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
+
+												"custom_asn": {
+
+													Type:     schema.TypeInt,
+													Optional: true,
+												},
+
 												"connections": {
 
 													Type:     schema.TypeList,
@@ -1017,6 +1007,12 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 																		},
 																	},
 																},
+															},
+
+															"circuit_id": {
+
+																Type:     schema.TypeString,
+																Optional: true,
 															},
 
 															"other_subscription": {
@@ -1162,26 +1158,6 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 																		},
 
 																		"circuit_id": {
-																			Type:     schema.TypeString,
-																			Optional: true,
-																		},
-																	},
-																},
-															},
-
-															"same_subscription": {
-
-																Type:     schema.TypeSet,
-																Optional: true,
-																Elem: &schema.Resource{
-																	Schema: map[string]*schema.Schema{
-
-																		"name": {
-																			Type:     schema.TypeString,
-																			Optional: true,
-																		},
-
-																		"resource_group": {
 																			Type:     schema.TypeString,
 																			Optional: true,
 																		},
@@ -1584,6 +1560,39 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 
 							Type:     schema.TypeBool,
 							Optional: true,
+						},
+
+						"active_enhanced_firewall_policies": {
+
+							Type:     schema.TypeSet,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"enhanced_firewall_policies": {
+
+										Type:     schema.TypeList,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"name": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+												"namespace": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+												"tenant": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+											},
+										},
+									},
+								},
+							},
 						},
 
 						"active_network_policies": {
@@ -2400,6 +2409,18 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
+												"auto_asn": {
+
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
+
+												"custom_asn": {
+
+													Type:     schema.TypeInt,
+													Optional: true,
+												},
+
 												"connections": {
 
 													Type:     schema.TypeList,
@@ -2430,6 +2451,12 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 																		},
 																	},
 																},
+															},
+
+															"circuit_id": {
+
+																Type:     schema.TypeString,
+																Optional: true,
 															},
 
 															"other_subscription": {
@@ -2575,26 +2602,6 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 																		},
 
 																		"circuit_id": {
-																			Type:     schema.TypeString,
-																			Optional: true,
-																		},
-																	},
-																},
-															},
-
-															"same_subscription": {
-
-																Type:     schema.TypeSet,
-																Optional: true,
-																Elem: &schema.Resource{
-																	Schema: map[string]*schema.Schema{
-
-																		"name": {
-																			Type:     schema.TypeString,
-																			Optional: true,
-																		},
-
-																		"resource_group": {
 																			Type:     schema.TypeString,
 																			Optional: true,
 																		},
@@ -2997,6 +3004,39 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 
 							Type:     schema.TypeBool,
 							Optional: true,
+						},
+
+						"active_enhanced_firewall_policies": {
+
+							Type:     schema.TypeSet,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"enhanced_firewall_policies": {
+
+										Type:     schema.TypeList,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"name": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+												"namespace": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+												"tenant": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+											},
+										},
+									},
+								},
+							},
 						},
 
 						"active_network_policies": {
@@ -4204,6 +4244,39 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 							Optional: true,
 						},
 
+						"active_enhanced_firewall_policies": {
+
+							Type:     schema.TypeSet,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"enhanced_firewall_policies": {
+
+										Type:     schema.TypeList,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"name": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+												"namespace": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+												"tenant": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+											},
+										},
+									},
+								},
+							},
+						},
+
 						"active_network_policies": {
 
 							Type:     schema.TypeSet,
@@ -5058,6 +5131,39 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 
 							Type:     schema.TypeBool,
 							Optional: true,
+						},
+
+						"active_enhanced_firewall_policies": {
+
+							Type:     schema.TypeSet,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"enhanced_firewall_policies": {
+
+										Type:     schema.TypeList,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"name": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+												"namespace": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+												"tenant": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+											},
+										},
+									},
+								},
+							},
 						},
 
 						"active_network_policies": {
@@ -5932,45 +6038,6 @@ func resourceVolterraAzureVnetSiteCreate(d *schema.ResourceData, meta interface{
 
 		createSpec.ResourceGroup =
 			v.(string)
-
-	}
-
-	//site_local_control_plane
-	if v, ok := d.GetOk("site_local_control_plane"); ok && !isIntfNil(v) {
-
-		sl := v.(*schema.Set).List()
-		siteLocalControlPlane := &ves_io_schema_views.LocalControlPlaneType{}
-		createSpec.SiteLocalControlPlane = siteLocalControlPlane
-		for _, set := range sl {
-			siteLocalControlPlaneMapStrToI := set.(map[string]interface{})
-
-			localControlPlaneChoiceTypeFound := false
-
-			if v, ok := siteLocalControlPlaneMapStrToI["default_local_control_plane"]; ok && !isIntfNil(v) && !localControlPlaneChoiceTypeFound {
-
-				localControlPlaneChoiceTypeFound = true
-
-				if v.(bool) {
-					localControlPlaneChoiceInt := &ves_io_schema_views.LocalControlPlaneType_DefaultLocalControlPlane{}
-					localControlPlaneChoiceInt.DefaultLocalControlPlane = &ves_io_schema.Empty{}
-					siteLocalControlPlane.LocalControlPlaneChoice = localControlPlaneChoiceInt
-				}
-
-			}
-
-			if v, ok := siteLocalControlPlaneMapStrToI["no_local_control_plane"]; ok && !isIntfNil(v) && !localControlPlaneChoiceTypeFound {
-
-				localControlPlaneChoiceTypeFound = true
-
-				if v.(bool) {
-					localControlPlaneChoiceInt := &ves_io_schema_views.LocalControlPlaneType_NoLocalControlPlane{}
-					localControlPlaneChoiceInt.NoLocalControlPlane = &ves_io_schema.Empty{}
-					siteLocalControlPlane.LocalControlPlaneChoice = localControlPlaneChoiceInt
-				}
-
-			}
-
-		}
 
 	}
 
@@ -6977,6 +7044,31 @@ func resourceVolterraAzureVnetSiteCreate(d *schema.ResourceData, meta interface{
 						for _, set := range sl {
 							cs := set.(map[string]interface{})
 
+							asnChoiceTypeFound := false
+
+							if v, ok := cs["auto_asn"]; ok && !isIntfNil(v) && !asnChoiceTypeFound {
+
+								asnChoiceTypeFound = true
+
+								if v.(bool) {
+									asnChoiceInt := &ves_io_schema_views_azure_vnet_site.ExpressRouteConfigType_AutoAsn{}
+									asnChoiceInt.AutoAsn = &ves_io_schema.Empty{}
+									expressRouteChoiceInt.ExpressRouteEnabled.AsnChoice = asnChoiceInt
+								}
+
+							}
+
+							if v, ok := cs["custom_asn"]; ok && !isIntfNil(v) && !asnChoiceTypeFound {
+
+								asnChoiceTypeFound = true
+								asnChoiceInt := &ves_io_schema_views_azure_vnet_site.ExpressRouteConfigType_CustomAsn{}
+
+								expressRouteChoiceInt.ExpressRouteEnabled.AsnChoice = asnChoiceInt
+
+								asnChoiceInt.CustomAsn = uint32(v.(int))
+
+							}
+
 							if v, ok := cs["connections"]; ok && !isIntfNil(v) {
 
 								sl := v.([]interface{})
@@ -7011,6 +7103,17 @@ func resourceVolterraAzureVnetSiteCreate(d *schema.ResourceData, meta interface{
 									}
 
 									subscriptionChoiceTypeFound := false
+
+									if v, ok := connectionsMapStrToI["circuit_id"]; ok && !isIntfNil(v) && !subscriptionChoiceTypeFound {
+
+										subscriptionChoiceTypeFound = true
+										subscriptionChoiceInt := &ves_io_schema_views_azure_vnet_site.ExpressRouteConnectionType_CircuitId{}
+
+										connections[i].SubscriptionChoice = subscriptionChoiceInt
+
+										subscriptionChoiceInt.CircuitId = v.(string)
+
+									}
 
 									if v, ok := connectionsMapStrToI["other_subscription"]; ok && !isIntfNil(v) && !subscriptionChoiceTypeFound {
 
@@ -7196,33 +7299,6 @@ func resourceVolterraAzureVnetSiteCreate(d *schema.ResourceData, meta interface{
 											if v, ok := cs["circuit_id"]; ok && !isIntfNil(v) {
 
 												subscriptionChoiceInt.OtherSubscription.CircuitId = v.(string)
-
-											}
-
-										}
-
-									}
-
-									if v, ok := connectionsMapStrToI["same_subscription"]; ok && !isIntfNil(v) && !subscriptionChoiceTypeFound {
-
-										subscriptionChoiceTypeFound = true
-										subscriptionChoiceInt := &ves_io_schema_views_azure_vnet_site.ExpressRouteConnectionType_SameSubscription{}
-										subscriptionChoiceInt.SameSubscription = &ves_io_schema_views.AzureExpressRouteConnectionType{}
-										connections[i].SubscriptionChoice = subscriptionChoiceInt
-
-										sl := v.(*schema.Set).List()
-										for _, set := range sl {
-											cs := set.(map[string]interface{})
-
-											if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-												subscriptionChoiceInt.SameSubscription.Name = v.(string)
-
-											}
-
-											if v, ok := cs["resource_group"]; ok && !isIntfNil(v) {
-
-												subscriptionChoiceInt.SameSubscription.ResourceGroup = v.(string)
 
 											}
 
@@ -7826,6 +7902,47 @@ func resourceVolterraAzureVnetSiteCreate(d *schema.ResourceData, meta interface{
 			}
 
 			networkPolicyChoiceTypeFound := false
+
+			if v, ok := cs["active_enhanced_firewall_policies"]; ok && !isIntfNil(v) && !networkPolicyChoiceTypeFound {
+
+				networkPolicyChoiceTypeFound = true
+				networkPolicyChoiceInt := &ves_io_schema_views_azure_vnet_site.AzureVnetIngressEgressGwType_ActiveEnhancedFirewallPolicies{}
+				networkPolicyChoiceInt.ActiveEnhancedFirewallPolicies = &ves_io_schema_network_firewall.ActiveEnhancedFirewallPoliciesType{}
+				siteTypeInt.IngressEgressGw.NetworkPolicyChoice = networkPolicyChoiceInt
+
+				sl := v.(*schema.Set).List()
+				for _, set := range sl {
+					cs := set.(map[string]interface{})
+
+					if v, ok := cs["enhanced_firewall_policies"]; ok && !isIntfNil(v) {
+
+						sl := v.([]interface{})
+						enhancedFirewallPoliciesInt := make([]*ves_io_schema_views.ObjectRefType, len(sl))
+						networkPolicyChoiceInt.ActiveEnhancedFirewallPolicies.EnhancedFirewallPolicies = enhancedFirewallPoliciesInt
+						for i, ps := range sl {
+
+							efpMapToStrVal := ps.(map[string]interface{})
+							enhancedFirewallPoliciesInt[i] = &ves_io_schema_views.ObjectRefType{}
+
+							if v, ok := efpMapToStrVal["name"]; ok && !isIntfNil(v) {
+								enhancedFirewallPoliciesInt[i].Name = v.(string)
+							}
+
+							if v, ok := efpMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+								enhancedFirewallPoliciesInt[i].Namespace = v.(string)
+							}
+
+							if v, ok := efpMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+								enhancedFirewallPoliciesInt[i].Tenant = v.(string)
+							}
+
+						}
+
+					}
+
+				}
+
+			}
 
 			if v, ok := cs["active_network_policies"]; ok && !isIntfNil(v) && !networkPolicyChoiceTypeFound {
 
@@ -8978,6 +9095,31 @@ func resourceVolterraAzureVnetSiteCreate(d *schema.ResourceData, meta interface{
 						for _, set := range sl {
 							cs := set.(map[string]interface{})
 
+							asnChoiceTypeFound := false
+
+							if v, ok := cs["auto_asn"]; ok && !isIntfNil(v) && !asnChoiceTypeFound {
+
+								asnChoiceTypeFound = true
+
+								if v.(bool) {
+									asnChoiceInt := &ves_io_schema_views_azure_vnet_site.ExpressRouteConfigType_AutoAsn{}
+									asnChoiceInt.AutoAsn = &ves_io_schema.Empty{}
+									expressRouteChoiceInt.ExpressRouteEnabled.AsnChoice = asnChoiceInt
+								}
+
+							}
+
+							if v, ok := cs["custom_asn"]; ok && !isIntfNil(v) && !asnChoiceTypeFound {
+
+								asnChoiceTypeFound = true
+								asnChoiceInt := &ves_io_schema_views_azure_vnet_site.ExpressRouteConfigType_CustomAsn{}
+
+								expressRouteChoiceInt.ExpressRouteEnabled.AsnChoice = asnChoiceInt
+
+								asnChoiceInt.CustomAsn = uint32(v.(int))
+
+							}
+
 							if v, ok := cs["connections"]; ok && !isIntfNil(v) {
 
 								sl := v.([]interface{})
@@ -9012,6 +9154,17 @@ func resourceVolterraAzureVnetSiteCreate(d *schema.ResourceData, meta interface{
 									}
 
 									subscriptionChoiceTypeFound := false
+
+									if v, ok := connectionsMapStrToI["circuit_id"]; ok && !isIntfNil(v) && !subscriptionChoiceTypeFound {
+
+										subscriptionChoiceTypeFound = true
+										subscriptionChoiceInt := &ves_io_schema_views_azure_vnet_site.ExpressRouteConnectionType_CircuitId{}
+
+										connections[i].SubscriptionChoice = subscriptionChoiceInt
+
+										subscriptionChoiceInt.CircuitId = v.(string)
+
+									}
 
 									if v, ok := connectionsMapStrToI["other_subscription"]; ok && !isIntfNil(v) && !subscriptionChoiceTypeFound {
 
@@ -9197,33 +9350,6 @@ func resourceVolterraAzureVnetSiteCreate(d *schema.ResourceData, meta interface{
 											if v, ok := cs["circuit_id"]; ok && !isIntfNil(v) {
 
 												subscriptionChoiceInt.OtherSubscription.CircuitId = v.(string)
-
-											}
-
-										}
-
-									}
-
-									if v, ok := connectionsMapStrToI["same_subscription"]; ok && !isIntfNil(v) && !subscriptionChoiceTypeFound {
-
-										subscriptionChoiceTypeFound = true
-										subscriptionChoiceInt := &ves_io_schema_views_azure_vnet_site.ExpressRouteConnectionType_SameSubscription{}
-										subscriptionChoiceInt.SameSubscription = &ves_io_schema_views.AzureExpressRouteConnectionType{}
-										connections[i].SubscriptionChoice = subscriptionChoiceInt
-
-										sl := v.(*schema.Set).List()
-										for _, set := range sl {
-											cs := set.(map[string]interface{})
-
-											if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-												subscriptionChoiceInt.SameSubscription.Name = v.(string)
-
-											}
-
-											if v, ok := cs["resource_group"]; ok && !isIntfNil(v) {
-
-												subscriptionChoiceInt.SameSubscription.ResourceGroup = v.(string)
 
 											}
 
@@ -9827,6 +9953,47 @@ func resourceVolterraAzureVnetSiteCreate(d *schema.ResourceData, meta interface{
 			}
 
 			networkPolicyChoiceTypeFound := false
+
+			if v, ok := cs["active_enhanced_firewall_policies"]; ok && !isIntfNil(v) && !networkPolicyChoiceTypeFound {
+
+				networkPolicyChoiceTypeFound = true
+				networkPolicyChoiceInt := &ves_io_schema_views_azure_vnet_site.AzureVnetIngressEgressGwARType_ActiveEnhancedFirewallPolicies{}
+				networkPolicyChoiceInt.ActiveEnhancedFirewallPolicies = &ves_io_schema_network_firewall.ActiveEnhancedFirewallPoliciesType{}
+				siteTypeInt.IngressEgressGwAr.NetworkPolicyChoice = networkPolicyChoiceInt
+
+				sl := v.(*schema.Set).List()
+				for _, set := range sl {
+					cs := set.(map[string]interface{})
+
+					if v, ok := cs["enhanced_firewall_policies"]; ok && !isIntfNil(v) {
+
+						sl := v.([]interface{})
+						enhancedFirewallPoliciesInt := make([]*ves_io_schema_views.ObjectRefType, len(sl))
+						networkPolicyChoiceInt.ActiveEnhancedFirewallPolicies.EnhancedFirewallPolicies = enhancedFirewallPoliciesInt
+						for i, ps := range sl {
+
+							efpMapToStrVal := ps.(map[string]interface{})
+							enhancedFirewallPoliciesInt[i] = &ves_io_schema_views.ObjectRefType{}
+
+							if v, ok := efpMapToStrVal["name"]; ok && !isIntfNil(v) {
+								enhancedFirewallPoliciesInt[i].Name = v.(string)
+							}
+
+							if v, ok := efpMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+								enhancedFirewallPoliciesInt[i].Namespace = v.(string)
+							}
+
+							if v, ok := efpMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+								enhancedFirewallPoliciesInt[i].Tenant = v.(string)
+							}
+
+						}
+
+					}
+
+				}
+
+			}
 
 			if v, ok := cs["active_network_policies"]; ok && !isIntfNil(v) && !networkPolicyChoiceTypeFound {
 
@@ -11524,6 +11691,47 @@ func resourceVolterraAzureVnetSiteCreate(d *schema.ResourceData, meta interface{
 
 			networkPolicyChoiceTypeFound := false
 
+			if v, ok := cs["active_enhanced_firewall_policies"]; ok && !isIntfNil(v) && !networkPolicyChoiceTypeFound {
+
+				networkPolicyChoiceTypeFound = true
+				networkPolicyChoiceInt := &ves_io_schema_views_azure_vnet_site.AzureVnetVoltstackClusterType_ActiveEnhancedFirewallPolicies{}
+				networkPolicyChoiceInt.ActiveEnhancedFirewallPolicies = &ves_io_schema_network_firewall.ActiveEnhancedFirewallPoliciesType{}
+				siteTypeInt.VoltstackCluster.NetworkPolicyChoice = networkPolicyChoiceInt
+
+				sl := v.(*schema.Set).List()
+				for _, set := range sl {
+					cs := set.(map[string]interface{})
+
+					if v, ok := cs["enhanced_firewall_policies"]; ok && !isIntfNil(v) {
+
+						sl := v.([]interface{})
+						enhancedFirewallPoliciesInt := make([]*ves_io_schema_views.ObjectRefType, len(sl))
+						networkPolicyChoiceInt.ActiveEnhancedFirewallPolicies.EnhancedFirewallPolicies = enhancedFirewallPoliciesInt
+						for i, ps := range sl {
+
+							efpMapToStrVal := ps.(map[string]interface{})
+							enhancedFirewallPoliciesInt[i] = &ves_io_schema_views.ObjectRefType{}
+
+							if v, ok := efpMapToStrVal["name"]; ok && !isIntfNil(v) {
+								enhancedFirewallPoliciesInt[i].Name = v.(string)
+							}
+
+							if v, ok := efpMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+								enhancedFirewallPoliciesInt[i].Namespace = v.(string)
+							}
+
+							if v, ok := efpMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+								enhancedFirewallPoliciesInt[i].Tenant = v.(string)
+							}
+
+						}
+
+					}
+
+				}
+
+			}
+
 			if v, ok := cs["active_network_policies"]; ok && !isIntfNil(v) && !networkPolicyChoiceTypeFound {
 
 				networkPolicyChoiceTypeFound = true
@@ -12732,6 +12940,47 @@ func resourceVolterraAzureVnetSiteCreate(d *schema.ResourceData, meta interface{
 
 			networkPolicyChoiceTypeFound := false
 
+			if v, ok := cs["active_enhanced_firewall_policies"]; ok && !isIntfNil(v) && !networkPolicyChoiceTypeFound {
+
+				networkPolicyChoiceTypeFound = true
+				networkPolicyChoiceInt := &ves_io_schema_views_azure_vnet_site.AzureVnetVoltstackClusterARType_ActiveEnhancedFirewallPolicies{}
+				networkPolicyChoiceInt.ActiveEnhancedFirewallPolicies = &ves_io_schema_network_firewall.ActiveEnhancedFirewallPoliciesType{}
+				siteTypeInt.VoltstackClusterAr.NetworkPolicyChoice = networkPolicyChoiceInt
+
+				sl := v.(*schema.Set).List()
+				for _, set := range sl {
+					cs := set.(map[string]interface{})
+
+					if v, ok := cs["enhanced_firewall_policies"]; ok && !isIntfNil(v) {
+
+						sl := v.([]interface{})
+						enhancedFirewallPoliciesInt := make([]*ves_io_schema_views.ObjectRefType, len(sl))
+						networkPolicyChoiceInt.ActiveEnhancedFirewallPolicies.EnhancedFirewallPolicies = enhancedFirewallPoliciesInt
+						for i, ps := range sl {
+
+							efpMapToStrVal := ps.(map[string]interface{})
+							enhancedFirewallPoliciesInt[i] = &ves_io_schema_views.ObjectRefType{}
+
+							if v, ok := efpMapToStrVal["name"]; ok && !isIntfNil(v) {
+								enhancedFirewallPoliciesInt[i].Name = v.(string)
+							}
+
+							if v, ok := efpMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+								enhancedFirewallPoliciesInt[i].Namespace = v.(string)
+							}
+
+							if v, ok := efpMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+								enhancedFirewallPoliciesInt[i].Tenant = v.(string)
+							}
+
+						}
+
+					}
+
+				}
+
+			}
+
 			if v, ok := cs["active_network_policies"]; ok && !isIntfNil(v) && !networkPolicyChoiceTypeFound {
 
 				networkPolicyChoiceTypeFound = true
@@ -13709,36 +13958,36 @@ func resourceVolterraAzureVnetSiteUpdate(d *schema.ResourceData, meta interface{
 
 	}
 
-	if v, ok := d.GetOk("site_local_control_plane"); ok && !isIntfNil(v) {
+	if v, ok := d.GetOk("offline_survivability_mode"); ok && !isIntfNil(v) {
 
 		sl := v.(*schema.Set).List()
-		siteLocalControlPlane := &ves_io_schema_views.LocalControlPlaneType{}
-		updateSpec.SiteLocalControlPlane = siteLocalControlPlane
+		offlineSurvivabilityMode := &ves_io_schema_views.OfflineSurvivabilityModeType{}
+		updateSpec.OfflineSurvivabilityMode = offlineSurvivabilityMode
 		for _, set := range sl {
-			siteLocalControlPlaneMapStrToI := set.(map[string]interface{})
+			offlineSurvivabilityModeMapStrToI := set.(map[string]interface{})
 
-			localControlPlaneChoiceTypeFound := false
+			offlineSurvivabilityModeChoiceTypeFound := false
 
-			if v, ok := siteLocalControlPlaneMapStrToI["default_local_control_plane"]; ok && !isIntfNil(v) && !localControlPlaneChoiceTypeFound {
+			if v, ok := offlineSurvivabilityModeMapStrToI["enable_offline_survivability_mode"]; ok && !isIntfNil(v) && !offlineSurvivabilityModeChoiceTypeFound {
 
-				localControlPlaneChoiceTypeFound = true
+				offlineSurvivabilityModeChoiceTypeFound = true
 
 				if v.(bool) {
-					localControlPlaneChoiceInt := &ves_io_schema_views.LocalControlPlaneType_DefaultLocalControlPlane{}
-					localControlPlaneChoiceInt.DefaultLocalControlPlane = &ves_io_schema.Empty{}
-					siteLocalControlPlane.LocalControlPlaneChoice = localControlPlaneChoiceInt
+					offlineSurvivabilityModeChoiceInt := &ves_io_schema_views.OfflineSurvivabilityModeType_EnableOfflineSurvivabilityMode{}
+					offlineSurvivabilityModeChoiceInt.EnableOfflineSurvivabilityMode = &ves_io_schema.Empty{}
+					offlineSurvivabilityMode.OfflineSurvivabilityModeChoice = offlineSurvivabilityModeChoiceInt
 				}
 
 			}
 
-			if v, ok := siteLocalControlPlaneMapStrToI["no_local_control_plane"]; ok && !isIntfNil(v) && !localControlPlaneChoiceTypeFound {
+			if v, ok := offlineSurvivabilityModeMapStrToI["no_offline_survivability_mode"]; ok && !isIntfNil(v) && !offlineSurvivabilityModeChoiceTypeFound {
 
-				localControlPlaneChoiceTypeFound = true
+				offlineSurvivabilityModeChoiceTypeFound = true
 
 				if v.(bool) {
-					localControlPlaneChoiceInt := &ves_io_schema_views.LocalControlPlaneType_NoLocalControlPlane{}
-					localControlPlaneChoiceInt.NoLocalControlPlane = &ves_io_schema.Empty{}
-					siteLocalControlPlane.LocalControlPlaneChoice = localControlPlaneChoiceInt
+					offlineSurvivabilityModeChoiceInt := &ves_io_schema_views.OfflineSurvivabilityModeType_NoOfflineSurvivabilityMode{}
+					offlineSurvivabilityModeChoiceInt.NoOfflineSurvivabilityMode = &ves_io_schema.Empty{}
+					offlineSurvivabilityMode.OfflineSurvivabilityModeChoice = offlineSurvivabilityModeChoiceInt
 				}
 
 			}
@@ -14547,6 +14796,31 @@ func resourceVolterraAzureVnetSiteUpdate(d *schema.ResourceData, meta interface{
 						for _, set := range sl {
 							cs := set.(map[string]interface{})
 
+							asnChoiceTypeFound := false
+
+							if v, ok := cs["auto_asn"]; ok && !isIntfNil(v) && !asnChoiceTypeFound {
+
+								asnChoiceTypeFound = true
+
+								if v.(bool) {
+									asnChoiceInt := &ves_io_schema_views_azure_vnet_site.ExpressRouteConfigType_AutoAsn{}
+									asnChoiceInt.AutoAsn = &ves_io_schema.Empty{}
+									expressRouteChoiceInt.ExpressRouteEnabled.AsnChoice = asnChoiceInt
+								}
+
+							}
+
+							if v, ok := cs["custom_asn"]; ok && !isIntfNil(v) && !asnChoiceTypeFound {
+
+								asnChoiceTypeFound = true
+								asnChoiceInt := &ves_io_schema_views_azure_vnet_site.ExpressRouteConfigType_CustomAsn{}
+
+								expressRouteChoiceInt.ExpressRouteEnabled.AsnChoice = asnChoiceInt
+
+								asnChoiceInt.CustomAsn = uint32(v.(int))
+
+							}
+
 							if v, ok := cs["connections"]; ok && !isIntfNil(v) {
 
 								sl := v.([]interface{})
@@ -14581,6 +14855,17 @@ func resourceVolterraAzureVnetSiteUpdate(d *schema.ResourceData, meta interface{
 									}
 
 									subscriptionChoiceTypeFound := false
+
+									if v, ok := connectionsMapStrToI["circuit_id"]; ok && !isIntfNil(v) && !subscriptionChoiceTypeFound {
+
+										subscriptionChoiceTypeFound = true
+										subscriptionChoiceInt := &ves_io_schema_views_azure_vnet_site.ExpressRouteConnectionType_CircuitId{}
+
+										connections[i].SubscriptionChoice = subscriptionChoiceInt
+
+										subscriptionChoiceInt.CircuitId = v.(string)
+
+									}
 
 									if v, ok := connectionsMapStrToI["other_subscription"]; ok && !isIntfNil(v) && !subscriptionChoiceTypeFound {
 
@@ -14766,33 +15051,6 @@ func resourceVolterraAzureVnetSiteUpdate(d *schema.ResourceData, meta interface{
 											if v, ok := cs["circuit_id"]; ok && !isIntfNil(v) {
 
 												subscriptionChoiceInt.OtherSubscription.CircuitId = v.(string)
-
-											}
-
-										}
-
-									}
-
-									if v, ok := connectionsMapStrToI["same_subscription"]; ok && !isIntfNil(v) && !subscriptionChoiceTypeFound {
-
-										subscriptionChoiceTypeFound = true
-										subscriptionChoiceInt := &ves_io_schema_views_azure_vnet_site.ExpressRouteConnectionType_SameSubscription{}
-										subscriptionChoiceInt.SameSubscription = &ves_io_schema_views.AzureExpressRouteConnectionType{}
-										connections[i].SubscriptionChoice = subscriptionChoiceInt
-
-										sl := v.(*schema.Set).List()
-										for _, set := range sl {
-											cs := set.(map[string]interface{})
-
-											if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-												subscriptionChoiceInt.SameSubscription.Name = v.(string)
-
-											}
-
-											if v, ok := cs["resource_group"]; ok && !isIntfNil(v) {
-
-												subscriptionChoiceInt.SameSubscription.ResourceGroup = v.(string)
 
 											}
 
@@ -15396,6 +15654,47 @@ func resourceVolterraAzureVnetSiteUpdate(d *schema.ResourceData, meta interface{
 			}
 
 			networkPolicyChoiceTypeFound := false
+
+			if v, ok := cs["active_enhanced_firewall_policies"]; ok && !isIntfNil(v) && !networkPolicyChoiceTypeFound {
+
+				networkPolicyChoiceTypeFound = true
+				networkPolicyChoiceInt := &ves_io_schema_views_azure_vnet_site.AzureVnetIngressEgressGwReplaceType_ActiveEnhancedFirewallPolicies{}
+				networkPolicyChoiceInt.ActiveEnhancedFirewallPolicies = &ves_io_schema_network_firewall.ActiveEnhancedFirewallPoliciesType{}
+				siteTypeInt.IngressEgressGw.NetworkPolicyChoice = networkPolicyChoiceInt
+
+				sl := v.(*schema.Set).List()
+				for _, set := range sl {
+					cs := set.(map[string]interface{})
+
+					if v, ok := cs["enhanced_firewall_policies"]; ok && !isIntfNil(v) {
+
+						sl := v.([]interface{})
+						enhancedFirewallPoliciesInt := make([]*ves_io_schema_views.ObjectRefType, len(sl))
+						networkPolicyChoiceInt.ActiveEnhancedFirewallPolicies.EnhancedFirewallPolicies = enhancedFirewallPoliciesInt
+						for i, ps := range sl {
+
+							efpMapToStrVal := ps.(map[string]interface{})
+							enhancedFirewallPoliciesInt[i] = &ves_io_schema_views.ObjectRefType{}
+
+							if v, ok := efpMapToStrVal["name"]; ok && !isIntfNil(v) {
+								enhancedFirewallPoliciesInt[i].Name = v.(string)
+							}
+
+							if v, ok := efpMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+								enhancedFirewallPoliciesInt[i].Namespace = v.(string)
+							}
+
+							if v, ok := efpMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+								enhancedFirewallPoliciesInt[i].Tenant = v.(string)
+							}
+
+						}
+
+					}
+
+				}
+
+			}
 
 			if v, ok := cs["active_network_policies"]; ok && !isIntfNil(v) && !networkPolicyChoiceTypeFound {
 
@@ -16542,6 +16841,31 @@ func resourceVolterraAzureVnetSiteUpdate(d *schema.ResourceData, meta interface{
 						for _, set := range sl {
 							cs := set.(map[string]interface{})
 
+							asnChoiceTypeFound := false
+
+							if v, ok := cs["auto_asn"]; ok && !isIntfNil(v) && !asnChoiceTypeFound {
+
+								asnChoiceTypeFound = true
+
+								if v.(bool) {
+									asnChoiceInt := &ves_io_schema_views_azure_vnet_site.ExpressRouteConfigType_AutoAsn{}
+									asnChoiceInt.AutoAsn = &ves_io_schema.Empty{}
+									expressRouteChoiceInt.ExpressRouteEnabled.AsnChoice = asnChoiceInt
+								}
+
+							}
+
+							if v, ok := cs["custom_asn"]; ok && !isIntfNil(v) && !asnChoiceTypeFound {
+
+								asnChoiceTypeFound = true
+								asnChoiceInt := &ves_io_schema_views_azure_vnet_site.ExpressRouteConfigType_CustomAsn{}
+
+								expressRouteChoiceInt.ExpressRouteEnabled.AsnChoice = asnChoiceInt
+
+								asnChoiceInt.CustomAsn = uint32(v.(int))
+
+							}
+
 							if v, ok := cs["connections"]; ok && !isIntfNil(v) {
 
 								sl := v.([]interface{})
@@ -16576,6 +16900,17 @@ func resourceVolterraAzureVnetSiteUpdate(d *schema.ResourceData, meta interface{
 									}
 
 									subscriptionChoiceTypeFound := false
+
+									if v, ok := connectionsMapStrToI["circuit_id"]; ok && !isIntfNil(v) && !subscriptionChoiceTypeFound {
+
+										subscriptionChoiceTypeFound = true
+										subscriptionChoiceInt := &ves_io_schema_views_azure_vnet_site.ExpressRouteConnectionType_CircuitId{}
+
+										connections[i].SubscriptionChoice = subscriptionChoiceInt
+
+										subscriptionChoiceInt.CircuitId = v.(string)
+
+									}
 
 									if v, ok := connectionsMapStrToI["other_subscription"]; ok && !isIntfNil(v) && !subscriptionChoiceTypeFound {
 
@@ -16761,33 +17096,6 @@ func resourceVolterraAzureVnetSiteUpdate(d *schema.ResourceData, meta interface{
 											if v, ok := cs["circuit_id"]; ok && !isIntfNil(v) {
 
 												subscriptionChoiceInt.OtherSubscription.CircuitId = v.(string)
-
-											}
-
-										}
-
-									}
-
-									if v, ok := connectionsMapStrToI["same_subscription"]; ok && !isIntfNil(v) && !subscriptionChoiceTypeFound {
-
-										subscriptionChoiceTypeFound = true
-										subscriptionChoiceInt := &ves_io_schema_views_azure_vnet_site.ExpressRouteConnectionType_SameSubscription{}
-										subscriptionChoiceInt.SameSubscription = &ves_io_schema_views.AzureExpressRouteConnectionType{}
-										connections[i].SubscriptionChoice = subscriptionChoiceInt
-
-										sl := v.(*schema.Set).List()
-										for _, set := range sl {
-											cs := set.(map[string]interface{})
-
-											if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-												subscriptionChoiceInt.SameSubscription.Name = v.(string)
-
-											}
-
-											if v, ok := cs["resource_group"]; ok && !isIntfNil(v) {
-
-												subscriptionChoiceInt.SameSubscription.ResourceGroup = v.(string)
 
 											}
 
@@ -17391,6 +17699,47 @@ func resourceVolterraAzureVnetSiteUpdate(d *schema.ResourceData, meta interface{
 			}
 
 			networkPolicyChoiceTypeFound := false
+
+			if v, ok := cs["active_enhanced_firewall_policies"]; ok && !isIntfNil(v) && !networkPolicyChoiceTypeFound {
+
+				networkPolicyChoiceTypeFound = true
+				networkPolicyChoiceInt := &ves_io_schema_views_azure_vnet_site.AzureVnetIngressEgressGwARReplaceType_ActiveEnhancedFirewallPolicies{}
+				networkPolicyChoiceInt.ActiveEnhancedFirewallPolicies = &ves_io_schema_network_firewall.ActiveEnhancedFirewallPoliciesType{}
+				siteTypeInt.IngressEgressGwAr.NetworkPolicyChoice = networkPolicyChoiceInt
+
+				sl := v.(*schema.Set).List()
+				for _, set := range sl {
+					cs := set.(map[string]interface{})
+
+					if v, ok := cs["enhanced_firewall_policies"]; ok && !isIntfNil(v) {
+
+						sl := v.([]interface{})
+						enhancedFirewallPoliciesInt := make([]*ves_io_schema_views.ObjectRefType, len(sl))
+						networkPolicyChoiceInt.ActiveEnhancedFirewallPolicies.EnhancedFirewallPolicies = enhancedFirewallPoliciesInt
+						for i, ps := range sl {
+
+							efpMapToStrVal := ps.(map[string]interface{})
+							enhancedFirewallPoliciesInt[i] = &ves_io_schema_views.ObjectRefType{}
+
+							if v, ok := efpMapToStrVal["name"]; ok && !isIntfNil(v) {
+								enhancedFirewallPoliciesInt[i].Name = v.(string)
+							}
+
+							if v, ok := efpMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+								enhancedFirewallPoliciesInt[i].Namespace = v.(string)
+							}
+
+							if v, ok := efpMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+								enhancedFirewallPoliciesInt[i].Tenant = v.(string)
+							}
+
+						}
+
+					}
+
+				}
+
+			}
 
 			if v, ok := cs["active_network_policies"]; ok && !isIntfNil(v) && !networkPolicyChoiceTypeFound {
 
@@ -18480,6 +18829,47 @@ func resourceVolterraAzureVnetSiteUpdate(d *schema.ResourceData, meta interface{
 
 			networkPolicyChoiceTypeFound := false
 
+			if v, ok := cs["active_enhanced_firewall_policies"]; ok && !isIntfNil(v) && !networkPolicyChoiceTypeFound {
+
+				networkPolicyChoiceTypeFound = true
+				networkPolicyChoiceInt := &ves_io_schema_views_azure_vnet_site.AzureVnetVoltstackClusterReplaceType_ActiveEnhancedFirewallPolicies{}
+				networkPolicyChoiceInt.ActiveEnhancedFirewallPolicies = &ves_io_schema_network_firewall.ActiveEnhancedFirewallPoliciesType{}
+				siteTypeInt.VoltstackCluster.NetworkPolicyChoice = networkPolicyChoiceInt
+
+				sl := v.(*schema.Set).List()
+				for _, set := range sl {
+					cs := set.(map[string]interface{})
+
+					if v, ok := cs["enhanced_firewall_policies"]; ok && !isIntfNil(v) {
+
+						sl := v.([]interface{})
+						enhancedFirewallPoliciesInt := make([]*ves_io_schema_views.ObjectRefType, len(sl))
+						networkPolicyChoiceInt.ActiveEnhancedFirewallPolicies.EnhancedFirewallPolicies = enhancedFirewallPoliciesInt
+						for i, ps := range sl {
+
+							efpMapToStrVal := ps.(map[string]interface{})
+							enhancedFirewallPoliciesInt[i] = &ves_io_schema_views.ObjectRefType{}
+
+							if v, ok := efpMapToStrVal["name"]; ok && !isIntfNil(v) {
+								enhancedFirewallPoliciesInt[i].Name = v.(string)
+							}
+
+							if v, ok := efpMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+								enhancedFirewallPoliciesInt[i].Namespace = v.(string)
+							}
+
+							if v, ok := efpMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+								enhancedFirewallPoliciesInt[i].Tenant = v.(string)
+							}
+
+						}
+
+					}
+
+				}
+
+			}
+
 			if v, ok := cs["active_network_policies"]; ok && !isIntfNil(v) && !networkPolicyChoiceTypeFound {
 
 				networkPolicyChoiceTypeFound = true
@@ -19555,6 +19945,47 @@ func resourceVolterraAzureVnetSiteUpdate(d *schema.ResourceData, meta interface{
 			}
 
 			networkPolicyChoiceTypeFound := false
+
+			if v, ok := cs["active_enhanced_firewall_policies"]; ok && !isIntfNil(v) && !networkPolicyChoiceTypeFound {
+
+				networkPolicyChoiceTypeFound = true
+				networkPolicyChoiceInt := &ves_io_schema_views_azure_vnet_site.AzureVnetVoltstackClusterARReplaceType_ActiveEnhancedFirewallPolicies{}
+				networkPolicyChoiceInt.ActiveEnhancedFirewallPolicies = &ves_io_schema_network_firewall.ActiveEnhancedFirewallPoliciesType{}
+				siteTypeInt.VoltstackClusterAr.NetworkPolicyChoice = networkPolicyChoiceInt
+
+				sl := v.(*schema.Set).List()
+				for _, set := range sl {
+					cs := set.(map[string]interface{})
+
+					if v, ok := cs["enhanced_firewall_policies"]; ok && !isIntfNil(v) {
+
+						sl := v.([]interface{})
+						enhancedFirewallPoliciesInt := make([]*ves_io_schema_views.ObjectRefType, len(sl))
+						networkPolicyChoiceInt.ActiveEnhancedFirewallPolicies.EnhancedFirewallPolicies = enhancedFirewallPoliciesInt
+						for i, ps := range sl {
+
+							efpMapToStrVal := ps.(map[string]interface{})
+							enhancedFirewallPoliciesInt[i] = &ves_io_schema_views.ObjectRefType{}
+
+							if v, ok := efpMapToStrVal["name"]; ok && !isIntfNil(v) {
+								enhancedFirewallPoliciesInt[i].Name = v.(string)
+							}
+
+							if v, ok := efpMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+								enhancedFirewallPoliciesInt[i].Namespace = v.(string)
+							}
+
+							if v, ok := efpMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+								enhancedFirewallPoliciesInt[i].Tenant = v.(string)
+							}
+
+						}
+
+					}
+
+				}
+
+			}
 
 			if v, ok := cs["active_network_policies"]; ok && !isIntfNil(v) && !networkPolicyChoiceTypeFound {
 

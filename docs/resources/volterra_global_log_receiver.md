@@ -21,45 +21,39 @@ resource "volterra_global_log_receiver" "example" {
   namespace = "staging"
 
   // One of the arguments from this list "ns_current ns_all ns_list ns_system" must be set
-  ns_all = true
+  ns_current = true
 
-  // One of the arguments from this list "elastic_receiver azure_receiver azure_event_hubs_receiver s3_receiver http_receiver datadog_receiver splunk_receiver" must be set
+  // One of the arguments from this list "request_logs security_events audit_logs" must be set
+  request_logs = true
 
-  azure_receiver {
+  // One of the arguments from this list "elastic_receiver azure_receiver kafka_receiver azure_event_hubs_receiver aws_cloud_watch_receiver s3_receiver http_receiver datadog_receiver splunk_receiver" must be set
+
+  s3_receiver {
+    aws_cred {
+      name      = "test1"
+      namespace = "staging"
+      tenant    = "acmecorp"
+    }
+
+    aws_region = "us-east-1"
+
     batch {
-      // One of the arguments from this list "max_bytes max_bytes_disabled" must be set
+      // One of the arguments from this list "max_bytes_disabled max_bytes" must be set
       max_bytes_disabled = true
 
       // One of the arguments from this list "max_events_disabled max_events" must be set
-      max_events_disabled = true
+      max_events = "200"
 
       // One of the arguments from this list "timeout_seconds_default timeout_seconds" must be set
       timeout_seconds_default = true
     }
 
+    bucket = "S3 Bucket Name"
+
     compression {
       // One of the arguments from this list "compression_none compression_gzip" must be set
       compression_none = true
     }
-
-    connection_string {
-      blindfold_secret_info_internal {
-        decryption_provider = "value"
-        location            = "string:///U2VjcmV0SW5mb3JtYXRpb24="
-        store_provider      = "value"
-      }
-
-      secret_encoding_type = "secret_encoding_type"
-
-      // One of the arguments from this list "blindfold_secret_info vault_secret_info clear_secret_info wingman_secret_info" must be set
-
-      clear_secret_info {
-        provider = "box-provider"
-        url      = "string:///U2VjcmV0SW5mb3JtYXRpb24="
-      }
-    }
-
-    container_name = "logs"
   }
 }
 
@@ -84,13 +78,21 @@ Argument Reference
 
 ### Spec Argument Reference
 
-`ns_all` - (Optional) Select logs from all namespaces (bool).
+`ns_all` - (Optional) x-displayName: "Select logs from all namespaces" (bool).
 
-`ns_current` - (Optional) Select logs from current namespace (bool).
+`ns_current` - (Optional) x-displayName: "Select logs from current namespace" (bool).
 
-`ns_list` - (Optional) Select logs in specific namespaces. See [Ns List ](#ns-list) below for details.
+`ns_list` - (Optional) x-displayName: "Select logs in specific namespaces". See [Ns List ](#ns-list) below for details.
 
-`ns_system` - (Optional) Select logs from System namespace (bool).
+`ns_system` - (Optional) x-displayName: "Select logs from System namespace" (bool).
+
+`audit_logs` - (Optional) Send Audit Logs (corresponding to Public Audit and Authentication) (bool).
+
+`request_logs` - (Optional) Send Request Logs (corresponding to Load Balancer access logs) (bool).
+
+`security_events` - (Optional) Send Security Events (corresponding to e.g. WAF blocked events or malicious requests) (bool).
+
+`aws_cloud_watch_receiver` - (Optional) Send logs to AWS Cloudwatch. See [Aws Cloud Watch Receiver ](#aws-cloud-watch-receiver) below for details.
 
 `azure_event_hubs_receiver` - (Optional) Send logs to Azure Event Hubs. See [Azure Event Hubs Receiver ](#azure-event-hubs-receiver) below for details.
 
@@ -101,6 +103,8 @@ Argument Reference
 `elastic_receiver` - (Optional) Send logs to an Elasticsearch endpoint. See [Elastic Receiver ](#elastic-receiver) below for details.
 
 `http_receiver` - (Optional) Send logs to a generic HTTP(s) server. See [Http Receiver ](#http-receiver) below for details.
+
+`kafka_receiver` - (Optional) Send logs to a Kafka cluster. See [Kafka Receiver ](#kafka-receiver) below for details.
 
 `s3_receiver` - (Optional) Send logs to an AWS S3 bucket. See [S3 Receiver ](#s3-receiver) below for details.
 
@@ -123,6 +127,22 @@ No Authentication for the Elasticsearch endpoint.
 Configure an Access Token for authentication to the HTTP(s) server (such as a Bearer Token).
 
 `token` - (Optional) Volterra Secret. URL for token, needs to be fetched from this path. See [Token ](#token) below for details.
+
+### Aws Cloud Watch Receiver
+
+Send logs to AWS Cloudwatch.
+
+`aws_cred` - (Required) Reference to AWS Cloud Credentials for access to the Cloudwatch Logs. See [ref](#ref) below for details.
+
+`aws_region` - (Required) AWS Region Name (`String`).
+
+`batch` - (Optional) Batch Options allow tuning of the conditions for how batches of logs are sent to the endpoint. See [Batch ](#batch) below for details.
+
+`compression` - (Optional) Compression Options allows selection of how data should be compressed when sent to the endpoint. See [Compression ](#compression) below for details.
+
+`group_name` - (Required) The group name of the target Cloudwatch Logs stream (`String`).
+
+`stream_name` - (Required) Note that there can only be one writer to a log stream at a time (`String`).
 
 ### Azure Event Hubs Receiver
 
@@ -312,6 +332,22 @@ Send logs to a generic HTTP(s) server.
 
 `uri` - (Required) HTTP Uri is the Uri of the HTTP endpoint to send logs to, example: `http://example.com:9000/logs` (`String`).
 
+### Kafka Receiver
+
+Send logs to a Kafka cluster.
+
+`batch` - (Optional) Batch Options allow tuning of the conditions for how batches of logs are sent to the endpoint. See [Batch ](#batch) below for details.
+
+`bootstrap_servers` - (Required) List of host:port pairs of the Kafka brokers (`String`).
+
+`compression` - (Optional) Compression Options allows selection of how data should be compressed when sent to the endpoint. See [Compression ](#compression) below for details.
+
+`kafka_topic` - (Required) The Kafka topic name to write events to (`String`).
+
+`no_tls` - (Optional) Do not use TLS for the client connection (bool).
+
+`use_tls` - (Optional) Use TLS for client connections to the endpoint. See [Use Tls ](#use-tls) below for details.
+
 ### Key Url
 
 The data may be optionally secured using BlindFold..
@@ -358,7 +394,7 @@ Do not use TLS for the client connection.
 
 ### Ns List
 
-Select logs in specific namespaces.
+x-displayName: "Select logs in specific namespaces".
 
 `namespaces` - (Required) List of namespaces to stream logs for (`String`).
 

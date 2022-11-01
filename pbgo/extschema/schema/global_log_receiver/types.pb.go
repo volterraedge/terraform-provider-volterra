@@ -1694,6 +1694,263 @@ func (m *AzureEventHubsConfig) GetInstance() string {
 	return ""
 }
 
+// AWS Cloudwatch Logs Configuration
+//
+// x-displayName: "AWS Cloudwatch Logs Configuration"
+// AWS Cloudwatch Logs Configuration for Global Log Receiver
+type AWSCloudwatchConfig struct {
+	// Group Name
+	//
+	// x-displayName: "Group Name"
+	// x-example: "logs"
+	// x-required
+	// The group name of the target Cloudwatch Logs stream
+	GroupName string `protobuf:"bytes,1,opt,name=group_name,json=groupName,proto3" json:"group_name,omitempty"`
+	// Stream Name
+	//
+	// x-displayName: "Stream Name"
+	// x-example: "access"
+	// x-required
+	// The stream name of the target Cloudwatch Logs stream.
+	// Note that there can only be one writer to a log stream at a time
+	StreamName string `protobuf:"bytes,2,opt,name=stream_name,json=streamName,proto3" json:"stream_name,omitempty"`
+	// AWS Cloud Credentials
+	//
+	// x-displayName: "AWS Cloud Credentials"
+	// x-required
+	// Reference to AWS Cloud Credentials for access to the Cloudwatch Logs
+	AwsCred *views.ObjectRefType `protobuf:"bytes,3,opt,name=aws_cred,json=awsCred,proto3" json:"aws_cred,omitempty"`
+	// AWS Region
+	//
+	// x-displayName: "AWS Region"
+	// x-example: "us-east-1"
+	// x-required
+	// AWS Region Name
+	AwsRegion string `protobuf:"bytes,4,opt,name=aws_region,json=awsRegion,proto3" json:"aws_region,omitempty"`
+	// Compression Options
+	//
+	// x-displayName: "Compression Options"
+	// Compression Options allows selection of how data should be compressed when sent to the endpoint
+	Compression *CompressionType `protobuf:"bytes,5,opt,name=compression,proto3" json:"compression,omitempty"`
+	// Batch Options
+	//
+	// x-displayName: "Batch Options"
+	// Batch Options allow tuning of the conditions for how batches of logs are sent to the endpoint
+	Batch *BatchOptionType `protobuf:"bytes,6,opt,name=batch,proto3" json:"batch,omitempty"`
+}
+
+func (m *AWSCloudwatchConfig) Reset()      { *m = AWSCloudwatchConfig{} }
+func (*AWSCloudwatchConfig) ProtoMessage() {}
+func (*AWSCloudwatchConfig) Descriptor() ([]byte, []int) {
+	return fileDescriptor_2ef22f1dd0dc1f3e, []int{14}
+}
+func (m *AWSCloudwatchConfig) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *AWSCloudwatchConfig) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *AWSCloudwatchConfig) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_AWSCloudwatchConfig.Merge(m, src)
+}
+func (m *AWSCloudwatchConfig) XXX_Size() int {
+	return m.Size()
+}
+func (m *AWSCloudwatchConfig) XXX_DiscardUnknown() {
+	xxx_messageInfo_AWSCloudwatchConfig.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_AWSCloudwatchConfig proto.InternalMessageInfo
+
+func (m *AWSCloudwatchConfig) GetGroupName() string {
+	if m != nil {
+		return m.GroupName
+	}
+	return ""
+}
+
+func (m *AWSCloudwatchConfig) GetStreamName() string {
+	if m != nil {
+		return m.StreamName
+	}
+	return ""
+}
+
+func (m *AWSCloudwatchConfig) GetAwsCred() *views.ObjectRefType {
+	if m != nil {
+		return m.AwsCred
+	}
+	return nil
+}
+
+func (m *AWSCloudwatchConfig) GetAwsRegion() string {
+	if m != nil {
+		return m.AwsRegion
+	}
+	return ""
+}
+
+func (m *AWSCloudwatchConfig) GetCompression() *CompressionType {
+	if m != nil {
+		return m.Compression
+	}
+	return nil
+}
+
+func (m *AWSCloudwatchConfig) GetBatch() *BatchOptionType {
+	if m != nil {
+		return m.Batch
+	}
+	return nil
+}
+
+// Kafka Configuration
+//
+// x-displayName: "Kafka Configuration"
+// Kafka Configuration for Global Log Receiver
+type KafkaConfig struct {
+	// Kafka Bootstrap Servers List
+	//
+	// x-displayName: "Kafka Bootstrap Servers List"
+	// x-example: "kafka-01.example.com:9093"
+	// x-required
+	// List of host:port pairs of the Kafka brokers
+	BootstrapServers []string `protobuf:"bytes,1,rep,name=bootstrap_servers,json=bootstrapServers,proto3" json:"bootstrap_servers,omitempty"`
+	// Kafka Topic
+	//
+	// x-displayName: "Kafka Topic"
+	// x-example: "accesslogs"
+	// x-required
+	// The Kafka topic name to write events to
+	KafkaTopic string `protobuf:"bytes,2,opt,name=kafka_topic,json=kafkaTopic,proto3" json:"kafka_topic,omitempty"`
+	// Compression Options
+	//
+	// x-displayName: "Compression Options"
+	// Compression Options allows selection of how data should be compressed when sent to the endpoint
+	Compression *CompressionType `protobuf:"bytes,3,opt,name=compression,proto3" json:"compression,omitempty"`
+	// Batch Options
+	//
+	// x-displayName: "Batch Options"
+	// Batch Options allow tuning of the conditions for how batches of logs are sent to the endpoint
+	Batch *BatchOptionType `protobuf:"bytes,4,opt,name=batch,proto3" json:"batch,omitempty"`
+	// Enable TLS
+	//
+	// x-displayName: "TLS"
+	// x-required
+	//
+	// Types that are valid to be assigned to TlsChoice:
+	//	*KafkaConfig_NoTls
+	//	*KafkaConfig_UseTls
+	TlsChoice isKafkaConfig_TlsChoice `protobuf_oneof:"tls_choice"`
+}
+
+func (m *KafkaConfig) Reset()      { *m = KafkaConfig{} }
+func (*KafkaConfig) ProtoMessage() {}
+func (*KafkaConfig) Descriptor() ([]byte, []int) {
+	return fileDescriptor_2ef22f1dd0dc1f3e, []int{15}
+}
+func (m *KafkaConfig) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *KafkaConfig) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *KafkaConfig) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_KafkaConfig.Merge(m, src)
+}
+func (m *KafkaConfig) XXX_Size() int {
+	return m.Size()
+}
+func (m *KafkaConfig) XXX_DiscardUnknown() {
+	xxx_messageInfo_KafkaConfig.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_KafkaConfig proto.InternalMessageInfo
+
+type isKafkaConfig_TlsChoice interface {
+	isKafkaConfig_TlsChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
+
+type KafkaConfig_NoTls struct {
+	NoTls *schema.Empty `protobuf:"bytes,6,opt,name=no_tls,json=noTls,proto3,oneof" json:"no_tls,omitempty"`
+}
+type KafkaConfig_UseTls struct {
+	UseTls *TLSConfigType `protobuf:"bytes,7,opt,name=use_tls,json=useTls,proto3,oneof" json:"use_tls,omitempty"`
+}
+
+func (*KafkaConfig_NoTls) isKafkaConfig_TlsChoice()  {}
+func (*KafkaConfig_UseTls) isKafkaConfig_TlsChoice() {}
+
+func (m *KafkaConfig) GetTlsChoice() isKafkaConfig_TlsChoice {
+	if m != nil {
+		return m.TlsChoice
+	}
+	return nil
+}
+
+func (m *KafkaConfig) GetBootstrapServers() []string {
+	if m != nil {
+		return m.BootstrapServers
+	}
+	return nil
+}
+
+func (m *KafkaConfig) GetKafkaTopic() string {
+	if m != nil {
+		return m.KafkaTopic
+	}
+	return ""
+}
+
+func (m *KafkaConfig) GetCompression() *CompressionType {
+	if m != nil {
+		return m.Compression
+	}
+	return nil
+}
+
+func (m *KafkaConfig) GetBatch() *BatchOptionType {
+	if m != nil {
+		return m.Batch
+	}
+	return nil
+}
+
+func (m *KafkaConfig) GetNoTls() *schema.Empty {
+	if x, ok := m.GetTlsChoice().(*KafkaConfig_NoTls); ok {
+		return x.NoTls
+	}
+	return nil
+}
+
+func (m *KafkaConfig) GetUseTls() *TLSConfigType {
+	if x, ok := m.GetTlsChoice().(*KafkaConfig_UseTls); ok {
+		return x.UseTls
+	}
+	return nil
+}
+
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*KafkaConfig) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
+		(*KafkaConfig_NoTls)(nil),
+		(*KafkaConfig_UseTls)(nil),
+	}
+}
+
 // Specification for Global Log Receiver
 //
 // x-displayName: "Specification"
@@ -1725,7 +1982,20 @@ type GlobalSpecType struct {
 	//	*GlobalSpecType_ElasticReceiver
 	//	*GlobalSpecType_AzureReceiver
 	//	*GlobalSpecType_AzureEventHubsReceiver
+	//	*GlobalSpecType_AwsCloudWatchReceiver
+	//	*GlobalSpecType_KafkaReceiver
 	Receiver isGlobalSpecType_Receiver `protobuf_oneof:"receiver"`
+	// Log Type Selection
+	//
+	// x-displayName: "Log Type"
+	// x-required
+	// Log Type
+	//
+	// Types that are valid to be assigned to LogType:
+	//	*GlobalSpecType_RequestLogs
+	//	*GlobalSpecType_SecurityEvents
+	//	*GlobalSpecType_AuditLogs
+	LogType isGlobalSpecType_LogType `protobuf_oneof:"log_type"`
 	// view_internal
 	//
 	// x-displayName: "View Internal"
@@ -1736,7 +2006,7 @@ type GlobalSpecType struct {
 func (m *GlobalSpecType) Reset()      { *m = GlobalSpecType{} }
 func (*GlobalSpecType) ProtoMessage() {}
 func (*GlobalSpecType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_2ef22f1dd0dc1f3e, []int{14}
+	return fileDescriptor_2ef22f1dd0dc1f3e, []int{16}
 }
 func (m *GlobalSpecType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1769,6 +2039,12 @@ type isGlobalSpecType_FilterChoice interface {
 }
 type isGlobalSpecType_Receiver interface {
 	isGlobalSpecType_Receiver()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
+type isGlobalSpecType_LogType interface {
+	isGlobalSpecType_LogType()
 	Equal(interface{}) bool
 	MarshalTo([]byte) (int, error)
 	Size() int
@@ -1807,6 +2083,21 @@ type GlobalSpecType_AzureReceiver struct {
 type GlobalSpecType_AzureEventHubsReceiver struct {
 	AzureEventHubsReceiver *AzureEventHubsConfig `protobuf:"bytes,13,opt,name=azure_event_hubs_receiver,json=azureEventHubsReceiver,proto3,oneof" json:"azure_event_hubs_receiver,omitempty"`
 }
+type GlobalSpecType_AwsCloudWatchReceiver struct {
+	AwsCloudWatchReceiver *AWSCloudwatchConfig `protobuf:"bytes,18,opt,name=aws_cloud_watch_receiver,json=awsCloudWatchReceiver,proto3,oneof" json:"aws_cloud_watch_receiver,omitempty"`
+}
+type GlobalSpecType_KafkaReceiver struct {
+	KafkaReceiver *KafkaConfig `protobuf:"bytes,19,opt,name=kafka_receiver,json=kafkaReceiver,proto3,oneof" json:"kafka_receiver,omitempty"`
+}
+type GlobalSpecType_RequestLogs struct {
+	RequestLogs *schema.Empty `protobuf:"bytes,15,opt,name=request_logs,json=requestLogs,proto3,oneof" json:"request_logs,omitempty"`
+}
+type GlobalSpecType_SecurityEvents struct {
+	SecurityEvents *schema.Empty `protobuf:"bytes,16,opt,name=security_events,json=securityEvents,proto3,oneof" json:"security_events,omitempty"`
+}
+type GlobalSpecType_AuditLogs struct {
+	AuditLogs *schema.Empty `protobuf:"bytes,17,opt,name=audit_logs,json=auditLogs,proto3,oneof" json:"audit_logs,omitempty"`
+}
 
 func (*GlobalSpecType_NsCurrent) isGlobalSpecType_FilterChoice()          {}
 func (*GlobalSpecType_NsAll) isGlobalSpecType_FilterChoice()              {}
@@ -1819,6 +2110,11 @@ func (*GlobalSpecType_SplunkReceiver) isGlobalSpecType_Receiver()         {}
 func (*GlobalSpecType_ElasticReceiver) isGlobalSpecType_Receiver()        {}
 func (*GlobalSpecType_AzureReceiver) isGlobalSpecType_Receiver()          {}
 func (*GlobalSpecType_AzureEventHubsReceiver) isGlobalSpecType_Receiver() {}
+func (*GlobalSpecType_AwsCloudWatchReceiver) isGlobalSpecType_Receiver()  {}
+func (*GlobalSpecType_KafkaReceiver) isGlobalSpecType_Receiver()          {}
+func (*GlobalSpecType_RequestLogs) isGlobalSpecType_LogType()             {}
+func (*GlobalSpecType_SecurityEvents) isGlobalSpecType_LogType()          {}
+func (*GlobalSpecType_AuditLogs) isGlobalSpecType_LogType()               {}
 
 func (m *GlobalSpecType) GetFilterChoice() isGlobalSpecType_FilterChoice {
 	if m != nil {
@@ -1829,6 +2125,12 @@ func (m *GlobalSpecType) GetFilterChoice() isGlobalSpecType_FilterChoice {
 func (m *GlobalSpecType) GetReceiver() isGlobalSpecType_Receiver {
 	if m != nil {
 		return m.Receiver
+	}
+	return nil
+}
+func (m *GlobalSpecType) GetLogType() isGlobalSpecType_LogType {
+	if m != nil {
+		return m.LogType
 	}
 	return nil
 }
@@ -1910,6 +2212,41 @@ func (m *GlobalSpecType) GetAzureEventHubsReceiver() *AzureEventHubsConfig {
 	return nil
 }
 
+func (m *GlobalSpecType) GetAwsCloudWatchReceiver() *AWSCloudwatchConfig {
+	if x, ok := m.GetReceiver().(*GlobalSpecType_AwsCloudWatchReceiver); ok {
+		return x.AwsCloudWatchReceiver
+	}
+	return nil
+}
+
+func (m *GlobalSpecType) GetKafkaReceiver() *KafkaConfig {
+	if x, ok := m.GetReceiver().(*GlobalSpecType_KafkaReceiver); ok {
+		return x.KafkaReceiver
+	}
+	return nil
+}
+
+func (m *GlobalSpecType) GetRequestLogs() *schema.Empty {
+	if x, ok := m.GetLogType().(*GlobalSpecType_RequestLogs); ok {
+		return x.RequestLogs
+	}
+	return nil
+}
+
+func (m *GlobalSpecType) GetSecurityEvents() *schema.Empty {
+	if x, ok := m.GetLogType().(*GlobalSpecType_SecurityEvents); ok {
+		return x.SecurityEvents
+	}
+	return nil
+}
+
+func (m *GlobalSpecType) GetAuditLogs() *schema.Empty {
+	if x, ok := m.GetLogType().(*GlobalSpecType_AuditLogs); ok {
+		return x.AuditLogs
+	}
+	return nil
+}
+
 func (m *GlobalSpecType) GetViewInternal() *views.ObjectRefType {
 	if m != nil {
 		return m.ViewInternal
@@ -1931,6 +2268,11 @@ func (*GlobalSpecType) XXX_OneofWrappers() []interface{} {
 		(*GlobalSpecType_ElasticReceiver)(nil),
 		(*GlobalSpecType_AzureReceiver)(nil),
 		(*GlobalSpecType_AzureEventHubsReceiver)(nil),
+		(*GlobalSpecType_AwsCloudWatchReceiver)(nil),
+		(*GlobalSpecType_KafkaReceiver)(nil),
+		(*GlobalSpecType_RequestLogs)(nil),
+		(*GlobalSpecType_SecurityEvents)(nil),
+		(*GlobalSpecType_AuditLogs)(nil),
 	}
 }
 
@@ -1953,13 +2295,20 @@ type CreateSpecType struct {
 	//	*CreateSpecType_ElasticReceiver
 	//	*CreateSpecType_AzureReceiver
 	//	*CreateSpecType_AzureEventHubsReceiver
+	//	*CreateSpecType_AwsCloudWatchReceiver
+	//	*CreateSpecType_KafkaReceiver
 	Receiver isCreateSpecType_Receiver `protobuf_oneof:"receiver"`
+	// Types that are valid to be assigned to LogType:
+	//	*CreateSpecType_RequestLogs
+	//	*CreateSpecType_SecurityEvents
+	//	*CreateSpecType_AuditLogs
+	LogType isCreateSpecType_LogType `protobuf_oneof:"log_type"`
 }
 
 func (m *CreateSpecType) Reset()      { *m = CreateSpecType{} }
 func (*CreateSpecType) ProtoMessage() {}
 func (*CreateSpecType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_2ef22f1dd0dc1f3e, []int{15}
+	return fileDescriptor_2ef22f1dd0dc1f3e, []int{17}
 }
 func (m *CreateSpecType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1992,6 +2341,12 @@ type isCreateSpecType_FilterChoice interface {
 }
 type isCreateSpecType_Receiver interface {
 	isCreateSpecType_Receiver()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
+type isCreateSpecType_LogType interface {
+	isCreateSpecType_LogType()
 	Equal(interface{}) bool
 	MarshalTo([]byte) (int, error)
 	Size() int
@@ -2030,6 +2385,21 @@ type CreateSpecType_AzureReceiver struct {
 type CreateSpecType_AzureEventHubsReceiver struct {
 	AzureEventHubsReceiver *AzureEventHubsConfig `protobuf:"bytes,13,opt,name=azure_event_hubs_receiver,json=azureEventHubsReceiver,proto3,oneof" json:"azure_event_hubs_receiver,omitempty"`
 }
+type CreateSpecType_AwsCloudWatchReceiver struct {
+	AwsCloudWatchReceiver *AWSCloudwatchConfig `protobuf:"bytes,18,opt,name=aws_cloud_watch_receiver,json=awsCloudWatchReceiver,proto3,oneof" json:"aws_cloud_watch_receiver,omitempty"`
+}
+type CreateSpecType_KafkaReceiver struct {
+	KafkaReceiver *KafkaConfig `protobuf:"bytes,19,opt,name=kafka_receiver,json=kafkaReceiver,proto3,oneof" json:"kafka_receiver,omitempty"`
+}
+type CreateSpecType_RequestLogs struct {
+	RequestLogs *schema.Empty `protobuf:"bytes,15,opt,name=request_logs,json=requestLogs,proto3,oneof" json:"request_logs,omitempty"`
+}
+type CreateSpecType_SecurityEvents struct {
+	SecurityEvents *schema.Empty `protobuf:"bytes,16,opt,name=security_events,json=securityEvents,proto3,oneof" json:"security_events,omitempty"`
+}
+type CreateSpecType_AuditLogs struct {
+	AuditLogs *schema.Empty `protobuf:"bytes,17,opt,name=audit_logs,json=auditLogs,proto3,oneof" json:"audit_logs,omitempty"`
+}
 
 func (*CreateSpecType_NsCurrent) isCreateSpecType_FilterChoice()          {}
 func (*CreateSpecType_NsAll) isCreateSpecType_FilterChoice()              {}
@@ -2042,6 +2412,11 @@ func (*CreateSpecType_SplunkReceiver) isCreateSpecType_Receiver()         {}
 func (*CreateSpecType_ElasticReceiver) isCreateSpecType_Receiver()        {}
 func (*CreateSpecType_AzureReceiver) isCreateSpecType_Receiver()          {}
 func (*CreateSpecType_AzureEventHubsReceiver) isCreateSpecType_Receiver() {}
+func (*CreateSpecType_AwsCloudWatchReceiver) isCreateSpecType_Receiver()  {}
+func (*CreateSpecType_KafkaReceiver) isCreateSpecType_Receiver()          {}
+func (*CreateSpecType_RequestLogs) isCreateSpecType_LogType()             {}
+func (*CreateSpecType_SecurityEvents) isCreateSpecType_LogType()          {}
+func (*CreateSpecType_AuditLogs) isCreateSpecType_LogType()               {}
 
 func (m *CreateSpecType) GetFilterChoice() isCreateSpecType_FilterChoice {
 	if m != nil {
@@ -2052,6 +2427,12 @@ func (m *CreateSpecType) GetFilterChoice() isCreateSpecType_FilterChoice {
 func (m *CreateSpecType) GetReceiver() isCreateSpecType_Receiver {
 	if m != nil {
 		return m.Receiver
+	}
+	return nil
+}
+func (m *CreateSpecType) GetLogType() isCreateSpecType_LogType {
+	if m != nil {
+		return m.LogType
 	}
 	return nil
 }
@@ -2133,6 +2514,41 @@ func (m *CreateSpecType) GetAzureEventHubsReceiver() *AzureEventHubsConfig {
 	return nil
 }
 
+func (m *CreateSpecType) GetAwsCloudWatchReceiver() *AWSCloudwatchConfig {
+	if x, ok := m.GetReceiver().(*CreateSpecType_AwsCloudWatchReceiver); ok {
+		return x.AwsCloudWatchReceiver
+	}
+	return nil
+}
+
+func (m *CreateSpecType) GetKafkaReceiver() *KafkaConfig {
+	if x, ok := m.GetReceiver().(*CreateSpecType_KafkaReceiver); ok {
+		return x.KafkaReceiver
+	}
+	return nil
+}
+
+func (m *CreateSpecType) GetRequestLogs() *schema.Empty {
+	if x, ok := m.GetLogType().(*CreateSpecType_RequestLogs); ok {
+		return x.RequestLogs
+	}
+	return nil
+}
+
+func (m *CreateSpecType) GetSecurityEvents() *schema.Empty {
+	if x, ok := m.GetLogType().(*CreateSpecType_SecurityEvents); ok {
+		return x.SecurityEvents
+	}
+	return nil
+}
+
+func (m *CreateSpecType) GetAuditLogs() *schema.Empty {
+	if x, ok := m.GetLogType().(*CreateSpecType_AuditLogs); ok {
+		return x.AuditLogs
+	}
+	return nil
+}
+
 // XXX_OneofWrappers is for the internal use of the proto package.
 func (*CreateSpecType) XXX_OneofWrappers() []interface{} {
 	return []interface{}{
@@ -2147,6 +2563,11 @@ func (*CreateSpecType) XXX_OneofWrappers() []interface{} {
 		(*CreateSpecType_ElasticReceiver)(nil),
 		(*CreateSpecType_AzureReceiver)(nil),
 		(*CreateSpecType_AzureEventHubsReceiver)(nil),
+		(*CreateSpecType_AwsCloudWatchReceiver)(nil),
+		(*CreateSpecType_KafkaReceiver)(nil),
+		(*CreateSpecType_RequestLogs)(nil),
+		(*CreateSpecType_SecurityEvents)(nil),
+		(*CreateSpecType_AuditLogs)(nil),
 	}
 }
 
@@ -2169,13 +2590,20 @@ type ReplaceSpecType struct {
 	//	*ReplaceSpecType_ElasticReceiver
 	//	*ReplaceSpecType_AzureReceiver
 	//	*ReplaceSpecType_AzureEventHubsReceiver
+	//	*ReplaceSpecType_AwsCloudWatchReceiver
+	//	*ReplaceSpecType_KafkaReceiver
 	Receiver isReplaceSpecType_Receiver `protobuf_oneof:"receiver"`
+	// Types that are valid to be assigned to LogType:
+	//	*ReplaceSpecType_RequestLogs
+	//	*ReplaceSpecType_SecurityEvents
+	//	*ReplaceSpecType_AuditLogs
+	LogType isReplaceSpecType_LogType `protobuf_oneof:"log_type"`
 }
 
 func (m *ReplaceSpecType) Reset()      { *m = ReplaceSpecType{} }
 func (*ReplaceSpecType) ProtoMessage() {}
 func (*ReplaceSpecType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_2ef22f1dd0dc1f3e, []int{16}
+	return fileDescriptor_2ef22f1dd0dc1f3e, []int{18}
 }
 func (m *ReplaceSpecType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -2208,6 +2636,12 @@ type isReplaceSpecType_FilterChoice interface {
 }
 type isReplaceSpecType_Receiver interface {
 	isReplaceSpecType_Receiver()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
+type isReplaceSpecType_LogType interface {
+	isReplaceSpecType_LogType()
 	Equal(interface{}) bool
 	MarshalTo([]byte) (int, error)
 	Size() int
@@ -2246,6 +2680,21 @@ type ReplaceSpecType_AzureReceiver struct {
 type ReplaceSpecType_AzureEventHubsReceiver struct {
 	AzureEventHubsReceiver *AzureEventHubsConfig `protobuf:"bytes,13,opt,name=azure_event_hubs_receiver,json=azureEventHubsReceiver,proto3,oneof" json:"azure_event_hubs_receiver,omitempty"`
 }
+type ReplaceSpecType_AwsCloudWatchReceiver struct {
+	AwsCloudWatchReceiver *AWSCloudwatchConfig `protobuf:"bytes,18,opt,name=aws_cloud_watch_receiver,json=awsCloudWatchReceiver,proto3,oneof" json:"aws_cloud_watch_receiver,omitempty"`
+}
+type ReplaceSpecType_KafkaReceiver struct {
+	KafkaReceiver *KafkaConfig `protobuf:"bytes,19,opt,name=kafka_receiver,json=kafkaReceiver,proto3,oneof" json:"kafka_receiver,omitempty"`
+}
+type ReplaceSpecType_RequestLogs struct {
+	RequestLogs *schema.Empty `protobuf:"bytes,15,opt,name=request_logs,json=requestLogs,proto3,oneof" json:"request_logs,omitempty"`
+}
+type ReplaceSpecType_SecurityEvents struct {
+	SecurityEvents *schema.Empty `protobuf:"bytes,16,opt,name=security_events,json=securityEvents,proto3,oneof" json:"security_events,omitempty"`
+}
+type ReplaceSpecType_AuditLogs struct {
+	AuditLogs *schema.Empty `protobuf:"bytes,17,opt,name=audit_logs,json=auditLogs,proto3,oneof" json:"audit_logs,omitempty"`
+}
 
 func (*ReplaceSpecType_NsCurrent) isReplaceSpecType_FilterChoice()          {}
 func (*ReplaceSpecType_NsAll) isReplaceSpecType_FilterChoice()              {}
@@ -2258,6 +2707,11 @@ func (*ReplaceSpecType_SplunkReceiver) isReplaceSpecType_Receiver()         {}
 func (*ReplaceSpecType_ElasticReceiver) isReplaceSpecType_Receiver()        {}
 func (*ReplaceSpecType_AzureReceiver) isReplaceSpecType_Receiver()          {}
 func (*ReplaceSpecType_AzureEventHubsReceiver) isReplaceSpecType_Receiver() {}
+func (*ReplaceSpecType_AwsCloudWatchReceiver) isReplaceSpecType_Receiver()  {}
+func (*ReplaceSpecType_KafkaReceiver) isReplaceSpecType_Receiver()          {}
+func (*ReplaceSpecType_RequestLogs) isReplaceSpecType_LogType()             {}
+func (*ReplaceSpecType_SecurityEvents) isReplaceSpecType_LogType()          {}
+func (*ReplaceSpecType_AuditLogs) isReplaceSpecType_LogType()               {}
 
 func (m *ReplaceSpecType) GetFilterChoice() isReplaceSpecType_FilterChoice {
 	if m != nil {
@@ -2268,6 +2722,12 @@ func (m *ReplaceSpecType) GetFilterChoice() isReplaceSpecType_FilterChoice {
 func (m *ReplaceSpecType) GetReceiver() isReplaceSpecType_Receiver {
 	if m != nil {
 		return m.Receiver
+	}
+	return nil
+}
+func (m *ReplaceSpecType) GetLogType() isReplaceSpecType_LogType {
+	if m != nil {
+		return m.LogType
 	}
 	return nil
 }
@@ -2349,6 +2809,41 @@ func (m *ReplaceSpecType) GetAzureEventHubsReceiver() *AzureEventHubsConfig {
 	return nil
 }
 
+func (m *ReplaceSpecType) GetAwsCloudWatchReceiver() *AWSCloudwatchConfig {
+	if x, ok := m.GetReceiver().(*ReplaceSpecType_AwsCloudWatchReceiver); ok {
+		return x.AwsCloudWatchReceiver
+	}
+	return nil
+}
+
+func (m *ReplaceSpecType) GetKafkaReceiver() *KafkaConfig {
+	if x, ok := m.GetReceiver().(*ReplaceSpecType_KafkaReceiver); ok {
+		return x.KafkaReceiver
+	}
+	return nil
+}
+
+func (m *ReplaceSpecType) GetRequestLogs() *schema.Empty {
+	if x, ok := m.GetLogType().(*ReplaceSpecType_RequestLogs); ok {
+		return x.RequestLogs
+	}
+	return nil
+}
+
+func (m *ReplaceSpecType) GetSecurityEvents() *schema.Empty {
+	if x, ok := m.GetLogType().(*ReplaceSpecType_SecurityEvents); ok {
+		return x.SecurityEvents
+	}
+	return nil
+}
+
+func (m *ReplaceSpecType) GetAuditLogs() *schema.Empty {
+	if x, ok := m.GetLogType().(*ReplaceSpecType_AuditLogs); ok {
+		return x.AuditLogs
+	}
+	return nil
+}
+
 // XXX_OneofWrappers is for the internal use of the proto package.
 func (*ReplaceSpecType) XXX_OneofWrappers() []interface{} {
 	return []interface{}{
@@ -2363,6 +2858,11 @@ func (*ReplaceSpecType) XXX_OneofWrappers() []interface{} {
 		(*ReplaceSpecType_ElasticReceiver)(nil),
 		(*ReplaceSpecType_AzureReceiver)(nil),
 		(*ReplaceSpecType_AzureEventHubsReceiver)(nil),
+		(*ReplaceSpecType_AwsCloudWatchReceiver)(nil),
+		(*ReplaceSpecType_KafkaReceiver)(nil),
+		(*ReplaceSpecType_RequestLogs)(nil),
+		(*ReplaceSpecType_SecurityEvents)(nil),
+		(*ReplaceSpecType_AuditLogs)(nil),
 	}
 }
 
@@ -2385,13 +2885,20 @@ type GetSpecType struct {
 	//	*GetSpecType_ElasticReceiver
 	//	*GetSpecType_AzureReceiver
 	//	*GetSpecType_AzureEventHubsReceiver
+	//	*GetSpecType_AwsCloudWatchReceiver
+	//	*GetSpecType_KafkaReceiver
 	Receiver isGetSpecType_Receiver `protobuf_oneof:"receiver"`
+	// Types that are valid to be assigned to LogType:
+	//	*GetSpecType_RequestLogs
+	//	*GetSpecType_SecurityEvents
+	//	*GetSpecType_AuditLogs
+	LogType isGetSpecType_LogType `protobuf_oneof:"log_type"`
 }
 
 func (m *GetSpecType) Reset()      { *m = GetSpecType{} }
 func (*GetSpecType) ProtoMessage() {}
 func (*GetSpecType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_2ef22f1dd0dc1f3e, []int{17}
+	return fileDescriptor_2ef22f1dd0dc1f3e, []int{19}
 }
 func (m *GetSpecType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -2424,6 +2931,12 @@ type isGetSpecType_FilterChoice interface {
 }
 type isGetSpecType_Receiver interface {
 	isGetSpecType_Receiver()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
+type isGetSpecType_LogType interface {
+	isGetSpecType_LogType()
 	Equal(interface{}) bool
 	MarshalTo([]byte) (int, error)
 	Size() int
@@ -2462,6 +2975,21 @@ type GetSpecType_AzureReceiver struct {
 type GetSpecType_AzureEventHubsReceiver struct {
 	AzureEventHubsReceiver *AzureEventHubsConfig `protobuf:"bytes,13,opt,name=azure_event_hubs_receiver,json=azureEventHubsReceiver,proto3,oneof" json:"azure_event_hubs_receiver,omitempty"`
 }
+type GetSpecType_AwsCloudWatchReceiver struct {
+	AwsCloudWatchReceiver *AWSCloudwatchConfig `protobuf:"bytes,18,opt,name=aws_cloud_watch_receiver,json=awsCloudWatchReceiver,proto3,oneof" json:"aws_cloud_watch_receiver,omitempty"`
+}
+type GetSpecType_KafkaReceiver struct {
+	KafkaReceiver *KafkaConfig `protobuf:"bytes,19,opt,name=kafka_receiver,json=kafkaReceiver,proto3,oneof" json:"kafka_receiver,omitempty"`
+}
+type GetSpecType_RequestLogs struct {
+	RequestLogs *schema.Empty `protobuf:"bytes,15,opt,name=request_logs,json=requestLogs,proto3,oneof" json:"request_logs,omitempty"`
+}
+type GetSpecType_SecurityEvents struct {
+	SecurityEvents *schema.Empty `protobuf:"bytes,16,opt,name=security_events,json=securityEvents,proto3,oneof" json:"security_events,omitempty"`
+}
+type GetSpecType_AuditLogs struct {
+	AuditLogs *schema.Empty `protobuf:"bytes,17,opt,name=audit_logs,json=auditLogs,proto3,oneof" json:"audit_logs,omitempty"`
+}
 
 func (*GetSpecType_NsCurrent) isGetSpecType_FilterChoice()          {}
 func (*GetSpecType_NsAll) isGetSpecType_FilterChoice()              {}
@@ -2474,6 +3002,11 @@ func (*GetSpecType_SplunkReceiver) isGetSpecType_Receiver()         {}
 func (*GetSpecType_ElasticReceiver) isGetSpecType_Receiver()        {}
 func (*GetSpecType_AzureReceiver) isGetSpecType_Receiver()          {}
 func (*GetSpecType_AzureEventHubsReceiver) isGetSpecType_Receiver() {}
+func (*GetSpecType_AwsCloudWatchReceiver) isGetSpecType_Receiver()  {}
+func (*GetSpecType_KafkaReceiver) isGetSpecType_Receiver()          {}
+func (*GetSpecType_RequestLogs) isGetSpecType_LogType()             {}
+func (*GetSpecType_SecurityEvents) isGetSpecType_LogType()          {}
+func (*GetSpecType_AuditLogs) isGetSpecType_LogType()               {}
 
 func (m *GetSpecType) GetFilterChoice() isGetSpecType_FilterChoice {
 	if m != nil {
@@ -2484,6 +3017,12 @@ func (m *GetSpecType) GetFilterChoice() isGetSpecType_FilterChoice {
 func (m *GetSpecType) GetReceiver() isGetSpecType_Receiver {
 	if m != nil {
 		return m.Receiver
+	}
+	return nil
+}
+func (m *GetSpecType) GetLogType() isGetSpecType_LogType {
+	if m != nil {
+		return m.LogType
 	}
 	return nil
 }
@@ -2565,6 +3104,41 @@ func (m *GetSpecType) GetAzureEventHubsReceiver() *AzureEventHubsConfig {
 	return nil
 }
 
+func (m *GetSpecType) GetAwsCloudWatchReceiver() *AWSCloudwatchConfig {
+	if x, ok := m.GetReceiver().(*GetSpecType_AwsCloudWatchReceiver); ok {
+		return x.AwsCloudWatchReceiver
+	}
+	return nil
+}
+
+func (m *GetSpecType) GetKafkaReceiver() *KafkaConfig {
+	if x, ok := m.GetReceiver().(*GetSpecType_KafkaReceiver); ok {
+		return x.KafkaReceiver
+	}
+	return nil
+}
+
+func (m *GetSpecType) GetRequestLogs() *schema.Empty {
+	if x, ok := m.GetLogType().(*GetSpecType_RequestLogs); ok {
+		return x.RequestLogs
+	}
+	return nil
+}
+
+func (m *GetSpecType) GetSecurityEvents() *schema.Empty {
+	if x, ok := m.GetLogType().(*GetSpecType_SecurityEvents); ok {
+		return x.SecurityEvents
+	}
+	return nil
+}
+
+func (m *GetSpecType) GetAuditLogs() *schema.Empty {
+	if x, ok := m.GetLogType().(*GetSpecType_AuditLogs); ok {
+		return x.AuditLogs
+	}
+	return nil
+}
+
 // XXX_OneofWrappers is for the internal use of the proto package.
 func (*GetSpecType) XXX_OneofWrappers() []interface{} {
 	return []interface{}{
@@ -2579,6 +3153,11 @@ func (*GetSpecType) XXX_OneofWrappers() []interface{} {
 		(*GetSpecType_ElasticReceiver)(nil),
 		(*GetSpecType_AzureReceiver)(nil),
 		(*GetSpecType_AzureEventHubsReceiver)(nil),
+		(*GetSpecType_AwsCloudWatchReceiver)(nil),
+		(*GetSpecType_KafkaReceiver)(nil),
+		(*GetSpecType_RequestLogs)(nil),
+		(*GetSpecType_SecurityEvents)(nil),
+		(*GetSpecType_AuditLogs)(nil),
 	}
 }
 
@@ -2597,6 +3176,8 @@ func init() {
 	proto.RegisterType((*ElasticConfig)(nil), "ves.io.schema.global_log_receiver.ElasticConfig")
 	proto.RegisterType((*AzureBlobConfig)(nil), "ves.io.schema.global_log_receiver.AzureBlobConfig")
 	proto.RegisterType((*AzureEventHubsConfig)(nil), "ves.io.schema.global_log_receiver.AzureEventHubsConfig")
+	proto.RegisterType((*AWSCloudwatchConfig)(nil), "ves.io.schema.global_log_receiver.AWSCloudwatchConfig")
+	proto.RegisterType((*KafkaConfig)(nil), "ves.io.schema.global_log_receiver.KafkaConfig")
 	proto.RegisterType((*GlobalSpecType)(nil), "ves.io.schema.global_log_receiver.GlobalSpecType")
 	proto.RegisterType((*CreateSpecType)(nil), "ves.io.schema.global_log_receiver.CreateSpecType")
 	proto.RegisterType((*ReplaceSpecType)(nil), "ves.io.schema.global_log_receiver.ReplaceSpecType")
@@ -2608,159 +3189,183 @@ func init() {
 }
 
 var fileDescriptor_2ef22f1dd0dc1f3e = []byte{
-	// 2428 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x5a, 0xcf, 0x6f, 0x1b, 0xc7,
-	0xf5, 0xe7, 0xf0, 0xe7, 0xf2, 0x91, 0x14, 0xe9, 0xb5, 0x93, 0xd0, 0xfa, 0x1a, 0x0c, 0xc3, 0x38,
-	0xdf, 0x2a, 0x31, 0x49, 0x45, 0x54, 0xec, 0xd8, 0x29, 0x90, 0x46, 0x2b, 0xbb, 0x66, 0x14, 0xd7,
-	0x49, 0x57, 0x72, 0x83, 0x26, 0xb5, 0xb7, 0xc3, 0xe5, 0x88, 0xdc, 0x6a, 0xb9, 0xbb, 0xd8, 0x99,
-	0x95, 0x2c, 0x03, 0x05, 0x84, 0x5c, 0x53, 0x14, 0x69, 0xd1, 0x43, 0xd0, 0xa2, 0x97, 0x9e, 0xda,
-	0xa2, 0x7f, 0x40, 0x51, 0xe6, 0x20, 0x14, 0x2d, 0x10, 0xe4, 0xa4, 0xa3, 0x4f, 0x45, 0xcc, 0x5c,
-	0xd2, 0x5b, 0x7a, 0x0b, 0x82, 0x02, 0x2d, 0x76, 0x76, 0xb9, 0x5c, 0x52, 0xb6, 0x44, 0xc7, 0x76,
-	0x7f, 0xa4, 0xba, 0x0d, 0x77, 0xde, 0xfb, 0xbc, 0xb7, 0xf3, 0xde, 0xfb, 0xbc, 0xb7, 0x23, 0x41,
-	0x6d, 0x93, 0xd0, 0xba, 0x66, 0xce, 0x53, 0xb5, 0x4b, 0x7a, 0x78, 0xbe, 0xa3, 0x9b, 0x2d, 0xac,
-	0x2b, 0xba, 0xd9, 0x51, 0x6c, 0xa2, 0x12, 0x6d, 0x93, 0xd8, 0xf3, 0x6c, 0xdb, 0x22, 0xb4, 0x6e,
-	0xd9, 0x26, 0x33, 0xc5, 0xa7, 0x3c, 0xf1, 0xba, 0x27, 0x5e, 0xbf, 0x8b, 0xf8, 0x6c, 0xad, 0xa3,
-	0xb1, 0xae, 0xd3, 0xaa, 0xab, 0x66, 0x6f, 0xbe, 0x63, 0x76, 0xcc, 0x79, 0xae, 0xd9, 0x72, 0xd6,
-	0xf9, 0x2f, 0xfe, 0x83, 0xaf, 0x3c, 0xc4, 0xd9, 0xff, 0x1b, 0x77, 0xc0, 0xb4, 0x98, 0x66, 0x1a,
-	0xbe, 0xb9, 0xd9, 0x93, 0xe3, 0x9b, 0x21, 0x4f, 0x66, 0x4f, 0x8d, 0x6f, 0x6d, 0x62, 0x5d, 0x6b,
-	0x63, 0x46, 0xfc, 0xdd, 0xf2, 0xc4, 0xae, 0x46, 0xb6, 0x94, 0x71, 0xe8, 0x27, 0xf7, 0x4b, 0xd0,
-	0xb0, 0x81, 0xca, 0x9f, 0x10, 0xe4, 0x97, 0xcd, 0x9e, 0x65, 0x13, 0x4a, 0x35, 0xd3, 0x58, 0xdb,
-	0xb6, 0x88, 0xb8, 0x04, 0x05, 0x75, 0xf4, 0x48, 0x31, 0x4c, 0x83, 0x14, 0xa3, 0x65, 0x34, 0x97,
-	0x69, 0x9c, 0xa8, 0x8f, 0x9f, 0xcc, 0xa5, 0x9e, 0xc5, 0xb6, 0x9b, 0x11, 0x39, 0x1f, 0x92, 0xbf,
-	0x6a, 0x1a, 0xfb, 0x20, 0x3a, 0xb7, 0x34, 0xab, 0x18, 0x9b, 0x1a, 0xe2, 0xf2, 0x2d, 0xcd, 0x92,
-	0x9e, 0x01, 0x31, 0x0c, 0xa1, 0x76, 0x4d, 0x4d, 0x25, 0x62, 0x7e, 0xb7, 0x8f, 0xa2, 0x7b, 0x7d,
-	0x84, 0x06, 0x7d, 0x14, 0x6b, 0x54, 0x17, 0x57, 0xe2, 0x02, 0x2a, 0x44, 0x2b, 0x7f, 0x8f, 0x41,
-	0x5e, 0xc2, 0x4c, 0xed, 0xbe, 0xce, 0x5f, 0x9f, 0xbf, 0xc6, 0x55, 0x78, 0x82, 0x69, 0x3d, 0x62,
-	0x3a, 0x4c, 0xa1, 0x44, 0x35, 0x8d, 0x36, 0x55, 0xda, 0x64, 0x1d, 0x3b, 0x3a, 0x3b, 0xe4, 0x6d,
-	0x1e, 0xf3, 0xd5, 0x56, 0x3d, 0xad, 0x8b, 0x9e, 0x92, 0x78, 0x1e, 0xf2, 0x13, 0x78, 0xfc, 0x95,
-	0xe2, 0x52, 0xee, 0x0f, 0x7f, 0xdd, 0x8d, 0x09, 0x8d, 0x64, 0xf1, 0xbd, 0x53, 0x73, 0xbf, 0x8b,
-	0x36, 0x23, 0xf2, 0xcc, 0x38, 0x80, 0xf8, 0x4d, 0x38, 0xde, 0xc3, 0x37, 0x15, 0xb2, 0x49, 0x0c,
-	0x46, 0x95, 0xb6, 0x46, 0x71, 0x4b, 0x27, 0xed, 0x62, 0xe2, 0x00, 0x2f, 0x90, 0x7c, 0xac, 0x87,
-	0x6f, 0x5e, 0xe2, 0x1a, 0x17, 0x7d, 0x05, 0xb1, 0x06, 0x30, 0xc2, 0x29, 0x26, 0xcb, 0x68, 0x2e,
-	0x27, 0x65, 0x5d, 0xe3, 0xa9, 0xe7, 0x12, 0xc5, 0xbd, 0xfc, 0x5c, 0xb9, 0x89, 0xe4, 0x74, 0xa0,
-	0x26, 0x5e, 0x04, 0xd1, 0x15, 0x6f, 0x6d, 0x33, 0x12, 0xb2, 0x2a, 0x1c, 0x60, 0x35, 0x2a, 0x17,
-	0x7a, 0xf8, 0xa6, 0xe4, 0x2a, 0x84, 0x8c, 0xa6, 0x03, 0x94, 0x62, 0x9a, 0xdb, 0x9c, 0x71, 0x6d,
-	0xa6, 0x9f, 0x4b, 0x15, 0x77, 0x76, 0x5e, 0x99, 0xdb, 0x29, 0x37, 0xa3, 0xb2, 0x30, 0x54, 0x93,
-	0xca, 0x90, 0x6b, 0xb9, 0x81, 0x50, 0xfc, 0x33, 0xd8, 0x17, 0x31, 0xe9, 0x49, 0xc8, 0x7a, 0x12,
-	0xde, 0x7b, 0x70, 0x81, 0xc4, 0x5e, 0x1f, 0xc5, 0x5d, 0x81, 0xb3, 0xd5, 0x73, 0x52, 0x09, 0x32,
-	0x9e, 0x00, 0xb7, 0xc9, 0xf7, 0x85, 0xbd, 0x3e, 0x4a, 0xb9, 0xfb, 0xe7, 0xab, 0x17, 0xbc, 0x90,
-	0xaf, 0xc4, 0x85, 0x78, 0x21, 0xb1, 0x12, 0x17, 0x52, 0x05, 0xa1, 0x72, 0x1e, 0x92, 0x57, 0x57,
-	0xaf, 0x68, 0x94, 0x89, 0x75, 0x00, 0x03, 0xf7, 0x08, 0xb5, 0xb0, 0x4a, 0x68, 0x11, 0x95, 0x63,
-	0x73, 0x69, 0x69, 0xe6, 0xf3, 0x3e, 0x8a, 0xb8, 0x2e, 0x27, 0x7e, 0x8a, 0xa2, 0x85, 0x82, 0x1c,
-	0x92, 0xa8, 0xbc, 0x9f, 0x00, 0x61, 0x75, 0x71, 0xd9, 0x34, 0xd6, 0xb5, 0x8e, 0x78, 0x05, 0x92,
-	0x2d, 0x47, 0xdd, 0x20, 0xac, 0x88, 0xca, 0x68, 0x2e, 0x2d, 0xbd, 0xc0, 0xcf, 0xd6, 0x4e, 0x14,
-	0x62, 0xc5, 0x1d, 0xe4, 0xae, 0x9f, 0xb6, 0x9f, 0x6a, 0x3c, 0x79, 0xe3, 0x6d, 0x5c, 0xbb, 0xf5,
-	0x7c, 0xed, 0xc2, 0xf5, 0x33, 0xfe, 0xe2, 0x7b, 0xf5, 0x5a, 0xb0, 0xbe, 0x7e, 0x5a, 0xf6, 0x31,
-	0xc4, 0x55, 0x10, 0xf0, 0x16, 0x55, 0x54, 0x9b, 0xb4, 0xfd, 0x84, 0xab, 0x4c, 0x1c, 0x3a, 0x2f,
-	0xc7, 0xfa, 0xeb, 0xad, 0x1f, 0x10, 0x95, 0xc9, 0x64, 0xdd, 0xcd, 0x5a, 0xe9, 0xc4, 0x6f, 0x7f,
-	0x78, 0x4c, 0xd5, 0x4d, 0xa7, 0xcd, 0x15, 0x89, 0xc1, 0x34, 0xac, 0x53, 0x39, 0x85, 0xb7, 0xe8,
-	0xb2, 0x4d, 0xda, 0xe2, 0xef, 0xa3, 0x00, 0x2e, 0xaa, 0x4d, 0x3a, 0x9a, 0x69, 0xf0, 0x04, 0x4c,
-	0x4b, 0xef, 0x47, 0x87, 0x6f, 0xf8, 0xe3, 0xa8, 0xfd, 0x6e, 0x54, 0x9e, 0xc1, 0x56, 0xcd, 0x30,
-	0x6d, 0xd6, 0x25, 0x98, 0xb2, 0xda, 0x02, 0xff, 0x4d, 0x4d, 0x27, 0xf8, 0x9d, 0x25, 0x4e, 0x4d,
-	0x25, 0x06, 0xb3, 0xb1, 0x5e, 0x5b, 0x90, 0xd3, 0xc4, 0xa9, 0x6d, 0x11, 0xbe, 0x11, 0x2c, 0x17,
-	0xe5, 0x34, 0xc5, 0x35, 0x5f, 0x3c, 0xed, 0xd0, 0x7d, 0xcb, 0x06, 0x5f, 0x72, 0xd9, 0x86, 0x9c,
-	0x55, 0x71, 0x08, 0x0f, 0xf0, 0xba, 0x67, 0xcd, 0x95, 0xc7, 0xd6, 0x50, 0x15, 0x86, 0x4e, 0xf8,
-	0x0e, 0x8d, 0x1c, 0x6c, 0x4c, 0x38, 0xd8, 0x90, 0x81, 0x38, 0x81, 0xac, 0xbb, 0xe6, 0xb2, 0x61,
-	0xff, 0x1a, 0x32, 0xf4, 0xc8, 0xc8, 0xca, 0xd0, 0x95, 0xc9, 0x57, 0x5d, 0x94, 0xd3, 0x78, 0x8b,
-	0xca, 0xfc, 0xac, 0xc4, 0x1b, 0x90, 0x09, 0x11, 0x4a, 0x31, 0xce, 0x43, 0xd2, 0xa8, 0x1f, 0xca,
-	0xf5, 0xf5, 0x09, 0x7e, 0x94, 0x84, 0xdd, 0x3e, 0x42, 0x9f, 0xf5, 0x11, 0x92, 0xc3, 0x80, 0xe2,
-	0x55, 0x48, 0xf0, 0xb4, 0xf5, 0xeb, 0x7a, 0x1a, 0xe4, 0x09, 0xca, 0x92, 0xe2, 0x2e, 0xb2, 0xec,
-	0xc1, 0x54, 0x7e, 0x81, 0xe0, 0xf8, 0xda, 0x95, 0xd5, 0x65, 0x5d, 0x23, 0x06, 0xf3, 0x32, 0x94,
-	0xf3, 0xda, 0x0a, 0x64, 0x54, 0x62, 0x33, 0x6d, 0x5d, 0x53, 0x31, 0x23, 0x7e, 0xaa, 0xce, 0x7d,
-	0xde, 0x47, 0xf1, 0x5f, 0x7d, 0x80, 0x32, 0x16, 0xe9, 0x55, 0xcb, 0x2d, 0x4c, 0xc9, 0x39, 0x9e,
-	0xbd, 0x49, 0x3b, 0x3e, 0xb7, 0xb3, 0x23, 0xf0, 0xec, 0xb7, 0x63, 0xef, 0x71, 0x9f, 0x47, 0xca,
-	0xe2, 0x79, 0x48, 0x6d, 0x90, 0x6d, 0xc5, 0xb1, 0x75, 0x3f, 0x45, 0x4f, 0x4e, 0x78, 0xbd, 0x4a,
-	0x54, 0x9b, 0x30, 0xcf, 0x39, 0xb7, 0x88, 0xe5, 0xe4, 0x06, 0xd9, 0xbe, 0x66, 0xeb, 0x95, 0xdf,
-	0x24, 0x21, 0xe7, 0x7a, 0x37, 0xf2, 0x4b, 0x86, 0x93, 0xc4, 0x70, 0x39, 0x43, 0xd9, 0x24, 0xb6,
-	0xb6, 0xbe, 0xad, 0x84, 0xbd, 0x3c, 0x98, 0x71, 0x9f, 0xf0, 0x14, 0xbf, 0xc3, 0xf5, 0x96, 0x43,
-	0xfe, 0xad, 0xc1, 0xac, 0x4f, 0x5c, 0x77, 0x03, 0x3d, 0xb8, 0xa3, 0x14, 0x7d, 0xcd, 0xfd, 0xa8,
-	0x57, 0xe0, 0xf1, 0x71, 0x4f, 0xbb, 0x26, 0x65, 0x2e, 0x29, 0x1c, 0x42, 0xc9, 0x27, 0xc2, 0x6e,
-	0x36, 0x7d, 0x1d, 0xb7, 0xcf, 0x4c, 0xf8, 0x18, 0xc0, 0x25, 0x0f, 0x84, 0x7b, 0x6c, 0xcc, 0xc1,
-	0x00, 0xef, 0x0c, 0x24, 0x0c, 0x53, 0x51, 0xf1, 0x21, 0x4c, 0x1d, 0x37, 0xcc, 0x65, 0x2c, 0xbe,
-	0x01, 0x33, 0xcc, 0x76, 0x28, 0x23, 0x6d, 0x45, 0xc5, 0x3c, 0x8e, 0xe9, 0xfb, 0xcb, 0x87, 0x66,
-	0x54, 0xce, 0xfa, 0x08, 0xcb, 0xf8, 0x9a, 0xad, 0x8b, 0x4b, 0x90, 0xeb, 0x31, 0x3d, 0xd4, 0x30,
-	0x32, 0xf7, 0x76, 0xc3, 0x4b, 0xd8, 0x66, 0x4c, 0xce, 0xba, 0x2a, 0x41, 0xcb, 0x50, 0x20, 0xc3,
-	0x21, 0xbc, 0xe3, 0x2a, 0x66, 0x39, 0xc0, 0xb9, 0x29, 0xea, 0xe1, 0x2e, 0xe9, 0x1e, 0x98, 0x00,
-	0x17, 0xf2, 0x12, 0x47, 0x94, 0x9e, 0x05, 0x71, 0x7f, 0x3a, 0x88, 0xc7, 0x27, 0x3a, 0x8d, 0x5b,
-	0xa2, 0xd2, 0xff, 0x43, 0x7e, 0x22, 0x2a, 0x5c, 0x2e, 0xdc, 0x70, 0xb8, 0xdc, 0x29, 0x48, 0xab,
-	0x38, 0x3c, 0x65, 0x84, 0x5b, 0x8e, 0x74, 0xda, 0x7f, 0x23, 0x7f, 0xff, 0xb1, 0xdd, 0x3e, 0xca,
-	0x7c, 0xd8, 0x47, 0x68, 0xaf, 0x8f, 0x60, 0xd0, 0x47, 0x89, 0x85, 0x85, 0xea, 0x42, 0x63, 0x7f,
-	0x63, 0x5a, 0x89, 0x0b, 0x50, 0xc8, 0x54, 0x6e, 0x42, 0xae, 0xc9, 0x98, 0xb5, 0xe4, 0xb0, 0xae,
-	0x84, 0xa9, 0xa6, 0x8a, 0xcf, 0x41, 0xda, 0xa1, 0xc4, 0x56, 0x78, 0x92, 0x78, 0x05, 0x9c, 0x1b,
-	0x52, 0x78, 0xdc, 0x8e, 0x16, 0x5f, 0x91, 0x05, 0x77, 0xff, 0xaa, 0xeb, 0xed, 0xd7, 0x41, 0xb0,
-	0x30, 0xa5, 0x5b, 0xa6, 0xdd, 0x9e, 0xb6, 0x46, 0x03, 0x85, 0x8a, 0x04, 0x69, 0xd7, 0xea, 0x9a,
-	0xb9, 0x41, 0x0c, 0xf1, 0x2c, 0x24, 0x98, 0xbb, 0xe0, 0x16, 0xa7, 0x80, 0xf1, 0xa4, 0x2b, 0xff,
-	0x88, 0x03, 0x34, 0xd7, 0xd6, 0xde, 0xf0, 0x9b, 0xe4, 0x29, 0x88, 0x39, 0xb6, 0xe6, 0x7b, 0x0d,
-	0x21, 0x62, 0x71, 0x1f, 0x8b, 0x8b, 0x90, 0xc6, 0x0e, 0xeb, 0x7a, 0x43, 0xe3, 0xc1, 0xf5, 0x29,
-	0xb8, 0x82, 0x7c, 0x5a, 0xfc, 0x36, 0x00, 0x57, 0x6a, 0xb9, 0x87, 0xe3, 0x13, 0xf3, 0xf3, 0x53,
-	0xa4, 0xcb, 0xd8, 0xa1, 0x36, 0x23, 0x32, 0x37, 0xed, 0x9d, 0xf0, 0xb7, 0x7c, 0x48, 0xef, 0x85,
-	0xbd, 0xb2, 0xae, 0x4e, 0x01, 0x19, 0x9c, 0xd6, 0x10, 0xce, 0x3b, 0xba, 0x89, 0xde, 0x91, 0x7c,
-	0x64, 0xbd, 0x23, 0xf5, 0x50, 0x7a, 0x87, 0x58, 0x83, 0xa4, 0x61, 0x2a, 0x4c, 0xf7, 0x26, 0xb6,
-	0x7b, 0x53, 0x50, 0xc2, 0x30, 0xd7, 0x74, 0x2a, 0xbe, 0x06, 0x29, 0x87, 0x12, 0x2e, 0x0f, 0x53,
-	0x9f, 0xfe, 0x18, 0xfb, 0x37, 0x91, 0x9c, 0x74, 0x28, 0x59, 0xd3, 0xdd, 0x09, 0x30, 0xc3, 0x8f,
-	0xde, 0xaf, 0x95, 0x63, 0xbb, 0x7d, 0x14, 0xdb, 0xeb, 0xa3, 0xa8, 0x5b, 0x27, 0x8b, 0xd5, 0x17,
-	0xaa, 0x67, 0xa5, 0x0a, 0x40, 0xa8, 0x98, 0x4e, 0xec, 0xf6, 0x51, 0xda, 0x2f, 0x26, 0x61, 0xd0,
-	0x47, 0xf1, 0x0b, 0xd5, 0x85, 0xe7, 0x57, 0xe2, 0x42, 0xb4, 0x10, 0x5b, 0x89, 0x0b, 0x42, 0x21,
-	0x5d, 0xf9, 0x65, 0x1c, 0x72, 0x17, 0x31, 0xc3, 0x6d, 0xb3, 0xe3, 0x27, 0x61, 0x19, 0xe2, 0x54,
-	0xf3, 0xdb, 0xca, 0x28, 0x0b, 0x6f, 0x47, 0x51, 0x33, 0x22, 0xf3, 0x1d, 0xb1, 0x02, 0x02, 0x31,
-	0xda, 0x96, 0xa9, 0x19, 0xcc, 0x9f, 0x92, 0x3c, 0x22, 0x89, 0xc8, 0xc1, 0x73, 0xf1, 0x32, 0xe4,
-	0xdb, 0x1e, 0xac, 0x82, 0x2d, 0x4d, 0xd9, 0x20, 0xdb, 0x7e, 0xf2, 0x1d, 0x5a, 0x1a, 0x39, 0x5f,
-	0x6f, 0xc9, 0xd2, 0x5e, 0x23, 0xdb, 0x93, 0xe9, 0x91, 0x78, 0x64, 0xe9, 0x91, 0x7c, 0xd8, 0xe9,
-	0x21, 0xdc, 0x67, 0x7a, 0xa4, 0x1f, 0x38, 0x3d, 0x2a, 0x90, 0x1f, 0x06, 0xe0, 0x5e, 0x1f, 0x75,
-	0xd2, 0x53, 0x63, 0x09, 0xe2, 0xf2, 0xb5, 0xe0, 0x27, 0xc8, 0xbe, 0x8f, 0x00, 0x77, 0xfc, 0xff,
-	0x28, 0x06, 0xd9, 0x55, 0x4b, 0x77, 0x8c, 0x0d, 0x3f, 0x3d, 0x66, 0x43, 0xc1, 0xe7, 0x44, 0x15,
-	0x0a, 0xfa, 0xab, 0x50, 0xa0, 0x5c, 0x56, 0xe9, 0x12, 0xd5, 0xe7, 0x87, 0x29, 0x79, 0x75, 0xc6,
-	0x53, 0x6c, 0x12, 0xf5, 0xae, 0xac, 0x10, 0x7b, 0x64, 0x61, 0x8f, 0x3f, 0xec, 0xb0, 0x27, 0x0f,
-	0x64, 0xe6, 0xfd, 0x61, 0x4f, 0x7d, 0xc9, 0xb0, 0x47, 0x82, 0xb0, 0xef, 0x0f, 0x69, 0xd2, 0x0f,
-	0x69, 0xc2, 0x0d, 0xe9, 0xb9, 0xea, 0x8b, 0x2b, 0x71, 0x21, 0x51, 0x48, 0x56, 0x7e, 0x94, 0x80,
-	0xdc, 0x25, 0x1d, 0x53, 0xa6, 0xa9, 0x53, 0x44, 0xf3, 0x3f, 0xa5, 0xdf, 0x7c, 0x17, 0x38, 0xbc,
-	0x82, 0xb7, 0xa8, 0x5f, 0xfe, 0xd3, 0x7c, 0xec, 0x15, 0xef, 0xf6, 0xb1, 0xf7, 0xa9, 0x47, 0x53,
-	0x29, 0x17, 0x6f, 0x69, 0x8b, 0x1e, 0xf5, 0x9e, 0x7f, 0x6b, 0xef, 0xf9, 0x5b, 0x14, 0xf2, 0x4b,
-	0xb7, 0x1c, 0x9b, 0x48, 0xba, 0xd9, 0x0a, 0xee, 0x09, 0x8e, 0xa9, 0xa6, 0x61, 0x10, 0xd5, 0x3d,
-	0x00, 0x85, 0x32, 0x5b, 0x33, 0x3a, 0xd3, 0x0e, 0x55, 0x85, 0x91, 0xe6, 0x2a, 0x57, 0x14, 0xbf,
-	0x0f, 0x33, 0xaa, 0x69, 0x30, 0xac, 0x19, 0xc3, 0x89, 0xd0, 0xeb, 0x6a, 0x17, 0xfc, 0x79, 0xbd,
-	0x10, 0x2b, 0x7e, 0xc3, 0x5d, 0x3e, 0x6b, 0x7f, 0xad, 0xf1, 0xcc, 0x8d, 0xb7, 0x97, 0x6a, 0x6f,
-	0xf9, 0x57, 0x0d, 0xa3, 0x65, 0xed, 0xfa, 0x99, 0xd0, 0xf3, 0xd3, 0x72, 0x2e, 0x00, 0xe4, 0x23,
-	0xe4, 0x7f, 0x19, 0x4f, 0x55, 0x7e, 0x16, 0x85, 0x13, 0xfc, 0xcc, 0xf9, 0x45, 0x56, 0xd3, 0x69,
-	0xd1, 0x47, 0x72, 0xf0, 0x6f, 0x42, 0x3a, 0xb8, 0x09, 0x7a, 0xf0, 0x33, 0x1f, 0x61, 0x89, 0xd7,
-	0x40, 0xd0, 0x0c, 0xca, 0xb0, 0xa1, 0x12, 0x7f, 0xf6, 0x78, 0x00, 0xdc, 0x00, 0xaa, 0xf2, 0x6e,
-	0x1a, 0x66, 0x2e, 0xf3, 0xb3, 0x5c, 0xb5, 0x88, 0xca, 0xbf, 0xb9, 0xcf, 0x02, 0x18, 0x54, 0x51,
-	0x1d, 0xdb, 0x26, 0xc6, 0x61, 0xd7, 0x9a, 0x69, 0x83, 0x2e, 0x7b, 0x82, 0xe2, 0xcb, 0x90, 0x34,
-	0xa8, 0x82, 0x75, 0xfd, 0x20, 0xca, 0x94, 0xf2, 0x83, 0x8f, 0xff, 0x1c, 0x83, 0x9f, 0x7f, 0x80,
-	0x92, 0xb4, 0x8b, 0x6d, 0xd2, 0xe6, 0x9d, 0x81, 0x2e, 0xe9, 0xba, 0x78, 0x0d, 0x52, 0x06, 0x55,
-	0x74, 0x8d, 0x32, 0x3f, 0xe4, 0xcf, 0x4e, 0x11, 0x72, 0xef, 0x86, 0xee, 0x6e, 0xa8, 0x49, 0x83,
-	0xf2, 0xcb, 0xbb, 0x0b, 0x90, 0x36, 0xa8, 0x42, 0xb7, 0x29, 0x23, 0xbd, 0x83, 0x3e, 0xc5, 0xa5,
-	0xb8, 0xcf, 0x91, 0x82, 0x41, 0x57, 0xb9, 0xb4, 0x78, 0x15, 0x32, 0x74, 0x31, 0xb0, 0xe5, 0x53,
-	0xd9, 0x99, 0x29, 0xbc, 0x1a, 0x5e, 0xfe, 0x35, 0x91, 0x0c, 0x74, 0x51, 0xf6, 0x1f, 0x8b, 0x6b,
-	0x90, 0xeb, 0x32, 0x66, 0x8d, 0x10, 0xbd, 0x41, 0xa9, 0x36, 0x4d, 0x97, 0x08, 0xbe, 0x95, 0x9a,
-	0x48, 0xce, 0xba, 0x28, 0x01, 0xea, 0x75, 0x28, 0x0c, 0x07, 0xce, 0x00, 0x78, 0xfa, 0x89, 0x6a,
-	0x6c, 0x04, 0x6e, 0x22, 0x79, 0x38, 0xbc, 0x06, 0xf0, 0x6f, 0x41, 0xde, 0x1f, 0x6d, 0x02, 0x74,
-	0x8f, 0x52, 0xe7, 0xa7, 0x39, 0x88, 0xd0, 0x00, 0xd5, 0x0c, 0x66, 0x9d, 0x00, 0x5b, 0x85, 0x02,
-	0xf1, 0xba, 0xf2, 0x08, 0x3c, 0x33, 0xb5, 0xeb, 0x63, 0x0d, 0xdd, 0x0f, 0x1f, 0x92, 0xf3, 0x3e,
-	0x62, 0x60, 0xe4, 0x6d, 0x98, 0xc1, 0x6e, 0xdd, 0x8f, 0x4c, 0x64, 0xa7, 0x66, 0x94, 0x09, 0x92,
-	0x6e, 0x22, 0x39, 0xc7, 0xb1, 0x02, 0x70, 0x06, 0x27, 0x3d, 0x70, 0x7e, 0xef, 0xac, 0x74, 0x9d,
-	0x16, 0x1d, 0xd9, 0xc9, 0x71, 0x3b, 0x2f, 0x4e, 0x6b, 0x67, 0x82, 0x98, 0x9a, 0x48, 0x7e, 0x1c,
-	0x8f, 0x3d, 0x0f, 0xac, 0xde, 0x80, 0x1c, 0xff, 0xbb, 0x8c, 0x66, 0x30, 0x62, 0x1b, 0x58, 0x2f,
-	0x7e, 0x9a, 0xba, 0x9f, 0xbb, 0xe0, 0x71, 0x65, 0xf7, 0xdc, 0xe4, 0xac, 0xfb, 0xe8, 0x55, 0xff,
-	0xc9, 0x4b, 0xe5, 0x3f, 0xf6, 0xd1, 0x29, 0x98, 0x85, 0xe3, 0x1e, 0x33, 0x94, 0xaf, 0x98, 0x9d,
-	0x72, 0x60, 0x3c, 0xb6, 0x50, 0x3d, 0x27, 0x9d, 0x86, 0xdc, 0xba, 0xa6, 0x33, 0x62, 0x87, 0x87,
-	0xaf, 0xe1, 0xb8, 0x9d, 0x6a, 0x54, 0xbd, 0xbe, 0xf8, 0x34, 0x08, 0xc3, 0x57, 0x14, 0x9f, 0xd8,
-	0xed, 0xa3, 0xd4, 0x5e, 0x1f, 0x25, 0x07, 0x7d, 0x94, 0x79, 0xb1, 0x7a, 0xbe, 0xea, 0x76, 0xc5,
-	0xea, 0xc2, 0x42, 0x30, 0x74, 0x27, 0x0b, 0xa9, 0xca, 0x9d, 0x14, 0xcc, 0x2c, 0xdb, 0x04, 0x33,
-	0xf2, 0xa0, 0x6c, 0x54, 0x9b, 0x86, 0x8d, 0x46, 0xe4, 0x73, 0xf1, 0xcb, 0x93, 0x4f, 0x88, 0x6b,
-	0x16, 0xa7, 0xe4, 0x9a, 0x23, 0x96, 0xf9, 0x57, 0xb2, 0xcc, 0xf5, 0x87, 0xc7, 0x32, 0xff, 0x1b,
-	0xfc, 0xf2, 0xd2, 0xb1, 0x8f, 0x5e, 0x9e, 0x18, 0x0a, 0xa4, 0xca, 0x64, 0xc1, 0x1f, 0x7b, 0xe7,
-	0x0b, 0x34, 0xfe, 0x48, 0x2a, 0x86, 0xca, 0x3d, 0xfb, 0xce, 0x17, 0x28, 0xf8, 0x35, 0x56, 0xe3,
-	0x83, 0x14, 0xe4, 0x65, 0x62, 0xe9, 0x58, 0x3d, 0x2a, 0xf2, 0xa3, 0x22, 0x3f, 0x2a, 0xf2, 0xaf,
-	0x64, 0x91, 0xff, 0x25, 0x05, 0x99, 0xcb, 0x84, 0x1d, 0x15, 0xf8, 0x51, 0x81, 0x1f, 0x15, 0xf8,
-	0x57, 0xb0, 0xc0, 0xa5, 0x9f, 0xa0, 0xbd, 0x3b, 0xa5, 0xc8, 0xed, 0x3b, 0xa5, 0xc8, 0x67, 0x77,
-	0x4a, 0x68, 0x67, 0x50, 0x42, 0xbf, 0x1e, 0x94, 0xd0, 0x87, 0x83, 0x12, 0xda, 0x1b, 0x94, 0xd0,
-	0xed, 0x41, 0x09, 0x7d, 0x3c, 0x28, 0xa1, 0x4f, 0x07, 0xa5, 0xc8, 0x67, 0x83, 0x12, 0x7a, 0xef,
-	0x93, 0x52, 0x64, 0xef, 0x93, 0x52, 0xe4, 0xf6, 0x27, 0xa5, 0xc8, 0x5b, 0x6f, 0x76, 0x4c, 0x6b,
-	0xa3, 0x53, 0xdf, 0x34, 0x5d, 0xab, 0x36, 0xae, 0x3b, 0x74, 0x9e, 0x2f, 0xd6, 0x4d, 0xbb, 0x57,
-	0xb3, 0x6c, 0x73, 0x53, 0x6b, 0x13, 0xbb, 0x36, 0xdc, 0x9e, 0xb7, 0x5a, 0x1d, 0x73, 0x9e, 0xdc,
-	0x64, 0xfe, 0xbf, 0x9b, 0xdd, 0xfb, 0xdf, 0xed, 0x5a, 0x49, 0xfe, 0xef, 0x67, 0x8b, 0xff, 0x0c,
-	0x00, 0x00, 0xff, 0xff, 0xbc, 0xd3, 0x6c, 0xc1, 0x9a, 0x27, 0x00, 0x00,
+	// 2811 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x5b, 0xdb, 0x6f, 0x1b, 0xc7,
+	0xd5, 0xd7, 0xf0, 0xba, 0x3c, 0xbc, 0x6a, 0x65, 0xc7, 0xb4, 0x3f, 0x87, 0x56, 0x18, 0x07, 0x9f,
+	0x62, 0x93, 0x54, 0x44, 0xc5, 0xb7, 0x7c, 0x1f, 0x9c, 0x88, 0xb2, 0x6b, 0x5a, 0x71, 0x9d, 0x74,
+	0x25, 0xd7, 0xa8, 0x2f, 0xda, 0x2e, 0x97, 0x23, 0x6a, 0xab, 0xe5, 0x2e, 0xb3, 0x33, 0x2b, 0x59,
+	0x06, 0x0a, 0xa8, 0x79, 0x6d, 0x51, 0xa4, 0x41, 0x1f, 0x82, 0x16, 0x7d, 0x68, 0x9f, 0x8a, 0xa2,
+	0x7f, 0x40, 0x51, 0x06, 0x85, 0x50, 0xb4, 0x40, 0x90, 0x27, 0x3d, 0xfa, 0xd1, 0x61, 0x5e, 0xd2,
+	0xb7, 0xb4, 0x4f, 0x41, 0xd0, 0x22, 0xc5, 0xcc, 0x2e, 0x97, 0x4b, 0x4a, 0x96, 0x99, 0xd8, 0x4a,
+	0x53, 0x80, 0x6f, 0xc3, 0x9d, 0x73, 0x7e, 0xe7, 0xec, 0x9c, 0x33, 0xbf, 0x73, 0x66, 0x56, 0x82,
+	0xe2, 0x3a, 0x26, 0x25, 0xcd, 0x9c, 0x26, 0xea, 0x2a, 0x6e, 0x2a, 0xd3, 0x0d, 0xdd, 0xac, 0x29,
+	0xba, 0xac, 0x9b, 0x0d, 0xd9, 0xc2, 0x2a, 0xd6, 0xd6, 0xb1, 0x35, 0x4d, 0x37, 0x5b, 0x98, 0x94,
+	0x5a, 0x96, 0x49, 0x4d, 0xf1, 0x39, 0x47, 0xbc, 0xe4, 0x88, 0x97, 0xf6, 0x10, 0x3f, 0x56, 0x6c,
+	0x68, 0x74, 0xd5, 0xae, 0x95, 0x54, 0xb3, 0x39, 0xdd, 0x30, 0x1b, 0xe6, 0x34, 0xd7, 0xac, 0xd9,
+	0x2b, 0xfc, 0x17, 0xff, 0xc1, 0x47, 0x0e, 0xe2, 0xb1, 0xff, 0xe9, 0x77, 0xc0, 0x6c, 0x51, 0xcd,
+	0x34, 0x5c, 0x73, 0xc7, 0x8e, 0xf6, 0x4f, 0xfa, 0x3c, 0x39, 0x76, 0xbc, 0x7f, 0x6a, 0x5d, 0xd1,
+	0xb5, 0xba, 0x42, 0xb1, 0x3b, 0x3b, 0x39, 0x30, 0xab, 0xe1, 0x0d, 0xb9, 0x1f, 0xfa, 0xc4, 0x6e,
+	0x09, 0xe2, 0x37, 0x90, 0xff, 0x0b, 0x82, 0xf4, 0xbc, 0xd9, 0x6c, 0x59, 0x98, 0x10, 0xcd, 0x34,
+	0x96, 0x36, 0x5b, 0x58, 0x9c, 0x83, 0x8c, 0xda, 0x7b, 0x24, 0x1b, 0xa6, 0x81, 0xb3, 0x81, 0x49,
+	0x34, 0x15, 0x2f, 0x1f, 0x2a, 0xf5, 0xaf, 0xcc, 0xe5, 0x66, 0x8b, 0x6e, 0x56, 0xc7, 0xa4, 0xb4,
+	0x4f, 0xfe, 0xba, 0x69, 0xec, 0x82, 0x68, 0xdc, 0xd7, 0x5a, 0xd9, 0xe0, 0xd0, 0x10, 0x57, 0xee,
+	0x6b, 0xad, 0xca, 0x0b, 0x20, 0xfa, 0x21, 0xd4, 0x55, 0x53, 0x53, 0xb1, 0x98, 0xde, 0x6e, 0xa3,
+	0xc0, 0x4e, 0x1b, 0xa1, 0x4e, 0x1b, 0x05, 0xcb, 0x85, 0xd9, 0x85, 0x90, 0x80, 0x32, 0x81, 0xfc,
+	0x3f, 0x83, 0x90, 0xae, 0x28, 0x54, 0x5d, 0x7d, 0x83, 0xbf, 0x3e, 0x7f, 0x8d, 0xeb, 0x70, 0x84,
+	0x6a, 0x4d, 0x6c, 0xda, 0x54, 0x26, 0x58, 0x35, 0x8d, 0x3a, 0x91, 0xeb, 0x78, 0x45, 0xb1, 0x75,
+	0xfa, 0x98, 0xb7, 0x39, 0xec, 0xaa, 0x2d, 0x3a, 0x5a, 0x97, 0x1c, 0x25, 0xf1, 0x3c, 0xa4, 0x07,
+	0xf0, 0xf8, 0x2b, 0x85, 0x2a, 0xc9, 0x3f, 0xfe, 0x6d, 0x3b, 0x28, 0x94, 0x23, 0xd9, 0x77, 0x8e,
+	0x4f, 0xfd, 0x3e, 0x50, 0x1d, 0x93, 0x52, 0xfd, 0x00, 0xe2, 0xb7, 0x60, 0xa2, 0xa9, 0xdc, 0x93,
+	0xf1, 0x3a, 0x36, 0x28, 0x91, 0xeb, 0x1a, 0x51, 0x6a, 0x3a, 0xae, 0x67, 0xc3, 0xfb, 0x78, 0x81,
+	0xa4, 0xf1, 0xa6, 0x72, 0xef, 0x32, 0xd7, 0xb8, 0xe4, 0x2a, 0x88, 0x45, 0x80, 0x1e, 0x4e, 0x36,
+	0x32, 0x89, 0xa6, 0x92, 0x95, 0x04, 0x33, 0x1e, 0x3d, 0x15, 0xce, 0xee, 0xa4, 0xa7, 0x26, 0xab,
+	0x48, 0x8a, 0x79, 0x6a, 0xe2, 0x25, 0x10, 0x99, 0x78, 0x6d, 0x93, 0x62, 0x9f, 0x55, 0x61, 0x1f,
+	0xab, 0x01, 0x29, 0xd3, 0x54, 0xee, 0x55, 0x98, 0x82, 0xcf, 0x68, 0xcc, 0x43, 0xc9, 0xc6, 0xb8,
+	0xcd, 0x14, 0xb3, 0x19, 0x3b, 0x15, 0xcd, 0x6e, 0x6d, 0xbd, 0x36, 0xb5, 0x35, 0x59, 0x0d, 0x48,
+	0x42, 0x57, 0xad, 0x32, 0x09, 0xc9, 0x1a, 0x0b, 0x84, 0xec, 0xae, 0xc1, 0xae, 0x88, 0x55, 0x4e,
+	0x40, 0xc2, 0x91, 0x70, 0xde, 0x83, 0x0b, 0x84, 0x77, 0xda, 0x28, 0xc4, 0x04, 0xce, 0x14, 0xce,
+	0x56, 0x72, 0x10, 0x77, 0x04, 0xb8, 0x4d, 0x3e, 0x2f, 0xec, 0xb4, 0x51, 0x94, 0xcd, 0x9f, 0x2f,
+	0x5c, 0x70, 0x42, 0xbe, 0x10, 0x12, 0x42, 0x99, 0xf0, 0x42, 0x48, 0x88, 0x66, 0x84, 0xfc, 0x79,
+	0x88, 0x5c, 0x5f, 0xbc, 0xa6, 0x11, 0x2a, 0x96, 0x00, 0x0c, 0xa5, 0x89, 0x49, 0x4b, 0x51, 0x31,
+	0xc9, 0xa2, 0xc9, 0xe0, 0x54, 0xac, 0x92, 0xfa, 0xac, 0x8d, 0xc6, 0x98, 0xcb, 0xe1, 0x77, 0x51,
+	0x20, 0x93, 0x91, 0x7c, 0x12, 0xf9, 0xf7, 0xc2, 0x20, 0x2c, 0xce, 0xce, 0x9b, 0xc6, 0x8a, 0xd6,
+	0x10, 0xaf, 0x41, 0xa4, 0x66, 0xab, 0x6b, 0x98, 0x66, 0xd1, 0x24, 0x9a, 0x8a, 0x55, 0x5e, 0xe6,
+	0x6b, 0x6b, 0x85, 0x33, 0xc1, 0xec, 0x16, 0x62, 0xe3, 0xe7, 0xad, 0xe7, 0xca, 0x27, 0x96, 0x6f,
+	0x2b, 0xc5, 0xfb, 0x2f, 0x15, 0x2f, 0xdc, 0x3d, 0xed, 0x0e, 0xee, 0x94, 0x8a, 0xde, 0xf8, 0xee,
+	0x49, 0xc9, 0xc5, 0x10, 0x17, 0x41, 0x50, 0x36, 0x88, 0xac, 0x5a, 0xb8, 0xee, 0x26, 0x5c, 0x7e,
+	0x60, 0xd1, 0xf9, 0x76, 0x2c, 0xbd, 0x51, 0xfb, 0x01, 0x56, 0xa9, 0x84, 0x57, 0x58, 0xd6, 0x56,
+	0x0e, 0xfd, 0xee, 0x87, 0xe3, 0xaa, 0x6e, 0xda, 0x75, 0xae, 0x88, 0x0d, 0xaa, 0x29, 0x3a, 0x91,
+	0xa2, 0xca, 0x06, 0x99, 0xb7, 0x70, 0x5d, 0xfc, 0x43, 0x00, 0x80, 0xa1, 0x5a, 0xb8, 0xa1, 0x99,
+	0x06, 0x4f, 0xc0, 0x58, 0xe5, 0xbd, 0x40, 0xf7, 0x0d, 0x7f, 0x1a, 0xb0, 0x7e, 0x1c, 0x90, 0x52,
+	0x4a, 0xab, 0x68, 0x98, 0x16, 0x5d, 0xc5, 0x0a, 0xa1, 0xc5, 0x19, 0xfe, 0x9b, 0x98, 0xb6, 0xf7,
+	0x3b, 0x81, 0xed, 0xa2, 0x8a, 0x0d, 0x6a, 0x29, 0x7a, 0x71, 0x46, 0x8a, 0x61, 0xbb, 0xb8, 0x81,
+	0xf9, 0x84, 0x37, 0x9c, 0x95, 0x62, 0x44, 0x29, 0xba, 0xe2, 0x31, 0x9b, 0xec, 0x1a, 0x96, 0xf9,
+	0x90, 0xcb, 0x96, 0xa5, 0x84, 0xaa, 0xf8, 0xf0, 0x40, 0x59, 0x71, 0xac, 0x31, 0x79, 0xa5, 0xd5,
+	0x55, 0x85, 0xae, 0x13, 0xae, 0x43, 0x3d, 0x07, 0xcb, 0x03, 0x0e, 0x96, 0x25, 0xc0, 0xb6, 0x27,
+	0xcb, 0xc6, 0x5c, 0xd6, 0xef, 0x5f, 0x59, 0x82, 0x26, 0xee, 0x59, 0xe9, 0xba, 0x32, 0xf8, 0xaa,
+	0xb3, 0x52, 0x4c, 0xd9, 0x20, 0x12, 0x5f, 0x2b, 0x71, 0x19, 0xe2, 0x3e, 0x42, 0xc9, 0x86, 0x78,
+	0x48, 0xca, 0xa5, 0xc7, 0x72, 0x7d, 0x69, 0x80, 0x1f, 0x2b, 0xc2, 0x76, 0x1b, 0xa1, 0x4f, 0xdb,
+	0x08, 0x49, 0x7e, 0x40, 0xf1, 0x3a, 0x84, 0x79, 0xda, 0xba, 0xfb, 0x7a, 0x18, 0xe4, 0x01, 0xca,
+	0xaa, 0x84, 0x18, 0xb2, 0xe4, 0xc0, 0xe4, 0x7f, 0x89, 0x60, 0x62, 0xe9, 0xda, 0xe2, 0xbc, 0xae,
+	0x61, 0x83, 0x3a, 0x19, 0xca, 0x79, 0x6d, 0x01, 0xe2, 0x2a, 0xb6, 0xa8, 0xb6, 0xa2, 0xa9, 0x0a,
+	0xc5, 0x6e, 0xaa, 0x4e, 0x7d, 0xd6, 0x46, 0xa1, 0xdf, 0xbc, 0x8f, 0xe2, 0x2d, 0xdc, 0x2c, 0x4c,
+	0xd6, 0x14, 0x82, 0xcf, 0xf2, 0xec, 0x8d, 0x58, 0xa1, 0xa9, 0xad, 0x2d, 0x81, 0x67, 0xbf, 0x15,
+	0x7c, 0x87, 0xfb, 0xdc, 0x53, 0x16, 0xcf, 0x43, 0x74, 0x0d, 0x6f, 0xca, 0xb6, 0xa5, 0xbb, 0x29,
+	0x7a, 0x74, 0xc0, 0xeb, 0x45, 0xac, 0x5a, 0x98, 0x3a, 0xce, 0xb1, 0x4d, 0x2c, 0x45, 0xd6, 0xf0,
+	0xe6, 0x0d, 0x4b, 0xcf, 0xff, 0x3a, 0x02, 0x49, 0xe6, 0x5d, 0xcf, 0x2f, 0x09, 0x8e, 0x62, 0x83,
+	0x71, 0x86, 0xbc, 0x8e, 0x2d, 0x6d, 0x65, 0x53, 0xf6, 0x7b, 0xb9, 0x3f, 0xe3, 0x1e, 0x71, 0x14,
+	0xbf, 0xcb, 0xf5, 0xe6, 0x7d, 0xfe, 0x2d, 0xc1, 0x31, 0x97, 0xb8, 0xf6, 0x02, 0xdd, 0xbf, 0xa2,
+	0x64, 0x5d, 0xcd, 0xdd, 0xa8, 0xd7, 0xe0, 0x99, 0x7e, 0x4f, 0x57, 0x4d, 0x42, 0x19, 0x29, 0x3c,
+	0x86, 0x92, 0x0f, 0xf9, 0xdd, 0xac, 0xba, 0x3a, 0xac, 0xce, 0x0c, 0xf8, 0xe8, 0xc1, 0x45, 0xf6,
+	0x85, 0x3b, 0xdc, 0xe7, 0xa0, 0x87, 0x77, 0x1a, 0xc2, 0x86, 0x29, 0xab, 0xca, 0x63, 0x98, 0x3a,
+	0x64, 0x98, 0xf3, 0x8a, 0xf8, 0x26, 0xa4, 0xa8, 0x65, 0x13, 0x8a, 0xeb, 0xb2, 0xaa, 0xf0, 0x38,
+	0xc6, 0xbe, 0x5c, 0x3e, 0x54, 0x03, 0x52, 0xc2, 0x45, 0x98, 0x57, 0x6e, 0x58, 0xba, 0x38, 0x07,
+	0xc9, 0x26, 0xd5, 0x7d, 0x05, 0x23, 0xfe, 0x68, 0x37, 0x9c, 0x84, 0xad, 0x06, 0xa5, 0x04, 0x53,
+	0xf1, 0x4a, 0x86, 0x0c, 0x71, 0x0e, 0xe1, 0x2c, 0x57, 0x36, 0xc1, 0x01, 0xce, 0x0e, 0xb1, 0x1f,
+	0xf6, 0x48, 0x77, 0xcf, 0x04, 0x30, 0xc8, 0xcb, 0x1c, 0x91, 0xf5, 0x06, 0xbb, 0xd3, 0x61, 0x77,
+	0xa5, 0xc9, 0x43, 0x7a, 0x20, 0x22, 0xbb, 0x8b, 0xcd, 0x71, 0x88, 0xa9, 0x8a, 0xbf, 0xbb, 0xf0,
+	0x97, 0x9a, 0xca, 0x49, 0xf7, 0x4d, 0xdc, 0xf9, 0xc3, 0xdb, 0x6d, 0x14, 0xff, 0xa0, 0x8d, 0xd0,
+	0x4e, 0x1b, 0x41, 0xa7, 0x8d, 0xc2, 0x33, 0x33, 0x85, 0x99, 0xf2, 0xee, 0x82, 0xb4, 0x10, 0x12,
+	0x20, 0x13, 0xcf, 0xdf, 0x83, 0x64, 0x95, 0xd2, 0xd6, 0x9c, 0x4d, 0x57, 0x2b, 0x0a, 0xd1, 0x54,
+	0xf1, 0x14, 0xc4, 0x6c, 0x82, 0x2d, 0x99, 0x27, 0x87, 0xb3, 0x71, 0x93, 0x5d, 0xea, 0x0e, 0x59,
+	0x81, 0xec, 0x6b, 0x92, 0xc0, 0xe6, 0xaf, 0x33, 0x4f, 0xff, 0x0f, 0x84, 0x96, 0x42, 0xc8, 0x86,
+	0x69, 0xd5, 0x87, 0xdd, 0x9b, 0x9e, 0x42, 0xbe, 0x02, 0x31, 0x66, 0x75, 0xc9, 0x5c, 0xc3, 0x86,
+	0x78, 0x06, 0xc2, 0x94, 0x0d, 0xb8, 0xc5, 0x21, 0x60, 0x1c, 0xe9, 0xfc, 0x17, 0x21, 0x80, 0xea,
+	0xd2, 0xd2, 0x9b, 0x6e, 0x71, 0x3c, 0x0e, 0x41, 0xdb, 0xd2, 0x5c, 0xaf, 0xc1, 0x47, 0x28, 0xec,
+	0xb1, 0x38, 0x0b, 0x31, 0xc5, 0xa6, 0xab, 0x4e, 0xb3, 0xb8, 0xff, 0xbe, 0x14, 0x98, 0x20, 0xef,
+	0x12, 0xbf, 0x03, 0xc0, 0x95, 0x6a, 0x6c, 0x71, 0x5c, 0x42, 0x7e, 0x69, 0x88, 0x34, 0xe9, 0x5b,
+	0xd4, 0xea, 0x98, 0xc4, 0x4d, 0x3b, 0x2b, 0xfc, 0x6d, 0x17, 0xd2, 0x79, 0x61, 0x67, 0x3b, 0x17,
+	0x86, 0x80, 0xf4, 0x56, 0xab, 0x0b, 0xe7, 0x2c, 0xdd, 0x40, 0xcd, 0x88, 0x1c, 0x58, 0xcd, 0x88,
+	0x3e, 0x95, 0x9a, 0x21, 0x16, 0x21, 0x62, 0x98, 0x32, 0xd5, 0x9d, 0x4e, 0xed, 0xd1, 0xd4, 0x13,
+	0x36, 0xcc, 0x25, 0x9d, 0x88, 0xaf, 0x43, 0xd4, 0x26, 0x98, 0xcb, 0xc3, 0xd0, 0xab, 0xdf, 0xc7,
+	0xfa, 0x55, 0x24, 0x45, 0x6c, 0x82, 0x97, 0x74, 0xd6, 0xf9, 0xc5, 0xf9, 0xd2, 0xbb, 0x7b, 0x65,
+	0x7c, 0xbb, 0x8d, 0x82, 0x3b, 0x6d, 0x14, 0x60, 0xfb, 0x64, 0xb6, 0xf0, 0x72, 0xe1, 0x4c, 0x25,
+	0x0f, 0xe0, 0xdb, 0x4c, 0x87, 0xb6, 0xdb, 0x28, 0xe6, 0x6e, 0x26, 0xa1, 0xd3, 0x46, 0xa1, 0x0b,
+	0x85, 0x99, 0x97, 0x16, 0x42, 0x42, 0x20, 0x13, 0x5c, 0x08, 0x09, 0x42, 0x26, 0x96, 0xff, 0x55,
+	0x08, 0x92, 0x97, 0x14, 0xaa, 0xd4, 0xcd, 0x86, 0x9b, 0x84, 0x93, 0x10, 0x22, 0x9a, 0x5b, 0x4e,
+	0x7a, 0x59, 0xf8, 0x20, 0x80, 0xaa, 0x63, 0x12, 0x9f, 0x11, 0xf3, 0x20, 0x60, 0xa3, 0xde, 0x32,
+	0x35, 0x83, 0xba, 0xdd, 0x91, 0x43, 0x20, 0x63, 0x92, 0xf7, 0x5c, 0xbc, 0x02, 0xe9, 0xba, 0x03,
+	0x2b, 0x2b, 0x2d, 0x4d, 0x5e, 0xc3, 0x9b, 0x6e, 0xf2, 0x3d, 0x76, 0x6b, 0x24, 0x5d, 0xbd, 0xb9,
+	0x96, 0xf6, 0x3a, 0xde, 0x1c, 0x4c, 0x8f, 0xf0, 0x81, 0xa5, 0x47, 0xe4, 0x69, 0xa7, 0x87, 0xf0,
+	0x25, 0xd3, 0x23, 0xf6, 0xc4, 0xe9, 0x91, 0x87, 0x74, 0x37, 0x00, 0x8f, 0x3a, 0xcc, 0x55, 0x9e,
+	0xeb, 0x4b, 0x90, 0x09, 0xc6, 0xc6, 0x6e, 0x82, 0xec, 0x6a, 0xfe, 0x59, 0xdb, 0xff, 0x61, 0x10,
+	0x12, 0x8b, 0x2d, 0xdd, 0x36, 0xd6, 0xdc, 0xf4, 0x38, 0xe6, 0x0b, 0x3e, 0x27, 0x2a, 0x5f, 0xd0,
+	0xaf, 0x42, 0x86, 0x70, 0x59, 0x79, 0x15, 0xab, 0x2e, 0x3f, 0x0c, 0xc9, 0xab, 0x29, 0x47, 0xb1,
+	0x8a, 0xd5, 0x3d, 0x59, 0x21, 0x78, 0x60, 0x61, 0x0f, 0x3d, 0xed, 0xb0, 0x47, 0xf6, 0x65, 0xe6,
+	0xdd, 0x61, 0x8f, 0x7e, 0xc5, 0xb0, 0x8f, 0x79, 0x61, 0xdf, 0x1d, 0xd2, 0x88, 0x1b, 0xd2, 0x30,
+	0x0b, 0xe9, 0xd9, 0xc2, 0xb9, 0x85, 0x90, 0x10, 0xce, 0x44, 0xf2, 0x3f, 0x09, 0x43, 0xf2, 0xb2,
+	0xae, 0x10, 0xaa, 0xa9, 0x43, 0x44, 0xf3, 0x9b, 0x52, 0x6f, 0xbe, 0x07, 0x1c, 0x5e, 0x56, 0x36,
+	0x88, 0xbb, 0xfd, 0x87, 0x39, 0xe4, 0x65, 0xf7, 0x3a, 0xe4, 0x7d, 0xe2, 0xd0, 0x54, 0x94, 0xe1,
+	0xcd, 0x6d, 0x90, 0x51, 0xed, 0xf9, 0x8f, 0xd6, 0x9e, 0xbf, 0x07, 0x20, 0x3d, 0x77, 0xdf, 0xb6,
+	0x70, 0x45, 0x37, 0x6b, 0xde, 0xfd, 0xc0, 0xb8, 0x6a, 0x1a, 0x06, 0x56, 0xd9, 0x02, 0xc8, 0x84,
+	0x5a, 0x9a, 0xd1, 0x18, 0xb6, 0xa9, 0xca, 0xf4, 0x34, 0x17, 0xb9, 0xa2, 0xf8, 0x7d, 0x48, 0xa9,
+	0xa6, 0x41, 0x15, 0xcd, 0xe8, 0x76, 0x84, 0x4e, 0x55, 0xbb, 0xe0, 0xf6, 0xe9, 0x99, 0x60, 0xf6,
+	0x55, 0x36, 0x7c, 0xd1, 0xfa, 0xdf, 0xf2, 0x0b, 0xcb, 0xb7, 0xe7, 0x8a, 0xb7, 0xdc, 0x2b, 0x86,
+	0xde, 0xb0, 0x78, 0xf7, 0xb4, 0xef, 0xf9, 0x49, 0x29, 0xe9, 0x01, 0xf2, 0x16, 0xf2, 0xbf, 0x8c,
+	0xa7, 0xf2, 0x3f, 0x0f, 0xc0, 0x21, 0xbe, 0xe6, 0xfc, 0x02, 0xab, 0x6a, 0xd7, 0xc8, 0x81, 0x2c,
+	0xfc, 0x4d, 0x88, 0x79, 0x37, 0x40, 0x4f, 0xbe, 0xe6, 0x3d, 0x2c, 0xf1, 0x06, 0x08, 0x9a, 0x41,
+	0xa8, 0x62, 0xa8, 0xd8, 0xed, 0x3d, 0x9e, 0x00, 0xd7, 0x83, 0xca, 0x3f, 0x0c, 0xc3, 0xc4, 0xdc,
+	0xcd, 0xc5, 0x79, 0x46, 0x18, 0x1b, 0x6c, 0xa1, 0xdc, 0x55, 0xb9, 0x0a, 0xd0, 0xb0, 0x4c, 0xbb,
+	0xe5, 0x3f, 0x4e, 0x9c, 0xf2, 0x5d, 0x59, 0x85, 0xd8, 0xf8, 0xa8, 0x75, 0xa4, 0x7c, 0x78, 0xf9,
+	0xf6, 0x9d, 0xd2, 0x9d, 0xa2, 0x3c, 0xfd, 0x7c, 0xcf, 0xc0, 0xe9, 0x93, 0x52, 0x8c, 0x6b, 0xf3,
+	0x4c, 0xb9, 0x08, 0x71, 0x42, 0x2d, 0xac, 0x34, 0xfd, 0x89, 0xf8, 0xec, 0x20, 0x56, 0xc2, 0x82,
+	0xb2, 0xb0, 0x7c, 0x7b, 0xf9, 0x95, 0x53, 0x77, 0x4f, 0x9d, 0x94, 0xc0, 0xd1, 0xe0, 0xfa, 0xfe,
+	0xbb, 0xae, 0xe0, 0x01, 0xdd, 0x75, 0x85, 0x46, 0x77, 0x5d, 0x5f, 0xf5, 0xae, 0xeb, 0x9b, 0xde,
+	0x98, 0xe6, 0xdf, 0x0b, 0x41, 0xfc, 0x75, 0x65, 0x65, 0x4d, 0x71, 0x53, 0x5b, 0x83, 0xf1, 0x9a,
+	0x69, 0x52, 0x42, 0x2d, 0xa5, 0x25, 0x13, 0x6c, 0xad, 0x63, 0xab, 0x7b, 0x9b, 0xfb, 0xff, 0x2c,
+	0xf6, 0xf0, 0x2e, 0x8a, 0xe6, 0xc3, 0x56, 0xf0, 0x21, 0x42, 0xfe, 0x9f, 0x53, 0x5b, 0x01, 0xef,
+	0x9e, 0x57, 0xe8, 0x8e, 0x04, 0xd4, 0x1d, 0x65, 0x91, 0x94, 0xf1, 0x60, 0x17, 0x1d, 0x54, 0xf1,
+	0x2a, 0xc4, 0xd7, 0x98, 0x65, 0x99, 0x9a, 0x2d, 0x4d, 0x75, 0x53, 0x7f, 0xaa, 0x97, 0xfa, 0x5f,
+	0x70, 0xf5, 0x23, 0xd6, 0xe1, 0xf2, 0x04, 0xbf, 0xf9, 0x9d, 0x2b, 0xde, 0xe2, 0x77, 0xbe, 0xf2,
+	0x9d, 0x22, 0xdb, 0x44, 0xc0, 0x95, 0x97, 0x98, 0xee, 0xa8, 0x2f, 0x3c, 0x88, 0xbe, 0xf0, 0x4f,
+	0x09, 0x48, 0x5d, 0xe1, 0xc0, 0x8b, 0x2d, 0xac, 0xf2, 0x9b, 0xc6, 0x33, 0x00, 0x06, 0x91, 0x55,
+	0xdb, 0xb2, 0xb0, 0xf1, 0xb8, 0x8f, 0x39, 0x31, 0x83, 0xcc, 0x3b, 0x82, 0xe2, 0x45, 0x88, 0x18,
+	0x44, 0x56, 0x74, 0x7d, 0xbf, 0x86, 0xb1, 0x92, 0xee, 0x3c, 0xfc, 0x6b, 0x10, 0x7e, 0xf1, 0x3e,
+	0x8a, 0x90, 0x55, 0xc5, 0xc2, 0x75, 0xfe, 0xfe, 0x64, 0x4e, 0xd7, 0xc5, 0x1b, 0x10, 0x35, 0x88,
+	0xac, 0x6b, 0x84, 0xba, 0x01, 0x78, 0x71, 0x88, 0xf7, 0x77, 0xbe, 0x4b, 0xec, 0x85, 0x1a, 0x31,
+	0x08, 0xff, 0x64, 0x71, 0x01, 0x62, 0x06, 0x91, 0xc9, 0x26, 0xa1, 0xb8, 0xb9, 0xdf, 0x05, 0x64,
+	0x25, 0xe4, 0x76, 0x88, 0x82, 0x41, 0x16, 0xb9, 0xb4, 0x78, 0x1d, 0xe2, 0x64, 0xd6, 0xb3, 0xe5,
+	0x46, 0xe5, 0xf4, 0x10, 0x5e, 0x75, 0x3f, 0x79, 0x54, 0x91, 0x04, 0x64, 0x56, 0x72, 0x1f, 0x8b,
+	0x4b, 0x90, 0x5c, 0xa5, 0xb4, 0xd5, 0x43, 0x74, 0x8e, 0x89, 0xc5, 0x61, 0x7a, 0x64, 0xef, 0xa6,
+	0xa8, 0x8a, 0xa4, 0x04, 0x43, 0xf1, 0x50, 0xef, 0x42, 0xa6, 0x7b, 0xdc, 0xf6, 0x80, 0x87, 0x3f,
+	0x4f, 0xf6, 0x5d, 0x00, 0x54, 0x91, 0xd4, 0x3d, 0xba, 0x7b, 0xf0, 0xb7, 0x20, 0xed, 0x1e, 0xec,
+	0x3c, 0x74, 0xa7, 0xa1, 0x9c, 0x1e, 0x66, 0x21, 0x7c, 0xc7, 0xc7, 0xaa, 0x77, 0xd2, 0xf3, 0xb0,
+	0x55, 0xc8, 0x60, 0xe7, 0x4c, 0xd2, 0x03, 0x8f, 0x0f, 0xed, 0x7a, 0xdf, 0x71, 0xc6, 0x0d, 0x1f,
+	0x92, 0xd2, 0x2e, 0xa2, 0x67, 0xe4, 0x36, 0xa4, 0x14, 0xd6, 0xf5, 0xf4, 0x4c, 0x24, 0x86, 0xde,
+	0xdf, 0x03, 0x2d, 0x6a, 0x15, 0x49, 0x49, 0x8e, 0xe5, 0x81, 0x53, 0x38, 0xea, 0x80, 0xf3, 0xaf,
+	0x6d, 0xf2, 0xaa, 0x5d, 0x23, 0x3d, 0x3b, 0x49, 0x6e, 0xe7, 0xdc, 0xb0, 0x76, 0x06, 0xda, 0xb2,
+	0x2a, 0x92, 0x9e, 0x51, 0xfa, 0x9e, 0x7b, 0x56, 0xdf, 0x82, 0x2c, 0xef, 0x07, 0x78, 0x71, 0xe7,
+	0x3d, 0x4b, 0xcf, 0xa8, 0x38, 0xf4, 0x75, 0xf0, 0x1e, 0x4d, 0x4f, 0x15, 0x49, 0x87, 0x59, 0x7f,
+	0xc0, 0x1e, 0xdf, 0x64, 0x8f, 0x3d, 0x93, 0x37, 0x21, 0xe5, 0xf0, 0xb8, 0x67, 0x68, 0x82, 0x1b,
+	0x2a, 0x0d, 0x61, 0xc8, 0x57, 0x7a, 0xd8, 0x0a, 0x72, 0x1c, 0x0f, 0xf8, 0x02, 0x24, 0x2c, 0xfc,
+	0x96, 0x8d, 0x09, 0x65, 0x4a, 0x24, 0x9b, 0xde, 0xf7, 0x5a, 0x3e, 0xee, 0xca, 0x5e, 0x33, 0x1b,
+	0x44, 0x7c, 0x15, 0xd2, 0x04, 0xab, 0xb6, 0xa5, 0xd1, 0xcd, 0xee, 0x57, 0xdb, 0xcc, 0xbe, 0xda,
+	0xa9, 0xae, 0xb8, 0xfb, 0x09, 0xf7, 0x0c, 0x3b, 0xb1, 0xd6, 0x35, 0xd7, 0xf2, 0xf8, 0xbe, 0xba,
+	0x31, 0x2e, 0xc9, 0xed, 0x2e, 0x43, 0x92, 0xff, 0x31, 0x80, 0x66, 0x50, 0x6c, 0x19, 0x8a, 0x9e,
+	0xfd, 0x24, 0xfa, 0x65, 0x9a, 0xb2, 0x7e, 0x65, 0x96, 0xb6, 0x52, 0x82, 0x3d, 0xba, 0xea, 0x3e,
+	0x79, 0xa5, 0xf0, 0x8f, 0x8b, 0x91, 0x99, 0x97, 0x0b, 0x33, 0x85, 0xb3, 0x7f, 0x6e, 0xa3, 0x13,
+	0xf0, 0x2c, 0x4c, 0x38, 0x0c, 0x3d, 0x79, 0xcd, 0x6c, 0x4c, 0x7a, 0x0b, 0xe7, 0x8a, 0x54, 0x4e,
+	0x42, 0x72, 0x45, 0xd3, 0x29, 0xb6, 0xfc, 0x6c, 0xdf, 0xbd, 0xf7, 0x89, 0x96, 0x0b, 0xce, 0x01,
+	0xed, 0x79, 0x10, 0xba, 0xf1, 0x10, 0x8f, 0x6c, 0xb7, 0x51, 0x74, 0xa7, 0x8d, 0x22, 0x9d, 0x36,
+	0x8a, 0x9f, 0x2b, 0x9c, 0x2f, 0xb0, 0xe3, 0x59, 0x61, 0x66, 0xa6, 0x32, 0x09, 0x02, 0x0b, 0x1c,
+	0x65, 0x55, 0x80, 0x9d, 0xe1, 0xd2, 0x3b, 0x6d, 0x94, 0xea, 0xb4, 0x91, 0x30, 0x73, 0xa6, 0x30,
+	0x73, 0xb6, 0x30, 0x73, 0xce, 0xbb, 0x1f, 0x8a, 0x64, 0xa2, 0x0b, 0x21, 0x21, 0x95, 0x49, 0xe7,
+	0xb7, 0xe2, 0x90, 0x9a, 0xb7, 0xb0, 0x42, 0xf1, 0x93, 0x16, 0x90, 0xe2, 0x30, 0x05, 0xa4, 0x57,
+	0x2f, 0x2e, 0x7d, 0xf5, 0x7a, 0xe1, 0x2b, 0x0f, 0xb3, 0x43, 0x96, 0x87, 0x51, 0x61, 0xf8, 0x3a,
+	0x0b, 0xc3, 0xdd, 0xa7, 0x57, 0x18, 0x46, 0x25, 0x61, 0x54, 0x12, 0x0e, 0xbc, 0x24, 0xbc, 0x32,
+	0xfe, 0xe1, 0xc5, 0x81, 0x36, 0xba, 0x92, 0x1f, 0xe4, 0xe5, 0xf1, 0xb7, 0x3f, 0x47, 0xfd, 0x8f,
+	0x2a, 0x59, 0x1f, 0x2b, 0x27, 0xde, 0xfe, 0x1c, 0x79, 0xbf, 0xd8, 0x8c, 0x47, 0xc5, 0x7c, 0xa6,
+	0xfb, 0x6b, 0x0f, 0x0a, 0xfe, 0x51, 0x1c, 0xd2, 0x12, 0x6e, 0xe9, 0x8a, 0x3a, 0xe2, 0xe0, 0x11,
+	0x07, 0x8f, 0x38, 0x78, 0xc4, 0xc1, 0x23, 0x0e, 0xfe, 0xba, 0x39, 0xf8, 0x5f, 0x00, 0xf1, 0x2b,
+	0x98, 0x8e, 0xf8, 0x77, 0xc4, 0xbf, 0x23, 0xfe, 0x1d, 0xf1, 0xef, 0x88, 0x7f, 0xbf, 0x5e, 0xfe,
+	0xad, 0xfc, 0x0c, 0xed, 0x7c, 0x94, 0x1b, 0x7b, 0xf0, 0x51, 0x6e, 0xec, 0xd3, 0x8f, 0x72, 0x68,
+	0xab, 0x93, 0x43, 0xbf, 0xed, 0xe4, 0xd0, 0x07, 0x9d, 0x1c, 0xda, 0xe9, 0xe4, 0xd0, 0x83, 0x4e,
+	0x0e, 0x3d, 0xec, 0xe4, 0xd0, 0x27, 0x9d, 0xdc, 0xd8, 0xa7, 0x9d, 0x1c, 0x7a, 0xe7, 0xe3, 0xdc,
+	0xd8, 0xce, 0xc7, 0xb9, 0xb1, 0x07, 0x1f, 0xe7, 0xc6, 0x6e, 0xdd, 0x6c, 0x98, 0xad, 0xb5, 0x46,
+	0x69, 0xdd, 0x64, 0x5e, 0x59, 0x4a, 0xc9, 0x26, 0xd3, 0x7c, 0xb0, 0x62, 0x5a, 0xcd, 0x62, 0xcb,
+	0x32, 0xd7, 0xb5, 0x3a, 0xb6, 0x8a, 0xdd, 0xe9, 0xe9, 0x56, 0xad, 0x61, 0x4e, 0xe3, 0x7b, 0xd4,
+	0xfd, 0xa7, 0x8f, 0x47, 0xff, 0xd3, 0x4b, 0x2d, 0xc2, 0xff, 0x09, 0x64, 0xf6, 0xdf, 0x01, 0x00,
+	0x00, 0xff, 0xff, 0x5c, 0x49, 0x63, 0x30, 0x20, 0x33, 0x00, 0x00,
 }
 
 func (this *CompressionType) Equal(that interface{}) bool {
@@ -4058,6 +4663,140 @@ func (this *AzureEventHubsConfig) Equal(that interface{}) bool {
 	}
 	return true
 }
+func (this *AWSCloudwatchConfig) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*AWSCloudwatchConfig)
+	if !ok {
+		that2, ok := that.(AWSCloudwatchConfig)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.GroupName != that1.GroupName {
+		return false
+	}
+	if this.StreamName != that1.StreamName {
+		return false
+	}
+	if !this.AwsCred.Equal(that1.AwsCred) {
+		return false
+	}
+	if this.AwsRegion != that1.AwsRegion {
+		return false
+	}
+	if !this.Compression.Equal(that1.Compression) {
+		return false
+	}
+	if !this.Batch.Equal(that1.Batch) {
+		return false
+	}
+	return true
+}
+func (this *KafkaConfig) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*KafkaConfig)
+	if !ok {
+		that2, ok := that.(KafkaConfig)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if len(this.BootstrapServers) != len(that1.BootstrapServers) {
+		return false
+	}
+	for i := range this.BootstrapServers {
+		if this.BootstrapServers[i] != that1.BootstrapServers[i] {
+			return false
+		}
+	}
+	if this.KafkaTopic != that1.KafkaTopic {
+		return false
+	}
+	if !this.Compression.Equal(that1.Compression) {
+		return false
+	}
+	if !this.Batch.Equal(that1.Batch) {
+		return false
+	}
+	if that1.TlsChoice == nil {
+		if this.TlsChoice != nil {
+			return false
+		}
+	} else if this.TlsChoice == nil {
+		return false
+	} else if !this.TlsChoice.Equal(that1.TlsChoice) {
+		return false
+	}
+	return true
+}
+func (this *KafkaConfig_NoTls) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*KafkaConfig_NoTls)
+	if !ok {
+		that2, ok := that.(KafkaConfig_NoTls)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.NoTls.Equal(that1.NoTls) {
+		return false
+	}
+	return true
+}
+func (this *KafkaConfig_UseTls) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*KafkaConfig_UseTls)
+	if !ok {
+		that2, ok := that.(KafkaConfig_UseTls)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.UseTls.Equal(that1.UseTls) {
+		return false
+	}
+	return true
+}
 func (this *GlobalSpecType) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -4093,6 +4832,15 @@ func (this *GlobalSpecType) Equal(that interface{}) bool {
 	} else if this.Receiver == nil {
 		return false
 	} else if !this.Receiver.Equal(that1.Receiver) {
+		return false
+	}
+	if that1.LogType == nil {
+		if this.LogType != nil {
+			return false
+		}
+	} else if this.LogType == nil {
+		return false
+	} else if !this.LogType.Equal(that1.LogType) {
 		return false
 	}
 	if !this.ViewInternal.Equal(that1.ViewInternal) {
@@ -4364,6 +5112,126 @@ func (this *GlobalSpecType_AzureEventHubsReceiver) Equal(that interface{}) bool 
 	}
 	return true
 }
+func (this *GlobalSpecType_AwsCloudWatchReceiver) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GlobalSpecType_AwsCloudWatchReceiver)
+	if !ok {
+		that2, ok := that.(GlobalSpecType_AwsCloudWatchReceiver)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.AwsCloudWatchReceiver.Equal(that1.AwsCloudWatchReceiver) {
+		return false
+	}
+	return true
+}
+func (this *GlobalSpecType_KafkaReceiver) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GlobalSpecType_KafkaReceiver)
+	if !ok {
+		that2, ok := that.(GlobalSpecType_KafkaReceiver)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.KafkaReceiver.Equal(that1.KafkaReceiver) {
+		return false
+	}
+	return true
+}
+func (this *GlobalSpecType_RequestLogs) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GlobalSpecType_RequestLogs)
+	if !ok {
+		that2, ok := that.(GlobalSpecType_RequestLogs)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.RequestLogs.Equal(that1.RequestLogs) {
+		return false
+	}
+	return true
+}
+func (this *GlobalSpecType_SecurityEvents) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GlobalSpecType_SecurityEvents)
+	if !ok {
+		that2, ok := that.(GlobalSpecType_SecurityEvents)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.SecurityEvents.Equal(that1.SecurityEvents) {
+		return false
+	}
+	return true
+}
+func (this *GlobalSpecType_AuditLogs) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GlobalSpecType_AuditLogs)
+	if !ok {
+		that2, ok := that.(GlobalSpecType_AuditLogs)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.AuditLogs.Equal(that1.AuditLogs) {
+		return false
+	}
+	return true
+}
 func (this *CreateSpecType) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -4399,6 +5267,15 @@ func (this *CreateSpecType) Equal(that interface{}) bool {
 	} else if this.Receiver == nil {
 		return false
 	} else if !this.Receiver.Equal(that1.Receiver) {
+		return false
+	}
+	if that1.LogType == nil {
+		if this.LogType != nil {
+			return false
+		}
+	} else if this.LogType == nil {
+		return false
+	} else if !this.LogType.Equal(that1.LogType) {
 		return false
 	}
 	return true
@@ -4667,6 +5544,126 @@ func (this *CreateSpecType_AzureEventHubsReceiver) Equal(that interface{}) bool 
 	}
 	return true
 }
+func (this *CreateSpecType_AwsCloudWatchReceiver) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CreateSpecType_AwsCloudWatchReceiver)
+	if !ok {
+		that2, ok := that.(CreateSpecType_AwsCloudWatchReceiver)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.AwsCloudWatchReceiver.Equal(that1.AwsCloudWatchReceiver) {
+		return false
+	}
+	return true
+}
+func (this *CreateSpecType_KafkaReceiver) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CreateSpecType_KafkaReceiver)
+	if !ok {
+		that2, ok := that.(CreateSpecType_KafkaReceiver)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.KafkaReceiver.Equal(that1.KafkaReceiver) {
+		return false
+	}
+	return true
+}
+func (this *CreateSpecType_RequestLogs) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CreateSpecType_RequestLogs)
+	if !ok {
+		that2, ok := that.(CreateSpecType_RequestLogs)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.RequestLogs.Equal(that1.RequestLogs) {
+		return false
+	}
+	return true
+}
+func (this *CreateSpecType_SecurityEvents) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CreateSpecType_SecurityEvents)
+	if !ok {
+		that2, ok := that.(CreateSpecType_SecurityEvents)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.SecurityEvents.Equal(that1.SecurityEvents) {
+		return false
+	}
+	return true
+}
+func (this *CreateSpecType_AuditLogs) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CreateSpecType_AuditLogs)
+	if !ok {
+		that2, ok := that.(CreateSpecType_AuditLogs)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.AuditLogs.Equal(that1.AuditLogs) {
+		return false
+	}
+	return true
+}
 func (this *ReplaceSpecType) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -4702,6 +5699,15 @@ func (this *ReplaceSpecType) Equal(that interface{}) bool {
 	} else if this.Receiver == nil {
 		return false
 	} else if !this.Receiver.Equal(that1.Receiver) {
+		return false
+	}
+	if that1.LogType == nil {
+		if this.LogType != nil {
+			return false
+		}
+	} else if this.LogType == nil {
+		return false
+	} else if !this.LogType.Equal(that1.LogType) {
 		return false
 	}
 	return true
@@ -4970,6 +5976,126 @@ func (this *ReplaceSpecType_AzureEventHubsReceiver) Equal(that interface{}) bool
 	}
 	return true
 }
+func (this *ReplaceSpecType_AwsCloudWatchReceiver) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ReplaceSpecType_AwsCloudWatchReceiver)
+	if !ok {
+		that2, ok := that.(ReplaceSpecType_AwsCloudWatchReceiver)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.AwsCloudWatchReceiver.Equal(that1.AwsCloudWatchReceiver) {
+		return false
+	}
+	return true
+}
+func (this *ReplaceSpecType_KafkaReceiver) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ReplaceSpecType_KafkaReceiver)
+	if !ok {
+		that2, ok := that.(ReplaceSpecType_KafkaReceiver)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.KafkaReceiver.Equal(that1.KafkaReceiver) {
+		return false
+	}
+	return true
+}
+func (this *ReplaceSpecType_RequestLogs) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ReplaceSpecType_RequestLogs)
+	if !ok {
+		that2, ok := that.(ReplaceSpecType_RequestLogs)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.RequestLogs.Equal(that1.RequestLogs) {
+		return false
+	}
+	return true
+}
+func (this *ReplaceSpecType_SecurityEvents) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ReplaceSpecType_SecurityEvents)
+	if !ok {
+		that2, ok := that.(ReplaceSpecType_SecurityEvents)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.SecurityEvents.Equal(that1.SecurityEvents) {
+		return false
+	}
+	return true
+}
+func (this *ReplaceSpecType_AuditLogs) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ReplaceSpecType_AuditLogs)
+	if !ok {
+		that2, ok := that.(ReplaceSpecType_AuditLogs)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.AuditLogs.Equal(that1.AuditLogs) {
+		return false
+	}
+	return true
+}
 func (this *GetSpecType) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -5005,6 +6131,15 @@ func (this *GetSpecType) Equal(that interface{}) bool {
 	} else if this.Receiver == nil {
 		return false
 	} else if !this.Receiver.Equal(that1.Receiver) {
+		return false
+	}
+	if that1.LogType == nil {
+		if this.LogType != nil {
+			return false
+		}
+	} else if this.LogType == nil {
+		return false
+	} else if !this.LogType.Equal(that1.LogType) {
 		return false
 	}
 	return true
@@ -5269,6 +6404,126 @@ func (this *GetSpecType_AzureEventHubsReceiver) Equal(that interface{}) bool {
 		return false
 	}
 	if !this.AzureEventHubsReceiver.Equal(that1.AzureEventHubsReceiver) {
+		return false
+	}
+	return true
+}
+func (this *GetSpecType_AwsCloudWatchReceiver) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GetSpecType_AwsCloudWatchReceiver)
+	if !ok {
+		that2, ok := that.(GetSpecType_AwsCloudWatchReceiver)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.AwsCloudWatchReceiver.Equal(that1.AwsCloudWatchReceiver) {
+		return false
+	}
+	return true
+}
+func (this *GetSpecType_KafkaReceiver) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GetSpecType_KafkaReceiver)
+	if !ok {
+		that2, ok := that.(GetSpecType_KafkaReceiver)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.KafkaReceiver.Equal(that1.KafkaReceiver) {
+		return false
+	}
+	return true
+}
+func (this *GetSpecType_RequestLogs) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GetSpecType_RequestLogs)
+	if !ok {
+		that2, ok := that.(GetSpecType_RequestLogs)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.RequestLogs.Equal(that1.RequestLogs) {
+		return false
+	}
+	return true
+}
+func (this *GetSpecType_SecurityEvents) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GetSpecType_SecurityEvents)
+	if !ok {
+		that2, ok := that.(GetSpecType_SecurityEvents)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.SecurityEvents.Equal(that1.SecurityEvents) {
+		return false
+	}
+	return true
+}
+func (this *GetSpecType_AuditLogs) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GetSpecType_AuditLogs)
+	if !ok {
+		that2, ok := that.(GetSpecType_AuditLogs)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.AuditLogs.Equal(that1.AuditLogs) {
 		return false
 	}
 	return true
@@ -5771,17 +7026,77 @@ func (this *AzureEventHubsConfig) GoString() string {
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
+func (this *AWSCloudwatchConfig) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 10)
+	s = append(s, "&global_log_receiver.AWSCloudwatchConfig{")
+	s = append(s, "GroupName: "+fmt.Sprintf("%#v", this.GroupName)+",\n")
+	s = append(s, "StreamName: "+fmt.Sprintf("%#v", this.StreamName)+",\n")
+	if this.AwsCred != nil {
+		s = append(s, "AwsCred: "+fmt.Sprintf("%#v", this.AwsCred)+",\n")
+	}
+	s = append(s, "AwsRegion: "+fmt.Sprintf("%#v", this.AwsRegion)+",\n")
+	if this.Compression != nil {
+		s = append(s, "Compression: "+fmt.Sprintf("%#v", this.Compression)+",\n")
+	}
+	if this.Batch != nil {
+		s = append(s, "Batch: "+fmt.Sprintf("%#v", this.Batch)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *KafkaConfig) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 10)
+	s = append(s, "&global_log_receiver.KafkaConfig{")
+	s = append(s, "BootstrapServers: "+fmt.Sprintf("%#v", this.BootstrapServers)+",\n")
+	s = append(s, "KafkaTopic: "+fmt.Sprintf("%#v", this.KafkaTopic)+",\n")
+	if this.Compression != nil {
+		s = append(s, "Compression: "+fmt.Sprintf("%#v", this.Compression)+",\n")
+	}
+	if this.Batch != nil {
+		s = append(s, "Batch: "+fmt.Sprintf("%#v", this.Batch)+",\n")
+	}
+	if this.TlsChoice != nil {
+		s = append(s, "TlsChoice: "+fmt.Sprintf("%#v", this.TlsChoice)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *KafkaConfig_NoTls) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&global_log_receiver.KafkaConfig_NoTls{` +
+		`NoTls:` + fmt.Sprintf("%#v", this.NoTls) + `}`}, ", ")
+	return s
+}
+func (this *KafkaConfig_UseTls) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&global_log_receiver.KafkaConfig_UseTls{` +
+		`UseTls:` + fmt.Sprintf("%#v", this.UseTls) + `}`}, ", ")
+	return s
+}
 func (this *GlobalSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 16)
+	s := make([]string, 0, 21)
 	s = append(s, "&global_log_receiver.GlobalSpecType{")
 	if this.FilterChoice != nil {
 		s = append(s, "FilterChoice: "+fmt.Sprintf("%#v", this.FilterChoice)+",\n")
 	}
 	if this.Receiver != nil {
 		s = append(s, "Receiver: "+fmt.Sprintf("%#v", this.Receiver)+",\n")
+	}
+	if this.LogType != nil {
+		s = append(s, "LogType: "+fmt.Sprintf("%#v", this.LogType)+",\n")
 	}
 	if this.ViewInternal != nil {
 		s = append(s, "ViewInternal: "+fmt.Sprintf("%#v", this.ViewInternal)+",\n")
@@ -5877,17 +7192,60 @@ func (this *GlobalSpecType_AzureEventHubsReceiver) GoString() string {
 		`AzureEventHubsReceiver:` + fmt.Sprintf("%#v", this.AzureEventHubsReceiver) + `}`}, ", ")
 	return s
 }
+func (this *GlobalSpecType_AwsCloudWatchReceiver) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&global_log_receiver.GlobalSpecType_AwsCloudWatchReceiver{` +
+		`AwsCloudWatchReceiver:` + fmt.Sprintf("%#v", this.AwsCloudWatchReceiver) + `}`}, ", ")
+	return s
+}
+func (this *GlobalSpecType_KafkaReceiver) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&global_log_receiver.GlobalSpecType_KafkaReceiver{` +
+		`KafkaReceiver:` + fmt.Sprintf("%#v", this.KafkaReceiver) + `}`}, ", ")
+	return s
+}
+func (this *GlobalSpecType_RequestLogs) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&global_log_receiver.GlobalSpecType_RequestLogs{` +
+		`RequestLogs:` + fmt.Sprintf("%#v", this.RequestLogs) + `}`}, ", ")
+	return s
+}
+func (this *GlobalSpecType_SecurityEvents) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&global_log_receiver.GlobalSpecType_SecurityEvents{` +
+		`SecurityEvents:` + fmt.Sprintf("%#v", this.SecurityEvents) + `}`}, ", ")
+	return s
+}
+func (this *GlobalSpecType_AuditLogs) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&global_log_receiver.GlobalSpecType_AuditLogs{` +
+		`AuditLogs:` + fmt.Sprintf("%#v", this.AuditLogs) + `}`}, ", ")
+	return s
+}
 func (this *CreateSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 15)
+	s := make([]string, 0, 20)
 	s = append(s, "&global_log_receiver.CreateSpecType{")
 	if this.FilterChoice != nil {
 		s = append(s, "FilterChoice: "+fmt.Sprintf("%#v", this.FilterChoice)+",\n")
 	}
 	if this.Receiver != nil {
 		s = append(s, "Receiver: "+fmt.Sprintf("%#v", this.Receiver)+",\n")
+	}
+	if this.LogType != nil {
+		s = append(s, "LogType: "+fmt.Sprintf("%#v", this.LogType)+",\n")
 	}
 	s = append(s, "}")
 	return strings.Join(s, "")
@@ -5980,17 +7338,60 @@ func (this *CreateSpecType_AzureEventHubsReceiver) GoString() string {
 		`AzureEventHubsReceiver:` + fmt.Sprintf("%#v", this.AzureEventHubsReceiver) + `}`}, ", ")
 	return s
 }
+func (this *CreateSpecType_AwsCloudWatchReceiver) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&global_log_receiver.CreateSpecType_AwsCloudWatchReceiver{` +
+		`AwsCloudWatchReceiver:` + fmt.Sprintf("%#v", this.AwsCloudWatchReceiver) + `}`}, ", ")
+	return s
+}
+func (this *CreateSpecType_KafkaReceiver) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&global_log_receiver.CreateSpecType_KafkaReceiver{` +
+		`KafkaReceiver:` + fmt.Sprintf("%#v", this.KafkaReceiver) + `}`}, ", ")
+	return s
+}
+func (this *CreateSpecType_RequestLogs) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&global_log_receiver.CreateSpecType_RequestLogs{` +
+		`RequestLogs:` + fmt.Sprintf("%#v", this.RequestLogs) + `}`}, ", ")
+	return s
+}
+func (this *CreateSpecType_SecurityEvents) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&global_log_receiver.CreateSpecType_SecurityEvents{` +
+		`SecurityEvents:` + fmt.Sprintf("%#v", this.SecurityEvents) + `}`}, ", ")
+	return s
+}
+func (this *CreateSpecType_AuditLogs) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&global_log_receiver.CreateSpecType_AuditLogs{` +
+		`AuditLogs:` + fmt.Sprintf("%#v", this.AuditLogs) + `}`}, ", ")
+	return s
+}
 func (this *ReplaceSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 15)
+	s := make([]string, 0, 20)
 	s = append(s, "&global_log_receiver.ReplaceSpecType{")
 	if this.FilterChoice != nil {
 		s = append(s, "FilterChoice: "+fmt.Sprintf("%#v", this.FilterChoice)+",\n")
 	}
 	if this.Receiver != nil {
 		s = append(s, "Receiver: "+fmt.Sprintf("%#v", this.Receiver)+",\n")
+	}
+	if this.LogType != nil {
+		s = append(s, "LogType: "+fmt.Sprintf("%#v", this.LogType)+",\n")
 	}
 	s = append(s, "}")
 	return strings.Join(s, "")
@@ -6083,17 +7484,60 @@ func (this *ReplaceSpecType_AzureEventHubsReceiver) GoString() string {
 		`AzureEventHubsReceiver:` + fmt.Sprintf("%#v", this.AzureEventHubsReceiver) + `}`}, ", ")
 	return s
 }
+func (this *ReplaceSpecType_AwsCloudWatchReceiver) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&global_log_receiver.ReplaceSpecType_AwsCloudWatchReceiver{` +
+		`AwsCloudWatchReceiver:` + fmt.Sprintf("%#v", this.AwsCloudWatchReceiver) + `}`}, ", ")
+	return s
+}
+func (this *ReplaceSpecType_KafkaReceiver) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&global_log_receiver.ReplaceSpecType_KafkaReceiver{` +
+		`KafkaReceiver:` + fmt.Sprintf("%#v", this.KafkaReceiver) + `}`}, ", ")
+	return s
+}
+func (this *ReplaceSpecType_RequestLogs) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&global_log_receiver.ReplaceSpecType_RequestLogs{` +
+		`RequestLogs:` + fmt.Sprintf("%#v", this.RequestLogs) + `}`}, ", ")
+	return s
+}
+func (this *ReplaceSpecType_SecurityEvents) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&global_log_receiver.ReplaceSpecType_SecurityEvents{` +
+		`SecurityEvents:` + fmt.Sprintf("%#v", this.SecurityEvents) + `}`}, ", ")
+	return s
+}
+func (this *ReplaceSpecType_AuditLogs) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&global_log_receiver.ReplaceSpecType_AuditLogs{` +
+		`AuditLogs:` + fmt.Sprintf("%#v", this.AuditLogs) + `}`}, ", ")
+	return s
+}
 func (this *GetSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 15)
+	s := make([]string, 0, 20)
 	s = append(s, "&global_log_receiver.GetSpecType{")
 	if this.FilterChoice != nil {
 		s = append(s, "FilterChoice: "+fmt.Sprintf("%#v", this.FilterChoice)+",\n")
 	}
 	if this.Receiver != nil {
 		s = append(s, "Receiver: "+fmt.Sprintf("%#v", this.Receiver)+",\n")
+	}
+	if this.LogType != nil {
+		s = append(s, "LogType: "+fmt.Sprintf("%#v", this.LogType)+",\n")
 	}
 	s = append(s, "}")
 	return strings.Join(s, "")
@@ -6184,6 +7628,46 @@ func (this *GetSpecType_AzureEventHubsReceiver) GoString() string {
 	}
 	s := strings.Join([]string{`&global_log_receiver.GetSpecType_AzureEventHubsReceiver{` +
 		`AzureEventHubsReceiver:` + fmt.Sprintf("%#v", this.AzureEventHubsReceiver) + `}`}, ", ")
+	return s
+}
+func (this *GetSpecType_AwsCloudWatchReceiver) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&global_log_receiver.GetSpecType_AwsCloudWatchReceiver{` +
+		`AwsCloudWatchReceiver:` + fmt.Sprintf("%#v", this.AwsCloudWatchReceiver) + `}`}, ", ")
+	return s
+}
+func (this *GetSpecType_KafkaReceiver) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&global_log_receiver.GetSpecType_KafkaReceiver{` +
+		`KafkaReceiver:` + fmt.Sprintf("%#v", this.KafkaReceiver) + `}`}, ", ")
+	return s
+}
+func (this *GetSpecType_RequestLogs) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&global_log_receiver.GetSpecType_RequestLogs{` +
+		`RequestLogs:` + fmt.Sprintf("%#v", this.RequestLogs) + `}`}, ", ")
+	return s
+}
+func (this *GetSpecType_SecurityEvents) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&global_log_receiver.GetSpecType_SecurityEvents{` +
+		`SecurityEvents:` + fmt.Sprintf("%#v", this.SecurityEvents) + `}`}, ", ")
+	return s
+}
+func (this *GetSpecType_AuditLogs) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&global_log_receiver.GetSpecType_AuditLogs{` +
+		`AuditLogs:` + fmt.Sprintf("%#v", this.AuditLogs) + `}`}, ", ")
 	return s
 }
 func valueToGoStringTypes(v interface{}, typ string) string {
@@ -7594,6 +9078,200 @@ func (m *AzureEventHubsConfig) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
+func (m *AWSCloudwatchConfig) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *AWSCloudwatchConfig) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *AWSCloudwatchConfig) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.Batch != nil {
+		{
+			size, err := m.Batch.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x32
+	}
+	if m.Compression != nil {
+		{
+			size, err := m.Compression.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x2a
+	}
+	if len(m.AwsRegion) > 0 {
+		i -= len(m.AwsRegion)
+		copy(dAtA[i:], m.AwsRegion)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.AwsRegion)))
+		i--
+		dAtA[i] = 0x22
+	}
+	if m.AwsCred != nil {
+		{
+			size, err := m.AwsCred.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1a
+	}
+	if len(m.StreamName) > 0 {
+		i -= len(m.StreamName)
+		copy(dAtA[i:], m.StreamName)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.StreamName)))
+		i--
+		dAtA[i] = 0x12
+	}
+	if len(m.GroupName) > 0 {
+		i -= len(m.GroupName)
+		copy(dAtA[i:], m.GroupName)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.GroupName)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *KafkaConfig) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *KafkaConfig) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *KafkaConfig) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.TlsChoice != nil {
+		{
+			size := m.TlsChoice.Size()
+			i -= size
+			if _, err := m.TlsChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	if m.Batch != nil {
+		{
+			size, err := m.Batch.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x22
+	}
+	if m.Compression != nil {
+		{
+			size, err := m.Compression.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1a
+	}
+	if len(m.KafkaTopic) > 0 {
+		i -= len(m.KafkaTopic)
+		copy(dAtA[i:], m.KafkaTopic)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.KafkaTopic)))
+		i--
+		dAtA[i] = 0x12
+	}
+	if len(m.BootstrapServers) > 0 {
+		for iNdEx := len(m.BootstrapServers) - 1; iNdEx >= 0; iNdEx-- {
+			i -= len(m.BootstrapServers[iNdEx])
+			copy(dAtA[i:], m.BootstrapServers[iNdEx])
+			i = encodeVarintTypes(dAtA, i, uint64(len(m.BootstrapServers[iNdEx])))
+			i--
+			dAtA[i] = 0xa
+		}
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *KafkaConfig_NoTls) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *KafkaConfig_NoTls) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.NoTls != nil {
+		{
+			size, err := m.NoTls.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x32
+	}
+	return len(dAtA) - i, nil
+}
+func (m *KafkaConfig_UseTls) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *KafkaConfig_UseTls) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.UseTls != nil {
+		{
+			size, err := m.UseTls.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x3a
+	}
+	return len(dAtA) - i, nil
+}
 func (m *GlobalSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -7633,6 +9311,15 @@ func (m *GlobalSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 			size := m.Receiver.Size()
 			i -= size
 			if _, err := m.Receiver.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	if m.LogType != nil {
+		{
+			size := m.LogType.Size()
+			i -= size
+			if _, err := m.LogType.MarshalTo(dAtA[i:]); err != nil {
 				return 0, err
 			}
 		}
@@ -7880,6 +9567,119 @@ func (m *GlobalSpecType_AzureEventHubsReceiver) MarshalToSizedBuffer(dAtA []byte
 	}
 	return len(dAtA) - i, nil
 }
+func (m *GlobalSpecType_RequestLogs) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType_RequestLogs) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.RequestLogs != nil {
+		{
+			size, err := m.RequestLogs.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x7a
+	}
+	return len(dAtA) - i, nil
+}
+func (m *GlobalSpecType_SecurityEvents) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType_SecurityEvents) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.SecurityEvents != nil {
+		{
+			size, err := m.SecurityEvents.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0x82
+	}
+	return len(dAtA) - i, nil
+}
+func (m *GlobalSpecType_AuditLogs) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType_AuditLogs) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.AuditLogs != nil {
+		{
+			size, err := m.AuditLogs.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0x8a
+	}
+	return len(dAtA) - i, nil
+}
+func (m *GlobalSpecType_AwsCloudWatchReceiver) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType_AwsCloudWatchReceiver) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.AwsCloudWatchReceiver != nil {
+		{
+			size, err := m.AwsCloudWatchReceiver.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0x92
+	}
+	return len(dAtA) - i, nil
+}
+func (m *GlobalSpecType_KafkaReceiver) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType_KafkaReceiver) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.KafkaReceiver != nil {
+		{
+			size, err := m.KafkaReceiver.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0x9a
+	}
+	return len(dAtA) - i, nil
+}
 func (m *CreateSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -7905,6 +9705,15 @@ func (m *CreateSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 			size := m.Receiver.Size()
 			i -= size
 			if _, err := m.Receiver.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	if m.LogType != nil {
+		{
+			size := m.LogType.Size()
+			i -= size
+			if _, err := m.LogType.MarshalTo(dAtA[i:]); err != nil {
 				return 0, err
 			}
 		}
@@ -8152,6 +9961,119 @@ func (m *CreateSpecType_AzureEventHubsReceiver) MarshalToSizedBuffer(dAtA []byte
 	}
 	return len(dAtA) - i, nil
 }
+func (m *CreateSpecType_RequestLogs) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType_RequestLogs) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.RequestLogs != nil {
+		{
+			size, err := m.RequestLogs.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x7a
+	}
+	return len(dAtA) - i, nil
+}
+func (m *CreateSpecType_SecurityEvents) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType_SecurityEvents) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.SecurityEvents != nil {
+		{
+			size, err := m.SecurityEvents.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0x82
+	}
+	return len(dAtA) - i, nil
+}
+func (m *CreateSpecType_AuditLogs) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType_AuditLogs) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.AuditLogs != nil {
+		{
+			size, err := m.AuditLogs.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0x8a
+	}
+	return len(dAtA) - i, nil
+}
+func (m *CreateSpecType_AwsCloudWatchReceiver) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType_AwsCloudWatchReceiver) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.AwsCloudWatchReceiver != nil {
+		{
+			size, err := m.AwsCloudWatchReceiver.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0x92
+	}
+	return len(dAtA) - i, nil
+}
+func (m *CreateSpecType_KafkaReceiver) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType_KafkaReceiver) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.KafkaReceiver != nil {
+		{
+			size, err := m.KafkaReceiver.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0x9a
+	}
+	return len(dAtA) - i, nil
+}
 func (m *ReplaceSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -8177,6 +10099,15 @@ func (m *ReplaceSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 			size := m.Receiver.Size()
 			i -= size
 			if _, err := m.Receiver.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	if m.LogType != nil {
+		{
+			size := m.LogType.Size()
+			i -= size
+			if _, err := m.LogType.MarshalTo(dAtA[i:]); err != nil {
 				return 0, err
 			}
 		}
@@ -8424,6 +10355,119 @@ func (m *ReplaceSpecType_AzureEventHubsReceiver) MarshalToSizedBuffer(dAtA []byt
 	}
 	return len(dAtA) - i, nil
 }
+func (m *ReplaceSpecType_RequestLogs) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType_RequestLogs) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.RequestLogs != nil {
+		{
+			size, err := m.RequestLogs.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x7a
+	}
+	return len(dAtA) - i, nil
+}
+func (m *ReplaceSpecType_SecurityEvents) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType_SecurityEvents) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.SecurityEvents != nil {
+		{
+			size, err := m.SecurityEvents.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0x82
+	}
+	return len(dAtA) - i, nil
+}
+func (m *ReplaceSpecType_AuditLogs) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType_AuditLogs) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.AuditLogs != nil {
+		{
+			size, err := m.AuditLogs.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0x8a
+	}
+	return len(dAtA) - i, nil
+}
+func (m *ReplaceSpecType_AwsCloudWatchReceiver) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType_AwsCloudWatchReceiver) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.AwsCloudWatchReceiver != nil {
+		{
+			size, err := m.AwsCloudWatchReceiver.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0x92
+	}
+	return len(dAtA) - i, nil
+}
+func (m *ReplaceSpecType_KafkaReceiver) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType_KafkaReceiver) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.KafkaReceiver != nil {
+		{
+			size, err := m.KafkaReceiver.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0x9a
+	}
+	return len(dAtA) - i, nil
+}
 func (m *GetSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -8449,6 +10493,15 @@ func (m *GetSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 			size := m.Receiver.Size()
 			i -= size
 			if _, err := m.Receiver.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	if m.LogType != nil {
+		{
+			size := m.LogType.Size()
+			i -= size
+			if _, err := m.LogType.MarshalTo(dAtA[i:]); err != nil {
 				return 0, err
 			}
 		}
@@ -8693,6 +10746,119 @@ func (m *GetSpecType_AzureEventHubsReceiver) MarshalToSizedBuffer(dAtA []byte) (
 		}
 		i--
 		dAtA[i] = 0x6a
+	}
+	return len(dAtA) - i, nil
+}
+func (m *GetSpecType_RequestLogs) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType_RequestLogs) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.RequestLogs != nil {
+		{
+			size, err := m.RequestLogs.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x7a
+	}
+	return len(dAtA) - i, nil
+}
+func (m *GetSpecType_SecurityEvents) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType_SecurityEvents) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.SecurityEvents != nil {
+		{
+			size, err := m.SecurityEvents.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0x82
+	}
+	return len(dAtA) - i, nil
+}
+func (m *GetSpecType_AuditLogs) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType_AuditLogs) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.AuditLogs != nil {
+		{
+			size, err := m.AuditLogs.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0x8a
+	}
+	return len(dAtA) - i, nil
+}
+func (m *GetSpecType_AwsCloudWatchReceiver) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType_AwsCloudWatchReceiver) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.AwsCloudWatchReceiver != nil {
+		{
+			size, err := m.AwsCloudWatchReceiver.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0x92
+	}
+	return len(dAtA) - i, nil
+}
+func (m *GetSpecType_KafkaReceiver) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType_KafkaReceiver) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.KafkaReceiver != nil {
+		{
+			size, err := m.KafkaReceiver.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0x9a
 	}
 	return len(dAtA) - i, nil
 }
@@ -9373,6 +11539,93 @@ func (m *AzureEventHubsConfig) Size() (n int) {
 	return n
 }
 
+func (m *AWSCloudwatchConfig) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.GroupName)
+	if l > 0 {
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	l = len(m.StreamName)
+	if l > 0 {
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.AwsCred != nil {
+		l = m.AwsCred.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	l = len(m.AwsRegion)
+	if l > 0 {
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.Compression != nil {
+		l = m.Compression.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.Batch != nil {
+		l = m.Batch.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+
+func (m *KafkaConfig) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if len(m.BootstrapServers) > 0 {
+		for _, s := range m.BootstrapServers {
+			l = len(s)
+			n += 1 + l + sovTypes(uint64(l))
+		}
+	}
+	l = len(m.KafkaTopic)
+	if l > 0 {
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.Compression != nil {
+		l = m.Compression.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.Batch != nil {
+		l = m.Batch.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.TlsChoice != nil {
+		n += m.TlsChoice.Size()
+	}
+	return n
+}
+
+func (m *KafkaConfig_NoTls) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.NoTls != nil {
+		l = m.NoTls.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *KafkaConfig_UseTls) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.UseTls != nil {
+		l = m.UseTls.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
 func (m *GlobalSpecType) Size() (n int) {
 	if m == nil {
 		return 0
@@ -9384,6 +11637,9 @@ func (m *GlobalSpecType) Size() (n int) {
 	}
 	if m.Receiver != nil {
 		n += m.Receiver.Size()
+	}
+	if m.LogType != nil {
+		n += m.LogType.Size()
 	}
 	if m.ViewInternal != nil {
 		l = m.ViewInternal.Size()
@@ -9524,6 +11780,66 @@ func (m *GlobalSpecType_AzureEventHubsReceiver) Size() (n int) {
 	}
 	return n
 }
+func (m *GlobalSpecType_RequestLogs) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.RequestLogs != nil {
+		l = m.RequestLogs.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *GlobalSpecType_SecurityEvents) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.SecurityEvents != nil {
+		l = m.SecurityEvents.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *GlobalSpecType_AuditLogs) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.AuditLogs != nil {
+		l = m.AuditLogs.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *GlobalSpecType_AwsCloudWatchReceiver) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.AwsCloudWatchReceiver != nil {
+		l = m.AwsCloudWatchReceiver.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *GlobalSpecType_KafkaReceiver) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.KafkaReceiver != nil {
+		l = m.KafkaReceiver.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
 func (m *CreateSpecType) Size() (n int) {
 	if m == nil {
 		return 0
@@ -9535,6 +11851,9 @@ func (m *CreateSpecType) Size() (n int) {
 	}
 	if m.Receiver != nil {
 		n += m.Receiver.Size()
+	}
+	if m.LogType != nil {
+		n += m.LogType.Size()
 	}
 	return n
 }
@@ -9671,6 +11990,66 @@ func (m *CreateSpecType_AzureEventHubsReceiver) Size() (n int) {
 	}
 	return n
 }
+func (m *CreateSpecType_RequestLogs) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.RequestLogs != nil {
+		l = m.RequestLogs.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *CreateSpecType_SecurityEvents) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.SecurityEvents != nil {
+		l = m.SecurityEvents.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *CreateSpecType_AuditLogs) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.AuditLogs != nil {
+		l = m.AuditLogs.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *CreateSpecType_AwsCloudWatchReceiver) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.AwsCloudWatchReceiver != nil {
+		l = m.AwsCloudWatchReceiver.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *CreateSpecType_KafkaReceiver) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.KafkaReceiver != nil {
+		l = m.KafkaReceiver.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
 func (m *ReplaceSpecType) Size() (n int) {
 	if m == nil {
 		return 0
@@ -9682,6 +12061,9 @@ func (m *ReplaceSpecType) Size() (n int) {
 	}
 	if m.Receiver != nil {
 		n += m.Receiver.Size()
+	}
+	if m.LogType != nil {
+		n += m.LogType.Size()
 	}
 	return n
 }
@@ -9818,6 +12200,66 @@ func (m *ReplaceSpecType_AzureEventHubsReceiver) Size() (n int) {
 	}
 	return n
 }
+func (m *ReplaceSpecType_RequestLogs) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.RequestLogs != nil {
+		l = m.RequestLogs.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *ReplaceSpecType_SecurityEvents) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.SecurityEvents != nil {
+		l = m.SecurityEvents.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *ReplaceSpecType_AuditLogs) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.AuditLogs != nil {
+		l = m.AuditLogs.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *ReplaceSpecType_AwsCloudWatchReceiver) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.AwsCloudWatchReceiver != nil {
+		l = m.AwsCloudWatchReceiver.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *ReplaceSpecType_KafkaReceiver) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.KafkaReceiver != nil {
+		l = m.KafkaReceiver.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
 func (m *GetSpecType) Size() (n int) {
 	if m == nil {
 		return 0
@@ -9829,6 +12271,9 @@ func (m *GetSpecType) Size() (n int) {
 	}
 	if m.Receiver != nil {
 		n += m.Receiver.Size()
+	}
+	if m.LogType != nil {
+		n += m.LogType.Size()
 	}
 	return n
 }
@@ -9962,6 +12407,66 @@ func (m *GetSpecType_AzureEventHubsReceiver) Size() (n int) {
 	if m.AzureEventHubsReceiver != nil {
 		l = m.AzureEventHubsReceiver.Size()
 		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *GetSpecType_RequestLogs) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.RequestLogs != nil {
+		l = m.RequestLogs.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *GetSpecType_SecurityEvents) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.SecurityEvents != nil {
+		l = m.SecurityEvents.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *GetSpecType_AuditLogs) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.AuditLogs != nil {
+		l = m.AuditLogs.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *GetSpecType_AwsCloudWatchReceiver) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.AwsCloudWatchReceiver != nil {
+		l = m.AwsCloudWatchReceiver.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *GetSpecType_KafkaReceiver) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.KafkaReceiver != nil {
+		l = m.KafkaReceiver.Size()
+		n += 2 + l + sovTypes(uint64(l))
 	}
 	return n
 }
@@ -10464,6 +12969,55 @@ func (this *AzureEventHubsConfig) String() string {
 	}, "")
 	return s
 }
+func (this *AWSCloudwatchConfig) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&AWSCloudwatchConfig{`,
+		`GroupName:` + fmt.Sprintf("%v", this.GroupName) + `,`,
+		`StreamName:` + fmt.Sprintf("%v", this.StreamName) + `,`,
+		`AwsCred:` + strings.Replace(fmt.Sprintf("%v", this.AwsCred), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
+		`AwsRegion:` + fmt.Sprintf("%v", this.AwsRegion) + `,`,
+		`Compression:` + strings.Replace(this.Compression.String(), "CompressionType", "CompressionType", 1) + `,`,
+		`Batch:` + strings.Replace(this.Batch.String(), "BatchOptionType", "BatchOptionType", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *KafkaConfig) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&KafkaConfig{`,
+		`BootstrapServers:` + fmt.Sprintf("%v", this.BootstrapServers) + `,`,
+		`KafkaTopic:` + fmt.Sprintf("%v", this.KafkaTopic) + `,`,
+		`Compression:` + strings.Replace(this.Compression.String(), "CompressionType", "CompressionType", 1) + `,`,
+		`Batch:` + strings.Replace(this.Batch.String(), "BatchOptionType", "BatchOptionType", 1) + `,`,
+		`TlsChoice:` + fmt.Sprintf("%v", this.TlsChoice) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *KafkaConfig_NoTls) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&KafkaConfig_NoTls{`,
+		`NoTls:` + strings.Replace(fmt.Sprintf("%v", this.NoTls), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *KafkaConfig_UseTls) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&KafkaConfig_UseTls{`,
+		`UseTls:` + strings.Replace(fmt.Sprintf("%v", this.UseTls), "TLSConfigType", "TLSConfigType", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
 func (this *GlobalSpecType) String() string {
 	if this == nil {
 		return "nil"
@@ -10471,6 +13025,7 @@ func (this *GlobalSpecType) String() string {
 	s := strings.Join([]string{`&GlobalSpecType{`,
 		`FilterChoice:` + fmt.Sprintf("%v", this.FilterChoice) + `,`,
 		`Receiver:` + fmt.Sprintf("%v", this.Receiver) + `,`,
+		`LogType:` + fmt.Sprintf("%v", this.LogType) + `,`,
 		`ViewInternal:` + strings.Replace(fmt.Sprintf("%v", this.ViewInternal), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
 		`}`,
 	}, "")
@@ -10586,6 +13141,56 @@ func (this *GlobalSpecType_AzureEventHubsReceiver) String() string {
 	}, "")
 	return s
 }
+func (this *GlobalSpecType_RequestLogs) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GlobalSpecType_RequestLogs{`,
+		`RequestLogs:` + strings.Replace(fmt.Sprintf("%v", this.RequestLogs), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GlobalSpecType_SecurityEvents) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GlobalSpecType_SecurityEvents{`,
+		`SecurityEvents:` + strings.Replace(fmt.Sprintf("%v", this.SecurityEvents), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GlobalSpecType_AuditLogs) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GlobalSpecType_AuditLogs{`,
+		`AuditLogs:` + strings.Replace(fmt.Sprintf("%v", this.AuditLogs), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GlobalSpecType_AwsCloudWatchReceiver) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GlobalSpecType_AwsCloudWatchReceiver{`,
+		`AwsCloudWatchReceiver:` + strings.Replace(fmt.Sprintf("%v", this.AwsCloudWatchReceiver), "AWSCloudwatchConfig", "AWSCloudwatchConfig", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GlobalSpecType_KafkaReceiver) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GlobalSpecType_KafkaReceiver{`,
+		`KafkaReceiver:` + strings.Replace(fmt.Sprintf("%v", this.KafkaReceiver), "KafkaConfig", "KafkaConfig", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
 func (this *CreateSpecType) String() string {
 	if this == nil {
 		return "nil"
@@ -10593,6 +13198,7 @@ func (this *CreateSpecType) String() string {
 	s := strings.Join([]string{`&CreateSpecType{`,
 		`FilterChoice:` + fmt.Sprintf("%v", this.FilterChoice) + `,`,
 		`Receiver:` + fmt.Sprintf("%v", this.Receiver) + `,`,
+		`LogType:` + fmt.Sprintf("%v", this.LogType) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -10707,6 +13313,56 @@ func (this *CreateSpecType_AzureEventHubsReceiver) String() string {
 	}, "")
 	return s
 }
+func (this *CreateSpecType_RequestLogs) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&CreateSpecType_RequestLogs{`,
+		`RequestLogs:` + strings.Replace(fmt.Sprintf("%v", this.RequestLogs), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *CreateSpecType_SecurityEvents) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&CreateSpecType_SecurityEvents{`,
+		`SecurityEvents:` + strings.Replace(fmt.Sprintf("%v", this.SecurityEvents), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *CreateSpecType_AuditLogs) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&CreateSpecType_AuditLogs{`,
+		`AuditLogs:` + strings.Replace(fmt.Sprintf("%v", this.AuditLogs), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *CreateSpecType_AwsCloudWatchReceiver) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&CreateSpecType_AwsCloudWatchReceiver{`,
+		`AwsCloudWatchReceiver:` + strings.Replace(fmt.Sprintf("%v", this.AwsCloudWatchReceiver), "AWSCloudwatchConfig", "AWSCloudwatchConfig", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *CreateSpecType_KafkaReceiver) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&CreateSpecType_KafkaReceiver{`,
+		`KafkaReceiver:` + strings.Replace(fmt.Sprintf("%v", this.KafkaReceiver), "KafkaConfig", "KafkaConfig", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
 func (this *ReplaceSpecType) String() string {
 	if this == nil {
 		return "nil"
@@ -10714,6 +13370,7 @@ func (this *ReplaceSpecType) String() string {
 	s := strings.Join([]string{`&ReplaceSpecType{`,
 		`FilterChoice:` + fmt.Sprintf("%v", this.FilterChoice) + `,`,
 		`Receiver:` + fmt.Sprintf("%v", this.Receiver) + `,`,
+		`LogType:` + fmt.Sprintf("%v", this.LogType) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -10828,6 +13485,56 @@ func (this *ReplaceSpecType_AzureEventHubsReceiver) String() string {
 	}, "")
 	return s
 }
+func (this *ReplaceSpecType_RequestLogs) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ReplaceSpecType_RequestLogs{`,
+		`RequestLogs:` + strings.Replace(fmt.Sprintf("%v", this.RequestLogs), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ReplaceSpecType_SecurityEvents) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ReplaceSpecType_SecurityEvents{`,
+		`SecurityEvents:` + strings.Replace(fmt.Sprintf("%v", this.SecurityEvents), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ReplaceSpecType_AuditLogs) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ReplaceSpecType_AuditLogs{`,
+		`AuditLogs:` + strings.Replace(fmt.Sprintf("%v", this.AuditLogs), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ReplaceSpecType_AwsCloudWatchReceiver) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ReplaceSpecType_AwsCloudWatchReceiver{`,
+		`AwsCloudWatchReceiver:` + strings.Replace(fmt.Sprintf("%v", this.AwsCloudWatchReceiver), "AWSCloudwatchConfig", "AWSCloudwatchConfig", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ReplaceSpecType_KafkaReceiver) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ReplaceSpecType_KafkaReceiver{`,
+		`KafkaReceiver:` + strings.Replace(fmt.Sprintf("%v", this.KafkaReceiver), "KafkaConfig", "KafkaConfig", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
 func (this *GetSpecType) String() string {
 	if this == nil {
 		return "nil"
@@ -10835,6 +13542,7 @@ func (this *GetSpecType) String() string {
 	s := strings.Join([]string{`&GetSpecType{`,
 		`FilterChoice:` + fmt.Sprintf("%v", this.FilterChoice) + `,`,
 		`Receiver:` + fmt.Sprintf("%v", this.Receiver) + `,`,
+		`LogType:` + fmt.Sprintf("%v", this.LogType) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -10945,6 +13653,56 @@ func (this *GetSpecType_AzureEventHubsReceiver) String() string {
 	}
 	s := strings.Join([]string{`&GetSpecType_AzureEventHubsReceiver{`,
 		`AzureEventHubsReceiver:` + strings.Replace(fmt.Sprintf("%v", this.AzureEventHubsReceiver), "AzureEventHubsConfig", "AzureEventHubsConfig", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GetSpecType_RequestLogs) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GetSpecType_RequestLogs{`,
+		`RequestLogs:` + strings.Replace(fmt.Sprintf("%v", this.RequestLogs), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GetSpecType_SecurityEvents) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GetSpecType_SecurityEvents{`,
+		`SecurityEvents:` + strings.Replace(fmt.Sprintf("%v", this.SecurityEvents), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GetSpecType_AuditLogs) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GetSpecType_AuditLogs{`,
+		`AuditLogs:` + strings.Replace(fmt.Sprintf("%v", this.AuditLogs), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GetSpecType_AwsCloudWatchReceiver) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GetSpecType_AwsCloudWatchReceiver{`,
+		`AwsCloudWatchReceiver:` + strings.Replace(fmt.Sprintf("%v", this.AwsCloudWatchReceiver), "AWSCloudwatchConfig", "AWSCloudwatchConfig", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GetSpecType_KafkaReceiver) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GetSpecType_KafkaReceiver{`,
+		`KafkaReceiver:` + strings.Replace(fmt.Sprintf("%v", this.KafkaReceiver), "KafkaConfig", "KafkaConfig", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -13837,6 +16595,522 @@ func (m *AzureEventHubsConfig) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
+func (m *AWSCloudwatchConfig) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: AWSCloudwatchConfig: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: AWSCloudwatchConfig: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field GroupName", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.GroupName = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field StreamName", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.StreamName = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field AwsCred", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.AwsCred == nil {
+				m.AwsCred = &views.ObjectRefType{}
+			}
+			if err := m.AwsCred.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field AwsRegion", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.AwsRegion = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 5:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Compression", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Compression == nil {
+				m.Compression = &CompressionType{}
+			}
+			if err := m.Compression.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 6:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Batch", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Batch == nil {
+				m.Batch = &BatchOptionType{}
+			}
+			if err := m.Batch.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *KafkaConfig) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: KafkaConfig: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: KafkaConfig: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field BootstrapServers", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.BootstrapServers = append(m.BootstrapServers, string(dAtA[iNdEx:postIndex]))
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field KafkaTopic", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.KafkaTopic = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Compression", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Compression == nil {
+				m.Compression = &CompressionType{}
+			}
+			if err := m.Compression.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Batch", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Batch == nil {
+				m.Batch = &BatchOptionType{}
+			}
+			if err := m.Batch.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 6:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field NoTls", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.TlsChoice = &KafkaConfig_NoTls{v}
+			iNdEx = postIndex
+		case 7:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field UseTls", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &TLSConfigType{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.TlsChoice = &KafkaConfig_UseTls{v}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
 func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
@@ -14250,6 +17524,181 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			m.Receiver = &GlobalSpecType_AzureEventHubsReceiver{v}
+			iNdEx = postIndex
+		case 15:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field RequestLogs", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.LogType = &GlobalSpecType_RequestLogs{v}
+			iNdEx = postIndex
+		case 16:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field SecurityEvents", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.LogType = &GlobalSpecType_SecurityEvents{v}
+			iNdEx = postIndex
+		case 17:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field AuditLogs", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.LogType = &GlobalSpecType_AuditLogs{v}
+			iNdEx = postIndex
+		case 18:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field AwsCloudWatchReceiver", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &AWSCloudwatchConfig{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.Receiver = &GlobalSpecType_AwsCloudWatchReceiver{v}
+			iNdEx = postIndex
+		case 19:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field KafkaReceiver", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &KafkaConfig{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.Receiver = &GlobalSpecType_KafkaReceiver{v}
 			iNdEx = postIndex
 		case 1000:
 			if wireType != 2 {
@@ -14725,6 +18174,181 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 			}
 			m.Receiver = &CreateSpecType_AzureEventHubsReceiver{v}
 			iNdEx = postIndex
+		case 15:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field RequestLogs", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.LogType = &CreateSpecType_RequestLogs{v}
+			iNdEx = postIndex
+		case 16:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field SecurityEvents", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.LogType = &CreateSpecType_SecurityEvents{v}
+			iNdEx = postIndex
+		case 17:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field AuditLogs", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.LogType = &CreateSpecType_AuditLogs{v}
+			iNdEx = postIndex
+		case 18:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field AwsCloudWatchReceiver", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &AWSCloudwatchConfig{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.Receiver = &CreateSpecType_AwsCloudWatchReceiver{v}
+			iNdEx = postIndex
+		case 19:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field KafkaReceiver", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &KafkaConfig{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.Receiver = &CreateSpecType_KafkaReceiver{v}
+			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipTypes(dAtA[iNdEx:])
@@ -15163,6 +18787,181 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 			}
 			m.Receiver = &ReplaceSpecType_AzureEventHubsReceiver{v}
 			iNdEx = postIndex
+		case 15:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field RequestLogs", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.LogType = &ReplaceSpecType_RequestLogs{v}
+			iNdEx = postIndex
+		case 16:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field SecurityEvents", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.LogType = &ReplaceSpecType_SecurityEvents{v}
+			iNdEx = postIndex
+		case 17:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field AuditLogs", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.LogType = &ReplaceSpecType_AuditLogs{v}
+			iNdEx = postIndex
+		case 18:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field AwsCloudWatchReceiver", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &AWSCloudwatchConfig{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.Receiver = &ReplaceSpecType_AwsCloudWatchReceiver{v}
+			iNdEx = postIndex
+		case 19:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field KafkaReceiver", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &KafkaConfig{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.Receiver = &ReplaceSpecType_KafkaReceiver{v}
+			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipTypes(dAtA[iNdEx:])
@@ -15600,6 +19399,181 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			m.Receiver = &GetSpecType_AzureEventHubsReceiver{v}
+			iNdEx = postIndex
+		case 15:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field RequestLogs", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.LogType = &GetSpecType_RequestLogs{v}
+			iNdEx = postIndex
+		case 16:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field SecurityEvents", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.LogType = &GetSpecType_SecurityEvents{v}
+			iNdEx = postIndex
+		case 17:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field AuditLogs", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.LogType = &GetSpecType_AuditLogs{v}
+			iNdEx = postIndex
+		case 18:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field AwsCloudWatchReceiver", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &AWSCloudwatchConfig{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.Receiver = &GetSpecType_AwsCloudWatchReceiver{v}
+			iNdEx = postIndex
+		case 19:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field KafkaReceiver", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &KafkaConfig{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.Receiver = &GetSpecType_KafkaReceiver{v}
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex

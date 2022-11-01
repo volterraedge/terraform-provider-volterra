@@ -22,14 +22,7 @@ resource "volterra_aws_vpc_site" "example" {
   aws_region = ["us-east-1"]
 
   // One of the arguments from this list "default_blocked_services blocked_services" must be set
-
-  blocked_services {
-    blocked_sevice {
-      // One of the arguments from this list "ssh web_user_interface dns" must be set
-      web_user_interface = true
-      network_type       = "network_type"
-    }
-  }
+  default_blocked_services = true
 
   // One of the arguments from this list "aws_cred" must be set
 
@@ -41,18 +34,21 @@ resource "volterra_aws_vpc_site" "example" {
   // One of the arguments from this list "direct_connect_disabled direct_connect_enabled" must be set
   direct_connect_disabled = true
   instance_type           = ["a1.xlarge"]
+
   // One of the arguments from this list "logs_streaming_disabled log_receiver" must be set
-  logs_streaming_disabled = true
+
+  log_receiver {
+    name      = "test1"
+    namespace = "staging"
+    tenant    = "acmecorp"
+  }
 
   // One of the arguments from this list "ingress_gw ingress_egress_gw voltstack_cluster" must be set
 
   ingress_gw {
     allowed_vip_port {
       // One of the arguments from this list "use_http_port use_https_port use_http_https_port custom_ports" must be set
-
-      custom_ports {
-        port_ranges = "80, 8080-8085"
-      }
+      use_http_port = true
     }
 
     aws_certified_hw = "aws-byol-voltmesh"
@@ -124,8 +120,6 @@ Argument Reference
 
 `os` - (Optional) Operating System Details. See [Os ](#os) below for details.
 
-`site_local_control_plane` - (Optional) Enable/Disable site local control plane. See [Site Local Control Plane ](#site-local-control-plane) below for details.
-
 `ingress_egress_gw` - (Optional) Two interface site is useful when site is used as ingress/egress gateway to the VPC.. See [Ingress Egress Gw ](#ingress-egress-gw) below for details.
 
 `ingress_gw` - (Optional) One interface site is useful when site is only used as ingress gateway to the VPC.. See [Ingress Gw ](#ingress-gw) below for details.
@@ -145,6 +139,12 @@ Argument Reference
 `nodes_per_az` - (Optional) Desired Worker Nodes Per AZ. Max limit is up to 21 (`Int`).
 
 `total_nodes` - (Optional) Total number of worker nodes to be deployed across all AZ's used in the Site (`Int`).
+
+### Active Enhanced Firewall Policies
+
+Enhanced Firewall Policies active for this site..
+
+`enhanced_firewall_policies` - (Required) Ordered List of Enhaned Firewall Policy active for this network firewall. See [ref](#ref) below for details.
 
 ### Active Forward Proxy Policies
 
@@ -300,10 +300,6 @@ Use Custom static route to configure all advanced options.
 
 `subnets` - (Optional) List of route prefixes. See [Subnets ](#subnets) below for details.
 
-### Default Local Control Plane
-
-Enable Site Local Control Plane.
-
 ### Default Os Version
 
 Will assign latest available OS version.
@@ -386,7 +382,7 @@ Enable Interception.
 
 ### Enable Offline Survivability Mode
 
-Enabling offline survivability reduces default security of a CE..
+When this feature is enabled on an existing site, the pods/services on this site will be restarted..
 
 ### Forward Proxy Allow All
 
@@ -426,7 +422,7 @@ Two interface site is useful when site is used as ingress/egress gateway to the 
 
 `aws_certified_hw` - (Required) Name for AWS certified hardware. (`String`).
 
-`az_nodes` - (Optional) Only Single AZ or Three AZ(s) nodes are supported currently.. See [Az Nodes ](#az-nodes) below for details.
+`az_nodes` - (Required) Only Single AZ or Three AZ(s) nodes are supported currently.. See [Az Nodes ](#az-nodes) below for details.
 
 `dc_cluster_group_inside_vn` - (Optional) This site is member of dc cluster group connected via inside network. See [ref](#ref) below for details.
 
@@ -447,6 +443,8 @@ Two interface site is useful when site is used as ingress/egress gateway to the 
 `inside_static_routes` - (Optional) Manage static routes for inside network.. See [Inside Static Routes ](#inside-static-routes) below for details.
 
 `no_inside_static_routes` - (Optional) Static Routes disabled for inside network. (bool).
+
+`active_enhanced_firewall_policies` - (Optional) Enhanced Firewall Policies active for this site.. See [Active Enhanced Firewall Policies ](#active-enhanced-firewall-policies) below for details.
 
 `active_network_policies` - (Optional) Firewall Policies active for this site.. See [Active Network Policies ](#active-network-policies) below for details.
 
@@ -564,17 +562,13 @@ No TLS interception is enabled for this network connector.
 
 Site Local K8s API access is disabled.
 
-### No Local Control Plane
-
-Disable Site Local Control Plane.
-
 ### No Network Policy
 
 Firewall Policy is disabled for this site..
 
 ### No Offline Survivability Mode
 
-Disable Offline Survivability Mode.
+When this feature is disabled on an existing site, the pods/services on this site will be restarted..
 
 ### No Outside Static Routes
 
@@ -584,9 +578,9 @@ Static Routes disabled for outside network..
 
 Enable/Disable offline survivability mode.
 
-`enable_offline_survivability_mode` - (Optional) Enabling offline survivability reduces default security of a CE. (bool).
+`enable_offline_survivability_mode` - (Optional) When this feature is enabled on an existing site, the pods/services on this site will be restarted. (bool).
 
-`no_offline_survivability_mode` - (Optional) Disable Offline Survivability Mode (bool).
+`no_offline_survivability_mode` - (Optional) When this feature is disabled on an existing site, the pods/services on this site will be restarted. (bool).
 
 ### Openebs Enterprise
 
@@ -653,14 +647,6 @@ tenant - (Optional) then tenant will hold the referred object's(e.g. route's) te
 ### Reserved Inside Subnet
 
 Autogenerate and reserve a subnet from the Primary CIDR.
-
-### Site Local Control Plane
-
-Enable/Disable site local control plane.
-
-`default_local_control_plane` - (Optional) Enable Site Local Control Plane (bool).
-
-`no_local_control_plane` - (Optional) Disable Site Local Control Plane (bool).
 
 ### Sli To Global Dr
 
@@ -800,7 +786,7 @@ App Stack Cluster using single interface, useful for deploying K8s cluster..
 
 `aws_certified_hw` - (Required) Name for AWS certified hardware. (`String`).
 
-`az_nodes` - (Optional) Only Single AZ or Three AZ(s) nodes are supported currently.. See [Az Nodes ](#az-nodes) below for details.
+`az_nodes` - (Required) Only Single AZ or Three AZ(s) nodes are supported currently.. See [Az Nodes ](#az-nodes) below for details.
 
 `dc_cluster_group` - (Optional) This site is member of dc cluster group connected via outside network. See [ref](#ref) below for details.
 
@@ -819,6 +805,8 @@ App Stack Cluster using single interface, useful for deploying K8s cluster..
 `k8s_cluster` - (Optional) Site Local K8s API access is enabled, using k8s_cluster object. See [ref](#ref) below for details.
 
 `no_k8s_cluster` - (Optional) Site Local K8s API access is disabled (bool).
+
+`active_enhanced_firewall_policies` - (Optional) Enhanced Firewall Policies active for this site.. See [Active Enhanced Firewall Policies ](#active-enhanced-firewall-policies) below for details.
 
 `active_network_policies` - (Optional) Firewall Policies active for this site.. See [Active Network Policies ](#active-network-policies) below for details.
 

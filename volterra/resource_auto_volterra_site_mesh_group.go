@@ -150,11 +150,6 @@ func resourceVolterraSiteMeshGroup() *schema.Resource {
 				},
 			},
 
-			"tunnel_type": {
-				Type:     schema.TypeString,
-				Optional: true,
-			},
-
 			"type": {
 				Type:     schema.TypeString,
 				Optional: true,
@@ -368,13 +363,6 @@ func resourceVolterraSiteMeshGroupCreate(d *schema.ResourceData, meta interface{
 			}
 
 		}
-
-	}
-
-	//tunnel_type
-	if v, ok := d.GetOk("tunnel_type"); ok && !isIntfNil(v) {
-
-		createSpec.TunnelType = ves_io_schema.SiteToSiteTunnelType(ves_io_schema.SiteToSiteTunnelType_value[v.(string)])
 
 	}
 
@@ -637,12 +625,6 @@ func resourceVolterraSiteMeshGroupUpdate(d *schema.ResourceData, meta interface{
 			}
 
 		}
-
-	}
-
-	if v, ok := d.GetOk("tunnel_type"); ok && !isIntfNil(v) {
-
-		updateSpec.TunnelType = ves_io_schema.SiteToSiteTunnelType(ves_io_schema.SiteToSiteTunnelType_value[v.(string)])
 
 	}
 

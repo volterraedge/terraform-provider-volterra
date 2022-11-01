@@ -40,7 +40,6 @@ func testSiteMeshGrpConfig(name string) string {
 		resource "volterra_site_mesh_group" "smg-full-mesh" {
 			name = "%s"
 			namespace = "system"
-			tunnel_type = "SITE_TO_SITE_TUNNEL_IPSEC"
 			type = "SITE_MESH_GROUP_TYPE_FULL_MESH"
 			virtual_site {
 				name = "test"

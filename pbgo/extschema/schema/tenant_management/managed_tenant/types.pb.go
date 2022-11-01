@@ -9,7 +9,7 @@ import (
 	proto "github.com/gogo/protobuf/proto"
 	golang_proto "github.com/golang/protobuf/proto"
 	schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-	contact "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/contact"
+	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/contact"
 	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/tenant_management"
 	views "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views"
 	io "io"
@@ -154,7 +154,6 @@ type GlobalSpecType struct {
 	//	*GlobalSpecType_TenantId
 	//	*GlobalSpecType_AllTenants
 	//	*GlobalSpecType_TenantRegex
-	//	*GlobalSpecType_NewTenantInfo
 	TenantChoice isGlobalSpecType_TenantChoice `protobuf_oneof:"tenant_choice"`
 	// groups
 	//
@@ -212,14 +211,10 @@ type GlobalSpecType_AllTenants struct {
 type GlobalSpecType_TenantRegex struct {
 	TenantRegex string `protobuf:"bytes,4,opt,name=tenant_regex,json=tenantRegex,proto3,oneof" json:"tenant_regex,omitempty"`
 }
-type GlobalSpecType_NewTenantInfo struct {
-	NewTenantInfo *NewTenantInfo `protobuf:"bytes,6,opt,name=new_tenant_info,json=newTenantInfo,proto3,oneof" json:"new_tenant_info,omitempty"`
-}
 
-func (*GlobalSpecType_TenantId) isGlobalSpecType_TenantChoice()      {}
-func (*GlobalSpecType_AllTenants) isGlobalSpecType_TenantChoice()    {}
-func (*GlobalSpecType_TenantRegex) isGlobalSpecType_TenantChoice()   {}
-func (*GlobalSpecType_NewTenantInfo) isGlobalSpecType_TenantChoice() {}
+func (*GlobalSpecType_TenantId) isGlobalSpecType_TenantChoice()    {}
+func (*GlobalSpecType_AllTenants) isGlobalSpecType_TenantChoice()  {}
+func (*GlobalSpecType_TenantRegex) isGlobalSpecType_TenantChoice() {}
 
 func (m *GlobalSpecType) GetTenantChoice() isGlobalSpecType_TenantChoice {
 	if m != nil {
@@ -249,13 +244,6 @@ func (m *GlobalSpecType) GetTenantRegex() string {
 	return ""
 }
 
-func (m *GlobalSpecType) GetNewTenantInfo() *NewTenantInfo {
-	if x, ok := m.GetTenantChoice().(*GlobalSpecType_NewTenantInfo); ok {
-		return x.NewTenantInfo
-	}
-	return nil
-}
-
 func (m *GlobalSpecType) GetGroups() []*GroupAssignmentType {
 	if m != nil {
 		return m.Groups
@@ -276,7 +264,6 @@ func (*GlobalSpecType) XXX_OneofWrappers() []interface{} {
 		(*GlobalSpecType_TenantId)(nil),
 		(*GlobalSpecType_AllTenants)(nil),
 		(*GlobalSpecType_TenantRegex)(nil),
-		(*GlobalSpecType_NewTenantInfo)(nil),
 	}
 }
 
@@ -289,7 +276,6 @@ type CreateSpecType struct {
 	//	*CreateSpecType_TenantId
 	//	*CreateSpecType_AllTenants
 	//	*CreateSpecType_TenantRegex
-	//	*CreateSpecType_NewTenantInfo
 	TenantChoice isCreateSpecType_TenantChoice `protobuf_oneof:"tenant_choice"`
 	Groups       []*GroupAssignmentType        `protobuf:"bytes,5,rep,name=groups,proto3" json:"groups,omitempty"`
 }
@@ -338,14 +324,10 @@ type CreateSpecType_AllTenants struct {
 type CreateSpecType_TenantRegex struct {
 	TenantRegex string `protobuf:"bytes,4,opt,name=tenant_regex,json=tenantRegex,proto3,oneof" json:"tenant_regex,omitempty"`
 }
-type CreateSpecType_NewTenantInfo struct {
-	NewTenantInfo *NewTenantInfo `protobuf:"bytes,6,opt,name=new_tenant_info,json=newTenantInfo,proto3,oneof" json:"new_tenant_info,omitempty"`
-}
 
-func (*CreateSpecType_TenantId) isCreateSpecType_TenantChoice()      {}
-func (*CreateSpecType_AllTenants) isCreateSpecType_TenantChoice()    {}
-func (*CreateSpecType_TenantRegex) isCreateSpecType_TenantChoice()   {}
-func (*CreateSpecType_NewTenantInfo) isCreateSpecType_TenantChoice() {}
+func (*CreateSpecType_TenantId) isCreateSpecType_TenantChoice()    {}
+func (*CreateSpecType_AllTenants) isCreateSpecType_TenantChoice()  {}
+func (*CreateSpecType_TenantRegex) isCreateSpecType_TenantChoice() {}
 
 func (m *CreateSpecType) GetTenantChoice() isCreateSpecType_TenantChoice {
 	if m != nil {
@@ -375,13 +357,6 @@ func (m *CreateSpecType) GetTenantRegex() string {
 	return ""
 }
 
-func (m *CreateSpecType) GetNewTenantInfo() *NewTenantInfo {
-	if x, ok := m.GetTenantChoice().(*CreateSpecType_NewTenantInfo); ok {
-		return x.NewTenantInfo
-	}
-	return nil
-}
-
 func (m *CreateSpecType) GetGroups() []*GroupAssignmentType {
 	if m != nil {
 		return m.Groups
@@ -395,7 +370,6 @@ func (*CreateSpecType) XXX_OneofWrappers() []interface{} {
 		(*CreateSpecType_TenantId)(nil),
 		(*CreateSpecType_AllTenants)(nil),
 		(*CreateSpecType_TenantRegex)(nil),
-		(*CreateSpecType_NewTenantInfo)(nil),
 	}
 }
 
@@ -411,7 +385,6 @@ type ReplaceSpecType struct {
 	//	*ReplaceSpecType_TenantId
 	//	*ReplaceSpecType_AllTenants
 	//	*ReplaceSpecType_TenantRegex
-	//	*ReplaceSpecType_NewTenantInfo
 	TenantChoice isReplaceSpecType_TenantChoice `protobuf_oneof:"tenant_choice"`
 	Groups       []*GroupAssignmentType         `protobuf:"bytes,5,rep,name=groups,proto3" json:"groups,omitempty"`
 }
@@ -460,14 +433,10 @@ type ReplaceSpecType_AllTenants struct {
 type ReplaceSpecType_TenantRegex struct {
 	TenantRegex string `protobuf:"bytes,4,opt,name=tenant_regex,json=tenantRegex,proto3,oneof" json:"tenant_regex,omitempty"`
 }
-type ReplaceSpecType_NewTenantInfo struct {
-	NewTenantInfo *NewTenantInfo `protobuf:"bytes,6,opt,name=new_tenant_info,json=newTenantInfo,proto3,oneof" json:"new_tenant_info,omitempty"`
-}
 
-func (*ReplaceSpecType_TenantId) isReplaceSpecType_TenantChoice()      {}
-func (*ReplaceSpecType_AllTenants) isReplaceSpecType_TenantChoice()    {}
-func (*ReplaceSpecType_TenantRegex) isReplaceSpecType_TenantChoice()   {}
-func (*ReplaceSpecType_NewTenantInfo) isReplaceSpecType_TenantChoice() {}
+func (*ReplaceSpecType_TenantId) isReplaceSpecType_TenantChoice()    {}
+func (*ReplaceSpecType_AllTenants) isReplaceSpecType_TenantChoice()  {}
+func (*ReplaceSpecType_TenantRegex) isReplaceSpecType_TenantChoice() {}
 
 func (m *ReplaceSpecType) GetTenantChoice() isReplaceSpecType_TenantChoice {
 	if m != nil {
@@ -497,13 +466,6 @@ func (m *ReplaceSpecType) GetTenantRegex() string {
 	return ""
 }
 
-func (m *ReplaceSpecType) GetNewTenantInfo() *NewTenantInfo {
-	if x, ok := m.GetTenantChoice().(*ReplaceSpecType_NewTenantInfo); ok {
-		return x.NewTenantInfo
-	}
-	return nil
-}
-
 func (m *ReplaceSpecType) GetGroups() []*GroupAssignmentType {
 	if m != nil {
 		return m.Groups
@@ -517,7 +479,6 @@ func (*ReplaceSpecType) XXX_OneofWrappers() []interface{} {
 		(*ReplaceSpecType_TenantId)(nil),
 		(*ReplaceSpecType_AllTenants)(nil),
 		(*ReplaceSpecType_TenantRegex)(nil),
-		(*ReplaceSpecType_NewTenantInfo)(nil),
 	}
 }
 
@@ -530,7 +491,6 @@ type GetSpecType struct {
 	//	*GetSpecType_TenantId
 	//	*GetSpecType_AllTenants
 	//	*GetSpecType_TenantRegex
-	//	*GetSpecType_NewTenantInfo
 	TenantChoice isGetSpecType_TenantChoice `protobuf_oneof:"tenant_choice"`
 	Groups       []*GroupAssignmentType     `protobuf:"bytes,5,rep,name=groups,proto3" json:"groups,omitempty"`
 	Status       Status                     `protobuf:"varint,7,opt,name=status,proto3,enum=ves.io.schema.tenant_management.managed_tenant.Status" json:"status,omitempty"`
@@ -580,14 +540,10 @@ type GetSpecType_AllTenants struct {
 type GetSpecType_TenantRegex struct {
 	TenantRegex string `protobuf:"bytes,4,opt,name=tenant_regex,json=tenantRegex,proto3,oneof" json:"tenant_regex,omitempty"`
 }
-type GetSpecType_NewTenantInfo struct {
-	NewTenantInfo *NewTenantInfo `protobuf:"bytes,6,opt,name=new_tenant_info,json=newTenantInfo,proto3,oneof" json:"new_tenant_info,omitempty"`
-}
 
-func (*GetSpecType_TenantId) isGetSpecType_TenantChoice()      {}
-func (*GetSpecType_AllTenants) isGetSpecType_TenantChoice()    {}
-func (*GetSpecType_TenantRegex) isGetSpecType_TenantChoice()   {}
-func (*GetSpecType_NewTenantInfo) isGetSpecType_TenantChoice() {}
+func (*GetSpecType_TenantId) isGetSpecType_TenantChoice()    {}
+func (*GetSpecType_AllTenants) isGetSpecType_TenantChoice()  {}
+func (*GetSpecType_TenantRegex) isGetSpecType_TenantChoice() {}
 
 func (m *GetSpecType) GetTenantChoice() isGetSpecType_TenantChoice {
 	if m != nil {
@@ -617,13 +573,6 @@ func (m *GetSpecType) GetTenantRegex() string {
 	return ""
 }
 
-func (m *GetSpecType) GetNewTenantInfo() *NewTenantInfo {
-	if x, ok := m.GetTenantChoice().(*GetSpecType_NewTenantInfo); ok {
-		return x.NewTenantInfo
-	}
-	return nil
-}
-
 func (m *GetSpecType) GetGroups() []*GroupAssignmentType {
 	if m != nil {
 		return m.Groups
@@ -644,206 +593,7 @@ func (*GetSpecType) XXX_OneofWrappers() []interface{} {
 		(*GetSpecType_TenantId)(nil),
 		(*GetSpecType_AllTenants)(nil),
 		(*GetSpecType_TenantRegex)(nil),
-		(*GetSpecType_NewTenantInfo)(nil),
 	}
-}
-
-// TenantOwnerInfo
-//
-// x-displayName: "Tenant Owner User"
-// Shape for specifying tenant owner user info.
-type TenantOwnerInfo struct {
-	// first_name
-	//
-	// x-displayName: "First Name"
-	// x-example: "John"
-	// x-required
-	// First name of the user (Tenant Owner)
-	FirstName string `protobuf:"bytes,1,opt,name=first_name,json=firstName,proto3" json:"first_name,omitempty"`
-	// last_name
-	//
-	// x-displayName: "Last Name"
-	// x-example: "Doe"
-	// x-required
-	// Last name of the user (Tenant Owner)
-	LastName string `protobuf:"bytes,2,opt,name=last_name,json=lastName,proto3" json:"last_name,omitempty"`
-	// email
-	//
-	// x-displayName: "Email"
-	// x-example: "john.doe@xyz.com"
-	// x-required
-	// Valid email address of tenant owner user.
-	// Access details for the new tenant will be sent to this email address.
-	Email string `protobuf:"bytes,3,opt,name=email,proto3" json:"email,omitempty"`
-	// Contact Number
-	//
-	// x-displayName: "Contact Number"
-	// x-example: "+14084004001"
-	// Contact number of the user in ITU E.164 format [+][country code][subscriber number including area code]
-	ContactNumber string `protobuf:"bytes,4,opt,name=contact_number,json=contactNumber,proto3" json:"contact_number,omitempty"`
-}
-
-func (m *TenantOwnerInfo) Reset()      { *m = TenantOwnerInfo{} }
-func (*TenantOwnerInfo) ProtoMessage() {}
-func (*TenantOwnerInfo) Descriptor() ([]byte, []int) {
-	return fileDescriptor_e85f277aa02575c0, []int{5}
-}
-func (m *TenantOwnerInfo) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *TenantOwnerInfo) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	b = b[:cap(b)]
-	n, err := m.MarshalToSizedBuffer(b)
-	if err != nil {
-		return nil, err
-	}
-	return b[:n], nil
-}
-func (m *TenantOwnerInfo) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_TenantOwnerInfo.Merge(m, src)
-}
-func (m *TenantOwnerInfo) XXX_Size() int {
-	return m.Size()
-}
-func (m *TenantOwnerInfo) XXX_DiscardUnknown() {
-	xxx_messageInfo_TenantOwnerInfo.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_TenantOwnerInfo proto.InternalMessageInfo
-
-func (m *TenantOwnerInfo) GetFirstName() string {
-	if m != nil {
-		return m.FirstName
-	}
-	return ""
-}
-
-func (m *TenantOwnerInfo) GetLastName() string {
-	if m != nil {
-		return m.LastName
-	}
-	return ""
-}
-
-func (m *TenantOwnerInfo) GetEmail() string {
-	if m != nil {
-		return m.Email
-	}
-	return ""
-}
-
-func (m *TenantOwnerInfo) GetContactNumber() string {
-	if m != nil {
-		return m.ContactNumber
-	}
-	return ""
-}
-
-// NewTenantInfo
-//
-// x-displayName: "New Tenant Info"
-// Shape for specifying child tenant info.
-// Based on this details, new tenant will be created and configuration will be
-// pushed to allow management by this requesting tenant.
-type NewTenantInfo struct {
-	// Domain Name
-	//
-	// x-displayName: "Domain Name"
-	// x-example: "xyz"
-	// x-required
-	// Special name to access your tenant account via web console.
-	// Choose this short name to represent your company/organization.
-	// A unique tenant id will auto generated based on this value.
-	Cname string `protobuf:"bytes,1,opt,name=cname,proto3" json:"cname,omitempty"`
-	// company_name
-	//
-	// x-displayName: "Company Name"
-	// x-example: "Xyz Inc"
-	// x-required
-	// Name of the company or organization.
-	CompanyName string `protobuf:"bytes,2,opt,name=company_name,json=companyName,proto3" json:"company_name,omitempty"`
-	// tenant_owner_info
-	//
-	// x-displayName: "Tenant Owner User"
-	// Provide user information of the tenant owner.
-	TenantOwnerInfo *TenantOwnerInfo `protobuf:"bytes,3,opt,name=tenant_owner_info,json=tenantOwnerInfo,proto3" json:"tenant_owner_info,omitempty"`
-	// billing_address
-	//
-	// x-displayName: "Billing Address"
-	// Billing Address for this tenant account
-	BillingAddress *contact.GlobalSpecType `protobuf:"bytes,4,opt,name=billing_address,json=billingAddress,proto3" json:"billing_address,omitempty"`
-	// usage_plan_name
-	//
-	// x-displayName: "Plan Name"
-	// x-example: "organization"
-	// x-required
-	// Name of the plan tenant want to signup for.
-	// Quota and usage will be provisioned based on this plan selection.
-	// Access this link for more info: https://www.f5.com/cloud/pricing
-	UsagePlanName string `protobuf:"bytes,5,opt,name=usage_plan_name,json=usagePlanName,proto3" json:"usage_plan_name,omitempty"`
-}
-
-func (m *NewTenantInfo) Reset()      { *m = NewTenantInfo{} }
-func (*NewTenantInfo) ProtoMessage() {}
-func (*NewTenantInfo) Descriptor() ([]byte, []int) {
-	return fileDescriptor_e85f277aa02575c0, []int{6}
-}
-func (m *NewTenantInfo) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *NewTenantInfo) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	b = b[:cap(b)]
-	n, err := m.MarshalToSizedBuffer(b)
-	if err != nil {
-		return nil, err
-	}
-	return b[:n], nil
-}
-func (m *NewTenantInfo) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_NewTenantInfo.Merge(m, src)
-}
-func (m *NewTenantInfo) XXX_Size() int {
-	return m.Size()
-}
-func (m *NewTenantInfo) XXX_DiscardUnknown() {
-	xxx_messageInfo_NewTenantInfo.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_NewTenantInfo proto.InternalMessageInfo
-
-func (m *NewTenantInfo) GetCname() string {
-	if m != nil {
-		return m.Cname
-	}
-	return ""
-}
-
-func (m *NewTenantInfo) GetCompanyName() string {
-	if m != nil {
-		return m.CompanyName
-	}
-	return ""
-}
-
-func (m *NewTenantInfo) GetTenantOwnerInfo() *TenantOwnerInfo {
-	if m != nil {
-		return m.TenantOwnerInfo
-	}
-	return nil
-}
-
-func (m *NewTenantInfo) GetBillingAddress() *contact.GlobalSpecType {
-	if m != nil {
-		return m.BillingAddress
-	}
-	return nil
-}
-
-func (m *NewTenantInfo) GetUsagePlanName() string {
-	if m != nil {
-		return m.UsagePlanName
-	}
-	return ""
 }
 
 // AccessInfo
@@ -872,7 +622,7 @@ type AccessInfo struct {
 func (m *AccessInfo) Reset()      { *m = AccessInfo{} }
 func (*AccessInfo) ProtoMessage() {}
 func (*AccessInfo) Descriptor() ([]byte, []int) {
-	return fileDescriptor_e85f277aa02575c0, []int{7}
+	return fileDescriptor_e85f277aa02575c0, []int{5}
 }
 func (m *AccessInfo) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -931,10 +681,6 @@ func init() {
 	golang_proto.RegisterType((*ReplaceSpecType)(nil), "ves.io.schema.tenant_management.managed_tenant.ReplaceSpecType")
 	proto.RegisterType((*GetSpecType)(nil), "ves.io.schema.tenant_management.managed_tenant.GetSpecType")
 	golang_proto.RegisterType((*GetSpecType)(nil), "ves.io.schema.tenant_management.managed_tenant.GetSpecType")
-	proto.RegisterType((*TenantOwnerInfo)(nil), "ves.io.schema.tenant_management.managed_tenant.TenantOwnerInfo")
-	golang_proto.RegisterType((*TenantOwnerInfo)(nil), "ves.io.schema.tenant_management.managed_tenant.TenantOwnerInfo")
-	proto.RegisterType((*NewTenantInfo)(nil), "ves.io.schema.tenant_management.managed_tenant.NewTenantInfo")
-	golang_proto.RegisterType((*NewTenantInfo)(nil), "ves.io.schema.tenant_management.managed_tenant.NewTenantInfo")
 	proto.RegisterType((*AccessInfo)(nil), "ves.io.schema.tenant_management.managed_tenant.AccessInfo")
 	golang_proto.RegisterType((*AccessInfo)(nil), "ves.io.schema.tenant_management.managed_tenant.AccessInfo")
 }
@@ -947,78 +693,63 @@ func init() {
 }
 
 var fileDescriptor_e85f277aa02575c0 = []byte{
-	// 1134 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x57, 0xcf, 0x6f, 0x1b, 0x45,
-	0x14, 0xf6, 0xf8, 0x57, 0xe2, 0xe7, 0xc6, 0x76, 0xb6, 0xad, 0xe4, 0xa4, 0xb0, 0x35, 0x2e, 0x08,
-	0x03, 0xc9, 0x1a, 0xdc, 0x52, 0x50, 0x24, 0x4a, 0xbd, 0x21, 0x24, 0x69, 0x83, 0x13, 0x6d, 0x02,
-	0x91, 0xe0, 0x60, 0xc6, 0xeb, 0xf1, 0x66, 0xc9, 0xfe, 0x62, 0x77, 0x9d, 0x34, 0x87, 0x48, 0x11,
-	0x17, 0x0e, 0x5c, 0x2a, 0xfe, 0x04, 0x4e, 0x08, 0x8e, 0x9c, 0x68, 0x7a, 0xc8, 0x11, 0xf5, 0x94,
-	0x63, 0x38, 0x41, 0x9c, 0x4b, 0xb9, 0x55, 0x1c, 0x39, 0xa1, 0x9d, 0x19, 0x37, 0xf6, 0x3a, 0x15,
-	0x89, 0x14, 0xd4, 0x4b, 0x6f, 0xb3, 0xf3, 0xbe, 0xf7, 0xde, 0x37, 0xef, 0x7b, 0x33, 0x7e, 0x86,
-	0xa9, 0x0d, 0xe2, 0x49, 0xba, 0x5d, 0xf6, 0xd4, 0x35, 0x62, 0xe2, 0xb2, 0x4f, 0x2c, 0x6c, 0xf9,
-	0x75, 0x13, 0x5b, 0x58, 0x23, 0x26, 0xb1, 0xfc, 0x32, 0x5b, 0x36, 0xeb, 0xcc, 0x52, 0xf6, 0xb7,
-	0x1c, 0xe2, 0x49, 0x8e, 0x6b, 0xfb, 0xb6, 0x20, 0x31, 0x5f, 0x89, 0xf9, 0x4a, 0x03, 0xbe, 0x52,
-	0xbf, 0xef, 0xf8, 0xa4, 0xa6, 0xfb, 0x6b, 0xed, 0x86, 0xa4, 0xda, 0x66, 0x59, 0xb3, 0x35, 0xbb,
-	0x4c, 0xc3, 0x34, 0xda, 0x2d, 0xfa, 0x45, 0x3f, 0xe8, 0x8a, 0x85, 0x1f, 0x7f, 0xa5, 0x9f, 0x9a,
-	0x6a, 0x5b, 0x3e, 0x56, 0xfb, 0x18, 0x8c, 0x5f, 0xe9, 0x87, 0xd8, 0x8e, 0xaf, 0xdb, 0x56, 0xd7,
-	0xf8, 0xd6, 0x7f, 0x1d, 0xad, 0x37, 0xd2, 0x58, 0x08, 0xdc, 0x63, 0x7a, 0xa9, 0xdf, 0xb4, 0x81,
-	0x0d, 0xbd, 0x89, 0x7d, 0xc2, 0xad, 0x85, 0x90, 0x55, 0x27, 0x9b, 0xf5, 0x7e, 0x1e, 0x57, 0x07,
-	0x11, 0x5e, 0x6f, 0x82, 0xe2, 0xb7, 0x51, 0xb8, 0x38, 0xeb, 0xda, 0x6d, 0xa7, 0xea, 0x79, 0xba,
-	0x66, 0x05, 0xdc, 0x56, 0xb6, 0x1c, 0x22, 0xdc, 0x85, 0x84, 0x16, 0x6c, 0xe7, 0x51, 0x01, 0x95,
-	0xd2, 0x95, 0x62, 0xa8, 0xde, 0x34, 0x90, 0xb4, 0xd8, 0xf8, 0x8a, 0xa8, 0xbe, 0x42, 0x5a, 0x81,
-	0x8b, 0x3c, 0xfa, 0xd3, 0x36, 0xb4, 0x3d, 0xe2, 0xd6, 0xa9, 0xe3, 0xce, 0x43, 0x84, 0x14, 0x16,
-	0x43, 0x58, 0x85, 0xcb, 0xfd, 0x72, 0x30, 0x88, 0x97, 0x8f, 0x16, 0x62, 0xa5, 0x94, 0x7c, 0xed,
-	0xc1, 0x43, 0x94, 0x1e, 0x46, 0x25, 0xf4, 0x36, 0x9a, 0x8a, 0x6d, 0x92, 0xc6, 0x83, 0xbf, 0xf6,
-	0x62, 0x89, 0xef, 0x51, 0x34, 0x57, 0xe8, 0xae, 0xf2, 0x48, 0xb9, 0xc8, 0x23, 0xac, 0xd0, 0x00,
-	0x94, 0xb2, 0x37, 0x75, 0xe7, 0xd1, 0x2e, 0xfa, 0x18, 0x72, 0x90, 0xa0, 0xdf, 0xe3, 0x43, 0x9c,
-	0x34, 0x54, 0xe0, 0xf2, 0x27, 0x0c, 0x5e, 0x60, 0xf8, 0x02, 0x73, 0x90, 0xc7, 0x9e, 0xc1, 0x24,
-	0x57, 0x28, 0xfe, 0x1c, 0x87, 0xcc, 0xac, 0x61, 0x37, 0xb0, 0xb1, 0xec, 0x10, 0x95, 0x16, 0xe1,
-	0x7d, 0x48, 0x71, 0x94, 0xde, 0xcc, 0x47, 0x0b, 0xa8, 0x94, 0x92, 0xc7, 0x4e, 0xe2, 0xea, 0xc6,
-	0xf2, 0x3b, 0xd1, 0xb9, 0x88, 0x32, 0xcc, 0xd0, 0xf3, 0x4d, 0xe1, 0x36, 0xa4, 0xb1, 0x61, 0xf0,
-	0x1c, 0x5e, 0x3e, 0x46, 0x8b, 0x78, 0x29, 0x54, 0xc4, 0x19, 0xd3, 0xf1, 0xb7, 0xe4, 0xa1, 0x83,
-	0x6d, 0xf4, 0x78, 0x17, 0xa1, 0xb9, 0x88, 0x02, 0xd8, 0x30, 0x18, 0x5f, 0x4f, 0xb8, 0x0d, 0x17,
-	0x78, 0x6e, 0x97, 0x68, 0xe4, 0x5e, 0x3e, 0x4e, 0xd3, 0x5f, 0xe1, 0xe0, 0xe3, 0xb4, 0x7c, 0xb5,
-	0x47, 0x03, 0xa4, 0x99, 0x8b, 0x12, 0x78, 0x08, 0x1a, 0x64, 0x2d, 0xb2, 0xd9, 0x3d, 0xa7, 0x6e,
-	0xb5, 0xec, 0x7c, 0x92, 0xf2, 0xf8, 0xe0, 0x8c, 0x97, 0x47, 0xaa, 0x91, 0x4d, 0x46, 0x6b, 0xde,
-	0x6a, 0xd9, 0x73, 0x11, 0x65, 0xc4, 0xea, 0xdd, 0x10, 0xbe, 0x86, 0x24, 0xd7, 0x33, 0x51, 0x88,
-	0x95, 0xd2, 0x95, 0xe9, 0xb3, 0xc6, 0x3f, 0xa1, 0x01, 0xe5, 0x4b, 0x4f, 0xbb, 0x20, 0xd7, 0xd3,
-	0x05, 0x3c, 0x91, 0xb0, 0x0c, 0x49, 0xcf, 0xc7, 0x7e, 0xdb, 0xcb, 0x0f, 0x15, 0x50, 0x29, 0x53,
-	0xb9, 0x79, 0xd6, 0x94, 0xcb, 0xd4, 0x5b, 0x8e, 0x1d, 0x6c, 0x23, 0x85, 0x87, 0x92, 0x5f, 0x85,
-	0x11, 0xee, 0xa7, 0xae, 0xd9, 0xba, 0x4a, 0x84, 0x8b, 0x7b, 0xbb, 0x28, 0xb9, 0xbf, 0x8b, 0x50,
-	0x67, 0x17, 0x0d, 0xdd, 0x9c, 0xa8, 0x4c, 0x5c, 0x9f, 0xb8, 0x71, 0x27, 0x3e, 0x8c, 0x72, 0xd1,
-	0xe2, 0xfd, 0x18, 0x64, 0xa6, 0x5d, 0x82, 0x7d, 0xf2, 0xb4, 0x5b, 0x5e, 0x1e, 0xe8, 0x96, 0xbe,
-	0x96, 0x78, 0xef, 0xd4, 0x2d, 0x11, 0xea, 0x84, 0x6b, 0x27, 0x75, 0xc2, 0x73, 0x13, 0xfb, 0x8b,
-	0xff, 0x41, 0xec, 0xae, 0xac, 0x53, 0xa3, 0x8f, 0x6e, 0x85, 0xee, 0xa0, 0x5c, 0x0c, 0x8b, 0x32,
-	0xfa, 0xcd, 0x3f, 0xa8, 0x7f, 0x8b, 0x4b, 0xf2, 0x5d, 0x0c, 0xb2, 0x0a, 0x71, 0x0c, 0xac, 0xbe,
-	0xd0, 0xe4, 0xb9, 0x6b, 0x52, 0xfc, 0x23, 0x06, 0xe9, 0x59, 0xe2, 0xbf, 0x50, 0xe2, 0xdc, 0x94,
-	0x10, 0x6a, 0xe7, 0xf3, 0xe8, 0x75, 0xdf, 0xbb, 0xa9, 0xb1, 0x01, 0x65, 0xff, 0xbe, 0x95, 0x08,
-	0x9e, 0xb9, 0x77, 0x4f, 0xa5, 0xf0, 0xaf, 0x08, 0xb2, 0xec, 0xe8, 0x8b, 0x9b, 0x16, 0x71, 0xe9,
-	0xf9, 0xdf, 0x00, 0x68, 0xe9, 0xae, 0xe7, 0xd7, 0x2d, 0x6c, 0x12, 0x3a, 0x3b, 0xa4, 0x64, 0x38,
-	0xfe, 0xb1, 0x52, 0x52, 0xd4, 0x5a, 0xc3, 0x26, 0x11, 0x5e, 0x87, 0x94, 0x81, 0xbb, 0xc8, 0xe8,
-	0x00, 0x72, 0x38, 0x30, 0x52, 0xe0, 0x55, 0x48, 0x10, 0x13, 0xeb, 0x06, 0x6d, 0x8a, 0x94, 0x9c,
-	0x0a, 0x40, 0x71, 0x37, 0xfa, 0x25, 0x52, 0xd8, 0xbe, 0xf0, 0x0e, 0x64, 0xf8, 0x80, 0x56, 0xb7,
-	0xda, 0x66, 0x83, 0xb8, 0xfc, 0xc7, 0xb2, 0x1b, 0x6e, 0x2f, 0x8a, 0x94, 0x11, 0x8e, 0xa8, 0x51,
-	0x40, 0xf1, 0xf7, 0x28, 0x8c, 0xf4, 0x49, 0x19, 0x64, 0x51, 0x7b, 0x48, 0x77, 0xb3, 0xe4, 0x47,
-	0x15, 0xb6, 0x2f, 0x4c, 0xc2, 0x05, 0xd5, 0x36, 0x1d, 0x6c, 0x6d, 0x3d, 0x8b, 0x72, 0x9a, 0xdb,
-	0x29, 0xeb, 0x75, 0x18, 0xe5, 0xe5, 0xb2, 0x83, 0xea, 0xb0, 0xa6, 0x63, 0x6d, 0xfd, 0xe1, 0x59,
-	0x75, 0x0b, 0x55, 0x59, 0xc9, 0xfa, 0xa1, 0xb2, 0xaf, 0x42, 0xb6, 0xa1, 0x1b, 0x86, 0x6e, 0x69,
-	0x75, 0xdc, 0x6c, 0xba, 0xc4, 0xf3, 0x68, 0x09, 0xd2, 0x95, 0xd7, 0x42, 0xa9, 0x78, 0x15, 0xa4,
-	0xd0, 0x85, 0xee, 0xce, 0x20, 0x4a, 0x86, 0x87, 0xa9, 0xb2, 0x28, 0x42, 0x05, 0xb2, 0x6d, 0x0f,
-	0x6b, 0xa4, 0xee, 0x18, 0xd8, 0x62, 0xe7, 0x4e, 0x0c, 0x9c, 0x7b, 0x84, 0x42, 0x96, 0x0c, 0x6c,
-	0x05, 0x27, 0x2f, 0xfe, 0x82, 0x00, 0xaa, 0xaa, 0x4a, 0x3c, 0x8f, 0x72, 0x13, 0x20, 0x7e, 0x5c,
-	0x57, 0x85, 0xae, 0x85, 0x1b, 0x10, 0x37, 0x74, 0x6b, 0x9d, 0xd6, 0x30, 0x5d, 0x29, 0x9c, 0x38,
-	0x5c, 0x2e, 0xe8, 0xd6, 0x3a, 0x1f, 0x2d, 0x15, 0x8a, 0xee, 0xb9, 0x5c, 0xb1, 0x73, 0xbf, 0x5c,
-	0x6f, 0xca, 0x90, 0x64, 0xd7, 0x43, 0x48, 0xc3, 0xd0, 0xa7, 0xb5, 0xbb, 0xb5, 0xc5, 0xd5, 0x5a,
-	0x2e, 0x22, 0x08, 0x90, 0xa9, 0x2d, 0xae, 0xd4, 0xab, 0x4b, 0x4b, 0x0b, 0xf3, 0xd3, 0x55, 0x79,
-	0x61, 0x26, 0x07, 0x01, 0x60, 0x69, 0xa6, 0xf6, 0xd1, 0x7c, 0x6d, 0x36, 0x77, 0x49, 0x00, 0x48,
-	0x56, 0xa7, 0x57, 0xe6, 0x3f, 0x9b, 0xc9, 0x89, 0xf2, 0x0f, 0x68, 0xff, 0x50, 0x8c, 0x1c, 0x1c,
-	0x8a, 0x91, 0x27, 0x87, 0x22, 0xda, 0xe9, 0x88, 0xe8, 0xc7, 0x8e, 0x88, 0x7e, 0xeb, 0x88, 0x68,
-	0xbf, 0x23, 0xa2, 0x83, 0x8e, 0x88, 0xfe, 0xec, 0x88, 0xe8, 0x71, 0x47, 0x8c, 0x3c, 0xe9, 0x88,
-	0xe8, 0xfe, 0x91, 0x18, 0xd9, 0x3b, 0x12, 0xd1, 0xfe, 0x91, 0x18, 0x39, 0x38, 0x12, 0x23, 0x9f,
-	0x37, 0x35, 0xdb, 0x59, 0xd7, 0xa4, 0x0d, 0xdb, 0xf0, 0x89, 0xeb, 0x62, 0xa9, 0xed, 0x95, 0xe9,
-	0xa2, 0x65, 0xbb, 0xe6, 0xa4, 0xe3, 0xda, 0x1b, 0x7a, 0x93, 0xb8, 0x93, 0x5d, 0x73, 0xd9, 0x69,
-	0x68, 0x76, 0x99, 0xdc, 0xf3, 0xf9, 0x6c, 0x7f, 0xca, 0x7f, 0x51, 0x8d, 0x24, 0x1d, 0xfc, 0xaf,
-	0xff, 0x1b, 0x00, 0x00, 0xff, 0xff, 0xfc, 0xcf, 0xe5, 0xc5, 0x7e, 0x0d, 0x00, 0x00,
+	// 892 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x56, 0xcf, 0x6f, 0xe3, 0x44,
+	0x14, 0xf6, 0xb3, 0xf3, 0xa3, 0x9d, 0x40, 0x71, 0xbd, 0x5d, 0x29, 0x6d, 0xc1, 0x98, 0xec, 0x25,
+	0x82, 0xd6, 0x46, 0xd9, 0xe5, 0x87, 0x72, 0x58, 0x6d, 0x5c, 0x4a, 0x37, 0xdd, 0x92, 0x56, 0x6e,
+	0x61, 0x25, 0x38, 0x44, 0x8e, 0x33, 0x75, 0x4d, 0x1d, 0x8f, 0xb1, 0x27, 0xdd, 0xed, 0xa1, 0x52,
+	0xc5, 0x85, 0x2b, 0xe2, 0x4f, 0xe0, 0xb4, 0x42, 0xe2, 0xc4, 0x6d, 0xb3, 0x87, 0x9e, 0x10, 0xda,
+	0x53, 0x8f, 0x39, 0x52, 0xf7, 0xb2, 0xdc, 0x56, 0x1c, 0x39, 0x20, 0x94, 0xb1, 0xb3, 0xc4, 0x69,
+	0x80, 0xad, 0xb4, 0x5c, 0x10, 0xb7, 0x37, 0x7e, 0xdf, 0xf7, 0xde, 0xf3, 0xf7, 0xcd, 0x68, 0x06,
+	0x55, 0x0f, 0x70, 0xa8, 0x3a, 0x44, 0x0b, 0xad, 0x3d, 0xdc, 0x31, 0x35, 0x8a, 0x3d, 0xd3, 0xa3,
+	0xcd, 0x8e, 0xe9, 0x99, 0x36, 0xee, 0x60, 0x8f, 0x6a, 0x71, 0xd8, 0x6e, 0xc6, 0x19, 0x8d, 0x1e,
+	0xfa, 0x38, 0x54, 0xfd, 0x80, 0x50, 0x22, 0xa9, 0x31, 0x57, 0x8d, 0xb9, 0xea, 0x05, 0xae, 0x9a,
+	0xe6, 0x2e, 0x2c, 0xdb, 0x0e, 0xdd, 0xeb, 0xb6, 0x54, 0x8b, 0x74, 0x34, 0x9b, 0xd8, 0x44, 0x63,
+	0x65, 0x5a, 0xdd, 0x5d, 0xb6, 0x62, 0x0b, 0x16, 0xc5, 0xe5, 0x17, 0xde, 0x48, 0x8f, 0x66, 0x11,
+	0x8f, 0x9a, 0x56, 0x6a, 0x82, 0x85, 0xc5, 0x34, 0x84, 0xf8, 0xd4, 0x21, 0xde, 0x30, 0xf9, 0xd6,
+	0x3f, 0xfd, 0xda, 0x68, 0xa5, 0xf9, 0x31, 0xf0, 0x48, 0xea, 0xd5, 0x74, 0xea, 0xc0, 0x74, 0x9d,
+	0xb6, 0x49, 0x71, 0x92, 0x55, 0xc6, 0xb2, 0x0e, 0xbe, 0xd7, 0x4c, 0xcf, 0xf1, 0xfa, 0x45, 0x44,
+	0x38, 0xda, 0xa0, 0xf4, 0x15, 0x8f, 0xae, 0xac, 0x05, 0xa4, 0xeb, 0xd7, 0xc2, 0xd0, 0xb1, 0xbd,
+	0xc1, 0x6c, 0x3b, 0x87, 0x3e, 0x96, 0xee, 0xa0, 0xac, 0x3d, 0xf8, 0x5c, 0x04, 0x05, 0xca, 0x85,
+	0x4a, 0x69, 0x4c, 0x6f, 0x56, 0x48, 0xdd, 0x6c, 0x7d, 0x8e, 0x2d, 0x6a, 0xe0, 0xdd, 0x01, 0x45,
+	0x9f, 0xfd, 0xee, 0x08, 0x75, 0x43, 0x1c, 0x34, 0x19, 0xf1, 0xf8, 0x11, 0x80, 0x11, 0xd7, 0x90,
+	0xee, 0xa2, 0xab, 0x69, 0x3b, 0x62, 0x48, 0x58, 0xe4, 0x15, 0xa1, 0x3c, 0xad, 0x5f, 0x7b, 0xf8,
+	0x08, 0x0a, 0x53, 0x50, 0x86, 0xb7, 0xa1, 0x2a, 0xdc, 0xc3, 0xad, 0x87, 0xbf, 0x9c, 0x08, 0xd9,
+	0x6f, 0x80, 0x17, 0x95, 0x61, 0x54, 0x04, 0xe3, 0x4a, 0x52, 0x61, 0x87, 0x15, 0x60, 0x23, 0x87,
+	0xd5, 0xf5, 0xc7, 0x3d, 0xf8, 0x10, 0x89, 0x28, 0xcb, 0xd6, 0x0b, 0xf9, 0x64, 0x68, 0x54, 0x41,
+	0x57, 0x3f, 0x8a, 0xe1, 0x4a, 0x8c, 0x57, 0x62, 0x82, 0x3e, 0xff, 0x17, 0x93, 0x88, 0x4a, 0xe9,
+	0x47, 0x01, 0xcd, 0xac, 0xb9, 0xa4, 0x65, 0xba, 0xdb, 0x3e, 0xb6, 0x98, 0x08, 0xef, 0xa3, 0xe9,
+	0x04, 0xe5, 0xb4, 0x8b, 0xbc, 0x02, 0xe5, 0x69, 0x7d, 0x7e, 0xd2, 0xac, 0x81, 0x50, 0x3c, 0xe6,
+	0x6f, 0x73, 0xc6, 0x54, 0x8c, 0xae, 0xb7, 0xa5, 0x5b, 0xa8, 0x60, 0xba, 0x6e, 0xd2, 0x23, 0x2c,
+	0x0a, 0x4c, 0xc4, 0xb9, 0x31, 0x11, 0x57, 0x3b, 0x3e, 0x3d, 0xd4, 0xf3, 0xfd, 0x23, 0x78, 0xd2,
+	0x03, 0xb8, 0xcd, 0x19, 0xc8, 0x74, 0xdd, 0x78, 0xde, 0x50, 0xba, 0x85, 0x5e, 0x4a, 0x7a, 0x07,
+	0xd8, 0xc6, 0xf7, 0x8b, 0x19, 0xd6, 0x7e, 0x31, 0x01, 0xff, 0xd9, 0x36, 0x89, 0x4e, 0x58, 0x81,
+	0x42, 0x4c, 0x31, 0x06, 0x0c, 0xe9, 0x0b, 0x94, 0x4b, 0x64, 0xce, 0x2a, 0x42, 0xb9, 0x50, 0x59,
+	0xb9, 0xe4, 0x99, 0x51, 0x27, 0xec, 0x0b, 0x7d, 0xee, 0x99, 0x39, 0xe2, 0x88, 0x39, 0x49, 0x23,
+	0x69, 0x1b, 0xe5, 0x42, 0x6a, 0xd2, 0x6e, 0x58, 0xcc, 0x2b, 0x50, 0x9e, 0xa9, 0xbc, 0x7b, 0xd9,
+	0x96, 0xdb, 0x8c, 0xad, 0x0b, 0xfd, 0x23, 0x30, 0x92, 0x52, 0x7a, 0x09, 0xbd, 0x9c, 0xf0, 0xac,
+	0x3d, 0xe2, 0x58, 0x58, 0x9a, 0x3d, 0xe9, 0x01, 0x7f, 0xda, 0x03, 0x88, 0x7a, 0x90, 0xad, 0x2c,
+	0x5d, 0x5f, 0xba, 0xb1, 0x9e, 0x99, 0x02, 0x91, 0x5f, 0xcf, 0x4c, 0xe5, 0xc4, 0x7c, 0xe9, 0x7b,
+	0x1e, 0xcd, 0xac, 0x04, 0xd8, 0xa4, 0xf8, 0x99, 0x91, 0xaf, 0x5d, 0x30, 0x32, 0xe5, 0xd6, 0x7b,
+	0xcf, 0xed, 0xd6, 0x98, 0x49, 0xd7, 0x26, 0x99, 0x34, 0xee, 0xc3, 0x67, 0xff, 0x82, 0x0f, 0x43,
+	0xc5, 0xab, 0xb3, 0x8f, 0x6f, 0x8e, 0xed, 0xda, 0x09, 0x7a, 0x7d, 0xf9, 0x1b, 0xa4, 0x3f, 0xa5,
+	0xf4, 0x7a, 0xc0, 0xa3, 0x57, 0x0c, 0xec, 0xbb, 0xa6, 0xf5, 0xbf, 0x60, 0x7f, 0x23, 0xd8, 0x40,
+	0xaa, 0xdf, 0x79, 0x54, 0x58, 0xc3, 0xf4, 0xbf, 0x2f, 0x93, 0xd4, 0x78, 0x31, 0x27, 0x79, 0x78,
+	0x88, 0xab, 0x8b, 0x17, 0x64, 0xff, 0xf5, 0x66, 0x9e, 0x9d, 0xdd, 0xa5, 0x77, 0x2e, 0x61, 0xc0,
+	0x0f, 0x80, 0x50, 0xcd, 0xb2, 0x70, 0x18, 0xd6, 0xbd, 0x5d, 0x22, 0x49, 0x28, 0xe3, 0x99, 0x1d,
+	0xcc, 0x2e, 0xa9, 0x69, 0x83, 0xc5, 0xd2, 0x0d, 0x94, 0x71, 0x1d, 0x6f, 0x9f, 0xd9, 0x51, 0xa8,
+	0x28, 0x13, 0x2f, 0xae, 0x0d, 0xc7, 0xdb, 0x4f, 0xae, 0x2d, 0x83, 0xa1, 0x47, 0xc4, 0x14, 0x5e,
+	0xb8, 0x98, 0x6f, 0xea, 0x28, 0x17, 0xcb, 0x21, 0x15, 0x50, 0xfe, 0xe3, 0xc6, 0x9d, 0xc6, 0xe6,
+	0xdd, 0x86, 0xc8, 0x49, 0x12, 0x9a, 0x69, 0x6c, 0xee, 0x34, 0x6b, 0x5b, 0x5b, 0x1b, 0xf5, 0x95,
+	0x9a, 0xbe, 0xb1, 0x2a, 0xa2, 0x01, 0x60, 0x6b, 0xb5, 0xf1, 0x41, 0xbd, 0xb1, 0x26, 0xce, 0x49,
+	0x08, 0xe5, 0x6a, 0x2b, 0x3b, 0xf5, 0x4f, 0x56, 0x45, 0x59, 0xff, 0x16, 0x4e, 0xcf, 0x64, 0xae,
+	0x7f, 0x26, 0x73, 0x4f, 0xcf, 0x64, 0x38, 0x8e, 0x64, 0x78, 0x10, 0xc9, 0xf0, 0x53, 0x24, 0xc3,
+	0x69, 0x24, 0x43, 0x3f, 0x92, 0xe1, 0xe7, 0x48, 0x86, 0x27, 0x91, 0xcc, 0x3d, 0x8d, 0x64, 0xf8,
+	0xfa, 0x5c, 0xe6, 0x4e, 0xce, 0x65, 0x38, 0x3d, 0x97, 0xb9, 0xfe, 0xb9, 0xcc, 0x7d, 0xda, 0xb6,
+	0x89, 0xbf, 0x6f, 0xab, 0x07, 0xc4, 0xa5, 0x38, 0x08, 0x4c, 0xb5, 0x1b, 0x6a, 0x2c, 0xd8, 0x25,
+	0x41, 0x67, 0xd9, 0x0f, 0xc8, 0x81, 0xd3, 0xc6, 0xc1, 0xf2, 0x30, 0xad, 0xf9, 0x2d, 0x9b, 0x68,
+	0xf8, 0x3e, 0x4d, 0xde, 0x0d, 0xcf, 0xf9, 0x42, 0x6b, 0xe5, 0xd8, 0xa3, 0xe2, 0xfa, 0x1f, 0x01,
+	0x00, 0x00, 0xff, 0xff, 0xbf, 0xe9, 0x3a, 0x05, 0xda, 0x09, 0x00, 0x00,
 }
 
 func (x Status) String() string {
@@ -1173,30 +904,6 @@ func (this *GlobalSpecType_TenantRegex) Equal(that interface{}) bool {
 	}
 	return true
 }
-func (this *GlobalSpecType_NewTenantInfo) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*GlobalSpecType_NewTenantInfo)
-	if !ok {
-		that2, ok := that.(GlobalSpecType_NewTenantInfo)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.NewTenantInfo.Equal(that1.NewTenantInfo) {
-		return false
-	}
-	return true
-}
 func (this *CreateSpecType) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -1307,30 +1014,6 @@ func (this *CreateSpecType_TenantRegex) Equal(that interface{}) bool {
 	}
 	return true
 }
-func (this *CreateSpecType_NewTenantInfo) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*CreateSpecType_NewTenantInfo)
-	if !ok {
-		that2, ok := that.(CreateSpecType_NewTenantInfo)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.NewTenantInfo.Equal(that1.NewTenantInfo) {
-		return false
-	}
-	return true
-}
 func (this *ReplaceSpecType) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -1437,30 +1120,6 @@ func (this *ReplaceSpecType_TenantRegex) Equal(that interface{}) bool {
 		return false
 	}
 	if this.TenantRegex != that1.TenantRegex {
-		return false
-	}
-	return true
-}
-func (this *ReplaceSpecType_NewTenantInfo) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*ReplaceSpecType_NewTenantInfo)
-	if !ok {
-		that2, ok := that.(ReplaceSpecType_NewTenantInfo)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.NewTenantInfo.Equal(that1.NewTenantInfo) {
 		return false
 	}
 	return true
@@ -1578,99 +1237,6 @@ func (this *GetSpecType_TenantRegex) Equal(that interface{}) bool {
 	}
 	return true
 }
-func (this *GetSpecType_NewTenantInfo) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*GetSpecType_NewTenantInfo)
-	if !ok {
-		that2, ok := that.(GetSpecType_NewTenantInfo)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.NewTenantInfo.Equal(that1.NewTenantInfo) {
-		return false
-	}
-	return true
-}
-func (this *TenantOwnerInfo) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*TenantOwnerInfo)
-	if !ok {
-		that2, ok := that.(TenantOwnerInfo)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if this.FirstName != that1.FirstName {
-		return false
-	}
-	if this.LastName != that1.LastName {
-		return false
-	}
-	if this.Email != that1.Email {
-		return false
-	}
-	if this.ContactNumber != that1.ContactNumber {
-		return false
-	}
-	return true
-}
-func (this *NewTenantInfo) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*NewTenantInfo)
-	if !ok {
-		that2, ok := that.(NewTenantInfo)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if this.Cname != that1.Cname {
-		return false
-	}
-	if this.CompanyName != that1.CompanyName {
-		return false
-	}
-	if !this.TenantOwnerInfo.Equal(that1.TenantOwnerInfo) {
-		return false
-	}
-	if !this.BillingAddress.Equal(that1.BillingAddress) {
-		return false
-	}
-	if this.UsagePlanName != that1.UsagePlanName {
-		return false
-	}
-	return true
-}
 func (this *AccessInfo) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -1723,7 +1289,7 @@ func (this *GlobalSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 10)
+	s := make([]string, 0, 9)
 	s = append(s, "&managed_tenant.GlobalSpecType{")
 	if this.TenantChoice != nil {
 		s = append(s, "TenantChoice: "+fmt.Sprintf("%#v", this.TenantChoice)+",\n")
@@ -1759,19 +1325,11 @@ func (this *GlobalSpecType_TenantRegex) GoString() string {
 		`TenantRegex:` + fmt.Sprintf("%#v", this.TenantRegex) + `}`}, ", ")
 	return s
 }
-func (this *GlobalSpecType_NewTenantInfo) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&managed_tenant.GlobalSpecType_NewTenantInfo{` +
-		`NewTenantInfo:` + fmt.Sprintf("%#v", this.NewTenantInfo) + `}`}, ", ")
-	return s
-}
 func (this *CreateSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 9)
+	s := make([]string, 0, 8)
 	s = append(s, "&managed_tenant.CreateSpecType{")
 	if this.TenantChoice != nil {
 		s = append(s, "TenantChoice: "+fmt.Sprintf("%#v", this.TenantChoice)+",\n")
@@ -1806,19 +1364,11 @@ func (this *CreateSpecType_TenantRegex) GoString() string {
 		`TenantRegex:` + fmt.Sprintf("%#v", this.TenantRegex) + `}`}, ", ")
 	return s
 }
-func (this *CreateSpecType_NewTenantInfo) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&managed_tenant.CreateSpecType_NewTenantInfo{` +
-		`NewTenantInfo:` + fmt.Sprintf("%#v", this.NewTenantInfo) + `}`}, ", ")
-	return s
-}
 func (this *ReplaceSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 9)
+	s := make([]string, 0, 8)
 	s = append(s, "&managed_tenant.ReplaceSpecType{")
 	if this.TenantChoice != nil {
 		s = append(s, "TenantChoice: "+fmt.Sprintf("%#v", this.TenantChoice)+",\n")
@@ -1853,19 +1403,11 @@ func (this *ReplaceSpecType_TenantRegex) GoString() string {
 		`TenantRegex:` + fmt.Sprintf("%#v", this.TenantRegex) + `}`}, ", ")
 	return s
 }
-func (this *ReplaceSpecType_NewTenantInfo) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&managed_tenant.ReplaceSpecType_NewTenantInfo{` +
-		`NewTenantInfo:` + fmt.Sprintf("%#v", this.NewTenantInfo) + `}`}, ", ")
-	return s
-}
 func (this *GetSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 10)
+	s := make([]string, 0, 9)
 	s = append(s, "&managed_tenant.GetSpecType{")
 	if this.TenantChoice != nil {
 		s = append(s, "TenantChoice: "+fmt.Sprintf("%#v", this.TenantChoice)+",\n")
@@ -1900,45 +1442,6 @@ func (this *GetSpecType_TenantRegex) GoString() string {
 	s := strings.Join([]string{`&managed_tenant.GetSpecType_TenantRegex{` +
 		`TenantRegex:` + fmt.Sprintf("%#v", this.TenantRegex) + `}`}, ", ")
 	return s
-}
-func (this *GetSpecType_NewTenantInfo) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&managed_tenant.GetSpecType_NewTenantInfo{` +
-		`NewTenantInfo:` + fmt.Sprintf("%#v", this.NewTenantInfo) + `}`}, ", ")
-	return s
-}
-func (this *TenantOwnerInfo) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := make([]string, 0, 8)
-	s = append(s, "&managed_tenant.TenantOwnerInfo{")
-	s = append(s, "FirstName: "+fmt.Sprintf("%#v", this.FirstName)+",\n")
-	s = append(s, "LastName: "+fmt.Sprintf("%#v", this.LastName)+",\n")
-	s = append(s, "Email: "+fmt.Sprintf("%#v", this.Email)+",\n")
-	s = append(s, "ContactNumber: "+fmt.Sprintf("%#v", this.ContactNumber)+",\n")
-	s = append(s, "}")
-	return strings.Join(s, "")
-}
-func (this *NewTenantInfo) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := make([]string, 0, 9)
-	s = append(s, "&managed_tenant.NewTenantInfo{")
-	s = append(s, "Cname: "+fmt.Sprintf("%#v", this.Cname)+",\n")
-	s = append(s, "CompanyName: "+fmt.Sprintf("%#v", this.CompanyName)+",\n")
-	if this.TenantOwnerInfo != nil {
-		s = append(s, "TenantOwnerInfo: "+fmt.Sprintf("%#v", this.TenantOwnerInfo)+",\n")
-	}
-	if this.BillingAddress != nil {
-		s = append(s, "BillingAddress: "+fmt.Sprintf("%#v", this.BillingAddress)+",\n")
-	}
-	s = append(s, "UsagePlanName: "+fmt.Sprintf("%#v", this.UsagePlanName)+",\n")
-	s = append(s, "}")
-	return strings.Join(s, "")
 }
 func (this *AccessInfo) GoString() string {
 	if this == nil {
@@ -2033,15 +1536,6 @@ func (m *GlobalSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		i--
 		dAtA[i] = 0x38
 	}
-	if m.TenantChoice != nil {
-		{
-			size := m.TenantChoice.Size()
-			i -= size
-			if _, err := m.TenantChoice.MarshalTo(dAtA[i:]); err != nil {
-				return 0, err
-			}
-		}
-	}
 	if len(m.Groups) > 0 {
 		for iNdEx := len(m.Groups) - 1; iNdEx >= 0; iNdEx-- {
 			{
@@ -2054,6 +1548,15 @@ func (m *GlobalSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 			}
 			i--
 			dAtA[i] = 0x2a
+		}
+	}
+	if m.TenantChoice != nil {
+		{
+			size := m.TenantChoice.Size()
+			i -= size
+			if _, err := m.TenantChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
 		}
 	}
 	return len(dAtA) - i, nil
@@ -2108,27 +1611,6 @@ func (m *GlobalSpecType_TenantRegex) MarshalToSizedBuffer(dAtA []byte) (int, err
 	dAtA[i] = 0x22
 	return len(dAtA) - i, nil
 }
-func (m *GlobalSpecType_NewTenantInfo) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *GlobalSpecType_NewTenantInfo) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	if m.NewTenantInfo != nil {
-		{
-			size, err := m.NewTenantInfo.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x32
-	}
-	return len(dAtA) - i, nil
-}
 func (m *CreateSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -2149,15 +1631,6 @@ func (m *CreateSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
-	if m.TenantChoice != nil {
-		{
-			size := m.TenantChoice.Size()
-			i -= size
-			if _, err := m.TenantChoice.MarshalTo(dAtA[i:]); err != nil {
-				return 0, err
-			}
-		}
-	}
 	if len(m.Groups) > 0 {
 		for iNdEx := len(m.Groups) - 1; iNdEx >= 0; iNdEx-- {
 			{
@@ -2170,6 +1643,15 @@ func (m *CreateSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 			}
 			i--
 			dAtA[i] = 0x2a
+		}
+	}
+	if m.TenantChoice != nil {
+		{
+			size := m.TenantChoice.Size()
+			i -= size
+			if _, err := m.TenantChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
 		}
 	}
 	return len(dAtA) - i, nil
@@ -2224,27 +1706,6 @@ func (m *CreateSpecType_TenantRegex) MarshalToSizedBuffer(dAtA []byte) (int, err
 	dAtA[i] = 0x22
 	return len(dAtA) - i, nil
 }
-func (m *CreateSpecType_NewTenantInfo) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *CreateSpecType_NewTenantInfo) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	if m.NewTenantInfo != nil {
-		{
-			size, err := m.NewTenantInfo.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x32
-	}
-	return len(dAtA) - i, nil
-}
 func (m *ReplaceSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -2265,15 +1726,6 @@ func (m *ReplaceSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
-	if m.TenantChoice != nil {
-		{
-			size := m.TenantChoice.Size()
-			i -= size
-			if _, err := m.TenantChoice.MarshalTo(dAtA[i:]); err != nil {
-				return 0, err
-			}
-		}
-	}
 	if len(m.Groups) > 0 {
 		for iNdEx := len(m.Groups) - 1; iNdEx >= 0; iNdEx-- {
 			{
@@ -2286,6 +1738,15 @@ func (m *ReplaceSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 			}
 			i--
 			dAtA[i] = 0x2a
+		}
+	}
+	if m.TenantChoice != nil {
+		{
+			size := m.TenantChoice.Size()
+			i -= size
+			if _, err := m.TenantChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
 		}
 	}
 	return len(dAtA) - i, nil
@@ -2340,27 +1801,6 @@ func (m *ReplaceSpecType_TenantRegex) MarshalToSizedBuffer(dAtA []byte) (int, er
 	dAtA[i] = 0x22
 	return len(dAtA) - i, nil
 }
-func (m *ReplaceSpecType_NewTenantInfo) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *ReplaceSpecType_NewTenantInfo) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	if m.NewTenantInfo != nil {
-		{
-			size, err := m.NewTenantInfo.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x32
-	}
-	return len(dAtA) - i, nil
-}
 func (m *GetSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -2386,15 +1826,6 @@ func (m *GetSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		i--
 		dAtA[i] = 0x38
 	}
-	if m.TenantChoice != nil {
-		{
-			size := m.TenantChoice.Size()
-			i -= size
-			if _, err := m.TenantChoice.MarshalTo(dAtA[i:]); err != nil {
-				return 0, err
-			}
-		}
-	}
 	if len(m.Groups) > 0 {
 		for iNdEx := len(m.Groups) - 1; iNdEx >= 0; iNdEx-- {
 			{
@@ -2407,6 +1838,15 @@ func (m *GetSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 			}
 			i--
 			dAtA[i] = 0x2a
+		}
+	}
+	if m.TenantChoice != nil {
+		{
+			size := m.TenantChoice.Size()
+			i -= size
+			if _, err := m.TenantChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
 		}
 	}
 	return len(dAtA) - i, nil
@@ -2461,146 +1901,6 @@ func (m *GetSpecType_TenantRegex) MarshalToSizedBuffer(dAtA []byte) (int, error)
 	dAtA[i] = 0x22
 	return len(dAtA) - i, nil
 }
-func (m *GetSpecType_NewTenantInfo) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *GetSpecType_NewTenantInfo) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	if m.NewTenantInfo != nil {
-		{
-			size, err := m.NewTenantInfo.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x32
-	}
-	return len(dAtA) - i, nil
-}
-func (m *TenantOwnerInfo) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *TenantOwnerInfo) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *TenantOwnerInfo) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if len(m.ContactNumber) > 0 {
-		i -= len(m.ContactNumber)
-		copy(dAtA[i:], m.ContactNumber)
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.ContactNumber)))
-		i--
-		dAtA[i] = 0x22
-	}
-	if len(m.Email) > 0 {
-		i -= len(m.Email)
-		copy(dAtA[i:], m.Email)
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.Email)))
-		i--
-		dAtA[i] = 0x1a
-	}
-	if len(m.LastName) > 0 {
-		i -= len(m.LastName)
-		copy(dAtA[i:], m.LastName)
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.LastName)))
-		i--
-		dAtA[i] = 0x12
-	}
-	if len(m.FirstName) > 0 {
-		i -= len(m.FirstName)
-		copy(dAtA[i:], m.FirstName)
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.FirstName)))
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
-}
-
-func (m *NewTenantInfo) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *NewTenantInfo) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *NewTenantInfo) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if len(m.UsagePlanName) > 0 {
-		i -= len(m.UsagePlanName)
-		copy(dAtA[i:], m.UsagePlanName)
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.UsagePlanName)))
-		i--
-		dAtA[i] = 0x2a
-	}
-	if m.BillingAddress != nil {
-		{
-			size, err := m.BillingAddress.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x22
-	}
-	if m.TenantOwnerInfo != nil {
-		{
-			size, err := m.TenantOwnerInfo.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x1a
-	}
-	if len(m.CompanyName) > 0 {
-		i -= len(m.CompanyName)
-		copy(dAtA[i:], m.CompanyName)
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.CompanyName)))
-		i--
-		dAtA[i] = 0x12
-	}
-	if len(m.Cname) > 0 {
-		i -= len(m.Cname)
-		copy(dAtA[i:], m.Cname)
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.Cname)))
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
-}
-
 func (m *AccessInfo) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -2740,18 +2040,6 @@ func (m *GlobalSpecType_TenantRegex) Size() (n int) {
 	n += 1 + l + sovTypes(uint64(l))
 	return n
 }
-func (m *GlobalSpecType_NewTenantInfo) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.NewTenantInfo != nil {
-		l = m.NewTenantInfo.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	return n
-}
 func (m *CreateSpecType) Size() (n int) {
 	if m == nil {
 		return 0
@@ -2802,18 +2090,6 @@ func (m *CreateSpecType_TenantRegex) Size() (n int) {
 	n += 1 + l + sovTypes(uint64(l))
 	return n
 }
-func (m *CreateSpecType_NewTenantInfo) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.NewTenantInfo != nil {
-		l = m.NewTenantInfo.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	return n
-}
 func (m *ReplaceSpecType) Size() (n int) {
 	if m == nil {
 		return 0
@@ -2862,18 +2138,6 @@ func (m *ReplaceSpecType_TenantRegex) Size() (n int) {
 	_ = l
 	l = len(m.TenantRegex)
 	n += 1 + l + sovTypes(uint64(l))
-	return n
-}
-func (m *ReplaceSpecType_NewTenantInfo) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.NewTenantInfo != nil {
-		l = m.NewTenantInfo.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
 	return n
 }
 func (m *GetSpecType) Size() (n int) {
@@ -2929,72 +2193,6 @@ func (m *GetSpecType_TenantRegex) Size() (n int) {
 	n += 1 + l + sovTypes(uint64(l))
 	return n
 }
-func (m *GetSpecType_NewTenantInfo) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.NewTenantInfo != nil {
-		l = m.NewTenantInfo.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *TenantOwnerInfo) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	l = len(m.FirstName)
-	if l > 0 {
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	l = len(m.LastName)
-	if l > 0 {
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	l = len(m.Email)
-	if l > 0 {
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	l = len(m.ContactNumber)
-	if l > 0 {
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-
-func (m *NewTenantInfo) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	l = len(m.Cname)
-	if l > 0 {
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	l = len(m.CompanyName)
-	if l > 0 {
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	if m.TenantOwnerInfo != nil {
-		l = m.TenantOwnerInfo.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	if m.BillingAddress != nil {
-		l = m.BillingAddress.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	l = len(m.UsagePlanName)
-	if l > 0 {
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-
 func (m *AccessInfo) Size() (n int) {
 	if m == nil {
 		return 0
@@ -3082,16 +2280,6 @@ func (this *GlobalSpecType_TenantRegex) String() string {
 	}, "")
 	return s
 }
-func (this *GlobalSpecType_NewTenantInfo) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&GlobalSpecType_NewTenantInfo{`,
-		`NewTenantInfo:` + strings.Replace(fmt.Sprintf("%v", this.NewTenantInfo), "NewTenantInfo", "NewTenantInfo", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
 func (this *CreateSpecType) String() string {
 	if this == nil {
 		return "nil"
@@ -3134,16 +2322,6 @@ func (this *CreateSpecType_TenantRegex) String() string {
 	}
 	s := strings.Join([]string{`&CreateSpecType_TenantRegex{`,
 		`TenantRegex:` + fmt.Sprintf("%v", this.TenantRegex) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *CreateSpecType_NewTenantInfo) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&CreateSpecType_NewTenantInfo{`,
-		`NewTenantInfo:` + strings.Replace(fmt.Sprintf("%v", this.NewTenantInfo), "NewTenantInfo", "NewTenantInfo", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -3194,16 +2372,6 @@ func (this *ReplaceSpecType_TenantRegex) String() string {
 	}, "")
 	return s
 }
-func (this *ReplaceSpecType_NewTenantInfo) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&ReplaceSpecType_NewTenantInfo{`,
-		`NewTenantInfo:` + strings.Replace(fmt.Sprintf("%v", this.NewTenantInfo), "NewTenantInfo", "NewTenantInfo", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
 func (this *GetSpecType) String() string {
 	if this == nil {
 		return "nil"
@@ -3247,43 +2415,6 @@ func (this *GetSpecType_TenantRegex) String() string {
 	}
 	s := strings.Join([]string{`&GetSpecType_TenantRegex{`,
 		`TenantRegex:` + fmt.Sprintf("%v", this.TenantRegex) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *GetSpecType_NewTenantInfo) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&GetSpecType_NewTenantInfo{`,
-		`NewTenantInfo:` + strings.Replace(fmt.Sprintf("%v", this.NewTenantInfo), "NewTenantInfo", "NewTenantInfo", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *TenantOwnerInfo) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&TenantOwnerInfo{`,
-		`FirstName:` + fmt.Sprintf("%v", this.FirstName) + `,`,
-		`LastName:` + fmt.Sprintf("%v", this.LastName) + `,`,
-		`Email:` + fmt.Sprintf("%v", this.Email) + `,`,
-		`ContactNumber:` + fmt.Sprintf("%v", this.ContactNumber) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *NewTenantInfo) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&NewTenantInfo{`,
-		`Cname:` + fmt.Sprintf("%v", this.Cname) + `,`,
-		`CompanyName:` + fmt.Sprintf("%v", this.CompanyName) + `,`,
-		`TenantOwnerInfo:` + strings.Replace(this.TenantOwnerInfo.String(), "TenantOwnerInfo", "TenantOwnerInfo", 1) + `,`,
-		`BillingAddress:` + strings.Replace(fmt.Sprintf("%v", this.BillingAddress), "GlobalSpecType", "contact.GlobalSpecType", 1) + `,`,
-		`UsagePlanName:` + fmt.Sprintf("%v", this.UsagePlanName) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -3596,41 +2727,6 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			iNdEx = postIndex
-		case 6:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field NewTenantInfo", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &NewTenantInfo{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.TenantChoice = &GlobalSpecType_NewTenantInfo{v}
-			iNdEx = postIndex
 		case 7:
 			if wireType != 0 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Status", wireType)
@@ -3836,41 +2932,6 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			iNdEx = postIndex
-		case 6:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field NewTenantInfo", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &NewTenantInfo{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.TenantChoice = &CreateSpecType_NewTenantInfo{v}
-			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipTypes(dAtA[iNdEx:])
@@ -4056,41 +3117,6 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 			if err := m.Groups[len(m.Groups)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
-			iNdEx = postIndex
-		case 6:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field NewTenantInfo", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &NewTenantInfo{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.TenantChoice = &ReplaceSpecType_NewTenantInfo{v}
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
@@ -4278,41 +3304,6 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			iNdEx = postIndex
-		case 6:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field NewTenantInfo", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &NewTenantInfo{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.TenantChoice = &GetSpecType_NewTenantInfo{v}
-			iNdEx = postIndex
 		case 7:
 			if wireType != 0 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Status", wireType)
@@ -4332,408 +3323,6 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 					break
 				}
 			}
-		default:
-			iNdEx = preIndex
-			skippy, err := skipTypes(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if skippy < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if (iNdEx + skippy) < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *TenantOwnerInfo) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowTypes
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: TenantOwnerInfo: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: TenantOwnerInfo: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field FirstName", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.FirstName = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field LastName", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.LastName = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 3:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Email", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Email = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 4:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ContactNumber", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.ContactNumber = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipTypes(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if skippy < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if (iNdEx + skippy) < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *NewTenantInfo) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowTypes
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: NewTenantInfo: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: NewTenantInfo: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Cname", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Cname = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field CompanyName", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.CompanyName = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 3:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field TenantOwnerInfo", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.TenantOwnerInfo == nil {
-				m.TenantOwnerInfo = &TenantOwnerInfo{}
-			}
-			if err := m.TenantOwnerInfo.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 4:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field BillingAddress", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.BillingAddress == nil {
-				m.BillingAddress = &contact.GlobalSpecType{}
-			}
-			if err := m.BillingAddress.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 5:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field UsagePlanName", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.UsagePlanName = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipTypes(dAtA[iNdEx:])

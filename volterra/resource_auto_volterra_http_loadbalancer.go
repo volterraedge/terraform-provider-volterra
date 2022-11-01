@@ -18,12 +18,14 @@ import (
 
 	ves_io_schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
 	ves_io_schema_app_firewall "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/app_firewall"
+	ves_io_schema_cluster "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/cluster"
 	ves_io_schema_policy "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/policy"
 	ves_io_schema_rate_limiter "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/rate_limiter"
 	ves_io_schema_route "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/route"
 	ves_io_schema_service_policy_rule "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/service_policy_rule"
 	ves_io_schema_views "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views"
 	ves_io_schema_views_http_loadbalancer "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/http_loadbalancer"
+	ves_io_schema_views_origin_pool "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/origin_pool"
 	ves_io_schema_views_rate_limiter_policy "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/rate_limiter_policy"
 	ves_io_schema_virtual_host "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/virtual_host"
 	ves_io_schema_waf_rule_list "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/waf_rule_list"
@@ -5701,6 +5703,1219 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 
 							Type:     schema.TypeBool,
 							Optional: true,
+						},
+					},
+				},
+			},
+
+			"default_pool": {
+
+				Type:     schema.TypeSet,
+				Optional: true,
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+
+						"advanced_options": {
+
+							Type:     schema.TypeSet,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"circuit_breaker": {
+
+										Type:     schema.TypeSet,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{},
+										},
+									},
+
+									"default_circuit_breaker": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+
+									"disable_circuit_breaker": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+
+									"connection_timeout": {
+										Type:     schema.TypeInt,
+										Optional: true,
+									},
+
+									"header_transformation_type": {
+
+										Type:     schema.TypeSet,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"default_header_transformation": {
+
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
+
+												"proper_case_header_transformation": {
+
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
+											},
+										},
+									},
+
+									"http2_options": {
+
+										Type:     schema.TypeSet,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{},
+										},
+									},
+
+									"http_idle_timeout": {
+										Type:     schema.TypeInt,
+										Optional: true,
+									},
+
+									"disable_outlier_detection": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+
+									"outlier_detection": {
+
+										Type:     schema.TypeSet,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{},
+										},
+									},
+
+									"no_panic_threshold": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+
+									"panic_threshold": {
+
+										Type:     schema.TypeInt,
+										Optional: true,
+									},
+
+									"disable_subsets": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+
+									"enable_subsets": {
+
+										Type:     schema.TypeSet,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"endpoint_subsets": {
+
+													Type:     schema.TypeList,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{},
+													},
+												},
+
+												"any_endpoint": {
+
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
+
+												"default_subset": {
+
+													Type:     schema.TypeSet,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"default_subset": {
+																Type:     schema.TypeMap,
+																Optional: true,
+															},
+														},
+													},
+												},
+
+												"fail_request": {
+
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
+											},
+										},
+									},
+								},
+							},
+						},
+
+						"endpoint_selection": {
+							Type:     schema.TypeString,
+							Optional: true,
+						},
+
+						"health_check_port": {
+
+							Type:     schema.TypeInt,
+							Optional: true,
+						},
+
+						"same_as_endpoint_port": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+
+						"healthcheck": {
+
+							Type:     schema.TypeList,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"name": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+									"namespace": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+									"tenant": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+								},
+							},
+						},
+
+						"loadbalancer_algorithm": {
+							Type:     schema.TypeString,
+							Optional: true,
+						},
+
+						"origin_servers": {
+
+							Type:     schema.TypeList,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"consul_service": {
+
+										Type:     schema.TypeSet,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"inside_network": {
+
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
+
+												"outside_network": {
+
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
+
+												"service_name": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+
+												"site_locator": {
+
+													Type:     schema.TypeSet,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"site": {
+
+																Type:     schema.TypeSet,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"kind": {
+																			Type:     schema.TypeString,
+																			Computed: true,
+																		},
+
+																		"name": {
+																			Type:     schema.TypeString,
+																			Optional: true,
+																		},
+																		"namespace": {
+																			Type:     schema.TypeString,
+																			Optional: true,
+																		},
+																		"tenant": {
+																			Type:     schema.TypeString,
+																			Optional: true,
+																		},
+																	},
+																},
+															},
+
+															"virtual_site": {
+
+																Type:     schema.TypeSet,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"kind": {
+																			Type:     schema.TypeString,
+																			Computed: true,
+																		},
+
+																		"name": {
+																			Type:     schema.TypeString,
+																			Optional: true,
+																		},
+																		"namespace": {
+																			Type:     schema.TypeString,
+																			Optional: true,
+																		},
+																		"tenant": {
+																			Type:     schema.TypeString,
+																			Optional: true,
+																		},
+																	},
+																},
+															},
+														},
+													},
+												},
+											},
+										},
+									},
+
+									"custom_endpoint_object": {
+
+										Type:     schema.TypeSet,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"endpoint": {
+
+													Type:     schema.TypeSet,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"name": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+															"namespace": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+															"tenant": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+														},
+													},
+												},
+											},
+										},
+									},
+
+									"k8s_service": {
+
+										Type:     schema.TypeSet,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"inside_network": {
+
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
+
+												"outside_network": {
+
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
+
+												"vk8s_networks": {
+
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
+
+												"service_name": {
+
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+
+												"service_selector": {
+
+													Type:     schema.TypeSet,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"expressions": {
+
+																Type: schema.TypeList,
+
+																Required: true,
+																Elem: &schema.Schema{
+																	Type: schema.TypeString,
+																},
+															},
+														},
+													},
+												},
+
+												"site_locator": {
+
+													Type:     schema.TypeSet,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"site": {
+
+																Type:     schema.TypeSet,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"kind": {
+																			Type:     schema.TypeString,
+																			Computed: true,
+																		},
+
+																		"name": {
+																			Type:     schema.TypeString,
+																			Optional: true,
+																		},
+																		"namespace": {
+																			Type:     schema.TypeString,
+																			Optional: true,
+																		},
+																		"tenant": {
+																			Type:     schema.TypeString,
+																			Optional: true,
+																		},
+																	},
+																},
+															},
+
+															"virtual_site": {
+
+																Type:     schema.TypeSet,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"kind": {
+																			Type:     schema.TypeString,
+																			Computed: true,
+																		},
+
+																		"name": {
+																			Type:     schema.TypeString,
+																			Optional: true,
+																		},
+																		"namespace": {
+																			Type:     schema.TypeString,
+																			Optional: true,
+																		},
+																		"tenant": {
+																			Type:     schema.TypeString,
+																			Optional: true,
+																		},
+																	},
+																},
+															},
+														},
+													},
+												},
+											},
+										},
+									},
+
+									"private_ip": {
+
+										Type:     schema.TypeSet,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"ip": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+
+												"inside_network": {
+
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
+
+												"outside_network": {
+
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
+
+												"site_locator": {
+
+													Type:     schema.TypeSet,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"site": {
+
+																Type:     schema.TypeSet,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"kind": {
+																			Type:     schema.TypeString,
+																			Computed: true,
+																		},
+
+																		"name": {
+																			Type:     schema.TypeString,
+																			Optional: true,
+																		},
+																		"namespace": {
+																			Type:     schema.TypeString,
+																			Optional: true,
+																		},
+																		"tenant": {
+																			Type:     schema.TypeString,
+																			Optional: true,
+																		},
+																	},
+																},
+															},
+
+															"virtual_site": {
+
+																Type:     schema.TypeSet,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"kind": {
+																			Type:     schema.TypeString,
+																			Computed: true,
+																		},
+
+																		"name": {
+																			Type:     schema.TypeString,
+																			Optional: true,
+																		},
+																		"namespace": {
+																			Type:     schema.TypeString,
+																			Optional: true,
+																		},
+																		"tenant": {
+																			Type:     schema.TypeString,
+																			Optional: true,
+																		},
+																	},
+																},
+															},
+														},
+													},
+												},
+											},
+										},
+									},
+
+									"private_name": {
+
+										Type:     schema.TypeSet,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"dns_name": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+
+												"inside_network": {
+
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
+
+												"outside_network": {
+
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
+
+												"site_locator": {
+
+													Type:     schema.TypeSet,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"site": {
+
+																Type:     schema.TypeSet,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"kind": {
+																			Type:     schema.TypeString,
+																			Computed: true,
+																		},
+
+																		"name": {
+																			Type:     schema.TypeString,
+																			Optional: true,
+																		},
+																		"namespace": {
+																			Type:     schema.TypeString,
+																			Optional: true,
+																		},
+																		"tenant": {
+																			Type:     schema.TypeString,
+																			Optional: true,
+																		},
+																	},
+																},
+															},
+
+															"virtual_site": {
+
+																Type:     schema.TypeSet,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"kind": {
+																			Type:     schema.TypeString,
+																			Computed: true,
+																		},
+
+																		"name": {
+																			Type:     schema.TypeString,
+																			Optional: true,
+																		},
+																		"namespace": {
+																			Type:     schema.TypeString,
+																			Optional: true,
+																		},
+																		"tenant": {
+																			Type:     schema.TypeString,
+																			Optional: true,
+																		},
+																	},
+																},
+															},
+														},
+													},
+												},
+											},
+										},
+									},
+
+									"public_ip": {
+
+										Type:     schema.TypeSet,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"ip": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+											},
+										},
+									},
+
+									"public_name": {
+
+										Type:     schema.TypeSet,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"dns_name": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+											},
+										},
+									},
+
+									"vn_private_ip": {
+
+										Type:     schema.TypeSet,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"ip": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+
+												"virtual_network": {
+
+													Type:     schema.TypeSet,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"name": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+															"namespace": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+															"tenant": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+														},
+													},
+												},
+											},
+										},
+									},
+
+									"vn_private_name": {
+
+										Type:     schema.TypeSet,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"dns_name": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+
+												"private_network": {
+
+													Type:     schema.TypeSet,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"name": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+															"namespace": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+															"tenant": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+														},
+													},
+												},
+											},
+										},
+									},
+
+									"labels": {
+										Type:     schema.TypeMap,
+										Optional: true,
+									},
+								},
+							},
+						},
+
+						"automatic_port": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+
+						"port": {
+
+							Type:     schema.TypeInt,
+							Optional: true,
+						},
+
+						"no_tls": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+
+						"use_tls": {
+
+							Type:     schema.TypeSet,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"no_mtls": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+
+									"use_mtls": {
+
+										Type:     schema.TypeSet,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"tls_certificates": {
+
+													Type:     schema.TypeList,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"certificate_url": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+
+															"description": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+
+															"custom_hash_algorithms": {
+
+																Type:     schema.TypeSet,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"hash_algorithms": {
+
+																			Type: schema.TypeList,
+
+																			Required: true,
+																			Elem: &schema.Schema{
+																				Type: schema.TypeString,
+																			},
+																		},
+																	},
+																},
+															},
+
+															"disable_ocsp_stapling": {
+
+																Type:     schema.TypeSet,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{},
+																},
+															},
+
+															"use_system_defaults": {
+
+																Type:     schema.TypeSet,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{},
+																},
+															},
+
+															"private_key": {
+
+																Type:     schema.TypeSet,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"blindfold_secret_info_internal": {
+
+																			Type:     schema.TypeSet,
+																			Optional: true,
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{
+
+																					"decryption_provider": {
+																						Type:     schema.TypeString,
+																						Optional: true,
+																					},
+
+																					"location": {
+																						Type:     schema.TypeString,
+																						Optional: true,
+																					},
+
+																					"store_provider": {
+																						Type:     schema.TypeString,
+																						Optional: true,
+																					},
+																				},
+																			},
+																		},
+
+																		"secret_encoding_type": {
+																			Type:     schema.TypeString,
+																			Optional: true,
+																		},
+
+																		"blindfold_secret_info": {
+
+																			Type:     schema.TypeSet,
+																			Optional: true,
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{
+
+																					"decryption_provider": {
+																						Type:     schema.TypeString,
+																						Optional: true,
+																					},
+
+																					"location": {
+																						Type:     schema.TypeString,
+																						Optional: true,
+																					},
+
+																					"store_provider": {
+																						Type:     schema.TypeString,
+																						Optional: true,
+																					},
+																				},
+																			},
+																		},
+
+																		"clear_secret_info": {
+
+																			Type:     schema.TypeSet,
+																			Optional: true,
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{
+
+																					"provider": {
+																						Type:     schema.TypeString,
+																						Optional: true,
+																					},
+
+																					"url": {
+																						Type:     schema.TypeString,
+																						Optional: true,
+																					},
+																				},
+																			},
+																		},
+
+																		"vault_secret_info": {
+
+																			Type:     schema.TypeSet,
+																			Optional: true,
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{
+
+																					"key": {
+																						Type:     schema.TypeString,
+																						Optional: true,
+																					},
+
+																					"location": {
+																						Type:     schema.TypeString,
+																						Optional: true,
+																					},
+
+																					"provider": {
+																						Type:     schema.TypeString,
+																						Optional: true,
+																					},
+
+																					"secret_encoding": {
+																						Type:     schema.TypeString,
+																						Optional: true,
+																					},
+
+																					"version": {
+																						Type:     schema.TypeInt,
+																						Optional: true,
+																					},
+																				},
+																			},
+																		},
+
+																		"wingman_secret_info": {
+
+																			Type:     schema.TypeSet,
+																			Optional: true,
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{
+
+																					"name": {
+																						Type:     schema.TypeString,
+																						Optional: true,
+																					},
+																				},
+																			},
+																		},
+																	},
+																},
+															},
+														},
+													},
+												},
+											},
+										},
+									},
+
+									"skip_server_verification": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+
+									"use_server_verification": {
+
+										Type:     schema.TypeSet,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"trusted_ca_url": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+											},
+										},
+									},
+
+									"volterra_trusted_ca": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+
+									"disable_sni": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+
+									"sni": {
+
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+
+									"use_host_header_as_sni": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+
+									"tls_config": {
+
+										Type:     schema.TypeSet,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"custom_security": {
+
+													Type:     schema.TypeSet,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"cipher_suites": {
+
+																Type: schema.TypeList,
+
+																Required: true,
+																Elem: &schema.Schema{
+																	Type: schema.TypeString,
+																},
+															},
+
+															"max_version": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+
+															"min_version": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+														},
+													},
+												},
+
+												"default_security": {
+
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
+
+												"low_security": {
+
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
+
+												"medium_security": {
+
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
+											},
+										},
+									},
+								},
+							},
+						},
+
+						"view_internal": {
+
+							Type:     schema.TypeSet,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"name": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+									"namespace": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+									"tenant": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+
+			"default_pool_list": {
+
+				Type:     schema.TypeSet,
+				Optional: true,
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+
+						"pools": {
+
+							Type:     schema.TypeList,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"endpoint_subsets": {
+										Type:     schema.TypeMap,
+										Optional: true,
+									},
+
+									"cluster": {
+
+										Type:     schema.TypeSet,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"kind": {
+													Type:     schema.TypeString,
+													Computed: true,
+												},
+
+												"name": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+												"namespace": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+												"tenant": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+											},
+										},
+									},
+
+									"pool": {
+
+										Type:     schema.TypeSet,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"kind": {
+													Type:     schema.TypeString,
+													Computed: true,
+												},
+
+												"name": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+												"namespace": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+												"tenant": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+											},
+										},
+									},
+
+									"priority": {
+										Type:     schema.TypeInt,
+										Optional: true,
+									},
+
+									"weight": {
+										Type:     schema.TypeInt,
+										Optional: true,
+									},
+								},
+							},
 						},
 					},
 				},
@@ -15705,6 +16920,1685 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 					strictSniHostHeaderCheckChoiceInt := &ves_io_schema_views_http_loadbalancer.AdvancedOptionsType_EnableStrictSniHostHeaderCheck{}
 					strictSniHostHeaderCheckChoiceInt.EnableStrictSniHostHeaderCheck = &ves_io_schema.Empty{}
 					moreOption.StrictSniHostHeaderCheckChoice = strictSniHostHeaderCheckChoiceInt
+				}
+
+			}
+
+		}
+
+	}
+
+	//origin_pool_choice
+
+	originPoolChoiceTypeFound := false
+
+	if v, ok := d.GetOk("default_pool"); ok && !originPoolChoiceTypeFound {
+
+		originPoolChoiceTypeFound = true
+		originPoolChoiceInt := &ves_io_schema_views_http_loadbalancer.CreateSpecType_DefaultPool{}
+		originPoolChoiceInt.DefaultPool = &ves_io_schema_views_origin_pool.GlobalSpecType{}
+		createSpec.OriginPoolChoice = originPoolChoiceInt
+
+		sl := v.(*schema.Set).List()
+		for _, set := range sl {
+			cs := set.(map[string]interface{})
+
+			if v, ok := cs["advanced_options"]; ok && !isIntfNil(v) {
+
+				sl := v.(*schema.Set).List()
+				advancedOptions := &ves_io_schema_views_origin_pool.OriginPoolAdvancedOptions{}
+				originPoolChoiceInt.DefaultPool.AdvancedOptions = advancedOptions
+				for _, set := range sl {
+					advancedOptionsMapStrToI := set.(map[string]interface{})
+
+					circuitBreakerChoiceTypeFound := false
+
+					if v, ok := advancedOptionsMapStrToI["circuit_breaker"]; ok && !isIntfNil(v) && !circuitBreakerChoiceTypeFound {
+
+						circuitBreakerChoiceTypeFound = true
+						_ = v
+					}
+
+					if v, ok := advancedOptionsMapStrToI["default_circuit_breaker"]; ok && !isIntfNil(v) && !circuitBreakerChoiceTypeFound {
+
+						circuitBreakerChoiceTypeFound = true
+
+						if v.(bool) {
+							circuitBreakerChoiceInt := &ves_io_schema_views_origin_pool.OriginPoolAdvancedOptions_DefaultCircuitBreaker{}
+							circuitBreakerChoiceInt.DefaultCircuitBreaker = &ves_io_schema.Empty{}
+							advancedOptions.CircuitBreakerChoice = circuitBreakerChoiceInt
+						}
+
+					}
+
+					if v, ok := advancedOptionsMapStrToI["disable_circuit_breaker"]; ok && !isIntfNil(v) && !circuitBreakerChoiceTypeFound {
+
+						circuitBreakerChoiceTypeFound = true
+
+						if v.(bool) {
+							circuitBreakerChoiceInt := &ves_io_schema_views_origin_pool.OriginPoolAdvancedOptions_DisableCircuitBreaker{}
+							circuitBreakerChoiceInt.DisableCircuitBreaker = &ves_io_schema.Empty{}
+							advancedOptions.CircuitBreakerChoice = circuitBreakerChoiceInt
+						}
+
+					}
+
+					if w, ok := advancedOptionsMapStrToI["connection_timeout"]; ok && !isIntfNil(w) {
+						advancedOptions.ConnectionTimeout = uint32(w.(int))
+					}
+
+					if v, ok := advancedOptionsMapStrToI["header_transformation_type"]; ok && !isIntfNil(v) {
+
+						sl := v.(*schema.Set).List()
+						headerTransformationType := &ves_io_schema.HeaderTransformationType{}
+						advancedOptions.HeaderTransformationType = headerTransformationType
+						for _, set := range sl {
+							headerTransformationTypeMapStrToI := set.(map[string]interface{})
+
+							headerTransformationChoiceTypeFound := false
+
+							if v, ok := headerTransformationTypeMapStrToI["default_header_transformation"]; ok && !isIntfNil(v) && !headerTransformationChoiceTypeFound {
+
+								headerTransformationChoiceTypeFound = true
+
+								if v.(bool) {
+									headerTransformationChoiceInt := &ves_io_schema.HeaderTransformationType_DefaultHeaderTransformation{}
+									headerTransformationChoiceInt.DefaultHeaderTransformation = &ves_io_schema.Empty{}
+									headerTransformationType.HeaderTransformationChoice = headerTransformationChoiceInt
+								}
+
+							}
+
+							if v, ok := headerTransformationTypeMapStrToI["proper_case_header_transformation"]; ok && !isIntfNil(v) && !headerTransformationChoiceTypeFound {
+
+								headerTransformationChoiceTypeFound = true
+
+								if v.(bool) {
+									headerTransformationChoiceInt := &ves_io_schema.HeaderTransformationType_ProperCaseHeaderTransformation{}
+									headerTransformationChoiceInt.ProperCaseHeaderTransformation = &ves_io_schema.Empty{}
+									headerTransformationType.HeaderTransformationChoice = headerTransformationChoiceInt
+								}
+
+							}
+
+						}
+
+					}
+
+					if v, ok := advancedOptionsMapStrToI["http2_options"]; ok && !isIntfNil(v) {
+
+						sl := v.(*schema.Set).List()
+						http2Options := &ves_io_schema_cluster.Http2ProtocolOptions{}
+						advancedOptions.Http2Options = http2Options
+						for _, set := range sl {
+							_ = set.(map[string]interface{})
+
+						}
+
+					}
+
+					if w, ok := advancedOptionsMapStrToI["http_idle_timeout"]; ok && !isIntfNil(w) {
+						advancedOptions.HttpIdleTimeout = uint32(w.(int))
+					}
+
+					outlierDetectionChoiceTypeFound := false
+
+					if v, ok := advancedOptionsMapStrToI["disable_outlier_detection"]; ok && !isIntfNil(v) && !outlierDetectionChoiceTypeFound {
+
+						outlierDetectionChoiceTypeFound = true
+
+						if v.(bool) {
+							outlierDetectionChoiceInt := &ves_io_schema_views_origin_pool.OriginPoolAdvancedOptions_DisableOutlierDetection{}
+							outlierDetectionChoiceInt.DisableOutlierDetection = &ves_io_schema.Empty{}
+							advancedOptions.OutlierDetectionChoice = outlierDetectionChoiceInt
+						}
+
+					}
+
+					if v, ok := advancedOptionsMapStrToI["outlier_detection"]; ok && !isIntfNil(v) && !outlierDetectionChoiceTypeFound {
+
+						outlierDetectionChoiceTypeFound = true
+						_ = v
+					}
+
+					panicThresholdTypeTypeFound := false
+
+					if v, ok := advancedOptionsMapStrToI["no_panic_threshold"]; ok && !isIntfNil(v) && !panicThresholdTypeTypeFound {
+
+						panicThresholdTypeTypeFound = true
+
+						if v.(bool) {
+							panicThresholdTypeInt := &ves_io_schema_views_origin_pool.OriginPoolAdvancedOptions_NoPanicThreshold{}
+							panicThresholdTypeInt.NoPanicThreshold = &ves_io_schema.Empty{}
+							advancedOptions.PanicThresholdType = panicThresholdTypeInt
+						}
+
+					}
+
+					if v, ok := advancedOptionsMapStrToI["panic_threshold"]; ok && !isIntfNil(v) && !panicThresholdTypeTypeFound {
+
+						panicThresholdTypeTypeFound = true
+						panicThresholdTypeInt := &ves_io_schema_views_origin_pool.OriginPoolAdvancedOptions_PanicThreshold{}
+
+						advancedOptions.PanicThresholdType = panicThresholdTypeInt
+
+						panicThresholdTypeInt.PanicThreshold = uint32(v.(int))
+
+					}
+
+					subsetChoiceTypeFound := false
+
+					if v, ok := advancedOptionsMapStrToI["disable_subsets"]; ok && !isIntfNil(v) && !subsetChoiceTypeFound {
+
+						subsetChoiceTypeFound = true
+
+						if v.(bool) {
+							subsetChoiceInt := &ves_io_schema_views_origin_pool.OriginPoolAdvancedOptions_DisableSubsets{}
+							subsetChoiceInt.DisableSubsets = &ves_io_schema.Empty{}
+							advancedOptions.SubsetChoice = subsetChoiceInt
+						}
+
+					}
+
+					if v, ok := advancedOptionsMapStrToI["enable_subsets"]; ok && !isIntfNil(v) && !subsetChoiceTypeFound {
+
+						subsetChoiceTypeFound = true
+						subsetChoiceInt := &ves_io_schema_views_origin_pool.OriginPoolAdvancedOptions_EnableSubsets{}
+						subsetChoiceInt.EnableSubsets = &ves_io_schema_views_origin_pool.OriginPoolSubsets{}
+						advancedOptions.SubsetChoice = subsetChoiceInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["endpoint_subsets"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								endpointSubsets := make([]*ves_io_schema_cluster.EndpointSubsetSelectorType, len(sl))
+								subsetChoiceInt.EnableSubsets.EndpointSubsets = endpointSubsets
+								for i, set := range sl {
+									endpointSubsets[i] = &ves_io_schema_cluster.EndpointSubsetSelectorType{}
+									_ = set.(map[string]interface{})
+
+								}
+
+							}
+
+							fallbackPolicyChoiceTypeFound := false
+
+							if v, ok := cs["any_endpoint"]; ok && !isIntfNil(v) && !fallbackPolicyChoiceTypeFound {
+
+								fallbackPolicyChoiceTypeFound = true
+
+								if v.(bool) {
+									fallbackPolicyChoiceInt := &ves_io_schema_views_origin_pool.OriginPoolSubsets_AnyEndpoint{}
+									fallbackPolicyChoiceInt.AnyEndpoint = &ves_io_schema.Empty{}
+									subsetChoiceInt.EnableSubsets.FallbackPolicyChoice = fallbackPolicyChoiceInt
+								}
+
+							}
+
+							if v, ok := cs["default_subset"]; ok && !isIntfNil(v) && !fallbackPolicyChoiceTypeFound {
+
+								fallbackPolicyChoiceTypeFound = true
+								fallbackPolicyChoiceInt := &ves_io_schema_views_origin_pool.OriginPoolSubsets_DefaultSubset{}
+								fallbackPolicyChoiceInt.DefaultSubset = &ves_io_schema_views_origin_pool.OriginPoolDefaultSubset{}
+								subsetChoiceInt.EnableSubsets.FallbackPolicyChoice = fallbackPolicyChoiceInt
+
+								sl := v.(*schema.Set).List()
+								for _, set := range sl {
+									cs := set.(map[string]interface{})
+
+									if v, ok := cs["default_subset"]; ok && !isIntfNil(v) {
+
+										ms := map[string]string{}
+										for k, v := range v.(map[string]interface{}) {
+											ms[k] = v.(string)
+										}
+										fallbackPolicyChoiceInt.DefaultSubset.DefaultSubset = ms
+									}
+
+								}
+
+							}
+
+							if v, ok := cs["fail_request"]; ok && !isIntfNil(v) && !fallbackPolicyChoiceTypeFound {
+
+								fallbackPolicyChoiceTypeFound = true
+
+								if v.(bool) {
+									fallbackPolicyChoiceInt := &ves_io_schema_views_origin_pool.OriginPoolSubsets_FailRequest{}
+									fallbackPolicyChoiceInt.FailRequest = &ves_io_schema.Empty{}
+									subsetChoiceInt.EnableSubsets.FallbackPolicyChoice = fallbackPolicyChoiceInt
+								}
+
+							}
+
+						}
+
+					}
+
+				}
+
+			}
+
+			if v, ok := cs["endpoint_selection"]; ok && !isIntfNil(v) {
+
+				originPoolChoiceInt.DefaultPool.EndpointSelection = ves_io_schema_cluster.EndpointSelectionPolicy(ves_io_schema_cluster.EndpointSelectionPolicy_value[v.(string)])
+
+			}
+
+			healthCheckPortChoiceTypeFound := false
+
+			if v, ok := cs["health_check_port"]; ok && !isIntfNil(v) && !healthCheckPortChoiceTypeFound {
+
+				healthCheckPortChoiceTypeFound = true
+				healthCheckPortChoiceInt := &ves_io_schema_views_origin_pool.GlobalSpecType_HealthCheckPort{}
+
+				originPoolChoiceInt.DefaultPool.HealthCheckPortChoice = healthCheckPortChoiceInt
+
+				healthCheckPortChoiceInt.HealthCheckPort = uint32(v.(int))
+
+			}
+
+			if v, ok := cs["same_as_endpoint_port"]; ok && !isIntfNil(v) && !healthCheckPortChoiceTypeFound {
+
+				healthCheckPortChoiceTypeFound = true
+
+				if v.(bool) {
+					healthCheckPortChoiceInt := &ves_io_schema_views_origin_pool.GlobalSpecType_SameAsEndpointPort{}
+					healthCheckPortChoiceInt.SameAsEndpointPort = &ves_io_schema.Empty{}
+					originPoolChoiceInt.DefaultPool.HealthCheckPortChoice = healthCheckPortChoiceInt
+				}
+
+			}
+
+			if v, ok := cs["healthcheck"]; ok && !isIntfNil(v) {
+
+				sl := v.([]interface{})
+				healthcheckInt := make([]*ves_io_schema_views.ObjectRefType, len(sl))
+				originPoolChoiceInt.DefaultPool.Healthcheck = healthcheckInt
+				for i, ps := range sl {
+
+					hMapToStrVal := ps.(map[string]interface{})
+					healthcheckInt[i] = &ves_io_schema_views.ObjectRefType{}
+
+					if v, ok := hMapToStrVal["name"]; ok && !isIntfNil(v) {
+						healthcheckInt[i].Name = v.(string)
+					}
+
+					if v, ok := hMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+						healthcheckInt[i].Namespace = v.(string)
+					}
+
+					if v, ok := hMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+						healthcheckInt[i].Tenant = v.(string)
+					}
+
+				}
+
+			}
+
+			if v, ok := cs["loadbalancer_algorithm"]; ok && !isIntfNil(v) {
+
+				originPoolChoiceInt.DefaultPool.LoadbalancerAlgorithm = ves_io_schema_cluster.LoadbalancerAlgorithm(ves_io_schema_cluster.LoadbalancerAlgorithm_value[v.(string)])
+
+			}
+
+			if v, ok := cs["origin_servers"]; ok && !isIntfNil(v) {
+
+				sl := v.([]interface{})
+				originServers := make([]*ves_io_schema_views_origin_pool.OriginServerType, len(sl))
+				originPoolChoiceInt.DefaultPool.OriginServers = originServers
+				for i, set := range sl {
+					originServers[i] = &ves_io_schema_views_origin_pool.OriginServerType{}
+					originServersMapStrToI := set.(map[string]interface{})
+
+					choiceTypeFound := false
+
+					if v, ok := originServersMapStrToI["consul_service"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+						choiceTypeFound = true
+						choiceInt := &ves_io_schema_views_origin_pool.OriginServerType_ConsulService{}
+						choiceInt.ConsulService = &ves_io_schema_views_origin_pool.OriginServerConsulService{}
+						originServers[i].Choice = choiceInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							networkChoiceTypeFound := false
+
+							if v, ok := cs["inside_network"]; ok && !isIntfNil(v) && !networkChoiceTypeFound {
+
+								networkChoiceTypeFound = true
+
+								if v.(bool) {
+									networkChoiceInt := &ves_io_schema_views_origin_pool.OriginServerConsulService_InsideNetwork{}
+									networkChoiceInt.InsideNetwork = &ves_io_schema.Empty{}
+									choiceInt.ConsulService.NetworkChoice = networkChoiceInt
+								}
+
+							}
+
+							if v, ok := cs["outside_network"]; ok && !isIntfNil(v) && !networkChoiceTypeFound {
+
+								networkChoiceTypeFound = true
+
+								if v.(bool) {
+									networkChoiceInt := &ves_io_schema_views_origin_pool.OriginServerConsulService_OutsideNetwork{}
+									networkChoiceInt.OutsideNetwork = &ves_io_schema.Empty{}
+									choiceInt.ConsulService.NetworkChoice = networkChoiceInt
+								}
+
+							}
+
+							if v, ok := cs["service_name"]; ok && !isIntfNil(v) {
+
+								choiceInt.ConsulService.ServiceName = v.(string)
+
+							}
+
+							if v, ok := cs["site_locator"]; ok && !isIntfNil(v) {
+
+								sl := v.(*schema.Set).List()
+								siteLocator := &ves_io_schema_views.SiteLocator{}
+								choiceInt.ConsulService.SiteLocator = siteLocator
+								for _, set := range sl {
+									siteLocatorMapStrToI := set.(map[string]interface{})
+
+									choiceTypeFound := false
+
+									if v, ok := siteLocatorMapStrToI["site"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+										choiceTypeFound = true
+										choiceInt := &ves_io_schema_views.SiteLocator_Site{}
+										choiceInt.Site = &ves_io_schema_views.ObjectRefType{}
+										siteLocator.Choice = choiceInt
+
+										sl := v.(*schema.Set).List()
+										for _, set := range sl {
+											cs := set.(map[string]interface{})
+
+											if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+												choiceInt.Site.Name = v.(string)
+
+											}
+
+											if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+												choiceInt.Site.Namespace = v.(string)
+
+											}
+
+											if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+												choiceInt.Site.Tenant = v.(string)
+
+											}
+
+										}
+
+									}
+
+									if v, ok := siteLocatorMapStrToI["virtual_site"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+										choiceTypeFound = true
+										choiceInt := &ves_io_schema_views.SiteLocator_VirtualSite{}
+										choiceInt.VirtualSite = &ves_io_schema_views.ObjectRefType{}
+										siteLocator.Choice = choiceInt
+
+										sl := v.(*schema.Set).List()
+										for _, set := range sl {
+											cs := set.(map[string]interface{})
+
+											if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+												choiceInt.VirtualSite.Name = v.(string)
+
+											}
+
+											if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+												choiceInt.VirtualSite.Namespace = v.(string)
+
+											}
+
+											if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+												choiceInt.VirtualSite.Tenant = v.(string)
+
+											}
+
+										}
+
+									}
+
+								}
+
+							}
+
+						}
+
+					}
+
+					if v, ok := originServersMapStrToI["custom_endpoint_object"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+						choiceTypeFound = true
+						choiceInt := &ves_io_schema_views_origin_pool.OriginServerType_CustomEndpointObject{}
+						choiceInt.CustomEndpointObject = &ves_io_schema_views_origin_pool.OriginServerCustomEndpoint{}
+						originServers[i].Choice = choiceInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["endpoint"]; ok && !isIntfNil(v) {
+
+								sl := v.(*schema.Set).List()
+								endpointInt := &ves_io_schema_views.ObjectRefType{}
+								choiceInt.CustomEndpointObject.Endpoint = endpointInt
+
+								for _, set := range sl {
+									eMapToStrVal := set.(map[string]interface{})
+									if val, ok := eMapToStrVal["name"]; ok && !isIntfNil(v) {
+										endpointInt.Name = val.(string)
+									}
+									if val, ok := eMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+										endpointInt.Namespace = val.(string)
+									}
+
+									if val, ok := eMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+										endpointInt.Tenant = val.(string)
+									}
+								}
+
+							}
+
+						}
+
+					}
+
+					if v, ok := originServersMapStrToI["k8s_service"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+						choiceTypeFound = true
+						choiceInt := &ves_io_schema_views_origin_pool.OriginServerType_K8SService{}
+						choiceInt.K8SService = &ves_io_schema_views_origin_pool.OriginServerK8SService{}
+						originServers[i].Choice = choiceInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							networkChoiceTypeFound := false
+
+							if v, ok := cs["inside_network"]; ok && !isIntfNil(v) && !networkChoiceTypeFound {
+
+								networkChoiceTypeFound = true
+
+								if v.(bool) {
+									networkChoiceInt := &ves_io_schema_views_origin_pool.OriginServerK8SService_InsideNetwork{}
+									networkChoiceInt.InsideNetwork = &ves_io_schema.Empty{}
+									choiceInt.K8SService.NetworkChoice = networkChoiceInt
+								}
+
+							}
+
+							if v, ok := cs["outside_network"]; ok && !isIntfNil(v) && !networkChoiceTypeFound {
+
+								networkChoiceTypeFound = true
+
+								if v.(bool) {
+									networkChoiceInt := &ves_io_schema_views_origin_pool.OriginServerK8SService_OutsideNetwork{}
+									networkChoiceInt.OutsideNetwork = &ves_io_schema.Empty{}
+									choiceInt.K8SService.NetworkChoice = networkChoiceInt
+								}
+
+							}
+
+							if v, ok := cs["vk8s_networks"]; ok && !isIntfNil(v) && !networkChoiceTypeFound {
+
+								networkChoiceTypeFound = true
+
+								if v.(bool) {
+									networkChoiceInt := &ves_io_schema_views_origin_pool.OriginServerK8SService_Vk8SNetworks{}
+									networkChoiceInt.Vk8SNetworks = &ves_io_schema.Empty{}
+									choiceInt.K8SService.NetworkChoice = networkChoiceInt
+								}
+
+							}
+
+							serviceInfoTypeFound := false
+
+							if v, ok := cs["service_name"]; ok && !isIntfNil(v) && !serviceInfoTypeFound {
+
+								serviceInfoTypeFound = true
+								serviceInfoInt := &ves_io_schema_views_origin_pool.OriginServerK8SService_ServiceName{}
+
+								choiceInt.K8SService.ServiceInfo = serviceInfoInt
+
+								serviceInfoInt.ServiceName = v.(string)
+
+							}
+
+							if v, ok := cs["service_selector"]; ok && !isIntfNil(v) && !serviceInfoTypeFound {
+
+								serviceInfoTypeFound = true
+								serviceInfoInt := &ves_io_schema_views_origin_pool.OriginServerK8SService_ServiceSelector{}
+								serviceInfoInt.ServiceSelector = &ves_io_schema.LabelSelectorType{}
+								choiceInt.K8SService.ServiceInfo = serviceInfoInt
+
+								sl := v.(*schema.Set).List()
+								for _, set := range sl {
+									cs := set.(map[string]interface{})
+
+									if v, ok := cs["expressions"]; ok && !isIntfNil(v) {
+
+										ls := make([]string, len(v.([]interface{})))
+										for i, v := range v.([]interface{}) {
+											ls[i] = v.(string)
+										}
+										serviceInfoInt.ServiceSelector.Expressions = ls
+
+									}
+
+								}
+
+							}
+
+							if v, ok := cs["site_locator"]; ok && !isIntfNil(v) {
+
+								sl := v.(*schema.Set).List()
+								siteLocator := &ves_io_schema_views.SiteLocator{}
+								choiceInt.K8SService.SiteLocator = siteLocator
+								for _, set := range sl {
+									siteLocatorMapStrToI := set.(map[string]interface{})
+
+									choiceTypeFound := false
+
+									if v, ok := siteLocatorMapStrToI["site"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+										choiceTypeFound = true
+										choiceInt := &ves_io_schema_views.SiteLocator_Site{}
+										choiceInt.Site = &ves_io_schema_views.ObjectRefType{}
+										siteLocator.Choice = choiceInt
+
+										sl := v.(*schema.Set).List()
+										for _, set := range sl {
+											cs := set.(map[string]interface{})
+
+											if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+												choiceInt.Site.Name = v.(string)
+
+											}
+
+											if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+												choiceInt.Site.Namespace = v.(string)
+
+											}
+
+											if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+												choiceInt.Site.Tenant = v.(string)
+
+											}
+
+										}
+
+									}
+
+									if v, ok := siteLocatorMapStrToI["virtual_site"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+										choiceTypeFound = true
+										choiceInt := &ves_io_schema_views.SiteLocator_VirtualSite{}
+										choiceInt.VirtualSite = &ves_io_schema_views.ObjectRefType{}
+										siteLocator.Choice = choiceInt
+
+										sl := v.(*schema.Set).List()
+										for _, set := range sl {
+											cs := set.(map[string]interface{})
+
+											if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+												choiceInt.VirtualSite.Name = v.(string)
+
+											}
+
+											if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+												choiceInt.VirtualSite.Namespace = v.(string)
+
+											}
+
+											if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+												choiceInt.VirtualSite.Tenant = v.(string)
+
+											}
+
+										}
+
+									}
+
+								}
+
+							}
+
+						}
+
+					}
+
+					if v, ok := originServersMapStrToI["private_ip"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+						choiceTypeFound = true
+						choiceInt := &ves_io_schema_views_origin_pool.OriginServerType_PrivateIp{}
+						choiceInt.PrivateIp = &ves_io_schema_views_origin_pool.OriginServerPrivateIP{}
+						originServers[i].Choice = choiceInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["ip"]; ok && !isIntfNil(v) {
+
+								choiceInt.PrivateIp.Ip = v.(string)
+
+							}
+
+							networkChoiceTypeFound := false
+
+							if v, ok := cs["inside_network"]; ok && !isIntfNil(v) && !networkChoiceTypeFound {
+
+								networkChoiceTypeFound = true
+
+								if v.(bool) {
+									networkChoiceInt := &ves_io_schema_views_origin_pool.OriginServerPrivateIP_InsideNetwork{}
+									networkChoiceInt.InsideNetwork = &ves_io_schema.Empty{}
+									choiceInt.PrivateIp.NetworkChoice = networkChoiceInt
+								}
+
+							}
+
+							if v, ok := cs["outside_network"]; ok && !isIntfNil(v) && !networkChoiceTypeFound {
+
+								networkChoiceTypeFound = true
+
+								if v.(bool) {
+									networkChoiceInt := &ves_io_schema_views_origin_pool.OriginServerPrivateIP_OutsideNetwork{}
+									networkChoiceInt.OutsideNetwork = &ves_io_schema.Empty{}
+									choiceInt.PrivateIp.NetworkChoice = networkChoiceInt
+								}
+
+							}
+
+							if v, ok := cs["site_locator"]; ok && !isIntfNil(v) {
+
+								sl := v.(*schema.Set).List()
+								siteLocator := &ves_io_schema_views.SiteLocator{}
+								choiceInt.PrivateIp.SiteLocator = siteLocator
+								for _, set := range sl {
+									siteLocatorMapStrToI := set.(map[string]interface{})
+
+									choiceTypeFound := false
+
+									if v, ok := siteLocatorMapStrToI["site"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+										choiceTypeFound = true
+										choiceInt := &ves_io_schema_views.SiteLocator_Site{}
+										choiceInt.Site = &ves_io_schema_views.ObjectRefType{}
+										siteLocator.Choice = choiceInt
+
+										sl := v.(*schema.Set).List()
+										for _, set := range sl {
+											cs := set.(map[string]interface{})
+
+											if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+												choiceInt.Site.Name = v.(string)
+
+											}
+
+											if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+												choiceInt.Site.Namespace = v.(string)
+
+											}
+
+											if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+												choiceInt.Site.Tenant = v.(string)
+
+											}
+
+										}
+
+									}
+
+									if v, ok := siteLocatorMapStrToI["virtual_site"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+										choiceTypeFound = true
+										choiceInt := &ves_io_schema_views.SiteLocator_VirtualSite{}
+										choiceInt.VirtualSite = &ves_io_schema_views.ObjectRefType{}
+										siteLocator.Choice = choiceInt
+
+										sl := v.(*schema.Set).List()
+										for _, set := range sl {
+											cs := set.(map[string]interface{})
+
+											if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+												choiceInt.VirtualSite.Name = v.(string)
+
+											}
+
+											if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+												choiceInt.VirtualSite.Namespace = v.(string)
+
+											}
+
+											if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+												choiceInt.VirtualSite.Tenant = v.(string)
+
+											}
+
+										}
+
+									}
+
+								}
+
+							}
+
+						}
+
+					}
+
+					if v, ok := originServersMapStrToI["private_name"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+						choiceTypeFound = true
+						choiceInt := &ves_io_schema_views_origin_pool.OriginServerType_PrivateName{}
+						choiceInt.PrivateName = &ves_io_schema_views_origin_pool.OriginServerPrivateName{}
+						originServers[i].Choice = choiceInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["dns_name"]; ok && !isIntfNil(v) {
+
+								choiceInt.PrivateName.DnsName = v.(string)
+
+							}
+
+							networkChoiceTypeFound := false
+
+							if v, ok := cs["inside_network"]; ok && !isIntfNil(v) && !networkChoiceTypeFound {
+
+								networkChoiceTypeFound = true
+
+								if v.(bool) {
+									networkChoiceInt := &ves_io_schema_views_origin_pool.OriginServerPrivateName_InsideNetwork{}
+									networkChoiceInt.InsideNetwork = &ves_io_schema.Empty{}
+									choiceInt.PrivateName.NetworkChoice = networkChoiceInt
+								}
+
+							}
+
+							if v, ok := cs["outside_network"]; ok && !isIntfNil(v) && !networkChoiceTypeFound {
+
+								networkChoiceTypeFound = true
+
+								if v.(bool) {
+									networkChoiceInt := &ves_io_schema_views_origin_pool.OriginServerPrivateName_OutsideNetwork{}
+									networkChoiceInt.OutsideNetwork = &ves_io_schema.Empty{}
+									choiceInt.PrivateName.NetworkChoice = networkChoiceInt
+								}
+
+							}
+
+							if v, ok := cs["site_locator"]; ok && !isIntfNil(v) {
+
+								sl := v.(*schema.Set).List()
+								siteLocator := &ves_io_schema_views.SiteLocator{}
+								choiceInt.PrivateName.SiteLocator = siteLocator
+								for _, set := range sl {
+									siteLocatorMapStrToI := set.(map[string]interface{})
+
+									choiceTypeFound := false
+
+									if v, ok := siteLocatorMapStrToI["site"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+										choiceTypeFound = true
+										choiceInt := &ves_io_schema_views.SiteLocator_Site{}
+										choiceInt.Site = &ves_io_schema_views.ObjectRefType{}
+										siteLocator.Choice = choiceInt
+
+										sl := v.(*schema.Set).List()
+										for _, set := range sl {
+											cs := set.(map[string]interface{})
+
+											if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+												choiceInt.Site.Name = v.(string)
+
+											}
+
+											if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+												choiceInt.Site.Namespace = v.(string)
+
+											}
+
+											if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+												choiceInt.Site.Tenant = v.(string)
+
+											}
+
+										}
+
+									}
+
+									if v, ok := siteLocatorMapStrToI["virtual_site"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+										choiceTypeFound = true
+										choiceInt := &ves_io_schema_views.SiteLocator_VirtualSite{}
+										choiceInt.VirtualSite = &ves_io_schema_views.ObjectRefType{}
+										siteLocator.Choice = choiceInt
+
+										sl := v.(*schema.Set).List()
+										for _, set := range sl {
+											cs := set.(map[string]interface{})
+
+											if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+												choiceInt.VirtualSite.Name = v.(string)
+
+											}
+
+											if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+												choiceInt.VirtualSite.Namespace = v.(string)
+
+											}
+
+											if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+												choiceInt.VirtualSite.Tenant = v.(string)
+
+											}
+
+										}
+
+									}
+
+								}
+
+							}
+
+						}
+
+					}
+
+					if v, ok := originServersMapStrToI["public_ip"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+						choiceTypeFound = true
+						choiceInt := &ves_io_schema_views_origin_pool.OriginServerType_PublicIp{}
+						choiceInt.PublicIp = &ves_io_schema_views_origin_pool.OriginServerPublicIP{}
+						originServers[i].Choice = choiceInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["ip"]; ok && !isIntfNil(v) {
+
+								choiceInt.PublicIp.Ip = v.(string)
+
+							}
+
+						}
+
+					}
+
+					if v, ok := originServersMapStrToI["public_name"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+						choiceTypeFound = true
+						choiceInt := &ves_io_schema_views_origin_pool.OriginServerType_PublicName{}
+						choiceInt.PublicName = &ves_io_schema_views_origin_pool.OriginServerPublicName{}
+						originServers[i].Choice = choiceInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["dns_name"]; ok && !isIntfNil(v) {
+
+								choiceInt.PublicName.DnsName = v.(string)
+
+							}
+
+						}
+
+					}
+
+					if v, ok := originServersMapStrToI["vn_private_ip"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+						choiceTypeFound = true
+						choiceInt := &ves_io_schema_views_origin_pool.OriginServerType_VnPrivateIp{}
+						choiceInt.VnPrivateIp = &ves_io_schema_views_origin_pool.OriginServerVirtualNetworkIP{}
+						originServers[i].Choice = choiceInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["ip"]; ok && !isIntfNil(v) {
+
+								choiceInt.VnPrivateIp.Ip = v.(string)
+
+							}
+
+							if v, ok := cs["virtual_network"]; ok && !isIntfNil(v) {
+
+								sl := v.(*schema.Set).List()
+								virtualNetworkInt := &ves_io_schema_views.ObjectRefType{}
+								choiceInt.VnPrivateIp.VirtualNetwork = virtualNetworkInt
+
+								for _, set := range sl {
+									vnMapToStrVal := set.(map[string]interface{})
+									if val, ok := vnMapToStrVal["name"]; ok && !isIntfNil(v) {
+										virtualNetworkInt.Name = val.(string)
+									}
+									if val, ok := vnMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+										virtualNetworkInt.Namespace = val.(string)
+									}
+
+									if val, ok := vnMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+										virtualNetworkInt.Tenant = val.(string)
+									}
+								}
+
+							}
+
+						}
+
+					}
+
+					if v, ok := originServersMapStrToI["vn_private_name"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+						choiceTypeFound = true
+						choiceInt := &ves_io_schema_views_origin_pool.OriginServerType_VnPrivateName{}
+						choiceInt.VnPrivateName = &ves_io_schema_views_origin_pool.OriginServerVirtualNetworkName{}
+						originServers[i].Choice = choiceInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["dns_name"]; ok && !isIntfNil(v) {
+
+								choiceInt.VnPrivateName.DnsName = v.(string)
+
+							}
+
+							if v, ok := cs["private_network"]; ok && !isIntfNil(v) {
+
+								sl := v.(*schema.Set).List()
+								privateNetworkInt := &ves_io_schema_views.ObjectRefType{}
+								choiceInt.VnPrivateName.PrivateNetwork = privateNetworkInt
+
+								for _, set := range sl {
+									pnMapToStrVal := set.(map[string]interface{})
+									if val, ok := pnMapToStrVal["name"]; ok && !isIntfNil(v) {
+										privateNetworkInt.Name = val.(string)
+									}
+									if val, ok := pnMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+										privateNetworkInt.Namespace = val.(string)
+									}
+
+									if val, ok := pnMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+										privateNetworkInt.Tenant = val.(string)
+									}
+								}
+
+							}
+
+						}
+
+					}
+
+					if w, ok := originServersMapStrToI["labels"]; ok && !isIntfNil(w) {
+						ms := map[string]string{}
+						for k, v := range w.(map[string]interface{}) {
+							ms[k] = v.(string)
+						}
+						originServers[i].Labels = ms
+					}
+
+				}
+
+			}
+
+			portChoiceTypeFound := false
+
+			if v, ok := cs["automatic_port"]; ok && !isIntfNil(v) && !portChoiceTypeFound {
+
+				portChoiceTypeFound = true
+
+				if v.(bool) {
+					portChoiceInt := &ves_io_schema_views_origin_pool.GlobalSpecType_AutomaticPort{}
+					portChoiceInt.AutomaticPort = &ves_io_schema.Empty{}
+					originPoolChoiceInt.DefaultPool.PortChoice = portChoiceInt
+				}
+
+			}
+
+			if v, ok := cs["port"]; ok && !isIntfNil(v) && !portChoiceTypeFound {
+
+				portChoiceTypeFound = true
+				portChoiceInt := &ves_io_schema_views_origin_pool.GlobalSpecType_Port{}
+
+				originPoolChoiceInt.DefaultPool.PortChoice = portChoiceInt
+
+				portChoiceInt.Port = uint32(v.(int))
+
+			}
+
+			tlsChoiceTypeFound := false
+
+			if v, ok := cs["no_tls"]; ok && !isIntfNil(v) && !tlsChoiceTypeFound {
+
+				tlsChoiceTypeFound = true
+
+				if v.(bool) {
+					tlsChoiceInt := &ves_io_schema_views_origin_pool.GlobalSpecType_NoTls{}
+					tlsChoiceInt.NoTls = &ves_io_schema.Empty{}
+					originPoolChoiceInt.DefaultPool.TlsChoice = tlsChoiceInt
+				}
+
+			}
+
+			if v, ok := cs["use_tls"]; ok && !isIntfNil(v) && !tlsChoiceTypeFound {
+
+				tlsChoiceTypeFound = true
+				tlsChoiceInt := &ves_io_schema_views_origin_pool.GlobalSpecType_UseTls{}
+				tlsChoiceInt.UseTls = &ves_io_schema_views_origin_pool.UpstreamTlsParameters{}
+				originPoolChoiceInt.DefaultPool.TlsChoice = tlsChoiceInt
+
+				sl := v.(*schema.Set).List()
+				for _, set := range sl {
+					cs := set.(map[string]interface{})
+
+					mtlsChoiceTypeFound := false
+
+					if v, ok := cs["no_mtls"]; ok && !isIntfNil(v) && !mtlsChoiceTypeFound {
+
+						mtlsChoiceTypeFound = true
+
+						if v.(bool) {
+							mtlsChoiceInt := &ves_io_schema_views_origin_pool.UpstreamTlsParameters_NoMtls{}
+							mtlsChoiceInt.NoMtls = &ves_io_schema.Empty{}
+							tlsChoiceInt.UseTls.MtlsChoice = mtlsChoiceInt
+						}
+
+					}
+
+					if v, ok := cs["use_mtls"]; ok && !isIntfNil(v) && !mtlsChoiceTypeFound {
+
+						mtlsChoiceTypeFound = true
+						mtlsChoiceInt := &ves_io_schema_views_origin_pool.UpstreamTlsParameters_UseMtls{}
+						mtlsChoiceInt.UseMtls = &ves_io_schema_views_origin_pool.TlsCertificatesType{}
+						tlsChoiceInt.UseTls.MtlsChoice = mtlsChoiceInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["tls_certificates"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								tlsCertificates := make([]*ves_io_schema.TlsCertificateType, len(sl))
+								mtlsChoiceInt.UseMtls.TlsCertificates = tlsCertificates
+								for i, set := range sl {
+									tlsCertificates[i] = &ves_io_schema.TlsCertificateType{}
+									tlsCertificatesMapStrToI := set.(map[string]interface{})
+
+									if w, ok := tlsCertificatesMapStrToI["certificate_url"]; ok && !isIntfNil(w) {
+										tlsCertificates[i].CertificateUrl = w.(string)
+									}
+
+									if w, ok := tlsCertificatesMapStrToI["description"]; ok && !isIntfNil(w) {
+										tlsCertificates[i].Description = w.(string)
+									}
+
+									ocspStaplingChoiceTypeFound := false
+
+									if v, ok := tlsCertificatesMapStrToI["custom_hash_algorithms"]; ok && !isIntfNil(v) && !ocspStaplingChoiceTypeFound {
+
+										ocspStaplingChoiceTypeFound = true
+										ocspStaplingChoiceInt := &ves_io_schema.TlsCertificateType_CustomHashAlgorithms{}
+										ocspStaplingChoiceInt.CustomHashAlgorithms = &ves_io_schema.HashAlgorithms{}
+										tlsCertificates[i].OcspStaplingChoice = ocspStaplingChoiceInt
+
+										sl := v.(*schema.Set).List()
+										for _, set := range sl {
+											cs := set.(map[string]interface{})
+
+											if v, ok := cs["hash_algorithms"]; ok && !isIntfNil(v) {
+
+												hash_algorithmsList := []ves_io_schema.HashAlgorithm{}
+												for _, j := range v.([]interface{}) {
+													hash_algorithmsList = append(hash_algorithmsList, ves_io_schema.HashAlgorithm(ves_io_schema.HashAlgorithm_value[j.(string)]))
+												}
+												ocspStaplingChoiceInt.CustomHashAlgorithms.HashAlgorithms = hash_algorithmsList
+
+											}
+
+										}
+
+									}
+
+									if v, ok := tlsCertificatesMapStrToI["disable_ocsp_stapling"]; ok && !isIntfNil(v) && !ocspStaplingChoiceTypeFound {
+
+										ocspStaplingChoiceTypeFound = true
+										_ = v
+									}
+
+									if v, ok := tlsCertificatesMapStrToI["use_system_defaults"]; ok && !isIntfNil(v) && !ocspStaplingChoiceTypeFound {
+
+										ocspStaplingChoiceTypeFound = true
+										_ = v
+									}
+
+									if v, ok := tlsCertificatesMapStrToI["private_key"]; ok && !isIntfNil(v) {
+
+										sl := v.(*schema.Set).List()
+										privateKey := &ves_io_schema.SecretType{}
+										tlsCertificates[i].PrivateKey = privateKey
+										for _, set := range sl {
+											privateKeyMapStrToI := set.(map[string]interface{})
+
+											if v, ok := privateKeyMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
+
+												sl := v.(*schema.Set).List()
+												blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
+												privateKey.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
+												for _, set := range sl {
+													blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
+
+													if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
+														blindfoldSecretInfoInternal.DecryptionProvider = w.(string)
+													}
+
+													if w, ok := blindfoldSecretInfoInternalMapStrToI["location"]; ok && !isIntfNil(w) {
+														blindfoldSecretInfoInternal.Location = w.(string)
+													}
+
+													if w, ok := blindfoldSecretInfoInternalMapStrToI["store_provider"]; ok && !isIntfNil(w) {
+														blindfoldSecretInfoInternal.StoreProvider = w.(string)
+													}
+
+												}
+
+											}
+
+											if v, ok := privateKeyMapStrToI["secret_encoding_type"]; ok && !isIntfNil(v) {
+
+												privateKey.SecretEncodingType = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+											}
+
+											secretInfoOneofTypeFound := false
+
+											if v, ok := privateKeyMapStrToI["blindfold_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+												secretInfoOneofTypeFound = true
+												secretInfoOneofInt := &ves_io_schema.SecretType_BlindfoldSecretInfo{}
+												secretInfoOneofInt.BlindfoldSecretInfo = &ves_io_schema.BlindfoldSecretInfoType{}
+												privateKey.SecretInfoOneof = secretInfoOneofInt
+
+												sl := v.(*schema.Set).List()
+												for _, set := range sl {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["decryption_provider"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.BlindfoldSecretInfo.DecryptionProvider = v.(string)
+
+													}
+
+													if v, ok := cs["location"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.BlindfoldSecretInfo.Location = v.(string)
+
+													}
+
+													if v, ok := cs["store_provider"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.BlindfoldSecretInfo.StoreProvider = v.(string)
+
+													}
+
+												}
+
+											}
+
+											if v, ok := privateKeyMapStrToI["clear_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+												secretInfoOneofTypeFound = true
+												secretInfoOneofInt := &ves_io_schema.SecretType_ClearSecretInfo{}
+												secretInfoOneofInt.ClearSecretInfo = &ves_io_schema.ClearSecretInfoType{}
+												privateKey.SecretInfoOneof = secretInfoOneofInt
+
+												sl := v.(*schema.Set).List()
+												for _, set := range sl {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["provider"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.ClearSecretInfo.Provider = v.(string)
+
+													}
+
+													if v, ok := cs["url"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
+
+													}
+
+												}
+
+											}
+
+											if v, ok := privateKeyMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+												secretInfoOneofTypeFound = true
+												secretInfoOneofInt := &ves_io_schema.SecretType_VaultSecretInfo{}
+												secretInfoOneofInt.VaultSecretInfo = &ves_io_schema.VaultSecretInfoType{}
+												privateKey.SecretInfoOneof = secretInfoOneofInt
+
+												sl := v.(*schema.Set).List()
+												for _, set := range sl {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["key"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
+
+													}
+
+													if v, ok := cs["location"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
+
+													}
+
+													if v, ok := cs["provider"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
+
+													}
+
+													if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.VaultSecretInfo.SecretEncoding = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+													}
+
+													if v, ok := cs["version"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
+
+													}
+
+												}
+
+											}
+
+											if v, ok := privateKeyMapStrToI["wingman_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+												secretInfoOneofTypeFound = true
+												secretInfoOneofInt := &ves_io_schema.SecretType_WingmanSecretInfo{}
+												secretInfoOneofInt.WingmanSecretInfo = &ves_io_schema.WingmanSecretInfoType{}
+												privateKey.SecretInfoOneof = secretInfoOneofInt
+
+												sl := v.(*schema.Set).List()
+												for _, set := range sl {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
+
+													}
+
+												}
+
+											}
+
+										}
+
+									}
+
+								}
+
+							}
+
+						}
+
+					}
+
+					serverValidationChoiceTypeFound := false
+
+					if v, ok := cs["skip_server_verification"]; ok && !isIntfNil(v) && !serverValidationChoiceTypeFound {
+
+						serverValidationChoiceTypeFound = true
+
+						if v.(bool) {
+							serverValidationChoiceInt := &ves_io_schema_views_origin_pool.UpstreamTlsParameters_SkipServerVerification{}
+							serverValidationChoiceInt.SkipServerVerification = &ves_io_schema.Empty{}
+							tlsChoiceInt.UseTls.ServerValidationChoice = serverValidationChoiceInt
+						}
+
+					}
+
+					if v, ok := cs["use_server_verification"]; ok && !isIntfNil(v) && !serverValidationChoiceTypeFound {
+
+						serverValidationChoiceTypeFound = true
+						serverValidationChoiceInt := &ves_io_schema_views_origin_pool.UpstreamTlsParameters_UseServerVerification{}
+						serverValidationChoiceInt.UseServerVerification = &ves_io_schema_views_origin_pool.UpstreamTlsValidationContext{}
+						tlsChoiceInt.UseTls.ServerValidationChoice = serverValidationChoiceInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["trusted_ca_url"]; ok && !isIntfNil(v) {
+
+								serverValidationChoiceInt.UseServerVerification.TrustedCaUrl = v.(string)
+
+							}
+
+						}
+
+					}
+
+					if v, ok := cs["volterra_trusted_ca"]; ok && !isIntfNil(v) && !serverValidationChoiceTypeFound {
+
+						serverValidationChoiceTypeFound = true
+
+						if v.(bool) {
+							serverValidationChoiceInt := &ves_io_schema_views_origin_pool.UpstreamTlsParameters_VolterraTrustedCa{}
+							serverValidationChoiceInt.VolterraTrustedCa = &ves_io_schema.Empty{}
+							tlsChoiceInt.UseTls.ServerValidationChoice = serverValidationChoiceInt
+						}
+
+					}
+
+					sniChoiceTypeFound := false
+
+					if v, ok := cs["disable_sni"]; ok && !isIntfNil(v) && !sniChoiceTypeFound {
+
+						sniChoiceTypeFound = true
+
+						if v.(bool) {
+							sniChoiceInt := &ves_io_schema_views_origin_pool.UpstreamTlsParameters_DisableSni{}
+							sniChoiceInt.DisableSni = &ves_io_schema.Empty{}
+							tlsChoiceInt.UseTls.SniChoice = sniChoiceInt
+						}
+
+					}
+
+					if v, ok := cs["sni"]; ok && !isIntfNil(v) && !sniChoiceTypeFound {
+
+						sniChoiceTypeFound = true
+						sniChoiceInt := &ves_io_schema_views_origin_pool.UpstreamTlsParameters_Sni{}
+
+						tlsChoiceInt.UseTls.SniChoice = sniChoiceInt
+
+						sniChoiceInt.Sni = v.(string)
+
+					}
+
+					if v, ok := cs["use_host_header_as_sni"]; ok && !isIntfNil(v) && !sniChoiceTypeFound {
+
+						sniChoiceTypeFound = true
+
+						if v.(bool) {
+							sniChoiceInt := &ves_io_schema_views_origin_pool.UpstreamTlsParameters_UseHostHeaderAsSni{}
+							sniChoiceInt.UseHostHeaderAsSni = &ves_io_schema.Empty{}
+							tlsChoiceInt.UseTls.SniChoice = sniChoiceInt
+						}
+
+					}
+
+					if v, ok := cs["tls_config"]; ok && !isIntfNil(v) {
+
+						sl := v.(*schema.Set).List()
+						tlsConfig := &ves_io_schema_views.TlsConfig{}
+						tlsChoiceInt.UseTls.TlsConfig = tlsConfig
+						for _, set := range sl {
+							tlsConfigMapStrToI := set.(map[string]interface{})
+
+							choiceTypeFound := false
+
+							if v, ok := tlsConfigMapStrToI["custom_security"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+								choiceTypeFound = true
+								choiceInt := &ves_io_schema_views.TlsConfig_CustomSecurity{}
+								choiceInt.CustomSecurity = &ves_io_schema_views.CustomCiphers{}
+								tlsConfig.Choice = choiceInt
+
+								sl := v.(*schema.Set).List()
+								for _, set := range sl {
+									cs := set.(map[string]interface{})
+
+									if v, ok := cs["cipher_suites"]; ok && !isIntfNil(v) {
+
+										ls := make([]string, len(v.([]interface{})))
+										for i, v := range v.([]interface{}) {
+											ls[i] = v.(string)
+										}
+										choiceInt.CustomSecurity.CipherSuites = ls
+
+									}
+
+									if v, ok := cs["max_version"]; ok && !isIntfNil(v) {
+
+										choiceInt.CustomSecurity.MaxVersion = ves_io_schema.TlsProtocol(ves_io_schema.TlsProtocol_value[v.(string)])
+
+									}
+
+									if v, ok := cs["min_version"]; ok && !isIntfNil(v) {
+
+										choiceInt.CustomSecurity.MinVersion = ves_io_schema.TlsProtocol(ves_io_schema.TlsProtocol_value[v.(string)])
+
+									}
+
+								}
+
+							}
+
+							if v, ok := tlsConfigMapStrToI["default_security"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+								choiceTypeFound = true
+
+								if v.(bool) {
+									choiceInt := &ves_io_schema_views.TlsConfig_DefaultSecurity{}
+									choiceInt.DefaultSecurity = &ves_io_schema.Empty{}
+									tlsConfig.Choice = choiceInt
+								}
+
+							}
+
+							if v, ok := tlsConfigMapStrToI["low_security"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+								choiceTypeFound = true
+
+								if v.(bool) {
+									choiceInt := &ves_io_schema_views.TlsConfig_LowSecurity{}
+									choiceInt.LowSecurity = &ves_io_schema.Empty{}
+									tlsConfig.Choice = choiceInt
+								}
+
+							}
+
+							if v, ok := tlsConfigMapStrToI["medium_security"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+								choiceTypeFound = true
+
+								if v.(bool) {
+									choiceInt := &ves_io_schema_views.TlsConfig_MediumSecurity{}
+									choiceInt.MediumSecurity = &ves_io_schema.Empty{}
+									tlsConfig.Choice = choiceInt
+								}
+
+							}
+
+						}
+
+					}
+
+				}
+
+			}
+
+			if v, ok := cs["view_internal"]; ok && !isIntfNil(v) {
+
+				sl := v.(*schema.Set).List()
+				viewInternalInt := &ves_io_schema_views.ObjectRefType{}
+				originPoolChoiceInt.DefaultPool.ViewInternal = viewInternalInt
+
+				for _, set := range sl {
+					viMapToStrVal := set.(map[string]interface{})
+					if val, ok := viMapToStrVal["name"]; ok && !isIntfNil(v) {
+						viewInternalInt.Name = val.(string)
+					}
+					if val, ok := viMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+						viewInternalInt.Namespace = val.(string)
+					}
+
+					if val, ok := viMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+						viewInternalInt.Tenant = val.(string)
+					}
+				}
+
+			}
+
+		}
+
+	}
+
+	if v, ok := d.GetOk("default_pool_list"); ok && !originPoolChoiceTypeFound {
+
+		originPoolChoiceTypeFound = true
+		originPoolChoiceInt := &ves_io_schema_views_http_loadbalancer.CreateSpecType_DefaultPoolList{}
+		originPoolChoiceInt.DefaultPoolList = &ves_io_schema_views.OriginPoolListType{}
+		createSpec.OriginPoolChoice = originPoolChoiceInt
+
+		sl := v.(*schema.Set).List()
+		for _, set := range sl {
+			cs := set.(map[string]interface{})
+
+			if v, ok := cs["pools"]; ok && !isIntfNil(v) {
+
+				sl := v.([]interface{})
+				pools := make([]*ves_io_schema_views.OriginPoolWithWeight, len(sl))
+				originPoolChoiceInt.DefaultPoolList.Pools = pools
+				for i, set := range sl {
+					pools[i] = &ves_io_schema_views.OriginPoolWithWeight{}
+					poolsMapStrToI := set.(map[string]interface{})
+
+					if w, ok := poolsMapStrToI["endpoint_subsets"]; ok && !isIntfNil(w) {
+						ms := map[string]string{}
+						for k, v := range w.(map[string]interface{}) {
+							ms[k] = v.(string)
+						}
+						pools[i].EndpointSubsets = ms
+					}
+
+					poolChoiceTypeFound := false
+
+					if v, ok := poolsMapStrToI["cluster"]; ok && !isIntfNil(v) && !poolChoiceTypeFound {
+
+						poolChoiceTypeFound = true
+						poolChoiceInt := &ves_io_schema_views.OriginPoolWithWeight_Cluster{}
+						poolChoiceInt.Cluster = &ves_io_schema_views.ObjectRefType{}
+						pools[i].PoolChoice = poolChoiceInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+								poolChoiceInt.Cluster.Name = v.(string)
+
+							}
+
+							if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+								poolChoiceInt.Cluster.Namespace = v.(string)
+
+							}
+
+							if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+								poolChoiceInt.Cluster.Tenant = v.(string)
+
+							}
+
+						}
+
+					}
+
+					if v, ok := poolsMapStrToI["pool"]; ok && !isIntfNil(v) && !poolChoiceTypeFound {
+
+						poolChoiceTypeFound = true
+						poolChoiceInt := &ves_io_schema_views.OriginPoolWithWeight_Pool{}
+						poolChoiceInt.Pool = &ves_io_schema_views.ObjectRefType{}
+						pools[i].PoolChoice = poolChoiceInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+								poolChoiceInt.Pool.Name = v.(string)
+
+							}
+
+							if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+								poolChoiceInt.Pool.Namespace = v.(string)
+
+							}
+
+							if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+								poolChoiceInt.Pool.Tenant = v.(string)
+
+							}
+
+						}
+
+					}
+
+					if w, ok := poolsMapStrToI["priority"]; ok && !isIntfNil(w) {
+						pools[i].Priority = uint32(w.(int))
+					}
+
+					if w, ok := poolsMapStrToI["weight"]; ok && !isIntfNil(w) {
+						pools[i].Weight = uint32(w.(int))
+					}
+
 				}
 
 			}
@@ -26578,6 +29472,1683 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 					strictSniHostHeaderCheckChoiceInt := &ves_io_schema_views_http_loadbalancer.AdvancedOptionsType_EnableStrictSniHostHeaderCheck{}
 					strictSniHostHeaderCheckChoiceInt.EnableStrictSniHostHeaderCheck = &ves_io_schema.Empty{}
 					moreOption.StrictSniHostHeaderCheckChoice = strictSniHostHeaderCheckChoiceInt
+				}
+
+			}
+
+		}
+
+	}
+
+	originPoolChoiceTypeFound := false
+
+	if v, ok := d.GetOk("default_pool"); ok && !originPoolChoiceTypeFound {
+
+		originPoolChoiceTypeFound = true
+		originPoolChoiceInt := &ves_io_schema_views_http_loadbalancer.ReplaceSpecType_DefaultPool{}
+		originPoolChoiceInt.DefaultPool = &ves_io_schema_views_origin_pool.GlobalSpecType{}
+		updateSpec.OriginPoolChoice = originPoolChoiceInt
+
+		sl := v.(*schema.Set).List()
+		for _, set := range sl {
+			cs := set.(map[string]interface{})
+
+			if v, ok := cs["advanced_options"]; ok && !isIntfNil(v) {
+
+				sl := v.(*schema.Set).List()
+				advancedOptions := &ves_io_schema_views_origin_pool.OriginPoolAdvancedOptions{}
+				originPoolChoiceInt.DefaultPool.AdvancedOptions = advancedOptions
+				for _, set := range sl {
+					advancedOptionsMapStrToI := set.(map[string]interface{})
+
+					circuitBreakerChoiceTypeFound := false
+
+					if v, ok := advancedOptionsMapStrToI["circuit_breaker"]; ok && !isIntfNil(v) && !circuitBreakerChoiceTypeFound {
+
+						circuitBreakerChoiceTypeFound = true
+						_ = v
+					}
+
+					if v, ok := advancedOptionsMapStrToI["default_circuit_breaker"]; ok && !isIntfNil(v) && !circuitBreakerChoiceTypeFound {
+
+						circuitBreakerChoiceTypeFound = true
+
+						if v.(bool) {
+							circuitBreakerChoiceInt := &ves_io_schema_views_origin_pool.OriginPoolAdvancedOptions_DefaultCircuitBreaker{}
+							circuitBreakerChoiceInt.DefaultCircuitBreaker = &ves_io_schema.Empty{}
+							advancedOptions.CircuitBreakerChoice = circuitBreakerChoiceInt
+						}
+
+					}
+
+					if v, ok := advancedOptionsMapStrToI["disable_circuit_breaker"]; ok && !isIntfNil(v) && !circuitBreakerChoiceTypeFound {
+
+						circuitBreakerChoiceTypeFound = true
+
+						if v.(bool) {
+							circuitBreakerChoiceInt := &ves_io_schema_views_origin_pool.OriginPoolAdvancedOptions_DisableCircuitBreaker{}
+							circuitBreakerChoiceInt.DisableCircuitBreaker = &ves_io_schema.Empty{}
+							advancedOptions.CircuitBreakerChoice = circuitBreakerChoiceInt
+						}
+
+					}
+
+					if w, ok := advancedOptionsMapStrToI["connection_timeout"]; ok && !isIntfNil(w) {
+						advancedOptions.ConnectionTimeout = uint32(w.(int))
+					}
+
+					if v, ok := advancedOptionsMapStrToI["header_transformation_type"]; ok && !isIntfNil(v) {
+
+						sl := v.(*schema.Set).List()
+						headerTransformationType := &ves_io_schema.HeaderTransformationType{}
+						advancedOptions.HeaderTransformationType = headerTransformationType
+						for _, set := range sl {
+							headerTransformationTypeMapStrToI := set.(map[string]interface{})
+
+							headerTransformationChoiceTypeFound := false
+
+							if v, ok := headerTransformationTypeMapStrToI["default_header_transformation"]; ok && !isIntfNil(v) && !headerTransformationChoiceTypeFound {
+
+								headerTransformationChoiceTypeFound = true
+
+								if v.(bool) {
+									headerTransformationChoiceInt := &ves_io_schema.HeaderTransformationType_DefaultHeaderTransformation{}
+									headerTransformationChoiceInt.DefaultHeaderTransformation = &ves_io_schema.Empty{}
+									headerTransformationType.HeaderTransformationChoice = headerTransformationChoiceInt
+								}
+
+							}
+
+							if v, ok := headerTransformationTypeMapStrToI["proper_case_header_transformation"]; ok && !isIntfNil(v) && !headerTransformationChoiceTypeFound {
+
+								headerTransformationChoiceTypeFound = true
+
+								if v.(bool) {
+									headerTransformationChoiceInt := &ves_io_schema.HeaderTransformationType_ProperCaseHeaderTransformation{}
+									headerTransformationChoiceInt.ProperCaseHeaderTransformation = &ves_io_schema.Empty{}
+									headerTransformationType.HeaderTransformationChoice = headerTransformationChoiceInt
+								}
+
+							}
+
+						}
+
+					}
+
+					if v, ok := advancedOptionsMapStrToI["http2_options"]; ok && !isIntfNil(v) {
+
+						sl := v.(*schema.Set).List()
+						http2Options := &ves_io_schema_cluster.Http2ProtocolOptions{}
+						advancedOptions.Http2Options = http2Options
+						for _, set := range sl {
+							_ = set.(map[string]interface{})
+
+						}
+
+					}
+
+					if w, ok := advancedOptionsMapStrToI["http_idle_timeout"]; ok && !isIntfNil(w) {
+						advancedOptions.HttpIdleTimeout = uint32(w.(int))
+					}
+
+					outlierDetectionChoiceTypeFound := false
+
+					if v, ok := advancedOptionsMapStrToI["disable_outlier_detection"]; ok && !isIntfNil(v) && !outlierDetectionChoiceTypeFound {
+
+						outlierDetectionChoiceTypeFound = true
+
+						if v.(bool) {
+							outlierDetectionChoiceInt := &ves_io_schema_views_origin_pool.OriginPoolAdvancedOptions_DisableOutlierDetection{}
+							outlierDetectionChoiceInt.DisableOutlierDetection = &ves_io_schema.Empty{}
+							advancedOptions.OutlierDetectionChoice = outlierDetectionChoiceInt
+						}
+
+					}
+
+					if v, ok := advancedOptionsMapStrToI["outlier_detection"]; ok && !isIntfNil(v) && !outlierDetectionChoiceTypeFound {
+
+						outlierDetectionChoiceTypeFound = true
+						_ = v
+					}
+
+					panicThresholdTypeTypeFound := false
+
+					if v, ok := advancedOptionsMapStrToI["no_panic_threshold"]; ok && !isIntfNil(v) && !panicThresholdTypeTypeFound {
+
+						panicThresholdTypeTypeFound = true
+
+						if v.(bool) {
+							panicThresholdTypeInt := &ves_io_schema_views_origin_pool.OriginPoolAdvancedOptions_NoPanicThreshold{}
+							panicThresholdTypeInt.NoPanicThreshold = &ves_io_schema.Empty{}
+							advancedOptions.PanicThresholdType = panicThresholdTypeInt
+						}
+
+					}
+
+					if v, ok := advancedOptionsMapStrToI["panic_threshold"]; ok && !isIntfNil(v) && !panicThresholdTypeTypeFound {
+
+						panicThresholdTypeTypeFound = true
+						panicThresholdTypeInt := &ves_io_schema_views_origin_pool.OriginPoolAdvancedOptions_PanicThreshold{}
+
+						advancedOptions.PanicThresholdType = panicThresholdTypeInt
+
+						panicThresholdTypeInt.PanicThreshold = uint32(v.(int))
+
+					}
+
+					subsetChoiceTypeFound := false
+
+					if v, ok := advancedOptionsMapStrToI["disable_subsets"]; ok && !isIntfNil(v) && !subsetChoiceTypeFound {
+
+						subsetChoiceTypeFound = true
+
+						if v.(bool) {
+							subsetChoiceInt := &ves_io_schema_views_origin_pool.OriginPoolAdvancedOptions_DisableSubsets{}
+							subsetChoiceInt.DisableSubsets = &ves_io_schema.Empty{}
+							advancedOptions.SubsetChoice = subsetChoiceInt
+						}
+
+					}
+
+					if v, ok := advancedOptionsMapStrToI["enable_subsets"]; ok && !isIntfNil(v) && !subsetChoiceTypeFound {
+
+						subsetChoiceTypeFound = true
+						subsetChoiceInt := &ves_io_schema_views_origin_pool.OriginPoolAdvancedOptions_EnableSubsets{}
+						subsetChoiceInt.EnableSubsets = &ves_io_schema_views_origin_pool.OriginPoolSubsets{}
+						advancedOptions.SubsetChoice = subsetChoiceInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["endpoint_subsets"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								endpointSubsets := make([]*ves_io_schema_cluster.EndpointSubsetSelectorType, len(sl))
+								subsetChoiceInt.EnableSubsets.EndpointSubsets = endpointSubsets
+								for i, set := range sl {
+									endpointSubsets[i] = &ves_io_schema_cluster.EndpointSubsetSelectorType{}
+									_ = set.(map[string]interface{})
+
+								}
+
+							}
+
+							fallbackPolicyChoiceTypeFound := false
+
+							if v, ok := cs["any_endpoint"]; ok && !isIntfNil(v) && !fallbackPolicyChoiceTypeFound {
+
+								fallbackPolicyChoiceTypeFound = true
+
+								if v.(bool) {
+									fallbackPolicyChoiceInt := &ves_io_schema_views_origin_pool.OriginPoolSubsets_AnyEndpoint{}
+									fallbackPolicyChoiceInt.AnyEndpoint = &ves_io_schema.Empty{}
+									subsetChoiceInt.EnableSubsets.FallbackPolicyChoice = fallbackPolicyChoiceInt
+								}
+
+							}
+
+							if v, ok := cs["default_subset"]; ok && !isIntfNil(v) && !fallbackPolicyChoiceTypeFound {
+
+								fallbackPolicyChoiceTypeFound = true
+								fallbackPolicyChoiceInt := &ves_io_schema_views_origin_pool.OriginPoolSubsets_DefaultSubset{}
+								fallbackPolicyChoiceInt.DefaultSubset = &ves_io_schema_views_origin_pool.OriginPoolDefaultSubset{}
+								subsetChoiceInt.EnableSubsets.FallbackPolicyChoice = fallbackPolicyChoiceInt
+
+								sl := v.(*schema.Set).List()
+								for _, set := range sl {
+									cs := set.(map[string]interface{})
+
+									if v, ok := cs["default_subset"]; ok && !isIntfNil(v) {
+
+										ms := map[string]string{}
+										for k, v := range v.(map[string]interface{}) {
+											ms[k] = v.(string)
+										}
+										fallbackPolicyChoiceInt.DefaultSubset.DefaultSubset = ms
+									}
+
+								}
+
+							}
+
+							if v, ok := cs["fail_request"]; ok && !isIntfNil(v) && !fallbackPolicyChoiceTypeFound {
+
+								fallbackPolicyChoiceTypeFound = true
+
+								if v.(bool) {
+									fallbackPolicyChoiceInt := &ves_io_schema_views_origin_pool.OriginPoolSubsets_FailRequest{}
+									fallbackPolicyChoiceInt.FailRequest = &ves_io_schema.Empty{}
+									subsetChoiceInt.EnableSubsets.FallbackPolicyChoice = fallbackPolicyChoiceInt
+								}
+
+							}
+
+						}
+
+					}
+
+				}
+
+			}
+
+			if v, ok := cs["endpoint_selection"]; ok && !isIntfNil(v) {
+
+				originPoolChoiceInt.DefaultPool.EndpointSelection = ves_io_schema_cluster.EndpointSelectionPolicy(ves_io_schema_cluster.EndpointSelectionPolicy_value[v.(string)])
+
+			}
+
+			healthCheckPortChoiceTypeFound := false
+
+			if v, ok := cs["health_check_port"]; ok && !isIntfNil(v) && !healthCheckPortChoiceTypeFound {
+
+				healthCheckPortChoiceTypeFound = true
+				healthCheckPortChoiceInt := &ves_io_schema_views_origin_pool.GlobalSpecType_HealthCheckPort{}
+
+				originPoolChoiceInt.DefaultPool.HealthCheckPortChoice = healthCheckPortChoiceInt
+
+				healthCheckPortChoiceInt.HealthCheckPort = uint32(v.(int))
+
+			}
+
+			if v, ok := cs["same_as_endpoint_port"]; ok && !isIntfNil(v) && !healthCheckPortChoiceTypeFound {
+
+				healthCheckPortChoiceTypeFound = true
+
+				if v.(bool) {
+					healthCheckPortChoiceInt := &ves_io_schema_views_origin_pool.GlobalSpecType_SameAsEndpointPort{}
+					healthCheckPortChoiceInt.SameAsEndpointPort = &ves_io_schema.Empty{}
+					originPoolChoiceInt.DefaultPool.HealthCheckPortChoice = healthCheckPortChoiceInt
+				}
+
+			}
+
+			if v, ok := cs["healthcheck"]; ok && !isIntfNil(v) {
+
+				sl := v.([]interface{})
+				healthcheckInt := make([]*ves_io_schema_views.ObjectRefType, len(sl))
+				originPoolChoiceInt.DefaultPool.Healthcheck = healthcheckInt
+				for i, ps := range sl {
+
+					hMapToStrVal := ps.(map[string]interface{})
+					healthcheckInt[i] = &ves_io_schema_views.ObjectRefType{}
+
+					if v, ok := hMapToStrVal["name"]; ok && !isIntfNil(v) {
+						healthcheckInt[i].Name = v.(string)
+					}
+
+					if v, ok := hMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+						healthcheckInt[i].Namespace = v.(string)
+					}
+
+					if v, ok := hMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+						healthcheckInt[i].Tenant = v.(string)
+					}
+
+				}
+
+			}
+
+			if v, ok := cs["loadbalancer_algorithm"]; ok && !isIntfNil(v) {
+
+				originPoolChoiceInt.DefaultPool.LoadbalancerAlgorithm = ves_io_schema_cluster.LoadbalancerAlgorithm(ves_io_schema_cluster.LoadbalancerAlgorithm_value[v.(string)])
+
+			}
+
+			if v, ok := cs["origin_servers"]; ok && !isIntfNil(v) {
+
+				sl := v.([]interface{})
+				originServers := make([]*ves_io_schema_views_origin_pool.OriginServerType, len(sl))
+				originPoolChoiceInt.DefaultPool.OriginServers = originServers
+				for i, set := range sl {
+					originServers[i] = &ves_io_schema_views_origin_pool.OriginServerType{}
+					originServersMapStrToI := set.(map[string]interface{})
+
+					choiceTypeFound := false
+
+					if v, ok := originServersMapStrToI["consul_service"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+						choiceTypeFound = true
+						choiceInt := &ves_io_schema_views_origin_pool.OriginServerType_ConsulService{}
+						choiceInt.ConsulService = &ves_io_schema_views_origin_pool.OriginServerConsulService{}
+						originServers[i].Choice = choiceInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							networkChoiceTypeFound := false
+
+							if v, ok := cs["inside_network"]; ok && !isIntfNil(v) && !networkChoiceTypeFound {
+
+								networkChoiceTypeFound = true
+
+								if v.(bool) {
+									networkChoiceInt := &ves_io_schema_views_origin_pool.OriginServerConsulService_InsideNetwork{}
+									networkChoiceInt.InsideNetwork = &ves_io_schema.Empty{}
+									choiceInt.ConsulService.NetworkChoice = networkChoiceInt
+								}
+
+							}
+
+							if v, ok := cs["outside_network"]; ok && !isIntfNil(v) && !networkChoiceTypeFound {
+
+								networkChoiceTypeFound = true
+
+								if v.(bool) {
+									networkChoiceInt := &ves_io_schema_views_origin_pool.OriginServerConsulService_OutsideNetwork{}
+									networkChoiceInt.OutsideNetwork = &ves_io_schema.Empty{}
+									choiceInt.ConsulService.NetworkChoice = networkChoiceInt
+								}
+
+							}
+
+							if v, ok := cs["service_name"]; ok && !isIntfNil(v) {
+
+								choiceInt.ConsulService.ServiceName = v.(string)
+
+							}
+
+							if v, ok := cs["site_locator"]; ok && !isIntfNil(v) {
+
+								sl := v.(*schema.Set).List()
+								siteLocator := &ves_io_schema_views.SiteLocator{}
+								choiceInt.ConsulService.SiteLocator = siteLocator
+								for _, set := range sl {
+									siteLocatorMapStrToI := set.(map[string]interface{})
+
+									choiceTypeFound := false
+
+									if v, ok := siteLocatorMapStrToI["site"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+										choiceTypeFound = true
+										choiceInt := &ves_io_schema_views.SiteLocator_Site{}
+										choiceInt.Site = &ves_io_schema_views.ObjectRefType{}
+										siteLocator.Choice = choiceInt
+
+										sl := v.(*schema.Set).List()
+										for _, set := range sl {
+											cs := set.(map[string]interface{})
+
+											if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+												choiceInt.Site.Name = v.(string)
+
+											}
+
+											if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+												choiceInt.Site.Namespace = v.(string)
+
+											}
+
+											if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+												choiceInt.Site.Tenant = v.(string)
+
+											}
+
+										}
+
+									}
+
+									if v, ok := siteLocatorMapStrToI["virtual_site"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+										choiceTypeFound = true
+										choiceInt := &ves_io_schema_views.SiteLocator_VirtualSite{}
+										choiceInt.VirtualSite = &ves_io_schema_views.ObjectRefType{}
+										siteLocator.Choice = choiceInt
+
+										sl := v.(*schema.Set).List()
+										for _, set := range sl {
+											cs := set.(map[string]interface{})
+
+											if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+												choiceInt.VirtualSite.Name = v.(string)
+
+											}
+
+											if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+												choiceInt.VirtualSite.Namespace = v.(string)
+
+											}
+
+											if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+												choiceInt.VirtualSite.Tenant = v.(string)
+
+											}
+
+										}
+
+									}
+
+								}
+
+							}
+
+						}
+
+					}
+
+					if v, ok := originServersMapStrToI["custom_endpoint_object"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+						choiceTypeFound = true
+						choiceInt := &ves_io_schema_views_origin_pool.OriginServerType_CustomEndpointObject{}
+						choiceInt.CustomEndpointObject = &ves_io_schema_views_origin_pool.OriginServerCustomEndpoint{}
+						originServers[i].Choice = choiceInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["endpoint"]; ok && !isIntfNil(v) {
+
+								sl := v.(*schema.Set).List()
+								endpointInt := &ves_io_schema_views.ObjectRefType{}
+								choiceInt.CustomEndpointObject.Endpoint = endpointInt
+
+								for _, set := range sl {
+									eMapToStrVal := set.(map[string]interface{})
+									if val, ok := eMapToStrVal["name"]; ok && !isIntfNil(v) {
+										endpointInt.Name = val.(string)
+									}
+									if val, ok := eMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+										endpointInt.Namespace = val.(string)
+									}
+
+									if val, ok := eMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+										endpointInt.Tenant = val.(string)
+									}
+								}
+
+							}
+
+						}
+
+					}
+
+					if v, ok := originServersMapStrToI["k8s_service"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+						choiceTypeFound = true
+						choiceInt := &ves_io_schema_views_origin_pool.OriginServerType_K8SService{}
+						choiceInt.K8SService = &ves_io_schema_views_origin_pool.OriginServerK8SService{}
+						originServers[i].Choice = choiceInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							networkChoiceTypeFound := false
+
+							if v, ok := cs["inside_network"]; ok && !isIntfNil(v) && !networkChoiceTypeFound {
+
+								networkChoiceTypeFound = true
+
+								if v.(bool) {
+									networkChoiceInt := &ves_io_schema_views_origin_pool.OriginServerK8SService_InsideNetwork{}
+									networkChoiceInt.InsideNetwork = &ves_io_schema.Empty{}
+									choiceInt.K8SService.NetworkChoice = networkChoiceInt
+								}
+
+							}
+
+							if v, ok := cs["outside_network"]; ok && !isIntfNil(v) && !networkChoiceTypeFound {
+
+								networkChoiceTypeFound = true
+
+								if v.(bool) {
+									networkChoiceInt := &ves_io_schema_views_origin_pool.OriginServerK8SService_OutsideNetwork{}
+									networkChoiceInt.OutsideNetwork = &ves_io_schema.Empty{}
+									choiceInt.K8SService.NetworkChoice = networkChoiceInt
+								}
+
+							}
+
+							if v, ok := cs["vk8s_networks"]; ok && !isIntfNil(v) && !networkChoiceTypeFound {
+
+								networkChoiceTypeFound = true
+
+								if v.(bool) {
+									networkChoiceInt := &ves_io_schema_views_origin_pool.OriginServerK8SService_Vk8SNetworks{}
+									networkChoiceInt.Vk8SNetworks = &ves_io_schema.Empty{}
+									choiceInt.K8SService.NetworkChoice = networkChoiceInt
+								}
+
+							}
+
+							serviceInfoTypeFound := false
+
+							if v, ok := cs["service_name"]; ok && !isIntfNil(v) && !serviceInfoTypeFound {
+
+								serviceInfoTypeFound = true
+								serviceInfoInt := &ves_io_schema_views_origin_pool.OriginServerK8SService_ServiceName{}
+
+								choiceInt.K8SService.ServiceInfo = serviceInfoInt
+
+								serviceInfoInt.ServiceName = v.(string)
+
+							}
+
+							if v, ok := cs["service_selector"]; ok && !isIntfNil(v) && !serviceInfoTypeFound {
+
+								serviceInfoTypeFound = true
+								serviceInfoInt := &ves_io_schema_views_origin_pool.OriginServerK8SService_ServiceSelector{}
+								serviceInfoInt.ServiceSelector = &ves_io_schema.LabelSelectorType{}
+								choiceInt.K8SService.ServiceInfo = serviceInfoInt
+
+								sl := v.(*schema.Set).List()
+								for _, set := range sl {
+									cs := set.(map[string]interface{})
+
+									if v, ok := cs["expressions"]; ok && !isIntfNil(v) {
+
+										ls := make([]string, len(v.([]interface{})))
+										for i, v := range v.([]interface{}) {
+											ls[i] = v.(string)
+										}
+										serviceInfoInt.ServiceSelector.Expressions = ls
+
+									}
+
+								}
+
+							}
+
+							if v, ok := cs["site_locator"]; ok && !isIntfNil(v) {
+
+								sl := v.(*schema.Set).List()
+								siteLocator := &ves_io_schema_views.SiteLocator{}
+								choiceInt.K8SService.SiteLocator = siteLocator
+								for _, set := range sl {
+									siteLocatorMapStrToI := set.(map[string]interface{})
+
+									choiceTypeFound := false
+
+									if v, ok := siteLocatorMapStrToI["site"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+										choiceTypeFound = true
+										choiceInt := &ves_io_schema_views.SiteLocator_Site{}
+										choiceInt.Site = &ves_io_schema_views.ObjectRefType{}
+										siteLocator.Choice = choiceInt
+
+										sl := v.(*schema.Set).List()
+										for _, set := range sl {
+											cs := set.(map[string]interface{})
+
+											if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+												choiceInt.Site.Name = v.(string)
+
+											}
+
+											if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+												choiceInt.Site.Namespace = v.(string)
+
+											}
+
+											if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+												choiceInt.Site.Tenant = v.(string)
+
+											}
+
+										}
+
+									}
+
+									if v, ok := siteLocatorMapStrToI["virtual_site"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+										choiceTypeFound = true
+										choiceInt := &ves_io_schema_views.SiteLocator_VirtualSite{}
+										choiceInt.VirtualSite = &ves_io_schema_views.ObjectRefType{}
+										siteLocator.Choice = choiceInt
+
+										sl := v.(*schema.Set).List()
+										for _, set := range sl {
+											cs := set.(map[string]interface{})
+
+											if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+												choiceInt.VirtualSite.Name = v.(string)
+
+											}
+
+											if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+												choiceInt.VirtualSite.Namespace = v.(string)
+
+											}
+
+											if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+												choiceInt.VirtualSite.Tenant = v.(string)
+
+											}
+
+										}
+
+									}
+
+								}
+
+							}
+
+						}
+
+					}
+
+					if v, ok := originServersMapStrToI["private_ip"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+						choiceTypeFound = true
+						choiceInt := &ves_io_schema_views_origin_pool.OriginServerType_PrivateIp{}
+						choiceInt.PrivateIp = &ves_io_schema_views_origin_pool.OriginServerPrivateIP{}
+						originServers[i].Choice = choiceInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["ip"]; ok && !isIntfNil(v) {
+
+								choiceInt.PrivateIp.Ip = v.(string)
+
+							}
+
+							networkChoiceTypeFound := false
+
+							if v, ok := cs["inside_network"]; ok && !isIntfNil(v) && !networkChoiceTypeFound {
+
+								networkChoiceTypeFound = true
+
+								if v.(bool) {
+									networkChoiceInt := &ves_io_schema_views_origin_pool.OriginServerPrivateIP_InsideNetwork{}
+									networkChoiceInt.InsideNetwork = &ves_io_schema.Empty{}
+									choiceInt.PrivateIp.NetworkChoice = networkChoiceInt
+								}
+
+							}
+
+							if v, ok := cs["outside_network"]; ok && !isIntfNil(v) && !networkChoiceTypeFound {
+
+								networkChoiceTypeFound = true
+
+								if v.(bool) {
+									networkChoiceInt := &ves_io_schema_views_origin_pool.OriginServerPrivateIP_OutsideNetwork{}
+									networkChoiceInt.OutsideNetwork = &ves_io_schema.Empty{}
+									choiceInt.PrivateIp.NetworkChoice = networkChoiceInt
+								}
+
+							}
+
+							if v, ok := cs["site_locator"]; ok && !isIntfNil(v) {
+
+								sl := v.(*schema.Set).List()
+								siteLocator := &ves_io_schema_views.SiteLocator{}
+								choiceInt.PrivateIp.SiteLocator = siteLocator
+								for _, set := range sl {
+									siteLocatorMapStrToI := set.(map[string]interface{})
+
+									choiceTypeFound := false
+
+									if v, ok := siteLocatorMapStrToI["site"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+										choiceTypeFound = true
+										choiceInt := &ves_io_schema_views.SiteLocator_Site{}
+										choiceInt.Site = &ves_io_schema_views.ObjectRefType{}
+										siteLocator.Choice = choiceInt
+
+										sl := v.(*schema.Set).List()
+										for _, set := range sl {
+											cs := set.(map[string]interface{})
+
+											if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+												choiceInt.Site.Name = v.(string)
+
+											}
+
+											if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+												choiceInt.Site.Namespace = v.(string)
+
+											}
+
+											if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+												choiceInt.Site.Tenant = v.(string)
+
+											}
+
+										}
+
+									}
+
+									if v, ok := siteLocatorMapStrToI["virtual_site"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+										choiceTypeFound = true
+										choiceInt := &ves_io_schema_views.SiteLocator_VirtualSite{}
+										choiceInt.VirtualSite = &ves_io_schema_views.ObjectRefType{}
+										siteLocator.Choice = choiceInt
+
+										sl := v.(*schema.Set).List()
+										for _, set := range sl {
+											cs := set.(map[string]interface{})
+
+											if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+												choiceInt.VirtualSite.Name = v.(string)
+
+											}
+
+											if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+												choiceInt.VirtualSite.Namespace = v.(string)
+
+											}
+
+											if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+												choiceInt.VirtualSite.Tenant = v.(string)
+
+											}
+
+										}
+
+									}
+
+								}
+
+							}
+
+						}
+
+					}
+
+					if v, ok := originServersMapStrToI["private_name"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+						choiceTypeFound = true
+						choiceInt := &ves_io_schema_views_origin_pool.OriginServerType_PrivateName{}
+						choiceInt.PrivateName = &ves_io_schema_views_origin_pool.OriginServerPrivateName{}
+						originServers[i].Choice = choiceInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["dns_name"]; ok && !isIntfNil(v) {
+
+								choiceInt.PrivateName.DnsName = v.(string)
+
+							}
+
+							networkChoiceTypeFound := false
+
+							if v, ok := cs["inside_network"]; ok && !isIntfNil(v) && !networkChoiceTypeFound {
+
+								networkChoiceTypeFound = true
+
+								if v.(bool) {
+									networkChoiceInt := &ves_io_schema_views_origin_pool.OriginServerPrivateName_InsideNetwork{}
+									networkChoiceInt.InsideNetwork = &ves_io_schema.Empty{}
+									choiceInt.PrivateName.NetworkChoice = networkChoiceInt
+								}
+
+							}
+
+							if v, ok := cs["outside_network"]; ok && !isIntfNil(v) && !networkChoiceTypeFound {
+
+								networkChoiceTypeFound = true
+
+								if v.(bool) {
+									networkChoiceInt := &ves_io_schema_views_origin_pool.OriginServerPrivateName_OutsideNetwork{}
+									networkChoiceInt.OutsideNetwork = &ves_io_schema.Empty{}
+									choiceInt.PrivateName.NetworkChoice = networkChoiceInt
+								}
+
+							}
+
+							if v, ok := cs["site_locator"]; ok && !isIntfNil(v) {
+
+								sl := v.(*schema.Set).List()
+								siteLocator := &ves_io_schema_views.SiteLocator{}
+								choiceInt.PrivateName.SiteLocator = siteLocator
+								for _, set := range sl {
+									siteLocatorMapStrToI := set.(map[string]interface{})
+
+									choiceTypeFound := false
+
+									if v, ok := siteLocatorMapStrToI["site"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+										choiceTypeFound = true
+										choiceInt := &ves_io_schema_views.SiteLocator_Site{}
+										choiceInt.Site = &ves_io_schema_views.ObjectRefType{}
+										siteLocator.Choice = choiceInt
+
+										sl := v.(*schema.Set).List()
+										for _, set := range sl {
+											cs := set.(map[string]interface{})
+
+											if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+												choiceInt.Site.Name = v.(string)
+
+											}
+
+											if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+												choiceInt.Site.Namespace = v.(string)
+
+											}
+
+											if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+												choiceInt.Site.Tenant = v.(string)
+
+											}
+
+										}
+
+									}
+
+									if v, ok := siteLocatorMapStrToI["virtual_site"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+										choiceTypeFound = true
+										choiceInt := &ves_io_schema_views.SiteLocator_VirtualSite{}
+										choiceInt.VirtualSite = &ves_io_schema_views.ObjectRefType{}
+										siteLocator.Choice = choiceInt
+
+										sl := v.(*schema.Set).List()
+										for _, set := range sl {
+											cs := set.(map[string]interface{})
+
+											if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+												choiceInt.VirtualSite.Name = v.(string)
+
+											}
+
+											if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+												choiceInt.VirtualSite.Namespace = v.(string)
+
+											}
+
+											if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+												choiceInt.VirtualSite.Tenant = v.(string)
+
+											}
+
+										}
+
+									}
+
+								}
+
+							}
+
+						}
+
+					}
+
+					if v, ok := originServersMapStrToI["public_ip"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+						choiceTypeFound = true
+						choiceInt := &ves_io_schema_views_origin_pool.OriginServerType_PublicIp{}
+						choiceInt.PublicIp = &ves_io_schema_views_origin_pool.OriginServerPublicIP{}
+						originServers[i].Choice = choiceInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["ip"]; ok && !isIntfNil(v) {
+
+								choiceInt.PublicIp.Ip = v.(string)
+
+							}
+
+						}
+
+					}
+
+					if v, ok := originServersMapStrToI["public_name"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+						choiceTypeFound = true
+						choiceInt := &ves_io_schema_views_origin_pool.OriginServerType_PublicName{}
+						choiceInt.PublicName = &ves_io_schema_views_origin_pool.OriginServerPublicName{}
+						originServers[i].Choice = choiceInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["dns_name"]; ok && !isIntfNil(v) {
+
+								choiceInt.PublicName.DnsName = v.(string)
+
+							}
+
+						}
+
+					}
+
+					if v, ok := originServersMapStrToI["vn_private_ip"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+						choiceTypeFound = true
+						choiceInt := &ves_io_schema_views_origin_pool.OriginServerType_VnPrivateIp{}
+						choiceInt.VnPrivateIp = &ves_io_schema_views_origin_pool.OriginServerVirtualNetworkIP{}
+						originServers[i].Choice = choiceInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["ip"]; ok && !isIntfNil(v) {
+
+								choiceInt.VnPrivateIp.Ip = v.(string)
+
+							}
+
+							if v, ok := cs["virtual_network"]; ok && !isIntfNil(v) {
+
+								sl := v.(*schema.Set).List()
+								virtualNetworkInt := &ves_io_schema_views.ObjectRefType{}
+								choiceInt.VnPrivateIp.VirtualNetwork = virtualNetworkInt
+
+								for _, set := range sl {
+									vnMapToStrVal := set.(map[string]interface{})
+									if val, ok := vnMapToStrVal["name"]; ok && !isIntfNil(v) {
+										virtualNetworkInt.Name = val.(string)
+									}
+									if val, ok := vnMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+										virtualNetworkInt.Namespace = val.(string)
+									}
+
+									if val, ok := vnMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+										virtualNetworkInt.Tenant = val.(string)
+									}
+								}
+
+							}
+
+						}
+
+					}
+
+					if v, ok := originServersMapStrToI["vn_private_name"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+						choiceTypeFound = true
+						choiceInt := &ves_io_schema_views_origin_pool.OriginServerType_VnPrivateName{}
+						choiceInt.VnPrivateName = &ves_io_schema_views_origin_pool.OriginServerVirtualNetworkName{}
+						originServers[i].Choice = choiceInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["dns_name"]; ok && !isIntfNil(v) {
+
+								choiceInt.VnPrivateName.DnsName = v.(string)
+
+							}
+
+							if v, ok := cs["private_network"]; ok && !isIntfNil(v) {
+
+								sl := v.(*schema.Set).List()
+								privateNetworkInt := &ves_io_schema_views.ObjectRefType{}
+								choiceInt.VnPrivateName.PrivateNetwork = privateNetworkInt
+
+								for _, set := range sl {
+									pnMapToStrVal := set.(map[string]interface{})
+									if val, ok := pnMapToStrVal["name"]; ok && !isIntfNil(v) {
+										privateNetworkInt.Name = val.(string)
+									}
+									if val, ok := pnMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+										privateNetworkInt.Namespace = val.(string)
+									}
+
+									if val, ok := pnMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+										privateNetworkInt.Tenant = val.(string)
+									}
+								}
+
+							}
+
+						}
+
+					}
+
+					if w, ok := originServersMapStrToI["labels"]; ok && !isIntfNil(w) {
+						ms := map[string]string{}
+						for k, v := range w.(map[string]interface{}) {
+							ms[k] = v.(string)
+						}
+						originServers[i].Labels = ms
+					}
+
+				}
+
+			}
+
+			portChoiceTypeFound := false
+
+			if v, ok := cs["automatic_port"]; ok && !isIntfNil(v) && !portChoiceTypeFound {
+
+				portChoiceTypeFound = true
+
+				if v.(bool) {
+					portChoiceInt := &ves_io_schema_views_origin_pool.GlobalSpecType_AutomaticPort{}
+					portChoiceInt.AutomaticPort = &ves_io_schema.Empty{}
+					originPoolChoiceInt.DefaultPool.PortChoice = portChoiceInt
+				}
+
+			}
+
+			if v, ok := cs["port"]; ok && !isIntfNil(v) && !portChoiceTypeFound {
+
+				portChoiceTypeFound = true
+				portChoiceInt := &ves_io_schema_views_origin_pool.GlobalSpecType_Port{}
+
+				originPoolChoiceInt.DefaultPool.PortChoice = portChoiceInt
+
+				portChoiceInt.Port = uint32(v.(int))
+
+			}
+
+			tlsChoiceTypeFound := false
+
+			if v, ok := cs["no_tls"]; ok && !isIntfNil(v) && !tlsChoiceTypeFound {
+
+				tlsChoiceTypeFound = true
+
+				if v.(bool) {
+					tlsChoiceInt := &ves_io_schema_views_origin_pool.GlobalSpecType_NoTls{}
+					tlsChoiceInt.NoTls = &ves_io_schema.Empty{}
+					originPoolChoiceInt.DefaultPool.TlsChoice = tlsChoiceInt
+				}
+
+			}
+
+			if v, ok := cs["use_tls"]; ok && !isIntfNil(v) && !tlsChoiceTypeFound {
+
+				tlsChoiceTypeFound = true
+				tlsChoiceInt := &ves_io_schema_views_origin_pool.GlobalSpecType_UseTls{}
+				tlsChoiceInt.UseTls = &ves_io_schema_views_origin_pool.UpstreamTlsParameters{}
+				originPoolChoiceInt.DefaultPool.TlsChoice = tlsChoiceInt
+
+				sl := v.(*schema.Set).List()
+				for _, set := range sl {
+					cs := set.(map[string]interface{})
+
+					mtlsChoiceTypeFound := false
+
+					if v, ok := cs["no_mtls"]; ok && !isIntfNil(v) && !mtlsChoiceTypeFound {
+
+						mtlsChoiceTypeFound = true
+
+						if v.(bool) {
+							mtlsChoiceInt := &ves_io_schema_views_origin_pool.UpstreamTlsParameters_NoMtls{}
+							mtlsChoiceInt.NoMtls = &ves_io_schema.Empty{}
+							tlsChoiceInt.UseTls.MtlsChoice = mtlsChoiceInt
+						}
+
+					}
+
+					if v, ok := cs["use_mtls"]; ok && !isIntfNil(v) && !mtlsChoiceTypeFound {
+
+						mtlsChoiceTypeFound = true
+						mtlsChoiceInt := &ves_io_schema_views_origin_pool.UpstreamTlsParameters_UseMtls{}
+						mtlsChoiceInt.UseMtls = &ves_io_schema_views_origin_pool.TlsCertificatesType{}
+						tlsChoiceInt.UseTls.MtlsChoice = mtlsChoiceInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["tls_certificates"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								tlsCertificates := make([]*ves_io_schema.TlsCertificateType, len(sl))
+								mtlsChoiceInt.UseMtls.TlsCertificates = tlsCertificates
+								for i, set := range sl {
+									tlsCertificates[i] = &ves_io_schema.TlsCertificateType{}
+									tlsCertificatesMapStrToI := set.(map[string]interface{})
+
+									if w, ok := tlsCertificatesMapStrToI["certificate_url"]; ok && !isIntfNil(w) {
+										tlsCertificates[i].CertificateUrl = w.(string)
+									}
+
+									if w, ok := tlsCertificatesMapStrToI["description"]; ok && !isIntfNil(w) {
+										tlsCertificates[i].Description = w.(string)
+									}
+
+									ocspStaplingChoiceTypeFound := false
+
+									if v, ok := tlsCertificatesMapStrToI["custom_hash_algorithms"]; ok && !isIntfNil(v) && !ocspStaplingChoiceTypeFound {
+
+										ocspStaplingChoiceTypeFound = true
+										ocspStaplingChoiceInt := &ves_io_schema.TlsCertificateType_CustomHashAlgorithms{}
+										ocspStaplingChoiceInt.CustomHashAlgorithms = &ves_io_schema.HashAlgorithms{}
+										tlsCertificates[i].OcspStaplingChoice = ocspStaplingChoiceInt
+
+										sl := v.(*schema.Set).List()
+										for _, set := range sl {
+											cs := set.(map[string]interface{})
+
+											if v, ok := cs["hash_algorithms"]; ok && !isIntfNil(v) {
+
+												hash_algorithmsList := []ves_io_schema.HashAlgorithm{}
+												for _, j := range v.([]interface{}) {
+													hash_algorithmsList = append(hash_algorithmsList, ves_io_schema.HashAlgorithm(ves_io_schema.HashAlgorithm_value[j.(string)]))
+												}
+												ocspStaplingChoiceInt.CustomHashAlgorithms.HashAlgorithms = hash_algorithmsList
+
+											}
+
+										}
+
+									}
+
+									if v, ok := tlsCertificatesMapStrToI["disable_ocsp_stapling"]; ok && !isIntfNil(v) && !ocspStaplingChoiceTypeFound {
+
+										ocspStaplingChoiceTypeFound = true
+										_ = v
+									}
+
+									if v, ok := tlsCertificatesMapStrToI["use_system_defaults"]; ok && !isIntfNil(v) && !ocspStaplingChoiceTypeFound {
+
+										ocspStaplingChoiceTypeFound = true
+										_ = v
+									}
+
+									if v, ok := tlsCertificatesMapStrToI["private_key"]; ok && !isIntfNil(v) {
+
+										sl := v.(*schema.Set).List()
+										privateKey := &ves_io_schema.SecretType{}
+										tlsCertificates[i].PrivateKey = privateKey
+										for _, set := range sl {
+											privateKeyMapStrToI := set.(map[string]interface{})
+
+											if v, ok := privateKeyMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
+
+												sl := v.(*schema.Set).List()
+												blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
+												privateKey.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
+												for _, set := range sl {
+													blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
+
+													if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
+														blindfoldSecretInfoInternal.DecryptionProvider = w.(string)
+													}
+
+													if w, ok := blindfoldSecretInfoInternalMapStrToI["location"]; ok && !isIntfNil(w) {
+														blindfoldSecretInfoInternal.Location = w.(string)
+													}
+
+													if w, ok := blindfoldSecretInfoInternalMapStrToI["store_provider"]; ok && !isIntfNil(w) {
+														blindfoldSecretInfoInternal.StoreProvider = w.(string)
+													}
+
+												}
+
+											}
+
+											if v, ok := privateKeyMapStrToI["secret_encoding_type"]; ok && !isIntfNil(v) {
+
+												privateKey.SecretEncodingType = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+											}
+
+											secretInfoOneofTypeFound := false
+
+											if v, ok := privateKeyMapStrToI["blindfold_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+												secretInfoOneofTypeFound = true
+												secretInfoOneofInt := &ves_io_schema.SecretType_BlindfoldSecretInfo{}
+												secretInfoOneofInt.BlindfoldSecretInfo = &ves_io_schema.BlindfoldSecretInfoType{}
+												privateKey.SecretInfoOneof = secretInfoOneofInt
+
+												sl := v.(*schema.Set).List()
+												for _, set := range sl {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["decryption_provider"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.BlindfoldSecretInfo.DecryptionProvider = v.(string)
+
+													}
+
+													if v, ok := cs["location"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.BlindfoldSecretInfo.Location = v.(string)
+
+													}
+
+													if v, ok := cs["store_provider"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.BlindfoldSecretInfo.StoreProvider = v.(string)
+
+													}
+
+												}
+
+											}
+
+											if v, ok := privateKeyMapStrToI["clear_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+												secretInfoOneofTypeFound = true
+												secretInfoOneofInt := &ves_io_schema.SecretType_ClearSecretInfo{}
+												secretInfoOneofInt.ClearSecretInfo = &ves_io_schema.ClearSecretInfoType{}
+												privateKey.SecretInfoOneof = secretInfoOneofInt
+
+												sl := v.(*schema.Set).List()
+												for _, set := range sl {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["provider"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.ClearSecretInfo.Provider = v.(string)
+
+													}
+
+													if v, ok := cs["url"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
+
+													}
+
+												}
+
+											}
+
+											if v, ok := privateKeyMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+												secretInfoOneofTypeFound = true
+												secretInfoOneofInt := &ves_io_schema.SecretType_VaultSecretInfo{}
+												secretInfoOneofInt.VaultSecretInfo = &ves_io_schema.VaultSecretInfoType{}
+												privateKey.SecretInfoOneof = secretInfoOneofInt
+
+												sl := v.(*schema.Set).List()
+												for _, set := range sl {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["key"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
+
+													}
+
+													if v, ok := cs["location"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
+
+													}
+
+													if v, ok := cs["provider"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
+
+													}
+
+													if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.VaultSecretInfo.SecretEncoding = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+													}
+
+													if v, ok := cs["version"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
+
+													}
+
+												}
+
+											}
+
+											if v, ok := privateKeyMapStrToI["wingman_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+												secretInfoOneofTypeFound = true
+												secretInfoOneofInt := &ves_io_schema.SecretType_WingmanSecretInfo{}
+												secretInfoOneofInt.WingmanSecretInfo = &ves_io_schema.WingmanSecretInfoType{}
+												privateKey.SecretInfoOneof = secretInfoOneofInt
+
+												sl := v.(*schema.Set).List()
+												for _, set := range sl {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
+
+													}
+
+												}
+
+											}
+
+										}
+
+									}
+
+								}
+
+							}
+
+						}
+
+					}
+
+					serverValidationChoiceTypeFound := false
+
+					if v, ok := cs["skip_server_verification"]; ok && !isIntfNil(v) && !serverValidationChoiceTypeFound {
+
+						serverValidationChoiceTypeFound = true
+
+						if v.(bool) {
+							serverValidationChoiceInt := &ves_io_schema_views_origin_pool.UpstreamTlsParameters_SkipServerVerification{}
+							serverValidationChoiceInt.SkipServerVerification = &ves_io_schema.Empty{}
+							tlsChoiceInt.UseTls.ServerValidationChoice = serverValidationChoiceInt
+						}
+
+					}
+
+					if v, ok := cs["use_server_verification"]; ok && !isIntfNil(v) && !serverValidationChoiceTypeFound {
+
+						serverValidationChoiceTypeFound = true
+						serverValidationChoiceInt := &ves_io_schema_views_origin_pool.UpstreamTlsParameters_UseServerVerification{}
+						serverValidationChoiceInt.UseServerVerification = &ves_io_schema_views_origin_pool.UpstreamTlsValidationContext{}
+						tlsChoiceInt.UseTls.ServerValidationChoice = serverValidationChoiceInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["trusted_ca_url"]; ok && !isIntfNil(v) {
+
+								serverValidationChoiceInt.UseServerVerification.TrustedCaUrl = v.(string)
+
+							}
+
+						}
+
+					}
+
+					if v, ok := cs["volterra_trusted_ca"]; ok && !isIntfNil(v) && !serverValidationChoiceTypeFound {
+
+						serverValidationChoiceTypeFound = true
+
+						if v.(bool) {
+							serverValidationChoiceInt := &ves_io_schema_views_origin_pool.UpstreamTlsParameters_VolterraTrustedCa{}
+							serverValidationChoiceInt.VolterraTrustedCa = &ves_io_schema.Empty{}
+							tlsChoiceInt.UseTls.ServerValidationChoice = serverValidationChoiceInt
+						}
+
+					}
+
+					sniChoiceTypeFound := false
+
+					if v, ok := cs["disable_sni"]; ok && !isIntfNil(v) && !sniChoiceTypeFound {
+
+						sniChoiceTypeFound = true
+
+						if v.(bool) {
+							sniChoiceInt := &ves_io_schema_views_origin_pool.UpstreamTlsParameters_DisableSni{}
+							sniChoiceInt.DisableSni = &ves_io_schema.Empty{}
+							tlsChoiceInt.UseTls.SniChoice = sniChoiceInt
+						}
+
+					}
+
+					if v, ok := cs["sni"]; ok && !isIntfNil(v) && !sniChoiceTypeFound {
+
+						sniChoiceTypeFound = true
+						sniChoiceInt := &ves_io_schema_views_origin_pool.UpstreamTlsParameters_Sni{}
+
+						tlsChoiceInt.UseTls.SniChoice = sniChoiceInt
+
+						sniChoiceInt.Sni = v.(string)
+
+					}
+
+					if v, ok := cs["use_host_header_as_sni"]; ok && !isIntfNil(v) && !sniChoiceTypeFound {
+
+						sniChoiceTypeFound = true
+
+						if v.(bool) {
+							sniChoiceInt := &ves_io_schema_views_origin_pool.UpstreamTlsParameters_UseHostHeaderAsSni{}
+							sniChoiceInt.UseHostHeaderAsSni = &ves_io_schema.Empty{}
+							tlsChoiceInt.UseTls.SniChoice = sniChoiceInt
+						}
+
+					}
+
+					if v, ok := cs["tls_config"]; ok && !isIntfNil(v) {
+
+						sl := v.(*schema.Set).List()
+						tlsConfig := &ves_io_schema_views.TlsConfig{}
+						tlsChoiceInt.UseTls.TlsConfig = tlsConfig
+						for _, set := range sl {
+							tlsConfigMapStrToI := set.(map[string]interface{})
+
+							choiceTypeFound := false
+
+							if v, ok := tlsConfigMapStrToI["custom_security"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+								choiceTypeFound = true
+								choiceInt := &ves_io_schema_views.TlsConfig_CustomSecurity{}
+								choiceInt.CustomSecurity = &ves_io_schema_views.CustomCiphers{}
+								tlsConfig.Choice = choiceInt
+
+								sl := v.(*schema.Set).List()
+								for _, set := range sl {
+									cs := set.(map[string]interface{})
+
+									if v, ok := cs["cipher_suites"]; ok && !isIntfNil(v) {
+
+										ls := make([]string, len(v.([]interface{})))
+										for i, v := range v.([]interface{}) {
+											ls[i] = v.(string)
+										}
+										choiceInt.CustomSecurity.CipherSuites = ls
+
+									}
+
+									if v, ok := cs["max_version"]; ok && !isIntfNil(v) {
+
+										choiceInt.CustomSecurity.MaxVersion = ves_io_schema.TlsProtocol(ves_io_schema.TlsProtocol_value[v.(string)])
+
+									}
+
+									if v, ok := cs["min_version"]; ok && !isIntfNil(v) {
+
+										choiceInt.CustomSecurity.MinVersion = ves_io_schema.TlsProtocol(ves_io_schema.TlsProtocol_value[v.(string)])
+
+									}
+
+								}
+
+							}
+
+							if v, ok := tlsConfigMapStrToI["default_security"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+								choiceTypeFound = true
+
+								if v.(bool) {
+									choiceInt := &ves_io_schema_views.TlsConfig_DefaultSecurity{}
+									choiceInt.DefaultSecurity = &ves_io_schema.Empty{}
+									tlsConfig.Choice = choiceInt
+								}
+
+							}
+
+							if v, ok := tlsConfigMapStrToI["low_security"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+								choiceTypeFound = true
+
+								if v.(bool) {
+									choiceInt := &ves_io_schema_views.TlsConfig_LowSecurity{}
+									choiceInt.LowSecurity = &ves_io_schema.Empty{}
+									tlsConfig.Choice = choiceInt
+								}
+
+							}
+
+							if v, ok := tlsConfigMapStrToI["medium_security"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+								choiceTypeFound = true
+
+								if v.(bool) {
+									choiceInt := &ves_io_schema_views.TlsConfig_MediumSecurity{}
+									choiceInt.MediumSecurity = &ves_io_schema.Empty{}
+									tlsConfig.Choice = choiceInt
+								}
+
+							}
+
+						}
+
+					}
+
+				}
+
+			}
+
+			if v, ok := cs["view_internal"]; ok && !isIntfNil(v) {
+
+				sl := v.(*schema.Set).List()
+				viewInternalInt := &ves_io_schema_views.ObjectRefType{}
+				originPoolChoiceInt.DefaultPool.ViewInternal = viewInternalInt
+
+				for _, set := range sl {
+					viMapToStrVal := set.(map[string]interface{})
+					if val, ok := viMapToStrVal["name"]; ok && !isIntfNil(v) {
+						viewInternalInt.Name = val.(string)
+					}
+					if val, ok := viMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+						viewInternalInt.Namespace = val.(string)
+					}
+
+					if val, ok := viMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+						viewInternalInt.Tenant = val.(string)
+					}
+				}
+
+			}
+
+		}
+
+	}
+
+	if v, ok := d.GetOk("default_pool_list"); ok && !originPoolChoiceTypeFound {
+
+		originPoolChoiceTypeFound = true
+		originPoolChoiceInt := &ves_io_schema_views_http_loadbalancer.ReplaceSpecType_DefaultPoolList{}
+		originPoolChoiceInt.DefaultPoolList = &ves_io_schema_views.OriginPoolListType{}
+		updateSpec.OriginPoolChoice = originPoolChoiceInt
+
+		sl := v.(*schema.Set).List()
+		for _, set := range sl {
+			cs := set.(map[string]interface{})
+
+			if v, ok := cs["pools"]; ok && !isIntfNil(v) {
+
+				sl := v.([]interface{})
+				pools := make([]*ves_io_schema_views.OriginPoolWithWeight, len(sl))
+				originPoolChoiceInt.DefaultPoolList.Pools = pools
+				for i, set := range sl {
+					pools[i] = &ves_io_schema_views.OriginPoolWithWeight{}
+					poolsMapStrToI := set.(map[string]interface{})
+
+					if w, ok := poolsMapStrToI["endpoint_subsets"]; ok && !isIntfNil(w) {
+						ms := map[string]string{}
+						for k, v := range w.(map[string]interface{}) {
+							ms[k] = v.(string)
+						}
+						pools[i].EndpointSubsets = ms
+					}
+
+					poolChoiceTypeFound := false
+
+					if v, ok := poolsMapStrToI["cluster"]; ok && !isIntfNil(v) && !poolChoiceTypeFound {
+
+						poolChoiceTypeFound = true
+						poolChoiceInt := &ves_io_schema_views.OriginPoolWithWeight_Cluster{}
+						poolChoiceInt.Cluster = &ves_io_schema_views.ObjectRefType{}
+						pools[i].PoolChoice = poolChoiceInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+								poolChoiceInt.Cluster.Name = v.(string)
+
+							}
+
+							if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+								poolChoiceInt.Cluster.Namespace = v.(string)
+
+							}
+
+							if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+								poolChoiceInt.Cluster.Tenant = v.(string)
+
+							}
+
+						}
+
+					}
+
+					if v, ok := poolsMapStrToI["pool"]; ok && !isIntfNil(v) && !poolChoiceTypeFound {
+
+						poolChoiceTypeFound = true
+						poolChoiceInt := &ves_io_schema_views.OriginPoolWithWeight_Pool{}
+						poolChoiceInt.Pool = &ves_io_schema_views.ObjectRefType{}
+						pools[i].PoolChoice = poolChoiceInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+								poolChoiceInt.Pool.Name = v.(string)
+
+							}
+
+							if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+								poolChoiceInt.Pool.Namespace = v.(string)
+
+							}
+
+							if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+								poolChoiceInt.Pool.Tenant = v.(string)
+
+							}
+
+						}
+
+					}
+
+					if w, ok := poolsMapStrToI["priority"]; ok && !isIntfNil(w) {
+						pools[i].Priority = uint32(w.(int))
+					}
+
+					if w, ok := poolsMapStrToI["weight"]; ok && !isIntfNil(w) {
+						pools[i].Weight = uint32(w.(int))
+					}
+
 				}
 
 			}

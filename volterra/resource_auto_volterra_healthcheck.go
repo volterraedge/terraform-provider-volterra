@@ -67,6 +67,16 @@ func resourceVolterraHealthcheck() *schema.Resource {
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 
+						"expected_status_codes": {
+
+							Type: schema.TypeList,
+
+							Optional: true,
+							Elem: &schema.Schema{
+								Type: schema.TypeString,
+							},
+						},
+
 						"headers": {
 							Type:     schema.TypeMap,
 							Optional: true,
@@ -222,6 +232,16 @@ func resourceVolterraHealthcheckCreate(d *schema.ResourceData, meta interface{})
 		sl := v.(*schema.Set).List()
 		for _, set := range sl {
 			cs := set.(map[string]interface{})
+
+			if v, ok := cs["expected_status_codes"]; ok && !isIntfNil(v) {
+
+				ls := make([]string, len(v.([]interface{})))
+				for i, v := range v.([]interface{}) {
+					ls[i] = v.(string)
+				}
+				healthCheckInt.HttpHealthCheck.ExpectedStatusCodes = ls
+
+			}
 
 			if v, ok := cs["headers"]; ok && !isIntfNil(v) {
 
@@ -460,6 +480,16 @@ func resourceVolterraHealthcheckUpdate(d *schema.ResourceData, meta interface{})
 		sl := v.(*schema.Set).List()
 		for _, set := range sl {
 			cs := set.(map[string]interface{})
+
+			if v, ok := cs["expected_status_codes"]; ok && !isIntfNil(v) {
+
+				ls := make([]string, len(v.([]interface{})))
+				for i, v := range v.([]interface{}) {
+					ls[i] = v.(string)
+				}
+				healthCheckInt.HttpHealthCheck.ExpectedStatusCodes = ls
+
+			}
 
 			if v, ok := cs["headers"]; ok && !isIntfNil(v) {
 
