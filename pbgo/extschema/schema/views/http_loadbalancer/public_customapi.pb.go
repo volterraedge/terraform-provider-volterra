@@ -19,7 +19,7 @@ import (
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
-	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+	schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
 	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/vesenv"
 	virtual_host_dns_info "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/virtual_host_dns_info"
 	io "io"
@@ -157,11 +157,268 @@ func (m *GetDnsInfoResponse) GetDnsInfo() *virtual_host_dns_info.GlobalSpecType 
 	return nil
 }
 
+// Get Security Config request
+//
+// x-displayName: "Get Security Config Request"
+// Request of GET Security Config Spec API
+type GetSecurityConfigReq struct {
+	// Namespace
+	//
+	// x-displayName: "Namespace"
+	// x-example: "shared"
+	// Namespace of the HTTP Load Balancer for current request
+	Namespace string `protobuf:"bytes,1,opt,name=namespace,proto3" json:"namespace,omitempty"`
+	// Get loadbalancer
+	//
+	// x-displayName: "Load Balancer Choice"
+	// Fetch Security Config of All Load Balancers or list of LBs
+	//
+	// Types that are valid to be assigned to LoadbalancerChoice:
+	//	*GetSecurityConfigReq_AllHttpLoadbalancers
+	//	*GetSecurityConfigReq_HttpLoadbalancersList
+	LoadbalancerChoice isGetSecurityConfigReq_LoadbalancerChoice `protobuf_oneof:"loadbalancer_choice"`
+}
+
+func (m *GetSecurityConfigReq) Reset()      { *m = GetSecurityConfigReq{} }
+func (*GetSecurityConfigReq) ProtoMessage() {}
+func (*GetSecurityConfigReq) Descriptor() ([]byte, []int) {
+	return fileDescriptor_e0f78b47e1ecaa96, []int{2}
+}
+func (m *GetSecurityConfigReq) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *GetSecurityConfigReq) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_GetSecurityConfigReq.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *GetSecurityConfigReq) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GetSecurityConfigReq.Merge(m, src)
+}
+func (m *GetSecurityConfigReq) XXX_Size() int {
+	return m.Size()
+}
+func (m *GetSecurityConfigReq) XXX_DiscardUnknown() {
+	xxx_messageInfo_GetSecurityConfigReq.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_GetSecurityConfigReq proto.InternalMessageInfo
+
+type isGetSecurityConfigReq_LoadbalancerChoice interface {
+	isGetSecurityConfigReq_LoadbalancerChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
+
+type GetSecurityConfigReq_AllHttpLoadbalancers struct {
+	AllHttpLoadbalancers *schema.Empty `protobuf:"bytes,3,opt,name=all_http_loadbalancers,json=allHttpLoadbalancers,proto3,oneof" json:"all_http_loadbalancers,omitempty"`
+}
+type GetSecurityConfigReq_HttpLoadbalancersList struct {
+	HttpLoadbalancersList *HTTPLoadBalancerList `protobuf:"bytes,4,opt,name=http_loadbalancers_list,json=httpLoadbalancersList,proto3,oneof" json:"http_loadbalancers_list,omitempty"`
+}
+
+func (*GetSecurityConfigReq_AllHttpLoadbalancers) isGetSecurityConfigReq_LoadbalancerChoice()  {}
+func (*GetSecurityConfigReq_HttpLoadbalancersList) isGetSecurityConfigReq_LoadbalancerChoice() {}
+
+func (m *GetSecurityConfigReq) GetLoadbalancerChoice() isGetSecurityConfigReq_LoadbalancerChoice {
+	if m != nil {
+		return m.LoadbalancerChoice
+	}
+	return nil
+}
+
+func (m *GetSecurityConfigReq) GetNamespace() string {
+	if m != nil {
+		return m.Namespace
+	}
+	return ""
+}
+
+func (m *GetSecurityConfigReq) GetAllHttpLoadbalancers() *schema.Empty {
+	if x, ok := m.GetLoadbalancerChoice().(*GetSecurityConfigReq_AllHttpLoadbalancers); ok {
+		return x.AllHttpLoadbalancers
+	}
+	return nil
+}
+
+func (m *GetSecurityConfigReq) GetHttpLoadbalancersList() *HTTPLoadBalancerList {
+	if x, ok := m.GetLoadbalancerChoice().(*GetSecurityConfigReq_HttpLoadbalancersList); ok {
+		return x.HttpLoadbalancersList
+	}
+	return nil
+}
+
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*GetSecurityConfigReq) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
+		(*GetSecurityConfigReq_AllHttpLoadbalancers)(nil),
+		(*GetSecurityConfigReq_HttpLoadbalancersList)(nil),
+	}
+}
+
+// Get Security Config Response
+//
+// x-displayName: "Get Security Config Response"
+type GetSecurityConfigRsp struct {
+	// App Firewall Configured
+	//
+	// x-displayName: "App Firewall Configured"
+	AppFirewall []string `protobuf:"bytes,1,rep,name=app_firewall,json=appFirewall,proto3" json:"app_firewall,omitempty"`
+	// Bot Defense Configured
+	//
+	// x-displayName: "Bot Defense Configured"
+	BotDefense []string `protobuf:"bytes,2,rep,name=bot_defense,json=botDefense,proto3" json:"bot_defense,omitempty"`
+	// DDOS Detection Configured
+	//
+	// x-displayName: "DDOS Detection Configured"
+	DdosDetection []string `protobuf:"bytes,3,rep,name=ddos_detection,json=ddosDetection,proto3" json:"ddos_detection,omitempty"`
+	// API Protection Configured
+	//
+	// x-displayName: "API Protection Configured"
+	ApiProtection []string `protobuf:"bytes,4,rep,name=api_protection,json=apiProtection,proto3" json:"api_protection,omitempty"`
+	// Protected LoadBalancers Configured
+	//
+	// x-displayName: "List of Load Balancers Secured"
+	Protected []string `protobuf:"bytes,5,rep,name=protected,proto3" json:"protected,omitempty"`
+}
+
+func (m *GetSecurityConfigRsp) Reset()      { *m = GetSecurityConfigRsp{} }
+func (*GetSecurityConfigRsp) ProtoMessage() {}
+func (*GetSecurityConfigRsp) Descriptor() ([]byte, []int) {
+	return fileDescriptor_e0f78b47e1ecaa96, []int{3}
+}
+func (m *GetSecurityConfigRsp) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *GetSecurityConfigRsp) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_GetSecurityConfigRsp.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *GetSecurityConfigRsp) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GetSecurityConfigRsp.Merge(m, src)
+}
+func (m *GetSecurityConfigRsp) XXX_Size() int {
+	return m.Size()
+}
+func (m *GetSecurityConfigRsp) XXX_DiscardUnknown() {
+	xxx_messageInfo_GetSecurityConfigRsp.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_GetSecurityConfigRsp proto.InternalMessageInfo
+
+func (m *GetSecurityConfigRsp) GetAppFirewall() []string {
+	if m != nil {
+		return m.AppFirewall
+	}
+	return nil
+}
+
+func (m *GetSecurityConfigRsp) GetBotDefense() []string {
+	if m != nil {
+		return m.BotDefense
+	}
+	return nil
+}
+
+func (m *GetSecurityConfigRsp) GetDdosDetection() []string {
+	if m != nil {
+		return m.DdosDetection
+	}
+	return nil
+}
+
+func (m *GetSecurityConfigRsp) GetApiProtection() []string {
+	if m != nil {
+		return m.ApiProtection
+	}
+	return nil
+}
+
+func (m *GetSecurityConfigRsp) GetProtected() []string {
+	if m != nil {
+		return m.Protected
+	}
+	return nil
+}
+
+// List of http load balancers
+//
+// x-displayName: "List of HTTP Load Balancers"
+type HTTPLoadBalancerList struct {
+	// HTTP LoadBalancer
+	//
+	// x-displayName: "HTTP LoadBalancer"
+	// x-example: "[blogging-app]"
+	// x-required
+	HttpLoadbalancer []string `protobuf:"bytes,1,rep,name=http_loadbalancer,json=httpLoadbalancer,proto3" json:"http_loadbalancer,omitempty"`
+}
+
+func (m *HTTPLoadBalancerList) Reset()      { *m = HTTPLoadBalancerList{} }
+func (*HTTPLoadBalancerList) ProtoMessage() {}
+func (*HTTPLoadBalancerList) Descriptor() ([]byte, []int) {
+	return fileDescriptor_e0f78b47e1ecaa96, []int{4}
+}
+func (m *HTTPLoadBalancerList) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *HTTPLoadBalancerList) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_HTTPLoadBalancerList.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *HTTPLoadBalancerList) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_HTTPLoadBalancerList.Merge(m, src)
+}
+func (m *HTTPLoadBalancerList) XXX_Size() int {
+	return m.Size()
+}
+func (m *HTTPLoadBalancerList) XXX_DiscardUnknown() {
+	xxx_messageInfo_HTTPLoadBalancerList.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_HTTPLoadBalancerList proto.InternalMessageInfo
+
+func (m *HTTPLoadBalancerList) GetHttpLoadbalancer() []string {
+	if m != nil {
+		return m.HttpLoadbalancer
+	}
+	return nil
+}
+
 func init() {
 	proto.RegisterType((*GetDnsInfoRequest)(nil), "ves.io.schema.views.http_loadbalancer.GetDnsInfoRequest")
 	golang_proto.RegisterType((*GetDnsInfoRequest)(nil), "ves.io.schema.views.http_loadbalancer.GetDnsInfoRequest")
 	proto.RegisterType((*GetDnsInfoResponse)(nil), "ves.io.schema.views.http_loadbalancer.GetDnsInfoResponse")
 	golang_proto.RegisterType((*GetDnsInfoResponse)(nil), "ves.io.schema.views.http_loadbalancer.GetDnsInfoResponse")
+	proto.RegisterType((*GetSecurityConfigReq)(nil), "ves.io.schema.views.http_loadbalancer.GetSecurityConfigReq")
+	golang_proto.RegisterType((*GetSecurityConfigReq)(nil), "ves.io.schema.views.http_loadbalancer.GetSecurityConfigReq")
+	proto.RegisterType((*GetSecurityConfigRsp)(nil), "ves.io.schema.views.http_loadbalancer.GetSecurityConfigRsp")
+	golang_proto.RegisterType((*GetSecurityConfigRsp)(nil), "ves.io.schema.views.http_loadbalancer.GetSecurityConfigRsp")
+	proto.RegisterType((*HTTPLoadBalancerList)(nil), "ves.io.schema.views.http_loadbalancer.HTTPLoadBalancerList")
+	golang_proto.RegisterType((*HTTPLoadBalancerList)(nil), "ves.io.schema.views.http_loadbalancer.HTTPLoadBalancerList")
 }
 
 func init() {
@@ -172,40 +429,62 @@ func init() {
 }
 
 var fileDescriptor_e0f78b47e1ecaa96 = []byte{
-	// 528 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x9c, 0x53, 0xbf, 0x6f, 0xd3, 0x40,
-	0x14, 0xf6, 0x05, 0x04, 0xc4, 0x2c, 0xd4, 0x53, 0x14, 0xa2, 0x13, 0x8a, 0x84, 0xc4, 0x80, 0xef,
-	0x50, 0xbb, 0x00, 0x62, 0xe1, 0x47, 0x15, 0x75, 0x01, 0x14, 0x98, 0x60, 0x88, 0xce, 0xf6, 0x8b,
-	0x63, 0x70, 0xee, 0x1d, 0xbe, 0xb3, 0x69, 0x85, 0x2a, 0xa1, 0xfe, 0x05, 0x48, 0x88, 0xff, 0x81,
-	0x9d, 0x05, 0xa9, 0x4b, 0x37, 0x3a, 0xa1, 0x08, 0x96, 0x8e, 0xc4, 0x61, 0x80, 0xad, 0x7f, 0x02,
-	0xca, 0x39, 0xfd, 0x41, 0x82, 0x50, 0xd5, 0xed, 0x3d, 0x7f, 0xfa, 0xbe, 0x7b, 0xef, 0x7b, 0x9f,
-	0xdd, 0x3b, 0x05, 0x68, 0x96, 0x20, 0xd7, 0xe1, 0x00, 0x86, 0x82, 0x17, 0x09, 0xbc, 0xd6, 0x7c,
-	0x60, 0x8c, 0xea, 0xa5, 0x28, 0xa2, 0x40, 0xa4, 0x42, 0x86, 0x90, 0x71, 0x95, 0x07, 0x69, 0x12,
-	0xf6, 0xc2, 0x5c, 0x1b, 0x1c, 0x0a, 0x95, 0x30, 0x95, 0xa1, 0x41, 0xef, 0x6a, 0xc5, 0x66, 0x15,
-	0x9b, 0x59, 0x36, 0x5b, 0x60, 0x37, 0xfd, 0x38, 0x31, 0x83, 0x3c, 0x60, 0x21, 0x0e, 0x79, 0x8c,
-	0x31, 0x72, 0xcb, 0x0e, 0xf2, 0xbe, 0xed, 0x6c, 0x63, 0xab, 0x4a, 0xb5, 0xd9, 0x8a, 0x11, 0xe3,
-	0x14, 0xb8, 0x50, 0x09, 0x17, 0x52, 0xa2, 0x11, 0x26, 0x41, 0xa9, 0x67, 0xe8, 0xe5, 0xbf, 0x27,
-	0x46, 0x75, 0x1c, 0x6c, 0xcd, 0xad, 0x23, 0xd2, 0x24, 0x12, 0x06, 0x66, 0x68, 0x7b, 0x0e, 0x05,
-	0x0d, 0xb2, 0x98, 0x53, 0xb8, 0x31, 0x6f, 0x48, 0x66, 0x72, 0x91, 0xf6, 0x06, 0xa8, 0x4d, 0x2f,
-	0x92, 0xba, 0x97, 0xc8, 0x3e, 0x72, 0x0c, 0x5e, 0x40, 0x68, 0x2a, 0x46, 0x7b, 0xd5, 0x5d, 0xea,
-	0x80, 0x79, 0x20, 0xf5, 0x9a, 0xec, 0x63, 0x17, 0x5e, 0xe5, 0xa0, 0x8d, 0xd7, 0x72, 0xeb, 0x52,
-	0x0c, 0x41, 0x2b, 0x11, 0x42, 0x83, 0x5c, 0x21, 0xd7, 0xea, 0xdd, 0xa3, 0x0f, 0x9e, 0xe7, 0x9e,
-	0x9d, 0x36, 0x8d, 0x9a, 0x05, 0x6c, 0xdd, 0x8e, 0x5c, 0xef, 0xb8, 0x8c, 0x56, 0x28, 0x35, 0x78,
-	0x0f, 0xdd, 0x0b, 0x07, 0xaf, 0x5a, 0x99, 0x8b, 0xcb, 0x2b, 0x6c, 0xde, 0xf4, 0x7f, 0x4c, 0xc8,
-	0x3a, 0x29, 0x06, 0x22, 0x7d, 0xa2, 0x20, 0x7c, 0xba, 0xa1, 0xa0, 0x7b, 0x3e, 0xaa, 0x74, 0x97,
-	0x3f, 0xd5, 0xdc, 0xfa, 0x7d, 0x7b, 0xc5, 0xbb, 0x8f, 0xd7, 0xbc, 0xdf, 0xc4, 0x75, 0x8f, 0x1e,
-	0xf5, 0x6e, 0xb2, 0x13, 0xdd, 0x93, 0x2d, 0xac, 0xdb, 0xbc, 0x75, 0x0a, 0x66, 0xb5, 0x61, 0xbb,
-	0xbf, 0xfb, 0xb9, 0x46, 0xca, 0x2f, 0x8d, 0xa5, 0x02, 0xb4, 0x9f, 0xa0, 0xaf, 0x32, 0x5c, 0xdf,
-	0xf0, 0x33, 0x10, 0xd1, 0xd6, 0xf7, 0x9f, 0xef, 0x6b, 0x1d, 0x6f, 0x75, 0x96, 0x3e, 0x7e, 0xe8,
-	0x9f, 0xe6, 0x6f, 0x0e, 0xeb, 0xcd, 0xc5, 0xb4, 0xce, 0xe0, 0x4d, 0x1e, 0x83, 0xf1, 0x23, 0xa9,
-	0xfd, 0xa9, 0x23, 0xcd, 0xdb, 0x3b, 0xdb, 0xe4, 0xcc, 0xb7, 0x6d, 0x72, 0xfd, 0x64, 0x93, 0x3e,
-	0xb2, 0x27, 0xde, 0xfa, 0xda, 0xa8, 0x5d, 0x22, 0xf7, 0x3e, 0x90, 0xd1, 0x98, 0x3a, 0x7b, 0x63,
-	0xea, 0xec, 0x8f, 0x29, 0x79, 0x5b, 0x52, 0xf2, 0xb1, 0xa4, 0x64, 0xb7, 0xa4, 0x64, 0x54, 0x52,
-	0xf2, 0xa3, 0xa4, 0xe4, 0x57, 0x49, 0x9d, 0xfd, 0x92, 0x92, 0x77, 0x13, 0xea, 0xec, 0x4c, 0x28,
-	0x19, 0x4d, 0xa8, 0xb3, 0x37, 0xa1, 0xce, 0xb3, 0xe7, 0x31, 0xaa, 0x97, 0x31, 0x2b, 0x30, 0x35,
-	0x90, 0x65, 0x82, 0xe5, 0x9a, 0xdb, 0xa2, 0x8f, 0xd9, 0x70, 0xba, 0x6b, 0x91, 0x44, 0x90, 0xf9,
-	0x07, 0x30, 0x57, 0x41, 0x8c, 0x1c, 0xd6, 0xcd, 0x2c, 0x7e, 0xff, 0xff, 0x2d, 0x83, 0x73, 0x36,
-	0x81, 0x2b, 0x7f, 0x02, 0x00, 0x00, 0xff, 0xff, 0x87, 0x93, 0x40, 0x13, 0xc6, 0x03, 0x00, 0x00,
+	// 869 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x9c, 0x55, 0xcf, 0x6f, 0xdc, 0x54,
+	0x10, 0xde, 0xe7, 0xdd, 0xb4, 0xd9, 0x17, 0x40, 0x9b, 0x47, 0x00, 0xb3, 0x44, 0x6e, 0xb0, 0x54,
+	0xa9, 0x42, 0xac, 0x0d, 0xed, 0x05, 0x5a, 0x2e, 0xa4, 0x09, 0x49, 0xab, 0x08, 0xa2, 0x6d, 0x4e,
+	0x20, 0x61, 0x3d, 0xdb, 0xb3, 0xde, 0x07, 0x5e, 0xbf, 0x57, 0xbf, 0xe7, 0x6d, 0x57, 0xa8, 0x52,
+	0xd5, 0xbf, 0x00, 0x05, 0x71, 0xe7, 0xc8, 0x89, 0x33, 0x22, 0x97, 0x9c, 0xa0, 0x27, 0x14, 0xc1,
+	0xa5, 0x47, 0xb2, 0xe1, 0x40, 0x6f, 0x3d, 0x72, 0x44, 0x7e, 0xf6, 0xe6, 0xc7, 0x3a, 0x0a, 0x51,
+	0x6e, 0x33, 0xf3, 0xcd, 0x37, 0x9e, 0x99, 0x37, 0x33, 0xc6, 0x1f, 0x0d, 0x41, 0x3a, 0x8c, 0xbb,
+	0x32, 0xe8, 0xc3, 0x80, 0xba, 0x43, 0x06, 0x0f, 0xa4, 0xdb, 0x57, 0x4a, 0x78, 0x31, 0xa7, 0xa1,
+	0x4f, 0x63, 0x9a, 0x04, 0x90, 0xba, 0x22, 0xf3, 0x63, 0x16, 0x78, 0x41, 0x26, 0x15, 0x1f, 0x50,
+	0xc1, 0x1c, 0x91, 0x72, 0xc5, 0xc9, 0xd5, 0x82, 0xed, 0x14, 0x6c, 0x47, 0xb3, 0x9d, 0x0a, 0xbb,
+	0xdd, 0x89, 0x98, 0xea, 0x67, 0xbe, 0x13, 0xf0, 0x81, 0x1b, 0xf1, 0x88, 0xbb, 0x9a, 0xed, 0x67,
+	0x3d, 0xad, 0x69, 0x45, 0x4b, 0x45, 0xd4, 0xf6, 0x62, 0xc4, 0x79, 0x14, 0x83, 0x4b, 0x05, 0x73,
+	0x69, 0x92, 0x70, 0x45, 0x15, 0xe3, 0x89, 0x2c, 0xd1, 0xb7, 0x4e, 0x66, 0xcc, 0xc5, 0x71, 0xf0,
+	0xcd, 0x93, 0xa0, 0x1a, 0x09, 0x98, 0x40, 0x8b, 0x53, 0x95, 0xd2, 0x98, 0x85, 0x54, 0x41, 0x89,
+	0xda, 0x53, 0x28, 0x48, 0x48, 0x86, 0x53, 0xc1, 0x97, 0xaa, 0xbd, 0xf2, 0x4e, 0x7a, 0xbc, 0x37,
+	0xed, 0x91, 0xaa, 0x8c, 0xc6, 0x5e, 0x9f, 0x4b, 0xe5, 0x85, 0x89, 0xf4, 0x58, 0xd2, 0xe3, 0x2e,
+	0xf7, 0xbf, 0x82, 0x40, 0x15, 0x0c, 0x7b, 0x15, 0xcf, 0xaf, 0x81, 0x5a, 0x49, 0xe4, 0x9d, 0xa4,
+	0xc7, 0xbb, 0x70, 0x3f, 0x03, 0xa9, 0xc8, 0x22, 0x6e, 0x26, 0x74, 0x00, 0x52, 0xd0, 0x00, 0x4c,
+	0xb4, 0x84, 0xae, 0x35, 0xbb, 0x47, 0x06, 0x42, 0x70, 0x23, 0x57, 0x4c, 0x43, 0x03, 0x5a, 0xb6,
+	0x43, 0x4c, 0x8e, 0x87, 0x91, 0x82, 0x27, 0x12, 0xc8, 0xa7, 0x78, 0x76, 0xf2, 0x55, 0x1d, 0x66,
+	0xee, 0xfa, 0x0d, 0x67, 0xfa, 0xc5, 0x4e, 0xc9, 0xd0, 0x59, 0x8b, 0xb9, 0x4f, 0xe3, 0x7b, 0x02,
+	0x82, 0xad, 0x91, 0x80, 0xee, 0xe5, 0xb0, 0x88, 0x6b, 0xff, 0x60, 0xe0, 0x85, 0x35, 0x50, 0xf7,
+	0x20, 0xc8, 0x52, 0xa6, 0x46, 0xb7, 0x79, 0xd2, 0x63, 0x51, 0x17, 0xee, 0xff, 0x4f, 0xc2, 0x1b,
+	0xf8, 0x75, 0x1a, 0xc7, 0x5e, 0x65, 0x2e, 0xa4, 0x59, 0xd7, 0x49, 0x2d, 0x4c, 0x25, 0xb5, 0x3a,
+	0x10, 0x6a, 0xb4, 0x5e, 0xeb, 0x2e, 0xd0, 0x38, 0x5e, 0x57, 0x4a, 0x6c, 0x1c, 0xe7, 0x90, 0x0c,
+	0xbf, 0x51, 0x8d, 0xe4, 0xc5, 0x4c, 0x2a, 0xb3, 0xa1, 0xc3, 0xdd, 0x72, 0xce, 0x35, 0x95, 0xce,
+	0xfa, 0xd6, 0xd6, 0x66, 0x1e, 0x7a, 0xb9, 0x34, 0x6c, 0x30, 0xa9, 0xd6, 0x6b, 0xdd, 0xd7, 0xfa,
+	0xd3, 0x9f, 0xcc, 0x81, 0xe5, 0x2b, 0xf8, 0xd5, 0xe3, 0x6c, 0x2f, 0xe8, 0x73, 0x16, 0x00, 0x99,
+	0xdd, 0xdd, 0x41, 0xf5, 0xbd, 0x1d, 0x64, 0xdc, 0x6d, 0xcc, 0x1a, 0xad, 0xba, 0xfd, 0x2b, 0x3a,
+	0xad, 0x45, 0x52, 0x90, 0xb7, 0xf1, 0x4b, 0x54, 0x08, 0xaf, 0xc7, 0x52, 0x78, 0x40, 0xe3, 0xd8,
+	0x44, 0x4b, 0xf5, 0x6b, 0xcd, 0xee, 0x1c, 0x15, 0xe2, 0x93, 0xd2, 0x44, 0xae, 0xe0, 0x39, 0x9f,
+	0x2b, 0x2f, 0x84, 0x1e, 0x24, 0x32, 0x7f, 0xdf, 0xdc, 0x03, 0xfb, 0x5c, 0xad, 0x14, 0x16, 0x72,
+	0x15, 0xbf, 0x12, 0x86, 0x5c, 0x7a, 0x21, 0x28, 0x08, 0xf2, 0xb9, 0x33, 0xeb, 0xda, 0xe7, 0xe5,
+	0xdc, 0xba, 0x32, 0x31, 0xe6, 0x6e, 0x54, 0x30, 0x2f, 0x1f, 0xb0, 0xd2, 0xad, 0x51, 0xb8, 0x51,
+	0xc1, 0x36, 0x0f, 0x8d, 0xf9, 0xa3, 0x95, 0x2e, 0x10, 0x9a, 0x33, 0xda, 0xe3, 0xc8, 0x60, 0x0f,
+	0xf1, 0xc2, 0x69, 0x0d, 0x22, 0x5f, 0xe2, 0xf9, 0x4a, 0x2b, 0x8b, 0x62, 0x96, 0xdf, 0xff, 0xe5,
+	0xf9, 0x6e, 0x1d, 0x6f, 0xa3, 0xcb, 0xf6, 0x4c, 0x5a, 0x37, 0x1f, 0x1b, 0xb9, 0xda, 0xdc, 0x46,
+	0x97, 0xec, 0x46, 0x6a, 0xb4, 0x50, 0xae, 0xcd, 0x6c, 0x23, 0xa3, 0x35, 0x33, 0x91, 0x66, 0x51,
+	0xb7, 0x35, 0xdd, 0xec, 0xeb, 0x3f, 0x35, 0x70, 0xf3, 0xb6, 0x3e, 0x33, 0x1f, 0x6f, 0xde, 0x21,
+	0xcf, 0x11, 0xc6, 0x47, 0x83, 0x4d, 0x3e, 0x38, 0xe7, 0xd3, 0x56, 0x56, 0xaa, 0xfd, 0xe1, 0x05,
+	0x98, 0xc5, 0x16, 0xd9, 0xbd, 0xa7, 0x3f, 0x1b, 0x68, 0xfc, 0x9b, 0x39, 0x3f, 0x04, 0xd9, 0x61,
+	0xbc, 0x23, 0x52, 0xfe, 0x70, 0xd4, 0x49, 0x81, 0x86, 0x4f, 0xfe, 0xfc, 0xfb, 0x3b, 0x63, 0x8d,
+	0xac, 0x96, 0xe7, 0xd1, 0x3d, 0x1c, 0x79, 0xe9, 0x7e, 0x73, 0x28, 0x3f, 0xaa, 0x9e, 0xd3, 0x12,
+	0x7e, 0xe4, 0x46, 0xa0, 0x3a, 0x61, 0x22, 0x3b, 0xf9, 0xd6, 0x91, 0x7f, 0x91, 0xbe, 0x05, 0x27,
+	0x47, 0x87, 0xdc, 0x3a, 0x7f, 0xe2, 0x95, 0xbd, 0x6c, 0x5f, 0x9c, 0x2c, 0x85, 0xcd, 0xce, 0xae,
+	0xfb, 0xae, 0x7d, 0x81, 0xba, 0x23, 0x50, 0x9e, 0x2c, 0xbf, 0xe4, 0x05, 0xfa, 0x53, 0x37, 0xd1,
+	0x3b, 0xed, 0x9b, 0xf9, 0x16, 0xfd, 0xb1, 0x83, 0xde, 0x3d, 0x5f, 0xba, 0x9f, 0xe9, 0x0b, 0xfa,
+	0xe4, 0x77, 0xd3, 0x68, 0xa1, 0xe5, 0xef, 0xd1, 0xde, 0xbe, 0x55, 0x7b, 0xb6, 0x6f, 0xd5, 0x5e,
+	0xec, 0x5b, 0xe8, 0xf1, 0xd8, 0x42, 0x3f, 0x8e, 0x2d, 0xf4, 0x74, 0x6c, 0xa1, 0xbd, 0xb1, 0x85,
+	0xfe, 0x1a, 0x5b, 0xe8, 0x9f, 0xb1, 0x55, 0x7b, 0x31, 0xb6, 0xd0, 0xb7, 0x07, 0x56, 0x6d, 0xf7,
+	0xc0, 0x42, 0x7b, 0x07, 0x56, 0xed, 0xd9, 0x81, 0x55, 0xfb, 0xfc, 0x8b, 0x88, 0x8b, 0xaf, 0x23,
+	0x67, 0xc8, 0x63, 0x05, 0x69, 0x4a, 0x9d, 0x4c, 0xba, 0x5a, 0xe8, 0xf1, 0x74, 0x90, 0x97, 0x3b,
+	0x64, 0x21, 0xa4, 0x9d, 0x09, 0xec, 0x0a, 0x3f, 0xe2, 0x2e, 0x3c, 0x54, 0xe5, 0x75, 0x3f, 0xfb,
+	0x97, 0xe9, 0x5f, 0xd2, 0x07, 0xfe, 0xc6, 0x7f, 0x01, 0x00, 0x00, 0xff, 0xff, 0x52, 0x26, 0x59,
+	0xc1, 0x62, 0x07, 0x00, 0x00,
 }
 
 func (this *GetDnsInfoRequest) Equal(that interface{}) bool {
@@ -259,6 +538,177 @@ func (this *GetDnsInfoResponse) Equal(that interface{}) bool {
 	}
 	return true
 }
+func (this *GetSecurityConfigReq) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GetSecurityConfigReq)
+	if !ok {
+		that2, ok := that.(GetSecurityConfigReq)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.Namespace != that1.Namespace {
+		return false
+	}
+	if that1.LoadbalancerChoice == nil {
+		if this.LoadbalancerChoice != nil {
+			return false
+		}
+	} else if this.LoadbalancerChoice == nil {
+		return false
+	} else if !this.LoadbalancerChoice.Equal(that1.LoadbalancerChoice) {
+		return false
+	}
+	return true
+}
+func (this *GetSecurityConfigReq_AllHttpLoadbalancers) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GetSecurityConfigReq_AllHttpLoadbalancers)
+	if !ok {
+		that2, ok := that.(GetSecurityConfigReq_AllHttpLoadbalancers)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.AllHttpLoadbalancers.Equal(that1.AllHttpLoadbalancers) {
+		return false
+	}
+	return true
+}
+func (this *GetSecurityConfigReq_HttpLoadbalancersList) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GetSecurityConfigReq_HttpLoadbalancersList)
+	if !ok {
+		that2, ok := that.(GetSecurityConfigReq_HttpLoadbalancersList)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.HttpLoadbalancersList.Equal(that1.HttpLoadbalancersList) {
+		return false
+	}
+	return true
+}
+func (this *GetSecurityConfigRsp) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GetSecurityConfigRsp)
+	if !ok {
+		that2, ok := that.(GetSecurityConfigRsp)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if len(this.AppFirewall) != len(that1.AppFirewall) {
+		return false
+	}
+	for i := range this.AppFirewall {
+		if this.AppFirewall[i] != that1.AppFirewall[i] {
+			return false
+		}
+	}
+	if len(this.BotDefense) != len(that1.BotDefense) {
+		return false
+	}
+	for i := range this.BotDefense {
+		if this.BotDefense[i] != that1.BotDefense[i] {
+			return false
+		}
+	}
+	if len(this.DdosDetection) != len(that1.DdosDetection) {
+		return false
+	}
+	for i := range this.DdosDetection {
+		if this.DdosDetection[i] != that1.DdosDetection[i] {
+			return false
+		}
+	}
+	if len(this.ApiProtection) != len(that1.ApiProtection) {
+		return false
+	}
+	for i := range this.ApiProtection {
+		if this.ApiProtection[i] != that1.ApiProtection[i] {
+			return false
+		}
+	}
+	if len(this.Protected) != len(that1.Protected) {
+		return false
+	}
+	for i := range this.Protected {
+		if this.Protected[i] != that1.Protected[i] {
+			return false
+		}
+	}
+	return true
+}
+func (this *HTTPLoadBalancerList) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*HTTPLoadBalancerList)
+	if !ok {
+		that2, ok := that.(HTTPLoadBalancerList)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if len(this.HttpLoadbalancer) != len(that1.HttpLoadbalancer) {
+		return false
+	}
+	for i := range this.HttpLoadbalancer {
+		if this.HttpLoadbalancer[i] != that1.HttpLoadbalancer[i] {
+			return false
+		}
+	}
+	return true
+}
 func (this *GetDnsInfoRequest) GoString() string {
 	if this == nil {
 		return "nil"
@@ -279,6 +729,59 @@ func (this *GetDnsInfoResponse) GoString() string {
 	if this.DnsInfo != nil {
 		s = append(s, "DnsInfo: "+fmt.Sprintf("%#v", this.DnsInfo)+",\n")
 	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *GetSecurityConfigReq) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 7)
+	s = append(s, "&http_loadbalancer.GetSecurityConfigReq{")
+	s = append(s, "Namespace: "+fmt.Sprintf("%#v", this.Namespace)+",\n")
+	if this.LoadbalancerChoice != nil {
+		s = append(s, "LoadbalancerChoice: "+fmt.Sprintf("%#v", this.LoadbalancerChoice)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *GetSecurityConfigReq_AllHttpLoadbalancers) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&http_loadbalancer.GetSecurityConfigReq_AllHttpLoadbalancers{` +
+		`AllHttpLoadbalancers:` + fmt.Sprintf("%#v", this.AllHttpLoadbalancers) + `}`}, ", ")
+	return s
+}
+func (this *GetSecurityConfigReq_HttpLoadbalancersList) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&http_loadbalancer.GetSecurityConfigReq_HttpLoadbalancersList{` +
+		`HttpLoadbalancersList:` + fmt.Sprintf("%#v", this.HttpLoadbalancersList) + `}`}, ", ")
+	return s
+}
+func (this *GetSecurityConfigRsp) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 9)
+	s = append(s, "&http_loadbalancer.GetSecurityConfigRsp{")
+	s = append(s, "AppFirewall: "+fmt.Sprintf("%#v", this.AppFirewall)+",\n")
+	s = append(s, "BotDefense: "+fmt.Sprintf("%#v", this.BotDefense)+",\n")
+	s = append(s, "DdosDetection: "+fmt.Sprintf("%#v", this.DdosDetection)+",\n")
+	s = append(s, "ApiProtection: "+fmt.Sprintf("%#v", this.ApiProtection)+",\n")
+	s = append(s, "Protected: "+fmt.Sprintf("%#v", this.Protected)+",\n")
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *HTTPLoadBalancerList) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 5)
+	s = append(s, "&http_loadbalancer.HTTPLoadBalancerList{")
+	s = append(s, "HttpLoadbalancer: "+fmt.Sprintf("%#v", this.HttpLoadbalancer)+",\n")
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
@@ -308,6 +811,11 @@ type CustomAPIClient interface {
 	// x-displayName: "Get DNS Info"
 	// GetDnsInfo is an API to get DNS information for a given HTTP load balancer
 	GetDnsInfo(ctx context.Context, in *GetDnsInfoRequest, opts ...grpc.CallOption) (*GetDnsInfoResponse, error)
+	// Get Security Config for Http Load Balancers
+	//
+	// x-displayName: "Get Security Config for Http Load Balancer"
+	// Get the corresponding Security Config for the given HTTP load balancer
+	GetSecurityConfig(ctx context.Context, in *GetSecurityConfigReq, opts ...grpc.CallOption) (*GetSecurityConfigRsp, error)
 }
 
 type customAPIClient struct {
@@ -327,6 +835,15 @@ func (c *customAPIClient) GetDnsInfo(ctx context.Context, in *GetDnsInfoRequest,
 	return out, nil
 }
 
+func (c *customAPIClient) GetSecurityConfig(ctx context.Context, in *GetSecurityConfigReq, opts ...grpc.CallOption) (*GetSecurityConfigRsp, error) {
+	out := new(GetSecurityConfigRsp)
+	err := c.cc.Invoke(ctx, "/ves.io.schema.views.http_loadbalancer.CustomAPI/GetSecurityConfig", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // CustomAPIServer is the server API for CustomAPI service.
 type CustomAPIServer interface {
 	// GetDnsInfo
@@ -334,6 +851,11 @@ type CustomAPIServer interface {
 	// x-displayName: "Get DNS Info"
 	// GetDnsInfo is an API to get DNS information for a given HTTP load balancer
 	GetDnsInfo(context.Context, *GetDnsInfoRequest) (*GetDnsInfoResponse, error)
+	// Get Security Config for Http Load Balancers
+	//
+	// x-displayName: "Get Security Config for Http Load Balancer"
+	// Get the corresponding Security Config for the given HTTP load balancer
+	GetSecurityConfig(context.Context, *GetSecurityConfigReq) (*GetSecurityConfigRsp, error)
 }
 
 // UnimplementedCustomAPIServer can be embedded to have forward compatible implementations.
@@ -342,6 +864,9 @@ type UnimplementedCustomAPIServer struct {
 
 func (*UnimplementedCustomAPIServer) GetDnsInfo(ctx context.Context, req *GetDnsInfoRequest) (*GetDnsInfoResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetDnsInfo not implemented")
+}
+func (*UnimplementedCustomAPIServer) GetSecurityConfig(ctx context.Context, req *GetSecurityConfigReq) (*GetSecurityConfigRsp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetSecurityConfig not implemented")
 }
 
 func RegisterCustomAPIServer(s *grpc.Server, srv CustomAPIServer) {
@@ -366,6 +891,24 @@ func _CustomAPI_GetDnsInfo_Handler(srv interface{}, ctx context.Context, dec fun
 	return interceptor(ctx, in, info, handler)
 }
 
+func _CustomAPI_GetSecurityConfig_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetSecurityConfigReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CustomAPIServer).GetSecurityConfig(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/ves.io.schema.views.http_loadbalancer.CustomAPI/GetSecurityConfig",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CustomAPIServer).GetSecurityConfig(ctx, req.(*GetSecurityConfigReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 var _CustomAPI_serviceDesc = grpc.ServiceDesc{
 	ServiceName: "ves.io.schema.views.http_loadbalancer.CustomAPI",
 	HandlerType: (*CustomAPIServer)(nil),
@@ -373,6 +916,10 @@ var _CustomAPI_serviceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetDnsInfo",
 			Handler:    _CustomAPI_GetDnsInfo_Handler,
+		},
+		{
+			MethodName: "GetSecurityConfig",
+			Handler:    _CustomAPI_GetSecurityConfig_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
@@ -451,6 +998,187 @@ func (m *GetDnsInfoResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
+func (m *GetSecurityConfigReq) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *GetSecurityConfigReq) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSecurityConfigReq) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.LoadbalancerChoice != nil {
+		{
+			size := m.LoadbalancerChoice.Size()
+			i -= size
+			if _, err := m.LoadbalancerChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	if len(m.Namespace) > 0 {
+		i -= len(m.Namespace)
+		copy(dAtA[i:], m.Namespace)
+		i = encodeVarintPublicCustomapi(dAtA, i, uint64(len(m.Namespace)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *GetSecurityConfigReq_AllHttpLoadbalancers) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSecurityConfigReq_AllHttpLoadbalancers) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.AllHttpLoadbalancers != nil {
+		{
+			size, err := m.AllHttpLoadbalancers.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintPublicCustomapi(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1a
+	}
+	return len(dAtA) - i, nil
+}
+func (m *GetSecurityConfigReq_HttpLoadbalancersList) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSecurityConfigReq_HttpLoadbalancersList) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.HttpLoadbalancersList != nil {
+		{
+			size, err := m.HttpLoadbalancersList.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintPublicCustomapi(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x22
+	}
+	return len(dAtA) - i, nil
+}
+func (m *GetSecurityConfigRsp) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *GetSecurityConfigRsp) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSecurityConfigRsp) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.Protected) > 0 {
+		for iNdEx := len(m.Protected) - 1; iNdEx >= 0; iNdEx-- {
+			i -= len(m.Protected[iNdEx])
+			copy(dAtA[i:], m.Protected[iNdEx])
+			i = encodeVarintPublicCustomapi(dAtA, i, uint64(len(m.Protected[iNdEx])))
+			i--
+			dAtA[i] = 0x2a
+		}
+	}
+	if len(m.ApiProtection) > 0 {
+		for iNdEx := len(m.ApiProtection) - 1; iNdEx >= 0; iNdEx-- {
+			i -= len(m.ApiProtection[iNdEx])
+			copy(dAtA[i:], m.ApiProtection[iNdEx])
+			i = encodeVarintPublicCustomapi(dAtA, i, uint64(len(m.ApiProtection[iNdEx])))
+			i--
+			dAtA[i] = 0x22
+		}
+	}
+	if len(m.DdosDetection) > 0 {
+		for iNdEx := len(m.DdosDetection) - 1; iNdEx >= 0; iNdEx-- {
+			i -= len(m.DdosDetection[iNdEx])
+			copy(dAtA[i:], m.DdosDetection[iNdEx])
+			i = encodeVarintPublicCustomapi(dAtA, i, uint64(len(m.DdosDetection[iNdEx])))
+			i--
+			dAtA[i] = 0x1a
+		}
+	}
+	if len(m.BotDefense) > 0 {
+		for iNdEx := len(m.BotDefense) - 1; iNdEx >= 0; iNdEx-- {
+			i -= len(m.BotDefense[iNdEx])
+			copy(dAtA[i:], m.BotDefense[iNdEx])
+			i = encodeVarintPublicCustomapi(dAtA, i, uint64(len(m.BotDefense[iNdEx])))
+			i--
+			dAtA[i] = 0x12
+		}
+	}
+	if len(m.AppFirewall) > 0 {
+		for iNdEx := len(m.AppFirewall) - 1; iNdEx >= 0; iNdEx-- {
+			i -= len(m.AppFirewall[iNdEx])
+			copy(dAtA[i:], m.AppFirewall[iNdEx])
+			i = encodeVarintPublicCustomapi(dAtA, i, uint64(len(m.AppFirewall[iNdEx])))
+			i--
+			dAtA[i] = 0xa
+		}
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *HTTPLoadBalancerList) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *HTTPLoadBalancerList) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *HTTPLoadBalancerList) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.HttpLoadbalancer) > 0 {
+		for iNdEx := len(m.HttpLoadbalancer) - 1; iNdEx >= 0; iNdEx-- {
+			i -= len(m.HttpLoadbalancer[iNdEx])
+			copy(dAtA[i:], m.HttpLoadbalancer[iNdEx])
+			i = encodeVarintPublicCustomapi(dAtA, i, uint64(len(m.HttpLoadbalancer[iNdEx])))
+			i--
+			dAtA[i] = 0xa
+		}
+	}
+	return len(dAtA) - i, nil
+}
+
 func encodeVarintPublicCustomapi(dAtA []byte, offset int, v uint64) int {
 	offset -= sovPublicCustomapi(v)
 	base := offset
@@ -492,6 +1220,100 @@ func (m *GetDnsInfoResponse) Size() (n int) {
 	return n
 }
 
+func (m *GetSecurityConfigReq) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Namespace)
+	if l > 0 {
+		n += 1 + l + sovPublicCustomapi(uint64(l))
+	}
+	if m.LoadbalancerChoice != nil {
+		n += m.LoadbalancerChoice.Size()
+	}
+	return n
+}
+
+func (m *GetSecurityConfigReq_AllHttpLoadbalancers) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.AllHttpLoadbalancers != nil {
+		l = m.AllHttpLoadbalancers.Size()
+		n += 1 + l + sovPublicCustomapi(uint64(l))
+	}
+	return n
+}
+func (m *GetSecurityConfigReq_HttpLoadbalancersList) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.HttpLoadbalancersList != nil {
+		l = m.HttpLoadbalancersList.Size()
+		n += 1 + l + sovPublicCustomapi(uint64(l))
+	}
+	return n
+}
+func (m *GetSecurityConfigRsp) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if len(m.AppFirewall) > 0 {
+		for _, s := range m.AppFirewall {
+			l = len(s)
+			n += 1 + l + sovPublicCustomapi(uint64(l))
+		}
+	}
+	if len(m.BotDefense) > 0 {
+		for _, s := range m.BotDefense {
+			l = len(s)
+			n += 1 + l + sovPublicCustomapi(uint64(l))
+		}
+	}
+	if len(m.DdosDetection) > 0 {
+		for _, s := range m.DdosDetection {
+			l = len(s)
+			n += 1 + l + sovPublicCustomapi(uint64(l))
+		}
+	}
+	if len(m.ApiProtection) > 0 {
+		for _, s := range m.ApiProtection {
+			l = len(s)
+			n += 1 + l + sovPublicCustomapi(uint64(l))
+		}
+	}
+	if len(m.Protected) > 0 {
+		for _, s := range m.Protected {
+			l = len(s)
+			n += 1 + l + sovPublicCustomapi(uint64(l))
+		}
+	}
+	return n
+}
+
+func (m *HTTPLoadBalancerList) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if len(m.HttpLoadbalancer) > 0 {
+		for _, s := range m.HttpLoadbalancer {
+			l = len(s)
+			n += 1 + l + sovPublicCustomapi(uint64(l))
+		}
+	}
+	return n
+}
+
 func sovPublicCustomapi(x uint64) (n int) {
 	return (math_bits.Len64(x|1) + 6) / 7
 }
@@ -515,6 +1337,61 @@ func (this *GetDnsInfoResponse) String() string {
 	}
 	s := strings.Join([]string{`&GetDnsInfoResponse{`,
 		`DnsInfo:` + strings.Replace(fmt.Sprintf("%v", this.DnsInfo), "GlobalSpecType", "virtual_host_dns_info.GlobalSpecType", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GetSecurityConfigReq) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GetSecurityConfigReq{`,
+		`Namespace:` + fmt.Sprintf("%v", this.Namespace) + `,`,
+		`LoadbalancerChoice:` + fmt.Sprintf("%v", this.LoadbalancerChoice) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GetSecurityConfigReq_AllHttpLoadbalancers) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GetSecurityConfigReq_AllHttpLoadbalancers{`,
+		`AllHttpLoadbalancers:` + strings.Replace(fmt.Sprintf("%v", this.AllHttpLoadbalancers), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GetSecurityConfigReq_HttpLoadbalancersList) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GetSecurityConfigReq_HttpLoadbalancersList{`,
+		`HttpLoadbalancersList:` + strings.Replace(fmt.Sprintf("%v", this.HttpLoadbalancersList), "HTTPLoadBalancerList", "HTTPLoadBalancerList", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GetSecurityConfigRsp) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GetSecurityConfigRsp{`,
+		`AppFirewall:` + fmt.Sprintf("%v", this.AppFirewall) + `,`,
+		`BotDefense:` + fmt.Sprintf("%v", this.BotDefense) + `,`,
+		`DdosDetection:` + fmt.Sprintf("%v", this.DdosDetection) + `,`,
+		`ApiProtection:` + fmt.Sprintf("%v", this.ApiProtection) + `,`,
+		`Protected:` + fmt.Sprintf("%v", this.Protected) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *HTTPLoadBalancerList) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&HTTPLoadBalancerList{`,
+		`HttpLoadbalancer:` + fmt.Sprintf("%v", this.HttpLoadbalancer) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -708,6 +1585,459 @@ func (m *GetDnsInfoResponse) Unmarshal(dAtA []byte) error {
 			if err := m.DnsInfo.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipPublicCustomapi(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *GetSecurityConfigReq) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowPublicCustomapi
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: GetSecurityConfigReq: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: GetSecurityConfigReq: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Namespace", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Namespace = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field AllHttpLoadbalancers", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.LoadbalancerChoice = &GetSecurityConfigReq_AllHttpLoadbalancers{v}
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field HttpLoadbalancersList", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &HTTPLoadBalancerList{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.LoadbalancerChoice = &GetSecurityConfigReq_HttpLoadbalancersList{v}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipPublicCustomapi(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *GetSecurityConfigRsp) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowPublicCustomapi
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: GetSecurityConfigRsp: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: GetSecurityConfigRsp: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field AppFirewall", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.AppFirewall = append(m.AppFirewall, string(dAtA[iNdEx:postIndex]))
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field BotDefense", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.BotDefense = append(m.BotDefense, string(dAtA[iNdEx:postIndex]))
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DdosDetection", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.DdosDetection = append(m.DdosDetection, string(dAtA[iNdEx:postIndex]))
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ApiProtection", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.ApiProtection = append(m.ApiProtection, string(dAtA[iNdEx:postIndex]))
+			iNdEx = postIndex
+		case 5:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Protected", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Protected = append(m.Protected, string(dAtA[iNdEx:postIndex]))
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipPublicCustomapi(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *HTTPLoadBalancerList) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowPublicCustomapi
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: HTTPLoadBalancerList: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: HTTPLoadBalancerList: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field HttpLoadbalancer", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.HttpLoadbalancer = append(m.HttpLoadbalancer, string(dAtA[iNdEx:postIndex]))
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex

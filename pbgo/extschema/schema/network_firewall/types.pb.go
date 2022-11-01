@@ -78,6 +78,54 @@ func (m *ActiveNetworkPoliciesType) GetNetworkPolicies() []*views.ObjectRefType 
 	return nil
 }
 
+// Active Enhanced Firewall Policies Type
+//
+// x-displayName: "Active Enhanced Network Policies Type"
+// List of Enhanced Firewall Policies
+type ActiveEnhancedFirewallPoliciesType struct {
+	// Enhanced Firewall Policy
+	//
+	// x-displayName: "Enhanced Firewall Policy"
+	// x-required
+	// Ordered List of Enhaned Firewall Policy active for this network firewall
+	EnhancedFirewallPolicies []*views.ObjectRefType `protobuf:"bytes,1,rep,name=enhanced_firewall_policies,json=enhancedFirewallPolicies,proto3" json:"enhanced_firewall_policies,omitempty"`
+}
+
+func (m *ActiveEnhancedFirewallPoliciesType) Reset()      { *m = ActiveEnhancedFirewallPoliciesType{} }
+func (*ActiveEnhancedFirewallPoliciesType) ProtoMessage() {}
+func (*ActiveEnhancedFirewallPoliciesType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_e07e50a9abc3814c, []int{1}
+}
+func (m *ActiveEnhancedFirewallPoliciesType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *ActiveEnhancedFirewallPoliciesType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *ActiveEnhancedFirewallPoliciesType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ActiveEnhancedFirewallPoliciesType.Merge(m, src)
+}
+func (m *ActiveEnhancedFirewallPoliciesType) XXX_Size() int {
+	return m.Size()
+}
+func (m *ActiveEnhancedFirewallPoliciesType) XXX_DiscardUnknown() {
+	xxx_messageInfo_ActiveEnhancedFirewallPoliciesType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ActiveEnhancedFirewallPoliciesType proto.InternalMessageInfo
+
+func (m *ActiveEnhancedFirewallPoliciesType) GetEnhancedFirewallPolicies() []*views.ObjectRefType {
+	if m != nil {
+		return m.EnhancedFirewallPolicies
+	}
+	return nil
+}
+
 // Active Forward Proxy Policies Type
 //
 // x-displayName: "Active Forward Proxy Policies Type"
@@ -94,7 +142,7 @@ type ActiveForwardProxyPoliciesType struct {
 func (m *ActiveForwardProxyPoliciesType) Reset()      { *m = ActiveForwardProxyPoliciesType{} }
 func (*ActiveForwardProxyPoliciesType) ProtoMessage() {}
 func (*ActiveForwardProxyPoliciesType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_e07e50a9abc3814c, []int{1}
+	return fileDescriptor_e07e50a9abc3814c, []int{2}
 }
 func (m *ActiveForwardProxyPoliciesType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -142,7 +190,7 @@ type ActiveFastACLsType struct {
 func (m *ActiveFastACLsType) Reset()      { *m = ActiveFastACLsType{} }
 func (*ActiveFastACLsType) ProtoMessage() {}
 func (*ActiveFastACLsType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_e07e50a9abc3814c, []int{2}
+	return fileDescriptor_e07e50a9abc3814c, []int{3}
 }
 func (m *ActiveFastACLsType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -199,6 +247,15 @@ type GlobalSpecType struct {
 	// Fast ACL set defined for the fleet. Fast ACL set is applied for all sites that are member of the fleet.
 	// The list of Virtual Networks / Interfaces is selected by the Fast ACL set object
 	FastAclSet []*schema.ObjectRefType `protobuf:"bytes,4,rep,name=fast_acl_set,json=fastAclSet,proto3" json:"fast_acl_set,omitempty"`
+	// Enhanced Firewall Policy Set
+	//
+	// x-displayName: "Enhanced Firewall Policy Set"
+	// L3/L4 Security rules
+	// Enhanced Firewall Policies to be used as firewall for the fleet where this firewall is attached
+	// Currently, Firewall Policy is applied for following Virtual Networks in a site,
+	//    - Site Local Inside
+	//    - Site Local
+	EnhancedFirewallPolicies []*schema.ObjectRefType `protobuf:"bytes,32,rep,name=enhanced_firewall_policies,json=enhancedFirewallPolicies,proto3" json:"enhanced_firewall_policies,omitempty"`
 	// Internal Firewall Policy Config Mode
 	//
 	// x-displayName: "Internal Firewall Policy Config Mode"
@@ -208,6 +265,7 @@ type GlobalSpecType struct {
 	//	*GlobalSpecType_DisableNetworkPolicy
 	//	*GlobalSpecType_ActiveNetworkPolicies
 	//	*GlobalSpecType_NetworkPolicyLegacyMode
+	//	*GlobalSpecType_ActiveEnhancedFirewallPolicies
 	NetworkPolicyConfigMode isGlobalSpecType_NetworkPolicyConfigMode `protobuf_oneof:"network_policy_config_mode"`
 	// Internal Forward Proxy Policy Config Mode
 	//
@@ -238,7 +296,7 @@ type GlobalSpecType struct {
 func (m *GlobalSpecType) Reset()      { *m = GlobalSpecType{} }
 func (*GlobalSpecType) ProtoMessage() {}
 func (*GlobalSpecType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_e07e50a9abc3814c, []int{3}
+	return fileDescriptor_e07e50a9abc3814c, []int{4}
 }
 func (m *GlobalSpecType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -291,6 +349,9 @@ type GlobalSpecType_ActiveNetworkPolicies struct {
 type GlobalSpecType_NetworkPolicyLegacyMode struct {
 	NetworkPolicyLegacyMode *schema.Empty `protobuf:"bytes,12,opt,name=network_policy_legacy_mode,json=networkPolicyLegacyMode,proto3,oneof" json:"network_policy_legacy_mode,omitempty"`
 }
+type GlobalSpecType_ActiveEnhancedFirewallPolicies struct {
+	ActiveEnhancedFirewallPolicies *ActiveEnhancedFirewallPoliciesType `protobuf:"bytes,33,opt,name=active_enhanced_firewall_policies,json=activeEnhancedFirewallPolicies,proto3,oneof" json:"active_enhanced_firewall_policies,omitempty"`
+}
 type GlobalSpecType_DisableForwardProxyPolicy struct {
 	DisableForwardProxyPolicy *schema.Empty `protobuf:"bytes,9,opt,name=disable_forward_proxy_policy,json=disableForwardProxyPolicy,proto3,oneof" json:"disable_forward_proxy_policy,omitempty"`
 }
@@ -313,6 +374,7 @@ type GlobalSpecType_FastAclLegacyMode struct {
 func (*GlobalSpecType_DisableNetworkPolicy) isGlobalSpecType_NetworkPolicyConfigMode()              {}
 func (*GlobalSpecType_ActiveNetworkPolicies) isGlobalSpecType_NetworkPolicyConfigMode()             {}
 func (*GlobalSpecType_NetworkPolicyLegacyMode) isGlobalSpecType_NetworkPolicyConfigMode()           {}
+func (*GlobalSpecType_ActiveEnhancedFirewallPolicies) isGlobalSpecType_NetworkPolicyConfigMode()    {}
 func (*GlobalSpecType_DisableForwardProxyPolicy) isGlobalSpecType_ForwardProxyPolicyConfigMode()    {}
 func (*GlobalSpecType_ActiveForwardProxyPolicies) isGlobalSpecType_ForwardProxyPolicyConfigMode()   {}
 func (*GlobalSpecType_ForwardProxyPolicyLegacyMode) isGlobalSpecType_ForwardProxyPolicyConfigMode() {}
@@ -360,6 +422,13 @@ func (m *GlobalSpecType) GetFastAclSet() []*schema.ObjectRefType {
 	return nil
 }
 
+func (m *GlobalSpecType) GetEnhancedFirewallPolicies() []*schema.ObjectRefType {
+	if m != nil {
+		return m.EnhancedFirewallPolicies
+	}
+	return nil
+}
+
 func (m *GlobalSpecType) GetDisableNetworkPolicy() *schema.Empty {
 	if x, ok := m.GetNetworkPolicyConfigMode().(*GlobalSpecType_DisableNetworkPolicy); ok {
 		return x.DisableNetworkPolicy
@@ -377,6 +446,13 @@ func (m *GlobalSpecType) GetActiveNetworkPolicies() *ActiveNetworkPoliciesType {
 func (m *GlobalSpecType) GetNetworkPolicyLegacyMode() *schema.Empty {
 	if x, ok := m.GetNetworkPolicyConfigMode().(*GlobalSpecType_NetworkPolicyLegacyMode); ok {
 		return x.NetworkPolicyLegacyMode
+	}
+	return nil
+}
+
+func (m *GlobalSpecType) GetActiveEnhancedFirewallPolicies() *ActiveEnhancedFirewallPoliciesType {
+	if x, ok := m.GetNetworkPolicyConfigMode().(*GlobalSpecType_ActiveEnhancedFirewallPolicies); ok {
+		return x.ActiveEnhancedFirewallPolicies
 	}
 	return nil
 }
@@ -436,6 +512,7 @@ func (*GlobalSpecType) XXX_OneofWrappers() []interface{} {
 		(*GlobalSpecType_DisableNetworkPolicy)(nil),
 		(*GlobalSpecType_ActiveNetworkPolicies)(nil),
 		(*GlobalSpecType_NetworkPolicyLegacyMode)(nil),
+		(*GlobalSpecType_ActiveEnhancedFirewallPolicies)(nil),
 		(*GlobalSpecType_DisableForwardProxyPolicy)(nil),
 		(*GlobalSpecType_ActiveForwardProxyPolicies)(nil),
 		(*GlobalSpecType_ForwardProxyPolicyLegacyMode)(nil),
@@ -460,6 +537,7 @@ type CreateSpecType struct {
 	//	*CreateSpecType_DisableNetworkPolicy
 	//	*CreateSpecType_ActiveNetworkPolicies
 	//	*CreateSpecType_NetworkPolicySet
+	//	*CreateSpecType_EnhancedFirewallPolicies
 	NetworkPolicyChoice isCreateSpecType_NetworkPolicyChoice `protobuf_oneof:"network_policy_choice"`
 	// Forward Proxy Policy List Configuration
 	//
@@ -488,7 +566,7 @@ type CreateSpecType struct {
 func (m *CreateSpecType) Reset()      { *m = CreateSpecType{} }
 func (*CreateSpecType) ProtoMessage() {}
 func (*CreateSpecType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_e07e50a9abc3814c, []int{4}
+	return fileDescriptor_e07e50a9abc3814c, []int{5}
 }
 func (m *CreateSpecType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -541,6 +619,9 @@ type CreateSpecType_ActiveNetworkPolicies struct {
 type CreateSpecType_NetworkPolicySet struct {
 	NetworkPolicySet *views.ObjectRefType `protobuf:"bytes,23,opt,name=network_policy_set,json=networkPolicySet,proto3,oneof" json:"network_policy_set,omitempty"`
 }
+type CreateSpecType_EnhancedFirewallPolicies struct {
+	EnhancedFirewallPolicies *ActiveEnhancedFirewallPoliciesType `protobuf:"bytes,32,opt,name=enhanced_firewall_policies,json=enhancedFirewallPolicies,proto3,oneof" json:"enhanced_firewall_policies,omitempty"`
+}
 type CreateSpecType_DisableForwardProxyPolicy struct {
 	DisableForwardProxyPolicy *schema.Empty `protobuf:"bytes,25,opt,name=disable_forward_proxy_policy,json=disableForwardProxyPolicy,proto3,oneof" json:"disable_forward_proxy_policy,omitempty"`
 }
@@ -563,6 +644,7 @@ type CreateSpecType_FastAclSet struct {
 func (*CreateSpecType_DisableNetworkPolicy) isCreateSpecType_NetworkPolicyChoice()            {}
 func (*CreateSpecType_ActiveNetworkPolicies) isCreateSpecType_NetworkPolicyChoice()           {}
 func (*CreateSpecType_NetworkPolicySet) isCreateSpecType_NetworkPolicyChoice()                {}
+func (*CreateSpecType_EnhancedFirewallPolicies) isCreateSpecType_NetworkPolicyChoice()        {}
 func (*CreateSpecType_DisableForwardProxyPolicy) isCreateSpecType_ForwardProxyPolicyChoice()  {}
 func (*CreateSpecType_ActiveForwardProxyPolicies) isCreateSpecType_ForwardProxyPolicyChoice() {}
 func (*CreateSpecType_ForwardProxyPolicySet) isCreateSpecType_ForwardProxyPolicyChoice()      {}
@@ -606,6 +688,13 @@ func (m *CreateSpecType) GetActiveNetworkPolicies() *ActiveNetworkPoliciesType {
 func (m *CreateSpecType) GetNetworkPolicySet() *views.ObjectRefType {
 	if x, ok := m.GetNetworkPolicyChoice().(*CreateSpecType_NetworkPolicySet); ok {
 		return x.NetworkPolicySet
+	}
+	return nil
+}
+
+func (m *CreateSpecType) GetEnhancedFirewallPolicies() *ActiveEnhancedFirewallPoliciesType {
+	if x, ok := m.GetNetworkPolicyChoice().(*CreateSpecType_EnhancedFirewallPolicies); ok {
+		return x.EnhancedFirewallPolicies
 	}
 	return nil
 }
@@ -658,6 +747,7 @@ func (*CreateSpecType) XXX_OneofWrappers() []interface{} {
 		(*CreateSpecType_DisableNetworkPolicy)(nil),
 		(*CreateSpecType_ActiveNetworkPolicies)(nil),
 		(*CreateSpecType_NetworkPolicySet)(nil),
+		(*CreateSpecType_EnhancedFirewallPolicies)(nil),
 		(*CreateSpecType_DisableForwardProxyPolicy)(nil),
 		(*CreateSpecType_ActiveForwardProxyPolicies)(nil),
 		(*CreateSpecType_ForwardProxyPolicySet)(nil),
@@ -682,6 +772,7 @@ type ReplaceSpecType struct {
 	//	*ReplaceSpecType_DisableNetworkPolicy
 	//	*ReplaceSpecType_ActiveNetworkPolicies
 	//	*ReplaceSpecType_NetworkPolicySet
+	//	*ReplaceSpecType_EnhancedFirewallPolicies
 	NetworkPolicyChoice isReplaceSpecType_NetworkPolicyChoice `protobuf_oneof:"network_policy_choice"`
 	// Forward Proxy Policy List Configuration
 	//
@@ -710,7 +801,7 @@ type ReplaceSpecType struct {
 func (m *ReplaceSpecType) Reset()      { *m = ReplaceSpecType{} }
 func (*ReplaceSpecType) ProtoMessage() {}
 func (*ReplaceSpecType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_e07e50a9abc3814c, []int{5}
+	return fileDescriptor_e07e50a9abc3814c, []int{6}
 }
 func (m *ReplaceSpecType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -763,6 +854,9 @@ type ReplaceSpecType_ActiveNetworkPolicies struct {
 type ReplaceSpecType_NetworkPolicySet struct {
 	NetworkPolicySet *views.ObjectRefType `protobuf:"bytes,23,opt,name=network_policy_set,json=networkPolicySet,proto3,oneof" json:"network_policy_set,omitempty"`
 }
+type ReplaceSpecType_EnhancedFirewallPolicies struct {
+	EnhancedFirewallPolicies *ActiveEnhancedFirewallPoliciesType `protobuf:"bytes,32,opt,name=enhanced_firewall_policies,json=enhancedFirewallPolicies,proto3,oneof" json:"enhanced_firewall_policies,omitempty"`
+}
 type ReplaceSpecType_DisableForwardProxyPolicy struct {
 	DisableForwardProxyPolicy *schema.Empty `protobuf:"bytes,25,opt,name=disable_forward_proxy_policy,json=disableForwardProxyPolicy,proto3,oneof" json:"disable_forward_proxy_policy,omitempty"`
 }
@@ -785,6 +879,7 @@ type ReplaceSpecType_FastAclSet struct {
 func (*ReplaceSpecType_DisableNetworkPolicy) isReplaceSpecType_NetworkPolicyChoice()            {}
 func (*ReplaceSpecType_ActiveNetworkPolicies) isReplaceSpecType_NetworkPolicyChoice()           {}
 func (*ReplaceSpecType_NetworkPolicySet) isReplaceSpecType_NetworkPolicyChoice()                {}
+func (*ReplaceSpecType_EnhancedFirewallPolicies) isReplaceSpecType_NetworkPolicyChoice()        {}
 func (*ReplaceSpecType_DisableForwardProxyPolicy) isReplaceSpecType_ForwardProxyPolicyChoice()  {}
 func (*ReplaceSpecType_ActiveForwardProxyPolicies) isReplaceSpecType_ForwardProxyPolicyChoice() {}
 func (*ReplaceSpecType_ForwardProxyPolicySet) isReplaceSpecType_ForwardProxyPolicyChoice()      {}
@@ -828,6 +923,13 @@ func (m *ReplaceSpecType) GetActiveNetworkPolicies() *ActiveNetworkPoliciesType 
 func (m *ReplaceSpecType) GetNetworkPolicySet() *views.ObjectRefType {
 	if x, ok := m.GetNetworkPolicyChoice().(*ReplaceSpecType_NetworkPolicySet); ok {
 		return x.NetworkPolicySet
+	}
+	return nil
+}
+
+func (m *ReplaceSpecType) GetEnhancedFirewallPolicies() *ActiveEnhancedFirewallPoliciesType {
+	if x, ok := m.GetNetworkPolicyChoice().(*ReplaceSpecType_EnhancedFirewallPolicies); ok {
+		return x.EnhancedFirewallPolicies
 	}
 	return nil
 }
@@ -880,6 +982,7 @@ func (*ReplaceSpecType) XXX_OneofWrappers() []interface{} {
 		(*ReplaceSpecType_DisableNetworkPolicy)(nil),
 		(*ReplaceSpecType_ActiveNetworkPolicies)(nil),
 		(*ReplaceSpecType_NetworkPolicySet)(nil),
+		(*ReplaceSpecType_EnhancedFirewallPolicies)(nil),
 		(*ReplaceSpecType_DisableForwardProxyPolicy)(nil),
 		(*ReplaceSpecType_ActiveForwardProxyPolicies)(nil),
 		(*ReplaceSpecType_ForwardProxyPolicySet)(nil),
@@ -904,6 +1007,7 @@ type GetSpecType struct {
 	//	*GetSpecType_DisableNetworkPolicy
 	//	*GetSpecType_ActiveNetworkPolicies
 	//	*GetSpecType_NetworkPolicySet
+	//	*GetSpecType_EnhancedFirewallPolicies
 	NetworkPolicyChoice isGetSpecType_NetworkPolicyChoice `protobuf_oneof:"network_policy_choice"`
 	// Forward Proxy Policy List Configuration
 	//
@@ -932,7 +1036,7 @@ type GetSpecType struct {
 func (m *GetSpecType) Reset()      { *m = GetSpecType{} }
 func (*GetSpecType) ProtoMessage() {}
 func (*GetSpecType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_e07e50a9abc3814c, []int{6}
+	return fileDescriptor_e07e50a9abc3814c, []int{7}
 }
 func (m *GetSpecType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -985,6 +1089,9 @@ type GetSpecType_ActiveNetworkPolicies struct {
 type GetSpecType_NetworkPolicySet struct {
 	NetworkPolicySet *views.ObjectRefType `protobuf:"bytes,23,opt,name=network_policy_set,json=networkPolicySet,proto3,oneof" json:"network_policy_set,omitempty"`
 }
+type GetSpecType_EnhancedFirewallPolicies struct {
+	EnhancedFirewallPolicies *ActiveEnhancedFirewallPoliciesType `protobuf:"bytes,32,opt,name=enhanced_firewall_policies,json=enhancedFirewallPolicies,proto3,oneof" json:"enhanced_firewall_policies,omitempty"`
+}
 type GetSpecType_DisableForwardProxyPolicy struct {
 	DisableForwardProxyPolicy *schema.Empty `protobuf:"bytes,25,opt,name=disable_forward_proxy_policy,json=disableForwardProxyPolicy,proto3,oneof" json:"disable_forward_proxy_policy,omitempty"`
 }
@@ -1007,6 +1114,7 @@ type GetSpecType_FastAclSet struct {
 func (*GetSpecType_DisableNetworkPolicy) isGetSpecType_NetworkPolicyChoice()            {}
 func (*GetSpecType_ActiveNetworkPolicies) isGetSpecType_NetworkPolicyChoice()           {}
 func (*GetSpecType_NetworkPolicySet) isGetSpecType_NetworkPolicyChoice()                {}
+func (*GetSpecType_EnhancedFirewallPolicies) isGetSpecType_NetworkPolicyChoice()        {}
 func (*GetSpecType_DisableForwardProxyPolicy) isGetSpecType_ForwardProxyPolicyChoice()  {}
 func (*GetSpecType_ActiveForwardProxyPolicies) isGetSpecType_ForwardProxyPolicyChoice() {}
 func (*GetSpecType_ForwardProxyPolicySet) isGetSpecType_ForwardProxyPolicyChoice()      {}
@@ -1050,6 +1158,13 @@ func (m *GetSpecType) GetActiveNetworkPolicies() *ActiveNetworkPoliciesType {
 func (m *GetSpecType) GetNetworkPolicySet() *views.ObjectRefType {
 	if x, ok := m.GetNetworkPolicyChoice().(*GetSpecType_NetworkPolicySet); ok {
 		return x.NetworkPolicySet
+	}
+	return nil
+}
+
+func (m *GetSpecType) GetEnhancedFirewallPolicies() *ActiveEnhancedFirewallPoliciesType {
+	if x, ok := m.GetNetworkPolicyChoice().(*GetSpecType_EnhancedFirewallPolicies); ok {
+		return x.EnhancedFirewallPolicies
 	}
 	return nil
 }
@@ -1102,6 +1217,7 @@ func (*GetSpecType) XXX_OneofWrappers() []interface{} {
 		(*GetSpecType_DisableNetworkPolicy)(nil),
 		(*GetSpecType_ActiveNetworkPolicies)(nil),
 		(*GetSpecType_NetworkPolicySet)(nil),
+		(*GetSpecType_EnhancedFirewallPolicies)(nil),
 		(*GetSpecType_DisableForwardProxyPolicy)(nil),
 		(*GetSpecType_ActiveForwardProxyPolicies)(nil),
 		(*GetSpecType_ForwardProxyPolicySet)(nil),
@@ -1126,7 +1242,7 @@ type NetworkFirewallStatus struct {
 func (m *NetworkFirewallStatus) Reset()      { *m = NetworkFirewallStatus{} }
 func (*NetworkFirewallStatus) ProtoMessage() {}
 func (*NetworkFirewallStatus) Descriptor() ([]byte, []int) {
-	return fileDescriptor_e07e50a9abc3814c, []int{7}
+	return fileDescriptor_e07e50a9abc3814c, []int{8}
 }
 func (m *NetworkFirewallStatus) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1161,6 +1277,8 @@ func (m *NetworkFirewallStatus) GetInstalled() bool {
 func init() {
 	proto.RegisterType((*ActiveNetworkPoliciesType)(nil), "ves.io.schema.network_firewall.ActiveNetworkPoliciesType")
 	golang_proto.RegisterType((*ActiveNetworkPoliciesType)(nil), "ves.io.schema.network_firewall.ActiveNetworkPoliciesType")
+	proto.RegisterType((*ActiveEnhancedFirewallPoliciesType)(nil), "ves.io.schema.network_firewall.ActiveEnhancedFirewallPoliciesType")
+	golang_proto.RegisterType((*ActiveEnhancedFirewallPoliciesType)(nil), "ves.io.schema.network_firewall.ActiveEnhancedFirewallPoliciesType")
 	proto.RegisterType((*ActiveForwardProxyPoliciesType)(nil), "ves.io.schema.network_firewall.ActiveForwardProxyPoliciesType")
 	golang_proto.RegisterType((*ActiveForwardProxyPoliciesType)(nil), "ves.io.schema.network_firewall.ActiveForwardProxyPoliciesType")
 	proto.RegisterType((*ActiveFastACLsType)(nil), "ves.io.schema.network_firewall.ActiveFastACLsType")
@@ -1185,92 +1303,100 @@ func init() {
 }
 
 var fileDescriptor_e07e50a9abc3814c = []byte{
-	// 1349 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x58, 0x5d, 0x6f, 0xdb, 0xd4,
-	0x1b, 0xcf, 0x69, 0xfd, 0x6f, 0x9c, 0xd3, 0xae, 0x3d, 0xf3, 0x92, 0xe6, 0xa5, 0x89, 0x1b, 0xe5,
-	0x7f, 0xc1, 0x04, 0x6e, 0xd2, 0xa4, 0x7b, 0x05, 0x69, 0x62, 0x99, 0xd8, 0x8b, 0x35, 0x60, 0xca,
-	0x86, 0x40, 0x08, 0x16, 0x1c, 0xe7, 0x24, 0x33, 0x73, 0x72, 0x2c, 0xfb, 0x34, 0x5d, 0x26, 0x22,
-	0x4d, 0x42, 0xe2, 0x02, 0x01, 0x42, 0xbb, 0xe1, 0x2b, 0x40, 0x3f, 0x02, 0xbe, 0xa9, 0xb8, 0x42,
-	0x5c, 0xe5, 0xb2, 0x97, 0x2c, 0x95, 0x58, 0xe1, 0x6a, 0x1f, 0x01, 0xc5, 0x71, 0x1a, 0x3b, 0xb1,
-	0xbb, 0x6c, 0x43, 0xda, 0x4d, 0xee, 0xec, 0xf3, 0xbc, 0xfc, 0x9e, 0xf3, 0xf3, 0xf3, 0xfc, 0xce,
-	0x91, 0xe1, 0x9b, 0x2d, 0x6c, 0x64, 0x15, 0x92, 0x33, 0xe4, 0x7b, 0xb8, 0x21, 0xe5, 0x9a, 0x98,
-	0xee, 0x10, 0xfd, 0x7e, 0xb9, 0xa6, 0xe8, 0x78, 0x47, 0x52, 0xd5, 0x1c, 0x6d, 0x6b, 0xd8, 0xc8,
-	0x6a, 0x3a, 0xa1, 0x84, 0xe3, 0x07, 0xbe, 0xd9, 0x81, 0x6f, 0x76, 0xdc, 0x37, 0xb1, 0x51, 0x57,
-	0xe8, 0xbd, 0xed, 0x4a, 0x56, 0x26, 0x8d, 0x5c, 0x9d, 0xd4, 0x49, 0xce, 0x0a, 0xab, 0x6c, 0xd7,
-	0xac, 0x37, 0xeb, 0xc5, 0x7a, 0x1a, 0xa4, 0x4b, 0xac, 0xd7, 0x09, 0xa9, 0xab, 0x78, 0xe4, 0x45,
-	0x95, 0x06, 0x36, 0xa8, 0xd4, 0xd0, 0x6c, 0x87, 0xe8, 0x44, 0x6d, 0xb6, 0x61, 0xcd, 0x6d, 0x20,
-	0x1a, 0x55, 0x48, 0xd3, 0xae, 0x32, 0x91, 0x72, 0x1b, 0xb5, 0x16, 0x2d, 0x3b, 0x36, 0x91, 0x88,
-	0xbb, 0xcd, 0x4e, 0x53, 0xd2, 0x6d, 0x6a, 0x49, 0xaa, 0x52, 0x95, 0x28, 0xb6, 0xad, 0xe9, 0x31,
-	0xab, 0x82, 0x77, 0xca, 0x6e, 0xe4, 0xf5, 0x49, 0x0f, 0xc3, 0x09, 0x90, 0xf9, 0x09, 0xc0, 0xf8,
-	0x65, 0x99, 0x2a, 0x2d, 0xfc, 0xc1, 0x80, 0xbb, 0x5b, 0x44, 0x55, 0x64, 0x05, 0x1b, 0x77, 0xda,
-	0x1a, 0xe6, 0x1e, 0x42, 0x34, 0xa4, 0x54, 0xb3, 0xd7, 0x63, 0x20, 0x3d, 0x7f, 0x7a, 0xb1, 0x90,
-	0xc9, 0xba, 0x99, 0xb7, 0x32, 0x67, 0x3f, 0xac, 0x7c, 0x89, 0x65, 0x5a, 0xc2, 0xb5, 0x7e, 0x74,
-	0xf1, 0xad, 0xdd, 0xce, 0x29, 0x57, 0x78, 0xbb, 0xdc, 0x77, 0xfb, 0xf5, 0xef, 0xbd, 0xf9, 0x85,
-	0xc7, 0x60, 0x1e, 0x3d, 0x02, 0xfd, 0xc7, 0xff, 0x3d, 0x06, 0x73, 0x2c, 0x28, 0xad, 0x34, 0xdd,
-	0xf8, 0x99, 0x5f, 0x00, 0xe4, 0x07, 0x95, 0x5d, 0x25, 0xfa, 0x8e, 0xa4, 0x57, 0x6f, 0xe9, 0xe4,
-	0x41, 0xdb, 0x55, 0xde, 0x37, 0x00, 0xae, 0xd6, 0x06, 0xc6, 0xb2, 0xd6, 0xb7, 0xbe, 0x4c, 0x95,
-	0xc2, 0x6e, 0x27, 0xec, 0x91, 0xa4, 0xed, 0x5d, 0xe6, 0xd0, 0xd5, 0x55, 0x4c, 0x66, 0x07, 0x72,
-	0x76, 0xa9, 0x92, 0x41, 0x2f, 0x5f, 0xb9, 0x39, 0x28, 0x4f, 0x82, 0xa1, 0x9a, 0x64, 0xd0, 0xb2,
-	0x24, 0xab, 0x2f, 0x52, 0x50, 0x7a, 0xb7, 0xc3, 0x0e, 0xe3, 0xbc, 0x8b, 0xb0, 0xcc, 0x97, 0x65,
-	0xd5, 0xc8, 0xfc, 0xb3, 0x04, 0x97, 0xaf, 0xa9, 0xa4, 0x22, 0xa9, 0xb7, 0x35, 0x2c, 0x5b, 0xa8,
-	0x04, 0x72, 0x63, 0xa4, 0x1b, 0x98, 0xda, 0xf0, 0xc9, 0x31, 0x78, 0x37, 0xf0, 0xff, 0x77, 0x3b,
-	0x1e, 0xa1, 0x87, 0x26, 0x38, 0xc2, 0x46, 0xa0, 0x84, 0x9c, 0xdf, 0xa9, 0x7d, 0x1b, 0x53, 0xee,
-	0x21, 0x8c, 0x79, 0xf1, 0x67, 0xc1, 0xce, 0x4d, 0x09, 0x6b, 0x60, 0xbd, 0xa5, 0xc8, 0xd8, 0x1f,
-	0x36, 0x32, 0xc1, 0xbb, 0x85, 0xfd, 0x39, 0x5c, 0x1a, 0x52, 0x65, 0xe1, 0x31, 0x53, 0xe0, 0xa5,
-	0x76, 0x3b, 0xae, 0xa0, 0x31, 0x24, 0x68, 0x93, 0xdb, 0x4f, 0xff, 0x11, 0x5c, 0xad, 0x2a, 0x86,
-	0x54, 0x51, 0x71, 0xd9, 0x4d, 0x4c, 0x6c, 0x21, 0x0d, 0x4e, 0x2f, 0x16, 0xc2, 0x63, 0x40, 0xef,
-	0x35, 0x34, 0xda, 0x2e, 0x06, 0xf7, 0x3b, 0xa0, 0x9f, 0xf4, 0x7a, 0xa0, 0x14, 0xb6, 0xc3, 0x9d,
-	0xc3, 0xd5, 0xe6, 0xbe, 0x82, 0x51, 0xc9, 0x6a, 0x97, 0xf2, 0xc4, 0x74, 0x05, 0xad, 0xbc, 0x17,
-	0xb3, 0xc7, 0xeb, 0x5a, 0xd6, 0x77, 0x64, 0x9d, 0xe0, 0x11, 0xc9, 0xcb, 0x8b, 0xfb, 0x0c, 0x26,
-	0xc6, 0xbe, 0xb2, 0x8a, 0xeb, 0x92, 0xdc, 0x2e, 0x37, 0x48, 0x15, 0xc7, 0x96, 0xa6, 0xdb, 0x58,
-	0xd4, 0xd5, 0x06, 0x37, 0xad, 0x04, 0xef, 0x93, 0x2a, 0xe6, 0xbe, 0x80, 0xc9, 0x21, 0x65, 0x5e,
-	0x5d, 0x11, 0x0b, 0x4d, 0x93, 0x1f, 0x94, 0xe2, 0x76, 0x92, 0x89, 0xd9, 0x6f, 0x73, 0xdf, 0x01,
-	0x98, 0xb2, 0xe9, 0xf3, 0x19, 0x7e, 0x68, 0x61, 0x5c, 0x9a, 0x8e, 0x44, 0x3f, 0x75, 0x71, 0x56,
-	0x93, 0x90, 0x7c, 0x5d, 0xb9, 0x3a, 0x4c, 0x7b, 0xb6, 0xbf, 0x93, 0xd4, 0xe5, 0xe9, 0x36, 0x9d,
-	0x9c, 0x6c, 0x72, 0x07, 0xb3, 0x37, 0x20, 0x3a, 0x62, 0xd6, 0x6e, 0xdf, 0x18, 0x9a, 0x26, 0xf1,
-	0x5c, 0x69, 0x79, 0xc8, 0xe6, 0xa0, 0xb5, 0xb9, 0x3a, 0x44, 0x43, 0x06, 0x8f, 0x04, 0xea, 0xa4,
-	0x95, 0xaa, 0x30, 0x25, 0x69, 0x0e, 0x9d, 0x73, 0x01, 0x49, 0x23, 0xb3, 0xac, 0x1a, 0xdc, 0x2d,
-	0x18, 0x3e, 0x1a, 0x35, 0x27, 0x21, 0xdc, 0x74, 0x75, 0x9f, 0xb4, 0x67, 0xd1, 0xc1, 0xc2, 0x5d,
-	0x78, 0xc2, 0x3a, 0xe7, 0x94, 0x26, 0xc5, 0x7a, 0x53, 0x52, 0x63, 0x87, 0x83, 0x91, 0x99, 0x46,
-	0x59, 0xc3, 0xbb, 0x1d, 0x77, 0x70, 0x1f, 0xa6, 0xb4, 0xd4, 0x5f, 0xba, 0x61, 0xaf, 0x14, 0xcf,
-	0x4c, 0x4c, 0x87, 0x4c, 0x9a, 0x35, 0xa5, 0x6e, 0xd5, 0xcd, 0xad, 0xee, 0x99, 0x60, 0xa1, 0x6b,
-	0x82, 0xc5, 0x9e, 0x09, 0x16, 0xce, 0x09, 0xe7, 0x85, 0x7c, 0xe1, 0x99, 0x09, 0x40, 0xf1, 0x1d,
-	0x9f, 0x26, 0x70, 0xc6, 0x46, 0xf7, 0x4c, 0x10, 0xea, 0x9a, 0xe0, 0x44, 0xcf, 0x04, 0xc1, 0x8b,
-	0x42, 0x7e, 0x53, 0xc8, 0x9f, 0xb1, 0x82, 0x37, 0x1d, 0x24, 0x39, 0x03, 0x62, 0x7b, 0x26, 0x40,
-	0x5d, 0x13, 0xac, 0xf4, 0x4c, 0xc0, 0xe6, 0xcf, 0x09, 0xf9, 0xf3, 0x42, 0xfe, 0x42, 0x3f, 0x42,
-	0x64, 0xd8, 0x79, 0xc4, 0x88, 0x0c, 0xbb, 0x88, 0x96, 0x44, 0x86, 0x3d, 0x81, 0x96, 0x45, 0x86,
-	0x5d, 0x41, 0x48, 0x64, 0xd8, 0x53, 0x28, 0x2c, 0x32, 0x6c, 0x18, 0x45, 0x44, 0x86, 0x8d, 0xa0,
-	0x55, 0x91, 0x61, 0x57, 0x51, 0x54, 0x64, 0xd8, 0x28, 0x8a, 0x89, 0x0c, 0x1b, 0x43, 0x71, 0x91,
-	0x61, 0xe3, 0x28, 0x21, 0x32, 0x6c, 0x02, 0xad, 0x89, 0x0c, 0xbb, 0x86, 0x92, 0x22, 0xc3, 0x26,
-	0x51, 0x4a, 0x64, 0xd8, 0x14, 0xe2, 0x45, 0x86, 0xe5, 0xd1, 0xba, 0xc8, 0xb0, 0xeb, 0x28, 0x2d,
-	0x2e, 0xb0, 0x7f, 0x05, 0xd1, 0xd3, 0xa0, 0xb8, 0xc0, 0x3e, 0x0d, 0xa2, 0xc3, 0x60, 0xe6, 0xfb,
-	0x10, 0x5c, 0xbe, 0xa2, 0x63, 0x89, 0xe2, 0xa3, 0xc3, 0xe6, 0xa6, 0xaf, 0x40, 0x46, 0xfc, 0xbf,
-	0xb0, 0xaf, 0x2e, 0x1a, 0xfe, 0xba, 0xb8, 0xfa, 0x8a, 0xba, 0xe8, 0x2f, 0x87, 0x8a, 0xe7, 0x79,
-	0x19, 0x9d, 0xba, 0xa9, 0x22, 0x9e, 0xa7, 0xe6, 0xf5, 0x80, 0xc7, 0x49, 0xf9, 0xf1, 0x73, 0xb4,
-	0x31, 0x7e, 0x0c, 0x67, 0xc7, 0x4a, 0xe2, 0xd7, 0xcf, 0x95, 0xc4, 0xc4, 0x7f, 0x21, 0x89, 0xcf,
-	0x51, 0x42, 0x7a, 0xcc, 0x45, 0x60, 0xed, 0x85, 0xf8, 0x9c, 0xbc, 0x0e, 0x5c, 0xf7, 0xbd, 0x02,
-	0xbc, 0xeb, 0x21, 0x8b, 0xa9, 0x63, 0x88, 0x9c, 0x54, 0xc3, 0xbb, 0x1e, 0x6a, 0xc8, 0xbf, 0xac,
-	0x1a, 0x7a, 0x88, 0xe0, 0xf8, 0x25, 0x65, 0xfd, 0x55, 0xb9, 0x98, 0x73, 0x5e, 0x52, 0xde, 0xfe,
-	0xe4, 0x8f, 0x4b, 0x63, 0x77, 0xc0, 0xdf, 0x4c, 0x70, 0x05, 0x26, 0x60, 0xd8, 0xfe, 0x4a, 0x69,
-	0x8b, 0xb1, 0xb4, 0xdd, 0x2b, 0x73, 0x85, 0x33, 0x30, 0x02, 0x57, 0xae, 0xda, 0x5b, 0x18, 0x2d,
-	0x6f, 0xc2, 0x65, 0xc8, 0xf6, 0x8b, 0x4e, 0xf7, 0x49, 0x99, 0x2b, 0x5c, 0x28, 0x6e, 0xc0, 0xc8,
-	0xb8, 0x16, 0xde, 0x23, 0x8a, 0x8c, 0xb9, 0xf0, 0x9e, 0x09, 0x22, 0x5d, 0x13, 0x84, 0xfb, 0xca,
-	0x54, 0xc8, 0x0b, 0x85, 0x82, 0x50, 0xd8, 0x2a, 0x6e, 0xc1, 0x35, 0x6f, 0x11, 0x1c, 0x05, 0xc5,
-	0xbb, 0x26, 0x88, 0x59, 0x41, 0x67, 0x85, 0xc2, 0x39, 0xa1, 0x70, 0xbe, 0xf8, 0x06, 0x5c, 0x19,
-	0x89, 0xdf, 0xc8, 0x31, 0xd5, 0x35, 0x41, 0xd2, 0x72, 0xbc, 0x28, 0x6c, 0x6d, 0x0a, 0x5b, 0xf9,
-	0x23, 0x55, 0x1b, 0x68, 0x58, 0x12, 0xa5, 0x32, 0x3f, 0x84, 0xe0, 0x4a, 0x09, 0x6b, 0xaa, 0x24,
-	0xcf, 0x04, 0x69, 0x26, 0x48, 0x33, 0x41, 0x9a, 0x09, 0xd2, 0x6b, 0x16, 0xa4, 0x6f, 0x43, 0x70,
-	0xf1, 0x1a, 0xa6, 0x33, 0x31, 0x9a, 0x89, 0xd1, 0x4c, 0x8c, 0x66, 0x62, 0xf4, 0x7a, 0xc5, 0xe8,
-	0x2c, 0x8c, 0xd8, 0xc3, 0x3c, 0xdc, 0xcc, 0x6d, 0x2a, 0xd1, 0x6d, 0x83, 0x4b, 0xc2, 0x90, 0xd2,
-	0x34, 0xa8, 0xa4, 0xaa, 0xb8, 0x1a, 0x03, 0x69, 0x70, 0x9a, 0x2d, 0x8d, 0x16, 0x8a, 0x8f, 0x41,
-	0xf7, 0x09, 0x1f, 0xd8, 0x7f, 0xc2, 0x07, 0x9e, 0x3d, 0xe1, 0xc1, 0xa3, 0x1e, 0x0f, 0x7e, 0xee,
-	0xf1, 0xe0, 0xf7, 0x1e, 0x0f, 0xba, 0x3d, 0x1e, 0xec, 0xf7, 0x78, 0xf0, 0x67, 0x8f, 0x07, 0x87,
-	0x3d, 0x3e, 0xf0, 0xac, 0xc7, 0x83, 0x1f, 0x0f, 0xf8, 0xc0, 0xde, 0x01, 0x0f, 0xba, 0x07, 0x7c,
-	0x60, 0xff, 0x80, 0x0f, 0x7c, 0x7a, 0xa7, 0x4e, 0xb4, 0xfb, 0xf5, 0x6c, 0x8b, 0xa8, 0x14, 0xeb,
-	0xba, 0x94, 0xdd, 0x36, 0x72, 0xd6, 0x43, 0x8d, 0xe8, 0x8d, 0x0d, 0x4d, 0x27, 0x2d, 0xa5, 0x8a,
-	0xf5, 0x8d, 0xa1, 0x39, 0xa7, 0x55, 0xea, 0x24, 0x87, 0x1f, 0x50, 0xfb, 0xff, 0xb4, 0xcf, 0x2f,
-	0xff, 0xca, 0x82, 0xf5, 0xb3, 0x7a, 0xeb, 0xdf, 0x00, 0x00, 0x00, 0xff, 0xff, 0xde, 0x56, 0x74,
-	0xe6, 0x1b, 0x18, 0x00, 0x00,
+	// 1473 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x99, 0x5d, 0x6f, 0xdb, 0x54,
+	0x18, 0xc7, 0x73, 0x5a, 0xd3, 0xba, 0xa7, 0x5d, 0x7b, 0xe6, 0x25, 0x6d, 0x92, 0x26, 0x6e, 0x16,
+	0x2e, 0x98, 0xc0, 0x4b, 0x1a, 0x67, 0x5b, 0x57, 0x90, 0x06, 0xcb, 0xb4, 0x37, 0x6b, 0xc0, 0x94,
+	0x0d, 0x81, 0x10, 0x2c, 0xb8, 0xce, 0x49, 0x6a, 0xe6, 0xc4, 0x96, 0xed, 0xa6, 0xcb, 0x44, 0xa4,
+	0x49, 0x48, 0xdc, 0xc0, 0x05, 0xaa, 0x84, 0x40, 0x42, 0xe2, 0xe5, 0x0e, 0xf2, 0x11, 0x30, 0x17,
+	0x15, 0x12, 0xd2, 0xc4, 0x55, 0x2e, 0x7b, 0xb9, 0xa5, 0x12, 0x2b, 0x77, 0xfb, 0x08, 0x28, 0x8e,
+	0x93, 0xda, 0x89, 0x9d, 0x7a, 0x1b, 0xdc, 0xe5, 0x2e, 0xf1, 0xf3, 0x3c, 0xe7, 0xff, 0xbc, 0x9c,
+	0xf3, 0xf3, 0x91, 0x0c, 0x5f, 0xad, 0x61, 0x2d, 0x25, 0xca, 0x69, 0x4d, 0xd8, 0xc4, 0x15, 0x3e,
+	0x5d, 0xc5, 0xfa, 0xb6, 0xac, 0xde, 0x2d, 0x94, 0x44, 0x15, 0x6f, 0xf3, 0x92, 0x94, 0xd6, 0xeb,
+	0x0a, 0xd6, 0x52, 0x8a, 0x2a, 0xeb, 0x32, 0x45, 0x77, 0x7d, 0x53, 0x5d, 0xdf, 0xd4, 0xa0, 0x6f,
+	0xf4, 0x74, 0x59, 0xd4, 0x37, 0xb7, 0x36, 0x52, 0x82, 0x5c, 0x49, 0x97, 0xe5, 0xb2, 0x9c, 0x36,
+	0xc3, 0x36, 0xb6, 0x4a, 0xe6, 0x3f, 0xf3, 0x8f, 0xf9, 0xab, 0xbb, 0x5c, 0x74, 0xa5, 0x2c, 0xcb,
+	0x65, 0x09, 0x1f, 0x7a, 0xe9, 0x62, 0x05, 0x6b, 0x3a, 0x5f, 0x51, 0x2c, 0x87, 0xa5, 0xa1, 0xdc,
+	0x2c, 0xc3, 0xb2, 0xd3, 0x20, 0x2b, 0xba, 0x28, 0x57, 0xad, 0x2c, 0xa3, 0x71, 0xa7, 0x51, 0xa9,
+	0xe9, 0x05, 0x5b, 0x11, 0xd1, 0x88, 0xd3, 0x6c, 0x37, 0xc5, 0x9c, 0xa6, 0x1a, 0x2f, 0x89, 0x45,
+	0x5e, 0xc7, 0x96, 0x35, 0x31, 0x60, 0x15, 0xf1, 0x76, 0xc1, 0xa9, 0xbc, 0x32, 0xec, 0xa1, 0xd9,
+	0x05, 0x92, 0xdf, 0x02, 0x18, 0xb9, 0x28, 0xe8, 0x62, 0x0d, 0xbf, 0xd3, 0xed, 0xdd, 0x4d, 0x59,
+	0x12, 0x05, 0x11, 0x6b, 0xb7, 0xeb, 0x0a, 0xa6, 0xee, 0x43, 0xd4, 0x6b, 0xa9, 0x62, 0x3d, 0x0f,
+	0x83, 0xc4, 0xe4, 0xa9, 0x59, 0x36, 0x99, 0x72, 0x76, 0xde, 0x5c, 0x39, 0xf5, 0xee, 0xc6, 0xa7,
+	0x58, 0xd0, 0xf3, 0xb8, 0xd4, 0x89, 0xce, 0xbd, 0xd6, 0x6c, 0x9c, 0x70, 0x84, 0xd7, 0x0b, 0x1d,
+	0xb7, 0xdf, 0xfe, 0xd9, 0x9d, 0x9c, 0xda, 0x01, 0x93, 0xe8, 0x01, 0xe8, 0xfc, 0x7c, 0x69, 0x07,
+	0x4c, 0x90, 0x20, 0xbf, 0x50, 0x75, 0xea, 0x27, 0x1f, 0x02, 0x98, 0xec, 0x66, 0x76, 0xb9, 0xba,
+	0xc9, 0x57, 0x05, 0x5c, 0xbc, 0x62, 0x4d, 0xd5, 0x91, 0xe2, 0xcf, 0x00, 0x46, 0xb1, 0xe5, 0xd0,
+	0x9f, 0xfb, 0xf3, 0x64, 0xfb, 0x66, 0xb3, 0x11, 0xf6, 0x58, 0xa8, 0xde, 0x32, 0x00, 0x70, 0x4d,
+	0xbb, 0xfd, 0xe8, 0xcf, 0xc9, 0xa9, 0x9d, 0xdf, 0xc1, 0x04, 0x02, 0xf9, 0x7e, 0xf4, 0x60, 0x9e,
+	0xc9, 0x5f, 0x01, 0xa4, 0xbb, 0xa5, 0x5c, 0x91, 0xd5, 0x6d, 0x5e, 0x2d, 0xde, 0x54, 0xe5, 0x7b,
+	0x75, 0x47, 0x19, 0x5f, 0x00, 0xb8, 0x58, 0xea, 0x1a, 0x0b, 0x4a, 0xc7, 0xfa, 0x3c, 0x25, 0x30,
+	0xcd, 0x46, 0xd0, 0x65, 0x91, 0xba, 0x7b, 0xc7, 0x7b, 0xae, 0x8e, 0x64, 0x92, 0xdb, 0x90, 0xb2,
+	0x52, 0xe5, 0x35, 0xfd, 0xe2, 0xa5, 0x1b, 0xdd, 0xf4, 0x78, 0x38, 0x53, 0xe2, 0x35, 0xbd, 0xc0,
+	0x0b, 0xd2, 0xb3, 0x24, 0x94, 0x68, 0x36, 0xc8, 0x5e, 0x9c, 0x7b, 0x12, 0xa6, 0xf9, 0xa2, 0x20,
+	0x69, 0xc9, 0x9f, 0x16, 0xe0, 0xfc, 0x55, 0x49, 0xde, 0xe0, 0xa5, 0x5b, 0x0a, 0x16, 0x4c, 0x55,
+	0x19, 0x52, 0x03, 0xfb, 0x47, 0xc3, 0xba, 0x25, 0x1f, 0x1b, 0x90, 0x77, 0x0a, 0xbf, 0xdc, 0x6c,
+	0xb8, 0x84, 0x1e, 0x58, 0x63, 0xec, 0x68, 0x23, 0x90, 0x47, 0xf6, 0x2d, 0x57, 0xbf, 0x85, 0x75,
+	0xea, 0x3e, 0x0c, 0xbb, 0xf5, 0xcf, 0x94, 0x9d, 0xf0, 0x29, 0xab, 0x61, 0xb5, 0x26, 0x0a, 0xd8,
+	0x5b, 0x36, 0x34, 0xd4, 0x77, 0x53, 0xfb, 0x63, 0x38, 0xd7, 0x6b, 0x95, 0xa9, 0x47, 0xf8, 0xd0,
+	0x8b, 0x37, 0x1b, 0x8e, 0xa0, 0x01, 0x25, 0x68, 0x35, 0xb7, 0xb3, 0xfc, 0x37, 0xa3, 0xcf, 0x49,
+	0xc2, 0x87, 0xda, 0xfa, 0x11, 0x27, 0xe4, 0xc0, 0x79, 0x4a, 0x7c, 0x9d, 0x0d, 0xea, 0x3d, 0xb8,
+	0x58, 0x14, 0x35, 0x7e, 0x43, 0xc2, 0x05, 0xe7, 0xc0, 0xc2, 0x53, 0x09, 0x70, 0x6a, 0x96, 0x0d,
+	0x0e, 0xa4, 0x74, 0xb9, 0xa2, 0xe8, 0xf5, 0xdc, 0xf4, 0x5e, 0xc3, 0x94, 0xbb, 0x16, 0xc8, 0x07,
+	0xad, 0x70, 0x3b, 0xbf, 0xea, 0xd4, 0x67, 0x70, 0x89, 0x37, 0xb7, 0x71, 0x61, 0x08, 0x60, 0xd3,
+	0xe6, 0xba, 0xeb, 0xa9, 0xd1, 0xaf, 0x8e, 0x94, 0x27, 0x15, 0xed, 0xe2, 0x21, 0xde, 0xcd, 0x8b,
+	0xfa, 0x08, 0x46, 0x07, 0x76, 0x9f, 0x84, 0xcb, 0xbc, 0x50, 0x2f, 0x54, 0xe4, 0x22, 0x0e, 0xcf,
+	0xf9, 0x2b, 0x6c, 0xc9, 0xb1, 0x3d, 0x6f, 0x98, 0x0b, 0xbc, 0x2d, 0x17, 0x31, 0xf5, 0x1d, 0x80,
+	0x27, 0xad, 0xe2, 0x46, 0x4c, 0xf4, 0xa4, 0xa9, 0x92, 0xf3, 0x57, 0xe6, 0x28, 0xc4, 0xda, 0x73,
+	0xa2, 0xf9, 0x91, 0xee, 0xd4, 0x27, 0x30, 0xd6, 0x9b, 0xa6, 0xdb, 0x41, 0x0a, 0xcf, 0xf8, 0x29,
+	0x1d, 0xe4, 0x23, 0xd6, 0x22, 0x43, 0xb8, 0xac, 0x53, 0x5f, 0x01, 0x18, 0xb7, 0x8a, 0xf7, 0xe0,
+	0x25, 0x34, 0x35, 0x2e, 0xf8, 0x2b, 0xdc, 0x0b, 0xc8, 0xf6, 0x6c, 0xa2, 0xbc, 0xa7, 0x2b, 0x55,
+	0x86, 0x09, 0x57, 0x62, 0xd8, 0xe7, 0x3d, 0xef, 0xaf, 0xe8, 0xd8, 0x30, 0x17, 0x6c, 0x43, 0xbf,
+	0x0e, 0x51, 0xbf, 0xb3, 0xd6, 0x89, 0x0f, 0x23, 0x3f, 0x0b, 0x4f, 0xe4, 0xe7, 0x7b, 0xdd, 0xec,
+	0xd2, 0x80, 0x2a, 0x43, 0xd4, 0xeb, 0x60, 0x9f, 0xe9, 0xc7, 0xcd, 0xa5, 0x58, 0x9f, 0x4d, 0xb3,
+	0xbd, 0x1a, 0x1c, 0x42, 0xfc, 0xa1, 0x59, 0x90, 0x34, 0xea, 0x26, 0x0c, 0xf6, 0xe9, 0x64, 0x6f,
+	0x08, 0xe5, 0x2f, 0xef, 0xe3, 0x16, 0xbe, 0x6c, 0x5d, 0xb8, 0x03, 0x8f, 0x99, 0xb7, 0x1c, 0xb1,
+	0xaa, 0x63, 0xb5, 0xca, 0x4b, 0xe1, 0x83, 0xee, 0x69, 0xf6, 0xf3, 0x32, 0x0a, 0x36, 0x1b, 0xce,
+	0xe0, 0x8e, 0x4c, 0x7e, 0xae, 0xf3, 0xe8, 0xba, 0xf5, 0x24, 0xb7, 0x36, 0x74, 0x70, 0x05, 0xb9,
+	0x5a, 0x12, 0xcb, 0x66, 0xde, 0x54, 0x64, 0xd7, 0x00, 0x53, 0x2d, 0x03, 0xcc, 0xb6, 0x0d, 0x30,
+	0x73, 0x8e, 0xc9, 0x66, 0x99, 0x35, 0x26, 0xc3, 0x3e, 0x35, 0x00, 0xc8, 0xbd, 0xe1, 0xb1, 0x0f,
+	0xec, 0xe1, 0x4b, 0xbb, 0x06, 0x98, 0x69, 0x19, 0xe0, 0x58, 0xdb, 0x00, 0xd3, 0xeb, 0x4c, 0x66,
+	0x95, 0xc9, 0x9c, 0x31, 0x83, 0x57, 0x6d, 0x7d, 0xb2, 0x07, 0x84, 0x77, 0x0d, 0x80, 0x5a, 0x06,
+	0x58, 0x68, 0x1b, 0x80, 0xcc, 0x9c, 0x63, 0x32, 0x6b, 0x4c, 0xe6, 0x7c, 0x27, 0x82, 0x23, 0xc8,
+	0x49, 0x44, 0x70, 0x04, 0x39, 0x8b, 0xe6, 0x38, 0x82, 0x3c, 0x86, 0xe6, 0x39, 0x82, 0x5c, 0x40,
+	0x88, 0x23, 0xc8, 0x13, 0x28, 0xc8, 0x11, 0x64, 0x10, 0x85, 0x38, 0x82, 0x0c, 0xa1, 0x45, 0x8e,
+	0x20, 0x17, 0xd1, 0x12, 0x47, 0x90, 0x4b, 0x28, 0xcc, 0x11, 0x64, 0x18, 0x45, 0x38, 0x82, 0x8c,
+	0xa0, 0x28, 0x47, 0x90, 0x51, 0xb4, 0xcc, 0x11, 0xe4, 0x32, 0x8a, 0x71, 0x04, 0x19, 0x43, 0x71,
+	0x8e, 0x20, 0xe3, 0x88, 0xe6, 0x08, 0x92, 0x46, 0x2b, 0x1c, 0x41, 0xae, 0xa0, 0x04, 0x37, 0x45,
+	0xfe, 0x3d, 0x8d, 0x9e, 0x4c, 0x73, 0x53, 0xe4, 0x93, 0x69, 0x74, 0x30, 0x9d, 0xfc, 0x01, 0xc2,
+	0xf9, 0x4b, 0x2a, 0xe6, 0x75, 0xdc, 0x7f, 0x45, 0xdf, 0xf0, 0xc4, 0x77, 0xc8, 0x7b, 0xc8, 0x9e,
+	0xd4, 0xd6, 0xbc, 0xa9, 0xbd, 0xf8, 0x82, 0xd4, 0xf6, 0x86, 0xb5, 0xe8, 0x7a, 0xcb, 0x58, 0xf2,
+	0xbd, 0xaf, 0x42, 0xae, 0x77, 0x8d, 0x6b, 0x01, 0x97, 0xfb, 0xc5, 0x97, 0x47, 0xbd, 0x84, 0xff,
+	0x07, 0x64, 0x7b, 0xbf, 0x7a, 0xdf, 0x3f, 0x02, 0xd6, 0x91, 0x11, 0x13, 0x1c, 0xc9, 0xe8, 0xcf,
+	0x8f, 0x64, 0x74, 0xf4, 0xbf, 0x60, 0xf4, 0x11, 0x68, 0xd6, 0x47, 0x5c, 0xe6, 0x96, 0x9f, 0x69,
+	0xba, 0xc3, 0x57, 0xba, 0x6b, 0x9e, 0xd7, 0xb8, 0xb7, 0x5c, 0x38, 0x1d, 0x1f, 0xd1, 0xc8, 0x61,
+	0x3c, 0xdf, 0x71, 0xc1, 0x33, 0xfd, 0xbc, 0x78, 0x76, 0xa1, 0xf2, 0xe0, 0x45, 0x73, 0xe5, 0x45,
+	0x7b, 0x31, 0x61, 0xbf, 0x68, 0xbe, 0xfe, 0xc1, 0x5f, 0x17, 0x06, 0xee, 0xf1, 0x7f, 0x18, 0xe0,
+	0x12, 0x8c, 0xc2, 0xa0, 0x35, 0xa5, 0x84, 0xd9, 0xb1, 0x84, 0xb5, 0x57, 0x26, 0xd8, 0x33, 0x30,
+	0x04, 0x17, 0x7a, 0x9b, 0xf3, 0xf0, 0xf1, 0x2a, 0x9c, 0x87, 0x64, 0x27, 0xe9, 0x44, 0xa7, 0x29,
+	0x13, 0xec, 0xf9, 0xdc, 0x2a, 0x0c, 0x0d, 0xc2, 0x79, 0x53, 0x16, 0x85, 0x2e, 0x58, 0x43, 0x2d,
+	0x03, 0x04, 0xdb, 0x06, 0x98, 0x65, 0x33, 0x4c, 0x96, 0x65, 0x58, 0x96, 0x61, 0xb3, 0xb9, 0x2c,
+	0x5c, 0x76, 0xa7, 0x72, 0x37, 0x2e, 0xb8, 0x6b, 0x80, 0x48, 0xcb, 0x00, 0xe1, 0x0e, 0x5f, 0xd9,
+	0xb3, 0x0c, 0x7b, 0x8e, 0x61, 0xd7, 0x72, 0xaf, 0xc0, 0x85, 0x43, 0x1a, 0x1f, 0x3a, 0xc6, 0x5b,
+	0x06, 0x88, 0x99, 0x8e, 0xeb, 0x4c, 0x76, 0x95, 0xc9, 0x66, 0xfa, 0x98, 0xed, 0x42, 0x35, 0x86,
+	0xe2, 0xc9, 0x1f, 0x21, 0x5c, 0xc8, 0x63, 0x45, 0xe2, 0x85, 0x31, 0x21, 0xc7, 0x84, 0x1c, 0x13,
+	0x72, 0x4c, 0xc8, 0x31, 0x21, 0x9d, 0x84, 0xfc, 0x1e, 0xc2, 0xd9, 0xab, 0x58, 0x1f, 0xd3, 0x71,
+	0x4c, 0xc7, 0x31, 0x1d, 0xc7, 0x74, 0x1c, 0xd3, 0xd1, 0x41, 0xc7, 0xb3, 0x30, 0x64, 0xd1, 0xa5,
+	0x57, 0xcf, 0x2d, 0x9d, 0xd7, 0xb7, 0x34, 0x2a, 0x06, 0x67, 0xc4, 0xaa, 0xa6, 0xf3, 0x92, 0x84,
+	0x8b, 0x61, 0x90, 0x00, 0xa7, 0xc8, 0xfc, 0xe1, 0x83, 0xdc, 0x0e, 0x68, 0x3d, 0xa6, 0x03, 0x7b,
+	0x8f, 0xe9, 0xc0, 0xd3, 0xc7, 0x34, 0x78, 0xd0, 0xa6, 0xc1, 0x2f, 0x6d, 0x1a, 0x3c, 0x6c, 0xd3,
+	0xa0, 0xd5, 0xa6, 0xc1, 0x5e, 0x9b, 0x06, 0x8f, 0xda, 0x34, 0x38, 0x68, 0xd3, 0x81, 0xa7, 0x6d,
+	0x1a, 0x7c, 0xbd, 0x4f, 0x07, 0x76, 0xf7, 0x69, 0xd0, 0xda, 0xa7, 0x03, 0x7b, 0xfb, 0x74, 0xe0,
+	0xc3, 0xdb, 0x65, 0x59, 0xb9, 0x5b, 0x4e, 0xd5, 0x64, 0x49, 0xc7, 0xaa, 0xca, 0xa7, 0xb6, 0xb4,
+	0xb4, 0xf9, 0xa3, 0x24, 0xab, 0x95, 0xd3, 0x8a, 0x2a, 0xd7, 0xc4, 0x22, 0x56, 0x4f, 0xf7, 0xcc,
+	0x69, 0x65, 0xa3, 0x2c, 0xa7, 0xf1, 0x3d, 0xdd, 0xfa, 0xa6, 0xe4, 0xf1, 0x99, 0x6e, 0x63, 0xca,
+	0xfc, 0xc0, 0x94, 0xfd, 0x37, 0x00, 0x00, 0xff, 0xff, 0xed, 0xab, 0x63, 0x3f, 0xcf, 0x1b, 0x00,
+	0x00,
 }
 
 func (this *ActiveNetworkPoliciesType) Equal(that interface{}) bool {
@@ -1297,6 +1423,35 @@ func (this *ActiveNetworkPoliciesType) Equal(that interface{}) bool {
 	}
 	for i := range this.NetworkPolicies {
 		if !this.NetworkPolicies[i].Equal(that1.NetworkPolicies[i]) {
+			return false
+		}
+	}
+	return true
+}
+func (this *ActiveEnhancedFirewallPoliciesType) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ActiveEnhancedFirewallPoliciesType)
+	if !ok {
+		that2, ok := that.(ActiveEnhancedFirewallPoliciesType)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if len(this.EnhancedFirewallPolicies) != len(that1.EnhancedFirewallPolicies) {
+		return false
+	}
+	for i := range this.EnhancedFirewallPolicies {
+		if !this.EnhancedFirewallPolicies[i].Equal(that1.EnhancedFirewallPolicies[i]) {
 			return false
 		}
 	}
@@ -1403,6 +1558,14 @@ func (this *GlobalSpecType) Equal(that interface{}) bool {
 			return false
 		}
 	}
+	if len(this.EnhancedFirewallPolicies) != len(that1.EnhancedFirewallPolicies) {
+		return false
+	}
+	for i := range this.EnhancedFirewallPolicies {
+		if !this.EnhancedFirewallPolicies[i].Equal(that1.EnhancedFirewallPolicies[i]) {
+			return false
+		}
+	}
 	if that1.NetworkPolicyConfigMode == nil {
 		if this.NetworkPolicyConfigMode != nil {
 			return false
@@ -1503,6 +1666,30 @@ func (this *GlobalSpecType_NetworkPolicyLegacyMode) Equal(that interface{}) bool
 		return false
 	}
 	if !this.NetworkPolicyLegacyMode.Equal(that1.NetworkPolicyLegacyMode) {
+		return false
+	}
+	return true
+}
+func (this *GlobalSpecType_ActiveEnhancedFirewallPolicies) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GlobalSpecType_ActiveEnhancedFirewallPolicies)
+	if !ok {
+		that2, ok := that.(GlobalSpecType_ActiveEnhancedFirewallPolicies)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.ActiveEnhancedFirewallPolicies.Equal(that1.ActiveEnhancedFirewallPolicies) {
 		return false
 	}
 	return true
@@ -1771,6 +1958,30 @@ func (this *CreateSpecType_NetworkPolicySet) Equal(that interface{}) bool {
 	}
 	return true
 }
+func (this *CreateSpecType_EnhancedFirewallPolicies) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CreateSpecType_EnhancedFirewallPolicies)
+	if !ok {
+		that2, ok := that.(CreateSpecType_EnhancedFirewallPolicies)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.EnhancedFirewallPolicies.Equal(that1.EnhancedFirewallPolicies) {
+		return false
+	}
+	return true
+}
 func (this *CreateSpecType_DisableForwardProxyPolicy) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -2031,6 +2242,30 @@ func (this *ReplaceSpecType_NetworkPolicySet) Equal(that interface{}) bool {
 		return false
 	}
 	if !this.NetworkPolicySet.Equal(that1.NetworkPolicySet) {
+		return false
+	}
+	return true
+}
+func (this *ReplaceSpecType_EnhancedFirewallPolicies) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ReplaceSpecType_EnhancedFirewallPolicies)
+	if !ok {
+		that2, ok := that.(ReplaceSpecType_EnhancedFirewallPolicies)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.EnhancedFirewallPolicies.Equal(that1.EnhancedFirewallPolicies) {
 		return false
 	}
 	return true
@@ -2299,6 +2534,30 @@ func (this *GetSpecType_NetworkPolicySet) Equal(that interface{}) bool {
 	}
 	return true
 }
+func (this *GetSpecType_EnhancedFirewallPolicies) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GetSpecType_EnhancedFirewallPolicies)
+	if !ok {
+		that2, ok := that.(GetSpecType_EnhancedFirewallPolicies)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.EnhancedFirewallPolicies.Equal(that1.EnhancedFirewallPolicies) {
+		return false
+	}
+	return true
+}
 func (this *GetSpecType_DisableForwardProxyPolicy) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -2479,6 +2738,18 @@ func (this *ActiveNetworkPoliciesType) GoString() string {
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
+func (this *ActiveEnhancedFirewallPoliciesType) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 5)
+	s = append(s, "&network_firewall.ActiveEnhancedFirewallPoliciesType{")
+	if this.EnhancedFirewallPolicies != nil {
+		s = append(s, "EnhancedFirewallPolicies: "+fmt.Sprintf("%#v", this.EnhancedFirewallPolicies)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
 func (this *ActiveForwardProxyPoliciesType) GoString() string {
 	if this == nil {
 		return "nil"
@@ -2507,7 +2778,7 @@ func (this *GlobalSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 17)
+	s := make([]string, 0, 19)
 	s = append(s, "&network_firewall.GlobalSpecType{")
 	if this.NetworkPolicySet != nil {
 		s = append(s, "NetworkPolicySet: "+fmt.Sprintf("%#v", this.NetworkPolicySet)+",\n")
@@ -2517,6 +2788,9 @@ func (this *GlobalSpecType) GoString() string {
 	}
 	if this.FastAclSet != nil {
 		s = append(s, "FastAclSet: "+fmt.Sprintf("%#v", this.FastAclSet)+",\n")
+	}
+	if this.EnhancedFirewallPolicies != nil {
+		s = append(s, "EnhancedFirewallPolicies: "+fmt.Sprintf("%#v", this.EnhancedFirewallPolicies)+",\n")
 	}
 	if this.NetworkPolicyConfigMode != nil {
 		s = append(s, "NetworkPolicyConfigMode: "+fmt.Sprintf("%#v", this.NetworkPolicyConfigMode)+",\n")
@@ -2555,6 +2829,14 @@ func (this *GlobalSpecType_NetworkPolicyLegacyMode) GoString() string {
 	}
 	s := strings.Join([]string{`&network_firewall.GlobalSpecType_NetworkPolicyLegacyMode{` +
 		`NetworkPolicyLegacyMode:` + fmt.Sprintf("%#v", this.NetworkPolicyLegacyMode) + `}`}, ", ")
+	return s
+}
+func (this *GlobalSpecType_ActiveEnhancedFirewallPolicies) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&network_firewall.GlobalSpecType_ActiveEnhancedFirewallPolicies{` +
+		`ActiveEnhancedFirewallPolicies:` + fmt.Sprintf("%#v", this.ActiveEnhancedFirewallPolicies) + `}`}, ", ")
 	return s
 }
 func (this *GlobalSpecType_DisableForwardProxyPolicy) GoString() string {
@@ -2609,7 +2891,7 @@ func (this *CreateSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 13)
+	s := make([]string, 0, 14)
 	s = append(s, "&network_firewall.CreateSpecType{")
 	if this.NetworkPolicyChoice != nil {
 		s = append(s, "NetworkPolicyChoice: "+fmt.Sprintf("%#v", this.NetworkPolicyChoice)+",\n")
@@ -2645,6 +2927,14 @@ func (this *CreateSpecType_NetworkPolicySet) GoString() string {
 	}
 	s := strings.Join([]string{`&network_firewall.CreateSpecType_NetworkPolicySet{` +
 		`NetworkPolicySet:` + fmt.Sprintf("%#v", this.NetworkPolicySet) + `}`}, ", ")
+	return s
+}
+func (this *CreateSpecType_EnhancedFirewallPolicies) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&network_firewall.CreateSpecType_EnhancedFirewallPolicies{` +
+		`EnhancedFirewallPolicies:` + fmt.Sprintf("%#v", this.EnhancedFirewallPolicies) + `}`}, ", ")
 	return s
 }
 func (this *CreateSpecType_DisableForwardProxyPolicy) GoString() string {
@@ -2699,7 +2989,7 @@ func (this *ReplaceSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 13)
+	s := make([]string, 0, 14)
 	s = append(s, "&network_firewall.ReplaceSpecType{")
 	if this.NetworkPolicyChoice != nil {
 		s = append(s, "NetworkPolicyChoice: "+fmt.Sprintf("%#v", this.NetworkPolicyChoice)+",\n")
@@ -2735,6 +3025,14 @@ func (this *ReplaceSpecType_NetworkPolicySet) GoString() string {
 	}
 	s := strings.Join([]string{`&network_firewall.ReplaceSpecType_NetworkPolicySet{` +
 		`NetworkPolicySet:` + fmt.Sprintf("%#v", this.NetworkPolicySet) + `}`}, ", ")
+	return s
+}
+func (this *ReplaceSpecType_EnhancedFirewallPolicies) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&network_firewall.ReplaceSpecType_EnhancedFirewallPolicies{` +
+		`EnhancedFirewallPolicies:` + fmt.Sprintf("%#v", this.EnhancedFirewallPolicies) + `}`}, ", ")
 	return s
 }
 func (this *ReplaceSpecType_DisableForwardProxyPolicy) GoString() string {
@@ -2789,7 +3087,7 @@ func (this *GetSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 13)
+	s := make([]string, 0, 14)
 	s = append(s, "&network_firewall.GetSpecType{")
 	if this.NetworkPolicyChoice != nil {
 		s = append(s, "NetworkPolicyChoice: "+fmt.Sprintf("%#v", this.NetworkPolicyChoice)+",\n")
@@ -2825,6 +3123,14 @@ func (this *GetSpecType_NetworkPolicySet) GoString() string {
 	}
 	s := strings.Join([]string{`&network_firewall.GetSpecType_NetworkPolicySet{` +
 		`NetworkPolicySet:` + fmt.Sprintf("%#v", this.NetworkPolicySet) + `}`}, ", ")
+	return s
+}
+func (this *GetSpecType_EnhancedFirewallPolicies) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&network_firewall.GetSpecType_EnhancedFirewallPolicies{` +
+		`EnhancedFirewallPolicies:` + fmt.Sprintf("%#v", this.EnhancedFirewallPolicies) + `}`}, ", ")
 	return s
 }
 func (this *GetSpecType_DisableForwardProxyPolicy) GoString() string {
@@ -2917,6 +3223,43 @@ func (m *ActiveNetworkPoliciesType) MarshalToSizedBuffer(dAtA []byte) (int, erro
 		for iNdEx := len(m.NetworkPolicies) - 1; iNdEx >= 0; iNdEx-- {
 			{
 				size, err := m.NetworkPolicies[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0xa
+		}
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *ActiveEnhancedFirewallPoliciesType) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *ActiveEnhancedFirewallPoliciesType) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ActiveEnhancedFirewallPoliciesType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.EnhancedFirewallPolicies) > 0 {
+		for iNdEx := len(m.EnhancedFirewallPolicies) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.EnhancedFirewallPolicies[iNdEx].MarshalToSizedBuffer(dAtA[:i])
 				if err != nil {
 					return 0, err
 				}
@@ -3038,6 +3381,31 @@ func (m *GlobalSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		i--
 		dAtA[i] = 0xc2
 	}
+	if m.NetworkPolicyConfigMode != nil {
+		{
+			size := m.NetworkPolicyConfigMode.Size()
+			i -= size
+			if _, err := m.NetworkPolicyConfigMode.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	if len(m.EnhancedFirewallPolicies) > 0 {
+		for iNdEx := len(m.EnhancedFirewallPolicies) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.EnhancedFirewallPolicies[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x2
+			i--
+			dAtA[i] = 0x82
+		}
+	}
 	if m.FastAclConfigMode != nil {
 		{
 			size := m.FastAclConfigMode.Size()
@@ -3052,15 +3420,6 @@ func (m *GlobalSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 			size := m.ForwardProxyPolicyConfigMode.Size()
 			i -= size
 			if _, err := m.ForwardProxyPolicyConfigMode.MarshalTo(dAtA[i:]); err != nil {
-				return 0, err
-			}
-		}
-	}
-	if m.NetworkPolicyConfigMode != nil {
-		{
-			size := m.NetworkPolicyConfigMode.Size()
-			i -= size
-			if _, err := m.NetworkPolicyConfigMode.MarshalTo(dAtA[i:]); err != nil {
 				return 0, err
 			}
 		}
@@ -3305,6 +3664,29 @@ func (m *GlobalSpecType_FastAclLegacyMode) MarshalToSizedBuffer(dAtA []byte) (in
 	}
 	return len(dAtA) - i, nil
 }
+func (m *GlobalSpecType_ActiveEnhancedFirewallPolicies) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType_ActiveEnhancedFirewallPolicies) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.ActiveEnhancedFirewallPolicies != nil {
+		{
+			size, err := m.ActiveEnhancedFirewallPolicies.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x2
+		i--
+		dAtA[i] = 0x8a
+	}
+	return len(dAtA) - i, nil
+}
 func (m *CreateSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -3325,6 +3707,15 @@ func (m *CreateSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	if m.NetworkPolicyChoice != nil {
+		{
+			size := m.NetworkPolicyChoice.Size()
+			i -= size
+			if _, err := m.NetworkPolicyChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
 	if m.FastAclChoice != nil {
 		{
 			size := m.FastAclChoice.Size()
@@ -3339,15 +3730,6 @@ func (m *CreateSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 			size := m.ForwardProxyPolicyChoice.Size()
 			i -= size
 			if _, err := m.ForwardProxyPolicyChoice.MarshalTo(dAtA[i:]); err != nil {
-				return 0, err
-			}
-		}
-	}
-	if m.NetworkPolicyChoice != nil {
-		{
-			size := m.NetworkPolicyChoice.Size()
-			i -= size
-			if _, err := m.NetworkPolicyChoice.MarshalTo(dAtA[i:]); err != nil {
 				return 0, err
 			}
 		}
@@ -3562,6 +3944,29 @@ func (m *CreateSpecType_FastAclSet) MarshalToSizedBuffer(dAtA []byte) (int, erro
 	}
 	return len(dAtA) - i, nil
 }
+func (m *CreateSpecType_EnhancedFirewallPolicies) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType_EnhancedFirewallPolicies) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.EnhancedFirewallPolicies != nil {
+		{
+			size, err := m.EnhancedFirewallPolicies.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x2
+		i--
+		dAtA[i] = 0x82
+	}
+	return len(dAtA) - i, nil
+}
 func (m *ReplaceSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -3582,6 +3987,15 @@ func (m *ReplaceSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	if m.NetworkPolicyChoice != nil {
+		{
+			size := m.NetworkPolicyChoice.Size()
+			i -= size
+			if _, err := m.NetworkPolicyChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
 	if m.FastAclChoice != nil {
 		{
 			size := m.FastAclChoice.Size()
@@ -3596,15 +4010,6 @@ func (m *ReplaceSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 			size := m.ForwardProxyPolicyChoice.Size()
 			i -= size
 			if _, err := m.ForwardProxyPolicyChoice.MarshalTo(dAtA[i:]); err != nil {
-				return 0, err
-			}
-		}
-	}
-	if m.NetworkPolicyChoice != nil {
-		{
-			size := m.NetworkPolicyChoice.Size()
-			i -= size
-			if _, err := m.NetworkPolicyChoice.MarshalTo(dAtA[i:]); err != nil {
 				return 0, err
 			}
 		}
@@ -3819,6 +4224,29 @@ func (m *ReplaceSpecType_FastAclSet) MarshalToSizedBuffer(dAtA []byte) (int, err
 	}
 	return len(dAtA) - i, nil
 }
+func (m *ReplaceSpecType_EnhancedFirewallPolicies) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType_EnhancedFirewallPolicies) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.EnhancedFirewallPolicies != nil {
+		{
+			size, err := m.EnhancedFirewallPolicies.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x2
+		i--
+		dAtA[i] = 0x82
+	}
+	return len(dAtA) - i, nil
+}
 func (m *GetSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -3839,6 +4267,15 @@ func (m *GetSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	if m.NetworkPolicyChoice != nil {
+		{
+			size := m.NetworkPolicyChoice.Size()
+			i -= size
+			if _, err := m.NetworkPolicyChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
 	if m.FastAclChoice != nil {
 		{
 			size := m.FastAclChoice.Size()
@@ -3853,15 +4290,6 @@ func (m *GetSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 			size := m.ForwardProxyPolicyChoice.Size()
 			i -= size
 			if _, err := m.ForwardProxyPolicyChoice.MarshalTo(dAtA[i:]); err != nil {
-				return 0, err
-			}
-		}
-	}
-	if m.NetworkPolicyChoice != nil {
-		{
-			size := m.NetworkPolicyChoice.Size()
-			i -= size
-			if _, err := m.NetworkPolicyChoice.MarshalTo(dAtA[i:]); err != nil {
 				return 0, err
 			}
 		}
@@ -4076,6 +4504,29 @@ func (m *GetSpecType_FastAclSet) MarshalToSizedBuffer(dAtA []byte) (int, error) 
 	}
 	return len(dAtA) - i, nil
 }
+func (m *GetSpecType_EnhancedFirewallPolicies) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType_EnhancedFirewallPolicies) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.EnhancedFirewallPolicies != nil {
+		{
+			size, err := m.EnhancedFirewallPolicies.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x2
+		i--
+		dAtA[i] = 0x82
+	}
+	return len(dAtA) - i, nil
+}
 func (m *NetworkFirewallStatus) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -4128,6 +4579,21 @@ func (m *ActiveNetworkPoliciesType) Size() (n int) {
 	_ = l
 	if len(m.NetworkPolicies) > 0 {
 		for _, e := range m.NetworkPolicies {
+			l = e.Size()
+			n += 1 + l + sovTypes(uint64(l))
+		}
+	}
+	return n
+}
+
+func (m *ActiveEnhancedFirewallPoliciesType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if len(m.EnhancedFirewallPolicies) > 0 {
+		for _, e := range m.EnhancedFirewallPolicies {
 			l = e.Size()
 			n += 1 + l + sovTypes(uint64(l))
 		}
@@ -4197,6 +4663,12 @@ func (m *GlobalSpecType) Size() (n int) {
 	}
 	if m.FastAclConfigMode != nil {
 		n += m.FastAclConfigMode.Size()
+	}
+	if len(m.EnhancedFirewallPolicies) > 0 {
+		for _, e := range m.EnhancedFirewallPolicies {
+			l = e.Size()
+			n += 2 + l + sovTypes(uint64(l))
+		}
 	}
 	if m.ViewInternal != nil {
 		l = m.ViewInternal.Size()
@@ -4309,6 +4781,18 @@ func (m *GlobalSpecType_FastAclLegacyMode) Size() (n int) {
 	_ = l
 	if m.FastAclLegacyMode != nil {
 		l = m.FastAclLegacyMode.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *GlobalSpecType_ActiveEnhancedFirewallPolicies) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.ActiveEnhancedFirewallPolicies != nil {
+		l = m.ActiveEnhancedFirewallPolicies.Size()
 		n += 2 + l + sovTypes(uint64(l))
 	}
 	return n
@@ -4439,6 +4923,18 @@ func (m *CreateSpecType_FastAclSet) Size() (n int) {
 	}
 	return n
 }
+func (m *CreateSpecType_EnhancedFirewallPolicies) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.EnhancedFirewallPolicies != nil {
+		l = m.EnhancedFirewallPolicies.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
 func (m *ReplaceSpecType) Size() (n int) {
 	if m == nil {
 		return 0
@@ -4561,6 +5057,18 @@ func (m *ReplaceSpecType_FastAclSet) Size() (n int) {
 	_ = l
 	if m.FastAclSet != nil {
 		l = m.FastAclSet.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *ReplaceSpecType_EnhancedFirewallPolicies) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.EnhancedFirewallPolicies != nil {
+		l = m.EnhancedFirewallPolicies.Size()
 		n += 2 + l + sovTypes(uint64(l))
 	}
 	return n
@@ -4691,6 +5199,18 @@ func (m *GetSpecType_FastAclSet) Size() (n int) {
 	}
 	return n
 }
+func (m *GetSpecType_EnhancedFirewallPolicies) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.EnhancedFirewallPolicies != nil {
+		l = m.EnhancedFirewallPolicies.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
 func (m *NetworkFirewallStatus) Size() (n int) {
 	if m == nil {
 		return 0
@@ -4720,6 +5240,21 @@ func (this *ActiveNetworkPoliciesType) String() string {
 	repeatedStringForNetworkPolicies += "}"
 	s := strings.Join([]string{`&ActiveNetworkPoliciesType{`,
 		`NetworkPolicies:` + repeatedStringForNetworkPolicies + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ActiveEnhancedFirewallPoliciesType) String() string {
+	if this == nil {
+		return "nil"
+	}
+	repeatedStringForEnhancedFirewallPolicies := "[]*ObjectRefType{"
+	for _, f := range this.EnhancedFirewallPolicies {
+		repeatedStringForEnhancedFirewallPolicies += strings.Replace(fmt.Sprintf("%v", f), "ObjectRefType", "views.ObjectRefType", 1) + ","
+	}
+	repeatedStringForEnhancedFirewallPolicies += "}"
+	s := strings.Join([]string{`&ActiveEnhancedFirewallPoliciesType{`,
+		`EnhancedFirewallPolicies:` + repeatedStringForEnhancedFirewallPolicies + `,`,
 		`}`,
 	}, "")
 	return s
@@ -4773,6 +5308,11 @@ func (this *GlobalSpecType) String() string {
 		repeatedStringForFastAclSet += strings.Replace(fmt.Sprintf("%v", f), "ObjectRefType", "schema.ObjectRefType", 1) + ","
 	}
 	repeatedStringForFastAclSet += "}"
+	repeatedStringForEnhancedFirewallPolicies := "[]*ObjectRefType{"
+	for _, f := range this.EnhancedFirewallPolicies {
+		repeatedStringForEnhancedFirewallPolicies += strings.Replace(fmt.Sprintf("%v", f), "ObjectRefType", "schema.ObjectRefType", 1) + ","
+	}
+	repeatedStringForEnhancedFirewallPolicies += "}"
 	s := strings.Join([]string{`&GlobalSpecType{`,
 		`NetworkPolicySet:` + repeatedStringForNetworkPolicySet + `,`,
 		`ForwardProxyPolicySet:` + repeatedStringForForwardProxyPolicySet + `,`,
@@ -4780,6 +5320,7 @@ func (this *GlobalSpecType) String() string {
 		`NetworkPolicyConfigMode:` + fmt.Sprintf("%v", this.NetworkPolicyConfigMode) + `,`,
 		`ForwardProxyPolicyConfigMode:` + fmt.Sprintf("%v", this.ForwardProxyPolicyConfigMode) + `,`,
 		`FastAclConfigMode:` + fmt.Sprintf("%v", this.FastAclConfigMode) + `,`,
+		`EnhancedFirewallPolicies:` + repeatedStringForEnhancedFirewallPolicies + `,`,
 		`ViewInternal:` + strings.Replace(fmt.Sprintf("%v", this.ViewInternal), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
 		`}`,
 	}, "")
@@ -4871,6 +5412,16 @@ func (this *GlobalSpecType_FastAclLegacyMode) String() string {
 	}
 	s := strings.Join([]string{`&GlobalSpecType_FastAclLegacyMode{`,
 		`FastAclLegacyMode:` + strings.Replace(fmt.Sprintf("%v", this.FastAclLegacyMode), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GlobalSpecType_ActiveEnhancedFirewallPolicies) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GlobalSpecType_ActiveEnhancedFirewallPolicies{`,
+		`ActiveEnhancedFirewallPolicies:` + strings.Replace(fmt.Sprintf("%v", this.ActiveEnhancedFirewallPolicies), "ActiveEnhancedFirewallPoliciesType", "ActiveEnhancedFirewallPoliciesType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -4977,6 +5528,16 @@ func (this *CreateSpecType_FastAclSet) String() string {
 	}, "")
 	return s
 }
+func (this *CreateSpecType_EnhancedFirewallPolicies) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&CreateSpecType_EnhancedFirewallPolicies{`,
+		`EnhancedFirewallPolicies:` + strings.Replace(fmt.Sprintf("%v", this.EnhancedFirewallPolicies), "ActiveEnhancedFirewallPoliciesType", "ActiveEnhancedFirewallPoliciesType", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
 func (this *ReplaceSpecType) String() string {
 	if this == nil {
 		return "nil"
@@ -5075,6 +5636,16 @@ func (this *ReplaceSpecType_FastAclSet) String() string {
 	}
 	s := strings.Join([]string{`&ReplaceSpecType_FastAclSet{`,
 		`FastAclSet:` + strings.Replace(fmt.Sprintf("%v", this.FastAclSet), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ReplaceSpecType_EnhancedFirewallPolicies) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ReplaceSpecType_EnhancedFirewallPolicies{`,
+		`EnhancedFirewallPolicies:` + strings.Replace(fmt.Sprintf("%v", this.EnhancedFirewallPolicies), "ActiveEnhancedFirewallPoliciesType", "ActiveEnhancedFirewallPoliciesType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -5181,6 +5752,16 @@ func (this *GetSpecType_FastAclSet) String() string {
 	}, "")
 	return s
 }
+func (this *GetSpecType_EnhancedFirewallPolicies) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GetSpecType_EnhancedFirewallPolicies{`,
+		`EnhancedFirewallPolicies:` + strings.Replace(fmt.Sprintf("%v", this.EnhancedFirewallPolicies), "ActiveEnhancedFirewallPoliciesType", "ActiveEnhancedFirewallPoliciesType", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
 func (this *NetworkFirewallStatus) String() string {
 	if this == nil {
 		return "nil"
@@ -5259,6 +5840,93 @@ func (m *ActiveNetworkPoliciesType) Unmarshal(dAtA []byte) error {
 			}
 			m.NetworkPolicies = append(m.NetworkPolicies, &views.ObjectRefType{})
 			if err := m.NetworkPolicies[len(m.NetworkPolicies)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *ActiveEnhancedFirewallPoliciesType) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: ActiveEnhancedFirewallPoliciesType: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: ActiveEnhancedFirewallPoliciesType: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field EnhancedFirewallPolicies", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.EnhancedFirewallPolicies = append(m.EnhancedFirewallPolicies, &views.ObjectRefType{})
+			if err := m.EnhancedFirewallPolicies[len(m.EnhancedFirewallPolicies)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex
@@ -5906,6 +6574,75 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 			}
 			m.FastAclConfigMode = &GlobalSpecType_FastAclLegacyMode{v}
 			iNdEx = postIndex
+		case 32:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field EnhancedFirewallPolicies", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.EnhancedFirewallPolicies = append(m.EnhancedFirewallPolicies, &schema.ObjectRefType{})
+			if err := m.EnhancedFirewallPolicies[len(m.EnhancedFirewallPolicies)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 33:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ActiveEnhancedFirewallPolicies", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &ActiveEnhancedFirewallPoliciesType{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.NetworkPolicyConfigMode = &GlobalSpecType_ActiveEnhancedFirewallPolicies{v}
+			iNdEx = postIndex
 		case 1000:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field ViewInternal", wireType)
@@ -6310,6 +7047,41 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 			}
 			m.FastAclChoice = &CreateSpecType_FastAclSet{v}
 			iNdEx = postIndex
+		case 32:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field EnhancedFirewallPolicies", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &ActiveEnhancedFirewallPoliciesType{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.NetworkPolicyChoice = &CreateSpecType_EnhancedFirewallPolicies{v}
+			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipTypes(dAtA[iNdEx:])
@@ -6678,6 +7450,41 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 			}
 			m.FastAclChoice = &ReplaceSpecType_FastAclSet{v}
 			iNdEx = postIndex
+		case 32:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field EnhancedFirewallPolicies", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &ActiveEnhancedFirewallPoliciesType{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.NetworkPolicyChoice = &ReplaceSpecType_EnhancedFirewallPolicies{v}
+			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipTypes(dAtA[iNdEx:])
@@ -7045,6 +7852,41 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			m.FastAclChoice = &GetSpecType_FastAclSet{v}
+			iNdEx = postIndex
+		case 32:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field EnhancedFirewallPolicies", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &ActiveEnhancedFirewallPoliciesType{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.NetworkPolicyChoice = &GetSpecType_EnhancedFirewallPolicies{v}
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
