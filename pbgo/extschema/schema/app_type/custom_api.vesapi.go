@@ -2527,6 +2527,16 @@ var CustomAPISwaggerJSON string = `{
                     "x-displayname": "API endpoint URL",
                     "x-ves-example": "/api/v1/user_id/DYN/vehicle_id/DYN"
                 },
+                "domains": {
+                    "type": "array",
+                    "description": " List of Domains of the API endpoint\n\nExample: - \"[www.example1.com\", \"www.example2.com]\"-",
+                    "title": "List of domains",
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-displayname": "List of Domains",
+                    "x-ves-example": "[www.example1.com\", \"www.example2.com]"
+                },
                 "dyn_examples": {
                     "type": "array",
                     "description": " For example -\n {\"dyn_examples\": [\n  {\n    \"component_identifier\": \"api/v1/user_id/DYN\",\n    \"component_examples\": [\n      \"cmenomo007\",\n      \"marcusaurelius\"\n      \"artattacksince1947\",\n      \"johndoe83\",\n    ]\n  },\n  {\n    \"component_identifier\": \"api/v1/user_id/DYN/vehicle_id/DYN\",\n    \"component_examples\": [\n      \"JN1CV6AR3AM458367\",\n      \"1GBCS10AXP2917522\",\n      \"JM1DE1KY9D0155647\",\n      \"JN1CA31D5YT533780\"\n    ]\n  }\n ]}\n List  of sample URL(s) that are collapsed and dynamic components to collapse them\n\nExample: - \"{component_identifierapi/v1/user_id/DYN,component_examples: [cmenomo007]}\"-",

@@ -1063,8 +1063,8 @@ func (e *DBStatusObject) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	var drInfos []db.DRefInfo
-	if fdrInfos, err := e.GetObjectRefsDRefInfo(); err != nil {
-		return nil, errors.Wrap(err, "GetObjectRefsDRefInfo() FAILED")
+	if fdrInfos, err := e.GetDcClusterGroupStatusDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetDcClusterGroupStatusDRefInfo() FAILED")
 	} else {
 		for i := range fdrInfos {
 			dri := &fdrInfos[i]
@@ -1088,8 +1088,8 @@ func (e *DBStatusObject) GetDRefInfo() ([]db.DRefInfo, error) {
 		}
 		drInfos = append(drInfos, fdrInfos...)
 	}
-	if fdrInfos, err := e.GetStatusDRefInfo(); err != nil {
-		return nil, errors.Wrap(err, "GetStatusDRefInfo() FAILED")
+	if fdrInfos, err := e.GetObjectRefsDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetObjectRefsDRefInfo() FAILED")
 	} else {
 		for i := range fdrInfos {
 			dri := &fdrInfos[i]
@@ -1158,6 +1158,24 @@ func NewEntryStatusObject(opts ...db.OpOption) db.Entry {
 	return nil
 }
 
+// GetDRefInfo for the field's type
+func (e *DBStatusObject) GetDcClusterGroupStatusDRefInfo() ([]db.DRefInfo, error) {
+	if e.GetDcClusterGroupStatus() == nil {
+		return nil, nil
+	}
+
+	drInfos, err := e.GetDcClusterGroupStatus().GetDRefInfo()
+	if err != nil {
+		return nil, errors.Wrap(err, "GetDcClusterGroupStatus().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "dc_cluster_group_status." + dri.DRField
+	}
+	return drInfos, err
+
+}
+
 func (e *DBStatusObject) GetObjectRefsDRefInfo() ([]db.DRefInfo, error) {
 	refrUID, err := e.Key()
 	if err != nil {
@@ -1216,24 +1234,6 @@ func (e *DBStatusObject) GetObjectRefsDBEntries(ctx context.Context, d db.Interf
 	return entries, nil
 }
 
-// GetDRefInfo for the field's type
-func (e *DBStatusObject) GetStatusDRefInfo() ([]db.DRefInfo, error) {
-	if e.GetStatus() == nil {
-		return nil, nil
-	}
-
-	drInfos, err := e.GetStatus().GetDRefInfo()
-	if err != nil {
-		return nil, errors.Wrap(err, "GetStatus().GetDRefInfo() FAILED")
-	}
-	for i := range drInfos {
-		dri := &drInfos[i]
-		dri.DRField = "status." + dri.DRField
-	}
-	return drInfos, err
-
-}
-
 type ValidateStatusObject struct {
 	FldValidators map[string]db.ValidatorFunc
 }
@@ -1262,6 +1262,15 @@ func (v *ValidateStatusObject) Validate(ctx context.Context, pm interface{}, opt
 
 	}
 
+	if fv, exists := v.FldValidators["dc_cluster_group_status"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("dc_cluster_group_status"))
+		if err := fv(ctx, e.GetDcClusterGroupStatus(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["metadata"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("metadata"))
@@ -1283,15 +1292,6 @@ func (v *ValidateStatusObject) Validate(ctx context.Context, pm interface{}, opt
 
 	}
 
-	if fv, exists := v.FldValidators["status"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("status"))
-		if err := fv(ctx, e.GetStatus(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
 	return nil
 }
 
@@ -1301,7 +1301,7 @@ var DefaultStatusObjectValidator = func() *ValidateStatusObject {
 
 	v.FldValidators["conditions"] = ves_io_schema.ConditionTypeValidator().Validate
 
-	v.FldValidators["status"] = DcClusterGroupStatusValidator().Validate
+	v.FldValidators["dc_cluster_group_status"] = ves_io_schema.DcClusterGroupStatusValidator().Validate
 
 	return v
 }()

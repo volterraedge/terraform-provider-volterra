@@ -2663,6 +2663,15 @@ func (v *ValidateTile) Validate(ctx context.Context, pm interface{}, opts ...db.
 		return nil
 	}
 
+	if fv, exists := v.FldValidators["anonymous"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("anonymous"))
+		if err := fv(ctx, m.GetAnonymous(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["fields"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("fields"))

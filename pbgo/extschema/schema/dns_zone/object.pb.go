@@ -191,9 +191,9 @@ func (m *SpecType) GetGcSpec() *GlobalSpecType {
 // x-displayName: "DNS Zone Status"
 // Status DNS Zone
 type DNSZoneStatus struct {
-	// Volterra Nameservers
+	// F5XC Nameservers
 	//
-	// x-displayName: "Volterra Nameservers"
+	// x-displayName: "F5XC Nameservers"
 	// Status of DNS domain verification process.
 	VolterraNameservers []string `protobuf:"bytes,1,rep,name=volterra_nameservers,json=volterraNameservers,proto3" json:"volterra_nameservers,omitempty"`
 	// DNS Zone Deployment Status

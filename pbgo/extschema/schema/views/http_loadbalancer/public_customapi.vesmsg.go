@@ -14,6 +14,7 @@ import (
 	"gopkg.volterra.us/stdlib/db"
 	"gopkg.volterra.us/stdlib/errors"
 
+	ves_io_schema_dos_mitigation "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/dos_mitigation"
 	ves_io_schema_virtual_host_dns_info "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/virtual_host_dns_info"
 )
 
@@ -23,6 +24,180 @@ var (
 	_ = errors.Wrap
 	_ = strings.Split
 )
+
+// augmented methods on protoc/std generated struct
+
+func (m *DeleteDoSAutoMitigationRuleReq) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *DeleteDoSAutoMitigationRuleReq) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *DeleteDoSAutoMitigationRuleReq) DeepCopy() *DeleteDoSAutoMitigationRuleReq {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &DeleteDoSAutoMitigationRuleReq{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *DeleteDoSAutoMitigationRuleReq) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *DeleteDoSAutoMitigationRuleReq) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return DeleteDoSAutoMitigationRuleReqValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateDeleteDoSAutoMitigationRuleReq struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateDeleteDoSAutoMitigationRuleReq) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*DeleteDoSAutoMitigationRuleReq)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *DeleteDoSAutoMitigationRuleReq got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["dos_automitigation_rule_name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("dos_automitigation_rule_name"))
+		if err := fv(ctx, m.GetDosAutomitigationRuleName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("name"))
+		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["namespace"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("namespace"))
+		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultDeleteDoSAutoMitigationRuleReqValidator = func() *ValidateDeleteDoSAutoMitigationRuleReq {
+	v := &ValidateDeleteDoSAutoMitigationRuleReq{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func DeleteDoSAutoMitigationRuleReqValidator() db.Validator {
+	return DefaultDeleteDoSAutoMitigationRuleReqValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *DeleteDoSAutoMitigationRuleRsp) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *DeleteDoSAutoMitigationRuleRsp) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *DeleteDoSAutoMitigationRuleRsp) DeepCopy() *DeleteDoSAutoMitigationRuleRsp {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &DeleteDoSAutoMitigationRuleRsp{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *DeleteDoSAutoMitigationRuleRsp) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *DeleteDoSAutoMitigationRuleRsp) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return DeleteDoSAutoMitigationRuleRspValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateDeleteDoSAutoMitigationRuleRsp struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateDeleteDoSAutoMitigationRuleRsp) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*DeleteDoSAutoMitigationRuleRsp)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *DeleteDoSAutoMitigationRuleRsp got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("name"))
+		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultDeleteDoSAutoMitigationRuleRspValidator = func() *ValidateDeleteDoSAutoMitigationRuleRsp {
+	v := &ValidateDeleteDoSAutoMitigationRuleRsp{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func DeleteDoSAutoMitigationRuleRspValidator() db.Validator {
+	return DefaultDeleteDoSAutoMitigationRuleRspValidator
+}
 
 // augmented methods on protoc/std generated struct
 
@@ -216,6 +391,207 @@ var DefaultGetDnsInfoResponseValidator = func() *ValidateGetDnsInfoResponse {
 
 func GetDnsInfoResponseValidator() db.Validator {
 	return DefaultGetDnsInfoResponseValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *GetDoSAutoMitigationRulesReq) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *GetDoSAutoMitigationRulesReq) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *GetDoSAutoMitigationRulesReq) DeepCopy() *GetDoSAutoMitigationRulesReq {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &GetDoSAutoMitigationRulesReq{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *GetDoSAutoMitigationRulesReq) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *GetDoSAutoMitigationRulesReq) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return GetDoSAutoMitigationRulesReqValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateGetDoSAutoMitigationRulesReq struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateGetDoSAutoMitigationRulesReq) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*GetDoSAutoMitigationRulesReq)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *GetDoSAutoMitigationRulesReq got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("name"))
+		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["namespace"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("namespace"))
+		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultGetDoSAutoMitigationRulesReqValidator = func() *ValidateGetDoSAutoMitigationRulesReq {
+	v := &ValidateGetDoSAutoMitigationRulesReq{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func GetDoSAutoMitigationRulesReqValidator() db.Validator {
+	return DefaultGetDoSAutoMitigationRulesReqValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *GetDoSAutoMitigationRulesRsp) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *GetDoSAutoMitigationRulesRsp) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *GetDoSAutoMitigationRulesRsp) DeepCopy() *GetDoSAutoMitigationRulesRsp {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &GetDoSAutoMitigationRulesRsp{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *GetDoSAutoMitigationRulesRsp) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *GetDoSAutoMitigationRulesRsp) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return GetDoSAutoMitigationRulesRspValidator().Validate(ctx, m, opts...)
+}
+
+func (m *GetDoSAutoMitigationRulesRsp) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetDosAutomitigationRulesDRefInfo()
+
+}
+
+// GetDRefInfo for the field's type
+func (m *GetDoSAutoMitigationRulesRsp) GetDosAutomitigationRulesDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetDosAutomitigationRules() == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	for idx, e := range m.GetDosAutomitigationRules() {
+		driSet, err := e.GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetDosAutomitigationRules() GetDRefInfo() FAILED")
+		}
+		for i := range driSet {
+			dri := &driSet[i]
+			dri.DRField = fmt.Sprintf("dos_automitigation_rules[%v].%s", idx, dri.DRField)
+		}
+		drInfos = append(drInfos, driSet...)
+	}
+	return drInfos, nil
+
+}
+
+type ValidateGetDoSAutoMitigationRulesRsp struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateGetDoSAutoMitigationRulesRsp) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*GetDoSAutoMitigationRulesRsp)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *GetDoSAutoMitigationRulesRsp got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["dos_automitigation_rules"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("dos_automitigation_rules"))
+		for idx, item := range m.GetDosAutomitigationRules() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultGetDoSAutoMitigationRulesRspValidator = func() *ValidateGetDoSAutoMitigationRulesRsp {
+	v := &ValidateGetDoSAutoMitigationRulesRsp{FldValidators: map[string]db.ValidatorFunc{}}
+
+	v.FldValidators["dos_automitigation_rules"] = ves_io_schema_dos_mitigation.DoSMitigationRuleInfoValidator().Validate
+
+	return v
+}()
+
+func GetDoSAutoMitigationRulesRspValidator() db.Validator {
+	return DefaultGetDoSAutoMitigationRulesRspValidator
 }
 
 // augmented methods on protoc/std generated struct

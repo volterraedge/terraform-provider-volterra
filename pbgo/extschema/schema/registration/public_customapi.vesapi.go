@@ -1604,7 +1604,7 @@ var CustomAPISwaggerJSON string = `{
                 },
                 "certified_hw": {
                     "type": "string",
-                    "description": " certified HW name used to map with Volterra certified_hardware definition\n\nExample: - \"value\"-",
+                    "description": " certified HW name used to map with F5XC certified_hardware definition\n\nExample: - \"value\"-",
                     "title": "Certified hardware name",
                     "x-displayname": "Certified Hardware",
                     "x-ves-example": "value"
@@ -1651,7 +1651,7 @@ var CustomAPISwaggerJSON string = `{
                     }
                 },
                 "internet_proxy": {
-                    "description": " It will be used as the proxy URL for HTTP requests and HTTPS requests to Volterra public domains.",
+                    "description": " It will be used as the proxy URL for HTTP requests and HTTPS requests to F5XC public domains.",
                     "title": "Internet Proxy Configuration",
                     "$ref": "#/definitions/registrationInternetProxy",
                     "x-displayname": "Local HTTP/HTTPS proxy configuration"
@@ -2059,7 +2059,7 @@ var CustomAPISwaggerJSON string = `{
                 },
                 "private_network_name": {
                     "type": "string",
-                    "description": " Private Network name for private access connectivity to Volterra ADN.\n It is used for PrivateLink, CloudLink and L3VPN.\n\nExample: - \"private-ntw\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 64\n",
+                    "description": " Private Network name for private access connectivity to F5XC ADN.\n It is used for PrivateLink, CloudLink and L3VPN.\n\nExample: - \"private-ntw\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 64\n",
                     "title": "Private Network Name",
                     "maxLength": 64,
                     "x-displayname": "Private Network Name",
@@ -2070,10 +2070,10 @@ var CustomAPISwaggerJSON string = `{
                 },
                 "volterra_software_version": {
                     "type": "string",
-                    "description": "Exclusive with [default_sw_version]\n Volterra Software Version is optional parameter, which allows to specify target SW version for particular site e.g. crt-20210329-1002.\n\nExample: - \"crt-20210329-1002\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 20\n",
-                    "title": "Volterra Software Version",
+                    "description": "Exclusive with [default_sw_version]\n F5XC Software Version is optional parameter, which allows to specify target SW version for particular site e.g. crt-20210329-1002.\n\nExample: - \"crt-20210329-1002\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 20\n",
+                    "title": "F5XC Software Version",
                     "maxLength": 20,
-                    "x-displayname": "Volterra Software Version",
+                    "x-displayname": "F5XC Software Version",
                     "x-ves-example": "crt-20210329-1002",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.string.max_len": "20"
@@ -2083,7 +2083,7 @@ var CustomAPISwaggerJSON string = `{
         },
         "registrationProvider": {
             "type": "string",
-            "description": "Infrastructure provider enum for registration. It describes where is instance running.\n\nProvider was not detected\nAWS cloud instance\nGoogle cloud instance\nAzure cloud instance\nVMWare VM\nKVM VM\nOther provider, which was not identified by system.\nVolterra HW device.\nIBM Cloud instance.\nKubernetes cluster in AWS\nKubernetes cluster in GCP\nKubernetes cluster in Azure\nKubernetes cluster in Vmware\nKubernetes cluster in VMware\nKubernetes cluster in Other provider\nKubernetes cluster in Volterra\nKubernetes cluster in IBM Cloud",
+            "description": "Infrastructure provider enum for registration. It describes where is instance running.\n\nProvider was not detected\nAWS cloud instance\nGoogle cloud instance\nAzure cloud instance\nVMWare VM\nKVM VM\nOther provider, which was not identified by system.\nF5XC HW device.\nIBM Cloud instance.\nKubernetes cluster in AWS\nKubernetes cluster in GCP\nKubernetes cluster in Azure\nKubernetes cluster in Vmware\nKubernetes cluster in VMware\nKubernetes cluster in Other provider\nKubernetes cluster in Volterra\nKubernetes cluster in IBM Cloud",
             "title": "Infrastructure provider",
             "enum": [
                 "UNKNOWN",

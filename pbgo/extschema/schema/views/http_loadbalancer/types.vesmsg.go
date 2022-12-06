@@ -3142,6 +3142,32 @@ func (v *ValidateAppEndpointType) Validate(ctx context.Context, pm interface{}, 
 
 	}
 
+	switch m.GetFlowLabelChoice().(type) {
+	case *AppEndpointType_UndefinedFlowLabel:
+		if fv, exists := v.FldValidators["flow_label_choice.undefined_flow_label"]; exists {
+			val := m.GetFlowLabelChoice().(*AppEndpointType_UndefinedFlowLabel).UndefinedFlowLabel
+			vOpts := append(opts,
+				db.WithValidateField("flow_label_choice"),
+				db.WithValidateField("undefined_flow_label"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *AppEndpointType_FlowLabel:
+		if fv, exists := v.FldValidators["flow_label_choice.flow_label"]; exists {
+			val := m.GetFlowLabelChoice().(*AppEndpointType_FlowLabel).FlowLabel
+			vOpts := append(opts,
+				db.WithValidateField("flow_label_choice"),
+				db.WithValidateField("flow_label"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["http_methods"]; exists {
 		vOpts := append(opts, db.WithValidateField("http_methods"))
 		if err := fv(ctx, m.GetHttpMethods(), vOpts...); err != nil {
@@ -3264,6 +3290,8 @@ var DefaultAppEndpointTypeValidator = func() *ValidateAppEndpointType {
 	v.FldValidators["app_traffic_type_choice.web_mobile"] = WebMobileTrafficTypeValidator().Validate
 
 	v.FldValidators["domain_matcher_choice.domain"] = ves_io_schema.DomainTypeValidator().Validate
+
+	v.FldValidators["flow_label_choice.flow_label"] = ves_io_schema.BotDefenseFlowLabelCategoriesChoiceTypeValidator().Validate
 
 	return v
 }()
@@ -6022,6 +6050,15 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["csrf_policy"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("csrf_policy"))
+		if err := fv(ctx, m.GetCsrfPolicy(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["data_guard_rules"]; exists {
 		vOpts := append(opts, db.WithValidateField("data_guard_rules"))
 		if err := fv(ctx, m.GetDataGuardRules(), vOpts...); err != nil {
@@ -6906,6 +6943,8 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	v.FldValidators["malicious_user_mitigation"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	v.FldValidators["api_protection_rules"] = APIProtectionRulesValidator().Validate
+
+	v.FldValidators["csrf_policy"] = ves_io_schema.CsrfPolicyValidator().Validate
 
 	return v
 }()
@@ -9126,6 +9165,15 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 
 	}
 
+	if fv, exists := v.FldValidators["csrf_policy"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("csrf_policy"))
+		if err := fv(ctx, m.GetCsrfPolicy(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["data_guard_rules"]; exists {
 		vOpts := append(opts, db.WithValidateField("data_guard_rules"))
 		if err := fv(ctx, m.GetDataGuardRules(), vOpts...); err != nil {
@@ -10052,6 +10100,8 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v.FldValidators["malicious_user_mitigation"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	v.FldValidators["api_protection_rules"] = APIProtectionRulesValidator().Validate
+
+	v.FldValidators["csrf_policy"] = ves_io_schema.CsrfPolicyValidator().Validate
 
 	v.FldValidators["dns_info"] = ves_io_schema_virtual_host_dns_info.DnsInfoValidator().Validate
 
@@ -11680,6 +11730,15 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["csrf_policy"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("csrf_policy"))
+		if err := fv(ctx, m.GetCsrfPolicy(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["data_guard_rules"]; exists {
 		vOpts := append(opts, db.WithValidateField("data_guard_rules"))
 		if err := fv(ctx, m.GetDataGuardRules(), vOpts...); err != nil {
@@ -12664,6 +12723,8 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v.FldValidators["malicious_user_mitigation"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	v.FldValidators["api_protection_rules"] = APIProtectionRulesValidator().Validate
+
+	v.FldValidators["csrf_policy"] = ves_io_schema.CsrfPolicyValidator().Validate
 
 	v.FldValidators["view_internal"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
@@ -16949,6 +17010,15 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 
 	}
 
+	if fv, exists := v.FldValidators["csrf_policy"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("csrf_policy"))
+		if err := fv(ctx, m.GetCsrfPolicy(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["data_guard_rules"]; exists {
 		vOpts := append(opts, db.WithValidateField("data_guard_rules"))
 		if err := fv(ctx, m.GetDataGuardRules(), vOpts...); err != nil {
@@ -17833,6 +17903,8 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	v.FldValidators["malicious_user_mitigation"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	v.FldValidators["api_protection_rules"] = APIProtectionRulesValidator().Validate
+
+	v.FldValidators["csrf_policy"] = ves_io_schema.CsrfPolicyValidator().Validate
 
 	return v
 }()
@@ -23729,6 +23801,7 @@ func (m *CreateSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool
 	m.GetChallengeTypeFromGlobalSpecType(f)
 	m.GetClientSideDefenseChoiceFromGlobalSpecType(f)
 	m.CorsPolicy = f.GetCorsPolicy()
+	m.CsrfPolicy = f.GetCsrfPolicy()
 	m.DataGuardRules = f.GetDataGuardRules()
 	m.GetDdosDetectionChoiceFromGlobalSpecType(f)
 	m.DdosMitigationRules = f.GetDdosMitigationRules()
@@ -23777,6 +23850,7 @@ func (m *CreateSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) 
 	m1.SetChallengeTypeToGlobalSpecType(f)
 	m1.SetClientSideDefenseChoiceToGlobalSpecType(f)
 	f.CorsPolicy = m1.CorsPolicy
+	f.CsrfPolicy = m1.CsrfPolicy
 	f.DataGuardRules = m1.DataGuardRules
 	m1.SetDdosDetectionChoiceToGlobalSpecType(f)
 	f.DdosMitigationRules = m1.DdosMitigationRules
@@ -24537,6 +24611,7 @@ func (m *GetSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	m.GetChallengeTypeFromGlobalSpecType(f)
 	m.GetClientSideDefenseChoiceFromGlobalSpecType(f)
 	m.CorsPolicy = f.GetCorsPolicy()
+	m.CsrfPolicy = f.GetCsrfPolicy()
 	m.DataGuardRules = f.GetDataGuardRules()
 	m.GetDdosDetectionChoiceFromGlobalSpecType(f)
 	m.DdosMitigationRules = f.GetDdosMitigationRules()
@@ -24590,6 +24665,7 @@ func (m *GetSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	m1.SetChallengeTypeToGlobalSpecType(f)
 	m1.SetClientSideDefenseChoiceToGlobalSpecType(f)
 	f.CorsPolicy = m1.CorsPolicy
+	f.CsrfPolicy = m1.CsrfPolicy
 	f.DataGuardRules = m1.DataGuardRules
 	m1.SetDdosDetectionChoiceToGlobalSpecType(f)
 	f.DdosMitigationRules = m1.DdosMitigationRules
@@ -25353,6 +25429,7 @@ func (m *ReplaceSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy boo
 	m.GetChallengeTypeFromGlobalSpecType(f)
 	m.GetClientSideDefenseChoiceFromGlobalSpecType(f)
 	m.CorsPolicy = f.GetCorsPolicy()
+	m.CsrfPolicy = f.GetCsrfPolicy()
 	m.DataGuardRules = f.GetDataGuardRules()
 	m.GetDdosDetectionChoiceFromGlobalSpecType(f)
 	m.DdosMitigationRules = f.GetDdosMitigationRules()
@@ -25401,6 +25478,7 @@ func (m *ReplaceSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool)
 	m1.SetChallengeTypeToGlobalSpecType(f)
 	m1.SetClientSideDefenseChoiceToGlobalSpecType(f)
 	f.CorsPolicy = m1.CorsPolicy
+	f.CsrfPolicy = m1.CsrfPolicy
 	f.DataGuardRules = m1.DataGuardRules
 	m1.SetDdosDetectionChoiceToGlobalSpecType(f)
 	f.DdosMitigationRules = m1.DdosMitigationRules

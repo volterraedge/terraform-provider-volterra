@@ -424,6 +424,54 @@ type ValidateBlockedServicesListType struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateBlockedServicesListType) BlockedSeviceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for blocked_sevice")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*BlockedServices, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := BlockedServicesValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for blocked_sevice")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*BlockedServices)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*BlockedServices, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated blocked_sevice")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items blocked_sevice")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateBlockedServicesListType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*BlockedServicesListType)
 	if !ok {
@@ -439,13 +487,9 @@ func (v *ValidateBlockedServicesListType) Validate(ctx context.Context, pm inter
 	}
 
 	if fv, exists := v.FldValidators["blocked_sevice"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("blocked_sevice"))
-		for idx, item := range m.GetBlockedSevice() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
-			if err := fv(ctx, item, vOpts...); err != nil {
-				return err
-			}
+		if err := fv(ctx, m.GetBlockedSevice(), vOpts...); err != nil {
+			return err
 		}
 
 	}
@@ -457,7 +501,24 @@ func (v *ValidateBlockedServicesListType) Validate(ctx context.Context, pm inter
 var DefaultBlockedServicesListTypeValidator = func() *ValidateBlockedServicesListType {
 	v := &ValidateBlockedServicesListType{FldValidators: map[string]db.ValidatorFunc{}}
 
-	v.FldValidators["blocked_sevice"] = BlockedServicesValidator().Validate
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhBlockedSevice := v.BlockedSeviceValidationRuleHandler
+	rulesBlockedSevice := map[string]string{
+		"ves.io.schema.rules.repeated.unique": "true",
+	}
+	vFn, err = vrhBlockedSevice(rulesBlockedSevice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for BlockedServicesListType.blocked_sevice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["blocked_sevice"] = vFn
 
 	return v
 }()

@@ -4573,7 +4573,7 @@ var CustomAPISwaggerJSON string = `{
                     "x-ves-example": "[\"dev-group-1\"]"
                 },
                 "idm_type": {
-                    "description": " Identity management type of the user (Volterra Managed, SSO)",
+                    "description": " Identity management type of the user (F5XC Managed, SSO)",
                     "title": "IDM type",
                     "$ref": "#/definitions/userIdmType",
                     "x-displayname": "Identity Management Type"
@@ -4833,7 +4833,7 @@ var CustomAPISwaggerJSON string = `{
         },
         "userIdmType": {
             "type": "string",
-            "description": "IdmType is to identify who is managing the user.\n\n - SSO: SSO User\nExternally managed Single Sign On based user imported into UAM.\n - VOLTERRA_MANAGED: Volterra Managed Local user\nVolterra managed local user. Full user life cycle is managed by volterra UAM and Identity.",
+            "description": "IdmType is to identify who is managing the user.\n\n - SSO: SSO User\nExternally managed Single Sign On based user imported into UAM.\n - VOLTERRA_MANAGED: F5XC Managed Local user\nF5XC managed local user. Full user life cycle is managed by volterra UAM and Identity.",
             "title": "IDM Type",
             "enum": [
                 "SSO",
@@ -4915,7 +4915,7 @@ var CustomAPISwaggerJSON string = `{
                     "x-ves-example": "[\"dev-group-1\"]"
                 },
                 "idm_type": {
-                    "description": " Identity management type of the user (Volterra Managed, SSO)",
+                    "description": " Identity management type of the user (F5XC Managed, SSO)",
                     "title": "IDM type",
                     "$ref": "#/definitions/userIdmType",
                     "x-displayname": "Identity Management Type"

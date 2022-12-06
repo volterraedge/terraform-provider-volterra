@@ -10,8 +10,8 @@
 //
 // Terminology
 //
-// Downstream: A downstream host connects to Volterra ADC, sends requests, and receives responses.
-// Upstream: An upstream host receives connections and requests from Volterra ADC and returns responses.
+// Downstream: A downstream host connects to F5XC ADC, sends requests, and receives responses.
+// Upstream: An upstream host receives connections and requests from F5XC ADC and returns responses.
 
 package virtual_host
 

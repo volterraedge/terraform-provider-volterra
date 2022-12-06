@@ -3162,12 +3162,15 @@ var APISwaggerJSON string = `{
             "properties": {
                 "blocked_sevice": {
                     "type": "array",
-                    "description": " Use custom blocked services configuration",
+                    "description": " Use custom blocked services configuration\n\nValidation Rules:\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "Custom Blocked Services Configuration",
                     "items": {
                         "$ref": "#/definitions/fleetBlockedServices"
                     },
-                    "x-displayname": "Custom Blocked Services Configuration"
+                    "x-displayname": "Custom Blocked Services Configuration",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
                 }
             }
         },
@@ -5671,7 +5674,7 @@ var APISwaggerJSON string = `{
         },
         "schemaBlindfoldSecretInfoType": {
             "type": "object",
-            "description": "BlindfoldSecretInfoType specifies information about the Secret managed by Volterra Secret Management",
+            "description": "BlindfoldSecretInfoType specifies information about the Secret managed by F5XC Secret Management",
             "title": "BlindfoldSecretInfoType",
             "x-displayname": "Blindfold Secret",
             "x-ves-displayorder": "3,1,2",
@@ -6075,7 +6078,7 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.SecretType",
             "properties": {
                 "blindfold_secret_info": {
-                    "description": "Exclusive with [clear_secret_info]\n Blindfold Secret is used for the secrets managed by Volterra Secret Management Service",
+                    "description": "Exclusive with [clear_secret_info]\n Blindfold Secret is used for the secrets managed by F5XC Secret Management Service",
                     "title": "Blindfold Secret",
                     "$ref": "#/definitions/schemaBlindfoldSecretInfoType",
                     "x-displayname": "Blindfold Secret"
@@ -6347,7 +6350,7 @@ var APISwaggerJSON string = `{
                     "title": "certificate_url"
                 },
                 "custom_hash_algorithms": {
-                    "description": "x-displayName: \"Use hash algorithms in custom order\"\nUse hash algorithms in the custom order. Volterra will try to fetch ocsp response from the CA in the given order. Additionally, LoadBalancer will not become active until ocspResponse cannot be fetched if the certificate has MustStaple extension set.",
+                    "description": "x-displayName: \"Use hash algorithms in custom order\"\nUse hash algorithms in the custom order. F5XC will try to fetch ocsp response from the CA in the given order. Additionally, LoadBalancer will not become active until ocspResponse cannot be fetched if the certificate has MustStaple extension set.",
                     "title": "Use Custom Order for Hash Algorithms",
                     "$ref": "#/definitions/schemaHashAlgorithms"
                 },
@@ -6357,7 +6360,7 @@ var APISwaggerJSON string = `{
                     "title": "description"
                 },
                 "disable_ocsp_stapling": {
-                    "description": "x-displayName: \"Disable OCSP Stapling\"\nDisable OCSP Stapling. Volterra will not fetch and staple OCSP Response for this certificate.\nThis is the default behavior if no choice is selected.",
+                    "description": "x-displayName: \"Disable OCSP Stapling\"\nDisable OCSP Stapling. F5XC will not fetch and staple OCSP Response for this certificate.\nThis is the default behavior if no choice is selected.",
                     "title": "Disable OCSP Stapling",
                     "$ref": "#/definitions/schemaEmpty"
                 },
@@ -6367,8 +6370,8 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/schemaSecretType"
                 },
                 "use_system_defaults": {
-                    "description": "x-displayName: \"Fetch with Volterra default settings\"\nUse Volterra Default Settings to fetch and staple OCSP Response.\nOCSP Response will be stapled if it can be fetched. Additionally, LoadBalancer will not become active until ocspResponse cannot be fetched if the certificate has MustStaple extension set.\nVolterra will try to fetch OCSPResponse with sha256 and sha1 as HashAlgorithm, in that order.",
-                    "title": "Fetch with Volterra default settings",
+                    "description": "x-displayName: \"Fetch with F5XC default settings\"\nUse F5XC Default Settings to fetch and staple OCSP Response.\nOCSP Response will be stapled if it can be fetched. Additionally, LoadBalancer will not become active until ocspResponse cannot be fetched if the certificate has MustStaple extension set.\nF5XC will try to fetch OCSPResponse with sha256 and sha1 as HashAlgorithm, in that order.",
+                    "title": "Fetch with F5XC default settings",
                     "$ref": "#/definitions/schemaEmpty"
                 }
             }
@@ -6436,13 +6439,13 @@ var APISwaggerJSON string = `{
                     "title": "Custom List"
                 },
                 "volterra_certificate": {
-                    "description": "x-displayName: \"Volterra Signing Certificate\"\nVolterra certificates for generating intermediate certificate for TLS interception.",
-                    "title": "Volterra Signing Certificate",
+                    "description": "x-displayName: \"F5XC Signing Certificate\"\nF5XC certificates for generating intermediate certificate for TLS interception.",
+                    "title": "F5XC Signing Certificate",
                     "$ref": "#/definitions/schemaEmpty"
                 },
                 "volterra_trusted_ca": {
                     "description": "x-displayName: \"Default Trusted CA List\"\nDefault volterra trusted CA list for validating upstream server certificate",
-                    "title": "Volterra List",
+                    "title": "F5XC List",
                     "$ref": "#/definitions/schemaEmpty"
                 }
             }
@@ -6532,7 +6535,7 @@ var APISwaggerJSON string = `{
         },
         "schemaVirtualNetworkType": {
             "type": "string",
-            "description": "Different types of virtual networks understood by the system\n\nVirtual-network of type VIRTUAL_NETWORK_SITE_LOCAL provides connectivity to public (outside) network.\nThis is an insecure network and is connected to public internet via NAT Gateways/firwalls\nVirtual-network of this type is local to every site. Two virtual networks of this type on different\nsites are neither related nor connected.\n\nConstraints:\nThere can be atmost one virtual network of this type in a given site.\nThis network type is supported on CE sites. This network is created automatically and present on all sites\nVirtual-network of type VIRTUAL_NETWORK_SITE_LOCAL_INSIDE is a private network inside site.\nIt is a secure network and is not connected to public network.\nVirtual-network of this type is local to every site. Two virtual networks of this type on different\nsites are neither related nor connected.\n\nConstraints:\nThere can be atmost one virtual network of this type in a given site.\nThis network type is supported on CE sites. This network is created during provisioning of site\nUser defined per-site virtual network. Scope of this virtual network is limited to the site.\nThis is not yet supported\nVirtual-network of type VIRTUAL_NETWORK_PUBLIC directly conects to the public internet.\nVirtual-network of this type is local to every site. Two virtual networks of this type on different sites are neither related nor connected.\n\nConstraints:\nThere can be atmost one virtual network of this type in a given site.\nThis network type is supported on RE sites only\nIt is an internally created by the system. They must not be created by user\nVirtual Neworks with global scope across different sites in Volterra domain.\nAn example global virtual-network called \"AIN Network\" is created for every tenant.\nfor volterra fabric\n\nConstraints:\nIt is currently only supported as internally created by the system.\nvK8s service network for a given tenant. Used to advertise a virtual host only to vk8s pods for that tenant\nConstraints:\nIt is an internally created by the system. Must not be created by user\nVER internal network for the site. It can only be used for virtual hosts with SMA_PROXY type proxy\nConstraints:\nIt is an internally created by the system. Must not be created by user\nVirtual-network of type VIRTUAL_NETWORK_SITE_LOCAL_INSIDE_OUTSIDE represents both\nVIRTUAL_NETWORK_SITE_LOCAL and VIRTUAL_NETWORK_SITE_LOCAL_INSIDE\n\nConstraints:\nThis network type is only meaningful in an advertise policy\nWhen virtual-network of type VIRTUAL_NETWORK_IP_AUTO is selected for\nan endpoint, VER will try to determine the network based on the provided\nIP address\n\nConstraints:\nThis network type is only meaningful in an endpoint\n\nVoltADN Private Network is used on volterra RE(s) to connect to customer private networks\nThis network is created by opening a support ticket\n\nThis network is per site srv6 network\nVER IP Fabric network for the site.\nThis Virtual network type is used for exposing virtual host on IP Fabric network on the VER site or\nfor endpoint in IP Fabric network\nConstraints:\nIt is an internally created by the system. Must not be created by user",
+            "description": "Different types of virtual networks understood by the system\n\nVirtual-network of type VIRTUAL_NETWORK_SITE_LOCAL provides connectivity to public (outside) network.\nThis is an insecure network and is connected to public internet via NAT Gateways/firwalls\nVirtual-network of this type is local to every site. Two virtual networks of this type on different\nsites are neither related nor connected.\n\nConstraints:\nThere can be atmost one virtual network of this type in a given site.\nThis network type is supported on CE sites. This network is created automatically and present on all sites\nVirtual-network of type VIRTUAL_NETWORK_SITE_LOCAL_INSIDE is a private network inside site.\nIt is a secure network and is not connected to public network.\nVirtual-network of this type is local to every site. Two virtual networks of this type on different\nsites are neither related nor connected.\n\nConstraints:\nThere can be atmost one virtual network of this type in a given site.\nThis network type is supported on CE sites. This network is created during provisioning of site\nUser defined per-site virtual network. Scope of this virtual network is limited to the site.\nThis is not yet supported\nVirtual-network of type VIRTUAL_NETWORK_PUBLIC directly conects to the public internet.\nVirtual-network of this type is local to every site. Two virtual networks of this type on different sites are neither related nor connected.\n\nConstraints:\nThere can be atmost one virtual network of this type in a given site.\nThis network type is supported on RE sites only\nIt is an internally created by the system. They must not be created by user\nVirtual Neworks with global scope across different sites in F5XC domain.\nAn example global virtual-network called \"AIN Network\" is created for every tenant.\nfor volterra fabric\n\nConstraints:\nIt is currently only supported as internally created by the system.\nvK8s service network for a given tenant. Used to advertise a virtual host only to vk8s pods for that tenant\nConstraints:\nIt is an internally created by the system. Must not be created by user\nVER internal network for the site. It can only be used for virtual hosts with SMA_PROXY type proxy\nConstraints:\nIt is an internally created by the system. Must not be created by user\nVirtual-network of type VIRTUAL_NETWORK_SITE_LOCAL_INSIDE_OUTSIDE represents both\nVIRTUAL_NETWORK_SITE_LOCAL and VIRTUAL_NETWORK_SITE_LOCAL_INSIDE\n\nConstraints:\nThis network type is only meaningful in an advertise policy\nWhen virtual-network of type VIRTUAL_NETWORK_IP_AUTO is selected for\nan endpoint, VER will try to determine the network based on the provided\nIP address\n\nConstraints:\nThis network type is only meaningful in an endpoint\n\nVoltADN Private Network is used on volterra RE(s) to connect to customer private networks\nThis network is created by opening a support ticket\n\nThis network is per site srv6 network\nVER IP Fabric network for the site.\nThis Virtual network type is used for exposing virtual host on IP Fabric network on the VER site or\nfor endpoint in IP Fabric network\nConstraints:\nIt is an internally created by the system. Must not be created by user",
             "title": "VirtualNetworkType",
             "enum": [
                 "VIRTUAL_NETWORK_SITE_LOCAL",
@@ -6810,8 +6813,8 @@ var APISwaggerJSON string = `{
         "viewsVolterraSoftwareType": {
             "type": "object",
             "description": "This is to specify volterra software version choice",
-            "title": "Volterra Software Version",
-            "x-displayname": "Volterra Software Version",
+            "title": "F5XC Software Version",
+            "x-displayname": "F5XC Software Version",
             "x-ves-displayorder": "1",
             "x-ves-oneof-field-volterra_sw_version_choice": "[\"default_sw_version\",\"volterra_software_version\"]",
             "x-ves-proto-message": "ves.io.schema.views.VolterraSoftwareType",
@@ -6824,10 +6827,10 @@ var APISwaggerJSON string = `{
                 },
                 "volterra_software_version": {
                     "type": "string",
-                    "description": "Exclusive with [default_sw_version]\n Volterra Software Version is optional parameter, which allows to specify target SW version for particular site e.g. crt-20210329-1002.\n\nExample: - \"crt-20210329-1002\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 20\n",
-                    "title": "Volterra Software Version",
+                    "description": "Exclusive with [default_sw_version]\n F5XC Software Version is optional parameter, which allows to specify target SW version for particular site e.g. crt-20210329-1002.\n\nExample: - \"crt-20210329-1002\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 20\n",
+                    "title": "F5XC Software Version",
                     "maxLength": 20,
-                    "x-displayname": "Volterra Software Version",
+                    "x-displayname": "F5XC Software Version",
                     "x-ves-example": "crt-20210329-1002",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.string.max_len": "20"
@@ -7044,10 +7047,10 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Operating System"
                 },
                 "sw": {
-                    "description": " Volterra Software Details",
-                    "title": "Volterra Software",
+                    "description": " F5XC Software Details",
+                    "title": "F5XC Software",
                     "$ref": "#/definitions/viewsVolterraSoftwareType",
-                    "x-displayname": "Volterra Software"
+                    "x-displayname": "F5XC Software"
                 },
                 "usb_policy": {
                     "description": "Exclusive with [allow_all_usb deny_all_usb]\n Allow only specific USB devices",
@@ -7325,7 +7328,7 @@ var APISwaggerJSON string = `{
                 },
                 "object_refs": {
                     "type": "array",
-                    "description": " Volterra App Stack site object direct reference",
+                    "description": " F5XC App Stack site object direct reference",
                     "title": "object_refs",
                     "items": {
                         "$ref": "#/definitions/ioschemaObjectRefType"

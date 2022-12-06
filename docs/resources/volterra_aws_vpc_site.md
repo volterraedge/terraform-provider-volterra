@@ -31,23 +31,17 @@ resource "volterra_aws_vpc_site" "example" {
     namespace = "staging"
     tenant    = "acmecorp"
   }
-  // One of the arguments from this list "direct_connect_disabled direct_connect_enabled" must be set
+  // One of the arguments from this list "direct_connect_enabled direct_connect_disabled" must be set
   direct_connect_disabled = true
   instance_type           = ["a1.xlarge"]
-
   // One of the arguments from this list "logs_streaming_disabled log_receiver" must be set
-
-  log_receiver {
-    name      = "test1"
-    namespace = "staging"
-    tenant    = "acmecorp"
-  }
+  logs_streaming_disabled = true
 
   // One of the arguments from this list "ingress_gw ingress_egress_gw voltstack_cluster" must be set
 
   ingress_gw {
     allowed_vip_port {
-      // One of the arguments from this list "use_http_port use_https_port use_http_https_port custom_ports" must be set
+      // One of the arguments from this list "use_http_https_port custom_ports use_http_port use_https_port" must be set
       use_http_port = true
     }
 
@@ -128,7 +122,7 @@ Argument Reference
 
 `ssh_key` - (Optional) Public SSH key for accessing the site. (`String`).
 
-`sw` - (Optional) Volterra Software Details. See [Sw ](#sw) below for details.
+`sw` - (Optional) F5XC Software Details. See [Sw ](#sw) below for details.
 
 `tags` - (Optional) It helps to manage, identify, organize, search for, and filter resources in AWS console. (`String`).
 
@@ -208,7 +202,7 @@ Only Single AZ or Three AZ(s) nodes are supported currently..
 
 ### Blindfold Secret Info
 
-Blindfold Secret is used for the secrets managed by Volterra Secret Management Service.
+Blindfold Secret is used for the secrets managed by F5XC Secret Management Service.
 
 `decryption_provider` - (Optional) Name of the Secret Management Access object that contains information about the backend Secret Management service. (`String`).
 
@@ -268,17 +262,17 @@ Certificates for generating intermediate certificate for TLS interception..
 
 `description` - (Optional) Description for the certificate (`String`).
 
-`custom_hash_algorithms` - (Optional) Use hash algorithms in the custom order. Volterra will try to fetch ocsp response from the CA in the given order. Additionally, LoadBalancer will not become active until ocspResponse cannot be fetched if the certificate has MustStaple extension set.. See [Custom Hash Algorithms ](#custom-hash-algorithms) below for details.
+`custom_hash_algorithms` - (Optional) Use hash algorithms in the custom order. F5XC will try to fetch ocsp response from the CA in the given order. Additionally, LoadBalancer will not become active until ocspResponse cannot be fetched if the certificate has MustStaple extension set.. See [Custom Hash Algorithms ](#custom-hash-algorithms) below for details.
 
 `disable_ocsp_stapling` - (Optional) This is the default behavior if no choice is selected.. See [Disable Ocsp Stapling ](#disable-ocsp-stapling) below for details.
 
-`use_system_defaults` - (Optional) Volterra will try to fetch OCSPResponse with sha256 and sha1 as HashAlgorithm, in that order.. See [Use System Defaults ](#use-system-defaults) below for details.
+`use_system_defaults` - (Optional) F5XC will try to fetch OCSPResponse with sha256 and sha1 as HashAlgorithm, in that order.. See [Use System Defaults ](#use-system-defaults) below for details.
 
 `private_key` - (Required) TLS Private Key data in unencrypted PEM format including the PEM headers. The data may be optionally secured using BlindFold. TLS key has to match the accompanying certificate.. See [Private Key ](#private-key) below for details.
 
 ### Custom Hash Algorithms
 
-Use hash algorithms in the custom order. Volterra will try to fetch ocsp response from the CA in the given order. Additionally, LoadBalancer will not become active until ocspResponse cannot be fetched if the certificate has MustStaple extension set..
+Use hash algorithms in the custom order. F5XC will try to fetch ocsp response from the CA in the given order. Additionally, LoadBalancer will not become active until ocspResponse cannot be fetched if the certificate has MustStaple extension set..
 
 `hash_algorithms` - (Required) Ordered list of hash algorithms to be used. (`List of Strings`).
 
@@ -298,7 +292,7 @@ Use Custom static route to configure all advanced options.
 
 `nexthop` - (Optional) Nexthop for the route. See [Nexthop ](#nexthop) below for details.
 
-`subnets` - (Optional) List of route prefixes. See [Subnets ](#subnets) below for details.
+`subnets` - (Required) List of route prefixes. See [Subnets ](#subnets) below for details.
 
 ### Default Os Version
 
@@ -337,6 +331,10 @@ Forward Proxy is disabled for this connector.
 ### Disable Interception
 
 Disable Interception.
+
+### Disable Internet Vip
+
+Do not create Internet VIP.
 
 ### Disable Ocsp Stapling
 
@@ -379,6 +377,14 @@ Forward Proxy is enabled for this connector.
 ### Enable Interception
 
 Enable Interception.
+
+### Enable Internet Vip
+
+Enable Internet VIP..
+
+`reserved_internet_nlb_subnet` - (Optional) Autogenerate Internet NLB and reserve a subnet from the Primary CIDR (bool).
+
+`subnet` - (Optional) Select Existing Subnet for Internet NLB Subnet or Create New. See [Subnet ](#subnet) below for details.
 
 ### Enable Offline Survivability Mode
 
@@ -443,6 +449,10 @@ Two interface site is useful when site is used as ingress/egress gateway to the 
 `inside_static_routes` - (Optional) Manage static routes for inside network.. See [Inside Static Routes ](#inside-static-routes) below for details.
 
 `no_inside_static_routes` - (Optional) Static Routes disabled for inside network. (bool).
+
+`disable_internet_vip` - (Optional) Do not create Internet VIP (bool).
+
+`enable_internet_vip` - (Optional) Enable Internet VIP.. See [Enable Internet Vip ](#enable-internet-vip) below for details.
 
 `active_enhanced_firewall_policies` - (Optional) Enhanced Firewall Policies active for this site.. See [Active Enhanced Firewall Policies ](#active-enhanced-firewall-policies) below for details.
 
@@ -626,13 +636,13 @@ TLS Private Key data in unencrypted PEM format including the PEM headers. The da
 
 `secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).
 
-`blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by Volterra Secret Management Service. See [Blindfold Secret Info ](#blindfold-secret-info) below for details.
+`blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Blindfold Secret Info ](#blindfold-secret-info) below for details.
 
 `clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Clear Secret Info ](#clear-secret-info) below for details.
 
 `vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Vault Secret Info ](#vault-secret-info) below for details.
 
-`wingman_secret_info` - (Optional) Secret is given as bootstrap secret in Volterra Security Sidecar. See [Wingman Secret Info ](#wingman-secret-info) below for details.
+`wingman_secret_info` - (Optional) Secret is given as bootstrap secret in F5XC Security Sidecar. See [Wingman Secret Info ](#wingman-secret-info) below for details.
 
 ### Ref
 
@@ -647,6 +657,10 @@ tenant - (Optional) then tenant will hold the referred object's(e.g. route's) te
 ### Reserved Inside Subnet
 
 Autogenerate and reserve a subnet from the Primary CIDR.
+
+### Reserved Internet Nlb Subnet
+
+Autogenerate Internet NLB and reserve a subnet from the Primary CIDR.
 
 ### Sli To Global Dr
 
@@ -700,6 +714,14 @@ List of custom storage classes.
 
 `storage_class_name` - (Required) Name of the storage class as it will appear in K8s. (`String`).
 
+### Subnet
+
+Select Existing Subnet for Internet NLB Subnet or Create New.
+
+`existing_subnet_id` - (Optional) Information about existing subnet ID (`String`).
+
+`subnet_param` - (Optional) Parameters for creating new subnet. See [Subnet Param ](#subnet-param) below for details.
+
 ### Subnet Param
 
 Parameters for creating new subnet.
@@ -718,11 +740,11 @@ List of route prefixes.
 
 ### Sw
 
-Volterra Software Details.
+F5XC Software Details.
 
 `default_sw_version` - (Optional) Will assign latest available SW version (bool).
 
-`volterra_software_version` - (Optional) Volterra Software Version is optional parameter, which allows to specify target SW version for particular site e.g. crt-20210329-1002. (`String`).
+`volterra_software_version` - (Optional) F5XC Software Version is optional parameter, which allows to specify target SW version for particular site e.g. crt-20210329-1002. (`String`).
 
 ### Tls Intercept
 
@@ -734,7 +756,7 @@ Specify TLS interception configuration for the network connector.
 
 `custom_certificate` - (Optional) Certificates for generating intermediate certificate for TLS interception.. See [Custom Certificate ](#custom-certificate) below for details.
 
-`volterra_certificate` - (Optional) Volterra certificates for generating intermediate certificate for TLS interception. (bool).
+`volterra_certificate` - (Optional) F5XC certificates for generating intermediate certificate for TLS interception. (bool).
 
 `trusted_ca_url` - (Optional) Custom trusted CA certificates for validating upstream server certificate (`String`).
 
@@ -754,7 +776,7 @@ Only HTTPS Port (443) will be allowed..
 
 ### Use System Defaults
 
-Volterra will try to fetch OCSPResponse with sha256 and sha1 as HashAlgorithm, in that order..
+F5XC will try to fetch OCSPResponse with sha256 and sha1 as HashAlgorithm, in that order..
 
 ### Vault Secret Info
 
@@ -772,7 +794,7 @@ Vault Secret is used for the secrets managed by Hashicorp Vault.
 
 ### Volterra Certificate
 
-Volterra certificates for generating intermediate certificate for TLS interception..
+F5XC certificates for generating intermediate certificate for TLS interception..
 
 ### Volterra Trusted Ca
 
@@ -838,7 +860,7 @@ Matches the web user interface port.
 
 ### Wingman Secret Info
 
-Secret is given as bootstrap secret in Volterra Security Sidecar.
+Secret is given as bootstrap secret in F5XC Security Sidecar.
 
 `name` - (Required) Name of the secret. (`String`).
 

@@ -1658,7 +1658,7 @@ var APISwaggerJSON string = `{
     "swagger": "2.0",
     "info": {
         "title": "Network Interface",
-        "description": "Network Interface object represents the configuration of a network device in a fleet of\nVolterra Customer Edge sites. The following properties can be configured in this object:\n\n   IP address allocation scheme of the network interface (dhcp or static). Virtual Network of this network interface, Whether to run a DHCP server on this interface\n\n      Subnet to use for allocation\n\n      Default gateway\n\n      DNS server\n\n Interfaces belonging to site local inside and site local outside networks have to be configured as part of\n bootstrap configuration. This configuration can be done in two ways:\n\n     during site registration and is bundled as part of certified hardware image.\n\n     configured locally on the CE via Sia application\n\n Interfaces corresponding to these local interfaces can be configured in the global configuration. Label\n assignments for the local interfaces can be done in the global network interface configuration. Also, DHCP\n can be still be configured on site local inside network interface configuration, so that dynamic address is\n obtained and used.\n\n When DHCP address assignment (server) is enabled in the Network interface, external clients can get their addresses\n assigned from the configured subnet. The local interface can also get a dynamic address from the same pool if DHCP\n client is enabled in the network interface. Gateway and DNS servers for such clients can be external addresses or\n addresses internally allocated from the same subnet or may be disabled.\n\n Note that DHCP client and server configuration are independent. A Network interface may have DHCP client configured\n and DHCP server disabled, if an external DHCP server is used.\n\n Currently, DHCP client should always be enabled, setting static address on a network interface is not supported.\n\n If this Network interface is for primary network device (site local), then it has to be configured only as\n DHCP assigned address. This interface will be used to reach volterra cloud for registration. Virtual network\n of this interface has to be site local network. If there are multiple interfaces and multiple virtual\n networks, then site local interface has to be in the outside network.\n\n If network has Network interface with DHCP address assignment configured, then default gateway and DNS server\n for this network will be taken from DHCP response. Having multiple interfaces in a network giving default route\n can cause bad routing decisions. In case of site local network, DNS and default gateway response from primary\n interface will be used.",
+        "description": "Network Interface object represents the configuration of a network device in a fleet of\nF5XC Customer Edge sites. The following properties can be configured in this object:\n\n   IP address allocation scheme of the network interface (dhcp or static). Virtual Network of this network interface, Whether to run a DHCP server on this interface\n\n      Subnet to use for allocation\n\n      Default gateway\n\n      DNS server\n\n Interfaces belonging to site local inside and site local outside networks have to be configured as part of\n bootstrap configuration. This configuration can be done in two ways:\n\n     during site registration and is bundled as part of certified hardware image.\n\n     configured locally on the CE via Sia application\n\n Interfaces corresponding to these local interfaces can be configured in the global configuration. Label\n assignments for the local interfaces can be done in the global network interface configuration. Also, DHCP\n can be still be configured on site local inside network interface configuration, so that dynamic address is\n obtained and used.\n\n When DHCP address assignment (server) is enabled in the Network interface, external clients can get their addresses\n assigned from the configured subnet. The local interface can also get a dynamic address from the same pool if DHCP\n client is enabled in the network interface. Gateway and DNS servers for such clients can be external addresses or\n addresses internally allocated from the same subnet or may be disabled.\n\n Note that DHCP client and server configuration are independent. A Network interface may have DHCP client configured\n and DHCP server disabled, if an external DHCP server is used.\n\n Currently, DHCP client should always be enabled, setting static address on a network interface is not supported.\n\n If this Network interface is for primary network device (site local), then it has to be configured only as\n DHCP assigned address. This interface will be used to reach volterra cloud for registration. Virtual network\n of this interface has to be site local network. If there are multiple interfaces and multiple virtual\n networks, then site local interface has to be in the outside network.\n\n If network has Network interface with DHCP address assignment configured, then default gateway and DNS server\n for this network will be taken from DHCP response. Having multiple interfaces in a network giving default route\n can cause bad routing decisions. In case of site local network, DNS and default gateway response from primary\n interface will be used.",
         "version": "version not set"
     },
     "schemes": [
@@ -2286,32 +2286,38 @@ var APISwaggerJSON string = `{
             "description": "Network interface represents configuration of a network device.\nIt is created by users in system namespace.",
             "title": "Create network interface",
             "x-displayname": "Create Network Interface",
-            "x-ves-oneof-field-interface_choice": "[\"dedicated_interface\",\"dedicated_management_interface\",\"ethernet_interface\",\"tunnel_interface\"]",
+            "x-ves-oneof-field-interface_choice": "[\"dedicated_interface\",\"dedicated_management_interface\",\"ethernet_interface\",\"tunnel_interface\",\"vlan_interface\"]",
             "x-ves-proto-message": "ves.io.schema.network_interface.CreateSpecType",
             "properties": {
                 "dedicated_interface": {
-                    "description": "Exclusive with [dedicated_management_interface ethernet_interface tunnel_interface]\n Internal helps in conversion",
+                    "description": "Exclusive with [dedicated_management_interface ethernet_interface tunnel_interface vlan_interface]\n Internal helps in conversion",
                     "title": "Bootstrap Local Interface",
                     "$ref": "#/definitions/network_interfaceDedicatedInterfaceType",
                     "x-displayname": "Dedicated Interface"
                 },
                 "dedicated_management_interface": {
-                    "description": "Exclusive with [dedicated_interface ethernet_interface tunnel_interface]\n Internal helps in conversion",
+                    "description": "Exclusive with [dedicated_interface ethernet_interface tunnel_interface vlan_interface]\n Internal helps in conversion",
                     "title": "Dedicated Management Interface",
                     "$ref": "#/definitions/network_interfaceDedicatedManagementInterfaceType",
                     "x-displayname": "Dedicated Management Interface"
                 },
                 "ethernet_interface": {
-                    "description": "Exclusive with [dedicated_interface dedicated_management_interface tunnel_interface]\n Internal helps in conversion",
+                    "description": "Exclusive with [dedicated_interface dedicated_management_interface tunnel_interface vlan_interface]\n Internal helps in conversion",
                     "title": "Ethernet Interface",
                     "$ref": "#/definitions/network_interfaceEthernetInterfaceType",
                     "x-displayname": "Ethernet Interface"
                 },
                 "tunnel_interface": {
-                    "description": "Exclusive with [dedicated_interface dedicated_management_interface ethernet_interface]\n Internal helps in conversion",
+                    "description": "Exclusive with [dedicated_interface dedicated_management_interface ethernet_interface vlan_interface]\n Internal helps in conversion",
                     "title": "Tunnel Interface Template",
                     "$ref": "#/definitions/network_interfaceTunnelInterfaceType",
                     "x-displayname": "Tunnel Interface"
+                },
+                "vlan_interface": {
+                    "description": "Exclusive with [dedicated_interface dedicated_management_interface ethernet_interface tunnel_interface]\n Internal helps in conversion",
+                    "title": "VLAN interface",
+                    "$ref": "#/definitions/network_interfaceVlanInterfaceType",
+                    "x-displayname": "VLAN interface"
                 }
             }
         },
@@ -2940,7 +2946,7 @@ var APISwaggerJSON string = `{
             "description": "Get network interface from system namespace",
             "title": "Get network interface",
             "x-displayname": "Get Network Interface",
-            "x-ves-oneof-field-interface_choice": "[\"dedicated_interface\",\"dedicated_management_interface\",\"ethernet_interface\",\"legacy_interface\",\"tunnel_interface\"]",
+            "x-ves-oneof-field-interface_choice": "[\"dedicated_interface\",\"dedicated_management_interface\",\"ethernet_interface\",\"legacy_interface\",\"tunnel_interface\",\"vlan_interface\"]",
             "x-ves-oneof-field-monitoring_choice": "[\"monitor\",\"monitor_disabled\"]",
             "x-ves-proto-message": "ves.io.schema.network_interface.GetSpecType",
             "properties": {
@@ -2971,13 +2977,13 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "dedicated_interface": {
-                    "description": "Exclusive with [dedicated_management_interface ethernet_interface legacy_interface tunnel_interface]\n Internal helps in conversion",
+                    "description": "Exclusive with [dedicated_management_interface ethernet_interface legacy_interface tunnel_interface vlan_interface]\n Internal helps in conversion",
                     "title": "Bootstrap Local Interface",
                     "$ref": "#/definitions/network_interfaceDedicatedInterfaceType",
                     "x-displayname": "Dedicated Interface"
                 },
                 "dedicated_management_interface": {
-                    "description": "Exclusive with [dedicated_interface ethernet_interface legacy_interface tunnel_interface]\n Internal helps in conversion",
+                    "description": "Exclusive with [dedicated_interface ethernet_interface legacy_interface tunnel_interface vlan_interface]\n Internal helps in conversion",
                     "title": "Dedicated Management Interface",
                     "$ref": "#/definitions/network_interfaceDedicatedManagementInterfaceType",
                     "x-displayname": "Dedicated Management Interface"
@@ -3007,7 +3013,7 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "ethernet_interface": {
-                    "description": "Exclusive with [dedicated_interface dedicated_management_interface legacy_interface tunnel_interface]\n Internal helps in conversion",
+                    "description": "Exclusive with [dedicated_interface dedicated_management_interface legacy_interface tunnel_interface vlan_interface]\n Internal helps in conversion",
                     "title": "Ethernet Interface",
                     "$ref": "#/definitions/network_interfaceEthernetInterfaceType",
                     "x-displayname": "Ethernet Interface"
@@ -3030,7 +3036,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Primary Interface"
                 },
                 "legacy_interface": {
-                    "description": "Exclusive with [dedicated_interface dedicated_management_interface ethernet_interface tunnel_interface]\nOld method of interface configuration",
+                    "description": "Exclusive with [dedicated_interface dedicated_management_interface ethernet_interface tunnel_interface vlan_interface]\nOld method of interface configuration",
                     "title": "Legacy Interface",
                     "$ref": "#/definitions/network_interfaceLegacyInterfaceType",
                     "x-displayname": "Legacy Interface"
@@ -3085,7 +3091,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Tunnel"
                 },
                 "tunnel_interface": {
-                    "description": "Exclusive with [dedicated_interface dedicated_management_interface ethernet_interface legacy_interface]\n Internal helps in conversion",
+                    "description": "Exclusive with [dedicated_interface dedicated_management_interface ethernet_interface legacy_interface vlan_interface]\n Internal helps in conversion",
                     "title": "Tunnel Interface Template",
                     "$ref": "#/definitions/network_interfaceTunnelInterfaceType",
                     "x-displayname": "Tunnel Interface"
@@ -3110,6 +3116,12 @@ var APISwaggerJSON string = `{
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.repeated.max_items": "1"
                     }
+                },
+                "vlan_interface": {
+                    "description": "Exclusive with [dedicated_interface dedicated_management_interface ethernet_interface legacy_interface tunnel_interface]\n Internal helps in conversion",
+                    "title": "VLAN interface",
+                    "$ref": "#/definitions/network_interfaceVlanInterfaceType",
+                    "x-displayname": "VLAN interface"
                 },
                 "vlan_tag": {
                     "type": "integer",
@@ -3941,38 +3953,44 @@ var APISwaggerJSON string = `{
             "description": "Network interface represents configuration of a network device.\nReplace network interface will replace the contents of given network interface object.",
             "title": "Replace network interface",
             "x-displayname": "Replace Network Interface",
-            "x-ves-oneof-field-interface_choice": "[\"dedicated_interface\",\"dedicated_management_interface\",\"ethernet_interface\",\"legacy_interface\",\"tunnel_interface\"]",
+            "x-ves-oneof-field-interface_choice": "[\"dedicated_interface\",\"dedicated_management_interface\",\"ethernet_interface\",\"legacy_interface\",\"tunnel_interface\",\"vlan_interface\"]",
             "x-ves-proto-message": "ves.io.schema.network_interface.ReplaceSpecType",
             "properties": {
                 "dedicated_interface": {
-                    "description": "Exclusive with [dedicated_management_interface ethernet_interface legacy_interface tunnel_interface]\n Internal helps in conversion",
+                    "description": "Exclusive with [dedicated_management_interface ethernet_interface legacy_interface tunnel_interface vlan_interface]\n Internal helps in conversion",
                     "title": "Bootstrap Local Interface",
                     "$ref": "#/definitions/network_interfaceDedicatedInterfaceType",
                     "x-displayname": "Dedicated Interface"
                 },
                 "dedicated_management_interface": {
-                    "description": "Exclusive with [dedicated_interface ethernet_interface legacy_interface tunnel_interface]\n Internal helps in conversion",
+                    "description": "Exclusive with [dedicated_interface ethernet_interface legacy_interface tunnel_interface vlan_interface]\n Internal helps in conversion",
                     "title": "Dedicated Management Interface",
                     "$ref": "#/definitions/network_interfaceDedicatedManagementInterfaceType",
                     "x-displayname": "Dedicated Management Interface"
                 },
                 "ethernet_interface": {
-                    "description": "Exclusive with [dedicated_interface dedicated_management_interface legacy_interface tunnel_interface]\n Internal helps in conversion",
+                    "description": "Exclusive with [dedicated_interface dedicated_management_interface legacy_interface tunnel_interface vlan_interface]\n Internal helps in conversion",
                     "title": "Ethernet Interface",
                     "$ref": "#/definitions/network_interfaceEthernetInterfaceType",
                     "x-displayname": "Ethernet Interface"
                 },
                 "legacy_interface": {
-                    "description": "Exclusive with [dedicated_interface dedicated_management_interface ethernet_interface tunnel_interface]\nOld method of interface configuration",
+                    "description": "Exclusive with [dedicated_interface dedicated_management_interface ethernet_interface tunnel_interface vlan_interface]\nOld method of interface configuration",
                     "title": "Legacy Interface",
                     "$ref": "#/definitions/network_interfaceLegacyInterfaceType",
                     "x-displayname": "Legacy Interface"
                 },
                 "tunnel_interface": {
-                    "description": "Exclusive with [dedicated_interface dedicated_management_interface ethernet_interface legacy_interface]\n Internal helps in conversion",
+                    "description": "Exclusive with [dedicated_interface dedicated_management_interface ethernet_interface legacy_interface vlan_interface]\n Internal helps in conversion",
                     "title": "Tunnel Interface Template",
                     "$ref": "#/definitions/network_interfaceTunnelInterfaceType",
                     "x-displayname": "Tunnel Interface"
+                },
+                "vlan_interface": {
+                    "description": "Exclusive with [dedicated_interface dedicated_management_interface ethernet_interface legacy_interface tunnel_interface]\n Internal helps in conversion",
+                    "title": "VLAN interface",
+                    "$ref": "#/definitions/network_interfaceVlanInterfaceType",
+                    "x-displayname": "VLAN interface"
                 }
             }
         },
@@ -4231,6 +4249,44 @@ var APISwaggerJSON string = `{
                     "description": "x-displayName: \"Create Virtual Host Interface\"\nCreate a virtual interface for Network Interface. The virtual interface\nis not seen in host-os. This interface will be internal to VER\nSome options like DHCP will not be valid on the Network Interface",
                     "title": "Create Virtual Interface",
                     "$ref": "#/definitions/ioschemaEmpty"
+                }
+            }
+        },
+        "network_interfaceVlanInterfaceType": {
+            "type": "object",
+            "description": "VLAN Interface Configuration",
+            "title": "VLAN interface",
+            "x-displayname": "VLAN Interface",
+            "x-ves-proto-message": "ves.io.schema.network_interface.VlanInterfaceType",
+            "properties": {
+                "device": {
+                    "type": "string",
+                    "description": " Physical ethernet interface\n\nExample: - \"eth0\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 64\n  ves.io.schema.rules.string.min_len: 1\n",
+                    "title": "Device",
+                    "minLength": 1,
+                    "maxLength": 64,
+                    "x-displayname": "Ethernet Device",
+                    "x-ves-example": "eth0",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.max_len": "64",
+                        "ves.io.schema.rules.string.min_len": "1"
+                    }
+                },
+                "vlan_id": {
+                    "type": "integer",
+                    "description": " Configure a VLAN tagged ethernet interface\n\nExample: - \"eth0.10\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.uint32.gte: 1\n  ves.io.schema.rules.uint32.lte: 4095\n",
+                    "title": "VLAN Id",
+                    "format": "int64",
+                    "x-displayname": "VLAN Id",
+                    "x-ves-example": "eth0.10",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.uint32.gte": "1",
+                        "ves.io.schema.rules.uint32.lte": "4095"
+                    }
                 }
             }
         },

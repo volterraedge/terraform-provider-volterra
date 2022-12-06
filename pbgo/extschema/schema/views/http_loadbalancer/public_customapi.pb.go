@@ -20,6 +20,7 @@ import (
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
 	schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+	dos_mitigation "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/dos_mitigation"
 	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/vesenv"
 	virtual_host_dns_info "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/virtual_host_dns_info"
 	io "io"
@@ -408,6 +409,251 @@ func (m *HTTPLoadBalancerList) GetHttpLoadbalancer() []string {
 	return nil
 }
 
+// Get DoS Auto-Mitigation Rules request
+//
+// x-displayName: "Get DoS Auto-Mitigation Rules Request"
+// Request of GET DoS Auto-Mitigation Rules API
+type GetDoSAutoMitigationRulesReq struct {
+	// Namespace
+	//
+	// x-displayName: "Namespace"
+	// x-example: "shared"
+	// Namespace of the HTTP Load Balancer
+	Namespace string `protobuf:"bytes,1,opt,name=namespace,proto3" json:"namespace,omitempty"`
+	// Name
+	//
+	// x-displayName: "Name"
+	// x-example: "blogging-app"
+	// Name of the HTTP Load Balancer
+	Name string `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
+}
+
+func (m *GetDoSAutoMitigationRulesReq) Reset()      { *m = GetDoSAutoMitigationRulesReq{} }
+func (*GetDoSAutoMitigationRulesReq) ProtoMessage() {}
+func (*GetDoSAutoMitigationRulesReq) Descriptor() ([]byte, []int) {
+	return fileDescriptor_e0f78b47e1ecaa96, []int{5}
+}
+func (m *GetDoSAutoMitigationRulesReq) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *GetDoSAutoMitigationRulesReq) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_GetDoSAutoMitigationRulesReq.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *GetDoSAutoMitigationRulesReq) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GetDoSAutoMitigationRulesReq.Merge(m, src)
+}
+func (m *GetDoSAutoMitigationRulesReq) XXX_Size() int {
+	return m.Size()
+}
+func (m *GetDoSAutoMitigationRulesReq) XXX_DiscardUnknown() {
+	xxx_messageInfo_GetDoSAutoMitigationRulesReq.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_GetDoSAutoMitigationRulesReq proto.InternalMessageInfo
+
+func (m *GetDoSAutoMitigationRulesReq) GetNamespace() string {
+	if m != nil {
+		return m.Namespace
+	}
+	return ""
+}
+
+func (m *GetDoSAutoMitigationRulesReq) GetName() string {
+	if m != nil {
+		return m.Name
+	}
+	return ""
+}
+
+// Get DoS Auto-Mitigation Rules response
+//
+// x-displayName: "Get DDoS Auto-Mitigation Rules Response"
+// Response of GET DDoS Auto-Mitigation Rules API
+type GetDoSAutoMitigationRulesRsp struct {
+	// DoS Auto-Mitigation Rules
+	//
+	// x-displayName: "DoS Auto-Mitigation Rules"
+	DosAutomitigationRules []*dos_mitigation.DoSMitigationRuleInfo `protobuf:"bytes,2,rep,name=dos_automitigation_rules,json=dosAutomitigationRules,proto3" json:"dos_automitigation_rules,omitempty"`
+}
+
+func (m *GetDoSAutoMitigationRulesRsp) Reset()      { *m = GetDoSAutoMitigationRulesRsp{} }
+func (*GetDoSAutoMitigationRulesRsp) ProtoMessage() {}
+func (*GetDoSAutoMitigationRulesRsp) Descriptor() ([]byte, []int) {
+	return fileDescriptor_e0f78b47e1ecaa96, []int{6}
+}
+func (m *GetDoSAutoMitigationRulesRsp) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *GetDoSAutoMitigationRulesRsp) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_GetDoSAutoMitigationRulesRsp.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *GetDoSAutoMitigationRulesRsp) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GetDoSAutoMitigationRulesRsp.Merge(m, src)
+}
+func (m *GetDoSAutoMitigationRulesRsp) XXX_Size() int {
+	return m.Size()
+}
+func (m *GetDoSAutoMitigationRulesRsp) XXX_DiscardUnknown() {
+	xxx_messageInfo_GetDoSAutoMitigationRulesRsp.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_GetDoSAutoMitigationRulesRsp proto.InternalMessageInfo
+
+func (m *GetDoSAutoMitigationRulesRsp) GetDosAutomitigationRules() []*dos_mitigation.DoSMitigationRuleInfo {
+	if m != nil {
+		return m.DosAutomitigationRules
+	}
+	return nil
+}
+
+// Delete DoS Auto-Mitigation Rule request
+//
+// x-displayName: "Delete DoS Auto-Mitigation Rule request"
+// Request of Delete DoS Auto-Mitigation Rule API
+type DeleteDoSAutoMitigationRuleReq struct {
+	// Namespace
+	//
+	// x-displayName: "Namespace"
+	// x-example: "shared"
+	// Namespace of the HTTP Load Balancer
+	Namespace string `protobuf:"bytes,1,opt,name=namespace,proto3" json:"namespace,omitempty"`
+	// Name
+	//
+	// x-displayName: "Name"
+	// x-example: "blogging-app"
+	// Name of the HTTP Load Balancer
+	Name string `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
+	// DoS Mitigation Rule Name
+	//
+	// x-displayName: "DoS Mitigation Rule Name"
+	// x-example: "dos-auto-mitigation-ves-io-http-loadbalancer-ce22"
+	// Name of the DoS Mitigation Rule
+	DosAutomitigationRuleName string `protobuf:"bytes,3,opt,name=dos_automitigation_rule_name,json=dosAutomitigationRuleName,proto3" json:"dos_automitigation_rule_name,omitempty"`
+}
+
+func (m *DeleteDoSAutoMitigationRuleReq) Reset()      { *m = DeleteDoSAutoMitigationRuleReq{} }
+func (*DeleteDoSAutoMitigationRuleReq) ProtoMessage() {}
+func (*DeleteDoSAutoMitigationRuleReq) Descriptor() ([]byte, []int) {
+	return fileDescriptor_e0f78b47e1ecaa96, []int{7}
+}
+func (m *DeleteDoSAutoMitigationRuleReq) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *DeleteDoSAutoMitigationRuleReq) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_DeleteDoSAutoMitigationRuleReq.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *DeleteDoSAutoMitigationRuleReq) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_DeleteDoSAutoMitigationRuleReq.Merge(m, src)
+}
+func (m *DeleteDoSAutoMitigationRuleReq) XXX_Size() int {
+	return m.Size()
+}
+func (m *DeleteDoSAutoMitigationRuleReq) XXX_DiscardUnknown() {
+	xxx_messageInfo_DeleteDoSAutoMitigationRuleReq.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_DeleteDoSAutoMitigationRuleReq proto.InternalMessageInfo
+
+func (m *DeleteDoSAutoMitigationRuleReq) GetNamespace() string {
+	if m != nil {
+		return m.Namespace
+	}
+	return ""
+}
+
+func (m *DeleteDoSAutoMitigationRuleReq) GetName() string {
+	if m != nil {
+		return m.Name
+	}
+	return ""
+}
+
+func (m *DeleteDoSAutoMitigationRuleReq) GetDosAutomitigationRuleName() string {
+	if m != nil {
+		return m.DosAutomitigationRuleName
+	}
+	return ""
+}
+
+// Delete DoS Auto-Mitigation Rule response
+//
+// x-displayName: "Delete DoS Auto-Mitigation Rule response"
+// Response of Delete DoS Auto-Mitigation Rule API
+type DeleteDoSAutoMitigationRuleRsp struct {
+	// DoS Auto-Mitigation Rule Name
+	//
+	// x-displayName: "DoS Auto-Mitigation Rule Name"
+	// x-example: "dos-auto-mitigation-ves-io-http-loadbalancer-ce22"
+	// Name of the deleted DoS Auto-Mitigation HTTP Rule
+	Name string `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
+}
+
+func (m *DeleteDoSAutoMitigationRuleRsp) Reset()      { *m = DeleteDoSAutoMitigationRuleRsp{} }
+func (*DeleteDoSAutoMitigationRuleRsp) ProtoMessage() {}
+func (*DeleteDoSAutoMitigationRuleRsp) Descriptor() ([]byte, []int) {
+	return fileDescriptor_e0f78b47e1ecaa96, []int{8}
+}
+func (m *DeleteDoSAutoMitigationRuleRsp) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *DeleteDoSAutoMitigationRuleRsp) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_DeleteDoSAutoMitigationRuleRsp.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *DeleteDoSAutoMitigationRuleRsp) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_DeleteDoSAutoMitigationRuleRsp.Merge(m, src)
+}
+func (m *DeleteDoSAutoMitigationRuleRsp) XXX_Size() int {
+	return m.Size()
+}
+func (m *DeleteDoSAutoMitigationRuleRsp) XXX_DiscardUnknown() {
+	xxx_messageInfo_DeleteDoSAutoMitigationRuleRsp.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_DeleteDoSAutoMitigationRuleRsp proto.InternalMessageInfo
+
+func (m *DeleteDoSAutoMitigationRuleRsp) GetName() string {
+	if m != nil {
+		return m.Name
+	}
+	return ""
+}
+
 func init() {
 	proto.RegisterType((*GetDnsInfoRequest)(nil), "ves.io.schema.views.http_loadbalancer.GetDnsInfoRequest")
 	golang_proto.RegisterType((*GetDnsInfoRequest)(nil), "ves.io.schema.views.http_loadbalancer.GetDnsInfoRequest")
@@ -419,6 +665,14 @@ func init() {
 	golang_proto.RegisterType((*GetSecurityConfigRsp)(nil), "ves.io.schema.views.http_loadbalancer.GetSecurityConfigRsp")
 	proto.RegisterType((*HTTPLoadBalancerList)(nil), "ves.io.schema.views.http_loadbalancer.HTTPLoadBalancerList")
 	golang_proto.RegisterType((*HTTPLoadBalancerList)(nil), "ves.io.schema.views.http_loadbalancer.HTTPLoadBalancerList")
+	proto.RegisterType((*GetDoSAutoMitigationRulesReq)(nil), "ves.io.schema.views.http_loadbalancer.GetDoSAutoMitigationRulesReq")
+	golang_proto.RegisterType((*GetDoSAutoMitigationRulesReq)(nil), "ves.io.schema.views.http_loadbalancer.GetDoSAutoMitigationRulesReq")
+	proto.RegisterType((*GetDoSAutoMitigationRulesRsp)(nil), "ves.io.schema.views.http_loadbalancer.GetDoSAutoMitigationRulesRsp")
+	golang_proto.RegisterType((*GetDoSAutoMitigationRulesRsp)(nil), "ves.io.schema.views.http_loadbalancer.GetDoSAutoMitigationRulesRsp")
+	proto.RegisterType((*DeleteDoSAutoMitigationRuleReq)(nil), "ves.io.schema.views.http_loadbalancer.DeleteDoSAutoMitigationRuleReq")
+	golang_proto.RegisterType((*DeleteDoSAutoMitigationRuleReq)(nil), "ves.io.schema.views.http_loadbalancer.DeleteDoSAutoMitigationRuleReq")
+	proto.RegisterType((*DeleteDoSAutoMitigationRuleRsp)(nil), "ves.io.schema.views.http_loadbalancer.DeleteDoSAutoMitigationRuleRsp")
+	golang_proto.RegisterType((*DeleteDoSAutoMitigationRuleRsp)(nil), "ves.io.schema.views.http_loadbalancer.DeleteDoSAutoMitigationRuleRsp")
 }
 
 func init() {
@@ -429,62 +683,74 @@ func init() {
 }
 
 var fileDescriptor_e0f78b47e1ecaa96 = []byte{
-	// 869 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x9c, 0x55, 0xcf, 0x6f, 0xdc, 0x54,
-	0x10, 0xde, 0xe7, 0xdd, 0xb4, 0xd9, 0x17, 0x40, 0x9b, 0x47, 0x00, 0xb3, 0x44, 0x6e, 0xb0, 0x54,
-	0xa9, 0x42, 0xac, 0x0d, 0xed, 0x05, 0x5a, 0x2e, 0xa4, 0x09, 0x49, 0xab, 0x08, 0xa2, 0x6d, 0x4e,
-	0x20, 0x61, 0x3d, 0xdb, 0xb3, 0xde, 0x07, 0x5e, 0xbf, 0x57, 0xbf, 0xe7, 0x6d, 0x57, 0xa8, 0x52,
-	0xd5, 0xbf, 0x00, 0x05, 0x71, 0xe7, 0xc8, 0x89, 0x33, 0x22, 0x97, 0x9c, 0xa0, 0x27, 0x14, 0xc1,
-	0xa5, 0x47, 0xb2, 0xe1, 0x40, 0x6f, 0x3d, 0x72, 0x44, 0x7e, 0xf6, 0xe6, 0xc7, 0x3a, 0x0a, 0x51,
-	0x6e, 0x33, 0xf3, 0xcd, 0x37, 0x9e, 0x99, 0x37, 0x33, 0xc6, 0x1f, 0x0d, 0x41, 0x3a, 0x8c, 0xbb,
-	0x32, 0xe8, 0xc3, 0x80, 0xba, 0x43, 0x06, 0x0f, 0xa4, 0xdb, 0x57, 0x4a, 0x78, 0x31, 0xa7, 0xa1,
-	0x4f, 0x63, 0x9a, 0x04, 0x90, 0xba, 0x22, 0xf3, 0x63, 0x16, 0x78, 0x41, 0x26, 0x15, 0x1f, 0x50,
-	0xc1, 0x1c, 0x91, 0x72, 0xc5, 0xc9, 0xd5, 0x82, 0xed, 0x14, 0x6c, 0x47, 0xb3, 0x9d, 0x0a, 0xbb,
-	0xdd, 0x89, 0x98, 0xea, 0x67, 0xbe, 0x13, 0xf0, 0x81, 0x1b, 0xf1, 0x88, 0xbb, 0x9a, 0xed, 0x67,
-	0x3d, 0xad, 0x69, 0x45, 0x4b, 0x45, 0xd4, 0xf6, 0x62, 0xc4, 0x79, 0x14, 0x83, 0x4b, 0x05, 0x73,
-	0x69, 0x92, 0x70, 0x45, 0x15, 0xe3, 0x89, 0x2c, 0xd1, 0xb7, 0x4e, 0x66, 0xcc, 0xc5, 0x71, 0xf0,
-	0xcd, 0x93, 0xa0, 0x1a, 0x09, 0x98, 0x40, 0x8b, 0x53, 0x95, 0xd2, 0x98, 0x85, 0x54, 0x41, 0x89,
-	0xda, 0x53, 0x28, 0x48, 0x48, 0x86, 0x53, 0xc1, 0x97, 0xaa, 0xbd, 0xf2, 0x4e, 0x7a, 0xbc, 0x37,
-	0xed, 0x91, 0xaa, 0x8c, 0xc6, 0x5e, 0x9f, 0x4b, 0xe5, 0x85, 0x89, 0xf4, 0x58, 0xd2, 0xe3, 0x2e,
-	0xf7, 0xbf, 0x82, 0x40, 0x15, 0x0c, 0x7b, 0x15, 0xcf, 0xaf, 0x81, 0x5a, 0x49, 0xe4, 0x9d, 0xa4,
-	0xc7, 0xbb, 0x70, 0x3f, 0x03, 0xa9, 0xc8, 0x22, 0x6e, 0x26, 0x74, 0x00, 0x52, 0xd0, 0x00, 0x4c,
-	0xb4, 0x84, 0xae, 0x35, 0xbb, 0x47, 0x06, 0x42, 0x70, 0x23, 0x57, 0x4c, 0x43, 0x03, 0x5a, 0xb6,
-	0x43, 0x4c, 0x8e, 0x87, 0x91, 0x82, 0x27, 0x12, 0xc8, 0xa7, 0x78, 0x76, 0xf2, 0x55, 0x1d, 0x66,
-	0xee, 0xfa, 0x0d, 0x67, 0xfa, 0xc5, 0x4e, 0xc9, 0xd0, 0x59, 0x8b, 0xb9, 0x4f, 0xe3, 0x7b, 0x02,
-	0x82, 0xad, 0x91, 0x80, 0xee, 0xe5, 0xb0, 0x88, 0x6b, 0xff, 0x60, 0xe0, 0x85, 0x35, 0x50, 0xf7,
-	0x20, 0xc8, 0x52, 0xa6, 0x46, 0xb7, 0x79, 0xd2, 0x63, 0x51, 0x17, 0xee, 0xff, 0x4f, 0xc2, 0x1b,
-	0xf8, 0x75, 0x1a, 0xc7, 0x5e, 0x65, 0x2e, 0xa4, 0x59, 0xd7, 0x49, 0x2d, 0x4c, 0x25, 0xb5, 0x3a,
-	0x10, 0x6a, 0xb4, 0x5e, 0xeb, 0x2e, 0xd0, 0x38, 0x5e, 0x57, 0x4a, 0x6c, 0x1c, 0xe7, 0x90, 0x0c,
-	0xbf, 0x51, 0x8d, 0xe4, 0xc5, 0x4c, 0x2a, 0xb3, 0xa1, 0xc3, 0xdd, 0x72, 0xce, 0x35, 0x95, 0xce,
-	0xfa, 0xd6, 0xd6, 0x66, 0x1e, 0x7a, 0xb9, 0x34, 0x6c, 0x30, 0xa9, 0xd6, 0x6b, 0xdd, 0xd7, 0xfa,
-	0xd3, 0x9f, 0xcc, 0x81, 0xe5, 0x2b, 0xf8, 0xd5, 0xe3, 0x6c, 0x2f, 0xe8, 0x73, 0x16, 0x00, 0x99,
-	0xdd, 0xdd, 0x41, 0xf5, 0xbd, 0x1d, 0x64, 0xdc, 0x6d, 0xcc, 0x1a, 0xad, 0xba, 0xfd, 0x2b, 0x3a,
-	0xad, 0x45, 0x52, 0x90, 0xb7, 0xf1, 0x4b, 0x54, 0x08, 0xaf, 0xc7, 0x52, 0x78, 0x40, 0xe3, 0xd8,
-	0x44, 0x4b, 0xf5, 0x6b, 0xcd, 0xee, 0x1c, 0x15, 0xe2, 0x93, 0xd2, 0x44, 0xae, 0xe0, 0x39, 0x9f,
-	0x2b, 0x2f, 0x84, 0x1e, 0x24, 0x32, 0x7f, 0xdf, 0xdc, 0x03, 0xfb, 0x5c, 0xad, 0x14, 0x16, 0x72,
-	0x15, 0xbf, 0x12, 0x86, 0x5c, 0x7a, 0x21, 0x28, 0x08, 0xf2, 0xb9, 0x33, 0xeb, 0xda, 0xe7, 0xe5,
-	0xdc, 0xba, 0x32, 0x31, 0xe6, 0x6e, 0x54, 0x30, 0x2f, 0x1f, 0xb0, 0xd2, 0xad, 0x51, 0xb8, 0x51,
-	0xc1, 0x36, 0x0f, 0x8d, 0xf9, 0xa3, 0x95, 0x2e, 0x10, 0x9a, 0x33, 0xda, 0xe3, 0xc8, 0x60, 0x0f,
-	0xf1, 0xc2, 0x69, 0x0d, 0x22, 0x5f, 0xe2, 0xf9, 0x4a, 0x2b, 0x8b, 0x62, 0x96, 0xdf, 0xff, 0xe5,
-	0xf9, 0x6e, 0x1d, 0x6f, 0xa3, 0xcb, 0xf6, 0x4c, 0x5a, 0x37, 0x1f, 0x1b, 0xb9, 0xda, 0xdc, 0x46,
-	0x97, 0xec, 0x46, 0x6a, 0xb4, 0x50, 0xae, 0xcd, 0x6c, 0x23, 0xa3, 0x35, 0x33, 0x91, 0x66, 0x51,
-	0xb7, 0x35, 0xdd, 0xec, 0xeb, 0x3f, 0x35, 0x70, 0xf3, 0xb6, 0x3e, 0x33, 0x1f, 0x6f, 0xde, 0x21,
-	0xcf, 0x11, 0xc6, 0x47, 0x83, 0x4d, 0x3e, 0x38, 0xe7, 0xd3, 0x56, 0x56, 0xaa, 0xfd, 0xe1, 0x05,
-	0x98, 0xc5, 0x16, 0xd9, 0xbd, 0xa7, 0x3f, 0x1b, 0x68, 0xfc, 0x9b, 0x39, 0x3f, 0x04, 0xd9, 0x61,
-	0xbc, 0x23, 0x52, 0xfe, 0x70, 0xd4, 0x49, 0x81, 0x86, 0x4f, 0xfe, 0xfc, 0xfb, 0x3b, 0x63, 0x8d,
-	0xac, 0x96, 0xe7, 0xd1, 0x3d, 0x1c, 0x79, 0xe9, 0x7e, 0x73, 0x28, 0x3f, 0xaa, 0x9e, 0xd3, 0x12,
-	0x7e, 0xe4, 0x46, 0xa0, 0x3a, 0x61, 0x22, 0x3b, 0xf9, 0xd6, 0x91, 0x7f, 0x91, 0xbe, 0x05, 0x27,
-	0x47, 0x87, 0xdc, 0x3a, 0x7f, 0xe2, 0x95, 0xbd, 0x6c, 0x5f, 0x9c, 0x2c, 0x85, 0xcd, 0xce, 0xae,
-	0xfb, 0xae, 0x7d, 0x81, 0xba, 0x23, 0x50, 0x9e, 0x2c, 0xbf, 0xe4, 0x05, 0xfa, 0x53, 0x37, 0xd1,
-	0x3b, 0xed, 0x9b, 0xf9, 0x16, 0xfd, 0xb1, 0x83, 0xde, 0x3d, 0x5f, 0xba, 0x9f, 0xe9, 0x0b, 0xfa,
-	0xe4, 0x77, 0xd3, 0x68, 0xa1, 0xe5, 0xef, 0xd1, 0xde, 0xbe, 0x55, 0x7b, 0xb6, 0x6f, 0xd5, 0x5e,
-	0xec, 0x5b, 0xe8, 0xf1, 0xd8, 0x42, 0x3f, 0x8e, 0x2d, 0xf4, 0x74, 0x6c, 0xa1, 0xbd, 0xb1, 0x85,
-	0xfe, 0x1a, 0x5b, 0xe8, 0x9f, 0xb1, 0x55, 0x7b, 0x31, 0xb6, 0xd0, 0xb7, 0x07, 0x56, 0x6d, 0xf7,
-	0xc0, 0x42, 0x7b, 0x07, 0x56, 0xed, 0xd9, 0x81, 0x55, 0xfb, 0xfc, 0x8b, 0x88, 0x8b, 0xaf, 0x23,
-	0x67, 0xc8, 0x63, 0x05, 0x69, 0x4a, 0x9d, 0x4c, 0xba, 0x5a, 0xe8, 0xf1, 0x74, 0x90, 0x97, 0x3b,
-	0x64, 0x21, 0xa4, 0x9d, 0x09, 0xec, 0x0a, 0x3f, 0xe2, 0x2e, 0x3c, 0x54, 0xe5, 0x75, 0x3f, 0xfb,
-	0x97, 0xe9, 0x5f, 0xd2, 0x07, 0xfe, 0xc6, 0x7f, 0x01, 0x00, 0x00, 0xff, 0xff, 0x52, 0x26, 0x59,
-	0xc1, 0x62, 0x07, 0x00, 0x00,
+	// 1064 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xac, 0x56, 0xcd, 0x6f, 0x1c, 0x35,
+	0x14, 0x5f, 0xcf, 0x6e, 0xda, 0xac, 0x0b, 0x68, 0x63, 0x42, 0x99, 0x6c, 0xa3, 0x69, 0x18, 0xa9,
+	0x52, 0x54, 0xb1, 0x33, 0xd0, 0x72, 0x80, 0x16, 0x09, 0xe5, 0x8b, 0xa4, 0x51, 0x28, 0x61, 0x93,
+	0x13, 0x48, 0x8c, 0xbc, 0x33, 0xde, 0x59, 0xc3, 0xec, 0xd8, 0x1d, 0x7b, 0xb6, 0x8d, 0xaa, 0x48,
+	0x55, 0xcf, 0x1c, 0x20, 0x15, 0x07, 0x6e, 0x1c, 0xf9, 0x13, 0x10, 0x39, 0x90, 0x13, 0xf4, 0x84,
+	0x22, 0xb8, 0xf4, 0x48, 0x36, 0x1c, 0xe8, 0xad, 0x47, 0x8e, 0xc8, 0xde, 0xc9, 0xc7, 0x7e, 0x64,
+	0x1b, 0x42, 0x6f, 0xf6, 0x7b, 0xbf, 0xf7, 0xf3, 0x7b, 0xcf, 0xef, 0x3d, 0x1b, 0xbe, 0xdf, 0x22,
+	0xc2, 0xa1, 0xcc, 0x15, 0x7e, 0x83, 0x34, 0xb1, 0xdb, 0xa2, 0xe4, 0xae, 0x70, 0x1b, 0x52, 0x72,
+	0x2f, 0x62, 0x38, 0xa8, 0xe1, 0x08, 0xc7, 0x3e, 0x49, 0x5c, 0x9e, 0xd6, 0x22, 0xea, 0x7b, 0x7e,
+	0x2a, 0x24, 0x6b, 0x62, 0x4e, 0x1d, 0x9e, 0x30, 0xc9, 0xd0, 0x95, 0x8e, 0xb5, 0xd3, 0xb1, 0x76,
+	0xb4, 0xb5, 0xd3, 0x67, 0x5d, 0xae, 0x84, 0x54, 0x36, 0xd2, 0x9a, 0xe3, 0xb3, 0xa6, 0x1b, 0xb2,
+	0x90, 0xb9, 0xda, 0xba, 0x96, 0xd6, 0xf5, 0x4e, 0x6f, 0xf4, 0xaa, 0xc3, 0x5a, 0x9e, 0x0c, 0x19,
+	0x0b, 0x23, 0xe2, 0x62, 0x4e, 0x5d, 0x1c, 0xc7, 0x4c, 0x62, 0x49, 0x59, 0x2c, 0x32, 0xed, 0x74,
+	0xb7, 0xc7, 0x01, 0x13, 0x5e, 0x93, 0x4a, 0x1a, 0x6a, 0x90, 0x2b, 0x37, 0x38, 0x39, 0x40, 0x5e,
+	0xea, 0x46, 0x32, 0x7e, 0x9c, 0x66, 0xa2, 0x5b, 0x79, 0xdc, 0x6e, 0xb2, 0x27, 0x27, 0x38, 0xa2,
+	0x01, 0x96, 0x24, 0xd3, 0xda, 0x3d, 0x5a, 0x22, 0x48, 0xdc, 0xea, 0x21, 0x9f, 0xea, 0xcf, 0xaa,
+	0xd7, 0x8d, 0x78, 0xab, 0x17, 0x91, 0xc8, 0x14, 0x47, 0x5e, 0x83, 0x09, 0xe9, 0x05, 0xb1, 0xf0,
+	0x68, 0x5c, 0x67, 0x2e, 0xab, 0x7d, 0x41, 0x7c, 0xd9, 0xb1, 0xb0, 0x17, 0xe0, 0xd8, 0x22, 0x91,
+	0xf3, 0xb1, 0xb8, 0x15, 0xd7, 0x59, 0x95, 0xdc, 0x49, 0x89, 0x90, 0x68, 0x12, 0x16, 0x63, 0xdc,
+	0x24, 0x82, 0x63, 0x9f, 0x98, 0x60, 0x0a, 0x4c, 0x17, 0xab, 0x47, 0x02, 0x84, 0x60, 0x41, 0x6d,
+	0x4c, 0x43, 0x2b, 0xf4, 0xda, 0x0e, 0x20, 0x3a, 0x4e, 0x23, 0x38, 0x8b, 0x05, 0x41, 0xb7, 0xe1,
+	0xe8, 0xc1, 0xa9, 0x9a, 0xe6, 0xc2, 0xb5, 0xeb, 0x4e, 0xef, 0xdd, 0x0e, 0xf0, 0xd0, 0x59, 0x8c,
+	0x58, 0x0d, 0x47, 0x6b, 0x9c, 0xf8, 0xeb, 0x1b, 0x9c, 0x54, 0xcf, 0x07, 0x1d, 0x5e, 0xfb, 0x7b,
+	0x03, 0x8e, 0x2f, 0x12, 0xb9, 0x46, 0xfc, 0x34, 0xa1, 0x72, 0x63, 0x8e, 0xc5, 0x75, 0x1a, 0x56,
+	0xc9, 0x9d, 0xe7, 0x38, 0xbc, 0x02, 0x2f, 0xe2, 0x28, 0xf2, 0xfa, 0x2a, 0x48, 0x98, 0x79, 0xed,
+	0xd4, 0x78, 0x8f, 0x53, 0x0b, 0x4d, 0x2e, 0x37, 0x96, 0x72, 0xd5, 0x71, 0x1c, 0x45, 0x4b, 0x52,
+	0xf2, 0x95, 0xe3, 0x36, 0x28, 0x85, 0xaf, 0xf7, 0x33, 0x79, 0x11, 0x15, 0xd2, 0x2c, 0x68, 0xba,
+	0x9b, 0xce, 0xa9, 0xea, 0xd7, 0x59, 0x5a, 0x5f, 0x5f, 0x55, 0xd4, 0xb3, 0x99, 0x60, 0x85, 0x0a,
+	0xb9, 0x94, 0xab, 0xbe, 0xd6, 0xe8, 0x3d, 0x52, 0x29, 0x66, 0x2f, 0xc3, 0x57, 0x8f, 0x5b, 0x7b,
+	0x7e, 0x83, 0x51, 0x9f, 0xa0, 0xd1, 0x9d, 0x6d, 0x90, 0xdf, 0xdd, 0x06, 0xc6, 0x72, 0x61, 0xd4,
+	0x28, 0xe5, 0xed, 0x5f, 0xc0, 0xa0, 0x14, 0x09, 0x8e, 0xde, 0x80, 0x2f, 0x61, 0xce, 0xbd, 0x3a,
+	0x4d, 0xc8, 0x5d, 0x1c, 0x45, 0x26, 0x98, 0xca, 0x4f, 0x17, 0xab, 0x17, 0x30, 0xe7, 0x1f, 0x66,
+	0x22, 0x74, 0x19, 0x5e, 0xa8, 0x31, 0xe9, 0x05, 0xa4, 0x4e, 0x62, 0xa1, 0xee, 0x57, 0x21, 0x60,
+	0x8d, 0xc9, 0xf9, 0x8e, 0x04, 0x5d, 0x81, 0xaf, 0x04, 0xaa, 0x33, 0x02, 0x22, 0x89, 0xaf, 0xea,
+	0xce, 0xcc, 0x6b, 0xcc, 0xcb, 0x4a, 0x3a, 0x7f, 0x20, 0x54, 0x30, 0xcc, 0xa9, 0xa7, 0x0a, 0x2c,
+	0x83, 0x15, 0x3a, 0x30, 0xcc, 0xe9, 0xea, 0xa1, 0x50, 0x5d, 0x5a, 0x06, 0x21, 0x81, 0x39, 0xa2,
+	0x11, 0x47, 0x02, 0xbb, 0x05, 0xc7, 0x07, 0x25, 0x08, 0x7d, 0x0e, 0xc7, 0xfa, 0x52, 0xd9, 0x09,
+	0x66, 0xf6, 0xed, 0x9f, 0x9e, 0xee, 0xe4, 0xe1, 0x16, 0x38, 0x6f, 0x8f, 0x24, 0x79, 0xf3, 0x81,
+	0xa1, 0xb6, 0xc5, 0x2d, 0x70, 0xce, 0x2e, 0x24, 0x46, 0x09, 0xa8, 0xdd, 0xc8, 0x16, 0x30, 0x4a,
+	0x23, 0x07, 0xab, 0x51, 0x50, 0x2d, 0xf5, 0x26, 0xdb, 0x5e, 0x85, 0x93, 0xaa, 0x92, 0xd9, 0xda,
+	0x4c, 0x2a, 0xd9, 0x47, 0x87, 0x23, 0xa0, 0x9a, 0x46, 0x44, 0x3c, 0xbf, 0xd4, 0x06, 0xf5, 0xc6,
+	0x23, 0x30, 0x8c, 0x52, 0x70, 0xd4, 0x84, 0xa6, 0xca, 0x2a, 0x4e, 0x25, 0x3b, 0x9a, 0x39, 0x5e,
+	0xa2, 0xd4, 0xfa, 0x12, 0xfa, 0xdb, 0xa6, 0x7b, 0x3c, 0x39, 0xf3, 0x6c, 0xad, 0x9b, 0x56, 0x77,
+	0xe1, 0xc5, 0x80, 0x89, 0x99, 0x2e, 0x4e, 0x7d, 0xe2, 0x72, 0x61, 0x14, 0x94, 0x0c, 0xe5, 0x95,
+	0x35, 0x4f, 0x22, 0x22, 0xc9, 0x40, 0xc7, 0xce, 0x14, 0x2a, 0xfa, 0x00, 0x4e, 0x9e, 0x10, 0x89,
+	0xa7, 0xb1, 0x79, 0x8d, 0x9d, 0x18, 0xe8, 0xd8, 0x6d, 0x95, 0xab, 0x77, 0x86, 0x3b, 0x25, 0xf8,
+	0xa0, 0x63, 0xaf, 0x7d, 0x55, 0x84, 0xc5, 0x39, 0xfd, 0x88, 0xcc, 0xac, 0xde, 0x42, 0x4f, 0x01,
+	0x84, 0x47, 0xc3, 0x08, 0xbd, 0x7b, 0xca, 0x76, 0xec, 0x1b, 0x83, 0xe5, 0xf7, 0xce, 0x60, 0xd9,
+	0x99, 0x7c, 0x76, 0xfd, 0xf1, 0x8f, 0x06, 0x68, 0xff, 0x6a, 0x8e, 0xb5, 0x88, 0xa8, 0x50, 0x56,
+	0xe1, 0x09, 0xbb, 0xb7, 0x51, 0x49, 0x08, 0x0e, 0x1e, 0xfe, 0xf1, 0xd7, 0x23, 0x63, 0x11, 0x2d,
+	0x64, 0x8f, 0x9f, 0x7b, 0x98, 0x50, 0xe1, 0xde, 0x3f, 0x5c, 0x6f, 0xf6, 0x3f, 0x96, 0x99, 0x7a,
+	0xd3, 0x0d, 0x89, 0xac, 0x04, 0xb1, 0xa8, 0xa8, 0x49, 0x89, 0xfe, 0x01, 0x7a, 0x7e, 0x77, 0xb7,
+	0x3b, 0xba, 0x79, 0x7a, 0xc7, 0xfb, 0x66, 0x69, 0xf9, 0xec, 0xc6, 0x82, 0xdb, 0x74, 0x78, 0xdc,
+	0xcb, 0xf6, 0x19, 0xe2, 0x0e, 0x89, 0xf4, 0x44, 0x76, 0x92, 0xe7, 0xeb, 0xa3, 0x6e, 0x80, 0xab,
+	0xe8, 0x3b, 0x03, 0x4e, 0x9c, 0xd8, 0x56, 0x68, 0xee, 0x3f, 0xdc, 0xdd, 0x49, 0xbd, 0x5e, 0xfe,
+	0xff, 0x24, 0x82, 0xdb, 0xc9, 0xf0, 0x94, 0xac, 0xa1, 0x4f, 0xce, 0x5c, 0x0a, 0x27, 0x4d, 0x0d,
+	0xf4, 0xb3, 0x01, 0x2f, 0x0d, 0xe9, 0x23, 0xb4, 0x70, 0xca, 0xc0, 0x86, 0x0f, 0x88, 0xf2, 0x8b,
+	0xa0, 0x11, 0xdc, 0xfe, 0x06, 0x0c, 0x4f, 0x51, 0x72, 0x95, 0xbf, 0xf0, 0x14, 0xb9, 0xf7, 0x87,
+	0x0d, 0xaa, 0xcd, 0xf2, 0x0d, 0xf5, 0xae, 0xfe, 0xbe, 0x0d, 0xde, 0x3c, 0x5d, 0x84, 0x1f, 0xeb,
+	0x3f, 0xd5, 0xc3, 0xdf, 0x4c, 0xa3, 0x04, 0x66, 0xbf, 0x05, 0xbb, 0x7b, 0x56, 0xee, 0xc9, 0x9e,
+	0x95, 0x7b, 0xb6, 0x67, 0x81, 0x07, 0x6d, 0x0b, 0xfc, 0xd0, 0xb6, 0xc0, 0xe3, 0xb6, 0x05, 0x76,
+	0xdb, 0x16, 0xf8, 0xb3, 0x6d, 0x81, 0xbf, 0xdb, 0x56, 0xee, 0x59, 0xdb, 0x02, 0x5f, 0xef, 0x5b,
+	0xb9, 0x9d, 0x7d, 0x0b, 0xec, 0xee, 0x5b, 0xb9, 0x27, 0xfb, 0x56, 0xee, 0xd3, 0xcf, 0x42, 0xc6,
+	0xbf, 0x0c, 0x9d, 0x16, 0x8b, 0x24, 0x49, 0x12, 0xec, 0xa4, 0xc2, 0xd5, 0x8b, 0x3a, 0x4b, 0x9a,
+	0x2a, 0x2d, 0x2d, 0x1a, 0x90, 0xa4, 0x72, 0xa0, 0x76, 0x79, 0x2d, 0x64, 0x2e, 0xb9, 0x27, 0xb3,
+	0xff, 0xde, 0xf0, 0xef, 0x76, 0xed, 0x9c, 0xfe, 0xf2, 0x5d, 0xff, 0x37, 0x00, 0x00, 0xff, 0xff,
+	0xa7, 0x82, 0x96, 0x9e, 0x9e, 0x0b, 0x00, 0x00,
 }
 
 func (this *GetDnsInfoRequest) Equal(that interface{}) bool {
@@ -709,6 +975,116 @@ func (this *HTTPLoadBalancerList) Equal(that interface{}) bool {
 	}
 	return true
 }
+func (this *GetDoSAutoMitigationRulesReq) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GetDoSAutoMitigationRulesReq)
+	if !ok {
+		that2, ok := that.(GetDoSAutoMitigationRulesReq)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.Namespace != that1.Namespace {
+		return false
+	}
+	if this.Name != that1.Name {
+		return false
+	}
+	return true
+}
+func (this *GetDoSAutoMitigationRulesRsp) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GetDoSAutoMitigationRulesRsp)
+	if !ok {
+		that2, ok := that.(GetDoSAutoMitigationRulesRsp)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if len(this.DosAutomitigationRules) != len(that1.DosAutomitigationRules) {
+		return false
+	}
+	for i := range this.DosAutomitigationRules {
+		if !this.DosAutomitigationRules[i].Equal(that1.DosAutomitigationRules[i]) {
+			return false
+		}
+	}
+	return true
+}
+func (this *DeleteDoSAutoMitigationRuleReq) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*DeleteDoSAutoMitigationRuleReq)
+	if !ok {
+		that2, ok := that.(DeleteDoSAutoMitigationRuleReq)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.Namespace != that1.Namespace {
+		return false
+	}
+	if this.Name != that1.Name {
+		return false
+	}
+	if this.DosAutomitigationRuleName != that1.DosAutomitigationRuleName {
+		return false
+	}
+	return true
+}
+func (this *DeleteDoSAutoMitigationRuleRsp) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*DeleteDoSAutoMitigationRuleRsp)
+	if !ok {
+		that2, ok := that.(DeleteDoSAutoMitigationRuleRsp)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.Name != that1.Name {
+		return false
+	}
+	return true
+}
 func (this *GetDnsInfoRequest) GoString() string {
 	if this == nil {
 		return "nil"
@@ -785,6 +1161,51 @@ func (this *HTTPLoadBalancerList) GoString() string {
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
+func (this *GetDoSAutoMitigationRulesReq) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 6)
+	s = append(s, "&http_loadbalancer.GetDoSAutoMitigationRulesReq{")
+	s = append(s, "Namespace: "+fmt.Sprintf("%#v", this.Namespace)+",\n")
+	s = append(s, "Name: "+fmt.Sprintf("%#v", this.Name)+",\n")
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *GetDoSAutoMitigationRulesRsp) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 5)
+	s = append(s, "&http_loadbalancer.GetDoSAutoMitigationRulesRsp{")
+	if this.DosAutomitigationRules != nil {
+		s = append(s, "DosAutomitigationRules: "+fmt.Sprintf("%#v", this.DosAutomitigationRules)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *DeleteDoSAutoMitigationRuleReq) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 7)
+	s = append(s, "&http_loadbalancer.DeleteDoSAutoMitigationRuleReq{")
+	s = append(s, "Namespace: "+fmt.Sprintf("%#v", this.Namespace)+",\n")
+	s = append(s, "Name: "+fmt.Sprintf("%#v", this.Name)+",\n")
+	s = append(s, "DosAutomitigationRuleName: "+fmt.Sprintf("%#v", this.DosAutomitigationRuleName)+",\n")
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *DeleteDoSAutoMitigationRuleRsp) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 5)
+	s = append(s, "&http_loadbalancer.DeleteDoSAutoMitigationRuleRsp{")
+	s = append(s, "Name: "+fmt.Sprintf("%#v", this.Name)+",\n")
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
 func valueToGoStringPublicCustomapi(v interface{}, typ string) string {
 	rv := reflect.ValueOf(v)
 	if rv.IsNil() {
@@ -814,8 +1235,18 @@ type CustomAPIClient interface {
 	// Get Security Config for Http Load Balancers
 	//
 	// x-displayName: "Get Security Config for Http Load Balancer"
-	// Get the corresponding Security Config for the given HTTP load balancer
+	// Fetch the corresponding Security Config for the given HTTP load balancers
 	GetSecurityConfig(ctx context.Context, in *GetSecurityConfigReq, opts ...grpc.CallOption) (*GetSecurityConfigRsp, error)
+	// Get DoS Auto-Mitigation Rules for Http Load Balancer
+	//
+	// x-displayName: "Get DoS Auto-Mitigation Rules for Http Load Balancer"
+	// Get the corresponding DoS Auto-Mitigation Rules for the given HTTP load balancer
+	GetDoSAutoMitigationRules(ctx context.Context, in *GetDoSAutoMitigationRulesReq, opts ...grpc.CallOption) (*GetDoSAutoMitigationRulesRsp, error)
+	// Delete DoS Auto-Mitigation Rule for Http Load Balancer
+	//
+	// x-displayName: "Delete DoS Auto-Mitigation Rule for Http Load Balancer"
+	// Delete the corresponding DoS Auto-Mitigation Rule for the given HTTP load balancer
+	DeleteDoSAutoMitigationRule(ctx context.Context, in *DeleteDoSAutoMitigationRuleReq, opts ...grpc.CallOption) (*DeleteDoSAutoMitigationRuleRsp, error)
 }
 
 type customAPIClient struct {
@@ -844,6 +1275,24 @@ func (c *customAPIClient) GetSecurityConfig(ctx context.Context, in *GetSecurity
 	return out, nil
 }
 
+func (c *customAPIClient) GetDoSAutoMitigationRules(ctx context.Context, in *GetDoSAutoMitigationRulesReq, opts ...grpc.CallOption) (*GetDoSAutoMitigationRulesRsp, error) {
+	out := new(GetDoSAutoMitigationRulesRsp)
+	err := c.cc.Invoke(ctx, "/ves.io.schema.views.http_loadbalancer.CustomAPI/GetDoSAutoMitigationRules", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *customAPIClient) DeleteDoSAutoMitigationRule(ctx context.Context, in *DeleteDoSAutoMitigationRuleReq, opts ...grpc.CallOption) (*DeleteDoSAutoMitigationRuleRsp, error) {
+	out := new(DeleteDoSAutoMitigationRuleRsp)
+	err := c.cc.Invoke(ctx, "/ves.io.schema.views.http_loadbalancer.CustomAPI/DeleteDoSAutoMitigationRule", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // CustomAPIServer is the server API for CustomAPI service.
 type CustomAPIServer interface {
 	// GetDnsInfo
@@ -854,8 +1303,18 @@ type CustomAPIServer interface {
 	// Get Security Config for Http Load Balancers
 	//
 	// x-displayName: "Get Security Config for Http Load Balancer"
-	// Get the corresponding Security Config for the given HTTP load balancer
+	// Fetch the corresponding Security Config for the given HTTP load balancers
 	GetSecurityConfig(context.Context, *GetSecurityConfigReq) (*GetSecurityConfigRsp, error)
+	// Get DoS Auto-Mitigation Rules for Http Load Balancer
+	//
+	// x-displayName: "Get DoS Auto-Mitigation Rules for Http Load Balancer"
+	// Get the corresponding DoS Auto-Mitigation Rules for the given HTTP load balancer
+	GetDoSAutoMitigationRules(context.Context, *GetDoSAutoMitigationRulesReq) (*GetDoSAutoMitigationRulesRsp, error)
+	// Delete DoS Auto-Mitigation Rule for Http Load Balancer
+	//
+	// x-displayName: "Delete DoS Auto-Mitigation Rule for Http Load Balancer"
+	// Delete the corresponding DoS Auto-Mitigation Rule for the given HTTP load balancer
+	DeleteDoSAutoMitigationRule(context.Context, *DeleteDoSAutoMitigationRuleReq) (*DeleteDoSAutoMitigationRuleRsp, error)
 }
 
 // UnimplementedCustomAPIServer can be embedded to have forward compatible implementations.
@@ -867,6 +1326,12 @@ func (*UnimplementedCustomAPIServer) GetDnsInfo(ctx context.Context, req *GetDns
 }
 func (*UnimplementedCustomAPIServer) GetSecurityConfig(ctx context.Context, req *GetSecurityConfigReq) (*GetSecurityConfigRsp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetSecurityConfig not implemented")
+}
+func (*UnimplementedCustomAPIServer) GetDoSAutoMitigationRules(ctx context.Context, req *GetDoSAutoMitigationRulesReq) (*GetDoSAutoMitigationRulesRsp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetDoSAutoMitigationRules not implemented")
+}
+func (*UnimplementedCustomAPIServer) DeleteDoSAutoMitigationRule(ctx context.Context, req *DeleteDoSAutoMitigationRuleReq) (*DeleteDoSAutoMitigationRuleRsp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeleteDoSAutoMitigationRule not implemented")
 }
 
 func RegisterCustomAPIServer(s *grpc.Server, srv CustomAPIServer) {
@@ -909,6 +1374,42 @@ func _CustomAPI_GetSecurityConfig_Handler(srv interface{}, ctx context.Context, 
 	return interceptor(ctx, in, info, handler)
 }
 
+func _CustomAPI_GetDoSAutoMitigationRules_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetDoSAutoMitigationRulesReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CustomAPIServer).GetDoSAutoMitigationRules(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/ves.io.schema.views.http_loadbalancer.CustomAPI/GetDoSAutoMitigationRules",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CustomAPIServer).GetDoSAutoMitigationRules(ctx, req.(*GetDoSAutoMitigationRulesReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _CustomAPI_DeleteDoSAutoMitigationRule_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DeleteDoSAutoMitigationRuleReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CustomAPIServer).DeleteDoSAutoMitigationRule(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/ves.io.schema.views.http_loadbalancer.CustomAPI/DeleteDoSAutoMitigationRule",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CustomAPIServer).DeleteDoSAutoMitigationRule(ctx, req.(*DeleteDoSAutoMitigationRuleReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 var _CustomAPI_serviceDesc = grpc.ServiceDesc{
 	ServiceName: "ves.io.schema.views.http_loadbalancer.CustomAPI",
 	HandlerType: (*CustomAPIServer)(nil),
@@ -920,6 +1421,14 @@ var _CustomAPI_serviceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetSecurityConfig",
 			Handler:    _CustomAPI_GetSecurityConfig_Handler,
+		},
+		{
+			MethodName: "GetDoSAutoMitigationRules",
+			Handler:    _CustomAPI_GetDoSAutoMitigationRules_Handler,
+		},
+		{
+			MethodName: "DeleteDoSAutoMitigationRule",
+			Handler:    _CustomAPI_DeleteDoSAutoMitigationRule_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
@@ -1179,6 +1688,154 @@ func (m *HTTPLoadBalancerList) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
+func (m *GetDoSAutoMitigationRulesReq) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *GetDoSAutoMitigationRulesReq) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetDoSAutoMitigationRulesReq) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.Name) > 0 {
+		i -= len(m.Name)
+		copy(dAtA[i:], m.Name)
+		i = encodeVarintPublicCustomapi(dAtA, i, uint64(len(m.Name)))
+		i--
+		dAtA[i] = 0x12
+	}
+	if len(m.Namespace) > 0 {
+		i -= len(m.Namespace)
+		copy(dAtA[i:], m.Namespace)
+		i = encodeVarintPublicCustomapi(dAtA, i, uint64(len(m.Namespace)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *GetDoSAutoMitigationRulesRsp) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *GetDoSAutoMitigationRulesRsp) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetDoSAutoMitigationRulesRsp) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.DosAutomitigationRules) > 0 {
+		for iNdEx := len(m.DosAutomitigationRules) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.DosAutomitigationRules[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintPublicCustomapi(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x12
+		}
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *DeleteDoSAutoMitigationRuleReq) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *DeleteDoSAutoMitigationRuleReq) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *DeleteDoSAutoMitigationRuleReq) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.DosAutomitigationRuleName) > 0 {
+		i -= len(m.DosAutomitigationRuleName)
+		copy(dAtA[i:], m.DosAutomitigationRuleName)
+		i = encodeVarintPublicCustomapi(dAtA, i, uint64(len(m.DosAutomitigationRuleName)))
+		i--
+		dAtA[i] = 0x1a
+	}
+	if len(m.Name) > 0 {
+		i -= len(m.Name)
+		copy(dAtA[i:], m.Name)
+		i = encodeVarintPublicCustomapi(dAtA, i, uint64(len(m.Name)))
+		i--
+		dAtA[i] = 0x12
+	}
+	if len(m.Namespace) > 0 {
+		i -= len(m.Namespace)
+		copy(dAtA[i:], m.Namespace)
+		i = encodeVarintPublicCustomapi(dAtA, i, uint64(len(m.Namespace)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *DeleteDoSAutoMitigationRuleRsp) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *DeleteDoSAutoMitigationRuleRsp) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *DeleteDoSAutoMitigationRuleRsp) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.Name) > 0 {
+		i -= len(m.Name)
+		copy(dAtA[i:], m.Name)
+		i = encodeVarintPublicCustomapi(dAtA, i, uint64(len(m.Name)))
+		i--
+		dAtA[i] = 0x12
+	}
+	return len(dAtA) - i, nil
+}
+
 func encodeVarintPublicCustomapi(dAtA []byte, offset int, v uint64) int {
 	offset -= sovPublicCustomapi(v)
 	base := offset
@@ -1314,6 +1971,72 @@ func (m *HTTPLoadBalancerList) Size() (n int) {
 	return n
 }
 
+func (m *GetDoSAutoMitigationRulesReq) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Namespace)
+	if l > 0 {
+		n += 1 + l + sovPublicCustomapi(uint64(l))
+	}
+	l = len(m.Name)
+	if l > 0 {
+		n += 1 + l + sovPublicCustomapi(uint64(l))
+	}
+	return n
+}
+
+func (m *GetDoSAutoMitigationRulesRsp) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if len(m.DosAutomitigationRules) > 0 {
+		for _, e := range m.DosAutomitigationRules {
+			l = e.Size()
+			n += 1 + l + sovPublicCustomapi(uint64(l))
+		}
+	}
+	return n
+}
+
+func (m *DeleteDoSAutoMitigationRuleReq) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Namespace)
+	if l > 0 {
+		n += 1 + l + sovPublicCustomapi(uint64(l))
+	}
+	l = len(m.Name)
+	if l > 0 {
+		n += 1 + l + sovPublicCustomapi(uint64(l))
+	}
+	l = len(m.DosAutomitigationRuleName)
+	if l > 0 {
+		n += 1 + l + sovPublicCustomapi(uint64(l))
+	}
+	return n
+}
+
+func (m *DeleteDoSAutoMitigationRuleRsp) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Name)
+	if l > 0 {
+		n += 1 + l + sovPublicCustomapi(uint64(l))
+	}
+	return n
+}
+
 func sovPublicCustomapi(x uint64) (n int) {
 	return (math_bits.Len64(x|1) + 6) / 7
 }
@@ -1392,6 +2115,54 @@ func (this *HTTPLoadBalancerList) String() string {
 	}
 	s := strings.Join([]string{`&HTTPLoadBalancerList{`,
 		`HttpLoadbalancer:` + fmt.Sprintf("%v", this.HttpLoadbalancer) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GetDoSAutoMitigationRulesReq) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GetDoSAutoMitigationRulesReq{`,
+		`Namespace:` + fmt.Sprintf("%v", this.Namespace) + `,`,
+		`Name:` + fmt.Sprintf("%v", this.Name) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GetDoSAutoMitigationRulesRsp) String() string {
+	if this == nil {
+		return "nil"
+	}
+	repeatedStringForDosAutomitigationRules := "[]*DoSMitigationRuleInfo{"
+	for _, f := range this.DosAutomitigationRules {
+		repeatedStringForDosAutomitigationRules += strings.Replace(fmt.Sprintf("%v", f), "DoSMitigationRuleInfo", "dos_mitigation.DoSMitigationRuleInfo", 1) + ","
+	}
+	repeatedStringForDosAutomitigationRules += "}"
+	s := strings.Join([]string{`&GetDoSAutoMitigationRulesRsp{`,
+		`DosAutomitigationRules:` + repeatedStringForDosAutomitigationRules + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *DeleteDoSAutoMitigationRuleReq) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&DeleteDoSAutoMitigationRuleReq{`,
+		`Namespace:` + fmt.Sprintf("%v", this.Namespace) + `,`,
+		`Name:` + fmt.Sprintf("%v", this.Name) + `,`,
+		`DosAutomitigationRuleName:` + fmt.Sprintf("%v", this.DosAutomitigationRuleName) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *DeleteDoSAutoMitigationRuleRsp) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&DeleteDoSAutoMitigationRuleRsp{`,
+		`Name:` + fmt.Sprintf("%v", this.Name) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2038,6 +2809,444 @@ func (m *HTTPLoadBalancerList) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			m.HttpLoadbalancer = append(m.HttpLoadbalancer, string(dAtA[iNdEx:postIndex]))
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipPublicCustomapi(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *GetDoSAutoMitigationRulesReq) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowPublicCustomapi
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: GetDoSAutoMitigationRulesReq: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: GetDoSAutoMitigationRulesReq: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Namespace", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Namespace = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Name", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Name = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipPublicCustomapi(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *GetDoSAutoMitigationRulesRsp) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowPublicCustomapi
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: GetDoSAutoMitigationRulesRsp: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: GetDoSAutoMitigationRulesRsp: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DosAutomitigationRules", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.DosAutomitigationRules = append(m.DosAutomitigationRules, &dos_mitigation.DoSMitigationRuleInfo{})
+			if err := m.DosAutomitigationRules[len(m.DosAutomitigationRules)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipPublicCustomapi(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *DeleteDoSAutoMitigationRuleReq) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowPublicCustomapi
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: DeleteDoSAutoMitigationRuleReq: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: DeleteDoSAutoMitigationRuleReq: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Namespace", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Namespace = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Name", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Name = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DosAutomitigationRuleName", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.DosAutomitigationRuleName = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipPublicCustomapi(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *DeleteDoSAutoMitigationRuleRsp) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowPublicCustomapi
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: DeleteDoSAutoMitigationRuleRsp: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: DeleteDoSAutoMitigationRuleRsp: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Name", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Name = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex

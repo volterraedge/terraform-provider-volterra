@@ -13,8 +13,6 @@ import (
 	"gopkg.volterra.us/stdlib/codec"
 	"gopkg.volterra.us/stdlib/db"
 	"gopkg.volterra.us/stdlib/errors"
-
-	ves_io_schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
 )
 
 var (
@@ -77,6 +75,15 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 	}
 	if m == nil {
 		return nil
+	}
+
+	if fv, exists := v.FldValidators["type"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("type"))
+		if err := fv(ctx, m.GetType(), vOpts...); err != nil {
+			return err
+		}
+
 	}
 
 	return nil
@@ -190,181 +197,6 @@ func DCClusterGroupMeshTypeValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
-func (m *DcClusterGroupStatus) ToJSON() (string, error) {
-	return codec.ToJSON(m)
-}
-
-func (m *DcClusterGroupStatus) ToYAML() (string, error) {
-	return codec.ToYAML(m)
-}
-
-func (m *DcClusterGroupStatus) DeepCopy() *DcClusterGroupStatus {
-	if m == nil {
-		return nil
-	}
-	ser, err := m.Marshal()
-	if err != nil {
-		return nil
-	}
-	c := &DcClusterGroupStatus{}
-	err = c.Unmarshal(ser)
-	if err != nil {
-		return nil
-	}
-	return c
-}
-
-func (m *DcClusterGroupStatus) DeepCopyProto() proto.Message {
-	if m == nil {
-		return nil
-	}
-	return m.DeepCopy()
-}
-
-func (m *DcClusterGroupStatus) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
-	return DcClusterGroupStatusValidator().Validate(ctx, m, opts...)
-}
-
-func (m *DcClusterGroupStatus) GetDRefInfo() ([]db.DRefInfo, error) {
-	if m == nil {
-		return nil, nil
-	}
-
-	return m.GetSiteInfoDRefInfo()
-
-}
-
-// GetDRefInfo for the field's type
-func (m *DcClusterGroupStatus) GetSiteInfoDRefInfo() ([]db.DRefInfo, error) {
-	if m.GetSiteInfo() == nil {
-		return nil, nil
-	}
-
-	var drInfos []db.DRefInfo
-	for idx, e := range m.GetSiteInfo() {
-		driSet, err := e.GetDRefInfo()
-		if err != nil {
-			return nil, errors.Wrap(err, "GetSiteInfo() GetDRefInfo() FAILED")
-		}
-		for i := range driSet {
-			dri := &driSet[i]
-			dri.DRField = fmt.Sprintf("site_info[%v].%s", idx, dri.DRField)
-		}
-		drInfos = append(drInfos, driSet...)
-	}
-	return drInfos, nil
-
-}
-
-type ValidateDcClusterGroupStatus struct {
-	FldValidators map[string]db.ValidatorFunc
-}
-
-func (v *ValidateDcClusterGroupStatus) SiteInfoValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	itemRules := db.GetRepMessageItemRules(rules)
-	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
-	if err != nil {
-		return nil, errors.Wrap(err, "Message ValidationRuleHandler for site_info")
-	}
-	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema.SiteInfo, opts ...db.ValidateOpt) error {
-		for i, el := range elems {
-			if err := itemValFn(ctx, el, opts...); err != nil {
-				return errors.Wrap(err, fmt.Sprintf("element %d", i))
-			}
-			if err := ves_io_schema.SiteInfoValidator().Validate(ctx, el, opts...); err != nil {
-				return errors.Wrap(err, fmt.Sprintf("element %d", i))
-			}
-		}
-		return nil
-	}
-	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for site_info")
-	}
-
-	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
-		elems, ok := val.([]*ves_io_schema.SiteInfo)
-		if !ok {
-			return fmt.Errorf("Repeated validation expected []*ves_io_schema.SiteInfo, got %T", val)
-		}
-		l := []string{}
-		for _, elem := range elems {
-			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
-			if err != nil {
-				return errors.Wrapf(err, "Converting %v to JSON", elem)
-			}
-			l = append(l, strVal)
-		}
-		if err := repValFn(ctx, l, opts...); err != nil {
-			return errors.Wrap(err, "repeated site_info")
-		}
-		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
-			return errors.Wrap(err, "items site_info")
-		}
-		return nil
-	}
-
-	return validatorFn, nil
-}
-
-func (v *ValidateDcClusterGroupStatus) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
-	m, ok := pm.(*DcClusterGroupStatus)
-	if !ok {
-		switch t := pm.(type) {
-		case nil:
-			return nil
-		default:
-			return fmt.Errorf("Expected type *DcClusterGroupStatus got type %s", t)
-		}
-	}
-	if m == nil {
-		return nil
-	}
-
-	if fv, exists := v.FldValidators["site_info"]; exists {
-		vOpts := append(opts, db.WithValidateField("site_info"))
-		if err := fv(ctx, m.GetSiteInfo(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
-	return nil
-}
-
-// Well-known symbol for default validator implementation
-var DefaultDcClusterGroupStatusValidator = func() *ValidateDcClusterGroupStatus {
-	v := &ValidateDcClusterGroupStatus{FldValidators: map[string]db.ValidatorFunc{}}
-
-	var (
-		err error
-		vFn db.ValidatorFunc
-	)
-	_, _ = err, vFn
-	vFnMap := map[string]db.ValidatorFunc{}
-	_ = vFnMap
-
-	vrhSiteInfo := v.SiteInfoValidationRuleHandler
-	rulesSiteInfo := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
-	}
-	vFn, err = vrhSiteInfo(rulesSiteInfo)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for DcClusterGroupStatus.site_info: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["site_info"] = vFn
-
-	return v
-}()
-
-func DcClusterGroupStatusValidator() db.Validator {
-	return DefaultDcClusterGroupStatusValidator
-}
-
-// augmented methods on protoc/std generated struct
-
 func (m *GetSpecType) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -416,6 +248,15 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 	}
 	if m == nil {
 		return nil
+	}
+
+	if fv, exists := v.FldValidators["type"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("type"))
+		if err := fv(ctx, m.GetType(), vOpts...); err != nil {
+			return err
+		}
+
 	}
 
 	return nil
@@ -565,6 +406,15 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 		return nil
 	}
 
+	if fv, exists := v.FldValidators["type"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("type"))
+		if err := fv(ctx, m.GetType(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	return nil
 }
 
@@ -583,6 +433,7 @@ func (m *CreateSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool
 	if f == nil {
 		return
 	}
+	m.Type = f.GetType()
 }
 
 func (m *CreateSpecType) FromGlobalSpecType(f *GlobalSpecType) {
@@ -600,6 +451,7 @@ func (m *CreateSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) 
 	}
 	_ = m1
 
+	f.Type = m1.Type
 }
 
 func (m *CreateSpecType) ToGlobalSpecType(f *GlobalSpecType) {
@@ -614,6 +466,7 @@ func (m *GetSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	if f == nil {
 		return
 	}
+	m.Type = f.GetType()
 }
 
 func (m *GetSpecType) FromGlobalSpecType(f *GlobalSpecType) {
@@ -631,6 +484,7 @@ func (m *GetSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	}
 	_ = m1
 
+	f.Type = m1.Type
 }
 
 func (m *GetSpecType) ToGlobalSpecType(f *GlobalSpecType) {
@@ -645,6 +499,7 @@ func (m *ReplaceSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy boo
 	if f == nil {
 		return
 	}
+	m.Type = f.GetType()
 }
 
 func (m *ReplaceSpecType) FromGlobalSpecType(f *GlobalSpecType) {
@@ -662,6 +517,7 @@ func (m *ReplaceSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool)
 	}
 	_ = m1
 
+	f.Type = m1.Type
 }
 
 func (m *ReplaceSpecType) ToGlobalSpecType(f *GlobalSpecType) {

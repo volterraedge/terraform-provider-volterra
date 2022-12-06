@@ -2349,8 +2349,8 @@ var APISwaggerJSON string = `{
                     "title": "Server CA certificates"
                 },
                 "volterra_ca": {
-                    "description": "x-displayName: \"Default Volterra CA\"\nUse Volterra default CA",
-                    "title": "Default Volterra CA",
+                    "description": "x-displayName: \"Default F5XC CA\"\nUse F5XC default CA",
+                    "title": "Default F5XC CA",
                     "$ref": "#/definitions/ioschemaEmpty"
                 }
             }
@@ -2995,10 +2995,10 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "volterra_ca": {
-                    "description": "Exclusive with [trusted_ca_url]\n Use Volterra default CA",
-                    "title": "Default Volterra CA",
+                    "description": "Exclusive with [trusted_ca_url]\n Use F5XC default CA",
+                    "title": "Default F5XC CA",
                     "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "Default Volterra CA"
+                    "x-displayname": "Default F5XC CA"
                 }
             }
         },
@@ -3076,7 +3076,7 @@ var APISwaggerJSON string = `{
         },
         "schemaBlindfoldSecretInfoType": {
             "type": "object",
-            "description": "BlindfoldSecretInfoType specifies information about the Secret managed by Volterra Secret Management",
+            "description": "BlindfoldSecretInfoType specifies information about the Secret managed by F5XC Secret Management",
             "title": "BlindfoldSecretInfoType",
             "x-displayname": "Blindfold Secret",
             "x-ves-displayorder": "3,1,2",
@@ -3550,7 +3550,7 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.SecretType",
             "properties": {
                 "blindfold_secret_info": {
-                    "description": "Exclusive with [clear_secret_info]\n Blindfold Secret is used for the secrets managed by Volterra Secret Management Service",
+                    "description": "Exclusive with [clear_secret_info]\n Blindfold Secret is used for the secrets managed by F5XC Secret Management Service",
                     "title": "Blindfold Secret",
                     "$ref": "#/definitions/schemaBlindfoldSecretInfoType",
                     "x-displayname": "Blindfold Secret"
@@ -4012,12 +4012,14 @@ var APISwaggerJSON string = `{
         },
         "viewsSiteNetwork": {
             "type": "string",
-            "description": "x-displayName: \"Site Network\"\nThis defines network types to be used on site\n\n - SITE_NETWORK_INSIDE_AND_OUTSIDE: x-displayName: \"Inside and Outside Network\"\nAll inside and outside networks.\n - SITE_NETWORK_INSIDE: x-displayName: \"Inside Network\"\nAll inside networks.\n - SITE_NETWORK_OUTSIDE: x-displayName: \"Outside Network\"\nAll outside networks.\n - SITE_NETWORK_SERVICE: x-displayName: \"vK8s Service Network\"\nvK8s service network.",
+            "description": "x-displayName: \"Site Network\"\nThis defines network types to be used on site\n\n - SITE_NETWORK_INSIDE_AND_OUTSIDE: x-displayName: \"Inside and Outside Network\"\nAll inside and outside networks.\n - SITE_NETWORK_INSIDE_AND_OUTSIDE_WITH_INTERNET_VIP: x-displayName: \"Inside and Outside Network with Internet VIP\"\nAll inside and outside networks with internet VIP support.\n - SITE_NETWORK_INSIDE: x-displayName: \"Inside Network\"\nAll inside networks.\n - SITE_NETWORK_OUTSIDE: x-displayName: \"Outside Network\"\nAll outside networks.\n - SITE_NETWORK_OUTSIDE_WITH_INTERNET_VIP: x-displayName: \"Outside Network with internet VIP\"\nAll outside networks with internet VIP support.\n - SITE_NETWORK_SERVICE: x-displayName: \"vK8s Service Network\"\nvK8s service network.",
             "title": "SiteNetwork",
             "enum": [
                 "SITE_NETWORK_INSIDE_AND_OUTSIDE",
+                "SITE_NETWORK_INSIDE_AND_OUTSIDE_WITH_INTERNET_VIP",
                 "SITE_NETWORK_INSIDE",
                 "SITE_NETWORK_OUTSIDE",
+                "SITE_NETWORK_OUTSIDE_WITH_INTERNET_VIP",
                 "SITE_NETWORK_SERVICE"
             ],
             "default": "SITE_NETWORK_INSIDE_AND_OUTSIDE"

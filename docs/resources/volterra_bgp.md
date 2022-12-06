@@ -34,7 +34,7 @@ resource "volterra_bgp" "example" {
     bgp_router_id_key  = "value"
     bgp_router_id_type = "bgp_router_id_type"
 
-    // One of the arguments from this list "local_address from_site ip_address" must be set
+    // One of the arguments from this list "from_site ip_address local_address" must be set
     local_address = true
   }
 
@@ -46,50 +46,39 @@ resource "volterra_bgp" "example" {
     }
 
     // One of the arguments from this list "passive_mode_disabled passive_mode_enabled" must be set
-    passive_mode_disabled = true
-    target_service        = "value"
+    passive_mode_enabled = true
+    target_service       = "value"
 
     // One of the arguments from this list "external internal" must be set
 
-    internal {
-      // One of the arguments from this list "address from_site dns_name" must be set
-      address = "address"
+    external {
+      // One of the arguments from this list "address subnet_begin_offset subnet_end_offset from_site default_gateway" must be set
+      from_site = true
+      asn       = "64512"
 
-      family_inet6vpn {
+      family_inet {
         // One of the arguments from this list "enable disable" must be set
         enable = true
       }
 
-      family_inetvpn {
-        // One of the arguments from this list "enable disable" must be set
+      // One of the arguments from this list "interface interface_list inside_interfaces outside_interfaces" must be set
 
-        enable {
-          // One of the arguments from this list "enable disable" must be set
-          enable = true
-        }
+      interface {
+        name      = "test1"
+        namespace = "staging"
+        tenant    = "acmecorp"
       }
-
-      family_rtarget {
-        // One of the arguments from this list "enable disable" must be set
-        enable = true
-      }
-
-      family_uuidvpn {
-        // One of the arguments from this list "enable disable" must be set
-        enable = true
-      }
-
-      // One of the arguments from this list "disable_mtls enable_mtls" must be set
-      enable_mtls = true
-      port        = "179"
+      port = "179"
     }
   }
 
   where {
-    // One of the arguments from this list "virtual_site site" must be set
+    // One of the arguments from this list "site virtual_site" must be set
 
-    site {
-      network_type = "network_type"
+    virtual_site {
+      // One of the arguments from this list "disable_internet_vip enable_internet_vip" must be set
+      disable_internet_vip = true
+      network_type         = "network_type"
 
       ref {
         name      = "test1"
@@ -161,6 +150,10 @@ Use the default gateway address..
 
 Disable the IPv4 Unicast family..
 
+### Disable Internet Vip
+
+Do not enable advertise on external internet vip..
+
 ### Disable Mtls
 
 Disable MTLS.
@@ -168,6 +161,10 @@ Disable MTLS.
 ### Enable
 
 Enable the IPv4 Unicast family..
+
+### Enable Internet Vip
+
+Enable advertise on internet vip. Only supported for AWS TGW Site or AWS VPC Site..
 
 ### Enable Mtls
 
@@ -347,6 +344,10 @@ tenant - (Optional) then tenant will hold the referred object's(e.g. route's) te
 
 Direct reference to site object.
 
+`disable_internet_vip` - (Optional) Do not enable advertise on external internet vip. (bool).
+
+`enable_internet_vip` - (Optional) Enable advertise on internet vip. Only supported for AWS TGW Site or AWS VPC Site. (bool).
+
 `network_type` - (Optional) The type of network on the referred site (`String`).
 
 `ref` - (Optional) A site direct reference. See [ref](#ref) below for details.
@@ -354,6 +355,10 @@ Direct reference to site object.
 ### Virtual Site
 
 Direct reference to virtual site object.
+
+`disable_internet_vip` - (Optional) Do not enable advertise on external internet vip. (bool).
+
+`enable_internet_vip` - (Optional) Enable advertise on internet vip. Only supported for AWS TGW Site or AWS VPC Site. (bool).
 
 `network_type` - (Optional) The type of network on the referred virtual_site (`String`).
 

@@ -3314,7 +3314,7 @@ var APISwaggerJSON string = `{
         },
         "wafAppProfile": {
             "type": "object",
-            "description": "AppProfile contains different properties of the target App being protected by this WAF instance. For eg\nthere can be multiple CMS type supported by this WAF instance and if enabled , rules for\nthose CMS type will be enabled . Volterra WAF Rules Processor uses this information to include/exclude WAF\nsecurity rules which are relevant for this App Profile.",
+            "description": "AppProfile contains different properties of the target App being protected by this WAF instance. For eg\nthere can be multiple CMS type supported by this WAF instance and if enabled , rules for\nthose CMS type will be enabled . F5XC WAF Rules Processor uses this information to include/exclude WAF\nsecurity rules which are relevant for this App Profile.",
             "title": "AppProfile",
             "x-displayname": "App Profile",
             "x-ves-proto-message": "ves.io.schema.waf.AppProfile",

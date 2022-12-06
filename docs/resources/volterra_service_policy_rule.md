@@ -25,31 +25,17 @@ resource "volterra_service_policy_rule" "example" {
   any_asn          = true
   challenge_action = ["challenge_action"]
 
-  // One of the arguments from this list "any_client client_name ip_threat_category_list client_selector client_name_matcher" must be set
+  // One of the arguments from this list "ip_threat_category_list client_selector client_name_matcher any_client client_name" must be set
   any_client = true
 
   // One of the arguments from this list "any_ip ip_prefix_list ip_matcher" must be set
   any_ip = true
 
   waf_action {
-    // One of the arguments from this list "waf_in_monitoring_mode app_firewall_detection_control data_guard_control none waf_skip_processing waf_rule_control waf_inline_rule_control" must be set
+    // One of the arguments from this list "none waf_skip_processing waf_rule_control waf_inline_rule_control waf_in_monitoring_mode app_firewall_detection_control data_guard_control" must be set
 
-    app_firewall_detection_control {
-      exclude_attack_type_contexts {
-        exclude_attack_type = "ATTACK_TYPE_SQL_INJECTION"
-      }
-
-      exclude_bot_name_contexts {
-        bot_name = "Hydra"
-      }
-
-      exclude_signature_contexts {
-        signature_id = "10000001"
-      }
-
-      exclude_violation_contexts {
-        exclude_violation = "VIOL_MANDATORY_HEADER"
-      }
+    data_guard_control {
+      policy_name = "value"
     }
   }
 }
@@ -568,6 +554,8 @@ The predicate evaluates to true if the expressions in the label selector are tru
 Shape Protected Endpoint Action that include application traffic type and mitigation.
 
 `app_traffic_type` - (Required) Traffic type (`String`).
+
+`flow_label` - (Required) Flow label (`String`).
 
 `mitigation` - (Required) Mitigation action for protected endpoint. See [Mitigation ](#mitigation) below for details.
 

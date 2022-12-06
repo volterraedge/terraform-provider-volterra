@@ -1708,6 +1708,39 @@ func (v *ValidateServiceSlugChoice) Validate(ctx context.Context, pm interface{}
 				return err
 			}
 		}
+	case *ServiceSlugChoice_LogReceiver:
+		if fv, exists := v.FldValidators["choice.log_receiver"]; exists {
+			val := m.GetChoice().(*ServiceSlugChoice_LogReceiver).LogReceiver
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("log_receiver"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ServiceSlugChoice_ObservabilityConnector:
+		if fv, exists := v.FldValidators["choice.observability_connector"]; exists {
+			val := m.GetChoice().(*ServiceSlugChoice_ObservabilityConnector).ObservabilityConnector
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("observability_connector"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ServiceSlugChoice_Report:
+		if fv, exists := v.FldValidators["choice.report"]; exists {
+			val := m.GetChoice().(*ServiceSlugChoice_Report).Report
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("report"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 

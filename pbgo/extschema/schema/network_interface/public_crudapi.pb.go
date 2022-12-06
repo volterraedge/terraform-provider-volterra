@@ -5,7 +5,7 @@
 //
 // x-displayName: "Network Interface"
 // Network Interface object represents the configuration of a network device in a fleet of
-// Volterra Customer Edge sites. The following properties can be configured in this object:
+// F5XC Customer Edge sites. The following properties can be configured in this object:
 //
 //    IP address allocation scheme of the network interface (dhcp or static). Virtual Network of this network interface, Whether to run a DHCP server on this interface
 //

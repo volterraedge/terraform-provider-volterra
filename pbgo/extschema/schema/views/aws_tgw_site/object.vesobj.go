@@ -1288,6 +1288,15 @@ func (v *ValidateStatusObject) Validate(ctx context.Context, pm interface{}, opt
 
 	}
 
+	if fv, exists := v.FldValidators["deployment"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("deployment"))
+		if err := fv(ctx, e.GetDeployment(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["metadata"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("metadata"))

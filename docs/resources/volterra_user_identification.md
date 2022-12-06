@@ -21,8 +21,8 @@ resource "volterra_user_identification" "example" {
   namespace = "staging"
 
   rules {
-    // One of the arguments from this list "cookie_name none client_asn tls_fingerprint ip_and_http_header_name ip_and_tls_fingerprint client_ip query_param_key http_header_name" must be set
-    cookie_name = "Session"
+    // One of the arguments from this list "client_asn ip_and_http_header_name ip_and_tls_fingerprint client_country client_region client_city http_header_name cookie_name none tls_fingerprint client_ip query_param_key" must be set
+    client_ip = true
   }
 }
 
@@ -53,9 +53,21 @@ Argument Reference
 
 The client ASN is obtained by performing a lookup for the client IP Address in a GeoIP DB..
 
+### Client City
+
+The client city is obtained by performing a lookup for the client IP Address in a GeoIP DB..
+
+### Client Country
+
+The client country is obtained by performing a lookup for the client IP Address in a GeoIP DB..
+
 ### Client Ip
 
 Use client IP address as user identifier..
+
+### Client Region
+
+The client region is obtained by performing a lookup for the client IP Address in a GeoIP DB..
 
 ### Ip And Tls Fingerprint
 
@@ -71,13 +83,19 @@ Evaluation of the rules is terminated once a user identifier has been extracted.
 
 `client_asn` - (Optional) The client ASN is obtained by performing a lookup for the client IP Address in a GeoIP DB. (bool).
 
+`client_city` - (Optional) The client city is obtained by performing a lookup for the client IP Address in a GeoIP DB. (bool).
+
+`client_country` - (Optional) The client country is obtained by performing a lookup for the client IP Address in a GeoIP DB. (bool).
+
 `client_ip` - (Optional) Use client IP address as user identifier. (bool).
+
+`client_region` - (Optional) The client region is obtained by performing a lookup for the client IP Address in a GeoIP DB. (bool).
 
 `cookie_name` - (Optional) Use the HTTP cookie value for the given name as user identifier. (`String`).
 
 `http_header_name` - (Optional) Use the HTTP header value for the given name as user identifier. (`String`).
 
-`ip_and_http_header_name` - (Optional) Use the combination of Client IP and HTTP header value for the given name as user identifier. (`String`).
+`ip_and_http_header_name` - (Optional) Name of HTTP header from which the value should be extracted. (`String`).
 
 `ip_and_tls_fingerprint` - (Optional) Use the combination of Client IP and TLS Fingerprint as user identifier. (bool).
 

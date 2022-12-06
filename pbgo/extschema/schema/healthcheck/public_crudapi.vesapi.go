@@ -2601,16 +2601,20 @@ var APISwaggerJSON string = `{
             "properties": {
                 "expected_status_codes": {
                     "type": "array",
-                    "description": " Specifies a list of HTTP response status codes considered healthy. To treat default HTTP expected\n status code 200 as healthy, user has to configure it explicitly. This is a list of strings, each\n of which is single HTTP status code or a range with start and end values separated by \"-\".\n\nExample: - \"200-250\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.http_status_range: true\n  ves.io.schema.rules.repeated.max_items: 16\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " Specifies a list of HTTP response status codes considered healthy. To treat default HTTP expected\n status code 200 as healthy, user has to configure it explicitly. This is a list of strings, each\n of which is single HTTP status code or a range with start and end values separated by \"-\".\n\nExample: - \"200-250\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.http_status_range: true\n  ves.io.schema.rules.repeated.items.string.max_len: 10\n  ves.io.schema.rules.repeated.items.string.min_len: 3\n  ves.io.schema.rules.repeated.max_items: 16\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "Expected Status Codes",
                     "maxItems": 16,
                     "items": {
-                        "type": "string"
+                        "type": "string",
+                        "minLength": 3,
+                        "maxLength": 10
                     },
                     "x-displayname": "Expected Status Codes",
                     "x-ves-example": "200-250",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.repeated.items.string.http_status_range": "true",
+                        "ves.io.schema.rules.repeated.items.string.max_len": "10",
+                        "ves.io.schema.rules.repeated.items.string.min_len": "3",
                         "ves.io.schema.rules.repeated.max_items": "16",
                         "ves.io.schema.rules.repeated.unique": "true"
                     }

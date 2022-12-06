@@ -334,7 +334,7 @@ func (MetricLabelOp) EnumDescriptor() ([]byte, []int) {
 // x-displayName: "App Profile"
 // AppProfile contains different properties of the target App being protected by this WAF instance. For eg
 // there can be multiple CMS type supported by this WAF instance and if enabled , rules for
-// those CMS type will be enabled . Volterra WAF Rules Processor uses this information to include/exclude WAF
+// those CMS type will be enabled . F5XC WAF Rules Processor uses this information to include/exclude WAF
 // security rules which are relevant for this App Profile.
 type AppProfile struct {
 	// Languages

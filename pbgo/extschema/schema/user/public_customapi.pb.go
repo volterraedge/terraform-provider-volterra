@@ -882,7 +882,7 @@ type ListUserRoleResponseItem struct {
 	// IDM type
 	//
 	// x-displayName: "Identity Management Type"
-	// Identity management type of the user (Volterra Managed, SSO)
+	// Identity management type of the user (F5XC Managed, SSO)
 	IdmType IdmType `protobuf:"varint,10,opt,name=idm_type,json=idmType,proto3,enum=ves.io.schema.user.IdmType" json:"idm_type,omitempty"`
 	//  Domain Owner
 	//
@@ -1206,7 +1206,7 @@ type GetUserRoleResponse struct {
 	// IDM type
 	//
 	// x-displayName: "Identity Management Type"
-	// Identity management type of the user (Volterra Managed, SSO)
+	// Identity management type of the user (F5XC Managed, SSO)
 	IdmType IdmType `protobuf:"varint,13,opt,name=idm_type,json=idmType,proto3,enum=ves.io.schema.user.IdmType" json:"idm_type,omitempty"`
 	//  Domain Owner
 	//

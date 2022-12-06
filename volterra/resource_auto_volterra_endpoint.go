@@ -169,6 +169,18 @@ func resourceVolterraEndpoint() *schema.Resource {
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
+									"disable_internet_vip": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+
+									"enable_internet_vip": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+
 									"network_type": {
 										Type:     schema.TypeString,
 										Optional: true,
@@ -249,6 +261,18 @@ func resourceVolterraEndpoint() *schema.Resource {
 							Optional: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
+
+									"disable_internet_vip": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+
+									"enable_internet_vip": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
 
 									"network_type": {
 										Type:     schema.TypeString,
@@ -522,6 +546,32 @@ func resourceVolterraEndpointCreate(d *schema.ResourceData, meta interface{}) er
 				for _, set := range sl {
 					cs := set.(map[string]interface{})
 
+					internetVipChoiceTypeFound := false
+
+					if v, ok := cs["disable_internet_vip"]; ok && !isIntfNil(v) && !internetVipChoiceTypeFound {
+
+						internetVipChoiceTypeFound = true
+
+						if v.(bool) {
+							internetVipChoiceInt := &ves_io_schema.SiteRefType_DisableInternetVip{}
+							internetVipChoiceInt.DisableInternetVip = &ves_io_schema.Empty{}
+							refOrSelectorInt.Site.InternetVipChoice = internetVipChoiceInt
+						}
+
+					}
+
+					if v, ok := cs["enable_internet_vip"]; ok && !isIntfNil(v) && !internetVipChoiceTypeFound {
+
+						internetVipChoiceTypeFound = true
+
+						if v.(bool) {
+							internetVipChoiceInt := &ves_io_schema.SiteRefType_EnableInternetVip{}
+							internetVipChoiceInt.EnableInternetVip = &ves_io_schema.Empty{}
+							refOrSelectorInt.Site.InternetVipChoice = internetVipChoiceInt
+						}
+
+					}
+
 					if v, ok := cs["network_type"]; ok && !isIntfNil(v) {
 
 						refOrSelectorInt.Site.NetworkType = ves_io_schema.VirtualNetworkType(ves_io_schema.VirtualNetworkType_value[v.(string)])
@@ -621,6 +671,32 @@ func resourceVolterraEndpointCreate(d *schema.ResourceData, meta interface{}) er
 				sl := v.(*schema.Set).List()
 				for _, set := range sl {
 					cs := set.(map[string]interface{})
+
+					internetVipChoiceTypeFound := false
+
+					if v, ok := cs["disable_internet_vip"]; ok && !isIntfNil(v) && !internetVipChoiceTypeFound {
+
+						internetVipChoiceTypeFound = true
+
+						if v.(bool) {
+							internetVipChoiceInt := &ves_io_schema.VSiteRefType_DisableInternetVip{}
+							internetVipChoiceInt.DisableInternetVip = &ves_io_schema.Empty{}
+							refOrSelectorInt.VirtualSite.InternetVipChoice = internetVipChoiceInt
+						}
+
+					}
+
+					if v, ok := cs["enable_internet_vip"]; ok && !isIntfNil(v) && !internetVipChoiceTypeFound {
+
+						internetVipChoiceTypeFound = true
+
+						if v.(bool) {
+							internetVipChoiceInt := &ves_io_schema.VSiteRefType_EnableInternetVip{}
+							internetVipChoiceInt.EnableInternetVip = &ves_io_schema.Empty{}
+							refOrSelectorInt.VirtualSite.InternetVipChoice = internetVipChoiceInt
+						}
+
+					}
 
 					if v, ok := cs["network_type"]; ok && !isIntfNil(v) {
 
@@ -937,6 +1013,32 @@ func resourceVolterraEndpointUpdate(d *schema.ResourceData, meta interface{}) er
 				for _, set := range sl {
 					cs := set.(map[string]interface{})
 
+					internetVipChoiceTypeFound := false
+
+					if v, ok := cs["disable_internet_vip"]; ok && !isIntfNil(v) && !internetVipChoiceTypeFound {
+
+						internetVipChoiceTypeFound = true
+
+						if v.(bool) {
+							internetVipChoiceInt := &ves_io_schema.SiteRefType_DisableInternetVip{}
+							internetVipChoiceInt.DisableInternetVip = &ves_io_schema.Empty{}
+							refOrSelectorInt.Site.InternetVipChoice = internetVipChoiceInt
+						}
+
+					}
+
+					if v, ok := cs["enable_internet_vip"]; ok && !isIntfNil(v) && !internetVipChoiceTypeFound {
+
+						internetVipChoiceTypeFound = true
+
+						if v.(bool) {
+							internetVipChoiceInt := &ves_io_schema.SiteRefType_EnableInternetVip{}
+							internetVipChoiceInt.EnableInternetVip = &ves_io_schema.Empty{}
+							refOrSelectorInt.Site.InternetVipChoice = internetVipChoiceInt
+						}
+
+					}
+
 					if v, ok := cs["network_type"]; ok && !isIntfNil(v) {
 
 						refOrSelectorInt.Site.NetworkType = ves_io_schema.VirtualNetworkType(ves_io_schema.VirtualNetworkType_value[v.(string)])
@@ -1036,6 +1138,32 @@ func resourceVolterraEndpointUpdate(d *schema.ResourceData, meta interface{}) er
 				sl := v.(*schema.Set).List()
 				for _, set := range sl {
 					cs := set.(map[string]interface{})
+
+					internetVipChoiceTypeFound := false
+
+					if v, ok := cs["disable_internet_vip"]; ok && !isIntfNil(v) && !internetVipChoiceTypeFound {
+
+						internetVipChoiceTypeFound = true
+
+						if v.(bool) {
+							internetVipChoiceInt := &ves_io_schema.VSiteRefType_DisableInternetVip{}
+							internetVipChoiceInt.DisableInternetVip = &ves_io_schema.Empty{}
+							refOrSelectorInt.VirtualSite.InternetVipChoice = internetVipChoiceInt
+						}
+
+					}
+
+					if v, ok := cs["enable_internet_vip"]; ok && !isIntfNil(v) && !internetVipChoiceTypeFound {
+
+						internetVipChoiceTypeFound = true
+
+						if v.(bool) {
+							internetVipChoiceInt := &ves_io_schema.VSiteRefType_EnableInternetVip{}
+							internetVipChoiceInt.EnableInternetVip = &ves_io_schema.Empty{}
+							refOrSelectorInt.VirtualSite.InternetVipChoice = internetVipChoiceInt
+						}
+
+					}
 
 					if v, ok := cs["network_type"]; ok && !isIntfNil(v) {
 

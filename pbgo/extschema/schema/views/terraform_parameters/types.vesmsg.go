@@ -175,6 +175,102 @@ func ApplyStatusValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *DeploymentStatusType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *DeploymentStatusType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *DeploymentStatusType) DeepCopy() *DeploymentStatusType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &DeploymentStatusType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *DeploymentStatusType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *DeploymentStatusType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return DeploymentStatusTypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateDeploymentStatusType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateDeploymentStatusType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*DeploymentStatusType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *DeploymentStatusType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["apply_status"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("apply_status"))
+		if err := fv(ctx, m.GetApplyStatus(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["expected_container_version"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("expected_container_version"))
+		if err := fv(ctx, m.GetExpectedContainerVersion(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["plan_status"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("plan_status"))
+		if err := fv(ctx, m.GetPlanStatus(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultDeploymentStatusTypeValidator = func() *ValidateDeploymentStatusType {
+	v := &ValidateDeploymentStatusType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func DeploymentStatusTypeValidator() db.Validator {
+	return DefaultDeploymentStatusTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *GlobalSpecType) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }

@@ -237,6 +237,13 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		mdr.MsgIdx["ves.io.schema.DaemonTlsParametersType"] = mInfo
 	}
 	mInfo = &svcfw.MsgInfo{
+		Name:     "DcClusterGroupStatus",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.DcClusterGroupStatus"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
 		Name:     "OperMetaType",
 		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
 	}
@@ -249,6 +256,13 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	}
 	if mdr.MsgIdx != nil {
 		mdr.MsgIdx["ves.io.schema.ServiceParameters"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "SiteMeshGroupStatus",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.SiteMeshGroupStatus"] = mInfo
 	}
 	mInfo = &svcfw.MsgInfo{
 		Name:     "SuggestValuesResp",
@@ -342,6 +356,62 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		mdr.MsgIdx["ves.io.schema.BlindfoldSecretInfoType"] = mInfo
 	}
 	mInfo = &svcfw.MsgInfo{
+		Name:     "BotDefenseFlowLabelAccountManagementChoiceType",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.BotDefenseFlowLabelAccountManagementChoiceType"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "BotDefenseFlowLabelAuthenticationChoiceType",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.BotDefenseFlowLabelAuthenticationChoiceType"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "BotDefenseFlowLabelCategoriesChoiceType",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.BotDefenseFlowLabelCategoriesChoiceType"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "BotDefenseFlowLabelFinancialServicesChoiceType",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.BotDefenseFlowLabelFinancialServicesChoiceType"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "BotDefenseFlowLabelFlightChoiceType",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.BotDefenseFlowLabelFlightChoiceType"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "BotDefenseFlowLabelProfileManagementChoiceType",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.BotDefenseFlowLabelProfileManagementChoiceType"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "BotDefenseFlowLabelSearchChoiceType",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.BotDefenseFlowLabelSearchChoiceType"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "BotDefenseFlowLabelShoppingGiftCardsChoiceType",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.BotDefenseFlowLabelShoppingGiftCardsChoiceType"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
 		Name:     "BufferConfigType",
 		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
 	}
@@ -368,6 +438,13 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	}
 	if mdr.MsgIdx != nil {
 		mdr.MsgIdx["ves.io.schema.CorsPolicy"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "CsrfPolicy",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.CsrfPolicy"] = mInfo
 	}
 	mInfo = &svcfw.MsgInfo{
 		Name:     "DomainNameList",
@@ -10798,13 +10875,6 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		mdr.MsgIdx["ves.io.schema.dc_cluster_group.DCClusterGroupMeshType"] = mInfo
 	}
 	mInfo = &svcfw.MsgInfo{
-		Name:     "DcClusterGroupStatus",
-		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
-	}
-	if mdr.MsgIdx != nil {
-		mdr.MsgIdx["ves.io.schema.dc_cluster_group.DcClusterGroupStatus"] = mInfo
-	}
-	mInfo = &svcfw.MsgInfo{
 		Name:     "GetSpecType",
 		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
 	}
@@ -12927,6 +12997,324 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	}
 	if mdr.MsgIdx != nil {
 		mdr.MsgIdx["ves.io.schema.dns_zone.crudapi.ObjectReplaceRsp"] = mInfo
+	}
+
+	pInfo = &svcfw.PkgInfo{
+		Name:      svcfw.PkgName("ves.io.schema.dos_mitigation"),
+		GoName:    "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/dos_mitigation",
+		IsExtSch:  false,
+		FilesInfo: make(map[string]*svcfw.FileInfo),
+	}
+	mdr.PkgsInfo["ves.io.schema.dos_mitigation"] = pInfo
+
+	fInfo = &svcfw.FileInfo{
+		Name:        "ves.io/schema/dos_mitigation/object.proto",
+		MetricsInfo: make(map[svcfw.MetricName]*svcfw.MetricInfo),
+		ConfsInfo:   make(map[svcfw.ConfName]*svcfw.ConfInfo),
+		ObjsInfo:    make(map[svcfw.ObjType]*svcfw.ObjInfo),
+		APIsInfo:    make(map[svcfw.APIName]*svcfw.APIInfo),
+		MsgsInfo:    make(map[string]*svcfw.MsgInfo),
+	}
+	pInfo.FilesInfo["ves.io/schema/dos_mitigation/object.proto"] = fInfo
+	if mdr.FileIdx != nil {
+		mdr.FileIdx["ves.io/schema/dos_mitigation/object.proto"] = fInfo
+	}
+
+	oInfo = &svcfw.ObjInfo{
+		Name:             svcfw.ObjType("Object"),
+		IsSDRO:           true,
+		FldsInfo:         make(map[svcfw.FldName]*svcfw.FldInfo),
+		FldTypesInfo:     make(map[svcfw.FldType][]*svcfw.FldInfo),
+		KeysInfo:         make(map[svcfw.FldName]*svcfw.KeyInfo),
+		ReEncryptSecrets: make(map[string]*svcfw.ReEncryptBFSecretInfo),
+	}
+
+	fInfo.ObjsInfo[svcfw.ObjType("Object")] = oInfo
+	if mdr.ObjIdx != nil {
+		mdr.ObjIdx["ves.io.schema.dos_mitigation.Object"] = oInfo
+	}
+
+	oInfo = &svcfw.ObjInfo{
+		Name:             svcfw.ObjType("StatusObject"),
+		IsSDRO:           false,
+		FldsInfo:         make(map[svcfw.FldName]*svcfw.FldInfo),
+		FldTypesInfo:     make(map[svcfw.FldType][]*svcfw.FldInfo),
+		KeysInfo:         make(map[svcfw.FldName]*svcfw.KeyInfo),
+		ReEncryptSecrets: make(map[string]*svcfw.ReEncryptBFSecretInfo),
+	}
+
+	fInfo.ObjsInfo[svcfw.ObjType("StatusObject")] = oInfo
+	if mdr.ObjIdx != nil {
+		mdr.ObjIdx["ves.io.schema.dos_mitigation.StatusObject"] = oInfo
+	}
+
+	keyInfo = &svcfw.KeyInfo{
+		Type: svcfw.KeyType(2),
+	}
+	oInfo.KeysInfo[svcfw.FldName("metadata.uid")] = keyInfo
+	if mdr.KeyIdx != nil {
+		mdr.KeyIdx["ves.io.schema.dos_mitigation.StatusObject.metadata.uid"] = keyInfo
+	}
+
+	mInfo = &svcfw.MsgInfo{
+		Name:     "SpecType",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.dos_mitigation.SpecType"] = mInfo
+	}
+
+	fInfo = &svcfw.FileInfo{
+		Name:        "ves.io/schema/dos_mitigation/types.proto",
+		MetricsInfo: make(map[svcfw.MetricName]*svcfw.MetricInfo),
+		ConfsInfo:   make(map[svcfw.ConfName]*svcfw.ConfInfo),
+		ObjsInfo:    make(map[svcfw.ObjType]*svcfw.ObjInfo),
+		APIsInfo:    make(map[svcfw.APIName]*svcfw.APIInfo),
+		MsgsInfo:    make(map[string]*svcfw.MsgInfo),
+	}
+	pInfo.FilesInfo["ves.io/schema/dos_mitigation/types.proto"] = fInfo
+	if mdr.FileIdx != nil {
+		mdr.FileIdx["ves.io/schema/dos_mitigation/types.proto"] = fInfo
+	}
+
+	mInfo = &svcfw.MsgInfo{
+		Name:     "CreateSpecType",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.dos_mitigation.CreateSpecType"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "Destination",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.dos_mitigation.Destination"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "DoSMitigationRuleInfo",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.dos_mitigation.DoSMitigationRuleInfo"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "GetSpecType",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.dos_mitigation.GetSpecType"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "GlobalSpecType",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.dos_mitigation.GlobalSpecType"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "ReplaceSpecType",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.dos_mitigation.ReplaceSpecType"] = mInfo
+	}
+
+	pInfo = &svcfw.PkgInfo{
+		Name:      svcfw.PkgName("ves.io.schema.dos_mitigation.crudapi"),
+		GoName:    "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/dos_mitigation/crudapi",
+		IsExtSch:  false,
+		FilesInfo: make(map[string]*svcfw.FileInfo),
+	}
+	mdr.PkgsInfo["ves.io.schema.dos_mitigation.crudapi"] = pInfo
+
+	fInfo = &svcfw.FileInfo{
+		Name:        "ves.io/schema/dos_mitigation/crudapi/api.proto",
+		MetricsInfo: make(map[svcfw.MetricName]*svcfw.MetricInfo),
+		ConfsInfo:   make(map[svcfw.ConfName]*svcfw.ConfInfo),
+		ObjsInfo:    make(map[svcfw.ObjType]*svcfw.ObjInfo),
+		APIsInfo:    make(map[svcfw.APIName]*svcfw.APIInfo),
+		MsgsInfo:    make(map[string]*svcfw.MsgInfo),
+	}
+	pInfo.FilesInfo["ves.io/schema/dos_mitigation/crudapi/api.proto"] = fInfo
+	if mdr.FileIdx != nil {
+		mdr.FileIdx["ves.io/schema/dos_mitigation/crudapi/api.proto"] = fInfo
+	}
+
+	aInfo = &svcfw.APIInfo{
+		Name:        "API",
+		ServiceType: "AUTO_CRUD",
+		IsSDRO:      true,
+		ObjType:     "ves.io.schema.dos_mitigation.Object",
+		RPCsInfo:    make(map[svcfw.RPCName]*svcfw.RPCInfo),
+	}
+
+	rpcInfo = &svcfw.RPCInfo{
+		Name:         "Create",
+		InMsgType:    "ves.io.schema.dos_mitigation.crudapi.ObjectCreateReq",
+		InStreaming:  false,
+		OutMsgType:   "ves.io.schema.dos_mitigation.crudapi.ObjectCreateRsp",
+		OutStreaming: false,
+		IsImmutable:  false,
+		IsDeprecated: false,
+	}
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.dos_mitigation/Objects", "/ves.io.schema.dos_mitigation/introspect/write/Objects"}}
+	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
+	if mdr.RPCIdx != nil {
+		mdr.RPCIdx["ves.io.schema.dos_mitigation.crudapi.API.Create"] = rpcInfo
+	}
+	rpcInfo = &svcfw.RPCInfo{
+		Name:         "Delete",
+		InMsgType:    "ves.io.schema.dos_mitigation.crudapi.ObjectDeleteReq",
+		InStreaming:  false,
+		OutMsgType:   "ves.io.schema.dos_mitigation.crudapi.ObjectDeleteRsp",
+		OutStreaming: false,
+		IsImmutable:  false,
+		IsDeprecated: false,
+	}
+	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.dos_mitigation/Object/{object_uid}", "/ves.io.schema.dos_mitigation/introspect/write/Object/{object_uid}"}}
+	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
+	if mdr.RPCIdx != nil {
+		mdr.RPCIdx["ves.io.schema.dos_mitigation.crudapi.API.Delete"] = rpcInfo
+	}
+	rpcInfo = &svcfw.RPCInfo{
+		Name:         "Get",
+		InMsgType:    "ves.io.schema.dos_mitigation.crudapi.ObjectGetReq",
+		InStreaming:  false,
+		OutMsgType:   "ves.io.schema.dos_mitigation.crudapi.ObjectGetRsp",
+		OutStreaming: false,
+		IsImmutable:  true,
+		IsDeprecated: false,
+	}
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.dos_mitigation/Object/{object_uid}", "/ves.io.schema.dos_mitigation/introspect/read/Object/{object_uid}"}}
+	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
+	if mdr.RPCIdx != nil {
+		mdr.RPCIdx["ves.io.schema.dos_mitigation.crudapi.API.Get"] = rpcInfo
+	}
+	rpcInfo = &svcfw.RPCInfo{
+		Name:         "List",
+		InMsgType:    "ves.io.schema.dos_mitigation.crudapi.ObjectListReq",
+		InStreaming:  false,
+		OutMsgType:   "ves.io.schema.dos_mitigation.crudapi.ObjectListRsp",
+		OutStreaming: false,
+		IsImmutable:  true,
+		IsDeprecated: false,
+	}
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.dos_mitigation/Objects", "/ves.io.schema.dos_mitigation/introspect/read/Objects"}}
+	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
+	if mdr.RPCIdx != nil {
+		mdr.RPCIdx["ves.io.schema.dos_mitigation.crudapi.API.List"] = rpcInfo
+	}
+	rpcInfo = &svcfw.RPCInfo{
+		Name:         "ListStream",
+		InMsgType:    "ves.io.schema.dos_mitigation.crudapi.ObjectListReq",
+		InStreaming:  false,
+		OutMsgType:   "ves.io.schema.dos_mitigation.crudapi.ObjectListRsp",
+		OutStreaming: true,
+		IsImmutable:  false,
+		IsDeprecated: false,
+	}
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.dos_mitigation/Objects/stream"}}
+	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
+	if mdr.RPCIdx != nil {
+		mdr.RPCIdx["ves.io.schema.dos_mitigation.crudapi.API.ListStream"] = rpcInfo
+	}
+	rpcInfo = &svcfw.RPCInfo{
+		Name:         "Replace",
+		InMsgType:    "ves.io.schema.dos_mitigation.crudapi.ObjectReplaceReq",
+		InStreaming:  false,
+		OutMsgType:   "ves.io.schema.dos_mitigation.crudapi.ObjectReplaceRsp",
+		OutStreaming: false,
+		IsImmutable:  false,
+		IsDeprecated: false,
+	}
+	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.dos_mitigation/Object/{object_uid}", "/ves.io.schema.dos_mitigation/introspect/write/Object/{object_uid}"}}
+	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
+	if mdr.RPCIdx != nil {
+		mdr.RPCIdx["ves.io.schema.dos_mitigation.crudapi.API.Replace"] = rpcInfo
+	}
+
+	fInfo.APIsInfo["API"] = aInfo
+	if mdr.APIIdx != nil {
+		mdr.APIIdx["ves.io.schema.dos_mitigation.crudapi.API"] = aInfo
+	}
+
+	mInfo = &svcfw.MsgInfo{
+		Name:     "ObjectCreateReq",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.dos_mitigation.crudapi.ObjectCreateReq"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "ObjectCreateRsp",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.dos_mitigation.crudapi.ObjectCreateRsp"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "ObjectDeleteReq",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.dos_mitigation.crudapi.ObjectDeleteReq"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "ObjectDeleteRsp",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.dos_mitigation.crudapi.ObjectDeleteRsp"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "ObjectGetReq",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.dos_mitigation.crudapi.ObjectGetReq"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "ObjectGetRsp",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.dos_mitigation.crudapi.ObjectGetRsp"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "ObjectListReq",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.dos_mitigation.crudapi.ObjectListReq"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "ObjectListRsp",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.dos_mitigation.crudapi.ObjectListRsp"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "ObjectListRspItem",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.dos_mitigation.crudapi.ObjectListRspItem"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "ObjectReplaceReq",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.dos_mitigation.crudapi.ObjectReplaceReq"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "ObjectReplaceRsp",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.dos_mitigation.crudapi.ObjectReplaceRsp"] = mInfo
 	}
 
 	pInfo = &svcfw.PkgInfo{
@@ -19433,13 +19821,6 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		mdr.MsgIdx["ves.io.schema.l7_acl.CreateSpecType"] = mInfo
 	}
 	mInfo = &svcfw.MsgInfo{
-		Name:     "DestinationType",
-		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
-	}
-	if mdr.MsgIdx != nil {
-		mdr.MsgIdx["ves.io.schema.l7_acl.DestinationType"] = mInfo
-	}
-	mInfo = &svcfw.MsgInfo{
 		Name:     "GetSpecType",
 		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
 	}
@@ -19454,11 +19835,11 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		mdr.MsgIdx["ves.io.schema.l7_acl.GlobalSpecType"] = mInfo
 	}
 	mInfo = &svcfw.MsgInfo{
-		Name:     "L7AclRuleType",
+		Name:     "L7AclRule",
 		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
 	}
 	if mdr.MsgIdx != nil {
-		mdr.MsgIdx["ves.io.schema.l7_acl.L7AclRuleType"] = mInfo
+		mdr.MsgIdx["ves.io.schema.l7_acl.L7AclRule"] = mInfo
 	}
 	mInfo = &svcfw.MsgInfo{
 		Name:     "PathMatcherType",
@@ -21871,7 +22252,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		InStreaming:  false,
 		OutMsgType:   "ves.io.schema.namespace.EvaluateAPIAccessResp",
 		OutStreaming: false,
-		IsImmutable:  false,
+		IsImmutable:  true,
 		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/system/evaluate-api-access"}}
@@ -21885,7 +22266,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		InStreaming:  false,
 		OutMsgType:   "ves.io.schema.namespace.SuggestValuesResp",
 		OutStreaming: false,
-		IsImmutable:  false,
+		IsImmutable:  true,
 		IsDeprecated: false,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{namespace}/suggest-values"}}
@@ -24000,6 +24381,13 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	}
 	if mdr.MsgIdx != nil {
 		mdr.MsgIdx["ves.io.schema.network_interface.VhostInterfaceType"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "VlanInterfaceType",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.network_interface.VlanInterfaceType"] = mInfo
 	}
 
 	pInfo = &svcfw.PkgInfo{
@@ -33586,13 +33974,6 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		mdr.MsgIdx["ves.io.schema.site_mesh_group.ReplaceSpecType"] = mInfo
 	}
 	mInfo = &svcfw.MsgInfo{
-		Name:     "SiteMeshGroupStatus",
-		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
-	}
-	if mdr.MsgIdx != nil {
-		mdr.MsgIdx["ves.io.schema.site_mesh_group.SiteMeshGroupStatus"] = mInfo
-	}
-	mInfo = &svcfw.MsgInfo{
 		Name:     "SpokeMeshGroupType",
 		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
 	}
@@ -35239,7 +35620,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	}
 
 	rpcInfo = &svcfw.RPCInfo{
-		Name:         "Subscribe",
+		Name:         "DelegatedAccessSubscribe",
 		InMsgType:    "ves.io.schema.tenant_management.SubscribeRequest",
 		InStreaming:  false,
 		OutMsgType:   "ves.io.schema.tenant_management.SubscribeResponse",
@@ -35247,13 +35628,13 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		IsImmutable:  false,
 		IsDeprecated: false,
 	}
-	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/system/tenant_management/subscribe"}}
-	aInfo.RPCsInfo[svcfw.RPCName("Subscribe")] = rpcInfo
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/system/tenant_management/delegated_access/subscribe"}}
+	aInfo.RPCsInfo[svcfw.RPCName("DelegatedAccessSubscribe")] = rpcInfo
 	if mdr.RPCIdx != nil {
-		mdr.RPCIdx["ves.io.schema.tenant_management.CustomAPI.Subscribe"] = rpcInfo
+		mdr.RPCIdx["ves.io.schema.tenant_management.CustomAPI.DelegatedAccessSubscribe"] = rpcInfo
 	}
 	rpcInfo = &svcfw.RPCInfo{
-		Name:         "Unsubscribe",
+		Name:         "DelegatedAccessUnsubscribe",
 		InMsgType:    "ves.io.schema.tenant_management.UnsubscribeRequest",
 		InStreaming:  false,
 		OutMsgType:   "ves.io.schema.tenant_management.UnsubscribeResponse",
@@ -35261,10 +35642,10 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		IsImmutable:  false,
 		IsDeprecated: false,
 	}
-	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/system/tenant_management/unsubscribe"}}
-	aInfo.RPCsInfo[svcfw.RPCName("Unsubscribe")] = rpcInfo
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/system/tenant_management/delegated_access/unsubscribe"}}
+	aInfo.RPCsInfo[svcfw.RPCName("DelegatedAccessUnsubscribe")] = rpcInfo
 	if mdr.RPCIdx != nil {
-		mdr.RPCIdx["ves.io.schema.tenant_management.CustomAPI.Unsubscribe"] = rpcInfo
+		mdr.RPCIdx["ves.io.schema.tenant_management.CustomAPI.DelegatedAccessUnsubscribe"] = rpcInfo
 	}
 
 	fInfo.APIsInfo["CustomAPI"] = aInfo
@@ -39931,11 +40312,25 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	}
 
 	mInfo = &svcfw.MsgInfo{
+		Name:     "AWSInternetVIPType",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.views.AWSInternetVIPType"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
 		Name:     "AWSSubnetIdsType",
 		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
 	}
 	if mdr.MsgIdx != nil {
 		mdr.MsgIdx["ves.io.schema.views.AWSSubnetIdsType"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "AWSSubnetInfoType",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.views.AWSSubnetInfoType"] = mInfo
 	}
 	mInfo = &svcfw.MsgInfo{
 		Name:     "AWSVPCOneInterfaceNodeType",
@@ -40977,6 +41372,55 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		FilesInfo: make(map[string]*svcfw.FileInfo),
 	}
 	mdr.PkgsInfo["ves.io.schema.views.api_inventory"] = pInfo
+
+	fInfo = &svcfw.FileInfo{
+		Name:        "ves.io/schema/views/api_inventory/custom_api.proto",
+		MetricsInfo: make(map[svcfw.MetricName]*svcfw.MetricInfo),
+		ConfsInfo:   make(map[svcfw.ConfName]*svcfw.ConfInfo),
+		ObjsInfo:    make(map[svcfw.ObjType]*svcfw.ObjInfo),
+		APIsInfo:    make(map[svcfw.APIName]*svcfw.APIInfo),
+		MsgsInfo:    make(map[string]*svcfw.MsgInfo),
+	}
+	pInfo.FilesInfo["ves.io/schema/views/api_inventory/custom_api.proto"] = fInfo
+	if mdr.FileIdx != nil {
+		mdr.FileIdx["ves.io/schema/views/api_inventory/custom_api.proto"] = fInfo
+	}
+
+	aInfo = &svcfw.APIInfo{
+		Name:        "CustomAPIPrivate",
+		ServiceType: "CUSTOM_PRIVATE",
+		IsSDRO:      false,
+		ObjType:     "ves.io.schema.views.api_inventory.Object",
+		RPCsInfo:    make(map[svcfw.RPCName]*svcfw.RPCInfo),
+	}
+
+	rpcInfo = &svcfw.RPCInfo{
+		Name:         "GetPathSuggestions",
+		InMsgType:    "ves.io.schema.views.api_inventory.GetPathSuggestionsReq",
+		InStreaming:  false,
+		OutMsgType:   "ves.io.schema.SuggestValuesResp",
+		OutStreaming: false,
+		IsImmutable:  true,
+		IsDeprecated: false,
+	}
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/private/namespaces/{namespace}/api_inventories/{name}/api_endpoint_path/suggestion"}}
+	aInfo.RPCsInfo[svcfw.RPCName("GetPathSuggestions")] = rpcInfo
+	if mdr.RPCIdx != nil {
+		mdr.RPCIdx["ves.io.schema.views.api_inventory.CustomAPIPrivate.GetPathSuggestions"] = rpcInfo
+	}
+
+	fInfo.APIsInfo["CustomAPIPrivate"] = aInfo
+	if mdr.APIIdx != nil {
+		mdr.APIIdx["ves.io.schema.views.api_inventory.CustomAPIPrivate"] = aInfo
+	}
+
+	mInfo = &svcfw.MsgInfo{
+		Name:     "GetPathSuggestionsReq",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.views.api_inventory.GetPathSuggestionsReq"] = mInfo
+	}
 
 	fInfo = &svcfw.FileInfo{
 		Name:        "ves.io/schema/views/api_inventory/object.proto",
@@ -45469,6 +45913,20 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	}
 
 	rpcInfo = &svcfw.RPCInfo{
+		Name:         "DeleteDoSAutoMitigationRule",
+		InMsgType:    "ves.io.schema.views.http_loadbalancer.DeleteDoSAutoMitigationRuleReq",
+		InStreaming:  false,
+		OutMsgType:   "ves.io.schema.views.http_loadbalancer.DeleteDoSAutoMitigationRuleRsp",
+		OutStreaming: false,
+		IsImmutable:  true,
+		IsDeprecated: false,
+	}
+	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/public/namespaces/{namespace}/http_loadbalancers/{name}/dos_automitigation_rules/{dos_automitigation_rule_name}"}}
+	aInfo.RPCsInfo[svcfw.RPCName("DeleteDoSAutoMitigationRule")] = rpcInfo
+	if mdr.RPCIdx != nil {
+		mdr.RPCIdx["ves.io.schema.views.http_loadbalancer.CustomAPI.DeleteDoSAutoMitigationRule"] = rpcInfo
+	}
+	rpcInfo = &svcfw.RPCInfo{
 		Name:         "GetDnsInfo",
 		InMsgType:    "ves.io.schema.views.http_loadbalancer.GetDnsInfoRequest",
 		InStreaming:  false,
@@ -45481,6 +45939,20 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	aInfo.RPCsInfo[svcfw.RPCName("GetDnsInfo")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.views.http_loadbalancer.CustomAPI.GetDnsInfo"] = rpcInfo
+	}
+	rpcInfo = &svcfw.RPCInfo{
+		Name:         "GetDoSAutoMitigationRules",
+		InMsgType:    "ves.io.schema.views.http_loadbalancer.GetDoSAutoMitigationRulesReq",
+		InStreaming:  false,
+		OutMsgType:   "ves.io.schema.views.http_loadbalancer.GetDoSAutoMitigationRulesRsp",
+		OutStreaming: false,
+		IsImmutable:  true,
+		IsDeprecated: false,
+	}
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/http_loadbalancers/{name}/dos_automitigation_rules"}}
+	aInfo.RPCsInfo[svcfw.RPCName("GetDoSAutoMitigationRules")] = rpcInfo
+	if mdr.RPCIdx != nil {
+		mdr.RPCIdx["ves.io.schema.views.http_loadbalancer.CustomAPI.GetDoSAutoMitigationRules"] = rpcInfo
 	}
 	rpcInfo = &svcfw.RPCInfo{
 		Name:         "GetSecurityConfig",
@@ -45503,6 +45975,20 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	}
 
 	mInfo = &svcfw.MsgInfo{
+		Name:     "DeleteDoSAutoMitigationRuleReq",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.views.http_loadbalancer.DeleteDoSAutoMitigationRuleReq"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "DeleteDoSAutoMitigationRuleRsp",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.views.http_loadbalancer.DeleteDoSAutoMitigationRuleRsp"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
 		Name:     "GetDnsInfoRequest",
 		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
 	}
@@ -45515,6 +46001,20 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	}
 	if mdr.MsgIdx != nil {
 		mdr.MsgIdx["ves.io.schema.views.http_loadbalancer.GetDnsInfoResponse"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "GetDoSAutoMitigationRulesReq",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.views.http_loadbalancer.GetDoSAutoMitigationRulesReq"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "GetDoSAutoMitigationRulesRsp",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.views.http_loadbalancer.GetDoSAutoMitigationRulesRsp"] = mInfo
 	}
 	mInfo = &svcfw.MsgInfo{
 		Name:     "GetSecurityConfigReq",
@@ -49265,6 +49765,13 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		mdr.MsgIdx["ves.io.schema.views.terraform_parameters.ApplyStatus"] = mInfo
 	}
 	mInfo = &svcfw.MsgInfo{
+		Name:     "DeploymentStatusType",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.views.terraform_parameters.DeploymentStatusType"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
 		Name:     "GlobalSpecType",
 		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
 	}
@@ -50640,6 +51147,27 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	}
 	if mdr.MsgIdx != nil {
 		mdr.MsgIdx["ves.io.schema.virtual_host.CreateSpecType"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "DNSCacheProfile",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.virtual_host.DNSCacheProfile"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "DNSDDoSProfile",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.virtual_host.DNSDDoSProfile"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "DNSProxyConfiguration",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.virtual_host.DNSProxyConfiguration"] = mInfo
 	}
 	mInfo = &svcfw.MsgInfo{
 		Name:     "DNSRecord",

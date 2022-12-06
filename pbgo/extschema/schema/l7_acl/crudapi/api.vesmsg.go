@@ -67,38 +67,7 @@ func (m *ObjectCreateReq) GetDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 	}
 
-	var drInfos []db.DRefInfo
-	if fdrInfos, err := m.GetSpecDRefInfo(); err != nil {
-		return nil, errors.Wrap(err, "GetSpecDRefInfo() FAILED")
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
-	}
-
-	if fdrInfos, err := m.GetSystemMetadataDRefInfo(); err != nil {
-		return nil, errors.Wrap(err, "GetSystemMetadataDRefInfo() FAILED")
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
-	}
-
-	return drInfos, nil
-
-}
-
-// GetDRefInfo for the field's type
-func (m *ObjectCreateReq) GetSpecDRefInfo() ([]db.DRefInfo, error) {
-	if m.GetSpec() == nil {
-		return nil, nil
-	}
-
-	drInfos, err := m.GetSpec().GetDRefInfo()
-	if err != nil {
-		return nil, errors.Wrap(err, "GetSpec().GetDRefInfo() FAILED")
-	}
-	for i := range drInfos {
-		dri := &drInfos[i]
-		dri.DRField = "spec." + dri.DRField
-	}
-	return drInfos, err
+	return m.GetSystemMetadataDRefInfo()
 
 }
 
@@ -227,38 +196,7 @@ func (m *ObjectCreateRsp) GetDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 	}
 
-	var drInfos []db.DRefInfo
-	if fdrInfos, err := m.GetSpecDRefInfo(); err != nil {
-		return nil, errors.Wrap(err, "GetSpecDRefInfo() FAILED")
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
-	}
-
-	if fdrInfos, err := m.GetSystemMetadataDRefInfo(); err != nil {
-		return nil, errors.Wrap(err, "GetSystemMetadataDRefInfo() FAILED")
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
-	}
-
-	return drInfos, nil
-
-}
-
-// GetDRefInfo for the field's type
-func (m *ObjectCreateRsp) GetSpecDRefInfo() ([]db.DRefInfo, error) {
-	if m.GetSpec() == nil {
-		return nil, nil
-	}
-
-	drInfos, err := m.GetSpec().GetDRefInfo()
-	if err != nil {
-		return nil, errors.Wrap(err, "GetSpec().GetDRefInfo() FAILED")
-	}
-	for i := range drInfos {
-		dri := &drInfos[i]
-		dri.DRField = "spec." + dri.DRField
-	}
-	return drInfos, err
+	return m.GetSystemMetadataDRefInfo()
 
 }
 
@@ -670,11 +608,6 @@ func (m *ObjectGetRsp) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	var drInfos []db.DRefInfo
-	if fdrInfos, err := m.GetSpecDRefInfo(); err != nil {
-		return nil, errors.Wrap(err, "GetSpecDRefInfo() FAILED")
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
-	}
 
 	if fdrInfos, err := m.GetSystemMetadataDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetSystemMetadataDRefInfo() FAILED")
@@ -683,24 +616,6 @@ func (m *ObjectGetRsp) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return drInfos, nil
-
-}
-
-// GetDRefInfo for the field's type
-func (m *ObjectGetRsp) GetSpecDRefInfo() ([]db.DRefInfo, error) {
-	if m.GetSpec() == nil {
-		return nil, nil
-	}
-
-	drInfos, err := m.GetSpec().GetDRefInfo()
-	if err != nil {
-		return nil, errors.Wrap(err, "GetSpec().GetDRefInfo() FAILED")
-	}
-	for i := range drInfos {
-		dri := &drInfos[i]
-		dri.DRField = "spec." + dri.DRField
-	}
-	return drInfos, err
 
 }
 
@@ -1150,11 +1065,6 @@ func (m *ObjectListRspItem) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	var drInfos []db.DRefInfo
-	if fdrInfos, err := m.GetSpecDRefInfo(); err != nil {
-		return nil, errors.Wrap(err, "GetSpecDRefInfo() FAILED")
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
-	}
 
 	if fdrInfos, err := m.GetSystemMetadataDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetSystemMetadataDRefInfo() FAILED")
@@ -1163,24 +1073,6 @@ func (m *ObjectListRspItem) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return drInfos, nil
-
-}
-
-// GetDRefInfo for the field's type
-func (m *ObjectListRspItem) GetSpecDRefInfo() ([]db.DRefInfo, error) {
-	if m.GetSpec() == nil {
-		return nil, nil
-	}
-
-	drInfos, err := m.GetSpec().GetDRefInfo()
-	if err != nil {
-		return nil, errors.Wrap(err, "GetSpec().GetDRefInfo() FAILED")
-	}
-	for i := range drInfos {
-		dri := &drInfos[i]
-		dri.DRField = "spec." + dri.DRField
-	}
-	return drInfos, err
 
 }
 
@@ -1366,33 +1258,6 @@ func (m *ObjectReplaceReq) Validate(ctx context.Context, opts ...db.ValidateOpt)
 	return ObjectReplaceReqValidator().Validate(ctx, m, opts...)
 }
 
-func (m *ObjectReplaceReq) GetDRefInfo() ([]db.DRefInfo, error) {
-	if m == nil {
-		return nil, nil
-	}
-
-	return m.GetSpecDRefInfo()
-
-}
-
-// GetDRefInfo for the field's type
-func (m *ObjectReplaceReq) GetSpecDRefInfo() ([]db.DRefInfo, error) {
-	if m.GetSpec() == nil {
-		return nil, nil
-	}
-
-	drInfos, err := m.GetSpec().GetDRefInfo()
-	if err != nil {
-		return nil, errors.Wrap(err, "GetSpec().GetDRefInfo() FAILED")
-	}
-	for i := range drInfos {
-		dri := &drInfos[i]
-		dri.DRField = "spec." + dri.DRField
-	}
-	return drInfos, err
-
-}
-
 type ValidateObjectReplaceReq struct {
 	FldValidators map[string]db.ValidatorFunc
 }
@@ -1507,38 +1372,7 @@ func (m *ObjectReplaceRsp) GetDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 	}
 
-	var drInfos []db.DRefInfo
-	if fdrInfos, err := m.GetSpecDRefInfo(); err != nil {
-		return nil, errors.Wrap(err, "GetSpecDRefInfo() FAILED")
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
-	}
-
-	if fdrInfos, err := m.GetSystemMetadataDRefInfo(); err != nil {
-		return nil, errors.Wrap(err, "GetSystemMetadataDRefInfo() FAILED")
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
-	}
-
-	return drInfos, nil
-
-}
-
-// GetDRefInfo for the field's type
-func (m *ObjectReplaceRsp) GetSpecDRefInfo() ([]db.DRefInfo, error) {
-	if m.GetSpec() == nil {
-		return nil, nil
-	}
-
-	drInfos, err := m.GetSpec().GetDRefInfo()
-	if err != nil {
-		return nil, errors.Wrap(err, "GetSpec().GetDRefInfo() FAILED")
-	}
-	for i := range drInfos {
-		dri := &drInfos[i]
-		dri.DRField = "spec." + dri.DRField
-	}
-	return drInfos, err
+	return m.GetSystemMetadataDRefInfo()
 
 }
 

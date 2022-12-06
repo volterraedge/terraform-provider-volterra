@@ -1289,6 +1289,64 @@ func resourceVolterraAwsVpcSite() *schema.Resource {
 							Optional: true,
 						},
 
+						"disable_internet_vip": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+
+						"enable_internet_vip": {
+
+							Type:     schema.TypeSet,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"reserved_internet_nlb_subnet": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+
+									"subnet": {
+
+										Type:     schema.TypeSet,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"existing_subnet_id": {
+
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+
+												"subnet_param": {
+
+													Type:     schema.TypeSet,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"ipv4": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+
+															"ipv6": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+														},
+													},
+												},
+											},
+										},
+									},
+								},
+							},
+						},
+
 						"active_enhanced_firewall_policies": {
 
 							Type:     schema.TypeSet,
@@ -4619,6 +4677,104 @@ func resourceVolterraAwsVpcSiteCreate(d *schema.ResourceData, meta interface{}) 
 					insideStaticRouteChoiceInt := &ves_io_schema_views_aws_vpc_site.AWSVPCIngressEgressGwType_NoInsideStaticRoutes{}
 					insideStaticRouteChoiceInt.NoInsideStaticRoutes = &ves_io_schema.Empty{}
 					siteTypeInt.IngressEgressGw.InsideStaticRouteChoice = insideStaticRouteChoiceInt
+				}
+
+			}
+
+			internetVipChoiceTypeFound := false
+
+			if v, ok := cs["disable_internet_vip"]; ok && !isIntfNil(v) && !internetVipChoiceTypeFound {
+
+				internetVipChoiceTypeFound = true
+
+				if v.(bool) {
+					internetVipChoiceInt := &ves_io_schema_views_aws_vpc_site.AWSVPCIngressEgressGwType_DisableInternetVip{}
+					internetVipChoiceInt.DisableInternetVip = &ves_io_schema.Empty{}
+					siteTypeInt.IngressEgressGw.InternetVipChoice = internetVipChoiceInt
+				}
+
+			}
+
+			if v, ok := cs["enable_internet_vip"]; ok && !isIntfNil(v) && !internetVipChoiceTypeFound {
+
+				internetVipChoiceTypeFound = true
+				internetVipChoiceInt := &ves_io_schema_views_aws_vpc_site.AWSVPCIngressEgressGwType_EnableInternetVip{}
+				internetVipChoiceInt.EnableInternetVip = &ves_io_schema_views.AWSInternetVIPType{}
+				siteTypeInt.IngressEgressGw.InternetVipChoice = internetVipChoiceInt
+
+				sl := v.(*schema.Set).List()
+				for _, set := range sl {
+					cs := set.(map[string]interface{})
+
+					internetVipSubnetChoiceTypeFound := false
+
+					if v, ok := cs["reserved_internet_nlb_subnet"]; ok && !isIntfNil(v) && !internetVipSubnetChoiceTypeFound {
+
+						internetVipSubnetChoiceTypeFound = true
+
+						if v.(bool) {
+							internetVipSubnetChoiceInt := &ves_io_schema_views.AWSInternetVIPType_ReservedInternetNlbSubnet{}
+							internetVipSubnetChoiceInt.ReservedInternetNlbSubnet = &ves_io_schema.Empty{}
+							internetVipChoiceInt.EnableInternetVip.InternetVipSubnetChoice = internetVipSubnetChoiceInt
+						}
+
+					}
+
+					if v, ok := cs["subnet"]; ok && !isIntfNil(v) && !internetVipSubnetChoiceTypeFound {
+
+						internetVipSubnetChoiceTypeFound = true
+						internetVipSubnetChoiceInt := &ves_io_schema_views.AWSInternetVIPType_Subnet{}
+						internetVipSubnetChoiceInt.Subnet = &ves_io_schema_views.CloudSubnetType{}
+						internetVipChoiceInt.EnableInternetVip.InternetVipSubnetChoice = internetVipSubnetChoiceInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							choiceTypeFound := false
+
+							if v, ok := cs["existing_subnet_id"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+								choiceTypeFound = true
+								choiceInt := &ves_io_schema_views.CloudSubnetType_ExistingSubnetId{}
+
+								internetVipSubnetChoiceInt.Subnet.Choice = choiceInt
+
+								choiceInt.ExistingSubnetId = v.(string)
+
+							}
+
+							if v, ok := cs["subnet_param"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+								choiceTypeFound = true
+								choiceInt := &ves_io_schema_views.CloudSubnetType_SubnetParam{}
+								choiceInt.SubnetParam = &ves_io_schema_views.CloudSubnetParamType{}
+								internetVipSubnetChoiceInt.Subnet.Choice = choiceInt
+
+								sl := v.(*schema.Set).List()
+								for _, set := range sl {
+									cs := set.(map[string]interface{})
+
+									if v, ok := cs["ipv4"]; ok && !isIntfNil(v) {
+
+										choiceInt.SubnetParam.Ipv4 = v.(string)
+
+									}
+
+									if v, ok := cs["ipv6"]; ok && !isIntfNil(v) {
+
+										choiceInt.SubnetParam.Ipv6 = v.(string)
+
+									}
+
+								}
+
+							}
+
+						}
+
+					}
+
 				}
 
 			}

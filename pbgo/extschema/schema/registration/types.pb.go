@@ -62,7 +62,7 @@ const (
 	// Other provider, which was not identified by system.
 	OTHER Provider = 6
 	// x-displayName: "Volterra"
-	// Volterra HW device.
+	// F5XC HW device.
 	VOLTERRA Provider = 7
 	// x-displayName: "IBM Cloud"
 	// IBM Cloud instance.
@@ -282,12 +282,12 @@ type Infra struct {
 	//
 	// x-displayName: "Certified Hardware"
 	// x-example: "value"
-	// certified HW name used to map with Volterra certified_hardware definition
+	// certified HW name used to map with F5XC certified_hardware definition
 	CertifiedHw string `protobuf:"bytes,9,opt,name=certified_hw,json=certifiedHw,proto3" json:"certified_hw,omitempty"`
 	// Internet Proxy Configuration
 	//
 	// x-displayName: "Local HTTP/HTTPS proxy configuration"
-	// It will be used as the proxy URL for HTTP requests and HTTPS requests to Volterra public domains.
+	// It will be used as the proxy URL for HTTP requests and HTTPS requests to F5XC public domains.
 	InternetProxy *InternetProxy `protobuf:"bytes,10,opt,name=internet_proxy,json=internetProxy,proto3" json:"internet_proxy,omitempty"`
 	// Timestamp
 	//
@@ -741,13 +741,13 @@ type Passport struct {
 	//
 	// x-displayName: "Private Network Name"
 	// x-example: "private-ntw"
-	// Private Network name for private access connectivity to Volterra ADN.
+	// Private Network name for private access connectivity to F5XC ADN.
 	// It is used for PrivateLink, CloudLink and L3VPN.
 	PrivateNetworkName string `protobuf:"bytes,11,opt,name=private_network_name,json=privateNetworkName,proto3" json:"private_network_name,omitempty"`
-	// Select Volterra Software Version
+	// Select F5XC Software Version
 	//
-	// x-displayName: "Select Volterra Software Version"
-	// Volterra Software Version is optional parameter, which allows to specify target SW version for particular site e.g. crt-20210329-1002.
+	// x-displayName: "Select F5XC Software Version"
+	// F5XC Software Version is optional parameter, which allows to specify target SW version for particular site e.g. crt-20210329-1002.
 	// If not specified, latest available version is used. If existing site/fleet already has version, this value is ignored.
 	//
 	// Types that are valid to be assigned to VolterraSwVersionChoice:

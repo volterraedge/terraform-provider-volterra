@@ -26,6 +26,140 @@ var (
 
 // augmented methods on protoc/std generated struct
 
+func (m *AWSInternetVIPType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *AWSInternetVIPType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *AWSInternetVIPType) DeepCopy() *AWSInternetVIPType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &AWSInternetVIPType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *AWSInternetVIPType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *AWSInternetVIPType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return AWSInternetVIPTypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateAWSInternetVIPType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateAWSInternetVIPType) InternetVipSubnetChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for internet_vip_subnet_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateAWSInternetVIPType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*AWSInternetVIPType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *AWSInternetVIPType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["internet_vip_subnet_choice"]; exists {
+		val := m.GetInternetVipSubnetChoice()
+		vOpts := append(opts,
+			db.WithValidateField("internet_vip_subnet_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetInternetVipSubnetChoice().(type) {
+	case *AWSInternetVIPType_ReservedInternetNlbSubnet:
+		if fv, exists := v.FldValidators["internet_vip_subnet_choice.reserved_internet_nlb_subnet"]; exists {
+			val := m.GetInternetVipSubnetChoice().(*AWSInternetVIPType_ReservedInternetNlbSubnet).ReservedInternetNlbSubnet
+			vOpts := append(opts,
+				db.WithValidateField("internet_vip_subnet_choice"),
+				db.WithValidateField("reserved_internet_nlb_subnet"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *AWSInternetVIPType_Subnet:
+		if fv, exists := v.FldValidators["internet_vip_subnet_choice.subnet"]; exists {
+			val := m.GetInternetVipSubnetChoice().(*AWSInternetVIPType_Subnet).Subnet
+			vOpts := append(opts,
+				db.WithValidateField("internet_vip_subnet_choice"),
+				db.WithValidateField("subnet"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultAWSInternetVIPTypeValidator = func() *ValidateAWSInternetVIPType {
+	v := &ValidateAWSInternetVIPType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhInternetVipSubnetChoice := v.InternetVipSubnetChoiceValidationRuleHandler
+	rulesInternetVipSubnetChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhInternetVipSubnetChoice(rulesInternetVipSubnetChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for AWSInternetVIPType.internet_vip_subnet_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["internet_vip_subnet_choice"] = vFn
+
+	v.FldValidators["internet_vip_subnet_choice.subnet"] = CloudSubnetTypeValidator().Validate
+
+	return v
+}()
+
+func AWSInternetVIPTypeValidator() db.Validator {
+	return DefaultAWSInternetVIPTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *AWSSubnetIdsType) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -65,46 +199,6 @@ type ValidateAWSSubnetIdsType struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
-func (v *ValidateAWSSubnetIdsType) AzNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	validatorFn, err := db.NewStringValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for az_name")
-	}
-
-	return validatorFn, nil
-}
-
-func (v *ValidateAWSSubnetIdsType) OutsideSubnetIdValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	validatorFn, err := db.NewStringValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for outside_subnet_id")
-	}
-
-	return validatorFn, nil
-}
-
-func (v *ValidateAWSSubnetIdsType) InsideSubnetIdValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	validatorFn, err := db.NewStringValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for inside_subnet_id")
-	}
-
-	return validatorFn, nil
-}
-
-func (v *ValidateAWSSubnetIdsType) WorkloadSubnetIdValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	validatorFn, err := db.NewStringValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for workload_subnet_id")
-	}
-
-	return validatorFn, nil
-}
-
 func (v *ValidateAWSSubnetIdsType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*AWSSubnetIdsType)
 	if !ok {
@@ -128,6 +222,15 @@ func (v *ValidateAWSSubnetIdsType) Validate(ctx context.Context, pm interface{},
 
 	}
 
+	if fv, exists := v.FldValidators["inside_subnet"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("inside_subnet"))
+		if err := fv(ctx, m.GetInsideSubnet(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["inside_subnet_id"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("inside_subnet_id"))
@@ -137,10 +240,28 @@ func (v *ValidateAWSSubnetIdsType) Validate(ctx context.Context, pm interface{},
 
 	}
 
+	if fv, exists := v.FldValidators["outside_subnet"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("outside_subnet"))
+		if err := fv(ctx, m.GetOutsideSubnet(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["outside_subnet_id"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("outside_subnet_id"))
 		if err := fv(ctx, m.GetOutsideSubnetId(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["workload_subnet"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("workload_subnet"))
+		if err := fv(ctx, m.GetWorkloadSubnet(), vOpts...); err != nil {
 			return err
 		}
 
@@ -162,6 +283,138 @@ func (v *ValidateAWSSubnetIdsType) Validate(ctx context.Context, pm interface{},
 var DefaultAWSSubnetIdsTypeValidator = func() *ValidateAWSSubnetIdsType {
 	v := &ValidateAWSSubnetIdsType{FldValidators: map[string]db.ValidatorFunc{}}
 
+	v.FldValidators["outside_subnet"] = AWSSubnetInfoTypeValidator().Validate
+
+	v.FldValidators["inside_subnet"] = AWSSubnetInfoTypeValidator().Validate
+
+	v.FldValidators["workload_subnet"] = AWSSubnetInfoTypeValidator().Validate
+
+	return v
+}()
+
+func AWSSubnetIdsTypeValidator() db.Validator {
+	return DefaultAWSSubnetIdsTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *AWSSubnetInfoType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *AWSSubnetInfoType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *AWSSubnetInfoType) DeepCopy() *AWSSubnetInfoType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &AWSSubnetInfoType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *AWSSubnetInfoType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *AWSSubnetInfoType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return AWSSubnetInfoTypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateAWSSubnetInfoType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateAWSSubnetInfoType) AzNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for az_name")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateAWSSubnetInfoType) IdValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for id")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateAWSSubnetInfoType) Ipv4PrefixValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for ipv4_prefix")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateAWSSubnetInfoType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*AWSSubnetInfoType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *AWSSubnetInfoType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["az_name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("az_name"))
+		if err := fv(ctx, m.GetAzName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["id"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("id"))
+		if err := fv(ctx, m.GetId(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["ipv4_prefix"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("ipv4_prefix"))
+		if err := fv(ctx, m.GetIpv4Prefix(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultAWSSubnetInfoTypeValidator = func() *ValidateAWSSubnetInfoType {
+	v := &ValidateAWSSubnetInfoType{FldValidators: map[string]db.ValidatorFunc{}}
+
 	var (
 		err error
 		vFn db.ValidatorFunc
@@ -177,52 +430,42 @@ var DefaultAWSSubnetIdsTypeValidator = func() *ValidateAWSSubnetIdsType {
 	}
 	vFn, err = vrhAzName(rulesAzName)
 	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for AWSSubnetIdsType.az_name: %s", err)
+		errMsg := fmt.Sprintf("ValidationRuleHandler for AWSSubnetInfoType.az_name: %s", err)
 		panic(errMsg)
 	}
 	v.FldValidators["az_name"] = vFn
 
-	vrhOutsideSubnetId := v.OutsideSubnetIdValidationRuleHandler
-	rulesOutsideSubnetId := map[string]string{
+	vrhId := v.IdValidationRuleHandler
+	rulesId := map[string]string{
 		"ves.io.schema.rules.string.max_len": "64",
 		"ves.io.schema.rules.string.pattern": "^(subnet-)([a-z0-9]{8}|[a-z0-9]{17})$",
 	}
-	vFn, err = vrhOutsideSubnetId(rulesOutsideSubnetId)
+	vFn, err = vrhId(rulesId)
 	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for AWSSubnetIdsType.outside_subnet_id: %s", err)
+		errMsg := fmt.Sprintf("ValidationRuleHandler for AWSSubnetInfoType.id: %s", err)
 		panic(errMsg)
 	}
-	v.FldValidators["outside_subnet_id"] = vFn
+	v.FldValidators["id"] = vFn
 
-	vrhInsideSubnetId := v.InsideSubnetIdValidationRuleHandler
-	rulesInsideSubnetId := map[string]string{
-		"ves.io.schema.rules.string.max_len": "64",
-		"ves.io.schema.rules.string.pattern": "^(subnet-)([a-z0-9]{8}|[a-z0-9]{17})$",
+	vrhIpv4Prefix := v.Ipv4PrefixValidationRuleHandler
+	rulesIpv4Prefix := map[string]string{
+		"ves.io.schema.rules.message.required":            "true",
+		"ves.io.schema.rules.string.ipv4_prefix":          "true",
+		"ves.io.schema.rules.string.max_ip_prefix_length": "28",
+		"ves.io.schema.rules.string.min_ip_prefix_length": "8",
 	}
-	vFn, err = vrhInsideSubnetId(rulesInsideSubnetId)
+	vFn, err = vrhIpv4Prefix(rulesIpv4Prefix)
 	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for AWSSubnetIdsType.inside_subnet_id: %s", err)
+		errMsg := fmt.Sprintf("ValidationRuleHandler for AWSSubnetInfoType.ipv4_prefix: %s", err)
 		panic(errMsg)
 	}
-	v.FldValidators["inside_subnet_id"] = vFn
-
-	vrhWorkloadSubnetId := v.WorkloadSubnetIdValidationRuleHandler
-	rulesWorkloadSubnetId := map[string]string{
-		"ves.io.schema.rules.string.max_len": "64",
-		"ves.io.schema.rules.string.pattern": "^(subnet-)([a-z0-9]{8}|[a-z0-9]{17})$",
-	}
-	vFn, err = vrhWorkloadSubnetId(rulesWorkloadSubnetId)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for AWSSubnetIdsType.workload_subnet_id: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["workload_subnet_id"] = vFn
+	v.FldValidators["ipv4_prefix"] = vFn
 
 	return v
 }()
 
-func AWSSubnetIdsTypeValidator() db.Validator {
-	return DefaultAWSSubnetIdsTypeValidator
+func AWSSubnetInfoTypeValidator() db.Validator {
+	return DefaultAWSSubnetInfoTypeValidator
 }
 
 // augmented methods on protoc/std generated struct

@@ -2315,10 +2315,14 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.app_type.Feature",
             "properties": {
                 "type": {
-                    "description": " Feature type to be enabled",
+                    "description": " Feature type to be enabled\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "Enable type of Feature",
                     "$ref": "#/definitions/app_typeFeatureType",
-                    "x-displayname": "AI/ML Feature Type"
+                    "x-displayname": "AI/ML Feature Type",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 }
             }
         },

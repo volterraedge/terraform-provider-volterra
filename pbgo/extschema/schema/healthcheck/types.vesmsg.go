@@ -1331,6 +1331,8 @@ var DefaultHttpHealthCheckValidator = func() *ValidateHttpHealthCheck {
 	vrhExpectedStatusCodes := v.ExpectedStatusCodesValidationRuleHandler
 	rulesExpectedStatusCodes := map[string]string{
 		"ves.io.schema.rules.repeated.items.string.http_status_range": "true",
+		"ves.io.schema.rules.repeated.items.string.max_len":           "10",
+		"ves.io.schema.rules.repeated.items.string.min_len":           "3",
 		"ves.io.schema.rules.repeated.max_items":                      "16",
 		"ves.io.schema.rules.repeated.unique":                         "true",
 	}

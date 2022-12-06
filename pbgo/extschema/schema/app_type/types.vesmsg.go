@@ -212,6 +212,18 @@ func (v *ValidateAPIEPInfo) Validate(ctx context.Context, pm interface{}, opts .
 
 	}
 
+	if fv, exists := v.FldValidators["domains"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("domains"))
+		for idx, item := range m.GetDomains() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["dyn_examples"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("dyn_examples"))
@@ -811,6 +823,22 @@ type ValidateFeature struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateFeature) TypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	var conv db.EnumConvFn
+	conv = func(v interface{}) int32 {
+		i := v.(FeatureType)
+		return int32(i)
+	}
+	// FeatureType_name is generated in .pb.go
+	validatorFn, err := db.NewEnumValidationRuleHandler(rules, FeatureType_name, conv)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for type")
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateFeature) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*Feature)
 	if !ok {
@@ -840,6 +868,25 @@ func (v *ValidateFeature) Validate(ctx context.Context, pm interface{}, opts ...
 // Well-known symbol for default validator implementation
 var DefaultFeatureValidator = func() *ValidateFeature {
 	v := &ValidateFeature{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhType := v.TypeValidationRuleHandler
+	rulesType := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhType(rulesType)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for Feature.type: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["type"] = vFn
 
 	return v
 }()

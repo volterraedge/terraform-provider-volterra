@@ -1266,6 +1266,14 @@ func (v *ValidateAWSVPCIngressEgressGwType) InsideStaticRouteChoiceValidationRul
 	return validatorFn, nil
 }
 
+func (v *ValidateAWSVPCIngressEgressGwType) InternetVipChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for internet_vip_choice")
+	}
+	return validatorFn, nil
+}
+
 func (v *ValidateAWSVPCIngressEgressGwType) NetworkPolicyChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -1563,6 +1571,42 @@ func (v *ValidateAWSVPCIngressEgressGwType) Validate(ctx context.Context, pm int
 
 	}
 
+	if fv, exists := v.FldValidators["internet_vip_choice"]; exists {
+		val := m.GetInternetVipChoice()
+		vOpts := append(opts,
+			db.WithValidateField("internet_vip_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetInternetVipChoice().(type) {
+	case *AWSVPCIngressEgressGwType_DisableInternetVip:
+		if fv, exists := v.FldValidators["internet_vip_choice.disable_internet_vip"]; exists {
+			val := m.GetInternetVipChoice().(*AWSVPCIngressEgressGwType_DisableInternetVip).DisableInternetVip
+			vOpts := append(opts,
+				db.WithValidateField("internet_vip_choice"),
+				db.WithValidateField("disable_internet_vip"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *AWSVPCIngressEgressGwType_EnableInternetVip:
+		if fv, exists := v.FldValidators["internet_vip_choice.enable_internet_vip"]; exists {
+			val := m.GetInternetVipChoice().(*AWSVPCIngressEgressGwType_EnableInternetVip).EnableInternetVip
+			vOpts := append(opts,
+				db.WithValidateField("internet_vip_choice"),
+				db.WithValidateField("enable_internet_vip"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["network_policy_choice"]; exists {
 		val := m.GetNetworkPolicyChoice()
 		vOpts := append(opts,
@@ -1741,6 +1785,17 @@ var DefaultAWSVPCIngressEgressGwTypeValidator = func() *ValidateAWSVPCIngressEgr
 	}
 	v.FldValidators["inside_static_route_choice"] = vFn
 
+	vrhInternetVipChoice := v.InternetVipChoiceValidationRuleHandler
+	rulesInternetVipChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhInternetVipChoice(rulesInternetVipChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for AWSVPCIngressEgressGwType.internet_vip_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["internet_vip_choice"] = vFn
+
 	vrhNetworkPolicyChoice := v.NetworkPolicyChoiceValidationRuleHandler
 	rulesNetworkPolicyChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -1807,6 +1862,8 @@ var DefaultAWSVPCIngressEgressGwTypeValidator = func() *ValidateAWSVPCIngressEgr
 	v.FldValidators["global_network_choice.global_network_list"] = ves_io_schema_views.GlobalNetworkConnectionListTypeValidator().Validate
 
 	v.FldValidators["inside_static_route_choice.inside_static_routes"] = ves_io_schema_views.SiteStaticRoutesListTypeValidator().Validate
+
+	v.FldValidators["internet_vip_choice.enable_internet_vip"] = ves_io_schema_views.AWSInternetVIPTypeValidator().Validate
 
 	v.FldValidators["network_policy_choice.active_network_policies"] = ves_io_schema_network_firewall.ActiveNetworkPoliciesTypeValidator().Validate
 	v.FldValidators["network_policy_choice.active_enhanced_firewall_policies"] = ves_io_schema_network_firewall.ActiveEnhancedFirewallPoliciesTypeValidator().Validate
@@ -2217,6 +2274,54 @@ func (v *ValidateAWSVPCSiteInfoType) PrivateIpsValidationRuleHandler(rules map[s
 	return validatorFn, nil
 }
 
+func (v *ValidateAWSVPCSiteInfoType) SubnetIdsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for subnet_ids")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_views.AWSSubnetIdsType, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := ves_io_schema_views.AWSSubnetIdsTypeValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for subnet_ids")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema_views.AWSSubnetIdsType)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema_views.AWSSubnetIdsType, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated subnet_ids")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items subnet_ids")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateAWSVPCSiteInfoType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*AWSVPCSiteInfoType)
 	if !ok {
@@ -2242,6 +2347,14 @@ func (v *ValidateAWSVPCSiteInfoType) Validate(ctx context.Context, pm interface{
 	if fv, exists := v.FldValidators["public_ips"]; exists {
 		vOpts := append(opts, db.WithValidateField("public_ips"))
 		if err := fv(ctx, m.GetPublicIps(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["subnet_ids"]; exists {
+		vOpts := append(opts, db.WithValidateField("subnet_ids"))
+		if err := fv(ctx, m.GetSubnetIds(), vOpts...); err != nil {
 			return err
 		}
 
@@ -2289,6 +2402,18 @@ var DefaultAWSVPCSiteInfoTypeValidator = func() *ValidateAWSVPCSiteInfoType {
 		panic(errMsg)
 	}
 	v.FldValidators["private_ips"] = vFn
+
+	vrhSubnetIds := v.SubnetIdsValidationRuleHandler
+	rulesSubnetIds := map[string]string{
+		"ves.io.schema.rules.message.required":   "true",
+		"ves.io.schema.rules.repeated.num_items": "0,1,3",
+	}
+	vFn, err = vrhSubnetIds(rulesSubnetIds)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for AWSVPCSiteInfoType.subnet_ids: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["subnet_ids"] = vFn
 
 	return v
 }()

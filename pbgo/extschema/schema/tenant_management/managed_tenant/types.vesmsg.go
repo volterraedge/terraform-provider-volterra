@@ -246,13 +246,6 @@ func (v *ValidateCreateSpecType) TenantChoiceTenantIdValidationRuleHandler(rules
 	}
 	return oValidatorFn_TenantId, nil
 }
-func (v *ValidateCreateSpecType) TenantChoiceTenantRegexValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-	oValidatorFn_TenantRegex, err := db.NewStringValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for tenant_regex")
-	}
-	return oValidatorFn_TenantRegex, nil
-}
 
 func (v *ValidateCreateSpecType) GroupsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
@@ -346,28 +339,6 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-	case *CreateSpecType_AllTenants:
-		if fv, exists := v.FldValidators["tenant_choice.all_tenants"]; exists {
-			val := m.GetTenantChoice().(*CreateSpecType_AllTenants).AllTenants
-			vOpts := append(opts,
-				db.WithValidateField("tenant_choice"),
-				db.WithValidateField("all_tenants"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	case *CreateSpecType_TenantRegex:
-		if fv, exists := v.FldValidators["tenant_choice.tenant_regex"]; exists {
-			val := m.GetTenantChoice().(*CreateSpecType_TenantRegex).TenantRegex
-			vOpts := append(opts,
-				db.WithValidateField("tenant_choice"),
-				db.WithValidateField("tenant_regex"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
 
 	}
 
@@ -406,19 +377,8 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field CreateSpecType.tenant_choice_tenant_id: %s", err)
 		panic(errMsg)
 	}
-	vrhTenantChoiceTenantRegex := v.TenantChoiceTenantRegexValidationRuleHandler
-	rulesTenantChoiceTenantRegex := map[string]string{
-		"ves.io.schema.rules.string.max_len": "256",
-		"ves.io.schema.rules.string.regex":   "true",
-	}
-	vFnMap["tenant_choice.tenant_regex"], err = vrhTenantChoiceTenantRegex(rulesTenantChoiceTenantRegex)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field CreateSpecType.tenant_choice_tenant_regex: %s", err)
-		panic(errMsg)
-	}
 
 	v.FldValidators["tenant_choice.tenant_id"] = vFnMap["tenant_choice.tenant_id"]
-	v.FldValidators["tenant_choice.tenant_regex"] = vFnMap["tenant_choice.tenant_regex"]
 
 	vrhGroups := v.GroupsValidationRuleHandler
 	rulesGroups := map[string]string{
@@ -1116,6 +1076,27 @@ type ValidateGroupAssignmentType struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateGroupAssignmentType) GroupValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "MessageValidationRuleHandler for group")
+	}
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		if err := ves_io_schema_views.ObjectRefTypeValidator().Validate(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateGroupAssignmentType) ManagedTenantGroupsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
 	itemRules := db.GetRepStringItemRules(rules)
@@ -1204,8 +1185,20 @@ var DefaultGroupAssignmentTypeValidator = func() *ValidateGroupAssignmentType {
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
 
+	vrhGroup := v.GroupValidationRuleHandler
+	rulesGroup := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhGroup(rulesGroup)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GroupAssignmentType.group: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["group"] = vFn
+
 	vrhManagedTenantGroups := v.ManagedTenantGroupsValidationRuleHandler
 	rulesManagedTenantGroups := map[string]string{
+		"ves.io.schema.rules.message.required":   "true",
 		"ves.io.schema.rules.repeated.max_items": "32",
 		"ves.io.schema.rules.repeated.unique":    "true",
 	}
@@ -1215,8 +1208,6 @@ var DefaultGroupAssignmentTypeValidator = func() *ValidateGroupAssignmentType {
 		panic(errMsg)
 	}
 	v.FldValidators["managed_tenant_groups"] = vFn
-
-	v.FldValidators["group"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	return v
 }()
@@ -1297,29 +1288,6 @@ type ValidateReplaceSpecType struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
-func (v *ValidateReplaceSpecType) TenantChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for tenant_choice")
-	}
-	return validatorFn, nil
-}
-
-func (v *ValidateReplaceSpecType) TenantChoiceTenantIdValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-	oValidatorFn_TenantId, err := db.NewStringValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for tenant_id")
-	}
-	return oValidatorFn_TenantId, nil
-}
-func (v *ValidateReplaceSpecType) TenantChoiceTenantRegexValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-	oValidatorFn_TenantRegex, err := db.NewStringValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for tenant_regex")
-	}
-	return oValidatorFn_TenantRegex, nil
-}
-
 func (v *ValidateReplaceSpecType) GroupsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
 	itemRules := db.GetRepMessageItemRules(rules)
@@ -1390,53 +1358,6 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 
 	}
 
-	if fv, exists := v.FldValidators["tenant_choice"]; exists {
-		val := m.GetTenantChoice()
-		vOpts := append(opts,
-			db.WithValidateField("tenant_choice"),
-		)
-		if err := fv(ctx, val, vOpts...); err != nil {
-			return err
-		}
-	}
-
-	switch m.GetTenantChoice().(type) {
-	case *ReplaceSpecType_TenantId:
-		if fv, exists := v.FldValidators["tenant_choice.tenant_id"]; exists {
-			val := m.GetTenantChoice().(*ReplaceSpecType_TenantId).TenantId
-			vOpts := append(opts,
-				db.WithValidateField("tenant_choice"),
-				db.WithValidateField("tenant_id"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	case *ReplaceSpecType_AllTenants:
-		if fv, exists := v.FldValidators["tenant_choice.all_tenants"]; exists {
-			val := m.GetTenantChoice().(*ReplaceSpecType_AllTenants).AllTenants
-			vOpts := append(opts,
-				db.WithValidateField("tenant_choice"),
-				db.WithValidateField("all_tenants"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	case *ReplaceSpecType_TenantRegex:
-		if fv, exists := v.FldValidators["tenant_choice.tenant_regex"]; exists {
-			val := m.GetTenantChoice().(*ReplaceSpecType_TenantRegex).TenantRegex
-			vOpts := append(opts,
-				db.WithValidateField("tenant_choice"),
-				db.WithValidateField("tenant_regex"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-
-	}
-
 	return nil
 }
 
@@ -1451,40 +1372,6 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
-	vrhTenantChoice := v.TenantChoiceValidationRuleHandler
-	rulesTenantChoice := map[string]string{
-		"ves.io.schema.rules.message.required_oneof": "true",
-	}
-	vFn, err = vrhTenantChoice(rulesTenantChoice)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for ReplaceSpecType.tenant_choice: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["tenant_choice"] = vFn
-
-	vrhTenantChoiceTenantId := v.TenantChoiceTenantIdValidationRuleHandler
-	rulesTenantChoiceTenantId := map[string]string{
-		"ves.io.schema.rules.string.max_len": "256",
-	}
-	vFnMap["tenant_choice.tenant_id"], err = vrhTenantChoiceTenantId(rulesTenantChoiceTenantId)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field ReplaceSpecType.tenant_choice_tenant_id: %s", err)
-		panic(errMsg)
-	}
-	vrhTenantChoiceTenantRegex := v.TenantChoiceTenantRegexValidationRuleHandler
-	rulesTenantChoiceTenantRegex := map[string]string{
-		"ves.io.schema.rules.string.max_len": "256",
-		"ves.io.schema.rules.string.regex":   "true",
-	}
-	vFnMap["tenant_choice.tenant_regex"], err = vrhTenantChoiceTenantRegex(rulesTenantChoiceTenantRegex)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field ReplaceSpecType.tenant_choice_tenant_regex: %s", err)
-		panic(errMsg)
-	}
-
-	v.FldValidators["tenant_choice.tenant_id"] = vFnMap["tenant_choice.tenant_id"]
-	v.FldValidators["tenant_choice.tenant_regex"] = vFnMap["tenant_choice.tenant_regex"]
 
 	vrhGroups := v.GroupsValidationRuleHandler
 	rulesGroups := map[string]string{
@@ -1511,14 +1398,8 @@ func (r *CreateSpecType) SetTenantChoiceToGlobalSpecType(o *GlobalSpecType) erro
 	case nil:
 		o.TenantChoice = nil
 
-	case *CreateSpecType_AllTenants:
-		o.TenantChoice = &GlobalSpecType_AllTenants{AllTenants: of.AllTenants}
-
 	case *CreateSpecType_TenantId:
 		o.TenantChoice = &GlobalSpecType_TenantId{TenantId: of.TenantId}
-
-	case *CreateSpecType_TenantRegex:
-		o.TenantChoice = &GlobalSpecType_TenantRegex{TenantRegex: of.TenantRegex}
 
 	default:
 		return fmt.Errorf("Unknown oneof field %T", of)
@@ -1531,14 +1412,8 @@ func (r *CreateSpecType) GetTenantChoiceFromGlobalSpecType(o *GlobalSpecType) er
 	case nil:
 		r.TenantChoice = nil
 
-	case *GlobalSpecType_AllTenants:
-		r.TenantChoice = &CreateSpecType_AllTenants{AllTenants: of.AllTenants}
-
 	case *GlobalSpecType_TenantId:
 		r.TenantChoice = &CreateSpecType_TenantId{TenantId: of.TenantId}
-
-	case *GlobalSpecType_TenantRegex:
-		r.TenantChoice = &CreateSpecType_TenantRegex{TenantRegex: of.TenantRegex}
 
 	default:
 		return fmt.Errorf("Unknown oneof field %T", of)
@@ -1659,53 +1534,11 @@ func (m *GetSpecType) ToGlobalSpecTypeWithoutDeepCopy(f *GlobalSpecType) {
 	m.toGlobalSpecType(f, false)
 }
 
-// create setters in ReplaceSpecType from GlobalSpecType for oneof fields
-func (r *ReplaceSpecType) SetTenantChoiceToGlobalSpecType(o *GlobalSpecType) error {
-	switch of := r.TenantChoice.(type) {
-	case nil:
-		o.TenantChoice = nil
-
-	case *ReplaceSpecType_AllTenants:
-		o.TenantChoice = &GlobalSpecType_AllTenants{AllTenants: of.AllTenants}
-
-	case *ReplaceSpecType_TenantId:
-		o.TenantChoice = &GlobalSpecType_TenantId{TenantId: of.TenantId}
-
-	case *ReplaceSpecType_TenantRegex:
-		o.TenantChoice = &GlobalSpecType_TenantRegex{TenantRegex: of.TenantRegex}
-
-	default:
-		return fmt.Errorf("Unknown oneof field %T", of)
-	}
-	return nil
-}
-
-func (r *ReplaceSpecType) GetTenantChoiceFromGlobalSpecType(o *GlobalSpecType) error {
-	switch of := o.TenantChoice.(type) {
-	case nil:
-		r.TenantChoice = nil
-
-	case *GlobalSpecType_AllTenants:
-		r.TenantChoice = &ReplaceSpecType_AllTenants{AllTenants: of.AllTenants}
-
-	case *GlobalSpecType_TenantId:
-		r.TenantChoice = &ReplaceSpecType_TenantId{TenantId: of.TenantId}
-
-	case *GlobalSpecType_TenantRegex:
-		r.TenantChoice = &ReplaceSpecType_TenantRegex{TenantRegex: of.TenantRegex}
-
-	default:
-		return fmt.Errorf("Unknown oneof field %T", of)
-	}
-	return nil
-}
-
 func (m *ReplaceSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	if f == nil {
 		return
 	}
 	m.Groups = f.GetGroups()
-	m.GetTenantChoiceFromGlobalSpecType(f)
 }
 
 func (m *ReplaceSpecType) FromGlobalSpecType(f *GlobalSpecType) {
@@ -1724,7 +1557,6 @@ func (m *ReplaceSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool)
 	_ = m1
 
 	f.Groups = m1.Groups
-	m1.SetTenantChoiceToGlobalSpecType(f)
 }
 
 func (m *ReplaceSpecType) ToGlobalSpecType(f *GlobalSpecType) {

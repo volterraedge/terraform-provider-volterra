@@ -52,9 +52,33 @@ Argument Reference
 
 `server_selector` - (Optional) true if the expressions in the label selector are true for the server labels.. See [Server Selector ](#server-selector) below for details.
 
+### Any Asn
+
+any_asn.
+
+### Any Country
+
+x-displayName: "Any Country".
+
+### Any Ip
+
+any_ip.
+
 ### Apply Rate Limiter
 
 Apply the rate limiter configured on the HTTP loadbalancer..
+
+### Asn List
+
+asn_list.
+
+`as_numbers` - (Required) An unordered set of RFC 6793 defined 4-byte AS numbers that can be used to create allow or deny lists for use in network policy or service policy. (`Int`).
+
+### Asn Matcher
+
+asn_matcher.
+
+`asn_sets` - (Required) A list of references to bgp_asn_set objects.. See [ref](#ref) below for details.
 
 ### Bypass Rate Limiter
 
@@ -67,6 +91,14 @@ Check that the header is not present..
 ### Check Present
 
 Check that the header is present..
+
+### Country List
+
+x-displayName: "Country List".
+
+`country_codes` - (Required) List of Country Codes (`List of Strings`).
+
+`invert_match` - (Optional) Invert the match result. (`Bool`).
 
 ### Domain Matcher
 
@@ -99,6 +131,22 @@ http_method.
 `invert_matcher` - (Optional) Invert the match result. (`Bool`).
 
 `methods` - (Optional) x-example: "['GET', 'POST', 'DELETE']" (`List of Strings`).
+
+### Ip Matcher
+
+ip_matcher.
+
+`invert_matcher` - (Optional) Invert the match result. (`Bool`).
+
+`prefix_sets` - (Required) A list of references to ip_prefix_set objects.. See [ref](#ref) below for details.
+
+### Ip Prefix List
+
+ip_prefix_list.
+
+`invert_match` - (Optional) Invert the match result. (`Bool`).
+
+`ip_prefixes` - (Required) List of IPv4 prefix strings. (`String`).
 
 ### Item
 
@@ -176,11 +224,27 @@ Specification for the rule including match preicates and actions..
 
 `custom_rate_limiter` - (Optional) Apply a custom rate limiter.. See [ref](#ref) below for details.
 
+`any_asn` - (Optional)any_asn (bool).
+
+`asn_list` - (Optional)asn_list. See [Asn List ](#asn-list) below for details.
+
+`asn_matcher` - (Optional)asn_matcher. See [Asn Matcher ](#asn-matcher) below for details.
+
+`any_country` - (Optional) x-displayName: "Any Country" (bool).
+
+`country_list` - (Optional) x-displayName: "Country List". See [Country List ](#country-list) below for details.
+
 `domain_matcher` - (Optional)domain_matcher. See [Domain Matcher ](#domain-matcher) below for details.
 
 `headers` - (Optional)headers. See [Headers ](#headers) below for details.
 
 `http_method` - (Optional)http_method. See [Http Method ](#http-method) below for details.
+
+`any_ip` - (Optional)any_ip (bool).
+
+`ip_matcher` - (Optional)ip_matcher. See [Ip Matcher ](#ip-matcher) below for details.
+
+`ip_prefix_list` - (Optional)ip_prefix_list. See [Ip Prefix List ](#ip-prefix-list) below for details.
 
 `path` - (Optional)path. See [Path ](#path) below for details.
 

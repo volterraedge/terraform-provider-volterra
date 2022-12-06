@@ -803,7 +803,7 @@ type AuthToken struct {
 	// token
 	//
 	// x-displayName: "Token"
-	// Volterra Secret. URL for token, needs to be fetched from this path
+	// F5XC Secret. URL for token, needs to be fetched from this path
 	Token *schema.SecretType `protobuf:"bytes,1,opt,name=token,proto3" json:"token,omitempty"`
 }
 

@@ -2844,7 +2844,7 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.global_log_receiver.AuthToken",
             "properties": {
                 "token": {
-                    "description": " Volterra Secret. URL for token, needs to be fetched from this path",
+                    "description": " F5XC Secret. URL for token, needs to be fetched from this path",
                     "title": "token",
                     "$ref": "#/definitions/schemaSecretType",
                     "x-displayname": "Token"
@@ -3772,7 +3772,7 @@ var APISwaggerJSON string = `{
         },
         "schemaBlindfoldSecretInfoType": {
             "type": "object",
-            "description": "BlindfoldSecretInfoType specifies information about the Secret managed by Volterra Secret Management",
+            "description": "BlindfoldSecretInfoType specifies information about the Secret managed by F5XC Secret Management",
             "title": "BlindfoldSecretInfoType",
             "x-displayname": "Blindfold Secret",
             "x-ves-displayorder": "3,1,2",
@@ -4033,7 +4033,7 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.SecretType",
             "properties": {
                 "blindfold_secret_info": {
-                    "description": "Exclusive with [clear_secret_info]\n Blindfold Secret is used for the secrets managed by Volterra Secret Management Service",
+                    "description": "Exclusive with [clear_secret_info]\n Blindfold Secret is used for the secrets managed by F5XC Secret Management Service",
                     "title": "Blindfold Secret",
                     "$ref": "#/definitions/schemaBlindfoldSecretInfoType",
                     "x-displayname": "Blindfold Secret"

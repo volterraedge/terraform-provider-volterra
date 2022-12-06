@@ -22,11 +22,23 @@ resource "volterra_http_loadbalancer" "example" {
 
   // One of the arguments from this list "do_not_advertise advertise_on_public_default_vip advertise_on_public advertise_custom" must be set
 
-  advertise_on_public {
-    public_ip {
-      name      = "test1"
-      namespace = "staging"
-      tenant    = "acmecorp"
+  advertise_custom {
+    advertise_where {
+      // One of the arguments from this list "site virtual_site vk8s_service virtual_network" must be set
+
+      virtual_network {
+        // One of the arguments from this list "default_vip specific_vip" must be set
+        default_vip = true
+
+        virtual_network {
+          name      = "test1"
+          namespace = "staging"
+          tenant    = "acmecorp"
+        }
+      }
+
+      // One of the arguments from this list "use_default_port port" must be set
+      use_default_port = true
     }
   }
   // One of the arguments from this list "disable_api_definition api_definition api_definitions" must be set
@@ -38,24 +50,21 @@ resource "volterra_http_loadbalancer" "example" {
     // One of the arguments from this list "disable_learn_from_redirect_traffic enable_learn_from_redirect_traffic" must be set
     disable_learn_from_redirect_traffic = true
   }
-  // One of the arguments from this list "no_challenge js_challenge captcha_challenge policy_based_challenge" must be set
-  no_challenge = true
-  // One of the arguments from this list "enable_ddos_detection disable_ddos_detection" must be set
-  enable_ddos_detection = true
-  domains = ["www.foo.com"]
 
-  // One of the arguments from this list "least_active random source_ip_stickiness cookie_stickiness ring_hash round_robin" must be set
+  // One of the arguments from this list "captcha_challenge policy_based_challenge no_challenge js_challenge" must be set
 
-  ring_hash {
-    hash_policy {
-      // One of the arguments from this list "header_name cookie source_ip" must be set
-      header_name = "host"
-
-      terminal = true
-    }
+  js_challenge {
+    cookie_expiry   = "1000"
+    custom_page     = "string:///PHA+IFBsZWFzZSBXYWl0IDwvcD4="
+    js_script_delay = "1000"
   }
+  // One of the arguments from this list "enable_ddos_detection disable_ddos_detection" must be set
+  disable_ddos_detection = true
+  domains = ["www.foo.com"]
+  // One of the arguments from this list "ring_hash round_robin least_active random source_ip_stickiness cookie_stickiness" must be set
+  random = true
 
-  // One of the arguments from this list "http https_auto_cert https" must be set
+  // One of the arguments from this list "https http https_auto_cert" must be set
 
   http {
     dns_volterra_managed = true
@@ -65,20 +74,28 @@ resource "volterra_http_loadbalancer" "example" {
   enable_malicious_user_detection = true
   // One of the arguments from this list "disable_rate_limit api_rate_limit rate_limit" must be set
   disable_rate_limit = true
+
   // One of the arguments from this list "service_policies_from_namespace no_service_policies active_service_policies" must be set
-  service_policies_from_namespace = true
+
+  active_service_policies {
+    policies {
+      name      = "test1"
+      namespace = "staging"
+      tenant    = "acmecorp"
+    }
+  }
   // One of the arguments from this list "disable_trust_client_ip_headers enable_trust_client_ip_headers" must be set
   disable_trust_client_ip_headers = true
+
   // One of the arguments from this list "user_id_client_ip user_identification" must be set
-  user_id_client_ip = true
 
-  // One of the arguments from this list "disable_waf waf waf_rule app_firewall" must be set
-
-  app_firewall {
+  user_identification {
     name      = "test1"
     namespace = "staging"
     tenant    = "acmecorp"
   }
+  // One of the arguments from this list "disable_waf waf waf_rule app_firewall" must be set
+  disable_waf = true
 }
 
 ```
@@ -143,6 +160,8 @@ Argument Reference
 `disable_client_side_defense` - (Optional) No Client-Side Defense configuration for this load balancer (bool).
 
 `cors_policy` - (Optional) resources from a server at a different origin. See [Cors Policy ](#cors-policy) below for details.
+
+`csrf_policy` - (Optional) Policy configuration to protect against CSRF attacks.. See [Csrf Policy ](#csrf-policy) below for details.
 
 `data_guard_rules` - (Optional) Note: App Firewall should be enabled, to use Data Guard feature.. See [Data Guard Rules ](#data-guard-rules) below for details.
 
@@ -228,6 +247,14 @@ Argument Reference
 
 `waf_exclusion_rules` - (Optional) The match criteria include domain, path and method.. See [Waf Exclusion Rules ](#waf-exclusion-rules) below for details.
 
+### Account Management
+
+x-displayName: "Account Management".
+
+`create` - (Optional) x-displayName: "Account Creation" (bool).
+
+`password_reset` - (Optional) x-displayName: "Password Reset" (bool).
+
 ### Action
 
 The action to take if the input request matches the rule..
@@ -305,6 +332,10 @@ Where should this load balancer be available.
 `port` - (Optional) TCP port to Listen. (`Int`).
 
 `use_default_port` - (Optional) For HTTP, default is 80. For HTTPS/SNI, default is 443. (bool).
+
+### All Load Balancer Domains
+
+Add All load balancer domains to source origin (allow) list..
 
 ### Allow
 
@@ -430,6 +461,10 @@ Append mitigation headers..
 
 `inference_header_name` - (Required) A case-insensitive HTTP header name. (`String`).
 
+### Apply
+
+x-displayName: "Apply for a Financial Service Account (e.g., credit card, banking, retirement account)".
+
 ### Apply Data Guard
 
 x-displayName: "Apply".
@@ -446,6 +481,20 @@ The predicate evaluates to true if the origin ASN is present in one of the BGP A
 
 `asn_sets` - (Required) A list of references to bgp_asn_set objects.. See [ref](#ref) below for details.
 
+### Authentication
+
+x-displayName: "Authentication".
+
+`login` - (Optional) x-displayName: "Login" (bool).
+
+`login_mfa` - (Optional) x-displayName: "Login MFA" (bool).
+
+`login_partner` - (Optional) x-displayName: "Login for a Channel Partner" (bool).
+
+`logout` - (Optional) x-displayName: "Logout" (bool).
+
+`token_refresh` - (Optional) x-displayName: "Token Refresh" (bool).
+
 ### Auto Host Rewrite
 
 Host header will be swapped with hostname of upstream host chosen by the cluster.
@@ -456,7 +505,7 @@ For other origin server types, port will be automatically set as 443 if TLS is e
 
 ### Blindfold Secret Info
 
-Blindfold Secret is used for the secrets managed by Volterra Secret Management Service.
+Blindfold Secret is used for the secrets managed by F5XC Secret Management Service.
 
 `decryption_provider` - (Optional) Name of the Secret Management Access object that contains information about the backend Secret Management service. (`String`).
 
@@ -494,7 +543,7 @@ Define rules to block IP Prefixes or AS numbers..
 
 `waf_skip_processing` - (Optional) Skip WAF processing for clients matching this rule. (bool).
 
-`actions` - (Optional) Action that should be taken when client identifier matches the rule (`List of Strings`).
+`actions` - (Optional) Actions that should be taken when client identifier matches the rule (`List of Strings`).
 
 `as_number` - (Required) RFC 6793 defined 4-byte AS number (`Int`).
 
@@ -555,6 +604,10 @@ Check that the cookie is not present..
 ### Check Present
 
 Check that the cookie is present..
+
+### Checkin
+
+x-displayName: "Check into Flight".
 
 ### Circuit Breaker
 
@@ -684,6 +737,24 @@ resources from a server at a different origin.
 
 `maximum_age` - (Optional) Maximum permitted value is 86400 seconds (24 hours) (`Int`).
 
+### Create
+
+x-displayName: "Account Creation".
+
+### Csrf Policy
+
+Policy configuration to protect against CSRF attacks..
+
+`all_load_balancer_domains` - (Optional) Add All load balancer domains to source origin (allow) list. (bool).
+
+`custom_domain_list` - (Optional) Add one or more domains to source origin (allow) list.. See [Custom Domain List ](#custom-domain-list) below for details.
+
+### Custom Domain List
+
+Add one or more domains to source origin (allow) list..
+
+`domains` - (Optional) Wildcard names are supported in the suffix or prefix form. (`String`).
+
 ### Custom Endpoint Object
 
 Specify origin server with a reference to endpoint object.
@@ -692,7 +763,7 @@ Specify origin server with a reference to endpoint object.
 
 ### Custom Hash Algorithms
 
-Use hash algorithms in the custom order. Volterra will try to fetch ocsp response from the CA in the given order. Additionally, LoadBalancer will not become active until ocspResponse cannot be fetched if the certificate has MustStaple extension set..
+Use hash algorithms in the custom order. F5XC will try to fetch ocsp response from the CA in the given order. Additionally, LoadBalancer will not become active until ocspResponse cannot be fetched if the certificate has MustStaple extension set..
 
 `hash_algorithms` - (Required) Ordered list of hash algorithms to be used. (`List of Strings`).
 
@@ -1036,6 +1107,14 @@ App Firewall violation contexts to be excluded for this request.
 
 Request will be failed and error returned, as if cluster has no origin servers..
 
+### Financial Services
+
+x-displayName: "Financial Services".
+
+`apply` - (Optional) x-displayName: "Apply for a Financial Service Account (e.g., credit card, banking, retirement account)" (bool).
+
+`money_transfer` - (Optional) x-displayName: "Money Transfer" (bool).
+
 ### Flag
 
 Flag the request while not taking any invasive actions..
@@ -1043,6 +1122,42 @@ Flag the request while not taking any invasive actions..
 `append_headers` - (Optional) Append mitigation headers.. See [Append Headers ](#append-headers) below for details.
 
 `no_headers` - (Optional) No mitigation headers. (bool).
+
+### Flight
+
+x-displayName: "Flight".
+
+`checkin` - (Optional) x-displayName: "Check into Flight" (bool).
+
+### Flight Search
+
+x-displayName: "Flight Search".
+
+### Flow Label
+
+x-displayName: "Specify flow label category".
+
+`account_management` - (Optional) x-displayName: "Account Management". See [Account Management ](#account-management) below for details.
+
+`authentication` - (Optional) x-displayName: "Authentication". See [Authentication ](#authentication) below for details.
+
+`financial_services` - (Optional) x-displayName: "Financial Services". See [Financial Services ](#financial-services) below for details.
+
+`flight` - (Optional) x-displayName: "Flight". See [Flight ](#flight) below for details.
+
+`profile_management` - (Optional) x-displayName: "Profile Management". See [Profile Management ](#profile-management) below for details.
+
+`search` - (Optional) x-displayName: "Search". See [Search ](#search) below for details.
+
+`shopping_gift_cards` - (Optional) x-displayName: "Shopping & Gift Cards". See [Shopping Gift Cards ](#shopping-gift-cards) below for details.
+
+### Gift Card Make Purchase With Gift Card
+
+x-displayName: "Purchase with Gift Card".
+
+### Gift Card Validation
+
+x-displayName: "Gift Card Validation".
 
 ### Hash Policy
 
@@ -1296,6 +1411,22 @@ Specify origin server with K8s service name and site information.
 
 `site_locator` - (Required) Site or Virtual site where this origin server is located. See [Site Locator ](#site-locator) below for details.
 
+### Login
+
+x-displayName: "Login".
+
+### Login Mfa
+
+x-displayName: "Login MFA".
+
+### Login Partner
+
+x-displayName: "Login for a Channel Partner".
+
+### Logout
+
+x-displayName: "Logout".
+
 ### Low Security
 
 TLS v1.0+ including non-PFS ciphers and weak crypto algorithms..
@@ -1344,6 +1475,10 @@ Mobile SDK configuration.
 
 `reload_header_name` - (Required) Header that is used for SDK configuration sync. (`String`).
 
+### Money Transfer
+
+x-displayName: "Money Transfer".
+
 ### More Option
 
 More options like header manipulation, compression etc..
@@ -1354,7 +1489,7 @@ More options like header manipulation, compression etc..
 
 `custom_errors` - (Optional) matches for a request. (`String`).
 
-`disable_default_error_pages` - (Optional) Disable the use of default Volterra error pages. (`Bool`).
+`disable_default_error_pages` - (Optional) Disable the use of default F5XC error pages. (`Bool`).
 
 `idle_timeout` - (Optional) received, otherwise the stream is reset. (`Int`).
 
@@ -1470,6 +1605,10 @@ Outside network on the site.
 
 Pass existing server header as is. If server header is absent, a new header is not appended..
 
+### Password Reset
+
+x-displayName: "Password Reset".
+
 ### Path
 
 URI path matcher..
@@ -1568,13 +1707,13 @@ TLS Private Key data in unencrypted PEM format including the PEM headers. The da
 
 `secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).
 
-`blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by Volterra Secret Management Service. See [Blindfold Secret Info ](#blindfold-secret-info) below for details.
+`blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Blindfold Secret Info ](#blindfold-secret-info) below for details.
 
 `clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Clear Secret Info ](#clear-secret-info) below for details.
 
 `vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Vault Secret Info ](#vault-secret-info) below for details.
 
-`wingman_secret_info` - (Optional) Secret is given as bootstrap secret in Volterra Security Sidecar. See [Wingman Secret Info ](#wingman-secret-info) below for details.
+`wingman_secret_info` - (Optional) Secret is given as bootstrap secret in F5XC Security Sidecar. See [Wingman Secret Info ](#wingman-secret-info) below for details.
 
 ### Private Name
 
@@ -1587,6 +1726,20 @@ Specify origin server with private or public DNS name and site information.
 `outside_network` - (Optional) Outside network on the site (bool).
 
 `site_locator` - (Required) Site or Virtual site where this origin server is located. See [Site Locator ](#site-locator) below for details.
+
+### Product Search
+
+x-displayName: "Product Search".
+
+### Profile Management
+
+x-displayName: "Profile Management".
+
+`create` - (Optional) x-displayName: "Profile Creation" (bool).
+
+`update` - (Optional) x-displayName: "Profile Update" (bool).
+
+`view` - (Optional) x-displayName: "Profile View" (bool).
 
 ### Proper Case Header Transformation
 
@@ -1605,6 +1758,10 @@ List of protected application endpoints (max 128 items)..
 `any_domain` - (Optional) Any Domain. (bool).
 
 `domain` - (Optional) Domain matcher.. See [Domain ](#domain) below for details.
+
+`flow_label` - (Optional) x-displayName: "Specify flow label category". See [Flow Label ](#flow-label) below for details.
+
+`undefined_flow_label` - (Optional) x-displayName: "Undefined" (bool).
 
 `http_methods` - (Required) List of HTTP methods. (`List of Strings`).
 
@@ -1724,6 +1881,10 @@ Conditions related to the request, such as query parameters, headers, etc..
 
 `query_params` - (Optional) Note that all specified query parameter predicates must evaluate to true.. See [Query Params ](#query-params) below for details.
 
+### Reservation Search
+
+x-displayName: "Reservation Search (e.g., sporting events, concerts)".
+
 ### Response Headers To Add
 
 Headers specified at this level are applied after headers from matched Route are applied.
@@ -1745,6 +1906,10 @@ x-displayName: "Retain All Parameters".
 Request are sent to all eligible origin servers using hash of request based on hash policy. Consistent hashing algorithm, ring hash, is used to select origin server.
 
 `hash_policy` - (Required) route the request. See [Hash Policy ](#hash-policy) below for details.
+
+### Room Search
+
+x-displayName: "Room Search".
 
 ### Route Direct Response
 
@@ -1814,6 +1979,18 @@ Required list of pages to insert Bot Defense client JavaScript..
 
 Health check is performed on endpoint port itself.
 
+### Search
+
+x-displayName: "Search".
+
+`flight_search` - (Optional) x-displayName: "Flight Search" (bool).
+
+`product_search` - (Optional) x-displayName: "Product Search" (bool).
+
+`reservation_search` - (Optional) x-displayName: "Reservation Search (e.g., sporting events, concerts)" (bool).
+
+`room_search` - (Optional) x-displayName: "Room Search" (bool).
+
 ### Secret Value
 
 Secret Value of the HTTP header..
@@ -1822,13 +1999,13 @@ Secret Value of the HTTP header..
 
 `secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).
 
-`blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by Volterra Secret Management Service. See [Blindfold Secret Info ](#blindfold-secret-info) below for details.
+`blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Blindfold Secret Info ](#blindfold-secret-info) below for details.
 
 `clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Clear Secret Info ](#clear-secret-info) below for details.
 
 `vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Vault Secret Info ](#vault-secret-info) below for details.
 
-`wingman_secret_info` - (Optional) Secret is given as bootstrap secret in Volterra Security Sidecar. See [Wingman Secret Info ](#wingman-secret-info) below for details.
+`wingman_secret_info` - (Optional) Secret is given as bootstrap secret in F5XC Security Sidecar. See [Wingman Secret Info ](#wingman-secret-info) below for details.
 
 ### Server Url Rules
 
@@ -1849,6 +2026,74 @@ For matching also specific endpoints you can use the API endpoint rules set bell
 discovery has to happen. This implicit label is added to service_selector.
 
 `expressions` - (Required) expressions contains the kubernetes style label expression for selections. (`String`).
+
+### Shop Add To Cart
+
+x-displayName: "Add to Cart".
+
+### Shop Checkout
+
+x-displayName: "Checkout".
+
+### Shop Choose Seat
+
+x-displayName: "Select Seat(s)".
+
+### Shop Enter Drawing Submission
+
+x-displayName: "Enter Drawing Submission".
+
+### Shop Make Payment
+
+x-displayName: "Payment / Billing".
+
+### Shop Order
+
+x-displayName: "Order Submit".
+
+### Shop Price Inquiry
+
+x-displayName: "Price Inquiry".
+
+### Shop Promo Code Validation
+
+x-displayName: "Promo Code Validation".
+
+### Shop Purchase Gift Card
+
+x-displayName: "Purchase a Gift Card".
+
+### Shop Update Quantity
+
+x-displayName: "Update Quantity".
+
+### Shopping Gift Cards
+
+x-displayName: "Shopping & Gift Cards".
+
+`gift_card_make_purchase_with_gift_card` - (Optional) x-displayName: "Purchase with Gift Card" (bool).
+
+`gift_card_validation` - (Optional) x-displayName: "Gift Card Validation" (bool).
+
+`shop_add_to_cart` - (Optional) x-displayName: "Add to Cart" (bool).
+
+`shop_checkout` - (Optional) x-displayName: "Checkout" (bool).
+
+`shop_choose_seat` - (Optional) x-displayName: "Select Seat(s)" (bool).
+
+`shop_enter_drawing_submission` - (Optional) x-displayName: "Enter Drawing Submission" (bool).
+
+`shop_make_payment` - (Optional) x-displayName: "Payment / Billing" (bool).
+
+`shop_order` - (Optional) x-displayName: "Order Submit" (bool).
+
+`shop_price_inquiry` - (Optional) x-displayName: "Price Inquiry" (bool).
+
+`shop_promo_code_validation` - (Optional) x-displayName: "Promo Code Validation" (bool).
+
+`shop_purchase_gift_card` - (Optional) x-displayName: "Purchase a Gift Card" (bool).
+
+`shop_update_quantity` - (Optional) x-displayName: "Update Quantity" (bool).
 
 ### Simple Route
 
@@ -1930,17 +2175,17 @@ Specifies configuration for temporary user blocking resulting from malicious use
 
 ### Tls Certificates
 
-Set of TLS certificates.
+for example, domain.com and *.domain.com - but use different signature algorithms.
 
 `certificate_url` - (Required) Certificate or certificate chain in PEM format including the PEM headers. (`String`).
 
 `description` - (Optional) Description for the certificate (`String`).
 
-`custom_hash_algorithms` - (Optional) Use hash algorithms in the custom order. Volterra will try to fetch ocsp response from the CA in the given order. Additionally, LoadBalancer will not become active until ocspResponse cannot be fetched if the certificate has MustStaple extension set.. See [Custom Hash Algorithms ](#custom-hash-algorithms) below for details.
+`custom_hash_algorithms` - (Optional) Use hash algorithms in the custom order. F5XC will try to fetch ocsp response from the CA in the given order. Additionally, LoadBalancer will not become active until ocspResponse cannot be fetched if the certificate has MustStaple extension set.. See [Custom Hash Algorithms ](#custom-hash-algorithms) below for details.
 
 `disable_ocsp_stapling` - (Optional) This is the default behavior if no choice is selected.. See [Disable Ocsp Stapling ](#disable-ocsp-stapling) below for details.
 
-`use_system_defaults` - (Optional) Volterra will try to fetch OCSPResponse with sha256 and sha1 as HashAlgorithm, in that order.. See [Use System Defaults ](#use-system-defaults) below for details.
+`use_system_defaults` - (Optional) F5XC will try to fetch OCSPResponse with sha256 and sha1 as HashAlgorithm, in that order.. See [Use System Defaults ](#use-system-defaults) below for details.
 
 `private_key` - (Required) TLS Private Key data in unencrypted PEM format including the PEM headers. The data may be optionally secured using BlindFold. TLS key has to match the accompanying certificate.. See [Private Key ](#private-key) below for details.
 
@@ -1974,9 +2219,13 @@ TLS parameters for downstream connections..
 
 `use_mtls` - (Optional) x-displayName: "Enable". See [Use Mtls ](#use-mtls) below for details.
 
-`tls_certificates` - (Required) Set of TLS certificates. See [Tls Certificates ](#tls-certificates) below for details.
+`tls_certificates` - (Required) for example, domain.com and *.domain.com - but use different signature algorithms. See [Tls Certificates ](#tls-certificates) below for details.
 
 `tls_config` - (Optional) Configuration of TLS settings such as min/max TLS version and ciphersuites. See [Tls Config ](#tls-config) below for details.
+
+### Token Refresh
+
+x-displayName: "Token Refresh".
 
 ### Trusted Clients
 
@@ -1988,7 +2237,7 @@ Define rules to skip processing of one or more features such as WAF, Bot Defense
 
 `waf_skip_processing` - (Optional) Skip WAF processing for clients matching this rule. (bool).
 
-`actions` - (Optional) Action that should be taken when client identifier matches the rule (`List of Strings`).
+`actions` - (Optional) Actions that should be taken when client identifier matches the rule (`List of Strings`).
 
 `as_number` - (Required) RFC 6793 defined 4-byte AS number (`Int`).
 
@@ -2001,6 +2250,14 @@ Define rules to skip processing of one or more features such as WAF, Bot Defense
 `expiration_timestamp` - (Optional) the configuration but is not applied anymore. (`String`).
 
 `metadata` - (Required) Common attributes for the rule including name and description.. See [Metadata ](#metadata) below for details.
+
+### Undefined Flow Label
+
+x-displayName: "Undefined".
+
+### Update
+
+x-displayName: "Profile Update".
 
 ### Use Default Port
 
@@ -2032,7 +2289,7 @@ Perform origin server verification using the provided trusted CA list.
 
 ### Use System Defaults
 
-Volterra will try to fetch OCSPResponse with sha256 and sha1 as HashAlgorithm, in that order..
+F5XC will try to fetch OCSPResponse with sha256 and sha1 as HashAlgorithm, in that order..
 
 ### Use Tls
 
@@ -2046,7 +2303,7 @@ x-displayName: "Enable".
 
 `use_server_verification` - (Optional) Perform origin server verification using the provided trusted CA list. See [Use Server Verification ](#use-server-verification) below for details.
 
-`volterra_trusted_ca` - (Optional) Perform origin server verification using Volterra default trusted CA list (bool).
+`volterra_trusted_ca` - (Optional) Perform origin server verification using F5XC default trusted CA list (bool).
 
 `disable_sni` - (Optional) Do not use SNI. (bool).
 
@@ -2069,6 +2326,10 @@ Vault Secret is used for the secrets managed by Hashicorp Vault.
 `secret_encoding` - (Optional) This field defines the encoding type of the secret BEFORE the secret is put into Hashicorp Vault. (`String`).
 
 `version` - (Optional) If not provided latest version will be returned. (`Int`).
+
+### View
+
+x-displayName: "Profile View".
 
 ### Virtual Network
 
@@ -2118,13 +2379,11 @@ Specify origin server name on virtual network other than inside or outside netwo
 
 ### Volterra Trusted Ca
 
-Perform origin server verification using Volterra default trusted CA list.
+Perform origin server verification using F5XC default trusted CA list.
 
 ### Waf Exclusion Rules
 
 The match criteria include domain, path and method..
-
-`app_firewall_detection_control` - (Optional) Define the list of Signature IDs, Violations, Attack Types and Bot Names that should be excluded from triggering on the defined match criteria.. See [App Firewall Detection Control ](#app-firewall-detection-control) below for details.
 
 `any_domain` - (Optional) Apply this WAF exclusion rule for any domain (bool).
 
@@ -2141,6 +2400,10 @@ The match criteria include domain, path and method..
 `methods` - (Optional) methods to be matched (`List of Strings`).
 
 `path_regex` - (Required) path regex to be matched (`String`).
+
+`app_firewall_detection_control` - (Optional) Define the list of Signature IDs, Violations, Attack Types and Bot Names that should be excluded from triggering on the defined match criteria.. See [App Firewall Detection Control ](#app-firewall-detection-control) below for details.
+
+`waf_skip_processing` - (Optional) Skip all App Firewall processing for this request (bool).
 
 ### Waf Skip Processing
 
@@ -2162,7 +2425,7 @@ Web and mobile traffic channel..
 
 ### Wingman Secret Info
 
-Secret is given as bootstrap secret in Volterra Security Sidecar.
+Secret is given as bootstrap secret in F5XC Security Sidecar.
 
 `name` - (Required) Name of the secret. (`String`).
 

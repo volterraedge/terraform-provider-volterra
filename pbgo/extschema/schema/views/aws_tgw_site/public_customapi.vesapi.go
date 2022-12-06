@@ -1250,8 +1250,8 @@ var CustomAPISwaggerJSON string = `{
             "properties": {
                 "node_id": {
                     "type": "string",
-                    "description": "x-displayName: \"Volterra Node ID\"\nx-example: \"ves-node-id-xxxxxx\"\nx-required\nVolterra Node ID for which this tunnel is configured",
-                    "title": "Volterra Node ID"
+                    "description": "x-displayName: \"F5XC Node ID\"\nx-example: \"ves-node-id-xxxxxx\"\nx-required\nF5XC Node ID for which this tunnel is configured",
+                    "title": "F5XC Node ID"
                 },
                 "node_name": {
                     "type": "string",
@@ -1534,6 +1534,61 @@ var CustomAPISwaggerJSON string = `{
             "properties": {
                 "az_name": {
                     "type": "string",
+                    "description": " AWS availability zone, must be consistent with the selected AWS region.\n\nExample: - \"us-west-2a\"-",
+                    "title": "AZ Name",
+                    "x-displayname": "AZ Name",
+                    "x-ves-example": "us-west-2a"
+                },
+                "inside_subnet": {
+                    "description": " Inside subnet Info",
+                    "title": "Inside Subnet Info",
+                    "$ref": "#/definitions/viewsAWSSubnetInfoType",
+                    "x-displayname": "Inside Subnet Info"
+                },
+                "inside_subnet_id": {
+                    "type": "string",
+                    "description": " Inside subnet ID used by volterra site\n\nExample: - \"subnet-12345678901234567\"-",
+                    "title": "Inside Subnet ID",
+                    "x-displayname": "Inside Subnet ID",
+                    "x-ves-example": "subnet-12345678901234567"
+                },
+                "outside_subnet": {
+                    "description": " Outside subnet Info",
+                    "title": "Outside Subnet Info",
+                    "$ref": "#/definitions/viewsAWSSubnetInfoType",
+                    "x-displayname": "Outside Subnet Info"
+                },
+                "outside_subnet_id": {
+                    "type": "string",
+                    "description": " Outside subnet ID used by volterra site\n\nExample: - \"subnet-12345678901234567\"-",
+                    "title": "Outside Subnet ID",
+                    "x-displayname": "Outside Subnet ID",
+                    "x-ves-example": "subnet-12345678901234567"
+                },
+                "workload_subnet": {
+                    "description": " Workload subnet Info",
+                    "title": "Workload Subnet Info",
+                    "$ref": "#/definitions/viewsAWSSubnetInfoType",
+                    "x-displayname": "Workload Subnet Info"
+                },
+                "workload_subnet_id": {
+                    "type": "string",
+                    "description": " Workload subnet ID used by volterra site\n\nExample: - \"subnet-12345678901234567\"-",
+                    "title": "Workload Subnet ID",
+                    "x-displayname": "Workload Subnet ID",
+                    "x-ves-example": "subnet-12345678901234567"
+                }
+            }
+        },
+        "viewsAWSSubnetInfoType": {
+            "type": "object",
+            "description": "AWS Subnets Info Type",
+            "title": "AWS Subnets Info Type",
+            "x-displayname": "AWS Subnets Info Type",
+            "x-ves-proto-message": "ves.io.schema.views.AWSSubnetInfoType",
+            "properties": {
+                "az_name": {
+                    "type": "string",
                     "description": " AWS availability zone, must be consistent with the selected AWS region.\n\nExample: - \"us-west-2a\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.pattern: ^([a-z]{2})-([a-z0-9]{4,20})-([a-z0-9]{2})$\n",
                     "title": "AZ Name",
                     "x-displayname": "AZ Name",
@@ -1544,40 +1599,30 @@ var CustomAPISwaggerJSON string = `{
                         "ves.io.schema.rules.string.pattern": "^([a-z]{2})-([a-z0-9]{4,20})-([a-z0-9]{2})$"
                     }
                 },
-                "inside_subnet_id": {
+                "id": {
                     "type": "string",
-                    "description": " Inside subnet ID used by volterra site\n\nExample: - \"subnet-12345678901234567\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 64\n  ves.io.schema.rules.string.pattern: ^(subnet-)([a-z0-9]{8}|[a-z0-9]{17})$\n",
-                    "title": "Inside Subnet ID",
+                    "description": " Subnet ID\n\nExample: - \"subnet-12345678901234567\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 64\n  ves.io.schema.rules.string.pattern: ^(subnet-)([a-z0-9]{8}|[a-z0-9]{17})$\n",
+                    "title": "Subnet ID",
                     "maxLength": 64,
-                    "x-displayname": "Inside Subnet ID",
+                    "x-displayname": "Subnet ID",
                     "x-ves-example": "subnet-12345678901234567",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.string.max_len": "64",
                         "ves.io.schema.rules.string.pattern": "^(subnet-)([a-z0-9]{8}|[a-z0-9]{17})$"
                     }
                 },
-                "outside_subnet_id": {
+                "ipv4_prefix": {
                     "type": "string",
-                    "description": " Outside subnet ID used by volterra site\n\nExample: - \"subnet-12345678901234567\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 64\n  ves.io.schema.rules.string.pattern: ^(subnet-)([a-z0-9]{8}|[a-z0-9]{17})$\n",
-                    "title": "Outside Subnet ID",
-                    "maxLength": 64,
-                    "x-displayname": "Outside Subnet ID",
-                    "x-ves-example": "subnet-12345678901234567",
+                    "description": " Subnet CIDR block. It has to be private address space.\n\nExample: - \"10.1.0.0/16\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.ipv4_prefix: true\n  ves.io.schema.rules.string.max_ip_prefix_length: 28\n  ves.io.schema.rules.string.min_ip_prefix_length: 8\n",
+                    "title": "Subnet CIDR block",
+                    "x-displayname": "Subnet CIDR block",
+                    "x-ves-example": "10.1.0.0/16",
+                    "x-ves-required": "true",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.max_len": "64",
-                        "ves.io.schema.rules.string.pattern": "^(subnet-)([a-z0-9]{8}|[a-z0-9]{17})$"
-                    }
-                },
-                "workload_subnet_id": {
-                    "type": "string",
-                    "description": " Workload subnet ID used by volterra site\n\nExample: - \"subnet-12345678901234567\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 64\n  ves.io.schema.rules.string.pattern: ^(subnet-)([a-z0-9]{8}|[a-z0-9]{17})$\n",
-                    "title": "Workload Subnet ID",
-                    "maxLength": 64,
-                    "x-displayname": "Workload Subnet ID",
-                    "x-ves-example": "subnet-12345678901234567",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.max_len": "64",
-                        "ves.io.schema.rules.string.pattern": "^(subnet-)([a-z0-9]{8}|[a-z0-9]{17})$"
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.ipv4_prefix": "true",
+                        "ves.io.schema.rules.string.max_ip_prefix_length": "28",
+                        "ves.io.schema.rules.string.min_ip_prefix_length": "8"
                     }
                 }
             }

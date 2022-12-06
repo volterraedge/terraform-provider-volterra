@@ -405,6 +405,181 @@ func DaemonTlsParametersTypeValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *DcClusterGroupStatus) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *DcClusterGroupStatus) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *DcClusterGroupStatus) DeepCopy() *DcClusterGroupStatus {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &DcClusterGroupStatus{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *DcClusterGroupStatus) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *DcClusterGroupStatus) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return DcClusterGroupStatusValidator().Validate(ctx, m, opts...)
+}
+
+func (m *DcClusterGroupStatus) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetSiteInfoDRefInfo()
+
+}
+
+// GetDRefInfo for the field's type
+func (m *DcClusterGroupStatus) GetSiteInfoDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetSiteInfo() == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	for idx, e := range m.GetSiteInfo() {
+		driSet, err := e.GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetSiteInfo() GetDRefInfo() FAILED")
+		}
+		for i := range driSet {
+			dri := &driSet[i]
+			dri.DRField = fmt.Sprintf("site_info[%v].%s", idx, dri.DRField)
+		}
+		drInfos = append(drInfos, driSet...)
+	}
+	return drInfos, nil
+
+}
+
+type ValidateDcClusterGroupStatus struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateDcClusterGroupStatus) SiteInfoValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for site_info")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*SiteInfo, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := SiteInfoValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for site_info")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*SiteInfo)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*SiteInfo, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated site_info")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items site_info")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateDcClusterGroupStatus) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*DcClusterGroupStatus)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *DcClusterGroupStatus got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["site_info"]; exists {
+		vOpts := append(opts, db.WithValidateField("site_info"))
+		if err := fv(ctx, m.GetSiteInfo(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultDcClusterGroupStatusValidator = func() *ValidateDcClusterGroupStatus {
+	v := &ValidateDcClusterGroupStatus{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhSiteInfo := v.SiteInfoValidationRuleHandler
+	rulesSiteInfo := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhSiteInfo(rulesSiteInfo)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for DcClusterGroupStatus.site_info: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["site_info"] = vFn
+
+	return v
+}()
+
+func DcClusterGroupStatusValidator() db.Validator {
+	return DefaultDcClusterGroupStatusValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *OperMetaType) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -623,6 +798,132 @@ var DefaultServiceParametersValidator = func() *ValidateServiceParameters {
 
 func ServiceParametersValidator() db.Validator {
 	return DefaultServiceParametersValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *SiteMeshGroupStatus) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *SiteMeshGroupStatus) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *SiteMeshGroupStatus) DeepCopy() *SiteMeshGroupStatus {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &SiteMeshGroupStatus{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *SiteMeshGroupStatus) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *SiteMeshGroupStatus) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return SiteMeshGroupStatusValidator().Validate(ctx, m, opts...)
+}
+
+func (m *SiteMeshGroupStatus) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetSiteInfoDRefInfo()
+
+}
+
+// GetDRefInfo for the field's type
+func (m *SiteMeshGroupStatus) GetSiteInfoDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetSiteInfo() == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	for idx, e := range m.GetSiteInfo() {
+		driSet, err := e.GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetSiteInfo() GetDRefInfo() FAILED")
+		}
+		for i := range driSet {
+			dri := &driSet[i]
+			dri.DRField = fmt.Sprintf("site_info[%v].%s", idx, dri.DRField)
+		}
+		drInfos = append(drInfos, driSet...)
+	}
+	return drInfos, nil
+
+}
+
+type ValidateSiteMeshGroupStatus struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateSiteMeshGroupStatus) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*SiteMeshGroupStatus)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *SiteMeshGroupStatus got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["other_connected_sites"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("other_connected_sites"))
+		for idx, item := range m.GetOtherConnectedSites() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["site_info"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("site_info"))
+		for idx, item := range m.GetSiteInfo() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultSiteMeshGroupStatusValidator = func() *ValidateSiteMeshGroupStatus {
+	v := &ValidateSiteMeshGroupStatus{FldValidators: map[string]db.ValidatorFunc{}}
+
+	v.FldValidators["site_info"] = SiteInfoValidator().Validate
+
+	return v
+}()
+
+func SiteMeshGroupStatusValidator() db.Validator {
+	return DefaultSiteMeshGroupStatusValidator
 }
 
 // augmented methods on protoc/std generated struct

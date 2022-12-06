@@ -15,7 +15,7 @@
 // * TXT RECORD value string
 // * Verification Pending
 //
-// This TXT record value string is then programed into users DNS provider. Volterra then will verify the DNS sub domain
+// This TXT record value string is then programed into users DNS provider. F5XC then will verify the DNS sub domain
 // And status will change to
 //
 // * List of nameservers

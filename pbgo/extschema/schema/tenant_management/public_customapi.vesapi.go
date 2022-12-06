@@ -34,21 +34,21 @@ type CustomAPIGrpcClient struct {
 	rpcFns map[string]func(context.Context, string, ...grpc.CallOption) (proto.Message, error)
 }
 
-func (c *CustomAPIGrpcClient) doRPCSubscribe(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
+func (c *CustomAPIGrpcClient) doRPCDelegatedAccessSubscribe(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &SubscribeRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
 		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.tenant_management.SubscribeRequest", yamlReq)
 	}
-	rsp, err := c.grpcClient.Subscribe(ctx, req, opts...)
+	rsp, err := c.grpcClient.DelegatedAccessSubscribe(ctx, req, opts...)
 	return rsp, err
 }
 
-func (c *CustomAPIGrpcClient) doRPCUnsubscribe(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
+func (c *CustomAPIGrpcClient) doRPCDelegatedAccessUnsubscribe(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &UnsubscribeRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
 		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.tenant_management.UnsubscribeRequest", yamlReq)
 	}
-	rsp, err := c.grpcClient.Unsubscribe(ctx, req, opts...)
+	rsp, err := c.grpcClient.DelegatedAccessUnsubscribe(ctx, req, opts...)
 	return rsp, err
 }
 
@@ -82,9 +82,9 @@ func NewCustomAPIGrpcClient(cc *grpc.ClientConn) server.CustomClient {
 		grpcClient: NewCustomAPIClient(cc),
 	}
 	rpcFns := make(map[string]func(context.Context, string, ...grpc.CallOption) (proto.Message, error))
-	rpcFns["Subscribe"] = ccl.doRPCSubscribe
+	rpcFns["DelegatedAccessSubscribe"] = ccl.doRPCDelegatedAccessSubscribe
 
-	rpcFns["Unsubscribe"] = ccl.doRPCUnsubscribe
+	rpcFns["DelegatedAccessUnsubscribe"] = ccl.doRPCDelegatedAccessUnsubscribe
 
 	ccl.rpcFns = rpcFns
 
@@ -99,7 +99,7 @@ type CustomAPIRestClient struct {
 	rpcFns map[string]func(context.Context, *server.CustomCallOpts) (proto.Message, error)
 }
 
-func (c *CustomAPIRestClient) doRPCSubscribe(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
+func (c *CustomAPIRestClient) doRPCDelegatedAccessSubscribe(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
 	}
@@ -181,7 +181,7 @@ func (c *CustomAPIRestClient) doRPCSubscribe(ctx context.Context, callOpts *serv
 	return pbRsp, nil
 }
 
-func (c *CustomAPIRestClient) doRPCUnsubscribe(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
+func (c *CustomAPIRestClient) doRPCDelegatedAccessUnsubscribe(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
 	}
@@ -287,9 +287,9 @@ func NewCustomAPIRestClient(baseURL string, hc http.Client) server.CustomClient 
 	}
 
 	rpcFns := make(map[string]func(context.Context, *server.CustomCallOpts) (proto.Message, error))
-	rpcFns["Subscribe"] = ccl.doRPCSubscribe
+	rpcFns["DelegatedAccessSubscribe"] = ccl.doRPCDelegatedAccessSubscribe
 
-	rpcFns["Unsubscribe"] = ccl.doRPCUnsubscribe
+	rpcFns["DelegatedAccessUnsubscribe"] = ccl.doRPCDelegatedAccessUnsubscribe
 
 	ccl.rpcFns = rpcFns
 
@@ -303,11 +303,11 @@ type customAPIInprocClient struct {
 	CustomAPIServer
 }
 
-func (c *customAPIInprocClient) Subscribe(ctx context.Context, in *SubscribeRequest, opts ...grpc.CallOption) (*SubscribeResponse, error) {
-	return c.CustomAPIServer.Subscribe(ctx, in)
+func (c *customAPIInprocClient) DelegatedAccessSubscribe(ctx context.Context, in *SubscribeRequest, opts ...grpc.CallOption) (*SubscribeResponse, error) {
+	return c.CustomAPIServer.DelegatedAccessSubscribe(ctx, in)
 }
-func (c *customAPIInprocClient) Unsubscribe(ctx context.Context, in *UnsubscribeRequest, opts ...grpc.CallOption) (*UnsubscribeResponse, error) {
-	return c.CustomAPIServer.Unsubscribe(ctx, in)
+func (c *customAPIInprocClient) DelegatedAccessUnsubscribe(ctx context.Context, in *UnsubscribeRequest, opts ...grpc.CallOption) (*UnsubscribeResponse, error) {
+	return c.CustomAPIServer.DelegatedAccessUnsubscribe(ctx, in)
 }
 
 func NewCustomAPIInprocClient(svc svcfw.Service) CustomAPIClient {
@@ -331,7 +331,7 @@ type customAPISrv struct {
 	svc svcfw.Service
 }
 
-func (s *customAPISrv) Subscribe(ctx context.Context, in *SubscribeRequest) (*SubscribeResponse, error) {
+func (s *customAPISrv) DelegatedAccessSubscribe(ctx context.Context, in *SubscribeRequest) (*SubscribeResponse, error) {
 	ah := s.svc.GetAPIHandler("ves.io.schema.tenant_management.CustomAPI")
 	cah, ok := ah.(CustomAPIServer)
 	if !ok {
@@ -348,7 +348,7 @@ func (s *customAPISrv) Subscribe(ctx context.Context, in *SubscribeRequest) (*Su
 		if len(bodyFields) > 0 {
 			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
 		}
-		userMsg := "The 'CustomAPI.Subscribe' operation on 'tenant_management'"
+		userMsg := "The 'CustomAPI.DelegatedAccessSubscribe' operation on 'tenant_management'"
 		if err == nil {
 			userMsg += " was successfully performed."
 		} else {
@@ -363,7 +363,7 @@ func (s *customAPISrv) Subscribe(ctx context.Context, in *SubscribeRequest) (*Su
 	}
 
 	if s.svc.Config().EnableAPIValidation {
-		if rvFn := s.svc.GetRPCValidator("ves.io.schema.tenant_management.CustomAPI.Subscribe"); rvFn != nil {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.tenant_management.CustomAPI.DelegatedAccessSubscribe"); rvFn != nil {
 			if verr := rvFn(ctx, in); verr != nil {
 				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
 				return nil, server.GRPCStatusFromError(err).Err()
@@ -371,7 +371,7 @@ func (s *customAPISrv) Subscribe(ctx context.Context, in *SubscribeRequest) (*Su
 		}
 	}
 
-	rsp, err = cah.Subscribe(ctx, in)
+	rsp, err = cah.DelegatedAccessSubscribe(ctx, in)
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
@@ -380,7 +380,7 @@ func (s *customAPISrv) Subscribe(ctx context.Context, in *SubscribeRequest) (*Su
 
 	return rsp, nil
 }
-func (s *customAPISrv) Unsubscribe(ctx context.Context, in *UnsubscribeRequest) (*UnsubscribeResponse, error) {
+func (s *customAPISrv) DelegatedAccessUnsubscribe(ctx context.Context, in *UnsubscribeRequest) (*UnsubscribeResponse, error) {
 	ah := s.svc.GetAPIHandler("ves.io.schema.tenant_management.CustomAPI")
 	cah, ok := ah.(CustomAPIServer)
 	if !ok {
@@ -397,7 +397,7 @@ func (s *customAPISrv) Unsubscribe(ctx context.Context, in *UnsubscribeRequest) 
 		if len(bodyFields) > 0 {
 			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
 		}
-		userMsg := "The 'CustomAPI.Unsubscribe' operation on 'tenant_management'"
+		userMsg := "The 'CustomAPI.DelegatedAccessUnsubscribe' operation on 'tenant_management'"
 		if err == nil {
 			userMsg += " was successfully performed."
 		} else {
@@ -412,7 +412,7 @@ func (s *customAPISrv) Unsubscribe(ctx context.Context, in *UnsubscribeRequest) 
 	}
 
 	if s.svc.Config().EnableAPIValidation {
-		if rvFn := s.svc.GetRPCValidator("ves.io.schema.tenant_management.CustomAPI.Unsubscribe"); rvFn != nil {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.tenant_management.CustomAPI.DelegatedAccessUnsubscribe"); rvFn != nil {
 			if verr := rvFn(ctx, in); verr != nil {
 				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
 				return nil, server.GRPCStatusFromError(err).Err()
@@ -420,7 +420,7 @@ func (s *customAPISrv) Unsubscribe(ctx context.Context, in *UnsubscribeRequest) 
 		}
 	}
 
-	rsp, err = cah.Unsubscribe(ctx, in)
+	rsp, err = cah.DelegatedAccessUnsubscribe(ctx, in)
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
@@ -453,11 +453,11 @@ var CustomAPISwaggerJSON string = `{
     ],
     "tags": [],
     "paths": {
-        "/public/namespaces/system/tenant_management/subscribe": {
+        "/public/namespaces/system/tenant_management/delegated_access/subscribe": {
             "post": {
-                "summary": "Subscribe MSP Addon Service",
-                "description": "Subscribe Management Service Provider addon service feature.",
-                "operationId": "ves.io.schema.tenant_management.CustomAPI.Subscribe",
+                "summary": "Subscribe Delegated Access Addon Service",
+                "description": "Subscribe Delegated Access addon service feature. A support request will be created and feature will be enabled upon approval.",
+                "operationId": "ves.io.schema.tenant_management.CustomAPI.DelegatedAccessSubscribe",
                 "responses": {
                     "200": {
                         "description": "A successful response.",
@@ -529,19 +529,19 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-tenant_management-customapi-subscribe"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-tenant_management-customapi-delegatedaccesssubscribe"
                 },
-                "x-ves-proto-rpc": "ves.io.schema.tenant_management.CustomAPI.Subscribe"
+                "x-ves-proto-rpc": "ves.io.schema.tenant_management.CustomAPI.DelegatedAccessSubscribe"
             },
-            "x-displayname": "Allowed Tenant - UAM Manager Custom APIs",
+            "x-displayname": "Tenant Management",
             "x-ves-proto-service": "ves.io.schema.tenant_management.CustomAPI",
             "x-ves-proto-service-type": "CUSTOM_PUBLIC"
         },
-        "/public/namespaces/system/tenant_management/unsubscribe": {
+        "/public/namespaces/system/tenant_management/delegated_access/unsubscribe": {
             "post": {
-                "summary": "Unsubscribe MSP Addon Service",
-                "description": "unsubscribe Management Service Provider addon service feature.",
-                "operationId": "ves.io.schema.tenant_management.CustomAPI.Unsubscribe",
+                "summary": "Unsubscribe Delegated Access Addon Service",
+                "description": "Unsubscribe Delegated Access addon service feature. A support request will be created and request will be processed upon approval.",
+                "operationId": "ves.io.schema.tenant_management.CustomAPI.DelegatedAccessUnsubscribe",
                 "responses": {
                     "200": {
                         "description": "A successful response.",
@@ -613,11 +613,11 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-tenant_management-customapi-unsubscribe"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-tenant_management-customapi-delegatedaccessunsubscribe"
                 },
-                "x-ves-proto-rpc": "ves.io.schema.tenant_management.CustomAPI.Unsubscribe"
+                "x-ves-proto-rpc": "ves.io.schema.tenant_management.CustomAPI.DelegatedAccessUnsubscribe"
             },
-            "x-displayname": "Allowed Tenant - UAM Manager Custom APIs",
+            "x-displayname": "Tenant Management",
             "x-ves-proto-service": "ves.io.schema.tenant_management.CustomAPI",
             "x-ves-proto-service-type": "CUSTOM_PUBLIC"
         }

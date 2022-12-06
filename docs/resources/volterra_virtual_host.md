@@ -20,7 +20,7 @@ resource "volterra_virtual_host" "example" {
   name      = "acmecorp-web"
   namespace = "staging"
 
-  // One of the arguments from this list "no_challenge js_challenge captcha_challenge" must be set
+  // One of the arguments from this list "captcha_challenge no_challenge js_challenge" must be set
   no_challenge = true
 }
 
@@ -65,15 +65,19 @@ Argument Reference
 
 `cors_policy` - (Optional) resources from a server at a different origin. See [Cors Policy ](#cors-policy) below for details.
 
-`custom_errors` - (Optional) these pages are not editable. User has an option to disable the use of default Volterra error pages (`String`).
+`csrf_policy` - (Optional) CSRF is a mechanism that checks if request received at the server is from legitimate user.. See [Csrf Policy ](#csrf-policy) below for details.
+
+`custom_errors` - (Optional) these pages are not editable. User has an option to disable the use of default F5XC error pages (`String`).
 
 `default_loadbalancer` - (Optional) x-displayName: "Yes" (bool).
 
 `non_default_loadbalancer` - (Optional) x-displayName: "No" (bool).
 
-`disable_default_error_pages` - (Optional) An option to specify whether to disable using default Volterra error pages (`Bool`).
+`disable_default_error_pages` - (Optional) An option to specify whether to disable using default F5XC error pages (`Bool`).
 
 `disable_dns_resolve` - (Optional) for domains configured. This configuration is suitable for HTTP CONNECT proxy. (`Bool`).
+
+`dns_proxy_configuration` - (Optional) Advanced DNS Proxy Configurations like DDoS, Cache are mapped to DNSProxyConfiguration for internal use. See [Dns Proxy Configuration ](#dns-proxy-configuration) below for details.
 
 `domains` - (Optional) Domains also indicate the list of names for which DNS resolution will be done by VER (`List of String`).
 
@@ -133,6 +137,10 @@ Wildcard names are supported in the suffix or prefix form.
 
 `domains` - (Optional) Wildcard names are supported in the suffix or prefix form. (`String`).
 
+### All Load Balancer Domains
+
+Add All load balancer domains to source origin (allow) list..
+
 ### App Firewall
 
 A direct reference to an Application Firewall configuration object.
@@ -175,7 +183,7 @@ Configure authentication details.
 
 ### Blindfold Secret Info
 
-Blindfold Secret is used for the secrets managed by Volterra Secret Management Service.
+Blindfold Secret is used for the secrets managed by F5XC Secret Management Service.
 
 `decryption_provider` - (Optional) Name of the Secret Management Access object that contains information about the backend Secret Management service. (`String`).
 
@@ -202,6 +210,14 @@ specify the maximum buffer size and buffer interval with this config..
 `max_request_bytes` - (Optional) manager will stop buffering and return a RequestEntityTooLarge (413) response. (`Int`).
 
 `max_request_time` - (Optional) request before returning a RequestTimeout (408) response (`Int`).
+
+### Cache Profile
+
+which caches DNS replies from the origin DNS servers..
+
+`disable_cache_profile` - (Optional) x-displayName: "Disable" (bool).
+
+`enable_cache_profile` - (Optional) x-displayName: "Enable" (bool).
 
 ### Captcha Challenge
 
@@ -283,19 +299,57 @@ resources from a server at a different origin.
 
 `maximum_age` - (Optional) Maximum permitted value is 86400 seconds (24 hours) (`Int`).
 
+### Csrf Policy
+
+CSRF is a mechanism that checks if request received at the server is from legitimate user..
+
+`all_load_balancer_domains` - (Optional) Add All load balancer domains to source origin (allow) list. (bool).
+
+`custom_domain_list` - (Optional) Add one or more domains to source origin (allow) list.. See [Custom Domain List ](#custom-domain-list) below for details.
+
+### Custom Domain List
+
+Add one or more domains to source origin (allow) list..
+
+`domains` - (Optional) Wildcard names are supported in the suffix or prefix form. (`String`).
+
 ### Custom Hash Algorithms
 
-Use hash algorithms in the custom order. Volterra will try to fetch ocsp response from the CA in the given order. Additionally, LoadBalancer will not become active until ocspResponse cannot be fetched if the certificate has MustStaple extension set..
+Use hash algorithms in the custom order. F5XC will try to fetch ocsp response from the CA in the given order. Additionally, LoadBalancer will not become active until ocspResponse cannot be fetched if the certificate has MustStaple extension set..
 
 `hash_algorithms` - (Required) Ordered list of hash algorithms to be used. (`List of Strings`).
+
+### Ddos Profile
+
+to protect the origin DNS servers from external DDoS attacks..
+
+`disable_ddos_mitigation` - (Optional) x-displayName: "Disable" (bool).
+
+`enable_ddos_mitigation` - (Optional) x-displayName: "Enable" (bool).
 
 ### Default Header Transformation
 
 Normalize the headers to lower case.
 
+### Disable Cache Profile
+
+x-displayName: "Disable".
+
+### Disable Ddos Mitigation
+
+x-displayName: "Disable".
+
 ### Disable Ocsp Stapling
 
 This is the default behavior if no choice is selected..
+
+### Dns Proxy Configuration
+
+Advanced DNS Proxy Configurations like DDoS, Cache are mapped to DNSProxyConfiguration for internal use.
+
+`cache_profile` - (Optional) which caches DNS replies from the origin DNS servers.. See [Cache Profile ](#cache-profile) below for details.
+
+`ddos_profile` - (Required) to protect the origin DNS servers from external DDoS attacks.. See [Ddos Profile ](#ddos-profile) below for details.
 
 ### Dynamic Reverse Proxy
 
@@ -308,6 +362,14 @@ request. The DNS response is cached for 60s by default..
 `resolution_network_type` - (Optional) Type of the network to resolve the destination (`String`).
 
 `resolve_endpoint_dynamically` - (Optional) request. The DNS response is cached for 60s by default. (`Bool`).
+
+### Enable Cache Profile
+
+x-displayName: "Enable".
+
+### Enable Ddos Mitigation
+
+x-displayName: "Enable".
 
 ### Header Transformation Type
 
@@ -341,13 +403,13 @@ Primary HMAC Key.
 
 `secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).
 
-`blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by Volterra Secret Management Service. See [Blindfold Secret Info ](#blindfold-secret-info) below for details.
+`blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Blindfold Secret Info ](#blindfold-secret-info) below for details.
 
 `clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Clear Secret Info ](#clear-secret-info) below for details.
 
 `vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Vault Secret Info ](#vault-secret-info) below for details.
 
-`wingman_secret_info` - (Optional) Secret is given as bootstrap secret in Volterra Security Sidecar. See [Wingman Secret Info ](#wingman-secret-info) below for details.
+`wingman_secret_info` - (Optional) Secret is given as bootstrap secret in F5XC Security Sidecar. See [Wingman Secret Info ](#wingman-secret-info) below for details.
 
 ### Private Key
 
@@ -357,13 +419,13 @@ TLS Private Key data in unencrypted PEM format including the PEM headers. The da
 
 `secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).
 
-`blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by Volterra Secret Management Service. See [Blindfold Secret Info ](#blindfold-secret-info) below for details.
+`blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Blindfold Secret Info ](#blindfold-secret-info) below for details.
 
 `clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Clear Secret Info ](#clear-secret-info) below for details.
 
 `vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Vault Secret Info ](#vault-secret-info) below for details.
 
-`wingman_secret_info` - (Optional) Secret is given as bootstrap secret in Volterra Security Sidecar. See [Wingman Secret Info ](#wingman-secret-info) below for details.
+`wingman_secret_info` - (Optional) Secret is given as bootstrap secret in F5XC Security Sidecar. See [Wingman Secret Info ](#wingman-secret-info) below for details.
 
 ### Proper Case Header Transformation
 
@@ -431,13 +493,13 @@ Secondary HMAC Key.
 
 `secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).
 
-`blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by Volterra Secret Management Service. See [Blindfold Secret Info ](#blindfold-secret-info) below for details.
+`blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Blindfold Secret Info ](#blindfold-secret-info) below for details.
 
 `clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Clear Secret Info ](#clear-secret-info) below for details.
 
 `vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Vault Secret Info ](#vault-secret-info) below for details.
 
-`wingman_secret_info` - (Optional) Secret is given as bootstrap secret in Volterra Security Sidecar. See [Wingman Secret Info ](#wingman-secret-info) below for details.
+`wingman_secret_info` - (Optional) Secret is given as bootstrap secret in F5XC Security Sidecar. See [Wingman Secret Info ](#wingman-secret-info) below for details.
 
 ### Secret Value
 
@@ -447,13 +509,13 @@ Secret Value of the HTTP header..
 
 `secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).
 
-`blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by Volterra Secret Management Service. See [Blindfold Secret Info ](#blindfold-secret-info) below for details.
+`blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Blindfold Secret Info ](#blindfold-secret-info) below for details.
 
 `clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Clear Secret Info ](#clear-secret-info) below for details.
 
 `vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Vault Secret Info ](#vault-secret-info) below for details.
 
-`wingman_secret_info` - (Optional) Secret is given as bootstrap secret in Volterra Security Sidecar. See [Wingman Secret Info ](#wingman-secret-info) below for details.
+`wingman_secret_info` - (Optional) Secret is given as bootstrap secret in F5XC Security Sidecar. See [Wingman Secret Info ](#wingman-secret-info) below for details.
 
 ### Temporary User Blocking
 
@@ -469,11 +531,11 @@ Set of TLS certificates.
 
 `description` - (Optional) Description for the certificate (`String`).
 
-`custom_hash_algorithms` - (Optional) Use hash algorithms in the custom order. Volterra will try to fetch ocsp response from the CA in the given order. Additionally, LoadBalancer will not become active until ocspResponse cannot be fetched if the certificate has MustStaple extension set.. See [Custom Hash Algorithms ](#custom-hash-algorithms) below for details.
+`custom_hash_algorithms` - (Optional) Use hash algorithms in the custom order. F5XC will try to fetch ocsp response from the CA in the given order. Additionally, LoadBalancer will not become active until ocspResponse cannot be fetched if the certificate has MustStaple extension set.. See [Custom Hash Algorithms ](#custom-hash-algorithms) below for details.
 
 `disable_ocsp_stapling` - (Optional) This is the default behavior if no choice is selected.. See [Disable Ocsp Stapling ](#disable-ocsp-stapling) below for details.
 
-`use_system_defaults` - (Optional) Volterra will try to fetch OCSPResponse with sha256 and sha1 as HashAlgorithm, in that order.. See [Use System Defaults ](#use-system-defaults) below for details.
+`use_system_defaults` - (Optional) F5XC will try to fetch OCSPResponse with sha256 and sha1 as HashAlgorithm, in that order.. See [Use System Defaults ](#use-system-defaults) below for details.
 
 `private_key` - (Required) TLS Private Key data in unencrypted PEM format including the PEM headers. The data may be optionally secured using BlindFold. TLS key has to match the accompanying certificate.. See [Private Key ](#private-key) below for details.
 
@@ -493,7 +555,7 @@ Use the Cookie Params configured in Authentication Object.
 
 ### Use System Defaults
 
-Volterra will try to fetch OCSPResponse with sha256 and sha1 as HashAlgorithm, in that order..
+F5XC will try to fetch OCSPResponse with sha256 and sha1 as HashAlgorithm, in that order..
 
 ### Validation Params
 
@@ -547,7 +609,7 @@ A set of direct references of WAF Rules objects.
 
 ### Wingman Secret Info
 
-Secret is given as bootstrap secret in Volterra Security Sidecar.
+Secret is given as bootstrap secret in F5XC Security Sidecar.
 
 `name` - (Required) Name of the secret. (`String`).
 

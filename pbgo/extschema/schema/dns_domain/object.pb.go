@@ -322,9 +322,9 @@ type DNSDomainStatus struct {
 	// x-displayName: "Domain Verification Status"
 	// Status of DNS domain verification process.
 	DomainVerification DNSDomainVerificationType `protobuf:"varint,1,opt,name=domain_verification,json=domainVerification,proto3,enum=ves.io.schema.dns_domain.DNSDomainVerificationType" json:"domain_verification,omitempty"`
-	// Volterra Nameservers
+	// F5XC Nameservers
 	//
-	// x-displayName: "Volterra Nameservers"
+	// x-displayName: "F5XC Nameservers"
 	// Status of DNS domain verification process.
 	VolterraNameservers []string `protobuf:"bytes,2,rep,name=volterra_nameservers,json=volterraNameservers,proto3" json:"volterra_nameservers,omitempty"`
 	// DNSSEC Status

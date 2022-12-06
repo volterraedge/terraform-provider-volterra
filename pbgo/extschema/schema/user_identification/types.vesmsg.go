@@ -812,6 +812,39 @@ func (v *ValidateUserIdentificationRule) Validate(ctx context.Context, pm interf
 				return err
 			}
 		}
+	case *UserIdentificationRule_ClientCountry:
+		if fv, exists := v.FldValidators["identifier.client_country"]; exists {
+			val := m.GetIdentifier().(*UserIdentificationRule_ClientCountry).ClientCountry
+			vOpts := append(opts,
+				db.WithValidateField("identifier"),
+				db.WithValidateField("client_country"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *UserIdentificationRule_ClientRegion:
+		if fv, exists := v.FldValidators["identifier.client_region"]; exists {
+			val := m.GetIdentifier().(*UserIdentificationRule_ClientRegion).ClientRegion
+			vOpts := append(opts,
+				db.WithValidateField("identifier"),
+				db.WithValidateField("client_region"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *UserIdentificationRule_ClientCity:
+		if fv, exists := v.FldValidators["identifier.client_city"]; exists {
+			val := m.GetIdentifier().(*UserIdentificationRule_ClientCity).ClientCity
+			vOpts := append(opts,
+				db.WithValidateField("identifier"),
+				db.WithValidateField("client_city"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 

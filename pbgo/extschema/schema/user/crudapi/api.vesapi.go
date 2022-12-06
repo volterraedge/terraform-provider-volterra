@@ -3445,7 +3445,7 @@ var APISwaggerJSON string = `{
         },
         "userIdmType": {
             "type": "string",
-            "description": "IdmType is to identify who is managing the user.\n\n - SSO: SSO User\nExternally managed Single Sign On based user imported into UAM.\n - VOLTERRA_MANAGED: Volterra Managed Local user\nVolterra managed local user. Full user life cycle is managed by volterra UAM and Identity.",
+            "description": "IdmType is to identify who is managing the user.\n\n - SSO: SSO User\nExternally managed Single Sign On based user imported into UAM.\n - VOLTERRA_MANAGED: F5XC Managed Local user\nF5XC managed local user. Full user life cycle is managed by volterra UAM and Identity.",
             "title": "IDM Type",
             "enum": [
                 "SSO",

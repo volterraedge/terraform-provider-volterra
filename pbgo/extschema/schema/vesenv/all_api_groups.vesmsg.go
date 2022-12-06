@@ -1255,6 +1255,28 @@ func (v *ValidateAPIGroupChoice) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
+	case *APIGroupChoice_VesIoReportRead:
+		if fv, exists := v.FldValidators["choice.ves_io_report_read"]; exists {
+			val := m.GetChoice().(*APIGroupChoice_VesIoReportRead).VesIoReportRead
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("ves_io_report_read"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *APIGroupChoice_VesIoReportWrite:
+		if fv, exists := v.FldValidators["choice.ves_io_report_write"]; exists {
+			val := m.GetChoice().(*APIGroupChoice_VesIoReportWrite).VesIoReportWrite
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("ves_io_report_write"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 

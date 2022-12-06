@@ -37,10 +37,10 @@ const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 // x-displayName: "GCP Terraform Instance Parameters"
 // Shape of the view terraform parameters specification
 type GCPInstanceType struct {
-	// Volterra Node Id
+	// F5XC Node Id
 	//
-	// x-displayName: "Volterra Node ID"
-	// Volterra Node ID will be used to refer to this node in other TF parameters
+	// x-displayName: "F5XC Node ID"
+	// F5XC Node ID will be used to refer to this node in other TF parameters
 	VoltNodeId string `protobuf:"bytes,1,opt,name=volt_node_id,json=voltNodeId,proto3" json:"volt_node_id,omitempty"`
 	// Region id
 	//
@@ -72,14 +72,14 @@ type GCPInstanceType struct {
 	// x-displayName: "Image ID"
 	// Amazon Machine Image ID
 	ImageId string `protobuf:"bytes,8,opt,name=image_id,json=imageId,proto3" json:"image_id,omitempty"`
-	// Volterra Worker Node count
+	// F5XC Worker Node count
 	//
-	// x-displayName: "Volterra Node count"
+	// x-displayName: "F5XC Node count"
 	// Desired number of node count used for worker nodes
 	WorkerNodeCount uint32 `protobuf:"varint,9,opt,name=worker_node_count,json=workerNodeCount,proto3" json:"worker_node_count,omitempty"`
-	// Volterra Master Node count
+	// F5XC Master Node count
 	//
-	// x-displayName: "Volterra Node count"
+	// x-displayName: "F5XC Node count"
 	// Desired number of node count used for master nodes
 	MasterNodeCount uint32 `protobuf:"varint,11,opt,name=master_node_count,json=masterNodeCount,proto3" json:"master_node_count,omitempty"`
 	// List of Zones

@@ -1658,7 +1658,7 @@ var APISwaggerJSON string = `{
     "swagger": "2.0",
     "info": {
         "title": "Token object",
-        "description": "token object is used to manage site admission. User must generate token before provisioning and pass this\ntoken to site during it's registration. Invalid tokens are refused and site with invalid token won't be able\nto join Volterra network.\nSingle token can be used to register multiple sites.",
+        "description": "token object is used to manage site admission. User must generate token before provisioning and pass this\ntoken to site during it's registration. Invalid tokens are refused and site with invalid token won't be able\nto join F5XC network.\nSingle token can be used to register multiple sites.",
         "version": "version not set"
     },
     "schemes": [

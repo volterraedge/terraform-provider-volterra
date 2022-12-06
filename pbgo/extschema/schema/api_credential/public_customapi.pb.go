@@ -4,7 +4,7 @@
 // API/Service credential custom API
 //
 // x-displayName: "API/Service Credentials"
-// Volterra supports 2 variation of credentials -
+// F5XC supports 2 variation of credentials -
 // 1. My Credentials or API credentials
 // 2. Service Credentials
 //
@@ -2446,9 +2446,9 @@ type CustomAPIClient interface {
 	// API_TOKEN, API_CERTIFICATE and KUBE_CONFIG.
 	//
 	// an API_TOKEN is an easy to use secret that can be send part of HTTP request header Authorization: APIToken <value>
-	// in the create request expiry can be set additionally. Volterra also supports renew and revoke of API_TOKENs.
+	// in the create request expiry can be set additionally. F5XC also supports renew and revoke of API_TOKENs.
 	// an API_CERTIFICATE is a password protected P12 certificate bundle document and can be used as client certificate.
-	// when sending create request, user can request with an expiry and password. Volterra Identity Authority (IA)
+	// when sending create request, user can request with an expiry and password. F5XC Identity Authority (IA)
 	// mints new certificate with required credentials and is shared in the response as API Certificate.
 	// a virtual K8s kubeconfig can be generate with type KUBE_CONFIG. Create request can specify cluster, namespace and expiry
 	// with embedded user access with client certificate.
@@ -2673,9 +2673,9 @@ type CustomAPIServer interface {
 	// API_TOKEN, API_CERTIFICATE and KUBE_CONFIG.
 	//
 	// an API_TOKEN is an easy to use secret that can be send part of HTTP request header Authorization: APIToken <value>
-	// in the create request expiry can be set additionally. Volterra also supports renew and revoke of API_TOKENs.
+	// in the create request expiry can be set additionally. F5XC also supports renew and revoke of API_TOKENs.
 	// an API_CERTIFICATE is a password protected P12 certificate bundle document and can be used as client certificate.
-	// when sending create request, user can request with an expiry and password. Volterra Identity Authority (IA)
+	// when sending create request, user can request with an expiry and password. F5XC Identity Authority (IA)
 	// mints new certificate with required credentials and is shared in the response as API Certificate.
 	// a virtual K8s kubeconfig can be generate with type KUBE_CONFIG. Create request can specify cluster, namespace and expiry
 	// with embedded user access with client certificate.

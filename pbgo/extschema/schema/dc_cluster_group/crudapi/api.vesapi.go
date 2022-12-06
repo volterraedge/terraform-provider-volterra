@@ -2763,40 +2763,23 @@ var APISwaggerJSON string = `{
         },
         "dc_cluster_groupDCClusterGroupMeshType": {
             "type": "object",
-            "description": "x-displayName: \"DC Cluster Group Mesh Type\"\nDetails of DC Cluster Group Mesh Type",
+            "description": "Details of DC Cluster Group Mesh Type",
             "title": "DC Cluster Group Mesh Type",
+            "x-displayname": "DC Cluster Group Mesh Type",
+            "x-ves-oneof-field-dc_cluster_group_mesh_choice": "[\"control_and_data_plane_mesh\",\"data_plane_mesh\"]",
+            "x-ves-proto-message": "ves.io.schema.dc_cluster_group.DCClusterGroupMeshType",
             "properties": {
                 "control_and_data_plane_mesh": {
-                    "description": "x-displayName: \"Control and Data Plane Mesh\"\nFull Mesh of data plane connectivity across sites\nand control plane peering across sites",
+                    "description": "Exclusive with [data_plane_mesh]\n Full Mesh of data plane connectivity across sites\n and control plane peering across sites",
                     "title": "Control and Data Plane Mesh",
-                    "$ref": "#/definitions/schemaEmpty"
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Control and Data Plane Mesh"
                 },
                 "data_plane_mesh": {
-                    "description": "x-displayName: \"Data Plane Mesh\"\nFull Mesh of Data plane connectivity across sites",
+                    "description": "Exclusive with [control_and_data_plane_mesh]\n Full Mesh of Data plane connectivity across sites",
                     "title": "Data Plane Mesh",
-                    "$ref": "#/definitions/schemaEmpty"
-                }
-            }
-        },
-        "dc_cluster_groupDcClusterGroupStatus": {
-            "type": "object",
-            "description": "Status of the dc cluster group",
-            "title": "dc cluster group status",
-            "x-displayname": "Status",
-            "x-ves-proto-message": "ves.io.schema.dc_cluster_group.DcClusterGroupStatus",
-            "properties": {
-                "site_info": {
-                    "type": "array",
-                    "description": " The list of sites in the dc cluster group and information about each\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
-                    "title": "site_info",
-                    "items": {
-                        "$ref": "#/definitions/schemaSiteInfo"
-                    },
-                    "x-displayname": "site info",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
-                    }
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Data Plane Mesh"
                 }
             }
         },
@@ -2805,7 +2788,15 @@ var APISwaggerJSON string = `{
             "description": "DC Cluster Group specification",
             "title": "Global Specification",
             "x-displayname": "Global Specification",
-            "x-ves-proto-message": "ves.io.schema.dc_cluster_group.GlobalSpecType"
+            "x-ves-proto-message": "ves.io.schema.dc_cluster_group.GlobalSpecType",
+            "properties": {
+                "type": {
+                    "description": " DC Cluster Group Mesh Choice",
+                    "title": "DC Cluster Group Mesh Choice",
+                    "$ref": "#/definitions/dc_cluster_groupDCClusterGroupMeshType",
+                    "x-displayname": "Mesh Choice"
+                }
+            }
         },
         "dc_cluster_groupSpecType": {
             "type": "object",
@@ -2837,6 +2828,12 @@ var APISwaggerJSON string = `{
                     },
                     "x-displayname": "Conditions"
                 },
+                "dc_cluster_group_status": {
+                    "description": " DC Cluster Group Status",
+                    "title": "DC Cluster Group Status",
+                    "$ref": "#/definitions/schemaDcClusterGroupStatus",
+                    "x-displayname": "DC Cluster Group Status"
+                },
                 "metadata": {
                     "description": " Standard status's metadata",
                     "title": "metadata",
@@ -2851,12 +2848,6 @@ var APISwaggerJSON string = `{
                         "$ref": "#/definitions/schemaObjectRefType"
                     },
                     "x-displayname": "Config Object"
-                },
-                "status": {
-                    "description": " Current status of the dc cluster group object",
-                    "title": "status",
-                    "$ref": "#/definitions/dc_cluster_groupDcClusterGroupStatus",
-                    "x-displayname": "Status"
                 }
             }
         },
@@ -2955,10 +2946,34 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "schemaDcClusterGroupStatus": {
+            "type": "object",
+            "description": "Status of the dc cluster group (this will be used in site status object and dcg status object)",
+            "title": "dc cluster group status",
+            "x-displayname": "Status",
+            "x-ves-proto-message": "ves.io.schema.DcClusterGroupStatus",
+            "properties": {
+                "site_info": {
+                    "type": "array",
+                    "description": " The list of sites in the dc cluster group and information about each\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "site_info",
+                    "items": {
+                        "$ref": "#/definitions/schemaSiteInfo"
+                    },
+                    "x-displayname": "site info",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                }
+            }
+        },
         "schemaEmpty": {
             "type": "object",
-            "description": "x-displayName: \"Empty\"\nThis can be used for messages where no values are needed",
-            "title": "Empty"
+            "description": "This can be used for messages where no values are needed",
+            "title": "Empty",
+            "x-displayname": "Empty",
+            "x-ves-proto-message": "ves.io.schema.Empty"
         },
         "schemaInitializerType": {
             "type": "object",

@@ -185,6 +185,7 @@ func (c *ApiepCustomAPIRestClient) doRPCGetAPIEndpoint(ctx context.Context, call
 		_ = q
 		q.Add("api_endpoint_info_request", fmt.Sprintf("%v", req.ApiEndpointInfoRequest))
 		q.Add("collapsed_url", fmt.Sprintf("%v", req.CollapsedUrl))
+		q.Add("domains", fmt.Sprintf("%v", req.Domains))
 		q.Add("method", fmt.Sprintf("%v", req.Method))
 		q.Add("name", fmt.Sprintf("%v", req.Name))
 		q.Add("namespace", fmt.Sprintf("%v", req.Namespace))
@@ -271,6 +272,7 @@ func (c *ApiepCustomAPIRestClient) doRPCGetAPIEndpointLearntSchema(ctx context.C
 		q := hReq.URL.Query()
 		_ = q
 		q.Add("collapsed_url", fmt.Sprintf("%v", req.CollapsedUrl))
+		q.Add("domains", fmt.Sprintf("%v", req.Domains))
 		q.Add("method", fmt.Sprintf("%v", req.Method))
 		q.Add("name", fmt.Sprintf("%v", req.Name))
 		q.Add("namespace", fmt.Sprintf("%v", req.Namespace))
@@ -443,6 +445,7 @@ func (c *ApiepCustomAPIRestClient) doRPCGetAPIEndpoints(ctx context.Context, cal
 		q := hReq.URL.Query()
 		_ = q
 		q.Add("api_endpoint_info_request", fmt.Sprintf("%v", req.ApiEndpointInfoRequest))
+		q.Add("domains", fmt.Sprintf("%v", req.Domains))
 		q.Add("name", fmt.Sprintf("%v", req.Name))
 		q.Add("namespace", fmt.Sprintf("%v", req.Namespace))
 
@@ -611,6 +614,7 @@ func (c *ApiepCustomAPIRestClient) doRPCGetSwaggerSpec(ctx context.Context, call
 		hReq = newReq
 		q := hReq.URL.Query()
 		_ = q
+		q.Add("domains", fmt.Sprintf("%v", req.Domains))
 		q.Add("name", fmt.Sprintf("%v", req.Name))
 		q.Add("namespace", fmt.Sprintf("%v", req.Namespace))
 
@@ -1049,7 +1053,7 @@ var ApiepCustomAPISwaggerJSON string = `{
     "swagger": "2.0",
     "info": {
         "title": "Virtual host",
-        "description": "Virtual host is main anchor configuration for a proxy. Primary application for virtual host configuration is \nreverse proxy.  Virtual host object is used to create a Loadbalancer, virtual service Or API gateway.\nIt can also be viewed as base object to define application routing.\n\nTerminology\n\nDownstream: A downstream host connects to Volterra ADC, sends requests, and receives responses.\nUpstream: An upstream host receives connections and requests from Volterra ADC and returns responses.",
+        "description": "Virtual host is main anchor configuration for a proxy. Primary application for virtual host configuration is \nreverse proxy.  Virtual host object is used to create a Loadbalancer, virtual service Or API gateway.\nIt can also be viewed as base object to define application routing.\n\nTerminology\n\nDownstream: A downstream host connects to F5XC ADC, sends requests, and receives responses.\nUpstream: An upstream host receives connections and requests from F5XC ADC and returns responses.",
         "version": "version not set"
     },
     "schemes": [
@@ -1257,6 +1261,18 @@ var ApiepCustomAPISwaggerJSON string = `{
                         "required": false,
                         "type": "string",
                         "x-displayname": "Method"
+                    },
+                    {
+                        "name": "domains",
+                        "description": "x-example: \"www.example.com\"\nList of domains that needs to be sent as part of the request\nOptional filter by domains. If absent, all domains are considered.",
+                        "in": "query",
+                        "required": false,
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "collectionFormat": "multi",
+                        "x-displayname": "List of Domain"
                     }
                 ],
                 "tags": [
@@ -1473,6 +1489,18 @@ var ApiepCustomAPISwaggerJSON string = `{
                         },
                         "collectionFormat": "multi",
                         "x-displayname": "API Endpoint Info PDF Sparklines"
+                    },
+                    {
+                        "name": "domains",
+                        "description": "x-example: \"www.example.com\"\nList of domains that needs to be sent as part of the request\nOptional filter by domains. If absent, all domains are considered.",
+                        "in": "query",
+                        "required": false,
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "collectionFormat": "multi",
+                        "x-displayname": "List of Domain"
                     }
                 ],
                 "tags": [
@@ -1653,6 +1681,18 @@ var ApiepCustomAPISwaggerJSON string = `{
                         "required": true,
                         "type": "string",
                         "x-displayname": "Virtual Host Name"
+                    },
+                    {
+                        "name": "domains",
+                        "description": "x-example: \"www.example.com\"\nList of domains that needs to be sent as part of the request\nOptional filter by domains. If absent, all domains are considered.",
+                        "in": "query",
+                        "required": false,
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "collectionFormat": "multi",
+                        "x-displayname": "List of Domain"
                     }
                 ],
                 "tags": [
@@ -1768,6 +1808,16 @@ var ApiepCustomAPISwaggerJSON string = `{
                     "title": "Identified API",
                     "x-displayname": "API endpoint URL",
                     "x-ves-example": "/api/v1/user_id/DYN/vehicle_id/DYN"
+                },
+                "domains": {
+                    "type": "array",
+                    "description": " List of Domains of the API endpoint\n\nExample: - \"[www.example1.com\", \"www.example2.com]\"-",
+                    "title": "List of domains",
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-displayname": "List of Domains",
+                    "x-ves-example": "[www.example1.com\", \"www.example2.com]"
                 },
                 "dyn_examples": {
                     "type": "array",
@@ -2133,6 +2183,19 @@ var ApiepCustomAPISwaggerJSON string = `{
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true"
+                    }
+                },
+                "domains": {
+                    "type": "array",
+                    "description": " List of domains that needs to be sent as part of the request\n Optional filter by domains. If absent, all domains are considered.\n\nExample: - \"www.example.com\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "title": "List of Domain",
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-displayname": "List of Domain",
+                    "x-ves-example": "www.example.com",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.unique": "true"
                     }
                 },
                 "method": {

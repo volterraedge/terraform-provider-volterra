@@ -2902,7 +2902,7 @@ var APISwaggerJSON string = `{
                 },
                 "require_client_certificate": {
                     "type": "boolean",
-                    "description": " If true, Volterra will reject connections without a valid client\n certificate.",
+                    "description": " If true, F5XC will reject connections without a valid client\n certificate.",
                     "title": "require_client_certificate",
                     "format": "boolean",
                     "x-displayname": "Require Client Certificate(enable mTLS)"
@@ -3025,7 +3025,7 @@ var APISwaggerJSON string = `{
         },
         "schemaBlindfoldSecretInfoType": {
             "type": "object",
-            "description": "BlindfoldSecretInfoType specifies information about the Secret managed by Volterra Secret Management",
+            "description": "BlindfoldSecretInfoType specifies information about the Secret managed by F5XC Secret Management",
             "title": "BlindfoldSecretInfoType",
             "x-displayname": "Blindfold Secret",
             "x-ves-displayorder": "3,1,2",
@@ -3269,17 +3269,55 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "schemaCsrfPolicy": {
+            "type": "object",
+            "description": "To mitigate CSRF attack , the policy checks where a request is coming from to determine if the request's origin is the same as its detination.The policy relies on two pieces of information used in determining if a request originated from the same host.\n\n1. The origin that caused the user agent to issue the request (source origin).\n2. The origin that the request is going to (target origin).\nWhen the policy evaluating a request, it ensures both pieces of information are present and compare their values. If the source origin is missing or origins do not match the request is rejected. The exception to this being if the source-origin has been added to they policy as valid.\nBecause CSRF attacks specifically target state-changing requests, the policy only acts on the HTTP requests that have state-changing method (PUT,POST, etc.).",
+            "title": "CsrfPolicy",
+            "x-displayname": "CSRF Policy",
+            "x-ves-displayorder": "1",
+            "x-ves-oneof-field-allowed_domains": "[\"all_load_balancer_domains\",\"custom_domain_list\"]",
+            "x-ves-proto-message": "ves.io.schema.CsrfPolicy",
+            "properties": {
+                "all_load_balancer_domains": {
+                    "description": "Exclusive with [custom_domain_list]\n Add All load balancer domains to source origin (allow) list.",
+                    "title": "all_load_balancer_domains",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "All HTTP Loadbalancer Domains"
+                },
+                "custom_domain_list": {
+                    "description": "Exclusive with [all_load_balancer_domains]\n Add one or more domains to source origin (allow) list.\n\nExample: - \"abc.xyz.com\"-",
+                    "title": "custom_domain_list",
+                    "$ref": "#/definitions/schemaDomainNameList",
+                    "x-displayname": "Specified domains",
+                    "x-ves-example": "abc.xyz.com"
+                }
+            }
+        },
         "schemaDomainNameList": {
             "type": "object",
-            "description": "x-displayName: \"Domain name list\"\nList of domain names used for Host header matching",
+            "description": "List of domain names used for Host header matching",
             "title": "List of Domain names",
+            "x-displayname": "Domain name list",
+            "x-ves-proto-message": "ves.io.schema.DomainNameList",
             "properties": {
                 "domains": {
                     "type": "array",
-                    "description": "x-displayName: \"Domain names\"\nx-example: \"www.foo.com\"\n\nA list of domain names that will be matched to loadbalancer.\nThese domains are not used for SNI match.\nWildcard names are supported in the suffix or prefix form.",
+                    "description": "\n A list of domain names that will be matched to loadbalancer.\n These domains are not used for SNI match.\n Wildcard names are supported in the suffix or prefix form.\n\nExample: - \"www.foo.com\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.max_len: 256\n  ves.io.schema.rules.repeated.items.string.min_len: 1\n  ves.io.schema.rules.repeated.items.string.vh_domain: true\n  ves.io.schema.rules.repeated.max_items: 32\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "Domains",
+                    "maxItems": 32,
                     "items": {
-                        "type": "string"
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 256
+                    },
+                    "x-displayname": "Domain names",
+                    "x-ves-example": "www.foo.com",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.items.string.max_len": "256",
+                        "ves.io.schema.rules.repeated.items.string.min_len": "1",
+                        "ves.io.schema.rules.repeated.items.string.vh_domain": "true",
+                        "ves.io.schema.rules.repeated.max_items": "32",
+                        "ves.io.schema.rules.repeated.unique": "true"
                     }
                 }
             }
@@ -3679,7 +3717,7 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.SecretType",
             "properties": {
                 "blindfold_secret_info": {
-                    "description": "Exclusive with [clear_secret_info]\n Blindfold Secret is used for the secrets managed by Volterra Secret Management Service",
+                    "description": "Exclusive with [clear_secret_info]\n Blindfold Secret is used for the secrets managed by F5XC Secret Management Service",
                     "title": "Blindfold Secret",
                     "$ref": "#/definitions/schemaBlindfoldSecretInfoType",
                     "x-displayname": "Blindfold Secret"
@@ -3965,7 +4003,7 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "custom_hash_algorithms": {
-                    "description": "Exclusive with [disable_ocsp_stapling use_system_defaults]\n Use hash algorithms in the custom order. Volterra will try to fetch ocsp response from the CA in the given order. Additionally, LoadBalancer will not become active until ocspResponse cannot be fetched if the certificate has MustStaple extension set.",
+                    "description": "Exclusive with [disable_ocsp_stapling use_system_defaults]\n Use hash algorithms in the custom order. F5XC will try to fetch ocsp response from the CA in the given order. Additionally, LoadBalancer will not become active until ocspResponse cannot be fetched if the certificate has MustStaple extension set.",
                     "title": "Use Custom Order for Hash Algorithms",
                     "$ref": "#/definitions/schemaHashAlgorithms",
                     "x-displayname": "Use hash algorithms in custom order"
@@ -3978,7 +4016,7 @@ var APISwaggerJSON string = `{
                     "x-ves-example": "Certificate used in production environment"
                 },
                 "disable_ocsp_stapling": {
-                    "description": "Exclusive with [custom_hash_algorithms use_system_defaults]\n Disable OCSP Stapling. Volterra will not fetch and staple OCSP Response for this certificate.\n This is the default behavior if no choice is selected.",
+                    "description": "Exclusive with [custom_hash_algorithms use_system_defaults]\n Disable OCSP Stapling. F5XC will not fetch and staple OCSP Response for this certificate.\n This is the default behavior if no choice is selected.",
                     "title": "Disable OCSP Stapling",
                     "$ref": "#/definitions/schemaEmpty",
                     "x-displayname": "Disable OCSP Stapling"
@@ -3994,10 +4032,10 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "use_system_defaults": {
-                    "description": "Exclusive with [custom_hash_algorithms disable_ocsp_stapling]\n Use Volterra Default Settings to fetch and staple OCSP Response.\n OCSP Response will be stapled if it can be fetched. Additionally, LoadBalancer will not become active until ocspResponse cannot be fetched if the certificate has MustStaple extension set.\n Volterra will try to fetch OCSPResponse with sha256 and sha1 as HashAlgorithm, in that order.",
-                    "title": "Fetch with Volterra default settings",
+                    "description": "Exclusive with [custom_hash_algorithms disable_ocsp_stapling]\n Use F5XC Default Settings to fetch and staple OCSP Response.\n OCSP Response will be stapled if it can be fetched. Additionally, LoadBalancer will not become active until ocspResponse cannot be fetched if the certificate has MustStaple extension set.\n F5XC will try to fetch OCSPResponse with sha256 and sha1 as HashAlgorithm, in that order.",
+                    "title": "Fetch with F5XC default settings",
                     "$ref": "#/definitions/schemaEmpty",
-                    "x-displayname": "Fetch with Volterra default settings"
+                    "x-displayname": "Fetch with F5XC default settings"
                 }
             }
         },
@@ -4100,14 +4138,14 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "volterra_certificate": {
-                    "description": "Exclusive with [custom_certificate]\n Volterra certificates for generating intermediate certificate for TLS interception.",
-                    "title": "Volterra Signing Certificate",
+                    "description": "Exclusive with [custom_certificate]\n F5XC certificates for generating intermediate certificate for TLS interception.",
+                    "title": "F5XC Signing Certificate",
                     "$ref": "#/definitions/schemaEmpty",
-                    "x-displayname": "Volterra Signing Certificate"
+                    "x-displayname": "F5XC Signing Certificate"
                 },
                 "volterra_trusted_ca": {
                     "description": "Exclusive with [trusted_ca_url]\n Default volterra trusted CA list for validating upstream server certificate",
-                    "title": "Volterra List",
+                    "title": "F5XC List",
                     "$ref": "#/definitions/schemaEmpty",
                     "x-displayname": "Default Trusted CA List"
                 }
@@ -4289,7 +4327,7 @@ var APISwaggerJSON string = `{
         },
         "schemaVirtualNetworkType": {
             "type": "string",
-            "description": "Different types of virtual networks understood by the system\n\nVirtual-network of type VIRTUAL_NETWORK_SITE_LOCAL provides connectivity to public (outside) network.\nThis is an insecure network and is connected to public internet via NAT Gateways/firwalls\nVirtual-network of this type is local to every site. Two virtual networks of this type on different\nsites are neither related nor connected.\n\nConstraints:\nThere can be atmost one virtual network of this type in a given site.\nThis network type is supported on CE sites. This network is created automatically and present on all sites\nVirtual-network of type VIRTUAL_NETWORK_SITE_LOCAL_INSIDE is a private network inside site.\nIt is a secure network and is not connected to public network.\nVirtual-network of this type is local to every site. Two virtual networks of this type on different\nsites are neither related nor connected.\n\nConstraints:\nThere can be atmost one virtual network of this type in a given site.\nThis network type is supported on CE sites. This network is created during provisioning of site\nUser defined per-site virtual network. Scope of this virtual network is limited to the site.\nThis is not yet supported\nVirtual-network of type VIRTUAL_NETWORK_PUBLIC directly conects to the public internet.\nVirtual-network of this type is local to every site. Two virtual networks of this type on different sites are neither related nor connected.\n\nConstraints:\nThere can be atmost one virtual network of this type in a given site.\nThis network type is supported on RE sites only\nIt is an internally created by the system. They must not be created by user\nVirtual Neworks with global scope across different sites in Volterra domain.\nAn example global virtual-network called \"AIN Network\" is created for every tenant.\nfor volterra fabric\n\nConstraints:\nIt is currently only supported as internally created by the system.\nvK8s service network for a given tenant. Used to advertise a virtual host only to vk8s pods for that tenant\nConstraints:\nIt is an internally created by the system. Must not be created by user\nVER internal network for the site. It can only be used for virtual hosts with SMA_PROXY type proxy\nConstraints:\nIt is an internally created by the system. Must not be created by user\nVirtual-network of type VIRTUAL_NETWORK_SITE_LOCAL_INSIDE_OUTSIDE represents both\nVIRTUAL_NETWORK_SITE_LOCAL and VIRTUAL_NETWORK_SITE_LOCAL_INSIDE\n\nConstraints:\nThis network type is only meaningful in an advertise policy\nWhen virtual-network of type VIRTUAL_NETWORK_IP_AUTO is selected for\nan endpoint, VER will try to determine the network based on the provided\nIP address\n\nConstraints:\nThis network type is only meaningful in an endpoint\n\nVoltADN Private Network is used on volterra RE(s) to connect to customer private networks\nThis network is created by opening a support ticket\n\nThis network is per site srv6 network\nVER IP Fabric network for the site.\nThis Virtual network type is used for exposing virtual host on IP Fabric network on the VER site or\nfor endpoint in IP Fabric network\nConstraints:\nIt is an internally created by the system. Must not be created by user",
+            "description": "Different types of virtual networks understood by the system\n\nVirtual-network of type VIRTUAL_NETWORK_SITE_LOCAL provides connectivity to public (outside) network.\nThis is an insecure network and is connected to public internet via NAT Gateways/firwalls\nVirtual-network of this type is local to every site. Two virtual networks of this type on different\nsites are neither related nor connected.\n\nConstraints:\nThere can be atmost one virtual network of this type in a given site.\nThis network type is supported on CE sites. This network is created automatically and present on all sites\nVirtual-network of type VIRTUAL_NETWORK_SITE_LOCAL_INSIDE is a private network inside site.\nIt is a secure network and is not connected to public network.\nVirtual-network of this type is local to every site. Two virtual networks of this type on different\nsites are neither related nor connected.\n\nConstraints:\nThere can be atmost one virtual network of this type in a given site.\nThis network type is supported on CE sites. This network is created during provisioning of site\nUser defined per-site virtual network. Scope of this virtual network is limited to the site.\nThis is not yet supported\nVirtual-network of type VIRTUAL_NETWORK_PUBLIC directly conects to the public internet.\nVirtual-network of this type is local to every site. Two virtual networks of this type on different sites are neither related nor connected.\n\nConstraints:\nThere can be atmost one virtual network of this type in a given site.\nThis network type is supported on RE sites only\nIt is an internally created by the system. They must not be created by user\nVirtual Neworks with global scope across different sites in F5XC domain.\nAn example global virtual-network called \"AIN Network\" is created for every tenant.\nfor volterra fabric\n\nConstraints:\nIt is currently only supported as internally created by the system.\nvK8s service network for a given tenant. Used to advertise a virtual host only to vk8s pods for that tenant\nConstraints:\nIt is an internally created by the system. Must not be created by user\nVER internal network for the site. It can only be used for virtual hosts with SMA_PROXY type proxy\nConstraints:\nIt is an internally created by the system. Must not be created by user\nVirtual-network of type VIRTUAL_NETWORK_SITE_LOCAL_INSIDE_OUTSIDE represents both\nVIRTUAL_NETWORK_SITE_LOCAL and VIRTUAL_NETWORK_SITE_LOCAL_INSIDE\n\nConstraints:\nThis network type is only meaningful in an advertise policy\nWhen virtual-network of type VIRTUAL_NETWORK_IP_AUTO is selected for\nan endpoint, VER will try to determine the network based on the provided\nIP address\n\nConstraints:\nThis network type is only meaningful in an endpoint\n\nVoltADN Private Network is used on volterra RE(s) to connect to customer private networks\nThis network is created by opening a support ticket\n\nThis network is per site srv6 network\nVER IP Fabric network for the site.\nThis Virtual network type is used for exposing virtual host on IP Fabric network on the VER site or\nfor endpoint in IP Fabric network\nConstraints:\nIt is an internally created by the system. Must not be created by user",
             "title": "VirtualNetworkType",
             "enum": [
                 "VIRTUAL_NETWORK_SITE_LOCAL",
@@ -4422,6 +4460,7 @@ var APISwaggerJSON string = `{
             "x-ves-oneof-field-bot_defense_choice": "[]",
             "x-ves-oneof-field-challenge_type": "[\"captcha_challenge\",\"js_challenge\",\"no_challenge\"]",
             "x-ves-oneof-field-default_lb_choice": "[\"default_loadbalancer\",\"non_default_loadbalancer\"]",
+            "x-ves-oneof-field-dns_zone_state_choice": "[\"not_ready\",\"ready\"]",
             "x-ves-oneof-field-path_normalize_choice": "[\"disable_path_normalize\",\"enable_path_normalize\"]",
             "x-ves-oneof-field-server_header_choice": "[\"append_server_name\",\"default_header\",\"pass_through\",\"server_name\"]",
             "x-ves-oneof-field-strict_sni_host_header_check_choice": "[]",
@@ -4510,9 +4549,15 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/schemaCorsPolicy",
                     "x-displayname": "CORS Policy"
                 },
+                "csrf_policy": {
+                    "description": " Cross-Site Request Forgery configuration.\n\n CSRF is a mechanism that checks if request received at the server is from legitimate user.",
+                    "title": "csrf_policy",
+                    "$ref": "#/definitions/schemaCsrfPolicy",
+                    "x-displayname": "CSRF Policy"
+                },
                 "custom_errors": {
                     "type": "object",
-                    "description": "\n Map of integer error codes as keys and string values that can be used to provide custom\n http pages for each error code.\n Key of the map can be either response code class or HTTP Error code. Response code classes\n for key is configured as follows\n 3 -- for 3xx response code class\n 4 -- for 4xx response code class\n 5 -- for 5xx response code class\n Value is the uri_ref. Currently supported URL schemes is string:///.\n For string:/// scheme, message needs to be encoded in Base64 format.\n You can specify this message as base64 encoded plain text message e.g. \"Access Denied\"\n or it can be HTML paragraph or a body string encoded as base64 string\n E.g. \"\u003cp\u003e Access Denied \u003c/p\u003e\". Base64 encoded string for this html is \"PHA+IEFjY2VzcyBEZW5pZWQgPC9wPg==\"\n Specific response code takes preference when both response code and response code class\n matches for a request.\n\n The configured custom errors are only applicable for loadbalancer generated errors.\n Errors returned from upstream server is propagated as is.\n\n Volterra provides default error pages for the errors generated by the loadbalancer. Content of\n these pages are not editable. User has an option to disable the use of default Volterra error pages\n\nExample: - \"value\"-\n\nValidation Rules:\n  ves.io.schema.rules.map.keys.uint32.gte: 3\n  ves.io.schema.rules.map.keys.uint32.lte: 599\n  ves.io.schema.rules.map.max_pairs: 16\n  ves.io.schema.rules.map.values.string.max_len: 65536\n  ves.io.schema.rules.map.values.string.uri_ref: true\n",
+                    "description": "\n Map of integer error codes as keys and string values that can be used to provide custom\n http pages for each error code.\n Key of the map can be either response code class or HTTP Error code. Response code classes\n for key is configured as follows\n 3 -- for 3xx response code class\n 4 -- for 4xx response code class\n 5 -- for 5xx response code class\n Value is the uri_ref. Currently supported URL schemes is string:///.\n For string:/// scheme, message needs to be encoded in Base64 format.\n You can specify this message as base64 encoded plain text message e.g. \"Access Denied\"\n or it can be HTML paragraph or a body string encoded as base64 string\n E.g. \"\u003cp\u003e Access Denied \u003c/p\u003e\". Base64 encoded string for this html is \"PHA+IEFjY2VzcyBEZW5pZWQgPC9wPg==\"\n Specific response code takes preference when both response code and response code class\n matches for a request.\n\n The configured custom errors are only applicable for loadbalancer generated errors.\n Errors returned from upstream server is propagated as is.\n\n F5XC provides default error pages for the errors generated by the loadbalancer. Content of\n these pages are not editable. User has an option to disable the use of default F5XC error pages\n\nExample: - \"value\"-\n\nValidation Rules:\n  ves.io.schema.rules.map.keys.uint32.gte: 3\n  ves.io.schema.rules.map.keys.uint32.lte: 599\n  ves.io.schema.rules.map.max_pairs: 16\n  ves.io.schema.rules.map.values.string.max_len: 65536\n  ves.io.schema.rules.map.values.string.uri_ref: true\n",
                     "title": "Custom Errors",
                     "x-displayname": "Custom Error Responses",
                     "x-ves-example": "value",
@@ -4538,7 +4583,7 @@ var APISwaggerJSON string = `{
                 },
                 "disable_default_error_pages": {
                     "type": "boolean",
-                    "description": "\n An option to specify whether to disable using default Volterra error pages\n\nExample: - \"true\"-",
+                    "description": "\n An option to specify whether to disable using default F5XC error pages\n\nExample: - \"true\"-",
                     "title": "Disable use of default Error page",
                     "format": "boolean",
                     "x-displayname": "Disable default error pages",
@@ -4589,9 +4634,22 @@ var APISwaggerJSON string = `{
                 "dns_volterra_managed": {
                     "type": "boolean",
                     "description": " Is DNS for the specified domain managed by volterra. If this field is set, DNS record will be automatically added to the DNS domain.",
-                    "title": "DNS Volterra Managed",
+                    "title": "DNS F5XC Managed",
                     "format": "boolean",
-                    "x-displayname": "DNS Volterra Managed"
+                    "x-displayname": "DNS F5XC Managed"
+                },
+                "dns_zones": {
+                    "type": "array",
+                    "description": " Internal reference to dns_zone object\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 256\n",
+                    "title": "DNS Zone refs",
+                    "maxItems": 256,
+                    "items": {
+                        "$ref": "#/definitions/ioschemaObjectRefType"
+                    },
+                    "x-displayname": "DNS Zone",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "256"
+                    }
                 },
                 "domains": {
                     "type": "array",
@@ -4692,6 +4750,12 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/schemaEmpty",
                     "x-displayname": "No"
                 },
+                "not_ready": {
+                    "description": "Exclusive with [ready]\n",
+                    "title": "DNS Zone config is not ready",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Not Ready"
+                },
                 "pass_through": {
                     "description": "Exclusive with [append_server_name default_header server_name]\n Passes existing Server Header as is. If server header is absent, nothing is\n appended.",
                     "title": "pass_through",
@@ -4729,6 +4793,12 @@ var APISwaggerJSON string = `{
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.repeated.max_items": "4"
                     }
+                },
+                "ready": {
+                    "description": "Exclusive with [not_ready]\n",
+                    "title": "DNS Zone config is not ready",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Ready"
                 },
                 "request_headers_to_add": {
                     "type": "array",
@@ -4871,10 +4941,10 @@ var APISwaggerJSON string = `{
                 },
                 "volterra_cert": {
                     "type": "boolean",
-                    "description": " Volterra managed certificates. If this field is set, the user cannot specifi the TLS certificates",
-                    "title": "Volterra Certificates",
+                    "description": " F5XC managed certificates. If this field is set, the user cannot specifi the TLS certificates",
+                    "title": "F5XC Certificates",
                     "format": "boolean",
-                    "x-displayname": "Volterra Certificates"
+                    "x-displayname": "F5XC Certificates"
                 },
                 "waf_type": {
                     "description": " WAF can be used to analyze inbound and outbound http/https traffic.\n WAF can be configured either in BLOCKing Mode or ALERTing Mode.\n In BLOCKing mode if WAF detects suspicious inbound/outbound traffic it blocks the request or response.\n In ALERTing mode if suspicious traffic is detected, WAF generates ALERTs with details on the\n suspicious traffic (instead of blocking traffic).\n\n waf_type can be either WAF or WAFRules.\n WAF Object allows to\n     Configure mode of the WAF (BLOCK/ALERT)\n     Configure language used by the application which is being protected by the WAF\n     Disable different high level security tags if required (e.g. SQLI_DETECTION, XSS_DETECTION etc)\n WAFRules allows to\n     Configure mode of the WAF (BLOCK/ALERT)\n     Enable/Disable individual WAF security rules",
@@ -5172,6 +5242,57 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "virtual_hostDNSCacheProfile": {
+            "type": "object",
+            "description": "x-displayName: \"DNS Cache\"\nDNS Cache specifies cache configuration",
+            "title": "DNS Cache",
+            "properties": {
+                "disable_cache_profile": {
+                    "description": "x-displayName: \"Disable\"",
+                    "title": "Disable DNS Cache",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "enable_cache_profile": {
+                    "description": "x-displayName: \"Enable\"",
+                    "title": "Enable DNS Cache",
+                    "$ref": "#/definitions/schemaEmpty"
+                }
+            }
+        },
+        "virtual_hostDNSDDoSProfile": {
+            "type": "object",
+            "description": "x-displayName: \"DDoS Protection\"\nDDoS Protection Rule for DNS",
+            "title": "DDoS Protection",
+            "properties": {
+                "disable_ddos_mitigation": {
+                    "description": "x-displayName: \"Disable\"",
+                    "title": "Disable DDoS Protection",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "enable_ddos_mitigation": {
+                    "description": "x-displayName: \"Enable\"",
+                    "title": "Enable DDoS Protection",
+                    "$ref": "#/definitions/schemaEmpty"
+                }
+            }
+        },
+        "virtual_hostDNSProxyConfiguration": {
+            "type": "object",
+            "description": "x-displayName: \"DNS Proxy Configuration\"\nAdvanced DNS Proxy Configurations like DDoS, Cache are mapped to DNSProxyConfiguration for internal use",
+            "title": "DNS Proxy Configuration",
+            "properties": {
+                "cache_profile": {
+                    "description": "x-displayName: \"DNS Cache\"\nOptions for enabling and disabling the DNS cache profile for the DNS Proxy.\nOn enabling this feature, a default cache profile is applied to the DNS proxy\nwhich caches DNS replies from the origin DNS servers.",
+                    "title": "DNS Cache",
+                    "$ref": "#/definitions/virtual_hostDNSCacheProfile"
+                },
+                "ddos_profile": {
+                    "description": "x-displayName: \"DDoS mitigation\"\nx-required\nOptions for enabling and disabling the DDoS profile for the DNS Proxy.\nOn enabling this feature, a default DDoS profile is applied to the DNS proxy\nto protect the origin DNS servers from external DDoS attacks.",
+                    "title": "DDoS mitigation",
+                    "$ref": "#/definitions/virtual_hostDNSDDoSProfile"
+                }
+            }
+        },
         "virtual_hostDNSRecord": {
             "type": "object",
             "description": "Defines a DNS record",
@@ -5363,10 +5484,11 @@ var APISwaggerJSON string = `{
         },
         "virtual_hostProxyType": {
             "type": "string",
-            "description": "ProxyType tells the type of proxy to install for the virtual host.\n\nOnly the following combination of VirtualHosts within same AdvertisePolicy is permitted\n(None of them should have \"*\" in domains when used with other VirtualHosts in same AdvertisePolicy)\n1. Multiple TCP_PROXY_WITH_SNI and multiple HTTPS_PROXY\n2. Multiple HTTP_PROXY\n3. Multiple HTTPS_PROXY\n4. Multiple TCP_PROXY_WITH_SNI\n\nHTTPS_PROXY without TLS parameters is not permitted\nHTTP_PROXY/HTTPS_PROXY/TCP_PROXY_WITH_SNI/SMA_PROXY with empty domains is not permitted\nTCP_PROXY_WITH_SNI/SMA_PROXY should not have \"*\" in domains\n\n - HTTP_PROXY: HTTP_PROXY\n\nInstall HTTP proxy. HTTP Proxy is the default proxy installed.\n - TCP_PROXY: TCP_PROXY\n\nInstall TCP proxy\n - TCP_PROXY_WITH_SNI: TCP_PROXY_WITH_SNI\n\nInstall TCP proxy with SNI Routing\n - TLS_TCP_PROXY: TCP_PROXY\n\nInstall TCP proxy\n - TLS_TCP_PROXY_WITH_SNI: TCP_PROXY_WITH_SNI\n\nInstall TCP proxy with SNI Routing\n - HTTPS_PROXY: HTTPS_PROXY\n\nInstall HTTPS proxy\n - UDP_PROXY: UDP_PROXY\n\nInstall UDP proxy\n - SMA_PROXY: SMA_PROXY\n\nInstall Secret Management Access proxy",
+            "description": "ProxyType tells the type of proxy to install for the virtual host.\n\nOnly the following combination of VirtualHosts within same AdvertisePolicy is permitted\n(None of them should have \"*\" in domains when used with other VirtualHosts in same AdvertisePolicy)\n1. Multiple TCP_PROXY_WITH_SNI and multiple HTTPS_PROXY\n2. Multiple HTTP_PROXY\n3. Multiple HTTPS_PROXY\n4. Multiple TCP_PROXY_WITH_SNI\n\nHTTPS_PROXY without TLS parameters is not permitted\nHTTP_PROXY/HTTPS_PROXY/TCP_PROXY_WITH_SNI/SMA_PROXY with empty domains is not permitted\nTCP_PROXY_WITH_SNI/SMA_PROXY should not have \"*\" in domains\n\n - HTTP_PROXY: HTTP_PROXY\n\nInstall HTTP proxy. HTTP Proxy is the default proxy installed.\n - TCP_PROXY: TCP_PROXY\n\nInstall TCP proxy\n - TCP_PROXY_WITH_SNI: TCP_PROXY_WITH_SNI\n\nInstall TCP proxy with SNI Routing\n - TLS_TCP_PROXY: TCP_PROXY\n\nInstall TCP proxy\n - TLS_TCP_PROXY_WITH_SNI: TCP_PROXY_WITH_SNI\n\nInstall TCP proxy with SNI Routing\n - HTTPS_PROXY: HTTPS_PROXY\n\nInstall HTTPS proxy\n - UDP_PROXY: UDP_PROXY\n\nInstall UDP proxy\n - SMA_PROXY: SMA_PROXY\n\nInstall Secret Management Access proxy\n - DNS_PROXY: DNS_PROXY\n\nInstall DNS proxy",
             "enum": [
                 "UDP_PROXY",
-                "SMA_PROXY"
+                "SMA_PROXY",
+                "DNS_PROXY"
             ],
             "default": "HTTP_PROXY",
             "x-displayname": "Type of Proxy",

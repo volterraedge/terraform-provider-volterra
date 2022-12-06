@@ -5481,7 +5481,26 @@ func (m *RateLimiterRuleSpec) GetDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 	}
 
-	return m.GetActionChoiceDRefInfo()
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetActionChoiceDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetActionChoiceDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	if fdrInfos, err := m.GetAsnChoiceDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetAsnChoiceDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	if fdrInfos, err := m.GetIpChoiceDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetIpChoiceDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	return drInfos, nil
 
 }
 
@@ -5556,6 +5575,68 @@ func (m *RateLimiterRuleSpec) GetActionChoiceDBEntries(ctx context.Context, d db
 	return entries, nil
 }
 
+// GetDRefInfo for the field's type
+func (m *RateLimiterRuleSpec) GetAsnChoiceDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetAsnChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetAsnChoice().(type) {
+	case *RateLimiterRuleSpec_AnyAsn:
+
+		return nil, nil
+
+	case *RateLimiterRuleSpec_AsnList:
+
+		return nil, nil
+
+	case *RateLimiterRuleSpec_AsnMatcher:
+		drInfos, err := m.GetAsnMatcher().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetAsnMatcher().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "asn_matcher." + dri.DRField
+		}
+		return drInfos, err
+
+	default:
+		return nil, nil
+	}
+
+}
+
+// GetDRefInfo for the field's type
+func (m *RateLimiterRuleSpec) GetIpChoiceDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetIpChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetIpChoice().(type) {
+	case *RateLimiterRuleSpec_AnyIp:
+
+		return nil, nil
+
+	case *RateLimiterRuleSpec_IpPrefixList:
+
+		return nil, nil
+
+	case *RateLimiterRuleSpec_IpMatcher:
+		drInfos, err := m.GetIpMatcher().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetIpMatcher().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "ip_matcher." + dri.DRField
+		}
+		return drInfos, err
+
+	default:
+		return nil, nil
+	}
+
+}
+
 type ValidateRateLimiterRuleSpec struct {
 	FldValidators map[string]db.ValidatorFunc
 }
@@ -5564,6 +5645,14 @@ func (v *ValidateRateLimiterRuleSpec) ActionChoiceValidationRuleHandler(rules ma
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for action_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateRateLimiterRuleSpec) CountryChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for country_choice")
 	}
 	return validatorFn, nil
 }
@@ -5677,6 +5766,79 @@ func (v *ValidateRateLimiterRuleSpec) Validate(ctx context.Context, pm interface
 
 	}
 
+	switch m.GetAsnChoice().(type) {
+	case *RateLimiterRuleSpec_AnyAsn:
+		if fv, exists := v.FldValidators["asn_choice.any_asn"]; exists {
+			val := m.GetAsnChoice().(*RateLimiterRuleSpec_AnyAsn).AnyAsn
+			vOpts := append(opts,
+				db.WithValidateField("asn_choice"),
+				db.WithValidateField("any_asn"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *RateLimiterRuleSpec_AsnList:
+		if fv, exists := v.FldValidators["asn_choice.asn_list"]; exists {
+			val := m.GetAsnChoice().(*RateLimiterRuleSpec_AsnList).AsnList
+			vOpts := append(opts,
+				db.WithValidateField("asn_choice"),
+				db.WithValidateField("asn_list"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *RateLimiterRuleSpec_AsnMatcher:
+		if fv, exists := v.FldValidators["asn_choice.asn_matcher"]; exists {
+			val := m.GetAsnChoice().(*RateLimiterRuleSpec_AsnMatcher).AsnMatcher
+			vOpts := append(opts,
+				db.WithValidateField("asn_choice"),
+				db.WithValidateField("asn_matcher"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["country_choice"]; exists {
+		val := m.GetCountryChoice()
+		vOpts := append(opts,
+			db.WithValidateField("country_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetCountryChoice().(type) {
+	case *RateLimiterRuleSpec_AnyCountry:
+		if fv, exists := v.FldValidators["country_choice.any_country"]; exists {
+			val := m.GetCountryChoice().(*RateLimiterRuleSpec_AnyCountry).AnyCountry
+			vOpts := append(opts,
+				db.WithValidateField("country_choice"),
+				db.WithValidateField("any_country"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *RateLimiterRuleSpec_CountryList:
+		if fv, exists := v.FldValidators["country_choice.country_list"]; exists {
+			val := m.GetCountryChoice().(*RateLimiterRuleSpec_CountryList).CountryList
+			vOpts := append(opts,
+				db.WithValidateField("country_choice"),
+				db.WithValidateField("country_list"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["domain_matcher"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("domain_matcher"))
@@ -5699,6 +5861,43 @@ func (v *ValidateRateLimiterRuleSpec) Validate(ctx context.Context, pm interface
 		vOpts := append(opts, db.WithValidateField("http_method"))
 		if err := fv(ctx, m.GetHttpMethod(), vOpts...); err != nil {
 			return err
+		}
+
+	}
+
+	switch m.GetIpChoice().(type) {
+	case *RateLimiterRuleSpec_AnyIp:
+		if fv, exists := v.FldValidators["ip_choice.any_ip"]; exists {
+			val := m.GetIpChoice().(*RateLimiterRuleSpec_AnyIp).AnyIp
+			vOpts := append(opts,
+				db.WithValidateField("ip_choice"),
+				db.WithValidateField("any_ip"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *RateLimiterRuleSpec_IpPrefixList:
+		if fv, exists := v.FldValidators["ip_choice.ip_prefix_list"]; exists {
+			val := m.GetIpChoice().(*RateLimiterRuleSpec_IpPrefixList).IpPrefixList
+			vOpts := append(opts,
+				db.WithValidateField("ip_choice"),
+				db.WithValidateField("ip_prefix_list"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *RateLimiterRuleSpec_IpMatcher:
+		if fv, exists := v.FldValidators["ip_choice.ip_matcher"]; exists {
+			val := m.GetIpChoice().(*RateLimiterRuleSpec_IpMatcher).IpMatcher
+			vOpts := append(opts,
+				db.WithValidateField("ip_choice"),
+				db.WithValidateField("ip_matcher"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
 		}
 
 	}
@@ -5738,6 +5937,17 @@ var DefaultRateLimiterRuleSpecValidator = func() *ValidateRateLimiterRuleSpec {
 	}
 	v.FldValidators["action_choice"] = vFn
 
+	vrhCountryChoice := v.CountryChoiceValidationRuleHandler
+	rulesCountryChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhCountryChoice(rulesCountryChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for RateLimiterRuleSpec.country_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["country_choice"] = vFn
+
 	vrhHeaders := v.HeadersValidationRuleHandler
 	rulesHeaders := map[string]string{
 		"ves.io.schema.rules.repeated.max_items": "4",
@@ -5751,6 +5961,14 @@ var DefaultRateLimiterRuleSpecValidator = func() *ValidateRateLimiterRuleSpec {
 	v.FldValidators["headers"] = vFn
 
 	v.FldValidators["action_choice.custom_rate_limiter"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
+
+	v.FldValidators["asn_choice.asn_list"] = ves_io_schema_policy.AsnMatchListValidator().Validate
+	v.FldValidators["asn_choice.asn_matcher"] = ves_io_schema_policy.AsnMatcherTypeValidator().Validate
+
+	v.FldValidators["country_choice.country_list"] = ves_io_schema_policy.CountryCodeListValidator().Validate
+
+	v.FldValidators["ip_choice.ip_prefix_list"] = ves_io_schema_policy.PrefixMatchListValidator().Validate
+	v.FldValidators["ip_choice.ip_matcher"] = ves_io_schema_policy.IpMatcherTypeValidator().Validate
 
 	v.FldValidators["http_method"] = ves_io_schema_policy.HttpMethodMatcherTypeValidator().Validate
 
@@ -8184,10 +8402,94 @@ func (m *GetSpecType) ToGlobalSpecTypeWithoutDeepCopy(f *GlobalSpecType) {
 	m.toGlobalSpecType(f, false)
 }
 
+// create setters in RateLimiterRuleSpec from GlobalSpecType for oneof fields
+func (r *RateLimiterRuleSpec) SetAsnChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.AsnChoice.(type) {
+	case nil:
+		o.AsnChoice = nil
+
+	case *RateLimiterRuleSpec_AnyAsn:
+		o.AsnChoice = &GlobalSpecType_AnyAsn{AnyAsn: of.AnyAsn}
+
+	case *RateLimiterRuleSpec_AsnList:
+		o.AsnChoice = &GlobalSpecType_AsnList{AsnList: of.AsnList}
+
+	case *RateLimiterRuleSpec_AsnMatcher:
+		o.AsnChoice = &GlobalSpecType_AsnMatcher{AsnMatcher: of.AsnMatcher}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *RateLimiterRuleSpec) GetAsnChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.AsnChoice.(type) {
+	case nil:
+		r.AsnChoice = nil
+
+	case *GlobalSpecType_AnyAsn:
+		r.AsnChoice = &RateLimiterRuleSpec_AnyAsn{AnyAsn: of.AnyAsn}
+
+	case *GlobalSpecType_AsnList:
+		r.AsnChoice = &RateLimiterRuleSpec_AsnList{AsnList: of.AsnList}
+
+	case *GlobalSpecType_AsnMatcher:
+		r.AsnChoice = &RateLimiterRuleSpec_AsnMatcher{AsnMatcher: of.AsnMatcher}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+// create setters in RateLimiterRuleSpec from GlobalSpecType for oneof fields
+func (r *RateLimiterRuleSpec) SetIpChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.IpChoice.(type) {
+	case nil:
+		o.IpChoice = nil
+
+	case *RateLimiterRuleSpec_AnyIp:
+		o.IpChoice = &GlobalSpecType_AnyIp{AnyIp: of.AnyIp}
+
+	case *RateLimiterRuleSpec_IpMatcher:
+		o.IpChoice = &GlobalSpecType_IpMatcher{IpMatcher: of.IpMatcher}
+
+	case *RateLimiterRuleSpec_IpPrefixList:
+		o.IpChoice = &GlobalSpecType_IpPrefixList{IpPrefixList: of.IpPrefixList}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *RateLimiterRuleSpec) GetIpChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.IpChoice.(type) {
+	case nil:
+		r.IpChoice = nil
+
+	case *GlobalSpecType_AnyIp:
+		r.IpChoice = &RateLimiterRuleSpec_AnyIp{AnyIp: of.AnyIp}
+
+	case *GlobalSpecType_IpMatcher:
+		r.IpChoice = &RateLimiterRuleSpec_IpMatcher{IpMatcher: of.IpMatcher}
+
+	case *GlobalSpecType_IpPrefixList:
+		r.IpChoice = &RateLimiterRuleSpec_IpPrefixList{IpPrefixList: of.IpPrefixList}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
 func (m *RateLimiterRuleSpec) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	if f == nil {
 		return
 	}
+
+	m.GetAsnChoiceFromGlobalSpecType(f)
 
 	if f.GetDomainMatcher() != nil {
 		if m.DomainMatcher == nil {
@@ -8200,6 +8502,7 @@ func (m *RateLimiterRuleSpec) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy
 
 	m.Headers = f.GetHeaders()
 	m.HttpMethod = f.GetHttpMethod()
+	m.GetIpChoiceFromGlobalSpecType(f)
 	m.Path = f.GetPath()
 }
 
@@ -8218,6 +8521,8 @@ func (m *RateLimiterRuleSpec) toGlobalSpecType(f *GlobalSpecType, withDeepCopy b
 	}
 	_ = m1
 
+	m1.SetAsnChoiceToGlobalSpecType(f)
+
 	if m1.DomainMatcher != nil {
 		if f.DomainMatcher == nil {
 			f.DomainMatcher = &ves_io_schema_policy.MatcherType{}
@@ -8232,6 +8537,7 @@ func (m *RateLimiterRuleSpec) toGlobalSpecType(f *GlobalSpecType, withDeepCopy b
 
 	f.Headers = m1.Headers
 	f.HttpMethod = m1.HttpMethod
+	m1.SetIpChoiceToGlobalSpecType(f)
 	f.Path = m1.Path
 }
 

@@ -390,7 +390,8 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 
 	vrhTenantId := v.TenantIdValidationRuleHandler
 	rulesTenantId := map[string]string{
-		"ves.io.schema.rules.string.max_len": "256",
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.max_len":   "256",
 	}
 	vFn, err = vrhTenantId(rulesTenantId)
 	if err != nil {
@@ -603,6 +604,15 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 
 	}
 
+	if fv, exists := v.FldValidators["status"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("status"))
+		if err := fv(ctx, m.GetStatus(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["tenant_id"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("tenant_id"))
@@ -629,7 +639,8 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 
 	vrhTenantId := v.TenantIdValidationRuleHandler
 	rulesTenantId := map[string]string{
-		"ves.io.schema.rules.string.max_len": "256",
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.max_len":   "256",
 	}
 	vFn, err = vrhTenantId(rulesTenantId)
 	if err != nil {
@@ -857,6 +868,15 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["status"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("status"))
+		if err := fv(ctx, m.GetStatus(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["tenant_id"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("tenant_id"))
@@ -883,7 +903,8 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 
 	vrhTenantId := v.TenantIdValidationRuleHandler
 	rulesTenantId := map[string]string{
-		"ves.io.schema.rules.string.max_len": "256",
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.max_len":   "256",
 	}
 	vFn, err = vrhTenantId(rulesTenantId)
 	if err != nil {
@@ -1267,7 +1288,8 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 
 	vrhTenantId := v.TenantIdValidationRuleHandler
 	rulesTenantId := map[string]string{
-		"ves.io.schema.rules.string.max_len": "256",
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.max_len":   "256",
 	}
 	vFn, err = vrhTenantId(rulesTenantId)
 	if err != nil {
@@ -1335,6 +1357,7 @@ func (m *GetSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 		return
 	}
 	m.AllowedGroups = f.GetAllowedGroups()
+	m.Status = f.GetStatus()
 	m.TenantId = f.GetTenantId()
 }
 
@@ -1354,6 +1377,7 @@ func (m *GetSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	_ = m1
 
 	f.AllowedGroups = m1.AllowedGroups
+	f.Status = m1.Status
 	f.TenantId = m1.TenantId
 }
 

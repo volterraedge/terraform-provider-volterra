@@ -20,43 +20,30 @@ resource "volterra_voltstack_site" "example" {
   name      = "acmecorp-web"
   namespace = "staging"
 
-  // One of the arguments from this list "blocked_services default_blocked_services" must be set
+  // One of the arguments from this list "default_blocked_services blocked_services" must be set
   default_blocked_services = true
 
-  // One of the arguments from this list "bond_device_list no_bond_devices" must be set
-
-  bond_device_list {
-    bond_devices {
-      devices = ["eth0"]
-
-      // One of the arguments from this list "lacp active_backup" must be set
-
-      lacp {
-        rate = "30"
-      }
-      link_polling_interval = "1000"
-      link_up_delay         = "200"
-      name                  = "bond0"
-    }
-  }
+  // One of the arguments from this list "no_bond_devices bond_device_list" must be set
+  no_bond_devices = true
 
   // One of the arguments from this list "disable_gpu enable_gpu enable_vgpu" must be set
+  disable_gpu = true
 
-  enable_vgpu {
-    feature_type   = "feature_type"
-    server_address = "gridlicense1.example.com"
-    server_port    = "7070"
-  }
   // One of the arguments from this list "no_k8s_cluster k8s_cluster" must be set
   no_k8s_cluster = true
+
   // One of the arguments from this list "logs_streaming_disabled log_receiver" must be set
   logs_streaming_disabled = true
+
   master_nodes = ["master-0"]
+
   // One of the arguments from this list "default_network_config custom_network_config" must be set
   default_network_config = true
+
   // One of the arguments from this list "default_storage_config custom_storage_config" must be set
   default_storage_config = true
-  // One of the arguments from this list "deny_all_usb allow_all_usb usb_policy" must be set
+
+  // One of the arguments from this list "usb_policy deny_all_usb allow_all_usb" must be set
   deny_all_usb          = true
   volterra_certified_hw = ["isv-8000-series-voltstack-combo"]
 }
@@ -126,7 +113,7 @@ Argument Reference
 
 `default_storage_config` - (Optional) Use default storage configuration (bool).
 
-`sw` - (Optional) Volterra Software Details. See [Sw ](#sw) below for details.
+`sw` - (Optional) F5XC Software Details. See [Sw ](#sw) below for details.
 
 `allow_all_usb` - (Optional) All USB devices are allowed (bool).
 
@@ -182,7 +169,7 @@ BGP configuration for local control plane.
 
 ### Blindfold Secret Info
 
-Blindfold Secret is used for the secrets managed by Volterra Secret Management Service.
+Blindfold Secret is used for the secrets managed by F5XC Secret Management Service.
 
 `decryption_provider` - (Optional) Name of the Secret Management Access object that contains information about the backend Secret Management service. (`String`).
 
@@ -274,17 +261,17 @@ Certificates for generating intermediate certificate for TLS interception..
 
 `description` - (Optional) Description for the certificate (`String`).
 
-`custom_hash_algorithms` - (Optional) Use hash algorithms in the custom order. Volterra will try to fetch ocsp response from the CA in the given order. Additionally, LoadBalancer will not become active until ocspResponse cannot be fetched if the certificate has MustStaple extension set.. See [Custom Hash Algorithms ](#custom-hash-algorithms) below for details.
+`custom_hash_algorithms` - (Optional) Use hash algorithms in the custom order. F5XC will try to fetch ocsp response from the CA in the given order. Additionally, LoadBalancer will not become active until ocspResponse cannot be fetched if the certificate has MustStaple extension set.. See [Custom Hash Algorithms ](#custom-hash-algorithms) below for details.
 
 `disable_ocsp_stapling` - (Optional) This is the default behavior if no choice is selected.. See [Disable Ocsp Stapling ](#disable-ocsp-stapling) below for details.
 
-`use_system_defaults` - (Optional) Volterra will try to fetch OCSPResponse with sha256 and sha1 as HashAlgorithm, in that order.. See [Use System Defaults ](#use-system-defaults) below for details.
+`use_system_defaults` - (Optional) F5XC will try to fetch OCSPResponse with sha256 and sha1 as HashAlgorithm, in that order.. See [Use System Defaults ](#use-system-defaults) below for details.
 
 `private_key` - (Required) TLS Private Key data in unencrypted PEM format including the PEM headers. The data may be optionally secured using BlindFold. TLS key has to match the accompanying certificate.. See [Private Key ](#private-key) below for details.
 
 ### Custom Hash Algorithms
 
-Use hash algorithms in the custom order. Volterra will try to fetch ocsp response from the CA in the given order. Additionally, LoadBalancer will not become active until ocspResponse cannot be fetched if the certificate has MustStaple extension set..
+Use hash algorithms in the custom order. F5XC will try to fetch ocsp response from the CA in the given order. Additionally, LoadBalancer will not become active until ocspResponse cannot be fetched if the certificate has MustStaple extension set..
 
 `hash_algorithms` - (Required) Ordered list of hash algorithms to be used. (`List of Strings`).
 
@@ -846,13 +833,13 @@ TLS Private Key data in unencrypted PEM format including the PEM headers. The da
 
 `secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).
 
-`blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by Volterra Secret Management Service. See [Blindfold Secret Info ](#blindfold-secret-info) below for details.
+`blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Blindfold Secret Info ](#blindfold-secret-info) below for details.
 
 `clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Clear Secret Info ](#clear-secret-info) below for details.
 
 `vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Vault Secret Info ](#vault-secret-info) below for details.
 
-`wingman_secret_info` - (Optional) Secret is given as bootstrap secret in Volterra Security Sidecar. See [Wingman Secret Info ](#wingman-secret-info) below for details.
+`wingman_secret_info` - (Optional) Secret is given as bootstrap secret in F5XC Security Sidecar. See [Wingman Secret Info ](#wingman-secret-info) below for details.
 
 ### Pure Service Orchestrator
 
@@ -1074,11 +1061,11 @@ Interface belongs to site local network inside.
 
 ### Sw
 
-Volterra Software Details.
+F5XC Software Details.
 
 `default_sw_version` - (Optional) Will assign latest available SW version (bool).
 
-`volterra_software_version` - (Optional) Volterra Software Version is optional parameter, which allows to specify target SW version for particular site e.g. crt-20210329-1002. (`String`).
+`volterra_software_version` - (Optional) F5XC Software Version is optional parameter, which allows to specify target SW version for particular site e.g. crt-20210329-1002. (`String`).
 
 ### Tls Intercept
 
@@ -1090,7 +1077,7 @@ Specify TLS interception configuration for the network connector.
 
 `custom_certificate` - (Optional) Certificates for generating intermediate certificate for TLS interception.. See [Custom Certificate ](#custom-certificate) below for details.
 
-`volterra_certificate` - (Optional) Volterra certificates for generating intermediate certificate for TLS interception. (bool).
+`volterra_certificate` - (Optional) F5XC certificates for generating intermediate certificate for TLS interception. (bool).
 
 `trusted_ca_url` - (Optional) Custom trusted CA certificates for validating upstream server certificate (`String`).
 
@@ -1124,7 +1111,7 @@ Configure a untagged ethernet interface.
 
 ### Use System Defaults
 
-Volterra will try to fetch OCSPResponse with sha256 and sha1 as HashAlgorithm, in that order..
+F5XC will try to fetch OCSPResponse with sha256 and sha1 as HashAlgorithm, in that order..
 
 ### Vault Secret Info
 
@@ -1142,7 +1129,7 @@ Vault Secret is used for the secrets managed by Hashicorp Vault.
 
 ### Volterra Certificate
 
-Volterra certificates for generating intermediate certificate for TLS interception..
+F5XC certificates for generating intermediate certificate for TLS interception..
 
 ### Volterra Trusted Ca
 
@@ -1154,7 +1141,7 @@ Matches the web user interface port.
 
 ### Wingman Secret Info
 
-Secret is given as bootstrap secret in Volterra Security Sidecar.
+Secret is given as bootstrap secret in F5XC Security Sidecar.
 
 `name` - (Required) Name of the secret. (`String`).
 

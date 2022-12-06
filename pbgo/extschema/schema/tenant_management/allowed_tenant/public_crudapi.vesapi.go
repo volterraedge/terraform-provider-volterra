@@ -2280,11 +2280,13 @@ var APISwaggerJSON string = `{
                 },
                 "tenant_id": {
                     "type": "string",
-                    "description": " Specify the Tenant ID of the Original Tenant which is allowed to manage.\n NOTE: this is the name of the tenant configuration obj. not UID.\n\nExample: - \"msp-apac-s4543dsa\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 256\n",
+                    "description": " Specify the Tenant ID of the Original Tenant which is allowed to manage.\n NOTE: this is the name of the tenant configuration obj. not UID.\n\nExample: - \"msp-apac-s4543dsa\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 256\n",
                     "maxLength": 256,
-                    "x-displayname": "Tenant ID",
+                    "x-displayname": "Allowed Tenant ID",
                     "x-ves-example": "msp-apac-s4543dsa",
+                    "x-ves-required": "true",
                     "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
                         "ves.io.schema.rules.string.max_len": "256"
                     }
                 }
@@ -2402,7 +2404,7 @@ var APISwaggerJSON string = `{
             "description": "Get allowed_tenant reads a given object from storage backend for metadata.namespace.",
             "title": "Get Allowed Tenant",
             "x-displayname": "Get Allowed Tenant",
-            "x-ves-displayorder": "1,2",
+            "x-ves-displayorder": "1,2,3",
             "x-ves-proto-message": "ves.io.schema.tenant_management.allowed_tenant.GetSpecType",
             "properties": {
                 "allowed_groups": {
@@ -2418,13 +2420,20 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.repeated.unique": "true"
                     }
                 },
+                "status": {
+                    "description": " Status is to identify the status of the allowed tenant configuration.",
+                    "$ref": "#/definitions/tenant_managementStatus",
+                    "x-displayname": "Status"
+                },
                 "tenant_id": {
                     "type": "string",
-                    "description": " Specify the Tenant ID of the Original Tenant which is allowed to manage.\n NOTE: this is the name of the tenant configuration obj. not UID.\n\nExample: - \"msp-apac-s4543dsa\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 256\n",
+                    "description": " Specify the Tenant ID of the Original Tenant which is allowed to manage.\n NOTE: this is the name of the tenant configuration obj. not UID.\n\nExample: - \"msp-apac-s4543dsa\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 256\n",
                     "maxLength": 256,
-                    "x-displayname": "Tenant ID",
+                    "x-displayname": "Allowed Tenant ID",
                     "x-ves-example": "msp-apac-s4543dsa",
+                    "x-ves-required": "true",
                     "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
                         "ves.io.schema.rules.string.max_len": "256"
                     }
                 }
@@ -2452,14 +2461,22 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.repeated.unique": "true"
                     }
                 },
+                "status": {
+                    "description": " Status is to identify the status of the allowed tenant configuration.",
+                    "title": "Status",
+                    "$ref": "#/definitions/tenant_managementStatus",
+                    "x-displayname": "Status"
+                },
                 "tenant_id": {
                     "type": "string",
-                    "description": " Specify the Tenant ID of the Original Tenant which is allowed to manage.\n NOTE: this is the name of the tenant configuration obj. not UID.\n\nExample: - \"msp-apac-s4543dsa\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 256\n",
+                    "description": " Specify the Tenant ID of the Original Tenant which is allowed to manage.\n NOTE: this is the name of the tenant configuration obj. not UID.\n\nExample: - \"msp-apac-s4543dsa\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 256\n",
                     "title": "tenant_id",
                     "maxLength": 256,
-                    "x-displayname": "Tenant ID",
+                    "x-displayname": "Allowed Tenant ID",
                     "x-ves-example": "msp-apac-s4543dsa",
+                    "x-ves-required": "true",
                     "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
                         "ves.io.schema.rules.string.max_len": "256"
                     }
                 }
@@ -2682,11 +2699,13 @@ var APISwaggerJSON string = `{
                 },
                 "tenant_id": {
                     "type": "string",
-                    "description": " Specify the Tenant ID of the Original Tenant which is allowed to manage.\n NOTE: this is the name of the tenant configuration obj. not UID.\n\nExample: - \"msp-apac-s4543dsa\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 256\n",
+                    "description": " Specify the Tenant ID of the Original Tenant which is allowed to manage.\n NOTE: this is the name of the tenant configuration obj. not UID.\n\nExample: - \"msp-apac-s4543dsa\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 256\n",
                     "maxLength": 256,
-                    "x-displayname": "Tenant ID",
+                    "x-displayname": "Allowed Tenant ID",
                     "x-ves-example": "msp-apac-s4543dsa",
+                    "x-ves-required": "true",
                     "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
                         "ves.io.schema.rules.string.max_len": "256"
                     }
                 }
@@ -3618,6 +3637,20 @@ var APISwaggerJSON string = `{
                     }
                 }
             }
+        },
+        "tenant_managementStatus": {
+            "type": "string",
+            "description": "Status is to identify the status of the managed tenant configuration.\n\n - UNKNOWN: UNKNOWN\nUnknown status of the configuration.\n - NOT_APPLICABLE: Not Applicable\nThe status is not applicable for the managed tenant configuration.\n - PENDING: Pending\nThe configuration is incomplete.\n - ACTIVE: Active\nThe tenant configuration is active.",
+            "title": "Status",
+            "enum": [
+                "UNKNOWN",
+                "NOT_APPLICABLE",
+                "PENDING",
+                "ACTIVE"
+            ],
+            "default": "UNKNOWN",
+            "x-displayname": "Status",
+            "x-ves-proto-enum": "ves.io.schema.tenant_management.Status"
         }
     },
     "x-displayname": "Allowed Tenant",

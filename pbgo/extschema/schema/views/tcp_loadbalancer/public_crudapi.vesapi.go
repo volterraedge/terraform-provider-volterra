@@ -2253,7 +2253,7 @@ var APISwaggerJSON string = `{
         },
         "schemaBlindfoldSecretInfoType": {
             "type": "object",
-            "description": "BlindfoldSecretInfoType specifies information about the Secret managed by Volterra Secret Management",
+            "description": "BlindfoldSecretInfoType specifies information about the Secret managed by F5XC Secret Management",
             "title": "BlindfoldSecretInfoType",
             "x-displayname": "Blindfold Secret",
             "x-ves-displayorder": "3,1,2",
@@ -2767,7 +2767,7 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.SecretType",
             "properties": {
                 "blindfold_secret_info": {
-                    "description": "Exclusive with [clear_secret_info]\n Blindfold Secret is used for the secrets managed by Volterra Secret Management Service",
+                    "description": "Exclusive with [clear_secret_info]\n Blindfold Secret is used for the secrets managed by F5XC Secret Management Service",
                     "title": "Blindfold Secret",
                     "$ref": "#/definitions/schemaBlindfoldSecretInfoType",
                     "x-displayname": "Blindfold Secret"
@@ -3148,7 +3148,7 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "custom_hash_algorithms": {
-                    "description": "Exclusive with [disable_ocsp_stapling use_system_defaults]\n Use hash algorithms in the custom order. Volterra will try to fetch ocsp response from the CA in the given order. Additionally, LoadBalancer will not become active until ocspResponse cannot be fetched if the certificate has MustStaple extension set.",
+                    "description": "Exclusive with [disable_ocsp_stapling use_system_defaults]\n Use hash algorithms in the custom order. F5XC will try to fetch ocsp response from the CA in the given order. Additionally, LoadBalancer will not become active until ocspResponse cannot be fetched if the certificate has MustStaple extension set.",
                     "title": "Use Custom Order for Hash Algorithms",
                     "$ref": "#/definitions/schemaHashAlgorithms",
                     "x-displayname": "Use hash algorithms in custom order"
@@ -3161,7 +3161,7 @@ var APISwaggerJSON string = `{
                     "x-ves-example": "Certificate used in production environment"
                 },
                 "disable_ocsp_stapling": {
-                    "description": "Exclusive with [custom_hash_algorithms use_system_defaults]\n Disable OCSP Stapling. Volterra will not fetch and staple OCSP Response for this certificate.\n This is the default behavior if no choice is selected.",
+                    "description": "Exclusive with [custom_hash_algorithms use_system_defaults]\n Disable OCSP Stapling. F5XC will not fetch and staple OCSP Response for this certificate.\n This is the default behavior if no choice is selected.",
                     "title": "Disable OCSP Stapling",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Disable OCSP Stapling"
@@ -3177,10 +3177,10 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "use_system_defaults": {
-                    "description": "Exclusive with [custom_hash_algorithms disable_ocsp_stapling]\n Use Volterra Default Settings to fetch and staple OCSP Response.\n OCSP Response will be stapled if it can be fetched. Additionally, LoadBalancer will not become active until ocspResponse cannot be fetched if the certificate has MustStaple extension set.\n Volterra will try to fetch OCSPResponse with sha256 and sha1 as HashAlgorithm, in that order.",
-                    "title": "Fetch with Volterra default settings",
+                    "description": "Exclusive with [custom_hash_algorithms disable_ocsp_stapling]\n Use F5XC Default Settings to fetch and staple OCSP Response.\n OCSP Response will be stapled if it can be fetched. Additionally, LoadBalancer will not become active until ocspResponse cannot be fetched if the certificate has MustStaple extension set.\n F5XC will try to fetch OCSPResponse with sha256 and sha1 as HashAlgorithm, in that order.",
+                    "title": "Fetch with F5XC default settings",
                     "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "Fetch with Volterra default settings"
+                    "x-displayname": "Fetch with F5XC default settings"
                 }
             }
         },
@@ -3297,7 +3297,7 @@ var APISwaggerJSON string = `{
                 },
                 "tls_certificates": {
                     "type": "array",
-                    "description": " Set of TLS certificates\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 16\n  ves.io.schema.rules.repeated.min_items: 1\n",
+                    "description": " Users can add one or more certificates that share the same set of domains.\n for example, domain.com and *.domain.com - but use different signature algorithms\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 16\n  ves.io.schema.rules.repeated.min_items: 1\n",
                     "title": "tls_certificates",
                     "minItems": 1,
                     "maxItems": 16,
@@ -3936,13 +3936,15 @@ var APISwaggerJSON string = `{
         },
         "viewsSiteNetwork": {
             "type": "string",
-            "description": "This defines network types to be used on site\n\nAll inside and outside networks.\nAll inside networks.\nAll outside networks.\nvK8s service network.",
+            "description": "This defines network types to be used on site\n\nAll inside and outside networks.\nAll inside and outside networks with internet VIP support.\nAll inside networks.\nAll outside networks.\nAll outside networks with internet VIP support.\nvK8s service network.",
             "title": "SiteNetwork",
             "enum": [
                 "SITE_NETWORK_INSIDE_AND_OUTSIDE",
                 "SITE_NETWORK_INSIDE",
                 "SITE_NETWORK_OUTSIDE",
-                "SITE_NETWORK_SERVICE"
+                "SITE_NETWORK_SERVICE",
+                "SITE_NETWORK_OUTSIDE_WITH_INTERNET_VIP",
+                "SITE_NETWORK_INSIDE_AND_OUTSIDE_WITH_INTERNET_VIP"
             ],
             "default": "SITE_NETWORK_INSIDE_AND_OUTSIDE",
             "x-displayname": "Site Network",
@@ -4199,7 +4201,7 @@ var APISwaggerJSON string = `{
                 },
                 "dns_volterra_managed": {
                     "type": "boolean",
-                    "description": " DNS records for domains will be managed automatically by Volterra.\n This requires the domain to be delegated to Volterra using the Delegated Domain feature.",
+                    "description": " DNS records for domains will be managed automatically by Volterra.\n This requires the domain to be delegated to F5XC using the Delegated Domain feature.",
                     "format": "boolean",
                     "x-displayname": "Automatically Manage DNS Records"
                 },
@@ -4360,7 +4362,7 @@ var APISwaggerJSON string = `{
                 },
                 "dns_volterra_managed": {
                     "type": "boolean",
-                    "description": " DNS records for domains will be managed automatically by Volterra.\n This requires the domain to be delegated to Volterra using the Delegated Domain feature.",
+                    "description": " DNS records for domains will be managed automatically by Volterra.\n This requires the domain to be delegated to F5XC using the Delegated Domain feature.",
                     "format": "boolean",
                     "x-displayname": "Automatically Manage DNS Records"
                 },
@@ -4533,7 +4535,7 @@ var APISwaggerJSON string = `{
                 },
                 "dns_volterra_managed": {
                     "type": "boolean",
-                    "description": " DNS records for domains will be managed automatically by Volterra.\n This requires the domain to be delegated to Volterra using the Delegated Domain feature.",
+                    "description": " DNS records for domains will be managed automatically by Volterra.\n This requires the domain to be delegated to F5XC using the Delegated Domain feature.",
                     "title": "Manage DNS Domain",
                     "format": "boolean",
                     "x-displayname": "Automatically Manage DNS Records"
@@ -4738,7 +4740,7 @@ var APISwaggerJSON string = `{
                 },
                 "dns_volterra_managed": {
                     "type": "boolean",
-                    "description": " DNS records for domains will be managed automatically by Volterra.\n This requires the domain to be delegated to Volterra using the Delegated Domain feature.",
+                    "description": " DNS records for domains will be managed automatically by Volterra.\n This requires the domain to be delegated to F5XC using the Delegated Domain feature.",
                     "format": "boolean",
                     "x-displayname": "Automatically Manage DNS Records"
                 },

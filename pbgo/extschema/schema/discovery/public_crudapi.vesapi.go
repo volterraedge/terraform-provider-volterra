@@ -1658,7 +1658,7 @@ var APISwaggerJSON string = `{
     "swagger": "2.0",
     "info": {
         "title": "discovery",
-        "description": "Service discovery in Volterra performs following\n\nDynamic service discovery: Resolving the load balancer endpoints for a ADC cluster\nDynamic VIP discovery: Publishing virtual IP to attract traffic from clients",
+        "description": "Service discovery in F5XC performs following\n\nDynamic service discovery: Resolving the load balancer endpoints for a ADC cluster\nDynamic VIP discovery: Publishing virtual IP to attract traffic from clients",
         "version": "version not set"
     },
     "schemes": [
@@ -2243,7 +2243,7 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.discovery.ConsulHttpBasicAuthInfoType",
             "properties": {
                 "passwd_url": {
-                    "description": " Volterra Secret. URL for password, needs to be fetched from this path",
+                    "description": " F5XC Secret. URL for password, needs to be fetched from this path",
                     "title": "password",
                     "$ref": "#/definitions/schemaSecretType",
                     "x-displayname": "Password"
@@ -2719,7 +2719,7 @@ var APISwaggerJSON string = `{
                 },
                 "subdomain": {
                     "type": "string",
-                    "description": " The DNS subdomain for which Volterra will respond to DNS queries.\n\nExample: - \"value\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 256\n",
+                    "description": " The DNS subdomain for which F5XC will respond to DNS queries.\n\nExample: - \"value\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 256\n",
                     "title": "subdomain",
                     "maxLength": 256,
                     "x-displayname": "Subdomain",
@@ -3314,7 +3314,7 @@ var APISwaggerJSON string = `{
                 },
                 "subdomain": {
                     "type": "string",
-                    "description": "x-displayName: \"Subdomain\"\nSubdomain for which DNS delegation is done\nVolterra Edge Router will only respond for DNS queries on this sub-domain\nWhile programming the DNS DELEGATE on external cluster, VER will take ownership of this\nsub-domain",
+                    "description": "x-displayName: \"Subdomain\"\nSubdomain for which DNS delegation is done\nF5XC Edge Router will only respond for DNS queries on this sub-domain\nWhile programming the DNS DELEGATE on external cluster, VER will take ownership of this\nsub-domain",
                     "title": "DNS delegation sub-domain"
                 },
                 "type": {
@@ -3358,7 +3358,7 @@ var APISwaggerJSON string = `{
         },
         "schemaBlindfoldSecretInfoType": {
             "type": "object",
-            "description": "BlindfoldSecretInfoType specifies information about the Secret managed by Volterra Secret Management",
+            "description": "BlindfoldSecretInfoType specifies information about the Secret managed by F5XC Secret Management",
             "title": "BlindfoldSecretInfoType",
             "x-displayname": "Blindfold Secret",
             "x-ves-displayorder": "3,1,2",
@@ -3939,7 +3939,7 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.SecretType",
             "properties": {
                 "blindfold_secret_info": {
-                    "description": "Exclusive with [clear_secret_info]\n Blindfold Secret is used for the secrets managed by Volterra Secret Management Service",
+                    "description": "Exclusive with [clear_secret_info]\n Blindfold Secret is used for the secrets managed by F5XC Secret Management Service",
                     "title": "Blindfold Secret",
                     "$ref": "#/definitions/schemaBlindfoldSecretInfoType",
                     "x-displayname": "Blindfold Secret"
@@ -3957,8 +3957,21 @@ var APISwaggerJSON string = `{
             "description": "This specifies a direct reference to a site configuration object",
             "title": "SiteRefType",
             "x-displayname": "Site Reference",
+            "x-ves-oneof-field-internet_vip_choice": "[\"disable_internet_vip\",\"enable_internet_vip\"]",
             "x-ves-proto-message": "ves.io.schema.SiteRefType",
             "properties": {
+                "disable_internet_vip": {
+                    "description": "Exclusive with [enable_internet_vip]\n Do not enable advertise on external internet vip.",
+                    "title": "Disable advertise on internet vip",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disable advertise on internet vip"
+                },
+                "enable_internet_vip": {
+                    "description": "Exclusive with [disable_internet_vip]\n Enable advertise on internet vip. Only supported for AWS TGW Site or AWS VPC Site.",
+                    "title": "Enable advertise on internet vip",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Enable advertise on internet vip"
+                },
                 "network_type": {
                     "description": " The type of network on the referred site",
                     "title": "network_type",
@@ -4328,8 +4341,21 @@ var APISwaggerJSON string = `{
             "description": "A reference to virtual_site object",
             "title": "VSiteRefType",
             "x-displayname": "Virtual Site",
+            "x-ves-oneof-field-internet_vip_choice": "[\"disable_internet_vip\",\"enable_internet_vip\"]",
             "x-ves-proto-message": "ves.io.schema.VSiteRefType",
             "properties": {
+                "disable_internet_vip": {
+                    "description": "Exclusive with [enable_internet_vip]\n Do not enable advertise on external internet vip.",
+                    "title": "Disable advertise on internet vip",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disable advertise on internet vip"
+                },
+                "enable_internet_vip": {
+                    "description": "Exclusive with [disable_internet_vip]\n Enable advertise on internet vip. Only supported for AWS TGW Site or AWS VPC Site.",
+                    "title": "Enable advertise on internet vip",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Enable advertise on internet vip"
+                },
                 "network_type": {
                     "description": " The type of network on the referred virtual_site",
                     "title": "network_type",
@@ -4423,7 +4449,7 @@ var APISwaggerJSON string = `{
         },
         "schemaVirtualNetworkType": {
             "type": "string",
-            "description": "Different types of virtual networks understood by the system\n\nVirtual-network of type VIRTUAL_NETWORK_SITE_LOCAL provides connectivity to public (outside) network.\nThis is an insecure network and is connected to public internet via NAT Gateways/firwalls\nVirtual-network of this type is local to every site. Two virtual networks of this type on different\nsites are neither related nor connected.\n\nConstraints:\nThere can be atmost one virtual network of this type in a given site.\nThis network type is supported on CE sites. This network is created automatically and present on all sites\nVirtual-network of type VIRTUAL_NETWORK_SITE_LOCAL_INSIDE is a private network inside site.\nIt is a secure network and is not connected to public network.\nVirtual-network of this type is local to every site. Two virtual networks of this type on different\nsites are neither related nor connected.\n\nConstraints:\nThere can be atmost one virtual network of this type in a given site.\nThis network type is supported on CE sites. This network is created during provisioning of site\nUser defined per-site virtual network. Scope of this virtual network is limited to the site.\nThis is not yet supported\nVirtual-network of type VIRTUAL_NETWORK_PUBLIC directly conects to the public internet.\nVirtual-network of this type is local to every site. Two virtual networks of this type on different sites are neither related nor connected.\n\nConstraints:\nThere can be atmost one virtual network of this type in a given site.\nThis network type is supported on RE sites only\nIt is an internally created by the system. They must not be created by user\nVirtual Neworks with global scope across different sites in Volterra domain.\nAn example global virtual-network called \"AIN Network\" is created for every tenant.\nfor volterra fabric\n\nConstraints:\nIt is currently only supported as internally created by the system.\nvK8s service network for a given tenant. Used to advertise a virtual host only to vk8s pods for that tenant\nConstraints:\nIt is an internally created by the system. Must not be created by user\nVER internal network for the site. It can only be used for virtual hosts with SMA_PROXY type proxy\nConstraints:\nIt is an internally created by the system. Must not be created by user\nVirtual-network of type VIRTUAL_NETWORK_SITE_LOCAL_INSIDE_OUTSIDE represents both\nVIRTUAL_NETWORK_SITE_LOCAL and VIRTUAL_NETWORK_SITE_LOCAL_INSIDE\n\nConstraints:\nThis network type is only meaningful in an advertise policy\nWhen virtual-network of type VIRTUAL_NETWORK_IP_AUTO is selected for\nan endpoint, VER will try to determine the network based on the provided\nIP address\n\nConstraints:\nThis network type is only meaningful in an endpoint\n\nVoltADN Private Network is used on volterra RE(s) to connect to customer private networks\nThis network is created by opening a support ticket\n\nThis network is per site srv6 network\nVER IP Fabric network for the site.\nThis Virtual network type is used for exposing virtual host on IP Fabric network on the VER site or\nfor endpoint in IP Fabric network\nConstraints:\nIt is an internally created by the system. Must not be created by user",
+            "description": "Different types of virtual networks understood by the system\n\nVirtual-network of type VIRTUAL_NETWORK_SITE_LOCAL provides connectivity to public (outside) network.\nThis is an insecure network and is connected to public internet via NAT Gateways/firwalls\nVirtual-network of this type is local to every site. Two virtual networks of this type on different\nsites are neither related nor connected.\n\nConstraints:\nThere can be atmost one virtual network of this type in a given site.\nThis network type is supported on CE sites. This network is created automatically and present on all sites\nVirtual-network of type VIRTUAL_NETWORK_SITE_LOCAL_INSIDE is a private network inside site.\nIt is a secure network and is not connected to public network.\nVirtual-network of this type is local to every site. Two virtual networks of this type on different\nsites are neither related nor connected.\n\nConstraints:\nThere can be atmost one virtual network of this type in a given site.\nThis network type is supported on CE sites. This network is created during provisioning of site\nUser defined per-site virtual network. Scope of this virtual network is limited to the site.\nThis is not yet supported\nVirtual-network of type VIRTUAL_NETWORK_PUBLIC directly conects to the public internet.\nVirtual-network of this type is local to every site. Two virtual networks of this type on different sites are neither related nor connected.\n\nConstraints:\nThere can be atmost one virtual network of this type in a given site.\nThis network type is supported on RE sites only\nIt is an internally created by the system. They must not be created by user\nVirtual Neworks with global scope across different sites in F5XC domain.\nAn example global virtual-network called \"AIN Network\" is created for every tenant.\nfor volterra fabric\n\nConstraints:\nIt is currently only supported as internally created by the system.\nvK8s service network for a given tenant. Used to advertise a virtual host only to vk8s pods for that tenant\nConstraints:\nIt is an internally created by the system. Must not be created by user\nVER internal network for the site. It can only be used for virtual hosts with SMA_PROXY type proxy\nConstraints:\nIt is an internally created by the system. Must not be created by user\nVirtual-network of type VIRTUAL_NETWORK_SITE_LOCAL_INSIDE_OUTSIDE represents both\nVIRTUAL_NETWORK_SITE_LOCAL and VIRTUAL_NETWORK_SITE_LOCAL_INSIDE\n\nConstraints:\nThis network type is only meaningful in an advertise policy\nWhen virtual-network of type VIRTUAL_NETWORK_IP_AUTO is selected for\nan endpoint, VER will try to determine the network based on the provided\nIP address\n\nConstraints:\nThis network type is only meaningful in an endpoint\n\nVoltADN Private Network is used on volterra RE(s) to connect to customer private networks\nThis network is created by opening a support ticket\n\nThis network is per site srv6 network\nVER IP Fabric network for the site.\nThis Virtual network type is used for exposing virtual host on IP Fabric network on the VER site or\nfor endpoint in IP Fabric network\nConstraints:\nIt is an internally created by the system. Must not be created by user",
             "title": "VirtualNetworkType",
             "enum": [
                 "VIRTUAL_NETWORK_SITE_LOCAL",

@@ -8953,7 +8953,7 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	vrhTags := v.TagsValidationRuleHandler
 	rulesTags := map[string]string{
 		"ves.io.schema.rules.map.keys.string.max_len":   "127",
-		"ves.io.schema.rules.map.max_pairs":             "5",
+		"ves.io.schema.rules.map.max_pairs":             "10",
 		"ves.io.schema.rules.map.values.string.max_len": "255",
 	}
 	vFn, err = vrhTags(rulesTags)
@@ -9278,7 +9278,9 @@ var DefaultExpressRouteConfigTypeValidator = func() *ValidateExpressRouteConfigT
 
 	vrhConnections := v.ConnectionsValidationRuleHandler
 	rulesConnections := map[string]string{
+		"ves.io.schema.rules.message.required":   "true",
 		"ves.io.schema.rules.repeated.max_items": "8",
+		"ves.io.schema.rules.repeated.min_items": "1",
 	}
 	vFn, err = vrhConnections(rulesConnections)
 	if err != nil {
@@ -10910,7 +10912,7 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	vrhTags := v.TagsValidationRuleHandler
 	rulesTags := map[string]string{
 		"ves.io.schema.rules.map.keys.string.max_len":   "127",
-		"ves.io.schema.rules.map.max_pairs":             "5",
+		"ves.io.schema.rules.map.max_pairs":             "10",
 		"ves.io.schema.rules.map.values.string.max_len": "255",
 	}
 	vFn, err = vrhTags(rulesTags)
@@ -12293,7 +12295,7 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	vrhTags := v.TagsValidationRuleHandler
 	rulesTags := map[string]string{
 		"ves.io.schema.rules.map.keys.string.max_len":   "127",
-		"ves.io.schema.rules.map.max_pairs":             "5",
+		"ves.io.schema.rules.map.max_pairs":             "10",
 		"ves.io.schema.rules.map.values.string.max_len": "255",
 	}
 	vFn, err = vrhTags(rulesTags)
