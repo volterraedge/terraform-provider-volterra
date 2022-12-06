@@ -10,7 +10,7 @@ import (
 	golang_proto "github.com/golang/protobuf/proto"
 	schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
 	policy "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/policy"
-	views "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views"
+	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views"
 	io "io"
 	math "math"
 	math_bits "math/bits"
@@ -64,96 +64,6 @@ func (L7AclAction) EnumDescriptor() ([]byte, []int) {
 	return fileDescriptor_942a5acad400bc0b, []int{0}
 }
 
-// Destination type
-//
-// x-displayName: "Destination Type"
-// Defines the destination type
-type DestinationType struct {
-	// destination_type_choice
-	//
-	// x-displayName: "Destination Type"
-	// The different choices for a destination
-	//
-	// Types that are valid to be assigned to DestinationTypeChoice:
-	//	*DestinationType_Vhost
-	//	*DestinationType_Tenant
-	DestinationTypeChoice isDestinationType_DestinationTypeChoice `protobuf_oneof:"destination_type_choice"`
-}
-
-func (m *DestinationType) Reset()      { *m = DestinationType{} }
-func (*DestinationType) ProtoMessage() {}
-func (*DestinationType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_942a5acad400bc0b, []int{0}
-}
-func (m *DestinationType) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *DestinationType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	b = b[:cap(b)]
-	n, err := m.MarshalToSizedBuffer(b)
-	if err != nil {
-		return nil, err
-	}
-	return b[:n], nil
-}
-func (m *DestinationType) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_DestinationType.Merge(m, src)
-}
-func (m *DestinationType) XXX_Size() int {
-	return m.Size()
-}
-func (m *DestinationType) XXX_DiscardUnknown() {
-	xxx_messageInfo_DestinationType.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_DestinationType proto.InternalMessageInfo
-
-type isDestinationType_DestinationTypeChoice interface {
-	isDestinationType_DestinationTypeChoice()
-	Equal(interface{}) bool
-	MarshalTo([]byte) (int, error)
-	Size() int
-}
-
-type DestinationType_Vhost struct {
-	Vhost *views.ObjectRefType `protobuf:"bytes,2,opt,name=vhost,proto3,oneof" json:"vhost,omitempty"`
-}
-type DestinationType_Tenant struct {
-	Tenant *views.ObjectRefType `protobuf:"bytes,3,opt,name=tenant,proto3,oneof" json:"tenant,omitempty"`
-}
-
-func (*DestinationType_Vhost) isDestinationType_DestinationTypeChoice()  {}
-func (*DestinationType_Tenant) isDestinationType_DestinationTypeChoice() {}
-
-func (m *DestinationType) GetDestinationTypeChoice() isDestinationType_DestinationTypeChoice {
-	if m != nil {
-		return m.DestinationTypeChoice
-	}
-	return nil
-}
-
-func (m *DestinationType) GetVhost() *views.ObjectRefType {
-	if x, ok := m.GetDestinationTypeChoice().(*DestinationType_Vhost); ok {
-		return x.Vhost
-	}
-	return nil
-}
-
-func (m *DestinationType) GetTenant() *views.ObjectRefType {
-	if x, ok := m.GetDestinationTypeChoice().(*DestinationType_Tenant); ok {
-		return x.Tenant
-	}
-	return nil
-}
-
-// XXX_OneofWrappers is for the internal use of the proto package.
-func (*DestinationType) XXX_OneofWrappers() []interface{} {
-	return []interface{}{
-		(*DestinationType_Vhost)(nil),
-		(*DestinationType_Tenant)(nil),
-	}
-}
-
 // PathMatcherType
 //
 // x-displayName: "Path Matcher"
@@ -170,7 +80,7 @@ type PathMatcherType struct {
 func (m *PathMatcherType) Reset()      { *m = PathMatcherType{} }
 func (*PathMatcherType) ProtoMessage() {}
 func (*PathMatcherType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_942a5acad400bc0b, []int{1}
+	return fileDescriptor_942a5acad400bc0b, []int{0}
 }
 func (m *PathMatcherType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -206,7 +116,7 @@ func (m *PathMatcherType) GetExactValues() []string {
 //
 // x-displayName: "L7 ACL Rule"
 // Shape of `l7_acl_rule`
-type L7AclRuleType struct {
+type L7AclRule struct {
 	// metadata
 	//
 	// x-displayName: "Metadata"
@@ -219,42 +129,47 @@ type L7AclRuleType struct {
 	// x-required
 	// Action to be applied if traffic matched the rule
 	Action L7AclAction `protobuf:"varint,2,opt,name=action,proto3,enum=ves.io.schema.l7_acl.L7AclAction" json:"action,omitempty"`
-	// Country Matcher
+	// ip_prefix
 	//
-	// x-displayName: "Country Matcher"
-	// Country match criteria
-	CountryMatcher *policy.CountryCodeList `protobuf:"bytes,3,opt,name=country_matcher,json=countryMatcher,proto3" json:"country_matcher,omitempty"`
-	// ASN List Matcher
+	// x-displayName: "IP Prefixes"
+	// x-example: "[192.168.1.0/24, 192.168.2.0/24]"
+	// IP Address prefix in string format. String must contain both prefix and prefix-length
+	IpPrefix []string `protobuf:"bytes,3,rep,name=ip_prefix,json=ipPrefix,proto3" json:"ip_prefix,omitempty"`
+	// countries
 	//
-	// x-displayName: "ASN List Matcher"
-	// ASN match criteria
-	AsnListMatcher *policy.AsnMatchList `protobuf:"bytes,4,opt,name=asn_list_matcher,json=asnListMatcher,proto3" json:"asn_list_matcher,omitempty"`
-	// TLS Fingerprint Matcher
+	// x-displayName: "Country List"
+	// Sources that are located in one of the countries in the given list
+	Countries []policy.CountryCode `protobuf:"varint,4,rep,packed,name=countries,proto3,enum=ves.io.schema.policy.CountryCode" json:"countries,omitempty"`
+	// as numbers
 	//
-	// x-displayName: "TLS Fingerprint Matcher"
-	// TLS fingerprint match criteria
-	TlsFingerprintMatcher *policy.StringMatcherType `protobuf:"bytes,5,opt,name=tls_fingerprint_matcher,json=tlsFingerprintMatcher,proto3" json:"tls_fingerprint_matcher,omitempty"`
-	// Path Matcher
+	// x-displayName: "AS Numbers"
+	// x-example: "[713, 7932, 847325, 4683, 15269, 1000001]"
+	// x-required
+	// An unordered set of RFC 6793 defined 4-byte AS numbers that can be used to create allow or deny lists for use in network policy or service policy.
+	AsNumbers []uint32 `protobuf:"varint,5,rep,packed,name=as_numbers,json=asNumbers,proto3" json:"as_numbers,omitempty"`
+	// tls_fingerprints
 	//
-	// x-displayName: "Path Matcher"
-	// Path match criteria
-	PathMatcher *PathMatcherType `protobuf:"bytes,6,opt,name=path_matcher,json=pathMatcher,proto3" json:"path_matcher,omitempty"`
-	// IP Matcher
+	// x-displayName: "TLS Fingerprints"
+	// x-example: "1aa7bf8b97e540ca5edd75f7b8384bfa"
+	// A list of exact TLS JA3 fingerprints to match the input TLS JA3 fingerprint against
+	TlsFingerprints []string `protobuf:"bytes,6,rep,name=tls_fingerprints,json=tlsFingerprints,proto3" json:"tls_fingerprints,omitempty"`
+	// paths
 	//
-	// x-displayName: "IP Matcher"
-	// IP match criteria
-	IpMatcher *policy.PrefixMatchList `protobuf:"bytes,7,opt,name=ip_matcher,json=ipMatcher,proto3" json:"ip_matcher,omitempty"`
+	// x-displayName: "Paths"
+	// x-example: "['/api/web/namespaces/project179/users/user1', '/api/config/namespaces/accounting/bgps', '/api/data/namespaces/project443/virtual_host_101']"
+	// A list of exact path values to match the input HTTP path against
+	Paths []string `protobuf:"bytes,7,rep,name=paths,proto3" json:"paths,omitempty"`
 }
 
-func (m *L7AclRuleType) Reset()      { *m = L7AclRuleType{} }
-func (*L7AclRuleType) ProtoMessage() {}
-func (*L7AclRuleType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_942a5acad400bc0b, []int{2}
+func (m *L7AclRule) Reset()      { *m = L7AclRule{} }
+func (*L7AclRule) ProtoMessage() {}
+func (*L7AclRule) Descriptor() ([]byte, []int) {
+	return fileDescriptor_942a5acad400bc0b, []int{1}
 }
-func (m *L7AclRuleType) XXX_Unmarshal(b []byte) error {
+func (m *L7AclRule) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *L7AclRuleType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *L7AclRule) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	b = b[:cap(b)]
 	n, err := m.MarshalToSizedBuffer(b)
 	if err != nil {
@@ -262,63 +177,63 @@ func (m *L7AclRuleType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error
 	}
 	return b[:n], nil
 }
-func (m *L7AclRuleType) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_L7AclRuleType.Merge(m, src)
+func (m *L7AclRule) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_L7AclRule.Merge(m, src)
 }
-func (m *L7AclRuleType) XXX_Size() int {
+func (m *L7AclRule) XXX_Size() int {
 	return m.Size()
 }
-func (m *L7AclRuleType) XXX_DiscardUnknown() {
-	xxx_messageInfo_L7AclRuleType.DiscardUnknown(m)
+func (m *L7AclRule) XXX_DiscardUnknown() {
+	xxx_messageInfo_L7AclRule.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_L7AclRuleType proto.InternalMessageInfo
+var xxx_messageInfo_L7AclRule proto.InternalMessageInfo
 
-func (m *L7AclRuleType) GetMetadata() *schema.MessageMetaType {
+func (m *L7AclRule) GetMetadata() *schema.MessageMetaType {
 	if m != nil {
 		return m.Metadata
 	}
 	return nil
 }
 
-func (m *L7AclRuleType) GetAction() L7AclAction {
+func (m *L7AclRule) GetAction() L7AclAction {
 	if m != nil {
 		return m.Action
 	}
 	return DENY
 }
 
-func (m *L7AclRuleType) GetCountryMatcher() *policy.CountryCodeList {
+func (m *L7AclRule) GetIpPrefix() []string {
 	if m != nil {
-		return m.CountryMatcher
+		return m.IpPrefix
 	}
 	return nil
 }
 
-func (m *L7AclRuleType) GetAsnListMatcher() *policy.AsnMatchList {
+func (m *L7AclRule) GetCountries() []policy.CountryCode {
 	if m != nil {
-		return m.AsnListMatcher
+		return m.Countries
 	}
 	return nil
 }
 
-func (m *L7AclRuleType) GetTlsFingerprintMatcher() *policy.StringMatcherType {
+func (m *L7AclRule) GetAsNumbers() []uint32 {
 	if m != nil {
-		return m.TlsFingerprintMatcher
+		return m.AsNumbers
 	}
 	return nil
 }
 
-func (m *L7AclRuleType) GetPathMatcher() *PathMatcherType {
+func (m *L7AclRule) GetTlsFingerprints() []string {
 	if m != nil {
-		return m.PathMatcher
+		return m.TlsFingerprints
 	}
 	return nil
 }
 
-func (m *L7AclRuleType) GetIpMatcher() *policy.PrefixMatchList {
+func (m *L7AclRule) GetPaths() []string {
 	if m != nil {
-		return m.IpMatcher
+		return m.Paths
 	}
 	return nil
 }
@@ -328,24 +243,18 @@ func (m *L7AclRuleType) GetIpMatcher() *policy.PrefixMatchList {
 // x-displayName: "Global Spec"
 // Shape of `l7_acl` object
 type GlobalSpecType struct {
-	// Destination Type
+	// L7 ACL Rules
 	//
-	// x-displayName: "Destination type"
-	// x-required
-	// The destination type
-	DestinationType *DestinationType `protobuf:"bytes,1,opt,name=destination_type,json=destinationType,proto3" json:"destination_type,omitempty"`
-	// L7 Acl Rules
-	//
-	// x-displayName: "L7 Acl Rules"
+	// x-displayName: "L7 ACL Rules"
 	// x-required
 	// List of L7 ACL rules to be applied
-	L7AclRule []*L7AclRuleType `protobuf:"bytes,2,rep,name=l7_acl_rule,json=l7AclRule,proto3" json:"l7_acl_rule,omitempty"`
+	L7AclRule []*L7AclRule `protobuf:"bytes,2,rep,name=l7_acl_rule,json=l7AclRule,proto3" json:"l7_acl_rule,omitempty"`
 }
 
 func (m *GlobalSpecType) Reset()      { *m = GlobalSpecType{} }
 func (*GlobalSpecType) ProtoMessage() {}
 func (*GlobalSpecType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_942a5acad400bc0b, []int{3}
+	return fileDescriptor_942a5acad400bc0b, []int{2}
 }
 func (m *GlobalSpecType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -370,14 +279,7 @@ func (m *GlobalSpecType) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_GlobalSpecType proto.InternalMessageInfo
 
-func (m *GlobalSpecType) GetDestinationType() *DestinationType {
-	if m != nil {
-		return m.DestinationType
-	}
-	return nil
-}
-
-func (m *GlobalSpecType) GetL7AclRule() []*L7AclRuleType {
+func (m *GlobalSpecType) GetL7AclRule() []*L7AclRule {
 	if m != nil {
 		return m.L7AclRule
 	}
@@ -389,14 +291,13 @@ func (m *GlobalSpecType) GetL7AclRule() []*L7AclRuleType {
 // x-displayName: "Create L7 ACL"
 // Create L7 ACL
 type CreateSpecType struct {
-	DestinationType *DestinationType `protobuf:"bytes,1,opt,name=destination_type,json=destinationType,proto3" json:"destination_type,omitempty"`
-	L7AclRule       []*L7AclRuleType `protobuf:"bytes,2,rep,name=l7_acl_rule,json=l7AclRule,proto3" json:"l7_acl_rule,omitempty"`
+	L7AclRule []*L7AclRule `protobuf:"bytes,2,rep,name=l7_acl_rule,json=l7AclRule,proto3" json:"l7_acl_rule,omitempty"`
 }
 
 func (m *CreateSpecType) Reset()      { *m = CreateSpecType{} }
 func (*CreateSpecType) ProtoMessage() {}
 func (*CreateSpecType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_942a5acad400bc0b, []int{4}
+	return fileDescriptor_942a5acad400bc0b, []int{3}
 }
 func (m *CreateSpecType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -421,14 +322,7 @@ func (m *CreateSpecType) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_CreateSpecType proto.InternalMessageInfo
 
-func (m *CreateSpecType) GetDestinationType() *DestinationType {
-	if m != nil {
-		return m.DestinationType
-	}
-	return nil
-}
-
-func (m *CreateSpecType) GetL7AclRule() []*L7AclRuleType {
+func (m *CreateSpecType) GetL7AclRule() []*L7AclRule {
 	if m != nil {
 		return m.L7AclRule
 	}
@@ -440,14 +334,13 @@ func (m *CreateSpecType) GetL7AclRule() []*L7AclRuleType {
 // x-displayName: "Replace L7 ACL"
 // Replace L7 ACL
 type ReplaceSpecType struct {
-	DestinationType *DestinationType `protobuf:"bytes,1,opt,name=destination_type,json=destinationType,proto3" json:"destination_type,omitempty"`
-	L7AclRule       []*L7AclRuleType `protobuf:"bytes,2,rep,name=l7_acl_rule,json=l7AclRule,proto3" json:"l7_acl_rule,omitempty"`
+	L7AclRule []*L7AclRule `protobuf:"bytes,2,rep,name=l7_acl_rule,json=l7AclRule,proto3" json:"l7_acl_rule,omitempty"`
 }
 
 func (m *ReplaceSpecType) Reset()      { *m = ReplaceSpecType{} }
 func (*ReplaceSpecType) ProtoMessage() {}
 func (*ReplaceSpecType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_942a5acad400bc0b, []int{5}
+	return fileDescriptor_942a5acad400bc0b, []int{4}
 }
 func (m *ReplaceSpecType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -472,14 +365,7 @@ func (m *ReplaceSpecType) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_ReplaceSpecType proto.InternalMessageInfo
 
-func (m *ReplaceSpecType) GetDestinationType() *DestinationType {
-	if m != nil {
-		return m.DestinationType
-	}
-	return nil
-}
-
-func (m *ReplaceSpecType) GetL7AclRule() []*L7AclRuleType {
+func (m *ReplaceSpecType) GetL7AclRule() []*L7AclRule {
 	if m != nil {
 		return m.L7AclRule
 	}
@@ -491,14 +377,13 @@ func (m *ReplaceSpecType) GetL7AclRule() []*L7AclRuleType {
 // x-displayName: "Get L7 ACL"
 // Get L7 ACL
 type GetSpecType struct {
-	DestinationType *DestinationType `protobuf:"bytes,1,opt,name=destination_type,json=destinationType,proto3" json:"destination_type,omitempty"`
-	L7AclRule       []*L7AclRuleType `protobuf:"bytes,2,rep,name=l7_acl_rule,json=l7AclRule,proto3" json:"l7_acl_rule,omitempty"`
+	L7AclRule []*L7AclRule `protobuf:"bytes,2,rep,name=l7_acl_rule,json=l7AclRule,proto3" json:"l7_acl_rule,omitempty"`
 }
 
 func (m *GetSpecType) Reset()      { *m = GetSpecType{} }
 func (*GetSpecType) ProtoMessage() {}
 func (*GetSpecType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_942a5acad400bc0b, []int{6}
+	return fileDescriptor_942a5acad400bc0b, []int{5}
 }
 func (m *GetSpecType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -523,14 +408,7 @@ func (m *GetSpecType) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_GetSpecType proto.InternalMessageInfo
 
-func (m *GetSpecType) GetDestinationType() *DestinationType {
-	if m != nil {
-		return m.DestinationType
-	}
-	return nil
-}
-
-func (m *GetSpecType) GetL7AclRule() []*L7AclRuleType {
+func (m *GetSpecType) GetL7AclRule() []*L7AclRule {
 	if m != nil {
 		return m.L7AclRule
 	}
@@ -540,12 +418,10 @@ func (m *GetSpecType) GetL7AclRule() []*L7AclRuleType {
 func init() {
 	proto.RegisterEnum("ves.io.schema.l7_acl.L7AclAction", L7AclAction_name, L7AclAction_value)
 	golang_proto.RegisterEnum("ves.io.schema.l7_acl.L7AclAction", L7AclAction_name, L7AclAction_value)
-	proto.RegisterType((*DestinationType)(nil), "ves.io.schema.l7_acl.DestinationType")
-	golang_proto.RegisterType((*DestinationType)(nil), "ves.io.schema.l7_acl.DestinationType")
 	proto.RegisterType((*PathMatcherType)(nil), "ves.io.schema.l7_acl.PathMatcherType")
 	golang_proto.RegisterType((*PathMatcherType)(nil), "ves.io.schema.l7_acl.PathMatcherType")
-	proto.RegisterType((*L7AclRuleType)(nil), "ves.io.schema.l7_acl.L7AclRuleType")
-	golang_proto.RegisterType((*L7AclRuleType)(nil), "ves.io.schema.l7_acl.L7AclRuleType")
+	proto.RegisterType((*L7AclRule)(nil), "ves.io.schema.l7_acl.L7AclRule")
+	golang_proto.RegisterType((*L7AclRule)(nil), "ves.io.schema.l7_acl.L7AclRule")
 	proto.RegisterType((*GlobalSpecType)(nil), "ves.io.schema.l7_acl.GlobalSpecType")
 	golang_proto.RegisterType((*GlobalSpecType)(nil), "ves.io.schema.l7_acl.GlobalSpecType")
 	proto.RegisterType((*CreateSpecType)(nil), "ves.io.schema.l7_acl.CreateSpecType")
@@ -562,61 +438,52 @@ func init() {
 }
 
 var fileDescriptor_942a5acad400bc0b = []byte{
-	// 855 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xd4, 0x96, 0xcf, 0x6f, 0x1b, 0x45,
-	0x14, 0xc7, 0x77, 0xfc, 0xab, 0xf1, 0x38, 0xc4, 0x66, 0x55, 0x14, 0x63, 0xd0, 0x12, 0x5c, 0x21,
-	0x2c, 0xa4, 0xac, 0xa5, 0x70, 0xa8, 0xc8, 0x01, 0xc9, 0x4e, 0x20, 0x51, 0x71, 0xda, 0x68, 0x8b,
-	0x40, 0xe5, 0xb2, 0x1a, 0xaf, 0x9f, 0xd7, 0x03, 0xe3, 0x9d, 0xd5, 0xcc, 0xd8, 0x4d, 0x0e, 0x95,
-	0x7a, 0xe4, 0x88, 0x7a, 0xe7, 0x8e, 0xfa, 0x0f, 0x20, 0xd5, 0x42, 0xca, 0x11, 0xf5, 0x14, 0x71,
-	0xca, 0x91, 0xd8, 0x97, 0x72, 0xeb, 0x9f, 0x80, 0x3c, 0xbb, 0xb6, 0xd7, 0xc6, 0x54, 0x08, 0xa9,
-	0x87, 0xde, 0x66, 0xfc, 0xbe, 0xef, 0xf3, 0xde, 0xbc, 0xf9, 0xae, 0x77, 0xf1, 0xce, 0x10, 0xa4,
-	0x4d, 0x79, 0x5d, 0x7a, 0x3d, 0xe8, 0x93, 0x3a, 0xbb, 0xed, 0x12, 0x8f, 0xd5, 0xd5, 0x79, 0x08,
-	0xd2, 0x0e, 0x05, 0x57, 0xdc, 0xbc, 0x19, 0x29, 0xec, 0x48, 0x61, 0x47, 0x8a, 0xca, 0xae, 0x4f,
-	0x55, 0x6f, 0xd0, 0xb6, 0x3d, 0xde, 0xaf, 0xfb, 0xdc, 0xe7, 0x75, 0x2d, 0x6e, 0x0f, 0xba, 0x7a,
-	0xa7, 0x37, 0x7a, 0x15, 0x41, 0x2a, 0xdb, 0xcb, 0x65, 0x02, 0x50, 0x71, 0xe0, 0xbd, 0xe5, 0x00,
-	0x0f, 0x15, 0xe5, 0x41, 0x5c, 0xba, 0xb2, 0xd2, 0x5c, 0xc8, 0x19, 0xf5, 0xce, 0x93, 0xcd, 0x55,
-	0xde, 0x5d, 0x56, 0x24, 0x43, 0xef, 0x2f, 0x87, 0x86, 0x84, 0xd1, 0x0e, 0x51, 0xb0, 0x1e, 0x3d,
-	0xa4, 0xf0, 0xd0, 0x5d, 0x2e, 0xfe, 0xc1, 0x3f, 0x15, 0x32, 0x59, 0xa0, 0xfa, 0x07, 0xc2, 0xc5,
-	0x43, 0x90, 0x8a, 0x06, 0x64, 0x9a, 0xf7, 0xf5, 0x79, 0x08, 0xe6, 0x57, 0x38, 0x3b, 0xec, 0x71,
-	0xa9, 0xca, 0xa9, 0x1d, 0x54, 0x2b, 0xec, 0x55, 0xed, 0xe5, 0xe1, 0x69, 0x88, 0x7d, 0xaf, 0xfd,
-	0x3d, 0x78, 0xca, 0x81, 0xee, 0x34, 0xa5, 0x59, 0x7c, 0xfa, 0x68, 0x73, 0x48, 0x85, 0x1a, 0x10,
-	0xe6, 0x4e, 0x53, 0x8f, 0x0d, 0x27, 0x62, 0x98, 0x47, 0x38, 0xa7, 0x20, 0x20, 0x81, 0x2a, 0xa7,
-	0xff, 0x33, 0x2d, 0xff, 0xf4, 0x51, 0x9c, 0x74, 0x6c, 0x38, 0xf1, 0xaa, 0x79, 0x0b, 0x6f, 0x77,
-	0x16, 0x8d, 0xba, 0xd3, 0x43, 0xb8, 0x5e, 0x8f, 0x53, 0x0f, 0xcc, 0x8d, 0x8b, 0x11, 0x4a, 0x5d,
-	0x8e, 0x10, 0xba, 0x93, 0xd9, 0x40, 0xa5, 0x54, 0xf5, 0x21, 0x2e, 0x9e, 0x12, 0xd5, 0x3b, 0x21,
-	0xca, 0xeb, 0x81, 0xd0, 0x67, 0xea, 0xe0, 0x4d, 0x38, 0x23, 0x9e, 0x72, 0x87, 0x84, 0x0d, 0x40,
-	0x96, 0xd1, 0x4e, 0xba, 0x96, 0x6f, 0x36, 0x9e, 0xfd, 0x75, 0x91, 0xc6, 0x4f, 0xd0, 0x8d, 0x6a,
-	0x56, 0xa4, 0x5f, 0xa4, 0x50, 0x72, 0x5b, 0x7b, 0x9c, 0x4a, 0x6e, 0xaf, 0x90, 0x8e, 0x66, 0x9f,
-	0xa0, 0x54, 0xa9, 0x34, 0x5b, 0x95, 0x91, 0x53, 0xd0, 0xd8, 0x6f, 0x34, 0xb5, 0xfa, 0x73, 0x06,
-	0xbf, 0xd5, 0xba, 0xdd, 0xf0, 0x98, 0x33, 0x60, 0xa0, 0xeb, 0xee, 0xe3, 0x8d, 0x3e, 0x28, 0xd2,
-	0x21, 0x8a, 0x94, 0x91, 0x1e, 0x80, 0xb5, 0x32, 0x80, 0x13, 0x90, 0x92, 0xf8, 0x70, 0x02, 0x8a,
-	0x4c, 0x33, 0x9c, 0xb9, 0xde, 0xfc, 0x0c, 0xe7, 0x88, 0x37, 0x3d, 0xac, 0xbe, 0x88, 0xad, 0xbd,
-	0x0f, 0xed, 0x75, 0x2e, 0xb6, 0x75, 0xc1, 0x86, 0x16, 0x3a, 0x71, 0x82, 0x79, 0x17, 0x17, 0x3d,
-	0x3e, 0x08, 0x94, 0x38, 0x77, 0xfb, 0xd1, 0x14, 0xe2, 0xf1, 0x7f, 0xb4, 0xc2, 0x88, 0xec, 0x68,
-	0x1f, 0x44, 0xe2, 0x03, 0xde, 0x81, 0x16, 0x95, 0xca, 0xd9, 0x8a, 0xb3, 0xe3, 0x11, 0x9a, 0x2d,
-	0x5c, 0x22, 0x32, 0x70, 0x19, 0x95, 0x6a, 0x0e, 0xcc, 0xac, 0xbd, 0xcf, 0x18, 0xd8, 0x90, 0x81,
-	0xce, 0x8d, 0x68, 0x44, 0x06, 0xd3, 0xc5, 0x8c, 0xe6, 0xe2, 0x6d, 0xc5, 0xa4, 0xdb, 0xa5, 0x81,
-	0x0f, 0x22, 0x14, 0x34, 0x58, 0x40, 0xb3, 0x1a, 0xfa, 0xf1, 0x7a, 0xe8, 0x7d, 0x25, 0x68, 0xe0,
-	0x27, 0xae, 0xd5, 0x79, 0x47, 0x31, 0xf9, 0xe5, 0x02, 0x33, 0x2b, 0x70, 0x8c, 0x37, 0x43, 0xa2,
-	0x7a, 0x73, 0x6a, 0x6e, 0xed, 0xd9, 0xe3, 0xf9, 0xad, 0x58, 0xc5, 0x29, 0x84, 0x8b, 0x1f, 0xcc,
-	0x43, 0x8c, 0x69, 0x38, 0xe7, 0xdc, 0x78, 0xd5, 0x0c, 0x4f, 0x05, 0x74, 0xe9, 0xd9, 0xe2, 0xd4,
-	0x79, 0x1a, 0xc6, 0x94, 0xfd, 0xdc, 0xf3, 0x11, 0x4a, 0x95, 0x50, 0xf5, 0x37, 0x84, 0xb7, 0x8e,
-	0x18, 0x6f, 0x13, 0x76, 0x3f, 0x04, 0x4f, 0x1b, 0xe4, 0x14, 0x97, 0x56, 0x6d, 0x1d, 0x1b, 0xe5,
-	0x5f, 0xda, 0x5d, 0x79, 0x5a, 0x9d, 0x62, 0x67, 0xe5, 0xf1, 0x7d, 0x80, 0x0b, 0x91, 0xd4, 0x15,
-	0x03, 0x06, 0xe5, 0xd4, 0x4e, 0xba, 0x56, 0xd8, 0xbb, 0xf5, 0x0a, 0xef, 0xcc, 0xcc, 0xda, 0xbc,
-	0x39, 0x77, 0xf8, 0x5e, 0xc2, 0xe1, 0x79, 0x36, 0x13, 0x55, 0x9f, 0x21, 0xbc, 0x75, 0x20, 0x80,
-	0x28, 0x78, 0x8d, 0xfd, 0x1f, 0xfc, 0xdf, 0xfe, 0x13, 0x9d, 0xee, 0xbf, 0xfd, 0xfc, 0xf3, 0x95,
-	0x49, 0x57, 0x47, 0x08, 0x17, 0x1d, 0x08, 0x19, 0xf1, 0xde, 0xc4, 0xee, 0x7f, 0x45, 0xb8, 0x70,
-	0x04, 0xea, 0xcd, 0xeb, 0xfc, 0x93, 0x1a, 0x2e, 0x24, 0xfe, 0xa2, 0xcc, 0x0d, 0x9c, 0x39, 0xfc,
-	0xe2, 0xee, 0x83, 0x92, 0x61, 0xe6, 0x71, 0xb6, 0xd1, 0x6a, 0xdd, 0xfb, 0xb6, 0x84, 0x2a, 0x99,
-	0x8b, 0x11, 0x32, 0x9a, 0x3f, 0xa2, 0xcb, 0x6b, 0xcb, 0xb8, 0xba, 0xb6, 0x8c, 0x97, 0xd7, 0x16,
-	0x7a, 0x3c, 0xb6, 0xd0, 0x2f, 0x63, 0x0b, 0xfd, 0x3e, 0xb6, 0xd0, 0xe5, 0xd8, 0x42, 0x57, 0x63,
-	0x0b, 0xfd, 0x39, 0xb6, 0xd0, 0x8b, 0xb1, 0x65, 0xbc, 0x1c, 0x5b, 0xe8, 0xa7, 0x89, 0x65, 0x5c,
-	0x4c, 0x2c, 0x74, 0x39, 0xb1, 0x8c, 0xab, 0x89, 0x65, 0x7c, 0x77, 0xc7, 0xe7, 0xe1, 0x0f, 0xbe,
-	0x3d, 0xe4, 0x4c, 0x81, 0x10, 0xc4, 0x1e, 0xc8, 0xba, 0x5e, 0x74, 0xb9, 0xe8, 0xef, 0x86, 0x82,
-	0x0f, 0x69, 0x07, 0xc4, 0xee, 0x2c, 0x5c, 0x0f, 0xdb, 0x3e, 0xaf, 0xc3, 0x99, 0x8a, 0xdf, 0x8d,
-	0x4b, 0x1f, 0x0f, 0xed, 0x9c, 0x7e, 0x3d, 0x7e, 0xfa, 0x77, 0x00, 0x00, 0x00, 0xff, 0xff, 0x76,
-	0x5a, 0xe8, 0x5d, 0x5b, 0x08, 0x00, 0x00,
+	// 714 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xb4, 0x54, 0xb1, 0x6f, 0xd3, 0x4e,
+	0x14, 0xf6, 0xc5, 0x49, 0x9a, 0x5c, 0x7e, 0xbf, 0x36, 0x58, 0x95, 0x30, 0x01, 0x5d, 0x4d, 0x58,
+	0x2c, 0xa4, 0xda, 0x52, 0x19, 0x2a, 0x3a, 0x00, 0x49, 0x29, 0x95, 0xaa, 0xb6, 0x54, 0x81, 0x52,
+	0xc1, 0x12, 0x5d, 0x9c, 0x8b, 0x63, 0xe1, 0xe4, 0x2c, 0xdf, 0x39, 0x6d, 0xb6, 0x8a, 0x89, 0x11,
+	0x75, 0xe2, 0x4f, 0xe0, 0x6f, 0xa0, 0x4b, 0x47, 0xc4, 0xd4, 0x31, 0x23, 0x75, 0x96, 0xb2, 0x75,
+	0xec, 0x88, 0x7a, 0x4e, 0x8a, 0xdd, 0x46, 0x0c, 0x88, 0x6e, 0xf7, 0xf4, 0xbe, 0xfb, 0xbe, 0xf7,
+	0xbd, 0x77, 0xf7, 0xa0, 0xd6, 0x23, 0xcc, 0x70, 0xa8, 0xc9, 0xac, 0x36, 0xe9, 0x60, 0xd3, 0x5d,
+	0xac, 0x63, 0xcb, 0x35, 0x79, 0xdf, 0x23, 0xcc, 0xf0, 0x7c, 0xca, 0xa9, 0x32, 0x1b, 0x21, 0x8c,
+	0x08, 0x61, 0x44, 0x88, 0xd2, 0xbc, 0xed, 0xf0, 0x76, 0xd0, 0x30, 0x2c, 0xda, 0x31, 0x6d, 0x6a,
+	0x53, 0x53, 0x80, 0x1b, 0x41, 0x4b, 0x44, 0x22, 0x10, 0xa7, 0x88, 0xa4, 0x74, 0x3b, 0x29, 0xd3,
+	0x25, 0x7c, 0x94, 0xb8, 0x9b, 0x4c, 0x50, 0x8f, 0x3b, 0xb4, 0x3b, 0x92, 0x2e, 0x5d, 0x29, 0xce,
+	0xa3, 0xae, 0x63, 0xf5, 0xe3, 0xc5, 0x95, 0xee, 0x24, 0x11, 0xf1, 0xd4, 0xbd, 0x64, 0xaa, 0x87,
+	0x5d, 0xa7, 0x89, 0x39, 0x99, 0x4c, 0xdd, 0x73, 0xc8, 0x6e, 0x3d, 0x29, 0x3e, 0x77, 0x1d, 0xc1,
+	0xe2, 0x02, 0xe5, 0x5d, 0x38, 0xb3, 0x85, 0x79, 0x7b, 0x03, 0x73, 0xab, 0x4d, 0xfc, 0xd7, 0x7d,
+	0x8f, 0x28, 0x4d, 0xf8, 0x1f, 0xd9, 0xc3, 0x16, 0xaf, 0xf7, 0xb0, 0x1b, 0x10, 0xa6, 0x02, 0x4d,
+	0xd6, 0xf3, 0xd5, 0xca, 0xd7, 0x9f, 0x47, 0x32, 0x3c, 0x00, 0x53, 0xe5, 0x8c, 0x2f, 0x9f, 0xa6,
+	0x40, 0x3c, 0xd4, 0xf7, 0x53, 0xf1, 0x70, 0x00, 0x44, 0x36, 0x73, 0x00, 0x52, 0xc5, 0xe2, 0xf8,
+	0xa4, 0x82, 0x5a, 0x41, 0xd0, 0xbe, 0x11, 0xac, 0xe5, 0x0f, 0x69, 0x98, 0x5f, 0x5f, 0xac, 0x58,
+	0x6e, 0x2d, 0x70, 0x89, 0xb2, 0x04, 0x73, 0x1d, 0xc2, 0x71, 0x13, 0x73, 0xac, 0x02, 0x0d, 0xe8,
+	0x85, 0x05, 0x64, 0x24, 0x47, 0xb6, 0x41, 0x18, 0xc3, 0x36, 0xd9, 0x20, 0x1c, 0x5f, 0x54, 0x59,
+	0xbb, 0xc4, 0x2b, 0x8f, 0x61, 0x16, 0x5b, 0x17, 0xa6, 0xd5, 0x94, 0x06, 0xf4, 0xe9, 0x85, 0xfb,
+	0xc6, 0xa4, 0x61, 0x1b, 0x42, 0xac, 0x22, 0x80, 0xb5, 0xd1, 0x05, 0x65, 0x05, 0xe6, 0x1d, 0xaf,
+	0xee, 0xf9, 0xa4, 0xe5, 0xec, 0xa9, 0xb2, 0xf0, 0xa9, 0x9f, 0x1f, 0x02, 0x29, 0xee, 0xe6, 0x3c,
+	0x72, 0x93, 0x3d, 0x00, 0x72, 0x31, 0xf2, 0x39, 0xb2, 0x93, 0x73, 0xbc, 0x2d, 0x71, 0x53, 0xd9,
+	0x86, 0x79, 0x8b, 0x06, 0x5d, 0xee, 0x3b, 0x84, 0xa9, 0x69, 0x4d, 0x9e, 0x50, 0x44, 0x34, 0x76,
+	0x63, 0x59, 0xc0, 0xfa, 0xcb, 0xb4, 0x49, 0xaa, 0xb3, 0x97, 0x4d, 0x7a, 0x16, 0x63, 0xfd, 0xcd,
+	0xa4, 0x2c, 0x42, 0x88, 0x59, 0xbd, 0x1b, 0x74, 0x1a, 0xc4, 0x67, 0x6a, 0x46, 0x93, 0xf5, 0xff,
+	0xab, 0xea, 0xb8, 0xbc, 0x6b, 0xdd, 0xcd, 0x63, 0xb6, 0x19, 0x41, 0x95, 0x4d, 0x58, 0xe4, 0x2e,
+	0xab, 0xb7, 0x9c, 0xae, 0x4d, 0x7c, 0xcf, 0x77, 0xba, 0x9c, 0xa9, 0x59, 0xe1, 0xee, 0x41, 0xdc,
+	0xd9, 0x67, 0xa0, 0x4d, 0x64, 0x9a, 0xe1, 0x2e, 0x7b, 0x11, 0xbb, 0xab, 0xec, 0xc0, 0x8c, 0x87,
+	0x79, 0x9b, 0xa9, 0x53, 0xff, 0xea, 0x29, 0x44, 0x7c, 0xe5, 0x0e, 0x9c, 0x5e, 0x75, 0x69, 0x03,
+	0xbb, 0xaf, 0x3c, 0x62, 0x89, 0xc7, 0xb7, 0x0d, 0x0b, 0xd1, 0xbc, 0xea, 0x7e, 0xe0, 0x12, 0x35,
+	0xa5, 0xc9, 0x7a, 0x61, 0x61, 0xee, 0x0f, 0x13, 0xbd, 0x78, 0x3e, 0xb1, 0x56, 0x26, 0x3a, 0xe2,
+	0x8e, 0x01, 0x6b, 0xe9, 0x1c, 0x28, 0xa6, 0xca, 0x4d, 0x38, 0xbd, 0xec, 0x13, 0xcc, 0xc9, 0xa5,
+	0xdc, 0xd3, 0xbf, 0x91, 0x8b, 0x11, 0x2f, 0xdd, 0xfa, 0xfe, 0xe4, 0x8a, 0x85, 0x32, 0x81, 0x33,
+	0x35, 0xe2, 0xb9, 0xd8, 0xba, 0x59, 0x19, 0x0c, 0x0b, 0xab, 0x84, 0xdf, 0xa4, 0xc4, 0x43, 0x1d,
+	0x16, 0x62, 0xbf, 0x46, 0xc9, 0xc1, 0xf4, 0xf3, 0x95, 0xcd, 0xb7, 0x45, 0x49, 0xc9, 0xc3, 0x4c,
+	0x65, 0x7d, 0xfd, 0xe5, 0x4e, 0x11, 0x94, 0xd2, 0x47, 0x87, 0x40, 0xaa, 0x7e, 0x04, 0xc7, 0x27,
+	0x48, 0x1a, 0x9c, 0x20, 0xe9, 0xec, 0x04, 0x81, 0xfd, 0x10, 0x81, 0x2f, 0x21, 0x02, 0xdf, 0x42,
+	0x04, 0x8e, 0x43, 0x04, 0x06, 0x21, 0x02, 0x3f, 0x42, 0x04, 0x4e, 0x43, 0x24, 0x9d, 0x85, 0x08,
+	0x7c, 0x1a, 0x22, 0xe9, 0x68, 0x88, 0xc0, 0xf1, 0x10, 0x49, 0x83, 0x21, 0x92, 0xde, 0xad, 0xd9,
+	0xd4, 0x7b, 0x6f, 0x1b, 0x3d, 0xea, 0x72, 0xe2, 0xfb, 0xd8, 0x08, 0x98, 0x29, 0x0e, 0x2d, 0xea,
+	0x77, 0xe6, 0x3d, 0x9f, 0xf6, 0x9c, 0x26, 0xf1, 0xe7, 0xc7, 0x69, 0xd3, 0x6b, 0xd8, 0xd4, 0x24,
+	0x7b, 0x7c, 0xb4, 0xd5, 0x12, 0x6b, 0xbf, 0x91, 0x15, 0x8b, 0xed, 0xd1, 0xaf, 0x00, 0x00, 0x00,
+	0xff, 0xff, 0x98, 0xd8, 0x0d, 0x83, 0x15, 0x06, 0x00, 0x00,
 }
 
 func (x L7AclAction) String() string {
@@ -625,84 +492,6 @@ func (x L7AclAction) String() string {
 		return s
 	}
 	return strconv.Itoa(int(x))
-}
-func (this *DestinationType) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*DestinationType)
-	if !ok {
-		that2, ok := that.(DestinationType)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if that1.DestinationTypeChoice == nil {
-		if this.DestinationTypeChoice != nil {
-			return false
-		}
-	} else if this.DestinationTypeChoice == nil {
-		return false
-	} else if !this.DestinationTypeChoice.Equal(that1.DestinationTypeChoice) {
-		return false
-	}
-	return true
-}
-func (this *DestinationType_Vhost) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*DestinationType_Vhost)
-	if !ok {
-		that2, ok := that.(DestinationType_Vhost)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.Vhost.Equal(that1.Vhost) {
-		return false
-	}
-	return true
-}
-func (this *DestinationType_Tenant) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*DestinationType_Tenant)
-	if !ok {
-		that2, ok := that.(DestinationType_Tenant)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.Tenant.Equal(that1.Tenant) {
-		return false
-	}
-	return true
 }
 func (this *PathMatcherType) Equal(that interface{}) bool {
 	if that == nil {
@@ -733,14 +522,14 @@ func (this *PathMatcherType) Equal(that interface{}) bool {
 	}
 	return true
 }
-func (this *L7AclRuleType) Equal(that interface{}) bool {
+func (this *L7AclRule) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
 	}
 
-	that1, ok := that.(*L7AclRuleType)
+	that1, ok := that.(*L7AclRule)
 	if !ok {
-		that2, ok := that.(L7AclRuleType)
+		that2, ok := that.(L7AclRule)
 		if ok {
 			that1 = &that2
 		} else {
@@ -758,20 +547,45 @@ func (this *L7AclRuleType) Equal(that interface{}) bool {
 	if this.Action != that1.Action {
 		return false
 	}
-	if !this.CountryMatcher.Equal(that1.CountryMatcher) {
+	if len(this.IpPrefix) != len(that1.IpPrefix) {
 		return false
 	}
-	if !this.AsnListMatcher.Equal(that1.AsnListMatcher) {
+	for i := range this.IpPrefix {
+		if this.IpPrefix[i] != that1.IpPrefix[i] {
+			return false
+		}
+	}
+	if len(this.Countries) != len(that1.Countries) {
 		return false
 	}
-	if !this.TlsFingerprintMatcher.Equal(that1.TlsFingerprintMatcher) {
+	for i := range this.Countries {
+		if this.Countries[i] != that1.Countries[i] {
+			return false
+		}
+	}
+	if len(this.AsNumbers) != len(that1.AsNumbers) {
 		return false
 	}
-	if !this.PathMatcher.Equal(that1.PathMatcher) {
+	for i := range this.AsNumbers {
+		if this.AsNumbers[i] != that1.AsNumbers[i] {
+			return false
+		}
+	}
+	if len(this.TlsFingerprints) != len(that1.TlsFingerprints) {
 		return false
 	}
-	if !this.IpMatcher.Equal(that1.IpMatcher) {
+	for i := range this.TlsFingerprints {
+		if this.TlsFingerprints[i] != that1.TlsFingerprints[i] {
+			return false
+		}
+	}
+	if len(this.Paths) != len(that1.Paths) {
 		return false
+	}
+	for i := range this.Paths {
+		if this.Paths[i] != that1.Paths[i] {
+			return false
+		}
 	}
 	return true
 }
@@ -792,9 +606,6 @@ func (this *GlobalSpecType) Equal(that interface{}) bool {
 	if that1 == nil {
 		return this == nil
 	} else if this == nil {
-		return false
-	}
-	if !this.DestinationType.Equal(that1.DestinationType) {
 		return false
 	}
 	if len(this.L7AclRule) != len(that1.L7AclRule) {
@@ -826,9 +637,6 @@ func (this *CreateSpecType) Equal(that interface{}) bool {
 	} else if this == nil {
 		return false
 	}
-	if !this.DestinationType.Equal(that1.DestinationType) {
-		return false
-	}
 	if len(this.L7AclRule) != len(that1.L7AclRule) {
 		return false
 	}
@@ -856,9 +664,6 @@ func (this *ReplaceSpecType) Equal(that interface{}) bool {
 	if that1 == nil {
 		return this == nil
 	} else if this == nil {
-		return false
-	}
-	if !this.DestinationType.Equal(that1.DestinationType) {
 		return false
 	}
 	if len(this.L7AclRule) != len(that1.L7AclRule) {
@@ -890,9 +695,6 @@ func (this *GetSpecType) Equal(that interface{}) bool {
 	} else if this == nil {
 		return false
 	}
-	if !this.DestinationType.Equal(that1.DestinationType) {
-		return false
-	}
 	if len(this.L7AclRule) != len(that1.L7AclRule) {
 		return false
 	}
@@ -902,34 +704,6 @@ func (this *GetSpecType) Equal(that interface{}) bool {
 		}
 	}
 	return true
-}
-func (this *DestinationType) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := make([]string, 0, 6)
-	s = append(s, "&l7_acl.DestinationType{")
-	if this.DestinationTypeChoice != nil {
-		s = append(s, "DestinationTypeChoice: "+fmt.Sprintf("%#v", this.DestinationTypeChoice)+",\n")
-	}
-	s = append(s, "}")
-	return strings.Join(s, "")
-}
-func (this *DestinationType_Vhost) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&l7_acl.DestinationType_Vhost{` +
-		`Vhost:` + fmt.Sprintf("%#v", this.Vhost) + `}`}, ", ")
-	return s
-}
-func (this *DestinationType_Tenant) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&l7_acl.DestinationType_Tenant{` +
-		`Tenant:` + fmt.Sprintf("%#v", this.Tenant) + `}`}, ", ")
-	return s
 }
 func (this *PathMatcherType) GoString() string {
 	if this == nil {
@@ -941,31 +715,21 @@ func (this *PathMatcherType) GoString() string {
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
-func (this *L7AclRuleType) GoString() string {
+func (this *L7AclRule) GoString() string {
 	if this == nil {
 		return "nil"
 	}
 	s := make([]string, 0, 11)
-	s = append(s, "&l7_acl.L7AclRuleType{")
+	s = append(s, "&l7_acl.L7AclRule{")
 	if this.Metadata != nil {
 		s = append(s, "Metadata: "+fmt.Sprintf("%#v", this.Metadata)+",\n")
 	}
 	s = append(s, "Action: "+fmt.Sprintf("%#v", this.Action)+",\n")
-	if this.CountryMatcher != nil {
-		s = append(s, "CountryMatcher: "+fmt.Sprintf("%#v", this.CountryMatcher)+",\n")
-	}
-	if this.AsnListMatcher != nil {
-		s = append(s, "AsnListMatcher: "+fmt.Sprintf("%#v", this.AsnListMatcher)+",\n")
-	}
-	if this.TlsFingerprintMatcher != nil {
-		s = append(s, "TlsFingerprintMatcher: "+fmt.Sprintf("%#v", this.TlsFingerprintMatcher)+",\n")
-	}
-	if this.PathMatcher != nil {
-		s = append(s, "PathMatcher: "+fmt.Sprintf("%#v", this.PathMatcher)+",\n")
-	}
-	if this.IpMatcher != nil {
-		s = append(s, "IpMatcher: "+fmt.Sprintf("%#v", this.IpMatcher)+",\n")
-	}
+	s = append(s, "IpPrefix: "+fmt.Sprintf("%#v", this.IpPrefix)+",\n")
+	s = append(s, "Countries: "+fmt.Sprintf("%#v", this.Countries)+",\n")
+	s = append(s, "AsNumbers: "+fmt.Sprintf("%#v", this.AsNumbers)+",\n")
+	s = append(s, "TlsFingerprints: "+fmt.Sprintf("%#v", this.TlsFingerprints)+",\n")
+	s = append(s, "Paths: "+fmt.Sprintf("%#v", this.Paths)+",\n")
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
@@ -973,11 +737,8 @@ func (this *GlobalSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 6)
+	s := make([]string, 0, 5)
 	s = append(s, "&l7_acl.GlobalSpecType{")
-	if this.DestinationType != nil {
-		s = append(s, "DestinationType: "+fmt.Sprintf("%#v", this.DestinationType)+",\n")
-	}
 	if this.L7AclRule != nil {
 		s = append(s, "L7AclRule: "+fmt.Sprintf("%#v", this.L7AclRule)+",\n")
 	}
@@ -988,11 +749,8 @@ func (this *CreateSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 6)
+	s := make([]string, 0, 5)
 	s = append(s, "&l7_acl.CreateSpecType{")
-	if this.DestinationType != nil {
-		s = append(s, "DestinationType: "+fmt.Sprintf("%#v", this.DestinationType)+",\n")
-	}
 	if this.L7AclRule != nil {
 		s = append(s, "L7AclRule: "+fmt.Sprintf("%#v", this.L7AclRule)+",\n")
 	}
@@ -1003,11 +761,8 @@ func (this *ReplaceSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 6)
+	s := make([]string, 0, 5)
 	s = append(s, "&l7_acl.ReplaceSpecType{")
-	if this.DestinationType != nil {
-		s = append(s, "DestinationType: "+fmt.Sprintf("%#v", this.DestinationType)+",\n")
-	}
 	if this.L7AclRule != nil {
 		s = append(s, "L7AclRule: "+fmt.Sprintf("%#v", this.L7AclRule)+",\n")
 	}
@@ -1018,11 +773,8 @@ func (this *GetSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 6)
+	s := make([]string, 0, 5)
 	s = append(s, "&l7_acl.GetSpecType{")
-	if this.DestinationType != nil {
-		s = append(s, "DestinationType: "+fmt.Sprintf("%#v", this.DestinationType)+",\n")
-	}
 	if this.L7AclRule != nil {
 		s = append(s, "L7AclRule: "+fmt.Sprintf("%#v", this.L7AclRule)+",\n")
 	}
@@ -1036,80 +788,6 @@ func valueToGoStringTypes(v interface{}, typ string) string {
 	}
 	pv := reflect.Indirect(rv).Interface()
 	return fmt.Sprintf("func(v %v) *%v { return &v } ( %#v )", typ, typ, pv)
-}
-func (m *DestinationType) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *DestinationType) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *DestinationType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if m.DestinationTypeChoice != nil {
-		{
-			size := m.DestinationTypeChoice.Size()
-			i -= size
-			if _, err := m.DestinationTypeChoice.MarshalTo(dAtA[i:]); err != nil {
-				return 0, err
-			}
-		}
-	}
-	return len(dAtA) - i, nil
-}
-
-func (m *DestinationType_Vhost) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *DestinationType_Vhost) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	if m.Vhost != nil {
-		{
-			size, err := m.Vhost.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x12
-	}
-	return len(dAtA) - i, nil
-}
-func (m *DestinationType_Tenant) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *DestinationType_Tenant) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	if m.Tenant != nil {
-		{
-			size, err := m.Tenant.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x1a
-	}
-	return len(dAtA) - i, nil
 }
 func (m *PathMatcherType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
@@ -1143,7 +821,7 @@ func (m *PathMatcherType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
-func (m *L7AclRuleType) Marshal() (dAtA []byte, err error) {
+func (m *L7AclRule) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalToSizedBuffer(dAtA[:size])
@@ -1153,75 +831,78 @@ func (m *L7AclRuleType) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *L7AclRuleType) MarshalTo(dAtA []byte) (int, error) {
+func (m *L7AclRule) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *L7AclRuleType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *L7AclRule) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if m.IpMatcher != nil {
-		{
-			size, err := m.IpMatcher.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
+	if len(m.Paths) > 0 {
+		for iNdEx := len(m.Paths) - 1; iNdEx >= 0; iNdEx-- {
+			i -= len(m.Paths[iNdEx])
+			copy(dAtA[i:], m.Paths[iNdEx])
+			i = encodeVarintTypes(dAtA, i, uint64(len(m.Paths[iNdEx])))
+			i--
+			dAtA[i] = 0x3a
 		}
-		i--
-		dAtA[i] = 0x3a
 	}
-	if m.PathMatcher != nil {
-		{
-			size, err := m.PathMatcher.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
+	if len(m.TlsFingerprints) > 0 {
+		for iNdEx := len(m.TlsFingerprints) - 1; iNdEx >= 0; iNdEx-- {
+			i -= len(m.TlsFingerprints[iNdEx])
+			copy(dAtA[i:], m.TlsFingerprints[iNdEx])
+			i = encodeVarintTypes(dAtA, i, uint64(len(m.TlsFingerprints[iNdEx])))
+			i--
+			dAtA[i] = 0x32
 		}
-		i--
-		dAtA[i] = 0x32
 	}
-	if m.TlsFingerprintMatcher != nil {
-		{
-			size, err := m.TlsFingerprintMatcher.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
+	if len(m.AsNumbers) > 0 {
+		dAtA2 := make([]byte, len(m.AsNumbers)*10)
+		var j1 int
+		for _, num := range m.AsNumbers {
+			for num >= 1<<7 {
+				dAtA2[j1] = uint8(uint64(num)&0x7f | 0x80)
+				num >>= 7
+				j1++
 			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
+			dAtA2[j1] = uint8(num)
+			j1++
 		}
+		i -= j1
+		copy(dAtA[i:], dAtA2[:j1])
+		i = encodeVarintTypes(dAtA, i, uint64(j1))
 		i--
 		dAtA[i] = 0x2a
 	}
-	if m.AsnListMatcher != nil {
-		{
-			size, err := m.AsnListMatcher.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
+	if len(m.Countries) > 0 {
+		dAtA4 := make([]byte, len(m.Countries)*10)
+		var j3 int
+		for _, num := range m.Countries {
+			for num >= 1<<7 {
+				dAtA4[j3] = uint8(uint64(num)&0x7f | 0x80)
+				num >>= 7
+				j3++
 			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
+			dAtA4[j3] = uint8(num)
+			j3++
 		}
+		i -= j3
+		copy(dAtA[i:], dAtA4[:j3])
+		i = encodeVarintTypes(dAtA, i, uint64(j3))
 		i--
 		dAtA[i] = 0x22
 	}
-	if m.CountryMatcher != nil {
-		{
-			size, err := m.CountryMatcher.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
+	if len(m.IpPrefix) > 0 {
+		for iNdEx := len(m.IpPrefix) - 1; iNdEx >= 0; iNdEx-- {
+			i -= len(m.IpPrefix[iNdEx])
+			copy(dAtA[i:], m.IpPrefix[iNdEx])
+			i = encodeVarintTypes(dAtA, i, uint64(len(m.IpPrefix[iNdEx])))
+			i--
+			dAtA[i] = 0x1a
 		}
-		i--
-		dAtA[i] = 0x1a
 	}
 	if m.Action != 0 {
 		i = encodeVarintTypes(dAtA, i, uint64(m.Action))
@@ -1277,18 +958,6 @@ func (m *GlobalSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 			dAtA[i] = 0x12
 		}
 	}
-	if m.DestinationType != nil {
-		{
-			size, err := m.DestinationType.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0xa
-	}
 	return len(dAtA) - i, nil
 }
 
@@ -1325,18 +994,6 @@ func (m *CreateSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 			i--
 			dAtA[i] = 0x12
 		}
-	}
-	if m.DestinationType != nil {
-		{
-			size, err := m.DestinationType.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0xa
 	}
 	return len(dAtA) - i, nil
 }
@@ -1375,18 +1032,6 @@ func (m *ReplaceSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 			dAtA[i] = 0x12
 		}
 	}
-	if m.DestinationType != nil {
-		{
-			size, err := m.DestinationType.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0xa
-	}
 	return len(dAtA) - i, nil
 }
 
@@ -1424,18 +1069,6 @@ func (m *GetSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 			dAtA[i] = 0x12
 		}
 	}
-	if m.DestinationType != nil {
-		{
-			size, err := m.DestinationType.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0xa
-	}
 	return len(dAtA) - i, nil
 }
 
@@ -1449,42 +1082,6 @@ func encodeVarintTypes(dAtA []byte, offset int, v uint64) int {
 	}
 	dAtA[offset] = uint8(v)
 	return base
-}
-func (m *DestinationType) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.DestinationTypeChoice != nil {
-		n += m.DestinationTypeChoice.Size()
-	}
-	return n
-}
-
-func (m *DestinationType_Vhost) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.Vhost != nil {
-		l = m.Vhost.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *DestinationType_Tenant) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.Tenant != nil {
-		l = m.Tenant.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	return n
 }
 func (m *PathMatcherType) Size() (n int) {
 	if m == nil {
@@ -1501,7 +1098,7 @@ func (m *PathMatcherType) Size() (n int) {
 	return n
 }
 
-func (m *L7AclRuleType) Size() (n int) {
+func (m *L7AclRule) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -1514,25 +1111,37 @@ func (m *L7AclRuleType) Size() (n int) {
 	if m.Action != 0 {
 		n += 1 + sovTypes(uint64(m.Action))
 	}
-	if m.CountryMatcher != nil {
-		l = m.CountryMatcher.Size()
-		n += 1 + l + sovTypes(uint64(l))
+	if len(m.IpPrefix) > 0 {
+		for _, s := range m.IpPrefix {
+			l = len(s)
+			n += 1 + l + sovTypes(uint64(l))
+		}
 	}
-	if m.AsnListMatcher != nil {
-		l = m.AsnListMatcher.Size()
-		n += 1 + l + sovTypes(uint64(l))
+	if len(m.Countries) > 0 {
+		l = 0
+		for _, e := range m.Countries {
+			l += sovTypes(uint64(e))
+		}
+		n += 1 + sovTypes(uint64(l)) + l
 	}
-	if m.TlsFingerprintMatcher != nil {
-		l = m.TlsFingerprintMatcher.Size()
-		n += 1 + l + sovTypes(uint64(l))
+	if len(m.AsNumbers) > 0 {
+		l = 0
+		for _, e := range m.AsNumbers {
+			l += sovTypes(uint64(e))
+		}
+		n += 1 + sovTypes(uint64(l)) + l
 	}
-	if m.PathMatcher != nil {
-		l = m.PathMatcher.Size()
-		n += 1 + l + sovTypes(uint64(l))
+	if len(m.TlsFingerprints) > 0 {
+		for _, s := range m.TlsFingerprints {
+			l = len(s)
+			n += 1 + l + sovTypes(uint64(l))
+		}
 	}
-	if m.IpMatcher != nil {
-		l = m.IpMatcher.Size()
-		n += 1 + l + sovTypes(uint64(l))
+	if len(m.Paths) > 0 {
+		for _, s := range m.Paths {
+			l = len(s)
+			n += 1 + l + sovTypes(uint64(l))
+		}
 	}
 	return n
 }
@@ -1543,10 +1152,6 @@ func (m *GlobalSpecType) Size() (n int) {
 	}
 	var l int
 	_ = l
-	if m.DestinationType != nil {
-		l = m.DestinationType.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
 	if len(m.L7AclRule) > 0 {
 		for _, e := range m.L7AclRule {
 			l = e.Size()
@@ -1562,10 +1167,6 @@ func (m *CreateSpecType) Size() (n int) {
 	}
 	var l int
 	_ = l
-	if m.DestinationType != nil {
-		l = m.DestinationType.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
 	if len(m.L7AclRule) > 0 {
 		for _, e := range m.L7AclRule {
 			l = e.Size()
@@ -1581,10 +1182,6 @@ func (m *ReplaceSpecType) Size() (n int) {
 	}
 	var l int
 	_ = l
-	if m.DestinationType != nil {
-		l = m.DestinationType.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
 	if len(m.L7AclRule) > 0 {
 		for _, e := range m.L7AclRule {
 			l = e.Size()
@@ -1600,10 +1197,6 @@ func (m *GetSpecType) Size() (n int) {
 	}
 	var l int
 	_ = l
-	if m.DestinationType != nil {
-		l = m.DestinationType.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
 	if len(m.L7AclRule) > 0 {
 		for _, e := range m.L7AclRule {
 			l = e.Size()
@@ -1619,36 +1212,6 @@ func sovTypes(x uint64) (n int) {
 func sozTypes(x uint64) (n int) {
 	return sovTypes(uint64((x << 1) ^ uint64((int64(x) >> 63))))
 }
-func (this *DestinationType) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&DestinationType{`,
-		`DestinationTypeChoice:` + fmt.Sprintf("%v", this.DestinationTypeChoice) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *DestinationType_Vhost) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&DestinationType_Vhost{`,
-		`Vhost:` + strings.Replace(fmt.Sprintf("%v", this.Vhost), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *DestinationType_Tenant) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&DestinationType_Tenant{`,
-		`Tenant:` + strings.Replace(fmt.Sprintf("%v", this.Tenant), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
 func (this *PathMatcherType) String() string {
 	if this == nil {
 		return "nil"
@@ -1659,18 +1222,18 @@ func (this *PathMatcherType) String() string {
 	}, "")
 	return s
 }
-func (this *L7AclRuleType) String() string {
+func (this *L7AclRule) String() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings.Join([]string{`&L7AclRuleType{`,
+	s := strings.Join([]string{`&L7AclRule{`,
 		`Metadata:` + strings.Replace(fmt.Sprintf("%v", this.Metadata), "MessageMetaType", "schema.MessageMetaType", 1) + `,`,
 		`Action:` + fmt.Sprintf("%v", this.Action) + `,`,
-		`CountryMatcher:` + strings.Replace(fmt.Sprintf("%v", this.CountryMatcher), "CountryCodeList", "policy.CountryCodeList", 1) + `,`,
-		`AsnListMatcher:` + strings.Replace(fmt.Sprintf("%v", this.AsnListMatcher), "AsnMatchList", "policy.AsnMatchList", 1) + `,`,
-		`TlsFingerprintMatcher:` + strings.Replace(fmt.Sprintf("%v", this.TlsFingerprintMatcher), "StringMatcherType", "policy.StringMatcherType", 1) + `,`,
-		`PathMatcher:` + strings.Replace(this.PathMatcher.String(), "PathMatcherType", "PathMatcherType", 1) + `,`,
-		`IpMatcher:` + strings.Replace(fmt.Sprintf("%v", this.IpMatcher), "PrefixMatchList", "policy.PrefixMatchList", 1) + `,`,
+		`IpPrefix:` + fmt.Sprintf("%v", this.IpPrefix) + `,`,
+		`Countries:` + fmt.Sprintf("%v", this.Countries) + `,`,
+		`AsNumbers:` + fmt.Sprintf("%v", this.AsNumbers) + `,`,
+		`TlsFingerprints:` + fmt.Sprintf("%v", this.TlsFingerprints) + `,`,
+		`Paths:` + fmt.Sprintf("%v", this.Paths) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -1679,13 +1242,12 @@ func (this *GlobalSpecType) String() string {
 	if this == nil {
 		return "nil"
 	}
-	repeatedStringForL7AclRule := "[]*L7AclRuleType{"
+	repeatedStringForL7AclRule := "[]*L7AclRule{"
 	for _, f := range this.L7AclRule {
-		repeatedStringForL7AclRule += strings.Replace(f.String(), "L7AclRuleType", "L7AclRuleType", 1) + ","
+		repeatedStringForL7AclRule += strings.Replace(f.String(), "L7AclRule", "L7AclRule", 1) + ","
 	}
 	repeatedStringForL7AclRule += "}"
 	s := strings.Join([]string{`&GlobalSpecType{`,
-		`DestinationType:` + strings.Replace(this.DestinationType.String(), "DestinationType", "DestinationType", 1) + `,`,
 		`L7AclRule:` + repeatedStringForL7AclRule + `,`,
 		`}`,
 	}, "")
@@ -1695,13 +1257,12 @@ func (this *CreateSpecType) String() string {
 	if this == nil {
 		return "nil"
 	}
-	repeatedStringForL7AclRule := "[]*L7AclRuleType{"
+	repeatedStringForL7AclRule := "[]*L7AclRule{"
 	for _, f := range this.L7AclRule {
-		repeatedStringForL7AclRule += strings.Replace(f.String(), "L7AclRuleType", "L7AclRuleType", 1) + ","
+		repeatedStringForL7AclRule += strings.Replace(f.String(), "L7AclRule", "L7AclRule", 1) + ","
 	}
 	repeatedStringForL7AclRule += "}"
 	s := strings.Join([]string{`&CreateSpecType{`,
-		`DestinationType:` + strings.Replace(this.DestinationType.String(), "DestinationType", "DestinationType", 1) + `,`,
 		`L7AclRule:` + repeatedStringForL7AclRule + `,`,
 		`}`,
 	}, "")
@@ -1711,13 +1272,12 @@ func (this *ReplaceSpecType) String() string {
 	if this == nil {
 		return "nil"
 	}
-	repeatedStringForL7AclRule := "[]*L7AclRuleType{"
+	repeatedStringForL7AclRule := "[]*L7AclRule{"
 	for _, f := range this.L7AclRule {
-		repeatedStringForL7AclRule += strings.Replace(f.String(), "L7AclRuleType", "L7AclRuleType", 1) + ","
+		repeatedStringForL7AclRule += strings.Replace(f.String(), "L7AclRule", "L7AclRule", 1) + ","
 	}
 	repeatedStringForL7AclRule += "}"
 	s := strings.Join([]string{`&ReplaceSpecType{`,
-		`DestinationType:` + strings.Replace(this.DestinationType.String(), "DestinationType", "DestinationType", 1) + `,`,
 		`L7AclRule:` + repeatedStringForL7AclRule + `,`,
 		`}`,
 	}, "")
@@ -1727,13 +1287,12 @@ func (this *GetSpecType) String() string {
 	if this == nil {
 		return "nil"
 	}
-	repeatedStringForL7AclRule := "[]*L7AclRuleType{"
+	repeatedStringForL7AclRule := "[]*L7AclRule{"
 	for _, f := range this.L7AclRule {
-		repeatedStringForL7AclRule += strings.Replace(f.String(), "L7AclRuleType", "L7AclRuleType", 1) + ","
+		repeatedStringForL7AclRule += strings.Replace(f.String(), "L7AclRule", "L7AclRule", 1) + ","
 	}
 	repeatedStringForL7AclRule += "}"
 	s := strings.Join([]string{`&GetSpecType{`,
-		`DestinationType:` + strings.Replace(this.DestinationType.String(), "DestinationType", "DestinationType", 1) + `,`,
 		`L7AclRule:` + repeatedStringForL7AclRule + `,`,
 		`}`,
 	}, "")
@@ -1746,129 +1305,6 @@ func valueToStringTypes(v interface{}) string {
 	}
 	pv := reflect.Indirect(rv).Interface()
 	return fmt.Sprintf("*%v", pv)
-}
-func (m *DestinationType) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowTypes
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: DestinationType: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: DestinationType: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Vhost", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &views.ObjectRefType{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.DestinationTypeChoice = &DestinationType_Vhost{v}
-			iNdEx = postIndex
-		case 3:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Tenant", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &views.ObjectRefType{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.DestinationTypeChoice = &DestinationType_Tenant{v}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipTypes(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if skippy < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if (iNdEx + skippy) < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
 }
 func (m *PathMatcherType) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
@@ -1955,7 +1391,7 @@ func (m *PathMatcherType) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *L7AclRuleType) Unmarshal(dAtA []byte) error {
+func (m *L7AclRule) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -1978,10 +1414,10 @@ func (m *L7AclRuleType) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: L7AclRuleType: wiretype end group for non-group")
+			return fmt.Errorf("proto: L7AclRule: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: L7AclRuleType: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: L7AclRule: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:
@@ -2041,9 +1477,9 @@ func (m *L7AclRuleType) Unmarshal(dAtA []byte) error {
 			}
 		case 3:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field CountryMatcher", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field IpPrefix", wireType)
 			}
-			var msglen int
+			var stringLen uint64
 			for shift := uint(0); ; shift += 7 {
 				if shift >= 64 {
 					return ErrIntOverflowTypes
@@ -2053,105 +1489,174 @@ func (m *L7AclRuleType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= int(b&0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
 			}
-			if msglen < 0 {
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
 				return ErrInvalidLengthTypes
 			}
-			postIndex := iNdEx + msglen
+			postIndex := iNdEx + intStringLen
 			if postIndex < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			if m.CountryMatcher == nil {
-				m.CountryMatcher = &policy.CountryCodeList{}
-			}
-			if err := m.CountryMatcher.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
+			m.IpPrefix = append(m.IpPrefix, string(dAtA[iNdEx:postIndex]))
 			iNdEx = postIndex
 		case 4:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field AsnListMatcher", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
+			if wireType == 0 {
+				var v policy.CountryCode
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return ErrIntOverflowTypes
+					}
+					if iNdEx >= l {
+						return io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					v |= policy.CountryCode(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
 				}
-				if iNdEx >= l {
+				m.Countries = append(m.Countries, v)
+			} else if wireType == 2 {
+				var packedLen int
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return ErrIntOverflowTypes
+					}
+					if iNdEx >= l {
+						return io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					packedLen |= int(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				if packedLen < 0 {
+					return ErrInvalidLengthTypes
+				}
+				postIndex := iNdEx + packedLen
+				if postIndex < 0 {
+					return ErrInvalidLengthTypes
+				}
+				if postIndex > l {
 					return io.ErrUnexpectedEOF
 				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
+				var elementCount int
+				if elementCount != 0 && len(m.Countries) == 0 {
+					m.Countries = make([]policy.CountryCode, 0, elementCount)
 				}
+				for iNdEx < postIndex {
+					var v policy.CountryCode
+					for shift := uint(0); ; shift += 7 {
+						if shift >= 64 {
+							return ErrIntOverflowTypes
+						}
+						if iNdEx >= l {
+							return io.ErrUnexpectedEOF
+						}
+						b := dAtA[iNdEx]
+						iNdEx++
+						v |= policy.CountryCode(b&0x7F) << shift
+						if b < 0x80 {
+							break
+						}
+					}
+					m.Countries = append(m.Countries, v)
+				}
+			} else {
+				return fmt.Errorf("proto: wrong wireType = %d for field Countries", wireType)
 			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.AsnListMatcher == nil {
-				m.AsnListMatcher = &policy.AsnMatchList{}
-			}
-			if err := m.AsnListMatcher.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
 		case 5:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field TlsFingerprintMatcher", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
+			if wireType == 0 {
+				var v uint32
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return ErrIntOverflowTypes
+					}
+					if iNdEx >= l {
+						return io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					v |= uint32(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
 				}
-				if iNdEx >= l {
+				m.AsNumbers = append(m.AsNumbers, v)
+			} else if wireType == 2 {
+				var packedLen int
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return ErrIntOverflowTypes
+					}
+					if iNdEx >= l {
+						return io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					packedLen |= int(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				if packedLen < 0 {
+					return ErrInvalidLengthTypes
+				}
+				postIndex := iNdEx + packedLen
+				if postIndex < 0 {
+					return ErrInvalidLengthTypes
+				}
+				if postIndex > l {
 					return io.ErrUnexpectedEOF
 				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
+				var elementCount int
+				var count int
+				for _, integer := range dAtA[iNdEx:postIndex] {
+					if integer < 128 {
+						count++
+					}
 				}
+				elementCount = count
+				if elementCount != 0 && len(m.AsNumbers) == 0 {
+					m.AsNumbers = make([]uint32, 0, elementCount)
+				}
+				for iNdEx < postIndex {
+					var v uint32
+					for shift := uint(0); ; shift += 7 {
+						if shift >= 64 {
+							return ErrIntOverflowTypes
+						}
+						if iNdEx >= l {
+							return io.ErrUnexpectedEOF
+						}
+						b := dAtA[iNdEx]
+						iNdEx++
+						v |= uint32(b&0x7F) << shift
+						if b < 0x80 {
+							break
+						}
+					}
+					m.AsNumbers = append(m.AsNumbers, v)
+				}
+			} else {
+				return fmt.Errorf("proto: wrong wireType = %d for field AsNumbers", wireType)
 			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.TlsFingerprintMatcher == nil {
-				m.TlsFingerprintMatcher = &policy.StringMatcherType{}
-			}
-			if err := m.TlsFingerprintMatcher.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
 		case 6:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field PathMatcher", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field TlsFingerprints", wireType)
 			}
-			var msglen int
+			var stringLen uint64
 			for shift := uint(0); ; shift += 7 {
 				if shift >= 64 {
 					return ErrIntOverflowTypes
@@ -2161,33 +1666,29 @@ func (m *L7AclRuleType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= int(b&0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
 			}
-			if msglen < 0 {
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
 				return ErrInvalidLengthTypes
 			}
-			postIndex := iNdEx + msglen
+			postIndex := iNdEx + intStringLen
 			if postIndex < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			if m.PathMatcher == nil {
-				m.PathMatcher = &PathMatcherType{}
-			}
-			if err := m.PathMatcher.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
+			m.TlsFingerprints = append(m.TlsFingerprints, string(dAtA[iNdEx:postIndex]))
 			iNdEx = postIndex
 		case 7:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field IpMatcher", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field Paths", wireType)
 			}
-			var msglen int
+			var stringLen uint64
 			for shift := uint(0); ; shift += 7 {
 				if shift >= 64 {
 					return ErrIntOverflowTypes
@@ -2197,27 +1698,23 @@ func (m *L7AclRuleType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= int(b&0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
 			}
-			if msglen < 0 {
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
 				return ErrInvalidLengthTypes
 			}
-			postIndex := iNdEx + msglen
+			postIndex := iNdEx + intStringLen
 			if postIndex < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			if m.IpMatcher == nil {
-				m.IpMatcher = &policy.PrefixMatchList{}
-			}
-			if err := m.IpMatcher.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
+			m.Paths = append(m.Paths, string(dAtA[iNdEx:postIndex]))
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
@@ -2272,42 +1769,6 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 			return fmt.Errorf("proto: GlobalSpecType: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field DestinationType", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.DestinationType == nil {
-				m.DestinationType = &DestinationType{}
-			}
-			if err := m.DestinationType.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
 		case 2:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field L7AclRule", wireType)
@@ -2337,7 +1798,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.L7AclRule = append(m.L7AclRule, &L7AclRuleType{})
+			m.L7AclRule = append(m.L7AclRule, &L7AclRule{})
 			if err := m.L7AclRule[len(m.L7AclRule)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -2395,42 +1856,6 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 			return fmt.Errorf("proto: CreateSpecType: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field DestinationType", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.DestinationType == nil {
-				m.DestinationType = &DestinationType{}
-			}
-			if err := m.DestinationType.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
 		case 2:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field L7AclRule", wireType)
@@ -2460,7 +1885,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.L7AclRule = append(m.L7AclRule, &L7AclRuleType{})
+			m.L7AclRule = append(m.L7AclRule, &L7AclRule{})
 			if err := m.L7AclRule[len(m.L7AclRule)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -2518,42 +1943,6 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 			return fmt.Errorf("proto: ReplaceSpecType: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field DestinationType", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.DestinationType == nil {
-				m.DestinationType = &DestinationType{}
-			}
-			if err := m.DestinationType.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
 		case 2:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field L7AclRule", wireType)
@@ -2583,7 +1972,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.L7AclRule = append(m.L7AclRule, &L7AclRuleType{})
+			m.L7AclRule = append(m.L7AclRule, &L7AclRule{})
 			if err := m.L7AclRule[len(m.L7AclRule)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -2641,42 +2030,6 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 			return fmt.Errorf("proto: GetSpecType: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field DestinationType", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.DestinationType == nil {
-				m.DestinationType = &DestinationType{}
-			}
-			if err := m.DestinationType.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
 		case 2:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field L7AclRule", wireType)
@@ -2706,7 +2059,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.L7AclRule = append(m.L7AclRule, &L7AclRuleType{})
+			m.L7AclRule = append(m.L7AclRule, &L7AclRule{})
 			if err := m.L7AclRule[len(m.L7AclRule)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}

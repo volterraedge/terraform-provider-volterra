@@ -3059,6 +3059,34 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "schemaSiteMeshGroupStatus": {
+            "type": "object",
+            "description": "Status of the site mesh group (this will be used in site status object and smg status object)",
+            "title": "Site mesh group status",
+            "x-displayname": "Status",
+            "x-ves-proto-message": "ves.io.schema.SiteMeshGroupStatus",
+            "properties": {
+                "other_connected_sites": {
+                    "type": "array",
+                    "description": " List of sites connected by this Site Mesh Group\n\nExample: - \"[ce01-sfo, ce01-nyc]\"-",
+                    "title": "other_connected_sites",
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-displayname": "Other Connected Sites",
+                    "x-ves-example": "[ce01-sfo, ce01-nyc]"
+                },
+                "site_info": {
+                    "type": "array",
+                    "description": " The list of sites in the site mesh group and information about each",
+                    "title": "site_info",
+                    "items": {
+                        "$ref": "#/definitions/schemaSiteInfo"
+                    },
+                    "x-displayname": "site info"
+                }
+            }
+        },
         "schemaSiteToSiteTunnelType": {
             "type": "string",
             "description": "x-displayName: \"Tunnel type\"\nTunnel encapsulation to be used between sites\n\n - SITE_TO_SITE_TUNNEL_IPSEC_OR_SSL: x-displayName: \"IPSEC or SSL\"\nSite to site tunnel can operate in both ipsec and ssl\nipsec takes precedence over ssl\n - SITE_TO_SITE_TUNNEL_IPSEC: x-displayName: \"IPSEC\"\nSite to site tunnel is of type ipsec\n - SITE_TO_SITE_TUNNEL_SSL: x-displayName: \"SSL\"\nSite to site tunnel is of type ssl",
@@ -3464,34 +3492,6 @@ var APISwaggerJSON string = `{
                 }
             }
         },
-        "site_mesh_groupSiteMeshGroupStatus": {
-            "type": "object",
-            "description": "Status of the site mesh group",
-            "title": "Site mesh group status",
-            "x-displayname": "Status",
-            "x-ves-proto-message": "ves.io.schema.site_mesh_group.SiteMeshGroupStatus",
-            "properties": {
-                "other_connected_sites": {
-                    "type": "array",
-                    "description": " List of sites connected by this Site Mesh Group\n\nExample: - \"[ce01-sfo, ce01-nyc]\"-",
-                    "title": "other_connected_sites",
-                    "items": {
-                        "type": "string"
-                    },
-                    "x-displayname": "Other Connected Sites",
-                    "x-ves-example": "[ce01-sfo, ce01-nyc]"
-                },
-                "site_info": {
-                    "type": "array",
-                    "description": " The list of sites in the site mesh group and information about each",
-                    "title": "site_info",
-                    "items": {
-                        "$ref": "#/definitions/schemaSiteInfo"
-                    },
-                    "x-displayname": "site info"
-                }
-            }
-        },
         "site_mesh_groupSiteMeshGroupType": {
             "type": "string",
             "description": "x-displayName: \"Mesh Type\"\nDefines different types of Mesh\n\n - SITE_MESH_GROUP_TYPE_INVALID: x-displayName: \"Invalid\"\nInvalid mesh type\n - SITE_MESH_GROUP_TYPE_HUB_FULL_MESH: x-displayName: \"Hub\"\nMesh of type Hub\n - SITE_MESH_GROUP_TYPE_SPOKE: x-displayName: \"Spoke\"\nMesh of type Spoke\n - SITE_MESH_GROUP_TYPE_FULL_MESH: x-displayName: \"Full Mesh\"\nFull mesh of tunnels are created between all sites",
@@ -3567,11 +3567,11 @@ var APISwaggerJSON string = `{
                     },
                     "x-displayname": "Config Object"
                 },
-                "status": {
-                    "description": " Current status of the site mesh group object",
-                    "title": "status",
-                    "$ref": "#/definitions/site_mesh_groupSiteMeshGroupStatus",
-                    "x-displayname": "Status"
+                "site_mesh_group_status": {
+                    "description": " Site Mesh Group Status",
+                    "title": "Site Mesh Group Statusde",
+                    "$ref": "#/definitions/schemaSiteMeshGroupStatus",
+                    "x-displayname": "Site Mesh Group Status"
                 }
             }
         }

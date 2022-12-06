@@ -600,7 +600,7 @@ var CustomAPISwaggerJSON string = `{
                     "type": "string",
                     "description": "\n\nExample: - \"www or mail or * or corp.web or *.b\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.pattern: ^$|^([*]|[a-zA-Z0-9-/_]{1,63})([.][a-zA-Z0-9-/_]{1,63})*$\n",
                     "title": "Record Name",
-                    "x-displayname": "Record Name",
+                    "x-displayname": "Record Name (Excluding Domain name)",
                     "x-ves-example": "www or mail or * or corp.web or *.b",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.string.pattern": "^$|^([*]|[a-zA-Z0-9-/_]{1,63})([.][a-zA-Z0-9-/_]{1,63})*$"
@@ -639,7 +639,7 @@ var CustomAPISwaggerJSON string = `{
                     "type": "string",
                     "description": "\n\nExample: - \"www or mail or * or corp.web or *.b\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.pattern: ^$|^([*]|[a-zA-Z0-9-/_]{1,63})([.][a-zA-Z0-9-/_]{1,63})*$\n",
                     "title": "Record Name",
-                    "x-displayname": "Record Name",
+                    "x-displayname": "Record Name (Excluding Domain name)",
                     "x-ves-example": "www or mail or * or corp.web or *.b",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.string.pattern": "^$|^([*]|[a-zA-Z0-9-/_]{1,63})([.][a-zA-Z0-9-/_]{1,63})*$"
@@ -697,7 +697,7 @@ var CustomAPISwaggerJSON string = `{
                     "type": "string",
                     "description": "\n\nExample: - \"www or mail or * or corp.web or *.b\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.pattern: ^$|^([*]|[a-zA-Z0-9-/_]{1,63})([.][a-zA-Z0-9-/_]{1,63})*$\n",
                     "title": "Record Name",
-                    "x-displayname": "Record Name",
+                    "x-displayname": "Record Name (Excluding Domain name)",
                     "x-ves-example": "www or mail or * or corp.web or *.b",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.string.pattern": "^$|^([*]|[a-zA-Z0-9-/_]{1,63})([.][a-zA-Z0-9-/_]{1,63})*$"
@@ -728,7 +728,7 @@ var CustomAPISwaggerJSON string = `{
                     "type": "string",
                     "description": "\nExample: - \"www or mail or * or corp.web or *.b\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.pattern: ^([*]|[a-zA-Z0-9-/_]{1,63})([.][a-zA-Z0-9-/_]{1,63})*$\n",
                     "title": "Record Name",
-                    "x-displayname": "Record Name",
+                    "x-displayname": "Record Name (Excluding Domain name)",
                     "x-ves-example": "www or mail or * or corp.web or *.b",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
@@ -752,18 +752,25 @@ var CustomAPISwaggerJSON string = `{
         },
         "dns_zoneDNSLBResourceRecord": {
             "type": "object",
-            "description": "x-displayName: \"DNS Load Balancer Record\"\nDNS Load Balancer Record",
+            "description": "DNS Load Balancer Record",
             "title": "DNSLBResourcerecord",
+            "x-displayname": "DNS Load Balancer Record",
+            "x-ves-proto-message": "ves.io.schema.dns_zone.DNSLBResourceRecord",
             "properties": {
                 "name": {
                     "type": "string",
-                    "description": "x-displayName: \"Record Name\"\nx-example: \"www or mail or * or ww* or *ab\"",
-                    "title": "Record Name"
+                    "description": "\n\nExample: - \"www or mail or * or ww* or *ab\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.pattern: ^([a-zA-Z0-9*?]|([a-zA-Z0-9?*]+-[a-zA-Z0-9*?]+)){0,253}\n",
+                    "title": "Record Name",
+                    "x-displayname": "Record Name (Excluding Domain name)",
+                    "x-ves-example": "www or mail or * or ww* or *ab",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.pattern": "^([a-zA-Z0-9*?]|([a-zA-Z0-9?*]+-[a-zA-Z0-9*?]+)){0,253}"
+                    }
                 },
                 "value": {
-                    "description": "x-displayName: \"DNS Load Balancer Record\"",
                     "title": "DNS LB Record",
-                    "$ref": "#/definitions/schemaviewsObjectRefType"
+                    "$ref": "#/definitions/schemaviewsObjectRefType",
+                    "x-displayname": "DNS Load Balancer Record"
                 }
             }
         },
@@ -777,7 +784,7 @@ var CustomAPISwaggerJSON string = `{
                     "type": "string",
                     "description": "\n\nExample: - \"www or mail or * or corp.web or *.b\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.pattern: ^$|^([*]|[a-zA-Z0-9-/_]{1,63})([.][a-zA-Z0-9-/_]{1,63})*$\n",
                     "title": "Record Name",
-                    "x-displayname": "Record Name",
+                    "x-displayname": "Record Name (Excluding Domain name)",
                     "x-ves-example": "www or mail or * or corp.web or *.b",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.string.pattern": "^$|^([*]|[a-zA-Z0-9-/_]{1,63})([.][a-zA-Z0-9-/_]{1,63})*$"
@@ -810,7 +817,7 @@ var CustomAPISwaggerJSON string = `{
                     "type": "string",
                     "description": "\n\nExample: - \"www or mail or * or corp.we\" or *.b\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.pattern: ^$|^([*]|[a-zA-Z0-9-/_]{1,63})([.][a-zA-Z0-9-/_]{1,63})*$\n",
                     "title": "Record Name",
-                    "x-displayname": "Record Name",
+                    "x-displayname": "Record Name (Excluding Domain name)",
                     "x-ves-example": "www or mail or * or corp.we\" or *.b",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.string.pattern": "^$|^([*]|[a-zA-Z0-9-/_]{1,63})([.][a-zA-Z0-9-/_]{1,63})*$"
@@ -848,7 +855,7 @@ var CustomAPISwaggerJSON string = `{
                     "type": "string",
                     "description": "\n\nExample: - \"www or mail or * or corp.web or *.b\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.pattern: ^$|^([*]|[a-zA-Z0-9-/_]{1,63})([.][a-zA-Z0-9-/_]{1,63})*$\n",
                     "title": "Record Name",
-                    "x-displayname": "Record Name",
+                    "x-displayname": "Record Name (Excluding Domain name)",
                     "x-ves-example": "www or mail or * or corp.web or *.b",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.string.pattern": "^$|^([*]|[a-zA-Z0-9-/_]{1,63})([.][a-zA-Z0-9-/_]{1,63})*$"
@@ -914,7 +921,7 @@ var CustomAPISwaggerJSON string = `{
                     "type": "string",
                     "description": "\nExample: - \"www or mail or * or corp.web or *.b\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.pattern: ^([*]|[a-zA-Z0-9-_]{1,63})([.][a-zA-Z0-9-_]{1,63})*$\n",
                     "title": "Record Name",
-                    "x-displayname": "Record Name",
+                    "x-displayname": "Record Name (Excluding Domain name)",
                     "x-ves-example": "www or mail or * or corp.web or *.b",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
@@ -952,7 +959,7 @@ var CustomAPISwaggerJSON string = `{
                     "type": "string",
                     "description": "\n\nExample: - \"www or mail or * or corp.web or *.b\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.pattern: ^$|^([*]|[a-zA-Z0-9-/_]{1,63})([.][a-zA-Z0-9-/_]{1,63})*$\n",
                     "title": "Record Name",
-                    "x-displayname": "Record Name",
+                    "x-displayname": "Record Name (Excluding Domain name)",
                     "x-ves-example": "www or mail or * or corp.web or *.b",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.string.pattern": "^$|^([*]|[a-zA-Z0-9-/_]{1,63})([.][a-zA-Z0-9-/_]{1,63})*$"
@@ -1236,6 +1243,12 @@ var CustomAPISwaggerJSON string = `{
                     "$ref": "#/definitions/dns_zoneDNSCNAMEResourceRecord",
                     "x-displayname": "CNAME"
                 },
+                "lb_record": {
+                    "description": "Exclusive with [a_record aaaa_record alias_record caa_record cname_record mx_record ns_record ptr_record srv_record txt_record]\n",
+                    "title": "DNS LB Record",
+                    "$ref": "#/definitions/dns_zoneDNSLBResourceRecord",
+                    "x-displayname": "DNS Load Balancer"
+                },
                 "mx_record": {
                     "description": "Exclusive with [a_record aaaa_record alias_record caa_record cname_record lb_record ns_record ptr_record srv_record txt_record]\n",
                     "title": "MX Record",
@@ -1514,7 +1527,7 @@ var CustomAPISwaggerJSON string = `{
         },
         "schemaBlindfoldSecretInfoType": {
             "type": "object",
-            "description": "BlindfoldSecretInfoType specifies information about the Secret managed by Volterra Secret Management",
+            "description": "BlindfoldSecretInfoType specifies information about the Secret managed by F5XC Secret Management",
             "title": "BlindfoldSecretInfoType",
             "x-displayname": "Blindfold Secret",
             "x-ves-displayorder": "3,1,2",
@@ -1733,7 +1746,7 @@ var CustomAPISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.SecretType",
             "properties": {
                 "blindfold_secret_info": {
-                    "description": "Exclusive with [clear_secret_info]\n Blindfold Secret is used for the secrets managed by Volterra Secret Management Service",
+                    "description": "Exclusive with [clear_secret_info]\n Blindfold Secret is used for the secrets managed by F5XC Secret Management Service",
                     "title": "Blindfold Secret",
                     "$ref": "#/definitions/schemaBlindfoldSecretInfoType",
                     "x-displayname": "Blindfold Secret"
@@ -1956,23 +1969,47 @@ var CustomAPISwaggerJSON string = `{
         },
         "schemaviewsObjectRefType": {
             "type": "object",
-            "description": "x-displayName: \"Object reference\"\nThis type establishes a direct reference from one object(the referrer) to another(the referred).\nSuch a reference is in form of tenant/namespace/name",
+            "description": "This type establishes a direct reference from one object(the referrer) to another(the referred).\nSuch a reference is in form of tenant/namespace/name",
             "title": "ObjectRefType",
+            "x-displayname": "Object reference",
+            "x-ves-proto-message": "ves.io.schema.views.ObjectRefType",
             "properties": {
                 "name": {
                     "type": "string",
-                    "description": "x-displayName: \"Name\"\nx-example: \"contacts-route\"\nx-required\nWhen a configuration object(e.g. virtual_host) refers to another(e.g route)\nthen name will hold the referred object's(e.g. route's) name.",
-                    "title": "name"
+                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then name will hold the referred object's(e.g. route's) name.\n\nExample: - \"contacts-route\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_bytes: 64\n  ves.io.schema.rules.string.min_bytes: 1\n",
+                    "title": "name",
+                    "minLength": 1,
+                    "maxLength": 64,
+                    "x-displayname": "Name",
+                    "x-ves-example": "contacts-route",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.max_bytes": "64",
+                        "ves.io.schema.rules.string.min_bytes": "1"
+                    }
                 },
                 "namespace": {
                     "type": "string",
-                    "description": "x-displayName: \"Namespace\"\nx-example: \"ns1\"\nWhen a configuration object(e.g. virtual_host) refers to another(e.g route)\nthen namespace will hold the referred object's(e.g. route's) namespace.",
-                    "title": "namespace"
+                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then namespace will hold the referred object's(e.g. route's) namespace.\n\nExample: - \"ns1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 64\n",
+                    "title": "namespace",
+                    "maxLength": 64,
+                    "x-displayname": "Namespace",
+                    "x-ves-example": "ns1",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_bytes": "64"
+                    }
                 },
                 "tenant": {
                     "type": "string",
-                    "description": "x-displayName: \"Tenant\"\nx-example: \"acmecorp\"\nWhen a configuration object(e.g. virtual_host) refers to another(e.g route)\nthen tenant will hold the referred object's(e.g. route's) tenant.",
-                    "title": "tenant"
+                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then tenant will hold the referred object's(e.g. route's) tenant.\n\nExample: - \"acmecorp\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 64\n",
+                    "title": "tenant",
+                    "maxLength": 64,
+                    "x-displayname": "Tenant",
+                    "x-ves-example": "acmecorp",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_bytes": "64"
+                    }
                 }
             }
         }

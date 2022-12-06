@@ -36,7 +36,7 @@ type APICredentialType int32
 
 const (
 	// x-displayName: "User Certificate"
-	// Volterra user certificate to access Volterra public API using mTLS
+	// F5XC user certificate to access F5XC public API using mTLS
 	// using self credential (my credential)
 	API_CERTIFICATE APICredentialType = 0
 	// x-displayName: "Kubernetes Config File"
@@ -44,7 +44,7 @@ const (
 	// using self credential (my credential)
 	KUBE_CONFIG APICredentialType = 1
 	// x-displayName: "API Token"
-	// API token to access Volterra public API
+	// API token to access F5XC public API
 	// using self credential (my credential)
 	API_TOKEN APICredentialType = 2
 	// x-displayName: "Service API Token"
@@ -64,7 +64,7 @@ const (
 	// using self credential (my credential)
 	SITE_GLOBAL_KUBE_CONFIG APICredentialType = 6
 	// x-displayName: "SCIM API Token"
-	// Token for the SCIM public APIs used to sync users and groups with the Volterra platform.
+	// Token for the SCIM public APIs used to sync users and groups with the F5XC platform.
 	// External identity provider's SCIM client can use this token as Bearer token with Authorization header
 	SCIM_API_TOKEN APICredentialType = 7
 	// x-displayName: "Service Site Global Kubeconfig"

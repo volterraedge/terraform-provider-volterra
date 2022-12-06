@@ -34,12 +34,30 @@ type CustomAPIGrpcClient struct {
 	rpcFns map[string]func(context.Context, string, ...grpc.CallOption) (proto.Message, error)
 }
 
+func (c *CustomAPIGrpcClient) doRPCDeleteDoSAutoMitigationRule(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
+	req := &DeleteDoSAutoMitigationRuleReq{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.views.http_loadbalancer.DeleteDoSAutoMitigationRuleReq", yamlReq)
+	}
+	rsp, err := c.grpcClient.DeleteDoSAutoMitigationRule(ctx, req, opts...)
+	return rsp, err
+}
+
 func (c *CustomAPIGrpcClient) doRPCGetDnsInfo(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &GetDnsInfoRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
 		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.views.http_loadbalancer.GetDnsInfoRequest", yamlReq)
 	}
 	rsp, err := c.grpcClient.GetDnsInfo(ctx, req, opts...)
+	return rsp, err
+}
+
+func (c *CustomAPIGrpcClient) doRPCGetDoSAutoMitigationRules(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
+	req := &GetDoSAutoMitigationRulesReq{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.views.http_loadbalancer.GetDoSAutoMitigationRulesReq", yamlReq)
+	}
+	rsp, err := c.grpcClient.GetDoSAutoMitigationRules(ctx, req, opts...)
 	return rsp, err
 }
 
@@ -82,7 +100,11 @@ func NewCustomAPIGrpcClient(cc *grpc.ClientConn) server.CustomClient {
 		grpcClient: NewCustomAPIClient(cc),
 	}
 	rpcFns := make(map[string]func(context.Context, string, ...grpc.CallOption) (proto.Message, error))
+	rpcFns["DeleteDoSAutoMitigationRule"] = ccl.doRPCDeleteDoSAutoMitigationRule
+
 	rpcFns["GetDnsInfo"] = ccl.doRPCGetDnsInfo
+
+	rpcFns["GetDoSAutoMitigationRules"] = ccl.doRPCGetDoSAutoMitigationRules
 
 	rpcFns["GetSecurityConfig"] = ccl.doRPCGetSecurityConfig
 
@@ -97,6 +119,91 @@ type CustomAPIRestClient struct {
 	client  http.Client
 	// map of rpc name to its invocation
 	rpcFns map[string]func(context.Context, *server.CustomCallOpts) (proto.Message, error)
+}
+
+func (c *CustomAPIRestClient) doRPCDeleteDoSAutoMitigationRule(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
+	if callOpts.URI == "" {
+		return nil, fmt.Errorf("Error, URI should be specified, got empty")
+	}
+	url := fmt.Sprintf("%s%s", c.baseURL, callOpts.URI)
+
+	yamlReq := callOpts.YAMLReq
+	req := &DeleteDoSAutoMitigationRuleReq{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.views.http_loadbalancer.DeleteDoSAutoMitigationRuleReq: %s", yamlReq, err)
+	}
+
+	var hReq *http.Request
+	hm := strings.ToLower(callOpts.HTTPMethod)
+	switch hm {
+	case "post", "put":
+		jsn, err := codec.ToJSON(req, codec.ToWithUseProtoFieldName())
+		if err != nil {
+			return nil, errors.Wrap(err, "Custom RestClient converting YAML to JSON")
+		}
+		var op string
+		if hm == "post" {
+			op = http.MethodPost
+		} else {
+			op = http.MethodPut
+		}
+		newReq, err := http.NewRequest(op, url, bytes.NewBuffer([]byte(jsn)))
+		if err != nil {
+			return nil, errors.Wrapf(err, "Creating new HTTP %s request for custom API", op)
+		}
+		hReq = newReq
+	case "get":
+		newReq, err := http.NewRequest(http.MethodGet, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP GET request for custom API")
+		}
+		hReq = newReq
+		q := hReq.URL.Query()
+		_ = q
+		q.Add("dos_automitigation_rule_name", fmt.Sprintf("%v", req.DosAutomitigationRuleName))
+		q.Add("name", fmt.Sprintf("%v", req.Name))
+		q.Add("namespace", fmt.Sprintf("%v", req.Namespace))
+
+		hReq.URL.RawQuery += q.Encode()
+	case "delete":
+		newReq, err := http.NewRequest(http.MethodDelete, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP DELETE request for custom API")
+		}
+		hReq = newReq
+	default:
+		return nil, fmt.Errorf("Error, invalid/empty HTTPMethod(%s) specified, should be POST|DELETE|GET", callOpts.HTTPMethod)
+	}
+	hReq = hReq.WithContext(ctx)
+	hReq.Header.Set("Content-Type", "application/json")
+	client.AddHdrsToReq(callOpts.Headers, hReq)
+
+	rsp, err := c.client.Do(hReq)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient")
+	}
+	defer rsp.Body.Close()
+
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
+		body, err := ioutil.ReadAll(rsp.Body)
+		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
+	}
+
+	body, err := ioutil.ReadAll(rsp.Body)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient read body")
+	}
+	pbRsp := &DeleteDoSAutoMitigationRuleRsp{}
+	if err := codec.FromJSON(string(body), pbRsp); err != nil {
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.views.http_loadbalancer.DeleteDoSAutoMitigationRuleRsp", body)
+
+	}
+	if callOpts.OutCallResponse != nil {
+		callOpts.OutCallResponse.ProtoMsg = pbRsp
+		callOpts.OutCallResponse.JSON = string(body)
+	}
+	return pbRsp, nil
 }
 
 func (c *CustomAPIRestClient) doRPCGetDnsInfo(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
@@ -174,6 +281,90 @@ func (c *CustomAPIRestClient) doRPCGetDnsInfo(ctx context.Context, callOpts *ser
 	pbRsp := &GetDnsInfoResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.views.http_loadbalancer.GetDnsInfoResponse", body)
+
+	}
+	if callOpts.OutCallResponse != nil {
+		callOpts.OutCallResponse.ProtoMsg = pbRsp
+		callOpts.OutCallResponse.JSON = string(body)
+	}
+	return pbRsp, nil
+}
+
+func (c *CustomAPIRestClient) doRPCGetDoSAutoMitigationRules(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
+	if callOpts.URI == "" {
+		return nil, fmt.Errorf("Error, URI should be specified, got empty")
+	}
+	url := fmt.Sprintf("%s%s", c.baseURL, callOpts.URI)
+
+	yamlReq := callOpts.YAMLReq
+	req := &GetDoSAutoMitigationRulesReq{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.views.http_loadbalancer.GetDoSAutoMitigationRulesReq: %s", yamlReq, err)
+	}
+
+	var hReq *http.Request
+	hm := strings.ToLower(callOpts.HTTPMethod)
+	switch hm {
+	case "post", "put":
+		jsn, err := codec.ToJSON(req, codec.ToWithUseProtoFieldName())
+		if err != nil {
+			return nil, errors.Wrap(err, "Custom RestClient converting YAML to JSON")
+		}
+		var op string
+		if hm == "post" {
+			op = http.MethodPost
+		} else {
+			op = http.MethodPut
+		}
+		newReq, err := http.NewRequest(op, url, bytes.NewBuffer([]byte(jsn)))
+		if err != nil {
+			return nil, errors.Wrapf(err, "Creating new HTTP %s request for custom API", op)
+		}
+		hReq = newReq
+	case "get":
+		newReq, err := http.NewRequest(http.MethodGet, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP GET request for custom API")
+		}
+		hReq = newReq
+		q := hReq.URL.Query()
+		_ = q
+		q.Add("name", fmt.Sprintf("%v", req.Name))
+		q.Add("namespace", fmt.Sprintf("%v", req.Namespace))
+
+		hReq.URL.RawQuery += q.Encode()
+	case "delete":
+		newReq, err := http.NewRequest(http.MethodDelete, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP DELETE request for custom API")
+		}
+		hReq = newReq
+	default:
+		return nil, fmt.Errorf("Error, invalid/empty HTTPMethod(%s) specified, should be POST|DELETE|GET", callOpts.HTTPMethod)
+	}
+	hReq = hReq.WithContext(ctx)
+	hReq.Header.Set("Content-Type", "application/json")
+	client.AddHdrsToReq(callOpts.Headers, hReq)
+
+	rsp, err := c.client.Do(hReq)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient")
+	}
+	defer rsp.Body.Close()
+
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
+		body, err := ioutil.ReadAll(rsp.Body)
+		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
+	}
+
+	body, err := ioutil.ReadAll(rsp.Body)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient read body")
+	}
+	pbRsp := &GetDoSAutoMitigationRulesRsp{}
+	if err := codec.FromJSON(string(body), pbRsp); err != nil {
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.views.http_loadbalancer.GetDoSAutoMitigationRulesRsp", body)
 
 	}
 	if callOpts.OutCallResponse != nil {
@@ -291,7 +482,11 @@ func NewCustomAPIRestClient(baseURL string, hc http.Client) server.CustomClient 
 	}
 
 	rpcFns := make(map[string]func(context.Context, *server.CustomCallOpts) (proto.Message, error))
+	rpcFns["DeleteDoSAutoMitigationRule"] = ccl.doRPCDeleteDoSAutoMitigationRule
+
 	rpcFns["GetDnsInfo"] = ccl.doRPCGetDnsInfo
+
+	rpcFns["GetDoSAutoMitigationRules"] = ccl.doRPCGetDoSAutoMitigationRules
 
 	rpcFns["GetSecurityConfig"] = ccl.doRPCGetSecurityConfig
 
@@ -307,8 +502,14 @@ type customAPIInprocClient struct {
 	CustomAPIServer
 }
 
+func (c *customAPIInprocClient) DeleteDoSAutoMitigationRule(ctx context.Context, in *DeleteDoSAutoMitigationRuleReq, opts ...grpc.CallOption) (*DeleteDoSAutoMitigationRuleRsp, error) {
+	return c.CustomAPIServer.DeleteDoSAutoMitigationRule(ctx, in)
+}
 func (c *customAPIInprocClient) GetDnsInfo(ctx context.Context, in *GetDnsInfoRequest, opts ...grpc.CallOption) (*GetDnsInfoResponse, error) {
 	return c.CustomAPIServer.GetDnsInfo(ctx, in)
+}
+func (c *customAPIInprocClient) GetDoSAutoMitigationRules(ctx context.Context, in *GetDoSAutoMitigationRulesReq, opts ...grpc.CallOption) (*GetDoSAutoMitigationRulesRsp, error) {
+	return c.CustomAPIServer.GetDoSAutoMitigationRules(ctx, in)
 }
 func (c *customAPIInprocClient) GetSecurityConfig(ctx context.Context, in *GetSecurityConfigReq, opts ...grpc.CallOption) (*GetSecurityConfigRsp, error) {
 	return c.CustomAPIServer.GetSecurityConfig(ctx, in)
@@ -335,6 +536,55 @@ type customAPISrv struct {
 	svc svcfw.Service
 }
 
+func (s *customAPISrv) DeleteDoSAutoMitigationRule(ctx context.Context, in *DeleteDoSAutoMitigationRuleReq) (*DeleteDoSAutoMitigationRuleRsp, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.views.http_loadbalancer.CustomAPI")
+	cah, ok := ah.(CustomAPIServer)
+	if !ok {
+		return nil, fmt.Errorf("ah %v is not of type *CustomAPIServer", ah)
+	}
+
+	var (
+		rsp *DeleteDoSAutoMitigationRuleRsp
+		err error
+	)
+
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.views.http_loadbalancer.DeleteDoSAutoMitigationRuleReq", in)
+	defer func() {
+		if len(bodyFields) > 0 {
+			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
+		}
+		userMsg := "The 'CustomAPI.DeleteDoSAutoMitigationRule' operation on 'http_loadbalancer'"
+		if err == nil {
+			userMsg += " was successfully performed."
+		} else {
+			userMsg += " failed to be performed."
+		}
+		server.AddUserMsgToAPIAudit(ctx, userMsg)
+	}()
+
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
+
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.views.http_loadbalancer.CustomAPI.DeleteDoSAutoMitigationRule"); rvFn != nil {
+			if verr := rvFn(ctx, in); verr != nil {
+				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
+				return nil, server.GRPCStatusFromError(err).Err()
+			}
+		}
+	}
+
+	rsp, err = cah.DeleteDoSAutoMitigationRule(ctx, in)
+	if err != nil {
+		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
+	}
+
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.views.http_loadbalancer.DeleteDoSAutoMitigationRuleRsp", rsp)...)
+
+	return rsp, nil
+}
 func (s *customAPISrv) GetDnsInfo(ctx context.Context, in *GetDnsInfoRequest) (*GetDnsInfoResponse, error) {
 	ah := s.svc.GetAPIHandler("ves.io.schema.views.http_loadbalancer.CustomAPI")
 	cah, ok := ah.(CustomAPIServer)
@@ -381,6 +631,55 @@ func (s *customAPISrv) GetDnsInfo(ctx context.Context, in *GetDnsInfoRequest) (*
 	}
 
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.views.http_loadbalancer.GetDnsInfoResponse", rsp)...)
+
+	return rsp, nil
+}
+func (s *customAPISrv) GetDoSAutoMitigationRules(ctx context.Context, in *GetDoSAutoMitigationRulesReq) (*GetDoSAutoMitigationRulesRsp, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.views.http_loadbalancer.CustomAPI")
+	cah, ok := ah.(CustomAPIServer)
+	if !ok {
+		return nil, fmt.Errorf("ah %v is not of type *CustomAPIServer", ah)
+	}
+
+	var (
+		rsp *GetDoSAutoMitigationRulesRsp
+		err error
+	)
+
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.views.http_loadbalancer.GetDoSAutoMitigationRulesReq", in)
+	defer func() {
+		if len(bodyFields) > 0 {
+			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
+		}
+		userMsg := "The 'CustomAPI.GetDoSAutoMitigationRules' operation on 'http_loadbalancer'"
+		if err == nil {
+			userMsg += " was successfully performed."
+		} else {
+			userMsg += " failed to be performed."
+		}
+		server.AddUserMsgToAPIAudit(ctx, userMsg)
+	}()
+
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
+
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.views.http_loadbalancer.CustomAPI.GetDoSAutoMitigationRules"); rvFn != nil {
+			if verr := rvFn(ctx, in); verr != nil {
+				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
+				return nil, server.GRPCStatusFromError(err).Err()
+			}
+		}
+	}
+
+	rsp, err = cah.GetDoSAutoMitigationRules(ctx, in)
+	if err != nil {
+		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
+	}
+
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.views.http_loadbalancer.GetDoSAutoMitigationRulesRsp", rsp)...)
 
 	return rsp, nil
 }
@@ -460,7 +759,7 @@ var CustomAPISwaggerJSON string = `{
         "/public/namespaces/{namespace}/http_loadbalancers/get_security_config": {
             "post": {
                 "summary": "Get Security Config for Http Load Balancer",
-                "description": "Get the corresponding Security Config for the given HTTP load balancer",
+                "description": "Fetch the corresponding Security Config for the given HTTP load balancers",
                 "operationId": "ves.io.schema.views.http_loadbalancer.CustomAPI.GetSecurityConfig",
                 "responses": {
                     "200": {
@@ -544,6 +843,198 @@ var CustomAPISwaggerJSON string = `{
                     "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-http_loadbalancer-customapi-getsecurityconfig"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.http_loadbalancer.CustomAPI.GetSecurityConfig"
+            },
+            "x-displayname": "HTTP Load Balancer Custom API",
+            "x-ves-proto-service": "ves.io.schema.views.http_loadbalancer.CustomAPI",
+            "x-ves-proto-service-type": "CUSTOM_PUBLIC"
+        },
+        "/public/namespaces/{namespace}/http_loadbalancers/{name}/dos_automitigation_rules": {
+            "get": {
+                "summary": "Get DoS Auto-Mitigation Rules for Http Load Balancer",
+                "description": "Get the corresponding DoS Auto-Mitigation Rules for the given HTTP load balancer",
+                "operationId": "ves.io.schema.views.http_loadbalancer.CustomAPI.GetDoSAutoMitigationRules",
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/http_loadbalancerGetDoSAutoMitigationRulesRsp"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "namespace",
+                        "description": "Namespace\n\nx-example: \"shared\"\nNamespace of the HTTP Load Balancer",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "x-displayname": "Namespace"
+                    },
+                    {
+                        "name": "name",
+                        "description": "Name\n\nx-example: \"blogging-app\"\nName of the HTTP Load Balancer",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "x-displayname": "Name"
+                    }
+                ],
+                "tags": [
+                    "CustomAPI"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-http_loadbalancer-customapi-getdosautomitigationrules"
+                },
+                "x-ves-proto-rpc": "ves.io.schema.views.http_loadbalancer.CustomAPI.GetDoSAutoMitigationRules"
+            },
+            "x-displayname": "HTTP Load Balancer Custom API",
+            "x-ves-proto-service": "ves.io.schema.views.http_loadbalancer.CustomAPI",
+            "x-ves-proto-service-type": "CUSTOM_PUBLIC"
+        },
+        "/public/namespaces/{namespace}/http_loadbalancers/{name}/dos_automitigation_rules/{dos_automitigation_rule_name}": {
+            "delete": {
+                "summary": "Delete DoS Auto-Mitigation Rule for Http Load Balancer",
+                "description": "Delete the corresponding DoS Auto-Mitigation Rule for the given HTTP load balancer",
+                "operationId": "ves.io.schema.views.http_loadbalancer.CustomAPI.DeleteDoSAutoMitigationRule",
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/http_loadbalancerDeleteDoSAutoMitigationRuleRsp"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "namespace",
+                        "description": "Namespace\n\nx-example: \"shared\"\nNamespace of the HTTP Load Balancer",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "x-displayname": "Namespace"
+                    },
+                    {
+                        "name": "name",
+                        "description": "Name\n\nx-example: \"blogging-app\"\nName of the HTTP Load Balancer",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "x-displayname": "Name"
+                    },
+                    {
+                        "name": "dos_automitigation_rule_name",
+                        "description": "DoS Mitigation Rule Name\n\nx-example: \"dos-auto-mitigation-ves-io-http-loadbalancer-ce22\"\nName of the DoS Mitigation Rule",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "x-displayname": "DoS Mitigation Rule Name"
+                    }
+                ],
+                "tags": [
+                    "CustomAPI"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-http_loadbalancer-customapi-deletedosautomitigationrule"
+                },
+                "x-ves-proto-rpc": "ves.io.schema.views.http_loadbalancer.CustomAPI.DeleteDoSAutoMitigationRule"
             },
             "x-displayname": "HTTP Load Balancer Custom API",
             "x-ves-proto-service": "ves.io.schema.views.http_loadbalancer.CustomAPI",
@@ -643,6 +1134,77 @@ var CustomAPISwaggerJSON string = `{
         }
     },
     "definitions": {
+        "dos_mitigationDestination": {
+            "type": "object",
+            "description": "A reference to the object on which the DoS Attack is going to be mitigated",
+            "title": "Destination",
+            "x-displayname": "Destination Object",
+            "x-ves-oneof-field-destination": "[\"virtual_host\"]",
+            "x-ves-proto-message": "ves.io.schema.dos_mitigation.Destination",
+            "properties": {
+                "virtual_host": {
+                    "description": "Exclusive with []\n Virtual Host on which mitigation is to occur",
+                    "title": "virtual_host",
+                    "$ref": "#/definitions/schemaviewsObjectRefType",
+                    "x-displayname": "Virtual Host"
+                }
+            }
+        },
+        "dos_mitigationDoSMitigationRuleInfo": {
+            "type": "object",
+            "description": "DoS Mitigation Object to auto-configure rules to block attackers",
+            "title": "DoS Mitigation Rule Info",
+            "x-displayname": "DoS Mitigation Object",
+            "x-ves-proto-message": "ves.io.schema.dos_mitigation.DoSMitigationRuleInfo",
+            "properties": {
+                "creation_timestamp": {
+                    "type": "string",
+                    "description": " CreationTimestamp is a timestamp representing the server time when this object was\n created. It is not guaranteed to be set in happens-before order across separate operations.\n Clients may not set this value. It is represented in RFC3339 form and is in UTC.",
+                    "title": "creation_timestamp",
+                    "format": "date-time",
+                    "x-displayname": "Creation Timestamp"
+                },
+                "item": {
+                    "title": "global_spec_type",
+                    "$ref": "#/definitions/schemados_mitigationGetSpecType",
+                    "x-displayname": "DoS Mitigation Rule Spec"
+                },
+                "name": {
+                    "type": "string",
+                    "description": " This is the name of configuration object. It has to be unique within the namespace.\n It can only be specified during create API and cannot be changed during replace API.\n The value of name has to follow DNS-1035 format.\n\nExample: - \"acmecorp-web\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "name",
+                    "x-displayname": "Name",
+                    "x-ves-example": "acmecorp-web",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                },
+                "uid": {
+                    "type": "string",
+                    "description": " uid is the unique in time and space value for this object. It is generated by\n the server on successful creation of an object and is not allowed to change on Replace\n API. The value of is taken from uid field of ObjectMetaType, if provided.\n\nExample: - \"d15f1fad-4d37-48c0-8706-df1824d76d31\"-",
+                    "title": "uid",
+                    "x-displayname": "UID",
+                    "x-ves-example": "d15f1fad-4d37-48c0-8706-df1824d76d31"
+                }
+            }
+        },
+        "http_loadbalancerDeleteDoSAutoMitigationRuleRsp": {
+            "type": "object",
+            "description": "Response of Delete DoS Auto-Mitigation Rule API",
+            "title": "Delete DoS Auto-Mitigation Rule response",
+            "x-displayname": "Delete DoS Auto-Mitigation Rule response",
+            "x-ves-proto-message": "ves.io.schema.views.http_loadbalancer.DeleteDoSAutoMitigationRuleRsp",
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "description": " Name of the deleted DoS Auto-Mitigation HTTP Rule\n\nExample: - \"dos-auto-mitigation-ves-io-http-loadbalancer-ce22\"-",
+                    "title": "DoS Auto-Mitigation Rule Name",
+                    "x-displayname": "DoS Auto-Mitigation Rule Name",
+                    "x-ves-example": "dos-auto-mitigation-ves-io-http-loadbalancer-ce22"
+                }
+            }
+        },
         "http_loadbalancerGetDnsInfoResponse": {
             "type": "object",
             "description": "Response for get-dns-info API",
@@ -655,6 +1217,23 @@ var CustomAPISwaggerJSON string = `{
                     "title": "DNS information",
                     "$ref": "#/definitions/schemavirtual_host_dns_infoGlobalSpecType",
                     "x-displayname": "DNS information"
+                }
+            }
+        },
+        "http_loadbalancerGetDoSAutoMitigationRulesRsp": {
+            "type": "object",
+            "description": "Response of GET DDoS Auto-Mitigation Rules API",
+            "title": "Get DoS Auto-Mitigation Rules response",
+            "x-displayname": "Get DDoS Auto-Mitigation Rules Response",
+            "x-ves-proto-message": "ves.io.schema.views.http_loadbalancer.GetDoSAutoMitigationRulesRsp",
+            "properties": {
+                "dos_automitigation_rules": {
+                    "type": "array",
+                    "title": "DoS Auto-Mitigation Rules",
+                    "items": {
+                        "$ref": "#/definitions/dos_mitigationDoSMitigationRuleInfo"
+                    },
+                    "x-displayname": "DoS Auto-Mitigation Rules"
                 }
             }
         },
@@ -813,6 +1392,448 @@ var CustomAPISwaggerJSON string = `{
                     "title": "uid",
                     "x-displayname": "UID",
                     "x-ves-example": "d15f1fad-4d37-48c0-8706-df1824d76d31"
+                }
+            }
+        },
+        "policyCountryCode": {
+            "type": "string",
+            "description": "ISO 3166 Aplpha-2 country codes\n",
+            "title": "CountryCode",
+            "enum": [
+                "COUNTRY_NONE",
+                "COUNTRY_AD",
+                "COUNTRY_AE",
+                "COUNTRY_AF",
+                "COUNTRY_AG",
+                "COUNTRY_AI",
+                "COUNTRY_AL",
+                "COUNTRY_AM",
+                "COUNTRY_AN",
+                "COUNTRY_AO",
+                "COUNTRY_AQ",
+                "COUNTRY_AR",
+                "COUNTRY_AS",
+                "COUNTRY_AT",
+                "COUNTRY_AU",
+                "COUNTRY_AW",
+                "COUNTRY_AX",
+                "COUNTRY_AZ",
+                "COUNTRY_BA",
+                "COUNTRY_BB",
+                "COUNTRY_BD",
+                "COUNTRY_BE",
+                "COUNTRY_BF",
+                "COUNTRY_BG",
+                "COUNTRY_BH",
+                "COUNTRY_BI",
+                "COUNTRY_BJ",
+                "COUNTRY_BL",
+                "COUNTRY_BM",
+                "COUNTRY_BN",
+                "COUNTRY_BO",
+                "COUNTRY_BQ",
+                "COUNTRY_BR",
+                "COUNTRY_BS",
+                "COUNTRY_BT",
+                "COUNTRY_BV",
+                "COUNTRY_BW",
+                "COUNTRY_BY",
+                "COUNTRY_BZ",
+                "COUNTRY_CA",
+                "COUNTRY_CC",
+                "COUNTRY_CD",
+                "COUNTRY_CF",
+                "COUNTRY_CG",
+                "COUNTRY_CH",
+                "COUNTRY_CI",
+                "COUNTRY_CK",
+                "COUNTRY_CL",
+                "COUNTRY_CM",
+                "COUNTRY_CN",
+                "COUNTRY_CO",
+                "COUNTRY_CR",
+                "COUNTRY_CS",
+                "COUNTRY_CU",
+                "COUNTRY_CV",
+                "COUNTRY_CW",
+                "COUNTRY_CX",
+                "COUNTRY_CY",
+                "COUNTRY_CZ",
+                "COUNTRY_DE",
+                "COUNTRY_DJ",
+                "COUNTRY_DK",
+                "COUNTRY_DM",
+                "COUNTRY_DO",
+                "COUNTRY_DZ",
+                "COUNTRY_EC",
+                "COUNTRY_EE",
+                "COUNTRY_EG",
+                "COUNTRY_EH",
+                "COUNTRY_ER",
+                "COUNTRY_ES",
+                "COUNTRY_ET",
+                "COUNTRY_FI",
+                "COUNTRY_FJ",
+                "COUNTRY_FK",
+                "COUNTRY_FM",
+                "COUNTRY_FO",
+                "COUNTRY_FR",
+                "COUNTRY_GA",
+                "COUNTRY_GB",
+                "COUNTRY_GD",
+                "COUNTRY_GE",
+                "COUNTRY_GF",
+                "COUNTRY_GG",
+                "COUNTRY_GH",
+                "COUNTRY_GI",
+                "COUNTRY_GL",
+                "COUNTRY_GM",
+                "COUNTRY_GN",
+                "COUNTRY_GP",
+                "COUNTRY_GQ",
+                "COUNTRY_GR",
+                "COUNTRY_GS",
+                "COUNTRY_GT",
+                "COUNTRY_GU",
+                "COUNTRY_GW",
+                "COUNTRY_GY",
+                "COUNTRY_HK",
+                "COUNTRY_HM",
+                "COUNTRY_HN",
+                "COUNTRY_HR",
+                "COUNTRY_HT",
+                "COUNTRY_HU",
+                "COUNTRY_ID",
+                "COUNTRY_IE",
+                "COUNTRY_IL",
+                "COUNTRY_IM",
+                "COUNTRY_IN",
+                "COUNTRY_IO",
+                "COUNTRY_IQ",
+                "COUNTRY_IR",
+                "COUNTRY_IS",
+                "COUNTRY_IT",
+                "COUNTRY_JE",
+                "COUNTRY_JM",
+                "COUNTRY_JO",
+                "COUNTRY_JP",
+                "COUNTRY_KE",
+                "COUNTRY_KG",
+                "COUNTRY_KH",
+                "COUNTRY_KI",
+                "COUNTRY_KM",
+                "COUNTRY_KN",
+                "COUNTRY_KP",
+                "COUNTRY_KR",
+                "COUNTRY_KW",
+                "COUNTRY_KY",
+                "COUNTRY_KZ",
+                "COUNTRY_LA",
+                "COUNTRY_LB",
+                "COUNTRY_LC",
+                "COUNTRY_LI",
+                "COUNTRY_LK",
+                "COUNTRY_LR",
+                "COUNTRY_LS",
+                "COUNTRY_LT",
+                "COUNTRY_LU",
+                "COUNTRY_LV",
+                "COUNTRY_LY",
+                "COUNTRY_MA",
+                "COUNTRY_MC",
+                "COUNTRY_MD",
+                "COUNTRY_ME",
+                "COUNTRY_MF",
+                "COUNTRY_MG",
+                "COUNTRY_MH",
+                "COUNTRY_MK",
+                "COUNTRY_ML",
+                "COUNTRY_MM",
+                "COUNTRY_MN",
+                "COUNTRY_MO",
+                "COUNTRY_MP",
+                "COUNTRY_MQ",
+                "COUNTRY_MR",
+                "COUNTRY_MS",
+                "COUNTRY_MT",
+                "COUNTRY_MU",
+                "COUNTRY_MV",
+                "COUNTRY_MW",
+                "COUNTRY_MX",
+                "COUNTRY_MY",
+                "COUNTRY_MZ",
+                "COUNTRY_NA",
+                "COUNTRY_NC",
+                "COUNTRY_NE",
+                "COUNTRY_NF",
+                "COUNTRY_NG",
+                "COUNTRY_NI",
+                "COUNTRY_NL",
+                "COUNTRY_NO",
+                "COUNTRY_NP",
+                "COUNTRY_NR",
+                "COUNTRY_NU",
+                "COUNTRY_NZ",
+                "COUNTRY_OM",
+                "COUNTRY_PA",
+                "COUNTRY_PE",
+                "COUNTRY_PF",
+                "COUNTRY_PG",
+                "COUNTRY_PH",
+                "COUNTRY_PK",
+                "COUNTRY_PL",
+                "COUNTRY_PM",
+                "COUNTRY_PN",
+                "COUNTRY_PR",
+                "COUNTRY_PS",
+                "COUNTRY_PT",
+                "COUNTRY_PW",
+                "COUNTRY_PY",
+                "COUNTRY_QA",
+                "COUNTRY_RE",
+                "COUNTRY_RO",
+                "COUNTRY_RS",
+                "COUNTRY_RU",
+                "COUNTRY_RW",
+                "COUNTRY_SA",
+                "COUNTRY_SB",
+                "COUNTRY_SC",
+                "COUNTRY_SD",
+                "COUNTRY_SE",
+                "COUNTRY_SG",
+                "COUNTRY_SH",
+                "COUNTRY_SI",
+                "COUNTRY_SJ",
+                "COUNTRY_SK",
+                "COUNTRY_SL",
+                "COUNTRY_SM",
+                "COUNTRY_SN",
+                "COUNTRY_SO",
+                "COUNTRY_SR",
+                "COUNTRY_SS",
+                "COUNTRY_ST",
+                "COUNTRY_SV",
+                "COUNTRY_SX",
+                "COUNTRY_SY",
+                "COUNTRY_SZ",
+                "COUNTRY_TC",
+                "COUNTRY_TD",
+                "COUNTRY_TF",
+                "COUNTRY_TG",
+                "COUNTRY_TH",
+                "COUNTRY_TJ",
+                "COUNTRY_TK",
+                "COUNTRY_TL",
+                "COUNTRY_TM",
+                "COUNTRY_TN",
+                "COUNTRY_TO",
+                "COUNTRY_TR",
+                "COUNTRY_TT",
+                "COUNTRY_TV",
+                "COUNTRY_TW",
+                "COUNTRY_TZ",
+                "COUNTRY_UA",
+                "COUNTRY_UG",
+                "COUNTRY_UM",
+                "COUNTRY_US",
+                "COUNTRY_UY",
+                "COUNTRY_UZ",
+                "COUNTRY_VA",
+                "COUNTRY_VC",
+                "COUNTRY_VE",
+                "COUNTRY_VG",
+                "COUNTRY_VI",
+                "COUNTRY_VN",
+                "COUNTRY_VU",
+                "COUNTRY_WF",
+                "COUNTRY_WS",
+                "COUNTRY_XK",
+                "COUNTRY_XT",
+                "COUNTRY_YE",
+                "COUNTRY_YT",
+                "COUNTRY_ZA",
+                "COUNTRY_ZM",
+                "COUNTRY_ZW"
+            ],
+            "default": "COUNTRY_NONE",
+            "x-displayname": "Country Code",
+            "x-ves-proto-enum": "ves.io.schema.policy.CountryCode"
+        },
+        "schemados_mitigationGetSpecType": {
+            "type": "object",
+            "description": "Get DoS Mitigation",
+            "title": "Get DoS Mitigation",
+            "x-displayname": "Get DoS Mitigation",
+            "x-ves-oneof-field-expiration": "[\"expiration_never\",\"expiration_timestamp\",\"expiration_ttl\"]",
+            "x-ves-proto-message": "ves.io.schema.dos_mitigation.GetSpecType",
+            "properties": {
+                "as_numbers": {
+                    "type": "array",
+                    "description": " An unordered set of RFC 6793 defined 4-byte AS numbers that can be used to create allow or deny lists for use in network policy or service policy.\n\nExample: - \"[713, 7932, 847325, 4683, 15269, 1000001]\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 16\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "maxItems": 16,
+                    "items": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "x-displayname": "AS Numbers",
+                    "x-ves-example": "[713, 7932, 847325, 4683, 15269, 1000001]",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.max_items": "16",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
+                },
+                "countries": {
+                    "type": "array",
+                    "description": " Sources that are located in one of the countries in the given list\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 64\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "maxItems": 64,
+                    "items": {
+                        "$ref": "#/definitions/policyCountryCode"
+                    },
+                    "x-displayname": "Country List",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "64",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
+                },
+                "destination": {
+                    "description": " Destination object on which mitigation is to occur",
+                    "$ref": "#/definitions/dos_mitigationDestination",
+                    "x-displayname": "Destination"
+                },
+                "expiration_never": {
+                    "description": "Exclusive with [expiration_timestamp expiration_ttl]\n This mitigation will never expire",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Never"
+                },
+                "expiration_timestamp": {
+                    "type": "string",
+                    "description": "Exclusive with [expiration_never expiration_ttl]\n This mitigation will expire at the given timestamp and will be removed from the system afterwards",
+                    "format": "date-time",
+                    "x-displayname": "Expiration Time"
+                },
+                "expiration_ttl": {
+                    "type": "integer",
+                    "description": "Exclusive with [expiration_never expiration_timestamp]\n Mitigation will expire this number of seconds after its creation time\n\nExample: - \"400\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 0\n  ves.io.schema.rules.uint32.lte: 172800\n",
+                    "format": "int64",
+                    "x-displayname": "TTL in Seconds",
+                    "x-ves-example": "400",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.gte": "0",
+                        "ves.io.schema.rules.uint32.lte": "172800"
+                    }
+                },
+                "ip_prefixes": {
+                    "type": "array",
+                    "description": " IP Address prefix in string format. String must contain both prefix and prefix-length\n\nExample: - \"[192.168.1.0/24, 192.168.2.0/24]\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.ipv4_prefix: true\n  ves.io.schema.rules.repeated.max_items: 256\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "maxItems": 256,
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-displayname": "IP Prefixes",
+                    "x-ves-example": "[192.168.1.0/24, 192.168.2.0/24]",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.items.string.ipv4_prefix": "true",
+                        "ves.io.schema.rules.repeated.max_items": "256",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
+                },
+                "paths": {
+                    "type": "array",
+                    "description": " A list of exact path values to match the input HTTP path against\n\nExample: - \"['/api/web/namespaces/project179/users/user1', '/api/config/namespaces/accounting/bgps', '/api/data/namespaces/project443/virtual_host_101']\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.http_path: true\n  ves.io.schema.rules.repeated.items.string.max_bytes: 256\n  ves.io.schema.rules.repeated.items.string.not_empty: true\n  ves.io.schema.rules.repeated.max_items: 16\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "maxItems": 16,
+                    "items": {
+                        "type": "string",
+                        "maxLength": 256
+                    },
+                    "x-displayname": "Paths",
+                    "x-ves-example": "['/api/web/namespaces/project179/users/user1', '/api/config/namespaces/accounting/bgps', '/api/data/namespaces/project443/virtual_host_101']",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.items.string.http_path": "true",
+                        "ves.io.schema.rules.repeated.items.string.max_bytes": "256",
+                        "ves.io.schema.rules.repeated.items.string.not_empty": "true",
+                        "ves.io.schema.rules.repeated.max_items": "16",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
+                },
+                "tls_fingerprints": {
+                    "type": "array",
+                    "description": " A list of exact TLS JA3 fingerprints to match the input TLS JA3 fingerprint against\n\nExample: - \"1aa7bf8b97e540ca5edd75f7b8384bfa\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.len: 32\n  ves.io.schema.rules.repeated.max_items: 16\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "maxItems": 16,
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-displayname": "TLS Fingerprints",
+                    "x-ves-example": "1aa7bf8b97e540ca5edd75f7b8384bfa",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.items.string.len": "32",
+                        "ves.io.schema.rules.repeated.max_items": "16",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
+                },
+                "type": {
+                    "description": " The type of mitigation rule (default: manually created)",
+                    "$ref": "#/definitions/schemados_mitigationType",
+                    "x-displayname": "Type"
+                }
+            }
+        },
+        "schemados_mitigationType": {
+            "type": "string",
+            "description": "DoS Mitigation can either be manually added by a user (SRE), or can be automatically generated based on\n\nMITIGATION_MANUAL\nMITIGATION_AUTOMATIC",
+            "title": "Type",
+            "enum": [
+                "MITIGATION_MANUAL",
+                "MITIGATION_AUTOMATIC"
+            ],
+            "default": "MITIGATION_MANUAL",
+            "x-displayname": "DoS Mitigation Type",
+            "x-ves-proto-enum": "ves.io.schema.dos_mitigation.Type"
+        },
+        "schemaviewsObjectRefType": {
+            "type": "object",
+            "description": "This type establishes a direct reference from one object(the referrer) to another(the referred).\nSuch a reference is in form of tenant/namespace/name",
+            "title": "ObjectRefType",
+            "x-displayname": "Object reference",
+            "x-ves-proto-message": "ves.io.schema.views.ObjectRefType",
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then name will hold the referred object's(e.g. route's) name.\n\nExample: - \"contacts-route\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_bytes: 64\n  ves.io.schema.rules.string.min_bytes: 1\n",
+                    "title": "name",
+                    "minLength": 1,
+                    "maxLength": 64,
+                    "x-displayname": "Name",
+                    "x-ves-example": "contacts-route",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.max_bytes": "64",
+                        "ves.io.schema.rules.string.min_bytes": "1"
+                    }
+                },
+                "namespace": {
+                    "type": "string",
+                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then namespace will hold the referred object's(e.g. route's) namespace.\n\nExample: - \"ns1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 64\n",
+                    "title": "namespace",
+                    "maxLength": 64,
+                    "x-displayname": "Namespace",
+                    "x-ves-example": "ns1",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_bytes": "64"
+                    }
+                },
+                "tenant": {
+                    "type": "string",
+                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then tenant will hold the referred object's(e.g. route's) tenant.\n\nExample: - \"acmecorp\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 64\n",
+                    "title": "tenant",
+                    "maxLength": 64,
+                    "x-displayname": "Tenant",
+                    "x-ves-example": "acmecorp",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_bytes": "64"
+                    }
                 }
             }
         },

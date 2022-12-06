@@ -290,6 +290,22 @@ func (m *AzureExpressRouteType) ToYAML() (string, error) {
 	return codec.ToYAML(m)
 }
 
+// Redact squashes sensitive info in m (in-place)
+func (m *AzureExpressRouteType) Redact(ctx context.Context) error {
+	// clear fields with confidential option set (at message or field level)
+	if m == nil {
+		return nil
+	}
+
+	for idx, e := range m.GetExpressRouteCircuitInfo() {
+		if err := e.Redact(ctx); err != nil {
+			return errors.Wrapf(err, "Redacting AzureExpressRouteType.express_route_circuit_info idx %v", idx)
+		}
+	}
+
+	return nil
+}
+
 func (m *AzureExpressRouteType) DeepCopy() *AzureExpressRouteType {
 	if m == nil {
 		return nil
@@ -1241,6 +1257,20 @@ func (m *AzureVnetSiteType) ToYAML() (string, error) {
 	return codec.ToYAML(m)
 }
 
+// Redact squashes sensitive info in m (in-place)
+func (m *AzureVnetSiteType) Redact(ctx context.Context) error {
+	// clear fields with confidential option set (at message or field level)
+	if m == nil {
+		return nil
+	}
+
+	if err := m.GetExpressRoute().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting AzureVnetSiteType.express_route")
+	}
+
+	return nil
+}
+
 func (m *AzureVnetSiteType) DeepCopy() *AzureVnetSiteType {
 	if m == nil {
 		return nil
@@ -1509,6 +1539,35 @@ func (m *ExpressRouteCircuitInfo) ToJSON() (string, error) {
 
 func (m *ExpressRouteCircuitInfo) ToYAML() (string, error) {
 	return codec.ToYAML(m)
+}
+
+func (m *ExpressRouteCircuitInfo) String() string {
+	if m == nil {
+		return ""
+	}
+	copy := m.DeepCopy()
+	copy.AuthorizationKeyBlindfolded = ""
+
+	return copy.string()
+}
+
+func (m *ExpressRouteCircuitInfo) GoString() string {
+	copy := m.DeepCopy()
+	copy.AuthorizationKeyBlindfolded = ""
+
+	return copy.goString()
+}
+
+// Redact squashes sensitive info in m (in-place)
+func (m *ExpressRouteCircuitInfo) Redact(ctx context.Context) error {
+	// clear fields with confidential option set (at message or field level)
+	if m == nil {
+		return nil
+	}
+
+	m.AuthorizationKeyBlindfolded = ""
+
+	return nil
 }
 
 func (m *ExpressRouteCircuitInfo) DeepCopy() *ExpressRouteCircuitInfo {

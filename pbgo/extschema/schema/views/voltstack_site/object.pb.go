@@ -156,7 +156,7 @@ type StatusObject struct {
 	// object_refs
 	//
 	// x-displayName: "Config Object"
-	// Volterra App Stack site object direct reference
+	// F5XC App Stack site object direct reference
 	ObjectRefs []*schema.ObjectRefType `protobuf:"bytes,2,rep,name=object_refs,json=objectRefs,proto3" json:"object_refs,omitempty"`
 	// conditions
 	//

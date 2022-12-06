@@ -463,6 +463,17 @@ func (v *ValidateServiceChoice) Validate(ctx context.Context, pm interface{}, op
 				return err
 			}
 		}
+	case *ServiceChoice_Minerva:
+		if fv, exists := v.FldValidators["choice.minerva"]; exists {
+			val := m.GetChoice().(*ServiceChoice_Minerva).Minerva
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("minerva"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 

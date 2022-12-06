@@ -6,7 +6,7 @@
 // x-displayName: "Fleet"
 //
 // Fleet is used to configure infrastructure components (like nodes) in one or
-// more Volterra customer edge sites homogeneously. Fleet configuration has
+// more F5XC customer edge sites homogeneously. Fleet configuration has
 // following information,
 //   * Software image release to be deployed on the fleet
 //   * List of devices to be configured on every node

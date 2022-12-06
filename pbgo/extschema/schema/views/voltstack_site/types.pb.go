@@ -1652,10 +1652,10 @@ type GlobalSpecType struct {
 	//	*GlobalSpecType_NoLocalControlPlane
 	//	*GlobalSpecType_LocalControlPlane
 	LocalControlPlaneChoice isGlobalSpecType_LocalControlPlaneChoice `protobuf_oneof:"local_control_plane_choice"`
-	// Volterra Software
+	// F5XC Software
 	//
-	// x-displayName: "Volterra Software"
-	// Volterra Software Details
+	// x-displayName: "F5XC Software"
+	// F5XC Software Details
 	Sw *views.VolterraSoftwareType `protobuf:"bytes,34,opt,name=sw,proto3" json:"sw,omitempty"`
 	// Operating System
 	//
@@ -2259,10 +2259,10 @@ type CreateSpecType struct {
 	//	*CreateSpecType_DefaultBlockedServices
 	//	*CreateSpecType_BlockedServices
 	BlockedServicesChoice isCreateSpecType_BlockedServicesChoice `protobuf_oneof:"blocked_services_choice"`
-	// Volterra Software
+	// F5XC Software
 	//
-	// x-displayName: "Volterra Software"
-	// Volterra Software Details
+	// x-displayName: "F5XC Software"
+	// F5XC Software Details
 	Sw *views.VolterraSoftwareType `protobuf:"bytes,34,opt,name=sw,proto3" json:"sw,omitempty"`
 	// Operating System
 	//

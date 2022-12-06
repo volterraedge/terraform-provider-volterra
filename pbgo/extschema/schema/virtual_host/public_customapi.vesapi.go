@@ -293,7 +293,7 @@ var CustomAPISwaggerJSON string = `{
     "swagger": "2.0",
     "info": {
         "title": "Virtual host",
-        "description": "Virtual host is main anchor configuration for a proxy. Primary application for virtual host configuration is \nreverse proxy.  Virtual host object is used to create a LoadBalancer, virtual service Or API gateway.\nIt can also be viewed as base object to define application routing.\n\nTerminology\n\nDownstream: A downstream host connects to Volterra ADC, sends requests, and receives responses.\nUpstream: An upstream host receives connections and requests from Volterra ADC and returns responses.",
+        "description": "Virtual host is main anchor configuration for a proxy. Primary application for virtual host configuration is \nreverse proxy.  Virtual host object is used to create a LoadBalancer, virtual service Or API gateway.\nIt can also be viewed as base object to define application routing.\n\nTerminology\n\nDownstream: A downstream host connects to F5XC ADC, sends requests, and receives responses.\nUpstream: An upstream host receives connections and requests from F5XC ADC and returns responses.",
         "version": "version not set"
     },
     "schemes": [

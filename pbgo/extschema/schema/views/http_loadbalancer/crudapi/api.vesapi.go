@@ -3352,8 +3352,8 @@ var APISwaggerJSON string = `{
                 },
                 "disable_default_error_pages": {
                     "type": "boolean",
-                    "description": " Disable the use of default Volterra error pages.",
-                    "title": "Disable the use of default Volterra error pages",
+                    "description": " Disable the use of default F5XC error pages.",
+                    "title": "Disable the use of default F5XC error pages",
                     "format": "boolean",
                     "x-displayname": "Disable Default Error Pages"
                 },
@@ -3576,6 +3576,11 @@ var APISwaggerJSON string = `{
                     "title": "Domain",
                     "$ref": "#/definitions/schemaDomainType"
                 },
+                "flow_label": {
+                    "description": "x-displayName: \"Specify flow label category\"",
+                    "title": "flow_label",
+                    "$ref": "#/definitions/schemaBotDefenseFlowLabelCategoriesChoiceType"
+                },
                 "http_methods": {
                     "type": "array",
                     "description": "x-displayName: \"HTTP Methods\"\nx-required\nList of HTTP methods.",
@@ -3608,6 +3613,11 @@ var APISwaggerJSON string = `{
                     "description": "x-displayName: \"Protocol\"\nProtocol.",
                     "title": "Protocol",
                     "$ref": "#/definitions/http_loadbalancerURLScheme"
+                },
+                "undefined_flow_label": {
+                    "description": "x-displayName: \"Undefined\"",
+                    "title": "undefined",
+                    "$ref": "#/definitions/schemaEmpty"
                 },
                 "web": {
                     "description": "x-displayName: \"Web Traffic\"\nWeb traffic channel.",
@@ -4515,7 +4525,7 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "inherited_waf": {
-                    "description": "Exclusive with [app_firewall]\n App Firewall configuration is taken from Load Balancer. \n Hence no custom configuration is applied on the route",
+                    "description": "Exclusive with [app_firewall]\n App Firewall configuration is taken from Load Balancer.\n Hence no custom configuration is applied on the route",
                     "title": "Inherited WAF",
                     "$ref": "#/definitions/schemaEmpty",
                     "x-displayname": "Inherit App Firewall"
@@ -4751,7 +4761,7 @@ var APISwaggerJSON string = `{
             "description": "A simple route matches on path and/or HTTP method and forwards the matching traffic to the associated pools",
             "title": "RouteTypeSimple",
             "x-displayname": "Simple Route",
-            "x-ves-displayorder": "2,1,3,9,4,8",
+            "x-ves-displayorder": "2,1,9,3,4,8",
             "x-ves-oneof-field-host_rewrite_params": "[\"auto_host_rewrite\",\"disable_host_rewrite\",\"host_rewrite\"]",
             "x-ves-proto-message": "ves.io.schema.views.http_loadbalancer.RouteTypeSimple",
             "properties": {
@@ -5136,13 +5146,13 @@ var APISwaggerJSON string = `{
             "properties": {
                 "actions": {
                     "type": "array",
-                    "description": " Action that should be taken when client identifier matches the rule\n\nValidation Rules:\n  ves.io.schema.rules.enum.defined_only: true\n  ves.io.schema.rules.repeated.max_items: 5\n  ves.io.schema.rules.repeated.unique: true\n",
-                    "title": "action",
+                    "description": " Actions that should be taken when client identifier matches the rule\n\nValidation Rules:\n  ves.io.schema.rules.enum.defined_only: true\n  ves.io.schema.rules.repeated.max_items: 5\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "title": "actions",
                     "maxItems": 5,
                     "items": {
                         "$ref": "#/definitions/http_loadbalancerClientSrcRuleAction"
                     },
-                    "x-displayname": "Action",
+                    "x-displayname": "Actions",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.enum.defined_only": "true",
                         "ves.io.schema.rules.repeated.max_items": "5",
@@ -6157,8 +6167,8 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Use Custom CA List"
                 },
                 "volterra_trusted_ca": {
-                    "description": "Exclusive with [skip_server_verification use_server_verification]\n Perform origin server verification using Volterra default trusted CA list",
-                    "title": "Volterra Trusted CA",
+                    "description": "Exclusive with [skip_server_verification use_server_verification]\n Perform origin server verification using F5XC default trusted CA list",
+                    "title": "F5XC Trusted CA",
                     "$ref": "#/definitions/schemaEmpty",
                     "x-displayname": "Use Default Trusted CA List"
                 }
@@ -7323,8 +7333,9 @@ var APISwaggerJSON string = `{
             "description": "Simple WAF exclusion rule specifies a simple set of match conditions to be matched to skip a list of WAF rule ids",
             "title": "SimpleWafExclusionRule",
             "x-displayname": "WAF Exclusion Rule",
-            "x-ves-displayorder": "10,3,6,7,11,9",
+            "x-ves-displayorder": "10,3,6,7,14,9",
             "x-ves-oneof-field-domain_choice": "[\"any_domain\",\"exact_value\",\"suffix_value\"]",
+            "x-ves-oneof-field-waf_advanced_configuration": "[\"app_firewall_detection_control\",\"waf_skip_processing\"]",
             "x-ves-proto-message": "ves.io.schema.policy.SimpleWafExclusionRule",
             "properties": {
                 "any_domain": {
@@ -7334,7 +7345,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Any Domain"
                 },
                 "app_firewall_detection_control": {
-                    "description": " Define the list of Signature IDs, Violations, Attack Types and Bot Names that should be excluded from triggering on the defined match criteria.\n\nValidation Rules:\n  ves.io.schema.rules.message.required_one_nonzero_field: true\n",
+                    "description": "Exclusive with [waf_skip_processing]\n Define the list of Signature IDs, Violations, Attack Types and Bot Names that should be excluded from triggering on the defined match criteria.\n\nValidation Rules:\n  ves.io.schema.rules.message.required_one_nonzero_field: true\n",
                     "title": "App Firewall Detection control",
                     "$ref": "#/definitions/policyAppFirewallDetectionControl",
                     "x-displayname": "App Firewall Detection Control",
@@ -7417,6 +7428,12 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.string.max_len": "256",
                         "ves.io.schema.rules.string.min_len": "1"
                     }
+                },
+                "waf_skip_processing": {
+                    "description": "Exclusive with [app_firewall_detection_control]\n Skip all App Firewall processing for this request",
+                    "title": "Skip App Firewall Processing",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Skip App Firewall Processing"
                 }
             }
         },
@@ -7861,7 +7878,7 @@ var APISwaggerJSON string = `{
         },
         "schemaBlindfoldSecretInfoType": {
             "type": "object",
-            "description": "BlindfoldSecretInfoType specifies information about the Secret managed by Volterra Secret Management",
+            "description": "BlindfoldSecretInfoType specifies information about the Secret managed by F5XC Secret Management",
             "title": "BlindfoldSecretInfoType",
             "x-displayname": "Blindfold Secret",
             "x-ves-displayorder": "3,1,2",
@@ -7892,6 +7909,242 @@ var APISwaggerJSON string = `{
                     "title": "Store Provider",
                     "x-displayname": "Store Provider",
                     "x-ves-example": "value"
+                }
+            }
+        },
+        "schemaBotDefenseFlowLabelAccountManagementChoiceType": {
+            "type": "object",
+            "description": "x-displayName: \"Bot Defense Flow Label Account Management Category\"\nBot Defense Flow Label Account Management Category",
+            "title": "BotDefenseFlowLabelAccountManagementChoiceType",
+            "properties": {
+                "create": {
+                    "description": "x-displayName: \"Account Creation\"",
+                    "title": "Create",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "password_reset": {
+                    "description": "x-displayName: \"Password Reset\"",
+                    "title": "Password Reset",
+                    "$ref": "#/definitions/schemaEmpty"
+                }
+            }
+        },
+        "schemaBotDefenseFlowLabelAuthenticationChoiceType": {
+            "type": "object",
+            "description": "x-displayName: \"Bot Defense Flow Label Authentication Category\"\nBot Defense Flow Label Authentication Category",
+            "title": "BotDefenseFlowLabelCategoryChoiceType",
+            "properties": {
+                "login": {
+                    "description": "x-displayName: \"Login\"",
+                    "title": "Login",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "login_mfa": {
+                    "description": "x-displayName: \"Login MFA\"",
+                    "title": "LoginMFA",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "login_partner": {
+                    "description": "x-displayName: \"Login for a Channel Partner\"",
+                    "title": "login_partner",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "logout": {
+                    "description": "x-displayName: \"Logout\"",
+                    "title": "logout",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "token_refresh": {
+                    "description": "x-displayName: \"Token Refresh\"",
+                    "title": "token_refresh",
+                    "$ref": "#/definitions/schemaEmpty"
+                }
+            }
+        },
+        "schemaBotDefenseFlowLabelCategoriesChoiceType": {
+            "type": "object",
+            "description": "x-displayName: \"Bot Defense Flow Label Category\"\nBot Defense Flow Label Category allows to associate traffic with selected category",
+            "title": "BotDefenseFlowLabelCategoryChoiceType",
+            "properties": {
+                "account_management": {
+                    "description": "x-displayName: \"Account Management\"",
+                    "title": "Account Management",
+                    "$ref": "#/definitions/schemaBotDefenseFlowLabelAccountManagementChoiceType"
+                },
+                "authentication": {
+                    "description": "x-displayName: \"Authentication\"",
+                    "title": "Authentication",
+                    "$ref": "#/definitions/schemaBotDefenseFlowLabelAuthenticationChoiceType"
+                },
+                "financial_services": {
+                    "description": "x-displayName: \"Financial Services\"",
+                    "title": "Financial Services",
+                    "$ref": "#/definitions/schemaBotDefenseFlowLabelFinancialServicesChoiceType"
+                },
+                "flight": {
+                    "description": "x-displayName: \"Flight\"",
+                    "title": "Flight",
+                    "$ref": "#/definitions/schemaBotDefenseFlowLabelFlightChoiceType"
+                },
+                "profile_management": {
+                    "description": "x-displayName: \"Profile Management\"",
+                    "title": "Profile Management",
+                    "$ref": "#/definitions/schemaBotDefenseFlowLabelProfileManagementChoiceType"
+                },
+                "search": {
+                    "description": "x-displayName: \"Search\"",
+                    "title": "Search",
+                    "$ref": "#/definitions/schemaBotDefenseFlowLabelSearchChoiceType"
+                },
+                "shopping_gift_cards": {
+                    "description": "x-displayName: \"Shopping \u0026 Gift Cards\"",
+                    "title": "Shopping",
+                    "$ref": "#/definitions/schemaBotDefenseFlowLabelShoppingGiftCardsChoiceType"
+                }
+            }
+        },
+        "schemaBotDefenseFlowLabelFinancialServicesChoiceType": {
+            "type": "object",
+            "description": "x-displayName: \"Bot Defense Flow Label Financial Services Category\"\nBot Defense Flow Label Financial Services Category",
+            "title": "BotDefenseFlowLabelFinancialServicesChoiceType",
+            "properties": {
+                "apply": {
+                    "description": "x-displayName: \"Apply for a Financial Service Account (e.g., credit card, banking, retirement account)\"",
+                    "title": "apply",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "money_transfer": {
+                    "description": "x-displayName: \"Money Transfer\"",
+                    "title": "money_transfer",
+                    "$ref": "#/definitions/schemaEmpty"
+                }
+            }
+        },
+        "schemaBotDefenseFlowLabelFlightChoiceType": {
+            "type": "object",
+            "description": "x-displayName: \"Bot Defense Flow Label Flight Category\"\nBot Defense Flow Label Flight Category",
+            "title": "BotDefenseFlowLabelFlightChoiceType",
+            "properties": {
+                "checkin": {
+                    "description": "x-displayName: \"Check into Flight\"",
+                    "title": "flight_search",
+                    "$ref": "#/definitions/schemaEmpty"
+                }
+            }
+        },
+        "schemaBotDefenseFlowLabelProfileManagementChoiceType": {
+            "type": "object",
+            "description": "x-displayName: \"Bot Defense Flow Label Profile Management Category\"\nBot Defense Flow Label Profile Management Category",
+            "title": "BotDefenseFlowLabelProfileManagementChoiceType",
+            "properties": {
+                "create": {
+                    "description": "x-displayName: \"Profile Creation\"",
+                    "title": "Create",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "update": {
+                    "description": "x-displayName: \"Profile Update\"",
+                    "title": "update",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "view": {
+                    "description": "x-displayName: \"Profile View\"",
+                    "title": "view",
+                    "$ref": "#/definitions/schemaEmpty"
+                }
+            }
+        },
+        "schemaBotDefenseFlowLabelSearchChoiceType": {
+            "type": "object",
+            "description": "x-displayName: \"Bot Defense Flow Label Search Category\"\nBot Defense Flow Label Search Category",
+            "title": "BotDefenseFlowLabelSearchChoiceType",
+            "properties": {
+                "flight_search": {
+                    "description": "x-displayName: \"Flight Search\"",
+                    "title": "flight_search",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "product_search": {
+                    "description": "x-displayName: \"Product Search\"",
+                    "title": "product_search",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "reservation_search": {
+                    "description": "x-displayName: \"Reservation Search (e.g., sporting events, concerts)\"",
+                    "title": "reservation_search",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "room_search": {
+                    "description": "x-displayName: \"Room Search\"",
+                    "title": "room_search",
+                    "$ref": "#/definitions/schemaEmpty"
+                }
+            }
+        },
+        "schemaBotDefenseFlowLabelShoppingGiftCardsChoiceType": {
+            "type": "object",
+            "description": "x-displayName: \"Bot Defense Flow Label Shopping \u0026 Gift Cards Category\"\nBot Defense Flow Label Shopping \u0026 Gift Cards Category",
+            "title": "BotDefenseFlowLabelShoppingGiftCardsChoiceType",
+            "properties": {
+                "gift_card_make_purchase_with_gift_card": {
+                    "description": "x-displayName: \"Purchase with Gift Card\"",
+                    "title": "Purchase with Gift Card",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "gift_card_validation": {
+                    "description": "x-displayName: \"Gift Card Validation\"",
+                    "title": "Gift Card Validation",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "shop_add_to_cart": {
+                    "description": "x-displayName: \"Add to Cart\"",
+                    "title": "add_to_cart",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "shop_checkout": {
+                    "description": "x-displayName: \"Checkout\"",
+                    "title": "checkout",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "shop_choose_seat": {
+                    "description": "x-displayName: \"Select Seat(s)\"",
+                    "title": "Select Seat(s)",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "shop_enter_drawing_submission": {
+                    "description": "x-displayName: \"Enter Drawing Submission\"",
+                    "title": "Enter Drawing Submission",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "shop_make_payment": {
+                    "description": "x-displayName: \"Payment / Billing\"",
+                    "title": "make_payment",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "shop_order": {
+                    "description": "x-displayName: \"Order Submit\"",
+                    "title": "order",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "shop_price_inquiry": {
+                    "description": "x-displayName: \"Price Inquiry\"",
+                    "title": "price_inquiry",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "shop_promo_code_validation": {
+                    "description": "x-displayName: \"Promo Code Validation\"",
+                    "title": "promo_code_validation",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "shop_purchase_gift_card": {
+                    "description": "x-displayName: \"Purchase a Gift Card\"",
+                    "title": "shop_purchase_gift_card",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "shop_update_quantity": {
+                    "description": "x-displayName: \"Update Quantity\"",
+                    "title": "Update Quantity",
+                    "$ref": "#/definitions/schemaEmpty"
                 }
             }
         },
@@ -8118,6 +8371,30 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "schemaCsrfPolicy": {
+            "type": "object",
+            "description": "To mitigate CSRF attack , the policy checks where a request is coming from to determine if the request's origin is the same as its detination.The policy relies on two pieces of information used in determining if a request originated from the same host.\n\n1. The origin that caused the user agent to issue the request (source origin).\n2. The origin that the request is going to (target origin).\nWhen the policy evaluating a request, it ensures both pieces of information are present and compare their values. If the source origin is missing or origins do not match the request is rejected. The exception to this being if the source-origin has been added to they policy as valid.\nBecause CSRF attacks specifically target state-changing requests, the policy only acts on the HTTP requests that have state-changing method (PUT,POST, etc.).",
+            "title": "CsrfPolicy",
+            "x-displayname": "CSRF Policy",
+            "x-ves-displayorder": "1",
+            "x-ves-oneof-field-allowed_domains": "[\"all_load_balancer_domains\",\"custom_domain_list\"]",
+            "x-ves-proto-message": "ves.io.schema.CsrfPolicy",
+            "properties": {
+                "all_load_balancer_domains": {
+                    "description": "Exclusive with [custom_domain_list]\n Add All load balancer domains to source origin (allow) list.",
+                    "title": "all_load_balancer_domains",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "All HTTP Loadbalancer Domains"
+                },
+                "custom_domain_list": {
+                    "description": "Exclusive with [all_load_balancer_domains]\n Add one or more domains to source origin (allow) list.\n\nExample: - \"abc.xyz.com\"-",
+                    "title": "custom_domain_list",
+                    "$ref": "#/definitions/schemaDomainNameList",
+                    "x-displayname": "Specified domains",
+                    "x-ves-example": "abc.xyz.com"
+                }
+            }
+        },
         "schemaDenominatorType": {
             "type": "string",
             "description": "Denominator used in fraction where sampling percentages are needed. example sampled requests\n\nUse hundred as denominator\nUse ten thousand as denominator\nUse million as denominator",
@@ -8133,15 +8410,29 @@ var APISwaggerJSON string = `{
         },
         "schemaDomainNameList": {
             "type": "object",
-            "description": "x-displayName: \"Domain name list\"\nList of domain names used for Host header matching",
+            "description": "List of domain names used for Host header matching",
             "title": "List of Domain names",
+            "x-displayname": "Domain name list",
+            "x-ves-proto-message": "ves.io.schema.DomainNameList",
             "properties": {
                 "domains": {
                     "type": "array",
-                    "description": "x-displayName: \"Domain names\"\nx-example: \"www.foo.com\"\n\nA list of domain names that will be matched to loadbalancer.\nThese domains are not used for SNI match.\nWildcard names are supported in the suffix or prefix form.",
+                    "description": "\n A list of domain names that will be matched to loadbalancer.\n These domains are not used for SNI match.\n Wildcard names are supported in the suffix or prefix form.\n\nExample: - \"www.foo.com\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.max_len: 256\n  ves.io.schema.rules.repeated.items.string.min_len: 1\n  ves.io.schema.rules.repeated.items.string.vh_domain: true\n  ves.io.schema.rules.repeated.max_items: 32\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "Domains",
+                    "maxItems": 32,
                     "items": {
-                        "type": "string"
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 256
+                    },
+                    "x-displayname": "Domain names",
+                    "x-ves-example": "www.foo.com",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.items.string.max_len": "256",
+                        "ves.io.schema.rules.repeated.items.string.min_len": "1",
+                        "ves.io.schema.rules.repeated.items.string.vh_domain": "true",
+                        "ves.io.schema.rules.repeated.max_items": "32",
+                        "ves.io.schema.rules.repeated.unique": "true"
                     }
                 }
             }
@@ -8740,7 +9031,7 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.SecretType",
             "properties": {
                 "blindfold_secret_info": {
-                    "description": "Exclusive with [clear_secret_info]\n Blindfold Secret is used for the secrets managed by Volterra Secret Management Service",
+                    "description": "Exclusive with [clear_secret_info]\n Blindfold Secret is used for the secrets managed by F5XC Secret Management Service",
                     "title": "Blindfold Secret",
                     "$ref": "#/definitions/schemaBlindfoldSecretInfoType",
                     "x-displayname": "Blindfold Secret"
@@ -9026,7 +9317,7 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "custom_hash_algorithms": {
-                    "description": "Exclusive with [disable_ocsp_stapling use_system_defaults]\n Use hash algorithms in the custom order. Volterra will try to fetch ocsp response from the CA in the given order. Additionally, LoadBalancer will not become active until ocspResponse cannot be fetched if the certificate has MustStaple extension set.",
+                    "description": "Exclusive with [disable_ocsp_stapling use_system_defaults]\n Use hash algorithms in the custom order. F5XC will try to fetch ocsp response from the CA in the given order. Additionally, LoadBalancer will not become active until ocspResponse cannot be fetched if the certificate has MustStaple extension set.",
                     "title": "Use Custom Order for Hash Algorithms",
                     "$ref": "#/definitions/schemaHashAlgorithms",
                     "x-displayname": "Use hash algorithms in custom order"
@@ -9039,7 +9330,7 @@ var APISwaggerJSON string = `{
                     "x-ves-example": "Certificate used in production environment"
                 },
                 "disable_ocsp_stapling": {
-                    "description": "Exclusive with [custom_hash_algorithms use_system_defaults]\n Disable OCSP Stapling. Volterra will not fetch and staple OCSP Response for this certificate.\n This is the default behavior if no choice is selected.",
+                    "description": "Exclusive with [custom_hash_algorithms use_system_defaults]\n Disable OCSP Stapling. F5XC will not fetch and staple OCSP Response for this certificate.\n This is the default behavior if no choice is selected.",
                     "title": "Disable OCSP Stapling",
                     "$ref": "#/definitions/schemaEmpty",
                     "x-displayname": "Disable OCSP Stapling"
@@ -9055,10 +9346,10 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "use_system_defaults": {
-                    "description": "Exclusive with [custom_hash_algorithms disable_ocsp_stapling]\n Use Volterra Default Settings to fetch and staple OCSP Response.\n OCSP Response will be stapled if it can be fetched. Additionally, LoadBalancer will not become active until ocspResponse cannot be fetched if the certificate has MustStaple extension set.\n Volterra will try to fetch OCSPResponse with sha256 and sha1 as HashAlgorithm, in that order.",
-                    "title": "Fetch with Volterra default settings",
+                    "description": "Exclusive with [custom_hash_algorithms disable_ocsp_stapling]\n Use F5XC Default Settings to fetch and staple OCSP Response.\n OCSP Response will be stapled if it can be fetched. Additionally, LoadBalancer will not become active until ocspResponse cannot be fetched if the certificate has MustStaple extension set.\n F5XC will try to fetch OCSPResponse with sha256 and sha1 as HashAlgorithm, in that order.",
+                    "title": "Fetch with F5XC default settings",
                     "$ref": "#/definitions/schemaEmpty",
-                    "x-displayname": "Fetch with Volterra default settings"
+                    "x-displayname": "Fetch with F5XC default settings"
                 }
             }
         },
@@ -9397,7 +9688,7 @@ var APISwaggerJSON string = `{
                 },
                 "tls_certificates": {
                     "type": "array",
-                    "description": " Set of TLS certificates\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 16\n  ves.io.schema.rules.repeated.min_items: 1\n",
+                    "description": " Users can add one or more certificates that share the same set of domains.\n for example, domain.com and *.domain.com - but use different signature algorithms\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 16\n  ves.io.schema.rules.repeated.min_items: 1\n",
                     "title": "tls_certificates",
                     "minItems": 1,
                     "maxItems": 16,
@@ -9861,13 +10152,15 @@ var APISwaggerJSON string = `{
         },
         "viewsSiteNetwork": {
             "type": "string",
-            "description": "This defines network types to be used on site\n\nAll inside and outside networks.\nAll inside networks.\nAll outside networks.\nvK8s service network.",
+            "description": "This defines network types to be used on site\n\nAll inside and outside networks.\nAll inside and outside networks with internet VIP support.\nAll inside networks.\nAll outside networks.\nAll outside networks with internet VIP support.\nvK8s service network.",
             "title": "SiteNetwork",
             "enum": [
                 "SITE_NETWORK_INSIDE_AND_OUTSIDE",
                 "SITE_NETWORK_INSIDE",
                 "SITE_NETWORK_OUTSIDE",
-                "SITE_NETWORK_SERVICE"
+                "SITE_NETWORK_SERVICE",
+                "SITE_NETWORK_OUTSIDE_WITH_INTERNET_VIP",
+                "SITE_NETWORK_INSIDE_AND_OUTSIDE_WITH_INTERNET_VIP"
             ],
             "default": "SITE_NETWORK_INSIDE_AND_OUTSIDE",
             "x-displayname": "Site Network",
@@ -10222,6 +10515,12 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/schemaCorsPolicy",
                     "x-displayname": "CORS Policy"
                 },
+                "csrf_policy": {
+                    "description": " Cross-Site Request Forgery (CSRF) is an attack that occurs when a malicious third-party website exploits a vulnerability thats allows them to submit an undesired request on user's behalf.\n\n Policy configuration to protect against CSRF attacks.",
+                    "title": "csrf_policy",
+                    "$ref": "#/definitions/schemaCsrfPolicy",
+                    "x-displayname": "Cross-Site Request Forgery Protection"
+                },
                 "data_guard_rules": {
                     "type": "array",
                     "description": " Data Guard prevents responses from exposing sensitive information by masking the data.\n The system masks credit card numbers and social security numbers leaked from the application from within the http response with a string of asterisks (*).\n Note: App Firewall should be enabled, to use Data Guard feature.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 64\n  ves.io.schema.rules.repeated.unique_metadata_name: true\n",
@@ -10435,7 +10734,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "HTTPS with Custom Certificate"
                 },
                 "https_auto_cert": {
-                    "description": "Exclusive with [http https]\n HTTPS load balancer with automatic public certificate provisioning.\n DNS records for the domains will be automatically managed by F5 Distributed Cloud.\n As a prerequisite, the domain must be delegated to F5 Distributed Cloud using Delegated domain feature \n or a DNS CNAME record should be created in your DNS provider's portal.",
+                    "description": "Exclusive with [http https]\n HTTPS load balancer with automatic public certificate provisioning.\n DNS records for the domains will be automatically managed by F5 Distributed Cloud.\n As a prerequisite, the domain must be delegated to F5 Distributed Cloud using Delegated domain feature\n or a DNS CNAME record should be created in your DNS provider's portal.",
                     "title": "HTTPS",
                     "$ref": "#/definitions/http_loadbalancerProxyTypeHttpsAutoCerts",
                     "x-displayname": "HTTPS with Automatic Certificate"
@@ -10783,9 +11082,9 @@ var APISwaggerJSON string = `{
             "properties": {
                 "advanced_options": {
                     "description": " Advanced options configuration like timeouts, circuit breaker, subset load balancing",
-                    "title": "More Options",
+                    "title": "advanced_options",
                     "$ref": "#/definitions/origin_poolOriginPoolAdvancedOptions",
-                    "x-displayname": "More Options"
+                    "x-displayname": "Other Settings"
                 },
                 "automatic_port": {
                     "description": "Exclusive with [port]\n\n Automatic selection of port for endpoint\n\n For Consul service discovery, port will be discovered as part of service discovery.\n For other origin server types, port will be automatically set as 443 if TLS is enabled at Origin Pool and 80 if TLS is disabled",

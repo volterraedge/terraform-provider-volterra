@@ -2583,6 +2583,7 @@ var APISwaggerJSON string = `{
             "x-ves-oneof-field-forward_proxy_choice": "[\"active_forward_proxy_policies\",\"forward_proxy_allow_all\",\"no_forward_proxy\"]",
             "x-ves-oneof-field-global_network_choice": "[\"global_network_list\",\"no_global_network\"]",
             "x-ves-oneof-field-inside_static_route_choice": "[\"inside_static_routes\",\"no_inside_static_routes\"]",
+            "x-ves-oneof-field-internet_vip_choice": "[\"disable_internet_vip\",\"enable_internet_vip\"]",
             "x-ves-oneof-field-network_policy_choice": "[\"active_network_policies\",\"no_network_policy\"]",
             "x-ves-oneof-field-outside_static_route_choice": "[\"no_outside_static_routes\",\"outside_static_routes\"]",
             "x-ves-oneof-field-site_mesh_group_choice": "[\"sm_connection_public_ip\",\"sm_connection_pvt_ip\"]",
@@ -2651,6 +2652,18 @@ var APISwaggerJSON string = `{
                     "title": "Member of DC cluster Group via Outside Network",
                     "$ref": "#/definitions/schemaviewsObjectRefType",
                     "x-displayname": "Member of DC Cluster Group via Outside Network"
+                },
+                "disable_internet_vip": {
+                    "description": "Exclusive with [enable_internet_vip]\n Do not create Internet VIP",
+                    "title": "Disable Internet VIP",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Disable Internet VIP"
+                },
+                "enable_internet_vip": {
+                    "description": "Exclusive with [disable_internet_vip]\n Enable Internet VIP.",
+                    "title": "Enable Internet VIP",
+                    "$ref": "#/definitions/viewsAWSInternetVIPType",
+                    "x-displayname": "Enable Internet VIP"
                 },
                 "forward_proxy_allow_all": {
                     "description": "Exclusive with [active_forward_proxy_policies no_forward_proxy]\n Enable Forward Proxy for this site and allow all requests.",
@@ -2808,6 +2821,20 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.repeated.items.string.ip": "true",
                         "ves.io.schema.rules.repeated.num_items": "0,1,3",
                         "ves.io.schema.rules.repeated.unique": "true"
+                    }
+                },
+                "subnet_ids": {
+                    "type": "array",
+                    "description": " AWS Subnet Info where the F5XC site is deployed\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.num_items: 0,1,3\n",
+                    "title": "AWS Subnet Info",
+                    "items": {
+                        "$ref": "#/definitions/viewsAWSSubnetIdsType"
+                    },
+                    "x-displayname": "AWS Subnet Info",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.num_items": "0,1,3"
                     }
                 }
             }
@@ -2992,6 +3019,12 @@ var APISwaggerJSON string = `{
                         "$ref": "#/definitions/schemaConditionType"
                     },
                     "x-displayname": "Conditions"
+                },
+                "deployment": {
+                    "description": " Deployment status",
+                    "title": "Deployment status",
+                    "$ref": "#/definitions/terraform_parametersDeploymentStatusType",
+                    "x-displayname": "Deployment status"
                 },
                 "metadata": {
                     "description": " Standard status's metadata",
@@ -3243,12 +3276,15 @@ var APISwaggerJSON string = `{
             "properties": {
                 "blocked_sevice": {
                     "type": "array",
-                    "description": " Use custom blocked services configuration",
+                    "description": " Use custom blocked services configuration\n\nValidation Rules:\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "Custom Blocked Services Configuration",
                     "items": {
                         "$ref": "#/definitions/fleetBlockedServices"
                     },
-                    "x-displayname": "Custom Blocked Services Configuration"
+                    "x-displayname": "Custom Blocked Services Configuration",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
                 }
             }
         },
@@ -3405,7 +3441,7 @@ var APISwaggerJSON string = `{
         },
         "schemaBlindfoldSecretInfoType": {
             "type": "object",
-            "description": "x-displayName: \"Blindfold Secret\"\nBlindfoldSecretInfoType specifies information about the Secret managed by Volterra Secret Management",
+            "description": "x-displayName: \"Blindfold Secret\"\nBlindfoldSecretInfoType specifies information about the Secret managed by F5XC Secret Management",
             "title": "BlindfoldSecretInfoType",
             "properties": {
                 "decryption_provider": {
@@ -3935,7 +3971,7 @@ var APISwaggerJSON string = `{
             "title": "SecretType",
             "properties": {
                 "blindfold_secret_info": {
-                    "description": "x-displayName: \"Blindfold Secret\"\nBlindfold Secret is used for the secrets managed by Volterra Secret Management Service",
+                    "description": "x-displayName: \"Blindfold Secret\"\nBlindfold Secret is used for the secrets managed by F5XC Secret Management Service",
                     "title": "Blindfold Secret",
                     "$ref": "#/definitions/schemaBlindfoldSecretInfoType"
                 },
@@ -3960,7 +3996,7 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/schemaVaultSecretInfoType"
                 },
                 "wingman_secret_info": {
-                    "description": "x-displayName: \"Bootstrap Secret\"\nSecret is given as bootstrap secret in Volterra Security Sidecar",
+                    "description": "x-displayName: \"Bootstrap Secret\"\nSecret is given as bootstrap secret in F5XC Security Sidecar",
                     "title": "Wingman Secret",
                     "$ref": "#/definitions/schemaWingmanSecretInfoType"
                 }
@@ -4002,14 +4038,16 @@ var APISwaggerJSON string = `{
                 },
                 "subnets": {
                     "type": "array",
-                    "description": " List of route prefixes\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 256\n",
+                    "description": " List of route prefixes\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 256\n",
                     "title": "Subnets",
                     "maxItems": 256,
                     "items": {
                         "$ref": "#/definitions/schemaIpSubnetType"
                     },
                     "x-displayname": "Subnets",
+                    "x-ves-required": "true",
                     "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
                         "ves.io.schema.rules.repeated.max_items": "256"
                     }
                 }
@@ -4274,7 +4312,7 @@ var APISwaggerJSON string = `{
                     "title": "certificate_url"
                 },
                 "custom_hash_algorithms": {
-                    "description": "x-displayName: \"Use hash algorithms in custom order\"\nUse hash algorithms in the custom order. Volterra will try to fetch ocsp response from the CA in the given order. Additionally, LoadBalancer will not become active until ocspResponse cannot be fetched if the certificate has MustStaple extension set.",
+                    "description": "x-displayName: \"Use hash algorithms in custom order\"\nUse hash algorithms in the custom order. F5XC will try to fetch ocsp response from the CA in the given order. Additionally, LoadBalancer will not become active until ocspResponse cannot be fetched if the certificate has MustStaple extension set.",
                     "title": "Use Custom Order for Hash Algorithms",
                     "$ref": "#/definitions/schemaHashAlgorithms"
                 },
@@ -4284,7 +4322,7 @@ var APISwaggerJSON string = `{
                     "title": "description"
                 },
                 "disable_ocsp_stapling": {
-                    "description": "x-displayName: \"Disable OCSP Stapling\"\nDisable OCSP Stapling. Volterra will not fetch and staple OCSP Response for this certificate.\nThis is the default behavior if no choice is selected.",
+                    "description": "x-displayName: \"Disable OCSP Stapling\"\nDisable OCSP Stapling. F5XC will not fetch and staple OCSP Response for this certificate.\nThis is the default behavior if no choice is selected.",
                     "title": "Disable OCSP Stapling",
                     "$ref": "#/definitions/schemaEmpty"
                 },
@@ -4294,8 +4332,8 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/schemaSecretType"
                 },
                 "use_system_defaults": {
-                    "description": "x-displayName: \"Fetch with Volterra default settings\"\nUse Volterra Default Settings to fetch and staple OCSP Response.\nOCSP Response will be stapled if it can be fetched. Additionally, LoadBalancer will not become active until ocspResponse cannot be fetched if the certificate has MustStaple extension set.\nVolterra will try to fetch OCSPResponse with sha256 and sha1 as HashAlgorithm, in that order.",
-                    "title": "Fetch with Volterra default settings",
+                    "description": "x-displayName: \"Fetch with F5XC default settings\"\nUse F5XC Default Settings to fetch and staple OCSP Response.\nOCSP Response will be stapled if it can be fetched. Additionally, LoadBalancer will not become active until ocspResponse cannot be fetched if the certificate has MustStaple extension set.\nF5XC will try to fetch OCSPResponse with sha256 and sha1 as HashAlgorithm, in that order.",
+                    "title": "Fetch with F5XC default settings",
                     "$ref": "#/definitions/schemaEmpty"
                 }
             }
@@ -4363,13 +4401,13 @@ var APISwaggerJSON string = `{
                     "title": "Custom List"
                 },
                 "volterra_certificate": {
-                    "description": "x-displayName: \"Volterra Signing Certificate\"\nVolterra certificates for generating intermediate certificate for TLS interception.",
-                    "title": "Volterra Signing Certificate",
+                    "description": "x-displayName: \"F5XC Signing Certificate\"\nF5XC certificates for generating intermediate certificate for TLS interception.",
+                    "title": "F5XC Signing Certificate",
                     "$ref": "#/definitions/schemaEmpty"
                 },
                 "volterra_trusted_ca": {
                     "description": "x-displayName: \"Default Trusted CA List\"\nDefault volterra trusted CA list for validating upstream server certificate",
-                    "title": "Volterra List",
+                    "title": "F5XC List",
                     "$ref": "#/definitions/schemaEmpty"
                 }
             }
@@ -4446,7 +4484,7 @@ var APISwaggerJSON string = `{
         },
         "schemaVirtualNetworkType": {
             "type": "string",
-            "description": "Different types of virtual networks understood by the system\n\nVirtual-network of type VIRTUAL_NETWORK_SITE_LOCAL provides connectivity to public (outside) network.\nThis is an insecure network and is connected to public internet via NAT Gateways/firwalls\nVirtual-network of this type is local to every site. Two virtual networks of this type on different\nsites are neither related nor connected.\n\nConstraints:\nThere can be atmost one virtual network of this type in a given site.\nThis network type is supported on CE sites. This network is created automatically and present on all sites\nVirtual-network of type VIRTUAL_NETWORK_SITE_LOCAL_INSIDE is a private network inside site.\nIt is a secure network and is not connected to public network.\nVirtual-network of this type is local to every site. Two virtual networks of this type on different\nsites are neither related nor connected.\n\nConstraints:\nThere can be atmost one virtual network of this type in a given site.\nThis network type is supported on CE sites. This network is created during provisioning of site\nUser defined per-site virtual network. Scope of this virtual network is limited to the site.\nThis is not yet supported\nVirtual-network of type VIRTUAL_NETWORK_PUBLIC directly conects to the public internet.\nVirtual-network of this type is local to every site. Two virtual networks of this type on different sites are neither related nor connected.\n\nConstraints:\nThere can be atmost one virtual network of this type in a given site.\nThis network type is supported on RE sites only\nIt is an internally created by the system. They must not be created by user\nVirtual Neworks with global scope across different sites in Volterra domain.\nAn example global virtual-network called \"AIN Network\" is created for every tenant.\nfor volterra fabric\n\nConstraints:\nIt is currently only supported as internally created by the system.\nvK8s service network for a given tenant. Used to advertise a virtual host only to vk8s pods for that tenant\nConstraints:\nIt is an internally created by the system. Must not be created by user\nVER internal network for the site. It can only be used for virtual hosts with SMA_PROXY type proxy\nConstraints:\nIt is an internally created by the system. Must not be created by user\nVirtual-network of type VIRTUAL_NETWORK_SITE_LOCAL_INSIDE_OUTSIDE represents both\nVIRTUAL_NETWORK_SITE_LOCAL and VIRTUAL_NETWORK_SITE_LOCAL_INSIDE\n\nConstraints:\nThis network type is only meaningful in an advertise policy\nWhen virtual-network of type VIRTUAL_NETWORK_IP_AUTO is selected for\nan endpoint, VER will try to determine the network based on the provided\nIP address\n\nConstraints:\nThis network type is only meaningful in an endpoint\n\nVoltADN Private Network is used on volterra RE(s) to connect to customer private networks\nThis network is created by opening a support ticket\n\nThis network is per site srv6 network\nVER IP Fabric network for the site.\nThis Virtual network type is used for exposing virtual host on IP Fabric network on the VER site or\nfor endpoint in IP Fabric network\nConstraints:\nIt is an internally created by the system. Must not be created by user",
+            "description": "Different types of virtual networks understood by the system\n\nVirtual-network of type VIRTUAL_NETWORK_SITE_LOCAL provides connectivity to public (outside) network.\nThis is an insecure network and is connected to public internet via NAT Gateways/firwalls\nVirtual-network of this type is local to every site. Two virtual networks of this type on different\nsites are neither related nor connected.\n\nConstraints:\nThere can be atmost one virtual network of this type in a given site.\nThis network type is supported on CE sites. This network is created automatically and present on all sites\nVirtual-network of type VIRTUAL_NETWORK_SITE_LOCAL_INSIDE is a private network inside site.\nIt is a secure network and is not connected to public network.\nVirtual-network of this type is local to every site. Two virtual networks of this type on different\nsites are neither related nor connected.\n\nConstraints:\nThere can be atmost one virtual network of this type in a given site.\nThis network type is supported on CE sites. This network is created during provisioning of site\nUser defined per-site virtual network. Scope of this virtual network is limited to the site.\nThis is not yet supported\nVirtual-network of type VIRTUAL_NETWORK_PUBLIC directly conects to the public internet.\nVirtual-network of this type is local to every site. Two virtual networks of this type on different sites are neither related nor connected.\n\nConstraints:\nThere can be atmost one virtual network of this type in a given site.\nThis network type is supported on RE sites only\nIt is an internally created by the system. They must not be created by user\nVirtual Neworks with global scope across different sites in F5XC domain.\nAn example global virtual-network called \"AIN Network\" is created for every tenant.\nfor volterra fabric\n\nConstraints:\nIt is currently only supported as internally created by the system.\nvK8s service network for a given tenant. Used to advertise a virtual host only to vk8s pods for that tenant\nConstraints:\nIt is an internally created by the system. Must not be created by user\nVER internal network for the site. It can only be used for virtual hosts with SMA_PROXY type proxy\nConstraints:\nIt is an internally created by the system. Must not be created by user\nVirtual-network of type VIRTUAL_NETWORK_SITE_LOCAL_INSIDE_OUTSIDE represents both\nVIRTUAL_NETWORK_SITE_LOCAL and VIRTUAL_NETWORK_SITE_LOCAL_INSIDE\n\nConstraints:\nThis network type is only meaningful in an advertise policy\nWhen virtual-network of type VIRTUAL_NETWORK_IP_AUTO is selected for\nan endpoint, VER will try to determine the network based on the provided\nIP address\n\nConstraints:\nThis network type is only meaningful in an endpoint\n\nVoltADN Private Network is used on volterra RE(s) to connect to customer private networks\nThis network is created by opening a support ticket\n\nThis network is per site srv6 network\nVER IP Fabric network for the site.\nThis Virtual network type is used for exposing virtual host on IP Fabric network on the VER site or\nfor endpoint in IP Fabric network\nConstraints:\nIt is an internally created by the system. Must not be created by user",
             "title": "VirtualNetworkType",
             "enum": [
                 "VIRTUAL_NETWORK_SITE_LOCAL",
@@ -4624,6 +4662,311 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "terraform_parametersApplyStageState": {
+            "type": "string",
+            "description": "Terraform state during apply stage",
+            "title": "Apply Stage State",
+            "enum": [
+                "APPLIED",
+                "APPLY_ERRORED",
+                "APPLY_INIT_ERRORED",
+                "APPLYING",
+                "APPLY_PLANNING",
+                "APPLY_PLAN_ERRORED"
+            ],
+            "default": "APPLIED",
+            "x-displayname": "Apply Stage State",
+            "x-ves-proto-enum": "ves.io.schema.views.terraform_parameters.ApplyStageState"
+        },
+        "terraform_parametersApplyStatus": {
+            "type": "object",
+            "x-ves-oneof-field-state": "[\"apply_state\",\"destroy_state\",\"infra_state\"]",
+            "x-ves-proto-message": "ves.io.schema.views.terraform_parameters.ApplyStatus",
+            "properties": {
+                "apply_state": {
+                    "description": "Exclusive with [destroy_state infra_state]\n Terraform state during apply stage",
+                    "title": "apply_state",
+                    "$ref": "#/definitions/terraform_parametersApplyStageState",
+                    "x-displayname": "Apply State"
+                },
+                "container_version": {
+                    "type": "string",
+                    "description": " Container image version",
+                    "title": "container_version",
+                    "x-displayname": "Container image version"
+                },
+                "destroy_state": {
+                    "description": "Exclusive with [apply_state infra_state]\n Terraform state during destroy stage",
+                    "title": "destroy_state",
+                    "$ref": "#/definitions/terraform_parametersDestroyStageState",
+                    "x-displayname": "Destroy State"
+                },
+                "error_output": {
+                    "type": "string",
+                    "description": " Error output of terraform run\n\nExample: - \"value\"-",
+                    "title": "error_output",
+                    "x-displayname": "Error Output",
+                    "x-ves-example": "value"
+                },
+                "infra_state": {
+                    "description": "Exclusive with [apply_state destroy_state]\n Infrastructure state of the view provisioning",
+                    "title": "infra_state",
+                    "$ref": "#/definitions/terraform_parametersInfraState",
+                    "x-displayname": "Infra State"
+                },
+                "modification_timestamp": {
+                    "type": "string",
+                    "description": " ModificationTimestamp is a timestamp representing the server time when this status was\n last modified.",
+                    "title": "modification_timestamp",
+                    "format": "date-time",
+                    "x-displayname": "Modification Timestamp"
+                },
+                "tf_output": {
+                    "type": "string",
+                    "description": " The value of an \"output\" variable from the terraform state file.\n\nExample: - \"value\"-",
+                    "title": "tf_output",
+                    "x-displayname": "Terraform Output",
+                    "x-ves-example": "value"
+                },
+                "tf_stdout": {
+                    "type": "string",
+                    "description": " The stdout of terraform apply command.",
+                    "title": "tf_stdout",
+                    "x-displayname": "Terraform Standard Output"
+                }
+            }
+        },
+        "terraform_parametersDeploymentStatusType": {
+            "type": "object",
+            "x-ves-proto-message": "ves.io.schema.views.terraform_parameters.DeploymentStatusType",
+            "properties": {
+                "apply_status": {
+                    "description": " Status of Apply or Destroy action",
+                    "title": "Apply Status",
+                    "$ref": "#/definitions/terraform_parametersApplyStatus",
+                    "x-displayname": "Apply Status"
+                },
+                "expected_container_version": {
+                    "type": "string",
+                    "description": " Container version expected",
+                    "title": "Expected container version",
+                    "x-displayname": "Expected container version"
+                },
+                "plan_status": {
+                    "description": " Status of Plan action.",
+                    "title": "Plan Status",
+                    "$ref": "#/definitions/terraform_parametersPlanStatus",
+                    "x-displayname": "Plan Status"
+                }
+            }
+        },
+        "terraform_parametersDestroyStageState": {
+            "type": "string",
+            "description": "Terraform state during destroy stage",
+            "title": "Destroy Stage State",
+            "enum": [
+                "DESTROYED",
+                "DESTROY_ERRORED",
+                "DESTROYING"
+            ],
+            "default": "DESTROYED",
+            "x-displayname": "Destroy Stage State",
+            "x-ves-proto-enum": "ves.io.schema.views.terraform_parameters.DestroyStageState"
+        },
+        "terraform_parametersInfraState": {
+            "type": "string",
+            "description": "Infrastructure state of the view provisioning",
+            "title": "Infra State",
+            "enum": [
+                "PROVISIONED",
+                "TIMED_OUT",
+                "ERRORED",
+                "PROVISIONING"
+            ],
+            "default": "PROVISIONED",
+            "x-displayname": "Infra State",
+            "x-ves-proto-enum": "ves.io.schema.views.terraform_parameters.InfraState"
+        },
+        "terraform_parametersPlanStageState": {
+            "type": "string",
+            "description": "Terraform state during plan stage",
+            "title": "Plan Stage State",
+            "enum": [
+                "PLANNING",
+                "PLAN_ERRORED",
+                "NO_CHANGES",
+                "HAS_CHANGES",
+                "DISCARDED",
+                "PLAN_INIT_ERRORED"
+            ],
+            "default": "PLANNING",
+            "x-displayname": "Plan Stage State",
+            "x-ves-proto-enum": "ves.io.schema.views.terraform_parameters.PlanStageState"
+        },
+        "terraform_parametersPlanStatus": {
+            "type": "object",
+            "x-ves-oneof-field-state": "[\"infra_state\",\"plan_state\"]",
+            "x-ves-proto-message": "ves.io.schema.views.terraform_parameters.PlanStatus",
+            "properties": {
+                "error_output": {
+                    "type": "string",
+                    "description": " Error output of terraform run\n\nExample: - \"value\"-",
+                    "title": "error_output",
+                    "x-displayname": "Error Output",
+                    "x-ves-example": "value"
+                },
+                "infra_state": {
+                    "description": "Exclusive with [plan_state]\n Infrastructure state of the view provisioning",
+                    "title": "infra_state",
+                    "$ref": "#/definitions/terraform_parametersInfraState",
+                    "x-displayname": "Infra State"
+                },
+                "modification_timestamp": {
+                    "type": "string",
+                    "description": " ModificationTimestamp is a timestamp representing the server time when this status was\n last modified.",
+                    "title": "modification_timestamp",
+                    "format": "date-time",
+                    "x-displayname": "Modification Timestamp"
+                },
+                "plan_state": {
+                    "description": "Exclusive with [infra_state]\n Terraform state during plan stage",
+                    "title": "plan_state",
+                    "$ref": "#/definitions/terraform_parametersPlanStageState",
+                    "x-displayname": "Plan State"
+                },
+                "tf_plan_output": {
+                    "type": "string",
+                    "description": " Terraform \"plan\" command output. Terraform performs a refresh, unless explicitly disabled, and then\n determines what actions are necessary to achieve the desired state specified in the configuration files.\n\nExample: - \"value\"-",
+                    "title": "tf_plan_output",
+                    "x-displayname": "Terraform Plan Output",
+                    "x-ves-example": "value"
+                }
+            }
+        },
+        "viewsAWSInternetVIPType": {
+            "type": "object",
+            "description": "AWS Internet VIP Type",
+            "title": "AWS Internet VIP Type",
+            "x-displayname": "AWS Internet VIP Type",
+            "x-ves-oneof-field-internet_vip_subnet_choice": "[\"reserved_internet_nlb_subnet\",\"subnet\"]",
+            "x-ves-proto-message": "ves.io.schema.views.AWSInternetVIPType",
+            "properties": {
+                "reserved_internet_nlb_subnet": {
+                    "description": "Exclusive with [subnet]\n Autogenerate Internet NLB and reserve a subnet from the Primary CIDR",
+                    "title": "Autogenerate Internet NLB Subnet",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Autogenerate Internet NLB Subnet"
+                },
+                "subnet": {
+                    "description": "Exclusive with [reserved_internet_nlb_subnet]\n Select Existing Subnet for Internet NLB Subnet or Create New",
+                    "title": "Specify Subnet",
+                    "$ref": "#/definitions/viewsCloudSubnetType",
+                    "x-displayname": "Specify Subnet for Internet NLB Subnet"
+                }
+            }
+        },
+        "viewsAWSSubnetIdsType": {
+            "type": "object",
+            "description": "AWS Subnet Ids used by volterra site",
+            "title": "AWS Subnets Ids",
+            "x-displayname": "AWS Subnets Ids",
+            "x-ves-proto-message": "ves.io.schema.views.AWSSubnetIdsType",
+            "properties": {
+                "az_name": {
+                    "type": "string",
+                    "description": " AWS availability zone, must be consistent with the selected AWS region.\n\nExample: - \"us-west-2a\"-",
+                    "title": "AZ Name",
+                    "x-displayname": "AZ Name",
+                    "x-ves-example": "us-west-2a"
+                },
+                "inside_subnet": {
+                    "description": " Inside subnet Info",
+                    "title": "Inside Subnet Info",
+                    "$ref": "#/definitions/viewsAWSSubnetInfoType",
+                    "x-displayname": "Inside Subnet Info"
+                },
+                "inside_subnet_id": {
+                    "type": "string",
+                    "description": " Inside subnet ID used by volterra site\n\nExample: - \"subnet-12345678901234567\"-",
+                    "title": "Inside Subnet ID",
+                    "x-displayname": "Inside Subnet ID",
+                    "x-ves-example": "subnet-12345678901234567"
+                },
+                "outside_subnet": {
+                    "description": " Outside subnet Info",
+                    "title": "Outside Subnet Info",
+                    "$ref": "#/definitions/viewsAWSSubnetInfoType",
+                    "x-displayname": "Outside Subnet Info"
+                },
+                "outside_subnet_id": {
+                    "type": "string",
+                    "description": " Outside subnet ID used by volterra site\n\nExample: - \"subnet-12345678901234567\"-",
+                    "title": "Outside Subnet ID",
+                    "x-displayname": "Outside Subnet ID",
+                    "x-ves-example": "subnet-12345678901234567"
+                },
+                "workload_subnet": {
+                    "description": " Workload subnet Info",
+                    "title": "Workload Subnet Info",
+                    "$ref": "#/definitions/viewsAWSSubnetInfoType",
+                    "x-displayname": "Workload Subnet Info"
+                },
+                "workload_subnet_id": {
+                    "type": "string",
+                    "description": " Workload subnet ID used by volterra site\n\nExample: - \"subnet-12345678901234567\"-",
+                    "title": "Workload Subnet ID",
+                    "x-displayname": "Workload Subnet ID",
+                    "x-ves-example": "subnet-12345678901234567"
+                }
+            }
+        },
+        "viewsAWSSubnetInfoType": {
+            "type": "object",
+            "description": "AWS Subnets Info Type",
+            "title": "AWS Subnets Info Type",
+            "x-displayname": "AWS Subnets Info Type",
+            "x-ves-proto-message": "ves.io.schema.views.AWSSubnetInfoType",
+            "properties": {
+                "az_name": {
+                    "type": "string",
+                    "description": " AWS availability zone, must be consistent with the selected AWS region.\n\nExample: - \"us-west-2a\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.pattern: ^([a-z]{2})-([a-z0-9]{4,20})-([a-z0-9]{2})$\n",
+                    "title": "AZ Name",
+                    "x-displayname": "AZ Name",
+                    "x-ves-example": "us-west-2a",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.pattern": "^([a-z]{2})-([a-z0-9]{4,20})-([a-z0-9]{2})$"
+                    }
+                },
+                "id": {
+                    "type": "string",
+                    "description": " Subnet ID\n\nExample: - \"subnet-12345678901234567\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 64\n  ves.io.schema.rules.string.pattern: ^(subnet-)([a-z0-9]{8}|[a-z0-9]{17})$\n",
+                    "title": "Subnet ID",
+                    "maxLength": 64,
+                    "x-displayname": "Subnet ID",
+                    "x-ves-example": "subnet-12345678901234567",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "64",
+                        "ves.io.schema.rules.string.pattern": "^(subnet-)([a-z0-9]{8}|[a-z0-9]{17})$"
+                    }
+                },
+                "ipv4_prefix": {
+                    "type": "string",
+                    "description": " Subnet CIDR block. It has to be private address space.\n\nExample: - \"10.1.0.0/16\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.ipv4_prefix: true\n  ves.io.schema.rules.string.max_ip_prefix_length: 28\n  ves.io.schema.rules.string.min_ip_prefix_length: 8\n",
+                    "title": "Subnet CIDR block",
+                    "x-displayname": "Subnet CIDR block",
+                    "x-ves-example": "10.1.0.0/16",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.ipv4_prefix": "true",
+                        "ves.io.schema.rules.string.max_ip_prefix_length": "28",
+                        "ves.io.schema.rules.string.min_ip_prefix_length": "8"
+                    }
+                }
+            }
+        },
         "viewsAWSVPCOneInterfaceNodeType": {
             "type": "object",
             "description": "Parameters for creating Single interface Node in one AZ",
@@ -4772,7 +5115,7 @@ var APISwaggerJSON string = `{
         },
         "viewsAllowedVIPPorts": {
             "type": "object",
-            "description": "This defines the TCP port(s) which will be opened on the cloud loadbalancer.\nSuch that the client can use the cloud VIP IP and port combination\nto reach TCP/HTTP lb configured on the Volterra Site",
+            "description": "This defines the TCP port(s) which will be opened on the cloud loadbalancer.\nSuch that the client can use the cloud VIP IP and port combination\nto reach TCP/HTTP lb configured on the F5XC Site",
             "title": "Allowed VIP Ports",
             "x-displayname": "Allowed VIP Ports",
             "x-ves-oneof-field-port_choice": "[\"custom_ports\",\"use_http_https_port\",\"use_http_port\",\"use_https_port\"]",
@@ -4907,13 +5250,13 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "hosted_vifs": {
-                    "description": "Exclusive with [standard_vifs]\n Hosted VIF mode. Volterra provisions an AWS DirectConnect Gateway and a Virtual Private Gateway,\n and automatically associate provided hosted VIF and also setup BGP Peering.",
+                    "description": "Exclusive with [standard_vifs]\n Hosted VIF mode. F5XC provisions an AWS DirectConnect Gateway and a Virtual Private Gateway,\n and automatically associate provided hosted VIF and also setup BGP Peering.",
                     "title": "Hosted VIF mode",
                     "$ref": "#/definitions/viewsHostedVIFConfigType",
                     "x-displayname": "Hosted VIF mode"
                 },
                 "standard_vifs": {
-                    "description": "Exclusive with [hosted_vifs]\n Standard Non Hosted VIF Mode. Volterra provisions an AWS DirectConnect Gateway and a Virtual Private Gateway,\n and a user associate VIF to the DirectConnect gateway and setup BGP Peering.",
+                    "description": "Exclusive with [hosted_vifs]\n Standard Non Hosted VIF Mode. F5XC provisions an AWS DirectConnect Gateway and a Virtual Private Gateway,\n and a user associate VIF to the DirectConnect gateway and setup BGP Peering.",
                     "title": "Standard VIF mode",
                     "$ref": "#/definitions/schemaEmpty",
                     "x-displayname": "Standard VIF mode"
@@ -5219,8 +5562,8 @@ var APISwaggerJSON string = `{
         "viewsVolterraSoftwareType": {
             "type": "object",
             "description": "This is to specify volterra software version choice",
-            "title": "Volterra Software Version",
-            "x-displayname": "Volterra Software Version",
+            "title": "F5XC Software Version",
+            "x-displayname": "F5XC Software Version",
             "x-ves-displayorder": "1",
             "x-ves-oneof-field-volterra_sw_version_choice": "[\"default_sw_version\",\"volterra_software_version\"]",
             "x-ves-proto-message": "ves.io.schema.views.VolterraSoftwareType",
@@ -5233,10 +5576,10 @@ var APISwaggerJSON string = `{
                 },
                 "volterra_software_version": {
                     "type": "string",
-                    "description": "Exclusive with [default_sw_version]\n Volterra Software Version is optional parameter, which allows to specify target SW version for particular site e.g. crt-20210329-1002.\n\nExample: - \"crt-20210329-1002\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 20\n",
-                    "title": "Volterra Software Version",
+                    "description": "Exclusive with [default_sw_version]\n F5XC Software Version is optional parameter, which allows to specify target SW version for particular site e.g. crt-20210329-1002.\n\nExample: - \"crt-20210329-1002\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 20\n",
+                    "title": "F5XC Software Version",
                     "maxLength": 20,
-                    "x-displayname": "Volterra Software Version",
+                    "x-displayname": "F5XC Software Version",
                     "x-ves-example": "crt-20210329-1002",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.string.max_len": "20"
@@ -5418,10 +5761,10 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "sw": {
-                    "description": " Volterra Software Details",
-                    "title": "Volterra Software",
+                    "description": " F5XC Software Details",
+                    "title": "F5XC Software",
                     "$ref": "#/definitions/viewsVolterraSoftwareType",
-                    "x-displayname": "Volterra Software"
+                    "x-displayname": "F5XC Software"
                 },
                 "tags": {
                     "type": "object",

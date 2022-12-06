@@ -118,6 +118,10 @@ func (m *CreateSpecType) GetInterfaceChoiceDRefInfo() ([]db.DRefInfo, error) {
 
 		return nil, nil
 
+	case *CreateSpecType_VlanInterface:
+
+		return nil, nil
+
 	default:
 		return nil, nil
 	}
@@ -216,6 +220,17 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
+	case *CreateSpecType_VlanInterface:
+		if fv, exists := v.FldValidators["interface_choice.vlan_interface"]; exists {
+			val := m.GetInterfaceChoice().(*CreateSpecType_VlanInterface).VlanInterface
+			vOpts := append(opts,
+				db.WithValidateField("interface_choice"),
+				db.WithValidateField("vlan_interface"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 
@@ -250,6 +265,7 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	v.FldValidators["interface_choice.tunnel_interface"] = TunnelInterfaceTypeValidator().Validate
 	v.FldValidators["interface_choice.legacy_interface"] = LegacyInterfaceTypeValidator().Validate
 	v.FldValidators["interface_choice.dedicated_management_interface"] = DedicatedManagementInterfaceTypeValidator().Validate
+	v.FldValidators["interface_choice.vlan_interface"] = VlanInterfaceTypeValidator().Validate
 
 	return v
 }()
@@ -2909,6 +2925,10 @@ func (m *GetSpecType) GetInterfaceChoiceDRefInfo() ([]db.DRefInfo, error) {
 
 		return nil, nil
 
+	case *GetSpecType_VlanInterface:
+
+		return nil, nil
+
 	default:
 		return nil, nil
 	}
@@ -3493,6 +3513,17 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
+	case *GetSpecType_VlanInterface:
+		if fv, exists := v.FldValidators["interface_choice.vlan_interface"]; exists {
+			val := m.GetInterfaceChoice().(*GetSpecType_VlanInterface).VlanInterface
+			vOpts := append(opts,
+				db.WithValidateField("interface_choice"),
+				db.WithValidateField("vlan_interface"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 
@@ -3786,6 +3817,7 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v.FldValidators["interface_choice.tunnel_interface"] = TunnelInterfaceTypeValidator().Validate
 	v.FldValidators["interface_choice.legacy_interface"] = LegacyInterfaceTypeValidator().Validate
 	v.FldValidators["interface_choice.dedicated_management_interface"] = DedicatedManagementInterfaceTypeValidator().Validate
+	v.FldValidators["interface_choice.vlan_interface"] = VlanInterfaceTypeValidator().Validate
 
 	v.FldValidators["default_gateway"] = NetworkInterfaceDFGWValidator().Validate
 
@@ -4002,6 +4034,10 @@ func (m *GlobalSpecType) GetInterfaceChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "loopback_interface." + dri.DRField
 		}
 		return drInfos, err
+
+	case *GlobalSpecType_VlanInterface:
+
+		return nil, nil
 
 	default:
 		return nil, nil
@@ -4625,6 +4661,17 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
+	case *GlobalSpecType_VlanInterface:
+		if fv, exists := v.FldValidators["interface_choice.vlan_interface"]; exists {
+			val := m.GetInterfaceChoice().(*GlobalSpecType_VlanInterface).VlanInterface
+			vOpts := append(opts,
+				db.WithValidateField("interface_choice"),
+				db.WithValidateField("vlan_interface"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 
@@ -4945,6 +4992,7 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v.FldValidators["interface_choice.tunnel_interface"] = TunnelInterfaceTypeValidator().Validate
 	v.FldValidators["interface_choice.dedicated_management_interface"] = DedicatedManagementInterfaceTypeValidator().Validate
 	v.FldValidators["interface_choice.loopback_interface"] = LoopbackInterfaceTypeValidator().Validate
+	v.FldValidators["interface_choice.vlan_interface"] = VlanInterfaceTypeValidator().Validate
 
 	v.FldValidators["default_gateway"] = NetworkInterfaceDFGWValidator().Validate
 
@@ -6779,6 +6827,10 @@ func (m *ReplaceSpecType) GetInterfaceChoiceDRefInfo() ([]db.DRefInfo, error) {
 
 		return nil, nil
 
+	case *ReplaceSpecType_VlanInterface:
+
+		return nil, nil
+
 	default:
 		return nil, nil
 	}
@@ -6877,6 +6929,17 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
+	case *ReplaceSpecType_VlanInterface:
+		if fv, exists := v.FldValidators["interface_choice.vlan_interface"]; exists {
+			val := m.GetInterfaceChoice().(*ReplaceSpecType_VlanInterface).VlanInterface
+			vOpts := append(opts,
+				db.WithValidateField("interface_choice"),
+				db.WithValidateField("vlan_interface"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 
@@ -6911,6 +6974,7 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	v.FldValidators["interface_choice.tunnel_interface"] = TunnelInterfaceTypeValidator().Validate
 	v.FldValidators["interface_choice.legacy_interface"] = LegacyInterfaceTypeValidator().Validate
 	v.FldValidators["interface_choice.dedicated_management_interface"] = DedicatedManagementInterfaceTypeValidator().Validate
+	v.FldValidators["interface_choice.vlan_interface"] = VlanInterfaceTypeValidator().Validate
 
 	return v
 }()
@@ -8289,6 +8353,147 @@ var DefaultVhostInterfaceTypeValidator = func() *ValidateVhostInterfaceType {
 
 func VhostInterfaceTypeValidator() db.Validator {
 	return DefaultVhostInterfaceTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *VlanInterfaceType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *VlanInterfaceType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *VlanInterfaceType) DeepCopy() *VlanInterfaceType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &VlanInterfaceType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *VlanInterfaceType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *VlanInterfaceType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return VlanInterfaceTypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateVlanInterfaceType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateVlanInterfaceType) DeviceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for device")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateVlanInterfaceType) VlanIdValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for vlan_id")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateVlanInterfaceType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*VlanInterfaceType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *VlanInterfaceType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["device"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("device"))
+		if err := fv(ctx, m.GetDevice(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["vlan_id"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("vlan_id"))
+		if err := fv(ctx, m.GetVlanId(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultVlanInterfaceTypeValidator = func() *ValidateVlanInterfaceType {
+	v := &ValidateVlanInterfaceType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhDevice := v.DeviceValidationRuleHandler
+	rulesDevice := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.max_len":   "64",
+		"ves.io.schema.rules.string.min_len":   "1",
+	}
+	vFn, err = vrhDevice(rulesDevice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for VlanInterfaceType.device: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["device"] = vFn
+
+	vrhVlanId := v.VlanIdValidationRuleHandler
+	rulesVlanId := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.uint32.gte":       "1",
+		"ves.io.schema.rules.uint32.lte":       "4095",
+	}
+	vFn, err = vrhVlanId(rulesVlanId)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for VlanInterfaceType.vlan_id: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["vlan_id"] = vFn
+
+	return v
+}()
+
+func VlanInterfaceTypeValidator() db.Validator {
+	return DefaultVlanInterfaceTypeValidator
 }
 
 func (m *CreateSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {

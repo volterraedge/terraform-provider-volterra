@@ -747,14 +747,18 @@ var CustomAPISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.tenant_management.managed_tenant.GroupAssignmentType",
             "properties": {
                 "group": {
-                    "description": " Assosciate existing local user group which will be used to map groups in managed tenant.\n User should be member of this group to gain access into managed tenant.",
+                    "description": " Assosciate existing local user group which will be used to map groups in managed tenant.\n User should be member of this group to gain access into managed tenant.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "group",
                     "$ref": "#/definitions/schemaviewsObjectRefType",
-                    "x-displayname": "Group"
+                    "x-displayname": "Group",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 },
                 "managed_tenant_groups": {
                     "type": "array",
-                    "description": " List of group names in managed tenant (MT).\n Note - To properly establish access, admin of managed tenant need to create corresponding Allowed Tenant\n configuration object with access to use same group names. Once it's setup, when user from original tenant\n access managed tenant, underlying roles from managed tenant will be applied to user.\n\nExample: - \"user-group1\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 32\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " List of group names in managed tenant (MT).\n Note - To properly establish access, admin of managed tenant need to create corresponding Allowed Tenant\n configuration object with access to use same group names. Once it's setup, when user from original tenant\n access managed tenant, underlying roles from managed tenant will be applied to user.\n\nExample: - \"user-group1\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 32\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "managed_tenant_groups",
                     "maxItems": 32,
                     "items": {
@@ -762,7 +766,9 @@ var CustomAPISwaggerJSON string = `{
                     },
                     "x-displayname": "Managed Tenant Groups",
                     "x-ves-example": "user-group1",
+                    "x-ves-required": "true",
                     "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
                         "ves.io.schema.rules.repeated.max_items": "32",
                         "ves.io.schema.rules.repeated.unique": "true"
                     }

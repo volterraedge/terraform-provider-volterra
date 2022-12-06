@@ -2795,11 +2795,11 @@ var APISwaggerJSON string = `{
                 "volterra_nameservers": {
                     "type": "array",
                     "description": " Status of DNS domain verification process.",
-                    "title": "Volterra Nameservers",
+                    "title": "F5XC Nameservers",
                     "items": {
                         "type": "string"
                     },
-                    "x-displayname": "Volterra Nameservers"
+                    "x-displayname": "F5XC Nameservers"
                 }
             }
         },
@@ -2907,7 +2907,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "TXT Record"
                 },
                 "volterra_managed": {
-                    "description": "Exclusive with []\n Volterra will automatically create DNS A records for the domains matching this\n sub domain",
+                    "description": "Exclusive with []\n F5XC will automatically create DNS A records for the domains matching this\n sub domain",
                     "title": "Managed by Volterra",
                     "$ref": "#/definitions/schemaEmpty",
                     "x-displayname": "Managed by Distributed Cloud"

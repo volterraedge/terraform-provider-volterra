@@ -223,7 +223,7 @@ type GlobalSpecType struct {
 	//
 	// x-displayName: "Automatically Manage DNS Records"
 	// DNS records for domains will be managed automatically by Volterra.
-	// This requires the domain to be delegated to Volterra using the Delegated Domain feature.
+	// This requires the domain to be delegated to F5XC using the Delegated Domain feature.
 	DnsVolterraManaged bool `protobuf:"varint,11,opt,name=dns_volterra_managed,json=dnsVolterraManaged,proto3" json:"dns_volterra_managed,omitempty"`
 	// Origin Pools
 	//

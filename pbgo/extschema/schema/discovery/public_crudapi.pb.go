@@ -4,7 +4,7 @@
 // discovery
 //
 // x-displayName: "Discovery"
-// Service discovery in Volterra performs following
+// Service discovery in F5XC performs following
 //
 // Dynamic service discovery: Resolving the load balancer endpoints for a ADC cluster
 // Dynamic VIP discovery: Publishing virtual IP to attract traffic from clients

@@ -16,7 +16,6 @@ import (
 
 	ves_io_schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
 	ves_io_schema_policy "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/policy"
-	ves_io_schema_views "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views"
 )
 
 var (
@@ -63,52 +62,8 @@ func (m *CreateSpecType) Validate(ctx context.Context, opts ...db.ValidateOpt) e
 	return CreateSpecTypeValidator().Validate(ctx, m, opts...)
 }
 
-func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
-	if m == nil {
-		return nil, nil
-	}
-
-	return m.GetDestinationTypeDRefInfo()
-
-}
-
-// GetDRefInfo for the field's type
-func (m *CreateSpecType) GetDestinationTypeDRefInfo() ([]db.DRefInfo, error) {
-	if m.GetDestinationType() == nil {
-		return nil, nil
-	}
-
-	drInfos, err := m.GetDestinationType().GetDRefInfo()
-	if err != nil {
-		return nil, errors.Wrap(err, "GetDestinationType().GetDRefInfo() FAILED")
-	}
-	for i := range drInfos {
-		dri := &drInfos[i]
-		dri.DRField = "destination_type." + dri.DRField
-	}
-	return drInfos, err
-
-}
-
 type ValidateCreateSpecType struct {
 	FldValidators map[string]db.ValidatorFunc
-}
-
-func (v *ValidateCreateSpecType) DestinationTypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "MessageValidationRuleHandler for destination_type")
-	}
-	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
-		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
-			return err
-		}
-
-		return nil
-	}
-
-	return validatorFn, nil
 }
 
 func (v *ValidateCreateSpecType) L7AclRuleValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
@@ -118,12 +73,12 @@ func (v *ValidateCreateSpecType) L7AclRuleValidationRuleHandler(rules map[string
 	if err != nil {
 		return nil, errors.Wrap(err, "Message ValidationRuleHandler for l7_acl_rule")
 	}
-	itemsValidatorFn := func(ctx context.Context, elems []*L7AclRuleType, opts ...db.ValidateOpt) error {
+	itemsValidatorFn := func(ctx context.Context, elems []*L7AclRule, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
 			if err := itemValFn(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
-			if err := L7AclRuleTypeValidator().Validate(ctx, el, opts...); err != nil {
+			if err := L7AclRuleValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
 		}
@@ -135,9 +90,9 @@ func (v *ValidateCreateSpecType) L7AclRuleValidationRuleHandler(rules map[string
 	}
 
 	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
-		elems, ok := val.([]*L7AclRuleType)
+		elems, ok := val.([]*L7AclRule)
 		if !ok {
-			return fmt.Errorf("Repeated validation expected []*L7AclRuleType, got %T", val)
+			return fmt.Errorf("Repeated validation expected []*L7AclRule, got %T", val)
 		}
 		l := []string{}
 		for _, elem := range elems {
@@ -173,15 +128,6 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 		return nil
 	}
 
-	if fv, exists := v.FldValidators["destination_type"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("destination_type"))
-		if err := fv(ctx, m.GetDestinationType(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
 	if fv, exists := v.FldValidators["l7_acl_rule"]; exists {
 		vOpts := append(opts, db.WithValidateField("l7_acl_rule"))
 		if err := fv(ctx, m.GetL7AclRule(), vOpts...); err != nil {
@@ -205,21 +151,10 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
 
-	vrhDestinationType := v.DestinationTypeValidationRuleHandler
-	rulesDestinationType := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
-	}
-	vFn, err = vrhDestinationType(rulesDestinationType)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateSpecType.destination_type: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["destination_type"] = vFn
-
 	vrhL7AclRule := v.L7AclRuleValidationRuleHandler
 	rulesL7AclRule := map[string]string{
 		"ves.io.schema.rules.message.required":   "true",
-		"ves.io.schema.rules.repeated.max_items": "50",
+		"ves.io.schema.rules.repeated.max_items": "16",
 		"ves.io.schema.rules.repeated.unique":    "true",
 	}
 	vFn, err = vrhL7AclRule(rulesL7AclRule)
@@ -234,214 +169,6 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 
 func CreateSpecTypeValidator() db.Validator {
 	return DefaultCreateSpecTypeValidator
-}
-
-// augmented methods on protoc/std generated struct
-
-func (m *DestinationType) ToJSON() (string, error) {
-	return codec.ToJSON(m)
-}
-
-func (m *DestinationType) ToYAML() (string, error) {
-	return codec.ToYAML(m)
-}
-
-func (m *DestinationType) DeepCopy() *DestinationType {
-	if m == nil {
-		return nil
-	}
-	ser, err := m.Marshal()
-	if err != nil {
-		return nil
-	}
-	c := &DestinationType{}
-	err = c.Unmarshal(ser)
-	if err != nil {
-		return nil
-	}
-	return c
-}
-
-func (m *DestinationType) DeepCopyProto() proto.Message {
-	if m == nil {
-		return nil
-	}
-	return m.DeepCopy()
-}
-
-func (m *DestinationType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
-	return DestinationTypeValidator().Validate(ctx, m, opts...)
-}
-
-func (m *DestinationType) GetDRefInfo() ([]db.DRefInfo, error) {
-	if m == nil {
-		return nil, nil
-	}
-
-	return m.GetDestinationTypeChoiceDRefInfo()
-
-}
-
-func (m *DestinationType) GetDestinationTypeChoiceDRefInfo() ([]db.DRefInfo, error) {
-	switch m.GetDestinationTypeChoice().(type) {
-	case *DestinationType_Vhost:
-
-		vref := m.GetVhost()
-		if vref == nil {
-			return nil, nil
-		}
-		vdRef := db.NewDirectRefForView(vref)
-		vdRef.SetKind("virtual_host.Object")
-		dri := db.DRefInfo{
-			RefdType:   "virtual_host.Object",
-			RefdTenant: vref.Tenant,
-			RefdNS:     vref.Namespace,
-			RefdName:   vref.Name,
-			DRField:    "vhost",
-			Ref:        vdRef,
-		}
-		return []db.DRefInfo{dri}, nil
-
-	case *DestinationType_Tenant:
-
-		vref := m.GetTenant()
-		if vref == nil {
-			return nil, nil
-		}
-		vdRef := db.NewDirectRefForView(vref)
-		vdRef.SetKind("tenant.Object")
-		dri := db.DRefInfo{
-			RefdType:   "tenant.Object",
-			RefdTenant: vref.Tenant,
-			RefdNS:     vref.Namespace,
-			RefdName:   vref.Name,
-			DRField:    "tenant",
-			Ref:        vdRef,
-		}
-		return []db.DRefInfo{dri}, nil
-
-	default:
-		return nil, nil
-	}
-}
-
-// GetDestinationTypeChoiceDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
-func (m *DestinationType) GetDestinationTypeChoiceDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
-	var entries []db.Entry
-
-	switch m.GetDestinationTypeChoice().(type) {
-	case *DestinationType_Vhost:
-		refdType, err := d.TypeForEntryKind("", "", "virtual_host.Object")
-		if err != nil {
-			return nil, errors.Wrap(err, "Cannot find type for kind: virtual_host")
-		}
-
-		vref := m.GetVhost()
-		if vref == nil {
-			return nil, nil
-		}
-		ref := &ves_io_schema.ObjectRefType{
-			Kind:      "virtual_host.Object",
-			Tenant:    vref.Tenant,
-			Namespace: vref.Namespace,
-			Name:      vref.Name,
-		}
-		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
-		if err != nil {
-			return nil, errors.Wrap(err, "Getting referred entry")
-		}
-		if refdEnt != nil {
-			entries = append(entries, refdEnt)
-		}
-
-	case *DestinationType_Tenant:
-		refdType, err := d.TypeForEntryKind("", "", "tenant.Object")
-		if err != nil {
-			return nil, errors.Wrap(err, "Cannot find type for kind: tenant")
-		}
-
-		vref := m.GetTenant()
-		if vref == nil {
-			return nil, nil
-		}
-		ref := &ves_io_schema.ObjectRefType{
-			Kind:      "tenant.Object",
-			Tenant:    vref.Tenant,
-			Namespace: vref.Namespace,
-			Name:      vref.Name,
-		}
-		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
-		if err != nil {
-			return nil, errors.Wrap(err, "Getting referred entry")
-		}
-		if refdEnt != nil {
-			entries = append(entries, refdEnt)
-		}
-
-	}
-
-	return entries, nil
-}
-
-type ValidateDestinationType struct {
-	FldValidators map[string]db.ValidatorFunc
-}
-
-func (v *ValidateDestinationType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
-	m, ok := pm.(*DestinationType)
-	if !ok {
-		switch t := pm.(type) {
-		case nil:
-			return nil
-		default:
-			return fmt.Errorf("Expected type *DestinationType got type %s", t)
-		}
-	}
-	if m == nil {
-		return nil
-	}
-
-	switch m.GetDestinationTypeChoice().(type) {
-	case *DestinationType_Vhost:
-		if fv, exists := v.FldValidators["destination_type_choice.vhost"]; exists {
-			val := m.GetDestinationTypeChoice().(*DestinationType_Vhost).Vhost
-			vOpts := append(opts,
-				db.WithValidateField("destination_type_choice"),
-				db.WithValidateField("vhost"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	case *DestinationType_Tenant:
-		if fv, exists := v.FldValidators["destination_type_choice.tenant"]; exists {
-			val := m.GetDestinationTypeChoice().(*DestinationType_Tenant).Tenant
-			vOpts := append(opts,
-				db.WithValidateField("destination_type_choice"),
-				db.WithValidateField("tenant"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-
-	}
-
-	return nil
-}
-
-// Well-known symbol for default validator implementation
-var DefaultDestinationTypeValidator = func() *ValidateDestinationType {
-	v := &ValidateDestinationType{FldValidators: map[string]db.ValidatorFunc{}}
-
-	v.FldValidators["destination_type_choice.vhost"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
-	v.FldValidators["destination_type_choice.tenant"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
-
-	return v
-}()
-
-func DestinationTypeValidator() db.Validator {
-	return DefaultDestinationTypeValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -481,52 +208,8 @@ func (m *GetSpecType) Validate(ctx context.Context, opts ...db.ValidateOpt) erro
 	return GetSpecTypeValidator().Validate(ctx, m, opts...)
 }
 
-func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
-	if m == nil {
-		return nil, nil
-	}
-
-	return m.GetDestinationTypeDRefInfo()
-
-}
-
-// GetDRefInfo for the field's type
-func (m *GetSpecType) GetDestinationTypeDRefInfo() ([]db.DRefInfo, error) {
-	if m.GetDestinationType() == nil {
-		return nil, nil
-	}
-
-	drInfos, err := m.GetDestinationType().GetDRefInfo()
-	if err != nil {
-		return nil, errors.Wrap(err, "GetDestinationType().GetDRefInfo() FAILED")
-	}
-	for i := range drInfos {
-		dri := &drInfos[i]
-		dri.DRField = "destination_type." + dri.DRField
-	}
-	return drInfos, err
-
-}
-
 type ValidateGetSpecType struct {
 	FldValidators map[string]db.ValidatorFunc
-}
-
-func (v *ValidateGetSpecType) DestinationTypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "MessageValidationRuleHandler for destination_type")
-	}
-	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
-		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
-			return err
-		}
-
-		return nil
-	}
-
-	return validatorFn, nil
 }
 
 func (v *ValidateGetSpecType) L7AclRuleValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
@@ -536,12 +219,12 @@ func (v *ValidateGetSpecType) L7AclRuleValidationRuleHandler(rules map[string]st
 	if err != nil {
 		return nil, errors.Wrap(err, "Message ValidationRuleHandler for l7_acl_rule")
 	}
-	itemsValidatorFn := func(ctx context.Context, elems []*L7AclRuleType, opts ...db.ValidateOpt) error {
+	itemsValidatorFn := func(ctx context.Context, elems []*L7AclRule, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
 			if err := itemValFn(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
-			if err := L7AclRuleTypeValidator().Validate(ctx, el, opts...); err != nil {
+			if err := L7AclRuleValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
 		}
@@ -553,9 +236,9 @@ func (v *ValidateGetSpecType) L7AclRuleValidationRuleHandler(rules map[string]st
 	}
 
 	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
-		elems, ok := val.([]*L7AclRuleType)
+		elems, ok := val.([]*L7AclRule)
 		if !ok {
-			return fmt.Errorf("Repeated validation expected []*L7AclRuleType, got %T", val)
+			return fmt.Errorf("Repeated validation expected []*L7AclRule, got %T", val)
 		}
 		l := []string{}
 		for _, elem := range elems {
@@ -591,15 +274,6 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 		return nil
 	}
 
-	if fv, exists := v.FldValidators["destination_type"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("destination_type"))
-		if err := fv(ctx, m.GetDestinationType(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
 	if fv, exists := v.FldValidators["l7_acl_rule"]; exists {
 		vOpts := append(opts, db.WithValidateField("l7_acl_rule"))
 		if err := fv(ctx, m.GetL7AclRule(), vOpts...); err != nil {
@@ -623,21 +297,10 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
 
-	vrhDestinationType := v.DestinationTypeValidationRuleHandler
-	rulesDestinationType := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
-	}
-	vFn, err = vrhDestinationType(rulesDestinationType)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for GetSpecType.destination_type: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["destination_type"] = vFn
-
 	vrhL7AclRule := v.L7AclRuleValidationRuleHandler
 	rulesL7AclRule := map[string]string{
 		"ves.io.schema.rules.message.required":   "true",
-		"ves.io.schema.rules.repeated.max_items": "50",
+		"ves.io.schema.rules.repeated.max_items": "16",
 		"ves.io.schema.rules.repeated.unique":    "true",
 	}
 	vFn, err = vrhL7AclRule(rulesL7AclRule)
@@ -691,52 +354,8 @@ func (m *GlobalSpecType) Validate(ctx context.Context, opts ...db.ValidateOpt) e
 	return GlobalSpecTypeValidator().Validate(ctx, m, opts...)
 }
 
-func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
-	if m == nil {
-		return nil, nil
-	}
-
-	return m.GetDestinationTypeDRefInfo()
-
-}
-
-// GetDRefInfo for the field's type
-func (m *GlobalSpecType) GetDestinationTypeDRefInfo() ([]db.DRefInfo, error) {
-	if m.GetDestinationType() == nil {
-		return nil, nil
-	}
-
-	drInfos, err := m.GetDestinationType().GetDRefInfo()
-	if err != nil {
-		return nil, errors.Wrap(err, "GetDestinationType().GetDRefInfo() FAILED")
-	}
-	for i := range drInfos {
-		dri := &drInfos[i]
-		dri.DRField = "destination_type." + dri.DRField
-	}
-	return drInfos, err
-
-}
-
 type ValidateGlobalSpecType struct {
 	FldValidators map[string]db.ValidatorFunc
-}
-
-func (v *ValidateGlobalSpecType) DestinationTypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "MessageValidationRuleHandler for destination_type")
-	}
-	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
-		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
-			return err
-		}
-
-		return nil
-	}
-
-	return validatorFn, nil
 }
 
 func (v *ValidateGlobalSpecType) L7AclRuleValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
@@ -746,12 +365,12 @@ func (v *ValidateGlobalSpecType) L7AclRuleValidationRuleHandler(rules map[string
 	if err != nil {
 		return nil, errors.Wrap(err, "Message ValidationRuleHandler for l7_acl_rule")
 	}
-	itemsValidatorFn := func(ctx context.Context, elems []*L7AclRuleType, opts ...db.ValidateOpt) error {
+	itemsValidatorFn := func(ctx context.Context, elems []*L7AclRule, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
 			if err := itemValFn(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
-			if err := L7AclRuleTypeValidator().Validate(ctx, el, opts...); err != nil {
+			if err := L7AclRuleValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
 		}
@@ -763,9 +382,9 @@ func (v *ValidateGlobalSpecType) L7AclRuleValidationRuleHandler(rules map[string
 	}
 
 	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
-		elems, ok := val.([]*L7AclRuleType)
+		elems, ok := val.([]*L7AclRule)
 		if !ok {
-			return fmt.Errorf("Repeated validation expected []*L7AclRuleType, got %T", val)
+			return fmt.Errorf("Repeated validation expected []*L7AclRule, got %T", val)
 		}
 		l := []string{}
 		for _, elem := range elems {
@@ -801,15 +420,6 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 		return nil
 	}
 
-	if fv, exists := v.FldValidators["destination_type"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("destination_type"))
-		if err := fv(ctx, m.GetDestinationType(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
 	if fv, exists := v.FldValidators["l7_acl_rule"]; exists {
 		vOpts := append(opts, db.WithValidateField("l7_acl_rule"))
 		if err := fv(ctx, m.GetL7AclRule(), vOpts...); err != nil {
@@ -833,21 +443,10 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
 
-	vrhDestinationType := v.DestinationTypeValidationRuleHandler
-	rulesDestinationType := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
-	}
-	vFn, err = vrhDestinationType(rulesDestinationType)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.destination_type: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["destination_type"] = vFn
-
 	vrhL7AclRule := v.L7AclRuleValidationRuleHandler
 	rulesL7AclRule := map[string]string{
 		"ves.io.schema.rules.message.required":   "true",
-		"ves.io.schema.rules.repeated.max_items": "50",
+		"ves.io.schema.rules.repeated.max_items": "16",
 		"ves.io.schema.rules.repeated.unique":    "true",
 	}
 	vFn, err = vrhL7AclRule(rulesL7AclRule)
@@ -866,15 +465,15 @@ func GlobalSpecTypeValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
-func (m *L7AclRuleType) ToJSON() (string, error) {
+func (m *L7AclRule) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
 
-func (m *L7AclRuleType) ToYAML() (string, error) {
+func (m *L7AclRule) ToYAML() (string, error) {
 	return codec.ToYAML(m)
 }
 
-func (m *L7AclRuleType) DeepCopy() *L7AclRuleType {
+func (m *L7AclRule) DeepCopy() *L7AclRule {
 	if m == nil {
 		return nil
 	}
@@ -882,7 +481,7 @@ func (m *L7AclRuleType) DeepCopy() *L7AclRuleType {
 	if err != nil {
 		return nil
 	}
-	c := &L7AclRuleType{}
+	c := &L7AclRule{}
 	err = c.Unmarshal(ser)
 	if err != nil {
 		return nil
@@ -890,22 +489,22 @@ func (m *L7AclRuleType) DeepCopy() *L7AclRuleType {
 	return c
 }
 
-func (m *L7AclRuleType) DeepCopyProto() proto.Message {
+func (m *L7AclRule) DeepCopyProto() proto.Message {
 	if m == nil {
 		return nil
 	}
 	return m.DeepCopy()
 }
 
-func (m *L7AclRuleType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
-	return L7AclRuleTypeValidator().Validate(ctx, m, opts...)
+func (m *L7AclRule) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return L7AclRuleValidator().Validate(ctx, m, opts...)
 }
 
-type ValidateL7AclRuleType struct {
+type ValidateL7AclRule struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
-func (v *ValidateL7AclRuleType) MetadataValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+func (v *ValidateL7AclRule) MetadataValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -926,7 +525,7 @@ func (v *ValidateL7AclRuleType) MetadataValidationRuleHandler(rules map[string]s
 	return validatorFn, nil
 }
 
-func (v *ValidateL7AclRuleType) ActionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+func (v *ValidateL7AclRule) ActionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
 	var conv db.EnumConvFn
 	conv = func(v interface{}) int32 {
@@ -942,14 +541,230 @@ func (v *ValidateL7AclRuleType) ActionValidationRuleHandler(rules map[string]str
 	return validatorFn, nil
 }
 
-func (v *ValidateL7AclRuleType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
-	m, ok := pm.(*L7AclRuleType)
+func (v *ValidateL7AclRule) IpPrefixValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepStringItemRules(rules)
+	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Item ValidationRuleHandler for ip_prefix")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []string, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for ip_prefix")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]string)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []string, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal := fmt.Sprintf("%v", elem)
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated ip_prefix")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items ip_prefix")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateL7AclRule) CountriesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepEnumItemRules(rules)
+	var conv db.EnumConvFn
+	conv = func(v interface{}) int32 {
+		i := v.(ves_io_schema_policy.CountryCode)
+		return int32(i)
+	}
+	// ves_io_schema_policy.CountryCode_name is generated in .pb.go
+	itemValFn, err := db.NewEnumValidationRuleHandler(itemRules, ves_io_schema_policy.CountryCode_name, conv)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for countries")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []ves_io_schema_policy.CountryCode, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for countries")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]ves_io_schema_policy.CountryCode)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []ves_io_schema_policy.CountryCode, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal := fmt.Sprintf("%v", elem)
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated countries")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items countries")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateL7AclRule) AsNumbersValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepUint32ItemRules(rules)
+	itemValFn, err := db.NewUint32ValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Item ValidationRuleHandler for as_numbers")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []uint32, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for as_numbers")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]uint32)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []uint32, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal := fmt.Sprintf("%v", elem)
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated as_numbers")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items as_numbers")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateL7AclRule) TlsFingerprintsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepStringItemRules(rules)
+	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Item ValidationRuleHandler for tls_fingerprints")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []string, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for tls_fingerprints")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]string)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []string, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal := fmt.Sprintf("%v", elem)
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated tls_fingerprints")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items tls_fingerprints")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateL7AclRule) PathsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepStringItemRules(rules)
+	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Item ValidationRuleHandler for paths")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []string, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for paths")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]string)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []string, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal := fmt.Sprintf("%v", elem)
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated paths")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items paths")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateL7AclRule) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*L7AclRule)
 	if !ok {
 		switch t := pm.(type) {
 		case nil:
 			return nil
 		default:
-			return fmt.Errorf("Expected type *L7AclRuleType got type %s", t)
+			return fmt.Errorf("Expected type *L7AclRule got type %s", t)
 		}
 	}
 	if m == nil {
@@ -965,28 +780,25 @@ func (v *ValidateL7AclRuleType) Validate(ctx context.Context, pm interface{}, op
 
 	}
 
-	if fv, exists := v.FldValidators["asn_list_matcher"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("asn_list_matcher"))
-		if err := fv(ctx, m.GetAsnListMatcher(), vOpts...); err != nil {
+	if fv, exists := v.FldValidators["as_numbers"]; exists {
+		vOpts := append(opts, db.WithValidateField("as_numbers"))
+		if err := fv(ctx, m.GetAsNumbers(), vOpts...); err != nil {
 			return err
 		}
 
 	}
 
-	if fv, exists := v.FldValidators["country_matcher"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("country_matcher"))
-		if err := fv(ctx, m.GetCountryMatcher(), vOpts...); err != nil {
+	if fv, exists := v.FldValidators["countries"]; exists {
+		vOpts := append(opts, db.WithValidateField("countries"))
+		if err := fv(ctx, m.GetCountries(), vOpts...); err != nil {
 			return err
 		}
 
 	}
 
-	if fv, exists := v.FldValidators["ip_matcher"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("ip_matcher"))
-		if err := fv(ctx, m.GetIpMatcher(), vOpts...); err != nil {
+	if fv, exists := v.FldValidators["ip_prefix"]; exists {
+		vOpts := append(opts, db.WithValidateField("ip_prefix"))
+		if err := fv(ctx, m.GetIpPrefix(), vOpts...); err != nil {
 			return err
 		}
 
@@ -1001,19 +813,17 @@ func (v *ValidateL7AclRuleType) Validate(ctx context.Context, pm interface{}, op
 
 	}
 
-	if fv, exists := v.FldValidators["path_matcher"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("path_matcher"))
-		if err := fv(ctx, m.GetPathMatcher(), vOpts...); err != nil {
+	if fv, exists := v.FldValidators["paths"]; exists {
+		vOpts := append(opts, db.WithValidateField("paths"))
+		if err := fv(ctx, m.GetPaths(), vOpts...); err != nil {
 			return err
 		}
 
 	}
 
-	if fv, exists := v.FldValidators["tls_fingerprint_matcher"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("tls_fingerprint_matcher"))
-		if err := fv(ctx, m.GetTlsFingerprintMatcher(), vOpts...); err != nil {
+	if fv, exists := v.FldValidators["tls_fingerprints"]; exists {
+		vOpts := append(opts, db.WithValidateField("tls_fingerprints"))
+		if err := fv(ctx, m.GetTlsFingerprints(), vOpts...); err != nil {
 			return err
 		}
 
@@ -1023,8 +833,8 @@ func (v *ValidateL7AclRuleType) Validate(ctx context.Context, pm interface{}, op
 }
 
 // Well-known symbol for default validator implementation
-var DefaultL7AclRuleTypeValidator = func() *ValidateL7AclRuleType {
-	v := &ValidateL7AclRuleType{FldValidators: map[string]db.ValidatorFunc{}}
+var DefaultL7AclRuleValidator = func() *ValidateL7AclRule {
+	v := &ValidateL7AclRule{FldValidators: map[string]db.ValidatorFunc{}}
 
 	var (
 		err error
@@ -1040,7 +850,7 @@ var DefaultL7AclRuleTypeValidator = func() *ValidateL7AclRuleType {
 	}
 	vFn, err = vrhMetadata(rulesMetadata)
 	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for L7AclRuleType.metadata: %s", err)
+		errMsg := fmt.Sprintf("ValidationRuleHandler for L7AclRule.metadata: %s", err)
 		panic(errMsg)
 	}
 	v.FldValidators["metadata"] = vFn
@@ -1051,26 +861,82 @@ var DefaultL7AclRuleTypeValidator = func() *ValidateL7AclRuleType {
 	}
 	vFn, err = vrhAction(rulesAction)
 	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for L7AclRuleType.action: %s", err)
+		errMsg := fmt.Sprintf("ValidationRuleHandler for L7AclRule.action: %s", err)
 		panic(errMsg)
 	}
 	v.FldValidators["action"] = vFn
 
-	v.FldValidators["country_matcher"] = ves_io_schema_policy.CountryCodeListValidator().Validate
+	vrhIpPrefix := v.IpPrefixValidationRuleHandler
+	rulesIpPrefix := map[string]string{
+		"ves.io.schema.rules.repeated.items.string.ipv4_prefix": "true",
+		"ves.io.schema.rules.repeated.max_items":                "256",
+		"ves.io.schema.rules.repeated.unique":                   "true",
+	}
+	vFn, err = vrhIpPrefix(rulesIpPrefix)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for L7AclRule.ip_prefix: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["ip_prefix"] = vFn
 
-	v.FldValidators["asn_list_matcher"] = ves_io_schema_policy.AsnMatchListValidator().Validate
+	vrhCountries := v.CountriesValidationRuleHandler
+	rulesCountries := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "64",
+		"ves.io.schema.rules.repeated.unique":    "true",
+	}
+	vFn, err = vrhCountries(rulesCountries)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for L7AclRule.countries: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["countries"] = vFn
 
-	v.FldValidators["tls_fingerprint_matcher"] = ves_io_schema_policy.StringMatcherTypeValidator().Validate
+	vrhAsNumbers := v.AsNumbersValidationRuleHandler
+	rulesAsNumbers := map[string]string{
+		"ves.io.schema.rules.message.required":   "true",
+		"ves.io.schema.rules.repeated.max_items": "16",
+		"ves.io.schema.rules.repeated.unique":    "true",
+	}
+	vFn, err = vrhAsNumbers(rulesAsNumbers)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for L7AclRule.as_numbers: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["as_numbers"] = vFn
 
-	v.FldValidators["path_matcher"] = PathMatcherTypeValidator().Validate
+	vrhTlsFingerprints := v.TlsFingerprintsValidationRuleHandler
+	rulesTlsFingerprints := map[string]string{
+		"ves.io.schema.rules.repeated.items.string.len": "32",
+		"ves.io.schema.rules.repeated.max_items":        "16",
+		"ves.io.schema.rules.repeated.unique":           "true",
+	}
+	vFn, err = vrhTlsFingerprints(rulesTlsFingerprints)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for L7AclRule.tls_fingerprints: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["tls_fingerprints"] = vFn
 
-	v.FldValidators["ip_matcher"] = ves_io_schema_policy.PrefixMatchListValidator().Validate
+	vrhPaths := v.PathsValidationRuleHandler
+	rulesPaths := map[string]string{
+		"ves.io.schema.rules.repeated.items.string.http_path": "true",
+		"ves.io.schema.rules.repeated.items.string.max_bytes": "256",
+		"ves.io.schema.rules.repeated.items.string.not_empty": "true",
+		"ves.io.schema.rules.repeated.max_items":              "16",
+		"ves.io.schema.rules.repeated.unique":                 "true",
+	}
+	vFn, err = vrhPaths(rulesPaths)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for L7AclRule.paths: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["paths"] = vFn
 
 	return v
 }()
 
-func L7AclRuleTypeValidator() db.Validator {
-	return DefaultL7AclRuleTypeValidator
+func L7AclRuleValidator() db.Validator {
+	return DefaultL7AclRuleValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -1252,52 +1118,8 @@ func (m *ReplaceSpecType) Validate(ctx context.Context, opts ...db.ValidateOpt) 
 	return ReplaceSpecTypeValidator().Validate(ctx, m, opts...)
 }
 
-func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
-	if m == nil {
-		return nil, nil
-	}
-
-	return m.GetDestinationTypeDRefInfo()
-
-}
-
-// GetDRefInfo for the field's type
-func (m *ReplaceSpecType) GetDestinationTypeDRefInfo() ([]db.DRefInfo, error) {
-	if m.GetDestinationType() == nil {
-		return nil, nil
-	}
-
-	drInfos, err := m.GetDestinationType().GetDRefInfo()
-	if err != nil {
-		return nil, errors.Wrap(err, "GetDestinationType().GetDRefInfo() FAILED")
-	}
-	for i := range drInfos {
-		dri := &drInfos[i]
-		dri.DRField = "destination_type." + dri.DRField
-	}
-	return drInfos, err
-
-}
-
 type ValidateReplaceSpecType struct {
 	FldValidators map[string]db.ValidatorFunc
-}
-
-func (v *ValidateReplaceSpecType) DestinationTypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "MessageValidationRuleHandler for destination_type")
-	}
-	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
-		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
-			return err
-		}
-
-		return nil
-	}
-
-	return validatorFn, nil
 }
 
 func (v *ValidateReplaceSpecType) L7AclRuleValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
@@ -1307,12 +1129,12 @@ func (v *ValidateReplaceSpecType) L7AclRuleValidationRuleHandler(rules map[strin
 	if err != nil {
 		return nil, errors.Wrap(err, "Message ValidationRuleHandler for l7_acl_rule")
 	}
-	itemsValidatorFn := func(ctx context.Context, elems []*L7AclRuleType, opts ...db.ValidateOpt) error {
+	itemsValidatorFn := func(ctx context.Context, elems []*L7AclRule, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
 			if err := itemValFn(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
-			if err := L7AclRuleTypeValidator().Validate(ctx, el, opts...); err != nil {
+			if err := L7AclRuleValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
 		}
@@ -1324,9 +1146,9 @@ func (v *ValidateReplaceSpecType) L7AclRuleValidationRuleHandler(rules map[strin
 	}
 
 	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
-		elems, ok := val.([]*L7AclRuleType)
+		elems, ok := val.([]*L7AclRule)
 		if !ok {
-			return fmt.Errorf("Repeated validation expected []*L7AclRuleType, got %T", val)
+			return fmt.Errorf("Repeated validation expected []*L7AclRule, got %T", val)
 		}
 		l := []string{}
 		for _, elem := range elems {
@@ -1362,15 +1184,6 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 		return nil
 	}
 
-	if fv, exists := v.FldValidators["destination_type"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("destination_type"))
-		if err := fv(ctx, m.GetDestinationType(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
 	if fv, exists := v.FldValidators["l7_acl_rule"]; exists {
 		vOpts := append(opts, db.WithValidateField("l7_acl_rule"))
 		if err := fv(ctx, m.GetL7AclRule(), vOpts...); err != nil {
@@ -1394,21 +1207,10 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
 
-	vrhDestinationType := v.DestinationTypeValidationRuleHandler
-	rulesDestinationType := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
-	}
-	vFn, err = vrhDestinationType(rulesDestinationType)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for ReplaceSpecType.destination_type: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["destination_type"] = vFn
-
 	vrhL7AclRule := v.L7AclRuleValidationRuleHandler
 	rulesL7AclRule := map[string]string{
 		"ves.io.schema.rules.message.required":   "true",
-		"ves.io.schema.rules.repeated.max_items": "50",
+		"ves.io.schema.rules.repeated.max_items": "16",
 		"ves.io.schema.rules.repeated.unique":    "true",
 	}
 	vFn, err = vrhL7AclRule(rulesL7AclRule)
@@ -1429,7 +1231,6 @@ func (m *CreateSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool
 	if f == nil {
 		return
 	}
-	m.DestinationType = f.GetDestinationType()
 	m.L7AclRule = f.GetL7AclRule()
 }
 
@@ -1448,7 +1249,6 @@ func (m *CreateSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) 
 	}
 	_ = m1
 
-	f.DestinationType = m1.DestinationType
 	f.L7AclRule = m1.L7AclRule
 }
 
@@ -1464,7 +1264,6 @@ func (m *GetSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	if f == nil {
 		return
 	}
-	m.DestinationType = f.GetDestinationType()
 	m.L7AclRule = f.GetL7AclRule()
 }
 
@@ -1483,7 +1282,6 @@ func (m *GetSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	}
 	_ = m1
 
-	f.DestinationType = m1.DestinationType
 	f.L7AclRule = m1.L7AclRule
 }
 
@@ -1499,7 +1297,6 @@ func (m *ReplaceSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy boo
 	if f == nil {
 		return
 	}
-	m.DestinationType = f.GetDestinationType()
 	m.L7AclRule = f.GetL7AclRule()
 }
 
@@ -1518,7 +1315,6 @@ func (m *ReplaceSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool)
 	}
 	_ = m1
 
-	f.DestinationType = m1.DestinationType
 	f.L7AclRule = m1.L7AclRule
 }
 

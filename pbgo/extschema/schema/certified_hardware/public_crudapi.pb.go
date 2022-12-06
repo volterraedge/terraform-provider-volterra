@@ -5,7 +5,7 @@
 //
 // x-displayName: "Certified Hardware"
 // Certified Hardware object represents physical hardware or cloud instance type that will be used to instantiate
-// a volterra software appliance instance for the Volterra sites (Customer edge site). It has following information
+// a volterra software appliance instance for the F5XC sites (Customer edge site). It has following information
 //   *  Type
 //   *  Vendor
 //   *  Model

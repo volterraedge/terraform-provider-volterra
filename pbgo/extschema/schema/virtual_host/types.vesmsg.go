@@ -2208,6 +2208,15 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["csrf_policy"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("csrf_policy"))
+		if err := fv(ctx, m.GetCsrfPolicy(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["custom_errors"]; exists {
 		vOpts := append(opts, db.WithValidateField("custom_errors"))
 		if err := fv(ctx, m.GetCustomErrors(), vOpts...); err != nil {
@@ -2255,6 +2264,15 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 
 		vOpts := append(opts, db.WithValidateField("disable_dns_resolve"))
 		if err := fv(ctx, m.GetDisableDnsResolve(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["dns_proxy_configuration"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("dns_proxy_configuration"))
+		if err := fv(ctx, m.GetDnsProxyConfiguration(), vOpts...); err != nil {
 			return err
 		}
 
@@ -2728,11 +2746,367 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 
 	v.FldValidators["header_transformation_type"] = ves_io_schema.HeaderTransformationTypeValidator().Validate
 
+	v.FldValidators["csrf_policy"] = ves_io_schema.CsrfPolicyValidator().Validate
+
+	v.FldValidators["dns_proxy_configuration"] = DNSProxyConfigurationValidator().Validate
+
 	return v
 }()
 
 func CreateSpecTypeValidator() db.Validator {
 	return DefaultCreateSpecTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *DNSCacheProfile) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *DNSCacheProfile) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *DNSCacheProfile) DeepCopy() *DNSCacheProfile {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &DNSCacheProfile{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *DNSCacheProfile) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *DNSCacheProfile) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return DNSCacheProfileValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateDNSCacheProfile struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateDNSCacheProfile) CacheProfileChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for cache_profile_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateDNSCacheProfile) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*DNSCacheProfile)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *DNSCacheProfile got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["cache_profile_choice"]; exists {
+		val := m.GetCacheProfileChoice()
+		vOpts := append(opts,
+			db.WithValidateField("cache_profile_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetCacheProfileChoice().(type) {
+	case *DNSCacheProfile_EnableCacheProfile:
+		if fv, exists := v.FldValidators["cache_profile_choice.enable_cache_profile"]; exists {
+			val := m.GetCacheProfileChoice().(*DNSCacheProfile_EnableCacheProfile).EnableCacheProfile
+			vOpts := append(opts,
+				db.WithValidateField("cache_profile_choice"),
+				db.WithValidateField("enable_cache_profile"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *DNSCacheProfile_DisableCacheProfile:
+		if fv, exists := v.FldValidators["cache_profile_choice.disable_cache_profile"]; exists {
+			val := m.GetCacheProfileChoice().(*DNSCacheProfile_DisableCacheProfile).DisableCacheProfile
+			vOpts := append(opts,
+				db.WithValidateField("cache_profile_choice"),
+				db.WithValidateField("disable_cache_profile"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultDNSCacheProfileValidator = func() *ValidateDNSCacheProfile {
+	v := &ValidateDNSCacheProfile{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhCacheProfileChoice := v.CacheProfileChoiceValidationRuleHandler
+	rulesCacheProfileChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhCacheProfileChoice(rulesCacheProfileChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for DNSCacheProfile.cache_profile_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["cache_profile_choice"] = vFn
+
+	return v
+}()
+
+func DNSCacheProfileValidator() db.Validator {
+	return DefaultDNSCacheProfileValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *DNSDDoSProfile) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *DNSDDoSProfile) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *DNSDDoSProfile) DeepCopy() *DNSDDoSProfile {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &DNSDDoSProfile{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *DNSDDoSProfile) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *DNSDDoSProfile) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return DNSDDoSProfileValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateDNSDDoSProfile struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateDNSDDoSProfile) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*DNSDDoSProfile)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *DNSDDoSProfile got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	switch m.GetDdosMitigationChoice().(type) {
+	case *DNSDDoSProfile_EnableDdosMitigation:
+		if fv, exists := v.FldValidators["ddos_mitigation_choice.enable_ddos_mitigation"]; exists {
+			val := m.GetDdosMitigationChoice().(*DNSDDoSProfile_EnableDdosMitigation).EnableDdosMitigation
+			vOpts := append(opts,
+				db.WithValidateField("ddos_mitigation_choice"),
+				db.WithValidateField("enable_ddos_mitigation"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *DNSDDoSProfile_DisableDdosMitigation:
+		if fv, exists := v.FldValidators["ddos_mitigation_choice.disable_ddos_mitigation"]; exists {
+			val := m.GetDdosMitigationChoice().(*DNSDDoSProfile_DisableDdosMitigation).DisableDdosMitigation
+			vOpts := append(opts,
+				db.WithValidateField("ddos_mitigation_choice"),
+				db.WithValidateField("disable_ddos_mitigation"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultDNSDDoSProfileValidator = func() *ValidateDNSDDoSProfile {
+	v := &ValidateDNSDDoSProfile{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func DNSDDoSProfileValidator() db.Validator {
+	return DefaultDNSDDoSProfileValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *DNSProxyConfiguration) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *DNSProxyConfiguration) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *DNSProxyConfiguration) DeepCopy() *DNSProxyConfiguration {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &DNSProxyConfiguration{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *DNSProxyConfiguration) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *DNSProxyConfiguration) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return DNSProxyConfigurationValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateDNSProxyConfiguration struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateDNSProxyConfiguration) DdosProfileValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "MessageValidationRuleHandler for ddos_profile")
+	}
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateDNSProxyConfiguration) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*DNSProxyConfiguration)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *DNSProxyConfiguration got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["cache_profile"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("cache_profile"))
+		if err := fv(ctx, m.GetCacheProfile(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["ddos_profile"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("ddos_profile"))
+		if err := fv(ctx, m.GetDdosProfile(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultDNSProxyConfigurationValidator = func() *ValidateDNSProxyConfiguration {
+	v := &ValidateDNSProxyConfiguration{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhDdosProfile := v.DdosProfileValidationRuleHandler
+	rulesDdosProfile := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhDdosProfile(rulesDdosProfile)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for DNSProxyConfiguration.ddos_profile: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["ddos_profile"] = vFn
+
+	v.FldValidators["cache_profile"] = DNSCacheProfileValidator().Validate
+
+	return v
+}()
+
+func DNSProxyConfigurationValidator() db.Validator {
+	return DefaultDNSProxyConfigurationValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -4108,6 +4482,15 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 
 	}
 
+	if fv, exists := v.FldValidators["csrf_policy"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("csrf_policy"))
+		if err := fv(ctx, m.GetCsrfPolicy(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["custom_errors"]; exists {
 		vOpts := append(opts, db.WithValidateField("custom_errors"))
 		if err := fv(ctx, m.GetCustomErrors(), vOpts...); err != nil {
@@ -4166,6 +4549,41 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 		for idx, item := range m.GetDnsInfo() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
 			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["dns_proxy_configuration"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("dns_proxy_configuration"))
+		if err := fv(ctx, m.GetDnsProxyConfiguration(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	switch m.GetDnsZoneStateChoice().(type) {
+	case *GetSpecType_NotReady:
+		if fv, exists := v.FldValidators["dns_zone_state_choice.not_ready"]; exists {
+			val := m.GetDnsZoneStateChoice().(*GetSpecType_NotReady).NotReady
+			vOpts := append(opts,
+				db.WithValidateField("dns_zone_state_choice"),
+				db.WithValidateField("not_ready"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GetSpecType_Ready:
+		if fv, exists := v.FldValidators["dns_zone_state_choice.ready"]; exists {
+			val := m.GetDnsZoneStateChoice().(*GetSpecType_Ready).Ready
+			vOpts := append(opts,
+				db.WithValidateField("dns_zone_state_choice"),
+				db.WithValidateField("ready"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
 			}
 		}
@@ -4658,7 +5076,11 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 
 	v.FldValidators["header_transformation_type"] = ves_io_schema.HeaderTransformationTypeValidator().Validate
 
+	v.FldValidators["csrf_policy"] = ves_io_schema.CsrfPolicyValidator().Validate
+
 	v.FldValidators["dns_info"] = ves_io_schema_virtual_host_dns_info.DnsInfoValidator().Validate
+
+	v.FldValidators["dns_proxy_configuration"] = DNSProxyConfigurationValidator().Validate
 
 	return v
 }()
@@ -4760,12 +5182,6 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
-	if fdrInfos, err := m.GetAutoMitigationL7AclDRefInfo(); err != nil {
-		return nil, errors.Wrap(err, "GetAutoMitigationL7AclDRefInfo() FAILED")
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
-	}
-
 	if fdrInfos, err := m.GetBotDefenseChoiceDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetBotDefenseChoiceDRefInfo() FAILED")
 	} else {
@@ -4784,6 +5200,12 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
+	if fdrInfos, err := m.GetDnsZonesDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetDnsZonesDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
 	if fdrInfos, err := m.GetDynamicReverseProxyDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetDynamicReverseProxyDRefInfo() FAILED")
 	} else {
@@ -4798,6 +5220,12 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	if fdrInfos, err := m.GetJwtDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetJwtDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	if fdrInfos, err := m.GetL7AclDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetL7AclDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
@@ -4828,12 +5256,6 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	if fdrInfos, err := m.GetServicePolicySetsDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetServicePolicySetsDRefInfo() FAILED")
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
-	}
-
-	if fdrInfos, err := m.GetSreL7AclDRefInfo(); err != nil {
-		return nil, errors.Wrap(err, "GetSreL7AclDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
@@ -4930,51 +5352,6 @@ func (m *GlobalSpecType) GetAuthenticationChoiceDRefInfo() ([]db.DRefInfo, error
 		return nil, nil
 	}
 
-}
-
-func (m *GlobalSpecType) GetAutoMitigationL7AclDRefInfo() ([]db.DRefInfo, error) {
-	refs := m.GetAutoMitigationL7Acl()
-	if len(refs) == 0 {
-		return nil, nil
-	}
-	drInfos := make([]db.DRefInfo, 0, len(refs))
-	for i, ref := range refs {
-		if ref == nil {
-			return nil, fmt.Errorf("GlobalSpecType.auto_mitigation_l7_acl[%d] has a nil value", i)
-		}
-		// resolve kind to type if needed at DBObject.GetDRefInfo()
-		drInfos = append(drInfos, db.DRefInfo{
-			RefdType:   "l7_acl.Object",
-			RefdUID:    ref.Uid,
-			RefdTenant: ref.Tenant,
-			RefdNS:     ref.Namespace,
-			RefdName:   ref.Name,
-			DRField:    "auto_mitigation_l7_acl",
-			Ref:        ref,
-		})
-	}
-	return drInfos, nil
-
-}
-
-// GetAutoMitigationL7AclDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
-func (m *GlobalSpecType) GetAutoMitigationL7AclDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
-	var entries []db.Entry
-	refdType, err := d.TypeForEntryKind("", "", "l7_acl.Object")
-	if err != nil {
-		return nil, errors.Wrap(err, "Cannot find type for kind: l7_acl")
-	}
-	for _, ref := range m.GetAutoMitigationL7Acl() {
-		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
-		if err != nil {
-			return nil, errors.Wrap(err, "Getting referred entry")
-		}
-		if refdEnt != nil {
-			entries = append(entries, refdEnt)
-		}
-	}
-
-	return entries, nil
 }
 
 // GetDRefInfo for the field's type
@@ -5084,6 +5461,51 @@ func (m *GlobalSpecType) GetDnsDomainsDBEntries(ctx context.Context, d db.Interf
 	return entries, nil
 }
 
+func (m *GlobalSpecType) GetDnsZonesDRefInfo() ([]db.DRefInfo, error) {
+	refs := m.GetDnsZones()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(refs))
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("GlobalSpecType.dns_zones[%d] has a nil value", i)
+		}
+		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "dns_zone.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "dns_zones",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+
+}
+
+// GetDnsZonesDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *GlobalSpecType) GetDnsZonesDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+	refdType, err := d.TypeForEntryKind("", "", "dns_zone.Object")
+	if err != nil {
+		return nil, errors.Wrap(err, "Cannot find type for kind: dns_zone")
+	}
+	for _, ref := range m.GetDnsZones() {
+		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+		if err != nil {
+			return nil, errors.Wrap(err, "Getting referred entry")
+		}
+		if refdEnt != nil {
+			entries = append(entries, refdEnt)
+		}
+	}
+
+	return entries, nil
+}
+
 // GetDRefInfo for the field's type
 func (m *GlobalSpecType) GetDynamicReverseProxyDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetDynamicReverseProxy() == nil {
@@ -5180,6 +5602,51 @@ func (m *GlobalSpecType) GetJwtDBEntries(ctx context.Context, d db.Interface) ([
 		return nil, errors.Wrap(err, "Cannot find type for kind: jwt")
 	}
 	for _, ref := range m.GetJwt() {
+		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+		if err != nil {
+			return nil, errors.Wrap(err, "Getting referred entry")
+		}
+		if refdEnt != nil {
+			entries = append(entries, refdEnt)
+		}
+	}
+
+	return entries, nil
+}
+
+func (m *GlobalSpecType) GetL7AclDRefInfo() ([]db.DRefInfo, error) {
+	refs := m.GetL7Acl()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(refs))
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("GlobalSpecType.l7_acl[%d] has a nil value", i)
+		}
+		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "l7_acl.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "l7_acl",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+
+}
+
+// GetL7AclDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *GlobalSpecType) GetL7AclDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+	refdType, err := d.TypeForEntryKind("", "", "l7_acl.Object")
+	if err != nil {
+		return nil, errors.Wrap(err, "Cannot find type for kind: l7_acl")
+	}
+	for _, ref := range m.GetL7Acl() {
 		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
 		if err != nil {
 			return nil, errors.Wrap(err, "Getting referred entry")
@@ -5405,51 +5872,6 @@ func (m *GlobalSpecType) GetServicePolicySetsDBEntries(ctx context.Context, d db
 		return nil, errors.Wrap(err, "Cannot find type for kind: service_policy_set")
 	}
 	for _, ref := range m.GetServicePolicySets() {
-		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
-		if err != nil {
-			return nil, errors.Wrap(err, "Getting referred entry")
-		}
-		if refdEnt != nil {
-			entries = append(entries, refdEnt)
-		}
-	}
-
-	return entries, nil
-}
-
-func (m *GlobalSpecType) GetSreL7AclDRefInfo() ([]db.DRefInfo, error) {
-	refs := m.GetSreL7Acl()
-	if len(refs) == 0 {
-		return nil, nil
-	}
-	drInfos := make([]db.DRefInfo, 0, len(refs))
-	for i, ref := range refs {
-		if ref == nil {
-			return nil, fmt.Errorf("GlobalSpecType.sre_l7_acl[%d] has a nil value", i)
-		}
-		// resolve kind to type if needed at DBObject.GetDRefInfo()
-		drInfos = append(drInfos, db.DRefInfo{
-			RefdType:   "l7_acl.Object",
-			RefdUID:    ref.Uid,
-			RefdTenant: ref.Tenant,
-			RefdNS:     ref.Namespace,
-			RefdName:   ref.Name,
-			DRField:    "sre_l7_acl",
-			Ref:        ref,
-		})
-	}
-	return drInfos, nil
-
-}
-
-// GetSreL7AclDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
-func (m *GlobalSpecType) GetSreL7AclDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
-	var entries []db.Entry
-	refdType, err := d.TypeForEntryKind("", "", "l7_acl.Object")
-	if err != nil {
-		return nil, errors.Wrap(err, "Cannot find type for kind: l7_acl")
-	}
-	for _, ref := range m.GetSreL7Acl() {
 		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
 		if err != nil {
 			return nil, errors.Wrap(err, "Getting referred entry")
@@ -6281,12 +6703,12 @@ func (v *ValidateGlobalSpecType) FastAclValidationRuleHandler(rules map[string]s
 	return validatorFn, nil
 }
 
-func (v *ValidateGlobalSpecType) SreL7AclValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+func (v *ValidateGlobalSpecType) L7AclValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
-		return nil, errors.Wrap(err, "Message ValidationRuleHandler for sre_l7_acl")
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for l7_acl")
 	}
 	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema.ObjectRefType, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
@@ -6301,7 +6723,7 @@ func (v *ValidateGlobalSpecType) SreL7AclValidationRuleHandler(rules map[string]
 	}
 	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
 	if err != nil {
-		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for sre_l7_acl")
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for l7_acl")
 	}
 
 	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
@@ -6318,10 +6740,10 @@ func (v *ValidateGlobalSpecType) SreL7AclValidationRuleHandler(rules map[string]
 			l = append(l, strVal)
 		}
 		if err := repValFn(ctx, l, opts...); err != nil {
-			return errors.Wrap(err, "repeated sre_l7_acl")
+			return errors.Wrap(err, "repeated l7_acl")
 		}
 		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
-			return errors.Wrap(err, "items sre_l7_acl")
+			return errors.Wrap(err, "items l7_acl")
 		}
 		return nil
 	}
@@ -6329,12 +6751,12 @@ func (v *ValidateGlobalSpecType) SreL7AclValidationRuleHandler(rules map[string]
 	return validatorFn, nil
 }
 
-func (v *ValidateGlobalSpecType) AutoMitigationL7AclValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+func (v *ValidateGlobalSpecType) DnsZonesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
-		return nil, errors.Wrap(err, "Message ValidationRuleHandler for auto_mitigation_l7_acl")
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for dns_zones")
 	}
 	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema.ObjectRefType, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
@@ -6349,7 +6771,7 @@ func (v *ValidateGlobalSpecType) AutoMitigationL7AclValidationRuleHandler(rules 
 	}
 	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
 	if err != nil {
-		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for auto_mitigation_l7_acl")
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for dns_zones")
 	}
 
 	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
@@ -6366,10 +6788,10 @@ func (v *ValidateGlobalSpecType) AutoMitigationL7AclValidationRuleHandler(rules 
 			l = append(l, strVal)
 		}
 		if err := repValFn(ctx, l, opts...); err != nil {
-			return errors.Wrap(err, "repeated auto_mitigation_l7_acl")
+			return errors.Wrap(err, "repeated dns_zones")
 		}
 		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
-			return errors.Wrap(err, "items auto_mitigation_l7_acl")
+			return errors.Wrap(err, "items dns_zones")
 		}
 		return nil
 	}
@@ -6460,14 +6882,6 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 		vOpts := append(opts, db.WithValidateField("auto_cert_state"))
 		if err := fv(ctx, m.GetAutoCertState(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
-	if fv, exists := v.FldValidators["auto_mitigation_l7_acl"]; exists {
-		vOpts := append(opts, db.WithValidateField("auto_mitigation_l7_acl"))
-		if err := fv(ctx, m.GetAutoMitigationL7Acl(), vOpts...); err != nil {
 			return err
 		}
 
@@ -6602,6 +7016,15 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["csrf_policy"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("csrf_policy"))
+		if err := fv(ctx, m.GetCsrfPolicy(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["custom_errors"]; exists {
 		vOpts := append(opts, db.WithValidateField("custom_errors"))
 		if err := fv(ctx, m.GetCustomErrors(), vOpts...); err != nil {
@@ -6674,10 +7097,53 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["dns_proxy_configuration"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("dns_proxy_configuration"))
+		if err := fv(ctx, m.GetDnsProxyConfiguration(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["dns_volterra_managed"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("dns_volterra_managed"))
 		if err := fv(ctx, m.GetDnsVolterraManaged(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	switch m.GetDnsZoneStateChoice().(type) {
+	case *GlobalSpecType_NotReady:
+		if fv, exists := v.FldValidators["dns_zone_state_choice.not_ready"]; exists {
+			val := m.GetDnsZoneStateChoice().(*GlobalSpecType_NotReady).NotReady
+			vOpts := append(opts,
+				db.WithValidateField("dns_zone_state_choice"),
+				db.WithValidateField("not_ready"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GlobalSpecType_Ready:
+		if fv, exists := v.FldValidators["dns_zone_state_choice.ready"]; exists {
+			val := m.GetDnsZoneStateChoice().(*GlobalSpecType_Ready).Ready
+			vOpts := append(opts,
+				db.WithValidateField("dns_zone_state_choice"),
+				db.WithValidateField("ready"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["dns_zones"]; exists {
+		vOpts := append(opts, db.WithValidateField("dns_zones"))
+		if err := fv(ctx, m.GetDnsZones(), vOpts...); err != nil {
 			return err
 		}
 
@@ -6752,6 +7218,14 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["l7_acl"]; exists {
+		vOpts := append(opts, db.WithValidateField("l7_acl"))
+		if err := fv(ctx, m.GetL7Acl(), vOpts...); err != nil {
+			return err
 		}
 
 	}
@@ -6933,14 +7407,6 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 	if fv, exists := v.FldValidators["service_policy_sets"]; exists {
 		vOpts := append(opts, db.WithValidateField("service_policy_sets"))
 		if err := fv(ctx, m.GetServicePolicySets(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
-	if fv, exists := v.FldValidators["sre_l7_acl"]; exists {
-		vOpts := append(opts, db.WithValidateField("sre_l7_acl"))
-		if err := fv(ctx, m.GetSreL7Acl(), vOpts...); err != nil {
 			return err
 		}
 
@@ -7334,27 +7800,27 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	}
 	v.FldValidators["fast_acl"] = vFn
 
-	vrhSreL7Acl := v.SreL7AclValidationRuleHandler
-	rulesSreL7Acl := map[string]string{
+	vrhL7Acl := v.L7AclValidationRuleHandler
+	rulesL7Acl := map[string]string{
 		"ves.io.schema.rules.repeated.max_items": "1",
 	}
-	vFn, err = vrhSreL7Acl(rulesSreL7Acl)
+	vFn, err = vrhL7Acl(rulesL7Acl)
 	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.sre_l7_acl: %s", err)
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.l7_acl: %s", err)
 		panic(errMsg)
 	}
-	v.FldValidators["sre_l7_acl"] = vFn
+	v.FldValidators["l7_acl"] = vFn
 
-	vrhAutoMitigationL7Acl := v.AutoMitigationL7AclValidationRuleHandler
-	rulesAutoMitigationL7Acl := map[string]string{
-		"ves.io.schema.rules.repeated.max_items": "1",
+	vrhDnsZones := v.DnsZonesValidationRuleHandler
+	rulesDnsZones := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "256",
 	}
-	vFn, err = vrhAutoMitigationL7Acl(rulesAutoMitigationL7Acl)
+	vFn, err = vrhDnsZones(rulesDnsZones)
 	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.auto_mitigation_l7_acl: %s", err)
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.dns_zones: %s", err)
 		panic(errMsg)
 	}
-	v.FldValidators["auto_mitigation_l7_acl"] = vFn
+	v.FldValidators["dns_zones"] = vFn
 
 	v.FldValidators["authentication_choice.authentication"] = AuthenticationDetailsValidator().Validate
 
@@ -7390,7 +7856,11 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 
 	v.FldValidators["header_transformation_type"] = ves_io_schema.HeaderTransformationTypeValidator().Validate
 
+	v.FldValidators["csrf_policy"] = ves_io_schema.CsrfPolicyValidator().Validate
+
 	v.FldValidators["dns_info"] = ves_io_schema_virtual_host_dns_info.DnsInfoValidator().Validate
+
+	v.FldValidators["dns_proxy_configuration"] = DNSProxyConfigurationValidator().Validate
 
 	return v
 }()
@@ -9046,6 +9516,15 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 
 	}
 
+	if fv, exists := v.FldValidators["csrf_policy"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("csrf_policy"))
+		if err := fv(ctx, m.GetCsrfPolicy(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["custom_errors"]; exists {
 		vOpts := append(opts, db.WithValidateField("custom_errors"))
 		if err := fv(ctx, m.GetCustomErrors(), vOpts...); err != nil {
@@ -9093,6 +9572,15 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 
 		vOpts := append(opts, db.WithValidateField("disable_dns_resolve"))
 		if err := fv(ctx, m.GetDisableDnsResolve(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["dns_proxy_configuration"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("dns_proxy_configuration"))
+		if err := fv(ctx, m.GetDnsProxyConfiguration(), vOpts...); err != nil {
 			return err
 		}
 
@@ -9565,6 +10053,10 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	v.FldValidators["temporary_user_blocking"] = TemporaryUserBlockingTypeValidator().Validate
 
 	v.FldValidators["header_transformation_type"] = ves_io_schema.HeaderTransformationTypeValidator().Validate
+
+	v.FldValidators["csrf_policy"] = ves_io_schema.CsrfPolicyValidator().Validate
+
+	v.FldValidators["dns_proxy_configuration"] = DNSProxyConfigurationValidator().Validate
 
 	return v
 }()
@@ -10773,10 +11265,12 @@ func (m *CreateSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool
 	m.GetChallengeTypeFromGlobalSpecType(f)
 	m.CompressionParams = f.GetCompressionParams()
 	m.CorsPolicy = f.GetCorsPolicy()
+	m.CsrfPolicy = f.GetCsrfPolicy()
 	m.CustomErrors = f.GetCustomErrors()
 	m.GetDefaultLbChoiceFromGlobalSpecType(f)
 	m.DisableDefaultErrorPages = f.GetDisableDefaultErrorPages()
 	m.DisableDnsResolve = f.GetDisableDnsResolve()
+	m.DnsProxyConfiguration = f.GetDnsProxyConfiguration()
 	m.Domains = f.GetDomains()
 	m.DynamicReverseProxy = f.GetDynamicReverseProxy()
 	m.HeaderTransformationType = f.GetHeaderTransformationType()
@@ -10822,10 +11316,12 @@ func (m *CreateSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) 
 	m1.SetChallengeTypeToGlobalSpecType(f)
 	f.CompressionParams = m1.CompressionParams
 	f.CorsPolicy = m1.CorsPolicy
+	f.CsrfPolicy = m1.CsrfPolicy
 	f.CustomErrors = m1.CustomErrors
 	m1.SetDefaultLbChoiceToGlobalSpecType(f)
 	f.DisableDefaultErrorPages = m1.DisableDefaultErrorPages
 	f.DisableDnsResolve = m1.DisableDnsResolve
+	f.DnsProxyConfiguration = m1.DnsProxyConfiguration
 	f.Domains = m1.Domains
 	f.DynamicReverseProxy = m1.DynamicReverseProxy
 	f.HeaderTransformationType = m1.HeaderTransformationType
@@ -10969,6 +11465,41 @@ func (r *GetSpecType) GetDefaultLbChoiceFromGlobalSpecType(o *GlobalSpecType) er
 }
 
 // create setters in GetSpecType from GlobalSpecType for oneof fields
+func (r *GetSpecType) SetDnsZoneStateChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.DnsZoneStateChoice.(type) {
+	case nil:
+		o.DnsZoneStateChoice = nil
+
+	case *GetSpecType_NotReady:
+		o.DnsZoneStateChoice = &GlobalSpecType_NotReady{NotReady: of.NotReady}
+
+	case *GetSpecType_Ready:
+		o.DnsZoneStateChoice = &GlobalSpecType_Ready{Ready: of.Ready}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *GetSpecType) GetDnsZoneStateChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.DnsZoneStateChoice.(type) {
+	case nil:
+		r.DnsZoneStateChoice = nil
+
+	case *GlobalSpecType_NotReady:
+		r.DnsZoneStateChoice = &GetSpecType_NotReady{NotReady: of.NotReady}
+
+	case *GlobalSpecType_Ready:
+		r.DnsZoneStateChoice = &GetSpecType_Ready{Ready: of.Ready}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+// create setters in GetSpecType from GlobalSpecType for oneof fields
 func (r *GetSpecType) SetPathNormalizeChoiceToGlobalSpecType(o *GlobalSpecType) error {
 	switch of := r.PathNormalizeChoice.(type) {
 	case nil:
@@ -11098,11 +11629,14 @@ func (m *GetSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	m.GetChallengeTypeFromGlobalSpecType(f)
 	m.CompressionParams = f.GetCompressionParams()
 	m.CorsPolicy = f.GetCorsPolicy()
+	m.CsrfPolicy = f.GetCsrfPolicy()
 	m.CustomErrors = f.GetCustomErrors()
 	m.GetDefaultLbChoiceFromGlobalSpecType(f)
 	m.DisableDefaultErrorPages = f.GetDisableDefaultErrorPages()
 	m.DisableDnsResolve = f.GetDisableDnsResolve()
 	m.DnsInfo = f.GetDnsInfo()
+	m.DnsProxyConfiguration = f.GetDnsProxyConfiguration()
+	m.GetDnsZoneStateChoiceFromGlobalSpecType(f)
 	m.Domains = f.GetDomains()
 	m.DynamicReverseProxy = f.GetDynamicReverseProxy()
 	m.HeaderTransformationType = f.GetHeaderTransformationType()
@@ -11153,11 +11687,14 @@ func (m *GetSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	m1.SetChallengeTypeToGlobalSpecType(f)
 	f.CompressionParams = m1.CompressionParams
 	f.CorsPolicy = m1.CorsPolicy
+	f.CsrfPolicy = m1.CsrfPolicy
 	f.CustomErrors = m1.CustomErrors
 	m1.SetDefaultLbChoiceToGlobalSpecType(f)
 	f.DisableDefaultErrorPages = m1.DisableDefaultErrorPages
 	f.DisableDnsResolve = m1.DisableDnsResolve
 	f.DnsInfo = m1.DnsInfo
+	f.DnsProxyConfiguration = m1.DnsProxyConfiguration
+	m1.SetDnsZoneStateChoiceToGlobalSpecType(f)
 	f.Domains = m1.Domains
 	f.DynamicReverseProxy = m1.DynamicReverseProxy
 	f.HeaderTransformationType = m1.HeaderTransformationType
@@ -11431,10 +11968,12 @@ func (m *ReplaceSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy boo
 	m.GetChallengeTypeFromGlobalSpecType(f)
 	m.CompressionParams = f.GetCompressionParams()
 	m.CorsPolicy = f.GetCorsPolicy()
+	m.CsrfPolicy = f.GetCsrfPolicy()
 	m.CustomErrors = f.GetCustomErrors()
 	m.GetDefaultLbChoiceFromGlobalSpecType(f)
 	m.DisableDefaultErrorPages = f.GetDisableDefaultErrorPages()
 	m.DisableDnsResolve = f.GetDisableDnsResolve()
+	m.DnsProxyConfiguration = f.GetDnsProxyConfiguration()
 	m.Domains = f.GetDomains()
 	m.DynamicReverseProxy = f.GetDynamicReverseProxy()
 	m.HeaderTransformationType = f.GetHeaderTransformationType()
@@ -11480,10 +12019,12 @@ func (m *ReplaceSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool)
 	m1.SetChallengeTypeToGlobalSpecType(f)
 	f.CompressionParams = m1.CompressionParams
 	f.CorsPolicy = m1.CorsPolicy
+	f.CsrfPolicy = m1.CsrfPolicy
 	f.CustomErrors = m1.CustomErrors
 	m1.SetDefaultLbChoiceToGlobalSpecType(f)
 	f.DisableDefaultErrorPages = m1.DisableDefaultErrorPages
 	f.DisableDnsResolve = m1.DisableDnsResolve
+	f.DnsProxyConfiguration = m1.DnsProxyConfiguration
 	f.Domains = m1.Domains
 	f.DynamicReverseProxy = m1.DynamicReverseProxy
 	f.HeaderTransformationType = m1.HeaderTransformationType

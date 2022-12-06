@@ -1110,30 +1110,83 @@ func (e *DBStatusObject) GetDRefInfo() ([]db.DRefInfo, error) {
 		return nil, errors.Wrap(err, "GetDRefInfo, error in key")
 	}
 
-	drInfos, err := e.GetObjectRefsDRefInfo()
-	if err != nil {
-		return nil, errors.Wrap(err, "GetObjectRefsDRefInfo() FAILED")
-	}
-	for i := range drInfos {
-		dri := &drInfos[i]
-		// Convert Spec.LcSpec.vnRefs to ves.io.examplesvc.objectone.Object.Spec.LcSpec.vnRefs
-		dri.DRField = "ves.io.schema.site.StatusObject." + dri.DRField
-		dri.RefrType = e.Type()
-		dri.RefrUID = refrUID
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := e.GetDcClusterGroupStatusDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetDcClusterGroupStatusDRefInfo() FAILED")
+	} else {
+		for i := range fdrInfos {
+			dri := &fdrInfos[i]
+			// Convert Spec.LcSpec.vnRefs to ves.io.examplesvc.objectone.Object.Spec.LcSpec.vnRefs
+			dri.DRField = "ves.io.schema.site.StatusObject." + dri.DRField
+			dri.RefrType = e.Type()
+			dri.RefrUID = refrUID
 
-		// convert any ref_to schema annotation specified by kind value to type value
-		if !strings.HasPrefix(dri.RefdType, "ves.io") {
-			d, err := e.GetDB()
-			if err != nil {
-				return nil, errors.Wrap(err, "Cannot find db for entry to resolve kind to type")
+			// convert any ref_to schema annotation specified by kind value to type value
+			if !strings.HasPrefix(dri.RefdType, "ves.io") {
+				d, err := e.GetDB()
+				if err != nil {
+					return nil, errors.Wrap(err, "Cannot find db for entry to resolve kind to type")
+				}
+				refdType, err := d.TypeForEntryKind(dri.RefrType, dri.RefrUID, dri.RefdType)
+				if err != nil {
+					return nil, errors.Wrap(err, fmt.Sprintf("Cannot convert kind %s to type", dri.RefdType))
+				}
+				dri.RefdType = refdType
 			}
-			refdType, err := d.TypeForEntryKind(dri.RefrType, dri.RefrUID, dri.RefdType)
-			if err != nil {
-				return nil, errors.Wrap(err, fmt.Sprintf("Cannot convert kind %s to type", dri.RefdType))
-			}
-			dri.RefdType = refdType
 		}
+		drInfos = append(drInfos, fdrInfos...)
 	}
+	if fdrInfos, err := e.GetObjectRefsDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetObjectRefsDRefInfo() FAILED")
+	} else {
+		for i := range fdrInfos {
+			dri := &fdrInfos[i]
+			// Convert Spec.LcSpec.vnRefs to ves.io.examplesvc.objectone.Object.Spec.LcSpec.vnRefs
+			dri.DRField = "ves.io.schema.site.StatusObject." + dri.DRField
+			dri.RefrType = e.Type()
+			dri.RefrUID = refrUID
+
+			// convert any ref_to schema annotation specified by kind value to type value
+			if !strings.HasPrefix(dri.RefdType, "ves.io") {
+				d, err := e.GetDB()
+				if err != nil {
+					return nil, errors.Wrap(err, "Cannot find db for entry to resolve kind to type")
+				}
+				refdType, err := d.TypeForEntryKind(dri.RefrType, dri.RefrUID, dri.RefdType)
+				if err != nil {
+					return nil, errors.Wrap(err, fmt.Sprintf("Cannot convert kind %s to type", dri.RefdType))
+				}
+				dri.RefdType = refdType
+			}
+		}
+		drInfos = append(drInfos, fdrInfos...)
+	}
+	if fdrInfos, err := e.GetSiteMeshGroupStatusDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetSiteMeshGroupStatusDRefInfo() FAILED")
+	} else {
+		for i := range fdrInfos {
+			dri := &fdrInfos[i]
+			// Convert Spec.LcSpec.vnRefs to ves.io.examplesvc.objectone.Object.Spec.LcSpec.vnRefs
+			dri.DRField = "ves.io.schema.site.StatusObject." + dri.DRField
+			dri.RefrType = e.Type()
+			dri.RefrUID = refrUID
+
+			// convert any ref_to schema annotation specified by kind value to type value
+			if !strings.HasPrefix(dri.RefdType, "ves.io") {
+				d, err := e.GetDB()
+				if err != nil {
+					return nil, errors.Wrap(err, "Cannot find db for entry to resolve kind to type")
+				}
+				refdType, err := d.TypeForEntryKind(dri.RefrType, dri.RefrUID, dri.RefdType)
+				if err != nil {
+					return nil, errors.Wrap(err, fmt.Sprintf("Cannot convert kind %s to type", dri.RefdType))
+				}
+				dri.RefdType = refdType
+			}
+		}
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
 	return drInfos, nil
 
 }
@@ -1176,6 +1229,24 @@ func NewEntryStatusObject(opts ...db.OpOption) db.Entry {
 		return NewDBStatusObject(v, opts...)
 	}
 	return nil
+}
+
+// GetDRefInfo for the field's type
+func (e *DBStatusObject) GetDcClusterGroupStatusDRefInfo() ([]db.DRefInfo, error) {
+	if e.GetDcClusterGroupStatus() == nil {
+		return nil, nil
+	}
+
+	drInfos, err := e.GetDcClusterGroupStatus().GetDRefInfo()
+	if err != nil {
+		return nil, errors.Wrap(err, "GetDcClusterGroupStatus().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "dc_cluster_group_status." + dri.DRField
+	}
+	return drInfos, err
+
 }
 
 func (e *DBStatusObject) GetObjectRefsDRefInfo() ([]db.DRefInfo, error) {
@@ -1236,6 +1307,24 @@ func (e *DBStatusObject) GetObjectRefsDBEntries(ctx context.Context, d db.Interf
 	return entries, nil
 }
 
+// GetDRefInfo for the field's type
+func (e *DBStatusObject) GetSiteMeshGroupStatusDRefInfo() ([]db.DRefInfo, error) {
+	if e.GetSiteMeshGroupStatus() == nil {
+		return nil, nil
+	}
+
+	drInfos, err := e.GetSiteMeshGroupStatus().GetDRefInfo()
+	if err != nil {
+		return nil, errors.Wrap(err, "GetSiteMeshGroupStatus().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "site_mesh_group_status." + dri.DRField
+	}
+	return drInfos, err
+
+}
+
 type ValidateStatusObject struct {
 	FldValidators map[string]db.ValidatorFunc
 }
@@ -1269,6 +1358,15 @@ func (v *ValidateStatusObject) Validate(ctx context.Context, pm interface{}, opt
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["dc_cluster_group_status"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("dc_cluster_group_status"))
+		if err := fv(ctx, e.GetDcClusterGroupStatus(), vOpts...); err != nil {
+			return err
 		}
 
 	}
@@ -1375,6 +1473,15 @@ func (v *ValidateStatusObject) Validate(ctx context.Context, pm interface{}, opt
 
 	}
 
+	if fv, exists := v.FldValidators["site_mesh_group_status"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("site_mesh_group_status"))
+		if err := fv(ctx, e.GetSiteMeshGroupStatus(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["ver_master_status"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("ver_master_status"))
@@ -1427,6 +1534,10 @@ var DefaultStatusObjectValidator = func() *ValidateStatusObject {
 	v.FldValidators["operating_system_status"] = OperatingSystemStatusValidator().Validate
 
 	v.FldValidators["vnet_peering_status"] = AzureHubSpokeVnetPeeringStatusInfoValidator().Validate
+
+	v.FldValidators["site_mesh_group_status"] = ves_io_schema.SiteMeshGroupStatusValidator().Validate
+
+	v.FldValidators["dc_cluster_group_status"] = ves_io_schema.DcClusterGroupStatusValidator().Validate
 
 	return v
 }()

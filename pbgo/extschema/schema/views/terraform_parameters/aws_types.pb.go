@@ -35,14 +35,14 @@ const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 // x-displayName: "AWS Terraform Instance Parameters"
 // Shape of the view terraform parameters specification
 type AWSInstanceType struct {
-	// Volterra Node Id
+	// F5XC Node Id
 	//
-	// x-displayName: "Volterra Node ID"
-	// Volterra Node ID will be used to refer to this node in other TF parameters
+	// x-displayName: "F5XC Node ID"
+	// F5XC Node ID will be used to refer to this node in other TF parameters
 	VoltNodeId string `protobuf:"bytes,1,opt,name=volt_node_id,json=voltNodeId,proto3" json:"volt_node_id,omitempty"`
-	// Volterra VPC id
+	// F5XC VPC id
 	//
-	// x-displayName: "Volterra VPC id"
+	// x-displayName: "F5XC VPC id"
 	// VPC in which Cloud Instance is launched
 	VoltVpcId string `protobuf:"bytes,3,opt,name=volt_vpc_id,json=voltVpcId,proto3" json:"volt_vpc_id,omitempty"`
 	// Public Subnet
@@ -70,9 +70,9 @@ type AWSInstanceType struct {
 	// x-displayName: "AMI ID"
 	// Amazon Machine Image ID
 	AmiId string `protobuf:"bytes,8,opt,name=ami_id,json=amiId,proto3" json:"ami_id,omitempty"`
-	// Volterra Node count
+	// F5XC Node count
 	//
-	// x-displayName: "Volterra Node count"
+	// x-displayName: "F5XC Node count"
 	// Desired number of node count used for worker node scaling
 	NodeCount int32 `protobuf:"varint,9,opt,name=node_count,json=nodeCount,proto3" json:"node_count,omitempty"`
 	// EBS Volume size
@@ -249,14 +249,14 @@ func (m *CloudSubnetType) GetExistingSubnetId() string {
 // x-displayName: "Terraform Subnet Parameters"
 // Specifies subnet to be used or created in the cloud
 type SubnetType struct {
-	// Volterra Subnet Id
+	// F5XC Subnet Id
 	//
-	// x-displayName: "Volterra Subnet ID"
-	// Volterra subnet ID will be used to refer to this subnet in other TF parameters
+	// x-displayName: "F5XC Subnet ID"
+	// F5XC subnet ID will be used to refer to this subnet in other TF parameters
 	VoltSubnetId string `protobuf:"bytes,1,opt,name=volt_subnet_id,json=voltSubnetId,proto3" json:"volt_subnet_id,omitempty"`
-	// Volterra VPC id
+	// F5XC VPC id
 	//
-	// x-displayName: "Volterra VPC id"
+	// x-displayName: "F5XC VPC id"
 	// VPC in which Cloud Instance is launched
 	VoltVpcId string `protobuf:"bytes,2,opt,name=volt_vpc_id,json=voltVpcId,proto3" json:"volt_vpc_id,omitempty"`
 	// Cloud AZ
@@ -419,11 +419,11 @@ type AWSTGWInfoType struct {
 	// x-example: "64500"
 	// TGW ASN.
 	TgwAsn uint32 `protobuf:"varint,3,opt,name=tgw_asn,json=tgwAsn,proto3" json:"tgw_asn,omitempty"`
-	// Volterra Site ASN
+	// F5XC Site ASN
 	//
-	// x-displayName: "Volterra Site ASN"
+	// x-displayName: "F5XC Site ASN"
 	// x-example: "64500"
-	// Volterra Site ASN.
+	// F5XC Site ASN.
 	VolterraSiteAsn uint32 `protobuf:"varint,4,opt,name=volterra_site_asn,json=volterraSiteAsn,proto3" json:"volterra_site_asn,omitempty"`
 }
 
@@ -498,10 +498,10 @@ type AWSVPCType struct {
 	// x-displayName: "AWS Unique Name"
 	// AWS unique name which will be used to create the cloud resource objects on aws"
 	AwsName string `protobuf:"bytes,15,opt,name=aws_name,json=awsName,proto3" json:"aws_name,omitempty"`
-	// Volterra VPC Id
+	// F5XC VPC Id
 	//
-	// x-displayName: "Volterra VPC ID"
-	// Volterra vpc ID will be used to refer to this vpc in other TF parameters
+	// x-displayName: "F5XC VPC ID"
+	// F5XC vpc ID will be used to refer to this vpc in other TF parameters
 	VoltVpcId string `protobuf:"bytes,1,opt,name=volt_vpc_id,json=voltVpcId,proto3" json:"volt_vpc_id,omitempty"`
 	// Certified Hardware
 	//
@@ -822,10 +822,10 @@ type AWSTGWType struct {
 	// x-displayName: "AWS Unique Name"
 	// AWS unique name which will be used to create the cloud resource objects on aws"
 	AwsName string `protobuf:"bytes,15,opt,name=aws_name,json=awsName,proto3" json:"aws_name,omitempty"`
-	// Volterra VPC Id
+	// F5XC VPC Id
 	//
-	// x-displayName: "Volterra VPC ID"
-	// Volterra vpc ID will be used to refer to this vpc in other TF parameters
+	// x-displayName: "F5XC VPC ID"
+	// F5XC vpc ID will be used to refer to this vpc in other TF parameters
 	VoltVpcId string `protobuf:"bytes,2,opt,name=volt_vpc_id,json=voltVpcId,proto3" json:"volt_vpc_id,omitempty"`
 	// Fleet Label
 	//

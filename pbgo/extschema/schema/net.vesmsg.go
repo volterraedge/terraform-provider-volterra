@@ -303,6 +303,14 @@ type ValidateIpSubnetType struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateIpSubnetType) VerValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for ver")
+	}
+	return validatorFn, nil
+}
+
 func (v *ValidateIpSubnetType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*IpSubnetType)
 	if !ok {
@@ -315,6 +323,16 @@ func (v *ValidateIpSubnetType) Validate(ctx context.Context, pm interface{}, opt
 	}
 	if m == nil {
 		return nil
+	}
+
+	if fv, exists := v.FldValidators["ver"]; exists {
+		val := m.GetVer()
+		vOpts := append(opts,
+			db.WithValidateField("ver"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
 	}
 
 	switch m.GetVer().(type) {
@@ -349,6 +367,25 @@ func (v *ValidateIpSubnetType) Validate(ctx context.Context, pm interface{}, opt
 // Well-known symbol for default validator implementation
 var DefaultIpSubnetTypeValidator = func() *ValidateIpSubnetType {
 	v := &ValidateIpSubnetType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhVer := v.VerValidationRuleHandler
+	rulesVer := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhVer(rulesVer)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for IpSubnetType.ver: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["ver"] = vFn
 
 	v.FldValidators["ver.ipv4"] = Ipv4SubnetTypeValidator().Validate
 	v.FldValidators["ver.ipv6"] = Ipv6SubnetTypeValidator().Validate

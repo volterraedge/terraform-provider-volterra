@@ -2815,9 +2815,9 @@ var APISwaggerJSON string = `{
                 },
                 "ves_io_group": {
                     "description": "Exclusive with [custom default individual]\n Group the alerts by severity, group name and alert name",
-                    "title": "Volterra Defined Group",
+                    "title": "F5XC Defined Group",
                     "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "Volterra Defined Group"
+                    "x-displayname": "F5XC Defined Group"
                 }
             }
         },

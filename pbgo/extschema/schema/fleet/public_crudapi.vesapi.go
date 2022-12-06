@@ -1658,7 +1658,7 @@ var APISwaggerJSON string = `{
     "swagger": "2.0",
     "info": {
         "title": "Fleet",
-        "description": "\nFleet is used to configure infrastructure components (like nodes) in one or\nmore Volterra customer edge sites homogeneously. Fleet configuration has\nfollowing information,\n  * Software image release to be deployed on the fleet\n  * List of devices to be configured on every node\n  * Connections between the virtual networks in the site\n  * Security policies applied in the site\n\nFleet object must be created in the \"system\" namespace for the tenant\n\nAssociating Fleet with Site\n\nFleet has a field called \"fleet_label\". When a fleet object is created, system automatically creates a known_label\n\"ves.io/fleet=\u003cfleet_label\u003e\". The known_label is created in the \"shared\" namespace for the tenant.\nA site is made \"member of fleet\" when this known_label is added to the site. A site can have at most one known_label\nof type \"ves.io/fleet\" and hence belongs to exactly one fleet at any given time.\n\nWhen a site becomes member of fleet, all nodes in site also become \"member of fleet\". The fleet configuration\nis applied on all nodes that are member of the fleet.\n\nFleet and Virtual Site\n\nBoth Fleet and Virtual Sites select a list of sites based on the labels. But, there is a major difference between\nvirtual_site and Fleet. Virtual_sites are intersecting sub sets of available sites. Fleet is non intersecting subset\nof available sites compared to other Fleets. As a result, at most one Fleet configuration if applied on a Site.\n\nHowever to enable other features like monitoring, deploying application or jobs on sites represented by fleet,\nsystem will automatically create a virtual_site in shared namespace representing all sites in a fleet.",
+        "description": "\nFleet is used to configure infrastructure components (like nodes) in one or\nmore F5XC customer edge sites homogeneously. Fleet configuration has\nfollowing information,\n  * Software image release to be deployed on the fleet\n  * List of devices to be configured on every node\n  * Connections between the virtual networks in the site\n  * Security policies applied in the site\n\nFleet object must be created in the \"system\" namespace for the tenant\n\nAssociating Fleet with Site\n\nFleet has a field called \"fleet_label\". When a fleet object is created, system automatically creates a known_label\n\"ves.io/fleet=\u003cfleet_label\u003e\". The known_label is created in the \"shared\" namespace for the tenant.\nA site is made \"member of fleet\" when this known_label is added to the site. A site can have at most one known_label\nof type \"ves.io/fleet\" and hence belongs to exactly one fleet at any given time.\n\nWhen a site becomes member of fleet, all nodes in site also become \"member of fleet\". The fleet configuration\nis applied on all nodes that are member of the fleet.\n\nFleet and Virtual Site\n\nBoth Fleet and Virtual Sites select a list of sites based on the labels. But, there is a major difference between\nvirtual_site and Fleet. Virtual_sites are intersecting sub sets of available sites. Fleet is non intersecting subset\nof available sites compared to other Fleets. As a result, at most one Fleet configuration if applied on a Site.\n\nHowever to enable other features like monitoring, deploying application or jobs on sites represented by fleet,\nsystem will automatically create a virtual_site in shared namespace representing all sites in a fleet.",
         "version": "version not set"
     },
     "schemes": [
@@ -4793,7 +4793,7 @@ var APISwaggerJSON string = `{
         },
         "schemaBlindfoldSecretInfoType": {
             "type": "object",
-            "description": "BlindfoldSecretInfoType specifies information about the Secret managed by Volterra Secret Management",
+            "description": "BlindfoldSecretInfoType specifies information about the Secret managed by F5XC Secret Management",
             "title": "BlindfoldSecretInfoType",
             "x-displayname": "Blindfold Secret",
             "x-ves-displayorder": "3,1,2",
@@ -5496,7 +5496,7 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.SecretType",
             "properties": {
                 "blindfold_secret_info": {
-                    "description": "Exclusive with [clear_secret_info]\n Blindfold Secret is used for the secrets managed by Volterra Secret Management Service",
+                    "description": "Exclusive with [clear_secret_info]\n Blindfold Secret is used for the secrets managed by F5XC Secret Management Service",
                     "title": "Blindfold Secret",
                     "$ref": "#/definitions/schemaBlindfoldSecretInfoType",
                     "x-displayname": "Blindfold Secret"
@@ -5545,14 +5545,16 @@ var APISwaggerJSON string = `{
                 },
                 "subnets": {
                     "type": "array",
-                    "description": " List of route prefixes\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 256\n",
+                    "description": " List of route prefixes\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 256\n",
                     "title": "Subnets",
                     "maxItems": 256,
                     "items": {
                         "$ref": "#/definitions/schemaIpSubnetType"
                     },
                     "x-displayname": "Subnets",
+                    "x-ves-required": "true",
                     "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
                         "ves.io.schema.rules.repeated.max_items": "256"
                     }
                 }
@@ -5973,7 +5975,7 @@ var APISwaggerJSON string = `{
         },
         "schemaVirtualNetworkType": {
             "type": "string",
-            "description": "Different types of virtual networks understood by the system\n\nVirtual-network of type VIRTUAL_NETWORK_SITE_LOCAL provides connectivity to public (outside) network.\nThis is an insecure network and is connected to public internet via NAT Gateways/firwalls\nVirtual-network of this type is local to every site. Two virtual networks of this type on different\nsites are neither related nor connected.\n\nConstraints:\nThere can be atmost one virtual network of this type in a given site.\nThis network type is supported on CE sites. This network is created automatically and present on all sites\nVirtual-network of type VIRTUAL_NETWORK_SITE_LOCAL_INSIDE is a private network inside site.\nIt is a secure network and is not connected to public network.\nVirtual-network of this type is local to every site. Two virtual networks of this type on different\nsites are neither related nor connected.\n\nConstraints:\nThere can be atmost one virtual network of this type in a given site.\nThis network type is supported on CE sites. This network is created during provisioning of site\nUser defined per-site virtual network. Scope of this virtual network is limited to the site.\nThis is not yet supported\nVirtual-network of type VIRTUAL_NETWORK_PUBLIC directly conects to the public internet.\nVirtual-network of this type is local to every site. Two virtual networks of this type on different sites are neither related nor connected.\n\nConstraints:\nThere can be atmost one virtual network of this type in a given site.\nThis network type is supported on RE sites only\nIt is an internally created by the system. They must not be created by user\nVirtual Neworks with global scope across different sites in Volterra domain.\nAn example global virtual-network called \"AIN Network\" is created for every tenant.\nfor volterra fabric\n\nConstraints:\nIt is currently only supported as internally created by the system.\nvK8s service network for a given tenant. Used to advertise a virtual host only to vk8s pods for that tenant\nConstraints:\nIt is an internally created by the system. Must not be created by user\nVER internal network for the site. It can only be used for virtual hosts with SMA_PROXY type proxy\nConstraints:\nIt is an internally created by the system. Must not be created by user\nVirtual-network of type VIRTUAL_NETWORK_SITE_LOCAL_INSIDE_OUTSIDE represents both\nVIRTUAL_NETWORK_SITE_LOCAL and VIRTUAL_NETWORK_SITE_LOCAL_INSIDE\n\nConstraints:\nThis network type is only meaningful in an advertise policy\nWhen virtual-network of type VIRTUAL_NETWORK_IP_AUTO is selected for\nan endpoint, VER will try to determine the network based on the provided\nIP address\n\nConstraints:\nThis network type is only meaningful in an endpoint\n\nVoltADN Private Network is used on volterra RE(s) to connect to customer private networks\nThis network is created by opening a support ticket\n\nThis network is per site srv6 network\nVER IP Fabric network for the site.\nThis Virtual network type is used for exposing virtual host on IP Fabric network on the VER site or\nfor endpoint in IP Fabric network\nConstraints:\nIt is an internally created by the system. Must not be created by user",
+            "description": "Different types of virtual networks understood by the system\n\nVirtual-network of type VIRTUAL_NETWORK_SITE_LOCAL provides connectivity to public (outside) network.\nThis is an insecure network and is connected to public internet via NAT Gateways/firwalls\nVirtual-network of this type is local to every site. Two virtual networks of this type on different\nsites are neither related nor connected.\n\nConstraints:\nThere can be atmost one virtual network of this type in a given site.\nThis network type is supported on CE sites. This network is created automatically and present on all sites\nVirtual-network of type VIRTUAL_NETWORK_SITE_LOCAL_INSIDE is a private network inside site.\nIt is a secure network and is not connected to public network.\nVirtual-network of this type is local to every site. Two virtual networks of this type on different\nsites are neither related nor connected.\n\nConstraints:\nThere can be atmost one virtual network of this type in a given site.\nThis network type is supported on CE sites. This network is created during provisioning of site\nUser defined per-site virtual network. Scope of this virtual network is limited to the site.\nThis is not yet supported\nVirtual-network of type VIRTUAL_NETWORK_PUBLIC directly conects to the public internet.\nVirtual-network of this type is local to every site. Two virtual networks of this type on different sites are neither related nor connected.\n\nConstraints:\nThere can be atmost one virtual network of this type in a given site.\nThis network type is supported on RE sites only\nIt is an internally created by the system. They must not be created by user\nVirtual Neworks with global scope across different sites in F5XC domain.\nAn example global virtual-network called \"AIN Network\" is created for every tenant.\nfor volterra fabric\n\nConstraints:\nIt is currently only supported as internally created by the system.\nvK8s service network for a given tenant. Used to advertise a virtual host only to vk8s pods for that tenant\nConstraints:\nIt is an internally created by the system. Must not be created by user\nVER internal network for the site. It can only be used for virtual hosts with SMA_PROXY type proxy\nConstraints:\nIt is an internally created by the system. Must not be created by user\nVirtual-network of type VIRTUAL_NETWORK_SITE_LOCAL_INSIDE_OUTSIDE represents both\nVIRTUAL_NETWORK_SITE_LOCAL and VIRTUAL_NETWORK_SITE_LOCAL_INSIDE\n\nConstraints:\nThis network type is only meaningful in an advertise policy\nWhen virtual-network of type VIRTUAL_NETWORK_IP_AUTO is selected for\nan endpoint, VER will try to determine the network based on the provided\nIP address\n\nConstraints:\nThis network type is only meaningful in an endpoint\n\nVoltADN Private Network is used on volterra RE(s) to connect to customer private networks\nThis network is created by opening a support ticket\n\nThis network is per site srv6 network\nVER IP Fabric network for the site.\nThis Virtual network type is used for exposing virtual host on IP Fabric network on the VER site or\nfor endpoint in IP Fabric network\nConstraints:\nIt is an internally created by the system. Must not be created by user",
             "title": "VirtualNetworkType",
             "enum": [
                 "VIRTUAL_NETWORK_SITE_LOCAL",
@@ -6245,7 +6247,7 @@ var APISwaggerJSON string = `{
                 },
                 "volterra_software_version": {
                     "type": "string",
-                    "description": " Volterra software version is human readable string matching released set of version components.\n The given software version is applied to all sites that are member of the fleet.\n Current software installed can be overridden via site config.\n\nExample: - \"value\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 256\n",
+                    "description": " F5XC software version is human readable string matching released set of version components.\n The given software version is applied to all sites that are member of the fleet.\n Current software installed can be overridden via site config.\n\nExample: - \"value\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 256\n",
                     "maxLength": 256,
                     "x-displayname": "Software Version",
                     "x-ves-example": "value",
@@ -6495,7 +6497,7 @@ var APISwaggerJSON string = `{
                 },
                 "volterra_software_version": {
                     "type": "string",
-                    "description": " Volterra software version is human readable string matching released set of version components.\n The given software version is applied to all sites that are member of the fleet.\n Current software installed can be overridden via site config.\n\nExample: - \"value\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 256\n",
+                    "description": " F5XC software version is human readable string matching released set of version components.\n The given software version is applied to all sites that are member of the fleet.\n Current software installed can be overridden via site config.\n\nExample: - \"value\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 256\n",
                     "maxLength": 256,
                     "x-displayname": "Software Version",
                     "x-ves-example": "value",
@@ -6796,7 +6798,7 @@ var APISwaggerJSON string = `{
                 },
                 "volterra_software_version": {
                     "type": "string",
-                    "description": " Volterra software version is human readable string matching released set of version components.\n The given software version is applied to all sites that are member of the fleet.\n Current software installed can be overridden via site config.\n\nExample: - \"value\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 256\n",
+                    "description": " F5XC software version is human readable string matching released set of version components.\n The given software version is applied to all sites that are member of the fleet.\n Current software installed can be overridden via site config.\n\nExample: - \"value\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 256\n",
                     "title": "Software Version",
                     "maxLength": 256,
                     "x-displayname": "Software Version",
@@ -7036,7 +7038,7 @@ var APISwaggerJSON string = `{
                 },
                 "volterra_software_version": {
                     "type": "string",
-                    "description": " Volterra software version is human readable string matching released set of version components.\n The given software version is applied to all sites that are member of the fleet.\n Current software installed can be overridden via site config.\n\nExample: - \"value\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 256\n",
+                    "description": " F5XC software version is human readable string matching released set of version components.\n The given software version is applied to all sites that are member of the fleet.\n Current software installed can be overridden via site config.\n\nExample: - \"value\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 256\n",
                     "maxLength": 256,
                     "x-displayname": "Software Version",
                     "x-ves-example": "value",

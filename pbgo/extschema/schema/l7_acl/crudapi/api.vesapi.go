@@ -2805,28 +2805,6 @@ var APISwaggerJSON string = `{
                 }
             }
         },
-        "l7_aclDestinationType": {
-            "type": "object",
-            "description": "Defines the destination type",
-            "title": "Destination type",
-            "x-displayname": "Destination Type",
-            "x-ves-oneof-field-destination_type_choice": "[\"tenant\",\"vhost\"]",
-            "x-ves-proto-message": "ves.io.schema.l7_acl.DestinationType",
-            "properties": {
-                "tenant": {
-                    "description": "Exclusive with [vhost]\n All the tenant's virtual hosts",
-                    "title": "Tenant",
-                    "$ref": "#/definitions/schemaviewsObjectRefType",
-                    "x-displayname": "Tenant"
-                },
-                "vhost": {
-                    "description": "Exclusive with [tenant]\n A specific virtual host",
-                    "title": "Virtual Host",
-                    "$ref": "#/definitions/schemaviewsObjectRefType",
-                    "x-displayname": "Virtual Host"
-                }
-            }
-        },
         "l7_aclL7AclAction": {
             "type": "string",
             "description": "L7 ACL action configures the action to be taken on rule match\n\n - DENY: DENY\n\nDeny the request.\n - ALLOW: ALLOW\n\nAllow the request to proceed.",
@@ -2839,12 +2817,12 @@ var APISwaggerJSON string = `{
             "x-displayname": "L7AclAction",
             "x-ves-proto-enum": "ves.io.schema.l7_acl.L7AclAction"
         },
-        "l7_aclL7AclRuleType": {
+        "l7_aclL7AclRule": {
             "type": "object",
             "description": "Shape of -l7_acl_rule-",
             "title": "L7 ACL Rule",
             "x-displayname": "L7 ACL Rule",
-            "x-ves-proto-message": "ves.io.schema.l7_acl.L7AclRuleType",
+            "x-ves-proto-message": "ves.io.schema.l7_acl.L7AclRule",
             "properties": {
                 "action": {
                     "description": " Action to be applied if traffic matched the rule\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
@@ -2856,23 +2834,53 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.message.required": "true"
                     }
                 },
-                "asn_list_matcher": {
-                    "description": " ASN match criteria",
-                    "title": "ASN List Matcher",
-                    "$ref": "#/definitions/policyAsnMatchList",
-                    "x-displayname": "ASN List Matcher"
+                "as_numbers": {
+                    "type": "array",
+                    "description": " An unordered set of RFC 6793 defined 4-byte AS numbers that can be used to create allow or deny lists for use in network policy or service policy.\n\nExample: - \"[713, 7932, 847325, 4683, 15269, 1000001]\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 16\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "title": "as numbers",
+                    "maxItems": 16,
+                    "items": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "x-displayname": "AS Numbers",
+                    "x-ves-example": "[713, 7932, 847325, 4683, 15269, 1000001]",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.max_items": "16",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
                 },
-                "country_matcher": {
-                    "description": " Country match criteria",
-                    "title": "Country Matcher",
-                    "$ref": "#/definitions/policyCountryCodeList",
-                    "x-displayname": "Country Matcher"
+                "countries": {
+                    "type": "array",
+                    "description": " Sources that are located in one of the countries in the given list\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 64\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "title": "countries",
+                    "maxItems": 64,
+                    "items": {
+                        "$ref": "#/definitions/policyCountryCode"
+                    },
+                    "x-displayname": "Country List",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "64",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
                 },
-                "ip_matcher": {
-                    "description": " IP match criteria",
-                    "title": "IP Matcher",
-                    "$ref": "#/definitions/policyPrefixMatchList",
-                    "x-displayname": "IP Matcher"
+                "ip_prefix": {
+                    "type": "array",
+                    "description": " IP Address prefix in string format. String must contain both prefix and prefix-length\n\nExample: - \"[192.168.1.0/24, 192.168.2.0/24]\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.ipv4_prefix: true\n  ves.io.schema.rules.repeated.max_items: 256\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "title": "ip_prefix",
+                    "maxItems": 256,
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-displayname": "IP Prefixes",
+                    "x-ves-example": "[192.168.1.0/24, 192.168.2.0/24]",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.items.string.ipv4_prefix": "true",
+                        "ves.io.schema.rules.repeated.max_items": "256",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
                 },
                 "metadata": {
                     "description": " Common attributes for the rule including name and description.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
@@ -2884,17 +2892,40 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.message.required": "true"
                     }
                 },
-                "path_matcher": {
-                    "description": " Path match criteria",
-                    "title": "Path Matcher",
-                    "$ref": "#/definitions/schemal7_aclPathMatcherType",
-                    "x-displayname": "Path Matcher"
+                "paths": {
+                    "type": "array",
+                    "description": " A list of exact path values to match the input HTTP path against\n\nExample: - \"['/api/web/namespaces/project179/users/user1', '/api/config/namespaces/accounting/bgps', '/api/data/namespaces/project443/virtual_host_101']\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.http_path: true\n  ves.io.schema.rules.repeated.items.string.max_bytes: 256\n  ves.io.schema.rules.repeated.items.string.not_empty: true\n  ves.io.schema.rules.repeated.max_items: 16\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "title": "paths",
+                    "maxItems": 16,
+                    "items": {
+                        "type": "string",
+                        "maxLength": 256
+                    },
+                    "x-displayname": "Paths",
+                    "x-ves-example": "['/api/web/namespaces/project179/users/user1', '/api/config/namespaces/accounting/bgps', '/api/data/namespaces/project443/virtual_host_101']",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.items.string.http_path": "true",
+                        "ves.io.schema.rules.repeated.items.string.max_bytes": "256",
+                        "ves.io.schema.rules.repeated.items.string.not_empty": "true",
+                        "ves.io.schema.rules.repeated.max_items": "16",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
                 },
-                "tls_fingerprint_matcher": {
-                    "description": " TLS fingerprint match criteria",
-                    "title": "TLS Fingerprint Matcher",
-                    "$ref": "#/definitions/policyStringMatcherType",
-                    "x-displayname": "TLS Fingerprint Matcher"
+                "tls_fingerprints": {
+                    "type": "array",
+                    "description": " A list of exact TLS JA3 fingerprints to match the input TLS JA3 fingerprint against\n\nExample: - \"1aa7bf8b97e540ca5edd75f7b8384bfa\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.len: 32\n  ves.io.schema.rules.repeated.max_items: 16\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "title": "tls_fingerprints",
+                    "maxItems": 16,
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-displayname": "TLS Fingerprints",
+                    "x-ves-example": "1aa7bf8b97e540ca5edd75f7b8384bfa",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.items.string.len": "32",
+                        "ves.io.schema.rules.repeated.max_items": "16",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
                 }
             }
         },
@@ -2944,35 +2975,6 @@ var APISwaggerJSON string = `{
                         "$ref": "#/definitions/ioschemaObjectRefType"
                     },
                     "x-displayname": "Config Object"
-                }
-            }
-        },
-        "policyAsnMatchList": {
-            "type": "object",
-            "description": "An unordered set of RFC 6793 defined 4-byte AS numbers that can be used to create allow or deny lists for use in network policy or service policy.",
-            "title": "Asn Match List",
-            "x-displayname": "ASN Match List",
-            "x-ves-proto-message": "ves.io.schema.policy.AsnMatchList",
-            "properties": {
-                "as_numbers": {
-                    "type": "array",
-                    "description": " An unordered set of RFC 6793 defined 4-byte AS numbers that can be used to create allow or deny lists for use in network policy or service policy.\n\nExample: - \"[713, 7932, 847325, 4683, 15269, 1000001]\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 16\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
-                    "title": "as numbers",
-                    "minItems": 1,
-                    "maxItems": 16,
-                    "items": {
-                        "type": "integer",
-                        "format": "int64"
-                    },
-                    "x-displayname": "AS Numbers",
-                    "x-ves-example": "[713, 7932, 847325, 4683, 15269, 1000001]",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true",
-                        "ves.io.schema.rules.repeated.max_items": "16",
-                        "ves.io.schema.rules.repeated.min_items": "1",
-                        "ves.io.schema.rules.repeated.unique": "true"
-                    }
                 }
             }
         },
@@ -3239,112 +3241,6 @@ var APISwaggerJSON string = `{
             "default": "COUNTRY_NONE",
             "x-displayname": "Country Code",
             "x-ves-proto-enum": "ves.io.schema.policy.CountryCode"
-        },
-        "policyCountryCodeList": {
-            "type": "object",
-            "description": "List of Country Codes to match against.",
-            "title": "Country Code List",
-            "x-displayname": "Country Codes List",
-            "x-ves-proto-message": "ves.io.schema.policy.CountryCodeList",
-            "properties": {
-                "country_codes": {
-                    "type": "array",
-                    "description": " List of Country Codes\n\nExample: - \"IN, DE\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 64\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
-                    "title": "country codes",
-                    "minItems": 1,
-                    "maxItems": 64,
-                    "items": {
-                        "$ref": "#/definitions/policyCountryCode"
-                    },
-                    "x-displayname": "Country Codes List",
-                    "x-ves-example": "IN, DE",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true",
-                        "ves.io.schema.rules.repeated.max_items": "64",
-                        "ves.io.schema.rules.repeated.min_items": "1",
-                        "ves.io.schema.rules.repeated.unique": "true"
-                    }
-                },
-                "invert_match": {
-                    "type": "boolean",
-                    "description": " Invert the match result.",
-                    "title": "invert_matcher",
-                    "format": "boolean",
-                    "x-displayname": "Invert Match Result"
-                }
-            }
-        },
-        "policyPrefixMatchList": {
-            "type": "object",
-            "description": "List of IPv4 Prefix strings to match against.",
-            "title": "Prefix Match List",
-            "x-displayname": "IP Prefix Match List",
-            "x-ves-proto-message": "ves.io.schema.policy.PrefixMatchList",
-            "properties": {
-                "invert_match": {
-                    "type": "boolean",
-                    "description": " Invert the match result.",
-                    "title": "invert_matcher",
-                    "format": "boolean",
-                    "x-displayname": "Invert Match Result"
-                },
-                "ip_prefixes": {
-                    "type": "array",
-                    "description": " List of IPv4 prefix strings.\n\nExample: - \"192.168.20.0/24\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.items.string.ipv4_prefix: true\n  ves.io.schema.rules.repeated.max_items: 128\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
-                    "title": "ip prefixes",
-                    "minItems": 1,
-                    "maxItems": 128,
-                    "items": {
-                        "type": "string"
-                    },
-                    "x-displayname": "IP Prefix List",
-                    "x-ves-example": "192.168.20.0/24",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true",
-                        "ves.io.schema.rules.repeated.items.string.ipv4_prefix": "true",
-                        "ves.io.schema.rules.repeated.max_items": "128",
-                        "ves.io.schema.rules.repeated.min_items": "1",
-                        "ves.io.schema.rules.repeated.unique": "true"
-                    }
-                }
-            }
-        },
-        "policyStringMatcherType": {
-            "type": "object",
-            "description": "A matcher specifies a list of values for matching an input string. The match is considered successful if the input value is present in the list. The result of\nthe match is inverted if invert_matcher is true.",
-            "title": "StringMatcherType",
-            "x-displayname": "String Matcher",
-            "x-ves-proto-message": "ves.io.schema.policy.StringMatcherType",
-            "properties": {
-                "invert_matcher": {
-                    "type": "boolean",
-                    "description": " Invert the match result.",
-                    "title": "invert_matcher",
-                    "format": "boolean",
-                    "x-displayname": "Invert String Matcher"
-                },
-                "match": {
-                    "type": "array",
-                    "description": " A list of exact values to match the input against.\n\nExample: - \"['new york', 'london', 'sydney', 'tokyo', 'cairo']\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.items.string.max_bytes: 63\n  ves.io.schema.rules.repeated.max_items: 64\n  ves.io.schema.rules.repeated.unique: true\n",
-                    "title": "match",
-                    "maxItems": 64,
-                    "items": {
-                        "type": "string",
-                        "maxLength": 63
-                    },
-                    "x-displayname": "Exact Values",
-                    "x-ves-example": "['new york', 'london', 'sydney', 'tokyo', 'cairo']",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true",
-                        "ves.io.schema.rules.repeated.items.string.max_bytes": "63",
-                        "ves.io.schema.rules.repeated.max_items": "64",
-                        "ves.io.schema.rules.repeated.unique": "true"
-                    }
-                }
-            }
         },
         "protobufAny": {
             "type": "object",
@@ -3882,104 +3778,20 @@ var APISwaggerJSON string = `{
             "x-displayname": "Global Spec",
             "x-ves-proto-message": "ves.io.schema.l7_acl.GlobalSpecType",
             "properties": {
-                "destination_type": {
-                    "description": " The destination type\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
-                    "title": "Destination Type",
-                    "$ref": "#/definitions/l7_aclDestinationType",
-                    "x-displayname": "Destination type",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
-                    }
-                },
                 "l7_acl_rule": {
                     "type": "array",
-                    "description": " List of L7 ACL rules to be applied\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 50\n  ves.io.schema.rules.repeated.unique: true\n",
-                    "title": "L7 Acl Rules",
-                    "maxItems": 50,
-                    "items": {
-                        "$ref": "#/definitions/l7_aclL7AclRuleType"
-                    },
-                    "x-displayname": "L7 Acl Rules",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true",
-                        "ves.io.schema.rules.repeated.max_items": "50",
-                        "ves.io.schema.rules.repeated.unique": "true"
-                    }
-                }
-            }
-        },
-        "schemal7_aclPathMatcherType": {
-            "type": "object",
-            "description": "A path matcher specifies criteria for matching an HTTP path string.",
-            "title": "PathMatcherType",
-            "x-displayname": "Path Matcher",
-            "x-ves-proto-message": "ves.io.schema.l7_acl.PathMatcherType",
-            "properties": {
-                "exact_values": {
-                    "type": "array",
-                    "description": " A list of exact path values to match the input HTTP path against.\n\nExample: - \"['/api/web/namespaces/project179/users/user1', '/api/config/namespaces/accounting/bgps', '/api/data/namespaces/project443/virtual_host_101']\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.http_path: true\n  ves.io.schema.rules.repeated.items.string.max_bytes: 256\n  ves.io.schema.rules.repeated.items.string.not_empty: true\n  ves.io.schema.rules.repeated.max_items: 16\n  ves.io.schema.rules.repeated.unique: true\n",
-                    "title": "exact values",
+                    "description": " List of L7 ACL rules to be applied\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 16\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "title": "L7 ACL Rules",
                     "maxItems": 16,
                     "items": {
-                        "type": "string",
-                        "maxLength": 256
+                        "$ref": "#/definitions/l7_aclL7AclRule"
                     },
-                    "x-displayname": "Exact Values",
-                    "x-ves-example": "['/api/web/namespaces/project179/users/user1', '/api/config/namespaces/accounting/bgps', '/api/data/namespaces/project443/virtual_host_101']",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.repeated.items.string.http_path": "true",
-                        "ves.io.schema.rules.repeated.items.string.max_bytes": "256",
-                        "ves.io.schema.rules.repeated.items.string.not_empty": "true",
-                        "ves.io.schema.rules.repeated.max_items": "16",
-                        "ves.io.schema.rules.repeated.unique": "true"
-                    }
-                }
-            }
-        },
-        "schemaviewsObjectRefType": {
-            "type": "object",
-            "description": "This type establishes a direct reference from one object(the referrer) to another(the referred).\nSuch a reference is in form of tenant/namespace/name",
-            "title": "ObjectRefType",
-            "x-displayname": "Object reference",
-            "x-ves-proto-message": "ves.io.schema.views.ObjectRefType",
-            "properties": {
-                "name": {
-                    "type": "string",
-                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then name will hold the referred object's(e.g. route's) name.\n\nExample: - \"contacts-route\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_bytes: 64\n  ves.io.schema.rules.string.min_bytes: 1\n",
-                    "title": "name",
-                    "minLength": 1,
-                    "maxLength": 64,
-                    "x-displayname": "Name",
-                    "x-ves-example": "contacts-route",
+                    "x-displayname": "L7 ACL Rules",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true",
-                        "ves.io.schema.rules.string.max_bytes": "64",
-                        "ves.io.schema.rules.string.min_bytes": "1"
-                    }
-                },
-                "namespace": {
-                    "type": "string",
-                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then namespace will hold the referred object's(e.g. route's) namespace.\n\nExample: - \"ns1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 64\n",
-                    "title": "namespace",
-                    "maxLength": 64,
-                    "x-displayname": "Namespace",
-                    "x-ves-example": "ns1",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.max_bytes": "64"
-                    }
-                },
-                "tenant": {
-                    "type": "string",
-                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then tenant will hold the referred object's(e.g. route's) tenant.\n\nExample: - \"acmecorp\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 64\n",
-                    "title": "tenant",
-                    "maxLength": 64,
-                    "x-displayname": "Tenant",
-                    "x-ves-example": "acmecorp",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.max_bytes": "64"
+                        "ves.io.schema.rules.repeated.max_items": "16",
+                        "ves.io.schema.rules.repeated.unique": "true"
                     }
                 }
             }

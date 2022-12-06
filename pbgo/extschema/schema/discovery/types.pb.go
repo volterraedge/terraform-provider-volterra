@@ -496,7 +496,7 @@ type TLSClientConfigType struct {
 	// Client credentials
 	//
 	// x-displayName: "Client Credentials"
-	// Volterra Secret. URL to fetch the client certificate file
+	// F5XC Secret. URL to fetch the client certificate file
 	CertificateUrl *schema.SecretType `protobuf:"bytes,2,opt,name=certificate_url,json=certificateUrl,proto3" json:"certificate_url,omitempty"` // Deprecated: Do not use.
 	// The TLS certificate URL.
 	//
@@ -514,7 +514,7 @@ type TLSClientConfigType struct {
 	// Server CA certificates
 	//
 	// x-displayName: "Server CA Certificates"
-	// Volterra Secret. URL to fetch the server CA certificate file
+	// F5XC Secret. URL to fetch the server CA certificate file
 	CaCertificateUrl *schema.SecretType `protobuf:"bytes,4,opt,name=ca_certificate_url,json=caCertificateUrl,proto3" json:"ca_certificate_url,omitempty"` // Deprecated: Do not use.
 	// Server CA certificates
 	//
@@ -823,7 +823,7 @@ type ConsulHttpBasicAuthInfoType struct {
 	// password
 	//
 	// x-displayName: "Password"
-	// Volterra Secret. URL for password, needs to be fetched from this path
+	// F5XC Secret. URL for password, needs to be fetched from this path
 	PasswdUrl *schema.SecretType `protobuf:"bytes,2,opt,name=passwd_url,json=passwdUrl,proto3" json:"passwd_url,omitempty"`
 }
 
@@ -963,7 +963,7 @@ type VipDiscoveryInfoType struct {
 	//
 	// x-displayName: "Subdomain"
 	// Subdomain for which DNS delegation is done
-	// Volterra Edge Router will only respond for DNS queries on this sub-domain
+	// F5XC Edge Router will only respond for DNS queries on this sub-domain
 	// While programming the DNS DELEGATE on external cluster, VER will take ownership of this
 	// sub-domain
 	Subdomain string `protobuf:"bytes,3,opt,name=subdomain,proto3" json:"subdomain,omitempty"`
@@ -1103,7 +1103,7 @@ type K8SDelegationType struct {
 	// x-displayName: "Subdomain"
 	// x-example: "value"
 	// x-required
-	// The DNS subdomain for which Volterra will respond to DNS queries.
+	// The DNS subdomain for which F5XC will respond to DNS queries.
 	Subdomain string `protobuf:"bytes,1,opt,name=subdomain,proto3" json:"subdomain,omitempty"`
 	// DNS mode
 	//

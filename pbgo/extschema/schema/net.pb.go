@@ -69,7 +69,7 @@ const (
 	// It is an internally created by the system. They must not be created by user
 	VIRTUAL_NETWORK_PUBLIC VirtualNetworkType = 3
 	// x-displayName: "Global Network"
-	// Virtual Neworks with global scope across different sites in Volterra domain.
+	// Virtual Neworks with global scope across different sites in F5XC domain.
 	// An example global virtual-network called "AIN Network" is created for every tenant.
 	// for volterra fabric
 	//
@@ -522,6 +522,7 @@ type IpSubnetType struct {
 	// Version
 	//
 	// x-displayName: "Version"
+	// x-required
 	// IP Address version. Can be IPv4 subnet address or IPv6 subnet address
 	//
 	// Types that are valid to be assigned to Ver:

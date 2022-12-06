@@ -3144,6 +3144,11 @@ var APISwaggerJSON string = `{
                     "title": "Application traffic type",
                     "$ref": "#/definitions/policyAppTrafficType"
                 },
+                "flow_label": {
+                    "type": "string",
+                    "description": "x-displayName: \"Flow Label\"\nx-example: \"Flight.CheckIn\"\nx-required\nFlow label",
+                    "title": "Flow label"
+                },
                 "mitigation": {
                     "description": "x-displayName: \"Mitigation\"\nx-required\nMitigation action for protected endpoint",
                     "title": "Mitigation",

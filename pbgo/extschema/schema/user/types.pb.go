@@ -76,9 +76,9 @@ const (
 	// x-displayName: "SSO User"
 	// Externally managed Single Sign On based user imported into UAM.
 	SSO IdmType = 0
-	// Volterra Managed Local user
-	// x-displayName: "Volterra Managed User"
-	// Volterra managed local user. Full user life cycle is managed by volterra UAM and Identity.
+	// F5XC Managed Local user
+	// x-displayName: "F5XC Managed User"
+	// F5XC managed local user. Full user life cycle is managed by volterra UAM and Identity.
 	VOLTERRA_MANAGED IdmType = 10
 )
 

@@ -2900,6 +2900,28 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "schemaDcClusterGroupStatus": {
+            "type": "object",
+            "description": "Status of the dc cluster group (this will be used in site status object and dcg status object)",
+            "title": "dc cluster group status",
+            "x-displayname": "Status",
+            "x-ves-proto-message": "ves.io.schema.DcClusterGroupStatus",
+            "properties": {
+                "site_info": {
+                    "type": "array",
+                    "description": " The list of sites in the dc cluster group and information about each\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "site_info",
+                    "items": {
+                        "$ref": "#/definitions/schemaSiteInfo"
+                    },
+                    "x-displayname": "site info",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                }
+            }
+        },
         "schemaEmpty": {
             "type": "object",
             "description": "This can be used for messages where no values are needed",
@@ -3134,6 +3156,71 @@ var APISwaggerJSON string = `{
                     "description": " Only added so codegeneration does not break",
                     "title": "Title",
                     "x-displayname": "displayname"
+                }
+            }
+        },
+        "schemaSiteInfo": {
+            "type": "object",
+            "description": "Information about a particular site.",
+            "title": "Site Info",
+            "x-displayname": "Site Info",
+            "x-ves-proto-message": "ves.io.schema.SiteInfo",
+            "properties": {
+                "annotations": {
+                    "type": "array",
+                    "description": " The list of annotations providing information about the referenced site.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "annotations",
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-displayname": "annotations",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                },
+                "site": {
+                    "type": "array",
+                    "description": " 'site' refers to a site.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 1\n",
+                    "title": "site",
+                    "maxItems": 1,
+                    "items": {
+                        "$ref": "#/definitions/ioschemaObjectRefType"
+                    },
+                    "x-displayname": "site",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.max_items": "1"
+                    }
+                }
+            }
+        },
+        "schemaSiteMeshGroupStatus": {
+            "type": "object",
+            "description": "Status of the site mesh group (this will be used in site status object and smg status object)",
+            "title": "Site mesh group status",
+            "x-displayname": "Status",
+            "x-ves-proto-message": "ves.io.schema.SiteMeshGroupStatus",
+            "properties": {
+                "other_connected_sites": {
+                    "type": "array",
+                    "description": " List of sites connected by this Site Mesh Group\n\nExample: - \"[ce01-sfo, ce01-nyc]\"-",
+                    "title": "other_connected_sites",
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-displayname": "Other Connected Sites",
+                    "x-ves-example": "[ce01-sfo, ce01-nyc]"
+                },
+                "site_info": {
+                    "type": "array",
+                    "description": " The list of sites in the site mesh group and information about each",
+                    "title": "site_info",
+                    "items": {
+                        "$ref": "#/definitions/schemaSiteInfo"
+                    },
+                    "x-displayname": "site info"
                 }
             }
         },
@@ -3464,7 +3551,7 @@ var APISwaggerJSON string = `{
         },
         "schemaVirtualNetworkType": {
             "type": "string",
-            "description": "Different types of virtual networks understood by the system\n\nVirtual-network of type VIRTUAL_NETWORK_SITE_LOCAL provides connectivity to public (outside) network.\nThis is an insecure network and is connected to public internet via NAT Gateways/firwalls\nVirtual-network of this type is local to every site. Two virtual networks of this type on different\nsites are neither related nor connected.\n\nConstraints:\nThere can be atmost one virtual network of this type in a given site.\nThis network type is supported on CE sites. This network is created automatically and present on all sites\nVirtual-network of type VIRTUAL_NETWORK_SITE_LOCAL_INSIDE is a private network inside site.\nIt is a secure network and is not connected to public network.\nVirtual-network of this type is local to every site. Two virtual networks of this type on different\nsites are neither related nor connected.\n\nConstraints:\nThere can be atmost one virtual network of this type in a given site.\nThis network type is supported on CE sites. This network is created during provisioning of site\nUser defined per-site virtual network. Scope of this virtual network is limited to the site.\nThis is not yet supported\nVirtual-network of type VIRTUAL_NETWORK_PUBLIC directly conects to the public internet.\nVirtual-network of this type is local to every site. Two virtual networks of this type on different sites are neither related nor connected.\n\nConstraints:\nThere can be atmost one virtual network of this type in a given site.\nThis network type is supported on RE sites only\nIt is an internally created by the system. They must not be created by user\nVirtual Neworks with global scope across different sites in Volterra domain.\nAn example global virtual-network called \"AIN Network\" is created for every tenant.\nfor volterra fabric\n\nConstraints:\nIt is currently only supported as internally created by the system.\nvK8s service network for a given tenant. Used to advertise a virtual host only to vk8s pods for that tenant\nConstraints:\nIt is an internally created by the system. Must not be created by user\nVER internal network for the site. It can only be used for virtual hosts with SMA_PROXY type proxy\nConstraints:\nIt is an internally created by the system. Must not be created by user\nVirtual-network of type VIRTUAL_NETWORK_SITE_LOCAL_INSIDE_OUTSIDE represents both\nVIRTUAL_NETWORK_SITE_LOCAL and VIRTUAL_NETWORK_SITE_LOCAL_INSIDE\n\nConstraints:\nThis network type is only meaningful in an advertise policy\nWhen virtual-network of type VIRTUAL_NETWORK_IP_AUTO is selected for\nan endpoint, VER will try to determine the network based on the provided\nIP address\n\nConstraints:\nThis network type is only meaningful in an endpoint\n\nVoltADN Private Network is used on volterra RE(s) to connect to customer private networks\nThis network is created by opening a support ticket\n\nThis network is per site srv6 network\nVER IP Fabric network for the site.\nThis Virtual network type is used for exposing virtual host on IP Fabric network on the VER site or\nfor endpoint in IP Fabric network\nConstraints:\nIt is an internally created by the system. Must not be created by user",
+            "description": "Different types of virtual networks understood by the system\n\nVirtual-network of type VIRTUAL_NETWORK_SITE_LOCAL provides connectivity to public (outside) network.\nThis is an insecure network and is connected to public internet via NAT Gateways/firwalls\nVirtual-network of this type is local to every site. Two virtual networks of this type on different\nsites are neither related nor connected.\n\nConstraints:\nThere can be atmost one virtual network of this type in a given site.\nThis network type is supported on CE sites. This network is created automatically and present on all sites\nVirtual-network of type VIRTUAL_NETWORK_SITE_LOCAL_INSIDE is a private network inside site.\nIt is a secure network and is not connected to public network.\nVirtual-network of this type is local to every site. Two virtual networks of this type on different\nsites are neither related nor connected.\n\nConstraints:\nThere can be atmost one virtual network of this type in a given site.\nThis network type is supported on CE sites. This network is created during provisioning of site\nUser defined per-site virtual network. Scope of this virtual network is limited to the site.\nThis is not yet supported\nVirtual-network of type VIRTUAL_NETWORK_PUBLIC directly conects to the public internet.\nVirtual-network of this type is local to every site. Two virtual networks of this type on different sites are neither related nor connected.\n\nConstraints:\nThere can be atmost one virtual network of this type in a given site.\nThis network type is supported on RE sites only\nIt is an internally created by the system. They must not be created by user\nVirtual Neworks with global scope across different sites in F5XC domain.\nAn example global virtual-network called \"AIN Network\" is created for every tenant.\nfor volterra fabric\n\nConstraints:\nIt is currently only supported as internally created by the system.\nvK8s service network for a given tenant. Used to advertise a virtual host only to vk8s pods for that tenant\nConstraints:\nIt is an internally created by the system. Must not be created by user\nVER internal network for the site. It can only be used for virtual hosts with SMA_PROXY type proxy\nConstraints:\nIt is an internally created by the system. Must not be created by user\nVirtual-network of type VIRTUAL_NETWORK_SITE_LOCAL_INSIDE_OUTSIDE represents both\nVIRTUAL_NETWORK_SITE_LOCAL and VIRTUAL_NETWORK_SITE_LOCAL_INSIDE\n\nConstraints:\nThis network type is only meaningful in an advertise policy\nWhen virtual-network of type VIRTUAL_NETWORK_IP_AUTO is selected for\nan endpoint, VER will try to determine the network based on the provided\nIP address\n\nConstraints:\nThis network type is only meaningful in an endpoint\n\nVoltADN Private Network is used on volterra RE(s) to connect to customer private networks\nThis network is created by opening a support ticket\n\nThis network is per site srv6 network\nVER IP Fabric network for the site.\nThis Virtual network type is used for exposing virtual host on IP Fabric network on the VER site or\nfor endpoint in IP Fabric network\nConstraints:\nIt is an internally created by the system. Must not be created by user",
             "title": "VirtualNetworkType",
             "enum": [
                 "VIRTUAL_NETWORK_SITE_LOCAL",
@@ -4200,9 +4287,9 @@ var APISwaggerJSON string = `{
         },
         "siteFleetStatus": {
             "type": "object",
-            "description": "Volterra fleet status on the node",
-            "title": "Volterra Fleet Status",
-            "x-displayname": "Volterra Fleet Status",
+            "description": "F5XC fleet status on the node",
+            "title": "F5XC Fleet Status",
+            "x-displayname": "F5XC Fleet Status",
             "x-ves-proto-message": "ves.io.schema.site.FleetStatus",
             "properties": {
                 "deployment_state": {
@@ -4344,7 +4431,7 @@ var APISwaggerJSON string = `{
                 },
                 "cluster_ip": {
                     "type": "string",
-                    "description": " VIP in the Fabric VN for accessing Volterra services like Ares etc\n constraint - used only in REs\n\nExample: - \"1.2.3.4\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ip: true\n",
+                    "description": " VIP in the Fabric VN for accessing F5XC services like Ares etc\n constraint - used only in REs\n\nExample: - \"1.2.3.4\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ip: true\n",
                     "title": "cluster_ip",
                     "x-displayname": "Cluster IP",
                     "x-ves-example": "1.2.3.4",
@@ -4695,14 +4782,14 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Virtual Machine support enabled"
                 },
                 "volterra_software_overide": {
-                    "description": " Policy to pick Volterra software version between verion given in site and corresponding fleet object.",
+                    "description": " Policy to pick F5XC software version between verion given in site and corresponding fleet object.",
                     "title": "volterra_software_override",
                     "$ref": "#/definitions/siteSiteSoftwareOverrideType",
                     "x-displayname": "Site Software Version Override"
                 },
                 "volterra_software_version": {
                     "type": "string",
-                    "description": " Desired Volterra software version for this site, a string matching released set of software components.\n\nExample: - \"value\"-",
+                    "description": " Desired F5XC software version for this site, a string matching released set of software components.\n\nExample: - \"value\"-",
                     "title": "volterra_software_version",
                     "x-displayname": "Software Version",
                     "x-ves-example": "value"
@@ -5095,9 +5182,9 @@ var APISwaggerJSON string = `{
         },
         "siteOperatingSystemStatus": {
             "type": "object",
-            "description": "Volterra operating system version running in the site",
-            "title": "Volterra Operating system Status",
-            "x-displayname": "Volterra Operating System Status",
+            "description": "F5XC operating system version running in the site",
+            "title": "F5XC Operating system Status",
+            "x-displayname": "F5XC Operating System Status",
             "x-ves-proto-message": "ves.io.schema.site.OperatingSystemStatus",
             "properties": {
                 "available_version": {
@@ -5349,10 +5436,6 @@ var APISwaggerJSON string = `{
             "type": "object",
             "x-ves-proto-message": "ves.io.schema.site.RouteServerPeeringStatusType",
             "properties": {
-                "connection_state": {
-                    "type": "string",
-                    "title": "x-displayName: \"Route Server Connection State\"\nRoute Server Connection State"
-                },
                 "peerIP": {
                     "type": "string",
                     "title": "x-displayName: \"Route Server Peer IP\"\nRoute Server Peer IP"
@@ -5514,7 +5597,7 @@ var APISwaggerJSON string = `{
         },
         "siteSoftwareUpgradePhase": {
             "type": "string",
-            "description": "State of Volterra Software or Operating System upgrade phase in site\n\nSite Upgrade was triggered, but has not started yet\nSite upgrade was fetched and it is in progress\nSite upgrade was completed\nSite upgrade failed",
+            "description": "State of F5XC Software or Operating System upgrade phase in site\n\nSite Upgrade was triggered, but has not started yet\nSite upgrade was fetched and it is in progress\nSite upgrade was completed\nSite upgrade failed",
             "title": "SoftwareUpgradePhase",
             "enum": [
                 "UPGRADE_INVALID",
@@ -5550,7 +5633,7 @@ var APISwaggerJSON string = `{
             "properties": {
                 "certified_hardware": {
                     "type": "string",
-                    "description": " Certified Hardware identifies what Volterra Certified Hardware is deployed at this site.\n\nExample: - \"value\"-",
+                    "description": " Certified Hardware identifies what F5XC Certified Hardware is deployed at this site.\n\nExample: - \"value\"-",
                     "title": "Certified Hardware",
                     "x-displayname": "Certified Hardware",
                     "x-ves-example": "value"
@@ -5563,6 +5646,12 @@ var APISwaggerJSON string = `{
                         "$ref": "#/definitions/schemaConditionType"
                     },
                     "x-displayname": "Conditions"
+                },
+                "dc_cluster_group_status": {
+                    "description": " DC Cluster Group Status",
+                    "title": "DC Cluster Group Status",
+                    "$ref": "#/definitions/schemaDcClusterGroupStatus",
+                    "x-displayname": "DC Cluster Group Status"
                 },
                 "direct_connect_status": {
                     "description": " Direct Connect Status",
@@ -5633,6 +5722,12 @@ var APISwaggerJSON string = `{
                     "title": "Scaling Status",
                     "$ref": "#/definitions/siteScalingStatus",
                     "x-displayname": "Scaling Status"
+                },
+                "site_mesh_group_status": {
+                    "description": " Site Mesh Group Status",
+                    "title": "Site Mesh Group Status",
+                    "$ref": "#/definitions/schemaSiteMeshGroupStatus",
+                    "x-displayname": "Site Mesh Group Status"
                 },
                 "ver_master_status": {
                     "description": " Identify the master node in the cluster",
@@ -5959,7 +6054,7 @@ var APISwaggerJSON string = `{
         },
         "siteVTRPState": {
             "type": "string",
-            "description": "State of VTRP connection between (VER control plane)Vega \u0026 (Volterra Fabric control)Ares\n\nConnection is initialized\nVTRP connection is active\nConnecting to the server\nTCP connection is up\nVTRP session established\nConnection is deleted",
+            "description": "State of VTRP connection between (VER control plane)Vega \u0026 (F5XC Fabric control)Ares\n\nConnection is initialized\nVTRP connection is active\nConnecting to the server\nTCP connection is up\nVTRP session established\nConnection is deleted",
             "title": "VTRPState",
             "enum": [
                 "INIT",
@@ -6119,9 +6214,9 @@ var APISwaggerJSON string = `{
         },
         "siteVolterraSoftwareStatus": {
             "type": "object",
-            "description": "Volterra software version running in the site",
-            "title": "Volterra Software Status",
-            "x-displayname": "Volterra Software Status",
+            "description": "F5XC software version running in the site",
+            "title": "F5XC Software Status",
+            "x-displayname": "F5XC Software Status",
             "x-ves-proto-message": "ves.io.schema.site.VolterraSoftwareStatus",
             "properties": {
                 "available_version": {

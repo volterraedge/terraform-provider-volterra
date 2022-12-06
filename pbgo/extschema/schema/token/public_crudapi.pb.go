@@ -6,7 +6,7 @@
 // x-displayName: "Token"
 // token object is used to manage site admission. User must generate token before provisioning and pass this
 // token to site during it's registration. Invalid tokens are refused and site with invalid token won't be able
-// to join Volterra network.
+// to join F5XC network.
 // Single token can be used to register multiple sites.
 
 package token

@@ -197,9 +197,9 @@ type BigIPAWSType struct {
 	// x-required
 	// SSH Public Key to be programmed on bigip instance for ssh access
 	SshKey string `protobuf:"bytes,9,opt,name=ssh_key,json=sshKey,proto3" json:"ssh_key,omitempty"`
-	// Volterra AWS Subnet Ids Info
+	// F5XC AWS Subnet Ids Info
 	//
-	// x-displayName: "Volterra AWS Subnet Ids"
+	// x-displayName: "F5XC AWS Subnet Ids"
 	// x-required
 	// AWS Subnet Ids used by volterra site
 	VolterraSubnetIds []*views.AWSSubnetIdsType `protobuf:"bytes,10,rep,name=volterra_subnet_ids,json=volterraSubnetIds,proto3" json:"volterra_subnet_ids,omitempty"`

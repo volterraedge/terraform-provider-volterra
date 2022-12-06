@@ -1136,8 +1136,8 @@ func (e *DBStatusObject) GetDRefInfo() ([]db.DRefInfo, error) {
 		}
 		drInfos = append(drInfos, fdrInfos...)
 	}
-	if fdrInfos, err := e.GetStatusDRefInfo(); err != nil {
-		return nil, errors.Wrap(err, "GetStatusDRefInfo() FAILED")
+	if fdrInfos, err := e.GetSiteMeshGroupStatusDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetSiteMeshGroupStatusDRefInfo() FAILED")
 	} else {
 		for i := range fdrInfos {
 			dri := &fdrInfos[i]
@@ -1265,18 +1265,18 @@ func (e *DBStatusObject) GetObjectRefsDBEntries(ctx context.Context, d db.Interf
 }
 
 // GetDRefInfo for the field's type
-func (e *DBStatusObject) GetStatusDRefInfo() ([]db.DRefInfo, error) {
-	if e.GetStatus() == nil {
+func (e *DBStatusObject) GetSiteMeshGroupStatusDRefInfo() ([]db.DRefInfo, error) {
+	if e.GetSiteMeshGroupStatus() == nil {
 		return nil, nil
 	}
 
-	drInfos, err := e.GetStatus().GetDRefInfo()
+	drInfos, err := e.GetSiteMeshGroupStatus().GetDRefInfo()
 	if err != nil {
-		return nil, errors.Wrap(err, "GetStatus().GetDRefInfo() FAILED")
+		return nil, errors.Wrap(err, "GetSiteMeshGroupStatus().GetDRefInfo() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]
-		dri.DRField = "status." + dri.DRField
+		dri.DRField = "site_mesh_group_status." + dri.DRField
 	}
 	return drInfos, err
 
@@ -1331,10 +1331,10 @@ func (v *ValidateStatusObject) Validate(ctx context.Context, pm interface{}, opt
 
 	}
 
-	if fv, exists := v.FldValidators["status"]; exists {
+	if fv, exists := v.FldValidators["site_mesh_group_status"]; exists {
 
-		vOpts := append(opts, db.WithValidateField("status"))
-		if err := fv(ctx, e.GetStatus(), vOpts...); err != nil {
+		vOpts := append(opts, db.WithValidateField("site_mesh_group_status"))
+		if err := fv(ctx, e.GetSiteMeshGroupStatus(), vOpts...); err != nil {
 			return err
 		}
 
@@ -1349,7 +1349,7 @@ var DefaultStatusObjectValidator = func() *ValidateStatusObject {
 
 	v.FldValidators["conditions"] = ves_io_schema.ConditionTypeValidator().Validate
 
-	v.FldValidators["status"] = SiteMeshGroupStatusValidator().Validate
+	v.FldValidators["site_mesh_group_status"] = ves_io_schema.SiteMeshGroupStatusValidator().Validate
 
 	return v
 }()

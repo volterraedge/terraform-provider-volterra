@@ -6680,6 +6680,16 @@ func (v *ValidateShapeProtectedEndpointAction) WebScrapingValidationRuleHandler(
 	return validatorFn, nil
 }
 
+func (v *ValidateShapeProtectedEndpointAction) FlowLabelValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for flow_label")
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateShapeProtectedEndpointAction) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*ShapeProtectedEndpointAction)
 	if !ok {
@@ -6698,6 +6708,15 @@ func (v *ValidateShapeProtectedEndpointAction) Validate(ctx context.Context, pm 
 
 		vOpts := append(opts, db.WithValidateField("app_traffic_type"))
 		if err := fv(ctx, m.GetAppTrafficType(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["flow_label"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("flow_label"))
+		if err := fv(ctx, m.GetFlowLabel(), vOpts...); err != nil {
 			return err
 		}
 
@@ -6768,6 +6787,18 @@ var DefaultShapeProtectedEndpointActionValidator = func() *ValidateShapeProtecte
 		panic(errMsg)
 	}
 	v.FldValidators["web_scraping"] = vFn
+
+	vrhFlowLabel := v.FlowLabelValidationRuleHandler
+	rulesFlowLabel := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.max_len":   "128",
+	}
+	vFn, err = vrhFlowLabel(rulesFlowLabel)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ShapeProtectedEndpointAction.flow_label: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["flow_label"] = vFn
 
 	return v
 }()
@@ -7161,6 +7192,10 @@ func (v *ValidateSimpleWafExclusionRule) DomainChoiceSuffixValueValidationRuleHa
 	return oValidatorFn_SuffixValue, nil
 }
 
+func (v *ValidateSimpleWafExclusionRule) WafAdvancedConfigurationAppFirewallDetectionControlValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	return AppFirewallDetectionControlValidator().Validate, nil
+}
+
 func (v *ValidateSimpleWafExclusionRule) PathRegexValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
@@ -7288,13 +7323,6 @@ func (v *ValidateSimpleWafExclusionRule) MetadataValidationRuleHandler(rules map
 	return validatorFn, nil
 }
 
-func (v *ValidateSimpleWafExclusionRule) AppFirewallDetectionControlValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	validatorFn := AppFirewallDetectionControlValidator().Validate
-
-	return validatorFn, nil
-}
-
 func (v *ValidateSimpleWafExclusionRule) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*SimpleWafExclusionRule)
 	if !ok {
@@ -7307,15 +7335,6 @@ func (v *ValidateSimpleWafExclusionRule) Validate(ctx context.Context, pm interf
 	}
 	if m == nil {
 		return nil
-	}
-
-	if fv, exists := v.FldValidators["app_firewall_detection_control"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("app_firewall_detection_control"))
-		if err := fv(ctx, m.GetAppFirewallDetectionControl(), vOpts...); err != nil {
-			return err
-		}
-
 	}
 
 	if fv, exists := v.FldValidators["domain_choice"]; exists {
@@ -7408,6 +7427,32 @@ func (v *ValidateSimpleWafExclusionRule) Validate(ctx context.Context, pm interf
 
 	}
 
+	switch m.GetWafAdvancedConfiguration().(type) {
+	case *SimpleWafExclusionRule_AppFirewallDetectionControl:
+		if fv, exists := v.FldValidators["waf_advanced_configuration.app_firewall_detection_control"]; exists {
+			val := m.GetWafAdvancedConfiguration().(*SimpleWafExclusionRule_AppFirewallDetectionControl).AppFirewallDetectionControl
+			vOpts := append(opts,
+				db.WithValidateField("waf_advanced_configuration"),
+				db.WithValidateField("app_firewall_detection_control"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *SimpleWafExclusionRule_WafSkipProcessing:
+		if fv, exists := v.FldValidators["waf_advanced_configuration.waf_skip_processing"]; exists {
+			val := m.GetWafAdvancedConfiguration().(*SimpleWafExclusionRule_WafSkipProcessing).WafSkipProcessing
+			vOpts := append(opts,
+				db.WithValidateField("waf_advanced_configuration"),
+				db.WithValidateField("waf_skip_processing"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	return nil
 }
 
@@ -7460,6 +7505,18 @@ var DefaultSimpleWafExclusionRuleValidator = func() *ValidateSimpleWafExclusionR
 	v.FldValidators["domain_choice.exact_value"] = vFnMap["domain_choice.exact_value"]
 	v.FldValidators["domain_choice.suffix_value"] = vFnMap["domain_choice.suffix_value"]
 
+	vrhWafAdvancedConfigurationAppFirewallDetectionControl := v.WafAdvancedConfigurationAppFirewallDetectionControlValidationRuleHandler
+	rulesWafAdvancedConfigurationAppFirewallDetectionControl := map[string]string{
+		"ves.io.schema.rules.message.required_one_nonzero_field": "true",
+	}
+	vFnMap["waf_advanced_configuration.app_firewall_detection_control"], err = vrhWafAdvancedConfigurationAppFirewallDetectionControl(rulesWafAdvancedConfigurationAppFirewallDetectionControl)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field SimpleWafExclusionRule.waf_advanced_configuration_app_firewall_detection_control: %s", err)
+		panic(errMsg)
+	}
+
+	v.FldValidators["waf_advanced_configuration.app_firewall_detection_control"] = vFnMap["waf_advanced_configuration.app_firewall_detection_control"]
+
 	vrhPathRegex := v.PathRegexValidationRuleHandler
 	rulesPathRegex := map[string]string{
 		"ves.io.schema.rules.message.required": "true",
@@ -7509,17 +7566,6 @@ var DefaultSimpleWafExclusionRuleValidator = func() *ValidateSimpleWafExclusionR
 		panic(errMsg)
 	}
 	v.FldValidators["metadata"] = vFn
-
-	vrhAppFirewallDetectionControl := v.AppFirewallDetectionControlValidationRuleHandler
-	rulesAppFirewallDetectionControl := map[string]string{
-		"ves.io.schema.rules.message.required_one_nonzero_field": "true",
-	}
-	vFn, err = vrhAppFirewallDetectionControl(rulesAppFirewallDetectionControl)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for SimpleWafExclusionRule.app_firewall_detection_control: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["app_firewall_detection_control"] = vFn
 
 	return v
 }()

@@ -2394,14 +2394,18 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.tenant_management.managed_tenant.GroupAssignmentType",
             "properties": {
                 "group": {
-                    "description": " Assosciate existing local user group which will be used to map groups in managed tenant.\n User should be member of this group to gain access into managed tenant.",
+                    "description": " Assosciate existing local user group which will be used to map groups in managed tenant.\n User should be member of this group to gain access into managed tenant.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "group",
                     "$ref": "#/definitions/schemaviewsObjectRefType",
-                    "x-displayname": "Group"
+                    "x-displayname": "Group",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 },
                 "managed_tenant_groups": {
                     "type": "array",
-                    "description": " List of group names in managed tenant (MT).\n Note - To properly establish access, admin of managed tenant need to create corresponding Allowed Tenant\n configuration object with access to use same group names. Once it's setup, when user from original tenant\n access managed tenant, underlying roles from managed tenant will be applied to user.\n\nExample: - \"user-group1\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 32\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " List of group names in managed tenant (MT).\n Note - To properly establish access, admin of managed tenant need to create corresponding Allowed Tenant\n configuration object with access to use same group names. Once it's setup, when user from original tenant\n access managed tenant, underlying roles from managed tenant will be applied to user.\n\nExample: - \"user-group1\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 32\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "managed_tenant_groups",
                     "maxItems": 32,
                     "items": {
@@ -2409,7 +2413,9 @@ var APISwaggerJSON string = `{
                     },
                     "x-displayname": "Managed Tenant Groups",
                     "x-ves-example": "user-group1",
+                    "x-ves-required": "true",
                     "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
                         "ves.io.schema.rules.repeated.max_items": "32",
                         "ves.io.schema.rules.repeated.unique": "true"
                     }
@@ -2609,20 +2615,6 @@ var APISwaggerJSON string = `{
                     "x-displayname": "GC Spec"
                 }
             }
-        },
-        "managed_tenantStatus": {
-            "type": "string",
-            "description": "Status is to identify the status of the managed tenant configuration.\n\n - UNKNOWN: UNKNOWN\nUnknown status of the configuration.\n - NOT_APPLICABLE: Not Applicable\nThe status is not applicable for the managed tenant configuration.\n - PENDING: Pending\nThe configuration is incomplete.\n - ACTIVE: Active\nThe tenant configuration is active.",
-            "title": "Status",
-            "enum": [
-                "UNKNOWN",
-                "NOT_APPLICABLE",
-                "PENDING",
-                "ACTIVE"
-            ],
-            "default": "UNKNOWN",
-            "x-displayname": "Status",
-            "x-ves-proto-enum": "ves.io.schema.tenant_management.managed_tenant.Status"
         },
         "managed_tenantStatusObject": {
             "type": "object",
@@ -3488,11 +3480,26 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "tenant_managementStatus": {
+            "type": "string",
+            "description": "Status is to identify the status of the managed tenant configuration.\n\n - UNKNOWN: UNKNOWN\nUnknown status of the configuration.\n - NOT_APPLICABLE: Not Applicable\nThe status is not applicable for the managed tenant configuration.\n - PENDING: Pending\nThe configuration is incomplete.\n - ACTIVE: Active\nThe tenant configuration is active.",
+            "title": "Status",
+            "enum": [
+                "UNKNOWN",
+                "NOT_APPLICABLE",
+                "PENDING",
+                "ACTIVE"
+            ],
+            "default": "UNKNOWN",
+            "x-displayname": "Status",
+            "x-ves-proto-enum": "ves.io.schema.tenant_management.Status"
+        },
         "tenant_managementmanaged_tenantCreateSpecType": {
             "type": "object",
             "description": "Creates a managed_tenant config instance. Name of the object is name of the tenant that is allowed to manage.",
             "title": "Create Managed Tenant",
             "x-displayname": "Create Managed Tenant",
+            "x-ves-displayorder": "1,5",
             "x-ves-oneof-field-tenant_choice": "[\"tenant_id\"]",
             "x-ves-proto-message": "ves.io.schema.tenant_management.managed_tenant.CreateSpecType",
             "properties": {
@@ -3503,7 +3510,7 @@ var APISwaggerJSON string = `{
                     "items": {
                         "$ref": "#/definitions/managed_tenantGroupAssignmentType"
                     },
-                    "x-displayname": "Groups",
+                    "x-displayname": "Group Mapping",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.repeated.max_items": "16",
                         "ves.io.schema.rules.repeated.unique": "true"
@@ -3511,9 +3518,9 @@ var APISwaggerJSON string = `{
                 },
                 "tenant_id": {
                     "type": "string",
-                    "description": "Exclusive with []\n Specify the Tenant ID of the existing tenant which needs to be managed.\n NOTE: this is the name of the tenant configuration obj. not UID.\n\nExample: - \"company-s4543dsa\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 256\n",
+                    "description": "Exclusive with []\n Specify the Tenant ID of the existing tenant which needs to be managed.\n User can select Tenant ID from dropdown if managed tenant has already configured delegated access\n or manually input the Tenant ID if managed tenant configuration will happen in future.\n\nExample: - \"company-s4543dsa\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 256\n",
                     "maxLength": 256,
-                    "x-displayname": "Tenant ID (Existing)",
+                    "x-displayname": "Managed Tenant ID",
                     "x-ves-example": "company-s4543dsa",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.string.max_len": "256"
@@ -3526,7 +3533,7 @@ var APISwaggerJSON string = `{
             "description": "Get managed_tenant reads a given object from storage backend for metadata.namespace.",
             "title": "Get managed tenant",
             "x-displayname": "Get Managed Tenant",
-            "x-ves-displayorder": "2,3,4,5",
+            "x-ves-displayorder": "2,3,4,5,8",
             "x-ves-oneof-field-tenant_choice": "[\"tenant_id\"]",
             "x-ves-proto-message": "ves.io.schema.tenant_management.managed_tenant.GetSpecType",
             "properties": {
@@ -3537,7 +3544,7 @@ var APISwaggerJSON string = `{
                     "items": {
                         "$ref": "#/definitions/managed_tenantGroupAssignmentType"
                     },
-                    "x-displayname": "Groups",
+                    "x-displayname": "Group Mapping",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.repeated.max_items": "16",
                         "ves.io.schema.rules.repeated.unique": "true"
@@ -3545,14 +3552,14 @@ var APISwaggerJSON string = `{
                 },
                 "status": {
                     "description": " Status is to identify the status of the managed tenant configuration.",
-                    "$ref": "#/definitions/managed_tenantStatus",
+                    "$ref": "#/definitions/tenant_managementStatus",
                     "x-displayname": "Status"
                 },
                 "tenant_id": {
                     "type": "string",
-                    "description": "Exclusive with []\n Specify the Tenant ID of the existing tenant which needs to be managed.\n NOTE: this is the name of the tenant configuration obj. not UID.\n\nExample: - \"company-s4543dsa\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 256\n",
+                    "description": "Exclusive with []\n Specify the Tenant ID of the existing tenant which needs to be managed.\n User can select Tenant ID from dropdown if managed tenant has already configured delegated access\n or manually input the Tenant ID if managed tenant configuration will happen in future.\n\nExample: - \"company-s4543dsa\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 256\n",
                     "maxLength": 256,
-                    "x-displayname": "Tenant ID (Existing)",
+                    "x-displayname": "Managed Tenant ID",
                     "x-ves-example": "company-s4543dsa",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.string.max_len": "256"
@@ -3576,7 +3583,7 @@ var APISwaggerJSON string = `{
                     "items": {
                         "$ref": "#/definitions/managed_tenantGroupAssignmentType"
                     },
-                    "x-displayname": "Groups",
+                    "x-displayname": "Group Mapping",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.repeated.max_items": "16",
                         "ves.io.schema.rules.repeated.unique": "true"
@@ -3585,15 +3592,15 @@ var APISwaggerJSON string = `{
                 "status": {
                     "description": " Status is to identify the status of the managed tenant configuration.",
                     "title": "Status",
-                    "$ref": "#/definitions/managed_tenantStatus",
+                    "$ref": "#/definitions/tenant_managementStatus",
                     "x-displayname": "Status"
                 },
                 "tenant_id": {
                     "type": "string",
-                    "description": "Exclusive with []\n Specify the Tenant ID of the existing tenant which needs to be managed.\n NOTE: this is the name of the tenant configuration obj. not UID.\n\nExample: - \"company-s4543dsa\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 256\n",
+                    "description": "Exclusive with []\n Specify the Tenant ID of the existing tenant which needs to be managed.\n User can select Tenant ID from dropdown if managed tenant has already configured delegated access\n or manually input the Tenant ID if managed tenant configuration will happen in future.\n\nExample: - \"company-s4543dsa\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 256\n",
                     "title": "tenant_id",
                     "maxLength": 256,
-                    "x-displayname": "Tenant ID (Existing)",
+                    "x-displayname": "Managed Tenant ID",
                     "x-ves-example": "company-s4543dsa",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.string.max_len": "256"
@@ -3606,7 +3613,7 @@ var APISwaggerJSON string = `{
             "description": "Replaces attributes of a managed_tenant configuration.\nUpdate of existing tenant_choice selection is not supported but user may update existing group assignments.",
             "title": "Replace Managed Tenant",
             "x-displayname": "Replace Managed Tenant",
-            "x-ves-oneof-field-tenant_choice": "[\"tenant_id\"]",
+            "x-ves-displayorder": "5",
             "x-ves-proto-message": "ves.io.schema.tenant_management.managed_tenant.ReplaceSpecType",
             "properties": {
                 "groups": {
@@ -3616,20 +3623,10 @@ var APISwaggerJSON string = `{
                     "items": {
                         "$ref": "#/definitions/managed_tenantGroupAssignmentType"
                     },
-                    "x-displayname": "Groups",
+                    "x-displayname": "Group Mapping",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.repeated.max_items": "16",
                         "ves.io.schema.rules.repeated.unique": "true"
-                    }
-                },
-                "tenant_id": {
-                    "type": "string",
-                    "description": "Exclusive with []\n Specify the Tenant ID of the existing tenant which needs to be managed.\n NOTE: this is the name of the tenant configuration obj. not UID.\n\nExample: - \"company-s4543dsa\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 256\n",
-                    "maxLength": 256,
-                    "x-displayname": "Tenant ID (Existing)",
-                    "x-ves-example": "company-s4543dsa",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.max_len": "256"
                     }
                 }
             }
