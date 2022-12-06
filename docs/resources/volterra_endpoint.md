@@ -58,6 +58,10 @@ Argument Reference
 
 `where` - (Optional) This endpoint is present in site, virtual_site or virtual_network selected by following field.. See [Where ](#where) below for details.
 
+### Disable Internet Vip
+
+Do not enable advertise on external internet vip..
+
 ### Dns Name Advanced
 
 Specifies name and TTL used for DNS resolution..
@@ -67,6 +71,10 @@ Specifies name and TTL used for DNS resolution..
 `refresh_interval` - (Optional) Interval for DNS refresh in seconds. (`Int`).
 
 `strict_ttl` - (Optional) Use TTL value returned by DNS Server during DNS resolution as DNS refresh interval (bool).
+
+### Enable Internet Vip
+
+Enable advertise on internet vip. Only supported for AWS TGW Site or AWS VPC Site..
 
 ### Ref
 
@@ -100,6 +108,10 @@ discovery has to happen. This implicit label is added to service_selector.
 
 Direct reference to site object.
 
+`disable_internet_vip` - (Optional) Do not enable advertise on external internet vip. (bool).
+
+`enable_internet_vip` - (Optional) Enable advertise on internet vip. Only supported for AWS TGW Site or AWS VPC Site. (bool).
+
 `network_type` - (Optional) The type of network on the referred site (`String`).
 
 `ref` - (Optional) A site direct reference. See [ref](#ref) below for details.
@@ -117,6 +129,10 @@ Direct reference to virtual network object.
 ### Virtual Site
 
 Direct reference to virtual site object.
+
+`disable_internet_vip` - (Optional) Do not enable advertise on external internet vip. (bool).
+
+`enable_internet_vip` - (Optional) Enable advertise on internet vip. Only supported for AWS TGW Site or AWS VPC Site. (bool).
 
 `network_type` - (Optional) The type of network on the referred virtual_site (`String`).
 

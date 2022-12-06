@@ -29,19 +29,66 @@ resource "volterra_discovery" "example" {
     access_info {
       // One of the arguments from this list "kubeconfig_url connection_info in_cluster" must be set
 
-      kubeconfig_url {
-        blindfold_secret_info_internal {
-          decryption_provider = "value"
-          location            = "string:///U2VjcmV0SW5mb3JtYXRpb24="
-          store_provider      = "value"
-        }
+      connection_info {
+        api_server = "api.acme.com:4430"
 
-        secret_encoding_type = "secret_encoding_type"
+        tls_info {
+          ca_certificate_url {
+            blindfold_secret_info_internal {
+              decryption_provider = "value"
+              location            = "string:///U2VjcmV0SW5mb3JtYXRpb24="
+              store_provider      = "value"
+            }
 
-        // One of the arguments from this list "clear_secret_info wingman_secret_info blindfold_secret_info vault_secret_info" must be set
+            secret_encoding_type = "secret_encoding_type"
 
-        wingman_secret_info {
-          name = "ChargeBack-API-Key"
+            // One of the arguments from this list "blindfold_secret_info vault_secret_info clear_secret_info wingman_secret_info" must be set
+
+            wingman_secret_info {
+              name = "ChargeBack-API-Key"
+            }
+          }
+
+          certificate = "value"
+
+          certificate_url {
+            blindfold_secret_info_internal {
+              decryption_provider = "value"
+              location            = "string:///U2VjcmV0SW5mb3JtYXRpb24="
+              store_provider      = "value"
+            }
+
+            secret_encoding_type = "secret_encoding_type"
+
+            // One of the arguments from this list "wingman_secret_info blindfold_secret_info vault_secret_info clear_secret_info" must be set
+
+            blindfold_secret_info {
+              decryption_provider = "value"
+              location            = "string:///U2VjcmV0SW5mb3JtYXRpb24="
+              store_provider      = "value"
+            }
+          }
+
+          key_url {
+            blindfold_secret_info_internal {
+              decryption_provider = "value"
+              location            = "string:///U2VjcmV0SW5mb3JtYXRpb24="
+              store_provider      = "value"
+            }
+
+            secret_encoding_type = "secret_encoding_type"
+
+            // One of the arguments from this list "clear_secret_info wingman_secret_info blindfold_secret_info vault_secret_info" must be set
+
+            blindfold_secret_info {
+              decryption_provider = "value"
+              location            = "string:///U2VjcmV0SW5mb3JtYXRpb24="
+              store_provider      = "value"
+            }
+          }
+
+          server_name    = "k8s.acme.com"
+          trusted_ca_url = "value"
         }
       }
 
@@ -55,7 +102,7 @@ resource "volterra_discovery" "example" {
     }
   }
   where {
-    // One of the arguments from this list "virtual_network site virtual_site" must be set
+    // One of the arguments from this list "site virtual_site virtual_network" must be set
 
     virtual_network {
       ref {
@@ -110,7 +157,7 @@ Credentials to access Hashicorp Consul service discovery.
 
 ### Blindfold Secret Info
 
-Blindfold Secret is used for the secrets managed by Volterra Secret Management Service.
+Blindfold Secret is used for the secrets managed by F5XC Secret Management Service.
 
 `decryption_provider` - (Optional) Name of the Secret Management Access object that contains information about the backend Secret Management service. (`String`).
 
@@ -130,35 +177,35 @@ Blindfold Secret Internal is used for the putting re-encrypted blindfold secret.
 
 ### Ca Certificate Url
 
-Volterra Secret. URL to fetch the server CA certificate file.
+F5XC Secret. URL to fetch the server CA certificate file.
 
 `blindfold_secret_info_internal` - (Optional) Blindfold Secret Internal is used for the putting re-encrypted blindfold secret. See [Blindfold Secret Info Internal ](#blindfold-secret-info-internal) below for details.
 
 `secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).
 
-`blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by Volterra Secret Management Service. See [Blindfold Secret Info ](#blindfold-secret-info) below for details.
+`blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Blindfold Secret Info ](#blindfold-secret-info) below for details.
 
 `clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Clear Secret Info ](#clear-secret-info) below for details.
 
 `vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Vault Secret Info ](#vault-secret-info) below for details.
 
-`wingman_secret_info` - (Optional) Secret is given as bootstrap secret in Volterra Security Sidecar. See [Wingman Secret Info ](#wingman-secret-info) below for details.
+`wingman_secret_info` - (Optional) Secret is given as bootstrap secret in F5XC Security Sidecar. See [Wingman Secret Info ](#wingman-secret-info) below for details.
 
 ### Certificate Url
 
-Volterra Secret. URL to fetch the client certificate file.
+F5XC Secret. URL to fetch the client certificate file.
 
 `blindfold_secret_info_internal` - (Optional) Blindfold Secret Internal is used for the putting re-encrypted blindfold secret. See [Blindfold Secret Info Internal ](#blindfold-secret-info-internal) below for details.
 
 `secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).
 
-`blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by Volterra Secret Management Service. See [Blindfold Secret Info ](#blindfold-secret-info) below for details.
+`blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Blindfold Secret Info ](#blindfold-secret-info) below for details.
 
 `clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Clear Secret Info ](#clear-secret-info) below for details.
 
 `vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Vault Secret Info ](#vault-secret-info) below for details.
 
-`wingman_secret_info` - (Optional) Secret is given as bootstrap secret in Volterra Security Sidecar. See [Wingman Secret Info ](#wingman-secret-info) below for details.
+`wingman_secret_info` - (Optional) Secret is given as bootstrap secret in F5XC Security Sidecar. See [Wingman Secret Info ](#wingman-secret-info) below for details.
 
 ### Clear Secret Info
 
@@ -180,6 +227,10 @@ Configuration details to access Hashicorp Consul API service using REST..
 
 Disable VIP Publishing.
 
+### Disable Internet Vip
+
+Do not enable advertise on external internet vip..
+
 ### Discovery Consul
 
 Discovery configuration for Hashicorp Consul.
@@ -196,11 +247,15 @@ Discovery configuration for K8s..
 
 `publish_info` - (Required) Configuration to publish VIPs. See [Publish Info ](#publish-info) below for details.
 
+### Enable Internet Vip
+
+Enable advertise on internet vip. Only supported for AWS TGW Site or AWS VPC Site..
+
 ### Http Basic Auth Info
 
 Username and password used for HTTP/HTTPS access.
 
-`passwd_url` - (Optional) Volterra Secret. URL for password, needs to be fetched from this path. See [Passwd Url ](#passwd-url) below for details.
+`passwd_url` - (Optional) F5XC Secret. URL for password, needs to be fetched from this path. See [Passwd Url ](#passwd-url) below for details.
 
 `user_name` - (Optional) username in consul (`String`).
 
@@ -212,29 +267,29 @@ The data may be optionally secured using BlindFold..
 
 `secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).
 
-`blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by Volterra Secret Management Service. See [Blindfold Secret Info ](#blindfold-secret-info) below for details.
+`blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Blindfold Secret Info ](#blindfold-secret-info) below for details.
 
 `clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Clear Secret Info ](#clear-secret-info) below for details.
 
 `vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Vault Secret Info ](#vault-secret-info) below for details.
 
-`wingman_secret_info` - (Optional) Secret is given as bootstrap secret in Volterra Security Sidecar. See [Wingman Secret Info ](#wingman-secret-info) below for details.
+`wingman_secret_info` - (Optional) Secret is given as bootstrap secret in F5XC Security Sidecar. See [Wingman Secret Info ](#wingman-secret-info) below for details.
 
 ### Passwd Url
 
-Volterra Secret. URL for password, needs to be fetched from this path.
+F5XC Secret. URL for password, needs to be fetched from this path.
 
 `blindfold_secret_info_internal` - (Optional) Blindfold Secret Internal is used for the putting re-encrypted blindfold secret. See [Blindfold Secret Info Internal ](#blindfold-secret-info-internal) below for details.
 
 `secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).
 
-`blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by Volterra Secret Management Service. See [Blindfold Secret Info ](#blindfold-secret-info) below for details.
+`blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Blindfold Secret Info ](#blindfold-secret-info) below for details.
 
 `clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Clear Secret Info ](#clear-secret-info) below for details.
 
 `vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Vault Secret Info ](#vault-secret-info) below for details.
 
-`wingman_secret_info` - (Optional) Secret is given as bootstrap secret in Volterra Security Sidecar. See [Wingman Secret Info ](#wingman-secret-info) below for details.
+`wingman_secret_info` - (Optional) Secret is given as bootstrap secret in F5XC Security Sidecar. See [Wingman Secret Info ](#wingman-secret-info) below for details.
 
 ### Publish
 
@@ -262,6 +317,10 @@ tenant - (Optional) then tenant will hold the referred object's(e.g. route's) te
 
 Direct reference to site object.
 
+`disable_internet_vip` - (Optional) Do not enable advertise on external internet vip. (bool).
+
+`enable_internet_vip` - (Optional) Enable advertise on internet vip. Only supported for AWS TGW Site or AWS VPC Site. (bool).
+
 `network_type` - (Optional) The type of network on the referred site (`String`).
 
 `ref` - (Optional) A site direct reference. See [ref](#ref) below for details.
@@ -270,11 +329,11 @@ Direct reference to site object.
 
 TLS settings to enable transport layer security.
 
-`ca_certificate_url` - (Optional) Volterra Secret. URL to fetch the server CA certificate file. See [Ca Certificate Url ](#ca-certificate-url) below for details.
+`ca_certificate_url` - (Optional) F5XC Secret. URL to fetch the server CA certificate file. See [Ca Certificate Url ](#ca-certificate-url) below for details.
 
 `certificate` - (Optional) Client certificate is PEM-encoded certificate or certificate-chain. (`String`).
 
-`certificate_url` - (Optional) Volterra Secret. URL to fetch the client certificate file. See [Certificate Url ](#certificate-url) below for details.
+`certificate_url` - (Optional) F5XC Secret. URL to fetch the client certificate file. See [Certificate Url ](#certificate-url) below for details.
 
 `key_url` - (Optional) The data may be optionally secured using BlindFold.. See [Key Url ](#key-url) below for details.
 
@@ -306,6 +365,10 @@ Direct reference to virtual network object.
 
 Direct reference to virtual site object.
 
+`disable_internet_vip` - (Optional) Do not enable advertise on external internet vip. (bool).
+
+`enable_internet_vip` - (Optional) Enable advertise on internet vip. Only supported for AWS TGW Site or AWS VPC Site. (bool).
+
 `network_type` - (Optional) The type of network on the referred virtual_site (`String`).
 
 `ref` - (Optional) A virtual_site direct reference. See [ref](#ref) below for details.
@@ -322,7 +385,7 @@ All the sites where this discovery config is valid..
 
 ### Wingman Secret Info
 
-Secret is given as bootstrap secret in Volterra Security Sidecar.
+Secret is given as bootstrap secret in F5XC Security Sidecar.
 
 `name` - (Required) Name of the secret. (`String`).
 

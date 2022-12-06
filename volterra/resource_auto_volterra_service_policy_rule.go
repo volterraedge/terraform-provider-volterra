@@ -1222,6 +1222,11 @@ func resourceVolterraServicePolicyRule() *schema.Resource {
 							Optional: true,
 						},
 
+						"flow_label": {
+							Type:     schema.TypeString,
+							Optional: true,
+						},
+
 						"mitigation": {
 
 							Type:     schema.TypeSet,
@@ -3156,6 +3161,10 @@ func resourceVolterraServicePolicyRuleCreate(d *schema.ResourceData, meta interf
 
 				shapeProtectedEndpointAction.AppTrafficType = ves_io_schema_policy.AppTrafficType(ves_io_schema_policy.AppTrafficType_value[v.(string)])
 
+			}
+
+			if w, ok := shapeProtectedEndpointActionMapStrToI["flow_label"]; ok && !isIntfNil(w) {
+				shapeProtectedEndpointAction.FlowLabel = w.(string)
 			}
 
 			if v, ok := shapeProtectedEndpointActionMapStrToI["mitigation"]; ok && !isIntfNil(v) {
@@ -5237,6 +5246,10 @@ func resourceVolterraServicePolicyRuleUpdate(d *schema.ResourceData, meta interf
 
 				shapeProtectedEndpointAction.AppTrafficType = ves_io_schema_policy.AppTrafficType(ves_io_schema_policy.AppTrafficType_value[v.(string)])
 
+			}
+
+			if w, ok := shapeProtectedEndpointActionMapStrToI["flow_label"]; ok && !isIntfNil(w) {
+				shapeProtectedEndpointAction.FlowLabel = w.(string)
 			}
 
 			if v, ok := shapeProtectedEndpointActionMapStrToI["mitigation"]; ok && !isIntfNil(v) {

@@ -681,6 +681,42 @@ func resourceVolterraVirtualHost() *schema.Resource {
 				},
 			},
 
+			"csrf_policy": {
+
+				Type:     schema.TypeSet,
+				Optional: true,
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+
+						"all_load_balancer_domains": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+
+						"custom_domain_list": {
+
+							Type:     schema.TypeSet,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"domains": {
+
+										Type: schema.TypeList,
+
+										Optional: true,
+										Elem: &schema.Schema{
+											Type: schema.TypeString,
+										},
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+
 			"custom_errors": {
 				Type:     schema.TypeMap,
 				Optional: true,
@@ -706,6 +742,60 @@ func resourceVolterraVirtualHost() *schema.Resource {
 			"disable_dns_resolve": {
 				Type:     schema.TypeBool,
 				Optional: true,
+			},
+
+			"dns_proxy_configuration": {
+
+				Type:     schema.TypeSet,
+				Optional: true,
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+
+						"cache_profile": {
+
+							Type:     schema.TypeSet,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"disable_cache_profile": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+
+									"enable_cache_profile": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+								},
+							},
+						},
+
+						"ddos_profile": {
+
+							Type:     schema.TypeSet,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"disable_ddos_mitigation": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+
+									"enable_ddos_mitigation": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+								},
+							},
+						},
+					},
+				},
 			},
 
 			"domains": {
@@ -2669,6 +2759,58 @@ func resourceVolterraVirtualHostCreate(d *schema.ResourceData, meta interface{})
 
 	}
 
+	//csrf_policy
+	if v, ok := d.GetOk("csrf_policy"); ok && !isIntfNil(v) {
+
+		sl := v.(*schema.Set).List()
+		csrfPolicy := &ves_io_schema.CsrfPolicy{}
+		createSpec.CsrfPolicy = csrfPolicy
+		for _, set := range sl {
+			csrfPolicyMapStrToI := set.(map[string]interface{})
+
+			allowedDomainsTypeFound := false
+
+			if v, ok := csrfPolicyMapStrToI["all_load_balancer_domains"]; ok && !isIntfNil(v) && !allowedDomainsTypeFound {
+
+				allowedDomainsTypeFound = true
+
+				if v.(bool) {
+					allowedDomainsInt := &ves_io_schema.CsrfPolicy_AllLoadBalancerDomains{}
+					allowedDomainsInt.AllLoadBalancerDomains = &ves_io_schema.Empty{}
+					csrfPolicy.AllowedDomains = allowedDomainsInt
+				}
+
+			}
+
+			if v, ok := csrfPolicyMapStrToI["custom_domain_list"]; ok && !isIntfNil(v) && !allowedDomainsTypeFound {
+
+				allowedDomainsTypeFound = true
+				allowedDomainsInt := &ves_io_schema.CsrfPolicy_CustomDomainList{}
+				allowedDomainsInt.CustomDomainList = &ves_io_schema.DomainNameList{}
+				csrfPolicy.AllowedDomains = allowedDomainsInt
+
+				sl := v.(*schema.Set).List()
+				for _, set := range sl {
+					cs := set.(map[string]interface{})
+
+					if v, ok := cs["domains"]; ok && !isIntfNil(v) {
+
+						ls := make([]string, len(v.([]interface{})))
+						for i, v := range v.([]interface{}) {
+							ls[i] = v.(string)
+						}
+						allowedDomainsInt.CustomDomainList.Domains = ls
+
+					}
+
+				}
+
+			}
+
+		}
+
+	}
+
 	//custom_errors
 
 	//default_lb_choice
@@ -2712,6 +2854,95 @@ func resourceVolterraVirtualHostCreate(d *schema.ResourceData, meta interface{})
 
 		createSpec.DisableDnsResolve =
 			v.(bool)
+
+	}
+
+	//dns_proxy_configuration
+	if v, ok := d.GetOk("dns_proxy_configuration"); ok && !isIntfNil(v) {
+
+		sl := v.(*schema.Set).List()
+		dnsProxyConfiguration := &ves_io_schema_virtual_host.DNSProxyConfiguration{}
+		createSpec.DnsProxyConfiguration = dnsProxyConfiguration
+		for _, set := range sl {
+			dnsProxyConfigurationMapStrToI := set.(map[string]interface{})
+
+			if v, ok := dnsProxyConfigurationMapStrToI["cache_profile"]; ok && !isIntfNil(v) {
+
+				sl := v.(*schema.Set).List()
+				cacheProfile := &ves_io_schema_virtual_host.DNSCacheProfile{}
+				dnsProxyConfiguration.CacheProfile = cacheProfile
+				for _, set := range sl {
+					cacheProfileMapStrToI := set.(map[string]interface{})
+
+					cacheProfileChoiceTypeFound := false
+
+					if v, ok := cacheProfileMapStrToI["disable_cache_profile"]; ok && !isIntfNil(v) && !cacheProfileChoiceTypeFound {
+
+						cacheProfileChoiceTypeFound = true
+
+						if v.(bool) {
+							cacheProfileChoiceInt := &ves_io_schema_virtual_host.DNSCacheProfile_DisableCacheProfile{}
+							cacheProfileChoiceInt.DisableCacheProfile = &ves_io_schema.Empty{}
+							cacheProfile.CacheProfileChoice = cacheProfileChoiceInt
+						}
+
+					}
+
+					if v, ok := cacheProfileMapStrToI["enable_cache_profile"]; ok && !isIntfNil(v) && !cacheProfileChoiceTypeFound {
+
+						cacheProfileChoiceTypeFound = true
+
+						if v.(bool) {
+							cacheProfileChoiceInt := &ves_io_schema_virtual_host.DNSCacheProfile_EnableCacheProfile{}
+							cacheProfileChoiceInt.EnableCacheProfile = &ves_io_schema.Empty{}
+							cacheProfile.CacheProfileChoice = cacheProfileChoiceInt
+						}
+
+					}
+
+				}
+
+			}
+
+			if v, ok := dnsProxyConfigurationMapStrToI["ddos_profile"]; ok && !isIntfNil(v) {
+
+				sl := v.(*schema.Set).List()
+				ddosProfile := &ves_io_schema_virtual_host.DNSDDoSProfile{}
+				dnsProxyConfiguration.DdosProfile = ddosProfile
+				for _, set := range sl {
+					ddosProfileMapStrToI := set.(map[string]interface{})
+
+					ddosMitigationChoiceTypeFound := false
+
+					if v, ok := ddosProfileMapStrToI["disable_ddos_mitigation"]; ok && !isIntfNil(v) && !ddosMitigationChoiceTypeFound {
+
+						ddosMitigationChoiceTypeFound = true
+
+						if v.(bool) {
+							ddosMitigationChoiceInt := &ves_io_schema_virtual_host.DNSDDoSProfile_DisableDdosMitigation{}
+							ddosMitigationChoiceInt.DisableDdosMitigation = &ves_io_schema.Empty{}
+							ddosProfile.DdosMitigationChoice = ddosMitigationChoiceInt
+						}
+
+					}
+
+					if v, ok := ddosProfileMapStrToI["enable_ddos_mitigation"]; ok && !isIntfNil(v) && !ddosMitigationChoiceTypeFound {
+
+						ddosMitigationChoiceTypeFound = true
+
+						if v.(bool) {
+							ddosMitigationChoiceInt := &ves_io_schema_virtual_host.DNSDDoSProfile_EnableDdosMitigation{}
+							ddosMitigationChoiceInt.EnableDdosMitigation = &ves_io_schema.Empty{}
+							ddosProfile.DdosMitigationChoice = ddosMitigationChoiceInt
+						}
+
+					}
+
+				}
+
+			}
+
+		}
 
 	}
 
@@ -4985,6 +5216,57 @@ func resourceVolterraVirtualHostUpdate(d *schema.ResourceData, meta interface{})
 
 	}
 
+	if v, ok := d.GetOk("csrf_policy"); ok && !isIntfNil(v) {
+
+		sl := v.(*schema.Set).List()
+		csrfPolicy := &ves_io_schema.CsrfPolicy{}
+		updateSpec.CsrfPolicy = csrfPolicy
+		for _, set := range sl {
+			csrfPolicyMapStrToI := set.(map[string]interface{})
+
+			allowedDomainsTypeFound := false
+
+			if v, ok := csrfPolicyMapStrToI["all_load_balancer_domains"]; ok && !isIntfNil(v) && !allowedDomainsTypeFound {
+
+				allowedDomainsTypeFound = true
+
+				if v.(bool) {
+					allowedDomainsInt := &ves_io_schema.CsrfPolicy_AllLoadBalancerDomains{}
+					allowedDomainsInt.AllLoadBalancerDomains = &ves_io_schema.Empty{}
+					csrfPolicy.AllowedDomains = allowedDomainsInt
+				}
+
+			}
+
+			if v, ok := csrfPolicyMapStrToI["custom_domain_list"]; ok && !isIntfNil(v) && !allowedDomainsTypeFound {
+
+				allowedDomainsTypeFound = true
+				allowedDomainsInt := &ves_io_schema.CsrfPolicy_CustomDomainList{}
+				allowedDomainsInt.CustomDomainList = &ves_io_schema.DomainNameList{}
+				csrfPolicy.AllowedDomains = allowedDomainsInt
+
+				sl := v.(*schema.Set).List()
+				for _, set := range sl {
+					cs := set.(map[string]interface{})
+
+					if v, ok := cs["domains"]; ok && !isIntfNil(v) {
+
+						ls := make([]string, len(v.([]interface{})))
+						for i, v := range v.([]interface{}) {
+							ls[i] = v.(string)
+						}
+						allowedDomainsInt.CustomDomainList.Domains = ls
+
+					}
+
+				}
+
+			}
+
+		}
+
+	}
+
 	defaultLbChoiceTypeFound := false
 
 	if v, ok := d.GetOk("default_loadbalancer"); ok && !defaultLbChoiceTypeFound {
@@ -5022,6 +5304,94 @@ func resourceVolterraVirtualHostUpdate(d *schema.ResourceData, meta interface{})
 
 		updateSpec.DisableDnsResolve =
 			v.(bool)
+
+	}
+
+	if v, ok := d.GetOk("dns_proxy_configuration"); ok && !isIntfNil(v) {
+
+		sl := v.(*schema.Set).List()
+		dnsProxyConfiguration := &ves_io_schema_virtual_host.DNSProxyConfiguration{}
+		updateSpec.DnsProxyConfiguration = dnsProxyConfiguration
+		for _, set := range sl {
+			dnsProxyConfigurationMapStrToI := set.(map[string]interface{})
+
+			if v, ok := dnsProxyConfigurationMapStrToI["cache_profile"]; ok && !isIntfNil(v) {
+
+				sl := v.(*schema.Set).List()
+				cacheProfile := &ves_io_schema_virtual_host.DNSCacheProfile{}
+				dnsProxyConfiguration.CacheProfile = cacheProfile
+				for _, set := range sl {
+					cacheProfileMapStrToI := set.(map[string]interface{})
+
+					cacheProfileChoiceTypeFound := false
+
+					if v, ok := cacheProfileMapStrToI["disable_cache_profile"]; ok && !isIntfNil(v) && !cacheProfileChoiceTypeFound {
+
+						cacheProfileChoiceTypeFound = true
+
+						if v.(bool) {
+							cacheProfileChoiceInt := &ves_io_schema_virtual_host.DNSCacheProfile_DisableCacheProfile{}
+							cacheProfileChoiceInt.DisableCacheProfile = &ves_io_schema.Empty{}
+							cacheProfile.CacheProfileChoice = cacheProfileChoiceInt
+						}
+
+					}
+
+					if v, ok := cacheProfileMapStrToI["enable_cache_profile"]; ok && !isIntfNil(v) && !cacheProfileChoiceTypeFound {
+
+						cacheProfileChoiceTypeFound = true
+
+						if v.(bool) {
+							cacheProfileChoiceInt := &ves_io_schema_virtual_host.DNSCacheProfile_EnableCacheProfile{}
+							cacheProfileChoiceInt.EnableCacheProfile = &ves_io_schema.Empty{}
+							cacheProfile.CacheProfileChoice = cacheProfileChoiceInt
+						}
+
+					}
+
+				}
+
+			}
+
+			if v, ok := dnsProxyConfigurationMapStrToI["ddos_profile"]; ok && !isIntfNil(v) {
+
+				sl := v.(*schema.Set).List()
+				ddosProfile := &ves_io_schema_virtual_host.DNSDDoSProfile{}
+				dnsProxyConfiguration.DdosProfile = ddosProfile
+				for _, set := range sl {
+					ddosProfileMapStrToI := set.(map[string]interface{})
+
+					ddosMitigationChoiceTypeFound := false
+
+					if v, ok := ddosProfileMapStrToI["disable_ddos_mitigation"]; ok && !isIntfNil(v) && !ddosMitigationChoiceTypeFound {
+
+						ddosMitigationChoiceTypeFound = true
+
+						if v.(bool) {
+							ddosMitigationChoiceInt := &ves_io_schema_virtual_host.DNSDDoSProfile_DisableDdosMitigation{}
+							ddosMitigationChoiceInt.DisableDdosMitigation = &ves_io_schema.Empty{}
+							ddosProfile.DdosMitigationChoice = ddosMitigationChoiceInt
+						}
+
+					}
+
+					if v, ok := ddosProfileMapStrToI["enable_ddos_mitigation"]; ok && !isIntfNil(v) && !ddosMitigationChoiceTypeFound {
+
+						ddosMitigationChoiceTypeFound = true
+
+						if v.(bool) {
+							ddosMitigationChoiceInt := &ves_io_schema_virtual_host.DNSDDoSProfile_EnableDdosMitigation{}
+							ddosMitigationChoiceInt.EnableDdosMitigation = &ves_io_schema.Empty{}
+							ddosProfile.DdosMitigationChoice = ddosMitigationChoiceInt
+						}
+
+					}
+
+				}
+
+			}
+
+		}
 
 	}
 

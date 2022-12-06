@@ -2384,6 +2384,266 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 													},
 												},
 
+												"flow_label": {
+
+													Type:     schema.TypeSet,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"account_management": {
+
+																Type:     schema.TypeSet,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"create": {
+
+																			Type:     schema.TypeBool,
+																			Optional: true,
+																		},
+
+																		"password_reset": {
+
+																			Type:     schema.TypeBool,
+																			Optional: true,
+																		},
+																	},
+																},
+															},
+
+															"authentication": {
+
+																Type:     schema.TypeSet,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"login": {
+
+																			Type:     schema.TypeBool,
+																			Optional: true,
+																		},
+
+																		"login_mfa": {
+
+																			Type:     schema.TypeBool,
+																			Optional: true,
+																		},
+
+																		"login_partner": {
+
+																			Type:     schema.TypeBool,
+																			Optional: true,
+																		},
+
+																		"logout": {
+
+																			Type:     schema.TypeBool,
+																			Optional: true,
+																		},
+
+																		"token_refresh": {
+
+																			Type:     schema.TypeBool,
+																			Optional: true,
+																		},
+																	},
+																},
+															},
+
+															"financial_services": {
+
+																Type:     schema.TypeSet,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"apply": {
+
+																			Type:     schema.TypeBool,
+																			Optional: true,
+																		},
+
+																		"money_transfer": {
+
+																			Type:     schema.TypeBool,
+																			Optional: true,
+																		},
+																	},
+																},
+															},
+
+															"flight": {
+
+																Type:     schema.TypeSet,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"checkin": {
+
+																			Type:     schema.TypeBool,
+																			Optional: true,
+																		},
+																	},
+																},
+															},
+
+															"profile_management": {
+
+																Type:     schema.TypeSet,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"create": {
+
+																			Type:     schema.TypeBool,
+																			Optional: true,
+																		},
+
+																		"update": {
+
+																			Type:     schema.TypeBool,
+																			Optional: true,
+																		},
+
+																		"view": {
+
+																			Type:     schema.TypeBool,
+																			Optional: true,
+																		},
+																	},
+																},
+															},
+
+															"search": {
+
+																Type:     schema.TypeSet,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"flight_search": {
+
+																			Type:     schema.TypeBool,
+																			Optional: true,
+																		},
+
+																		"product_search": {
+
+																			Type:     schema.TypeBool,
+																			Optional: true,
+																		},
+
+																		"reservation_search": {
+
+																			Type:     schema.TypeBool,
+																			Optional: true,
+																		},
+
+																		"room_search": {
+
+																			Type:     schema.TypeBool,
+																			Optional: true,
+																		},
+																	},
+																},
+															},
+
+															"shopping_gift_cards": {
+
+																Type:     schema.TypeSet,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"gift_card_make_purchase_with_gift_card": {
+
+																			Type:     schema.TypeBool,
+																			Optional: true,
+																		},
+
+																		"gift_card_validation": {
+
+																			Type:     schema.TypeBool,
+																			Optional: true,
+																		},
+
+																		"shop_add_to_cart": {
+
+																			Type:     schema.TypeBool,
+																			Optional: true,
+																		},
+
+																		"shop_checkout": {
+
+																			Type:     schema.TypeBool,
+																			Optional: true,
+																		},
+
+																		"shop_choose_seat": {
+
+																			Type:     schema.TypeBool,
+																			Optional: true,
+																		},
+
+																		"shop_enter_drawing_submission": {
+
+																			Type:     schema.TypeBool,
+																			Optional: true,
+																		},
+
+																		"shop_make_payment": {
+
+																			Type:     schema.TypeBool,
+																			Optional: true,
+																		},
+
+																		"shop_order": {
+
+																			Type:     schema.TypeBool,
+																			Optional: true,
+																		},
+
+																		"shop_price_inquiry": {
+
+																			Type:     schema.TypeBool,
+																			Optional: true,
+																		},
+
+																		"shop_promo_code_validation": {
+
+																			Type:     schema.TypeBool,
+																			Optional: true,
+																		},
+
+																		"shop_purchase_gift_card": {
+
+																			Type:     schema.TypeBool,
+																			Optional: true,
+																		},
+
+																		"shop_update_quantity": {
+
+																			Type:     schema.TypeBool,
+																			Optional: true,
+																		},
+																	},
+																},
+															},
+														},
+													},
+												},
+
+												"undefined_flow_label": {
+
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
+
 												"http_methods": {
 
 													Type: schema.TypeList,
@@ -3959,6 +4219,42 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 						"maximum_age": {
 							Type:     schema.TypeInt,
 							Optional: true,
+						},
+					},
+				},
+			},
+
+			"csrf_policy": {
+
+				Type:     schema.TypeSet,
+				Optional: true,
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+
+						"all_load_balancer_domains": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+
+						"custom_domain_list": {
+
+							Type:     schema.TypeSet,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"domains": {
+
+										Type: schema.TypeList,
+
+										Optional: true,
+										Elem: &schema.Schema{
+											Type: schema.TypeString,
+										},
+									},
+								},
+							},
 						},
 					},
 				},
@@ -8967,76 +9263,6 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 
-						"app_firewall_detection_control": {
-
-							Type:     schema.TypeSet,
-							Optional: true,
-							Elem: &schema.Resource{
-								Schema: map[string]*schema.Schema{
-
-									"exclude_attack_type_contexts": {
-
-										Type:     schema.TypeList,
-										Optional: true,
-										Elem: &schema.Resource{
-											Schema: map[string]*schema.Schema{
-
-												"exclude_attack_type": {
-													Type:     schema.TypeString,
-													Optional: true,
-												},
-											},
-										},
-									},
-
-									"exclude_bot_name_contexts": {
-
-										Type:     schema.TypeList,
-										Optional: true,
-										Elem: &schema.Resource{
-											Schema: map[string]*schema.Schema{
-
-												"bot_name": {
-													Type:     schema.TypeString,
-													Optional: true,
-												},
-											},
-										},
-									},
-
-									"exclude_signature_contexts": {
-
-										Type:     schema.TypeList,
-										Optional: true,
-										Elem: &schema.Resource{
-											Schema: map[string]*schema.Schema{
-
-												"signature_id": {
-													Type:     schema.TypeInt,
-													Optional: true,
-												},
-											},
-										},
-									},
-
-									"exclude_violation_contexts": {
-
-										Type:     schema.TypeList,
-										Optional: true,
-										Elem: &schema.Resource{
-											Schema: map[string]*schema.Schema{
-
-												"exclude_violation": {
-													Type:     schema.TypeString,
-													Optional: true,
-												},
-											},
-										},
-									},
-								},
-							},
-						},
-
 						"any_domain": {
 
 							Type:     schema.TypeBool,
@@ -9107,6 +9333,82 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 
 						"path_regex": {
 							Type:     schema.TypeString,
+							Optional: true,
+						},
+
+						"app_firewall_detection_control": {
+
+							Type:     schema.TypeSet,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"exclude_attack_type_contexts": {
+
+										Type:     schema.TypeList,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"exclude_attack_type": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+											},
+										},
+									},
+
+									"exclude_bot_name_contexts": {
+
+										Type:     schema.TypeList,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"bot_name": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+											},
+										},
+									},
+
+									"exclude_signature_contexts": {
+
+										Type:     schema.TypeList,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"signature_id": {
+													Type:     schema.TypeInt,
+													Optional: true,
+												},
+											},
+										},
+									},
+
+									"exclude_violation_contexts": {
+
+										Type:     schema.TypeList,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"exclude_violation": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+											},
+										},
+									},
+								},
+							},
+						},
+
+						"waf_skip_processing": {
+
+							Type:     schema.TypeBool,
 							Optional: true,
 						},
 					},
@@ -12328,6 +12630,504 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 
 							}
 
+							flowLabelChoiceTypeFound := false
+
+							if v, ok := protectedAppEndpointsMapStrToI["flow_label"]; ok && !isIntfNil(v) && !flowLabelChoiceTypeFound {
+
+								flowLabelChoiceTypeFound = true
+								flowLabelChoiceInt := &ves_io_schema_views_http_loadbalancer.AppEndpointType_FlowLabel{}
+								flowLabelChoiceInt.FlowLabel = &ves_io_schema.BotDefenseFlowLabelCategoriesChoiceType{}
+								protectedAppEndpoints[i].FlowLabelChoice = flowLabelChoiceInt
+
+								sl := v.(*schema.Set).List()
+								for _, set := range sl {
+									cs := set.(map[string]interface{})
+
+									flowLabelChoiceTypeFound := false
+
+									if v, ok := cs["account_management"]; ok && !isIntfNil(v) && !flowLabelChoiceTypeFound {
+
+										flowLabelChoiceTypeFound = true
+										flowLabelChoiceIntNew := &ves_io_schema.BotDefenseFlowLabelCategoriesChoiceType_AccountManagement{}
+										flowLabelChoiceIntNew.AccountManagement = &ves_io_schema.BotDefenseFlowLabelAccountManagementChoiceType{}
+										flowLabelChoiceInt.FlowLabel.FlowLabelChoice = flowLabelChoiceIntNew
+
+										sl := v.(*schema.Set).List()
+										for _, set := range sl {
+											cs := set.(map[string]interface{})
+
+											labelChoiceTypeFound := false
+
+											if v, ok := cs["create"]; ok && !isIntfNil(v) && !labelChoiceTypeFound {
+
+												labelChoiceTypeFound = true
+
+												if v.(bool) {
+													labelChoiceInt := &ves_io_schema.BotDefenseFlowLabelAccountManagementChoiceType_Create{}
+													labelChoiceInt.Create = &ves_io_schema.Empty{}
+													flowLabelChoiceIntNew.AccountManagement.LabelChoice = labelChoiceInt
+												}
+
+											}
+
+											if v, ok := cs["password_reset"]; ok && !isIntfNil(v) && !labelChoiceTypeFound {
+
+												labelChoiceTypeFound = true
+
+												if v.(bool) {
+													labelChoiceInt := &ves_io_schema.BotDefenseFlowLabelAccountManagementChoiceType_PasswordReset{}
+													labelChoiceInt.PasswordReset = &ves_io_schema.Empty{}
+													flowLabelChoiceIntNew.AccountManagement.LabelChoice = labelChoiceInt
+												}
+
+											}
+
+										}
+
+									}
+
+									if v, ok := cs["authentication"]; ok && !isIntfNil(v) && !flowLabelChoiceTypeFound {
+
+										flowLabelChoiceTypeFound = true
+										flowLabelChoiceIntNew := &ves_io_schema.BotDefenseFlowLabelCategoriesChoiceType_Authentication{}
+										flowLabelChoiceIntNew.Authentication = &ves_io_schema.BotDefenseFlowLabelAuthenticationChoiceType{}
+										flowLabelChoiceInt.FlowLabel.FlowLabelChoice = flowLabelChoiceIntNew
+
+										sl := v.(*schema.Set).List()
+										for _, set := range sl {
+											cs := set.(map[string]interface{})
+
+											labelChoiceTypeFound := false
+
+											if v, ok := cs["login"]; ok && !isIntfNil(v) && !labelChoiceTypeFound {
+
+												labelChoiceTypeFound = true
+
+												if v.(bool) {
+													labelChoiceInt := &ves_io_schema.BotDefenseFlowLabelAuthenticationChoiceType_Login{}
+													labelChoiceInt.Login = &ves_io_schema.Empty{}
+													flowLabelChoiceIntNew.Authentication.LabelChoice = labelChoiceInt
+												}
+
+											}
+
+											if v, ok := cs["login_mfa"]; ok && !isIntfNil(v) && !labelChoiceTypeFound {
+
+												labelChoiceTypeFound = true
+
+												if v.(bool) {
+													labelChoiceInt := &ves_io_schema.BotDefenseFlowLabelAuthenticationChoiceType_LoginMfa{}
+													labelChoiceInt.LoginMfa = &ves_io_schema.Empty{}
+													flowLabelChoiceIntNew.Authentication.LabelChoice = labelChoiceInt
+												}
+
+											}
+
+											if v, ok := cs["login_partner"]; ok && !isIntfNil(v) && !labelChoiceTypeFound {
+
+												labelChoiceTypeFound = true
+
+												if v.(bool) {
+													labelChoiceInt := &ves_io_schema.BotDefenseFlowLabelAuthenticationChoiceType_LoginPartner{}
+													labelChoiceInt.LoginPartner = &ves_io_schema.Empty{}
+													flowLabelChoiceIntNew.Authentication.LabelChoice = labelChoiceInt
+												}
+
+											}
+
+											if v, ok := cs["logout"]; ok && !isIntfNil(v) && !labelChoiceTypeFound {
+
+												labelChoiceTypeFound = true
+
+												if v.(bool) {
+													labelChoiceInt := &ves_io_schema.BotDefenseFlowLabelAuthenticationChoiceType_Logout{}
+													labelChoiceInt.Logout = &ves_io_schema.Empty{}
+													flowLabelChoiceIntNew.Authentication.LabelChoice = labelChoiceInt
+												}
+
+											}
+
+											if v, ok := cs["token_refresh"]; ok && !isIntfNil(v) && !labelChoiceTypeFound {
+
+												labelChoiceTypeFound = true
+
+												if v.(bool) {
+													labelChoiceInt := &ves_io_schema.BotDefenseFlowLabelAuthenticationChoiceType_TokenRefresh{}
+													labelChoiceInt.TokenRefresh = &ves_io_schema.Empty{}
+													flowLabelChoiceIntNew.Authentication.LabelChoice = labelChoiceInt
+												}
+
+											}
+
+										}
+
+									}
+
+									if v, ok := cs["financial_services"]; ok && !isIntfNil(v) && !flowLabelChoiceTypeFound {
+
+										flowLabelChoiceTypeFound = true
+										flowLabelChoiceIntNew := &ves_io_schema.BotDefenseFlowLabelCategoriesChoiceType_FinancialServices{}
+										flowLabelChoiceIntNew.FinancialServices = &ves_io_schema.BotDefenseFlowLabelFinancialServicesChoiceType{}
+										flowLabelChoiceInt.FlowLabel.FlowLabelChoice = flowLabelChoiceIntNew
+
+										sl := v.(*schema.Set).List()
+										for _, set := range sl {
+											cs := set.(map[string]interface{})
+
+											labelChoiceTypeFound := false
+
+											if v, ok := cs["apply"]; ok && !isIntfNil(v) && !labelChoiceTypeFound {
+
+												labelChoiceTypeFound = true
+
+												if v.(bool) {
+													labelChoiceInt := &ves_io_schema.BotDefenseFlowLabelFinancialServicesChoiceType_Apply{}
+													labelChoiceInt.Apply = &ves_io_schema.Empty{}
+													flowLabelChoiceIntNew.FinancialServices.LabelChoice = labelChoiceInt
+												}
+
+											}
+
+											if v, ok := cs["money_transfer"]; ok && !isIntfNil(v) && !labelChoiceTypeFound {
+
+												labelChoiceTypeFound = true
+
+												if v.(bool) {
+													labelChoiceInt := &ves_io_schema.BotDefenseFlowLabelFinancialServicesChoiceType_MoneyTransfer{}
+													labelChoiceInt.MoneyTransfer = &ves_io_schema.Empty{}
+													flowLabelChoiceIntNew.FinancialServices.LabelChoice = labelChoiceInt
+												}
+
+											}
+
+										}
+
+									}
+
+									if v, ok := cs["flight"]; ok && !isIntfNil(v) && !flowLabelChoiceTypeFound {
+
+										flowLabelChoiceTypeFound = true
+										flowLabelChoiceIntNew := &ves_io_schema.BotDefenseFlowLabelCategoriesChoiceType_Flight{}
+										flowLabelChoiceIntNew.Flight = &ves_io_schema.BotDefenseFlowLabelFlightChoiceType{}
+										flowLabelChoiceInt.FlowLabel.FlowLabelChoice = flowLabelChoiceIntNew
+
+										sl := v.(*schema.Set).List()
+										for _, set := range sl {
+											cs := set.(map[string]interface{})
+
+											labelChoiceTypeFound := false
+
+											if v, ok := cs["checkin"]; ok && !isIntfNil(v) && !labelChoiceTypeFound {
+
+												labelChoiceTypeFound = true
+
+												if v.(bool) {
+													labelChoiceInt := &ves_io_schema.BotDefenseFlowLabelFlightChoiceType_Checkin{}
+													labelChoiceInt.Checkin = &ves_io_schema.Empty{}
+													flowLabelChoiceIntNew.Flight.LabelChoice = labelChoiceInt
+												}
+
+											}
+
+										}
+
+									}
+
+									if v, ok := cs["profile_management"]; ok && !isIntfNil(v) && !flowLabelChoiceTypeFound {
+
+										flowLabelChoiceTypeFound = true
+										flowLabelChoiceIntNew := &ves_io_schema.BotDefenseFlowLabelCategoriesChoiceType_ProfileManagement{}
+										flowLabelChoiceIntNew.ProfileManagement = &ves_io_schema.BotDefenseFlowLabelProfileManagementChoiceType{}
+										flowLabelChoiceInt.FlowLabel.FlowLabelChoice = flowLabelChoiceIntNew
+
+										sl := v.(*schema.Set).List()
+										for _, set := range sl {
+											cs := set.(map[string]interface{})
+
+											labelChoiceTypeFound := false
+
+											if v, ok := cs["create"]; ok && !isIntfNil(v) && !labelChoiceTypeFound {
+
+												labelChoiceTypeFound = true
+
+												if v.(bool) {
+													labelChoiceInt := &ves_io_schema.BotDefenseFlowLabelProfileManagementChoiceType_Create{}
+													labelChoiceInt.Create = &ves_io_schema.Empty{}
+													flowLabelChoiceIntNew.ProfileManagement.LabelChoice = labelChoiceInt
+												}
+
+											}
+
+											if v, ok := cs["update"]; ok && !isIntfNil(v) && !labelChoiceTypeFound {
+
+												labelChoiceTypeFound = true
+
+												if v.(bool) {
+													labelChoiceInt := &ves_io_schema.BotDefenseFlowLabelProfileManagementChoiceType_Update{}
+													labelChoiceInt.Update = &ves_io_schema.Empty{}
+													flowLabelChoiceIntNew.ProfileManagement.LabelChoice = labelChoiceInt
+												}
+
+											}
+
+											if v, ok := cs["view"]; ok && !isIntfNil(v) && !labelChoiceTypeFound {
+
+												labelChoiceTypeFound = true
+
+												if v.(bool) {
+													labelChoiceInt := &ves_io_schema.BotDefenseFlowLabelProfileManagementChoiceType_View{}
+													labelChoiceInt.View = &ves_io_schema.Empty{}
+													flowLabelChoiceIntNew.ProfileManagement.LabelChoice = labelChoiceInt
+												}
+
+											}
+
+										}
+
+									}
+
+									if v, ok := cs["search"]; ok && !isIntfNil(v) && !flowLabelChoiceTypeFound {
+
+										flowLabelChoiceTypeFound = true
+										flowLabelChoiceIntNew := &ves_io_schema.BotDefenseFlowLabelCategoriesChoiceType_Search{}
+										flowLabelChoiceIntNew.Search = &ves_io_schema.BotDefenseFlowLabelSearchChoiceType{}
+										flowLabelChoiceInt.FlowLabel.FlowLabelChoice = flowLabelChoiceIntNew
+
+										sl := v.(*schema.Set).List()
+										for _, set := range sl {
+											cs := set.(map[string]interface{})
+
+											labelChoiceTypeFound := false
+
+											if v, ok := cs["flight_search"]; ok && !isIntfNil(v) && !labelChoiceTypeFound {
+
+												labelChoiceTypeFound = true
+
+												if v.(bool) {
+													labelChoiceInt := &ves_io_schema.BotDefenseFlowLabelSearchChoiceType_FlightSearch{}
+													labelChoiceInt.FlightSearch = &ves_io_schema.Empty{}
+													flowLabelChoiceIntNew.Search.LabelChoice = labelChoiceInt
+												}
+
+											}
+
+											if v, ok := cs["product_search"]; ok && !isIntfNil(v) && !labelChoiceTypeFound {
+
+												labelChoiceTypeFound = true
+
+												if v.(bool) {
+													labelChoiceInt := &ves_io_schema.BotDefenseFlowLabelSearchChoiceType_ProductSearch{}
+													labelChoiceInt.ProductSearch = &ves_io_schema.Empty{}
+													flowLabelChoiceIntNew.Search.LabelChoice = labelChoiceInt
+												}
+
+											}
+
+											if v, ok := cs["reservation_search"]; ok && !isIntfNil(v) && !labelChoiceTypeFound {
+
+												labelChoiceTypeFound = true
+
+												if v.(bool) {
+													labelChoiceInt := &ves_io_schema.BotDefenseFlowLabelSearchChoiceType_ReservationSearch{}
+													labelChoiceInt.ReservationSearch = &ves_io_schema.Empty{}
+													flowLabelChoiceIntNew.Search.LabelChoice = labelChoiceInt
+												}
+
+											}
+
+											if v, ok := cs["room_search"]; ok && !isIntfNil(v) && !labelChoiceTypeFound {
+
+												labelChoiceTypeFound = true
+
+												if v.(bool) {
+													labelChoiceInt := &ves_io_schema.BotDefenseFlowLabelSearchChoiceType_RoomSearch{}
+													labelChoiceInt.RoomSearch = &ves_io_schema.Empty{}
+													flowLabelChoiceIntNew.Search.LabelChoice = labelChoiceInt
+												}
+
+											}
+
+										}
+
+									}
+
+									if v, ok := cs["shopping_gift_cards"]; ok && !isIntfNil(v) && !flowLabelChoiceTypeFound {
+
+										flowLabelChoiceTypeFound = true
+										flowLabelChoiceIntNew := &ves_io_schema.BotDefenseFlowLabelCategoriesChoiceType_ShoppingGiftCards{}
+										flowLabelChoiceIntNew.ShoppingGiftCards = &ves_io_schema.BotDefenseFlowLabelShoppingGiftCardsChoiceType{}
+										flowLabelChoiceInt.FlowLabel.FlowLabelChoice = flowLabelChoiceIntNew
+
+										sl := v.(*schema.Set).List()
+										for _, set := range sl {
+											cs := set.(map[string]interface{})
+
+											labelChoiceTypeFound := false
+
+											if v, ok := cs["gift_card_make_purchase_with_gift_card"]; ok && !isIntfNil(v) && !labelChoiceTypeFound {
+
+												labelChoiceTypeFound = true
+
+												if v.(bool) {
+													labelChoiceInt := &ves_io_schema.BotDefenseFlowLabelShoppingGiftCardsChoiceType_GiftCardMakePurchaseWithGiftCard{}
+													labelChoiceInt.GiftCardMakePurchaseWithGiftCard = &ves_io_schema.Empty{}
+													flowLabelChoiceIntNew.ShoppingGiftCards.LabelChoice = labelChoiceInt
+												}
+
+											}
+
+											if v, ok := cs["gift_card_validation"]; ok && !isIntfNil(v) && !labelChoiceTypeFound {
+
+												labelChoiceTypeFound = true
+
+												if v.(bool) {
+													labelChoiceInt := &ves_io_schema.BotDefenseFlowLabelShoppingGiftCardsChoiceType_GiftCardValidation{}
+													labelChoiceInt.GiftCardValidation = &ves_io_schema.Empty{}
+													flowLabelChoiceIntNew.ShoppingGiftCards.LabelChoice = labelChoiceInt
+												}
+
+											}
+
+											if v, ok := cs["shop_add_to_cart"]; ok && !isIntfNil(v) && !labelChoiceTypeFound {
+
+												labelChoiceTypeFound = true
+
+												if v.(bool) {
+													labelChoiceInt := &ves_io_schema.BotDefenseFlowLabelShoppingGiftCardsChoiceType_ShopAddToCart{}
+													labelChoiceInt.ShopAddToCart = &ves_io_schema.Empty{}
+													flowLabelChoiceIntNew.ShoppingGiftCards.LabelChoice = labelChoiceInt
+												}
+
+											}
+
+											if v, ok := cs["shop_checkout"]; ok && !isIntfNil(v) && !labelChoiceTypeFound {
+
+												labelChoiceTypeFound = true
+
+												if v.(bool) {
+													labelChoiceInt := &ves_io_schema.BotDefenseFlowLabelShoppingGiftCardsChoiceType_ShopCheckout{}
+													labelChoiceInt.ShopCheckout = &ves_io_schema.Empty{}
+													flowLabelChoiceIntNew.ShoppingGiftCards.LabelChoice = labelChoiceInt
+												}
+
+											}
+
+											if v, ok := cs["shop_choose_seat"]; ok && !isIntfNil(v) && !labelChoiceTypeFound {
+
+												labelChoiceTypeFound = true
+
+												if v.(bool) {
+													labelChoiceInt := &ves_io_schema.BotDefenseFlowLabelShoppingGiftCardsChoiceType_ShopChooseSeat{}
+													labelChoiceInt.ShopChooseSeat = &ves_io_schema.Empty{}
+													flowLabelChoiceIntNew.ShoppingGiftCards.LabelChoice = labelChoiceInt
+												}
+
+											}
+
+											if v, ok := cs["shop_enter_drawing_submission"]; ok && !isIntfNil(v) && !labelChoiceTypeFound {
+
+												labelChoiceTypeFound = true
+
+												if v.(bool) {
+													labelChoiceInt := &ves_io_schema.BotDefenseFlowLabelShoppingGiftCardsChoiceType_ShopEnterDrawingSubmission{}
+													labelChoiceInt.ShopEnterDrawingSubmission = &ves_io_schema.Empty{}
+													flowLabelChoiceIntNew.ShoppingGiftCards.LabelChoice = labelChoiceInt
+												}
+
+											}
+
+											if v, ok := cs["shop_make_payment"]; ok && !isIntfNil(v) && !labelChoiceTypeFound {
+
+												labelChoiceTypeFound = true
+
+												if v.(bool) {
+													labelChoiceInt := &ves_io_schema.BotDefenseFlowLabelShoppingGiftCardsChoiceType_ShopMakePayment{}
+													labelChoiceInt.ShopMakePayment = &ves_io_schema.Empty{}
+													flowLabelChoiceIntNew.ShoppingGiftCards.LabelChoice = labelChoiceInt
+												}
+
+											}
+
+											if v, ok := cs["shop_order"]; ok && !isIntfNil(v) && !labelChoiceTypeFound {
+
+												labelChoiceTypeFound = true
+
+												if v.(bool) {
+													labelChoiceInt := &ves_io_schema.BotDefenseFlowLabelShoppingGiftCardsChoiceType_ShopOrder{}
+													labelChoiceInt.ShopOrder = &ves_io_schema.Empty{}
+													flowLabelChoiceIntNew.ShoppingGiftCards.LabelChoice = labelChoiceInt
+												}
+
+											}
+
+											if v, ok := cs["shop_price_inquiry"]; ok && !isIntfNil(v) && !labelChoiceTypeFound {
+
+												labelChoiceTypeFound = true
+
+												if v.(bool) {
+													labelChoiceInt := &ves_io_schema.BotDefenseFlowLabelShoppingGiftCardsChoiceType_ShopPriceInquiry{}
+													labelChoiceInt.ShopPriceInquiry = &ves_io_schema.Empty{}
+													flowLabelChoiceIntNew.ShoppingGiftCards.LabelChoice = labelChoiceInt
+												}
+
+											}
+
+											if v, ok := cs["shop_promo_code_validation"]; ok && !isIntfNil(v) && !labelChoiceTypeFound {
+
+												labelChoiceTypeFound = true
+
+												if v.(bool) {
+													labelChoiceInt := &ves_io_schema.BotDefenseFlowLabelShoppingGiftCardsChoiceType_ShopPromoCodeValidation{}
+													labelChoiceInt.ShopPromoCodeValidation = &ves_io_schema.Empty{}
+													flowLabelChoiceIntNew.ShoppingGiftCards.LabelChoice = labelChoiceInt
+												}
+
+											}
+
+											if v, ok := cs["shop_purchase_gift_card"]; ok && !isIntfNil(v) && !labelChoiceTypeFound {
+
+												labelChoiceTypeFound = true
+
+												if v.(bool) {
+													labelChoiceInt := &ves_io_schema.BotDefenseFlowLabelShoppingGiftCardsChoiceType_ShopPurchaseGiftCard{}
+													labelChoiceInt.ShopPurchaseGiftCard = &ves_io_schema.Empty{}
+													flowLabelChoiceIntNew.ShoppingGiftCards.LabelChoice = labelChoiceInt
+												}
+
+											}
+
+											if v, ok := cs["shop_update_quantity"]; ok && !isIntfNil(v) && !labelChoiceTypeFound {
+
+												labelChoiceTypeFound = true
+
+												if v.(bool) {
+													labelChoiceInt := &ves_io_schema.BotDefenseFlowLabelShoppingGiftCardsChoiceType_ShopUpdateQuantity{}
+													labelChoiceInt.ShopUpdateQuantity = &ves_io_schema.Empty{}
+													flowLabelChoiceIntNew.ShoppingGiftCards.LabelChoice = labelChoiceInt
+												}
+
+											}
+
+										}
+
+									}
+
+								}
+
+							}
+
+							if v, ok := protectedAppEndpointsMapStrToI["undefined_flow_label"]; ok && !isIntfNil(v) && !flowLabelChoiceTypeFound {
+
+								flowLabelChoiceTypeFound = true
+
+								if v.(bool) {
+									flowLabelChoiceInt := &ves_io_schema_views_http_loadbalancer.AppEndpointType_UndefinedFlowLabel{}
+									flowLabelChoiceInt.UndefinedFlowLabel = &ves_io_schema.Empty{}
+									protectedAppEndpoints[i].FlowLabelChoice = flowLabelChoiceInt
+								}
+
+							}
+
 							if v, ok := protectedAppEndpointsMapStrToI["http_methods"]; ok && !isIntfNil(v) {
 
 								http_methodsList := []ves_io_schema.BotHttpMethod{}
@@ -14462,6 +15262,58 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 
 			if w, ok := corsPolicyMapStrToI["maximum_age"]; ok && !isIntfNil(w) {
 				corsPolicy.MaximumAge = int32(w.(int))
+			}
+
+		}
+
+	}
+
+	//csrf_policy
+	if v, ok := d.GetOk("csrf_policy"); ok && !isIntfNil(v) {
+
+		sl := v.(*schema.Set).List()
+		csrfPolicy := &ves_io_schema.CsrfPolicy{}
+		createSpec.CsrfPolicy = csrfPolicy
+		for _, set := range sl {
+			csrfPolicyMapStrToI := set.(map[string]interface{})
+
+			allowedDomainsTypeFound := false
+
+			if v, ok := csrfPolicyMapStrToI["all_load_balancer_domains"]; ok && !isIntfNil(v) && !allowedDomainsTypeFound {
+
+				allowedDomainsTypeFound = true
+
+				if v.(bool) {
+					allowedDomainsInt := &ves_io_schema.CsrfPolicy_AllLoadBalancerDomains{}
+					allowedDomainsInt.AllLoadBalancerDomains = &ves_io_schema.Empty{}
+					csrfPolicy.AllowedDomains = allowedDomainsInt
+				}
+
+			}
+
+			if v, ok := csrfPolicyMapStrToI["custom_domain_list"]; ok && !isIntfNil(v) && !allowedDomainsTypeFound {
+
+				allowedDomainsTypeFound = true
+				allowedDomainsInt := &ves_io_schema.CsrfPolicy_CustomDomainList{}
+				allowedDomainsInt.CustomDomainList = &ves_io_schema.DomainNameList{}
+				csrfPolicy.AllowedDomains = allowedDomainsInt
+
+				sl := v.(*schema.Set).List()
+				for _, set := range sl {
+					cs := set.(map[string]interface{})
+
+					if v, ok := cs["domains"]; ok && !isIntfNil(v) {
+
+						ls := make([]string, len(v.([]interface{})))
+						for i, v := range v.([]interface{}) {
+							ls[i] = v.(string)
+						}
+						allowedDomainsInt.CustomDomainList.Domains = ls
+
+					}
+
+				}
+
 			}
 
 		}
@@ -21477,90 +22329,6 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 			wafExclusionRules[i] = &ves_io_schema_policy.SimpleWafExclusionRule{}
 			wafExclusionRulesMapStrToI := set.(map[string]interface{})
 
-			if v, ok := wafExclusionRulesMapStrToI["app_firewall_detection_control"]; ok && !isIntfNil(v) {
-
-				sl := v.(*schema.Set).List()
-				appFirewallDetectionControl := &ves_io_schema_policy.AppFirewallDetectionControl{}
-				wafExclusionRules[i].AppFirewallDetectionControl = appFirewallDetectionControl
-				for _, set := range sl {
-					appFirewallDetectionControlMapStrToI := set.(map[string]interface{})
-
-					if v, ok := appFirewallDetectionControlMapStrToI["exclude_attack_type_contexts"]; ok && !isIntfNil(v) {
-
-						sl := v.([]interface{})
-						excludeAttackTypeContexts := make([]*ves_io_schema_policy.AppFirewallAttackTypeContext, len(sl))
-						appFirewallDetectionControl.ExcludeAttackTypeContexts = excludeAttackTypeContexts
-						for i, set := range sl {
-							excludeAttackTypeContexts[i] = &ves_io_schema_policy.AppFirewallAttackTypeContext{}
-							excludeAttackTypeContextsMapStrToI := set.(map[string]interface{})
-
-							if v, ok := excludeAttackTypeContextsMapStrToI["exclude_attack_type"]; ok && !isIntfNil(v) {
-
-								excludeAttackTypeContexts[i].ExcludeAttackType = ves_io_schema_app_firewall.AttackType(ves_io_schema_app_firewall.AttackType_value[v.(string)])
-
-							}
-
-						}
-
-					}
-
-					if v, ok := appFirewallDetectionControlMapStrToI["exclude_bot_name_contexts"]; ok && !isIntfNil(v) {
-
-						sl := v.([]interface{})
-						excludeBotNameContexts := make([]*ves_io_schema_policy.BotNameContext, len(sl))
-						appFirewallDetectionControl.ExcludeBotNameContexts = excludeBotNameContexts
-						for i, set := range sl {
-							excludeBotNameContexts[i] = &ves_io_schema_policy.BotNameContext{}
-							excludeBotNameContextsMapStrToI := set.(map[string]interface{})
-
-							if w, ok := excludeBotNameContextsMapStrToI["bot_name"]; ok && !isIntfNil(w) {
-								excludeBotNameContexts[i].BotName = w.(string)
-							}
-
-						}
-
-					}
-
-					if v, ok := appFirewallDetectionControlMapStrToI["exclude_signature_contexts"]; ok && !isIntfNil(v) {
-
-						sl := v.([]interface{})
-						excludeSignatureContexts := make([]*ves_io_schema_policy.AppFirewallSignatureContext, len(sl))
-						appFirewallDetectionControl.ExcludeSignatureContexts = excludeSignatureContexts
-						for i, set := range sl {
-							excludeSignatureContexts[i] = &ves_io_schema_policy.AppFirewallSignatureContext{}
-							excludeSignatureContextsMapStrToI := set.(map[string]interface{})
-
-							if w, ok := excludeSignatureContextsMapStrToI["signature_id"]; ok && !isIntfNil(w) {
-								excludeSignatureContexts[i].SignatureId = uint32(w.(int))
-							}
-
-						}
-
-					}
-
-					if v, ok := appFirewallDetectionControlMapStrToI["exclude_violation_contexts"]; ok && !isIntfNil(v) {
-
-						sl := v.([]interface{})
-						excludeViolationContexts := make([]*ves_io_schema_policy.AppFirewallViolationContext, len(sl))
-						appFirewallDetectionControl.ExcludeViolationContexts = excludeViolationContexts
-						for i, set := range sl {
-							excludeViolationContexts[i] = &ves_io_schema_policy.AppFirewallViolationContext{}
-							excludeViolationContextsMapStrToI := set.(map[string]interface{})
-
-							if v, ok := excludeViolationContextsMapStrToI["exclude_violation"]; ok && !isIntfNil(v) {
-
-								excludeViolationContexts[i].ExcludeViolation = ves_io_schema_app_firewall.AppFirewallViolationType(ves_io_schema_app_firewall.AppFirewallViolationType_value[v.(string)])
-
-							}
-
-						}
-
-					}
-
-				}
-
-			}
-
 			domainChoiceTypeFound := false
 
 			if v, ok := wafExclusionRulesMapStrToI["any_domain"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
@@ -21651,6 +22419,107 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 
 			if w, ok := wafExclusionRulesMapStrToI["path_regex"]; ok && !isIntfNil(w) {
 				wafExclusionRules[i].PathRegex = w.(string)
+			}
+
+			wafAdvancedConfigurationTypeFound := false
+
+			if v, ok := wafExclusionRulesMapStrToI["app_firewall_detection_control"]; ok && !isIntfNil(v) && !wafAdvancedConfigurationTypeFound {
+
+				wafAdvancedConfigurationTypeFound = true
+				wafAdvancedConfigurationInt := &ves_io_schema_policy.SimpleWafExclusionRule_AppFirewallDetectionControl{}
+				wafAdvancedConfigurationInt.AppFirewallDetectionControl = &ves_io_schema_policy.AppFirewallDetectionControl{}
+				wafExclusionRules[i].WafAdvancedConfiguration = wafAdvancedConfigurationInt
+
+				sl := v.(*schema.Set).List()
+				for _, set := range sl {
+					cs := set.(map[string]interface{})
+
+					if v, ok := cs["exclude_attack_type_contexts"]; ok && !isIntfNil(v) {
+
+						sl := v.([]interface{})
+						excludeAttackTypeContexts := make([]*ves_io_schema_policy.AppFirewallAttackTypeContext, len(sl))
+						wafAdvancedConfigurationInt.AppFirewallDetectionControl.ExcludeAttackTypeContexts = excludeAttackTypeContexts
+						for i, set := range sl {
+							excludeAttackTypeContexts[i] = &ves_io_schema_policy.AppFirewallAttackTypeContext{}
+							excludeAttackTypeContextsMapStrToI := set.(map[string]interface{})
+
+							if v, ok := excludeAttackTypeContextsMapStrToI["exclude_attack_type"]; ok && !isIntfNil(v) {
+
+								excludeAttackTypeContexts[i].ExcludeAttackType = ves_io_schema_app_firewall.AttackType(ves_io_schema_app_firewall.AttackType_value[v.(string)])
+
+							}
+
+						}
+
+					}
+
+					if v, ok := cs["exclude_bot_name_contexts"]; ok && !isIntfNil(v) {
+
+						sl := v.([]interface{})
+						excludeBotNameContexts := make([]*ves_io_schema_policy.BotNameContext, len(sl))
+						wafAdvancedConfigurationInt.AppFirewallDetectionControl.ExcludeBotNameContexts = excludeBotNameContexts
+						for i, set := range sl {
+							excludeBotNameContexts[i] = &ves_io_schema_policy.BotNameContext{}
+							excludeBotNameContextsMapStrToI := set.(map[string]interface{})
+
+							if w, ok := excludeBotNameContextsMapStrToI["bot_name"]; ok && !isIntfNil(w) {
+								excludeBotNameContexts[i].BotName = w.(string)
+							}
+
+						}
+
+					}
+
+					if v, ok := cs["exclude_signature_contexts"]; ok && !isIntfNil(v) {
+
+						sl := v.([]interface{})
+						excludeSignatureContexts := make([]*ves_io_schema_policy.AppFirewallSignatureContext, len(sl))
+						wafAdvancedConfigurationInt.AppFirewallDetectionControl.ExcludeSignatureContexts = excludeSignatureContexts
+						for i, set := range sl {
+							excludeSignatureContexts[i] = &ves_io_schema_policy.AppFirewallSignatureContext{}
+							excludeSignatureContextsMapStrToI := set.(map[string]interface{})
+
+							if w, ok := excludeSignatureContextsMapStrToI["signature_id"]; ok && !isIntfNil(w) {
+								excludeSignatureContexts[i].SignatureId = uint32(w.(int))
+							}
+
+						}
+
+					}
+
+					if v, ok := cs["exclude_violation_contexts"]; ok && !isIntfNil(v) {
+
+						sl := v.([]interface{})
+						excludeViolationContexts := make([]*ves_io_schema_policy.AppFirewallViolationContext, len(sl))
+						wafAdvancedConfigurationInt.AppFirewallDetectionControl.ExcludeViolationContexts = excludeViolationContexts
+						for i, set := range sl {
+							excludeViolationContexts[i] = &ves_io_schema_policy.AppFirewallViolationContext{}
+							excludeViolationContextsMapStrToI := set.(map[string]interface{})
+
+							if v, ok := excludeViolationContextsMapStrToI["exclude_violation"]; ok && !isIntfNil(v) {
+
+								excludeViolationContexts[i].ExcludeViolation = ves_io_schema_app_firewall.AppFirewallViolationType(ves_io_schema_app_firewall.AppFirewallViolationType_value[v.(string)])
+
+							}
+
+						}
+
+					}
+
+				}
+
+			}
+
+			if v, ok := wafExclusionRulesMapStrToI["waf_skip_processing"]; ok && !isIntfNil(v) && !wafAdvancedConfigurationTypeFound {
+
+				wafAdvancedConfigurationTypeFound = true
+
+				if v.(bool) {
+					wafAdvancedConfigurationInt := &ves_io_schema_policy.SimpleWafExclusionRule_WafSkipProcessing{}
+					wafAdvancedConfigurationInt.WafSkipProcessing = &ves_io_schema.Empty{}
+					wafExclusionRules[i].WafAdvancedConfiguration = wafAdvancedConfigurationInt
+				}
+
 			}
 
 		}
@@ -24903,6 +25772,504 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 
 							}
 
+							flowLabelChoiceTypeFound := false
+
+							if v, ok := protectedAppEndpointsMapStrToI["flow_label"]; ok && !isIntfNil(v) && !flowLabelChoiceTypeFound {
+
+								flowLabelChoiceTypeFound = true
+								flowLabelChoiceInt := &ves_io_schema_views_http_loadbalancer.AppEndpointType_FlowLabel{}
+								flowLabelChoiceInt.FlowLabel = &ves_io_schema.BotDefenseFlowLabelCategoriesChoiceType{}
+								protectedAppEndpoints[i].FlowLabelChoice = flowLabelChoiceInt
+
+								sl := v.(*schema.Set).List()
+								for _, set := range sl {
+									cs := set.(map[string]interface{})
+
+									flowLabelChoiceTypeFound := false
+
+									if v, ok := cs["account_management"]; ok && !isIntfNil(v) && !flowLabelChoiceTypeFound {
+
+										flowLabelChoiceTypeFound = true
+										flowLabelChoiceIntNew := &ves_io_schema.BotDefenseFlowLabelCategoriesChoiceType_AccountManagement{}
+										flowLabelChoiceIntNew.AccountManagement = &ves_io_schema.BotDefenseFlowLabelAccountManagementChoiceType{}
+										flowLabelChoiceInt.FlowLabel.FlowLabelChoice = flowLabelChoiceIntNew
+
+										sl := v.(*schema.Set).List()
+										for _, set := range sl {
+											cs := set.(map[string]interface{})
+
+											labelChoiceTypeFound := false
+
+											if v, ok := cs["create"]; ok && !isIntfNil(v) && !labelChoiceTypeFound {
+
+												labelChoiceTypeFound = true
+
+												if v.(bool) {
+													labelChoiceInt := &ves_io_schema.BotDefenseFlowLabelAccountManagementChoiceType_Create{}
+													labelChoiceInt.Create = &ves_io_schema.Empty{}
+													flowLabelChoiceIntNew.AccountManagement.LabelChoice = labelChoiceInt
+												}
+
+											}
+
+											if v, ok := cs["password_reset"]; ok && !isIntfNil(v) && !labelChoiceTypeFound {
+
+												labelChoiceTypeFound = true
+
+												if v.(bool) {
+													labelChoiceInt := &ves_io_schema.BotDefenseFlowLabelAccountManagementChoiceType_PasswordReset{}
+													labelChoiceInt.PasswordReset = &ves_io_schema.Empty{}
+													flowLabelChoiceIntNew.AccountManagement.LabelChoice = labelChoiceInt
+												}
+
+											}
+
+										}
+
+									}
+
+									if v, ok := cs["authentication"]; ok && !isIntfNil(v) && !flowLabelChoiceTypeFound {
+
+										flowLabelChoiceTypeFound = true
+										flowLabelChoiceIntNew := &ves_io_schema.BotDefenseFlowLabelCategoriesChoiceType_Authentication{}
+										flowLabelChoiceIntNew.Authentication = &ves_io_schema.BotDefenseFlowLabelAuthenticationChoiceType{}
+										flowLabelChoiceInt.FlowLabel.FlowLabelChoice = flowLabelChoiceIntNew
+
+										sl := v.(*schema.Set).List()
+										for _, set := range sl {
+											cs := set.(map[string]interface{})
+
+											labelChoiceTypeFound := false
+
+											if v, ok := cs["login"]; ok && !isIntfNil(v) && !labelChoiceTypeFound {
+
+												labelChoiceTypeFound = true
+
+												if v.(bool) {
+													labelChoiceInt := &ves_io_schema.BotDefenseFlowLabelAuthenticationChoiceType_Login{}
+													labelChoiceInt.Login = &ves_io_schema.Empty{}
+													flowLabelChoiceIntNew.Authentication.LabelChoice = labelChoiceInt
+												}
+
+											}
+
+											if v, ok := cs["login_mfa"]; ok && !isIntfNil(v) && !labelChoiceTypeFound {
+
+												labelChoiceTypeFound = true
+
+												if v.(bool) {
+													labelChoiceInt := &ves_io_schema.BotDefenseFlowLabelAuthenticationChoiceType_LoginMfa{}
+													labelChoiceInt.LoginMfa = &ves_io_schema.Empty{}
+													flowLabelChoiceIntNew.Authentication.LabelChoice = labelChoiceInt
+												}
+
+											}
+
+											if v, ok := cs["login_partner"]; ok && !isIntfNil(v) && !labelChoiceTypeFound {
+
+												labelChoiceTypeFound = true
+
+												if v.(bool) {
+													labelChoiceInt := &ves_io_schema.BotDefenseFlowLabelAuthenticationChoiceType_LoginPartner{}
+													labelChoiceInt.LoginPartner = &ves_io_schema.Empty{}
+													flowLabelChoiceIntNew.Authentication.LabelChoice = labelChoiceInt
+												}
+
+											}
+
+											if v, ok := cs["logout"]; ok && !isIntfNil(v) && !labelChoiceTypeFound {
+
+												labelChoiceTypeFound = true
+
+												if v.(bool) {
+													labelChoiceInt := &ves_io_schema.BotDefenseFlowLabelAuthenticationChoiceType_Logout{}
+													labelChoiceInt.Logout = &ves_io_schema.Empty{}
+													flowLabelChoiceIntNew.Authentication.LabelChoice = labelChoiceInt
+												}
+
+											}
+
+											if v, ok := cs["token_refresh"]; ok && !isIntfNil(v) && !labelChoiceTypeFound {
+
+												labelChoiceTypeFound = true
+
+												if v.(bool) {
+													labelChoiceInt := &ves_io_schema.BotDefenseFlowLabelAuthenticationChoiceType_TokenRefresh{}
+													labelChoiceInt.TokenRefresh = &ves_io_schema.Empty{}
+													flowLabelChoiceIntNew.Authentication.LabelChoice = labelChoiceInt
+												}
+
+											}
+
+										}
+
+									}
+
+									if v, ok := cs["financial_services"]; ok && !isIntfNil(v) && !flowLabelChoiceTypeFound {
+
+										flowLabelChoiceTypeFound = true
+										flowLabelChoiceIntNew := &ves_io_schema.BotDefenseFlowLabelCategoriesChoiceType_FinancialServices{}
+										flowLabelChoiceIntNew.FinancialServices = &ves_io_schema.BotDefenseFlowLabelFinancialServicesChoiceType{}
+										flowLabelChoiceInt.FlowLabel.FlowLabelChoice = flowLabelChoiceIntNew
+
+										sl := v.(*schema.Set).List()
+										for _, set := range sl {
+											cs := set.(map[string]interface{})
+
+											labelChoiceTypeFound := false
+
+											if v, ok := cs["apply"]; ok && !isIntfNil(v) && !labelChoiceTypeFound {
+
+												labelChoiceTypeFound = true
+
+												if v.(bool) {
+													labelChoiceInt := &ves_io_schema.BotDefenseFlowLabelFinancialServicesChoiceType_Apply{}
+													labelChoiceInt.Apply = &ves_io_schema.Empty{}
+													flowLabelChoiceIntNew.FinancialServices.LabelChoice = labelChoiceInt
+												}
+
+											}
+
+											if v, ok := cs["money_transfer"]; ok && !isIntfNil(v) && !labelChoiceTypeFound {
+
+												labelChoiceTypeFound = true
+
+												if v.(bool) {
+													labelChoiceInt := &ves_io_schema.BotDefenseFlowLabelFinancialServicesChoiceType_MoneyTransfer{}
+													labelChoiceInt.MoneyTransfer = &ves_io_schema.Empty{}
+													flowLabelChoiceIntNew.FinancialServices.LabelChoice = labelChoiceInt
+												}
+
+											}
+
+										}
+
+									}
+
+									if v, ok := cs["flight"]; ok && !isIntfNil(v) && !flowLabelChoiceTypeFound {
+
+										flowLabelChoiceTypeFound = true
+										flowLabelChoiceIntNew := &ves_io_schema.BotDefenseFlowLabelCategoriesChoiceType_Flight{}
+										flowLabelChoiceIntNew.Flight = &ves_io_schema.BotDefenseFlowLabelFlightChoiceType{}
+										flowLabelChoiceInt.FlowLabel.FlowLabelChoice = flowLabelChoiceIntNew
+
+										sl := v.(*schema.Set).List()
+										for _, set := range sl {
+											cs := set.(map[string]interface{})
+
+											labelChoiceTypeFound := false
+
+											if v, ok := cs["checkin"]; ok && !isIntfNil(v) && !labelChoiceTypeFound {
+
+												labelChoiceTypeFound = true
+
+												if v.(bool) {
+													labelChoiceInt := &ves_io_schema.BotDefenseFlowLabelFlightChoiceType_Checkin{}
+													labelChoiceInt.Checkin = &ves_io_schema.Empty{}
+													flowLabelChoiceIntNew.Flight.LabelChoice = labelChoiceInt
+												}
+
+											}
+
+										}
+
+									}
+
+									if v, ok := cs["profile_management"]; ok && !isIntfNil(v) && !flowLabelChoiceTypeFound {
+
+										flowLabelChoiceTypeFound = true
+										flowLabelChoiceIntNew := &ves_io_schema.BotDefenseFlowLabelCategoriesChoiceType_ProfileManagement{}
+										flowLabelChoiceIntNew.ProfileManagement = &ves_io_schema.BotDefenseFlowLabelProfileManagementChoiceType{}
+										flowLabelChoiceInt.FlowLabel.FlowLabelChoice = flowLabelChoiceIntNew
+
+										sl := v.(*schema.Set).List()
+										for _, set := range sl {
+											cs := set.(map[string]interface{})
+
+											labelChoiceTypeFound := false
+
+											if v, ok := cs["create"]; ok && !isIntfNil(v) && !labelChoiceTypeFound {
+
+												labelChoiceTypeFound = true
+
+												if v.(bool) {
+													labelChoiceInt := &ves_io_schema.BotDefenseFlowLabelProfileManagementChoiceType_Create{}
+													labelChoiceInt.Create = &ves_io_schema.Empty{}
+													flowLabelChoiceIntNew.ProfileManagement.LabelChoice = labelChoiceInt
+												}
+
+											}
+
+											if v, ok := cs["update"]; ok && !isIntfNil(v) && !labelChoiceTypeFound {
+
+												labelChoiceTypeFound = true
+
+												if v.(bool) {
+													labelChoiceInt := &ves_io_schema.BotDefenseFlowLabelProfileManagementChoiceType_Update{}
+													labelChoiceInt.Update = &ves_io_schema.Empty{}
+													flowLabelChoiceIntNew.ProfileManagement.LabelChoice = labelChoiceInt
+												}
+
+											}
+
+											if v, ok := cs["view"]; ok && !isIntfNil(v) && !labelChoiceTypeFound {
+
+												labelChoiceTypeFound = true
+
+												if v.(bool) {
+													labelChoiceInt := &ves_io_schema.BotDefenseFlowLabelProfileManagementChoiceType_View{}
+													labelChoiceInt.View = &ves_io_schema.Empty{}
+													flowLabelChoiceIntNew.ProfileManagement.LabelChoice = labelChoiceInt
+												}
+
+											}
+
+										}
+
+									}
+
+									if v, ok := cs["search"]; ok && !isIntfNil(v) && !flowLabelChoiceTypeFound {
+
+										flowLabelChoiceTypeFound = true
+										flowLabelChoiceIntNew := &ves_io_schema.BotDefenseFlowLabelCategoriesChoiceType_Search{}
+										flowLabelChoiceIntNew.Search = &ves_io_schema.BotDefenseFlowLabelSearchChoiceType{}
+										flowLabelChoiceInt.FlowLabel.FlowLabelChoice = flowLabelChoiceIntNew
+
+										sl := v.(*schema.Set).List()
+										for _, set := range sl {
+											cs := set.(map[string]interface{})
+
+											labelChoiceTypeFound := false
+
+											if v, ok := cs["flight_search"]; ok && !isIntfNil(v) && !labelChoiceTypeFound {
+
+												labelChoiceTypeFound = true
+
+												if v.(bool) {
+													labelChoiceInt := &ves_io_schema.BotDefenseFlowLabelSearchChoiceType_FlightSearch{}
+													labelChoiceInt.FlightSearch = &ves_io_schema.Empty{}
+													flowLabelChoiceIntNew.Search.LabelChoice = labelChoiceInt
+												}
+
+											}
+
+											if v, ok := cs["product_search"]; ok && !isIntfNil(v) && !labelChoiceTypeFound {
+
+												labelChoiceTypeFound = true
+
+												if v.(bool) {
+													labelChoiceInt := &ves_io_schema.BotDefenseFlowLabelSearchChoiceType_ProductSearch{}
+													labelChoiceInt.ProductSearch = &ves_io_schema.Empty{}
+													flowLabelChoiceIntNew.Search.LabelChoice = labelChoiceInt
+												}
+
+											}
+
+											if v, ok := cs["reservation_search"]; ok && !isIntfNil(v) && !labelChoiceTypeFound {
+
+												labelChoiceTypeFound = true
+
+												if v.(bool) {
+													labelChoiceInt := &ves_io_schema.BotDefenseFlowLabelSearchChoiceType_ReservationSearch{}
+													labelChoiceInt.ReservationSearch = &ves_io_schema.Empty{}
+													flowLabelChoiceIntNew.Search.LabelChoice = labelChoiceInt
+												}
+
+											}
+
+											if v, ok := cs["room_search"]; ok && !isIntfNil(v) && !labelChoiceTypeFound {
+
+												labelChoiceTypeFound = true
+
+												if v.(bool) {
+													labelChoiceInt := &ves_io_schema.BotDefenseFlowLabelSearchChoiceType_RoomSearch{}
+													labelChoiceInt.RoomSearch = &ves_io_schema.Empty{}
+													flowLabelChoiceIntNew.Search.LabelChoice = labelChoiceInt
+												}
+
+											}
+
+										}
+
+									}
+
+									if v, ok := cs["shopping_gift_cards"]; ok && !isIntfNil(v) && !flowLabelChoiceTypeFound {
+
+										flowLabelChoiceTypeFound = true
+										flowLabelChoiceIntNew := &ves_io_schema.BotDefenseFlowLabelCategoriesChoiceType_ShoppingGiftCards{}
+										flowLabelChoiceIntNew.ShoppingGiftCards = &ves_io_schema.BotDefenseFlowLabelShoppingGiftCardsChoiceType{}
+										flowLabelChoiceInt.FlowLabel.FlowLabelChoice = flowLabelChoiceIntNew
+
+										sl := v.(*schema.Set).List()
+										for _, set := range sl {
+											cs := set.(map[string]interface{})
+
+											labelChoiceTypeFound := false
+
+											if v, ok := cs["gift_card_make_purchase_with_gift_card"]; ok && !isIntfNil(v) && !labelChoiceTypeFound {
+
+												labelChoiceTypeFound = true
+
+												if v.(bool) {
+													labelChoiceInt := &ves_io_schema.BotDefenseFlowLabelShoppingGiftCardsChoiceType_GiftCardMakePurchaseWithGiftCard{}
+													labelChoiceInt.GiftCardMakePurchaseWithGiftCard = &ves_io_schema.Empty{}
+													flowLabelChoiceIntNew.ShoppingGiftCards.LabelChoice = labelChoiceInt
+												}
+
+											}
+
+											if v, ok := cs["gift_card_validation"]; ok && !isIntfNil(v) && !labelChoiceTypeFound {
+
+												labelChoiceTypeFound = true
+
+												if v.(bool) {
+													labelChoiceInt := &ves_io_schema.BotDefenseFlowLabelShoppingGiftCardsChoiceType_GiftCardValidation{}
+													labelChoiceInt.GiftCardValidation = &ves_io_schema.Empty{}
+													flowLabelChoiceIntNew.ShoppingGiftCards.LabelChoice = labelChoiceInt
+												}
+
+											}
+
+											if v, ok := cs["shop_add_to_cart"]; ok && !isIntfNil(v) && !labelChoiceTypeFound {
+
+												labelChoiceTypeFound = true
+
+												if v.(bool) {
+													labelChoiceInt := &ves_io_schema.BotDefenseFlowLabelShoppingGiftCardsChoiceType_ShopAddToCart{}
+													labelChoiceInt.ShopAddToCart = &ves_io_schema.Empty{}
+													flowLabelChoiceIntNew.ShoppingGiftCards.LabelChoice = labelChoiceInt
+												}
+
+											}
+
+											if v, ok := cs["shop_checkout"]; ok && !isIntfNil(v) && !labelChoiceTypeFound {
+
+												labelChoiceTypeFound = true
+
+												if v.(bool) {
+													labelChoiceInt := &ves_io_schema.BotDefenseFlowLabelShoppingGiftCardsChoiceType_ShopCheckout{}
+													labelChoiceInt.ShopCheckout = &ves_io_schema.Empty{}
+													flowLabelChoiceIntNew.ShoppingGiftCards.LabelChoice = labelChoiceInt
+												}
+
+											}
+
+											if v, ok := cs["shop_choose_seat"]; ok && !isIntfNil(v) && !labelChoiceTypeFound {
+
+												labelChoiceTypeFound = true
+
+												if v.(bool) {
+													labelChoiceInt := &ves_io_schema.BotDefenseFlowLabelShoppingGiftCardsChoiceType_ShopChooseSeat{}
+													labelChoiceInt.ShopChooseSeat = &ves_io_schema.Empty{}
+													flowLabelChoiceIntNew.ShoppingGiftCards.LabelChoice = labelChoiceInt
+												}
+
+											}
+
+											if v, ok := cs["shop_enter_drawing_submission"]; ok && !isIntfNil(v) && !labelChoiceTypeFound {
+
+												labelChoiceTypeFound = true
+
+												if v.(bool) {
+													labelChoiceInt := &ves_io_schema.BotDefenseFlowLabelShoppingGiftCardsChoiceType_ShopEnterDrawingSubmission{}
+													labelChoiceInt.ShopEnterDrawingSubmission = &ves_io_schema.Empty{}
+													flowLabelChoiceIntNew.ShoppingGiftCards.LabelChoice = labelChoiceInt
+												}
+
+											}
+
+											if v, ok := cs["shop_make_payment"]; ok && !isIntfNil(v) && !labelChoiceTypeFound {
+
+												labelChoiceTypeFound = true
+
+												if v.(bool) {
+													labelChoiceInt := &ves_io_schema.BotDefenseFlowLabelShoppingGiftCardsChoiceType_ShopMakePayment{}
+													labelChoiceInt.ShopMakePayment = &ves_io_schema.Empty{}
+													flowLabelChoiceIntNew.ShoppingGiftCards.LabelChoice = labelChoiceInt
+												}
+
+											}
+
+											if v, ok := cs["shop_order"]; ok && !isIntfNil(v) && !labelChoiceTypeFound {
+
+												labelChoiceTypeFound = true
+
+												if v.(bool) {
+													labelChoiceInt := &ves_io_schema.BotDefenseFlowLabelShoppingGiftCardsChoiceType_ShopOrder{}
+													labelChoiceInt.ShopOrder = &ves_io_schema.Empty{}
+													flowLabelChoiceIntNew.ShoppingGiftCards.LabelChoice = labelChoiceInt
+												}
+
+											}
+
+											if v, ok := cs["shop_price_inquiry"]; ok && !isIntfNil(v) && !labelChoiceTypeFound {
+
+												labelChoiceTypeFound = true
+
+												if v.(bool) {
+													labelChoiceInt := &ves_io_schema.BotDefenseFlowLabelShoppingGiftCardsChoiceType_ShopPriceInquiry{}
+													labelChoiceInt.ShopPriceInquiry = &ves_io_schema.Empty{}
+													flowLabelChoiceIntNew.ShoppingGiftCards.LabelChoice = labelChoiceInt
+												}
+
+											}
+
+											if v, ok := cs["shop_promo_code_validation"]; ok && !isIntfNil(v) && !labelChoiceTypeFound {
+
+												labelChoiceTypeFound = true
+
+												if v.(bool) {
+													labelChoiceInt := &ves_io_schema.BotDefenseFlowLabelShoppingGiftCardsChoiceType_ShopPromoCodeValidation{}
+													labelChoiceInt.ShopPromoCodeValidation = &ves_io_schema.Empty{}
+													flowLabelChoiceIntNew.ShoppingGiftCards.LabelChoice = labelChoiceInt
+												}
+
+											}
+
+											if v, ok := cs["shop_purchase_gift_card"]; ok && !isIntfNil(v) && !labelChoiceTypeFound {
+
+												labelChoiceTypeFound = true
+
+												if v.(bool) {
+													labelChoiceInt := &ves_io_schema.BotDefenseFlowLabelShoppingGiftCardsChoiceType_ShopPurchaseGiftCard{}
+													labelChoiceInt.ShopPurchaseGiftCard = &ves_io_schema.Empty{}
+													flowLabelChoiceIntNew.ShoppingGiftCards.LabelChoice = labelChoiceInt
+												}
+
+											}
+
+											if v, ok := cs["shop_update_quantity"]; ok && !isIntfNil(v) && !labelChoiceTypeFound {
+
+												labelChoiceTypeFound = true
+
+												if v.(bool) {
+													labelChoiceInt := &ves_io_schema.BotDefenseFlowLabelShoppingGiftCardsChoiceType_ShopUpdateQuantity{}
+													labelChoiceInt.ShopUpdateQuantity = &ves_io_schema.Empty{}
+													flowLabelChoiceIntNew.ShoppingGiftCards.LabelChoice = labelChoiceInt
+												}
+
+											}
+
+										}
+
+									}
+
+								}
+
+							}
+
+							if v, ok := protectedAppEndpointsMapStrToI["undefined_flow_label"]; ok && !isIntfNil(v) && !flowLabelChoiceTypeFound {
+
+								flowLabelChoiceTypeFound = true
+
+								if v.(bool) {
+									flowLabelChoiceInt := &ves_io_schema_views_http_loadbalancer.AppEndpointType_UndefinedFlowLabel{}
+									flowLabelChoiceInt.UndefinedFlowLabel = &ves_io_schema.Empty{}
+									protectedAppEndpoints[i].FlowLabelChoice = flowLabelChoiceInt
+								}
+
+							}
+
 							if v, ok := protectedAppEndpointsMapStrToI["http_methods"]; ok && !isIntfNil(v) {
 
 								http_methodsList := []ves_io_schema.BotHttpMethod{}
@@ -27032,6 +28399,57 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 
 			if w, ok := corsPolicyMapStrToI["maximum_age"]; ok && !isIntfNil(w) {
 				corsPolicy.MaximumAge = int32(w.(int))
+			}
+
+		}
+
+	}
+
+	if v, ok := d.GetOk("csrf_policy"); ok && !isIntfNil(v) {
+
+		sl := v.(*schema.Set).List()
+		csrfPolicy := &ves_io_schema.CsrfPolicy{}
+		updateSpec.CsrfPolicy = csrfPolicy
+		for _, set := range sl {
+			csrfPolicyMapStrToI := set.(map[string]interface{})
+
+			allowedDomainsTypeFound := false
+
+			if v, ok := csrfPolicyMapStrToI["all_load_balancer_domains"]; ok && !isIntfNil(v) && !allowedDomainsTypeFound {
+
+				allowedDomainsTypeFound = true
+
+				if v.(bool) {
+					allowedDomainsInt := &ves_io_schema.CsrfPolicy_AllLoadBalancerDomains{}
+					allowedDomainsInt.AllLoadBalancerDomains = &ves_io_schema.Empty{}
+					csrfPolicy.AllowedDomains = allowedDomainsInt
+				}
+
+			}
+
+			if v, ok := csrfPolicyMapStrToI["custom_domain_list"]; ok && !isIntfNil(v) && !allowedDomainsTypeFound {
+
+				allowedDomainsTypeFound = true
+				allowedDomainsInt := &ves_io_schema.CsrfPolicy_CustomDomainList{}
+				allowedDomainsInt.CustomDomainList = &ves_io_schema.DomainNameList{}
+				csrfPolicy.AllowedDomains = allowedDomainsInt
+
+				sl := v.(*schema.Set).List()
+				for _, set := range sl {
+					cs := set.(map[string]interface{})
+
+					if v, ok := cs["domains"]; ok && !isIntfNil(v) {
+
+						ls := make([]string, len(v.([]interface{})))
+						for i, v := range v.([]interface{}) {
+							ls[i] = v.(string)
+						}
+						allowedDomainsInt.CustomDomainList.Domains = ls
+
+					}
+
+				}
+
 			}
 
 		}
@@ -34014,90 +35432,6 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 			wafExclusionRules[i] = &ves_io_schema_policy.SimpleWafExclusionRule{}
 			wafExclusionRulesMapStrToI := set.(map[string]interface{})
 
-			if v, ok := wafExclusionRulesMapStrToI["app_firewall_detection_control"]; ok && !isIntfNil(v) {
-
-				sl := v.(*schema.Set).List()
-				appFirewallDetectionControl := &ves_io_schema_policy.AppFirewallDetectionControl{}
-				wafExclusionRules[i].AppFirewallDetectionControl = appFirewallDetectionControl
-				for _, set := range sl {
-					appFirewallDetectionControlMapStrToI := set.(map[string]interface{})
-
-					if v, ok := appFirewallDetectionControlMapStrToI["exclude_attack_type_contexts"]; ok && !isIntfNil(v) {
-
-						sl := v.([]interface{})
-						excludeAttackTypeContexts := make([]*ves_io_schema_policy.AppFirewallAttackTypeContext, len(sl))
-						appFirewallDetectionControl.ExcludeAttackTypeContexts = excludeAttackTypeContexts
-						for i, set := range sl {
-							excludeAttackTypeContexts[i] = &ves_io_schema_policy.AppFirewallAttackTypeContext{}
-							excludeAttackTypeContextsMapStrToI := set.(map[string]interface{})
-
-							if v, ok := excludeAttackTypeContextsMapStrToI["exclude_attack_type"]; ok && !isIntfNil(v) {
-
-								excludeAttackTypeContexts[i].ExcludeAttackType = ves_io_schema_app_firewall.AttackType(ves_io_schema_app_firewall.AttackType_value[v.(string)])
-
-							}
-
-						}
-
-					}
-
-					if v, ok := appFirewallDetectionControlMapStrToI["exclude_bot_name_contexts"]; ok && !isIntfNil(v) {
-
-						sl := v.([]interface{})
-						excludeBotNameContexts := make([]*ves_io_schema_policy.BotNameContext, len(sl))
-						appFirewallDetectionControl.ExcludeBotNameContexts = excludeBotNameContexts
-						for i, set := range sl {
-							excludeBotNameContexts[i] = &ves_io_schema_policy.BotNameContext{}
-							excludeBotNameContextsMapStrToI := set.(map[string]interface{})
-
-							if w, ok := excludeBotNameContextsMapStrToI["bot_name"]; ok && !isIntfNil(w) {
-								excludeBotNameContexts[i].BotName = w.(string)
-							}
-
-						}
-
-					}
-
-					if v, ok := appFirewallDetectionControlMapStrToI["exclude_signature_contexts"]; ok && !isIntfNil(v) {
-
-						sl := v.([]interface{})
-						excludeSignatureContexts := make([]*ves_io_schema_policy.AppFirewallSignatureContext, len(sl))
-						appFirewallDetectionControl.ExcludeSignatureContexts = excludeSignatureContexts
-						for i, set := range sl {
-							excludeSignatureContexts[i] = &ves_io_schema_policy.AppFirewallSignatureContext{}
-							excludeSignatureContextsMapStrToI := set.(map[string]interface{})
-
-							if w, ok := excludeSignatureContextsMapStrToI["signature_id"]; ok && !isIntfNil(w) {
-								excludeSignatureContexts[i].SignatureId = uint32(w.(int))
-							}
-
-						}
-
-					}
-
-					if v, ok := appFirewallDetectionControlMapStrToI["exclude_violation_contexts"]; ok && !isIntfNil(v) {
-
-						sl := v.([]interface{})
-						excludeViolationContexts := make([]*ves_io_schema_policy.AppFirewallViolationContext, len(sl))
-						appFirewallDetectionControl.ExcludeViolationContexts = excludeViolationContexts
-						for i, set := range sl {
-							excludeViolationContexts[i] = &ves_io_schema_policy.AppFirewallViolationContext{}
-							excludeViolationContextsMapStrToI := set.(map[string]interface{})
-
-							if v, ok := excludeViolationContextsMapStrToI["exclude_violation"]; ok && !isIntfNil(v) {
-
-								excludeViolationContexts[i].ExcludeViolation = ves_io_schema_app_firewall.AppFirewallViolationType(ves_io_schema_app_firewall.AppFirewallViolationType_value[v.(string)])
-
-							}
-
-						}
-
-					}
-
-				}
-
-			}
-
 			domainChoiceTypeFound := false
 
 			if v, ok := wafExclusionRulesMapStrToI["any_domain"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
@@ -34188,6 +35522,107 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 
 			if w, ok := wafExclusionRulesMapStrToI["path_regex"]; ok && !isIntfNil(w) {
 				wafExclusionRules[i].PathRegex = w.(string)
+			}
+
+			wafAdvancedConfigurationTypeFound := false
+
+			if v, ok := wafExclusionRulesMapStrToI["app_firewall_detection_control"]; ok && !isIntfNil(v) && !wafAdvancedConfigurationTypeFound {
+
+				wafAdvancedConfigurationTypeFound = true
+				wafAdvancedConfigurationInt := &ves_io_schema_policy.SimpleWafExclusionRule_AppFirewallDetectionControl{}
+				wafAdvancedConfigurationInt.AppFirewallDetectionControl = &ves_io_schema_policy.AppFirewallDetectionControl{}
+				wafExclusionRules[i].WafAdvancedConfiguration = wafAdvancedConfigurationInt
+
+				sl := v.(*schema.Set).List()
+				for _, set := range sl {
+					cs := set.(map[string]interface{})
+
+					if v, ok := cs["exclude_attack_type_contexts"]; ok && !isIntfNil(v) {
+
+						sl := v.([]interface{})
+						excludeAttackTypeContexts := make([]*ves_io_schema_policy.AppFirewallAttackTypeContext, len(sl))
+						wafAdvancedConfigurationInt.AppFirewallDetectionControl.ExcludeAttackTypeContexts = excludeAttackTypeContexts
+						for i, set := range sl {
+							excludeAttackTypeContexts[i] = &ves_io_schema_policy.AppFirewallAttackTypeContext{}
+							excludeAttackTypeContextsMapStrToI := set.(map[string]interface{})
+
+							if v, ok := excludeAttackTypeContextsMapStrToI["exclude_attack_type"]; ok && !isIntfNil(v) {
+
+								excludeAttackTypeContexts[i].ExcludeAttackType = ves_io_schema_app_firewall.AttackType(ves_io_schema_app_firewall.AttackType_value[v.(string)])
+
+							}
+
+						}
+
+					}
+
+					if v, ok := cs["exclude_bot_name_contexts"]; ok && !isIntfNil(v) {
+
+						sl := v.([]interface{})
+						excludeBotNameContexts := make([]*ves_io_schema_policy.BotNameContext, len(sl))
+						wafAdvancedConfigurationInt.AppFirewallDetectionControl.ExcludeBotNameContexts = excludeBotNameContexts
+						for i, set := range sl {
+							excludeBotNameContexts[i] = &ves_io_schema_policy.BotNameContext{}
+							excludeBotNameContextsMapStrToI := set.(map[string]interface{})
+
+							if w, ok := excludeBotNameContextsMapStrToI["bot_name"]; ok && !isIntfNil(w) {
+								excludeBotNameContexts[i].BotName = w.(string)
+							}
+
+						}
+
+					}
+
+					if v, ok := cs["exclude_signature_contexts"]; ok && !isIntfNil(v) {
+
+						sl := v.([]interface{})
+						excludeSignatureContexts := make([]*ves_io_schema_policy.AppFirewallSignatureContext, len(sl))
+						wafAdvancedConfigurationInt.AppFirewallDetectionControl.ExcludeSignatureContexts = excludeSignatureContexts
+						for i, set := range sl {
+							excludeSignatureContexts[i] = &ves_io_schema_policy.AppFirewallSignatureContext{}
+							excludeSignatureContextsMapStrToI := set.(map[string]interface{})
+
+							if w, ok := excludeSignatureContextsMapStrToI["signature_id"]; ok && !isIntfNil(w) {
+								excludeSignatureContexts[i].SignatureId = uint32(w.(int))
+							}
+
+						}
+
+					}
+
+					if v, ok := cs["exclude_violation_contexts"]; ok && !isIntfNil(v) {
+
+						sl := v.([]interface{})
+						excludeViolationContexts := make([]*ves_io_schema_policy.AppFirewallViolationContext, len(sl))
+						wafAdvancedConfigurationInt.AppFirewallDetectionControl.ExcludeViolationContexts = excludeViolationContexts
+						for i, set := range sl {
+							excludeViolationContexts[i] = &ves_io_schema_policy.AppFirewallViolationContext{}
+							excludeViolationContextsMapStrToI := set.(map[string]interface{})
+
+							if v, ok := excludeViolationContextsMapStrToI["exclude_violation"]; ok && !isIntfNil(v) {
+
+								excludeViolationContexts[i].ExcludeViolation = ves_io_schema_app_firewall.AppFirewallViolationType(ves_io_schema_app_firewall.AppFirewallViolationType_value[v.(string)])
+
+							}
+
+						}
+
+					}
+
+				}
+
+			}
+
+			if v, ok := wafExclusionRulesMapStrToI["waf_skip_processing"]; ok && !isIntfNil(v) && !wafAdvancedConfigurationTypeFound {
+
+				wafAdvancedConfigurationTypeFound = true
+
+				if v.(bool) {
+					wafAdvancedConfigurationInt := &ves_io_schema_policy.SimpleWafExclusionRule_WafSkipProcessing{}
+					wafAdvancedConfigurationInt.WafSkipProcessing = &ves_io_schema.Empty{}
+					wafExclusionRules[i].WafAdvancedConfiguration = wafAdvancedConfigurationInt
+				}
+
 			}
 
 		}

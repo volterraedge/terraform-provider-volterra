@@ -73,7 +73,25 @@ func resourceVolterraUserIdentification() *schema.Resource {
 							Optional: true,
 						},
 
+						"client_city": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+
+						"client_country": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+
 						"client_ip": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+
+						"client_region": {
 
 							Type:     schema.TypeBool,
 							Optional: true,
@@ -204,6 +222,30 @@ func resourceVolterraUserIdentificationCreate(d *schema.ResourceData, meta inter
 
 			}
 
+			if v, ok := rulesMapStrToI["client_city"]; ok && !isIntfNil(v) && !identifierTypeFound {
+
+				identifierTypeFound = true
+
+				if v.(bool) {
+					identifierInt := &ves_io_schema_user_identification.UserIdentificationRule_ClientCity{}
+					identifierInt.ClientCity = &ves_io_schema.Empty{}
+					rules[i].Identifier = identifierInt
+				}
+
+			}
+
+			if v, ok := rulesMapStrToI["client_country"]; ok && !isIntfNil(v) && !identifierTypeFound {
+
+				identifierTypeFound = true
+
+				if v.(bool) {
+					identifierInt := &ves_io_schema_user_identification.UserIdentificationRule_ClientCountry{}
+					identifierInt.ClientCountry = &ves_io_schema.Empty{}
+					rules[i].Identifier = identifierInt
+				}
+
+			}
+
 			if v, ok := rulesMapStrToI["client_ip"]; ok && !isIntfNil(v) && !identifierTypeFound {
 
 				identifierTypeFound = true
@@ -211,6 +253,18 @@ func resourceVolterraUserIdentificationCreate(d *schema.ResourceData, meta inter
 				if v.(bool) {
 					identifierInt := &ves_io_schema_user_identification.UserIdentificationRule_ClientIp{}
 					identifierInt.ClientIp = &ves_io_schema.Empty{}
+					rules[i].Identifier = identifierInt
+				}
+
+			}
+
+			if v, ok := rulesMapStrToI["client_region"]; ok && !isIntfNil(v) && !identifierTypeFound {
+
+				identifierTypeFound = true
+
+				if v.(bool) {
+					identifierInt := &ves_io_schema_user_identification.UserIdentificationRule_ClientRegion{}
+					identifierInt.ClientRegion = &ves_io_schema.Empty{}
 					rules[i].Identifier = identifierInt
 				}
 
@@ -421,6 +475,30 @@ func resourceVolterraUserIdentificationUpdate(d *schema.ResourceData, meta inter
 
 			}
 
+			if v, ok := rulesMapStrToI["client_city"]; ok && !isIntfNil(v) && !identifierTypeFound {
+
+				identifierTypeFound = true
+
+				if v.(bool) {
+					identifierInt := &ves_io_schema_user_identification.UserIdentificationRule_ClientCity{}
+					identifierInt.ClientCity = &ves_io_schema.Empty{}
+					rules[i].Identifier = identifierInt
+				}
+
+			}
+
+			if v, ok := rulesMapStrToI["client_country"]; ok && !isIntfNil(v) && !identifierTypeFound {
+
+				identifierTypeFound = true
+
+				if v.(bool) {
+					identifierInt := &ves_io_schema_user_identification.UserIdentificationRule_ClientCountry{}
+					identifierInt.ClientCountry = &ves_io_schema.Empty{}
+					rules[i].Identifier = identifierInt
+				}
+
+			}
+
 			if v, ok := rulesMapStrToI["client_ip"]; ok && !isIntfNil(v) && !identifierTypeFound {
 
 				identifierTypeFound = true
@@ -428,6 +506,18 @@ func resourceVolterraUserIdentificationUpdate(d *schema.ResourceData, meta inter
 				if v.(bool) {
 					identifierInt := &ves_io_schema_user_identification.UserIdentificationRule_ClientIp{}
 					identifierInt.ClientIp = &ves_io_schema.Empty{}
+					rules[i].Identifier = identifierInt
+				}
+
+			}
+
+			if v, ok := rulesMapStrToI["client_region"]; ok && !isIntfNil(v) && !identifierTypeFound {
+
+				identifierTypeFound = true
+
+				if v.(bool) {
+					identifierInt := &ves_io_schema_user_identification.UserIdentificationRule_ClientRegion{}
+					identifierInt.ClientRegion = &ves_io_schema.Empty{}
 					rules[i].Identifier = identifierInt
 				}
 
