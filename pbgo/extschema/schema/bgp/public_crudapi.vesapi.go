@@ -800,7 +800,13 @@ func (c *crudAPIRestClient) Delete(ctx context.Context, key string, opts ...serv
 }
 
 func NewCRUDAPIRestClient(baseURL string, cl http.Client) server.CRUDClient {
-	crcl := &crudAPIRestClient{baseURL, cl}
+	var bURL string
+	if strings.HasSuffix(baseURL, "/") {
+		bURL = baseURL[:len(baseURL)-1]
+	} else {
+		bURL = baseURL
+	}
+	crcl := &crudAPIRestClient{bURL, cl}
 	return crcl
 }
 
@@ -3938,14 +3944,16 @@ var APISwaggerJSON string = `{
                 },
                 "ref": {
                     "type": "array",
-                    "description": " A site direct reference\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 1\n",
+                    "description": " A site direct reference\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 1\n",
                     "title": "ref",
                     "maxItems": 1,
                     "items": {
                         "$ref": "#/definitions/ioschemaObjectRefType"
                     },
                     "x-displayname": "Reference",
+                    "x-ves-required": "true",
                     "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
                         "ves.io.schema.rules.repeated.max_items": "1"
                     }
                 }
@@ -4344,14 +4352,16 @@ var APISwaggerJSON string = `{
                 },
                 "ref": {
                     "type": "array",
-                    "description": " A virtual_site direct reference\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 1\n",
+                    "description": " A virtual_site direct reference\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 1\n",
                     "title": "ref",
                     "maxItems": 1,
                     "items": {
                         "$ref": "#/definitions/ioschemaObjectRefType"
                     },
                     "x-displayname": "Reference",
+                    "x-ves-required": "true",
                     "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
                         "ves.io.schema.rules.repeated.max_items": "1"
                     }
                 }

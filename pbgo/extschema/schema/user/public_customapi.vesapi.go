@@ -4712,6 +4712,13 @@ var CustomAPISwaggerJSON string = `{
                     "title": "User type",
                     "$ref": "#/definitions/userUserType",
                     "x-displayname": "User Type"
+                },
+                "user_uuid": {
+                    "type": "string",
+                    "description": " User UUId of the currently logged in user\n\nExample: - \"0795c420-4c6f-406d-a3c9-502baa4ead3b\"-",
+                    "title": "User UUId",
+                    "x-displayname": "User UUId",
+                    "x-ves-example": "0795c420-4c6f-406d-a3c9-502baa4ead3b"
                 }
             }
         },

@@ -46,6 +46,15 @@ func (r *ObjectCreateReq) ToEntry(e db.Entry) {
 	r.ToObject(e)
 }
 
+// db.Redactor
+func (r *ObjectCreateReq) Redact(ctx context.Context) error {
+	spec := r.GetSpec()
+	if r, ok := interface{}(spec).(db.Redactor); ok {
+		return r.Redact(ctx)
+	}
+	return nil
+}
+
 // create setters in object from request for oneof fields
 
 // EntryConverter
@@ -55,6 +64,15 @@ func (r *ObjectReplaceReq) FromEntry(e db.Entry) {
 
 func (r *ObjectReplaceReq) ToEntry(e db.Entry) {
 	r.ToObject(e)
+}
+
+// db.Redactor
+func (r *ObjectReplaceReq) Redact(ctx context.Context) error {
+	spec := r.GetSpec()
+	if r, ok := interface{}(spec).(db.Redactor); ok {
+		return r.Redact(ctx)
+	}
+	return nil
 }
 
 // create setters in object from request for oneof fields
@@ -748,7 +766,13 @@ func (c *crudAPIRestClient) Delete(ctx context.Context, key string, opts ...serv
 }
 
 func NewCRUDAPIRestClient(baseURL string, cl http.Client) server.CRUDClient {
-	crcl := &crudAPIRestClient{baseURL, cl}
+	var bURL string
+	if strings.HasSuffix(baseURL, "/") {
+		bURL = baseURL[:len(baseURL)-1]
+	} else {
+		bURL = baseURL
+	}
+	crcl := &crudAPIRestClient{bURL, cl}
 	return crcl
 }
 
@@ -2891,7 +2915,7 @@ var APISwaggerJSON string = `{
                 "enable_internet_vip": {
                     "description": "Exclusive with [disable_internet_vip]\n Enable Internet VIP.",
                     "title": "Enable Internet VIP",
-                    "$ref": "#/definitions/viewsAWSInternetVIPType",
+                    "$ref": "#/definitions/schemaEmpty",
                     "x-displayname": "Enable Internet VIP"
                 },
                 "existing_tgw": {
@@ -3172,6 +3196,18 @@ var APISwaggerJSON string = `{
             "x-ves-oneof-field-site_mesh_group_choice": "[\"sm_connection_public_ip\",\"sm_connection_pvt_ip\"]",
             "x-ves-proto-message": "ves.io.schema.views.aws_tgw_site.VnConfiguration",
             "properties": {
+                "allowed_vip_port": {
+                    "description": " Allowed VIP Port Configuration",
+                    "title": "Allowed VIP Port Configuration",
+                    "$ref": "#/definitions/viewsAllowedVIPPorts",
+                    "x-displayname": "Allowed VIP Port Configuration"
+                },
+                "allowed_vip_port_sli": {
+                    "description": " Allowed VIP Port Configuration for Inside Network",
+                    "title": "Allowed VIP Port Configuration for Inside Network",
+                    "$ref": "#/definitions/viewsAllowedVIPPorts",
+                    "x-displayname": "Allowed VIP Port Configuration for Inside Network"
+                },
                 "dc_cluster_group_inside_vn": {
                     "description": "Exclusive with [dc_cluster_group_outside_vn no_dc_cluster_group]\n This site is member of dc cluster group connected via inside network",
                     "title": "Member of DC cluster Group via Inside Network",
@@ -5011,28 +5047,6 @@ var APISwaggerJSON string = `{
                 }
             }
         },
-        "viewsAWSInternetVIPType": {
-            "type": "object",
-            "description": "AWS Internet VIP Type",
-            "title": "AWS Internet VIP Type",
-            "x-displayname": "AWS Internet VIP Type",
-            "x-ves-oneof-field-internet_vip_subnet_choice": "[\"reserved_internet_nlb_subnet\",\"subnet\"]",
-            "x-ves-proto-message": "ves.io.schema.views.AWSInternetVIPType",
-            "properties": {
-                "reserved_internet_nlb_subnet": {
-                    "description": "Exclusive with [subnet]\n Autogenerate Internet NLB and reserve a subnet from the Primary CIDR",
-                    "title": "Autogenerate Internet NLB Subnet",
-                    "$ref": "#/definitions/schemaEmpty",
-                    "x-displayname": "Autogenerate Internet NLB Subnet"
-                },
-                "subnet": {
-                    "description": "Exclusive with [reserved_internet_nlb_subnet]\n Select Existing Subnet for Internet NLB Subnet or Create New",
-                    "title": "Specify Subnet",
-                    "$ref": "#/definitions/viewsCloudSubnetType",
-                    "x-displayname": "Specify Subnet for Internet NLB Subnet"
-                }
-            }
-        },
         "viewsAWSSubnetIdsType": {
             "type": "object",
             "description": "AWS Subnet Ids used by volterra site",
@@ -5228,28 +5242,56 @@ var APISwaggerJSON string = `{
         },
         "viewsAllowedVIPPorts": {
             "type": "object",
-            "description": "x-displayName: \"Allowed VIP Ports\"\nThis defines the TCP port(s) which will be opened on the cloud loadbalancer.\nSuch that the client can use the cloud VIP IP and port combination\nto reach TCP/HTTP lb configured on the F5XC Site",
+            "description": "This defines the TCP port(s) which will be opened on the cloud loadbalancer.\nSuch that the client can use the cloud VIP IP and port combination\nto reach TCP/HTTP lb configured on the F5XC Site",
             "title": "Allowed VIP Ports",
+            "x-displayname": "Allowed VIP Ports",
+            "x-ves-oneof-field-port_choice": "[\"custom_ports\",\"use_http_https_port\",\"use_http_port\",\"use_https_port\"]",
+            "x-ves-proto-message": "ves.io.schema.views.AllowedVIPPorts",
             "properties": {
                 "custom_ports": {
-                    "description": "x-displayName: \" Ports Allowed on Public\"\nCustom list of ports to be allowed",
+                    "description": "Exclusive with [use_http_https_port use_http_port use_https_port]\n Custom list of ports to be allowed",
                     "title": "Custom Ports",
-                    "$ref": "#/definitions/viewsCustomPorts"
+                    "$ref": "#/definitions/viewsCustomPorts",
+                    "x-displayname": " Ports Allowed on Public"
                 },
                 "use_http_https_port": {
-                    "description": "x-displayName: \"Allow HTTP \u0026 HTTPS Port\"\nHTTP Port (80) \u0026 HTTPS Port (443) will be allowed.",
+                    "description": "Exclusive with [custom_ports use_http_port use_https_port]\n HTTP Port (80) \u0026 HTTPS Port (443) will be allowed.",
                     "title": "Allow HTTP \u0026 HTTPS Port",
-                    "$ref": "#/definitions/schemaEmpty"
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Allow HTTP \u0026 HTTPS Port"
                 },
                 "use_http_port": {
-                    "description": "x-displayName: \"Allow HTTP Port\"\nOnly HTTP Port (80) will be allowed.",
+                    "description": "Exclusive with [custom_ports use_http_https_port use_https_port]\n Only HTTP Port (80) will be allowed.",
                     "title": "Allow HTTP Port",
-                    "$ref": "#/definitions/schemaEmpty"
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Allow HTTP Port"
                 },
                 "use_https_port": {
-                    "description": "x-displayName: \"Allow HTTPS Port\"\nOnly HTTPS Port (443) will be allowed.",
+                    "description": "Exclusive with [custom_ports use_http_https_port use_http_port]\n Only HTTPS Port (443) will be allowed.",
                     "title": "Allow HTTPS Port",
-                    "$ref": "#/definitions/schemaEmpty"
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Allow HTTPS Port"
+                }
+            }
+        },
+        "viewsCloudLinkADNType": {
+            "type": "object",
+            "title": "Cloud Link ADN Network Config",
+            "x-displayname": "Cloud Link ADN Network Config",
+            "x-ves-proto-message": "ves.io.schema.views.CloudLinkADNType",
+            "properties": {
+                "cloudlink_network_name": {
+                    "type": "string",
+                    "description": " Cloud Link ADN Network Name for private access connectivity to F5XC ADN.\n\nExample: - \"private-cloud-ntw\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_bytes: 64\n",
+                    "title": "Cloud Link ADN Network Name",
+                    "maxLength": 64,
+                    "x-displayname": "Cloud Link ADN Network Name",
+                    "x-ves-example": "private-cloud-ntw",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.max_bytes": "64"
+                    }
                 }
             }
         },
@@ -5306,13 +5348,26 @@ var APISwaggerJSON string = `{
         },
         "viewsCustomPorts": {
             "type": "object",
-            "description": "x-displayName: \"Custom Ports\"\nList of Custom port",
+            "description": "List of Custom port",
             "title": "Custom Ports",
+            "x-displayname": "Custom Ports",
+            "x-ves-proto-message": "ves.io.schema.views.CustomPorts",
             "properties": {
                 "port_ranges": {
                     "type": "string",
-                    "description": "x-displayName: \"Port Ranges\"\nx-required\nx-example: \"80, 8080-8085\"\nPort Ranges",
-                    "title": "Port Ranges"
+                    "description": " Port Ranges\n\nExample: - \"80, 8080-8085\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 512\n  ves.io.schema.rules.string.min_len: 1\n  ves.io.schema.rules.string.port_range_list: true\n",
+                    "title": "Port Ranges",
+                    "minLength": 1,
+                    "maxLength": 512,
+                    "x-displayname": "Port Ranges",
+                    "x-ves-example": "80, 8080-8085",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.max_len": "512",
+                        "ves.io.schema.rules.string.min_len": "1",
+                        "ves.io.schema.rules.string.port_range_list": "true"
+                    }
                 }
             }
         },
@@ -5469,23 +5524,35 @@ var APISwaggerJSON string = `{
         },
         "viewsHostedVIFConfigType": {
             "type": "object",
-            "description": "Hosted VIF Configuration",
-            "title": "HostedVIFConfigType",
-            "x-displayname": "Hosted VIF Config",
+            "description": "x-example: \"value\"\nAWS Direct Connect Hosted VIF Configuration",
+            "title": "AWS Direct Connect Hosted VIF Config",
+            "x-displayname": "AWS Direct Connect Hosted VIF Config",
+            "x-ves-oneof-field-connectivity_options": "[\"site_registration_over_direct_connect\",\"site_registration_over_internet\"]",
             "x-ves-proto-message": "ves.io.schema.views.HostedVIFConfigType",
             "properties": {
-                "vifs": {
+                "site_registration_over_direct_connect": {
+                    "description": "Exclusive with [site_registration_over_internet]\n Site Registration and Site to RE tunnels go over the AWS Direct Connect Connection\n\nExample: - \"64512\"-",
+                    "title": "Site Registration \u0026 Connectivity to RE over AWS Direct Connect",
+                    "$ref": "#/definitions/viewsCloudLinkADNType",
+                    "x-displayname": "Site Registration \u0026 Connectivity to RE over AWS Direct Connect",
+                    "x-ves-example": "64512"
+                },
+                "site_registration_over_internet": {
+                    "description": "Exclusive with [site_registration_over_direct_connect]\n Site Registration and Site to RE tunnels go over the internet gateway",
+                    "title": "Site Registration \u0026 Connectivity to RE over Internet",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Site Registration \u0026 Connectivity to RE over Internet Gateway"
+                },
+                "vif_list": {
                     "type": "array",
-                    "description": " VIFs\n\nExample: - \"value\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.pattern: ^(dxvif-)([a-z0-9]{8}|[a-z0-9]{17})$\n  ves.io.schema.rules.repeated.max_items: 30\n  ves.io.schema.rules.repeated.unique: true\n",
-                    "title": "Hosted VIFs",
+                    "description": " List of Hosted VIF Config\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 30\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "title": "List of Hosted VIF Config",
                     "maxItems": 30,
                     "items": {
-                        "type": "string"
+                        "$ref": "#/definitions/viewsVifRegionConfig"
                     },
-                    "x-displayname": "List of VIF IDs",
-                    "x-ves-example": "value",
+                    "x-displayname": "List of Hosted VIF Config",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.repeated.items.string.pattern": "^(dxvif-)([a-z0-9]{8}|[a-z0-9]{17})$",
                         "ves.io.schema.rules.repeated.max_items": "30",
                         "ves.io.schema.rules.repeated.unique": "true"
                     }
@@ -5594,6 +5661,44 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "viewsVifRegionConfig": {
+            "type": "object",
+            "description": "x-example: \"value\"\nAWS Direct Connect Hosted VIF Config Per Region Object",
+            "title": "HostedVIFRegionObject",
+            "x-displayname": "Hosted VIF Config Per Region Object",
+            "x-ves-displayorder": "5,2",
+            "x-ves-oneof-field-vif_region_choice": "[\"other_region\",\"same_as_site_region\"]",
+            "x-ves-proto-message": "ves.io.schema.views.VifRegionConfig",
+            "properties": {
+                "other_region": {
+                    "type": "string",
+                    "description": "Exclusive with [same_as_site_region]\n Other Region\n\nValidation Rules:\n  ves.io.schema.rules.string.in: [\\\"af-south-1\\\",\\\"ap-east-1\\\",\\\"ap-northeast-1\\\",\\\"ap-northeast-2\\\",\\\"ap-south-1\\\",\\\"ap-southeast-1\\\",\\\"ap-southeast-2\\\",\\\"ap-southeast-3\\\",\\\"ca-central-1\\\",\\\"eu-central-1\\\",\\\"eu-north-1\\\",\\\"eu-south-1\\\",\\\"eu-west-1\\\",\\\"eu-west-2\\\",\\\"eu-west-3\\\",\\\"me-south-1\\\",\\\"sa-east-1\\\",\\\"us-east-1\\\",\\\"us-east-2\\\",\\\"us-west-1\\\",\\\"us-west-2\\\"]\n",
+                    "title": "Other Region",
+                    "x-displayname": "Other Region",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.in": "[\\\"af-south-1\\\",\\\"ap-east-1\\\",\\\"ap-northeast-1\\\",\\\"ap-northeast-2\\\",\\\"ap-south-1\\\",\\\"ap-southeast-1\\\",\\\"ap-southeast-2\\\",\\\"ap-southeast-3\\\",\\\"ca-central-1\\\",\\\"eu-central-1\\\",\\\"eu-north-1\\\",\\\"eu-south-1\\\",\\\"eu-west-1\\\",\\\"eu-west-2\\\",\\\"eu-west-3\\\",\\\"me-south-1\\\",\\\"sa-east-1\\\",\\\"us-east-1\\\",\\\"us-east-2\\\",\\\"us-west-1\\\",\\\"us-west-2\\\"]"
+                    }
+                },
+                "same_as_site_region": {
+                    "description": "Exclusive with [other_region]\n Use same region as that of the Site",
+                    "title": "Same Region as Site",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Same Region as Site"
+                },
+                "vif_id": {
+                    "type": "string",
+                    "description": " AWS Direct Connect VIF ID that needs to be connected to the site\n\nExample: - \"dxvif-fgwtckim\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.pattern: ^(dxvif-)([a-z0-9]{8}|[a-z0-9]{17})$\n",
+                    "title": "VIF ID",
+                    "x-displayname": "VIF ID",
+                    "x-ves-example": "dxvif-fgwtckim",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.pattern": "^(dxvif-)([a-z0-9]{8}|[a-z0-9]{17})$"
+                    }
+                }
+            }
+        },
         "viewsVolterraSoftwareType": {
             "type": "object",
             "description": "This is to specify volterra software version choice",
@@ -5666,7 +5771,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Co-ordinates"
                 },
                 "default_blocked_services": {
-                    "description": "Exclusive with [blocked_services]\n Use default dehavior of allowing ports mentioned in blocked services",
+                    "description": "Exclusive with [blocked_services]\n Use default behavior of allowing ports mentioned in blocked services",
                     "title": "Default Blocked Service Configuration",
                     "$ref": "#/definitions/schemaEmpty",
                     "x-displayname": "Default Blocked Service Configuration"
@@ -5721,13 +5826,13 @@ var APISwaggerJSON string = `{
                 },
                 "tags": {
                     "type": "object",
-                    "description": " AWS Tags is a label consisting of a user-defined key and value.\n It helps to manage, identify, organize, search for, and filter resources in AWS console.\n\nExample: - \"devstaging\"-\n\nValidation Rules:\n  ves.io.schema.rules.map.keys.string.max_len: 127\n  ves.io.schema.rules.map.max_pairs: 5\n  ves.io.schema.rules.map.values.string.max_len: 255\n",
+                    "description": " AWS Tags is a label consisting of a user-defined key and value.\n It helps to manage, identify, organize, search for, and filter resources in AWS console.\n\nExample: - \"devstaging\"-\n\nValidation Rules:\n  ves.io.schema.rules.map.keys.string.max_len: 127\n  ves.io.schema.rules.map.max_pairs: 10\n  ves.io.schema.rules.map.values.string.max_len: 255\n",
                     "title": "AWS Tags",
                     "x-displayname": "AWS Tags",
                     "x-ves-example": "dev: staging",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.map.keys.string.max_len": "127",
-                        "ves.io.schema.rules.map.max_pairs": "5",
+                        "ves.io.schema.rules.map.max_pairs": "10",
                         "ves.io.schema.rules.map.values.string.max_len": "255"
                     }
                 },

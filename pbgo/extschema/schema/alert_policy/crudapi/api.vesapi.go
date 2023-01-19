@@ -46,6 +46,15 @@ func (r *ObjectCreateReq) ToEntry(e db.Entry) {
 	r.ToObject(e)
 }
 
+// db.Redactor
+func (r *ObjectCreateReq) Redact(ctx context.Context) error {
+	spec := r.GetSpec()
+	if r, ok := interface{}(spec).(db.Redactor); ok {
+		return r.Redact(ctx)
+	}
+	return nil
+}
+
 // create setters in object from request for oneof fields
 
 // EntryConverter
@@ -55,6 +64,15 @@ func (r *ObjectReplaceReq) FromEntry(e db.Entry) {
 
 func (r *ObjectReplaceReq) ToEntry(e db.Entry) {
 	r.ToObject(e)
+}
+
+// db.Redactor
+func (r *ObjectReplaceReq) Redact(ctx context.Context) error {
+	spec := r.GetSpec()
+	if r, ok := interface{}(spec).(db.Redactor); ok {
+		return r.Redact(ctx)
+	}
+	return nil
 }
 
 // create setters in object from request for oneof fields
@@ -748,7 +766,13 @@ func (c *crudAPIRestClient) Delete(ctx context.Context, key string, opts ...serv
 }
 
 func NewCRUDAPIRestClient(baseURL string, cl http.Client) server.CRUDClient {
-	crcl := &crudAPIRestClient{baseURL, cl}
+	var bURL string
+	if strings.HasSuffix(baseURL, "/") {
+		bURL = baseURL[:len(baseURL)-1]
+	} else {
+		bURL = baseURL
+	}
+	crcl := &crudAPIRestClient{bURL, cl}
 	return crcl
 }
 
@@ -2618,13 +2642,19 @@ var APISwaggerJSON string = `{
             "properties": {
                 "labels": {
                     "type": "array",
-                    "description": " Name of labels to group/aggregate the alerts\n\nExample: - \"value\"-",
+                    "description": " Name of labels to group/aggregate the alerts\n\nExample: - \"value\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 5\n  ves.io.schema.rules.repeated.unique: true\n  ves.io.schema.rules.string.pattern: ^[a-zA-Z_][a-zA-Z0-9_]*$\n",
                     "title": "labels",
+                    "maxItems": 5,
                     "items": {
                         "type": "string"
                     },
                     "x-displayname": "Labels",
-                    "x-ves-example": "value"
+                    "x-ves-example": "value",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "5",
+                        "ves.io.schema.rules.repeated.unique": "true",
+                        "ves.io.schema.rules.string.pattern": "^[a-zA-Z_][a-zA-Z0-9_]*$"
+                    }
                 }
             }
         },
@@ -2638,12 +2668,13 @@ var APISwaggerJSON string = `{
             "properties": {
                 "alertlabel": {
                     "type": "object",
-                    "description": " AlertLabel to configure the alert policy rule\n\nValidation Rules:\n  ves.io.schema.rules.map.keys.string.max_len: 64\n  ves.io.schema.rules.map.keys.string.min_len: 1\n  ves.io.schema.rules.map.max_pairs: 3\n",
+                    "description": " AlertLabel to configure the alert policy rule\n\nValidation Rules:\n  ves.io.schema.rules.map.keys.string.max_len: 64\n  ves.io.schema.rules.map.keys.string.min_len: 1\n  ves.io.schema.rules.map.keys.string.pattern: ^[a-zA-Z_][a-zA-Z0-9_]*$\n  ves.io.schema.rules.map.max_pairs: 3\n",
                     "title": "AlertLabel",
                     "x-displayname": "AlertLabel",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.map.keys.string.max_len": "64",
                         "ves.io.schema.rules.map.keys.string.min_len": "1",
+                        "ves.io.schema.rules.map.keys.string.pattern": "^[a-zA-Z_][a-zA-Z0-9_]*$",
                         "ves.io.schema.rules.map.max_pairs": "3"
                     }
                 },

@@ -801,7 +801,7 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	vrhGcpLabels := v.GcpLabelsValidationRuleHandler
 	rulesGcpLabels := map[string]string{
 		"ves.io.schema.rules.map.keys.string.max_len":   "127",
-		"ves.io.schema.rules.map.max_pairs":             "5",
+		"ves.io.schema.rules.map.max_pairs":             "10",
 		"ves.io.schema.rules.map.values.string.max_len": "255",
 	}
 	vFn, err = vrhGcpLabels(rulesGcpLabels)
@@ -5542,6 +5542,15 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 
 	}
 
+	if fv, exists := v.FldValidators["user_modification_timestamp"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("user_modification_timestamp"))
+		if err := fv(ctx, m.GetUserModificationTimestamp(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["volterra_software_version"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("volterra_software_version"))
@@ -5704,7 +5713,7 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	vrhGcpLabels := v.GcpLabelsValidationRuleHandler
 	rulesGcpLabels := map[string]string{
 		"ves.io.schema.rules.map.keys.string.max_len":   "127",
-		"ves.io.schema.rules.map.max_pairs":             "5",
+		"ves.io.schema.rules.map.max_pairs":             "10",
 		"ves.io.schema.rules.map.values.string.max_len": "255",
 	}
 	vFn, err = vrhGcpLabels(rulesGcpLabels)
@@ -6562,6 +6571,15 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["user_modification_timestamp"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("user_modification_timestamp"))
+		if err := fv(ctx, m.GetUserModificationTimestamp(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["view_internal"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("view_internal"))
@@ -6733,7 +6751,7 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	vrhGcpLabels := v.GcpLabelsValidationRuleHandler
 	rulesGcpLabels := map[string]string{
 		"ves.io.schema.rules.map.keys.string.max_len":   "127",
-		"ves.io.schema.rules.map.max_pairs":             "5",
+		"ves.io.schema.rules.map.max_pairs":             "10",
 		"ves.io.schema.rules.map.values.string.max_len": "255",
 	}
 	vFn, err = vrhGcpLabels(rulesGcpLabels)
@@ -8200,6 +8218,7 @@ func (m *GetSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 
 	m.GetSiteTypeFromGlobalSpecType(f)
 	m.SshKey = f.GetSshKey()
+	m.UserModificationTimestamp = f.GetUserModificationTimestamp()
 	m.VolterraSoftwareVersion = f.GetVolterraSoftwareVersion()
 }
 
@@ -8234,6 +8253,7 @@ func (m *GetSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 
 	m1.SetSiteTypeToGlobalSpecType(f)
 	f.SshKey = m1.SshKey
+	f.UserModificationTimestamp = m1.UserModificationTimestamp
 	f.VolterraSoftwareVersion = m1.VolterraSoftwareVersion
 }
 

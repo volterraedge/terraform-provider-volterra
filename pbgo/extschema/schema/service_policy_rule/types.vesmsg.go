@@ -1919,6 +1919,15 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["request_constraints"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("request_constraints"))
+		if err := fv(ctx, m.GetRequestConstraints(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["scheme"]; exists {
 		vOpts := append(opts, db.WithValidateField("scheme"))
 		if err := fv(ctx, m.GetScheme(), vOpts...); err != nil {
@@ -2204,6 +2213,8 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	v.FldValidators["mum_action"] = ves_io_schema_policy.ModifyActionValidator().Validate
 
 	v.FldValidators["ip_reputation_action"] = ves_io_schema_policy.ModifyActionValidator().Validate
+
+	v.FldValidators["request_constraints"] = ves_io_schema_policy.RequestConstraintTypeValidator().Validate
 
 	return v
 }()
@@ -3395,6 +3406,15 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 
 	}
 
+	if fv, exists := v.FldValidators["request_constraints"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("request_constraints"))
+		if err := fv(ctx, m.GetRequestConstraints(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["scheme"]; exists {
 		vOpts := append(opts, db.WithValidateField("scheme"))
 		if err := fv(ctx, m.GetScheme(), vOpts...); err != nil {
@@ -3680,6 +3700,8 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v.FldValidators["mum_action"] = ves_io_schema_policy.ModifyActionValidator().Validate
 
 	v.FldValidators["ip_reputation_action"] = ves_io_schema_policy.ModifyActionValidator().Validate
+
+	v.FldValidators["request_constraints"] = ves_io_schema_policy.RequestConstraintTypeValidator().Validate
 
 	return v
 }()
@@ -4844,6 +4866,15 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["graphql_settings"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("graphql_settings"))
+		if err := fv(ctx, m.GetGraphqlSettings(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["headers"]; exists {
 		vOpts := append(opts, db.WithValidateField("headers"))
 		if err := fv(ctx, m.GetHeaders(), vOpts...); err != nil {
@@ -4973,6 +5004,15 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 	if fv, exists := v.FldValidators["rate_limiter"]; exists {
 		vOpts := append(opts, db.WithValidateField("rate_limiter"))
 		if err := fv(ctx, m.GetRateLimiter(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["request_constraints"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("request_constraints"))
+		if err := fv(ctx, m.GetRequestConstraints(), vOpts...); err != nil {
 			return err
 		}
 
@@ -5285,6 +5325,10 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v.FldValidators["ip_reputation_action"] = ves_io_schema_policy.ModifyActionValidator().Validate
 
 	v.FldValidators["user_identity_matcher"] = ves_io_schema_policy.MatcherTypeBasicValidator().Validate
+
+	v.FldValidators["request_constraints"] = ves_io_schema_policy.RequestConstraintTypeValidator().Validate
+
+	v.FldValidators["graphql_settings"] = ves_io_schema_policy.GraphQLSettingsTypeValidator().Validate
 
 	return v
 }()
@@ -7166,6 +7210,15 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 
 	}
 
+	if fv, exists := v.FldValidators["request_constraints"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("request_constraints"))
+		if err := fv(ctx, m.GetRequestConstraints(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["scheme"]; exists {
 		vOpts := append(opts, db.WithValidateField("scheme"))
 		if err := fv(ctx, m.GetScheme(), vOpts...); err != nil {
@@ -7451,6 +7504,8 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	v.FldValidators["mum_action"] = ves_io_schema_policy.ModifyActionValidator().Validate
 
 	v.FldValidators["ip_reputation_action"] = ves_io_schema_policy.ModifyActionValidator().Validate
+
+	v.FldValidators["request_constraints"] = ves_io_schema_policy.RequestConstraintTypeValidator().Validate
 
 	return v
 }()
@@ -7934,6 +7989,7 @@ func (m *CreateSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool
 	m.PortMatcher = f.GetPortMatcher()
 	m.QueryParams = f.GetQueryParams()
 	m.RateLimiter = f.GetRateLimiter()
+	m.RequestConstraints = f.GetRequestConstraints()
 	m.Scheme = f.GetScheme()
 	m.ServerSelector = f.GetServerSelector()
 	m.ShapeProtectedEndpointAction = f.GetShapeProtectedEndpointAction()
@@ -8006,6 +8062,7 @@ func (m *CreateSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) 
 	f.PortMatcher = m1.PortMatcher
 	f.QueryParams = m1.QueryParams
 	f.RateLimiter = m1.RateLimiter
+	f.RequestConstraints = m1.RequestConstraints
 	f.Scheme = m1.Scheme
 	f.ServerSelector = m1.ServerSelector
 	f.ShapeProtectedEndpointAction = m1.ShapeProtectedEndpointAction
@@ -8301,6 +8358,7 @@ func (m *GetSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	m.PortMatcher = f.GetPortMatcher()
 	m.QueryParams = f.GetQueryParams()
 	m.RateLimiter = f.GetRateLimiter()
+	m.RequestConstraints = f.GetRequestConstraints()
 	m.Scheme = f.GetScheme()
 	m.ServerSelector = f.GetServerSelector()
 	m.ShapeProtectedEndpointAction = f.GetShapeProtectedEndpointAction()
@@ -8373,6 +8431,7 @@ func (m *GetSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	f.PortMatcher = m1.PortMatcher
 	f.QueryParams = m1.QueryParams
 	f.RateLimiter = m1.RateLimiter
+	f.RequestConstraints = m1.RequestConstraints
 	f.Scheme = m1.Scheme
 	f.ServerSelector = m1.ServerSelector
 	f.ShapeProtectedEndpointAction = m1.ShapeProtectedEndpointAction
@@ -8815,6 +8874,7 @@ func (m *ReplaceSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy boo
 	m.PortMatcher = f.GetPortMatcher()
 	m.QueryParams = f.GetQueryParams()
 	m.RateLimiter = f.GetRateLimiter()
+	m.RequestConstraints = f.GetRequestConstraints()
 	m.Scheme = f.GetScheme()
 	m.ServerSelector = f.GetServerSelector()
 	m.ShapeProtectedEndpointAction = f.GetShapeProtectedEndpointAction()
@@ -8887,6 +8947,7 @@ func (m *ReplaceSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool)
 	f.PortMatcher = m1.PortMatcher
 	f.QueryParams = m1.QueryParams
 	f.RateLimiter = m1.RateLimiter
+	f.RequestConstraints = m1.RequestConstraints
 	f.Scheme = m1.Scheme
 	f.ServerSelector = m1.ServerSelector
 	f.ShapeProtectedEndpointAction = m1.ShapeProtectedEndpointAction

@@ -1277,6 +1277,28 @@ func (v *ValidateAPIGroupChoice) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
+	case *APIGroupChoice_F5XcSupportOperationsMonitor:
+		if fv, exists := v.FldValidators["choice.f5xc_support_operations_monitor"]; exists {
+			val := m.GetChoice().(*APIGroupChoice_F5XcSupportOperationsMonitor).F5XcSupportOperationsMonitor
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("f5xc_support_operations_monitor"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *APIGroupChoice_F5XcSupportOperationsUser:
+		if fv, exists := v.FldValidators["choice.f5xc_support_operations_user"]; exists {
+			val := m.GetChoice().(*APIGroupChoice_F5XcSupportOperationsUser).F5XcSupportOperationsUser
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("f5xc_support_operations_user"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 

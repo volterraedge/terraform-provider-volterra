@@ -1948,6 +1948,54 @@ func (v *ValidateAdvancedOptionsType) IdleTimeoutValidationRuleHandler(rules map
 	return validatorFn, nil
 }
 
+func (v *ValidateAdvancedOptionsType) CookiesToModifyValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for cookies_to_modify")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema.CookieManipulationOptionType, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := ves_io_schema.CookieManipulationOptionTypeValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for cookies_to_modify")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema.CookieManipulationOptionType)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema.CookieManipulationOptionType, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated cookies_to_modify")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items cookies_to_modify")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateAdvancedOptionsType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*AdvancedOptionsType)
 	if !ok {
@@ -1975,6 +2023,14 @@ func (v *ValidateAdvancedOptionsType) Validate(ctx context.Context, pm interface
 
 		vOpts := append(opts, db.WithValidateField("compression_params"))
 		if err := fv(ctx, m.GetCompressionParams(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["cookies_to_modify"]; exists {
+		vOpts := append(opts, db.WithValidateField("cookies_to_modify"))
+		if err := fv(ctx, m.GetCookiesToModify(), vOpts...); err != nil {
 			return err
 		}
 
@@ -2230,6 +2286,20 @@ var DefaultAdvancedOptionsTypeValidator = func() *ValidateAdvancedOptionsType {
 		panic(errMsg)
 	}
 	v.FldValidators["idle_timeout"] = vFn
+
+	vrhCookiesToModify := v.CookiesToModifyValidationRuleHandler
+	rulesCookiesToModify := map[string]string{
+		"ves.io.schema.rules.repeated.items.string.max_bytes": "256",
+		"ves.io.schema.rules.repeated.items.string.min_bytes": "1",
+		"ves.io.schema.rules.repeated.max_items":              "32",
+		"ves.io.schema.rules.repeated.unique":                 "true",
+	}
+	vFn, err = vrhCookiesToModify(rulesCookiesToModify)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for AdvancedOptionsType.cookies_to_modify: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["cookies_to_modify"] = vFn
 
 	v.FldValidators["strict_sni_host_header_check_choice.additional_domains"] = ves_io_schema.DomainNameListValidator().Validate
 
@@ -5750,6 +5820,54 @@ func (v *ValidateCreateSpecType) DataGuardRulesValidationRuleHandler(rules map[s
 	return validatorFn, nil
 }
 
+func (v *ValidateCreateSpecType) GraphqlRulesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for graphql_rules")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_policy.GraphQLRule, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := ves_io_schema_policy.GraphQLRuleValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for graphql_rules")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema_policy.GraphQLRule)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema_policy.GraphQLRule, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated graphql_rules")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items graphql_rules")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*CreateSpecType)
 	if !ok {
@@ -6122,6 +6240,14 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 	if fv, exists := v.FldValidators["domains"]; exists {
 		vOpts := append(opts, db.WithValidateField("domains"))
 		if err := fv(ctx, m.GetDomains(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["graphql_rules"]; exists {
+		vOpts := append(opts, db.WithValidateField("graphql_rules"))
+		if err := fv(ctx, m.GetGraphqlRules(), vOpts...); err != nil {
 			return err
 		}
 
@@ -6893,6 +7019,18 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	}
 	v.FldValidators["data_guard_rules"] = vFn
 
+	vrhGraphqlRules := v.GraphqlRulesValidationRuleHandler
+	rulesGraphqlRules := map[string]string{
+		"ves.io.schema.rules.repeated.max_items":            "64",
+		"ves.io.schema.rules.repeated.unique_metadata_name": "true",
+	}
+	vFn, err = vrhGraphqlRules(rulesGraphqlRules)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateSpecType.graphql_rules: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["graphql_rules"] = vFn
+
 	v.FldValidators["advertise_choice.advertise_on_public"] = ves_io_schema_views.AdvertisePublicValidator().Validate
 	v.FldValidators["advertise_choice.advertise_custom"] = ves_io_schema_views.AdvertiseCustomValidator().Validate
 
@@ -7617,6 +7755,101 @@ var DefaultDDoSMitigationRuleValidator = func() *ValidateDDoSMitigationRule {
 
 func DDoSMitigationRuleValidator() db.Validator {
 	return DefaultDDoSMitigationRuleValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *EnableDDoSDetectionSetting) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *EnableDDoSDetectionSetting) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *EnableDDoSDetectionSetting) DeepCopy() *EnableDDoSDetectionSetting {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &EnableDDoSDetectionSetting{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *EnableDDoSDetectionSetting) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *EnableDDoSDetectionSetting) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return EnableDDoSDetectionSettingValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateEnableDDoSDetectionSetting struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateEnableDDoSDetectionSetting) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*EnableDDoSDetectionSetting)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *EnableDDoSDetectionSetting got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	switch m.GetAutoMitigationChoice().(type) {
+	case *EnableDDoSDetectionSetting_EnableAutoMitigation:
+		if fv, exists := v.FldValidators["auto_mitigation_choice.enable_auto_mitigation"]; exists {
+			val := m.GetAutoMitigationChoice().(*EnableDDoSDetectionSetting_EnableAutoMitigation).EnableAutoMitigation
+			vOpts := append(opts,
+				db.WithValidateField("auto_mitigation_choice"),
+				db.WithValidateField("enable_auto_mitigation"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *EnableDDoSDetectionSetting_DisableAutoMitigation:
+		if fv, exists := v.FldValidators["auto_mitigation_choice.disable_auto_mitigation"]; exists {
+			val := m.GetAutoMitigationChoice().(*EnableDDoSDetectionSetting_DisableAutoMitigation).DisableAutoMitigation
+			vOpts := append(opts,
+				db.WithValidateField("auto_mitigation_choice"),
+				db.WithValidateField("disable_auto_mitigation"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultEnableDDoSDetectionSettingValidator = func() *ValidateEnableDDoSDetectionSetting {
+	v := &ValidateEnableDDoSDetectionSetting{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func EnableDDoSDetectionSettingValidator() db.Validator {
+	return DefaultEnableDDoSDetectionSettingValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -8856,6 +9089,54 @@ func (v *ValidateGetSpecType) DataGuardRulesValidationRuleHandler(rules map[stri
 	return validatorFn, nil
 }
 
+func (v *ValidateGetSpecType) GraphqlRulesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for graphql_rules")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_policy.GraphQLRule, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := ves_io_schema_policy.GraphQLRuleValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for graphql_rules")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema_policy.GraphQLRule)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema_policy.GraphQLRule, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated graphql_rules")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items graphql_rules")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*GetSpecType)
 	if !ok {
@@ -9262,6 +9543,14 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["graphql_rules"]; exists {
+		vOpts := append(opts, db.WithValidateField("graphql_rules"))
+		if err := fv(ctx, m.GetGraphqlRules(), vOpts...); err != nil {
+			return err
 		}
 
 	}
@@ -10049,6 +10338,18 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["data_guard_rules"] = vFn
+
+	vrhGraphqlRules := v.GraphqlRulesValidationRuleHandler
+	rulesGraphqlRules := map[string]string{
+		"ves.io.schema.rules.repeated.max_items":            "64",
+		"ves.io.schema.rules.repeated.unique_metadata_name": "true",
+	}
+	vFn, err = vrhGraphqlRules(rulesGraphqlRules)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GetSpecType.graphql_rules: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["graphql_rules"] = vFn
 
 	v.FldValidators["advertise_choice.advertise_on_public"] = ves_io_schema_views.AdvertisePublicValidator().Validate
 	v.FldValidators["advertise_choice.advertise_custom"] = ves_io_schema_views.AdvertiseCustomValidator().Validate
@@ -11412,6 +11713,54 @@ func (v *ValidateGlobalSpecType) DataGuardRulesValidationRuleHandler(rules map[s
 	return validatorFn, nil
 }
 
+func (v *ValidateGlobalSpecType) GraphqlRulesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for graphql_rules")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_policy.GraphQLRule, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := ves_io_schema_policy.GraphQLRuleValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for graphql_rules")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema_policy.GraphQLRule)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema_policy.GraphQLRule, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated graphql_rules")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items graphql_rules")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*GlobalSpecType)
 	if !ok {
@@ -11827,6 +12176,14 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["graphql_rules"]; exists {
+		vOpts := append(opts, db.WithValidateField("graphql_rules"))
+		if err := fv(ctx, m.GetGraphqlRules(), vOpts...); err != nil {
+			return err
 		}
 
 	}
@@ -12672,6 +13029,18 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["data_guard_rules"] = vFn
+
+	vrhGraphqlRules := v.GraphqlRulesValidationRuleHandler
+	rulesGraphqlRules := map[string]string{
+		"ves.io.schema.rules.repeated.max_items":            "64",
+		"ves.io.schema.rules.repeated.unique_metadata_name": "true",
+	}
+	vFn, err = vrhGraphqlRules(rulesGraphqlRules)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.graphql_rules: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["graphql_rules"] = vFn
 
 	v.FldValidators["advertise_choice.advertise_on_public"] = ves_io_schema_views.AdvertisePublicValidator().Validate
 	v.FldValidators["advertise_choice.advertise_custom"] = ves_io_schema_views.AdvertiseCustomValidator().Validate
@@ -14534,6 +14903,16 @@ func (v *ValidateProxyTypeHttps) PortValidationRuleHandler(rules map[string]stri
 	return validatorFn, nil
 }
 
+func (v *ValidateProxyTypeHttps) ConnectionIdleTimeoutValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for connection_idle_timeout")
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateProxyTypeHttps) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*ProxyTypeHttps)
 	if !ok {
@@ -14552,6 +14931,15 @@ func (v *ValidateProxyTypeHttps) Validate(ctx context.Context, pm interface{}, o
 
 		vOpts := append(opts, db.WithValidateField("add_hsts"))
 		if err := fv(ctx, m.GetAddHsts(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["connection_idle_timeout"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("connection_idle_timeout"))
+		if err := fv(ctx, m.GetConnectionIdleTimeout(), vOpts...); err != nil {
 			return err
 		}
 
@@ -14762,6 +15150,17 @@ var DefaultProxyTypeHttpsValidator = func() *ValidateProxyTypeHttps {
 	}
 	v.FldValidators["port"] = vFn
 
+	vrhConnectionIdleTimeout := v.ConnectionIdleTimeoutValidationRuleHandler
+	rulesConnectionIdleTimeout := map[string]string{
+		"ves.io.schema.rules.uint32.lte": "600000",
+	}
+	vFn, err = vrhConnectionIdleTimeout(rulesConnectionIdleTimeout)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ProxyTypeHttps.connection_idle_timeout: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["connection_idle_timeout"] = vFn
+
 	v.FldValidators["tls_parameters"] = ves_io_schema_views.DownstreamTlsParamsTypeValidator().Validate
 
 	v.FldValidators["header_transformation_type"] = ves_io_schema.HeaderTransformationTypeValidator().Validate
@@ -14891,6 +15290,16 @@ func (v *ValidateProxyTypeHttpsAutoCerts) PortValidationRuleHandler(rules map[st
 	return validatorFn, nil
 }
 
+func (v *ValidateProxyTypeHttpsAutoCerts) ConnectionIdleTimeoutValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for connection_idle_timeout")
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateProxyTypeHttpsAutoCerts) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*ProxyTypeHttpsAutoCerts)
 	if !ok {
@@ -14909,6 +15318,15 @@ func (v *ValidateProxyTypeHttpsAutoCerts) Validate(ctx context.Context, pm inter
 
 		vOpts := append(opts, db.WithValidateField("add_hsts"))
 		if err := fv(ctx, m.GetAddHsts(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["connection_idle_timeout"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("connection_idle_timeout"))
+		if err := fv(ctx, m.GetConnectionIdleTimeout(), vOpts...); err != nil {
 			return err
 		}
 
@@ -15165,6 +15583,17 @@ var DefaultProxyTypeHttpsAutoCertsValidator = func() *ValidateProxyTypeHttpsAuto
 		panic(errMsg)
 	}
 	v.FldValidators["port"] = vFn
+
+	vrhConnectionIdleTimeout := v.ConnectionIdleTimeoutValidationRuleHandler
+	rulesConnectionIdleTimeout := map[string]string{
+		"ves.io.schema.rules.uint32.lte": "600000",
+	}
+	vFn, err = vrhConnectionIdleTimeout(rulesConnectionIdleTimeout)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ProxyTypeHttpsAutoCerts.connection_idle_timeout: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["connection_idle_timeout"] = vFn
 
 	v.FldValidators["mtls_choice.use_mtls"] = ves_io_schema_views.DownstreamTlsValidationContextValidator().Validate
 
@@ -16710,6 +17139,54 @@ func (v *ValidateReplaceSpecType) DataGuardRulesValidationRuleHandler(rules map[
 	return validatorFn, nil
 }
 
+func (v *ValidateReplaceSpecType) GraphqlRulesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for graphql_rules")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_policy.GraphQLRule, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := ves_io_schema_policy.GraphQLRuleValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for graphql_rules")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema_policy.GraphQLRule)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema_policy.GraphQLRule, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated graphql_rules")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items graphql_rules")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*ReplaceSpecType)
 	if !ok {
@@ -17082,6 +17559,14 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 	if fv, exists := v.FldValidators["domains"]; exists {
 		vOpts := append(opts, db.WithValidateField("domains"))
 		if err := fv(ctx, m.GetDomains(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["graphql_rules"]; exists {
+		vOpts := append(opts, db.WithValidateField("graphql_rules"))
+		if err := fv(ctx, m.GetGraphqlRules(), vOpts...); err != nil {
 			return err
 		}
 
@@ -17853,6 +18338,18 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	}
 	v.FldValidators["data_guard_rules"] = vFn
 
+	vrhGraphqlRules := v.GraphqlRulesValidationRuleHandler
+	rulesGraphqlRules := map[string]string{
+		"ves.io.schema.rules.repeated.max_items":            "64",
+		"ves.io.schema.rules.repeated.unique_metadata_name": "true",
+	}
+	vFn, err = vrhGraphqlRules(rulesGraphqlRules)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ReplaceSpecType.graphql_rules: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["graphql_rules"] = vFn
+
 	v.FldValidators["advertise_choice.advertise_on_public"] = ves_io_schema_views.AdvertisePublicValidator().Validate
 	v.FldValidators["advertise_choice.advertise_custom"] = ves_io_schema_views.AdvertiseCustomValidator().Validate
 
@@ -18495,6 +18992,32 @@ func (v *ValidateRouteSimpleAdvancedOptions) Validate(ctx context.Context, pm in
 		return nil
 	}
 
+	switch m.GetBotDefenseJavascriptInjectionChoice().(type) {
+	case *RouteSimpleAdvancedOptions_InheritedBotDefenseJavascriptInjection:
+		if fv, exists := v.FldValidators["bot_defense_javascript_injection_choice.inherited_bot_defense_javascript_injection"]; exists {
+			val := m.GetBotDefenseJavascriptInjectionChoice().(*RouteSimpleAdvancedOptions_InheritedBotDefenseJavascriptInjection).InheritedBotDefenseJavascriptInjection
+			vOpts := append(opts,
+				db.WithValidateField("bot_defense_javascript_injection_choice"),
+				db.WithValidateField("inherited_bot_defense_javascript_injection"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *RouteSimpleAdvancedOptions_BotDefenseJavascriptInjection:
+		if fv, exists := v.FldValidators["bot_defense_javascript_injection_choice.bot_defense_javascript_injection"]; exists {
+			val := m.GetBotDefenseJavascriptInjectionChoice().(*RouteSimpleAdvancedOptions_BotDefenseJavascriptInjection).BotDefenseJavascriptInjection
+			vOpts := append(opts,
+				db.WithValidateField("bot_defense_javascript_injection_choice"),
+				db.WithValidateField("bot_defense_javascript_injection"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["buffer_choice"]; exists {
 		val := m.GetBufferChoice()
 		vOpts := append(opts,
@@ -19096,6 +19619,8 @@ var DefaultRouteSimpleAdvancedOptionsValidator = func() *ValidateRouteSimpleAdva
 		panic(errMsg)
 	}
 	v.FldValidators["timeout"] = vFn
+
+	v.FldValidators["bot_defense_javascript_injection_choice.bot_defense_javascript_injection"] = ves_io_schema_route.BotDefenseJavascriptInjectionTypeValidator().Validate
 
 	v.FldValidators["buffer_choice.buffer_policy"] = ves_io_schema.BufferConfigTypeValidator().Validate
 
@@ -23807,6 +24332,7 @@ func (m *CreateSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool
 	m.DdosMitigationRules = f.GetDdosMitigationRules()
 	m.DefaultRoutePools = f.GetDefaultRoutePools()
 	m.Domains = f.GetDomains()
+	m.GraphqlRules = f.GetGraphqlRules()
 	m.GetHashPolicyChoiceFromGlobalSpecType(f)
 	m.GetIpReputationChoiceFromGlobalSpecType(f)
 	m.GetLoadbalancerTypeFromGlobalSpecType(f)
@@ -23856,6 +24382,7 @@ func (m *CreateSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) 
 	f.DdosMitigationRules = m1.DdosMitigationRules
 	f.DefaultRoutePools = m1.DefaultRoutePools
 	f.Domains = m1.Domains
+	f.GraphqlRules = m1.GraphqlRules
 	m1.SetHashPolicyChoiceToGlobalSpecType(f)
 	m1.SetIpReputationChoiceToGlobalSpecType(f)
 	m1.SetLoadbalancerTypeToGlobalSpecType(f)
@@ -24619,6 +25146,7 @@ func (m *GetSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	m.DnsInfo = f.GetDnsInfo()
 	m.Domains = f.GetDomains()
 	m.DownstreamTlsCertificateExpirationTimestamps = f.GetDownstreamTlsCertificateExpirationTimestamps()
+	m.GraphqlRules = f.GetGraphqlRules()
 	m.GetHashPolicyChoiceFromGlobalSpecType(f)
 	m.HostName = f.GetHostName()
 	m.GetIpReputationChoiceFromGlobalSpecType(f)
@@ -24673,6 +25201,7 @@ func (m *GetSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	f.DnsInfo = m1.DnsInfo
 	f.Domains = m1.Domains
 	f.DownstreamTlsCertificateExpirationTimestamps = m1.DownstreamTlsCertificateExpirationTimestamps
+	f.GraphqlRules = m1.GraphqlRules
 	m1.SetHashPolicyChoiceToGlobalSpecType(f)
 	f.HostName = m1.HostName
 	m1.SetIpReputationChoiceToGlobalSpecType(f)
@@ -25435,6 +25964,7 @@ func (m *ReplaceSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy boo
 	m.DdosMitigationRules = f.GetDdosMitigationRules()
 	m.DefaultRoutePools = f.GetDefaultRoutePools()
 	m.Domains = f.GetDomains()
+	m.GraphqlRules = f.GetGraphqlRules()
 	m.GetHashPolicyChoiceFromGlobalSpecType(f)
 	m.GetIpReputationChoiceFromGlobalSpecType(f)
 	m.GetLoadbalancerTypeFromGlobalSpecType(f)
@@ -25484,6 +26014,7 @@ func (m *ReplaceSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool)
 	f.DdosMitigationRules = m1.DdosMitigationRules
 	f.DefaultRoutePools = m1.DefaultRoutePools
 	f.Domains = m1.Domains
+	f.GraphqlRules = m1.GraphqlRules
 	m1.SetHashPolicyChoiceToGlobalSpecType(f)
 	m1.SetIpReputationChoiceToGlobalSpecType(f)
 	m1.SetLoadbalancerTypeToGlobalSpecType(f)

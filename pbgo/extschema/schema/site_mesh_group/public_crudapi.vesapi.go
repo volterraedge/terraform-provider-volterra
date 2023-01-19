@@ -800,7 +800,13 @@ func (c *crudAPIRestClient) Delete(ctx context.Context, key string, opts ...serv
 }
 
 func NewCRUDAPIRestClient(baseURL string, cl http.Client) server.CRUDClient {
-	crcl := &crudAPIRestClient{baseURL, cl}
+	var bURL string
+	if strings.HasSuffix(baseURL, "/") {
+		bURL = baseURL[:len(baseURL)-1]
+	} else {
+		bURL = baseURL
+	}
+	crcl := &crudAPIRestClient{bURL, cl}
 	return crcl
 }
 
@@ -3113,7 +3119,7 @@ var APISwaggerJSON string = `{
                 },
                 "hub_mesh": {
                     "description": "Exclusive with [full_mesh spoke_mesh]\n  Mesh of Type Hub",
-                    "$ref": "#/definitions/ioschemaEmpty",
+                    "$ref": "#/definitions/site_mesh_groupHubFullMeshGroupType",
                     "x-displayname": "Hub"
                 },
                 "spoke_mesh": {
@@ -3151,7 +3157,7 @@ var APISwaggerJSON string = `{
                 },
                 "hub_mesh": {
                     "description": "Exclusive with [full_mesh spoke_mesh]\n  Mesh of Type Hub",
-                    "$ref": "#/definitions/ioschemaEmpty",
+                    "$ref": "#/definitions/site_mesh_groupHubFullMeshGroupType",
                     "x-displayname": "Hub"
                 },
                 "spoke_mesh": {
@@ -3190,7 +3196,7 @@ var APISwaggerJSON string = `{
                 "hub_mesh": {
                     "description": "Exclusive with [full_mesh spoke_mesh]\n  Mesh of Type Hub",
                     "title": "hub",
-                    "$ref": "#/definitions/ioschemaEmpty",
+                    "$ref": "#/definitions/site_mesh_groupHubFullMeshGroupType",
                     "x-displayname": "Hub"
                 },
                 "spoke_mesh": {
@@ -3230,7 +3236,7 @@ var APISwaggerJSON string = `{
                 },
                 "hub_mesh": {
                     "description": "Exclusive with [full_mesh spoke_mesh]\n  Mesh of Type Hub",
-                    "$ref": "#/definitions/ioschemaEmpty",
+                    "$ref": "#/definitions/site_mesh_groupHubFullMeshGroupType",
                     "x-displayname": "Hub"
                 },
                 "spoke_mesh": {
@@ -3472,6 +3478,28 @@ var APISwaggerJSON string = `{
             ],
             "default": "GET_RSP_FORMAT_DEFAULT"
         },
+        "site_mesh_groupHubFullMeshGroupType": {
+            "type": "object",
+            "description": "Details of Hub Full Mesh Group Type",
+            "title": "Hub Full Mesh Group Type",
+            "x-displayname": "Hub Full Mesh",
+            "x-ves-oneof-field-hub_full_mesh_choice": "[\"control_and_data_plane_mesh\",\"data_plane_mesh\"]",
+            "x-ves-proto-message": "ves.io.schema.site_mesh_group.HubFullMeshGroupType",
+            "properties": {
+                "control_and_data_plane_mesh": {
+                    "description": "Exclusive with [data_plane_mesh]\n Hub Full mesh of data plane tunnels across sites\n and control plane peering across sites",
+                    "title": "Control and Data Plane Mesh",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Control and Data Plane Mesh"
+                },
+                "data_plane_mesh": {
+                    "description": "Exclusive with [control_and_data_plane_mesh]\n Hub Full Mesh of data plane tunnels across sites",
+                    "title": "Data Plane Mesh",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Data Plane Mesh"
+                }
+            }
+        },
         "site_mesh_groupListResponse": {
             "type": "object",
             "description": "This is the output message of 'List' RPC.",
@@ -3682,8 +3710,21 @@ var APISwaggerJSON string = `{
             "description": "Details of Spoke Mesh Group Type",
             "title": "Spoke Mesh Group Type",
             "x-displayname": "Spoke",
+            "x-ves-oneof-field-spoke_hub_mesh_choice": "[\"control_and_data_plane_mesh\",\"data_plane_mesh\"]",
             "x-ves-proto-message": "ves.io.schema.site_mesh_group.SpokeMeshGroupType",
             "properties": {
+                "control_and_data_plane_mesh": {
+                    "description": "Exclusive with [data_plane_mesh]\n Mesh of data plane tunnels to the hub site/s\n and control plane peering with the hub site/s",
+                    "title": "Control and Data Plane Mesh",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Control and Data Plane Mesh"
+                },
+                "data_plane_mesh": {
+                    "description": "Exclusive with [control_and_data_plane_mesh]\n Mesh of data plane tunnels to the hub site/s",
+                    "title": "Data Plane Mesh",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Data Plane Mesh"
+                },
                 "hub_mesh_group": {
                     "description": " 'hub_mesh_group' refers to a Site Mesh Group of 'type' Hub.\n Spoke sites will connect to all the member sites of Hub Site Mesh Group\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "hub_mesh_group",

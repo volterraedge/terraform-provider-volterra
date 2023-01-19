@@ -46,6 +46,15 @@ func (r *ObjectCreateReq) ToEntry(e db.Entry) {
 	r.ToObject(e)
 }
 
+// db.Redactor
+func (r *ObjectCreateReq) Redact(ctx context.Context) error {
+	spec := r.GetSpec()
+	if r, ok := interface{}(spec).(db.Redactor); ok {
+		return r.Redact(ctx)
+	}
+	return nil
+}
+
 // create setters in object from request for oneof fields
 
 // EntryConverter
@@ -55,6 +64,15 @@ func (r *ObjectReplaceReq) FromEntry(e db.Entry) {
 
 func (r *ObjectReplaceReq) ToEntry(e db.Entry) {
 	r.ToObject(e)
+}
+
+// db.Redactor
+func (r *ObjectReplaceReq) Redact(ctx context.Context) error {
+	spec := r.GetSpec()
+	if r, ok := interface{}(spec).(db.Redactor); ok {
+		return r.Redact(ctx)
+	}
+	return nil
 }
 
 // create setters in object from request for oneof fields
@@ -748,7 +766,13 @@ func (c *crudAPIRestClient) Delete(ctx context.Context, key string, opts ...serv
 }
 
 func NewCRUDAPIRestClient(baseURL string, cl http.Client) server.CRUDClient {
-	crcl := &crudAPIRestClient{baseURL, cl}
+	var bURL string
+	if strings.HasSuffix(baseURL, "/") {
+		bURL = baseURL[:len(baseURL)-1]
+	} else {
+		bURL = baseURL
+	}
+	crcl := &crudAPIRestClient{bURL, cl}
 	return crcl
 }
 
@@ -3143,7 +3167,7 @@ var APISwaggerJSON string = `{
         },
         "registrationProvider": {
             "type": "string",
-            "description": "Infrastructure provider enum for registration. It describes where is instance running.\n\nProvider was not detected\nAWS cloud instance\nGoogle cloud instance\nAzure cloud instance\nVMWare VM\nKVM VM\nOther provider, which was not identified by system.\nF5XC HW device.\nIBM Cloud instance.\nKubernetes cluster in AWS\nKubernetes cluster in GCP\nKubernetes cluster in Azure\nKubernetes cluster in Vmware\nKubernetes cluster in VMware\nKubernetes cluster in Other provider\nKubernetes cluster in Volterra\nKubernetes cluster in IBM Cloud",
+            "description": "Infrastructure provider enum for registration. It describes where is instance running.\n\nProvider was not detected\nAWS cloud instance\nGoogle cloud instance\nAzure cloud instance\nVMWare VM\nKVM VM\nOther provider, which was not identified by system.\nF5XC HW device.\nIBM Cloud instance.\nKubernetes cluster in AWS\nKubernetes cluster in GCP\nKubernetes cluster in Azure\nKubernetes cluster in Vmware\nKubernetes cluster in VMware\nKubernetes cluster in Other provider\nKubernetes cluster in Volterra\nKubernetes cluster in IBM Cloud\nF5OS HW device.",
             "title": "Infrastructure provider",
             "enum": [
                 "UNKNOWN",
@@ -3163,7 +3187,8 @@ var APISwaggerJSON string = `{
                 "KVM_K8S",
                 "OTHER_K8S",
                 "VOLTERRA_K8S",
-                "IBMCLOUD_K8S"
+                "IBMCLOUD_K8S",
+                "F5OS"
             ],
             "default": "UNKNOWN",
             "x-displayname": "Infrastructure Provider",

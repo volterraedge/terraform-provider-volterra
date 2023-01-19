@@ -26,6 +26,270 @@ var (
 
 // augmented methods on protoc/std generated struct
 
+func (m *BotDefenseJavascriptInjectionType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *BotDefenseJavascriptInjectionType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *BotDefenseJavascriptInjectionType) DeepCopy() *BotDefenseJavascriptInjectionType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &BotDefenseJavascriptInjectionType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *BotDefenseJavascriptInjectionType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *BotDefenseJavascriptInjectionType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return BotDefenseJavascriptInjectionTypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateBotDefenseJavascriptInjectionType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateBotDefenseJavascriptInjectionType) JsDownloadPathValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for js_download_path")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateBotDefenseJavascriptInjectionType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*BotDefenseJavascriptInjectionType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *BotDefenseJavascriptInjectionType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["javascript_location"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("javascript_location"))
+		if err := fv(ctx, m.GetJavascriptLocation(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["js_download_path"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("js_download_path"))
+		if err := fv(ctx, m.GetJsDownloadPath(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultBotDefenseJavascriptInjectionTypeValidator = func() *ValidateBotDefenseJavascriptInjectionType {
+	v := &ValidateBotDefenseJavascriptInjectionType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhJsDownloadPath := v.JsDownloadPathValidationRuleHandler
+	rulesJsDownloadPath := map[string]string{
+		"ves.io.schema.rules.string.http_path": "true",
+	}
+	vFn, err = vrhJsDownloadPath(rulesJsDownloadPath)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for BotDefenseJavascriptInjectionType.js_download_path: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["js_download_path"] = vFn
+
+	return v
+}()
+
+func BotDefenseJavascriptInjectionTypeValidator() db.Validator {
+	return DefaultBotDefenseJavascriptInjectionTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *ContentRewriteType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *ContentRewriteType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *ContentRewriteType) DeepCopy() *ContentRewriteType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &ContentRewriteType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *ContentRewriteType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *ContentRewriteType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return ContentRewriteTypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateContentRewriteType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateContentRewriteType) InsertContentValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for insert_content")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateContentRewriteType) ElementSelectorValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for element_selector")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateContentRewriteType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*ContentRewriteType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *ContentRewriteType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["element_selector"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("element_selector"))
+		if err := fv(ctx, m.GetElementSelector(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["insert_content"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("insert_content"))
+		if err := fv(ctx, m.GetInsertContent(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["position"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("position"))
+		if err := fv(ctx, m.GetPosition(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultContentRewriteTypeValidator = func() *ValidateContentRewriteType {
+	v := &ValidateContentRewriteType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhInsertContent := v.InsertContentValidationRuleHandler
+	rulesInsertContent := map[string]string{
+		"ves.io.schema.rules.string.max_len": "8096",
+	}
+	vFn, err = vrhInsertContent(rulesInsertContent)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ContentRewriteType.insert_content: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["insert_content"] = vFn
+
+	vrhElementSelector := v.ElementSelectorValidationRuleHandler
+	rulesElementSelector := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.max_len":   "64",
+		"ves.io.schema.rules.string.min_len":   "1",
+	}
+	vFn, err = vrhElementSelector(rulesElementSelector)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ContentRewriteType.element_selector: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["element_selector"] = vFn
+
+	return v
+}()
+
+func ContentRewriteTypeValidator() db.Validator {
+	return DefaultContentRewriteTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *ContextExtensionInfo) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -234,6 +498,32 @@ func (v *ValidateCookieForHashing) Validate(ctx context.Context, pm interface{},
 		return nil
 	}
 
+	switch m.GetHttponly().(type) {
+	case *CookieForHashing_IgnoreHttponly:
+		if fv, exists := v.FldValidators["httponly.ignore_httponly"]; exists {
+			val := m.GetHttponly().(*CookieForHashing_IgnoreHttponly).IgnoreHttponly
+			vOpts := append(opts,
+				db.WithValidateField("httponly"),
+				db.WithValidateField("ignore_httponly"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CookieForHashing_AddHttponly:
+		if fv, exists := v.FldValidators["httponly.add_httponly"]; exists {
+			val := m.GetHttponly().(*CookieForHashing_AddHttponly).AddHttponly
+			vOpts := append(opts,
+				db.WithValidateField("httponly"),
+				db.WithValidateField("add_httponly"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["name"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("name"))
@@ -248,6 +538,80 @@ func (v *ValidateCookieForHashing) Validate(ctx context.Context, pm interface{},
 		vOpts := append(opts, db.WithValidateField("path"))
 		if err := fv(ctx, m.GetPath(), vOpts...); err != nil {
 			return err
+		}
+
+	}
+
+	switch m.GetSamesite().(type) {
+	case *CookieForHashing_IgnoreSamesite:
+		if fv, exists := v.FldValidators["samesite.ignore_samesite"]; exists {
+			val := m.GetSamesite().(*CookieForHashing_IgnoreSamesite).IgnoreSamesite
+			vOpts := append(opts,
+				db.WithValidateField("samesite"),
+				db.WithValidateField("ignore_samesite"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CookieForHashing_SamesiteStrict:
+		if fv, exists := v.FldValidators["samesite.samesite_strict"]; exists {
+			val := m.GetSamesite().(*CookieForHashing_SamesiteStrict).SamesiteStrict
+			vOpts := append(opts,
+				db.WithValidateField("samesite"),
+				db.WithValidateField("samesite_strict"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CookieForHashing_SamesiteLax:
+		if fv, exists := v.FldValidators["samesite.samesite_lax"]; exists {
+			val := m.GetSamesite().(*CookieForHashing_SamesiteLax).SamesiteLax
+			vOpts := append(opts,
+				db.WithValidateField("samesite"),
+				db.WithValidateField("samesite_lax"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CookieForHashing_SamesiteNone:
+		if fv, exists := v.FldValidators["samesite.samesite_none"]; exists {
+			val := m.GetSamesite().(*CookieForHashing_SamesiteNone).SamesiteNone
+			vOpts := append(opts,
+				db.WithValidateField("samesite"),
+				db.WithValidateField("samesite_none"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	switch m.GetSecure().(type) {
+	case *CookieForHashing_IgnoreSecure:
+		if fv, exists := v.FldValidators["secure.ignore_secure"]; exists {
+			val := m.GetSecure().(*CookieForHashing_IgnoreSecure).IgnoreSecure
+			vOpts := append(opts,
+				db.WithValidateField("secure"),
+				db.WithValidateField("ignore_secure"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CookieForHashing_AddSecure:
+		if fv, exists := v.FldValidators["secure.add_secure"]; exists {
+			val := m.GetSecure().(*CookieForHashing_AddSecure).AddSecure
+			vOpts := append(opts,
+				db.WithValidateField("secure"),
+				db.WithValidateField("add_secure"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
 		}
 
 	}
@@ -3235,6 +3599,41 @@ func (v *ValidateRouteType) Validate(ctx context.Context, pm interface{}, opts .
 		return nil
 	}
 
+	switch m.GetBotDefenseJavascriptInjectionChoice().(type) {
+	case *RouteType_InheritedBotDefenseJavascriptInjection:
+		if fv, exists := v.FldValidators["bot_defense_javascript_injection_choice.inherited_bot_defense_javascript_injection"]; exists {
+			val := m.GetBotDefenseJavascriptInjectionChoice().(*RouteType_InheritedBotDefenseJavascriptInjection).InheritedBotDefenseJavascriptInjection
+			vOpts := append(opts,
+				db.WithValidateField("bot_defense_javascript_injection_choice"),
+				db.WithValidateField("inherited_bot_defense_javascript_injection"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *RouteType_BotDefenseJavascriptInjection:
+		if fv, exists := v.FldValidators["bot_defense_javascript_injection_choice.bot_defense_javascript_injection"]; exists {
+			val := m.GetBotDefenseJavascriptInjectionChoice().(*RouteType_BotDefenseJavascriptInjection).BotDefenseJavascriptInjection
+			vOpts := append(opts,
+				db.WithValidateField("bot_defense_javascript_injection_choice"),
+				db.WithValidateField("bot_defense_javascript_injection"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["bot_defense_javascript_injection_inline_mode"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("bot_defense_javascript_injection_inline_mode"))
+		if err := fv(ctx, m.GetBotDefenseJavascriptInjectionInlineMode(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["disable_custom_script"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("disable_custom_script"))
@@ -3452,6 +3851,8 @@ var DefaultRouteTypeValidator = func() *ValidateRouteType {
 	}
 	v.FldValidators["response_headers_to_remove"] = vFn
 
+	v.FldValidators["bot_defense_javascript_injection_choice.bot_defense_javascript_injection"] = BotDefenseJavascriptInjectionTypeValidator().Validate
+
 	v.FldValidators["route_action.route_destination"] = RouteDestinationListValidator().Validate
 	v.FldValidators["route_action.route_redirect"] = RouteRedirectValidator().Validate
 	v.FldValidators["route_action.route_direct_response"] = RouteDirectResponseValidator().Validate
@@ -3459,6 +3860,8 @@ var DefaultRouteTypeValidator = func() *ValidateRouteType {
 	v.FldValidators["waf_type"] = ves_io_schema.WafTypeValidator().Validate
 
 	v.FldValidators["service_policy"] = ServicePolicyInfoValidator().Validate
+
+	v.FldValidators["bot_defense_javascript_injection_inline_mode"] = ContentRewriteTypeValidator().Validate
 
 	return v
 }()

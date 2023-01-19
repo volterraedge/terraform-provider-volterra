@@ -281,11 +281,41 @@ func (v *ValidateAPIEPInfo) Validate(ctx context.Context, pm interface{}, opts .
 
 	}
 
+	if fv, exists := v.FldValidators["requests_count"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("requests_count"))
+		if err := fv(ctx, m.GetRequestsCount(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["sec_events_count"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("sec_events_count"))
+		if err := fv(ctx, m.GetSecEventsCount(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["security_risk"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("security_risk"))
 		if err := fv(ctx, m.GetSecurityRisk(), vOpts...); err != nil {
 			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["sensitive_data"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("sensitive_data"))
+		for idx, item := range m.GetSensitiveData() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
 		}
 
 	}

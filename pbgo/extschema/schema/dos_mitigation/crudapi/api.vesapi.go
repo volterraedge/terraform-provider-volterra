@@ -46,6 +46,15 @@ func (r *ObjectCreateReq) ToEntry(e db.Entry) {
 	r.ToObject(e)
 }
 
+// db.Redactor
+func (r *ObjectCreateReq) Redact(ctx context.Context) error {
+	spec := r.GetSpec()
+	if r, ok := interface{}(spec).(db.Redactor); ok {
+		return r.Redact(ctx)
+	}
+	return nil
+}
+
 // create setters in object from request for oneof fields
 
 // EntryConverter
@@ -55,6 +64,15 @@ func (r *ObjectReplaceReq) FromEntry(e db.Entry) {
 
 func (r *ObjectReplaceReq) ToEntry(e db.Entry) {
 	r.ToObject(e)
+}
+
+// db.Redactor
+func (r *ObjectReplaceReq) Redact(ctx context.Context) error {
+	spec := r.GetSpec()
+	if r, ok := interface{}(spec).(db.Redactor); ok {
+		return r.Redact(ctx)
+	}
+	return nil
 }
 
 // create setters in object from request for oneof fields
@@ -748,7 +766,13 @@ func (c *crudAPIRestClient) Delete(ctx context.Context, key string, opts ...serv
 }
 
 func NewCRUDAPIRestClient(baseURL string, cl http.Client) server.CRUDClient {
-	crcl := &crudAPIRestClient{baseURL, cl}
+	var bURL string
+	if strings.HasSuffix(baseURL, "/") {
+		bURL = baseURL[:len(baseURL)-1]
+	} else {
+		bURL = baseURL
+	}
+	crcl := &crudAPIRestClient{bURL, cl}
 	return crcl
 }
 
@@ -2766,14 +2790,17 @@ var APISwaggerJSON string = `{
             "description": "A reference to the object on which the DoS Attack is going to be mitigated",
             "title": "Destination",
             "x-displayname": "Destination Object",
-            "x-ves-oneof-field-destination": "[\"virtual_host\"]",
             "x-ves-proto-message": "ves.io.schema.dos_mitigation.Destination",
             "properties": {
                 "virtual_host": {
-                    "description": "Exclusive with []\n Virtual Host on which mitigation is to occur",
+                    "description": " Virtual Host on which mitigation is to occur\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "virtual_host",
                     "$ref": "#/definitions/schemaviewsObjectRefType",
-                    "x-displayname": "Virtual Host"
+                    "x-displayname": "Virtual Host",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 }
             }
         },
@@ -3674,10 +3701,14 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "destination": {
-                    "description": " Destination object on which mitigation is to occur",
+                    "description": " Destination object on which mitigation is to occur\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "destination",
                     "$ref": "#/definitions/dos_mitigationDestination",
-                    "x-displayname": "Destination"
+                    "x-displayname": "Destination",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 },
                 "expiration_never": {
                     "description": "Exclusive with [expiration_timestamp expiration_ttl]\n This mitigation will never expire",

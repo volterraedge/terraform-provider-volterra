@@ -361,6 +361,15 @@ func (v *ValidateAzureExpressRouteType) Validate(ctx context.Context, pm interfa
 		return nil
 	}
 
+	if fv, exists := v.FldValidators["adn_dns_ip"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("adn_dns_ip"))
+		if err := fv(ctx, m.GetAdnDnsIp(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["existing_gateway_subnet"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("existing_gateway_subnet"))
@@ -413,6 +422,15 @@ func (v *ValidateAzureExpressRouteType) Validate(ctx context.Context, pm interfa
 
 		vOpts := append(opts, db.WithValidateField("new_route_server_subnet"))
 		if err := fv(ctx, m.GetNewRouteServerSubnet(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["private_network_name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("private_network_name"))
+		if err := fv(ctx, m.GetPrivateNetworkName(), vOpts...); err != nil {
 			return err
 		}
 

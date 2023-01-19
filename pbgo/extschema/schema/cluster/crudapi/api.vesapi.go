@@ -46,6 +46,15 @@ func (r *ObjectCreateReq) ToEntry(e db.Entry) {
 	r.ToObject(e)
 }
 
+// db.Redactor
+func (r *ObjectCreateReq) Redact(ctx context.Context) error {
+	spec := r.GetSpec()
+	if r, ok := interface{}(spec).(db.Redactor); ok {
+		return r.Redact(ctx)
+	}
+	return nil
+}
+
 // create setters in object from request for oneof fields
 
 // EntryConverter
@@ -55,6 +64,15 @@ func (r *ObjectReplaceReq) FromEntry(e db.Entry) {
 
 func (r *ObjectReplaceReq) ToEntry(e db.Entry) {
 	r.ToObject(e)
+}
+
+// db.Redactor
+func (r *ObjectReplaceReq) Redact(ctx context.Context) error {
+	spec := r.GetSpec()
+	if r, ok := interface{}(spec).(db.Redactor); ok {
+		return r.Redact(ctx)
+	}
+	return nil
 }
 
 // create setters in object from request for oneof fields
@@ -748,7 +766,13 @@ func (c *crudAPIRestClient) Delete(ctx context.Context, key string, opts ...serv
 }
 
 func NewCRUDAPIRestClient(baseURL string, cl http.Client) server.CRUDClient {
-	crcl := &crudAPIRestClient{baseURL, cl}
+	var bURL string
+	if strings.HasSuffix(baseURL, "/") {
+		bURL = baseURL[:len(baseURL)-1]
+	} else {
+		bURL = baseURL
+	}
+	crcl := &crudAPIRestClient{bURL, cl}
 	return crcl
 }
 
@@ -2700,9 +2724,16 @@ var APISwaggerJSON string = `{
             "description": "Configuration specification for Cluster",
             "title": "GlobalSpecType",
             "x-displayname": "Global Configuration Specification",
+            "x-ves-oneof-field-http_protocol_type": "[\"auto_http_config\",\"http1_config\",\"http2_options\"]",
             "x-ves-oneof-field-panic_threshold_type": "[\"no_panic_threshold\",\"panic_threshold\"]",
             "x-ves-proto-message": "ves.io.schema.cluster.GlobalSpecType",
             "properties": {
+                "auto_http_config": {
+                    "description": "Exclusive with [http1_config http2_options]\n This allows switching on protocol based on ALPN. It can use either HTTP/1.1 or HTTP/2,\n and will use whichever protocol is negotiated by ALPN with the upstream.",
+                    "title": "auto_http_config",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Automatic"
+                },
                 "circuit_breaker": {
                     "description": " CircuitBreaker provides a mechanism for watching failures in upstream connections or requests\n and if the failures reach a certain threshold, automatically fail subsequent requests which\n allows to apply back pressure on downstream quickly.",
                     "title": "circuit_breaker",
@@ -2799,11 +2830,17 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.repeated.max_items": "4"
                     }
                 },
+                "http1_config": {
+                    "description": "Exclusive with [auto_http_config http2_options]\n Enable HTTP/1.1 for upstream connections",
+                    "title": "http1_config",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "HTTP/1.1"
+                },
                 "http2_options": {
-                    "description": " Http2 Protocol options for upstream connections",
+                    "description": "Exclusive with [auto_http_config http1_config]\n Enable HTTP/2 for upstream connections",
                     "title": "http2_options",
                     "$ref": "#/definitions/clusterHttp2ProtocolOptions",
-                    "x-displayname": "Http2 Protocol Configuration"
+                    "x-displayname": "HTTP/2 Protocol Configuration"
                 },
                 "http_idle_timeout": {
                     "type": "integer",
@@ -2861,7 +2898,7 @@ var APISwaggerJSON string = `{
             "properties": {
                 "enabled": {
                     "type": "boolean",
-                    "description": " Enable/disable Http2 Protocol for upstream connections. It is disabled by default.",
+                    "description": " Enable/disable HTTP2 Protocol for upstream connections",
                     "title": "enabled",
                     "format": "boolean",
                     "x-displayname": "HTTP2 Enabled"

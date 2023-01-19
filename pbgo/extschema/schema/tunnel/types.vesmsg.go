@@ -658,6 +658,15 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 		return nil
 	}
 
+	if fv, exists := v.FldValidators["deployment_vpn_tunnel_type"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("deployment_vpn_tunnel_type"))
+		if err := fv(ctx, m.GetDeploymentVpnTunnelType(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["local_ip"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("local_ip"))

@@ -800,7 +800,13 @@ func (c *crudAPIRestClient) Delete(ctx context.Context, key string, opts ...serv
 }
 
 func NewCRUDAPIRestClient(baseURL string, cl http.Client) server.CRUDClient {
-	crcl := &crudAPIRestClient{baseURL, cl}
+	var bURL string
+	if strings.HasSuffix(baseURL, "/") {
+		bURL = baseURL[:len(baseURL)-1]
+	} else {
+		bURL = baseURL
+	}
+	crcl := &crudAPIRestClient{bURL, cl}
 	return crcl
 }
 
@@ -2286,38 +2292,38 @@ var APISwaggerJSON string = `{
             "description": "Network interface represents configuration of a network device.\nIt is created by users in system namespace.",
             "title": "Create network interface",
             "x-displayname": "Create Network Interface",
-            "x-ves-oneof-field-interface_choice": "[\"dedicated_interface\",\"dedicated_management_interface\",\"ethernet_interface\",\"tunnel_interface\",\"vlan_interface\"]",
+            "x-ves-oneof-field-interface_choice": "[\"dedicated_interface\",\"dedicated_management_interface\",\"ethernet_interface\",\"layer2_interface\",\"tunnel_interface\"]",
             "x-ves-proto-message": "ves.io.schema.network_interface.CreateSpecType",
             "properties": {
                 "dedicated_interface": {
-                    "description": "Exclusive with [dedicated_management_interface ethernet_interface tunnel_interface vlan_interface]\n Internal helps in conversion",
+                    "description": "Exclusive with [dedicated_management_interface ethernet_interface layer2_interface tunnel_interface]\n Internal helps in conversion",
                     "title": "Bootstrap Local Interface",
                     "$ref": "#/definitions/network_interfaceDedicatedInterfaceType",
                     "x-displayname": "Dedicated Interface"
                 },
                 "dedicated_management_interface": {
-                    "description": "Exclusive with [dedicated_interface ethernet_interface tunnel_interface vlan_interface]\n Internal helps in conversion",
+                    "description": "Exclusive with [dedicated_interface ethernet_interface layer2_interface tunnel_interface]\n Internal helps in conversion",
                     "title": "Dedicated Management Interface",
                     "$ref": "#/definitions/network_interfaceDedicatedManagementInterfaceType",
                     "x-displayname": "Dedicated Management Interface"
                 },
                 "ethernet_interface": {
-                    "description": "Exclusive with [dedicated_interface dedicated_management_interface tunnel_interface vlan_interface]\n Internal helps in conversion",
+                    "description": "Exclusive with [dedicated_interface dedicated_management_interface layer2_interface tunnel_interface]\n Internal helps in conversion",
                     "title": "Ethernet Interface",
                     "$ref": "#/definitions/network_interfaceEthernetInterfaceType",
                     "x-displayname": "Ethernet Interface"
                 },
+                "layer2_interface": {
+                    "description": "Exclusive with [dedicated_interface dedicated_management_interface ethernet_interface tunnel_interface]\n Internal helps in conversion",
+                    "title": "Layer2 interface",
+                    "$ref": "#/definitions/network_interfaceLayer2InterfaceType",
+                    "x-displayname": "Layer2 interface"
+                },
                 "tunnel_interface": {
-                    "description": "Exclusive with [dedicated_interface dedicated_management_interface ethernet_interface vlan_interface]\n Internal helps in conversion",
+                    "description": "Exclusive with [dedicated_interface dedicated_management_interface ethernet_interface layer2_interface]\n Internal helps in conversion",
                     "title": "Tunnel Interface Template",
                     "$ref": "#/definitions/network_interfaceTunnelInterfaceType",
                     "x-displayname": "Tunnel Interface"
-                },
-                "vlan_interface": {
-                    "description": "Exclusive with [dedicated_interface dedicated_management_interface ethernet_interface tunnel_interface]\n Internal helps in conversion",
-                    "title": "VLAN interface",
-                    "$ref": "#/definitions/network_interfaceVlanInterfaceType",
-                    "x-displayname": "VLAN interface"
                 }
             }
         },
@@ -2946,7 +2952,7 @@ var APISwaggerJSON string = `{
             "description": "Get network interface from system namespace",
             "title": "Get network interface",
             "x-displayname": "Get Network Interface",
-            "x-ves-oneof-field-interface_choice": "[\"dedicated_interface\",\"dedicated_management_interface\",\"ethernet_interface\",\"legacy_interface\",\"tunnel_interface\",\"vlan_interface\"]",
+            "x-ves-oneof-field-interface_choice": "[\"dedicated_interface\",\"dedicated_management_interface\",\"ethernet_interface\",\"layer2_interface\",\"legacy_interface\",\"tunnel_interface\"]",
             "x-ves-oneof-field-monitoring_choice": "[\"monitor\",\"monitor_disabled\"]",
             "x-ves-proto-message": "ves.io.schema.network_interface.GetSpecType",
             "properties": {
@@ -2977,13 +2983,13 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "dedicated_interface": {
-                    "description": "Exclusive with [dedicated_management_interface ethernet_interface legacy_interface tunnel_interface vlan_interface]\n Internal helps in conversion",
+                    "description": "Exclusive with [dedicated_management_interface ethernet_interface layer2_interface legacy_interface tunnel_interface]\n Internal helps in conversion",
                     "title": "Bootstrap Local Interface",
                     "$ref": "#/definitions/network_interfaceDedicatedInterfaceType",
                     "x-displayname": "Dedicated Interface"
                 },
                 "dedicated_management_interface": {
-                    "description": "Exclusive with [dedicated_interface ethernet_interface legacy_interface tunnel_interface vlan_interface]\n Internal helps in conversion",
+                    "description": "Exclusive with [dedicated_interface ethernet_interface layer2_interface legacy_interface tunnel_interface]\n Internal helps in conversion",
                     "title": "Dedicated Management Interface",
                     "$ref": "#/definitions/network_interfaceDedicatedManagementInterfaceType",
                     "x-displayname": "Dedicated Management Interface"
@@ -3013,7 +3019,7 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "ethernet_interface": {
-                    "description": "Exclusive with [dedicated_interface dedicated_management_interface legacy_interface tunnel_interface vlan_interface]\n Internal helps in conversion",
+                    "description": "Exclusive with [dedicated_interface dedicated_management_interface layer2_interface legacy_interface tunnel_interface]\n Internal helps in conversion",
                     "title": "Ethernet Interface",
                     "$ref": "#/definitions/network_interfaceEthernetInterfaceType",
                     "x-displayname": "Ethernet Interface"
@@ -3035,8 +3041,14 @@ var APISwaggerJSON string = `{
                     "format": "boolean",
                     "x-displayname": "Primary Interface"
                 },
+                "layer2_interface": {
+                    "description": "Exclusive with [dedicated_interface dedicated_management_interface ethernet_interface legacy_interface tunnel_interface]\n Internal helps in conversion",
+                    "title": "Layer2 interface",
+                    "$ref": "#/definitions/network_interfaceLayer2InterfaceType",
+                    "x-displayname": "Layer2 interface"
+                },
                 "legacy_interface": {
-                    "description": "Exclusive with [dedicated_interface dedicated_management_interface ethernet_interface tunnel_interface vlan_interface]\nOld method of interface configuration",
+                    "description": "Exclusive with [dedicated_interface dedicated_management_interface ethernet_interface layer2_interface tunnel_interface]\nOld method of interface configuration",
                     "title": "Legacy Interface",
                     "$ref": "#/definitions/network_interfaceLegacyInterfaceType",
                     "x-displayname": "Legacy Interface"
@@ -3091,7 +3103,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Tunnel"
                 },
                 "tunnel_interface": {
-                    "description": "Exclusive with [dedicated_interface dedicated_management_interface ethernet_interface legacy_interface vlan_interface]\n Internal helps in conversion",
+                    "description": "Exclusive with [dedicated_interface dedicated_management_interface ethernet_interface layer2_interface legacy_interface]\n Internal helps in conversion",
                     "title": "Tunnel Interface Template",
                     "$ref": "#/definitions/network_interfaceTunnelInterfaceType",
                     "x-displayname": "Tunnel Interface"
@@ -3116,12 +3128,6 @@ var APISwaggerJSON string = `{
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.repeated.max_items": "1"
                     }
-                },
-                "vlan_interface": {
-                    "description": "Exclusive with [dedicated_interface dedicated_management_interface ethernet_interface legacy_interface tunnel_interface]\n Internal helps in conversion",
-                    "title": "VLAN interface",
-                    "$ref": "#/definitions/network_interfaceVlanInterfaceType",
-                    "x-displayname": "VLAN interface"
                 },
                 "vlan_tag": {
                     "type": "integer",
@@ -3352,6 +3358,60 @@ var APISwaggerJSON string = `{
             "default": "NETWORK_INTERFACE_NETWORK_REF",
             "x-displayname": "Interface Network Type",
             "x-ves-proto-enum": "ves.io.schema.network_interface.InterfaceNetworkType"
+        },
+        "network_interfaceLayer2InterfaceType": {
+            "type": "object",
+            "description": "Layer2 Interface Configuration",
+            "title": "Layer2 interface",
+            "x-displayname": "Layer2 Interface",
+            "x-ves-oneof-field-layer2_interface_choice": "[\"l2vlan_interface\"]",
+            "x-ves-proto-message": "ves.io.schema.network_interface.Layer2InterfaceType",
+            "properties": {
+                "l2vlan_interface": {
+                    "description": "Exclusive with []\n Layer2 interface of type VLAN",
+                    "title": "VLAN Interface",
+                    "$ref": "#/definitions/network_interfaceLayer2VlanInterfaceType",
+                    "x-displayname": "VLAN Interface"
+                }
+            }
+        },
+        "network_interfaceLayer2VlanInterfaceType": {
+            "type": "object",
+            "description": "Layer2 VLAN Interface Configuration",
+            "title": "Layer2 VLAN interface",
+            "x-displayname": "Layer2 VLAN Interface",
+            "x-ves-proto-message": "ves.io.schema.network_interface.Layer2VlanInterfaceType",
+            "properties": {
+                "device": {
+                    "type": "string",
+                    "description": " Physical ethernet interface\n\nExample: - \"eth0\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 64\n  ves.io.schema.rules.string.min_len: 1\n",
+                    "title": "Device",
+                    "minLength": 1,
+                    "maxLength": 64,
+                    "x-displayname": "Ethernet Device",
+                    "x-ves-example": "eth0",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.max_len": "64",
+                        "ves.io.schema.rules.string.min_len": "1"
+                    }
+                },
+                "vlan_id": {
+                    "type": "integer",
+                    "description": " VLAN Id \n\nExample: - \"10\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.uint32.gte: 1\n  ves.io.schema.rules.uint32.lte: 4095\n",
+                    "title": "VLAN Id",
+                    "format": "int64",
+                    "x-displayname": "VLAN Id",
+                    "x-ves-example": "10",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.uint32.gte": "1",
+                        "ves.io.schema.rules.uint32.lte": "4095"
+                    }
+                }
+            }
         },
         "network_interfaceLegacyInterfaceType": {
             "type": "object",
@@ -3858,14 +3918,15 @@ var APISwaggerJSON string = `{
         },
         "network_interfaceNetworkInterfaceType": {
             "type": "string",
-            "description": "Identifies the type of the interface.\n\nNetwork interface is an Ethernet interface\nNetwork interface is a VLAN interface\nNetwork interface is a bond interface running LACP\nNetwork interface is a tunnel interface\nNetwork interface is a loopback device",
+            "description": "Identifies the type of the interface.\n\nNetwork interface is an Ethernet interface\nNetwork interface is a VLAN interface\nNetwork interface is a bond interface running LACP\nNetwork interface is a tunnel interface\nNetwork interface is a loopback device\nNetwork interface is a layer2 interface",
             "title": "Network Interface Type",
             "enum": [
                 "NETWORK_INTERFACE_ETHERNET",
                 "NETWORK_INTERFACE_VLAN_INTERFACE",
                 "NETWORK_INTERFACE_LACP_INTERFACE",
                 "NETWORK_INTERFACE_TUNNEL_INTERFACE",
-                "NETWORK_INTERFACE_LOOPBACK_INTERFACE"
+                "NETWORK_INTERFACE_LOOPBACK_INTERFACE",
+                "NETWORK_INTERFACE_LAYER2_INTERFACE"
             ],
             "default": "NETWORK_INTERFACE_ETHERNET",
             "x-displayname": "Network Interface Type",
@@ -3953,44 +4014,44 @@ var APISwaggerJSON string = `{
             "description": "Network interface represents configuration of a network device.\nReplace network interface will replace the contents of given network interface object.",
             "title": "Replace network interface",
             "x-displayname": "Replace Network Interface",
-            "x-ves-oneof-field-interface_choice": "[\"dedicated_interface\",\"dedicated_management_interface\",\"ethernet_interface\",\"legacy_interface\",\"tunnel_interface\",\"vlan_interface\"]",
+            "x-ves-oneof-field-interface_choice": "[\"dedicated_interface\",\"dedicated_management_interface\",\"ethernet_interface\",\"layer2_interface\",\"legacy_interface\",\"tunnel_interface\"]",
             "x-ves-proto-message": "ves.io.schema.network_interface.ReplaceSpecType",
             "properties": {
                 "dedicated_interface": {
-                    "description": "Exclusive with [dedicated_management_interface ethernet_interface legacy_interface tunnel_interface vlan_interface]\n Internal helps in conversion",
+                    "description": "Exclusive with [dedicated_management_interface ethernet_interface layer2_interface legacy_interface tunnel_interface]\n Internal helps in conversion",
                     "title": "Bootstrap Local Interface",
                     "$ref": "#/definitions/network_interfaceDedicatedInterfaceType",
                     "x-displayname": "Dedicated Interface"
                 },
                 "dedicated_management_interface": {
-                    "description": "Exclusive with [dedicated_interface ethernet_interface legacy_interface tunnel_interface vlan_interface]\n Internal helps in conversion",
+                    "description": "Exclusive with [dedicated_interface ethernet_interface layer2_interface legacy_interface tunnel_interface]\n Internal helps in conversion",
                     "title": "Dedicated Management Interface",
                     "$ref": "#/definitions/network_interfaceDedicatedManagementInterfaceType",
                     "x-displayname": "Dedicated Management Interface"
                 },
                 "ethernet_interface": {
-                    "description": "Exclusive with [dedicated_interface dedicated_management_interface legacy_interface tunnel_interface vlan_interface]\n Internal helps in conversion",
+                    "description": "Exclusive with [dedicated_interface dedicated_management_interface layer2_interface legacy_interface tunnel_interface]\n Internal helps in conversion",
                     "title": "Ethernet Interface",
                     "$ref": "#/definitions/network_interfaceEthernetInterfaceType",
                     "x-displayname": "Ethernet Interface"
                 },
+                "layer2_interface": {
+                    "description": "Exclusive with [dedicated_interface dedicated_management_interface ethernet_interface legacy_interface tunnel_interface]\n Internal helps in conversion",
+                    "title": "Layer2 interface",
+                    "$ref": "#/definitions/network_interfaceLayer2InterfaceType",
+                    "x-displayname": "Layer2 interface"
+                },
                 "legacy_interface": {
-                    "description": "Exclusive with [dedicated_interface dedicated_management_interface ethernet_interface tunnel_interface vlan_interface]\nOld method of interface configuration",
+                    "description": "Exclusive with [dedicated_interface dedicated_management_interface ethernet_interface layer2_interface tunnel_interface]\nOld method of interface configuration",
                     "title": "Legacy Interface",
                     "$ref": "#/definitions/network_interfaceLegacyInterfaceType",
                     "x-displayname": "Legacy Interface"
                 },
                 "tunnel_interface": {
-                    "description": "Exclusive with [dedicated_interface dedicated_management_interface ethernet_interface legacy_interface vlan_interface]\n Internal helps in conversion",
+                    "description": "Exclusive with [dedicated_interface dedicated_management_interface ethernet_interface layer2_interface legacy_interface]\n Internal helps in conversion",
                     "title": "Tunnel Interface Template",
                     "$ref": "#/definitions/network_interfaceTunnelInterfaceType",
                     "x-displayname": "Tunnel Interface"
-                },
-                "vlan_interface": {
-                    "description": "Exclusive with [dedicated_interface dedicated_management_interface ethernet_interface legacy_interface tunnel_interface]\n Internal helps in conversion",
-                    "title": "VLAN interface",
-                    "$ref": "#/definitions/network_interfaceVlanInterfaceType",
-                    "x-displayname": "VLAN interface"
                 }
             }
         },
@@ -4249,44 +4310,6 @@ var APISwaggerJSON string = `{
                     "description": "x-displayName: \"Create Virtual Host Interface\"\nCreate a virtual interface for Network Interface. The virtual interface\nis not seen in host-os. This interface will be internal to VER\nSome options like DHCP will not be valid on the Network Interface",
                     "title": "Create Virtual Interface",
                     "$ref": "#/definitions/ioschemaEmpty"
-                }
-            }
-        },
-        "network_interfaceVlanInterfaceType": {
-            "type": "object",
-            "description": "VLAN Interface Configuration",
-            "title": "VLAN interface",
-            "x-displayname": "VLAN Interface",
-            "x-ves-proto-message": "ves.io.schema.network_interface.VlanInterfaceType",
-            "properties": {
-                "device": {
-                    "type": "string",
-                    "description": " Physical ethernet interface\n\nExample: - \"eth0\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 64\n  ves.io.schema.rules.string.min_len: 1\n",
-                    "title": "Device",
-                    "minLength": 1,
-                    "maxLength": 64,
-                    "x-displayname": "Ethernet Device",
-                    "x-ves-example": "eth0",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true",
-                        "ves.io.schema.rules.string.max_len": "64",
-                        "ves.io.schema.rules.string.min_len": "1"
-                    }
-                },
-                "vlan_id": {
-                    "type": "integer",
-                    "description": " Configure a VLAN tagged ethernet interface\n\nExample: - \"eth0.10\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.uint32.gte: 1\n  ves.io.schema.rules.uint32.lte: 4095\n",
-                    "title": "VLAN Id",
-                    "format": "int64",
-                    "x-displayname": "VLAN Id",
-                    "x-ves-example": "eth0.10",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true",
-                        "ves.io.schema.rules.uint32.gte": "1",
-                        "ves.io.schema.rules.uint32.lte": "4095"
-                    }
                 }
             }
         },

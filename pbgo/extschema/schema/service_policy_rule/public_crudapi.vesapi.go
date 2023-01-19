@@ -800,7 +800,13 @@ func (c *crudAPIRestClient) Delete(ctx context.Context, key string, opts ...serv
 }
 
 func NewCRUDAPIRestClient(baseURL string, cl http.Client) server.CRUDClient {
-	crcl := &crudAPIRestClient{baseURL, cl}
+	var bURL string
+	if strings.HasSuffix(baseURL, "/") {
+		bURL = baseURL[:len(baseURL)-1]
+	} else {
+		bURL = baseURL
+	}
+	crcl := &crudAPIRestClient{bURL, cl}
 	return crcl
 }
 
@@ -2187,7 +2193,7 @@ var APISwaggerJSON string = `{
     "definitions": {
         "app_firewallAppFirewallViolationType": {
             "type": "string",
-            "description": "List of all supported Violation Types\n\nVIOL_NONE\nVIOL_FILETYPE\nVIOL_METHOD\nVIOL_MANDATORY_HEADER\nVIOL_HTTP_RESPONSE_STATUS\nVIOL_REQUEST_MAX_LENGTH\nVIOL_FILE_UPLOAD\nVIOL_FILE_UPLOAD_IN_BODY\nVIOL_XML_MALFORMED\nVIOL_JSON_MALFORMED\nVIOL_ASM_COOKIE_MODIFIED\nVIOL_HTTP_PROTOCOL_MULTIPLE_HOST_HEADERS\nVIOL_HTTP_PROTOCOL_BAD_HOST_HEADER_VALUE\nVIOL_HTTP_PROTOCOL_UNPARSABLE_REQUEST_CONTENT\nVIOL_HTTP_PROTOCOL_NULL_IN_REQUEST\nVIOL_HTTP_PROTOCOL_BAD_HTTP_VERSION\nVIOL_HTTP_PROTOCOL_CRLF_CHARACTERS_BEFORE_REQUEST_START\nVIOL_HTTP_PROTOCOL_NO_HOST_HEADER_IN_HTTP_1_1_REQUEST\nVIOL_HTTP_PROTOCOL_BAD_MULTIPART_PARAMETERS_PARSING\nVIOL_HTTP_PROTOCOL_SEVERAL_CONTENT_LENGTH_HEADERS\nVIOL_HTTP_PROTOCOL_CONTENT_LENGTH_SHOULD_BE_A_POSITIVE_NUMBER\nVIOL_EVASION_DIRECTORY_TRAVERSALS\nVIOL_MALFORMED_REQUEST\nVIOL_EVASION_MULTIPLE_DECODING\nVIOL_DATA_GUARD\nVIOL_EVASION_APACHE_WHITESPACE\nVIOL_COOKIE_MODIFIED\nVIOL_EVASION_IIS_UNICODE_CODEPOINTS\nVIOL_EVASION_IIS_BACKSLASHES\nVIOL_EVASION_PERCENT_U_DECODING\nVIOL_EVASION_BARE_BYTE_DECODING\nVIOL_EVASION_BAD_UNESCAPE",
+            "description": "List of all supported Violation Types\n\nVIOL_NONE\nVIOL_FILETYPE\nVIOL_METHOD\nVIOL_MANDATORY_HEADER\nVIOL_HTTP_RESPONSE_STATUS\nVIOL_REQUEST_MAX_LENGTH\nVIOL_FILE_UPLOAD\nVIOL_FILE_UPLOAD_IN_BODY\nVIOL_XML_MALFORMED\nVIOL_JSON_MALFORMED\nVIOL_ASM_COOKIE_MODIFIED\nVIOL_HTTP_PROTOCOL_MULTIPLE_HOST_HEADERS\nVIOL_HTTP_PROTOCOL_BAD_HOST_HEADER_VALUE\nVIOL_HTTP_PROTOCOL_UNPARSABLE_REQUEST_CONTENT\nVIOL_HTTP_PROTOCOL_NULL_IN_REQUEST\nVIOL_HTTP_PROTOCOL_BAD_HTTP_VERSION\nVIOL_HTTP_PROTOCOL_CRLF_CHARACTERS_BEFORE_REQUEST_START\nVIOL_HTTP_PROTOCOL_NO_HOST_HEADER_IN_HTTP_1_1_REQUEST\nVIOL_HTTP_PROTOCOL_BAD_MULTIPART_PARAMETERS_PARSING\nVIOL_HTTP_PROTOCOL_SEVERAL_CONTENT_LENGTH_HEADERS\nVIOL_HTTP_PROTOCOL_CONTENT_LENGTH_SHOULD_BE_A_POSITIVE_NUMBER\nVIOL_EVASION_DIRECTORY_TRAVERSALS\nVIOL_MALFORMED_REQUEST\nVIOL_EVASION_MULTIPLE_DECODING\nVIOL_DATA_GUARD\nVIOL_EVASION_APACHE_WHITESPACE\nVIOL_COOKIE_MODIFIED\nVIOL_EVASION_IIS_UNICODE_CODEPOINTS\nVIOL_EVASION_IIS_BACKSLASHES\nVIOL_EVASION_PERCENT_U_DECODING\nVIOL_EVASION_BARE_BYTE_DECODING\nVIOL_EVASION_BAD_UNESCAPE\nVIOL_HTTP_PROTOCOL_BAD_MULTIPART_FORMDATA_REQUEST_PARSING\nVIOL_HTTP_PROTOCOL_BODY_IN_GET_OR_HEAD_REQUEST\nVIOL_HTTP_PROTOCOL_HIGH_ASCII_CHARACTERS_IN_HEADERS\nVIOL_ENCODING\nVIOL_COOKIE_MALFORMED",
             "title": "App Firewall Violation Type",
             "enum": [
                 "VIOL_NONE",
@@ -2221,7 +2227,12 @@ var APISwaggerJSON string = `{
                 "VIOL_EVASION_IIS_BACKSLASHES",
                 "VIOL_EVASION_PERCENT_U_DECODING",
                 "VIOL_EVASION_BARE_BYTE_DECODING",
-                "VIOL_EVASION_BAD_UNESCAPE"
+                "VIOL_EVASION_BAD_UNESCAPE",
+                "VIOL_HTTP_PROTOCOL_BAD_MULTIPART_FORMDATA_REQUEST_PARSING",
+                "VIOL_HTTP_PROTOCOL_BODY_IN_GET_OR_HEAD_REQUEST",
+                "VIOL_HTTP_PROTOCOL_HIGH_ASCII_CHARACTERS_IN_HEADERS",
+                "VIOL_ENCODING",
+                "VIOL_COOKIE_MALFORMED"
             ],
             "default": "VIOL_NONE",
             "x-displayname": "App Firewall Violation Type",
@@ -2229,7 +2240,7 @@ var APISwaggerJSON string = `{
         },
         "app_firewallAttackType": {
             "type": "string",
-            "description": "List of all Attack Types\n\nATTACK_TYPE_NONE\nATTACK_TYPE_NON_BROWSER_CLIENT\nATTACK_TYPE_OTHER_APPLICATION_ATTACKS\nATTACK_TYPE_TROJAN_BACKDOOR_SPYWARE\nATTACK_TYPE_DETECTION_EVASION\nATTACK_TYPE_VULNERABILITY_SCAN\nATTACK_TYPE_ABUSE_OF_FUNCTIONALITY\nATTACK_TYPE_AUTHENTICATION_AUTHORIZATION_ATTACKS\nATTACK_TYPE_BUFFER_OVERFLOW\nATTACK_TYPE_PREDICTABLE_RESOURCE_LOCATION\nATTACK_TYPE_INFORMATION_LEAKAGE\nATTACK_TYPE_DIRECTORY_INDEXING\nATTACK_TYPE_PATH_TRAVERSAL\nATTACK_TYPE_XPATH_INJECTION\nATTACK_TYPE_LDAP_INJECTION\nATTACK_TYPE_SERVER_SIDE_CODE_INJECTION\nATTACK_TYPE_COMMAND_EXECUTION\nATTACK_TYPE_SQL_INJECTION\nATTACK_TYPE_CROSS_SITE_SCRIPTING\nATTACK_TYPE_DENIAL_OF_SERVICE\nATTACK_TYPE_HTTP_PARSER_ATTACK\nATTACK_TYPE_SESSION_HIJACKING\nATTACK_TYPE_HTTP_RESPONSE_SPLITTING\nATTACK_TYPE_FORCEFUL_BROWSING",
+            "description": "List of all Attack Types\n\nATTACK_TYPE_NONE\nATTACK_TYPE_NON_BROWSER_CLIENT\nATTACK_TYPE_OTHER_APPLICATION_ATTACKS\nATTACK_TYPE_TROJAN_BACKDOOR_SPYWARE\nATTACK_TYPE_DETECTION_EVASION\nATTACK_TYPE_VULNERABILITY_SCAN\nATTACK_TYPE_ABUSE_OF_FUNCTIONALITY\nATTACK_TYPE_AUTHENTICATION_AUTHORIZATION_ATTACKS\nATTACK_TYPE_BUFFER_OVERFLOW\nATTACK_TYPE_PREDICTABLE_RESOURCE_LOCATION\nATTACK_TYPE_INFORMATION_LEAKAGE\nATTACK_TYPE_DIRECTORY_INDEXING\nATTACK_TYPE_PATH_TRAVERSAL\nATTACK_TYPE_XPATH_INJECTION\nATTACK_TYPE_LDAP_INJECTION\nATTACK_TYPE_SERVER_SIDE_CODE_INJECTION\nATTACK_TYPE_COMMAND_EXECUTION\nATTACK_TYPE_SQL_INJECTION\nATTACK_TYPE_CROSS_SITE_SCRIPTING\nATTACK_TYPE_DENIAL_OF_SERVICE\nATTACK_TYPE_HTTP_PARSER_ATTACK\nATTACK_TYPE_SESSION_HIJACKING\nATTACK_TYPE_HTTP_RESPONSE_SPLITTING\nATTACK_TYPE_FORCEFUL_BROWSING\nATTACK_TYPE_REMOTE_FILE_INCLUDE\nATTACK_TYPE_MALICIOUS_FILE_UPLOAD",
             "title": "AttackType",
             "enum": [
                 "ATTACK_TYPE_NONE",
@@ -2255,7 +2266,9 @@ var APISwaggerJSON string = `{
                 "ATTACK_TYPE_HTTP_PARSER_ATTACK",
                 "ATTACK_TYPE_SESSION_HIJACKING",
                 "ATTACK_TYPE_HTTP_RESPONSE_SPLITTING",
-                "ATTACK_TYPE_FORCEFUL_BROWSING"
+                "ATTACK_TYPE_FORCEFUL_BROWSING",
+                "ATTACK_TYPE_REMOTE_FILE_INCLUDE",
+                "ATTACK_TYPE_MALICIOUS_FILE_UPLOAD"
             ],
             "default": "ATTACK_TYPE_NONE",
             "x-displayname": "Attack Types",
@@ -2341,13 +2354,13 @@ var APISwaggerJSON string = `{
             "properties": {
                 "exclude_attack_type_contexts": {
                     "type": "array",
-                    "description": " App Firewall attack types contexts to be excluded for this request\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 64\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " Attack Types to be excluded for the defined match criteria\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 64\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "Exclude Attack Types Contexts",
                     "maxItems": 64,
                     "items": {
                         "$ref": "#/definitions/policyAppFirewallAttackTypeContext"
                     },
-                    "x-displayname": "Exclude App Firewall Attack Types Contexts",
+                    "x-displayname": "Attack Types",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.repeated.max_items": "64",
                         "ves.io.schema.rules.repeated.unique": "true"
@@ -2355,13 +2368,13 @@ var APISwaggerJSON string = `{
                 },
                 "exclude_bot_name_contexts": {
                     "type": "array",
-                    "description": " Bot names contexts to be excluded for this request\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 64\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " Bot Names to be excluded for the defined match criteria\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 64\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "Exclude Bot Names Contexts",
                     "maxItems": 64,
                     "items": {
                         "$ref": "#/definitions/policyBotNameContext"
                     },
-                    "x-displayname": "Exclude Bot Names Contexts",
+                    "x-displayname": "Bot Names",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.repeated.max_items": "64",
                         "ves.io.schema.rules.repeated.unique": "true"
@@ -2369,13 +2382,13 @@ var APISwaggerJSON string = `{
                 },
                 "exclude_signature_contexts": {
                     "type": "array",
-                    "description": " App Firewall signature contexts to be excluded for this request\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 1024\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " Signature IDs to be excluded for the defined match criteria\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 1024\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "Exclude Signature Contexts",
                     "maxItems": 1024,
                     "items": {
                         "$ref": "#/definitions/policyAppFirewallSignatureContext"
                     },
-                    "x-displayname": "Exclude App Firewall Signature Contexts",
+                    "x-displayname": "Signature IDs",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.repeated.max_items": "1024",
                         "ves.io.schema.rules.repeated.unique": "true"
@@ -2383,13 +2396,13 @@ var APISwaggerJSON string = `{
                 },
                 "exclude_violation_contexts": {
                     "type": "array",
-                    "description": " App Firewall violation contexts to be excluded for this request\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 64\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " Violations to be excluded for the defined match criteria\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 64\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "Exclude Violation Contexts",
                     "maxItems": 64,
                     "items": {
                         "$ref": "#/definitions/policyAppFirewallViolationContext"
                     },
-                    "x-displayname": "Exclude App Firewall Violation Contexts",
+                    "x-displayname": "Violations",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.repeated.max_items": "64",
                         "ves.io.schema.rules.repeated.unique": "true"
@@ -2670,6 +2683,52 @@ var APISwaggerJSON string = `{
                 "policy_name": {
                     "type": "string",
                     "description": "x-displayName: \"Policy Name\"\nx-example: \"value\"\nSets the BD Policy to use",
+                    "title": "Set BD Policy name"
+                }
+            }
+        },
+        "policyGraphQLSettingsType": {
+            "type": "object",
+            "description": "x-displayName: \"GraphQL Settings\"\nGraphQL configuration.",
+            "title": "GraphQL Settings",
+            "properties": {
+                "disable_introspection": {
+                    "description": "x-displayName: \"Disable\"\nDisable introspection queries for the load balancer.",
+                    "title": "Disable Introspection Queries",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "enable_introspection": {
+                    "description": "x-displayName: \"Enable\"\nEnable introspection queries for the load balancer.",
+                    "title": "Enable Introspection Queries",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "max_batched_queries": {
+                    "type": "integer",
+                    "description": "x-displayName: \"Maximum Batched Queries\"\nx-example: \"10\"\nx-required\nSpecify maximum number of queries in a single batched request.",
+                    "title": "Max Batched Queries",
+                    "format": "int64"
+                },
+                "max_depth": {
+                    "type": "integer",
+                    "description": "x-displayName: \"Maximum Structure Depth\"\nx-example: \"10\"\nx-required\nSpecify maximum depth for the GraphQL query.",
+                    "title": "Max Depth",
+                    "format": "int64"
+                },
+                "max_total_length": {
+                    "type": "integer",
+                    "description": "x-displayName: \"Maximum Total Length\"\nx-example: \"5000\"\nx-required\nSpecify maximum length in bytes for the GraphQL query.",
+                    "title": "Max Total Length",
+                    "format": "int64"
+                },
+                "max_value_length": {
+                    "type": "integer",
+                    "description": "x-displayName: \"Maximum Value Length\"\nx-example: \"1024\"\nx-required\nSpecify maximum value length in bytes for the GraphQL query.",
+                    "title": "Max Value Length",
+                    "format": "int64"
+                },
+                "policy_name": {
+                    "type": "string",
+                    "description": "x-displayName: \"Policy Name\"\nx-example: \"graphql\"\nSets the BD Policy to use",
                     "title": "Set BD Policy name"
                 }
             }
@@ -3011,6 +3070,298 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.repeated.min_items": "1",
                         "ves.io.schema.rules.repeated.unique": "true"
                     }
+                }
+            }
+        },
+        "policyRequestConstraintType": {
+            "type": "object",
+            "title": "RequestConstraintType",
+            "x-displayname": "Request Constraints",
+            "x-ves-oneof-field-max_body_size_choice": "[\"max_body_size_exceeds\",\"max_body_size_none\"]",
+            "x-ves-oneof-field-max_cookie_count_choice": "[\"max_cookie_count_exceeds\",\"max_cookie_count_none\"]",
+            "x-ves-oneof-field-max_cookie_key_size_choice": "[\"max_cookie_key_size_exceeds\",\"max_cookie_key_size_none\"]",
+            "x-ves-oneof-field-max_cookie_value_size_choice": "[\"max_cookie_value_size_exceeds\",\"max_cookie_value_size_none\"]",
+            "x-ves-oneof-field-max_header_count_choice": "[\"max_header_count_exceeds\",\"max_header_count_none\"]",
+            "x-ves-oneof-field-max_header_key_size_choice": "[\"max_header_key_size_exceeds\",\"max_header_key_size_none\"]",
+            "x-ves-oneof-field-max_header_value_size_choice": "[\"max_header_value_size_exceeds\",\"max_header_value_size_none\"]",
+            "x-ves-oneof-field-max_parameter_count_choice": "[\"max_parameter_count_exceeds\",\"max_parameter_count_none\"]",
+            "x-ves-oneof-field-max_parameter_name_size_choice": "[\"max_parameter_name_size_exceeds\",\"max_parameter_name_size_none\"]",
+            "x-ves-oneof-field-max_parameter_value_size_choice": "[\"max_parameter_value_size_exceeds\",\"max_parameter_value_size_none\"]",
+            "x-ves-oneof-field-max_query_size_choice": "[\"max_query_size_exceeds\",\"max_query_size_none\"]",
+            "x-ves-oneof-field-max_request_line_size_choice": "[\"max_request_line_size_exceeds\",\"max_request_line_size_none\"]",
+            "x-ves-oneof-field-max_request_size_choice": "[\"max_request_size_exceeds\",\"max_request_size_none\"]",
+            "x-ves-oneof-field-max_upload_file_size_choice": "[\"max_upload_file_size_exceeds\",\"max_upload_file_size_none\"]",
+            "x-ves-oneof-field-max_url_size_choice": "[\"max_url_size_exceeds\",\"max_url_size_none\"]",
+            "x-ves-proto-message": "ves.io.schema.policy.RequestConstraintType",
+            "properties": {
+                "max_body_size_exceeds": {
+                    "type": "integer",
+                    "description": "Exclusive with [max_body_size_none]\n\nExample: - \"32768\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 1\n",
+                    "title": "max_body_size_exceeds",
+                    "format": "int64",
+                    "x-displayname": "Match on the Request Body Size that exceed this value",
+                    "x-ves-example": "32768",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.gte": "1"
+                    }
+                },
+                "max_body_size_none": {
+                    "description": "Exclusive with [max_body_size_exceeds]\n",
+                    "title": "max_body_size_none",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Not Configured"
+                },
+                "max_cookie_count_exceeds": {
+                    "type": "integer",
+                    "description": "Exclusive with [max_cookie_count_none]\n\nExample: - \"40\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 1\n  ves.io.schema.rules.uint32.lte: 1024\n",
+                    "title": "max_cookie_count_exceeds",
+                    "format": "int64",
+                    "x-displayname": "Match on the Count for all Cookies that exceed this value",
+                    "x-ves-example": "40",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.gte": "1",
+                        "ves.io.schema.rules.uint32.lte": "1024"
+                    }
+                },
+                "max_cookie_count_none": {
+                    "description": "Exclusive with [max_cookie_count_exceeds]\n",
+                    "title": "max_cookie_count_none",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Not Configured"
+                },
+                "max_cookie_key_size_exceeds": {
+                    "type": "integer",
+                    "description": "Exclusive with [max_cookie_key_size_none]\n\nExample: - \"64\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 1\n  ves.io.schema.rules.uint32.lte: 1024\n",
+                    "title": "max_cookie_key_size_exceeds",
+                    "format": "int64",
+                    "x-displayname": "Match on the Name Size per Cookie that exceed this value",
+                    "x-ves-example": "64",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.gte": "1",
+                        "ves.io.schema.rules.uint32.lte": "1024"
+                    }
+                },
+                "max_cookie_key_size_none": {
+                    "description": "Exclusive with [max_cookie_key_size_exceeds]\n",
+                    "title": "max_cookie_key_size_none",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Not Configured"
+                },
+                "max_cookie_value_size_exceeds": {
+                    "type": "integer",
+                    "description": "Exclusive with [max_cookie_value_size_none]\n\nExample: - \"4096\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 1\n  ves.io.schema.rules.uint32.lte: 32768\n",
+                    "title": "max_cookie_value_size_exceeds",
+                    "format": "int64",
+                    "x-displayname": "Match on the Value Size per Cookie that exceed this value",
+                    "x-ves-example": "4096",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.gte": "1",
+                        "ves.io.schema.rules.uint32.lte": "32768"
+                    }
+                },
+                "max_cookie_value_size_none": {
+                    "description": "Exclusive with [max_cookie_value_size_exceeds]\n",
+                    "title": "max_cookie_value_size_none",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Not Configured"
+                },
+                "max_header_count_exceeds": {
+                    "type": "integer",
+                    "description": "Exclusive with [max_header_count_none]\n\nExample: - \"20\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 1\n  ves.io.schema.rules.uint32.lte: 40\n",
+                    "title": "max_header_count_exceeds",
+                    "format": "int64",
+                    "x-displayname": "Match on the Count for all Headers that exceed this value",
+                    "x-ves-example": "20",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.gte": "1",
+                        "ves.io.schema.rules.uint32.lte": "40"
+                    }
+                },
+                "max_header_count_none": {
+                    "description": "Exclusive with [max_header_count_exceeds]\n",
+                    "title": "max_header_count_none",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Not Configured"
+                },
+                "max_header_key_size_exceeds": {
+                    "type": "integer",
+                    "description": "Exclusive with [max_header_key_size_none]\n\nExample: - \"32\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 1\n  ves.io.schema.rules.uint32.lte: 1024\n",
+                    "title": "max_header_key_size_exceeds",
+                    "format": "int64",
+                    "x-displayname": "Match on the Name Size per Header that exceed this value",
+                    "x-ves-example": "32",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.gte": "1",
+                        "ves.io.schema.rules.uint32.lte": "1024"
+                    }
+                },
+                "max_header_key_size_none": {
+                    "description": "Exclusive with [max_header_key_size_exceeds]\n",
+                    "title": "max_header_key_size_none",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Not Configured"
+                },
+                "max_header_value_size_exceeds": {
+                    "type": "integer",
+                    "description": "Exclusive with [max_header_value_size_none]\n\nExample: - \"1024\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 1\n  ves.io.schema.rules.uint32.lte: 64000\n",
+                    "title": "max_header_value_size_exceeds",
+                    "format": "int64",
+                    "x-displayname": "Match on the Value Size per Header that exceed this value",
+                    "x-ves-example": "1024",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.gte": "1",
+                        "ves.io.schema.rules.uint32.lte": "64000"
+                    }
+                },
+                "max_header_value_size_none": {
+                    "description": "Exclusive with [max_header_value_size_exceeds]\n",
+                    "title": "max_header_value_size_none",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Not Configured"
+                },
+                "max_parameter_count_exceeds": {
+                    "type": "integer",
+                    "description": "Exclusive with [max_parameter_count_none]\n\nExample: - \"4\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 1\n  ves.io.schema.rules.uint32.lte: 1024\n",
+                    "title": "max_parameter_count_exceeds",
+                    "format": "int64",
+                    "x-displayname": "Match on the Parameter Count that exceed this value",
+                    "x-ves-example": "4",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.gte": "1",
+                        "ves.io.schema.rules.uint32.lte": "1024"
+                    }
+                },
+                "max_parameter_count_none": {
+                    "description": "Exclusive with [max_parameter_count_exceeds]\n",
+                    "title": "max_parameter_count_none",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Not Configured"
+                },
+                "max_parameter_name_size_exceeds": {
+                    "type": "integer",
+                    "description": "Exclusive with [max_parameter_name_size_none]\n\nExample: - \"64\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 1\n  ves.io.schema.rules.uint32.lte: 1024\n",
+                    "title": "max_parameter_name_size_exceeds",
+                    "format": "int64",
+                    "x-displayname": "Match on the Parameter Name Size that exceed this value",
+                    "x-ves-example": "64",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.gte": "1",
+                        "ves.io.schema.rules.uint32.lte": "1024"
+                    }
+                },
+                "max_parameter_name_size_none": {
+                    "description": "Exclusive with [max_parameter_name_size_exceeds]\n",
+                    "title": "max_parameter_name_size_none",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Not Configured"
+                },
+                "max_parameter_value_size_exceeds": {
+                    "type": "integer",
+                    "description": "Exclusive with [max_parameter_value_size_none]\n\nExample: - \"1000\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 1\n  ves.io.schema.rules.uint32.lte: 1073741824\n",
+                    "title": "max_parameter_value_size_exceeds",
+                    "format": "int64",
+                    "x-displayname": "Match on the Parameter Value Size that exceed this value",
+                    "x-ves-example": "1000",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.gte": "1",
+                        "ves.io.schema.rules.uint32.lte": "1073741824"
+                    }
+                },
+                "max_parameter_value_size_none": {
+                    "description": "Exclusive with [max_parameter_value_size_exceeds]\n",
+                    "title": "max_parameter_value_size_none",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Not Configured"
+                },
+                "max_query_size_exceeds": {
+                    "type": "integer",
+                    "description": "Exclusive with [max_query_size_none]\n\nExample: - \"4096\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 1\n  ves.io.schema.rules.uint32.lte: 60000\n",
+                    "title": "max_query_size_exceeds",
+                    "format": "int64",
+                    "x-displayname": "Match on the URL Query Size that exceed this value",
+                    "x-ves-example": "4096",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.gte": "1",
+                        "ves.io.schema.rules.uint32.lte": "60000"
+                    }
+                },
+                "max_query_size_none": {
+                    "description": "Exclusive with [max_query_size_exceeds]\n",
+                    "title": "max_query_size_none",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Not Configured"
+                },
+                "max_request_line_size_exceeds": {
+                    "type": "integer",
+                    "description": "Exclusive with [max_request_line_size_none]\n\nExample: - \"4096\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 1\n  ves.io.schema.rules.uint32.lte: 65536\n",
+                    "title": "max_query_size_exceeds",
+                    "format": "int64",
+                    "x-displayname": "Match on the Request Line Size that exceed this value",
+                    "x-ves-example": "4096",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.gte": "1",
+                        "ves.io.schema.rules.uint32.lte": "65536"
+                    }
+                },
+                "max_request_line_size_none": {
+                    "description": "Exclusive with [max_request_line_size_exceeds]\n",
+                    "title": "max_request_line_size_none",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Not Configured"
+                },
+                "max_request_size_exceeds": {
+                    "type": "integer",
+                    "description": "Exclusive with [max_request_size_none]\n\nExample: - \"32768\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 1\n  ves.io.schema.rules.uint32.lte: 65536\n",
+                    "title": "max_request_size_exceeds",
+                    "format": "int64",
+                    "x-displayname": "Match on the Request Size that exceed this value",
+                    "x-ves-example": "32768",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.gte": "1",
+                        "ves.io.schema.rules.uint32.lte": "65536"
+                    }
+                },
+                "max_request_size_none": {
+                    "description": "Exclusive with [max_request_size_exceeds]\n",
+                    "title": "max_request_size_none",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Not Configured"
+                },
+                "max_upload_file_size_exceeds": {
+                    "type": "integer",
+                    "description": "Exclusive with [max_upload_file_size_none]\n\nExample: - \"1024\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 0\n  ves.io.schema.rules.uint32.lte: 51200\n",
+                    "title": "max_upload_file_size_exceeds",
+                    "format": "int64",
+                    "x-displayname": "Match on the File Upload Size that exceed this value",
+                    "x-ves-example": "1024",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.gte": "0",
+                        "ves.io.schema.rules.uint32.lte": "51200"
+                    }
+                },
+                "max_upload_file_size_none": {
+                    "description": "Exclusive with [max_upload_file_size_exceeds]\n",
+                    "title": "max_upload_file_size_none",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Not Configured"
+                },
+                "max_url_size_exceeds": {
+                    "type": "integer",
+                    "description": "Exclusive with [max_url_size_none]\n\nExample: - \"4096\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 1\n  ves.io.schema.rules.uint32.lte: 128000\n",
+                    "title": "max_url_size_exceeds",
+                    "format": "int64",
+                    "x-displayname": "Match on the URL Size that exceed this value",
+                    "x-ves-example": "4096",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.gte": "1",
+                        "ves.io.schema.rules.uint32.lte": "128000"
+                    }
+                },
+                "max_url_size_none": {
+                    "description": "Exclusive with [max_url_size_exceeds]\n",
+                    "title": "max_url_size_none",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Not Configured"
                 }
             }
         },
@@ -3515,7 +3866,7 @@ var APISwaggerJSON string = `{
         },
         "schemaHttpMethod": {
             "type": "string",
-            "description": "Specifies the HTTP method used to access a resource.\n\nAny HTTP Method\nGET method\nHEAD method\nPOST method\nPUT method\nDELETE method\nCONNECT method\nOPTIONS method\nTRACE method\nPATCH method",
+            "description": "Specifies the HTTP method used to access a resource.\n\nAny HTTP Method",
             "title": "HttpMethod",
             "enum": [
                 "ANY",
@@ -4742,6 +5093,11 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.repeated.max_items": "16"
                     }
                 },
+                "request_constraints": {
+                    "description": " Place limits on request based on the request attributes. The request matches if any of the attribute sizes exceed the corresponding maximum value.",
+                    "$ref": "#/definitions/policyRequestConstraintType",
+                    "x-displayname": "Request Constraints"
+                },
                 "tls_fingerprint_matcher": {
                     "description": " TLS JA3 fingerprints to be matched.\n The predicate evaluates to true if the TLS fingerprint matches any of the exact values or classes of known TLS fingerprints.",
                     "$ref": "#/definitions/policyTlsFingerprintMatcherType",
@@ -4939,6 +5295,11 @@ var APISwaggerJSON string = `{
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.repeated.max_items": "16"
                     }
+                },
+                "request_constraints": {
+                    "description": " Place limits on request based on the request attributes. The request matches if any of the attribute sizes exceed the corresponding maximum value.",
+                    "$ref": "#/definitions/policyRequestConstraintType",
+                    "x-displayname": "Request Constraints"
                 },
                 "tls_fingerprint_matcher": {
                     "description": " TLS JA3 fingerprints to be matched.\n The predicate evaluates to true if the TLS fingerprint matches any of the exact values or classes of known TLS fingerprints.",
@@ -5163,6 +5524,12 @@ var APISwaggerJSON string = `{
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.repeated.max_items": "16"
                     }
+                },
+                "request_constraints": {
+                    "description": " Place limits on request based on the request attributes. The request matches if any of the attribute sizes exceed the corresponding maximum value.",
+                    "title": "request constraints",
+                    "$ref": "#/definitions/policyRequestConstraintType",
+                    "x-displayname": "Request Constraints"
                 },
                 "tls_fingerprint_matcher": {
                     "description": " TLS JA3 fingerprints to be matched.\n The predicate evaluates to true if the TLS fingerprint matches any of the exact values or classes of known TLS fingerprints.",
@@ -5395,6 +5762,11 @@ var APISwaggerJSON string = `{
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.repeated.max_items": "16"
                     }
+                },
+                "request_constraints": {
+                    "description": " Place limits on request based on the request attributes. The request matches if any of the attribute sizes exceed the corresponding maximum value.",
+                    "$ref": "#/definitions/policyRequestConstraintType",
+                    "x-displayname": "Request Constraints"
                 },
                 "tls_fingerprint_matcher": {
                     "description": " TLS JA3 fingerprints to be matched.\n The predicate evaluates to true if the TLS fingerprint matches any of the exact values or classes of known TLS fingerprints.",

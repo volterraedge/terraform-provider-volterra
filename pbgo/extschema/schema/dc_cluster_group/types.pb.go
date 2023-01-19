@@ -35,7 +35,7 @@ const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 type DCClusterGroupMeshType struct {
 	// DC Cluster Group Mesh Choice
 	//
-	// x-displayName: "DC Cluster Group Mesh Choice"
+	// x-displayName: "Mesh Type"
 	//
 	// Choice of data plane, data plane and control plane dc cluster mesh
 	//

@@ -1863,8 +1863,6 @@ var DefaultAWSVPCIngressEgressGwTypeValidator = func() *ValidateAWSVPCIngressEgr
 
 	v.FldValidators["inside_static_route_choice.inside_static_routes"] = ves_io_schema_views.SiteStaticRoutesListTypeValidator().Validate
 
-	v.FldValidators["internet_vip_choice.enable_internet_vip"] = ves_io_schema_views.AWSInternetVIPTypeValidator().Validate
-
 	v.FldValidators["network_policy_choice.active_network_policies"] = ves_io_schema_network_firewall.ActiveNetworkPoliciesTypeValidator().Validate
 	v.FldValidators["network_policy_choice.active_enhanced_firewall_policies"] = ves_io_schema_network_firewall.ActiveEnhancedFirewallPoliciesTypeValidator().Validate
 
@@ -2322,6 +2320,16 @@ func (v *ValidateAWSVPCSiteInfoType) SubnetIdsValidationRuleHandler(rules map[st
 	return validatorFn, nil
 }
 
+func (v *ValidateAWSVPCSiteInfoType) VpcIdValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for vpc_id")
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateAWSVPCSiteInfoType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*AWSVPCSiteInfoType)
 	if !ok {
@@ -2355,6 +2363,15 @@ func (v *ValidateAWSVPCSiteInfoType) Validate(ctx context.Context, pm interface{
 	if fv, exists := v.FldValidators["subnet_ids"]; exists {
 		vOpts := append(opts, db.WithValidateField("subnet_ids"))
 		if err := fv(ctx, m.GetSubnetIds(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["vpc_id"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("vpc_id"))
+		if err := fv(ctx, m.GetVpcId(), vOpts...); err != nil {
 			return err
 		}
 
@@ -2414,6 +2431,17 @@ var DefaultAWSVPCSiteInfoTypeValidator = func() *ValidateAWSVPCSiteInfoType {
 		panic(errMsg)
 	}
 	v.FldValidators["subnet_ids"] = vFn
+
+	vrhVpcId := v.VpcIdValidationRuleHandler
+	rulesVpcId := map[string]string{
+		"ves.io.schema.rules.string.pattern": "^(vpc-)([a-z0-9]{8}|[a-z0-9]{17})$|^$",
+	}
+	vFn, err = vrhVpcId(rulesVpcId)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for AWSVPCSiteInfoType.vpc_id: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["vpc_id"] = vFn
 
 	return v
 }()
@@ -5004,7 +5032,7 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	vrhTags := v.TagsValidationRuleHandler
 	rulesTags := map[string]string{
 		"ves.io.schema.rules.map.keys.string.max_len":   "127",
-		"ves.io.schema.rules.map.max_pairs":             "5",
+		"ves.io.schema.rules.map.max_pairs":             "10",
 		"ves.io.schema.rules.map.values.string.max_len": "255",
 	}
 	vFn, err = vrhTags(rulesTags)
@@ -6117,7 +6145,7 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	vrhTags := v.TagsValidationRuleHandler
 	rulesTags := map[string]string{
 		"ves.io.schema.rules.map.keys.string.max_len":   "127",
-		"ves.io.schema.rules.map.max_pairs":             "5",
+		"ves.io.schema.rules.map.max_pairs":             "10",
 		"ves.io.schema.rules.map.values.string.max_len": "255",
 	}
 	vFn, err = vrhTags(rulesTags)
@@ -7376,7 +7404,7 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	vrhTags := v.TagsValidationRuleHandler
 	rulesTags := map[string]string{
 		"ves.io.schema.rules.map.keys.string.max_len":   "127",
-		"ves.io.schema.rules.map.max_pairs":             "5",
+		"ves.io.schema.rules.map.max_pairs":             "10",
 		"ves.io.schema.rules.map.values.string.max_len": "255",
 	}
 	vFn, err = vrhTags(rulesTags)

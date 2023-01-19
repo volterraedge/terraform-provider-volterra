@@ -1445,6 +1445,101 @@ func GlobalSpecTypeValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *HubFullMeshGroupType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *HubFullMeshGroupType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *HubFullMeshGroupType) DeepCopy() *HubFullMeshGroupType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &HubFullMeshGroupType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *HubFullMeshGroupType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *HubFullMeshGroupType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return HubFullMeshGroupTypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateHubFullMeshGroupType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateHubFullMeshGroupType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*HubFullMeshGroupType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *HubFullMeshGroupType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	switch m.GetHubFullMeshChoice().(type) {
+	case *HubFullMeshGroupType_DataPlaneMesh:
+		if fv, exists := v.FldValidators["hub_full_mesh_choice.data_plane_mesh"]; exists {
+			val := m.GetHubFullMeshChoice().(*HubFullMeshGroupType_DataPlaneMesh).DataPlaneMesh
+			vOpts := append(opts,
+				db.WithValidateField("hub_full_mesh_choice"),
+				db.WithValidateField("data_plane_mesh"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *HubFullMeshGroupType_ControlAndDataPlaneMesh:
+		if fv, exists := v.FldValidators["hub_full_mesh_choice.control_and_data_plane_mesh"]; exists {
+			val := m.GetHubFullMeshChoice().(*HubFullMeshGroupType_ControlAndDataPlaneMesh).ControlAndDataPlaneMesh
+			vOpts := append(opts,
+				db.WithValidateField("hub_full_mesh_choice"),
+				db.WithValidateField("control_and_data_plane_mesh"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultHubFullMeshGroupTypeValidator = func() *ValidateHubFullMeshGroupType {
+	v := &ValidateHubFullMeshGroupType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func HubFullMeshGroupTypeValidator() db.Validator {
+	return DefaultHubFullMeshGroupTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *ReplaceSpecType) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -2017,6 +2112,32 @@ func (v *ValidateSpokeMeshGroupType) Validate(ctx context.Context, pm interface{
 		vOpts := append(opts, db.WithValidateField("hub_mesh_group"))
 		if err := fv(ctx, m.GetHubMeshGroup(), vOpts...); err != nil {
 			return err
+		}
+
+	}
+
+	switch m.GetSpokeHubMeshChoice().(type) {
+	case *SpokeMeshGroupType_DataPlaneMesh:
+		if fv, exists := v.FldValidators["spoke_hub_mesh_choice.data_plane_mesh"]; exists {
+			val := m.GetSpokeHubMeshChoice().(*SpokeMeshGroupType_DataPlaneMesh).DataPlaneMesh
+			vOpts := append(opts,
+				db.WithValidateField("spoke_hub_mesh_choice"),
+				db.WithValidateField("data_plane_mesh"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *SpokeMeshGroupType_ControlAndDataPlaneMesh:
+		if fv, exists := v.FldValidators["spoke_hub_mesh_choice.control_and_data_plane_mesh"]; exists {
+			val := m.GetSpokeHubMeshChoice().(*SpokeMeshGroupType_ControlAndDataPlaneMesh).ControlAndDataPlaneMesh
+			vOpts := append(opts,
+				db.WithValidateField("spoke_hub_mesh_choice"),
+				db.WithValidateField("control_and_data_plane_mesh"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
 		}
 
 	}

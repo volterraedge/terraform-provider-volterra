@@ -100,6 +100,17 @@ func (v *ValidateAddonServiceChoice) Validate(ctx context.Context, pm interface{
 				return err
 			}
 		}
+	case *AddonServiceChoice_F5XcSupportOperations:
+		if fv, exists := v.FldValidators["choice.f5xc_support_operations"]; exists {
+			val := m.GetChoice().(*AddonServiceChoice_F5XcSupportOperations).F5XcSupportOperations
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("f5xc_support_operations"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 	case *AddonServiceChoice_VesIoVolterraDefault:
 		if fv, exists := v.FldValidators["choice.ves_io_volterra_default"]; exists {
 			val := m.GetChoice().(*AddonServiceChoice_VesIoVolterraDefault).VesIoVolterraDefault

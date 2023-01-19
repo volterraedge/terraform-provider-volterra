@@ -71,6 +71,26 @@ type ValidateAccessLogAggregationRequest struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateAccessLogAggregationRequest) StartTimeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for start_time")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateAccessLogAggregationRequest) EndTimeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for end_time")
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateAccessLogAggregationRequest) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*AccessLogAggregationRequest)
 	if !ok {
@@ -140,6 +160,36 @@ func (v *ValidateAccessLogAggregationRequest) Validate(ctx context.Context, pm i
 var DefaultAccessLogAggregationRequestValidator = func() *ValidateAccessLogAggregationRequest {
 	v := &ValidateAccessLogAggregationRequest{FldValidators: map[string]db.ValidatorFunc{}}
 
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhStartTime := v.StartTimeValidationRuleHandler
+	rulesStartTime := map[string]string{
+		"ves.io.schema.rules.string.query_time": "true",
+	}
+	vFn, err = vrhStartTime(rulesStartTime)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for AccessLogAggregationRequest.start_time: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["start_time"] = vFn
+
+	vrhEndTime := v.EndTimeValidationRuleHandler
+	rulesEndTime := map[string]string{
+		"ves.io.schema.rules.string.query_time": "true",
+	}
+	vFn, err = vrhEndTime(rulesEndTime)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for AccessLogAggregationRequest.end_time: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["end_time"] = vFn
+
 	v.FldValidators["aggs"] = ves_io_schema_log_access_log.AggregationRequestValidator().Validate
 
 	return v
@@ -188,6 +238,26 @@ func (m *AccessLogRequestV2) Validate(ctx context.Context, opts ...db.ValidateOp
 
 type ValidateAccessLogRequestV2 struct {
 	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateAccessLogRequestV2) StartTimeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for start_time")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateAccessLogRequestV2) EndTimeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for end_time")
+	}
+
+	return validatorFn, nil
 }
 
 func (v *ValidateAccessLogRequestV2) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
@@ -286,6 +356,36 @@ func (v *ValidateAccessLogRequestV2) Validate(ctx context.Context, pm interface{
 var DefaultAccessLogRequestV2Validator = func() *ValidateAccessLogRequestV2 {
 	v := &ValidateAccessLogRequestV2{FldValidators: map[string]db.ValidatorFunc{}}
 
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhStartTime := v.StartTimeValidationRuleHandler
+	rulesStartTime := map[string]string{
+		"ves.io.schema.rules.string.query_time": "true",
+	}
+	vFn, err = vrhStartTime(rulesStartTime)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for AccessLogRequestV2.start_time: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["start_time"] = vFn
+
+	vrhEndTime := v.EndTimeValidationRuleHandler
+	rulesEndTime := map[string]string{
+		"ves.io.schema.rules.string.query_time": "true",
+	}
+	vFn, err = vrhEndTime(rulesEndTime)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for AccessLogRequestV2.end_time: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["end_time"] = vFn
+
 	v.FldValidators["aggs"] = ves_io_schema_log_access_log.AggregationRequestValidator().Validate
 
 	return v
@@ -334,6 +434,26 @@ func (m *AuditLogAggregationRequest) Validate(ctx context.Context, opts ...db.Va
 
 type ValidateAuditLogAggregationRequest struct {
 	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateAuditLogAggregationRequest) StartTimeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for start_time")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateAuditLogAggregationRequest) EndTimeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for end_time")
+	}
+
+	return validatorFn, nil
 }
 
 func (v *ValidateAuditLogAggregationRequest) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
@@ -405,6 +525,36 @@ func (v *ValidateAuditLogAggregationRequest) Validate(ctx context.Context, pm in
 var DefaultAuditLogAggregationRequestValidator = func() *ValidateAuditLogAggregationRequest {
 	v := &ValidateAuditLogAggregationRequest{FldValidators: map[string]db.ValidatorFunc{}}
 
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhStartTime := v.StartTimeValidationRuleHandler
+	rulesStartTime := map[string]string{
+		"ves.io.schema.rules.string.query_time": "true",
+	}
+	vFn, err = vrhStartTime(rulesStartTime)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for AuditLogAggregationRequest.start_time: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["start_time"] = vFn
+
+	vrhEndTime := v.EndTimeValidationRuleHandler
+	rulesEndTime := map[string]string{
+		"ves.io.schema.rules.string.query_time": "true",
+	}
+	vFn, err = vrhEndTime(rulesEndTime)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for AuditLogAggregationRequest.end_time: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["end_time"] = vFn
+
 	v.FldValidators["aggs"] = ves_io_schema_log_audit_log.AggregationRequestValidator().Validate
 
 	return v
@@ -453,6 +603,26 @@ func (m *AuditLogRequestV2) Validate(ctx context.Context, opts ...db.ValidateOpt
 
 type ValidateAuditLogRequestV2 struct {
 	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateAuditLogRequestV2) StartTimeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for start_time")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateAuditLogRequestV2) EndTimeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for end_time")
+	}
+
+	return validatorFn, nil
 }
 
 func (v *ValidateAuditLogRequestV2) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
@@ -551,6 +721,36 @@ func (v *ValidateAuditLogRequestV2) Validate(ctx context.Context, pm interface{}
 var DefaultAuditLogRequestV2Validator = func() *ValidateAuditLogRequestV2 {
 	v := &ValidateAuditLogRequestV2{FldValidators: map[string]db.ValidatorFunc{}}
 
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhStartTime := v.StartTimeValidationRuleHandler
+	rulesStartTime := map[string]string{
+		"ves.io.schema.rules.string.query_time": "true",
+	}
+	vFn, err = vrhStartTime(rulesStartTime)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for AuditLogRequestV2.start_time: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["start_time"] = vFn
+
+	vrhEndTime := v.EndTimeValidationRuleHandler
+	rulesEndTime := map[string]string{
+		"ves.io.schema.rules.string.query_time": "true",
+	}
+	vFn, err = vrhEndTime(rulesEndTime)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for AuditLogRequestV2.end_time: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["end_time"] = vFn
+
 	v.FldValidators["aggs"] = ves_io_schema_log_audit_log.AggregationRequestValidator().Validate
 
 	return v
@@ -599,6 +799,26 @@ func (m *FirewallLogAggregationRequest) Validate(ctx context.Context, opts ...db
 
 type ValidateFirewallLogAggregationRequest struct {
 	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateFirewallLogAggregationRequest) StartTimeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for start_time")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateFirewallLogAggregationRequest) EndTimeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for end_time")
+	}
+
+	return validatorFn, nil
 }
 
 func (v *ValidateFirewallLogAggregationRequest) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
@@ -670,6 +890,36 @@ func (v *ValidateFirewallLogAggregationRequest) Validate(ctx context.Context, pm
 var DefaultFirewallLogAggregationRequestValidator = func() *ValidateFirewallLogAggregationRequest {
 	v := &ValidateFirewallLogAggregationRequest{FldValidators: map[string]db.ValidatorFunc{}}
 
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhStartTime := v.StartTimeValidationRuleHandler
+	rulesStartTime := map[string]string{
+		"ves.io.schema.rules.string.query_time": "true",
+	}
+	vFn, err = vrhStartTime(rulesStartTime)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for FirewallLogAggregationRequest.start_time: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["start_time"] = vFn
+
+	vrhEndTime := v.EndTimeValidationRuleHandler
+	rulesEndTime := map[string]string{
+		"ves.io.schema.rules.string.query_time": "true",
+	}
+	vFn, err = vrhEndTime(rulesEndTime)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for FirewallLogAggregationRequest.end_time: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["end_time"] = vFn
+
 	v.FldValidators["aggs"] = ves_io_schema_log_firewall_log.AggregationRequestValidator().Validate
 
 	return v
@@ -718,6 +968,26 @@ func (m *FirewallLogRequest) Validate(ctx context.Context, opts ...db.ValidateOp
 
 type ValidateFirewallLogRequest struct {
 	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateFirewallLogRequest) StartTimeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for start_time")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateFirewallLogRequest) EndTimeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for end_time")
+	}
+
+	return validatorFn, nil
 }
 
 func (v *ValidateFirewallLogRequest) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
@@ -816,6 +1086,36 @@ func (v *ValidateFirewallLogRequest) Validate(ctx context.Context, pm interface{
 var DefaultFirewallLogRequestValidator = func() *ValidateFirewallLogRequest {
 	v := &ValidateFirewallLogRequest{FldValidators: map[string]db.ValidatorFunc{}}
 
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhStartTime := v.StartTimeValidationRuleHandler
+	rulesStartTime := map[string]string{
+		"ves.io.schema.rules.string.query_time": "true",
+	}
+	vFn, err = vrhStartTime(rulesStartTime)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for FirewallLogRequest.start_time: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["start_time"] = vFn
+
+	vrhEndTime := v.EndTimeValidationRuleHandler
+	rulesEndTime := map[string]string{
+		"ves.io.schema.rules.string.query_time": "true",
+	}
+	vFn, err = vrhEndTime(rulesEndTime)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for FirewallLogRequest.end_time: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["end_time"] = vFn
+
 	v.FldValidators["aggs"] = ves_io_schema_log_firewall_log.AggregationRequestValidator().Validate
 
 	return v
@@ -864,6 +1164,26 @@ func (m *K8SAuditLogAggregationRequest) Validate(ctx context.Context, opts ...db
 
 type ValidateK8SAuditLogAggregationRequest struct {
 	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateK8SAuditLogAggregationRequest) StartTimeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for start_time")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateK8SAuditLogAggregationRequest) EndTimeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for end_time")
+	}
+
+	return validatorFn, nil
 }
 
 func (v *ValidateK8SAuditLogAggregationRequest) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
@@ -944,6 +1264,36 @@ func (v *ValidateK8SAuditLogAggregationRequest) Validate(ctx context.Context, pm
 var DefaultK8SAuditLogAggregationRequestValidator = func() *ValidateK8SAuditLogAggregationRequest {
 	v := &ValidateK8SAuditLogAggregationRequest{FldValidators: map[string]db.ValidatorFunc{}}
 
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhStartTime := v.StartTimeValidationRuleHandler
+	rulesStartTime := map[string]string{
+		"ves.io.schema.rules.string.query_time": "true",
+	}
+	vFn, err = vrhStartTime(rulesStartTime)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for K8SAuditLogAggregationRequest.start_time: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["start_time"] = vFn
+
+	vrhEndTime := v.EndTimeValidationRuleHandler
+	rulesEndTime := map[string]string{
+		"ves.io.schema.rules.string.query_time": "true",
+	}
+	vFn, err = vrhEndTime(rulesEndTime)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for K8SAuditLogAggregationRequest.end_time: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["end_time"] = vFn
+
 	v.FldValidators["aggs"] = ves_io_schema_log_k8s_audit_log.AggregationRequestValidator().Validate
 
 	return v
@@ -992,6 +1342,26 @@ func (m *K8SAuditLogRequest) Validate(ctx context.Context, opts ...db.ValidateOp
 
 type ValidateK8SAuditLogRequest struct {
 	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateK8SAuditLogRequest) StartTimeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for start_time")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateK8SAuditLogRequest) EndTimeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for end_time")
+	}
+
+	return validatorFn, nil
 }
 
 func (v *ValidateK8SAuditLogRequest) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
@@ -1099,6 +1469,36 @@ func (v *ValidateK8SAuditLogRequest) Validate(ctx context.Context, pm interface{
 var DefaultK8SAuditLogRequestValidator = func() *ValidateK8SAuditLogRequest {
 	v := &ValidateK8SAuditLogRequest{FldValidators: map[string]db.ValidatorFunc{}}
 
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhStartTime := v.StartTimeValidationRuleHandler
+	rulesStartTime := map[string]string{
+		"ves.io.schema.rules.string.query_time": "true",
+	}
+	vFn, err = vrhStartTime(rulesStartTime)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for K8SAuditLogRequest.start_time: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["start_time"] = vFn
+
+	vrhEndTime := v.EndTimeValidationRuleHandler
+	rulesEndTime := map[string]string{
+		"ves.io.schema.rules.string.query_time": "true",
+	}
+	vFn, err = vrhEndTime(rulesEndTime)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for K8SAuditLogRequest.end_time: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["end_time"] = vFn
+
 	v.FldValidators["aggs"] = ves_io_schema_log_k8s_audit_log.AggregationRequestValidator().Validate
 
 	return v
@@ -1147,6 +1547,26 @@ func (m *K8SEventsAggregationRequest) Validate(ctx context.Context, opts ...db.V
 
 type ValidateK8SEventsAggregationRequest struct {
 	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateK8SEventsAggregationRequest) StartTimeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for start_time")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateK8SEventsAggregationRequest) EndTimeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for end_time")
+	}
+
+	return validatorFn, nil
 }
 
 func (v *ValidateK8SEventsAggregationRequest) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
@@ -1227,6 +1647,36 @@ func (v *ValidateK8SEventsAggregationRequest) Validate(ctx context.Context, pm i
 var DefaultK8SEventsAggregationRequestValidator = func() *ValidateK8SEventsAggregationRequest {
 	v := &ValidateK8SEventsAggregationRequest{FldValidators: map[string]db.ValidatorFunc{}}
 
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhStartTime := v.StartTimeValidationRuleHandler
+	rulesStartTime := map[string]string{
+		"ves.io.schema.rules.string.query_time": "true",
+	}
+	vFn, err = vrhStartTime(rulesStartTime)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for K8SEventsAggregationRequest.start_time: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["start_time"] = vFn
+
+	vrhEndTime := v.EndTimeValidationRuleHandler
+	rulesEndTime := map[string]string{
+		"ves.io.schema.rules.string.query_time": "true",
+	}
+	vFn, err = vrhEndTime(rulesEndTime)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for K8SEventsAggregationRequest.end_time: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["end_time"] = vFn
+
 	v.FldValidators["aggs"] = ves_io_schema_log_k8s_events.AggregationRequestValidator().Validate
 
 	return v
@@ -1275,6 +1725,26 @@ func (m *K8SEventsRequest) Validate(ctx context.Context, opts ...db.ValidateOpt)
 
 type ValidateK8SEventsRequest struct {
 	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateK8SEventsRequest) StartTimeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for start_time")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateK8SEventsRequest) EndTimeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for end_time")
+	}
+
+	return validatorFn, nil
 }
 
 func (v *ValidateK8SEventsRequest) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
@@ -1381,6 +1851,36 @@ func (v *ValidateK8SEventsRequest) Validate(ctx context.Context, pm interface{},
 // Well-known symbol for default validator implementation
 var DefaultK8SEventsRequestValidator = func() *ValidateK8SEventsRequest {
 	v := &ValidateK8SEventsRequest{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhStartTime := v.StartTimeValidationRuleHandler
+	rulesStartTime := map[string]string{
+		"ves.io.schema.rules.string.query_time": "true",
+	}
+	vFn, err = vrhStartTime(rulesStartTime)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for K8SEventsRequest.start_time: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["start_time"] = vFn
+
+	vrhEndTime := v.EndTimeValidationRuleHandler
+	rulesEndTime := map[string]string{
+		"ves.io.schema.rules.string.query_time": "true",
+	}
+	vFn, err = vrhEndTime(rulesEndTime)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for K8SEventsRequest.end_time: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["end_time"] = vFn
 
 	v.FldValidators["aggs"] = ves_io_schema_log_k8s_events.AggregationRequestValidator().Validate
 
@@ -1724,6 +2224,26 @@ type ValidateVK8SAuditLogAggregationRequest struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateVK8SAuditLogAggregationRequest) StartTimeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for start_time")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateVK8SAuditLogAggregationRequest) EndTimeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for end_time")
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateVK8SAuditLogAggregationRequest) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*VK8SAuditLogAggregationRequest)
 	if !ok {
@@ -1793,6 +2313,36 @@ func (v *ValidateVK8SAuditLogAggregationRequest) Validate(ctx context.Context, p
 var DefaultVK8SAuditLogAggregationRequestValidator = func() *ValidateVK8SAuditLogAggregationRequest {
 	v := &ValidateVK8SAuditLogAggregationRequest{FldValidators: map[string]db.ValidatorFunc{}}
 
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhStartTime := v.StartTimeValidationRuleHandler
+	rulesStartTime := map[string]string{
+		"ves.io.schema.rules.string.query_time": "true",
+	}
+	vFn, err = vrhStartTime(rulesStartTime)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for VK8SAuditLogAggregationRequest.start_time: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["start_time"] = vFn
+
+	vrhEndTime := v.EndTimeValidationRuleHandler
+	rulesEndTime := map[string]string{
+		"ves.io.schema.rules.string.query_time": "true",
+	}
+	vFn, err = vrhEndTime(rulesEndTime)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for VK8SAuditLogAggregationRequest.end_time: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["end_time"] = vFn
+
 	v.FldValidators["aggs"] = ves_io_schema_log_vk8s_audit_log.AggregationRequestValidator().Validate
 
 	return v
@@ -1841,6 +2391,26 @@ func (m *VK8SAuditLogRequest) Validate(ctx context.Context, opts ...db.ValidateO
 
 type ValidateVK8SAuditLogRequest struct {
 	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateVK8SAuditLogRequest) StartTimeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for start_time")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateVK8SAuditLogRequest) EndTimeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for end_time")
+	}
+
+	return validatorFn, nil
 }
 
 func (v *ValidateVK8SAuditLogRequest) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
@@ -1939,6 +2509,36 @@ func (v *ValidateVK8SAuditLogRequest) Validate(ctx context.Context, pm interface
 var DefaultVK8SAuditLogRequestValidator = func() *ValidateVK8SAuditLogRequest {
 	v := &ValidateVK8SAuditLogRequest{FldValidators: map[string]db.ValidatorFunc{}}
 
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhStartTime := v.StartTimeValidationRuleHandler
+	rulesStartTime := map[string]string{
+		"ves.io.schema.rules.string.query_time": "true",
+	}
+	vFn, err = vrhStartTime(rulesStartTime)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for VK8SAuditLogRequest.start_time: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["start_time"] = vFn
+
+	vrhEndTime := v.EndTimeValidationRuleHandler
+	rulesEndTime := map[string]string{
+		"ves.io.schema.rules.string.query_time": "true",
+	}
+	vFn, err = vrhEndTime(rulesEndTime)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for VK8SAuditLogRequest.end_time: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["end_time"] = vFn
+
 	v.FldValidators["aggs"] = ves_io_schema_log_vk8s_audit_log.AggregationRequestValidator().Validate
 
 	return v
@@ -1987,6 +2587,26 @@ func (m *VK8SEventsAggregationRequest) Validate(ctx context.Context, opts ...db.
 
 type ValidateVK8SEventsAggregationRequest struct {
 	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateVK8SEventsAggregationRequest) StartTimeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for start_time")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateVK8SEventsAggregationRequest) EndTimeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for end_time")
+	}
+
+	return validatorFn, nil
 }
 
 func (v *ValidateVK8SEventsAggregationRequest) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
@@ -2058,6 +2678,36 @@ func (v *ValidateVK8SEventsAggregationRequest) Validate(ctx context.Context, pm 
 var DefaultVK8SEventsAggregationRequestValidator = func() *ValidateVK8SEventsAggregationRequest {
 	v := &ValidateVK8SEventsAggregationRequest{FldValidators: map[string]db.ValidatorFunc{}}
 
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhStartTime := v.StartTimeValidationRuleHandler
+	rulesStartTime := map[string]string{
+		"ves.io.schema.rules.string.query_time": "true",
+	}
+	vFn, err = vrhStartTime(rulesStartTime)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for VK8SEventsAggregationRequest.start_time: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["start_time"] = vFn
+
+	vrhEndTime := v.EndTimeValidationRuleHandler
+	rulesEndTime := map[string]string{
+		"ves.io.schema.rules.string.query_time": "true",
+	}
+	vFn, err = vrhEndTime(rulesEndTime)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for VK8SEventsAggregationRequest.end_time: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["end_time"] = vFn
+
 	v.FldValidators["aggs"] = ves_io_schema_log_vk8s_events.AggregationRequestValidator().Validate
 
 	return v
@@ -2106,6 +2756,26 @@ func (m *VK8SEventsRequest) Validate(ctx context.Context, opts ...db.ValidateOpt
 
 type ValidateVK8SEventsRequest struct {
 	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateVK8SEventsRequest) StartTimeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for start_time")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateVK8SEventsRequest) EndTimeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for end_time")
+	}
+
+	return validatorFn, nil
 }
 
 func (v *ValidateVK8SEventsRequest) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
@@ -2203,6 +2873,36 @@ func (v *ValidateVK8SEventsRequest) Validate(ctx context.Context, pm interface{}
 // Well-known symbol for default validator implementation
 var DefaultVK8SEventsRequestValidator = func() *ValidateVK8SEventsRequest {
 	v := &ValidateVK8SEventsRequest{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhStartTime := v.StartTimeValidationRuleHandler
+	rulesStartTime := map[string]string{
+		"ves.io.schema.rules.string.query_time": "true",
+	}
+	vFn, err = vrhStartTime(rulesStartTime)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for VK8SEventsRequest.start_time: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["start_time"] = vFn
+
+	vrhEndTime := v.EndTimeValidationRuleHandler
+	rulesEndTime := map[string]string{
+		"ves.io.schema.rules.string.query_time": "true",
+	}
+	vFn, err = vrhEndTime(rulesEndTime)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for VK8SEventsRequest.end_time: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["end_time"] = vFn
 
 	v.FldValidators["aggs"] = ves_io_schema_log_vk8s_events.AggregationRequestValidator().Validate
 

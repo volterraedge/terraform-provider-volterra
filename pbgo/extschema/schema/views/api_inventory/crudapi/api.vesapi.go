@@ -46,6 +46,15 @@ func (r *ObjectCreateReq) ToEntry(e db.Entry) {
 	r.ToObject(e)
 }
 
+// db.Redactor
+func (r *ObjectCreateReq) Redact(ctx context.Context) error {
+	spec := r.GetSpec()
+	if r, ok := interface{}(spec).(db.Redactor); ok {
+		return r.Redact(ctx)
+	}
+	return nil
+}
+
 // create setters in object from request for oneof fields
 
 // EntryConverter
@@ -55,6 +64,15 @@ func (r *ObjectReplaceReq) FromEntry(e db.Entry) {
 
 func (r *ObjectReplaceReq) ToEntry(e db.Entry) {
 	r.ToObject(e)
+}
+
+// db.Redactor
+func (r *ObjectReplaceReq) Redact(ctx context.Context) error {
+	spec := r.GetSpec()
+	if r, ok := interface{}(spec).(db.Redactor); ok {
+		return r.Redact(ctx)
+	}
+	return nil
 }
 
 // create setters in object from request for oneof fields
@@ -748,7 +766,13 @@ func (c *crudAPIRestClient) Delete(ctx context.Context, key string, opts ...serv
 }
 
 func NewCRUDAPIRestClient(baseURL string, cl http.Client) server.CRUDClient {
-	crcl := &crudAPIRestClient{baseURL, cl}
+	var bURL string
+	if strings.HasSuffix(baseURL, "/") {
+		bURL = baseURL[:len(baseURL)-1]
+	} else {
+		bURL = baseURL
+	}
+	crcl := &crudAPIRestClient{bURL, cl}
 	return crcl
 }
 
@@ -3002,7 +3026,7 @@ var APISwaggerJSON string = `{
         },
         "schemaHttpMethod": {
             "type": "string",
-            "description": "x-displayName: \"HTTP Method\"\nSpecifies the HTTP method used to access a resource.\n\n - ANY: x-displayName: \"ANY\"\nAny HTTP Method\n - GET: x-displayName: \"GET\"\nGET method\n - HEAD: x-displayName: \"HEAD\"\nHEAD method\n - POST: x-displayName: \"POST\"\nPOST method\n - PUT: x-displayName: \"PUT\"\nPUT method\n - DELETE: x-displayName: \"DELETE\"\nDELETE method\n - CONNECT: x-displayName: \"CONNECT\"\nCONNECT method\n - OPTIONS: x-displayName: \"OPTIONS\"\nOPTIONS method\n - TRACE: x-displayName: \"TRACE\"\nTRACE method\n - PATCH: x-displayName: \"PATCH\"\nPATCH method",
+            "description": "x-displayName: \"HTTP Method\"\nSpecifies the HTTP method used to access a resource.\n\n - ANY: x-displayName: \"ANY\"\nAny HTTP Method\n - GET: x-displayName: \"GET\"\n - HEAD: x-displayName: \"HEAD\"\n - POST: x-displayName: \"POST\"\n - PUT: x-displayName: \"PUT\"\n - DELETE: x-displayName: \"DELETE\"\n - CONNECT: x-displayName: \"CONNECT\"\n - OPTIONS: x-displayName: \"OPTIONS\"\n - TRACE: x-displayName: \"TRACE\"\n - PATCH: x-displayName: \"PATCH\"",
             "title": "HttpMethod",
             "enum": [
                 "ANY",

@@ -52,6 +52,15 @@ func (c *CustomAPIGrpcClient) doRPCEvaluateAPIAccess(ctx context.Context, yamlRe
 	return rsp, err
 }
 
+func (c *CustomAPIGrpcClient) doRPCLookupUserRoles(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
+	req := &LookupUserRolesReq{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.namespace.LookupUserRolesReq", yamlReq)
+	}
+	rsp, err := c.grpcClient.LookupUserRoles(ctx, req, opts...)
+	return rsp, err
+}
+
 func (c *CustomAPIGrpcClient) doRPCSuggestValues(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &SuggestValuesReq{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -94,6 +103,8 @@ func NewCustomAPIGrpcClient(cc *grpc.ClientConn) server.CustomClient {
 	rpcFns["CascadeDelete"] = ccl.doRPCCascadeDelete
 
 	rpcFns["EvaluateAPIAccess"] = ccl.doRPCEvaluateAPIAccess
+
+	rpcFns["LookupUserRoles"] = ccl.doRPCLookupUserRoles
 
 	rpcFns["SuggestValues"] = ccl.doRPCSuggestValues
 
@@ -277,6 +288,89 @@ func (c *CustomAPIRestClient) doRPCEvaluateAPIAccess(ctx context.Context, callOp
 	return pbRsp, nil
 }
 
+func (c *CustomAPIRestClient) doRPCLookupUserRoles(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
+	if callOpts.URI == "" {
+		return nil, fmt.Errorf("Error, URI should be specified, got empty")
+	}
+	url := fmt.Sprintf("%s%s", c.baseURL, callOpts.URI)
+
+	yamlReq := callOpts.YAMLReq
+	req := &LookupUserRolesReq{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.namespace.LookupUserRolesReq: %s", yamlReq, err)
+	}
+
+	var hReq *http.Request
+	hm := strings.ToLower(callOpts.HTTPMethod)
+	switch hm {
+	case "post", "put":
+		jsn, err := codec.ToJSON(req, codec.ToWithUseProtoFieldName())
+		if err != nil {
+			return nil, errors.Wrap(err, "Custom RestClient converting YAML to JSON")
+		}
+		var op string
+		if hm == "post" {
+			op = http.MethodPost
+		} else {
+			op = http.MethodPut
+		}
+		newReq, err := http.NewRequest(op, url, bytes.NewBuffer([]byte(jsn)))
+		if err != nil {
+			return nil, errors.Wrapf(err, "Creating new HTTP %s request for custom API", op)
+		}
+		hReq = newReq
+	case "get":
+		newReq, err := http.NewRequest(http.MethodGet, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP GET request for custom API")
+		}
+		hReq = newReq
+		q := hReq.URL.Query()
+		_ = q
+		q.Add("namespace", fmt.Sprintf("%v", req.Namespace))
+
+		hReq.URL.RawQuery += q.Encode()
+	case "delete":
+		newReq, err := http.NewRequest(http.MethodDelete, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP DELETE request for custom API")
+		}
+		hReq = newReq
+	default:
+		return nil, fmt.Errorf("Error, invalid/empty HTTPMethod(%s) specified, should be POST|DELETE|GET", callOpts.HTTPMethod)
+	}
+	hReq = hReq.WithContext(ctx)
+	hReq.Header.Set("Content-Type", "application/json")
+	client.AddHdrsToReq(callOpts.Headers, hReq)
+
+	rsp, err := c.client.Do(hReq)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient")
+	}
+	defer rsp.Body.Close()
+
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
+		body, err := ioutil.ReadAll(rsp.Body)
+		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
+	}
+
+	body, err := ioutil.ReadAll(rsp.Body)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient read body")
+	}
+	pbRsp := &LookupUserRolesResp{}
+	if err := codec.FromJSON(string(body), pbRsp); err != nil {
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.namespace.LookupUserRolesResp", body)
+
+	}
+	if callOpts.OutCallResponse != nil {
+		callOpts.OutCallResponse.ProtoMsg = pbRsp
+		callOpts.OutCallResponse.JSON = string(body)
+	}
+	return pbRsp, nil
+}
+
 func (c *CustomAPIRestClient) doRPCSuggestValues(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -391,6 +485,8 @@ func NewCustomAPIRestClient(baseURL string, hc http.Client) server.CustomClient 
 
 	rpcFns["EvaluateAPIAccess"] = ccl.doRPCEvaluateAPIAccess
 
+	rpcFns["LookupUserRoles"] = ccl.doRPCLookupUserRoles
+
 	rpcFns["SuggestValues"] = ccl.doRPCSuggestValues
 
 	ccl.rpcFns = rpcFns
@@ -410,6 +506,9 @@ func (c *customAPIInprocClient) CascadeDelete(ctx context.Context, in *CascadeDe
 }
 func (c *customAPIInprocClient) EvaluateAPIAccess(ctx context.Context, in *EvaluateAPIAccessReq, opts ...grpc.CallOption) (*EvaluateAPIAccessResp, error) {
 	return c.CustomAPIServer.EvaluateAPIAccess(ctx, in)
+}
+func (c *customAPIInprocClient) LookupUserRoles(ctx context.Context, in *LookupUserRolesReq, opts ...grpc.CallOption) (*LookupUserRolesResp, error) {
+	return c.CustomAPIServer.LookupUserRoles(ctx, in)
 }
 func (c *customAPIInprocClient) SuggestValues(ctx context.Context, in *SuggestValuesReq, opts ...grpc.CallOption) (*SuggestValuesResp, error) {
 	return c.CustomAPIServer.SuggestValues(ctx, in)
@@ -531,6 +630,55 @@ func (s *customAPISrv) EvaluateAPIAccess(ctx context.Context, in *EvaluateAPIAcc
 	}
 
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.namespace.EvaluateAPIAccessResp", rsp)...)
+
+	return rsp, nil
+}
+func (s *customAPISrv) LookupUserRoles(ctx context.Context, in *LookupUserRolesReq) (*LookupUserRolesResp, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.namespace.CustomAPI")
+	cah, ok := ah.(CustomAPIServer)
+	if !ok {
+		return nil, fmt.Errorf("ah %v is not of type *CustomAPIServer", ah)
+	}
+
+	var (
+		rsp *LookupUserRolesResp
+		err error
+	)
+
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.namespace.LookupUserRolesReq", in)
+	defer func() {
+		if len(bodyFields) > 0 {
+			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
+		}
+		userMsg := "The 'CustomAPI.LookupUserRoles' operation on 'namespace'"
+		if err == nil {
+			userMsg += " was successfully performed."
+		} else {
+			userMsg += " failed to be performed."
+		}
+		server.AddUserMsgToAPIAudit(ctx, userMsg)
+	}()
+
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
+
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.namespace.CustomAPI.LookupUserRoles"); rvFn != nil {
+			if verr := rvFn(ctx, in); verr != nil {
+				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
+				return nil, server.GRPCStatusFromError(err).Err()
+			}
+		}
+	}
+
+	rsp, err = cah.LookupUserRoles(ctx, in)
+	if err != nil {
+		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
+	}
+
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.namespace.LookupUserRolesResp", rsp)...)
 
 	return rsp, nil
 }
@@ -686,6 +834,90 @@ var CustomAPISwaggerJSON string = `{
                     "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-namespace-customapi-evaluateapiaccess"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.namespace.CustomAPI.EvaluateAPIAccess"
+            },
+            "x-displayname": "CustomAPI",
+            "x-ves-proto-service": "ves.io.schema.namespace.CustomAPI",
+            "x-ves-proto-service-type": "CUSTOM_PUBLIC"
+        },
+        "/public/namespaces/system/lookup-user-roles": {
+            "post": {
+                "summary": "Lookup User Roles",
+                "description": "LookupUserRoles returns roles for the the given user, namespace",
+                "operationId": "ves.io.schema.namespace.CustomAPI.LookupUserRoles",
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/namespaceLookupUserRolesResp"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/namespaceLookupUserRolesReq"
+                        }
+                    }
+                ],
+                "tags": [
+                    "CustomAPI"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-namespace-customapi-lookupuserroles"
+                },
+                "x-ves-proto-rpc": "ves.io.schema.namespace.CustomAPI.LookupUserRoles"
             },
             "x-displayname": "CustomAPI",
             "x-ves-proto-service": "ves.io.schema.namespace.CustomAPI",
@@ -1053,6 +1285,40 @@ var CustomAPISwaggerJSON string = `{
                 }
             }
         },
+        "namespaceLookupUserRolesReq": {
+            "type": "object",
+            "description": "Request body of LookupUserRoles request",
+            "title": "LookupUserRolesReq",
+            "x-displayname": "Request for LookupUserRoles",
+            "x-ves-proto-message": "ves.io.schema.namespace.LookupUserRolesReq",
+            "properties": {
+                "namespace": {
+                    "type": "string",
+                    "description": " Name of the namespace to lookup user roles\n\nExample: - \"value\"-",
+                    "title": "namespace",
+                    "x-displayname": "Namespace",
+                    "x-ves-example": "value"
+                }
+            }
+        },
+        "namespaceLookupUserRolesResp": {
+            "type": "object",
+            "description": "Response body of LookupUserRoles request",
+            "title": "LookupUserRolesResp",
+            "x-displayname": "Response for LookupUserRoles",
+            "x-ves-proto-message": "ves.io.schema.namespace.LookupUserRolesResp",
+            "properties": {
+                "roles": {
+                    "type": "array",
+                    "description": " List of user roles",
+                    "title": "roles",
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-displayname": "Roles"
+                }
+            }
+        },
         "namespaceSuggestValuesReq": {
             "type": "object",
             "description": "Request body of SuggestValues request",
@@ -1120,6 +1386,7 @@ var CustomAPISwaggerJSON string = `{
             "description": "A tuple with a suggested value and it's description.",
             "title": "SuggestedItem",
             "x-displayname": "Suggested Item",
+            "x-ves-oneof-field-value_choice": "[\"ref_value\",\"str_value\"]",
             "x-ves-proto-message": "ves.io.schema.namespace.SuggestedItem",
             "properties": {
                 "description": {
@@ -1128,9 +1395,21 @@ var CustomAPISwaggerJSON string = `{
                     "title": "description",
                     "x-displayname": "Description"
                 },
+                "ref_value": {
+                    "description": "Exclusive with [str_value]\n",
+                    "title": "str_value",
+                    "$ref": "#/definitions/schemaviewsObjectRefType",
+                    "x-displayname": "Object Reference"
+                },
+                "str_value": {
+                    "type": "string",
+                    "description": "Exclusive with [ref_value]\n",
+                    "title": "str_value",
+                    "x-displayname": "String"
+                },
                 "value": {
                     "type": "string",
-                    "description": " Suggested value for the field.",
+                    "description": " Suggested value for the field.\n Should use value_choice.str_value instead.",
                     "title": "value",
                     "x-displayname": "Value"
                 }
@@ -1148,6 +1427,52 @@ var CustomAPISwaggerJSON string = `{
                     "type": "string",
                     "description": "Must be a valid serialized protocol buffer of the above specified type.",
                     "format": "byte"
+                }
+            }
+        },
+        "schemaviewsObjectRefType": {
+            "type": "object",
+            "description": "This type establishes a direct reference from one object(the referrer) to another(the referred).\nSuch a reference is in form of tenant/namespace/name",
+            "title": "ObjectRefType",
+            "x-displayname": "Object reference",
+            "x-ves-proto-message": "ves.io.schema.views.ObjectRefType",
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then name will hold the referred object's(e.g. route's) name.\n\nExample: - \"contacts-route\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_bytes: 64\n  ves.io.schema.rules.string.min_bytes: 1\n",
+                    "title": "name",
+                    "minLength": 1,
+                    "maxLength": 64,
+                    "x-displayname": "Name",
+                    "x-ves-example": "contacts-route",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.max_bytes": "64",
+                        "ves.io.schema.rules.string.min_bytes": "1"
+                    }
+                },
+                "namespace": {
+                    "type": "string",
+                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then namespace will hold the referred object's(e.g. route's) namespace.\n\nExample: - \"ns1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 64\n",
+                    "title": "namespace",
+                    "maxLength": 64,
+                    "x-displayname": "Namespace",
+                    "x-ves-example": "ns1",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_bytes": "64"
+                    }
+                },
+                "tenant": {
+                    "type": "string",
+                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then tenant will hold the referred object's(e.g. route's) tenant.\n\nExample: - \"acmecorp\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 64\n",
+                    "title": "tenant",
+                    "maxLength": 64,
+                    "x-displayname": "Tenant",
+                    "x-ves-example": "acmecorp",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_bytes": "64"
+                    }
                 }
             }
         }

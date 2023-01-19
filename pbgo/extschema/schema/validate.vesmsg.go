@@ -3370,6 +3370,17 @@ func (v *ValidateStringRules) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
+	case *StringRules_QueryTime:
+		if fv, exists := v.FldValidators["well_known.query_time"]; exists {
+			val := m.GetWellKnown().(*StringRules_QueryTime).QueryTime
+			vOpts := append(opts,
+				db.WithValidateField("well_known"),
+				db.WithValidateField("query_time"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 

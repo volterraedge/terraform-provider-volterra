@@ -26,6 +26,305 @@ var (
 
 // augmented methods on protoc/std generated struct
 
+func (m *APIEPActivityMetrics) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *APIEPActivityMetrics) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *APIEPActivityMetrics) DeepCopy() *APIEPActivityMetrics {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &APIEPActivityMetrics{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *APIEPActivityMetrics) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *APIEPActivityMetrics) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return APIEPActivityMetricsValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateAPIEPActivityMetrics struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateAPIEPActivityMetrics) ApiepUrlValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for apiep_url")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateAPIEPActivityMetrics) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*APIEPActivityMetrics)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *APIEPActivityMetrics got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["apiep_url"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("apiep_url"))
+		if err := fv(ctx, m.GetApiepUrl(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["method"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("method"))
+		if err := fv(ctx, m.GetMethod(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["top_by_metric_value"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("top_by_metric_value"))
+		if err := fv(ctx, m.GetTopByMetricValue(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultAPIEPActivityMetricsValidator = func() *ValidateAPIEPActivityMetrics {
+	v := &ValidateAPIEPActivityMetrics{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhApiepUrl := v.ApiepUrlValidationRuleHandler
+	rulesApiepUrl := map[string]string{
+		"ves.io.schema.rules.string.max_bytes":           "1024",
+		"ves.io.schema.rules.string.min_bytes":           "1",
+		"ves.io.schema.rules.string.templated_http_path": "true",
+	}
+	vFn, err = vrhApiepUrl(rulesApiepUrl)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for APIEPActivityMetrics.apiep_url: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["apiep_url"] = vFn
+
+	return v
+}()
+
+func APIEPActivityMetricsValidator() db.Validator {
+	return DefaultAPIEPActivityMetricsValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *APIEPSummaryFilter) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *APIEPSummaryFilter) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *APIEPSummaryFilter) DeepCopy() *APIEPSummaryFilter {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &APIEPSummaryFilter{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *APIEPSummaryFilter) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *APIEPSummaryFilter) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return APIEPSummaryFilterValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateAPIEPSummaryFilter struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateAPIEPSummaryFilter) DomainsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepStringItemRules(rules)
+	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Item ValidationRuleHandler for domains")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []string, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for domains")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]string)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []string, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal := fmt.Sprintf("%v", elem)
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated domains")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items domains")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateAPIEPSummaryFilter) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*APIEPSummaryFilter)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *APIEPSummaryFilter got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["apiep_category"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("apiep_category"))
+		for idx, item := range m.GetApiepCategory() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["domains"]; exists {
+		vOpts := append(opts, db.WithValidateField("domains"))
+		if err := fv(ctx, m.GetDomains(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["end_time"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("end_time"))
+		if err := fv(ctx, m.GetEndTime(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["start_time"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("start_time"))
+		if err := fv(ctx, m.GetStartTime(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultAPIEPSummaryFilterValidator = func() *ValidateAPIEPSummaryFilter {
+	v := &ValidateAPIEPSummaryFilter{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhDomains := v.DomainsValidationRuleHandler
+	rulesDomains := map[string]string{
+		"ves.io.schema.rules.repeated.items.string.hostname": "true",
+		"ves.io.schema.rules.repeated.items.string.max_len":  "256",
+		"ves.io.schema.rules.repeated.items.string.min_len":  "1",
+		"ves.io.schema.rules.repeated.max_items":             "5",
+		"ves.io.schema.rules.repeated.unique":                "true",
+	}
+	vFn, err = vrhDomains(rulesDomains)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for APIEPSummaryFilter.domains: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["domains"] = vFn
+
+	return v
+}()
+
+func APIEPSummaryFilterValidator() db.Validator {
+	return DefaultAPIEPSummaryFilterValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *APIEndpointLearntSchemaReq) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -1009,9 +1308,30 @@ func (v *ValidateAPIEndpointsReq) Validate(ctx context.Context, pm interface{}, 
 
 	}
 
+	if fv, exists := v.FldValidators["apiep_category"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("apiep_category"))
+		for idx, item := range m.GetApiepCategory() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["domains"]; exists {
 		vOpts := append(opts, db.WithValidateField("domains"))
 		if err := fv(ctx, m.GetDomains(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["end_time"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("end_time"))
+		if err := fv(ctx, m.GetEndTime(), vOpts...); err != nil {
 			return err
 		}
 
@@ -1030,6 +1350,15 @@ func (v *ValidateAPIEndpointsReq) Validate(ctx context.Context, pm interface{}, 
 
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["start_time"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("start_time"))
+		if err := fv(ctx, m.GetStartTime(), vOpts...); err != nil {
 			return err
 		}
 
@@ -1063,7 +1392,11 @@ var DefaultAPIEndpointsReqValidator = func() *ValidateAPIEndpointsReq {
 
 	vrhDomains := v.DomainsValidationRuleHandler
 	rulesDomains := map[string]string{
-		"ves.io.schema.rules.repeated.unique": "true",
+		"ves.io.schema.rules.repeated.items.string.hostname": "true",
+		"ves.io.schema.rules.repeated.items.string.max_len":  "256",
+		"ves.io.schema.rules.repeated.items.string.min_len":  "1",
+		"ves.io.schema.rules.repeated.max_items":             "5",
+		"ves.io.schema.rules.repeated.unique":                "true",
 	}
 	vFn, err = vrhDomains(rulesDomains)
 	if err != nil {
@@ -1359,6 +1692,695 @@ var DefaultApiEndpointsStatsRspValidator = func() *ValidateApiEndpointsStatsRsp 
 
 func ApiEndpointsStatsRspValidator() db.Validator {
 	return DefaultApiEndpointsStatsRspValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *GetTopAPIEndpointsReq) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *GetTopAPIEndpointsReq) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *GetTopAPIEndpointsReq) DeepCopy() *GetTopAPIEndpointsReq {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &GetTopAPIEndpointsReq{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *GetTopAPIEndpointsReq) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *GetTopAPIEndpointsReq) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return GetTopAPIEndpointsReqValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateGetTopAPIEndpointsReq struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateGetTopAPIEndpointsReq) TopByMetricValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	var conv db.EnumConvFn
+	conv = func(v interface{}) int32 {
+		i := v.(APIEPActivityMetricType)
+		return int32(i)
+	}
+	// APIEPActivityMetricType_name is generated in .pb.go
+	validatorFn, err := db.NewEnumValidationRuleHandler(rules, APIEPActivityMetricType_name, conv)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for top_by_metric")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateGetTopAPIEndpointsReq) TopkValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for topk")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateGetTopAPIEndpointsReq) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*GetTopAPIEndpointsReq)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *GetTopAPIEndpointsReq got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["apiep_summary_filter"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("apiep_summary_filter"))
+		if err := fv(ctx, m.GetApiepSummaryFilter(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("name"))
+		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["namespace"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("namespace"))
+		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["top_by_metric"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("top_by_metric"))
+		if err := fv(ctx, m.GetTopByMetric(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["topk"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("topk"))
+		if err := fv(ctx, m.GetTopk(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultGetTopAPIEndpointsReqValidator = func() *ValidateGetTopAPIEndpointsReq {
+	v := &ValidateGetTopAPIEndpointsReq{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhTopByMetric := v.TopByMetricValidationRuleHandler
+	rulesTopByMetric := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhTopByMetric(rulesTopByMetric)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GetTopAPIEndpointsReq.top_by_metric: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["top_by_metric"] = vFn
+
+	vrhTopk := v.TopkValidationRuleHandler
+	rulesTopk := map[string]string{
+		"ves.io.schema.rules.uint32.gte": "0",
+		"ves.io.schema.rules.uint32.lte": "10",
+	}
+	vFn, err = vrhTopk(rulesTopk)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GetTopAPIEndpointsReq.topk: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["topk"] = vFn
+
+	v.FldValidators["apiep_summary_filter"] = APIEPSummaryFilterValidator().Validate
+
+	return v
+}()
+
+func GetTopAPIEndpointsReqValidator() db.Validator {
+	return DefaultGetTopAPIEndpointsReqValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *GetTopAPIEndpointsRsp) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *GetTopAPIEndpointsRsp) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *GetTopAPIEndpointsRsp) DeepCopy() *GetTopAPIEndpointsRsp {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &GetTopAPIEndpointsRsp{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *GetTopAPIEndpointsRsp) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *GetTopAPIEndpointsRsp) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return GetTopAPIEndpointsRspValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateGetTopAPIEndpointsRsp struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateGetTopAPIEndpointsRsp) TopApiepsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for top_apieps")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*APIEPActivityMetrics, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := APIEPActivityMetricsValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for top_apieps")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*APIEPActivityMetrics)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*APIEPActivityMetrics, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated top_apieps")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items top_apieps")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateGetTopAPIEndpointsRsp) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*GetTopAPIEndpointsRsp)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *GetTopAPIEndpointsRsp got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["top_apieps"]; exists {
+		vOpts := append(opts, db.WithValidateField("top_apieps"))
+		if err := fv(ctx, m.GetTopApieps(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultGetTopAPIEndpointsRspValidator = func() *ValidateGetTopAPIEndpointsRsp {
+	v := &ValidateGetTopAPIEndpointsRsp{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhTopApieps := v.TopApiepsValidationRuleHandler
+	rulesTopApieps := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "10",
+		"ves.io.schema.rules.repeated.unique":    "true",
+	}
+	vFn, err = vrhTopApieps(rulesTopApieps)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GetTopAPIEndpointsRsp.top_apieps: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["top_apieps"] = vFn
+
+	return v
+}()
+
+func GetTopAPIEndpointsRspValidator() db.Validator {
+	return DefaultGetTopAPIEndpointsRspValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *GetTopSensitiveDataReq) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *GetTopSensitiveDataReq) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *GetTopSensitiveDataReq) DeepCopy() *GetTopSensitiveDataReq {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &GetTopSensitiveDataReq{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *GetTopSensitiveDataReq) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *GetTopSensitiveDataReq) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return GetTopSensitiveDataReqValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateGetTopSensitiveDataReq struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateGetTopSensitiveDataReq) DomainsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepStringItemRules(rules)
+	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Item ValidationRuleHandler for domains")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []string, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for domains")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]string)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []string, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal := fmt.Sprintf("%v", elem)
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated domains")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items domains")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateGetTopSensitiveDataReq) TopkValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for topk")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateGetTopSensitiveDataReq) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*GetTopSensitiveDataReq)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *GetTopSensitiveDataReq got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["apiep_category"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("apiep_category"))
+		for idx, item := range m.GetApiepCategory() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["domains"]; exists {
+		vOpts := append(opts, db.WithValidateField("domains"))
+		if err := fv(ctx, m.GetDomains(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("name"))
+		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["namespace"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("namespace"))
+		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["topk"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("topk"))
+		if err := fv(ctx, m.GetTopk(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultGetTopSensitiveDataReqValidator = func() *ValidateGetTopSensitiveDataReq {
+	v := &ValidateGetTopSensitiveDataReq{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhDomains := v.DomainsValidationRuleHandler
+	rulesDomains := map[string]string{
+		"ves.io.schema.rules.repeated.items.string.hostname": "true",
+		"ves.io.schema.rules.repeated.items.string.max_len":  "256",
+		"ves.io.schema.rules.repeated.items.string.min_len":  "1",
+		"ves.io.schema.rules.repeated.max_items":             "5",
+		"ves.io.schema.rules.repeated.unique":                "true",
+	}
+	vFn, err = vrhDomains(rulesDomains)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GetTopSensitiveDataReq.domains: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["domains"] = vFn
+
+	vrhTopk := v.TopkValidationRuleHandler
+	rulesTopk := map[string]string{
+		"ves.io.schema.rules.uint32.gte": "0",
+		"ves.io.schema.rules.uint32.lte": "10",
+	}
+	vFn, err = vrhTopk(rulesTopk)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GetTopSensitiveDataReq.topk: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["topk"] = vFn
+
+	return v
+}()
+
+func GetTopSensitiveDataReqValidator() db.Validator {
+	return DefaultGetTopSensitiveDataReqValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *GetTopSensitiveDataRsp) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *GetTopSensitiveDataRsp) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *GetTopSensitiveDataRsp) DeepCopy() *GetTopSensitiveDataRsp {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &GetTopSensitiveDataRsp{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *GetTopSensitiveDataRsp) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *GetTopSensitiveDataRsp) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return GetTopSensitiveDataRspValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateGetTopSensitiveDataRsp struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateGetTopSensitiveDataRsp) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*GetTopSensitiveDataRsp)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *GetTopSensitiveDataRsp got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["top_sensitive_data"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("top_sensitive_data"))
+		for idx, item := range m.GetTopSensitiveData() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultGetTopSensitiveDataRspValidator = func() *ValidateGetTopSensitiveDataRsp {
+	v := &ValidateGetTopSensitiveDataRsp{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func GetTopSensitiveDataRspValidator() db.Validator {
+	return DefaultGetTopSensitiveDataRspValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *SensitiveDataCount) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *SensitiveDataCount) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *SensitiveDataCount) DeepCopy() *SensitiveDataCount {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &SensitiveDataCount{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *SensitiveDataCount) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *SensitiveDataCount) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return SensitiveDataCountValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateSensitiveDataCount struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateSensitiveDataCount) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*SensitiveDataCount)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *SensitiveDataCount got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["count"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("count"))
+		if err := fv(ctx, m.GetCount(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["sensitive_data_type"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("sensitive_data_type"))
+		if err := fv(ctx, m.GetSensitiveDataType(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultSensitiveDataCountValidator = func() *ValidateSensitiveDataCount {
+	v := &ValidateSensitiveDataCount{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func SensitiveDataCountValidator() db.Validator {
+	return DefaultSensitiveDataCountValidator
 }
 
 // augmented methods on protoc/std generated struct

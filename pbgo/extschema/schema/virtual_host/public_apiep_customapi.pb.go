@@ -27,13 +27,14 @@ import (
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
-	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+	schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
 	app_type "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/app_type"
 	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/vesenv"
 	io "io"
 	math "math"
 	math_bits "math/bits"
 	reflect "reflect"
+	strconv "strconv"
 	strings "strings"
 )
 
@@ -48,6 +49,37 @@ var _ = math.Inf
 // A compilation error at this line likely means your copy of the
 // proto package needs to be updated.
 const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
+
+// APIEPActivityMetricType
+//
+// x-displayName: "API Activity Metric Type"
+// Activity metric calculation type per API Endpoint
+type APIEPActivityMetricType int32
+
+const (
+	// x-displayName: "Top Attacked APIEPs By Security Events Percentage Of Requests Per API Endpoint"
+	// If specified, API returns top attacked APIEPs summary by sec_event percentage for given virtual host.
+	// The percentage is calculated as sec_events_percentage(apiep) = #sec-events(apiep)/#requests(apiep) * 100
+	ACTIVITY_METRIC_TYPE_SEC_EVENTS_PERCENTAGE APIEPActivityMetricType = 0
+	// x-displayName: "Top Active APIEPs By Request Percentage"
+	// If specified, API returns top active APIEPs summary by request ratio for given virtual host.
+	// The percentage is calculated as request_percentage(apiep) = #requests(apiep)/#requests(all apiep) * 100
+	ACTIVITY_METRIC_TYPE_REQ_PERCENTAGE APIEPActivityMetricType = 1
+)
+
+var APIEPActivityMetricType_name = map[int32]string{
+	0: "ACTIVITY_METRIC_TYPE_SEC_EVENTS_PERCENTAGE",
+	1: "ACTIVITY_METRIC_TYPE_REQ_PERCENTAGE",
+}
+
+var APIEPActivityMetricType_value = map[string]int32{
+	"ACTIVITY_METRIC_TYPE_SEC_EVENTS_PERCENTAGE": 0,
+	"ACTIVITY_METRIC_TYPE_REQ_PERCENTAGE":        1,
+}
+
+func (APIEPActivityMetricType) EnumDescriptor() ([]byte, []int) {
+	return fileDescriptor_6ff43449ad67ea61, []int{0}
+}
 
 // Api Endpoints stats request
 //
@@ -242,6 +274,31 @@ type APIEndpointsReq struct {
 	// List of domains that needs to be sent as part of the request
 	// Optional filter by domains. If absent, all domains are considered.
 	Domains []string `protobuf:"bytes,4,rep,name=domains,proto3" json:"domains,omitempty"`
+	// start time
+	//
+	// x-displayName: "Start Time"
+	// x-example: "2019-09-23T12:30:11.733Z"
+	// format: unix_timestamp|rfc 3339
+	// Filters the APIEPs with access time >= start_time. Considered only to calculate activity metrics, based on #sec-events and #requests.
+	// Optional: If not specified, then the start_time will be evaluated to end_time-2h
+	//           If end_time is not specified, then the start_time will be evaluated to <current time>-10m
+	StartTime string `protobuf:"bytes,5,opt,name=start_time,json=startTime,proto3" json:"start_time,omitempty"`
+	// end time
+	//
+	// x-displayName: "End Time"
+	// x-example: "2019-09-24T12:30:11.733Z"
+	// format: unix_timestamp|rfc 3339
+	// Filters the APIEPs with access time < end_time. Considered only to calculate activity metrics, based on #sec-events and #requests.
+	// Optional: If not specified, then the end_time will be evaluated to start_time+2h
+	//           If start_time is not specified, then the end_time will be evaluated to <current time>
+	EndTime string `protobuf:"bytes,6,opt,name=end_time,json=endTime,proto3" json:"end_time,omitempty"`
+	// APIEP Category
+	//
+	// x-displayName: "APIEP Category"
+	// x-example: "DISCOVERED"
+	// Category of api endpoints. Can be DISCOVERED, INVENTORY or SHADOW API.
+	// Optional filter by api_category. If absent, endpoints of all categories are considered.
+	ApiepCategory []app_type.APIEPCategory `protobuf:"varint,7,rep,packed,name=apiep_category,json=apiepCategory,proto3,enum=ves.io.schema.app_type.APIEPCategory" json:"apiep_category,omitempty"`
 }
 
 func (m *APIEndpointsReq) Reset()      { *m = APIEndpointsReq{} }
@@ -300,6 +357,27 @@ func (m *APIEndpointsReq) GetApiEndpointInfoRequest() []app_type.ApiEndpointInfo
 func (m *APIEndpointsReq) GetDomains() []string {
 	if m != nil {
 		return m.Domains
+	}
+	return nil
+}
+
+func (m *APIEndpointsReq) GetStartTime() string {
+	if m != nil {
+		return m.StartTime
+	}
+	return ""
+}
+
+func (m *APIEndpointsReq) GetEndTime() string {
+	if m != nil {
+		return m.EndTime
+	}
+	return ""
+}
+
+func (m *APIEndpointsReq) GetApiepCategory() []app_type.APIEPCategory {
+	if m != nil {
+		return m.ApiepCategory
 	}
 	return nil
 }
@@ -1007,7 +1085,559 @@ func (m *APIEndpointRsp) GetApiep() *app_type.APIEPInfo {
 	return nil
 }
 
+// Top attacked/active API endpoints request per virtual host
+//
+// x-displayName: "Top Attacked/Active API Endpoints per Virtual Host"
+// Request model for GetTopAPIEndpointsReq API
+type GetTopAPIEndpointsReq struct {
+	// Namespace
+	//
+	// x-displayName: "Namespace"
+	// x-example: "blogging-app"
+	// Namespace of the virtual host for current request
+	Namespace string `protobuf:"bytes,1,opt,name=namespace,proto3" json:"namespace,omitempty"`
+	// Virtual Host Name
+	//
+	// x-displayName: "Virtual Host Name"
+	// x-example: "blogging-app-vhost"
+	// Virtual Host name for current request
+	Name string `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
+	// apiep_summary_filter
+	//
+	// x-displayName: "Summary Block Filter"
+	// Filter object for summary block.
+	ApiepSummaryFilter *APIEPSummaryFilter `protobuf:"bytes,3,opt,name=apiep_summary_filter,json=apiepSummaryFilter,proto3" json:"apiep_summary_filter,omitempty"`
+	// top_by_metric
+	//
+	// x-displayName: "Top API endpoints by"
+	// x-example: "TOP_APIEPS_BY_SEC_EVENTS, TOP_APIEPS_BY_REQ_COUNT"
+	// x-required
+	// returns top api endpoints by security_events or requests metrics.
+	TopByMetric APIEPActivityMetricType `protobuf:"varint,4,opt,name=top_by_metric,json=topByMetric,proto3,enum=ves.io.schema.virtual_host.APIEPActivityMetricType" json:"top_by_metric,omitempty"`
+	// topk
+	//
+	// x-displayName: "Number of Top API Endpoints"
+	// x-example: "5"
+	// Number of top API endpoints to return in the response.
+	Topk uint32 `protobuf:"varint,5,opt,name=topk,proto3" json:"topk,omitempty"`
+}
+
+func (m *GetTopAPIEndpointsReq) Reset()      { *m = GetTopAPIEndpointsReq{} }
+func (*GetTopAPIEndpointsReq) ProtoMessage() {}
+func (*GetTopAPIEndpointsReq) Descriptor() ([]byte, []int) {
+	return fileDescriptor_6ff43449ad67ea61, []int{12}
+}
+func (m *GetTopAPIEndpointsReq) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *GetTopAPIEndpointsReq) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_GetTopAPIEndpointsReq.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *GetTopAPIEndpointsReq) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GetTopAPIEndpointsReq.Merge(m, src)
+}
+func (m *GetTopAPIEndpointsReq) XXX_Size() int {
+	return m.Size()
+}
+func (m *GetTopAPIEndpointsReq) XXX_DiscardUnknown() {
+	xxx_messageInfo_GetTopAPIEndpointsReq.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_GetTopAPIEndpointsReq proto.InternalMessageInfo
+
+func (m *GetTopAPIEndpointsReq) GetNamespace() string {
+	if m != nil {
+		return m.Namespace
+	}
+	return ""
+}
+
+func (m *GetTopAPIEndpointsReq) GetName() string {
+	if m != nil {
+		return m.Name
+	}
+	return ""
+}
+
+func (m *GetTopAPIEndpointsReq) GetApiepSummaryFilter() *APIEPSummaryFilter {
+	if m != nil {
+		return m.ApiepSummaryFilter
+	}
+	return nil
+}
+
+func (m *GetTopAPIEndpointsReq) GetTopByMetric() APIEPActivityMetricType {
+	if m != nil {
+		return m.TopByMetric
+	}
+	return ACTIVITY_METRIC_TYPE_SEC_EVENTS_PERCENTAGE
+}
+
+func (m *GetTopAPIEndpointsReq) GetTopk() uint32 {
+	if m != nil {
+		return m.Topk
+	}
+	return 0
+}
+
+// API endpoint GET response
+//
+// x-displayName: "API Endpoint Response"
+// Response model for GetTopAttackedAPIEndpoints API.
+type GetTopAPIEndpointsRsp struct {
+	// top_apieps
+	//
+	// x-displayName: "Top Attacked Endpoints"
+	// Top Attacked API endpoints
+	TopApieps []*APIEPActivityMetrics `protobuf:"bytes,1,rep,name=top_apieps,json=topApieps,proto3" json:"top_apieps,omitempty"`
+}
+
+func (m *GetTopAPIEndpointsRsp) Reset()      { *m = GetTopAPIEndpointsRsp{} }
+func (*GetTopAPIEndpointsRsp) ProtoMessage() {}
+func (*GetTopAPIEndpointsRsp) Descriptor() ([]byte, []int) {
+	return fileDescriptor_6ff43449ad67ea61, []int{13}
+}
+func (m *GetTopAPIEndpointsRsp) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *GetTopAPIEndpointsRsp) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_GetTopAPIEndpointsRsp.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *GetTopAPIEndpointsRsp) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GetTopAPIEndpointsRsp.Merge(m, src)
+}
+func (m *GetTopAPIEndpointsRsp) XXX_Size() int {
+	return m.Size()
+}
+func (m *GetTopAPIEndpointsRsp) XXX_DiscardUnknown() {
+	xxx_messageInfo_GetTopAPIEndpointsRsp.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_GetTopAPIEndpointsRsp proto.InternalMessageInfo
+
+func (m *GetTopAPIEndpointsRsp) GetTopApieps() []*APIEPActivityMetrics {
+	if m != nil {
+		return m.TopApieps
+	}
+	return nil
+}
+
+// APIEPActivityMetrics
+//
+// x-displayName: "API Endpoint Activity Metrics"
+// This represents the API endpoint's activity metrics.
+type APIEPActivityMetrics struct {
+	// apiep_url
+	//
+	// x-displayName: "API endpoint URL"
+	// x-example: "/api/v1/user/{user_id}/vehicle/{vehicle_id}"
+	// URL for API endpoint.
+	ApiepUrl string `protobuf:"bytes,1,opt,name=apiep_url,json=apiepUrl,proto3" json:"apiep_url,omitempty"`
+	// HTTP method
+	//
+	// x-displayName: "HTTP Method"
+	// x-example: "GET"
+	// HTTP method for the API.
+	Method schema.HttpMethod `protobuf:"varint,2,opt,name=method,proto3,enum=ves.io.schema.HttpMethod" json:"method,omitempty"`
+	// top_by_metric_value
+	//
+	// x-displayName: "Top By Metric Value"
+	// The field `top_by_metric_value` returns one of the following values based on the metric type passed in the request field `top_by_metric`
+	TopByMetricValue int32 `protobuf:"varint,3,opt,name=top_by_metric_value,json=topByMetricValue,proto3" json:"top_by_metric_value,omitempty"`
+}
+
+func (m *APIEPActivityMetrics) Reset()      { *m = APIEPActivityMetrics{} }
+func (*APIEPActivityMetrics) ProtoMessage() {}
+func (*APIEPActivityMetrics) Descriptor() ([]byte, []int) {
+	return fileDescriptor_6ff43449ad67ea61, []int{14}
+}
+func (m *APIEPActivityMetrics) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *APIEPActivityMetrics) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_APIEPActivityMetrics.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *APIEPActivityMetrics) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_APIEPActivityMetrics.Merge(m, src)
+}
+func (m *APIEPActivityMetrics) XXX_Size() int {
+	return m.Size()
+}
+func (m *APIEPActivityMetrics) XXX_DiscardUnknown() {
+	xxx_messageInfo_APIEPActivityMetrics.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_APIEPActivityMetrics proto.InternalMessageInfo
+
+func (m *APIEPActivityMetrics) GetApiepUrl() string {
+	if m != nil {
+		return m.ApiepUrl
+	}
+	return ""
+}
+
+func (m *APIEPActivityMetrics) GetMethod() schema.HttpMethod {
+	if m != nil {
+		return m.Method
+	}
+	return schema.ANY
+}
+
+func (m *APIEPActivityMetrics) GetTopByMetricValue() int32 {
+	if m != nil {
+		return m.TopByMetricValue
+	}
+	return 0
+}
+
+// GetTopSensitiveDataReq
+//
+// x-displayName: "Get Top Sensitive Data Request Object"
+// Request model for GetTopSensitiveDataReq API
+type GetTopSensitiveDataReq struct {
+	// Namespace
+	//
+	// x-displayName: "Namespace"
+	// x-example: "blogging-app"
+	// Namespace of the virtual host for current request
+	Namespace string `protobuf:"bytes,1,opt,name=namespace,proto3" json:"namespace,omitempty"`
+	// Virtual Host Name
+	//
+	// x-displayName: "Virtual Host Name"
+	// x-example: "blogging-app-vhost"
+	// Virtual Host name for current request
+	Name string `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
+	// List of Domain
+	//
+	// x-displayName: "List of Domain"
+	// x-example: "www.example.com"
+	// List of domains for which top api endpoints summary should be returned.
+	// Optional filter by domains. If absent, endpoints for all domains are considered.
+	Domains []string `protobuf:"bytes,3,rep,name=domains,proto3" json:"domains,omitempty"`
+	// APIEP Category
+	//
+	// x-displayName: "APIEP Category"
+	// x-example: "DISCOVERED"
+	// Category of api endpoints. Can be DISCOVERED, INVENTORY or SHADOW API.
+	ApiepCategory []app_type.APIEPCategory `protobuf:"varint,4,rep,packed,name=apiep_category,json=apiepCategory,proto3,enum=ves.io.schema.app_type.APIEPCategory" json:"apiep_category,omitempty"`
+	// topk
+	//
+	// x-displayName: "Number of Top API Endpoints"
+	// x-example: "5"
+	// Number of top API endpoints to return in the response.
+	Topk uint32 `protobuf:"varint,5,opt,name=topk,proto3" json:"topk,omitempty"`
+}
+
+func (m *GetTopSensitiveDataReq) Reset()      { *m = GetTopSensitiveDataReq{} }
+func (*GetTopSensitiveDataReq) ProtoMessage() {}
+func (*GetTopSensitiveDataReq) Descriptor() ([]byte, []int) {
+	return fileDescriptor_6ff43449ad67ea61, []int{15}
+}
+func (m *GetTopSensitiveDataReq) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *GetTopSensitiveDataReq) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_GetTopSensitiveDataReq.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *GetTopSensitiveDataReq) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GetTopSensitiveDataReq.Merge(m, src)
+}
+func (m *GetTopSensitiveDataReq) XXX_Size() int {
+	return m.Size()
+}
+func (m *GetTopSensitiveDataReq) XXX_DiscardUnknown() {
+	xxx_messageInfo_GetTopSensitiveDataReq.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_GetTopSensitiveDataReq proto.InternalMessageInfo
+
+func (m *GetTopSensitiveDataReq) GetNamespace() string {
+	if m != nil {
+		return m.Namespace
+	}
+	return ""
+}
+
+func (m *GetTopSensitiveDataReq) GetName() string {
+	if m != nil {
+		return m.Name
+	}
+	return ""
+}
+
+func (m *GetTopSensitiveDataReq) GetDomains() []string {
+	if m != nil {
+		return m.Domains
+	}
+	return nil
+}
+
+func (m *GetTopSensitiveDataReq) GetApiepCategory() []app_type.APIEPCategory {
+	if m != nil {
+		return m.ApiepCategory
+	}
+	return nil
+}
+
+func (m *GetTopSensitiveDataReq) GetTopk() uint32 {
+	if m != nil {
+		return m.Topk
+	}
+	return 0
+}
+
+// GetTopSensitiveDataRsp
+//
+// x-displayName: "SensitiveDataSummary API Response"
+// Response model for GetTopSensitiveDataRsp API.
+type GetTopSensitiveDataRsp struct {
+	// top_sensitive_data
+	//
+	// x-displayName: "Top Sensitive Data"
+	// Top k (max 10) sensitive data types with highest APIs count.
+	TopSensitiveData []*SensitiveDataCount `protobuf:"bytes,1,rep,name=top_sensitive_data,json=topSensitiveData,proto3" json:"top_sensitive_data,omitempty"`
+}
+
+func (m *GetTopSensitiveDataRsp) Reset()      { *m = GetTopSensitiveDataRsp{} }
+func (*GetTopSensitiveDataRsp) ProtoMessage() {}
+func (*GetTopSensitiveDataRsp) Descriptor() ([]byte, []int) {
+	return fileDescriptor_6ff43449ad67ea61, []int{16}
+}
+func (m *GetTopSensitiveDataRsp) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *GetTopSensitiveDataRsp) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_GetTopSensitiveDataRsp.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *GetTopSensitiveDataRsp) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GetTopSensitiveDataRsp.Merge(m, src)
+}
+func (m *GetTopSensitiveDataRsp) XXX_Size() int {
+	return m.Size()
+}
+func (m *GetTopSensitiveDataRsp) XXX_DiscardUnknown() {
+	xxx_messageInfo_GetTopSensitiveDataRsp.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_GetTopSensitiveDataRsp proto.InternalMessageInfo
+
+func (m *GetTopSensitiveDataRsp) GetTopSensitiveData() []*SensitiveDataCount {
+	if m != nil {
+		return m.TopSensitiveData
+	}
+	return nil
+}
+
+// SensitiveDataCount
+//
+// x-displayName: "Sensitive Data Count"
+// Response model for GetTopSensitiveDataRsp API.
+type SensitiveDataCount struct {
+	// sensitive_data_type
+	//
+	// x-displayName: "Type Of Sensitive Data"
+	// The type of sensitive data detected in APIs.
+	SensitiveDataType app_type.SensitiveDataType `protobuf:"varint,1,opt,name=sensitive_data_type,json=sensitiveDataType,proto3,enum=ves.io.schema.app_type.SensitiveDataType" json:"sensitive_data_type,omitempty"`
+	// count
+	//
+	// x-displayName: "API Count With This Sensitive Data Type"
+	// Number of APIEP detected this sensitive data type.
+	Count int32 `protobuf:"varint,2,opt,name=count,proto3" json:"count,omitempty"`
+}
+
+func (m *SensitiveDataCount) Reset()      { *m = SensitiveDataCount{} }
+func (*SensitiveDataCount) ProtoMessage() {}
+func (*SensitiveDataCount) Descriptor() ([]byte, []int) {
+	return fileDescriptor_6ff43449ad67ea61, []int{17}
+}
+func (m *SensitiveDataCount) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *SensitiveDataCount) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_SensitiveDataCount.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *SensitiveDataCount) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_SensitiveDataCount.Merge(m, src)
+}
+func (m *SensitiveDataCount) XXX_Size() int {
+	return m.Size()
+}
+func (m *SensitiveDataCount) XXX_DiscardUnknown() {
+	xxx_messageInfo_SensitiveDataCount.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_SensitiveDataCount proto.InternalMessageInfo
+
+func (m *SensitiveDataCount) GetSensitiveDataType() app_type.SensitiveDataType {
+	if m != nil {
+		return m.SensitiveDataType
+	}
+	return app_type.SENSITIVE_DATA_TYPE_CCN
+}
+
+func (m *SensitiveDataCount) GetCount() int32 {
+	if m != nil {
+		return m.Count
+	}
+	return 0
+}
+
+// APIEPSummaryFilter
+//
+// x-displayName: "APIEP Summary Filter"
+// Filter object for summary block.
+type APIEPSummaryFilter struct {
+	// List of Domain
+	//
+	// x-displayName: "List of Domains"
+	// x-example: "www.example.com"
+	// List of domains for which top api endpoints summary should be returned.
+	// Optional filter by domains. If absent, endpoints for all domains are considered.
+	Domains []string `protobuf:"bytes,1,rep,name=domains,proto3" json:"domains,omitempty"`
+	// start time
+	//
+	// x-displayName: "Start Time"
+	// x-example: "2019-09-23T12:30:11.733Z"
+	// format: unix_timestamp|rfc 3339
+	// Filters the APIEPs with access time >= start_time.
+	// Optional: If not specified, then the start_time will be evaluated to end_time-2h
+	//           If end_time is not specified, then the start_time will be evaluated to <current time>-10m
+	StartTime string `protobuf:"bytes,2,opt,name=start_time,json=startTime,proto3" json:"start_time,omitempty"`
+	// end time
+	//
+	// x-displayName: "End Time"
+	// x-example: "2019-09-24T12:30:11.733Z"
+	// format: unix_timestamp|rfc 3339
+	// Filters the APIEPs with access time < end_time.
+	// Optional: If not specified, then the end_time will be evaluated to start_time+2h
+	//           If start_time is not specified, then the end_time will be evaluated to <current time>
+	EndTime string `protobuf:"bytes,3,opt,name=end_time,json=endTime,proto3" json:"end_time,omitempty"`
+	// APIEP Category
+	//
+	// x-displayName: "APIEP Category"
+	// x-example: "DISCOVERED"
+	// Category of api endpoints. Can be DISCOVERED, INVENTORY or SHADOW API.
+	// Optional filter by api_category. If absent, endpoints of all categories are considered.
+	ApiepCategory []app_type.APIEPCategory `protobuf:"varint,4,rep,packed,name=apiep_category,json=apiepCategory,proto3,enum=ves.io.schema.app_type.APIEPCategory" json:"apiep_category,omitempty"`
+}
+
+func (m *APIEPSummaryFilter) Reset()      { *m = APIEPSummaryFilter{} }
+func (*APIEPSummaryFilter) ProtoMessage() {}
+func (*APIEPSummaryFilter) Descriptor() ([]byte, []int) {
+	return fileDescriptor_6ff43449ad67ea61, []int{18}
+}
+func (m *APIEPSummaryFilter) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *APIEPSummaryFilter) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_APIEPSummaryFilter.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *APIEPSummaryFilter) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_APIEPSummaryFilter.Merge(m, src)
+}
+func (m *APIEPSummaryFilter) XXX_Size() int {
+	return m.Size()
+}
+func (m *APIEPSummaryFilter) XXX_DiscardUnknown() {
+	xxx_messageInfo_APIEPSummaryFilter.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_APIEPSummaryFilter proto.InternalMessageInfo
+
+func (m *APIEPSummaryFilter) GetDomains() []string {
+	if m != nil {
+		return m.Domains
+	}
+	return nil
+}
+
+func (m *APIEPSummaryFilter) GetStartTime() string {
+	if m != nil {
+		return m.StartTime
+	}
+	return ""
+}
+
+func (m *APIEPSummaryFilter) GetEndTime() string {
+	if m != nil {
+		return m.EndTime
+	}
+	return ""
+}
+
+func (m *APIEPSummaryFilter) GetApiepCategory() []app_type.APIEPCategory {
+	if m != nil {
+		return m.ApiepCategory
+	}
+	return nil
+}
+
 func init() {
+	proto.RegisterEnum("ves.io.schema.virtual_host.APIEPActivityMetricType", APIEPActivityMetricType_name, APIEPActivityMetricType_value)
+	golang_proto.RegisterEnum("ves.io.schema.virtual_host.APIEPActivityMetricType", APIEPActivityMetricType_name, APIEPActivityMetricType_value)
 	proto.RegisterType((*ApiEndpointsStatsReq)(nil), "ves.io.schema.virtual_host.ApiEndpointsStatsReq")
 	golang_proto.RegisterType((*ApiEndpointsStatsReq)(nil), "ves.io.schema.virtual_host.ApiEndpointsStatsReq")
 	proto.RegisterType((*ApiEndpointsStatsRsp)(nil), "ves.io.schema.virtual_host.ApiEndpointsStatsRsp")
@@ -1032,6 +1662,20 @@ func init() {
 	golang_proto.RegisterType((*APIEndpointReq)(nil), "ves.io.schema.virtual_host.APIEndpointReq")
 	proto.RegisterType((*APIEndpointRsp)(nil), "ves.io.schema.virtual_host.APIEndpointRsp")
 	golang_proto.RegisterType((*APIEndpointRsp)(nil), "ves.io.schema.virtual_host.APIEndpointRsp")
+	proto.RegisterType((*GetTopAPIEndpointsReq)(nil), "ves.io.schema.virtual_host.GetTopAPIEndpointsReq")
+	golang_proto.RegisterType((*GetTopAPIEndpointsReq)(nil), "ves.io.schema.virtual_host.GetTopAPIEndpointsReq")
+	proto.RegisterType((*GetTopAPIEndpointsRsp)(nil), "ves.io.schema.virtual_host.GetTopAPIEndpointsRsp")
+	golang_proto.RegisterType((*GetTopAPIEndpointsRsp)(nil), "ves.io.schema.virtual_host.GetTopAPIEndpointsRsp")
+	proto.RegisterType((*APIEPActivityMetrics)(nil), "ves.io.schema.virtual_host.APIEPActivityMetrics")
+	golang_proto.RegisterType((*APIEPActivityMetrics)(nil), "ves.io.schema.virtual_host.APIEPActivityMetrics")
+	proto.RegisterType((*GetTopSensitiveDataReq)(nil), "ves.io.schema.virtual_host.GetTopSensitiveDataReq")
+	golang_proto.RegisterType((*GetTopSensitiveDataReq)(nil), "ves.io.schema.virtual_host.GetTopSensitiveDataReq")
+	proto.RegisterType((*GetTopSensitiveDataRsp)(nil), "ves.io.schema.virtual_host.GetTopSensitiveDataRsp")
+	golang_proto.RegisterType((*GetTopSensitiveDataRsp)(nil), "ves.io.schema.virtual_host.GetTopSensitiveDataRsp")
+	proto.RegisterType((*SensitiveDataCount)(nil), "ves.io.schema.virtual_host.SensitiveDataCount")
+	golang_proto.RegisterType((*SensitiveDataCount)(nil), "ves.io.schema.virtual_host.SensitiveDataCount")
+	proto.RegisterType((*APIEPSummaryFilter)(nil), "ves.io.schema.virtual_host.APIEPSummaryFilter")
+	golang_proto.RegisterType((*APIEPSummaryFilter)(nil), "ves.io.schema.virtual_host.APIEPSummaryFilter")
 }
 
 func init() {
@@ -1042,83 +1686,127 @@ func init() {
 }
 
 var fileDescriptor_6ff43449ad67ea61 = []byte{
-	// 1174 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xd4, 0x57, 0xcf, 0x6f, 0x1b, 0xc5,
-	0x17, 0xf7, 0xd8, 0x71, 0xfb, 0xf5, 0x24, 0x5f, 0x47, 0x19, 0xa2, 0xe2, 0x2e, 0xd1, 0x92, 0x2c,
-	0x95, 0x88, 0x8a, 0xbc, 0x1b, 0xa5, 0x12, 0x95, 0xe0, 0x40, 0x93, 0x26, 0x69, 0x2d, 0x55, 0x60,
-	0x39, 0xed, 0x85, 0xcb, 0x6a, 0xec, 0x1d, 0xaf, 0xa7, 0xac, 0x77, 0x26, 0x3b, 0x63, 0x97, 0x08,
-	0x55, 0x42, 0x39, 0x72, 0x42, 0x70, 0x84, 0x3f, 0x80, 0x2b, 0xb7, 0x8a, 0x5e, 0x72, 0x41, 0xf4,
-	0x84, 0x02, 0x5c, 0x2a, 0x4e, 0x8d, 0x83, 0x10, 0xdc, 0x7a, 0xe4, 0x06, 0xda, 0xd9, 0xb5, 0xb3,
-	0xeb, 0xc4, 0x89, 0x9b, 0xa0, 0x4a, 0x5c, 0xec, 0x99, 0xf7, 0x6b, 0xde, 0xe7, 0xbd, 0xcf, 0xbe,
-	0x9d, 0x85, 0xd7, 0xbb, 0x44, 0x98, 0x94, 0x59, 0xa2, 0xd1, 0x22, 0x6d, 0x6c, 0x75, 0x69, 0x20,
-	0x3b, 0xd8, 0xb3, 0x5b, 0x4c, 0x48, 0x8b, 0x77, 0xea, 0x1e, 0x6d, 0xd8, 0x98, 0x53, 0xc2, 0xed,
-	0x46, 0x47, 0x48, 0xd6, 0xc6, 0x9c, 0x9a, 0x3c, 0x60, 0x92, 0x21, 0x2d, 0x72, 0x34, 0x23, 0x47,
-	0x33, 0xe9, 0xa8, 0x95, 0x5d, 0x2a, 0x5b, 0x9d, 0xba, 0xd9, 0x60, 0x6d, 0xcb, 0x65, 0x2e, 0xb3,
-	0x94, 0x4b, 0xbd, 0xd3, 0x54, 0x3b, 0xb5, 0x51, 0xab, 0x28, 0x94, 0x36, 0xe7, 0x32, 0xe6, 0x7a,
-	0xc4, 0xc2, 0x9c, 0x5a, 0xd8, 0xf7, 0x99, 0xc4, 0x92, 0x32, 0x5f, 0xc4, 0xda, 0xcb, 0x09, 0x6d,
-	0x4b, 0x4a, 0x5e, 0x67, 0xce, 0x76, 0xac, 0x7a, 0x3d, 0x56, 0x0d, 0xc2, 0x4b, 0xda, 0x26, 0x42,
-	0xe2, 0x36, 0x8f, 0x0d, 0x8c, 0x34, 0x3a, 0xcc, 0xb9, 0x2d, 0xb7, 0x39, 0xb1, 0xc2, 0x9f, 0x7e,
-	0xfc, 0xd7, 0xd2, 0x36, 0x8c, 0x27, 0x0f, 0x9f, 0x1b, 0x2a, 0x0f, 0xf6, 0xa8, 0x83, 0x25, 0x39,
-	0x3e, 0x7c, 0x97, 0x08, 0xe2, 0x77, 0xd3, 0x11, 0x8c, 0xdb, 0x70, 0x76, 0x85, 0xd3, 0x75, 0xdf,
-	0xe1, 0x8c, 0xfa, 0x52, 0x6c, 0x4a, 0x2c, 0x45, 0x8d, 0x6c, 0x21, 0x04, 0x27, 0x7c, 0xdc, 0x26,
-	0x25, 0x30, 0x0f, 0x16, 0x0b, 0x35, 0xb5, 0x46, 0x73, 0xb0, 0x10, 0xfe, 0x0b, 0x8e, 0x1b, 0xa4,
-	0x94, 0x55, 0x8a, 0x43, 0x81, 0xf1, 0x08, 0x1c, 0x17, 0x4a, 0x70, 0xf4, 0x26, 0x9c, 0x96, 0x4c,
-	0x62, 0xcf, 0x26, 0x7d, 0x95, 0x8a, 0x9a, 0xaf, 0x15, 0x95, 0x78, 0xe0, 0x80, 0x74, 0x08, 0x1d,
-	0x2a, 0x1a, 0xac, 0x4b, 0x02, 0xe2, 0xa8, 0x03, 0xf2, 0xb5, 0x84, 0x24, 0x3c, 0x9f, 0xfa, 0x5d,
-	0xe2, 0x4b, 0x16, 0x6c, 0x97, 0x72, 0x4a, 0x7d, 0x28, 0x40, 0x97, 0xe0, 0x05, 0xd1, 0xc2, 0x0e,
-	0x7b, 0x50, 0x9a, 0x50, 0xaa, 0x78, 0x87, 0x16, 0xe0, 0x14, 0xa7, 0xd4, 0x76, 0x88, 0x24, 0x0d,
-	0x49, 0x9c, 0x52, 0x5e, 0x69, 0x27, 0x39, 0xa5, 0x6b, 0xb1, 0xc8, 0x78, 0x06, 0xe0, 0xf4, 0x4a,
-	0xb5, 0x32, 0xc8, 0x24, 0x2c, 0x40, 0x0a, 0x2c, 0x18, 0x02, 0x3b, 0x28, 0x4f, 0x36, 0x51, 0x9e,
-	0x0e, 0xbc, 0x8c, 0x39, 0x1d, 0xa0, 0xb4, 0xa9, 0xdf, 0x64, 0x76, 0x40, 0xb6, 0x3a, 0x44, 0xc8,
-	0x52, 0x6e, 0x3e, 0xb7, 0x58, 0x5c, 0x36, 0xcd, 0x34, 0x2d, 0xfb, 0x1d, 0x37, 0x13, 0x85, 0xab,
-	0xf8, 0x4d, 0x56, 0x8b, 0xbc, 0x56, 0xe1, 0x77, 0x7f, 0xee, 0xe6, 0xf2, 0x5f, 0x80, 0x6c, 0x09,
-	0xd4, 0x2e, 0xe1, 0x63, 0x6d, 0xd0, 0x15, 0x78, 0xd1, 0x61, 0x6d, 0x4c, 0x7d, 0x51, 0x9a, 0x98,
-	0xcf, 0x2d, 0x16, 0x52, 0x4e, 0x7d, 0x95, 0xd1, 0x82, 0xc5, 0xcd, 0x07, 0xd8, 0x75, 0x49, 0xb0,
-	0xc9, 0x49, 0xe3, 0x4c, 0x1d, 0x4e, 0x9e, 0x94, 0x1b, 0x7d, 0xd2, 0xb5, 0xf4, 0x49, 0x82, 0x87,
-	0x1d, 0x10, 0x91, 0xc4, 0x16, 0x9c, 0x34, 0xe2, 0x13, 0x27, 0xc5, 0xa1, 0x95, 0xb1, 0x03, 0xe0,
-	0x4c, 0xa2, 0x03, 0xd5, 0xb5, 0x8d, 0xb3, 0xf5, 0xe0, 0x0d, 0xf8, 0xff, 0x06, 0xf3, 0x3c, 0xcc,
-	0x05, 0x71, 0xec, 0x4e, 0xe0, 0x29, 0x9a, 0x14, 0x6a, 0x53, 0x03, 0xe1, 0xbd, 0xc0, 0x0b, 0x99,
-	0xd2, 0x26, 0xb2, 0xc5, 0x1c, 0xc5, 0x94, 0x42, 0x2d, 0xde, 0x19, 0xdf, 0x02, 0xa8, 0x25, 0x92,
-	0xb8, 0x43, 0x70, 0xe0, 0xcb, 0x4d, 0xd5, 0xa9, 0x97, 0x9f, 0x4d, 0xb2, 0xda, 0xf9, 0xd1, 0xd5,
-	0xde, 0x1c, 0x62, 0xae, 0xe0, 0xe8, 0x06, 0x84, 0xd1, 0x4c, 0xf4, 0xa8, 0x90, 0x25, 0x30, 0x9f,
-	0x5b, 0x9c, 0x5c, 0x5e, 0x18, 0x49, 0xbc, 0x6a, 0x65, 0xbd, 0xaa, 0xe8, 0x54, 0x50, 0x4e, 0x77,
-	0xa8, 0x90, 0xc6, 0xdd, 0x23, 0xcd, 0x10, 0x1c, 0xbd, 0x07, 0xff, 0xc7, 0x9d, 0xa6, 0x62, 0xb5,
-	0x42, 0x3f, 0xb9, 0x7c, 0xe5, 0xc4, 0xa0, 0xd5, 0xb5, 0x0d, 0x15, 0xf7, 0x22, 0x77, 0x9a, 0xe1,
-	0xc2, 0xf8, 0x2a, 0x3b, 0xba, 0xbc, 0x82, 0x87, 0xc5, 0xf2, 0x94, 0xc8, 0x8e, 0xc2, 0xc5, 0x25,
-	0x9e, 0xf2, 0x12, 0x76, 0x47, 0xa8, 0x94, 0x3d, 0x42, 0x25, 0xb4, 0x01, 0x67, 0x3c, 0x2c, 0xa4,
-	0xdd, 0xe1, 0xe1, 0x28, 0x74, 0xec, 0x70, 0xe8, 0xaa, 0xc2, 0x4f, 0x2e, 0x6b, 0x66, 0x34, 0x91,
-	0xcd, 0xfe, 0x44, 0x36, 0xef, 0xf6, 0x27, 0x72, 0x6d, 0x3a, 0x74, 0xba, 0x17, 0xf9, 0x84, 0x52,
-	0xb4, 0x04, 0x67, 0xc3, 0xc7, 0x79, 0x30, 0x60, 0xfa, 0x69, 0x45, 0x5d, 0x42, 0x98, 0xd3, 0x4a,
-	0x5f, 0x15, 0x27, 0xf7, 0x2e, 0xd4, 0x86, 0x3c, 0x92, 0xa9, 0xe6, 0x95, 0xdf, 0xab, 0x29, 0xbf,
-	0xc4, 0x13, 0xf0, 0x75, 0x16, 0x16, 0x13, 0xd5, 0xf9, 0x4f, 0x8d, 0xa0, 0x23, 0x3c, 0x9f, 0x38,
-	0x91, 0xe7, 0xf9, 0x51, 0x3c, 0xbf, 0x30, 0x9a, 0xe7, 0x95, 0x74, 0x75, 0x04, 0x47, 0xd7, 0x61,
-	0x5e, 0x31, 0x36, 0x26, 0xe3, 0x18, 0x0c, 0x8f, 0xec, 0x97, 0xff, 0x82, 0xb0, 0xb8, 0x12, 0xae,
-	0x6e, 0xaa, 0x3b, 0xc3, 0x4a, 0xb5, 0x82, 0x7e, 0x02, 0x70, 0xfa, 0x16, 0x91, 0xc9, 0x27, 0x09,
-	0xbd, 0x65, 0x8e, 0xbe, 0x42, 0x98, 0x43, 0x6f, 0x0b, 0x6d, 0x7c, 0x63, 0xc1, 0x0d, 0xe7, 0xc9,
-	0xa3, 0x2c, 0xe8, 0xfd, 0x50, 0x7a, 0xa5, 0x4b, 0x44, 0x99, 0xb2, 0xb2, 0x4b, 0x7c, 0x12, 0x60,
-	0xaf, 0x1c, 0x10, 0xec, 0xec, 0xfc, 0xf2, 0xdb, 0x97, 0xd9, 0x9b, 0x68, 0x25, 0xbe, 0xdd, 0x58,
-	0x83, 0x7e, 0x0b, 0xeb, 0x93, 0xc1, 0xfa, 0x61, 0xea, 0x22, 0x14, 0x6b, 0x1e, 0x5a, 0xc9, 0xd6,
-	0x0b, 0xb4, 0x07, 0x60, 0x31, 0x8d, 0x09, 0x5d, 0x1d, 0x33, 0xcb, 0x10, 0xd1, 0xd8, 0xb6, 0x82,
-	0x1b, 0xcd, 0xd3, 0x00, 0xad, 0x1b, 0x37, 0xce, 0x0b, 0xe8, 0x1d, 0x70, 0x15, 0xfd, 0x0a, 0xe0,
-	0x4c, 0x1a, 0x52, 0x75, 0x6d, 0x03, 0x95, 0xc7, 0xcc, 0x34, 0x7a, 0xa9, 0x68, 0x2f, 0x62, 0x2e,
-	0xb8, 0xe1, 0x9e, 0x86, 0x6d, 0x03, 0xad, 0x9d, 0x17, 0x9b, 0xc5, 0x9d, 0x26, 0xfa, 0x1b, 0x40,
-	0x2d, 0x0d, 0x2e, 0x39, 0x21, 0xd1, 0xdb, 0x63, 0xa6, 0x3d, 0xf4, 0xd6, 0xd2, 0xce, 0xe4, 0x27,
-	0xb8, 0xb1, 0x75, 0x1a, 0xee, 0x2a, 0x7a, 0xff, 0xdc, 0xb8, 0x53, 0x03, 0x1f, 0x7d, 0x1f, 0x31,
-	0x36, 0x31, 0x15, 0x4f, 0x66, 0x6c, 0xfa, 0x42, 0xa3, 0xcd, 0xf6, 0xa7, 0x7b, 0xf8, 0x15, 0x70,
-	0x5b, 0x4a, 0xbe, 0xca, 0x9c, 0xed, 0x97, 0x82, 0x43, 0x58, 0xc9, 0x49, 0x8f, 0x7e, 0x07, 0x70,
-	0x36, 0xec, 0xe4, 0xf0, 0x65, 0x18, 0x2d, 0x9d, 0xd8, 0x8b, 0x63, 0xae, 0xe1, 0xda, 0x0b, 0x7a,
-	0x08, 0x6e, 0xdc, 0x3f, 0x0d, 0x6f, 0x05, 0xdd, 0xfa, 0x17, 0xf0, 0x86, 0xc7, 0x69, 0xd6, 0xee,
-	0x63, 0x90, 0xfb, 0xf9, 0x31, 0x58, 0x38, 0x21, 0xc9, 0x0f, 0xea, 0xf7, 0x49, 0x43, 0xee, 0xfc,
-	0x58, 0xca, 0x2e, 0x81, 0xd5, 0xcf, 0xc0, 0xde, 0xbe, 0x9e, 0x79, 0xba, 0xaf, 0x67, 0x9e, 0xef,
-	0xeb, 0xe0, 0xd3, 0x9e, 0x0e, 0xbe, 0xe9, 0xe9, 0xe0, 0x49, 0x4f, 0x07, 0x7b, 0x3d, 0x1d, 0x3c,
-	0xeb, 0xe9, 0xe0, 0x8f, 0x9e, 0x9e, 0x79, 0xde, 0xd3, 0xc1, 0xe7, 0x07, 0x7a, 0x66, 0xf7, 0x40,
-	0x07, 0x7b, 0x07, 0x7a, 0xe6, 0xe9, 0x81, 0x9e, 0xf9, 0xb0, 0xea, 0x32, 0xfe, 0x91, 0x6b, 0x76,
-	0x99, 0x27, 0x49, 0x10, 0x60, 0xb3, 0x23, 0x2c, 0xb5, 0x68, 0xb2, 0xa0, 0x5d, 0xe6, 0x01, 0xeb,
-	0x52, 0x87, 0x04, 0xe5, 0xbe, 0xda, 0xe2, 0x75, 0x97, 0x59, 0xe4, 0x63, 0x19, 0x7f, 0xfb, 0x1c,
-	0xf3, 0xfd, 0x58, 0xbf, 0xa0, 0x6e, 0x01, 0xd7, 0xfe, 0x09, 0x00, 0x00, 0xff, 0xff, 0x4b, 0xf3,
-	0x30, 0x05, 0x64, 0x0e, 0x00, 0x00,
+	// 1762 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xd4, 0x58, 0x4f, 0x8c, 0x5b, 0x47,
+	0x19, 0xdf, 0x79, 0x5e, 0xef, 0xc6, 0xb3, 0x89, 0x93, 0x4c, 0x96, 0xd4, 0x31, 0x89, 0xd9, 0xbc,
+	0x16, 0x75, 0x59, 0xb4, 0x7e, 0xe9, 0x46, 0xa2, 0x52, 0x38, 0xb4, 0xb6, 0xd7, 0x9b, 0x5a, 0x4a,
+	0x82, 0x79, 0x76, 0x83, 0x16, 0x55, 0x7a, 0x8c, 0xfd, 0xc6, 0xf6, 0xb4, 0xcf, 0x6f, 0x26, 0x6f,
+	0xc6, 0x2e, 0x06, 0x15, 0x45, 0x2b, 0x71, 0xe1, 0x54, 0x85, 0x23, 0x70, 0xe2, 0xc2, 0x15, 0x89,
+	0x43, 0x45, 0x2f, 0xb9, 0x20, 0x7a, 0x42, 0x01, 0x2e, 0x15, 0x27, 0xe2, 0x20, 0x04, 0xb7, 0x9e,
+	0xca, 0x11, 0xf4, 0xe6, 0x3d, 0x3b, 0xef, 0xd9, 0x5e, 0x7b, 0xff, 0x84, 0x4a, 0xbd, 0xec, 0xbe,
+	0xf9, 0xfe, 0xcd, 0xf7, 0xfd, 0xe6, 0x37, 0x33, 0xdf, 0x18, 0xbe, 0xde, 0x27, 0x22, 0x4f, 0x99,
+	0x21, 0x9a, 0x1d, 0xd2, 0xc5, 0x46, 0x9f, 0x7a, 0xb2, 0x87, 0x1d, 0xab, 0xc3, 0x84, 0x34, 0x78,
+	0xaf, 0xe1, 0xd0, 0xa6, 0x85, 0x39, 0x25, 0xdc, 0x6a, 0xf6, 0x84, 0x64, 0x5d, 0xcc, 0x69, 0x9e,
+	0x7b, 0x4c, 0x32, 0x94, 0x0d, 0x1c, 0xf3, 0x81, 0x63, 0x3e, 0xea, 0x98, 0xdd, 0x6e, 0x53, 0xd9,
+	0xe9, 0x35, 0xf2, 0x4d, 0xd6, 0x35, 0xda, 0xac, 0xcd, 0x0c, 0xe5, 0xd2, 0xe8, 0xb5, 0xd4, 0x48,
+	0x0d, 0xd4, 0x57, 0x10, 0x2a, 0x7b, 0xb5, 0xcd, 0x58, 0xdb, 0x21, 0x06, 0xe6, 0xd4, 0xc0, 0xae,
+	0xcb, 0x24, 0x96, 0x94, 0xb9, 0x22, 0xd4, 0x5e, 0x89, 0x68, 0x3b, 0x52, 0xf2, 0x06, 0xb3, 0x07,
+	0xa1, 0xea, 0x6b, 0xa1, 0x6a, 0x1c, 0x5e, 0xd2, 0x2e, 0x11, 0x12, 0x77, 0x79, 0x68, 0xa0, 0xc7,
+	0xab, 0xc3, 0x9c, 0x5b, 0x72, 0xc0, 0x89, 0xe1, 0xff, 0x19, 0xc5, 0xff, 0x6a, 0xdc, 0x86, 0xf1,
+	0xd8, 0xe4, 0x71, 0x65, 0xd4, 0xef, 0xea, 0x04, 0x72, 0xd8, 0xa1, 0x36, 0x96, 0x64, 0xf6, 0xcc,
+	0x7d, 0x22, 0x88, 0xdb, 0x8f, 0x07, 0xd7, 0xdf, 0x82, 0xeb, 0x05, 0x4e, 0xcb, 0xae, 0xcd, 0x19,
+	0x75, 0xa5, 0xa8, 0x49, 0x2c, 0x85, 0x49, 0x1e, 0x20, 0x04, 0x97, 0x5d, 0xdc, 0x25, 0x19, 0xb0,
+	0x01, 0x36, 0x53, 0xa6, 0xfa, 0x46, 0x57, 0x61, 0xca, 0xff, 0x2f, 0x38, 0x6e, 0x92, 0x8c, 0xa6,
+	0x14, 0xcf, 0x05, 0xfa, 0x47, 0x60, 0x56, 0x28, 0xc1, 0xd1, 0xab, 0xf0, 0xbc, 0x64, 0x12, 0x3b,
+	0x16, 0x19, 0xa9, 0x54, 0xd4, 0xa4, 0x99, 0x56, 0xe2, 0xb1, 0x03, 0xca, 0x41, 0x68, 0x53, 0xd1,
+	0x64, 0x7d, 0xe2, 0x11, 0x5b, 0x4d, 0x90, 0x34, 0x23, 0x12, 0x7f, 0x7e, 0xea, 0xf6, 0x89, 0x2b,
+	0x99, 0x37, 0xc8, 0x24, 0x94, 0xfa, 0xb9, 0x00, 0x5d, 0x86, 0x2b, 0xa2, 0x83, 0x6d, 0xf6, 0x7e,
+	0x66, 0x59, 0xa9, 0xc2, 0x11, 0xba, 0x0e, 0xcf, 0x72, 0x4a, 0x2d, 0x9b, 0x48, 0xd2, 0x94, 0xc4,
+	0xce, 0x24, 0x95, 0x76, 0x8d, 0x53, 0xba, 0x1b, 0x8a, 0xf4, 0x5f, 0x25, 0xe0, 0xf9, 0x42, 0xb5,
+	0x32, 0xce, 0xc4, 0x07, 0x20, 0x56, 0x2c, 0x98, 0x28, 0x76, 0x0c, 0x8f, 0x16, 0x81, 0xa7, 0x07,
+	0xaf, 0x60, 0x4e, 0xc7, 0x55, 0x5a, 0xd4, 0x6d, 0x31, 0xcb, 0x23, 0x0f, 0x7a, 0x44, 0xc8, 0x4c,
+	0x62, 0x23, 0xb1, 0x99, 0xde, 0xc9, 0xe7, 0xe3, 0x8c, 0x1d, 0x91, 0x21, 0x1f, 0x01, 0xae, 0xe2,
+	0xb6, 0x98, 0x19, 0x78, 0x15, 0xe1, 0xef, 0xff, 0xfd, 0x38, 0x91, 0x7c, 0x04, 0xb4, 0x0c, 0x30,
+	0x2f, 0xe3, 0x99, 0x36, 0x68, 0x1f, 0xae, 0xda, 0xac, 0x8b, 0xa9, 0x2b, 0x32, 0xcb, 0x1b, 0x89,
+	0xcd, 0x54, 0xf1, 0x0d, 0xdf, 0x29, 0xf5, 0x08, 0xac, 0xe8, 0xcb, 0x9e, 0xd6, 0x01, 0xfe, 0x08,
+	0x3e, 0x02, 0xab, 0x7a, 0xd2, 0x4b, 0x64, 0x1e, 0x6a, 0x51, 0xe5, 0x05, 0x30, 0x8a, 0x7f, 0x21,
+	0x19, 0x99, 0x69, 0x14, 0x0f, 0x5d, 0x83, 0x50, 0x48, 0xec, 0x49, 0xcb, 0xe7, 0xb4, 0x02, 0x2e,
+	0x65, 0xa6, 0x94, 0xa4, 0x4e, 0xbb, 0x04, 0x5d, 0x81, 0x67, 0x88, 0x6b, 0x07, 0xca, 0x15, 0xa5,
+	0x5c, 0x25, 0xae, 0xad, 0x54, 0x77, 0x60, 0x3a, 0xdc, 0xb2, 0x58, 0x92, 0xb6, 0xbf, 0x5e, 0xab,
+	0x0a, 0x80, 0xaf, 0x1f, 0x0a, 0x40, 0xb5, 0x52, 0xae, 0x96, 0x42, 0x63, 0xf3, 0x9c, 0x72, 0x1e,
+	0x0d, 0xf5, 0x0e, 0x4c, 0xd7, 0xde, 0xc7, 0xed, 0x36, 0xf1, 0x6a, 0x9c, 0x34, 0x4f, 0x44, 0x4f,
+	0xf4, 0xca, 0x73, 0x98, 0x12, 0x0a, 0x26, 0x38, 0xa3, 0x62, 0xfd, 0x66, 0x7c, 0x26, 0xc1, 0x7d,
+	0xfa, 0x88, 0x40, 0x62, 0x09, 0x4e, 0x9a, 0xe1, 0x8c, 0x6b, 0xe2, 0xb9, 0x95, 0x7e, 0x00, 0xe0,
+	0xc5, 0x08, 0x7d, 0xaa, 0xbb, 0x7b, 0x27, 0x23, 0xd0, 0xcb, 0xf0, 0x5c, 0x93, 0x39, 0x0e, 0xe6,
+	0x82, 0xd8, 0x56, 0xcf, 0x73, 0x14, 0xc7, 0x53, 0xe6, 0xd9, 0xb1, 0xf0, 0x6d, 0xcf, 0xf1, 0x69,
+	0xde, 0x25, 0xb2, 0xc3, 0x6c, 0x45, 0xf3, 0x94, 0x19, 0x8e, 0xf4, 0xdf, 0x02, 0x98, 0x8d, 0x24,
+	0x71, 0x87, 0x60, 0xcf, 0x95, 0x35, 0x85, 0xf2, 0x17, 0x9f, 0x4d, 0x14, 0xed, 0xe4, 0xe1, 0x68,
+	0xd7, 0x26, 0xb6, 0x9d, 0xe0, 0xe8, 0x4d, 0x08, 0x03, 0xe2, 0x38, 0x54, 0xc8, 0x0c, 0xd8, 0x48,
+	0x6c, 0xae, 0xed, 0x5c, 0x9f, 0x4b, 0x1a, 0xb5, 0x17, 0x52, 0xca, 0xe9, 0x0e, 0x15, 0x52, 0xaf,
+	0x4f, 0x2d, 0x86, 0xe0, 0xe8, 0x0d, 0x78, 0x86, 0xdb, 0x2d, 0xb5, 0x25, 0x55, 0xf5, 0x6b, 0x3b,
+	0xaf, 0xcc, 0x0d, 0x5a, 0xdd, 0xdd, 0x53, 0x71, 0x57, 0xb9, 0xdd, 0xf2, 0x3f, 0xf4, 0x5f, 0x68,
+	0x87, 0xc3, 0x2b, 0xb8, 0x0f, 0x96, 0xa3, 0x44, 0x56, 0x10, 0x2e, 0x84, 0xf8, 0xac, 0x13, 0xb1,
+	0x9b, 0xa2, 0x92, 0x36, 0x45, 0x25, 0xb4, 0x07, 0x2f, 0x3a, 0x58, 0x48, 0xab, 0xc7, 0xfd, 0x73,
+	0x3c, 0xdc, 0x5b, 0x09, 0x95, 0x70, 0x36, 0x1f, 0xdc, 0x34, 0xf9, 0xd1, 0x4d, 0x93, 0xaf, 0x8f,
+	0x6e, 0x1a, 0xf3, 0xbc, 0xef, 0xf4, 0x76, 0xe0, 0xa3, 0xf6, 0xdf, 0x0d, 0xb8, 0xee, 0x9f, 0x45,
+	0xe3, 0xd3, 0x71, 0x94, 0x56, 0xb0, 0x4a, 0x08, 0x73, 0x5a, 0x19, 0xa9, 0xc2, 0xe4, 0xbe, 0x0d,
+	0xb3, 0x13, 0x1e, 0xd1, 0x54, 0x83, 0xbd, 0xff, 0x52, 0xcc, 0x2f, 0xb2, 0x03, 0x7e, 0xa9, 0xc1,
+	0x74, 0x04, 0x9d, 0x2f, 0xd5, 0xf9, 0x39, 0xc5, 0xf3, 0xe5, 0xb9, 0x3c, 0x4f, 0x1e, 0xc6, 0xf3,
+	0x95, 0xc3, 0x79, 0x5e, 0x89, 0xa3, 0x23, 0x38, 0x7a, 0x1d, 0x26, 0x15, 0x63, 0x43, 0x32, 0x1e,
+	0x81, 0xe1, 0x81, 0xbd, 0xfe, 0x6b, 0x0d, 0x7e, 0xe5, 0x36, 0x91, 0x75, 0xc6, 0x4f, 0x7f, 0x61,
+	0xfd, 0x40, 0x91, 0x84, 0x70, 0x4b, 0xf4, 0xba, 0x5d, 0xec, 0x0d, 0xac, 0x16, 0x75, 0x24, 0xf1,
+	0x42, 0xbe, 0x4d, 0x62, 0x1d, 0xed, 0xae, 0x82, 0xbc, 0x6a, 0x81, 0xdb, 0x9e, 0xf2, 0x52, 0xa4,
+	0x22, 0x3c, 0x26, 0x43, 0xdf, 0x83, 0xe7, 0x24, 0xe3, 0x56, 0x63, 0x60, 0x75, 0x89, 0xf4, 0x68,
+	0x53, 0x61, 0x9b, 0xde, 0xb9, 0xb9, 0x30, 0x74, 0xa1, 0x29, 0x69, 0x9f, 0xca, 0xc1, 0x5d, 0xe5,
+	0x56, 0x1f, 0x70, 0x62, 0xae, 0x49, 0xc6, 0x8b, 0xa1, 0x00, 0x5d, 0x83, 0xcb, 0x92, 0xf1, 0xf7,
+	0xd4, 0x6a, 0x9c, 0x2b, 0xa6, 0x7c, 0xd0, 0x97, 0xb7, 0xb4, 0x0c, 0x34, 0x95, 0x58, 0xff, 0xc9,
+	0x4c, 0x90, 0x04, 0x47, 0x04, 0x42, 0x3f, 0x21, 0x95, 0xaa, 0x08, 0x8f, 0x97, 0x1b, 0xc7, 0xcc,
+	0x46, 0x14, 0xd7, 0xc7, 0xd7, 0x66, 0x74, 0xb9, 0x53, 0x92, 0xf1, 0x82, 0x0a, 0xac, 0xff, 0xce,
+	0xef, 0x85, 0x66, 0x78, 0xa2, 0x5b, 0x30, 0x38, 0xa9, 0x14, 0xd1, 0xd4, 0x22, 0x15, 0xaf, 0xa9,
+	0x10, 0x5e, 0x62, 0xf3, 0xe1, 0x19, 0x55, 0x86, 0xa7, 0x6d, 0x80, 0x50, 0xf4, 0x61, 0x02, 0x98,
+	0x67, 0x94, 0xbd, 0xcf, 0xc1, 0xd7, 0xc6, 0x1c, 0xd4, 0x14, 0x8a, 0x57, 0x26, 0xf2, 0x7e, 0x4b,
+	0x4a, 0x7e, 0x57, 0x19, 0x8c, 0xe9, 0xb9, 0x0d, 0x2f, 0xc5, 0xf0, 0xb7, 0xfa, 0xd8, 0xe9, 0x91,
+	0xb0, 0x77, 0xba, 0x10, 0x01, 0xf4, 0xbe, 0x2f, 0xd7, 0x1f, 0x69, 0xf0, 0x72, 0x80, 0x5b, 0x8d,
+	0xb8, 0x82, 0x4a, 0xda, 0x27, 0xbb, 0x58, 0x9e, 0xf0, 0xfe, 0xd8, 0x9f, 0xbc, 0x70, 0x5f, 0x5c,
+	0x5f, 0x32, 0xdd, 0x5d, 0x2c, 0x9f, 0xbc, 0xbb, 0x58, 0xc4, 0xa5, 0xfe, 0x6c, 0x4c, 0x04, 0x47,
+	0xef, 0x40, 0xe4, 0xa3, 0x2b, 0x46, 0x72, 0xcb, 0xc6, 0x12, 0x87, 0xa4, 0x9a, 0xbb, 0x7b, 0x62,
+	0x91, 0x4a, 0xac, 0xe7, 0x4a, 0xb5, 0x18, 0x31, 0xb1, 0xfe, 0x53, 0x00, 0xd1, 0xb4, 0x21, 0xda,
+	0x87, 0x97, 0xe2, 0x13, 0xaa, 0x0a, 0xd5, 0x92, 0xa4, 0x77, 0xbe, 0x71, 0x18, 0x00, 0xb1, 0x40,
+	0x6a, 0x3b, 0x5d, 0x14, 0x93, 0x22, 0xb4, 0x0e, 0x93, 0x4d, 0x7f, 0x8e, 0xb0, 0xf5, 0x0e, 0x06,
+	0xfa, 0x7f, 0x00, 0x44, 0xd3, 0xdb, 0x3d, 0xba, 0xbc, 0xe0, 0xff, 0xda, 0x76, 0x6a, 0xf3, 0xda,
+	0xce, 0xc4, 0xa2, 0xb6, 0xf3, 0x14, 0xc4, 0xd8, 0xf2, 0xe0, 0x4b, 0x87, 0x1c, 0x46, 0x28, 0x0f,
+	0xb7, 0x0a, 0xa5, 0x7a, 0xe5, 0x7e, 0xa5, 0xbe, 0x6f, 0xdd, 0x2d, 0xd7, 0xcd, 0x4a, 0xc9, 0xaa,
+	0xef, 0x57, 0xcb, 0x56, 0xad, 0x5c, 0xb2, 0xca, 0xf7, 0xcb, 0xf7, 0xea, 0x35, 0xab, 0x5a, 0x36,
+	0x4b, 0xe5, 0x7b, 0xf5, 0xc2, 0xed, 0xf2, 0x85, 0x25, 0xf4, 0x2a, 0x7c, 0x79, 0xa6, 0xbd, 0x59,
+	0xfe, 0x6e, 0xd4, 0x10, 0xec, 0x7c, 0x9e, 0x86, 0x69, 0x75, 0x88, 0x94, 0xd4, 0x5b, 0xb7, 0x50,
+	0xad, 0xa0, 0x3f, 0x03, 0x78, 0xfe, 0x36, 0x91, 0xd1, 0xa3, 0x0c, 0x7d, 0x73, 0xd1, 0x99, 0x15,
+	0xb9, 0x19, 0xb2, 0x47, 0x37, 0x16, 0x5c, 0xb7, 0x3f, 0xf9, 0x48, 0x03, 0xc3, 0x3f, 0x66, 0x2e,
+	0xf5, 0x89, 0xd8, 0xa6, 0x6c, 0xbb, 0x4d, 0x5c, 0xe2, 0x61, 0x67, 0xdb, 0x23, 0xd8, 0x3e, 0xf8,
+	0xeb, 0x3f, 0x7e, 0xae, 0x95, 0x50, 0x21, 0x7c, 0x95, 0x1b, 0xe3, 0x03, 0x40, 0x18, 0x3f, 0x1e,
+	0x7f, 0x7f, 0x10, 0x7b, 0xc0, 0x87, 0x9a, 0x0f, 0x8c, 0xe8, 0xd5, 0x2e, 0xd0, 0x13, 0x00, 0xd3,
+	0xf1, 0x9a, 0xd0, 0xd6, 0x11, 0xb3, 0xf4, 0x2b, 0x3a, 0xb2, 0xad, 0xe0, 0x7a, 0x6b, 0x51, 0x41,
+	0x65, 0xfd, 0xcd, 0xd3, 0x16, 0x74, 0x0b, 0x6c, 0xa1, 0xbf, 0x01, 0x78, 0x31, 0x5e, 0x52, 0x75,
+	0x77, 0x0f, 0x6d, 0x1f, 0x31, 0xd3, 0xe0, 0xd1, 0x90, 0x3d, 0x8e, 0xb9, 0xe0, 0x7a, 0x7b, 0x51,
+	0x6d, 0x7b, 0x68, 0xf7, 0xb4, 0xb5, 0x19, 0xdc, 0x6e, 0xa1, 0xff, 0x02, 0x98, 0x8d, 0x17, 0x17,
+	0xed, 0x80, 0xd1, 0xb7, 0x8e, 0x98, 0xf6, 0xc4, 0xab, 0x24, 0x7b, 0x22, 0x3f, 0xc1, 0xf5, 0x07,
+	0x8b, 0xea, 0xae, 0xa2, 0x7b, 0xa7, 0xae, 0x3b, 0xd6, 0xd0, 0xa3, 0x3f, 0x04, 0x8c, 0x8d, 0x74,
+	0xbd, 0xf3, 0x19, 0x1b, 0x7f, 0xb0, 0x66, 0xd7, 0x47, 0xdd, 0x3b, 0xe6, 0x54, 0xdd, 0xd4, 0x45,
+	0x66, 0x0f, 0xbe, 0x90, 0x3a, 0x84, 0x11, 0xed, 0xe4, 0xd1, 0x3f, 0x01, 0x5c, 0xf7, 0x57, 0x72,
+	0xf2, 0x97, 0x1a, 0x34, 0xbf, 0x0d, 0x9a, 0xf1, 0x1b, 0x51, 0xf6, 0x98, 0x1e, 0x82, 0xeb, 0xef,
+	0x2e, 0xaa, 0xb7, 0x82, 0x6e, 0xbf, 0x80, 0x7a, 0x55, 0x3d, 0x9f, 0x03, 0x88, 0xa6, 0x9b, 0x40,
+	0xf4, 0xda, 0xbc, 0xa4, 0x67, 0x76, 0xd6, 0xd9, 0xe3, 0xba, 0x08, 0xae, 0xff, 0x68, 0x51, 0xa1,
+	0xfb, 0x7a, 0xfd, 0x05, 0x14, 0x1a, 0xdc, 0xc8, 0x86, 0x6a, 0x69, 0xfd, 0x4b, 0x8a, 0xf8, 0x07,
+	0xd1, 0x81, 0x06, 0x2f, 0xcd, 0xe8, 0x58, 0xd0, 0xce, 0xe2, 0x32, 0x26, 0xdb, 0xbe, 0xec, 0xb1,
+	0x7d, 0x04, 0xd7, 0x0f, 0xc0, 0xa2, 0xe2, 0xb1, 0xfe, 0xce, 0x8b, 0x2d, 0x3e, 0xde, 0x11, 0xdd,
+	0x02, 0x5b, 0x59, 0xe3, 0xf1, 0xc7, 0x20, 0xf1, 0x97, 0x8f, 0xc1, 0xf5, 0x39, 0xf9, 0x7f, 0xa7,
+	0xf1, 0x2e, 0x69, 0xca, 0x83, 0x3f, 0x65, 0xb4, 0x1b, 0xa0, 0xf8, 0x33, 0xf0, 0xe4, 0x69, 0x6e,
+	0xe9, 0xd3, 0xa7, 0xb9, 0xa5, 0xcf, 0x9e, 0xe6, 0xc0, 0xc3, 0x61, 0x0e, 0xfc, 0x66, 0x98, 0x03,
+	0x9f, 0x0c, 0x73, 0xe0, 0xc9, 0x30, 0x07, 0xfe, 0x3e, 0xcc, 0x81, 0x7f, 0x0d, 0x73, 0x4b, 0x9f,
+	0x0d, 0x73, 0xe0, 0xc3, 0x67, 0xb9, 0xa5, 0xc7, 0xcf, 0x72, 0xe0, 0xc9, 0xb3, 0xdc, 0xd2, 0xa7,
+	0xcf, 0x72, 0x4b, 0xdf, 0xaf, 0xb6, 0x19, 0x7f, 0xaf, 0x9d, 0xef, 0x33, 0xbf, 0x31, 0xf2, 0x70,
+	0xbe, 0x27, 0x0c, 0xf5, 0xd1, 0x62, 0x5e, 0x77, 0x9b, 0x7b, 0xac, 0x4f, 0x6d, 0xe2, 0x6d, 0x8f,
+	0xd4, 0x06, 0x6f, 0xb4, 0x99, 0x41, 0x7e, 0x28, 0xc3, 0x9f, 0x65, 0x67, 0xfc, 0xea, 0xdd, 0x58,
+	0x51, 0x6f, 0xfc, 0x9b, 0xff, 0x0b, 0x00, 0x00, 0xff, 0xff, 0x0c, 0xbd, 0xa6, 0x48, 0x1a, 0x17,
+	0x00, 0x00,
 }
 
+func (x APIEPActivityMetricType) String() string {
+	s, ok := APIEPActivityMetricType_name[int32(x)]
+	if ok {
+		return s
+	}
+	return strconv.Itoa(int(x))
+}
 func (this *ApiEndpointsStatsReq) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -1220,6 +1908,20 @@ func (this *APIEndpointsReq) Equal(that interface{}) bool {
 	}
 	for i := range this.Domains {
 		if this.Domains[i] != that1.Domains[i] {
+			return false
+		}
+	}
+	if this.StartTime != that1.StartTime {
+		return false
+	}
+	if this.EndTime != that1.EndTime {
+		return false
+	}
+	if len(this.ApiepCategory) != len(that1.ApiepCategory) {
+		return false
+	}
+	for i := range this.ApiepCategory {
+		if this.ApiepCategory[i] != that1.ApiepCategory[i] {
 			return false
 		}
 	}
@@ -1520,6 +2222,246 @@ func (this *APIEndpointRsp) Equal(that interface{}) bool {
 	}
 	return true
 }
+func (this *GetTopAPIEndpointsReq) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GetTopAPIEndpointsReq)
+	if !ok {
+		that2, ok := that.(GetTopAPIEndpointsReq)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.Namespace != that1.Namespace {
+		return false
+	}
+	if this.Name != that1.Name {
+		return false
+	}
+	if !this.ApiepSummaryFilter.Equal(that1.ApiepSummaryFilter) {
+		return false
+	}
+	if this.TopByMetric != that1.TopByMetric {
+		return false
+	}
+	if this.Topk != that1.Topk {
+		return false
+	}
+	return true
+}
+func (this *GetTopAPIEndpointsRsp) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GetTopAPIEndpointsRsp)
+	if !ok {
+		that2, ok := that.(GetTopAPIEndpointsRsp)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if len(this.TopApieps) != len(that1.TopApieps) {
+		return false
+	}
+	for i := range this.TopApieps {
+		if !this.TopApieps[i].Equal(that1.TopApieps[i]) {
+			return false
+		}
+	}
+	return true
+}
+func (this *APIEPActivityMetrics) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*APIEPActivityMetrics)
+	if !ok {
+		that2, ok := that.(APIEPActivityMetrics)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.ApiepUrl != that1.ApiepUrl {
+		return false
+	}
+	if this.Method != that1.Method {
+		return false
+	}
+	if this.TopByMetricValue != that1.TopByMetricValue {
+		return false
+	}
+	return true
+}
+func (this *GetTopSensitiveDataReq) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GetTopSensitiveDataReq)
+	if !ok {
+		that2, ok := that.(GetTopSensitiveDataReq)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.Namespace != that1.Namespace {
+		return false
+	}
+	if this.Name != that1.Name {
+		return false
+	}
+	if len(this.Domains) != len(that1.Domains) {
+		return false
+	}
+	for i := range this.Domains {
+		if this.Domains[i] != that1.Domains[i] {
+			return false
+		}
+	}
+	if len(this.ApiepCategory) != len(that1.ApiepCategory) {
+		return false
+	}
+	for i := range this.ApiepCategory {
+		if this.ApiepCategory[i] != that1.ApiepCategory[i] {
+			return false
+		}
+	}
+	if this.Topk != that1.Topk {
+		return false
+	}
+	return true
+}
+func (this *GetTopSensitiveDataRsp) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GetTopSensitiveDataRsp)
+	if !ok {
+		that2, ok := that.(GetTopSensitiveDataRsp)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if len(this.TopSensitiveData) != len(that1.TopSensitiveData) {
+		return false
+	}
+	for i := range this.TopSensitiveData {
+		if !this.TopSensitiveData[i].Equal(that1.TopSensitiveData[i]) {
+			return false
+		}
+	}
+	return true
+}
+func (this *SensitiveDataCount) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*SensitiveDataCount)
+	if !ok {
+		that2, ok := that.(SensitiveDataCount)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.SensitiveDataType != that1.SensitiveDataType {
+		return false
+	}
+	if this.Count != that1.Count {
+		return false
+	}
+	return true
+}
+func (this *APIEPSummaryFilter) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*APIEPSummaryFilter)
+	if !ok {
+		that2, ok := that.(APIEPSummaryFilter)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if len(this.Domains) != len(that1.Domains) {
+		return false
+	}
+	for i := range this.Domains {
+		if this.Domains[i] != that1.Domains[i] {
+			return false
+		}
+	}
+	if this.StartTime != that1.StartTime {
+		return false
+	}
+	if this.EndTime != that1.EndTime {
+		return false
+	}
+	if len(this.ApiepCategory) != len(that1.ApiepCategory) {
+		return false
+	}
+	for i := range this.ApiepCategory {
+		if this.ApiepCategory[i] != that1.ApiepCategory[i] {
+			return false
+		}
+	}
+	return true
+}
 func (this *ApiEndpointsStatsReq) GoString() string {
 	if this == nil {
 		return "nil"
@@ -1549,12 +2491,15 @@ func (this *APIEndpointsReq) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 8)
+	s := make([]string, 0, 11)
 	s = append(s, "&virtual_host.APIEndpointsReq{")
 	s = append(s, "Namespace: "+fmt.Sprintf("%#v", this.Namespace)+",\n")
 	s = append(s, "Name: "+fmt.Sprintf("%#v", this.Name)+",\n")
 	s = append(s, "ApiEndpointInfoRequest: "+fmt.Sprintf("%#v", this.ApiEndpointInfoRequest)+",\n")
 	s = append(s, "Domains: "+fmt.Sprintf("%#v", this.Domains)+",\n")
+	s = append(s, "StartTime: "+fmt.Sprintf("%#v", this.StartTime)+",\n")
+	s = append(s, "EndTime: "+fmt.Sprintf("%#v", this.EndTime)+",\n")
+	s = append(s, "ApiepCategory: "+fmt.Sprintf("%#v", this.ApiepCategory)+",\n")
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
@@ -1674,6 +2619,96 @@ func (this *APIEndpointRsp) GoString() string {
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
+func (this *GetTopAPIEndpointsReq) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 9)
+	s = append(s, "&virtual_host.GetTopAPIEndpointsReq{")
+	s = append(s, "Namespace: "+fmt.Sprintf("%#v", this.Namespace)+",\n")
+	s = append(s, "Name: "+fmt.Sprintf("%#v", this.Name)+",\n")
+	if this.ApiepSummaryFilter != nil {
+		s = append(s, "ApiepSummaryFilter: "+fmt.Sprintf("%#v", this.ApiepSummaryFilter)+",\n")
+	}
+	s = append(s, "TopByMetric: "+fmt.Sprintf("%#v", this.TopByMetric)+",\n")
+	s = append(s, "Topk: "+fmt.Sprintf("%#v", this.Topk)+",\n")
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *GetTopAPIEndpointsRsp) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 5)
+	s = append(s, "&virtual_host.GetTopAPIEndpointsRsp{")
+	if this.TopApieps != nil {
+		s = append(s, "TopApieps: "+fmt.Sprintf("%#v", this.TopApieps)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *APIEPActivityMetrics) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 7)
+	s = append(s, "&virtual_host.APIEPActivityMetrics{")
+	s = append(s, "ApiepUrl: "+fmt.Sprintf("%#v", this.ApiepUrl)+",\n")
+	s = append(s, "Method: "+fmt.Sprintf("%#v", this.Method)+",\n")
+	s = append(s, "TopByMetricValue: "+fmt.Sprintf("%#v", this.TopByMetricValue)+",\n")
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *GetTopSensitiveDataReq) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 9)
+	s = append(s, "&virtual_host.GetTopSensitiveDataReq{")
+	s = append(s, "Namespace: "+fmt.Sprintf("%#v", this.Namespace)+",\n")
+	s = append(s, "Name: "+fmt.Sprintf("%#v", this.Name)+",\n")
+	s = append(s, "Domains: "+fmt.Sprintf("%#v", this.Domains)+",\n")
+	s = append(s, "ApiepCategory: "+fmt.Sprintf("%#v", this.ApiepCategory)+",\n")
+	s = append(s, "Topk: "+fmt.Sprintf("%#v", this.Topk)+",\n")
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *GetTopSensitiveDataRsp) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 5)
+	s = append(s, "&virtual_host.GetTopSensitiveDataRsp{")
+	if this.TopSensitiveData != nil {
+		s = append(s, "TopSensitiveData: "+fmt.Sprintf("%#v", this.TopSensitiveData)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *SensitiveDataCount) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 6)
+	s = append(s, "&virtual_host.SensitiveDataCount{")
+	s = append(s, "SensitiveDataType: "+fmt.Sprintf("%#v", this.SensitiveDataType)+",\n")
+	s = append(s, "Count: "+fmt.Sprintf("%#v", this.Count)+",\n")
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *APIEPSummaryFilter) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 8)
+	s = append(s, "&virtual_host.APIEPSummaryFilter{")
+	s = append(s, "Domains: "+fmt.Sprintf("%#v", this.Domains)+",\n")
+	s = append(s, "StartTime: "+fmt.Sprintf("%#v", this.StartTime)+",\n")
+	s = append(s, "EndTime: "+fmt.Sprintf("%#v", this.EndTime)+",\n")
+	s = append(s, "ApiepCategory: "+fmt.Sprintf("%#v", this.ApiepCategory)+",\n")
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
 func valueToGoStringPublicApiepCustomapi(v interface{}, typ string) string {
 	rv := reflect.ValueOf(v)
 	if rv.IsNil() {
@@ -1725,6 +2760,18 @@ type ApiepCustomAPIClient interface {
 	// x-displayName: "Get Api Endpoints Stats for Virtual Host"
 	// Get api endpoints stats for the given Virtual Host
 	GetApiEndpointsStats(ctx context.Context, in *ApiEndpointsStatsReq, opts ...grpc.CallOption) (*ApiEndpointsStatsRsp, error)
+	// GetTopAPIEndpoints
+	//
+	// x-displayName: "Get Top APIs Endpoints for Virtual Host"
+	// Top APIs by requested activity metric. For example most-active APIs or most-attacked APIs.
+	GetTopAPIEndpoints(ctx context.Context, in *GetTopAPIEndpointsReq, opts ...grpc.CallOption) (*GetTopAPIEndpointsRsp, error)
+	// GetTopSensitiveData
+	//
+	// x-displayName: "Get Sensitive Data Summary for Virtual Host"
+	// Get sensitive data summary for the given Virtual Host.
+	// For each sensitive data type (e.g. SSN, CC, Email) we count the number of APIEPs having the respective
+	// sensitive data type and return top k (max 10) types with maximum APIEPs.
+	GetTopSensitiveData(ctx context.Context, in *GetTopSensitiveDataReq, opts ...grpc.CallOption) (*GetTopSensitiveDataRsp, error)
 }
 
 type apiepCustomAPIClient struct {
@@ -1789,6 +2836,24 @@ func (c *apiepCustomAPIClient) GetApiEndpointsStats(ctx context.Context, in *Api
 	return out, nil
 }
 
+func (c *apiepCustomAPIClient) GetTopAPIEndpoints(ctx context.Context, in *GetTopAPIEndpointsReq, opts ...grpc.CallOption) (*GetTopAPIEndpointsRsp, error) {
+	out := new(GetTopAPIEndpointsRsp)
+	err := c.cc.Invoke(ctx, "/ves.io.schema.virtual_host.ApiepCustomAPI/GetTopAPIEndpoints", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *apiepCustomAPIClient) GetTopSensitiveData(ctx context.Context, in *GetTopSensitiveDataReq, opts ...grpc.CallOption) (*GetTopSensitiveDataRsp, error) {
+	out := new(GetTopSensitiveDataRsp)
+	err := c.cc.Invoke(ctx, "/ves.io.schema.virtual_host.ApiepCustomAPI/GetTopSensitiveData", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // ApiepCustomAPIServer is the server API for ApiepCustomAPI service.
 type ApiepCustomAPIServer interface {
 	// Get API endpoints Per Virtual Host
@@ -1821,6 +2886,18 @@ type ApiepCustomAPIServer interface {
 	// x-displayName: "Get Api Endpoints Stats for Virtual Host"
 	// Get api endpoints stats for the given Virtual Host
 	GetApiEndpointsStats(context.Context, *ApiEndpointsStatsReq) (*ApiEndpointsStatsRsp, error)
+	// GetTopAPIEndpoints
+	//
+	// x-displayName: "Get Top APIs Endpoints for Virtual Host"
+	// Top APIs by requested activity metric. For example most-active APIs or most-attacked APIs.
+	GetTopAPIEndpoints(context.Context, *GetTopAPIEndpointsReq) (*GetTopAPIEndpointsRsp, error)
+	// GetTopSensitiveData
+	//
+	// x-displayName: "Get Sensitive Data Summary for Virtual Host"
+	// Get sensitive data summary for the given Virtual Host.
+	// For each sensitive data type (e.g. SSN, CC, Email) we count the number of APIEPs having the respective
+	// sensitive data type and return top k (max 10) types with maximum APIEPs.
+	GetTopSensitiveData(context.Context, *GetTopSensitiveDataReq) (*GetTopSensitiveDataRsp, error)
 }
 
 // UnimplementedApiepCustomAPIServer can be embedded to have forward compatible implementations.
@@ -1844,6 +2921,12 @@ func (*UnimplementedApiepCustomAPIServer) GetSwaggerSpec(ctx context.Context, re
 }
 func (*UnimplementedApiepCustomAPIServer) GetApiEndpointsStats(ctx context.Context, req *ApiEndpointsStatsReq) (*ApiEndpointsStatsRsp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetApiEndpointsStats not implemented")
+}
+func (*UnimplementedApiepCustomAPIServer) GetTopAPIEndpoints(ctx context.Context, req *GetTopAPIEndpointsReq) (*GetTopAPIEndpointsRsp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetTopAPIEndpoints not implemented")
+}
+func (*UnimplementedApiepCustomAPIServer) GetTopSensitiveData(ctx context.Context, req *GetTopSensitiveDataReq) (*GetTopSensitiveDataRsp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetTopSensitiveData not implemented")
 }
 
 func RegisterApiepCustomAPIServer(s *grpc.Server, srv ApiepCustomAPIServer) {
@@ -1958,6 +3041,42 @@ func _ApiepCustomAPI_GetApiEndpointsStats_Handler(srv interface{}, ctx context.C
 	return interceptor(ctx, in, info, handler)
 }
 
+func _ApiepCustomAPI_GetTopAPIEndpoints_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetTopAPIEndpointsReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ApiepCustomAPIServer).GetTopAPIEndpoints(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/ves.io.schema.virtual_host.ApiepCustomAPI/GetTopAPIEndpoints",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ApiepCustomAPIServer).GetTopAPIEndpoints(ctx, req.(*GetTopAPIEndpointsReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ApiepCustomAPI_GetTopSensitiveData_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetTopSensitiveDataReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ApiepCustomAPIServer).GetTopSensitiveData(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/ves.io.schema.virtual_host.ApiepCustomAPI/GetTopSensitiveData",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ApiepCustomAPIServer).GetTopSensitiveData(ctx, req.(*GetTopSensitiveDataReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 var _ApiepCustomAPI_serviceDesc = grpc.ServiceDesc{
 	ServiceName: "ves.io.schema.virtual_host.ApiepCustomAPI",
 	HandlerType: (*ApiepCustomAPIServer)(nil),
@@ -1985,6 +3104,14 @@ var _ApiepCustomAPI_serviceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetApiEndpointsStats",
 			Handler:    _ApiepCustomAPI_GetApiEndpointsStats_Handler,
+		},
+		{
+			MethodName: "GetTopAPIEndpoints",
+			Handler:    _ApiepCustomAPI_GetTopAPIEndpoints_Handler,
+		},
+		{
+			MethodName: "GetTopSensitiveData",
+			Handler:    _ApiepCustomAPI_GetTopSensitiveData_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
@@ -2096,19 +3223,10 @@ func (m *APIEndpointsReq) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
-	if len(m.Domains) > 0 {
-		for iNdEx := len(m.Domains) - 1; iNdEx >= 0; iNdEx-- {
-			i -= len(m.Domains[iNdEx])
-			copy(dAtA[i:], m.Domains[iNdEx])
-			i = encodeVarintPublicApiepCustomapi(dAtA, i, uint64(len(m.Domains[iNdEx])))
-			i--
-			dAtA[i] = 0x22
-		}
-	}
-	if len(m.ApiEndpointInfoRequest) > 0 {
-		dAtA2 := make([]byte, len(m.ApiEndpointInfoRequest)*10)
+	if len(m.ApiepCategory) > 0 {
+		dAtA2 := make([]byte, len(m.ApiepCategory)*10)
 		var j1 int
-		for _, num := range m.ApiEndpointInfoRequest {
+		for _, num := range m.ApiepCategory {
 			for num >= 1<<7 {
 				dAtA2[j1] = uint8(uint64(num)&0x7f | 0x80)
 				num >>= 7
@@ -2120,6 +3238,47 @@ func (m *APIEndpointsReq) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		i -= j1
 		copy(dAtA[i:], dAtA2[:j1])
 		i = encodeVarintPublicApiepCustomapi(dAtA, i, uint64(j1))
+		i--
+		dAtA[i] = 0x3a
+	}
+	if len(m.EndTime) > 0 {
+		i -= len(m.EndTime)
+		copy(dAtA[i:], m.EndTime)
+		i = encodeVarintPublicApiepCustomapi(dAtA, i, uint64(len(m.EndTime)))
+		i--
+		dAtA[i] = 0x32
+	}
+	if len(m.StartTime) > 0 {
+		i -= len(m.StartTime)
+		copy(dAtA[i:], m.StartTime)
+		i = encodeVarintPublicApiepCustomapi(dAtA, i, uint64(len(m.StartTime)))
+		i--
+		dAtA[i] = 0x2a
+	}
+	if len(m.Domains) > 0 {
+		for iNdEx := len(m.Domains) - 1; iNdEx >= 0; iNdEx-- {
+			i -= len(m.Domains[iNdEx])
+			copy(dAtA[i:], m.Domains[iNdEx])
+			i = encodeVarintPublicApiepCustomapi(dAtA, i, uint64(len(m.Domains[iNdEx])))
+			i--
+			dAtA[i] = 0x22
+		}
+	}
+	if len(m.ApiEndpointInfoRequest) > 0 {
+		dAtA4 := make([]byte, len(m.ApiEndpointInfoRequest)*10)
+		var j3 int
+		for _, num := range m.ApiEndpointInfoRequest {
+			for num >= 1<<7 {
+				dAtA4[j3] = uint8(uint64(num)&0x7f | 0x80)
+				num >>= 7
+				j3++
+			}
+			dAtA4[j3] = uint8(num)
+			j3++
+		}
+		i -= j3
+		copy(dAtA[i:], dAtA4[:j3])
+		i = encodeVarintPublicApiepCustomapi(dAtA, i, uint64(j3))
 		i--
 		dAtA[i] = 0x1a
 	}
@@ -2506,20 +3665,20 @@ func (m *APIEndpointReq) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		dAtA[i] = 0x22
 	}
 	if len(m.ApiEndpointInfoRequest) > 0 {
-		dAtA6 := make([]byte, len(m.ApiEndpointInfoRequest)*10)
-		var j5 int
+		dAtA8 := make([]byte, len(m.ApiEndpointInfoRequest)*10)
+		var j7 int
 		for _, num := range m.ApiEndpointInfoRequest {
 			for num >= 1<<7 {
-				dAtA6[j5] = uint8(uint64(num)&0x7f | 0x80)
+				dAtA8[j7] = uint8(uint64(num)&0x7f | 0x80)
 				num >>= 7
-				j5++
+				j7++
 			}
-			dAtA6[j5] = uint8(num)
-			j5++
+			dAtA8[j7] = uint8(num)
+			j7++
 		}
-		i -= j5
-		copy(dAtA[i:], dAtA6[:j5])
-		i = encodeVarintPublicApiepCustomapi(dAtA, i, uint64(j5))
+		i -= j7
+		copy(dAtA[i:], dAtA8[:j7])
+		i = encodeVarintPublicApiepCustomapi(dAtA, i, uint64(j7))
 		i--
 		dAtA[i] = 0x1a
 	}
@@ -2571,6 +3730,345 @@ func (m *APIEndpointRsp) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		}
 		i--
 		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *GetTopAPIEndpointsReq) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *GetTopAPIEndpointsReq) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetTopAPIEndpointsReq) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.Topk != 0 {
+		i = encodeVarintPublicApiepCustomapi(dAtA, i, uint64(m.Topk))
+		i--
+		dAtA[i] = 0x28
+	}
+	if m.TopByMetric != 0 {
+		i = encodeVarintPublicApiepCustomapi(dAtA, i, uint64(m.TopByMetric))
+		i--
+		dAtA[i] = 0x20
+	}
+	if m.ApiepSummaryFilter != nil {
+		{
+			size, err := m.ApiepSummaryFilter.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintPublicApiepCustomapi(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1a
+	}
+	if len(m.Name) > 0 {
+		i -= len(m.Name)
+		copy(dAtA[i:], m.Name)
+		i = encodeVarintPublicApiepCustomapi(dAtA, i, uint64(len(m.Name)))
+		i--
+		dAtA[i] = 0x12
+	}
+	if len(m.Namespace) > 0 {
+		i -= len(m.Namespace)
+		copy(dAtA[i:], m.Namespace)
+		i = encodeVarintPublicApiepCustomapi(dAtA, i, uint64(len(m.Namespace)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *GetTopAPIEndpointsRsp) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *GetTopAPIEndpointsRsp) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetTopAPIEndpointsRsp) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.TopApieps) > 0 {
+		for iNdEx := len(m.TopApieps) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.TopApieps[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintPublicApiepCustomapi(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0xa
+		}
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *APIEPActivityMetrics) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *APIEPActivityMetrics) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *APIEPActivityMetrics) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.TopByMetricValue != 0 {
+		i = encodeVarintPublicApiepCustomapi(dAtA, i, uint64(m.TopByMetricValue))
+		i--
+		dAtA[i] = 0x18
+	}
+	if m.Method != 0 {
+		i = encodeVarintPublicApiepCustomapi(dAtA, i, uint64(m.Method))
+		i--
+		dAtA[i] = 0x10
+	}
+	if len(m.ApiepUrl) > 0 {
+		i -= len(m.ApiepUrl)
+		copy(dAtA[i:], m.ApiepUrl)
+		i = encodeVarintPublicApiepCustomapi(dAtA, i, uint64(len(m.ApiepUrl)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *GetTopSensitiveDataReq) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *GetTopSensitiveDataReq) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetTopSensitiveDataReq) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.Topk != 0 {
+		i = encodeVarintPublicApiepCustomapi(dAtA, i, uint64(m.Topk))
+		i--
+		dAtA[i] = 0x28
+	}
+	if len(m.ApiepCategory) > 0 {
+		dAtA12 := make([]byte, len(m.ApiepCategory)*10)
+		var j11 int
+		for _, num := range m.ApiepCategory {
+			for num >= 1<<7 {
+				dAtA12[j11] = uint8(uint64(num)&0x7f | 0x80)
+				num >>= 7
+				j11++
+			}
+			dAtA12[j11] = uint8(num)
+			j11++
+		}
+		i -= j11
+		copy(dAtA[i:], dAtA12[:j11])
+		i = encodeVarintPublicApiepCustomapi(dAtA, i, uint64(j11))
+		i--
+		dAtA[i] = 0x22
+	}
+	if len(m.Domains) > 0 {
+		for iNdEx := len(m.Domains) - 1; iNdEx >= 0; iNdEx-- {
+			i -= len(m.Domains[iNdEx])
+			copy(dAtA[i:], m.Domains[iNdEx])
+			i = encodeVarintPublicApiepCustomapi(dAtA, i, uint64(len(m.Domains[iNdEx])))
+			i--
+			dAtA[i] = 0x1a
+		}
+	}
+	if len(m.Name) > 0 {
+		i -= len(m.Name)
+		copy(dAtA[i:], m.Name)
+		i = encodeVarintPublicApiepCustomapi(dAtA, i, uint64(len(m.Name)))
+		i--
+		dAtA[i] = 0x12
+	}
+	if len(m.Namespace) > 0 {
+		i -= len(m.Namespace)
+		copy(dAtA[i:], m.Namespace)
+		i = encodeVarintPublicApiepCustomapi(dAtA, i, uint64(len(m.Namespace)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *GetTopSensitiveDataRsp) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *GetTopSensitiveDataRsp) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetTopSensitiveDataRsp) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.TopSensitiveData) > 0 {
+		for iNdEx := len(m.TopSensitiveData) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.TopSensitiveData[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintPublicApiepCustomapi(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0xa
+		}
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *SensitiveDataCount) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *SensitiveDataCount) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *SensitiveDataCount) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.Count != 0 {
+		i = encodeVarintPublicApiepCustomapi(dAtA, i, uint64(m.Count))
+		i--
+		dAtA[i] = 0x10
+	}
+	if m.SensitiveDataType != 0 {
+		i = encodeVarintPublicApiepCustomapi(dAtA, i, uint64(m.SensitiveDataType))
+		i--
+		dAtA[i] = 0x8
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *APIEPSummaryFilter) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *APIEPSummaryFilter) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *APIEPSummaryFilter) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.ApiepCategory) > 0 {
+		dAtA14 := make([]byte, len(m.ApiepCategory)*10)
+		var j13 int
+		for _, num := range m.ApiepCategory {
+			for num >= 1<<7 {
+				dAtA14[j13] = uint8(uint64(num)&0x7f | 0x80)
+				num >>= 7
+				j13++
+			}
+			dAtA14[j13] = uint8(num)
+			j13++
+		}
+		i -= j13
+		copy(dAtA[i:], dAtA14[:j13])
+		i = encodeVarintPublicApiepCustomapi(dAtA, i, uint64(j13))
+		i--
+		dAtA[i] = 0x22
+	}
+	if len(m.EndTime) > 0 {
+		i -= len(m.EndTime)
+		copy(dAtA[i:], m.EndTime)
+		i = encodeVarintPublicApiepCustomapi(dAtA, i, uint64(len(m.EndTime)))
+		i--
+		dAtA[i] = 0x1a
+	}
+	if len(m.StartTime) > 0 {
+		i -= len(m.StartTime)
+		copy(dAtA[i:], m.StartTime)
+		i = encodeVarintPublicApiepCustomapi(dAtA, i, uint64(len(m.StartTime)))
+		i--
+		dAtA[i] = 0x12
+	}
+	if len(m.Domains) > 0 {
+		for iNdEx := len(m.Domains) - 1; iNdEx >= 0; iNdEx-- {
+			i -= len(m.Domains[iNdEx])
+			copy(dAtA[i:], m.Domains[iNdEx])
+			i = encodeVarintPublicApiepCustomapi(dAtA, i, uint64(len(m.Domains[iNdEx])))
+			i--
+			dAtA[i] = 0xa
+		}
 	}
 	return len(dAtA) - i, nil
 }
@@ -2653,6 +4151,21 @@ func (m *APIEndpointsReq) Size() (n int) {
 			l = len(s)
 			n += 1 + l + sovPublicApiepCustomapi(uint64(l))
 		}
+	}
+	l = len(m.StartTime)
+	if l > 0 {
+		n += 1 + l + sovPublicApiepCustomapi(uint64(l))
+	}
+	l = len(m.EndTime)
+	if l > 0 {
+		n += 1 + l + sovPublicApiepCustomapi(uint64(l))
+	}
+	if len(m.ApiepCategory) > 0 {
+		l = 0
+		for _, e := range m.ApiepCategory {
+			l += sovPublicApiepCustomapi(uint64(e))
+		}
+		n += 1 + sovPublicApiepCustomapi(uint64(l)) + l
 	}
 	return n
 }
@@ -2857,6 +4370,160 @@ func (m *APIEndpointRsp) Size() (n int) {
 	return n
 }
 
+func (m *GetTopAPIEndpointsReq) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Namespace)
+	if l > 0 {
+		n += 1 + l + sovPublicApiepCustomapi(uint64(l))
+	}
+	l = len(m.Name)
+	if l > 0 {
+		n += 1 + l + sovPublicApiepCustomapi(uint64(l))
+	}
+	if m.ApiepSummaryFilter != nil {
+		l = m.ApiepSummaryFilter.Size()
+		n += 1 + l + sovPublicApiepCustomapi(uint64(l))
+	}
+	if m.TopByMetric != 0 {
+		n += 1 + sovPublicApiepCustomapi(uint64(m.TopByMetric))
+	}
+	if m.Topk != 0 {
+		n += 1 + sovPublicApiepCustomapi(uint64(m.Topk))
+	}
+	return n
+}
+
+func (m *GetTopAPIEndpointsRsp) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if len(m.TopApieps) > 0 {
+		for _, e := range m.TopApieps {
+			l = e.Size()
+			n += 1 + l + sovPublicApiepCustomapi(uint64(l))
+		}
+	}
+	return n
+}
+
+func (m *APIEPActivityMetrics) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.ApiepUrl)
+	if l > 0 {
+		n += 1 + l + sovPublicApiepCustomapi(uint64(l))
+	}
+	if m.Method != 0 {
+		n += 1 + sovPublicApiepCustomapi(uint64(m.Method))
+	}
+	if m.TopByMetricValue != 0 {
+		n += 1 + sovPublicApiepCustomapi(uint64(m.TopByMetricValue))
+	}
+	return n
+}
+
+func (m *GetTopSensitiveDataReq) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Namespace)
+	if l > 0 {
+		n += 1 + l + sovPublicApiepCustomapi(uint64(l))
+	}
+	l = len(m.Name)
+	if l > 0 {
+		n += 1 + l + sovPublicApiepCustomapi(uint64(l))
+	}
+	if len(m.Domains) > 0 {
+		for _, s := range m.Domains {
+			l = len(s)
+			n += 1 + l + sovPublicApiepCustomapi(uint64(l))
+		}
+	}
+	if len(m.ApiepCategory) > 0 {
+		l = 0
+		for _, e := range m.ApiepCategory {
+			l += sovPublicApiepCustomapi(uint64(e))
+		}
+		n += 1 + sovPublicApiepCustomapi(uint64(l)) + l
+	}
+	if m.Topk != 0 {
+		n += 1 + sovPublicApiepCustomapi(uint64(m.Topk))
+	}
+	return n
+}
+
+func (m *GetTopSensitiveDataRsp) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if len(m.TopSensitiveData) > 0 {
+		for _, e := range m.TopSensitiveData {
+			l = e.Size()
+			n += 1 + l + sovPublicApiepCustomapi(uint64(l))
+		}
+	}
+	return n
+}
+
+func (m *SensitiveDataCount) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.SensitiveDataType != 0 {
+		n += 1 + sovPublicApiepCustomapi(uint64(m.SensitiveDataType))
+	}
+	if m.Count != 0 {
+		n += 1 + sovPublicApiepCustomapi(uint64(m.Count))
+	}
+	return n
+}
+
+func (m *APIEPSummaryFilter) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if len(m.Domains) > 0 {
+		for _, s := range m.Domains {
+			l = len(s)
+			n += 1 + l + sovPublicApiepCustomapi(uint64(l))
+		}
+	}
+	l = len(m.StartTime)
+	if l > 0 {
+		n += 1 + l + sovPublicApiepCustomapi(uint64(l))
+	}
+	l = len(m.EndTime)
+	if l > 0 {
+		n += 1 + l + sovPublicApiepCustomapi(uint64(l))
+	}
+	if len(m.ApiepCategory) > 0 {
+		l = 0
+		for _, e := range m.ApiepCategory {
+			l += sovPublicApiepCustomapi(uint64(e))
+		}
+		n += 1 + sovPublicApiepCustomapi(uint64(l)) + l
+	}
+	return n
+}
+
 func sovPublicApiepCustomapi(x uint64) (n int) {
 	return (math_bits.Len64(x|1) + 6) / 7
 }
@@ -2897,6 +4564,9 @@ func (this *APIEndpointsReq) String() string {
 		`Name:` + fmt.Sprintf("%v", this.Name) + `,`,
 		`ApiEndpointInfoRequest:` + fmt.Sprintf("%v", this.ApiEndpointInfoRequest) + `,`,
 		`Domains:` + fmt.Sprintf("%v", this.Domains) + `,`,
+		`StartTime:` + fmt.Sprintf("%v", this.StartTime) + `,`,
+		`EndTime:` + fmt.Sprintf("%v", this.EndTime) + `,`,
+		`ApiepCategory:` + fmt.Sprintf("%v", this.ApiepCategory) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -3010,6 +4680,100 @@ func (this *APIEndpointRsp) String() string {
 	}
 	s := strings.Join([]string{`&APIEndpointRsp{`,
 		`Apiep:` + strings.Replace(fmt.Sprintf("%v", this.Apiep), "APIEPInfo", "app_type.APIEPInfo", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GetTopAPIEndpointsReq) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GetTopAPIEndpointsReq{`,
+		`Namespace:` + fmt.Sprintf("%v", this.Namespace) + `,`,
+		`Name:` + fmt.Sprintf("%v", this.Name) + `,`,
+		`ApiepSummaryFilter:` + strings.Replace(this.ApiepSummaryFilter.String(), "APIEPSummaryFilter", "APIEPSummaryFilter", 1) + `,`,
+		`TopByMetric:` + fmt.Sprintf("%v", this.TopByMetric) + `,`,
+		`Topk:` + fmt.Sprintf("%v", this.Topk) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GetTopAPIEndpointsRsp) String() string {
+	if this == nil {
+		return "nil"
+	}
+	repeatedStringForTopApieps := "[]*APIEPActivityMetrics{"
+	for _, f := range this.TopApieps {
+		repeatedStringForTopApieps += strings.Replace(f.String(), "APIEPActivityMetrics", "APIEPActivityMetrics", 1) + ","
+	}
+	repeatedStringForTopApieps += "}"
+	s := strings.Join([]string{`&GetTopAPIEndpointsRsp{`,
+		`TopApieps:` + repeatedStringForTopApieps + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *APIEPActivityMetrics) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&APIEPActivityMetrics{`,
+		`ApiepUrl:` + fmt.Sprintf("%v", this.ApiepUrl) + `,`,
+		`Method:` + fmt.Sprintf("%v", this.Method) + `,`,
+		`TopByMetricValue:` + fmt.Sprintf("%v", this.TopByMetricValue) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GetTopSensitiveDataReq) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GetTopSensitiveDataReq{`,
+		`Namespace:` + fmt.Sprintf("%v", this.Namespace) + `,`,
+		`Name:` + fmt.Sprintf("%v", this.Name) + `,`,
+		`Domains:` + fmt.Sprintf("%v", this.Domains) + `,`,
+		`ApiepCategory:` + fmt.Sprintf("%v", this.ApiepCategory) + `,`,
+		`Topk:` + fmt.Sprintf("%v", this.Topk) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GetTopSensitiveDataRsp) String() string {
+	if this == nil {
+		return "nil"
+	}
+	repeatedStringForTopSensitiveData := "[]*SensitiveDataCount{"
+	for _, f := range this.TopSensitiveData {
+		repeatedStringForTopSensitiveData += strings.Replace(f.String(), "SensitiveDataCount", "SensitiveDataCount", 1) + ","
+	}
+	repeatedStringForTopSensitiveData += "}"
+	s := strings.Join([]string{`&GetTopSensitiveDataRsp{`,
+		`TopSensitiveData:` + repeatedStringForTopSensitiveData + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *SensitiveDataCount) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&SensitiveDataCount{`,
+		`SensitiveDataType:` + fmt.Sprintf("%v", this.SensitiveDataType) + `,`,
+		`Count:` + fmt.Sprintf("%v", this.Count) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *APIEPSummaryFilter) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&APIEPSummaryFilter{`,
+		`Domains:` + fmt.Sprintf("%v", this.Domains) + `,`,
+		`StartTime:` + fmt.Sprintf("%v", this.StartTime) + `,`,
+		`EndTime:` + fmt.Sprintf("%v", this.EndTime) + `,`,
+		`ApiepCategory:` + fmt.Sprintf("%v", this.ApiepCategory) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -3481,6 +5245,139 @@ func (m *APIEndpointsReq) Unmarshal(dAtA []byte) error {
 			}
 			m.Domains = append(m.Domains, string(dAtA[iNdEx:postIndex]))
 			iNdEx = postIndex
+		case 5:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field StartTime", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicApiepCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPublicApiepCustomapi
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicApiepCustomapi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.StartTime = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 6:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field EndTime", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicApiepCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPublicApiepCustomapi
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicApiepCustomapi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.EndTime = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 7:
+			if wireType == 0 {
+				var v app_type.APIEPCategory
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return ErrIntOverflowPublicApiepCustomapi
+					}
+					if iNdEx >= l {
+						return io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					v |= app_type.APIEPCategory(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				m.ApiepCategory = append(m.ApiepCategory, v)
+			} else if wireType == 2 {
+				var packedLen int
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return ErrIntOverflowPublicApiepCustomapi
+					}
+					if iNdEx >= l {
+						return io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					packedLen |= int(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				if packedLen < 0 {
+					return ErrInvalidLengthPublicApiepCustomapi
+				}
+				postIndex := iNdEx + packedLen
+				if postIndex < 0 {
+					return ErrInvalidLengthPublicApiepCustomapi
+				}
+				if postIndex > l {
+					return io.ErrUnexpectedEOF
+				}
+				var elementCount int
+				if elementCount != 0 && len(m.ApiepCategory) == 0 {
+					m.ApiepCategory = make([]app_type.APIEPCategory, 0, elementCount)
+				}
+				for iNdEx < postIndex {
+					var v app_type.APIEPCategory
+					for shift := uint(0); ; shift += 7 {
+						if shift >= 64 {
+							return ErrIntOverflowPublicApiepCustomapi
+						}
+						if iNdEx >= l {
+							return io.ErrUnexpectedEOF
+						}
+						b := dAtA[iNdEx]
+						iNdEx++
+						v |= app_type.APIEPCategory(b&0x7F) << shift
+						if b < 0x80 {
+							break
+						}
+					}
+					m.ApiepCategory = append(m.ApiepCategory, v)
+				}
+			} else {
+				return fmt.Errorf("proto: wrong wireType = %d for field ApiepCategory", wireType)
+			}
 		default:
 			iNdEx = preIndex
 			skippy, err := skipPublicApiepCustomapi(dAtA[iNdEx:])
@@ -4873,6 +6770,1040 @@ func (m *APIEndpointRsp) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipPublicApiepCustomapi(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthPublicApiepCustomapi
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthPublicApiepCustomapi
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *GetTopAPIEndpointsReq) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowPublicApiepCustomapi
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: GetTopAPIEndpointsReq: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: GetTopAPIEndpointsReq: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Namespace", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicApiepCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPublicApiepCustomapi
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicApiepCustomapi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Namespace = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Name", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicApiepCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPublicApiepCustomapi
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicApiepCustomapi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Name = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ApiepSummaryFilter", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicApiepCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthPublicApiepCustomapi
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicApiepCustomapi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.ApiepSummaryFilter == nil {
+				m.ApiepSummaryFilter = &APIEPSummaryFilter{}
+			}
+			if err := m.ApiepSummaryFilter.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 4:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field TopByMetric", wireType)
+			}
+			m.TopByMetric = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicApiepCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.TopByMetric |= APIEPActivityMetricType(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 5:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Topk", wireType)
+			}
+			m.Topk = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicApiepCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.Topk |= uint32(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		default:
+			iNdEx = preIndex
+			skippy, err := skipPublicApiepCustomapi(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthPublicApiepCustomapi
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthPublicApiepCustomapi
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *GetTopAPIEndpointsRsp) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowPublicApiepCustomapi
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: GetTopAPIEndpointsRsp: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: GetTopAPIEndpointsRsp: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field TopApieps", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicApiepCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthPublicApiepCustomapi
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicApiepCustomapi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.TopApieps = append(m.TopApieps, &APIEPActivityMetrics{})
+			if err := m.TopApieps[len(m.TopApieps)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipPublicApiepCustomapi(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthPublicApiepCustomapi
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthPublicApiepCustomapi
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *APIEPActivityMetrics) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowPublicApiepCustomapi
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: APIEPActivityMetrics: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: APIEPActivityMetrics: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ApiepUrl", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicApiepCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPublicApiepCustomapi
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicApiepCustomapi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.ApiepUrl = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Method", wireType)
+			}
+			m.Method = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicApiepCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.Method |= schema.HttpMethod(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 3:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field TopByMetricValue", wireType)
+			}
+			m.TopByMetricValue = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicApiepCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.TopByMetricValue |= int32(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		default:
+			iNdEx = preIndex
+			skippy, err := skipPublicApiepCustomapi(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthPublicApiepCustomapi
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthPublicApiepCustomapi
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *GetTopSensitiveDataReq) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowPublicApiepCustomapi
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: GetTopSensitiveDataReq: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: GetTopSensitiveDataReq: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Namespace", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicApiepCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPublicApiepCustomapi
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicApiepCustomapi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Namespace = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Name", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicApiepCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPublicApiepCustomapi
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicApiepCustomapi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Name = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Domains", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicApiepCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPublicApiepCustomapi
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicApiepCustomapi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Domains = append(m.Domains, string(dAtA[iNdEx:postIndex]))
+			iNdEx = postIndex
+		case 4:
+			if wireType == 0 {
+				var v app_type.APIEPCategory
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return ErrIntOverflowPublicApiepCustomapi
+					}
+					if iNdEx >= l {
+						return io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					v |= app_type.APIEPCategory(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				m.ApiepCategory = append(m.ApiepCategory, v)
+			} else if wireType == 2 {
+				var packedLen int
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return ErrIntOverflowPublicApiepCustomapi
+					}
+					if iNdEx >= l {
+						return io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					packedLen |= int(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				if packedLen < 0 {
+					return ErrInvalidLengthPublicApiepCustomapi
+				}
+				postIndex := iNdEx + packedLen
+				if postIndex < 0 {
+					return ErrInvalidLengthPublicApiepCustomapi
+				}
+				if postIndex > l {
+					return io.ErrUnexpectedEOF
+				}
+				var elementCount int
+				if elementCount != 0 && len(m.ApiepCategory) == 0 {
+					m.ApiepCategory = make([]app_type.APIEPCategory, 0, elementCount)
+				}
+				for iNdEx < postIndex {
+					var v app_type.APIEPCategory
+					for shift := uint(0); ; shift += 7 {
+						if shift >= 64 {
+							return ErrIntOverflowPublicApiepCustomapi
+						}
+						if iNdEx >= l {
+							return io.ErrUnexpectedEOF
+						}
+						b := dAtA[iNdEx]
+						iNdEx++
+						v |= app_type.APIEPCategory(b&0x7F) << shift
+						if b < 0x80 {
+							break
+						}
+					}
+					m.ApiepCategory = append(m.ApiepCategory, v)
+				}
+			} else {
+				return fmt.Errorf("proto: wrong wireType = %d for field ApiepCategory", wireType)
+			}
+		case 5:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Topk", wireType)
+			}
+			m.Topk = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicApiepCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.Topk |= uint32(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		default:
+			iNdEx = preIndex
+			skippy, err := skipPublicApiepCustomapi(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthPublicApiepCustomapi
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthPublicApiepCustomapi
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *GetTopSensitiveDataRsp) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowPublicApiepCustomapi
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: GetTopSensitiveDataRsp: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: GetTopSensitiveDataRsp: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field TopSensitiveData", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicApiepCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthPublicApiepCustomapi
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicApiepCustomapi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.TopSensitiveData = append(m.TopSensitiveData, &SensitiveDataCount{})
+			if err := m.TopSensitiveData[len(m.TopSensitiveData)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipPublicApiepCustomapi(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthPublicApiepCustomapi
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthPublicApiepCustomapi
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *SensitiveDataCount) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowPublicApiepCustomapi
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: SensitiveDataCount: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: SensitiveDataCount: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field SensitiveDataType", wireType)
+			}
+			m.SensitiveDataType = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicApiepCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.SensitiveDataType |= app_type.SensitiveDataType(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 2:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Count", wireType)
+			}
+			m.Count = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicApiepCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.Count |= int32(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		default:
+			iNdEx = preIndex
+			skippy, err := skipPublicApiepCustomapi(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthPublicApiepCustomapi
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthPublicApiepCustomapi
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *APIEPSummaryFilter) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowPublicApiepCustomapi
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: APIEPSummaryFilter: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: APIEPSummaryFilter: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Domains", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicApiepCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPublicApiepCustomapi
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicApiepCustomapi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Domains = append(m.Domains, string(dAtA[iNdEx:postIndex]))
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field StartTime", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicApiepCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPublicApiepCustomapi
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicApiepCustomapi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.StartTime = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field EndTime", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicApiepCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPublicApiepCustomapi
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicApiepCustomapi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.EndTime = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 4:
+			if wireType == 0 {
+				var v app_type.APIEPCategory
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return ErrIntOverflowPublicApiepCustomapi
+					}
+					if iNdEx >= l {
+						return io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					v |= app_type.APIEPCategory(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				m.ApiepCategory = append(m.ApiepCategory, v)
+			} else if wireType == 2 {
+				var packedLen int
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return ErrIntOverflowPublicApiepCustomapi
+					}
+					if iNdEx >= l {
+						return io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					packedLen |= int(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				if packedLen < 0 {
+					return ErrInvalidLengthPublicApiepCustomapi
+				}
+				postIndex := iNdEx + packedLen
+				if postIndex < 0 {
+					return ErrInvalidLengthPublicApiepCustomapi
+				}
+				if postIndex > l {
+					return io.ErrUnexpectedEOF
+				}
+				var elementCount int
+				if elementCount != 0 && len(m.ApiepCategory) == 0 {
+					m.ApiepCategory = make([]app_type.APIEPCategory, 0, elementCount)
+				}
+				for iNdEx < postIndex {
+					var v app_type.APIEPCategory
+					for shift := uint(0); ; shift += 7 {
+						if shift >= 64 {
+							return ErrIntOverflowPublicApiepCustomapi
+						}
+						if iNdEx >= l {
+							return io.ErrUnexpectedEOF
+						}
+						b := dAtA[iNdEx]
+						iNdEx++
+						v |= app_type.APIEPCategory(b&0x7F) << shift
+						if b < 0x80 {
+							break
+						}
+					}
+					m.ApiepCategory = append(m.ApiepCategory, v)
+				}
+			} else {
+				return fmt.Errorf("proto: wrong wireType = %d for field ApiepCategory", wireType)
+			}
 		default:
 			iNdEx = preIndex
 			skippy, err := skipPublicApiepCustomapi(dAtA[iNdEx:])

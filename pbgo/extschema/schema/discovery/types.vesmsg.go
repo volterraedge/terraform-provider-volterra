@@ -696,6 +696,10 @@ func (v *ValidateCreateSpecType) WhereValidationRuleHandler(rules map[string]str
 			return err
 		}
 
+		if err := ves_io_schema.NetworkSiteRefSelectorValidator().Validate(ctx, val, opts...); err != nil {
+			return err
+		}
+
 		return nil
 	}
 
@@ -1343,6 +1347,10 @@ func (v *ValidateGetSpecType) WhereValidationRuleHandler(rules map[string]string
 			return err
 		}
 
+		if err := ves_io_schema.NetworkSiteRefSelectorValidator().Validate(ctx, val, opts...); err != nil {
+			return err
+		}
+
 		return nil
 	}
 
@@ -1687,6 +1695,10 @@ func (v *ValidateGlobalSpecType) WhereValidationRuleHandler(rules map[string]str
 	}
 	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		if err := ves_io_schema.NetworkSiteRefSelectorValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
 
@@ -3144,6 +3156,10 @@ func (v *ValidateReplaceSpecType) WhereValidationRuleHandler(rules map[string]st
 	}
 	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		if err := ves_io_schema.NetworkSiteRefSelectorValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
 

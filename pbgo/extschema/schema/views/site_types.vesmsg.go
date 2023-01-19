@@ -26,140 +26,6 @@ var (
 
 // augmented methods on protoc/std generated struct
 
-func (m *AWSInternetVIPType) ToJSON() (string, error) {
-	return codec.ToJSON(m)
-}
-
-func (m *AWSInternetVIPType) ToYAML() (string, error) {
-	return codec.ToYAML(m)
-}
-
-func (m *AWSInternetVIPType) DeepCopy() *AWSInternetVIPType {
-	if m == nil {
-		return nil
-	}
-	ser, err := m.Marshal()
-	if err != nil {
-		return nil
-	}
-	c := &AWSInternetVIPType{}
-	err = c.Unmarshal(ser)
-	if err != nil {
-		return nil
-	}
-	return c
-}
-
-func (m *AWSInternetVIPType) DeepCopyProto() proto.Message {
-	if m == nil {
-		return nil
-	}
-	return m.DeepCopy()
-}
-
-func (m *AWSInternetVIPType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
-	return AWSInternetVIPTypeValidator().Validate(ctx, m, opts...)
-}
-
-type ValidateAWSInternetVIPType struct {
-	FldValidators map[string]db.ValidatorFunc
-}
-
-func (v *ValidateAWSInternetVIPType) InternetVipSubnetChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for internet_vip_subnet_choice")
-	}
-	return validatorFn, nil
-}
-
-func (v *ValidateAWSInternetVIPType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
-	m, ok := pm.(*AWSInternetVIPType)
-	if !ok {
-		switch t := pm.(type) {
-		case nil:
-			return nil
-		default:
-			return fmt.Errorf("Expected type *AWSInternetVIPType got type %s", t)
-		}
-	}
-	if m == nil {
-		return nil
-	}
-
-	if fv, exists := v.FldValidators["internet_vip_subnet_choice"]; exists {
-		val := m.GetInternetVipSubnetChoice()
-		vOpts := append(opts,
-			db.WithValidateField("internet_vip_subnet_choice"),
-		)
-		if err := fv(ctx, val, vOpts...); err != nil {
-			return err
-		}
-	}
-
-	switch m.GetInternetVipSubnetChoice().(type) {
-	case *AWSInternetVIPType_ReservedInternetNlbSubnet:
-		if fv, exists := v.FldValidators["internet_vip_subnet_choice.reserved_internet_nlb_subnet"]; exists {
-			val := m.GetInternetVipSubnetChoice().(*AWSInternetVIPType_ReservedInternetNlbSubnet).ReservedInternetNlbSubnet
-			vOpts := append(opts,
-				db.WithValidateField("internet_vip_subnet_choice"),
-				db.WithValidateField("reserved_internet_nlb_subnet"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	case *AWSInternetVIPType_Subnet:
-		if fv, exists := v.FldValidators["internet_vip_subnet_choice.subnet"]; exists {
-			val := m.GetInternetVipSubnetChoice().(*AWSInternetVIPType_Subnet).Subnet
-			vOpts := append(opts,
-				db.WithValidateField("internet_vip_subnet_choice"),
-				db.WithValidateField("subnet"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-
-	}
-
-	return nil
-}
-
-// Well-known symbol for default validator implementation
-var DefaultAWSInternetVIPTypeValidator = func() *ValidateAWSInternetVIPType {
-	v := &ValidateAWSInternetVIPType{FldValidators: map[string]db.ValidatorFunc{}}
-
-	var (
-		err error
-		vFn db.ValidatorFunc
-	)
-	_, _ = err, vFn
-	vFnMap := map[string]db.ValidatorFunc{}
-	_ = vFnMap
-
-	vrhInternetVipSubnetChoice := v.InternetVipSubnetChoiceValidationRuleHandler
-	rulesInternetVipSubnetChoice := map[string]string{
-		"ves.io.schema.rules.message.required_oneof": "true",
-	}
-	vFn, err = vrhInternetVipSubnetChoice(rulesInternetVipSubnetChoice)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for AWSInternetVIPType.internet_vip_subnet_choice: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["internet_vip_subnet_choice"] = vFn
-
-	v.FldValidators["internet_vip_subnet_choice.subnet"] = CloudSubnetTypeValidator().Validate
-
-	return v
-}()
-
-func AWSInternetVIPTypeValidator() db.Validator {
-	return DefaultAWSInternetVIPTypeValidator
-}
-
-// augmented methods on protoc/std generated struct
-
 func (m *AWSSubnetIdsType) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -3060,6 +2926,114 @@ func AzureVnetTypeValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *CloudLinkADNType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *CloudLinkADNType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *CloudLinkADNType) DeepCopy() *CloudLinkADNType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &CloudLinkADNType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *CloudLinkADNType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *CloudLinkADNType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return CloudLinkADNTypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateCloudLinkADNType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateCloudLinkADNType) CloudlinkNetworkNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for cloudlink_network_name")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateCloudLinkADNType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*CloudLinkADNType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *CloudLinkADNType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["cloudlink_network_name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("cloudlink_network_name"))
+		if err := fv(ctx, m.GetCloudlinkNetworkName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultCloudLinkADNTypeValidator = func() *ValidateCloudLinkADNType {
+	v := &ValidateCloudLinkADNType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhCloudlinkNetworkName := v.CloudlinkNetworkNameValidationRuleHandler
+	rulesCloudlinkNetworkName := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.max_bytes": "64",
+	}
+	vFn, err = vrhCloudlinkNetworkName(rulesCloudlinkNetworkName)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CloudLinkADNType.cloudlink_network_name: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["cloudlink_network_name"] = vFn
+
+	return v
+}()
+
+func CloudLinkADNTypeValidator() db.Validator {
+	return DefaultCloudLinkADNTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *CloudSubnetParamType) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -5524,6 +5498,54 @@ func (v *ValidateHostedVIFConfigType) VifsValidationRuleHandler(rules map[string
 	return validatorFn, nil
 }
 
+func (v *ValidateHostedVIFConfigType) VifListValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for vif_list")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*VifRegionConfig, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := VifRegionConfigValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for vif_list")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*VifRegionConfig)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*VifRegionConfig, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated vif_list")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items vif_list")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateHostedVIFConfigType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*HostedVIFConfigType)
 	if !ok {
@@ -5536,6 +5558,40 @@ func (v *ValidateHostedVIFConfigType) Validate(ctx context.Context, pm interface
 	}
 	if m == nil {
 		return nil
+	}
+
+	switch m.GetConnectivityOptions().(type) {
+	case *HostedVIFConfigType_SiteRegistrationOverInternet:
+		if fv, exists := v.FldValidators["connectivity_options.site_registration_over_internet"]; exists {
+			val := m.GetConnectivityOptions().(*HostedVIFConfigType_SiteRegistrationOverInternet).SiteRegistrationOverInternet
+			vOpts := append(opts,
+				db.WithValidateField("connectivity_options"),
+				db.WithValidateField("site_registration_over_internet"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *HostedVIFConfigType_SiteRegistrationOverDirectConnect:
+		if fv, exists := v.FldValidators["connectivity_options.site_registration_over_direct_connect"]; exists {
+			val := m.GetConnectivityOptions().(*HostedVIFConfigType_SiteRegistrationOverDirectConnect).SiteRegistrationOverDirectConnect
+			vOpts := append(opts,
+				db.WithValidateField("connectivity_options"),
+				db.WithValidateField("site_registration_over_direct_connect"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["vif_list"]; exists {
+		vOpts := append(opts, db.WithValidateField("vif_list"))
+		if err := fv(ctx, m.GetVifList(), vOpts...); err != nil {
+			return err
+		}
+
 	}
 
 	if fv, exists := v.FldValidators["vifs"]; exists {
@@ -5573,6 +5629,20 @@ var DefaultHostedVIFConfigTypeValidator = func() *ValidateHostedVIFConfigType {
 		panic(errMsg)
 	}
 	v.FldValidators["vifs"] = vFn
+
+	vrhVifList := v.VifListValidationRuleHandler
+	rulesVifList := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "30",
+		"ves.io.schema.rules.repeated.unique":    "true",
+	}
+	vFn, err = vrhVifList(rulesVifList)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for HostedVIFConfigType.vif_list: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["vif_list"] = vFn
+
+	v.FldValidators["connectivity_options.site_registration_over_direct_connect"] = CloudLinkADNTypeValidator().Validate
 
 	return v
 }()
@@ -6074,4 +6144,187 @@ var DefaultSiteStaticRoutesTypeValidator = func() *ValidateSiteStaticRoutesType 
 
 func SiteStaticRoutesTypeValidator() db.Validator {
 	return DefaultSiteStaticRoutesTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *VifRegionConfig) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *VifRegionConfig) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *VifRegionConfig) DeepCopy() *VifRegionConfig {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &VifRegionConfig{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *VifRegionConfig) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *VifRegionConfig) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return VifRegionConfigValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateVifRegionConfig struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateVifRegionConfig) VifRegionChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for vif_region_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateVifRegionConfig) VifRegionChoiceOtherRegionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_OtherRegion, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for other_region")
+	}
+	return oValidatorFn_OtherRegion, nil
+}
+
+func (v *ValidateVifRegionConfig) VifIdValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for vif_id")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateVifRegionConfig) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*VifRegionConfig)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *VifRegionConfig got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["vif_id"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("vif_id"))
+		if err := fv(ctx, m.GetVifId(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["vif_region_choice"]; exists {
+		val := m.GetVifRegionChoice()
+		vOpts := append(opts,
+			db.WithValidateField("vif_region_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetVifRegionChoice().(type) {
+	case *VifRegionConfig_SameAsSiteRegion:
+		if fv, exists := v.FldValidators["vif_region_choice.same_as_site_region"]; exists {
+			val := m.GetVifRegionChoice().(*VifRegionConfig_SameAsSiteRegion).SameAsSiteRegion
+			vOpts := append(opts,
+				db.WithValidateField("vif_region_choice"),
+				db.WithValidateField("same_as_site_region"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *VifRegionConfig_OtherRegion:
+		if fv, exists := v.FldValidators["vif_region_choice.other_region"]; exists {
+			val := m.GetVifRegionChoice().(*VifRegionConfig_OtherRegion).OtherRegion
+			vOpts := append(opts,
+				db.WithValidateField("vif_region_choice"),
+				db.WithValidateField("other_region"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultVifRegionConfigValidator = func() *ValidateVifRegionConfig {
+	v := &ValidateVifRegionConfig{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhVifRegionChoice := v.VifRegionChoiceValidationRuleHandler
+	rulesVifRegionChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhVifRegionChoice(rulesVifRegionChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for VifRegionConfig.vif_region_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["vif_region_choice"] = vFn
+
+	vrhVifRegionChoiceOtherRegion := v.VifRegionChoiceOtherRegionValidationRuleHandler
+	rulesVifRegionChoiceOtherRegion := map[string]string{
+		"ves.io.schema.rules.string.in": "[\"af-south-1\",\"ap-east-1\",\"ap-northeast-1\",\"ap-northeast-2\",\"ap-south-1\",\"ap-southeast-1\",\"ap-southeast-2\",\"ap-southeast-3\",\"ca-central-1\",\"eu-central-1\",\"eu-north-1\",\"eu-south-1\",\"eu-west-1\",\"eu-west-2\",\"eu-west-3\",\"me-south-1\",\"sa-east-1\",\"us-east-1\",\"us-east-2\",\"us-west-1\",\"us-west-2\"]",
+	}
+	vFnMap["vif_region_choice.other_region"], err = vrhVifRegionChoiceOtherRegion(rulesVifRegionChoiceOtherRegion)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field VifRegionConfig.vif_region_choice_other_region: %s", err)
+		panic(errMsg)
+	}
+
+	v.FldValidators["vif_region_choice.other_region"] = vFnMap["vif_region_choice.other_region"]
+
+	vrhVifId := v.VifIdValidationRuleHandler
+	rulesVifId := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.pattern":   "^(dxvif-)([a-z0-9]{8}|[a-z0-9]{17})$",
+	}
+	vFn, err = vrhVifId(rulesVifId)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for VifRegionConfig.vif_id: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["vif_id"] = vFn
+
+	return v
+}()
+
+func VifRegionConfigValidator() db.Validator {
+	return DefaultVifRegionConfigValidator
 }
