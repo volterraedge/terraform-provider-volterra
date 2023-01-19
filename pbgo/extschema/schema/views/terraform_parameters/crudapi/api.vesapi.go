@@ -46,15 +46,6 @@ func (r *ObjectCreateReq) ToEntry(e db.Entry) {
 	r.ToObject(e)
 }
 
-// db.Redactor
-func (r *ObjectCreateReq) Redact(ctx context.Context) error {
-	spec := r.GetSpec()
-	if r, ok := interface{}(spec).(db.Redactor); ok {
-		return r.Redact(ctx)
-	}
-	return nil
-}
-
 // create setters in object from request for oneof fields
 
 // EntryConverter
@@ -64,15 +55,6 @@ func (r *ObjectReplaceReq) FromEntry(e db.Entry) {
 
 func (r *ObjectReplaceReq) ToEntry(e db.Entry) {
 	r.ToObject(e)
-}
-
-// db.Redactor
-func (r *ObjectReplaceReq) Redact(ctx context.Context) error {
-	spec := r.GetSpec()
-	if r, ok := interface{}(spec).(db.Redactor); ok {
-		return r.Redact(ctx)
-	}
-	return nil
 }
 
 // create setters in object from request for oneof fields
@@ -766,13 +748,7 @@ func (c *crudAPIRestClient) Delete(ctx context.Context, key string, opts ...serv
 }
 
 func NewCRUDAPIRestClient(baseURL string, cl http.Client) server.CRUDClient {
-	var bURL string
-	if strings.HasSuffix(baseURL, "/") {
-		bURL = baseURL[:len(baseURL)-1]
-	} else {
-		bURL = baseURL
-	}
-	crcl := &crudAPIRestClient{bURL, cl}
+	crcl := &crudAPIRestClient{baseURL, cl}
 	return crcl
 }
 
@@ -4347,13 +4323,7 @@ func (c *crudStatusAPIRestClient) Delete(ctx context.Context, key string, opts .
 }
 
 func NewCRUDStatusAPIRestClient(baseURL string, cl http.Client) server.CRUDClient {
-	var bURL string
-	if strings.HasSuffix(baseURL, "/") {
-		bURL = baseURL[:len(baseURL)-1]
-	} else {
-		bURL = baseURL
-	}
-	crcl := &crudStatusAPIRestClient{bURL, cl}
+	crcl := &crudStatusAPIRestClient{baseURL, cl}
 	return crcl
 }
 

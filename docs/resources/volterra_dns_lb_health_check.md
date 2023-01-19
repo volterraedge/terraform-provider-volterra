@@ -1,0 +1,106 @@
+---
+
+page_title: "Volterra: dns_lb_health_check"
+
+description: "The dns_lb_health_check allows CRUD of Dns Lb Health Check resource on Volterra SaaS"
+---------------------------------------------------------------------------------------------------
+
+Resource volterra_dns_lb_health_check
+=====================================
+
+The Dns Lb Health Check allows CRUD of Dns Lb Health Check resource on Volterra SaaS
+
+~> **Note:** Please refer to [Dns Lb Health Check API docs](https://volterra.io/docs/api/dns-lb-health-check) to learn more
+
+Example Usage
+-------------
+
+```hcl
+resource "volterra_dns_lb_health_check" "example" {
+  name      = "acmecorp-web"
+  namespace = "staging"
+
+  // One of the arguments from this list "udp_health_check icmp_health_check https_health_check http_health_check tcp_health_check" must be set
+
+  tcp_health_check {
+    health_check_port = "80"
+    receive           = "receive"
+    send              = "send"
+  }
+}
+
+```
+
+Argument Reference
+------------------
+
+### Metadata Argument Reference
+
+`annotations` - (Optional) queryable and should be preserved when modifying objects. (`String`).
+
+`description` - (Optional) Human readable description for the object (`String`).
+
+`disable` - (Optional) A value of true will administratively disable the object (`Bool`).
+
+`labels` - (Optional) by selector expression (`String`).
+
+`name` - (Required) The value of name has to follow DNS-1035 format. (`String`).
+
+`namespace` - (Optional) Must be a DNS_LABEL format. For a namespace object itself, namespace value will be "" (`String`).
+
+### Spec Argument Reference
+
+`http_health_check` - (Optional) HTTP Health Check. See [Http Health Check ](#http-health-check) below for details.
+
+`https_health_check` - (Optional) HTTPS Health Check. See [Https Health Check ](#https-health-check) below for details.
+
+`icmp_health_check` - (Optional) ICMP Health Check (bool).
+
+`tcp_health_check` - (Optional) TCP Health Check. See [Tcp Health Check ](#tcp-health-check) below for details.
+
+`udp_health_check` - (Optional) UDP Health Check. See [Udp Health Check ](#udp-health-check) below for details.
+
+### Http Health Check
+
+HTTP Health Check.
+
+`health_check_port` - (Required) x-example: "80" (`Int`).
+
+`receive` - (Optional) Regular expression used to match against the response to the health check's request. Mark node up upon receipt of a successful regular expression match. Uses re2 regular expression syntax. (`String`).
+
+`send` - (Optional) HTTP payload to send to the target (`String`).
+
+### Https Health Check
+
+HTTPS Health Check.
+
+`health_check_port` - (Required) x-example: "80" (`Int`).
+
+`receive` - (Optional) Regular expression used to match against the response to the health check's request. Mark node up upon receipt of a successful regular expression match. Uses re2 regular expression syntax. (`String`).
+
+`send` - (Optional) HTTP payload to send to the target (`String`).
+
+### Tcp Health Check
+
+TCP Health Check.
+
+`health_check_port` - (Required) x-example: "80" (`Int`).
+
+`receive` - (Optional) Regular expression used to match against the response to the monitor's request. Mark node up upon receipt of a successful regular expression match. Uses re2 regular expression syntax. (`String`).
+
+`send` - (Optional) Send this string to target (default empty. When send and receive are both empty, monitor just tests 3WHS) (`String`).
+
+### Udp Health Check
+
+UDP Health Check.
+
+`health_check_port` - (Required) x-example: "80" (`Int`).
+
+`receive` - (Required) UDP response to be matched. It can be a regex. (`String`).
+
+`send` - (Required) UDP payload (`String`).
+
+Attribute Reference
+-------------------
+
+-	`id` - This is the id of the configured dns_lb_health_check.

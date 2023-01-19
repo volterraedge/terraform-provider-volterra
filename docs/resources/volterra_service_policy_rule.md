@@ -25,18 +25,23 @@ resource "volterra_service_policy_rule" "example" {
   any_asn          = true
   challenge_action = ["challenge_action"]
 
-  // One of the arguments from this list "ip_threat_category_list client_selector client_name_matcher any_client client_name" must be set
+  // One of the arguments from this list "any_client client_name ip_threat_category_list client_selector client_name_matcher" must be set
   any_client = true
 
   // One of the arguments from this list "any_ip ip_prefix_list ip_matcher" must be set
-  any_ip = true
 
+  ip_matcher {
+    invert_matcher = true
+
+    prefix_sets {
+      name      = "test1"
+      namespace = "staging"
+      tenant    = "acmecorp"
+    }
+  }
   waf_action {
     // One of the arguments from this list "none waf_skip_processing waf_rule_control waf_inline_rule_control waf_in_monitoring_mode app_firewall_detection_control data_guard_control" must be set
-
-    data_guard_control {
-      policy_name = "value"
-    }
+    waf_in_monitoring_mode = true
   }
 }
 
@@ -139,6 +144,8 @@ Argument Reference
 
 `rate_limiter` - (Optional) Requests matching this the enclosing rule are subjected to the specified rate_limiter.. See [ref](#ref) below for details.
 
+`request_constraints` - (Optional) Place limits on request based on the request attributes. The request matches if any of the attribute sizes exceed the corresponding maximum value.. See [Request Constraints ](#request-constraints) below for details.
+
 `scheme` - (Optional) The scheme in the request. (`List of String`).
 
 `server_selector` - (Optional) The predicate evaluates to true if the expressions in the label selector are true for the server labels.. See [Server Selector ](#server-selector) below for details.
@@ -165,13 +172,13 @@ The predicate evaluates to true if any of the actual API group names for the req
 
 Define the list of Signature IDs, Violations, Attack Types and Bot Names that should be excluded from triggering on the defined match criteria..
 
-`exclude_attack_type_contexts` - (Optional) App Firewall attack types contexts to be excluded for this request. See [Exclude Attack Type Contexts ](#exclude-attack-type-contexts) below for details.
+`exclude_attack_type_contexts` - (Optional) Attack Types to be excluded for the defined match criteria. See [Exclude Attack Type Contexts ](#exclude-attack-type-contexts) below for details.
 
-`exclude_bot_name_contexts` - (Optional) Bot names contexts to be excluded for this request. See [Exclude Bot Name Contexts ](#exclude-bot-name-contexts) below for details.
+`exclude_bot_name_contexts` - (Optional) Bot Names to be excluded for the defined match criteria. See [Exclude Bot Name Contexts ](#exclude-bot-name-contexts) below for details.
 
-`exclude_signature_contexts` - (Optional) App Firewall signature contexts to be excluded for this request. See [Exclude Signature Contexts ](#exclude-signature-contexts) below for details.
+`exclude_signature_contexts` - (Optional) Signature IDs to be excluded for the defined match criteria. See [Exclude Signature Contexts ](#exclude-signature-contexts) below for details.
 
-`exclude_violation_contexts` - (Optional) App Firewall violation contexts to be excluded for this request. See [Exclude Violation Contexts ](#exclude-violation-contexts) below for details.
+`exclude_violation_contexts` - (Optional) Violations to be excluded for the defined match criteria. See [Exclude Violation Contexts ](#exclude-violation-contexts) below for details.
 
 ### Append Headers
 
@@ -345,25 +352,25 @@ The predicate evaluates to true if the destination address is covered by one or 
 
 ### Exclude Attack Type Contexts
 
-App Firewall attack types contexts to be excluded for this request.
+Attack Types to be excluded for the defined match criteria.
 
 `exclude_attack_type` - (Required) x-required (`String`).
 
 ### Exclude Bot Name Contexts
 
-Bot names contexts to be excluded for this request.
+Bot Names to be excluded for the defined match criteria.
 
 `bot_name` - (Required) x-example: "Hydra" (`String`).
 
 ### Exclude Signature Contexts
 
-App Firewall signature contexts to be excluded for this request.
+Signature IDs to be excluded for the defined match criteria.
 
 `signature_id` - (Required) x-required (`Int`).
 
 ### Exclude Violation Contexts
 
-App Firewall violation contexts to be excluded for this request.
+Violations to be excluded for the defined match criteria.
 
 `exclude_violation` - (Required) x-required (`String`).
 
@@ -461,6 +468,66 @@ other labels do not matter..
 
 `keys` - (Optional) The list of label key names that have to match (`String`).
 
+### Max Body Size None
+
+x-displayName: "Not Configured".
+
+### Max Cookie Count None
+
+x-displayName: "Not Configured".
+
+### Max Cookie Key Size None
+
+x-displayName: "Not Configured".
+
+### Max Cookie Value Size None
+
+x-displayName: "Not Configured".
+
+### Max Header Count None
+
+x-displayName: "Not Configured".
+
+### Max Header Key Size None
+
+x-displayName: "Not Configured".
+
+### Max Header Value Size None
+
+x-displayName: "Not Configured".
+
+### Max Parameter Count None
+
+x-displayName: "Not Configured".
+
+### Max Parameter Name Size None
+
+x-displayName: "Not Configured".
+
+### Max Parameter Value Size None
+
+x-displayName: "Not Configured".
+
+### Max Query Size None
+
+x-displayName: "Not Configured".
+
+### Max Request Line Size None
+
+x-displayName: "Not Configured".
+
+### Max Request Size None
+
+x-displayName: "Not Configured".
+
+### Max Upload File Size None
+
+x-displayName: "Not Configured".
+
+### Max Url Size None
+
+x-displayName: "Not Configured".
+
 ### Mitigation
 
 Mitigation action for protected endpoint.
@@ -542,6 +609,70 @@ name - (Required) then name will hold the referred object's(e.g. route's) name. 
 namespace - (Optional) then namespace will hold the referred object's(e.g. route's) namespace. (String).
 
 tenant - (Optional) then tenant will hold the referred object's(e.g. route's) tenant. (String).
+
+### Request Constraints
+
+Place limits on request based on the request attributes. The request matches if any of the attribute sizes exceed the corresponding maximum value..
+
+`max_body_size_exceeds` - (Optional) x-example: "32768" (`Int`).
+
+`max_body_size_none` - (Optional) x-displayName: "Not Configured" (bool).
+
+`max_cookie_count_exceeds` - (Optional) x-example: "40" (`Int`).
+
+`max_cookie_count_none` - (Optional) x-displayName: "Not Configured" (bool).
+
+`max_cookie_key_size_exceeds` - (Optional) x-example: "64" (`Int`).
+
+`max_cookie_key_size_none` - (Optional) x-displayName: "Not Configured" (bool).
+
+`max_cookie_value_size_exceeds` - (Optional) x-example: "4096" (`Int`).
+
+`max_cookie_value_size_none` - (Optional) x-displayName: "Not Configured" (bool).
+
+`max_header_count_exceeds` - (Optional) x-example: "20" (`Int`).
+
+`max_header_count_none` - (Optional) x-displayName: "Not Configured" (bool).
+
+`max_header_key_size_exceeds` - (Optional) x-example: "32" (`Int`).
+
+`max_header_key_size_none` - (Optional) x-displayName: "Not Configured" (bool).
+
+`max_header_value_size_exceeds` - (Optional) x-example: "1024" (`Int`).
+
+`max_header_value_size_none` - (Optional) x-displayName: "Not Configured" (bool).
+
+`max_parameter_count_exceeds` - (Optional) x-example: "4" (`Int`).
+
+`max_parameter_count_none` - (Optional) x-displayName: "Not Configured" (bool).
+
+`max_parameter_name_size_exceeds` - (Optional) x-example: "64" (`Int`).
+
+`max_parameter_name_size_none` - (Optional) x-displayName: "Not Configured" (bool).
+
+`max_parameter_value_size_exceeds` - (Optional) x-example: "1000" (`Int`).
+
+`max_parameter_value_size_none` - (Optional) x-displayName: "Not Configured" (bool).
+
+`max_query_size_exceeds` - (Optional) x-example: "4096" (`Int`).
+
+`max_query_size_none` - (Optional) x-displayName: "Not Configured" (bool).
+
+`max_request_line_size_exceeds` - (Optional) x-example: "4096" (`Int`).
+
+`max_request_line_size_none` - (Optional) x-displayName: "Not Configured" (bool).
+
+`max_request_size_exceeds` - (Optional) x-example: "32768" (`Int`).
+
+`max_request_size_none` - (Optional) x-displayName: "Not Configured" (bool).
+
+`max_upload_file_size_exceeds` - (Optional) x-example: "1024" (`Int`).
+
+`max_upload_file_size_none` - (Optional) x-displayName: "Not Configured" (bool).
+
+`max_url_size_exceeds` - (Optional) x-example: "4096" (`Int`).
+
+`max_url_size_none` - (Optional) x-displayName: "Not Configured" (bool).
 
 ### Server Selector
 

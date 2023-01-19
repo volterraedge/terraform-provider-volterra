@@ -46,7 +46,7 @@ Argument Reference
 
 `full_mesh` - (Optional) Full mesh of tunnels are created between all sites. See [Full Mesh ](#full-mesh) below for details.
 
-`hub_mesh` - (Optional) Mesh of Type Hub (bool).
+`hub_mesh` - (Optional) Mesh of Type Hub. See [Hub Mesh ](#hub-mesh) below for details.
 
 `spoke_mesh` - (Optional) Mesh of Type Spoke. See [Spoke Mesh ](#spoke-mesh) below for details.
 
@@ -70,6 +70,14 @@ Full mesh of tunnels are created between all sites.
 
 `data_plane_mesh` - (Optional) Full Mesh of data plane tunnels across sites (bool).
 
+### Hub Mesh
+
+Mesh of Type Hub.
+
+`control_and_data_plane_mesh` - (Optional) and control plane peering across sites (bool).
+
+`data_plane_mesh` - (Optional) Hub Full Mesh of data plane tunnels across sites (bool).
+
 ### Ref
 
 Reference to another volterra object is shown like below
@@ -85,6 +93,10 @@ tenant - (Optional) then tenant will hold the referred object's(e.g. route's) te
 Mesh of Type Spoke.
 
 `hub_mesh_group` - (Required) Spoke sites will connect to all the member sites of Hub Site Mesh Group. See [ref](#ref) below for details.
+
+`control_and_data_plane_mesh` - (Optional) and control plane peering with the hub site/s (bool).
+
+`data_plane_mesh` - (Optional) Mesh of data plane tunnels to the hub site/s (bool).
 
 Attribute Reference
 -------------------

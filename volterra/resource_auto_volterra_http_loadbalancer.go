@@ -4361,8 +4361,24 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 
 			"enable_ddos_detection": {
 
-				Type:     schema.TypeBool,
+				Type:     schema.TypeSet,
 				Optional: true,
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+
+						"disable_auto_mitigation": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+
+						"enable_auto_mitigation": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+					},
+				},
 			},
 
 			"ddos_mitigation_rules": {
@@ -4607,12 +4623,129 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 				},
 			},
 
+			"graphql_rules": {
+
+				Type:     schema.TypeList,
+				Optional: true,
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+
+						"any_domain": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+
+						"exact_value": {
+
+							Type:     schema.TypeString,
+							Optional: true,
+						},
+
+						"suffix_value": {
+
+							Type:     schema.TypeString,
+							Optional: true,
+						},
+
+						"exact_path": {
+							Type:     schema.TypeString,
+							Optional: true,
+						},
+
+						"graphql_settings": {
+
+							Type:     schema.TypeSet,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"disable_introspection": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+
+									"enable_introspection": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+
+									"max_batched_queries": {
+										Type:     schema.TypeInt,
+										Optional: true,
+									},
+
+									"max_depth": {
+										Type:     schema.TypeInt,
+										Optional: true,
+									},
+
+									"max_total_length": {
+										Type:     schema.TypeInt,
+										Optional: true,
+									},
+
+									"max_value_length": {
+										Type:     schema.TypeInt,
+										Optional: true,
+									},
+
+									"policy_name": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+								},
+							},
+						},
+
+						"metadata": {
+
+							Type:     schema.TypeSet,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"description": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+
+									"disable": {
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+
+									"name": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+
 			"cookie_stickiness": {
 
 				Type:     schema.TypeSet,
 				Optional: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
+
+						"add_httponly": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+
+						"ignore_httponly": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
 
 						"name": {
 							Type:     schema.TypeString,
@@ -4621,6 +4754,42 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 
 						"path": {
 							Type:     schema.TypeString,
+							Optional: true,
+						},
+
+						"ignore_samesite": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+
+						"samesite_lax": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+
+						"samesite_none": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+
+						"samesite_strict": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+
+						"add_secure": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+
+						"ignore_secure": {
+
+							Type:     schema.TypeBool,
 							Optional: true,
 						},
 
@@ -4665,6 +4834,18 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
+												"add_httponly": {
+
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
+
+												"ignore_httponly": {
+
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
+
 												"name": {
 													Type:     schema.TypeString,
 													Optional: true,
@@ -4672,6 +4853,42 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 
 												"path": {
 													Type:     schema.TypeString,
+													Optional: true,
+												},
+
+												"ignore_samesite": {
+
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
+
+												"samesite_lax": {
+
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
+
+												"samesite_none": {
+
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
+
+												"samesite_strict": {
+
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
+
+												"add_secure": {
+
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
+
+												"ignore_secure": {
+
+													Type:     schema.TypeBool,
 													Optional: true,
 												},
 
@@ -4773,6 +4990,11 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 
 						"add_hsts": {
 							Type:     schema.TypeBool,
+							Optional: true,
+						},
+
+						"connection_idle_timeout": {
+							Type:     schema.TypeInt,
 							Optional: true,
 						},
 
@@ -5187,6 +5409,11 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 							Optional: true,
 						},
 
+						"connection_idle_timeout": {
+							Type:     schema.TypeInt,
+							Optional: true,
+						},
+
 						"default_loadbalancer": {
 
 							Type:     schema.TypeBool,
@@ -5467,8 +5694,24 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 
 						"enable_ddos_detection": {
 
-							Type:     schema.TypeBool,
+							Type:     schema.TypeSet,
 							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"disable_auto_mitigation": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+
+									"enable_auto_mitigation": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+								},
+							},
 						},
 
 						"disable_malicious_user_detection": {
@@ -5546,6 +5789,81 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 									},
 
 									"remove_accept_encoding_header": {
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+								},
+							},
+						},
+
+						"cookies_to_modify": {
+
+							Type:     schema.TypeList,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"add_httponly": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+
+									"ignore_httponly": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+
+									"ignore_max_age": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+
+									"max_age_value": {
+
+										Type:     schema.TypeInt,
+										Optional: true,
+									},
+
+									"name": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+
+									"ignore_samesite": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+
+									"samesite_lax": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+
+									"samesite_none": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+
+									"samesite_strict": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+
+									"add_secure": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+
+									"ignore_secure": {
+
 										Type:     schema.TypeBool,
 										Optional: true,
 									},
@@ -6066,6 +6384,23 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 										},
 									},
 
+									"http_idle_timeout": {
+										Type:     schema.TypeInt,
+										Optional: true,
+									},
+
+									"auto_http_config": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+
+									"http1_config": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+
 									"http2_options": {
 
 										Type:     schema.TypeSet,
@@ -6073,11 +6408,6 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{},
 										},
-									},
-
-									"http_idle_timeout": {
-										Type:     schema.TypeInt,
-										Optional: true,
 									},
 
 									"disable_outlier_detection": {
@@ -7970,6 +8300,32 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
+												"bot_defense_javascript_injection": {
+
+													Type:     schema.TypeSet,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"javascript_location": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+
+															"js_download_path": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+														},
+													},
+												},
+
+												"inherited_bot_defense_javascript_injection": {
+
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
+
 												"buffer_policy": {
 
 													Type:     schema.TypeSet,
@@ -8115,6 +8471,18 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 																			Elem: &schema.Resource{
 																				Schema: map[string]*schema.Schema{
 
+																					"add_httponly": {
+
+																						Type:     schema.TypeBool,
+																						Optional: true,
+																					},
+
+																					"ignore_httponly": {
+
+																						Type:     schema.TypeBool,
+																						Optional: true,
+																					},
+
 																					"name": {
 																						Type:     schema.TypeString,
 																						Optional: true,
@@ -8122,6 +8490,42 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 
 																					"path": {
 																						Type:     schema.TypeString,
+																						Optional: true,
+																					},
+
+																					"ignore_samesite": {
+
+																						Type:     schema.TypeBool,
+																						Optional: true,
+																					},
+
+																					"samesite_lax": {
+
+																						Type:     schema.TypeBool,
+																						Optional: true,
+																					},
+
+																					"samesite_none": {
+
+																						Type:     schema.TypeBool,
+																						Optional: true,
+																					},
+
+																					"samesite_strict": {
+
+																						Type:     schema.TypeBool,
+																						Optional: true,
+																					},
+
+																					"add_secure": {
+
+																						Type:     schema.TypeBool,
+																						Optional: true,
+																					},
+
+																					"ignore_secure": {
+
+																						Type:     schema.TypeBool,
 																						Optional: true,
 																					},
 
@@ -9331,7 +9735,20 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 							},
 						},
 
+						"any_path": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+
+						"path_prefix": {
+
+							Type:     schema.TypeString,
+							Optional: true,
+						},
+
 						"path_regex": {
+
 							Type:     schema.TypeString,
 							Optional: true,
 						},
@@ -15486,11 +15903,40 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 	if v, ok := d.GetOk("enable_ddos_detection"); ok && !ddosDetectionChoiceTypeFound {
 
 		ddosDetectionChoiceTypeFound = true
+		ddosDetectionChoiceInt := &ves_io_schema_views_http_loadbalancer.CreateSpecType_EnableDdosDetection{}
+		ddosDetectionChoiceInt.EnableDdosDetection = &ves_io_schema_views_http_loadbalancer.EnableDDoSDetectionSetting{}
+		createSpec.DdosDetectionChoice = ddosDetectionChoiceInt
 
-		if v.(bool) {
-			ddosDetectionChoiceInt := &ves_io_schema_views_http_loadbalancer.CreateSpecType_EnableDdosDetection{}
-			ddosDetectionChoiceInt.EnableDdosDetection = &ves_io_schema.Empty{}
-			createSpec.DdosDetectionChoice = ddosDetectionChoiceInt
+		sl := v.(*schema.Set).List()
+		for _, set := range sl {
+			cs := set.(map[string]interface{})
+
+			autoMitigationChoiceTypeFound := false
+
+			if v, ok := cs["disable_auto_mitigation"]; ok && !isIntfNil(v) && !autoMitigationChoiceTypeFound {
+
+				autoMitigationChoiceTypeFound = true
+
+				if v.(bool) {
+					autoMitigationChoiceInt := &ves_io_schema_views_http_loadbalancer.EnableDDoSDetectionSetting_DisableAutoMitigation{}
+					autoMitigationChoiceInt.DisableAutoMitigation = &ves_io_schema.Empty{}
+					ddosDetectionChoiceInt.EnableDdosDetection.AutoMitigationChoice = autoMitigationChoiceInt
+				}
+
+			}
+
+			if v, ok := cs["enable_auto_mitigation"]; ok && !isIntfNil(v) && !autoMitigationChoiceTypeFound {
+
+				autoMitigationChoiceTypeFound = true
+
+				if v.(bool) {
+					autoMitigationChoiceInt := &ves_io_schema_views_http_loadbalancer.EnableDDoSDetectionSetting_EnableAutoMitigation{}
+					autoMitigationChoiceInt.EnableAutoMitigation = &ves_io_schema.Empty{}
+					ddosDetectionChoiceInt.EnableDdosDetection.AutoMitigationChoice = autoMitigationChoiceInt
+				}
+
+			}
+
 		}
 
 	}
@@ -15780,6 +16226,142 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 
 	}
 
+	//graphql_rules
+	if v, ok := d.GetOk("graphql_rules"); ok && !isIntfNil(v) {
+
+		sl := v.([]interface{})
+		graphqlRules := make([]*ves_io_schema_policy.GraphQLRule, len(sl))
+		createSpec.GraphqlRules = graphqlRules
+		for i, set := range sl {
+			graphqlRules[i] = &ves_io_schema_policy.GraphQLRule{}
+			graphqlRulesMapStrToI := set.(map[string]interface{})
+
+			domainChoiceTypeFound := false
+
+			if v, ok := graphqlRulesMapStrToI["any_domain"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
+
+				domainChoiceTypeFound = true
+
+				if v.(bool) {
+					domainChoiceInt := &ves_io_schema_policy.GraphQLRule_AnyDomain{}
+					domainChoiceInt.AnyDomain = &ves_io_schema.Empty{}
+					graphqlRules[i].DomainChoice = domainChoiceInt
+				}
+
+			}
+
+			if v, ok := graphqlRulesMapStrToI["exact_value"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
+
+				domainChoiceTypeFound = true
+				domainChoiceInt := &ves_io_schema_policy.GraphQLRule_ExactValue{}
+
+				graphqlRules[i].DomainChoice = domainChoiceInt
+
+				domainChoiceInt.ExactValue = v.(string)
+
+			}
+
+			if v, ok := graphqlRulesMapStrToI["suffix_value"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
+
+				domainChoiceTypeFound = true
+				domainChoiceInt := &ves_io_schema_policy.GraphQLRule_SuffixValue{}
+
+				graphqlRules[i].DomainChoice = domainChoiceInt
+
+				domainChoiceInt.SuffixValue = v.(string)
+
+			}
+
+			if w, ok := graphqlRulesMapStrToI["exact_path"]; ok && !isIntfNil(w) {
+				graphqlRules[i].ExactPath = w.(string)
+			}
+
+			if v, ok := graphqlRulesMapStrToI["graphql_settings"]; ok && !isIntfNil(v) {
+
+				sl := v.(*schema.Set).List()
+				graphqlSettings := &ves_io_schema_policy.GraphQLSettingsType{}
+				graphqlRules[i].GraphqlSettings = graphqlSettings
+				for _, set := range sl {
+					graphqlSettingsMapStrToI := set.(map[string]interface{})
+
+					allowIntrospectionQueriesChoiceTypeFound := false
+
+					if v, ok := graphqlSettingsMapStrToI["disable_introspection"]; ok && !isIntfNil(v) && !allowIntrospectionQueriesChoiceTypeFound {
+
+						allowIntrospectionQueriesChoiceTypeFound = true
+
+						if v.(bool) {
+							allowIntrospectionQueriesChoiceInt := &ves_io_schema_policy.GraphQLSettingsType_DisableIntrospection{}
+							allowIntrospectionQueriesChoiceInt.DisableIntrospection = &ves_io_schema.Empty{}
+							graphqlSettings.AllowIntrospectionQueriesChoice = allowIntrospectionQueriesChoiceInt
+						}
+
+					}
+
+					if v, ok := graphqlSettingsMapStrToI["enable_introspection"]; ok && !isIntfNil(v) && !allowIntrospectionQueriesChoiceTypeFound {
+
+						allowIntrospectionQueriesChoiceTypeFound = true
+
+						if v.(bool) {
+							allowIntrospectionQueriesChoiceInt := &ves_io_schema_policy.GraphQLSettingsType_EnableIntrospection{}
+							allowIntrospectionQueriesChoiceInt.EnableIntrospection = &ves_io_schema.Empty{}
+							graphqlSettings.AllowIntrospectionQueriesChoice = allowIntrospectionQueriesChoiceInt
+						}
+
+					}
+
+					if w, ok := graphqlSettingsMapStrToI["max_batched_queries"]; ok && !isIntfNil(w) {
+						graphqlSettings.MaxBatchedQueries = uint32(w.(int))
+					}
+
+					if w, ok := graphqlSettingsMapStrToI["max_depth"]; ok && !isIntfNil(w) {
+						graphqlSettings.MaxDepth = uint32(w.(int))
+					}
+
+					if w, ok := graphqlSettingsMapStrToI["max_total_length"]; ok && !isIntfNil(w) {
+						graphqlSettings.MaxTotalLength = uint32(w.(int))
+					}
+
+					if w, ok := graphqlSettingsMapStrToI["max_value_length"]; ok && !isIntfNil(w) {
+						graphqlSettings.MaxValueLength = uint32(w.(int))
+					}
+
+					if w, ok := graphqlSettingsMapStrToI["policy_name"]; ok && !isIntfNil(w) {
+						graphqlSettings.PolicyName = w.(string)
+					}
+
+				}
+
+			}
+
+			if v, ok := graphqlRulesMapStrToI["metadata"]; ok && !isIntfNil(v) {
+
+				sl := v.(*schema.Set).List()
+				metadata := &ves_io_schema.MessageMetaType{}
+				graphqlRules[i].Metadata = metadata
+				for _, set := range sl {
+					metadataMapStrToI := set.(map[string]interface{})
+
+					if w, ok := metadataMapStrToI["description"]; ok && !isIntfNil(w) {
+						metadata.Description = w.(string)
+					}
+
+					if w, ok := metadataMapStrToI["disable"]; ok && !isIntfNil(w) {
+						metadata.Disable = w.(bool)
+					}
+
+					if w, ok := metadataMapStrToI["name"]; ok && !isIntfNil(w) {
+						metadata.Name = w.(string)
+					}
+
+				}
+
+			}
+
+		}
+
+	}
+
 	//hash_policy_choice
 
 	hashPolicyChoiceTypeFound := false
@@ -15795,6 +16377,32 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 		for _, set := range sl {
 			cs := set.(map[string]interface{})
 
+			httponlyTypeFound := false
+
+			if v, ok := cs["add_httponly"]; ok && !isIntfNil(v) && !httponlyTypeFound {
+
+				httponlyTypeFound = true
+
+				if v.(bool) {
+					httponlyInt := &ves_io_schema_route.CookieForHashing_AddHttponly{}
+					httponlyInt.AddHttponly = &ves_io_schema.Empty{}
+					hashPolicyChoiceInt.CookieStickiness.Httponly = httponlyInt
+				}
+
+			}
+
+			if v, ok := cs["ignore_httponly"]; ok && !isIntfNil(v) && !httponlyTypeFound {
+
+				httponlyTypeFound = true
+
+				if v.(bool) {
+					httponlyInt := &ves_io_schema_route.CookieForHashing_IgnoreHttponly{}
+					httponlyInt.IgnoreHttponly = &ves_io_schema.Empty{}
+					hashPolicyChoiceInt.CookieStickiness.Httponly = httponlyInt
+				}
+
+			}
+
 			if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 				hashPolicyChoiceInt.CookieStickiness.Name = v.(string)
@@ -15804,6 +16412,82 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 			if v, ok := cs["path"]; ok && !isIntfNil(v) {
 
 				hashPolicyChoiceInt.CookieStickiness.Path = v.(string)
+
+			}
+
+			samesiteTypeFound := false
+
+			if v, ok := cs["ignore_samesite"]; ok && !isIntfNil(v) && !samesiteTypeFound {
+
+				samesiteTypeFound = true
+
+				if v.(bool) {
+					samesiteInt := &ves_io_schema_route.CookieForHashing_IgnoreSamesite{}
+					samesiteInt.IgnoreSamesite = &ves_io_schema.Empty{}
+					hashPolicyChoiceInt.CookieStickiness.Samesite = samesiteInt
+				}
+
+			}
+
+			if v, ok := cs["samesite_lax"]; ok && !isIntfNil(v) && !samesiteTypeFound {
+
+				samesiteTypeFound = true
+
+				if v.(bool) {
+					samesiteInt := &ves_io_schema_route.CookieForHashing_SamesiteLax{}
+					samesiteInt.SamesiteLax = &ves_io_schema.Empty{}
+					hashPolicyChoiceInt.CookieStickiness.Samesite = samesiteInt
+				}
+
+			}
+
+			if v, ok := cs["samesite_none"]; ok && !isIntfNil(v) && !samesiteTypeFound {
+
+				samesiteTypeFound = true
+
+				if v.(bool) {
+					samesiteInt := &ves_io_schema_route.CookieForHashing_SamesiteNone{}
+					samesiteInt.SamesiteNone = &ves_io_schema.Empty{}
+					hashPolicyChoiceInt.CookieStickiness.Samesite = samesiteInt
+				}
+
+			}
+
+			if v, ok := cs["samesite_strict"]; ok && !isIntfNil(v) && !samesiteTypeFound {
+
+				samesiteTypeFound = true
+
+				if v.(bool) {
+					samesiteInt := &ves_io_schema_route.CookieForHashing_SamesiteStrict{}
+					samesiteInt.SamesiteStrict = &ves_io_schema.Empty{}
+					hashPolicyChoiceInt.CookieStickiness.Samesite = samesiteInt
+				}
+
+			}
+
+			secureTypeFound := false
+
+			if v, ok := cs["add_secure"]; ok && !isIntfNil(v) && !secureTypeFound {
+
+				secureTypeFound = true
+
+				if v.(bool) {
+					secureInt := &ves_io_schema_route.CookieForHashing_AddSecure{}
+					secureInt.AddSecure = &ves_io_schema.Empty{}
+					hashPolicyChoiceInt.CookieStickiness.Secure = secureInt
+				}
+
+			}
+
+			if v, ok := cs["ignore_secure"]; ok && !isIntfNil(v) && !secureTypeFound {
+
+				secureTypeFound = true
+
+				if v.(bool) {
+					secureInt := &ves_io_schema_route.CookieForHashing_IgnoreSecure{}
+					secureInt.IgnoreSecure = &ves_io_schema.Empty{}
+					hashPolicyChoiceInt.CookieStickiness.Secure = secureInt
+				}
 
 			}
 
@@ -15874,6 +16558,32 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 						for _, set := range sl {
 							cs := set.(map[string]interface{})
 
+							httponlyTypeFound := false
+
+							if v, ok := cs["add_httponly"]; ok && !isIntfNil(v) && !httponlyTypeFound {
+
+								httponlyTypeFound = true
+
+								if v.(bool) {
+									httponlyInt := &ves_io_schema_route.CookieForHashing_AddHttponly{}
+									httponlyInt.AddHttponly = &ves_io_schema.Empty{}
+									policySpecifierInt.Cookie.Httponly = httponlyInt
+								}
+
+							}
+
+							if v, ok := cs["ignore_httponly"]; ok && !isIntfNil(v) && !httponlyTypeFound {
+
+								httponlyTypeFound = true
+
+								if v.(bool) {
+									httponlyInt := &ves_io_schema_route.CookieForHashing_IgnoreHttponly{}
+									httponlyInt.IgnoreHttponly = &ves_io_schema.Empty{}
+									policySpecifierInt.Cookie.Httponly = httponlyInt
+								}
+
+							}
+
 							if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 								policySpecifierInt.Cookie.Name = v.(string)
@@ -15883,6 +16593,82 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 							if v, ok := cs["path"]; ok && !isIntfNil(v) {
 
 								policySpecifierInt.Cookie.Path = v.(string)
+
+							}
+
+							samesiteTypeFound := false
+
+							if v, ok := cs["ignore_samesite"]; ok && !isIntfNil(v) && !samesiteTypeFound {
+
+								samesiteTypeFound = true
+
+								if v.(bool) {
+									samesiteInt := &ves_io_schema_route.CookieForHashing_IgnoreSamesite{}
+									samesiteInt.IgnoreSamesite = &ves_io_schema.Empty{}
+									policySpecifierInt.Cookie.Samesite = samesiteInt
+								}
+
+							}
+
+							if v, ok := cs["samesite_lax"]; ok && !isIntfNil(v) && !samesiteTypeFound {
+
+								samesiteTypeFound = true
+
+								if v.(bool) {
+									samesiteInt := &ves_io_schema_route.CookieForHashing_SamesiteLax{}
+									samesiteInt.SamesiteLax = &ves_io_schema.Empty{}
+									policySpecifierInt.Cookie.Samesite = samesiteInt
+								}
+
+							}
+
+							if v, ok := cs["samesite_none"]; ok && !isIntfNil(v) && !samesiteTypeFound {
+
+								samesiteTypeFound = true
+
+								if v.(bool) {
+									samesiteInt := &ves_io_schema_route.CookieForHashing_SamesiteNone{}
+									samesiteInt.SamesiteNone = &ves_io_schema.Empty{}
+									policySpecifierInt.Cookie.Samesite = samesiteInt
+								}
+
+							}
+
+							if v, ok := cs["samesite_strict"]; ok && !isIntfNil(v) && !samesiteTypeFound {
+
+								samesiteTypeFound = true
+
+								if v.(bool) {
+									samesiteInt := &ves_io_schema_route.CookieForHashing_SamesiteStrict{}
+									samesiteInt.SamesiteStrict = &ves_io_schema.Empty{}
+									policySpecifierInt.Cookie.Samesite = samesiteInt
+								}
+
+							}
+
+							secureTypeFound := false
+
+							if v, ok := cs["add_secure"]; ok && !isIntfNil(v) && !secureTypeFound {
+
+								secureTypeFound = true
+
+								if v.(bool) {
+									secureInt := &ves_io_schema_route.CookieForHashing_AddSecure{}
+									secureInt.AddSecure = &ves_io_schema.Empty{}
+									policySpecifierInt.Cookie.Secure = secureInt
+								}
+
+							}
+
+							if v, ok := cs["ignore_secure"]; ok && !isIntfNil(v) && !secureTypeFound {
+
+								secureTypeFound = true
+
+								if v.(bool) {
+									secureInt := &ves_io_schema_route.CookieForHashing_IgnoreSecure{}
+									secureInt.IgnoreSecure = &ves_io_schema.Empty{}
+									policySpecifierInt.Cookie.Secure = secureInt
+								}
 
 							}
 
@@ -16040,6 +16826,12 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 			if v, ok := cs["add_hsts"]; ok && !isIntfNil(v) {
 
 				loadbalancerTypeInt.Https.AddHsts = v.(bool)
+
+			}
+
+			if v, ok := cs["connection_idle_timeout"]; ok && !isIntfNil(v) {
+
+				loadbalancerTypeInt.Https.ConnectionIdleTimeout = uint32(v.(int))
 
 			}
 
@@ -16625,6 +17417,12 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 
 			}
 
+			if v, ok := cs["connection_idle_timeout"]; ok && !isIntfNil(v) {
+
+				loadbalancerTypeInt.HttpsAutoCert.ConnectionIdleTimeout = uint32(v.(int))
+
+			}
+
 			defaultLbChoiceTypeFound := false
 
 			if v, ok := cs["default_loadbalancer"]; ok && !isIntfNil(v) && !defaultLbChoiceTypeFound {
@@ -17098,11 +17896,40 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 			if v, ok := cs["enable_ddos_detection"]; ok && !isIntfNil(v) && !ddosDetectionChoiceTypeFound {
 
 				ddosDetectionChoiceTypeFound = true
+				ddosDetectionChoiceInt := &ves_io_schema_views_http_loadbalancer.SingleLoadBalancerAppSetting_EnableDdosDetection{}
+				ddosDetectionChoiceInt.EnableDdosDetection = &ves_io_schema_views_http_loadbalancer.EnableDDoSDetectionSetting{}
+				mlConfigChoiceInt.SingleLbApp.DdosDetectionChoice = ddosDetectionChoiceInt
 
-				if v.(bool) {
-					ddosDetectionChoiceInt := &ves_io_schema_views_http_loadbalancer.SingleLoadBalancerAppSetting_EnableDdosDetection{}
-					ddosDetectionChoiceInt.EnableDdosDetection = &ves_io_schema.Empty{}
-					mlConfigChoiceInt.SingleLbApp.DdosDetectionChoice = ddosDetectionChoiceInt
+				sl := v.(*schema.Set).List()
+				for _, set := range sl {
+					cs := set.(map[string]interface{})
+
+					autoMitigationChoiceTypeFound := false
+
+					if v, ok := cs["disable_auto_mitigation"]; ok && !isIntfNil(v) && !autoMitigationChoiceTypeFound {
+
+						autoMitigationChoiceTypeFound = true
+
+						if v.(bool) {
+							autoMitigationChoiceInt := &ves_io_schema_views_http_loadbalancer.EnableDDoSDetectionSetting_DisableAutoMitigation{}
+							autoMitigationChoiceInt.DisableAutoMitigation = &ves_io_schema.Empty{}
+							ddosDetectionChoiceInt.EnableDdosDetection.AutoMitigationChoice = autoMitigationChoiceInt
+						}
+
+					}
+
+					if v, ok := cs["enable_auto_mitigation"]; ok && !isIntfNil(v) && !autoMitigationChoiceTypeFound {
+
+						autoMitigationChoiceTypeFound = true
+
+						if v.(bool) {
+							autoMitigationChoiceInt := &ves_io_schema_views_http_loadbalancer.EnableDDoSDetectionSetting_EnableAutoMitigation{}
+							autoMitigationChoiceInt.EnableAutoMitigation = &ves_io_schema.Empty{}
+							ddosDetectionChoiceInt.EnableDdosDetection.AutoMitigationChoice = autoMitigationChoiceInt
+						}
+
+					}
+
 				}
 
 			}
@@ -17196,6 +18023,150 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 
 					if w, ok := compressionParamsMapStrToI["remove_accept_encoding_header"]; ok && !isIntfNil(w) {
 						compressionParams.RemoveAcceptEncodingHeader = w.(bool)
+					}
+
+				}
+
+			}
+
+			if v, ok := moreOptionMapStrToI["cookies_to_modify"]; ok && !isIntfNil(v) {
+
+				sl := v.([]interface{})
+				cookiesToModify := make([]*ves_io_schema.CookieManipulationOptionType, len(sl))
+				moreOption.CookiesToModify = cookiesToModify
+				for i, set := range sl {
+					cookiesToModify[i] = &ves_io_schema.CookieManipulationOptionType{}
+					cookiesToModifyMapStrToI := set.(map[string]interface{})
+
+					httponlyTypeFound := false
+
+					if v, ok := cookiesToModifyMapStrToI["add_httponly"]; ok && !isIntfNil(v) && !httponlyTypeFound {
+
+						httponlyTypeFound = true
+
+						if v.(bool) {
+							httponlyInt := &ves_io_schema.CookieManipulationOptionType_AddHttponly{}
+							httponlyInt.AddHttponly = &ves_io_schema.Empty{}
+							cookiesToModify[i].Httponly = httponlyInt
+						}
+
+					}
+
+					if v, ok := cookiesToModifyMapStrToI["ignore_httponly"]; ok && !isIntfNil(v) && !httponlyTypeFound {
+
+						httponlyTypeFound = true
+
+						if v.(bool) {
+							httponlyInt := &ves_io_schema.CookieManipulationOptionType_IgnoreHttponly{}
+							httponlyInt.IgnoreHttponly = &ves_io_schema.Empty{}
+							cookiesToModify[i].Httponly = httponlyInt
+						}
+
+					}
+
+					maxAgeTypeFound := false
+
+					if v, ok := cookiesToModifyMapStrToI["ignore_max_age"]; ok && !isIntfNil(v) && !maxAgeTypeFound {
+
+						maxAgeTypeFound = true
+
+						if v.(bool) {
+							maxAgeInt := &ves_io_schema.CookieManipulationOptionType_IgnoreMaxAge{}
+							maxAgeInt.IgnoreMaxAge = &ves_io_schema.Empty{}
+							cookiesToModify[i].MaxAge = maxAgeInt
+						}
+
+					}
+
+					if v, ok := cookiesToModifyMapStrToI["max_age_value"]; ok && !isIntfNil(v) && !maxAgeTypeFound {
+
+						maxAgeTypeFound = true
+						maxAgeInt := &ves_io_schema.CookieManipulationOptionType_MaxAgeValue{}
+
+						cookiesToModify[i].MaxAge = maxAgeInt
+
+						maxAgeInt.MaxAgeValue = int32(v.(int))
+
+					}
+
+					if w, ok := cookiesToModifyMapStrToI["name"]; ok && !isIntfNil(w) {
+						cookiesToModify[i].Name = w.(string)
+					}
+
+					samesiteTypeFound := false
+
+					if v, ok := cookiesToModifyMapStrToI["ignore_samesite"]; ok && !isIntfNil(v) && !samesiteTypeFound {
+
+						samesiteTypeFound = true
+
+						if v.(bool) {
+							samesiteInt := &ves_io_schema.CookieManipulationOptionType_IgnoreSamesite{}
+							samesiteInt.IgnoreSamesite = &ves_io_schema.Empty{}
+							cookiesToModify[i].Samesite = samesiteInt
+						}
+
+					}
+
+					if v, ok := cookiesToModifyMapStrToI["samesite_lax"]; ok && !isIntfNil(v) && !samesiteTypeFound {
+
+						samesiteTypeFound = true
+
+						if v.(bool) {
+							samesiteInt := &ves_io_schema.CookieManipulationOptionType_SamesiteLax{}
+							samesiteInt.SamesiteLax = &ves_io_schema.Empty{}
+							cookiesToModify[i].Samesite = samesiteInt
+						}
+
+					}
+
+					if v, ok := cookiesToModifyMapStrToI["samesite_none"]; ok && !isIntfNil(v) && !samesiteTypeFound {
+
+						samesiteTypeFound = true
+
+						if v.(bool) {
+							samesiteInt := &ves_io_schema.CookieManipulationOptionType_SamesiteNone{}
+							samesiteInt.SamesiteNone = &ves_io_schema.Empty{}
+							cookiesToModify[i].Samesite = samesiteInt
+						}
+
+					}
+
+					if v, ok := cookiesToModifyMapStrToI["samesite_strict"]; ok && !isIntfNil(v) && !samesiteTypeFound {
+
+						samesiteTypeFound = true
+
+						if v.(bool) {
+							samesiteInt := &ves_io_schema.CookieManipulationOptionType_SamesiteStrict{}
+							samesiteInt.SamesiteStrict = &ves_io_schema.Empty{}
+							cookiesToModify[i].Samesite = samesiteInt
+						}
+
+					}
+
+					secureTypeFound := false
+
+					if v, ok := cookiesToModifyMapStrToI["add_secure"]; ok && !isIntfNil(v) && !secureTypeFound {
+
+						secureTypeFound = true
+
+						if v.(bool) {
+							secureInt := &ves_io_schema.CookieManipulationOptionType_AddSecure{}
+							secureInt.AddSecure = &ves_io_schema.Empty{}
+							cookiesToModify[i].Secure = secureInt
+						}
+
+					}
+
+					if v, ok := cookiesToModifyMapStrToI["ignore_secure"]; ok && !isIntfNil(v) && !secureTypeFound {
+
+						secureTypeFound = true
+
+						if v.(bool) {
+							secureInt := &ves_io_schema.CookieManipulationOptionType_IgnoreSecure{}
+							secureInt.IgnoreSecure = &ves_io_schema.Empty{}
+							cookiesToModify[i].Secure = secureInt
+						}
+
 					}
 
 				}
@@ -17877,20 +18848,40 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 
 					}
 
-					if v, ok := advancedOptionsMapStrToI["http2_options"]; ok && !isIntfNil(v) {
+					if w, ok := advancedOptionsMapStrToI["http_idle_timeout"]; ok && !isIntfNil(w) {
+						advancedOptions.HttpIdleTimeout = uint32(w.(int))
+					}
 
-						sl := v.(*schema.Set).List()
-						http2Options := &ves_io_schema_cluster.Http2ProtocolOptions{}
-						advancedOptions.Http2Options = http2Options
-						for _, set := range sl {
-							_ = set.(map[string]interface{})
+					httpProtocolTypeTypeFound := false
 
+					if v, ok := advancedOptionsMapStrToI["auto_http_config"]; ok && !isIntfNil(v) && !httpProtocolTypeTypeFound {
+
+						httpProtocolTypeTypeFound = true
+
+						if v.(bool) {
+							httpProtocolTypeInt := &ves_io_schema_views_origin_pool.OriginPoolAdvancedOptions_AutoHttpConfig{}
+							httpProtocolTypeInt.AutoHttpConfig = &ves_io_schema.Empty{}
+							advancedOptions.HttpProtocolType = httpProtocolTypeInt
 						}
 
 					}
 
-					if w, ok := advancedOptionsMapStrToI["http_idle_timeout"]; ok && !isIntfNil(w) {
-						advancedOptions.HttpIdleTimeout = uint32(w.(int))
+					if v, ok := advancedOptionsMapStrToI["http1_config"]; ok && !isIntfNil(v) && !httpProtocolTypeTypeFound {
+
+						httpProtocolTypeTypeFound = true
+
+						if v.(bool) {
+							httpProtocolTypeInt := &ves_io_schema_views_origin_pool.OriginPoolAdvancedOptions_Http1Config{}
+							httpProtocolTypeInt.Http1Config = &ves_io_schema.Empty{}
+							advancedOptions.HttpProtocolType = httpProtocolTypeInt
+						}
+
+					}
+
+					if v, ok := advancedOptionsMapStrToI["http2_options"]; ok && !isIntfNil(v) && !httpProtocolTypeTypeFound {
+
+						httpProtocolTypeTypeFound = true
+						_ = v
 					}
 
 					outlierDetectionChoiceTypeFound := false
@@ -17968,9 +18959,9 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 								sl := v.([]interface{})
 								endpointSubsets := make([]*ves_io_schema_cluster.EndpointSubsetSelectorType, len(sl))
 								subsetChoiceInt.EnableSubsets.EndpointSubsets = endpointSubsets
-								for i, set := range sl {
+								for i, _ := range sl {
 									endpointSubsets[i] = &ves_io_schema_cluster.EndpointSubsetSelectorType{}
-									_ = set.(map[string]interface{})
+									//endpointSubsetsMapStrToI := set.(map[string]interface{})
 
 								}
 
@@ -20535,6 +21526,47 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 						for _, set := range sl {
 							advancedOptionsMapStrToI := set.(map[string]interface{})
 
+							botDefenseJavascriptInjectionChoiceTypeFound := false
+
+							if v, ok := advancedOptionsMapStrToI["bot_defense_javascript_injection"]; ok && !isIntfNil(v) && !botDefenseJavascriptInjectionChoiceTypeFound {
+
+								botDefenseJavascriptInjectionChoiceTypeFound = true
+								botDefenseJavascriptInjectionChoiceInt := &ves_io_schema_views_http_loadbalancer.RouteSimpleAdvancedOptions_BotDefenseJavascriptInjection{}
+								botDefenseJavascriptInjectionChoiceInt.BotDefenseJavascriptInjection = &ves_io_schema_route.BotDefenseJavascriptInjectionType{}
+								advancedOptions.BotDefenseJavascriptInjectionChoice = botDefenseJavascriptInjectionChoiceInt
+
+								sl := v.(*schema.Set).List()
+								for _, set := range sl {
+									cs := set.(map[string]interface{})
+
+									if v, ok := cs["javascript_location"]; ok && !isIntfNil(v) {
+
+										botDefenseJavascriptInjectionChoiceInt.BotDefenseJavascriptInjection.JavascriptLocation = ves_io_schema_route.JavaScriptLocation(ves_io_schema_route.JavaScriptLocation_value[v.(string)])
+
+									}
+
+									if v, ok := cs["js_download_path"]; ok && !isIntfNil(v) {
+
+										botDefenseJavascriptInjectionChoiceInt.BotDefenseJavascriptInjection.JsDownloadPath = v.(string)
+
+									}
+
+								}
+
+							}
+
+							if v, ok := advancedOptionsMapStrToI["inherited_bot_defense_javascript_injection"]; ok && !isIntfNil(v) && !botDefenseJavascriptInjectionChoiceTypeFound {
+
+								botDefenseJavascriptInjectionChoiceTypeFound = true
+
+								if v.(bool) {
+									botDefenseJavascriptInjectionChoiceInt := &ves_io_schema_views_http_loadbalancer.RouteSimpleAdvancedOptions_InheritedBotDefenseJavascriptInjection{}
+									botDefenseJavascriptInjectionChoiceInt.InheritedBotDefenseJavascriptInjection = &ves_io_schema.Empty{}
+									advancedOptions.BotDefenseJavascriptInjectionChoice = botDefenseJavascriptInjectionChoiceInt
+								}
+
+							}
+
 							bufferChoiceTypeFound := false
 
 							if v, ok := advancedOptionsMapStrToI["buffer_policy"]; ok && !isIntfNil(v) && !bufferChoiceTypeFound {
@@ -20723,6 +21755,32 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 												for _, set := range sl {
 													cs := set.(map[string]interface{})
 
+													httponlyTypeFound := false
+
+													if v, ok := cs["add_httponly"]; ok && !isIntfNil(v) && !httponlyTypeFound {
+
+														httponlyTypeFound = true
+
+														if v.(bool) {
+															httponlyInt := &ves_io_schema_route.CookieForHashing_AddHttponly{}
+															httponlyInt.AddHttponly = &ves_io_schema.Empty{}
+															policySpecifierInt.Cookie.Httponly = httponlyInt
+														}
+
+													}
+
+													if v, ok := cs["ignore_httponly"]; ok && !isIntfNil(v) && !httponlyTypeFound {
+
+														httponlyTypeFound = true
+
+														if v.(bool) {
+															httponlyInt := &ves_io_schema_route.CookieForHashing_IgnoreHttponly{}
+															httponlyInt.IgnoreHttponly = &ves_io_schema.Empty{}
+															policySpecifierInt.Cookie.Httponly = httponlyInt
+														}
+
+													}
+
 													if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 														policySpecifierInt.Cookie.Name = v.(string)
@@ -20732,6 +21790,82 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 													if v, ok := cs["path"]; ok && !isIntfNil(v) {
 
 														policySpecifierInt.Cookie.Path = v.(string)
+
+													}
+
+													samesiteTypeFound := false
+
+													if v, ok := cs["ignore_samesite"]; ok && !isIntfNil(v) && !samesiteTypeFound {
+
+														samesiteTypeFound = true
+
+														if v.(bool) {
+															samesiteInt := &ves_io_schema_route.CookieForHashing_IgnoreSamesite{}
+															samesiteInt.IgnoreSamesite = &ves_io_schema.Empty{}
+															policySpecifierInt.Cookie.Samesite = samesiteInt
+														}
+
+													}
+
+													if v, ok := cs["samesite_lax"]; ok && !isIntfNil(v) && !samesiteTypeFound {
+
+														samesiteTypeFound = true
+
+														if v.(bool) {
+															samesiteInt := &ves_io_schema_route.CookieForHashing_SamesiteLax{}
+															samesiteInt.SamesiteLax = &ves_io_schema.Empty{}
+															policySpecifierInt.Cookie.Samesite = samesiteInt
+														}
+
+													}
+
+													if v, ok := cs["samesite_none"]; ok && !isIntfNil(v) && !samesiteTypeFound {
+
+														samesiteTypeFound = true
+
+														if v.(bool) {
+															samesiteInt := &ves_io_schema_route.CookieForHashing_SamesiteNone{}
+															samesiteInt.SamesiteNone = &ves_io_schema.Empty{}
+															policySpecifierInt.Cookie.Samesite = samesiteInt
+														}
+
+													}
+
+													if v, ok := cs["samesite_strict"]; ok && !isIntfNil(v) && !samesiteTypeFound {
+
+														samesiteTypeFound = true
+
+														if v.(bool) {
+															samesiteInt := &ves_io_schema_route.CookieForHashing_SamesiteStrict{}
+															samesiteInt.SamesiteStrict = &ves_io_schema.Empty{}
+															policySpecifierInt.Cookie.Samesite = samesiteInt
+														}
+
+													}
+
+													secureTypeFound := false
+
+													if v, ok := cs["add_secure"]; ok && !isIntfNil(v) && !secureTypeFound {
+
+														secureTypeFound = true
+
+														if v.(bool) {
+															secureInt := &ves_io_schema_route.CookieForHashing_AddSecure{}
+															secureInt.AddSecure = &ves_io_schema.Empty{}
+															policySpecifierInt.Cookie.Secure = secureInt
+														}
+
+													}
+
+													if v, ok := cs["ignore_secure"]; ok && !isIntfNil(v) && !secureTypeFound {
+
+														secureTypeFound = true
+
+														if v.(bool) {
+															secureInt := &ves_io_schema_route.CookieForHashing_IgnoreSecure{}
+															secureInt.IgnoreSecure = &ves_io_schema.Empty{}
+															policySpecifierInt.Cookie.Secure = secureInt
+														}
 
 													}
 
@@ -22417,8 +23551,40 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 
 			}
 
-			if w, ok := wafExclusionRulesMapStrToI["path_regex"]; ok && !isIntfNil(w) {
-				wafExclusionRules[i].PathRegex = w.(string)
+			pathChoiceTypeFound := false
+
+			if v, ok := wafExclusionRulesMapStrToI["any_path"]; ok && !isIntfNil(v) && !pathChoiceTypeFound {
+
+				pathChoiceTypeFound = true
+
+				if v.(bool) {
+					pathChoiceInt := &ves_io_schema_policy.SimpleWafExclusionRule_AnyPath{}
+					pathChoiceInt.AnyPath = &ves_io_schema.Empty{}
+					wafExclusionRules[i].PathChoice = pathChoiceInt
+				}
+
+			}
+
+			if v, ok := wafExclusionRulesMapStrToI["path_prefix"]; ok && !isIntfNil(v) && !pathChoiceTypeFound {
+
+				pathChoiceTypeFound = true
+				pathChoiceInt := &ves_io_schema_policy.SimpleWafExclusionRule_PathPrefix{}
+
+				wafExclusionRules[i].PathChoice = pathChoiceInt
+
+				pathChoiceInt.PathPrefix = v.(string)
+
+			}
+
+			if v, ok := wafExclusionRulesMapStrToI["path_regex"]; ok && !isIntfNil(v) && !pathChoiceTypeFound {
+
+				pathChoiceTypeFound = true
+				pathChoiceInt := &ves_io_schema_policy.SimpleWafExclusionRule_PathRegex{}
+
+				wafExclusionRules[i].PathChoice = pathChoiceInt
+
+				pathChoiceInt.PathRegex = v.(string)
+
 			}
 
 			wafAdvancedConfigurationTypeFound := false
@@ -28619,11 +29785,40 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 	if v, ok := d.GetOk("enable_ddos_detection"); ok && !ddosDetectionChoiceTypeFound {
 
 		ddosDetectionChoiceTypeFound = true
+		ddosDetectionChoiceInt := &ves_io_schema_views_http_loadbalancer.ReplaceSpecType_EnableDdosDetection{}
+		ddosDetectionChoiceInt.EnableDdosDetection = &ves_io_schema_views_http_loadbalancer.EnableDDoSDetectionSetting{}
+		updateSpec.DdosDetectionChoice = ddosDetectionChoiceInt
 
-		if v.(bool) {
-			ddosDetectionChoiceInt := &ves_io_schema_views_http_loadbalancer.ReplaceSpecType_EnableDdosDetection{}
-			ddosDetectionChoiceInt.EnableDdosDetection = &ves_io_schema.Empty{}
-			updateSpec.DdosDetectionChoice = ddosDetectionChoiceInt
+		sl := v.(*schema.Set).List()
+		for _, set := range sl {
+			cs := set.(map[string]interface{})
+
+			autoMitigationChoiceTypeFound := false
+
+			if v, ok := cs["disable_auto_mitigation"]; ok && !isIntfNil(v) && !autoMitigationChoiceTypeFound {
+
+				autoMitigationChoiceTypeFound = true
+
+				if v.(bool) {
+					autoMitigationChoiceInt := &ves_io_schema_views_http_loadbalancer.EnableDDoSDetectionSetting_DisableAutoMitigation{}
+					autoMitigationChoiceInt.DisableAutoMitigation = &ves_io_schema.Empty{}
+					ddosDetectionChoiceInt.EnableDdosDetection.AutoMitigationChoice = autoMitigationChoiceInt
+				}
+
+			}
+
+			if v, ok := cs["enable_auto_mitigation"]; ok && !isIntfNil(v) && !autoMitigationChoiceTypeFound {
+
+				autoMitigationChoiceTypeFound = true
+
+				if v.(bool) {
+					autoMitigationChoiceInt := &ves_io_schema_views_http_loadbalancer.EnableDDoSDetectionSetting_EnableAutoMitigation{}
+					autoMitigationChoiceInt.EnableAutoMitigation = &ves_io_schema.Empty{}
+					ddosDetectionChoiceInt.EnableDdosDetection.AutoMitigationChoice = autoMitigationChoiceInt
+				}
+
+			}
+
 		}
 
 	}
@@ -28910,6 +30105,141 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 
 	}
 
+	if v, ok := d.GetOk("graphql_rules"); ok && !isIntfNil(v) {
+
+		sl := v.([]interface{})
+		graphqlRules := make([]*ves_io_schema_policy.GraphQLRule, len(sl))
+		updateSpec.GraphqlRules = graphqlRules
+		for i, set := range sl {
+			graphqlRules[i] = &ves_io_schema_policy.GraphQLRule{}
+			graphqlRulesMapStrToI := set.(map[string]interface{})
+
+			domainChoiceTypeFound := false
+
+			if v, ok := graphqlRulesMapStrToI["any_domain"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
+
+				domainChoiceTypeFound = true
+
+				if v.(bool) {
+					domainChoiceInt := &ves_io_schema_policy.GraphQLRule_AnyDomain{}
+					domainChoiceInt.AnyDomain = &ves_io_schema.Empty{}
+					graphqlRules[i].DomainChoice = domainChoiceInt
+				}
+
+			}
+
+			if v, ok := graphqlRulesMapStrToI["exact_value"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
+
+				domainChoiceTypeFound = true
+				domainChoiceInt := &ves_io_schema_policy.GraphQLRule_ExactValue{}
+
+				graphqlRules[i].DomainChoice = domainChoiceInt
+
+				domainChoiceInt.ExactValue = v.(string)
+
+			}
+
+			if v, ok := graphqlRulesMapStrToI["suffix_value"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
+
+				domainChoiceTypeFound = true
+				domainChoiceInt := &ves_io_schema_policy.GraphQLRule_SuffixValue{}
+
+				graphqlRules[i].DomainChoice = domainChoiceInt
+
+				domainChoiceInt.SuffixValue = v.(string)
+
+			}
+
+			if w, ok := graphqlRulesMapStrToI["exact_path"]; ok && !isIntfNil(w) {
+				graphqlRules[i].ExactPath = w.(string)
+			}
+
+			if v, ok := graphqlRulesMapStrToI["graphql_settings"]; ok && !isIntfNil(v) {
+
+				sl := v.(*schema.Set).List()
+				graphqlSettings := &ves_io_schema_policy.GraphQLSettingsType{}
+				graphqlRules[i].GraphqlSettings = graphqlSettings
+				for _, set := range sl {
+					graphqlSettingsMapStrToI := set.(map[string]interface{})
+
+					allowIntrospectionQueriesChoiceTypeFound := false
+
+					if v, ok := graphqlSettingsMapStrToI["disable_introspection"]; ok && !isIntfNil(v) && !allowIntrospectionQueriesChoiceTypeFound {
+
+						allowIntrospectionQueriesChoiceTypeFound = true
+
+						if v.(bool) {
+							allowIntrospectionQueriesChoiceInt := &ves_io_schema_policy.GraphQLSettingsType_DisableIntrospection{}
+							allowIntrospectionQueriesChoiceInt.DisableIntrospection = &ves_io_schema.Empty{}
+							graphqlSettings.AllowIntrospectionQueriesChoice = allowIntrospectionQueriesChoiceInt
+						}
+
+					}
+
+					if v, ok := graphqlSettingsMapStrToI["enable_introspection"]; ok && !isIntfNil(v) && !allowIntrospectionQueriesChoiceTypeFound {
+
+						allowIntrospectionQueriesChoiceTypeFound = true
+
+						if v.(bool) {
+							allowIntrospectionQueriesChoiceInt := &ves_io_schema_policy.GraphQLSettingsType_EnableIntrospection{}
+							allowIntrospectionQueriesChoiceInt.EnableIntrospection = &ves_io_schema.Empty{}
+							graphqlSettings.AllowIntrospectionQueriesChoice = allowIntrospectionQueriesChoiceInt
+						}
+
+					}
+
+					if w, ok := graphqlSettingsMapStrToI["max_batched_queries"]; ok && !isIntfNil(w) {
+						graphqlSettings.MaxBatchedQueries = uint32(w.(int))
+					}
+
+					if w, ok := graphqlSettingsMapStrToI["max_depth"]; ok && !isIntfNil(w) {
+						graphqlSettings.MaxDepth = uint32(w.(int))
+					}
+
+					if w, ok := graphqlSettingsMapStrToI["max_total_length"]; ok && !isIntfNil(w) {
+						graphqlSettings.MaxTotalLength = uint32(w.(int))
+					}
+
+					if w, ok := graphqlSettingsMapStrToI["max_value_length"]; ok && !isIntfNil(w) {
+						graphqlSettings.MaxValueLength = uint32(w.(int))
+					}
+
+					if w, ok := graphqlSettingsMapStrToI["policy_name"]; ok && !isIntfNil(w) {
+						graphqlSettings.PolicyName = w.(string)
+					}
+
+				}
+
+			}
+
+			if v, ok := graphqlRulesMapStrToI["metadata"]; ok && !isIntfNil(v) {
+
+				sl := v.(*schema.Set).List()
+				metadata := &ves_io_schema.MessageMetaType{}
+				graphqlRules[i].Metadata = metadata
+				for _, set := range sl {
+					metadataMapStrToI := set.(map[string]interface{})
+
+					if w, ok := metadataMapStrToI["description"]; ok && !isIntfNil(w) {
+						metadata.Description = w.(string)
+					}
+
+					if w, ok := metadataMapStrToI["disable"]; ok && !isIntfNil(w) {
+						metadata.Disable = w.(bool)
+					}
+
+					if w, ok := metadataMapStrToI["name"]; ok && !isIntfNil(w) {
+						metadata.Name = w.(string)
+					}
+
+				}
+
+			}
+
+		}
+
+	}
+
 	hashPolicyChoiceTypeFound := false
 
 	if v, ok := d.GetOk("cookie_stickiness"); ok && !hashPolicyChoiceTypeFound {
@@ -28923,6 +30253,32 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 		for _, set := range sl {
 			cs := set.(map[string]interface{})
 
+			httponlyTypeFound := false
+
+			if v, ok := cs["add_httponly"]; ok && !isIntfNil(v) && !httponlyTypeFound {
+
+				httponlyTypeFound = true
+
+				if v.(bool) {
+					httponlyInt := &ves_io_schema_route.CookieForHashing_AddHttponly{}
+					httponlyInt.AddHttponly = &ves_io_schema.Empty{}
+					hashPolicyChoiceInt.CookieStickiness.Httponly = httponlyInt
+				}
+
+			}
+
+			if v, ok := cs["ignore_httponly"]; ok && !isIntfNil(v) && !httponlyTypeFound {
+
+				httponlyTypeFound = true
+
+				if v.(bool) {
+					httponlyInt := &ves_io_schema_route.CookieForHashing_IgnoreHttponly{}
+					httponlyInt.IgnoreHttponly = &ves_io_schema.Empty{}
+					hashPolicyChoiceInt.CookieStickiness.Httponly = httponlyInt
+				}
+
+			}
+
 			if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 				hashPolicyChoiceInt.CookieStickiness.Name = v.(string)
@@ -28932,6 +30288,82 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 			if v, ok := cs["path"]; ok && !isIntfNil(v) {
 
 				hashPolicyChoiceInt.CookieStickiness.Path = v.(string)
+
+			}
+
+			samesiteTypeFound := false
+
+			if v, ok := cs["ignore_samesite"]; ok && !isIntfNil(v) && !samesiteTypeFound {
+
+				samesiteTypeFound = true
+
+				if v.(bool) {
+					samesiteInt := &ves_io_schema_route.CookieForHashing_IgnoreSamesite{}
+					samesiteInt.IgnoreSamesite = &ves_io_schema.Empty{}
+					hashPolicyChoiceInt.CookieStickiness.Samesite = samesiteInt
+				}
+
+			}
+
+			if v, ok := cs["samesite_lax"]; ok && !isIntfNil(v) && !samesiteTypeFound {
+
+				samesiteTypeFound = true
+
+				if v.(bool) {
+					samesiteInt := &ves_io_schema_route.CookieForHashing_SamesiteLax{}
+					samesiteInt.SamesiteLax = &ves_io_schema.Empty{}
+					hashPolicyChoiceInt.CookieStickiness.Samesite = samesiteInt
+				}
+
+			}
+
+			if v, ok := cs["samesite_none"]; ok && !isIntfNil(v) && !samesiteTypeFound {
+
+				samesiteTypeFound = true
+
+				if v.(bool) {
+					samesiteInt := &ves_io_schema_route.CookieForHashing_SamesiteNone{}
+					samesiteInt.SamesiteNone = &ves_io_schema.Empty{}
+					hashPolicyChoiceInt.CookieStickiness.Samesite = samesiteInt
+				}
+
+			}
+
+			if v, ok := cs["samesite_strict"]; ok && !isIntfNil(v) && !samesiteTypeFound {
+
+				samesiteTypeFound = true
+
+				if v.(bool) {
+					samesiteInt := &ves_io_schema_route.CookieForHashing_SamesiteStrict{}
+					samesiteInt.SamesiteStrict = &ves_io_schema.Empty{}
+					hashPolicyChoiceInt.CookieStickiness.Samesite = samesiteInt
+				}
+
+			}
+
+			secureTypeFound := false
+
+			if v, ok := cs["add_secure"]; ok && !isIntfNil(v) && !secureTypeFound {
+
+				secureTypeFound = true
+
+				if v.(bool) {
+					secureInt := &ves_io_schema_route.CookieForHashing_AddSecure{}
+					secureInt.AddSecure = &ves_io_schema.Empty{}
+					hashPolicyChoiceInt.CookieStickiness.Secure = secureInt
+				}
+
+			}
+
+			if v, ok := cs["ignore_secure"]; ok && !isIntfNil(v) && !secureTypeFound {
+
+				secureTypeFound = true
+
+				if v.(bool) {
+					secureInt := &ves_io_schema_route.CookieForHashing_IgnoreSecure{}
+					secureInt.IgnoreSecure = &ves_io_schema.Empty{}
+					hashPolicyChoiceInt.CookieStickiness.Secure = secureInt
+				}
 
 			}
 
@@ -29002,6 +30434,32 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 						for _, set := range sl {
 							cs := set.(map[string]interface{})
 
+							httponlyTypeFound := false
+
+							if v, ok := cs["add_httponly"]; ok && !isIntfNil(v) && !httponlyTypeFound {
+
+								httponlyTypeFound = true
+
+								if v.(bool) {
+									httponlyInt := &ves_io_schema_route.CookieForHashing_AddHttponly{}
+									httponlyInt.AddHttponly = &ves_io_schema.Empty{}
+									policySpecifierInt.Cookie.Httponly = httponlyInt
+								}
+
+							}
+
+							if v, ok := cs["ignore_httponly"]; ok && !isIntfNil(v) && !httponlyTypeFound {
+
+								httponlyTypeFound = true
+
+								if v.(bool) {
+									httponlyInt := &ves_io_schema_route.CookieForHashing_IgnoreHttponly{}
+									httponlyInt.IgnoreHttponly = &ves_io_schema.Empty{}
+									policySpecifierInt.Cookie.Httponly = httponlyInt
+								}
+
+							}
+
 							if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 								policySpecifierInt.Cookie.Name = v.(string)
@@ -29011,6 +30469,82 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 							if v, ok := cs["path"]; ok && !isIntfNil(v) {
 
 								policySpecifierInt.Cookie.Path = v.(string)
+
+							}
+
+							samesiteTypeFound := false
+
+							if v, ok := cs["ignore_samesite"]; ok && !isIntfNil(v) && !samesiteTypeFound {
+
+								samesiteTypeFound = true
+
+								if v.(bool) {
+									samesiteInt := &ves_io_schema_route.CookieForHashing_IgnoreSamesite{}
+									samesiteInt.IgnoreSamesite = &ves_io_schema.Empty{}
+									policySpecifierInt.Cookie.Samesite = samesiteInt
+								}
+
+							}
+
+							if v, ok := cs["samesite_lax"]; ok && !isIntfNil(v) && !samesiteTypeFound {
+
+								samesiteTypeFound = true
+
+								if v.(bool) {
+									samesiteInt := &ves_io_schema_route.CookieForHashing_SamesiteLax{}
+									samesiteInt.SamesiteLax = &ves_io_schema.Empty{}
+									policySpecifierInt.Cookie.Samesite = samesiteInt
+								}
+
+							}
+
+							if v, ok := cs["samesite_none"]; ok && !isIntfNil(v) && !samesiteTypeFound {
+
+								samesiteTypeFound = true
+
+								if v.(bool) {
+									samesiteInt := &ves_io_schema_route.CookieForHashing_SamesiteNone{}
+									samesiteInt.SamesiteNone = &ves_io_schema.Empty{}
+									policySpecifierInt.Cookie.Samesite = samesiteInt
+								}
+
+							}
+
+							if v, ok := cs["samesite_strict"]; ok && !isIntfNil(v) && !samesiteTypeFound {
+
+								samesiteTypeFound = true
+
+								if v.(bool) {
+									samesiteInt := &ves_io_schema_route.CookieForHashing_SamesiteStrict{}
+									samesiteInt.SamesiteStrict = &ves_io_schema.Empty{}
+									policySpecifierInt.Cookie.Samesite = samesiteInt
+								}
+
+							}
+
+							secureTypeFound := false
+
+							if v, ok := cs["add_secure"]; ok && !isIntfNil(v) && !secureTypeFound {
+
+								secureTypeFound = true
+
+								if v.(bool) {
+									secureInt := &ves_io_schema_route.CookieForHashing_AddSecure{}
+									secureInt.AddSecure = &ves_io_schema.Empty{}
+									policySpecifierInt.Cookie.Secure = secureInt
+								}
+
+							}
+
+							if v, ok := cs["ignore_secure"]; ok && !isIntfNil(v) && !secureTypeFound {
+
+								secureTypeFound = true
+
+								if v.(bool) {
+									secureInt := &ves_io_schema_route.CookieForHashing_IgnoreSecure{}
+									secureInt.IgnoreSecure = &ves_io_schema.Empty{}
+									policySpecifierInt.Cookie.Secure = secureInt
+								}
 
 							}
 
@@ -29164,6 +30698,12 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 			if v, ok := cs["add_hsts"]; ok && !isIntfNil(v) {
 
 				loadbalancerTypeInt.Https.AddHsts = v.(bool)
+
+			}
+
+			if v, ok := cs["connection_idle_timeout"]; ok && !isIntfNil(v) {
+
+				loadbalancerTypeInt.Https.ConnectionIdleTimeout = uint32(v.(int))
 
 			}
 
@@ -29749,6 +31289,12 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 
 			}
 
+			if v, ok := cs["connection_idle_timeout"]; ok && !isIntfNil(v) {
+
+				loadbalancerTypeInt.HttpsAutoCert.ConnectionIdleTimeout = uint32(v.(int))
+
+			}
+
 			defaultLbChoiceTypeFound := false
 
 			if v, ok := cs["default_loadbalancer"]; ok && !isIntfNil(v) && !defaultLbChoiceTypeFound {
@@ -30217,11 +31763,40 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 			if v, ok := cs["enable_ddos_detection"]; ok && !isIntfNil(v) && !ddosDetectionChoiceTypeFound {
 
 				ddosDetectionChoiceTypeFound = true
+				ddosDetectionChoiceInt := &ves_io_schema_views_http_loadbalancer.SingleLoadBalancerAppSetting_EnableDdosDetection{}
+				ddosDetectionChoiceInt.EnableDdosDetection = &ves_io_schema_views_http_loadbalancer.EnableDDoSDetectionSetting{}
+				mlConfigChoiceInt.SingleLbApp.DdosDetectionChoice = ddosDetectionChoiceInt
 
-				if v.(bool) {
-					ddosDetectionChoiceInt := &ves_io_schema_views_http_loadbalancer.SingleLoadBalancerAppSetting_EnableDdosDetection{}
-					ddosDetectionChoiceInt.EnableDdosDetection = &ves_io_schema.Empty{}
-					mlConfigChoiceInt.SingleLbApp.DdosDetectionChoice = ddosDetectionChoiceInt
+				sl := v.(*schema.Set).List()
+				for _, set := range sl {
+					cs := set.(map[string]interface{})
+
+					autoMitigationChoiceTypeFound := false
+
+					if v, ok := cs["disable_auto_mitigation"]; ok && !isIntfNil(v) && !autoMitigationChoiceTypeFound {
+
+						autoMitigationChoiceTypeFound = true
+
+						if v.(bool) {
+							autoMitigationChoiceInt := &ves_io_schema_views_http_loadbalancer.EnableDDoSDetectionSetting_DisableAutoMitigation{}
+							autoMitigationChoiceInt.DisableAutoMitigation = &ves_io_schema.Empty{}
+							ddosDetectionChoiceInt.EnableDdosDetection.AutoMitigationChoice = autoMitigationChoiceInt
+						}
+
+					}
+
+					if v, ok := cs["enable_auto_mitigation"]; ok && !isIntfNil(v) && !autoMitigationChoiceTypeFound {
+
+						autoMitigationChoiceTypeFound = true
+
+						if v.(bool) {
+							autoMitigationChoiceInt := &ves_io_schema_views_http_loadbalancer.EnableDDoSDetectionSetting_EnableAutoMitigation{}
+							autoMitigationChoiceInt.EnableAutoMitigation = &ves_io_schema.Empty{}
+							ddosDetectionChoiceInt.EnableDdosDetection.AutoMitigationChoice = autoMitigationChoiceInt
+						}
+
+					}
+
 				}
 
 			}
@@ -30314,6 +31889,150 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 
 					if w, ok := compressionParamsMapStrToI["remove_accept_encoding_header"]; ok && !isIntfNil(w) {
 						compressionParams.RemoveAcceptEncodingHeader = w.(bool)
+					}
+
+				}
+
+			}
+
+			if v, ok := moreOptionMapStrToI["cookies_to_modify"]; ok && !isIntfNil(v) {
+
+				sl := v.([]interface{})
+				cookiesToModify := make([]*ves_io_schema.CookieManipulationOptionType, len(sl))
+				moreOption.CookiesToModify = cookiesToModify
+				for i, set := range sl {
+					cookiesToModify[i] = &ves_io_schema.CookieManipulationOptionType{}
+					cookiesToModifyMapStrToI := set.(map[string]interface{})
+
+					httponlyTypeFound := false
+
+					if v, ok := cookiesToModifyMapStrToI["add_httponly"]; ok && !isIntfNil(v) && !httponlyTypeFound {
+
+						httponlyTypeFound = true
+
+						if v.(bool) {
+							httponlyInt := &ves_io_schema.CookieManipulationOptionType_AddHttponly{}
+							httponlyInt.AddHttponly = &ves_io_schema.Empty{}
+							cookiesToModify[i].Httponly = httponlyInt
+						}
+
+					}
+
+					if v, ok := cookiesToModifyMapStrToI["ignore_httponly"]; ok && !isIntfNil(v) && !httponlyTypeFound {
+
+						httponlyTypeFound = true
+
+						if v.(bool) {
+							httponlyInt := &ves_io_schema.CookieManipulationOptionType_IgnoreHttponly{}
+							httponlyInt.IgnoreHttponly = &ves_io_schema.Empty{}
+							cookiesToModify[i].Httponly = httponlyInt
+						}
+
+					}
+
+					maxAgeTypeFound := false
+
+					if v, ok := cookiesToModifyMapStrToI["ignore_max_age"]; ok && !isIntfNil(v) && !maxAgeTypeFound {
+
+						maxAgeTypeFound = true
+
+						if v.(bool) {
+							maxAgeInt := &ves_io_schema.CookieManipulationOptionType_IgnoreMaxAge{}
+							maxAgeInt.IgnoreMaxAge = &ves_io_schema.Empty{}
+							cookiesToModify[i].MaxAge = maxAgeInt
+						}
+
+					}
+
+					if v, ok := cookiesToModifyMapStrToI["max_age_value"]; ok && !isIntfNil(v) && !maxAgeTypeFound {
+
+						maxAgeTypeFound = true
+						maxAgeInt := &ves_io_schema.CookieManipulationOptionType_MaxAgeValue{}
+
+						cookiesToModify[i].MaxAge = maxAgeInt
+
+						maxAgeInt.MaxAgeValue = int32(v.(int))
+
+					}
+
+					if w, ok := cookiesToModifyMapStrToI["name"]; ok && !isIntfNil(w) {
+						cookiesToModify[i].Name = w.(string)
+					}
+
+					samesiteTypeFound := false
+
+					if v, ok := cookiesToModifyMapStrToI["ignore_samesite"]; ok && !isIntfNil(v) && !samesiteTypeFound {
+
+						samesiteTypeFound = true
+
+						if v.(bool) {
+							samesiteInt := &ves_io_schema.CookieManipulationOptionType_IgnoreSamesite{}
+							samesiteInt.IgnoreSamesite = &ves_io_schema.Empty{}
+							cookiesToModify[i].Samesite = samesiteInt
+						}
+
+					}
+
+					if v, ok := cookiesToModifyMapStrToI["samesite_lax"]; ok && !isIntfNil(v) && !samesiteTypeFound {
+
+						samesiteTypeFound = true
+
+						if v.(bool) {
+							samesiteInt := &ves_io_schema.CookieManipulationOptionType_SamesiteLax{}
+							samesiteInt.SamesiteLax = &ves_io_schema.Empty{}
+							cookiesToModify[i].Samesite = samesiteInt
+						}
+
+					}
+
+					if v, ok := cookiesToModifyMapStrToI["samesite_none"]; ok && !isIntfNil(v) && !samesiteTypeFound {
+
+						samesiteTypeFound = true
+
+						if v.(bool) {
+							samesiteInt := &ves_io_schema.CookieManipulationOptionType_SamesiteNone{}
+							samesiteInt.SamesiteNone = &ves_io_schema.Empty{}
+							cookiesToModify[i].Samesite = samesiteInt
+						}
+
+					}
+
+					if v, ok := cookiesToModifyMapStrToI["samesite_strict"]; ok && !isIntfNil(v) && !samesiteTypeFound {
+
+						samesiteTypeFound = true
+
+						if v.(bool) {
+							samesiteInt := &ves_io_schema.CookieManipulationOptionType_SamesiteStrict{}
+							samesiteInt.SamesiteStrict = &ves_io_schema.Empty{}
+							cookiesToModify[i].Samesite = samesiteInt
+						}
+
+					}
+
+					secureTypeFound := false
+
+					if v, ok := cookiesToModifyMapStrToI["add_secure"]; ok && !isIntfNil(v) && !secureTypeFound {
+
+						secureTypeFound = true
+
+						if v.(bool) {
+							secureInt := &ves_io_schema.CookieManipulationOptionType_AddSecure{}
+							secureInt.AddSecure = &ves_io_schema.Empty{}
+							cookiesToModify[i].Secure = secureInt
+						}
+
+					}
+
+					if v, ok := cookiesToModifyMapStrToI["ignore_secure"]; ok && !isIntfNil(v) && !secureTypeFound {
+
+						secureTypeFound = true
+
+						if v.(bool) {
+							secureInt := &ves_io_schema.CookieManipulationOptionType_IgnoreSecure{}
+							secureInt.IgnoreSecure = &ves_io_schema.Empty{}
+							cookiesToModify[i].Secure = secureInt
+						}
+
 					}
 
 				}
@@ -30993,20 +32712,40 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 
 					}
 
-					if v, ok := advancedOptionsMapStrToI["http2_options"]; ok && !isIntfNil(v) {
+					if w, ok := advancedOptionsMapStrToI["http_idle_timeout"]; ok && !isIntfNil(w) {
+						advancedOptions.HttpIdleTimeout = uint32(w.(int))
+					}
 
-						sl := v.(*schema.Set).List()
-						http2Options := &ves_io_schema_cluster.Http2ProtocolOptions{}
-						advancedOptions.Http2Options = http2Options
-						for _, set := range sl {
-							_ = set.(map[string]interface{})
+					httpProtocolTypeTypeFound := false
 
+					if v, ok := advancedOptionsMapStrToI["auto_http_config"]; ok && !isIntfNil(v) && !httpProtocolTypeTypeFound {
+
+						httpProtocolTypeTypeFound = true
+
+						if v.(bool) {
+							httpProtocolTypeInt := &ves_io_schema_views_origin_pool.OriginPoolAdvancedOptions_AutoHttpConfig{}
+							httpProtocolTypeInt.AutoHttpConfig = &ves_io_schema.Empty{}
+							advancedOptions.HttpProtocolType = httpProtocolTypeInt
 						}
 
 					}
 
-					if w, ok := advancedOptionsMapStrToI["http_idle_timeout"]; ok && !isIntfNil(w) {
-						advancedOptions.HttpIdleTimeout = uint32(w.(int))
+					if v, ok := advancedOptionsMapStrToI["http1_config"]; ok && !isIntfNil(v) && !httpProtocolTypeTypeFound {
+
+						httpProtocolTypeTypeFound = true
+
+						if v.(bool) {
+							httpProtocolTypeInt := &ves_io_schema_views_origin_pool.OriginPoolAdvancedOptions_Http1Config{}
+							httpProtocolTypeInt.Http1Config = &ves_io_schema.Empty{}
+							advancedOptions.HttpProtocolType = httpProtocolTypeInt
+						}
+
+					}
+
+					if v, ok := advancedOptionsMapStrToI["http2_options"]; ok && !isIntfNil(v) && !httpProtocolTypeTypeFound {
+
+						httpProtocolTypeTypeFound = true
+						_ = v
 					}
 
 					outlierDetectionChoiceTypeFound := false
@@ -31084,9 +32823,9 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 								sl := v.([]interface{})
 								endpointSubsets := make([]*ves_io_schema_cluster.EndpointSubsetSelectorType, len(sl))
 								subsetChoiceInt.EnableSubsets.EndpointSubsets = endpointSubsets
-								for i, set := range sl {
+								for i, _ := range sl {
 									endpointSubsets[i] = &ves_io_schema_cluster.EndpointSubsetSelectorType{}
-									_ = set.(map[string]interface{})
+									//endpointSubsetsMapStrToI := set.(map[string]interface{})
 
 								}
 
@@ -33648,6 +35387,47 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 						for _, set := range sl {
 							advancedOptionsMapStrToI := set.(map[string]interface{})
 
+							botDefenseJavascriptInjectionChoiceTypeFound := false
+
+							if v, ok := advancedOptionsMapStrToI["bot_defense_javascript_injection"]; ok && !isIntfNil(v) && !botDefenseJavascriptInjectionChoiceTypeFound {
+
+								botDefenseJavascriptInjectionChoiceTypeFound = true
+								botDefenseJavascriptInjectionChoiceInt := &ves_io_schema_views_http_loadbalancer.RouteSimpleAdvancedOptions_BotDefenseJavascriptInjection{}
+								botDefenseJavascriptInjectionChoiceInt.BotDefenseJavascriptInjection = &ves_io_schema_route.BotDefenseJavascriptInjectionType{}
+								advancedOptions.BotDefenseJavascriptInjectionChoice = botDefenseJavascriptInjectionChoiceInt
+
+								sl := v.(*schema.Set).List()
+								for _, set := range sl {
+									cs := set.(map[string]interface{})
+
+									if v, ok := cs["javascript_location"]; ok && !isIntfNil(v) {
+
+										botDefenseJavascriptInjectionChoiceInt.BotDefenseJavascriptInjection.JavascriptLocation = ves_io_schema_route.JavaScriptLocation(ves_io_schema_route.JavaScriptLocation_value[v.(string)])
+
+									}
+
+									if v, ok := cs["js_download_path"]; ok && !isIntfNil(v) {
+
+										botDefenseJavascriptInjectionChoiceInt.BotDefenseJavascriptInjection.JsDownloadPath = v.(string)
+
+									}
+
+								}
+
+							}
+
+							if v, ok := advancedOptionsMapStrToI["inherited_bot_defense_javascript_injection"]; ok && !isIntfNil(v) && !botDefenseJavascriptInjectionChoiceTypeFound {
+
+								botDefenseJavascriptInjectionChoiceTypeFound = true
+
+								if v.(bool) {
+									botDefenseJavascriptInjectionChoiceInt := &ves_io_schema_views_http_loadbalancer.RouteSimpleAdvancedOptions_InheritedBotDefenseJavascriptInjection{}
+									botDefenseJavascriptInjectionChoiceInt.InheritedBotDefenseJavascriptInjection = &ves_io_schema.Empty{}
+									advancedOptions.BotDefenseJavascriptInjectionChoice = botDefenseJavascriptInjectionChoiceInt
+								}
+
+							}
+
 							bufferChoiceTypeFound := false
 
 							if v, ok := advancedOptionsMapStrToI["buffer_policy"]; ok && !isIntfNil(v) && !bufferChoiceTypeFound {
@@ -33836,6 +35616,32 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 												for _, set := range sl {
 													cs := set.(map[string]interface{})
 
+													httponlyTypeFound := false
+
+													if v, ok := cs["add_httponly"]; ok && !isIntfNil(v) && !httponlyTypeFound {
+
+														httponlyTypeFound = true
+
+														if v.(bool) {
+															httponlyInt := &ves_io_schema_route.CookieForHashing_AddHttponly{}
+															httponlyInt.AddHttponly = &ves_io_schema.Empty{}
+															policySpecifierInt.Cookie.Httponly = httponlyInt
+														}
+
+													}
+
+													if v, ok := cs["ignore_httponly"]; ok && !isIntfNil(v) && !httponlyTypeFound {
+
+														httponlyTypeFound = true
+
+														if v.(bool) {
+															httponlyInt := &ves_io_schema_route.CookieForHashing_IgnoreHttponly{}
+															httponlyInt.IgnoreHttponly = &ves_io_schema.Empty{}
+															policySpecifierInt.Cookie.Httponly = httponlyInt
+														}
+
+													}
+
 													if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 														policySpecifierInt.Cookie.Name = v.(string)
@@ -33845,6 +35651,82 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 													if v, ok := cs["path"]; ok && !isIntfNil(v) {
 
 														policySpecifierInt.Cookie.Path = v.(string)
+
+													}
+
+													samesiteTypeFound := false
+
+													if v, ok := cs["ignore_samesite"]; ok && !isIntfNil(v) && !samesiteTypeFound {
+
+														samesiteTypeFound = true
+
+														if v.(bool) {
+															samesiteInt := &ves_io_schema_route.CookieForHashing_IgnoreSamesite{}
+															samesiteInt.IgnoreSamesite = &ves_io_schema.Empty{}
+															policySpecifierInt.Cookie.Samesite = samesiteInt
+														}
+
+													}
+
+													if v, ok := cs["samesite_lax"]; ok && !isIntfNil(v) && !samesiteTypeFound {
+
+														samesiteTypeFound = true
+
+														if v.(bool) {
+															samesiteInt := &ves_io_schema_route.CookieForHashing_SamesiteLax{}
+															samesiteInt.SamesiteLax = &ves_io_schema.Empty{}
+															policySpecifierInt.Cookie.Samesite = samesiteInt
+														}
+
+													}
+
+													if v, ok := cs["samesite_none"]; ok && !isIntfNil(v) && !samesiteTypeFound {
+
+														samesiteTypeFound = true
+
+														if v.(bool) {
+															samesiteInt := &ves_io_schema_route.CookieForHashing_SamesiteNone{}
+															samesiteInt.SamesiteNone = &ves_io_schema.Empty{}
+															policySpecifierInt.Cookie.Samesite = samesiteInt
+														}
+
+													}
+
+													if v, ok := cs["samesite_strict"]; ok && !isIntfNil(v) && !samesiteTypeFound {
+
+														samesiteTypeFound = true
+
+														if v.(bool) {
+															samesiteInt := &ves_io_schema_route.CookieForHashing_SamesiteStrict{}
+															samesiteInt.SamesiteStrict = &ves_io_schema.Empty{}
+															policySpecifierInt.Cookie.Samesite = samesiteInt
+														}
+
+													}
+
+													secureTypeFound := false
+
+													if v, ok := cs["add_secure"]; ok && !isIntfNil(v) && !secureTypeFound {
+
+														secureTypeFound = true
+
+														if v.(bool) {
+															secureInt := &ves_io_schema_route.CookieForHashing_AddSecure{}
+															secureInt.AddSecure = &ves_io_schema.Empty{}
+															policySpecifierInt.Cookie.Secure = secureInt
+														}
+
+													}
+
+													if v, ok := cs["ignore_secure"]; ok && !isIntfNil(v) && !secureTypeFound {
+
+														secureTypeFound = true
+
+														if v.(bool) {
+															secureInt := &ves_io_schema_route.CookieForHashing_IgnoreSecure{}
+															secureInt.IgnoreSecure = &ves_io_schema.Empty{}
+															policySpecifierInt.Cookie.Secure = secureInt
+														}
 
 													}
 
@@ -35520,8 +37402,40 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 
 			}
 
-			if w, ok := wafExclusionRulesMapStrToI["path_regex"]; ok && !isIntfNil(w) {
-				wafExclusionRules[i].PathRegex = w.(string)
+			pathChoiceTypeFound := false
+
+			if v, ok := wafExclusionRulesMapStrToI["any_path"]; ok && !isIntfNil(v) && !pathChoiceTypeFound {
+
+				pathChoiceTypeFound = true
+
+				if v.(bool) {
+					pathChoiceInt := &ves_io_schema_policy.SimpleWafExclusionRule_AnyPath{}
+					pathChoiceInt.AnyPath = &ves_io_schema.Empty{}
+					wafExclusionRules[i].PathChoice = pathChoiceInt
+				}
+
+			}
+
+			if v, ok := wafExclusionRulesMapStrToI["path_prefix"]; ok && !isIntfNil(v) && !pathChoiceTypeFound {
+
+				pathChoiceTypeFound = true
+				pathChoiceInt := &ves_io_schema_policy.SimpleWafExclusionRule_PathPrefix{}
+
+				wafExclusionRules[i].PathChoice = pathChoiceInt
+
+				pathChoiceInt.PathPrefix = v.(string)
+
+			}
+
+			if v, ok := wafExclusionRulesMapStrToI["path_regex"]; ok && !isIntfNil(v) && !pathChoiceTypeFound {
+
+				pathChoiceTypeFound = true
+				pathChoiceInt := &ves_io_schema_policy.SimpleWafExclusionRule_PathRegex{}
+
+				wafExclusionRules[i].PathChoice = pathChoiceInt
+
+				pathChoiceInt.PathRegex = v.(string)
+
 			}
 
 			wafAdvancedConfigurationTypeFound := false

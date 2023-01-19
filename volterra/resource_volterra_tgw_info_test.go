@@ -43,9 +43,24 @@ func testTGWInfo(name string) string {
 		  vpc_id = "vpc-02d0d70860b330393"
 		  subnet_ids {
 			outside_subnet_id = "subnet-12345678"
-			inside_subnet_id = "subnet-12345678"
-			workload_subnet_id = "subnet-12345678"
+			inside_subnet_id = "subnet-45678123"
+			workload_subnet_id = "subnet-56781234"
 			az = "us-east-2a"
+			outside_subnet {
+				az_name = "us-east-2a"
+				id = "subnet-12345678"
+				ipv4_prefix = "10.0.0.0/24"
+			}
+			inside_subnet {
+				az_name = "us-east-2a"
+				id = "subnet-45678123"
+				ipv4_prefix = "10.0.1.0/24"
+			}
+			workload_subnet {
+				az_name = "us-east-2a"
+				id = "subnet-56781234"
+				ipv4_prefix = "10.0.2.0/24"
+			}
 		  }
 		  public_ips = ["10.0.0.10"]
 		  private_ips = ["192.168.0.10"]
@@ -62,9 +77,24 @@ func testTGWInfoWithDirectConnectInfo(name string) string {
 		  vpc_id = "vpc-02d0d70860b330393"
 		  subnet_ids {
 			outside_subnet_id = "subnet-12345678"
-			inside_subnet_id = "subnet-12345678"
-			workload_subnet_id = "subnet-12345678"
+			inside_subnet_id = "subnet-45678123"
+			workload_subnet_id = "subnet-56781234"
 			az = "us-east-2a"
+			outside_subnet {
+				az_name = "us-east-2a"
+				id = "subnet-12345678"
+				ipv4_prefix = "10.0.0.0/24"
+			}
+			inside_subnet {
+				az_name = "us-east-2a"
+				id = "subnet-45678123"
+				ipv4_prefix = "10.0.1.0/24"
+			}
+			workload_subnet {
+				az_name = "us-east-2a"
+				id = "subnet-56781234"
+				ipv4_prefix = "10.0.2.0/24"
+			}
 		  }
 		  public_ips = ["10.0.0.10"]
 		  private_ips = ["192.168.0.10"]

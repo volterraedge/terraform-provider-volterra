@@ -31,7 +31,7 @@ resource "volterra_aws_vpc_site" "example" {
     namespace = "staging"
     tenant    = "acmecorp"
   }
-  // One of the arguments from this list "direct_connect_enabled direct_connect_disabled" must be set
+  // One of the arguments from this list "direct_connect_disabled direct_connect_enabled" must be set
   direct_connect_disabled = true
   instance_type           = ["a1.xlarge"]
   // One of the arguments from this list "logs_streaming_disabled log_receiver" must be set
@@ -41,7 +41,7 @@ resource "volterra_aws_vpc_site" "example" {
 
   ingress_gw {
     allowed_vip_port {
-      // One of the arguments from this list "use_http_https_port custom_ports use_http_port use_https_port" must be set
+      // One of the arguments from this list "use_http_port use_https_port use_http_https_port custom_ports" must be set
       use_http_port = true
     }
 
@@ -92,7 +92,7 @@ Argument Reference
 
 `blocked_services` - (Optional) Use custom blocked services configuration. See [Blocked Services ](#blocked-services) below for details.
 
-`default_blocked_services` - (Optional) Use default dehavior of allowing ports mentioned in blocked services (bool).
+`default_blocked_services` - (Optional) Use default behavior of allowing ports mentioned in blocked services (bool).
 
 `coordinates` - (Optional) Site longitude and latitude co-ordinates. See [Coordinates ](#coordinates) below for details.
 
@@ -382,10 +382,6 @@ Enable Interception.
 
 Enable Internet VIP..
 
-`reserved_internet_nlb_subnet` - (Optional) Autogenerate Internet NLB and reserve a subnet from the Primary CIDR (bool).
-
-`subnet` - (Optional) Select Existing Subnet for Internet NLB Subnet or Create New. See [Subnet ](#subnet) below for details.
-
 ### Enable Offline Survivability Mode
 
 When this feature is enabled on an existing site, the pods/services on this site will be restarted..
@@ -415,6 +411,12 @@ List of global network connections.
 ### Hosted Vifs
 
 and automatically associate provided hosted VIF and also setup BGP Peering..
+
+`site_registration_over_direct_connect` - (Optional) Site Registration and Site to RE tunnels go over the AWS Direct Connect Connection. See [Site Registration Over Direct Connect ](#site-registration-over-direct-connect) below for details.
+
+`site_registration_over_internet` - (Optional) Site Registration and Site to RE tunnels go over the internet gateway (bool).
+
+`vif_list` - (Optional) List of Hosted VIF Config. See [Vif List ](#vif-list) below for details.
 
 `vifs` - (Optional) VIFs (`String`).
 
@@ -452,7 +454,7 @@ Two interface site is useful when site is used as ingress/egress gateway to the 
 
 `disable_internet_vip` - (Optional) Do not create Internet VIP (bool).
 
-`enable_internet_vip` - (Optional) Enable Internet VIP.. See [Enable Internet Vip ](#enable-internet-vip) below for details.
+`enable_internet_vip` - (Optional) Enable Internet VIP. (bool).
 
 `active_enhanced_firewall_policies` - (Optional) Enhanced Firewall Policies active for this site.. See [Active Enhanced Firewall Policies ](#active-enhanced-firewall-policies) below for details.
 
@@ -658,9 +660,19 @@ tenant - (Optional) then tenant will hold the referred object's(e.g. route's) te
 
 Autogenerate and reserve a subnet from the Primary CIDR.
 
-### Reserved Internet Nlb Subnet
+### Same As Site Region
 
-Autogenerate Internet NLB and reserve a subnet from the Primary CIDR.
+Use same region as that of the Site.
+
+### Site Registration Over Direct Connect
+
+Site Registration and Site to RE tunnels go over the AWS Direct Connect Connection.
+
+`cloudlink_network_name` - (Required) Cloud Link ADN Network Name for private access connectivity to F5XC ADN. (`String`).
+
+### Site Registration Over Internet
+
+Site Registration and Site to RE tunnels go over the internet gateway.
 
 ### Sli To Global Dr
 
@@ -713,14 +725,6 @@ List of custom storage classes.
 `openebs_enterprise` - (Optional) Storage class Device configuration for OpenEBS Enterprise. See [Openebs Enterprise ](#openebs-enterprise) below for details.
 
 `storage_class_name` - (Required) Name of the storage class as it will appear in K8s. (`String`).
-
-### Subnet
-
-Select Existing Subnet for Internet NLB Subnet or Create New.
-
-`existing_subnet_id` - (Optional) Information about existing subnet ID (`String`).
-
-`subnet_param` - (Optional) Parameters for creating new subnet. See [Subnet Param ](#subnet-param) below for details.
 
 ### Subnet Param
 
@@ -791,6 +795,16 @@ Vault Secret is used for the secrets managed by Hashicorp Vault.
 `secret_encoding` - (Optional) This field defines the encoding type of the secret BEFORE the secret is put into Hashicorp Vault. (`String`).
 
 `version` - (Optional) If not provided latest version will be returned. (`Int`).
+
+### Vif List
+
+List of Hosted VIF Config.
+
+`vif_id` - (Required) AWS Direct Connect VIF ID that needs to be connected to the site (`String`).
+
+`other_region` - (Optional) Other Region (`String`).
+
+`same_as_site_region` - (Optional) Use same region as that of the Site (bool).
 
 ### Volterra Certificate
 

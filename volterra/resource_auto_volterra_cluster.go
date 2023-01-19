@@ -213,6 +213,23 @@ func resourceVolterraCluster() *schema.Resource {
 				},
 			},
 
+			"http_idle_timeout": {
+				Type:     schema.TypeInt,
+				Optional: true,
+			},
+
+			"auto_http_config": {
+
+				Type:     schema.TypeBool,
+				Optional: true,
+			},
+
+			"http1_config": {
+
+				Type:     schema.TypeBool,
+				Optional: true,
+			},
+
 			"http2_options": {
 
 				Type:     schema.TypeSet,
@@ -226,11 +243,6 @@ func resourceVolterraCluster() *schema.Resource {
 						},
 					},
 				},
-			},
-
-			"http_idle_timeout": {
-				Type:     schema.TypeInt,
-				Optional: true,
 			},
 
 			"loadbalancer_algorithm": {
@@ -826,28 +838,60 @@ func resourceVolterraClusterCreate(d *schema.ResourceData, meta interface{}) err
 
 	}
 
-	//http2_options
-	if v, ok := d.GetOk("http2_options"); ok && !isIntfNil(v) {
-
-		sl := v.(*schema.Set).List()
-		http2Options := &ves_io_schema_cluster.Http2ProtocolOptions{}
-		createSpec.Http2Options = http2Options
-		for _, set := range sl {
-			http2OptionsMapStrToI := set.(map[string]interface{})
-
-			if w, ok := http2OptionsMapStrToI["enabled"]; ok && !isIntfNil(w) {
-				http2Options.Enabled = w.(bool)
-			}
-
-		}
-
-	}
-
 	//http_idle_timeout
 	if v, ok := d.GetOk("http_idle_timeout"); ok && !isIntfNil(v) {
 
 		createSpec.HttpIdleTimeout =
 			uint32(v.(int))
+
+	}
+
+	//http_protocol_type
+
+	httpProtocolTypeTypeFound := false
+
+	if v, ok := d.GetOk("auto_http_config"); ok && !httpProtocolTypeTypeFound {
+
+		httpProtocolTypeTypeFound = true
+
+		if v.(bool) {
+			httpProtocolTypeInt := &ves_io_schema_cluster.CreateSpecType_AutoHttpConfig{}
+			httpProtocolTypeInt.AutoHttpConfig = &ves_io_schema.Empty{}
+			createSpec.HttpProtocolType = httpProtocolTypeInt
+		}
+
+	}
+
+	if v, ok := d.GetOk("http1_config"); ok && !httpProtocolTypeTypeFound {
+
+		httpProtocolTypeTypeFound = true
+
+		if v.(bool) {
+			httpProtocolTypeInt := &ves_io_schema_cluster.CreateSpecType_Http1Config{}
+			httpProtocolTypeInt.Http1Config = &ves_io_schema.Empty{}
+			createSpec.HttpProtocolType = httpProtocolTypeInt
+		}
+
+	}
+
+	if v, ok := d.GetOk("http2_options"); ok && !httpProtocolTypeTypeFound {
+
+		httpProtocolTypeTypeFound = true
+		httpProtocolTypeInt := &ves_io_schema_cluster.CreateSpecType_Http2Options{}
+		httpProtocolTypeInt.Http2Options = &ves_io_schema_cluster.Http2ProtocolOptions{}
+		createSpec.HttpProtocolType = httpProtocolTypeInt
+
+		sl := v.(*schema.Set).List()
+		for _, set := range sl {
+			cs := set.(map[string]interface{})
+
+			if v, ok := cs["enabled"]; ok && !isIntfNil(v) {
+
+				httpProtocolTypeInt.Http2Options.Enabled = v.(bool)
+
+			}
+
+		}
 
 	}
 
@@ -1549,26 +1593,57 @@ func resourceVolterraClusterUpdate(d *schema.ResourceData, meta interface{}) err
 
 	}
 
-	if v, ok := d.GetOk("http2_options"); ok && !isIntfNil(v) {
-
-		sl := v.(*schema.Set).List()
-		http2Options := &ves_io_schema_cluster.Http2ProtocolOptions{}
-		updateSpec.Http2Options = http2Options
-		for _, set := range sl {
-			http2OptionsMapStrToI := set.(map[string]interface{})
-
-			if w, ok := http2OptionsMapStrToI["enabled"]; ok && !isIntfNil(w) {
-				http2Options.Enabled = w.(bool)
-			}
-
-		}
-
-	}
-
 	if v, ok := d.GetOk("http_idle_timeout"); ok && !isIntfNil(v) {
 
 		updateSpec.HttpIdleTimeout =
 			uint32(v.(int))
+
+	}
+
+	httpProtocolTypeTypeFound := false
+
+	if v, ok := d.GetOk("auto_http_config"); ok && !httpProtocolTypeTypeFound {
+
+		httpProtocolTypeTypeFound = true
+
+		if v.(bool) {
+			httpProtocolTypeInt := &ves_io_schema_cluster.ReplaceSpecType_AutoHttpConfig{}
+			httpProtocolTypeInt.AutoHttpConfig = &ves_io_schema.Empty{}
+			updateSpec.HttpProtocolType = httpProtocolTypeInt
+		}
+
+	}
+
+	if v, ok := d.GetOk("http1_config"); ok && !httpProtocolTypeTypeFound {
+
+		httpProtocolTypeTypeFound = true
+
+		if v.(bool) {
+			httpProtocolTypeInt := &ves_io_schema_cluster.ReplaceSpecType_Http1Config{}
+			httpProtocolTypeInt.Http1Config = &ves_io_schema.Empty{}
+			updateSpec.HttpProtocolType = httpProtocolTypeInt
+		}
+
+	}
+
+	if v, ok := d.GetOk("http2_options"); ok && !httpProtocolTypeTypeFound {
+
+		httpProtocolTypeTypeFound = true
+		httpProtocolTypeInt := &ves_io_schema_cluster.ReplaceSpecType_Http2Options{}
+		httpProtocolTypeInt.Http2Options = &ves_io_schema_cluster.Http2ProtocolOptions{}
+		updateSpec.HttpProtocolType = httpProtocolTypeInt
+
+		sl := v.(*schema.Set).List()
+		for _, set := range sl {
+			cs := set.(map[string]interface{})
+
+			if v, ok := cs["enabled"]; ok && !isIntfNil(v) {
+
+				httpProtocolTypeInt.Http2Options.Enabled = v.(bool)
+
+			}
+
+		}
 
 	}
 

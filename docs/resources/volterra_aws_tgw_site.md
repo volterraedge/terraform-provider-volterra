@@ -33,16 +33,16 @@ resource "volterra_aws_tgw_site" "example" {
 
       outside_subnet {
         // One of the arguments from this list "subnet_param existing_subnet_id" must be set
+        existing_subnet_id = "subnet-12345678901234567"
+      }
+
+      workload_subnet {
+        // One of the arguments from this list "subnet_param existing_subnet_id" must be set
 
         subnet_param {
           ipv4 = "10.1.2.0/24"
           ipv6 = "1234:568:abcd:9100::/64"
         }
-      }
-
-      workload_subnet {
-        // One of the arguments from this list "subnet_param existing_subnet_id" must be set
-        existing_subnet_id = "subnet-12345678901234567"
       }
     }
 
@@ -58,7 +58,7 @@ resource "volterra_aws_tgw_site" "example" {
     // One of the arguments from this list "disable_internet_vip enable_internet_vip" must be set
     disable_internet_vip = true
 
-    // One of the arguments from this list "vpc_id new_vpc" must be set
+    // One of the arguments from this list "new_vpc vpc_id" must be set
 
     new_vpc {
       allocate_ipv6 = true
@@ -72,21 +72,27 @@ resource "volterra_aws_tgw_site" "example" {
 
     // One of the arguments from this list "new_tgw existing_tgw" must be set
 
-    new_tgw {
-      // One of the arguments from this list "system_generated user_assigned" must be set
-      system_generated = true
+    existing_tgw {
+      tgw_asn           = "64500"
+      tgw_id            = "tgw-12345678901234567"
+      volterra_site_asn = "64501"
     }
     // One of the arguments from this list "nodes_per_az total_nodes no_worker_nodes" must be set
     nodes_per_az = "2"
   }
 
   // One of the arguments from this list "default_blocked_services blocked_services" must be set
-  default_blocked_services = true
 
+  blocked_services {
+    blocked_sevice {
+      // One of the arguments from this list "web_user_interface dns ssh" must be set
+      ssh          = true
+      network_type = "network_type"
+    }
+  }
   // One of the arguments from this list "direct_connect_disabled direct_connect_enabled" must be set
   direct_connect_disabled = true
-
-  // One of the arguments from this list "log_receiver logs_streaming_disabled" must be set
+  // One of the arguments from this list "logs_streaming_disabled log_receiver" must be set
   logs_streaming_disabled = true
 }
 
@@ -117,7 +123,7 @@ Argument Reference
 
 `blocked_services` - (Optional) Use custom blocked services configuration. See [Blocked Services ](#blocked-services) below for details.
 
-`default_blocked_services` - (Optional) Use default dehavior of allowing ports mentioned in blocked services (bool).
+`default_blocked_services` - (Optional) Use default behavior of allowing ports mentioned in blocked services (bool).
 
 `coordinates` - (Optional) Site longitude and latitude co-ordinates. See [Coordinates ](#coordinates) below for details.
 
@@ -179,6 +185,18 @@ Allowed VIP Port Configuration.
 
 `use_https_port` - (Optional) Only HTTPS Port (443) will be allowed. (bool).
 
+### Allowed Vip Port Sli
+
+Allowed VIP Port Configuration for Inside Network.
+
+`custom_ports` - (Optional) Custom list of ports to be allowed. See [Custom Ports ](#custom-ports) below for details.
+
+`use_http_https_port` - (Optional) HTTP Port (80) & HTTPS Port (443) will be allowed. (bool).
+
+`use_http_port` - (Optional) Only HTTP Port (80) will be allowed. (bool).
+
+`use_https_port` - (Optional) Only HTTPS Port (443) will be allowed. (bool).
+
 ### Assisted
 
 In assisted deployment get AWS parameters generated in status of this objects and run volterra provided terraform script..
@@ -211,7 +229,7 @@ Configure AWS TGW, services VPC and site nodes parameters..
 
 `disable_internet_vip` - (Optional) Do not create Internet VIP (bool).
 
-`enable_internet_vip` - (Optional) Enable Internet VIP.. See [Enable Internet Vip ](#enable-internet-vip) below for details.
+`enable_internet_vip` - (Optional) Enable Internet VIP. (bool).
 
 `new_vpc` - (Optional) Parameters for creating new VPC. See [New Vpc ](#new-vpc) below for details.
 
@@ -427,10 +445,6 @@ Enable Interception.
 
 Enable Internet VIP..
 
-`reserved_internet_nlb_subnet` - (Optional) Autogenerate Internet NLB and reserve a subnet from the Primary CIDR (bool).
-
-`subnet` - (Optional) Select Existing Subnet for Internet NLB Subnet or Create New. See [Subnet ](#subnet) below for details.
-
 ### Enable Offline Survivability Mode
 
 When this feature is enabled on an existing site, the pods/services on this site will be restarted..
@@ -470,6 +484,12 @@ List of global network connections.
 ### Hosted Vifs
 
 and automatically associate provided hosted VIF and also setup BGP Peering..
+
+`site_registration_over_direct_connect` - (Optional) Site Registration and Site to RE tunnels go over the AWS Direct Connect Connection. See [Site Registration Over Direct Connect ](#site-registration-over-direct-connect) below for details.
+
+`site_registration_over_internet` - (Optional) Site Registration and Site to RE tunnels go over the internet gateway (bool).
+
+`vif_list` - (Optional) List of Hosted VIF Config. See [Vif List ](#vif-list) below for details.
 
 `vifs` - (Optional) VIFs (`String`).
 
@@ -657,9 +677,19 @@ tenant - (Optional) then tenant will hold the referred object's(e.g. route's) te
 
 Autogenerate and reserve a subnet from the Primary CIDR.
 
-### Reserved Internet Nlb Subnet
+### Same As Site Region
 
-Autogenerate Internet NLB and reserve a subnet from the Primary CIDR.
+Use same region as that of the Site.
+
+### Site Registration Over Direct Connect
+
+Site Registration and Site to RE tunnels go over the AWS Direct Connect Connection.
+
+`cloudlink_network_name` - (Required) Cloud Link ADN Network Name for private access connectivity to F5XC ADN. (`String`).
+
+### Site Registration Over Internet
+
+Site Registration and Site to RE tunnels go over the internet gateway.
 
 ### Sli To Global Dr
 
@@ -696,14 +726,6 @@ List of Static routes.
 `custom_static_route` - (Optional) Use Custom static route to configure all advanced options. See [Custom Static Route ](#custom-static-route) below for details.
 
 `simple_static_route` - (Optional) Use simple static route for prefix pointing to single interface in the network (`String`).
-
-### Subnet
-
-Select Existing Subnet for Internet NLB Subnet or Create New.
-
-`existing_subnet_id` - (Optional) Information about existing subnet ID (`String`).
-
-`subnet_param` - (Optional) Parameters for creating new subnet. See [Subnet Param ](#subnet-param) below for details.
 
 ### Subnet Param
 
@@ -809,11 +831,23 @@ Vault Secret is used for the secrets managed by Hashicorp Vault.
 
 `version` - (Optional) If not provided latest version will be returned. (`Int`).
 
+### Vif List
+
+List of Hosted VIF Config.
+
+`vif_id` - (Required) AWS Direct Connect VIF ID that needs to be connected to the site (`String`).
+
+`other_region` - (Optional) Other Region (`String`).
+
+`same_as_site_region` - (Optional) Use same region as that of the Site (bool).
+
 ### Vn Config
 
 Virtual Network Configuration for transit gateway.
 
 `allowed_vip_port` - (Optional) Allowed VIP Port Configuration. See [Allowed Vip Port ](#allowed-vip-port) below for details.
+
+`allowed_vip_port_sli` - (Optional) Allowed VIP Port Configuration for Inside Network. See [Allowed Vip Port Sli ](#allowed-vip-port-sli) below for details.
 
 `dc_cluster_group_inside_vn` - (Optional) This site is member of dc cluster group connected via inside network. See [ref](#ref) below for details.
 

@@ -10,7 +10,6 @@ import (
 	"net/http"
 	"net/http/httputil"
 	"net/url"
-	"os"
 	"strings"
 	"time"
 
@@ -21,6 +20,7 @@ import (
 	"gopkg.volterra.us/stdlib/client/vesapi"
 	"gopkg.volterra.us/stdlib/errors"
 	"gopkg.volterra.us/stdlib/server"
+	tlsutil "gopkg.volterra.us/stdlib/util/tls"
 
 	ves_io_schema_combined "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/combined"
 )
@@ -201,15 +201,18 @@ func getclientOpts(c *Config) ([]vesapi.ConfigOpt, error) {
 		vesapi.WithCfgRPCTimeout(dur),
 	}
 
-	if c.apiP12File != "" {
-		if _, err := os.Stat(c.apiP12File); err != nil {
-			clOpts = append(clOpts, vesapi.WithCfgP12Bundle(c.apiP12File, c.apiP12Password))
-		}
-	}
-
 	if c.apiCert != "" && c.apiKey != "" {
 		clOpts = append(clOpts, vesapi.WithCfgCert(c.apiCert))
 		clOpts = append(clOpts, vesapi.WithCfgKey(c.apiKey))
+	}
+
+	if c.apiP12File != "" && c.apiP12Password != "" {
+		// build tlsCfg and provide otherwise client.Client will try to fetch using cert-mgr
+		tlsCfg, err := tlsutil.BuildClientTLSConfig(context.Background(), c.apiP12File, c.apiP12Password, "", "", "", "")
+		if err != nil {
+			return nil, errors.Wrapf(err, "Building TLS configuration, bundle %s", c.apiP12File)
+		}
+		clOpts = append(clOpts, vesapi.WithTLSCfg(tlsCfg))
 	}
 
 	if c.apiCACert != "" {

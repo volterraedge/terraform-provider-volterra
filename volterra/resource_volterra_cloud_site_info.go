@@ -63,6 +63,101 @@ func resourceVolterraSetCloudSiteInfo() *schema.Resource {
 					Type: schema.TypeString,
 				},
 			},
+			"vpc_id": {
+				Type:     schema.TypeString,
+				Optional: true,
+				Elem: &schema.Schema{
+					Type: schema.TypeString,
+				},
+			},
+			"subnet_ids": {
+				Type:     schema.TypeList,
+				Optional: true,
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+						"az": {
+							Type:       schema.TypeString,
+							Optional:   true,
+							Deprecated: "use new_attribute instead",
+						},
+						"outside_subnet_id": {
+							Optional:   true,
+							Type:       schema.TypeString,
+							Deprecated: "use new_attribute instead",
+						},
+						"inside_subnet_id": {
+							Type:       schema.TypeString,
+							Optional:   true,
+							Deprecated: "use new_attribute instead",
+						},
+						"workload_subnet_id": {
+							Type:       schema.TypeString,
+							Optional:   true,
+							Deprecated: "use new_attribute instead",
+						},
+						"outside_subnet": {
+							Type:     schema.TypeSet,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+									"az_name": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+									"id": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+									"ipv4_prefix": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+								},
+							},
+						},
+						"inside_subnet": {
+							Type:     schema.TypeSet,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+									"az_name": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+									"id": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+									"ipv4_prefix": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+								},
+							},
+						},
+						"workload_subnet": {
+							Type:     schema.TypeSet,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+									"az_name": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+									"id": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+									"ipv4_prefix": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+								},
+							},
+						},
+					},
+				},
+			},
 			"direct_connect_info": {
 				Type:     schema.TypeSet,
 				Optional: true,
@@ -174,13 +269,18 @@ func resourceVolterraSetCloudSiteInfoCreate(d *schema.ResourceData, meta interfa
 
 	switch siteType {
 	case "aws_vpc_site":
+		subnetIDs := getSubnetIDs(d)
 		req := &aws_vpc_site.SetCloudSiteInfoRequest{
 			Name:      name,
 			Namespace: systemNS,
 			AwsVpcInfo: &aws_vpc_site.AWSVPCSiteInfoType{
 				PublicIps:  publicIps,
 				PrivateIps: privateIps,
+				SubnetIds:  subnetIDs,
 			},
+		}
+		if v, ok := d.GetOk("vpc_id"); ok {
+			req.AwsVpcInfo.VpcId = v.(string)
 		}
 		if dcxInfo := getDirectConnectInfo(d); dcxInfo != nil {
 			req.DirectConnectInfo = dcxInfo

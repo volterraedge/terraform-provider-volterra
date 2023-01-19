@@ -1173,6 +1173,27 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 													},
 												},
 
+												"site_registration_over_express_route": {
+
+													Type:     schema.TypeSet,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"cloudlink_network_name": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+														},
+													},
+												},
+
+												"site_registration_over_internet": {
+
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
+
 												"gateway_subnet": {
 
 													Type:     schema.TypeSet,
@@ -2615,6 +2636,27 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 															},
 														},
 													},
+												},
+
+												"site_registration_over_express_route": {
+
+													Type:     schema.TypeSet,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"cloudlink_network_name": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+														},
+													},
+												},
+
+												"site_registration_over_internet": {
+
+													Type:     schema.TypeBool,
+													Optional: true,
 												},
 
 												"gateway_subnet": {
@@ -7314,6 +7356,41 @@ func resourceVolterraAzureVnetSiteCreate(d *schema.ResourceData, meta interface{
 
 							}
 
+							connectivityOptionsTypeFound := false
+
+							if v, ok := cs["site_registration_over_express_route"]; ok && !isIntfNil(v) && !connectivityOptionsTypeFound {
+
+								connectivityOptionsTypeFound = true
+								connectivityOptionsInt := &ves_io_schema_views_azure_vnet_site.ExpressRouteConfigType_SiteRegistrationOverExpressRoute{}
+								connectivityOptionsInt.SiteRegistrationOverExpressRoute = &ves_io_schema_views.CloudLinkADNType{}
+								expressRouteChoiceInt.ExpressRouteEnabled.ConnectivityOptions = connectivityOptionsInt
+
+								sl := v.(*schema.Set).List()
+								for _, set := range sl {
+									cs := set.(map[string]interface{})
+
+									if v, ok := cs["cloudlink_network_name"]; ok && !isIntfNil(v) {
+
+										connectivityOptionsInt.SiteRegistrationOverExpressRoute.CloudlinkNetworkName = v.(string)
+
+									}
+
+								}
+
+							}
+
+							if v, ok := cs["site_registration_over_internet"]; ok && !isIntfNil(v) && !connectivityOptionsTypeFound {
+
+								connectivityOptionsTypeFound = true
+
+								if v.(bool) {
+									connectivityOptionsInt := &ves_io_schema_views_azure_vnet_site.ExpressRouteConfigType_SiteRegistrationOverInternet{}
+									connectivityOptionsInt.SiteRegistrationOverInternet = &ves_io_schema.Empty{}
+									expressRouteChoiceInt.ExpressRouteEnabled.ConnectivityOptions = connectivityOptionsInt
+								}
+
+							}
+
 							if v, ok := cs["gateway_subnet"]; ok && !isIntfNil(v) {
 
 								sl := v.(*schema.Set).List()
@@ -9361,6 +9438,41 @@ func resourceVolterraAzureVnetSiteCreate(d *schema.ResourceData, meta interface{
 										connections[i].Weight = uint32(w.(int))
 									}
 
+								}
+
+							}
+
+							connectivityOptionsTypeFound := false
+
+							if v, ok := cs["site_registration_over_express_route"]; ok && !isIntfNil(v) && !connectivityOptionsTypeFound {
+
+								connectivityOptionsTypeFound = true
+								connectivityOptionsInt := &ves_io_schema_views_azure_vnet_site.ExpressRouteConfigType_SiteRegistrationOverExpressRoute{}
+								connectivityOptionsInt.SiteRegistrationOverExpressRoute = &ves_io_schema_views.CloudLinkADNType{}
+								expressRouteChoiceInt.ExpressRouteEnabled.ConnectivityOptions = connectivityOptionsInt
+
+								sl := v.(*schema.Set).List()
+								for _, set := range sl {
+									cs := set.(map[string]interface{})
+
+									if v, ok := cs["cloudlink_network_name"]; ok && !isIntfNil(v) {
+
+										connectivityOptionsInt.SiteRegistrationOverExpressRoute.CloudlinkNetworkName = v.(string)
+
+									}
+
+								}
+
+							}
+
+							if v, ok := cs["site_registration_over_internet"]; ok && !isIntfNil(v) && !connectivityOptionsTypeFound {
+
+								connectivityOptionsTypeFound = true
+
+								if v.(bool) {
+									connectivityOptionsInt := &ves_io_schema_views_azure_vnet_site.ExpressRouteConfigType_SiteRegistrationOverInternet{}
+									connectivityOptionsInt.SiteRegistrationOverInternet = &ves_io_schema.Empty{}
+									expressRouteChoiceInt.ExpressRouteEnabled.ConnectivityOptions = connectivityOptionsInt
 								}
 
 							}
@@ -15066,6 +15178,41 @@ func resourceVolterraAzureVnetSiteUpdate(d *schema.ResourceData, meta interface{
 
 							}
 
+							connectivityOptionsTypeFound := false
+
+							if v, ok := cs["site_registration_over_express_route"]; ok && !isIntfNil(v) && !connectivityOptionsTypeFound {
+
+								connectivityOptionsTypeFound = true
+								connectivityOptionsInt := &ves_io_schema_views_azure_vnet_site.ExpressRouteConfigType_SiteRegistrationOverExpressRoute{}
+								connectivityOptionsInt.SiteRegistrationOverExpressRoute = &ves_io_schema_views.CloudLinkADNType{}
+								expressRouteChoiceInt.ExpressRouteEnabled.ConnectivityOptions = connectivityOptionsInt
+
+								sl := v.(*schema.Set).List()
+								for _, set := range sl {
+									cs := set.(map[string]interface{})
+
+									if v, ok := cs["cloudlink_network_name"]; ok && !isIntfNil(v) {
+
+										connectivityOptionsInt.SiteRegistrationOverExpressRoute.CloudlinkNetworkName = v.(string)
+
+									}
+
+								}
+
+							}
+
+							if v, ok := cs["site_registration_over_internet"]; ok && !isIntfNil(v) && !connectivityOptionsTypeFound {
+
+								connectivityOptionsTypeFound = true
+
+								if v.(bool) {
+									connectivityOptionsInt := &ves_io_schema_views_azure_vnet_site.ExpressRouteConfigType_SiteRegistrationOverInternet{}
+									connectivityOptionsInt.SiteRegistrationOverInternet = &ves_io_schema.Empty{}
+									expressRouteChoiceInt.ExpressRouteEnabled.ConnectivityOptions = connectivityOptionsInt
+								}
+
+							}
+
 							if v, ok := cs["gateway_subnet"]; ok && !isIntfNil(v) {
 
 								sl := v.(*schema.Set).List()
@@ -17107,6 +17254,41 @@ func resourceVolterraAzureVnetSiteUpdate(d *schema.ResourceData, meta interface{
 										connections[i].Weight = uint32(w.(int))
 									}
 
+								}
+
+							}
+
+							connectivityOptionsTypeFound := false
+
+							if v, ok := cs["site_registration_over_express_route"]; ok && !isIntfNil(v) && !connectivityOptionsTypeFound {
+
+								connectivityOptionsTypeFound = true
+								connectivityOptionsInt := &ves_io_schema_views_azure_vnet_site.ExpressRouteConfigType_SiteRegistrationOverExpressRoute{}
+								connectivityOptionsInt.SiteRegistrationOverExpressRoute = &ves_io_schema_views.CloudLinkADNType{}
+								expressRouteChoiceInt.ExpressRouteEnabled.ConnectivityOptions = connectivityOptionsInt
+
+								sl := v.(*schema.Set).List()
+								for _, set := range sl {
+									cs := set.(map[string]interface{})
+
+									if v, ok := cs["cloudlink_network_name"]; ok && !isIntfNil(v) {
+
+										connectivityOptionsInt.SiteRegistrationOverExpressRoute.CloudlinkNetworkName = v.(string)
+
+									}
+
+								}
+
+							}
+
+							if v, ok := cs["site_registration_over_internet"]; ok && !isIntfNil(v) && !connectivityOptionsTypeFound {
+
+								connectivityOptionsTypeFound = true
+
+								if v.(bool) {
+									connectivityOptionsInt := &ves_io_schema_views_azure_vnet_site.ExpressRouteConfigType_SiteRegistrationOverInternet{}
+									connectivityOptionsInt.SiteRegistrationOverInternet = &ves_io_schema.Empty{}
+									expressRouteChoiceInt.ExpressRouteEnabled.ConnectivityOptions = connectivityOptionsInt
 								}
 
 							}

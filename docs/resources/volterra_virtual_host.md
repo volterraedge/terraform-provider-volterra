@@ -20,7 +20,7 @@ resource "volterra_virtual_host" "example" {
   name      = "acmecorp-web"
   namespace = "staging"
 
-  // One of the arguments from this list "captcha_challenge no_challenge js_challenge" must be set
+  // One of the arguments from this list "js_challenge captcha_challenge no_challenge" must be set
   no_challenge = true
 }
 
@@ -62,6 +62,10 @@ Argument Reference
 `no_challenge` - (Optional) No challenge is enabled for this virtual host (bool).
 
 `compression_params` - (Optional) Only GZIP compression is supported. See [Compression Params ](#compression-params) below for details.
+
+`connection_idle_timeout` - (Optional) This is specified in milliseconds. The default value is 2 minutes. (`Int`).
+
+`cookies_to_modify` - (Optional) List of cookies to be modified from the HTTP response being sent towards downstream.. See [Cookies To Modify ](#cookies-to-modify) below for details.
 
 `cors_policy` - (Optional) resources from a server at a different origin. See [Cors Policy ](#cors-policy) below for details.
 
@@ -130,6 +134,14 @@ Argument Reference
 `user_identification` - (Optional) The rules in the user_identification object are evaluated to determine the user identifier to be rate limited.. See [ref](#ref) below for details.
 
 `waf_type` - (Optional) Enable/Disable individual WAF security rules. See [Waf Type ](#waf-type) below for details.
+
+### Add Httponly
+
+Add httponly attribute.
+
+### Add Secure
+
+Add secure attribute.
 
 ### Additional Domains
 
@@ -277,6 +289,32 @@ Configure all Cookie params.
 
 `session_expiry` - (Optional) Default session expiry is 86400 seconds(24 hours). (`Int`).
 
+### Cookies To Modify
+
+List of cookies to be modified from the HTTP response being sent towards downstream..
+
+`add_httponly` - (Optional) Add httponly attribute (bool).
+
+`ignore_httponly` - (Optional) Ignore httponly attribute (bool).
+
+`ignore_max_age` - (Optional) Ignore max age attribute (bool).
+
+`max_age_value` - (Optional) Add max age attribute (`Int`).
+
+`name` - (Required) Name of the Cookie (`String`).
+
+`ignore_samesite` - (Optional) Ignore Samesite attribute (bool).
+
+`samesite_lax` - (Optional) Add Samesite attribute with Lax. Means that the cookie is not sent on cross-site requests (bool).
+
+`samesite_none` - (Optional) Add Samesite attribute with None. Means that the browser sends the cookie with both cross-site and same-site requests (bool).
+
+`samesite_strict` - (Optional) Add Samesite attribute with Strict. Means that the browser sends the cookie only for same-site requests (bool).
+
+`add_secure` - (Optional) Add secure attribute (bool).
+
+`ignore_secure` - (Optional) Ignore secure attribute (bool).
+
 ### Cors Policy
 
 resources from a server at a different origin.
@@ -378,6 +416,22 @@ Header transformation options for response headers to the client.
 `default_header_transformation` - (Optional) Normalize the headers to lower case (bool).
 
 `proper_case_header_transformation` - (Optional) For example, “content-type” becomes “Content-Type”, and “foo$b#$are” becomes “Foo$B#$Are” (bool).
+
+### Ignore Httponly
+
+Ignore httponly attribute.
+
+### Ignore Max Age
+
+Ignore max age attribute.
+
+### Ignore Samesite
+
+Ignore Samesite attribute.
+
+### Ignore Secure
+
+Ignore secure attribute.
 
 ### Js Challenge
 
@@ -484,6 +538,18 @@ Indicates that the virtual_host has a retry policy..
 `retry_condition` - (Optional) matching one defined in retriable_status_codes field (`String`).
 
 `retry_on` - (Optional) matching one defined in retriable_status_codes field (`String`).
+
+### Samesite Lax
+
+Add Samesite attribute with Lax. Means that the cookie is not sent on cross-site requests.
+
+### Samesite None
+
+Add Samesite attribute with None. Means that the browser sends the cookie with both cross-site and same-site requests.
+
+### Samesite Strict
+
+Add Samesite attribute with Strict. Means that the browser sends the cookie only for same-site requests.
 
 ### Sec Key
 

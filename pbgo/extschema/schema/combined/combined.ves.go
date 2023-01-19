@@ -17113,8 +17113,6 @@ func init() {
 		"spec.tls_parameters.crl.#",
 	}
 
-	MDR.RPCConfidentialRequestRegistry["ves.io.schema.advertise_policy.API.Create"] = "ves.io.schema.advertise_policy.CreateRequest"
-
 	MDR.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.advertise_policy.API.Get"] = []string{
 		"object",
 	}
@@ -17140,8 +17138,6 @@ func init() {
 		"spec.tls_parameters.crl.#",
 	}
 
-	MDR.RPCConfidentialRequestRegistry["ves.io.schema.advertise_policy.API.Replace"] = "ves.io.schema.advertise_policy.ReplaceRequest"
-
 	MDR.RPCOneofDefaultChoiceFieldsRegistry["ves.io.schema.advertise_policy.crudapi.API.Create"] = []svcfw.OneofDefaultChoiceField{
 		{
 			FieldPath: "ves.io.schema.advertise_policy.crudapi.ObjectCreateReq.spec.gc_spec.where.ref_or_selector.site.internet_vip_choice.disable_internet_vip",
@@ -17153,8 +17149,6 @@ func init() {
 		},
 	}
 
-	MDR.RPCConfidentialRequestRegistry["ves.io.schema.advertise_policy.crudapi.API.Create"] = "ves.io.schema.advertise_policy.crudapi.ObjectCreateReq"
-
 	MDR.RPCOneofDefaultChoiceFieldsRegistry["ves.io.schema.advertise_policy.crudapi.API.Replace"] = []svcfw.OneofDefaultChoiceField{
 		{
 			FieldPath: "ves.io.schema.advertise_policy.crudapi.ObjectReplaceReq.spec.gc_spec.where.ref_or_selector.site.internet_vip_choice.disable_internet_vip",
@@ -17165,8 +17159,6 @@ func init() {
 			GoType:    reflect.TypeOf(ves_io_schema.VSiteRefType_DisableInternetVip{}),
 		},
 	}
-
-	MDR.RPCConfidentialRequestRegistry["ves.io.schema.advertise_policy.crudapi.API.Replace"] = "ves.io.schema.advertise_policy.crudapi.ObjectReplaceReq"
 
 	MDR.RPCOneofDefaultChoiceFieldsRegistry["ves.io.schema.alert_policy.API.Create"] = []svcfw.OneofDefaultChoiceField{
 		{
@@ -17247,8 +17239,6 @@ func init() {
 		"spec.slack.url.wingman_secret_info",
 	}
 
-	MDR.RPCConfidentialRequestRegistry["ves.io.schema.alert_receiver.API.Create"] = "ves.io.schema.alert_receiver.CreateRequest"
-
 	MDR.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.alert_receiver.API.Get"] = []string{
 		"object",
 	}
@@ -17267,16 +17257,6 @@ func init() {
 		"spec.slack.url.vault_secret_info",
 		"spec.slack.url.wingman_secret_info",
 	}
-
-	MDR.RPCConfidentialRequestRegistry["ves.io.schema.alert_receiver.API.Replace"] = "ves.io.schema.alert_receiver.ReplaceRequest"
-
-	MDR.RPCConfidentialRequestRegistry["ves.io.schema.alert_receiver.crudapi.API.Create"] = "ves.io.schema.alert_receiver.crudapi.ObjectCreateReq"
-
-	MDR.RPCConfidentialRequestRegistry["ves.io.schema.alert_receiver.crudapi.API.Replace"] = "ves.io.schema.alert_receiver.crudapi.ObjectReplaceReq"
-
-	MDR.RPCConfidentialRequestRegistry["ves.io.schema.api_credential.CustomAPI.Create"] = "ves.io.schema.api_credential.CreateRequest"
-
-	MDR.RPCConfidentialRequestRegistry["ves.io.schema.api_credential.CustomAPI.CreateServiceCredentials"] = "ves.io.schema.api_credential.CreateServiceCredentialsRequest"
 
 	MDR.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.api_group_element.API.Get"] = []string{
 		"object",
@@ -17591,8 +17571,6 @@ func init() {
 		"spec.oidc_auth.client_secret.wingman_secret_info",
 	}
 
-	MDR.RPCConfidentialRequestRegistry["ves.io.schema.authentication.API.Create"] = "ves.io.schema.authentication.CreateRequest"
-
 	MDR.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.authentication.API.Get"] = []string{
 		"object",
 	}
@@ -17611,12 +17589,6 @@ func init() {
 		"spec.oidc_auth.client_secret.vault_secret_info",
 		"spec.oidc_auth.client_secret.wingman_secret_info",
 	}
-
-	MDR.RPCConfidentialRequestRegistry["ves.io.schema.authentication.API.Replace"] = "ves.io.schema.authentication.ReplaceRequest"
-
-	MDR.RPCConfidentialRequestRegistry["ves.io.schema.authentication.crudapi.API.Create"] = "ves.io.schema.authentication.crudapi.ObjectCreateReq"
-
-	MDR.RPCConfidentialRequestRegistry["ves.io.schema.authentication.crudapi.API.Replace"] = "ves.io.schema.authentication.crudapi.ObjectReplaceReq"
 
 	MDR.RPCOneofDefaultChoiceFieldsRegistry["ves.io.schema.bgp.API.Create"] = []svcfw.OneofDefaultChoiceField{
 		{
@@ -17829,8 +17801,6 @@ func init() {
 		"spec.gcp_cred_file.credential_file.wingman_secret_info",
 	}
 
-	MDR.RPCConfidentialRequestRegistry["ves.io.schema.cloud_credentials.API.Create"] = "ves.io.schema.cloud_credentials.CreateRequest"
-
 	MDR.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.cloud_credentials.API.Get"] = []string{
 		"object",
 	}
@@ -17854,12 +17824,6 @@ func init() {
 		"spec.gcp_cred_file.credential_file.wingman_secret_info",
 	}
 
-	MDR.RPCConfidentialRequestRegistry["ves.io.schema.cloud_credentials.API.Replace"] = "ves.io.schema.cloud_credentials.ReplaceRequest"
-
-	MDR.RPCConfidentialRequestRegistry["ves.io.schema.cloud_credentials.crudapi.API.Create"] = "ves.io.schema.cloud_credentials.crudapi.ObjectCreateReq"
-
-	MDR.RPCConfidentialRequestRegistry["ves.io.schema.cloud_credentials.crudapi.API.Replace"] = "ves.io.schema.cloud_credentials.crudapi.ObjectReplaceReq"
-
 	MDR.RPCOneofDefaultChoiceFieldsRegistry["ves.io.schema.cluster.API.Create"] = []svcfw.OneofDefaultChoiceField{
 		{
 			FieldPath: "ves.io.schema.cluster.CreateRequest.spec.header_transformation_type.header_transformation_choice.default_header_transformation",
@@ -17875,8 +17839,6 @@ func init() {
 		"spec.tls_parameters.common_params.trusted_ca_url",
 		"spec.tls_parameters.common_params.validation_params.use_volterra_trusted_ca_url",
 	}
-
-	MDR.RPCConfidentialRequestRegistry["ves.io.schema.cluster.API.Create"] = "ves.io.schema.cluster.CreateRequest"
 
 	MDR.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.cluster.API.Get"] = []string{
 		"object",
@@ -17898,8 +17860,6 @@ func init() {
 		"spec.tls_parameters.common_params.validation_params.use_volterra_trusted_ca_url",
 	}
 
-	MDR.RPCConfidentialRequestRegistry["ves.io.schema.cluster.API.Replace"] = "ves.io.schema.cluster.ReplaceRequest"
-
 	MDR.RPCOneofDefaultChoiceFieldsRegistry["ves.io.schema.cluster.crudapi.API.Create"] = []svcfw.OneofDefaultChoiceField{
 		{
 			FieldPath: "ves.io.schema.cluster.crudapi.ObjectCreateReq.spec.gc_spec.header_transformation_type.header_transformation_choice.default_header_transformation",
@@ -17907,16 +17867,12 @@ func init() {
 		},
 	}
 
-	MDR.RPCConfidentialRequestRegistry["ves.io.schema.cluster.crudapi.API.Create"] = "ves.io.schema.cluster.crudapi.ObjectCreateReq"
-
 	MDR.RPCOneofDefaultChoiceFieldsRegistry["ves.io.schema.cluster.crudapi.API.Replace"] = []svcfw.OneofDefaultChoiceField{
 		{
 			FieldPath: "ves.io.schema.cluster.crudapi.ObjectReplaceReq.spec.gc_spec.header_transformation_type.header_transformation_choice.default_header_transformation",
 			GoType:    reflect.TypeOf(ves_io_schema.HeaderTransformationType_DefaultHeaderTransformation{}),
 		},
 	}
-
-	MDR.RPCConfidentialRequestRegistry["ves.io.schema.cluster.crudapi.API.Replace"] = "ves.io.schema.cluster.crudapi.ObjectReplaceReq"
 
 	MDR.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.contact.API.Get"] = []string{
 		"object",
@@ -17929,8 +17885,6 @@ func init() {
 		"spec.password.wingman_secret_info",
 	}
 
-	MDR.RPCConfidentialRequestRegistry["ves.io.schema.container_registry.API.Create"] = "ves.io.schema.container_registry.CreateRequest"
-
 	MDR.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.container_registry.API.Get"] = []string{
 		"object",
 	}
@@ -17941,12 +17895,6 @@ func init() {
 		"spec.password.vault_secret_info",
 		"spec.password.wingman_secret_info",
 	}
-
-	MDR.RPCConfidentialRequestRegistry["ves.io.schema.container_registry.API.Replace"] = "ves.io.schema.container_registry.ReplaceRequest"
-
-	MDR.RPCConfidentialRequestRegistry["ves.io.schema.container_registry.crudapi.API.Create"] = "ves.io.schema.container_registry.crudapi.ObjectCreateReq"
-
-	MDR.RPCConfidentialRequestRegistry["ves.io.schema.container_registry.crudapi.API.Replace"] = "ves.io.schema.container_registry.crudapi.ObjectReplaceReq"
 
 	MDR.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.dc_cluster_group.API.Get"] = []string{
 		"object",
@@ -18004,8 +17952,6 @@ func init() {
 		"spec.discovery_k8s.access_info.kubeconfig_url.wingman_secret_info",
 	}
 
-	MDR.RPCConfidentialRequestRegistry["ves.io.schema.discovery.API.Create"] = "ves.io.schema.discovery.CreateRequest"
-
 	MDR.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.discovery.API.Get"] = []string{
 		"object",
 	}
@@ -18062,8 +18008,6 @@ func init() {
 		"spec.discovery_k8s.access_info.kubeconfig_url.wingman_secret_info",
 	}
 
-	MDR.RPCConfidentialRequestRegistry["ves.io.schema.discovery.API.Replace"] = "ves.io.schema.discovery.ReplaceRequest"
-
 	MDR.RPCOneofDefaultChoiceFieldsRegistry["ves.io.schema.discovery.crudapi.API.Create"] = []svcfw.OneofDefaultChoiceField{
 		{
 			FieldPath: "ves.io.schema.discovery.crudapi.ObjectCreateReq.spec.gc_spec.access_info.k8s.k8s_pod_network_choice.isolated",
@@ -18095,8 +18039,6 @@ func init() {
 		},
 	}
 
-	MDR.RPCConfidentialRequestRegistry["ves.io.schema.discovery.crudapi.API.Create"] = "ves.io.schema.discovery.crudapi.ObjectCreateReq"
-
 	MDR.RPCOneofDefaultChoiceFieldsRegistry["ves.io.schema.discovery.crudapi.API.Replace"] = []svcfw.OneofDefaultChoiceField{
 		{
 			FieldPath: "ves.io.schema.discovery.crudapi.ObjectReplaceReq.spec.gc_spec.access_info.k8s.k8s_pod_network_choice.isolated",
@@ -18127,8 +18069,6 @@ func init() {
 			GoType:    reflect.TypeOf(ves_io_schema.VSiteRefType_DisableInternetVip{}),
 		},
 	}
-
-	MDR.RPCConfidentialRequestRegistry["ves.io.schema.discovery.crudapi.API.Replace"] = "ves.io.schema.discovery.crudapi.ObjectReplaceReq"
 
 	MDR.RPCOneofDefaultChoiceFieldsRegistry["ves.io.schema.dns_domain.API.Create"] = []svcfw.OneofDefaultChoiceField{
 		{
@@ -18265,8 +18205,6 @@ func init() {
 		"spec.secondary.tsig_key_value.wingman_secret_info",
 	}
 
-	MDR.RPCConfidentialRequestRegistry["ves.io.schema.dns_zone.API.Create"] = "ves.io.schema.dns_zone.CreateRequest"
-
 	MDR.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.dns_zone.API.Get"] = []string{
 		"object",
 	}
@@ -18288,16 +18226,12 @@ func init() {
 		"spec.secondary.tsig_key_value.wingman_secret_info",
 	}
 
-	MDR.RPCConfidentialRequestRegistry["ves.io.schema.dns_zone.API.Replace"] = "ves.io.schema.dns_zone.ReplaceRequest"
-
 	MDR.RPCHiddenInternalFieldsRegistry["ves.io.schema.dns_zone.CustomAPI.ImportAXFR"] = []string{
 		"tsig_key_value.blindfold_secret_info_internal",
 		"tsig_key_value.secret_encoding_type",
 		"tsig_key_value.vault_secret_info",
 		"tsig_key_value.wingman_secret_info",
 	}
-
-	MDR.RPCConfidentialRequestRegistry["ves.io.schema.dns_zone.CustomAPI.ImportAXFR"] = "ves.io.schema.dns_zone.ImportAXFRRequest"
 
 	MDR.RPCOneofDefaultChoiceFieldsRegistry["ves.io.schema.dns_zone.crudapi.API.Create"] = []svcfw.OneofDefaultChoiceField{
 		{
@@ -18310,8 +18244,6 @@ func init() {
 		},
 	}
 
-	MDR.RPCConfidentialRequestRegistry["ves.io.schema.dns_zone.crudapi.API.Create"] = "ves.io.schema.dns_zone.crudapi.ObjectCreateReq"
-
 	MDR.RPCOneofDefaultChoiceFieldsRegistry["ves.io.schema.dns_zone.crudapi.API.Replace"] = []svcfw.OneofDefaultChoiceField{
 		{
 			FieldPath: "ves.io.schema.dns_zone.crudapi.ObjectReplaceReq.spec.gc_spec.dns_type.primary.dnssec_mode.mode.disable",
@@ -18322,8 +18254,6 @@ func init() {
 			GoType:    reflect.TypeOf(ves_io_schema_dns_zone.PrimaryDNSConfig_DefaultSoaParameters{}),
 		},
 	}
-
-	MDR.RPCConfidentialRequestRegistry["ves.io.schema.dns_zone.crudapi.API.Replace"] = "ves.io.schema.dns_zone.crudapi.ObjectReplaceReq"
 
 	MDR.RPCOneofDefaultChoiceFieldsRegistry["ves.io.schema.endpoint.API.Create"] = []svcfw.OneofDefaultChoiceField{
 		{
@@ -18559,8 +18489,6 @@ func init() {
 		"spec.storage_device_list.storage_devices.#.pure_service_orchestrator.arrays.flash_blade.flash_blades.#.api_token.wingman_secret_info",
 	}
 
-	MDR.RPCConfidentialRequestRegistry["ves.io.schema.fleet.API.Create"] = "ves.io.schema.fleet.CreateRequest"
-
 	MDR.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.fleet.API.Get"] = []string{
 		"object",
 	}
@@ -18659,8 +18587,6 @@ func init() {
 		"spec.storage_device_list.storage_devices.#.pure_service_orchestrator.arrays.flash_blade.flash_blades.#.api_token.wingman_secret_info",
 	}
 
-	MDR.RPCConfidentialRequestRegistry["ves.io.schema.fleet.API.Replace"] = "ves.io.schema.fleet.ReplaceRequest"
-
 	MDR.RPCOneofDefaultChoiceFieldsRegistry["ves.io.schema.fleet.crudapi.API.Create"] = []svcfw.OneofDefaultChoiceField{
 		{
 			FieldPath: "ves.io.schema.fleet.crudapi.ObjectCreateReq.spec.gc_spec.bond_choice.no_bond_devices",
@@ -18752,8 +18678,6 @@ func init() {
 		},
 	}
 
-	MDR.RPCConfidentialRequestRegistry["ves.io.schema.fleet.crudapi.API.Create"] = "ves.io.schema.fleet.crudapi.ObjectCreateReq"
-
 	MDR.RPCOneofDefaultChoiceFieldsRegistry["ves.io.schema.fleet.crudapi.API.Replace"] = []svcfw.OneofDefaultChoiceField{
 		{
 			FieldPath: "ves.io.schema.fleet.crudapi.ObjectReplaceReq.spec.gc_spec.bond_choice.no_bond_devices",
@@ -18844,8 +18768,6 @@ func init() {
 			GoType:    reflect.TypeOf(ves_io_schema_fleet.GlobalSpecType_DenyAllUsb{}),
 		},
 	}
-
-	MDR.RPCConfidentialRequestRegistry["ves.io.schema.fleet.crudapi.API.Replace"] = "ves.io.schema.fleet.crudapi.ObjectReplaceReq"
 
 	MDR.RPCOneofDefaultChoiceFieldsRegistry["ves.io.schema.global_log_receiver.API.Create"] = []svcfw.OneofDefaultChoiceField{
 		{
@@ -18976,8 +18898,6 @@ func init() {
 		"spec.splunk_receiver.use_tls.mtls_enable.key_url.vault_secret_info",
 		"spec.splunk_receiver.use_tls.mtls_enable.key_url.wingman_secret_info",
 	}
-
-	MDR.RPCConfidentialRequestRegistry["ves.io.schema.global_log_receiver.API.Create"] = "ves.io.schema.global_log_receiver.CreateRequest"
 
 	MDR.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.global_log_receiver.API.Get"] = []string{
 		"object",
@@ -19113,8 +19033,6 @@ func init() {
 		"spec.splunk_receiver.use_tls.mtls_enable.key_url.wingman_secret_info",
 	}
 
-	MDR.RPCConfidentialRequestRegistry["ves.io.schema.global_log_receiver.API.Replace"] = "ves.io.schema.global_log_receiver.ReplaceRequest"
-
 	MDR.RPCOneofDefaultChoiceFieldsRegistry["ves.io.schema.global_log_receiver.crudapi.API.Create"] = []svcfw.OneofDefaultChoiceField{
 		{
 			FieldPath: "ves.io.schema.global_log_receiver.crudapi.ObjectCreateReq.spec.gc_spec.filter_choice.ns_current",
@@ -19194,8 +19112,6 @@ func init() {
 		},
 	}
 
-	MDR.RPCConfidentialRequestRegistry["ves.io.schema.global_log_receiver.crudapi.API.Create"] = "ves.io.schema.global_log_receiver.crudapi.ObjectCreateReq"
-
 	MDR.RPCOneofDefaultChoiceFieldsRegistry["ves.io.schema.global_log_receiver.crudapi.API.Replace"] = []svcfw.OneofDefaultChoiceField{
 		{
 			FieldPath: "ves.io.schema.global_log_receiver.crudapi.ObjectReplaceReq.spec.gc_spec.filter_choice.ns_current",
@@ -19274,8 +19190,6 @@ func init() {
 			GoType:    reflect.TypeOf(ves_io_schema_global_log_receiver.TLSConfigType_MtlsDisabled{}),
 		},
 	}
-
-	MDR.RPCConfidentialRequestRegistry["ves.io.schema.global_log_receiver.crudapi.API.Replace"] = "ves.io.schema.global_log_receiver.crudapi.ObjectReplaceReq"
 
 	MDR.RPCOneofDefaultChoiceFieldsRegistry["ves.io.schema.healthcheck.API.Create"] = []svcfw.OneofDefaultChoiceField{
 		{
@@ -19367,8 +19281,6 @@ func init() {
 		"spec.cluster_wide_app_list.cluster_wide_apps.#.prometheus.generated_yaml",
 	}
 
-	MDR.RPCConfidentialRequestRegistry["ves.io.schema.k8s_cluster.API.Create"] = "ves.io.schema.k8s_cluster.CreateRequest"
-
 	MDR.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.k8s_cluster.API.Get"] = []string{
 		"object",
 	}
@@ -19427,8 +19339,6 @@ func init() {
 		"spec.cluster_wide_app_list.cluster_wide_apps.#.prometheus.generated_yaml",
 	}
 
-	MDR.RPCConfidentialRequestRegistry["ves.io.schema.k8s_cluster.API.Replace"] = "ves.io.schema.k8s_cluster.ReplaceRequest"
-
 	MDR.RPCOneofDefaultChoiceFieldsRegistry["ves.io.schema.k8s_cluster.crudapi.API.Create"] = []svcfw.OneofDefaultChoiceField{
 		{
 			FieldPath: "ves.io.schema.k8s_cluster.crudapi.ObjectCreateReq.spec.gc_spec.apps_choice.cluster_wide_app_list.cluster_wide_apps.app_choice.argo_cd.local_domain.port_choice.default_port",
@@ -19472,8 +19382,6 @@ func init() {
 		},
 	}
 
-	MDR.RPCConfidentialRequestRegistry["ves.io.schema.k8s_cluster.crudapi.API.Create"] = "ves.io.schema.k8s_cluster.crudapi.ObjectCreateReq"
-
 	MDR.RPCOneofDefaultChoiceFieldsRegistry["ves.io.schema.k8s_cluster.crudapi.API.Replace"] = []svcfw.OneofDefaultChoiceField{
 		{
 			FieldPath: "ves.io.schema.k8s_cluster.crudapi.ObjectReplaceReq.spec.gc_spec.apps_choice.cluster_wide_app_list.cluster_wide_apps.app_choice.argo_cd.local_domain.port_choice.default_port",
@@ -19516,8 +19424,6 @@ func init() {
 			GoType:    reflect.TypeOf(ves_io_schema_k8s_cluster.GlobalSpecType_UseDefaultPsp{}),
 		},
 	}
-
-	MDR.RPCConfidentialRequestRegistry["ves.io.schema.k8s_cluster.crudapi.API.Replace"] = "ves.io.schema.k8s_cluster.crudapi.ObjectReplaceReq"
 
 	MDR.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.k8s_cluster_role.API.Get"] = []string{
 		"object",
@@ -19753,8 +19659,6 @@ func init() {
 		"spec.syslog.tls_server.mtls_enable.key_url.wingman_secret_info",
 	}
 
-	MDR.RPCConfidentialRequestRegistry["ves.io.schema.log_receiver.API.Create"] = "ves.io.schema.log_receiver.CreateRequest"
-
 	MDR.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.log_receiver.API.Get"] = []string{
 		"object",
 	}
@@ -19825,8 +19729,6 @@ func init() {
 		"spec.syslog.tls_server.mtls_enable.key_url.wingman_secret_info",
 	}
 
-	MDR.RPCConfidentialRequestRegistry["ves.io.schema.log_receiver.API.Replace"] = "ves.io.schema.log_receiver.ReplaceRequest"
-
 	MDR.RPCOneofDefaultChoiceFieldsRegistry["ves.io.schema.log_receiver.crudapi.API.Create"] = []svcfw.OneofDefaultChoiceField{
 		{
 			FieldPath: "ves.io.schema.log_receiver.crudapi.ObjectCreateReq.spec.gc_spec.log_receiver_choice.data_dog.ca_choice.volterra_ca",
@@ -19874,8 +19776,6 @@ func init() {
 		},
 	}
 
-	MDR.RPCConfidentialRequestRegistry["ves.io.schema.log_receiver.crudapi.API.Create"] = "ves.io.schema.log_receiver.crudapi.ObjectCreateReq"
-
 	MDR.RPCOneofDefaultChoiceFieldsRegistry["ves.io.schema.log_receiver.crudapi.API.Replace"] = []svcfw.OneofDefaultChoiceField{
 		{
 			FieldPath: "ves.io.schema.log_receiver.crudapi.ObjectReplaceReq.spec.gc_spec.log_receiver_choice.data_dog.ca_choice.volterra_ca",
@@ -19922,8 +19822,6 @@ func init() {
 			GoType:    reflect.TypeOf(ves_io_schema_log_receiver.GlobalSpecType_SiteLocal{}),
 		},
 	}
-
-	MDR.RPCConfidentialRequestRegistry["ves.io.schema.log_receiver.crudapi.API.Replace"] = "ves.io.schema.log_receiver.crudapi.ObjectReplaceReq"
 
 	MDR.RPCOneofDefaultChoiceFieldsRegistry["ves.io.schema.malicious_user_mitigation.API.Create"] = []svcfw.OneofDefaultChoiceField{
 		{
@@ -19987,10 +19885,6 @@ func init() {
 		"object",
 	}
 
-	MDR.RPCConfidentialRequestRegistry["ves.io.schema.namespace.crudapi.API.Create"] = "ves.io.schema.namespace.crudapi.ObjectCreateReq"
-
-	MDR.RPCConfidentialRequestRegistry["ves.io.schema.namespace.crudapi.API.Replace"] = "ves.io.schema.namespace.crudapi.ObjectReplaceReq"
-
 	MDR.RPCOneofDefaultChoiceFieldsRegistry["ves.io.schema.network_connector.API.Create"] = []svcfw.OneofDefaultChoiceField{
 		{
 			FieldPath: "ves.io.schema.network_connector.CreateRequest.spec.connector_choice.sli_to_global_snat.snat_config.pool_choice.interface_ip",
@@ -20046,8 +19940,6 @@ func init() {
 		"spec.sli_to_slo_snat.snat_pool_allocator",
 		"spec.slo_to_global_snat",
 	}
-
-	MDR.RPCConfidentialRequestRegistry["ves.io.schema.network_connector.API.Create"] = "ves.io.schema.network_connector.CreateRequest"
 
 	MDR.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.network_connector.API.Get"] = []string{
 		"object",
@@ -20109,8 +20001,6 @@ func init() {
 		"spec.slo_to_global_snat",
 	}
 
-	MDR.RPCConfidentialRequestRegistry["ves.io.schema.network_connector.API.Replace"] = "ves.io.schema.network_connector.ReplaceRequest"
-
 	MDR.RPCOneofDefaultChoiceFieldsRegistry["ves.io.schema.network_connector.crudapi.API.Create"] = []svcfw.OneofDefaultChoiceField{
 		{
 			FieldPath: "ves.io.schema.network_connector.crudapi.ObjectCreateReq.spec.gc_spec.forward_proxy.tls_interception_choice.tls_intercept.interception_policy_choice.enable_for_all_domains",
@@ -20126,8 +20016,6 @@ func init() {
 		},
 	}
 
-	MDR.RPCConfidentialRequestRegistry["ves.io.schema.network_connector.crudapi.API.Create"] = "ves.io.schema.network_connector.crudapi.ObjectCreateReq"
-
 	MDR.RPCOneofDefaultChoiceFieldsRegistry["ves.io.schema.network_connector.crudapi.API.Replace"] = []svcfw.OneofDefaultChoiceField{
 		{
 			FieldPath: "ves.io.schema.network_connector.crudapi.ObjectReplaceReq.spec.gc_spec.forward_proxy.tls_interception_choice.tls_intercept.interception_policy_choice.enable_for_all_domains",
@@ -20142,8 +20030,6 @@ func init() {
 			GoType:    reflect.TypeOf(ves_io_schema.TlsInterceptionType_VolterraTrustedCa{}),
 		},
 	}
-
-	MDR.RPCConfidentialRequestRegistry["ves.io.schema.network_connector.crudapi.API.Replace"] = "ves.io.schema.network_connector.crudapi.ObjectReplaceReq"
 
 	MDR.RPCOneofDefaultChoiceFieldsRegistry["ves.io.schema.network_firewall.API.Create"] = []svcfw.OneofDefaultChoiceField{
 		{
@@ -20579,8 +20465,6 @@ func init() {
 		"spec.routes.#.waf_type.waf_rules",
 	}
 
-	MDR.RPCConfidentialRequestRegistry["ves.io.schema.route.API.Create"] = "ves.io.schema.route.CreateRequest"
-
 	MDR.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.route.API.Get"] = []string{
 		"object",
 	}
@@ -20607,12 +20491,6 @@ func init() {
 		"spec.routes.#.waf_type.waf",
 		"spec.routes.#.waf_type.waf_rules",
 	}
-
-	MDR.RPCConfidentialRequestRegistry["ves.io.schema.route.API.Replace"] = "ves.io.schema.route.ReplaceRequest"
-
-	MDR.RPCConfidentialRequestRegistry["ves.io.schema.route.crudapi.API.Create"] = "ves.io.schema.route.crudapi.ObjectCreateReq"
-
-	MDR.RPCConfidentialRequestRegistry["ves.io.schema.route.crudapi.API.Replace"] = "ves.io.schema.route.crudapi.ObjectReplaceReq"
 
 	MDR.RPCHiddenInternalFieldsRegistry["ves.io.schema.secret_policy.API.Create"] = []string{
 		"spec.algo",
@@ -21748,18 +21626,6 @@ func init() {
 		"object",
 	}
 
-	MDR.RPCConfidentialRequestRegistry["ves.io.schema.stored_object.CustomPrivateAPI.CreateObject"] = "ves.io.schema.stored_object.CreateObjectRequest"
-
-	MDR.RPCConfidentialRequestRegistry["ves.io.schema.stored_object.CustomAPI.CreateObject"] = "ves.io.schema.stored_object.CreateObjectRequest"
-
-	MDR.RPCConfidentialRequestRegistry["ves.io.schema.tenant.CustomAPI.SetBillingInfo"] = "ves.io.schema.tenant.SetBillingInfoRequest"
-
-	MDR.RPCConfidentialRequestRegistry["ves.io.schema.tenant.CustomAPI.UpdateImage"] = "ves.io.schema.tenant.UpdateImageRequest"
-
-	MDR.RPCConfidentialRequestRegistry["ves.io.schema.tenant.crudapi.API.Create"] = "ves.io.schema.tenant.crudapi.ObjectCreateReq"
-
-	MDR.RPCConfidentialRequestRegistry["ves.io.schema.tenant.crudapi.API.Replace"] = "ves.io.schema.tenant.crudapi.ObjectReplaceReq"
-
 	MDR.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.tenant_management.allowed_tenant.API.Get"] = []string{
 		"object",
 	}
@@ -21800,8 +21666,6 @@ func init() {
 		"spec.params.ipsec.ipsec_psk.wingman_secret_info",
 	}
 
-	MDR.RPCConfidentialRequestRegistry["ves.io.schema.tunnel.API.Create"] = "ves.io.schema.tunnel.CreateRequest"
-
 	MDR.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.tunnel.API.Get"] = []string{
 		"object",
 	}
@@ -21813,16 +21677,12 @@ func init() {
 		"spec.params.ipsec.ipsec_psk.wingman_secret_info",
 	}
 
-	MDR.RPCConfidentialRequestRegistry["ves.io.schema.tunnel.API.Replace"] = "ves.io.schema.tunnel.ReplaceRequest"
-
 	MDR.RPCOneofDefaultChoiceFieldsRegistry["ves.io.schema.tunnel.crudapi.API.Create"] = []svcfw.OneofDefaultChoiceField{
 		{
 			FieldPath: "ves.io.schema.tunnel.crudapi.ObjectCreateReq.spec.gc_spec.tunnel_attribute.default_tunnel_attribute",
 			GoType:    reflect.TypeOf(ves_io_schema_tunnel.GlobalSpecType_DefaultTunnelAttribute{}),
 		},
 	}
-
-	MDR.RPCConfidentialRequestRegistry["ves.io.schema.tunnel.crudapi.API.Create"] = "ves.io.schema.tunnel.crudapi.ObjectCreateReq"
 
 	MDR.RPCOneofDefaultChoiceFieldsRegistry["ves.io.schema.tunnel.crudapi.API.Replace"] = []svcfw.OneofDefaultChoiceField{
 		{
@@ -21831,15 +21691,9 @@ func init() {
 		},
 	}
 
-	MDR.RPCConfidentialRequestRegistry["ves.io.schema.tunnel.crudapi.API.Replace"] = "ves.io.schema.tunnel.crudapi.ObjectReplaceReq"
-
 	MDR.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.usb_policy.API.Get"] = []string{
 		"object",
 	}
-
-	MDR.RPCConfidentialRequestRegistry["ves.io.schema.user.setting.CustomAPI.Update"] = "ves.io.schema.user.setting.UserSettingsRequest"
-
-	MDR.RPCConfidentialRequestRegistry["ves.io.schema.user.setting.CustomAPI.UpdateUserImage"] = "ves.io.schema.user.setting.UpdateImageRequest"
 
 	MDR.RPCOneofDefaultChoiceFieldsRegistry["ves.io.schema.user_identification.API.Create"] = []svcfw.OneofDefaultChoiceField{
 		{
@@ -21998,8 +21852,6 @@ func init() {
 		"spec.vn_config.global_network_list.global_network_connections.#.enable_forward_proxy.tls_intercept.custom_certificate.private_key.wingman_secret_info",
 	}
 
-	MDR.RPCConfidentialRequestRegistry["ves.io.schema.views.aws_tgw_site.API.Create"] = "ves.io.schema.views.aws_tgw_site.CreateRequest"
-
 	MDR.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.views.aws_tgw_site.API.Get"] = []string{
 		"object",
 	}
@@ -22086,8 +21938,6 @@ func init() {
 		"spec.vn_config.global_network_list.global_network_connections.#.enable_forward_proxy.tls_intercept.custom_certificate.private_key.vault_secret_info",
 		"spec.vn_config.global_network_list.global_network_connections.#.enable_forward_proxy.tls_intercept.custom_certificate.private_key.wingman_secret_info",
 	}
-
-	MDR.RPCConfidentialRequestRegistry["ves.io.schema.views.aws_tgw_site.API.Replace"] = "ves.io.schema.views.aws_tgw_site.ReplaceRequest"
 
 	MDR.RPCHiddenInternalFieldsRegistry["ves.io.schema.views.aws_tgw_site.CustomAPI.SetVPNTunnels"] = []string{
 		"tunnels.#",
@@ -22192,8 +22042,6 @@ func init() {
 		},
 	}
 
-	MDR.RPCConfidentialRequestRegistry["ves.io.schema.views.aws_tgw_site.crudapi.API.Create"] = "ves.io.schema.views.aws_tgw_site.crudapi.ObjectCreateReq"
-
 	MDR.RPCOneofDefaultChoiceFieldsRegistry["ves.io.schema.views.aws_tgw_site.crudapi.API.Replace"] = []svcfw.OneofDefaultChoiceField{
 		{
 			FieldPath: "ves.io.schema.views.aws_tgw_site.crudapi.ObjectReplaceReq.spec.gc_spec.aws_parameters.az_nodes.choice.reserved_inside_subnet",
@@ -22292,8 +22140,6 @@ func init() {
 			GoType:    reflect.TypeOf(ves_io_schema_views_aws_tgw_site.VnConfiguration_SmConnectionPublicIp{}),
 		},
 	}
-
-	MDR.RPCConfidentialRequestRegistry["ves.io.schema.views.aws_tgw_site.crudapi.API.Replace"] = "ves.io.schema.views.aws_tgw_site.crudapi.ObjectReplaceReq"
 
 	MDR.RPCOneofDefaultChoiceFieldsRegistry["ves.io.schema.views.aws_vpc_site.API.Create"] = []svcfw.OneofDefaultChoiceField{
 		{
@@ -22446,8 +22292,6 @@ func init() {
 		"spec.voltstack_cluster.global_network_list.global_network_connections.#.enable_forward_proxy.tls_intercept.custom_certificate.private_key.wingman_secret_info",
 	}
 
-	MDR.RPCConfidentialRequestRegistry["ves.io.schema.views.aws_vpc_site.API.Create"] = "ves.io.schema.views.aws_vpc_site.CreateRequest"
-
 	MDR.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.views.aws_vpc_site.API.Get"] = []string{
 		"object",
 	}
@@ -22571,8 +22415,6 @@ func init() {
 		"spec.voltstack_cluster.global_network_list.global_network_connections.#.enable_forward_proxy.tls_intercept.custom_certificate.private_key.vault_secret_info",
 		"spec.voltstack_cluster.global_network_list.global_network_connections.#.enable_forward_proxy.tls_intercept.custom_certificate.private_key.wingman_secret_info",
 	}
-
-	MDR.RPCConfidentialRequestRegistry["ves.io.schema.views.aws_vpc_site.API.Replace"] = "ves.io.schema.views.aws_vpc_site.ReplaceRequest"
 
 	MDR.RPCOneofDefaultChoiceFieldsRegistry["ves.io.schema.views.aws_vpc_site.crudapi.API.Create"] = []svcfw.OneofDefaultChoiceField{
 		{
@@ -22709,8 +22551,6 @@ func init() {
 		},
 	}
 
-	MDR.RPCConfidentialRequestRegistry["ves.io.schema.views.aws_vpc_site.crudapi.API.Create"] = "ves.io.schema.views.aws_vpc_site.crudapi.ObjectCreateReq"
-
 	MDR.RPCOneofDefaultChoiceFieldsRegistry["ves.io.schema.views.aws_vpc_site.crudapi.API.Replace"] = []svcfw.OneofDefaultChoiceField{
 		{
 			FieldPath: "ves.io.schema.views.aws_vpc_site.crudapi.ObjectReplaceReq.spec.gc_spec.blocked_services_choice.default_blocked_services",
@@ -22845,8 +22685,6 @@ func init() {
 			GoType:    reflect.TypeOf(ves_io_schema_views_aws_vpc_site.GlobalSpecType_NoWorkerNodes{}),
 		},
 	}
-
-	MDR.RPCConfidentialRequestRegistry["ves.io.schema.views.aws_vpc_site.crudapi.API.Replace"] = "ves.io.schema.views.aws_vpc_site.crudapi.ObjectReplaceReq"
 
 	MDR.RPCOneofDefaultChoiceFieldsRegistry["ves.io.schema.views.azure_vnet_site.API.Create"] = []svcfw.OneofDefaultChoiceField{
 		{
@@ -23131,8 +22969,6 @@ func init() {
 		"spec.voltstack_cluster_ar.global_network_list.global_network_connections.#.enable_forward_proxy.tls_intercept.custom_certificate.private_key.wingman_secret_info",
 	}
 
-	MDR.RPCConfidentialRequestRegistry["ves.io.schema.views.azure_vnet_site.API.Create"] = "ves.io.schema.views.azure_vnet_site.CreateRequest"
-
 	MDR.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.views.azure_vnet_site.API.Get"] = []string{
 		"object",
 	}
@@ -23389,8 +23225,6 @@ func init() {
 		"spec.voltstack_cluster_ar.global_network_list.global_network_connections.#.enable_forward_proxy.tls_intercept.custom_certificate.private_key.wingman_secret_info",
 	}
 
-	MDR.RPCConfidentialRequestRegistry["ves.io.schema.views.azure_vnet_site.API.Replace"] = "ves.io.schema.views.azure_vnet_site.ReplaceRequest"
-
 	MDR.RPCOneofDefaultChoiceFieldsRegistry["ves.io.schema.views.azure_vnet_site.crudapi.API.Create"] = []svcfw.OneofDefaultChoiceField{
 		{
 			FieldPath: "ves.io.schema.views.azure_vnet_site.crudapi.ObjectCreateReq.spec.gc_spec.blocked_services_choice.default_blocked_services",
@@ -23638,8 +23472,6 @@ func init() {
 		},
 	}
 
-	MDR.RPCConfidentialRequestRegistry["ves.io.schema.views.azure_vnet_site.crudapi.API.Create"] = "ves.io.schema.views.azure_vnet_site.crudapi.ObjectCreateReq"
-
 	MDR.RPCOneofDefaultChoiceFieldsRegistry["ves.io.schema.views.azure_vnet_site.crudapi.API.Replace"] = []svcfw.OneofDefaultChoiceField{
 		{
 			FieldPath: "ves.io.schema.views.azure_vnet_site.crudapi.ObjectReplaceReq.spec.gc_spec.blocked_services_choice.default_blocked_services",
@@ -23886,8 +23718,6 @@ func init() {
 			GoType:    reflect.TypeOf(ves_io_schema_views_azure_vnet_site.GlobalSpecType_NoWorkerNodes{}),
 		},
 	}
-
-	MDR.RPCConfidentialRequestRegistry["ves.io.schema.views.azure_vnet_site.crudapi.API.Replace"] = "ves.io.schema.views.azure_vnet_site.crudapi.ObjectReplaceReq"
 
 	MDR.RPCOneofDefaultChoiceFieldsRegistry["ves.io.schema.views.forward_proxy_policy.API.Create"] = []svcfw.OneofDefaultChoiceField{
 		{
@@ -24187,8 +24017,6 @@ func init() {
 		"spec.voltstack_cluster.global_network_list.global_network_connections.#.enable_forward_proxy.tls_intercept.custom_certificate.private_key.wingman_secret_info",
 	}
 
-	MDR.RPCConfidentialRequestRegistry["ves.io.schema.views.gcp_vpc_site.API.Create"] = "ves.io.schema.views.gcp_vpc_site.CreateRequest"
-
 	MDR.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.views.gcp_vpc_site.API.Get"] = []string{
 		"object",
 	}
@@ -24297,8 +24125,6 @@ func init() {
 		"spec.voltstack_cluster.global_network_list.global_network_connections.#.enable_forward_proxy.tls_intercept.custom_certificate.private_key.wingman_secret_info",
 	}
 
-	MDR.RPCConfidentialRequestRegistry["ves.io.schema.views.gcp_vpc_site.API.Replace"] = "ves.io.schema.views.gcp_vpc_site.ReplaceRequest"
-
 	MDR.RPCOneofDefaultChoiceFieldsRegistry["ves.io.schema.views.gcp_vpc_site.crudapi.API.Create"] = []svcfw.OneofDefaultChoiceField{
 		{
 			FieldPath: "ves.io.schema.views.gcp_vpc_site.crudapi.ObjectCreateReq.spec.gc_spec.blocked_services_choice.default_blocked_services",
@@ -24406,8 +24232,6 @@ func init() {
 		},
 	}
 
-	MDR.RPCConfidentialRequestRegistry["ves.io.schema.views.gcp_vpc_site.crudapi.API.Create"] = "ves.io.schema.views.gcp_vpc_site.crudapi.ObjectCreateReq"
-
 	MDR.RPCOneofDefaultChoiceFieldsRegistry["ves.io.schema.views.gcp_vpc_site.crudapi.API.Replace"] = []svcfw.OneofDefaultChoiceField{
 		{
 			FieldPath: "ves.io.schema.views.gcp_vpc_site.crudapi.ObjectReplaceReq.spec.gc_spec.blocked_services_choice.default_blocked_services",
@@ -24514,8 +24338,6 @@ func init() {
 			GoType:    reflect.TypeOf(ves_io_schema_views.VolterraSoftwareType_DefaultSwVersion{}),
 		},
 	}
-
-	MDR.RPCConfidentialRequestRegistry["ves.io.schema.views.gcp_vpc_site.crudapi.API.Replace"] = "ves.io.schema.views.gcp_vpc_site.crudapi.ObjectReplaceReq"
 
 	MDR.RPCSubscriptionFieldsRegistry["ves.io.schema.views.http_loadbalancer.API.Create"] = []svcfw.SubscriptionField{
 		{
@@ -24930,8 +24752,6 @@ func init() {
 		"spec.waf_exclusion_rules.#.metadata.disable",
 		"spec.waf_rule",
 	}
-
-	MDR.RPCConfidentialRequestRegistry["ves.io.schema.views.http_loadbalancer.API.Create"] = "ves.io.schema.views.http_loadbalancer.CreateRequest"
 
 	MDR.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.views.http_loadbalancer.API.Get"] = []string{
 		"object",
@@ -25351,8 +25171,6 @@ func init() {
 		"spec.waf_rule",
 	}
 
-	MDR.RPCConfidentialRequestRegistry["ves.io.schema.views.http_loadbalancer.API.Replace"] = "ves.io.schema.views.http_loadbalancer.ReplaceRequest"
-
 	MDR.RPCOneofDefaultChoiceFieldsRegistry["ves.io.schema.views.http_loadbalancer.crudapi.API.Create"] = []svcfw.OneofDefaultChoiceField{
 		{
 			FieldPath: "ves.io.schema.views.http_loadbalancer.crudapi.ObjectCreateReq.spec.gc_spec.advertise_choice.advertise_custom.advertise_where.choice.virtual_network.vip_choice.default_vip",
@@ -25691,8 +25509,6 @@ func init() {
 			GoType:    reflect.TypeOf(ves_io_schema_policy.SimpleWafExclusionRule_AnyPath{}),
 		},
 	}
-
-	MDR.RPCConfidentialRequestRegistry["ves.io.schema.views.http_loadbalancer.crudapi.API.Create"] = "ves.io.schema.views.http_loadbalancer.crudapi.ObjectCreateReq"
 
 	MDR.RPCOneofDefaultChoiceFieldsRegistry["ves.io.schema.views.http_loadbalancer.crudapi.API.Replace"] = []svcfw.OneofDefaultChoiceField{
 		{
@@ -26033,8 +25849,6 @@ func init() {
 		},
 	}
 
-	MDR.RPCConfidentialRequestRegistry["ves.io.schema.views.http_loadbalancer.crudapi.API.Replace"] = "ves.io.schema.views.http_loadbalancer.crudapi.ObjectReplaceReq"
-
 	MDR.RPCHiddenInternalFieldsRegistry["ves.io.schema.views.network_policy_view.API.Create"] = []string{
 		"spec.egress_rules.#.keys.#",
 		"spec.egress_rules.#.metadata.disable",
@@ -26136,8 +25950,6 @@ func init() {
 		"spec.use_tls.use_mtls.tls_certificates.#.private_key.wingman_secret_info",
 	}
 
-	MDR.RPCConfidentialRequestRegistry["ves.io.schema.views.origin_pool.API.Create"] = "ves.io.schema.views.origin_pool.CreateRequest"
-
 	MDR.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.views.origin_pool.API.Get"] = []string{
 		"object",
 	}
@@ -26217,8 +26029,6 @@ func init() {
 		"spec.use_tls.use_mtls.tls_certificates.#.private_key.wingman_secret_info",
 	}
 
-	MDR.RPCConfidentialRequestRegistry["ves.io.schema.views.origin_pool.API.Replace"] = "ves.io.schema.views.origin_pool.ReplaceRequest"
-
 	MDR.RPCOneofDefaultChoiceFieldsRegistry["ves.io.schema.views.origin_pool.crudapi.API.Create"] = []svcfw.OneofDefaultChoiceField{
 		{
 			FieldPath: "ves.io.schema.views.origin_pool.crudapi.ObjectCreateReq.spec.gc_spec.advanced_options.circuit_breaker_choice.default_circuit_breaker",
@@ -26286,8 +26096,6 @@ func init() {
 		},
 	}
 
-	MDR.RPCConfidentialRequestRegistry["ves.io.schema.views.origin_pool.crudapi.API.Create"] = "ves.io.schema.views.origin_pool.crudapi.ObjectCreateReq"
-
 	MDR.RPCOneofDefaultChoiceFieldsRegistry["ves.io.schema.views.origin_pool.crudapi.API.Replace"] = []svcfw.OneofDefaultChoiceField{
 		{
 			FieldPath: "ves.io.schema.views.origin_pool.crudapi.ObjectReplaceReq.spec.gc_spec.advanced_options.circuit_breaker_choice.default_circuit_breaker",
@@ -26354,8 +26162,6 @@ func init() {
 			GoType:    reflect.TypeOf(ves_io_schema_views.TlsConfig_DefaultSecurity{}),
 		},
 	}
-
-	MDR.RPCConfidentialRequestRegistry["ves.io.schema.views.origin_pool.crudapi.API.Replace"] = "ves.io.schema.views.origin_pool.crudapi.ObjectReplaceReq"
 
 	MDR.RPCOneofDefaultChoiceFieldsRegistry["ves.io.schema.views.rate_limiter_policy.API.Create"] = []svcfw.OneofDefaultChoiceField{
 		{
@@ -26467,8 +26273,6 @@ func init() {
 		"spec.tls_tcp.tls_parameters.tls_certificates.#.private_key.wingman_secret_info",
 	}
 
-	MDR.RPCConfidentialRequestRegistry["ves.io.schema.views.tcp_loadbalancer.API.Create"] = "ves.io.schema.views.tcp_loadbalancer.CreateRequest"
-
 	MDR.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.views.tcp_loadbalancer.API.Get"] = []string{
 		"object",
 	}
@@ -26528,8 +26332,6 @@ func init() {
 		"spec.tls_tcp.tls_parameters.tls_certificates.#.private_key.wingman_secret_info",
 	}
 
-	MDR.RPCConfidentialRequestRegistry["ves.io.schema.views.tcp_loadbalancer.API.Replace"] = "ves.io.schema.views.tcp_loadbalancer.ReplaceRequest"
-
 	MDR.RPCOneofDefaultChoiceFieldsRegistry["ves.io.schema.views.tcp_loadbalancer.crudapi.API.Create"] = []svcfw.OneofDefaultChoiceField{
 		{
 			FieldPath: "ves.io.schema.views.tcp_loadbalancer.crudapi.ObjectCreateReq.spec.gc_spec.advertise_choice.advertise_custom.advertise_where.choice.virtual_network.vip_choice.default_vip",
@@ -26577,8 +26379,6 @@ func init() {
 		},
 	}
 
-	MDR.RPCConfidentialRequestRegistry["ves.io.schema.views.tcp_loadbalancer.crudapi.API.Create"] = "ves.io.schema.views.tcp_loadbalancer.crudapi.ObjectCreateReq"
-
 	MDR.RPCOneofDefaultChoiceFieldsRegistry["ves.io.schema.views.tcp_loadbalancer.crudapi.API.Replace"] = []svcfw.OneofDefaultChoiceField{
 		{
 			FieldPath: "ves.io.schema.views.tcp_loadbalancer.crudapi.ObjectReplaceReq.spec.gc_spec.advertise_choice.advertise_custom.advertise_where.choice.virtual_network.vip_choice.default_vip",
@@ -26625,8 +26425,6 @@ func init() {
 			GoType:    reflect.TypeOf(ves_io_schema_views_tcp_loadbalancer.GlobalSpecType_NoSni{}),
 		},
 	}
-
-	MDR.RPCConfidentialRequestRegistry["ves.io.schema.views.tcp_loadbalancer.crudapi.API.Replace"] = "ves.io.schema.views.tcp_loadbalancer.crudapi.ObjectReplaceReq"
 
 	MDR.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.views.tenant_configuration.API.Get"] = []string{
 		"object",
@@ -26952,8 +26750,6 @@ func init() {
 		"spec.local_control_plane.bgp_config.peers.#.target_service",
 	}
 
-	MDR.RPCConfidentialRequestRegistry["ves.io.schema.views.voltstack_site.API.Create"] = "ves.io.schema.views.voltstack_site.CreateRequest"
-
 	MDR.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.views.voltstack_site.API.Get"] = []string{
 		"object",
 	}
@@ -27270,8 +27066,6 @@ func init() {
 		"spec.local_control_plane.bgp_config.peers.#.target_service",
 	}
 
-	MDR.RPCConfidentialRequestRegistry["ves.io.schema.views.voltstack_site.API.Replace"] = "ves.io.schema.views.voltstack_site.ReplaceRequest"
-
 	MDR.RPCOneofDefaultChoiceFieldsRegistry["ves.io.schema.views.voltstack_site.crudapi.API.Create"] = []svcfw.OneofDefaultChoiceField{
 		{
 			FieldPath: "ves.io.schema.views.voltstack_site.crudapi.ObjectCreateReq.spec.gc_spec.blocked_services_choice.default_blocked_services",
@@ -27526,8 +27320,6 @@ func init() {
 			GoType:    reflect.TypeOf(ves_io_schema_views_voltstack_site.GlobalSpecType_DenyAllUsb{}),
 		},
 	}
-
-	MDR.RPCConfidentialRequestRegistry["ves.io.schema.views.voltstack_site.crudapi.API.Create"] = "ves.io.schema.views.voltstack_site.crudapi.ObjectCreateReq"
 
 	MDR.RPCOneofDefaultChoiceFieldsRegistry["ves.io.schema.views.voltstack_site.crudapi.API.Replace"] = []svcfw.OneofDefaultChoiceField{
 		{
@@ -27784,8 +27576,6 @@ func init() {
 		},
 	}
 
-	MDR.RPCConfidentialRequestRegistry["ves.io.schema.views.voltstack_site.crudapi.API.Replace"] = "ves.io.schema.views.voltstack_site.crudapi.ObjectReplaceReq"
-
 	MDR.RPCOneofDefaultChoiceFieldsRegistry["ves.io.schema.virtual_host.API.Create"] = []svcfw.OneofDefaultChoiceField{
 		{
 			FieldPath: "ves.io.schema.virtual_host.CreateRequest.spec.challenge_type.no_challenge",
@@ -27834,8 +27624,6 @@ func init() {
 		"spec.waf_type.waf",
 		"spec.waf_type.waf_rules",
 	}
-
-	MDR.RPCConfidentialRequestRegistry["ves.io.schema.virtual_host.API.Create"] = "ves.io.schema.virtual_host.CreateRequest"
 
 	MDR.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.virtual_host.API.Get"] = []string{
 		"object",
@@ -27890,8 +27678,6 @@ func init() {
 		"spec.waf_type.waf_rules",
 	}
 
-	MDR.RPCConfidentialRequestRegistry["ves.io.schema.virtual_host.API.Replace"] = "ves.io.schema.virtual_host.ReplaceRequest"
-
 	MDR.RPCOneofDefaultChoiceFieldsRegistry["ves.io.schema.virtual_host.crudapi.API.Create"] = []svcfw.OneofDefaultChoiceField{
 		{
 			FieldPath: "ves.io.schema.virtual_host.crudapi.ObjectCreateReq.spec.gc_spec.cdn_service.content_choice.download_delivery",
@@ -27931,8 +27717,6 @@ func init() {
 		},
 	}
 
-	MDR.RPCConfidentialRequestRegistry["ves.io.schema.virtual_host.crudapi.API.Create"] = "ves.io.schema.virtual_host.crudapi.ObjectCreateReq"
-
 	MDR.RPCOneofDefaultChoiceFieldsRegistry["ves.io.schema.virtual_host.crudapi.API.Replace"] = []svcfw.OneofDefaultChoiceField{
 		{
 			FieldPath: "ves.io.schema.virtual_host.crudapi.ObjectReplaceReq.spec.gc_spec.cdn_service.content_choice.download_delivery",
@@ -27971,8 +27755,6 @@ func init() {
 			GoType:    reflect.TypeOf(ves_io_schema_virtual_host.GlobalSpecType_DisableTrustClientIpHeaders{}),
 		},
 	}
-
-	MDR.RPCConfidentialRequestRegistry["ves.io.schema.virtual_host.crudapi.API.Replace"] = "ves.io.schema.virtual_host.crudapi.ObjectReplaceReq"
 
 	MDR.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.virtual_k8s.API.Get"] = []string{
 		"object",

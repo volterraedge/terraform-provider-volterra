@@ -14,8 +14,10 @@ import (
 	"time"
 
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
+	"github.com/hashicorp/terraform-plugin-sdk/helper/validation"
 	"gopkg.volterra.us/stdlib/codec"
 	"gopkg.volterra.us/stdlib/svcfw"
+	ves_io_schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
 	ves_io_schema_registration "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/registration"
 )
 
@@ -84,6 +86,15 @@ func resourceVolterraRegistrationApproval() *schema.Resource {
 				Type:     schema.TypeString,
 				Computed: true,
 			},
+			"tunnel_type": {
+				Type:     schema.TypeString,
+				Optional: true,
+				ValidateFunc: validation.StringInSlice([]string{
+					"SITE_TO_SITE_TUNNEL_IPSEC_OR_SSL",
+					"SITE_TO_SITE_TUNNEL_IPSEC",
+					"SITE_TO_SITE_TUNNEL_SSL",
+				}, false),
+			},
 		},
 	}
 }
@@ -124,6 +135,11 @@ func resourceVolterraRegistrationApprovalCreate(d *schema.ResourceData, meta int
 	approvalReq := &ves_io_schema_registration.ApprovalReq{
 		Namespace: svcfw.SystemNSVal,
 		State:     ves_io_schema_registration.APPROVED,
+	}
+	if v, ok := d.GetOk("tunnel_type"); ok {
+		if tunType, ok := ves_io_schema.SiteToSiteTunnelType_value[v.(string)]; ok {
+			approvalReq.TunnelType = ves_io_schema.SiteToSiteTunnelType(tunType)
+		}
 	}
 
 	// Get list of all PENDING registrations
