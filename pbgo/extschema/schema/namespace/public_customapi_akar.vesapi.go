@@ -3130,6 +3130,7 @@ var NamespaceCustomAPISwaggerJSON string = `{
             "description": "A tuple with a suggested value and it's description.",
             "title": "SuggestedItem",
             "x-displayname": "Suggested Item",
+            "x-ves-oneof-field-value_choice": "[\"ref_value\",\"str_value\"]",
             "x-ves-proto-message": "ves.io.schema.namespace.SuggestedItem",
             "properties": {
                 "description": {
@@ -3138,9 +3139,21 @@ var NamespaceCustomAPISwaggerJSON string = `{
                     "title": "description",
                     "x-displayname": "Description"
                 },
+                "ref_value": {
+                    "description": "Exclusive with [str_value]\n",
+                    "title": "str_value",
+                    "$ref": "#/definitions/schemaviewsObjectRefType",
+                    "x-displayname": "Object Reference"
+                },
+                "str_value": {
+                    "type": "string",
+                    "description": "Exclusive with [ref_value]\n",
+                    "title": "str_value",
+                    "x-displayname": "String"
+                },
                 "value": {
                     "type": "string",
-                    "description": " Suggested value for the field.",
+                    "description": " Suggested value for the field.\n Should use value_choice.str_value instead.",
                     "title": "value",
                     "x-displayname": "Value"
                 }

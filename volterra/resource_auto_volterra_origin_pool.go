@@ -143,6 +143,23 @@ func resourceVolterraOriginPool() *schema.Resource {
 							},
 						},
 
+						"http_idle_timeout": {
+							Type:     schema.TypeInt,
+							Optional: true,
+						},
+
+						"auto_http_config": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+
+						"http1_config": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+
 						"http2_options": {
 
 							Type:     schema.TypeSet,
@@ -156,11 +173,6 @@ func resourceVolterraOriginPool() *schema.Resource {
 									},
 								},
 							},
-						},
-
-						"http_idle_timeout": {
-							Type:     schema.TypeInt,
-							Optional: true,
 						},
 
 						"disable_outlier_detection": {
@@ -1398,24 +1410,55 @@ func resourceVolterraOriginPoolCreate(d *schema.ResourceData, meta interface{}) 
 
 			}
 
-			if v, ok := advancedOptionsMapStrToI["http2_options"]; ok && !isIntfNil(v) {
+			if w, ok := advancedOptionsMapStrToI["http_idle_timeout"]; ok && !isIntfNil(w) {
+				advancedOptions.HttpIdleTimeout = uint32(w.(int))
+			}
 
-				sl := v.(*schema.Set).List()
-				http2Options := &ves_io_schema_cluster.Http2ProtocolOptions{}
-				advancedOptions.Http2Options = http2Options
-				for _, set := range sl {
-					http2OptionsMapStrToI := set.(map[string]interface{})
+			httpProtocolTypeTypeFound := false
 
-					if w, ok := http2OptionsMapStrToI["enabled"]; ok && !isIntfNil(w) {
-						http2Options.Enabled = w.(bool)
-					}
+			if v, ok := advancedOptionsMapStrToI["auto_http_config"]; ok && !isIntfNil(v) && !httpProtocolTypeTypeFound {
 
+				httpProtocolTypeTypeFound = true
+
+				if v.(bool) {
+					httpProtocolTypeInt := &ves_io_schema_views_origin_pool.OriginPoolAdvancedOptions_AutoHttpConfig{}
+					httpProtocolTypeInt.AutoHttpConfig = &ves_io_schema.Empty{}
+					advancedOptions.HttpProtocolType = httpProtocolTypeInt
 				}
 
 			}
 
-			if w, ok := advancedOptionsMapStrToI["http_idle_timeout"]; ok && !isIntfNil(w) {
-				advancedOptions.HttpIdleTimeout = uint32(w.(int))
+			if v, ok := advancedOptionsMapStrToI["http1_config"]; ok && !isIntfNil(v) && !httpProtocolTypeTypeFound {
+
+				httpProtocolTypeTypeFound = true
+
+				if v.(bool) {
+					httpProtocolTypeInt := &ves_io_schema_views_origin_pool.OriginPoolAdvancedOptions_Http1Config{}
+					httpProtocolTypeInt.Http1Config = &ves_io_schema.Empty{}
+					advancedOptions.HttpProtocolType = httpProtocolTypeInt
+				}
+
+			}
+
+			if v, ok := advancedOptionsMapStrToI["http2_options"]; ok && !isIntfNil(v) && !httpProtocolTypeTypeFound {
+
+				httpProtocolTypeTypeFound = true
+				httpProtocolTypeInt := &ves_io_schema_views_origin_pool.OriginPoolAdvancedOptions_Http2Options{}
+				httpProtocolTypeInt.Http2Options = &ves_io_schema_cluster.Http2ProtocolOptions{}
+				advancedOptions.HttpProtocolType = httpProtocolTypeInt
+
+				sl := v.(*schema.Set).List()
+				for _, set := range sl {
+					cs := set.(map[string]interface{})
+
+					if v, ok := cs["enabled"]; ok && !isIntfNil(v) {
+
+						httpProtocolTypeInt.Http2Options.Enabled = v.(bool)
+
+					}
+
+				}
+
 			}
 
 			outlierDetectionChoiceTypeFound := false
@@ -3122,24 +3165,55 @@ func resourceVolterraOriginPoolUpdate(d *schema.ResourceData, meta interface{}) 
 
 			}
 
-			if v, ok := advancedOptionsMapStrToI["http2_options"]; ok && !isIntfNil(v) {
+			if w, ok := advancedOptionsMapStrToI["http_idle_timeout"]; ok && !isIntfNil(w) {
+				advancedOptions.HttpIdleTimeout = uint32(w.(int))
+			}
 
-				sl := v.(*schema.Set).List()
-				http2Options := &ves_io_schema_cluster.Http2ProtocolOptions{}
-				advancedOptions.Http2Options = http2Options
-				for _, set := range sl {
-					http2OptionsMapStrToI := set.(map[string]interface{})
+			httpProtocolTypeTypeFound := false
 
-					if w, ok := http2OptionsMapStrToI["enabled"]; ok && !isIntfNil(w) {
-						http2Options.Enabled = w.(bool)
-					}
+			if v, ok := advancedOptionsMapStrToI["auto_http_config"]; ok && !isIntfNil(v) && !httpProtocolTypeTypeFound {
 
+				httpProtocolTypeTypeFound = true
+
+				if v.(bool) {
+					httpProtocolTypeInt := &ves_io_schema_views_origin_pool.OriginPoolAdvancedOptions_AutoHttpConfig{}
+					httpProtocolTypeInt.AutoHttpConfig = &ves_io_schema.Empty{}
+					advancedOptions.HttpProtocolType = httpProtocolTypeInt
 				}
 
 			}
 
-			if w, ok := advancedOptionsMapStrToI["http_idle_timeout"]; ok && !isIntfNil(w) {
-				advancedOptions.HttpIdleTimeout = uint32(w.(int))
+			if v, ok := advancedOptionsMapStrToI["http1_config"]; ok && !isIntfNil(v) && !httpProtocolTypeTypeFound {
+
+				httpProtocolTypeTypeFound = true
+
+				if v.(bool) {
+					httpProtocolTypeInt := &ves_io_schema_views_origin_pool.OriginPoolAdvancedOptions_Http1Config{}
+					httpProtocolTypeInt.Http1Config = &ves_io_schema.Empty{}
+					advancedOptions.HttpProtocolType = httpProtocolTypeInt
+				}
+
+			}
+
+			if v, ok := advancedOptionsMapStrToI["http2_options"]; ok && !isIntfNil(v) && !httpProtocolTypeTypeFound {
+
+				httpProtocolTypeTypeFound = true
+				httpProtocolTypeInt := &ves_io_schema_views_origin_pool.OriginPoolAdvancedOptions_Http2Options{}
+				httpProtocolTypeInt.Http2Options = &ves_io_schema_cluster.Http2ProtocolOptions{}
+				advancedOptions.HttpProtocolType = httpProtocolTypeInt
+
+				sl := v.(*schema.Set).List()
+				for _, set := range sl {
+					cs := set.(map[string]interface{})
+
+					if v, ok := cs["enabled"]; ok && !isIntfNil(v) {
+
+						httpProtocolTypeInt.Http2Options.Enabled = v.(bool)
+
+					}
+
+				}
+
 			}
 
 			outlierDetectionChoiceTypeFound := false

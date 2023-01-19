@@ -705,20 +705,48 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
-	if fv, exists := v.FldValidators["http2_options"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("http2_options"))
-		if err := fv(ctx, m.GetHttp2Options(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
 	if fv, exists := v.FldValidators["http_idle_timeout"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("http_idle_timeout"))
 		if err := fv(ctx, m.GetHttpIdleTimeout(), vOpts...); err != nil {
 			return err
+		}
+
+	}
+
+	switch m.GetHttpProtocolType().(type) {
+	case *CreateSpecType_Http2Options:
+		if fv, exists := v.FldValidators["http_protocol_type.http2_options"]; exists {
+			val := m.GetHttpProtocolType().(*CreateSpecType_Http2Options).Http2Options
+			vOpts := append(opts,
+				db.WithValidateField("http_protocol_type"),
+				db.WithValidateField("http2_options"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CreateSpecType_Http1Config:
+		if fv, exists := v.FldValidators["http_protocol_type.http1_config"]; exists {
+			val := m.GetHttpProtocolType().(*CreateSpecType_Http1Config).Http1Config
+			vOpts := append(opts,
+				db.WithValidateField("http_protocol_type"),
+				db.WithValidateField("http1_config"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CreateSpecType_AutoHttpConfig:
+		if fv, exists := v.FldValidators["http_protocol_type.auto_http_config"]; exists {
+			val := m.GetHttpProtocolType().(*CreateSpecType_AutoHttpConfig).AutoHttpConfig
+			vOpts := append(opts,
+				db.WithValidateField("http_protocol_type"),
+				db.WithValidateField("auto_http_config"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
 		}
 
 	}
@@ -1497,20 +1525,48 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 
 	}
 
-	if fv, exists := v.FldValidators["http2_options"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("http2_options"))
-		if err := fv(ctx, m.GetHttp2Options(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
 	if fv, exists := v.FldValidators["http_idle_timeout"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("http_idle_timeout"))
 		if err := fv(ctx, m.GetHttpIdleTimeout(), vOpts...); err != nil {
 			return err
+		}
+
+	}
+
+	switch m.GetHttpProtocolType().(type) {
+	case *GetSpecType_Http2Options:
+		if fv, exists := v.FldValidators["http_protocol_type.http2_options"]; exists {
+			val := m.GetHttpProtocolType().(*GetSpecType_Http2Options).Http2Options
+			vOpts := append(opts,
+				db.WithValidateField("http_protocol_type"),
+				db.WithValidateField("http2_options"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GetSpecType_Http1Config:
+		if fv, exists := v.FldValidators["http_protocol_type.http1_config"]; exists {
+			val := m.GetHttpProtocolType().(*GetSpecType_Http1Config).Http1Config
+			vOpts := append(opts,
+				db.WithValidateField("http_protocol_type"),
+				db.WithValidateField("http1_config"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GetSpecType_AutoHttpConfig:
+		if fv, exists := v.FldValidators["http_protocol_type.auto_http_config"]; exists {
+			val := m.GetHttpProtocolType().(*GetSpecType_AutoHttpConfig).AutoHttpConfig
+			vOpts := append(opts,
+				db.WithValidateField("http_protocol_type"),
+				db.WithValidateField("auto_http_config"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
 		}
 
 	}
@@ -2169,20 +2225,48 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
-	if fv, exists := v.FldValidators["http2_options"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("http2_options"))
-		if err := fv(ctx, m.GetHttp2Options(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
 	if fv, exists := v.FldValidators["http_idle_timeout"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("http_idle_timeout"))
 		if err := fv(ctx, m.GetHttpIdleTimeout(), vOpts...); err != nil {
 			return err
+		}
+
+	}
+
+	switch m.GetHttpProtocolType().(type) {
+	case *GlobalSpecType_Http2Options:
+		if fv, exists := v.FldValidators["http_protocol_type.http2_options"]; exists {
+			val := m.GetHttpProtocolType().(*GlobalSpecType_Http2Options).Http2Options
+			vOpts := append(opts,
+				db.WithValidateField("http_protocol_type"),
+				db.WithValidateField("http2_options"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GlobalSpecType_Http1Config:
+		if fv, exists := v.FldValidators["http_protocol_type.http1_config"]; exists {
+			val := m.GetHttpProtocolType().(*GlobalSpecType_Http1Config).Http1Config
+			vOpts := append(opts,
+				db.WithValidateField("http_protocol_type"),
+				db.WithValidateField("http1_config"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GlobalSpecType_AutoHttpConfig:
+		if fv, exists := v.FldValidators["http_protocol_type.auto_http_config"]; exists {
+			val := m.GetHttpProtocolType().(*GlobalSpecType_AutoHttpConfig).AutoHttpConfig
+			vOpts := append(opts,
+				db.WithValidateField("http_protocol_type"),
+				db.WithValidateField("auto_http_config"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
 		}
 
 	}
@@ -3128,20 +3212,48 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 
 	}
 
-	if fv, exists := v.FldValidators["http2_options"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("http2_options"))
-		if err := fv(ctx, m.GetHttp2Options(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
 	if fv, exists := v.FldValidators["http_idle_timeout"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("http_idle_timeout"))
 		if err := fv(ctx, m.GetHttpIdleTimeout(), vOpts...); err != nil {
 			return err
+		}
+
+	}
+
+	switch m.GetHttpProtocolType().(type) {
+	case *ReplaceSpecType_Http2Options:
+		if fv, exists := v.FldValidators["http_protocol_type.http2_options"]; exists {
+			val := m.GetHttpProtocolType().(*ReplaceSpecType_Http2Options).Http2Options
+			vOpts := append(opts,
+				db.WithValidateField("http_protocol_type"),
+				db.WithValidateField("http2_options"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ReplaceSpecType_Http1Config:
+		if fv, exists := v.FldValidators["http_protocol_type.http1_config"]; exists {
+			val := m.GetHttpProtocolType().(*ReplaceSpecType_Http1Config).Http1Config
+			vOpts := append(opts,
+				db.WithValidateField("http_protocol_type"),
+				db.WithValidateField("http1_config"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ReplaceSpecType_AutoHttpConfig:
+		if fv, exists := v.FldValidators["http_protocol_type.auto_http_config"]; exists {
+			val := m.GetHttpProtocolType().(*ReplaceSpecType_AutoHttpConfig).AutoHttpConfig
+			vOpts := append(opts,
+				db.WithValidateField("http_protocol_type"),
+				db.WithValidateField("auto_http_config"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
 		}
 
 	}
@@ -3308,6 +3420,47 @@ func ReplaceSpecTypeValidator() db.Validator {
 }
 
 // create setters in CreateSpecType from GlobalSpecType for oneof fields
+func (r *CreateSpecType) SetHttpProtocolTypeToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.HttpProtocolType.(type) {
+	case nil:
+		o.HttpProtocolType = nil
+
+	case *CreateSpecType_AutoHttpConfig:
+		o.HttpProtocolType = &GlobalSpecType_AutoHttpConfig{AutoHttpConfig: of.AutoHttpConfig}
+
+	case *CreateSpecType_Http1Config:
+		o.HttpProtocolType = &GlobalSpecType_Http1Config{Http1Config: of.Http1Config}
+
+	case *CreateSpecType_Http2Options:
+		o.HttpProtocolType = &GlobalSpecType_Http2Options{Http2Options: of.Http2Options}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *CreateSpecType) GetHttpProtocolTypeFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.HttpProtocolType.(type) {
+	case nil:
+		r.HttpProtocolType = nil
+
+	case *GlobalSpecType_AutoHttpConfig:
+		r.HttpProtocolType = &CreateSpecType_AutoHttpConfig{AutoHttpConfig: of.AutoHttpConfig}
+
+	case *GlobalSpecType_Http1Config:
+		r.HttpProtocolType = &CreateSpecType_Http1Config{Http1Config: of.Http1Config}
+
+	case *GlobalSpecType_Http2Options:
+		r.HttpProtocolType = &CreateSpecType_Http2Options{Http2Options: of.Http2Options}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+// create setters in CreateSpecType from GlobalSpecType for oneof fields
 func (r *CreateSpecType) SetPanicThresholdTypeToGlobalSpecType(o *GlobalSpecType) error {
 	switch of := r.PanicThresholdType.(type) {
 	case nil:
@@ -3355,8 +3508,8 @@ func (m *CreateSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool
 	m.FallbackPolicy = f.GetFallbackPolicy()
 	m.HeaderTransformationType = f.GetHeaderTransformationType()
 	m.HealthChecks = f.GetHealthChecks()
-	m.Http2Options = f.GetHttp2Options()
 	m.HttpIdleTimeout = f.GetHttpIdleTimeout()
+	m.GetHttpProtocolTypeFromGlobalSpecType(f)
 	m.LoadbalancerAlgorithm = f.GetLoadbalancerAlgorithm()
 	m.OutlierDetection = f.GetOutlierDetection()
 	m.GetPanicThresholdTypeFromGlobalSpecType(f)
@@ -3387,8 +3540,8 @@ func (m *CreateSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) 
 	f.FallbackPolicy = m1.FallbackPolicy
 	f.HeaderTransformationType = m1.HeaderTransformationType
 	f.HealthChecks = m1.HealthChecks
-	f.Http2Options = m1.Http2Options
 	f.HttpIdleTimeout = m1.HttpIdleTimeout
+	m1.SetHttpProtocolTypeToGlobalSpecType(f)
 	f.LoadbalancerAlgorithm = m1.LoadbalancerAlgorithm
 	f.OutlierDetection = m1.OutlierDetection
 	m1.SetPanicThresholdTypeToGlobalSpecType(f)
@@ -3401,6 +3554,47 @@ func (m *CreateSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 
 func (m *CreateSpecType) ToGlobalSpecTypeWithoutDeepCopy(f *GlobalSpecType) {
 	m.toGlobalSpecType(f, false)
+}
+
+// create setters in GetSpecType from GlobalSpecType for oneof fields
+func (r *GetSpecType) SetHttpProtocolTypeToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.HttpProtocolType.(type) {
+	case nil:
+		o.HttpProtocolType = nil
+
+	case *GetSpecType_AutoHttpConfig:
+		o.HttpProtocolType = &GlobalSpecType_AutoHttpConfig{AutoHttpConfig: of.AutoHttpConfig}
+
+	case *GetSpecType_Http1Config:
+		o.HttpProtocolType = &GlobalSpecType_Http1Config{Http1Config: of.Http1Config}
+
+	case *GetSpecType_Http2Options:
+		o.HttpProtocolType = &GlobalSpecType_Http2Options{Http2Options: of.Http2Options}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *GetSpecType) GetHttpProtocolTypeFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.HttpProtocolType.(type) {
+	case nil:
+		r.HttpProtocolType = nil
+
+	case *GlobalSpecType_AutoHttpConfig:
+		r.HttpProtocolType = &GetSpecType_AutoHttpConfig{AutoHttpConfig: of.AutoHttpConfig}
+
+	case *GlobalSpecType_Http1Config:
+		r.HttpProtocolType = &GetSpecType_Http1Config{Http1Config: of.Http1Config}
+
+	case *GlobalSpecType_Http2Options:
+		r.HttpProtocolType = &GetSpecType_Http2Options{Http2Options: of.Http2Options}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
 }
 
 // create setters in GetSpecType from GlobalSpecType for oneof fields
@@ -3451,8 +3645,8 @@ func (m *GetSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	m.FallbackPolicy = f.GetFallbackPolicy()
 	m.HeaderTransformationType = f.GetHeaderTransformationType()
 	m.HealthChecks = f.GetHealthChecks()
-	m.Http2Options = f.GetHttp2Options()
 	m.HttpIdleTimeout = f.GetHttpIdleTimeout()
+	m.GetHttpProtocolTypeFromGlobalSpecType(f)
 	m.LoadbalancerAlgorithm = f.GetLoadbalancerAlgorithm()
 	m.OutlierDetection = f.GetOutlierDetection()
 	m.GetPanicThresholdTypeFromGlobalSpecType(f)
@@ -3483,8 +3677,8 @@ func (m *GetSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	f.FallbackPolicy = m1.FallbackPolicy
 	f.HeaderTransformationType = m1.HeaderTransformationType
 	f.HealthChecks = m1.HealthChecks
-	f.Http2Options = m1.Http2Options
 	f.HttpIdleTimeout = m1.HttpIdleTimeout
+	m1.SetHttpProtocolTypeToGlobalSpecType(f)
 	f.LoadbalancerAlgorithm = m1.LoadbalancerAlgorithm
 	f.OutlierDetection = m1.OutlierDetection
 	m1.SetPanicThresholdTypeToGlobalSpecType(f)
@@ -3497,6 +3691,47 @@ func (m *GetSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 
 func (m *GetSpecType) ToGlobalSpecTypeWithoutDeepCopy(f *GlobalSpecType) {
 	m.toGlobalSpecType(f, false)
+}
+
+// create setters in ReplaceSpecType from GlobalSpecType for oneof fields
+func (r *ReplaceSpecType) SetHttpProtocolTypeToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.HttpProtocolType.(type) {
+	case nil:
+		o.HttpProtocolType = nil
+
+	case *ReplaceSpecType_AutoHttpConfig:
+		o.HttpProtocolType = &GlobalSpecType_AutoHttpConfig{AutoHttpConfig: of.AutoHttpConfig}
+
+	case *ReplaceSpecType_Http1Config:
+		o.HttpProtocolType = &GlobalSpecType_Http1Config{Http1Config: of.Http1Config}
+
+	case *ReplaceSpecType_Http2Options:
+		o.HttpProtocolType = &GlobalSpecType_Http2Options{Http2Options: of.Http2Options}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *ReplaceSpecType) GetHttpProtocolTypeFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.HttpProtocolType.(type) {
+	case nil:
+		r.HttpProtocolType = nil
+
+	case *GlobalSpecType_AutoHttpConfig:
+		r.HttpProtocolType = &ReplaceSpecType_AutoHttpConfig{AutoHttpConfig: of.AutoHttpConfig}
+
+	case *GlobalSpecType_Http1Config:
+		r.HttpProtocolType = &ReplaceSpecType_Http1Config{Http1Config: of.Http1Config}
+
+	case *GlobalSpecType_Http2Options:
+		r.HttpProtocolType = &ReplaceSpecType_Http2Options{Http2Options: of.Http2Options}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
 }
 
 // create setters in ReplaceSpecType from GlobalSpecType for oneof fields
@@ -3547,8 +3782,8 @@ func (m *ReplaceSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy boo
 	m.FallbackPolicy = f.GetFallbackPolicy()
 	m.HeaderTransformationType = f.GetHeaderTransformationType()
 	m.HealthChecks = f.GetHealthChecks()
-	m.Http2Options = f.GetHttp2Options()
 	m.HttpIdleTimeout = f.GetHttpIdleTimeout()
+	m.GetHttpProtocolTypeFromGlobalSpecType(f)
 	m.LoadbalancerAlgorithm = f.GetLoadbalancerAlgorithm()
 	m.OutlierDetection = f.GetOutlierDetection()
 	m.GetPanicThresholdTypeFromGlobalSpecType(f)
@@ -3579,8 +3814,8 @@ func (m *ReplaceSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool)
 	f.FallbackPolicy = m1.FallbackPolicy
 	f.HeaderTransformationType = m1.HeaderTransformationType
 	f.HealthChecks = m1.HealthChecks
-	f.Http2Options = m1.Http2Options
 	f.HttpIdleTimeout = m1.HttpIdleTimeout
+	m1.SetHttpProtocolTypeToGlobalSpecType(f)
 	f.LoadbalancerAlgorithm = m1.LoadbalancerAlgorithm
 	f.OutlierDetection = m1.OutlierDetection
 	m1.SetPanicThresholdTypeToGlobalSpecType(f)

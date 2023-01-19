@@ -25,6 +25,9 @@ import (
 	ves_io_schema_dc_cluster_group "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/dc_cluster_group"
 	ves_io_schema_discovery "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/discovery"
 	ves_io_schema_dns_domain "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/dns_domain"
+	ves_io_schema_dns_lb_health_check "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/dns_lb_health_check"
+	ves_io_schema_dns_lb_pool "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/dns_lb_pool"
+	ves_io_schema_dns_load_balancer "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/dns_load_balancer"
 	ves_io_schema_dns_zone "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/dns_zone"
 	ves_io_schema_endpoint "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/endpoint"
 	ves_io_schema_fast_acl "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/fast_acl"
@@ -90,6 +93,9 @@ func getVolterraResourceMap() map[string]*schema.Resource {
 		"volterra_dc_cluster_group":          resourceVolterraDcClusterGroup(),
 		"volterra_discovery":                 resourceVolterraDiscovery(),
 		"volterra_dns_domain":                resourceVolterraDnsDomain(),
+		"volterra_dns_lb_health_check":       resourceVolterraDnsLbHealthCheck(),
+		"volterra_dns_lb_pool":               resourceVolterraDnsLbPool(),
+		"volterra_dns_load_balancer":         resourceVolterraDnsLoadBalancer(),
 		"volterra_dns_zone":                  resourceVolterraDnsZone(),
 		"volterra_endpoint":                  resourceVolterraEndpoint(),
 		"volterra_fast_acl":                  resourceVolterraFastAcl(),
@@ -157,6 +163,9 @@ func getAllAkarObjectTypes() sets.String {
 		ves_io_schema_dc_cluster_group.ObjectType,
 		ves_io_schema_discovery.ObjectType,
 		ves_io_schema_dns_domain.ObjectType,
+		ves_io_schema_dns_lb_health_check.ObjectType,
+		ves_io_schema_dns_lb_pool.ObjectType,
+		ves_io_schema_dns_load_balancer.ObjectType,
 		ves_io_schema_dns_zone.ObjectType,
 		ves_io_schema_endpoint.ObjectType,
 		ves_io_schema_fast_acl.ObjectType,

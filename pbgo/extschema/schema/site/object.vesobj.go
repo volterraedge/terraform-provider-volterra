@@ -1371,6 +1371,15 @@ func (v *ValidateStatusObject) Validate(ctx context.Context, pm interface{}, opt
 
 	}
 
+	if fv, exists := v.FldValidators["deployment"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("deployment"))
+		if err := fv(ctx, e.GetDeployment(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["direct_connect_status"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("direct_connect_status"))
@@ -1411,6 +1420,15 @@ func (v *ValidateStatusObject) Validate(ctx context.Context, pm interface{}, opt
 
 		vOpts := append(opts, db.WithValidateField("hw_info"))
 		if err := fv(ctx, e.GetHwInfo(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["internet_VIP_status"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("internet_VIP_status"))
+		if err := fv(ctx, e.GetInternet_VIPStatus(), vOpts...); err != nil {
 			return err
 		}
 

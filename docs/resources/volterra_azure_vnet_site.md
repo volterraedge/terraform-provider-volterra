@@ -36,46 +36,12 @@ resource "volterra_azure_vnet_site" "example" {
   azure_region = "eastus"
   resource_group = ["my-resources"]
 
-  // One of the arguments from this list "voltstack_cluster_ar ingress_gw ingress_egress_gw voltstack_cluster ingress_gw_ar ingress_egress_gw_ar" must be set
+  // One of the arguments from this list "voltstack_cluster ingress_gw_ar ingress_egress_gw_ar voltstack_cluster_ar ingress_gw ingress_egress_gw" must be set
 
-  ingress_egress_gw_ar {
-    azure_certified_hw = "azure-byol-multi-nic-voltmesh"
-
-    // One of the arguments from this list "no_dc_cluster_group dc_cluster_group_outside_vn dc_cluster_group_inside_vn" must be set
-    no_dc_cluster_group = true
-
-    // One of the arguments from this list "no_forward_proxy active_forward_proxy_policies forward_proxy_allow_all" must be set
-    no_forward_proxy = true
-
-    // One of the arguments from this list "no_global_network global_network_list" must be set
-    no_global_network = true
-
-    // One of the arguments from this list "hub not_hub" must be set
-
-    hub {
-      // One of the arguments from this list "express_route_enabled express_route_disabled" must be set
-      express_route_disabled = true
-
-      spoke_vnets {
-        labels = {
-          "key1" = "value1"
-        }
-
-        // One of the arguments from this list "auto manual" must be set
-        auto = true
-
-        vnet {
-          resource_group = "MyResourceGroup"
-          vnet_name      = "MyVnet"
-        }
-      }
-    }
-    // One of the arguments from this list "no_inside_static_routes inside_static_routes" must be set
-    no_inside_static_routes = true
-    // One of the arguments from this list "active_network_policies active_enhanced_firewall_policies no_network_policy" must be set
-    no_network_policy = true
-    node {
-      fault_domain = "1"
+  ingress_egress_gw {
+    az_nodes {
+      azure_az  = "1"
+      disk_size = "80"
 
       inside_subnet {
         // One of the arguments from this list "subnet_param subnet" must be set
@@ -86,8 +52,6 @@ resource "volterra_azure_vnet_site" "example" {
         }
       }
 
-      node_number = "1"
-
       outside_subnet {
         // One of the arguments from this list "subnet_param subnet" must be set
 
@@ -96,25 +60,43 @@ resource "volterra_azure_vnet_site" "example" {
           ipv6 = "1234:568:abcd:9100::/64"
         }
       }
-
-      update_domain = "1"
     }
+
+    azure_certified_hw = "azure-byol-multi-nic-voltmesh"
+
+    // One of the arguments from this list "no_dc_cluster_group dc_cluster_group_outside_vn dc_cluster_group_inside_vn" must be set
+
+    dc_cluster_group_outside_vn {
+      name      = "test1"
+      namespace = "staging"
+      tenant    = "acmecorp"
+    }
+    // One of the arguments from this list "no_forward_proxy active_forward_proxy_policies forward_proxy_allow_all" must be set
+    forward_proxy_allow_all = true
+    // One of the arguments from this list "no_global_network global_network_list" must be set
+    no_global_network = true
+    // One of the arguments from this list "not_hub hub" must be set
+    not_hub = true
+    // One of the arguments from this list "inside_static_routes no_inside_static_routes" must be set
+    no_inside_static_routes = true
+    // One of the arguments from this list "no_network_policy active_network_policies active_enhanced_firewall_policies" must be set
+    no_network_policy = true
     // One of the arguments from this list "no_outside_static_routes outside_static_routes" must be set
     no_outside_static_routes = true
     // One of the arguments from this list "sm_connection_public_ip sm_connection_pvt_ip" must be set
     sm_connection_public_ip = true
   }
   vnet {
-    // One of the arguments from this list "new_vnet existing_vnet" must be set
+    // One of the arguments from this list "existing_vnet new_vnet" must be set
 
     new_vnet {
-      // One of the arguments from this list "name autogenerate" must be set
+      // One of the arguments from this list "autogenerate name" must be set
       name = "name"
 
       primary_ipv4 = "10.1.0.0/16"
     }
   }
-  // One of the arguments from this list "total_nodes no_worker_nodes nodes_per_az" must be set
+  // One of the arguments from this list "nodes_per_az total_nodes no_worker_nodes" must be set
   nodes_per_az = "2"
 }
 
@@ -143,7 +125,7 @@ Argument Reference
 
 `blocked_services` - (Optional) Use custom blocked services configuration. See [Blocked Services ](#blocked-services) below for details.
 
-`default_blocked_services` - (Optional) Use default dehavior of allowing ports mentioned in blocked services (bool).
+`default_blocked_services` - (Optional) Use default behavior of allowing ports mentioned in blocked services (bool).
 
 `coordinates` - (Optional) Site longitude and latitude co-ordinates. See [Coordinates ](#coordinates) below for details.
 
@@ -181,7 +163,7 @@ Argument Reference
 
 `ssh_key` - (Optional) Public SSH key for accessing the site. (`String`).
 
-`sw` - (Optional) Volterra Software Details. See [Sw ](#sw) below for details.
+`sw` - (Optional) F5XC Software Details. See [Sw ](#sw) below for details.
 
 `tags` - (Optional) It helps to manage, identify, organize, search for, and filter resources in Azure console. (`String`).
 
@@ -219,21 +201,21 @@ Authorization Key created by the circuit owner.
 
 `secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).
 
-`blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by Volterra Secret Management Service. See [Blindfold Secret Info ](#blindfold-secret-info) below for details.
+`blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Blindfold Secret Info ](#blindfold-secret-info) below for details.
 
 `clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Clear Secret Info ](#clear-secret-info) below for details.
 
 `vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Vault Secret Info ](#vault-secret-info) below for details.
 
-`wingman_secret_info` - (Optional) Secret is given as bootstrap secret in Volterra Security Sidecar. See [Wingman Secret Info ](#wingman-secret-info) below for details.
+`wingman_secret_info` - (Optional) Secret is given as bootstrap secret in F5XC Security Sidecar. See [Wingman Secret Info ](#wingman-secret-info) below for details.
 
 ### Auto
 
-Parameters for creating new subnet automatically.
+The subnet CIDR is autogenerated..
 
 ### Auto Asn
 
-Automatically set ASN.
+(Recommended) Automatically set ASN for BGP between Site and Azure Route Servers.
 
 ### Autogenerate
 
@@ -253,7 +235,7 @@ Only Single AZ or Three AZ(s) nodes are supported currently..
 
 ### Blindfold Secret Info
 
-Blindfold Secret is used for the secrets managed by Volterra Secret Management Service.
+Blindfold Secret is used for the secrets managed by F5XC Secret Management Service.
 
 `decryption_provider` - (Optional) Name of the Secret Management Access object that contains information about the backend Secret Management service. (`String`).
 
@@ -299,15 +281,15 @@ Clear Secret is used for the secrets that are not encrypted.
 
 ### Connections
 
-List of connections from hub VNet gateway to express route circuit.
+Add the ExpressRoute Circuit Connections to this site.
 
 `metadata` - (Required) Connection Metadata like name and description. See [Metadata ](#metadata) below for details.
 
-`circuit_id` - (Optional) Circuit ID in Same Subscription (`String`).
+`circuit_id` - (Optional) ExpressRoute Circuit is in same subscription as the site (`String`).
 
-`other_subscription` - (Optional) Circuit in Other Subscription. See [Other Subscription ](#other-subscription) below for details.
+`other_subscription` - (Optional) ExpressRoute Circuit is in a different subscription than the site. In this case both Circuit ID and Authorization key are needed. See [Other Subscription ](#other-subscription) below for details.
 
-`weight` - (Optional) Route weight (`Int`).
+`weight` - (Optional) The weight (or priority) for the routes received from this connection. The default value is 10. (`Int`).
 
 ### Coordinates
 
@@ -325,17 +307,17 @@ Certificates for generating intermediate certificate for TLS interception..
 
 `description` - (Optional) Description for the certificate (`String`).
 
-`custom_hash_algorithms` - (Optional) Use hash algorithms in the custom order. Volterra will try to fetch ocsp response from the CA in the given order. Additionally, LoadBalancer will not become active until ocspResponse cannot be fetched if the certificate has MustStaple extension set.. See [Custom Hash Algorithms ](#custom-hash-algorithms) below for details.
+`custom_hash_algorithms` - (Optional) Use hash algorithms in the custom order. F5XC will try to fetch ocsp response from the CA in the given order. Additionally, LoadBalancer will not become active until ocspResponse cannot be fetched if the certificate has MustStaple extension set.. See [Custom Hash Algorithms ](#custom-hash-algorithms) below for details.
 
 `disable_ocsp_stapling` - (Optional) This is the default behavior if no choice is selected.. See [Disable Ocsp Stapling ](#disable-ocsp-stapling) below for details.
 
-`use_system_defaults` - (Optional) Volterra will try to fetch OCSPResponse with sha256 and sha1 as HashAlgorithm, in that order.. See [Use System Defaults ](#use-system-defaults) below for details.
+`use_system_defaults` - (Optional) F5XC will try to fetch OCSPResponse with sha256 and sha1 as HashAlgorithm, in that order.. See [Use System Defaults ](#use-system-defaults) below for details.
 
 `private_key` - (Required) TLS Private Key data in unencrypted PEM format including the PEM headers. The data may be optionally secured using BlindFold. TLS key has to match the accompanying certificate.. See [Private Key ](#private-key) below for details.
 
 ### Custom Hash Algorithms
 
-Use hash algorithms in the custom order. Volterra will try to fetch ocsp response from the CA in the given order. Additionally, LoadBalancer will not become active until ocspResponse cannot be fetched if the certificate has MustStaple extension set..
+Use hash algorithms in the custom order. F5XC will try to fetch ocsp response from the CA in the given order. Additionally, LoadBalancer will not become active until ocspResponse cannot be fetched if the certificate has MustStaple extension set..
 
 `hash_algorithms` - (Required) Ordered list of hash algorithms to be used. (`List of Strings`).
 
@@ -349,7 +331,7 @@ Use Custom static route to configure all advanced options.
 
 `nexthop` - (Optional) Nexthop for the route. See [Nexthop ](#nexthop) below for details.
 
-`subnets` - (Optional) List of route prefixes. See [Subnets ](#subnets) below for details.
+`subnets` - (Required) List of route prefixes. See [Subnets ](#subnets) below for details.
 
 ### Default Os Version
 
@@ -427,21 +409,25 @@ Information about existing Vnet.
 
 ### Express Route Disabled
 
-Express Route feature disabled.
+Express Route is disabled on this site.
 
 ### Express Route Enabled
 
-Express Route feature enabled.
+Express Route is enabled on this site.
 
-`auto_asn` - (Optional) Automatically set ASN (bool).
+`auto_asn` - (Optional) (Recommended) Automatically set ASN for BGP between Site and Azure Route Servers (bool).
 
-`custom_asn` - (Optional) Custom Autonomous System Number (`Int`).
+`custom_asn` - (Optional) Set custom ASN for BGP between Site and Azure Route Servers (`Int`).
 
-`connections` - (Optional) List of connections from hub VNet gateway to express route circuit. See [Connections ](#connections) below for details.
+`connections` - (Required) Add the ExpressRoute Circuit Connections to this site. See [Connections ](#connections) below for details.
 
-`gateway_subnet` - (Optional) Gateway subnet. See [Gateway Subnet ](#gateway-subnet) below for details.
+`site_registration_over_express_route` - (Optional) Site Registration and Site to RE tunnels go over the Azure Express Route. See [Site Registration Over Express Route ](#site-registration-over-express-route) below for details.
 
-`route_server_subnet` - (Optional) Route Server Subnet. See [Route Server Subnet ](#route-server-subnet) below for details.
+`site_registration_over_internet` - (Optional) Site Registration and Site to RE tunnels go over the internet (bool).
+
+`gateway_subnet` - (Optional) Select the type of subnet to be used for VNet Gateway. See [Gateway Subnet ](#gateway-subnet) below for details.
+
+`route_server_subnet` - (Optional) Select the type of subnet to be used for Azure Route Server. See [Route Server Subnet ](#route-server-subnet) below for details.
 
 `sku_ergw1az` - (Optional) ErGw1Az SKU (Standard + Zone protection) (bool).
 
@@ -457,13 +443,13 @@ Enable Forward Proxy for this site and allow all requests..
 
 ### Gateway Subnet
 
-Gateway subnet.
+Select the type of subnet to be used for VNet Gateway.
 
-`auto` - (Optional) Parameters for creating new subnet automatically (bool).
+`auto` - (Optional) The subnet CIDR is autogenerated. (bool).
 
-`subnet` - (Optional) Information about existing subnet.. See [Subnet ](#subnet) below for details.
+`subnet` - (Optional) An existing subnet in specified resource group is used.. See [Subnet ](#subnet) below for details.
 
-`subnet_param` - (Optional) Parameters for creating new subnet.. See [Subnet Param ](#subnet-param) below for details.
+`subnet_param` - (Optional) A new subnet with specified CIDR is created.. See [Subnet Param ](#subnet-param) below for details.
 
 ### Global Network Connections
 
@@ -487,9 +473,9 @@ List of global network connections.
 
 This VNet is a hub VNet.
 
-`express_route_disabled` - (Optional) Express Route feature disabled (bool).
+`express_route_disabled` - (Optional) Express Route is disabled on this site (bool).
 
-`express_route_enabled` - (Optional) Express Route feature enabled. See [Express Route Enabled ](#express-route-enabled) below for details.
+`express_route_enabled` - (Optional) Express Route is enabled on this site. See [Express Route Enabled ](#express-route-enabled) below for details.
 
 `spoke_vnets` - (Optional) Spoke VNet Peering. See [Spoke Vnets ](#spoke-vnets) below for details.
 
@@ -759,7 +745,7 @@ Operating System Details.
 
 ### Other Subscription
 
-Circuit in Other Subscription.
+ExpressRoute Circuit is in a different subscription than the site. In this case both Circuit ID and Authorization key are needed.
 
 `authorized_key` - (Optional) Authorization Key created by the circuit owner. See [Authorized Key ](#authorized-key) below for details.
 
@@ -793,13 +779,13 @@ TLS Private Key data in unencrypted PEM format including the PEM headers. The da
 
 `secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).
 
-`blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by Volterra Secret Management Service. See [Blindfold Secret Info ](#blindfold-secret-info) below for details.
+`blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Blindfold Secret Info ](#blindfold-secret-info) below for details.
 
 `clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Clear Secret Info ](#clear-secret-info) below for details.
 
 `vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Vault Secret Info ](#vault-secret-info) below for details.
 
-`wingman_secret_info` - (Optional) Secret is given as bootstrap secret in Volterra Security Sidecar. See [Wingman Secret Info ](#wingman-secret-info) below for details.
+`wingman_secret_info` - (Optional) Secret is given as bootstrap secret in F5XC Security Sidecar. See [Wingman Secret Info ](#wingman-secret-info) below for details.
 
 ### Ref
 
@@ -813,13 +799,23 @@ tenant - (Optional) then tenant will hold the referred object's(e.g. route's) te
 
 ### Route Server Subnet
 
-Route Server Subnet.
+Select the type of subnet to be used for Azure Route Server.
 
-`auto` - (Optional) Parameters for creating new subnet automatically (bool).
+`auto` - (Optional) The subnet CIDR is autogenerated. (bool).
 
-`subnet` - (Optional) Information about existing subnet.. See [Subnet ](#subnet) below for details.
+`subnet` - (Optional) An existing subnet in specified resource group is used.. See [Subnet ](#subnet) below for details.
 
-`subnet_param` - (Optional) Parameters for creating new subnet.. See [Subnet Param ](#subnet-param) below for details.
+`subnet_param` - (Optional) A new subnet with specified CIDR is created.. See [Subnet Param ](#subnet-param) below for details.
+
+### Site Registration Over Express Route
+
+Site Registration and Site to RE tunnels go over the Azure Express Route.
+
+`cloudlink_network_name` - (Required) Cloud Link ADN Network Name for private access connectivity to F5XC ADN. (`String`).
+
+### Site Registration Over Internet
+
+Site Registration and Site to RE tunnels go over the internet.
 
 ### Sku Ergw1az
 
@@ -925,11 +921,11 @@ List of route prefixes.
 
 ### Sw
 
-Volterra Software Details.
+F5XC Software Details.
 
 `default_sw_version` - (Optional) Will assign latest available SW version (bool).
 
-`volterra_software_version` - (Optional) Volterra Software Version is optional parameter, which allows to specify target SW version for particular site e.g. crt-20210329-1002. (`String`).
+`volterra_software_version` - (Optional) F5XC Software Version is optional parameter, which allows to specify target SW version for particular site e.g. crt-20210329-1002. (`String`).
 
 ### Tls Intercept
 
@@ -941,7 +937,7 @@ Specify TLS interception configuration for the network connector.
 
 `custom_certificate` - (Optional) Certificates for generating intermediate certificate for TLS interception.. See [Custom Certificate ](#custom-certificate) below for details.
 
-`volterra_certificate` - (Optional) Volterra certificates for generating intermediate certificate for TLS interception. (bool).
+`volterra_certificate` - (Optional) F5XC certificates for generating intermediate certificate for TLS interception. (bool).
 
 `trusted_ca_url` - (Optional) Custom trusted CA certificates for validating upstream server certificate (`String`).
 
@@ -949,7 +945,7 @@ Specify TLS interception configuration for the network connector.
 
 ### Use System Defaults
 
-Volterra will try to fetch OCSPResponse with sha256 and sha1 as HashAlgorithm, in that order..
+F5XC will try to fetch OCSPResponse with sha256 and sha1 as HashAlgorithm, in that order..
 
 ### Vault Secret Info
 
@@ -979,7 +975,7 @@ Use the same Resource Group as the Vnet.
 
 ### Volterra Certificate
 
-Volterra certificates for generating intermediate certificate for TLS interception..
+F5XC certificates for generating intermediate certificate for TLS interception..
 
 ### Volterra Trusted Ca
 
@@ -1079,7 +1075,7 @@ Matches the web user interface port.
 
 ### Wingman Secret Info
 
-Secret is given as bootstrap secret in Volterra Security Sidecar.
+Secret is given as bootstrap secret in F5XC Security Sidecar.
 
 `name` - (Required) Name of the secret. (`String`).
 

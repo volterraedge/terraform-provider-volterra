@@ -3173,6 +3173,69 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "schemaCookieManipulationOptionType": {
+            "type": "object",
+            "description": "x-displayName: \"Cookie Manipulation Option\"\nCookie manipulation option.",
+            "title": "CookieManipulationOptionType",
+            "properties": {
+                "add_httponly": {
+                    "description": "x-displayName: \"Add HttpOnly\"\nAdd httponly attribute",
+                    "title": "add_httponly",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "add_secure": {
+                    "description": "x-displayName: \"Add Secure\"\nAdd secure attribute",
+                    "title": "add_secure",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "ignore_httponly": {
+                    "description": "x-displayName: \"Ignore HttpOnly\"\nIgnore httponly attribute",
+                    "title": "ignore_httponly",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "ignore_max_age": {
+                    "description": "x-displayName: \"Ignore Max Age\"\nIgnore max age attribute",
+                    "title": "ignore_max_age",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "ignore_samesite": {
+                    "description": "x-displayName: \"Ignore Samesite\"\nIgnore Samesite attribute",
+                    "title": "ignore_samesite",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "ignore_secure": {
+                    "description": "x-displayName: \"Ignore Secure\"\nIgnore secure attribute",
+                    "title": "ignore_secure",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "max_age_value": {
+                    "type": "integer",
+                    "description": "x-displayName: \"Add Max Age\"\nAdd max age attribute",
+                    "title": "add_max_age",
+                    "format": "int32"
+                },
+                "name": {
+                    "type": "string",
+                    "description": "x-displayName: \"Cookie Name\"\nx-example: \"value\"\nx-required\nName of the Cookie",
+                    "title": "name"
+                },
+                "samesite_lax": {
+                    "description": "x-displayName: \"Lax\"\nAdd Samesite attribute with Lax. Means that the cookie is not sent on cross-site requests",
+                    "title": "lax",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "samesite_none": {
+                    "description": "x-displayName: \"None\"\nAdd Samesite attribute with None. Means that the browser sends the cookie with both cross-site and same-site requests",
+                    "title": "none",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "samesite_strict": {
+                    "description": "x-displayName: \"Strict\"\nAdd Samesite attribute with Strict. Means that the browser sends the cookie only for same-site requests",
+                    "title": "strict",
+                    "$ref": "#/definitions/schemaEmpty"
+                }
+            }
+        },
         "schemaCorsPolicy": {
             "type": "object",
             "description": "Cross-Origin Resource Sharing requests configuration specified at Virtual-host or\nRoute level. Route level configuration takes precedence.\n\nAn example of an Cross origin HTTP request\n    GET /resources/public-data/ HTTP/1.1\n    Host: bar.other\n    User-Agent: Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10.5; en-US; rv:1.9.1b3pre) Gecko/20081130 Minefield/3.1b3pre\n    Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8\n    Accept-Language: en-us,en;q=0.5\n    Accept-Encoding: gzip,deflate\n    Accept-Charset: ISO-8859-1,utf-8;q=0.7,*;q=0.7\n    Connection: keep-alive\n    Referrer: http://foo.example/examples/access-control/simpleXSInvocation.html\n    Origin: http://foo.example\n\n\n    HTTP/1.1 200 OK\n    Date: Mon, 01 Dec 2008 00:23:53 GMT\n    Server: Apache/2.0.61\n    Access-Control-Allow-Origin: *\n    Keep-Alive: timeout=2, max=100\n    Connection: Keep-Alive\n    Transfer-Encoding: chunked\n    Content-Type: application/xml\n\nAn example for cross origin HTTP OPTIONS request with Access-Control-Request-* header\n\n    OPTIONS /resources/post-here/ HTTP/1.1\n    Host: bar.other\n    User-Agent: Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10.5; en-US; rv:1.9.1b3pre) Gecko/20081130 Minefield/3.1b3pre\n    Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8\n    Accept-Language: en-us,en;q=0.5\n    Accept-Encoding: gzip,deflate\n    Accept-Charset: ISO-8859-1,utf-8;q=0.7,*;q=0.7\n    Connection: keep-alive\n    Origin: http://foo.example\n    Access-Control-Request-Method: POST\n    Access-Control-Request-Headers: X-PINGOTHER, Content-Type\n\n\n    HTTP/1.1 204 No Content\n    Date: Mon, 01 Dec 2008 01:15:39 GMT\n    Server: Apache/2.0.61 (Unix)\n    Access-Control-Allow-Origin: http://foo.example\n    Access-Control-Allow-Methods: POST, GET, OPTIONS\n    Access-Control-Allow-Headers: X-PINGOTHER, Content-Type\n    Access-Control-Max-Age: 86400\n    Vary: Accept-Encoding, Origin\n    Keep-Alive: timeout=2, max=100\n    Connection: Keep-Alive",
@@ -4542,6 +4605,17 @@ var APISwaggerJSON string = `{
                     "title": "Compression configuration",
                     "$ref": "#/definitions/virtual_hostCompressionType",
                     "x-displayname": "Compression Parameters"
+                },
+                "connection_idle_timeout": {
+                    "type": "integer",
+                    "description": " The idle timeout for downstream connections. The idle timeout is defined as the\n period in which there are no active requests. When the idle timeout is reached the connection\n will be closed. Note that request based timeouts mean that HTTP/2 PINGs will not keep the connection alive.\n This is specified in milliseconds. The default value is 2 minutes.\n\nExample: - \"60000\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 600000\n",
+                    "title": "Connection Idle Timeout",
+                    "format": "int64",
+                    "x-displayname": "Connection Idle Timeout",
+                    "x-ves-example": "60000",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.lte": "600000"
+                    }
                 },
                 "cors_policy": {
                     "description": " CORS is a mechanism that uses additional HTTP headers to tell a browser to let\n a web application running at one origin (domain) have permission to access selected\n resources from a server at a different origin",

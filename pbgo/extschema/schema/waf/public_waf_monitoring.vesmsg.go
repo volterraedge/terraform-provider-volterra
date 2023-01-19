@@ -63,6 +63,26 @@ type ValidateRuleHitsCountRequest struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateRuleHitsCountRequest) StartTimeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for start_time")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateRuleHitsCountRequest) EndTimeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for end_time")
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateRuleHitsCountRequest) StepValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
@@ -180,6 +200,28 @@ var DefaultRuleHitsCountRequestValidator = func() *ValidateRuleHitsCountRequest 
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
+
+	vrhStartTime := v.StartTimeValidationRuleHandler
+	rulesStartTime := map[string]string{
+		"ves.io.schema.rules.string.query_time": "true",
+	}
+	vFn, err = vrhStartTime(rulesStartTime)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for RuleHitsCountRequest.start_time: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["start_time"] = vFn
+
+	vrhEndTime := v.EndTimeValidationRuleHandler
+	rulesEndTime := map[string]string{
+		"ves.io.schema.rules.string.query_time": "true",
+	}
+	vFn, err = vrhEndTime(rulesEndTime)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for RuleHitsCountRequest.end_time: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["end_time"] = vFn
 
 	vrhStep := v.StepValidationRuleHandler
 	rulesStep := map[string]string{
@@ -332,6 +374,26 @@ type ValidateSecurityEventsCountRequest struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateSecurityEventsCountRequest) StartTimeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for start_time")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateSecurityEventsCountRequest) EndTimeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for end_time")
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateSecurityEventsCountRequest) StepValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
@@ -449,6 +511,28 @@ var DefaultSecurityEventsCountRequestValidator = func() *ValidateSecurityEventsC
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
+
+	vrhStartTime := v.StartTimeValidationRuleHandler
+	rulesStartTime := map[string]string{
+		"ves.io.schema.rules.string.query_time": "true",
+	}
+	vFn, err = vrhStartTime(rulesStartTime)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for SecurityEventsCountRequest.start_time: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["start_time"] = vFn
+
+	vrhEndTime := v.EndTimeValidationRuleHandler
+	rulesEndTime := map[string]string{
+		"ves.io.schema.rules.string.query_time": "true",
+	}
+	vFn, err = vrhEndTime(rulesEndTime)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for SecurityEventsCountRequest.end_time: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["end_time"] = vFn
 
 	vrhStep := v.StepValidationRuleHandler
 	rulesStep := map[string]string{

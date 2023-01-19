@@ -5564,7 +5564,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Co-ordinates"
                 },
                 "default_blocked_services": {
-                    "description": "Exclusive with [blocked_services]\n Use default dehavior of allowing ports mentioned in blocked services",
+                    "description": "Exclusive with [blocked_services]\n Use default behavior of allowing ports mentioned in blocked services",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Default Blocked Service Configuration"
                 },
@@ -5580,12 +5580,12 @@ var APISwaggerJSON string = `{
                 },
                 "gcp_labels": {
                     "type": "object",
-                    "description": " GCP Label is a label consisting of a user-defined key and value.\n It helps to manage, identify, organize, search for, and filter resources in GCP console.\n\nExample: - \"devstaging\"-\n\nValidation Rules:\n  ves.io.schema.rules.map.keys.string.max_len: 127\n  ves.io.schema.rules.map.max_pairs: 5\n  ves.io.schema.rules.map.values.string.max_len: 255\n",
+                    "description": " GCP Label is a label consisting of a user-defined key and value.\n It helps to manage, identify, organize, search for, and filter resources in GCP console.\n\nExample: - \"devstaging\"-\n\nValidation Rules:\n  ves.io.schema.rules.map.keys.string.max_len: 127\n  ves.io.schema.rules.map.max_pairs: 10\n  ves.io.schema.rules.map.values.string.max_len: 255\n",
                     "x-displayname": "GCP Labels",
                     "x-ves-example": "dev: staging",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.map.keys.string.max_len": "127",
-                        "ves.io.schema.rules.map.max_pairs": "5",
+                        "ves.io.schema.rules.map.max_pairs": "10",
                         "ves.io.schema.rules.map.values.string.max_len": "255"
                     }
                 },
@@ -5709,7 +5709,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Co-ordinates"
                 },
                 "default_blocked_services": {
-                    "description": "Exclusive with [blocked_services]\n Use default dehavior of allowing ports mentioned in blocked services",
+                    "description": "Exclusive with [blocked_services]\n Use default behavior of allowing ports mentioned in blocked services",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Default Blocked Service Configuration"
                 },
@@ -5725,12 +5725,12 @@ var APISwaggerJSON string = `{
                 },
                 "gcp_labels": {
                     "type": "object",
-                    "description": " GCP Label is a label consisting of a user-defined key and value.\n It helps to manage, identify, organize, search for, and filter resources in GCP console.\n\nExample: - \"devstaging\"-\n\nValidation Rules:\n  ves.io.schema.rules.map.keys.string.max_len: 127\n  ves.io.schema.rules.map.max_pairs: 5\n  ves.io.schema.rules.map.values.string.max_len: 255\n",
+                    "description": " GCP Label is a label consisting of a user-defined key and value.\n It helps to manage, identify, organize, search for, and filter resources in GCP console.\n\nExample: - \"devstaging\"-\n\nValidation Rules:\n  ves.io.schema.rules.map.keys.string.max_len: 127\n  ves.io.schema.rules.map.max_pairs: 10\n  ves.io.schema.rules.map.values.string.max_len: 255\n",
                     "x-displayname": "GCP Labels",
                     "x-ves-example": "dev: staging",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.map.keys.string.max_len": "127",
-                        "ves.io.schema.rules.map.max_pairs": "5",
+                        "ves.io.schema.rules.map.max_pairs": "10",
                         "ves.io.schema.rules.map.values.string.max_len": "255"
                     }
                 },
@@ -5853,7 +5853,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Co-ordinates"
                 },
                 "default_blocked_services": {
-                    "description": "Exclusive with [blocked_services]\n Use default dehavior of allowing ports mentioned in blocked services",
+                    "description": "Exclusive with [blocked_services]\n Use default behavior of allowing ports mentioned in blocked services",
                     "title": "Default Blocked Service Configuration",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Default Blocked Service Configuration"
@@ -5871,13 +5871,13 @@ var APISwaggerJSON string = `{
                 },
                 "gcp_labels": {
                     "type": "object",
-                    "description": " GCP Label is a label consisting of a user-defined key and value.\n It helps to manage, identify, organize, search for, and filter resources in GCP console.\n\nExample: - \"devstaging\"-\n\nValidation Rules:\n  ves.io.schema.rules.map.keys.string.max_len: 127\n  ves.io.schema.rules.map.max_pairs: 5\n  ves.io.schema.rules.map.values.string.max_len: 255\n",
+                    "description": " GCP Label is a label consisting of a user-defined key and value.\n It helps to manage, identify, organize, search for, and filter resources in GCP console.\n\nExample: - \"devstaging\"-\n\nValidation Rules:\n  ves.io.schema.rules.map.keys.string.max_len: 127\n  ves.io.schema.rules.map.max_pairs: 10\n  ves.io.schema.rules.map.values.string.max_len: 255\n",
                     "title": "GCP Labels",
                     "x-displayname": "GCP Labels",
                     "x-ves-example": "dev: staging",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.map.keys.string.max_len": "127",
-                        "ves.io.schema.rules.map.max_pairs": "5",
+                        "ves.io.schema.rules.map.max_pairs": "10",
                         "ves.io.schema.rules.map.values.string.max_len": "255"
                     }
                 },
@@ -5999,7 +5999,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Co-ordinates"
                 },
                 "default_blocked_services": {
-                    "description": "Exclusive with [blocked_services]\n Use default dehavior of allowing ports mentioned in blocked services",
+                    "description": "Exclusive with [blocked_services]\n Use default behavior of allowing ports mentioned in blocked services",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Default Blocked Service Configuration"
                 },

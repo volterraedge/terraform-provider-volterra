@@ -1406,7 +1406,7 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	vrhTags := v.TagsValidationRuleHandler
 	rulesTags := map[string]string{
 		"ves.io.schema.rules.map.keys.string.max_len":   "127",
-		"ves.io.schema.rules.map.max_pairs":             "5",
+		"ves.io.schema.rules.map.max_pairs":             "10",
 		"ves.io.schema.rules.map.values.string.max_len": "255",
 	}
 	vFn, err = vrhTags(rulesTags)
@@ -2419,7 +2419,7 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	vrhTags := v.TagsValidationRuleHandler
 	rulesTags := map[string]string{
 		"ves.io.schema.rules.map.keys.string.max_len":   "127",
-		"ves.io.schema.rules.map.max_pairs":             "5",
+		"ves.io.schema.rules.map.max_pairs":             "10",
 		"ves.io.schema.rules.map.values.string.max_len": "255",
 	}
 	vFn, err = vrhTags(rulesTags)
@@ -3422,7 +3422,7 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	vrhTags := v.TagsValidationRuleHandler
 	rulesTags := map[string]string{
 		"ves.io.schema.rules.map.keys.string.max_len":   "127",
-		"ves.io.schema.rules.map.max_pairs":             "5",
+		"ves.io.schema.rules.map.max_pairs":             "10",
 		"ves.io.schema.rules.map.values.string.max_len": "255",
 	}
 	vFn, err = vrhTags(rulesTags)
@@ -5304,8 +5304,6 @@ var DefaultServicesVPCTypeValidator = func() *ValidateServicesVPCType {
 
 	v.FldValidators["deployment.aws_cred"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
-	v.FldValidators["internet_vip_choice.enable_internet_vip"] = ves_io_schema_views.AWSInternetVIPTypeValidator().Validate
-
 	v.FldValidators["service_vpc_choice.new_vpc"] = ves_io_schema_views.AWSVPCParamsTypeValidator().Validate
 
 	v.FldValidators["tgw_choice.new_tgw"] = TGWParamsTypeValidator().Validate
@@ -6337,6 +6335,15 @@ func (v *ValidateVnConfiguration) Validate(ctx context.Context, pm interface{}, 
 
 	}
 
+	if fv, exists := v.FldValidators["allowed_vip_port_sli"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("allowed_vip_port_sli"))
+		if err := fv(ctx, m.GetAllowedVipPortSli(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["dc_cluster_group_choice"]; exists {
 		val := m.GetDcClusterGroupChoice()
 		vOpts := append(opts,
@@ -6608,6 +6615,8 @@ var DefaultVnConfigurationValidator = func() *ValidateVnConfiguration {
 	v.FldValidators["outside_static_route_choice.outside_static_routes"] = ves_io_schema_views.SiteStaticRoutesListTypeValidator().Validate
 
 	v.FldValidators["allowed_vip_port"] = ves_io_schema_views.AllowedVIPPortsValidator().Validate
+
+	v.FldValidators["allowed_vip_port_sli"] = ves_io_schema_views.AllowedVIPPortsValidator().Validate
 
 	return v
 }()

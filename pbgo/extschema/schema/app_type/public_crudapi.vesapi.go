@@ -2187,9 +2187,9 @@ var APISwaggerJSON string = `{
     "definitions": {
         "app_typeBusinessLogicMarkupSetting": {
             "type": "object",
-            "description": "Setting specifying how Business Logic Markup will be performed.",
-            "title": "Business Logic Markup Setting",
-            "x-displayname": "Business Logic Markup Setting",
+            "description": "Settings specifying how API Discovery will be performed",
+            "title": "API Discovery Settings",
+            "x-displayname": "API Discovery Settings",
             "x-ves-oneof-field-learn_from_redirect_traffic": "[\"disable\",\"enable\"]",
             "x-ves-proto-message": "ves.io.schema.app_type.BusinessLogicMarkupSetting",
             "properties": {
@@ -2197,13 +2197,13 @@ var APISwaggerJSON string = `{
                     "description": "Exclusive with [enable]\n Disable learning API patterns from traffic with redirect response codes 3xx",
                     "title": "Disable learning from redirected request traffic",
                     "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "Disable learning from redirect traffic"
+                    "x-displayname": "Disable"
                 },
                 "enable": {
                     "description": "Exclusive with [disable]\n Enable learning API patterns from traffic with redirect response codes 3xx",
                     "title": "Enable learning from redirected request traffic",
                     "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "Enable learning from redirect traffic"
+                    "x-displayname": "Enable"
                 }
             }
         },
@@ -2260,9 +2260,9 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.app_type.CreateSpecType",
             "properties": {
                 "business_logic_markup_setting": {
-                    "description": " Setting specifying how Business Logic Markup will be performed",
+                    "description": " Setting specifying how API Discovery will be performed",
                     "$ref": "#/definitions/app_typeBusinessLogicMarkupSetting",
-                    "x-displayname": "Business Logic Markup Setting"
+                    "x-displayname": "API Discovery Settings"
                 },
                 "features": {
                     "type": "array",
@@ -2328,7 +2328,7 @@ var APISwaggerJSON string = `{
         },
         "app_typeFeatureType": {
             "type": "string",
-            "description": "Enumeration for AI/ML features supported\n\nAPI Discovery enables generation of model for various API interactions between services of App type.\nEnable analysis of timeseries for various metric collected like requests, errors, latency etc.\nEnable anomaly detection per API request.\nEnable user behavior analysis",
+            "description": "Enumeration for AI/ML features supported\n\nAPI Discovery enables generation of model for various API interactions between services of App type.\nEnable analysis of timeseries for various metric collected like requests, errors, latency etc.\nEnable anomaly detection per API request, i.e. the probability density function (PDF) charts generation for API endpoints\nEnable user behavior analysis",
             "title": "FeatureType",
             "enum": [
                 "BUSINESS_LOGIC_MARKUP",
@@ -2425,9 +2425,9 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.app_type.GetSpecType",
             "properties": {
                 "business_logic_markup_setting": {
-                    "description": " Setting specifying how Business Logic Markup will be performed",
+                    "description": " Setting specifying how API Discovery will be performed",
                     "$ref": "#/definitions/app_typeBusinessLogicMarkupSetting",
-                    "x-displayname": "Business Logic Markup Setting"
+                    "x-displayname": "API Discovery Settings"
                 },
                 "features": {
                     "type": "array",
@@ -2449,10 +2449,10 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.app_type.GlobalSpecType",
             "properties": {
                 "business_logic_markup_setting": {
-                    "description": " Setting specifying how Business Logic Markup will be performed",
-                    "title": "Business Logic Markup Setting",
+                    "description": " Setting specifying how API Discovery will be performed",
+                    "title": "API Discovery Settings",
                     "$ref": "#/definitions/app_typeBusinessLogicMarkupSetting",
-                    "x-displayname": "Business Logic Markup Setting"
+                    "x-displayname": "API Discovery Settings"
                 },
                 "features": {
                     "type": "array",
@@ -2656,9 +2656,9 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.app_type.ReplaceSpecType",
             "properties": {
                 "business_logic_markup_setting": {
-                    "description": " Setting specifying how Business Logic Markup will be performed",
+                    "description": " Setting specifying how API Discovery will be performed",
                     "$ref": "#/definitions/app_typeBusinessLogicMarkupSetting",
-                    "x-displayname": "Business Logic Markup Setting"
+                    "x-displayname": "API Discovery Settings"
                 },
                 "features": {
                     "type": "array",

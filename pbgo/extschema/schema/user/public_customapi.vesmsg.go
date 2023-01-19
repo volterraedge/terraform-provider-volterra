@@ -1494,6 +1494,15 @@ func (v *ValidateGetUserRoleResponse) Validate(ctx context.Context, pm interface
 
 	}
 
+	if fv, exists := v.FldValidators["user_uuid"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("user_uuid"))
+		if err := fv(ctx, m.GetUserUuid(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	return nil
 }
 

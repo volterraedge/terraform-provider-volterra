@@ -2642,6 +2642,31 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "advertise_policyListenerConfig": {
+            "type": "object",
+            "x-ves-proto-message": "ves.io.schema.advertise_policy.ListenerConfig",
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "description": " listener name for Internet VIP",
+                    "title": "Name",
+                    "x-displayname": "Name"
+                },
+                "port": {
+                    "type": "integer",
+                    "description": " listener port for Internet VIP",
+                    "title": "Port",
+                    "format": "int64",
+                    "x-displayname": "Port"
+                },
+                "status": {
+                    "type": "string",
+                    "description": " listener Status for Internet VIP",
+                    "title": "Status",
+                    "x-displayname": "Status"
+                }
+            }
+        },
         "advertise_policySpecType": {
             "type": "object",
             "description": "Desired state of the advertise policy",
@@ -2673,6 +2698,15 @@ var APISwaggerJSON string = `{
                         "$ref": "#/definitions/schemaConditionType"
                     },
                     "x-displayname": "Conditions"
+                },
+                "listeners": {
+                    "type": "array",
+                    "description": " list of Listeners for the internet NLB",
+                    "title": "listeners",
+                    "items": {
+                        "$ref": "#/definitions/advertise_policyListenerConfig"
+                    },
+                    "x-displayname": "Listeners"
                 },
                 "metadata": {
                     "description": " Standard status's metadata",
@@ -3164,14 +3198,16 @@ var APISwaggerJSON string = `{
             "properties": {
                 "ref": {
                     "type": "array",
-                    "description": " A virtual network direct reference\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 1\n",
+                    "description": " A virtual network direct reference\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 1\n",
                     "title": "ref",
                     "maxItems": 1,
                     "items": {
                         "$ref": "#/definitions/schemaObjectRefType"
                     },
                     "x-displayname": "Reference",
+                    "x-ves-required": "true",
                     "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
                         "ves.io.schema.rules.repeated.max_items": "1"
                     }
                 }
@@ -3378,14 +3414,16 @@ var APISwaggerJSON string = `{
                 },
                 "ref": {
                     "type": "array",
-                    "description": " A site direct reference\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 1\n",
+                    "description": " A site direct reference\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 1\n",
                     "title": "ref",
                     "maxItems": 1,
                     "items": {
                         "$ref": "#/definitions/schemaObjectRefType"
                     },
                     "x-displayname": "Reference",
+                    "x-ves-required": "true",
                     "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
                         "ves.io.schema.rules.repeated.max_items": "1"
                     }
                 }
@@ -3832,14 +3870,16 @@ var APISwaggerJSON string = `{
                 },
                 "ref": {
                     "type": "array",
-                    "description": " A virtual_site direct reference\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 1\n",
+                    "description": " A virtual_site direct reference\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 1\n",
                     "title": "ref",
                     "maxItems": 1,
                     "items": {
                         "$ref": "#/definitions/schemaObjectRefType"
                     },
                     "x-displayname": "Reference",
+                    "x-ves-required": "true",
                     "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
                         "ves.io.schema.rules.repeated.max_items": "1"
                     }
                 }

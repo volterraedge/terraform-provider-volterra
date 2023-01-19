@@ -1180,6 +1180,196 @@ func resourceVolterraServicePolicyRule() *schema.Resource {
 				},
 			},
 
+			"request_constraints": {
+
+				Type:     schema.TypeSet,
+				Optional: true,
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+
+						"max_body_size_exceeds": {
+
+							Type:     schema.TypeInt,
+							Optional: true,
+						},
+
+						"max_body_size_none": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+
+						"max_cookie_count_exceeds": {
+
+							Type:     schema.TypeInt,
+							Optional: true,
+						},
+
+						"max_cookie_count_none": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+
+						"max_cookie_key_size_exceeds": {
+
+							Type:     schema.TypeInt,
+							Optional: true,
+						},
+
+						"max_cookie_key_size_none": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+
+						"max_cookie_value_size_exceeds": {
+
+							Type:     schema.TypeInt,
+							Optional: true,
+						},
+
+						"max_cookie_value_size_none": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+
+						"max_header_count_exceeds": {
+
+							Type:     schema.TypeInt,
+							Optional: true,
+						},
+
+						"max_header_count_none": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+
+						"max_header_key_size_exceeds": {
+
+							Type:     schema.TypeInt,
+							Optional: true,
+						},
+
+						"max_header_key_size_none": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+
+						"max_header_value_size_exceeds": {
+
+							Type:     schema.TypeInt,
+							Optional: true,
+						},
+
+						"max_header_value_size_none": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+
+						"max_parameter_count_exceeds": {
+
+							Type:     schema.TypeInt,
+							Optional: true,
+						},
+
+						"max_parameter_count_none": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+
+						"max_parameter_name_size_exceeds": {
+
+							Type:     schema.TypeInt,
+							Optional: true,
+						},
+
+						"max_parameter_name_size_none": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+
+						"max_parameter_value_size_exceeds": {
+
+							Type:     schema.TypeInt,
+							Optional: true,
+						},
+
+						"max_parameter_value_size_none": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+
+						"max_query_size_exceeds": {
+
+							Type:     schema.TypeInt,
+							Optional: true,
+						},
+
+						"max_query_size_none": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+
+						"max_request_line_size_exceeds": {
+
+							Type:     schema.TypeInt,
+							Optional: true,
+						},
+
+						"max_request_line_size_none": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+
+						"max_request_size_exceeds": {
+
+							Type:     schema.TypeInt,
+							Optional: true,
+						},
+
+						"max_request_size_none": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+
+						"max_upload_file_size_exceeds": {
+
+							Type:     schema.TypeInt,
+							Optional: true,
+						},
+
+						"max_upload_file_size_none": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+
+						"max_url_size_exceeds": {
+
+							Type:     schema.TypeInt,
+							Optional: true,
+						},
+
+						"max_url_size_none": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+					},
+				},
+			},
+
 			"scheme": {
 
 				Type: schema.TypeList,
@@ -3110,6 +3300,394 @@ func resourceVolterraServicePolicyRuleCreate(d *schema.ResourceData, meta interf
 
 			if v, ok := rlMapToStrVal["uid"]; ok && !isIntfNil(v) {
 				rateLimiterInt[i].Uid = v.(string)
+			}
+
+		}
+
+	}
+
+	//request_constraints
+	if v, ok := d.GetOk("request_constraints"); ok && !isIntfNil(v) {
+
+		sl := v.(*schema.Set).List()
+		requestConstraints := &ves_io_schema_policy.RequestConstraintType{}
+		createSpec.RequestConstraints = requestConstraints
+		for _, set := range sl {
+			requestConstraintsMapStrToI := set.(map[string]interface{})
+
+			maxBodySizeChoiceTypeFound := false
+
+			if v, ok := requestConstraintsMapStrToI["max_body_size_exceeds"]; ok && !isIntfNil(v) && !maxBodySizeChoiceTypeFound {
+
+				maxBodySizeChoiceTypeFound = true
+				maxBodySizeChoiceInt := &ves_io_schema_policy.RequestConstraintType_MaxBodySizeExceeds{}
+
+				requestConstraints.MaxBodySizeChoice = maxBodySizeChoiceInt
+
+				maxBodySizeChoiceInt.MaxBodySizeExceeds = uint32(v.(int))
+
+			}
+
+			if v, ok := requestConstraintsMapStrToI["max_body_size_none"]; ok && !isIntfNil(v) && !maxBodySizeChoiceTypeFound {
+
+				maxBodySizeChoiceTypeFound = true
+
+				if v.(bool) {
+					maxBodySizeChoiceInt := &ves_io_schema_policy.RequestConstraintType_MaxBodySizeNone{}
+					maxBodySizeChoiceInt.MaxBodySizeNone = &ves_io_schema.Empty{}
+					requestConstraints.MaxBodySizeChoice = maxBodySizeChoiceInt
+				}
+
+			}
+
+			maxCookieCountChoiceTypeFound := false
+
+			if v, ok := requestConstraintsMapStrToI["max_cookie_count_exceeds"]; ok && !isIntfNil(v) && !maxCookieCountChoiceTypeFound {
+
+				maxCookieCountChoiceTypeFound = true
+				maxCookieCountChoiceInt := &ves_io_schema_policy.RequestConstraintType_MaxCookieCountExceeds{}
+
+				requestConstraints.MaxCookieCountChoice = maxCookieCountChoiceInt
+
+				maxCookieCountChoiceInt.MaxCookieCountExceeds = uint32(v.(int))
+
+			}
+
+			if v, ok := requestConstraintsMapStrToI["max_cookie_count_none"]; ok && !isIntfNil(v) && !maxCookieCountChoiceTypeFound {
+
+				maxCookieCountChoiceTypeFound = true
+
+				if v.(bool) {
+					maxCookieCountChoiceInt := &ves_io_schema_policy.RequestConstraintType_MaxCookieCountNone{}
+					maxCookieCountChoiceInt.MaxCookieCountNone = &ves_io_schema.Empty{}
+					requestConstraints.MaxCookieCountChoice = maxCookieCountChoiceInt
+				}
+
+			}
+
+			maxCookieKeySizeChoiceTypeFound := false
+
+			if v, ok := requestConstraintsMapStrToI["max_cookie_key_size_exceeds"]; ok && !isIntfNil(v) && !maxCookieKeySizeChoiceTypeFound {
+
+				maxCookieKeySizeChoiceTypeFound = true
+				maxCookieKeySizeChoiceInt := &ves_io_schema_policy.RequestConstraintType_MaxCookieKeySizeExceeds{}
+
+				requestConstraints.MaxCookieKeySizeChoice = maxCookieKeySizeChoiceInt
+
+				maxCookieKeySizeChoiceInt.MaxCookieKeySizeExceeds = uint32(v.(int))
+
+			}
+
+			if v, ok := requestConstraintsMapStrToI["max_cookie_key_size_none"]; ok && !isIntfNil(v) && !maxCookieKeySizeChoiceTypeFound {
+
+				maxCookieKeySizeChoiceTypeFound = true
+
+				if v.(bool) {
+					maxCookieKeySizeChoiceInt := &ves_io_schema_policy.RequestConstraintType_MaxCookieKeySizeNone{}
+					maxCookieKeySizeChoiceInt.MaxCookieKeySizeNone = &ves_io_schema.Empty{}
+					requestConstraints.MaxCookieKeySizeChoice = maxCookieKeySizeChoiceInt
+				}
+
+			}
+
+			maxCookieValueSizeChoiceTypeFound := false
+
+			if v, ok := requestConstraintsMapStrToI["max_cookie_value_size_exceeds"]; ok && !isIntfNil(v) && !maxCookieValueSizeChoiceTypeFound {
+
+				maxCookieValueSizeChoiceTypeFound = true
+				maxCookieValueSizeChoiceInt := &ves_io_schema_policy.RequestConstraintType_MaxCookieValueSizeExceeds{}
+
+				requestConstraints.MaxCookieValueSizeChoice = maxCookieValueSizeChoiceInt
+
+				maxCookieValueSizeChoiceInt.MaxCookieValueSizeExceeds = uint32(v.(int))
+
+			}
+
+			if v, ok := requestConstraintsMapStrToI["max_cookie_value_size_none"]; ok && !isIntfNil(v) && !maxCookieValueSizeChoiceTypeFound {
+
+				maxCookieValueSizeChoiceTypeFound = true
+
+				if v.(bool) {
+					maxCookieValueSizeChoiceInt := &ves_io_schema_policy.RequestConstraintType_MaxCookieValueSizeNone{}
+					maxCookieValueSizeChoiceInt.MaxCookieValueSizeNone = &ves_io_schema.Empty{}
+					requestConstraints.MaxCookieValueSizeChoice = maxCookieValueSizeChoiceInt
+				}
+
+			}
+
+			maxHeaderCountChoiceTypeFound := false
+
+			if v, ok := requestConstraintsMapStrToI["max_header_count_exceeds"]; ok && !isIntfNil(v) && !maxHeaderCountChoiceTypeFound {
+
+				maxHeaderCountChoiceTypeFound = true
+				maxHeaderCountChoiceInt := &ves_io_schema_policy.RequestConstraintType_MaxHeaderCountExceeds{}
+
+				requestConstraints.MaxHeaderCountChoice = maxHeaderCountChoiceInt
+
+				maxHeaderCountChoiceInt.MaxHeaderCountExceeds = uint32(v.(int))
+
+			}
+
+			if v, ok := requestConstraintsMapStrToI["max_header_count_none"]; ok && !isIntfNil(v) && !maxHeaderCountChoiceTypeFound {
+
+				maxHeaderCountChoiceTypeFound = true
+
+				if v.(bool) {
+					maxHeaderCountChoiceInt := &ves_io_schema_policy.RequestConstraintType_MaxHeaderCountNone{}
+					maxHeaderCountChoiceInt.MaxHeaderCountNone = &ves_io_schema.Empty{}
+					requestConstraints.MaxHeaderCountChoice = maxHeaderCountChoiceInt
+				}
+
+			}
+
+			maxHeaderKeySizeChoiceTypeFound := false
+
+			if v, ok := requestConstraintsMapStrToI["max_header_key_size_exceeds"]; ok && !isIntfNil(v) && !maxHeaderKeySizeChoiceTypeFound {
+
+				maxHeaderKeySizeChoiceTypeFound = true
+				maxHeaderKeySizeChoiceInt := &ves_io_schema_policy.RequestConstraintType_MaxHeaderKeySizeExceeds{}
+
+				requestConstraints.MaxHeaderKeySizeChoice = maxHeaderKeySizeChoiceInt
+
+				maxHeaderKeySizeChoiceInt.MaxHeaderKeySizeExceeds = uint32(v.(int))
+
+			}
+
+			if v, ok := requestConstraintsMapStrToI["max_header_key_size_none"]; ok && !isIntfNil(v) && !maxHeaderKeySizeChoiceTypeFound {
+
+				maxHeaderKeySizeChoiceTypeFound = true
+
+				if v.(bool) {
+					maxHeaderKeySizeChoiceInt := &ves_io_schema_policy.RequestConstraintType_MaxHeaderKeySizeNone{}
+					maxHeaderKeySizeChoiceInt.MaxHeaderKeySizeNone = &ves_io_schema.Empty{}
+					requestConstraints.MaxHeaderKeySizeChoice = maxHeaderKeySizeChoiceInt
+				}
+
+			}
+
+			maxHeaderValueSizeChoiceTypeFound := false
+
+			if v, ok := requestConstraintsMapStrToI["max_header_value_size_exceeds"]; ok && !isIntfNil(v) && !maxHeaderValueSizeChoiceTypeFound {
+
+				maxHeaderValueSizeChoiceTypeFound = true
+				maxHeaderValueSizeChoiceInt := &ves_io_schema_policy.RequestConstraintType_MaxHeaderValueSizeExceeds{}
+
+				requestConstraints.MaxHeaderValueSizeChoice = maxHeaderValueSizeChoiceInt
+
+				maxHeaderValueSizeChoiceInt.MaxHeaderValueSizeExceeds = uint32(v.(int))
+
+			}
+
+			if v, ok := requestConstraintsMapStrToI["max_header_value_size_none"]; ok && !isIntfNil(v) && !maxHeaderValueSizeChoiceTypeFound {
+
+				maxHeaderValueSizeChoiceTypeFound = true
+
+				if v.(bool) {
+					maxHeaderValueSizeChoiceInt := &ves_io_schema_policy.RequestConstraintType_MaxHeaderValueSizeNone{}
+					maxHeaderValueSizeChoiceInt.MaxHeaderValueSizeNone = &ves_io_schema.Empty{}
+					requestConstraints.MaxHeaderValueSizeChoice = maxHeaderValueSizeChoiceInt
+				}
+
+			}
+
+			maxParameterCountChoiceTypeFound := false
+
+			if v, ok := requestConstraintsMapStrToI["max_parameter_count_exceeds"]; ok && !isIntfNil(v) && !maxParameterCountChoiceTypeFound {
+
+				maxParameterCountChoiceTypeFound = true
+				maxParameterCountChoiceInt := &ves_io_schema_policy.RequestConstraintType_MaxParameterCountExceeds{}
+
+				requestConstraints.MaxParameterCountChoice = maxParameterCountChoiceInt
+
+				maxParameterCountChoiceInt.MaxParameterCountExceeds = uint32(v.(int))
+
+			}
+
+			if v, ok := requestConstraintsMapStrToI["max_parameter_count_none"]; ok && !isIntfNil(v) && !maxParameterCountChoiceTypeFound {
+
+				maxParameterCountChoiceTypeFound = true
+
+				if v.(bool) {
+					maxParameterCountChoiceInt := &ves_io_schema_policy.RequestConstraintType_MaxParameterCountNone{}
+					maxParameterCountChoiceInt.MaxParameterCountNone = &ves_io_schema.Empty{}
+					requestConstraints.MaxParameterCountChoice = maxParameterCountChoiceInt
+				}
+
+			}
+
+			maxParameterNameSizeChoiceTypeFound := false
+
+			if v, ok := requestConstraintsMapStrToI["max_parameter_name_size_exceeds"]; ok && !isIntfNil(v) && !maxParameterNameSizeChoiceTypeFound {
+
+				maxParameterNameSizeChoiceTypeFound = true
+				maxParameterNameSizeChoiceInt := &ves_io_schema_policy.RequestConstraintType_MaxParameterNameSizeExceeds{}
+
+				requestConstraints.MaxParameterNameSizeChoice = maxParameterNameSizeChoiceInt
+
+				maxParameterNameSizeChoiceInt.MaxParameterNameSizeExceeds = uint32(v.(int))
+
+			}
+
+			if v, ok := requestConstraintsMapStrToI["max_parameter_name_size_none"]; ok && !isIntfNil(v) && !maxParameterNameSizeChoiceTypeFound {
+
+				maxParameterNameSizeChoiceTypeFound = true
+
+				if v.(bool) {
+					maxParameterNameSizeChoiceInt := &ves_io_schema_policy.RequestConstraintType_MaxParameterNameSizeNone{}
+					maxParameterNameSizeChoiceInt.MaxParameterNameSizeNone = &ves_io_schema.Empty{}
+					requestConstraints.MaxParameterNameSizeChoice = maxParameterNameSizeChoiceInt
+				}
+
+			}
+
+			maxParameterValueSizeChoiceTypeFound := false
+
+			if v, ok := requestConstraintsMapStrToI["max_parameter_value_size_exceeds"]; ok && !isIntfNil(v) && !maxParameterValueSizeChoiceTypeFound {
+
+				maxParameterValueSizeChoiceTypeFound = true
+				maxParameterValueSizeChoiceInt := &ves_io_schema_policy.RequestConstraintType_MaxParameterValueSizeExceeds{}
+
+				requestConstraints.MaxParameterValueSizeChoice = maxParameterValueSizeChoiceInt
+
+				maxParameterValueSizeChoiceInt.MaxParameterValueSizeExceeds = uint32(v.(int))
+
+			}
+
+			if v, ok := requestConstraintsMapStrToI["max_parameter_value_size_none"]; ok && !isIntfNil(v) && !maxParameterValueSizeChoiceTypeFound {
+
+				maxParameterValueSizeChoiceTypeFound = true
+
+				if v.(bool) {
+					maxParameterValueSizeChoiceInt := &ves_io_schema_policy.RequestConstraintType_MaxParameterValueSizeNone{}
+					maxParameterValueSizeChoiceInt.MaxParameterValueSizeNone = &ves_io_schema.Empty{}
+					requestConstraints.MaxParameterValueSizeChoice = maxParameterValueSizeChoiceInt
+				}
+
+			}
+
+			maxQuerySizeChoiceTypeFound := false
+
+			if v, ok := requestConstraintsMapStrToI["max_query_size_exceeds"]; ok && !isIntfNil(v) && !maxQuerySizeChoiceTypeFound {
+
+				maxQuerySizeChoiceTypeFound = true
+				maxQuerySizeChoiceInt := &ves_io_schema_policy.RequestConstraintType_MaxQuerySizeExceeds{}
+
+				requestConstraints.MaxQuerySizeChoice = maxQuerySizeChoiceInt
+
+				maxQuerySizeChoiceInt.MaxQuerySizeExceeds = uint32(v.(int))
+
+			}
+
+			if v, ok := requestConstraintsMapStrToI["max_query_size_none"]; ok && !isIntfNil(v) && !maxQuerySizeChoiceTypeFound {
+
+				maxQuerySizeChoiceTypeFound = true
+
+				if v.(bool) {
+					maxQuerySizeChoiceInt := &ves_io_schema_policy.RequestConstraintType_MaxQuerySizeNone{}
+					maxQuerySizeChoiceInt.MaxQuerySizeNone = &ves_io_schema.Empty{}
+					requestConstraints.MaxQuerySizeChoice = maxQuerySizeChoiceInt
+				}
+
+			}
+
+			maxRequestLineSizeChoiceTypeFound := false
+
+			if v, ok := requestConstraintsMapStrToI["max_request_line_size_exceeds"]; ok && !isIntfNil(v) && !maxRequestLineSizeChoiceTypeFound {
+
+				maxRequestLineSizeChoiceTypeFound = true
+				maxRequestLineSizeChoiceInt := &ves_io_schema_policy.RequestConstraintType_MaxRequestLineSizeExceeds{}
+
+				requestConstraints.MaxRequestLineSizeChoice = maxRequestLineSizeChoiceInt
+
+				maxRequestLineSizeChoiceInt.MaxRequestLineSizeExceeds = uint32(v.(int))
+
+			}
+
+			if v, ok := requestConstraintsMapStrToI["max_request_line_size_none"]; ok && !isIntfNil(v) && !maxRequestLineSizeChoiceTypeFound {
+
+				maxRequestLineSizeChoiceTypeFound = true
+
+				if v.(bool) {
+					maxRequestLineSizeChoiceInt := &ves_io_schema_policy.RequestConstraintType_MaxRequestLineSizeNone{}
+					maxRequestLineSizeChoiceInt.MaxRequestLineSizeNone = &ves_io_schema.Empty{}
+					requestConstraints.MaxRequestLineSizeChoice = maxRequestLineSizeChoiceInt
+				}
+
+			}
+
+			maxRequestSizeChoiceTypeFound := false
+
+			if v, ok := requestConstraintsMapStrToI["max_request_size_exceeds"]; ok && !isIntfNil(v) && !maxRequestSizeChoiceTypeFound {
+
+				maxRequestSizeChoiceTypeFound = true
+				maxRequestSizeChoiceInt := &ves_io_schema_policy.RequestConstraintType_MaxRequestSizeExceeds{}
+
+				requestConstraints.MaxRequestSizeChoice = maxRequestSizeChoiceInt
+
+				maxRequestSizeChoiceInt.MaxRequestSizeExceeds = uint32(v.(int))
+
+			}
+
+			if v, ok := requestConstraintsMapStrToI["max_request_size_none"]; ok && !isIntfNil(v) && !maxRequestSizeChoiceTypeFound {
+
+				maxRequestSizeChoiceTypeFound = true
+
+				if v.(bool) {
+					maxRequestSizeChoiceInt := &ves_io_schema_policy.RequestConstraintType_MaxRequestSizeNone{}
+					maxRequestSizeChoiceInt.MaxRequestSizeNone = &ves_io_schema.Empty{}
+					requestConstraints.MaxRequestSizeChoice = maxRequestSizeChoiceInt
+				}
+
+			}
+
+			maxUploadFileSizeChoiceTypeFound := false
+
+			if v, ok := requestConstraintsMapStrToI["max_upload_file_size_exceeds"]; ok && !isIntfNil(v) && !maxUploadFileSizeChoiceTypeFound {
+
+				maxUploadFileSizeChoiceTypeFound = true
+				maxUploadFileSizeChoiceInt := &ves_io_schema_policy.RequestConstraintType_MaxUploadFileSizeExceeds{}
+
+				requestConstraints.MaxUploadFileSizeChoice = maxUploadFileSizeChoiceInt
+
+				maxUploadFileSizeChoiceInt.MaxUploadFileSizeExceeds = uint32(v.(int))
+
+			}
+
+			if v, ok := requestConstraintsMapStrToI["max_upload_file_size_none"]; ok && !isIntfNil(v) && !maxUploadFileSizeChoiceTypeFound {
+
+				maxUploadFileSizeChoiceTypeFound = true
+
+				if v.(bool) {
+					maxUploadFileSizeChoiceInt := &ves_io_schema_policy.RequestConstraintType_MaxUploadFileSizeNone{}
+					maxUploadFileSizeChoiceInt.MaxUploadFileSizeNone = &ves_io_schema.Empty{}
+					requestConstraints.MaxUploadFileSizeChoice = maxUploadFileSizeChoiceInt
+				}
+
+			}
+
+			maxUrlSizeChoiceTypeFound := false
+
+			if v, ok := requestConstraintsMapStrToI["max_url_size_exceeds"]; ok && !isIntfNil(v) && !maxUrlSizeChoiceTypeFound {
+
+				maxUrlSizeChoiceTypeFound = true
+				maxUrlSizeChoiceInt := &ves_io_schema_policy.RequestConstraintType_MaxUrlSizeExceeds{}
+
+				requestConstraints.MaxUrlSizeChoice = maxUrlSizeChoiceInt
+
+				maxUrlSizeChoiceInt.MaxUrlSizeExceeds = uint32(v.(int))
+
+			}
+
+			if v, ok := requestConstraintsMapStrToI["max_url_size_none"]; ok && !isIntfNil(v) && !maxUrlSizeChoiceTypeFound {
+
+				maxUrlSizeChoiceTypeFound = true
+
+				if v.(bool) {
+					maxUrlSizeChoiceInt := &ves_io_schema_policy.RequestConstraintType_MaxUrlSizeNone{}
+					maxUrlSizeChoiceInt.MaxUrlSizeNone = &ves_io_schema.Empty{}
+					requestConstraints.MaxUrlSizeChoice = maxUrlSizeChoiceInt
+				}
+
 			}
 
 		}
@@ -5198,6 +5776,393 @@ func resourceVolterraServicePolicyRuleUpdate(d *schema.ResourceData, meta interf
 
 			if v, ok := rlMapToStrVal["uid"]; ok && !isIntfNil(v) {
 				rateLimiterInt[i].Uid = v.(string)
+			}
+
+		}
+
+	}
+
+	if v, ok := d.GetOk("request_constraints"); ok && !isIntfNil(v) {
+
+		sl := v.(*schema.Set).List()
+		requestConstraints := &ves_io_schema_policy.RequestConstraintType{}
+		updateSpec.RequestConstraints = requestConstraints
+		for _, set := range sl {
+			requestConstraintsMapStrToI := set.(map[string]interface{})
+
+			maxBodySizeChoiceTypeFound := false
+
+			if v, ok := requestConstraintsMapStrToI["max_body_size_exceeds"]; ok && !isIntfNil(v) && !maxBodySizeChoiceTypeFound {
+
+				maxBodySizeChoiceTypeFound = true
+				maxBodySizeChoiceInt := &ves_io_schema_policy.RequestConstraintType_MaxBodySizeExceeds{}
+
+				requestConstraints.MaxBodySizeChoice = maxBodySizeChoiceInt
+
+				maxBodySizeChoiceInt.MaxBodySizeExceeds = uint32(v.(int))
+
+			}
+
+			if v, ok := requestConstraintsMapStrToI["max_body_size_none"]; ok && !isIntfNil(v) && !maxBodySizeChoiceTypeFound {
+
+				maxBodySizeChoiceTypeFound = true
+
+				if v.(bool) {
+					maxBodySizeChoiceInt := &ves_io_schema_policy.RequestConstraintType_MaxBodySizeNone{}
+					maxBodySizeChoiceInt.MaxBodySizeNone = &ves_io_schema.Empty{}
+					requestConstraints.MaxBodySizeChoice = maxBodySizeChoiceInt
+				}
+
+			}
+
+			maxCookieCountChoiceTypeFound := false
+
+			if v, ok := requestConstraintsMapStrToI["max_cookie_count_exceeds"]; ok && !isIntfNil(v) && !maxCookieCountChoiceTypeFound {
+
+				maxCookieCountChoiceTypeFound = true
+				maxCookieCountChoiceInt := &ves_io_schema_policy.RequestConstraintType_MaxCookieCountExceeds{}
+
+				requestConstraints.MaxCookieCountChoice = maxCookieCountChoiceInt
+
+				maxCookieCountChoiceInt.MaxCookieCountExceeds = uint32(v.(int))
+
+			}
+
+			if v, ok := requestConstraintsMapStrToI["max_cookie_count_none"]; ok && !isIntfNil(v) && !maxCookieCountChoiceTypeFound {
+
+				maxCookieCountChoiceTypeFound = true
+
+				if v.(bool) {
+					maxCookieCountChoiceInt := &ves_io_schema_policy.RequestConstraintType_MaxCookieCountNone{}
+					maxCookieCountChoiceInt.MaxCookieCountNone = &ves_io_schema.Empty{}
+					requestConstraints.MaxCookieCountChoice = maxCookieCountChoiceInt
+				}
+
+			}
+
+			maxCookieKeySizeChoiceTypeFound := false
+
+			if v, ok := requestConstraintsMapStrToI["max_cookie_key_size_exceeds"]; ok && !isIntfNil(v) && !maxCookieKeySizeChoiceTypeFound {
+
+				maxCookieKeySizeChoiceTypeFound = true
+				maxCookieKeySizeChoiceInt := &ves_io_schema_policy.RequestConstraintType_MaxCookieKeySizeExceeds{}
+
+				requestConstraints.MaxCookieKeySizeChoice = maxCookieKeySizeChoiceInt
+
+				maxCookieKeySizeChoiceInt.MaxCookieKeySizeExceeds = uint32(v.(int))
+
+			}
+
+			if v, ok := requestConstraintsMapStrToI["max_cookie_key_size_none"]; ok && !isIntfNil(v) && !maxCookieKeySizeChoiceTypeFound {
+
+				maxCookieKeySizeChoiceTypeFound = true
+
+				if v.(bool) {
+					maxCookieKeySizeChoiceInt := &ves_io_schema_policy.RequestConstraintType_MaxCookieKeySizeNone{}
+					maxCookieKeySizeChoiceInt.MaxCookieKeySizeNone = &ves_io_schema.Empty{}
+					requestConstraints.MaxCookieKeySizeChoice = maxCookieKeySizeChoiceInt
+				}
+
+			}
+
+			maxCookieValueSizeChoiceTypeFound := false
+
+			if v, ok := requestConstraintsMapStrToI["max_cookie_value_size_exceeds"]; ok && !isIntfNil(v) && !maxCookieValueSizeChoiceTypeFound {
+
+				maxCookieValueSizeChoiceTypeFound = true
+				maxCookieValueSizeChoiceInt := &ves_io_schema_policy.RequestConstraintType_MaxCookieValueSizeExceeds{}
+
+				requestConstraints.MaxCookieValueSizeChoice = maxCookieValueSizeChoiceInt
+
+				maxCookieValueSizeChoiceInt.MaxCookieValueSizeExceeds = uint32(v.(int))
+
+			}
+
+			if v, ok := requestConstraintsMapStrToI["max_cookie_value_size_none"]; ok && !isIntfNil(v) && !maxCookieValueSizeChoiceTypeFound {
+
+				maxCookieValueSizeChoiceTypeFound = true
+
+				if v.(bool) {
+					maxCookieValueSizeChoiceInt := &ves_io_schema_policy.RequestConstraintType_MaxCookieValueSizeNone{}
+					maxCookieValueSizeChoiceInt.MaxCookieValueSizeNone = &ves_io_schema.Empty{}
+					requestConstraints.MaxCookieValueSizeChoice = maxCookieValueSizeChoiceInt
+				}
+
+			}
+
+			maxHeaderCountChoiceTypeFound := false
+
+			if v, ok := requestConstraintsMapStrToI["max_header_count_exceeds"]; ok && !isIntfNil(v) && !maxHeaderCountChoiceTypeFound {
+
+				maxHeaderCountChoiceTypeFound = true
+				maxHeaderCountChoiceInt := &ves_io_schema_policy.RequestConstraintType_MaxHeaderCountExceeds{}
+
+				requestConstraints.MaxHeaderCountChoice = maxHeaderCountChoiceInt
+
+				maxHeaderCountChoiceInt.MaxHeaderCountExceeds = uint32(v.(int))
+
+			}
+
+			if v, ok := requestConstraintsMapStrToI["max_header_count_none"]; ok && !isIntfNil(v) && !maxHeaderCountChoiceTypeFound {
+
+				maxHeaderCountChoiceTypeFound = true
+
+				if v.(bool) {
+					maxHeaderCountChoiceInt := &ves_io_schema_policy.RequestConstraintType_MaxHeaderCountNone{}
+					maxHeaderCountChoiceInt.MaxHeaderCountNone = &ves_io_schema.Empty{}
+					requestConstraints.MaxHeaderCountChoice = maxHeaderCountChoiceInt
+				}
+
+			}
+
+			maxHeaderKeySizeChoiceTypeFound := false
+
+			if v, ok := requestConstraintsMapStrToI["max_header_key_size_exceeds"]; ok && !isIntfNil(v) && !maxHeaderKeySizeChoiceTypeFound {
+
+				maxHeaderKeySizeChoiceTypeFound = true
+				maxHeaderKeySizeChoiceInt := &ves_io_schema_policy.RequestConstraintType_MaxHeaderKeySizeExceeds{}
+
+				requestConstraints.MaxHeaderKeySizeChoice = maxHeaderKeySizeChoiceInt
+
+				maxHeaderKeySizeChoiceInt.MaxHeaderKeySizeExceeds = uint32(v.(int))
+
+			}
+
+			if v, ok := requestConstraintsMapStrToI["max_header_key_size_none"]; ok && !isIntfNil(v) && !maxHeaderKeySizeChoiceTypeFound {
+
+				maxHeaderKeySizeChoiceTypeFound = true
+
+				if v.(bool) {
+					maxHeaderKeySizeChoiceInt := &ves_io_schema_policy.RequestConstraintType_MaxHeaderKeySizeNone{}
+					maxHeaderKeySizeChoiceInt.MaxHeaderKeySizeNone = &ves_io_schema.Empty{}
+					requestConstraints.MaxHeaderKeySizeChoice = maxHeaderKeySizeChoiceInt
+				}
+
+			}
+
+			maxHeaderValueSizeChoiceTypeFound := false
+
+			if v, ok := requestConstraintsMapStrToI["max_header_value_size_exceeds"]; ok && !isIntfNil(v) && !maxHeaderValueSizeChoiceTypeFound {
+
+				maxHeaderValueSizeChoiceTypeFound = true
+				maxHeaderValueSizeChoiceInt := &ves_io_schema_policy.RequestConstraintType_MaxHeaderValueSizeExceeds{}
+
+				requestConstraints.MaxHeaderValueSizeChoice = maxHeaderValueSizeChoiceInt
+
+				maxHeaderValueSizeChoiceInt.MaxHeaderValueSizeExceeds = uint32(v.(int))
+
+			}
+
+			if v, ok := requestConstraintsMapStrToI["max_header_value_size_none"]; ok && !isIntfNil(v) && !maxHeaderValueSizeChoiceTypeFound {
+
+				maxHeaderValueSizeChoiceTypeFound = true
+
+				if v.(bool) {
+					maxHeaderValueSizeChoiceInt := &ves_io_schema_policy.RequestConstraintType_MaxHeaderValueSizeNone{}
+					maxHeaderValueSizeChoiceInt.MaxHeaderValueSizeNone = &ves_io_schema.Empty{}
+					requestConstraints.MaxHeaderValueSizeChoice = maxHeaderValueSizeChoiceInt
+				}
+
+			}
+
+			maxParameterCountChoiceTypeFound := false
+
+			if v, ok := requestConstraintsMapStrToI["max_parameter_count_exceeds"]; ok && !isIntfNil(v) && !maxParameterCountChoiceTypeFound {
+
+				maxParameterCountChoiceTypeFound = true
+				maxParameterCountChoiceInt := &ves_io_schema_policy.RequestConstraintType_MaxParameterCountExceeds{}
+
+				requestConstraints.MaxParameterCountChoice = maxParameterCountChoiceInt
+
+				maxParameterCountChoiceInt.MaxParameterCountExceeds = uint32(v.(int))
+
+			}
+
+			if v, ok := requestConstraintsMapStrToI["max_parameter_count_none"]; ok && !isIntfNil(v) && !maxParameterCountChoiceTypeFound {
+
+				maxParameterCountChoiceTypeFound = true
+
+				if v.(bool) {
+					maxParameterCountChoiceInt := &ves_io_schema_policy.RequestConstraintType_MaxParameterCountNone{}
+					maxParameterCountChoiceInt.MaxParameterCountNone = &ves_io_schema.Empty{}
+					requestConstraints.MaxParameterCountChoice = maxParameterCountChoiceInt
+				}
+
+			}
+
+			maxParameterNameSizeChoiceTypeFound := false
+
+			if v, ok := requestConstraintsMapStrToI["max_parameter_name_size_exceeds"]; ok && !isIntfNil(v) && !maxParameterNameSizeChoiceTypeFound {
+
+				maxParameterNameSizeChoiceTypeFound = true
+				maxParameterNameSizeChoiceInt := &ves_io_schema_policy.RequestConstraintType_MaxParameterNameSizeExceeds{}
+
+				requestConstraints.MaxParameterNameSizeChoice = maxParameterNameSizeChoiceInt
+
+				maxParameterNameSizeChoiceInt.MaxParameterNameSizeExceeds = uint32(v.(int))
+
+			}
+
+			if v, ok := requestConstraintsMapStrToI["max_parameter_name_size_none"]; ok && !isIntfNil(v) && !maxParameterNameSizeChoiceTypeFound {
+
+				maxParameterNameSizeChoiceTypeFound = true
+
+				if v.(bool) {
+					maxParameterNameSizeChoiceInt := &ves_io_schema_policy.RequestConstraintType_MaxParameterNameSizeNone{}
+					maxParameterNameSizeChoiceInt.MaxParameterNameSizeNone = &ves_io_schema.Empty{}
+					requestConstraints.MaxParameterNameSizeChoice = maxParameterNameSizeChoiceInt
+				}
+
+			}
+
+			maxParameterValueSizeChoiceTypeFound := false
+
+			if v, ok := requestConstraintsMapStrToI["max_parameter_value_size_exceeds"]; ok && !isIntfNil(v) && !maxParameterValueSizeChoiceTypeFound {
+
+				maxParameterValueSizeChoiceTypeFound = true
+				maxParameterValueSizeChoiceInt := &ves_io_schema_policy.RequestConstraintType_MaxParameterValueSizeExceeds{}
+
+				requestConstraints.MaxParameterValueSizeChoice = maxParameterValueSizeChoiceInt
+
+				maxParameterValueSizeChoiceInt.MaxParameterValueSizeExceeds = uint32(v.(int))
+
+			}
+
+			if v, ok := requestConstraintsMapStrToI["max_parameter_value_size_none"]; ok && !isIntfNil(v) && !maxParameterValueSizeChoiceTypeFound {
+
+				maxParameterValueSizeChoiceTypeFound = true
+
+				if v.(bool) {
+					maxParameterValueSizeChoiceInt := &ves_io_schema_policy.RequestConstraintType_MaxParameterValueSizeNone{}
+					maxParameterValueSizeChoiceInt.MaxParameterValueSizeNone = &ves_io_schema.Empty{}
+					requestConstraints.MaxParameterValueSizeChoice = maxParameterValueSizeChoiceInt
+				}
+
+			}
+
+			maxQuerySizeChoiceTypeFound := false
+
+			if v, ok := requestConstraintsMapStrToI["max_query_size_exceeds"]; ok && !isIntfNil(v) && !maxQuerySizeChoiceTypeFound {
+
+				maxQuerySizeChoiceTypeFound = true
+				maxQuerySizeChoiceInt := &ves_io_schema_policy.RequestConstraintType_MaxQuerySizeExceeds{}
+
+				requestConstraints.MaxQuerySizeChoice = maxQuerySizeChoiceInt
+
+				maxQuerySizeChoiceInt.MaxQuerySizeExceeds = uint32(v.(int))
+
+			}
+
+			if v, ok := requestConstraintsMapStrToI["max_query_size_none"]; ok && !isIntfNil(v) && !maxQuerySizeChoiceTypeFound {
+
+				maxQuerySizeChoiceTypeFound = true
+
+				if v.(bool) {
+					maxQuerySizeChoiceInt := &ves_io_schema_policy.RequestConstraintType_MaxQuerySizeNone{}
+					maxQuerySizeChoiceInt.MaxQuerySizeNone = &ves_io_schema.Empty{}
+					requestConstraints.MaxQuerySizeChoice = maxQuerySizeChoiceInt
+				}
+
+			}
+
+			maxRequestLineSizeChoiceTypeFound := false
+
+			if v, ok := requestConstraintsMapStrToI["max_request_line_size_exceeds"]; ok && !isIntfNil(v) && !maxRequestLineSizeChoiceTypeFound {
+
+				maxRequestLineSizeChoiceTypeFound = true
+				maxRequestLineSizeChoiceInt := &ves_io_schema_policy.RequestConstraintType_MaxRequestLineSizeExceeds{}
+
+				requestConstraints.MaxRequestLineSizeChoice = maxRequestLineSizeChoiceInt
+
+				maxRequestLineSizeChoiceInt.MaxRequestLineSizeExceeds = uint32(v.(int))
+
+			}
+
+			if v, ok := requestConstraintsMapStrToI["max_request_line_size_none"]; ok && !isIntfNil(v) && !maxRequestLineSizeChoiceTypeFound {
+
+				maxRequestLineSizeChoiceTypeFound = true
+
+				if v.(bool) {
+					maxRequestLineSizeChoiceInt := &ves_io_schema_policy.RequestConstraintType_MaxRequestLineSizeNone{}
+					maxRequestLineSizeChoiceInt.MaxRequestLineSizeNone = &ves_io_schema.Empty{}
+					requestConstraints.MaxRequestLineSizeChoice = maxRequestLineSizeChoiceInt
+				}
+
+			}
+
+			maxRequestSizeChoiceTypeFound := false
+
+			if v, ok := requestConstraintsMapStrToI["max_request_size_exceeds"]; ok && !isIntfNil(v) && !maxRequestSizeChoiceTypeFound {
+
+				maxRequestSizeChoiceTypeFound = true
+				maxRequestSizeChoiceInt := &ves_io_schema_policy.RequestConstraintType_MaxRequestSizeExceeds{}
+
+				requestConstraints.MaxRequestSizeChoice = maxRequestSizeChoiceInt
+
+				maxRequestSizeChoiceInt.MaxRequestSizeExceeds = uint32(v.(int))
+
+			}
+
+			if v, ok := requestConstraintsMapStrToI["max_request_size_none"]; ok && !isIntfNil(v) && !maxRequestSizeChoiceTypeFound {
+
+				maxRequestSizeChoiceTypeFound = true
+
+				if v.(bool) {
+					maxRequestSizeChoiceInt := &ves_io_schema_policy.RequestConstraintType_MaxRequestSizeNone{}
+					maxRequestSizeChoiceInt.MaxRequestSizeNone = &ves_io_schema.Empty{}
+					requestConstraints.MaxRequestSizeChoice = maxRequestSizeChoiceInt
+				}
+
+			}
+
+			maxUploadFileSizeChoiceTypeFound := false
+
+			if v, ok := requestConstraintsMapStrToI["max_upload_file_size_exceeds"]; ok && !isIntfNil(v) && !maxUploadFileSizeChoiceTypeFound {
+
+				maxUploadFileSizeChoiceTypeFound = true
+				maxUploadFileSizeChoiceInt := &ves_io_schema_policy.RequestConstraintType_MaxUploadFileSizeExceeds{}
+
+				requestConstraints.MaxUploadFileSizeChoice = maxUploadFileSizeChoiceInt
+
+				maxUploadFileSizeChoiceInt.MaxUploadFileSizeExceeds = uint32(v.(int))
+
+			}
+
+			if v, ok := requestConstraintsMapStrToI["max_upload_file_size_none"]; ok && !isIntfNil(v) && !maxUploadFileSizeChoiceTypeFound {
+
+				maxUploadFileSizeChoiceTypeFound = true
+
+				if v.(bool) {
+					maxUploadFileSizeChoiceInt := &ves_io_schema_policy.RequestConstraintType_MaxUploadFileSizeNone{}
+					maxUploadFileSizeChoiceInt.MaxUploadFileSizeNone = &ves_io_schema.Empty{}
+					requestConstraints.MaxUploadFileSizeChoice = maxUploadFileSizeChoiceInt
+				}
+
+			}
+
+			maxUrlSizeChoiceTypeFound := false
+
+			if v, ok := requestConstraintsMapStrToI["max_url_size_exceeds"]; ok && !isIntfNil(v) && !maxUrlSizeChoiceTypeFound {
+
+				maxUrlSizeChoiceTypeFound = true
+				maxUrlSizeChoiceInt := &ves_io_schema_policy.RequestConstraintType_MaxUrlSizeExceeds{}
+
+				requestConstraints.MaxUrlSizeChoice = maxUrlSizeChoiceInt
+
+				maxUrlSizeChoiceInt.MaxUrlSizeExceeds = uint32(v.(int))
+
+			}
+
+			if v, ok := requestConstraintsMapStrToI["max_url_size_none"]; ok && !isIntfNil(v) && !maxUrlSizeChoiceTypeFound {
+
+				maxUrlSizeChoiceTypeFound = true
+
+				if v.(bool) {
+					maxUrlSizeChoiceInt := &ves_io_schema_policy.RequestConstraintType_MaxUrlSizeNone{}
+					maxUrlSizeChoiceInt.MaxUrlSizeNone = &ves_io_schema.Empty{}
+					requestConstraints.MaxUrlSizeChoice = maxUrlSizeChoiceInt
+				}
+
 			}
 
 		}

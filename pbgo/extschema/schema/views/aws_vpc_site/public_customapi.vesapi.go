@@ -966,6 +966,16 @@ var CustomAPISwaggerJSON string = `{
                         "ves.io.schema.rules.message.required": "true",
                         "ves.io.schema.rules.repeated.num_items": "0,1,3"
                     }
+                },
+                "vpc_id": {
+                    "type": "string",
+                    "description": " VPC ID where the volterra site exists\n\nExample: - \"vpc-12345678\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.pattern: ^(vpc-)([a-z0-9]{8}|[a-z0-9]{17})$|^$\n",
+                    "title": "VPC ID",
+                    "x-displayname": "VPC ID",
+                    "x-ves-example": "vpc-12345678",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.pattern": "^(vpc-)([a-z0-9]{8}|[a-z0-9]{17})$|^$"
+                    }
                 }
             }
         },

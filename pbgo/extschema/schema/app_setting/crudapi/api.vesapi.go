@@ -2609,20 +2609,20 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "business_logic_markup_setting": {
-                    "description": " Setting specifying how Business Logic Markup will be performed.",
-                    "title": "Business Logic Markup Setting",
+                    "description": " Setting specifying how API Discovery will be performed.",
+                    "title": "API Discovery Settings",
                     "$ref": "#/definitions/app_settingBusinessLogicMarkupSetting",
-                    "x-displayname": "Business Logic Markup Setting"
+                    "x-displayname": "API Discovery"
                 },
                 "timeseries_analyses_setting": {
-                    "description": " Configuration for timeseries analyses",
-                    "title": "Timeseries Analyses Setting",
+                    "description": " Time series anomaly detection is performed using advanced machine learning based on metrics\n such as request rate, error rate, latency, throughput etc.\n The clients are flagged if anomalies are observed",
+                    "title": "DDoS Detection Settings",
                     "$ref": "#/definitions/app_settingTimeseriesAnalysesSetting",
                     "x-displayname": "DDoS Detection"
                 },
                 "user_behavior_analysis_setting": {
-                    "description": " Configuration for user behavior analysis in this namespace",
-                    "title": "User Behavior Analysis Setting",
+                    "description": " Malicious User Detection performs user behavior analysis and assigns a suspicion score and\n threat level of low, medium, or high based on suspicious activity of the user.\n The suspicion score of the user decays over time, if no further suspicious activity is noted",
+                    "title": "Malicious User Detection Settings",
                     "$ref": "#/definitions/app_settingUserBehaviorAnalysisSetting",
                     "x-displayname": "Malicious User Detection"
                 }
@@ -2630,23 +2630,23 @@ var APISwaggerJSON string = `{
         },
         "app_settingBusinessLogicMarkupSetting": {
             "type": "object",
-            "description": "Setting specifying how Business Logic Markup will be performed.",
-            "title": "Business Logic Markup Setting",
-            "x-displayname": "Business Logic Markup Setting",
+            "description": "Settings specifying how API Discovery will be performed",
+            "title": "API Endpoints Discovery Settings",
+            "x-displayname": "API Discovery",
             "x-ves-oneof-field-learn_from_namespace": "[\"disable\",\"enable\"]",
             "x-ves-proto-message": "ves.io.schema.app_setting.BusinessLogicMarkupSetting",
             "properties": {
                 "disable": {
-                    "description": "Exclusive with [enable]\n Disable learning API patterns from this namespace",
+                    "description": "Exclusive with [enable]\n API Endpoints are not discovered in this namespace",
                     "title": "Disable learning from this namespace",
                     "$ref": "#/definitions/schemaEmpty",
-                    "x-displayname": "Disable learning from this namespace"
+                    "x-displayname": "Disable"
                 },
                 "enable": {
-                    "description": "Exclusive with [disable]\n Enable learning API patterns from this namespace",
+                    "description": "Exclusive with [disable]\n API Endpoints are discovered in this namespace",
                     "title": "Enable learning from this namespace",
                     "$ref": "#/definitions/schemaEmpty",
-                    "x-displayname": "Enable learning from this namespace"
+                    "x-displayname": "Enable"
                 }
             }
         },
@@ -2710,7 +2710,7 @@ var APISwaggerJSON string = `{
                     "items": {
                         "$ref": "#/definitions/app_settingAppTypeSettings"
                     },
-                    "x-displayname": "AppType Settings",
+                    "x-displayname": "Customize AppType For This Namespace",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true",
@@ -2722,9 +2722,9 @@ var APISwaggerJSON string = `{
         },
         "app_settingMaliciousUserDetectionSetting": {
             "type": "object",
-            "description": "Various factors abour user activity are monitored and analysed to determine malicious users.\nThese settings allow tuning those factors used by the system to detect malicious users.",
-            "title": "Malicious User Detection Setting",
-            "x-displayname": "Malicious User Detection Setting",
+            "description": "Various factors about user activity are monitored and analysed to determine malicious users.\nThese settings allow tuning those factors used by the system to detect malicious users.",
+            "title": "Malicious User Detection Settings",
+            "x-displayname": "Malicious User Detection Settings",
             "x-ves-displayorder": "1,4,7,12,15,10",
             "x-ves-oneof-field-cooling_off_period_setting": "[\"cooling_off_period\"]",
             "x-ves-oneof-field-failed_login_activity_choice": "[\"exclude_failed_login_activity\",\"include_failed_login_activity\"]",
@@ -2739,7 +2739,7 @@ var APISwaggerJSON string = `{
                     "description": "Exclusive with []\n Malicious user detection assigns a threat level to each user based on their activity.\n Once a threat level is assigned, the system continues tracking activity from this user\n and if no further malicious activity is seen, it gradually reduces the threat assesment to lower levels.\n This field specifies the time period, in minutes, used by the system to decay a user's threat level from\n a high to medium or medium to low or low to none.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.uint32.gt: 0\n  ves.io.schema.rules.uint32.lte: 120\n",
                     "title": "Cooling Off Period",
                     "format": "int64",
-                    "x-displayname": "Cooling off period (minutes)",
+                    "x-displayname": "Cooling off period",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true",
@@ -2751,73 +2751,73 @@ var APISwaggerJSON string = `{
                     "description": "Exclusive with [include_failed_login_activity]\n Exclude persistent login failures activity (401 response code) in malicious user detection",
                     "title": "exclude failed login activity",
                     "$ref": "#/definitions/schemaEmpty",
-                    "x-displayname": "Exclude Failed Login Activity"
+                    "x-displayname": "Disable"
                 },
                 "exclude_forbidden_activity": {
                     "description": "Exclusive with [include_forbidden_activity]\n Exclude forbidden activity by policy in malicious user detection",
                     "title": "exclude disallowed activity",
                     "$ref": "#/definitions/schemaEmpty",
-                    "x-displayname": "Exclude Forbidden Activity"
+                    "x-displayname": "Disable"
                 },
                 "exclude_ip_reputation": {
-                    "description": "Exclusive with [include_ip_reputation]\n Exclude IP Reputation by policy in malicious user detection",
+                    "description": "Exclusive with [include_ip_reputation]\n Exclude IP Reputation in malicious user detection",
                     "title": "exclude disallowed activity",
                     "$ref": "#/definitions/schemaEmpty",
-                    "x-displayname": "Exclude IP Reputation"
+                    "x-displayname": "Disable"
                 },
                 "exclude_non_existent_url_activity": {
                     "description": "Exclusive with [include_non_existent_url_activity_automatic include_non_existent_url_activity_custom]\n Exclude Non-Existent URL activity in malicious user detection",
                     "title": "exclude non-existent url activity",
                     "$ref": "#/definitions/schemaEmpty",
-                    "x-displayname": "Exclude Non-Existent URL Activity"
+                    "x-displayname": "Disable"
                 },
                 "exclude_waf_activity": {
                     "description": "Exclusive with [include_waf_activity]\n Exclude WAF activity in malicious user detection",
                     "title": "exclude WAF activity",
                     "$ref": "#/definitions/schemaEmpty",
-                    "x-displayname": "Exclude WAF Activity"
+                    "x-displayname": "Disable"
                 },
                 "include_failed_login_activity": {
                     "description": "Exclusive with [exclude_failed_login_activity]\n Include persistent login failures activity (401 response code) in malicious user detection",
                     "title": "include failed login activity",
                     "$ref": "#/definitions/app_settingFailedLoginActivitySetting",
-                    "x-displayname": "Include Failed Login Activity"
+                    "x-displayname": "Enable"
                 },
                 "include_forbidden_activity": {
                     "description": "Exclusive with [exclude_forbidden_activity]\n Include forbidden activity by policy in malicious user detection",
                     "title": "include forbidden activity",
                     "$ref": "#/definitions/app_settingForbiddenActivitySetting",
-                    "x-displayname": "Include Forbidden Activity"
+                    "x-displayname": "Enable"
                 },
                 "include_ip_reputation": {
-                    "description": "Exclusive with [exclude_ip_reputation]\n Include IP Reputation by policy in malicious user detection",
+                    "description": "Exclusive with [exclude_ip_reputation]\n Include IP Reputation in malicious user detection",
                     "title": "include IP Reputation",
                     "$ref": "#/definitions/schemaEmpty",
-                    "x-displayname": "Include IP Reputation"
+                    "x-displayname": "Enable"
                 },
                 "include_non_existent_url_activity_automatic": {
                     "description": "Exclusive with [exclude_non_existent_url_activity include_non_existent_url_activity_custom]\n Include Non-Existent URL Activity using automatic threshold in malicious user detection",
                     "title": "include non-existent url activity using automatic threshold",
                     "$ref": "#/definitions/app_settingNonexistentUrlAutomaticActivitySetting",
-                    "x-displayname": "Include Non-Existent URL Activity using automatic threshold"
+                    "x-displayname": "Enable using automatic threshold"
                 },
                 "include_non_existent_url_activity_custom": {
                     "description": "Exclusive with [exclude_non_existent_url_activity include_non_existent_url_activity_automatic]\n Include Non-Existent URL Activity using custom threshold in malicious user detection",
                     "title": "include non-existent url activity using custom threshold",
                     "$ref": "#/definitions/app_settingNonexistentUrlCustomActivitySetting",
-                    "x-displayname": "Include Non-Existent URL Activity using custom threshold"
+                    "x-displayname": "Enable using custom threshold"
                 },
                 "include_waf_activity": {
                     "description": "Exclusive with [exclude_waf_activity]\n Include WAF activity in malicious user detection",
                     "title": "include WAF activity",
                     "$ref": "#/definitions/schemaEmpty",
-                    "x-displayname": "Include WAF Activity"
+                    "x-displayname": "Enable"
                 }
             }
         },
         "app_settingMetric": {
             "type": "string",
-            "description": "Supported metrics that can be selected for timeseries analyses\n\nNo metrics will be analyzed\nSelect request rate metric for analyses\nSelect error rate metric for analyses\nSelect latency metric for analyses\nSelect response throughput metric for analyses",
+            "description": "Supported metrics that can be selected for timeseries analyses\n",
             "title": "Metric",
             "enum": [
                 "NO_METRICS",
@@ -2839,7 +2839,7 @@ var APISwaggerJSON string = `{
             "properties": {
                 "metric": {
                     "type": "array",
-                    "description": " Metrics enabled to be analyzed\n\nValidation Rules:\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " Choose one or more metrics to be included in the detection logic\n\nValidation Rules:\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "Metrics",
                     "items": {
                         "$ref": "#/definitions/app_settingMetric"
@@ -2850,7 +2850,7 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "metrics_source": {
-                    "description": " Source from where this metric is gathered for analyses",
+                    "description": " Choose the source for the metrics to be included in the detection logic",
                     "title": "Metrics Sources",
                     "$ref": "#/definitions/app_settingMetricsSource",
                     "x-displayname": "Metrics Source"
@@ -2859,7 +2859,7 @@ var APISwaggerJSON string = `{
         },
         "app_settingMetricsSource": {
             "type": "string",
-            "description": "Supported sources from which Metrics can be analyzed\n\nDisable analyses for all metrics\nEnable metrics analyses for all services\nEnable metrics analyses for all edges in the service mesh graph.\nThis enables separate analyses of metrics between all source and destination service combinations.\nEnable metrics analyses for all virtual hosts in this namespace.",
+            "description": "Supported sources from which Metrics can be analyzed\n\nAll edges in the service mesh graph. Metrics are analyzed separately between all source and destination service combinations",
             "title": "Metrics Source",
             "enum": [
                 "NONE",
@@ -2874,7 +2874,7 @@ var APISwaggerJSON string = `{
         "app_settingNonexistentUrlAutomaticActivitySetting": {
             "type": "object",
             "title": "Non-existent URL Activity Setting for Automatic Threshold",
-            "x-displayname": "Non-existent URL Automatic Activity Setting",
+            "x-displayname": "Non-existent URL Automatic Activity Settings",
             "x-ves-oneof-field-sensitivity": "[\"high\",\"low\",\"medium\"]",
             "x-ves-proto-message": "ves.io.schema.app_setting.NonexistentUrlAutomaticActivitySetting",
             "properties": {
@@ -2882,19 +2882,19 @@ var APISwaggerJSON string = `{
                     "description": "Exclusive with [low medium]\n Use auto-calculated threshold decreased by margin for more sensitive detection",
                     "title": "High",
                     "$ref": "#/definitions/schemaEmpty",
-                    "x-displayname": "High sensitivity"
+                    "x-displayname": "High"
                 },
                 "low": {
                     "description": "Exclusive with [high medium]\n Use auto-calculated threshold with margin for less sensitive detection",
                     "title": "Low",
                     "$ref": "#/definitions/schemaEmpty",
-                    "x-displayname": "Low sensitivity"
+                    "x-displayname": "Low"
                 },
                 "medium": {
                     "description": "Exclusive with [high low]\n Use auto-calculated threshold learnt from statistics per given application",
                     "title": "Medium",
                     "$ref": "#/definitions/schemaEmpty",
-                    "x-displayname": "Medium sensitivity"
+                    "x-displayname": "Medium"
                 }
             }
         },
@@ -2909,7 +2909,7 @@ var APISwaggerJSON string = `{
                     "description": " The percentage of non-existent requests beyond which the system will flag this user as malicious\n\nExample: - \"50\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.uint32.gt: 0\n  ves.io.schema.rules.uint32.lte: 100\n",
                     "title": "non-existent url custom threshold",
                     "format": "int64",
-                    "x-displayname": "Non-existent URL Custom Threshold",
+                    "x-displayname": "Non-existent URL Custom Threshold (percentage)",
                     "x-ves-example": "50",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
@@ -2969,14 +2969,14 @@ var APISwaggerJSON string = `{
         },
         "app_settingTimeseriesAnalysesSetting": {
             "type": "object",
-            "description": "Configuration for timeseries analyses",
-            "title": "Timeseries Analyses Setting",
-            "x-displayname": "Timeseries Analyses Setting",
+            "description": "Configuration for DDoS Detection",
+            "title": "DDoS Detection Settings",
+            "x-displayname": "DDoS Settings",
             "x-ves-proto-message": "ves.io.schema.app_setting.TimeseriesAnalysesSetting",
             "properties": {
                 "metric_selectors": {
                     "type": "array",
-                    "description": " List of metric selectors where each selector specifies which metrics are selected to be analyzed\n\nValidation Rules:\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " Define the metric selection criteria, i.e. the metrics source and the actual metrics that should\n be included in the detection logic\n\nValidation Rules:\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "Metric Selector",
                     "items": {
                         "$ref": "#/definitions/app_settingMetricSelector"
@@ -3001,25 +3001,25 @@ var APISwaggerJSON string = `{
                     "description": "Exclusive with [enable_detection]\n Disable malicious user detection",
                     "title": "Disable malicious user detection",
                     "$ref": "#/definitions/schemaEmpty",
-                    "x-displayname": "Disable malicious user detection"
+                    "x-displayname": "Disable"
                 },
                 "disable_learning": {
                     "description": "Exclusive with [enable_learning]\n Disable learning user behavior patterns from this namespace",
                     "title": "Disable learning from this namespace",
                     "$ref": "#/definitions/schemaEmpty",
-                    "x-displayname": "Disable learning from this namespace"
+                    "x-displayname": "Disable"
                 },
                 "enable_detection": {
                     "description": "Exclusive with [disable_detection]\n Enable AI based malicious user detection",
                     "title": "Enable AI based malicious user detection",
                     "$ref": "#/definitions/app_settingMaliciousUserDetectionSetting",
-                    "x-displayname": "Enable malicious user detection"
+                    "x-displayname": "Enable"
                 },
                 "enable_learning": {
                     "description": "Exclusive with [disable_learning]\n Enable learning user behavior patterns from this namespace",
                     "title": "Enable learning from this namespace",
                     "$ref": "#/definitions/schemaEmpty",
-                    "x-displayname": "Enable learning from this namespace"
+                    "x-displayname": "Enable"
                 }
             }
         },

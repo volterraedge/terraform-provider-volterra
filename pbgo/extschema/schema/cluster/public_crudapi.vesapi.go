@@ -2295,9 +2295,15 @@ var APISwaggerJSON string = `{
             "description": "Create cluster will create the object in the storage backend for namespace metadata.namespace",
             "title": "Create cluster",
             "x-displayname": "Create Cluster",
+            "x-ves-oneof-field-http_protocol_type": "[\"auto_http_config\",\"http1_config\",\"http2_options\"]",
             "x-ves-oneof-field-panic_threshold_type": "[\"no_panic_threshold\",\"panic_threshold\"]",
             "x-ves-proto-message": "ves.io.schema.cluster.CreateSpecType",
             "properties": {
+                "auto_http_config": {
+                    "description": "Exclusive with [http1_config http2_options]\n This allows switching on protocol based on ALPN. It can use either HTTP/1.1 or HTTP/2,\n and will use whichever protocol is negotiated by ALPN with the upstream.",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Automatic"
+                },
                 "circuit_breaker": {
                     "description": " CircuitBreaker provides a mechanism for watching failures in upstream connections or requests\n and if the failures reach a certain threshold, automatically fail subsequent requests which\n allows to apply back pressure on downstream quickly.",
                     "$ref": "#/definitions/clusterCircuitBreaker",
@@ -2373,10 +2379,15 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.repeated.max_items": "4"
                     }
                 },
+                "http1_config": {
+                    "description": "Exclusive with [auto_http_config http2_options]\n Enable HTTP/1.1 for upstream connections",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "HTTP/1.1"
+                },
                 "http2_options": {
-                    "description": " Http2 Protocol options for upstream connections",
+                    "description": "Exclusive with [auto_http_config http1_config]\n Enable HTTP/2 for upstream connections",
                     "$ref": "#/definitions/clusterHttp2ProtocolOptions",
-                    "x-displayname": "Http2 Protocol Configuration"
+                    "x-displayname": "HTTP/2 Protocol Configuration"
                 },
                 "http_idle_timeout": {
                     "type": "integer",
@@ -2592,9 +2603,15 @@ var APISwaggerJSON string = `{
             "description": "Get cluster will get the object from the storage backend for namespace metadata.namespace",
             "title": "Get cluster",
             "x-displayname": "Get Cluster",
+            "x-ves-oneof-field-http_protocol_type": "[\"auto_http_config\",\"http1_config\",\"http2_options\"]",
             "x-ves-oneof-field-panic_threshold_type": "[\"no_panic_threshold\",\"panic_threshold\"]",
             "x-ves-proto-message": "ves.io.schema.cluster.GetSpecType",
             "properties": {
+                "auto_http_config": {
+                    "description": "Exclusive with [http1_config http2_options]\n This allows switching on protocol based on ALPN. It can use either HTTP/1.1 or HTTP/2,\n and will use whichever protocol is negotiated by ALPN with the upstream.",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Automatic"
+                },
                 "circuit_breaker": {
                     "description": " CircuitBreaker provides a mechanism for watching failures in upstream connections or requests\n and if the failures reach a certain threshold, automatically fail subsequent requests which\n allows to apply back pressure on downstream quickly.",
                     "$ref": "#/definitions/clusterCircuitBreaker",
@@ -2670,10 +2687,15 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.repeated.max_items": "4"
                     }
                 },
+                "http1_config": {
+                    "description": "Exclusive with [auto_http_config http2_options]\n Enable HTTP/1.1 for upstream connections",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "HTTP/1.1"
+                },
                 "http2_options": {
-                    "description": " Http2 Protocol options for upstream connections",
+                    "description": "Exclusive with [auto_http_config http1_config]\n Enable HTTP/2 for upstream connections",
                     "$ref": "#/definitions/clusterHttp2ProtocolOptions",
-                    "x-displayname": "Http2 Protocol Configuration"
+                    "x-displayname": "HTTP/2 Protocol Configuration"
                 },
                 "http_idle_timeout": {
                     "type": "integer",
@@ -2721,9 +2743,16 @@ var APISwaggerJSON string = `{
             "description": "Configuration specification for Cluster",
             "title": "GlobalSpecType",
             "x-displayname": "Global Configuration Specification",
+            "x-ves-oneof-field-http_protocol_type": "[\"auto_http_config\",\"http1_config\",\"http2_options\"]",
             "x-ves-oneof-field-panic_threshold_type": "[\"no_panic_threshold\",\"panic_threshold\"]",
             "x-ves-proto-message": "ves.io.schema.cluster.GlobalSpecType",
             "properties": {
+                "auto_http_config": {
+                    "description": "Exclusive with [http1_config http2_options]\n This allows switching on protocol based on ALPN. It can use either HTTP/1.1 or HTTP/2,\n and will use whichever protocol is negotiated by ALPN with the upstream.",
+                    "title": "auto_http_config",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Automatic"
+                },
                 "circuit_breaker": {
                     "description": " CircuitBreaker provides a mechanism for watching failures in upstream connections or requests\n and if the failures reach a certain threshold, automatically fail subsequent requests which\n allows to apply back pressure on downstream quickly.",
                     "title": "circuit_breaker",
@@ -2820,11 +2849,17 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.repeated.max_items": "4"
                     }
                 },
+                "http1_config": {
+                    "description": "Exclusive with [auto_http_config http2_options]\n Enable HTTP/1.1 for upstream connections",
+                    "title": "http1_config",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "HTTP/1.1"
+                },
                 "http2_options": {
-                    "description": " Http2 Protocol options for upstream connections",
+                    "description": "Exclusive with [auto_http_config http1_config]\n Enable HTTP/2 for upstream connections",
                     "title": "http2_options",
                     "$ref": "#/definitions/clusterHttp2ProtocolOptions",
-                    "x-displayname": "Http2 Protocol Configuration"
+                    "x-displayname": "HTTP/2 Protocol Configuration"
                 },
                 "http_idle_timeout": {
                     "type": "integer",
@@ -2882,7 +2917,7 @@ var APISwaggerJSON string = `{
             "properties": {
                 "enabled": {
                     "type": "boolean",
-                    "description": " Enable/disable Http2 Protocol for upstream connections. It is disabled by default.",
+                    "description": " Enable/disable HTTP2 Protocol for upstream connections",
                     "title": "enabled",
                     "format": "boolean",
                     "x-displayname": "HTTP2 Enabled"
@@ -3154,9 +3189,15 @@ var APISwaggerJSON string = `{
             "description": "Replacing an cluster object will update the object by replacing the existing spec with the provided one.\nFor read-then-write operations a resourceVersion mismatch will occur if the object was modified between the read and write",
             "title": "Replace cluster",
             "x-displayname": "Replace Cluster",
+            "x-ves-oneof-field-http_protocol_type": "[\"auto_http_config\",\"http1_config\",\"http2_options\"]",
             "x-ves-oneof-field-panic_threshold_type": "[\"no_panic_threshold\",\"panic_threshold\"]",
             "x-ves-proto-message": "ves.io.schema.cluster.ReplaceSpecType",
             "properties": {
+                "auto_http_config": {
+                    "description": "Exclusive with [http1_config http2_options]\n This allows switching on protocol based on ALPN. It can use either HTTP/1.1 or HTTP/2,\n and will use whichever protocol is negotiated by ALPN with the upstream.",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Automatic"
+                },
                 "circuit_breaker": {
                     "description": " CircuitBreaker provides a mechanism for watching failures in upstream connections or requests\n and if the failures reach a certain threshold, automatically fail subsequent requests which\n allows to apply back pressure on downstream quickly.",
                     "$ref": "#/definitions/clusterCircuitBreaker",
@@ -3232,10 +3273,15 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.repeated.max_items": "4"
                     }
                 },
+                "http1_config": {
+                    "description": "Exclusive with [auto_http_config http2_options]\n Enable HTTP/1.1 for upstream connections",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "HTTP/1.1"
+                },
                 "http2_options": {
-                    "description": " Http2 Protocol options for upstream connections",
+                    "description": "Exclusive with [auto_http_config http1_config]\n Enable HTTP/2 for upstream connections",
                     "$ref": "#/definitions/clusterHttp2ProtocolOptions",
-                    "x-displayname": "Http2 Protocol Configuration"
+                    "x-displayname": "HTTP/2 Protocol Configuration"
                 },
                 "http_idle_timeout": {
                     "type": "integer",

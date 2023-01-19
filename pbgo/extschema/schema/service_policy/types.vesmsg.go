@@ -3583,6 +3583,15 @@ func (v *ValidateSimpleRule) Validate(ctx context.Context, pm interface{}, opts 
 
 	}
 
+	if fv, exists := v.FldValidators["graphql_settings"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("graphql_settings"))
+		if err := fv(ctx, m.GetGraphqlSettings(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["headers"]; exists {
 		vOpts := append(opts, db.WithValidateField("headers"))
 		if err := fv(ctx, m.GetHeaders(), vOpts...); err != nil {
@@ -3713,6 +3722,15 @@ func (v *ValidateSimpleRule) Validate(ctx context.Context, pm interface{}, opts 
 	if fv, exists := v.FldValidators["rate_limiters"]; exists {
 		vOpts := append(opts, db.WithValidateField("rate_limiters"))
 		if err := fv(ctx, m.GetRateLimiters(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["request_constraints"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("request_constraints"))
+		if err := fv(ctx, m.GetRequestConstraints(), vOpts...); err != nil {
 			return err
 		}
 
@@ -3940,6 +3958,10 @@ var DefaultSimpleRuleValidator = func() *ValidateSimpleRule {
 	v.FldValidators["arg_matchers"] = ves_io_schema_policy.ArgMatcherTypeValidator().Validate
 
 	v.FldValidators["cookie_matchers"] = ves_io_schema_policy.CookieMatcherTypeValidator().Validate
+
+	v.FldValidators["request_constraints"] = ves_io_schema_policy.RequestConstraintTypeValidator().Validate
+
+	v.FldValidators["graphql_settings"] = ves_io_schema_policy.GraphQLSettingsTypeValidator().Validate
 
 	return v
 }()

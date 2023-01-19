@@ -3424,6 +3424,36 @@ var APISwaggerJSON string = `{
             "x-displayname": "Interface Network Type",
             "x-ves-proto-enum": "ves.io.schema.network_interface.InterfaceNetworkType"
         },
+        "network_interfaceLayer2InterfaceType": {
+            "type": "object",
+            "description": "x-displayName: \"Layer2 Interface\"\nLayer2 Interface Configuration",
+            "title": "Layer2 interface",
+            "properties": {
+                "l2vlan_interface": {
+                    "description": "x-displayName: \"VLAN Interface\"\nLayer2 interface of type VLAN",
+                    "title": "VLAN Interface",
+                    "$ref": "#/definitions/network_interfaceLayer2VlanInterfaceType"
+                }
+            }
+        },
+        "network_interfaceLayer2VlanInterfaceType": {
+            "type": "object",
+            "description": "x-displayName: \"Layer2 VLAN Interface\"\nLayer2 VLAN Interface Configuration",
+            "title": "Layer2 VLAN interface",
+            "properties": {
+                "device": {
+                    "type": "string",
+                    "description": "x-displayName: \"Ethernet Device\"\nx-example: \"eth0\"\nx-required\nPhysical ethernet interface",
+                    "title": "Device"
+                },
+                "vlan_id": {
+                    "type": "integer",
+                    "description": "x-displayName: \"VLAN Id\"\nx-example: \"10\"\nx-required\nVLAN Id",
+                    "title": "VLAN Id",
+                    "format": "int64"
+                }
+            }
+        },
         "network_interfaceLinkQualityMonitorConfig": {
             "type": "object",
             "description": "Link Quality Monitoring configuration for a network interface.",
@@ -3642,14 +3672,15 @@ var APISwaggerJSON string = `{
         },
         "network_interfaceNetworkInterfaceType": {
             "type": "string",
-            "description": "Identifies the type of the interface.\n\nNetwork interface is an Ethernet interface\nNetwork interface is a VLAN interface\nNetwork interface is a bond interface running LACP\nNetwork interface is a tunnel interface\nNetwork interface is a loopback device",
+            "description": "Identifies the type of the interface.\n\nNetwork interface is an Ethernet interface\nNetwork interface is a VLAN interface\nNetwork interface is a bond interface running LACP\nNetwork interface is a tunnel interface\nNetwork interface is a loopback device\nNetwork interface is a layer2 interface",
             "title": "Network Interface Type",
             "enum": [
                 "NETWORK_INTERFACE_ETHERNET",
                 "NETWORK_INTERFACE_VLAN_INTERFACE",
                 "NETWORK_INTERFACE_LACP_INTERFACE",
                 "NETWORK_INTERFACE_TUNNEL_INTERFACE",
-                "NETWORK_INTERFACE_LOOPBACK_INTERFACE"
+                "NETWORK_INTERFACE_LOOPBACK_INTERFACE",
+                "NETWORK_INTERFACE_LAYER2_INTERFACE"
             ],
             "default": "NETWORK_INTERFACE_ETHERNET",
             "x-displayname": "Network Interface Type",
@@ -3884,24 +3915,6 @@ var APISwaggerJSON string = `{
                     "description": "x-displayName: \"Create Virtual Host Interface\"\nCreate a virtual interface for Network Interface. The virtual interface\nis not seen in host-os. This interface will be internal to VER\nSome options like DHCP will not be valid on the Network Interface",
                     "title": "Create Virtual Interface",
                     "$ref": "#/definitions/schemaEmpty"
-                }
-            }
-        },
-        "network_interfaceVlanInterfaceType": {
-            "type": "object",
-            "description": "x-displayName: \"VLAN Interface\"\nVLAN Interface Configuration",
-            "title": "VLAN interface",
-            "properties": {
-                "device": {
-                    "type": "string",
-                    "description": "x-displayName: \"Ethernet Device\"\nx-example: \"eth0\"\nx-required\nPhysical ethernet interface",
-                    "title": "Device"
-                },
-                "vlan_id": {
-                    "type": "integer",
-                    "description": "x-displayName: \"VLAN Id\"\nx-example: \"eth0.10\"\nx-required\nConfigure a VLAN tagged ethernet interface",
-                    "title": "VLAN Id",
-                    "format": "int64"
                 }
             }
         },

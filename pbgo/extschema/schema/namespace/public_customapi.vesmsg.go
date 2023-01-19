@@ -387,3 +387,162 @@ var DefaultEvaluateAPIAccessRespValidator = func() *ValidateEvaluateAPIAccessRes
 func EvaluateAPIAccessRespValidator() db.Validator {
 	return DefaultEvaluateAPIAccessRespValidator
 }
+
+// augmented methods on protoc/std generated struct
+
+func (m *LookupUserRolesReq) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *LookupUserRolesReq) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *LookupUserRolesReq) DeepCopy() *LookupUserRolesReq {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &LookupUserRolesReq{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *LookupUserRolesReq) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *LookupUserRolesReq) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return LookupUserRolesReqValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateLookupUserRolesReq struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateLookupUserRolesReq) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*LookupUserRolesReq)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *LookupUserRolesReq got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["namespace"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("namespace"))
+		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultLookupUserRolesReqValidator = func() *ValidateLookupUserRolesReq {
+	v := &ValidateLookupUserRolesReq{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func LookupUserRolesReqValidator() db.Validator {
+	return DefaultLookupUserRolesReqValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *LookupUserRolesResp) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *LookupUserRolesResp) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *LookupUserRolesResp) DeepCopy() *LookupUserRolesResp {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &LookupUserRolesResp{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *LookupUserRolesResp) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *LookupUserRolesResp) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return LookupUserRolesRespValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateLookupUserRolesResp struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateLookupUserRolesResp) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*LookupUserRolesResp)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *LookupUserRolesResp got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["roles"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("roles"))
+		for idx, item := range m.GetRoles() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultLookupUserRolesRespValidator = func() *ValidateLookupUserRolesResp {
+	v := &ValidateLookupUserRolesResp{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func LookupUserRolesRespValidator() db.Validator {
+	return DefaultLookupUserRolesRespValidator
+}

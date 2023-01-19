@@ -2546,6 +2546,543 @@ func DenyInformationValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *GraphQLRule) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *GraphQLRule) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *GraphQLRule) DeepCopy() *GraphQLRule {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &GraphQLRule{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *GraphQLRule) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *GraphQLRule) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return GraphQLRuleValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateGraphQLRule struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateGraphQLRule) DomainChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for domain_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateGraphQLRule) DomainChoiceExactValueValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_ExactValue, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for exact_value")
+	}
+	return oValidatorFn_ExactValue, nil
+}
+func (v *ValidateGraphQLRule) DomainChoiceSuffixValueValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_SuffixValue, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for suffix_value")
+	}
+	return oValidatorFn_SuffixValue, nil
+}
+
+func (v *ValidateGraphQLRule) MetadataValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "MessageValidationRuleHandler for metadata")
+	}
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		if err := ves_io_schema.MessageMetaTypeValidator().Validate(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateGraphQLRule) ExactPathValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for exact_path")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateGraphQLRule) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*GraphQLRule)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *GraphQLRule got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["domain_choice"]; exists {
+		val := m.GetDomainChoice()
+		vOpts := append(opts,
+			db.WithValidateField("domain_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetDomainChoice().(type) {
+	case *GraphQLRule_AnyDomain:
+		if fv, exists := v.FldValidators["domain_choice.any_domain"]; exists {
+			val := m.GetDomainChoice().(*GraphQLRule_AnyDomain).AnyDomain
+			vOpts := append(opts,
+				db.WithValidateField("domain_choice"),
+				db.WithValidateField("any_domain"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GraphQLRule_ExactValue:
+		if fv, exists := v.FldValidators["domain_choice.exact_value"]; exists {
+			val := m.GetDomainChoice().(*GraphQLRule_ExactValue).ExactValue
+			vOpts := append(opts,
+				db.WithValidateField("domain_choice"),
+				db.WithValidateField("exact_value"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GraphQLRule_SuffixValue:
+		if fv, exists := v.FldValidators["domain_choice.suffix_value"]; exists {
+			val := m.GetDomainChoice().(*GraphQLRule_SuffixValue).SuffixValue
+			vOpts := append(opts,
+				db.WithValidateField("domain_choice"),
+				db.WithValidateField("suffix_value"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["exact_path"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("exact_path"))
+		if err := fv(ctx, m.GetExactPath(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["graphql_settings"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("graphql_settings"))
+		if err := fv(ctx, m.GetGraphqlSettings(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["metadata"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("metadata"))
+		if err := fv(ctx, m.GetMetadata(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultGraphQLRuleValidator = func() *ValidateGraphQLRule {
+	v := &ValidateGraphQLRule{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhDomainChoice := v.DomainChoiceValidationRuleHandler
+	rulesDomainChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhDomainChoice(rulesDomainChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GraphQLRule.domain_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["domain_choice"] = vFn
+
+	vrhDomainChoiceExactValue := v.DomainChoiceExactValueValidationRuleHandler
+	rulesDomainChoiceExactValue := map[string]string{
+		"ves.io.schema.rules.string.hostname": "true",
+		"ves.io.schema.rules.string.max_len":  "256",
+		"ves.io.schema.rules.string.min_len":  "1",
+	}
+	vFnMap["domain_choice.exact_value"], err = vrhDomainChoiceExactValue(rulesDomainChoiceExactValue)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field GraphQLRule.domain_choice_exact_value: %s", err)
+		panic(errMsg)
+	}
+	vrhDomainChoiceSuffixValue := v.DomainChoiceSuffixValueValidationRuleHandler
+	rulesDomainChoiceSuffixValue := map[string]string{
+		"ves.io.schema.rules.string.hostname": "true",
+		"ves.io.schema.rules.string.max_len":  "256",
+		"ves.io.schema.rules.string.min_len":  "1",
+	}
+	vFnMap["domain_choice.suffix_value"], err = vrhDomainChoiceSuffixValue(rulesDomainChoiceSuffixValue)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field GraphQLRule.domain_choice_suffix_value: %s", err)
+		panic(errMsg)
+	}
+
+	v.FldValidators["domain_choice.exact_value"] = vFnMap["domain_choice.exact_value"]
+	v.FldValidators["domain_choice.suffix_value"] = vFnMap["domain_choice.suffix_value"]
+
+	vrhMetadata := v.MetadataValidationRuleHandler
+	rulesMetadata := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhMetadata(rulesMetadata)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GraphQLRule.metadata: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["metadata"] = vFn
+
+	vrhExactPath := v.ExactPathValidationRuleHandler
+	rulesExactPath := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.http_path": "true",
+		"ves.io.schema.rules.string.max_len":   "256",
+	}
+	vFn, err = vrhExactPath(rulesExactPath)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GraphQLRule.exact_path: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["exact_path"] = vFn
+
+	v.FldValidators["graphql_settings"] = GraphQLSettingsTypeValidator().Validate
+
+	return v
+}()
+
+func GraphQLRuleValidator() db.Validator {
+	return DefaultGraphQLRuleValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *GraphQLSettingsType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *GraphQLSettingsType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *GraphQLSettingsType) DeepCopy() *GraphQLSettingsType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &GraphQLSettingsType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *GraphQLSettingsType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *GraphQLSettingsType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return GraphQLSettingsTypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateGraphQLSettingsType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateGraphQLSettingsType) AllowIntrospectionQueriesChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for allow_introspection_queries_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateGraphQLSettingsType) MaxTotalLengthValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for max_total_length")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateGraphQLSettingsType) MaxValueLengthValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for max_value_length")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateGraphQLSettingsType) MaxDepthValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for max_depth")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateGraphQLSettingsType) MaxBatchedQueriesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for max_batched_queries")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateGraphQLSettingsType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*GraphQLSettingsType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *GraphQLSettingsType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["allow_introspection_queries_choice"]; exists {
+		val := m.GetAllowIntrospectionQueriesChoice()
+		vOpts := append(opts,
+			db.WithValidateField("allow_introspection_queries_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetAllowIntrospectionQueriesChoice().(type) {
+	case *GraphQLSettingsType_DisableIntrospection:
+		if fv, exists := v.FldValidators["allow_introspection_queries_choice.disable_introspection"]; exists {
+			val := m.GetAllowIntrospectionQueriesChoice().(*GraphQLSettingsType_DisableIntrospection).DisableIntrospection
+			vOpts := append(opts,
+				db.WithValidateField("allow_introspection_queries_choice"),
+				db.WithValidateField("disable_introspection"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GraphQLSettingsType_EnableIntrospection:
+		if fv, exists := v.FldValidators["allow_introspection_queries_choice.enable_introspection"]; exists {
+			val := m.GetAllowIntrospectionQueriesChoice().(*GraphQLSettingsType_EnableIntrospection).EnableIntrospection
+			vOpts := append(opts,
+				db.WithValidateField("allow_introspection_queries_choice"),
+				db.WithValidateField("enable_introspection"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["max_batched_queries"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("max_batched_queries"))
+		if err := fv(ctx, m.GetMaxBatchedQueries(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["max_depth"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("max_depth"))
+		if err := fv(ctx, m.GetMaxDepth(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["max_total_length"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("max_total_length"))
+		if err := fv(ctx, m.GetMaxTotalLength(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["max_value_length"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("max_value_length"))
+		if err := fv(ctx, m.GetMaxValueLength(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["policy_name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("policy_name"))
+		if err := fv(ctx, m.GetPolicyName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultGraphQLSettingsTypeValidator = func() *ValidateGraphQLSettingsType {
+	v := &ValidateGraphQLSettingsType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhAllowIntrospectionQueriesChoice := v.AllowIntrospectionQueriesChoiceValidationRuleHandler
+	rulesAllowIntrospectionQueriesChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhAllowIntrospectionQueriesChoice(rulesAllowIntrospectionQueriesChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GraphQLSettingsType.allow_introspection_queries_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["allow_introspection_queries_choice"] = vFn
+
+	vrhMaxTotalLength := v.MaxTotalLengthValidationRuleHandler
+	rulesMaxTotalLength := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.uint32.gte":       "0",
+		"ves.io.schema.rules.uint32.lte":       "8096",
+	}
+	vFn, err = vrhMaxTotalLength(rulesMaxTotalLength)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GraphQLSettingsType.max_total_length: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["max_total_length"] = vFn
+
+	vrhMaxValueLength := v.MaxValueLengthValidationRuleHandler
+	rulesMaxValueLength := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.uint32.gte":       "0",
+		"ves.io.schema.rules.uint32.lte":       "4096",
+	}
+	vFn, err = vrhMaxValueLength(rulesMaxValueLength)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GraphQLSettingsType.max_value_length: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["max_value_length"] = vFn
+
+	vrhMaxDepth := v.MaxDepthValidationRuleHandler
+	rulesMaxDepth := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.uint32.gte":       "0",
+		"ves.io.schema.rules.uint32.lte":       "20",
+	}
+	vFn, err = vrhMaxDepth(rulesMaxDepth)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GraphQLSettingsType.max_depth: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["max_depth"] = vFn
+
+	vrhMaxBatchedQueries := v.MaxBatchedQueriesValidationRuleHandler
+	rulesMaxBatchedQueries := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.uint32.gte":       "0",
+		"ves.io.schema.rules.uint32.lte":       "20",
+	}
+	vFn, err = vrhMaxBatchedQueries(rulesMaxBatchedQueries)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GraphQLSettingsType.max_batched_queries: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["max_batched_queries"] = vFn
+
+	return v
+}()
+
+func GraphQLSettingsTypeValidator() db.Validator {
+	return DefaultGraphQLSettingsTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *HeaderMatcherType) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -5569,6 +6106,1222 @@ func QueryParameterMatcherTypeValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *RequestConstraintType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *RequestConstraintType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *RequestConstraintType) DeepCopy() *RequestConstraintType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &RequestConstraintType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *RequestConstraintType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *RequestConstraintType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return RequestConstraintTypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateRequestConstraintType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateRequestConstraintType) MaxBodySizeChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for max_body_size_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateRequestConstraintType) MaxBodySizeChoiceMaxBodySizeExceedsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_MaxBodySizeExceeds, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for max_body_size_exceeds")
+	}
+	return oValidatorFn_MaxBodySizeExceeds, nil
+}
+
+func (v *ValidateRequestConstraintType) MaxCookieCountChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for max_cookie_count_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateRequestConstraintType) MaxCookieCountChoiceMaxCookieCountExceedsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_MaxCookieCountExceeds, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for max_cookie_count_exceeds")
+	}
+	return oValidatorFn_MaxCookieCountExceeds, nil
+}
+
+func (v *ValidateRequestConstraintType) MaxCookieKeySizeChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for max_cookie_key_size_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateRequestConstraintType) MaxCookieKeySizeChoiceMaxCookieKeySizeExceedsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_MaxCookieKeySizeExceeds, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for max_cookie_key_size_exceeds")
+	}
+	return oValidatorFn_MaxCookieKeySizeExceeds, nil
+}
+
+func (v *ValidateRequestConstraintType) MaxCookieValueSizeChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for max_cookie_value_size_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateRequestConstraintType) MaxCookieValueSizeChoiceMaxCookieValueSizeExceedsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_MaxCookieValueSizeExceeds, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for max_cookie_value_size_exceeds")
+	}
+	return oValidatorFn_MaxCookieValueSizeExceeds, nil
+}
+
+func (v *ValidateRequestConstraintType) MaxHeaderCountChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for max_header_count_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateRequestConstraintType) MaxHeaderCountChoiceMaxHeaderCountExceedsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_MaxHeaderCountExceeds, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for max_header_count_exceeds")
+	}
+	return oValidatorFn_MaxHeaderCountExceeds, nil
+}
+
+func (v *ValidateRequestConstraintType) MaxHeaderKeySizeChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for max_header_key_size_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateRequestConstraintType) MaxHeaderKeySizeChoiceMaxHeaderKeySizeExceedsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_MaxHeaderKeySizeExceeds, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for max_header_key_size_exceeds")
+	}
+	return oValidatorFn_MaxHeaderKeySizeExceeds, nil
+}
+
+func (v *ValidateRequestConstraintType) MaxHeaderValueSizeChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for max_header_value_size_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateRequestConstraintType) MaxHeaderValueSizeChoiceMaxHeaderValueSizeExceedsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_MaxHeaderValueSizeExceeds, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for max_header_value_size_exceeds")
+	}
+	return oValidatorFn_MaxHeaderValueSizeExceeds, nil
+}
+
+func (v *ValidateRequestConstraintType) MaxParameterCountChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for max_parameter_count_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateRequestConstraintType) MaxParameterCountChoiceMaxParameterCountExceedsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_MaxParameterCountExceeds, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for max_parameter_count_exceeds")
+	}
+	return oValidatorFn_MaxParameterCountExceeds, nil
+}
+
+func (v *ValidateRequestConstraintType) MaxParameterNameSizeChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for max_parameter_name_size_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateRequestConstraintType) MaxParameterNameSizeChoiceMaxParameterNameSizeExceedsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_MaxParameterNameSizeExceeds, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for max_parameter_name_size_exceeds")
+	}
+	return oValidatorFn_MaxParameterNameSizeExceeds, nil
+}
+
+func (v *ValidateRequestConstraintType) MaxParameterValueSizeChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for max_parameter_value_size_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateRequestConstraintType) MaxParameterValueSizeChoiceMaxParameterValueSizeExceedsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_MaxParameterValueSizeExceeds, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for max_parameter_value_size_exceeds")
+	}
+	return oValidatorFn_MaxParameterValueSizeExceeds, nil
+}
+
+func (v *ValidateRequestConstraintType) MaxQuerySizeChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for max_query_size_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateRequestConstraintType) MaxQuerySizeChoiceMaxQuerySizeExceedsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_MaxQuerySizeExceeds, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for max_query_size_exceeds")
+	}
+	return oValidatorFn_MaxQuerySizeExceeds, nil
+}
+
+func (v *ValidateRequestConstraintType) MaxRequestLineSizeChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for max_request_line_size_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateRequestConstraintType) MaxRequestLineSizeChoiceMaxRequestLineSizeExceedsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_MaxRequestLineSizeExceeds, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for max_request_line_size_exceeds")
+	}
+	return oValidatorFn_MaxRequestLineSizeExceeds, nil
+}
+
+func (v *ValidateRequestConstraintType) MaxRequestSizeChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for max_request_size_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateRequestConstraintType) MaxRequestSizeChoiceMaxRequestSizeExceedsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_MaxRequestSizeExceeds, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for max_request_size_exceeds")
+	}
+	return oValidatorFn_MaxRequestSizeExceeds, nil
+}
+
+func (v *ValidateRequestConstraintType) MaxUploadFileSizeChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for max_upload_file_size_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateRequestConstraintType) MaxUploadFileSizeChoiceMaxUploadFileSizeExceedsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_MaxUploadFileSizeExceeds, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for max_upload_file_size_exceeds")
+	}
+	return oValidatorFn_MaxUploadFileSizeExceeds, nil
+}
+
+func (v *ValidateRequestConstraintType) MaxUrlSizeChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for max_url_size_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateRequestConstraintType) MaxUrlSizeChoiceMaxUrlSizeExceedsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_MaxUrlSizeExceeds, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for max_url_size_exceeds")
+	}
+	return oValidatorFn_MaxUrlSizeExceeds, nil
+}
+
+func (v *ValidateRequestConstraintType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*RequestConstraintType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *RequestConstraintType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["max_body_size_choice"]; exists {
+		val := m.GetMaxBodySizeChoice()
+		vOpts := append(opts,
+			db.WithValidateField("max_body_size_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetMaxBodySizeChoice().(type) {
+	case *RequestConstraintType_MaxBodySizeNone:
+		if fv, exists := v.FldValidators["max_body_size_choice.max_body_size_none"]; exists {
+			val := m.GetMaxBodySizeChoice().(*RequestConstraintType_MaxBodySizeNone).MaxBodySizeNone
+			vOpts := append(opts,
+				db.WithValidateField("max_body_size_choice"),
+				db.WithValidateField("max_body_size_none"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *RequestConstraintType_MaxBodySizeExceeds:
+		if fv, exists := v.FldValidators["max_body_size_choice.max_body_size_exceeds"]; exists {
+			val := m.GetMaxBodySizeChoice().(*RequestConstraintType_MaxBodySizeExceeds).MaxBodySizeExceeds
+			vOpts := append(opts,
+				db.WithValidateField("max_body_size_choice"),
+				db.WithValidateField("max_body_size_exceeds"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["max_cookie_count_choice"]; exists {
+		val := m.GetMaxCookieCountChoice()
+		vOpts := append(opts,
+			db.WithValidateField("max_cookie_count_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetMaxCookieCountChoice().(type) {
+	case *RequestConstraintType_MaxCookieCountNone:
+		if fv, exists := v.FldValidators["max_cookie_count_choice.max_cookie_count_none"]; exists {
+			val := m.GetMaxCookieCountChoice().(*RequestConstraintType_MaxCookieCountNone).MaxCookieCountNone
+			vOpts := append(opts,
+				db.WithValidateField("max_cookie_count_choice"),
+				db.WithValidateField("max_cookie_count_none"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *RequestConstraintType_MaxCookieCountExceeds:
+		if fv, exists := v.FldValidators["max_cookie_count_choice.max_cookie_count_exceeds"]; exists {
+			val := m.GetMaxCookieCountChoice().(*RequestConstraintType_MaxCookieCountExceeds).MaxCookieCountExceeds
+			vOpts := append(opts,
+				db.WithValidateField("max_cookie_count_choice"),
+				db.WithValidateField("max_cookie_count_exceeds"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["max_cookie_key_size_choice"]; exists {
+		val := m.GetMaxCookieKeySizeChoice()
+		vOpts := append(opts,
+			db.WithValidateField("max_cookie_key_size_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetMaxCookieKeySizeChoice().(type) {
+	case *RequestConstraintType_MaxCookieKeySizeNone:
+		if fv, exists := v.FldValidators["max_cookie_key_size_choice.max_cookie_key_size_none"]; exists {
+			val := m.GetMaxCookieKeySizeChoice().(*RequestConstraintType_MaxCookieKeySizeNone).MaxCookieKeySizeNone
+			vOpts := append(opts,
+				db.WithValidateField("max_cookie_key_size_choice"),
+				db.WithValidateField("max_cookie_key_size_none"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *RequestConstraintType_MaxCookieKeySizeExceeds:
+		if fv, exists := v.FldValidators["max_cookie_key_size_choice.max_cookie_key_size_exceeds"]; exists {
+			val := m.GetMaxCookieKeySizeChoice().(*RequestConstraintType_MaxCookieKeySizeExceeds).MaxCookieKeySizeExceeds
+			vOpts := append(opts,
+				db.WithValidateField("max_cookie_key_size_choice"),
+				db.WithValidateField("max_cookie_key_size_exceeds"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["max_cookie_value_size_choice"]; exists {
+		val := m.GetMaxCookieValueSizeChoice()
+		vOpts := append(opts,
+			db.WithValidateField("max_cookie_value_size_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetMaxCookieValueSizeChoice().(type) {
+	case *RequestConstraintType_MaxCookieValueSizeNone:
+		if fv, exists := v.FldValidators["max_cookie_value_size_choice.max_cookie_value_size_none"]; exists {
+			val := m.GetMaxCookieValueSizeChoice().(*RequestConstraintType_MaxCookieValueSizeNone).MaxCookieValueSizeNone
+			vOpts := append(opts,
+				db.WithValidateField("max_cookie_value_size_choice"),
+				db.WithValidateField("max_cookie_value_size_none"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *RequestConstraintType_MaxCookieValueSizeExceeds:
+		if fv, exists := v.FldValidators["max_cookie_value_size_choice.max_cookie_value_size_exceeds"]; exists {
+			val := m.GetMaxCookieValueSizeChoice().(*RequestConstraintType_MaxCookieValueSizeExceeds).MaxCookieValueSizeExceeds
+			vOpts := append(opts,
+				db.WithValidateField("max_cookie_value_size_choice"),
+				db.WithValidateField("max_cookie_value_size_exceeds"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["max_header_count_choice"]; exists {
+		val := m.GetMaxHeaderCountChoice()
+		vOpts := append(opts,
+			db.WithValidateField("max_header_count_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetMaxHeaderCountChoice().(type) {
+	case *RequestConstraintType_MaxHeaderCountNone:
+		if fv, exists := v.FldValidators["max_header_count_choice.max_header_count_none"]; exists {
+			val := m.GetMaxHeaderCountChoice().(*RequestConstraintType_MaxHeaderCountNone).MaxHeaderCountNone
+			vOpts := append(opts,
+				db.WithValidateField("max_header_count_choice"),
+				db.WithValidateField("max_header_count_none"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *RequestConstraintType_MaxHeaderCountExceeds:
+		if fv, exists := v.FldValidators["max_header_count_choice.max_header_count_exceeds"]; exists {
+			val := m.GetMaxHeaderCountChoice().(*RequestConstraintType_MaxHeaderCountExceeds).MaxHeaderCountExceeds
+			vOpts := append(opts,
+				db.WithValidateField("max_header_count_choice"),
+				db.WithValidateField("max_header_count_exceeds"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["max_header_key_size_choice"]; exists {
+		val := m.GetMaxHeaderKeySizeChoice()
+		vOpts := append(opts,
+			db.WithValidateField("max_header_key_size_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetMaxHeaderKeySizeChoice().(type) {
+	case *RequestConstraintType_MaxHeaderKeySizeNone:
+		if fv, exists := v.FldValidators["max_header_key_size_choice.max_header_key_size_none"]; exists {
+			val := m.GetMaxHeaderKeySizeChoice().(*RequestConstraintType_MaxHeaderKeySizeNone).MaxHeaderKeySizeNone
+			vOpts := append(opts,
+				db.WithValidateField("max_header_key_size_choice"),
+				db.WithValidateField("max_header_key_size_none"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *RequestConstraintType_MaxHeaderKeySizeExceeds:
+		if fv, exists := v.FldValidators["max_header_key_size_choice.max_header_key_size_exceeds"]; exists {
+			val := m.GetMaxHeaderKeySizeChoice().(*RequestConstraintType_MaxHeaderKeySizeExceeds).MaxHeaderKeySizeExceeds
+			vOpts := append(opts,
+				db.WithValidateField("max_header_key_size_choice"),
+				db.WithValidateField("max_header_key_size_exceeds"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["max_header_value_size_choice"]; exists {
+		val := m.GetMaxHeaderValueSizeChoice()
+		vOpts := append(opts,
+			db.WithValidateField("max_header_value_size_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetMaxHeaderValueSizeChoice().(type) {
+	case *RequestConstraintType_MaxHeaderValueSizeNone:
+		if fv, exists := v.FldValidators["max_header_value_size_choice.max_header_value_size_none"]; exists {
+			val := m.GetMaxHeaderValueSizeChoice().(*RequestConstraintType_MaxHeaderValueSizeNone).MaxHeaderValueSizeNone
+			vOpts := append(opts,
+				db.WithValidateField("max_header_value_size_choice"),
+				db.WithValidateField("max_header_value_size_none"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *RequestConstraintType_MaxHeaderValueSizeExceeds:
+		if fv, exists := v.FldValidators["max_header_value_size_choice.max_header_value_size_exceeds"]; exists {
+			val := m.GetMaxHeaderValueSizeChoice().(*RequestConstraintType_MaxHeaderValueSizeExceeds).MaxHeaderValueSizeExceeds
+			vOpts := append(opts,
+				db.WithValidateField("max_header_value_size_choice"),
+				db.WithValidateField("max_header_value_size_exceeds"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["max_parameter_count_choice"]; exists {
+		val := m.GetMaxParameterCountChoice()
+		vOpts := append(opts,
+			db.WithValidateField("max_parameter_count_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetMaxParameterCountChoice().(type) {
+	case *RequestConstraintType_MaxParameterCountNone:
+		if fv, exists := v.FldValidators["max_parameter_count_choice.max_parameter_count_none"]; exists {
+			val := m.GetMaxParameterCountChoice().(*RequestConstraintType_MaxParameterCountNone).MaxParameterCountNone
+			vOpts := append(opts,
+				db.WithValidateField("max_parameter_count_choice"),
+				db.WithValidateField("max_parameter_count_none"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *RequestConstraintType_MaxParameterCountExceeds:
+		if fv, exists := v.FldValidators["max_parameter_count_choice.max_parameter_count_exceeds"]; exists {
+			val := m.GetMaxParameterCountChoice().(*RequestConstraintType_MaxParameterCountExceeds).MaxParameterCountExceeds
+			vOpts := append(opts,
+				db.WithValidateField("max_parameter_count_choice"),
+				db.WithValidateField("max_parameter_count_exceeds"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["max_parameter_name_size_choice"]; exists {
+		val := m.GetMaxParameterNameSizeChoice()
+		vOpts := append(opts,
+			db.WithValidateField("max_parameter_name_size_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetMaxParameterNameSizeChoice().(type) {
+	case *RequestConstraintType_MaxParameterNameSizeNone:
+		if fv, exists := v.FldValidators["max_parameter_name_size_choice.max_parameter_name_size_none"]; exists {
+			val := m.GetMaxParameterNameSizeChoice().(*RequestConstraintType_MaxParameterNameSizeNone).MaxParameterNameSizeNone
+			vOpts := append(opts,
+				db.WithValidateField("max_parameter_name_size_choice"),
+				db.WithValidateField("max_parameter_name_size_none"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *RequestConstraintType_MaxParameterNameSizeExceeds:
+		if fv, exists := v.FldValidators["max_parameter_name_size_choice.max_parameter_name_size_exceeds"]; exists {
+			val := m.GetMaxParameterNameSizeChoice().(*RequestConstraintType_MaxParameterNameSizeExceeds).MaxParameterNameSizeExceeds
+			vOpts := append(opts,
+				db.WithValidateField("max_parameter_name_size_choice"),
+				db.WithValidateField("max_parameter_name_size_exceeds"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["max_parameter_value_size_choice"]; exists {
+		val := m.GetMaxParameterValueSizeChoice()
+		vOpts := append(opts,
+			db.WithValidateField("max_parameter_value_size_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetMaxParameterValueSizeChoice().(type) {
+	case *RequestConstraintType_MaxParameterValueSizeNone:
+		if fv, exists := v.FldValidators["max_parameter_value_size_choice.max_parameter_value_size_none"]; exists {
+			val := m.GetMaxParameterValueSizeChoice().(*RequestConstraintType_MaxParameterValueSizeNone).MaxParameterValueSizeNone
+			vOpts := append(opts,
+				db.WithValidateField("max_parameter_value_size_choice"),
+				db.WithValidateField("max_parameter_value_size_none"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *RequestConstraintType_MaxParameterValueSizeExceeds:
+		if fv, exists := v.FldValidators["max_parameter_value_size_choice.max_parameter_value_size_exceeds"]; exists {
+			val := m.GetMaxParameterValueSizeChoice().(*RequestConstraintType_MaxParameterValueSizeExceeds).MaxParameterValueSizeExceeds
+			vOpts := append(opts,
+				db.WithValidateField("max_parameter_value_size_choice"),
+				db.WithValidateField("max_parameter_value_size_exceeds"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["max_query_size_choice"]; exists {
+		val := m.GetMaxQuerySizeChoice()
+		vOpts := append(opts,
+			db.WithValidateField("max_query_size_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetMaxQuerySizeChoice().(type) {
+	case *RequestConstraintType_MaxQuerySizeNone:
+		if fv, exists := v.FldValidators["max_query_size_choice.max_query_size_none"]; exists {
+			val := m.GetMaxQuerySizeChoice().(*RequestConstraintType_MaxQuerySizeNone).MaxQuerySizeNone
+			vOpts := append(opts,
+				db.WithValidateField("max_query_size_choice"),
+				db.WithValidateField("max_query_size_none"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *RequestConstraintType_MaxQuerySizeExceeds:
+		if fv, exists := v.FldValidators["max_query_size_choice.max_query_size_exceeds"]; exists {
+			val := m.GetMaxQuerySizeChoice().(*RequestConstraintType_MaxQuerySizeExceeds).MaxQuerySizeExceeds
+			vOpts := append(opts,
+				db.WithValidateField("max_query_size_choice"),
+				db.WithValidateField("max_query_size_exceeds"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["max_request_line_size_choice"]; exists {
+		val := m.GetMaxRequestLineSizeChoice()
+		vOpts := append(opts,
+			db.WithValidateField("max_request_line_size_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetMaxRequestLineSizeChoice().(type) {
+	case *RequestConstraintType_MaxRequestLineSizeNone:
+		if fv, exists := v.FldValidators["max_request_line_size_choice.max_request_line_size_none"]; exists {
+			val := m.GetMaxRequestLineSizeChoice().(*RequestConstraintType_MaxRequestLineSizeNone).MaxRequestLineSizeNone
+			vOpts := append(opts,
+				db.WithValidateField("max_request_line_size_choice"),
+				db.WithValidateField("max_request_line_size_none"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *RequestConstraintType_MaxRequestLineSizeExceeds:
+		if fv, exists := v.FldValidators["max_request_line_size_choice.max_request_line_size_exceeds"]; exists {
+			val := m.GetMaxRequestLineSizeChoice().(*RequestConstraintType_MaxRequestLineSizeExceeds).MaxRequestLineSizeExceeds
+			vOpts := append(opts,
+				db.WithValidateField("max_request_line_size_choice"),
+				db.WithValidateField("max_request_line_size_exceeds"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["max_request_size_choice"]; exists {
+		val := m.GetMaxRequestSizeChoice()
+		vOpts := append(opts,
+			db.WithValidateField("max_request_size_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetMaxRequestSizeChoice().(type) {
+	case *RequestConstraintType_MaxRequestSizeNone:
+		if fv, exists := v.FldValidators["max_request_size_choice.max_request_size_none"]; exists {
+			val := m.GetMaxRequestSizeChoice().(*RequestConstraintType_MaxRequestSizeNone).MaxRequestSizeNone
+			vOpts := append(opts,
+				db.WithValidateField("max_request_size_choice"),
+				db.WithValidateField("max_request_size_none"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *RequestConstraintType_MaxRequestSizeExceeds:
+		if fv, exists := v.FldValidators["max_request_size_choice.max_request_size_exceeds"]; exists {
+			val := m.GetMaxRequestSizeChoice().(*RequestConstraintType_MaxRequestSizeExceeds).MaxRequestSizeExceeds
+			vOpts := append(opts,
+				db.WithValidateField("max_request_size_choice"),
+				db.WithValidateField("max_request_size_exceeds"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["max_upload_file_size_choice"]; exists {
+		val := m.GetMaxUploadFileSizeChoice()
+		vOpts := append(opts,
+			db.WithValidateField("max_upload_file_size_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetMaxUploadFileSizeChoice().(type) {
+	case *RequestConstraintType_MaxUploadFileSizeNone:
+		if fv, exists := v.FldValidators["max_upload_file_size_choice.max_upload_file_size_none"]; exists {
+			val := m.GetMaxUploadFileSizeChoice().(*RequestConstraintType_MaxUploadFileSizeNone).MaxUploadFileSizeNone
+			vOpts := append(opts,
+				db.WithValidateField("max_upload_file_size_choice"),
+				db.WithValidateField("max_upload_file_size_none"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *RequestConstraintType_MaxUploadFileSizeExceeds:
+		if fv, exists := v.FldValidators["max_upload_file_size_choice.max_upload_file_size_exceeds"]; exists {
+			val := m.GetMaxUploadFileSizeChoice().(*RequestConstraintType_MaxUploadFileSizeExceeds).MaxUploadFileSizeExceeds
+			vOpts := append(opts,
+				db.WithValidateField("max_upload_file_size_choice"),
+				db.WithValidateField("max_upload_file_size_exceeds"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["max_url_size_choice"]; exists {
+		val := m.GetMaxUrlSizeChoice()
+		vOpts := append(opts,
+			db.WithValidateField("max_url_size_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetMaxUrlSizeChoice().(type) {
+	case *RequestConstraintType_MaxUrlSizeNone:
+		if fv, exists := v.FldValidators["max_url_size_choice.max_url_size_none"]; exists {
+			val := m.GetMaxUrlSizeChoice().(*RequestConstraintType_MaxUrlSizeNone).MaxUrlSizeNone
+			vOpts := append(opts,
+				db.WithValidateField("max_url_size_choice"),
+				db.WithValidateField("max_url_size_none"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *RequestConstraintType_MaxUrlSizeExceeds:
+		if fv, exists := v.FldValidators["max_url_size_choice.max_url_size_exceeds"]; exists {
+			val := m.GetMaxUrlSizeChoice().(*RequestConstraintType_MaxUrlSizeExceeds).MaxUrlSizeExceeds
+			vOpts := append(opts,
+				db.WithValidateField("max_url_size_choice"),
+				db.WithValidateField("max_url_size_exceeds"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultRequestConstraintTypeValidator = func() *ValidateRequestConstraintType {
+	v := &ValidateRequestConstraintType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhMaxBodySizeChoice := v.MaxBodySizeChoiceValidationRuleHandler
+	rulesMaxBodySizeChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhMaxBodySizeChoice(rulesMaxBodySizeChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for RequestConstraintType.max_body_size_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["max_body_size_choice"] = vFn
+
+	vrhMaxBodySizeChoiceMaxBodySizeExceeds := v.MaxBodySizeChoiceMaxBodySizeExceedsValidationRuleHandler
+	rulesMaxBodySizeChoiceMaxBodySizeExceeds := map[string]string{
+		"ves.io.schema.rules.uint32.gte": "1",
+	}
+	vFnMap["max_body_size_choice.max_body_size_exceeds"], err = vrhMaxBodySizeChoiceMaxBodySizeExceeds(rulesMaxBodySizeChoiceMaxBodySizeExceeds)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field RequestConstraintType.max_body_size_choice_max_body_size_exceeds: %s", err)
+		panic(errMsg)
+	}
+
+	v.FldValidators["max_body_size_choice.max_body_size_exceeds"] = vFnMap["max_body_size_choice.max_body_size_exceeds"]
+
+	vrhMaxCookieCountChoice := v.MaxCookieCountChoiceValidationRuleHandler
+	rulesMaxCookieCountChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhMaxCookieCountChoice(rulesMaxCookieCountChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for RequestConstraintType.max_cookie_count_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["max_cookie_count_choice"] = vFn
+
+	vrhMaxCookieCountChoiceMaxCookieCountExceeds := v.MaxCookieCountChoiceMaxCookieCountExceedsValidationRuleHandler
+	rulesMaxCookieCountChoiceMaxCookieCountExceeds := map[string]string{
+		"ves.io.schema.rules.uint32.gte": "1",
+		"ves.io.schema.rules.uint32.lte": "1024",
+	}
+	vFnMap["max_cookie_count_choice.max_cookie_count_exceeds"], err = vrhMaxCookieCountChoiceMaxCookieCountExceeds(rulesMaxCookieCountChoiceMaxCookieCountExceeds)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field RequestConstraintType.max_cookie_count_choice_max_cookie_count_exceeds: %s", err)
+		panic(errMsg)
+	}
+
+	v.FldValidators["max_cookie_count_choice.max_cookie_count_exceeds"] = vFnMap["max_cookie_count_choice.max_cookie_count_exceeds"]
+
+	vrhMaxCookieKeySizeChoice := v.MaxCookieKeySizeChoiceValidationRuleHandler
+	rulesMaxCookieKeySizeChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhMaxCookieKeySizeChoice(rulesMaxCookieKeySizeChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for RequestConstraintType.max_cookie_key_size_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["max_cookie_key_size_choice"] = vFn
+
+	vrhMaxCookieKeySizeChoiceMaxCookieKeySizeExceeds := v.MaxCookieKeySizeChoiceMaxCookieKeySizeExceedsValidationRuleHandler
+	rulesMaxCookieKeySizeChoiceMaxCookieKeySizeExceeds := map[string]string{
+		"ves.io.schema.rules.uint32.gte": "1",
+		"ves.io.schema.rules.uint32.lte": "1024",
+	}
+	vFnMap["max_cookie_key_size_choice.max_cookie_key_size_exceeds"], err = vrhMaxCookieKeySizeChoiceMaxCookieKeySizeExceeds(rulesMaxCookieKeySizeChoiceMaxCookieKeySizeExceeds)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field RequestConstraintType.max_cookie_key_size_choice_max_cookie_key_size_exceeds: %s", err)
+		panic(errMsg)
+	}
+
+	v.FldValidators["max_cookie_key_size_choice.max_cookie_key_size_exceeds"] = vFnMap["max_cookie_key_size_choice.max_cookie_key_size_exceeds"]
+
+	vrhMaxCookieValueSizeChoice := v.MaxCookieValueSizeChoiceValidationRuleHandler
+	rulesMaxCookieValueSizeChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhMaxCookieValueSizeChoice(rulesMaxCookieValueSizeChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for RequestConstraintType.max_cookie_value_size_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["max_cookie_value_size_choice"] = vFn
+
+	vrhMaxCookieValueSizeChoiceMaxCookieValueSizeExceeds := v.MaxCookieValueSizeChoiceMaxCookieValueSizeExceedsValidationRuleHandler
+	rulesMaxCookieValueSizeChoiceMaxCookieValueSizeExceeds := map[string]string{
+		"ves.io.schema.rules.uint32.gte": "1",
+		"ves.io.schema.rules.uint32.lte": "32768",
+	}
+	vFnMap["max_cookie_value_size_choice.max_cookie_value_size_exceeds"], err = vrhMaxCookieValueSizeChoiceMaxCookieValueSizeExceeds(rulesMaxCookieValueSizeChoiceMaxCookieValueSizeExceeds)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field RequestConstraintType.max_cookie_value_size_choice_max_cookie_value_size_exceeds: %s", err)
+		panic(errMsg)
+	}
+
+	v.FldValidators["max_cookie_value_size_choice.max_cookie_value_size_exceeds"] = vFnMap["max_cookie_value_size_choice.max_cookie_value_size_exceeds"]
+
+	vrhMaxHeaderCountChoice := v.MaxHeaderCountChoiceValidationRuleHandler
+	rulesMaxHeaderCountChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhMaxHeaderCountChoice(rulesMaxHeaderCountChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for RequestConstraintType.max_header_count_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["max_header_count_choice"] = vFn
+
+	vrhMaxHeaderCountChoiceMaxHeaderCountExceeds := v.MaxHeaderCountChoiceMaxHeaderCountExceedsValidationRuleHandler
+	rulesMaxHeaderCountChoiceMaxHeaderCountExceeds := map[string]string{
+		"ves.io.schema.rules.uint32.gte": "1",
+		"ves.io.schema.rules.uint32.lte": "40",
+	}
+	vFnMap["max_header_count_choice.max_header_count_exceeds"], err = vrhMaxHeaderCountChoiceMaxHeaderCountExceeds(rulesMaxHeaderCountChoiceMaxHeaderCountExceeds)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field RequestConstraintType.max_header_count_choice_max_header_count_exceeds: %s", err)
+		panic(errMsg)
+	}
+
+	v.FldValidators["max_header_count_choice.max_header_count_exceeds"] = vFnMap["max_header_count_choice.max_header_count_exceeds"]
+
+	vrhMaxHeaderKeySizeChoice := v.MaxHeaderKeySizeChoiceValidationRuleHandler
+	rulesMaxHeaderKeySizeChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhMaxHeaderKeySizeChoice(rulesMaxHeaderKeySizeChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for RequestConstraintType.max_header_key_size_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["max_header_key_size_choice"] = vFn
+
+	vrhMaxHeaderKeySizeChoiceMaxHeaderKeySizeExceeds := v.MaxHeaderKeySizeChoiceMaxHeaderKeySizeExceedsValidationRuleHandler
+	rulesMaxHeaderKeySizeChoiceMaxHeaderKeySizeExceeds := map[string]string{
+		"ves.io.schema.rules.uint32.gte": "1",
+		"ves.io.schema.rules.uint32.lte": "1024",
+	}
+	vFnMap["max_header_key_size_choice.max_header_key_size_exceeds"], err = vrhMaxHeaderKeySizeChoiceMaxHeaderKeySizeExceeds(rulesMaxHeaderKeySizeChoiceMaxHeaderKeySizeExceeds)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field RequestConstraintType.max_header_key_size_choice_max_header_key_size_exceeds: %s", err)
+		panic(errMsg)
+	}
+
+	v.FldValidators["max_header_key_size_choice.max_header_key_size_exceeds"] = vFnMap["max_header_key_size_choice.max_header_key_size_exceeds"]
+
+	vrhMaxHeaderValueSizeChoice := v.MaxHeaderValueSizeChoiceValidationRuleHandler
+	rulesMaxHeaderValueSizeChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhMaxHeaderValueSizeChoice(rulesMaxHeaderValueSizeChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for RequestConstraintType.max_header_value_size_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["max_header_value_size_choice"] = vFn
+
+	vrhMaxHeaderValueSizeChoiceMaxHeaderValueSizeExceeds := v.MaxHeaderValueSizeChoiceMaxHeaderValueSizeExceedsValidationRuleHandler
+	rulesMaxHeaderValueSizeChoiceMaxHeaderValueSizeExceeds := map[string]string{
+		"ves.io.schema.rules.uint32.gte": "1",
+		"ves.io.schema.rules.uint32.lte": "64000",
+	}
+	vFnMap["max_header_value_size_choice.max_header_value_size_exceeds"], err = vrhMaxHeaderValueSizeChoiceMaxHeaderValueSizeExceeds(rulesMaxHeaderValueSizeChoiceMaxHeaderValueSizeExceeds)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field RequestConstraintType.max_header_value_size_choice_max_header_value_size_exceeds: %s", err)
+		panic(errMsg)
+	}
+
+	v.FldValidators["max_header_value_size_choice.max_header_value_size_exceeds"] = vFnMap["max_header_value_size_choice.max_header_value_size_exceeds"]
+
+	vrhMaxParameterCountChoice := v.MaxParameterCountChoiceValidationRuleHandler
+	rulesMaxParameterCountChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhMaxParameterCountChoice(rulesMaxParameterCountChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for RequestConstraintType.max_parameter_count_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["max_parameter_count_choice"] = vFn
+
+	vrhMaxParameterCountChoiceMaxParameterCountExceeds := v.MaxParameterCountChoiceMaxParameterCountExceedsValidationRuleHandler
+	rulesMaxParameterCountChoiceMaxParameterCountExceeds := map[string]string{
+		"ves.io.schema.rules.uint32.gte": "1",
+		"ves.io.schema.rules.uint32.lte": "1024",
+	}
+	vFnMap["max_parameter_count_choice.max_parameter_count_exceeds"], err = vrhMaxParameterCountChoiceMaxParameterCountExceeds(rulesMaxParameterCountChoiceMaxParameterCountExceeds)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field RequestConstraintType.max_parameter_count_choice_max_parameter_count_exceeds: %s", err)
+		panic(errMsg)
+	}
+
+	v.FldValidators["max_parameter_count_choice.max_parameter_count_exceeds"] = vFnMap["max_parameter_count_choice.max_parameter_count_exceeds"]
+
+	vrhMaxParameterNameSizeChoice := v.MaxParameterNameSizeChoiceValidationRuleHandler
+	rulesMaxParameterNameSizeChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhMaxParameterNameSizeChoice(rulesMaxParameterNameSizeChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for RequestConstraintType.max_parameter_name_size_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["max_parameter_name_size_choice"] = vFn
+
+	vrhMaxParameterNameSizeChoiceMaxParameterNameSizeExceeds := v.MaxParameterNameSizeChoiceMaxParameterNameSizeExceedsValidationRuleHandler
+	rulesMaxParameterNameSizeChoiceMaxParameterNameSizeExceeds := map[string]string{
+		"ves.io.schema.rules.uint32.gte": "1",
+		"ves.io.schema.rules.uint32.lte": "1024",
+	}
+	vFnMap["max_parameter_name_size_choice.max_parameter_name_size_exceeds"], err = vrhMaxParameterNameSizeChoiceMaxParameterNameSizeExceeds(rulesMaxParameterNameSizeChoiceMaxParameterNameSizeExceeds)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field RequestConstraintType.max_parameter_name_size_choice_max_parameter_name_size_exceeds: %s", err)
+		panic(errMsg)
+	}
+
+	v.FldValidators["max_parameter_name_size_choice.max_parameter_name_size_exceeds"] = vFnMap["max_parameter_name_size_choice.max_parameter_name_size_exceeds"]
+
+	vrhMaxParameterValueSizeChoice := v.MaxParameterValueSizeChoiceValidationRuleHandler
+	rulesMaxParameterValueSizeChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhMaxParameterValueSizeChoice(rulesMaxParameterValueSizeChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for RequestConstraintType.max_parameter_value_size_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["max_parameter_value_size_choice"] = vFn
+
+	vrhMaxParameterValueSizeChoiceMaxParameterValueSizeExceeds := v.MaxParameterValueSizeChoiceMaxParameterValueSizeExceedsValidationRuleHandler
+	rulesMaxParameterValueSizeChoiceMaxParameterValueSizeExceeds := map[string]string{
+		"ves.io.schema.rules.uint32.gte": "1",
+		"ves.io.schema.rules.uint32.lte": "1073741824",
+	}
+	vFnMap["max_parameter_value_size_choice.max_parameter_value_size_exceeds"], err = vrhMaxParameterValueSizeChoiceMaxParameterValueSizeExceeds(rulesMaxParameterValueSizeChoiceMaxParameterValueSizeExceeds)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field RequestConstraintType.max_parameter_value_size_choice_max_parameter_value_size_exceeds: %s", err)
+		panic(errMsg)
+	}
+
+	v.FldValidators["max_parameter_value_size_choice.max_parameter_value_size_exceeds"] = vFnMap["max_parameter_value_size_choice.max_parameter_value_size_exceeds"]
+
+	vrhMaxQuerySizeChoice := v.MaxQuerySizeChoiceValidationRuleHandler
+	rulesMaxQuerySizeChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhMaxQuerySizeChoice(rulesMaxQuerySizeChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for RequestConstraintType.max_query_size_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["max_query_size_choice"] = vFn
+
+	vrhMaxQuerySizeChoiceMaxQuerySizeExceeds := v.MaxQuerySizeChoiceMaxQuerySizeExceedsValidationRuleHandler
+	rulesMaxQuerySizeChoiceMaxQuerySizeExceeds := map[string]string{
+		"ves.io.schema.rules.uint32.gte": "1",
+		"ves.io.schema.rules.uint32.lte": "60000",
+	}
+	vFnMap["max_query_size_choice.max_query_size_exceeds"], err = vrhMaxQuerySizeChoiceMaxQuerySizeExceeds(rulesMaxQuerySizeChoiceMaxQuerySizeExceeds)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field RequestConstraintType.max_query_size_choice_max_query_size_exceeds: %s", err)
+		panic(errMsg)
+	}
+
+	v.FldValidators["max_query_size_choice.max_query_size_exceeds"] = vFnMap["max_query_size_choice.max_query_size_exceeds"]
+
+	vrhMaxRequestLineSizeChoice := v.MaxRequestLineSizeChoiceValidationRuleHandler
+	rulesMaxRequestLineSizeChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhMaxRequestLineSizeChoice(rulesMaxRequestLineSizeChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for RequestConstraintType.max_request_line_size_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["max_request_line_size_choice"] = vFn
+
+	vrhMaxRequestLineSizeChoiceMaxRequestLineSizeExceeds := v.MaxRequestLineSizeChoiceMaxRequestLineSizeExceedsValidationRuleHandler
+	rulesMaxRequestLineSizeChoiceMaxRequestLineSizeExceeds := map[string]string{
+		"ves.io.schema.rules.uint32.gte": "1",
+		"ves.io.schema.rules.uint32.lte": "65536",
+	}
+	vFnMap["max_request_line_size_choice.max_request_line_size_exceeds"], err = vrhMaxRequestLineSizeChoiceMaxRequestLineSizeExceeds(rulesMaxRequestLineSizeChoiceMaxRequestLineSizeExceeds)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field RequestConstraintType.max_request_line_size_choice_max_request_line_size_exceeds: %s", err)
+		panic(errMsg)
+	}
+
+	v.FldValidators["max_request_line_size_choice.max_request_line_size_exceeds"] = vFnMap["max_request_line_size_choice.max_request_line_size_exceeds"]
+
+	vrhMaxRequestSizeChoice := v.MaxRequestSizeChoiceValidationRuleHandler
+	rulesMaxRequestSizeChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhMaxRequestSizeChoice(rulesMaxRequestSizeChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for RequestConstraintType.max_request_size_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["max_request_size_choice"] = vFn
+
+	vrhMaxRequestSizeChoiceMaxRequestSizeExceeds := v.MaxRequestSizeChoiceMaxRequestSizeExceedsValidationRuleHandler
+	rulesMaxRequestSizeChoiceMaxRequestSizeExceeds := map[string]string{
+		"ves.io.schema.rules.uint32.gte": "1",
+		"ves.io.schema.rules.uint32.lte": "65536",
+	}
+	vFnMap["max_request_size_choice.max_request_size_exceeds"], err = vrhMaxRequestSizeChoiceMaxRequestSizeExceeds(rulesMaxRequestSizeChoiceMaxRequestSizeExceeds)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field RequestConstraintType.max_request_size_choice_max_request_size_exceeds: %s", err)
+		panic(errMsg)
+	}
+
+	v.FldValidators["max_request_size_choice.max_request_size_exceeds"] = vFnMap["max_request_size_choice.max_request_size_exceeds"]
+
+	vrhMaxUploadFileSizeChoice := v.MaxUploadFileSizeChoiceValidationRuleHandler
+	rulesMaxUploadFileSizeChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhMaxUploadFileSizeChoice(rulesMaxUploadFileSizeChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for RequestConstraintType.max_upload_file_size_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["max_upload_file_size_choice"] = vFn
+
+	vrhMaxUploadFileSizeChoiceMaxUploadFileSizeExceeds := v.MaxUploadFileSizeChoiceMaxUploadFileSizeExceedsValidationRuleHandler
+	rulesMaxUploadFileSizeChoiceMaxUploadFileSizeExceeds := map[string]string{
+		"ves.io.schema.rules.uint32.gte": "0",
+		"ves.io.schema.rules.uint32.lte": "51200",
+	}
+	vFnMap["max_upload_file_size_choice.max_upload_file_size_exceeds"], err = vrhMaxUploadFileSizeChoiceMaxUploadFileSizeExceeds(rulesMaxUploadFileSizeChoiceMaxUploadFileSizeExceeds)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field RequestConstraintType.max_upload_file_size_choice_max_upload_file_size_exceeds: %s", err)
+		panic(errMsg)
+	}
+
+	v.FldValidators["max_upload_file_size_choice.max_upload_file_size_exceeds"] = vFnMap["max_upload_file_size_choice.max_upload_file_size_exceeds"]
+
+	vrhMaxUrlSizeChoice := v.MaxUrlSizeChoiceValidationRuleHandler
+	rulesMaxUrlSizeChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhMaxUrlSizeChoice(rulesMaxUrlSizeChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for RequestConstraintType.max_url_size_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["max_url_size_choice"] = vFn
+
+	vrhMaxUrlSizeChoiceMaxUrlSizeExceeds := v.MaxUrlSizeChoiceMaxUrlSizeExceedsValidationRuleHandler
+	rulesMaxUrlSizeChoiceMaxUrlSizeExceeds := map[string]string{
+		"ves.io.schema.rules.uint32.gte": "1",
+		"ves.io.schema.rules.uint32.lte": "128000",
+	}
+	vFnMap["max_url_size_choice.max_url_size_exceeds"], err = vrhMaxUrlSizeChoiceMaxUrlSizeExceeds(rulesMaxUrlSizeChoiceMaxUrlSizeExceeds)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field RequestConstraintType.max_url_size_choice_max_url_size_exceeds: %s", err)
+		panic(errMsg)
+	}
+
+	v.FldValidators["max_url_size_choice.max_url_size_exceeds"] = vFnMap["max_url_size_choice.max_url_size_exceeds"]
+
+	return v
+}()
+
+func RequestConstraintTypeValidator() db.Validator {
+	return DefaultRequestConstraintTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *RequestMatcher) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -7192,18 +8945,31 @@ func (v *ValidateSimpleWafExclusionRule) DomainChoiceSuffixValueValidationRuleHa
 	return oValidatorFn_SuffixValue, nil
 }
 
-func (v *ValidateSimpleWafExclusionRule) WafAdvancedConfigurationAppFirewallDetectionControlValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-	return AppFirewallDetectionControlValidator().Validate, nil
+func (v *ValidateSimpleWafExclusionRule) PathChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for path_choice")
+	}
+	return validatorFn, nil
 }
 
-func (v *ValidateSimpleWafExclusionRule) PathRegexValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+func (v *ValidateSimpleWafExclusionRule) PathChoicePathRegexValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_PathRegex, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for path_regex")
 	}
+	return oValidatorFn_PathRegex, nil
+}
+func (v *ValidateSimpleWafExclusionRule) PathChoicePathPrefixValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_PathPrefix, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for path_prefix")
+	}
+	return oValidatorFn_PathPrefix, nil
+}
 
-	return validatorFn, nil
+func (v *ValidateSimpleWafExclusionRule) WafAdvancedConfigurationAppFirewallDetectionControlValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	return AppFirewallDetectionControlValidator().Validate, nil
 }
 
 func (v *ValidateSimpleWafExclusionRule) MethodsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
@@ -7418,11 +9184,49 @@ func (v *ValidateSimpleWafExclusionRule) Validate(ctx context.Context, pm interf
 
 	}
 
-	if fv, exists := v.FldValidators["path_regex"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("path_regex"))
-		if err := fv(ctx, m.GetPathRegex(), vOpts...); err != nil {
+	if fv, exists := v.FldValidators["path_choice"]; exists {
+		val := m.GetPathChoice()
+		vOpts := append(opts,
+			db.WithValidateField("path_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
 			return err
+		}
+	}
+
+	switch m.GetPathChoice().(type) {
+	case *SimpleWafExclusionRule_PathRegex:
+		if fv, exists := v.FldValidators["path_choice.path_regex"]; exists {
+			val := m.GetPathChoice().(*SimpleWafExclusionRule_PathRegex).PathRegex
+			vOpts := append(opts,
+				db.WithValidateField("path_choice"),
+				db.WithValidateField("path_regex"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *SimpleWafExclusionRule_AnyPath:
+		if fv, exists := v.FldValidators["path_choice.any_path"]; exists {
+			val := m.GetPathChoice().(*SimpleWafExclusionRule_AnyPath).AnyPath
+			vOpts := append(opts,
+				db.WithValidateField("path_choice"),
+				db.WithValidateField("any_path"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *SimpleWafExclusionRule_PathPrefix:
+		if fv, exists := v.FldValidators["path_choice.path_prefix"]; exists {
+			val := m.GetPathChoice().(*SimpleWafExclusionRule_PathPrefix).PathPrefix
+			vOpts := append(opts,
+				db.WithValidateField("path_choice"),
+				db.WithValidateField("path_prefix"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
 		}
 
 	}
@@ -7505,6 +9309,41 @@ var DefaultSimpleWafExclusionRuleValidator = func() *ValidateSimpleWafExclusionR
 	v.FldValidators["domain_choice.exact_value"] = vFnMap["domain_choice.exact_value"]
 	v.FldValidators["domain_choice.suffix_value"] = vFnMap["domain_choice.suffix_value"]
 
+	vrhPathChoice := v.PathChoiceValidationRuleHandler
+	rulesPathChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhPathChoice(rulesPathChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for SimpleWafExclusionRule.path_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["path_choice"] = vFn
+
+	vrhPathChoicePathRegex := v.PathChoicePathRegexValidationRuleHandler
+	rulesPathChoicePathRegex := map[string]string{
+		"ves.io.schema.rules.string.max_bytes": "256",
+		"ves.io.schema.rules.string.regex":     "true",
+	}
+	vFnMap["path_choice.path_regex"], err = vrhPathChoicePathRegex(rulesPathChoicePathRegex)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field SimpleWafExclusionRule.path_choice_path_regex: %s", err)
+		panic(errMsg)
+	}
+	vrhPathChoicePathPrefix := v.PathChoicePathPrefixValidationRuleHandler
+	rulesPathChoicePathPrefix := map[string]string{
+		"ves.io.schema.rules.string.http_path": "true",
+		"ves.io.schema.rules.string.max_len":   "256",
+	}
+	vFnMap["path_choice.path_prefix"], err = vrhPathChoicePathPrefix(rulesPathChoicePathPrefix)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field SimpleWafExclusionRule.path_choice_path_prefix: %s", err)
+		panic(errMsg)
+	}
+
+	v.FldValidators["path_choice.path_regex"] = vFnMap["path_choice.path_regex"]
+	v.FldValidators["path_choice.path_prefix"] = vFnMap["path_choice.path_prefix"]
+
 	vrhWafAdvancedConfigurationAppFirewallDetectionControl := v.WafAdvancedConfigurationAppFirewallDetectionControlValidationRuleHandler
 	rulesWafAdvancedConfigurationAppFirewallDetectionControl := map[string]string{
 		"ves.io.schema.rules.message.required_one_nonzero_field": "true",
@@ -7516,19 +9355,6 @@ var DefaultSimpleWafExclusionRuleValidator = func() *ValidateSimpleWafExclusionR
 	}
 
 	v.FldValidators["waf_advanced_configuration.app_firewall_detection_control"] = vFnMap["waf_advanced_configuration.app_firewall_detection_control"]
-
-	vrhPathRegex := v.PathRegexValidationRuleHandler
-	rulesPathRegex := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
-		"ves.io.schema.rules.string.max_bytes": "256",
-		"ves.io.schema.rules.string.regex":     "true",
-	}
-	vFn, err = vrhPathRegex(rulesPathRegex)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for SimpleWafExclusionRule.path_regex: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["path_regex"] = vFn
 
 	vrhMethods := v.MethodsValidationRuleHandler
 	rulesMethods := map[string]string{

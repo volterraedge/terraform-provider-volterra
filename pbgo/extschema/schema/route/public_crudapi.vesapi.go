@@ -2192,6 +2192,174 @@ var APISwaggerJSON string = `{
             "x-displayname": "Empty",
             "x-ves-proto-message": "ves.io.schema.Empty"
         },
+        "ioschemaHeaderMatcherType": {
+            "type": "object",
+            "description": "Header match is done using the name of the header and its value.\nThe value match is done using one of the following\n    regex match on value\n    exact match of value\n    presence of header\n\nHeader Match can also be inverse of above, which be used to check\n    missing header or\n    non-matching value",
+            "title": "HeaderMatcherType",
+            "x-displayname": "Header to Match",
+            "x-ves-oneof-field-value_match": "[\"exact\",\"presence\",\"regex\"]",
+            "x-ves-proto-message": "ves.io.schema.HeaderMatcherType",
+            "properties": {
+                "exact": {
+                    "type": "string",
+                    "description": "Exclusive with [presence regex]\n Header value to match exactly\n\nExample: - \"application/json\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 256\n  ves.io.schema.rules.string.not_empty: true\n",
+                    "title": "exact",
+                    "maxLength": 256,
+                    "x-displayname": "Exact",
+                    "x-ves-example": "application/json",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_bytes": "256",
+                        "ves.io.schema.rules.string.not_empty": "true"
+                    }
+                },
+                "invert_match": {
+                    "type": "boolean",
+                    "description": " Invert the result of the match to detect missing header or non-matching value",
+                    "title": "invert_match",
+                    "format": "boolean",
+                    "x-displayname": "NOT of match"
+                },
+                "name": {
+                    "type": "string",
+                    "description": " Name of the header\n\nExample: - \"Content-Type\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.http_header_field: true\n  ves.io.schema.rules.string.max_bytes: 256\n  ves.io.schema.rules.string.min_bytes: 1\n",
+                    "title": "name",
+                    "minLength": 1,
+                    "maxLength": 256,
+                    "x-displayname": "Name",
+                    "x-ves-example": "Content-Type",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.http_header_field": "true",
+                        "ves.io.schema.rules.string.max_bytes": "256",
+                        "ves.io.schema.rules.string.min_bytes": "1"
+                    }
+                },
+                "presence": {
+                    "type": "boolean",
+                    "description": "Exclusive with [exact regex]\n If true, check for presence of header",
+                    "title": "presence",
+                    "format": "boolean",
+                    "x-displayname": "Presence"
+                },
+                "regex": {
+                    "type": "string",
+                    "description": "Exclusive with [exact presence]\n Regex match of the header value in re2 format\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 256\n  ves.io.schema.rules.string.not_empty: true\n  ves.io.schema.rules.string.regex: true\n",
+                    "title": "regex",
+                    "maxLength": 256,
+                    "x-displayname": "Regex",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_bytes": "256",
+                        "ves.io.schema.rules.string.not_empty": "true",
+                        "ves.io.schema.rules.string.regex": "true"
+                    }
+                }
+            }
+        },
+        "ioschemaPathMatcherType": {
+            "type": "object",
+            "description": "Path match of the URI can be either be, Prefix match or exact match or regular expression match",
+            "title": "PathMatcherType",
+            "x-displayname": "Path to Match",
+            "x-ves-displayorder": "4",
+            "x-ves-oneof-field-path_match": "[\"path\",\"prefix\",\"regex\"]",
+            "x-ves-proto-message": "ves.io.schema.PathMatcherType",
+            "properties": {
+                "path": {
+                    "type": "string",
+                    "description": "Exclusive with [prefix regex]\n Exact path value to match\n\nExample: - \"/logout\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.http_path: true\n  ves.io.schema.rules.string.max_len: 256\n",
+                    "title": "path",
+                    "maxLength": 256,
+                    "x-displayname": "Path",
+                    "x-ves-example": "/logout",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.http_path": "true",
+                        "ves.io.schema.rules.string.max_len": "256"
+                    }
+                },
+                "prefix": {
+                    "type": "string",
+                    "description": "Exclusive with [path regex]\n Path prefix to match (e.g. the value / will match on all paths)\n\nExample: - \"/register/\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.http_path: true\n  ves.io.schema.rules.string.max_len: 256\n",
+                    "title": "prefix",
+                    "maxLength": 256,
+                    "x-displayname": "Prefix",
+                    "x-ves-example": "/register/",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.http_path": "true",
+                        "ves.io.schema.rules.string.max_len": "256"
+                    }
+                },
+                "regex": {
+                    "type": "string",
+                    "description": "Exclusive with [path prefix]\n Regular expression of path match (e.g. the value .* will match on all paths)\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 256\n  ves.io.schema.rules.string.min_bytes: 1\n  ves.io.schema.rules.string.regex: true\n",
+                    "title": "regex",
+                    "minLength": 1,
+                    "maxLength": 256,
+                    "x-displayname": "Regex",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_bytes": "256",
+                        "ves.io.schema.rules.string.min_bytes": "1",
+                        "ves.io.schema.rules.string.regex": "true"
+                    }
+                }
+            }
+        },
+        "ioschemaQueryParameterMatcherType": {
+            "type": "object",
+            "description": "Query parameter match can be either regex match on value or exact match of value for given key\nAn example for HTTP request with query parameter https://gitlab.com/dashboard/issues?assignee_username=xxyyxx",
+            "title": "QueryParameterMatcherType",
+            "x-displayname": "Query Parameter to Match",
+            "x-ves-oneof-field-value_match": "[\"exact\",\"regex\"]",
+            "x-ves-proto-message": "ves.io.schema.QueryParameterMatcherType",
+            "properties": {
+                "exact": {
+                    "type": "string",
+                    "description": "Exclusive with [regex]\n Exact match value for the query parameter key",
+                    "title": "exact",
+                    "x-displayname": "Exact"
+                },
+                "key": {
+                    "type": "string",
+                    "description": " Query parameter key\n In the above example, assignee_username is the key\n\nExample: - \"assignee_username\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_bytes: 256\n  ves.io.schema.rules.string.min_bytes: 1\n",
+                    "title": "key",
+                    "minLength": 1,
+                    "maxLength": 256,
+                    "x-displayname": "Key",
+                    "x-ves-example": "assignee_username",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.max_bytes": "256",
+                        "ves.io.schema.rules.string.min_bytes": "1"
+                    }
+                },
+                "regex": {
+                    "type": "string",
+                    "description": "Exclusive with [exact]\n Regex match value for the query parameter key\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 256\n  ves.io.schema.rules.string.min_bytes: 1\n  ves.io.schema.rules.string.regex: true\n",
+                    "title": "regex",
+                    "minLength": 1,
+                    "maxLength": 256,
+                    "x-displayname": "Regex",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_bytes": "256",
+                        "ves.io.schema.rules.string.min_bytes": "1",
+                        "ves.io.schema.rules.string.regex": "true"
+                    }
+                }
+            }
+        },
+        "policyHTMLPosition": {
+            "type": "string",
+            "description": "x-displayName: \"HTML Position\"\nPosition of the HTML tag to insert in HTML document\n\n - BEGINNING: x-displayName: \"Beginning of HTML tag\"\nBeginning of HTML tag.\n - END: x-displayName: \"End of HTML tag\"\nEnd of HTML tag.\n - BEFORE: x-displayName: \"Before HTML tag\"\nBefore HTML tag.\n - AFTER: x-displayName: \"After HTML tag\"\nAfter HTML tag.",
+            "title": "HTMLPosition",
+            "enum": [
+                "BEGINNING",
+                "END",
+                "BEFORE",
+                "AFTER"
+            ],
+            "default": "BEGINNING"
+        },
         "protobufAny": {
             "type": "object",
             "description": "-Any- contains an arbitrary serialized protocol buffer message along with a\nURL that describes the type of the serialized message.\n\nProtobuf library provides support to pack/unpack Any values in the form\nof utility functions or additional generated methods of the Any type.\n\nExample 1: Pack and unpack a message in C++.\n\n    Foo foo = ...;\n    Any any;\n    any.PackFrom(foo);\n    ...\n    if (any.UnpackTo(\u0026foo)) {\n      ...\n    }\n\nExample 2: Pack and unpack a message in Java.\n\n    Foo foo = ...;\n    Any any = Any.pack(foo);\n    ...\n    if (any.is(Foo.class)) {\n      foo = any.unpack(Foo.class);\n    }\n\n Example 3: Pack and unpack a message in Python.\n\n    foo = Foo(...)\n    any = Any()\n    any.Pack(foo)\n    ...\n    if any.Is(Foo.DESCRIPTOR):\n      any.Unpack(foo)\n      ...\n\n Example 4: Pack and unpack a message in Go\n\n     foo := \u0026pb.Foo{...}\n     any, err := ptypes.MarshalAny(foo)\n     ...\n     foo := \u0026pb.Foo{}\n     if err := ptypes.UnmarshalAny(any, foo); err != nil {\n       ...\n     }\n\nThe pack methods provided by protobuf library will by default use\n'type.googleapis.com/full.type.name' as the type URL and the unpack\nmethods only use the fully qualified type name after the last '/'\nin the type URL, for example \"foo.bar.com/x/y.z\" will yield type\nname \"y.z\".\n\n\nJSON\n====\nThe JSON representation of an -Any- value uses the regular\nrepresentation of the deserialized, embedded message, with an\nadditional field -@type- which contains the type URL. Example:\n\n    package google.profile;\n    message Person {\n      string first_name = 1;\n      string last_name = 2;\n    }\n\n    {\n      \"@type\": \"type.googleapis.com/google.profile.Person\",\n      \"firstName\": \u003cstring\u003e,\n      \"lastName\": \u003cstring\u003e\n    }\n\nIf the embedded message type is well-known and has a custom JSON\nrepresentation, that representation will be embedded adding a field\n-value- which holds the custom JSON in addition to the -@type-\nfield. Example (for message [google.protobuf.Duration][]):\n\n    {\n      \"@type\": \"type.googleapis.com/google.protobuf.Duration\",\n      \"value\": \"1.212s\"\n    }",
@@ -2204,6 +2372,53 @@ var APISwaggerJSON string = `{
                     "type": "string",
                     "description": "Must be a valid serialized protocol buffer of the above specified type.",
                     "format": "byte"
+                }
+            }
+        },
+        "routeBotDefenseJavascriptInjectionType": {
+            "type": "object",
+            "description": "Bot Defense Javascript Injection Configuration for inline bot defense deployments",
+            "title": "BotDefenseJavascriptInjectionType",
+            "x-displayname": "Bot Defense Javascript Injection Configuration for inline deployments",
+            "x-ves-proto-message": "ves.io.schema.route.BotDefenseJavascriptInjectionType",
+            "properties": {
+                "javascript_location": {
+                    "description": " Defines where perform the Bot Defense Javascript Injection in HTML page.",
+                    "title": "javascript_location",
+                    "$ref": "#/definitions/routeJavaScriptLocation",
+                    "x-displayname": "JavaScript Location"
+                },
+                "js_download_path": {
+                    "type": "string",
+                    "description": " Web client will fetch F5 Client Java Script from this path.\n This path must not conflict with any other website/application paths.\n\n If not specified, default to ‘/common.js’.\n\nExample: - \"/common.js\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.http_path: true\n",
+                    "title": "js_download_path",
+                    "x-displayname": "Web Client JavaScript Path",
+                    "x-ves-example": "/common.js",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.http_path": "true"
+                    }
+                }
+            }
+        },
+        "routeContentRewriteType": {
+            "type": "object",
+            "description": "x-displayName: \"Content Rewrite Type\"\nRewrite HTML response to insert HTML content such as Javascript \u003cscript\u003e tags into the HTML document",
+            "title": "ContentRewriteType",
+            "properties": {
+                "element_selector": {
+                    "type": "string",
+                    "description": "x-displayName: \"Element selector to rewrite\"\nx-example: \"value\"\nx-required\nElement selector to insert into.",
+                    "title": "Element selector"
+                },
+                "insert_content": {
+                    "type": "string",
+                    "description": "x-displayName: \"HTML Content to insert\"\nx-example: \"value\"\nHTML content to insert.",
+                    "title": "Insert Content"
+                },
+                "position": {
+                    "description": "x-displayName: \"HTML position\"\nPosition of HTML content to be inserted within HTML tag.",
+                    "title": "Position",
+                    "$ref": "#/definitions/policyHTMLPosition"
                 }
             }
         },
@@ -2224,8 +2439,41 @@ var APISwaggerJSON string = `{
             "description": "Two types of cookie affinity:\n\n1. Passive. Takes a cookie that's present in the cookies header and\n   hashes on its value.\n\n2. Generated. Generates and sets a cookie with an expiration (TTL)\n   on the first request from the client in its response to the client,\n   based on the endpoint the request gets sent to. The client then\n   presents this on the next and all subsequent requests. The hash of\n   this is sufficient to ensure these requests get sent to the same\n   endpoint. The cookie is generated by hashing the source and\n   destination ports and addresses so that multiple independent HTTP2\n   streams on the same connection will independently receive the same\n   cookie, even if they arrive simultaneously.",
             "title": "Cookie for hashing",
             "x-displayname": "Hashing using Cookie",
+            "x-ves-oneof-field-httponly": "[\"add_httponly\",\"ignore_httponly\"]",
+            "x-ves-oneof-field-samesite": "[\"ignore_samesite\",\"samesite_lax\",\"samesite_none\",\"samesite_strict\"]",
+            "x-ves-oneof-field-secure": "[\"add_secure\",\"ignore_secure\"]",
             "x-ves-proto-message": "ves.io.schema.route.CookieForHashing",
             "properties": {
+                "add_httponly": {
+                    "description": "Exclusive with [ignore_httponly]\n Add httponly attribute",
+                    "title": "add_httponly",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Add HttpOnly"
+                },
+                "add_secure": {
+                    "description": "Exclusive with [ignore_secure]\n Add secure attribute",
+                    "title": "add_secure",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Add Secure"
+                },
+                "ignore_httponly": {
+                    "description": "Exclusive with [add_httponly]\n Ignore httponly attribute",
+                    "title": "ignore_httponly",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Ignore HttpOnly"
+                },
+                "ignore_samesite": {
+                    "description": "Exclusive with [samesite_lax samesite_none samesite_strict]\n Ignore Samesite attribute",
+                    "title": "ignore_samesite",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Ignore Samesite"
+                },
+                "ignore_secure": {
+                    "description": "Exclusive with [add_secure]\n Ignore secure attribute",
+                    "title": "ignore_secure",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Ignore Secure"
+                },
                 "name": {
                     "type": "string",
                     "description": " The name of the cookie that will be used to obtain the hash key. If the\n cookie is not present and TTL below is not set, no hash will be\n produced\n\nExample: - \"userid\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 256\n  ves.io.schema.rules.string.min_len: 1\n",
@@ -2247,6 +2495,24 @@ var APISwaggerJSON string = `{
                     "title": "path",
                     "x-displayname": "Path",
                     "x-ves-example": "/Users/userid/browser/cookies"
+                },
+                "samesite_lax": {
+                    "description": "Exclusive with [ignore_samesite samesite_none samesite_strict]\n Add Samesite attribute with Lax. Means that the cookie is not sent on cross-site requests",
+                    "title": "lax",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Lax"
+                },
+                "samesite_none": {
+                    "description": "Exclusive with [ignore_samesite samesite_lax samesite_strict]\n Add Samesite attribute with None. Means that the browser sends the cookie with both cross-site and same-site requests",
+                    "title": "none",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "None"
+                },
+                "samesite_strict": {
+                    "description": "Exclusive with [ignore_samesite samesite_lax samesite_none]\n Add Samesite attribute with Strict. Means that the browser sends the cookie only for same-site requests",
+                    "title": "strict",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Strict"
                 },
                 "ttl": {
                     "type": "integer",
@@ -2274,7 +2540,7 @@ var APISwaggerJSON string = `{
                 "spec": {
                     "description": " Specification of the desired behavior of the route",
                     "title": "spec",
-                    "$ref": "#/definitions/routeCreateSpecType",
+                    "$ref": "#/definitions/schemarouteCreateSpecType",
                     "x-displayname": "Spec"
                 }
             }
@@ -2292,7 +2558,7 @@ var APISwaggerJSON string = `{
                 "spec": {
                     "description": " Specification of the desired behavior of the route",
                     "title": "spec",
-                    "$ref": "#/definitions/routeGetSpecType",
+                    "$ref": "#/definitions/schemarouteGetSpecType",
                     "x-displayname": "Spec"
                 },
                 "system_metadata": {
@@ -2300,29 +2566,6 @@ var APISwaggerJSON string = `{
                     "title": "system metadata",
                     "$ref": "#/definitions/schemaSystemObjectGetMetaType",
                     "x-displayname": "System Metadata"
-                }
-            }
-        },
-        "routeCreateSpecType": {
-            "type": "object",
-            "description": "Create route object in a given namespace. Route object is list of route rules.\nEach rule has match condition to match incoming requests and actions to take on matching requests.\nVirtual host object has reference to route object",
-            "title": "CreateSpecType",
-            "x-displayname": "Create Route",
-            "x-ves-proto-message": "ves.io.schema.route.CreateSpecType",
-            "properties": {
-                "routes": {
-                    "type": "array",
-                    "description": " List of routes to match for incoming request\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 64\n",
-                    "maxItems": 64,
-                    "items": {
-                        "$ref": "#/definitions/routeRouteType"
-                    },
-                    "x-displayname": "Routes",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true",
-                        "ves.io.schema.rules.repeated.max_items": "64"
-                    }
                 }
             }
         },
@@ -2399,7 +2642,7 @@ var APISwaggerJSON string = `{
                 "spec": {
                     "description": " Specification of the desired behavior of the route",
                     "title": "spec",
-                    "$ref": "#/definitions/routeGetSpecType",
+                    "$ref": "#/definitions/schemarouteGetSpecType",
                     "x-displayname": "Spec"
                 },
                 "status": {
@@ -2432,53 +2675,6 @@ var APISwaggerJSON string = `{
                 "GET_RSP_FORMAT_REFERRING_OBJECTS"
             ],
             "default": "GET_RSP_FORMAT_DEFAULT"
-        },
-        "routeGetSpecType": {
-            "type": "object",
-            "description": "Get route object in a given namespace. Route object is list of route rules.\nEach rule has match condition to match incoming requests and actions to take on matching requests.\nVirtual host object has reference to route object",
-            "title": "GetSpecType",
-            "x-displayname": "Get Route",
-            "x-ves-proto-message": "ves.io.schema.route.GetSpecType",
-            "properties": {
-                "routes": {
-                    "type": "array",
-                    "description": " List of routes to match for incoming request\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 64\n",
-                    "maxItems": 64,
-                    "items": {
-                        "$ref": "#/definitions/routeRouteType"
-                    },
-                    "x-displayname": "Routes",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true",
-                        "ves.io.schema.rules.repeated.max_items": "64"
-                    }
-                }
-            }
-        },
-        "routeGlobalSpecType": {
-            "type": "object",
-            "description": "Route object configuration",
-            "title": "GlobalSpecType",
-            "x-displayname": "Global Configuration Specification",
-            "x-ves-proto-message": "ves.io.schema.route.GlobalSpecType",
-            "properties": {
-                "routes": {
-                    "type": "array",
-                    "description": " List of routes to match for incoming request\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 64\n",
-                    "title": "routes",
-                    "maxItems": 64,
-                    "items": {
-                        "$ref": "#/definitions/routeRouteType"
-                    },
-                    "x-displayname": "Routes",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true",
-                        "ves.io.schema.rules.repeated.max_items": "64"
-                    }
-                }
-            }
         },
         "routeHashPolicyType": {
             "type": "object",
@@ -2522,6 +2718,19 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Terminal"
                 }
             }
+        },
+        "routeJavaScriptLocation": {
+            "type": "string",
+            "description": "All inside networks.\n\nInsert JavaScript after \u003chead\u003e tag\nInsert JavaScript after \u003c/title\u003e tag.\nInsert JavaScript before first \u003cscript\u003e tag",
+            "title": "JavaScriptLocation",
+            "enum": [
+                "AFTER_HEAD",
+                "AFTER_TITLE_END",
+                "BEFORE_SCRIPT"
+            ],
+            "default": "AFTER_HEAD",
+            "x-displayname": "JavaScript Location",
+            "x-ves-proto-enum": "ves.io.schema.route.JavaScriptLocation"
         },
         "routeListResponse": {
             "type": "object",
@@ -2579,7 +2788,7 @@ var APISwaggerJSON string = `{
                 "get_spec": {
                     "description": " If ListRequest has any specified report_fields, it will appear in object",
                     "title": "get_spec",
-                    "$ref": "#/definitions/routeGetSpecType",
+                    "$ref": "#/definitions/schemarouteGetSpecType",
                     "x-displayname": "Get Specification"
                 },
                 "labels": {
@@ -2724,7 +2933,7 @@ var APISwaggerJSON string = `{
                 "spec": {
                     "description": " Specification of the desired behavior of the route",
                     "title": "spec",
-                    "$ref": "#/definitions/routeReplaceSpecType",
+                    "$ref": "#/definitions/schemarouteReplaceSpecType",
                     "x-displayname": "Spec"
                 }
             }
@@ -2732,29 +2941,6 @@ var APISwaggerJSON string = `{
         "routeReplaceResponse": {
             "type": "object",
             "x-ves-proto-message": "ves.io.schema.route.ReplaceResponse"
-        },
-        "routeReplaceSpecType": {
-            "type": "object",
-            "description": "Replace route object in a given namespace. Route object is list of route rules.\nEach rule has match condition to match incoming requests and actions to take on matching requests.\nVirtual host object has reference to route object",
-            "title": "ReplaceSpecType",
-            "x-displayname": "Replace Route",
-            "x-ves-proto-message": "ves.io.schema.route.ReplaceSpecType",
-            "properties": {
-                "routes": {
-                    "type": "array",
-                    "description": " List of routes to match for incoming request\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 64\n",
-                    "maxItems": 64,
-                    "items": {
-                        "$ref": "#/definitions/routeRouteType"
-                    },
-                    "x-displayname": "Routes",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true",
-                        "ves.io.schema.rules.repeated.max_items": "64"
-                    }
-                }
-            }
         },
         "routeRouteDestination": {
             "type": "object",
@@ -3089,16 +3275,29 @@ var APISwaggerJSON string = `{
             "description": "Each RouteType is a rule which has match condition and action. When the condition is\nmatched for incoming request, the specified action is taken.",
             "title": "RouteType",
             "x-displayname": "Route",
-            "x-ves-displayorder": "1,14,13,12,11,7,9,8,10,5",
+            "x-ves-displayorder": "1,14,13,12,11,7,9,8,10,5,16",
+            "x-ves-oneof-field-bot_defense_javascript_injection_choice": "[\"bot_defense_javascript_injection\",\"inherited_bot_defense_javascript_injection\"]",
             "x-ves-oneof-field-route_action": "[\"route_destination\",\"route_direct_response\",\"route_redirect\"]",
             "x-ves-proto-message": "ves.io.schema.route.RouteType",
             "properties": {
+                "bot_defense_javascript_injection": {
+                    "description": "Exclusive with [inherited_bot_defense_javascript_injection]\n Configuration for Bot Defense Javascript Injection",
+                    "title": "Bot Defense Javascript Injection for inline bot defense deployments",
+                    "$ref": "#/definitions/routeBotDefenseJavascriptInjectionType",
+                    "x-displayname": "Enable"
+                },
                 "disable_location_add": {
                     "type": "boolean",
                     "description": " disables append of x-volterra-location = \u003cre-site-name\u003e at route level, if it is configured at\n virtual-host level. This configuration is ignored on CE sites.\n\nExample: - true-",
                     "title": "disable_location_add",
                     "format": "boolean",
                     "x-displayname": "Disable Location Addition"
+                },
+                "inherited_bot_defense_javascript_injection": {
+                    "description": "Exclusive with [bot_defense_javascript_injection]\n Bot Defense Javascript Injection configuration is taken from Load Balancer.\n Hence no custom configuration is applied on the route",
+                    "title": "Inherited Bot Defense Javascript Injection",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Inherit Bot Defense Javascript Injection"
                 },
                 "match": {
                     "type": "array",
@@ -3249,7 +3448,7 @@ var APISwaggerJSON string = `{
             "properties": {
                 "gc_spec": {
                     "title": "gc_spec",
-                    "$ref": "#/definitions/routeGlobalSpecType",
+                    "$ref": "#/definitions/schemarouteGlobalSpecType",
                     "x-displayname": "GC Spec"
                 }
             }
@@ -3708,73 +3907,9 @@ var APISwaggerJSON string = `{
                 }
             }
         },
-        "schemaHeaderMatcherType": {
-            "type": "object",
-            "description": "Header match is done using the name of the header and its value.\nThe value match is done using one of the following\n    regex match on value\n    exact match of value\n    presence of header\n\nHeader Match can also be inverse of above, which be used to check\n    missing header or\n    non-matching value",
-            "title": "HeaderMatcherType",
-            "x-displayname": "Header to Match",
-            "x-ves-oneof-field-value_match": "[\"exact\",\"presence\",\"regex\"]",
-            "x-ves-proto-message": "ves.io.schema.HeaderMatcherType",
-            "properties": {
-                "exact": {
-                    "type": "string",
-                    "description": "Exclusive with [presence regex]\n Header value to match exactly\n\nExample: - \"application/json\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 256\n  ves.io.schema.rules.string.not_empty: true\n",
-                    "title": "exact",
-                    "maxLength": 256,
-                    "x-displayname": "Exact",
-                    "x-ves-example": "application/json",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.max_bytes": "256",
-                        "ves.io.schema.rules.string.not_empty": "true"
-                    }
-                },
-                "invert_match": {
-                    "type": "boolean",
-                    "description": " Invert the result of the match to detect missing header or non-matching value",
-                    "title": "invert_match",
-                    "format": "boolean",
-                    "x-displayname": "NOT of match"
-                },
-                "name": {
-                    "type": "string",
-                    "description": " Name of the header\n\nExample: - \"Content-Type\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.http_header_field: true\n  ves.io.schema.rules.string.max_bytes: 256\n  ves.io.schema.rules.string.min_bytes: 1\n",
-                    "title": "name",
-                    "minLength": 1,
-                    "maxLength": 256,
-                    "x-displayname": "Name",
-                    "x-ves-example": "Content-Type",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true",
-                        "ves.io.schema.rules.string.http_header_field": "true",
-                        "ves.io.schema.rules.string.max_bytes": "256",
-                        "ves.io.schema.rules.string.min_bytes": "1"
-                    }
-                },
-                "presence": {
-                    "type": "boolean",
-                    "description": "Exclusive with [exact regex]\n If true, check for presence of header",
-                    "title": "presence",
-                    "format": "boolean",
-                    "x-displayname": "Presence"
-                },
-                "regex": {
-                    "type": "string",
-                    "description": "Exclusive with [exact presence]\n Regex match of the header value in re2 format\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 256\n  ves.io.schema.rules.string.not_empty: true\n  ves.io.schema.rules.string.regex: true\n",
-                    "title": "regex",
-                    "maxLength": 256,
-                    "x-displayname": "Regex",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.max_bytes": "256",
-                        "ves.io.schema.rules.string.not_empty": "true",
-                        "ves.io.schema.rules.string.regex": "true"
-                    }
-                }
-            }
-        },
         "schemaHttpMethod": {
             "type": "string",
-            "description": "Specifies the HTTP method used to access a resource.\n\nAny HTTP Method\nGET method\nHEAD method\nPOST method\nPUT method\nDELETE method\nCONNECT method\nOPTIONS method\nTRACE method\nPATCH method",
+            "description": "Specifies the HTTP method used to access a resource.\n\nAny HTTP Method",
             "title": "HttpMethod",
             "enum": [
                 "ANY",
@@ -4125,98 +4260,6 @@ var APISwaggerJSON string = `{
                 }
             }
         },
-        "schemaPathMatcherType": {
-            "type": "object",
-            "description": "Path match of the URI can be either be, Prefix match or exact match or regular expression match",
-            "title": "PathMatcherType",
-            "x-displayname": "Path to Match",
-            "x-ves-displayorder": "4",
-            "x-ves-oneof-field-path_match": "[\"path\",\"prefix\",\"regex\"]",
-            "x-ves-proto-message": "ves.io.schema.PathMatcherType",
-            "properties": {
-                "path": {
-                    "type": "string",
-                    "description": "Exclusive with [prefix regex]\n Exact path value to match\n\nExample: - \"/logout\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.http_path: true\n  ves.io.schema.rules.string.max_len: 256\n",
-                    "title": "path",
-                    "maxLength": 256,
-                    "x-displayname": "Path",
-                    "x-ves-example": "/logout",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.http_path": "true",
-                        "ves.io.schema.rules.string.max_len": "256"
-                    }
-                },
-                "prefix": {
-                    "type": "string",
-                    "description": "Exclusive with [path regex]\n Path prefix to match\n\nExample: - \"/register/\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.http_path: true\n  ves.io.schema.rules.string.max_len: 256\n",
-                    "title": "prefix",
-                    "maxLength": 256,
-                    "x-displayname": "Prefix",
-                    "x-ves-example": "/register/",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.http_path": "true",
-                        "ves.io.schema.rules.string.max_len": "256"
-                    }
-                },
-                "regex": {
-                    "type": "string",
-                    "description": "Exclusive with [path prefix]\n Regular expression of path match\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 256\n  ves.io.schema.rules.string.min_bytes: 1\n  ves.io.schema.rules.string.regex: true\n",
-                    "title": "regex",
-                    "minLength": 1,
-                    "maxLength": 256,
-                    "x-displayname": "Regex",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.max_bytes": "256",
-                        "ves.io.schema.rules.string.min_bytes": "1",
-                        "ves.io.schema.rules.string.regex": "true"
-                    }
-                }
-            }
-        },
-        "schemaQueryParameterMatcherType": {
-            "type": "object",
-            "description": "Query parameter match can be either regex match on value or exact match of value for given key\nAn example for HTTP request with query parameter https://gitlab.com/dashboard/issues?assignee_username=xxyyxx",
-            "title": "QueryParameterMatcherType",
-            "x-displayname": "Query Parameter to Match",
-            "x-ves-oneof-field-value_match": "[\"exact\",\"regex\"]",
-            "x-ves-proto-message": "ves.io.schema.QueryParameterMatcherType",
-            "properties": {
-                "exact": {
-                    "type": "string",
-                    "description": "Exclusive with [regex]\n Exact match value for the query parameter key",
-                    "title": "exact",
-                    "x-displayname": "Exact"
-                },
-                "key": {
-                    "type": "string",
-                    "description": " Query parameter key\n In the above example, assignee_username is the key\n\nExample: - \"assignee_username\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_bytes: 256\n  ves.io.schema.rules.string.min_bytes: 1\n",
-                    "title": "key",
-                    "minLength": 1,
-                    "maxLength": 256,
-                    "x-displayname": "Key",
-                    "x-ves-example": "assignee_username",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true",
-                        "ves.io.schema.rules.string.max_bytes": "256",
-                        "ves.io.schema.rules.string.min_bytes": "1"
-                    }
-                },
-                "regex": {
-                    "type": "string",
-                    "description": "Exclusive with [exact]\n Regex match value for the query parameter key\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 256\n  ves.io.schema.rules.string.min_bytes: 1\n  ves.io.schema.rules.string.regex: true\n",
-                    "title": "regex",
-                    "minLength": 1,
-                    "maxLength": 256,
-                    "x-displayname": "Regex",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.max_bytes": "256",
-                        "ves.io.schema.rules.string.min_bytes": "1",
-                        "ves.io.schema.rules.string.regex": "true"
-                    }
-                }
-            }
-        },
         "schemaRetryBackOff": {
             "type": "object",
             "description": "Specifies parameters that control retry back off.",
@@ -4330,7 +4373,7 @@ var APISwaggerJSON string = `{
                     "title": "headers",
                     "maxItems": 16,
                     "items": {
-                        "$ref": "#/definitions/schemaHeaderMatcherType"
+                        "$ref": "#/definitions/ioschemaHeaderMatcherType"
                     },
                     "x-displayname": "Headers",
                     "x-ves-validation-rules": {
@@ -4347,7 +4390,7 @@ var APISwaggerJSON string = `{
                 "path": {
                     "description": " URI path of route",
                     "title": "path",
-                    "$ref": "#/definitions/schemaPathMatcherType",
+                    "$ref": "#/definitions/ioschemaPathMatcherType",
                     "x-displayname": "Path"
                 },
                 "query_params": {
@@ -4356,7 +4399,7 @@ var APISwaggerJSON string = `{
                     "title": "query_params",
                     "maxItems": 16,
                     "items": {
-                        "$ref": "#/definitions/schemaQueryParameterMatcherType"
+                        "$ref": "#/definitions/ioschemaQueryParameterMatcherType"
                     },
                     "x-displayname": "Query Parameters",
                     "x-ves-validation-rules": {
@@ -4878,6 +4921,99 @@ var APISwaggerJSON string = `{
                     "type": "string",
                     "description": "x-displayName: \"Name\"\nx-required\nx-example: \"ChargeBack-API-Key\"\nName of the secret.",
                     "title": "Name"
+                }
+            }
+        },
+        "schemarouteCreateSpecType": {
+            "type": "object",
+            "description": "Create route object in a given namespace. Route object is list of route rules.\nEach rule has match condition to match incoming requests and actions to take on matching requests.\nVirtual host object has reference to route object",
+            "title": "CreateSpecType",
+            "x-displayname": "Create Route",
+            "x-ves-proto-message": "ves.io.schema.route.CreateSpecType",
+            "properties": {
+                "routes": {
+                    "type": "array",
+                    "description": " List of routes to match for incoming request\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 64\n",
+                    "maxItems": 64,
+                    "items": {
+                        "$ref": "#/definitions/routeRouteType"
+                    },
+                    "x-displayname": "Routes",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.max_items": "64"
+                    }
+                }
+            }
+        },
+        "schemarouteGetSpecType": {
+            "type": "object",
+            "description": "Get route object in a given namespace. Route object is list of route rules.\nEach rule has match condition to match incoming requests and actions to take on matching requests.\nVirtual host object has reference to route object",
+            "title": "GetSpecType",
+            "x-displayname": "Get Route",
+            "x-ves-proto-message": "ves.io.schema.route.GetSpecType",
+            "properties": {
+                "routes": {
+                    "type": "array",
+                    "description": " List of routes to match for incoming request\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 64\n",
+                    "maxItems": 64,
+                    "items": {
+                        "$ref": "#/definitions/routeRouteType"
+                    },
+                    "x-displayname": "Routes",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.max_items": "64"
+                    }
+                }
+            }
+        },
+        "schemarouteGlobalSpecType": {
+            "type": "object",
+            "description": "Route object configuration",
+            "title": "GlobalSpecType",
+            "x-displayname": "Global Configuration Specification",
+            "x-ves-proto-message": "ves.io.schema.route.GlobalSpecType",
+            "properties": {
+                "routes": {
+                    "type": "array",
+                    "description": " List of routes to match for incoming request\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 64\n",
+                    "title": "routes",
+                    "maxItems": 64,
+                    "items": {
+                        "$ref": "#/definitions/routeRouteType"
+                    },
+                    "x-displayname": "Routes",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.max_items": "64"
+                    }
+                }
+            }
+        },
+        "schemarouteReplaceSpecType": {
+            "type": "object",
+            "description": "Replace route object in a given namespace. Route object is list of route rules.\nEach rule has match condition to match incoming requests and actions to take on matching requests.\nVirtual host object has reference to route object",
+            "title": "ReplaceSpecType",
+            "x-displayname": "Replace Route",
+            "x-ves-proto-message": "ves.io.schema.route.ReplaceSpecType",
+            "properties": {
+                "routes": {
+                    "type": "array",
+                    "description": " List of routes to match for incoming request\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 64\n",
+                    "maxItems": 64,
+                    "items": {
+                        "$ref": "#/definitions/routeRouteType"
+                    },
+                    "x-displayname": "Routes",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.max_items": "64"
+                    }
                 }
             }
         }

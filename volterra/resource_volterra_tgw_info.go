@@ -51,20 +51,84 @@ func resourceVolterraSetTGWInfo() *schema.Resource {
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"az": {
-							Type:     schema.TypeString,
-							Required: true,
+							Type:       schema.TypeString,
+							Optional:   true,
+							Deprecated: "use new_attribute instead",
 						},
 						"outside_subnet_id": {
-							Type:     schema.TypeString,
-							Required: true,
+							Optional:   true,
+							Type:       schema.TypeString,
+							Deprecated: "use new_attribute instead",
 						},
 						"inside_subnet_id": {
-							Type:     schema.TypeString,
-							Required: true,
+							Type:       schema.TypeString,
+							Optional:   true,
+							Deprecated: "use new_attribute instead",
 						},
 						"workload_subnet_id": {
-							Type:     schema.TypeString,
-							Required: true,
+							Type:       schema.TypeString,
+							Optional:   true,
+							Deprecated: "use new_attribute instead",
+						},
+						"outside_subnet": {
+							Type:     schema.TypeSet,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+									"az_name": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+									"id": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+									"ipv4_prefix": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+								},
+							},
+						},
+						"inside_subnet": {
+							Type:     schema.TypeSet,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+									"az_name": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+									"id": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+									"ipv4_prefix": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+								},
+							},
+						},
+						"workload_subnet": {
+							Type:     schema.TypeSet,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+									"az_name": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+									"id": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+									"ipv4_prefix": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+								},
+							},
 						},
 					},
 				},
@@ -176,44 +240,7 @@ func resourceVolterraSetTGWInfoRead(d *schema.ResourceData, meta interface{}) er
 
 // resourceVolterraSetTGWInfoUpdate updates Namespace resource
 func resourceVolterraSetTGWInfoUpdate(d *schema.ResourceData, meta interface{}) error {
-	client := meta.(*APIClient)
-
-	var name, tgwID, vpcID string
-	if v, ok := d.GetOk("name"); ok {
-		name = v.(string)
-	}
-	if v, ok := d.GetOk("tgw_id"); ok {
-		tgwID = v.(string)
-	}
-	if v, ok := d.GetOk("vpc_id"); ok {
-		vpcID = v.(string)
-	}
-	subnetIDs := getSubnetIDs(d)
-
-	req := &ves_io_schema_tgw_site.SetTGWInfoRequest{
-		Name:      name,
-		Namespace: systemNS,
-		TgwInfo: &ves_io_schema_tgw_site.AWSTGWInfoConfigType{
-			TgwId:     tgwID,
-			VpcId:     vpcID,
-			SubnetIds: subnetIDs,
-		},
-	}
-	if dcxInfo := getDirectConnectInfo(d); dcxInfo != nil {
-		req.DirectConnectInfo = dcxInfo
-	}
-
-	yamlReq, err := codec.ToYAML(req)
-	if err != nil {
-		return fmt.Errorf("Error marshalling rpc response to yaml: %s", err)
-	}
-
-	log.Printf("[INFO] Setting Volterra TGW Info struct: %+v", req)
-	_, err = client.CustomAPI(context.Background(), http.MethodPost, fmt.Sprintf(setTGWInfoURI, systemNS, name), setTGWInfoRPCFQN, yamlReq)
-	if err != nil {
-		return fmt.Errorf("Error Setting Volterra TGW Info: %s", err)
-	}
-	return nil
+	return resourceVolterraSetTGWInfoCreate(d, meta)
 }
 
 func resourceVolterraSetTGWInfoDelete(d *schema.ResourceData, meta interface{}) error {
@@ -260,10 +287,38 @@ func getSubnetIDs(d *schema.ResourceData) []*ves_io_schema_views.AWSSubnetIdsTyp
 			if subnet_id, ok := subnetIDMapStrToI["workload_subnet_id"]; ok && !isIntfNil(subnet_id) {
 				subnetID.WorkloadSubnetId = subnet_id.(string)
 			}
+
+			if subnet, ok := subnetIDMapStrToI["outside_subnet"]; ok && !isIntfNil(subnet) {
+				subnetID.OutsideSubnet = getSubnetInfoDataType(subnet)
+			}
+			if subnet, ok := subnetIDMapStrToI["inside_subnet"]; ok && !isIntfNil(subnet) {
+				subnetID.InsideSubnet = getSubnetInfoDataType(subnet)
+			}
+			if subnet, ok := subnetIDMapStrToI["workload_subnet"]; ok && !isIntfNil(subnet) {
+				subnetID.WorkloadSubnet = getSubnetInfoDataType(subnet)
+			}
 			subnetIDs = append(subnetIDs, subnetID)
 		}
 	}
 	return subnetIDs
+}
+
+func getSubnetInfoDataType(subnetResource interface{}) *ves_io_schema_views.AWSSubnetInfoType {
+	subnetInfo := &ves_io_schema_views.AWSSubnetInfoType{}
+	sl := subnetResource.(*schema.Set).List()
+	for _, set := range sl {
+		cs := set.(map[string]interface{})
+		if v, ok := cs["az_name"]; ok && !isIntfNil(v) {
+			subnetInfo.AzName = v.(string)
+		}
+		if v, ok := cs["id"]; ok && !isIntfNil(v) {
+			subnetInfo.Id = v.(string)
+		}
+		if v, ok := cs["ipv4_prefix"]; ok && !isIntfNil(v) {
+			subnetInfo.Ipv4Prefix = v.(string)
+		}
+	}
+	return subnetInfo
 }
 
 func getDirectConnectInfo(d *schema.ResourceData) *ves_io_schema_views.DirectConnectInfo {

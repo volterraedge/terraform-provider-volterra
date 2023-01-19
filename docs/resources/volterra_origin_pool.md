@@ -23,23 +23,10 @@ resource "volterra_origin_pool" "example" {
   loadbalancer_algorithm = ["loadbalancer_algorithm"]
 
   origin_servers {
-    // One of the arguments from this list "custom_endpoint_object private_name k8s_service private_ip consul_service vn_private_ip vn_private_name public_ip public_name" must be set
+    // One of the arguments from this list "vn_private_name public_ip public_name private_ip private_name k8s_service consul_service vn_private_ip custom_endpoint_object" must be set
 
-    private_name {
+    public_name {
       dns_name = "value"
-
-      // One of the arguments from this list "inside_network outside_network" must be set
-      inside_network = true
-
-      site_locator {
-        // One of the arguments from this list "site virtual_site" must be set
-
-        site {
-          name      = "test1"
-          namespace = "staging"
-          tenant    = "acmecorp"
-        }
-      }
     }
 
     labels = {
@@ -48,7 +35,7 @@ resource "volterra_origin_pool" "example" {
   }
 
   // One of the arguments from this list "port automatic_port" must be set
-  port = "9080"
+  automatic_port = true
 
   // One of the arguments from this list "no_tls use_tls" must be set
   no_tls = true
@@ -109,11 +96,15 @@ Advanced options configuration like timeouts, circuit breaker, subset load balan
 
 `connection_timeout` - (Optional) This is specified in milliseconds. The default value is 2 seconds (`Int`).
 
-`header_transformation_type` - (Optional) Header transformation options for upstream request headers. See [Header Transformation Type ](#header-transformation-type) below for details.
-
-`http2_options` - (Optional) Http2 Protocol options for upstream connections. See [Http2 Options ](#http2-options) below for details.
+`header_transformation_type` - (Optional) Settings to normalize the headers of upstream requests.. See [Header Transformation Type ](#header-transformation-type) below for details.
 
 `http_idle_timeout` - (Optional) This is specified in milliseconds. The default value is 5 minutes. (`Int`).
+
+`auto_http_config` - (Optional) and will use whichever protocol is negotiated by ALPN with the upstream. (bool).
+
+`http1_config` - (Optional) Enable HTTP/1.1 for upstream connections (bool).
+
+`http2_options` - (Optional) Enable HTTP/2 for upstream connections.. See [Http2 Options ](#http2-options) below for details.
 
 `disable_outlier_detection` - (Optional) Outlier detection is disabled (bool).
 
@@ -131,9 +122,13 @@ Advanced options configuration like timeouts, circuit breaker, subset load balan
 
 Select any origin server from available healthy origin servers in this pool.
 
+### Auto Http Config
+
+and will use whichever protocol is negotiated by ALPN with the upstream..
+
 ### Blindfold Secret Info
 
-Blindfold Secret is used for the secrets managed by Volterra Secret Management Service.
+Blindfold Secret is used for the secrets managed by F5XC Secret Management Service.
 
 `decryption_provider` - (Optional) Name of the Secret Management Access object that contains information about the backend Secret Management service. (`String`).
 
@@ -193,7 +188,7 @@ Specify origin server with a reference to endpoint object.
 
 ### Custom Hash Algorithms
 
-Use hash algorithms in the custom order. Volterra will try to fetch ocsp response from the CA in the given order. Additionally, LoadBalancer will not become active until ocspResponse cannot be fetched if the certificate has MustStaple extension set..
+Use hash algorithms in the custom order. F5XC will try to fetch ocsp response from the CA in the given order. Additionally, LoadBalancer will not become active until ocspResponse cannot be fetched if the certificate has MustStaple extension set..
 
 `hash_algorithms` - (Required) Ordered list of hash algorithms to be used. (`List of Strings`).
 
@@ -269,17 +264,21 @@ Request will be failed and error returned, as if cluster has no origin servers..
 
 ### Header Transformation Type
 
-Header transformation options for upstream request headers.
+Settings to normalize the headers of upstream requests..
 
 `default_header_transformation` - (Optional) Normalize the headers to lower case (bool).
 
 `proper_case_header_transformation` - (Optional) For example, “content-type” becomes “Content-Type”, and “foo$b#$are” becomes “Foo$B#$Are” (bool).
 
+### Http1 Config
+
+Enable HTTP/1.1 for upstream connections.
+
 ### Http2 Options
 
-Http2 Protocol options for upstream connections.
+Enable HTTP/2 for upstream connections..
 
-`enabled` - (Optional) Enable/disable Http2 Protocol for upstream connections. It is disabled by default. (`Bool`).
+`enabled` - (Optional) Enable/disable HTTP2 Protocol for upstream connections (`Bool`).
 
 ### Inside Network
 
@@ -379,13 +378,13 @@ TLS Private Key data in unencrypted PEM format including the PEM headers. The da
 
 `secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).
 
-`blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by Volterra Secret Management Service. See [Blindfold Secret Info ](#blindfold-secret-info) below for details.
+`blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Blindfold Secret Info ](#blindfold-secret-info) below for details.
 
 `clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Clear Secret Info ](#clear-secret-info) below for details.
 
 `vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Vault Secret Info ](#vault-secret-info) below for details.
 
-`wingman_secret_info` - (Optional) Secret is given as bootstrap secret in Volterra Security Sidecar. See [Wingman Secret Info ](#wingman-secret-info) below for details.
+`wingman_secret_info` - (Optional) Secret is given as bootstrap secret in F5XC Security Sidecar. See [Wingman Secret Info ](#wingman-secret-info) below for details.
 
 ### Private Name
 
@@ -451,11 +450,11 @@ TLS Certificates.
 
 `description` - (Optional) Description for the certificate (`String`).
 
-`custom_hash_algorithms` - (Optional) Use hash algorithms in the custom order. Volterra will try to fetch ocsp response from the CA in the given order. Additionally, LoadBalancer will not become active until ocspResponse cannot be fetched if the certificate has MustStaple extension set.. See [Custom Hash Algorithms ](#custom-hash-algorithms) below for details.
+`custom_hash_algorithms` - (Optional) Use hash algorithms in the custom order. F5XC will try to fetch ocsp response from the CA in the given order. Additionally, LoadBalancer will not become active until ocspResponse cannot be fetched if the certificate has MustStaple extension set.. See [Custom Hash Algorithms ](#custom-hash-algorithms) below for details.
 
 `disable_ocsp_stapling` - (Optional) This is the default behavior if no choice is selected.. See [Disable Ocsp Stapling ](#disable-ocsp-stapling) below for details.
 
-`use_system_defaults` - (Optional) Volterra will try to fetch OCSPResponse with sha256 and sha1 as HashAlgorithm, in that order.. See [Use System Defaults ](#use-system-defaults) below for details.
+`use_system_defaults` - (Optional) F5XC will try to fetch OCSPResponse with sha256 and sha1 as HashAlgorithm, in that order.. See [Use System Defaults ](#use-system-defaults) below for details.
 
 `private_key` - (Required) TLS Private Key data in unencrypted PEM format including the PEM headers. The data may be optionally secured using BlindFold. TLS key has to match the accompanying certificate.. See [Private Key ](#private-key) below for details.
 
@@ -489,7 +488,7 @@ Perform origin server verification using the provided trusted CA list.
 
 ### Use System Defaults
 
-Volterra will try to fetch OCSPResponse with sha256 and sha1 as HashAlgorithm, in that order..
+F5XC will try to fetch OCSPResponse with sha256 and sha1 as HashAlgorithm, in that order..
 
 ### Use Tls
 
@@ -503,7 +502,7 @@ x-displayName: "Enable".
 
 `use_server_verification` - (Optional) Perform origin server verification using the provided trusted CA list. See [Use Server Verification ](#use-server-verification) below for details.
 
-`volterra_trusted_ca` - (Optional) Perform origin server verification using Volterra default trusted CA list (bool).
+`volterra_trusted_ca` - (Optional) Perform origin server verification using F5XC default trusted CA list (bool).
 
 `disable_sni` - (Optional) Do not use SNI. (bool).
 
@@ -549,11 +548,11 @@ Specify origin server name on virtual network other than inside or outside netwo
 
 ### Volterra Trusted Ca
 
-Perform origin server verification using Volterra default trusted CA list.
+Perform origin server verification using F5XC default trusted CA list.
 
 ### Wingman Secret Info
 
-Secret is given as bootstrap secret in Volterra Security Sidecar.
+Secret is given as bootstrap secret in F5XC Security Sidecar.
 
 `name` - (Required) Name of the secret. (`String`).
 

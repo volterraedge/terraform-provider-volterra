@@ -1741,6 +1741,17 @@ func (v *ValidateServiceSlugChoice) Validate(ctx context.Context, pm interface{}
 				return err
 			}
 		}
+	case *ServiceSlugChoice_Waf:
+		if fv, exists := v.FldValidators["choice.waf"]; exists {
+			val := m.GetChoice().(*ServiceSlugChoice_Waf).Waf
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("waf"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 

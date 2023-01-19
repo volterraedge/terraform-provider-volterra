@@ -5336,10 +5336,13 @@ var CustomAPISwaggerJSON string = `{
                 },
                 "end_time": {
                     "type": "string",
-                    "description": " fetch access logs whose timestamp \u003c= end_time\n format: unix_timestamp|rfc 3339\n\n Optional: If not specified, then the end_time will be evaluated to start_time+10m\n           If start_time is not specified, then the end_time will be evaluated to \u003ccurrent time\u003e\n\nExample: - \"2019-09-24T12:30:11.733Z\"-",
+                    "description": " fetch access logs whose timestamp \u003c= end_time\n format: unix_timestamp|rfc 3339\n\n Optional: If not specified, then the end_time will be evaluated to start_time+10m\n           If start_time is not specified, then the end_time will be evaluated to \u003ccurrent time\u003e\n\nExample: - \"2019-09-24T12:30:11.733Z\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.query_time: true\n",
                     "title": "end time",
                     "x-displayname": "End Time",
-                    "x-ves-example": "2019-09-24T12:30:11.733Z"
+                    "x-ves-example": "2019-09-24T12:30:11.733Z",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.query_time": "true"
+                    }
                 },
                 "namespace": {
                     "type": "string",
@@ -5357,10 +5360,13 @@ var CustomAPISwaggerJSON string = `{
                 },
                 "start_time": {
                     "type": "string",
-                    "description": " fetch access logs whose timestamp \u003e= start_time\n format: unix_timestamp|rfc 3339\n\n Optional: If not specified, then the start_time will be evaluated to end_time-10m\n           If end_time is not specified, then the start_time will be evaluated to \u003ccurrent time\u003e-10m\n\nExample: - \"2019-09-23T12:30:11.733Z\"-",
+                    "description": " fetch access logs whose timestamp \u003e= start_time\n format: unix_timestamp|rfc 3339\n\n Optional: If not specified, then the start_time will be evaluated to end_time-10m\n           If end_time is not specified, then the start_time will be evaluated to \u003ccurrent time\u003e-10m\n\nExample: - \"2019-09-23T12:30:11.733Z\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.query_time: true\n",
                     "title": "start time",
                     "x-displayname": "Start Time",
-                    "x-ves-example": "2019-09-23T12:30:11.733Z"
+                    "x-ves-example": "2019-09-23T12:30:11.733Z",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.query_time": "true"
+                    }
                 }
             }
         },
@@ -5379,10 +5385,13 @@ var CustomAPISwaggerJSON string = `{
                 },
                 "end_time": {
                     "type": "string",
-                    "description": " fetch access logs whose timestamp \u003c= end_time\n format: unix_timestamp|rfc 3339\n\n Optional: If not specified, then the end_time will be evaluated to start_time+10m\n           If start_time is not specified, then the end_time will be evaluated to \u003ccurrent time\u003e\n\nExample: - \"2019-09-24T12:30:11.733Z\"-",
+                    "description": " fetch access logs whose timestamp \u003c= end_time\n format: unix_timestamp|rfc 3339\n\n Optional: If not specified, then the end_time will be evaluated to start_time+10m\n           If start_time is not specified, then the end_time will be evaluated to \u003ccurrent time\u003e\n\nExample: - \"2019-09-24T12:30:11.733Z\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.query_time: true\n",
                     "title": "end time",
                     "x-displayname": "End Time",
-                    "x-ves-example": "2019-09-24T12:30:11.733Z"
+                    "x-ves-example": "2019-09-24T12:30:11.733Z",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.query_time": "true"
+                    }
                 },
                 "limit": {
                     "type": "integer",
@@ -5422,10 +5431,13 @@ var CustomAPISwaggerJSON string = `{
                 },
                 "start_time": {
                     "type": "string",
-                    "description": " fetch access logs whose timestamp \u003e= start_time\n format: unix_timestamp|rfc 3339\n\n Optional: If not specified, then the start_time will be evaluated to end_time-10m\n           If end_time is not specified, then the start_time will be evaluated to \u003ccurrent time\u003e-10m\n\nExample: - \"2019-09-23T12:30:11.733Z\"-",
+                    "description": " fetch access logs whose timestamp \u003e= start_time\n format: unix_timestamp|rfc 3339\n\n Optional: If not specified, then the start_time will be evaluated to end_time-10m\n           If end_time is not specified, then the start_time will be evaluated to \u003ccurrent time\u003e-10m\n\nExample: - \"2019-09-23T12:30:11.733Z\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.query_time: true\n",
                     "title": "start time",
                     "x-displayname": "Start Time",
-                    "x-ves-example": "2019-09-23T12:30:11.733Z"
+                    "x-ves-example": "2019-09-23T12:30:11.733Z",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.query_time": "true"
+                    }
                 }
             }
         },
@@ -5444,10 +5456,13 @@ var CustomAPISwaggerJSON string = `{
                 },
                 "end_time": {
                     "type": "string",
-                    "description": " fetch audit logs whose timestamp \u003c= end_time\n format: unix_timestamp|rfc 3339\n\n Optional: If not specified, then the end_time will be evaluated to start_time+10m\n           If start_time is not specified, then the end_time will be evaluated to \u003ccurrent time\u003e\n\nExample: - \"2019-09-24T12:30:11.733Z\"-",
+                    "description": " fetch audit logs whose timestamp \u003c= end_time\n format: unix_timestamp|rfc 3339\n\n Optional: If not specified, then the end_time will be evaluated to start_time+10m\n           If start_time is not specified, then the end_time will be evaluated to \u003ccurrent time\u003e\n\nExample: - \"2019-09-24T12:30:11.733Z\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.query_time: true\n",
                     "title": "end time",
                     "x-displayname": "End Time",
-                    "x-ves-example": "2019-09-24T12:30:11.733Z"
+                    "x-ves-example": "2019-09-24T12:30:11.733Z",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.query_time": "true"
+                    }
                 },
                 "namespace": {
                     "type": "string",
@@ -5465,10 +5480,13 @@ var CustomAPISwaggerJSON string = `{
                 },
                 "start_time": {
                     "type": "string",
-                    "description": " fetch audit logs whose timestamp \u003e= start_time\n format: unix_timestamp|rfc 3339\n\n Optional: If not specified, then the start_time will be evaluated to end_time-10m\n           If end_time is not specified, then the start_time will be evaluated to \u003ccurrent time\u003e-10m\n\nExample: - \"2019-09-23T12:30:11.733Z\"-",
+                    "description": " fetch audit logs whose timestamp \u003e= start_time\n format: unix_timestamp|rfc 3339\n\n Optional: If not specified, then the start_time will be evaluated to end_time-10m\n           If end_time is not specified, then the start_time will be evaluated to \u003ccurrent time\u003e-10m\n\nExample: - \"2019-09-23T12:30:11.733Z\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.query_time: true\n",
                     "title": "start time",
                     "x-displayname": "Start Time",
-                    "x-ves-example": "2019-09-23T12:30:11.733Z"
+                    "x-ves-example": "2019-09-23T12:30:11.733Z",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.query_time": "true"
+                    }
                 }
             }
         },
@@ -5487,10 +5505,13 @@ var CustomAPISwaggerJSON string = `{
                 },
                 "end_time": {
                     "type": "string",
-                    "description": " fetch audit logs whose timestamp \u003c= end_time\n format: unix_timestamp|rfc 3339\n\n Optional: If not specified, then the end_time will be evaluated to start_time+10m\n           If start_time is not specified, then the end_time will be evaluated to \u003ccurrent time\u003e\n\nExample: - \"2019-09-24T12:30:11.733Z\"-",
+                    "description": " fetch audit logs whose timestamp \u003c= end_time\n format: unix_timestamp|rfc 3339\n\n Optional: If not specified, then the end_time will be evaluated to start_time+10m\n           If start_time is not specified, then the end_time will be evaluated to \u003ccurrent time\u003e\n\nExample: - \"2019-09-24T12:30:11.733Z\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.query_time: true\n",
                     "title": "end time",
                     "x-displayname": "End Time",
-                    "x-ves-example": "2019-09-24T12:30:11.733Z"
+                    "x-ves-example": "2019-09-24T12:30:11.733Z",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.query_time": "true"
+                    }
                 },
                 "limit": {
                     "type": "integer",
@@ -5530,10 +5551,13 @@ var CustomAPISwaggerJSON string = `{
                 },
                 "start_time": {
                     "type": "string",
-                    "description": " fetch audit logs whose timestamp \u003e= start_time\n format: unix_timestamp|rfc 3339\n\n Optional: If not specified, then the start_time will be evaluated to end_time-10m\n           If end_time is not specified, then the start_time will be evaluated to \u003ccurrent time\u003e-10m\n\nExample: - \"2019-09-23T12:30:11.733Z\"-",
+                    "description": " fetch audit logs whose timestamp \u003e= start_time\n format: unix_timestamp|rfc 3339\n\n Optional: If not specified, then the start_time will be evaluated to end_time-10m\n           If end_time is not specified, then the start_time will be evaluated to \u003ccurrent time\u003e-10m\n\nExample: - \"2019-09-23T12:30:11.733Z\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.query_time: true\n",
                     "title": "start time",
                     "x-displayname": "Start Time",
-                    "x-ves-example": "2019-09-23T12:30:11.733Z"
+                    "x-ves-example": "2019-09-23T12:30:11.733Z",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.query_time": "true"
+                    }
                 }
             }
         },
@@ -5676,10 +5700,13 @@ var CustomAPISwaggerJSON string = `{
                 },
                 "end_time": {
                     "type": "string",
-                    "description": " fetch Firewall logs whose timestamp \u003c= end_time\n format: unix_timestamp|rfc 3339\n\n Optional: If not specified, then the end_time will be evaluated to start_time+10m\n           If start_time is not specified, then the end_time will be evaluated to \u003ccurrent time\u003e\n\nExample: - \"2019-09-24T12:30:11.733Z\"-",
+                    "description": " fetch Firewall logs whose timestamp \u003c= end_time\n format: unix_timestamp|rfc 3339\n\n Optional: If not specified, then the end_time will be evaluated to start_time+10m\n           If start_time is not specified, then the end_time will be evaluated to \u003ccurrent time\u003e\n\nExample: - \"2019-09-24T12:30:11.733Z\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.query_time: true\n",
                     "title": "end time",
                     "x-displayname": "End Time",
-                    "x-ves-example": "2019-09-24T12:30:11.733Z"
+                    "x-ves-example": "2019-09-24T12:30:11.733Z",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.query_time": "true"
+                    }
                 },
                 "namespace": {
                     "type": "string",
@@ -5697,10 +5724,13 @@ var CustomAPISwaggerJSON string = `{
                 },
                 "start_time": {
                     "type": "string",
-                    "description": " fetch Firewall logs whose timestamp \u003e= start_time\n format: unix_timestamp|rfc 3339\n\n Optional: If not specified, then the start_time will be evaluated to end_time-10m\n           If end_time is not specified, then the start_time will be evaluated to \u003ccurrent time\u003e-10m\n\nExample: - \"2019-09-23T12:30:11.733Z\"-",
+                    "description": " fetch Firewall logs whose timestamp \u003e= start_time\n format: unix_timestamp|rfc 3339\n\n Optional: If not specified, then the start_time will be evaluated to end_time-10m\n           If end_time is not specified, then the start_time will be evaluated to \u003ccurrent time\u003e-10m\n\nExample: - \"2019-09-23T12:30:11.733Z\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.query_time: true\n",
                     "title": "start time",
                     "x-displayname": "Start Time",
-                    "x-ves-example": "2019-09-23T12:30:11.733Z"
+                    "x-ves-example": "2019-09-23T12:30:11.733Z",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.query_time": "true"
+                    }
                 }
             }
         },
@@ -5719,10 +5749,13 @@ var CustomAPISwaggerJSON string = `{
                 },
                 "end_time": {
                     "type": "string",
-                    "description": " fetch Firewall logs whose timestamp \u003c= end_time\n format: unix_timestamp|rfc 3339\n\n Optional: If not specified, then the end_time will be evaluated to start_time+10m\n           If start_time is not specified, then the end_time will be evaluated to \u003ccurrent time\u003e\n\nExample: - \"2019-09-24T12:30:11.733Z\"-",
+                    "description": " fetch Firewall logs whose timestamp \u003c= end_time\n format: unix_timestamp|rfc 3339\n\n Optional: If not specified, then the end_time will be evaluated to start_time+10m\n           If start_time is not specified, then the end_time will be evaluated to \u003ccurrent time\u003e\n\nExample: - \"2019-09-24T12:30:11.733Z\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.query_time: true\n",
                     "title": "end time",
                     "x-displayname": "End Time",
-                    "x-ves-example": "2019-09-24T12:30:11.733Z"
+                    "x-ves-example": "2019-09-24T12:30:11.733Z",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.query_time": "true"
+                    }
                 },
                 "limit": {
                     "type": "integer",
@@ -5762,10 +5795,13 @@ var CustomAPISwaggerJSON string = `{
                 },
                 "start_time": {
                     "type": "string",
-                    "description": " fetch Firewall logs whose timestamp \u003e= start_time\n format: unix_timestamp|rfc 3339\n\n Optional: If not specified, then the start_time will be evaluated to end_time-10m\n           If end_time is not specified, then the start_time will be evaluated to \u003ccurrent time\u003e-10m\n\nExample: - \"2019-09-23T12:30:11.733Z\"-",
+                    "description": " fetch Firewall logs whose timestamp \u003e= start_time\n format: unix_timestamp|rfc 3339\n\n Optional: If not specified, then the start_time will be evaluated to end_time-10m\n           If end_time is not specified, then the start_time will be evaluated to \u003ccurrent time\u003e-10m\n\nExample: - \"2019-09-23T12:30:11.733Z\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.query_time: true\n",
                     "title": "start time",
                     "x-displayname": "Start Time",
-                    "x-ves-example": "2019-09-23T12:30:11.733Z"
+                    "x-ves-example": "2019-09-23T12:30:11.733Z",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.query_time": "true"
+                    }
                 }
             }
         },
@@ -5784,10 +5820,13 @@ var CustomAPISwaggerJSON string = `{
                 },
                 "end_time": {
                     "type": "string",
-                    "description": " fetch audit logs whose timestamp \u003c= end_time\n format: unix_timestamp|rfc 3339\n\n Optional: If not specified, then the end_time will be evaluated to start_time+10m\n           If start_time is not specified, then the end_time will be evaluated to \u003ccurrent time\u003e\n\nExample: - \"2019-09-24T12:30:11.733Z\"-",
+                    "description": " fetch audit logs whose timestamp \u003c= end_time\n format: unix_timestamp|rfc 3339\n\n Optional: If not specified, then the end_time will be evaluated to start_time+10m\n           If start_time is not specified, then the end_time will be evaluated to \u003ccurrent time\u003e\n\nExample: - \"2019-09-24T12:30:11.733Z\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.query_time: true\n",
                     "title": "end time",
                     "x-displayname": "End Time",
-                    "x-ves-example": "2019-09-24T12:30:11.733Z"
+                    "x-ves-example": "2019-09-24T12:30:11.733Z",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.query_time": "true"
+                    }
                 },
                 "namespace": {
                     "type": "string",
@@ -5812,10 +5851,13 @@ var CustomAPISwaggerJSON string = `{
                 },
                 "start_time": {
                     "type": "string",
-                    "description": " fetch audit logs whose timestamp \u003e= start_time\n format: unix_timestamp|rfc 3339\n\n Optional: If not specified, then the start_time will be evaluated to end_time-10m\n           If end_time is not specified, then the start_time will be evaluated to \u003ccurrent time\u003e-10m\n\nExample: - \"2019-09-23T12:30:11.733Z\"-",
+                    "description": " fetch audit logs whose timestamp \u003e= start_time\n format: unix_timestamp|rfc 3339\n\n Optional: If not specified, then the start_time will be evaluated to end_time-10m\n           If end_time is not specified, then the start_time will be evaluated to \u003ccurrent time\u003e-10m\n\nExample: - \"2019-09-23T12:30:11.733Z\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.query_time: true\n",
                     "title": "start time",
                     "x-displayname": "Start Time",
-                    "x-ves-example": "2019-09-23T12:30:11.733Z"
+                    "x-ves-example": "2019-09-23T12:30:11.733Z",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.query_time": "true"
+                    }
                 }
             }
         },
@@ -5834,10 +5876,13 @@ var CustomAPISwaggerJSON string = `{
                 },
                 "end_time": {
                     "type": "string",
-                    "description": " fetch audit logs whose timestamp \u003c= end_time\n format: unix_timestamp|rfc 3339\n\n Optional: If not specified, then the end_time will be evaluated to start_time+10m\n           If start_time is not specified, then the end_time will be evaluated to \u003ccurrent time\u003e\n\nExample: - \"2019-09-24T12:30:11.733Z\"-",
+                    "description": " fetch audit logs whose timestamp \u003c= end_time\n format: unix_timestamp|rfc 3339\n\n Optional: If not specified, then the end_time will be evaluated to start_time+10m\n           If start_time is not specified, then the end_time will be evaluated to \u003ccurrent time\u003e\n\nExample: - \"2019-09-24T12:30:11.733Z\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.query_time: true\n",
                     "title": "end time",
                     "x-displayname": "End Time",
-                    "x-ves-example": "2019-09-24T12:30:11.733Z"
+                    "x-ves-example": "2019-09-24T12:30:11.733Z",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.query_time": "true"
+                    }
                 },
                 "limit": {
                     "type": "integer",
@@ -5884,10 +5929,13 @@ var CustomAPISwaggerJSON string = `{
                 },
                 "start_time": {
                     "type": "string",
-                    "description": " fetch audit logs whose timestamp \u003e= start_time\n format: unix_timestamp|rfc 3339\n\n Optional: If not specified, then the start_time will be evaluated to end_time-10m\n           If end_time is not specified, then the start_time will be evaluated to \u003ccurrent time\u003e-10m\n\nExample: - \"2019-09-23T12:30:11.733Z\"-",
+                    "description": " fetch audit logs whose timestamp \u003e= start_time\n format: unix_timestamp|rfc 3339\n\n Optional: If not specified, then the start_time will be evaluated to end_time-10m\n           If end_time is not specified, then the start_time will be evaluated to \u003ccurrent time\u003e-10m\n\nExample: - \"2019-09-23T12:30:11.733Z\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.query_time: true\n",
                     "title": "start time",
                     "x-displayname": "Start Time",
-                    "x-ves-example": "2019-09-23T12:30:11.733Z"
+                    "x-ves-example": "2019-09-23T12:30:11.733Z",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.query_time": "true"
+                    }
                 }
             }
         },
@@ -5906,10 +5954,13 @@ var CustomAPISwaggerJSON string = `{
                 },
                 "end_time": {
                     "type": "string",
-                    "description": " fetch vK8s events whose timestamp \u003c= end_time\n format: unix_timestamp|rfc 3339\n\n Optional: If not specified, then the end_time will be evaluated to start_time+10m\n           If start_time is not specified, then the end_time will be evaluated to \u003ccurrent time\u003e\n\nExample: - \"2019-09-24T12:30:11.733Z\"-",
+                    "description": " fetch vK8s events whose timestamp \u003c= end_time\n format: unix_timestamp|rfc 3339\n\n Optional: If not specified, then the end_time will be evaluated to start_time+10m\n           If start_time is not specified, then the end_time will be evaluated to \u003ccurrent time\u003e\n\nExample: - \"2019-09-24T12:30:11.733Z\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.query_time: true\n",
                     "title": "end time",
                     "x-displayname": "End Time",
-                    "x-ves-example": "2019-09-24T12:30:11.733Z"
+                    "x-ves-example": "2019-09-24T12:30:11.733Z",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.query_time": "true"
+                    }
                 },
                 "namespace": {
                     "type": "string",
@@ -5934,10 +5985,13 @@ var CustomAPISwaggerJSON string = `{
                 },
                 "start_time": {
                     "type": "string",
-                    "description": " fetch vK8s events whose timestamp \u003e= start_time\n format: unix_timestamp|rfc 3339\n\n Optional: If not specified, then the start_time will be evaluated to end_time-10m\n           If end_time is not specified, then the start_time will be evaluated to \u003ccurrent time\u003e-10m\n\nExample: - \"2019-09-23T12:30:11.733Z\"-",
+                    "description": " fetch vK8s events whose timestamp \u003e= start_time\n format: unix_timestamp|rfc 3339\n\n Optional: If not specified, then the start_time will be evaluated to end_time-10m\n           If end_time is not specified, then the start_time will be evaluated to \u003ccurrent time\u003e-10m\n\nExample: - \"2019-09-23T12:30:11.733Z\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.query_time: true\n",
                     "title": "start time",
                     "x-displayname": "Start Time",
-                    "x-ves-example": "2019-09-23T12:30:11.733Z"
+                    "x-ves-example": "2019-09-23T12:30:11.733Z",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.query_time": "true"
+                    }
                 }
             }
         },
@@ -5956,10 +6010,13 @@ var CustomAPISwaggerJSON string = `{
                 },
                 "end_time": {
                     "type": "string",
-                    "description": " fetch vK8s events whose timestamp \u003c= end_time\n format: unix_timestamp|rfc 3339\n\n Optional: If not specified, then the end_time will be evaluated to start_time+10m\n           If start_time is not specified, then the end_time will be evaluated to \u003ccurrent time\u003e\n\nExample: - \"2019-09-24T12:30:11.733Z\"-",
+                    "description": " fetch vK8s events whose timestamp \u003c= end_time\n format: unix_timestamp|rfc 3339\n\n Optional: If not specified, then the end_time will be evaluated to start_time+10m\n           If start_time is not specified, then the end_time will be evaluated to \u003ccurrent time\u003e\n\nExample: - \"2019-09-24T12:30:11.733Z\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.query_time: true\n",
                     "title": "end time",
                     "x-displayname": "End Time",
-                    "x-ves-example": "2019-09-24T12:30:11.733Z"
+                    "x-ves-example": "2019-09-24T12:30:11.733Z",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.query_time": "true"
+                    }
                 },
                 "limit": {
                     "type": "integer",
@@ -6006,10 +6063,13 @@ var CustomAPISwaggerJSON string = `{
                 },
                 "start_time": {
                     "type": "string",
-                    "description": " fetch vK8s events whose timestamp \u003e= start_time\n format: unix_timestamp|rfc 3339\n\n Optional: If not specified, then the start_time will be evaluated to end_time-10m\n           If end_time is not specified, then the start_time will be evaluated to \u003ccurrent time\u003e-10m\n\nExample: - \"2019-09-23T12:30:11.733Z\"-",
+                    "description": " fetch vK8s events whose timestamp \u003e= start_time\n format: unix_timestamp|rfc 3339\n\n Optional: If not specified, then the start_time will be evaluated to end_time-10m\n           If end_time is not specified, then the start_time will be evaluated to \u003ccurrent time\u003e-10m\n\nExample: - \"2019-09-23T12:30:11.733Z\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.query_time: true\n",
                     "title": "start time",
                     "x-displayname": "Start Time",
-                    "x-ves-example": "2019-09-23T12:30:11.733Z"
+                    "x-ves-example": "2019-09-23T12:30:11.733Z",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.query_time": "true"
+                    }
                 }
             }
         },
@@ -6151,10 +6211,13 @@ var CustomAPISwaggerJSON string = `{
                 },
                 "end_time": {
                     "type": "string",
-                    "description": " fetch audit logs whose timestamp \u003c= end_time\n format: unix_timestamp|rfc 3339\n\n Optional: If not specified, then the end_time will be evaluated to start_time+10m\n           If start_time is not specified, then the end_time will be evaluated to \u003ccurrent time\u003e\n\nExample: - \"2019-09-24T12:30:11.733Z\"-",
+                    "description": " fetch audit logs whose timestamp \u003c= end_time\n format: unix_timestamp|rfc 3339\n\n Optional: If not specified, then the end_time will be evaluated to start_time+10m\n           If start_time is not specified, then the end_time will be evaluated to \u003ccurrent time\u003e\n\nExample: - \"2019-09-24T12:30:11.733Z\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.query_time: true\n",
                     "title": "end time",
                     "x-displayname": "End Time",
-                    "x-ves-example": "2019-09-24T12:30:11.733Z"
+                    "x-ves-example": "2019-09-24T12:30:11.733Z",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.query_time": "true"
+                    }
                 },
                 "namespace": {
                     "type": "string",
@@ -6172,10 +6235,13 @@ var CustomAPISwaggerJSON string = `{
                 },
                 "start_time": {
                     "type": "string",
-                    "description": " fetch audit logs whose timestamp \u003e= start_time\n format: unix_timestamp|rfc 3339\n\n Optional: If not specified, then the start_time will be evaluated to end_time-10m\n           If end_time is not specified, then the start_time will be evaluated to \u003ccurrent time\u003e-10m\n\nExample: - \"2019-09-23T12:30:11.733Z\"-",
+                    "description": " fetch audit logs whose timestamp \u003e= start_time\n format: unix_timestamp|rfc 3339\n\n Optional: If not specified, then the start_time will be evaluated to end_time-10m\n           If end_time is not specified, then the start_time will be evaluated to \u003ccurrent time\u003e-10m\n\nExample: - \"2019-09-23T12:30:11.733Z\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.query_time: true\n",
                     "title": "start time",
                     "x-displayname": "Start Time",
-                    "x-ves-example": "2019-09-23T12:30:11.733Z"
+                    "x-ves-example": "2019-09-23T12:30:11.733Z",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.query_time": "true"
+                    }
                 }
             }
         },
@@ -6194,10 +6260,13 @@ var CustomAPISwaggerJSON string = `{
                 },
                 "end_time": {
                     "type": "string",
-                    "description": " fetch audit logs whose timestamp \u003c= end_time\n format: unix_timestamp|rfc 3339\n\n Optional: If not specified, then the end_time will be evaluated to start_time+10m\n           If start_time is not specified, then the end_time will be evaluated to \u003ccurrent time\u003e\n\nExample: - \"2019-09-24T12:30:11.733Z\"-",
+                    "description": " fetch audit logs whose timestamp \u003c= end_time\n format: unix_timestamp|rfc 3339\n\n Optional: If not specified, then the end_time will be evaluated to start_time+10m\n           If start_time is not specified, then the end_time will be evaluated to \u003ccurrent time\u003e\n\nExample: - \"2019-09-24T12:30:11.733Z\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.query_time: true\n",
                     "title": "end time",
                     "x-displayname": "End Time",
-                    "x-ves-example": "2019-09-24T12:30:11.733Z"
+                    "x-ves-example": "2019-09-24T12:30:11.733Z",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.query_time": "true"
+                    }
                 },
                 "limit": {
                     "type": "integer",
@@ -6237,10 +6306,13 @@ var CustomAPISwaggerJSON string = `{
                 },
                 "start_time": {
                     "type": "string",
-                    "description": " fetch audit logs whose timestamp \u003e= start_time\n format: unix_timestamp|rfc 3339\n\n Optional: If not specified, then the start_time will be evaluated to end_time-10m\n           If end_time is not specified, then the start_time will be evaluated to \u003ccurrent time\u003e-10m\n\nExample: - \"2019-09-23T12:30:11.733Z\"-",
+                    "description": " fetch audit logs whose timestamp \u003e= start_time\n format: unix_timestamp|rfc 3339\n\n Optional: If not specified, then the start_time will be evaluated to end_time-10m\n           If end_time is not specified, then the start_time will be evaluated to \u003ccurrent time\u003e-10m\n\nExample: - \"2019-09-23T12:30:11.733Z\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.query_time: true\n",
                     "title": "start time",
                     "x-displayname": "Start Time",
-                    "x-ves-example": "2019-09-23T12:30:11.733Z"
+                    "x-ves-example": "2019-09-23T12:30:11.733Z",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.query_time": "true"
+                    }
                 }
             }
         },
@@ -6259,10 +6331,13 @@ var CustomAPISwaggerJSON string = `{
                 },
                 "end_time": {
                     "type": "string",
-                    "description": " fetch vK8s events whose timestamp \u003c= end_time\n format: unix_timestamp|rfc 3339\n\n Optional: If not specified, then the end_time will be evaluated to start_time+10m\n           If start_time is not specified, then the end_time will be evaluated to \u003ccurrent time\u003e\n\nExample: - \"2019-09-24T12:30:11.733Z\"-",
+                    "description": " fetch vK8s events whose timestamp \u003c= end_time\n format: unix_timestamp|rfc 3339\n\n Optional: If not specified, then the end_time will be evaluated to start_time+10m\n           If start_time is not specified, then the end_time will be evaluated to \u003ccurrent time\u003e\n\nExample: - \"2019-09-24T12:30:11.733Z\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.query_time: true\n",
                     "title": "end time",
                     "x-displayname": "End Time",
-                    "x-ves-example": "2019-09-24T12:30:11.733Z"
+                    "x-ves-example": "2019-09-24T12:30:11.733Z",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.query_time": "true"
+                    }
                 },
                 "namespace": {
                     "type": "string",
@@ -6280,10 +6355,13 @@ var CustomAPISwaggerJSON string = `{
                 },
                 "start_time": {
                     "type": "string",
-                    "description": " fetch vK8s events whose timestamp \u003e= start_time\n format: unix_timestamp|rfc 3339\n\n Optional: If not specified, then the start_time will be evaluated to end_time-10m\n           If end_time is not specified, then the start_time will be evaluated to \u003ccurrent time\u003e-10m\n\nExample: - \"2019-09-23T12:30:11.733Z\"-",
+                    "description": " fetch vK8s events whose timestamp \u003e= start_time\n format: unix_timestamp|rfc 3339\n\n Optional: If not specified, then the start_time will be evaluated to end_time-10m\n           If end_time is not specified, then the start_time will be evaluated to \u003ccurrent time\u003e-10m\n\nExample: - \"2019-09-23T12:30:11.733Z\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.query_time: true\n",
                     "title": "start time",
                     "x-displayname": "Start Time",
-                    "x-ves-example": "2019-09-23T12:30:11.733Z"
+                    "x-ves-example": "2019-09-23T12:30:11.733Z",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.query_time": "true"
+                    }
                 }
             }
         },
@@ -6302,10 +6380,13 @@ var CustomAPISwaggerJSON string = `{
                 },
                 "end_time": {
                     "type": "string",
-                    "description": " fetch vK8s events whose timestamp \u003c= end_time\n format: unix_timestamp|rfc 3339\n\n Optional: If not specified, then the end_time will be evaluated to start_time+10m\n           If start_time is not specified, then the end_time will be evaluated to \u003ccurrent time\u003e\n\nExample: - \"2019-09-24T12:30:11.733Z\"-",
+                    "description": " fetch vK8s events whose timestamp \u003c= end_time\n format: unix_timestamp|rfc 3339\n\n Optional: If not specified, then the end_time will be evaluated to start_time+10m\n           If start_time is not specified, then the end_time will be evaluated to \u003ccurrent time\u003e\n\nExample: - \"2019-09-24T12:30:11.733Z\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.query_time: true\n",
                     "title": "end time",
                     "x-displayname": "End Time",
-                    "x-ves-example": "2019-09-24T12:30:11.733Z"
+                    "x-ves-example": "2019-09-24T12:30:11.733Z",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.query_time": "true"
+                    }
                 },
                 "limit": {
                     "type": "integer",
@@ -6345,10 +6426,13 @@ var CustomAPISwaggerJSON string = `{
                 },
                 "start_time": {
                     "type": "string",
-                    "description": " fetch vK8s events whose timestamp \u003e= start_time\n format: unix_timestamp|rfc 3339\n\n Optional: If not specified, then the start_time will be evaluated to end_time-10m\n           If end_time is not specified, then the start_time will be evaluated to \u003ccurrent time\u003e-10m\n\nExample: - \"2019-09-23T12:30:11.733Z\"-",
+                    "description": " fetch vK8s events whose timestamp \u003e= start_time\n format: unix_timestamp|rfc 3339\n\n Optional: If not specified, then the start_time will be evaluated to end_time-10m\n           If end_time is not specified, then the start_time will be evaluated to \u003ccurrent time\u003e-10m\n\nExample: - \"2019-09-23T12:30:11.733Z\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.query_time: true\n",
                     "title": "start time",
                     "x-displayname": "Start Time",
-                    "x-ves-example": "2019-09-23T12:30:11.733Z"
+                    "x-ves-example": "2019-09-23T12:30:11.733Z",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.query_time": "true"
+                    }
                 }
             }
         },

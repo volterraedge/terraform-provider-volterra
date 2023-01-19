@@ -3440,14 +3440,16 @@ var APISwaggerJSON string = `{
             "properties": {
                 "ref": {
                     "type": "array",
-                    "description": " A virtual network direct reference\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 1\n",
+                    "description": " A virtual network direct reference\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 1\n",
                     "title": "ref",
                     "maxItems": 1,
                     "items": {
                         "$ref": "#/definitions/schemaObjectRefType"
                     },
                     "x-displayname": "Reference",
+                    "x-ves-required": "true",
                     "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
                         "ves.io.schema.rules.repeated.max_items": "1"
                     }
                 }
@@ -3803,14 +3805,16 @@ var APISwaggerJSON string = `{
                 },
                 "ref": {
                     "type": "array",
-                    "description": " A site direct reference\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 1\n",
+                    "description": " A site direct reference\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 1\n",
                     "title": "ref",
                     "maxItems": 1,
                     "items": {
                         "$ref": "#/definitions/schemaObjectRefType"
                     },
                     "x-displayname": "Reference",
+                    "x-ves-required": "true",
                     "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
                         "ves.io.schema.rules.repeated.max_items": "1"
                     }
                 }
@@ -4187,14 +4191,16 @@ var APISwaggerJSON string = `{
                 },
                 "ref": {
                     "type": "array",
-                    "description": " A virtual_site direct reference\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 1\n",
+                    "description": " A virtual_site direct reference\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 1\n",
                     "title": "ref",
                     "maxItems": 1,
                     "items": {
                         "$ref": "#/definitions/schemaObjectRefType"
                     },
                     "x-displayname": "Reference",
+                    "x-ves-required": "true",
                     "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
                         "ves.io.schema.rules.repeated.max_items": "1"
                     }
                 }

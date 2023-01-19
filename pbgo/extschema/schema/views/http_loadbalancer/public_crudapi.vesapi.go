@@ -2187,7 +2187,7 @@ var APISwaggerJSON string = `{
     "definitions": {
         "app_firewallAppFirewallViolationType": {
             "type": "string",
-            "description": "List of all supported Violation Types\n\nVIOL_NONE\nVIOL_FILETYPE\nVIOL_METHOD\nVIOL_MANDATORY_HEADER\nVIOL_HTTP_RESPONSE_STATUS\nVIOL_REQUEST_MAX_LENGTH\nVIOL_FILE_UPLOAD\nVIOL_FILE_UPLOAD_IN_BODY\nVIOL_XML_MALFORMED\nVIOL_JSON_MALFORMED\nVIOL_ASM_COOKIE_MODIFIED\nVIOL_HTTP_PROTOCOL_MULTIPLE_HOST_HEADERS\nVIOL_HTTP_PROTOCOL_BAD_HOST_HEADER_VALUE\nVIOL_HTTP_PROTOCOL_UNPARSABLE_REQUEST_CONTENT\nVIOL_HTTP_PROTOCOL_NULL_IN_REQUEST\nVIOL_HTTP_PROTOCOL_BAD_HTTP_VERSION\nVIOL_HTTP_PROTOCOL_CRLF_CHARACTERS_BEFORE_REQUEST_START\nVIOL_HTTP_PROTOCOL_NO_HOST_HEADER_IN_HTTP_1_1_REQUEST\nVIOL_HTTP_PROTOCOL_BAD_MULTIPART_PARAMETERS_PARSING\nVIOL_HTTP_PROTOCOL_SEVERAL_CONTENT_LENGTH_HEADERS\nVIOL_HTTP_PROTOCOL_CONTENT_LENGTH_SHOULD_BE_A_POSITIVE_NUMBER\nVIOL_EVASION_DIRECTORY_TRAVERSALS\nVIOL_MALFORMED_REQUEST\nVIOL_EVASION_MULTIPLE_DECODING\nVIOL_DATA_GUARD\nVIOL_EVASION_APACHE_WHITESPACE\nVIOL_COOKIE_MODIFIED\nVIOL_EVASION_IIS_UNICODE_CODEPOINTS\nVIOL_EVASION_IIS_BACKSLASHES\nVIOL_EVASION_PERCENT_U_DECODING\nVIOL_EVASION_BARE_BYTE_DECODING\nVIOL_EVASION_BAD_UNESCAPE",
+            "description": "List of all supported Violation Types\n\nVIOL_NONE\nVIOL_FILETYPE\nVIOL_METHOD\nVIOL_MANDATORY_HEADER\nVIOL_HTTP_RESPONSE_STATUS\nVIOL_REQUEST_MAX_LENGTH\nVIOL_FILE_UPLOAD\nVIOL_FILE_UPLOAD_IN_BODY\nVIOL_XML_MALFORMED\nVIOL_JSON_MALFORMED\nVIOL_ASM_COOKIE_MODIFIED\nVIOL_HTTP_PROTOCOL_MULTIPLE_HOST_HEADERS\nVIOL_HTTP_PROTOCOL_BAD_HOST_HEADER_VALUE\nVIOL_HTTP_PROTOCOL_UNPARSABLE_REQUEST_CONTENT\nVIOL_HTTP_PROTOCOL_NULL_IN_REQUEST\nVIOL_HTTP_PROTOCOL_BAD_HTTP_VERSION\nVIOL_HTTP_PROTOCOL_CRLF_CHARACTERS_BEFORE_REQUEST_START\nVIOL_HTTP_PROTOCOL_NO_HOST_HEADER_IN_HTTP_1_1_REQUEST\nVIOL_HTTP_PROTOCOL_BAD_MULTIPART_PARAMETERS_PARSING\nVIOL_HTTP_PROTOCOL_SEVERAL_CONTENT_LENGTH_HEADERS\nVIOL_HTTP_PROTOCOL_CONTENT_LENGTH_SHOULD_BE_A_POSITIVE_NUMBER\nVIOL_EVASION_DIRECTORY_TRAVERSALS\nVIOL_MALFORMED_REQUEST\nVIOL_EVASION_MULTIPLE_DECODING\nVIOL_DATA_GUARD\nVIOL_EVASION_APACHE_WHITESPACE\nVIOL_COOKIE_MODIFIED\nVIOL_EVASION_IIS_UNICODE_CODEPOINTS\nVIOL_EVASION_IIS_BACKSLASHES\nVIOL_EVASION_PERCENT_U_DECODING\nVIOL_EVASION_BARE_BYTE_DECODING\nVIOL_EVASION_BAD_UNESCAPE\nVIOL_HTTP_PROTOCOL_BAD_MULTIPART_FORMDATA_REQUEST_PARSING\nVIOL_HTTP_PROTOCOL_BODY_IN_GET_OR_HEAD_REQUEST\nVIOL_HTTP_PROTOCOL_HIGH_ASCII_CHARACTERS_IN_HEADERS\nVIOL_ENCODING\nVIOL_COOKIE_MALFORMED",
             "title": "App Firewall Violation Type",
             "enum": [
                 "VIOL_NONE",
@@ -2221,7 +2221,12 @@ var APISwaggerJSON string = `{
                 "VIOL_EVASION_IIS_BACKSLASHES",
                 "VIOL_EVASION_PERCENT_U_DECODING",
                 "VIOL_EVASION_BARE_BYTE_DECODING",
-                "VIOL_EVASION_BAD_UNESCAPE"
+                "VIOL_EVASION_BAD_UNESCAPE",
+                "VIOL_HTTP_PROTOCOL_BAD_MULTIPART_FORMDATA_REQUEST_PARSING",
+                "VIOL_HTTP_PROTOCOL_BODY_IN_GET_OR_HEAD_REQUEST",
+                "VIOL_HTTP_PROTOCOL_HIGH_ASCII_CHARACTERS_IN_HEADERS",
+                "VIOL_ENCODING",
+                "VIOL_COOKIE_MALFORMED"
             ],
             "default": "VIOL_NONE",
             "x-displayname": "App Firewall Violation Type",
@@ -2229,7 +2234,7 @@ var APISwaggerJSON string = `{
         },
         "app_firewallAttackType": {
             "type": "string",
-            "description": "List of all Attack Types\n\nATTACK_TYPE_NONE\nATTACK_TYPE_NON_BROWSER_CLIENT\nATTACK_TYPE_OTHER_APPLICATION_ATTACKS\nATTACK_TYPE_TROJAN_BACKDOOR_SPYWARE\nATTACK_TYPE_DETECTION_EVASION\nATTACK_TYPE_VULNERABILITY_SCAN\nATTACK_TYPE_ABUSE_OF_FUNCTIONALITY\nATTACK_TYPE_AUTHENTICATION_AUTHORIZATION_ATTACKS\nATTACK_TYPE_BUFFER_OVERFLOW\nATTACK_TYPE_PREDICTABLE_RESOURCE_LOCATION\nATTACK_TYPE_INFORMATION_LEAKAGE\nATTACK_TYPE_DIRECTORY_INDEXING\nATTACK_TYPE_PATH_TRAVERSAL\nATTACK_TYPE_XPATH_INJECTION\nATTACK_TYPE_LDAP_INJECTION\nATTACK_TYPE_SERVER_SIDE_CODE_INJECTION\nATTACK_TYPE_COMMAND_EXECUTION\nATTACK_TYPE_SQL_INJECTION\nATTACK_TYPE_CROSS_SITE_SCRIPTING\nATTACK_TYPE_DENIAL_OF_SERVICE\nATTACK_TYPE_HTTP_PARSER_ATTACK\nATTACK_TYPE_SESSION_HIJACKING\nATTACK_TYPE_HTTP_RESPONSE_SPLITTING\nATTACK_TYPE_FORCEFUL_BROWSING",
+            "description": "List of all Attack Types\n\nATTACK_TYPE_NONE\nATTACK_TYPE_NON_BROWSER_CLIENT\nATTACK_TYPE_OTHER_APPLICATION_ATTACKS\nATTACK_TYPE_TROJAN_BACKDOOR_SPYWARE\nATTACK_TYPE_DETECTION_EVASION\nATTACK_TYPE_VULNERABILITY_SCAN\nATTACK_TYPE_ABUSE_OF_FUNCTIONALITY\nATTACK_TYPE_AUTHENTICATION_AUTHORIZATION_ATTACKS\nATTACK_TYPE_BUFFER_OVERFLOW\nATTACK_TYPE_PREDICTABLE_RESOURCE_LOCATION\nATTACK_TYPE_INFORMATION_LEAKAGE\nATTACK_TYPE_DIRECTORY_INDEXING\nATTACK_TYPE_PATH_TRAVERSAL\nATTACK_TYPE_XPATH_INJECTION\nATTACK_TYPE_LDAP_INJECTION\nATTACK_TYPE_SERVER_SIDE_CODE_INJECTION\nATTACK_TYPE_COMMAND_EXECUTION\nATTACK_TYPE_SQL_INJECTION\nATTACK_TYPE_CROSS_SITE_SCRIPTING\nATTACK_TYPE_DENIAL_OF_SERVICE\nATTACK_TYPE_HTTP_PARSER_ATTACK\nATTACK_TYPE_SESSION_HIJACKING\nATTACK_TYPE_HTTP_RESPONSE_SPLITTING\nATTACK_TYPE_FORCEFUL_BROWSING\nATTACK_TYPE_REMOTE_FILE_INCLUDE\nATTACK_TYPE_MALICIOUS_FILE_UPLOAD",
             "title": "AttackType",
             "enum": [
                 "ATTACK_TYPE_NONE",
@@ -2255,7 +2260,9 @@ var APISwaggerJSON string = `{
                 "ATTACK_TYPE_HTTP_PARSER_ATTACK",
                 "ATTACK_TYPE_SESSION_HIJACKING",
                 "ATTACK_TYPE_HTTP_RESPONSE_SPLITTING",
-                "ATTACK_TYPE_FORCEFUL_BROWSING"
+                "ATTACK_TYPE_FORCEFUL_BROWSING",
+                "ATTACK_TYPE_REMOTE_FILE_INCLUDE",
+                "ATTACK_TYPE_MALICIOUS_FILE_UPLOAD"
             ],
             "default": "ATTACK_TYPE_NONE",
             "x-displayname": "Attack Types",
@@ -2366,7 +2373,7 @@ var APISwaggerJSON string = `{
             "properties": {
                 "enabled": {
                     "type": "boolean",
-                    "description": " Enable/disable Http2 Protocol for upstream connections. It is disabled by default.",
+                    "description": " Enable/disable HTTP2 Protocol for upstream connections",
                     "title": "enabled",
                     "format": "boolean",
                     "x-displayname": "HTTP2 Enabled"
@@ -3001,7 +3008,7 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/schemaDomainType"
                 },
                 "flow_label": {
-                    "description": "x-displayName: \"Specify flow label category\"",
+                    "description": "x-displayName: \"Specify Endpoint label category\"",
                     "title": "flow_label",
                     "$ref": "#/definitions/schemaBotDefenseFlowLabelCategoriesChoiceType"
                 },
@@ -3480,6 +3487,27 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "http_loadbalancerEnableDDoSDetectionSetting": {
+            "type": "object",
+            "title": "Enable DDos Detection",
+            "x-displayname": "Enable DDoS detection",
+            "x-ves-oneof-field-auto_mitigation_choice": "[\"disable_auto_mitigation\",\"enable_auto_mitigation\"]",
+            "x-ves-proto-message": "ves.io.schema.views.http_loadbalancer.EnableDDoSDetectionSetting",
+            "properties": {
+                "disable_auto_mitigation": {
+                    "description": "Exclusive with [enable_auto_mitigation]\n",
+                    "title": "Disable Auto Mitigation",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disable"
+                },
+                "enable_auto_mitigation": {
+                    "description": "Exclusive with [disable_auto_mitigation]\n",
+                    "title": "Enable Auto Mitigation",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Enable"
+                }
+            }
+        },
         "http_loadbalancerGetResponse": {
             "type": "object",
             "description": "This is the output message of the 'Get' RPC",
@@ -3650,17 +3678,6 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Use HTTP-LB User Identifier"
                 }
             }
-        },
-        "http_loadbalancerJavaScriptLocation": {
-            "type": "string",
-            "description": "x-displayName: \"JavaScript Location\"\nAll inside networks.\n\n - AFTER_HEAD: x-displayName: \"After \u003chead\u003e tag\"\nInsert JavaScript after \u003chead\u003e tag\n - AFTER_TITLE_END: x-displayName: \"After \u003c/title\u003e tag\"\nInsert JavaScript after \u003c/title\u003e tag.\n - BEFORE_SCRIPT: x-displayName: \"Before \u003cscript\u003e tag\"\nInsert JavaScript before first \u003cscript\u003e tag",
-            "title": "JavaScriptLocation",
-            "enum": [
-                "AFTER_HEAD",
-                "AFTER_TITLE_END",
-                "BEFORE_SCRIPT"
-            ],
-            "default": "AFTER_HEAD"
         },
         "http_loadbalancerListResponse": {
             "type": "object",
@@ -3864,7 +3881,7 @@ var APISwaggerJSON string = `{
             "description": "Choice for selecting HTTP proxy with bring your own certificates",
             "title": "BYOC HTTPS Choice",
             "x-displayname": "BYOC HTTPS Choice",
-            "x-ves-displayorder": "1,2,15,3,4,9,16,19",
+            "x-ves-displayorder": "1,2,15,3,4,9,16,19,20",
             "x-ves-oneof-field-default_lb_choice": "[\"default_loadbalancer\",\"non_default_loadbalancer\"]",
             "x-ves-oneof-field-path_normalize_choice": "[\"disable_path_normalize\",\"enable_path_normalize\"]",
             "x-ves-oneof-field-server_header_choice": "[\"append_server_name\",\"default_header\",\"pass_through\",\"server_name\"]",
@@ -3885,6 +3902,17 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Append header value",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.string.max_len": "8096"
+                    }
+                },
+                "connection_idle_timeout": {
+                    "type": "integer",
+                    "description": " The idle timeout for downstream connections. The idle timeout is defined as the\n period in which there are no active requests. When the idle timeout is reached the connection\n will be closed. Note that request based timeouts mean that HTTP/2 PINGs will not keep the connection alive.\n This is specified in milliseconds. The default value is 2 minutes.\n\nExample: - \"60000\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 600000\n",
+                    "title": "Connection Idle Timeout",
+                    "format": "int64",
+                    "x-displayname": "Connection Idle Timeout",
+                    "x-ves-example": "60000",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.lte": "600000"
                     }
                 },
                 "default_header": {
@@ -3963,7 +3991,7 @@ var APISwaggerJSON string = `{
             "description": "Choice for selecting HTTP proxy with bring your own certificates",
             "title": "HTTPS with Auto Certs Choice",
             "x-displayname": "HTTPS with Auto Certs Choice",
-            "x-ves-displayorder": "1,2,18,3,4,7,12,19,22",
+            "x-ves-displayorder": "1,2,18,3,4,7,12,19,22,23",
             "x-ves-oneof-field-default_lb_choice": "[\"default_loadbalancer\",\"non_default_loadbalancer\"]",
             "x-ves-oneof-field-mtls_choice": "[\"no_mtls\",\"use_mtls\"]",
             "x-ves-oneof-field-path_normalize_choice": "[\"disable_path_normalize\",\"enable_path_normalize\"]",
@@ -3985,6 +4013,17 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Append header value",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.string.max_len": "8096"
+                    }
+                },
+                "connection_idle_timeout": {
+                    "type": "integer",
+                    "description": " The idle timeout for downstream connections. The idle timeout is defined as the\n period in which there are no active requests. When the idle timeout is reached the connection\n will be closed. Note that request based timeouts mean that HTTP/2 PINGs will not keep the connection alive.\n This is specified in milliseconds. The default value is 2 minutes.\n\nExample: - \"60000\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 600000\n",
+                    "title": "Connection Idle Timeout",
+                    "format": "int64",
+                    "x-displayname": "Connection Idle Timeout",
+                    "x-ves-example": "60000",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.lte": "600000"
                     }
                 },
                 "default_header": {
@@ -4153,6 +4192,7 @@ var APISwaggerJSON string = `{
             "description": "Configure advanced options for route like path rewrite, hash policy, etc.",
             "title": "Advanced Route Options",
             "x-displayname": "Advanced Route Options",
+            "x-ves-oneof-field-bot_defense_javascript_injection_choice": "[\"bot_defense_javascript_injection\",\"inherited_bot_defense_javascript_injection\"]",
             "x-ves-oneof-field-buffer_choice": "[\"buffer_policy\",\"common_buffering\"]",
             "x-ves-oneof-field-cluster_retract_choice": "[\"do_not_retract_cluster\",\"retract_cluster\"]",
             "x-ves-oneof-field-hash_policy_choice": "[\"common_hash_policy\",\"specific_hash_policy\"]",
@@ -4169,6 +4209,12 @@ var APISwaggerJSON string = `{
                     "title": "app_firewall",
                     "$ref": "#/definitions/schemaviewsObjectRefType",
                     "x-displayname": "App Firewall"
+                },
+                "bot_defense_javascript_injection": {
+                    "description": "Exclusive with [inherited_bot_defense_javascript_injection]\n Configuration for Bot Defense Javascript Injection",
+                    "title": "Bot Defense Javascript Injection for inline bot defense deployments",
+                    "$ref": "#/definitions/routeBotDefenseJavascriptInjectionType",
+                    "x-displayname": "Enable"
                 },
                 "buffer_policy": {
                     "description": "Exclusive with [common_buffering]\n Buffering configuration for requests\n Some upstream applications are not capable of handling streamed data. This config\n enables buffering the entire request before sending to upstream application. We can\n specify the maximum buffer size and buffer interval with this config.\n Route level buffer configuration overrides any configuration at VirtualHost level.",
@@ -4252,6 +4298,12 @@ var APISwaggerJSON string = `{
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.map.max_pairs": "16"
                     }
+                },
+                "inherited_bot_defense_javascript_injection": {
+                    "description": "Exclusive with [bot_defense_javascript_injection]\n Bot Defense Javascript Injection configuration is taken from Load Balancer.\n Hence no custom configuration is applied on the route",
+                    "title": "Inherited Bot Defense Javascript Injection",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Inherit Bot Defense Javascript Injection"
                 },
                 "inherited_waf": {
                     "description": "Exclusive with [app_firewall]\n App Firewall configuration is taken from Load Balancer.\n Hence no custom configuration is applied on the route",
@@ -4785,7 +4837,7 @@ var APISwaggerJSON string = `{
                 "javascript_location": {
                     "description": "x-displayName: \"JavaScript Location\"\nDefines where to insert Bot Defense JavaScript in HTML page.",
                     "title": "javascript_location",
-                    "$ref": "#/definitions/http_loadbalancerJavaScriptLocation"
+                    "$ref": "#/definitions/viewshttp_loadbalancerJavaScriptLocation"
                 }
             }
         },
@@ -4805,7 +4857,7 @@ var APISwaggerJSON string = `{
                 "javascript_location": {
                     "description": "x-displayName: \"JavaScript Location\"\nDefines where to insert Bot Defense JavaScript in HTML page.",
                     "title": "javascript_location",
-                    "$ref": "#/definitions/http_loadbalancerJavaScriptLocation"
+                    "$ref": "#/definitions/viewshttp_loadbalancerJavaScriptLocation"
                 }
             }
         },
@@ -4850,7 +4902,7 @@ var APISwaggerJSON string = `{
                 "javascript_location": {
                     "description": "x-displayName: \"JavaScript Location\"\nDefines where to insert Bot Defense JavaScript in HTML page.",
                     "title": "javascript_location",
-                    "$ref": "#/definitions/http_loadbalancerJavaScriptLocation"
+                    "$ref": "#/definitions/viewshttp_loadbalancerJavaScriptLocation"
                 },
                 "metadata": {
                     "description": "x-displayName: \"Metadata\"\nx-required\nCommon attributes for the rule including name and description.",
@@ -5006,7 +5058,7 @@ var APISwaggerJSON string = `{
                 "enable_ddos_detection": {
                     "description": "Exclusive with [disable_ddos_detection]\n",
                     "title": "Enable DDoS detection",
-                    "$ref": "#/definitions/ioschemaEmpty",
+                    "$ref": "#/definitions/http_loadbalancerEnableDDoSDetectionSetting",
                     "x-displayname": "Enable"
                 },
                 "enable_discovery": {
@@ -5230,7 +5282,7 @@ var APISwaggerJSON string = `{
                 },
                 "prefix": {
                     "type": "string",
-                    "description": "Exclusive with [path regex]\n Path prefix to match\n\nExample: - \"/register/\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.http_path: true\n  ves.io.schema.rules.string.max_len: 256\n",
+                    "description": "Exclusive with [path regex]\n Path prefix to match (e.g. the value / will match on all paths)\n\nExample: - \"/register/\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.http_path: true\n  ves.io.schema.rules.string.max_len: 256\n",
                     "title": "prefix",
                     "maxLength": 256,
                     "x-displayname": "Prefix",
@@ -5242,7 +5294,7 @@ var APISwaggerJSON string = `{
                 },
                 "regex": {
                     "type": "string",
-                    "description": "Exclusive with [path prefix]\n Regular expression of path match\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 256\n  ves.io.schema.rules.string.min_bytes: 1\n  ves.io.schema.rules.string.regex: true\n",
+                    "description": "Exclusive with [path prefix]\n Regular expression of path match (e.g. the value .* will match on all paths)\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 256\n  ves.io.schema.rules.string.min_bytes: 1\n  ves.io.schema.rules.string.regex: true\n",
                     "title": "regex",
                     "minLength": 1,
                     "maxLength": 256,
@@ -5261,11 +5313,18 @@ var APISwaggerJSON string = `{
             "title": "Origin Pool Advanced Options",
             "x-displayname": "Origin Pool Advanced Options",
             "x-ves-oneof-field-circuit_breaker_choice": "[\"circuit_breaker\",\"default_circuit_breaker\",\"disable_circuit_breaker\"]",
+            "x-ves-oneof-field-http_protocol_type": "[\"auto_http_config\",\"http1_config\",\"http2_options\"]",
             "x-ves-oneof-field-outlier_detection_choice": "[\"disable_outlier_detection\",\"outlier_detection\"]",
             "x-ves-oneof-field-panic_threshold_type": "[\"no_panic_threshold\",\"panic_threshold\"]",
             "x-ves-oneof-field-subset_choice": "[\"disable_subsets\",\"enable_subsets\"]",
             "x-ves-proto-message": "ves.io.schema.views.origin_pool.OriginPoolAdvancedOptions",
             "properties": {
+                "auto_http_config": {
+                    "description": "Exclusive with [http1_config http2_options]\n This allows switching on protocol based on ALPN. It can use either HTTP/1.1 or HTTP/2,\n and will use whichever protocol is negotiated by ALPN with the upstream.",
+                    "title": "auto_http_config",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Automatic"
+                },
                 "circuit_breaker": {
                     "description": "Exclusive with [default_circuit_breaker disable_circuit_breaker]\n CircuitBreaker provides a mechanism for watching failures in upstream connections or requests\n and if the failures reach a certain threshold, automatically fail subsequent requests which\n allows to apply back pressure on downstream quickly.",
                     "title": "circuit_breaker",
@@ -5319,11 +5378,17 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/schemaHeaderTransformationType",
                     "x-displayname": "Header Transformation Configuration"
                 },
+                "http1_config": {
+                    "description": "Exclusive with [auto_http_config http2_options]\n Enable HTTP/1.1 for upstream connections",
+                    "title": "http1_config",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "HTTP/1.1"
+                },
                 "http2_options": {
-                    "description": " Http2 Protocol options for upstream connections",
+                    "description": "Exclusive with [auto_http_config http1_config]\n Enable HTTP/2 for upstream connections.",
                     "title": "http2_options",
                     "$ref": "#/definitions/clusterHttp2ProtocolOptions",
-                    "x-displayname": "Http2 Protocol Configuration"
+                    "x-displayname": "HTTP/2 Configuration"
                 },
                 "http_idle_timeout": {
                     "type": "integer",
@@ -5965,13 +6030,13 @@ var APISwaggerJSON string = `{
             "properties": {
                 "exclude_attack_type_contexts": {
                     "type": "array",
-                    "description": " App Firewall attack types contexts to be excluded for this request\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 64\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " Attack Types to be excluded for the defined match criteria\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 64\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "Exclude Attack Types Contexts",
                     "maxItems": 64,
                     "items": {
                         "$ref": "#/definitions/policyAppFirewallAttackTypeContext"
                     },
-                    "x-displayname": "Exclude App Firewall Attack Types Contexts",
+                    "x-displayname": "Attack Types",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.repeated.max_items": "64",
                         "ves.io.schema.rules.repeated.unique": "true"
@@ -5979,13 +6044,13 @@ var APISwaggerJSON string = `{
                 },
                 "exclude_bot_name_contexts": {
                     "type": "array",
-                    "description": " Bot names contexts to be excluded for this request\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 64\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " Bot Names to be excluded for the defined match criteria\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 64\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "Exclude Bot Names Contexts",
                     "maxItems": 64,
                     "items": {
                         "$ref": "#/definitions/policyBotNameContext"
                     },
-                    "x-displayname": "Exclude Bot Names Contexts",
+                    "x-displayname": "Bot Names",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.repeated.max_items": "64",
                         "ves.io.schema.rules.repeated.unique": "true"
@@ -5993,13 +6058,13 @@ var APISwaggerJSON string = `{
                 },
                 "exclude_signature_contexts": {
                     "type": "array",
-                    "description": " App Firewall signature contexts to be excluded for this request\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 1024\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " Signature IDs to be excluded for the defined match criteria\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 1024\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "Exclude Signature Contexts",
                     "maxItems": 1024,
                     "items": {
                         "$ref": "#/definitions/policyAppFirewallSignatureContext"
                     },
-                    "x-displayname": "Exclude App Firewall Signature Contexts",
+                    "x-displayname": "Signature IDs",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.repeated.max_items": "1024",
                         "ves.io.schema.rules.repeated.unique": "true"
@@ -6007,13 +6072,13 @@ var APISwaggerJSON string = `{
                 },
                 "exclude_violation_contexts": {
                     "type": "array",
-                    "description": " App Firewall violation contexts to be excluded for this request\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 64\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " Violations to be excluded for the defined match criteria\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 64\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "Exclude Violation Contexts",
                     "maxItems": 64,
                     "items": {
                         "$ref": "#/definitions/policyAppFirewallViolationContext"
                     },
-                    "x-displayname": "Exclude App Firewall Violation Contexts",
+                    "x-displayname": "Violations",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.repeated.max_items": "64",
                         "ves.io.schema.rules.repeated.unique": "true"
@@ -6565,6 +6630,89 @@ var APISwaggerJSON string = `{
             "x-displayname": "Country Code",
             "x-ves-proto-enum": "ves.io.schema.policy.CountryCode"
         },
+        "policyGraphQLRule": {
+            "type": "object",
+            "description": "x-displayName: \"GraphQL\"\nThis section defines various configuration options for GraphQL inspection.",
+            "title": "GraphQL Rule",
+            "properties": {
+                "any_domain": {
+                    "description": "x-displayName: \"Any Domain\"\nEnable GraphQL inspection for any domain",
+                    "title": "Any domain",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "exact_path": {
+                    "type": "string",
+                    "description": "x-displayName: \"Path\"\nx-example: \"/graphql\"\nx-required\nGraphQL endpoint. Default value is /graphql.",
+                    "title": "Path"
+                },
+                "exact_value": {
+                    "type": "string",
+                    "description": "x-displayName: \"Exact Value\"\nx-example: \"abc.zyz.com\"\nExact domain name",
+                    "title": "exact value"
+                },
+                "graphql_settings": {
+                    "description": "x-displayName: \"GraphQL Settings\"\nGraphQL configuration.",
+                    "title": "GraphQL Settings",
+                    "$ref": "#/definitions/policyGraphQLSettingsType"
+                },
+                "metadata": {
+                    "description": "x-displayName: \"Metadata\"\nx-required\nCommon attributes for the rule including name and description.",
+                    "title": "metadata",
+                    "$ref": "#/definitions/schemaMessageMetaType"
+                },
+                "suffix_value": {
+                    "type": "string",
+                    "description": "x-displayName: \"Suffix Value\"\nx-example: \"xyz.com\"\nSuffix of domain name e.g \"xyz.com\" will match \"*.xyz.com\" and \"xyz.com\"",
+                    "title": "suffix value"
+                }
+            }
+        },
+        "policyGraphQLSettingsType": {
+            "type": "object",
+            "description": "x-displayName: \"GraphQL Settings\"\nGraphQL configuration.",
+            "title": "GraphQL Settings",
+            "properties": {
+                "disable_introspection": {
+                    "description": "x-displayName: \"Disable\"\nDisable introspection queries for the load balancer.",
+                    "title": "Disable Introspection Queries",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "enable_introspection": {
+                    "description": "x-displayName: \"Enable\"\nEnable introspection queries for the load balancer.",
+                    "title": "Enable Introspection Queries",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "max_batched_queries": {
+                    "type": "integer",
+                    "description": "x-displayName: \"Maximum Batched Queries\"\nx-example: \"10\"\nx-required\nSpecify maximum number of queries in a single batched request.",
+                    "title": "Max Batched Queries",
+                    "format": "int64"
+                },
+                "max_depth": {
+                    "type": "integer",
+                    "description": "x-displayName: \"Maximum Structure Depth\"\nx-example: \"10\"\nx-required\nSpecify maximum depth for the GraphQL query.",
+                    "title": "Max Depth",
+                    "format": "int64"
+                },
+                "max_total_length": {
+                    "type": "integer",
+                    "description": "x-displayName: \"Maximum Total Length\"\nx-example: \"5000\"\nx-required\nSpecify maximum length in bytes for the GraphQL query.",
+                    "title": "Max Total Length",
+                    "format": "int64"
+                },
+                "max_value_length": {
+                    "type": "integer",
+                    "description": "x-displayName: \"Maximum Value Length\"\nx-example: \"1024\"\nx-required\nSpecify maximum value length in bytes for the GraphQL query.",
+                    "title": "Max Value Length",
+                    "format": "int64"
+                },
+                "policy_name": {
+                    "type": "string",
+                    "description": "x-displayName: \"Policy Name\"\nx-example: \"graphql\"\nSets the BD Policy to use",
+                    "title": "Set BD Policy name"
+                }
+            }
+        },
         "policyHeaderMatcherTypeBasic": {
             "type": "object",
             "description": "x-displayName: \"Header Matcher\"\nA header matcher specifies the name of a single HTTP header and the criteria for the input request to match it. The input has a list of actual values for each\nheader name in the original HTTP request.\nA header matcher can check for one of the following:\n* Presence or absence of the header in the input\n* At least one of the values for the header in the input satisfies the MatcherType item",
@@ -7069,8 +7217,9 @@ var APISwaggerJSON string = `{
             "description": "Simple WAF exclusion rule specifies a simple set of match conditions to be matched to skip a list of WAF rule ids",
             "title": "SimpleWafExclusionRule",
             "x-displayname": "WAF Exclusion Rule",
-            "x-ves-displayorder": "10,3,6,7,14,9",
+            "x-ves-displayorder": "10,3,16,7,14,9",
             "x-ves-oneof-field-domain_choice": "[\"any_domain\",\"exact_value\",\"suffix_value\"]",
+            "x-ves-oneof-field-path_choice": "[\"any_path\",\"path_prefix\",\"path_regex\"]",
             "x-ves-oneof-field-waf_advanced_configuration": "[\"app_firewall_detection_control\",\"waf_skip_processing\"]",
             "x-ves-proto-message": "ves.io.schema.policy.SimpleWafExclusionRule",
             "properties": {
@@ -7079,6 +7228,12 @@ var APISwaggerJSON string = `{
                     "title": "Any domain",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Any Domain"
+                },
+                "any_path": {
+                    "description": "Exclusive with [path_prefix path_regex]\n Match all paths",
+                    "title": "Any path",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Any Path"
                 },
                 "app_firewall_detection_control": {
                     "description": "Exclusive with [waf_skip_processing]\n Define the list of Signature IDs, Violations, Attack Types and Bot Names that should be excluded from triggering on the defined match criteria.\n\nValidation Rules:\n  ves.io.schema.rules.message.required_one_nonzero_field: true\n",
@@ -7137,16 +7292,26 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.repeated.unique": "true"
                     }
                 },
+                "path_prefix": {
+                    "type": "string",
+                    "description": "Exclusive with [any_path path_regex]\n Path prefix to match (e.g. the value / will match on all paths)\n\nExample: - \"/register/\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.http_path: true\n  ves.io.schema.rules.string.max_len: 256\n",
+                    "title": "prefix",
+                    "maxLength": 256,
+                    "x-displayname": "Prefix",
+                    "x-ves-example": "/register/",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.http_path": "true",
+                        "ves.io.schema.rules.string.max_len": "256"
+                    }
+                },
                 "path_regex": {
                     "type": "string",
-                    "description": " path regex to be matched\n\nExample: - \"/blog_id/.*\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_bytes: 256\n  ves.io.schema.rules.string.regex: true\n",
+                    "description": "Exclusive with [any_path path_prefix]\n Define the regex for the path. For example, the regex ^/.*$ will match on all paths\n\nExample: - \"/blog_id/.*\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 256\n  ves.io.schema.rules.string.regex: true\n",
                     "title": "Path Regex",
                     "maxLength": 256,
                     "x-displayname": "Path Regex",
                     "x-ves-example": "/blog_id/.*",
-                    "x-ves-required": "true",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true",
                         "ves.io.schema.rules.string.max_bytes": "256",
                         "ves.io.schema.rules.string.regex": "true"
                     }
@@ -7352,13 +7517,71 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "routeBotDefenseJavascriptInjectionType": {
+            "type": "object",
+            "description": "Bot Defense Javascript Injection Configuration for inline bot defense deployments",
+            "title": "BotDefenseJavascriptInjectionType",
+            "x-displayname": "Bot Defense Javascript Injection Configuration for inline deployments",
+            "x-ves-proto-message": "ves.io.schema.route.BotDefenseJavascriptInjectionType",
+            "properties": {
+                "javascript_location": {
+                    "description": " Defines where perform the Bot Defense Javascript Injection in HTML page.",
+                    "title": "javascript_location",
+                    "$ref": "#/definitions/schemarouteJavaScriptLocation",
+                    "x-displayname": "JavaScript Location"
+                },
+                "js_download_path": {
+                    "type": "string",
+                    "description": " Web client will fetch F5 Client Java Script from this path.\n This path must not conflict with any other website/application paths.\n\n If not specified, default to ‘/common.js’.\n\nExample: - \"/common.js\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.http_path: true\n",
+                    "title": "js_download_path",
+                    "x-displayname": "Web Client JavaScript Path",
+                    "x-ves-example": "/common.js",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.http_path": "true"
+                    }
+                }
+            }
+        },
         "routeCookieForHashing": {
             "type": "object",
             "description": "Two types of cookie affinity:\n\n1. Passive. Takes a cookie that's present in the cookies header and\n   hashes on its value.\n\n2. Generated. Generates and sets a cookie with an expiration (TTL)\n   on the first request from the client in its response to the client,\n   based on the endpoint the request gets sent to. The client then\n   presents this on the next and all subsequent requests. The hash of\n   this is sufficient to ensure these requests get sent to the same\n   endpoint. The cookie is generated by hashing the source and\n   destination ports and addresses so that multiple independent HTTP2\n   streams on the same connection will independently receive the same\n   cookie, even if they arrive simultaneously.",
             "title": "Cookie for hashing",
             "x-displayname": "Hashing using Cookie",
+            "x-ves-oneof-field-httponly": "[\"add_httponly\",\"ignore_httponly\"]",
+            "x-ves-oneof-field-samesite": "[\"ignore_samesite\",\"samesite_lax\",\"samesite_none\",\"samesite_strict\"]",
+            "x-ves-oneof-field-secure": "[\"add_secure\",\"ignore_secure\"]",
             "x-ves-proto-message": "ves.io.schema.route.CookieForHashing",
             "properties": {
+                "add_httponly": {
+                    "description": "Exclusive with [ignore_httponly]\n Add httponly attribute",
+                    "title": "add_httponly",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Add HttpOnly"
+                },
+                "add_secure": {
+                    "description": "Exclusive with [ignore_secure]\n Add secure attribute",
+                    "title": "add_secure",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Add Secure"
+                },
+                "ignore_httponly": {
+                    "description": "Exclusive with [add_httponly]\n Ignore httponly attribute",
+                    "title": "ignore_httponly",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Ignore HttpOnly"
+                },
+                "ignore_samesite": {
+                    "description": "Exclusive with [samesite_lax samesite_none samesite_strict]\n Ignore Samesite attribute",
+                    "title": "ignore_samesite",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Ignore Samesite"
+                },
+                "ignore_secure": {
+                    "description": "Exclusive with [add_secure]\n Ignore secure attribute",
+                    "title": "ignore_secure",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Ignore Secure"
+                },
                 "name": {
                     "type": "string",
                     "description": " The name of the cookie that will be used to obtain the hash key. If the\n cookie is not present and TTL below is not set, no hash will be\n produced\n\nExample: - \"userid\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 256\n  ves.io.schema.rules.string.min_len: 1\n",
@@ -7380,6 +7603,24 @@ var APISwaggerJSON string = `{
                     "title": "path",
                     "x-displayname": "Path",
                     "x-ves-example": "/Users/userid/browser/cookies"
+                },
+                "samesite_lax": {
+                    "description": "Exclusive with [ignore_samesite samesite_none samesite_strict]\n Add Samesite attribute with Lax. Means that the cookie is not sent on cross-site requests",
+                    "title": "lax",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Lax"
+                },
+                "samesite_none": {
+                    "description": "Exclusive with [ignore_samesite samesite_lax samesite_strict]\n Add Samesite attribute with None. Means that the browser sends the cookie with both cross-site and same-site requests",
+                    "title": "none",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "None"
+                },
+                "samesite_strict": {
+                    "description": "Exclusive with [ignore_samesite samesite_lax samesite_none]\n Add Samesite attribute with Strict. Means that the browser sends the cookie only for same-site requests",
+                    "title": "strict",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Strict"
                 },
                 "ttl": {
                     "type": "integer",
@@ -7986,6 +8227,69 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "schemaCookieManipulationOptionType": {
+            "type": "object",
+            "description": "x-displayName: \"Cookie Manipulation Option\"\nCookie manipulation option.",
+            "title": "CookieManipulationOptionType",
+            "properties": {
+                "add_httponly": {
+                    "description": "x-displayName: \"Add HttpOnly\"\nAdd httponly attribute",
+                    "title": "add_httponly",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "add_secure": {
+                    "description": "x-displayName: \"Add Secure\"\nAdd secure attribute",
+                    "title": "add_secure",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "ignore_httponly": {
+                    "description": "x-displayName: \"Ignore HttpOnly\"\nIgnore httponly attribute",
+                    "title": "ignore_httponly",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "ignore_max_age": {
+                    "description": "x-displayName: \"Ignore Max Age\"\nIgnore max age attribute",
+                    "title": "ignore_max_age",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "ignore_samesite": {
+                    "description": "x-displayName: \"Ignore Samesite\"\nIgnore Samesite attribute",
+                    "title": "ignore_samesite",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "ignore_secure": {
+                    "description": "x-displayName: \"Ignore Secure\"\nIgnore secure attribute",
+                    "title": "ignore_secure",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "max_age_value": {
+                    "type": "integer",
+                    "description": "x-displayName: \"Add Max Age\"\nAdd max age attribute",
+                    "title": "add_max_age",
+                    "format": "int32"
+                },
+                "name": {
+                    "type": "string",
+                    "description": "x-displayName: \"Cookie Name\"\nx-example: \"value\"\nx-required\nName of the Cookie",
+                    "title": "name"
+                },
+                "samesite_lax": {
+                    "description": "x-displayName: \"Lax\"\nAdd Samesite attribute with Lax. Means that the cookie is not sent on cross-site requests",
+                    "title": "lax",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "samesite_none": {
+                    "description": "x-displayName: \"None\"\nAdd Samesite attribute with None. Means that the browser sends the cookie with both cross-site and same-site requests",
+                    "title": "none",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "samesite_strict": {
+                    "description": "x-displayName: \"Strict\"\nAdd Samesite attribute with Strict. Means that the browser sends the cookie only for same-site requests",
+                    "title": "strict",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                }
+            }
+        },
         "schemaCorsPolicy": {
             "type": "object",
             "description": "Cross-Origin Resource Sharing requests configuration specified at Virtual-host or\nRoute level. Route level configuration takes precedence.\n\nAn example of an Cross origin HTTP request\n    GET /resources/public-data/ HTTP/1.1\n    Host: bar.other\n    User-Agent: Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10.5; en-US; rv:1.9.1b3pre) Gecko/20081130 Minefield/3.1b3pre\n    Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8\n    Accept-Language: en-us,en;q=0.5\n    Accept-Encoding: gzip,deflate\n    Accept-Charset: ISO-8859-1,utf-8;q=0.7,*;q=0.7\n    Connection: keep-alive\n    Referrer: http://foo.example/examples/access-control/simpleXSInvocation.html\n    Origin: http://foo.example\n\n\n    HTTP/1.1 200 OK\n    Date: Mon, 01 Dec 2008 00:23:53 GMT\n    Server: Apache/2.0.61\n    Access-Control-Allow-Origin: *\n    Keep-Alive: timeout=2, max=100\n    Connection: Keep-Alive\n    Transfer-Encoding: chunked\n    Content-Type: application/xml\n\nAn example for cross origin HTTP OPTIONS request with Access-Control-Request-* header\n\n    OPTIONS /resources/post-here/ HTTP/1.1\n    Host: bar.other\n    User-Agent: Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10.5; en-US; rv:1.9.1b3pre) Gecko/20081130 Minefield/3.1b3pre\n    Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8\n    Accept-Language: en-us,en;q=0.5\n    Accept-Encoding: gzip,deflate\n    Accept-Charset: ISO-8859-1,utf-8;q=0.7,*;q=0.7\n    Connection: keep-alive\n    Origin: http://foo.example\n    Access-Control-Request-Method: POST\n    Access-Control-Request-Headers: X-PINGOTHER, Content-Type\n\n\n    HTTP/1.1 204 No Content\n    Date: Mon, 01 Dec 2008 01:15:39 GMT\n    Server: Apache/2.0.61 (Unix)\n    Access-Control-Allow-Origin: http://foo.example\n    Access-Control-Allow-Methods: POST, GET, OPTIONS\n    Access-Control-Allow-Headers: X-PINGOTHER, Content-Type\n    Access-Control-Max-Age: 86400\n    Vary: Accept-Encoding, Origin\n    Keep-Alive: timeout=2, max=100\n    Connection: Keep-Alive",
@@ -8389,7 +8693,7 @@ var APISwaggerJSON string = `{
         },
         "schemaHttpMethod": {
             "type": "string",
-            "description": "Specifies the HTTP method used to access a resource.\n\nAny HTTP Method\nGET method\nHEAD method\nPOST method\nPUT method\nDELETE method\nCONNECT method\nOPTIONS method\nTRACE method\nPATCH method",
+            "description": "Specifies the HTTP method used to access a resource.\n\nAny HTTP Method",
             "title": "HttpMethod",
             "enum": [
                 "ANY",
@@ -9691,6 +9995,19 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "schemarouteJavaScriptLocation": {
+            "type": "string",
+            "description": "All inside networks.\n\nInsert JavaScript after \u003chead\u003e tag\nInsert JavaScript after \u003c/title\u003e tag.\nInsert JavaScript before first \u003cscript\u003e tag",
+            "title": "JavaScriptLocation",
+            "enum": [
+                "AFTER_HEAD",
+                "AFTER_TITLE_END",
+                "BEFORE_SCRIPT"
+            ],
+            "default": "AFTER_HEAD",
+            "x-displayname": "JavaScript Location",
+            "x-ves-proto-enum": "ves.io.schema.route.JavaScriptLocation"
+        },
         "schemaviewsDownstreamTlsParamsType": {
             "type": "object",
             "description": "TLS parameters",
@@ -10457,7 +10774,7 @@ var APISwaggerJSON string = `{
                 "api_definition": {
                     "description": "Exclusive with [disable_api_definition]\n Specify API definition which includes application API paths and methods derived from swagger files.",
                     "$ref": "#/definitions/schemaviewsObjectRefType",
-                    "x-displayname": "Enable"
+                    "x-displayname": "Use API Definition"
                 },
                 "api_protection_rules": {
                     "description": " API Protection Rules can be defined in two categories.\n The first category includes fine-grained rules, per API path and methods.\n The second category includes rules per API groups or Server URLs.\n If request matches any rule in the first category, second category rules are not evaluated.\n Rules can also include additional conditions, for example specific clients can access certain API endpoint or API group.",
@@ -10498,7 +10815,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Enable"
                 },
                 "cookie_stickiness": {
-                    "description": "Exclusive with [least_active random ring_hash round_robin source_ip_stickiness]\n Request are sent to all eligible origin servers using hash of source ip. Consistent hashing algorithm, ring hash, is used to select origin server",
+                    "description": "Exclusive with [least_active random ring_hash round_robin source_ip_stickiness]\n Request are sent to all eligible origin servers using hash of cookie. Cookie can be passive(present in the cookies header) or \n generated(hashing the source and destination ports and addresses).\n Consistent hashing algorithm, ring hash, is used to select origin server",
                     "$ref": "#/definitions/routeCookieForHashing",
                     "x-displayname": "Cookie Based Stickiness"
                 },
@@ -10508,7 +10825,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "CORS Policy"
                 },
                 "csrf_policy": {
-                    "description": " Cross-Site Request Forgery (CSRF) is an attack that occurs when a malicious third-party website exploits a vulnerability thats allows them to submit an undesired request on user's behalf.\n\n Policy configuration to protect against CSRF attacks.",
+                    "description": " Cross-Site Request Forgery (CSRF) is an attack that occurs when a malicious third-party website exploits a vulnerability thats allows them to submit an undesired request on user's behalf.\n\n The policy checks where a request is coming from to determine if the request's origin is the same as its destination. The policy relies on two pieces of information used in determining if a request originated from the same host.\n\n 1. The origin that caused the user agent to issue the request (source origin).\n 2. The origin that the request is going to (target origin).\n When the policy evaluating a request, it ensures both pieces of information are present and compare their values. If the source origin is missing or origins do not match the request is rejected. The exception to this being the source-origin has been added to the policy as valid.\n Because CSRF attacks specifically target state-changing requests, the policy only acts on the HTTP requests that have state-changing method (PUT,POST, etc.).",
                     "$ref": "#/definitions/schemaCsrfPolicy",
                     "x-displayname": "Cross-Site Request Forgery Protection"
                 },
@@ -10527,7 +10844,7 @@ var APISwaggerJSON string = `{
                 },
                 "ddos_mitigation_rules": {
                     "type": "array",
-                    "description": " Rules that specify the DDoS clients to be blocked\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 256\n  ves.io.schema.rules.repeated.unique_metadata_name: true\n",
+                    "description": " Define manual mitigation rules to block L7 DDos attacks.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 256\n  ves.io.schema.rules.repeated.unique_metadata_name: true\n",
                     "maxItems": 256,
                     "items": {
                         "$ref": "#/definitions/http_loadbalancerDDoSMitigationRule"
@@ -10641,7 +10958,7 @@ var APISwaggerJSON string = `{
                 },
                 "enable_ddos_detection": {
                     "description": "Exclusive with [disable_ddos_detection]\n",
-                    "$ref": "#/definitions/ioschemaEmpty",
+                    "$ref": "#/definitions/http_loadbalancerEnableDDoSDetectionSetting",
                     "x-displayname": "Enable"
                 },
                 "enable_ip_reputation": {
@@ -10782,7 +11099,7 @@ var APISwaggerJSON string = `{
                 },
                 "waf_exclusion_rules": {
                     "type": "array",
-                    "description": " Define the Signature IDs, Violations, Attack Types and Bot Names that should be excluded from WAF processing on specific match criteria.\n The match criteria include domain, path and method.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 256\n  ves.io.schema.rules.repeated.unique_metadata_name: true\n",
+                    "description": " Define the Signature IDs, Violations, Attack Types and Bot Names that should be excluded from WAF processing on specific match criteria.\n The match criteria include domain, path and method.\n WAF Exclusion rules is a sequential engine where rules are evaluated one after the other.\n It's important to define the correct order for WAF exclusion rules to get the intended result, rules are evaluated from top to bottom in the list.\n For each request, its characteristics are evaluated based on the match criteria in each WAF exclusion rule, starting from the top.\n When an exclusion rule is matched, then this exclusion rule takes effect and no more rules are evaluated.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 256\n  ves.io.schema.rules.repeated.unique_metadata_name: true\n",
                     "maxItems": 256,
                     "items": {
                         "$ref": "#/definitions/policySimpleWafExclusionRule"
@@ -10850,7 +11167,7 @@ var APISwaggerJSON string = `{
                 "api_definition": {
                     "description": "Exclusive with [disable_api_definition]\n Specify API definition which includes application API paths and methods derived from swagger files.",
                     "$ref": "#/definitions/schemaviewsObjectRefType",
-                    "x-displayname": "Enable"
+                    "x-displayname": "Use API Definition"
                 },
                 "api_protection_rules": {
                     "description": " API Protection Rules can be defined in two categories.\n The first category includes fine-grained rules, per API path and methods.\n The second category includes rules per API groups or Server URLs.\n If request matches any rule in the first category, second category rules are not evaluated.\n Rules can also include additional conditions, for example specific clients can access certain API endpoint or API group.",
@@ -10896,7 +11213,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Enable"
                 },
                 "cookie_stickiness": {
-                    "description": "Exclusive with [least_active random ring_hash round_robin source_ip_stickiness]\n Request are sent to all eligible origin servers using hash of source ip. Consistent hashing algorithm, ring hash, is used to select origin server",
+                    "description": "Exclusive with [least_active random ring_hash round_robin source_ip_stickiness]\n Request are sent to all eligible origin servers using hash of cookie. Cookie can be passive(present in the cookies header) or \n generated(hashing the source and destination ports and addresses).\n Consistent hashing algorithm, ring hash, is used to select origin server",
                     "$ref": "#/definitions/routeCookieForHashing",
                     "x-displayname": "Cookie Based Stickiness"
                 },
@@ -10906,7 +11223,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "CORS Policy"
                 },
                 "csrf_policy": {
-                    "description": " Cross-Site Request Forgery (CSRF) is an attack that occurs when a malicious third-party website exploits a vulnerability thats allows them to submit an undesired request on user's behalf.\n\n Policy configuration to protect against CSRF attacks.",
+                    "description": " Cross-Site Request Forgery (CSRF) is an attack that occurs when a malicious third-party website exploits a vulnerability thats allows them to submit an undesired request on user's behalf.\n\n The policy checks where a request is coming from to determine if the request's origin is the same as its destination. The policy relies on two pieces of information used in determining if a request originated from the same host.\n\n 1. The origin that caused the user agent to issue the request (source origin).\n 2. The origin that the request is going to (target origin).\n When the policy evaluating a request, it ensures both pieces of information are present and compare their values. If the source origin is missing or origins do not match the request is rejected. The exception to this being the source-origin has been added to the policy as valid.\n Because CSRF attacks specifically target state-changing requests, the policy only acts on the HTTP requests that have state-changing method (PUT,POST, etc.).",
                     "$ref": "#/definitions/schemaCsrfPolicy",
                     "x-displayname": "Cross-Site Request Forgery Protection"
                 },
@@ -10925,7 +11242,7 @@ var APISwaggerJSON string = `{
                 },
                 "ddos_mitigation_rules": {
                     "type": "array",
-                    "description": " Rules that specify the DDoS clients to be blocked\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 256\n  ves.io.schema.rules.repeated.unique_metadata_name: true\n",
+                    "description": " Define manual mitigation rules to block L7 DDos attacks.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 256\n  ves.io.schema.rules.repeated.unique_metadata_name: true\n",
                     "maxItems": 256,
                     "items": {
                         "$ref": "#/definitions/http_loadbalancerDDoSMitigationRule"
@@ -11047,7 +11364,7 @@ var APISwaggerJSON string = `{
                 },
                 "enable_ddos_detection": {
                     "description": "Exclusive with [disable_ddos_detection]\n",
-                    "$ref": "#/definitions/ioschemaEmpty",
+                    "$ref": "#/definitions/http_loadbalancerEnableDDoSDetectionSetting",
                     "x-displayname": "Enable"
                 },
                 "enable_ip_reputation": {
@@ -11199,7 +11516,7 @@ var APISwaggerJSON string = `{
                 },
                 "waf_exclusion_rules": {
                     "type": "array",
-                    "description": " Define the Signature IDs, Violations, Attack Types and Bot Names that should be excluded from WAF processing on specific match criteria.\n The match criteria include domain, path and method.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 256\n  ves.io.schema.rules.repeated.unique_metadata_name: true\n",
+                    "description": " Define the Signature IDs, Violations, Attack Types and Bot Names that should be excluded from WAF processing on specific match criteria.\n The match criteria include domain, path and method.\n WAF Exclusion rules is a sequential engine where rules are evaluated one after the other.\n It's important to define the correct order for WAF exclusion rules to get the intended result, rules are evaluated from top to bottom in the list.\n For each request, its characteristics are evaluated based on the match criteria in each WAF exclusion rule, starting from the top.\n When an exclusion rule is matched, then this exclusion rule takes effect and no more rules are evaluated.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 256\n  ves.io.schema.rules.repeated.unique_metadata_name: true\n",
                     "maxItems": 256,
                     "items": {
                         "$ref": "#/definitions/policySimpleWafExclusionRule"
@@ -11274,7 +11591,7 @@ var APISwaggerJSON string = `{
                     "description": "Exclusive with [disable_api_definition]\n Specify API definition which includes application API paths and methods derived from swagger files.",
                     "title": "Use API Definition",
                     "$ref": "#/definitions/schemaviewsObjectRefType",
-                    "x-displayname": "Enable"
+                    "x-displayname": "Use API Definition"
                 },
                 "api_protection_rules": {
                     "description": " API Protection Rules can be defined in two categories.\n The first category includes fine-grained rules, per API path and methods.\n The second category includes rules per API groups or Server URLs.\n If request matches any rule in the first category, second category rules are not evaluated.\n Rules can also include additional conditions, for example specific clients can access certain API endpoint or API group.",
@@ -11333,7 +11650,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Enable"
                 },
                 "cookie_stickiness": {
-                    "description": "Exclusive with [least_active random ring_hash round_robin source_ip_stickiness]\n Request are sent to all eligible origin servers using hash of source ip. Consistent hashing algorithm, ring hash, is used to select origin server",
+                    "description": "Exclusive with [least_active random ring_hash round_robin source_ip_stickiness]\n Request are sent to all eligible origin servers using hash of cookie. Cookie can be passive(present in the cookies header) or \n generated(hashing the source and destination ports and addresses).\n Consistent hashing algorithm, ring hash, is used to select origin server",
                     "title": "Cookie Based Stickiness",
                     "$ref": "#/definitions/routeCookieForHashing",
                     "x-displayname": "Cookie Based Stickiness"
@@ -11345,7 +11662,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "CORS Policy"
                 },
                 "csrf_policy": {
-                    "description": " Cross-Site Request Forgery (CSRF) is an attack that occurs when a malicious third-party website exploits a vulnerability thats allows them to submit an undesired request on user's behalf.\n\n Policy configuration to protect against CSRF attacks.",
+                    "description": " Cross-Site Request Forgery (CSRF) is an attack that occurs when a malicious third-party website exploits a vulnerability thats allows them to submit an undesired request on user's behalf.\n\n The policy checks where a request is coming from to determine if the request's origin is the same as its destination. The policy relies on two pieces of information used in determining if a request originated from the same host.\n\n 1. The origin that caused the user agent to issue the request (source origin).\n 2. The origin that the request is going to (target origin).\n When the policy evaluating a request, it ensures both pieces of information are present and compare their values. If the source origin is missing or origins do not match the request is rejected. The exception to this being the source-origin has been added to the policy as valid.\n Because CSRF attacks specifically target state-changing requests, the policy only acts on the HTTP requests that have state-changing method (PUT,POST, etc.).",
                     "title": "csrf_policy",
                     "$ref": "#/definitions/schemaCsrfPolicy",
                     "x-displayname": "Cross-Site Request Forgery Protection"
@@ -11366,7 +11683,7 @@ var APISwaggerJSON string = `{
                 },
                 "ddos_mitigation_rules": {
                     "type": "array",
-                    "description": " Rules that specify the DDoS clients to be blocked\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 256\n  ves.io.schema.rules.repeated.unique_metadata_name: true\n",
+                    "description": " Define manual mitigation rules to block L7 DDos attacks.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 256\n  ves.io.schema.rules.repeated.unique_metadata_name: true\n",
                     "title": "DDoS Mitigation Rules",
                     "maxItems": 256,
                     "items": {
@@ -11512,7 +11829,7 @@ var APISwaggerJSON string = `{
                 "enable_ddos_detection": {
                     "description": "Exclusive with [disable_ddos_detection]\n",
                     "title": "Enable DDoS detection",
-                    "$ref": "#/definitions/ioschemaEmpty",
+                    "$ref": "#/definitions/http_loadbalancerEnableDDoSDetectionSetting",
                     "x-displayname": "Enable"
                 },
                 "enable_ip_reputation": {
@@ -11700,7 +12017,7 @@ var APISwaggerJSON string = `{
                 },
                 "waf_exclusion_rules": {
                     "type": "array",
-                    "description": " Define the Signature IDs, Violations, Attack Types and Bot Names that should be excluded from WAF processing on specific match criteria.\n The match criteria include domain, path and method.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 256\n  ves.io.schema.rules.repeated.unique_metadata_name: true\n",
+                    "description": " Define the Signature IDs, Violations, Attack Types and Bot Names that should be excluded from WAF processing on specific match criteria.\n The match criteria include domain, path and method.\n WAF Exclusion rules is a sequential engine where rules are evaluated one after the other.\n It's important to define the correct order for WAF exclusion rules to get the intended result, rules are evaluated from top to bottom in the list.\n For each request, its characteristics are evaluated based on the match criteria in each WAF exclusion rule, starting from the top.\n When an exclusion rule is matched, then this exclusion rule takes effect and no more rules are evaluated.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 256\n  ves.io.schema.rules.repeated.unique_metadata_name: true\n",
                     "title": "WAF Exclusion Rules",
                     "maxItems": 256,
                     "items": {
@@ -11738,6 +12055,17 @@ var APISwaggerJSON string = `{
                     }
                 }
             }
+        },
+        "viewshttp_loadbalancerJavaScriptLocation": {
+            "type": "string",
+            "description": "x-displayName: \"JavaScript Location\"\nAll inside networks.\n\n - AFTER_HEAD: x-displayName: \"After \u003chead\u003e tag\"\nInsert JavaScript after \u003chead\u003e tag\n - AFTER_TITLE_END: x-displayName: \"After \u003c/title\u003e tag\"\nInsert JavaScript after \u003c/title\u003e tag.\n - BEFORE_SCRIPT: x-displayName: \"Before \u003cscript\u003e tag\"\nInsert JavaScript before first \u003cscript\u003e tag",
+            "title": "JavaScriptLocation",
+            "enum": [
+                "AFTER_HEAD",
+                "AFTER_TITLE_END",
+                "BEFORE_SCRIPT"
+            ],
+            "default": "AFTER_HEAD"
         },
         "viewshttp_loadbalancerMirrorPolicyType": {
             "type": "object",
@@ -11936,7 +12264,7 @@ var APISwaggerJSON string = `{
                 "api_definition": {
                     "description": "Exclusive with [disable_api_definition]\n Specify API definition which includes application API paths and methods derived from swagger files.",
                     "$ref": "#/definitions/schemaviewsObjectRefType",
-                    "x-displayname": "Enable"
+                    "x-displayname": "Use API Definition"
                 },
                 "api_protection_rules": {
                     "description": " API Protection Rules can be defined in two categories.\n The first category includes fine-grained rules, per API path and methods.\n The second category includes rules per API groups or Server URLs.\n If request matches any rule in the first category, second category rules are not evaluated.\n Rules can also include additional conditions, for example specific clients can access certain API endpoint or API group.",
@@ -11977,7 +12305,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Enable"
                 },
                 "cookie_stickiness": {
-                    "description": "Exclusive with [least_active random ring_hash round_robin source_ip_stickiness]\n Request are sent to all eligible origin servers using hash of source ip. Consistent hashing algorithm, ring hash, is used to select origin server",
+                    "description": "Exclusive with [least_active random ring_hash round_robin source_ip_stickiness]\n Request are sent to all eligible origin servers using hash of cookie. Cookie can be passive(present in the cookies header) or \n generated(hashing the source and destination ports and addresses).\n Consistent hashing algorithm, ring hash, is used to select origin server",
                     "$ref": "#/definitions/routeCookieForHashing",
                     "x-displayname": "Cookie Based Stickiness"
                 },
@@ -11987,7 +12315,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "CORS Policy"
                 },
                 "csrf_policy": {
-                    "description": " Cross-Site Request Forgery (CSRF) is an attack that occurs when a malicious third-party website exploits a vulnerability thats allows them to submit an undesired request on user's behalf.\n\n Policy configuration to protect against CSRF attacks.",
+                    "description": " Cross-Site Request Forgery (CSRF) is an attack that occurs when a malicious third-party website exploits a vulnerability thats allows them to submit an undesired request on user's behalf.\n\n The policy checks where a request is coming from to determine if the request's origin is the same as its destination. The policy relies on two pieces of information used in determining if a request originated from the same host.\n\n 1. The origin that caused the user agent to issue the request (source origin).\n 2. The origin that the request is going to (target origin).\n When the policy evaluating a request, it ensures both pieces of information are present and compare their values. If the source origin is missing or origins do not match the request is rejected. The exception to this being the source-origin has been added to the policy as valid.\n Because CSRF attacks specifically target state-changing requests, the policy only acts on the HTTP requests that have state-changing method (PUT,POST, etc.).",
                     "$ref": "#/definitions/schemaCsrfPolicy",
                     "x-displayname": "Cross-Site Request Forgery Protection"
                 },
@@ -12006,7 +12334,7 @@ var APISwaggerJSON string = `{
                 },
                 "ddos_mitigation_rules": {
                     "type": "array",
-                    "description": " Rules that specify the DDoS clients to be blocked\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 256\n  ves.io.schema.rules.repeated.unique_metadata_name: true\n",
+                    "description": " Define manual mitigation rules to block L7 DDos attacks.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 256\n  ves.io.schema.rules.repeated.unique_metadata_name: true\n",
                     "maxItems": 256,
                     "items": {
                         "$ref": "#/definitions/http_loadbalancerDDoSMitigationRule"
@@ -12120,7 +12448,7 @@ var APISwaggerJSON string = `{
                 },
                 "enable_ddos_detection": {
                     "description": "Exclusive with [disable_ddos_detection]\n",
-                    "$ref": "#/definitions/ioschemaEmpty",
+                    "$ref": "#/definitions/http_loadbalancerEnableDDoSDetectionSetting",
                     "x-displayname": "Enable"
                 },
                 "enable_ip_reputation": {
@@ -12261,7 +12589,7 @@ var APISwaggerJSON string = `{
                 },
                 "waf_exclusion_rules": {
                     "type": "array",
-                    "description": " Define the Signature IDs, Violations, Attack Types and Bot Names that should be excluded from WAF processing on specific match criteria.\n The match criteria include domain, path and method.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 256\n  ves.io.schema.rules.repeated.unique_metadata_name: true\n",
+                    "description": " Define the Signature IDs, Violations, Attack Types and Bot Names that should be excluded from WAF processing on specific match criteria.\n The match criteria include domain, path and method.\n WAF Exclusion rules is a sequential engine where rules are evaluated one after the other.\n It's important to define the correct order for WAF exclusion rules to get the intended result, rules are evaluated from top to bottom in the list.\n For each request, its characteristics are evaluated based on the match criteria in each WAF exclusion rule, starting from the top.\n When an exclusion rule is matched, then this exclusion rule takes effect and no more rules are evaluated.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 256\n  ves.io.schema.rules.repeated.unique_metadata_name: true\n",
                     "maxItems": 256,
                     "items": {
                         "$ref": "#/definitions/policySimpleWafExclusionRule"

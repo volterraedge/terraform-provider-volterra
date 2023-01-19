@@ -6903,7 +6903,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Custom Storage Configuration"
                 },
                 "default_blocked_services": {
-                    "description": "Exclusive with [blocked_services]\n Use default dehavior of allowing ports mentioned in blocked services",
+                    "description": "Exclusive with [blocked_services]\n Use default behavior of allowing ports mentioned in blocked services",
                     "title": "Default Blocked Service Configuration",
                     "$ref": "#/definitions/schemaEmpty",
                     "x-displayname": "Default Blocked Service Configuration"

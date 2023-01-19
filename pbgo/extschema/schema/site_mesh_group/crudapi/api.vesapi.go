@@ -3400,7 +3400,7 @@ var APISwaggerJSON string = `{
                 "hub_mesh": {
                     "description": "Exclusive with [full_mesh spoke_mesh]\n  Mesh of Type Hub",
                     "title": "hub",
-                    "$ref": "#/definitions/schemaEmpty",
+                    "$ref": "#/definitions/site_mesh_groupHubFullMeshGroupType",
                     "x-displayname": "Hub"
                 },
                 "spoke_mesh": {
@@ -3492,6 +3492,28 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "site_mesh_groupHubFullMeshGroupType": {
+            "type": "object",
+            "description": "Details of Hub Full Mesh Group Type",
+            "title": "Hub Full Mesh Group Type",
+            "x-displayname": "Hub Full Mesh",
+            "x-ves-oneof-field-hub_full_mesh_choice": "[\"control_and_data_plane_mesh\",\"data_plane_mesh\"]",
+            "x-ves-proto-message": "ves.io.schema.site_mesh_group.HubFullMeshGroupType",
+            "properties": {
+                "control_and_data_plane_mesh": {
+                    "description": "Exclusive with [data_plane_mesh]\n Hub Full mesh of data plane tunnels across sites\n and control plane peering across sites",
+                    "title": "Control and Data Plane Mesh",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Control and Data Plane Mesh"
+                },
+                "data_plane_mesh": {
+                    "description": "Exclusive with [control_and_data_plane_mesh]\n Hub Full Mesh of data plane tunnels across sites",
+                    "title": "Data Plane Mesh",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Data Plane Mesh"
+                }
+            }
+        },
         "site_mesh_groupSiteMeshGroupType": {
             "type": "string",
             "description": "x-displayName: \"Mesh Type\"\nDefines different types of Mesh\n\n - SITE_MESH_GROUP_TYPE_INVALID: x-displayName: \"Invalid\"\nInvalid mesh type\n - SITE_MESH_GROUP_TYPE_HUB_FULL_MESH: x-displayName: \"Hub\"\nMesh of type Hub\n - SITE_MESH_GROUP_TYPE_SPOKE: x-displayName: \"Spoke\"\nMesh of type Spoke\n - SITE_MESH_GROUP_TYPE_FULL_MESH: x-displayName: \"Full Mesh\"\nFull mesh of tunnels are created between all sites",
@@ -3522,8 +3544,21 @@ var APISwaggerJSON string = `{
             "description": "Details of Spoke Mesh Group Type",
             "title": "Spoke Mesh Group Type",
             "x-displayname": "Spoke",
+            "x-ves-oneof-field-spoke_hub_mesh_choice": "[\"control_and_data_plane_mesh\",\"data_plane_mesh\"]",
             "x-ves-proto-message": "ves.io.schema.site_mesh_group.SpokeMeshGroupType",
             "properties": {
+                "control_and_data_plane_mesh": {
+                    "description": "Exclusive with [data_plane_mesh]\n Mesh of data plane tunnels to the hub site/s\n and control plane peering with the hub site/s",
+                    "title": "Control and Data Plane Mesh",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Control and Data Plane Mesh"
+                },
+                "data_plane_mesh": {
+                    "description": "Exclusive with [control_and_data_plane_mesh]\n Mesh of data plane tunnels to the hub site/s",
+                    "title": "Data Plane Mesh",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Data Plane Mesh"
+                },
                 "hub_mesh_group": {
                     "description": " 'hub_mesh_group' refers to a Site Mesh Group of 'type' Hub.\n Spoke sites will connect to all the member sites of Hub Site Mesh Group\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "hub_mesh_group",

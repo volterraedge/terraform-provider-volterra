@@ -110,6 +110,27 @@ func (v *ValidateCreateSpecType) ExpirationExpirationTtlValidationRuleHandler(ru
 	return oValidatorFn_ExpirationTtl, nil
 }
 
+func (v *ValidateCreateSpecType) DestinationValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "MessageValidationRuleHandler for destination")
+	}
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		if err := DestinationValidator().Validate(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateCreateSpecType) IpPrefixesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
 	itemRules := db.GetRepStringItemRules(rules)
@@ -484,6 +505,17 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 
 	v.FldValidators["expiration.expiration_ttl"] = vFnMap["expiration.expiration_ttl"]
 
+	vrhDestination := v.DestinationValidationRuleHandler
+	rulesDestination := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhDestination(rulesDestination)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateSpecType.destination: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["destination"] = vFn
+
 	vrhIpPrefixes := v.IpPrefixesValidationRuleHandler
 	rulesIpPrefixes := map[string]string{
 		"ves.io.schema.rules.repeated.items.string.ipv4_prefix": "true",
@@ -550,8 +582,6 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	}
 	v.FldValidators["paths"] = vFn
 
-	v.FldValidators["destination"] = DestinationValidator().Validate
-
 	return v
 }()
 
@@ -601,64 +631,54 @@ func (m *Destination) GetDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 	}
 
-	return m.GetDestinationDRefInfo()
+	return m.GetVirtualHostDRefInfo()
 
 }
 
-func (m *Destination) GetDestinationDRefInfo() ([]db.DRefInfo, error) {
-	switch m.GetDestination().(type) {
-	case *Destination_VirtualHost:
+func (m *Destination) GetVirtualHostDRefInfo() ([]db.DRefInfo, error) {
 
-		vref := m.GetVirtualHost()
-		if vref == nil {
-			return nil, nil
-		}
-		vdRef := db.NewDirectRefForView(vref)
-		vdRef.SetKind("virtual_host.Object")
-		dri := db.DRefInfo{
-			RefdType:   "virtual_host.Object",
-			RefdTenant: vref.Tenant,
-			RefdNS:     vref.Namespace,
-			RefdName:   vref.Name,
-			DRField:    "virtual_host",
-			Ref:        vdRef,
-		}
-		return []db.DRefInfo{dri}, nil
-
-	default:
+	vref := m.GetVirtualHost()
+	if vref == nil {
 		return nil, nil
 	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("virtual_host.Object")
+	dri := db.DRefInfo{
+		RefdType:   "virtual_host.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "virtual_host",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+
 }
 
-// GetDestinationDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
-func (m *Destination) GetDestinationDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+// GetVirtualHostDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *Destination) GetVirtualHostDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
 	var entries []db.Entry
+	refdType, err := d.TypeForEntryKind("", "", "virtual_host.Object")
+	if err != nil {
+		return nil, errors.Wrap(err, "Cannot find type for kind: virtual_host")
+	}
 
-	switch m.GetDestination().(type) {
-	case *Destination_VirtualHost:
-		refdType, err := d.TypeForEntryKind("", "", "virtual_host.Object")
-		if err != nil {
-			return nil, errors.Wrap(err, "Cannot find type for kind: virtual_host")
-		}
-
-		vref := m.GetVirtualHost()
-		if vref == nil {
-			return nil, nil
-		}
-		ref := &ves_io_schema.ObjectRefType{
-			Kind:      "virtual_host.Object",
-			Tenant:    vref.Tenant,
-			Namespace: vref.Namespace,
-			Name:      vref.Name,
-		}
-		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
-		if err != nil {
-			return nil, errors.Wrap(err, "Getting referred entry")
-		}
-		if refdEnt != nil {
-			entries = append(entries, refdEnt)
-		}
-
+	vref := m.GetVirtualHost()
+	if vref == nil {
+		return nil, nil
+	}
+	ref := &ves_io_schema.ObjectRefType{
+		Kind:      "virtual_host.Object",
+		Tenant:    vref.Tenant,
+		Namespace: vref.Namespace,
+		Name:      vref.Name,
+	}
+	refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+	if err != nil {
+		return nil, errors.Wrap(err, "Getting referred entry")
+	}
+	if refdEnt != nil {
+		entries = append(entries, refdEnt)
 	}
 
 	return entries, nil
@@ -668,11 +688,24 @@ type ValidateDestination struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
-func (v *ValidateDestination) DestinationValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+func (v *ValidateDestination) VirtualHostValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for destination")
+		return nil, errors.Wrap(err, "MessageValidationRuleHandler for virtual_host")
 	}
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		if err := ves_io_schema_views.ObjectRefTypeValidator().Validate(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		return nil
+	}
+
 	return validatorFn, nil
 }
 
@@ -690,27 +723,11 @@ func (v *ValidateDestination) Validate(ctx context.Context, pm interface{}, opts
 		return nil
 	}
 
-	if fv, exists := v.FldValidators["destination"]; exists {
-		val := m.GetDestination()
-		vOpts := append(opts,
-			db.WithValidateField("destination"),
-		)
-		if err := fv(ctx, val, vOpts...); err != nil {
-			return err
-		}
-	}
+	if fv, exists := v.FldValidators["virtual_host"]; exists {
 
-	switch m.GetDestination().(type) {
-	case *Destination_VirtualHost:
-		if fv, exists := v.FldValidators["destination.virtual_host"]; exists {
-			val := m.GetDestination().(*Destination_VirtualHost).VirtualHost
-			vOpts := append(opts,
-				db.WithValidateField("destination"),
-				db.WithValidateField("virtual_host"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
+		vOpts := append(opts, db.WithValidateField("virtual_host"))
+		if err := fv(ctx, m.GetVirtualHost(), vOpts...); err != nil {
+			return err
 		}
 
 	}
@@ -730,18 +747,16 @@ var DefaultDestinationValidator = func() *ValidateDestination {
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
 
-	vrhDestination := v.DestinationValidationRuleHandler
-	rulesDestination := map[string]string{
-		"ves.io.schema.rules.message.required_oneof": "true",
+	vrhVirtualHost := v.VirtualHostValidationRuleHandler
+	rulesVirtualHost := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
 	}
-	vFn, err = vrhDestination(rulesDestination)
+	vFn, err = vrhVirtualHost(rulesVirtualHost)
 	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for Destination.destination: %s", err)
+		errMsg := fmt.Sprintf("ValidationRuleHandler for Destination.virtual_host: %s", err)
 		panic(errMsg)
 	}
-	v.FldValidators["destination"] = vFn
-
-	v.FldValidators["destination.virtual_host"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
+	v.FldValidators["virtual_host"] = vFn
 
 	return v
 }()
@@ -995,6 +1010,27 @@ func (v *ValidateGetSpecType) ExpirationExpirationTtlValidationRuleHandler(rules
 		return nil, errors.Wrap(err, "ValidationRuleHandler for expiration_ttl")
 	}
 	return oValidatorFn_ExpirationTtl, nil
+}
+
+func (v *ValidateGetSpecType) DestinationValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "MessageValidationRuleHandler for destination")
+	}
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		if err := DestinationValidator().Validate(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		return nil
+	}
+
+	return validatorFn, nil
 }
 
 func (v *ValidateGetSpecType) IpPrefixesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
@@ -1371,6 +1407,17 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 
 	v.FldValidators["expiration.expiration_ttl"] = vFnMap["expiration.expiration_ttl"]
 
+	vrhDestination := v.DestinationValidationRuleHandler
+	rulesDestination := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhDestination(rulesDestination)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GetSpecType.destination: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["destination"] = vFn
+
 	vrhIpPrefixes := v.IpPrefixesValidationRuleHandler
 	rulesIpPrefixes := map[string]string{
 		"ves.io.schema.rules.repeated.items.string.ipv4_prefix": "true",
@@ -1436,8 +1483,6 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["paths"] = vFn
-
-	v.FldValidators["destination"] = DestinationValidator().Validate
 
 	return v
 }()
@@ -1528,6 +1573,27 @@ func (v *ValidateGlobalSpecType) ExpirationExpirationTtlValidationRuleHandler(ru
 		return nil, errors.Wrap(err, "ValidationRuleHandler for expiration_ttl")
 	}
 	return oValidatorFn_ExpirationTtl, nil
+}
+
+func (v *ValidateGlobalSpecType) DestinationValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "MessageValidationRuleHandler for destination")
+	}
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		if err := DestinationValidator().Validate(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		return nil
+	}
+
+	return validatorFn, nil
 }
 
 func (v *ValidateGlobalSpecType) IpPrefixesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
@@ -1904,6 +1970,17 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 
 	v.FldValidators["expiration.expiration_ttl"] = vFnMap["expiration.expiration_ttl"]
 
+	vrhDestination := v.DestinationValidationRuleHandler
+	rulesDestination := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhDestination(rulesDestination)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.destination: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["destination"] = vFn
+
 	vrhIpPrefixes := v.IpPrefixesValidationRuleHandler
 	rulesIpPrefixes := map[string]string{
 		"ves.io.schema.rules.repeated.items.string.ipv4_prefix": "true",
@@ -1969,8 +2046,6 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["paths"] = vFn
-
-	v.FldValidators["destination"] = DestinationValidator().Validate
 
 	return v
 }()
@@ -2061,6 +2136,27 @@ func (v *ValidateReplaceSpecType) ExpirationExpirationTtlValidationRuleHandler(r
 		return nil, errors.Wrap(err, "ValidationRuleHandler for expiration_ttl")
 	}
 	return oValidatorFn_ExpirationTtl, nil
+}
+
+func (v *ValidateReplaceSpecType) DestinationValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "MessageValidationRuleHandler for destination")
+	}
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		if err := DestinationValidator().Validate(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		return nil
+	}
+
+	return validatorFn, nil
 }
 
 func (v *ValidateReplaceSpecType) IpPrefixesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
@@ -2428,6 +2524,17 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 
 	v.FldValidators["expiration.expiration_ttl"] = vFnMap["expiration.expiration_ttl"]
 
+	vrhDestination := v.DestinationValidationRuleHandler
+	rulesDestination := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhDestination(rulesDestination)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ReplaceSpecType.destination: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["destination"] = vFn
+
 	vrhIpPrefixes := v.IpPrefixesValidationRuleHandler
 	rulesIpPrefixes := map[string]string{
 		"ves.io.schema.rules.repeated.items.string.ipv4_prefix": "true",
@@ -2493,8 +2600,6 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["paths"] = vFn
-
-	v.FldValidators["destination"] = DestinationValidator().Validate
 
 	return v
 }()

@@ -21,50 +21,40 @@ resource "volterra_http_loadbalancer" "example" {
   namespace = "staging"
 
   // One of the arguments from this list "do_not_advertise advertise_on_public_default_vip advertise_on_public advertise_custom" must be set
+  do_not_advertise = true
 
-  advertise_custom {
-    advertise_where {
-      // One of the arguments from this list "site virtual_site vk8s_service virtual_network" must be set
-
-      virtual_network {
-        // One of the arguments from this list "default_vip specific_vip" must be set
-        default_vip = true
-
-        virtual_network {
-          name      = "test1"
-          namespace = "staging"
-          tenant    = "acmecorp"
-        }
-      }
-
-      // One of the arguments from this list "use_default_port port" must be set
-      use_default_port = true
-    }
-  }
   // One of the arguments from this list "disable_api_definition api_definition api_definitions" must be set
   disable_api_definition = true
 
-  // One of the arguments from this list "enable_api_discovery disable_api_discovery" must be set
+  // One of the arguments from this list "disable_api_discovery enable_api_discovery" must be set
 
   enable_api_discovery {
     // One of the arguments from this list "disable_learn_from_redirect_traffic enable_learn_from_redirect_traffic" must be set
     disable_learn_from_redirect_traffic = true
   }
+  // One of the arguments from this list "no_challenge js_challenge captcha_challenge policy_based_challenge" must be set
+  no_challenge = true
 
-  // One of the arguments from this list "captcha_challenge policy_based_challenge no_challenge js_challenge" must be set
-
-  js_challenge {
-    cookie_expiry   = "1000"
-    custom_page     = "string:///PHA+IFBsZWFzZSBXYWl0IDwvcD4="
-    js_script_delay = "1000"
-  }
   // One of the arguments from this list "enable_ddos_detection disable_ddos_detection" must be set
-  disable_ddos_detection = true
-  domains = ["www.foo.com"]
-  // One of the arguments from this list "ring_hash round_robin least_active random source_ip_stickiness cookie_stickiness" must be set
-  random = true
 
-  // One of the arguments from this list "https http https_auto_cert" must be set
+  enable_ddos_detection {
+    // One of the arguments from this list "enable_auto_mitigation disable_auto_mitigation" must be set
+    enable_auto_mitigation = true
+  }
+  domains = ["www.foo.com"]
+
+  // One of the arguments from this list "round_robin least_active random source_ip_stickiness cookie_stickiness ring_hash" must be set
+
+  ring_hash {
+    hash_policy {
+      // One of the arguments from this list "header_name cookie source_ip" must be set
+      header_name = "host"
+
+      terminal = true
+    }
+  }
+
+  // One of the arguments from this list "https_auto_cert https http" must be set
 
   http {
     dns_volterra_managed = true
@@ -74,28 +64,20 @@ resource "volterra_http_loadbalancer" "example" {
   enable_malicious_user_detection = true
   // One of the arguments from this list "disable_rate_limit api_rate_limit rate_limit" must be set
   disable_rate_limit = true
-
   // One of the arguments from this list "service_policies_from_namespace no_service_policies active_service_policies" must be set
-
-  active_service_policies {
-    policies {
-      name      = "test1"
-      namespace = "staging"
-      tenant    = "acmecorp"
-    }
-  }
+  service_policies_from_namespace = true
   // One of the arguments from this list "disable_trust_client_ip_headers enable_trust_client_ip_headers" must be set
   disable_trust_client_ip_headers = true
-
   // One of the arguments from this list "user_id_client_ip user_identification" must be set
+  user_id_client_ip = true
 
-  user_identification {
+  // One of the arguments from this list "app_firewall disable_waf waf waf_rule" must be set
+
+  app_firewall {
     name      = "test1"
     namespace = "staging"
     tenant    = "acmecorp"
   }
-  // One of the arguments from this list "disable_waf waf waf_rule app_firewall" must be set
-  disable_waf = true
 }
 
 ```
@@ -161,21 +143,23 @@ Argument Reference
 
 `cors_policy` - (Optional) resources from a server at a different origin. See [Cors Policy ](#cors-policy) below for details.
 
-`csrf_policy` - (Optional) Policy configuration to protect against CSRF attacks.. See [Csrf Policy ](#csrf-policy) below for details.
+`csrf_policy` - (Optional) Because CSRF attacks specifically target state-changing requests, the policy only acts on the HTTP requests that have state-changing method (PUT,POST, etc.).. See [Csrf Policy ](#csrf-policy) below for details.
 
 `data_guard_rules` - (Optional) Note: App Firewall should be enabled, to use Data Guard feature.. See [Data Guard Rules ](#data-guard-rules) below for details.
 
 `disable_ddos_detection` - (Optional) x-displayName: "Disable" (bool).
 
-`enable_ddos_detection` - (Optional) x-displayName: "Enable" (bool).
+`enable_ddos_detection` - (Optional) x-displayName: "Enable". See [Enable Ddos Detection ](#enable-ddos-detection) below for details.
 
-`ddos_mitigation_rules` - (Optional) Rules that specify the DDoS clients to be blocked. See [Ddos Mitigation Rules ](#ddos-mitigation-rules) below for details.
+`ddos_mitigation_rules` - (Optional) Define manual mitigation rules to block L7 DDos attacks.. See [Ddos Mitigation Rules ](#ddos-mitigation-rules) below for details.
 
 `default_route_pools` - (Optional) Origin Pools used when no route is specified (default route). See [Default Route Pools ](#default-route-pools) below for details.
 
 `domains` - (Required) Domains also indicate the list of names for which DNS resolution will be done by VER (`List of String`).
 
-`cookie_stickiness` - (Optional) Request are sent to all eligible origin servers using hash of source ip. Consistent hashing algorithm, ring hash, is used to select origin server. See [Cookie Stickiness ](#cookie-stickiness) below for details.
+`graphql_rules` - (Optional) queries and prevent GraphQL tailored attacks.. See [Graphql Rules ](#graphql-rules) below for details.
+
+`cookie_stickiness` - (Optional) Consistent hashing algorithm, ring hash, is used to select origin server. See [Cookie Stickiness ](#cookie-stickiness) below for details.
 
 `least_active` - (Optional) Request are sent to origin server that has least active requests (bool).
 
@@ -245,7 +229,7 @@ Argument Reference
 
 `waf_rule` - (Optional) Reference to WAF Rules configuration object. See [ref](#ref) below for details.
 
-`waf_exclusion_rules` - (Optional) The match criteria include domain, path and method.. See [Waf Exclusion Rules ](#waf-exclusion-rules) below for details.
+`waf_exclusion_rules` - (Optional) When an exclusion rule is matched, then this exclusion rule takes effect and no more rules are evaluated.. See [Waf Exclusion Rules ](#waf-exclusion-rules) below for details.
 
 ### Account Management
 
@@ -269,6 +253,14 @@ Apply the specified list of service policies and bypass the namespace service po
 
 `policies` - (Required) If all policies are evaluated and none match, then the request will be denied by default.. See [ref](#ref) below for details.
 
+### Add Httponly
+
+Add httponly attribute.
+
+### Add Secure
+
+Add secure attribute.
+
 ### Additional Domains
 
 Wildcard names are supported in the suffix or prefix form.
@@ -289,9 +281,13 @@ Advanced options configuration like timeouts, circuit breaker, subset load balan
 
 `header_transformation_type` - (Optional) Settings to normalize the headers of upstream requests.. See [Header Transformation Type ](#header-transformation-type) below for details.
 
-`http2_options` - (Optional) Http2 Protocol options for upstream connections. See [Http2 Options ](#http2-options) below for details.
-
 `http_idle_timeout` - (Optional) This is specified in milliseconds. The default value is 5 minutes. (`Int`).
+
+`auto_http_config` - (Optional) and will use whichever protocol is negotiated by ALPN with the upstream. (bool).
+
+`http1_config` - (Optional) Enable HTTP/1.1 for upstream connections (bool).
+
+`http2_options` - (Optional) Enable HTTP/2 for upstream connections.. See [Http2 Options ](#http2-options) below for details.
 
 `disable_outlier_detection` - (Optional) Outlier detection is disabled (bool).
 
@@ -364,6 +360,10 @@ Select any origin server from available healthy origin servers in this pool.
 ### Any Ip
 
 Any Source IP.
+
+### Any Path
+
+Match all paths.
 
 ### Api Definitions
 
@@ -445,13 +445,13 @@ Define rate limiting for one or more API endpoints.
 
 Define the list of Signature IDs, Violations, Attack Types and Bot Names that should be excluded from triggering on the defined match criteria..
 
-`exclude_attack_type_contexts` - (Optional) App Firewall attack types contexts to be excluded for this request. See [Exclude Attack Type Contexts ](#exclude-attack-type-contexts) below for details.
+`exclude_attack_type_contexts` - (Optional) Attack Types to be excluded for the defined match criteria. See [Exclude Attack Type Contexts ](#exclude-attack-type-contexts) below for details.
 
-`exclude_bot_name_contexts` - (Optional) Bot names contexts to be excluded for this request. See [Exclude Bot Name Contexts ](#exclude-bot-name-contexts) below for details.
+`exclude_bot_name_contexts` - (Optional) Bot Names to be excluded for the defined match criteria. See [Exclude Bot Name Contexts ](#exclude-bot-name-contexts) below for details.
 
-`exclude_signature_contexts` - (Optional) App Firewall signature contexts to be excluded for this request. See [Exclude Signature Contexts ](#exclude-signature-contexts) below for details.
+`exclude_signature_contexts` - (Optional) Signature IDs to be excluded for the defined match criteria. See [Exclude Signature Contexts ](#exclude-signature-contexts) below for details.
 
-`exclude_violation_contexts` - (Optional) App Firewall violation contexts to be excluded for this request. See [Exclude Violation Contexts ](#exclude-violation-contexts) below for details.
+`exclude_violation_contexts` - (Optional) Violations to be excluded for the defined match criteria. See [Exclude Violation Contexts ](#exclude-violation-contexts) below for details.
 
 ### Append Headers
 
@@ -498,6 +498,10 @@ x-displayName: "Authentication".
 ### Auto Host Rewrite
 
 Host header will be swapped with hostname of upstream host chosen by the cluster.
+
+### Auto Http Config
+
+and will use whichever protocol is negotiated by ALPN with the upstream..
 
 ### Automatic Port
 
@@ -683,9 +687,25 @@ Specify origin server with Hashi Corp Consul service name and site information.
 
 Hash based on cookie.
 
+`add_httponly` - (Optional) Add httponly attribute (bool).
+
+`ignore_httponly` - (Optional) Ignore httponly attribute (bool).
+
 `name` - (Required) produced (`String`).
 
 `path` - (Optional) will be set for the cookie (`String`).
+
+`ignore_samesite` - (Optional) Ignore Samesite attribute (bool).
+
+`samesite_lax` - (Optional) Add Samesite attribute with Lax. Means that the cookie is not sent on cross-site requests (bool).
+
+`samesite_none` - (Optional) Add Samesite attribute with None. Means that the browser sends the cookie with both cross-site and same-site requests (bool).
+
+`samesite_strict` - (Optional) Add Samesite attribute with Strict. Means that the browser sends the cookie only for same-site requests (bool).
+
+`add_secure` - (Optional) Add secure attribute (bool).
+
+`ignore_secure` - (Optional) Ignore secure attribute (bool).
 
 `ttl` - (Optional) be a session cookie. TTL value is in milliseconds (`Int`).
 
@@ -707,13 +727,55 @@ Note that all specified cookie matcher predicates must evaluate to true..
 
 ### Cookie Stickiness
 
-Request are sent to all eligible origin servers using hash of source ip. Consistent hashing algorithm, ring hash, is used to select origin server.
+Consistent hashing algorithm, ring hash, is used to select origin server.
+
+`add_httponly` - (Optional) Add httponly attribute (bool).
+
+`ignore_httponly` - (Optional) Ignore httponly attribute (bool).
 
 `name` - (Required) produced (`String`).
 
 `path` - (Optional) will be set for the cookie (`String`).
 
+`ignore_samesite` - (Optional) Ignore Samesite attribute (bool).
+
+`samesite_lax` - (Optional) Add Samesite attribute with Lax. Means that the cookie is not sent on cross-site requests (bool).
+
+`samesite_none` - (Optional) Add Samesite attribute with None. Means that the browser sends the cookie with both cross-site and same-site requests (bool).
+
+`samesite_strict` - (Optional) Add Samesite attribute with Strict. Means that the browser sends the cookie only for same-site requests (bool).
+
+`add_secure` - (Optional) Add secure attribute (bool).
+
+`ignore_secure` - (Optional) Ignore secure attribute (bool).
+
 `ttl` - (Optional) be a session cookie. TTL value is in milliseconds (`Int`).
+
+### Cookies To Modify
+
+List of cookies to be modified from the HTTP response being sent towards downstream..
+
+`add_httponly` - (Optional) Add httponly attribute (bool).
+
+`ignore_httponly` - (Optional) Ignore httponly attribute (bool).
+
+`ignore_max_age` - (Optional) Ignore max age attribute (bool).
+
+`max_age_value` - (Optional) Add max age attribute (`Int`).
+
+`name` - (Required) Name of the Cookie (`String`).
+
+`ignore_samesite` - (Optional) Ignore Samesite attribute (bool).
+
+`samesite_lax` - (Optional) Add Samesite attribute with Lax. Means that the cookie is not sent on cross-site requests (bool).
+
+`samesite_none` - (Optional) Add Samesite attribute with None. Means that the browser sends the cookie with both cross-site and same-site requests (bool).
+
+`samesite_strict` - (Optional) Add Samesite attribute with Strict. Means that the browser sends the cookie only for same-site requests (bool).
+
+`add_secure` - (Optional) Add secure attribute (bool).
+
+`ignore_secure` - (Optional) Ignore secure attribute (bool).
 
 ### Cors Policy
 
@@ -743,7 +805,7 @@ x-displayName: "Account Creation".
 
 ### Csrf Policy
 
-Policy configuration to protect against CSRF attacks..
+Because CSRF attacks specifically target state-changing requests, the policy only acts on the HTTP requests that have state-changing method (PUT,POST, etc.)..
 
 `all_load_balancer_domains` - (Optional) Add All load balancer domains to source origin (allow) list. (bool).
 
@@ -819,7 +881,7 @@ Combination of Region, ASN and TLS Fingerprints.
 
 ### Ddos Mitigation Rules
 
-Rules that specify the DDoS clients to be blocked.
+Define manual mitigation rules to block L7 DDos attacks..
 
 `expiration_timestamp` - (Optional) the configuration but is not applied anymore. (`String`).
 
@@ -941,6 +1003,10 @@ A direct response route matches on path and/or HTTP method and responds directly
 
 `route_direct_response` - (Optional) Send direct response. See [Route Direct Response ](#route-direct-response) below for details.
 
+### Disable Auto Mitigation
+
+x-displayName: "Disable".
+
 ### Disable Circuit Breaker
 
 Circuit Breaker is disabled.
@@ -956,6 +1022,10 @@ x-displayName: "Disable".
 ### Disable Host Rewrite
 
 Host header is not modified.
+
+### Disable Introspection
+
+Disable introspection queries for the load balancer..
 
 ### Disable Js Insert
 
@@ -1011,9 +1081,17 @@ x-displayName: "Enable".
 
 `enable_learn_from_redirect_traffic` - (Optional) Enable learning API patterns from traffic with redirect response codes 3xx (bool).
 
+### Enable Auto Mitigation
+
+x-displayName: "Enable".
+
 ### Enable Ddos Detection
 
 x-displayName: "Enable".
+
+`disable_auto_mitigation` - (Optional) x-displayName: "Disable" (bool).
+
+`enable_auto_mitigation` - (Optional) x-displayName: "Enable" (bool).
 
 ### Enable Discovery
 
@@ -1022,6 +1100,10 @@ x-displayName: "Enable".
 `disable_learn_from_redirect_traffic` - (Optional) Disable learning API patterns from traffic with redirect response codes 3xx (bool).
 
 `enable_learn_from_redirect_traffic` - (Optional) Enable learning API patterns from traffic with redirect response codes 3xx (bool).
+
+### Enable Introspection
+
+Enable introspection queries for the load balancer..
 
 ### Enable Ip Reputation
 
@@ -1069,13 +1151,13 @@ List of subset class. Subsets class is defined using list of keys. Every unique 
 
 ### Exclude Attack Type Contexts
 
-App Firewall attack types contexts to be excluded for this request.
+Attack Types to be excluded for the defined match criteria.
 
 `exclude_attack_type` - (Required) x-required (`String`).
 
 ### Exclude Bot Name Contexts
 
-Bot names contexts to be excluded for this request.
+Bot Names to be excluded for the defined match criteria.
 
 `bot_name` - (Required) x-example: "Hydra" (`String`).
 
@@ -1093,13 +1175,13 @@ Optional JavaScript insertions exclude list of domain and path matchers..
 
 ### Exclude Signature Contexts
 
-App Firewall signature contexts to be excluded for this request.
+Signature IDs to be excluded for the defined match criteria.
 
 `signature_id` - (Required) x-required (`Int`).
 
 ### Exclude Violation Contexts
 
-App Firewall violation contexts to be excluded for this request.
+Violations to be excluded for the defined match criteria.
 
 `exclude_violation` - (Required) x-required (`String`).
 
@@ -1135,7 +1217,7 @@ x-displayName: "Flight Search".
 
 ### Flow Label
 
-x-displayName: "Specify flow label category".
+x-displayName: "Specify Endpoint label category".
 
 `account_management` - (Optional) x-displayName: "Account Management". See [Account Management ](#account-management) below for details.
 
@@ -1158,6 +1240,40 @@ x-displayName: "Purchase with Gift Card".
 ### Gift Card Validation
 
 x-displayName: "Gift Card Validation".
+
+### Graphql Rules
+
+queries and prevent GraphQL tailored attacks..
+
+`any_domain` - (Optional) Enable GraphQL inspection for any domain (bool).
+
+`exact_value` - (Optional) Exact domain name (`String`).
+
+`suffix_value` - (Optional) Suffix of domain name e.g "xyz.com" will match "*.xyz.com" and "xyz.com" (`String`).
+
+`exact_path` - (Required) GraphQL endpoint. Default value is /graphql. (`String`).
+
+`graphql_settings` - (Optional) GraphQL configuration.. See [Graphql Settings ](#graphql-settings) below for details.
+
+`metadata` - (Required) Common attributes for the rule including name and description.. See [Metadata ](#metadata) below for details.
+
+### Graphql Settings
+
+GraphQL configuration..
+
+`disable_introspection` - (Optional) Disable introspection queries for the load balancer. (bool).
+
+`enable_introspection` - (Optional) Enable introspection queries for the load balancer. (bool).
+
+`max_batched_queries` - (Required) Specify maximum number of queries in a single batched request. (`Int`).
+
+`max_depth` - (Required) Specify maximum depth for the GraphQL query. (`Int`).
+
+`max_total_length` - (Required) Specify maximum length in bytes for the GraphQL query. (`Int`).
+
+`max_value_length` - (Required) Specify maximum value length in bytes for the GraphQL query. (`Int`).
+
+`policy_name` - (Optional) Sets the BD Policy to use (`String`).
 
 ### Hash Policy
 
@@ -1215,9 +1331,13 @@ HTTP Load Balancer..
 
 `port` - (Optional) x-example: "80" (`Int`).
 
+### Http1 Config
+
+Enable HTTP/1.1 for upstream connections.
+
 ### Http2 Options
 
-Http2 Protocol options for upstream connections.
+Enable HTTP/2 for upstream connections..
 
 ### Http Header
 
@@ -1230,6 +1350,8 @@ Request header name and value pairs.
 User is responsible for managing DNS to this load balancer..
 
 `add_hsts` - (Optional) Add HTTP Strict-Transport-Security response header (`Bool`).
+
+`connection_idle_timeout` - (Optional) This is specified in milliseconds. The default value is 2 minutes. (`Int`).
 
 `default_loadbalancer` - (Optional) x-displayName: "Yes" (bool).
 
@@ -1261,6 +1383,8 @@ or a DNS CNAME record should be created in your DNS provider's portal..
 
 `add_hsts` - (Optional) Add HTTP Strict-Transport-Security response header (`Bool`).
 
+`connection_idle_timeout` - (Optional) This is specified in milliseconds. The default value is 2 minutes. (`Int`).
+
 `default_loadbalancer` - (Optional) x-displayName: "Yes" (bool).
 
 `non_default_loadbalancer` - (Optional) x-displayName: "No" (bool).
@@ -1288,6 +1412,22 @@ or a DNS CNAME record should be created in your DNS provider's portal..
 `server_name` - (Optional) This will overwrite existing values, if any, for the server header. (`String`).
 
 `tls_config` - (Optional) Configuration of TLS settings such as min/max TLS version and ciphersuites. See [Tls Config ](#tls-config) below for details.
+
+### Ignore Httponly
+
+Ignore httponly attribute.
+
+### Ignore Max Age
+
+Ignore max age attribute.
+
+### Ignore Samesite
+
+Ignore Samesite attribute.
+
+### Ignore Secure
+
+Ignore secure attribute.
 
 ### Inline Rate Limiter
 
@@ -1487,6 +1627,8 @@ More options like header manipulation, compression etc..
 
 `compression_params` - (Optional) Only GZIP compression is supported. See [Compression Params ](#compression-params) below for details.
 
+`cookies_to_modify` - (Optional) List of cookies to be modified from the HTTP response being sent towards downstream.. See [Cookies To Modify ](#cookies-to-modify) below for details.
+
 `custom_errors` - (Optional) matches for a request. (`String`).
 
 `disable_default_error_pages` - (Optional) Disable the use of default F5XC error pages. (`Bool`).
@@ -1615,9 +1757,9 @@ URI path matcher..
 
 `path` - (Optional) Exact path value to match (`String`).
 
-`prefix` - (Optional) Path prefix to match (`String`).
+`prefix` - (Optional) Path prefix to match (e.g. the value / will match on all paths) (`String`).
 
-`regex` - (Optional) Regular expression of path match (`String`).
+`regex` - (Optional) Regular expression of path match (e.g. the value .* will match on all paths) (`String`).
 
 ### Policies
 
@@ -1759,7 +1901,7 @@ List of protected application endpoints (max 128 items)..
 
 `domain` - (Optional) Domain matcher.. See [Domain ](#domain) below for details.
 
-`flow_label` - (Optional) x-displayName: "Specify flow label category". See [Flow Label ](#flow-label) below for details.
+`flow_label` - (Optional) x-displayName: "Specify Endpoint label category". See [Flow Label ](#flow-label) below for details.
 
 `undefined_flow_label` - (Optional) x-displayName: "Undefined" (bool).
 
@@ -1979,6 +2121,18 @@ Required list of pages to insert Bot Defense client JavaScript..
 
 Health check is performed on endpoint port itself.
 
+### Samesite Lax
+
+Add Samesite attribute with Lax. Means that the cookie is not sent on cross-site requests.
+
+### Samesite None
+
+Add Samesite attribute with None. Means that the browser sends the cookie with both cross-site and same-site requests.
+
+### Samesite Strict
+
+Add Samesite attribute with Strict. Means that the browser sends the cookie only for same-site requests.
+
 ### Search
 
 x-displayName: "Search".
@@ -2125,7 +2279,7 @@ ML Config applied on this load balancer.
 
 `disable_ddos_detection` - (Optional) x-displayName: "Disable" (bool).
 
-`enable_ddos_detection` - (Optional) x-displayName: "Enable" (bool).
+`enable_ddos_detection` - (Optional) x-displayName: "Enable". See [Enable Ddos Detection ](#enable-ddos-detection) below for details.
 
 `disable_malicious_user_detection` - (Optional) x-displayName: "Disable" (bool).
 
@@ -2383,7 +2537,7 @@ Perform origin server verification using F5XC default trusted CA list.
 
 ### Waf Exclusion Rules
 
-The match criteria include domain, path and method..
+When an exclusion rule is matched, then this exclusion rule takes effect and no more rules are evaluated..
 
 `any_domain` - (Optional) Apply this WAF exclusion rule for any domain (bool).
 
@@ -2399,7 +2553,11 @@ The match criteria include domain, path and method..
 
 `methods` - (Optional) methods to be matched (`List of Strings`).
 
-`path_regex` - (Required) path regex to be matched (`String`).
+`any_path` - (Optional) Match all paths (bool).
+
+`path_prefix` - (Optional) Path prefix to match (e.g. the value / will match on all paths) (`String`).
+
+`path_regex` - (Optional) Define the regex for the path. For example, the regex ^/.*$ will match on all paths (`String`).
 
 `app_firewall_detection_control` - (Optional) Define the list of Signature IDs, Violations, Attack Types and Bot Names that should be excluded from triggering on the defined match criteria.. See [App Firewall Detection Control ](#app-firewall-detection-control) below for details.
 

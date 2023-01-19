@@ -282,6 +282,84 @@ func KeysValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *LogField) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *LogField) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *LogField) DeepCopy() *LogField {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &LogField{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *LogField) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *LogField) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return LogFieldValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateLogField struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateLogField) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*LogField)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *LogField got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("name"))
+		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultLogFieldValidator = func() *ValidateLogField {
+	v := &ValidateLogField{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func LogFieldValidator() db.Validator {
+	return DefaultLogFieldValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *MetricDef) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }

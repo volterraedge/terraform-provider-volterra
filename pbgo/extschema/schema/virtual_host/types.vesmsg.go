@@ -2073,6 +2073,64 @@ func (v *ValidateCreateSpecType) RateLimiterAllowedPrefixesValidationRuleHandler
 	return validatorFn, nil
 }
 
+func (v *ValidateCreateSpecType) CookiesToModifyValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for cookies_to_modify")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema.CookieManipulationOptionType, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := ves_io_schema.CookieManipulationOptionTypeValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for cookies_to_modify")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema.CookieManipulationOptionType)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema.CookieManipulationOptionType, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated cookies_to_modify")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items cookies_to_modify")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateCreateSpecType) ConnectionIdleTimeoutValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for connection_idle_timeout")
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*CreateSpecType)
 	if !ok {
@@ -2194,6 +2252,23 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 
 		vOpts := append(opts, db.WithValidateField("compression_params"))
 		if err := fv(ctx, m.GetCompressionParams(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["connection_idle_timeout"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("connection_idle_timeout"))
+		if err := fv(ctx, m.GetConnectionIdleTimeout(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["cookies_to_modify"]; exists {
+		vOpts := append(opts, db.WithValidateField("cookies_to_modify"))
+		if err := fv(ctx, m.GetCookiesToModify(), vOpts...); err != nil {
 			return err
 		}
 
@@ -2720,6 +2795,31 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["rate_limiter_allowed_prefixes"] = vFn
+
+	vrhCookiesToModify := v.CookiesToModifyValidationRuleHandler
+	rulesCookiesToModify := map[string]string{
+		"ves.io.schema.rules.repeated.items.string.max_bytes": "256",
+		"ves.io.schema.rules.repeated.items.string.min_bytes": "1",
+		"ves.io.schema.rules.repeated.max_items":              "32",
+		"ves.io.schema.rules.repeated.unique":                 "true",
+	}
+	vFn, err = vrhCookiesToModify(rulesCookiesToModify)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateSpecType.cookies_to_modify: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["cookies_to_modify"] = vFn
+
+	vrhConnectionIdleTimeout := v.ConnectionIdleTimeoutValidationRuleHandler
+	rulesConnectionIdleTimeout := map[string]string{
+		"ves.io.schema.rules.uint32.lte": "600000",
+	}
+	vFn, err = vrhConnectionIdleTimeout(rulesConnectionIdleTimeout)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateSpecType.connection_idle_timeout: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["connection_idle_timeout"] = vFn
 
 	v.FldValidators["authentication_choice.authentication"] = AuthenticationDetailsValidator().Validate
 
@@ -4329,6 +4429,64 @@ func (v *ValidateGetSpecType) RateLimiterAllowedPrefixesValidationRuleHandler(ru
 	return validatorFn, nil
 }
 
+func (v *ValidateGetSpecType) CookiesToModifyValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for cookies_to_modify")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema.CookieManipulationOptionType, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := ves_io_schema.CookieManipulationOptionTypeValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for cookies_to_modify")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema.CookieManipulationOptionType)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema.CookieManipulationOptionType, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated cookies_to_modify")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items cookies_to_modify")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateGetSpecType) ConnectionIdleTimeoutValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for connection_idle_timeout")
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*GetSpecType)
 	if !ok {
@@ -4468,6 +4626,23 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 
 		vOpts := append(opts, db.WithValidateField("compression_params"))
 		if err := fv(ctx, m.GetCompressionParams(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["connection_idle_timeout"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("connection_idle_timeout"))
+		if err := fv(ctx, m.GetConnectionIdleTimeout(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["cookies_to_modify"]; exists {
+		vOpts := append(opts, db.WithValidateField("cookies_to_modify"))
+		if err := fv(ctx, m.GetCookiesToModify(), vOpts...); err != nil {
 			return err
 		}
 
@@ -5048,6 +5223,31 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["rate_limiter_allowed_prefixes"] = vFn
+
+	vrhCookiesToModify := v.CookiesToModifyValidationRuleHandler
+	rulesCookiesToModify := map[string]string{
+		"ves.io.schema.rules.repeated.items.string.max_bytes": "256",
+		"ves.io.schema.rules.repeated.items.string.min_bytes": "1",
+		"ves.io.schema.rules.repeated.max_items":              "32",
+		"ves.io.schema.rules.repeated.unique":                 "true",
+	}
+	vFn, err = vrhCookiesToModify(rulesCookiesToModify)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GetSpecType.cookies_to_modify: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["cookies_to_modify"] = vFn
+
+	vrhConnectionIdleTimeout := v.ConnectionIdleTimeoutValidationRuleHandler
+	rulesConnectionIdleTimeout := map[string]string{
+		"ves.io.schema.rules.uint32.lte": "600000",
+	}
+	vFn, err = vrhConnectionIdleTimeout(rulesConnectionIdleTimeout)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GetSpecType.connection_idle_timeout: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["connection_idle_timeout"] = vFn
 
 	v.FldValidators["authentication_choice.authentication"] = AuthenticationDetailsValidator().Validate
 
@@ -6517,6 +6717,64 @@ func (v *ValidateGlobalSpecType) MaliciousUserMitigationValidationRuleHandler(ru
 	return validatorFn, nil
 }
 
+func (v *ValidateGlobalSpecType) CookiesToModifyValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for cookies_to_modify")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema.CookieManipulationOptionType, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := ves_io_schema.CookieManipulationOptionTypeValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for cookies_to_modify")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema.CookieManipulationOptionType)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema.CookieManipulationOptionType, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated cookies_to_modify")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items cookies_to_modify")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateGlobalSpecType) ConnectionIdleTimeoutValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for connection_idle_timeout")
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateGlobalSpecType) DnsDomainsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
 	itemRules := db.GetRepMessageItemRules(rules)
@@ -7007,6 +7265,23 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["connection_idle_timeout"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("connection_idle_timeout"))
+		if err := fv(ctx, m.GetConnectionIdleTimeout(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["cookies_to_modify"]; exists {
+		vOpts := append(opts, db.WithValidateField("cookies_to_modify"))
+		if err := fv(ctx, m.GetCookiesToModify(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["cors_policy"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("cors_policy"))
@@ -7020,6 +7295,15 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 		vOpts := append(opts, db.WithValidateField("csrf_policy"))
 		if err := fv(ctx, m.GetCsrfPolicy(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["custom_cert_expiry"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("custom_cert_expiry"))
+		if err := fv(ctx, m.GetCustomCertExpiry(), vOpts...); err != nil {
 			return err
 		}
 
@@ -7753,6 +8037,31 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["malicious_user_mitigation"] = vFn
+
+	vrhCookiesToModify := v.CookiesToModifyValidationRuleHandler
+	rulesCookiesToModify := map[string]string{
+		"ves.io.schema.rules.repeated.items.string.max_bytes": "256",
+		"ves.io.schema.rules.repeated.items.string.min_bytes": "1",
+		"ves.io.schema.rules.repeated.max_items":              "32",
+		"ves.io.schema.rules.repeated.unique":                 "true",
+	}
+	vFn, err = vrhCookiesToModify(rulesCookiesToModify)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.cookies_to_modify: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["cookies_to_modify"] = vFn
+
+	vrhConnectionIdleTimeout := v.ConnectionIdleTimeoutValidationRuleHandler
+	rulesConnectionIdleTimeout := map[string]string{
+		"ves.io.schema.rules.uint32.lte": "600000",
+	}
+	vFn, err = vrhConnectionIdleTimeout(rulesConnectionIdleTimeout)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.connection_idle_timeout: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["connection_idle_timeout"] = vFn
 
 	vrhDnsDomains := v.DnsDomainsValidationRuleHandler
 	rulesDnsDomains := map[string]string{
@@ -9381,6 +9690,64 @@ func (v *ValidateReplaceSpecType) RateLimiterAllowedPrefixesValidationRuleHandle
 	return validatorFn, nil
 }
 
+func (v *ValidateReplaceSpecType) CookiesToModifyValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for cookies_to_modify")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema.CookieManipulationOptionType, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := ves_io_schema.CookieManipulationOptionTypeValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for cookies_to_modify")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema.CookieManipulationOptionType)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema.CookieManipulationOptionType, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated cookies_to_modify")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items cookies_to_modify")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateReplaceSpecType) ConnectionIdleTimeoutValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for connection_idle_timeout")
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*ReplaceSpecType)
 	if !ok {
@@ -9502,6 +9869,23 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 
 		vOpts := append(opts, db.WithValidateField("compression_params"))
 		if err := fv(ctx, m.GetCompressionParams(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["connection_idle_timeout"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("connection_idle_timeout"))
+		if err := fv(ctx, m.GetConnectionIdleTimeout(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["cookies_to_modify"]; exists {
+		vOpts := append(opts, db.WithValidateField("cookies_to_modify"))
+		if err := fv(ctx, m.GetCookiesToModify(), vOpts...); err != nil {
 			return err
 		}
 
@@ -10028,6 +10412,31 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["rate_limiter_allowed_prefixes"] = vFn
+
+	vrhCookiesToModify := v.CookiesToModifyValidationRuleHandler
+	rulesCookiesToModify := map[string]string{
+		"ves.io.schema.rules.repeated.items.string.max_bytes": "256",
+		"ves.io.schema.rules.repeated.items.string.min_bytes": "1",
+		"ves.io.schema.rules.repeated.max_items":              "32",
+		"ves.io.schema.rules.repeated.unique":                 "true",
+	}
+	vFn, err = vrhCookiesToModify(rulesCookiesToModify)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ReplaceSpecType.cookies_to_modify: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["cookies_to_modify"] = vFn
+
+	vrhConnectionIdleTimeout := v.ConnectionIdleTimeoutValidationRuleHandler
+	rulesConnectionIdleTimeout := map[string]string{
+		"ves.io.schema.rules.uint32.lte": "600000",
+	}
+	vFn, err = vrhConnectionIdleTimeout(rulesConnectionIdleTimeout)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ReplaceSpecType.connection_idle_timeout: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["connection_idle_timeout"] = vFn
 
 	v.FldValidators["authentication_choice.authentication"] = AuthenticationDetailsValidator().Validate
 
@@ -11264,6 +11673,8 @@ func (m *CreateSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool
 	m.BufferPolicy = f.GetBufferPolicy()
 	m.GetChallengeTypeFromGlobalSpecType(f)
 	m.CompressionParams = f.GetCompressionParams()
+	m.ConnectionIdleTimeout = f.GetConnectionIdleTimeout()
+	m.CookiesToModify = f.GetCookiesToModify()
 	m.CorsPolicy = f.GetCorsPolicy()
 	m.CsrfPolicy = f.GetCsrfPolicy()
 	m.CustomErrors = f.GetCustomErrors()
@@ -11315,6 +11726,8 @@ func (m *CreateSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) 
 	f.BufferPolicy = m1.BufferPolicy
 	m1.SetChallengeTypeToGlobalSpecType(f)
 	f.CompressionParams = m1.CompressionParams
+	f.ConnectionIdleTimeout = m1.ConnectionIdleTimeout
+	f.CookiesToModify = m1.CookiesToModify
 	f.CorsPolicy = m1.CorsPolicy
 	f.CsrfPolicy = m1.CsrfPolicy
 	f.CustomErrors = m1.CustomErrors
@@ -11628,6 +12041,8 @@ func (m *GetSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	m.CdnService = f.GetCdnService()
 	m.GetChallengeTypeFromGlobalSpecType(f)
 	m.CompressionParams = f.GetCompressionParams()
+	m.ConnectionIdleTimeout = f.GetConnectionIdleTimeout()
+	m.CookiesToModify = f.GetCookiesToModify()
 	m.CorsPolicy = f.GetCorsPolicy()
 	m.CsrfPolicy = f.GetCsrfPolicy()
 	m.CustomErrors = f.GetCustomErrors()
@@ -11686,6 +12101,8 @@ func (m *GetSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	f.CdnService = m1.CdnService
 	m1.SetChallengeTypeToGlobalSpecType(f)
 	f.CompressionParams = m1.CompressionParams
+	f.ConnectionIdleTimeout = m1.ConnectionIdleTimeout
+	f.CookiesToModify = m1.CookiesToModify
 	f.CorsPolicy = m1.CorsPolicy
 	f.CsrfPolicy = m1.CsrfPolicy
 	f.CustomErrors = m1.CustomErrors
@@ -11967,6 +12384,8 @@ func (m *ReplaceSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy boo
 	m.BufferPolicy = f.GetBufferPolicy()
 	m.GetChallengeTypeFromGlobalSpecType(f)
 	m.CompressionParams = f.GetCompressionParams()
+	m.ConnectionIdleTimeout = f.GetConnectionIdleTimeout()
+	m.CookiesToModify = f.GetCookiesToModify()
 	m.CorsPolicy = f.GetCorsPolicy()
 	m.CsrfPolicy = f.GetCsrfPolicy()
 	m.CustomErrors = f.GetCustomErrors()
@@ -12018,6 +12437,8 @@ func (m *ReplaceSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool)
 	f.BufferPolicy = m1.BufferPolicy
 	m1.SetChallengeTypeToGlobalSpecType(f)
 	f.CompressionParams = m1.CompressionParams
+	f.ConnectionIdleTimeout = m1.ConnectionIdleTimeout
+	f.CookiesToModify = m1.CookiesToModify
 	f.CorsPolicy = m1.CorsPolicy
 	f.CsrfPolicy = m1.CsrfPolicy
 	f.CustomErrors = m1.CustomErrors

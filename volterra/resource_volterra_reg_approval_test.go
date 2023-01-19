@@ -132,6 +132,7 @@ func testRegApproval(name string) string {
 		  latitude = 50
 		  longitude = 50
 		  hostname = "master-0"
+		  tunnel_type = "SITE_TO_SITE_TUNNEL_IPSEC"
 		}
 		`, approvalResource, name)
 }

@@ -141,6 +141,15 @@ func (v *ValidateAccessInfo) Validate(ctx context.Context, pm interface{}, opts 
 
 	}
 
+	if fv, exists := v.FldValidators["tenant_status"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("tenant_status"))
+		if err := fv(ctx, m.GetTenantStatus(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	return nil
 }
 

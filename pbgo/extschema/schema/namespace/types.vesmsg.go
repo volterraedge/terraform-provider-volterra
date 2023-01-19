@@ -15,6 +15,7 @@ import (
 	"gopkg.volterra.us/stdlib/errors"
 
 	ves_io_schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+	ves_io_schema_views "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views"
 )
 
 var (
@@ -1091,6 +1092,8 @@ func (v *ValidateSuggestValuesResp) Validate(ctx context.Context, pm interface{}
 var DefaultSuggestValuesRespValidator = func() *ValidateSuggestValuesResp {
 	v := &ValidateSuggestValuesResp{FldValidators: map[string]db.ValidatorFunc{}}
 
+	v.FldValidators["items"] = SuggestedItemValidator().Validate
+
 	return v
 }()
 
@@ -1171,12 +1174,40 @@ func (v *ValidateSuggestedItem) Validate(ctx context.Context, pm interface{}, op
 
 	}
 
+	switch m.GetValueChoice().(type) {
+	case *SuggestedItem_StrValue:
+		if fv, exists := v.FldValidators["value_choice.str_value"]; exists {
+			val := m.GetValueChoice().(*SuggestedItem_StrValue).StrValue
+			vOpts := append(opts,
+				db.WithValidateField("value_choice"),
+				db.WithValidateField("str_value"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *SuggestedItem_RefValue:
+		if fv, exists := v.FldValidators["value_choice.ref_value"]; exists {
+			val := m.GetValueChoice().(*SuggestedItem_RefValue).RefValue
+			vOpts := append(opts,
+				db.WithValidateField("value_choice"),
+				db.WithValidateField("ref_value"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultSuggestedItemValidator = func() *ValidateSuggestedItem {
 	v := &ValidateSuggestedItem{FldValidators: map[string]db.ValidatorFunc{}}
+
+	v.FldValidators["value_choice.ref_value"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	return v
 }()

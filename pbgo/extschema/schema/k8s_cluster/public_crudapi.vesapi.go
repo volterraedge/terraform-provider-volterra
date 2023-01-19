@@ -2335,10 +2335,10 @@ var APISwaggerJSON string = `{
             "properties": {
                 "cluster_wide_apps": {
                     "type": "array",
-                    "description": " List of cluster wide applications\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 2\n  ves.io.schema.rules.repeated.min_items: 1\n",
+                    "description": " List of cluster wide applications\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 5\n  ves.io.schema.rules.repeated.min_items: 1\n",
                     "title": "Cluster Wide Application List",
                     "minItems": 1,
-                    "maxItems": 2,
+                    "maxItems": 5,
                     "items": {
                         "$ref": "#/definitions/k8s_clusterClusterWideAppType"
                     },
@@ -2346,7 +2346,7 @@ var APISwaggerJSON string = `{
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true",
-                        "ves.io.schema.rules.repeated.max_items": "2",
+                        "ves.io.schema.rules.repeated.max_items": "5",
                         "ves.io.schema.rules.repeated.min_items": "1"
                     }
                 }

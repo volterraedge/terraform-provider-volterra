@@ -89,6 +89,24 @@ func (c *ApiepCustomAPIGrpcClient) doRPCGetSwaggerSpec(ctx context.Context, yaml
 	return rsp, err
 }
 
+func (c *ApiepCustomAPIGrpcClient) doRPCGetTopAPIEndpoints(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
+	req := &GetTopAPIEndpointsReq{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.virtual_host.GetTopAPIEndpointsReq", yamlReq)
+	}
+	rsp, err := c.grpcClient.GetTopAPIEndpoints(ctx, req, opts...)
+	return rsp, err
+}
+
+func (c *ApiepCustomAPIGrpcClient) doRPCGetTopSensitiveData(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
+	req := &GetTopSensitiveDataReq{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.virtual_host.GetTopSensitiveDataReq", yamlReq)
+	}
+	rsp, err := c.grpcClient.GetTopSensitiveData(ctx, req, opts...)
+	return rsp, err
+}
+
 func (c *ApiepCustomAPIGrpcClient) DoRPC(ctx context.Context, rpc string, opts ...server.CustomCallOpt) (proto.Message, error) {
 	rpcFn, exists := c.rpcFns[rpc]
 	if !exists {
@@ -130,6 +148,10 @@ func NewApiepCustomAPIGrpcClient(cc *grpc.ClientConn) server.CustomClient {
 	rpcFns["GetApiEndpointsStats"] = ccl.doRPCGetApiEndpointsStats
 
 	rpcFns["GetSwaggerSpec"] = ccl.doRPCGetSwaggerSpec
+
+	rpcFns["GetTopAPIEndpoints"] = ccl.doRPCGetTopAPIEndpoints
+
+	rpcFns["GetTopSensitiveData"] = ccl.doRPCGetTopSensitiveData
 
 	ccl.rpcFns = rpcFns
 
@@ -445,9 +467,12 @@ func (c *ApiepCustomAPIRestClient) doRPCGetAPIEndpoints(ctx context.Context, cal
 		q := hReq.URL.Query()
 		_ = q
 		q.Add("api_endpoint_info_request", fmt.Sprintf("%v", req.ApiEndpointInfoRequest))
+		q.Add("apiep_category", fmt.Sprintf("%v", req.ApiepCategory))
 		q.Add("domains", fmt.Sprintf("%v", req.Domains))
+		q.Add("end_time", fmt.Sprintf("%v", req.EndTime))
 		q.Add("name", fmt.Sprintf("%v", req.Name))
 		q.Add("namespace", fmt.Sprintf("%v", req.Namespace))
+		q.Add("start_time", fmt.Sprintf("%v", req.StartTime))
 
 		hReq.URL.RawQuery += q.Encode()
 	case "delete":
@@ -662,6 +687,180 @@ func (c *ApiepCustomAPIRestClient) doRPCGetSwaggerSpec(ctx context.Context, call
 	return pbRsp, nil
 }
 
+func (c *ApiepCustomAPIRestClient) doRPCGetTopAPIEndpoints(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
+	if callOpts.URI == "" {
+		return nil, fmt.Errorf("Error, URI should be specified, got empty")
+	}
+	url := fmt.Sprintf("%s%s", c.baseURL, callOpts.URI)
+
+	yamlReq := callOpts.YAMLReq
+	req := &GetTopAPIEndpointsReq{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.virtual_host.GetTopAPIEndpointsReq: %s", yamlReq, err)
+	}
+
+	var hReq *http.Request
+	hm := strings.ToLower(callOpts.HTTPMethod)
+	switch hm {
+	case "post", "put":
+		jsn, err := codec.ToJSON(req, codec.ToWithUseProtoFieldName())
+		if err != nil {
+			return nil, errors.Wrap(err, "Custom RestClient converting YAML to JSON")
+		}
+		var op string
+		if hm == "post" {
+			op = http.MethodPost
+		} else {
+			op = http.MethodPut
+		}
+		newReq, err := http.NewRequest(op, url, bytes.NewBuffer([]byte(jsn)))
+		if err != nil {
+			return nil, errors.Wrapf(err, "Creating new HTTP %s request for custom API", op)
+		}
+		hReq = newReq
+	case "get":
+		newReq, err := http.NewRequest(http.MethodGet, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP GET request for custom API")
+		}
+		hReq = newReq
+		q := hReq.URL.Query()
+		_ = q
+		q.Add("apiep_summary_filter", fmt.Sprintf("%v", req.ApiepSummaryFilter))
+		q.Add("name", fmt.Sprintf("%v", req.Name))
+		q.Add("namespace", fmt.Sprintf("%v", req.Namespace))
+		q.Add("top_by_metric", fmt.Sprintf("%v", req.TopByMetric))
+		q.Add("topk", fmt.Sprintf("%v", req.Topk))
+
+		hReq.URL.RawQuery += q.Encode()
+	case "delete":
+		newReq, err := http.NewRequest(http.MethodDelete, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP DELETE request for custom API")
+		}
+		hReq = newReq
+	default:
+		return nil, fmt.Errorf("Error, invalid/empty HTTPMethod(%s) specified, should be POST|DELETE|GET", callOpts.HTTPMethod)
+	}
+	hReq = hReq.WithContext(ctx)
+	hReq.Header.Set("Content-Type", "application/json")
+	client.AddHdrsToReq(callOpts.Headers, hReq)
+
+	rsp, err := c.client.Do(hReq)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient")
+	}
+	defer rsp.Body.Close()
+
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
+		body, err := ioutil.ReadAll(rsp.Body)
+		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
+	}
+
+	body, err := ioutil.ReadAll(rsp.Body)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient read body")
+	}
+	pbRsp := &GetTopAPIEndpointsRsp{}
+	if err := codec.FromJSON(string(body), pbRsp); err != nil {
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.virtual_host.GetTopAPIEndpointsRsp", body)
+
+	}
+	if callOpts.OutCallResponse != nil {
+		callOpts.OutCallResponse.ProtoMsg = pbRsp
+		callOpts.OutCallResponse.JSON = string(body)
+	}
+	return pbRsp, nil
+}
+
+func (c *ApiepCustomAPIRestClient) doRPCGetTopSensitiveData(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
+	if callOpts.URI == "" {
+		return nil, fmt.Errorf("Error, URI should be specified, got empty")
+	}
+	url := fmt.Sprintf("%s%s", c.baseURL, callOpts.URI)
+
+	yamlReq := callOpts.YAMLReq
+	req := &GetTopSensitiveDataReq{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.virtual_host.GetTopSensitiveDataReq: %s", yamlReq, err)
+	}
+
+	var hReq *http.Request
+	hm := strings.ToLower(callOpts.HTTPMethod)
+	switch hm {
+	case "post", "put":
+		jsn, err := codec.ToJSON(req, codec.ToWithUseProtoFieldName())
+		if err != nil {
+			return nil, errors.Wrap(err, "Custom RestClient converting YAML to JSON")
+		}
+		var op string
+		if hm == "post" {
+			op = http.MethodPost
+		} else {
+			op = http.MethodPut
+		}
+		newReq, err := http.NewRequest(op, url, bytes.NewBuffer([]byte(jsn)))
+		if err != nil {
+			return nil, errors.Wrapf(err, "Creating new HTTP %s request for custom API", op)
+		}
+		hReq = newReq
+	case "get":
+		newReq, err := http.NewRequest(http.MethodGet, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP GET request for custom API")
+		}
+		hReq = newReq
+		q := hReq.URL.Query()
+		_ = q
+		q.Add("apiep_category", fmt.Sprintf("%v", req.ApiepCategory))
+		q.Add("domains", fmt.Sprintf("%v", req.Domains))
+		q.Add("name", fmt.Sprintf("%v", req.Name))
+		q.Add("namespace", fmt.Sprintf("%v", req.Namespace))
+		q.Add("topk", fmt.Sprintf("%v", req.Topk))
+
+		hReq.URL.RawQuery += q.Encode()
+	case "delete":
+		newReq, err := http.NewRequest(http.MethodDelete, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP DELETE request for custom API")
+		}
+		hReq = newReq
+	default:
+		return nil, fmt.Errorf("Error, invalid/empty HTTPMethod(%s) specified, should be POST|DELETE|GET", callOpts.HTTPMethod)
+	}
+	hReq = hReq.WithContext(ctx)
+	hReq.Header.Set("Content-Type", "application/json")
+	client.AddHdrsToReq(callOpts.Headers, hReq)
+
+	rsp, err := c.client.Do(hReq)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient")
+	}
+	defer rsp.Body.Close()
+
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
+		body, err := ioutil.ReadAll(rsp.Body)
+		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
+	}
+
+	body, err := ioutil.ReadAll(rsp.Body)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient read body")
+	}
+	pbRsp := &GetTopSensitiveDataRsp{}
+	if err := codec.FromJSON(string(body), pbRsp); err != nil {
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.virtual_host.GetTopSensitiveDataRsp", body)
+
+	}
+	if callOpts.OutCallResponse != nil {
+		callOpts.OutCallResponse.ProtoMsg = pbRsp
+		callOpts.OutCallResponse.JSON = string(body)
+	}
+	return pbRsp, nil
+}
+
 func (c *ApiepCustomAPIRestClient) DoRPC(ctx context.Context, rpc string, opts ...server.CustomCallOpt) (proto.Message, error) {
 	rpcFn, exists := c.rpcFns[rpc]
 	if !exists {
@@ -698,6 +897,10 @@ func NewApiepCustomAPIRestClient(baseURL string, hc http.Client) server.CustomCl
 
 	rpcFns["GetSwaggerSpec"] = ccl.doRPCGetSwaggerSpec
 
+	rpcFns["GetTopAPIEndpoints"] = ccl.doRPCGetTopAPIEndpoints
+
+	rpcFns["GetTopSensitiveData"] = ccl.doRPCGetTopSensitiveData
+
 	ccl.rpcFns = rpcFns
 
 	return ccl
@@ -727,6 +930,12 @@ func (c *apiepCustomAPIInprocClient) GetApiEndpointsStats(ctx context.Context, i
 }
 func (c *apiepCustomAPIInprocClient) GetSwaggerSpec(ctx context.Context, in *SwaggerSpecReq, opts ...grpc.CallOption) (*google_api.HttpBody, error) {
 	return c.ApiepCustomAPIServer.GetSwaggerSpec(ctx, in)
+}
+func (c *apiepCustomAPIInprocClient) GetTopAPIEndpoints(ctx context.Context, in *GetTopAPIEndpointsReq, opts ...grpc.CallOption) (*GetTopAPIEndpointsRsp, error) {
+	return c.ApiepCustomAPIServer.GetTopAPIEndpoints(ctx, in)
+}
+func (c *apiepCustomAPIInprocClient) GetTopSensitiveData(ctx context.Context, in *GetTopSensitiveDataReq, opts ...grpc.CallOption) (*GetTopSensitiveDataRsp, error) {
+	return c.ApiepCustomAPIServer.GetTopSensitiveData(ctx, in)
 }
 
 func NewApiepCustomAPIInprocClient(svc svcfw.Service) ApiepCustomAPIClient {
@@ -1041,6 +1250,104 @@ func (s *apiepCustomAPISrv) GetSwaggerSpec(ctx context.Context, in *SwaggerSpecR
 	}
 
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "google.api.HttpBody", rsp)...)
+
+	return rsp, nil
+}
+func (s *apiepCustomAPISrv) GetTopAPIEndpoints(ctx context.Context, in *GetTopAPIEndpointsReq) (*GetTopAPIEndpointsRsp, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.virtual_host.ApiepCustomAPI")
+	cah, ok := ah.(ApiepCustomAPIServer)
+	if !ok {
+		return nil, fmt.Errorf("ah %v is not of type *ApiepCustomAPIServer", ah)
+	}
+
+	var (
+		rsp *GetTopAPIEndpointsRsp
+		err error
+	)
+
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.virtual_host.GetTopAPIEndpointsReq", in)
+	defer func() {
+		if len(bodyFields) > 0 {
+			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
+		}
+		userMsg := "The 'ApiepCustomAPI.GetTopAPIEndpoints' operation on 'virtual_host'"
+		if err == nil {
+			userMsg += " was successfully performed."
+		} else {
+			userMsg += " failed to be performed."
+		}
+		server.AddUserMsgToAPIAudit(ctx, userMsg)
+	}()
+
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
+
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.virtual_host.ApiepCustomAPI.GetTopAPIEndpoints"); rvFn != nil {
+			if verr := rvFn(ctx, in); verr != nil {
+				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
+				return nil, server.GRPCStatusFromError(err).Err()
+			}
+		}
+	}
+
+	rsp, err = cah.GetTopAPIEndpoints(ctx, in)
+	if err != nil {
+		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
+	}
+
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.virtual_host.GetTopAPIEndpointsRsp", rsp)...)
+
+	return rsp, nil
+}
+func (s *apiepCustomAPISrv) GetTopSensitiveData(ctx context.Context, in *GetTopSensitiveDataReq) (*GetTopSensitiveDataRsp, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.virtual_host.ApiepCustomAPI")
+	cah, ok := ah.(ApiepCustomAPIServer)
+	if !ok {
+		return nil, fmt.Errorf("ah %v is not of type *ApiepCustomAPIServer", ah)
+	}
+
+	var (
+		rsp *GetTopSensitiveDataRsp
+		err error
+	)
+
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.virtual_host.GetTopSensitiveDataReq", in)
+	defer func() {
+		if len(bodyFields) > 0 {
+			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
+		}
+		userMsg := "The 'ApiepCustomAPI.GetTopSensitiveData' operation on 'virtual_host'"
+		if err == nil {
+			userMsg += " was successfully performed."
+		} else {
+			userMsg += " failed to be performed."
+		}
+		server.AddUserMsgToAPIAudit(ctx, userMsg)
+	}()
+
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
+
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.virtual_host.ApiepCustomAPI.GetTopSensitiveData"); rvFn != nil {
+			if verr := rvFn(ctx, in); verr != nil {
+				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
+				return nil, server.GRPCStatusFromError(err).Err()
+			}
+		}
+	}
+
+	rsp, err = cah.GetTopSensitiveData(ctx, in)
+	if err != nil {
+		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
+	}
+
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.virtual_host.GetTopSensitiveDataRsp", rsp)...)
 
 	return rsp, nil
 }
@@ -1501,6 +1808,40 @@ var ApiepCustomAPISwaggerJSON string = `{
                         },
                         "collectionFormat": "multi",
                         "x-displayname": "List of Domain"
+                    },
+                    {
+                        "name": "start_time",
+                        "description": "x-example: \"2019-09-23T12:30:11.733Z\"\nformat: unix_timestamp|rfc 3339\nFilters the APIEPs with access time \u003e= start_time. Considered only to calculate activity metrics, based on #sec-events and #requests.\nOptional: If not specified, then the start_time will be evaluated to end_time-2h\n          If end_time is not specified, then the start_time will be evaluated to \u003ccurrent time\u003e-10m",
+                        "in": "query",
+                        "required": false,
+                        "type": "string",
+                        "x-displayname": "Start Time"
+                    },
+                    {
+                        "name": "end_time",
+                        "description": "x-example: \"2019-09-24T12:30:11.733Z\"\nformat: unix_timestamp|rfc 3339\nFilters the APIEPs with access time \u003c end_time. Considered only to calculate activity metrics, based on #sec-events and #requests.\nOptional: If not specified, then the end_time will be evaluated to start_time+2h\n          If start_time is not specified, then the end_time will be evaluated to \u003ccurrent time\u003e",
+                        "in": "query",
+                        "required": false,
+                        "type": "string",
+                        "x-displayname": "End Time"
+                    },
+                    {
+                        "name": "apiep_category",
+                        "description": "x-example: \"DISCOVERED\"\nCategory of api endpoints. Can be DISCOVERED, INVENTORY or SHADOW API.\nOptional filter by api_category. If absent, endpoints of all categories are considered.\n\nDiscovered API Endpoint.\nThe API Endpoint is imported from user swagger.\nThe API Endpoint is present at the API Inventory.\nThe API Endpoint is considered as part of Shadow API.",
+                        "in": "query",
+                        "required": false,
+                        "type": "array",
+                        "items": {
+                            "type": "string",
+                            "enum": [
+                                "APIEP_CATEGORY_DISCOVERED",
+                                "APIEP_CATEGORY_SWAGGER",
+                                "APIEP_CATEGORY_INVENTORY",
+                                "APIEP_CATEGORY_SHADOW"
+                            ]
+                        },
+                        "collectionFormat": "multi",
+                        "x-displayname": "API Endpoint Origin Discovered"
                     }
                 ],
                 "tags": [
@@ -1599,6 +1940,206 @@ var ApiepCustomAPISwaggerJSON string = `{
                     "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-virtual_host-apiepcustomapi-getapiendpointsstats"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.virtual_host.ApiepCustomAPI.GetApiEndpointsStats"
+            },
+            "x-displayname": "API Endpoints by Virtual Host Custom API",
+            "x-ves-proto-service": "ves.io.schema.virtual_host.ApiepCustomAPI",
+            "x-ves-proto-service-type": "CUSTOM_PUBLIC"
+        },
+        "/public/namespaces/{namespace}/virtual_hosts/{name}/api_endpoints/summary/top_active": {
+            "post": {
+                "summary": "Get Top APIs Endpoints for Virtual Host",
+                "description": "Top APIs by requested activity metric. For example most-active APIs or most-attacked APIs.",
+                "operationId": "ves.io.schema.virtual_host.ApiepCustomAPI.GetTopAPIEndpoints",
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/virtual_hostGetTopAPIEndpointsRsp"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "namespace",
+                        "description": "Namespace\n\nx-example: \"blogging-app\"\nNamespace of the virtual host for current request",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "x-displayname": "Namespace"
+                    },
+                    {
+                        "name": "name",
+                        "description": "Virtual Host Name\n\nx-example: \"blogging-app-vhost\"\nVirtual Host name for current request",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "x-displayname": "Virtual Host Name"
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/virtual_hostGetTopAPIEndpointsReq"
+                        }
+                    }
+                ],
+                "tags": [
+                    "ApiepCustomAPI"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-virtual_host-apiepcustomapi-gettopapiendpoints"
+                },
+                "x-ves-proto-rpc": "ves.io.schema.virtual_host.ApiepCustomAPI.GetTopAPIEndpoints"
+            },
+            "x-displayname": "API Endpoints by Virtual Host Custom API",
+            "x-ves-proto-service": "ves.io.schema.virtual_host.ApiepCustomAPI",
+            "x-ves-proto-service-type": "CUSTOM_PUBLIC"
+        },
+        "/public/namespaces/{namespace}/virtual_hosts/{name}/api_endpoints/summary/top_sensitive_data": {
+            "post": {
+                "summary": "Get Sensitive Data Summary for Virtual Host",
+                "description": "Get sensitive data summary for the given Virtual Host.\nFor each sensitive data type (e.g. SSN, CC, Email) we count the number of APIEPs having the respective\nsensitive data type and return top k (max 10) types with maximum APIEPs.",
+                "operationId": "ves.io.schema.virtual_host.ApiepCustomAPI.GetTopSensitiveData",
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/virtual_hostGetTopSensitiveDataRsp"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "namespace",
+                        "description": "Namespace\n\nx-example: \"blogging-app\"\nNamespace of the virtual host for current request",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "x-displayname": "Namespace"
+                    },
+                    {
+                        "name": "name",
+                        "description": "Virtual Host Name\n\nx-example: \"blogging-app-vhost\"\nVirtual Host name for current request",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "x-displayname": "Virtual Host Name"
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/virtual_hostGetTopSensitiveDataReq"
+                        }
+                    }
+                ],
+                "tags": [
+                    "ApiepCustomAPI"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-virtual_host-apiepcustomapi-gettopsensitivedata"
+                },
+                "x-ves-proto-rpc": "ves.io.schema.virtual_host.ApiepCustomAPI.GetTopSensitiveData"
             },
             "x-displayname": "API Endpoints by Virtual Host Custom API",
             "x-ves-proto-service": "ves.io.schema.virtual_host.ApiepCustomAPI",
@@ -1863,11 +2404,37 @@ var ApiepCustomAPISwaggerJSON string = `{
                     "x-displayname": "Request Percentage",
                     "x-ves-example": "78.5789"
                 },
+                "requests_count": {
+                    "type": "integer",
+                    "description": " Number of requests seen for this API Endpoint for the specified time-range.\n\nExample: - \"1234\"-",
+                    "title": "requests_count",
+                    "format": "int32",
+                    "x-displayname": "Number Of Total Requests",
+                    "x-ves-example": "1234"
+                },
+                "sec_events_count": {
+                    "type": "integer",
+                    "description": " Number of sec_events seen for this API Endpoint for the specified time-range.\n\nExample: - \"1234\"-",
+                    "title": "sec_events_count",
+                    "format": "int32",
+                    "x-displayname": "Number Of Total Security Events",
+                    "x-ves-example": "1234"
+                },
                 "security_risk": {
                     "description": " Signifies api endpoint security risk level.\n\nExample: - APIEP_SEC_RISK_LOW, APIEP_SEC_RISK_MED, APIEP_SEC_RISK_HIGH-",
                     "title": "security_risk",
                     "$ref": "#/definitions/app_typeAPIEPSecurityRisk",
                     "x-displayname": "Security Risk Level"
+                },
+                "sensitive_data": {
+                    "type": "array",
+                    "description": " List of Sensitive Data found in the API endpoint\n\nExample: - \"[SENSITIVE_DATA_TYPE_CCN, SENSITIVE_DATA_TYPE_SSN, SENSITIVE_DATA_TYPE_IP]\"-",
+                    "title": "List of Sensitive Data",
+                    "items": {
+                        "$ref": "#/definitions/app_typeSensitiveDataType"
+                    },
+                    "x-displayname": "List of Sensitive Data",
+                    "x-ves-example": "[SENSITIVE_DATA_TYPE_CCN, SENSITIVE_DATA_TYPE_SSN, SENSITIVE_DATA_TYPE_IP]"
                 }
             }
         },
@@ -2080,6 +2647,24 @@ var ApiepCustomAPISwaggerJSON string = `{
                 }
             }
         },
+        "app_typeSensitiveDataType": {
+            "type": "string",
+            "description": "List of possible types of sensitive data that can be discovered for an APIEP.\n\nThe Sensitive Data detected as credit card number.\nThe sensitive data detected as social security number.\nThe sensitive data detected as IP address.\nThe sensitive data detected as email address.\nThe sensitive data detected as phone number.\nThe sensitive data detected as authentication info(e.g password, auth token etc).\nThe sensitive data detected as information leakage.\nThe sensitive data detected as masked PII (CCN, SSN)",
+            "title": "SensitiveDataType",
+            "enum": [
+                "SENSITIVE_DATA_TYPE_CCN",
+                "SENSITIVE_DATA_TYPE_SSN",
+                "SENSITIVE_DATA_TYPE_IP",
+                "SENSITIVE_DATA_TYPE_EMAIL",
+                "SENSITIVE_DATA_TYPE_PHONE",
+                "SENSITIVE_DATA_TYPE_AUTHENTICATION",
+                "SENSITIVE_DATA_TYPE_APP_INFO_LEAKAGE",
+                "SENSITIVE_DATA_TYPE_MASKED_PII"
+            ],
+            "default": "SENSITIVE_DATA_TYPE_CCN",
+            "x-displayname": "Sensitive Data Type",
+            "x-ves-proto-enum": "ves.io.schema.app_type.SensitiveDataType"
+        },
         "protobufAny": {
             "type": "object",
             "description": "-Any- contains an arbitrary serialized protocol buffer message along with a\nURL that describes the type of the serialized message.\n\nProtobuf library provides support to pack/unpack Any values in the form\nof utility functions or additional generated methods of the Any type.\n\nExample 1: Pack and unpack a message in C++.\n\n    Foo foo = ...;\n    Any any;\n    any.PackFrom(foo);\n    ...\n    if (any.UnpackTo(\u0026foo)) {\n      ...\n    }\n\nExample 2: Pack and unpack a message in Java.\n\n    Foo foo = ...;\n    Any any = Any.pack(foo);\n    ...\n    if (any.is(Foo.class)) {\n      foo = any.unpack(Foo.class);\n    }\n\n Example 3: Pack and unpack a message in Python.\n\n    foo = Foo(...)\n    any = Any()\n    any.Pack(foo)\n    ...\n    if any.Is(Foo.DESCRIPTOR):\n      any.Unpack(foo)\n      ...\n\n Example 4: Pack and unpack a message in Go\n\n     foo := \u0026pb.Foo{...}\n     any, err := ptypes.MarshalAny(foo)\n     ...\n     foo := \u0026pb.Foo{}\n     if err := ptypes.UnmarshalAny(any, foo); err != nil {\n       ...\n     }\n\nThe pack methods provided by protobuf library will by default use\n'type.googleapis.com/full.type.name' as the type URL and the unpack\nmethods only use the fully qualified type name after the last '/'\nin the type URL, for example \"foo.bar.com/x/y.z\" will yield type\nname \"y.z\".\n\n\nJSON\n====\nThe JSON representation of an -Any- value uses the regular\nrepresentation of the deserialized, embedded message, with an\nadditional field -@type- which contains the type URL. Example:\n\n    package google.profile;\n    message Person {\n      string first_name = 1;\n      string last_name = 2;\n    }\n\n    {\n      \"@type\": \"type.googleapis.com/google.profile.Person\",\n      \"firstName\": \u003cstring\u003e,\n      \"lastName\": \u003cstring\u003e\n    }\n\nIf the embedded message type is well-known and has a custom JSON\nrepresentation, that representation will be embedded adding a field\n-value- which holds the custom JSON in addition to the -@type-\nfield. Example (for message [google.protobuf.Duration][]):\n\n    {\n      \"@type\": \"type.googleapis.com/google.protobuf.Duration\",\n      \"value\": \"1.212s\"\n    }",
@@ -2092,6 +2677,128 @@ var ApiepCustomAPISwaggerJSON string = `{
                     "type": "string",
                     "description": "Must be a valid serialized protocol buffer of the above specified type.",
                     "format": "byte"
+                }
+            }
+        },
+        "schemaHttpMethod": {
+            "type": "string",
+            "description": "Specifies the HTTP method used to access a resource.\n\nAny HTTP Method",
+            "title": "HttpMethod",
+            "enum": [
+                "ANY",
+                "GET",
+                "HEAD",
+                "POST",
+                "PUT",
+                "DELETE",
+                "CONNECT",
+                "OPTIONS",
+                "TRACE",
+                "PATCH"
+            ],
+            "default": "ANY",
+            "x-displayname": "HTTP Method",
+            "x-ves-proto-enum": "ves.io.schema.HttpMethod"
+        },
+        "virtual_hostAPIEPActivityMetricType": {
+            "type": "string",
+            "description": "Activity metric calculation type per API Endpoint\n\nIf specified, API returns top attacked APIEPs summary by sec_event percentage for given virtual host.\nThe percentage is calculated as sec_events_percentage(apiep) = #sec-events(apiep)/#requests(apiep) * 100\nIf specified, API returns top active APIEPs summary by request ratio for given virtual host.\nThe percentage is calculated as request_percentage(apiep) = #requests(apiep)/#requests(all apiep) * 100",
+            "title": "APIEPActivityMetricType",
+            "enum": [
+                "ACTIVITY_METRIC_TYPE_SEC_EVENTS_PERCENTAGE",
+                "ACTIVITY_METRIC_TYPE_REQ_PERCENTAGE"
+            ],
+            "default": "ACTIVITY_METRIC_TYPE_SEC_EVENTS_PERCENTAGE",
+            "x-displayname": "API Activity Metric Type",
+            "x-ves-proto-enum": "ves.io.schema.virtual_host.APIEPActivityMetricType"
+        },
+        "virtual_hostAPIEPActivityMetrics": {
+            "type": "object",
+            "description": "This represents the API endpoint's activity metrics.",
+            "title": "APIEPActivityMetrics",
+            "x-displayname": "API Endpoint Activity Metrics",
+            "x-ves-proto-message": "ves.io.schema.virtual_host.APIEPActivityMetrics",
+            "properties": {
+                "apiep_url": {
+                    "type": "string",
+                    "description": " URL for API endpoint.\n\nExample: - \"/api/v1/user/{user_id}/vehicle/{vehicle_id}\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 1024\n  ves.io.schema.rules.string.min_bytes: 1\n  ves.io.schema.rules.string.templated_http_path: true\n",
+                    "title": "apiep_url",
+                    "minLength": 1,
+                    "maxLength": 1024,
+                    "x-displayname": "API endpoint URL",
+                    "x-ves-example": "/api/v1/user/{user_id}/vehicle/{vehicle_id}",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_bytes": "1024",
+                        "ves.io.schema.rules.string.min_bytes": "1",
+                        "ves.io.schema.rules.string.templated_http_path": "true"
+                    }
+                },
+                "method": {
+                    "description": " HTTP method for the API.\n\nExample: - \"GET\"-",
+                    "title": "HTTP method",
+                    "$ref": "#/definitions/schemaHttpMethod",
+                    "x-displayname": "HTTP Method",
+                    "x-ves-example": "GET"
+                },
+                "top_by_metric_value": {
+                    "type": "integer",
+                    "description": " The field -top_by_metric_value- returns one of the following values based on the metric type passed in the request field -top_by_metric-",
+                    "title": "top_by_metric_value",
+                    "format": "int32",
+                    "x-displayname": "Top By Metric Value"
+                }
+            }
+        },
+        "virtual_hostAPIEPSummaryFilter": {
+            "type": "object",
+            "description": "Filter object for summary block.",
+            "title": "APIEPSummaryFilter",
+            "x-displayname": "APIEP Summary Filter",
+            "x-ves-proto-message": "ves.io.schema.virtual_host.APIEPSummaryFilter",
+            "properties": {
+                "apiep_category": {
+                    "type": "array",
+                    "description": " Category of api endpoints. Can be DISCOVERED, INVENTORY or SHADOW API.\n Optional filter by api_category. If absent, endpoints of all categories are considered.\n\nExample: - \"DISCOVERED\"-",
+                    "title": "APIEP Category",
+                    "items": {
+                        "$ref": "#/definitions/app_typeAPIEPCategory"
+                    },
+                    "x-displayname": "APIEP Category",
+                    "x-ves-example": "DISCOVERED"
+                },
+                "domains": {
+                    "type": "array",
+                    "description": " List of domains for which top api endpoints summary should be returned.\n Optional filter by domains. If absent, endpoints for all domains are considered.\n\nExample: - \"www.example.com\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.hostname: true\n  ves.io.schema.rules.repeated.items.string.max_len: 256\n  ves.io.schema.rules.repeated.items.string.min_len: 1\n  ves.io.schema.rules.repeated.max_items: 5\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "title": "List of Domain",
+                    "maxItems": 5,
+                    "items": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 256
+                    },
+                    "x-displayname": "List of Domains",
+                    "x-ves-example": "www.example.com",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.items.string.hostname": "true",
+                        "ves.io.schema.rules.repeated.items.string.max_len": "256",
+                        "ves.io.schema.rules.repeated.items.string.min_len": "1",
+                        "ves.io.schema.rules.repeated.max_items": "5",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
+                },
+                "end_time": {
+                    "type": "string",
+                    "description": " format: unix_timestamp|rfc 3339\n Filters the APIEPs with access time \u003c end_time.\n Optional: If not specified, then the end_time will be evaluated to start_time+2h\n           If start_time is not specified, then the end_time will be evaluated to \u003ccurrent time\u003e\n\nExample: - \"2019-09-24T12:30:11.733Z\"-",
+                    "title": "end time",
+                    "x-displayname": "End Time",
+                    "x-ves-example": "2019-09-24T12:30:11.733Z"
+                },
+                "start_time": {
+                    "type": "string",
+                    "description": " format: unix_timestamp|rfc 3339\n Filters the APIEPs with access time \u003e= start_time. \n Optional: If not specified, then the start_time will be evaluated to end_time-2h\n           If end_time is not specified, then the start_time will be evaluated to \u003ccurrent time\u003e-10m\n\nExample: - \"2019-09-23T12:30:11.733Z\"-",
+                    "title": "start time",
+                    "x-displayname": "Start Time",
+                    "x-ves-example": "2019-09-23T12:30:11.733Z"
                 }
             }
         },
@@ -2299,6 +3006,186 @@ var ApiepCustomAPISwaggerJSON string = `{
                     "title": "number of endpoints",
                     "format": "int32",
                     "x-displayname": "Total Endpoints"
+                }
+            }
+        },
+        "virtual_hostGetTopAPIEndpointsReq": {
+            "type": "object",
+            "description": "Request model for GetTopAPIEndpointsReq API",
+            "title": "Top attacked/active API endpoints request per virtual host",
+            "x-displayname": "Top Attacked/Active API Endpoints per Virtual Host",
+            "x-ves-proto-message": "ves.io.schema.virtual_host.GetTopAPIEndpointsReq",
+            "properties": {
+                "apiep_summary_filter": {
+                    "description": " Filter object for summary block.",
+                    "title": "apiep_summary_filter",
+                    "$ref": "#/definitions/virtual_hostAPIEPSummaryFilter",
+                    "x-displayname": "Summary Block Filter"
+                },
+                "name": {
+                    "type": "string",
+                    "description": " Virtual Host name for current request\n\nExample: - \"blogging-app-vhost\"-",
+                    "title": "Virtual Host Name",
+                    "x-displayname": "Virtual Host Name",
+                    "x-ves-example": "blogging-app-vhost"
+                },
+                "namespace": {
+                    "type": "string",
+                    "description": " Namespace of the virtual host for current request\n\nExample: - \"blogging-app\"-",
+                    "title": "Namespace",
+                    "x-displayname": "Namespace",
+                    "x-ves-example": "blogging-app"
+                },
+                "top_by_metric": {
+                    "description": " returns top api endpoints by security_events or requests metrics.\n\nExample: - \"TOP_APIEPS_BY_SEC_EVENTS, TOP_APIEPS_BY_REQ_COUNT\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "top_by_metric",
+                    "$ref": "#/definitions/virtual_hostAPIEPActivityMetricType",
+                    "x-displayname": "Top API endpoints by",
+                    "x-ves-example": "TOP_APIEPS_BY_SEC_EVENTS, TOP_APIEPS_BY_REQ_COUNT",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                },
+                "topk": {
+                    "type": "integer",
+                    "description": " Number of top API endpoints to return in the response.\n\nExample: - \"5\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 0\n  ves.io.schema.rules.uint32.lte: 10\n",
+                    "title": "topk",
+                    "format": "int64",
+                    "x-displayname": "Number of Top API Endpoints",
+                    "x-ves-example": "5",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.gte": "0",
+                        "ves.io.schema.rules.uint32.lte": "10"
+                    }
+                }
+            }
+        },
+        "virtual_hostGetTopAPIEndpointsRsp": {
+            "type": "object",
+            "description": "Response model for GetTopAttackedAPIEndpoints API.",
+            "title": "API endpoint GET response",
+            "x-displayname": "API Endpoint Response",
+            "x-ves-proto-message": "ves.io.schema.virtual_host.GetTopAPIEndpointsRsp",
+            "properties": {
+                "top_apieps": {
+                    "type": "array",
+                    "description": " Top Attacked API endpoints\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 10\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "title": "top_apieps",
+                    "maxItems": 10,
+                    "items": {
+                        "$ref": "#/definitions/virtual_hostAPIEPActivityMetrics"
+                    },
+                    "x-displayname": "Top Attacked Endpoints",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "10",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
+                }
+            }
+        },
+        "virtual_hostGetTopSensitiveDataReq": {
+            "type": "object",
+            "description": "Request model for GetTopSensitiveDataReq API",
+            "title": "GetTopSensitiveDataReq",
+            "x-displayname": "Get Top Sensitive Data Request Object",
+            "x-ves-proto-message": "ves.io.schema.virtual_host.GetTopSensitiveDataReq",
+            "properties": {
+                "apiep_category": {
+                    "type": "array",
+                    "description": " Category of api endpoints. Can be DISCOVERED, INVENTORY or SHADOW API.\n\nExample: - \"DISCOVERED\"-",
+                    "title": "APIEP Category",
+                    "items": {
+                        "$ref": "#/definitions/app_typeAPIEPCategory"
+                    },
+                    "x-displayname": "APIEP Category",
+                    "x-ves-example": "DISCOVERED"
+                },
+                "domains": {
+                    "type": "array",
+                    "description": " List of domains for which top api endpoints summary should be returned.\n Optional filter by domains. If absent, endpoints for all domains are considered.\n\nExample: - \"www.example.com\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.hostname: true\n  ves.io.schema.rules.repeated.items.string.max_len: 256\n  ves.io.schema.rules.repeated.items.string.min_len: 1\n  ves.io.schema.rules.repeated.max_items: 5\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "title": "List of Domain",
+                    "maxItems": 5,
+                    "items": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 256
+                    },
+                    "x-displayname": "List of Domain",
+                    "x-ves-example": "www.example.com",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.items.string.hostname": "true",
+                        "ves.io.schema.rules.repeated.items.string.max_len": "256",
+                        "ves.io.schema.rules.repeated.items.string.min_len": "1",
+                        "ves.io.schema.rules.repeated.max_items": "5",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
+                },
+                "name": {
+                    "type": "string",
+                    "description": " Virtual Host name for current request\n\nExample: - \"blogging-app-vhost\"-",
+                    "title": "Virtual Host Name",
+                    "x-displayname": "Virtual Host Name",
+                    "x-ves-example": "blogging-app-vhost"
+                },
+                "namespace": {
+                    "type": "string",
+                    "description": " Namespace of the virtual host for current request\n\nExample: - \"blogging-app\"-",
+                    "title": "Namespace",
+                    "x-displayname": "Namespace",
+                    "x-ves-example": "blogging-app"
+                },
+                "topk": {
+                    "type": "integer",
+                    "description": " Number of top API endpoints to return in the response.\n\nExample: - \"5\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 0\n  ves.io.schema.rules.uint32.lte: 10\n",
+                    "title": "topk",
+                    "format": "int64",
+                    "x-displayname": "Number of Top API Endpoints",
+                    "x-ves-example": "5",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.gte": "0",
+                        "ves.io.schema.rules.uint32.lte": "10"
+                    }
+                }
+            }
+        },
+        "virtual_hostGetTopSensitiveDataRsp": {
+            "type": "object",
+            "description": "Response model for GetTopSensitiveDataRsp API.",
+            "title": "GetTopSensitiveDataRsp",
+            "x-displayname": "SensitiveDataSummary API Response",
+            "x-ves-proto-message": "ves.io.schema.virtual_host.GetTopSensitiveDataRsp",
+            "properties": {
+                "top_sensitive_data": {
+                    "type": "array",
+                    "description": " Top k (max 10) sensitive data types with highest APIs count.",
+                    "title": "top_sensitive_data",
+                    "items": {
+                        "$ref": "#/definitions/virtual_hostSensitiveDataCount"
+                    },
+                    "x-displayname": "Top Sensitive Data"
+                }
+            }
+        },
+        "virtual_hostSensitiveDataCount": {
+            "type": "object",
+            "description": "Response model for GetTopSensitiveDataRsp API.",
+            "title": "SensitiveDataCount",
+            "x-displayname": "Sensitive Data Count",
+            "x-ves-proto-message": "ves.io.schema.virtual_host.SensitiveDataCount",
+            "properties": {
+                "count": {
+                    "type": "integer",
+                    "description": " Number of APIEP detected this sensitive data type.",
+                    "title": "count",
+                    "format": "int32",
+                    "x-displayname": "API Count With This Sensitive Data Type"
+                },
+                "sensitive_data_type": {
+                    "description": " The type of sensitive data detected in APIs.",
+                    "title": "sensitive_data_type",
+                    "$ref": "#/definitions/app_typeSensitiveDataType",
+                    "x-displayname": "Type Of Sensitive Data"
                 }
             }
         }

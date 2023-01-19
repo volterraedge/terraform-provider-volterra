@@ -181,6 +181,11 @@ func (n *nsCustomAPIServer) SuggestValues(context.Context,
 	return &ves_io_schema_ns.SuggestValuesResp{}, nil
 }
 
+func (n *nsCustomAPIServer) LookupUserRoles(context.Context,
+	*ves_io_schema_ns.LookupUserRolesReq) (*ves_io_schema_ns.LookupUserRolesResp, error) {
+	return &ves_io_schema_ns.LookupUserRolesResp{}, nil
+}
+
 var _ ves_io_schema_ns.CustomAPIServer = &nsCustomAPIServer{}
 
 // ves.io.schema.namespace.CustomAPI handling - end

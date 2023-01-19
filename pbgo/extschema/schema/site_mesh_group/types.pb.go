@@ -71,6 +71,97 @@ func (SiteMeshGroupType) EnumDescriptor() ([]byte, []int) {
 	return fileDescriptor_e184213e79779d5e, []int{0}
 }
 
+// Hub Full Mesh Group Type
+//
+// x-displayName: "Hub Full Mesh"
+// Details of Hub Full Mesh Group Type
+type HubFullMeshGroupType struct {
+	// Hub Full Mesh Choice
+	//
+	// x-displayName: "Mesh Type"
+	//
+	// Choice of data plane, data plane and control plane hub full mesh
+	//
+	// Types that are valid to be assigned to HubFullMeshChoice:
+	//	*HubFullMeshGroupType_DataPlaneMesh
+	//	*HubFullMeshGroupType_ControlAndDataPlaneMesh
+	HubFullMeshChoice isHubFullMeshGroupType_HubFullMeshChoice `protobuf_oneof:"hub_full_mesh_choice"`
+}
+
+func (m *HubFullMeshGroupType) Reset()      { *m = HubFullMeshGroupType{} }
+func (*HubFullMeshGroupType) ProtoMessage() {}
+func (*HubFullMeshGroupType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_e184213e79779d5e, []int{0}
+}
+func (m *HubFullMeshGroupType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *HubFullMeshGroupType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *HubFullMeshGroupType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_HubFullMeshGroupType.Merge(m, src)
+}
+func (m *HubFullMeshGroupType) XXX_Size() int {
+	return m.Size()
+}
+func (m *HubFullMeshGroupType) XXX_DiscardUnknown() {
+	xxx_messageInfo_HubFullMeshGroupType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_HubFullMeshGroupType proto.InternalMessageInfo
+
+type isHubFullMeshGroupType_HubFullMeshChoice interface {
+	isHubFullMeshGroupType_HubFullMeshChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
+
+type HubFullMeshGroupType_DataPlaneMesh struct {
+	DataPlaneMesh *schema.Empty `protobuf:"bytes,2,opt,name=data_plane_mesh,json=dataPlaneMesh,proto3,oneof" json:"data_plane_mesh,omitempty"`
+}
+type HubFullMeshGroupType_ControlAndDataPlaneMesh struct {
+	ControlAndDataPlaneMesh *schema.Empty `protobuf:"bytes,3,opt,name=control_and_data_plane_mesh,json=controlAndDataPlaneMesh,proto3,oneof" json:"control_and_data_plane_mesh,omitempty"`
+}
+
+func (*HubFullMeshGroupType_DataPlaneMesh) isHubFullMeshGroupType_HubFullMeshChoice()           {}
+func (*HubFullMeshGroupType_ControlAndDataPlaneMesh) isHubFullMeshGroupType_HubFullMeshChoice() {}
+
+func (m *HubFullMeshGroupType) GetHubFullMeshChoice() isHubFullMeshGroupType_HubFullMeshChoice {
+	if m != nil {
+		return m.HubFullMeshChoice
+	}
+	return nil
+}
+
+func (m *HubFullMeshGroupType) GetDataPlaneMesh() *schema.Empty {
+	if x, ok := m.GetHubFullMeshChoice().(*HubFullMeshGroupType_DataPlaneMesh); ok {
+		return x.DataPlaneMesh
+	}
+	return nil
+}
+
+func (m *HubFullMeshGroupType) GetControlAndDataPlaneMesh() *schema.Empty {
+	if x, ok := m.GetHubFullMeshChoice().(*HubFullMeshGroupType_ControlAndDataPlaneMesh); ok {
+		return x.ControlAndDataPlaneMesh
+	}
+	return nil
+}
+
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*HubFullMeshGroupType) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
+		(*HubFullMeshGroupType_DataPlaneMesh)(nil),
+		(*HubFullMeshGroupType_ControlAndDataPlaneMesh)(nil),
+	}
+}
+
 // Full Mesh Group Type
 //
 // x-displayName: "Full Mesh"
@@ -91,7 +182,7 @@ type FullMeshGroupType struct {
 func (m *FullMeshGroupType) Reset()      { *m = FullMeshGroupType{} }
 func (*FullMeshGroupType) ProtoMessage() {}
 func (*FullMeshGroupType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_e184213e79779d5e, []int{0}
+	return fileDescriptor_e184213e79779d5e, []int{1}
 }
 func (m *FullMeshGroupType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -174,12 +265,22 @@ type SpokeMeshGroupType struct {
 	// 'hub_mesh_group' refers to a Site Mesh Group of 'type' Hub.
 	// Spoke sites will connect to all the member sites of Hub Site Mesh Group
 	HubMeshGroup *views.ObjectRefType `protobuf:"bytes,1,opt,name=hub_mesh_group,json=hubMeshGroup,proto3" json:"hub_mesh_group,omitempty"`
+	// Spoke Hub Mesh Choice
+	//
+	// x-displayName: "Mesh Type"
+	//
+	// Choice of data plane, data plane and control plane mesh
+	//
+	// Types that are valid to be assigned to SpokeHubMeshChoice:
+	//	*SpokeMeshGroupType_DataPlaneMesh
+	//	*SpokeMeshGroupType_ControlAndDataPlaneMesh
+	SpokeHubMeshChoice isSpokeMeshGroupType_SpokeHubMeshChoice `protobuf_oneof:"spoke_hub_mesh_choice"`
 }
 
 func (m *SpokeMeshGroupType) Reset()      { *m = SpokeMeshGroupType{} }
 func (*SpokeMeshGroupType) ProtoMessage() {}
 func (*SpokeMeshGroupType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_e184213e79779d5e, []int{1}
+	return fileDescriptor_e184213e79779d5e, []int{2}
 }
 func (m *SpokeMeshGroupType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -204,11 +305,57 @@ func (m *SpokeMeshGroupType) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_SpokeMeshGroupType proto.InternalMessageInfo
 
+type isSpokeMeshGroupType_SpokeHubMeshChoice interface {
+	isSpokeMeshGroupType_SpokeHubMeshChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
+
+type SpokeMeshGroupType_DataPlaneMesh struct {
+	DataPlaneMesh *schema.Empty `protobuf:"bytes,3,opt,name=data_plane_mesh,json=dataPlaneMesh,proto3,oneof" json:"data_plane_mesh,omitempty"`
+}
+type SpokeMeshGroupType_ControlAndDataPlaneMesh struct {
+	ControlAndDataPlaneMesh *schema.Empty `protobuf:"bytes,4,opt,name=control_and_data_plane_mesh,json=controlAndDataPlaneMesh,proto3,oneof" json:"control_and_data_plane_mesh,omitempty"`
+}
+
+func (*SpokeMeshGroupType_DataPlaneMesh) isSpokeMeshGroupType_SpokeHubMeshChoice()           {}
+func (*SpokeMeshGroupType_ControlAndDataPlaneMesh) isSpokeMeshGroupType_SpokeHubMeshChoice() {}
+
+func (m *SpokeMeshGroupType) GetSpokeHubMeshChoice() isSpokeMeshGroupType_SpokeHubMeshChoice {
+	if m != nil {
+		return m.SpokeHubMeshChoice
+	}
+	return nil
+}
+
 func (m *SpokeMeshGroupType) GetHubMeshGroup() *views.ObjectRefType {
 	if m != nil {
 		return m.HubMeshGroup
 	}
 	return nil
+}
+
+func (m *SpokeMeshGroupType) GetDataPlaneMesh() *schema.Empty {
+	if x, ok := m.GetSpokeHubMeshChoice().(*SpokeMeshGroupType_DataPlaneMesh); ok {
+		return x.DataPlaneMesh
+	}
+	return nil
+}
+
+func (m *SpokeMeshGroupType) GetControlAndDataPlaneMesh() *schema.Empty {
+	if x, ok := m.GetSpokeHubMeshChoice().(*SpokeMeshGroupType_ControlAndDataPlaneMesh); ok {
+		return x.ControlAndDataPlaneMesh
+	}
+	return nil
+}
+
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*SpokeMeshGroupType) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
+		(*SpokeMeshGroupType_DataPlaneMesh)(nil),
+		(*SpokeMeshGroupType_ControlAndDataPlaneMesh)(nil),
+	}
 }
 
 // Global Specification
@@ -261,7 +408,7 @@ type GlobalSpecType struct {
 func (m *GlobalSpecType) Reset()      { *m = GlobalSpecType{} }
 func (*GlobalSpecType) ProtoMessage() {}
 func (*GlobalSpecType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_e184213e79779d5e, []int{2}
+	return fileDescriptor_e184213e79779d5e, []int{3}
 }
 func (m *GlobalSpecType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -294,7 +441,7 @@ type isGlobalSpecType_MeshChoice interface {
 }
 
 type GlobalSpecType_HubMesh struct {
-	HubMesh *schema.Empty `protobuf:"bytes,6,opt,name=hub_mesh,json=hubMesh,proto3,oneof" json:"hub_mesh,omitempty"`
+	HubMesh *HubFullMeshGroupType `protobuf:"bytes,6,opt,name=hub_mesh,json=hubMesh,proto3,oneof" json:"hub_mesh,omitempty"`
 }
 type GlobalSpecType_SpokeMesh struct {
 	SpokeMesh *SpokeMeshGroupType `protobuf:"bytes,7,opt,name=spoke_mesh,json=spokeMesh,proto3,oneof" json:"spoke_mesh,omitempty"`
@@ -343,7 +490,7 @@ func (m *GlobalSpecType) GetHub() []*schema.ObjectRefType {
 	return nil
 }
 
-func (m *GlobalSpecType) GetHubMesh() *schema.Empty {
+func (m *GlobalSpecType) GetHubMesh() *HubFullMeshGroupType {
 	if x, ok := m.GetMeshChoice().(*GlobalSpecType_HubMesh); ok {
 		return x.HubMesh
 	}
@@ -391,7 +538,7 @@ type CreateSpecType struct {
 func (m *CreateSpecType) Reset()      { *m = CreateSpecType{} }
 func (*CreateSpecType) ProtoMessage() {}
 func (*CreateSpecType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_e184213e79779d5e, []int{3}
+	return fileDescriptor_e184213e79779d5e, []int{4}
 }
 func (m *CreateSpecType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -424,7 +571,7 @@ type isCreateSpecType_MeshChoice interface {
 }
 
 type CreateSpecType_HubMesh struct {
-	HubMesh *schema.Empty `protobuf:"bytes,6,opt,name=hub_mesh,json=hubMesh,proto3,oneof" json:"hub_mesh,omitempty"`
+	HubMesh *HubFullMeshGroupType `protobuf:"bytes,6,opt,name=hub_mesh,json=hubMesh,proto3,oneof" json:"hub_mesh,omitempty"`
 }
 type CreateSpecType_SpokeMesh struct {
 	SpokeMesh *SpokeMeshGroupType `protobuf:"bytes,7,opt,name=spoke_mesh,json=spokeMesh,proto3,oneof" json:"spoke_mesh,omitempty"`
@@ -465,7 +612,7 @@ func (m *CreateSpecType) GetHub() []*schema.ObjectRefType {
 	return nil
 }
 
-func (m *CreateSpecType) GetHubMesh() *schema.Empty {
+func (m *CreateSpecType) GetHubMesh() *HubFullMeshGroupType {
 	if x, ok := m.GetMeshChoice().(*CreateSpecType_HubMesh); ok {
 		return x.HubMesh
 	}
@@ -513,7 +660,7 @@ type ReplaceSpecType struct {
 func (m *ReplaceSpecType) Reset()      { *m = ReplaceSpecType{} }
 func (*ReplaceSpecType) ProtoMessage() {}
 func (*ReplaceSpecType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_e184213e79779d5e, []int{4}
+	return fileDescriptor_e184213e79779d5e, []int{5}
 }
 func (m *ReplaceSpecType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -546,7 +693,7 @@ type isReplaceSpecType_MeshChoice interface {
 }
 
 type ReplaceSpecType_HubMesh struct {
-	HubMesh *schema.Empty `protobuf:"bytes,6,opt,name=hub_mesh,json=hubMesh,proto3,oneof" json:"hub_mesh,omitempty"`
+	HubMesh *HubFullMeshGroupType `protobuf:"bytes,6,opt,name=hub_mesh,json=hubMesh,proto3,oneof" json:"hub_mesh,omitempty"`
 }
 type ReplaceSpecType_SpokeMesh struct {
 	SpokeMesh *SpokeMeshGroupType `protobuf:"bytes,7,opt,name=spoke_mesh,json=spokeMesh,proto3,oneof" json:"spoke_mesh,omitempty"`
@@ -587,7 +734,7 @@ func (m *ReplaceSpecType) GetHub() []*schema.ObjectRefType {
 	return nil
 }
 
-func (m *ReplaceSpecType) GetHubMesh() *schema.Empty {
+func (m *ReplaceSpecType) GetHubMesh() *HubFullMeshGroupType {
 	if x, ok := m.GetMeshChoice().(*ReplaceSpecType_HubMesh); ok {
 		return x.HubMesh
 	}
@@ -636,7 +783,7 @@ type GetSpecType struct {
 func (m *GetSpecType) Reset()      { *m = GetSpecType{} }
 func (*GetSpecType) ProtoMessage() {}
 func (*GetSpecType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_e184213e79779d5e, []int{5}
+	return fileDescriptor_e184213e79779d5e, []int{6}
 }
 func (m *GetSpecType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -669,7 +816,7 @@ type isGetSpecType_MeshChoice interface {
 }
 
 type GetSpecType_HubMesh struct {
-	HubMesh *schema.Empty `protobuf:"bytes,6,opt,name=hub_mesh,json=hubMesh,proto3,oneof" json:"hub_mesh,omitempty"`
+	HubMesh *HubFullMeshGroupType `protobuf:"bytes,6,opt,name=hub_mesh,json=hubMesh,proto3,oneof" json:"hub_mesh,omitempty"`
 }
 type GetSpecType_SpokeMesh struct {
 	SpokeMesh *SpokeMeshGroupType `protobuf:"bytes,7,opt,name=spoke_mesh,json=spokeMesh,proto3,oneof" json:"spoke_mesh,omitempty"`
@@ -717,7 +864,7 @@ func (m *GetSpecType) GetHub() []*schema.ObjectRefType {
 	return nil
 }
 
-func (m *GetSpecType) GetHubMesh() *schema.Empty {
+func (m *GetSpecType) GetHubMesh() *HubFullMeshGroupType {
 	if x, ok := m.GetMeshChoice().(*GetSpecType_HubMesh); ok {
 		return x.HubMesh
 	}
@@ -750,6 +897,8 @@ func (*GetSpecType) XXX_OneofWrappers() []interface{} {
 func init() {
 	proto.RegisterEnum("ves.io.schema.site_mesh_group.SiteMeshGroupType", SiteMeshGroupType_name, SiteMeshGroupType_value)
 	golang_proto.RegisterEnum("ves.io.schema.site_mesh_group.SiteMeshGroupType", SiteMeshGroupType_name, SiteMeshGroupType_value)
+	proto.RegisterType((*HubFullMeshGroupType)(nil), "ves.io.schema.site_mesh_group.HubFullMeshGroupType")
+	golang_proto.RegisterType((*HubFullMeshGroupType)(nil), "ves.io.schema.site_mesh_group.HubFullMeshGroupType")
 	proto.RegisterType((*FullMeshGroupType)(nil), "ves.io.schema.site_mesh_group.FullMeshGroupType")
 	golang_proto.RegisterType((*FullMeshGroupType)(nil), "ves.io.schema.site_mesh_group.FullMeshGroupType")
 	proto.RegisterType((*SpokeMeshGroupType)(nil), "ves.io.schema.site_mesh_group.SpokeMeshGroupType")
@@ -772,69 +921,74 @@ func init() {
 }
 
 var fileDescriptor_e184213e79779d5e = []byte{
-	// 980 bytes of a gzipped FileDescriptorProto
+	// 1067 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x97, 0xc1, 0x6f, 0xdb, 0x54,
-	0x1c, 0xc7, 0xfd, 0xe2, 0x24, 0x4d, 0x5f, 0x46, 0x92, 0x5a, 0x93, 0x96, 0xa6, 0xed, 0x5b, 0x95,
-	0x0d, 0x34, 0x50, 0xea, 0xd0, 0x14, 0x01, 0xe2, 0x50, 0x69, 0x59, 0xb3, 0xa6, 0xa5, 0x6b, 0x22,
-	0x27, 0x45, 0x62, 0x42, 0x58, 0x4e, 0xf2, 0xe2, 0x78, 0x73, 0xf2, 0x2c, 0xfb, 0x39, 0xd0, 0x43,
-	0xa5, 0x6a, 0x57, 0x10, 0x02, 0xfe, 0x08, 0x84, 0xf6, 0x27, 0x10, 0x0e, 0x3d, 0xa2, 0x9d, 0x72,
-	0xe0, 0x50, 0x71, 0xa2, 0xee, 0x65, 0xdc, 0x26, 0x8e, 0x9c, 0x90, 0x5f, 0xdc, 0x2e, 0x76, 0xa2,
-	0xae, 0x1a, 0x88, 0x03, 0xea, 0x25, 0xb1, 0xfd, 0xfd, 0xfd, 0xbe, 0xbf, 0xdf, 0x7b, 0xbf, 0x8f,
-	0x63, 0x07, 0xbe, 0xdd, 0xc7, 0x96, 0xa8, 0x91, 0xbc, 0xd5, 0xec, 0xe0, 0xae, 0x92, 0xb7, 0x34,
-	0x8a, 0xe5, 0x2e, 0xb6, 0x3a, 0xb2, 0x6a, 0x12, 0xdb, 0xc8, 0xd3, 0x7d, 0x03, 0x5b, 0xa2, 0x61,
-	0x12, 0x4a, 0x84, 0xa5, 0x51, 0xa8, 0x38, 0x0a, 0x15, 0x03, 0xa1, 0x99, 0x15, 0x55, 0xa3, 0x1d,
-	0xbb, 0x21, 0x36, 0x49, 0x37, 0xaf, 0x12, 0x95, 0xe4, 0x59, 0x56, 0xc3, 0x6e, 0xb3, 0x33, 0x76,
-	0xc2, 0x8e, 0x46, 0x6e, 0x99, 0x9b, 0x2a, 0x21, 0xaa, 0x8e, 0x5f, 0x46, 0x51, 0xad, 0x8b, 0x2d,
-	0xaa, 0x74, 0x0d, 0x2f, 0xe0, 0x86, 0xbf, 0xb3, 0x1e, 0xa6, 0x9e, 0xb0, 0xe0, 0x17, 0x88, 0x41,
-	0x35, 0xd2, 0xf3, 0x9a, 0xcc, 0x2c, 0xf9, 0x45, 0xa3, 0x4f, 0xe5, 0xb1, 0x35, 0x64, 0xd0, 0xe4,
-	0x72, 0xc7, 0xd7, 0x98, 0x99, 0xf7, 0xeb, 0xe3, 0xd2, 0xa2, 0x5f, 0xea, 0x2b, 0xba, 0xd6, 0x52,
-	0x28, 0xf6, 0xd4, 0xe5, 0x80, 0xaa, 0xe1, 0x2f, 0x64, 0x7f, 0x67, 0x37, 0x27, 0x23, 0xac, 0xf1,
-	0x02, 0xd9, 0x5f, 0x01, 0x9c, 0xbb, 0x6f, 0xeb, 0xfa, 0x03, 0x6c, 0x75, 0x36, 0xdd, 0x2d, 0xad,
-	0xef, 0x1b, 0x58, 0x58, 0x87, 0xc9, 0x96, 0x42, 0x15, 0xd9, 0xd0, 0x95, 0xde, 0x68, 0xbf, 0xd3,
-	0xa1, 0x65, 0x70, 0x27, 0x5e, 0xb8, 0x2e, 0xfa, 0xe7, 0x51, 0xea, 0x1a, 0x74, 0xbf, 0xcc, 0x49,
-	0x6f, 0xb8, 0xe1, 0x55, 0x37, 0xda, 0x35, 0x12, 0xea, 0x70, 0xa1, 0x49, 0x7a, 0xd4, 0x24, 0xba,
-	0xac, 0xf4, 0x5a, 0x72, 0xd0, 0x8b, 0xbf, 0xd0, 0xeb, 0x86, 0x97, 0x7a, 0xb7, 0xd7, 0xda, 0x18,
-	0x77, 0x2d, 0xde, 0x82, 0xa9, 0xb6, 0xad, 0xeb, 0xa3, 0xf9, 0x37, 0x3b, 0x44, 0x6b, 0x62, 0x21,
-	0x79, 0x34, 0x00, 0xa1, 0xe1, 0x00, 0x00, 0x67, 0x00, 0xf8, 0x42, 0x6e, 0x6d, 0x3b, 0x1c, 0x03,
-	0xa9, 0x50, 0xd6, 0x84, 0x42, 0xcd, 0x20, 0x8f, 0xb1, 0x7f, 0x59, 0x9f, 0xc1, 0x44, 0xc7, 0x6e,
-	0x8c, 0xf1, 0x93, 0x06, 0xac, 0x93, 0x6c, 0xa0, 0x13, 0xb6, 0x4d, 0x62, 0xa5, 0xf1, 0x08, 0x37,
-	0xa9, 0x84, 0xdb, 0x6e, 0x6e, 0x51, 0x78, 0x7a, 0x90, 0x0c, 0xd0, 0x27, 0x5d, 0xeb, 0xd8, 0x8d,
-	0xf3, 0x0a, 0xd9, 0x6f, 0x22, 0x30, 0xb1, 0xa9, 0x93, 0x86, 0xa2, 0xd7, 0x0c, 0xdc, 0x64, 0x05,
-	0x1f, 0xc2, 0xb0, 0xbb, 0xd9, 0xac, 0x4c, 0xa2, 0xf0, 0xae, 0x78, 0x21, 0xcc, 0x62, 0x4d, 0xa3,
-	0xfe, 0x86, 0x8b, 0xd7, 0x9f, 0x0f, 0x00, 0xf8, 0xe9, 0x8f, 0x23, 0x7e, 0xf6, 0x09, 0x88, 0x66,
-	0xc2, 0x1c, 0x08, 0xf1, 0x69, 0x20, 0x31, 0x4f, 0xe1, 0x11, 0x8c, 0x53, 0xbb, 0xd7, 0xc3, 0x3a,
-	0x63, 0x8d, 0xcd, 0x27, 0x51, 0xb8, 0x15, 0x28, 0xe1, 0x5a, 0xd6, 0x09, 0xfb, 0x64, 0xb1, 0xcc,
-	0xf5, 0xf6, 0xf1, 0x01, 0xf8, 0x6d, 0x00, 0xe6, 0x6b, 0x5b, 0xf5, 0x92, 0x5c, 0xaf, 0xc8, 0xa3,
-	0xef, 0xbd, 0xdd, 0xdd, 0xd2, 0x8e, 0xbc, 0x55, 0xad, 0x95, 0xee, 0xb9, 0x55, 0x25, 0x48, 0xcf,
-	0x33, 0x84, 0xcf, 0xe1, 0xb5, 0xbe, 0x66, 0x52, 0x5b, 0xd1, 0x65, 0xb7, 0xe9, 0x34, 0xbf, 0xcc,
-	0xdf, 0x89, 0x17, 0x16, 0x03, 0xc5, 0xfc, 0x1b, 0xb6, 0xf4, 0xf4, 0xc0, 0x97, 0x74, 0xf8, 0xf3,
-	0x68, 0x29, 0x91, 0xef, 0x41, 0x28, 0x05, 0xa4, 0xb8, 0xa7, 0xb9, 0xbd, 0x09, 0x75, 0xc8, 0x77,
-	0xec, 0x46, 0x3a, 0x7c, 0x09, 0xdb, 0xdb, 0x93, 0x73, 0x70, 0xdb, 0x0d, 0xb8, 0xbb, 0x76, 0xc2,
-	0x2a, 0x8c, 0x9d, 0x8d, 0x3b, 0x1d, 0xbd, 0x10, 0xb9, 0x19, 0x6f, 0x90, 0x82, 0x04, 0xa1, 0xe5,
-	0x72, 0x33, 0x4a, 0x9a, 0x61, 0x49, 0xab, 0xaf, 0x1a, 0xdb, 0x04, 0x68, 0x65, 0x4e, 0x9a, 0xb5,
-	0xce, 0xae, 0x0a, 0x15, 0x38, 0x7b, 0x8e, 0x6d, 0x3a, 0xc6, 0x2c, 0x5f, 0x45, 0xc2, 0xc4, 0x1d,
-	0x59, 0xe6, 0xa4, 0x58, 0xdb, 0xbb, 0x58, 0x5c, 0x86, 0xf1, 0xf1, 0x5b, 0x60, 0xee, 0x68, 0x00,
-	0x62, 0xc3, 0x01, 0x88, 0x38, 0x03, 0x10, 0xf9, 0x30, 0xf7, 0x7e, 0xee, 0x83, 0xed, 0x70, 0x2c,
-	0x92, 0x8a, 0x66, 0xbf, 0x0a, 0xc3, 0xc4, 0x3d, 0x13, 0x2b, 0x14, 0x9f, 0x03, 0xb9, 0xf1, 0xcf,
-	0x80, 0xf4, 0xd0, 0xab, 0xbe, 0x06, 0x0e, 0xc9, 0x00, 0x0e, 0x7e, 0x00, 0x8a, 0x97, 0x07, 0x60,
-	0xda, 0x8d, 0xf8, 0x7f, 0x1e, 0xf7, 0x47, 0xf3, 0xcf, 0xd6, 0x03, 0xbf, 0x2b, 0x7f, 0xae, 0x47,
-	0x56, 0x73, 0x6b, 0xb9, 0xf7, 0x8a, 0xc8, 0x4f, 0x42, 0xf2, 0xc9, 0x5f, 0x60, 0xfc, 0xc2, 0x76,
-	0x38, 0x16, 0x4a, 0xf1, 0x1e, 0x0d, 0x5f, 0x87, 0x61, 0x52, 0xc2, 0x86, 0xae, 0x34, 0xaf, 0x70,
-	0xb8, 0xc2, 0x21, 0xfb, 0x2c, 0x0c, 0xe3, 0x9b, 0x98, 0xfe, 0xcb, 0x28, 0x6c, 0xbc, 0xee, 0x43,
-	0xc9, 0xf7, 0xb8, 0xb9, 0x02, 0xea, 0xbf, 0x04, 0x6a, 0x61, 0x0a, 0x50, 0x33, 0x0c, 0xa8, 0x5c,
-	0xe1, 0x12, 0x48, 0x45, 0x52, 0xd1, 0x77, 0x7e, 0x00, 0x70, 0x6e, 0x02, 0x09, 0xe1, 0x4d, 0xb8,
-	0xc8, 0x5e, 0x2d, 0x1e, 0x94, 0x6a, 0x65, 0x79, 0x53, 0xaa, 0xec, 0x55, 0xe5, 0xfa, 0xa7, 0xd5,
-	0x92, 0xbc, 0xb5, 0xfb, 0xc9, 0xdd, 0x9d, 0xad, 0x8d, 0x14, 0x97, 0xe1, 0x0f, 0x0f, 0x80, 0xf0,
-	0x16, 0xcc, 0x4e, 0x0d, 0x2b, 0xef, 0x15, 0xe5, 0xfb, 0x7b, 0x3b, 0x3b, 0x4c, 0x48, 0x01, 0x01,
-	0xc1, 0xcc, 0xd4, 0xb8, 0x5a, 0xb5, 0xf2, 0x71, 0x29, 0x15, 0x12, 0xb2, 0x10, 0x4d, 0xd5, 0x5f,
-	0x7a, 0xf0, 0xc5, 0xef, 0xc0, 0xf0, 0x04, 0x71, 0xc7, 0x27, 0x88, 0x7b, 0x71, 0x82, 0xc0, 0xa1,
-	0x83, 0xc0, 0x8f, 0x0e, 0x02, 0xbf, 0x38, 0x08, 0x0c, 0x1d, 0x04, 0x8e, 0x1d, 0x04, 0x7e, 0x77,
-	0x10, 0x78, 0xee, 0x20, 0xee, 0x85, 0x83, 0xc0, 0xb7, 0xa7, 0x88, 0x3b, 0x3a, 0x45, 0x60, 0x78,
-	0x8a, 0xb8, 0xe3, 0x53, 0xc4, 0x3d, 0xac, 0xa9, 0xc4, 0x78, 0xac, 0x8a, 0x7d, 0xa2, 0x53, 0x6c,
-	0x9a, 0x8a, 0x68, 0x5b, 0x79, 0x76, 0xd0, 0x26, 0x66, 0x77, 0xc5, 0x30, 0x49, 0x5f, 0x6b, 0x61,
-	0x73, 0xe5, 0x4c, 0xce, 0x1b, 0x0d, 0x95, 0xe4, 0xf1, 0x97, 0xf4, 0xec, 0xc5, 0x7f, 0xea, 0xdf,
-	0x9d, 0x46, 0x94, 0xbd, 0x89, 0xaf, 0xfd, 0x1d, 0x00, 0x00, 0xff, 0xff, 0xe5, 0x90, 0xde, 0x60,
-	0x16, 0x0d, 0x00, 0x00,
+	0x1c, 0xc7, 0xfd, 0x62, 0xa7, 0xcd, 0x5e, 0x46, 0x93, 0x5a, 0x45, 0x4b, 0xd3, 0xd6, 0xab, 0xb2,
+	0x01, 0xa3, 0x4a, 0x1d, 0x96, 0x4e, 0x80, 0x38, 0x14, 0x96, 0x35, 0x6b, 0x3a, 0xba, 0x36, 0x72,
+	0x52, 0x24, 0x26, 0x84, 0x65, 0x27, 0xaf, 0x8e, 0x37, 0x27, 0xcf, 0xb2, 0x9f, 0x03, 0x3d, 0x54,
+	0xaa, 0x76, 0xe4, 0x04, 0xfc, 0x11, 0x08, 0x15, 0xf1, 0x0f, 0x90, 0x1d, 0x7a, 0x44, 0x9c, 0x72,
+	0xe0, 0x50, 0x71, 0xa2, 0xee, 0x65, 0xbb, 0x4d, 0x70, 0xe3, 0x84, 0xfc, 0xe2, 0xb6, 0xb1, 0x13,
+	0xb5, 0x55, 0xd9, 0x01, 0x44, 0x2f, 0xad, 0xed, 0xef, 0xef, 0x7d, 0xdf, 0xef, 0xf7, 0x7b, 0x9f,
+	0xf7, 0x1c, 0xc3, 0xb7, 0xdb, 0xc8, 0x16, 0x75, 0x9c, 0xb3, 0x6b, 0x0d, 0xd4, 0x54, 0x72, 0xb6,
+	0x4e, 0x90, 0xdc, 0x44, 0x76, 0x43, 0xd6, 0x2c, 0xec, 0x98, 0x39, 0xb2, 0x65, 0x22, 0x5b, 0x34,
+	0x2d, 0x4c, 0x30, 0x3f, 0xd3, 0x0b, 0x15, 0x7b, 0xa1, 0x62, 0x28, 0x34, 0x3d, 0xaf, 0xe9, 0xa4,
+	0xe1, 0xa8, 0x62, 0x0d, 0x37, 0x73, 0x1a, 0xd6, 0x70, 0x8e, 0x8e, 0x52, 0x9d, 0x4d, 0x7a, 0x47,
+	0x6f, 0xe8, 0x55, 0xcf, 0x2d, 0x7d, 0x5d, 0xc3, 0x58, 0x33, 0xd0, 0x49, 0x14, 0xd1, 0x9b, 0xc8,
+	0x26, 0x4a, 0xd3, 0xf4, 0x03, 0xae, 0x05, 0x33, 0x6b, 0x21, 0xe2, 0x0b, 0x53, 0x41, 0x01, 0x9b,
+	0x44, 0xc7, 0x2d, 0x3f, 0xc9, 0xf4, 0x4c, 0x50, 0x34, 0xdb, 0x44, 0xee, 0xab, 0x21, 0x2d, 0x0c,
+	0x96, 0xdb, 0x5f, 0x63, 0x7a, 0x32, 0xa8, 0xf7, 0x4b, 0xd3, 0x41, 0xa9, 0xad, 0x18, 0x7a, 0x5d,
+	0x21, 0xc8, 0x57, 0x67, 0x43, 0xaa, 0x8e, 0xbe, 0x90, 0x83, 0x99, 0x5d, 0x1f, 0x8c, 0xb0, 0xfb,
+	0x27, 0xc8, 0xfc, 0x09, 0xe0, 0x44, 0xc9, 0x51, 0xef, 0x3b, 0x86, 0xf1, 0x10, 0xd9, 0x8d, 0x65,
+	0xaf, 0xab, 0xd5, 0x2d, 0x13, 0xf1, 0x8b, 0x30, 0x51, 0x57, 0x88, 0x22, 0x9b, 0x86, 0xd2, 0xea,
+	0xb5, 0x3c, 0x15, 0x99, 0x05, 0xb7, 0xe2, 0xf9, 0x09, 0x31, 0xb8, 0x24, 0xc5, 0xa6, 0x49, 0xb6,
+	0x4a, 0x8c, 0xf4, 0x9a, 0x17, 0x5e, 0xf6, 0xa2, 0x3d, 0x23, 0xbe, 0x0a, 0xa7, 0x6a, 0xb8, 0x45,
+	0x2c, 0x6c, 0xc8, 0x4a, 0xab, 0x2e, 0x87, 0xbd, 0xd8, 0x53, 0xbd, 0xae, 0xf9, 0x43, 0xef, 0xb6,
+	0xea, 0x4b, 0xfd, 0xae, 0x85, 0x0f, 0xe1, 0x44, 0xc3, 0x51, 0xe5, 0x4d, 0xc7, 0x30, 0x7a, 0x18,
+	0xd4, 0x1a, 0x58, 0xaf, 0x21, 0xfe, 0xad, 0xbd, 0x0e, 0x88, 0x74, 0x3b, 0x00, 0xb8, 0x1d, 0xc0,
+	0xe6, 0xb3, 0x0b, 0x5f, 0x3d, 0x03, 0x13, 0x73, 0x6c, 0xcd, 0x22, 0x73, 0xa3, 0x36, 0x51, 0x34,
+	0xbd, 0xa5, 0xcd, 0x71, 0xa6, 0x85, 0xeb, 0x0f, 0xb8, 0x18, 0x48, 0x46, 0x32, 0xbf, 0x02, 0x38,
+	0xfe, 0x5f, 0x29, 0xf9, 0x06, 0x4c, 0x0e, 0x94, 0x9b, 0x08, 0x95, 0xeb, 0x97, 0xd5, 0x8d, 0x40,
+	0xbe, 0x62, 0xe2, 0x27, 0x28, 0x58, 0xd7, 0x67, 0x70, 0xcc, 0x6b, 0xda, 0xc9, 0xb6, 0x49, 0x01,
+	0x9a, 0x4a, 0x26, 0x94, 0x0a, 0xa5, 0x43, 0x5c, 0x57, 0x1f, 0xa3, 0x1a, 0x91, 0xd0, 0xa6, 0x37,
+	0xb6, 0xc0, 0xef, 0x6e, 0x27, 0x42, 0x9b, 0x4e, 0xba, 0xda, 0x70, 0xd4, 0xe3, 0x19, 0x86, 0x75,
+	0x8d, 0x7d, 0x85, 0x5d, 0xe3, 0x2e, 0xd6, 0xb5, 0x8f, 0xe0, 0xeb, 0xb6, 0xd7, 0x09, 0xf9, 0xb8,
+	0xf2, 0x3e, 0x52, 0xd8, 0x6e, 0x07, 0x44, 0xbc, 0xd6, 0x2d, 0x64, 0xef, 0x9c, 0x42, 0x4a, 0x24,
+	0xc9, 0x66, 0x7e, 0x8c, 0xc2, 0xb1, 0x65, 0x03, 0xab, 0x8a, 0x51, 0x31, 0x51, 0x8d, 0xb6, 0xf3,
+	0x11, 0xe4, 0xbc, 0x1d, 0x44, 0x9b, 0x38, 0x96, 0x7f, 0x47, 0x3c, 0xf5, 0x84, 0x12, 0x2b, 0x3a,
+	0x09, 0x2e, 0x47, 0x61, 0xe2, 0x79, 0x07, 0x80, 0x9f, 0x5e, 0xec, 0xb1, 0x57, 0x9e, 0x82, 0x91,
+	0x34, 0xc7, 0x80, 0x08, 0x9b, 0x02, 0x12, 0xf5, 0xe4, 0x1f, 0xc3, 0x38, 0x71, 0x5a, 0x2d, 0x64,
+	0xd0, 0x03, 0x84, 0xe2, 0x37, 0x96, 0xbf, 0x11, 0x9a, 0xc2, 0xb3, 0xac, 0x62, 0xfa, 0x97, 0xc6,
+	0x52, 0xd7, 0x9b, 0xfb, 0xdb, 0xe0, 0xb7, 0x0e, 0x98, 0xac, 0xac, 0x54, 0x8b, 0x72, 0x75, 0x5d,
+	0xee, 0xfd, 0xdf, 0x58, 0x5b, 0x2b, 0xae, 0xca, 0x2b, 0xe5, 0x4a, 0xf1, 0x9e, 0x37, 0xab, 0x04,
+	0xc9, 0xf1, 0x08, 0xfe, 0x73, 0x78, 0xb5, 0xad, 0x5b, 0xc4, 0x51, 0x0c, 0xd9, 0x4b, 0x3a, 0xc5,
+	0xce, 0xb2, 0xb7, 0xe2, 0xf9, 0xe9, 0xd0, 0x64, 0x41, 0x1c, 0x66, 0x76, 0xb7, 0x03, 0x83, 0x76,
+	0x9e, 0xf5, 0x4a, 0x89, 0x7e, 0x0b, 0x22, 0x49, 0x20, 0xc5, 0x7d, 0xcd, 0xcb, 0x8d, 0xaf, 0x42,
+	0xb6, 0xe1, 0xa8, 0x29, 0xee, 0x1c, 0xb6, 0x37, 0x07, 0x29, 0xf3, 0xd2, 0x0d, 0xb9, 0x7b, 0x76,
+	0x7c, 0x19, 0xc6, 0x8e, 0x96, 0x34, 0x35, 0x42, 0xd9, 0x58, 0x38, 0x63, 0x05, 0x86, 0x1d, 0x6f,
+	0x25, 0x46, 0x1a, 0xf5, 0x29, 0xe6, 0x25, 0x08, 0x7b, 0xa8, 0x50, 0xcf, 0x51, 0xea, 0x79, 0xfb,
+	0xac, 0x55, 0x1d, 0xd8, 0x65, 0x25, 0x46, 0xba, 0x62, 0x1f, 0x3d, 0xe5, 0xd7, 0xe1, 0x95, 0xe3,
+	0x4d, 0x9b, 0x8a, 0x51, 0xcb, 0xb3, 0x40, 0x19, 0x96, 0x63, 0x6c, 0xd3, 0x7f, 0x58, 0x98, 0x85,
+	0xf1, 0x7e, 0x8a, 0xc7, 0xf7, 0x3a, 0x20, 0xd6, 0xed, 0x80, 0xa8, 0xdb, 0x01, 0xd1, 0xf7, 0xb3,
+	0xef, 0x66, 0xdf, 0x7b, 0xc0, 0xc5, 0xa2, 0xc9, 0x91, 0xcc, 0x2e, 0x07, 0xc7, 0xee, 0x59, 0x48,
+	0x21, 0xe8, 0x98, 0xd7, 0xa5, 0x7f, 0xc6, 0xab, 0x4f, 0x66, 0xf9, 0x02, 0xb4, 0x24, 0x42, 0xb4,
+	0x04, 0xf9, 0x28, 0x9c, 0x9f, 0x8f, 0x61, 0xa7, 0xd0, 0xff, 0x98, 0x86, 0x0f, 0x26, 0x7f, 0x59,
+	0x0c, 0x9d, 0x4a, 0x7f, 0x2c, 0x46, 0x6f, 0x67, 0x17, 0xb2, 0x77, 0x0a, 0x42, 0x10, 0x94, 0xc4,
+	0xd3, 0xbf, 0x40, 0xff, 0x83, 0xde, 0xb1, 0xe6, 0xc3, 0xf2, 0x03, 0x07, 0x13, 0x12, 0x32, 0x0d,
+	0xa5, 0x76, 0x49, 0xcb, 0x25, 0x2d, 0x67, 0xd1, 0xf2, 0x82, 0x83, 0xf1, 0x65, 0x44, 0x5e, 0x31,
+	0x29, 0x4b, 0x17, 0x7d, 0xe3, 0x05, 0xde, 0x65, 0x97, 0xbc, 0xfd, 0x8b, 0x78, 0x9b, 0x1a, 0xc2,
+	0xdb, 0x28, 0xe5, 0x2d, 0x9b, 0x3f, 0x07, 0x71, 0xd1, 0xe4, 0xc8, 0xdc, 0x77, 0x00, 0x8e, 0x0f,
+	0x10, 0xc3, 0xbf, 0x01, 0xa7, 0xe9, 0xcf, 0x9a, 0x87, 0xc5, 0x4a, 0x49, 0x5e, 0x96, 0xd6, 0x37,
+	0xca, 0x72, 0xf5, 0xd3, 0x72, 0x51, 0x5e, 0x59, 0xfb, 0xe4, 0xee, 0xea, 0xca, 0x52, 0x92, 0x49,
+	0xb3, 0x3b, 0xdb, 0x80, 0x7f, 0x13, 0x66, 0x86, 0x86, 0x95, 0x36, 0x0a, 0xf2, 0xfd, 0x8d, 0xd5,
+	0x55, 0x2a, 0x24, 0x01, 0x2f, 0xc0, 0xf4, 0xd0, 0xb8, 0x4a, 0x79, 0xfd, 0xe3, 0x62, 0x32, 0xc2,
+	0x67, 0xa0, 0x30, 0x54, 0x3f, 0xf1, 0x60, 0x0b, 0xdf, 0x80, 0xee, 0x81, 0xc0, 0xec, 0x1f, 0x08,
+	0xcc, 0xcb, 0x03, 0x01, 0xec, 0xb8, 0x02, 0xf8, 0xde, 0x15, 0xc0, 0xcf, 0xae, 0x00, 0xba, 0xae,
+	0x00, 0xf6, 0x5d, 0x01, 0xfc, 0xee, 0x0a, 0xe0, 0xb9, 0x2b, 0x30, 0x2f, 0x5d, 0x01, 0x7c, 0x7d,
+	0x28, 0x30, 0x7b, 0x87, 0x02, 0xe8, 0x1e, 0x0a, 0xcc, 0xfe, 0xa1, 0xc0, 0x3c, 0xaa, 0x68, 0xd8,
+	0x7c, 0xa2, 0x89, 0x6d, 0x6c, 0x10, 0x64, 0x59, 0x8a, 0xe8, 0xd8, 0x39, 0x7a, 0xb1, 0x89, 0xad,
+	0xe6, 0xbc, 0x69, 0xe1, 0xb6, 0x5e, 0x47, 0xd6, 0xfc, 0x91, 0x9c, 0x33, 0x55, 0x0d, 0xe7, 0xd0,
+	0x97, 0xe4, 0xe8, 0x4b, 0x72, 0xe8, 0xf7, 0xb3, 0x3a, 0x42, 0x3f, 0xed, 0x16, 0xfe, 0x0e, 0x00,
+	0x00, 0xff, 0xff, 0x8a, 0x51, 0x9c, 0x30, 0x67, 0x0f, 0x00, 0x00,
 }
 
 func (x SiteMeshGroupType) String() string {
@@ -843,6 +997,84 @@ func (x SiteMeshGroupType) String() string {
 		return s
 	}
 	return strconv.Itoa(int(x))
+}
+func (this *HubFullMeshGroupType) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*HubFullMeshGroupType)
+	if !ok {
+		that2, ok := that.(HubFullMeshGroupType)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if that1.HubFullMeshChoice == nil {
+		if this.HubFullMeshChoice != nil {
+			return false
+		}
+	} else if this.HubFullMeshChoice == nil {
+		return false
+	} else if !this.HubFullMeshChoice.Equal(that1.HubFullMeshChoice) {
+		return false
+	}
+	return true
+}
+func (this *HubFullMeshGroupType_DataPlaneMesh) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*HubFullMeshGroupType_DataPlaneMesh)
+	if !ok {
+		that2, ok := that.(HubFullMeshGroupType_DataPlaneMesh)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.DataPlaneMesh.Equal(that1.DataPlaneMesh) {
+		return false
+	}
+	return true
+}
+func (this *HubFullMeshGroupType_ControlAndDataPlaneMesh) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*HubFullMeshGroupType_ControlAndDataPlaneMesh)
+	if !ok {
+		that2, ok := that.(HubFullMeshGroupType_ControlAndDataPlaneMesh)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.ControlAndDataPlaneMesh.Equal(that1.ControlAndDataPlaneMesh) {
+		return false
+	}
+	return true
 }
 func (this *FullMeshGroupType) Equal(that interface{}) bool {
 	if that == nil {
@@ -942,6 +1174,63 @@ func (this *SpokeMeshGroupType) Equal(that interface{}) bool {
 		return false
 	}
 	if !this.HubMeshGroup.Equal(that1.HubMeshGroup) {
+		return false
+	}
+	if that1.SpokeHubMeshChoice == nil {
+		if this.SpokeHubMeshChoice != nil {
+			return false
+		}
+	} else if this.SpokeHubMeshChoice == nil {
+		return false
+	} else if !this.SpokeHubMeshChoice.Equal(that1.SpokeHubMeshChoice) {
+		return false
+	}
+	return true
+}
+func (this *SpokeMeshGroupType_DataPlaneMesh) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*SpokeMeshGroupType_DataPlaneMesh)
+	if !ok {
+		that2, ok := that.(SpokeMeshGroupType_DataPlaneMesh)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.DataPlaneMesh.Equal(that1.DataPlaneMesh) {
+		return false
+	}
+	return true
+}
+func (this *SpokeMeshGroupType_ControlAndDataPlaneMesh) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*SpokeMeshGroupType_ControlAndDataPlaneMesh)
+	if !ok {
+		that2, ok := that.(SpokeMeshGroupType_ControlAndDataPlaneMesh)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.ControlAndDataPlaneMesh.Equal(that1.ControlAndDataPlaneMesh) {
 		return false
 	}
 	return true
@@ -1436,6 +1725,34 @@ func (this *GetSpecType_FullMesh) Equal(that interface{}) bool {
 	}
 	return true
 }
+func (this *HubFullMeshGroupType) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 6)
+	s = append(s, "&site_mesh_group.HubFullMeshGroupType{")
+	if this.HubFullMeshChoice != nil {
+		s = append(s, "HubFullMeshChoice: "+fmt.Sprintf("%#v", this.HubFullMeshChoice)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *HubFullMeshGroupType_DataPlaneMesh) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&site_mesh_group.HubFullMeshGroupType_DataPlaneMesh{` +
+		`DataPlaneMesh:` + fmt.Sprintf("%#v", this.DataPlaneMesh) + `}`}, ", ")
+	return s
+}
+func (this *HubFullMeshGroupType_ControlAndDataPlaneMesh) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&site_mesh_group.HubFullMeshGroupType_ControlAndDataPlaneMesh{` +
+		`ControlAndDataPlaneMesh:` + fmt.Sprintf("%#v", this.ControlAndDataPlaneMesh) + `}`}, ", ")
+	return s
+}
 func (this *FullMeshGroupType) GoString() string {
 	if this == nil {
 		return "nil"
@@ -1468,13 +1785,32 @@ func (this *SpokeMeshGroupType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 5)
+	s := make([]string, 0, 7)
 	s = append(s, "&site_mesh_group.SpokeMeshGroupType{")
 	if this.HubMeshGroup != nil {
 		s = append(s, "HubMeshGroup: "+fmt.Sprintf("%#v", this.HubMeshGroup)+",\n")
 	}
+	if this.SpokeHubMeshChoice != nil {
+		s = append(s, "SpokeHubMeshChoice: "+fmt.Sprintf("%#v", this.SpokeHubMeshChoice)+",\n")
+	}
 	s = append(s, "}")
 	return strings.Join(s, "")
+}
+func (this *SpokeMeshGroupType_DataPlaneMesh) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&site_mesh_group.SpokeMeshGroupType_DataPlaneMesh{` +
+		`DataPlaneMesh:` + fmt.Sprintf("%#v", this.DataPlaneMesh) + `}`}, ", ")
+	return s
+}
+func (this *SpokeMeshGroupType_ControlAndDataPlaneMesh) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&site_mesh_group.SpokeMeshGroupType_ControlAndDataPlaneMesh{` +
+		`ControlAndDataPlaneMesh:` + fmt.Sprintf("%#v", this.ControlAndDataPlaneMesh) + `}`}, ", ")
+	return s
 }
 func (this *GlobalSpecType) GoString() string {
 	if this == nil {
@@ -1658,6 +1994,80 @@ func valueToGoStringTypes(v interface{}, typ string) string {
 	pv := reflect.Indirect(rv).Interface()
 	return fmt.Sprintf("func(v %v) *%v { return &v } ( %#v )", typ, typ, pv)
 }
+func (m *HubFullMeshGroupType) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *HubFullMeshGroupType) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *HubFullMeshGroupType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.HubFullMeshChoice != nil {
+		{
+			size := m.HubFullMeshChoice.Size()
+			i -= size
+			if _, err := m.HubFullMeshChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *HubFullMeshGroupType_DataPlaneMesh) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *HubFullMeshGroupType_DataPlaneMesh) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.DataPlaneMesh != nil {
+		{
+			size, err := m.DataPlaneMesh.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x12
+	}
+	return len(dAtA) - i, nil
+}
+func (m *HubFullMeshGroupType_ControlAndDataPlaneMesh) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *HubFullMeshGroupType_ControlAndDataPlaneMesh) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.ControlAndDataPlaneMesh != nil {
+		{
+			size, err := m.ControlAndDataPlaneMesh.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1a
+	}
+	return len(dAtA) - i, nil
+}
 func (m *FullMeshGroupType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -1752,6 +2162,15 @@ func (m *SpokeMeshGroupType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	if m.SpokeHubMeshChoice != nil {
+		{
+			size := m.SpokeHubMeshChoice.Size()
+			i -= size
+			if _, err := m.SpokeHubMeshChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
 	if m.HubMeshGroup != nil {
 		{
 			size, err := m.HubMeshGroup.MarshalToSizedBuffer(dAtA[:i])
@@ -1767,6 +2186,48 @@ func (m *SpokeMeshGroupType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
+func (m *SpokeMeshGroupType_DataPlaneMesh) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *SpokeMeshGroupType_DataPlaneMesh) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.DataPlaneMesh != nil {
+		{
+			size, err := m.DataPlaneMesh.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1a
+	}
+	return len(dAtA) - i, nil
+}
+func (m *SpokeMeshGroupType_ControlAndDataPlaneMesh) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *SpokeMeshGroupType_ControlAndDataPlaneMesh) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.ControlAndDataPlaneMesh != nil {
+		{
+			size, err := m.ControlAndDataPlaneMesh.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x22
+	}
+	return len(dAtA) - i, nil
+}
 func (m *GlobalSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -2300,6 +2761,42 @@ func encodeVarintTypes(dAtA []byte, offset int, v uint64) int {
 	dAtA[offset] = uint8(v)
 	return base
 }
+func (m *HubFullMeshGroupType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.HubFullMeshChoice != nil {
+		n += m.HubFullMeshChoice.Size()
+	}
+	return n
+}
+
+func (m *HubFullMeshGroupType_DataPlaneMesh) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.DataPlaneMesh != nil {
+		l = m.DataPlaneMesh.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *HubFullMeshGroupType_ControlAndDataPlaneMesh) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.ControlAndDataPlaneMesh != nil {
+		l = m.ControlAndDataPlaneMesh.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
 func (m *FullMeshGroupType) Size() (n int) {
 	if m == nil {
 		return 0
@@ -2346,9 +2843,36 @@ func (m *SpokeMeshGroupType) Size() (n int) {
 		l = m.HubMeshGroup.Size()
 		n += 1 + l + sovTypes(uint64(l))
 	}
+	if m.SpokeHubMeshChoice != nil {
+		n += m.SpokeHubMeshChoice.Size()
+	}
 	return n
 }
 
+func (m *SpokeMeshGroupType_DataPlaneMesh) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.DataPlaneMesh != nil {
+		l = m.DataPlaneMesh.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *SpokeMeshGroupType_ControlAndDataPlaneMesh) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.ControlAndDataPlaneMesh != nil {
+		l = m.ControlAndDataPlaneMesh.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
 func (m *GlobalSpecType) Size() (n int) {
 	if m == nil {
 		return 0
@@ -2614,6 +3138,36 @@ func sovTypes(x uint64) (n int) {
 func sozTypes(x uint64) (n int) {
 	return sovTypes(uint64((x << 1) ^ uint64((int64(x) >> 63))))
 }
+func (this *HubFullMeshGroupType) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&HubFullMeshGroupType{`,
+		`HubFullMeshChoice:` + fmt.Sprintf("%v", this.HubFullMeshChoice) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *HubFullMeshGroupType_DataPlaneMesh) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&HubFullMeshGroupType_DataPlaneMesh{`,
+		`DataPlaneMesh:` + strings.Replace(fmt.Sprintf("%v", this.DataPlaneMesh), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *HubFullMeshGroupType_ControlAndDataPlaneMesh) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&HubFullMeshGroupType_ControlAndDataPlaneMesh{`,
+		`ControlAndDataPlaneMesh:` + strings.Replace(fmt.Sprintf("%v", this.ControlAndDataPlaneMesh), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
 func (this *FullMeshGroupType) String() string {
 	if this == nil {
 		return "nil"
@@ -2650,6 +3204,27 @@ func (this *SpokeMeshGroupType) String() string {
 	}
 	s := strings.Join([]string{`&SpokeMeshGroupType{`,
 		`HubMeshGroup:` + strings.Replace(fmt.Sprintf("%v", this.HubMeshGroup), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
+		`SpokeHubMeshChoice:` + fmt.Sprintf("%v", this.SpokeHubMeshChoice) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *SpokeMeshGroupType_DataPlaneMesh) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&SpokeMeshGroupType_DataPlaneMesh{`,
+		`DataPlaneMesh:` + strings.Replace(fmt.Sprintf("%v", this.DataPlaneMesh), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *SpokeMeshGroupType_ControlAndDataPlaneMesh) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&SpokeMeshGroupType_ControlAndDataPlaneMesh{`,
+		`ControlAndDataPlaneMesh:` + strings.Replace(fmt.Sprintf("%v", this.ControlAndDataPlaneMesh), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2683,7 +3258,7 @@ func (this *GlobalSpecType_HubMesh) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GlobalSpecType_HubMesh{`,
-		`HubMesh:` + strings.Replace(fmt.Sprintf("%v", this.HubMesh), "Empty", "schema.Empty", 1) + `,`,
+		`HubMesh:` + strings.Replace(fmt.Sprintf("%v", this.HubMesh), "HubFullMeshGroupType", "HubFullMeshGroupType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2736,7 +3311,7 @@ func (this *CreateSpecType_HubMesh) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&CreateSpecType_HubMesh{`,
-		`HubMesh:` + strings.Replace(fmt.Sprintf("%v", this.HubMesh), "Empty", "schema.Empty", 1) + `,`,
+		`HubMesh:` + strings.Replace(fmt.Sprintf("%v", this.HubMesh), "HubFullMeshGroupType", "HubFullMeshGroupType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2789,7 +3364,7 @@ func (this *ReplaceSpecType_HubMesh) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&ReplaceSpecType_HubMesh{`,
-		`HubMesh:` + strings.Replace(fmt.Sprintf("%v", this.HubMesh), "Empty", "schema.Empty", 1) + `,`,
+		`HubMesh:` + strings.Replace(fmt.Sprintf("%v", this.HubMesh), "HubFullMeshGroupType", "HubFullMeshGroupType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2843,7 +3418,7 @@ func (this *GetSpecType_HubMesh) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GetSpecType_HubMesh{`,
-		`HubMesh:` + strings.Replace(fmt.Sprintf("%v", this.HubMesh), "Empty", "schema.Empty", 1) + `,`,
+		`HubMesh:` + strings.Replace(fmt.Sprintf("%v", this.HubMesh), "HubFullMeshGroupType", "HubFullMeshGroupType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2875,6 +3450,129 @@ func valueToStringTypes(v interface{}) string {
 	}
 	pv := reflect.Indirect(rv).Interface()
 	return fmt.Sprintf("*%v", pv)
+}
+func (m *HubFullMeshGroupType) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: HubFullMeshGroupType: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: HubFullMeshGroupType: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DataPlaneMesh", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.HubFullMeshChoice = &HubFullMeshGroupType_DataPlaneMesh{v}
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ControlAndDataPlaneMesh", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.HubFullMeshChoice = &HubFullMeshGroupType_ControlAndDataPlaneMesh{v}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
 }
 func (m *FullMeshGroupType) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
@@ -3064,6 +3762,76 @@ func (m *SpokeMeshGroupType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DataPlaneMesh", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.SpokeHubMeshChoice = &SpokeMeshGroupType_DataPlaneMesh{v}
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ControlAndDataPlaneMesh", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.SpokeHubMeshChoice = &SpokeMeshGroupType_ControlAndDataPlaneMesh{v}
+			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipTypes(dAtA[iNdEx:])
@@ -3252,7 +4020,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &schema.Empty{}
+			v := &HubFullMeshGroupType{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -3497,7 +4265,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &schema.Empty{}
+			v := &HubFullMeshGroupType{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -3742,7 +4510,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &schema.Empty{}
+			v := &HubFullMeshGroupType{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -4006,7 +4774,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &schema.Empty{}
+			v := &HubFullMeshGroupType{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}

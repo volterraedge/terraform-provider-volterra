@@ -15,6 +15,7 @@ import (
 	"gopkg.volterra.us/stdlib/client/vesapi"
 
 	ves_io_schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+	ves_io_schema_policy "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/policy"
 	ves_io_schema_route "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/route"
 )
 
@@ -66,6 +67,57 @@ func resourceVolterraRoute() *schema.Resource {
 				Optional: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
+
+						"bot_defense_javascript_injection": {
+
+							Type:     schema.TypeSet,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"javascript_location": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+
+									"js_download_path": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+								},
+							},
+						},
+
+						"inherited_bot_defense_javascript_injection": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+
+						"bot_defense_javascript_injection_inline_mode": {
+
+							Type:     schema.TypeSet,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"element_selector": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+
+									"insert_content": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+
+									"position": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+								},
+							},
+						},
 
 						"disable_custom_script": {
 							Type:     schema.TypeBool,
@@ -708,6 +760,18 @@ func resourceVolterraRoute() *schema.Resource {
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
+															"add_httponly": {
+
+																Type:     schema.TypeBool,
+																Optional: true,
+															},
+
+															"ignore_httponly": {
+
+																Type:     schema.TypeBool,
+																Optional: true,
+															},
+
 															"name": {
 																Type:     schema.TypeString,
 																Optional: true,
@@ -715,6 +779,42 @@ func resourceVolterraRoute() *schema.Resource {
 
 															"path": {
 																Type:     schema.TypeString,
+																Optional: true,
+															},
+
+															"ignore_samesite": {
+
+																Type:     schema.TypeBool,
+																Optional: true,
+															},
+
+															"samesite_lax": {
+
+																Type:     schema.TypeBool,
+																Optional: true,
+															},
+
+															"samesite_none": {
+
+																Type:     schema.TypeBool,
+																Optional: true,
+															},
+
+															"samesite_strict": {
+
+																Type:     schema.TypeBool,
+																Optional: true,
+															},
+
+															"add_secure": {
+
+																Type:     schema.TypeBool,
+																Optional: true,
+															},
+
+															"ignore_secure": {
+
+																Type:     schema.TypeBool,
 																Optional: true,
 															},
 
@@ -1268,6 +1368,73 @@ func resourceVolterraRouteCreate(d *schema.ResourceData, meta interface{}) error
 		for i, set := range sl {
 			routes[i] = &ves_io_schema_route.RouteType{}
 			routesMapStrToI := set.(map[string]interface{})
+
+			botDefenseJavascriptInjectionChoiceTypeFound := false
+
+			if v, ok := routesMapStrToI["bot_defense_javascript_injection"]; ok && !isIntfNil(v) && !botDefenseJavascriptInjectionChoiceTypeFound {
+
+				botDefenseJavascriptInjectionChoiceTypeFound = true
+				botDefenseJavascriptInjectionChoiceInt := &ves_io_schema_route.RouteType_BotDefenseJavascriptInjection{}
+				botDefenseJavascriptInjectionChoiceInt.BotDefenseJavascriptInjection = &ves_io_schema_route.BotDefenseJavascriptInjectionType{}
+				routes[i].BotDefenseJavascriptInjectionChoice = botDefenseJavascriptInjectionChoiceInt
+
+				sl := v.(*schema.Set).List()
+				for _, set := range sl {
+					cs := set.(map[string]interface{})
+
+					if v, ok := cs["javascript_location"]; ok && !isIntfNil(v) {
+
+						botDefenseJavascriptInjectionChoiceInt.BotDefenseJavascriptInjection.JavascriptLocation = ves_io_schema_route.JavaScriptLocation(ves_io_schema_route.JavaScriptLocation_value[v.(string)])
+
+					}
+
+					if v, ok := cs["js_download_path"]; ok && !isIntfNil(v) {
+
+						botDefenseJavascriptInjectionChoiceInt.BotDefenseJavascriptInjection.JsDownloadPath = v.(string)
+
+					}
+
+				}
+
+			}
+
+			if v, ok := routesMapStrToI["inherited_bot_defense_javascript_injection"]; ok && !isIntfNil(v) && !botDefenseJavascriptInjectionChoiceTypeFound {
+
+				botDefenseJavascriptInjectionChoiceTypeFound = true
+
+				if v.(bool) {
+					botDefenseJavascriptInjectionChoiceInt := &ves_io_schema_route.RouteType_InheritedBotDefenseJavascriptInjection{}
+					botDefenseJavascriptInjectionChoiceInt.InheritedBotDefenseJavascriptInjection = &ves_io_schema.Empty{}
+					routes[i].BotDefenseJavascriptInjectionChoice = botDefenseJavascriptInjectionChoiceInt
+				}
+
+			}
+
+			if v, ok := routesMapStrToI["bot_defense_javascript_injection_inline_mode"]; ok && !isIntfNil(v) {
+
+				sl := v.(*schema.Set).List()
+				botDefenseJavascriptInjectionInlineMode := &ves_io_schema_route.ContentRewriteType{}
+				routes[i].BotDefenseJavascriptInjectionInlineMode = botDefenseJavascriptInjectionInlineMode
+				for _, set := range sl {
+					botDefenseJavascriptInjectionInlineModeMapStrToI := set.(map[string]interface{})
+
+					if w, ok := botDefenseJavascriptInjectionInlineModeMapStrToI["element_selector"]; ok && !isIntfNil(w) {
+						botDefenseJavascriptInjectionInlineMode.ElementSelector = w.(string)
+					}
+
+					if w, ok := botDefenseJavascriptInjectionInlineModeMapStrToI["insert_content"]; ok && !isIntfNil(w) {
+						botDefenseJavascriptInjectionInlineMode.InsertContent = w.(string)
+					}
+
+					if v, ok := botDefenseJavascriptInjectionInlineModeMapStrToI["position"]; ok && !isIntfNil(v) {
+
+						botDefenseJavascriptInjectionInlineMode.Position = ves_io_schema_policy.HTMLPosition(ves_io_schema_policy.HTMLPosition_value[v.(string)])
+
+					}
+
+				}
+
+			}
 
 			if w, ok := routesMapStrToI["disable_custom_script"]; ok && !isIntfNil(w) {
 				routes[i].DisableCustomScript = w.(bool)
@@ -2081,6 +2248,32 @@ func resourceVolterraRouteCreate(d *schema.ResourceData, meta interface{}) error
 								for _, set := range sl {
 									cs := set.(map[string]interface{})
 
+									httponlyTypeFound := false
+
+									if v, ok := cs["add_httponly"]; ok && !isIntfNil(v) && !httponlyTypeFound {
+
+										httponlyTypeFound = true
+
+										if v.(bool) {
+											httponlyInt := &ves_io_schema_route.CookieForHashing_AddHttponly{}
+											httponlyInt.AddHttponly = &ves_io_schema.Empty{}
+											policySpecifierInt.Cookie.Httponly = httponlyInt
+										}
+
+									}
+
+									if v, ok := cs["ignore_httponly"]; ok && !isIntfNil(v) && !httponlyTypeFound {
+
+										httponlyTypeFound = true
+
+										if v.(bool) {
+											httponlyInt := &ves_io_schema_route.CookieForHashing_IgnoreHttponly{}
+											httponlyInt.IgnoreHttponly = &ves_io_schema.Empty{}
+											policySpecifierInt.Cookie.Httponly = httponlyInt
+										}
+
+									}
+
 									if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 										policySpecifierInt.Cookie.Name = v.(string)
@@ -2090,6 +2283,82 @@ func resourceVolterraRouteCreate(d *schema.ResourceData, meta interface{}) error
 									if v, ok := cs["path"]; ok && !isIntfNil(v) {
 
 										policySpecifierInt.Cookie.Path = v.(string)
+
+									}
+
+									samesiteTypeFound := false
+
+									if v, ok := cs["ignore_samesite"]; ok && !isIntfNil(v) && !samesiteTypeFound {
+
+										samesiteTypeFound = true
+
+										if v.(bool) {
+											samesiteInt := &ves_io_schema_route.CookieForHashing_IgnoreSamesite{}
+											samesiteInt.IgnoreSamesite = &ves_io_schema.Empty{}
+											policySpecifierInt.Cookie.Samesite = samesiteInt
+										}
+
+									}
+
+									if v, ok := cs["samesite_lax"]; ok && !isIntfNil(v) && !samesiteTypeFound {
+
+										samesiteTypeFound = true
+
+										if v.(bool) {
+											samesiteInt := &ves_io_schema_route.CookieForHashing_SamesiteLax{}
+											samesiteInt.SamesiteLax = &ves_io_schema.Empty{}
+											policySpecifierInt.Cookie.Samesite = samesiteInt
+										}
+
+									}
+
+									if v, ok := cs["samesite_none"]; ok && !isIntfNil(v) && !samesiteTypeFound {
+
+										samesiteTypeFound = true
+
+										if v.(bool) {
+											samesiteInt := &ves_io_schema_route.CookieForHashing_SamesiteNone{}
+											samesiteInt.SamesiteNone = &ves_io_schema.Empty{}
+											policySpecifierInt.Cookie.Samesite = samesiteInt
+										}
+
+									}
+
+									if v, ok := cs["samesite_strict"]; ok && !isIntfNil(v) && !samesiteTypeFound {
+
+										samesiteTypeFound = true
+
+										if v.(bool) {
+											samesiteInt := &ves_io_schema_route.CookieForHashing_SamesiteStrict{}
+											samesiteInt.SamesiteStrict = &ves_io_schema.Empty{}
+											policySpecifierInt.Cookie.Samesite = samesiteInt
+										}
+
+									}
+
+									secureTypeFound := false
+
+									if v, ok := cs["add_secure"]; ok && !isIntfNil(v) && !secureTypeFound {
+
+										secureTypeFound = true
+
+										if v.(bool) {
+											secureInt := &ves_io_schema_route.CookieForHashing_AddSecure{}
+											secureInt.AddSecure = &ves_io_schema.Empty{}
+											policySpecifierInt.Cookie.Secure = secureInt
+										}
+
+									}
+
+									if v, ok := cs["ignore_secure"]; ok && !isIntfNil(v) && !secureTypeFound {
+
+										secureTypeFound = true
+
+										if v.(bool) {
+											secureInt := &ves_io_schema_route.CookieForHashing_IgnoreSecure{}
+											secureInt.IgnoreSecure = &ves_io_schema.Empty{}
+											policySpecifierInt.Cookie.Secure = secureInt
+										}
 
 									}
 
@@ -2821,6 +3090,73 @@ func resourceVolterraRouteUpdate(d *schema.ResourceData, meta interface{}) error
 			routes[i] = &ves_io_schema_route.RouteType{}
 			routesMapStrToI := set.(map[string]interface{})
 
+			botDefenseJavascriptInjectionChoiceTypeFound := false
+
+			if v, ok := routesMapStrToI["bot_defense_javascript_injection"]; ok && !isIntfNil(v) && !botDefenseJavascriptInjectionChoiceTypeFound {
+
+				botDefenseJavascriptInjectionChoiceTypeFound = true
+				botDefenseJavascriptInjectionChoiceInt := &ves_io_schema_route.RouteType_BotDefenseJavascriptInjection{}
+				botDefenseJavascriptInjectionChoiceInt.BotDefenseJavascriptInjection = &ves_io_schema_route.BotDefenseJavascriptInjectionType{}
+				routes[i].BotDefenseJavascriptInjectionChoice = botDefenseJavascriptInjectionChoiceInt
+
+				sl := v.(*schema.Set).List()
+				for _, set := range sl {
+					cs := set.(map[string]interface{})
+
+					if v, ok := cs["javascript_location"]; ok && !isIntfNil(v) {
+
+						botDefenseJavascriptInjectionChoiceInt.BotDefenseJavascriptInjection.JavascriptLocation = ves_io_schema_route.JavaScriptLocation(ves_io_schema_route.JavaScriptLocation_value[v.(string)])
+
+					}
+
+					if v, ok := cs["js_download_path"]; ok && !isIntfNil(v) {
+
+						botDefenseJavascriptInjectionChoiceInt.BotDefenseJavascriptInjection.JsDownloadPath = v.(string)
+
+					}
+
+				}
+
+			}
+
+			if v, ok := routesMapStrToI["inherited_bot_defense_javascript_injection"]; ok && !isIntfNil(v) && !botDefenseJavascriptInjectionChoiceTypeFound {
+
+				botDefenseJavascriptInjectionChoiceTypeFound = true
+
+				if v.(bool) {
+					botDefenseJavascriptInjectionChoiceInt := &ves_io_schema_route.RouteType_InheritedBotDefenseJavascriptInjection{}
+					botDefenseJavascriptInjectionChoiceInt.InheritedBotDefenseJavascriptInjection = &ves_io_schema.Empty{}
+					routes[i].BotDefenseJavascriptInjectionChoice = botDefenseJavascriptInjectionChoiceInt
+				}
+
+			}
+
+			if v, ok := routesMapStrToI["bot_defense_javascript_injection_inline_mode"]; ok && !isIntfNil(v) {
+
+				sl := v.(*schema.Set).List()
+				botDefenseJavascriptInjectionInlineMode := &ves_io_schema_route.ContentRewriteType{}
+				routes[i].BotDefenseJavascriptInjectionInlineMode = botDefenseJavascriptInjectionInlineMode
+				for _, set := range sl {
+					botDefenseJavascriptInjectionInlineModeMapStrToI := set.(map[string]interface{})
+
+					if w, ok := botDefenseJavascriptInjectionInlineModeMapStrToI["element_selector"]; ok && !isIntfNil(w) {
+						botDefenseJavascriptInjectionInlineMode.ElementSelector = w.(string)
+					}
+
+					if w, ok := botDefenseJavascriptInjectionInlineModeMapStrToI["insert_content"]; ok && !isIntfNil(w) {
+						botDefenseJavascriptInjectionInlineMode.InsertContent = w.(string)
+					}
+
+					if v, ok := botDefenseJavascriptInjectionInlineModeMapStrToI["position"]; ok && !isIntfNil(v) {
+
+						botDefenseJavascriptInjectionInlineMode.Position = ves_io_schema_policy.HTMLPosition(ves_io_schema_policy.HTMLPosition_value[v.(string)])
+
+					}
+
+				}
+
+			}
+
 			if w, ok := routesMapStrToI["disable_custom_script"]; ok && !isIntfNil(w) {
 				routes[i].DisableCustomScript = w.(bool)
 			}
@@ -3633,6 +3969,32 @@ func resourceVolterraRouteUpdate(d *schema.ResourceData, meta interface{}) error
 								for _, set := range sl {
 									cs := set.(map[string]interface{})
 
+									httponlyTypeFound := false
+
+									if v, ok := cs["add_httponly"]; ok && !isIntfNil(v) && !httponlyTypeFound {
+
+										httponlyTypeFound = true
+
+										if v.(bool) {
+											httponlyInt := &ves_io_schema_route.CookieForHashing_AddHttponly{}
+											httponlyInt.AddHttponly = &ves_io_schema.Empty{}
+											policySpecifierInt.Cookie.Httponly = httponlyInt
+										}
+
+									}
+
+									if v, ok := cs["ignore_httponly"]; ok && !isIntfNil(v) && !httponlyTypeFound {
+
+										httponlyTypeFound = true
+
+										if v.(bool) {
+											httponlyInt := &ves_io_schema_route.CookieForHashing_IgnoreHttponly{}
+											httponlyInt.IgnoreHttponly = &ves_io_schema.Empty{}
+											policySpecifierInt.Cookie.Httponly = httponlyInt
+										}
+
+									}
+
 									if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 										policySpecifierInt.Cookie.Name = v.(string)
@@ -3642,6 +4004,82 @@ func resourceVolterraRouteUpdate(d *schema.ResourceData, meta interface{}) error
 									if v, ok := cs["path"]; ok && !isIntfNil(v) {
 
 										policySpecifierInt.Cookie.Path = v.(string)
+
+									}
+
+									samesiteTypeFound := false
+
+									if v, ok := cs["ignore_samesite"]; ok && !isIntfNil(v) && !samesiteTypeFound {
+
+										samesiteTypeFound = true
+
+										if v.(bool) {
+											samesiteInt := &ves_io_schema_route.CookieForHashing_IgnoreSamesite{}
+											samesiteInt.IgnoreSamesite = &ves_io_schema.Empty{}
+											policySpecifierInt.Cookie.Samesite = samesiteInt
+										}
+
+									}
+
+									if v, ok := cs["samesite_lax"]; ok && !isIntfNil(v) && !samesiteTypeFound {
+
+										samesiteTypeFound = true
+
+										if v.(bool) {
+											samesiteInt := &ves_io_schema_route.CookieForHashing_SamesiteLax{}
+											samesiteInt.SamesiteLax = &ves_io_schema.Empty{}
+											policySpecifierInt.Cookie.Samesite = samesiteInt
+										}
+
+									}
+
+									if v, ok := cs["samesite_none"]; ok && !isIntfNil(v) && !samesiteTypeFound {
+
+										samesiteTypeFound = true
+
+										if v.(bool) {
+											samesiteInt := &ves_io_schema_route.CookieForHashing_SamesiteNone{}
+											samesiteInt.SamesiteNone = &ves_io_schema.Empty{}
+											policySpecifierInt.Cookie.Samesite = samesiteInt
+										}
+
+									}
+
+									if v, ok := cs["samesite_strict"]; ok && !isIntfNil(v) && !samesiteTypeFound {
+
+										samesiteTypeFound = true
+
+										if v.(bool) {
+											samesiteInt := &ves_io_schema_route.CookieForHashing_SamesiteStrict{}
+											samesiteInt.SamesiteStrict = &ves_io_schema.Empty{}
+											policySpecifierInt.Cookie.Samesite = samesiteInt
+										}
+
+									}
+
+									secureTypeFound := false
+
+									if v, ok := cs["add_secure"]; ok && !isIntfNil(v) && !secureTypeFound {
+
+										secureTypeFound = true
+
+										if v.(bool) {
+											secureInt := &ves_io_schema_route.CookieForHashing_AddSecure{}
+											secureInt.AddSecure = &ves_io_schema.Empty{}
+											policySpecifierInt.Cookie.Secure = secureInt
+										}
+
+									}
+
+									if v, ok := cs["ignore_secure"]; ok && !isIntfNil(v) && !secureTypeFound {
+
+										secureTypeFound = true
+
+										if v.(bool) {
+											secureInt := &ves_io_schema_route.CookieForHashing_IgnoreSecure{}
+											secureInt.IgnoreSecure = &ves_io_schema.Empty{}
+											policySpecifierInt.Cookie.Secure = secureInt
+										}
 
 									}
 

@@ -778,10 +778,13 @@ var CustomDataAPISwaggerJSON string = `{
             "properties": {
                 "end_time": {
                     "type": "string",
-                    "description": " end time of metric collection from which data will be considered.\n Format: unix_timestamp|rfc 3339\n\n Optional: If not specified, then the end_time will be evaluated to start_time+10m\n           If start_time is not specified, then the end_time will be evaluated to \u003ccurrent time\u003e\n\nExample: - \"1570007981\"-",
+                    "description": " end time of metric collection from which data will be considered.\n Format: unix_timestamp|rfc 3339\n\n Optional: If not specified, then the end_time will be evaluated to start_time+10m\n           If start_time is not specified, then the end_time will be evaluated to \u003ccurrent time\u003e\n\nExample: - \"1570007981\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.query_time: true\n",
                     "title": "End time",
                     "x-displayname": "End Time",
-                    "x-ves-example": "1570007981"
+                    "x-ves-example": "1570007981",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.query_time": "true"
+                    }
                 },
                 "group_by": {
                     "type": "array",
@@ -810,10 +813,13 @@ var CustomDataAPISwaggerJSON string = `{
                 },
                 "start_time": {
                     "type": "string",
-                    "description": " start time of metric collection from which data will be considered.\n Format: unix_timestamp|rfc 3339\n\n Optional: If not specified, then the start_time will be evaluated to end_time-10m\n           If end_time is not specified, then the start_time will be evaluated to \u003ccurrent time\u003e-10m\n\nExample: - \"1570007981\"-",
+                    "description": " start time of metric collection from which data will be considered.\n Format: unix_timestamp|rfc 3339\n\n Optional: If not specified, then the start_time will be evaluated to end_time-10m\n           If end_time is not specified, then the start_time will be evaluated to \u003ccurrent time\u003e-10m\n\nExample: - \"1570007981\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.query_time: true\n",
                     "title": "Start time",
                     "x-displayname": "Start Time",
-                    "x-ves-example": "1570007981"
+                    "x-ves-example": "1570007981",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.query_time": "true"
+                    }
                 },
                 "step": {
                     "type": "string",

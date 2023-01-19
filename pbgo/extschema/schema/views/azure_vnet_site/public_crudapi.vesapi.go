@@ -3453,6 +3453,7 @@ var APISwaggerJSON string = `{
             "title": "Express Route Configuration",
             "x-displayname": "Express Route Configuration",
             "x-ves-oneof-field-asn_choice": "[\"auto_asn\",\"custom_asn\"]",
+            "x-ves-oneof-field-connectivity_options": "[\"site_registration_over_express_route\",\"site_registration_over_internet\"]",
             "x-ves-oneof-field-sku_choice": "[\"sku_ergw1az\",\"sku_ergw2az\",\"sku_high_perf\",\"sku_standard\"]",
             "x-ves-proto-message": "ves.io.schema.views.azure_vnet_site.ExpressRouteConfigType",
             "properties": {
@@ -3503,6 +3504,19 @@ var APISwaggerJSON string = `{
                     "title": "Route Server Subnet",
                     "$ref": "#/definitions/viewsAzureSubnetChoiceWithAutoType",
                     "x-displayname": "Subnet for Azure Route Server"
+                },
+                "site_registration_over_express_route": {
+                    "description": "Exclusive with [site_registration_over_internet]\n Site Registration and Site to RE tunnels go over the Azure Express Route\n\nExample: - \"64512\"-",
+                    "title": "Site Registration \u0026 Connectivity to RE over Azure Express Route",
+                    "$ref": "#/definitions/viewsCloudLinkADNType",
+                    "x-displayname": "Site Registration \u0026 Connectivity to RE over Azure Express Route",
+                    "x-ves-example": "64512"
+                },
+                "site_registration_over_internet": {
+                    "description": "Exclusive with [site_registration_over_express_route]\n Site Registration and Site to RE tunnels go over the internet",
+                    "title": "Site Registration \u0026 Connectivity to RE over Internet",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Site Registration \u0026 Connectivity to RE Internet Gateway"
                 },
                 "sku_ergw1az": {
                     "description": "Exclusive with [sku_ergw2az sku_high_perf sku_standard]\n ErGw1Az SKU (Standard + Zone protection)",
@@ -6412,6 +6426,27 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "viewsCloudLinkADNType": {
+            "type": "object",
+            "title": "Cloud Link ADN Network Config",
+            "x-displayname": "Cloud Link ADN Network Config",
+            "x-ves-proto-message": "ves.io.schema.views.CloudLinkADNType",
+            "properties": {
+                "cloudlink_network_name": {
+                    "type": "string",
+                    "description": " Cloud Link ADN Network Name for private access connectivity to F5XC ADN.\n\nExample: - \"private-cloud-ntw\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_bytes: 64\n",
+                    "title": "Cloud Link ADN Network Name",
+                    "maxLength": 64,
+                    "x-displayname": "Cloud Link ADN Network Name",
+                    "x-ves-example": "private-cloud-ntw",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.max_bytes": "64"
+                    }
+                }
+            }
+        },
         "viewsCloudSubnetParamType": {
             "type": "object",
             "description": "Parameters for creating a new cloud subnet",
@@ -6750,7 +6785,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Co-ordinates"
                 },
                 "default_blocked_services": {
-                    "description": "Exclusive with [blocked_services]\n Use default dehavior of allowing ports mentioned in blocked services",
+                    "description": "Exclusive with [blocked_services]\n Use default behavior of allowing ports mentioned in blocked services",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Default Blocked Service Configuration"
                 },
@@ -6968,7 +7003,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Co-ordinates"
                 },
                 "default_blocked_services": {
-                    "description": "Exclusive with [blocked_services]\n Use default dehavior of allowing ports mentioned in blocked services",
+                    "description": "Exclusive with [blocked_services]\n Use default behavior of allowing ports mentioned in blocked services",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Default Blocked Service Configuration"
                 },
@@ -7187,7 +7222,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Co-ordinates"
                 },
                 "default_blocked_services": {
-                    "description": "Exclusive with [blocked_services]\n Use default dehavior of allowing ports mentioned in blocked services",
+                    "description": "Exclusive with [blocked_services]\n Use default behavior of allowing ports mentioned in blocked services",
                     "title": "Default Blocked Service Configuration",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Default Blocked Service Configuration"
@@ -7392,7 +7427,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Co-ordinates"
                 },
                 "default_blocked_services": {
-                    "description": "Exclusive with [blocked_services]\n Use default dehavior of allowing ports mentioned in blocked services",
+                    "description": "Exclusive with [blocked_services]\n Use default behavior of allowing ports mentioned in blocked services",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Default Blocked Service Configuration"
                 },

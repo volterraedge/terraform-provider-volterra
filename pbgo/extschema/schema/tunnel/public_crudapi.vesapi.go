@@ -3371,6 +3371,18 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "tunnelDeploymentVPNTunnelType": {
+            "type": "string",
+            "description": "This defines AWS TGW VPN Tunnel type for which the config exists\n\nVPN Tunnel Type - HUB\nVPN Tunnel Type - Services",
+            "title": "AWS TGW VPN Tunnel Type",
+            "enum": [
+                "HUB",
+                "SERVICES"
+            ],
+            "default": "HUB",
+            "x-displayname": "AWS TGW VPN Tunnel Type",
+            "x-ves-proto-enum": "ves.io.schema.tunnel.DeploymentVPNTunnelType"
+        },
         "tunnelGetResponse": {
             "type": "object",
             "description": "This is the output message of the 'Get' RPC",
@@ -3503,6 +3515,12 @@ var APISwaggerJSON string = `{
                     "title": "Disable Forward Proxy",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Disable Forward Proxy"
+                },
+                "deployment_vpn_tunnel_type": {
+                    "description": " AWS TGW Hub/Services VPN Tunnel demarcation",
+                    "title": "AWS TGW VPN Tunnel Parameters",
+                    "$ref": "#/definitions/tunnelDeploymentVPNTunnelType",
+                    "x-displayname": "AWS TGW Tunnel Parameters"
                 },
                 "local_ip": {
                     "description": " Selects local IP address configuration for tunnel\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",

@@ -2249,7 +2249,7 @@ var APISwaggerJSON string = `{
             "properties": {
                 "enabled": {
                     "type": "boolean",
-                    "description": " Enable/disable Http2 Protocol for upstream connections. It is disabled by default.",
+                    "description": " Enable/disable HTTP2 Protocol for upstream connections",
                     "title": "enabled",
                     "format": "boolean",
                     "x-displayname": "HTTP2 Enabled"
@@ -2681,11 +2681,18 @@ var APISwaggerJSON string = `{
             "title": "Origin Pool Advanced Options",
             "x-displayname": "Origin Pool Advanced Options",
             "x-ves-oneof-field-circuit_breaker_choice": "[\"circuit_breaker\",\"default_circuit_breaker\",\"disable_circuit_breaker\"]",
+            "x-ves-oneof-field-http_protocol_type": "[\"auto_http_config\",\"http1_config\",\"http2_options\"]",
             "x-ves-oneof-field-outlier_detection_choice": "[\"disable_outlier_detection\",\"outlier_detection\"]",
             "x-ves-oneof-field-panic_threshold_type": "[\"no_panic_threshold\",\"panic_threshold\"]",
             "x-ves-oneof-field-subset_choice": "[\"disable_subsets\",\"enable_subsets\"]",
             "x-ves-proto-message": "ves.io.schema.views.origin_pool.OriginPoolAdvancedOptions",
             "properties": {
+                "auto_http_config": {
+                    "description": "Exclusive with [http1_config http2_options]\n This allows switching on protocol based on ALPN. It can use either HTTP/1.1 or HTTP/2,\n and will use whichever protocol is negotiated by ALPN with the upstream.",
+                    "title": "auto_http_config",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Automatic"
+                },
                 "circuit_breaker": {
                     "description": "Exclusive with [default_circuit_breaker disable_circuit_breaker]\n CircuitBreaker provides a mechanism for watching failures in upstream connections or requests\n and if the failures reach a certain threshold, automatically fail subsequent requests which\n allows to apply back pressure on downstream quickly.",
                     "title": "circuit_breaker",
@@ -2739,11 +2746,17 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/schemaHeaderTransformationType",
                     "x-displayname": "Header Transformation Configuration"
                 },
+                "http1_config": {
+                    "description": "Exclusive with [auto_http_config http2_options]\n Enable HTTP/1.1 for upstream connections",
+                    "title": "http1_config",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "HTTP/1.1"
+                },
                 "http2_options": {
-                    "description": " Http2 Protocol options for upstream connections",
+                    "description": "Exclusive with [auto_http_config http1_config]\n Enable HTTP/2 for upstream connections.",
                     "title": "http2_options",
                     "$ref": "#/definitions/clusterHttp2ProtocolOptions",
-                    "x-displayname": "Http2 Protocol Configuration"
+                    "x-displayname": "HTTP/2 Configuration"
                 },
                 "http_idle_timeout": {
                     "type": "integer",

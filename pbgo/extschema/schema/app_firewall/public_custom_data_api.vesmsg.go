@@ -294,6 +294,26 @@ func (v *ValidateMetricsRequest) FieldSelectorValidationRuleHandler(rules map[st
 	return validatorFn, nil
 }
 
+func (v *ValidateMetricsRequest) StartTimeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for start_time")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateMetricsRequest) EndTimeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for end_time")
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateMetricsRequest) StepValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
@@ -427,6 +447,28 @@ var DefaultMetricsRequestValidator = func() *ValidateMetricsRequest {
 		panic(errMsg)
 	}
 	v.FldValidators["field_selector"] = vFn
+
+	vrhStartTime := v.StartTimeValidationRuleHandler
+	rulesStartTime := map[string]string{
+		"ves.io.schema.rules.string.query_time": "true",
+	}
+	vFn, err = vrhStartTime(rulesStartTime)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for MetricsRequest.start_time: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["start_time"] = vFn
+
+	vrhEndTime := v.EndTimeValidationRuleHandler
+	rulesEndTime := map[string]string{
+		"ves.io.schema.rules.string.query_time": "true",
+	}
+	vFn, err = vrhEndTime(rulesEndTime)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for MetricsRequest.end_time: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["end_time"] = vFn
 
 	vrhStep := v.StepValidationRuleHandler
 	rulesStep := map[string]string{

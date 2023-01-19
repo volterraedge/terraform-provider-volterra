@@ -2947,7 +2947,7 @@ var APISwaggerJSON string = `{
         },
         "schemaHttpMethod": {
             "type": "string",
-            "description": "Specifies the HTTP method used to access a resource.\n\nAny HTTP Method\nGET method\nHEAD method\nPOST method\nPUT method\nDELETE method\nCONNECT method\nOPTIONS method\nTRACE method\nPATCH method",
+            "description": "Specifies the HTTP method used to access a resource.\n\nAny HTTP Method",
             "title": "HttpMethod",
             "enum": [
                 "ANY",

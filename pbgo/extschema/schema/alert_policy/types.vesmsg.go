@@ -343,6 +343,48 @@ type ValidateCustomGroupBy struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateCustomGroupBy) LabelsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepStringItemRules(rules)
+	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Item ValidationRuleHandler for labels")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []string, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for labels")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]string)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []string, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal := fmt.Sprintf("%v", elem)
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated labels")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items labels")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateCustomGroupBy) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*CustomGroupBy)
 	if !ok {
@@ -358,13 +400,9 @@ func (v *ValidateCustomGroupBy) Validate(ctx context.Context, pm interface{}, op
 	}
 
 	if fv, exists := v.FldValidators["labels"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("labels"))
-		for idx, item := range m.GetLabels() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
-			if err := fv(ctx, item, vOpts...); err != nil {
-				return err
-			}
+		if err := fv(ctx, m.GetLabels(), vOpts...); err != nil {
+			return err
 		}
 
 	}
@@ -375,6 +413,27 @@ func (v *ValidateCustomGroupBy) Validate(ctx context.Context, pm interface{}, op
 // Well-known symbol for default validator implementation
 var DefaultCustomGroupByValidator = func() *ValidateCustomGroupBy {
 	v := &ValidateCustomGroupBy{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhLabels := v.LabelsValidationRuleHandler
+	rulesLabels := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "5",
+		"ves.io.schema.rules.repeated.unique":    "true",
+		"ves.io.schema.rules.string.pattern":     "^[a-zA-Z_][a-zA-Z0-9_]*$",
+	}
+	vFn, err = vrhLabels(rulesLabels)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CustomGroupBy.labels: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["labels"] = vFn
 
 	return v
 }()
@@ -532,6 +591,7 @@ var DefaultCustomMatcherValidator = func() *ValidateCustomMatcher {
 	rulesAlertlabel := map[string]string{
 		"ves.io.schema.rules.map.keys.string.max_len": "64",
 		"ves.io.schema.rules.map.keys.string.min_len": "1",
+		"ves.io.schema.rules.map.keys.string.pattern": "^[a-zA-Z_][a-zA-Z0-9_]*$",
 		"ves.io.schema.rules.map.max_pairs":           "3",
 	}
 	vFn, err = vrhAlertlabel(rulesAlertlabel)
@@ -1565,6 +1625,8 @@ var DefaultNotificationParametersValidator = func() *ValidateNotificationParamet
 		panic(errMsg)
 	}
 	v.FldValidators["repeat_interval"] = vFn
+
+	v.FldValidators["group_by.custom"] = CustomGroupByValidator().Validate
 
 	return v
 }()

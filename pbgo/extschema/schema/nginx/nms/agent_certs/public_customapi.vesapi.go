@@ -463,88 +463,315 @@ var CustomAPISwaggerJSON string = `{
         "application/json"
     ],
     "tags": [],
-    "paths": {},
+    "paths": {
+        "/public/namespaces/system/agent-certs": {
+            "post": {
+                "summary": "Generate Agent Cert",
+                "description": "Generate an Agent Cert",
+                "operationId": "ves.io.schema.nginx.nms.agent_certs.CustomAPI.GenerateAgentCert",
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/agent_certsGenerateAgentCertResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/agent_certsGenerateAgentCertRequest"
+                        }
+                    }
+                ],
+                "tags": [
+                    "CustomAPI"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-nginx-nms-agent_certs-customapi-generateagentcert"
+                },
+                "x-ves-proto-rpc": "ves.io.schema.nginx.nms.agent_certs.CustomAPI.GenerateAgentCert"
+            },
+            "x-displayname": "Agent Certs",
+            "x-ves-proto-service": "ves.io.schema.nginx.nms.agent_certs.CustomAPI",
+            "x-ves-proto-service-type": "CUSTOM_PUBLIC"
+        },
+        "/public/namespaces/system/agent-certs/revoke": {
+            "post": {
+                "summary": "Revoke Agent Cert",
+                "description": "Revoke an Agent Cert",
+                "operationId": "ves.io.schema.nginx.nms.agent_certs.CustomAPI.RevokeAgentCert",
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/agent_certsRevokeAgentCertResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/agent_certsRevokeAgentCertRequest"
+                        }
+                    }
+                ],
+                "tags": [
+                    "CustomAPI"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-nginx-nms-agent_certs-customapi-revokeagentcert"
+                },
+                "x-ves-proto-rpc": "ves.io.schema.nginx.nms.agent_certs.CustomAPI.RevokeAgentCert"
+            },
+            "x-displayname": "Agent Certs",
+            "x-ves-proto-service": "ves.io.schema.nginx.nms.agent_certs.CustomAPI",
+            "x-ves-proto-service-type": "CUSTOM_PUBLIC"
+        }
+    },
     "definitions": {
         "agent_certsGenerateAgentCertRequest": {
             "type": "object",
-            "description": "x-displayName: \"Generate Agent Cert Request\"\nGenerate a new Agent Cert",
+            "description": "Generate a new Agent Cert",
             "title": "GenerateAgentCertRequest is used to generate a new agent cert",
+            "x-displayname": "Generate Agent Cert Request",
+            "x-ves-proto-message": "ves.io.schema.nginx.nms.agent_certs.GenerateAgentCertRequest",
             "properties": {
                 "csr": {
                     "type": "string",
-                    "description": "x-displayName: \"The base-64 encoded PEM certificate signing request\"\nx-required\nx-example: \"example base-64 encoded PEM certificate signing request\"\nThe base-64 encoded PEM certificate signing request",
-                    "title": "The base-64 encoded PEM certificate signing request"
+                    "description": " The base-64 encoded PEM certificate signing request\n\nExample: - \"example base-64 encoded PEM certificate signing request\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "The base-64 encoded PEM certificate signing request",
+                    "x-displayname": "The base-64 encoded PEM certificate signing request",
+                    "x-ves-example": "example base-64 encoded PEM certificate signing request",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 },
                 "deployment_ref": {
-                    "description": "x-displayName: \"The deployment for which the agent cert is requested\"\nx-required\nThe deployment for which the agent cert is requested",
+                    "description": " The deployment for which the agent cert is requested\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "The deployment for which the agent cert is requested",
-                    "$ref": "#/definitions/schemaviewsObjectRefType"
+                    "$ref": "#/definitions/schemaviewsObjectRefType",
+                    "x-displayname": "The deployment for which the agent cert is requested",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 },
                 "expiration_time": {
                     "type": "string",
-                    "description": "x-displayName: \"The expirationTime for the agent certificate (ISO-8601 format)\"\nx-example: \"2022-08-10 15:00:00.000\"\nThe expirationTime for the agent certificate (ISO-8601 format)",
-                    "title": "The expirationTime for the agent certificate (ISO-8601 format)"
+                    "description": " The expirationTime for the agent certificate (ISO-8601 format)\n\n\nExample: - \"2022-08-10 15:00:00.000\"-",
+                    "title": "The expirationTime for the agent certificate (ISO-8601 format)",
+                    "x-displayname": "The expirationTime for the agent certificate (ISO-8601 format)",
+                    "x-ves-example": "2022-08-10 15:00:00.000"
                 }
             }
         },
         "agent_certsGenerateAgentCertResponse": {
             "type": "object",
-            "description": "x-displayName: \"Generate Agent Cert Response\"\nGenerate Agent Cert Response",
+            "description": "Generate Agent Cert Response",
             "title": "GenerateAgentCertResponse is the response from GenerateAgentCert API",
+            "x-displayname": "Generate Agent Cert Response",
+            "x-ves-proto-message": "ves.io.schema.nginx.nms.agent_certs.GenerateAgentCertResponse",
             "properties": {
                 "certificate": {
                     "type": "string",
-                    "description": "x-displayName: \"The base64 encoded PEM Agent certificate\"\nThe base64 encoded PEM Agent certificate",
-                    "title": "The base64 encoded PEM Agent certificate"
+                    "description": " The base64 encoded PEM Agent certificate\n",
+                    "title": "The base64 encoded PEM Agent certificate",
+                    "x-displayname": "The base64 encoded PEM Agent certificate"
                 },
                 "serial_number": {
                     "type": "string",
-                    "description": "x-displayName: \"The unique identifier for the created agent cert\"\nThe unique identifier for the created agent cert",
-                    "title": "The unique identifier for the created agent cert"
+                    "description": " The unique identifier for the created agent cert\n",
+                    "title": "The unique identifier for the created agent cert",
+                    "x-displayname": "The unique identifier for the created agent cert"
                 }
             }
         },
         "agent_certsRevokeAgentCertRequest": {
             "type": "object",
-            "description": "x-displayName: \"Revoke Agent Cert Request\"\nRevoke an Agent Cert",
+            "description": "Revoke an Agent Cert",
             "title": "RevokeAgentCertRequest is used to revoke an agent cert",
+            "x-displayname": "Revoke Agent Cert Request",
+            "x-ves-proto-message": "ves.io.schema.nginx.nms.agent_certs.RevokeAgentCertRequest",
             "properties": {
                 "deployment_ref": {
-                    "description": "x-displayName: \"The deployment for which the agent cert is requested\"\nx-required\nThe deployment for which the agent cert is requested",
+                    "description": " The deployment for which the agent cert is requested\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "The deployment for which the agent cert is requested",
-                    "$ref": "#/definitions/schemaviewsObjectRefType"
+                    "$ref": "#/definitions/schemaviewsObjectRefType",
+                    "x-displayname": "The deployment for which the agent cert is requested",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 },
                 "serial_number": {
                     "type": "string",
-                    "description": "x-displayName: \"The unique identifier for the created agent cert\"\nx-required\nx-example: \"a uniquely identifiable serial number\"\nThe unique identifier for the created agent cert",
-                    "title": "The unique identifier for the created agent cert"
+                    "description": " The unique identifier for the created agent cert\n\nExample: - \"a uniquely identifiable serial number\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "The unique identifier for the created agent cert",
+                    "x-displayname": "The unique identifier for the created agent cert",
+                    "x-ves-example": "a uniquely identifiable serial number",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 }
             }
         },
         "agent_certsRevokeAgentCertResponse": {
             "type": "object",
-            "description": "x-displayName: \"Revoke Agent Cert Response\"\nRevoke Agent Cert Response",
-            "title": "RevokeAgentCertResponse is response received from RevokeAgentCert API"
+            "description": "Revoke Agent Cert Response",
+            "title": "RevokeAgentCertResponse is response received from RevokeAgentCert API",
+            "x-displayname": "Revoke Agent Cert Response",
+            "x-ves-proto-message": "ves.io.schema.nginx.nms.agent_certs.RevokeAgentCertResponse"
         },
         "schemaviewsObjectRefType": {
             "type": "object",
-            "description": "x-displayName: \"Object reference\"\nThis type establishes a direct reference from one object(the referrer) to another(the referred).\nSuch a reference is in form of tenant/namespace/name",
+            "description": "This type establishes a direct reference from one object(the referrer) to another(the referred).\nSuch a reference is in form of tenant/namespace/name",
             "title": "ObjectRefType",
+            "x-displayname": "Object reference",
+            "x-ves-proto-message": "ves.io.schema.views.ObjectRefType",
             "properties": {
                 "name": {
                     "type": "string",
-                    "description": "x-displayName: \"Name\"\nx-example: \"contacts-route\"\nx-required\nWhen a configuration object(e.g. virtual_host) refers to another(e.g route)\nthen name will hold the referred object's(e.g. route's) name.",
-                    "title": "name"
+                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then name will hold the referred object's(e.g. route's) name.\n\nExample: - \"contacts-route\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_bytes: 64\n  ves.io.schema.rules.string.min_bytes: 1\n",
+                    "title": "name",
+                    "minLength": 1,
+                    "maxLength": 64,
+                    "x-displayname": "Name",
+                    "x-ves-example": "contacts-route",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.max_bytes": "64",
+                        "ves.io.schema.rules.string.min_bytes": "1"
+                    }
                 },
                 "namespace": {
                     "type": "string",
-                    "description": "x-displayName: \"Namespace\"\nx-example: \"ns1\"\nWhen a configuration object(e.g. virtual_host) refers to another(e.g route)\nthen namespace will hold the referred object's(e.g. route's) namespace.",
-                    "title": "namespace"
+                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then namespace will hold the referred object's(e.g. route's) namespace.\n\nExample: - \"ns1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 64\n",
+                    "title": "namespace",
+                    "maxLength": 64,
+                    "x-displayname": "Namespace",
+                    "x-ves-example": "ns1",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_bytes": "64"
+                    }
                 },
                 "tenant": {
                     "type": "string",
-                    "description": "x-displayName: \"Tenant\"\nx-example: \"acmecorp\"\nWhen a configuration object(e.g. virtual_host) refers to another(e.g route)\nthen tenant will hold the referred object's(e.g. route's) tenant.",
-                    "title": "tenant"
+                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then tenant will hold the referred object's(e.g. route's) tenant.\n\nExample: - \"acmecorp\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 64\n",
+                    "title": "tenant",
+                    "maxLength": 64,
+                    "x-displayname": "Tenant",
+                    "x-ves-example": "acmecorp",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_bytes": "64"
+                    }
                 }
             }
         }

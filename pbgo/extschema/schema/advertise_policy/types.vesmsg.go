@@ -1025,6 +1025,102 @@ func GlobalSpecTypeValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *ListenerConfig) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *ListenerConfig) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *ListenerConfig) DeepCopy() *ListenerConfig {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &ListenerConfig{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *ListenerConfig) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *ListenerConfig) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return ListenerConfigValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateListenerConfig struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateListenerConfig) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*ListenerConfig)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *ListenerConfig got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("name"))
+		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["port"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("port"))
+		if err := fv(ctx, m.GetPort(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["status"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("status"))
+		if err := fv(ctx, m.GetStatus(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultListenerConfigValidator = func() *ValidateListenerConfig {
+	v := &ValidateListenerConfig{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func ListenerConfigValidator() db.Validator {
+	return DefaultListenerConfigValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *ReplaceSpecType) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }

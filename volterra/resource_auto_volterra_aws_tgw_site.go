@@ -267,54 +267,8 @@ func resourceVolterraAwsTgwSite() *schema.Resource {
 
 						"enable_internet_vip": {
 
-							Type:     schema.TypeSet,
+							Type:     schema.TypeBool,
 							Optional: true,
-							Elem: &schema.Resource{
-								Schema: map[string]*schema.Schema{
-
-									"reserved_internet_nlb_subnet": {
-
-										Type:     schema.TypeBool,
-										Optional: true,
-									},
-
-									"subnet": {
-
-										Type:     schema.TypeSet,
-										Optional: true,
-										Elem: &schema.Resource{
-											Schema: map[string]*schema.Schema{
-
-												"existing_subnet_id": {
-
-													Type:     schema.TypeString,
-													Optional: true,
-												},
-
-												"subnet_param": {
-
-													Type:     schema.TypeSet,
-													Optional: true,
-													Elem: &schema.Resource{
-														Schema: map[string]*schema.Schema{
-
-															"ipv4": {
-																Type:     schema.TypeString,
-																Optional: true,
-															},
-
-															"ipv6": {
-																Type:     schema.TypeString,
-																Optional: true,
-															},
-														},
-													},
-												},
-											},
-										},
-									},
-								},
-							},
 						},
 
 						"new_vpc": {
@@ -562,6 +516,54 @@ func resourceVolterraAwsTgwSite() *schema.Resource {
 							Optional: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
+
+									"site_registration_over_direct_connect": {
+
+										Type:     schema.TypeSet,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"cloudlink_network_name": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+											},
+										},
+									},
+
+									"site_registration_over_internet": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+
+									"vif_list": {
+
+										Type:     schema.TypeList,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"vif_id": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+
+												"other_region": {
+
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+
+												"same_as_site_region": {
+
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
+											},
+										},
+									},
 
 									"vifs": {
 
@@ -871,6 +873,49 @@ func resourceVolterraAwsTgwSite() *schema.Resource {
 					Schema: map[string]*schema.Schema{
 
 						"allowed_vip_port": {
+
+							Type:     schema.TypeSet,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"custom_ports": {
+
+										Type:     schema.TypeSet,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"port_ranges": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+											},
+										},
+									},
+
+									"use_http_https_port": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+
+									"use_http_port": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+
+									"use_https_port": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+								},
+							},
+						},
+
+						"allowed_vip_port_sli": {
 
 							Type:     schema.TypeSet,
 							Optional: true,
@@ -2178,83 +2223,11 @@ func resourceVolterraAwsTgwSiteCreate(d *schema.ResourceData, meta interface{}) 
 			if v, ok := awsParametersMapStrToI["enable_internet_vip"]; ok && !isIntfNil(v) && !internetVipChoiceTypeFound {
 
 				internetVipChoiceTypeFound = true
-				internetVipChoiceInt := &ves_io_schema_views_aws_tgw_site.ServicesVPCType_EnableInternetVip{}
-				internetVipChoiceInt.EnableInternetVip = &ves_io_schema_views.AWSInternetVIPType{}
-				awsParameters.InternetVipChoice = internetVipChoiceInt
 
-				sl := v.(*schema.Set).List()
-				for _, set := range sl {
-					cs := set.(map[string]interface{})
-
-					internetVipSubnetChoiceTypeFound := false
-
-					if v, ok := cs["reserved_internet_nlb_subnet"]; ok && !isIntfNil(v) && !internetVipSubnetChoiceTypeFound {
-
-						internetVipSubnetChoiceTypeFound = true
-
-						if v.(bool) {
-							internetVipSubnetChoiceInt := &ves_io_schema_views.AWSInternetVIPType_ReservedInternetNlbSubnet{}
-							internetVipSubnetChoiceInt.ReservedInternetNlbSubnet = &ves_io_schema.Empty{}
-							internetVipChoiceInt.EnableInternetVip.InternetVipSubnetChoice = internetVipSubnetChoiceInt
-						}
-
-					}
-
-					if v, ok := cs["subnet"]; ok && !isIntfNil(v) && !internetVipSubnetChoiceTypeFound {
-
-						internetVipSubnetChoiceTypeFound = true
-						internetVipSubnetChoiceInt := &ves_io_schema_views.AWSInternetVIPType_Subnet{}
-						internetVipSubnetChoiceInt.Subnet = &ves_io_schema_views.CloudSubnetType{}
-						internetVipChoiceInt.EnableInternetVip.InternetVipSubnetChoice = internetVipSubnetChoiceInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							choiceTypeFound := false
-
-							if v, ok := cs["existing_subnet_id"]; ok && !isIntfNil(v) && !choiceTypeFound {
-
-								choiceTypeFound = true
-								choiceInt := &ves_io_schema_views.CloudSubnetType_ExistingSubnetId{}
-
-								internetVipSubnetChoiceInt.Subnet.Choice = choiceInt
-
-								choiceInt.ExistingSubnetId = v.(string)
-
-							}
-
-							if v, ok := cs["subnet_param"]; ok && !isIntfNil(v) && !choiceTypeFound {
-
-								choiceTypeFound = true
-								choiceInt := &ves_io_schema_views.CloudSubnetType_SubnetParam{}
-								choiceInt.SubnetParam = &ves_io_schema_views.CloudSubnetParamType{}
-								internetVipSubnetChoiceInt.Subnet.Choice = choiceInt
-
-								sl := v.(*schema.Set).List()
-								for _, set := range sl {
-									cs := set.(map[string]interface{})
-
-									if v, ok := cs["ipv4"]; ok && !isIntfNil(v) {
-
-										choiceInt.SubnetParam.Ipv4 = v.(string)
-
-									}
-
-									if v, ok := cs["ipv6"]; ok && !isIntfNil(v) {
-
-										choiceInt.SubnetParam.Ipv6 = v.(string)
-
-									}
-
-								}
-
-							}
-
-						}
-
-					}
-
+				if v.(bool) {
+					internetVipChoiceInt := &ves_io_schema_views_aws_tgw_site.ServicesVPCType_EnableInternetVip{}
+					internetVipChoiceInt.EnableInternetVip = &ves_io_schema.Empty{}
+					awsParameters.InternetVipChoice = internetVipChoiceInt
 				}
 
 			}
@@ -2652,6 +2625,83 @@ func resourceVolterraAwsTgwSiteCreate(d *schema.ResourceData, meta interface{}) 
 				sl := v.(*schema.Set).List()
 				for _, set := range sl {
 					cs := set.(map[string]interface{})
+
+					connectivityOptionsTypeFound := false
+
+					if v, ok := cs["site_registration_over_direct_connect"]; ok && !isIntfNil(v) && !connectivityOptionsTypeFound {
+
+						connectivityOptionsTypeFound = true
+						connectivityOptionsInt := &ves_io_schema_views.HostedVIFConfigType_SiteRegistrationOverDirectConnect{}
+						connectivityOptionsInt.SiteRegistrationOverDirectConnect = &ves_io_schema_views.CloudLinkADNType{}
+						vifChoiceInt.HostedVifs.ConnectivityOptions = connectivityOptionsInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["cloudlink_network_name"]; ok && !isIntfNil(v) {
+
+								connectivityOptionsInt.SiteRegistrationOverDirectConnect.CloudlinkNetworkName = v.(string)
+
+							}
+
+						}
+
+					}
+
+					if v, ok := cs["site_registration_over_internet"]; ok && !isIntfNil(v) && !connectivityOptionsTypeFound {
+
+						connectivityOptionsTypeFound = true
+
+						if v.(bool) {
+							connectivityOptionsInt := &ves_io_schema_views.HostedVIFConfigType_SiteRegistrationOverInternet{}
+							connectivityOptionsInt.SiteRegistrationOverInternet = &ves_io_schema.Empty{}
+							vifChoiceInt.HostedVifs.ConnectivityOptions = connectivityOptionsInt
+						}
+
+					}
+
+					if v, ok := cs["vif_list"]; ok && !isIntfNil(v) {
+
+						sl := v.([]interface{})
+						vifList := make([]*ves_io_schema_views.VifRegionConfig, len(sl))
+						vifChoiceInt.HostedVifs.VifList = vifList
+						for i, set := range sl {
+							vifList[i] = &ves_io_schema_views.VifRegionConfig{}
+							vifListMapStrToI := set.(map[string]interface{})
+
+							if w, ok := vifListMapStrToI["vif_id"]; ok && !isIntfNil(w) {
+								vifList[i].VifId = w.(string)
+							}
+
+							vifRegionChoiceTypeFound := false
+
+							if v, ok := vifListMapStrToI["other_region"]; ok && !isIntfNil(v) && !vifRegionChoiceTypeFound {
+
+								vifRegionChoiceTypeFound = true
+								vifRegionChoiceInt := &ves_io_schema_views.VifRegionConfig_OtherRegion{}
+
+								vifList[i].VifRegionChoice = vifRegionChoiceInt
+
+								vifRegionChoiceInt.OtherRegion = v.(string)
+
+							}
+
+							if v, ok := vifListMapStrToI["same_as_site_region"]; ok && !isIntfNil(v) && !vifRegionChoiceTypeFound {
+
+								vifRegionChoiceTypeFound = true
+
+								if v.(bool) {
+									vifRegionChoiceInt := &ves_io_schema_views.VifRegionConfig_SameAsSiteRegion{}
+									vifRegionChoiceInt.SameAsSiteRegion = &ves_io_schema.Empty{}
+									vifList[i].VifRegionChoice = vifRegionChoiceInt
+								}
+
+							}
+
+						}
+
+					}
 
 					if v, ok := cs["vifs"]; ok && !isIntfNil(v) {
 
@@ -3184,6 +3234,77 @@ func resourceVolterraAwsTgwSiteCreate(d *schema.ResourceData, meta interface{}) 
 							portChoiceInt := &ves_io_schema_views.AllowedVIPPorts_UseHttpsPort{}
 							portChoiceInt.UseHttpsPort = &ves_io_schema.Empty{}
 							allowedVipPort.PortChoice = portChoiceInt
+						}
+
+					}
+
+				}
+
+			}
+
+			if v, ok := vnConfigMapStrToI["allowed_vip_port_sli"]; ok && !isIntfNil(v) {
+
+				sl := v.(*schema.Set).List()
+				allowedVipPortSli := &ves_io_schema_views.AllowedVIPPorts{}
+				vnConfig.AllowedVipPortSli = allowedVipPortSli
+				for _, set := range sl {
+					allowedVipPortSliMapStrToI := set.(map[string]interface{})
+
+					portChoiceTypeFound := false
+
+					if v, ok := allowedVipPortSliMapStrToI["custom_ports"]; ok && !isIntfNil(v) && !portChoiceTypeFound {
+
+						portChoiceTypeFound = true
+						portChoiceInt := &ves_io_schema_views.AllowedVIPPorts_CustomPorts{}
+						portChoiceInt.CustomPorts = &ves_io_schema_views.CustomPorts{}
+						allowedVipPortSli.PortChoice = portChoiceInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["port_ranges"]; ok && !isIntfNil(v) {
+
+								portChoiceInt.CustomPorts.PortRanges = v.(string)
+
+							}
+
+						}
+
+					}
+
+					if v, ok := allowedVipPortSliMapStrToI["use_http_https_port"]; ok && !isIntfNil(v) && !portChoiceTypeFound {
+
+						portChoiceTypeFound = true
+
+						if v.(bool) {
+							portChoiceInt := &ves_io_schema_views.AllowedVIPPorts_UseHttpHttpsPort{}
+							portChoiceInt.UseHttpHttpsPort = &ves_io_schema.Empty{}
+							allowedVipPortSli.PortChoice = portChoiceInt
+						}
+
+					}
+
+					if v, ok := allowedVipPortSliMapStrToI["use_http_port"]; ok && !isIntfNil(v) && !portChoiceTypeFound {
+
+						portChoiceTypeFound = true
+
+						if v.(bool) {
+							portChoiceInt := &ves_io_schema_views.AllowedVIPPorts_UseHttpPort{}
+							portChoiceInt.UseHttpPort = &ves_io_schema.Empty{}
+							allowedVipPortSli.PortChoice = portChoiceInt
+						}
+
+					}
+
+					if v, ok := allowedVipPortSliMapStrToI["use_https_port"]; ok && !isIntfNil(v) && !portChoiceTypeFound {
+
+						portChoiceTypeFound = true
+
+						if v.(bool) {
+							portChoiceInt := &ves_io_schema_views.AllowedVIPPorts_UseHttpsPort{}
+							portChoiceInt.UseHttpsPort = &ves_io_schema.Empty{}
+							allowedVipPortSli.PortChoice = portChoiceInt
 						}
 
 					}
@@ -4812,6 +4933,83 @@ func resourceVolterraAwsTgwSiteUpdate(d *schema.ResourceData, meta interface{}) 
 				for _, set := range sl {
 					cs := set.(map[string]interface{})
 
+					connectivityOptionsTypeFound := false
+
+					if v, ok := cs["site_registration_over_direct_connect"]; ok && !isIntfNil(v) && !connectivityOptionsTypeFound {
+
+						connectivityOptionsTypeFound = true
+						connectivityOptionsInt := &ves_io_schema_views.HostedVIFConfigType_SiteRegistrationOverDirectConnect{}
+						connectivityOptionsInt.SiteRegistrationOverDirectConnect = &ves_io_schema_views.CloudLinkADNType{}
+						vifChoiceInt.HostedVifs.ConnectivityOptions = connectivityOptionsInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["cloudlink_network_name"]; ok && !isIntfNil(v) {
+
+								connectivityOptionsInt.SiteRegistrationOverDirectConnect.CloudlinkNetworkName = v.(string)
+
+							}
+
+						}
+
+					}
+
+					if v, ok := cs["site_registration_over_internet"]; ok && !isIntfNil(v) && !connectivityOptionsTypeFound {
+
+						connectivityOptionsTypeFound = true
+
+						if v.(bool) {
+							connectivityOptionsInt := &ves_io_schema_views.HostedVIFConfigType_SiteRegistrationOverInternet{}
+							connectivityOptionsInt.SiteRegistrationOverInternet = &ves_io_schema.Empty{}
+							vifChoiceInt.HostedVifs.ConnectivityOptions = connectivityOptionsInt
+						}
+
+					}
+
+					if v, ok := cs["vif_list"]; ok && !isIntfNil(v) {
+
+						sl := v.([]interface{})
+						vifList := make([]*ves_io_schema_views.VifRegionConfig, len(sl))
+						vifChoiceInt.HostedVifs.VifList = vifList
+						for i, set := range sl {
+							vifList[i] = &ves_io_schema_views.VifRegionConfig{}
+							vifListMapStrToI := set.(map[string]interface{})
+
+							if w, ok := vifListMapStrToI["vif_id"]; ok && !isIntfNil(w) {
+								vifList[i].VifId = w.(string)
+							}
+
+							vifRegionChoiceTypeFound := false
+
+							if v, ok := vifListMapStrToI["other_region"]; ok && !isIntfNil(v) && !vifRegionChoiceTypeFound {
+
+								vifRegionChoiceTypeFound = true
+								vifRegionChoiceInt := &ves_io_schema_views.VifRegionConfig_OtherRegion{}
+
+								vifList[i].VifRegionChoice = vifRegionChoiceInt
+
+								vifRegionChoiceInt.OtherRegion = v.(string)
+
+							}
+
+							if v, ok := vifListMapStrToI["same_as_site_region"]; ok && !isIntfNil(v) && !vifRegionChoiceTypeFound {
+
+								vifRegionChoiceTypeFound = true
+
+								if v.(bool) {
+									vifRegionChoiceInt := &ves_io_schema_views.VifRegionConfig_SameAsSiteRegion{}
+									vifRegionChoiceInt.SameAsSiteRegion = &ves_io_schema.Empty{}
+									vifList[i].VifRegionChoice = vifRegionChoiceInt
+								}
+
+							}
+
+						}
+
+					}
+
 					if v, ok := cs["vifs"]; ok && !isIntfNil(v) {
 
 						ls := make([]string, len(v.([]interface{})))
@@ -5252,6 +5450,77 @@ func resourceVolterraAwsTgwSiteUpdate(d *schema.ResourceData, meta interface{}) 
 							portChoiceInt := &ves_io_schema_views.AllowedVIPPorts_UseHttpsPort{}
 							portChoiceInt.UseHttpsPort = &ves_io_schema.Empty{}
 							allowedVipPort.PortChoice = portChoiceInt
+						}
+
+					}
+
+				}
+
+			}
+
+			if v, ok := vnConfigMapStrToI["allowed_vip_port_sli"]; ok && !isIntfNil(v) {
+
+				sl := v.(*schema.Set).List()
+				allowedVipPortSli := &ves_io_schema_views.AllowedVIPPorts{}
+				vnConfig.AllowedVipPortSli = allowedVipPortSli
+				for _, set := range sl {
+					allowedVipPortSliMapStrToI := set.(map[string]interface{})
+
+					portChoiceTypeFound := false
+
+					if v, ok := allowedVipPortSliMapStrToI["custom_ports"]; ok && !isIntfNil(v) && !portChoiceTypeFound {
+
+						portChoiceTypeFound = true
+						portChoiceInt := &ves_io_schema_views.AllowedVIPPorts_CustomPorts{}
+						portChoiceInt.CustomPorts = &ves_io_schema_views.CustomPorts{}
+						allowedVipPortSli.PortChoice = portChoiceInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["port_ranges"]; ok && !isIntfNil(v) {
+
+								portChoiceInt.CustomPorts.PortRanges = v.(string)
+
+							}
+
+						}
+
+					}
+
+					if v, ok := allowedVipPortSliMapStrToI["use_http_https_port"]; ok && !isIntfNil(v) && !portChoiceTypeFound {
+
+						portChoiceTypeFound = true
+
+						if v.(bool) {
+							portChoiceInt := &ves_io_schema_views.AllowedVIPPorts_UseHttpHttpsPort{}
+							portChoiceInt.UseHttpHttpsPort = &ves_io_schema.Empty{}
+							allowedVipPortSli.PortChoice = portChoiceInt
+						}
+
+					}
+
+					if v, ok := allowedVipPortSliMapStrToI["use_http_port"]; ok && !isIntfNil(v) && !portChoiceTypeFound {
+
+						portChoiceTypeFound = true
+
+						if v.(bool) {
+							portChoiceInt := &ves_io_schema_views.AllowedVIPPorts_UseHttpPort{}
+							portChoiceInt.UseHttpPort = &ves_io_schema.Empty{}
+							allowedVipPortSli.PortChoice = portChoiceInt
+						}
+
+					}
+
+					if v, ok := allowedVipPortSliMapStrToI["use_https_port"]; ok && !isIntfNil(v) && !portChoiceTypeFound {
+
+						portChoiceTypeFound = true
+
+						if v.(bool) {
+							portChoiceInt := &ves_io_schema_views.AllowedVIPPorts_UseHttpsPort{}
+							portChoiceInt.UseHttpsPort = &ves_io_schema.Empty{}
+							allowedVipPortSli.PortChoice = portChoiceInt
 						}
 
 					}

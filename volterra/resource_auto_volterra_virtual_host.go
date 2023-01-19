@@ -616,6 +616,86 @@ func resourceVolterraVirtualHost() *schema.Resource {
 				},
 			},
 
+			"connection_idle_timeout": {
+				Type:     schema.TypeInt,
+				Optional: true,
+			},
+
+			"cookies_to_modify": {
+
+				Type:     schema.TypeList,
+				Optional: true,
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+
+						"add_httponly": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+
+						"ignore_httponly": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+
+						"ignore_max_age": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+
+						"max_age_value": {
+
+							Type:     schema.TypeInt,
+							Optional: true,
+						},
+
+						"name": {
+							Type:     schema.TypeString,
+							Optional: true,
+						},
+
+						"ignore_samesite": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+
+						"samesite_lax": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+
+						"samesite_none": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+
+						"samesite_strict": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+
+						"add_secure": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+
+						"ignore_secure": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+					},
+				},
+			},
+
 			"cors_policy": {
 
 				Type:     schema.TypeSet,
@@ -2696,6 +2776,159 @@ func resourceVolterraVirtualHostCreate(d *schema.ResourceData, meta interface{})
 
 			if w, ok := compressionParamsMapStrToI["remove_accept_encoding_header"]; ok && !isIntfNil(w) {
 				compressionParams.RemoveAcceptEncodingHeader = w.(bool)
+			}
+
+		}
+
+	}
+
+	//connection_idle_timeout
+	if v, ok := d.GetOk("connection_idle_timeout"); ok && !isIntfNil(v) {
+
+		createSpec.ConnectionIdleTimeout =
+			uint32(v.(int))
+
+	}
+
+	//cookies_to_modify
+	if v, ok := d.GetOk("cookies_to_modify"); ok && !isIntfNil(v) {
+
+		sl := v.([]interface{})
+		cookiesToModify := make([]*ves_io_schema.CookieManipulationOptionType, len(sl))
+		createSpec.CookiesToModify = cookiesToModify
+		for i, set := range sl {
+			cookiesToModify[i] = &ves_io_schema.CookieManipulationOptionType{}
+			cookiesToModifyMapStrToI := set.(map[string]interface{})
+
+			httponlyTypeFound := false
+
+			if v, ok := cookiesToModifyMapStrToI["add_httponly"]; ok && !isIntfNil(v) && !httponlyTypeFound {
+
+				httponlyTypeFound = true
+
+				if v.(bool) {
+					httponlyInt := &ves_io_schema.CookieManipulationOptionType_AddHttponly{}
+					httponlyInt.AddHttponly = &ves_io_schema.Empty{}
+					cookiesToModify[i].Httponly = httponlyInt
+				}
+
+			}
+
+			if v, ok := cookiesToModifyMapStrToI["ignore_httponly"]; ok && !isIntfNil(v) && !httponlyTypeFound {
+
+				httponlyTypeFound = true
+
+				if v.(bool) {
+					httponlyInt := &ves_io_schema.CookieManipulationOptionType_IgnoreHttponly{}
+					httponlyInt.IgnoreHttponly = &ves_io_schema.Empty{}
+					cookiesToModify[i].Httponly = httponlyInt
+				}
+
+			}
+
+			maxAgeTypeFound := false
+
+			if v, ok := cookiesToModifyMapStrToI["ignore_max_age"]; ok && !isIntfNil(v) && !maxAgeTypeFound {
+
+				maxAgeTypeFound = true
+
+				if v.(bool) {
+					maxAgeInt := &ves_io_schema.CookieManipulationOptionType_IgnoreMaxAge{}
+					maxAgeInt.IgnoreMaxAge = &ves_io_schema.Empty{}
+					cookiesToModify[i].MaxAge = maxAgeInt
+				}
+
+			}
+
+			if v, ok := cookiesToModifyMapStrToI["max_age_value"]; ok && !isIntfNil(v) && !maxAgeTypeFound {
+
+				maxAgeTypeFound = true
+				maxAgeInt := &ves_io_schema.CookieManipulationOptionType_MaxAgeValue{}
+
+				cookiesToModify[i].MaxAge = maxAgeInt
+
+				maxAgeInt.MaxAgeValue = int32(v.(int))
+
+			}
+
+			if w, ok := cookiesToModifyMapStrToI["name"]; ok && !isIntfNil(w) {
+				cookiesToModify[i].Name = w.(string)
+			}
+
+			samesiteTypeFound := false
+
+			if v, ok := cookiesToModifyMapStrToI["ignore_samesite"]; ok && !isIntfNil(v) && !samesiteTypeFound {
+
+				samesiteTypeFound = true
+
+				if v.(bool) {
+					samesiteInt := &ves_io_schema.CookieManipulationOptionType_IgnoreSamesite{}
+					samesiteInt.IgnoreSamesite = &ves_io_schema.Empty{}
+					cookiesToModify[i].Samesite = samesiteInt
+				}
+
+			}
+
+			if v, ok := cookiesToModifyMapStrToI["samesite_lax"]; ok && !isIntfNil(v) && !samesiteTypeFound {
+
+				samesiteTypeFound = true
+
+				if v.(bool) {
+					samesiteInt := &ves_io_schema.CookieManipulationOptionType_SamesiteLax{}
+					samesiteInt.SamesiteLax = &ves_io_schema.Empty{}
+					cookiesToModify[i].Samesite = samesiteInt
+				}
+
+			}
+
+			if v, ok := cookiesToModifyMapStrToI["samesite_none"]; ok && !isIntfNil(v) && !samesiteTypeFound {
+
+				samesiteTypeFound = true
+
+				if v.(bool) {
+					samesiteInt := &ves_io_schema.CookieManipulationOptionType_SamesiteNone{}
+					samesiteInt.SamesiteNone = &ves_io_schema.Empty{}
+					cookiesToModify[i].Samesite = samesiteInt
+				}
+
+			}
+
+			if v, ok := cookiesToModifyMapStrToI["samesite_strict"]; ok && !isIntfNil(v) && !samesiteTypeFound {
+
+				samesiteTypeFound = true
+
+				if v.(bool) {
+					samesiteInt := &ves_io_schema.CookieManipulationOptionType_SamesiteStrict{}
+					samesiteInt.SamesiteStrict = &ves_io_schema.Empty{}
+					cookiesToModify[i].Samesite = samesiteInt
+				}
+
+			}
+
+			secureTypeFound := false
+
+			if v, ok := cookiesToModifyMapStrToI["add_secure"]; ok && !isIntfNil(v) && !secureTypeFound {
+
+				secureTypeFound = true
+
+				if v.(bool) {
+					secureInt := &ves_io_schema.CookieManipulationOptionType_AddSecure{}
+					secureInt.AddSecure = &ves_io_schema.Empty{}
+					cookiesToModify[i].Secure = secureInt
+				}
+
+			}
+
+			if v, ok := cookiesToModifyMapStrToI["ignore_secure"]; ok && !isIntfNil(v) && !secureTypeFound {
+
+				secureTypeFound = true
+
+				if v.(bool) {
+					secureInt := &ves_io_schema.CookieManipulationOptionType_IgnoreSecure{}
+					secureInt.IgnoreSecure = &ves_io_schema.Empty{}
+					cookiesToModify[i].Secure = secureInt
+				}
+
 			}
 
 		}
@@ -5154,6 +5387,157 @@ func resourceVolterraVirtualHostUpdate(d *schema.ResourceData, meta interface{})
 
 			if w, ok := compressionParamsMapStrToI["remove_accept_encoding_header"]; ok && !isIntfNil(w) {
 				compressionParams.RemoveAcceptEncodingHeader = w.(bool)
+			}
+
+		}
+
+	}
+
+	if v, ok := d.GetOk("connection_idle_timeout"); ok && !isIntfNil(v) {
+
+		updateSpec.ConnectionIdleTimeout =
+			uint32(v.(int))
+
+	}
+
+	if v, ok := d.GetOk("cookies_to_modify"); ok && !isIntfNil(v) {
+
+		sl := v.([]interface{})
+		cookiesToModify := make([]*ves_io_schema.CookieManipulationOptionType, len(sl))
+		updateSpec.CookiesToModify = cookiesToModify
+		for i, set := range sl {
+			cookiesToModify[i] = &ves_io_schema.CookieManipulationOptionType{}
+			cookiesToModifyMapStrToI := set.(map[string]interface{})
+
+			httponlyTypeFound := false
+
+			if v, ok := cookiesToModifyMapStrToI["add_httponly"]; ok && !isIntfNil(v) && !httponlyTypeFound {
+
+				httponlyTypeFound = true
+
+				if v.(bool) {
+					httponlyInt := &ves_io_schema.CookieManipulationOptionType_AddHttponly{}
+					httponlyInt.AddHttponly = &ves_io_schema.Empty{}
+					cookiesToModify[i].Httponly = httponlyInt
+				}
+
+			}
+
+			if v, ok := cookiesToModifyMapStrToI["ignore_httponly"]; ok && !isIntfNil(v) && !httponlyTypeFound {
+
+				httponlyTypeFound = true
+
+				if v.(bool) {
+					httponlyInt := &ves_io_schema.CookieManipulationOptionType_IgnoreHttponly{}
+					httponlyInt.IgnoreHttponly = &ves_io_schema.Empty{}
+					cookiesToModify[i].Httponly = httponlyInt
+				}
+
+			}
+
+			maxAgeTypeFound := false
+
+			if v, ok := cookiesToModifyMapStrToI["ignore_max_age"]; ok && !isIntfNil(v) && !maxAgeTypeFound {
+
+				maxAgeTypeFound = true
+
+				if v.(bool) {
+					maxAgeInt := &ves_io_schema.CookieManipulationOptionType_IgnoreMaxAge{}
+					maxAgeInt.IgnoreMaxAge = &ves_io_schema.Empty{}
+					cookiesToModify[i].MaxAge = maxAgeInt
+				}
+
+			}
+
+			if v, ok := cookiesToModifyMapStrToI["max_age_value"]; ok && !isIntfNil(v) && !maxAgeTypeFound {
+
+				maxAgeTypeFound = true
+				maxAgeInt := &ves_io_schema.CookieManipulationOptionType_MaxAgeValue{}
+
+				cookiesToModify[i].MaxAge = maxAgeInt
+
+				maxAgeInt.MaxAgeValue = int32(v.(int))
+
+			}
+
+			if w, ok := cookiesToModifyMapStrToI["name"]; ok && !isIntfNil(w) {
+				cookiesToModify[i].Name = w.(string)
+			}
+
+			samesiteTypeFound := false
+
+			if v, ok := cookiesToModifyMapStrToI["ignore_samesite"]; ok && !isIntfNil(v) && !samesiteTypeFound {
+
+				samesiteTypeFound = true
+
+				if v.(bool) {
+					samesiteInt := &ves_io_schema.CookieManipulationOptionType_IgnoreSamesite{}
+					samesiteInt.IgnoreSamesite = &ves_io_schema.Empty{}
+					cookiesToModify[i].Samesite = samesiteInt
+				}
+
+			}
+
+			if v, ok := cookiesToModifyMapStrToI["samesite_lax"]; ok && !isIntfNil(v) && !samesiteTypeFound {
+
+				samesiteTypeFound = true
+
+				if v.(bool) {
+					samesiteInt := &ves_io_schema.CookieManipulationOptionType_SamesiteLax{}
+					samesiteInt.SamesiteLax = &ves_io_schema.Empty{}
+					cookiesToModify[i].Samesite = samesiteInt
+				}
+
+			}
+
+			if v, ok := cookiesToModifyMapStrToI["samesite_none"]; ok && !isIntfNil(v) && !samesiteTypeFound {
+
+				samesiteTypeFound = true
+
+				if v.(bool) {
+					samesiteInt := &ves_io_schema.CookieManipulationOptionType_SamesiteNone{}
+					samesiteInt.SamesiteNone = &ves_io_schema.Empty{}
+					cookiesToModify[i].Samesite = samesiteInt
+				}
+
+			}
+
+			if v, ok := cookiesToModifyMapStrToI["samesite_strict"]; ok && !isIntfNil(v) && !samesiteTypeFound {
+
+				samesiteTypeFound = true
+
+				if v.(bool) {
+					samesiteInt := &ves_io_schema.CookieManipulationOptionType_SamesiteStrict{}
+					samesiteInt.SamesiteStrict = &ves_io_schema.Empty{}
+					cookiesToModify[i].Samesite = samesiteInt
+				}
+
+			}
+
+			secureTypeFound := false
+
+			if v, ok := cookiesToModifyMapStrToI["add_secure"]; ok && !isIntfNil(v) && !secureTypeFound {
+
+				secureTypeFound = true
+
+				if v.(bool) {
+					secureInt := &ves_io_schema.CookieManipulationOptionType_AddSecure{}
+					secureInt.AddSecure = &ves_io_schema.Empty{}
+					cookiesToModify[i].Secure = secureInt
+				}
+
+			}
+
+			if v, ok := cookiesToModifyMapStrToI["ignore_secure"]; ok && !isIntfNil(v) && !secureTypeFound {
+
+				secureTypeFound = true
+
+				if v.(bool) {
+					secureInt := &ves_io_schema.CookieManipulationOptionType_IgnoreSecure{}
+					secureInt.IgnoreSecure = &ves_io_schema.Empty{}
+					cookiesToModify[i].Secure = secureInt
+				}
+
 			}
 
 		}

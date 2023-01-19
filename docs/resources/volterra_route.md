@@ -21,6 +21,15 @@ resource "volterra_route" "example" {
   namespace = "staging"
 
   routes {
+    // One of the arguments from this list "inherited_bot_defense_javascript_injection bot_defense_javascript_injection" must be set
+    inherited_bot_defense_javascript_injection = true
+
+    bot_defense_javascript_injection_inline_mode {
+      element_selector = "value"
+      insert_content   = "value"
+      position         = "position"
+    }
+
     disable_custom_script = true
     disable_location_add  = true
 
@@ -30,21 +39,21 @@ resource "volterra_route" "example" {
         name         = "Content-Type"
 
         // One of the arguments from this list "exact regex presence" must be set
-        exact = "application/json"
+        regex = "regex"
       }
 
       http_method = "http_method"
 
       path {
         // One of the arguments from this list "prefix path regex" must be set
-        regex = "regex"
+        prefix = "/register/"
       }
 
       query_params {
         key = "assignee_username"
 
         // One of the arguments from this list "exact regex" must be set
-        exact = "exact"
+        regex = "regex"
       }
     }
 
@@ -70,18 +79,101 @@ resource "volterra_route" "example" {
 
     // One of the arguments from this list "route_destination route_redirect route_direct_response" must be set
 
-    route_redirect {
-      host_redirect  = "one.ves.io"
-      proto_redirect = "https"
-
-      // One of the arguments from this list "replace_params strip_query_params all_params retain_all_params remove_all_params" must be set
-
-      strip_query_params {
-        query_params = ["userid"]
+    route_destination {
+      buffer_policy {
+        disabled          = true
+        max_request_bytes = "2048"
+        max_request_time  = "30"
       }
-      // One of the arguments from this list "path_redirect prefix_rewrite" must be set
-      path_redirect = "/api/register"
-      response_code = "303"
+
+      // One of the arguments from this list "do_not_retract_cluster retract_cluster" must be set
+      retract_cluster = true
+
+      cors_policy {
+        allow_credentials = true
+        allow_headers     = "value"
+        allow_methods     = "GET"
+
+        allow_origin = ["value"]
+
+        allow_origin_regex = ["value"]
+        disabled           = true
+        expose_headers     = "value"
+        max_age            = "value"
+        maximum_age        = "-1"
+      }
+
+      destinations {
+        cluster {
+          name      = "test1"
+          namespace = "staging"
+          tenant    = "acmecorp"
+        }
+
+        endpoint_subsets = {
+          "key1" = "value1"
+        }
+
+        priority = "1"
+        weight   = "10"
+      }
+
+      endpoint_subsets = {
+        "key1" = "value1"
+      }
+
+      hash_policy {
+        // One of the arguments from this list "header_name cookie source_ip" must be set
+        header_name = "host"
+
+        terminal = true
+      }
+
+      // One of the arguments from this list "host_rewrite auto_host_rewrite" must be set
+      host_rewrite = "one.volterra.com"
+
+      mirror_policy {
+        cluster {
+          name      = "test1"
+          namespace = "staging"
+          tenant    = "acmecorp"
+        }
+
+        percent {
+          denominator = "denominator"
+          numerator   = "5"
+        }
+      }
+
+      prefix_rewrite = "/"
+      priority       = "priority"
+
+      retry_policy {
+        back_off {
+          base_interval = "5"
+          max_interval  = "60"
+        }
+
+        num_retries     = "3"
+        per_try_timeout = "1000"
+
+        retriable_status_codes = ["403"]
+
+        retry_condition = ["5xx"]
+        retry_on        = "5xx"
+      }
+
+      spdy_config {
+        use_spdy = true
+      }
+
+      timeout = "2000"
+
+      web_socket_config {
+        idle_timeout         = "2000"
+        max_connect_attempts = "5"
+        use_websocket        = true
+      }
     }
     service_policy {
       // One of the arguments from this list "disable context_extensions" must be set
@@ -125,6 +217,14 @@ Argument Reference
 
 `routes` - (Required) List of routes to match for incoming request. See [Routes ](#routes) below for details.
 
+### Add Httponly
+
+Add httponly attribute.
+
+### Add Secure
+
+Add secure attribute.
+
 ### App Firewall
 
 A direct reference to an Application Firewall configuration object.
@@ -141,7 +241,7 @@ A direct reference to an Application Firewall configuration object.
 
 ### Blindfold Secret Info
 
-Blindfold Secret is used for the secrets managed by Volterra Secret Management Service.
+Blindfold Secret is used for the secrets managed by F5XC Secret Management Service.
 
 `decryption_provider` - (Optional) Name of the Secret Management Access object that contains information about the backend Secret Management service. (`String`).
 
@@ -158,6 +258,24 @@ Blindfold Secret Internal is used for the putting re-encrypted blindfold secret.
 `location` - (Required) Or it could be a path if the store provider is an http/https location (`String`).
 
 `store_provider` - (Optional) This field needs to be provided only if the url scheme is not string:/// (`String`).
+
+### Bot Defense Javascript Injection
+
+Configuration for Bot Defense Javascript Injection.
+
+`javascript_location` - (Optional) Defines where perform the Bot Defense Javascript Injection in HTML page. (`String`).
+
+`js_download_path` - (Optional) If not specified, default to ‘/common.js’. (`String`).
+
+### Bot Defense Javascript Injection Inline Mode
+
+Specifies whether bot defense js injection inline mode will be enabled.
+
+`element_selector` - (Required) Element selector to insert into. (`String`).
+
+`insert_content` - (Optional) HTML content to insert. (`String`).
+
+`position` - (Optional) Position of HTML content to be inserted within HTML tag. (`String`).
 
 ### Buffer Policy
 
@@ -187,9 +305,25 @@ sending additional information to the external authorization server..
 
 Hash based on cookie.
 
+`add_httponly` - (Optional) Add httponly attribute (bool).
+
+`ignore_httponly` - (Optional) Ignore httponly attribute (bool).
+
 `name` - (Required) produced (`String`).
 
 `path` - (Optional) will be set for the cookie (`String`).
+
+`ignore_samesite` - (Optional) Ignore Samesite attribute (bool).
+
+`samesite_lax` - (Optional) Add Samesite attribute with Lax. Means that the cookie is not sent on cross-site requests (bool).
+
+`samesite_none` - (Optional) Add Samesite attribute with None. Means that the browser sends the cookie with both cross-site and same-site requests (bool).
+
+`samesite_strict` - (Optional) Add Samesite attribute with Strict. Means that the browser sends the cookie only for same-site requests (bool).
+
+`add_secure` - (Optional) Add secure attribute (bool).
+
+`ignore_secure` - (Optional) Ignore secure attribute (bool).
 
 `ttl` - (Optional) be a session cookie. TTL value is in milliseconds (`Int`).
 
@@ -257,6 +391,22 @@ List of (key, value) headers.
 
 `regex` - (Optional) Regex match of the header value in re2 format (`String`).
 
+### Ignore Httponly
+
+Ignore httponly attribute.
+
+### Ignore Samesite
+
+Ignore Samesite attribute.
+
+### Ignore Secure
+
+Ignore secure attribute.
+
+### Inherited Bot Defense Javascript Injection
+
+Hence no custom configuration is applied on the route.
+
 ### Match
 
 route match condition.
@@ -283,9 +433,9 @@ URI path of route.
 
 `path` - (Optional) Exact path value to match (`String`).
 
-`prefix` - (Optional) Path prefix to match (`String`).
+`prefix` - (Optional) Path prefix to match (e.g. the value / will match on all paths) (`String`).
 
-`regex` - (Optional) Regular expression of path match (`String`).
+`regex` - (Optional) Regular expression of path match (e.g. the value .* will match on all paths) (`String`).
 
 ### Percent
 
@@ -439,6 +589,12 @@ Send redirect response.
 
 List of routes to match for incoming request.
 
+`bot_defense_javascript_injection` - (Optional) Configuration for Bot Defense Javascript Injection. See [Bot Defense Javascript Injection ](#bot-defense-javascript-injection) below for details.
+
+`inherited_bot_defense_javascript_injection` - (Optional) Hence no custom configuration is applied on the route (bool).
+
+`bot_defense_javascript_injection_inline_mode` - (Optional) Specifies whether bot defense js injection inline mode will be enabled. See [Bot Defense Javascript Injection Inline Mode ](#bot-defense-javascript-injection-inline-mode) below for details.
+
 `disable_custom_script` - (Optional) disable execution of Javascript at route level, if it is configured at virtual-host level (`Bool`).
 
 `disable_location_add` - (Optional) virtual-host level. This configuration is ignored on CE sites. (`Bool`).
@@ -465,6 +621,18 @@ List of routes to match for incoming request.
 
 `waf_type` - (Optional) waf_type specified at route level overrides waf configuration at VirtualHost level. See [Waf Type ](#waf-type) below for details.
 
+### Samesite Lax
+
+Add Samesite attribute with Lax. Means that the cookie is not sent on cross-site requests.
+
+### Samesite None
+
+Add Samesite attribute with None. Means that the browser sends the cookie with both cross-site and same-site requests.
+
+### Samesite Strict
+
+Add Samesite attribute with Strict. Means that the browser sends the cookie only for same-site requests.
+
 ### Secret Value
 
 Secret Value of the HTTP header..
@@ -473,13 +641,13 @@ Secret Value of the HTTP header..
 
 `secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).
 
-`blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by Volterra Secret Management Service. See [Blindfold Secret Info ](#blindfold-secret-info) below for details.
+`blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Blindfold Secret Info ](#blindfold-secret-info) below for details.
 
 `clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Clear Secret Info ](#clear-secret-info) below for details.
 
 `vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Vault Secret Info ](#vault-secret-info) below for details.
 
-`wingman_secret_info` - (Optional) Secret is given as bootstrap secret in Volterra Security Sidecar. See [Wingman Secret Info ](#wingman-secret-info) below for details.
+`wingman_secret_info` - (Optional) Secret is given as bootstrap secret in F5XC Security Sidecar. See [Wingman Secret Info ](#wingman-secret-info) below for details.
 
 ### Service Policy
 
@@ -549,7 +717,7 @@ Websocket configuration for each route.
 
 ### Wingman Secret Info
 
-Secret is given as bootstrap secret in Volterra Security Sidecar.
+Secret is given as bootstrap secret in F5XC Security Sidecar.
 
 `name` - (Required) Name of the secret. (`String`).
 

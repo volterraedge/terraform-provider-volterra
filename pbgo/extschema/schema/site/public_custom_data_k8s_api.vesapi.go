@@ -5305,7 +5305,8 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 "UNIT_PACKETS_PER_SECOND",
                 "UNIT_REQUESTS_PER_SECOND",
                 "UNIT_PACKETS",
-                "UNIT_PERCENTAGE"
+                "UNIT_PERCENTAGE",
+                "UNIT_COUNT"
             ],
             "default": "UNIT_MILLISECONDS",
             "x-displayname": "Unit",
@@ -5390,10 +5391,13 @@ var CustomDataK8SAPISwaggerJSON string = `{
             "properties": {
                 "end_time": {
                     "type": "string",
-                    "description": " End time of metric data.\n Format: unix_timestamp|rfc 3339\n\n Optional: If not specified, then the end_time will be evaluated to start_time+10m\n           If start_time is not specified, then the end_time will be evaluated to \u003ccurrent time\u003e\n\nExample: - \"1570197600\"-",
+                    "description": " End time of metric data.\n Format: unix_timestamp|rfc 3339\n\n Optional: If not specified, then the end_time will be evaluated to start_time+10m\n           If start_time is not specified, then the end_time will be evaluated to \u003ccurrent time\u003e\n\nExample: - \"1570197600\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.query_time: true\n",
                     "title": "End time",
                     "x-displayname": "End Time",
-                    "x-ves-example": "1570197600"
+                    "x-ves-example": "1570197600",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.query_time": "true"
+                    }
                 },
                 "metric_selector": {
                     "type": "array",
@@ -5425,10 +5429,13 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 },
                 "start_time": {
                     "type": "string",
-                    "description": " Start time of metric data.\n Format: unix_timestamp|rfc 3339\n\n Optional: If not specified, then the start_time will be evaluated to end_time-10m\n           If end_time is not specified, then the start_time will be evaluated to \u003ccurrent time\u003e-10m\n\nExample: - \"1570194000\"-",
+                    "description": " Start time of metric data.\n Format: unix_timestamp|rfc 3339\n\n Optional: If not specified, then the start_time will be evaluated to end_time-10m\n           If end_time is not specified, then the start_time will be evaluated to \u003ccurrent time\u003e-10m\n\nExample: - \"1570194000\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.query_time: true\n",
                     "title": "Start time",
                     "x-displayname": "Start Time",
-                    "x-ves-example": "1570194000"
+                    "x-ves-example": "1570194000",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.query_time": "true"
+                    }
                 }
             }
         },

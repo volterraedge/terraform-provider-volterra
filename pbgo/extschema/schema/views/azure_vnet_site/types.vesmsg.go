@@ -9170,6 +9170,32 @@ func (v *ValidateExpressRouteConfigType) Validate(ctx context.Context, pm interf
 
 	}
 
+	switch m.GetConnectivityOptions().(type) {
+	case *ExpressRouteConfigType_SiteRegistrationOverInternet:
+		if fv, exists := v.FldValidators["connectivity_options.site_registration_over_internet"]; exists {
+			val := m.GetConnectivityOptions().(*ExpressRouteConfigType_SiteRegistrationOverInternet).SiteRegistrationOverInternet
+			vOpts := append(opts,
+				db.WithValidateField("connectivity_options"),
+				db.WithValidateField("site_registration_over_internet"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ExpressRouteConfigType_SiteRegistrationOverExpressRoute:
+		if fv, exists := v.FldValidators["connectivity_options.site_registration_over_express_route"]; exists {
+			val := m.GetConnectivityOptions().(*ExpressRouteConfigType_SiteRegistrationOverExpressRoute).SiteRegistrationOverExpressRoute
+			vOpts := append(opts,
+				db.WithValidateField("connectivity_options"),
+				db.WithValidateField("site_registration_over_express_route"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["gateway_subnet"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("gateway_subnet"))
@@ -9288,6 +9314,8 @@ var DefaultExpressRouteConfigTypeValidator = func() *ValidateExpressRouteConfigT
 		panic(errMsg)
 	}
 	v.FldValidators["connections"] = vFn
+
+	v.FldValidators["connectivity_options.site_registration_over_express_route"] = ves_io_schema_views.CloudLinkADNTypeValidator().Validate
 
 	v.FldValidators["gateway_subnet"] = ves_io_schema_views.AzureSubnetChoiceWithAutoTypeValidator().Validate
 

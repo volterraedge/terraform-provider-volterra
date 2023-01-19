@@ -691,6 +691,12 @@ var CustomAPISwaggerJSON string = `{
                     "title": "Name",
                     "x-displayname": "Name",
                     "x-ves-example": "l1-support"
+                },
+                "tenant_status": {
+                    "description": " Status indicates status of a tenant, like active, to be deleted, disabled and so on",
+                    "title": "Tenant Status",
+                    "$ref": "#/definitions/managed_tenantTenantStatus",
+                    "x-displayname": "Tenant Status"
                 }
             }
         },
@@ -774,6 +780,20 @@ var CustomAPISwaggerJSON string = `{
                     }
                 }
             }
+        },
+        "managed_tenantTenantStatus": {
+            "type": "string",
+            "description": "Status indicates status of a tenant, like active, to be deleted, disabled and so on\n\ntenant is active\ntenant is disabled\ntenant is about to be deleted\nany other status then active",
+            "title": "Status",
+            "enum": [
+                "TENANT_STATUS_ACTIVE",
+                "TENANT_STATUS_DISABLED",
+                "TENANT_STATUS_TO_BE_DELETED",
+                "TENANT_STATUS_INACTIVE"
+            ],
+            "default": "TENANT_STATUS_ACTIVE",
+            "x-displayname": "Status",
+            "x-ves-proto-enum": "ves.io.schema.tenant_management.managed_tenant.TenantStatus"
         },
         "schemaviewsObjectRefType": {
             "type": "object",

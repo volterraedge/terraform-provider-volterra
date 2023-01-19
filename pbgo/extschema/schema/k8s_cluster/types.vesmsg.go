@@ -1049,7 +1049,7 @@ var DefaultClusterWideAppListTypeValidator = func() *ValidateClusterWideAppListT
 	vrhClusterWideApps := v.ClusterWideAppsValidationRuleHandler
 	rulesClusterWideApps := map[string]string{
 		"ves.io.schema.rules.message.required":   "true",
-		"ves.io.schema.rules.repeated.max_items": "2",
+		"ves.io.schema.rules.repeated.max_items": "5",
 		"ves.io.schema.rules.repeated.min_items": "1",
 	}
 	vFn, err = vrhClusterWideApps(rulesClusterWideApps)

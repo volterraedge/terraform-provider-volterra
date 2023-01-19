@@ -2581,11 +2581,37 @@ var CustomAPISwaggerJSON string = `{
                     "x-displayname": "Request Percentage",
                     "x-ves-example": "78.5789"
                 },
+                "requests_count": {
+                    "type": "integer",
+                    "description": " Number of requests seen for this API Endpoint for the specified time-range.\n\nExample: - \"1234\"-",
+                    "title": "requests_count",
+                    "format": "int32",
+                    "x-displayname": "Number Of Total Requests",
+                    "x-ves-example": "1234"
+                },
+                "sec_events_count": {
+                    "type": "integer",
+                    "description": " Number of sec_events seen for this API Endpoint for the specified time-range.\n\nExample: - \"1234\"-",
+                    "title": "sec_events_count",
+                    "format": "int32",
+                    "x-displayname": "Number Of Total Security Events",
+                    "x-ves-example": "1234"
+                },
                 "security_risk": {
                     "description": " Signifies api endpoint security risk level.\n\nExample: - APIEP_SEC_RISK_LOW, APIEP_SEC_RISK_MED, APIEP_SEC_RISK_HIGH-",
                     "title": "security_risk",
                     "$ref": "#/definitions/app_typeAPIEPSecurityRisk",
                     "x-displayname": "Security Risk Level"
+                },
+                "sensitive_data": {
+                    "type": "array",
+                    "description": " List of Sensitive Data found in the API endpoint\n\nExample: - \"[SENSITIVE_DATA_TYPE_CCN, SENSITIVE_DATA_TYPE_SSN, SENSITIVE_DATA_TYPE_IP]\"-",
+                    "title": "List of Sensitive Data",
+                    "items": {
+                        "$ref": "#/definitions/app_typeSensitiveDataType"
+                    },
+                    "x-displayname": "List of Sensitive Data",
+                    "x-ves-example": "[SENSITIVE_DATA_TYPE_CCN, SENSITIVE_DATA_TYPE_SSN, SENSITIVE_DATA_TYPE_IP]"
                 }
             }
         },
@@ -3040,6 +3066,24 @@ var CustomAPISwaggerJSON string = `{
                     "x-displayname": "PDF(Mean)"
                 }
             }
+        },
+        "app_typeSensitiveDataType": {
+            "type": "string",
+            "description": "List of possible types of sensitive data that can be discovered for an APIEP.\n\nThe Sensitive Data detected as credit card number.\nThe sensitive data detected as social security number.\nThe sensitive data detected as IP address.\nThe sensitive data detected as email address.\nThe sensitive data detected as phone number.\nThe sensitive data detected as authentication info(e.g password, auth token etc).\nThe sensitive data detected as information leakage.\nThe sensitive data detected as masked PII (CCN, SSN)",
+            "title": "SensitiveDataType",
+            "enum": [
+                "SENSITIVE_DATA_TYPE_CCN",
+                "SENSITIVE_DATA_TYPE_SSN",
+                "SENSITIVE_DATA_TYPE_IP",
+                "SENSITIVE_DATA_TYPE_EMAIL",
+                "SENSITIVE_DATA_TYPE_PHONE",
+                "SENSITIVE_DATA_TYPE_AUTHENTICATION",
+                "SENSITIVE_DATA_TYPE_APP_INFO_LEAKAGE",
+                "SENSITIVE_DATA_TYPE_MASKED_PII"
+            ],
+            "default": "SENSITIVE_DATA_TYPE_CCN",
+            "x-displayname": "Sensitive Data Type",
+            "x-ves-proto-enum": "ves.io.schema.app_type.SensitiveDataType"
         },
         "app_typeServiceAPIEndpointPDFReq": {
             "type": "object",

@@ -1908,6 +1908,14 @@ func (v *ValidateOriginPoolAdvancedOptions) CircuitBreakerChoiceValidationRuleHa
 	return validatorFn, nil
 }
 
+func (v *ValidateOriginPoolAdvancedOptions) HttpProtocolTypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for http_protocol_type")
+	}
+	return validatorFn, nil
+}
+
 func (v *ValidateOriginPoolAdvancedOptions) OutlierDetectionChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -2039,20 +2047,58 @@ func (v *ValidateOriginPoolAdvancedOptions) Validate(ctx context.Context, pm int
 
 	}
 
-	if fv, exists := v.FldValidators["http2_options"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("http2_options"))
-		if err := fv(ctx, m.GetHttp2Options(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
 	if fv, exists := v.FldValidators["http_idle_timeout"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("http_idle_timeout"))
 		if err := fv(ctx, m.GetHttpIdleTimeout(), vOpts...); err != nil {
 			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["http_protocol_type"]; exists {
+		val := m.GetHttpProtocolType()
+		vOpts := append(opts,
+			db.WithValidateField("http_protocol_type"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetHttpProtocolType().(type) {
+	case *OriginPoolAdvancedOptions_Http2Options:
+		if fv, exists := v.FldValidators["http_protocol_type.http2_options"]; exists {
+			val := m.GetHttpProtocolType().(*OriginPoolAdvancedOptions_Http2Options).Http2Options
+			vOpts := append(opts,
+				db.WithValidateField("http_protocol_type"),
+				db.WithValidateField("http2_options"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *OriginPoolAdvancedOptions_Http1Config:
+		if fv, exists := v.FldValidators["http_protocol_type.http1_config"]; exists {
+			val := m.GetHttpProtocolType().(*OriginPoolAdvancedOptions_Http1Config).Http1Config
+			vOpts := append(opts,
+				db.WithValidateField("http_protocol_type"),
+				db.WithValidateField("http1_config"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *OriginPoolAdvancedOptions_AutoHttpConfig:
+		if fv, exists := v.FldValidators["http_protocol_type.auto_http_config"]; exists {
+			val := m.GetHttpProtocolType().(*OriginPoolAdvancedOptions_AutoHttpConfig).AutoHttpConfig
+			vOpts := append(opts,
+				db.WithValidateField("http_protocol_type"),
+				db.WithValidateField("auto_http_config"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
 		}
 
 	}
@@ -2190,6 +2236,17 @@ var DefaultOriginPoolAdvancedOptionsValidator = func() *ValidateOriginPoolAdvanc
 		panic(errMsg)
 	}
 	v.FldValidators["circuit_breaker_choice"] = vFn
+
+	vrhHttpProtocolType := v.HttpProtocolTypeValidationRuleHandler
+	rulesHttpProtocolType := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhHttpProtocolType(rulesHttpProtocolType)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for OriginPoolAdvancedOptions.http_protocol_type: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["http_protocol_type"] = vFn
 
 	vrhOutlierDetectionChoice := v.OutlierDetectionChoiceValidationRuleHandler
 	rulesOutlierDetectionChoice := map[string]string{
