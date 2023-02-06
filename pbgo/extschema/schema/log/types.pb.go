@@ -4,6 +4,7 @@
 package log
 
 import (
+	encoding_binary "encoding/binary"
 	fmt "fmt"
 	_ "github.com/gogo/protobuf/gogoproto"
 	proto "github.com/gogo/protobuf/proto"
@@ -296,6 +297,67 @@ func (m *FieldAggregationBucket) GetSubAggs() map[string]*FieldSubAggregationDat
 	return nil
 }
 
+// PercentilesAggregationValue
+//
+// x-displayName: "Percentiles Aggregation Value"
+// Percentiles aggregation value containing percent and the corresponding value.
+type PercentilesAggregationValue struct {
+	// key
+	//
+	// x-displayName: "Key"
+	// x-example: 99.0
+	Key float32 `protobuf:"fixed32,1,opt,name=key,proto3" json:"key,omitempty"`
+	// value
+	//
+	// x-displayName: "Value"
+	// x-example: 985.0
+	//
+	// value corresponding to the key percent
+	Value float32 `protobuf:"fixed32,2,opt,name=value,proto3" json:"value,omitempty"`
+}
+
+func (m *PercentilesAggregationValue) Reset()      { *m = PercentilesAggregationValue{} }
+func (*PercentilesAggregationValue) ProtoMessage() {}
+func (*PercentilesAggregationValue) Descriptor() ([]byte, []int) {
+	return fileDescriptor_18e467d5ba8b30ac, []int{4}
+}
+func (m *PercentilesAggregationValue) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *PercentilesAggregationValue) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *PercentilesAggregationValue) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_PercentilesAggregationValue.Merge(m, src)
+}
+func (m *PercentilesAggregationValue) XXX_Size() int {
+	return m.Size()
+}
+func (m *PercentilesAggregationValue) XXX_DiscardUnknown() {
+	xxx_messageInfo_PercentilesAggregationValue.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_PercentilesAggregationValue proto.InternalMessageInfo
+
+func (m *PercentilesAggregationValue) GetKey() float32 {
+	if m != nil {
+		return m.Key
+	}
+	return 0
+}
+
+func (m *PercentilesAggregationValue) GetValue() float32 {
+	if m != nil {
+		return m.Value
+	}
+	return 0
+}
+
 // FieldSubAggregationData
 //
 // x-displayName: "Field SubAggregation"
@@ -311,7 +373,7 @@ type FieldSubAggregationData struct {
 func (m *FieldSubAggregationData) Reset()      { *m = FieldSubAggregationData{} }
 func (*FieldSubAggregationData) ProtoMessage() {}
 func (*FieldSubAggregationData) Descriptor() ([]byte, []int) {
-	return fileDescriptor_18e467d5ba8b30ac, []int{4}
+	return fileDescriptor_18e467d5ba8b30ac, []int{5}
 }
 func (m *FieldSubAggregationData) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -358,7 +420,7 @@ type FieldAggregationData struct {
 func (m *FieldAggregationData) Reset()      { *m = FieldAggregationData{} }
 func (*FieldAggregationData) ProtoMessage() {}
 func (*FieldAggregationData) Descriptor() ([]byte, []int) {
-	return fileDescriptor_18e467d5ba8b30ac, []int{5}
+	return fileDescriptor_18e467d5ba8b30ac, []int{6}
 }
 func (m *FieldAggregationData) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -413,7 +475,7 @@ type MultiFieldAggregationBucket struct {
 func (m *MultiFieldAggregationBucket) Reset()      { *m = MultiFieldAggregationBucket{} }
 func (*MultiFieldAggregationBucket) ProtoMessage() {}
 func (*MultiFieldAggregationBucket) Descriptor() ([]byte, []int) {
-	return fileDescriptor_18e467d5ba8b30ac, []int{6}
+	return fileDescriptor_18e467d5ba8b30ac, []int{7}
 }
 func (m *MultiFieldAggregationBucket) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -467,7 +529,7 @@ type MultiFieldAggregationData struct {
 func (m *MultiFieldAggregationData) Reset()      { *m = MultiFieldAggregationData{} }
 func (*MultiFieldAggregationData) ProtoMessage() {}
 func (*MultiFieldAggregationData) Descriptor() ([]byte, []int) {
-	return fileDescriptor_18e467d5ba8b30ac, []int{7}
+	return fileDescriptor_18e467d5ba8b30ac, []int{8}
 }
 func (m *MultiFieldAggregationData) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -515,7 +577,7 @@ type CardinalityAggregationData struct {
 func (m *CardinalityAggregationData) Reset()      { *m = CardinalityAggregationData{} }
 func (*CardinalityAggregationData) ProtoMessage() {}
 func (*CardinalityAggregationData) Descriptor() ([]byte, []int) {
-	return fileDescriptor_18e467d5ba8b30ac, []int{8}
+	return fileDescriptor_18e467d5ba8b30ac, []int{9}
 }
 func (m *CardinalityAggregationData) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -547,6 +609,130 @@ func (m *CardinalityAggregationData) GetCount() uint64 {
 	return 0
 }
 
+// PercentilesAggregationData
+//
+// x-displayName: "Percentiles Aggregation Data"
+// Percentiles Aggregation data
+type PercentilesAggregationData struct {
+	// values
+	//
+	// x-displayName: "Values"
+	// Lists of values containing percent and the corresponding value
+	Values []*PercentilesAggregationValue `protobuf:"bytes,1,rep,name=values,proto3" json:"values,omitempty"`
+}
+
+func (m *PercentilesAggregationData) Reset()      { *m = PercentilesAggregationData{} }
+func (*PercentilesAggregationData) ProtoMessage() {}
+func (*PercentilesAggregationData) Descriptor() ([]byte, []int) {
+	return fileDescriptor_18e467d5ba8b30ac, []int{10}
+}
+func (m *PercentilesAggregationData) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *PercentilesAggregationData) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *PercentilesAggregationData) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_PercentilesAggregationData.Merge(m, src)
+}
+func (m *PercentilesAggregationData) XXX_Size() int {
+	return m.Size()
+}
+func (m *PercentilesAggregationData) XXX_DiscardUnknown() {
+	xxx_messageInfo_PercentilesAggregationData.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_PercentilesAggregationData proto.InternalMessageInfo
+
+func (m *PercentilesAggregationData) GetValues() []*PercentilesAggregationValue {
+	if m != nil {
+		return m.Values
+	}
+	return nil
+}
+
+// MetricsAggregationData
+//
+// x-displayName: "Metrics Aggregation"
+// Metrics aggregation data
+type MetricsAggregationData struct {
+	// aggregation type
+	//
+	// x-displayName: "Aggregation Type"
+	// Specify one of the aggregation types
+	//
+	// Types that are valid to be assigned to AggregationType:
+	//	*MetricsAggregationData_PercentilesAggregation
+	AggregationType isMetricsAggregationData_AggregationType `protobuf_oneof:"aggregation_type"`
+}
+
+func (m *MetricsAggregationData) Reset()      { *m = MetricsAggregationData{} }
+func (*MetricsAggregationData) ProtoMessage() {}
+func (*MetricsAggregationData) Descriptor() ([]byte, []int) {
+	return fileDescriptor_18e467d5ba8b30ac, []int{11}
+}
+func (m *MetricsAggregationData) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MetricsAggregationData) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *MetricsAggregationData) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MetricsAggregationData.Merge(m, src)
+}
+func (m *MetricsAggregationData) XXX_Size() int {
+	return m.Size()
+}
+func (m *MetricsAggregationData) XXX_DiscardUnknown() {
+	xxx_messageInfo_MetricsAggregationData.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MetricsAggregationData proto.InternalMessageInfo
+
+type isMetricsAggregationData_AggregationType interface {
+	isMetricsAggregationData_AggregationType()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
+
+type MetricsAggregationData_PercentilesAggregation struct {
+	PercentilesAggregation *PercentilesAggregationData `protobuf:"bytes,2,opt,name=percentiles_aggregation,json=percentilesAggregation,proto3,oneof" json:"percentiles_aggregation,omitempty"`
+}
+
+func (*MetricsAggregationData_PercentilesAggregation) isMetricsAggregationData_AggregationType() {}
+
+func (m *MetricsAggregationData) GetAggregationType() isMetricsAggregationData_AggregationType {
+	if m != nil {
+		return m.AggregationType
+	}
+	return nil
+}
+
+func (m *MetricsAggregationData) GetPercentilesAggregation() *PercentilesAggregationData {
+	if x, ok := m.GetAggregationType().(*MetricsAggregationData_PercentilesAggregation); ok {
+		return x.PercentilesAggregation
+	}
+	return nil
+}
+
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*MetricsAggregationData) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
+		(*MetricsAggregationData_PercentilesAggregation)(nil),
+	}
+}
+
 // LogAggregationData
 //
 // x-displayName: "Log Aggregation"
@@ -572,12 +758,17 @@ type LogAggregationData struct {
 	//
 	// Cardinality aggregation data
 	CardinalityAggregation *CardinalityAggregationData `protobuf:"bytes,5,opt,name=cardinality_aggregation,json=cardinalityAggregation,proto3" json:"cardinality_aggregation,omitempty"`
+	// metrics Aggregation
+	//
+	// x-displayName: "Metrics Aggregation"
+	// Metrics aggregation data
+	MetricsAggregation *MetricsAggregationData `protobuf:"bytes,7,opt,name=metrics_aggregation,json=metricsAggregation,proto3" json:"metrics_aggregation,omitempty"`
 }
 
 func (m *LogAggregationData) Reset()      { *m = LogAggregationData{} }
 func (*LogAggregationData) ProtoMessage() {}
 func (*LogAggregationData) Descriptor() ([]byte, []int) {
-	return fileDescriptor_18e467d5ba8b30ac, []int{9}
+	return fileDescriptor_18e467d5ba8b30ac, []int{12}
 }
 func (m *LogAggregationData) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -630,6 +821,13 @@ func (m *LogAggregationData) GetCardinalityAggregation() *CardinalityAggregation
 	return nil
 }
 
+func (m *LogAggregationData) GetMetricsAggregation() *MetricsAggregationData {
+	if m != nil {
+		return m.MetricsAggregation
+	}
+	return nil
+}
+
 func init() {
 	proto.RegisterType((*DateAggregationBucket)(nil), "ves.io.schema.log.DateAggregationBucket")
 	proto.RegisterMapType((map[string]*DateSubAggregationData)(nil), "ves.io.schema.log.DateAggregationBucket.SubAggsEntry")
@@ -637,64 +835,75 @@ func init() {
 	proto.RegisterType((*DateAggregationData)(nil), "ves.io.schema.log.DateAggregationData")
 	proto.RegisterType((*FieldAggregationBucket)(nil), "ves.io.schema.log.FieldAggregationBucket")
 	proto.RegisterMapType((map[string]*FieldSubAggregationData)(nil), "ves.io.schema.log.FieldAggregationBucket.SubAggsEntry")
+	proto.RegisterType((*PercentilesAggregationValue)(nil), "ves.io.schema.log.PercentilesAggregationValue")
 	proto.RegisterType((*FieldSubAggregationData)(nil), "ves.io.schema.log.FieldSubAggregationData")
 	proto.RegisterType((*FieldAggregationData)(nil), "ves.io.schema.log.FieldAggregationData")
 	proto.RegisterType((*MultiFieldAggregationBucket)(nil), "ves.io.schema.log.MultiFieldAggregationBucket")
 	proto.RegisterMapType((map[string]string)(nil), "ves.io.schema.log.MultiFieldAggregationBucket.KeysEntry")
 	proto.RegisterType((*MultiFieldAggregationData)(nil), "ves.io.schema.log.MultiFieldAggregationData")
 	proto.RegisterType((*CardinalityAggregationData)(nil), "ves.io.schema.log.CardinalityAggregationData")
+	proto.RegisterType((*PercentilesAggregationData)(nil), "ves.io.schema.log.PercentilesAggregationData")
+	proto.RegisterType((*MetricsAggregationData)(nil), "ves.io.schema.log.MetricsAggregationData")
 	proto.RegisterType((*LogAggregationData)(nil), "ves.io.schema.log.LogAggregationData")
 }
 
 func init() { proto.RegisterFile("ves.io/schema/log/types.proto", fileDescriptor_18e467d5ba8b30ac) }
 
 var fileDescriptor_18e467d5ba8b30ac = []byte{
-	// 710 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xb4, 0x56, 0xbf, 0x6f, 0xd3, 0x40,
-	0x14, 0xce, 0xc5, 0x49, 0x4b, 0xaf, 0x48, 0xb4, 0x47, 0x7f, 0x84, 0x14, 0x4e, 0x95, 0x07, 0x68,
-	0x11, 0xb1, 0xa5, 0x20, 0xa0, 0x62, 0x81, 0xa6, 0xe5, 0x87, 0x44, 0x91, 0x68, 0x60, 0x82, 0xa1,
-	0xb2, 0x93, 0xcb, 0xd5, 0x8a, 0x93, 0xb3, 0xec, 0x73, 0xc0, 0x1b, 0x9d, 0x59, 0xf8, 0x33, 0xf8,
-	0x1b, 0x3a, 0x31, 0x32, 0x76, 0x60, 0xe8, 0x48, 0xdd, 0x05, 0xb6, 0xce, 0xb0, 0x20, 0x9f, 0x9d,
-	0xa6, 0x71, 0x2e, 0x69, 0x90, 0xca, 0x76, 0x77, 0xdf, 0xbb, 0xf7, 0xdd, 0x7b, 0xdf, 0x77, 0x67,
-	0xc3, 0x1b, 0x1d, 0xe2, 0x69, 0x16, 0xd3, 0xbd, 0xda, 0x2e, 0x69, 0x19, 0xba, 0xcd, 0xa8, 0xce,
-	0x03, 0x87, 0x78, 0x9a, 0xe3, 0x32, 0xce, 0xd0, 0x6c, 0x0c, 0x6b, 0x31, 0xac, 0xd9, 0x8c, 0x16,
-	0x4b, 0xd4, 0xe2, 0xbb, 0xbe, 0xa9, 0xd5, 0x58, 0x4b, 0xa7, 0x8c, 0x32, 0x5d, 0x44, 0x9a, 0x7e,
-	0x43, 0xcc, 0xc4, 0x44, 0x8c, 0xe2, 0x0c, 0xc5, 0xa5, 0x7e, 0x02, 0xe6, 0x70, 0x8b, 0xb5, 0x93,
-	0xf4, 0xc5, 0xeb, 0xfd, 0x60, 0xc7, 0xb0, 0xad, 0xba, 0xc1, 0x49, 0x82, 0x2e, 0xa7, 0x50, 0x8b,
-	0xbc, 0xdf, 0xe9, 0xdb, 0xaf, 0xfe, 0x06, 0x70, 0x7e, 0xd3, 0xe0, 0x64, 0x9d, 0x52, 0x97, 0x50,
-	0x23, 0x82, 0x2a, 0x7e, 0xad, 0x49, 0x38, 0x42, 0x30, 0xc7, 0xad, 0x16, 0x29, 0x80, 0x65, 0xb0,
-	0x92, 0xab, 0x8a, 0x31, 0x9a, 0x83, 0xf9, 0x1a, 0xf3, 0xdb, 0xbc, 0x90, 0x15, 0x8b, 0xf1, 0x04,
-	0xbd, 0x82, 0x97, 0x3c, 0xdf, 0xdc, 0x31, 0x28, 0xf5, 0x0a, 0xca, 0xb2, 0xb2, 0x32, 0x5d, 0xbe,
-	0xa7, 0x0d, 0x54, 0xad, 0x49, 0x59, 0xb4, 0xd7, 0xbe, 0xb9, 0x4e, 0xa9, 0xf7, 0xa4, 0xcd, 0xdd,
-	0xa0, 0x3a, 0xe9, 0xc5, 0xb3, 0x22, 0x81, 0x97, 0xcf, 0x02, 0x68, 0x06, 0x2a, 0x4d, 0x12, 0x88,
-	0xa3, 0x4c, 0x55, 0xa3, 0x21, 0x7a, 0x04, 0xf3, 0x1d, 0xc3, 0xf6, 0x89, 0x38, 0xc9, 0x74, 0x79,
-	0x75, 0x08, 0x61, 0x9c, 0xa5, 0xcb, 0xb9, 0x69, 0x70, 0xa3, 0x1a, 0xef, 0x7b, 0x98, 0x5d, 0x03,
-	0xea, 0x77, 0x00, 0x17, 0xe4, 0x51, 0xe8, 0x0d, 0x9c, 0x6d, 0x58, 0xc4, 0xae, 0x47, 0x55, 0x75,
-	0x01, 0xc1, 0x3f, 0x5d, 0xbe, 0x25, 0xe1, 0x7a, 0x1a, 0xc5, 0xa6, 0x99, 0x66, 0x1a, 0xa9, 0x55,
-	0x54, 0x87, 0x8b, 0x2d, 0xdf, 0xe6, 0xd6, 0xce, 0x60, 0xee, 0xb8, 0x8e, 0x3b, 0x92, 0xdc, 0x2f,
-	0xa3, 0x1d, 0x52, 0x82, 0xf9, 0x96, 0x0c, 0x52, 0x03, 0x78, 0x35, 0xd5, 0x6c, 0x51, 0x52, 0x05,
-	0x4e, 0x9a, 0xa2, 0xe9, 0x5e, 0x21, 0x2b, 0x54, 0x5a, 0x19, 0x57, 0xa5, 0x6a, 0x77, 0x23, 0xc2,
-	0x30, 0xe7, 0x71, 0xe2, 0x14, 0x94, 0x48, 0x89, 0x0a, 0xdc, 0xff, 0xf5, 0x55, 0xc9, 0xbb, 0xca,
-	0x49, 0x16, 0x54, 0xc5, 0xba, 0xfa, 0x07, 0xc0, 0x85, 0xf4, 0x79, 0x12, 0x3f, 0x0d, 0x6a, 0x28,
-	0x77, 0xd3, 0xf6, 0x80, 0x9b, 0xee, 0x8f, 0xd1, 0xf0, 0x91, 0x76, 0x6a, 0x9c, 0x6b, 0xa7, 0xc7,
-	0xfd, 0x76, 0xba, 0x3d, 0x8c, 0x71, 0xb4, 0x9f, 0xf6, 0x00, 0x5c, 0x1c, 0x12, 0x86, 0x1a, 0x70,
-	0xb1, 0x66, 0xb8, 0x75, 0xab, 0x6d, 0xd8, 0x16, 0x0f, 0x24, 0xb6, 0x2a, 0x49, 0x38, 0x37, 0x7a,
-	0x3b, 0xd2, 0xb4, 0x0b, 0x35, 0x29, 0xa6, 0xbe, 0x83, 0x73, 0x32, 0xaf, 0xa0, 0x8d, 0xb4, 0xfa,
-	0xab, 0x63, 0x77, 0xf5, 0x54, 0x7e, 0x75, 0x1f, 0xc0, 0x25, 0xa9, 0x1d, 0x13, 0x8d, 0xb7, 0x60,
-	0xae, 0x49, 0x02, 0xaf, 0x00, 0x04, 0xc3, 0xda, 0xb8, 0x66, 0x4e, 0xc4, 0x7b, 0x41, 0x82, 0x44,
-	0x39, 0x91, 0x45, 0xee, 0x8f, 0xe2, 0x03, 0x38, 0x75, 0x1a, 0x28, 0x37, 0x55, 0x4f, 0xc9, 0xa9,
-	0xb3, 0xea, 0x10, 0x78, 0x6d, 0xe8, 0x55, 0x42, 0xcf, 0xd3, 0xed, 0xd1, 0xfe, 0xed, 0xf0, 0xbd,
-	0x1e, 0x95, 0x61, 0x71, 0xb8, 0x6c, 0xbd, 0x9a, 0xc0, 0x99, 0x9a, 0xd4, 0x4f, 0x0a, 0x44, 0x5b,
-	0x8c, 0xa6, 0x83, 0xb7, 0xe1, 0x4c, 0xf4, 0x98, 0xf7, 0x99, 0x45, 0x11, 0x66, 0xb9, 0x79, 0xfe,
-	0xd5, 0x15, 0x2e, 0xb9, 0x52, 0xef, 0x5f, 0x94, 0xbf, 0x6b, 0xb9, 0xff, 0xf8, 0xae, 0x4d, 0x5c,
-	0xd8, 0xbb, 0x36, 0xea, 0x0a, 0xe5, 0x2f, 0xf0, 0x0a, 0x55, 0xf6, 0xc0, 0xc1, 0x11, 0xce, 0x1c,
-	0x1e, 0xe1, 0xcc, 0xc9, 0x11, 0x06, 0x1f, 0x43, 0x0c, 0xbe, 0x84, 0x18, 0x7c, 0x0b, 0x31, 0x38,
-	0x08, 0x31, 0x38, 0x0c, 0x31, 0xf8, 0x11, 0x62, 0xf0, 0x33, 0xc4, 0x99, 0x93, 0x10, 0x83, 0xcf,
-	0xc7, 0x38, 0x73, 0x70, 0x8c, 0x33, 0x87, 0xc7, 0x38, 0xf3, 0xf6, 0x19, 0x65, 0x4e, 0x93, 0x6a,
-	0x1d, 0x66, 0x73, 0xe2, 0xba, 0x86, 0xe6, 0x7b, 0xba, 0x18, 0x34, 0x98, 0xdb, 0x2a, 0x39, 0x2e,
-	0xeb, 0x58, 0x75, 0xe2, 0x96, 0xba, 0xb0, 0xee, 0x98, 0x94, 0xe9, 0xe4, 0x03, 0x4f, 0xbe, 0xcf,
-	0xbd, 0x5f, 0x08, 0x73, 0x42, 0x7c, 0x9e, 0xef, 0xfe, 0x0d, 0x00, 0x00, 0xff, 0xff, 0x84, 0x4b,
-	0xb0, 0xde, 0x5e, 0x08, 0x00, 0x00,
+	// 847 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xb4, 0x56, 0x4d, 0x8f, 0xdb, 0x44,
+	0x18, 0xce, 0xd8, 0xd9, 0xaf, 0x77, 0x91, 0x48, 0xa7, 0x6d, 0x12, 0xb2, 0xc5, 0x5a, 0xf9, 0x00,
+	0x5b, 0x44, 0x6c, 0x29, 0x08, 0xa8, 0x7a, 0x81, 0xa6, 0x1f, 0x54, 0xd0, 0x4a, 0xad, 0x41, 0x1c,
+	0xca, 0x21, 0x72, 0x9c, 0xc9, 0xac, 0x15, 0x3b, 0x63, 0xd9, 0xe3, 0x40, 0x6e, 0xf4, 0x1f, 0xf0,
+	0x33, 0x38, 0xf1, 0x03, 0xba, 0x97, 0x1e, 0x11, 0xa7, 0x1c, 0x38, 0xec, 0x91, 0xf5, 0x1e, 0x80,
+	0xdb, 0x9e, 0xe1, 0x82, 0x3c, 0x76, 0x36, 0x89, 0x33, 0x49, 0x83, 0xd4, 0xde, 0x66, 0xe6, 0x99,
+	0xf7, 0x7d, 0xde, 0x8f, 0xc7, 0xf3, 0x1a, 0xde, 0x1d, 0x91, 0xc8, 0x70, 0x99, 0x19, 0x39, 0xc7,
+	0xc4, 0xb7, 0x4d, 0x8f, 0x51, 0x93, 0x8f, 0x03, 0x12, 0x19, 0x41, 0xc8, 0x38, 0xc3, 0x57, 0x32,
+	0xd8, 0xc8, 0x60, 0xc3, 0x63, 0xb4, 0xd1, 0xa4, 0x2e, 0x3f, 0x8e, 0xbb, 0x86, 0xc3, 0x7c, 0x93,
+	0x32, 0xca, 0x4c, 0x71, 0xb3, 0x1b, 0xf7, 0xc5, 0x4e, 0x6c, 0xc4, 0x2a, 0xf3, 0xd0, 0x38, 0x58,
+	0x24, 0x60, 0x01, 0x77, 0xd9, 0x30, 0x77, 0xdf, 0xb8, 0xb1, 0x08, 0x8e, 0x6c, 0xcf, 0xed, 0xd9,
+	0x9c, 0xe4, 0xe8, 0x61, 0x01, 0x75, 0xc9, 0xf7, 0x9d, 0x05, 0x7b, 0xfd, 0x1f, 0x04, 0xd7, 0xef,
+	0xd9, 0x9c, 0xdc, 0xa1, 0x34, 0x24, 0xd4, 0x4e, 0xa1, 0x76, 0xec, 0x0c, 0x08, 0xc7, 0x18, 0xca,
+	0xdc, 0xf5, 0x49, 0x1d, 0x1d, 0xa2, 0xa3, 0xb2, 0x25, 0xd6, 0xf8, 0x1a, 0x6c, 0x39, 0x2c, 0x1e,
+	0xf2, 0xba, 0x22, 0x0e, 0xb3, 0x0d, 0x7e, 0x02, 0xbb, 0x51, 0xdc, 0xed, 0xd8, 0x94, 0x46, 0x75,
+	0xf5, 0x50, 0x3d, 0xda, 0x6f, 0x7d, 0x6c, 0x2c, 0x65, 0x6d, 0x48, 0x59, 0x8c, 0xaf, 0xe3, 0xee,
+	0x1d, 0x4a, 0xa3, 0xfb, 0x43, 0x1e, 0x8e, 0xad, 0x9d, 0x28, 0xdb, 0x35, 0x08, 0xbc, 0x35, 0x0f,
+	0xe0, 0x0a, 0xa8, 0x03, 0x32, 0x16, 0xa1, 0xec, 0x59, 0xe9, 0x12, 0x7f, 0x06, 0x5b, 0x23, 0xdb,
+	0x8b, 0x89, 0x88, 0x64, 0xbf, 0x75, 0x73, 0x05, 0x61, 0xe6, 0x65, 0xca, 0x79, 0xcf, 0xe6, 0xb6,
+	0x95, 0xd9, 0xdd, 0x56, 0x6e, 0x21, 0xfd, 0x77, 0x04, 0x55, 0xf9, 0x2d, 0xfc, 0x0d, 0x5c, 0xe9,
+	0xbb, 0xc4, 0xeb, 0xa5, 0x59, 0x4d, 0x01, 0xc1, 0xbf, 0xdf, 0x7a, 0x5f, 0xc2, 0xf5, 0x20, 0xbd,
+	0x5b, 0x64, 0xaa, 0xf4, 0x0b, 0xa7, 0xb8, 0x07, 0x35, 0x3f, 0xf6, 0xb8, 0xdb, 0x59, 0xf6, 0x9d,
+	0xe5, 0xf1, 0xa1, 0xc4, 0xf7, 0xe3, 0xd4, 0x42, 0x4a, 0x70, 0xdd, 0x97, 0x41, 0xfa, 0x18, 0xae,
+	0x16, 0x8a, 0x2d, 0x52, 0x6a, 0xc3, 0x4e, 0x57, 0x14, 0x3d, 0xaa, 0x2b, 0xa2, 0x4b, 0x47, 0x9b,
+	0x76, 0xc9, 0x9a, 0x1a, 0x62, 0x0d, 0xca, 0x11, 0x27, 0x41, 0x5d, 0x4d, 0x3b, 0xd1, 0x86, 0x17,
+	0x7f, 0xbf, 0x54, 0xb7, 0x42, 0xf5, 0x42, 0x41, 0x96, 0x38, 0xd7, 0xff, 0x45, 0x50, 0x2d, 0xc6,
+	0x93, 0xeb, 0x69, 0xb9, 0x87, 0x72, 0x35, 0x3d, 0x5d, 0x52, 0xd3, 0x27, 0x1b, 0x14, 0x7c, 0xad,
+	0x9c, 0xfa, 0xaf, 0x94, 0xd3, 0xe7, 0x8b, 0x72, 0xfa, 0x60, 0x15, 0xe3, 0x7a, 0x3d, 0xdd, 0x87,
+	0x83, 0x27, 0x24, 0x74, 0xc8, 0x90, 0xbb, 0x1e, 0x89, 0xe6, 0x2e, 0x7e, 0x9b, 0x5e, 0x99, 0xa7,
+	0x55, 0x2e, 0x2b, 0x30, 0xa3, 0x55, 0x72, 0x57, 0xfa, 0x73, 0x04, 0xb5, 0x15, 0x6c, 0xb8, 0x0f,
+	0x35, 0xc7, 0x0e, 0x7b, 0xee, 0xd0, 0xf6, 0x5c, 0x3e, 0x96, 0xa8, 0xb3, 0x29, 0x09, 0xfd, 0xee,
+	0xcc, 0xa2, 0x18, 0x7d, 0xd5, 0x91, 0x62, 0xfa, 0x77, 0x70, 0x4d, 0x26, 0x39, 0x7c, 0xb7, 0x28,
+	0xa2, 0x9b, 0x1b, 0x37, 0xe7, 0x52, 0x45, 0xfa, 0x0b, 0x04, 0x07, 0x52, 0x55, 0xe7, 0x52, 0x79,
+	0x04, 0xe5, 0x01, 0x19, 0x47, 0x75, 0x24, 0x18, 0x6e, 0x6d, 0xfa, 0x4d, 0xe4, 0x1a, 0xf8, 0x8a,
+	0x8c, 0x73, 0x01, 0x08, 0x2f, 0x72, 0x99, 0x35, 0x3e, 0x85, 0xbd, 0xcb, 0x8b, 0x72, 0x6d, 0xce,
+	0x3a, 0xb3, 0x37, 0xdf, 0x64, 0x02, 0xef, 0xac, 0xfc, 0x22, 0xf1, 0xc3, 0x62, 0x79, 0x8c, 0xff,
+	0x17, 0xfc, 0xac, 0x46, 0x2d, 0x68, 0xac, 0x6e, 0xdb, 0x2c, 0x27, 0x34, 0x97, 0x93, 0xde, 0x83,
+	0x86, 0x5c, 0x7f, 0xc2, 0xe6, 0x01, 0x6c, 0x8b, 0x2c, 0xa6, 0x75, 0x95, 0x85, 0xb6, 0x46, 0xbe,
+	0x56, 0x6e, 0xad, 0xff, 0x82, 0xa0, 0xfa, 0x98, 0xf0, 0xd0, 0x75, 0x96, 0x28, 0x8e, 0xa1, 0x16,
+	0xcc, 0x3c, 0x48, 0xde, 0xb7, 0xe6, 0xc6, 0x9c, 0xa9, 0xbf, 0x87, 0x25, 0xab, 0x1a, 0x48, 0xd1,
+	0xdb, 0xdb, 0xbf, 0x9d, 0x20, 0xa5, 0x82, 0xda, 0x37, 0xa0, 0x32, 0xc7, 0xd2, 0x49, 0x27, 0x2f,
+	0xde, 0x7d, 0x79, 0x82, 0x94, 0xc9, 0x09, 0x42, 0x5f, 0x96, 0x77, 0x51, 0x45, 0xd1, 0xff, 0x54,
+	0x01, 0x3f, 0x62, 0xb4, 0x18, 0xec, 0x53, 0xa8, 0xa4, 0xa3, 0x72, 0x21, 0x4a, 0x55, 0x44, 0xf9,
+	0xde, 0xab, 0x1f, 0x46, 0xf1, 0xf1, 0xbc, 0xdd, 0x5b, 0x3c, 0x94, 0x4f, 0x8d, 0xf2, 0x1b, 0x9c,
+	0x1a, 0xdb, 0xaf, 0x6d, 0x6a, 0xac, 0x7b, 0x59, 0xb6, 0x5e, 0xe3, 0xcb, 0x82, 0x9f, 0xc1, 0x55,
+	0x3f, 0x53, 0xcf, 0x02, 0xc7, 0xce, 0xca, 0x39, 0x2e, 0xd7, 0x9a, 0x85, 0xfd, 0xa5, 0xf3, 0xf6,
+	0x73, 0x34, 0x39, 0xd3, 0x4a, 0xa7, 0x67, 0x5a, 0xe9, 0xe2, 0x4c, 0x43, 0x3f, 0x26, 0x1a, 0xfa,
+	0x39, 0xd1, 0xd0, 0xaf, 0x89, 0x86, 0x26, 0x89, 0x86, 0x4e, 0x13, 0x0d, 0xfd, 0x91, 0x68, 0xe8,
+	0xaf, 0x44, 0x2b, 0x5d, 0x24, 0x1a, 0xfa, 0xe9, 0x5c, 0x2b, 0x4d, 0xce, 0xb5, 0xd2, 0xe9, 0xb9,
+	0x56, 0x7a, 0xf6, 0x05, 0x65, 0xc1, 0x80, 0x1a, 0x23, 0xe6, 0x71, 0x12, 0x86, 0xb6, 0x11, 0x47,
+	0xa6, 0x58, 0xf4, 0x59, 0xe8, 0x37, 0x83, 0x90, 0x8d, 0xdc, 0x1e, 0x09, 0x9b, 0x53, 0xd8, 0x0c,
+	0xba, 0x94, 0x99, 0xe4, 0x07, 0x9e, 0xff, 0x59, 0xcd, 0x7e, 0xfe, 0xba, 0xdb, 0xe2, 0xc7, 0xea,
+	0xa3, 0xff, 0x02, 0x00, 0x00, 0xff, 0xff, 0xa2, 0x27, 0xfd, 0x55, 0x18, 0x0a, 0x00, 0x00,
 }
 
 func (this *DateAggregationBucket) Equal(that interface{}) bool {
@@ -823,6 +1032,33 @@ func (this *FieldAggregationBucket) Equal(that interface{}) bool {
 		if !this.SubAggs[i].Equal(that1.SubAggs[i]) {
 			return false
 		}
+	}
+	return true
+}
+func (this *PercentilesAggregationValue) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*PercentilesAggregationValue)
+	if !ok {
+		that2, ok := that.(PercentilesAggregationValue)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.Key != that1.Key {
+		return false
+	}
+	if this.Value != that1.Value {
+		return false
 	}
 	return true
 }
@@ -964,6 +1200,89 @@ func (this *CardinalityAggregationData) Equal(that interface{}) bool {
 	}
 	return true
 }
+func (this *PercentilesAggregationData) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*PercentilesAggregationData)
+	if !ok {
+		that2, ok := that.(PercentilesAggregationData)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if len(this.Values) != len(that1.Values) {
+		return false
+	}
+	for i := range this.Values {
+		if !this.Values[i].Equal(that1.Values[i]) {
+			return false
+		}
+	}
+	return true
+}
+func (this *MetricsAggregationData) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*MetricsAggregationData)
+	if !ok {
+		that2, ok := that.(MetricsAggregationData)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if that1.AggregationType == nil {
+		if this.AggregationType != nil {
+			return false
+		}
+	} else if this.AggregationType == nil {
+		return false
+	} else if !this.AggregationType.Equal(that1.AggregationType) {
+		return false
+	}
+	return true
+}
+func (this *MetricsAggregationData_PercentilesAggregation) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*MetricsAggregationData_PercentilesAggregation)
+	if !ok {
+		that2, ok := that.(MetricsAggregationData_PercentilesAggregation)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.PercentilesAggregation.Equal(that1.PercentilesAggregation) {
+		return false
+	}
+	return true
+}
 func (this *LogAggregationData) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -993,6 +1312,9 @@ func (this *LogAggregationData) Equal(that interface{}) bool {
 		return false
 	}
 	if !this.CardinalityAggregation.Equal(that1.CardinalityAggregation) {
+		return false
+	}
+	if !this.MetricsAggregation.Equal(that1.MetricsAggregation) {
 		return false
 	}
 	return true
@@ -1073,6 +1395,17 @@ func (this *FieldAggregationBucket) GoString() string {
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
+func (this *PercentilesAggregationValue) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 6)
+	s = append(s, "&log.PercentilesAggregationValue{")
+	s = append(s, "Key: "+fmt.Sprintf("%#v", this.Key)+",\n")
+	s = append(s, "Value: "+fmt.Sprintf("%#v", this.Value)+",\n")
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
 func (this *FieldSubAggregationData) GoString() string {
 	if this == nil {
 		return "nil"
@@ -1142,11 +1475,43 @@ func (this *CardinalityAggregationData) GoString() string {
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
+func (this *PercentilesAggregationData) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 5)
+	s = append(s, "&log.PercentilesAggregationData{")
+	if this.Values != nil {
+		s = append(s, "Values: "+fmt.Sprintf("%#v", this.Values)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *MetricsAggregationData) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 5)
+	s = append(s, "&log.MetricsAggregationData{")
+	if this.AggregationType != nil {
+		s = append(s, "AggregationType: "+fmt.Sprintf("%#v", this.AggregationType)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *MetricsAggregationData_PercentilesAggregation) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&log.MetricsAggregationData_PercentilesAggregation{` +
+		`PercentilesAggregation:` + fmt.Sprintf("%#v", this.PercentilesAggregation) + `}`}, ", ")
+	return s
+}
 func (this *LogAggregationData) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 8)
+	s := make([]string, 0, 9)
 	s = append(s, "&log.LogAggregationData{")
 	if this.DateAggregation != nil {
 		s = append(s, "DateAggregation: "+fmt.Sprintf("%#v", this.DateAggregation)+",\n")
@@ -1159,6 +1524,9 @@ func (this *LogAggregationData) GoString() string {
 	}
 	if this.CardinalityAggregation != nil {
 		s = append(s, "CardinalityAggregation: "+fmt.Sprintf("%#v", this.CardinalityAggregation)+",\n")
+	}
+	if this.MetricsAggregation != nil {
+		s = append(s, "MetricsAggregation: "+fmt.Sprintf("%#v", this.MetricsAggregation)+",\n")
 	}
 	s = append(s, "}")
 	return strings.Join(s, "")
@@ -1392,6 +1760,41 @@ func (m *FieldAggregationBucket) MarshalToSizedBuffer(dAtA []byte) (int, error) 
 	return len(dAtA) - i, nil
 }
 
+func (m *PercentilesAggregationValue) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *PercentilesAggregationValue) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *PercentilesAggregationValue) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.Value != 0 {
+		i -= 4
+		encoding_binary.LittleEndian.PutUint32(dAtA[i:], uint32(math.Float32bits(float32(m.Value))))
+		i--
+		dAtA[i] = 0x15
+	}
+	if m.Key != 0 {
+		i -= 4
+		encoding_binary.LittleEndian.PutUint32(dAtA[i:], uint32(math.Float32bits(float32(m.Key))))
+		i--
+		dAtA[i] = 0xd
+	}
+	return len(dAtA) - i, nil
+}
+
 func (m *FieldSubAggregationData) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -1581,6 +1984,96 @@ func (m *CardinalityAggregationData) MarshalToSizedBuffer(dAtA []byte) (int, err
 	return len(dAtA) - i, nil
 }
 
+func (m *PercentilesAggregationData) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *PercentilesAggregationData) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *PercentilesAggregationData) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.Values) > 0 {
+		for iNdEx := len(m.Values) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.Values[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0xa
+		}
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *MetricsAggregationData) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MetricsAggregationData) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MetricsAggregationData) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.AggregationType != nil {
+		{
+			size := m.AggregationType.Size()
+			i -= size
+			if _, err := m.AggregationType.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *MetricsAggregationData_PercentilesAggregation) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MetricsAggregationData_PercentilesAggregation) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.PercentilesAggregation != nil {
+		{
+			size, err := m.PercentilesAggregation.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x12
+	}
+	return len(dAtA) - i, nil
+}
 func (m *LogAggregationData) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -1601,6 +2094,18 @@ func (m *LogAggregationData) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	if m.MetricsAggregation != nil {
+		{
+			size, err := m.MetricsAggregation.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x3a
+	}
 	if m.MultiFieldAggregation != nil {
 		{
 			size, err := m.MultiFieldAggregation.MarshalToSizedBuffer(dAtA[:i])
@@ -1756,6 +2261,21 @@ func (m *FieldAggregationBucket) Size() (n int) {
 	return n
 }
 
+func (m *PercentilesAggregationValue) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Key != 0 {
+		n += 5
+	}
+	if m.Value != 0 {
+		n += 5
+	}
+	return n
+}
+
 func (m *FieldSubAggregationData) Size() (n int) {
 	if m == nil {
 		return 0
@@ -1831,6 +2351,45 @@ func (m *CardinalityAggregationData) Size() (n int) {
 	return n
 }
 
+func (m *PercentilesAggregationData) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if len(m.Values) > 0 {
+		for _, e := range m.Values {
+			l = e.Size()
+			n += 1 + l + sovTypes(uint64(l))
+		}
+	}
+	return n
+}
+
+func (m *MetricsAggregationData) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.AggregationType != nil {
+		n += m.AggregationType.Size()
+	}
+	return n
+}
+
+func (m *MetricsAggregationData_PercentilesAggregation) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.PercentilesAggregation != nil {
+		l = m.PercentilesAggregation.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
 func (m *LogAggregationData) Size() (n int) {
 	if m == nil {
 		return 0
@@ -1851,6 +2410,10 @@ func (m *LogAggregationData) Size() (n int) {
 	}
 	if m.MultiFieldAggregation != nil {
 		l = m.MultiFieldAggregation.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.MetricsAggregation != nil {
+		l = m.MetricsAggregation.Size()
 		n += 1 + l + sovTypes(uint64(l))
 	}
 	return n
@@ -1933,6 +2496,17 @@ func (this *FieldAggregationBucket) String() string {
 	}, "")
 	return s
 }
+func (this *PercentilesAggregationValue) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&PercentilesAggregationValue{`,
+		`Key:` + fmt.Sprintf("%v", this.Key) + `,`,
+		`Value:` + fmt.Sprintf("%v", this.Value) + `,`,
+		`}`,
+	}, "")
+	return s
+}
 func (this *FieldSubAggregationData) String() string {
 	if this == nil {
 		return "nil"
@@ -2004,6 +2578,41 @@ func (this *CardinalityAggregationData) String() string {
 	}, "")
 	return s
 }
+func (this *PercentilesAggregationData) String() string {
+	if this == nil {
+		return "nil"
+	}
+	repeatedStringForValues := "[]*PercentilesAggregationValue{"
+	for _, f := range this.Values {
+		repeatedStringForValues += strings.Replace(f.String(), "PercentilesAggregationValue", "PercentilesAggregationValue", 1) + ","
+	}
+	repeatedStringForValues += "}"
+	s := strings.Join([]string{`&PercentilesAggregationData{`,
+		`Values:` + repeatedStringForValues + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *MetricsAggregationData) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&MetricsAggregationData{`,
+		`AggregationType:` + fmt.Sprintf("%v", this.AggregationType) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *MetricsAggregationData_PercentilesAggregation) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&MetricsAggregationData_PercentilesAggregation{`,
+		`PercentilesAggregation:` + strings.Replace(fmt.Sprintf("%v", this.PercentilesAggregation), "PercentilesAggregationData", "PercentilesAggregationData", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
 func (this *LogAggregationData) String() string {
 	if this == nil {
 		return "nil"
@@ -2013,6 +2622,7 @@ func (this *LogAggregationData) String() string {
 		`FieldAggregation:` + strings.Replace(this.FieldAggregation.String(), "FieldAggregationData", "FieldAggregationData", 1) + `,`,
 		`CardinalityAggregation:` + strings.Replace(this.CardinalityAggregation.String(), "CardinalityAggregationData", "CardinalityAggregationData", 1) + `,`,
 		`MultiFieldAggregation:` + strings.Replace(this.MultiFieldAggregation.String(), "MultiFieldAggregationData", "MultiFieldAggregationData", 1) + `,`,
+		`MetricsAggregation:` + strings.Replace(this.MetricsAggregation.String(), "MetricsAggregationData", "MetricsAggregationData", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2722,6 +3332,81 @@ func (m *FieldAggregationBucket) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
+func (m *PercentilesAggregationValue) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: PercentilesAggregationValue: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: PercentilesAggregationValue: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 5 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Key", wireType)
+			}
+			var v uint32
+			if (iNdEx + 4) > l {
+				return io.ErrUnexpectedEOF
+			}
+			v = uint32(encoding_binary.LittleEndian.Uint32(dAtA[iNdEx:]))
+			iNdEx += 4
+			m.Key = float32(math.Float32frombits(v))
+		case 2:
+			if wireType != 5 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Value", wireType)
+			}
+			var v uint32
+			if (iNdEx + 4) > l {
+				return io.ErrUnexpectedEOF
+			}
+			v = uint32(encoding_binary.LittleEndian.Uint32(dAtA[iNdEx:]))
+			iNdEx += 4
+			m.Value = float32(math.Float32frombits(v))
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
 func (m *FieldSubAggregationData) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
@@ -3256,6 +3941,181 @@ func (m *CardinalityAggregationData) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
+func (m *PercentilesAggregationData) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: PercentilesAggregationData: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: PercentilesAggregationData: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Values", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Values = append(m.Values, &PercentilesAggregationValue{})
+			if err := m.Values[len(m.Values)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MetricsAggregationData) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MetricsAggregationData: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MetricsAggregationData: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field PercentilesAggregation", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &PercentilesAggregationData{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.AggregationType = &MetricsAggregationData_PercentilesAggregation{v}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
 func (m *LogAggregationData) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
@@ -3426,6 +4286,42 @@ func (m *LogAggregationData) Unmarshal(dAtA []byte) error {
 				m.MultiFieldAggregation = &MultiFieldAggregationData{}
 			}
 			if err := m.MultiFieldAggregation.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 7:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field MetricsAggregation", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.MetricsAggregation == nil {
+				m.MetricsAggregation = &MetricsAggregationData{}
+			}
+			if err := m.MetricsAggregation.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex

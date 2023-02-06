@@ -9,12 +9,6 @@
 // The endpoints are stored in a swagger file and manipulated by the asterix service,
 // thus operations on the inventory are proxied to the asterix service.
 // Inventory's content is automatically synced with API Definition specified for HTTP Load Balancer.
-// In addition, API Inventory maintains custom API groups as child objects, and provides methods to
-// evaluate a custom group builder without updating groups. Custom api groups are defined by
-// api group builders which contain selection expressions, explicit include list, and explicit exclude list.
-//
-//  The view creates the following child objects:
-//  * app_api_group
 //
 
 package api_inventory

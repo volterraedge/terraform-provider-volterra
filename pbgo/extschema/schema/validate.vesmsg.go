@@ -3381,6 +3381,50 @@ func (v *ValidateStringRules) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
+	case *StringRules_QueryStep:
+		if fv, exists := v.FldValidators["well_known.query_step"]; exists {
+			val := m.GetWellKnown().(*StringRules_QueryStep).QueryStep
+			vOpts := append(opts,
+				db.WithValidateField("well_known"),
+				db.WithValidateField("query_step"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *StringRules_Ipv4PrefixStrict:
+		if fv, exists := v.FldValidators["well_known.ipv4_prefix_strict"]; exists {
+			val := m.GetWellKnown().(*StringRules_Ipv4PrefixStrict).Ipv4PrefixStrict
+			vOpts := append(opts,
+				db.WithValidateField("well_known"),
+				db.WithValidateField("ipv4_prefix_strict"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *StringRules_Ipv6PrefixStrict:
+		if fv, exists := v.FldValidators["well_known.ipv6_prefix_strict"]; exists {
+			val := m.GetWellKnown().(*StringRules_Ipv6PrefixStrict).Ipv6PrefixStrict
+			vOpts := append(opts,
+				db.WithValidateField("well_known"),
+				db.WithValidateField("ipv6_prefix_strict"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *StringRules_IpPrefixStrict:
+		if fv, exists := v.FldValidators["well_known.ip_prefix_strict"]; exists {
+			val := m.GetWellKnown().(*StringRules_IpPrefixStrict).IpPrefixStrict
+			vOpts := append(opts,
+				db.WithValidateField("well_known"),
+				db.WithValidateField("ip_prefix_strict"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 

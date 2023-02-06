@@ -10,7 +10,7 @@ import (
 	_ "github.com/gogo/protobuf/types"
 	golang_proto "github.com/golang/protobuf/proto"
 	schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views"
+	views "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views"
 	io "io"
 	math "math"
 	math_bits "math/bits"
@@ -47,6 +47,7 @@ type GlobalSpecType struct {
 	//	*GlobalSpecType_UdpHealthCheck
 	//	*GlobalSpecType_IcmpHealthCheck
 	//	*GlobalSpecType_HttpsHealthCheck
+	//	*GlobalSpecType_TcpHexHealthCheck
 	HealthCheck isGlobalSpecType_HealthCheck `protobuf_oneof:"health_check"`
 	// timeout
 	//
@@ -62,6 +63,11 @@ type GlobalSpecType struct {
 	// x-example: "10"
 	// Time interval in seconds between two healthcheck requests.
 	Interval uint32 `protobuf:"varint,8,opt,name=interval,proto3" json:"interval,omitempty"`
+	// backref_objs
+	//
+	// x-displayName: "DNS Load balancer pools"
+	// a list of DNS Load balancer pools associated with this health check
+	DnsLbPools []*views.ObjectRefType `protobuf:"bytes,11,rep,name=dns_lb_pools,json=dnsLbPools,proto3" json:"dns_lb_pools,omitempty"`
 }
 
 func (m *GlobalSpecType) Reset()      { *m = GlobalSpecType{} }
@@ -114,12 +120,16 @@ type GlobalSpecType_IcmpHealthCheck struct {
 type GlobalSpecType_HttpsHealthCheck struct {
 	HttpsHealthCheck *HttpHealthCheck `protobuf:"bytes,9,opt,name=https_health_check,json=httpsHealthCheck,proto3,oneof" json:"https_health_check,omitempty"`
 }
+type GlobalSpecType_TcpHexHealthCheck struct {
+	TcpHexHealthCheck *TcpHexHealthCheck `protobuf:"bytes,10,opt,name=tcp_hex_health_check,json=tcpHexHealthCheck,proto3,oneof" json:"tcp_hex_health_check,omitempty"`
+}
 
-func (*GlobalSpecType_HttpHealthCheck) isGlobalSpecType_HealthCheck()  {}
-func (*GlobalSpecType_TcpHealthCheck) isGlobalSpecType_HealthCheck()   {}
-func (*GlobalSpecType_UdpHealthCheck) isGlobalSpecType_HealthCheck()   {}
-func (*GlobalSpecType_IcmpHealthCheck) isGlobalSpecType_HealthCheck()  {}
-func (*GlobalSpecType_HttpsHealthCheck) isGlobalSpecType_HealthCheck() {}
+func (*GlobalSpecType_HttpHealthCheck) isGlobalSpecType_HealthCheck()   {}
+func (*GlobalSpecType_TcpHealthCheck) isGlobalSpecType_HealthCheck()    {}
+func (*GlobalSpecType_UdpHealthCheck) isGlobalSpecType_HealthCheck()    {}
+func (*GlobalSpecType_IcmpHealthCheck) isGlobalSpecType_HealthCheck()   {}
+func (*GlobalSpecType_HttpsHealthCheck) isGlobalSpecType_HealthCheck()  {}
+func (*GlobalSpecType_TcpHexHealthCheck) isGlobalSpecType_HealthCheck() {}
 
 func (m *GlobalSpecType) GetHealthCheck() isGlobalSpecType_HealthCheck {
 	if m != nil {
@@ -163,6 +173,13 @@ func (m *GlobalSpecType) GetHttpsHealthCheck() *HttpHealthCheck {
 	return nil
 }
 
+func (m *GlobalSpecType) GetTcpHexHealthCheck() *TcpHexHealthCheck {
+	if x, ok := m.GetHealthCheck().(*GlobalSpecType_TcpHexHealthCheck); ok {
+		return x.TcpHexHealthCheck
+	}
+	return nil
+}
+
 func (m *GlobalSpecType) GetTimeout() uint32 {
 	if m != nil {
 		return m.Timeout
@@ -177,6 +194,13 @@ func (m *GlobalSpecType) GetInterval() uint32 {
 	return 0
 }
 
+func (m *GlobalSpecType) GetDnsLbPools() []*views.ObjectRefType {
+	if m != nil {
+		return m.DnsLbPools
+	}
+	return nil
+}
+
 // XXX_OneofWrappers is for the internal use of the proto package.
 func (*GlobalSpecType) XXX_OneofWrappers() []interface{} {
 	return []interface{}{
@@ -185,6 +209,7 @@ func (*GlobalSpecType) XXX_OneofWrappers() []interface{} {
 		(*GlobalSpecType_UdpHealthCheck)(nil),
 		(*GlobalSpecType_IcmpHealthCheck)(nil),
 		(*GlobalSpecType_HttpsHealthCheck)(nil),
+		(*GlobalSpecType_TcpHexHealthCheck)(nil),
 	}
 }
 
@@ -336,6 +361,80 @@ func (m *TcpHealthCheck) GetHealthCheckPort() uint32 {
 	return 0
 }
 
+// TCP Hex Health Check
+//
+// x-displayName: "TCP Hex Health Check"
+type TcpHexHealthCheck struct {
+	// Send Payload
+	//
+	// x-displayName: "Send Payload"
+	// x-example: "000000FF"
+	// Hex encoded raw bytes sent in the request. Empty payloads imply a connect-only health check.
+	Send string `protobuf:"bytes,1,opt,name=send,proto3" json:"send,omitempty"`
+	// Receive Payload
+	//
+	// x-displayName: "Receive Payload"
+	// x-example: "00000034"
+	// Hex encoded raw bytes expected in the response.
+	Receive string `protobuf:"bytes,2,opt,name=receive,proto3" json:"receive,omitempty"`
+	// Health check port
+	//
+	// x-required
+	// x-displayName: "Health Check Port"
+	// Port used for performing health check
+	// x-example: "80"
+	HealthCheckPort uint32 `protobuf:"varint,3,opt,name=health_check_port,json=healthCheckPort,proto3" json:"health_check_port,omitempty"`
+}
+
+func (m *TcpHexHealthCheck) Reset()      { *m = TcpHexHealthCheck{} }
+func (*TcpHexHealthCheck) ProtoMessage() {}
+func (*TcpHexHealthCheck) Descriptor() ([]byte, []int) {
+	return fileDescriptor_6febe8700ef285c8, []int{3}
+}
+func (m *TcpHexHealthCheck) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *TcpHexHealthCheck) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *TcpHexHealthCheck) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_TcpHexHealthCheck.Merge(m, src)
+}
+func (m *TcpHexHealthCheck) XXX_Size() int {
+	return m.Size()
+}
+func (m *TcpHexHealthCheck) XXX_DiscardUnknown() {
+	xxx_messageInfo_TcpHexHealthCheck.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_TcpHexHealthCheck proto.InternalMessageInfo
+
+func (m *TcpHexHealthCheck) GetSend() string {
+	if m != nil {
+		return m.Send
+	}
+	return ""
+}
+
+func (m *TcpHexHealthCheck) GetReceive() string {
+	if m != nil {
+		return m.Receive
+	}
+	return ""
+}
+
+func (m *TcpHexHealthCheck) GetHealthCheckPort() uint32 {
+	if m != nil {
+		return m.HealthCheckPort
+	}
+	return 0
+}
+
 // UDP Health Check
 //
 // x-displayName: "UDP Health Check"
@@ -366,7 +465,7 @@ type UdpHealthCheck struct {
 func (m *UdpHealthCheck) Reset()      { *m = UdpHealthCheck{} }
 func (*UdpHealthCheck) ProtoMessage() {}
 func (*UdpHealthCheck) Descriptor() ([]byte, []int) {
-	return fileDescriptor_6febe8700ef285c8, []int{3}
+	return fileDescriptor_6febe8700ef285c8, []int{4}
 }
 func (m *UdpHealthCheck) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -423,13 +522,14 @@ type CreateSpecType struct {
 	//	*CreateSpecType_UdpHealthCheck
 	//	*CreateSpecType_IcmpHealthCheck
 	//	*CreateSpecType_HttpsHealthCheck
+	//	*CreateSpecType_TcpHexHealthCheck
 	HealthCheck isCreateSpecType_HealthCheck `protobuf_oneof:"health_check"`
 }
 
 func (m *CreateSpecType) Reset()      { *m = CreateSpecType{} }
 func (*CreateSpecType) ProtoMessage() {}
 func (*CreateSpecType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_6febe8700ef285c8, []int{4}
+	return fileDescriptor_6febe8700ef285c8, []int{5}
 }
 func (m *CreateSpecType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -476,12 +576,16 @@ type CreateSpecType_IcmpHealthCheck struct {
 type CreateSpecType_HttpsHealthCheck struct {
 	HttpsHealthCheck *HttpHealthCheck `protobuf:"bytes,9,opt,name=https_health_check,json=httpsHealthCheck,proto3,oneof" json:"https_health_check,omitempty"`
 }
+type CreateSpecType_TcpHexHealthCheck struct {
+	TcpHexHealthCheck *TcpHexHealthCheck `protobuf:"bytes,10,opt,name=tcp_hex_health_check,json=tcpHexHealthCheck,proto3,oneof" json:"tcp_hex_health_check,omitempty"`
+}
 
-func (*CreateSpecType_HttpHealthCheck) isCreateSpecType_HealthCheck()  {}
-func (*CreateSpecType_TcpHealthCheck) isCreateSpecType_HealthCheck()   {}
-func (*CreateSpecType_UdpHealthCheck) isCreateSpecType_HealthCheck()   {}
-func (*CreateSpecType_IcmpHealthCheck) isCreateSpecType_HealthCheck()  {}
-func (*CreateSpecType_HttpsHealthCheck) isCreateSpecType_HealthCheck() {}
+func (*CreateSpecType_HttpHealthCheck) isCreateSpecType_HealthCheck()   {}
+func (*CreateSpecType_TcpHealthCheck) isCreateSpecType_HealthCheck()    {}
+func (*CreateSpecType_UdpHealthCheck) isCreateSpecType_HealthCheck()    {}
+func (*CreateSpecType_IcmpHealthCheck) isCreateSpecType_HealthCheck()   {}
+func (*CreateSpecType_HttpsHealthCheck) isCreateSpecType_HealthCheck()  {}
+func (*CreateSpecType_TcpHexHealthCheck) isCreateSpecType_HealthCheck() {}
 
 func (m *CreateSpecType) GetHealthCheck() isCreateSpecType_HealthCheck {
 	if m != nil {
@@ -525,6 +629,13 @@ func (m *CreateSpecType) GetHttpsHealthCheck() *HttpHealthCheck {
 	return nil
 }
 
+func (m *CreateSpecType) GetTcpHexHealthCheck() *TcpHexHealthCheck {
+	if x, ok := m.GetHealthCheck().(*CreateSpecType_TcpHexHealthCheck); ok {
+		return x.TcpHexHealthCheck
+	}
+	return nil
+}
+
 // XXX_OneofWrappers is for the internal use of the proto package.
 func (*CreateSpecType) XXX_OneofWrappers() []interface{} {
 	return []interface{}{
@@ -533,6 +644,7 @@ func (*CreateSpecType) XXX_OneofWrappers() []interface{} {
 		(*CreateSpecType_UdpHealthCheck)(nil),
 		(*CreateSpecType_IcmpHealthCheck)(nil),
 		(*CreateSpecType_HttpsHealthCheck)(nil),
+		(*CreateSpecType_TcpHexHealthCheck)(nil),
 	}
 }
 
@@ -547,13 +659,14 @@ type ReplaceSpecType struct {
 	//	*ReplaceSpecType_UdpHealthCheck
 	//	*ReplaceSpecType_IcmpHealthCheck
 	//	*ReplaceSpecType_HttpsHealthCheck
+	//	*ReplaceSpecType_TcpHexHealthCheck
 	HealthCheck isReplaceSpecType_HealthCheck `protobuf_oneof:"health_check"`
 }
 
 func (m *ReplaceSpecType) Reset()      { *m = ReplaceSpecType{} }
 func (*ReplaceSpecType) ProtoMessage() {}
 func (*ReplaceSpecType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_6febe8700ef285c8, []int{5}
+	return fileDescriptor_6febe8700ef285c8, []int{6}
 }
 func (m *ReplaceSpecType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -600,12 +713,16 @@ type ReplaceSpecType_IcmpHealthCheck struct {
 type ReplaceSpecType_HttpsHealthCheck struct {
 	HttpsHealthCheck *HttpHealthCheck `protobuf:"bytes,9,opt,name=https_health_check,json=httpsHealthCheck,proto3,oneof" json:"https_health_check,omitempty"`
 }
+type ReplaceSpecType_TcpHexHealthCheck struct {
+	TcpHexHealthCheck *TcpHexHealthCheck `protobuf:"bytes,10,opt,name=tcp_hex_health_check,json=tcpHexHealthCheck,proto3,oneof" json:"tcp_hex_health_check,omitempty"`
+}
 
-func (*ReplaceSpecType_HttpHealthCheck) isReplaceSpecType_HealthCheck()  {}
-func (*ReplaceSpecType_TcpHealthCheck) isReplaceSpecType_HealthCheck()   {}
-func (*ReplaceSpecType_UdpHealthCheck) isReplaceSpecType_HealthCheck()   {}
-func (*ReplaceSpecType_IcmpHealthCheck) isReplaceSpecType_HealthCheck()  {}
-func (*ReplaceSpecType_HttpsHealthCheck) isReplaceSpecType_HealthCheck() {}
+func (*ReplaceSpecType_HttpHealthCheck) isReplaceSpecType_HealthCheck()   {}
+func (*ReplaceSpecType_TcpHealthCheck) isReplaceSpecType_HealthCheck()    {}
+func (*ReplaceSpecType_UdpHealthCheck) isReplaceSpecType_HealthCheck()    {}
+func (*ReplaceSpecType_IcmpHealthCheck) isReplaceSpecType_HealthCheck()   {}
+func (*ReplaceSpecType_HttpsHealthCheck) isReplaceSpecType_HealthCheck()  {}
+func (*ReplaceSpecType_TcpHexHealthCheck) isReplaceSpecType_HealthCheck() {}
 
 func (m *ReplaceSpecType) GetHealthCheck() isReplaceSpecType_HealthCheck {
 	if m != nil {
@@ -649,6 +766,13 @@ func (m *ReplaceSpecType) GetHttpsHealthCheck() *HttpHealthCheck {
 	return nil
 }
 
+func (m *ReplaceSpecType) GetTcpHexHealthCheck() *TcpHexHealthCheck {
+	if x, ok := m.GetHealthCheck().(*ReplaceSpecType_TcpHexHealthCheck); ok {
+		return x.TcpHexHealthCheck
+	}
+	return nil
+}
+
 // XXX_OneofWrappers is for the internal use of the proto package.
 func (*ReplaceSpecType) XXX_OneofWrappers() []interface{} {
 	return []interface{}{
@@ -657,6 +781,7 @@ func (*ReplaceSpecType) XXX_OneofWrappers() []interface{} {
 		(*ReplaceSpecType_UdpHealthCheck)(nil),
 		(*ReplaceSpecType_IcmpHealthCheck)(nil),
 		(*ReplaceSpecType_HttpsHealthCheck)(nil),
+		(*ReplaceSpecType_TcpHexHealthCheck)(nil),
 	}
 }
 
@@ -671,13 +796,15 @@ type GetSpecType struct {
 	//	*GetSpecType_UdpHealthCheck
 	//	*GetSpecType_IcmpHealthCheck
 	//	*GetSpecType_HttpsHealthCheck
+	//	*GetSpecType_TcpHexHealthCheck
 	HealthCheck isGetSpecType_HealthCheck `protobuf_oneof:"health_check"`
+	DnsLbPools  []*views.ObjectRefType    `protobuf:"bytes,11,rep,name=dns_lb_pools,json=dnsLbPools,proto3" json:"dns_lb_pools,omitempty"`
 }
 
 func (m *GetSpecType) Reset()      { *m = GetSpecType{} }
 func (*GetSpecType) ProtoMessage() {}
 func (*GetSpecType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_6febe8700ef285c8, []int{6}
+	return fileDescriptor_6febe8700ef285c8, []int{7}
 }
 func (m *GetSpecType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -724,12 +851,16 @@ type GetSpecType_IcmpHealthCheck struct {
 type GetSpecType_HttpsHealthCheck struct {
 	HttpsHealthCheck *HttpHealthCheck `protobuf:"bytes,9,opt,name=https_health_check,json=httpsHealthCheck,proto3,oneof" json:"https_health_check,omitempty"`
 }
+type GetSpecType_TcpHexHealthCheck struct {
+	TcpHexHealthCheck *TcpHexHealthCheck `protobuf:"bytes,10,opt,name=tcp_hex_health_check,json=tcpHexHealthCheck,proto3,oneof" json:"tcp_hex_health_check,omitempty"`
+}
 
-func (*GetSpecType_HttpHealthCheck) isGetSpecType_HealthCheck()  {}
-func (*GetSpecType_TcpHealthCheck) isGetSpecType_HealthCheck()   {}
-func (*GetSpecType_UdpHealthCheck) isGetSpecType_HealthCheck()   {}
-func (*GetSpecType_IcmpHealthCheck) isGetSpecType_HealthCheck()  {}
-func (*GetSpecType_HttpsHealthCheck) isGetSpecType_HealthCheck() {}
+func (*GetSpecType_HttpHealthCheck) isGetSpecType_HealthCheck()   {}
+func (*GetSpecType_TcpHealthCheck) isGetSpecType_HealthCheck()    {}
+func (*GetSpecType_UdpHealthCheck) isGetSpecType_HealthCheck()    {}
+func (*GetSpecType_IcmpHealthCheck) isGetSpecType_HealthCheck()   {}
+func (*GetSpecType_HttpsHealthCheck) isGetSpecType_HealthCheck()  {}
+func (*GetSpecType_TcpHexHealthCheck) isGetSpecType_HealthCheck() {}
 
 func (m *GetSpecType) GetHealthCheck() isGetSpecType_HealthCheck {
 	if m != nil {
@@ -773,6 +904,20 @@ func (m *GetSpecType) GetHttpsHealthCheck() *HttpHealthCheck {
 	return nil
 }
 
+func (m *GetSpecType) GetTcpHexHealthCheck() *TcpHexHealthCheck {
+	if x, ok := m.GetHealthCheck().(*GetSpecType_TcpHexHealthCheck); ok {
+		return x.TcpHexHealthCheck
+	}
+	return nil
+}
+
+func (m *GetSpecType) GetDnsLbPools() []*views.ObjectRefType {
+	if m != nil {
+		return m.DnsLbPools
+	}
+	return nil
+}
+
 // XXX_OneofWrappers is for the internal use of the proto package.
 func (*GetSpecType) XXX_OneofWrappers() []interface{} {
 	return []interface{}{
@@ -781,6 +926,7 @@ func (*GetSpecType) XXX_OneofWrappers() []interface{} {
 		(*GetSpecType_UdpHealthCheck)(nil),
 		(*GetSpecType_IcmpHealthCheck)(nil),
 		(*GetSpecType_HttpsHealthCheck)(nil),
+		(*GetSpecType_TcpHexHealthCheck)(nil),
 	}
 }
 
@@ -791,6 +937,8 @@ func init() {
 	golang_proto.RegisterType((*HttpHealthCheck)(nil), "ves.io.schema.dns_lb_health_check.HttpHealthCheck")
 	proto.RegisterType((*TcpHealthCheck)(nil), "ves.io.schema.dns_lb_health_check.TcpHealthCheck")
 	golang_proto.RegisterType((*TcpHealthCheck)(nil), "ves.io.schema.dns_lb_health_check.TcpHealthCheck")
+	proto.RegisterType((*TcpHexHealthCheck)(nil), "ves.io.schema.dns_lb_health_check.TcpHexHealthCheck")
+	golang_proto.RegisterType((*TcpHexHealthCheck)(nil), "ves.io.schema.dns_lb_health_check.TcpHexHealthCheck")
 	proto.RegisterType((*UdpHealthCheck)(nil), "ves.io.schema.dns_lb_health_check.UdpHealthCheck")
 	golang_proto.RegisterType((*UdpHealthCheck)(nil), "ves.io.schema.dns_lb_health_check.UdpHealthCheck")
 	proto.RegisterType((*CreateSpecType)(nil), "ves.io.schema.dns_lb_health_check.CreateSpecType")
@@ -809,62 +957,69 @@ func init() {
 }
 
 var fileDescriptor_6febe8700ef285c8 = []byte{
-	// 877 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x57, 0xc1, 0x6f, 0xdb, 0x54,
-	0x18, 0xcf, 0x97, 0x38, 0x4d, 0xfa, 0xb6, 0xa5, 0xae, 0x35, 0x98, 0x29, 0xe8, 0xd5, 0xab, 0x34,
-	0x29, 0x9a, 0x5c, 0x3b, 0x4d, 0xd2, 0x2e, 0xad, 0xc4, 0x24, 0x32, 0xa6, 0x45, 0xe5, 0x32, 0x85,
-	0x22, 0x24, 0x34, 0x94, 0x39, 0xce, 0x9b, 0x6d, 0xcd, 0xc9, 0xb3, 0xec, 0x97, 0x40, 0x0f, 0x48,
-	0x13, 0x27, 0x0e, 0x1c, 0x76, 0x01, 0x09, 0x4e, 0x1c, 0xf9, 0x1b, 0x30, 0x87, 0x1e, 0x11, 0xa7,
-	0x1e, 0xa3, 0x9e, 0xa8, 0x7b, 0x19, 0xb7, 0x89, 0x13, 0x20, 0xa1, 0x21, 0xbf, 0xa4, 0x34, 0xf6,
-	0x98, 0x98, 0xc4, 0xa9, 0x53, 0x0e, 0xf9, 0xe4, 0xf7, 0xbe, 0xef, 0xf7, 0xfb, 0xbe, 0xef, 0xa7,
-	0xef, 0xbd, 0xe8, 0xa1, 0xf5, 0x11, 0x09, 0x34, 0x87, 0xea, 0x81, 0x69, 0x93, 0xbe, 0xa1, 0xf7,
-	0x06, 0x41, 0xc7, 0xed, 0x76, 0x6c, 0x62, 0xb8, 0xcc, 0xee, 0x98, 0x36, 0x31, 0x1f, 0xea, 0x6c,
-	0xdf, 0x23, 0x81, 0xe6, 0xf9, 0x94, 0x51, 0xe9, 0xea, 0x24, 0x5c, 0x9b, 0x84, 0x6b, 0xff, 0x12,
-	0xbe, 0xb2, 0x6e, 0x39, 0xcc, 0x1e, 0x76, 0x35, 0x93, 0xf6, 0x75, 0x8b, 0x5a, 0x54, 0xe7, 0xc8,
-	0xee, 0xf0, 0x01, 0x5f, 0xf1, 0x05, 0xff, 0x9a, 0x30, 0xae, 0xac, 0x5a, 0x94, 0x5a, 0x2e, 0x39,
-	0x8b, 0x62, 0x4e, 0x9f, 0x04, 0xcc, 0xe8, 0x7b, 0xd3, 0x80, 0x2b, 0xc9, 0x0a, 0x07, 0x84, 0x4d,
-	0x1d, 0x6f, 0x26, 0x1d, 0xd4, 0x63, 0x0e, 0x1d, 0x4c, 0x0b, 0x5d, 0x79, 0x23, 0xe9, 0x9c, 0xe9,
-	0x61, 0xe5, 0xad, 0xa4, 0x6b, 0x64, 0xb8, 0x4e, 0xcf, 0x60, 0x64, 0xea, 0x55, 0x52, 0x5e, 0x87,
-	0x7c, 0xd2, 0x49, 0x52, 0xaf, 0x3e, 0x1f, 0x11, 0xcc, 0x26, 0x58, 0x7b, 0x9c, 0x47, 0xa5, 0x3b,
-	0x2e, 0xed, 0x1a, 0xee, 0xfb, 0x1e, 0x31, 0xf7, 0xf6, 0x3d, 0x22, 0xdd, 0x47, 0xcb, 0x36, 0x63,
-	0x5e, 0x42, 0x29, 0x39, 0xa7, 0x40, 0xf9, 0x42, 0xb5, 0xaa, 0xfd, 0xa7, 0xa6, 0x5a, 0x8b, 0x31,
-	0xaf, 0xc5, 0x37, 0x6e, 0xc5, 0xeb, 0x56, 0xa6, 0xbd, 0x64, 0x27, 0xb7, 0xa4, 0x8f, 0x91, 0xc8,
-	0xcc, 0x54, 0x02, 0x81, 0x27, 0xd8, 0x78, 0x89, 0x04, 0x7b, 0x66, 0x8a, 0xbf, 0xc4, 0xcc, 0x34,
-	0xfd, 0xb0, 0x97, 0xa2, 0xcf, 0xbf, 0x34, 0xfd, 0x07, 0xbd, 0x34, 0xfd, 0x30, 0xb1, 0x23, 0x35,
-	0xd1, 0xb2, 0x63, 0xf6, 0x53, 0xfc, 0x0b, 0x9c, 0xff, 0x72, 0x8a, 0xff, 0x76, 0xdf, 0x63, 0xfb,
-	0xb1, 0x02, 0x31, 0x60, 0x96, 0xa3, 0x8b, 0xa4, 0x58, 0x94, 0x20, 0x49, 0xb2, 0xf8, 0x3f, 0x44,
-	0x16, 0x39, 0xdf, 0x6c, 0x8e, 0x1d, 0x54, 0x88, 0xe7, 0x93, 0x0e, 0x99, 0x5c, 0x50, 0xa0, 0x7c,
-	0xa9, 0xa9, 0x8c, 0x3f, 0x83, 0xa3, 0x10, 0xa0, 0xf6, 0x24, 0x04, 0xf8, 0x3d, 0x84, 0xcc, 0x17,
-	0x3f, 0x02, 0xfc, 0xf0, 0xeb, 0x41, 0xae, 0x70, 0x3d, 0x2f, 0x8f, 0x85, 0x32, 0xb4, 0x4f, 0x01,
-	0xd2, 0xdb, 0xa8, 0xe8, 0x0c, 0x18, 0xf1, 0x47, 0x86, 0x2b, 0x17, 0x39, 0xf8, 0xea, 0x04, 0x9c,
-	0xad, 0x55, 0x5e, 0x80, 0x46, 0xed, 0x7f, 0x20, 0x3b, 0xc5, 0xdf, 0x6e, 0xe6, 0xab, 0xea, 0x0d,
-	0xb5, 0xd1, 0xbc, 0x86, 0x2e, 0xce, 0x16, 0x2e, 0xbd, 0x76, 0x10, 0x42, 0xee, 0x30, 0x84, 0x6c,
-	0x14, 0xc2, 0x62, 0x4d, 0xdd, 0x56, 0xeb, 0xea, 0xa6, 0xba, 0xb5, 0x2b, 0x14, 0x41, 0xcc, 0xee,
-	0x0a, 0xc5, 0xac, 0x98, 0x5b, 0xfb, 0x2e, 0x8b, 0x96, 0x52, 0xfd, 0x49, 0xdb, 0x48, 0x08, 0xc8,
-	0xa0, 0x27, 0x83, 0x02, 0xe5, 0xc5, 0xe6, 0xb5, 0xa3, 0x10, 0xae, 0xb4, 0x6e, 0xbf, 0xf3, 0xae,
-	0xa2, 0x2b, 0xad, 0xbd, 0xbd, 0xbb, 0xfa, 0x86, 0x56, 0xb9, 0xe7, 0xdf, 0x1b, 0xc4, 0xbf, 0xb8,
-	0xa2, 0xbc, 0x9f, 0x93, 0x1f, 0x89, 0x6d, 0x0e, 0x91, 0xb6, 0x51, 0xc1, 0x27, 0x26, 0x71, 0x46,
-	0x44, 0xce, 0x72, 0xf4, 0xea, 0x51, 0x08, 0x85, 0x29, 0xec, 0x2c, 0x7a, 0xfa, 0x75, 0x00, 0xd0,
-	0x3e, 0x8d, 0x97, 0xbe, 0x04, 0xb4, 0x3c, 0x5b, 0x7d, 0xc7, 0xa3, 0x3e, 0xe3, 0x47, 0xe1, 0x52,
-	0xf3, 0x7e, 0x14, 0xc2, 0x7b, 0x28, 0xdb, 0xa8, 0x20, 0xa1, 0x51, 0xe1, 0xb6, 0x11, 0xdb, 0x6a,
-	0x65, 0xb3, 0x1a, 0xdb, 0xc6, 0xc4, 0x6e, 0xc5, 0x76, 0x7b, 0x13, 0xe5, 0xea, 0xf5, 0x1a, 0x77,
-	0x72, 0xdb, 0x98, 0xd8, 0x1b, 0xdc, 0xb9, 0x85, 0x84, 0x46, 0xbd, 0x5e, 0x8b, 0x15, 0x8d, 0x6b,
-	0x28, 0x5e, 0x5f, 0x90, 0x9f, 0x3d, 0xcb, 0x95, 0xa1, 0xbd, 0x64, 0x9f, 0x09, 0x70, 0x97, 0xfa,
-	0x8c, 0xab, 0xba, 0xa1, 0x56, 0xd5, 0xda, 0xda, 0x1f, 0x80, 0x4a, 0xc9, 0x63, 0x20, 0xe1, 0x84,
-	0x42, 0xe8, 0x39, 0x19, 0xb4, 0xb4, 0x0c, 0x97, 0xcf, 0x69, 0xef, 0x7f, 0x01, 0x2a, 0x25, 0xcf,
-	0xa8, 0xa4, 0x24, 0x7a, 0xbf, 0xc8, 0x87, 0xd2, 0xcf, 0x8b, 0x70, 0xd6, 0x7d, 0x25, 0xdd, 0xfd,
-	0xeb, 0xb3, 0x41, 0xe7, 0xaa, 0xff, 0x6f, 0x04, 0x54, 0xba, 0xe5, 0x13, 0x83, 0x91, 0xf9, 0x8d,
-	0xfd, 0x6a, 0xdd, 0xd8, 0x3b, 0xcb, 0x3f, 0xdf, 0x4c, 0xfd, 0x19, 0x37, 0x95, 0xd4, 0xfd, 0x29,
-	0x7e, 0xfe, 0x27, 0x24, 0x76, 0xf8, 0xd5, 0x99, 0xdb, 0x15, 0x8a, 0x05, 0x71, 0x71, 0xed, 0x5b,
-	0x01, 0x2d, 0xb5, 0x89, 0xe7, 0x1a, 0xe6, 0x7c, 0x38, 0xe6, 0xc3, 0x91, 0x1a, 0x8e, 0xaf, 0x05,
-	0x74, 0xe1, 0x0e, 0x61, 0xf3, 0xc1, 0x98, 0x0f, 0x46, 0x62, 0x30, 0x9a, 0x5f, 0xc1, 0xe1, 0x31,
-	0xce, 0x8c, 0x8f, 0x71, 0xe6, 0xe9, 0x31, 0x86, 0x47, 0x11, 0x86, 0xef, 0x23, 0x0c, 0x3f, 0x45,
-	0x18, 0x0e, 0x23, 0x0c, 0xe3, 0x08, 0xc3, 0x2f, 0x11, 0x86, 0x27, 0x11, 0xce, 0x3c, 0x8d, 0x30,
-	0x3c, 0x3e, 0xc1, 0x99, 0x83, 0x13, 0x0c, 0x87, 0x27, 0x38, 0x33, 0x3e, 0xc1, 0x99, 0x8f, 0x3e,
-	0xb4, 0xa8, 0xf7, 0xd0, 0xd2, 0x46, 0xd4, 0x65, 0xc4, 0xf7, 0x0d, 0x6d, 0x18, 0xe8, 0xfc, 0xe3,
-	0x01, 0xf5, 0xfb, 0xeb, 0x9e, 0x4f, 0x47, 0x4e, 0x8f, 0xf8, 0xeb, 0xa7, 0x6e, 0xdd, 0xeb, 0x5a,
-	0x54, 0x27, 0x9f, 0xb2, 0xe9, 0x93, 0xe4, 0xc5, 0x8f, 0xb9, 0xee, 0x02, 0x7f, 0xa2, 0xd4, 0xfe,
-	0x0e, 0x00, 0x00, 0xff, 0xff, 0xfd, 0x0d, 0x81, 0x49, 0xf8, 0x0d, 0x00, 0x00,
+	// 989 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x58, 0xcf, 0x6b, 0x1b, 0x47,
+	0x14, 0xd6, 0xd3, 0x0f, 0x4b, 0x1e, 0x3b, 0xb2, 0xb4, 0x98, 0x66, 0xeb, 0x96, 0xf5, 0x46, 0x50,
+	0x10, 0x41, 0xde, 0x95, 0x25, 0xd9, 0x91, 0x0d, 0x0d, 0x54, 0x49, 0x88, 0x70, 0x0b, 0x35, 0xaa,
+	0x4a, 0xa1, 0xa4, 0x28, 0xab, 0xd5, 0x58, 0xda, 0x66, 0xa5, 0x59, 0x76, 0x47, 0xaa, 0x7d, 0x08,
+	0x84, 0x14, 0x4a, 0x0f, 0x3d, 0xf4, 0xd2, 0x7b, 0x8f, 0xa5, 0x7f, 0x42, 0xb7, 0x07, 0x5f, 0x0a,
+	0xa5, 0x27, 0xd3, 0x93, 0xf0, 0xa9, 0x5e, 0x5f, 0xd2, 0x9b, 0xe9, 0xa9, 0x2d, 0x94, 0x94, 0x1d,
+	0xc9, 0xb5, 0x66, 0xdd, 0x50, 0xe3, 0x1c, 0x8a, 0x41, 0x07, 0x3f, 0x76, 0xe6, 0xbd, 0xef, 0x7b,
+	0xf3, 0xbe, 0x7d, 0xe3, 0xd9, 0x11, 0x5a, 0x19, 0x60, 0x47, 0x31, 0x88, 0xea, 0xe8, 0x1d, 0xdc,
+	0xd5, 0xd4, 0x56, 0xcf, 0x69, 0x98, 0xcd, 0x46, 0x07, 0x6b, 0x26, 0xed, 0x34, 0xf4, 0x0e, 0xd6,
+	0x1f, 0xa9, 0x74, 0xcf, 0xc2, 0x8e, 0x62, 0xd9, 0x84, 0x12, 0xe1, 0xc6, 0x28, 0x5c, 0x19, 0x85,
+	0x2b, 0xff, 0x12, 0xbe, 0xb4, 0xd2, 0x36, 0x68, 0xa7, 0xdf, 0x54, 0x74, 0xd2, 0x55, 0xdb, 0xa4,
+	0x4d, 0x54, 0x86, 0x6c, 0xf6, 0x77, 0xd8, 0x88, 0x0d, 0xd8, 0xd3, 0x88, 0x71, 0x69, 0xb9, 0x4d,
+	0x48, 0xdb, 0xc4, 0x67, 0x51, 0xd4, 0xe8, 0x62, 0x87, 0x6a, 0x5d, 0x6b, 0x1c, 0x70, 0x9d, 0x5f,
+	0x61, 0x0f, 0xd3, 0xb1, 0xe3, 0x35, 0xde, 0x41, 0x2c, 0x6a, 0x90, 0xde, 0x78, 0xa1, 0x4b, 0xaf,
+	0xf2, 0xce, 0x89, 0x1a, 0x96, 0x5e, 0xe7, 0x5d, 0x03, 0xcd, 0x34, 0x5a, 0x1a, 0xc5, 0x63, 0xaf,
+	0x1c, 0xf0, 0x1a, 0xf8, 0x93, 0x06, 0x4f, 0xbd, 0x7c, 0x3e, 0xc2, 0x99, 0x4c, 0x90, 0xf9, 0x79,
+	0x06, 0x25, 0xef, 0x9b, 0xa4, 0xa9, 0x99, 0xef, 0x59, 0x58, 0xaf, 0xef, 0x59, 0x58, 0x78, 0x88,
+	0xd2, 0x1d, 0x4a, 0x2d, 0x4e, 0x29, 0x31, 0x22, 0x43, 0x76, 0xae, 0x50, 0x50, 0xfe, 0x53, 0x53,
+	0xa5, 0x4a, 0xa9, 0x55, 0x65, 0x13, 0x77, 0xfc, 0x71, 0x35, 0x54, 0x5b, 0xe8, 0xf0, 0x53, 0xc2,
+	0x47, 0x28, 0x45, 0xf5, 0x40, 0x82, 0x28, 0x4b, 0xb0, 0x7a, 0x81, 0x04, 0x75, 0x3d, 0xc0, 0x9f,
+	0xa4, 0x7a, 0x90, 0xbe, 0xdf, 0x0a, 0xd0, 0xc7, 0x2e, 0x4c, 0xff, 0x7e, 0x2b, 0x48, 0xdf, 0xe7,
+	0x66, 0x84, 0x0a, 0x4a, 0x1b, 0x7a, 0x37, 0xc0, 0x3f, 0xc3, 0xf8, 0x17, 0x03, 0xfc, 0xf7, 0xba,
+	0x16, 0xdd, 0xf3, 0x15, 0xf0, 0x01, 0x93, 0x1c, 0x4d, 0x24, 0xf8, 0xa2, 0x38, 0x3c, 0xc9, 0xec,
+	0x4b, 0x88, 0x9c, 0x62, 0x7c, 0x93, 0x39, 0xda, 0x68, 0x71, 0xa4, 0xf2, 0x2e, 0x9f, 0x05, 0xb1,
+	0x2c, 0xa5, 0x8b, 0x2a, 0xbd, 0xcb, 0xe7, 0x49, 0xd3, 0xe0, 0xa4, 0xb0, 0x89, 0xe2, 0xfe, 0x46,
+	0x20, 0x7d, 0x2a, 0xc6, 0x65, 0xc8, 0x5e, 0xab, 0xc8, 0xc3, 0xc7, 0x70, 0xe8, 0x02, 0x14, 0x9f,
+	0xb9, 0x00, 0xbf, 0xbb, 0x10, 0xfa, 0xfc, 0x7b, 0x80, 0xef, 0x7e, 0xdd, 0x8f, 0xc4, 0x6f, 0xc6,
+	0xc4, 0x61, 0x34, 0x0b, 0xb5, 0x53, 0x80, 0xf0, 0x26, 0x4a, 0x18, 0x3d, 0x8a, 0xed, 0x81, 0x66,
+	0x8a, 0x09, 0x06, 0xbe, 0x31, 0x02, 0x87, 0x8b, 0xf9, 0x17, 0xa0, 0x51, 0xed, 0x1f, 0x88, 0x50,
+	0x47, 0xf3, 0xe3, 0x85, 0x5b, 0x84, 0x98, 0x8e, 0x38, 0x27, 0x47, 0xb2, 0x73, 0x85, 0x4c, 0xa0,
+	0x36, 0xd6, 0xf6, 0xca, 0xbb, 0xcd, 0x8f, 0xb1, 0x4e, 0x6b, 0x78, 0xc7, 0xef, 0xf2, 0x4a, 0xf2,
+	0xdb, 0xc7, 0x73, 0x13, 0xd0, 0x1a, 0x6a, 0xf5, 0x9c, 0x77, 0x9a, 0xdb, 0x3e, 0xcb, 0x66, 0xe2,
+	0xb7, 0xdb, 0xb1, 0x42, 0xee, 0x56, 0xae, 0x5c, 0xc9, 0xa2, 0xf9, 0x49, 0x45, 0x04, 0x71, 0xdf,
+	0x85, 0xc8, 0x81, 0x0b, 0x61, 0xcf, 0x85, 0xf9, 0x62, 0x6e, 0x23, 0x57, 0xca, 0xad, 0xe6, 0x73,
+	0x6b, 0xb9, 0xf5, 0xad, 0x68, 0x02, 0x52, 0xe1, 0xad, 0x68, 0x22, 0x9c, 0x8a, 0x64, 0xbe, 0x0e,
+	0xa3, 0x85, 0xc0, 0x1b, 0x12, 0x36, 0x50, 0xd4, 0xc1, 0xbd, 0x96, 0x08, 0x32, 0x64, 0x67, 0x2b,
+	0x6f, 0x1c, 0xba, 0x70, 0xbd, 0x7a, 0xef, 0xad, 0xbb, 0xb2, 0x2a, 0x57, 0xeb, 0xf5, 0x6d, 0x75,
+	0x55, 0xc9, 0x3f, 0xb0, 0x1f, 0xf4, 0xfc, 0x3f, 0xbf, 0xd4, 0x98, 0x1d, 0x11, 0x9f, 0xa4, 0x6a,
+	0x0c, 0x22, 0x6c, 0xa0, 0xb8, 0x8d, 0x75, 0x6c, 0x0c, 0xb0, 0x18, 0x66, 0xe8, 0xe5, 0x43, 0x17,
+	0xe2, 0x63, 0xd8, 0x59, 0xf4, 0xf8, 0x69, 0x1f, 0xa0, 0x76, 0x1a, 0x2f, 0x7c, 0x01, 0x28, 0x3d,
+	0x59, 0x40, 0xc3, 0x22, 0x36, 0x65, 0x9b, 0xf9, 0x5a, 0xe5, 0xa1, 0xe7, 0xc2, 0xdb, 0x28, 0x5c,
+	0xce, 0xa3, 0x68, 0x39, 0xcf, 0x6c, 0xd9, 0xb7, 0x85, 0xfc, 0x5a, 0xc1, 0xb7, 0xe5, 0x91, 0x5d,
+	0xf7, 0xed, 0xc6, 0x1a, 0x8a, 0x94, 0x4a, 0x45, 0xe6, 0x64, 0xb6, 0x3c, 0xb2, 0xb7, 0x98, 0x73,
+	0x1d, 0x45, 0xcb, 0xa5, 0x52, 0xd1, 0x7f, 0x55, 0xfe, 0x1a, 0x12, 0x37, 0x67, 0xc4, 0xe7, 0xcf,
+	0x23, 0x59, 0xa8, 0x2d, 0x74, 0xce, 0x04, 0xd8, 0x26, 0x36, 0x65, 0xc2, 0xae, 0xe6, 0x0a, 0xb9,
+	0x62, 0xe6, 0x0f, 0x40, 0x49, 0x7e, 0x23, 0x0b, 0x12, 0xa7, 0x10, 0x3a, 0x27, 0x83, 0x12, 0x94,
+	0x61, 0xf1, 0x8a, 0xd6, 0xfe, 0x59, 0x18, 0xa5, 0xcf, 0x6d, 0x2d, 0x21, 0xcb, 0x95, 0x7f, 0xbe,
+	0xb6, 0x13, 0x80, 0x8b, 0x0b, 0x71, 0x72, 0x25, 0x84, 0xf8, 0x0b, 0x50, 0x92, 0xff, 0x77, 0x2b,
+	0xc8, 0x9c, 0x0a, 0xf3, 0x6c, 0xdb, 0xdb, 0xb1, 0x14, 0x9c, 0xb5, 0x41, 0x3e, 0x58, 0xfd, 0x2b,
+	0x93, 0x41, 0x57, 0xaa, 0x11, 0x9e, 0xc6, 0x50, 0xf2, 0x8e, 0x8d, 0x35, 0x8a, 0xa7, 0x87, 0xef,
+	0xf4, 0xf0, 0xbd, 0xd4, 0xe1, 0xbb, 0x99, 0xfe, 0xe9, 0x76, 0xe0, 0x03, 0xae, 0x22, 0x07, 0x0e,
+	0xad, 0xd4, 0xd3, 0x3f, 0x81, 0x9b, 0x61, 0x87, 0x55, 0x64, 0x2b, 0x9a, 0x88, 0xa7, 0x66, 0x33,
+	0x9f, 0xc6, 0xd0, 0x42, 0x0d, 0x5b, 0xa6, 0xa6, 0x4f, 0xbb, 0x70, 0xda, 0x85, 0xff, 0x57, 0x17,
+	0xfe, 0x10, 0x43, 0x73, 0xf7, 0x31, 0x9d, 0x76, 0xe0, 0xb4, 0x03, 0x2f, 0x77, 0x09, 0xb9, 0x7b,
+	0xd9, 0x9b, 0x00, 0xf7, 0xe5, 0xff, 0xb2, 0x7d, 0x5c, 0xf9, 0x0a, 0x0e, 0x8e, 0xa4, 0xd0, 0xf0,
+	0x48, 0x0a, 0x9d, 0x1c, 0x49, 0xf0, 0xc4, 0x93, 0xe0, 0x1b, 0x4f, 0x82, 0x1f, 0x3d, 0x09, 0x0e,
+	0x3c, 0x09, 0x86, 0x9e, 0x04, 0xbf, 0x78, 0x12, 0x3c, 0xf3, 0xa4, 0xd0, 0x89, 0x27, 0xc1, 0x97,
+	0xc7, 0x52, 0x68, 0xff, 0x58, 0x82, 0x83, 0x63, 0x29, 0x34, 0x3c, 0x96, 0x42, 0x1f, 0x7e, 0xd0,
+	0x26, 0xd6, 0xa3, 0xb6, 0x32, 0x20, 0x26, 0xc5, 0xb6, 0xad, 0x29, 0x7d, 0x47, 0x65, 0x0f, 0x3b,
+	0xc4, 0xee, 0xae, 0x58, 0x36, 0x19, 0x18, 0x2d, 0x6c, 0xaf, 0x9c, 0xba, 0x55, 0xab, 0xd9, 0x26,
+	0x2a, 0xde, 0xa5, 0xe3, 0xeb, 0xfd, 0x8b, 0x7f, 0x18, 0x69, 0xce, 0xb0, 0xeb, 0x7e, 0xf1, 0xef,
+	0x00, 0x00, 0x00, 0xff, 0xff, 0x4e, 0xfa, 0x47, 0x67, 0x44, 0x11, 0x00, 0x00,
 }
 
 func (this *GlobalSpecType) Equal(that interface{}) bool {
@@ -900,6 +1055,14 @@ func (this *GlobalSpecType) Equal(that interface{}) bool {
 	}
 	if this.Interval != that1.Interval {
 		return false
+	}
+	if len(this.DnsLbPools) != len(that1.DnsLbPools) {
+		return false
+	}
+	for i := range this.DnsLbPools {
+		if !this.DnsLbPools[i].Equal(that1.DnsLbPools[i]) {
+			return false
+		}
 	}
 	return true
 }
@@ -1023,6 +1186,30 @@ func (this *GlobalSpecType_HttpsHealthCheck) Equal(that interface{}) bool {
 	}
 	return true
 }
+func (this *GlobalSpecType_TcpHexHealthCheck) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GlobalSpecType_TcpHexHealthCheck)
+	if !ok {
+		that2, ok := that.(GlobalSpecType_TcpHexHealthCheck)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.TcpHexHealthCheck.Equal(that1.TcpHexHealthCheck) {
+		return false
+	}
+	return true
+}
 func (this *HttpHealthCheck) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -1061,6 +1248,36 @@ func (this *TcpHealthCheck) Equal(that interface{}) bool {
 	that1, ok := that.(*TcpHealthCheck)
 	if !ok {
 		that2, ok := that.(TcpHealthCheck)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.Send != that1.Send {
+		return false
+	}
+	if this.Receive != that1.Receive {
+		return false
+	}
+	if this.HealthCheckPort != that1.HealthCheckPort {
+		return false
+	}
+	return true
+}
+func (this *TcpHexHealthCheck) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*TcpHexHealthCheck)
+	if !ok {
+		that2, ok := that.(TcpHexHealthCheck)
 		if ok {
 			that1 = &that2
 		} else {
@@ -1263,6 +1480,30 @@ func (this *CreateSpecType_HttpsHealthCheck) Equal(that interface{}) bool {
 	}
 	return true
 }
+func (this *CreateSpecType_TcpHexHealthCheck) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CreateSpecType_TcpHexHealthCheck)
+	if !ok {
+		that2, ok := that.(CreateSpecType_TcpHexHealthCheck)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.TcpHexHealthCheck.Equal(that1.TcpHexHealthCheck) {
+		return false
+	}
+	return true
+}
 func (this *ReplaceSpecType) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -1413,6 +1654,30 @@ func (this *ReplaceSpecType_HttpsHealthCheck) Equal(that interface{}) bool {
 	}
 	return true
 }
+func (this *ReplaceSpecType_TcpHexHealthCheck) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ReplaceSpecType_TcpHexHealthCheck)
+	if !ok {
+		that2, ok := that.(ReplaceSpecType_TcpHexHealthCheck)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.TcpHexHealthCheck.Equal(that1.TcpHexHealthCheck) {
+		return false
+	}
+	return true
+}
 func (this *GetSpecType) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -1440,6 +1705,14 @@ func (this *GetSpecType) Equal(that interface{}) bool {
 		return false
 	} else if !this.HealthCheck.Equal(that1.HealthCheck) {
 		return false
+	}
+	if len(this.DnsLbPools) != len(that1.DnsLbPools) {
+		return false
+	}
+	for i := range this.DnsLbPools {
+		if !this.DnsLbPools[i].Equal(that1.DnsLbPools[i]) {
+			return false
+		}
 	}
 	return true
 }
@@ -1563,17 +1836,44 @@ func (this *GetSpecType_HttpsHealthCheck) Equal(that interface{}) bool {
 	}
 	return true
 }
+func (this *GetSpecType_TcpHexHealthCheck) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GetSpecType_TcpHexHealthCheck)
+	if !ok {
+		that2, ok := that.(GetSpecType_TcpHexHealthCheck)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.TcpHexHealthCheck.Equal(that1.TcpHexHealthCheck) {
+		return false
+	}
+	return true
+}
 func (this *GlobalSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 11)
+	s := make([]string, 0, 13)
 	s = append(s, "&dns_lb_health_check.GlobalSpecType{")
 	if this.HealthCheck != nil {
 		s = append(s, "HealthCheck: "+fmt.Sprintf("%#v", this.HealthCheck)+",\n")
 	}
 	s = append(s, "Timeout: "+fmt.Sprintf("%#v", this.Timeout)+",\n")
 	s = append(s, "Interval: "+fmt.Sprintf("%#v", this.Interval)+",\n")
+	if this.DnsLbPools != nil {
+		s = append(s, "DnsLbPools: "+fmt.Sprintf("%#v", this.DnsLbPools)+",\n")
+	}
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
@@ -1617,6 +1917,14 @@ func (this *GlobalSpecType_HttpsHealthCheck) GoString() string {
 		`HttpsHealthCheck:` + fmt.Sprintf("%#v", this.HttpsHealthCheck) + `}`}, ", ")
 	return s
 }
+func (this *GlobalSpecType_TcpHexHealthCheck) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&dns_lb_health_check.GlobalSpecType_TcpHexHealthCheck{` +
+		`TcpHexHealthCheck:` + fmt.Sprintf("%#v", this.TcpHexHealthCheck) + `}`}, ", ")
+	return s
+}
 func (this *HttpHealthCheck) GoString() string {
 	if this == nil {
 		return "nil"
@@ -1641,6 +1949,18 @@ func (this *TcpHealthCheck) GoString() string {
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
+func (this *TcpHexHealthCheck) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 7)
+	s = append(s, "&dns_lb_health_check.TcpHexHealthCheck{")
+	s = append(s, "Send: "+fmt.Sprintf("%#v", this.Send)+",\n")
+	s = append(s, "Receive: "+fmt.Sprintf("%#v", this.Receive)+",\n")
+	s = append(s, "HealthCheckPort: "+fmt.Sprintf("%#v", this.HealthCheckPort)+",\n")
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
 func (this *UdpHealthCheck) GoString() string {
 	if this == nil {
 		return "nil"
@@ -1657,7 +1977,7 @@ func (this *CreateSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 9)
+	s := make([]string, 0, 10)
 	s = append(s, "&dns_lb_health_check.CreateSpecType{")
 	if this.HealthCheck != nil {
 		s = append(s, "HealthCheck: "+fmt.Sprintf("%#v", this.HealthCheck)+",\n")
@@ -1705,11 +2025,19 @@ func (this *CreateSpecType_HttpsHealthCheck) GoString() string {
 		`HttpsHealthCheck:` + fmt.Sprintf("%#v", this.HttpsHealthCheck) + `}`}, ", ")
 	return s
 }
+func (this *CreateSpecType_TcpHexHealthCheck) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&dns_lb_health_check.CreateSpecType_TcpHexHealthCheck{` +
+		`TcpHexHealthCheck:` + fmt.Sprintf("%#v", this.TcpHexHealthCheck) + `}`}, ", ")
+	return s
+}
 func (this *ReplaceSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 9)
+	s := make([]string, 0, 10)
 	s = append(s, "&dns_lb_health_check.ReplaceSpecType{")
 	if this.HealthCheck != nil {
 		s = append(s, "HealthCheck: "+fmt.Sprintf("%#v", this.HealthCheck)+",\n")
@@ -1757,14 +2085,25 @@ func (this *ReplaceSpecType_HttpsHealthCheck) GoString() string {
 		`HttpsHealthCheck:` + fmt.Sprintf("%#v", this.HttpsHealthCheck) + `}`}, ", ")
 	return s
 }
+func (this *ReplaceSpecType_TcpHexHealthCheck) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&dns_lb_health_check.ReplaceSpecType_TcpHexHealthCheck{` +
+		`TcpHexHealthCheck:` + fmt.Sprintf("%#v", this.TcpHexHealthCheck) + `}`}, ", ")
+	return s
+}
 func (this *GetSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 9)
+	s := make([]string, 0, 11)
 	s = append(s, "&dns_lb_health_check.GetSpecType{")
 	if this.HealthCheck != nil {
 		s = append(s, "HealthCheck: "+fmt.Sprintf("%#v", this.HealthCheck)+",\n")
+	}
+	if this.DnsLbPools != nil {
+		s = append(s, "DnsLbPools: "+fmt.Sprintf("%#v", this.DnsLbPools)+",\n")
 	}
 	s = append(s, "}")
 	return strings.Join(s, "")
@@ -1809,6 +2148,14 @@ func (this *GetSpecType_HttpsHealthCheck) GoString() string {
 		`HttpsHealthCheck:` + fmt.Sprintf("%#v", this.HttpsHealthCheck) + `}`}, ", ")
 	return s
 }
+func (this *GetSpecType_TcpHexHealthCheck) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&dns_lb_health_check.GetSpecType_TcpHexHealthCheck{` +
+		`TcpHexHealthCheck:` + fmt.Sprintf("%#v", this.TcpHexHealthCheck) + `}`}, ", ")
+	return s
+}
 func valueToGoStringTypes(v interface{}, typ string) string {
 	rv := reflect.ValueOf(v)
 	if rv.IsNil() {
@@ -1837,6 +2184,20 @@ func (m *GlobalSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	if len(m.DnsLbPools) > 0 {
+		for iNdEx := len(m.DnsLbPools) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.DnsLbPools[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x5a
+		}
+	}
 	if m.HealthCheck != nil {
 		{
 			size := m.HealthCheck.Size()
@@ -1964,6 +2325,27 @@ func (m *GlobalSpecType_HttpsHealthCheck) MarshalToSizedBuffer(dAtA []byte) (int
 	}
 	return len(dAtA) - i, nil
 }
+func (m *GlobalSpecType_TcpHexHealthCheck) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType_TcpHexHealthCheck) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.TcpHexHealthCheck != nil {
+		{
+			size, err := m.TcpHexHealthCheck.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x52
+	}
+	return len(dAtA) - i, nil
+}
 func (m *HttpHealthCheck) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -2022,6 +2404,48 @@ func (m *TcpHealthCheck) MarshalTo(dAtA []byte) (int, error) {
 }
 
 func (m *TcpHealthCheck) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.HealthCheckPort != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.HealthCheckPort))
+		i--
+		dAtA[i] = 0x18
+	}
+	if len(m.Receive) > 0 {
+		i -= len(m.Receive)
+		copy(dAtA[i:], m.Receive)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.Receive)))
+		i--
+		dAtA[i] = 0x12
+	}
+	if len(m.Send) > 0 {
+		i -= len(m.Send)
+		copy(dAtA[i:], m.Send)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.Send)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *TcpHexHealthCheck) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *TcpHexHealthCheck) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *TcpHexHealthCheck) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
@@ -2227,6 +2651,27 @@ func (m *CreateSpecType_HttpsHealthCheck) MarshalToSizedBuffer(dAtA []byte) (int
 	}
 	return len(dAtA) - i, nil
 }
+func (m *CreateSpecType_TcpHexHealthCheck) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType_TcpHexHealthCheck) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.TcpHexHealthCheck != nil {
+		{
+			size, err := m.TcpHexHealthCheck.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x52
+	}
+	return len(dAtA) - i, nil
+}
 func (m *ReplaceSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -2364,6 +2809,27 @@ func (m *ReplaceSpecType_HttpsHealthCheck) MarshalToSizedBuffer(dAtA []byte) (in
 	}
 	return len(dAtA) - i, nil
 }
+func (m *ReplaceSpecType_TcpHexHealthCheck) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType_TcpHexHealthCheck) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.TcpHexHealthCheck != nil {
+		{
+			size, err := m.TcpHexHealthCheck.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x52
+	}
+	return len(dAtA) - i, nil
+}
 func (m *GetSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -2384,6 +2850,20 @@ func (m *GetSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	if len(m.DnsLbPools) > 0 {
+		for iNdEx := len(m.DnsLbPools) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.DnsLbPools[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x5a
+		}
+	}
 	if m.HealthCheck != nil {
 		{
 			size := m.HealthCheck.Size()
@@ -2501,6 +2981,27 @@ func (m *GetSpecType_HttpsHealthCheck) MarshalToSizedBuffer(dAtA []byte) (int, e
 	}
 	return len(dAtA) - i, nil
 }
+func (m *GetSpecType_TcpHexHealthCheck) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType_TcpHexHealthCheck) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.TcpHexHealthCheck != nil {
+		{
+			size, err := m.TcpHexHealthCheck.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x52
+	}
+	return len(dAtA) - i, nil
+}
 func encodeVarintTypes(dAtA []byte, offset int, v uint64) int {
 	offset -= sovTypes(v)
 	base := offset
@@ -2526,6 +3027,12 @@ func (m *GlobalSpecType) Size() (n int) {
 	}
 	if m.Interval != 0 {
 		n += 1 + sovTypes(uint64(m.Interval))
+	}
+	if len(m.DnsLbPools) > 0 {
+		for _, e := range m.DnsLbPools {
+			l = e.Size()
+			n += 1 + l + sovTypes(uint64(l))
+		}
 	}
 	return n
 }
@@ -2590,6 +3097,18 @@ func (m *GlobalSpecType_HttpsHealthCheck) Size() (n int) {
 	}
 	return n
 }
+func (m *GlobalSpecType_TcpHexHealthCheck) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.TcpHexHealthCheck != nil {
+		l = m.TcpHexHealthCheck.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
 func (m *HttpHealthCheck) Size() (n int) {
 	if m == nil {
 		return 0
@@ -2611,6 +3130,26 @@ func (m *HttpHealthCheck) Size() (n int) {
 }
 
 func (m *TcpHealthCheck) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Send)
+	if l > 0 {
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	l = len(m.Receive)
+	if l > 0 {
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.HealthCheckPort != 0 {
+		n += 1 + sovTypes(uint64(m.HealthCheckPort))
+	}
+	return n
+}
+
+func (m *TcpHexHealthCheck) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -2722,6 +3261,18 @@ func (m *CreateSpecType_HttpsHealthCheck) Size() (n int) {
 	}
 	return n
 }
+func (m *CreateSpecType_TcpHexHealthCheck) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.TcpHexHealthCheck != nil {
+		l = m.TcpHexHealthCheck.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
 func (m *ReplaceSpecType) Size() (n int) {
 	if m == nil {
 		return 0
@@ -2794,6 +3345,18 @@ func (m *ReplaceSpecType_HttpsHealthCheck) Size() (n int) {
 	}
 	return n
 }
+func (m *ReplaceSpecType_TcpHexHealthCheck) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.TcpHexHealthCheck != nil {
+		l = m.TcpHexHealthCheck.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
 func (m *GetSpecType) Size() (n int) {
 	if m == nil {
 		return 0
@@ -2802,6 +3365,12 @@ func (m *GetSpecType) Size() (n int) {
 	_ = l
 	if m.HealthCheck != nil {
 		n += m.HealthCheck.Size()
+	}
+	if len(m.DnsLbPools) > 0 {
+		for _, e := range m.DnsLbPools {
+			l = e.Size()
+			n += 1 + l + sovTypes(uint64(l))
+		}
 	}
 	return n
 }
@@ -2866,6 +3435,18 @@ func (m *GetSpecType_HttpsHealthCheck) Size() (n int) {
 	}
 	return n
 }
+func (m *GetSpecType_TcpHexHealthCheck) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.TcpHexHealthCheck != nil {
+		l = m.TcpHexHealthCheck.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
 
 func sovTypes(x uint64) (n int) {
 	return (math_bits.Len64(x|1) + 6) / 7
@@ -2877,10 +3458,16 @@ func (this *GlobalSpecType) String() string {
 	if this == nil {
 		return "nil"
 	}
+	repeatedStringForDnsLbPools := "[]*ObjectRefType{"
+	for _, f := range this.DnsLbPools {
+		repeatedStringForDnsLbPools += strings.Replace(fmt.Sprintf("%v", f), "ObjectRefType", "views.ObjectRefType", 1) + ","
+	}
+	repeatedStringForDnsLbPools += "}"
 	s := strings.Join([]string{`&GlobalSpecType{`,
 		`HealthCheck:` + fmt.Sprintf("%v", this.HealthCheck) + `,`,
 		`Timeout:` + fmt.Sprintf("%v", this.Timeout) + `,`,
 		`Interval:` + fmt.Sprintf("%v", this.Interval) + `,`,
+		`DnsLbPools:` + repeatedStringForDnsLbPools + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2935,6 +3522,16 @@ func (this *GlobalSpecType_HttpsHealthCheck) String() string {
 	}, "")
 	return s
 }
+func (this *GlobalSpecType_TcpHexHealthCheck) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GlobalSpecType_TcpHexHealthCheck{`,
+		`TcpHexHealthCheck:` + strings.Replace(fmt.Sprintf("%v", this.TcpHexHealthCheck), "TcpHexHealthCheck", "TcpHexHealthCheck", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
 func (this *HttpHealthCheck) String() string {
 	if this == nil {
 		return "nil"
@@ -2952,6 +3549,18 @@ func (this *TcpHealthCheck) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&TcpHealthCheck{`,
+		`Send:` + fmt.Sprintf("%v", this.Send) + `,`,
+		`Receive:` + fmt.Sprintf("%v", this.Receive) + `,`,
+		`HealthCheckPort:` + fmt.Sprintf("%v", this.HealthCheckPort) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *TcpHexHealthCheck) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&TcpHexHealthCheck{`,
 		`Send:` + fmt.Sprintf("%v", this.Send) + `,`,
 		`Receive:` + fmt.Sprintf("%v", this.Receive) + `,`,
 		`HealthCheckPort:` + fmt.Sprintf("%v", this.HealthCheckPort) + `,`,
@@ -3031,6 +3640,16 @@ func (this *CreateSpecType_HttpsHealthCheck) String() string {
 	}, "")
 	return s
 }
+func (this *CreateSpecType_TcpHexHealthCheck) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&CreateSpecType_TcpHexHealthCheck{`,
+		`TcpHexHealthCheck:` + strings.Replace(fmt.Sprintf("%v", this.TcpHexHealthCheck), "TcpHexHealthCheck", "TcpHexHealthCheck", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
 func (this *ReplaceSpecType) String() string {
 	if this == nil {
 		return "nil"
@@ -3091,12 +3710,28 @@ func (this *ReplaceSpecType_HttpsHealthCheck) String() string {
 	}, "")
 	return s
 }
+func (this *ReplaceSpecType_TcpHexHealthCheck) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ReplaceSpecType_TcpHexHealthCheck{`,
+		`TcpHexHealthCheck:` + strings.Replace(fmt.Sprintf("%v", this.TcpHexHealthCheck), "TcpHexHealthCheck", "TcpHexHealthCheck", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
 func (this *GetSpecType) String() string {
 	if this == nil {
 		return "nil"
 	}
+	repeatedStringForDnsLbPools := "[]*ObjectRefType{"
+	for _, f := range this.DnsLbPools {
+		repeatedStringForDnsLbPools += strings.Replace(fmt.Sprintf("%v", f), "ObjectRefType", "views.ObjectRefType", 1) + ","
+	}
+	repeatedStringForDnsLbPools += "}"
 	s := strings.Join([]string{`&GetSpecType{`,
 		`HealthCheck:` + fmt.Sprintf("%v", this.HealthCheck) + `,`,
+		`DnsLbPools:` + repeatedStringForDnsLbPools + `,`,
 		`}`,
 	}, "")
 	return s
@@ -3147,6 +3782,16 @@ func (this *GetSpecType_HttpsHealthCheck) String() string {
 	}
 	s := strings.Join([]string{`&GetSpecType_HttpsHealthCheck{`,
 		`HttpsHealthCheck:` + strings.Replace(fmt.Sprintf("%v", this.HttpsHealthCheck), "HttpHealthCheck", "HttpHealthCheck", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GetSpecType_TcpHexHealthCheck) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GetSpecType_TcpHexHealthCheck{`,
+		`TcpHexHealthCheck:` + strings.Replace(fmt.Sprintf("%v", this.TcpHexHealthCheck), "TcpHexHealthCheck", "TcpHexHealthCheck", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -3401,6 +4046,75 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 			}
 			m.HealthCheck = &GlobalSpecType_HttpsHealthCheck{v}
 			iNdEx = postIndex
+		case 10:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field TcpHexHealthCheck", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &TcpHexHealthCheck{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.HealthCheck = &GlobalSpecType_TcpHexHealthCheck{v}
+			iNdEx = postIndex
+		case 11:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DnsLbPools", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.DnsLbPools = append(m.DnsLbPools, &views.ObjectRefType{})
+			if err := m.DnsLbPools[len(m.DnsLbPools)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipTypes(dAtA[iNdEx:])
@@ -3588,6 +4302,142 @@ func (m *TcpHealthCheck) Unmarshal(dAtA []byte) error {
 		}
 		if fieldNum <= 0 {
 			return fmt.Errorf("proto: TcpHealthCheck: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Send", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Send = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Receive", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Receive = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 3:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field HealthCheckPort", wireType)
+			}
+			m.HealthCheckPort = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.HealthCheckPort |= uint32(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *TcpHexHealthCheck) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: TcpHexHealthCheck: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: TcpHexHealthCheck: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:
@@ -4037,6 +4887,41 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 			}
 			m.HealthCheck = &CreateSpecType_HttpsHealthCheck{v}
 			iNdEx = postIndex
+		case 10:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field TcpHexHealthCheck", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &TcpHexHealthCheck{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.HealthCheck = &CreateSpecType_TcpHexHealthCheck{v}
+			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipTypes(dAtA[iNdEx:])
@@ -4265,6 +5150,41 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 			}
 			m.HealthCheck = &ReplaceSpecType_HttpsHealthCheck{v}
 			iNdEx = postIndex
+		case 10:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field TcpHexHealthCheck", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &TcpHexHealthCheck{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.HealthCheck = &ReplaceSpecType_TcpHexHealthCheck{v}
+			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipTypes(dAtA[iNdEx:])
@@ -4492,6 +5412,75 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			m.HealthCheck = &GetSpecType_HttpsHealthCheck{v}
+			iNdEx = postIndex
+		case 10:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field TcpHexHealthCheck", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &TcpHexHealthCheck{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.HealthCheck = &GetSpecType_TcpHexHealthCheck{v}
+			iNdEx = postIndex
+		case 11:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DnsLbPools", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.DnsLbPools = append(m.DnsLbPools, &views.ObjectRefType{})
+			if err := m.DnsLbPools[len(m.DnsLbPools)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex

@@ -2783,14 +2783,16 @@ var APISwaggerJSON string = `{
                 },
                 "ports": {
                     "type": "array",
-                    "description": " List of ports to match with destination ports\n Special value \"0\" means all valid ports on the VIPs\n\nExample: - 100-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 128\n",
+                    "description": " List of ports to match with destination ports\n Special value \"0\" means all valid ports on the VIPs\n\nExample: - 100-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 128\n",
                     "title": "Ports",
                     "maxItems": 128,
                     "items": {
                         "$ref": "#/definitions/schemaPortValueType"
                     },
                     "x-displayname": "Ports",
+                    "x-ves-required": "true",
                     "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
                         "ves.io.schema.rules.repeated.max_items": "128"
                     }
                 },

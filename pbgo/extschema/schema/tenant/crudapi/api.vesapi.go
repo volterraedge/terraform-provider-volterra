@@ -3082,6 +3082,21 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "schemaPlanType": {
+            "type": "string",
+            "description": "PlanType is the type of billing plan for the customer\n",
+            "title": "PlanType",
+            "enum": [
+                "FREE",
+                "INDIVIDUAL",
+                "TEAM",
+                "ORGANIZATION",
+                "PLAN_TYPE_UNSPECIFIED"
+            ],
+            "default": "FREE",
+            "x-displayname": "Plan Type",
+            "x-ves-proto-enum": "ves.io.schema.PlanType"
+        },
         "schemaSecretEncodingType": {
             "type": "string",
             "description": "x-displayName: \"Secret Encoding\"\nSecretEncodingType defines the encoding type of the secret before handled by the Secret Management Service.\n\n - EncodingNone: x-displayName: \"None\"\nNo Encoding\n - EncodingBase64: Base64\n\nx-displayName: \"Base64\"\nBase64 encoding",
@@ -3588,6 +3603,12 @@ var APISwaggerJSON string = `{
                     },
                     "x-displayname": "K8S Server Sub CAs"
                 },
+                "plan_type": {
+                    "description": " Type of the billing plan the tenant is subscribed to. Value can be one of FREE, INDIVIDUAL, TEAM, ORGANIZATION.",
+                    "title": "Plan type",
+                    "$ref": "#/definitions/schemaPlanType",
+                    "x-displayname": "Plan Type"
+                },
                 "proxy_root_ca_latest_version": {
                     "type": "integer",
                     "description": " CA version which is the latest and will be used for proxy feature.",
@@ -3646,7 +3667,7 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "tenant_type": {
-                    "description": " Type of the tenant (FREEMIUM, ENTERPRISE, ...)",
+                    "description": " Type of the tenant (FREEMIUM, ENTERPRISE)\n Freemium type includes Free or individual account signups and\n Enterprise type includes all tenants signed up for a team account with a team plan or organizational plan",
                     "title": "Tenant Type",
                     "$ref": "#/definitions/schemaTenantType",
                     "x-displayname": "Tenant Type"

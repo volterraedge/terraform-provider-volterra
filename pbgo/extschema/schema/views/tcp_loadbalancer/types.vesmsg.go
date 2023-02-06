@@ -1472,6 +1472,18 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 
 	}
 
+	if fv, exists := v.FldValidators["internet_vip_info"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("internet_vip_info"))
+		for idx, item := range m.GetInternetVipInfo() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["listen_port"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("listen_port"))
@@ -2464,6 +2476,18 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 		vOpts := append(opts, db.WithValidateField("idle_timeout"))
 		if err := fv(ctx, m.GetIdleTimeout(), vOpts...); err != nil {
 			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["internet_vip_info"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("internet_vip_info"))
+		for idx, item := range m.GetInternetVipInfo() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
 		}
 
 	}
@@ -4437,6 +4461,7 @@ func (m *GetSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	m.GetHashPolicyChoiceFromGlobalSpecType(f)
 	m.HostName = f.GetHostName()
 	m.IdleTimeout = f.GetIdleTimeout()
+	m.InternetVipInfo = f.GetInternetVipInfo()
 	m.ListenPort = f.GetListenPort()
 	m.GetLoadbalancerTypeFromGlobalSpecType(f)
 	m.OriginPools = f.GetOriginPools()
@@ -4469,6 +4494,7 @@ func (m *GetSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	m1.SetHashPolicyChoiceToGlobalSpecType(f)
 	f.HostName = m1.HostName
 	f.IdleTimeout = m1.IdleTimeout
+	f.InternetVipInfo = m1.InternetVipInfo
 	f.ListenPort = m1.ListenPort
 	m1.SetLoadbalancerTypeToGlobalSpecType(f)
 	f.OriginPools = m1.OriginPools

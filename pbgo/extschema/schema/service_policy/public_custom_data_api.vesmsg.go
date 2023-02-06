@@ -485,6 +485,16 @@ type ValidateServicePolicyHitsResponse struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateServicePolicyHitsResponse) StepValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for step")
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateServicePolicyHitsResponse) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*ServicePolicyHitsResponse)
 	if !ok {
@@ -511,12 +521,40 @@ func (v *ValidateServicePolicyHitsResponse) Validate(ctx context.Context, pm int
 
 	}
 
+	if fv, exists := v.FldValidators["step"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("step"))
+		if err := fv(ctx, m.GetStep(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultServicePolicyHitsResponseValidator = func() *ValidateServicePolicyHitsResponse {
 	v := &ValidateServicePolicyHitsResponse{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhStep := v.StepValidationRuleHandler
+	rulesStep := map[string]string{
+		"ves.io.schema.rules.string.time_interval": "true",
+	}
+	vFn, err = vrhStep(rulesStep)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ServicePolicyHitsResponse.step: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["step"] = vFn
 
 	return v
 }()

@@ -1736,6 +1736,43 @@ func (v *ValidateDetectionSetting) Validate(ctx context.Context, pm interface{},
 
 	}
 
+	switch m.GetSignaturesStagingSettings().(type) {
+	case *DetectionSetting_DisableStaging:
+		if fv, exists := v.FldValidators["signatures_staging_settings.disable_staging"]; exists {
+			val := m.GetSignaturesStagingSettings().(*DetectionSetting_DisableStaging).DisableStaging
+			vOpts := append(opts,
+				db.WithValidateField("signatures_staging_settings"),
+				db.WithValidateField("disable_staging"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *DetectionSetting_StageNewSignatures:
+		if fv, exists := v.FldValidators["signatures_staging_settings.stage_new_signatures"]; exists {
+			val := m.GetSignaturesStagingSettings().(*DetectionSetting_StageNewSignatures).StageNewSignatures
+			vOpts := append(opts,
+				db.WithValidateField("signatures_staging_settings"),
+				db.WithValidateField("stage_new_signatures"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *DetectionSetting_StageNewAndUpdatedSignatures:
+		if fv, exists := v.FldValidators["signatures_staging_settings.stage_new_and_updated_signatures"]; exists {
+			val := m.GetSignaturesStagingSettings().(*DetectionSetting_StageNewAndUpdatedSignatures).StageNewAndUpdatedSignatures
+			vOpts := append(opts,
+				db.WithValidateField("signatures_staging_settings"),
+				db.WithValidateField("stage_new_and_updated_signatures"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["threat_campaign_choice"]; exists {
 		val := m.GetThreatCampaignChoice()
 		vOpts := append(opts,
@@ -1867,6 +1904,9 @@ var DefaultDetectionSettingValidator = func() *ValidateDetectionSetting {
 	}
 
 	v.FldValidators["violation_detection_setting.violation_settings"] = vFnMap["violation_detection_setting.violation_settings"]
+
+	v.FldValidators["signatures_staging_settings.stage_new_signatures"] = SignaturesStagingSettingsValidator().Validate
+	v.FldValidators["signatures_staging_settings.stage_new_and_updated_signatures"] = SignaturesStagingSettingsValidator().Validate
 
 	v.FldValidators["signature_selection_setting"] = SignatureSelectionSettingValidator().Validate
 
@@ -3386,6 +3426,115 @@ var DefaultSignatureSelectionSettingValidator = func() *ValidateSignatureSelecti
 
 func SignatureSelectionSettingValidator() db.Validator {
 	return DefaultSignatureSelectionSettingValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *SignaturesStagingSettings) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *SignaturesStagingSettings) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *SignaturesStagingSettings) DeepCopy() *SignaturesStagingSettings {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &SignaturesStagingSettings{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *SignaturesStagingSettings) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *SignaturesStagingSettings) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return SignaturesStagingSettingsValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateSignaturesStagingSettings struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateSignaturesStagingSettings) StagingPeriodValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for staging_period")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateSignaturesStagingSettings) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*SignaturesStagingSettings)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *SignaturesStagingSettings got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["staging_period"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("staging_period"))
+		if err := fv(ctx, m.GetStagingPeriod(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultSignaturesStagingSettingsValidator = func() *ValidateSignaturesStagingSettings {
+	v := &ValidateSignaturesStagingSettings{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhStagingPeriod := v.StagingPeriodValidationRuleHandler
+	rulesStagingPeriod := map[string]string{
+		"ves.io.schema.rules.int32.gte":        "1",
+		"ves.io.schema.rules.int32.lte":        "20",
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhStagingPeriod(rulesStagingPeriod)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for SignaturesStagingSettings.staging_period: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["staging_period"] = vFn
+
+	return v
+}()
+
+func SignaturesStagingSettingsValidator() db.Validator {
+	return DefaultSignaturesStagingSettingsValidator
 }
 
 // augmented methods on protoc/std generated struct

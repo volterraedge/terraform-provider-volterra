@@ -540,6 +540,16 @@ type ValidateMetricsResponse struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateMetricsResponse) StepValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for step")
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateMetricsResponse) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*MetricsResponse)
 	if !ok {
@@ -566,12 +576,40 @@ func (v *ValidateMetricsResponse) Validate(ctx context.Context, pm interface{}, 
 
 	}
 
+	if fv, exists := v.FldValidators["step"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("step"))
+		if err := fv(ctx, m.GetStep(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultMetricsResponseValidator = func() *ValidateMetricsResponse {
 	v := &ValidateMetricsResponse{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhStep := v.StepValidationRuleHandler
+	rulesStep := map[string]string{
+		"ves.io.schema.rules.string.time_interval": "true",
+	}
+	vFn, err = vrhStep(rulesStep)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for MetricsResponse.step: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["step"] = vFn
 
 	return v
 }()

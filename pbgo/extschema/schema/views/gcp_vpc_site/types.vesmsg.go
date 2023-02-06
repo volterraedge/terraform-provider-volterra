@@ -1513,6 +1513,15 @@ func (v *ValidateGCPVPCIngressEgressGwReplaceType) Validate(ctx context.Context,
 
 	}
 
+	if fv, exists := v.FldValidators["performance_enhancement_mode"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("performance_enhancement_mode"))
+		if err := fv(ctx, m.GetPerformanceEnhancementMode(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["site_mesh_group_choice"]; exists {
 		val := m.GetSiteMeshGroupChoice()
 		vOpts := append(opts,
@@ -1654,6 +1663,8 @@ var DefaultGCPVPCIngressEgressGwReplaceTypeValidator = func() *ValidateGCPVPCIng
 	v.FldValidators["network_policy_choice.active_enhanced_firewall_policies"] = ves_io_schema_network_firewall.ActiveEnhancedFirewallPoliciesTypeValidator().Validate
 
 	v.FldValidators["outside_static_route_choice.outside_static_routes"] = ves_io_schema_views.SiteStaticRoutesListTypeValidator().Validate
+
+	v.FldValidators["performance_enhancement_mode"] = ves_io_schema_views.PerformanceEnhancementModeTypeValidator().Validate
 
 	return v
 }()
@@ -2463,6 +2474,15 @@ func (v *ValidateGCPVPCIngressEgressGwType) Validate(ctx context.Context, pm int
 
 	}
 
+	if fv, exists := v.FldValidators["performance_enhancement_mode"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("performance_enhancement_mode"))
+		if err := fv(ctx, m.GetPerformanceEnhancementMode(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["site_mesh_group_choice"]; exists {
 		val := m.GetSiteMeshGroupChoice()
 		vOpts := append(opts,
@@ -2651,6 +2671,8 @@ var DefaultGCPVPCIngressEgressGwTypeValidator = func() *ValidateGCPVPCIngressEgr
 
 	v.FldValidators["outside_subnet"] = ves_io_schema_views.GCPVPCSubnetChoiceTypeValidator().Validate
 
+	v.FldValidators["performance_enhancement_mode"] = ves_io_schema_views.PerformanceEnhancementModeTypeValidator().Validate
+
 	return v
 }()
 
@@ -2713,12 +2735,23 @@ func (v *ValidateGCPVPCIngressGwReplaceType) Validate(ctx context.Context, pm in
 		return nil
 	}
 
+	if fv, exists := v.FldValidators["performance_enhancement_mode"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("performance_enhancement_mode"))
+		if err := fv(ctx, m.GetPerformanceEnhancementMode(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGCPVPCIngressGwReplaceTypeValidator = func() *ValidateGCPVPCIngressGwReplaceType {
 	v := &ValidateGCPVPCIngressGwReplaceType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	v.FldValidators["performance_enhancement_mode"] = ves_io_schema_views.PerformanceEnhancementModeTypeValidator().Validate
 
 	return v
 }()
@@ -2888,6 +2921,15 @@ func (v *ValidateGCPVPCIngressGwType) Validate(ctx context.Context, pm interface
 
 	}
 
+	if fv, exists := v.FldValidators["performance_enhancement_mode"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("performance_enhancement_mode"))
+		if err := fv(ctx, m.GetPerformanceEnhancementMode(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	return nil
 }
 
@@ -2944,6 +2986,8 @@ var DefaultGCPVPCIngressGwTypeValidator = func() *ValidateGCPVPCIngressGwType {
 	v.FldValidators["local_network"] = ves_io_schema_views.GCPVPCNetworkChoiceTypeValidator().Validate
 
 	v.FldValidators["local_subnet"] = ves_io_schema_views.GCPVPCSubnetChoiceTypeValidator().Validate
+
+	v.FldValidators["performance_enhancement_mode"] = ves_io_schema_views.PerformanceEnhancementModeTypeValidator().Validate
 
 	return v
 }()
@@ -7233,6 +7277,7 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 
 	v.FldValidators["logs_receiver_choice.log_receiver"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
+	v.FldValidators["site_type.ingress_gw"] = GCPVPCIngressGwReplaceTypeValidator().Validate
 	v.FldValidators["site_type.ingress_egress_gw"] = GCPVPCIngressEgressGwReplaceTypeValidator().Validate
 	v.FldValidators["site_type.voltstack_cluster"] = GCPVPCVoltstackClusterReplaceTypeValidator().Validate
 
@@ -7721,6 +7766,7 @@ func (m *GCPVPCIngressEgressGwReplaceType) fromGCPVPCIngressEgressGwType(f *GCPV
 	m.GetInsideStaticRouteChoiceFromGCPVPCIngressEgressGwType(f)
 	m.GetNetworkPolicyChoiceFromGCPVPCIngressEgressGwType(f)
 	m.GetOutsideStaticRouteChoiceFromGCPVPCIngressEgressGwType(f)
+	m.PerformanceEnhancementMode = f.GetPerformanceEnhancementMode()
 	m.GetSiteMeshGroupChoiceFromGCPVPCIngressEgressGwType(f)
 }
 
@@ -7745,6 +7791,7 @@ func (m *GCPVPCIngressEgressGwReplaceType) toGCPVPCIngressEgressGwType(f *GCPVPC
 	m1.SetInsideStaticRouteChoiceToGCPVPCIngressEgressGwType(f)
 	m1.SetNetworkPolicyChoiceToGCPVPCIngressEgressGwType(f)
 	m1.SetOutsideStaticRouteChoiceToGCPVPCIngressEgressGwType(f)
+	f.PerformanceEnhancementMode = m1.PerformanceEnhancementMode
 	m1.SetSiteMeshGroupChoiceToGCPVPCIngressEgressGwType(f)
 }
 
@@ -7760,6 +7807,7 @@ func (m *GCPVPCIngressGwReplaceType) fromGCPVPCIngressGwType(f *GCPVPCIngressGwT
 	if f == nil {
 		return
 	}
+	m.PerformanceEnhancementMode = f.GetPerformanceEnhancementMode()
 }
 
 func (m *GCPVPCIngressGwReplaceType) FromGCPVPCIngressGwType(f *GCPVPCIngressGwType) {
@@ -7777,6 +7825,7 @@ func (m *GCPVPCIngressGwReplaceType) toGCPVPCIngressGwType(f *GCPVPCIngressGwTyp
 	}
 	_ = m1
 
+	f.PerformanceEnhancementMode = m1.PerformanceEnhancementMode
 }
 
 func (m *GCPVPCIngressGwReplaceType) ToGCPVPCIngressGwType(f *GCPVPCIngressGwType) {

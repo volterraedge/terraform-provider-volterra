@@ -745,6 +745,15 @@ func (v *ValidateLogAggregationData) Validate(ctx context.Context, pm interface{
 
 	}
 
+	if fv, exists := v.FldValidators["metrics_aggregation"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("metrics_aggregation"))
+		if err := fv(ctx, m.GetMetricsAggregation(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["multi_field_aggregation"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("multi_field_aggregation"))
@@ -768,6 +777,90 @@ var DefaultLogAggregationDataValidator = func() *ValidateLogAggregationData {
 
 func LogAggregationDataValidator() db.Validator {
 	return DefaultLogAggregationDataValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *MetricsAggregationData) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *MetricsAggregationData) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *MetricsAggregationData) DeepCopy() *MetricsAggregationData {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &MetricsAggregationData{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *MetricsAggregationData) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *MetricsAggregationData) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return MetricsAggregationDataValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateMetricsAggregationData struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateMetricsAggregationData) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*MetricsAggregationData)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *MetricsAggregationData got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	switch m.GetAggregationType().(type) {
+	case *MetricsAggregationData_PercentilesAggregation:
+		if fv, exists := v.FldValidators["aggregation_type.percentiles_aggregation"]; exists {
+			val := m.GetAggregationType().(*MetricsAggregationData_PercentilesAggregation).PercentilesAggregation
+			vOpts := append(opts,
+				db.WithValidateField("aggregation_type"),
+				db.WithValidateField("percentiles_aggregation"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultMetricsAggregationDataValidator = func() *ValidateMetricsAggregationData {
+	v := &ValidateMetricsAggregationData{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func MetricsAggregationDataValidator() db.Validator {
+	return DefaultMetricsAggregationDataValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -939,4 +1032,172 @@ var DefaultMultiFieldAggregationDataValidator = func() *ValidateMultiFieldAggreg
 
 func MultiFieldAggregationDataValidator() db.Validator {
 	return DefaultMultiFieldAggregationDataValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *PercentilesAggregationData) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *PercentilesAggregationData) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *PercentilesAggregationData) DeepCopy() *PercentilesAggregationData {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &PercentilesAggregationData{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *PercentilesAggregationData) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *PercentilesAggregationData) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return PercentilesAggregationDataValidator().Validate(ctx, m, opts...)
+}
+
+type ValidatePercentilesAggregationData struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidatePercentilesAggregationData) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*PercentilesAggregationData)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *PercentilesAggregationData got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["values"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("values"))
+		for idx, item := range m.GetValues() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultPercentilesAggregationDataValidator = func() *ValidatePercentilesAggregationData {
+	v := &ValidatePercentilesAggregationData{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func PercentilesAggregationDataValidator() db.Validator {
+	return DefaultPercentilesAggregationDataValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *PercentilesAggregationValue) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *PercentilesAggregationValue) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *PercentilesAggregationValue) DeepCopy() *PercentilesAggregationValue {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &PercentilesAggregationValue{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *PercentilesAggregationValue) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *PercentilesAggregationValue) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return PercentilesAggregationValueValidator().Validate(ctx, m, opts...)
+}
+
+type ValidatePercentilesAggregationValue struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidatePercentilesAggregationValue) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*PercentilesAggregationValue)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *PercentilesAggregationValue got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["key"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("key"))
+		if err := fv(ctx, m.GetKey(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["value"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("value"))
+		if err := fv(ctx, m.GetValue(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultPercentilesAggregationValueValidator = func() *ValidatePercentilesAggregationValue {
+	v := &ValidatePercentilesAggregationValue{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func PercentilesAggregationValueValidator() db.Validator {
+	return DefaultPercentilesAggregationValueValidator
 }

@@ -2769,9 +2769,12 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.dos_mitigation.Destination",
             "properties": {
                 "virtual_host": {
+                    "type": "array",
                     "description": " Virtual Host on which mitigation is to occur\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "virtual_host",
-                    "$ref": "#/definitions/schemaviewsObjectRefType",
+                    "items": {
+                        "$ref": "#/definitions/ioschemaObjectRefType"
+                    },
                     "x-displayname": "Virtual Host",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
@@ -3701,11 +3704,11 @@ var APISwaggerJSON string = `{
                 },
                 "expiration_ttl": {
                     "type": "integer",
-                    "description": "Exclusive with [expiration_never expiration_timestamp]\n Mitigation will expire this number of seconds after its creation time\n\nExample: - \"400\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 0\n  ves.io.schema.rules.uint32.lte: 172800\n",
+                    "description": "Exclusive with [expiration_never expiration_timestamp]\n Mitigation will expire this number of seconds after its creation time\n\nExample: - \"600\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 0\n  ves.io.schema.rules.uint32.lte: 172800\n",
                     "title": "expiration_ttl",
                     "format": "int64",
                     "x-displayname": "TTL in Seconds",
-                    "x-ves-example": "400",
+                    "x-ves-example": "600",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.uint32.gte": "0",
                         "ves.io.schema.rules.uint32.lte": "172800"
@@ -3781,52 +3784,6 @@ var APISwaggerJSON string = `{
             "default": "MITIGATION_MANUAL",
             "x-displayname": "DoS Mitigation Type",
             "x-ves-proto-enum": "ves.io.schema.dos_mitigation.Type"
-        },
-        "schemaviewsObjectRefType": {
-            "type": "object",
-            "description": "This type establishes a direct reference from one object(the referrer) to another(the referred).\nSuch a reference is in form of tenant/namespace/name",
-            "title": "ObjectRefType",
-            "x-displayname": "Object reference",
-            "x-ves-proto-message": "ves.io.schema.views.ObjectRefType",
-            "properties": {
-                "name": {
-                    "type": "string",
-                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then name will hold the referred object's(e.g. route's) name.\n\nExample: - \"contacts-route\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_bytes: 64\n  ves.io.schema.rules.string.min_bytes: 1\n",
-                    "title": "name",
-                    "minLength": 1,
-                    "maxLength": 64,
-                    "x-displayname": "Name",
-                    "x-ves-example": "contacts-route",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true",
-                        "ves.io.schema.rules.string.max_bytes": "64",
-                        "ves.io.schema.rules.string.min_bytes": "1"
-                    }
-                },
-                "namespace": {
-                    "type": "string",
-                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then namespace will hold the referred object's(e.g. route's) namespace.\n\nExample: - \"ns1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 64\n",
-                    "title": "namespace",
-                    "maxLength": 64,
-                    "x-displayname": "Namespace",
-                    "x-ves-example": "ns1",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.max_bytes": "64"
-                    }
-                },
-                "tenant": {
-                    "type": "string",
-                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then tenant will hold the referred object's(e.g. route's) tenant.\n\nExample: - \"acmecorp\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 64\n",
-                    "title": "tenant",
-                    "maxLength": 64,
-                    "x-displayname": "Tenant",
-                    "x-ves-example": "acmecorp",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.max_bytes": "64"
-                    }
-                }
-            }
         }
     },
     "x-displayname": "",

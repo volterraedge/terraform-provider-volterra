@@ -3079,7 +3079,7 @@ var APISwaggerJSON string = `{
             "description": "Configuration of custom storage class",
             "title": "Custom Storage Class",
             "x-displayname": "Custom Storage Class",
-            "x-ves-oneof-field-device_choice": "[\"custom_storage\",\"netapp_trident\",\"pure_service_orchestrator\"]",
+            "x-ves-oneof-field-device_choice": "[\"custom_storage\",\"hpe_storage\",\"netapp_trident\",\"pure_service_orchestrator\"]",
             "x-ves-proto-message": "ves.io.schema.fleet.FleetStorageClassType",
             "properties": {
                 "advanced_storage_parameters": {
@@ -3104,7 +3104,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Allow Volume Expansion"
                 },
                 "custom_storage": {
-                    "description": "Exclusive with [netapp_trident pure_service_orchestrator]\n Storage configuration for Custom Storage",
+                    "description": "Exclusive with [hpe_storage netapp_trident pure_service_orchestrator]\n Storage configuration for Custom Storage",
                     "title": "Custom Storage",
                     "$ref": "#/definitions/fleetStorageClassCustomType",
                     "x-displayname": "Custom Storage"
@@ -3127,14 +3127,20 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.string.max_len": "256"
                     }
                 },
+                "hpe_storage": {
+                    "description": "Exclusive with [custom_storage netapp_trident pure_service_orchestrator]\n Storage configuration for HPE Storage",
+                    "title": "HPE Storage",
+                    "$ref": "#/definitions/fleetStorageClassHpeStorageType",
+                    "x-displayname": "HPE Storage"
+                },
                 "netapp_trident": {
-                    "description": "Exclusive with [custom_storage pure_service_orchestrator]\n Storage class Device configuration for NetApp Trident",
+                    "description": "Exclusive with [custom_storage hpe_storage pure_service_orchestrator]\n Storage class Device configuration for NetApp Trident",
                     "title": "NetApp Trident",
                     "$ref": "#/definitions/fleetStorageClassNetappTridentType",
                     "x-displayname": "NetApp Trident"
                 },
                 "pure_service_orchestrator": {
-                    "description": "Exclusive with [custom_storage netapp_trident]\n Storage class Device configuration for Pure Service Orchestrator",
+                    "description": "Exclusive with [custom_storage hpe_storage netapp_trident]\n Storage class Device configuration for Pure Service Orchestrator",
                     "title": "Pure Storage Service Orchestrator",
                     "$ref": "#/definitions/fleetStorageClassPureServiceOrchestratorType",
                     "x-displayname": "Pure Storage Service Orchestrator"
@@ -3207,7 +3213,7 @@ var APISwaggerJSON string = `{
             "description": "Configuration of storage device",
             "title": "Storage Device",
             "x-displayname": "Storage Device",
-            "x-ves-oneof-field-device_choice": "[\"custom_storage\",\"netapp_trident\",\"pure_service_orchestrator\"]",
+            "x-ves-oneof-field-device_choice": "[\"custom_storage\",\"hpe_storage\",\"netapp_trident\",\"pure_service_orchestrator\"]",
             "x-ves-proto-message": "ves.io.schema.fleet.FleetStorageDeviceType",
             "properties": {
                 "advanced_advanced_parameters": {
@@ -3225,19 +3231,25 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "custom_storage": {
-                    "description": "Exclusive with [netapp_trident pure_service_orchestrator]\n Device configuration for Custom Storage",
+                    "description": "Exclusive with [hpe_storage netapp_trident pure_service_orchestrator]\n Device configuration for Custom Storage",
                     "title": "Custom Storage",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Custom Storage"
                 },
+                "hpe_storage": {
+                    "description": "Exclusive with [custom_storage netapp_trident pure_service_orchestrator]\n Device configuration for HPE Storage",
+                    "title": "HPE Storage",
+                    "$ref": "#/definitions/fleetStorageDeviceHpeStorageType",
+                    "x-displayname": "HPE Storage"
+                },
                 "netapp_trident": {
-                    "description": "Exclusive with [custom_storage pure_service_orchestrator]\n Device configuration for NetApp Trident",
+                    "description": "Exclusive with [custom_storage hpe_storage pure_service_orchestrator]\n Device configuration for NetApp Trident",
                     "title": "NetApp Trident",
                     "$ref": "#/definitions/fleetStorageDeviceNetappTridentType",
                     "x-displayname": "NetApp Trident"
                 },
                 "pure_service_orchestrator": {
-                    "description": "Exclusive with [custom_storage netapp_trident]\n Device configuration for Pure Storage Service Orchestrator",
+                    "description": "Exclusive with [custom_storage hpe_storage netapp_trident]\n Device configuration for Pure Storage Service Orchestrator",
                     "title": "Pure Storage Service Orchestrator",
                     "$ref": "#/definitions/fleetStorageDevicePureStorageServiceOrchestratorType",
                     "x-displayname": "Pure Storage Service Orchestrator"
@@ -3504,6 +3516,48 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "fleetStorageClassHpeStorageType": {
+            "type": "object",
+            "description": "Storage class Device configuration for HPE Storage",
+            "title": "HPE Storage",
+            "x-displayname": "HPE Storage",
+            "x-ves-proto-message": "ves.io.schema.fleet.StorageClassHpeStorageType",
+            "properties": {
+                "description": {
+                    "type": "string",
+                    "description": " The SecretName parameter is used to identify name of secret to identify backend storage's auth information\n\nExample: - \"Volume created by using a default Secret with the HPE CSI Driver for Kubernetes\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 512\n",
+                    "title": "Description",
+                    "maxLength": 512,
+                    "x-displayname": "Description",
+                    "x-ves-example": "Volume created by using a default Secret with the HPE CSI Driver for Kubernetes",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "512"
+                    }
+                },
+                "secret_name": {
+                    "type": "string",
+                    "description": " The SecretName parameter is used to identify name of secret to identify backend storage's auth information\n\nExample: - \"hpe-backend\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 256\n",
+                    "title": "Secret Name",
+                    "maxLength": 256,
+                    "x-displayname": "Secret Name",
+                    "x-ves-example": "hpe-backend",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "256"
+                    }
+                },
+                "secret_namespace": {
+                    "type": "string",
+                    "description": " The SecretNamespace parameter is used to identify name of namespace where secret resides\n\nExample: - \"hpe-storage\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 256\n",
+                    "title": "Secret Namespace",
+                    "maxLength": 256,
+                    "x-displayname": "Secret Namespace",
+                    "x-ves-example": "hpe-storage",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "256"
+                    }
+                }
+            }
+        },
         "fleetStorageClassNetappTridentType": {
             "type": "object",
             "description": "Storage class Device configuration for NetApp Trident",
@@ -3568,6 +3622,68 @@ var APISwaggerJSON string = `{
                     "x-ves-example": "3000",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.uint32.ranges": "0,100-100000000"
+                    }
+                }
+            }
+        },
+        "fleetStorageDeviceHpeStorageType": {
+            "type": "object",
+            "description": "Device configuration for HPE Storage",
+            "title": "HPE Storage",
+            "x-displayname": "HPE Storage",
+            "x-ves-proto-message": "ves.io.schema.fleet.StorageDeviceHpeStorageType",
+            "properties": {
+                "api_server_port": {
+                    "type": "integer",
+                    "description": " Enter Storage Server Port\n\nExample: - \"8080\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 1\n  ves.io.schema.rules.uint32.lte: 65535\n",
+                    "title": "Storage server Port",
+                    "format": "int64",
+                    "x-displayname": "Storage server Port",
+                    "x-ves-example": "8080",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.gte": "1",
+                        "ves.io.schema.rules.uint32.lte": "65535"
+                    }
+                },
+                "password": {
+                    "description": " Please Enter you password.",
+                    "title": "Password",
+                    "$ref": "#/definitions/schemaSecretType",
+                    "x-displayname": "Password"
+                },
+                "storage_server_ip_address": {
+                    "type": "string",
+                    "description": " Enter storage server IP address\n\nExample: - \"10.10.10.10\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv4: true\n",
+                    "title": "Storage Server IP address",
+                    "x-displayname": "Storage Server IP address",
+                    "x-ves-example": "10.10.10.10",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.ipv4": "true"
+                    }
+                },
+                "storage_server_name": {
+                    "type": "string",
+                    "description": " Enter storage server Name\n\nExample: - \"hpe-backend\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.hostname: true\n",
+                    "title": "Storage Server Name",
+                    "x-displayname": "Storage Server Name",
+                    "x-ves-example": "hpe-backend",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.hostname": "true"
+                    }
+                },
+                "username": {
+                    "type": "string",
+                    "description": " Username to connect to the HPE storage management IP\n\nExample: - \"admin\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 256\n  ves.io.schema.rules.string.min_len: 1\n",
+                    "title": "Username",
+                    "minLength": 1,
+                    "maxLength": 256,
+                    "x-displayname": "Username",
+                    "x-ves-example": "admin",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.max_len": "256",
+                        "ves.io.schema.rules.string.min_len": "1"
                     }
                 }
             }
@@ -4885,17 +5001,11 @@ var APISwaggerJSON string = `{
             "description": "Configure Static IP parameters",
             "title": "Static IP Parameters",
             "x-displayname": "Static IP Parameters",
-            "x-ves-oneof-field-network_prefix_choice": "[\"cluster_static_ip\",\"node_static_ip\"]",
+            "x-ves-oneof-field-network_prefix_choice": "[\"node_static_ip\"]",
             "x-ves-proto-message": "ves.io.schema.network_interface.StaticIPParametersType",
             "properties": {
-                "cluster_static_ip": {
-                    "description": "Exclusive with [node_static_ip]\n Static IP configuration for a specific node",
-                    "title": "Node Specific",
-                    "$ref": "#/definitions/network_interfaceStaticIpParametersClusterType",
-                    "x-displayname": "Cluster, All Nodes of the Site"
-                },
                 "node_static_ip": {
-                    "description": "Exclusive with [cluster_static_ip]\n Static IP configuration for the Node",
+                    "description": "Exclusive with []\n Static IP configuration for the Node",
                     "title": "Node",
                     "$ref": "#/definitions/network_interfaceStaticIpParametersNodeType",
                     "x-displayname": "Specific Node"
@@ -4904,21 +5014,13 @@ var APISwaggerJSON string = `{
         },
         "network_interfaceStaticIpParametersClusterType": {
             "type": "object",
-            "description": "Configure Static IP parameters  for cluster",
+            "description": "x-displayName: \"Cluster: Static IP Parameters\"\nConfigure Static IP parameters  for cluster",
             "title": "Static IP Parameters",
-            "x-displayname": "Cluster: Static IP Parameters",
-            "x-ves-proto-message": "ves.io.schema.network_interface.StaticIpParametersClusterType",
             "properties": {
                 "interface_ip_map": {
                     "type": "object",
-                    "description": " Map of Node to Static ip configuration value, Key:Node, Value:IP Address\n\nValidation Rules:\n  ves.io.schema.rules.map.keys.string.max_len: 128\n  ves.io.schema.rules.map.keys.string.min_len: 1\n  ves.io.schema.rules.map.max_pairs: 128\n",
-                    "title": "Site:Node to IP mapping",
-                    "x-displayname": "Node to IP Mapping",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.map.keys.string.max_len": "128",
-                        "ves.io.schema.rules.map.keys.string.min_len": "1",
-                        "ves.io.schema.rules.map.max_pairs": "128"
-                    }
+                    "description": "x-displayName: \"Node to IP Mapping\"\nMap of Node to Static ip configuration value, Key:Node, Value:IP Address",
+                    "title": "Site:Node to IP mapping"
                 }
             }
         },

@@ -1919,6 +1919,15 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["performance_enhancement_mode"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("performance_enhancement_mode"))
+		if err := fv(ctx, m.GetPerformanceEnhancementMode(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["storage_class_choice"]; exists {
 		val := m.GetStorageClassChoice()
 		vOpts := append(opts,
@@ -2380,6 +2389,8 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	v.FldValidators["storage_static_routes_choice.storage_static_routes"] = FleetStorageStaticRoutesListTypeValidator().Validate
 
 	v.FldValidators["usb_policy_choice.usb_policy"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
+
+	v.FldValidators["performance_enhancement_mode"] = ves_io_schema_views.PerformanceEnhancementModeTypeValidator().Validate
 
 	return v
 }()
@@ -5480,6 +5491,17 @@ func (v *ValidateFleetStorageClassType) Validate(ctx context.Context, pm interfa
 				return err
 			}
 		}
+	case *FleetStorageClassType_HpeStorage:
+		if fv, exists := v.FldValidators["device_choice.hpe_storage"]; exists {
+			val := m.GetDeviceChoice().(*FleetStorageClassType_HpeStorage).HpeStorage
+			vOpts := append(opts,
+				db.WithValidateField("device_choice"),
+				db.WithValidateField("hpe_storage"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 
@@ -5601,6 +5623,7 @@ var DefaultFleetStorageClassTypeValidator = func() *ValidateFleetStorageClassTyp
 	v.FldValidators["device_choice.netapp_trident"] = StorageClassNetappTridentTypeValidator().Validate
 	v.FldValidators["device_choice.pure_service_orchestrator"] = StorageClassPureServiceOrchestratorTypeValidator().Validate
 	v.FldValidators["device_choice.custom_storage"] = StorageClassCustomTypeValidator().Validate
+	v.FldValidators["device_choice.hpe_storage"] = StorageClassHpeStorageTypeValidator().Validate
 
 	return v
 }()
@@ -5795,6 +5818,10 @@ func (m *FleetStorageDeviceType) Redact(ctx context.Context) error {
 		return errors.Wrapf(err, "Redacting FleetStorageDeviceType.pure_service_orchestrator")
 	}
 
+	if err := m.GetHpeStorage().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting FleetStorageDeviceType.hpe_storage")
+	}
+
 	return nil
 }
 
@@ -5969,6 +5996,17 @@ func (v *ValidateFleetStorageDeviceType) Validate(ctx context.Context, pm interf
 				return err
 			}
 		}
+	case *FleetStorageDeviceType_HpeStorage:
+		if fv, exists := v.FldValidators["device_choice.hpe_storage"]; exists {
+			val := m.GetDeviceChoice().(*FleetStorageDeviceType_HpeStorage).HpeStorage
+			vOpts := append(opts,
+				db.WithValidateField("device_choice"),
+				db.WithValidateField("hpe_storage"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 
@@ -6037,6 +6075,7 @@ var DefaultFleetStorageDeviceTypeValidator = func() *ValidateFleetStorageDeviceT
 	v.FldValidators["device_choice.netapp_trident"] = StorageDeviceNetappTridentTypeValidator().Validate
 	v.FldValidators["device_choice.pure_service_orchestrator"] = StorageDevicePureStorageServiceOrchestratorTypeValidator().Validate
 	v.FldValidators["device_choice.openebs_enterprise"] = StorageDeviceOpenebsEnterpriseTypeValidator().Validate
+	v.FldValidators["device_choice.hpe_storage"] = StorageDeviceHpeStorageTypeValidator().Validate
 
 	return v
 }()
@@ -7576,6 +7615,15 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 
 	}
 
+	if fv, exists := v.FldValidators["performance_enhancement_mode"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("performance_enhancement_mode"))
+		if err := fv(ctx, m.GetPerformanceEnhancementMode(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["storage_class_choice"]; exists {
 		val := m.GetStorageClassChoice()
 		vOpts := append(opts,
@@ -8037,6 +8085,8 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v.FldValidators["storage_static_routes_choice.storage_static_routes"] = FleetStorageStaticRoutesListTypeValidator().Validate
 
 	v.FldValidators["usb_policy_choice.usb_policy"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
+
+	v.FldValidators["performance_enhancement_mode"] = ves_io_schema_views.PerformanceEnhancementModeTypeValidator().Validate
 
 	return v
 }()
@@ -9876,6 +9926,15 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["performance_enhancement_mode"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("performance_enhancement_mode"))
+		if err := fv(ctx, m.GetPerformanceEnhancementMode(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["single_site"]; exists {
 		vOpts := append(opts, db.WithValidateField("single_site"))
 		if err := fv(ctx, m.GetSingleSite(), vOpts...); err != nil {
@@ -10405,6 +10464,8 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v.FldValidators["local_control_plane"] = LocalControlPlaneTypeValidator().Validate
 
 	v.FldValidators["offline_survivability_mode"] = ves_io_schema_views.OfflineSurvivabilityModeTypeValidator().Validate
+
+	v.FldValidators["performance_enhancement_mode"] = ves_io_schema_views.PerformanceEnhancementModeTypeValidator().Validate
 
 	v.FldValidators["view_internal"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
@@ -12858,6 +12919,15 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 
 	}
 
+	if fv, exists := v.FldValidators["performance_enhancement_mode"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("performance_enhancement_mode"))
+		if err := fv(ctx, m.GetPerformanceEnhancementMode(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["storage_class_choice"]; exists {
 		val := m.GetStorageClassChoice()
 		vOpts := append(opts,
@@ -13307,6 +13377,8 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	v.FldValidators["storage_static_routes_choice.storage_static_routes"] = FleetStorageStaticRoutesListTypeValidator().Validate
 
 	v.FldValidators["usb_policy_choice.usb_policy"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
+
+	v.FldValidators["performance_enhancement_mode"] = ves_io_schema_views.PerformanceEnhancementModeTypeValidator().Validate
 
 	return v
 }()
@@ -13785,6 +13857,416 @@ var DefaultStorageClassHPENimbusStorageAf40TypeValidator = func() *ValidateStora
 
 func StorageClassHPENimbusStorageAf40TypeValidator() db.Validator {
 	return DefaultStorageClassHPENimbusStorageAf40TypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *StorageClassHpeStorageType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *StorageClassHpeStorageType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *StorageClassHpeStorageType) DeepCopy() *StorageClassHpeStorageType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &StorageClassHpeStorageType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *StorageClassHpeStorageType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *StorageClassHpeStorageType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return StorageClassHpeStorageTypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateStorageClassHpeStorageType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateStorageClassHpeStorageType) SecretNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for secret_name")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateStorageClassHpeStorageType) DescriptionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for description")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateStorageClassHpeStorageType) SecretNamespaceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for secret_namespace")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateStorageClassHpeStorageType) PerformancePolicyValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for performance_policy")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateStorageClassHpeStorageType) ProtectionTemplateValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for protection_template")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateStorageClassHpeStorageType) FolderValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for folder")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateStorageClassHpeStorageType) PoolValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for pool")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateStorageClassHpeStorageType) AllowOverridesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for allow_overrides")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateStorageClassHpeStorageType) AllowMutationsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for allow_mutations")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateStorageClassHpeStorageType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*StorageClassHpeStorageType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *StorageClassHpeStorageType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["allow_mutations"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("allow_mutations"))
+		if err := fv(ctx, m.GetAllowMutations(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["allow_overrides"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("allow_overrides"))
+		if err := fv(ctx, m.GetAllowOverrides(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["dedupe_enabled"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("dedupe_enabled"))
+		if err := fv(ctx, m.GetDedupeEnabled(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["description"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("description"))
+		if err := fv(ctx, m.GetDescription(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["destroy_on_delete"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("destroy_on_delete"))
+		if err := fv(ctx, m.GetDestroyOnDelete(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["encrypted"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("encrypted"))
+		if err := fv(ctx, m.GetEncrypted(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["folder"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("folder"))
+		if err := fv(ctx, m.GetFolder(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["limit_iops"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("limit_iops"))
+		if err := fv(ctx, m.GetLimitIops(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["limit_mbps"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("limit_mbps"))
+		if err := fv(ctx, m.GetLimitMbps(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["performance_policy"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("performance_policy"))
+		if err := fv(ctx, m.GetPerformancePolicy(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["pool"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("pool"))
+		if err := fv(ctx, m.GetPool(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["protection_template"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("protection_template"))
+		if err := fv(ctx, m.GetProtectionTemplate(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["secret_name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("secret_name"))
+		if err := fv(ctx, m.GetSecretName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["secret_namespace"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("secret_namespace"))
+		if err := fv(ctx, m.GetSecretNamespace(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["sync_on_detach"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("sync_on_detach"))
+		if err := fv(ctx, m.GetSyncOnDetach(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["thick"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("thick"))
+		if err := fv(ctx, m.GetThick(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultStorageClassHpeStorageTypeValidator = func() *ValidateStorageClassHpeStorageType {
+	v := &ValidateStorageClassHpeStorageType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhSecretName := v.SecretNameValidationRuleHandler
+	rulesSecretName := map[string]string{
+		"ves.io.schema.rules.string.max_len": "256",
+	}
+	vFn, err = vrhSecretName(rulesSecretName)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for StorageClassHpeStorageType.secret_name: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["secret_name"] = vFn
+
+	vrhDescription := v.DescriptionValidationRuleHandler
+	rulesDescription := map[string]string{
+		"ves.io.schema.rules.string.max_len": "512",
+	}
+	vFn, err = vrhDescription(rulesDescription)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for StorageClassHpeStorageType.description: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["description"] = vFn
+
+	vrhSecretNamespace := v.SecretNamespaceValidationRuleHandler
+	rulesSecretNamespace := map[string]string{
+		"ves.io.schema.rules.string.max_len": "256",
+	}
+	vFn, err = vrhSecretNamespace(rulesSecretNamespace)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for StorageClassHpeStorageType.secret_namespace: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["secret_namespace"] = vFn
+
+	vrhPerformancePolicy := v.PerformancePolicyValidationRuleHandler
+	rulesPerformancePolicy := map[string]string{
+		"ves.io.schema.rules.string.max_len": "128",
+	}
+	vFn, err = vrhPerformancePolicy(rulesPerformancePolicy)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for StorageClassHpeStorageType.performance_policy: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["performance_policy"] = vFn
+
+	vrhProtectionTemplate := v.ProtectionTemplateValidationRuleHandler
+	rulesProtectionTemplate := map[string]string{
+		"ves.io.schema.rules.string.max_len": "128",
+	}
+	vFn, err = vrhProtectionTemplate(rulesProtectionTemplate)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for StorageClassHpeStorageType.protection_template: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["protection_template"] = vFn
+
+	vrhFolder := v.FolderValidationRuleHandler
+	rulesFolder := map[string]string{
+		"ves.io.schema.rules.string.max_len": "128",
+	}
+	vFn, err = vrhFolder(rulesFolder)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for StorageClassHpeStorageType.folder: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["folder"] = vFn
+
+	vrhPool := v.PoolValidationRuleHandler
+	rulesPool := map[string]string{
+		"ves.io.schema.rules.string.max_len": "128",
+	}
+	vFn, err = vrhPool(rulesPool)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for StorageClassHpeStorageType.pool: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["pool"] = vFn
+
+	vrhAllowOverrides := v.AllowOverridesValidationRuleHandler
+	rulesAllowOverrides := map[string]string{
+		"ves.io.schema.rules.string.max_len": "256",
+	}
+	vFn, err = vrhAllowOverrides(rulesAllowOverrides)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for StorageClassHpeStorageType.allow_overrides: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["allow_overrides"] = vFn
+
+	vrhAllowMutations := v.AllowMutationsValidationRuleHandler
+	rulesAllowMutations := map[string]string{
+		"ves.io.schema.rules.string.max_len": "256",
+	}
+	vFn, err = vrhAllowMutations(rulesAllowMutations)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for StorageClassHpeStorageType.allow_mutations: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["allow_mutations"] = vFn
+
+	return v
+}()
+
+func StorageClassHpeStorageTypeValidator() db.Validator {
+	return DefaultStorageClassHpeStorageTypeValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -14884,6 +15366,339 @@ var DefaultStorageDeviceHPENimbusStorageAf40TypeValidator = func() *ValidateStor
 
 func StorageDeviceHPENimbusStorageAf40TypeValidator() db.Validator {
 	return DefaultStorageDeviceHPENimbusStorageAf40TypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *StorageDeviceHpeStorageType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *StorageDeviceHpeStorageType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+// Redact squashes sensitive info in m (in-place)
+func (m *StorageDeviceHpeStorageType) Redact(ctx context.Context) error {
+	// clear fields with confidential option set (at message or field level)
+	if m == nil {
+		return nil
+	}
+
+	if err := m.GetPassword().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting StorageDeviceHpeStorageType.password")
+	}
+
+	if err := m.GetIscsiChapPassword().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting StorageDeviceHpeStorageType.iscsi_chap_password")
+	}
+
+	return nil
+}
+
+func (m *StorageDeviceHpeStorageType) DeepCopy() *StorageDeviceHpeStorageType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &StorageDeviceHpeStorageType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *StorageDeviceHpeStorageType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *StorageDeviceHpeStorageType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return StorageDeviceHpeStorageTypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateStorageDeviceHpeStorageType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateStorageDeviceHpeStorageType) StorageServerNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for storage_server_name")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateStorageDeviceHpeStorageType) StorageServerIpAddressValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for storage_server_ip_address")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateStorageDeviceHpeStorageType) ApiServerPortValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for api_server_port")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateStorageDeviceHpeStorageType) UsernameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for username")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateStorageDeviceHpeStorageType) CsiVersionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for csi_version")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateStorageDeviceHpeStorageType) IscsiChapUserValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for iscsi_chap_user")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateStorageDeviceHpeStorageType) LogLevelValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for log_level")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateStorageDeviceHpeStorageType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*StorageDeviceHpeStorageType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *StorageDeviceHpeStorageType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["api_server_port"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("api_server_port"))
+		if err := fv(ctx, m.GetApiServerPort(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["csi_version"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("csi_version"))
+		if err := fv(ctx, m.GetCsiVersion(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["iscsi_chap_password"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("iscsi_chap_password"))
+		if err := fv(ctx, m.GetIscsiChapPassword(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["iscsi_chap_user"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("iscsi_chap_user"))
+		if err := fv(ctx, m.GetIscsiChapUser(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["log_level"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("log_level"))
+		if err := fv(ctx, m.GetLogLevel(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["password"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("password"))
+		if err := fv(ctx, m.GetPassword(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["storage_server_ip_address"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("storage_server_ip_address"))
+		if err := fv(ctx, m.GetStorageServerIpAddress(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["storage_server_name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("storage_server_name"))
+		if err := fv(ctx, m.GetStorageServerName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["username"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("username"))
+		if err := fv(ctx, m.GetUsername(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultStorageDeviceHpeStorageTypeValidator = func() *ValidateStorageDeviceHpeStorageType {
+	v := &ValidateStorageDeviceHpeStorageType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhStorageServerName := v.StorageServerNameValidationRuleHandler
+	rulesStorageServerName := map[string]string{
+		"ves.io.schema.rules.string.hostname": "true",
+	}
+	vFn, err = vrhStorageServerName(rulesStorageServerName)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for StorageDeviceHpeStorageType.storage_server_name: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["storage_server_name"] = vFn
+
+	vrhStorageServerIpAddress := v.StorageServerIpAddressValidationRuleHandler
+	rulesStorageServerIpAddress := map[string]string{
+		"ves.io.schema.rules.string.ipv4": "true",
+	}
+	vFn, err = vrhStorageServerIpAddress(rulesStorageServerIpAddress)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for StorageDeviceHpeStorageType.storage_server_ip_address: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["storage_server_ip_address"] = vFn
+
+	vrhApiServerPort := v.ApiServerPortValidationRuleHandler
+	rulesApiServerPort := map[string]string{
+		"ves.io.schema.rules.uint32.gte": "1",
+		"ves.io.schema.rules.uint32.lte": "65535",
+	}
+	vFn, err = vrhApiServerPort(rulesApiServerPort)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for StorageDeviceHpeStorageType.api_server_port: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["api_server_port"] = vFn
+
+	vrhUsername := v.UsernameValidationRuleHandler
+	rulesUsername := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.max_len":   "256",
+		"ves.io.schema.rules.string.min_len":   "1",
+	}
+	vFn, err = vrhUsername(rulesUsername)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for StorageDeviceHpeStorageType.username: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["username"] = vFn
+
+	vrhCsiVersion := v.CsiVersionValidationRuleHandler
+	rulesCsiVersion := map[string]string{
+		"ves.io.schema.rules.string.max_len": "50",
+		"ves.io.schema.rules.string.min_len": "1",
+	}
+	vFn, err = vrhCsiVersion(rulesCsiVersion)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for StorageDeviceHpeStorageType.csi_version: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["csi_version"] = vFn
+
+	vrhIscsiChapUser := v.IscsiChapUserValidationRuleHandler
+	rulesIscsiChapUser := map[string]string{
+		"ves.io.schema.rules.string.max_len": "256",
+		"ves.io.schema.rules.string.min_len": "1",
+	}
+	vFn, err = vrhIscsiChapUser(rulesIscsiChapUser)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for StorageDeviceHpeStorageType.iscsi_chap_user: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["iscsi_chap_user"] = vFn
+
+	vrhLogLevel := v.LogLevelValidationRuleHandler
+	rulesLogLevel := map[string]string{
+		"ves.io.schema.rules.string.max_len": "256",
+		"ves.io.schema.rules.string.min_len": "1",
+	}
+	vFn, err = vrhLogLevel(rulesLogLevel)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for StorageDeviceHpeStorageType.log_level: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["log_level"] = vFn
+
+	v.FldValidators["password"] = ves_io_schema.SecretTypeValidator().Validate
+
+	v.FldValidators["iscsi_chap_password"] = ves_io_schema.SecretTypeValidator().Validate
+
+	return v
+}()
+
+func StorageDeviceHpeStorageTypeValidator() db.Validator {
+	return DefaultStorageDeviceHpeStorageTypeValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -17380,6 +18195,7 @@ func (m *CreateSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool
 	m.NetworkFirewall = f.GetNetworkFirewall()
 	m.OperatingSystemVersion = f.GetOperatingSystemVersion()
 	m.OutsideVirtualNetwork = f.GetOutsideVirtualNetwork()
+	m.PerformanceEnhancementMode = f.GetPerformanceEnhancementMode()
 	m.GetStorageClassChoiceFromGlobalSpecType(f)
 	m.GetStorageDeviceChoiceFromGlobalSpecType(f)
 	m.GetStorageInterfaceChoiceFromGlobalSpecType(f)
@@ -17417,6 +18233,7 @@ func (m *CreateSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) 
 	f.NetworkFirewall = m1.NetworkFirewall
 	f.OperatingSystemVersion = m1.OperatingSystemVersion
 	f.OutsideVirtualNetwork = m1.OutsideVirtualNetwork
+	f.PerformanceEnhancementMode = m1.PerformanceEnhancementMode
 	m1.SetStorageClassChoiceToGlobalSpecType(f)
 	m1.SetStorageDeviceChoiceToGlobalSpecType(f)
 	m1.SetStorageInterfaceChoiceToGlobalSpecType(f)
@@ -17819,6 +18636,7 @@ func (m *GetSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	m.NetworkFirewall = f.GetNetworkFirewall()
 	m.OperatingSystemVersion = f.GetOperatingSystemVersion()
 	m.OutsideVirtualNetwork = f.GetOutsideVirtualNetwork()
+	m.PerformanceEnhancementMode = f.GetPerformanceEnhancementMode()
 	m.GetStorageClassChoiceFromGlobalSpecType(f)
 	m.GetStorageDeviceChoiceFromGlobalSpecType(f)
 	m.GetStorageInterfaceChoiceFromGlobalSpecType(f)
@@ -17856,6 +18674,7 @@ func (m *GetSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	f.NetworkFirewall = m1.NetworkFirewall
 	f.OperatingSystemVersion = m1.OperatingSystemVersion
 	f.OutsideVirtualNetwork = m1.OutsideVirtualNetwork
+	f.PerformanceEnhancementMode = m1.PerformanceEnhancementMode
 	m1.SetStorageClassChoiceToGlobalSpecType(f)
 	m1.SetStorageDeviceChoiceToGlobalSpecType(f)
 	m1.SetStorageInterfaceChoiceToGlobalSpecType(f)
@@ -18257,6 +19076,7 @@ func (m *ReplaceSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy boo
 	m.NetworkFirewall = f.GetNetworkFirewall()
 	m.OperatingSystemVersion = f.GetOperatingSystemVersion()
 	m.OutsideVirtualNetwork = f.GetOutsideVirtualNetwork()
+	m.PerformanceEnhancementMode = f.GetPerformanceEnhancementMode()
 	m.GetStorageClassChoiceFromGlobalSpecType(f)
 	m.GetStorageDeviceChoiceFromGlobalSpecType(f)
 	m.GetStorageInterfaceChoiceFromGlobalSpecType(f)
@@ -18293,6 +19113,7 @@ func (m *ReplaceSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool)
 	f.NetworkFirewall = m1.NetworkFirewall
 	f.OperatingSystemVersion = m1.OperatingSystemVersion
 	f.OutsideVirtualNetwork = m1.OutsideVirtualNetwork
+	f.PerformanceEnhancementMode = m1.PerformanceEnhancementMode
 	m1.SetStorageClassChoiceToGlobalSpecType(f)
 	m1.SetStorageDeviceChoiceToGlobalSpecType(f)
 	m1.SetStorageInterfaceChoiceToGlobalSpecType(f)

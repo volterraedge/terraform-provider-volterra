@@ -612,7 +612,9 @@ var DefaultApiOperationValidator = func() *ValidateApiOperation {
 
 	vrhMethod := v.MethodValidationRuleHandler
 	rulesMethod := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.enum.defined_only": "true",
+		"ves.io.schema.rules.enum.not_in":       "0",
+		"ves.io.schema.rules.message.required":  "true",
 	}
 	vFn, err = vrhMethod(rulesMethod)
 	if err != nil {
@@ -623,10 +625,10 @@ var DefaultApiOperationValidator = func() *ValidateApiOperation {
 
 	vrhPath := v.PathValidationRuleHandler
 	rulesPath := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
-		"ves.io.schema.rules.string.max_bytes": "1024",
-		"ves.io.schema.rules.string.min_bytes": "1",
-		"ves.io.schema.rules.string.pattern":   "^/[\\w/{}\\-._~%!$&'()*+,;=:]*$",
+		"ves.io.schema.rules.message.required":           "true",
+		"ves.io.schema.rules.string.max_bytes":           "1024",
+		"ves.io.schema.rules.string.min_bytes":           "1",
+		"ves.io.schema.rules.string.templated_http_path": "true",
 	}
 	vFn, err = vrhPath(rulesPath)
 	if err != nil {

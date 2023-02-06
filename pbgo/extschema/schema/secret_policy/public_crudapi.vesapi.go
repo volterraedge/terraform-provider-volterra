@@ -2185,6 +2185,123 @@ var APISwaggerJSON string = `{
         }
     },
     "definitions": {
+        "ioschemaObjectRefType": {
+            "type": "object",
+            "description": "This type establishes a 'direct reference' from one object(the referrer) to another(the referred).\nSuch a reference is in form of tenant/namespace/name for public API and Uid for private API\nThis type of reference is called direct because the relation is explicit and concrete (as opposed\nto selector reference which builds a group based on labels of selectee objects)",
+            "title": "ObjectRefType",
+            "x-displayname": "Object reference",
+            "x-ves-proto-message": "ves.io.schema.ObjectRefType",
+            "properties": {
+                "kind": {
+                    "type": "string",
+                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then kind will hold the referred object's kind (e.g. \"route\")\n\nExample: - \"virtual_site\"-",
+                    "title": "kind",
+                    "x-displayname": "Kind",
+                    "x-ves-example": "virtual_site"
+                },
+                "name": {
+                    "type": "string",
+                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then name will hold the referred object's(e.g. route's) name.\n\nExample: - \"contactus-route\"-",
+                    "title": "name",
+                    "x-displayname": "Name",
+                    "x-ves-example": "contactus-route"
+                },
+                "namespace": {
+                    "type": "string",
+                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then namespace will hold the referred object's(e.g. route's) namespace.\n\nExample: - \"ns1\"-",
+                    "title": "namespace",
+                    "x-displayname": "Namespace",
+                    "x-ves-example": "ns1"
+                },
+                "tenant": {
+                    "type": "string",
+                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then tenant will hold the referred object's(e.g. route's) tenant.\n\nExample: - \"acmecorp\"-",
+                    "title": "tenant",
+                    "x-displayname": "Tenant",
+                    "x-ves-example": "acmecorp"
+                },
+                "uid": {
+                    "type": "string",
+                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then uid will hold the referred object's(e.g. route's) uid.\n\nExample: - \"d15f1fad-4d37-48c0-8706-df1824d76d31\"-",
+                    "title": "uid",
+                    "x-displayname": "UID",
+                    "x-ves-example": "d15f1fad-4d37-48c0-8706-df1824d76d31"
+                }
+            }
+        },
+        "policyMatcherType": {
+            "type": "object",
+            "description": "A matcher specifies multiple criteria for matching an input string. The match is considered successful if any of the criteria are satisfied. The set\nof supported match criteria includes a list of exact values and a list of regular expressions.",
+            "title": "MatcherType",
+            "x-displayname": "Matcher",
+            "x-ves-proto-message": "ves.io.schema.policy.MatcherType",
+            "properties": {
+                "exact_values": {
+                    "type": "array",
+                    "description": " A list of exact values to match the input against.\n\nExample: - \"['new york', 'london', 'sydney', 'tokyo', 'cairo']\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.max_bytes: 256\n  ves.io.schema.rules.repeated.items.string.not_empty: true\n  ves.io.schema.rules.repeated.max_items: 64\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "title": "exact values",
+                    "maxItems": 64,
+                    "items": {
+                        "type": "string",
+                        "maxLength": 256
+                    },
+                    "x-displayname": "Exact Values",
+                    "x-ves-example": "['new york', 'london', 'sydney', 'tokyo', 'cairo']",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.items.string.max_bytes": "256",
+                        "ves.io.schema.rules.repeated.items.string.not_empty": "true",
+                        "ves.io.schema.rules.repeated.max_items": "64",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
+                },
+                "regex_values": {
+                    "type": "array",
+                    "description": " A list of regular expressions to match the input against.\n\nExample: - \"['^new .*$', 'san f.*', '.* del .*']\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.max_bytes: 256\n  ves.io.schema.rules.repeated.items.string.not_empty: true\n  ves.io.schema.rules.repeated.items.string.regex: true\n  ves.io.schema.rules.repeated.max_items: 16\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "title": "regex values",
+                    "maxItems": 16,
+                    "items": {
+                        "type": "string",
+                        "maxLength": 256
+                    },
+                    "x-displayname": "Regex Values",
+                    "x-ves-example": "['^new .*$', 'san f.*', '.* del .*']",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.items.string.max_bytes": "256",
+                        "ves.io.schema.rules.repeated.items.string.not_empty": "true",
+                        "ves.io.schema.rules.repeated.items.string.regex": "true",
+                        "ves.io.schema.rules.repeated.max_items": "16",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
+                },
+                "transformers": {
+                    "type": "array",
+                    "description": " An ordered list of transformers (starting from index 0) to be applied to the path before matching.\n\nExample: - \"[BASE64_DECODE, LOWER_CASE]-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 9\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "title": "transformers",
+                    "maxItems": 9,
+                    "items": {
+                        "$ref": "#/definitions/policyTransformer"
+                    },
+                    "x-displayname": "Transformers",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "9",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
+                }
+            }
+        },
+        "policyRuleAction": {
+            "type": "string",
+            "description": "The rule action determines the disposition of the input request API. If a policy matches a rule with an ALLOW action, the processing of the request proceeds\nforward. If it matches a rule with a DENY action, the processing of the request is terminated and an appropriate message/code returned to the originator. If\nit matches a rule with a NEXT_POLICY_SET action, evaluation of the current policy set terminates and evaluation of the next policy set in the chain begins.\n\n - DENY: DENY\n\nDeny the request.\n - ALLOW: ALLOW\n\nAllow the request to proceed.\n - NEXT_POLICY_SET: NEXT_POLICY_SET\n\nTerminate evaluation of the current policy set and begin evaluating the next policy set in the chain. Note that the evaluation of any remaining policies\nin the current policy set is skipped.\n - NEXT_POLICY: NEXT_POLICY\n\nTerminate evaluation of the current policy and begin evaluating the next policy in the policy set. Note that the evaluation of any remaining rules in the\ncurrent policy is skipped.\n - LAST_POLICY: LAST_POLICY\n\nTerminate evaluation of the current policy and begin evaluating the last policy in the policy set. Note that the evaluation of any remaining rules in the\ncurrent policy is skipped.\n - GOTO_POLICY: GOTO_POLICY\n\nTerminate evaluation of the current policy and begin evaluating a specific policy in the policy set. The policy is specified using the goto_policy field in\nthe rule and must be after the current policy in the policy set.",
+            "title": "Rule Action",
+            "enum": [
+                "DENY",
+                "ALLOW",
+                "NEXT_POLICY"
+            ],
+            "default": "DENY",
+            "x-displayname": "Rule Action",
+            "x-ves-proto-enum": "ves.io.schema.policy.RuleAction"
+        },
         "policyRuleCombiningAlgorithm": {
             "type": "string",
             "description": "x-displayName: \"Rule Combining Algorithm\"\nThe rule combining algorithm for a policy determines how the list of rules in the policy is evaluated.\nIf any of the rules is configured with a App Firewall action, the rule combining algorithm must be configured to be FIRST_MATCH.\n\n- FIRST_MATCH Rules are evaluated sequentially till a matching rule is identified\n- ALLOW_OVERRIDES Rules with an ALLOW action are evaluated prior to rules with a DENY action\n- DENY_OVERRIDES Rules with a DENY action are evaluated prior to rules with an ALLOW action\n\n - FIRST_MATCH: First Match\n\nx-displayName: \"First Rule Match\"\nRules are evaluated sequentially till a matching rule is identified\n - DENY_OVERRIDES: Deny Overrides\n\nx-displayName: \"Deny Rule Overrides\"\nRules with a DENY action are evaluated prior to rules with an ALLOW action\n - ALLOW_OVERRIDES: Allow Overrides\n\nx-displayName: \"Allow Rule Overrides\"\nRules with an ALLOW action are evaluated prior to rules with a DENY action",
@@ -2195,6 +2312,25 @@ var APISwaggerJSON string = `{
                 "ALLOW_OVERRIDES"
             ],
             "default": "FIRST_MATCH"
+        },
+        "policyTransformer": {
+            "type": "string",
+            "description": "Transformers to be applied on the part of the request before matching.\n\n - TRANSFORMER_NONE: transformer none\n\nNo transformers enabled\n - LOWER_CASE: lower case\n\nConvert string to lower case\n - UPPER_CASE: upper case\n\nConvert string to upper case\n - BASE64_DECODE: base64 decode\n\nDecode string assuming base64 encoding\n - NORMALIZE_PATH: normalize path\n\nNormalize URL path so that /a/b/../c will be transformed to /a/c\n - REMOVE_WHITESPACE: remove whitespace\n\nRemove whitespaces\n - URL_DECODE: URL decode\n\nDecode string assuming URL encoding as per rfc1738\n - TRIM_LEFT: trim left\n\nRemove whitespace from the left side of the input string\n - TRIM_RIGHT: trim right\n\nRemove whitespace from the right side of the input string\n - TRIM: trim\n\nRemove whitespace from the both sides of the input string",
+            "title": "Transformer",
+            "enum": [
+                "LOWER_CASE",
+                "UPPER_CASE",
+                "BASE64_DECODE",
+                "NORMALIZE_PATH",
+                "REMOVE_WHITESPACE",
+                "URL_DECODE",
+                "TRIM_LEFT",
+                "TRIM_RIGHT",
+                "TRIM"
+            ],
+            "default": "TRANSFORMER_NONE",
+            "x-displayname": "Transformer",
+            "x-ves-proto-enum": "ves.io.schema.policy.Transformer"
         },
         "protobufAny": {
             "type": "object",
@@ -2348,6 +2484,85 @@ var APISwaggerJSON string = `{
                     "title": "result",
                     "$ref": "#/definitions/schemaStatusType",
                     "x-displayname": "Result"
+                }
+            }
+        },
+        "schemaLabelMatcherType": {
+            "type": "object",
+            "description": "x-displayName: \"Label Matcher\"\nA label matcher specifies a list of label keys whose values need to match for\nsource/client and destination/server. Note that the actual label values are not\nspecified and do not matter. This allows an ability to scope grouping by the\nlabel key name.",
+            "title": "LabelMatcherType",
+            "properties": {
+                "keys": {
+                    "type": "array",
+                    "description": "x-displayName: \"Keys\"\nx-example: \"['environment', 'location', 'deployment']\"\nThe list of label key names that have to match",
+                    "title": "keys",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "schemaLabelSelectorType": {
+            "type": "object",
+            "description": "This type can be used to establish a 'selector reference' from one object(called selector) to\na set of other objects(called selectees) based on the value of expresssions.\nA label selector is a label query over a set of resources. An empty label selector matches all objects.\nA null label selector matches no objects. Label selector is immutable.\nexpressions is a list of strings of label selection expression.\nEach string has \",\" separated values which are \"AND\" and all strings are logically \"OR\".\nBNF for expression string\n\u003cselector-syntax\u003e         ::= \u003crequirement\u003e | \u003crequirement\u003e \",\" \u003cselector-syntax\u003e\n\u003crequirement\u003e             ::= [!] KEY [ \u003cset-based-restriction\u003e | \u003cexact-match-restriction\u003e ]\n\u003cset-based-restriction\u003e   ::= \"\" | \u003cinclusion-exclusion\u003e \u003cvalue-set\u003e\n\u003cinclusion-exclusion\u003e     ::= \u003cinclusion\u003e | \u003cexclusion\u003e\n\u003cexclusion\u003e               ::= \"notin\"\n\u003cinclusion\u003e               ::= \"in\"\n\u003cvalue-set\u003e               ::= \"(\" \u003cvalues\u003e \")\"\n\u003cvalues\u003e                  ::= VALUE | VALUE \",\" \u003cvalues\u003e\n\u003cexact-match-restriction\u003e ::= [\"=\"|\"==\"|\"!=\"] VALUE",
+            "title": "LabelSelectorType",
+            "x-displayname": "Label Selector",
+            "x-ves-proto-message": "ves.io.schema.LabelSelectorType",
+            "properties": {
+                "expressions": {
+                    "type": "array",
+                    "description": " expressions contains the kubernetes style label expression for selections.\n\nExample: - \"region in (us-west1, us-west2),tier in (staging)\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.items.string.k8s_label_selector: true\n  ves.io.schema.rules.repeated.items.string.max_len: 4096\n  ves.io.schema.rules.repeated.items.string.min_len: 1\n  ves.io.schema.rules.repeated.max_items: 1\n",
+                    "title": "expressions",
+                    "maxItems": 1,
+                    "items": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 4096
+                    },
+                    "x-displayname": "Selector Expression",
+                    "x-ves-example": "region in (us-west1, us-west2),tier in (staging)",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.items.string.k8s_label_selector": "true",
+                        "ves.io.schema.rules.repeated.items.string.max_len": "4096",
+                        "ves.io.schema.rules.repeated.items.string.min_len": "1",
+                        "ves.io.schema.rules.repeated.max_items": "1"
+                    }
+                }
+            }
+        },
+        "schemaMessageMetaType": {
+            "type": "object",
+            "description": "MessageMetaType is metadata (common attributes) of a message that only certain messages\nhave. This information is propagated to the metadata of a child object that gets created\nfrom the containing message during view processing.\nThe information in this type can be specified by user during create and replace APIs.",
+            "title": "MessageMetaType",
+            "x-displayname": "Message Metadata",
+            "x-ves-proto-message": "ves.io.schema.MessageMetaType",
+            "properties": {
+                "description": {
+                    "type": "string",
+                    "description": " Human readable description.\n\nExample: - \"Virtual Host for acmecorp website\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 256\n",
+                    "title": "description",
+                    "maxLength": 256,
+                    "x-displayname": "Description",
+                    "x-ves-example": "Virtual Host for acmecorp website",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "256"
+                    }
+                },
+                "name": {
+                    "type": "string",
+                    "description": " This is the name of the message.\n The value of name has to follow DNS-1035 format.\n\nExample: - \"acmecorp-web\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.min_len: 1\n  ves.io.schema.rules.string.ves_object_name: true\n",
+                    "title": "name",
+                    "minLength": 1,
+                    "x-displayname": "Name",
+                    "x-ves-example": "acmecorp-web",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.min_len": "1",
+                        "ves.io.schema.rules.string.ves_object_name": "true"
+                    }
                 }
             }
         },
@@ -2535,50 +2750,6 @@ var APISwaggerJSON string = `{
                 "uid": {
                     "type": "string",
                     "description": " uid is the unique in time and space value for this object. Object create will fail if\n provided by the client and the value exists in the system. Typically generated by the\n server on successful creation of an object and is not allowed to change once populated.\n Shadowed by SystemObjectMeta's uid field.\n\nExample: - \"d15f1fad-4d37-48c0-8706-df1824d76d31\"-",
-                    "title": "uid",
-                    "x-displayname": "UID",
-                    "x-ves-example": "d15f1fad-4d37-48c0-8706-df1824d76d31"
-                }
-            }
-        },
-        "schemaObjectRefType": {
-            "type": "object",
-            "description": "This type establishes a 'direct reference' from one object(the referrer) to another(the referred).\nSuch a reference is in form of tenant/namespace/name for public API and Uid for private API\nThis type of reference is called direct because the relation is explicit and concrete (as opposed\nto selector reference which builds a group based on labels of selectee objects)",
-            "title": "ObjectRefType",
-            "x-displayname": "Object reference",
-            "x-ves-proto-message": "ves.io.schema.ObjectRefType",
-            "properties": {
-                "kind": {
-                    "type": "string",
-                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then kind will hold the referred object's kind (e.g. \"route\")\n\nExample: - \"virtual_site\"-",
-                    "title": "kind",
-                    "x-displayname": "Kind",
-                    "x-ves-example": "virtual_site"
-                },
-                "name": {
-                    "type": "string",
-                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then name will hold the referred object's(e.g. route's) name.\n\nExample: - \"contactus-route\"-",
-                    "title": "name",
-                    "x-displayname": "Name",
-                    "x-ves-example": "contactus-route"
-                },
-                "namespace": {
-                    "type": "string",
-                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then namespace will hold the referred object's(e.g. route's) namespace.\n\nExample: - \"ns1\"-",
-                    "title": "namespace",
-                    "x-displayname": "Namespace",
-                    "x-ves-example": "ns1"
-                },
-                "tenant": {
-                    "type": "string",
-                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then tenant will hold the referred object's(e.g. route's) tenant.\n\nExample: - \"acmecorp\"-",
-                    "title": "tenant",
-                    "x-displayname": "Tenant",
-                    "x-ves-example": "acmecorp"
-                },
-                "uid": {
-                    "type": "string",
-                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then uid will hold the referred object's(e.g. route's) uid.\n\nExample: - \"d15f1fad-4d37-48c0-8706-df1824d76d31\"-",
                     "title": "uid",
                     "x-displayname": "UID",
                     "x-ves-example": "d15f1fad-4d37-48c0-8706-df1824d76d31"
@@ -2923,7 +3094,7 @@ var APISwaggerJSON string = `{
                     "title": "namespace",
                     "maxItems": 1,
                     "items": {
-                        "$ref": "#/definitions/schemaObjectRefType"
+                        "$ref": "#/definitions/ioschemaObjectRefType"
                     },
                     "x-displayname": "Namespace Reference",
                     "x-ves-validation-rules": {
@@ -3030,13 +3201,14 @@ var APISwaggerJSON string = `{
             "description": "Create secret_policy creates a new object in the storage backend for metadata.namespace.",
             "title": "Create Secret Policy",
             "x-displayname": "Create Secret Policy",
+            "x-ves-oneof-field-rule_choice": "[\"rule_list\"]",
             "x-ves-proto-message": "ves.io.schema.secret_policy.CreateSpecType",
             "properties": {
-                "allow_volterra": {
+                "allow_f5xc": {
                     "type": "boolean",
-                    "description": " if allow_volterra is set to true, it allows relevant volterra infrastructure services to decrypt the secret encrypted using this policy.\n\nExample: - \"true\"-",
+                    "description": " if allow_f5xc is set to true, it allows relevant F5XC infrastructure services to decrypt the secret encrypted using this policy.\n\nExample: - \"true\"-",
                     "format": "boolean",
-                    "x-displayname": "Allow Volterra",
+                    "x-displayname": "Allow F5XC",
                     "x-ves-example": "true"
                 },
                 "decrypt_cache_timeout": {
@@ -3045,17 +3217,10 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Decrypt Cache Timeout",
                     "x-ves-example": "6h"
                 },
-                "rules": {
-                    "type": "array",
-                    "description": " A list of references to secret_policy_rule objects.\n The order of evaluation of the rules depends on the rule combining algorithm.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 256\n",
-                    "maxItems": 256,
-                    "items": {
-                        "$ref": "#/definitions/schemaObjectRefType"
-                    },
-                    "x-displayname": "Secret Policy Rules",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.repeated.max_items": "256"
-                    }
+                "rule_list": {
+                    "description": "Exclusive with []\n",
+                    "$ref": "#/definitions/secret_policyRuleList",
+                    "x-displayname": "Custom Rule List"
                 }
             }
         },
@@ -3064,13 +3229,14 @@ var APISwaggerJSON string = `{
             "description": "Get secret_policy reads a given object from storage backend for metadata.namespace.",
             "title": "Get Secret Policy",
             "x-displayname": "Get Secret Policy",
+            "x-ves-oneof-field-rule_choice": "[\"legacy_rule_list\",\"rule_list\"]",
             "x-ves-proto-message": "ves.io.schema.secret_policy.GetSpecType",
             "properties": {
-                "allow_volterra": {
+                "allow_f5xc": {
                     "type": "boolean",
-                    "description": " if allow_volterra is set to true, it allows relevant volterra infrastructure services to decrypt the secret encrypted using this policy.\n\nExample: - \"true\"-",
+                    "description": " if allow_f5xc is set to true, it allows relevant F5XC infrastructure services to decrypt the secret encrypted using this policy.\n\nExample: - \"true\"-",
                     "format": "boolean",
-                    "x-displayname": "Allow Volterra",
+                    "x-displayname": "Allow F5XC",
                     "x-ves-example": "true"
                 },
                 "decrypt_cache_timeout": {
@@ -3086,6 +3252,11 @@ var APISwaggerJSON string = `{
                     "format": "date-time",
                     "x-displayname": "Deletion Time"
                 },
+                "legacy_rule_list": {
+                    "description": "Exclusive with [rule_list]\n",
+                    "$ref": "#/definitions/secret_policyLegacyRuleList",
+                    "x-displayname": "Legacy Rule List"
+                },
                 "marked_for_delete": {
                     "type": "boolean",
                     "description": "marked_for_delete is set when the secret policy object is marked for delete, based on this value\nsecret policy marked for delete will be automatically deleted after deletion_time",
@@ -3093,17 +3264,10 @@ var APISwaggerJSON string = `{
                     "format": "boolean",
                     "x-displayname": "Marked For Delete"
                 },
-                "rules": {
-                    "type": "array",
-                    "description": " A list of references to secret_policy_rule objects.\n The order of evaluation of the rules depends on the rule combining algorithm.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 256\n",
-                    "maxItems": 256,
-                    "items": {
-                        "$ref": "#/definitions/schemaObjectRefType"
-                    },
-                    "x-displayname": "Secret Policy Rules",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.repeated.max_items": "256"
-                    }
+                "rule_list": {
+                    "description": "Exclusive with [legacy_rule_list]\n",
+                    "$ref": "#/definitions/secret_policyRuleList",
+                    "x-displayname": "Custom Rule List"
                 }
             }
         },
@@ -3112,14 +3276,15 @@ var APISwaggerJSON string = `{
             "description": "Shape of secret_policy in the storage backend",
             "title": "GlobalSpecType",
             "x-displayname": "Specification",
+            "x-ves-oneof-field-rule_choice": "[\"legacy_rule_list\",\"rule_list\"]",
             "x-ves-proto-message": "ves.io.schema.secret_policy.GlobalSpecType",
             "properties": {
-                "allow_volterra": {
+                "allow_f5xc": {
                     "type": "boolean",
-                    "description": " if allow_volterra is set to true, it allows relevant volterra infrastructure services to decrypt the secret encrypted using this policy.\n\nExample: - \"true\"-",
+                    "description": " if allow_f5xc is set to true, it allows relevant F5XC infrastructure services to decrypt the secret encrypted using this policy.\n\nExample: - \"true\"-",
                     "title": "Allow Volterra",
                     "format": "boolean",
-                    "x-displayname": "Allow Volterra",
+                    "x-displayname": "Allow F5XC",
                     "x-ves-example": "true"
                 },
                 "decrypt_cache_timeout": {
@@ -3129,18 +3294,17 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Decrypt Cache Timeout",
                     "x-ves-example": "6h"
                 },
-                "rules": {
-                    "type": "array",
-                    "description": " A list of references to secret_policy_rule objects.\n The order of evaluation of the rules depends on the rule combining algorithm.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 256\n",
-                    "title": "Rules",
-                    "maxItems": 256,
-                    "items": {
-                        "$ref": "#/definitions/schemaObjectRefType"
-                    },
-                    "x-displayname": "Secret Policy Rules",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.repeated.max_items": "256"
-                    }
+                "legacy_rule_list": {
+                    "description": "Exclusive with [rule_list]\n",
+                    "title": "legacy_rule_list",
+                    "$ref": "#/definitions/secret_policyLegacyRuleList",
+                    "x-displayname": "Legacy Rule List"
+                },
+                "rule_list": {
+                    "description": "Exclusive with [legacy_rule_list]\n",
+                    "title": "rule_list",
+                    "$ref": "#/definitions/secret_policyRuleList",
+                    "x-displayname": "Custom Rule List"
                 }
             }
         },
@@ -3149,13 +3313,14 @@ var APISwaggerJSON string = `{
             "description": "Replace secret_policy replaces an existing object in the storage backend for metadata.namespace.",
             "title": "Replace Secret Policy",
             "x-displayname": "Replace Secret Policy",
+            "x-ves-oneof-field-rule_choice": "[\"legacy_rule_list\",\"rule_list\"]",
             "x-ves-proto-message": "ves.io.schema.secret_policy.ReplaceSpecType",
             "properties": {
-                "allow_volterra": {
+                "allow_f5xc": {
                     "type": "boolean",
-                    "description": " if allow_volterra is set to true, it allows relevant volterra infrastructure services to decrypt the secret encrypted using this policy.\n\nExample: - \"true\"-",
+                    "description": " if allow_f5xc is set to true, it allows relevant F5XC infrastructure services to decrypt the secret encrypted using this policy.\n\nExample: - \"true\"-",
                     "format": "boolean",
-                    "x-displayname": "Allow Volterra",
+                    "x-displayname": "Allow F5XC",
                     "x-ves-example": "true"
                 },
                 "decrypt_cache_timeout": {
@@ -3164,17 +3329,81 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Decrypt Cache Timeout",
                     "x-ves-example": "6h"
                 },
-                "rules": {
-                    "type": "array",
-                    "description": " A list of references to secret_policy_rule objects.\n The order of evaluation of the rules depends on the rule combining algorithm.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 256\n",
-                    "maxItems": 256,
-                    "items": {
-                        "$ref": "#/definitions/schemaObjectRefType"
-                    },
-                    "x-displayname": "Secret Policy Rules",
+                "legacy_rule_list": {
+                    "description": "Exclusive with [rule_list]\n",
+                    "$ref": "#/definitions/secret_policyLegacyRuleList",
+                    "x-displayname": "Legacy Rule List"
+                },
+                "rule_list": {
+                    "description": "Exclusive with [legacy_rule_list]\n",
+                    "$ref": "#/definitions/secret_policyRuleList",
+                    "x-displayname": "Custom Rule List"
+                }
+            }
+        },
+        "schemasecret_policy_ruleGlobalSpecType": {
+            "type": "object",
+            "description": "A secret_policy_rule object consists of an unordered list of predicates and an action.\nThe predicates are evaluated against a set of input fields that are extracted from client certificate.\nA rule is considered to match if all predicates in the rule evaluate to true for that request.\nAny predicates that are not specified in a rule are implicitly considered to be true.\nIf a rule is matched, the action specified for the rule is enforced for that request.\n\nA secret_policy_rule can be part of exactly one secret_policy and must belong to the same namespace as the secret policy.",
+            "title": "Secret Policy Rule Specifications",
+            "x-displayname": "Global Specifications",
+            "x-ves-oneof-field-client_choice": "[\"client_name\",\"client_name_matcher\",\"client_selector\"]",
+            "x-ves-proto-message": "ves.io.schema.secret_policy_rule.GlobalSpecType",
+            "properties": {
+                "action": {
+                    "description": " Action to be enforced if all the predicates evaluates to true.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.enum.in: [0,1]\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "action",
+                    "$ref": "#/definitions/policyRuleAction",
+                    "x-displayname": "Action",
+                    "x-ves-required": "true",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.repeated.max_items": "256"
+                        "ves.io.schema.rules.enum.in": "[0,1]",
+                        "ves.io.schema.rules.message.required": "true"
                     }
+                },
+                "client_name": {
+                    "type": "string",
+                    "description": "Exclusive with [client_name_matcher client_selector]\n The name of the client trying to access the secret. Name of the client will be extracted from client TLS certificate.\n This predicate evaluates to true if client name matches the configured name\n\nExample: - \"ver.re01.int.ves.io\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 256\n",
+                    "title": "client name",
+                    "maxLength": 256,
+                    "x-displayname": "Client Name",
+                    "x-ves-example": "ver.re01.int.ves.io",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_bytes": "256"
+                    }
+                },
+                "client_name_matcher": {
+                    "description": "Exclusive with [client_name client_selector]\n A list of exact values and/or regular expressions for the expected name of the client. The actual names of the client are extracted from its TLS certificate.\n This is a generalized version of the client name predicate that allows the same rule to be applicable to a set of clients rather than a single client.\n The predicate evaluates to true if any of the client's actual names match any of the exact values or regular expressions in the client name matcher.",
+                    "title": "client name matcher",
+                    "$ref": "#/definitions/policyMatcherType",
+                    "x-displayname": "Group of Clients by Name"
+                },
+                "client_selector": {
+                    "description": "Exclusive with [client_name client_name_matcher]\n A label selector that describes the expected set of clients. The labels associated with the client trying to access the secret are used to evaluate the label\n expressions in the selector. These labels are derived from the client TLS certificate.\n This is a more flexible and powerful version of the client name matcher predicate that allows a given rule to be applicable to a set of clients based on the\n client labels rather than being limited to relying on patterns in the client name.\n The predicate evaluates to true if the expressions in the label selector are true for the client labels.",
+                    "title": "client selector",
+                    "$ref": "#/definitions/schemaLabelSelectorType",
+                    "x-displayname": "Group of Clients by Label Selector"
+                }
+            }
+        },
+        "schemaviewsObjectRefType": {
+            "type": "object",
+            "description": "x-displayName: \"Object reference\"\nThis type establishes a direct reference from one object(the referrer) to another(the referred).\nSuch a reference is in form of tenant/namespace/name",
+            "title": "ObjectRefType",
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "description": "x-displayName: \"Name\"\nx-example: \"contacts-route\"\nx-required\nWhen a configuration object(e.g. virtual_host) refers to another(e.g route)\nthen name will hold the referred object's(e.g. route's) name.",
+                    "title": "name"
+                },
+                "namespace": {
+                    "type": "string",
+                    "description": "x-displayName: \"Namespace\"\nx-example: \"ns1\"\nWhen a configuration object(e.g. virtual_host) refers to another(e.g route)\nthen namespace will hold the referred object's(e.g. route's) namespace.",
+                    "title": "namespace"
+                },
+                "tenant": {
+                    "type": "string",
+                    "description": "x-displayName: \"Tenant\"\nx-example: \"acmecorp\"\nWhen a configuration object(e.g. virtual_host) refers to another(e.g route)\nthen tenant will hold the referred object's(e.g. route's) tenant.",
+                    "title": "tenant"
                 }
             }
         },
@@ -3283,7 +3512,7 @@ var APISwaggerJSON string = `{
                     "description": "The set of objects that are referring to this object in their spec",
                     "title": "referring_objects",
                     "items": {
-                        "$ref": "#/definitions/schemaObjectRefType"
+                        "$ref": "#/definitions/ioschemaObjectRefType"
                     },
                     "x-displayname": "Referring Objects"
                 },
@@ -3329,6 +3558,28 @@ var APISwaggerJSON string = `{
                 "GET_RSP_FORMAT_REFERRING_OBJECTS"
             ],
             "default": "GET_RSP_FORMAT_DEFAULT"
+        },
+        "secret_policyLegacyRuleList": {
+            "type": "object",
+            "description": "A list of references to service_policy_rule objects.\nThe order of evaluation of the rules depends on the rule combining algorithm.",
+            "title": "LegacyRuleList",
+            "x-displayname": "Legacy Rules",
+            "x-ves-proto-message": "ves.io.schema.secret_policy.LegacyRuleList",
+            "properties": {
+                "rules": {
+                    "type": "array",
+                    "description": " A list of references to service_policy_rule objects.\n The order of evaluation of the rules depends on the rule combining algorithm.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 256\n",
+                    "title": "rules",
+                    "maxItems": 256,
+                    "items": {
+                        "$ref": "#/definitions/ioschemaObjectRefType"
+                    },
+                    "x-displayname": "Rules",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "256"
+                    }
+                }
+            }
         },
         "secret_policyListResponse": {
             "type": "object",
@@ -3510,6 +3761,58 @@ var APISwaggerJSON string = `{
             "type": "object",
             "x-ves-proto-message": "ves.io.schema.secret_policy.ReplaceResponse"
         },
+        "secret_policyRule": {
+            "type": "object",
+            "description": "A Rule consists of an unordered list of predicates and an action. The predicates are evaluated against a set of input fields that are extracted from\nor derived from an L7 request API. A request API is considered to match the simple rule if all predicates in the rule evaluate to true for that request. Any\npredicates that are not specified in a rule are implicitly considered to be true. If a request API matches a simple rule, the action for the simple rule is\nenforced.",
+            "title": "rule",
+            "x-displayname": "Rule",
+            "x-ves-proto-message": "ves.io.schema.secret_policy.Rule",
+            "properties": {
+                "metadata": {
+                    "description": " Common attributes for the rule including name and description.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "metadata",
+                    "$ref": "#/definitions/schemaMessageMetaType",
+                    "x-displayname": "Metadata",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                },
+                "spec": {
+                    "description": " Specification for the rule including match predicates and actions.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "spec",
+                    "$ref": "#/definitions/schemasecret_policy_ruleGlobalSpecType",
+                    "x-displayname": "Rule Specification",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                }
+            }
+        },
+        "secret_policyRuleList": {
+            "type": "object",
+            "description": "A list of rules.\nThe order of evaluation of the rules depends on the rule combining algorithm.",
+            "title": "rule list",
+            "x-displayname": "Rule List",
+            "x-ves-proto-message": "ves.io.schema.secret_policy.RuleList",
+            "properties": {
+                "rules": {
+                    "type": "array",
+                    "description": " Define the list of rules (with an order) that should be evaluated by this service policy.\n Rules are evaluated from top to bottom in the list.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 256\n  ves.io.schema.rules.repeated.unique_metadata_name: true\n",
+                    "title": "rules",
+                    "maxItems": 256,
+                    "items": {
+                        "$ref": "#/definitions/secret_policyRule"
+                    },
+                    "x-displayname": "Rules",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "256",
+                        "ves.io.schema.rules.repeated.unique_metadata_name": "true"
+                    }
+                }
+            }
+        },
         "secret_policySpecType": {
             "type": "object",
             "description": "Shape of the secret policy specification",
@@ -3552,7 +3855,7 @@ var APISwaggerJSON string = `{
                     "description": " Object reference",
                     "title": "object_refs",
                     "items": {
-                        "$ref": "#/definitions/schemaObjectRefType"
+                        "$ref": "#/definitions/ioschemaObjectRefType"
                     },
                     "x-displayname": "Config Object"
                 }

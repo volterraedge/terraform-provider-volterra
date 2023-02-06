@@ -3875,6 +3875,163 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "viewsInternetVIPInfo": {
+            "type": "object",
+            "description": "Internet VIP Info",
+            "title": "Internet VIP Info",
+            "x-displayname": "Internet VIP Info",
+            "x-ves-proto-message": "ves.io.schema.views.InternetVIPInfo",
+            "properties": {
+                "site_name": {
+                    "type": "string",
+                    "description": " Site Name where Internet VIP is installed",
+                    "title": "Site Name",
+                    "x-displayname": "Site Name"
+                },
+                "site_network_type": {
+                    "description": " Network Type of the site where Internet VIP is installed",
+                    "title": "Site Network Type",
+                    "$ref": "#/definitions/viewsSiteNetwork",
+                    "x-displayname": "Site Network Type"
+                },
+                "status": {
+                    "description": " Detailed status for internet VIP",
+                    "title": "Internet VIP Status",
+                    "$ref": "#/definitions/viewsInternetVIPStatus",
+                    "x-displayname": "Status"
+                }
+            }
+        },
+        "viewsInternetVIPListenerStatusType": {
+            "type": "object",
+            "x-ves-proto-message": "ves.io.schema.views.InternetVIPListenerStatusType",
+            "properties": {
+                "arn": {
+                    "type": "string",
+                    "description": " Name",
+                    "title": "Name",
+                    "x-displayname": "Name"
+                },
+                "port": {
+                    "type": "integer",
+                    "description": " Port",
+                    "title": "Port",
+                    "format": "int64",
+                    "x-displayname": "Port"
+                },
+                "protocol": {
+                    "type": "string",
+                    "description": " Protocol",
+                    "title": "Protocol",
+                    "x-displayname": "Protocol"
+                },
+                "reason": {
+                    "type": "string",
+                    "description": " Reason",
+                    "title": "Reason",
+                    "x-displayname": "reason"
+                },
+                "status": {
+                    "type": "string",
+                    "description": " Status",
+                    "title": "Status",
+                    "x-displayname": "Status"
+                }
+            }
+        },
+        "viewsInternetVIPStatus": {
+            "type": "object",
+            "description": "CName and installation info",
+            "title": "Internet VIP Status",
+            "x-displayname": "Internet VIP Status",
+            "x-ves-proto-message": "ves.io.schema.views.InternetVIPStatus",
+            "properties": {
+                "arn": {
+                    "type": "string",
+                    "description": " ARN",
+                    "title": "ARN",
+                    "x-displayname": "ARN"
+                },
+                "name": {
+                    "type": "string",
+                    "description": " Name",
+                    "title": "Name",
+                    "x-displayname": "Name"
+                },
+                "nlb_cname": {
+                    "type": "string",
+                    "description": " NLB CNAME",
+                    "title": "NLB CNAME",
+                    "x-displayname": "NLB CNAME"
+                },
+                "nlb_status": {
+                    "type": "string",
+                    "description": " NLB Status",
+                    "title": "NLB Status",
+                    "x-displayname": "NLB Status"
+                },
+                "reason": {
+                    "type": "string",
+                    "description": " Reason",
+                    "title": "Reason",
+                    "x-displayname": "reason"
+                },
+                "target_group_status": {
+                    "type": "array",
+                    "description": " Target Group Status",
+                    "title": "Target Group Status",
+                    "items": {
+                        "$ref": "#/definitions/viewsInternetVIPTargetGroupStatusType"
+                    },
+                    "x-displayname": "Target Group Status"
+                }
+            }
+        },
+        "viewsInternetVIPTargetGroupStatusType": {
+            "type": "object",
+            "x-ves-proto-message": "ves.io.schema.views.InternetVIPTargetGroupStatusType",
+            "properties": {
+                "arn": {
+                    "type": "string",
+                    "description": " ARN",
+                    "title": "ARN",
+                    "x-displayname": "ARN"
+                },
+                "listener_status": {
+                    "type": "array",
+                    "description": " Listener status",
+                    "title": "Listener status",
+                    "items": {
+                        "$ref": "#/definitions/viewsInternetVIPListenerStatusType"
+                    },
+                    "x-displayname": "Listener status"
+                },
+                "name": {
+                    "type": "string",
+                    "description": " Name",
+                    "title": "Name",
+                    "x-displayname": "Name"
+                },
+                "protocol": {
+                    "type": "string",
+                    "description": " Protocol",
+                    "title": "Protocol",
+                    "x-displayname": "Protocol"
+                },
+                "reason": {
+                    "type": "string",
+                    "description": " Reason",
+                    "title": "Reason",
+                    "x-displayname": "reason"
+                },
+                "status": {
+                    "type": "string",
+                    "description": " Status",
+                    "title": "Status",
+                    "x-displayname": "Status"
+                }
+            }
+        },
         "viewsOriginPoolWithWeight": {
             "type": "object",
             "description": "This defines a combination of origin pool with weight and priority",
@@ -4427,6 +4584,14 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.uint32.lte": "4147200000"
                     }
                 },
+                "internet_vip_info": {
+                    "type": "array",
+                    "description": " Internet VIP Info ",
+                    "items": {
+                        "$ref": "#/definitions/viewsInternetVIPInfo"
+                    },
+                    "x-displayname": "Internet VIP Info"
+                },
                 "listen_port": {
                     "type": "integer",
                     "description": " Listen Port for this load balancer\n\nExample: - \"0\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 65535\n",
@@ -4609,6 +4774,15 @@ var APISwaggerJSON string = `{
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.uint32.lte": "4147200000"
                     }
+                },
+                "internet_vip_info": {
+                    "type": "array",
+                    "description": " Internet VIP Info ",
+                    "title": "Internet VIP Info",
+                    "items": {
+                        "$ref": "#/definitions/viewsInternetVIPInfo"
+                    },
+                    "x-displayname": "Internet VIP Info"
                 },
                 "listen_port": {
                     "type": "integer",

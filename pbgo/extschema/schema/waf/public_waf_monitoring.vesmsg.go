@@ -24,6 +24,102 @@ var (
 
 // augmented methods on protoc/std generated struct
 
+func (m *MetricLabelFilter) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *MetricLabelFilter) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *MetricLabelFilter) DeepCopy() *MetricLabelFilter {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &MetricLabelFilter{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *MetricLabelFilter) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *MetricLabelFilter) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return MetricLabelFilterValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateMetricLabelFilter struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateMetricLabelFilter) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*MetricLabelFilter)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *MetricLabelFilter got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["label"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("label"))
+		if err := fv(ctx, m.GetLabel(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["op"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("op"))
+		if err := fv(ctx, m.GetOp(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["value"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("value"))
+		if err := fv(ctx, m.GetValue(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultMetricLabelFilterValidator = func() *ValidateMetricLabelFilter {
+	v := &ValidateMetricLabelFilter{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func MetricLabelFilterValidator() db.Validator {
+	return DefaultMetricLabelFilterValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *RuleHitsCountRequest) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -335,6 +431,273 @@ func RuleHitsCountResponseValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *RuleHitsCounter) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *RuleHitsCounter) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *RuleHitsCounter) DeepCopy() *RuleHitsCounter {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &RuleHitsCounter{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *RuleHitsCounter) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *RuleHitsCounter) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return RuleHitsCounterValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateRuleHitsCounter struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateRuleHitsCounter) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*RuleHitsCounter)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *RuleHitsCounter got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["id"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("id"))
+		if err := fv(ctx, m.GetId(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["metric"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("metric"))
+		for idx, item := range m.GetMetric() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultRuleHitsCounterValidator = func() *ValidateRuleHitsCounter {
+	v := &ValidateRuleHitsCounter{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func RuleHitsCounterValidator() db.Validator {
+	return DefaultRuleHitsCounterValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *RuleHitsId) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *RuleHitsId) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *RuleHitsId) DeepCopy() *RuleHitsId {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &RuleHitsId{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *RuleHitsId) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *RuleHitsId) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return RuleHitsIdValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateRuleHitsId struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateRuleHitsId) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*RuleHitsId)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *RuleHitsId got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["app_type"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("app_type"))
+		if err := fv(ctx, m.GetAppType(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["bot_name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("bot_name"))
+		if err := fv(ctx, m.GetBotName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["bot_type"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("bot_type"))
+		if err := fv(ctx, m.GetBotType(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["instance"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("instance"))
+		if err := fv(ctx, m.GetInstance(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["namespace"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("namespace"))
+		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["rule_id"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("rule_id"))
+		if err := fv(ctx, m.GetRuleId(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["rule_severity"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("rule_severity"))
+		if err := fv(ctx, m.GetRuleSeverity(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["rule_tag"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("rule_tag"))
+		if err := fv(ctx, m.GetRuleTag(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["service"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("service"))
+		if err := fv(ctx, m.GetService(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["site"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("site"))
+		if err := fv(ctx, m.GetSite(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["virtual_host"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("virtual_host"))
+		if err := fv(ctx, m.GetVirtualHost(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["waf_instance_id"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("waf_instance_id"))
+		if err := fv(ctx, m.GetWafInstanceId(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultRuleHitsIdValidator = func() *ValidateRuleHitsId {
+	v := &ValidateRuleHitsId{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func RuleHitsIdValidator() db.Validator {
+	return DefaultRuleHitsIdValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *SecurityEventsCountRequest) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -642,4 +1005,253 @@ var DefaultSecurityEventsCountResponseValidator = func() *ValidateSecurityEvents
 
 func SecurityEventsCountResponseValidator() db.Validator {
 	return DefaultSecurityEventsCountResponseValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *SecurityEventsCounter) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *SecurityEventsCounter) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *SecurityEventsCounter) DeepCopy() *SecurityEventsCounter {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &SecurityEventsCounter{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *SecurityEventsCounter) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *SecurityEventsCounter) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return SecurityEventsCounterValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateSecurityEventsCounter struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateSecurityEventsCounter) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*SecurityEventsCounter)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *SecurityEventsCounter got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["id"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("id"))
+		if err := fv(ctx, m.GetId(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["metric"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("metric"))
+		for idx, item := range m.GetMetric() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultSecurityEventsCounterValidator = func() *ValidateSecurityEventsCounter {
+	v := &ValidateSecurityEventsCounter{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func SecurityEventsCounterValidator() db.Validator {
+	return DefaultSecurityEventsCounterValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *SecurityEventsId) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *SecurityEventsId) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *SecurityEventsId) DeepCopy() *SecurityEventsId {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &SecurityEventsId{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *SecurityEventsId) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *SecurityEventsId) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return SecurityEventsIdValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateSecurityEventsId struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateSecurityEventsId) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*SecurityEventsId)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *SecurityEventsId got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["app_type"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("app_type"))
+		if err := fv(ctx, m.GetAppType(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["bot_name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("bot_name"))
+		if err := fv(ctx, m.GetBotName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["bot_type"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("bot_type"))
+		if err := fv(ctx, m.GetBotType(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["instance"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("instance"))
+		if err := fv(ctx, m.GetInstance(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["namespace"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("namespace"))
+		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["service"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("service"))
+		if err := fv(ctx, m.GetService(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["site"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("site"))
+		if err := fv(ctx, m.GetSite(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["virtual_host"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("virtual_host"))
+		if err := fv(ctx, m.GetVirtualHost(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["waf_instance_id"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("waf_instance_id"))
+		if err := fv(ctx, m.GetWafInstanceId(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["waf_mode"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("waf_mode"))
+		if err := fv(ctx, m.GetWafMode(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultSecurityEventsIdValidator = func() *ValidateSecurityEventsId {
+	v := &ValidateSecurityEventsId{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func SecurityEventsIdValidator() db.Validator {
+	return DefaultSecurityEventsIdValidator
 }

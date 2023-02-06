@@ -3005,20 +3005,21 @@ var APISwaggerJSON string = `{
             "type": "object",
             "description": "A list of references to the app_firewall configuration objects",
             "title": "AppFirewallRefType",
-            "x-displayname": "WAF Rules Reference",
+            "x-displayname": "App Firewall Reference",
             "x-ves-proto-message": "ves.io.schema.AppFirewallRefType",
             "properties": {
                 "app_firewall": {
                     "type": "array",
-                    "description": " References to an Application Firewall configuration object\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 1\n",
+                    "description": " References to an Application Firewall configuration object\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.num_items: 1\n",
                     "title": "app_firewall",
-                    "maxItems": 1,
                     "items": {
                         "$ref": "#/definitions/ioschemaObjectRefType"
                     },
                     "x-displayname": "Application Firewall",
+                    "x-ves-required": "true",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.repeated.max_items": "1"
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.num_items": "1"
                     }
                 }
             }
@@ -3175,21 +3176,21 @@ var APISwaggerJSON string = `{
         },
         "schemaCookieManipulationOptionType": {
             "type": "object",
-            "description": "x-displayName: \"Cookie Manipulation Option\"\nCookie manipulation option.",
+            "description": "x-displayName: \"Cookie Protection\"\nSet Cookie protection attributes.",
             "title": "CookieManipulationOptionType",
             "properties": {
                 "add_httponly": {
-                    "description": "x-displayName: \"Add HttpOnly\"\nAdd httponly attribute",
+                    "description": "x-displayName: \"Add\"",
                     "title": "add_httponly",
                     "$ref": "#/definitions/schemaEmpty"
                 },
                 "add_secure": {
-                    "description": "x-displayName: \"Add Secure\"\nAdd secure attribute",
+                    "description": "x-displayName: \"Add\"",
                     "title": "add_secure",
                     "$ref": "#/definitions/schemaEmpty"
                 },
                 "ignore_httponly": {
-                    "description": "x-displayName: \"Ignore HttpOnly\"\nIgnore httponly attribute",
+                    "description": "x-displayName: \"Ignore\"",
                     "title": "ignore_httponly",
                     "$ref": "#/definitions/schemaEmpty"
                 },
@@ -3199,12 +3200,12 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/schemaEmpty"
                 },
                 "ignore_samesite": {
-                    "description": "x-displayName: \"Ignore Samesite\"\nIgnore Samesite attribute",
+                    "description": "x-displayName: \"Ignore\"\nIgnore Samesite attribute",
                     "title": "ignore_samesite",
                     "$ref": "#/definitions/schemaEmpty"
                 },
                 "ignore_secure": {
-                    "description": "x-displayName: \"Ignore Secure\"\nIgnore secure attribute",
+                    "description": "x-displayName: \"Ignore\"",
                     "title": "ignore_secure",
                     "$ref": "#/definitions/schemaEmpty"
                 },
@@ -4410,49 +4411,31 @@ var APISwaggerJSON string = `{
             "x-displayname": "Virtual Network Type",
             "x-ves-proto-enum": "ves.io.schema.VirtualNetworkType"
         },
-        "schemaWafRefType": {
-            "type": "object",
-            "description": "x-displayName: \"WAF Reference\"\nA reference to the WAF configuration object",
-            "title": "WafRefType",
-            "properties": {
-                "waf": {
-                    "type": "array",
-                    "description": "x-displayName: \"WAF\"\nA direct reference to web application firewall configuration object",
-                    "title": "waf",
-                    "items": {
-                        "$ref": "#/definitions/ioschemaObjectRefType"
-                    }
-                }
-            }
-        },
-        "schemaWafRulesRefType": {
-            "type": "object",
-            "description": "x-displayName: \"WAF Rules Reference\"\nA list of references to the waf_rules configuration objects",
-            "title": "WafRulesRefType",
-            "properties": {
-                "waf_rules": {
-                    "type": "array",
-                    "description": "x-displayName: \"WAF Rules\"\nReferences to a set of WAF Rules configuration object",
-                    "title": "waf_rules",
-                    "items": {
-                        "$ref": "#/definitions/ioschemaObjectRefType"
-                    }
-                }
-            }
-        },
         "schemaWafType": {
             "type": "object",
-            "description": "WAF instance will be pointing to either Waf object (high level) or waf_rules Object",
+            "description": "WAF instance will be pointing to an app_firewall object",
             "title": "WafType",
             "x-displayname": "WAF Instance",
-            "x-ves-oneof-field-ref_type": "[\"app_firewall\"]",
+            "x-ves-oneof-field-ref_type": "[\"app_firewall\",\"disable_waf\",\"inherit_waf\"]",
             "x-ves-proto-message": "ves.io.schema.WafType",
             "properties": {
                 "app_firewall": {
-                    "description": "Exclusive with []\n A direct reference to an Application Firewall configuration object",
+                    "description": "Exclusive with [disable_waf inherit_waf]\n A direct reference to an Application Firewall configuration object",
                     "title": "app_firewall",
                     "$ref": "#/definitions/schemaAppFirewallRefType",
                     "x-displayname": "Application Firewall"
+                },
+                "disable_waf": {
+                    "description": "Exclusive with [app_firewall inherit_waf]\n Any Application Firewall configuration will not be enforced",
+                    "title": "disable app firewall",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Disabled"
+                },
+                "inherit_waf": {
+                    "description": "Exclusive with [app_firewall disable_waf]\n Any Application Firewall configuration that was configured on a higher level will be enforced",
+                    "title": "inherit app firewall",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Inherit"
                 }
             }
         },
@@ -4961,6 +4944,12 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.string.max_len": "8096"
                     }
                 },
+                "slow_ddos_mitigation": {
+                    "description": " A Low and Slow DDoS attack, also known as a slow-rate attack, involves what appears to be\n legitimate traffic at a very slow rate. This type of state exhaustion DDoS attack targets\n application and server resources and is difficult to distinguish from normal traffic.\n This configuration helps to mitigate such type of attacks.",
+                    "title": "Slow DDOS Mitigation",
+                    "$ref": "#/definitions/virtual_hostSlowDDoSMitigation",
+                    "x-displayname": "Slow DDOS Mitigation"
+                },
                 "state": {
                     "description": " State of the virtual host",
                     "title": "Virtual Host state",
@@ -5021,7 +5010,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "F5XC Certificates"
                 },
                 "waf_type": {
-                    "description": " WAF can be used to analyze inbound and outbound http/https traffic.\n WAF can be configured either in BLOCKing Mode or ALERTing Mode.\n In BLOCKing mode if WAF detects suspicious inbound/outbound traffic it blocks the request or response.\n In ALERTing mode if suspicious traffic is detected, WAF generates ALERTs with details on the\n suspicious traffic (instead of blocking traffic).\n\n waf_type can be either WAF or WAFRules.\n WAF Object allows to\n     Configure mode of the WAF (BLOCK/ALERT)\n     Configure language used by the application which is being protected by the WAF\n     Disable different high level security tags if required (e.g. SQLI_DETECTION, XSS_DETECTION etc)\n WAFRules allows to\n     Configure mode of the WAF (BLOCK/ALERT)\n     Enable/Disable individual WAF security rules",
+                    "description": " WAF can be used to analyze inbound and outbound http/https traffic.\n WAF can be configured either in BLOCKing Mode or ALERTing Mode.\n In BLOCKing mode if WAF detects suspicious inbound/outbound traffic it blocks the request or response.\n In ALERTing mode if suspicious traffic is detected, WAF generates ALERTs with details on the\n suspicious traffic (instead of blocking traffic).\n\n waf_type is the App Firewall profile to use.",
                     "title": "Enable the WAF (Web Application Firewall) functionality for VirtualHost",
                     "$ref": "#/definitions/schemaWafType",
                     "x-displayname": "WAF Config"
@@ -5039,6 +5028,28 @@ var APISwaggerJSON string = `{
                     "title": "gc_spec",
                     "$ref": "#/definitions/schemavirtual_hostGlobalSpecType",
                     "x-displayname": "GC Spec"
+                }
+            }
+        },
+        "virtual_hostApiSpec": {
+            "type": "object",
+            "description": "x-displayName: \"OpenAPI Specification\"\nOpenAPI specification settings",
+            "title": "OpenAPI Specification",
+            "properties": {
+                "api_definition": {
+                    "description": "x-displayName: \"API Definition\"\nx-required\nAPI definition is set on this vhost for enforcing OpenAPI on requests",
+                    "title": "API Definition",
+                    "$ref": "#/definitions/schemaviewsObjectRefType"
+                },
+                "disable_open_api_validation": {
+                    "description": "x-displayName: \"Disable OpenApi Validation\"\nNo OpenApi Validation configuration for this VH",
+                    "title": "Disable OpenApi Validation",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "enable_open_api_validation": {
+                    "description": "x-displayName: \"Specify OpenApi Validation Configuration\"\nOpenApi Validation configuration object",
+                    "title": "Shape Bot Defense",
+                    "$ref": "#/definitions/schemaEmpty"
                 }
             }
         },
@@ -5610,7 +5621,7 @@ var APISwaggerJSON string = `{
                 },
                 "instance": {
                     "type": "array",
-                    "description": "x-displayName: \"Shape Instance\"\nWhich Shape insatnce to use",
+                    "description": "x-displayName: \"Shape Instance\"\nWhich Shape instance to use",
                     "title": "Shape Instance",
                     "items": {
                         "$ref": "#/definitions/ioschemaObjectRefType"
@@ -5626,6 +5637,39 @@ var APISwaggerJSON string = `{
                     "description": "x-displayName: \"Timeout\"\nx-example: 300\nThe timeout for the inference check, in milliseconds.",
                     "title": "timeout",
                     "format": "int64"
+                }
+            }
+        },
+        "virtual_hostSlowDDoSMitigation": {
+            "type": "object",
+            "description": "\"Slow and low\" attacks tie up server resources, leaving none available for servicing\nrequests from actual users.",
+            "title": "Slow DDoS Mitigation",
+            "x-displayname": "Slow DDoS Mitigation",
+            "x-ves-proto-message": "ves.io.schema.virtual_host.SlowDDoSMitigation",
+            "properties": {
+                "request_headers_timeout": {
+                    "type": "integer",
+                    "description": " The amount of time the client has to send only the headers on the request stream before\n the stream is cancelled. The default value is 10000 milliseconds. This setting\n provides protection against Slowloris attacks.\n\nExample: - \"60000\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 2000\n  ves.io.schema.rules.uint32.lte: 30000\n",
+                    "title": "Request Headers Timeout",
+                    "format": "int64",
+                    "x-displayname": "Request Headers Timeout",
+                    "x-ves-example": "60000",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.gte": "2000",
+                        "ves.io.schema.rules.uint32.lte": "30000"
+                    }
+                },
+                "request_timeout": {
+                    "type": "integer",
+                    "description": " The amount of time allowed for the entire request stream to be received from the client,\n in milliseconds. The stream is terminated with a HTTP 408 (Request Timeout) error code\n if request has not been completed. The default value is 60000 milliseconds. This setting\n provides protection against Slow POST attacks.\n\nExample: - \"60000\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 2000\n  ves.io.schema.rules.uint32.lte: 300000\n",
+                    "title": "Request Timeout",
+                    "format": "int64",
+                    "x-displayname": "Request Timeout",
+                    "x-ves-example": "60000",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.gte": "2000",
+                        "ves.io.schema.rules.uint32.lte": "300000"
+                    }
                 }
             }
         },

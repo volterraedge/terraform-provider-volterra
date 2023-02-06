@@ -2376,6 +2376,14 @@ var APISwaggerJSON string = `{
             "x-displayname": "Get DNS Load Balancer",
             "x-ves-proto-message": "ves.io.schema.dns_load_balancer.GetSpecType",
             "properties": {
+                "dns_zones": {
+                    "type": "array",
+                    "description": " a list of DNS Zones associated with this load balancer",
+                    "items": {
+                        "$ref": "#/definitions/schemaviewsObjectRefType"
+                    },
+                    "x-displayname": "DNS Zones"
+                },
                 "record_type": {
                     "description": "\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "$ref": "#/definitions/dns_load_balancerResourceRecordType",
@@ -2409,6 +2417,15 @@ var APISwaggerJSON string = `{
             "x-ves-displayorder": "2,3,4",
             "x-ves-proto-message": "ves.io.schema.dns_load_balancer.GlobalSpecType",
             "properties": {
+                "dns_zones": {
+                    "type": "array",
+                    "description": " a list of DNS Zones associated with this load balancer",
+                    "title": "backref_objs",
+                    "items": {
+                        "$ref": "#/definitions/schemaviewsObjectRefType"
+                    },
+                    "x-displayname": "DNS Zones"
+                },
                 "record_type": {
                     "description": "\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "Resource Record Type",
@@ -2614,10 +2631,10 @@ var APISwaggerJSON string = `{
             "properties": {
                 "rules": {
                     "type": "array",
-                    "description": " Rules to perform load balancing\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 32\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " Rules to perform load balancing\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 64\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "Load Balancing Rules",
                     "minItems": 1,
-                    "maxItems": 32,
+                    "maxItems": 64,
                     "items": {
                         "$ref": "#/definitions/dns_load_balancerLoadBalancingRule"
                     },
@@ -2625,7 +2642,7 @@ var APISwaggerJSON string = `{
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true",
-                        "ves.io.schema.rules.repeated.max_items": "32",
+                        "ves.io.schema.rules.repeated.max_items": "64",
                         "ves.io.schema.rules.repeated.min_items": "1",
                         "ves.io.schema.rules.repeated.unique": "true"
                     }

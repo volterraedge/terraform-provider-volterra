@@ -188,7 +188,7 @@ const (
 	// x-displayName: "ServicePolicyTooManyAttacks"
 	// Virtual Host Service Policy security events detected
 	SERVICE_POLICY_TOO_MANY_ATTACKS AlertName = 14
-	// x-displayName: "WAFTooManyMaliciousbots"
+	// x-displayName: "WAFTooManyMaliciousBots"
 	// Virtual Host Many Malicious Bots based WAF security events detected
 	WAF_TOO_MANY_MALICIOUS_BOTS AlertName = 15
 	// x-displayName: "BotDefenseTooManySecurityEvents"

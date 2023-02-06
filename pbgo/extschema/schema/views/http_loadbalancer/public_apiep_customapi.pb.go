@@ -24,12 +24,14 @@ import (
 	_ "github.com/gogo/googleapis/google/api"
 	_ "github.com/gogo/protobuf/gogoproto"
 	proto "github.com/gogo/protobuf/proto"
+	types "github.com/gogo/protobuf/types"
 	golang_proto "github.com/golang/protobuf/proto"
 	httpbody "google.golang.org/genproto/googleapis/api/httpbody"
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
-	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+	schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+	app_type "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/app_type"
 	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/vesenv"
 	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/virtual_host_dns_info"
 	io "io"
@@ -168,11 +170,236 @@ func (m *SwaggerSpecRsp) GetSwaggerSpec() string {
 	return ""
 }
 
+// Get API Endpoints For Groups Request
+//
+// x-displayName: "Get API Endpoints For Groups"
+// Request shape for Get API Endpoints For Groups
+type GetAPIEndpointsForGroupsReq struct {
+	// Http LoadBalancer Name
+	//
+	// x-displayName: "Http LoadBalancer Name"
+	// x-example: "blogging-app"
+	// Http LoadBalancer for the current request
+	Name string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
+	// Namespace
+	//
+	// x-displayName: "Namespace"
+	// x-example: "shared"
+	// Namespace of the Http LoadBalancer for the current request
+	Namespace string `protobuf:"bytes,2,opt,name=namespace,proto3" json:"namespace,omitempty"`
+}
+
+func (m *GetAPIEndpointsForGroupsReq) Reset()      { *m = GetAPIEndpointsForGroupsReq{} }
+func (*GetAPIEndpointsForGroupsReq) ProtoMessage() {}
+func (*GetAPIEndpointsForGroupsReq) Descriptor() ([]byte, []int) {
+	return fileDescriptor_edda31a2e072ec0d, []int{2}
+}
+func (m *GetAPIEndpointsForGroupsReq) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *GetAPIEndpointsForGroupsReq) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_GetAPIEndpointsForGroupsReq.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *GetAPIEndpointsForGroupsReq) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GetAPIEndpointsForGroupsReq.Merge(m, src)
+}
+func (m *GetAPIEndpointsForGroupsReq) XXX_Size() int {
+	return m.Size()
+}
+func (m *GetAPIEndpointsForGroupsReq) XXX_DiscardUnknown() {
+	xxx_messageInfo_GetAPIEndpointsForGroupsReq.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_GetAPIEndpointsForGroupsReq proto.InternalMessageInfo
+
+func (m *GetAPIEndpointsForGroupsReq) GetName() string {
+	if m != nil {
+		return m.Name
+	}
+	return ""
+}
+
+func (m *GetAPIEndpointsForGroupsReq) GetNamespace() string {
+	if m != nil {
+		return m.Namespace
+	}
+	return ""
+}
+
+// Get API Endpoints For Groups Response
+//
+// x-displayName: "Get API Endpoints For Groups Response"
+// Response shape for Get API Endpoints For Groups request
+type GetAPIEndpointsForGroupsRsp struct {
+	// API Endpoints
+	//
+	// x-displayName: "API Endpoints"
+	// A list of API endpoints associated with the HTTP Loadbalancer
+	ApiEndpoints []*APIGroupsApiep `protobuf:"bytes,1,rep,name=api_endpoints,json=apiEndpoints,proto3" json:"api_endpoints,omitempty"`
+	// apieps_timestamp
+	//
+	// x-displayName: "API Endpoints Timestamp"
+	// The API endpoints timestamp indicates most recent update of API endpoints happened
+	// The API Discovery periodically updates the API endpoints list based on application's traffic
+	ApiepsTimestamp *types.Timestamp `protobuf:"bytes,2,opt,name=apieps_timestamp,json=apiepsTimestamp,proto3" json:"apieps_timestamp,omitempty"`
+}
+
+func (m *GetAPIEndpointsForGroupsRsp) Reset()      { *m = GetAPIEndpointsForGroupsRsp{} }
+func (*GetAPIEndpointsForGroupsRsp) ProtoMessage() {}
+func (*GetAPIEndpointsForGroupsRsp) Descriptor() ([]byte, []int) {
+	return fileDescriptor_edda31a2e072ec0d, []int{3}
+}
+func (m *GetAPIEndpointsForGroupsRsp) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *GetAPIEndpointsForGroupsRsp) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_GetAPIEndpointsForGroupsRsp.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *GetAPIEndpointsForGroupsRsp) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GetAPIEndpointsForGroupsRsp.Merge(m, src)
+}
+func (m *GetAPIEndpointsForGroupsRsp) XXX_Size() int {
+	return m.Size()
+}
+func (m *GetAPIEndpointsForGroupsRsp) XXX_DiscardUnknown() {
+	xxx_messageInfo_GetAPIEndpointsForGroupsRsp.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_GetAPIEndpointsForGroupsRsp proto.InternalMessageInfo
+
+func (m *GetAPIEndpointsForGroupsRsp) GetApiEndpoints() []*APIGroupsApiep {
+	if m != nil {
+		return m.ApiEndpoints
+	}
+	return nil
+}
+
+func (m *GetAPIEndpointsForGroupsRsp) GetApiepsTimestamp() *types.Timestamp {
+	if m != nil {
+		return m.ApiepsTimestamp
+	}
+	return nil
+}
+
+// API Endpoint for API Group Evaluation
+//
+// x-displayName: "API Groups Endpoint"
+// Apiep for the Evaluate Api Group Builder response.
+type APIGroupsApiep struct {
+	// Path
+	//
+	// x-displayName: "Path"
+	// x-example: "/api/v1/users/{id}"
+	// API Endpoint path
+	Path string `protobuf:"bytes,1,opt,name=path,proto3" json:"path,omitempty"`
+	// Method
+	//
+	// x-displayName: "Method"
+	// API Endpoint method
+	Method schema.HttpMethod `protobuf:"varint,2,opt,name=method,proto3,enum=ves.io.schema.HttpMethod" json:"method,omitempty"`
+	// Category
+	//
+	// x-displayName: "Category"
+	// x-example: "[APIEP_CATEGORY_DISCOVERED, APIEP_CATEGORY_INVENTORY]"
+	// The category of the API Endpoint relative to API Inventory.
+	Category []app_type.APIEPCategory `protobuf:"varint,3,rep,packed,name=category,proto3,enum=ves.io.schema.app_type.APIEPCategory" json:"category,omitempty"`
+	// Sensitive Data
+	//
+	// x-displayName: "Sensitive Data"
+	// x-example: "[SENSITIVE_DATA_TYPE_CCN, SENSITIVE_DATA_TYPE_SSN]"
+	// Sensitive Data of the API endpoint
+	SensitiveData []app_type.SensitiveDataType `protobuf:"varint,4,rep,packed,name=sensitive_data,json=sensitiveData,proto3,enum=ves.io.schema.app_type.SensitiveDataType" json:"sensitive_data,omitempty"`
+}
+
+func (m *APIGroupsApiep) Reset()      { *m = APIGroupsApiep{} }
+func (*APIGroupsApiep) ProtoMessage() {}
+func (*APIGroupsApiep) Descriptor() ([]byte, []int) {
+	return fileDescriptor_edda31a2e072ec0d, []int{4}
+}
+func (m *APIGroupsApiep) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *APIGroupsApiep) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_APIGroupsApiep.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *APIGroupsApiep) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_APIGroupsApiep.Merge(m, src)
+}
+func (m *APIGroupsApiep) XXX_Size() int {
+	return m.Size()
+}
+func (m *APIGroupsApiep) XXX_DiscardUnknown() {
+	xxx_messageInfo_APIGroupsApiep.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_APIGroupsApiep proto.InternalMessageInfo
+
+func (m *APIGroupsApiep) GetPath() string {
+	if m != nil {
+		return m.Path
+	}
+	return ""
+}
+
+func (m *APIGroupsApiep) GetMethod() schema.HttpMethod {
+	if m != nil {
+		return m.Method
+	}
+	return schema.ANY
+}
+
+func (m *APIGroupsApiep) GetCategory() []app_type.APIEPCategory {
+	if m != nil {
+		return m.Category
+	}
+	return nil
+}
+
+func (m *APIGroupsApiep) GetSensitiveData() []app_type.SensitiveDataType {
+	if m != nil {
+		return m.SensitiveData
+	}
+	return nil
+}
+
 func init() {
 	proto.RegisterType((*SwaggerSpecReq)(nil), "ves.io.schema.views.http_loadbalancer.SwaggerSpecReq")
 	golang_proto.RegisterType((*SwaggerSpecReq)(nil), "ves.io.schema.views.http_loadbalancer.SwaggerSpecReq")
 	proto.RegisterType((*SwaggerSpecRsp)(nil), "ves.io.schema.views.http_loadbalancer.SwaggerSpecRsp")
 	golang_proto.RegisterType((*SwaggerSpecRsp)(nil), "ves.io.schema.views.http_loadbalancer.SwaggerSpecRsp")
+	proto.RegisterType((*GetAPIEndpointsForGroupsReq)(nil), "ves.io.schema.views.http_loadbalancer.GetAPIEndpointsForGroupsReq")
+	golang_proto.RegisterType((*GetAPIEndpointsForGroupsReq)(nil), "ves.io.schema.views.http_loadbalancer.GetAPIEndpointsForGroupsReq")
+	proto.RegisterType((*GetAPIEndpointsForGroupsRsp)(nil), "ves.io.schema.views.http_loadbalancer.GetAPIEndpointsForGroupsRsp")
+	golang_proto.RegisterType((*GetAPIEndpointsForGroupsRsp)(nil), "ves.io.schema.views.http_loadbalancer.GetAPIEndpointsForGroupsRsp")
+	proto.RegisterType((*APIGroupsApiep)(nil), "ves.io.schema.views.http_loadbalancer.APIGroupsApiep")
+	golang_proto.RegisterType((*APIGroupsApiep)(nil), "ves.io.schema.views.http_loadbalancer.APIGroupsApiep")
 }
 
 func init() {
@@ -183,41 +410,58 @@ func init() {
 }
 
 var fileDescriptor_edda31a2e072ec0d = []byte{
-	// 540 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x8c, 0x93, 0x41, 0x6b, 0xd4, 0x4e,
-	0x18, 0xc6, 0x33, 0xfb, 0xff, 0x23, 0x34, 0x4a, 0x91, 0xe8, 0x61, 0x5d, 0xcb, 0xa0, 0x0b, 0x82,
-	0x07, 0x33, 0x53, 0x2c, 0x5e, 0xbc, 0x75, 0x3d, 0xa8, 0x20, 0x28, 0x2d, 0x5e, 0xf4, 0x10, 0x26,
-	0xc9, 0xbb, 0xd9, 0xd1, 0x6c, 0xde, 0x31, 0x33, 0x49, 0x2d, 0x52, 0x90, 0x7e, 0x02, 0x41, 0xfc,
-	0x0a, 0xe2, 0x47, 0x10, 0x7a, 0xe9, 0xcd, 0x9e, 0x64, 0x51, 0x84, 0x1e, 0xdd, 0xac, 0x07, 0x8f,
-	0xfd, 0x08, 0xb2, 0x93, 0xd8, 0xee, 0x6e, 0x41, 0x7a, 0xda, 0x77, 0xe6, 0xd9, 0xf7, 0x17, 0x9e,
-	0x3c, 0x4f, 0xdc, 0x5e, 0x09, 0x9a, 0x49, 0xe4, 0x3a, 0x1a, 0xc0, 0x50, 0xf0, 0x52, 0xc2, 0x96,
-	0xe6, 0x03, 0x63, 0x54, 0x90, 0xa2, 0x88, 0x43, 0x91, 0x8a, 0x2c, 0x82, 0x9c, 0xab, 0x22, 0x4c,
-	0x65, 0x14, 0x08, 0x25, 0x41, 0x05, 0x51, 0xa1, 0x0d, 0x0e, 0x85, 0x92, 0x4c, 0xe5, 0x68, 0xd0,
-	0xbb, 0x51, 0x33, 0x58, 0xcd, 0x60, 0x96, 0xc1, 0x4e, 0x31, 0x3a, 0x7e, 0x22, 0xcd, 0xa0, 0x08,
-	0x59, 0x84, 0x43, 0x9e, 0x60, 0x82, 0xdc, 0x6e, 0x87, 0x45, 0xdf, 0x9e, 0xec, 0xc1, 0x4e, 0x35,
-	0xb5, 0xb3, 0x92, 0x20, 0x26, 0x29, 0x70, 0xa1, 0x24, 0x17, 0x59, 0x86, 0x46, 0x18, 0x89, 0x99,
-	0x6e, 0xd4, 0x2b, 0x33, 0xea, 0xf4, 0x51, 0x21, 0xc6, 0xdb, 0x8d, 0x74, 0x75, 0xde, 0x12, 0xaa,
-	0xd9, 0xbd, 0x95, 0x05, 0xbf, 0x22, 0x95, 0xb1, 0x30, 0xd0, 0xa8, 0xdd, 0x05, 0x15, 0x34, 0x64,
-	0xe5, 0x02, 0x61, 0x75, 0xf1, 0x8d, 0xe5, 0xa6, 0x10, 0x69, 0x30, 0x40, 0x6d, 0x82, 0x38, 0xd3,
-	0x81, 0xcc, 0xfa, 0xc8, 0x31, 0x7c, 0x01, 0x91, 0xa9, 0x37, 0xba, 0x3d, 0x77, 0x79, 0x73, 0x4b,
-	0x24, 0x09, 0xe4, 0x9b, 0x0a, 0xa2, 0x0d, 0x78, 0xe5, 0x79, 0xee, 0xff, 0x99, 0x18, 0x42, 0x9b,
-	0x5c, 0x23, 0x37, 0x97, 0x36, 0xec, 0xec, 0xad, 0xb8, 0x4b, 0xd3, 0x5f, 0xad, 0x44, 0x04, 0xed,
-	0x96, 0x15, 0x4e, 0x2e, 0xba, 0x6b, 0xf3, 0x0c, 0xad, 0xbc, 0xeb, 0xee, 0x05, 0x5d, 0xdf, 0x04,
-	0x5a, 0x41, 0xd4, 0xb0, 0xce, 0xeb, 0x93, 0x7f, 0xdd, 0xfe, 0xd8, 0x72, 0x2f, 0xae, 0x4f, 0x23,
-	0x7b, 0xd4, 0xbb, 0x67, 0x33, 0x5b, 0x7f, 0xf2, 0xd0, 0xfb, 0x41, 0xdc, 0xe5, 0xfb, 0x60, 0x66,
-	0x68, 0xde, 0x1d, 0x76, 0xa6, 0x04, 0xd9, 0xbc, 0x8b, 0xce, 0x65, 0x56, 0x87, 0xc0, 0xa6, 0x55,
-	0x78, 0x60, 0x8c, 0xea, 0x61, 0xbc, 0xdd, 0x2d, 0x0f, 0x3e, 0xb7, 0x48, 0xf5, 0xa5, 0x7d, 0xa9,
-	0x04, 0xed, 0x4b, 0xf4, 0x13, 0xc8, 0x20, 0x17, 0xa9, 0x9f, 0x83, 0x88, 0x77, 0xbf, 0xff, 0x7a,
-	0xdf, 0x7a, 0xea, 0x6d, 0x36, 0x7d, 0xe2, 0xc7, 0xfe, 0x34, 0x7f, 0x73, 0x3c, 0xef, 0x9c, 0xee,
-	0x5f, 0x23, 0xef, 0x4c, 0xe3, 0x0e, 0x20, 0x8b, 0x15, 0xca, 0xcc, 0x68, 0x3e, 0xeb, 0xbf, 0x73,
-	0x77, 0x7f, 0x8f, 0xfc, 0xf7, 0x6d, 0x8f, 0xdc, 0x3a, 0x9b, 0x97, 0xc7, 0x36, 0xa1, 0xdd, 0xaf,
-	0xed, 0xd6, 0x2a, 0xe9, 0x7d, 0x20, 0xa3, 0x31, 0x75, 0x0e, 0xc7, 0xd4, 0x39, 0x1a, 0x53, 0xf2,
-	0xb6, 0xa2, 0xe4, 0x53, 0x45, 0xc9, 0x41, 0x45, 0xc9, 0xa8, 0xa2, 0xe4, 0x67, 0x45, 0xc9, 0xef,
-	0x8a, 0x3a, 0x47, 0x15, 0x25, 0xef, 0x26, 0xd4, 0xd9, 0x9f, 0x50, 0x32, 0x9a, 0x50, 0xe7, 0x70,
-	0x42, 0x9d, 0x67, 0xcf, 0x13, 0x54, 0x2f, 0x13, 0x56, 0x62, 0x6a, 0x20, 0xcf, 0x05, 0x2b, 0x34,
-	0xb7, 0x43, 0x1f, 0xf3, 0xa1, 0xaf, 0x72, 0x2c, 0x65, 0x0c, 0xb9, 0xff, 0x57, 0xe6, 0x2a, 0x4c,
-	0x90, 0xc3, 0x6b, 0xd3, 0xb4, 0xe7, 0xdf, 0x9f, 0x5d, 0x78, 0xce, 0x16, 0x68, 0xed, 0x4f, 0x00,
-	0x00, 0x00, 0xff, 0xff, 0x13, 0x1e, 0x54, 0xd7, 0xa6, 0x03, 0x00, 0x00,
+	// 816 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xac, 0x55, 0x41, 0x8f, 0xdb, 0x44,
+	0x14, 0xce, 0x64, 0x57, 0x15, 0xf5, 0xb6, 0xa1, 0x32, 0x1c, 0xdc, 0x74, 0x65, 0x16, 0x4b, 0x95,
+	0x16, 0x44, 0x3c, 0x25, 0x15, 0x97, 0xde, 0x92, 0xb2, 0x5d, 0x56, 0x80, 0x1a, 0x25, 0xe5, 0x52,
+	0x0e, 0xd6, 0xd8, 0x7e, 0xeb, 0x0c, 0xd8, 0x9e, 0xc1, 0x33, 0x76, 0x1b, 0xa1, 0x4a, 0xa8, 0xbf,
+	0x00, 0x09, 0x21, 0xfe, 0x02, 0x3f, 0x01, 0xa9, 0x97, 0xdc, 0xe8, 0x09, 0xad, 0x40, 0x48, 0x3d,
+	0xb2, 0x0e, 0x07, 0x0e, 0x1c, 0xfa, 0x13, 0x90, 0xc7, 0x76, 0x36, 0x4e, 0xe9, 0x2a, 0x82, 0x5e,
+	0x92, 0xf1, 0x7c, 0xef, 0x7d, 0x6f, 0xde, 0xe7, 0x6f, 0x9e, 0xb5, 0x61, 0x06, 0xc2, 0xa6, 0x0c,
+	0x0b, 0x6f, 0x0a, 0x11, 0xc1, 0x19, 0x85, 0x07, 0x02, 0x4f, 0xa5, 0xe4, 0x4e, 0xc8, 0x88, 0xef,
+	0x92, 0x90, 0xc4, 0x1e, 0x24, 0x98, 0xa7, 0x6e, 0x48, 0x3d, 0x87, 0x70, 0x0a, 0xdc, 0xf1, 0x52,
+	0x21, 0x59, 0x44, 0x38, 0xb5, 0x79, 0xc2, 0x24, 0xd3, 0xaf, 0x97, 0x1c, 0x76, 0xc9, 0x61, 0x2b,
+	0x0e, 0xfb, 0x05, 0x8e, 0x6e, 0x2f, 0xa0, 0x72, 0x9a, 0xba, 0xb6, 0xc7, 0x22, 0x1c, 0xb0, 0x80,
+	0x61, 0x95, 0xed, 0xa6, 0xc7, 0xea, 0x49, 0x3d, 0xa8, 0x55, 0xc9, 0xda, 0xdd, 0x0d, 0x18, 0x0b,
+	0x42, 0xc0, 0x84, 0x53, 0x4c, 0xe2, 0x98, 0x49, 0x22, 0x29, 0x8b, 0x45, 0x85, 0x5e, 0x5d, 0x41,
+	0x8b, 0x52, 0x2e, 0xf3, 0x67, 0x15, 0xf4, 0x56, 0x05, 0x2d, 0xe9, 0x25, 0x8d, 0x40, 0x48, 0x12,
+	0xf1, 0x2a, 0xc0, 0x6a, 0xf6, 0x4c, 0x38, 0x77, 0xe4, 0x8c, 0x03, 0x2e, 0x7e, 0x6a, 0xfe, 0x6b,
+	0xcd, 0x18, 0xc6, 0x1b, 0xc5, 0x9b, 0xe0, 0x6a, 0xde, 0xee, 0x9a, 0x9e, 0x24, 0xa4, 0x3e, 0x91,
+	0xf0, 0xef, 0x95, 0x33, 0x10, 0x10, 0x67, 0x6b, 0xe4, 0x37, 0xd6, 0xdf, 0x48, 0x22, 0x53, 0x12,
+	0x3a, 0x53, 0x26, 0xa4, 0xe3, 0xc7, 0xc2, 0xa1, 0xf1, 0x31, 0xc3, 0xcc, 0xfd, 0x02, 0x3c, 0x59,
+	0x66, 0x58, 0x43, 0xad, 0x33, 0x79, 0x40, 0x82, 0x00, 0x92, 0x09, 0x07, 0x6f, 0x0c, 0x5f, 0xe9,
+	0xba, 0xb6, 0x1d, 0x93, 0x08, 0x0c, 0xb4, 0x87, 0xf6, 0x2f, 0x8e, 0xd5, 0x5a, 0xdf, 0xd5, 0x2e,
+	0x16, 0xff, 0x82, 0x13, 0x0f, 0x8c, 0xb6, 0x02, 0xce, 0x36, 0xac, 0x9b, 0x4d, 0x0e, 0xc1, 0xf5,
+	0xb7, 0xb5, 0x4b, 0xa2, 0xdc, 0x71, 0x04, 0x07, 0xaf, 0xe2, 0xda, 0x11, 0x67, 0x51, 0xd6, 0x5d,
+	0xed, 0xda, 0x21, 0xc8, 0xc1, 0xe8, 0xe8, 0x20, 0xf6, 0x39, 0xa3, 0xb1, 0x14, 0x77, 0x58, 0x72,
+	0x98, 0xb0, 0x94, 0x8b, 0xff, 0x76, 0x8a, 0x39, 0x3a, 0x87, 0x51, 0x70, 0xfd, 0xbe, 0x76, 0x99,
+	0x70, 0xea, 0x40, 0x0d, 0x1a, 0x68, 0x6f, 0x6b, 0x7f, 0xa7, 0xff, 0x81, 0xbd, 0x91, 0x03, 0xed,
+	0xc1, 0xe8, 0xa8, 0xe4, 0x1a, 0x14, 0x3e, 0x1e, 0x5f, 0x22, 0x9c, 0x2e, 0xeb, 0xe8, 0x07, 0xda,
+	0x15, 0x65, 0x6f, 0xe1, 0x2c, 0xfd, 0xa2, 0x0e, 0xb8, 0xd3, 0xef, 0xda, 0xa5, 0xa3, 0xec, 0xda,
+	0x51, 0xf6, 0xbd, 0x3a, 0x62, 0xfc, 0x7a, 0x99, 0xb3, 0xdc, 0xb0, 0xfe, 0x46, 0x5a, 0xa7, 0x59,
+	0xa7, 0xd0, 0x81, 0x13, 0x39, 0xad, 0x75, 0x28, 0xd6, 0xfa, 0xfb, 0xda, 0x85, 0x08, 0xe4, 0x94,
+	0xf9, 0xaa, 0x46, 0xa7, 0x7f, 0x75, 0xad, 0x85, 0x8f, 0xa4, 0xe4, 0x9f, 0xaa, 0x80, 0x71, 0x15,
+	0xa8, 0x0f, 0xb4, 0xd7, 0x3c, 0x22, 0x21, 0x60, 0xc9, 0xcc, 0xd8, 0xda, 0xdb, 0xda, 0xef, 0xf4,
+	0xaf, 0xaf, 0x25, 0xd5, 0x4e, 0x2e, 0x1a, 0x3d, 0x18, 0xdd, 0xae, 0x82, 0xc7, 0xcb, 0x34, 0x7d,
+	0xa4, 0x75, 0x04, 0xc4, 0x82, 0x4a, 0x9a, 0x81, 0xe3, 0x13, 0x49, 0x8c, 0x6d, 0x45, 0xf4, 0xce,
+	0xcb, 0x88, 0x26, 0x75, 0xf4, 0x87, 0x44, 0x92, 0x7b, 0x33, 0x0e, 0xe3, 0xcb, 0x62, 0x75, 0xab,
+	0x3f, 0xdf, 0xd6, 0xae, 0xa8, 0x2e, 0x3f, 0x19, 0xde, 0x56, 0x63, 0x61, 0x30, 0x3a, 0xd2, 0x7f,
+	0x47, 0x5a, 0xe7, 0x10, 0xe4, 0x8a, 0xa1, 0xf4, 0x4d, 0x5f, 0x51, 0xd3, 0xc8, 0xdd, 0x37, 0x6b,
+	0xe9, 0x8b, 0x69, 0x53, 0x68, 0x32, 0x64, 0xfe, 0xcc, 0xca, 0x9e, 0xfe, 0xd4, 0x46, 0xf9, 0xcf,
+	0xc6, 0x1b, 0x19, 0x88, 0x1e, 0x65, 0xbd, 0x00, 0x62, 0x48, 0x48, 0xd8, 0x4b, 0x80, 0xf8, 0x8f,
+	0x7f, 0xfb, 0xf3, 0xbb, 0xf6, 0x67, 0xfa, 0xa4, 0x1a, 0x59, 0x78, 0x69, 0x2e, 0x81, 0xbf, 0x5e,
+	0xae, 0x1f, 0xbd, 0x38, 0xe2, 0x2a, 0xf8, 0x11, 0x6e, 0x18, 0x0c, 0xaf, 0x5e, 0x01, 0xfd, 0x87,
+	0xb6, 0x66, 0xbc, 0xcc, 0x9e, 0xfa, 0x70, 0xc3, 0x0e, 0xcf, 0xb9, 0x31, 0xdd, 0xff, 0xcd, 0x21,
+	0xb8, 0x25, 0x2a, 0x71, 0xba, 0x95, 0x38, 0x3c, 0x61, 0x0f, 0x67, 0x3d, 0x01, 0x5e, 0x9a, 0x50,
+	0x39, 0x3b, 0xd3, 0xe8, 0x63, 0xeb, 0xce, 0xab, 0xd1, 0xe8, 0x16, 0x7a, 0xb7, 0x7b, 0x6b, 0xfe,
+	0x04, 0x6d, 0xfd, 0xfa, 0x04, 0xbd, 0xb7, 0xd9, 0xf9, 0xef, 0xaa, 0xf1, 0xf5, 0xf8, 0x17, 0xa3,
+	0x7d, 0x03, 0x0d, 0xbf, 0x47, 0x27, 0xa7, 0x66, 0xeb, 0xd9, 0xa9, 0xd9, 0x7a, 0x7e, 0x6a, 0xa2,
+	0x6f, 0x72, 0x13, 0xfd, 0x98, 0x9b, 0xe8, 0x69, 0x6e, 0xa2, 0x93, 0xdc, 0x44, 0x7f, 0xe4, 0x26,
+	0xfa, 0x2b, 0x37, 0x5b, 0xcf, 0x73, 0x13, 0x7d, 0xbb, 0x30, 0x5b, 0xf3, 0x85, 0x89, 0x4e, 0x16,
+	0x66, 0xeb, 0xd9, 0xc2, 0x6c, 0xdd, 0xff, 0x3c, 0x60, 0xfc, 0xcb, 0xc0, 0xce, 0x58, 0x28, 0x21,
+	0x49, 0x88, 0x9d, 0x0a, 0xac, 0x16, 0xc7, 0x2c, 0x89, 0x8a, 0xc6, 0x33, 0xea, 0x43, 0xd2, 0xab,
+	0x61, 0xcc, 0xdd, 0x80, 0x61, 0x78, 0x28, 0xab, 0xd1, 0x7a, 0xfe, 0x37, 0xcf, 0xbd, 0xa0, 0xae,
+	0xfb, 0xcd, 0x7f, 0x02, 0x00, 0x00, 0xff, 0xff, 0xd8, 0x9f, 0xaf, 0x06, 0x23, 0x07, 0x00, 0x00,
 }
 
 func (this *SwaggerSpecReq) Equal(that interface{}) bool {
@@ -271,6 +515,108 @@ func (this *SwaggerSpecRsp) Equal(that interface{}) bool {
 	}
 	return true
 }
+func (this *GetAPIEndpointsForGroupsReq) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GetAPIEndpointsForGroupsReq)
+	if !ok {
+		that2, ok := that.(GetAPIEndpointsForGroupsReq)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.Name != that1.Name {
+		return false
+	}
+	if this.Namespace != that1.Namespace {
+		return false
+	}
+	return true
+}
+func (this *GetAPIEndpointsForGroupsRsp) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GetAPIEndpointsForGroupsRsp)
+	if !ok {
+		that2, ok := that.(GetAPIEndpointsForGroupsRsp)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if len(this.ApiEndpoints) != len(that1.ApiEndpoints) {
+		return false
+	}
+	for i := range this.ApiEndpoints {
+		if !this.ApiEndpoints[i].Equal(that1.ApiEndpoints[i]) {
+			return false
+		}
+	}
+	if !this.ApiepsTimestamp.Equal(that1.ApiepsTimestamp) {
+		return false
+	}
+	return true
+}
+func (this *APIGroupsApiep) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*APIGroupsApiep)
+	if !ok {
+		that2, ok := that.(APIGroupsApiep)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.Path != that1.Path {
+		return false
+	}
+	if this.Method != that1.Method {
+		return false
+	}
+	if len(this.Category) != len(that1.Category) {
+		return false
+	}
+	for i := range this.Category {
+		if this.Category[i] != that1.Category[i] {
+			return false
+		}
+	}
+	if len(this.SensitiveData) != len(that1.SensitiveData) {
+		return false
+	}
+	for i := range this.SensitiveData {
+		if this.SensitiveData[i] != that1.SensitiveData[i] {
+			return false
+		}
+	}
+	return true
+}
 func (this *SwaggerSpecReq) GoString() string {
 	if this == nil {
 		return "nil"
@@ -289,6 +635,45 @@ func (this *SwaggerSpecRsp) GoString() string {
 	s := make([]string, 0, 5)
 	s = append(s, "&http_loadbalancer.SwaggerSpecRsp{")
 	s = append(s, "SwaggerSpec: "+fmt.Sprintf("%#v", this.SwaggerSpec)+",\n")
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *GetAPIEndpointsForGroupsReq) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 6)
+	s = append(s, "&http_loadbalancer.GetAPIEndpointsForGroupsReq{")
+	s = append(s, "Name: "+fmt.Sprintf("%#v", this.Name)+",\n")
+	s = append(s, "Namespace: "+fmt.Sprintf("%#v", this.Namespace)+",\n")
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *GetAPIEndpointsForGroupsRsp) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 6)
+	s = append(s, "&http_loadbalancer.GetAPIEndpointsForGroupsRsp{")
+	if this.ApiEndpoints != nil {
+		s = append(s, "ApiEndpoints: "+fmt.Sprintf("%#v", this.ApiEndpoints)+",\n")
+	}
+	if this.ApiepsTimestamp != nil {
+		s = append(s, "ApiepsTimestamp: "+fmt.Sprintf("%#v", this.ApiepsTimestamp)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *APIGroupsApiep) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 8)
+	s = append(s, "&http_loadbalancer.APIGroupsApiep{")
+	s = append(s, "Path: "+fmt.Sprintf("%#v", this.Path)+",\n")
+	s = append(s, "Method: "+fmt.Sprintf("%#v", this.Method)+",\n")
+	s = append(s, "Category: "+fmt.Sprintf("%#v", this.Category)+",\n")
+	s = append(s, "SensitiveData: "+fmt.Sprintf("%#v", this.SensitiveData)+",\n")
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
@@ -318,6 +703,11 @@ type ApiepLBCustomAPIClient interface {
 	// x-displayName: "Get Swagger Spec for Http Load Balancer"
 	// Get the corresponding Swagger spec for the given HTTP load balancer
 	GetSwaggerSpec(ctx context.Context, in *SwaggerSpecReq, opts ...grpc.CallOption) (*httpbody.HttpBody, error)
+	// Get API Endpoints for groups
+	//
+	// x-displayName: "Get API Endpoints"
+	// Get list of all API Endpoints associated with the HTTP loadbalancer in format suitable for API Groups management.
+	GetAPIEndpointsForGroups(ctx context.Context, in *GetAPIEndpointsForGroupsReq, opts ...grpc.CallOption) (*GetAPIEndpointsForGroupsRsp, error)
 }
 
 type apiepLBCustomAPIClient struct {
@@ -337,6 +727,15 @@ func (c *apiepLBCustomAPIClient) GetSwaggerSpec(ctx context.Context, in *Swagger
 	return out, nil
 }
 
+func (c *apiepLBCustomAPIClient) GetAPIEndpointsForGroups(ctx context.Context, in *GetAPIEndpointsForGroupsReq, opts ...grpc.CallOption) (*GetAPIEndpointsForGroupsRsp, error) {
+	out := new(GetAPIEndpointsForGroupsRsp)
+	err := c.cc.Invoke(ctx, "/ves.io.schema.views.http_loadbalancer.ApiepLBCustomAPI/GetAPIEndpointsForGroups", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // ApiepLBCustomAPIServer is the server API for ApiepLBCustomAPI service.
 type ApiepLBCustomAPIServer interface {
 	// Get Swagger Spec for App Type
@@ -344,6 +743,11 @@ type ApiepLBCustomAPIServer interface {
 	// x-displayName: "Get Swagger Spec for Http Load Balancer"
 	// Get the corresponding Swagger spec for the given HTTP load balancer
 	GetSwaggerSpec(context.Context, *SwaggerSpecReq) (*httpbody.HttpBody, error)
+	// Get API Endpoints for groups
+	//
+	// x-displayName: "Get API Endpoints"
+	// Get list of all API Endpoints associated with the HTTP loadbalancer in format suitable for API Groups management.
+	GetAPIEndpointsForGroups(context.Context, *GetAPIEndpointsForGroupsReq) (*GetAPIEndpointsForGroupsRsp, error)
 }
 
 // UnimplementedApiepLBCustomAPIServer can be embedded to have forward compatible implementations.
@@ -352,6 +756,9 @@ type UnimplementedApiepLBCustomAPIServer struct {
 
 func (*UnimplementedApiepLBCustomAPIServer) GetSwaggerSpec(ctx context.Context, req *SwaggerSpecReq) (*httpbody.HttpBody, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetSwaggerSpec not implemented")
+}
+func (*UnimplementedApiepLBCustomAPIServer) GetAPIEndpointsForGroups(ctx context.Context, req *GetAPIEndpointsForGroupsReq) (*GetAPIEndpointsForGroupsRsp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetAPIEndpointsForGroups not implemented")
 }
 
 func RegisterApiepLBCustomAPIServer(s *grpc.Server, srv ApiepLBCustomAPIServer) {
@@ -376,6 +783,24 @@ func _ApiepLBCustomAPI_GetSwaggerSpec_Handler(srv interface{}, ctx context.Conte
 	return interceptor(ctx, in, info, handler)
 }
 
+func _ApiepLBCustomAPI_GetAPIEndpointsForGroups_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetAPIEndpointsForGroupsReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ApiepLBCustomAPIServer).GetAPIEndpointsForGroups(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/ves.io.schema.views.http_loadbalancer.ApiepLBCustomAPI/GetAPIEndpointsForGroups",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ApiepLBCustomAPIServer).GetAPIEndpointsForGroups(ctx, req.(*GetAPIEndpointsForGroupsReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 var _ApiepLBCustomAPI_serviceDesc = grpc.ServiceDesc{
 	ServiceName: "ves.io.schema.views.http_loadbalancer.ApiepLBCustomAPI",
 	HandlerType: (*ApiepLBCustomAPIServer)(nil),
@@ -383,6 +808,10 @@ var _ApiepLBCustomAPI_serviceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetSwaggerSpec",
 			Handler:    _ApiepLBCustomAPI_GetSwaggerSpec_Handler,
+		},
+		{
+			MethodName: "GetAPIEndpointsForGroups",
+			Handler:    _ApiepLBCustomAPI_GetAPIEndpointsForGroups_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
@@ -456,6 +885,163 @@ func (m *SwaggerSpecRsp) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
+func (m *GetAPIEndpointsForGroupsReq) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *GetAPIEndpointsForGroupsReq) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetAPIEndpointsForGroupsReq) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.Namespace) > 0 {
+		i -= len(m.Namespace)
+		copy(dAtA[i:], m.Namespace)
+		i = encodeVarintPublicApiepCustomapi(dAtA, i, uint64(len(m.Namespace)))
+		i--
+		dAtA[i] = 0x12
+	}
+	if len(m.Name) > 0 {
+		i -= len(m.Name)
+		copy(dAtA[i:], m.Name)
+		i = encodeVarintPublicApiepCustomapi(dAtA, i, uint64(len(m.Name)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *GetAPIEndpointsForGroupsRsp) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *GetAPIEndpointsForGroupsRsp) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetAPIEndpointsForGroupsRsp) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.ApiepsTimestamp != nil {
+		{
+			size, err := m.ApiepsTimestamp.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintPublicApiepCustomapi(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x12
+	}
+	if len(m.ApiEndpoints) > 0 {
+		for iNdEx := len(m.ApiEndpoints) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.ApiEndpoints[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintPublicApiepCustomapi(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0xa
+		}
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *APIGroupsApiep) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *APIGroupsApiep) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *APIGroupsApiep) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.SensitiveData) > 0 {
+		dAtA3 := make([]byte, len(m.SensitiveData)*10)
+		var j2 int
+		for _, num := range m.SensitiveData {
+			for num >= 1<<7 {
+				dAtA3[j2] = uint8(uint64(num)&0x7f | 0x80)
+				num >>= 7
+				j2++
+			}
+			dAtA3[j2] = uint8(num)
+			j2++
+		}
+		i -= j2
+		copy(dAtA[i:], dAtA3[:j2])
+		i = encodeVarintPublicApiepCustomapi(dAtA, i, uint64(j2))
+		i--
+		dAtA[i] = 0x22
+	}
+	if len(m.Category) > 0 {
+		dAtA5 := make([]byte, len(m.Category)*10)
+		var j4 int
+		for _, num := range m.Category {
+			for num >= 1<<7 {
+				dAtA5[j4] = uint8(uint64(num)&0x7f | 0x80)
+				num >>= 7
+				j4++
+			}
+			dAtA5[j4] = uint8(num)
+			j4++
+		}
+		i -= j4
+		copy(dAtA[i:], dAtA5[:j4])
+		i = encodeVarintPublicApiepCustomapi(dAtA, i, uint64(j4))
+		i--
+		dAtA[i] = 0x1a
+	}
+	if m.Method != 0 {
+		i = encodeVarintPublicApiepCustomapi(dAtA, i, uint64(m.Method))
+		i--
+		dAtA[i] = 0x10
+	}
+	if len(m.Path) > 0 {
+		i -= len(m.Path)
+		copy(dAtA[i:], m.Path)
+		i = encodeVarintPublicApiepCustomapi(dAtA, i, uint64(len(m.Path)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
 func encodeVarintPublicApiepCustomapi(dAtA []byte, offset int, v uint64) int {
 	offset -= sovPublicApiepCustomapi(v)
 	base := offset
@@ -497,6 +1083,72 @@ func (m *SwaggerSpecRsp) Size() (n int) {
 	return n
 }
 
+func (m *GetAPIEndpointsForGroupsReq) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Name)
+	if l > 0 {
+		n += 1 + l + sovPublicApiepCustomapi(uint64(l))
+	}
+	l = len(m.Namespace)
+	if l > 0 {
+		n += 1 + l + sovPublicApiepCustomapi(uint64(l))
+	}
+	return n
+}
+
+func (m *GetAPIEndpointsForGroupsRsp) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if len(m.ApiEndpoints) > 0 {
+		for _, e := range m.ApiEndpoints {
+			l = e.Size()
+			n += 1 + l + sovPublicApiepCustomapi(uint64(l))
+		}
+	}
+	if m.ApiepsTimestamp != nil {
+		l = m.ApiepsTimestamp.Size()
+		n += 1 + l + sovPublicApiepCustomapi(uint64(l))
+	}
+	return n
+}
+
+func (m *APIGroupsApiep) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Path)
+	if l > 0 {
+		n += 1 + l + sovPublicApiepCustomapi(uint64(l))
+	}
+	if m.Method != 0 {
+		n += 1 + sovPublicApiepCustomapi(uint64(m.Method))
+	}
+	if len(m.Category) > 0 {
+		l = 0
+		for _, e := range m.Category {
+			l += sovPublicApiepCustomapi(uint64(e))
+		}
+		n += 1 + sovPublicApiepCustomapi(uint64(l)) + l
+	}
+	if len(m.SensitiveData) > 0 {
+		l = 0
+		for _, e := range m.SensitiveData {
+			l += sovPublicApiepCustomapi(uint64(e))
+		}
+		n += 1 + sovPublicApiepCustomapi(uint64(l)) + l
+	}
+	return n
+}
+
 func sovPublicApiepCustomapi(x uint64) (n int) {
 	return (math_bits.Len64(x|1) + 6) / 7
 }
@@ -520,6 +1172,46 @@ func (this *SwaggerSpecRsp) String() string {
 	}
 	s := strings.Join([]string{`&SwaggerSpecRsp{`,
 		`SwaggerSpec:` + fmt.Sprintf("%v", this.SwaggerSpec) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GetAPIEndpointsForGroupsReq) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GetAPIEndpointsForGroupsReq{`,
+		`Name:` + fmt.Sprintf("%v", this.Name) + `,`,
+		`Namespace:` + fmt.Sprintf("%v", this.Namespace) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GetAPIEndpointsForGroupsRsp) String() string {
+	if this == nil {
+		return "nil"
+	}
+	repeatedStringForApiEndpoints := "[]*APIGroupsApiep{"
+	for _, f := range this.ApiEndpoints {
+		repeatedStringForApiEndpoints += strings.Replace(f.String(), "APIGroupsApiep", "APIGroupsApiep", 1) + ","
+	}
+	repeatedStringForApiEndpoints += "}"
+	s := strings.Join([]string{`&GetAPIEndpointsForGroupsRsp{`,
+		`ApiEndpoints:` + repeatedStringForApiEndpoints + `,`,
+		`ApiepsTimestamp:` + strings.Replace(fmt.Sprintf("%v", this.ApiepsTimestamp), "Timestamp", "types.Timestamp", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *APIGroupsApiep) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&APIGroupsApiep{`,
+		`Path:` + fmt.Sprintf("%v", this.Path) + `,`,
+		`Method:` + fmt.Sprintf("%v", this.Method) + `,`,
+		`Category:` + fmt.Sprintf("%v", this.Category) + `,`,
+		`SensitiveData:` + fmt.Sprintf("%v", this.SensitiveData) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -710,6 +1402,488 @@ func (m *SwaggerSpecRsp) Unmarshal(dAtA []byte) error {
 			}
 			m.SwaggerSpec = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipPublicApiepCustomapi(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthPublicApiepCustomapi
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthPublicApiepCustomapi
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *GetAPIEndpointsForGroupsReq) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowPublicApiepCustomapi
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: GetAPIEndpointsForGroupsReq: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: GetAPIEndpointsForGroupsReq: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Name", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicApiepCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPublicApiepCustomapi
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicApiepCustomapi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Name = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Namespace", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicApiepCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPublicApiepCustomapi
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicApiepCustomapi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Namespace = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipPublicApiepCustomapi(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthPublicApiepCustomapi
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthPublicApiepCustomapi
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *GetAPIEndpointsForGroupsRsp) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowPublicApiepCustomapi
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: GetAPIEndpointsForGroupsRsp: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: GetAPIEndpointsForGroupsRsp: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ApiEndpoints", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicApiepCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthPublicApiepCustomapi
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicApiepCustomapi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.ApiEndpoints = append(m.ApiEndpoints, &APIGroupsApiep{})
+			if err := m.ApiEndpoints[len(m.ApiEndpoints)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ApiepsTimestamp", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicApiepCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthPublicApiepCustomapi
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicApiepCustomapi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.ApiepsTimestamp == nil {
+				m.ApiepsTimestamp = &types.Timestamp{}
+			}
+			if err := m.ApiepsTimestamp.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipPublicApiepCustomapi(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthPublicApiepCustomapi
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthPublicApiepCustomapi
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *APIGroupsApiep) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowPublicApiepCustomapi
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: APIGroupsApiep: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: APIGroupsApiep: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Path", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicApiepCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPublicApiepCustomapi
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicApiepCustomapi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Path = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Method", wireType)
+			}
+			m.Method = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicApiepCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.Method |= schema.HttpMethod(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 3:
+			if wireType == 0 {
+				var v app_type.APIEPCategory
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return ErrIntOverflowPublicApiepCustomapi
+					}
+					if iNdEx >= l {
+						return io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					v |= app_type.APIEPCategory(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				m.Category = append(m.Category, v)
+			} else if wireType == 2 {
+				var packedLen int
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return ErrIntOverflowPublicApiepCustomapi
+					}
+					if iNdEx >= l {
+						return io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					packedLen |= int(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				if packedLen < 0 {
+					return ErrInvalidLengthPublicApiepCustomapi
+				}
+				postIndex := iNdEx + packedLen
+				if postIndex < 0 {
+					return ErrInvalidLengthPublicApiepCustomapi
+				}
+				if postIndex > l {
+					return io.ErrUnexpectedEOF
+				}
+				var elementCount int
+				if elementCount != 0 && len(m.Category) == 0 {
+					m.Category = make([]app_type.APIEPCategory, 0, elementCount)
+				}
+				for iNdEx < postIndex {
+					var v app_type.APIEPCategory
+					for shift := uint(0); ; shift += 7 {
+						if shift >= 64 {
+							return ErrIntOverflowPublicApiepCustomapi
+						}
+						if iNdEx >= l {
+							return io.ErrUnexpectedEOF
+						}
+						b := dAtA[iNdEx]
+						iNdEx++
+						v |= app_type.APIEPCategory(b&0x7F) << shift
+						if b < 0x80 {
+							break
+						}
+					}
+					m.Category = append(m.Category, v)
+				}
+			} else {
+				return fmt.Errorf("proto: wrong wireType = %d for field Category", wireType)
+			}
+		case 4:
+			if wireType == 0 {
+				var v app_type.SensitiveDataType
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return ErrIntOverflowPublicApiepCustomapi
+					}
+					if iNdEx >= l {
+						return io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					v |= app_type.SensitiveDataType(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				m.SensitiveData = append(m.SensitiveData, v)
+			} else if wireType == 2 {
+				var packedLen int
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return ErrIntOverflowPublicApiepCustomapi
+					}
+					if iNdEx >= l {
+						return io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					packedLen |= int(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				if packedLen < 0 {
+					return ErrInvalidLengthPublicApiepCustomapi
+				}
+				postIndex := iNdEx + packedLen
+				if postIndex < 0 {
+					return ErrInvalidLengthPublicApiepCustomapi
+				}
+				if postIndex > l {
+					return io.ErrUnexpectedEOF
+				}
+				var elementCount int
+				if elementCount != 0 && len(m.SensitiveData) == 0 {
+					m.SensitiveData = make([]app_type.SensitiveDataType, 0, elementCount)
+				}
+				for iNdEx < postIndex {
+					var v app_type.SensitiveDataType
+					for shift := uint(0); ; shift += 7 {
+						if shift >= 64 {
+							return ErrIntOverflowPublicApiepCustomapi
+						}
+						if iNdEx >= l {
+							return io.ErrUnexpectedEOF
+						}
+						b := dAtA[iNdEx]
+						iNdEx++
+						v |= app_type.SensitiveDataType(b&0x7F) << shift
+						if b < 0x80 {
+							break
+						}
+					}
+					m.SensitiveData = append(m.SensitiveData, v)
+				}
+			} else {
+				return fmt.Errorf("proto: wrong wireType = %d for field SensitiveData", wireType)
+			}
 		default:
 			iNdEx = preIndex
 			skippy, err := skipPublicApiepCustomapi(dAtA[iNdEx:])

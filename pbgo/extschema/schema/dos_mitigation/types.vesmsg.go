@@ -16,7 +16,6 @@ import (
 
 	ves_io_schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
 	ves_io_schema_policy "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/policy"
-	ves_io_schema_views "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views"
 )
 
 var (
@@ -636,22 +635,27 @@ func (m *Destination) GetDRefInfo() ([]db.DRefInfo, error) {
 }
 
 func (m *Destination) GetVirtualHostDRefInfo() ([]db.DRefInfo, error) {
-
-	vref := m.GetVirtualHost()
-	if vref == nil {
+	refs := m.GetVirtualHost()
+	if len(refs) == 0 {
 		return nil, nil
 	}
-	vdRef := db.NewDirectRefForView(vref)
-	vdRef.SetKind("virtual_host.Object")
-	dri := db.DRefInfo{
-		RefdType:   "virtual_host.Object",
-		RefdTenant: vref.Tenant,
-		RefdNS:     vref.Namespace,
-		RefdName:   vref.Name,
-		DRField:    "virtual_host",
-		Ref:        vdRef,
+	drInfos := make([]db.DRefInfo, 0, len(refs))
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("Destination.virtual_host[%d] has a nil value", i)
+		}
+		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "virtual_host.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "virtual_host",
+			Ref:        ref,
+		})
 	}
-	return []db.DRefInfo{dri}, nil
+	return drInfos, nil
 
 }
 
@@ -662,23 +666,14 @@ func (m *Destination) GetVirtualHostDBEntries(ctx context.Context, d db.Interfac
 	if err != nil {
 		return nil, errors.Wrap(err, "Cannot find type for kind: virtual_host")
 	}
-
-	vref := m.GetVirtualHost()
-	if vref == nil {
-		return nil, nil
-	}
-	ref := &ves_io_schema.ObjectRefType{
-		Kind:      "virtual_host.Object",
-		Tenant:    vref.Tenant,
-		Namespace: vref.Namespace,
-		Name:      vref.Name,
-	}
-	refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
-	if err != nil {
-		return nil, errors.Wrap(err, "Getting referred entry")
-	}
-	if refdEnt != nil {
-		entries = append(entries, refdEnt)
+	for _, ref := range m.GetVirtualHost() {
+		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+		if err != nil {
+			return nil, errors.Wrap(err, "Getting referred entry")
+		}
+		if refdEnt != nil {
+			entries = append(entries, refdEnt)
+		}
 	}
 
 	return entries, nil
@@ -690,19 +685,46 @@ type ValidateDestination struct {
 
 func (v *ValidateDestination) VirtualHostValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
-	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
-		return nil, errors.Wrap(err, "MessageValidationRuleHandler for virtual_host")
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for virtual_host")
 	}
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema.ObjectRefType, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := ves_io_schema.ObjectRefTypeValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for virtual_host")
+	}
+
 	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
-		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
-			return err
+		elems, ok := val.([]*ves_io_schema.ObjectRefType)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema.ObjectRefType, got %T", val)
 		}
-
-		if err := ves_io_schema_views.ObjectRefTypeValidator().Validate(ctx, val, opts...); err != nil {
-			return err
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
 		}
-
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated virtual_host")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items virtual_host")
+		}
 		return nil
 	}
 
@@ -724,7 +746,6 @@ func (v *ValidateDestination) Validate(ctx context.Context, pm interface{}, opts
 	}
 
 	if fv, exists := v.FldValidators["virtual_host"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("virtual_host"))
 		if err := fv(ctx, m.GetVirtualHost(), vOpts...); err != nil {
 			return err

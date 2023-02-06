@@ -2312,6 +2312,12 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/viewsSiteStaticRoutesListType",
                     "x-displayname": "Manage Static routes"
                 },
+                "performance_enhancement_mode": {
+                    "description": " Performance Enhancement Mode to optimize for L3 or L7 networking",
+                    "title": "Performance Enhancement Choice",
+                    "$ref": "#/definitions/viewsPerformanceEnhancementModeType",
+                    "x-displayname": "Performance Enhancement Mode"
+                },
                 "sm_connection_public_ip": {
                     "description": "Exclusive with [sm_connection_pvt_ip]\n Site Mesh Group Connection Via Public IP. This option will use elastic IP for\n creating ipsec between two sites which are part of the site mesh group",
                     "title": "Site Mesh Group Connection Via Public Ip",
@@ -2457,6 +2463,12 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/viewsSiteStaticRoutesListType",
                     "x-displayname": "Manage Static routes"
                 },
+                "performance_enhancement_mode": {
+                    "description": " Performance Enhancement Mode to optimize for L3 or L7 networking",
+                    "title": "Performance Enhancement Choice",
+                    "$ref": "#/definitions/viewsPerformanceEnhancementModeType",
+                    "x-displayname": "Performance Enhancement Mode"
+                },
                 "sm_connection_public_ip": {
                     "description": "Exclusive with [sm_connection_pvt_ip]\n Site Mesh Group Connection Via Public IP. This option will use elastic IP for\n creating ipsec between two sites which are part of the site mesh group",
                     "title": "Site Mesh Group Connection Via Public Ip",
@@ -2581,6 +2593,12 @@ var APISwaggerJSON string = `{
                     "title": "Manage Static routes",
                     "$ref": "#/definitions/viewsSiteStaticRoutesListType",
                     "x-displayname": "Manage Static routes"
+                },
+                "performance_enhancement_mode": {
+                    "description": " Performance Enhancement Mode to optimize for L3 or L7 networking",
+                    "title": "Performance Enhancement Choice",
+                    "$ref": "#/definitions/viewsPerformanceEnhancementModeType",
+                    "x-displayname": "Performance Enhancement Mode"
                 },
                 "sm_connection_public_ip": {
                     "description": "Exclusive with [sm_connection_pvt_ip]\n Site Mesh Group Connection Via Public IP. This option will use elastic IP for\n creating ipsec between two sites which are part of the site mesh group",
@@ -2735,6 +2753,12 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/viewsSiteStaticRoutesListType",
                     "x-displayname": "Manage Static routes"
                 },
+                "performance_enhancement_mode": {
+                    "description": " Performance Enhancement Mode to optimize for L3 or L7 networking",
+                    "title": "Performance Enhancement Choice",
+                    "$ref": "#/definitions/viewsPerformanceEnhancementModeType",
+                    "x-displayname": "Performance Enhancement Mode"
+                },
                 "sm_connection_public_ip": {
                     "description": "Exclusive with [sm_connection_pvt_ip]\n Site Mesh Group Connection Via Public IP. This option will use elastic IP for\n creating ipsec between two sites which are part of the site mesh group",
                     "title": "Site Mesh Group Connection Via Public Ip",
@@ -2782,6 +2806,12 @@ var APISwaggerJSON string = `{
                     "title": "Node Information",
                     "$ref": "#/definitions/viewsAzureVnetOneInterfaceNodeARType",
                     "x-displayname": "Ingress Gateway (One Interface) Node information"
+                },
+                "performance_enhancement_mode": {
+                    "description": " Performance Enhancement Mode to optimize for L3 or L7 networking",
+                    "title": "Performance Enhancement Choice",
+                    "$ref": "#/definitions/viewsPerformanceEnhancementModeType",
+                    "x-displayname": "Performance Enhancement Mode"
                 }
             }
         },
@@ -2826,6 +2856,12 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.string.in": "[\\\"azure-byol-voltmesh\\\"]",
                         "ves.io.schema.rules.string.max_len": "64"
                     }
+                },
+                "performance_enhancement_mode": {
+                    "description": " Performance Enhancement Mode to optimize for L3 or L7 networking",
+                    "title": "Performance Enhancement Choice",
+                    "$ref": "#/definitions/viewsPerformanceEnhancementModeType",
+                    "x-displayname": "Performance Enhancement Mode"
                 }
             }
         },
@@ -6585,6 +6621,29 @@ var APISwaggerJSON string = `{
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.string.max_len": "20"
                     }
+                }
+            }
+        },
+        "viewsPerformanceEnhancementModeType": {
+            "type": "object",
+            "description": "x-required\nPerformance Enhancement Mode to optimize for L3 or L7 networking",
+            "title": "Performance Enhancement Choice",
+            "x-displayname": "Performance Enhancement Mode",
+            "x-ves-displayorder": "1",
+            "x-ves-oneof-field-perf_mode_choice": "[\"perf_mode_l3_enhanced\",\"perf_mode_l7_enhanced\"]",
+            "x-ves-proto-message": "ves.io.schema.views.PerformanceEnhancementModeType",
+            "properties": {
+                "perf_mode_l3_enhanced": {
+                    "description": "Exclusive with [perf_mode_l7_enhanced]\n Site optimized for L3 traffic processing",
+                    "title": "L3 Mode Enhanced Performance",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "L3 Mode Enhanced Performance"
+                },
+                "perf_mode_l7_enhanced": {
+                    "description": "Exclusive with [perf_mode_l3_enhanced]\n Site optimized for L7 traffic processing",
+                    "title": "Default Performance Mode",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "L7 Enhanced"
                 }
             }
         },

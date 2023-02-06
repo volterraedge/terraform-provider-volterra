@@ -740,6 +740,15 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["plan_type"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("plan_type"))
+		if err := fv(ctx, m.GetPlanType(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["proxy_root_ca_latest_version"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("proxy_root_ca_latest_version"))

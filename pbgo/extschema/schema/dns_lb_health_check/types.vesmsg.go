@@ -13,6 +13,9 @@ import (
 	"gopkg.volterra.us/stdlib/codec"
 	"gopkg.volterra.us/stdlib/db"
 	"gopkg.volterra.us/stdlib/errors"
+
+	ves_io_schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+	ves_io_schema_views "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views"
 )
 
 var (
@@ -151,6 +154,17 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
+	case *CreateSpecType_TcpHexHealthCheck:
+		if fv, exists := v.FldValidators["health_check.tcp_hex_health_check"]; exists {
+			val := m.GetHealthCheck().(*CreateSpecType_TcpHexHealthCheck).TcpHexHealthCheck
+			vOpts := append(opts,
+				db.WithValidateField("health_check"),
+				db.WithValidateField("tcp_hex_health_check"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 
@@ -184,6 +198,7 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	v.FldValidators["health_check.tcp_health_check"] = TcpHealthCheckValidator().Validate
 	v.FldValidators["health_check.udp_health_check"] = UdpHealthCheckValidator().Validate
 	v.FldValidators["health_check.https_health_check"] = HttpHealthCheckValidator().Validate
+	v.FldValidators["health_check.tcp_hex_health_check"] = TcpHexHealthCheckValidator().Validate
 
 	return v
 }()
@@ -229,6 +244,70 @@ func (m *GetSpecType) Validate(ctx context.Context, opts ...db.ValidateOpt) erro
 	return GetSpecTypeValidator().Validate(ctx, m, opts...)
 }
 
+func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetDnsLbPoolsDRefInfo()
+
+}
+
+func (m *GetSpecType) GetDnsLbPoolsDRefInfo() ([]db.DRefInfo, error) {
+	vrefs := m.GetDnsLbPools()
+	if len(vrefs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(vrefs))
+	for i, vref := range vrefs {
+		if vref == nil {
+			return nil, fmt.Errorf("GetSpecType.dns_lb_pools[%d] has a nil value", i)
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("dns_lb_pool.Object")
+		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "dns_lb_pool.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "dns_lb_pools",
+			Ref:        vdRef,
+		})
+	}
+	return drInfos, nil
+
+}
+
+// GetDnsLbPoolsDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *GetSpecType) GetDnsLbPoolsDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+	refdType, err := d.TypeForEntryKind("", "", "dns_lb_pool.Object")
+	if err != nil {
+		return nil, errors.Wrap(err, "Cannot find type for kind: dns_lb_pool")
+	}
+	for i, vref := range m.GetDnsLbPools() {
+		if vref == nil {
+			return nil, fmt.Errorf("GetSpecType.dns_lb_pools[%d] has a nil value", i)
+		}
+		ref := &ves_io_schema.ObjectRefType{
+			Kind:      "dns_lb_pool.Object",
+			Tenant:    vref.Tenant,
+			Namespace: vref.Namespace,
+			Name:      vref.Name,
+		}
+		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+		if err != nil {
+			return nil, errors.Wrap(err, "Getting referred entry")
+		}
+		if refdEnt != nil {
+			entries = append(entries, refdEnt)
+		}
+	}
+
+	return entries, nil
+}
+
 type ValidateGetSpecType struct {
 	FldValidators map[string]db.ValidatorFunc
 }
@@ -253,6 +332,18 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 	}
 	if m == nil {
 		return nil
+	}
+
+	if fv, exists := v.FldValidators["dns_lb_pools"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("dns_lb_pools"))
+		for idx, item := range m.GetDnsLbPools() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
 	}
 
 	if fv, exists := v.FldValidators["health_check"]; exists {
@@ -321,6 +412,17 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
+	case *GetSpecType_TcpHexHealthCheck:
+		if fv, exists := v.FldValidators["health_check.tcp_hex_health_check"]; exists {
+			val := m.GetHealthCheck().(*GetSpecType_TcpHexHealthCheck).TcpHexHealthCheck
+			vOpts := append(opts,
+				db.WithValidateField("health_check"),
+				db.WithValidateField("tcp_hex_health_check"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 
@@ -354,6 +456,9 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v.FldValidators["health_check.tcp_health_check"] = TcpHealthCheckValidator().Validate
 	v.FldValidators["health_check.udp_health_check"] = UdpHealthCheckValidator().Validate
 	v.FldValidators["health_check.https_health_check"] = HttpHealthCheckValidator().Validate
+	v.FldValidators["health_check.tcp_hex_health_check"] = TcpHexHealthCheckValidator().Validate
+
+	v.FldValidators["dns_lb_pools"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	return v
 }()
@@ -397,6 +502,70 @@ func (m *GlobalSpecType) DeepCopyProto() proto.Message {
 
 func (m *GlobalSpecType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
 	return GlobalSpecTypeValidator().Validate(ctx, m, opts...)
+}
+
+func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetDnsLbPoolsDRefInfo()
+
+}
+
+func (m *GlobalSpecType) GetDnsLbPoolsDRefInfo() ([]db.DRefInfo, error) {
+	vrefs := m.GetDnsLbPools()
+	if len(vrefs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(vrefs))
+	for i, vref := range vrefs {
+		if vref == nil {
+			return nil, fmt.Errorf("GlobalSpecType.dns_lb_pools[%d] has a nil value", i)
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("dns_lb_pool.Object")
+		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "dns_lb_pool.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "dns_lb_pools",
+			Ref:        vdRef,
+		})
+	}
+	return drInfos, nil
+
+}
+
+// GetDnsLbPoolsDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *GlobalSpecType) GetDnsLbPoolsDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+	refdType, err := d.TypeForEntryKind("", "", "dns_lb_pool.Object")
+	if err != nil {
+		return nil, errors.Wrap(err, "Cannot find type for kind: dns_lb_pool")
+	}
+	for i, vref := range m.GetDnsLbPools() {
+		if vref == nil {
+			return nil, fmt.Errorf("GlobalSpecType.dns_lb_pools[%d] has a nil value", i)
+		}
+		ref := &ves_io_schema.ObjectRefType{
+			Kind:      "dns_lb_pool.Object",
+			Tenant:    vref.Tenant,
+			Namespace: vref.Namespace,
+			Name:      vref.Name,
+		}
+		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+		if err != nil {
+			return nil, errors.Wrap(err, "Getting referred entry")
+		}
+		if refdEnt != nil {
+			entries = append(entries, refdEnt)
+		}
+	}
+
+	return entries, nil
 }
 
 type ValidateGlobalSpecType struct {
@@ -443,6 +612,18 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 	}
 	if m == nil {
 		return nil
+	}
+
+	if fv, exists := v.FldValidators["dns_lb_pools"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("dns_lb_pools"))
+		for idx, item := range m.GetDnsLbPools() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
 	}
 
 	if fv, exists := v.FldValidators["health_check"]; exists {
@@ -506,6 +687,17 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 			vOpts := append(opts,
 				db.WithValidateField("health_check"),
 				db.WithValidateField("https_health_check"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GlobalSpecType_TcpHexHealthCheck:
+		if fv, exists := v.FldValidators["health_check.tcp_hex_health_check"]; exists {
+			val := m.GetHealthCheck().(*GlobalSpecType_TcpHexHealthCheck).TcpHexHealthCheck
+			vOpts := append(opts,
+				db.WithValidateField("health_check"),
+				db.WithValidateField("tcp_hex_health_check"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
@@ -586,6 +778,9 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v.FldValidators["health_check.tcp_health_check"] = TcpHealthCheckValidator().Validate
 	v.FldValidators["health_check.udp_health_check"] = UdpHealthCheckValidator().Validate
 	v.FldValidators["health_check.https_health_check"] = HttpHealthCheckValidator().Validate
+	v.FldValidators["health_check.tcp_hex_health_check"] = TcpHexHealthCheckValidator().Validate
+
+	v.FldValidators["dns_lb_pools"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	return v
 }()
@@ -893,6 +1088,17 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
+	case *ReplaceSpecType_TcpHexHealthCheck:
+		if fv, exists := v.FldValidators["health_check.tcp_hex_health_check"]; exists {
+			val := m.GetHealthCheck().(*ReplaceSpecType_TcpHexHealthCheck).TcpHexHealthCheck
+			vOpts := append(opts,
+				db.WithValidateField("health_check"),
+				db.WithValidateField("tcp_hex_health_check"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 
@@ -926,6 +1132,7 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	v.FldValidators["health_check.tcp_health_check"] = TcpHealthCheckValidator().Validate
 	v.FldValidators["health_check.udp_health_check"] = UdpHealthCheckValidator().Validate
 	v.FldValidators["health_check.https_health_check"] = HttpHealthCheckValidator().Validate
+	v.FldValidators["health_check.tcp_hex_health_check"] = TcpHexHealthCheckValidator().Validate
 
 	return v
 }()
@@ -1102,6 +1309,177 @@ var DefaultTcpHealthCheckValidator = func() *ValidateTcpHealthCheck {
 
 func TcpHealthCheckValidator() db.Validator {
 	return DefaultTcpHealthCheckValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *TcpHexHealthCheck) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *TcpHexHealthCheck) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *TcpHexHealthCheck) DeepCopy() *TcpHexHealthCheck {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &TcpHexHealthCheck{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *TcpHexHealthCheck) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *TcpHexHealthCheck) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return TcpHexHealthCheckValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateTcpHexHealthCheck struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateTcpHexHealthCheck) SendValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for send")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateTcpHexHealthCheck) ReceiveValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for receive")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateTcpHexHealthCheck) HealthCheckPortValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for health_check_port")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateTcpHexHealthCheck) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*TcpHexHealthCheck)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *TcpHexHealthCheck got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["health_check_port"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("health_check_port"))
+		if err := fv(ctx, m.GetHealthCheckPort(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["receive"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("receive"))
+		if err := fv(ctx, m.GetReceive(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["send"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("send"))
+		if err := fv(ctx, m.GetSend(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultTcpHexHealthCheckValidator = func() *ValidateTcpHexHealthCheck {
+	v := &ValidateTcpHexHealthCheck{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhSend := v.SendValidationRuleHandler
+	rulesSend := map[string]string{
+		"ves.io.schema.rules.string.hex":     "true",
+		"ves.io.schema.rules.string.max_len": "2048",
+	}
+	vFn, err = vrhSend(rulesSend)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for TcpHexHealthCheck.send: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["send"] = vFn
+
+	vrhReceive := v.ReceiveValidationRuleHandler
+	rulesReceive := map[string]string{
+		"ves.io.schema.rules.string.hex":     "true",
+		"ves.io.schema.rules.string.max_len": "2048",
+	}
+	vFn, err = vrhReceive(rulesReceive)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for TcpHexHealthCheck.receive: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["receive"] = vFn
+
+	vrhHealthCheckPort := v.HealthCheckPortValidationRuleHandler
+	rulesHealthCheckPort := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.uint32.gte":       "1",
+		"ves.io.schema.rules.uint32.lte":       "65535",
+	}
+	vFn, err = vrhHealthCheckPort(rulesHealthCheckPort)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for TcpHexHealthCheck.health_check_port: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["health_check_port"] = vFn
+
+	return v
+}()
+
+func TcpHexHealthCheckValidator() db.Validator {
+	return DefaultTcpHexHealthCheckValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -1296,6 +1674,9 @@ func (r *CreateSpecType) SetHealthCheckToGlobalSpecType(o *GlobalSpecType) error
 	case *CreateSpecType_TcpHealthCheck:
 		o.HealthCheck = &GlobalSpecType_TcpHealthCheck{TcpHealthCheck: of.TcpHealthCheck}
 
+	case *CreateSpecType_TcpHexHealthCheck:
+		o.HealthCheck = &GlobalSpecType_TcpHexHealthCheck{TcpHexHealthCheck: of.TcpHexHealthCheck}
+
 	case *CreateSpecType_UdpHealthCheck:
 		o.HealthCheck = &GlobalSpecType_UdpHealthCheck{UdpHealthCheck: of.UdpHealthCheck}
 
@@ -1321,6 +1702,9 @@ func (r *CreateSpecType) GetHealthCheckFromGlobalSpecType(o *GlobalSpecType) err
 
 	case *GlobalSpecType_TcpHealthCheck:
 		r.HealthCheck = &CreateSpecType_TcpHealthCheck{TcpHealthCheck: of.TcpHealthCheck}
+
+	case *GlobalSpecType_TcpHexHealthCheck:
+		r.HealthCheck = &CreateSpecType_TcpHexHealthCheck{TcpHexHealthCheck: of.TcpHexHealthCheck}
 
 	case *GlobalSpecType_UdpHealthCheck:
 		r.HealthCheck = &CreateSpecType_UdpHealthCheck{UdpHealthCheck: of.UdpHealthCheck}
@@ -1382,6 +1766,9 @@ func (r *GetSpecType) SetHealthCheckToGlobalSpecType(o *GlobalSpecType) error {
 	case *GetSpecType_TcpHealthCheck:
 		o.HealthCheck = &GlobalSpecType_TcpHealthCheck{TcpHealthCheck: of.TcpHealthCheck}
 
+	case *GetSpecType_TcpHexHealthCheck:
+		o.HealthCheck = &GlobalSpecType_TcpHexHealthCheck{TcpHexHealthCheck: of.TcpHexHealthCheck}
+
 	case *GetSpecType_UdpHealthCheck:
 		o.HealthCheck = &GlobalSpecType_UdpHealthCheck{UdpHealthCheck: of.UdpHealthCheck}
 
@@ -1408,6 +1795,9 @@ func (r *GetSpecType) GetHealthCheckFromGlobalSpecType(o *GlobalSpecType) error 
 	case *GlobalSpecType_TcpHealthCheck:
 		r.HealthCheck = &GetSpecType_TcpHealthCheck{TcpHealthCheck: of.TcpHealthCheck}
 
+	case *GlobalSpecType_TcpHexHealthCheck:
+		r.HealthCheck = &GetSpecType_TcpHexHealthCheck{TcpHexHealthCheck: of.TcpHexHealthCheck}
+
 	case *GlobalSpecType_UdpHealthCheck:
 		r.HealthCheck = &GetSpecType_UdpHealthCheck{UdpHealthCheck: of.UdpHealthCheck}
 
@@ -1421,6 +1811,7 @@ func (m *GetSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	if f == nil {
 		return
 	}
+	m.DnsLbPools = f.GetDnsLbPools()
 	m.GetHealthCheckFromGlobalSpecType(f)
 }
 
@@ -1439,6 +1830,7 @@ func (m *GetSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	}
 	_ = m1
 
+	f.DnsLbPools = m1.DnsLbPools
 	m1.SetHealthCheckToGlobalSpecType(f)
 }
 
@@ -1468,6 +1860,9 @@ func (r *ReplaceSpecType) SetHealthCheckToGlobalSpecType(o *GlobalSpecType) erro
 	case *ReplaceSpecType_TcpHealthCheck:
 		o.HealthCheck = &GlobalSpecType_TcpHealthCheck{TcpHealthCheck: of.TcpHealthCheck}
 
+	case *ReplaceSpecType_TcpHexHealthCheck:
+		o.HealthCheck = &GlobalSpecType_TcpHexHealthCheck{TcpHexHealthCheck: of.TcpHexHealthCheck}
+
 	case *ReplaceSpecType_UdpHealthCheck:
 		o.HealthCheck = &GlobalSpecType_UdpHealthCheck{UdpHealthCheck: of.UdpHealthCheck}
 
@@ -1493,6 +1888,9 @@ func (r *ReplaceSpecType) GetHealthCheckFromGlobalSpecType(o *GlobalSpecType) er
 
 	case *GlobalSpecType_TcpHealthCheck:
 		r.HealthCheck = &ReplaceSpecType_TcpHealthCheck{TcpHealthCheck: of.TcpHealthCheck}
+
+	case *GlobalSpecType_TcpHexHealthCheck:
+		r.HealthCheck = &ReplaceSpecType_TcpHexHealthCheck{TcpHexHealthCheck: of.TcpHexHealthCheck}
 
 	case *GlobalSpecType_UdpHealthCheck:
 		r.HealthCheck = &ReplaceSpecType_UdpHealthCheck{UdpHealthCheck: of.UdpHealthCheck}

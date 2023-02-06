@@ -2295,6 +2295,12 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/viewsSiteStaticRoutesListType",
                     "x-displayname": "Manage Static routes"
                 },
+                "performance_enhancement_mode": {
+                    "description": " Performance Enhancement Mode to optimize for L3 or L7 networking",
+                    "title": "Performance Enhancement Choice",
+                    "$ref": "#/definitions/viewsPerformanceEnhancementModeType",
+                    "x-displayname": "Performance Enhancement Mode"
+                },
                 "sm_connection_public_ip": {
                     "description": "Exclusive with [sm_connection_pvt_ip]\n Site Mesh Group Connection Via Public IP. This option will use elastic IP for\n creating ipsec between two sites which are part of the site mesh group",
                     "title": "Site Mesh Group Connection Via Public Ip",
@@ -2318,7 +2324,6 @@ var APISwaggerJSON string = `{
             "x-ves-oneof-field-forward_proxy_choice": "[\"active_forward_proxy_policies\",\"forward_proxy_allow_all\",\"no_forward_proxy\"]",
             "x-ves-oneof-field-global_network_choice": "[\"global_network_list\",\"no_global_network\"]",
             "x-ves-oneof-field-inside_static_route_choice": "[\"inside_static_routes\",\"no_inside_static_routes\"]",
-            "x-ves-oneof-field-internet_vip_choice": "[\"disable_internet_vip\",\"enable_internet_vip\"]",
             "x-ves-oneof-field-network_policy_choice": "[\"active_network_policies\",\"no_network_policy\"]",
             "x-ves-oneof-field-outside_static_route_choice": "[\"no_outside_static_routes\",\"outside_static_routes\"]",
             "x-ves-oneof-field-site_mesh_group_choice": "[\"sm_connection_public_ip\",\"sm_connection_pvt_ip\"]",
@@ -2388,18 +2393,6 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/schemaviewsObjectRefType",
                     "x-displayname": "Member of DC Cluster Group via Outside Network"
                 },
-                "disable_internet_vip": {
-                    "description": "Exclusive with [enable_internet_vip]\n Do not create Internet VIP",
-                    "title": "Disable Internet VIP",
-                    "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "Disable Internet VIP"
-                },
-                "enable_internet_vip": {
-                    "description": "Exclusive with [disable_internet_vip]\n Enable Internet VIP.",
-                    "title": "Enable Internet VIP",
-                    "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "Enable Internet VIP"
-                },
                 "forward_proxy_allow_all": {
                     "description": "Exclusive with [active_forward_proxy_policies no_forward_proxy]\n Enable Forward Proxy for this site and allow all requests.",
                     "title": "Enable Forward Proxy with Allow All Policy",
@@ -2460,6 +2453,12 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/viewsSiteStaticRoutesListType",
                     "x-displayname": "Manage Static routes"
                 },
+                "performance_enhancement_mode": {
+                    "description": " Performance Enhancement Mode to optimize for L3 or L7 networking",
+                    "title": "Performance Enhancement Choice",
+                    "$ref": "#/definitions/viewsPerformanceEnhancementModeType",
+                    "x-displayname": "Performance Enhancement Mode"
+                },
                 "sm_connection_public_ip": {
                     "description": "Exclusive with [sm_connection_pvt_ip]\n Site Mesh Group Connection Via Public IP. This option will use elastic IP for\n creating ipsec between two sites which are part of the site mesh group",
                     "title": "Site Mesh Group Connection Via Public Ip",
@@ -2486,6 +2485,12 @@ var APISwaggerJSON string = `{
                     "title": "Allowed VIP Port Configuration",
                     "$ref": "#/definitions/viewsAllowedVIPPorts",
                     "x-displayname": "Allowed VIP Port Configuration"
+                },
+                "performance_enhancement_mode": {
+                    "description": " Performance Enhancement Mode to optimize for L3 or L7 networking",
+                    "title": "Performance Enhancement Choice",
+                    "$ref": "#/definitions/viewsPerformanceEnhancementModeType",
+                    "x-displayname": "Performance Enhancement Mode"
                 }
             }
         },
@@ -2529,6 +2534,12 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.message.required": "true",
                         "ves.io.schema.rules.repeated.num_items": "1,3"
                     }
+                },
+                "performance_enhancement_mode": {
+                    "description": " Performance Enhancement Mode to optimize for L3 or L7 networking",
+                    "title": "Performance Enhancement Choice",
+                    "$ref": "#/definitions/viewsPerformanceEnhancementModeType",
+                    "x-displayname": "Performance Enhancement Mode"
                 }
             }
         },
@@ -5773,6 +5784,29 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "viewsPerformanceEnhancementModeType": {
+            "type": "object",
+            "description": "x-required\nPerformance Enhancement Mode to optimize for L3 or L7 networking",
+            "title": "Performance Enhancement Choice",
+            "x-displayname": "Performance Enhancement Mode",
+            "x-ves-displayorder": "1",
+            "x-ves-oneof-field-perf_mode_choice": "[\"perf_mode_l3_enhanced\",\"perf_mode_l7_enhanced\"]",
+            "x-ves-proto-message": "ves.io.schema.views.PerformanceEnhancementModeType",
+            "properties": {
+                "perf_mode_l3_enhanced": {
+                    "description": "Exclusive with [perf_mode_l7_enhanced]\n Site optimized for L3 traffic processing",
+                    "title": "L3 Mode Enhanced Performance",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "L3 Mode Enhanced Performance"
+                },
+                "perf_mode_l7_enhanced": {
+                    "description": "Exclusive with [perf_mode_l3_enhanced]\n Site optimized for L7 traffic processing",
+                    "title": "Default Performance Mode",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "L7 Enhanced"
+                }
+            }
+        },
         "viewsSiteStaticRoutesListType": {
             "type": "object",
             "description": "List of static routes",
@@ -5957,6 +5991,7 @@ var APISwaggerJSON string = `{
             "x-ves-oneof-field-blocked_services_choice": "[\"blocked_services\",\"default_blocked_services\"]",
             "x-ves-oneof-field-deployment": "[\"aws_cred\"]",
             "x-ves-oneof-field-direct_connect_choice": "[\"direct_connect_disabled\",\"direct_connect_enabled\"]",
+            "x-ves-oneof-field-internet_vip_choice": "[\"disable_internet_vip\",\"enable_internet_vip\"]",
             "x-ves-oneof-field-logs_receiver_choice": "[\"log_receiver\",\"logs_streaming_disabled\"]",
             "x-ves-oneof-field-site_type": "[\"ingress_egress_gw\",\"ingress_gw\",\"voltstack_cluster\"]",
             "x-ves-oneof-field-worker_nodes": "[\"no_worker_nodes\",\"nodes_per_az\",\"total_nodes\"]",
@@ -6013,6 +6048,11 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/viewsDirectConnectConfigType",
                     "x-displayname": "Enable Direct Connect"
                 },
+                "disable_internet_vip": {
+                    "description": "Exclusive with [enable_internet_vip]\n Do not create Internet VIP",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disable Internet VIP"
+                },
                 "disk_size": {
                     "type": "integer",
                     "description": " Disk size to be used for this instance in GiB. 80 is 80 GiB\n\nExample: - \"80\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 2048\n",
@@ -6022,6 +6062,11 @@ var APISwaggerJSON string = `{
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.uint32.lte": "2048"
                     }
+                },
+                "enable_internet_vip": {
+                    "description": "Exclusive with [disable_internet_vip]\n Enable Internet VIP",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Enable Internet VIP"
                 },
                 "ingress_egress_gw": {
                     "description": "Exclusive with [ingress_gw voltstack_cluster]\n Two interface site is useful when site is used as ingress/egress gateway to the VPC.",
@@ -6140,6 +6185,7 @@ var APISwaggerJSON string = `{
             "x-ves-oneof-field-blocked_services_choice": "[\"blocked_services\",\"default_blocked_services\"]",
             "x-ves-oneof-field-deployment": "[\"aws_cred\"]",
             "x-ves-oneof-field-direct_connect_choice": "[\"direct_connect_disabled\",\"direct_connect_enabled\"]",
+            "x-ves-oneof-field-internet_vip_choice": "[\"disable_internet_vip\",\"enable_internet_vip\"]",
             "x-ves-oneof-field-logs_receiver_choice": "[\"log_receiver\",\"logs_streaming_disabled\"]",
             "x-ves-oneof-field-site_type": "[\"ingress_egress_gw\",\"ingress_gw\",\"voltstack_cluster\"]",
             "x-ves-oneof-field-worker_nodes": "[\"no_worker_nodes\",\"nodes_per_az\",\"total_nodes\"]",
@@ -6206,6 +6252,11 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/viewsDirectConnectInfo",
                     "x-displayname": "Direct Connect Information"
                 },
+                "disable_internet_vip": {
+                    "description": "Exclusive with [enable_internet_vip]\n Do not create Internet VIP",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disable Internet VIP"
+                },
                 "disk_size": {
                     "type": "integer",
                     "description": " Disk size to be used for this instance in GiB. 80 is 80 GiB\n\nExample: - \"80\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 2048\n",
@@ -6215,6 +6266,11 @@ var APISwaggerJSON string = `{
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.uint32.lte": "2048"
                     }
+                },
+                "enable_internet_vip": {
+                    "description": "Exclusive with [disable_internet_vip]\n Enable Internet VIP",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Enable Internet VIP"
                 },
                 "ingress_egress_gw": {
                     "description": "Exclusive with [ingress_gw voltstack_cluster]\n Two interface site is useful when site is used as ingress/egress gateway to the VPC.",
@@ -6327,6 +6383,7 @@ var APISwaggerJSON string = `{
             "x-ves-oneof-field-blocked_services_choice": "[\"blocked_services\",\"default_blocked_services\"]",
             "x-ves-oneof-field-deployment": "[\"aws_cred\"]",
             "x-ves-oneof-field-direct_connect_choice": "[\"direct_connect_disabled\",\"direct_connect_enabled\"]",
+            "x-ves-oneof-field-internet_vip_choice": "[\"disable_internet_vip\",\"enable_internet_vip\"]",
             "x-ves-oneof-field-logs_receiver_choice": "[\"log_receiver\",\"logs_streaming_disabled\"]",
             "x-ves-oneof-field-site_type": "[\"ingress_egress_gw\",\"ingress_gw\",\"voltstack_cluster\"]",
             "x-ves-oneof-field-worker_nodes": "[\"no_worker_nodes\",\"nodes_per_az\",\"total_nodes\"]",
@@ -6403,6 +6460,12 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/viewsDirectConnectInfo",
                     "x-displayname": "Direct Connect Information"
                 },
+                "disable_internet_vip": {
+                    "description": "Exclusive with [enable_internet_vip]\n Do not create Internet VIP",
+                    "title": "Disable Internet VIP",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disable Internet VIP"
+                },
                 "disk_size": {
                     "type": "integer",
                     "description": " Disk size to be used for this instance in GiB. 80 is 80 GiB\n\nExample: - \"80\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 2048\n",
@@ -6413,6 +6476,12 @@ var APISwaggerJSON string = `{
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.uint32.lte": "2048"
                     }
+                },
+                "enable_internet_vip": {
+                    "description": "Exclusive with [disable_internet_vip]\n Enable Internet VIP",
+                    "title": "Enable Internet VIP",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Enable Internet VIP"
                 },
                 "ingress_egress_gw": {
                     "description": "Exclusive with [ingress_gw voltstack_cluster]\n Two interface site is useful when site is used as ingress/egress gateway to the VPC.",
@@ -6543,6 +6612,7 @@ var APISwaggerJSON string = `{
             "x-displayname": "Replace AWS VPC site",
             "x-ves-oneof-field-blocked_services_choice": "[\"blocked_services\",\"default_blocked_services\"]",
             "x-ves-oneof-field-direct_connect_choice": "[\"direct_connect_disabled\",\"direct_connect_enabled\"]",
+            "x-ves-oneof-field-internet_vip_choice": "[\"disable_internet_vip\",\"enable_internet_vip\"]",
             "x-ves-oneof-field-logs_receiver_choice": "[\"log_receiver\",\"logs_streaming_disabled\"]",
             "x-ves-oneof-field-site_type": "[\"ingress_egress_gw\",\"ingress_gw\",\"voltstack_cluster\"]",
             "x-ves-oneof-field-worker_nodes": "[\"no_worker_nodes\",\"nodes_per_az\",\"total_nodes\"]",
@@ -6582,6 +6652,16 @@ var APISwaggerJSON string = `{
                     "description": "Exclusive with [direct_connect_disabled]\n Direct Connect feature is enabled",
                     "$ref": "#/definitions/viewsDirectConnectConfigType",
                     "x-displayname": "Enable Direct Connect"
+                },
+                "disable_internet_vip": {
+                    "description": "Exclusive with [enable_internet_vip]\n Do not create Internet VIP",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disable Internet VIP"
+                },
+                "enable_internet_vip": {
+                    "description": "Exclusive with [disable_internet_vip]\n Enable Internet VIP",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Enable Internet VIP"
                 },
                 "ingress_egress_gw": {
                     "description": "Exclusive with [ingress_gw voltstack_cluster]\n Two interface site is useful when site is used as ingress/egress gateway to the VPC.",

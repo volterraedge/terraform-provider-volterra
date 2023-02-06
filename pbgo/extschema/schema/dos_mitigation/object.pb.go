@@ -47,7 +47,7 @@ type Object struct {
 	// spec
 	//
 	// x-displayName: "Spec"
-	// Specification of the desired behavior of the WAF instance
+	// Specification of DoS Mitigation configuration
 	Spec *SpecType `protobuf:"bytes,3,opt,name=spec,proto3" json:"spec,omitempty"`
 }
 

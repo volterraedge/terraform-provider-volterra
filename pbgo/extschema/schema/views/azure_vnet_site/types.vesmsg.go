@@ -969,6 +969,15 @@ func (v *ValidateAzureVnetIngressEgressGwARReplaceType) Validate(ctx context.Con
 
 	}
 
+	if fv, exists := v.FldValidators["performance_enhancement_mode"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("performance_enhancement_mode"))
+		if err := fv(ctx, m.GetPerformanceEnhancementMode(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["site_mesh_group_choice"]; exists {
 		val := m.GetSiteMeshGroupChoice()
 		vOpts := append(opts,
@@ -1123,6 +1132,8 @@ var DefaultAzureVnetIngressEgressGwARReplaceTypeValidator = func() *ValidateAzur
 	v.FldValidators["network_policy_choice.active_enhanced_firewall_policies"] = ves_io_schema_network_firewall.ActiveEnhancedFirewallPoliciesTypeValidator().Validate
 
 	v.FldValidators["outside_static_route_choice.outside_static_routes"] = ves_io_schema_views.SiteStaticRoutesListTypeValidator().Validate
+
+	v.FldValidators["performance_enhancement_mode"] = ves_io_schema_views.PerformanceEnhancementModeTypeValidator().Validate
 
 	return v
 }()
@@ -1884,6 +1895,15 @@ func (v *ValidateAzureVnetIngressEgressGwARType) Validate(ctx context.Context, p
 
 	}
 
+	if fv, exists := v.FldValidators["performance_enhancement_mode"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("performance_enhancement_mode"))
+		if err := fv(ctx, m.GetPerformanceEnhancementMode(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["site_mesh_group_choice"]; exists {
 		val := m.GetSiteMeshGroupChoice()
 		vOpts := append(opts,
@@ -2053,6 +2073,8 @@ var DefaultAzureVnetIngressEgressGwARTypeValidator = func() *ValidateAzureVnetIn
 	v.FldValidators["outside_static_route_choice.outside_static_routes"] = ves_io_schema_views.SiteStaticRoutesListTypeValidator().Validate
 
 	v.FldValidators["node"] = ves_io_schema_views.AzureVnetTwoInterfaceNodeARTypeValidator().Validate
+
+	v.FldValidators["performance_enhancement_mode"] = ves_io_schema_views.PerformanceEnhancementModeTypeValidator().Validate
 
 	return v
 }()
@@ -2786,6 +2808,15 @@ func (v *ValidateAzureVnetIngressEgressGwReplaceType) Validate(ctx context.Conte
 
 	}
 
+	if fv, exists := v.FldValidators["performance_enhancement_mode"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("performance_enhancement_mode"))
+		if err := fv(ctx, m.GetPerformanceEnhancementMode(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["site_mesh_group_choice"]; exists {
 		val := m.GetSiteMeshGroupChoice()
 		vOpts := append(opts,
@@ -2940,6 +2971,8 @@ var DefaultAzureVnetIngressEgressGwReplaceTypeValidator = func() *ValidateAzureV
 	v.FldValidators["network_policy_choice.active_enhanced_firewall_policies"] = ves_io_schema_network_firewall.ActiveEnhancedFirewallPoliciesTypeValidator().Validate
 
 	v.FldValidators["outside_static_route_choice.outside_static_routes"] = ves_io_schema_views.SiteStaticRoutesListTypeValidator().Validate
+
+	v.FldValidators["performance_enhancement_mode"] = ves_io_schema_views.PerformanceEnhancementModeTypeValidator().Validate
 
 	return v
 }()
@@ -3748,6 +3781,15 @@ func (v *ValidateAzureVnetIngressEgressGwType) Validate(ctx context.Context, pm 
 
 	}
 
+	if fv, exists := v.FldValidators["performance_enhancement_mode"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("performance_enhancement_mode"))
+		if err := fv(ctx, m.GetPerformanceEnhancementMode(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["site_mesh_group_choice"]; exists {
 		val := m.GetSiteMeshGroupChoice()
 		vOpts := append(opts,
@@ -3928,6 +3970,8 @@ var DefaultAzureVnetIngressEgressGwTypeValidator = func() *ValidateAzureVnetIngr
 
 	v.FldValidators["outside_static_route_choice.outside_static_routes"] = ves_io_schema_views.SiteStaticRoutesListTypeValidator().Validate
 
+	v.FldValidators["performance_enhancement_mode"] = ves_io_schema_views.PerformanceEnhancementModeTypeValidator().Validate
+
 	return v
 }()
 
@@ -4087,6 +4131,15 @@ func (v *ValidateAzureVnetIngressGwARType) Validate(ctx context.Context, pm inte
 
 	}
 
+	if fv, exists := v.FldValidators["performance_enhancement_mode"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("performance_enhancement_mode"))
+		if err := fv(ctx, m.GetPerformanceEnhancementMode(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	return nil
 }
 
@@ -4116,6 +4169,8 @@ var DefaultAzureVnetIngressGwARTypeValidator = func() *ValidateAzureVnetIngressG
 	v.FldValidators["azure_certified_hw"] = vFn
 
 	v.FldValidators["node"] = ves_io_schema_views.AzureVnetOneInterfaceNodeARTypeValidator().Validate
+
+	v.FldValidators["performance_enhancement_mode"] = ves_io_schema_views.PerformanceEnhancementModeTypeValidator().Validate
 
 	return v
 }()
@@ -4323,6 +4378,15 @@ func (v *ValidateAzureVnetIngressGwType) Validate(ctx context.Context, pm interf
 
 	}
 
+	if fv, exists := v.FldValidators["performance_enhancement_mode"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("performance_enhancement_mode"))
+		if err := fv(ctx, m.GetPerformanceEnhancementMode(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	return nil
 }
 
@@ -4362,6 +4426,8 @@ var DefaultAzureVnetIngressGwTypeValidator = func() *ValidateAzureVnetIngressGwT
 		panic(errMsg)
 	}
 	v.FldValidators["azure_certified_hw"] = vFn
+
+	v.FldValidators["performance_enhancement_mode"] = ves_io_schema_views.PerformanceEnhancementModeTypeValidator().Validate
 
 	return v
 }()
@@ -13753,6 +13819,7 @@ func (m *AzureVnetIngressEgressGwARReplaceType) fromAzureVnetIngressEgressGwARTy
 	m.GetInsideStaticRouteChoiceFromAzureVnetIngressEgressGwARType(f)
 	m.GetNetworkPolicyChoiceFromAzureVnetIngressEgressGwARType(f)
 	m.GetOutsideStaticRouteChoiceFromAzureVnetIngressEgressGwARType(f)
+	m.PerformanceEnhancementMode = f.GetPerformanceEnhancementMode()
 	m.GetSiteMeshGroupChoiceFromAzureVnetIngressEgressGwARType(f)
 }
 
@@ -13778,6 +13845,7 @@ func (m *AzureVnetIngressEgressGwARReplaceType) toAzureVnetIngressEgressGwARType
 	m1.SetInsideStaticRouteChoiceToAzureVnetIngressEgressGwARType(f)
 	m1.SetNetworkPolicyChoiceToAzureVnetIngressEgressGwARType(f)
 	m1.SetOutsideStaticRouteChoiceToAzureVnetIngressEgressGwARType(f)
+	f.PerformanceEnhancementMode = m1.PerformanceEnhancementMode
 	m1.SetSiteMeshGroupChoiceToAzureVnetIngressEgressGwARType(f)
 }
 
@@ -14098,6 +14166,7 @@ func (m *AzureVnetIngressEgressGwReplaceType) fromAzureVnetIngressEgressGwType(f
 	m.GetInsideStaticRouteChoiceFromAzureVnetIngressEgressGwType(f)
 	m.GetNetworkPolicyChoiceFromAzureVnetIngressEgressGwType(f)
 	m.GetOutsideStaticRouteChoiceFromAzureVnetIngressEgressGwType(f)
+	m.PerformanceEnhancementMode = f.GetPerformanceEnhancementMode()
 	m.GetSiteMeshGroupChoiceFromAzureVnetIngressEgressGwType(f)
 }
 
@@ -14123,6 +14192,7 @@ func (m *AzureVnetIngressEgressGwReplaceType) toAzureVnetIngressEgressGwType(f *
 	m1.SetInsideStaticRouteChoiceToAzureVnetIngressEgressGwType(f)
 	m1.SetNetworkPolicyChoiceToAzureVnetIngressEgressGwType(f)
 	m1.SetOutsideStaticRouteChoiceToAzureVnetIngressEgressGwType(f)
+	f.PerformanceEnhancementMode = m1.PerformanceEnhancementMode
 	m1.SetSiteMeshGroupChoiceToAzureVnetIngressEgressGwType(f)
 }
 

@@ -348,8 +348,8 @@ var DefaultDateAggregationValidator = func() *ValidateDateAggregation {
 
 	vrhStep := v.StepValidationRuleHandler
 	rulesStep := map[string]string{
-		"ves.io.schema.rules.message.required":     "true",
-		"ves.io.schema.rules.string.time_interval": "true",
+		"ves.io.schema.rules.message.required":  "true",
+		"ves.io.schema.rules.string.query_step": "true",
 	}
 	vFn, err = vrhStep(rulesStep)
 	if err != nil {

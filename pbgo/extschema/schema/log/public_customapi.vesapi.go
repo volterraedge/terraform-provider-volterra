@@ -6093,6 +6093,11 @@ var CustomAPISwaggerJSON string = `{
                     "title": "field aggregation\nx-displayName: \"Field Aggregation\"",
                     "$ref": "#/definitions/logFieldAggregationData"
                 },
+                "metrics_aggregation": {
+                    "description": "x-displayName: \"Metrics Aggregation\"\nMetrics aggregation data",
+                    "title": "metrics Aggregation",
+                    "$ref": "#/definitions/logMetricsAggregationData"
+                },
                 "multi_field_aggregation": {
                     "description": "Multi-Field aggregation data",
                     "title": "multi-field aggregation\nx-displayName: \"Multi-Field Aggregation\"",
@@ -6163,6 +6168,18 @@ var CustomAPISwaggerJSON string = `{
                 }
             }
         },
+        "logMetricsAggregationData": {
+            "type": "object",
+            "description": "x-displayName: \"Metrics Aggregation\"\nMetrics aggregation data",
+            "title": "MetricsAggregationData",
+            "properties": {
+                "percentiles_aggregation": {
+                    "description": "percentiles aggregation data",
+                    "title": "percentiles aggregation\nx-displayName: \"Percentiles Aggregation\"",
+                    "$ref": "#/definitions/logPercentilesAggregationData"
+                }
+            }
+        },
         "logMultiFieldAggregationBucket": {
             "type": "object",
             "description": "x-displayName: \"Multi-Field Aggregation Bucket\"\nMulti-Field aggregation bucket containing field values and the number of logs.",
@@ -6193,6 +6210,40 @@ var CustomAPISwaggerJSON string = `{
                     "items": {
                         "$ref": "#/definitions/logMultiFieldAggregationBucket"
                     }
+                }
+            }
+        },
+        "logPercentilesAggregationData": {
+            "type": "object",
+            "description": "x-displayName: \"Percentiles Aggregation Data\"\nPercentiles Aggregation data",
+            "title": "PercentilesAggregationData",
+            "properties": {
+                "values": {
+                    "type": "array",
+                    "description": "x-displayName: \"Values\"\nLists of values containing percent and the corresponding value",
+                    "title": "values",
+                    "items": {
+                        "$ref": "#/definitions/logPercentilesAggregationValue"
+                    }
+                }
+            }
+        },
+        "logPercentilesAggregationValue": {
+            "type": "object",
+            "description": "x-displayName: \"Percentiles Aggregation Value\"\nPercentiles aggregation value containing percent and the corresponding value.",
+            "title": "PercentilesAggregationValue",
+            "properties": {
+                "key": {
+                    "type": "number",
+                    "description": "x-displayName: \"Key\"\nx-example: 99.0",
+                    "title": "key",
+                    "format": "float"
+                },
+                "value": {
+                    "type": "number",
+                    "description": "x-displayName: \"Value\"\nx-example: 985.0\n\nvalue corresponding to the key percent",
+                    "title": "value",
+                    "format": "float"
                 }
             }
         },

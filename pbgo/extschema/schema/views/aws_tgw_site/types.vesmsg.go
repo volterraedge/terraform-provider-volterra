@@ -1289,6 +1289,15 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["performance_enhancement_mode"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("performance_enhancement_mode"))
+		if err := fv(ctx, m.GetPerformanceEnhancementMode(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["sw"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("sw"))
@@ -1435,6 +1444,8 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	v.FldValidators["os"] = ves_io_schema_views.OperatingSystemTypeValidator().Validate
 
 	v.FldValidators["offline_survivability_mode"] = ves_io_schema_views.OfflineSurvivabilityModeTypeValidator().Validate
+
+	v.FldValidators["performance_enhancement_mode"] = ves_io_schema_views.PerformanceEnhancementModeTypeValidator().Validate
 
 	return v
 }()
@@ -2213,6 +2224,15 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 
 	}
 
+	if fv, exists := v.FldValidators["performance_enhancement_mode"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("performance_enhancement_mode"))
+		if err := fv(ctx, m.GetPerformanceEnhancementMode(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["site_state"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("site_state"))
@@ -2460,6 +2480,8 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v.FldValidators["tgw_info"] = AWSTGWInfoConfigTypeValidator().Validate
 
 	v.FldValidators["offline_survivability_mode"] = ves_io_schema_views.OfflineSurvivabilityModeTypeValidator().Validate
+
+	v.FldValidators["performance_enhancement_mode"] = ves_io_schema_views.PerformanceEnhancementModeTypeValidator().Validate
 
 	v.FldValidators["direct_connect_info"] = ves_io_schema_views.DirectConnectInfoValidator().Validate
 
@@ -3189,6 +3211,15 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["performance_enhancement_mode"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("performance_enhancement_mode"))
+		if err := fv(ctx, m.GetPerformanceEnhancementMode(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["site_to_site_tunnel_ip"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("site_to_site_tunnel_ip"))
@@ -3467,6 +3498,8 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v.FldValidators["os"] = ves_io_schema_views.OperatingSystemTypeValidator().Validate
 
 	v.FldValidators["offline_survivability_mode"] = ves_io_schema_views.OfflineSurvivabilityModeTypeValidator().Validate
+
+	v.FldValidators["performance_enhancement_mode"] = ves_io_schema_views.PerformanceEnhancementModeTypeValidator().Validate
 
 	v.FldValidators["tf_params"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
@@ -3878,6 +3911,15 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 
 	}
 
+	if fv, exists := v.FldValidators["performance_enhancement_mode"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("performance_enhancement_mode"))
+		if err := fv(ctx, m.GetPerformanceEnhancementMode(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["tgw_security"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("tgw_security"))
@@ -3990,6 +4032,8 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	v.FldValidators["coordinates"] = ves_io_schema_site.CoordinatesValidator().Validate
 
 	v.FldValidators["offline_survivability_mode"] = ves_io_schema_views.OfflineSurvivabilityModeTypeValidator().Validate
+
+	v.FldValidators["performance_enhancement_mode"] = ves_io_schema_views.PerformanceEnhancementModeTypeValidator().Validate
 
 	return v
 }()
@@ -4449,6 +4493,14 @@ type ValidateServicesVPCReplaceType struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateServicesVPCReplaceType) InternetVipChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for internet_vip_choice")
+	}
+	return validatorFn, nil
+}
+
 func (v *ValidateServicesVPCReplaceType) WorkerNodesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -4484,6 +4536,42 @@ func (v *ValidateServicesVPCReplaceType) Validate(ctx context.Context, pm interf
 	}
 	if m == nil {
 		return nil
+	}
+
+	if fv, exists := v.FldValidators["internet_vip_choice"]; exists {
+		val := m.GetInternetVipChoice()
+		vOpts := append(opts,
+			db.WithValidateField("internet_vip_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetInternetVipChoice().(type) {
+	case *ServicesVPCReplaceType_DisableInternetVip:
+		if fv, exists := v.FldValidators["internet_vip_choice.disable_internet_vip"]; exists {
+			val := m.GetInternetVipChoice().(*ServicesVPCReplaceType_DisableInternetVip).DisableInternetVip
+			vOpts := append(opts,
+				db.WithValidateField("internet_vip_choice"),
+				db.WithValidateField("disable_internet_vip"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ServicesVPCReplaceType_EnableInternetVip:
+		if fv, exists := v.FldValidators["internet_vip_choice.enable_internet_vip"]; exists {
+			val := m.GetInternetVipChoice().(*ServicesVPCReplaceType_EnableInternetVip).EnableInternetVip
+			vOpts := append(opts,
+				db.WithValidateField("internet_vip_choice"),
+				db.WithValidateField("enable_internet_vip"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
 	}
 
 	if fv, exists := v.FldValidators["worker_nodes"]; exists {
@@ -4547,6 +4635,17 @@ var DefaultServicesVPCReplaceTypeValidator = func() *ValidateServicesVPCReplaceT
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
+
+	vrhInternetVipChoice := v.InternetVipChoiceValidationRuleHandler
+	rulesInternetVipChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhInternetVipChoice(rulesInternetVipChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ServicesVPCReplaceType.internet_vip_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["internet_vip_choice"] = vFn
 
 	vrhWorkerNodes := v.WorkerNodesValidationRuleHandler
 	rulesWorkerNodes := map[string]string{
@@ -6742,6 +6841,7 @@ func (m *CreateSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool
 	m.GetLogsReceiverChoiceFromGlobalSpecType(f)
 	m.OfflineSurvivabilityMode = f.GetOfflineSurvivabilityMode()
 	m.Os = f.GetOs()
+	m.PerformanceEnhancementMode = f.GetPerformanceEnhancementMode()
 	m.Sw = f.GetSw()
 	m.Tags = f.GetTags()
 	m.TgwSecurity = f.GetTgwSecurity()
@@ -6772,6 +6872,7 @@ func (m *CreateSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) 
 	m1.SetLogsReceiverChoiceToGlobalSpecType(f)
 	f.OfflineSurvivabilityMode = m1.OfflineSurvivabilityMode
 	f.Os = m1.Os
+	f.PerformanceEnhancementMode = m1.PerformanceEnhancementMode
 	f.Sw = m1.Sw
 	f.Tags = m1.Tags
 	f.TgwSecurity = m1.TgwSecurity
@@ -6905,6 +7006,7 @@ func (m *GetSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	m.GetLogsReceiverChoiceFromGlobalSpecType(f)
 	m.OfflineSurvivabilityMode = f.GetOfflineSurvivabilityMode()
 	m.OperatingSystemVersion = f.GetOperatingSystemVersion()
+	m.PerformanceEnhancementMode = f.GetPerformanceEnhancementMode()
 
 	m.Tags = f.GetTags()
 	m.TgwInfo = f.GetTgwInfo()
@@ -6942,6 +7044,7 @@ func (m *GetSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	m1.SetLogsReceiverChoiceToGlobalSpecType(f)
 	f.OfflineSurvivabilityMode = m1.OfflineSurvivabilityMode
 	f.OperatingSystemVersion = m1.OperatingSystemVersion
+	f.PerformanceEnhancementMode = m1.PerformanceEnhancementMode
 
 	f.Tags = m1.Tags
 	f.TgwInfo = m1.TgwInfo
@@ -7088,6 +7191,7 @@ func (m *ReplaceSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy boo
 	m.GetDirectConnectChoiceFromGlobalSpecType(f)
 	m.GetLogsReceiverChoiceFromGlobalSpecType(f)
 	m.OfflineSurvivabilityMode = f.GetOfflineSurvivabilityMode()
+	m.PerformanceEnhancementMode = f.GetPerformanceEnhancementMode()
 	m.TgwSecurity = f.GetTgwSecurity()
 	m.VnConfig = f.GetVnConfig()
 	m.VpcAttachments = f.GetVpcAttachments()
@@ -7127,6 +7231,7 @@ func (m *ReplaceSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool)
 	m1.SetDirectConnectChoiceToGlobalSpecType(f)
 	m1.SetLogsReceiverChoiceToGlobalSpecType(f)
 	f.OfflineSurvivabilityMode = m1.OfflineSurvivabilityMode
+	f.PerformanceEnhancementMode = m1.PerformanceEnhancementMode
 	f.TgwSecurity = m1.TgwSecurity
 	f.VnConfig = m1.VnConfig
 	f.VpcAttachments = m1.VpcAttachments
@@ -7138,6 +7243,41 @@ func (m *ReplaceSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 
 func (m *ReplaceSpecType) ToGlobalSpecTypeWithoutDeepCopy(f *GlobalSpecType) {
 	m.toGlobalSpecType(f, false)
+}
+
+// create setters in ServicesVPCReplaceType from ServicesVPCType for oneof fields
+func (r *ServicesVPCReplaceType) SetInternetVipChoiceToServicesVPCType(o *ServicesVPCType) error {
+	switch of := r.InternetVipChoice.(type) {
+	case nil:
+		o.InternetVipChoice = nil
+
+	case *ServicesVPCReplaceType_DisableInternetVip:
+		o.InternetVipChoice = &ServicesVPCType_DisableInternetVip{DisableInternetVip: of.DisableInternetVip}
+
+	case *ServicesVPCReplaceType_EnableInternetVip:
+		o.InternetVipChoice = &ServicesVPCType_EnableInternetVip{EnableInternetVip: of.EnableInternetVip}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *ServicesVPCReplaceType) GetInternetVipChoiceFromServicesVPCType(o *ServicesVPCType) error {
+	switch of := o.InternetVipChoice.(type) {
+	case nil:
+		r.InternetVipChoice = nil
+
+	case *ServicesVPCType_DisableInternetVip:
+		r.InternetVipChoice = &ServicesVPCReplaceType_DisableInternetVip{DisableInternetVip: of.DisableInternetVip}
+
+	case *ServicesVPCType_EnableInternetVip:
+		r.InternetVipChoice = &ServicesVPCReplaceType_EnableInternetVip{EnableInternetVip: of.EnableInternetVip}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
 }
 
 // create setters in ServicesVPCReplaceType from ServicesVPCType for oneof fields
@@ -7185,6 +7325,7 @@ func (m *ServicesVPCReplaceType) fromServicesVPCType(f *ServicesVPCType, withDee
 	if f == nil {
 		return
 	}
+	m.GetInternetVipChoiceFromServicesVPCType(f)
 	m.GetWorkerNodesFromServicesVPCType(f)
 }
 
@@ -7203,6 +7344,7 @@ func (m *ServicesVPCReplaceType) toServicesVPCType(f *ServicesVPCType, withDeepC
 	}
 	_ = m1
 
+	m1.SetInternetVipChoiceToServicesVPCType(f)
 	m1.SetWorkerNodesToServicesVPCType(f)
 }
 
