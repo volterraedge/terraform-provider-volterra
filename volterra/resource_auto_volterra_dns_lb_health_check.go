@@ -141,6 +141,31 @@ func resourceVolterraDnsLbHealthCheck() *schema.Resource {
 				},
 			},
 
+			"tcp_hex_health_check": {
+
+				Type:     schema.TypeSet,
+				Optional: true,
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+
+						"health_check_port": {
+							Type:     schema.TypeInt,
+							Optional: true,
+						},
+
+						"receive": {
+							Type:     schema.TypeString,
+							Optional: true,
+						},
+
+						"send": {
+							Type:     schema.TypeString,
+							Optional: true,
+						},
+					},
+				},
+			},
+
 			"udp_health_check": {
 
 				Type:     schema.TypeSet,
@@ -330,6 +355,39 @@ func resourceVolterraDnsLbHealthCheckCreate(d *schema.ResourceData, meta interfa
 			if v, ok := cs["send"]; ok && !isIntfNil(v) {
 
 				healthCheckInt.TcpHealthCheck.Send = v.(string)
+
+			}
+
+		}
+
+	}
+
+	if v, ok := d.GetOk("tcp_hex_health_check"); ok && !healthCheckTypeFound {
+
+		healthCheckTypeFound = true
+		healthCheckInt := &ves_io_schema_dns_lb_health_check.CreateSpecType_TcpHexHealthCheck{}
+		healthCheckInt.TcpHexHealthCheck = &ves_io_schema_dns_lb_health_check.TcpHexHealthCheck{}
+		createSpec.HealthCheck = healthCheckInt
+
+		sl := v.(*schema.Set).List()
+		for _, set := range sl {
+			cs := set.(map[string]interface{})
+
+			if v, ok := cs["health_check_port"]; ok && !isIntfNil(v) {
+
+				healthCheckInt.TcpHexHealthCheck.HealthCheckPort = uint32(v.(int))
+
+			}
+
+			if v, ok := cs["receive"]; ok && !isIntfNil(v) {
+
+				healthCheckInt.TcpHexHealthCheck.Receive = v.(string)
+
+			}
+
+			if v, ok := cs["send"]; ok && !isIntfNil(v) {
+
+				healthCheckInt.TcpHexHealthCheck.Send = v.(string)
 
 			}
 
@@ -574,6 +632,39 @@ func resourceVolterraDnsLbHealthCheckUpdate(d *schema.ResourceData, meta interfa
 			if v, ok := cs["send"]; ok && !isIntfNil(v) {
 
 				healthCheckInt.TcpHealthCheck.Send = v.(string)
+
+			}
+
+		}
+
+	}
+
+	if v, ok := d.GetOk("tcp_hex_health_check"); ok && !healthCheckTypeFound {
+
+		healthCheckTypeFound = true
+		healthCheckInt := &ves_io_schema_dns_lb_health_check.ReplaceSpecType_TcpHexHealthCheck{}
+		healthCheckInt.TcpHexHealthCheck = &ves_io_schema_dns_lb_health_check.TcpHexHealthCheck{}
+		updateSpec.HealthCheck = healthCheckInt
+
+		sl := v.(*schema.Set).List()
+		for _, set := range sl {
+			cs := set.(map[string]interface{})
+
+			if v, ok := cs["health_check_port"]; ok && !isIntfNil(v) {
+
+				healthCheckInt.TcpHexHealthCheck.HealthCheckPort = uint32(v.(int))
+
+			}
+
+			if v, ok := cs["receive"]; ok && !isIntfNil(v) {
+
+				healthCheckInt.TcpHexHealthCheck.Receive = v.(string)
+
+			}
+
+			if v, ok := cs["send"]; ok && !isIntfNil(v) {
+
+				healthCheckInt.TcpHexHealthCheck.Send = v.(string)
 
 			}
 

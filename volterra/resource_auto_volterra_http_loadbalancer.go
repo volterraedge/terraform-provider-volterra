@@ -28,7 +28,6 @@ import (
 	ves_io_schema_views_origin_pool "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/origin_pool"
 	ves_io_schema_views_rate_limiter_policy "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/rate_limiter_policy"
 	ves_io_schema_virtual_host "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/virtual_host"
-	ves_io_schema_waf_rule_list "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/waf_rule_list"
 )
 
 // resourceVolterraHttpLoadbalancer is implementation of Volterra's HttpLoadbalancer resources
@@ -418,6 +417,282 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 									},
 								},
 							},
+						},
+					},
+				},
+			},
+
+			"api_specification": {
+
+				Type:     schema.TypeSet,
+				Optional: true,
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+
+						"api_definition": {
+
+							Type:     schema.TypeSet,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"name": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+									"namespace": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+									"tenant": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+								},
+							},
+						},
+
+						"validation_all_spec_endpoints": {
+
+							Type:     schema.TypeSet,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"fall_through_mode": {
+
+										Type:     schema.TypeSet,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"fall_through_mode_allow": {
+
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
+
+												"fall_through_mode_block": {
+
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
+
+												"fall_through_mode_report": {
+
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
+											},
+										},
+									},
+
+									"validation_mode": {
+
+										Type:     schema.TypeSet,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"skip_validation": {
+
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
+
+												"validation_mode_active": {
+
+													Type:     schema.TypeSet,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"request_validation_properties": {
+
+																Type: schema.TypeList,
+
+																Required: true,
+																Elem: &schema.Schema{
+																	Type: schema.TypeString,
+																},
+															},
+
+															"enforcement_block": {
+
+																Type:     schema.TypeBool,
+																Optional: true,
+															},
+
+															"enforcement_report": {
+
+																Type:     schema.TypeBool,
+																Optional: true,
+															},
+														},
+													},
+												},
+											},
+										},
+									},
+								},
+							},
+						},
+
+						"validation_custom_list": {
+
+							Type:     schema.TypeSet,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"fall_through_mode": {
+
+										Type:     schema.TypeSet,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"fall_through_mode_allow": {
+
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
+
+												"fall_through_mode_block": {
+
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
+
+												"fall_through_mode_report": {
+
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
+											},
+										},
+									},
+
+									"open_api_validation_rules": {
+
+										Type:     schema.TypeList,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"api_endpoint_path": {
+
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+
+												"api_group": {
+
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+
+												"base_path": {
+
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+
+												"any_domain": {
+
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
+
+												"specific_domain": {
+
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+
+												"metadata": {
+
+													Type:     schema.TypeSet,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"description": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+
+															"disable": {
+																Type:     schema.TypeBool,
+																Optional: true,
+															},
+
+															"name": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+														},
+													},
+												},
+
+												"validation_mode": {
+
+													Type:     schema.TypeSet,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"skip_validation": {
+
+																Type:     schema.TypeBool,
+																Optional: true,
+															},
+
+															"validation_mode_active": {
+
+																Type:     schema.TypeSet,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"request_validation_properties": {
+
+																			Type: schema.TypeList,
+
+																			Required: true,
+																			Elem: &schema.Schema{
+																				Type: schema.TypeString,
+																			},
+																		},
+
+																		"enforcement_block": {
+
+																			Type:     schema.TypeBool,
+																			Optional: true,
+																		},
+
+																		"enforcement_report": {
+
+																			Type:     schema.TypeBool,
+																			Optional: true,
+																		},
+																	},
+																},
+															},
+														},
+													},
+												},
+											},
+										},
+									},
+								},
+							},
+						},
+
+						"validation_disabled": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
 						},
 					},
 				},
@@ -2422,8 +2697,88 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 
 																		"login": {
 
-																			Type:     schema.TypeBool,
+																			Type:     schema.TypeSet,
 																			Optional: true,
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{
+
+																					"disable_transaction_result": {
+
+																						Type:     schema.TypeBool,
+																						Optional: true,
+																					},
+
+																					"transaction_result": {
+
+																						Type:     schema.TypeSet,
+																						Optional: true,
+																						Elem: &schema.Resource{
+																							Schema: map[string]*schema.Schema{
+
+																								"failure_conditions": {
+
+																									Type:     schema.TypeList,
+																									Optional: true,
+																									Elem: &schema.Resource{
+																										Schema: map[string]*schema.Schema{
+
+																											"name": {
+																												Type:     schema.TypeString,
+																												Optional: true,
+																											},
+
+																											"regex_values": {
+
+																												Type: schema.TypeList,
+
+																												Optional: true,
+																												Elem: &schema.Schema{
+																													Type: schema.TypeString,
+																												},
+																											},
+
+																											"status": {
+																												Type:     schema.TypeString,
+																												Optional: true,
+																											},
+																										},
+																									},
+																								},
+
+																								"success_conditions": {
+
+																									Type:     schema.TypeList,
+																									Optional: true,
+																									Elem: &schema.Resource{
+																										Schema: map[string]*schema.Schema{
+
+																											"name": {
+																												Type:     schema.TypeString,
+																												Optional: true,
+																											},
+
+																											"regex_values": {
+
+																												Type: schema.TypeList,
+
+																												Optional: true,
+																												Elem: &schema.Schema{
+																													Type: schema.TypeString,
+																												},
+																											},
+
+																											"status": {
+																												Type:     schema.TypeString,
+																												Optional: true,
+																											},
+																										},
+																									},
+																								},
+																							},
+																						},
+																					},
+																				},
+																			},
 																		},
 
 																		"login_mfa": {
@@ -4723,6 +5078,18 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 									},
 								},
 							},
+						},
+
+						"method_get": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+
+						"method_post": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
 						},
 					},
 				},
@@ -7547,6 +7914,81 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 				},
 			},
 
+			"protected_cookies": {
+
+				Type:     schema.TypeList,
+				Optional: true,
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+
+						"add_httponly": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+
+						"ignore_httponly": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+
+						"ignore_max_age": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+
+						"max_age_value": {
+
+							Type:     schema.TypeInt,
+							Optional: true,
+						},
+
+						"name": {
+							Type:     schema.TypeString,
+							Optional: true,
+						},
+
+						"ignore_samesite": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+
+						"samesite_lax": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+
+						"samesite_none": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+
+						"samesite_strict": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+
+						"add_secure": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+
+						"ignore_secure": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+					},
+				},
+			},
+
 			"api_rate_limit": {
 
 				Type:     schema.TypeSet,
@@ -8211,6 +8653,11 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 
 												"host_redirect": {
 													Type:     schema.TypeString,
+													Optional: true,
+												},
+
+												"port_redirect": {
+													Type:     schema.TypeInt,
 													Optional: true,
 												},
 
@@ -9089,56 +9536,16 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 													},
 												},
 
-												"inherited_waf": {
+												"disable_waf": {
 
 													Type:     schema.TypeBool,
 													Optional: true,
 												},
 
-												"waf": {
+												"inherited_waf": {
 
-													Type:     schema.TypeSet,
+													Type:     schema.TypeBool,
 													Optional: true,
-													Elem: &schema.Resource{
-														Schema: map[string]*schema.Schema{
-
-															"name": {
-																Type:     schema.TypeString,
-																Optional: true,
-															},
-															"namespace": {
-																Type:     schema.TypeString,
-																Optional: true,
-															},
-															"tenant": {
-																Type:     schema.TypeString,
-																Optional: true,
-															},
-														},
-													},
-												},
-
-												"waf_rule": {
-
-													Type:     schema.TypeSet,
-													Optional: true,
-													Elem: &schema.Resource{
-														Schema: map[string]*schema.Schema{
-
-															"name": {
-																Type:     schema.TypeString,
-																Optional: true,
-															},
-															"namespace": {
-																Type:     schema.TypeString,
-																Optional: true,
-															},
-															"tenant": {
-																Type:     schema.TypeString,
-																Optional: true,
-															},
-														},
-													},
 												},
 
 												"disable_web_socket_config": {
@@ -9396,6 +9803,26 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 				Optional: true,
 			},
 
+			"slow_ddos_mitigation": {
+
+				Type:     schema.TypeSet,
+				Optional: true,
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+
+						"request_headers_timeout": {
+							Type:     schema.TypeInt,
+							Optional: true,
+						},
+
+						"request_timeout": {
+							Type:     schema.TypeInt,
+							Optional: true,
+						},
+					},
+				},
+			},
+
 			"disable_trust_client_ip_headers": {
 
 				Type:     schema.TypeBool,
@@ -9614,52 +10041,6 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 				Optional: true,
 			},
 
-			"waf": {
-
-				Type:     schema.TypeSet,
-				Optional: true,
-				Elem: &schema.Resource{
-					Schema: map[string]*schema.Schema{
-
-						"name": {
-							Type:     schema.TypeString,
-							Optional: true,
-						},
-						"namespace": {
-							Type:     schema.TypeString,
-							Optional: true,
-						},
-						"tenant": {
-							Type:     schema.TypeString,
-							Optional: true,
-						},
-					},
-				},
-			},
-
-			"waf_rule": {
-
-				Type:     schema.TypeSet,
-				Optional: true,
-				Elem: &schema.Resource{
-					Schema: map[string]*schema.Schema{
-
-						"name": {
-							Type:     schema.TypeString,
-							Optional: true,
-						},
-						"namespace": {
-							Type:     schema.TypeString,
-							Optional: true,
-						},
-						"tenant": {
-							Type:     schema.TypeString,
-							Optional: true,
-						},
-					},
-				},
-			},
-
 			"waf_exclusion_rules": {
 
 				Type:     schema.TypeList,
@@ -9683,16 +10064,6 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 
 							Type:     schema.TypeString,
 							Optional: true,
-						},
-
-						"exclude_rule_ids": {
-
-							Type: schema.TypeList,
-
-							Required: true,
-							Elem: &schema.Schema{
-								Type: schema.TypeString,
-							},
 						},
 
 						"expiration_timestamp": {
@@ -9797,6 +10168,16 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
+												"context": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+
+												"context_name": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+
 												"signature_id": {
 													Type:     schema.TypeInt,
 													Optional: true,
@@ -9811,6 +10192,11 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
+
+												"context": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
 
 												"exclude_violation": {
 													Type:     schema.TypeString,
@@ -10331,6 +10717,438 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 						apiDefinitionsInt[i].Tenant = v.(string)
 					}
 
+				}
+
+			}
+
+		}
+
+	}
+
+	if v, ok := d.GetOk("api_specification"); ok && !apiDefinitionChoiceTypeFound {
+
+		apiDefinitionChoiceTypeFound = true
+		apiDefinitionChoiceInt := &ves_io_schema_views_http_loadbalancer.CreateSpecType_ApiSpecification{}
+		apiDefinitionChoiceInt.ApiSpecification = &ves_io_schema_views_http_loadbalancer.APISpecificationSettings{}
+		createSpec.ApiDefinitionChoice = apiDefinitionChoiceInt
+
+		sl := v.(*schema.Set).List()
+		for _, set := range sl {
+			cs := set.(map[string]interface{})
+
+			if v, ok := cs["api_definition"]; ok && !isIntfNil(v) {
+
+				sl := v.(*schema.Set).List()
+				apiDefinitionIntNew := &ves_io_schema_views.ObjectRefType{}
+				apiDefinitionChoiceInt.ApiSpecification.ApiDefinition = apiDefinitionIntNew
+
+				for _, set := range sl {
+					adMapToStrVal := set.(map[string]interface{})
+					if val, ok := adMapToStrVal["name"]; ok && !isIntfNil(v) {
+						apiDefinitionIntNew.Name = val.(string)
+					}
+					if val, ok := adMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+						apiDefinitionIntNew.Namespace = val.(string)
+					}
+
+					if val, ok := adMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+						apiDefinitionIntNew.Tenant = val.(string)
+					}
+				}
+
+			}
+
+			validationTargetChoiceTypeFound := false
+
+			if v, ok := cs["validation_all_spec_endpoints"]; ok && !isIntfNil(v) && !validationTargetChoiceTypeFound {
+
+				validationTargetChoiceTypeFound = true
+				validationTargetChoiceInt := &ves_io_schema_views_http_loadbalancer.APISpecificationSettings_ValidationAllSpecEndpoints{}
+				validationTargetChoiceInt.ValidationAllSpecEndpoints = &ves_io_schema_views_http_loadbalancer.OpenApiValidationAllSpecEndpointsSettings{}
+				apiDefinitionChoiceInt.ApiSpecification.ValidationTargetChoice = validationTargetChoiceInt
+
+				sl := v.(*schema.Set).List()
+				for _, set := range sl {
+					cs := set.(map[string]interface{})
+
+					if v, ok := cs["fall_through_mode"]; ok && !isIntfNil(v) {
+
+						sl := v.(*schema.Set).List()
+						fallThroughMode := &ves_io_schema_views_http_loadbalancer.OpenApiFallThroughMode{}
+						validationTargetChoiceInt.ValidationAllSpecEndpoints.FallThroughMode = fallThroughMode
+						for _, set := range sl {
+							fallThroughModeMapStrToI := set.(map[string]interface{})
+
+							fallThroughModeChoiceTypeFound := false
+
+							if v, ok := fallThroughModeMapStrToI["fall_through_mode_allow"]; ok && !isIntfNil(v) && !fallThroughModeChoiceTypeFound {
+
+								fallThroughModeChoiceTypeFound = true
+
+								if v.(bool) {
+									fallThroughModeChoiceInt := &ves_io_schema_views_http_loadbalancer.OpenApiFallThroughMode_FallThroughModeAllow{}
+									fallThroughModeChoiceInt.FallThroughModeAllow = &ves_io_schema.Empty{}
+									fallThroughMode.FallThroughModeChoice = fallThroughModeChoiceInt
+								}
+
+							}
+
+							if v, ok := fallThroughModeMapStrToI["fall_through_mode_block"]; ok && !isIntfNil(v) && !fallThroughModeChoiceTypeFound {
+
+								fallThroughModeChoiceTypeFound = true
+
+								if v.(bool) {
+									fallThroughModeChoiceInt := &ves_io_schema_views_http_loadbalancer.OpenApiFallThroughMode_FallThroughModeBlock{}
+									fallThroughModeChoiceInt.FallThroughModeBlock = &ves_io_schema.Empty{}
+									fallThroughMode.FallThroughModeChoice = fallThroughModeChoiceInt
+								}
+
+							}
+
+							if v, ok := fallThroughModeMapStrToI["fall_through_mode_report"]; ok && !isIntfNil(v) && !fallThroughModeChoiceTypeFound {
+
+								fallThroughModeChoiceTypeFound = true
+
+								if v.(bool) {
+									fallThroughModeChoiceInt := &ves_io_schema_views_http_loadbalancer.OpenApiFallThroughMode_FallThroughModeReport{}
+									fallThroughModeChoiceInt.FallThroughModeReport = &ves_io_schema.Empty{}
+									fallThroughMode.FallThroughModeChoice = fallThroughModeChoiceInt
+								}
+
+							}
+
+						}
+
+					}
+
+					if v, ok := cs["validation_mode"]; ok && !isIntfNil(v) {
+
+						sl := v.(*schema.Set).List()
+						validationMode := &ves_io_schema_views_http_loadbalancer.OpenApiValidationMode{}
+						validationTargetChoiceInt.ValidationAllSpecEndpoints.ValidationMode = validationMode
+						for _, set := range sl {
+							validationModeMapStrToI := set.(map[string]interface{})
+
+							validationModeChoiceTypeFound := false
+
+							if v, ok := validationModeMapStrToI["skip_validation"]; ok && !isIntfNil(v) && !validationModeChoiceTypeFound {
+
+								validationModeChoiceTypeFound = true
+
+								if v.(bool) {
+									validationModeChoiceInt := &ves_io_schema_views_http_loadbalancer.OpenApiValidationMode_SkipValidation{}
+									validationModeChoiceInt.SkipValidation = &ves_io_schema.Empty{}
+									validationMode.ValidationModeChoice = validationModeChoiceInt
+								}
+
+							}
+
+							if v, ok := validationModeMapStrToI["validation_mode_active"]; ok && !isIntfNil(v) && !validationModeChoiceTypeFound {
+
+								validationModeChoiceTypeFound = true
+								validationModeChoiceInt := &ves_io_schema_views_http_loadbalancer.OpenApiValidationMode_ValidationModeActive{}
+								validationModeChoiceInt.ValidationModeActive = &ves_io_schema_views_http_loadbalancer.OpenApiValidationModeActive{}
+								validationMode.ValidationModeChoice = validationModeChoiceInt
+
+								sl := v.(*schema.Set).List()
+								for _, set := range sl {
+									cs := set.(map[string]interface{})
+
+									if v, ok := cs["request_validation_properties"]; ok && !isIntfNil(v) {
+
+										request_validation_propertiesList := []ves_io_schema.OpenApiValidationProperties{}
+										for _, j := range v.([]interface{}) {
+											request_validation_propertiesList = append(request_validation_propertiesList, ves_io_schema.OpenApiValidationProperties(ves_io_schema.OpenApiValidationProperties_value[j.(string)]))
+										}
+										validationModeChoiceInt.ValidationModeActive.RequestValidationProperties = request_validation_propertiesList
+
+									}
+
+									validationEnforcementTypeTypeFound := false
+
+									if v, ok := cs["enforcement_block"]; ok && !isIntfNil(v) && !validationEnforcementTypeTypeFound {
+
+										validationEnforcementTypeTypeFound = true
+
+										if v.(bool) {
+											validationEnforcementTypeInt := &ves_io_schema_views_http_loadbalancer.OpenApiValidationModeActive_EnforcementBlock{}
+											validationEnforcementTypeInt.EnforcementBlock = &ves_io_schema.Empty{}
+											validationModeChoiceInt.ValidationModeActive.ValidationEnforcementType = validationEnforcementTypeInt
+										}
+
+									}
+
+									if v, ok := cs["enforcement_report"]; ok && !isIntfNil(v) && !validationEnforcementTypeTypeFound {
+
+										validationEnforcementTypeTypeFound = true
+
+										if v.(bool) {
+											validationEnforcementTypeInt := &ves_io_schema_views_http_loadbalancer.OpenApiValidationModeActive_EnforcementReport{}
+											validationEnforcementTypeInt.EnforcementReport = &ves_io_schema.Empty{}
+											validationModeChoiceInt.ValidationModeActive.ValidationEnforcementType = validationEnforcementTypeInt
+										}
+
+									}
+
+								}
+
+							}
+
+						}
+
+					}
+
+				}
+
+			}
+
+			if v, ok := cs["validation_custom_list"]; ok && !isIntfNil(v) && !validationTargetChoiceTypeFound {
+
+				validationTargetChoiceTypeFound = true
+				validationTargetChoiceInt := &ves_io_schema_views_http_loadbalancer.APISpecificationSettings_ValidationCustomList{}
+				validationTargetChoiceInt.ValidationCustomList = &ves_io_schema_views_http_loadbalancer.ValidateApiBySpecRule{}
+				apiDefinitionChoiceInt.ApiSpecification.ValidationTargetChoice = validationTargetChoiceInt
+
+				sl := v.(*schema.Set).List()
+				for _, set := range sl {
+					cs := set.(map[string]interface{})
+
+					if v, ok := cs["fall_through_mode"]; ok && !isIntfNil(v) {
+
+						sl := v.(*schema.Set).List()
+						fallThroughMode := &ves_io_schema_views_http_loadbalancer.OpenApiFallThroughMode{}
+						validationTargetChoiceInt.ValidationCustomList.FallThroughMode = fallThroughMode
+						for _, set := range sl {
+							fallThroughModeMapStrToI := set.(map[string]interface{})
+
+							fallThroughModeChoiceTypeFound := false
+
+							if v, ok := fallThroughModeMapStrToI["fall_through_mode_allow"]; ok && !isIntfNil(v) && !fallThroughModeChoiceTypeFound {
+
+								fallThroughModeChoiceTypeFound = true
+
+								if v.(bool) {
+									fallThroughModeChoiceInt := &ves_io_schema_views_http_loadbalancer.OpenApiFallThroughMode_FallThroughModeAllow{}
+									fallThroughModeChoiceInt.FallThroughModeAllow = &ves_io_schema.Empty{}
+									fallThroughMode.FallThroughModeChoice = fallThroughModeChoiceInt
+								}
+
+							}
+
+							if v, ok := fallThroughModeMapStrToI["fall_through_mode_block"]; ok && !isIntfNil(v) && !fallThroughModeChoiceTypeFound {
+
+								fallThroughModeChoiceTypeFound = true
+
+								if v.(bool) {
+									fallThroughModeChoiceInt := &ves_io_schema_views_http_loadbalancer.OpenApiFallThroughMode_FallThroughModeBlock{}
+									fallThroughModeChoiceInt.FallThroughModeBlock = &ves_io_schema.Empty{}
+									fallThroughMode.FallThroughModeChoice = fallThroughModeChoiceInt
+								}
+
+							}
+
+							if v, ok := fallThroughModeMapStrToI["fall_through_mode_report"]; ok && !isIntfNil(v) && !fallThroughModeChoiceTypeFound {
+
+								fallThroughModeChoiceTypeFound = true
+
+								if v.(bool) {
+									fallThroughModeChoiceInt := &ves_io_schema_views_http_loadbalancer.OpenApiFallThroughMode_FallThroughModeReport{}
+									fallThroughModeChoiceInt.FallThroughModeReport = &ves_io_schema.Empty{}
+									fallThroughMode.FallThroughModeChoice = fallThroughModeChoiceInt
+								}
+
+							}
+
+						}
+
+					}
+
+					if v, ok := cs["open_api_validation_rules"]; ok && !isIntfNil(v) {
+
+						sl := v.([]interface{})
+						openApiValidationRules := make([]*ves_io_schema_views_http_loadbalancer.OpenApiValidationRule, len(sl))
+						validationTargetChoiceInt.ValidationCustomList.OpenApiValidationRules = openApiValidationRules
+						for i, set := range sl {
+							openApiValidationRules[i] = &ves_io_schema_views_http_loadbalancer.OpenApiValidationRule{}
+							openApiValidationRulesMapStrToI := set.(map[string]interface{})
+
+							conditionTypeChoiceTypeFound := false
+
+							if v, ok := openApiValidationRulesMapStrToI["api_endpoint_path"]; ok && !isIntfNil(v) && !conditionTypeChoiceTypeFound {
+
+								conditionTypeChoiceTypeFound = true
+								conditionTypeChoiceInt := &ves_io_schema_views_http_loadbalancer.OpenApiValidationRule_ApiEndpointPath{}
+
+								openApiValidationRules[i].ConditionTypeChoice = conditionTypeChoiceInt
+
+								conditionTypeChoiceInt.ApiEndpointPath = v.(string)
+
+							}
+
+							if v, ok := openApiValidationRulesMapStrToI["api_group"]; ok && !isIntfNil(v) && !conditionTypeChoiceTypeFound {
+
+								conditionTypeChoiceTypeFound = true
+								conditionTypeChoiceInt := &ves_io_schema_views_http_loadbalancer.OpenApiValidationRule_ApiGroup{}
+
+								openApiValidationRules[i].ConditionTypeChoice = conditionTypeChoiceInt
+
+								conditionTypeChoiceInt.ApiGroup = v.(string)
+
+							}
+
+							if v, ok := openApiValidationRulesMapStrToI["base_path"]; ok && !isIntfNil(v) && !conditionTypeChoiceTypeFound {
+
+								conditionTypeChoiceTypeFound = true
+								conditionTypeChoiceInt := &ves_io_schema_views_http_loadbalancer.OpenApiValidationRule_BasePath{}
+
+								openApiValidationRules[i].ConditionTypeChoice = conditionTypeChoiceInt
+
+								conditionTypeChoiceInt.BasePath = v.(string)
+
+							}
+
+							domainChoiceTypeFound := false
+
+							if v, ok := openApiValidationRulesMapStrToI["any_domain"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
+
+								domainChoiceTypeFound = true
+
+								if v.(bool) {
+									domainChoiceInt := &ves_io_schema_views_http_loadbalancer.OpenApiValidationRule_AnyDomain{}
+									domainChoiceInt.AnyDomain = &ves_io_schema.Empty{}
+									openApiValidationRules[i].DomainChoice = domainChoiceInt
+								}
+
+							}
+
+							if v, ok := openApiValidationRulesMapStrToI["specific_domain"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
+
+								domainChoiceTypeFound = true
+								domainChoiceInt := &ves_io_schema_views_http_loadbalancer.OpenApiValidationRule_SpecificDomain{}
+
+								openApiValidationRules[i].DomainChoice = domainChoiceInt
+
+								domainChoiceInt.SpecificDomain = v.(string)
+
+							}
+
+							if v, ok := openApiValidationRulesMapStrToI["metadata"]; ok && !isIntfNil(v) {
+
+								sl := v.(*schema.Set).List()
+								metadata := &ves_io_schema.MessageMetaType{}
+								openApiValidationRules[i].Metadata = metadata
+								for _, set := range sl {
+									metadataMapStrToI := set.(map[string]interface{})
+
+									if w, ok := metadataMapStrToI["description"]; ok && !isIntfNil(w) {
+										metadata.Description = w.(string)
+									}
+
+									if w, ok := metadataMapStrToI["disable"]; ok && !isIntfNil(w) {
+										metadata.Disable = w.(bool)
+									}
+
+									if w, ok := metadataMapStrToI["name"]; ok && !isIntfNil(w) {
+										metadata.Name = w.(string)
+									}
+
+								}
+
+							}
+
+							if v, ok := openApiValidationRulesMapStrToI["validation_mode"]; ok && !isIntfNil(v) {
+
+								sl := v.(*schema.Set).List()
+								validationMode := &ves_io_schema_views_http_loadbalancer.OpenApiValidationMode{}
+								openApiValidationRules[i].ValidationMode = validationMode
+								for _, set := range sl {
+									validationModeMapStrToI := set.(map[string]interface{})
+
+									validationModeChoiceTypeFound := false
+
+									if v, ok := validationModeMapStrToI["skip_validation"]; ok && !isIntfNil(v) && !validationModeChoiceTypeFound {
+
+										validationModeChoiceTypeFound = true
+
+										if v.(bool) {
+											validationModeChoiceInt := &ves_io_schema_views_http_loadbalancer.OpenApiValidationMode_SkipValidation{}
+											validationModeChoiceInt.SkipValidation = &ves_io_schema.Empty{}
+											validationMode.ValidationModeChoice = validationModeChoiceInt
+										}
+
+									}
+
+									if v, ok := validationModeMapStrToI["validation_mode_active"]; ok && !isIntfNil(v) && !validationModeChoiceTypeFound {
+
+										validationModeChoiceTypeFound = true
+										validationModeChoiceInt := &ves_io_schema_views_http_loadbalancer.OpenApiValidationMode_ValidationModeActive{}
+										validationModeChoiceInt.ValidationModeActive = &ves_io_schema_views_http_loadbalancer.OpenApiValidationModeActive{}
+										validationMode.ValidationModeChoice = validationModeChoiceInt
+
+										sl := v.(*schema.Set).List()
+										for _, set := range sl {
+											cs := set.(map[string]interface{})
+
+											if v, ok := cs["request_validation_properties"]; ok && !isIntfNil(v) {
+
+												request_validation_propertiesList := []ves_io_schema.OpenApiValidationProperties{}
+												for _, j := range v.([]interface{}) {
+													request_validation_propertiesList = append(request_validation_propertiesList, ves_io_schema.OpenApiValidationProperties(ves_io_schema.OpenApiValidationProperties_value[j.(string)]))
+												}
+												validationModeChoiceInt.ValidationModeActive.RequestValidationProperties = request_validation_propertiesList
+
+											}
+
+											validationEnforcementTypeTypeFound := false
+
+											if v, ok := cs["enforcement_block"]; ok && !isIntfNil(v) && !validationEnforcementTypeTypeFound {
+
+												validationEnforcementTypeTypeFound = true
+
+												if v.(bool) {
+													validationEnforcementTypeInt := &ves_io_schema_views_http_loadbalancer.OpenApiValidationModeActive_EnforcementBlock{}
+													validationEnforcementTypeInt.EnforcementBlock = &ves_io_schema.Empty{}
+													validationModeChoiceInt.ValidationModeActive.ValidationEnforcementType = validationEnforcementTypeInt
+												}
+
+											}
+
+											if v, ok := cs["enforcement_report"]; ok && !isIntfNil(v) && !validationEnforcementTypeTypeFound {
+
+												validationEnforcementTypeTypeFound = true
+
+												if v.(bool) {
+													validationEnforcementTypeInt := &ves_io_schema_views_http_loadbalancer.OpenApiValidationModeActive_EnforcementReport{}
+													validationEnforcementTypeInt.EnforcementReport = &ves_io_schema.Empty{}
+													validationModeChoiceInt.ValidationModeActive.ValidationEnforcementType = validationEnforcementTypeInt
+												}
+
+											}
+
+										}
+
+									}
+
+								}
+
+							}
+
+						}
+
+					}
+
+				}
+
+			}
+
+			if v, ok := cs["validation_disabled"]; ok && !isIntfNil(v) && !validationTargetChoiceTypeFound {
+
+				validationTargetChoiceTypeFound = true
+
+				if v.(bool) {
+					validationTargetChoiceInt := &ves_io_schema_views_http_loadbalancer.APISpecificationSettings_ValidationDisabled{}
+					validationTargetChoiceInt.ValidationDisabled = &ves_io_schema.Empty{}
+					apiDefinitionChoiceInt.ApiSpecification.ValidationTargetChoice = validationTargetChoiceInt
 				}
 
 			}
@@ -13119,11 +13937,105 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 											if v, ok := cs["login"]; ok && !isIntfNil(v) && !labelChoiceTypeFound {
 
 												labelChoiceTypeFound = true
+												labelChoiceInt := &ves_io_schema.BotDefenseFlowLabelAuthenticationChoiceType_Login{}
+												labelChoiceInt.Login = &ves_io_schema.BotDefenseTransactionResult{}
+												flowLabelChoiceIntNew.Authentication.LabelChoice = labelChoiceInt
 
-												if v.(bool) {
-													labelChoiceInt := &ves_io_schema.BotDefenseFlowLabelAuthenticationChoiceType_Login{}
-													labelChoiceInt.Login = &ves_io_schema.Empty{}
-													flowLabelChoiceIntNew.Authentication.LabelChoice = labelChoiceInt
+												sl := v.(*schema.Set).List()
+												for _, set := range sl {
+													cs := set.(map[string]interface{})
+
+													transactionResultChoiceTypeFound := false
+
+													if v, ok := cs["disable_transaction_result"]; ok && !isIntfNil(v) && !transactionResultChoiceTypeFound {
+
+														transactionResultChoiceTypeFound = true
+
+														if v.(bool) {
+															transactionResultChoiceInt := &ves_io_schema.BotDefenseTransactionResult_DisableTransactionResult{}
+															transactionResultChoiceInt.DisableTransactionResult = &ves_io_schema.Empty{}
+															labelChoiceInt.Login.TransactionResultChoice = transactionResultChoiceInt
+														}
+
+													}
+
+													if v, ok := cs["transaction_result"]; ok && !isIntfNil(v) && !transactionResultChoiceTypeFound {
+
+														transactionResultChoiceTypeFound = true
+														transactionResultChoiceInt := &ves_io_schema.BotDefenseTransactionResult_TransactionResult{}
+														transactionResultChoiceInt.TransactionResult = &ves_io_schema.BotDefenseTransactionResultType{}
+														labelChoiceInt.Login.TransactionResultChoice = transactionResultChoiceInt
+
+														sl := v.(*schema.Set).List()
+														for _, set := range sl {
+															cs := set.(map[string]interface{})
+
+															if v, ok := cs["failure_conditions"]; ok && !isIntfNil(v) {
+
+																sl := v.([]interface{})
+																failureConditions := make([]*ves_io_schema.BotDefenseTransactionResultCondition, len(sl))
+																transactionResultChoiceInt.TransactionResult.FailureConditions = failureConditions
+																for i, set := range sl {
+																	failureConditions[i] = &ves_io_schema.BotDefenseTransactionResultCondition{}
+																	failureConditionsMapStrToI := set.(map[string]interface{})
+
+																	if w, ok := failureConditionsMapStrToI["name"]; ok && !isIntfNil(w) {
+																		failureConditions[i].Name = w.(string)
+																	}
+
+																	if w, ok := failureConditionsMapStrToI["regex_values"]; ok && !isIntfNil(w) {
+																		ls := make([]string, len(w.([]interface{})))
+																		for i, v := range w.([]interface{}) {
+																			ls[i] = v.(string)
+																		}
+																		failureConditions[i].RegexValues = ls
+																	}
+
+																	if v, ok := failureConditionsMapStrToI["status"]; ok && !isIntfNil(v) {
+
+																		failureConditions[i].Status = ves_io_schema.HttpStatusCode(ves_io_schema.HttpStatusCode_value[v.(string)])
+
+																	}
+
+																}
+
+															}
+
+															if v, ok := cs["success_conditions"]; ok && !isIntfNil(v) {
+
+																sl := v.([]interface{})
+																successConditions := make([]*ves_io_schema.BotDefenseTransactionResultCondition, len(sl))
+																transactionResultChoiceInt.TransactionResult.SuccessConditions = successConditions
+																for i, set := range sl {
+																	successConditions[i] = &ves_io_schema.BotDefenseTransactionResultCondition{}
+																	successConditionsMapStrToI := set.(map[string]interface{})
+
+																	if w, ok := successConditionsMapStrToI["name"]; ok && !isIntfNil(w) {
+																		successConditions[i].Name = w.(string)
+																	}
+
+																	if w, ok := successConditionsMapStrToI["regex_values"]; ok && !isIntfNil(w) {
+																		ls := make([]string, len(w.([]interface{})))
+																		for i, v := range w.([]interface{}) {
+																			ls[i] = v.(string)
+																		}
+																		successConditions[i].RegexValues = ls
+																	}
+
+																	if v, ok := successConditionsMapStrToI["status"]; ok && !isIntfNil(v) {
+
+																		successConditions[i].Status = ves_io_schema.HttpStatusCode(ves_io_schema.HttpStatusCode_value[v.(string)])
+
+																	}
+
+																}
+
+															}
+
+														}
+
+													}
+
 												}
 
 											}
@@ -16358,6 +17270,32 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 
 			}
 
+			methodChoiceTypeFound := false
+
+			if v, ok := graphqlRulesMapStrToI["method_get"]; ok && !isIntfNil(v) && !methodChoiceTypeFound {
+
+				methodChoiceTypeFound = true
+
+				if v.(bool) {
+					methodChoiceInt := &ves_io_schema_policy.GraphQLRule_MethodGet{}
+					methodChoiceInt.MethodGet = &ves_io_schema.Empty{}
+					graphqlRules[i].MethodChoice = methodChoiceInt
+				}
+
+			}
+
+			if v, ok := graphqlRulesMapStrToI["method_post"]; ok && !isIntfNil(v) && !methodChoiceTypeFound {
+
+				methodChoiceTypeFound = true
+
+				if v.(bool) {
+					methodChoiceInt := &ves_io_schema_policy.GraphQLRule_MethodPost{}
+					methodChoiceInt.MethodPost = &ves_io_schema.Empty{}
+					graphqlRules[i].MethodChoice = methodChoiceInt
+				}
+
+			}
+
 		}
 
 	}
@@ -18954,19 +19892,6 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 						for _, set := range sl {
 							cs := set.(map[string]interface{})
 
-							if v, ok := cs["endpoint_subsets"]; ok && !isIntfNil(v) {
-
-								sl := v.([]interface{})
-								endpointSubsets := make([]*ves_io_schema_cluster.EndpointSubsetSelectorType, len(sl))
-								subsetChoiceInt.EnableSubsets.EndpointSubsets = endpointSubsets
-								for i, _ := range sl {
-									endpointSubsets[i] = &ves_io_schema_cluster.EndpointSubsetSelectorType{}
-									//endpointSubsetsMapStrToI := set.(map[string]interface{})
-
-								}
-
-							}
-
 							fallbackPolicyChoiceTypeFound := false
 
 							if v, ok := cs["any_endpoint"]; ok && !isIntfNil(v) && !fallbackPolicyChoiceTypeFound {
@@ -20450,6 +21375,151 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 
 	}
 
+	//protected_cookies
+	if v, ok := d.GetOk("protected_cookies"); ok && !isIntfNil(v) {
+
+		sl := v.([]interface{})
+		protectedCookies := make([]*ves_io_schema.CookieManipulationOptionType, len(sl))
+		createSpec.ProtectedCookies = protectedCookies
+		for i, set := range sl {
+			protectedCookies[i] = &ves_io_schema.CookieManipulationOptionType{}
+			protectedCookiesMapStrToI := set.(map[string]interface{})
+
+			httponlyTypeFound := false
+
+			if v, ok := protectedCookiesMapStrToI["add_httponly"]; ok && !isIntfNil(v) && !httponlyTypeFound {
+
+				httponlyTypeFound = true
+
+				if v.(bool) {
+					httponlyInt := &ves_io_schema.CookieManipulationOptionType_AddHttponly{}
+					httponlyInt.AddHttponly = &ves_io_schema.Empty{}
+					protectedCookies[i].Httponly = httponlyInt
+				}
+
+			}
+
+			if v, ok := protectedCookiesMapStrToI["ignore_httponly"]; ok && !isIntfNil(v) && !httponlyTypeFound {
+
+				httponlyTypeFound = true
+
+				if v.(bool) {
+					httponlyInt := &ves_io_schema.CookieManipulationOptionType_IgnoreHttponly{}
+					httponlyInt.IgnoreHttponly = &ves_io_schema.Empty{}
+					protectedCookies[i].Httponly = httponlyInt
+				}
+
+			}
+
+			maxAgeTypeFound := false
+
+			if v, ok := protectedCookiesMapStrToI["ignore_max_age"]; ok && !isIntfNil(v) && !maxAgeTypeFound {
+
+				maxAgeTypeFound = true
+
+				if v.(bool) {
+					maxAgeInt := &ves_io_schema.CookieManipulationOptionType_IgnoreMaxAge{}
+					maxAgeInt.IgnoreMaxAge = &ves_io_schema.Empty{}
+					protectedCookies[i].MaxAge = maxAgeInt
+				}
+
+			}
+
+			if v, ok := protectedCookiesMapStrToI["max_age_value"]; ok && !isIntfNil(v) && !maxAgeTypeFound {
+
+				maxAgeTypeFound = true
+				maxAgeInt := &ves_io_schema.CookieManipulationOptionType_MaxAgeValue{}
+
+				protectedCookies[i].MaxAge = maxAgeInt
+
+				maxAgeInt.MaxAgeValue = int32(v.(int))
+
+			}
+
+			if w, ok := protectedCookiesMapStrToI["name"]; ok && !isIntfNil(w) {
+				protectedCookies[i].Name = w.(string)
+			}
+
+			samesiteTypeFound := false
+
+			if v, ok := protectedCookiesMapStrToI["ignore_samesite"]; ok && !isIntfNil(v) && !samesiteTypeFound {
+
+				samesiteTypeFound = true
+
+				if v.(bool) {
+					samesiteInt := &ves_io_schema.CookieManipulationOptionType_IgnoreSamesite{}
+					samesiteInt.IgnoreSamesite = &ves_io_schema.Empty{}
+					protectedCookies[i].Samesite = samesiteInt
+				}
+
+			}
+
+			if v, ok := protectedCookiesMapStrToI["samesite_lax"]; ok && !isIntfNil(v) && !samesiteTypeFound {
+
+				samesiteTypeFound = true
+
+				if v.(bool) {
+					samesiteInt := &ves_io_schema.CookieManipulationOptionType_SamesiteLax{}
+					samesiteInt.SamesiteLax = &ves_io_schema.Empty{}
+					protectedCookies[i].Samesite = samesiteInt
+				}
+
+			}
+
+			if v, ok := protectedCookiesMapStrToI["samesite_none"]; ok && !isIntfNil(v) && !samesiteTypeFound {
+
+				samesiteTypeFound = true
+
+				if v.(bool) {
+					samesiteInt := &ves_io_schema.CookieManipulationOptionType_SamesiteNone{}
+					samesiteInt.SamesiteNone = &ves_io_schema.Empty{}
+					protectedCookies[i].Samesite = samesiteInt
+				}
+
+			}
+
+			if v, ok := protectedCookiesMapStrToI["samesite_strict"]; ok && !isIntfNil(v) && !samesiteTypeFound {
+
+				samesiteTypeFound = true
+
+				if v.(bool) {
+					samesiteInt := &ves_io_schema.CookieManipulationOptionType_SamesiteStrict{}
+					samesiteInt.SamesiteStrict = &ves_io_schema.Empty{}
+					protectedCookies[i].Samesite = samesiteInt
+				}
+
+			}
+
+			secureTypeFound := false
+
+			if v, ok := protectedCookiesMapStrToI["add_secure"]; ok && !isIntfNil(v) && !secureTypeFound {
+
+				secureTypeFound = true
+
+				if v.(bool) {
+					secureInt := &ves_io_schema.CookieManipulationOptionType_AddSecure{}
+					secureInt.AddSecure = &ves_io_schema.Empty{}
+					protectedCookies[i].Secure = secureInt
+				}
+
+			}
+
+			if v, ok := protectedCookiesMapStrToI["ignore_secure"]; ok && !isIntfNil(v) && !secureTypeFound {
+
+				secureTypeFound = true
+
+				if v.(bool) {
+					secureInt := &ves_io_schema.CookieManipulationOptionType_IgnoreSecure{}
+					secureInt.IgnoreSecure = &ves_io_schema.Empty{}
+					protectedCookies[i].Secure = secureInt
+				}
+
+			}
+
+		}
+
+	}
+
 	//rate_limit_choice
 
 	rateLimitChoiceTypeFound := false
@@ -21392,6 +22462,10 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 
 							if w, ok := routeRedirectMapStrToI["host_redirect"]; ok && !isIntfNil(w) {
 								routeRedirect.HostRedirect = w.(string)
+							}
+
+							if w, ok := routeRedirectMapStrToI["port_redirect"]; ok && !isIntfNil(w) {
+								routeRedirect.PortRedirect = uint32(w.(int))
 							}
 
 							if w, ok := routeRedirectMapStrToI["proto_redirect"]; ok && !isIntfNil(w) {
@@ -22599,6 +23673,18 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 
 							}
 
+							if v, ok := advancedOptionsMapStrToI["disable_waf"]; ok && !isIntfNil(v) && !wafChoiceTypeFound {
+
+								wafChoiceTypeFound = true
+
+								if v.(bool) {
+									wafChoiceInt := &ves_io_schema_views_http_loadbalancer.RouteSimpleAdvancedOptions_DisableWaf{}
+									wafChoiceInt.DisableWaf = &ves_io_schema.Empty{}
+									advancedOptions.WafChoice = wafChoiceInt
+								}
+
+							}
+
 							if v, ok := advancedOptionsMapStrToI["inherited_waf"]; ok && !isIntfNil(v) && !wafChoiceTypeFound {
 
 								wafChoiceTypeFound = true
@@ -22607,72 +23693,6 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 									wafChoiceInt := &ves_io_schema_views_http_loadbalancer.RouteSimpleAdvancedOptions_InheritedWaf{}
 									wafChoiceInt.InheritedWaf = &ves_io_schema.Empty{}
 									advancedOptions.WafChoice = wafChoiceInt
-								}
-
-							}
-
-							if v, ok := advancedOptionsMapStrToI["waf"]; ok && !isIntfNil(v) && !wafChoiceTypeFound {
-
-								wafChoiceTypeFound = true
-								wafChoiceInt := &ves_io_schema_views_http_loadbalancer.RouteSimpleAdvancedOptions_Waf{}
-								wafChoiceInt.Waf = &ves_io_schema_views.ObjectRefType{}
-								advancedOptions.WafChoice = wafChoiceInt
-
-								sl := v.(*schema.Set).List()
-								for _, set := range sl {
-									cs := set.(map[string]interface{})
-
-									if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-										wafChoiceInt.Waf.Name = v.(string)
-
-									}
-
-									if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
-
-										wafChoiceInt.Waf.Namespace = v.(string)
-
-									}
-
-									if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
-
-										wafChoiceInt.Waf.Tenant = v.(string)
-
-									}
-
-								}
-
-							}
-
-							if v, ok := advancedOptionsMapStrToI["waf_rule"]; ok && !isIntfNil(v) && !wafChoiceTypeFound {
-
-								wafChoiceTypeFound = true
-								wafChoiceInt := &ves_io_schema_views_http_loadbalancer.RouteSimpleAdvancedOptions_WafRule{}
-								wafChoiceInt.WafRule = &ves_io_schema_views.ObjectRefType{}
-								advancedOptions.WafChoice = wafChoiceInt
-
-								sl := v.(*schema.Set).List()
-								for _, set := range sl {
-									cs := set.(map[string]interface{})
-
-									if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-										wafChoiceInt.WafRule.Name = v.(string)
-
-									}
-
-									if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
-
-										wafChoiceInt.WafRule.Namespace = v.(string)
-
-									}
-
-									if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
-
-										wafChoiceInt.WafRule.Tenant = v.(string)
-
-									}
-
 								}
 
 							}
@@ -23048,6 +24068,27 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 
 	}
 
+	//slow_ddos_mitigation
+	if v, ok := d.GetOk("slow_ddos_mitigation"); ok && !isIntfNil(v) {
+
+		sl := v.(*schema.Set).List()
+		slowDdosMitigation := &ves_io_schema_virtual_host.SlowDDoSMitigation{}
+		createSpec.SlowDdosMitigation = slowDdosMitigation
+		for _, set := range sl {
+			slowDdosMitigationMapStrToI := set.(map[string]interface{})
+
+			if w, ok := slowDdosMitigationMapStrToI["request_headers_timeout"]; ok && !isIntfNil(w) {
+				slowDdosMitigation.RequestHeadersTimeout = uint32(w.(int))
+			}
+
+			if w, ok := slowDdosMitigationMapStrToI["request_timeout"]; ok && !isIntfNil(w) {
+				slowDdosMitigation.RequestTimeout = uint32(w.(int))
+			}
+
+		}
+
+	}
+
 	//trust_client_ip_headers_choice
 
 	trustClientIpHeadersChoiceTypeFound := false
@@ -23387,72 +24428,6 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 
 	}
 
-	if v, ok := d.GetOk("waf"); ok && !wafChoiceTypeFound {
-
-		wafChoiceTypeFound = true
-		wafChoiceInt := &ves_io_schema_views_http_loadbalancer.CreateSpecType_Waf{}
-		wafChoiceInt.Waf = &ves_io_schema_views.ObjectRefType{}
-		createSpec.WafChoice = wafChoiceInt
-
-		sl := v.(*schema.Set).List()
-		for _, set := range sl {
-			cs := set.(map[string]interface{})
-
-			if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-				wafChoiceInt.Waf.Name = v.(string)
-
-			}
-
-			if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
-
-				wafChoiceInt.Waf.Namespace = v.(string)
-
-			}
-
-			if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
-
-				wafChoiceInt.Waf.Tenant = v.(string)
-
-			}
-
-		}
-
-	}
-
-	if v, ok := d.GetOk("waf_rule"); ok && !wafChoiceTypeFound {
-
-		wafChoiceTypeFound = true
-		wafChoiceInt := &ves_io_schema_views_http_loadbalancer.CreateSpecType_WafRule{}
-		wafChoiceInt.WafRule = &ves_io_schema_views.ObjectRefType{}
-		createSpec.WafChoice = wafChoiceInt
-
-		sl := v.(*schema.Set).List()
-		for _, set := range sl {
-			cs := set.(map[string]interface{})
-
-			if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-				wafChoiceInt.WafRule.Name = v.(string)
-
-			}
-
-			if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
-
-				wafChoiceInt.WafRule.Namespace = v.(string)
-
-			}
-
-			if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
-
-				wafChoiceInt.WafRule.Tenant = v.(string)
-
-			}
-
-		}
-
-	}
-
 	//waf_exclusion_rules
 	if v, ok := d.GetOk("waf_exclusion_rules"); ok && !isIntfNil(v) {
 
@@ -23496,16 +24471,6 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 				wafExclusionRules[i].DomainChoice = domainChoiceInt
 
 				domainChoiceInt.SuffixValue = v.(string)
-
-			}
-
-			if v, ok := wafExclusionRulesMapStrToI["exclude_rule_ids"]; ok && !isIntfNil(v) {
-
-				exclude_rule_idsList := []ves_io_schema_waf_rule_list.WafRuleID{}
-				for _, j := range v.([]interface{}) {
-					exclude_rule_idsList = append(exclude_rule_idsList, ves_io_schema_waf_rule_list.WafRuleID(ves_io_schema_waf_rule_list.WafRuleID_value[j.(string)]))
-				}
-				wafExclusionRules[i].ExcludeRuleIds = exclude_rule_idsList
 
 			}
 
@@ -23645,6 +24610,16 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 							excludeSignatureContexts[i] = &ves_io_schema_policy.AppFirewallSignatureContext{}
 							excludeSignatureContextsMapStrToI := set.(map[string]interface{})
 
+							if v, ok := excludeSignatureContextsMapStrToI["context"]; ok && !isIntfNil(v) {
+
+								excludeSignatureContexts[i].Context = ves_io_schema_policy.DetectionContext(ves_io_schema_policy.DetectionContext_value[v.(string)])
+
+							}
+
+							if w, ok := excludeSignatureContextsMapStrToI["context_name"]; ok && !isIntfNil(w) {
+								excludeSignatureContexts[i].ContextName = w.(string)
+							}
+
 							if w, ok := excludeSignatureContextsMapStrToI["signature_id"]; ok && !isIntfNil(w) {
 								excludeSignatureContexts[i].SignatureId = uint32(w.(int))
 							}
@@ -23661,6 +24636,12 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 						for i, set := range sl {
 							excludeViolationContexts[i] = &ves_io_schema_policy.AppFirewallViolationContext{}
 							excludeViolationContextsMapStrToI := set.(map[string]interface{})
+
+							if v, ok := excludeViolationContextsMapStrToI["context"]; ok && !isIntfNil(v) {
+
+								excludeViolationContexts[i].Context = ves_io_schema_policy.DetectionContext(ves_io_schema_policy.DetectionContext_value[v.(string)])
+
+							}
 
 							if v, ok := excludeViolationContextsMapStrToI["exclude_violation"]; ok && !isIntfNil(v) {
 
@@ -24228,6 +25209,438 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 						apiDefinitionsInt[i].Tenant = v.(string)
 					}
 
+				}
+
+			}
+
+		}
+
+	}
+
+	if v, ok := d.GetOk("api_specification"); ok && !apiDefinitionChoiceTypeFound {
+
+		apiDefinitionChoiceTypeFound = true
+		apiDefinitionChoiceInt := &ves_io_schema_views_http_loadbalancer.ReplaceSpecType_ApiSpecification{}
+		apiDefinitionChoiceInt.ApiSpecification = &ves_io_schema_views_http_loadbalancer.APISpecificationSettings{}
+		updateSpec.ApiDefinitionChoice = apiDefinitionChoiceInt
+
+		sl := v.(*schema.Set).List()
+		for _, set := range sl {
+			cs := set.(map[string]interface{})
+
+			if v, ok := cs["api_definition"]; ok && !isIntfNil(v) {
+
+				sl := v.(*schema.Set).List()
+				apiDefinitionIntNew := &ves_io_schema_views.ObjectRefType{}
+				apiDefinitionChoiceInt.ApiSpecification.ApiDefinition = apiDefinitionIntNew
+
+				for _, set := range sl {
+					adMapToStrVal := set.(map[string]interface{})
+					if val, ok := adMapToStrVal["name"]; ok && !isIntfNil(v) {
+						apiDefinitionIntNew.Name = val.(string)
+					}
+					if val, ok := adMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+						apiDefinitionIntNew.Namespace = val.(string)
+					}
+
+					if val, ok := adMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+						apiDefinitionIntNew.Tenant = val.(string)
+					}
+				}
+
+			}
+
+			validationTargetChoiceTypeFound := false
+
+			if v, ok := cs["validation_all_spec_endpoints"]; ok && !isIntfNil(v) && !validationTargetChoiceTypeFound {
+
+				validationTargetChoiceTypeFound = true
+				validationTargetChoiceInt := &ves_io_schema_views_http_loadbalancer.APISpecificationSettings_ValidationAllSpecEndpoints{}
+				validationTargetChoiceInt.ValidationAllSpecEndpoints = &ves_io_schema_views_http_loadbalancer.OpenApiValidationAllSpecEndpointsSettings{}
+				apiDefinitionChoiceInt.ApiSpecification.ValidationTargetChoice = validationTargetChoiceInt
+
+				sl := v.(*schema.Set).List()
+				for _, set := range sl {
+					cs := set.(map[string]interface{})
+
+					if v, ok := cs["fall_through_mode"]; ok && !isIntfNil(v) {
+
+						sl := v.(*schema.Set).List()
+						fallThroughMode := &ves_io_schema_views_http_loadbalancer.OpenApiFallThroughMode{}
+						validationTargetChoiceInt.ValidationAllSpecEndpoints.FallThroughMode = fallThroughMode
+						for _, set := range sl {
+							fallThroughModeMapStrToI := set.(map[string]interface{})
+
+							fallThroughModeChoiceTypeFound := false
+
+							if v, ok := fallThroughModeMapStrToI["fall_through_mode_allow"]; ok && !isIntfNil(v) && !fallThroughModeChoiceTypeFound {
+
+								fallThroughModeChoiceTypeFound = true
+
+								if v.(bool) {
+									fallThroughModeChoiceInt := &ves_io_schema_views_http_loadbalancer.OpenApiFallThroughMode_FallThroughModeAllow{}
+									fallThroughModeChoiceInt.FallThroughModeAllow = &ves_io_schema.Empty{}
+									fallThroughMode.FallThroughModeChoice = fallThroughModeChoiceInt
+								}
+
+							}
+
+							if v, ok := fallThroughModeMapStrToI["fall_through_mode_block"]; ok && !isIntfNil(v) && !fallThroughModeChoiceTypeFound {
+
+								fallThroughModeChoiceTypeFound = true
+
+								if v.(bool) {
+									fallThroughModeChoiceInt := &ves_io_schema_views_http_loadbalancer.OpenApiFallThroughMode_FallThroughModeBlock{}
+									fallThroughModeChoiceInt.FallThroughModeBlock = &ves_io_schema.Empty{}
+									fallThroughMode.FallThroughModeChoice = fallThroughModeChoiceInt
+								}
+
+							}
+
+							if v, ok := fallThroughModeMapStrToI["fall_through_mode_report"]; ok && !isIntfNil(v) && !fallThroughModeChoiceTypeFound {
+
+								fallThroughModeChoiceTypeFound = true
+
+								if v.(bool) {
+									fallThroughModeChoiceInt := &ves_io_schema_views_http_loadbalancer.OpenApiFallThroughMode_FallThroughModeReport{}
+									fallThroughModeChoiceInt.FallThroughModeReport = &ves_io_schema.Empty{}
+									fallThroughMode.FallThroughModeChoice = fallThroughModeChoiceInt
+								}
+
+							}
+
+						}
+
+					}
+
+					if v, ok := cs["validation_mode"]; ok && !isIntfNil(v) {
+
+						sl := v.(*schema.Set).List()
+						validationMode := &ves_io_schema_views_http_loadbalancer.OpenApiValidationMode{}
+						validationTargetChoiceInt.ValidationAllSpecEndpoints.ValidationMode = validationMode
+						for _, set := range sl {
+							validationModeMapStrToI := set.(map[string]interface{})
+
+							validationModeChoiceTypeFound := false
+
+							if v, ok := validationModeMapStrToI["skip_validation"]; ok && !isIntfNil(v) && !validationModeChoiceTypeFound {
+
+								validationModeChoiceTypeFound = true
+
+								if v.(bool) {
+									validationModeChoiceInt := &ves_io_schema_views_http_loadbalancer.OpenApiValidationMode_SkipValidation{}
+									validationModeChoiceInt.SkipValidation = &ves_io_schema.Empty{}
+									validationMode.ValidationModeChoice = validationModeChoiceInt
+								}
+
+							}
+
+							if v, ok := validationModeMapStrToI["validation_mode_active"]; ok && !isIntfNil(v) && !validationModeChoiceTypeFound {
+
+								validationModeChoiceTypeFound = true
+								validationModeChoiceInt := &ves_io_schema_views_http_loadbalancer.OpenApiValidationMode_ValidationModeActive{}
+								validationModeChoiceInt.ValidationModeActive = &ves_io_schema_views_http_loadbalancer.OpenApiValidationModeActive{}
+								validationMode.ValidationModeChoice = validationModeChoiceInt
+
+								sl := v.(*schema.Set).List()
+								for _, set := range sl {
+									cs := set.(map[string]interface{})
+
+									if v, ok := cs["request_validation_properties"]; ok && !isIntfNil(v) {
+
+										request_validation_propertiesList := []ves_io_schema.OpenApiValidationProperties{}
+										for _, j := range v.([]interface{}) {
+											request_validation_propertiesList = append(request_validation_propertiesList, ves_io_schema.OpenApiValidationProperties(ves_io_schema.OpenApiValidationProperties_value[j.(string)]))
+										}
+										validationModeChoiceInt.ValidationModeActive.RequestValidationProperties = request_validation_propertiesList
+
+									}
+
+									validationEnforcementTypeTypeFound := false
+
+									if v, ok := cs["enforcement_block"]; ok && !isIntfNil(v) && !validationEnforcementTypeTypeFound {
+
+										validationEnforcementTypeTypeFound = true
+
+										if v.(bool) {
+											validationEnforcementTypeInt := &ves_io_schema_views_http_loadbalancer.OpenApiValidationModeActive_EnforcementBlock{}
+											validationEnforcementTypeInt.EnforcementBlock = &ves_io_schema.Empty{}
+											validationModeChoiceInt.ValidationModeActive.ValidationEnforcementType = validationEnforcementTypeInt
+										}
+
+									}
+
+									if v, ok := cs["enforcement_report"]; ok && !isIntfNil(v) && !validationEnforcementTypeTypeFound {
+
+										validationEnforcementTypeTypeFound = true
+
+										if v.(bool) {
+											validationEnforcementTypeInt := &ves_io_schema_views_http_loadbalancer.OpenApiValidationModeActive_EnforcementReport{}
+											validationEnforcementTypeInt.EnforcementReport = &ves_io_schema.Empty{}
+											validationModeChoiceInt.ValidationModeActive.ValidationEnforcementType = validationEnforcementTypeInt
+										}
+
+									}
+
+								}
+
+							}
+
+						}
+
+					}
+
+				}
+
+			}
+
+			if v, ok := cs["validation_custom_list"]; ok && !isIntfNil(v) && !validationTargetChoiceTypeFound {
+
+				validationTargetChoiceTypeFound = true
+				validationTargetChoiceInt := &ves_io_schema_views_http_loadbalancer.APISpecificationSettings_ValidationCustomList{}
+				validationTargetChoiceInt.ValidationCustomList = &ves_io_schema_views_http_loadbalancer.ValidateApiBySpecRule{}
+				apiDefinitionChoiceInt.ApiSpecification.ValidationTargetChoice = validationTargetChoiceInt
+
+				sl := v.(*schema.Set).List()
+				for _, set := range sl {
+					cs := set.(map[string]interface{})
+
+					if v, ok := cs["fall_through_mode"]; ok && !isIntfNil(v) {
+
+						sl := v.(*schema.Set).List()
+						fallThroughMode := &ves_io_schema_views_http_loadbalancer.OpenApiFallThroughMode{}
+						validationTargetChoiceInt.ValidationCustomList.FallThroughMode = fallThroughMode
+						for _, set := range sl {
+							fallThroughModeMapStrToI := set.(map[string]interface{})
+
+							fallThroughModeChoiceTypeFound := false
+
+							if v, ok := fallThroughModeMapStrToI["fall_through_mode_allow"]; ok && !isIntfNil(v) && !fallThroughModeChoiceTypeFound {
+
+								fallThroughModeChoiceTypeFound = true
+
+								if v.(bool) {
+									fallThroughModeChoiceInt := &ves_io_schema_views_http_loadbalancer.OpenApiFallThroughMode_FallThroughModeAllow{}
+									fallThroughModeChoiceInt.FallThroughModeAllow = &ves_io_schema.Empty{}
+									fallThroughMode.FallThroughModeChoice = fallThroughModeChoiceInt
+								}
+
+							}
+
+							if v, ok := fallThroughModeMapStrToI["fall_through_mode_block"]; ok && !isIntfNil(v) && !fallThroughModeChoiceTypeFound {
+
+								fallThroughModeChoiceTypeFound = true
+
+								if v.(bool) {
+									fallThroughModeChoiceInt := &ves_io_schema_views_http_loadbalancer.OpenApiFallThroughMode_FallThroughModeBlock{}
+									fallThroughModeChoiceInt.FallThroughModeBlock = &ves_io_schema.Empty{}
+									fallThroughMode.FallThroughModeChoice = fallThroughModeChoiceInt
+								}
+
+							}
+
+							if v, ok := fallThroughModeMapStrToI["fall_through_mode_report"]; ok && !isIntfNil(v) && !fallThroughModeChoiceTypeFound {
+
+								fallThroughModeChoiceTypeFound = true
+
+								if v.(bool) {
+									fallThroughModeChoiceInt := &ves_io_schema_views_http_loadbalancer.OpenApiFallThroughMode_FallThroughModeReport{}
+									fallThroughModeChoiceInt.FallThroughModeReport = &ves_io_schema.Empty{}
+									fallThroughMode.FallThroughModeChoice = fallThroughModeChoiceInt
+								}
+
+							}
+
+						}
+
+					}
+
+					if v, ok := cs["open_api_validation_rules"]; ok && !isIntfNil(v) {
+
+						sl := v.([]interface{})
+						openApiValidationRules := make([]*ves_io_schema_views_http_loadbalancer.OpenApiValidationRule, len(sl))
+						validationTargetChoiceInt.ValidationCustomList.OpenApiValidationRules = openApiValidationRules
+						for i, set := range sl {
+							openApiValidationRules[i] = &ves_io_schema_views_http_loadbalancer.OpenApiValidationRule{}
+							openApiValidationRulesMapStrToI := set.(map[string]interface{})
+
+							conditionTypeChoiceTypeFound := false
+
+							if v, ok := openApiValidationRulesMapStrToI["api_endpoint_path"]; ok && !isIntfNil(v) && !conditionTypeChoiceTypeFound {
+
+								conditionTypeChoiceTypeFound = true
+								conditionTypeChoiceInt := &ves_io_schema_views_http_loadbalancer.OpenApiValidationRule_ApiEndpointPath{}
+
+								openApiValidationRules[i].ConditionTypeChoice = conditionTypeChoiceInt
+
+								conditionTypeChoiceInt.ApiEndpointPath = v.(string)
+
+							}
+
+							if v, ok := openApiValidationRulesMapStrToI["api_group"]; ok && !isIntfNil(v) && !conditionTypeChoiceTypeFound {
+
+								conditionTypeChoiceTypeFound = true
+								conditionTypeChoiceInt := &ves_io_schema_views_http_loadbalancer.OpenApiValidationRule_ApiGroup{}
+
+								openApiValidationRules[i].ConditionTypeChoice = conditionTypeChoiceInt
+
+								conditionTypeChoiceInt.ApiGroup = v.(string)
+
+							}
+
+							if v, ok := openApiValidationRulesMapStrToI["base_path"]; ok && !isIntfNil(v) && !conditionTypeChoiceTypeFound {
+
+								conditionTypeChoiceTypeFound = true
+								conditionTypeChoiceInt := &ves_io_schema_views_http_loadbalancer.OpenApiValidationRule_BasePath{}
+
+								openApiValidationRules[i].ConditionTypeChoice = conditionTypeChoiceInt
+
+								conditionTypeChoiceInt.BasePath = v.(string)
+
+							}
+
+							domainChoiceTypeFound := false
+
+							if v, ok := openApiValidationRulesMapStrToI["any_domain"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
+
+								domainChoiceTypeFound = true
+
+								if v.(bool) {
+									domainChoiceInt := &ves_io_schema_views_http_loadbalancer.OpenApiValidationRule_AnyDomain{}
+									domainChoiceInt.AnyDomain = &ves_io_schema.Empty{}
+									openApiValidationRules[i].DomainChoice = domainChoiceInt
+								}
+
+							}
+
+							if v, ok := openApiValidationRulesMapStrToI["specific_domain"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
+
+								domainChoiceTypeFound = true
+								domainChoiceInt := &ves_io_schema_views_http_loadbalancer.OpenApiValidationRule_SpecificDomain{}
+
+								openApiValidationRules[i].DomainChoice = domainChoiceInt
+
+								domainChoiceInt.SpecificDomain = v.(string)
+
+							}
+
+							if v, ok := openApiValidationRulesMapStrToI["metadata"]; ok && !isIntfNil(v) {
+
+								sl := v.(*schema.Set).List()
+								metadata := &ves_io_schema.MessageMetaType{}
+								openApiValidationRules[i].Metadata = metadata
+								for _, set := range sl {
+									metadataMapStrToI := set.(map[string]interface{})
+
+									if w, ok := metadataMapStrToI["description"]; ok && !isIntfNil(w) {
+										metadata.Description = w.(string)
+									}
+
+									if w, ok := metadataMapStrToI["disable"]; ok && !isIntfNil(w) {
+										metadata.Disable = w.(bool)
+									}
+
+									if w, ok := metadataMapStrToI["name"]; ok && !isIntfNil(w) {
+										metadata.Name = w.(string)
+									}
+
+								}
+
+							}
+
+							if v, ok := openApiValidationRulesMapStrToI["validation_mode"]; ok && !isIntfNil(v) {
+
+								sl := v.(*schema.Set).List()
+								validationMode := &ves_io_schema_views_http_loadbalancer.OpenApiValidationMode{}
+								openApiValidationRules[i].ValidationMode = validationMode
+								for _, set := range sl {
+									validationModeMapStrToI := set.(map[string]interface{})
+
+									validationModeChoiceTypeFound := false
+
+									if v, ok := validationModeMapStrToI["skip_validation"]; ok && !isIntfNil(v) && !validationModeChoiceTypeFound {
+
+										validationModeChoiceTypeFound = true
+
+										if v.(bool) {
+											validationModeChoiceInt := &ves_io_schema_views_http_loadbalancer.OpenApiValidationMode_SkipValidation{}
+											validationModeChoiceInt.SkipValidation = &ves_io_schema.Empty{}
+											validationMode.ValidationModeChoice = validationModeChoiceInt
+										}
+
+									}
+
+									if v, ok := validationModeMapStrToI["validation_mode_active"]; ok && !isIntfNil(v) && !validationModeChoiceTypeFound {
+
+										validationModeChoiceTypeFound = true
+										validationModeChoiceInt := &ves_io_schema_views_http_loadbalancer.OpenApiValidationMode_ValidationModeActive{}
+										validationModeChoiceInt.ValidationModeActive = &ves_io_schema_views_http_loadbalancer.OpenApiValidationModeActive{}
+										validationMode.ValidationModeChoice = validationModeChoiceInt
+
+										sl := v.(*schema.Set).List()
+										for _, set := range sl {
+											cs := set.(map[string]interface{})
+
+											if v, ok := cs["request_validation_properties"]; ok && !isIntfNil(v) {
+
+												request_validation_propertiesList := []ves_io_schema.OpenApiValidationProperties{}
+												for _, j := range v.([]interface{}) {
+													request_validation_propertiesList = append(request_validation_propertiesList, ves_io_schema.OpenApiValidationProperties(ves_io_schema.OpenApiValidationProperties_value[j.(string)]))
+												}
+												validationModeChoiceInt.ValidationModeActive.RequestValidationProperties = request_validation_propertiesList
+
+											}
+
+											validationEnforcementTypeTypeFound := false
+
+											if v, ok := cs["enforcement_block"]; ok && !isIntfNil(v) && !validationEnforcementTypeTypeFound {
+
+												validationEnforcementTypeTypeFound = true
+
+												if v.(bool) {
+													validationEnforcementTypeInt := &ves_io_schema_views_http_loadbalancer.OpenApiValidationModeActive_EnforcementBlock{}
+													validationEnforcementTypeInt.EnforcementBlock = &ves_io_schema.Empty{}
+													validationModeChoiceInt.ValidationModeActive.ValidationEnforcementType = validationEnforcementTypeInt
+												}
+
+											}
+
+											if v, ok := cs["enforcement_report"]; ok && !isIntfNil(v) && !validationEnforcementTypeTypeFound {
+
+												validationEnforcementTypeTypeFound = true
+
+												if v.(bool) {
+													validationEnforcementTypeInt := &ves_io_schema_views_http_loadbalancer.OpenApiValidationModeActive_EnforcementReport{}
+													validationEnforcementTypeInt.EnforcementReport = &ves_io_schema.Empty{}
+													validationModeChoiceInt.ValidationModeActive.ValidationEnforcementType = validationEnforcementTypeInt
+												}
+
+											}
+
+										}
+
+									}
+
+								}
+
+							}
+
+						}
+
+					}
+
+				}
+
+			}
+
+			if v, ok := cs["validation_disabled"]; ok && !isIntfNil(v) && !validationTargetChoiceTypeFound {
+
+				validationTargetChoiceTypeFound = true
+
+				if v.(bool) {
+					validationTargetChoiceInt := &ves_io_schema_views_http_loadbalancer.APISpecificationSettings_ValidationDisabled{}
+					validationTargetChoiceInt.ValidationDisabled = &ves_io_schema.Empty{}
+					apiDefinitionChoiceInt.ApiSpecification.ValidationTargetChoice = validationTargetChoiceInt
 				}
 
 			}
@@ -27010,11 +28423,105 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 											if v, ok := cs["login"]; ok && !isIntfNil(v) && !labelChoiceTypeFound {
 
 												labelChoiceTypeFound = true
+												labelChoiceInt := &ves_io_schema.BotDefenseFlowLabelAuthenticationChoiceType_Login{}
+												labelChoiceInt.Login = &ves_io_schema.BotDefenseTransactionResult{}
+												flowLabelChoiceIntNew.Authentication.LabelChoice = labelChoiceInt
 
-												if v.(bool) {
-													labelChoiceInt := &ves_io_schema.BotDefenseFlowLabelAuthenticationChoiceType_Login{}
-													labelChoiceInt.Login = &ves_io_schema.Empty{}
-													flowLabelChoiceIntNew.Authentication.LabelChoice = labelChoiceInt
+												sl := v.(*schema.Set).List()
+												for _, set := range sl {
+													cs := set.(map[string]interface{})
+
+													transactionResultChoiceTypeFound := false
+
+													if v, ok := cs["disable_transaction_result"]; ok && !isIntfNil(v) && !transactionResultChoiceTypeFound {
+
+														transactionResultChoiceTypeFound = true
+
+														if v.(bool) {
+															transactionResultChoiceInt := &ves_io_schema.BotDefenseTransactionResult_DisableTransactionResult{}
+															transactionResultChoiceInt.DisableTransactionResult = &ves_io_schema.Empty{}
+															labelChoiceInt.Login.TransactionResultChoice = transactionResultChoiceInt
+														}
+
+													}
+
+													if v, ok := cs["transaction_result"]; ok && !isIntfNil(v) && !transactionResultChoiceTypeFound {
+
+														transactionResultChoiceTypeFound = true
+														transactionResultChoiceInt := &ves_io_schema.BotDefenseTransactionResult_TransactionResult{}
+														transactionResultChoiceInt.TransactionResult = &ves_io_schema.BotDefenseTransactionResultType{}
+														labelChoiceInt.Login.TransactionResultChoice = transactionResultChoiceInt
+
+														sl := v.(*schema.Set).List()
+														for _, set := range sl {
+															cs := set.(map[string]interface{})
+
+															if v, ok := cs["failure_conditions"]; ok && !isIntfNil(v) {
+
+																sl := v.([]interface{})
+																failureConditions := make([]*ves_io_schema.BotDefenseTransactionResultCondition, len(sl))
+																transactionResultChoiceInt.TransactionResult.FailureConditions = failureConditions
+																for i, set := range sl {
+																	failureConditions[i] = &ves_io_schema.BotDefenseTransactionResultCondition{}
+																	failureConditionsMapStrToI := set.(map[string]interface{})
+
+																	if w, ok := failureConditionsMapStrToI["name"]; ok && !isIntfNil(w) {
+																		failureConditions[i].Name = w.(string)
+																	}
+
+																	if w, ok := failureConditionsMapStrToI["regex_values"]; ok && !isIntfNil(w) {
+																		ls := make([]string, len(w.([]interface{})))
+																		for i, v := range w.([]interface{}) {
+																			ls[i] = v.(string)
+																		}
+																		failureConditions[i].RegexValues = ls
+																	}
+
+																	if v, ok := failureConditionsMapStrToI["status"]; ok && !isIntfNil(v) {
+
+																		failureConditions[i].Status = ves_io_schema.HttpStatusCode(ves_io_schema.HttpStatusCode_value[v.(string)])
+
+																	}
+
+																}
+
+															}
+
+															if v, ok := cs["success_conditions"]; ok && !isIntfNil(v) {
+
+																sl := v.([]interface{})
+																successConditions := make([]*ves_io_schema.BotDefenseTransactionResultCondition, len(sl))
+																transactionResultChoiceInt.TransactionResult.SuccessConditions = successConditions
+																for i, set := range sl {
+																	successConditions[i] = &ves_io_schema.BotDefenseTransactionResultCondition{}
+																	successConditionsMapStrToI := set.(map[string]interface{})
+
+																	if w, ok := successConditionsMapStrToI["name"]; ok && !isIntfNil(w) {
+																		successConditions[i].Name = w.(string)
+																	}
+
+																	if w, ok := successConditionsMapStrToI["regex_values"]; ok && !isIntfNil(w) {
+																		ls := make([]string, len(w.([]interface{})))
+																		for i, v := range w.([]interface{}) {
+																			ls[i] = v.(string)
+																		}
+																		successConditions[i].RegexValues = ls
+																	}
+
+																	if v, ok := successConditionsMapStrToI["status"]; ok && !isIntfNil(v) {
+
+																		successConditions[i].Status = ves_io_schema.HttpStatusCode(ves_io_schema.HttpStatusCode_value[v.(string)])
+
+																	}
+
+																}
+
+															}
+
+														}
+
+													}
+
 												}
 
 											}
@@ -30236,6 +31743,32 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 
 			}
 
+			methodChoiceTypeFound := false
+
+			if v, ok := graphqlRulesMapStrToI["method_get"]; ok && !isIntfNil(v) && !methodChoiceTypeFound {
+
+				methodChoiceTypeFound = true
+
+				if v.(bool) {
+					methodChoiceInt := &ves_io_schema_policy.GraphQLRule_MethodGet{}
+					methodChoiceInt.MethodGet = &ves_io_schema.Empty{}
+					graphqlRules[i].MethodChoice = methodChoiceInt
+				}
+
+			}
+
+			if v, ok := graphqlRulesMapStrToI["method_post"]; ok && !isIntfNil(v) && !methodChoiceTypeFound {
+
+				methodChoiceTypeFound = true
+
+				if v.(bool) {
+					methodChoiceInt := &ves_io_schema_policy.GraphQLRule_MethodPost{}
+					methodChoiceInt.MethodPost = &ves_io_schema.Empty{}
+					graphqlRules[i].MethodChoice = methodChoiceInt
+				}
+
+			}
+
 		}
 
 	}
@@ -32818,19 +34351,6 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 						for _, set := range sl {
 							cs := set.(map[string]interface{})
 
-							if v, ok := cs["endpoint_subsets"]; ok && !isIntfNil(v) {
-
-								sl := v.([]interface{})
-								endpointSubsets := make([]*ves_io_schema_cluster.EndpointSubsetSelectorType, len(sl))
-								subsetChoiceInt.EnableSubsets.EndpointSubsets = endpointSubsets
-								for i, _ := range sl {
-									endpointSubsets[i] = &ves_io_schema_cluster.EndpointSubsetSelectorType{}
-									//endpointSubsetsMapStrToI := set.(map[string]interface{})
-
-								}
-
-							}
-
 							fallbackPolicyChoiceTypeFound := false
 
 							if v, ok := cs["any_endpoint"]; ok && !isIntfNil(v) && !fallbackPolicyChoiceTypeFound {
@@ -34314,6 +35834,150 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 
 	}
 
+	if v, ok := d.GetOk("protected_cookies"); ok && !isIntfNil(v) {
+
+		sl := v.([]interface{})
+		protectedCookies := make([]*ves_io_schema.CookieManipulationOptionType, len(sl))
+		updateSpec.ProtectedCookies = protectedCookies
+		for i, set := range sl {
+			protectedCookies[i] = &ves_io_schema.CookieManipulationOptionType{}
+			protectedCookiesMapStrToI := set.(map[string]interface{})
+
+			httponlyTypeFound := false
+
+			if v, ok := protectedCookiesMapStrToI["add_httponly"]; ok && !isIntfNil(v) && !httponlyTypeFound {
+
+				httponlyTypeFound = true
+
+				if v.(bool) {
+					httponlyInt := &ves_io_schema.CookieManipulationOptionType_AddHttponly{}
+					httponlyInt.AddHttponly = &ves_io_schema.Empty{}
+					protectedCookies[i].Httponly = httponlyInt
+				}
+
+			}
+
+			if v, ok := protectedCookiesMapStrToI["ignore_httponly"]; ok && !isIntfNil(v) && !httponlyTypeFound {
+
+				httponlyTypeFound = true
+
+				if v.(bool) {
+					httponlyInt := &ves_io_schema.CookieManipulationOptionType_IgnoreHttponly{}
+					httponlyInt.IgnoreHttponly = &ves_io_schema.Empty{}
+					protectedCookies[i].Httponly = httponlyInt
+				}
+
+			}
+
+			maxAgeTypeFound := false
+
+			if v, ok := protectedCookiesMapStrToI["ignore_max_age"]; ok && !isIntfNil(v) && !maxAgeTypeFound {
+
+				maxAgeTypeFound = true
+
+				if v.(bool) {
+					maxAgeInt := &ves_io_schema.CookieManipulationOptionType_IgnoreMaxAge{}
+					maxAgeInt.IgnoreMaxAge = &ves_io_schema.Empty{}
+					protectedCookies[i].MaxAge = maxAgeInt
+				}
+
+			}
+
+			if v, ok := protectedCookiesMapStrToI["max_age_value"]; ok && !isIntfNil(v) && !maxAgeTypeFound {
+
+				maxAgeTypeFound = true
+				maxAgeInt := &ves_io_schema.CookieManipulationOptionType_MaxAgeValue{}
+
+				protectedCookies[i].MaxAge = maxAgeInt
+
+				maxAgeInt.MaxAgeValue = int32(v.(int))
+
+			}
+
+			if w, ok := protectedCookiesMapStrToI["name"]; ok && !isIntfNil(w) {
+				protectedCookies[i].Name = w.(string)
+			}
+
+			samesiteTypeFound := false
+
+			if v, ok := protectedCookiesMapStrToI["ignore_samesite"]; ok && !isIntfNil(v) && !samesiteTypeFound {
+
+				samesiteTypeFound = true
+
+				if v.(bool) {
+					samesiteInt := &ves_io_schema.CookieManipulationOptionType_IgnoreSamesite{}
+					samesiteInt.IgnoreSamesite = &ves_io_schema.Empty{}
+					protectedCookies[i].Samesite = samesiteInt
+				}
+
+			}
+
+			if v, ok := protectedCookiesMapStrToI["samesite_lax"]; ok && !isIntfNil(v) && !samesiteTypeFound {
+
+				samesiteTypeFound = true
+
+				if v.(bool) {
+					samesiteInt := &ves_io_schema.CookieManipulationOptionType_SamesiteLax{}
+					samesiteInt.SamesiteLax = &ves_io_schema.Empty{}
+					protectedCookies[i].Samesite = samesiteInt
+				}
+
+			}
+
+			if v, ok := protectedCookiesMapStrToI["samesite_none"]; ok && !isIntfNil(v) && !samesiteTypeFound {
+
+				samesiteTypeFound = true
+
+				if v.(bool) {
+					samesiteInt := &ves_io_schema.CookieManipulationOptionType_SamesiteNone{}
+					samesiteInt.SamesiteNone = &ves_io_schema.Empty{}
+					protectedCookies[i].Samesite = samesiteInt
+				}
+
+			}
+
+			if v, ok := protectedCookiesMapStrToI["samesite_strict"]; ok && !isIntfNil(v) && !samesiteTypeFound {
+
+				samesiteTypeFound = true
+
+				if v.(bool) {
+					samesiteInt := &ves_io_schema.CookieManipulationOptionType_SamesiteStrict{}
+					samesiteInt.SamesiteStrict = &ves_io_schema.Empty{}
+					protectedCookies[i].Samesite = samesiteInt
+				}
+
+			}
+
+			secureTypeFound := false
+
+			if v, ok := protectedCookiesMapStrToI["add_secure"]; ok && !isIntfNil(v) && !secureTypeFound {
+
+				secureTypeFound = true
+
+				if v.(bool) {
+					secureInt := &ves_io_schema.CookieManipulationOptionType_AddSecure{}
+					secureInt.AddSecure = &ves_io_schema.Empty{}
+					protectedCookies[i].Secure = secureInt
+				}
+
+			}
+
+			if v, ok := protectedCookiesMapStrToI["ignore_secure"]; ok && !isIntfNil(v) && !secureTypeFound {
+
+				secureTypeFound = true
+
+				if v.(bool) {
+					secureInt := &ves_io_schema.CookieManipulationOptionType_IgnoreSecure{}
+					secureInt.IgnoreSecure = &ves_io_schema.Empty{}
+					protectedCookies[i].Secure = secureInt
+				}
+
+			}
+
+		}
+
+	}
+
 	rateLimitChoiceTypeFound := false
 
 	if v, ok := d.GetOk("api_rate_limit"); ok && !rateLimitChoiceTypeFound {
@@ -35253,6 +36917,10 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 
 							if w, ok := routeRedirectMapStrToI["host_redirect"]; ok && !isIntfNil(w) {
 								routeRedirect.HostRedirect = w.(string)
+							}
+
+							if w, ok := routeRedirectMapStrToI["port_redirect"]; ok && !isIntfNil(w) {
+								routeRedirect.PortRedirect = uint32(w.(int))
 							}
 
 							if w, ok := routeRedirectMapStrToI["proto_redirect"]; ok && !isIntfNil(w) {
@@ -36460,6 +38128,18 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 
 							}
 
+							if v, ok := advancedOptionsMapStrToI["disable_waf"]; ok && !isIntfNil(v) && !wafChoiceTypeFound {
+
+								wafChoiceTypeFound = true
+
+								if v.(bool) {
+									wafChoiceInt := &ves_io_schema_views_http_loadbalancer.RouteSimpleAdvancedOptions_DisableWaf{}
+									wafChoiceInt.DisableWaf = &ves_io_schema.Empty{}
+									advancedOptions.WafChoice = wafChoiceInt
+								}
+
+							}
+
 							if v, ok := advancedOptionsMapStrToI["inherited_waf"]; ok && !isIntfNil(v) && !wafChoiceTypeFound {
 
 								wafChoiceTypeFound = true
@@ -36468,72 +38148,6 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 									wafChoiceInt := &ves_io_schema_views_http_loadbalancer.RouteSimpleAdvancedOptions_InheritedWaf{}
 									wafChoiceInt.InheritedWaf = &ves_io_schema.Empty{}
 									advancedOptions.WafChoice = wafChoiceInt
-								}
-
-							}
-
-							if v, ok := advancedOptionsMapStrToI["waf"]; ok && !isIntfNil(v) && !wafChoiceTypeFound {
-
-								wafChoiceTypeFound = true
-								wafChoiceInt := &ves_io_schema_views_http_loadbalancer.RouteSimpleAdvancedOptions_Waf{}
-								wafChoiceInt.Waf = &ves_io_schema_views.ObjectRefType{}
-								advancedOptions.WafChoice = wafChoiceInt
-
-								sl := v.(*schema.Set).List()
-								for _, set := range sl {
-									cs := set.(map[string]interface{})
-
-									if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-										wafChoiceInt.Waf.Name = v.(string)
-
-									}
-
-									if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
-
-										wafChoiceInt.Waf.Namespace = v.(string)
-
-									}
-
-									if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
-
-										wafChoiceInt.Waf.Tenant = v.(string)
-
-									}
-
-								}
-
-							}
-
-							if v, ok := advancedOptionsMapStrToI["waf_rule"]; ok && !isIntfNil(v) && !wafChoiceTypeFound {
-
-								wafChoiceTypeFound = true
-								wafChoiceInt := &ves_io_schema_views_http_loadbalancer.RouteSimpleAdvancedOptions_WafRule{}
-								wafChoiceInt.WafRule = &ves_io_schema_views.ObjectRefType{}
-								advancedOptions.WafChoice = wafChoiceInt
-
-								sl := v.(*schema.Set).List()
-								for _, set := range sl {
-									cs := set.(map[string]interface{})
-
-									if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-										wafChoiceInt.WafRule.Name = v.(string)
-
-									}
-
-									if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
-
-										wafChoiceInt.WafRule.Namespace = v.(string)
-
-									}
-
-									if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
-
-										wafChoiceInt.WafRule.Tenant = v.(string)
-
-									}
-
 								}
 
 							}
@@ -36907,6 +38521,26 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 
 	}
 
+	if v, ok := d.GetOk("slow_ddos_mitigation"); ok && !isIntfNil(v) {
+
+		sl := v.(*schema.Set).List()
+		slowDdosMitigation := &ves_io_schema_virtual_host.SlowDDoSMitigation{}
+		updateSpec.SlowDdosMitigation = slowDdosMitigation
+		for _, set := range sl {
+			slowDdosMitigationMapStrToI := set.(map[string]interface{})
+
+			if w, ok := slowDdosMitigationMapStrToI["request_headers_timeout"]; ok && !isIntfNil(w) {
+				slowDdosMitigation.RequestHeadersTimeout = uint32(w.(int))
+			}
+
+			if w, ok := slowDdosMitigationMapStrToI["request_timeout"]; ok && !isIntfNil(w) {
+				slowDdosMitigation.RequestTimeout = uint32(w.(int))
+			}
+
+		}
+
+	}
+
 	trustClientIpHeadersChoiceTypeFound := false
 
 	if v, ok := d.GetOk("disable_trust_client_ip_headers"); ok && !trustClientIpHeadersChoiceTypeFound {
@@ -37239,72 +38873,6 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 
 	}
 
-	if v, ok := d.GetOk("waf"); ok && !wafChoiceTypeFound {
-
-		wafChoiceTypeFound = true
-		wafChoiceInt := &ves_io_schema_views_http_loadbalancer.ReplaceSpecType_Waf{}
-		wafChoiceInt.Waf = &ves_io_schema_views.ObjectRefType{}
-		updateSpec.WafChoice = wafChoiceInt
-
-		sl := v.(*schema.Set).List()
-		for _, set := range sl {
-			cs := set.(map[string]interface{})
-
-			if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-				wafChoiceInt.Waf.Name = v.(string)
-
-			}
-
-			if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
-
-				wafChoiceInt.Waf.Namespace = v.(string)
-
-			}
-
-			if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
-
-				wafChoiceInt.Waf.Tenant = v.(string)
-
-			}
-
-		}
-
-	}
-
-	if v, ok := d.GetOk("waf_rule"); ok && !wafChoiceTypeFound {
-
-		wafChoiceTypeFound = true
-		wafChoiceInt := &ves_io_schema_views_http_loadbalancer.ReplaceSpecType_WafRule{}
-		wafChoiceInt.WafRule = &ves_io_schema_views.ObjectRefType{}
-		updateSpec.WafChoice = wafChoiceInt
-
-		sl := v.(*schema.Set).List()
-		for _, set := range sl {
-			cs := set.(map[string]interface{})
-
-			if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-				wafChoiceInt.WafRule.Name = v.(string)
-
-			}
-
-			if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
-
-				wafChoiceInt.WafRule.Namespace = v.(string)
-
-			}
-
-			if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
-
-				wafChoiceInt.WafRule.Tenant = v.(string)
-
-			}
-
-		}
-
-	}
-
 	if v, ok := d.GetOk("waf_exclusion_rules"); ok && !isIntfNil(v) {
 
 		sl := v.([]interface{})
@@ -37347,16 +38915,6 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 				wafExclusionRules[i].DomainChoice = domainChoiceInt
 
 				domainChoiceInt.SuffixValue = v.(string)
-
-			}
-
-			if v, ok := wafExclusionRulesMapStrToI["exclude_rule_ids"]; ok && !isIntfNil(v) {
-
-				exclude_rule_idsList := []ves_io_schema_waf_rule_list.WafRuleID{}
-				for _, j := range v.([]interface{}) {
-					exclude_rule_idsList = append(exclude_rule_idsList, ves_io_schema_waf_rule_list.WafRuleID(ves_io_schema_waf_rule_list.WafRuleID_value[j.(string)]))
-				}
-				wafExclusionRules[i].ExcludeRuleIds = exclude_rule_idsList
 
 			}
 
@@ -37496,6 +39054,16 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 							excludeSignatureContexts[i] = &ves_io_schema_policy.AppFirewallSignatureContext{}
 							excludeSignatureContextsMapStrToI := set.(map[string]interface{})
 
+							if v, ok := excludeSignatureContextsMapStrToI["context"]; ok && !isIntfNil(v) {
+
+								excludeSignatureContexts[i].Context = ves_io_schema_policy.DetectionContext(ves_io_schema_policy.DetectionContext_value[v.(string)])
+
+							}
+
+							if w, ok := excludeSignatureContextsMapStrToI["context_name"]; ok && !isIntfNil(w) {
+								excludeSignatureContexts[i].ContextName = w.(string)
+							}
+
 							if w, ok := excludeSignatureContextsMapStrToI["signature_id"]; ok && !isIntfNil(w) {
 								excludeSignatureContexts[i].SignatureId = uint32(w.(int))
 							}
@@ -37512,6 +39080,12 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 						for i, set := range sl {
 							excludeViolationContexts[i] = &ves_io_schema_policy.AppFirewallViolationContext{}
 							excludeViolationContextsMapStrToI := set.(map[string]interface{})
+
+							if v, ok := excludeViolationContextsMapStrToI["context"]; ok && !isIntfNil(v) {
+
+								excludeViolationContexts[i].Context = ves_io_schema_policy.DetectionContext(ves_io_schema_policy.DetectionContext_value[v.(string)])
+
+							}
 
 							if v, ok := excludeViolationContextsMapStrToI["exclude_violation"]; ok && !isIntfNil(v) {
 

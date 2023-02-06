@@ -20,7 +20,6 @@ import (
 	ves_io_schema_service_policy "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/service_policy"
 	ves_io_schema_service_policy_rule "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/service_policy_rule"
 	ves_io_schema_views "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views"
-	ves_io_schema_waf_rule_list "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/waf_rule_list"
 )
 
 // resourceVolterraServicePolicy is implementation of Volterra's ServicePolicy resources
@@ -1904,74 +1903,6 @@ func resourceVolterraServicePolicy() *schema.Resource {
 
 																Type:     schema.TypeBool,
 																Optional: true,
-															},
-
-															"waf_inline_rule_control": {
-
-																Type:     schema.TypeSet,
-																Optional: true,
-																Elem: &schema.Resource{
-																	Schema: map[string]*schema.Schema{
-
-																		"exclude_rule_ids": {
-
-																			Type: schema.TypeList,
-
-																			Optional: true,
-																			Elem: &schema.Schema{
-																				Type: schema.TypeString,
-																			},
-																		},
-
-																		"monitoring_mode": {
-																			Type:     schema.TypeBool,
-																			Optional: true,
-																		},
-																	},
-																},
-															},
-
-															"waf_rule_control": {
-
-																Type:     schema.TypeSet,
-																Optional: true,
-																Elem: &schema.Resource{
-																	Schema: map[string]*schema.Schema{
-
-																		"exclude_rule_ids": {
-
-																			Type:     schema.TypeList,
-																			Optional: true,
-																			Elem: &schema.Resource{
-																				Schema: map[string]*schema.Schema{
-
-																					"kind": {
-																						Type:     schema.TypeString,
-																						Computed: true,
-																					},
-
-																					"name": {
-																						Type:     schema.TypeString,
-																						Optional: true,
-																					},
-																					"namespace": {
-																						Type:     schema.TypeString,
-																						Optional: true,
-																					},
-																					"tenant": {
-																						Type:     schema.TypeString,
-																						Optional: true,
-																					},
-																				},
-																			},
-																		},
-
-																		"monitoring_mode": {
-																			Type:     schema.TypeBool,
-																			Optional: true,
-																		},
-																	},
-																},
 															},
 
 															"waf_skip_processing": {
@@ -4376,90 +4307,6 @@ func resourceVolterraServicePolicyCreate(d *schema.ResourceData, meta interface{
 											actionTypeInt := &ves_io_schema_policy.WafAction_WafInMonitoringMode{}
 											actionTypeInt.WafInMonitoringMode = &ves_io_schema.Empty{}
 											wafAction.ActionType = actionTypeInt
-										}
-
-									}
-
-									if v, ok := wafActionMapStrToI["waf_inline_rule_control"]; ok && !isIntfNil(v) && !actionTypeTypeFound {
-
-										actionTypeTypeFound = true
-										actionTypeInt := &ves_io_schema_policy.WafAction_WafInlineRuleControl{}
-										actionTypeInt.WafInlineRuleControl = &ves_io_schema_policy.WafInlineRuleControl{}
-										wafAction.ActionType = actionTypeInt
-
-										sl := v.(*schema.Set).List()
-										for _, set := range sl {
-											cs := set.(map[string]interface{})
-
-											if v, ok := cs["exclude_rule_ids"]; ok && !isIntfNil(v) {
-
-												exclude_rule_idsList := []ves_io_schema_waf_rule_list.WafRuleID{}
-												for _, j := range v.([]interface{}) {
-													exclude_rule_idsList = append(exclude_rule_idsList, ves_io_schema_waf_rule_list.WafRuleID(ves_io_schema_waf_rule_list.WafRuleID_value[j.(string)]))
-												}
-												actionTypeInt.WafInlineRuleControl.ExcludeRuleIds = exclude_rule_idsList
-
-											}
-
-											if v, ok := cs["monitoring_mode"]; ok && !isIntfNil(v) {
-
-												actionTypeInt.WafInlineRuleControl.MonitoringMode = v.(bool)
-
-											}
-
-										}
-
-									}
-
-									if v, ok := wafActionMapStrToI["waf_rule_control"]; ok && !isIntfNil(v) && !actionTypeTypeFound {
-
-										actionTypeTypeFound = true
-										actionTypeInt := &ves_io_schema_policy.WafAction_WafRuleControl{}
-										actionTypeInt.WafRuleControl = &ves_io_schema_policy.WafRuleControl{}
-										wafAction.ActionType = actionTypeInt
-
-										sl := v.(*schema.Set).List()
-										for _, set := range sl {
-											cs := set.(map[string]interface{})
-
-											if v, ok := cs["exclude_rule_ids"]; ok && !isIntfNil(v) {
-
-												sl := v.([]interface{})
-												excludeRuleIdsInt := make([]*ves_io_schema.ObjectRefType, len(sl))
-												actionTypeInt.WafRuleControl.ExcludeRuleIds = excludeRuleIdsInt
-												for i, ps := range sl {
-
-													eriMapToStrVal := ps.(map[string]interface{})
-													excludeRuleIdsInt[i] = &ves_io_schema.ObjectRefType{}
-
-													excludeRuleIdsInt[i].Kind = "waf_rule_list"
-
-													if v, ok := eriMapToStrVal["name"]; ok && !isIntfNil(v) {
-														excludeRuleIdsInt[i].Name = v.(string)
-													}
-
-													if v, ok := eriMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-														excludeRuleIdsInt[i].Namespace = v.(string)
-													}
-
-													if v, ok := eriMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-														excludeRuleIdsInt[i].Tenant = v.(string)
-													}
-
-													if v, ok := eriMapToStrVal["uid"]; ok && !isIntfNil(v) {
-														excludeRuleIdsInt[i].Uid = v.(string)
-													}
-
-												}
-
-											}
-
-											if v, ok := cs["monitoring_mode"]; ok && !isIntfNil(v) {
-
-												actionTypeInt.WafRuleControl.MonitoringMode = v.(bool)
-
-											}
-
 										}
 
 									}
@@ -6943,89 +6790,6 @@ func resourceVolterraServicePolicyUpdate(d *schema.ResourceData, meta interface{
 
 									}
 
-									if v, ok := wafActionMapStrToI["waf_inline_rule_control"]; ok && !isIntfNil(v) && !actionTypeTypeFound {
-
-										actionTypeTypeFound = true
-										actionTypeInt := &ves_io_schema_policy.WafAction_WafInlineRuleControl{}
-										actionTypeInt.WafInlineRuleControl = &ves_io_schema_policy.WafInlineRuleControl{}
-										wafAction.ActionType = actionTypeInt
-
-										sl := v.(*schema.Set).List()
-										for _, set := range sl {
-											cs := set.(map[string]interface{})
-
-											if v, ok := cs["exclude_rule_ids"]; ok && !isIntfNil(v) {
-
-												exclude_rule_idsList := []ves_io_schema_waf_rule_list.WafRuleID{}
-												for _, j := range v.([]interface{}) {
-													exclude_rule_idsList = append(exclude_rule_idsList, ves_io_schema_waf_rule_list.WafRuleID(ves_io_schema_waf_rule_list.WafRuleID_value[j.(string)]))
-												}
-												actionTypeInt.WafInlineRuleControl.ExcludeRuleIds = exclude_rule_idsList
-
-											}
-
-											if v, ok := cs["monitoring_mode"]; ok && !isIntfNil(v) {
-
-												actionTypeInt.WafInlineRuleControl.MonitoringMode = v.(bool)
-
-											}
-
-										}
-
-									}
-
-									if v, ok := wafActionMapStrToI["waf_rule_control"]; ok && !isIntfNil(v) && !actionTypeTypeFound {
-
-										actionTypeTypeFound = true
-										actionTypeInt := &ves_io_schema_policy.WafAction_WafRuleControl{}
-										actionTypeInt.WafRuleControl = &ves_io_schema_policy.WafRuleControl{}
-										wafAction.ActionType = actionTypeInt
-
-										sl := v.(*schema.Set).List()
-										for _, set := range sl {
-											cs := set.(map[string]interface{})
-
-											if v, ok := cs["exclude_rule_ids"]; ok && !isIntfNil(v) {
-
-												sl := v.([]interface{})
-												excludeRuleIdsInt := make([]*ves_io_schema.ObjectRefType, len(sl))
-												actionTypeInt.WafRuleControl.ExcludeRuleIds = excludeRuleIdsInt
-												for i, ps := range sl {
-
-													eriMapToStrVal := ps.(map[string]interface{})
-													excludeRuleIdsInt[i] = &ves_io_schema.ObjectRefType{}
-
-													excludeRuleIdsInt[i].Kind = "waf_rule_list"
-
-													if v, ok := eriMapToStrVal["name"]; ok && !isIntfNil(v) {
-														excludeRuleIdsInt[i].Name = v.(string)
-													}
-
-													if v, ok := eriMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-														excludeRuleIdsInt[i].Namespace = v.(string)
-													}
-
-													if v, ok := eriMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-														excludeRuleIdsInt[i].Tenant = v.(string)
-													}
-
-													if v, ok := eriMapToStrVal["uid"]; ok && !isIntfNil(v) {
-														excludeRuleIdsInt[i].Uid = v.(string)
-													}
-
-												}
-
-											}
-
-											if v, ok := cs["monitoring_mode"]; ok && !isIntfNil(v) {
-
-												actionTypeInt.WafRuleControl.MonitoringMode = v.(bool)
-
-											}
-
-										}
-
-									}
 
 									if v, ok := wafActionMapStrToI["waf_skip_processing"]; ok && !isIntfNil(v) && !actionTypeTypeFound {
 
