@@ -21,12 +21,18 @@ resource "volterra_http_loadbalancer" "example" {
   namespace = "staging"
 
   // One of the arguments from this list "do_not_advertise advertise_on_public_default_vip advertise_on_public advertise_custom" must be set
-  do_not_advertise = true
 
-  // One of the arguments from this list "disable_api_definition api_definition api_definitions" must be set
+  advertise_on_public {
+    public_ip {
+      name      = "test1"
+      namespace = "staging"
+      tenant    = "acmecorp"
+    }
+  }
+  // One of the arguments from this list "api_definition api_specification api_definitions disable_api_definition" must be set
   disable_api_definition = true
 
-  // One of the arguments from this list "disable_api_discovery enable_api_discovery" must be set
+  // One of the arguments from this list "enable_api_discovery disable_api_discovery" must be set
 
   enable_api_discovery {
     // One of the arguments from this list "disable_learn_from_redirect_traffic enable_learn_from_redirect_traffic" must be set
@@ -38,21 +44,12 @@ resource "volterra_http_loadbalancer" "example" {
   // One of the arguments from this list "enable_ddos_detection disable_ddos_detection" must be set
 
   enable_ddos_detection {
-    // One of the arguments from this list "enable_auto_mitigation disable_auto_mitigation" must be set
+    // One of the arguments from this list "disable_auto_mitigation enable_auto_mitigation" must be set
     enable_auto_mitigation = true
   }
   domains = ["www.foo.com"]
-
-  // One of the arguments from this list "round_robin least_active random source_ip_stickiness cookie_stickiness ring_hash" must be set
-
-  ring_hash {
-    hash_policy {
-      // One of the arguments from this list "header_name cookie source_ip" must be set
-      header_name = "host"
-
-      terminal = true
-    }
-  }
+  // One of the arguments from this list "random source_ip_stickiness cookie_stickiness ring_hash round_robin least_active" must be set
+  round_robin = true
 
   // One of the arguments from this list "https_auto_cert https http" must be set
 
@@ -62,22 +59,41 @@ resource "volterra_http_loadbalancer" "example" {
   }
   // One of the arguments from this list "enable_malicious_user_detection disable_malicious_user_detection" must be set
   enable_malicious_user_detection = true
+
   // One of the arguments from this list "disable_rate_limit api_rate_limit rate_limit" must be set
-  disable_rate_limit = true
+
+  rate_limit {
+    // One of the arguments from this list "no_ip_allowed_list ip_allowed_list custom_ip_allowed_list" must be set
+
+    custom_ip_allowed_list {
+      rate_limiter_allowed_prefixes {
+        name      = "test1"
+        namespace = "staging"
+        tenant    = "acmecorp"
+      }
+    }
+
+    // One of the arguments from this list "no_policies policies" must be set
+    no_policies = true
+
+    rate_limiter {
+      burst_multiplier = "1"
+      total_number     = "1"
+      unit             = "unit"
+    }
+  }
   // One of the arguments from this list "service_policies_from_namespace no_service_policies active_service_policies" must be set
   service_policies_from_namespace = true
+
   // One of the arguments from this list "disable_trust_client_ip_headers enable_trust_client_ip_headers" must be set
-  disable_trust_client_ip_headers = true
+
+  enable_trust_client_ip_headers {
+    client_ip_headers = ["Client-IP-Header"]
+  }
   // One of the arguments from this list "user_id_client_ip user_identification" must be set
   user_id_client_ip = true
-
-  // One of the arguments from this list "app_firewall disable_waf waf waf_rule" must be set
-
-  app_firewall {
-    name      = "test1"
-    namespace = "staging"
-    tenant    = "acmecorp"
-  }
+  // One of the arguments from this list "disable_waf app_firewall" must be set
+  disable_waf = true
 }
 
 ```
@@ -114,6 +130,8 @@ Argument Reference
 `api_definition` - (Optional) Specify API definition which includes application API paths and methods derived from swagger files.. See [ref](#ref) below for details.
 
 `api_definitions` - (Optional) DEPRECATED by 'api_definition'. See [Api Definitions ](#api-definitions) below for details.
+
+`api_specification` - (Optional) Specify API definition and OpenAPI Validation. See [Api Specification ](#api-specification) below for details.
 
 `disable_api_definition` - (Optional) API Definition is not currently used for this load balancer (bool).
 
@@ -197,6 +215,8 @@ Argument Reference
 
 `default_pool_list` - (Optional) Multiple Origin Pools with weights and priorities. See [Default Pool List ](#default-pool-list) below for details.
 
+`protected_cookies` - (Optional) List of cookies to be modified from the HTTP response being sent towards downstream.. See [Protected Cookies ](#protected-cookies) below for details.
+
 `api_rate_limit` - (Optional) Define rate limiting for one or more API endpoints. See [Api Rate Limit ](#api-rate-limit) below for details.
 
 `disable_rate_limit` - (Optional) Rate limiting is not currently enabled for this load balancer (bool).
@@ -211,6 +231,8 @@ Argument Reference
 
 `service_policies_from_namespace` - (Optional) Apply the active service policies configured as part of the namespace service policy set (bool).
 
+`slow_ddos_mitigation` - (Optional) requests from actual users.. See [Slow Ddos Mitigation ](#slow-ddos-mitigation) below for details.
+
 `disable_trust_client_ip_headers` - (Optional) x-displayName: "Disable" (bool).
 
 `enable_trust_client_ip_headers` - (Optional) x-displayName: "Enable". See [Enable Trust Client Ip Headers ](#enable-trust-client-ip-headers) below for details.
@@ -224,10 +246,6 @@ Argument Reference
 `app_firewall` - (Optional) Reference to App Firewall configuration object. See [ref](#ref) below for details.
 
 `disable_waf` - (Optional) No WAF configuration for this load balancer (bool).
-
-`waf` - (Optional) Reference to WAF intent configuration object. See [ref](#ref) below for details.
-
-`waf_rule` - (Optional) Reference to WAF Rules configuration object. See [ref](#ref) below for details.
 
 `waf_exclusion_rules` - (Optional) When an exclusion rule is matched, then this exclusion rule takes effect and no more rules are evaluated.. See [Waf Exclusion Rules ](#waf-exclusion-rules) below for details.
 
@@ -441,6 +459,18 @@ Define rate limiting for one or more API endpoints.
 
 `server_url_rules` - (Optional) For matching also specific endpoints you can use the API endpoint rules set bellow.. See [Server Url Rules ](#server-url-rules) below for details.
 
+### Api Specification
+
+Specify API definition and OpenAPI Validation.
+
+`api_definition` - (Required) Specify API definition which includes application API paths and methods derived from swagger files.. See [ref](#ref) below for details.
+
+`validation_all_spec_endpoints` - (Optional) Any other end-points not listed will act according to "Fall Through Mode". See [Validation All Spec Endpoints ](#validation-all-spec-endpoints) below for details.
+
+`validation_custom_list` - (Optional) Any other end-points not listed will act according to "Fall Through Mode". See [Validation Custom List ](#validation-custom-list) below for details.
+
+`validation_disabled` - (Optional) Don't run OpenAPI validation (bool).
+
 ### App Firewall Detection Control
 
 Define the list of Signature IDs, Violations, Attack Types and Bot Names that should be excluded from triggering on the defined match criteria..
@@ -485,7 +515,7 @@ The predicate evaluates to true if the origin ASN is present in one of the BGP A
 
 x-displayName: "Authentication".
 
-`login` - (Optional) x-displayName: "Login" (bool).
+`login` - (Optional) x-displayName: "Login". See [Login ](#login) below for details.
 
 `login_mfa` - (Optional) x-displayName: "Login MFA" (bool).
 
@@ -755,9 +785,9 @@ Consistent hashing algorithm, ring hash, is used to select origin server.
 
 List of cookies to be modified from the HTTP response being sent towards downstream..
 
-`add_httponly` - (Optional) Add httponly attribute (bool).
+`add_httponly` - (Optional) x-displayName: "Add" (bool).
 
-`ignore_httponly` - (Optional) Ignore httponly attribute (bool).
+`ignore_httponly` - (Optional) x-displayName: "Ignore" (bool).
 
 `ignore_max_age` - (Optional) Ignore max age attribute (bool).
 
@@ -773,9 +803,9 @@ List of cookies to be modified from the HTTP response being sent towards downstr
 
 `samesite_strict` - (Optional) Add Samesite attribute with Strict. Means that the browser sends the cookie only for same-site requests (bool).
 
-`add_secure` - (Optional) Add secure attribute (bool).
+`add_secure` - (Optional) x-displayName: "Add" (bool).
 
-`ignore_secure` - (Optional) Ignore secure attribute (bool).
+`ignore_secure` - (Optional) x-displayName: "Ignore" (bool).
 
 ### Cors Policy
 
@@ -1063,6 +1093,10 @@ Do not use SNI..
 
 Subset load balancing is disabled. All eligible origin servers will be considered for load balancing..
 
+### Disable Transaction Result
+
+Disable collection of transaction result..
+
 ### Domain
 
 Domain matcher..
@@ -1149,6 +1183,14 @@ x-displayName: "Enable".
 
 List of subset class. Subsets class is defined using list of keys. Every unique combination of values of these keys form a subset withing the class..
 
+### Enforcement Block
+
+Block the request, trigger an API security event.
+
+### Enforcement Report
+
+Allow the request, trigger an API security event.
+
 ### Exclude Attack Type Contexts
 
 Attack Types to be excluded for the defined match criteria.
@@ -1177,17 +1219,55 @@ Optional JavaScript insertions exclude list of domain and path matchers..
 
 Signature IDs to be excluded for the defined match criteria.
 
+`context` - (Required) x-required (`String`).
+
+`context_name` - (Optional) Relevant only for contexts: Header, Cookie and Parameter. Name of the Context that the WAF Exclusion Rules will check. (`String`).
+
 `signature_id` - (Required) x-required (`Int`).
 
 ### Exclude Violation Contexts
 
 Violations to be excluded for the defined match criteria.
 
+`context` - (Required) x-required (`String`).
+
 `exclude_violation` - (Required) x-required (`String`).
 
 ### Fail Request
 
 Request will be failed and error returned, as if cluster has no origin servers..
+
+### Failure Conditions
+
+Failure Conditions.
+
+`name` - (Optional) A case-insensitive HTTP header name. (`String`).
+
+`regex_values` - (Optional) A list of regular expressions to match the input against. (`String`).
+
+`status` - (Required) HTTP Status code (`String`).
+
+### Fall Through Mode
+
+Determine what to do with unprotected endpoints (not in the OpenAPI specification file (a.k.a. swagger) or doesn't have a specific rule in custom rules).
+
+`fall_through_mode_allow` - (Optional) Allow the request (bool).
+
+`fall_through_mode_block` - (Optional) Block any request and trigger an API security event (bool).
+
+`fall_through_mode_report` - (Optional) Allow the request but trigger an API security event (bool).
+
+### Fall Through Mode Allow
+
+Allow the request.
+
+### Fall Through Mode Block
+
+Block any request and trigger an API security event.
+
+### Fall Through Mode Report
+
+Allow the request but trigger an API security event.
 
 ### Financial Services
 
@@ -1251,11 +1331,15 @@ queries and prevent GraphQL tailored attacks..
 
 `suffix_value` - (Optional) Suffix of domain name e.g "xyz.com" will match "*.xyz.com" and "xyz.com" (`String`).
 
-`exact_path` - (Required) GraphQL endpoint. Default value is /graphql. (`String`).
+`exact_path` - (Required) Specifies the exact path to GraphQL endpoint. Default value is /graphql. (`String`).
 
 `graphql_settings` - (Optional) GraphQL configuration.. See [Graphql Settings ](#graphql-settings) below for details.
 
 `metadata` - (Required) Common attributes for the rule including name and description.. See [Metadata ](#metadata) below for details.
+
+`method_get` - (Optional) x-displayName: "GET" (bool).
+
+`method_post` - (Optional) x-displayName: "POST" (bool).
 
 ### Graphql Settings
 
@@ -1555,6 +1639,10 @@ Specify origin server with K8s service name and site information.
 
 x-displayName: "Login".
 
+`disable_transaction_result` - (Optional) Disable collection of transaction result. (bool).
+
+`transaction_result` - (Optional) Collect transaction result.. See [Transaction Result ](#transaction-result) below for details.
+
 ### Login Mfa
 
 x-displayName: "Login MFA".
@@ -1584,6 +1672,14 @@ Common attributes for the rule including name and description..
 `disable` - (Optional) A value of true will administratively disable the object that corresponds to the containing message. (`Bool`).
 
 `name` - (Required) The value of name has to follow DNS-1035 format. (`String`).
+
+### Method Get
+
+x-displayName: "GET".
+
+### Method Post
+
+x-displayName: "POST".
 
 ### Mitigation
 
@@ -1696,6 +1792,24 @@ x-displayName: "No".
 ### None
 
 No mitigation actions..
+
+### Open Api Validation Rules
+
+x-displayName: "Validation List".
+
+`api_endpoint_path` - (Optional) The API endpoint which this validation applies to (`String`).
+
+`api_group` - (Optional) The API group which this validation applies to (`String`).
+
+`base_path` - (Optional) The base path which this validation applies to (`String`).
+
+`any_domain` - (Required) The rule will apply for all domains. (bool).
+
+`specific_domain` - (Required) The rule will apply for a specific domain. (`String`).
+
+`metadata` - (Required) Common attributes for the rule including name and description.. See [Metadata ](#metadata) below for details.
+
+`validation_mode` - (Required) When a validation mismatch occurs on a request to one of the endpoints listed on the OpenAPI specification file (a.k.a. swagger). See [Validation Mode ](#validation-mode) below for details.
 
 ### Origin Pools
 
@@ -1915,6 +2029,32 @@ List of protected application endpoints (max 128 items)..
 
 `protocol` - (Optional) Protocol. (`String`).
 
+### Protected Cookies
+
+List of cookies to be modified from the HTTP response being sent towards downstream..
+
+`add_httponly` - (Optional) x-displayName: "Add" (bool).
+
+`ignore_httponly` - (Optional) x-displayName: "Ignore" (bool).
+
+`ignore_max_age` - (Optional) Ignore max age attribute (bool).
+
+`max_age_value` - (Optional) Add max age attribute (`Int`).
+
+`name` - (Required) Name of the Cookie (`String`).
+
+`ignore_samesite` - (Optional) Ignore Samesite attribute (bool).
+
+`samesite_lax` - (Optional) Add Samesite attribute with Lax. Means that the cookie is not sent on cross-site requests (bool).
+
+`samesite_none` - (Optional) Add Samesite attribute with None. Means that the browser sends the cookie with both cross-site and same-site requests (bool).
+
+`samesite_strict` - (Optional) Add Samesite attribute with Strict. Means that the browser sends the cookie only for same-site requests (bool).
+
+`add_secure` - (Optional) x-displayName: "Add" (bool).
+
+`ignore_secure` - (Optional) x-displayName: "Ignore" (bool).
+
 ### Public Ip
 
 Specify origin server with public IP.
@@ -2066,6 +2206,8 @@ Send direct response.
 Send redirect response.
 
 `host_redirect` - (Optional) swap host part of incoming URL in redirect URL (`String`).
+
+`port_redirect` - (Optional) Specify the port value to redirect to a URL with non default port(443) (`Int`).
 
 `proto_redirect` - (Optional) When incoming-proto option is specified, swapping of protocol is not done. (`String`).
 
@@ -2315,11 +2457,33 @@ Skip both WAF and Bot Defense processing for clients matching this rule..
 
 Skip origin server verification.
 
+### Skip Validation
+
+Skip OpenAPI validation processing for this event.
+
+### Slow Ddos Mitigation
+
+requests from actual users..
+
+`request_headers_timeout` - (Optional) provides protection against Slowloris attacks. (`Int`).
+
+`request_timeout` - (Optional) provides protection against Slow POST attacks. (`Int`).
+
 ### Strip Query Params
 
 Specifies the list of query params to be removed. Not supported.
 
 `query_params` - (Optional) Query params keys to strip while manipulating the HTTP request (`String`).
+
+### Success Conditions
+
+Success Conditions.
+
+`name` - (Optional) A case-insensitive HTTP header name. (`String`).
+
+`regex_values` - (Optional) A list of regular expressions to match the input against. (`String`).
+
+`status` - (Required) HTTP Status code (`String`).
 
 ### Temporary User Blocking
 
@@ -2380,6 +2544,14 @@ TLS parameters for downstream connections..
 ### Token Refresh
 
 x-displayName: "Token Refresh".
+
+### Transaction Result
+
+Collect transaction result..
+
+`failure_conditions` - (Optional) Failure Conditions. See [Failure Conditions ](#failure-conditions) below for details.
+
+`success_conditions` - (Optional) Success Conditions. See [Success Conditions ](#success-conditions) below for details.
 
 ### Trusted Clients
 
@@ -2467,6 +2639,44 @@ x-displayName: "Enable".
 
 `tls_config` - (Required) TLS parameters such as min/max TLS version and ciphers. See [Tls Config ](#tls-config) below for details.
 
+### Validation All Spec Endpoints
+
+Any other end-points not listed will act according to "Fall Through Mode".
+
+`fall_through_mode` - (Required) Determine what to do with unprotected endpoints (not in the OpenAPI specification file (a.k.a. swagger) or doesn't have a specific rule in custom rules). See [Fall Through Mode ](#fall-through-mode) below for details.
+
+`validation_mode` - (Required) When a validation mismatch occurs on a request to one of the endpoints listed on the OpenAPI specification file (a.k.a. swagger). See [Validation Mode ](#validation-mode) below for details.
+
+### Validation Custom List
+
+Any other end-points not listed will act according to "Fall Through Mode".
+
+`fall_through_mode` - (Required) Determine what to do with unprotected endpoints (not in the OpenAPI specification file (a.k.a. swagger) or doesn't have a specific rule in custom rules). See [Fall Through Mode ](#fall-through-mode) below for details.
+
+`open_api_validation_rules` - (Required) x-displayName: "Validation List". See [Open Api Validation Rules ](#open-api-validation-rules) below for details.
+
+### Validation Disabled
+
+Don't run OpenAPI validation.
+
+### Validation Mode
+
+When a validation mismatch occurs on a request to one of the endpoints listed on the OpenAPI specification file (a.k.a. swagger).
+
+`skip_validation` - (Optional) Skip OpenAPI validation processing for this event (bool).
+
+`validation_mode_active` - (Optional) Enforce OpenAPI validation processing for this event. See [Validation Mode Active ](#validation-mode-active) below for details.
+
+### Validation Mode Active
+
+Enforce OpenAPI validation processing for this event.
+
+`request_validation_properties` - (Required) List of properties of the request to validate according to the OpenAPI specification file (a.k.a. swagger) (`List of Strings`).
+
+`enforcement_block` - (Optional) Block the request, trigger an API security event (bool).
+
+`enforcement_report` - (Optional) Allow the request, trigger an API security event (bool).
+
 ### Vault Secret Info
 
 Vault Secret is used for the secrets managed by Hashicorp Vault.
@@ -2544,8 +2754,6 @@ When an exclusion rule is matched, then this exclusion rule takes effect and no 
 `exact_value` - (Optional) Exact domain name (`String`).
 
 `suffix_value` - (Optional) Suffix of domain name e.g "xyz.com" will match "*.xyz.com" and "xyz.com" (`String`).
-
-`exclude_rule_ids` - (Required) WAF Rules to be excluded when match conditions are met (`List of Strings`).
 
 `expiration_timestamp` - (Optional) the configuration but is not applied anymore. (`String`).
 

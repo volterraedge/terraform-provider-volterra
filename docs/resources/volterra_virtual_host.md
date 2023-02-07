@@ -20,7 +20,7 @@ resource "volterra_virtual_host" "example" {
   name      = "acmecorp-web"
   namespace = "staging"
 
-  // One of the arguments from this list "js_challenge captcha_challenge no_challenge" must be set
+  // One of the arguments from this list "captcha_challenge no_challenge js_challenge" must be set
   no_challenge = true
 }
 
@@ -48,6 +48,8 @@ Argument Reference
 `add_location` - (Optional) is ignored on CE sites. (`Bool`).
 
 `advertise_policies` - (Optional) If advertise policy is not specified then no VIP is assigned for this virtual host.. See [ref](#ref) below for details.
+
+`api_spec` - (Optional) OpenAPI specification settings. See [Api Spec ](#api-spec) below for details.
 
 `authentication` - (Optional) Configure authentication details. See [Authentication ](#authentication) below for details.
 
@@ -123,6 +125,8 @@ Argument Reference
 
 `server_name` - (Optional) This will overwrite existing values if any for Server Header (`String`).
 
+`slow_ddos_mitigation` - (Optional) This configuration helps to mitigate such type of attacks.. See [Slow Ddos Mitigation ](#slow-ddos-mitigation) below for details.
+
 `additional_domains` - (Optional) Wildcard names are supported in the suffix or prefix form. See [Additional Domains ](#additional-domains) below for details.
 
 `enable_strict_sni_host_header_check` - (Optional) Enable strict SNI and Host header check" (bool).
@@ -133,15 +137,15 @@ Argument Reference
 
 `user_identification` - (Optional) The rules in the user_identification object are evaluated to determine the user identifier to be rate limited.. See [ref](#ref) below for details.
 
-`waf_type` - (Optional) Enable/Disable individual WAF security rules. See [Waf Type ](#waf-type) below for details.
+`waf_type` - (Optional) waf_type is the App Firewall profile to use.. See [Waf Type ](#waf-type) below for details.
 
 ### Add Httponly
 
-Add httponly attribute.
+x-displayName: "Add".
 
 ### Add Secure
 
-Add secure attribute.
+x-displayName: "Add".
 
 ### Additional Domains
 
@@ -153,11 +157,21 @@ Wildcard names are supported in the suffix or prefix form.
 
 Add All load balancer domains to source origin (allow) list..
 
+### Api Spec
+
+OpenAPI specification settings.
+
+`api_definition` - (Required) API definition is set on this vhost for enforcing OpenAPI on requests. See [ref](#ref) below for details.
+
+`disable_open_api_validation` - (Optional) No OpenApi Validation configuration for this VH (bool).
+
+`enable_open_api_validation` - (Optional) OpenApi Validation configuration object (bool).
+
 ### App Firewall
 
 A direct reference to an Application Firewall configuration object.
 
-`app_firewall` - (Optional) References to an Application Firewall configuration object. See [ref](#ref) below for details.
+`app_firewall` - (Required) References to an Application Firewall configuration object. See [ref](#ref) below for details.
 
 ### Auth Hmac
 
@@ -293,9 +307,9 @@ Configure all Cookie params.
 
 List of cookies to be modified from the HTTP response being sent towards downstream..
 
-`add_httponly` - (Optional) Add httponly attribute (bool).
+`add_httponly` - (Optional) x-displayName: "Add" (bool).
 
-`ignore_httponly` - (Optional) Ignore httponly attribute (bool).
+`ignore_httponly` - (Optional) x-displayName: "Ignore" (bool).
 
 `ignore_max_age` - (Optional) Ignore max age attribute (bool).
 
@@ -311,9 +325,9 @@ List of cookies to be modified from the HTTP response being sent towards downstr
 
 `samesite_strict` - (Optional) Add Samesite attribute with Strict. Means that the browser sends the cookie only for same-site requests (bool).
 
-`add_secure` - (Optional) Add secure attribute (bool).
+`add_secure` - (Optional) x-displayName: "Add" (bool).
 
-`ignore_secure` - (Optional) Ignore secure attribute (bool).
+`ignore_secure` - (Optional) x-displayName: "Ignore" (bool).
 
 ### Cors Policy
 
@@ -381,6 +395,14 @@ x-displayName: "Disable".
 
 This is the default behavior if no choice is selected..
 
+### Disable Open Api Validation
+
+No OpenApi Validation configuration for this VH.
+
+### Disable Waf
+
+Any Application Firewall configuration will not be enforced.
+
 ### Dns Proxy Configuration
 
 Advanced DNS Proxy Configurations like DDoS, Cache are mapped to DNSProxyConfiguration for internal use.
@@ -409,6 +431,10 @@ x-displayName: "Enable".
 
 x-displayName: "Enable".
 
+### Enable Open Api Validation
+
+OpenApi Validation configuration object.
+
 ### Header Transformation Type
 
 Header transformation options for response headers to the client.
@@ -419,7 +445,7 @@ Header transformation options for response headers to the client.
 
 ### Ignore Httponly
 
-Ignore httponly attribute.
+x-displayName: "Ignore".
 
 ### Ignore Max Age
 
@@ -431,7 +457,11 @@ Ignore Samesite attribute.
 
 ### Ignore Secure
 
-Ignore secure attribute.
+x-displayName: "Ignore".
+
+### Inherit Waf
+
+Any Application Firewall configuration that was configured on a higher level will be enforced.
 
 ### Js Challenge
 
@@ -583,6 +613,14 @@ Secret Value of the HTTP header..
 
 `wingman_secret_info` - (Optional) Secret is given as bootstrap secret in F5XC Security Sidecar. See [Wingman Secret Info ](#wingman-secret-info) below for details.
 
+### Slow Ddos Mitigation
+
+This configuration helps to mitigate such type of attacks..
+
+`request_headers_timeout` - (Optional) provides protection against Slowloris attacks. (`Int`).
+
+`request_timeout` - (Optional) provides protection against Slow POST attacks. (`Int`).
+
 ### Temporary User Blocking
 
 Specifies configuration for temporary user blocking resulting from malicious user detection.
@@ -649,29 +687,15 @@ Vault Secret is used for the secrets managed by Hashicorp Vault.
 
 `version` - (Optional) If not provided latest version will be returned. (`Int`).
 
-### Waf
-
-A WAF object direct reference.
-
-`waf` - (Optional) A direct reference to web application firewall configuration object. See [ref](#ref) below for details.
-
-### Waf Rules
-
-A set of direct references of WAF Rules objects.
-
-`waf_rules` - (Optional) References to a set of WAF Rules configuration object. See [ref](#ref) below for details.
-
 ### Waf Type
 
-```
- Enable/Disable individual WAF security rules.
-```
+waf_type is the App Firewall profile to use..
 
 `app_firewall` - (Optional) A direct reference to an Application Firewall configuration object. See [App Firewall ](#app-firewall) below for details.
 
-`waf` - (Optional) A WAF object direct reference. See [Waf ](#waf) below for details.
+`disable_waf` - (Optional) Any Application Firewall configuration will not be enforced (bool).
 
-`waf_rules` - (Optional) A set of direct references of WAF Rules objects. See [Waf Rules ](#waf-rules) below for details.
+`inherit_waf` - (Optional) Any Application Firewall configuration that was configured on a higher level will be enforced (bool).
 
 ### Wingman Secret Info
 

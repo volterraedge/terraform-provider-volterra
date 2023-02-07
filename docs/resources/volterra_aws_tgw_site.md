@@ -33,7 +33,11 @@ resource "volterra_aws_tgw_site" "example" {
 
       outside_subnet {
         // One of the arguments from this list "subnet_param existing_subnet_id" must be set
-        existing_subnet_id = "subnet-12345678901234567"
+
+        subnet_param {
+          ipv4 = "10.1.2.0/24"
+          ipv6 = "1234:568:abcd:9100::/64"
+        }
       }
 
       workload_subnet {
@@ -46,7 +50,7 @@ resource "volterra_aws_tgw_site" "example" {
       }
     }
 
-    // One of the arguments from this list "aws_cred assisted" must be set
+    // One of the arguments from this list "assisted aws_cred" must be set
 
     aws_cred {
       name      = "test1"
@@ -55,7 +59,7 @@ resource "volterra_aws_tgw_site" "example" {
     }
     disk_size     = "80"
     instance_type = "a1.xlarge"
-    // One of the arguments from this list "disable_internet_vip enable_internet_vip" must be set
+    // One of the arguments from this list "enable_internet_vip disable_internet_vip" must be set
     disable_internet_vip = true
 
     // One of the arguments from this list "new_vpc vpc_id" must be set
@@ -64,20 +68,18 @@ resource "volterra_aws_tgw_site" "example" {
       allocate_ipv6 = true
 
       // One of the arguments from this list "name_tag autogenerate" must be set
-      name_tag = "name_tag"
-
+      autogenerate = true
       primary_ipv4 = "10.1.0.0/16"
     }
     ssh_key = "ssh-rsa AAAAB..."
 
     // One of the arguments from this list "new_tgw existing_tgw" must be set
 
-    existing_tgw {
-      tgw_asn           = "64500"
-      tgw_id            = "tgw-12345678901234567"
-      volterra_site_asn = "64501"
+    new_tgw {
+      // One of the arguments from this list "system_generated user_assigned" must be set
+      system_generated = true
     }
-    // One of the arguments from this list "nodes_per_az total_nodes no_worker_nodes" must be set
+    // One of the arguments from this list "total_nodes no_worker_nodes nodes_per_az" must be set
     nodes_per_az = "2"
   }
 
@@ -85,15 +87,21 @@ resource "volterra_aws_tgw_site" "example" {
 
   blocked_services {
     blocked_sevice {
-      // One of the arguments from this list "web_user_interface dns ssh" must be set
-      ssh          = true
-      network_type = "network_type"
+      // One of the arguments from this list "ssh web_user_interface dns" must be set
+      web_user_interface = true
+      network_type       = "network_type"
     }
   }
   // One of the arguments from this list "direct_connect_disabled direct_connect_enabled" must be set
   direct_connect_disabled = true
+
   // One of the arguments from this list "logs_streaming_disabled log_receiver" must be set
-  logs_streaming_disabled = true
+
+  log_receiver {
+    name      = "test1"
+    namespace = "staging"
+    tenant    = "acmecorp"
+  }
 }
 
 ```
@@ -138,6 +146,8 @@ Argument Reference
 `offline_survivability_mode` - (Optional) Enable/Disable offline survivability mode. See [Offline Survivability Mode ](#offline-survivability-mode) below for details.
 
 `os` - (Optional) Operating System Details. See [Os ](#os) below for details.
+
+`performance_enhancement_mode` - (Optional) Performance Enhancement Mode to optimize for L3 or L7 networking. See [Performance Enhancement Mode ](#performance-enhancement-mode) below for details.
 
 `sw` - (Optional) F5XC Software Details. See [Sw ](#sw) below for details.
 
@@ -640,6 +650,22 @@ Subnet for the outside interface of the node.
 `existing_subnet_id` - (Optional) Information about existing subnet ID (`String`).
 
 `subnet_param` - (Optional) Parameters for creating new subnet. See [Subnet Param ](#subnet-param) below for details.
+
+### Perf Mode L3 Enhanced
+
+Site optimized for L3 traffic processing.
+
+### Perf Mode L7 Enhanced
+
+Site optimized for L7 traffic processing.
+
+### Performance Enhancement Mode
+
+Performance Enhancement Mode to optimize for L3 or L7 networking.
+
+`perf_mode_l3_enhanced` - (Optional) Site optimized for L3 traffic processing (bool).
+
+`perf_mode_l7_enhanced` - (Optional) Site optimized for L7 traffic processing (bool).
 
 ### Policy
 

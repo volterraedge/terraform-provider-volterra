@@ -21,7 +21,14 @@ resource "volterra_azure_vnet_site" "example" {
   namespace = "staging"
 
   // One of the arguments from this list "default_blocked_services blocked_services" must be set
-  default_blocked_services = true
+
+  blocked_services {
+    blocked_sevice {
+      // One of the arguments from this list "web_user_interface dns ssh" must be set
+      web_user_interface = true
+      network_type       = "network_type"
+    }
+  }
 
   // One of the arguments from this list "azure_cred" must be set
 
@@ -33,27 +40,18 @@ resource "volterra_azure_vnet_site" "example" {
   // One of the arguments from this list "logs_streaming_disabled log_receiver" must be set
   logs_streaming_disabled = true
   // One of the arguments from this list "azure_region alternate_region" must be set
-  azure_region = "eastus"
+  alternate_region = "northcentralus"
   resource_group = ["my-resources"]
 
-  // One of the arguments from this list "voltstack_cluster ingress_gw_ar ingress_egress_gw_ar voltstack_cluster_ar ingress_gw ingress_egress_gw" must be set
+  // One of the arguments from this list "ingress_egress_gw_ar voltstack_cluster_ar ingress_gw ingress_egress_gw voltstack_cluster ingress_gw_ar" must be set
 
-  ingress_egress_gw {
+  ingress_gw {
     az_nodes {
       azure_az  = "1"
       disk_size = "80"
 
-      inside_subnet {
-        // One of the arguments from this list "subnet_param subnet" must be set
-
-        subnet_param {
-          ipv4 = "10.1.2.0/24"
-          ipv6 = "1234:568:abcd:9100::/64"
-        }
-      }
-
-      outside_subnet {
-        // One of the arguments from this list "subnet_param subnet" must be set
+      local_subnet {
+        // One of the arguments from this list "subnet subnet_param" must be set
 
         subnet_param {
           ipv4 = "10.1.2.0/24"
@@ -62,41 +60,24 @@ resource "volterra_azure_vnet_site" "example" {
       }
     }
 
-    azure_certified_hw = "azure-byol-multi-nic-voltmesh"
+    azure_certified_hw = "azure-byol-voltmesh"
 
-    // One of the arguments from this list "no_dc_cluster_group dc_cluster_group_outside_vn dc_cluster_group_inside_vn" must be set
-
-    dc_cluster_group_outside_vn {
-      name      = "test1"
-      namespace = "staging"
-      tenant    = "acmecorp"
+    performance_enhancement_mode {
+      // One of the arguments from this list "perf_mode_l7_enhanced perf_mode_l3_enhanced" must be set
+      perf_mode_l7_enhanced = true
     }
-    // One of the arguments from this list "no_forward_proxy active_forward_proxy_policies forward_proxy_allow_all" must be set
-    forward_proxy_allow_all = true
-    // One of the arguments from this list "no_global_network global_network_list" must be set
-    no_global_network = true
-    // One of the arguments from this list "not_hub hub" must be set
-    not_hub = true
-    // One of the arguments from this list "inside_static_routes no_inside_static_routes" must be set
-    no_inside_static_routes = true
-    // One of the arguments from this list "no_network_policy active_network_policies active_enhanced_firewall_policies" must be set
-    no_network_policy = true
-    // One of the arguments from this list "no_outside_static_routes outside_static_routes" must be set
-    no_outside_static_routes = true
-    // One of the arguments from this list "sm_connection_public_ip sm_connection_pvt_ip" must be set
-    sm_connection_public_ip = true
   }
   vnet {
-    // One of the arguments from this list "existing_vnet new_vnet" must be set
+    // One of the arguments from this list "new_vnet existing_vnet" must be set
 
     new_vnet {
-      // One of the arguments from this list "autogenerate name" must be set
+      // One of the arguments from this list "name autogenerate" must be set
       name = "name"
 
       primary_ipv4 = "10.1.0.0/16"
     }
   }
-  // One of the arguments from this list "nodes_per_az total_nodes no_worker_nodes" must be set
+  // One of the arguments from this list "total_nodes no_worker_nodes nodes_per_az" must be set
   nodes_per_az = "2"
 }
 
@@ -521,6 +502,8 @@ Two interface site is useful when site is used as ingress/egress gateway to the 
 
 `outside_static_routes` - (Optional) Manage static routes for outside network.. See [Outside Static Routes ](#outside-static-routes) below for details.
 
+`performance_enhancement_mode` - (Optional) Performance Enhancement Mode to optimize for L3 or L7 networking. See [Performance Enhancement Mode ](#performance-enhancement-mode) below for details.
+
 `sm_connection_public_ip` - (Optional) creating ipsec between two sites which are part of the site mesh group (bool).
 
 `sm_connection_pvt_ip` - (Optional) creating ipsec between two sites which are part of the site mesh group (bool).
@@ -567,6 +550,8 @@ Two interface site is useful when site is used as ingress/egress gateway to the 
 
 `outside_static_routes` - (Optional) Manage static routes for outside network.. See [Outside Static Routes ](#outside-static-routes) below for details.
 
+`performance_enhancement_mode` - (Optional) Performance Enhancement Mode to optimize for L3 or L7 networking. See [Performance Enhancement Mode ](#performance-enhancement-mode) below for details.
+
 `sm_connection_public_ip` - (Optional) creating ipsec between two sites which are part of the site mesh group (bool).
 
 `sm_connection_pvt_ip` - (Optional) creating ipsec between two sites which are part of the site mesh group (bool).
@@ -579,6 +564,8 @@ One interface site is useful when site is only used as ingress gateway to the VN
 
 `azure_certified_hw` - (Required) Name for Azure certified hardware. (`String`).
 
+`performance_enhancement_mode` - (Optional) Performance Enhancement Mode to optimize for L3 or L7 networking. See [Performance Enhancement Mode ](#performance-enhancement-mode) below for details.
+
 ### Ingress Gw Ar
 
 One interface site is useful when site is only used as ingress gateway to the VNet..
@@ -586,6 +573,8 @@ One interface site is useful when site is only used as ingress gateway to the VN
 `azure_certified_hw` - (Required) Name for Azure certified hardware. (`String`).
 
 `node` - (Optional) Ingress Gateway (One Interface) Node information. See [Node ](#node) below for details.
+
+`performance_enhancement_mode` - (Optional) Performance Enhancement Mode to optimize for L3 or L7 networking. See [Performance Enhancement Mode ](#performance-enhancement-mode) below for details.
 
 ### Inside Static Routes
 
@@ -764,6 +753,22 @@ Subnets for the outside interface of the node.
 `subnet` - (Optional) Information about existing subnet.. See [Subnet ](#subnet) below for details.
 
 `subnet_param` - (Optional) Parameters for creating new subnet.. See [Subnet Param ](#subnet-param) below for details.
+
+### Perf Mode L3 Enhanced
+
+Site optimized for L3 traffic processing.
+
+### Perf Mode L7 Enhanced
+
+Site optimized for L7 traffic processing.
+
+### Performance Enhancement Mode
+
+Performance Enhancement Mode to optimize for L3 or L7 networking.
+
+`perf_mode_l3_enhanced` - (Optional) Site optimized for L3 traffic processing (bool).
+
+`perf_mode_l7_enhanced` - (Optional) Site optimized for L7 traffic processing (bool).
 
 ### Policy
 

@@ -23,81 +23,37 @@ resource "volterra_fleet" "example" {
   // One of the arguments from this list "no_bond_devices bond_device_list" must be set
   no_bond_devices = true
 
-  // One of the arguments from this list "no_dc_cluster_group dc_cluster_group dc_cluster_group_inside" must be set
-  no_dc_cluster_group = true
-  fleet_label         = ["sfo"]
+  // One of the arguments from this list "dc_cluster_group dc_cluster_group_inside no_dc_cluster_group" must be set
 
+  dc_cluster_group_inside {
+    name      = "test1"
+    namespace = "staging"
+    tenant    = "acmecorp"
+  }
+  fleet_label = ["sfo"]
   // One of the arguments from this list "disable_gpu enable_gpu enable_vgpu" must be set
   disable_gpu = true
 
   // One of the arguments from this list "interface_list default_config device_list" must be set
 
-  device_list {
-    devices {
-      // One of the arguments from this list "network_device" must be set
-
-      network_device {
-        interface {
-          name      = "test1"
-          namespace = "staging"
-          tenant    = "acmecorp"
-        }
-
-        use = "use"
-      }
-
-      name  = "eth0"
-      owner = "owner"
+  interface_list {
+    interfaces {
+      name      = "test1"
+      namespace = "staging"
+      tenant    = "acmecorp"
     }
   }
   // One of the arguments from this list "logs_streaming_disabled log_receiver" must be set
   logs_streaming_disabled = true
-  // One of the arguments from this list "storage_class_list default_storage_class" must be set
+  // One of the arguments from this list "default_storage_class storage_class_list" must be set
   default_storage_class = true
   // One of the arguments from this list "no_storage_device storage_device_list" must be set
   no_storage_device = true
-  // One of the arguments from this list "storage_interface_list no_storage_interfaces" must be set
+  // One of the arguments from this list "no_storage_interfaces storage_interface_list" must be set
   no_storage_interfaces = true
-
   // One of the arguments from this list "no_storage_static_routes storage_static_routes" must be set
-
-  storage_static_routes {
-    storage_routes {
-      attrs = ["attrs"]
-
-      labels = {
-        "key1" = "value1"
-      }
-
-      nexthop {
-        interface {
-          name      = "test1"
-          namespace = "staging"
-          tenant    = "acmecorp"
-        }
-
-        nexthop_address {
-          // One of the arguments from this list "ipv4 ipv6" must be set
-
-          ipv4 {
-            addr = "192.168.1.1"
-          }
-        }
-
-        type = "type"
-      }
-
-      subnets {
-        // One of the arguments from this list "ipv4 ipv6" must be set
-
-        ipv4 {
-          plen   = "24"
-          prefix = "192.168.1.0"
-        }
-      }
-    }
-  }
-  // One of the arguments from this list "allow_all_usb usb_policy deny_all_usb" must be set
+  no_storage_static_routes = true
+  // One of the arguments from this list "deny_all_usb allow_all_usb usb_policy" must be set
   deny_all_usb = true
 }
 
@@ -163,6 +119,8 @@ Argument Reference
 `operating_system_version` - (Optional) Current Operating System version can be overridden via site config. (`String`).
 
 `outside_virtual_network` - (Optional) Default outside (site local) virtual network for the fleet. See [ref](#ref) below for details.
+
+`performance_enhancement_mode` - (Optional) Performance Enhancement Mode to optimize for L3 or L7 networking. See [Performance Enhancement Mode ](#performance-enhancement-mode) below for details.
 
 `default_storage_class` - (Optional) Use only default storage class in kubernetes (bool).
 
@@ -270,6 +228,42 @@ Enable NVIDIA vGPU hosted on VMware.
 
 VMs support is enabled for this fleet.
 
+### Hpe Storage
+
+Storage configuration for HPE Storage.
+
+`allow_mutations` - (Optional) mutation can override specified parameters (`String`).
+
+`allow_overrides` - (Optional) PVC can override specified parameters (`String`).
+
+`dedupe_enabled` - (Optional) Indicates that the volume should enable deduplication. (`Bool`).
+
+`description` - (Optional) The SecretName parameter is used to identify name of secret to identify backend storage's auth information (`String`).
+
+`destroy_on_delete` - (Optional) Indicates the backing Nimble volume (including snapshots) should be destroyed when the PVC is deleted (`Bool`).
+
+`encrypted` - (Optional) Indicates that the volume should be encrypted. (`Bool`).
+
+`folder` - (Optional) The name of the folder in which to place the volume. (`String`).
+
+`limit_iops` - (Optional) The IOPS limit of the volume. (`Int`).
+
+`limit_mbps` - (Optional) The IOPS limit of the volume. (`Int`).
+
+`performance_policy` - (Optional) The name of the performance policy to assign to the volume. (`String`).
+
+`pool` - (Optional) The name of the pool in which to place the volume. (`String`).
+
+`protection_template` - (Optional) The name of the performance policy to assign to the volume. (`String`).
+
+`secret_name` - (Optional) The SecretName parameter is used to identify name of secret to identify backend storage's auth information (`String`).
+
+`secret_namespace` - (Optional) The SecretNamespace parameter is used to identify name of namespace where secret resides (`String`).
+
+`sync_on_detach` - (Optional) Indicates that a snapshot of the volume should be synced to the replication partner each time it is detached from a node. (`Bool`).
+
+`thick` - (Optional) Indicates that the volume should be thick provisioned. (`Bool`).
+
 ### Interface List
 
 Add all interfaces belonging to this fleet.
@@ -344,6 +338,22 @@ Device configuration for Pure Storage Service Orchestrator.
 
 `mayastor_pools` - (Optional) mechanism/transport/device type and differentiated by corresponding performance and/or attachment locality.. See [Mayastor Pools ](#mayastor-pools) below for details.
 
+### Perf Mode L3 Enhanced
+
+Site optimized for L3 traffic processing.
+
+### Perf Mode L7 Enhanced
+
+Site optimized for L7 traffic processing.
+
+### Performance Enhancement Mode
+
+Performance Enhancement Mode to optimize for L3 or L7 networking.
+
+`perf_mode_l3_enhanced` - (Optional) Site optimized for L3 traffic processing (bool).
+
+`perf_mode_l7_enhanced` - (Optional) Site optimized for L7 traffic processing (bool).
+
 ### Pure Service Orchestrator
 
 Storage class Device configuration for Pure Service Orchestrator.
@@ -388,6 +398,8 @@ List of custom storage classes.
 
 `custom_storage` - (Optional) Storage configuration for Custom Storage. See [Custom Storage ](#custom-storage) below for details.
 
+`hpe_storage` - (Optional) Storage configuration for HPE Storage. See [Hpe Storage ](#hpe-storage) below for details.
+
 `netapp_trident` - (Optional) Storage class Device configuration for NetApp Trident. See [Netapp Trident ](#netapp-trident) below for details.
 
 `pure_service_orchestrator` - (Optional) Storage class Device configuration for Pure Service Orchestrator. See [Pure Service Orchestrator ](#pure-service-orchestrator) below for details.
@@ -411,6 +423,8 @@ List of custom storage devices.
 `advanced_advanced_parameters` - (Optional) Map of parameter name and string value (`String`).
 
 `custom_storage` - (Optional) Device configuration for Custom Storage (bool).
+
+`hpe_storage` - (Optional) Device configuration for HPE Storage. See [Hpe Storage ](#hpe-storage) below for details.
 
 `netapp_trident` - (Optional) Device configuration for NetApp Trident. See [Netapp Trident ](#netapp-trident) below for details.
 
@@ -436,7 +450,7 @@ List of storage static routes.
 
 `nexthop` - (Optional) Nexthop for the route. See [Nexthop ](#nexthop) below for details.
 
-`subnets` - (Optional) List of route prefixes. See [Subnets ](#subnets) below for details.
+`subnets` - (Required) List of route prefixes. See [Subnets ](#subnets) below for details.
 
 ### Storage Static Routes
 
