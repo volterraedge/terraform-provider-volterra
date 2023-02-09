@@ -4290,31 +4290,6 @@ var APISwaggerJSON string = `{
                 }
             }
         },
-        "siteInternetVIPStatus": {
-            "type": "object",
-            "x-ves-proto-message": "ves.io.schema.site.InternetVIPStatus",
-            "properties": {
-                "listener_status": {
-                    "type": "array",
-                    "title": "x-displayName: \"Listener Status\"\n List of listeners",
-                    "items": {
-                        "$ref": "#/definitions/siteListeners"
-                    }
-                },
-                "nlb_cname": {
-                    "type": "string",
-                    "title": "x-displayName: \"NLB CNAME\"\nNLB CNAME"
-                },
-                "nlb_status": {
-                    "type": "string",
-                    "title": "x-displayName: \"NLB Status\"\nNLB Status"
-                },
-                "target_group_status": {
-                    "type": "string",
-                    "title": "x-displayName: \"Target Group Status\"\nTarget Group Status"
-                }
-            }
-        },
         "siteK8SApiServerParameters": {
             "type": "object",
             "description": "x-displayName: \"K8s Api Server\"\nSite's Physical Kubernetes API server. The location of this server is in site specification",
@@ -4506,25 +4481,6 @@ var APISwaggerJSON string = `{
                     "title": "uid",
                     "x-displayname": "UID",
                     "x-ves-example": "d27938ba-967e-40a7-9709-57b8627f9f75"
-                }
-            }
-        },
-        "siteListeners": {
-            "type": "object",
-            "x-ves-proto-message": "ves.io.schema.site.Listeners",
-            "properties": {
-                "name": {
-                    "type": "string",
-                    "title": "x-displayName: \"Name\"\nName"
-                },
-                "port": {
-                    "type": "integer",
-                    "title": "x-displayName: \"Port\"\nPort",
-                    "format": "int64"
-                },
-                "status": {
-                    "type": "string",
-                    "title": "x-displayName: \"Status\"\nStatus"
                 }
             }
         },
@@ -5451,7 +5407,7 @@ var APISwaggerJSON string = `{
                 "internet_VIP_status": {
                     "description": " Provides AWS Internet NLB VIP Status",
                     "title": "Internet VIP Status",
-                    "$ref": "#/definitions/siteInternetVIPStatus",
+                    "$ref": "#/definitions/viewsInternetVIPStatus",
                     "x-displayname": "Internet VIP Status"
                 },
                 "metadata": {
@@ -6230,6 +6186,136 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.string.max_len": "64",
                         "ves.io.schema.rules.string.min_len": "1"
                     }
+                }
+            }
+        },
+        "viewsInternetVIPListenerStatusType": {
+            "type": "object",
+            "x-ves-proto-message": "ves.io.schema.views.InternetVIPListenerStatusType",
+            "properties": {
+                "arn": {
+                    "type": "string",
+                    "description": " Name",
+                    "title": "Name",
+                    "x-displayname": "Name"
+                },
+                "port": {
+                    "type": "integer",
+                    "description": " Port",
+                    "title": "Port",
+                    "format": "int64",
+                    "x-displayname": "Port"
+                },
+                "protocol": {
+                    "type": "string",
+                    "description": " Protocol",
+                    "title": "Protocol",
+                    "x-displayname": "Protocol"
+                },
+                "reason": {
+                    "type": "string",
+                    "description": " Reason",
+                    "title": "Reason",
+                    "x-displayname": "reason"
+                },
+                "status": {
+                    "type": "string",
+                    "description": " Status",
+                    "title": "Status",
+                    "x-displayname": "Status"
+                }
+            }
+        },
+        "viewsInternetVIPStatus": {
+            "type": "object",
+            "description": "CName and installation info",
+            "title": "Internet VIP Status",
+            "x-displayname": "Internet VIP Status",
+            "x-ves-proto-message": "ves.io.schema.views.InternetVIPStatus",
+            "properties": {
+                "arn": {
+                    "type": "string",
+                    "description": " ARN",
+                    "title": "ARN",
+                    "x-displayname": "ARN"
+                },
+                "name": {
+                    "type": "string",
+                    "description": " Name",
+                    "title": "Name",
+                    "x-displayname": "Name"
+                },
+                "nlb_cname": {
+                    "type": "string",
+                    "description": " NLB CNAME",
+                    "title": "NLB CNAME",
+                    "x-displayname": "NLB CNAME"
+                },
+                "nlb_status": {
+                    "type": "string",
+                    "description": " NLB Status",
+                    "title": "NLB Status",
+                    "x-displayname": "NLB Status"
+                },
+                "reason": {
+                    "type": "string",
+                    "description": " Reason",
+                    "title": "Reason",
+                    "x-displayname": "reason"
+                },
+                "target_group_status": {
+                    "type": "array",
+                    "description": " Target Group Status",
+                    "title": "Target Group Status",
+                    "items": {
+                        "$ref": "#/definitions/viewsInternetVIPTargetGroupStatusType"
+                    },
+                    "x-displayname": "Target Group Status"
+                }
+            }
+        },
+        "viewsInternetVIPTargetGroupStatusType": {
+            "type": "object",
+            "x-ves-proto-message": "ves.io.schema.views.InternetVIPTargetGroupStatusType",
+            "properties": {
+                "arn": {
+                    "type": "string",
+                    "description": " ARN",
+                    "title": "ARN",
+                    "x-displayname": "ARN"
+                },
+                "listener_status": {
+                    "type": "array",
+                    "description": " Listener status",
+                    "title": "Listener status",
+                    "items": {
+                        "$ref": "#/definitions/viewsInternetVIPListenerStatusType"
+                    },
+                    "x-displayname": "Listener status"
+                },
+                "name": {
+                    "type": "string",
+                    "description": " Name",
+                    "title": "Name",
+                    "x-displayname": "Name"
+                },
+                "protocol": {
+                    "type": "string",
+                    "description": " Protocol",
+                    "title": "Protocol",
+                    "x-displayname": "Protocol"
+                },
+                "reason": {
+                    "type": "string",
+                    "description": " Reason",
+                    "title": "Reason",
+                    "x-displayname": "reason"
+                },
+                "status": {
+                    "type": "string",
+                    "description": " Status",
+                    "title": "Status",
+                    "x-displayname": "Status"
                 }
             }
         }

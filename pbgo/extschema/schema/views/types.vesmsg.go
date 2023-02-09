@@ -1370,6 +1370,468 @@ func GlobalConnectorTypeValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *InternetVIPInfo) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *InternetVIPInfo) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *InternetVIPInfo) DeepCopy() *InternetVIPInfo {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &InternetVIPInfo{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *InternetVIPInfo) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *InternetVIPInfo) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return InternetVIPInfoValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateInternetVIPInfo struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateInternetVIPInfo) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*InternetVIPInfo)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *InternetVIPInfo got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["site_name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("site_name"))
+		if err := fv(ctx, m.GetSiteName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["site_network_type"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("site_network_type"))
+		if err := fv(ctx, m.GetSiteNetworkType(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["status"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("status"))
+		if err := fv(ctx, m.GetStatus(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultInternetVIPInfoValidator = func() *ValidateInternetVIPInfo {
+	v := &ValidateInternetVIPInfo{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func InternetVIPInfoValidator() db.Validator {
+	return DefaultInternetVIPInfoValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *InternetVIPListenerStatusType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *InternetVIPListenerStatusType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *InternetVIPListenerStatusType) DeepCopy() *InternetVIPListenerStatusType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &InternetVIPListenerStatusType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *InternetVIPListenerStatusType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *InternetVIPListenerStatusType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return InternetVIPListenerStatusTypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateInternetVIPListenerStatusType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateInternetVIPListenerStatusType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*InternetVIPListenerStatusType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *InternetVIPListenerStatusType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["arn"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("arn"))
+		if err := fv(ctx, m.GetArn(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["port"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("port"))
+		if err := fv(ctx, m.GetPort(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["protocol"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("protocol"))
+		if err := fv(ctx, m.GetProtocol(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["reason"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("reason"))
+		if err := fv(ctx, m.GetReason(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["status"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("status"))
+		if err := fv(ctx, m.GetStatus(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultInternetVIPListenerStatusTypeValidator = func() *ValidateInternetVIPListenerStatusType {
+	v := &ValidateInternetVIPListenerStatusType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func InternetVIPListenerStatusTypeValidator() db.Validator {
+	return DefaultInternetVIPListenerStatusTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *InternetVIPStatus) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *InternetVIPStatus) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *InternetVIPStatus) DeepCopy() *InternetVIPStatus {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &InternetVIPStatus{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *InternetVIPStatus) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *InternetVIPStatus) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return InternetVIPStatusValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateInternetVIPStatus struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateInternetVIPStatus) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*InternetVIPStatus)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *InternetVIPStatus got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["arn"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("arn"))
+		if err := fv(ctx, m.GetArn(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("name"))
+		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["nlb_cname"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("nlb_cname"))
+		if err := fv(ctx, m.GetNlbCname(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["nlb_status"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("nlb_status"))
+		if err := fv(ctx, m.GetNlbStatus(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["reason"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("reason"))
+		if err := fv(ctx, m.GetReason(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["target_group_status"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("target_group_status"))
+		for idx, item := range m.GetTargetGroupStatus() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultInternetVIPStatusValidator = func() *ValidateInternetVIPStatus {
+	v := &ValidateInternetVIPStatus{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func InternetVIPStatusValidator() db.Validator {
+	return DefaultInternetVIPStatusValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *InternetVIPTargetGroupStatusType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *InternetVIPTargetGroupStatusType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *InternetVIPTargetGroupStatusType) DeepCopy() *InternetVIPTargetGroupStatusType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &InternetVIPTargetGroupStatusType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *InternetVIPTargetGroupStatusType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *InternetVIPTargetGroupStatusType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return InternetVIPTargetGroupStatusTypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateInternetVIPTargetGroupStatusType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateInternetVIPTargetGroupStatusType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*InternetVIPTargetGroupStatusType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *InternetVIPTargetGroupStatusType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["arn"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("arn"))
+		if err := fv(ctx, m.GetArn(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["listener_status"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("listener_status"))
+		for idx, item := range m.GetListenerStatus() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("name"))
+		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["protocol"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("protocol"))
+		if err := fv(ctx, m.GetProtocol(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["reason"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("reason"))
+		if err := fv(ctx, m.GetReason(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["status"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("status"))
+		if err := fv(ctx, m.GetStatus(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultInternetVIPTargetGroupStatusTypeValidator = func() *ValidateInternetVIPTargetGroupStatusType {
+	v := &ValidateInternetVIPTargetGroupStatusType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func InternetVIPTargetGroupStatusTypeValidator() db.Validator {
+	return DefaultInternetVIPTargetGroupStatusTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *LinkRefType) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -2391,6 +2853,138 @@ var DefaultOriginPoolWithWeightValidator = func() *ValidateOriginPoolWithWeight 
 
 func OriginPoolWithWeightValidator() db.Validator {
 	return DefaultOriginPoolWithWeightValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *PerformanceEnhancementModeType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *PerformanceEnhancementModeType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *PerformanceEnhancementModeType) DeepCopy() *PerformanceEnhancementModeType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &PerformanceEnhancementModeType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *PerformanceEnhancementModeType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *PerformanceEnhancementModeType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return PerformanceEnhancementModeTypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidatePerformanceEnhancementModeType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidatePerformanceEnhancementModeType) PerfModeChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for perf_mode_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidatePerformanceEnhancementModeType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*PerformanceEnhancementModeType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *PerformanceEnhancementModeType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["perf_mode_choice"]; exists {
+		val := m.GetPerfModeChoice()
+		vOpts := append(opts,
+			db.WithValidateField("perf_mode_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetPerfModeChoice().(type) {
+	case *PerformanceEnhancementModeType_PerfModeL7Enhanced:
+		if fv, exists := v.FldValidators["perf_mode_choice.perf_mode_l7_enhanced"]; exists {
+			val := m.GetPerfModeChoice().(*PerformanceEnhancementModeType_PerfModeL7Enhanced).PerfModeL7Enhanced
+			vOpts := append(opts,
+				db.WithValidateField("perf_mode_choice"),
+				db.WithValidateField("perf_mode_l7_enhanced"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *PerformanceEnhancementModeType_PerfModeL3Enhanced:
+		if fv, exists := v.FldValidators["perf_mode_choice.perf_mode_l3_enhanced"]; exists {
+			val := m.GetPerfModeChoice().(*PerformanceEnhancementModeType_PerfModeL3Enhanced).PerfModeL3Enhanced
+			vOpts := append(opts,
+				db.WithValidateField("perf_mode_choice"),
+				db.WithValidateField("perf_mode_l3_enhanced"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultPerformanceEnhancementModeTypeValidator = func() *ValidatePerformanceEnhancementModeType {
+	v := &ValidatePerformanceEnhancementModeType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhPerfModeChoice := v.PerfModeChoiceValidationRuleHandler
+	rulesPerfModeChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhPerfModeChoice(rulesPerfModeChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for PerformanceEnhancementModeType.perf_mode_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["perf_mode_choice"] = vFn
+
+	return v
+}()
+
+func PerformanceEnhancementModeTypeValidator() db.Validator {
+	return DefaultPerformanceEnhancementModeTypeValidator
 }
 
 // augmented methods on protoc/std generated struct

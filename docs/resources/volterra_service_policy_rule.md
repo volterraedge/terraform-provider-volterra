@@ -25,23 +25,35 @@ resource "volterra_service_policy_rule" "example" {
   any_asn          = true
   challenge_action = ["challenge_action"]
 
-  // One of the arguments from this list "any_client client_name ip_threat_category_list client_selector client_name_matcher" must be set
-  any_client = true
+  // One of the arguments from this list "client_selector client_name_matcher any_client client_name ip_threat_category_list" must be set
+  client_name = "backend.production.customer.volterra.us"
 
   // One of the arguments from this list "any_ip ip_prefix_list ip_matcher" must be set
+  any_ip = true
 
-  ip_matcher {
-    invert_matcher = true
-
-    prefix_sets {
-      name      = "test1"
-      namespace = "staging"
-      tenant    = "acmecorp"
-    }
-  }
   waf_action {
-    // One of the arguments from this list "none waf_skip_processing waf_rule_control waf_inline_rule_control waf_in_monitoring_mode app_firewall_detection_control data_guard_control" must be set
-    waf_in_monitoring_mode = true
+    // One of the arguments from this list "none waf_skip_processing waf_in_monitoring_mode app_firewall_detection_control data_guard_control" must be set
+
+    app_firewall_detection_control {
+      exclude_attack_type_contexts {
+        exclude_attack_type = "ATTACK_TYPE_SQL_INJECTION"
+      }
+
+      exclude_bot_name_contexts {
+        bot_name = "Hydra"
+      }
+
+      exclude_signature_contexts {
+        context      = "context"
+        context_name = "example: user-agent for Header"
+        signature_id = "10000001"
+      }
+
+      exclude_violation_contexts {
+        context           = "context"
+        exclude_violation = "VIOL_MANDATORY_HEADER"
+      }
+    }
   }
 }
 
@@ -366,13 +378,29 @@ Bot Names to be excluded for the defined match criteria.
 
 Signature IDs to be excluded for the defined match criteria.
 
+`context` - (Required) x-required (`String`).
+
+`context_name` - (Optional) Relevant only for contexts: Header, Cookie and Parameter. Name of the Context that the WAF Exclusion Rules will check. (`String`).
+
 `signature_id` - (Required) x-required (`Int`).
 
 ### Exclude Violation Contexts
 
 Violations to be excluded for the defined match criteria.
 
+`context` - (Required) x-required (`String`).
+
 `exclude_violation` - (Required) x-required (`String`).
+
+### Failure Conditions
+
+Failure Conditions.
+
+`name` - (Optional) A case-insensitive HTTP header name. (`String`).
+
+`regex_values` - (Optional) A list of regular expressions to match the input against. (`String`).
+
+`status` - (Required) HTTP Status code (`String`).
 
 ### Flag
 
@@ -690,11 +718,23 @@ Shape Protected Endpoint Action that include application traffic type and mitiga
 
 `mitigation` - (Required) Mitigation action for protected endpoint. See [Mitigation ](#mitigation) below for details.
 
+`transaction_result` - (Optional) Success/failure Criteria for transaction result. See [Transaction Result ](#transaction-result) below for details.
+
 `web_scraping` - (Required) Web scraping protection enabled for protected endpoint (`Bool`).
 
 ### Skip Processing
 
 Do not perform enforcement for this request.
+
+### Success Conditions
+
+Success Conditions.
+
+`name` - (Optional) A case-insensitive HTTP header name. (`String`).
+
+`regex_values` - (Optional) A list of regular expressions to match the input against. (`String`).
+
+`status` - (Required) HTTP Status code (`String`).
 
 ### Tls Fingerprint Matcher
 
@@ -705,6 +745,14 @@ The predicate evaluates to true if the TLS fingerprint matches any of the exact 
 `exact_values` - (Optional) A list of exact TLS JA3 fingerprints to match the input TLS JA3 fingerprint against. (`String`).
 
 `excluded_values` - (Optional) or more known TLS fingerprint classes in the enclosing matcher. (`String`).
+
+### Transaction Result
+
+Success/failure Criteria for transaction result.
+
+`failure_conditions` - (Optional) Failure Conditions. See [Failure Conditions ](#failure-conditions) below for details.
+
+`success_conditions` - (Optional) Success Conditions. See [Success Conditions ](#success-conditions) below for details.
 
 ### Url Items
 
@@ -748,31 +796,11 @@ App Firewall action to be enforced if the input request matches the rule..
 
 `waf_in_monitoring_mode` - (Optional) App Firewall will run in monitoring mode without blocking the request (bool).
 
-`waf_inline_rule_control` - (Optional) App Firewall rule changes to be applied for this request. See [Waf Inline Rule Control ](#waf-inline-rule-control) below for details.
-
-`waf_rule_control` - (Optional) App Firewall rule changes to be applied for this request. See [Waf Rule Control ](#waf-rule-control) below for details.
-
 `waf_skip_processing` - (Optional) Skip all App Firewall processing for this request (bool).
 
 ### Waf In Monitoring Mode
 
 App Firewall will run in monitoring mode without blocking the request.
-
-### Waf Inline Rule Control
-
-App Firewall rule changes to be applied for this request.
-
-`exclude_rule_ids` - (Optional) App Firewall Rule IDs to be excluded for this request (`List of Strings`).
-
-`monitoring_mode` - (Optional) App Firewall will run in monitoring mode without blocking the request (`Bool`).
-
-### Waf Rule Control
-
-App Firewall rule changes to be applied for this request.
-
-`exclude_rule_ids` - (Optional) App Firewall Rule List specifying the rule IDs to be excluded for this request. See [ref](#ref) below for details.
-
-`monitoring_mode` - (Optional) App Firewall will run in monitoring mode without blocking the request (`Bool`).
 
 ### Waf Skip Processing
 

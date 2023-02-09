@@ -10,6 +10,8 @@ import (
 	types "github.com/gogo/protobuf/types"
 	schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
 	policy "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/policy"
+	secret_policy_rule "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/secret_policy_rule"
+	views "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views"
 	io "io"
 	math "math"
 	math_bits "math/bits"
@@ -27,6 +29,168 @@ var _ = math.Inf
 // A compilation error at this line likely means your copy of the
 // proto package needs to be updated.
 const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
+
+// rule
+//
+// x-displayName: "Rule"
+// A Rule consists of an unordered list of predicates and an action. The predicates are evaluated against a set of input fields that are extracted from
+// or derived from an L7 request API. A request API is considered to match the simple rule if all predicates in the rule evaluate to true for that request. Any
+// predicates that are not specified in a rule are implicitly considered to be true. If a request API matches a simple rule, the action for the simple rule is
+// enforced.
+type Rule struct {
+	// metadata
+	//
+	// x-displayName: "Metadata"
+	// x-required
+	// Common attributes for the rule including name and description.
+	Metadata *schema.MessageMetaType `protobuf:"bytes,1,opt,name=metadata,proto3" json:"metadata,omitempty"`
+	// spec
+	//
+	// x-displayName: "Rule Specification"
+	// x-required
+	// Specification for the rule including match predicates and actions.
+	Spec *secret_policy_rule.GlobalSpecType `protobuf:"bytes,2,opt,name=spec,proto3" json:"spec,omitempty"`
+}
+
+func (m *Rule) Reset()      { *m = Rule{} }
+func (*Rule) ProtoMessage() {}
+func (*Rule) Descriptor() ([]byte, []int) {
+	return fileDescriptor_2cbc9232abd5bc5d, []int{0}
+}
+func (m *Rule) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *Rule) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *Rule) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Rule.Merge(m, src)
+}
+func (m *Rule) XXX_Size() int {
+	return m.Size()
+}
+func (m *Rule) XXX_DiscardUnknown() {
+	xxx_messageInfo_Rule.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_Rule proto.InternalMessageInfo
+
+func (m *Rule) GetMetadata() *schema.MessageMetaType {
+	if m != nil {
+		return m.Metadata
+	}
+	return nil
+}
+
+func (m *Rule) GetSpec() *secret_policy_rule.GlobalSpecType {
+	if m != nil {
+		return m.Spec
+	}
+	return nil
+}
+
+// rule list
+//
+// x-displayName: "Rule List"
+// A list of rules.
+// The order of evaluation of the rules depends on the rule combining algorithm.
+type RuleList struct {
+	// rules
+	//
+	// x-displayName: "Rules"
+	// Define the list of rules (with an order) that should be evaluated by this service policy.
+	// Rules are evaluated from top to bottom in the list.
+	Rules []*Rule `protobuf:"bytes,1,rep,name=rules,proto3" json:"rules,omitempty"`
+}
+
+func (m *RuleList) Reset()      { *m = RuleList{} }
+func (*RuleList) ProtoMessage() {}
+func (*RuleList) Descriptor() ([]byte, []int) {
+	return fileDescriptor_2cbc9232abd5bc5d, []int{1}
+}
+func (m *RuleList) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *RuleList) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *RuleList) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_RuleList.Merge(m, src)
+}
+func (m *RuleList) XXX_Size() int {
+	return m.Size()
+}
+func (m *RuleList) XXX_DiscardUnknown() {
+	xxx_messageInfo_RuleList.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_RuleList proto.InternalMessageInfo
+
+func (m *RuleList) GetRules() []*Rule {
+	if m != nil {
+		return m.Rules
+	}
+	return nil
+}
+
+// LegacyRuleList
+//
+// x-displayName: "Legacy Rules"
+// A list of references to service_policy_rule objects.
+// The order of evaluation of the rules depends on the rule combining algorithm.
+type LegacyRuleList struct {
+	// rules
+	//
+	// x-displayName: "Rules"
+	// A list of references to service_policy_rule objects.
+	// The order of evaluation of the rules depends on the rule combining algorithm.
+	Rules []*schema.ObjectRefType `protobuf:"bytes,1,rep,name=rules,proto3" json:"rules,omitempty"`
+}
+
+func (m *LegacyRuleList) Reset()      { *m = LegacyRuleList{} }
+func (*LegacyRuleList) ProtoMessage() {}
+func (*LegacyRuleList) Descriptor() ([]byte, []int) {
+	return fileDescriptor_2cbc9232abd5bc5d, []int{2}
+}
+func (m *LegacyRuleList) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *LegacyRuleList) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *LegacyRuleList) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_LegacyRuleList.Merge(m, src)
+}
+func (m *LegacyRuleList) XXX_Size() int {
+	return m.Size()
+}
+func (m *LegacyRuleList) XXX_DiscardUnknown() {
+	xxx_messageInfo_LegacyRuleList.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_LegacyRuleList proto.InternalMessageInfo
+
+func (m *LegacyRuleList) GetRules() []*schema.ObjectRefType {
+	if m != nil {
+		return m.Rules
+	}
+	return nil
+}
 
 // GlobalSpecType
 //
@@ -50,10 +214,10 @@ type GlobalSpecType struct {
 	Rules []*schema.ObjectRefType `protobuf:"bytes,2,rep,name=rules,proto3" json:"rules,omitempty"`
 	// Allow Volterra
 	//
-	// x-displayName: "Allow Volterra"
+	// x-displayName: "Allow F5XC"
 	// x-example: "true"
-	// if allow_volterra is set to true, it allows relevant volterra infrastructure services to decrypt the secret encrypted using this policy.
-	AllowVolterra bool `protobuf:"varint,3,opt,name=allow_volterra,json=allowVolterra,proto3" json:"allow_volterra,omitempty"`
+	// if allow_f5xc is set to true, it allows relevant F5XC infrastructure services to decrypt the secret encrypted using this policy.
+	AllowF5Xc bool `protobuf:"varint,3,opt,name=allow_f5xc,json=allowF5xc,proto3" json:"allow_f5xc,omitempty"`
 	// Decrypt Cache Timeout
 	//
 	// x-displayName: "Decrypt Cache Timeout"
@@ -73,12 +237,28 @@ type GlobalSpecType struct {
 	// deleted_delay is set when the secret policy object is marked for delete, based on this value
 	// object marked for delete will be deleted after delete_delay
 	DeleteDelay *types.Duration `protobuf:"bytes,6,opt,name=delete_delay,json=deleteDelay,proto3" json:"delete_delay,omitempty"`
+	// rule choice
+	//
+	// x-displayName: "Select Policy Rules"
+	// x-required
+	// Allowed/Denied Sources rules provide the ability to allow/deny lists of IP addresses, countries, TLS fingerprints and ASNs.
+	// Custom rules provide more flexibility to define your own logic to control incoming requests.
+	//
+	// Types that are valid to be assigned to RuleChoice:
+	//	*GlobalSpecType_RuleList
+	//	*GlobalSpecType_LegacyRuleList
+	RuleChoice isGlobalSpecType_RuleChoice `protobuf_oneof:"rule_choice"`
+	// view_internal
+	//
+	// x-displayName: "View Internal"
+	// Reference to view internal object
+	ViewInternal *views.ObjectRefType `protobuf:"bytes,1000,opt,name=view_internal,json=viewInternal,proto3" json:"view_internal,omitempty"`
 }
 
 func (m *GlobalSpecType) Reset()      { *m = GlobalSpecType{} }
 func (*GlobalSpecType) ProtoMessage() {}
 func (*GlobalSpecType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_2cbc9232abd5bc5d, []int{0}
+	return fileDescriptor_2cbc9232abd5bc5d, []int{3}
 }
 func (m *GlobalSpecType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -103,6 +283,30 @@ func (m *GlobalSpecType) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_GlobalSpecType proto.InternalMessageInfo
 
+type isGlobalSpecType_RuleChoice interface {
+	isGlobalSpecType_RuleChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
+
+type GlobalSpecType_RuleList struct {
+	RuleList *RuleList `protobuf:"bytes,13,opt,name=rule_list,json=ruleList,proto3,oneof" json:"rule_list,omitempty"`
+}
+type GlobalSpecType_LegacyRuleList struct {
+	LegacyRuleList *LegacyRuleList `protobuf:"bytes,15,opt,name=legacy_rule_list,json=legacyRuleList,proto3,oneof" json:"legacy_rule_list,omitempty"`
+}
+
+func (*GlobalSpecType_RuleList) isGlobalSpecType_RuleChoice()       {}
+func (*GlobalSpecType_LegacyRuleList) isGlobalSpecType_RuleChoice() {}
+
+func (m *GlobalSpecType) GetRuleChoice() isGlobalSpecType_RuleChoice {
+	if m != nil {
+		return m.RuleChoice
+	}
+	return nil
+}
+
 func (m *GlobalSpecType) GetAlgo() policy.RuleCombiningAlgorithm {
 	if m != nil {
 		return m.Algo
@@ -117,9 +321,9 @@ func (m *GlobalSpecType) GetRules() []*schema.ObjectRefType {
 	return nil
 }
 
-func (m *GlobalSpecType) GetAllowVolterra() bool {
+func (m *GlobalSpecType) GetAllowF5Xc() bool {
 	if m != nil {
-		return m.AllowVolterra
+		return m.AllowF5Xc
 	}
 	return false
 }
@@ -145,6 +349,35 @@ func (m *GlobalSpecType) GetDeleteDelay() *types.Duration {
 	return nil
 }
 
+func (m *GlobalSpecType) GetRuleList() *RuleList {
+	if x, ok := m.GetRuleChoice().(*GlobalSpecType_RuleList); ok {
+		return x.RuleList
+	}
+	return nil
+}
+
+func (m *GlobalSpecType) GetLegacyRuleList() *LegacyRuleList {
+	if x, ok := m.GetRuleChoice().(*GlobalSpecType_LegacyRuleList); ok {
+		return x.LegacyRuleList
+	}
+	return nil
+}
+
+func (m *GlobalSpecType) GetViewInternal() *views.ObjectRefType {
+	if m != nil {
+		return m.ViewInternal
+	}
+	return nil
+}
+
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*GlobalSpecType) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
+		(*GlobalSpecType_RuleList)(nil),
+		(*GlobalSpecType_LegacyRuleList)(nil),
+	}
+}
+
 // Create Secret Policy
 //
 // x-displayName: "Create Secret Policy"
@@ -152,14 +385,18 @@ func (m *GlobalSpecType) GetDeleteDelay() *types.Duration {
 type CreateSpecType struct {
 	Algo                policy.RuleCombiningAlgorithm `protobuf:"varint,1,opt,name=algo,proto3,enum=ves.io.schema.policy.RuleCombiningAlgorithm" json:"algo,omitempty"`
 	Rules               []*schema.ObjectRefType       `protobuf:"bytes,2,rep,name=rules,proto3" json:"rules,omitempty"`
-	AllowVolterra       bool                          `protobuf:"varint,3,opt,name=allow_volterra,json=allowVolterra,proto3" json:"allow_volterra,omitempty"`
+	AllowF5Xc           bool                          `protobuf:"varint,3,opt,name=allow_f5xc,json=allowF5xc,proto3" json:"allow_f5xc,omitempty"`
 	DecryptCacheTimeout *types.Duration               `protobuf:"bytes,4,opt,name=decrypt_cache_timeout,json=decryptCacheTimeout,proto3" json:"decrypt_cache_timeout,omitempty"`
+	// Types that are valid to be assigned to RuleChoice:
+	//	*CreateSpecType_RuleList
+	//	*CreateSpecType_LegacyRuleList
+	RuleChoice isCreateSpecType_RuleChoice `protobuf_oneof:"rule_choice"`
 }
 
 func (m *CreateSpecType) Reset()      { *m = CreateSpecType{} }
 func (*CreateSpecType) ProtoMessage() {}
 func (*CreateSpecType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_2cbc9232abd5bc5d, []int{1}
+	return fileDescriptor_2cbc9232abd5bc5d, []int{4}
 }
 func (m *CreateSpecType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -184,6 +421,30 @@ func (m *CreateSpecType) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_CreateSpecType proto.InternalMessageInfo
 
+type isCreateSpecType_RuleChoice interface {
+	isCreateSpecType_RuleChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
+
+type CreateSpecType_RuleList struct {
+	RuleList *RuleList `protobuf:"bytes,13,opt,name=rule_list,json=ruleList,proto3,oneof" json:"rule_list,omitempty"`
+}
+type CreateSpecType_LegacyRuleList struct {
+	LegacyRuleList *LegacyRuleList `protobuf:"bytes,15,opt,name=legacy_rule_list,json=legacyRuleList,proto3,oneof" json:"legacy_rule_list,omitempty"`
+}
+
+func (*CreateSpecType_RuleList) isCreateSpecType_RuleChoice()       {}
+func (*CreateSpecType_LegacyRuleList) isCreateSpecType_RuleChoice() {}
+
+func (m *CreateSpecType) GetRuleChoice() isCreateSpecType_RuleChoice {
+	if m != nil {
+		return m.RuleChoice
+	}
+	return nil
+}
+
 func (m *CreateSpecType) GetAlgo() policy.RuleCombiningAlgorithm {
 	if m != nil {
 		return m.Algo
@@ -198,9 +459,9 @@ func (m *CreateSpecType) GetRules() []*schema.ObjectRefType {
 	return nil
 }
 
-func (m *CreateSpecType) GetAllowVolterra() bool {
+func (m *CreateSpecType) GetAllowF5Xc() bool {
 	if m != nil {
-		return m.AllowVolterra
+		return m.AllowF5Xc
 	}
 	return false
 }
@@ -212,6 +473,28 @@ func (m *CreateSpecType) GetDecryptCacheTimeout() *types.Duration {
 	return nil
 }
 
+func (m *CreateSpecType) GetRuleList() *RuleList {
+	if x, ok := m.GetRuleChoice().(*CreateSpecType_RuleList); ok {
+		return x.RuleList
+	}
+	return nil
+}
+
+func (m *CreateSpecType) GetLegacyRuleList() *LegacyRuleList {
+	if x, ok := m.GetRuleChoice().(*CreateSpecType_LegacyRuleList); ok {
+		return x.LegacyRuleList
+	}
+	return nil
+}
+
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*CreateSpecType) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
+		(*CreateSpecType_RuleList)(nil),
+		(*CreateSpecType_LegacyRuleList)(nil),
+	}
+}
+
 // Replace Secret Policy
 //
 // x-displayName: "Replace Secret Policy"
@@ -219,14 +502,18 @@ func (m *CreateSpecType) GetDecryptCacheTimeout() *types.Duration {
 type ReplaceSpecType struct {
 	Algo                policy.RuleCombiningAlgorithm `protobuf:"varint,1,opt,name=algo,proto3,enum=ves.io.schema.policy.RuleCombiningAlgorithm" json:"algo,omitempty"`
 	Rules               []*schema.ObjectRefType       `protobuf:"bytes,2,rep,name=rules,proto3" json:"rules,omitempty"`
-	AllowVolterra       bool                          `protobuf:"varint,3,opt,name=allow_volterra,json=allowVolterra,proto3" json:"allow_volterra,omitempty"`
+	AllowF5Xc           bool                          `protobuf:"varint,3,opt,name=allow_f5xc,json=allowF5xc,proto3" json:"allow_f5xc,omitempty"`
 	DecryptCacheTimeout *types.Duration               `protobuf:"bytes,4,opt,name=decrypt_cache_timeout,json=decryptCacheTimeout,proto3" json:"decrypt_cache_timeout,omitempty"`
+	// Types that are valid to be assigned to RuleChoice:
+	//	*ReplaceSpecType_RuleList
+	//	*ReplaceSpecType_LegacyRuleList
+	RuleChoice isReplaceSpecType_RuleChoice `protobuf_oneof:"rule_choice"`
 }
 
 func (m *ReplaceSpecType) Reset()      { *m = ReplaceSpecType{} }
 func (*ReplaceSpecType) ProtoMessage() {}
 func (*ReplaceSpecType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_2cbc9232abd5bc5d, []int{2}
+	return fileDescriptor_2cbc9232abd5bc5d, []int{5}
 }
 func (m *ReplaceSpecType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -251,6 +538,30 @@ func (m *ReplaceSpecType) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_ReplaceSpecType proto.InternalMessageInfo
 
+type isReplaceSpecType_RuleChoice interface {
+	isReplaceSpecType_RuleChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
+
+type ReplaceSpecType_RuleList struct {
+	RuleList *RuleList `protobuf:"bytes,13,opt,name=rule_list,json=ruleList,proto3,oneof" json:"rule_list,omitempty"`
+}
+type ReplaceSpecType_LegacyRuleList struct {
+	LegacyRuleList *LegacyRuleList `protobuf:"bytes,15,opt,name=legacy_rule_list,json=legacyRuleList,proto3,oneof" json:"legacy_rule_list,omitempty"`
+}
+
+func (*ReplaceSpecType_RuleList) isReplaceSpecType_RuleChoice()       {}
+func (*ReplaceSpecType_LegacyRuleList) isReplaceSpecType_RuleChoice() {}
+
+func (m *ReplaceSpecType) GetRuleChoice() isReplaceSpecType_RuleChoice {
+	if m != nil {
+		return m.RuleChoice
+	}
+	return nil
+}
+
 func (m *ReplaceSpecType) GetAlgo() policy.RuleCombiningAlgorithm {
 	if m != nil {
 		return m.Algo
@@ -265,9 +576,9 @@ func (m *ReplaceSpecType) GetRules() []*schema.ObjectRefType {
 	return nil
 }
 
-func (m *ReplaceSpecType) GetAllowVolterra() bool {
+func (m *ReplaceSpecType) GetAllowF5Xc() bool {
 	if m != nil {
-		return m.AllowVolterra
+		return m.AllowF5Xc
 	}
 	return false
 }
@@ -279,6 +590,28 @@ func (m *ReplaceSpecType) GetDecryptCacheTimeout() *types.Duration {
 	return nil
 }
 
+func (m *ReplaceSpecType) GetRuleList() *RuleList {
+	if x, ok := m.GetRuleChoice().(*ReplaceSpecType_RuleList); ok {
+		return x.RuleList
+	}
+	return nil
+}
+
+func (m *ReplaceSpecType) GetLegacyRuleList() *LegacyRuleList {
+	if x, ok := m.GetRuleChoice().(*ReplaceSpecType_LegacyRuleList); ok {
+		return x.LegacyRuleList
+	}
+	return nil
+}
+
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*ReplaceSpecType) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
+		(*ReplaceSpecType_RuleList)(nil),
+		(*ReplaceSpecType_LegacyRuleList)(nil),
+	}
+}
+
 // Get Secret Policy
 //
 // x-displayName: "Get Secret Policy"
@@ -286,7 +619,7 @@ func (m *ReplaceSpecType) GetDecryptCacheTimeout() *types.Duration {
 type GetSpecType struct {
 	Algo                policy.RuleCombiningAlgorithm `protobuf:"varint,1,opt,name=algo,proto3,enum=ves.io.schema.policy.RuleCombiningAlgorithm" json:"algo,omitempty"`
 	Rules               []*schema.ObjectRefType       `protobuf:"bytes,2,rep,name=rules,proto3" json:"rules,omitempty"`
-	AllowVolterra       bool                          `protobuf:"varint,3,opt,name=allow_volterra,json=allowVolterra,proto3" json:"allow_volterra,omitempty"`
+	AllowF5Xc           bool                          `protobuf:"varint,3,opt,name=allow_f5xc,json=allowF5xc,proto3" json:"allow_f5xc,omitempty"`
 	DecryptCacheTimeout *types.Duration               `protobuf:"bytes,4,opt,name=decrypt_cache_timeout,json=decryptCacheTimeout,proto3" json:"decrypt_cache_timeout,omitempty"`
 	// Marked For Delete
 	//
@@ -300,12 +633,16 @@ type GetSpecType struct {
 	// deletion_time is set when the secret policy object is marked for delete,
 	// secret policy marked for delete will be automatically deleted after deletion_time
 	DeletionTime *types.Timestamp `protobuf:"bytes,6,opt,name=deletion_time,json=deletionTime,proto3" json:"deletion_time,omitempty"`
+	// Types that are valid to be assigned to RuleChoice:
+	//	*GetSpecType_RuleList
+	//	*GetSpecType_LegacyRuleList
+	RuleChoice isGetSpecType_RuleChoice `protobuf_oneof:"rule_choice"`
 }
 
 func (m *GetSpecType) Reset()      { *m = GetSpecType{} }
 func (*GetSpecType) ProtoMessage() {}
 func (*GetSpecType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_2cbc9232abd5bc5d, []int{3}
+	return fileDescriptor_2cbc9232abd5bc5d, []int{6}
 }
 func (m *GetSpecType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -330,6 +667,30 @@ func (m *GetSpecType) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_GetSpecType proto.InternalMessageInfo
 
+type isGetSpecType_RuleChoice interface {
+	isGetSpecType_RuleChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
+
+type GetSpecType_RuleList struct {
+	RuleList *RuleList `protobuf:"bytes,13,opt,name=rule_list,json=ruleList,proto3,oneof" json:"rule_list,omitempty"`
+}
+type GetSpecType_LegacyRuleList struct {
+	LegacyRuleList *LegacyRuleList `protobuf:"bytes,15,opt,name=legacy_rule_list,json=legacyRuleList,proto3,oneof" json:"legacy_rule_list,omitempty"`
+}
+
+func (*GetSpecType_RuleList) isGetSpecType_RuleChoice()       {}
+func (*GetSpecType_LegacyRuleList) isGetSpecType_RuleChoice() {}
+
+func (m *GetSpecType) GetRuleChoice() isGetSpecType_RuleChoice {
+	if m != nil {
+		return m.RuleChoice
+	}
+	return nil
+}
+
 func (m *GetSpecType) GetAlgo() policy.RuleCombiningAlgorithm {
 	if m != nil {
 		return m.Algo
@@ -344,9 +705,9 @@ func (m *GetSpecType) GetRules() []*schema.ObjectRefType {
 	return nil
 }
 
-func (m *GetSpecType) GetAllowVolterra() bool {
+func (m *GetSpecType) GetAllowF5Xc() bool {
 	if m != nil {
-		return m.AllowVolterra
+		return m.AllowF5Xc
 	}
 	return false
 }
@@ -372,7 +733,32 @@ func (m *GetSpecType) GetDeletionTime() *types.Timestamp {
 	return nil
 }
 
+func (m *GetSpecType) GetRuleList() *RuleList {
+	if x, ok := m.GetRuleChoice().(*GetSpecType_RuleList); ok {
+		return x.RuleList
+	}
+	return nil
+}
+
+func (m *GetSpecType) GetLegacyRuleList() *LegacyRuleList {
+	if x, ok := m.GetRuleChoice().(*GetSpecType_LegacyRuleList); ok {
+		return x.LegacyRuleList
+	}
+	return nil
+}
+
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*GetSpecType) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
+		(*GetSpecType_RuleList)(nil),
+		(*GetSpecType_LegacyRuleList)(nil),
+	}
+}
+
 func init() {
+	proto.RegisterType((*Rule)(nil), "ves.io.schema.secret_policy.Rule")
+	proto.RegisterType((*RuleList)(nil), "ves.io.schema.secret_policy.RuleList")
+	proto.RegisterType((*LegacyRuleList)(nil), "ves.io.schema.secret_policy.LegacyRuleList")
 	proto.RegisterType((*GlobalSpecType)(nil), "ves.io.schema.secret_policy.GlobalSpecType")
 	proto.RegisterType((*CreateSpecType)(nil), "ves.io.schema.secret_policy.CreateSpecType")
 	proto.RegisterType((*ReplaceSpecType)(nil), "ves.io.schema.secret_policy.ReplaceSpecType")
@@ -384,51 +770,168 @@ func init() {
 }
 
 var fileDescriptor_2cbc9232abd5bc5d = []byte{
-	// 666 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x55, 0xbf, 0x6f, 0xd3, 0x4c,
-	0x18, 0xce, 0x25, 0x6d, 0xbf, 0x7e, 0x97, 0x36, 0xfd, 0xea, 0x4f, 0xa0, 0x34, 0xad, 0x8e, 0xa8,
-	0x12, 0x22, 0x42, 0xd4, 0x96, 0xca, 0xc6, 0x00, 0x34, 0x29, 0x2d, 0x0c, 0x15, 0xc2, 0x8d, 0x10,
-	0x62, 0xb1, 0x2e, 0xf6, 0x1b, 0xc7, 0xf4, 0x9c, 0xb3, 0x2e, 0x97, 0x94, 0x0c, 0x95, 0xba, 0xb3,
-	0x20, 0x56, 0xfe, 0x01, 0xc4, 0x06, 0x23, 0x5d, 0x60, 0x43, 0x4c, 0x1d, 0x23, 0x26, 0xea, 0x2e,
-	0x65, 0xeb, 0x9f, 0x80, 0x7c, 0x76, 0x28, 0x6e, 0x23, 0x40, 0x8c, 0xa8, 0xdb, 0xdd, 0xfb, 0x3e,
-	0xcf, 0x73, 0xef, 0xbd, 0xcf, 0xfd, 0xc0, 0x57, 0x7a, 0xd0, 0xd1, 0x3d, 0x6e, 0x74, 0xec, 0x16,
-	0xf8, 0xd4, 0xe8, 0x80, 0x2d, 0x40, 0x5a, 0x01, 0x67, 0x9e, 0xdd, 0x37, 0x64, 0x3f, 0x80, 0x8e,
-	0x1e, 0x08, 0x2e, 0xb9, 0x36, 0x1f, 0x03, 0xf5, 0x18, 0xa8, 0xa7, 0x80, 0xa5, 0x25, 0xd7, 0x93,
-	0xad, 0x6e, 0x43, 0xb7, 0xb9, 0x6f, 0xb8, 0xdc, 0xe5, 0x86, 0xe2, 0x34, 0xba, 0x4d, 0x35, 0x53,
-	0x13, 0x35, 0x8a, 0xb5, 0x4a, 0xc4, 0xe5, 0xdc, 0x65, 0x70, 0x82, 0x72, 0xba, 0x82, 0x4a, 0x8f,
-	0xb7, 0x93, 0xfc, 0xa5, 0xd3, 0x79, 0xe9, 0xf9, 0xd0, 0x91, 0xd4, 0x0f, 0x12, 0xc0, 0x7c, 0xba,
-	0x6a, 0x1e, 0x44, 0xe4, 0xa4, 0xd2, 0x52, 0x39, 0x9d, 0x3c, 0xbb, 0x97, 0xd2, 0x5c, 0x1a, 0xf1,
-	0x63, 0x6a, 0x21, 0x9d, 0xea, 0x51, 0xe6, 0x39, 0x54, 0xc2, 0x68, 0xe9, 0x9e, 0x07, 0xdb, 0x56,
-	0x6a, 0xf1, 0xc5, 0x0f, 0x39, 0x5c, 0x58, 0x67, 0xbc, 0x41, 0xd9, 0x66, 0x00, 0x76, 0xbd, 0x1f,
-	0x80, 0xf6, 0x08, 0x8f, 0x51, 0xe6, 0xf2, 0x22, 0x2a, 0xa3, 0x4a, 0x61, 0xf9, 0x9a, 0x9e, 0x6e,
-	0x64, 0x5c, 0x9e, 0x6e, 0x76, 0x19, 0xd4, 0xb8, 0xdf, 0xf0, 0xda, 0x5e, 0xdb, 0x5d, 0x61, 0x2e,
-	0x17, 0x9e, 0x6c, 0xf9, 0xd5, 0x8b, 0x83, 0x1d, 0xf4, 0x79, 0x0f, 0xe5, 0xd7, 0xee, 0x99, 0x9b,
-	0x75, 0x6b, 0x63, 0xa5, 0x5e, 0xbb, 0x7b, 0xb4, 0x87, 0x90, 0xa9, 0x14, 0xb5, 0x3a, 0x1e, 0x17,
-	0x5d, 0x06, 0x9d, 0x62, 0xb6, 0x9c, 0xab, 0xe4, 0x97, 0x17, 0x4e, 0x49, 0xdf, 0x6f, 0x3c, 0x01,
-	0x5b, 0x9a, 0xd0, 0x8c, 0xca, 0xa8, 0x96, 0x5f, 0xef, 0x68, 0x29, 0xd7, 0xac, 0x88, 0xfb, 0xee,
-	0xeb, 0xfb, 0xdc, 0xc4, 0x0b, 0x94, 0xfb, 0x6f, 0x37, 0x6b, 0xc6, 0x62, 0xda, 0x65, 0x5c, 0xa0,
-	0x8c, 0xf1, 0x6d, 0xab, 0xc7, 0x99, 0x04, 0x21, 0x68, 0x31, 0x57, 0x46, 0x95, 0x49, 0x73, 0x5a,
-	0x45, 0x1f, 0x26, 0x41, 0x6d, 0x03, 0x5f, 0x70, 0xc0, 0x16, 0xfd, 0x40, 0x5a, 0x36, 0xb5, 0x5b,
-	0x60, 0x45, 0x26, 0xf1, 0xae, 0x2c, 0x8e, 0x95, 0x51, 0x25, 0xbf, 0x3c, 0xa7, 0xc7, 0x26, 0xea,
-	0x43, 0x13, 0xf5, 0xd5, 0xc4, 0x64, 0xf3, 0xff, 0x84, 0x57, 0x8b, 0x68, 0xf5, 0x98, 0xa5, 0x55,
-	0x31, 0x76, 0x80, 0x81, 0x04, 0xc7, 0xa2, 0xb2, 0x38, 0xae, 0x34, 0x4a, 0x67, 0x34, 0xea, 0xc3,
-	0x83, 0x50, 0xfd, 0x67, 0xb0, 0x83, 0x54, 0x2b, 0xfe, 0x4d, 0x68, 0x2b, 0x52, 0xbb, 0x83, 0xa7,
-	0xe2, 0x89, 0xe5, 0x00, 0xa3, 0xfd, 0xe2, 0xc4, 0x2f, 0x2a, 0x39, 0x11, 0xc9, 0xc7, 0xbc, 0xd5,
-	0x88, 0xb6, 0xf8, 0x26, 0x8b, 0x0b, 0x35, 0x01, 0x54, 0xc2, 0x77, 0x0f, 0x6f, 0xff, 0xb9, 0x87,
-	0x7f, 0x9f, 0x57, 0x37, 0x66, 0x3f, 0xdd, 0x3c, 0x75, 0xc8, 0x17, 0xdf, 0x66, 0xf1, 0x8c, 0x09,
-	0x01, 0xa3, 0xf6, 0x79, 0xd3, 0x7e, 0xbb, 0x69, 0x2f, 0x73, 0x38, 0xbf, 0x0e, 0xf2, 0xbc, 0x61,
-	0x23, 0x5f, 0x84, 0xab, 0x78, 0xd6, 0xa7, 0x62, 0x0b, 0x1c, 0xab, 0xc9, 0x85, 0x15, 0x5f, 0x50,
-	0xf5, 0x30, 0x4c, 0x9a, 0x33, 0x71, 0x62, 0x8d, 0x8b, 0x55, 0x15, 0xd6, 0x6e, 0xe1, 0x69, 0x05,
-	0xf0, 0x78, 0x5b, 0xad, 0x9a, 0x5c, 0xfd, 0x9f, 0x3c, 0x20, 0xe6, 0xd4, 0x90, 0x10, 0x85, 0x46,
-	0xb8, 0x53, 0x7d, 0x86, 0xf6, 0x0f, 0x48, 0x66, 0x70, 0x40, 0x32, 0xc7, 0x07, 0x04, 0xed, 0x86,
-	0x04, 0xbd, 0x0a, 0x09, 0xfa, 0x18, 0x12, 0xb4, 0x1f, 0x12, 0x34, 0x08, 0x09, 0xfa, 0x12, 0x12,
-	0x74, 0x14, 0x92, 0xcc, 0x71, 0x48, 0xd0, 0xf3, 0x43, 0x92, 0xd9, 0x3f, 0x24, 0x99, 0xc1, 0x21,
-	0xc9, 0x3c, 0x7e, 0xe0, 0xf2, 0x60, 0xcb, 0xd5, 0x87, 0xed, 0xd2, 0xbb, 0x1d, 0x43, 0x0d, 0x9a,
-	0x5c, 0xf8, 0x4b, 0x81, 0xe0, 0x3d, 0xcf, 0x01, 0xb1, 0x34, 0x4c, 0x1b, 0x41, 0xc3, 0xe5, 0x06,
-	0x3c, 0x95, 0xc3, 0x4f, 0x78, 0xc4, 0x5f, 0xdc, 0x98, 0x50, 0x5b, 0xb8, 0xfe, 0x2d, 0x00, 0x00,
-	0xff, 0xff, 0x80, 0x37, 0x7a, 0x35, 0xb1, 0x07, 0x00, 0x00,
+	// 1172 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x57, 0x41, 0x6c, 0x1b, 0x45,
+	0x14, 0xf5, 0xd8, 0x4e, 0xea, 0x8c, 0xed, 0xd8, 0x59, 0xda, 0xe2, 0xba, 0x65, 0x6b, 0x2c, 0x4a,
+	0x43, 0x9a, 0xac, 0x9b, 0x54, 0xb9, 0xe4, 0x00, 0xc4, 0x4e, 0xd3, 0x14, 0x35, 0x45, 0x6c, 0x2d,
+	0x40, 0x20, 0x58, 0xc6, 0xbb, 0xdf, 0xeb, 0xa5, 0xbb, 0x9e, 0x65, 0x77, 0xec, 0xc6, 0x87, 0x48,
+	0x15, 0xe2, 0xc6, 0x05, 0xe5, 0x06, 0x27, 0x24, 0x2e, 0xa8, 0x27, 0xce, 0x38, 0x87, 0x0a, 0x09,
+	0x09, 0xf5, 0x64, 0x71, 0x8a, 0x38, 0x35, 0xce, 0x25, 0x48, 0x1c, 0x72, 0x44, 0x1c, 0x10, 0xda,
+	0xb1, 0x9d, 0x78, 0x9d, 0xe0, 0x14, 0x14, 0x84, 0x54, 0xf5, 0xb6, 0xf3, 0xe7, 0xff, 0xf7, 0xfe,
+	0x9f, 0xff, 0xe6, 0x8f, 0x16, 0x5f, 0xae, 0x83, 0x2b, 0x19, 0x34, 0xe7, 0xaa, 0x15, 0xb0, 0x48,
+	0xce, 0x05, 0xd5, 0x01, 0xa6, 0xd8, 0xd4, 0x34, 0xd4, 0x46, 0x8e, 0x35, 0x6c, 0x70, 0x25, 0xdb,
+	0xa1, 0x8c, 0x0a, 0xe7, 0x3b, 0x8e, 0x52, 0xc7, 0x51, 0xf2, 0x39, 0xa6, 0x67, 0x74, 0x83, 0x55,
+	0x6a, 0x25, 0x49, 0xa5, 0x56, 0x4e, 0xa7, 0x3a, 0xcd, 0xf1, 0x98, 0x52, 0xad, 0xcc, 0x57, 0x7c,
+	0xc1, 0xbf, 0x3a, 0x58, 0x69, 0x51, 0xa7, 0x54, 0x37, 0xe1, 0xc0, 0x4b, 0xab, 0x39, 0x84, 0x19,
+	0xb4, 0xda, 0xdd, 0xbf, 0x38, 0xb8, 0xcf, 0x0c, 0x0b, 0x5c, 0x46, 0x2c, 0xbb, 0xeb, 0x70, 0xde,
+	0x9f, 0x35, 0xb5, 0xbd, 0xe0, 0x6e, 0xa6, 0xe9, 0x8c, 0x7f, 0xf3, 0x70, 0x2d, 0xe9, 0xe9, 0x21,
+	0x45, 0x2b, 0x4e, 0xcd, 0x04, 0x9f, 0xf7, 0x39, 0xbf, 0x77, 0xff, 0xd6, 0x05, 0xff, 0x56, 0x9d,
+	0x98, 0x86, 0x46, 0x18, 0x1c, 0x9d, 0x48, 0xdd, 0x80, 0x7b, 0x8a, 0x3f, 0xd5, 0x8b, 0x87, 0x3d,
+	0xdc, 0x7e, 0x82, 0xec, 0x97, 0x61, 0x1c, 0x96, 0x6b, 0x26, 0x08, 0x0b, 0x38, 0x62, 0x01, 0x23,
+	0x1a, 0x61, 0x24, 0x85, 0x32, 0x68, 0x32, 0x3a, 0x27, 0x4a, 0xfe, 0x8e, 0xac, 0x82, 0xeb, 0x12,
+	0x1d, 0x56, 0x81, 0x91, 0x62, 0xc3, 0x06, 0x79, 0xdf, 0x5f, 0xb8, 0x8d, 0xc3, 0xae, 0x0d, 0x6a,
+	0x2a, 0xc8, 0xe3, 0xae, 0x4a, 0x43, 0x3a, 0xc9, 0xab, 0x97, 0x6e, 0x98, 0xb4, 0x44, 0xcc, 0x3b,
+	0x36, 0xa8, 0x1e, 0x52, 0x3e, 0xd2, 0x6a, 0x22, 0xd4, 0xda, 0x44, 0x48, 0xe6, 0x38, 0x0b, 0x9f,
+	0x85, 0x7e, 0x68, 0xa2, 0x04, 0x8e, 0xe3, 0xc8, 0x6a, 0x8f, 0x02, 0xcd, 0x3e, 0x6a, 0xa2, 0xdf,
+	0x82, 0xf8, 0x79, 0x1c, 0xbe, 0x4d, 0x2c, 0x48, 0x27, 0x70, 0xbc, 0x47, 0x2f, 0x55, 0x89, 0x05,
+	0x58, 0xc4, 0x51, 0xaf, 0x8e, 0xcc, 0xa2, 0xea, 0xd5, 0x9f, 0x4e, 0xe0, 0xa8, 0x07, 0x25, 0x11,
+	0xbe, 0xcc, 0x20, 0xfc, 0x5d, 0x10, 0x8f, 0x16, 0x4c, 0x03, 0xaa, 0x2c, 0x89, 0xa6, 0xbe, 0x09,
+	0xe2, 0xaf, 0x83, 0x58, 0xc0, 0x49, 0xee, 0xa3, 0x72, 0xb3, 0xc2, 0x61, 0x34, 0x7c, 0x69, 0xd0,
+	0xa6, 0x58, 0x84, 0xa9, 0x15, 0x70, 0x24, 0x58, 0x23, 0x2a, 0x53, 0xea, 0xc4, 0xac, 0x81, 0x9b,
+	0x4d, 0x26, 0x43, 0x53, 0xb1, 0xeb, 0x9e, 0x25, 0xf3, 0x36, 0xb7, 0xc8, 0xaf, 0x0c, 0x09, 0x75,
+	0x40, 0x87, 0xb5, 0x6e, 0x68, 0x32, 0x30, 0x94, 0xa5, 0xdf, 0xb5, 0xc3, 0x22, 0x7b, 0x96, 0x27,
+	0x61, 0xe9, 0x4f, 0x30, 0x19, 0xc0, 0x2f, 0xe3, 0xd4, 0xdf, 0xb9, 0xce, 0xe1, 0x02, 0xad, 0x96,
+	0x0d, 0xbd, 0xe6, 0x80, 0x86, 0xcf, 0xe2, 0xd3, 0xfd, 0x7e, 0x2e, 0x98, 0xa0, 0x32, 0xea, 0x64,
+	0x0d, 0x1c, 0xf1, 0x8e, 0xf4, 0x96, 0xe1, 0x32, 0xe1, 0x03, 0x3c, 0xe2, 0x75, 0xce, 0x4d, 0xa1,
+	0x4c, 0x68, 0x32, 0x3a, 0xf7, 0xe2, 0xb0, 0x1e, 0x4b, 0x5e, 0x54, 0xfe, 0x25, 0xaf, 0xa9, 0xdf,
+	0xff, 0xfa, 0x30, 0x34, 0xba, 0x81, 0x42, 0xc9, 0xfb, 0x41, 0xef, 0x73, 0x64, 0x03, 0x05, 0xaf,
+	0xa2, 0xf6, 0xe3, 0x1f, 0x43, 0xa3, 0x1b, 0x9b, 0x28, 0x98, 0x44, 0x72, 0x07, 0x35, 0xfb, 0x09,
+	0x1e, 0xbf, 0x05, 0x3a, 0x51, 0x1b, 0xfb, 0x84, 0x8a, 0x9f, 0xf0, 0xc2, 0x00, 0xe1, 0x9b, 0xa5,
+	0x8f, 0x41, 0x65, 0x32, 0x94, 0xb9, 0x80, 0xae, 0x3c, 0x58, 0x17, 0x0e, 0xcb, 0xac, 0x8f, 0xfc,
+	0x08, 0xca, 0x3f, 0x47, 0xf0, 0xb8, 0x5f, 0x87, 0xc2, 0xbb, 0x38, 0x4c, 0x4c, 0x9d, 0x72, 0xfd,
+	0x8f, 0xcf, 0x4d, 0x0f, 0x50, 0xf6, 0x15, 0x57, 0xa0, 0x56, 0xc9, 0xa8, 0x1a, 0x55, 0x7d, 0xd1,
+	0xd4, 0xa9, 0x63, 0xb0, 0x8a, 0x95, 0x3f, 0xbb, 0xb5, 0x8e, 0x7e, 0x69, 0xa2, 0xe8, 0xf2, 0x4d,
+	0xf9, 0x4e, 0x51, 0x59, 0x5d, 0x2c, 0x16, 0x56, 0x76, 0x9b, 0x9e, 0xa2, 0x3d, 0x44, 0xe1, 0xfd,
+	0x5e, 0x35, 0xc1, 0x27, 0xa8, 0xe6, 0xf2, 0x91, 0xd5, 0x6c, 0xad, 0xa3, 0x5d, 0xff, 0x89, 0x76,
+	0x2b, 0x11, 0x5e, 0xc0, 0x98, 0x98, 0x26, 0xbd, 0xa7, 0x94, 0xe7, 0xd7, 0xd4, 0x54, 0x28, 0x83,
+	0x26, 0x23, 0xf2, 0x18, 0xb7, 0x2c, 0xcf, 0xaf, 0xa9, 0xc2, 0x2a, 0x3e, 0xa3, 0x81, 0xea, 0x34,
+	0x6c, 0xa6, 0xa8, 0x44, 0xad, 0x80, 0xe2, 0x0d, 0x3b, 0x5a, 0x63, 0xa9, 0x30, 0xbf, 0xae, 0xe7,
+	0xa4, 0xce, 0x30, 0x94, 0x7a, 0xc3, 0x50, 0x5a, 0xea, 0x0e, 0x4b, 0xf9, 0xb9, 0x6e, 0x5c, 0xc1,
+	0x0b, 0x2b, 0x76, 0xa2, 0x84, 0x3c, 0xc6, 0x1a, 0x98, 0xc0, 0x40, 0x53, 0x08, 0x4b, 0x8d, 0x70,
+	0x8c, 0xf4, 0x21, 0x8c, 0x62, 0x6f, 0xa0, 0xe6, 0x4f, 0x75, 0x13, 0x97, 0xc7, 0xba, 0x61, 0x8b,
+	0x4c, 0xb8, 0x8e, 0x63, 0x9d, 0x85, 0xa2, 0x81, 0x49, 0x1a, 0xa9, 0xd1, 0x63, 0x32, 0x39, 0x00,
+	0x89, 0x76, 0xe2, 0x96, 0xbc, 0x30, 0x61, 0x09, 0x8f, 0x79, 0x27, 0xa0, 0x98, 0x86, 0xcb, 0x52,
+	0x71, 0x8e, 0x71, 0xe9, 0x58, 0x61, 0x7a, 0xea, 0x5a, 0x09, 0xc8, 0x11, 0xa7, 0xa7, 0xb4, 0x2a,
+	0x4e, 0x9a, 0x5c, 0x7b, 0xca, 0x01, 0x58, 0x82, 0x83, 0x5d, 0x19, 0x0a, 0xe6, 0x17, 0x6c, 0xfe,
+	0x8c, 0xa7, 0xb1, 0xe4, 0x57, 0x9b, 0x28, 0xe6, 0x56, 0x88, 0x03, 0xda, 0x74, 0xa6, 0xe6, 0x82,
+	0xb3, 0x12, 0x90, 0xc7, 0x4d, 0xbf, 0xb2, 0x3f, 0xc4, 0x71, 0x3e, 0xa9, 0x8d, 0x2a, 0x03, 0xa7,
+	0x4a, 0xcc, 0xd4, 0xee, 0x29, 0xce, 0x96, 0x1d, 0x60, 0xe3, 0xc3, 0x7a, 0x40, 0x1a, 0xa7, 0x1f,
+	0xac, 0xfb, 0x83, 0xf9, 0xa1, 0xc4, 0x3c, 0xd3, 0xcd, 0xae, 0x25, 0x9f, 0xc1, 0x51, 0x5e, 0x88,
+	0x5a, 0xa1, 0x86, 0x0a, 0xc2, 0xc4, 0xc3, 0x26, 0x8a, 0xb7, 0x9a, 0x28, 0xd6, 0x6e, 0xa2, 0x91,
+	0xd9, 0x6b, 0xd3, 0xb3, 0xf3, 0x6f, 0x84, 0x23, 0xb1, 0x64, 0x3c, 0xfb, 0x7b, 0x08, 0x8f, 0x17,
+	0x1c, 0x20, 0x0c, 0xf6, 0x2f, 0xc0, 0xeb, 0xff, 0xfe, 0x02, 0x3c, 0x7d, 0x42, 0x3f, 0x19, 0x75,
+	0x7d, 0x74, 0x32, 0xea, 0xea, 0x5d, 0x80, 0xc3, 0x7a, 0x5a, 0x98, 0x78, 0xf4, 0xea, 0xc0, 0x20,
+	0xcb, 0x8b, 0x7e, 0x09, 0x24, 0x3e, 0xfd, 0x03, 0xf5, 0x1b, 0xb2, 0x7b, 0x21, 0x9c, 0x90, 0xc1,
+	0x36, 0x89, 0xfa, 0xac, 0xf7, 0xff, 0x61, 0xef, 0xdf, 0x39, 0x91, 0xde, 0x9f, 0x4c, 0xcb, 0x7f,
+	0x0e, 0xe3, 0xe8, 0x0d, 0x60, 0x27, 0xd8, 0xee, 0xe2, 0x3f, 0x69, 0x77, 0xe6, 0xb8, 0x17, 0xfa,
+	0xff, 0xe9, 0xf3, 0x14, 0x9e, 0xb0, 0x88, 0x73, 0x17, 0x34, 0xa5, 0x4c, 0x1d, 0xa5, 0xf3, 0xb6,
+	0xf0, 0x37, 0x2d, 0x22, 0x27, 0x3a, 0x1b, 0xcb, 0xd4, 0x59, 0xe2, 0x66, 0xe1, 0x35, 0x1c, 0xe7,
+	0x0e, 0x06, 0xad, 0x72, 0xd6, 0xee, 0xab, 0x35, 0xe4, 0xed, 0x93, 0x63, 0xbd, 0x00, 0xcf, 0xf4,
+	0xf4, 0x89, 0x2a, 0xff, 0x39, 0x6a, 0x6d, 0x8b, 0x81, 0xad, 0x6d, 0x31, 0xb0, 0xb7, 0x2d, 0xa2,
+	0xfb, 0x6d, 0x11, 0x7d, 0xdb, 0x16, 0xd1, 0x4f, 0x6d, 0x11, 0xb5, 0xda, 0x22, 0xda, 0x6a, 0x8b,
+	0xe8, 0x71, 0x5b, 0x44, 0xbb, 0x6d, 0x31, 0xb0, 0xd7, 0x16, 0xd1, 0x17, 0x3b, 0x62, 0xa0, 0xb5,
+	0x23, 0x06, 0xb6, 0x76, 0xc4, 0xc0, 0x7b, 0x6f, 0xe9, 0xd4, 0xbe, 0xab, 0x4b, 0x75, 0x6a, 0x32,
+	0x70, 0x1c, 0x22, 0xd5, 0xdc, 0x1c, 0xff, 0x28, 0x53, 0xc7, 0x9a, 0xb1, 0x1d, 0x5a, 0x37, 0x34,
+	0x70, 0x66, 0x7a, 0xdb, 0x39, 0xbb, 0xa4, 0xd3, 0x1c, 0xac, 0xb1, 0xde, 0x1f, 0xd5, 0x11, 0x3f,
+	0x56, 0xa5, 0x51, 0xde, 0x81, 0x6b, 0x7f, 0x05, 0x00, 0x00, 0xff, 0xff, 0x23, 0x69, 0x6a, 0x62,
+	0x73, 0x0e, 0x00, 0x00,
 }
 
+func (this *Rule) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*Rule)
+	if !ok {
+		that2, ok := that.(Rule)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.Metadata.Equal(that1.Metadata) {
+		return false
+	}
+	if !this.Spec.Equal(that1.Spec) {
+		return false
+	}
+	return true
+}
+func (this *RuleList) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*RuleList)
+	if !ok {
+		that2, ok := that.(RuleList)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if len(this.Rules) != len(that1.Rules) {
+		return false
+	}
+	for i := range this.Rules {
+		if !this.Rules[i].Equal(that1.Rules[i]) {
+			return false
+		}
+	}
+	return true
+}
+func (this *LegacyRuleList) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*LegacyRuleList)
+	if !ok {
+		that2, ok := that.(LegacyRuleList)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if len(this.Rules) != len(that1.Rules) {
+		return false
+	}
+	for i := range this.Rules {
+		if !this.Rules[i].Equal(that1.Rules[i]) {
+			return false
+		}
+	}
+	return true
+}
 func (this *GlobalSpecType) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -459,7 +962,7 @@ func (this *GlobalSpecType) Equal(that interface{}) bool {
 			return false
 		}
 	}
-	if this.AllowVolterra != that1.AllowVolterra {
+	if this.AllowF5Xc != that1.AllowF5Xc {
 		return false
 	}
 	if !this.DecryptCacheTimeout.Equal(that1.DecryptCacheTimeout) {
@@ -469,6 +972,66 @@ func (this *GlobalSpecType) Equal(that interface{}) bool {
 		return false
 	}
 	if !this.DeleteDelay.Equal(that1.DeleteDelay) {
+		return false
+	}
+	if that1.RuleChoice == nil {
+		if this.RuleChoice != nil {
+			return false
+		}
+	} else if this.RuleChoice == nil {
+		return false
+	} else if !this.RuleChoice.Equal(that1.RuleChoice) {
+		return false
+	}
+	if !this.ViewInternal.Equal(that1.ViewInternal) {
+		return false
+	}
+	return true
+}
+func (this *GlobalSpecType_RuleList) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GlobalSpecType_RuleList)
+	if !ok {
+		that2, ok := that.(GlobalSpecType_RuleList)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.RuleList.Equal(that1.RuleList) {
+		return false
+	}
+	return true
+}
+func (this *GlobalSpecType_LegacyRuleList) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GlobalSpecType_LegacyRuleList)
+	if !ok {
+		that2, ok := that.(GlobalSpecType_LegacyRuleList)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.LegacyRuleList.Equal(that1.LegacyRuleList) {
 		return false
 	}
 	return true
@@ -503,10 +1066,67 @@ func (this *CreateSpecType) Equal(that interface{}) bool {
 			return false
 		}
 	}
-	if this.AllowVolterra != that1.AllowVolterra {
+	if this.AllowF5Xc != that1.AllowF5Xc {
 		return false
 	}
 	if !this.DecryptCacheTimeout.Equal(that1.DecryptCacheTimeout) {
+		return false
+	}
+	if that1.RuleChoice == nil {
+		if this.RuleChoice != nil {
+			return false
+		}
+	} else if this.RuleChoice == nil {
+		return false
+	} else if !this.RuleChoice.Equal(that1.RuleChoice) {
+		return false
+	}
+	return true
+}
+func (this *CreateSpecType_RuleList) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CreateSpecType_RuleList)
+	if !ok {
+		that2, ok := that.(CreateSpecType_RuleList)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.RuleList.Equal(that1.RuleList) {
+		return false
+	}
+	return true
+}
+func (this *CreateSpecType_LegacyRuleList) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CreateSpecType_LegacyRuleList)
+	if !ok {
+		that2, ok := that.(CreateSpecType_LegacyRuleList)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.LegacyRuleList.Equal(that1.LegacyRuleList) {
 		return false
 	}
 	return true
@@ -541,10 +1161,67 @@ func (this *ReplaceSpecType) Equal(that interface{}) bool {
 			return false
 		}
 	}
-	if this.AllowVolterra != that1.AllowVolterra {
+	if this.AllowF5Xc != that1.AllowF5Xc {
 		return false
 	}
 	if !this.DecryptCacheTimeout.Equal(that1.DecryptCacheTimeout) {
+		return false
+	}
+	if that1.RuleChoice == nil {
+		if this.RuleChoice != nil {
+			return false
+		}
+	} else if this.RuleChoice == nil {
+		return false
+	} else if !this.RuleChoice.Equal(that1.RuleChoice) {
+		return false
+	}
+	return true
+}
+func (this *ReplaceSpecType_RuleList) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ReplaceSpecType_RuleList)
+	if !ok {
+		that2, ok := that.(ReplaceSpecType_RuleList)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.RuleList.Equal(that1.RuleList) {
+		return false
+	}
+	return true
+}
+func (this *ReplaceSpecType_LegacyRuleList) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ReplaceSpecType_LegacyRuleList)
+	if !ok {
+		that2, ok := that.(ReplaceSpecType_LegacyRuleList)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.LegacyRuleList.Equal(that1.LegacyRuleList) {
 		return false
 	}
 	return true
@@ -579,7 +1256,7 @@ func (this *GetSpecType) Equal(that interface{}) bool {
 			return false
 		}
 	}
-	if this.AllowVolterra != that1.AllowVolterra {
+	if this.AllowF5Xc != that1.AllowF5Xc {
 		return false
 	}
 	if !this.DecryptCacheTimeout.Equal(that1.DecryptCacheTimeout) {
@@ -591,19 +1268,115 @@ func (this *GetSpecType) Equal(that interface{}) bool {
 	if !this.DeletionTime.Equal(that1.DeletionTime) {
 		return false
 	}
+	if that1.RuleChoice == nil {
+		if this.RuleChoice != nil {
+			return false
+		}
+	} else if this.RuleChoice == nil {
+		return false
+	} else if !this.RuleChoice.Equal(that1.RuleChoice) {
+		return false
+	}
 	return true
+}
+func (this *GetSpecType_RuleList) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GetSpecType_RuleList)
+	if !ok {
+		that2, ok := that.(GetSpecType_RuleList)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.RuleList.Equal(that1.RuleList) {
+		return false
+	}
+	return true
+}
+func (this *GetSpecType_LegacyRuleList) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GetSpecType_LegacyRuleList)
+	if !ok {
+		that2, ok := that.(GetSpecType_LegacyRuleList)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.LegacyRuleList.Equal(that1.LegacyRuleList) {
+		return false
+	}
+	return true
+}
+func (this *Rule) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 6)
+	s = append(s, "&secret_policy.Rule{")
+	if this.Metadata != nil {
+		s = append(s, "Metadata: "+fmt.Sprintf("%#v", this.Metadata)+",\n")
+	}
+	if this.Spec != nil {
+		s = append(s, "Spec: "+fmt.Sprintf("%#v", this.Spec)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *RuleList) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 5)
+	s = append(s, "&secret_policy.RuleList{")
+	if this.Rules != nil {
+		s = append(s, "Rules: "+fmt.Sprintf("%#v", this.Rules)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *LegacyRuleList) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 5)
+	s = append(s, "&secret_policy.LegacyRuleList{")
+	if this.Rules != nil {
+		s = append(s, "Rules: "+fmt.Sprintf("%#v", this.Rules)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
 }
 func (this *GlobalSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 10)
+	s := make([]string, 0, 13)
 	s = append(s, "&secret_policy.GlobalSpecType{")
 	s = append(s, "Algo: "+fmt.Sprintf("%#v", this.Algo)+",\n")
 	if this.Rules != nil {
 		s = append(s, "Rules: "+fmt.Sprintf("%#v", this.Rules)+",\n")
 	}
-	s = append(s, "AllowVolterra: "+fmt.Sprintf("%#v", this.AllowVolterra)+",\n")
+	s = append(s, "AllowF5Xc: "+fmt.Sprintf("%#v", this.AllowF5Xc)+",\n")
 	if this.DecryptCacheTimeout != nil {
 		s = append(s, "DecryptCacheTimeout: "+fmt.Sprintf("%#v", this.DecryptCacheTimeout)+",\n")
 	}
@@ -613,54 +1386,114 @@ func (this *GlobalSpecType) GoString() string {
 	if this.DeleteDelay != nil {
 		s = append(s, "DeleteDelay: "+fmt.Sprintf("%#v", this.DeleteDelay)+",\n")
 	}
+	if this.RuleChoice != nil {
+		s = append(s, "RuleChoice: "+fmt.Sprintf("%#v", this.RuleChoice)+",\n")
+	}
+	if this.ViewInternal != nil {
+		s = append(s, "ViewInternal: "+fmt.Sprintf("%#v", this.ViewInternal)+",\n")
+	}
 	s = append(s, "}")
 	return strings.Join(s, "")
+}
+func (this *GlobalSpecType_RuleList) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&secret_policy.GlobalSpecType_RuleList{` +
+		`RuleList:` + fmt.Sprintf("%#v", this.RuleList) + `}`}, ", ")
+	return s
+}
+func (this *GlobalSpecType_LegacyRuleList) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&secret_policy.GlobalSpecType_LegacyRuleList{` +
+		`LegacyRuleList:` + fmt.Sprintf("%#v", this.LegacyRuleList) + `}`}, ", ")
+	return s
 }
 func (this *CreateSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 8)
+	s := make([]string, 0, 10)
 	s = append(s, "&secret_policy.CreateSpecType{")
 	s = append(s, "Algo: "+fmt.Sprintf("%#v", this.Algo)+",\n")
 	if this.Rules != nil {
 		s = append(s, "Rules: "+fmt.Sprintf("%#v", this.Rules)+",\n")
 	}
-	s = append(s, "AllowVolterra: "+fmt.Sprintf("%#v", this.AllowVolterra)+",\n")
+	s = append(s, "AllowF5Xc: "+fmt.Sprintf("%#v", this.AllowF5Xc)+",\n")
 	if this.DecryptCacheTimeout != nil {
 		s = append(s, "DecryptCacheTimeout: "+fmt.Sprintf("%#v", this.DecryptCacheTimeout)+",\n")
 	}
+	if this.RuleChoice != nil {
+		s = append(s, "RuleChoice: "+fmt.Sprintf("%#v", this.RuleChoice)+",\n")
+	}
 	s = append(s, "}")
 	return strings.Join(s, "")
+}
+func (this *CreateSpecType_RuleList) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&secret_policy.CreateSpecType_RuleList{` +
+		`RuleList:` + fmt.Sprintf("%#v", this.RuleList) + `}`}, ", ")
+	return s
+}
+func (this *CreateSpecType_LegacyRuleList) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&secret_policy.CreateSpecType_LegacyRuleList{` +
+		`LegacyRuleList:` + fmt.Sprintf("%#v", this.LegacyRuleList) + `}`}, ", ")
+	return s
 }
 func (this *ReplaceSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 8)
+	s := make([]string, 0, 10)
 	s = append(s, "&secret_policy.ReplaceSpecType{")
 	s = append(s, "Algo: "+fmt.Sprintf("%#v", this.Algo)+",\n")
 	if this.Rules != nil {
 		s = append(s, "Rules: "+fmt.Sprintf("%#v", this.Rules)+",\n")
 	}
-	s = append(s, "AllowVolterra: "+fmt.Sprintf("%#v", this.AllowVolterra)+",\n")
+	s = append(s, "AllowF5Xc: "+fmt.Sprintf("%#v", this.AllowF5Xc)+",\n")
 	if this.DecryptCacheTimeout != nil {
 		s = append(s, "DecryptCacheTimeout: "+fmt.Sprintf("%#v", this.DecryptCacheTimeout)+",\n")
 	}
+	if this.RuleChoice != nil {
+		s = append(s, "RuleChoice: "+fmt.Sprintf("%#v", this.RuleChoice)+",\n")
+	}
 	s = append(s, "}")
 	return strings.Join(s, "")
+}
+func (this *ReplaceSpecType_RuleList) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&secret_policy.ReplaceSpecType_RuleList{` +
+		`RuleList:` + fmt.Sprintf("%#v", this.RuleList) + `}`}, ", ")
+	return s
+}
+func (this *ReplaceSpecType_LegacyRuleList) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&secret_policy.ReplaceSpecType_LegacyRuleList{` +
+		`LegacyRuleList:` + fmt.Sprintf("%#v", this.LegacyRuleList) + `}`}, ", ")
+	return s
 }
 func (this *GetSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 10)
+	s := make([]string, 0, 12)
 	s = append(s, "&secret_policy.GetSpecType{")
 	s = append(s, "Algo: "+fmt.Sprintf("%#v", this.Algo)+",\n")
 	if this.Rules != nil {
 		s = append(s, "Rules: "+fmt.Sprintf("%#v", this.Rules)+",\n")
 	}
-	s = append(s, "AllowVolterra: "+fmt.Sprintf("%#v", this.AllowVolterra)+",\n")
+	s = append(s, "AllowF5Xc: "+fmt.Sprintf("%#v", this.AllowF5Xc)+",\n")
 	if this.DecryptCacheTimeout != nil {
 		s = append(s, "DecryptCacheTimeout: "+fmt.Sprintf("%#v", this.DecryptCacheTimeout)+",\n")
 	}
@@ -668,8 +1501,27 @@ func (this *GetSpecType) GoString() string {
 	if this.DeletionTime != nil {
 		s = append(s, "DeletionTime: "+fmt.Sprintf("%#v", this.DeletionTime)+",\n")
 	}
+	if this.RuleChoice != nil {
+		s = append(s, "RuleChoice: "+fmt.Sprintf("%#v", this.RuleChoice)+",\n")
+	}
 	s = append(s, "}")
 	return strings.Join(s, "")
+}
+func (this *GetSpecType_RuleList) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&secret_policy.GetSpecType_RuleList{` +
+		`RuleList:` + fmt.Sprintf("%#v", this.RuleList) + `}`}, ", ")
+	return s
+}
+func (this *GetSpecType_LegacyRuleList) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&secret_policy.GetSpecType_LegacyRuleList{` +
+		`LegacyRuleList:` + fmt.Sprintf("%#v", this.LegacyRuleList) + `}`}, ", ")
+	return s
 }
 func valueToGoStringTypes(v interface{}, typ string) string {
 	rv := reflect.ValueOf(v)
@@ -679,6 +1531,127 @@ func valueToGoStringTypes(v interface{}, typ string) string {
 	pv := reflect.Indirect(rv).Interface()
 	return fmt.Sprintf("func(v %v) *%v { return &v } ( %#v )", typ, typ, pv)
 }
+func (m *Rule) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *Rule) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *Rule) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.Spec != nil {
+		{
+			size, err := m.Spec.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x12
+	}
+	if m.Metadata != nil {
+		{
+			size, err := m.Metadata.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *RuleList) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *RuleList) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *RuleList) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.Rules) > 0 {
+		for iNdEx := len(m.Rules) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.Rules[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0xa
+		}
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *LegacyRuleList) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *LegacyRuleList) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *LegacyRuleList) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.Rules) > 0 {
+		for iNdEx := len(m.Rules) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.Rules[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0xa
+		}
+	}
+	return len(dAtA) - i, nil
+}
+
 func (m *GlobalSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -699,6 +1672,29 @@ func (m *GlobalSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	if m.ViewInternal != nil {
+		{
+			size, err := m.ViewInternal.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x3e
+		i--
+		dAtA[i] = 0xc2
+	}
+	if m.RuleChoice != nil {
+		{
+			size := m.RuleChoice.Size()
+			i -= size
+			if _, err := m.RuleChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
 	if m.DeleteDelay != nil {
 		{
 			size, err := m.DeleteDelay.MarshalToSizedBuffer(dAtA[:i])
@@ -735,9 +1731,9 @@ func (m *GlobalSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		i--
 		dAtA[i] = 0x22
 	}
-	if m.AllowVolterra {
+	if m.AllowF5Xc {
 		i--
-		if m.AllowVolterra {
+		if m.AllowF5Xc {
 			dAtA[i] = 1
 		} else {
 			dAtA[i] = 0
@@ -767,6 +1763,48 @@ func (m *GlobalSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
+func (m *GlobalSpecType_RuleList) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType_RuleList) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.RuleList != nil {
+		{
+			size, err := m.RuleList.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x6a
+	}
+	return len(dAtA) - i, nil
+}
+func (m *GlobalSpecType_LegacyRuleList) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType_LegacyRuleList) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.LegacyRuleList != nil {
+		{
+			size, err := m.LegacyRuleList.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x7a
+	}
+	return len(dAtA) - i, nil
+}
 func (m *CreateSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -787,6 +1825,15 @@ func (m *CreateSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	if m.RuleChoice != nil {
+		{
+			size := m.RuleChoice.Size()
+			i -= size
+			if _, err := m.RuleChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
 	if m.DecryptCacheTimeout != nil {
 		{
 			size, err := m.DecryptCacheTimeout.MarshalToSizedBuffer(dAtA[:i])
@@ -799,9 +1846,9 @@ func (m *CreateSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		i--
 		dAtA[i] = 0x22
 	}
-	if m.AllowVolterra {
+	if m.AllowF5Xc {
 		i--
-		if m.AllowVolterra {
+		if m.AllowF5Xc {
 			dAtA[i] = 1
 		} else {
 			dAtA[i] = 0
@@ -831,6 +1878,48 @@ func (m *CreateSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
+func (m *CreateSpecType_RuleList) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType_RuleList) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.RuleList != nil {
+		{
+			size, err := m.RuleList.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x6a
+	}
+	return len(dAtA) - i, nil
+}
+func (m *CreateSpecType_LegacyRuleList) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType_LegacyRuleList) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.LegacyRuleList != nil {
+		{
+			size, err := m.LegacyRuleList.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x7a
+	}
+	return len(dAtA) - i, nil
+}
 func (m *ReplaceSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -851,6 +1940,15 @@ func (m *ReplaceSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	if m.RuleChoice != nil {
+		{
+			size := m.RuleChoice.Size()
+			i -= size
+			if _, err := m.RuleChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
 	if m.DecryptCacheTimeout != nil {
 		{
 			size, err := m.DecryptCacheTimeout.MarshalToSizedBuffer(dAtA[:i])
@@ -863,9 +1961,9 @@ func (m *ReplaceSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		i--
 		dAtA[i] = 0x22
 	}
-	if m.AllowVolterra {
+	if m.AllowF5Xc {
 		i--
-		if m.AllowVolterra {
+		if m.AllowF5Xc {
 			dAtA[i] = 1
 		} else {
 			dAtA[i] = 0
@@ -895,6 +1993,48 @@ func (m *ReplaceSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
+func (m *ReplaceSpecType_RuleList) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType_RuleList) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.RuleList != nil {
+		{
+			size, err := m.RuleList.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x6a
+	}
+	return len(dAtA) - i, nil
+}
+func (m *ReplaceSpecType_LegacyRuleList) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType_LegacyRuleList) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.LegacyRuleList != nil {
+		{
+			size, err := m.LegacyRuleList.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x7a
+	}
+	return len(dAtA) - i, nil
+}
 func (m *GetSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -915,6 +2055,15 @@ func (m *GetSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	if m.RuleChoice != nil {
+		{
+			size := m.RuleChoice.Size()
+			i -= size
+			if _, err := m.RuleChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
 	if m.DeletionTime != nil {
 		{
 			size, err := m.DeletionTime.MarshalToSizedBuffer(dAtA[:i])
@@ -949,9 +2098,9 @@ func (m *GetSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		i--
 		dAtA[i] = 0x22
 	}
-	if m.AllowVolterra {
+	if m.AllowF5Xc {
 		i--
-		if m.AllowVolterra {
+		if m.AllowF5Xc {
 			dAtA[i] = 1
 		} else {
 			dAtA[i] = 0
@@ -981,6 +2130,48 @@ func (m *GetSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
+func (m *GetSpecType_RuleList) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType_RuleList) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.RuleList != nil {
+		{
+			size, err := m.RuleList.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x6a
+	}
+	return len(dAtA) - i, nil
+}
+func (m *GetSpecType_LegacyRuleList) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType_LegacyRuleList) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.LegacyRuleList != nil {
+		{
+			size, err := m.LegacyRuleList.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x7a
+	}
+	return len(dAtA) - i, nil
+}
 func encodeVarintTypes(dAtA []byte, offset int, v uint64) int {
 	offset -= sovTypes(v)
 	base := offset
@@ -992,6 +2183,53 @@ func encodeVarintTypes(dAtA []byte, offset int, v uint64) int {
 	dAtA[offset] = uint8(v)
 	return base
 }
+func (m *Rule) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Metadata != nil {
+		l = m.Metadata.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.Spec != nil {
+		l = m.Spec.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+
+func (m *RuleList) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if len(m.Rules) > 0 {
+		for _, e := range m.Rules {
+			l = e.Size()
+			n += 1 + l + sovTypes(uint64(l))
+		}
+	}
+	return n
+}
+
+func (m *LegacyRuleList) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if len(m.Rules) > 0 {
+		for _, e := range m.Rules {
+			l = e.Size()
+			n += 1 + l + sovTypes(uint64(l))
+		}
+	}
+	return n
+}
+
 func (m *GlobalSpecType) Size() (n int) {
 	if m == nil {
 		return 0
@@ -1007,7 +2245,7 @@ func (m *GlobalSpecType) Size() (n int) {
 			n += 1 + l + sovTypes(uint64(l))
 		}
 	}
-	if m.AllowVolterra {
+	if m.AllowF5Xc {
 		n += 2
 	}
 	if m.DecryptCacheTimeout != nil {
@@ -1022,9 +2260,40 @@ func (m *GlobalSpecType) Size() (n int) {
 		l = m.DeleteDelay.Size()
 		n += 1 + l + sovTypes(uint64(l))
 	}
+	if m.RuleChoice != nil {
+		n += m.RuleChoice.Size()
+	}
+	if m.ViewInternal != nil {
+		l = m.ViewInternal.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
 	return n
 }
 
+func (m *GlobalSpecType_RuleList) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.RuleList != nil {
+		l = m.RuleList.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *GlobalSpecType_LegacyRuleList) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.LegacyRuleList != nil {
+		l = m.LegacyRuleList.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
 func (m *CreateSpecType) Size() (n int) {
 	if m == nil {
 		return 0
@@ -1040,16 +2309,43 @@ func (m *CreateSpecType) Size() (n int) {
 			n += 1 + l + sovTypes(uint64(l))
 		}
 	}
-	if m.AllowVolterra {
+	if m.AllowF5Xc {
 		n += 2
 	}
 	if m.DecryptCacheTimeout != nil {
 		l = m.DecryptCacheTimeout.Size()
 		n += 1 + l + sovTypes(uint64(l))
 	}
+	if m.RuleChoice != nil {
+		n += m.RuleChoice.Size()
+	}
 	return n
 }
 
+func (m *CreateSpecType_RuleList) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.RuleList != nil {
+		l = m.RuleList.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *CreateSpecType_LegacyRuleList) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.LegacyRuleList != nil {
+		l = m.LegacyRuleList.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
 func (m *ReplaceSpecType) Size() (n int) {
 	if m == nil {
 		return 0
@@ -1065,16 +2361,43 @@ func (m *ReplaceSpecType) Size() (n int) {
 			n += 1 + l + sovTypes(uint64(l))
 		}
 	}
-	if m.AllowVolterra {
+	if m.AllowF5Xc {
 		n += 2
 	}
 	if m.DecryptCacheTimeout != nil {
 		l = m.DecryptCacheTimeout.Size()
 		n += 1 + l + sovTypes(uint64(l))
 	}
+	if m.RuleChoice != nil {
+		n += m.RuleChoice.Size()
+	}
 	return n
 }
 
+func (m *ReplaceSpecType_RuleList) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.RuleList != nil {
+		l = m.RuleList.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *ReplaceSpecType_LegacyRuleList) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.LegacyRuleList != nil {
+		l = m.LegacyRuleList.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
 func (m *GetSpecType) Size() (n int) {
 	if m == nil {
 		return 0
@@ -1090,7 +2413,7 @@ func (m *GetSpecType) Size() (n int) {
 			n += 1 + l + sovTypes(uint64(l))
 		}
 	}
-	if m.AllowVolterra {
+	if m.AllowF5Xc {
 		n += 2
 	}
 	if m.DecryptCacheTimeout != nil {
@@ -1104,6 +2427,34 @@ func (m *GetSpecType) Size() (n int) {
 		l = m.DeletionTime.Size()
 		n += 1 + l + sovTypes(uint64(l))
 	}
+	if m.RuleChoice != nil {
+		n += m.RuleChoice.Size()
+	}
+	return n
+}
+
+func (m *GetSpecType_RuleList) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.RuleList != nil {
+		l = m.RuleList.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *GetSpecType_LegacyRuleList) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.LegacyRuleList != nil {
+		l = m.LegacyRuleList.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
 	return n
 }
 
@@ -1112,6 +2463,47 @@ func sovTypes(x uint64) (n int) {
 }
 func sozTypes(x uint64) (n int) {
 	return sovTypes(uint64((x << 1) ^ uint64((int64(x) >> 63))))
+}
+func (this *Rule) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&Rule{`,
+		`Metadata:` + strings.Replace(fmt.Sprintf("%v", this.Metadata), "MessageMetaType", "schema.MessageMetaType", 1) + `,`,
+		`Spec:` + strings.Replace(fmt.Sprintf("%v", this.Spec), "GlobalSpecType", "secret_policy_rule.GlobalSpecType", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *RuleList) String() string {
+	if this == nil {
+		return "nil"
+	}
+	repeatedStringForRules := "[]*Rule{"
+	for _, f := range this.Rules {
+		repeatedStringForRules += strings.Replace(f.String(), "Rule", "Rule", 1) + ","
+	}
+	repeatedStringForRules += "}"
+	s := strings.Join([]string{`&RuleList{`,
+		`Rules:` + repeatedStringForRules + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *LegacyRuleList) String() string {
+	if this == nil {
+		return "nil"
+	}
+	repeatedStringForRules := "[]*ObjectRefType{"
+	for _, f := range this.Rules {
+		repeatedStringForRules += strings.Replace(fmt.Sprintf("%v", f), "ObjectRefType", "schema.ObjectRefType", 1) + ","
+	}
+	repeatedStringForRules += "}"
+	s := strings.Join([]string{`&LegacyRuleList{`,
+		`Rules:` + repeatedStringForRules + `,`,
+		`}`,
+	}, "")
+	return s
 }
 func (this *GlobalSpecType) String() string {
 	if this == nil {
@@ -1125,10 +2517,32 @@ func (this *GlobalSpecType) String() string {
 	s := strings.Join([]string{`&GlobalSpecType{`,
 		`Algo:` + fmt.Sprintf("%v", this.Algo) + `,`,
 		`Rules:` + repeatedStringForRules + `,`,
-		`AllowVolterra:` + fmt.Sprintf("%v", this.AllowVolterra) + `,`,
+		`AllowF5Xc:` + fmt.Sprintf("%v", this.AllowF5Xc) + `,`,
 		`DecryptCacheTimeout:` + strings.Replace(fmt.Sprintf("%v", this.DecryptCacheTimeout), "Duration", "types.Duration", 1) + `,`,
 		`DeletedAt:` + strings.Replace(fmt.Sprintf("%v", this.DeletedAt), "Timestamp", "types.Timestamp", 1) + `,`,
 		`DeleteDelay:` + strings.Replace(fmt.Sprintf("%v", this.DeleteDelay), "Duration", "types.Duration", 1) + `,`,
+		`RuleChoice:` + fmt.Sprintf("%v", this.RuleChoice) + `,`,
+		`ViewInternal:` + strings.Replace(fmt.Sprintf("%v", this.ViewInternal), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GlobalSpecType_RuleList) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GlobalSpecType_RuleList{`,
+		`RuleList:` + strings.Replace(fmt.Sprintf("%v", this.RuleList), "RuleList", "RuleList", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GlobalSpecType_LegacyRuleList) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GlobalSpecType_LegacyRuleList{`,
+		`LegacyRuleList:` + strings.Replace(fmt.Sprintf("%v", this.LegacyRuleList), "LegacyRuleList", "LegacyRuleList", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -1145,8 +2559,29 @@ func (this *CreateSpecType) String() string {
 	s := strings.Join([]string{`&CreateSpecType{`,
 		`Algo:` + fmt.Sprintf("%v", this.Algo) + `,`,
 		`Rules:` + repeatedStringForRules + `,`,
-		`AllowVolterra:` + fmt.Sprintf("%v", this.AllowVolterra) + `,`,
+		`AllowF5Xc:` + fmt.Sprintf("%v", this.AllowF5Xc) + `,`,
 		`DecryptCacheTimeout:` + strings.Replace(fmt.Sprintf("%v", this.DecryptCacheTimeout), "Duration", "types.Duration", 1) + `,`,
+		`RuleChoice:` + fmt.Sprintf("%v", this.RuleChoice) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *CreateSpecType_RuleList) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&CreateSpecType_RuleList{`,
+		`RuleList:` + strings.Replace(fmt.Sprintf("%v", this.RuleList), "RuleList", "RuleList", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *CreateSpecType_LegacyRuleList) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&CreateSpecType_LegacyRuleList{`,
+		`LegacyRuleList:` + strings.Replace(fmt.Sprintf("%v", this.LegacyRuleList), "LegacyRuleList", "LegacyRuleList", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -1163,8 +2598,29 @@ func (this *ReplaceSpecType) String() string {
 	s := strings.Join([]string{`&ReplaceSpecType{`,
 		`Algo:` + fmt.Sprintf("%v", this.Algo) + `,`,
 		`Rules:` + repeatedStringForRules + `,`,
-		`AllowVolterra:` + fmt.Sprintf("%v", this.AllowVolterra) + `,`,
+		`AllowF5Xc:` + fmt.Sprintf("%v", this.AllowF5Xc) + `,`,
 		`DecryptCacheTimeout:` + strings.Replace(fmt.Sprintf("%v", this.DecryptCacheTimeout), "Duration", "types.Duration", 1) + `,`,
+		`RuleChoice:` + fmt.Sprintf("%v", this.RuleChoice) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ReplaceSpecType_RuleList) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ReplaceSpecType_RuleList{`,
+		`RuleList:` + strings.Replace(fmt.Sprintf("%v", this.RuleList), "RuleList", "RuleList", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ReplaceSpecType_LegacyRuleList) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ReplaceSpecType_LegacyRuleList{`,
+		`LegacyRuleList:` + strings.Replace(fmt.Sprintf("%v", this.LegacyRuleList), "LegacyRuleList", "LegacyRuleList", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -1181,10 +2637,31 @@ func (this *GetSpecType) String() string {
 	s := strings.Join([]string{`&GetSpecType{`,
 		`Algo:` + fmt.Sprintf("%v", this.Algo) + `,`,
 		`Rules:` + repeatedStringForRules + `,`,
-		`AllowVolterra:` + fmt.Sprintf("%v", this.AllowVolterra) + `,`,
+		`AllowF5Xc:` + fmt.Sprintf("%v", this.AllowF5Xc) + `,`,
 		`DecryptCacheTimeout:` + strings.Replace(fmt.Sprintf("%v", this.DecryptCacheTimeout), "Duration", "types.Duration", 1) + `,`,
 		`MarkedForDelete:` + fmt.Sprintf("%v", this.MarkedForDelete) + `,`,
 		`DeletionTime:` + strings.Replace(fmt.Sprintf("%v", this.DeletionTime), "Timestamp", "types.Timestamp", 1) + `,`,
+		`RuleChoice:` + fmt.Sprintf("%v", this.RuleChoice) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GetSpecType_RuleList) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GetSpecType_RuleList{`,
+		`RuleList:` + strings.Replace(fmt.Sprintf("%v", this.RuleList), "RuleList", "RuleList", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GetSpecType_LegacyRuleList) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GetSpecType_LegacyRuleList{`,
+		`LegacyRuleList:` + strings.Replace(fmt.Sprintf("%v", this.LegacyRuleList), "LegacyRuleList", "LegacyRuleList", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -1196,6 +2673,305 @@ func valueToStringTypes(v interface{}) string {
 	}
 	pv := reflect.Indirect(rv).Interface()
 	return fmt.Sprintf("*%v", pv)
+}
+func (m *Rule) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: Rule: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: Rule: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Metadata", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Metadata == nil {
+				m.Metadata = &schema.MessageMetaType{}
+			}
+			if err := m.Metadata.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Spec", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Spec == nil {
+				m.Spec = &secret_policy_rule.GlobalSpecType{}
+			}
+			if err := m.Spec.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *RuleList) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: RuleList: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: RuleList: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Rules", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Rules = append(m.Rules, &Rule{})
+			if err := m.Rules[len(m.Rules)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *LegacyRuleList) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: LegacyRuleList: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: LegacyRuleList: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Rules", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Rules = append(m.Rules, &schema.ObjectRefType{})
+			if err := m.Rules[len(m.Rules)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
 }
 func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
@@ -1281,7 +3057,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 			iNdEx = postIndex
 		case 3:
 			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field AllowVolterra", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field AllowF5Xc", wireType)
 			}
 			var v int
 			for shift := uint(0); ; shift += 7 {
@@ -1298,7 +3074,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 					break
 				}
 			}
-			m.AllowVolterra = bool(v != 0)
+			m.AllowF5Xc = bool(v != 0)
 		case 4:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field DecryptCacheTimeout", wireType)
@@ -1404,6 +3180,112 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				m.DeleteDelay = &types.Duration{}
 			}
 			if err := m.DeleteDelay.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 13:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field RuleList", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &RuleList{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.RuleChoice = &GlobalSpecType_RuleList{v}
+			iNdEx = postIndex
+		case 15:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field LegacyRuleList", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &LegacyRuleList{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.RuleChoice = &GlobalSpecType_LegacyRuleList{v}
+			iNdEx = postIndex
+		case 1000:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ViewInternal", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.ViewInternal == nil {
+				m.ViewInternal = &views.ObjectRefType{}
+			}
+			if err := m.ViewInternal.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex
@@ -1515,7 +3397,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 			iNdEx = postIndex
 		case 3:
 			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field AllowVolterra", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field AllowF5Xc", wireType)
 			}
 			var v int
 			for shift := uint(0); ; shift += 7 {
@@ -1532,7 +3414,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 					break
 				}
 			}
-			m.AllowVolterra = bool(v != 0)
+			m.AllowF5Xc = bool(v != 0)
 		case 4:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field DecryptCacheTimeout", wireType)
@@ -1568,6 +3450,76 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 			if err := m.DecryptCacheTimeout.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
+			iNdEx = postIndex
+		case 13:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field RuleList", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &RuleList{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.RuleChoice = &CreateSpecType_RuleList{v}
+			iNdEx = postIndex
+		case 15:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field LegacyRuleList", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &LegacyRuleList{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.RuleChoice = &CreateSpecType_LegacyRuleList{v}
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
@@ -1677,7 +3629,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 			iNdEx = postIndex
 		case 3:
 			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field AllowVolterra", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field AllowF5Xc", wireType)
 			}
 			var v int
 			for shift := uint(0); ; shift += 7 {
@@ -1694,7 +3646,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 					break
 				}
 			}
-			m.AllowVolterra = bool(v != 0)
+			m.AllowF5Xc = bool(v != 0)
 		case 4:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field DecryptCacheTimeout", wireType)
@@ -1730,6 +3682,76 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 			if err := m.DecryptCacheTimeout.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
+			iNdEx = postIndex
+		case 13:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field RuleList", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &RuleList{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.RuleChoice = &ReplaceSpecType_RuleList{v}
+			iNdEx = postIndex
+		case 15:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field LegacyRuleList", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &LegacyRuleList{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.RuleChoice = &ReplaceSpecType_LegacyRuleList{v}
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
@@ -1839,7 +3861,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 			iNdEx = postIndex
 		case 3:
 			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field AllowVolterra", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field AllowF5Xc", wireType)
 			}
 			var v int
 			for shift := uint(0); ; shift += 7 {
@@ -1856,7 +3878,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 					break
 				}
 			}
-			m.AllowVolterra = bool(v != 0)
+			m.AllowF5Xc = bool(v != 0)
 		case 4:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field DecryptCacheTimeout", wireType)
@@ -1948,6 +3970,76 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 			if err := m.DeletionTime.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
+			iNdEx = postIndex
+		case 13:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field RuleList", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &RuleList{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.RuleChoice = &GetSpecType_RuleList{v}
+			iNdEx = postIndex
+		case 15:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field LegacyRuleList", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &LegacyRuleList{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.RuleChoice = &GetSpecType_LegacyRuleList{v}
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex

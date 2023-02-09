@@ -21,7 +21,14 @@ resource "volterra_gcp_vpc_site" "example" {
   namespace = "staging"
 
   // One of the arguments from this list "default_blocked_services blocked_services" must be set
-  default_blocked_services = true
+
+  blocked_services {
+    blocked_sevice {
+      // One of the arguments from this list "dns ssh web_user_interface" must be set
+      ssh          = true
+      network_type = "network_type"
+    }
+  }
 
   // One of the arguments from this list "cloud_credentials" must be set
 
@@ -32,14 +39,8 @@ resource "volterra_gcp_vpc_site" "example" {
   }
   gcp_region    = ["us-west1"]
   instance_type = ["n1-standard-4"]
-
   // One of the arguments from this list "logs_streaming_disabled log_receiver" must be set
-
-  log_receiver {
-    name      = "test1"
-    namespace = "staging"
-    tenant    = "acmecorp"
-  }
+  logs_streaming_disabled = true
 
   // One of the arguments from this list "ingress_gw ingress_egress_gw voltstack_cluster" must be set
 
@@ -49,7 +50,7 @@ resource "volterra_gcp_vpc_site" "example" {
     gcp_zone_names = ["us-west1-a, us-west1-b, us-west1-c"]
 
     local_network {
-      // One of the arguments from this list "new_network_autogenerate new_network existing_network" must be set
+      // One of the arguments from this list "existing_network new_network_autogenerate new_network" must be set
 
       new_network_autogenerate {
         autogenerate = true
@@ -66,6 +67,11 @@ resource "volterra_gcp_vpc_site" "example" {
     }
 
     node_number = "1"
+
+    performance_enhancement_mode {
+      // One of the arguments from this list "perf_mode_l7_enhanced perf_mode_l3_enhanced" must be set
+      perf_mode_l7_enhanced = true
+    }
   }
 }
 
@@ -94,7 +100,7 @@ Argument Reference
 
 `blocked_services` - (Optional) Use custom blocked services configuration. See [Blocked Services ](#blocked-services) below for details.
 
-`default_blocked_services` - (Optional) Use default dehavior of allowing ports mentioned in blocked services (bool).
+`default_blocked_services` - (Optional) Use default behavior of allowing ports mentioned in blocked services (bool).
 
 `coordinates` - (Optional) Site longitude and latitude co-ordinates. See [Coordinates ](#coordinates) below for details.
 
@@ -126,7 +132,7 @@ Argument Reference
 
 `ssh_key` - (Optional) Public SSH key for accessing the site. (`String`).
 
-`sw` - (Optional) Volterra Software Details. See [Sw ](#sw) below for details.
+`sw` - (Optional) F5XC Software Details. See [Sw ](#sw) below for details.
 
 ### Active Enhanced Firewall Policies
 
@@ -148,7 +154,7 @@ Firewall Policies active for this site..
 
 ### Blindfold Secret Info
 
-Blindfold Secret is used for the secrets managed by Volterra Secret Management Service.
+Blindfold Secret is used for the secrets managed by F5XC Secret Management Service.
 
 `decryption_provider` - (Optional) Name of the Secret Management Access object that contains information about the backend Secret Management service. (`String`).
 
@@ -208,17 +214,17 @@ Certificates for generating intermediate certificate for TLS interception..
 
 `description` - (Optional) Description for the certificate (`String`).
 
-`custom_hash_algorithms` - (Optional) Use hash algorithms in the custom order. Volterra will try to fetch ocsp response from the CA in the given order. Additionally, LoadBalancer will not become active until ocspResponse cannot be fetched if the certificate has MustStaple extension set.. See [Custom Hash Algorithms ](#custom-hash-algorithms) below for details.
+`custom_hash_algorithms` - (Optional) Use hash algorithms in the custom order. F5XC will try to fetch ocsp response from the CA in the given order. Additionally, LoadBalancer will not become active until ocspResponse cannot be fetched if the certificate has MustStaple extension set.. See [Custom Hash Algorithms ](#custom-hash-algorithms) below for details.
 
 `disable_ocsp_stapling` - (Optional) This is the default behavior if no choice is selected.. See [Disable Ocsp Stapling ](#disable-ocsp-stapling) below for details.
 
-`use_system_defaults` - (Optional) Volterra will try to fetch OCSPResponse with sha256 and sha1 as HashAlgorithm, in that order.. See [Use System Defaults ](#use-system-defaults) below for details.
+`use_system_defaults` - (Optional) F5XC will try to fetch OCSPResponse with sha256 and sha1 as HashAlgorithm, in that order.. See [Use System Defaults ](#use-system-defaults) below for details.
 
 `private_key` - (Required) TLS Private Key data in unencrypted PEM format including the PEM headers. The data may be optionally secured using BlindFold. TLS key has to match the accompanying certificate.. See [Private Key ](#private-key) below for details.
 
 ### Custom Hash Algorithms
 
-Use hash algorithms in the custom order. Volterra will try to fetch ocsp response from the CA in the given order. Additionally, LoadBalancer will not become active until ocspResponse cannot be fetched if the certificate has MustStaple extension set..
+Use hash algorithms in the custom order. F5XC will try to fetch ocsp response from the CA in the given order. Additionally, LoadBalancer will not become active until ocspResponse cannot be fetched if the certificate has MustStaple extension set..
 
 `hash_algorithms` - (Required) Ordered list of hash algorithms to be used. (`List of Strings`).
 
@@ -232,7 +238,7 @@ Use Custom static route to configure all advanced options.
 
 `nexthop` - (Optional) Nexthop for the route. See [Nexthop ](#nexthop) below for details.
 
-`subnets` - (Optional) List of route prefixes. See [Subnets ](#subnets) below for details.
+`subnets` - (Required) List of route prefixes. See [Subnets ](#subnets) below for details.
 
 ### Default Os Version
 
@@ -382,6 +388,8 @@ Two interface site is useful when site is used as ingress/egress gateway to the 
 
 `outside_subnet` - (Optional) Subnet for the outside interface of the node.. See [Outside Subnet ](#outside-subnet) below for details.
 
+`performance_enhancement_mode` - (Optional) Performance Enhancement Mode to optimize for L3 or L7 networking. See [Performance Enhancement Mode ](#performance-enhancement-mode) below for details.
+
 `sm_connection_public_ip` - (Optional) creating ipsec between two sites which are part of the site mesh group (bool).
 
 `sm_connection_pvt_ip` - (Optional) creating ipsec between two sites which are part of the site mesh group (bool).
@@ -399,6 +407,8 @@ One interface site is useful when site is only used as ingress gateway to the VP
 `local_subnet` - (Optional) Subnet for the local interface of the node.. See [Local Subnet ](#local-subnet) below for details.
 
 `node_number` - (Optional) Number of main nodes to create, either 1 or 3. (`Int`).
+
+`performance_enhancement_mode` - (Optional) Performance Enhancement Mode to optimize for L3 or L7 networking. See [Performance Enhancement Mode ](#performance-enhancement-mode) below for details.
 
 ### Inside Network
 
@@ -586,6 +596,22 @@ Subnet for the outside interface of the node..
 
 `new_subnet` - (Optional) Parameters for creating a new VPC Subnet. See [New Subnet ](#new-subnet) below for details.
 
+### Perf Mode L3 Enhanced
+
+Site optimized for L3 traffic processing.
+
+### Perf Mode L7 Enhanced
+
+Site optimized for L7 traffic processing.
+
+### Performance Enhancement Mode
+
+Performance Enhancement Mode to optimize for L3 or L7 networking.
+
+`perf_mode_l3_enhanced` - (Optional) Site optimized for L3 traffic processing (bool).
+
+`perf_mode_l7_enhanced` - (Optional) Site optimized for L7 traffic processing (bool).
+
 ### Policy
 
 Policy to enable/disable specific domains, with implicit enable all domains.
@@ -600,13 +626,13 @@ TLS Private Key data in unencrypted PEM format including the PEM headers. The da
 
 `secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).
 
-`blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by Volterra Secret Management Service. See [Blindfold Secret Info ](#blindfold-secret-info) below for details.
+`blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Blindfold Secret Info ](#blindfold-secret-info) below for details.
 
 `clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Clear Secret Info ](#clear-secret-info) below for details.
 
 `vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Vault Secret Info ](#vault-secret-info) below for details.
 
-`wingman_secret_info` - (Optional) Secret is given as bootstrap secret in Volterra Security Sidecar. See [Wingman Secret Info ](#wingman-secret-info) below for details.
+`wingman_secret_info` - (Optional) Secret is given as bootstrap secret in F5XC Security Sidecar. See [Wingman Secret Info ](#wingman-secret-info) below for details.
 
 ### Ref
 
@@ -694,11 +720,11 @@ List of route prefixes.
 
 ### Sw
 
-Volterra Software Details.
+F5XC Software Details.
 
 `default_sw_version` - (Optional) Will assign latest available SW version (bool).
 
-`volterra_software_version` - (Optional) Volterra Software Version is optional parameter, which allows to specify target SW version for particular site e.g. crt-20210329-1002. (`String`).
+`volterra_software_version` - (Optional) F5XC Software Version is optional parameter, which allows to specify target SW version for particular site e.g. crt-20210329-1002. (`String`).
 
 ### Tls Intercept
 
@@ -710,7 +736,7 @@ Specify TLS interception configuration for the network connector.
 
 `custom_certificate` - (Optional) Certificates for generating intermediate certificate for TLS interception.. See [Custom Certificate ](#custom-certificate) below for details.
 
-`volterra_certificate` - (Optional) Volterra certificates for generating intermediate certificate for TLS interception. (bool).
+`volterra_certificate` - (Optional) F5XC certificates for generating intermediate certificate for TLS interception. (bool).
 
 `trusted_ca_url` - (Optional) Custom trusted CA certificates for validating upstream server certificate (`String`).
 
@@ -718,7 +744,7 @@ Specify TLS interception configuration for the network connector.
 
 ### Use System Defaults
 
-Volterra will try to fetch OCSPResponse with sha256 and sha1 as HashAlgorithm, in that order..
+F5XC will try to fetch OCSPResponse with sha256 and sha1 as HashAlgorithm, in that order..
 
 ### Vault Secret Info
 
@@ -736,7 +762,7 @@ Vault Secret is used for the secrets managed by Hashicorp Vault.
 
 ### Volterra Certificate
 
-Volterra certificates for generating intermediate certificate for TLS interception..
+F5XC certificates for generating intermediate certificate for TLS interception..
 
 ### Volterra Trusted Ca
 
@@ -798,7 +824,7 @@ Matches the web user interface port.
 
 ### Wingman Secret Info
 
-Secret is given as bootstrap secret in Volterra Security Sidecar.
+Secret is given as bootstrap secret in F5XC Security Sidecar.
 
 `name` - (Required) Name of the secret. (`String`).
 

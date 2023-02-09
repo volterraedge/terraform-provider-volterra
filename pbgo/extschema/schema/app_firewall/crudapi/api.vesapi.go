@@ -2725,7 +2725,7 @@ var APISwaggerJSON string = `{
         },
         "app_firewallAppFirewallViolationType": {
             "type": "string",
-            "description": "List of all supported Violation Types\n\nVIOL_NONE\nVIOL_FILETYPE\nVIOL_METHOD\nVIOL_MANDATORY_HEADER\nVIOL_HTTP_RESPONSE_STATUS\nVIOL_REQUEST_MAX_LENGTH\nVIOL_FILE_UPLOAD\nVIOL_FILE_UPLOAD_IN_BODY\nVIOL_XML_MALFORMED\nVIOL_JSON_MALFORMED\nVIOL_ASM_COOKIE_MODIFIED\nVIOL_HTTP_PROTOCOL_MULTIPLE_HOST_HEADERS\nVIOL_HTTP_PROTOCOL_BAD_HOST_HEADER_VALUE\nVIOL_HTTP_PROTOCOL_UNPARSABLE_REQUEST_CONTENT\nVIOL_HTTP_PROTOCOL_NULL_IN_REQUEST\nVIOL_HTTP_PROTOCOL_BAD_HTTP_VERSION\nVIOL_HTTP_PROTOCOL_CRLF_CHARACTERS_BEFORE_REQUEST_START\nVIOL_HTTP_PROTOCOL_NO_HOST_HEADER_IN_HTTP_1_1_REQUEST\nVIOL_HTTP_PROTOCOL_BAD_MULTIPART_PARAMETERS_PARSING\nVIOL_HTTP_PROTOCOL_SEVERAL_CONTENT_LENGTH_HEADERS\nVIOL_HTTP_PROTOCOL_CONTENT_LENGTH_SHOULD_BE_A_POSITIVE_NUMBER\nVIOL_EVASION_DIRECTORY_TRAVERSALS\nVIOL_MALFORMED_REQUEST\nVIOL_EVASION_MULTIPLE_DECODING\nVIOL_DATA_GUARD\nVIOL_EVASION_APACHE_WHITESPACE\nVIOL_COOKIE_MODIFIED\nVIOL_EVASION_IIS_UNICODE_CODEPOINTS\nVIOL_EVASION_IIS_BACKSLASHES\nVIOL_EVASION_PERCENT_U_DECODING\nVIOL_EVASION_BARE_BYTE_DECODING\nVIOL_EVASION_BAD_UNESCAPE\nVIOL_HTTP_PROTOCOL_BAD_MULTIPART_FORMDATA_REQUEST_PARSING\nVIOL_HTTP_PROTOCOL_BODY_IN_GET_OR_HEAD_REQUEST\nVIOL_HTTP_PROTOCOL_HIGH_ASCII_CHARACTERS_IN_HEADERS\nVIOL_ENCODING\nVIOL_COOKIE_MALFORMED",
+            "description": "List of all supported Violation Types\n\nVIOL_NONE\nVIOL_FILETYPE\nVIOL_METHOD\nVIOL_MANDATORY_HEADER\nVIOL_HTTP_RESPONSE_STATUS\nVIOL_REQUEST_MAX_LENGTH\nVIOL_FILE_UPLOAD\nVIOL_FILE_UPLOAD_IN_BODY\nVIOL_XML_MALFORMED\nVIOL_JSON_MALFORMED\nVIOL_ASM_COOKIE_MODIFIED\nVIOL_HTTP_PROTOCOL_MULTIPLE_HOST_HEADERS\nVIOL_HTTP_PROTOCOL_BAD_HOST_HEADER_VALUE\nVIOL_HTTP_PROTOCOL_UNPARSABLE_REQUEST_CONTENT\nVIOL_HTTP_PROTOCOL_NULL_IN_REQUEST\nVIOL_HTTP_PROTOCOL_BAD_HTTP_VERSION\nVIOL_HTTP_PROTOCOL_CRLF_CHARACTERS_BEFORE_REQUEST_START\nVIOL_HTTP_PROTOCOL_NO_HOST_HEADER_IN_HTTP_1_1_REQUEST\nVIOL_HTTP_PROTOCOL_BAD_MULTIPART_PARAMETERS_PARSING\nVIOL_HTTP_PROTOCOL_SEVERAL_CONTENT_LENGTH_HEADERS\nVIOL_HTTP_PROTOCOL_CONTENT_LENGTH_SHOULD_BE_A_POSITIVE_NUMBER\nVIOL_EVASION_DIRECTORY_TRAVERSALS\nVIOL_MALFORMED_REQUEST\nVIOL_EVASION_MULTIPLE_DECODING\nVIOL_DATA_GUARD\nVIOL_EVASION_APACHE_WHITESPACE\nVIOL_COOKIE_MODIFIED\nVIOL_EVASION_IIS_UNICODE_CODEPOINTS\nVIOL_EVASION_IIS_BACKSLASHES\nVIOL_EVASION_PERCENT_U_DECODING\nVIOL_EVASION_BARE_BYTE_DECODING\nVIOL_EVASION_BAD_UNESCAPE\nVIOL_HTTP_PROTOCOL_BAD_MULTIPART_FORMDATA_REQUEST_PARSING\nVIOL_HTTP_PROTOCOL_BODY_IN_GET_OR_HEAD_REQUEST\nVIOL_HTTP_PROTOCOL_HIGH_ASCII_CHARACTERS_IN_HEADERS\nVIOL_ENCODING\nVIOL_COOKIE_MALFORMED\nVIOL_GRAPHQL_FORMAT\nVIOL_GRAPHQL_MALFORMED\nVIOL_GRAPHQL_INTROSPECTION_QUERY",
             "title": "App Firewall Violation Type",
             "enum": [
                 "VIOL_NONE",
@@ -2764,7 +2764,10 @@ var APISwaggerJSON string = `{
                 "VIOL_HTTP_PROTOCOL_BODY_IN_GET_OR_HEAD_REQUEST",
                 "VIOL_HTTP_PROTOCOL_HIGH_ASCII_CHARACTERS_IN_HEADERS",
                 "VIOL_ENCODING",
-                "VIOL_COOKIE_MALFORMED"
+                "VIOL_COOKIE_MALFORMED",
+                "VIOL_GRAPHQL_FORMAT",
+                "VIOL_GRAPHQL_MALFORMED",
+                "VIOL_GRAPHQL_INTROSPECTION_QUERY"
             ],
             "default": "VIOL_NONE",
             "x-displayname": "App Firewall Violation Type",
@@ -2772,7 +2775,7 @@ var APISwaggerJSON string = `{
         },
         "app_firewallAttackType": {
             "type": "string",
-            "description": "List of all Attack Types\n\nATTACK_TYPE_NONE\nATTACK_TYPE_NON_BROWSER_CLIENT\nATTACK_TYPE_OTHER_APPLICATION_ATTACKS\nATTACK_TYPE_TROJAN_BACKDOOR_SPYWARE\nATTACK_TYPE_DETECTION_EVASION\nATTACK_TYPE_VULNERABILITY_SCAN\nATTACK_TYPE_ABUSE_OF_FUNCTIONALITY\nATTACK_TYPE_AUTHENTICATION_AUTHORIZATION_ATTACKS\nATTACK_TYPE_BUFFER_OVERFLOW\nATTACK_TYPE_PREDICTABLE_RESOURCE_LOCATION\nATTACK_TYPE_INFORMATION_LEAKAGE\nATTACK_TYPE_DIRECTORY_INDEXING\nATTACK_TYPE_PATH_TRAVERSAL\nATTACK_TYPE_XPATH_INJECTION\nATTACK_TYPE_LDAP_INJECTION\nATTACK_TYPE_SERVER_SIDE_CODE_INJECTION\nATTACK_TYPE_COMMAND_EXECUTION\nATTACK_TYPE_SQL_INJECTION\nATTACK_TYPE_CROSS_SITE_SCRIPTING\nATTACK_TYPE_DENIAL_OF_SERVICE\nATTACK_TYPE_HTTP_PARSER_ATTACK\nATTACK_TYPE_SESSION_HIJACKING\nATTACK_TYPE_HTTP_RESPONSE_SPLITTING\nATTACK_TYPE_FORCEFUL_BROWSING\nATTACK_TYPE_REMOTE_FILE_INCLUDE\nATTACK_TYPE_MALICIOUS_FILE_UPLOAD",
+            "description": "List of all Attack Types\n\nATTACK_TYPE_NONE\nATTACK_TYPE_NON_BROWSER_CLIENT\nATTACK_TYPE_OTHER_APPLICATION_ATTACKS\nATTACK_TYPE_TROJAN_BACKDOOR_SPYWARE\nATTACK_TYPE_DETECTION_EVASION\nATTACK_TYPE_VULNERABILITY_SCAN\nATTACK_TYPE_ABUSE_OF_FUNCTIONALITY\nATTACK_TYPE_AUTHENTICATION_AUTHORIZATION_ATTACKS\nATTACK_TYPE_BUFFER_OVERFLOW\nATTACK_TYPE_PREDICTABLE_RESOURCE_LOCATION\nATTACK_TYPE_INFORMATION_LEAKAGE\nATTACK_TYPE_DIRECTORY_INDEXING\nATTACK_TYPE_PATH_TRAVERSAL\nATTACK_TYPE_XPATH_INJECTION\nATTACK_TYPE_LDAP_INJECTION\nATTACK_TYPE_SERVER_SIDE_CODE_INJECTION\nATTACK_TYPE_COMMAND_EXECUTION\nATTACK_TYPE_SQL_INJECTION\nATTACK_TYPE_CROSS_SITE_SCRIPTING\nATTACK_TYPE_DENIAL_OF_SERVICE\nATTACK_TYPE_HTTP_PARSER_ATTACK\nATTACK_TYPE_SESSION_HIJACKING\nATTACK_TYPE_HTTP_RESPONSE_SPLITTING\nATTACK_TYPE_FORCEFUL_BROWSING\nATTACK_TYPE_REMOTE_FILE_INCLUDE\nATTACK_TYPE_MALICIOUS_FILE_UPLOAD\nATTACK_TYPE_GRAPHQL_PARSER_ATTACK",
             "title": "AttackType",
             "enum": [
                 "ATTACK_TYPE_NONE",
@@ -2800,7 +2803,8 @@ var APISwaggerJSON string = `{
                 "ATTACK_TYPE_HTTP_RESPONSE_SPLITTING",
                 "ATTACK_TYPE_FORCEFUL_BROWSING",
                 "ATTACK_TYPE_REMOTE_FILE_INCLUDE",
-                "ATTACK_TYPE_MALICIOUS_FILE_UPLOAD"
+                "ATTACK_TYPE_MALICIOUS_FILE_UPLOAD",
+                "ATTACK_TYPE_GRAPHQL_PARSER_ATTACK"
             ],
             "default": "ATTACK_TYPE_NONE",
             "x-displayname": "Attack Types",
@@ -2908,7 +2912,9 @@ var APISwaggerJSON string = `{
             "description": "Specifies detection settings to be used by WAF",
             "title": "Detection Settings",
             "x-displayname": "Detection Settings",
+            "x-ves-displayorder": "1,2,12,5,8",
             "x-ves-oneof-field-false_positive_suppression": "[\"disable_suppression\",\"enable_suppression\"]",
+            "x-ves-oneof-field-signatures_staging_settings": "[\"disable_staging\",\"stage_new_and_updated_signatures\",\"stage_new_signatures\"]",
             "x-ves-oneof-field-threat_campaign_choice": "[\"disable_threat_campaigns\",\"enable_threat_campaigns\"]",
             "x-ves-oneof-field-violation_detection_setting": "[\"default_violation_settings\",\"violation_settings\"]",
             "x-ves-proto-message": "ves.io.schema.app_firewall.DetectionSetting",
@@ -2918,6 +2924,12 @@ var APISwaggerJSON string = `{
                     "title": "Default Violation Settings",
                     "$ref": "#/definitions/schemaEmpty",
                     "x-displayname": "Default"
+                },
+                "disable_staging": {
+                    "description": "Exclusive with [stage_new_and_updated_signatures stage_new_signatures]\n Enforce new and modified attack signatures.",
+                    "title": "Disable Attack Signatures Staging",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Disable"
                 },
                 "disable_suppression": {
                     "description": "Exclusive with [enable_suppression]\n",
@@ -2948,6 +2960,18 @@ var APISwaggerJSON string = `{
                     "title": "Signature Selection Setting",
                     "$ref": "#/definitions/app_firewallSignatureSelectionSetting",
                     "x-displayname": "Attack Signatures"
+                },
+                "stage_new_and_updated_signatures": {
+                    "description": "Exclusive with [disable_staging stage_new_signatures]\n WAF supports only one set of attack signatures which means each signature can be either enforced or staged.\n If signature is updated the user must decide whether to stage it and potentially reduce protection level\n because that signature was enforced before or continue enforcing it despite the change which may lead to\n false positive detections.",
+                    "title": "New and Updated Signatures Staging Settings",
+                    "$ref": "#/definitions/app_firewallSignaturesStagingSettings",
+                    "x-displayname": "Stage new and updated attack signatures"
+                },
+                "stage_new_signatures": {
+                    "description": "Exclusive with [disable_staging stage_new_and_updated_signatures]\n Stage new attack signatures only. Updated signatures will be enforced.",
+                    "title": "New Signatures Staging Settings",
+                    "$ref": "#/definitions/app_firewallSignaturesStagingSettings",
+                    "x-displayname": "Stage new attack signatures"
                 },
                 "violation_settings": {
                     "description": "Exclusive with [default_violation_settings]\n Define violations to be disabled for detection\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
@@ -3092,6 +3116,29 @@ var APISwaggerJSON string = `{
                     "title": "Only High Accuracy Signatures",
                     "$ref": "#/definitions/schemaEmpty",
                     "x-displayname": "High"
+                }
+            }
+        },
+        "app_firewallSignaturesStagingSettings": {
+            "type": "object",
+            "description": "Attack Signatures staging configuration.",
+            "title": "Attack Signatures Staging Settings",
+            "x-displayname": "Attack Signatures Staging Settings",
+            "x-ves-proto-message": "ves.io.schema.app_firewall.SignaturesStagingSettings",
+            "properties": {
+                "staging_period": {
+                    "type": "integer",
+                    "description": " Defines staging period in days. WAF doesn't support staging period longer than 20 days.\n The default staging period is 7 days.\n\nExample: - \"7\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.int32.gte: 1\n  ves.io.schema.rules.int32.lte: 20\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "Staging Period",
+                    "format": "int64",
+                    "x-displayname": "Staging Period",
+                    "x-ves-example": "7",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.int32.gte": "1",
+                        "ves.io.schema.rules.int32.lte": "20",
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 }
             }
         },

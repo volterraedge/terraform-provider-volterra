@@ -651,6 +651,15 @@ func (v *ValidateAWSTGWType) Validate(ctx context.Context, pm interface{}, opts 
 
 	}
 
+	if fv, exists := v.FldValidators["deployment"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("deployment"))
+		if err := fv(ctx, m.GetDeployment(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["dx_connect"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("dx_connect"))
@@ -877,6 +886,8 @@ var DefaultAWSTGWTypeValidator = func() *ValidateAWSTGWType {
 
 	v.FldValidators["dx_connect"] = DirectConnectTypeValidator().Validate
 
+	v.FldValidators["deployment"] = DeploymentInfoValidator().Validate
+
 	return v
 }()
 
@@ -1055,6 +1066,15 @@ func (v *ValidateAWSVPCType) Validate(ctx context.Context, pm interface{}, opts 
 
 	}
 
+	if fv, exists := v.FldValidators["deployment"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("deployment"))
+		if err := fv(ctx, m.GetDeployment(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["dx_connect"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("dx_connect"))
@@ -1215,6 +1235,8 @@ var DefaultAWSVPCTypeValidator = func() *ValidateAWSVPCType {
 
 	v.FldValidators["dx_connect"] = DirectConnectTypeValidator().Validate
 
+	v.FldValidators["deployment"] = DeploymentInfoValidator().Validate
+
 	return v
 }()
 
@@ -1309,6 +1331,182 @@ var DefaultCloudSubnetTypeValidator = func() *ValidateCloudSubnetType {
 
 func CloudSubnetTypeValidator() db.Validator {
 	return DefaultCloudSubnetTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *DeploymentInfo) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *DeploymentInfo) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *DeploymentInfo) DeepCopy() *DeploymentInfo {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &DeploymentInfo{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *DeploymentInfo) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *DeploymentInfo) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return DeploymentInfoValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateDeploymentInfo struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateDeploymentInfo) VpcIdValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for vpc_id")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateDeploymentInfo) SubnetIdsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for subnet_ids")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_views.AWSSubnetIdsType, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := ves_io_schema_views.AWSSubnetIdsTypeValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for subnet_ids")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema_views.AWSSubnetIdsType)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema_views.AWSSubnetIdsType, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated subnet_ids")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items subnet_ids")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateDeploymentInfo) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*DeploymentInfo)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *DeploymentInfo got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["subnet_ids"]; exists {
+		vOpts := append(opts, db.WithValidateField("subnet_ids"))
+		if err := fv(ctx, m.GetSubnetIds(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["vpc_id"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("vpc_id"))
+		if err := fv(ctx, m.GetVpcId(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultDeploymentInfoValidator = func() *ValidateDeploymentInfo {
+	v := &ValidateDeploymentInfo{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhVpcId := v.VpcIdValidationRuleHandler
+	rulesVpcId := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.pattern":   "^(vpc-)([a-z0-9]{8}|[a-z0-9]{17})$",
+	}
+	vFn, err = vrhVpcId(rulesVpcId)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for DeploymentInfo.vpc_id: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["vpc_id"] = vFn
+
+	vrhSubnetIds := v.SubnetIdsValidationRuleHandler
+	rulesSubnetIds := map[string]string{
+		"ves.io.schema.rules.message.required":   "true",
+		"ves.io.schema.rules.repeated.num_items": "0,1,3",
+	}
+	vFn, err = vrhSubnetIds(rulesSubnetIds)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for DeploymentInfo.subnet_ids: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["subnet_ids"] = vFn
+
+	return v
+}()
+
+func DeploymentInfoValidator() db.Validator {
+	return DefaultDeploymentInfoValidator
 }
 
 // augmented methods on protoc/std generated struct

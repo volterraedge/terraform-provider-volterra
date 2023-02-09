@@ -16,7 +16,6 @@ import (
 
 	ves_io_schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
 	ves_io_schema_app_firewall "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/app_firewall"
-	ves_io_schema_waf_rule_list "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/waf_rule_list"
 )
 
 var (
@@ -539,6 +538,32 @@ func (v *ValidateAppFirewallSignatureContext) SignatureIdValidationRuleHandler(r
 	return validatorFn, nil
 }
 
+func (v *ValidateAppFirewallSignatureContext) ContextValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	var conv db.EnumConvFn
+	conv = func(v interface{}) int32 {
+		i := v.(DetectionContext)
+		return int32(i)
+	}
+	// DetectionContext_name is generated in .pb.go
+	validatorFn, err := db.NewEnumValidationRuleHandler(rules, DetectionContext_name, conv)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for context")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateAppFirewallSignatureContext) ContextNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for context_name")
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateAppFirewallSignatureContext) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*AppFirewallSignatureContext)
 	if !ok {
@@ -551,6 +576,24 @@ func (v *ValidateAppFirewallSignatureContext) Validate(ctx context.Context, pm i
 	}
 	if m == nil {
 		return nil
+	}
+
+	if fv, exists := v.FldValidators["context"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("context"))
+		if err := fv(ctx, m.GetContext(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["context_name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("context_name"))
+		if err := fv(ctx, m.GetContextName(), vOpts...); err != nil {
+			return err
+		}
+
 	}
 
 	if fv, exists := v.FldValidators["signature_id"]; exists {
@@ -589,6 +632,28 @@ var DefaultAppFirewallSignatureContextValidator = func() *ValidateAppFirewallSig
 		panic(errMsg)
 	}
 	v.FldValidators["signature_id"] = vFn
+
+	vrhContext := v.ContextValidationRuleHandler
+	rulesContext := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhContext(rulesContext)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for AppFirewallSignatureContext.context: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["context"] = vFn
+
+	vrhContextName := v.ContextNameValidationRuleHandler
+	rulesContextName := map[string]string{
+		"ves.io.schema.rules.string.max_len": "32",
+	}
+	vFn, err = vrhContextName(rulesContextName)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for AppFirewallSignatureContext.context_name: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["context_name"] = vFn
 
 	return v
 }()
@@ -654,6 +719,22 @@ func (v *ValidateAppFirewallViolationContext) ExcludeViolationValidationRuleHand
 	return validatorFn, nil
 }
 
+func (v *ValidateAppFirewallViolationContext) ContextValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	var conv db.EnumConvFn
+	conv = func(v interface{}) int32 {
+		i := v.(DetectionContext)
+		return int32(i)
+	}
+	// DetectionContext_name is generated in .pb.go
+	validatorFn, err := db.NewEnumValidationRuleHandler(rules, DetectionContext_name, conv)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for context")
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateAppFirewallViolationContext) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*AppFirewallViolationContext)
 	if !ok {
@@ -666,6 +747,15 @@ func (v *ValidateAppFirewallViolationContext) Validate(ctx context.Context, pm i
 	}
 	if m == nil {
 		return nil
+	}
+
+	if fv, exists := v.FldValidators["context"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("context"))
+		if err := fv(ctx, m.GetContext(), vOpts...); err != nil {
+			return err
+		}
+
 	}
 
 	if fv, exists := v.FldValidators["exclude_violation"]; exists {
@@ -702,6 +792,17 @@ var DefaultAppFirewallViolationContextValidator = func() *ValidateAppFirewallVio
 		panic(errMsg)
 	}
 	v.FldValidators["exclude_violation"] = vFn
+
+	vrhContext := v.ContextValidationRuleHandler
+	rulesContext := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhContext(rulesContext)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for AppFirewallViolationContext.context: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["context"] = vFn
 
 	return v
 }()
@@ -2608,6 +2709,14 @@ func (v *ValidateGraphQLRule) DomainChoiceSuffixValueValidationRuleHandler(rules
 	return oValidatorFn_SuffixValue, nil
 }
 
+func (v *ValidateGraphQLRule) MethodChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for method_choice")
+	}
+	return validatorFn, nil
+}
+
 func (v *ValidateGraphQLRule) MetadataValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
@@ -2727,6 +2836,42 @@ func (v *ValidateGraphQLRule) Validate(ctx context.Context, pm interface{}, opts
 
 	}
 
+	if fv, exists := v.FldValidators["method_choice"]; exists {
+		val := m.GetMethodChoice()
+		vOpts := append(opts,
+			db.WithValidateField("method_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetMethodChoice().(type) {
+	case *GraphQLRule_MethodGet:
+		if fv, exists := v.FldValidators["method_choice.method_get"]; exists {
+			val := m.GetMethodChoice().(*GraphQLRule_MethodGet).MethodGet
+			vOpts := append(opts,
+				db.WithValidateField("method_choice"),
+				db.WithValidateField("method_get"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GraphQLRule_MethodPost:
+		if fv, exists := v.FldValidators["method_choice.method_post"]; exists {
+			val := m.GetMethodChoice().(*GraphQLRule_MethodPost).MethodPost
+			vOpts := append(opts,
+				db.WithValidateField("method_choice"),
+				db.WithValidateField("method_post"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	return nil
 }
 
@@ -2778,6 +2923,17 @@ var DefaultGraphQLRuleValidator = func() *ValidateGraphQLRule {
 
 	v.FldValidators["domain_choice.exact_value"] = vFnMap["domain_choice.exact_value"]
 	v.FldValidators["domain_choice.suffix_value"] = vFnMap["domain_choice.suffix_value"]
+
+	vrhMethodChoice := v.MethodChoiceValidationRuleHandler
+	rulesMethodChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhMethodChoice(rulesMethodChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GraphQLRule.method_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["method_choice"] = vFn
 
 	vrhMetadata := v.MetadataValidationRuleHandler
 	rulesMetadata := map[string]string{
@@ -5201,6 +5357,188 @@ var DefaultModifyActionValidator = func() *ValidateModifyAction {
 
 func ModifyActionValidator() db.Validator {
 	return DefaultModifyActionValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *OpenApiValidationAction) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *OpenApiValidationAction) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *OpenApiValidationAction) DeepCopy() *OpenApiValidationAction {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &OpenApiValidationAction{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *OpenApiValidationAction) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *OpenApiValidationAction) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return OpenApiValidationActionValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateOpenApiValidationAction struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateOpenApiValidationAction) RequestPropertiesSelectionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepEnumItemRules(rules)
+	var conv db.EnumConvFn
+	conv = func(v interface{}) int32 {
+		i := v.(ves_io_schema.OpenApiValidationProperties)
+		return int32(i)
+	}
+	// ves_io_schema.OpenApiValidationProperties_name is generated in .pb.go
+	itemValFn, err := db.NewEnumValidationRuleHandler(itemRules, ves_io_schema.OpenApiValidationProperties_name, conv)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for request_properties_selection")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []ves_io_schema.OpenApiValidationProperties, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for request_properties_selection")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]ves_io_schema.OpenApiValidationProperties)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []ves_io_schema.OpenApiValidationProperties, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal := fmt.Sprintf("%v", elem)
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated request_properties_selection")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items request_properties_selection")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateOpenApiValidationAction) OasValidationActionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	var conv db.EnumConvFn
+	conv = func(v interface{}) int32 {
+		i := v.(OasValidationActionType)
+		return int32(i)
+	}
+	// OasValidationActionType_name is generated in .pb.go
+	validatorFn, err := db.NewEnumValidationRuleHandler(rules, OasValidationActionType_name, conv)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for oas_validation_action")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateOpenApiValidationAction) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*OpenApiValidationAction)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *OpenApiValidationAction got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["oas_validation_action"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("oas_validation_action"))
+		if err := fv(ctx, m.GetOasValidationAction(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["request_properties_selection"]; exists {
+		vOpts := append(opts, db.WithValidateField("request_properties_selection"))
+		if err := fv(ctx, m.GetRequestPropertiesSelection(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultOpenApiValidationActionValidator = func() *ValidateOpenApiValidationAction {
+	v := &ValidateOpenApiValidationAction{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhRequestPropertiesSelection := v.RequestPropertiesSelectionValidationRuleHandler
+	rulesRequestPropertiesSelection := map[string]string{
+		"ves.io.schema.rules.repeated.items.enum.defined_only": "true",
+		"ves.io.schema.rules.repeated.unique":                  "true",
+	}
+	vFn, err = vrhRequestPropertiesSelection(rulesRequestPropertiesSelection)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for OpenApiValidationAction.request_properties_selection: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["request_properties_selection"] = vFn
+
+	vrhOasValidationAction := v.OasValidationActionValidationRuleHandler
+	rulesOasValidationAction := map[string]string{
+		"ves.io.schema.rules.enum.defined_only": "true",
+		"ves.io.schema.rules.message.required":  "true",
+	}
+	vFn, err = vrhOasValidationAction(rulesOasValidationAction)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for OpenApiValidationAction.oas_validation_action: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["oas_validation_action"] = vFn
+
+	return v
+}()
+
+func OpenApiValidationActionValidator() db.Validator {
+	return DefaultOpenApiValidationActionValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -8484,6 +8822,15 @@ func (v *ValidateShapeProtectedEndpointAction) Validate(ctx context.Context, pm 
 
 	}
 
+	if fv, exists := v.FldValidators["transaction_result"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("transaction_result"))
+		if err := fv(ctx, m.GetTransactionResult(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["web_scraping"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("web_scraping"))
@@ -8552,6 +8899,8 @@ var DefaultShapeProtectedEndpointActionValidator = func() *ValidateShapeProtecte
 		panic(errMsg)
 	}
 	v.FldValidators["flow_label"] = vFn
+
+	v.FldValidators["transaction_result"] = ves_io_schema.BotDefenseTransactionResultTypeValidator().Validate
 
 	return v
 }()
@@ -9020,54 +9369,6 @@ func (v *ValidateSimpleWafExclusionRule) MethodsValidationRuleHandler(rules map[
 	return validatorFn, nil
 }
 
-func (v *ValidateSimpleWafExclusionRule) ExcludeRuleIdsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	itemRules := db.GetRepEnumItemRules(rules)
-	var conv db.EnumConvFn
-	conv = func(v interface{}) int32 {
-		i := v.(ves_io_schema_waf_rule_list.WafRuleID)
-		return int32(i)
-	}
-	// ves_io_schema_waf_rule_list.WafRuleID_name is generated in .pb.go
-	itemValFn, err := db.NewEnumValidationRuleHandler(itemRules, ves_io_schema_waf_rule_list.WafRuleID_name, conv)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for exclude_rule_ids")
-	}
-	itemsValidatorFn := func(ctx context.Context, elems []ves_io_schema_waf_rule_list.WafRuleID, opts ...db.ValidateOpt) error {
-		for i, el := range elems {
-			if err := itemValFn(ctx, el, opts...); err != nil {
-				return errors.Wrap(err, fmt.Sprintf("element %d", i))
-			}
-		}
-		return nil
-	}
-	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for exclude_rule_ids")
-	}
-
-	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
-		elems, ok := val.([]ves_io_schema_waf_rule_list.WafRuleID)
-		if !ok {
-			return fmt.Errorf("Repeated validation expected []ves_io_schema_waf_rule_list.WafRuleID, got %T", val)
-		}
-		l := []string{}
-		for _, elem := range elems {
-			strVal := fmt.Sprintf("%v", elem)
-			l = append(l, strVal)
-		}
-		if err := repValFn(ctx, l, opts...); err != nil {
-			return errors.Wrap(err, "repeated exclude_rule_ids")
-		}
-		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
-			return errors.Wrap(err, "items exclude_rule_ids")
-		}
-		return nil
-	}
-
-	return validatorFn, nil
-}
-
 func (v *ValidateSimpleWafExclusionRule) MetadataValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
@@ -9146,14 +9447,6 @@ func (v *ValidateSimpleWafExclusionRule) Validate(ctx context.Context, pm interf
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
 			}
-		}
-
-	}
-
-	if fv, exists := v.FldValidators["exclude_rule_ids"]; exists {
-		vOpts := append(opts, db.WithValidateField("exclude_rule_ids"))
-		if err := fv(ctx, m.GetExcludeRuleIds(), vOpts...); err != nil {
-			return err
 		}
 
 	}
@@ -9368,19 +9661,6 @@ var DefaultSimpleWafExclusionRuleValidator = func() *ValidateSimpleWafExclusionR
 		panic(errMsg)
 	}
 	v.FldValidators["methods"] = vFn
-
-	vrhExcludeRuleIds := v.ExcludeRuleIdsValidationRuleHandler
-	rulesExcludeRuleIds := map[string]string{
-		"ves.io.schema.rules.message.required":   "true",
-		"ves.io.schema.rules.repeated.max_items": "64",
-		"ves.io.schema.rules.repeated.unique":    "true",
-	}
-	vFn, err = vrhExcludeRuleIds(rulesExcludeRuleIds)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for SimpleWafExclusionRule.exclude_rule_ids: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["exclude_rule_ids"] = vFn
 
 	vrhMetadata := v.MetadataValidationRuleHandler
 	rulesMetadata := map[string]string{
@@ -10277,62 +10557,6 @@ func (m *WafAction) Validate(ctx context.Context, opts ...db.ValidateOpt) error 
 	return WafActionValidator().Validate(ctx, m, opts...)
 }
 
-func (m *WafAction) GetDRefInfo() ([]db.DRefInfo, error) {
-	if m == nil {
-		return nil, nil
-	}
-
-	return m.GetActionTypeDRefInfo()
-
-}
-
-// GetDRefInfo for the field's type
-func (m *WafAction) GetActionTypeDRefInfo() ([]db.DRefInfo, error) {
-	if m.GetActionType() == nil {
-		return nil, nil
-	}
-	switch m.GetActionType().(type) {
-	case *WafAction_WafSkipProcessing:
-
-		return nil, nil
-
-	case *WafAction_WafRuleControl:
-		drInfos, err := m.GetWafRuleControl().GetDRefInfo()
-		if err != nil {
-			return nil, errors.Wrap(err, "GetWafRuleControl().GetDRefInfo() FAILED")
-		}
-		for i := range drInfos {
-			dri := &drInfos[i]
-			dri.DRField = "waf_rule_control." + dri.DRField
-		}
-		return drInfos, err
-
-	case *WafAction_None:
-
-		return nil, nil
-
-	case *WafAction_WafInlineRuleControl:
-
-		return nil, nil
-
-	case *WafAction_WafInMonitoringMode:
-
-		return nil, nil
-
-	case *WafAction_AppFirewallDetectionControl:
-
-		return nil, nil
-
-	case *WafAction_DataGuardControl:
-
-		return nil, nil
-
-	default:
-		return nil, nil
-	}
-
-}
-
 type ValidateWafAction struct {
 	FldValidators map[string]db.ValidatorFunc
 }
@@ -10385,34 +10609,12 @@ func (v *ValidateWafAction) Validate(ctx context.Context, pm interface{}, opts .
 				return err
 			}
 		}
-	case *WafAction_WafRuleControl:
-		if fv, exists := v.FldValidators["action_type.waf_rule_control"]; exists {
-			val := m.GetActionType().(*WafAction_WafRuleControl).WafRuleControl
-			vOpts := append(opts,
-				db.WithValidateField("action_type"),
-				db.WithValidateField("waf_rule_control"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
 	case *WafAction_None:
 		if fv, exists := v.FldValidators["action_type.none"]; exists {
 			val := m.GetActionType().(*WafAction_None).None
 			vOpts := append(opts,
 				db.WithValidateField("action_type"),
 				db.WithValidateField("none"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	case *WafAction_WafInlineRuleControl:
-		if fv, exists := v.FldValidators["action_type.waf_inline_rule_control"]; exists {
-			val := m.GetActionType().(*WafAction_WafInlineRuleControl).WafInlineRuleControl
-			vOpts := append(opts,
-				db.WithValidateField("action_type"),
-				db.WithValidateField("waf_inline_rule_control"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
@@ -10492,375 +10694,11 @@ var DefaultWafActionValidator = func() *ValidateWafAction {
 
 	v.FldValidators["action_type.app_firewall_detection_control"] = vFnMap["action_type.app_firewall_detection_control"]
 
-	v.FldValidators["action_type.waf_rule_control"] = WafRuleControlValidator().Validate
-	v.FldValidators["action_type.waf_inline_rule_control"] = WafInlineRuleControlValidator().Validate
-
 	return v
 }()
 
 func WafActionValidator() db.Validator {
 	return DefaultWafActionValidator
-}
-
-// augmented methods on protoc/std generated struct
-
-func (m *WafInlineRuleControl) ToJSON() (string, error) {
-	return codec.ToJSON(m)
-}
-
-func (m *WafInlineRuleControl) ToYAML() (string, error) {
-	return codec.ToYAML(m)
-}
-
-func (m *WafInlineRuleControl) DeepCopy() *WafInlineRuleControl {
-	if m == nil {
-		return nil
-	}
-	ser, err := m.Marshal()
-	if err != nil {
-		return nil
-	}
-	c := &WafInlineRuleControl{}
-	err = c.Unmarshal(ser)
-	if err != nil {
-		return nil
-	}
-	return c
-}
-
-func (m *WafInlineRuleControl) DeepCopyProto() proto.Message {
-	if m == nil {
-		return nil
-	}
-	return m.DeepCopy()
-}
-
-func (m *WafInlineRuleControl) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
-	return WafInlineRuleControlValidator().Validate(ctx, m, opts...)
-}
-
-type ValidateWafInlineRuleControl struct {
-	FldValidators map[string]db.ValidatorFunc
-}
-
-func (v *ValidateWafInlineRuleControl) ExcludeRuleIdsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	itemRules := db.GetRepEnumItemRules(rules)
-	var conv db.EnumConvFn
-	conv = func(v interface{}) int32 {
-		i := v.(ves_io_schema_waf_rule_list.WafRuleID)
-		return int32(i)
-	}
-	// ves_io_schema_waf_rule_list.WafRuleID_name is generated in .pb.go
-	itemValFn, err := db.NewEnumValidationRuleHandler(itemRules, ves_io_schema_waf_rule_list.WafRuleID_name, conv)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for exclude_rule_ids")
-	}
-	itemsValidatorFn := func(ctx context.Context, elems []ves_io_schema_waf_rule_list.WafRuleID, opts ...db.ValidateOpt) error {
-		for i, el := range elems {
-			if err := itemValFn(ctx, el, opts...); err != nil {
-				return errors.Wrap(err, fmt.Sprintf("element %d", i))
-			}
-		}
-		return nil
-	}
-	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for exclude_rule_ids")
-	}
-
-	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
-		elems, ok := val.([]ves_io_schema_waf_rule_list.WafRuleID)
-		if !ok {
-			return fmt.Errorf("Repeated validation expected []ves_io_schema_waf_rule_list.WafRuleID, got %T", val)
-		}
-		l := []string{}
-		for _, elem := range elems {
-			strVal := fmt.Sprintf("%v", elem)
-			l = append(l, strVal)
-		}
-		if err := repValFn(ctx, l, opts...); err != nil {
-			return errors.Wrap(err, "repeated exclude_rule_ids")
-		}
-		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
-			return errors.Wrap(err, "items exclude_rule_ids")
-		}
-		return nil
-	}
-
-	return validatorFn, nil
-}
-
-func (v *ValidateWafInlineRuleControl) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
-	m, ok := pm.(*WafInlineRuleControl)
-	if !ok {
-		switch t := pm.(type) {
-		case nil:
-			return nil
-		default:
-			return fmt.Errorf("Expected type *WafInlineRuleControl got type %s", t)
-		}
-	}
-	if m == nil {
-		return nil
-	}
-
-	if fv, exists := v.FldValidators["exclude_rule_ids"]; exists {
-		vOpts := append(opts, db.WithValidateField("exclude_rule_ids"))
-		if err := fv(ctx, m.GetExcludeRuleIds(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
-	if fv, exists := v.FldValidators["monitoring_mode"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("monitoring_mode"))
-		if err := fv(ctx, m.GetMonitoringMode(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
-	return nil
-}
-
-// Well-known symbol for default validator implementation
-var DefaultWafInlineRuleControlValidator = func() *ValidateWafInlineRuleControl {
-	v := &ValidateWafInlineRuleControl{FldValidators: map[string]db.ValidatorFunc{}}
-
-	var (
-		err error
-		vFn db.ValidatorFunc
-	)
-	_, _ = err, vFn
-	vFnMap := map[string]db.ValidatorFunc{}
-	_ = vFnMap
-
-	vrhExcludeRuleIds := v.ExcludeRuleIdsValidationRuleHandler
-	rulesExcludeRuleIds := map[string]string{
-		"ves.io.schema.rules.repeated.max_items": "64",
-		"ves.io.schema.rules.repeated.unique":    "true",
-	}
-	vFn, err = vrhExcludeRuleIds(rulesExcludeRuleIds)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for WafInlineRuleControl.exclude_rule_ids: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["exclude_rule_ids"] = vFn
-
-	return v
-}()
-
-func WafInlineRuleControlValidator() db.Validator {
-	return DefaultWafInlineRuleControlValidator
-}
-
-// augmented methods on protoc/std generated struct
-
-func (m *WafRuleControl) ToJSON() (string, error) {
-	return codec.ToJSON(m)
-}
-
-func (m *WafRuleControl) ToYAML() (string, error) {
-	return codec.ToYAML(m)
-}
-
-func (m *WafRuleControl) DeepCopy() *WafRuleControl {
-	if m == nil {
-		return nil
-	}
-	ser, err := m.Marshal()
-	if err != nil {
-		return nil
-	}
-	c := &WafRuleControl{}
-	err = c.Unmarshal(ser)
-	if err != nil {
-		return nil
-	}
-	return c
-}
-
-func (m *WafRuleControl) DeepCopyProto() proto.Message {
-	if m == nil {
-		return nil
-	}
-	return m.DeepCopy()
-}
-
-func (m *WafRuleControl) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
-	return WafRuleControlValidator().Validate(ctx, m, opts...)
-}
-
-func (m *WafRuleControl) GetDRefInfo() ([]db.DRefInfo, error) {
-	if m == nil {
-		return nil, nil
-	}
-
-	return m.GetExcludeRuleIdsDRefInfo()
-
-}
-
-func (m *WafRuleControl) GetExcludeRuleIdsDRefInfo() ([]db.DRefInfo, error) {
-	refs := m.GetExcludeRuleIds()
-	if len(refs) == 0 {
-		return nil, nil
-	}
-	drInfos := make([]db.DRefInfo, 0, len(refs))
-	for i, ref := range refs {
-		if ref == nil {
-			return nil, fmt.Errorf("WafRuleControl.exclude_rule_ids[%d] has a nil value", i)
-		}
-		// resolve kind to type if needed at DBObject.GetDRefInfo()
-		drInfos = append(drInfos, db.DRefInfo{
-			RefdType:   "waf_rule_list.Object",
-			RefdUID:    ref.Uid,
-			RefdTenant: ref.Tenant,
-			RefdNS:     ref.Namespace,
-			RefdName:   ref.Name,
-			DRField:    "exclude_rule_ids",
-			Ref:        ref,
-		})
-	}
-	return drInfos, nil
-
-}
-
-// GetExcludeRuleIdsDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
-func (m *WafRuleControl) GetExcludeRuleIdsDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
-	var entries []db.Entry
-	refdType, err := d.TypeForEntryKind("", "", "waf_rule_list.Object")
-	if err != nil {
-		return nil, errors.Wrap(err, "Cannot find type for kind: waf_rule_list")
-	}
-	for _, ref := range m.GetExcludeRuleIds() {
-		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
-		if err != nil {
-			return nil, errors.Wrap(err, "Getting referred entry")
-		}
-		if refdEnt != nil {
-			entries = append(entries, refdEnt)
-		}
-	}
-
-	return entries, nil
-}
-
-type ValidateWafRuleControl struct {
-	FldValidators map[string]db.ValidatorFunc
-}
-
-func (v *ValidateWafRuleControl) ExcludeRuleIdsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	itemRules := db.GetRepMessageItemRules(rules)
-	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
-	if err != nil {
-		return nil, errors.Wrap(err, "Message ValidationRuleHandler for exclude_rule_ids")
-	}
-	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema.ObjectRefType, opts ...db.ValidateOpt) error {
-		for i, el := range elems {
-			if err := itemValFn(ctx, el, opts...); err != nil {
-				return errors.Wrap(err, fmt.Sprintf("element %d", i))
-			}
-			if err := ves_io_schema.ObjectRefTypeValidator().Validate(ctx, el, opts...); err != nil {
-				return errors.Wrap(err, fmt.Sprintf("element %d", i))
-			}
-		}
-		return nil
-	}
-	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for exclude_rule_ids")
-	}
-
-	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
-		elems, ok := val.([]*ves_io_schema.ObjectRefType)
-		if !ok {
-			return fmt.Errorf("Repeated validation expected []*ves_io_schema.ObjectRefType, got %T", val)
-		}
-		l := []string{}
-		for _, elem := range elems {
-			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
-			if err != nil {
-				return errors.Wrapf(err, "Converting %v to JSON", elem)
-			}
-			l = append(l, strVal)
-		}
-		if err := repValFn(ctx, l, opts...); err != nil {
-			return errors.Wrap(err, "repeated exclude_rule_ids")
-		}
-		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
-			return errors.Wrap(err, "items exclude_rule_ids")
-		}
-		return nil
-	}
-
-	return validatorFn, nil
-}
-
-func (v *ValidateWafRuleControl) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
-	m, ok := pm.(*WafRuleControl)
-	if !ok {
-		switch t := pm.(type) {
-		case nil:
-			return nil
-		default:
-			return fmt.Errorf("Expected type *WafRuleControl got type %s", t)
-		}
-	}
-	if m == nil {
-		return nil
-	}
-
-	if fv, exists := v.FldValidators["exclude_rule_ids"]; exists {
-		vOpts := append(opts, db.WithValidateField("exclude_rule_ids"))
-		if err := fv(ctx, m.GetExcludeRuleIds(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
-	if fv, exists := v.FldValidators["monitoring_mode"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("monitoring_mode"))
-		if err := fv(ctx, m.GetMonitoringMode(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
-	return nil
-}
-
-// Well-known symbol for default validator implementation
-var DefaultWafRuleControlValidator = func() *ValidateWafRuleControl {
-	v := &ValidateWafRuleControl{FldValidators: map[string]db.ValidatorFunc{}}
-
-	var (
-		err error
-		vFn db.ValidatorFunc
-	)
-	_, _ = err, vFn
-	vFnMap := map[string]db.ValidatorFunc{}
-	_ = vFnMap
-
-	vrhExcludeRuleIds := v.ExcludeRuleIdsValidationRuleHandler
-	rulesExcludeRuleIds := map[string]string{
-		"ves.io.schema.rules.repeated.max_items": "4",
-	}
-	vFn, err = vrhExcludeRuleIds(rulesExcludeRuleIds)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for WafRuleControl.exclude_rule_ids: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["exclude_rule_ids"] = vFn
-
-	return v
-}()
-
-func WafRuleControlValidator() db.Validator {
-	return DefaultWafRuleControlValidator
 }
 
 // create setters in HeaderMatcherTypeBasic from HeaderMatcherType for oneof fields

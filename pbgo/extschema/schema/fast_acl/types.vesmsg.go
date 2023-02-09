@@ -513,6 +513,7 @@ var DefaultDestinationIPAddressTypeValidator = func() *ValidateDestinationIPAddr
 
 	vrhPorts := v.PortsValidationRuleHandler
 	rulesPorts := map[string]string{
+		"ves.io.schema.rules.message.required":   "true",
 		"ves.io.schema.rules.repeated.max_items": "128",
 	}
 	vFn, err = vrhPorts(rulesPorts)

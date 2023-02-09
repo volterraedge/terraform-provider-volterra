@@ -34,6 +34,35 @@ func (m *PANAWSType) ToYAML() (string, error) {
 	return codec.ToYAML(m)
 }
 
+func (m *PANAWSType) String() string {
+	if m == nil {
+		return ""
+	}
+	copy := m.DeepCopy()
+	copy.PanAuthorizationKeyBlindfolded = ""
+
+	return copy.string()
+}
+
+func (m *PANAWSType) GoString() string {
+	copy := m.DeepCopy()
+	copy.PanAuthorizationKeyBlindfolded = ""
+
+	return copy.goString()
+}
+
+// Redact squashes sensitive info in m (in-place)
+func (m *PANAWSType) Redact(ctx context.Context) error {
+	// clear fields with confidential option set (at message or field level)
+	if m == nil {
+		return nil
+	}
+
+	m.PanAuthorizationKeyBlindfolded = ""
+
+	return nil
+}
+
 func (m *PANAWSType) DeepCopy() *PANAWSType {
 	if m == nil {
 		return nil
@@ -244,6 +273,15 @@ func (v *ValidatePANAWSType) Validate(ctx context.Context, pm interface{}, opts 
 
 	}
 
+	if fv, exists := v.FldValidators["aws_name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("aws_name"))
+		if err := fv(ctx, m.GetAwsName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["aws_name_prefix"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("aws_name_prefix"))
@@ -265,6 +303,51 @@ func (v *ValidatePANAWSType) Validate(ctx context.Context, pm interface{}, opts 
 	if fv, exists := v.FldValidators["devices"]; exists {
 		vOpts := append(opts, db.WithValidateField("devices"))
 		if err := fv(ctx, m.GetDevices(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["pan_authorization_key"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("pan_authorization_key"))
+		if err := fv(ctx, m.GetPanAuthorizationKey(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["pan_authorization_key_blindfolded"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("pan_authorization_key_blindfolded"))
+		if err := fv(ctx, m.GetPanAuthorizationKeyBlindfolded(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["pan_authorization_key_clear_b64"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("pan_authorization_key_clear_b64"))
+		if err := fv(ctx, m.GetPanAuthorizationKeyClearB64(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["panorama_server"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("panorama_server"))
+		if err := fv(ctx, m.GetPanoramaServer(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["panorama_template_name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("panorama_template_name"))
+		if err := fv(ctx, m.GetPanoramaTemplateName(), vOpts...); err != nil {
 			return err
 		}
 
@@ -305,6 +388,15 @@ func (v *ValidatePANAWSType) Validate(ctx context.Context, pm interface{}, opts 
 			if err := fv(ctx, value, vOpts...); err != nil {
 				return err
 			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["vmseries_version"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("vmseries_version"))
+		if err := fv(ctx, m.GetVmseriesVersion(), vOpts...); err != nil {
+			return err
 		}
 
 	}

@@ -2767,35 +2767,50 @@ var APISwaggerJSON string = `{
             "title": "DNS Load Balancer Health Check specification",
             "x-displayname": "Specification",
             "x-ves-displayorder": "2,7,8",
-            "x-ves-oneof-field-health_check": "[\"http_health_check\",\"https_health_check\",\"icmp_health_check\",\"tcp_health_check\",\"udp_health_check\"]",
+            "x-ves-oneof-field-health_check": "[\"http_health_check\",\"https_health_check\",\"icmp_health_check\",\"tcp_health_check\",\"tcp_hex_health_check\",\"udp_health_check\"]",
             "x-ves-proto-message": "ves.io.schema.dns_lb_health_check.GlobalSpecType",
             "properties": {
+                "dns_lb_pools": {
+                    "type": "array",
+                    "description": " a list of DNS Load balancer pools associated with this health check",
+                    "title": "backref_objs",
+                    "items": {
+                        "$ref": "#/definitions/schemaviewsObjectRefType"
+                    },
+                    "x-displayname": "DNS Load balancer pools"
+                },
                 "http_health_check": {
-                    "description": "Exclusive with [https_health_check icmp_health_check tcp_health_check udp_health_check]\n HTTP Health Check",
+                    "description": "Exclusive with [https_health_check icmp_health_check tcp_health_check tcp_hex_health_check udp_health_check]\n HTTP Health Check",
                     "title": "HTTP Health Check",
                     "$ref": "#/definitions/dns_lb_health_checkHttpHealthCheck",
                     "x-displayname": "HTTP Health Check"
                 },
                 "https_health_check": {
-                    "description": "Exclusive with [http_health_check icmp_health_check tcp_health_check udp_health_check]\n HTTPS Health Check",
+                    "description": "Exclusive with [http_health_check icmp_health_check tcp_health_check tcp_hex_health_check udp_health_check]\n HTTPS Health Check",
                     "title": "HTTPS Health Check",
                     "$ref": "#/definitions/dns_lb_health_checkHttpHealthCheck",
                     "x-displayname": "HTTPS Health Check"
                 },
                 "icmp_health_check": {
-                    "description": "Exclusive with [http_health_check https_health_check tcp_health_check udp_health_check]\n ICMP Health Check",
+                    "description": "Exclusive with [http_health_check https_health_check tcp_health_check tcp_hex_health_check udp_health_check]\n ICMP Health Check",
                     "title": "ICMP Health Check",
                     "$ref": "#/definitions/schemaEmpty",
                     "x-displayname": "ICMP Health Check"
                 },
                 "tcp_health_check": {
-                    "description": "Exclusive with [http_health_check https_health_check icmp_health_check udp_health_check]\n TCP Health Check",
+                    "description": "Exclusive with [http_health_check https_health_check icmp_health_check tcp_hex_health_check udp_health_check]\n TCP Health Check",
                     "title": "TCP Health Check",
                     "$ref": "#/definitions/dns_lb_health_checkTcpHealthCheck",
                     "x-displayname": "TCP Health Check"
                 },
+                "tcp_hex_health_check": {
+                    "description": "Exclusive with [http_health_check https_health_check icmp_health_check tcp_health_check udp_health_check]\n TCP Health Check with Hex Encoded Payload",
+                    "title": "TCP Hex Health Check",
+                    "$ref": "#/definitions/dns_lb_health_checkTcpHexHealthCheck",
+                    "x-displayname": "TCP Health Check (Hex)"
+                },
                 "udp_health_check": {
-                    "description": "Exclusive with [http_health_check https_health_check icmp_health_check tcp_health_check]\n UDP Health Check",
+                    "description": "Exclusive with [http_health_check https_health_check icmp_health_check tcp_health_check tcp_hex_health_check]\n UDP Health Check",
                     "title": "UDP Health Check",
                     "$ref": "#/definitions/dns_lb_health_checkUdpHealthCheck",
                     "x-displayname": "UDP Health Check"
@@ -2934,6 +2949,53 @@ var APISwaggerJSON string = `{
                     "maxLength": 2048,
                     "x-displayname": "Send String",
                     "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "2048"
+                    }
+                }
+            }
+        },
+        "dns_lb_health_checkTcpHexHealthCheck": {
+            "type": "object",
+            "title": "TCP Hex Health Check",
+            "x-displayname": "TCP Hex Health Check",
+            "x-ves-displayorder": "1,2,3",
+            "x-ves-proto-message": "ves.io.schema.dns_lb_health_check.TcpHexHealthCheck",
+            "properties": {
+                "health_check_port": {
+                    "type": "integer",
+                    "description": " Port used for performing health check\n\nExample: - \"80\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.uint32.gte: 1\n  ves.io.schema.rules.uint32.lte: 65535\n",
+                    "title": "Health check port",
+                    "format": "int64",
+                    "x-displayname": "Health Check Port",
+                    "x-ves-example": "80",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.uint32.gte": "1",
+                        "ves.io.schema.rules.uint32.lte": "65535"
+                    }
+                },
+                "receive": {
+                    "type": "string",
+                    "description": " Hex encoded raw bytes expected in the response.\n\nExample: - \"00000034\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.hex: true\n  ves.io.schema.rules.string.max_len: 2048\n",
+                    "title": "Receive Payload",
+                    "maxLength": 2048,
+                    "x-displayname": "Receive Payload",
+                    "x-ves-example": "00000034",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.hex": "true",
+                        "ves.io.schema.rules.string.max_len": "2048"
+                    }
+                },
+                "send": {
+                    "type": "string",
+                    "description": " Hex encoded raw bytes sent in the request. Empty payloads imply a connect-only health check.\n\nExample: - \"000000FF\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.hex: true\n  ves.io.schema.rules.string.max_len: 2048\n",
+                    "title": "Send Payload",
+                    "maxLength": 2048,
+                    "x-displayname": "Send Payload",
+                    "x-ves-example": "000000FF",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.hex": "true",
                         "ves.io.schema.rules.string.max_len": "2048"
                     }
                 }
@@ -3534,6 +3596,52 @@ var APISwaggerJSON string = `{
                     "title": "uid",
                     "x-displayname": "UID",
                     "x-ves-example": "f3744323-1adf-4aaa-a5dc-0707c1d1bd82"
+                }
+            }
+        },
+        "schemaviewsObjectRefType": {
+            "type": "object",
+            "description": "This type establishes a direct reference from one object(the referrer) to another(the referred).\nSuch a reference is in form of tenant/namespace/name",
+            "title": "ObjectRefType",
+            "x-displayname": "Object reference",
+            "x-ves-proto-message": "ves.io.schema.views.ObjectRefType",
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then name will hold the referred object's(e.g. route's) name.\n\nExample: - \"contacts-route\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_bytes: 64\n  ves.io.schema.rules.string.min_bytes: 1\n",
+                    "title": "name",
+                    "minLength": 1,
+                    "maxLength": 64,
+                    "x-displayname": "Name",
+                    "x-ves-example": "contacts-route",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.max_bytes": "64",
+                        "ves.io.schema.rules.string.min_bytes": "1"
+                    }
+                },
+                "namespace": {
+                    "type": "string",
+                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then namespace will hold the referred object's(e.g. route's) namespace.\n\nExample: - \"ns1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 64\n",
+                    "title": "namespace",
+                    "maxLength": 64,
+                    "x-displayname": "Namespace",
+                    "x-ves-example": "ns1",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_bytes": "64"
+                    }
+                },
+                "tenant": {
+                    "type": "string",
+                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then tenant will hold the referred object's(e.g. route's) tenant.\n\nExample: - \"acmecorp\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 64\n",
+                    "title": "tenant",
+                    "maxLength": 64,
+                    "x-displayname": "Tenant",
+                    "x-ves-example": "acmecorp",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_bytes": "64"
+                    }
                 }
             }
         }

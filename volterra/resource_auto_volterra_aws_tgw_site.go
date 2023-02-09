@@ -666,6 +666,28 @@ func resourceVolterraAwsTgwSite() *schema.Resource {
 				},
 			},
 
+			"performance_enhancement_mode": {
+
+				Type:     schema.TypeSet,
+				Optional: true,
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+
+						"perf_mode_l3_enhanced": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+
+						"perf_mode_l7_enhanced": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+					},
+				},
+			},
+
 			"sw": {
 
 				Type:     schema.TypeSet,
@@ -2871,6 +2893,45 @@ func resourceVolterraAwsTgwSiteCreate(d *schema.ResourceData, meta interface{}) 
 
 	}
 
+	//performance_enhancement_mode
+	if v, ok := d.GetOk("performance_enhancement_mode"); ok && !isIntfNil(v) {
+
+		sl := v.(*schema.Set).List()
+		performanceEnhancementMode := &ves_io_schema_views.PerformanceEnhancementModeType{}
+		createSpec.PerformanceEnhancementMode = performanceEnhancementMode
+		for _, set := range sl {
+			performanceEnhancementModeMapStrToI := set.(map[string]interface{})
+
+			perfModeChoiceTypeFound := false
+
+			if v, ok := performanceEnhancementModeMapStrToI["perf_mode_l3_enhanced"]; ok && !isIntfNil(v) && !perfModeChoiceTypeFound {
+
+				perfModeChoiceTypeFound = true
+
+				if v.(bool) {
+					perfModeChoiceInt := &ves_io_schema_views.PerformanceEnhancementModeType_PerfModeL3Enhanced{}
+					perfModeChoiceInt.PerfModeL3Enhanced = &ves_io_schema.Empty{}
+					performanceEnhancementMode.PerfModeChoice = perfModeChoiceInt
+				}
+
+			}
+
+			if v, ok := performanceEnhancementModeMapStrToI["perf_mode_l7_enhanced"]; ok && !isIntfNil(v) && !perfModeChoiceTypeFound {
+
+				perfModeChoiceTypeFound = true
+
+				if v.(bool) {
+					perfModeChoiceInt := &ves_io_schema_views.PerformanceEnhancementModeType_PerfModeL7Enhanced{}
+					perfModeChoiceInt.PerfModeL7Enhanced = &ves_io_schema.Empty{}
+					performanceEnhancementMode.PerfModeChoice = perfModeChoiceInt
+				}
+
+			}
+
+		}
+
+	}
+
 	//sw
 	if v, ok := d.GetOk("sw"); ok && !isIntfNil(v) {
 
@@ -4704,6 +4765,32 @@ func resourceVolterraAwsTgwSiteUpdate(d *schema.ResourceData, meta interface{}) 
 		for _, set := range sl {
 			awsParametersMapStrToI := set.(map[string]interface{})
 
+			internetVipChoiceTypeFound := false
+
+			if v, ok := awsParametersMapStrToI["disable_internet_vip"]; ok && !isIntfNil(v) && !internetVipChoiceTypeFound {
+
+				internetVipChoiceTypeFound = true
+
+				if v.(bool) {
+					internetVipChoiceInt := &ves_io_schema_views_aws_tgw_site.ServicesVPCReplaceType_DisableInternetVip{}
+					internetVipChoiceInt.DisableInternetVip = &ves_io_schema.Empty{}
+					awsParameters.InternetVipChoice = internetVipChoiceInt
+				}
+
+			}
+
+			if v, ok := awsParametersMapStrToI["enable_internet_vip"]; ok && !isIntfNil(v) && !internetVipChoiceTypeFound {
+
+				internetVipChoiceTypeFound = true
+
+				if v.(bool) {
+					internetVipChoiceInt := &ves_io_schema_views_aws_tgw_site.ServicesVPCReplaceType_EnableInternetVip{}
+					internetVipChoiceInt.EnableInternetVip = &ves_io_schema.Empty{}
+					awsParameters.InternetVipChoice = internetVipChoiceInt
+				}
+
+			}
+
 			workerNodesTypeFound := false
 
 			if v, ok := awsParametersMapStrToI["no_worker_nodes"]; ok && !isIntfNil(v) && !workerNodesTypeFound {
@@ -5129,6 +5216,44 @@ func resourceVolterraAwsTgwSiteUpdate(d *schema.ResourceData, meta interface{}) 
 					offlineSurvivabilityModeChoiceInt := &ves_io_schema_views.OfflineSurvivabilityModeType_NoOfflineSurvivabilityMode{}
 					offlineSurvivabilityModeChoiceInt.NoOfflineSurvivabilityMode = &ves_io_schema.Empty{}
 					offlineSurvivabilityMode.OfflineSurvivabilityModeChoice = offlineSurvivabilityModeChoiceInt
+				}
+
+			}
+
+		}
+
+	}
+
+	if v, ok := d.GetOk("performance_enhancement_mode"); ok && !isIntfNil(v) {
+
+		sl := v.(*schema.Set).List()
+		performanceEnhancementMode := &ves_io_schema_views.PerformanceEnhancementModeType{}
+		updateSpec.PerformanceEnhancementMode = performanceEnhancementMode
+		for _, set := range sl {
+			performanceEnhancementModeMapStrToI := set.(map[string]interface{})
+
+			perfModeChoiceTypeFound := false
+
+			if v, ok := performanceEnhancementModeMapStrToI["perf_mode_l3_enhanced"]; ok && !isIntfNil(v) && !perfModeChoiceTypeFound {
+
+				perfModeChoiceTypeFound = true
+
+				if v.(bool) {
+					perfModeChoiceInt := &ves_io_schema_views.PerformanceEnhancementModeType_PerfModeL3Enhanced{}
+					perfModeChoiceInt.PerfModeL3Enhanced = &ves_io_schema.Empty{}
+					performanceEnhancementMode.PerfModeChoice = perfModeChoiceInt
+				}
+
+			}
+
+			if v, ok := performanceEnhancementModeMapStrToI["perf_mode_l7_enhanced"]; ok && !isIntfNil(v) && !perfModeChoiceTypeFound {
+
+				perfModeChoiceTypeFound = true
+
+				if v.(bool) {
+					perfModeChoiceInt := &ves_io_schema_views.PerformanceEnhancementModeType_PerfModeL7Enhanced{}
+					perfModeChoiceInt.PerfModeL7Enhanced = &ves_io_schema.Empty{}
+					performanceEnhancementMode.PerfModeChoice = perfModeChoiceInt
 				}
 
 			}

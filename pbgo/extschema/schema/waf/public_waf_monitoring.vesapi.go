@@ -1145,24 +1145,12 @@ var WAFMonitoringAPISwaggerJSON string = `{
         }
     },
     "definitions": {
-        "schemawafMetricLabelOp": {
-            "type": "string",
-            "description": "The operator to use when querying WAF metrics with labels.\nQuery can choose to either select a label if it matches a given value OR\nif it done not match a given value. This is done by choosing the EQ or NEQ operator\nin MetricLabelFilter\n\nEqual to\nNot Equal to",
-            "title": "WAF Metric Label Operator",
-            "enum": [
-                "EQ",
-                "NEQ"
-            ],
-            "default": "EQ",
-            "x-displayname": "WAF Metric Label Operator",
-            "x-ves-proto-enum": "ves.io.schema.waf.MetricLabelOp"
-        },
-        "schemawafMetricValue": {
+        "schemaMetricValue": {
             "type": "object",
-            "description": "Value returned for a WAF Metrics query",
+            "description": "Metric data contains timestamp and the value.",
             "title": "Metric Value",
             "x-displayname": "Metric Value",
-            "x-ves-proto-message": "ves.io.schema.waf.MetricValue",
+            "x-ves-proto-message": "ves.io.schema.MetricValue",
             "properties": {
                 "timestamp": {
                     "type": "number",
@@ -1174,12 +1162,24 @@ var WAFMonitoringAPISwaggerJSON string = `{
                 },
                 "value": {
                     "type": "string",
-                    "description": " value\n\nExample: - \"15\"-",
+                    "description": "\n\nExample: - \"15\"-",
                     "title": "Value",
                     "x-displayname": "Value",
                     "x-ves-example": "15"
                 }
             }
+        },
+        "schemawafMetricLabelOp": {
+            "type": "string",
+            "description": "The operator to use when querying WAF metrics with labels.\nQuery can choose to either select a label if it matches a given value OR\nif it done not match a given value. This is done by choosing the EQ or NEQ operator\nin MetricLabelFilter\n\nEqual to\nNot Equal to",
+            "title": "WAF Metric Label Operator",
+            "enum": [
+                "EQ",
+                "NEQ"
+            ],
+            "default": "EQ",
+            "x-displayname": "WAF Metric Label Operator",
+            "x-ves-proto-enum": "ves.io.schema.waf.MetricLabelOp"
         },
         "wafMetricLabel": {
             "type": "string",
@@ -1340,7 +1340,7 @@ var WAFMonitoringAPISwaggerJSON string = `{
                     "description": " List of metric values",
                     "title": "Metric Values",
                     "items": {
-                        "$ref": "#/definitions/schemawafMetricValue"
+                        "$ref": "#/definitions/schemaMetricValue"
                     },
                     "x-displayname": "Metric Values"
                 }
@@ -1549,7 +1549,7 @@ var WAFMonitoringAPISwaggerJSON string = `{
                     "description": " List of metric values",
                     "title": "Metric Values",
                     "items": {
-                        "$ref": "#/definitions/schemawafMetricValue"
+                        "$ref": "#/definitions/schemaMetricValue"
                     },
                     "x-displayname": "Metric Values"
                 }

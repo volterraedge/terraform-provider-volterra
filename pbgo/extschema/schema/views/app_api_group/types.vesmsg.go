@@ -17,6 +17,7 @@ import (
 	ves_io_schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
 	ves_io_schema_api_group_element "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/api_group_element"
 	ves_io_schema_views "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views"
+	ves_io_schema_views_api_definition "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/api_definition"
 )
 
 var (
@@ -25,6 +26,358 @@ var (
 	_ = errors.Wrap
 	_ = strings.Split
 )
+
+// augmented methods on protoc/std generated struct
+
+func (m *ApiGroupScopeApiDefinition) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *ApiGroupScopeApiDefinition) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *ApiGroupScopeApiDefinition) DeepCopy() *ApiGroupScopeApiDefinition {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &ApiGroupScopeApiDefinition{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *ApiGroupScopeApiDefinition) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *ApiGroupScopeApiDefinition) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return ApiGroupScopeApiDefinitionValidator().Validate(ctx, m, opts...)
+}
+
+func (m *ApiGroupScopeApiDefinition) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetApiDefinitionDRefInfo()
+
+}
+
+func (m *ApiGroupScopeApiDefinition) GetApiDefinitionDRefInfo() ([]db.DRefInfo, error) {
+
+	vref := m.GetApiDefinition()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("api_definition.Object")
+	dri := db.DRefInfo{
+		RefdType:   "api_definition.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "api_definition",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+
+}
+
+// GetApiDefinitionDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *ApiGroupScopeApiDefinition) GetApiDefinitionDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+	refdType, err := d.TypeForEntryKind("", "", "api_definition.Object")
+	if err != nil {
+		return nil, errors.Wrap(err, "Cannot find type for kind: api_definition")
+	}
+
+	vref := m.GetApiDefinition()
+	if vref == nil {
+		return nil, nil
+	}
+	ref := &ves_io_schema.ObjectRefType{
+		Kind:      "api_definition.Object",
+		Tenant:    vref.Tenant,
+		Namespace: vref.Namespace,
+		Name:      vref.Name,
+	}
+	refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+	if err != nil {
+		return nil, errors.Wrap(err, "Getting referred entry")
+	}
+	if refdEnt != nil {
+		entries = append(entries, refdEnt)
+	}
+
+	return entries, nil
+}
+
+type ValidateApiGroupScopeApiDefinition struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateApiGroupScopeApiDefinition) ApiDefinitionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "MessageValidationRuleHandler for api_definition")
+	}
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		if err := ves_io_schema_views.ObjectRefTypeValidator().Validate(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateApiGroupScopeApiDefinition) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*ApiGroupScopeApiDefinition)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *ApiGroupScopeApiDefinition got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["api_definition"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("api_definition"))
+		if err := fv(ctx, m.GetApiDefinition(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultApiGroupScopeApiDefinitionValidator = func() *ValidateApiGroupScopeApiDefinition {
+	v := &ValidateApiGroupScopeApiDefinition{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhApiDefinition := v.ApiDefinitionValidationRuleHandler
+	rulesApiDefinition := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhApiDefinition(rulesApiDefinition)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ApiGroupScopeApiDefinition.api_definition: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["api_definition"] = vFn
+
+	return v
+}()
+
+func ApiGroupScopeApiDefinitionValidator() db.Validator {
+	return DefaultApiGroupScopeApiDefinitionValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *ApiGroupScopeHttpLoadbalancer) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *ApiGroupScopeHttpLoadbalancer) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *ApiGroupScopeHttpLoadbalancer) DeepCopy() *ApiGroupScopeHttpLoadbalancer {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &ApiGroupScopeHttpLoadbalancer{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *ApiGroupScopeHttpLoadbalancer) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *ApiGroupScopeHttpLoadbalancer) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return ApiGroupScopeHttpLoadbalancerValidator().Validate(ctx, m, opts...)
+}
+
+func (m *ApiGroupScopeHttpLoadbalancer) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetHttpLoadbalancerDRefInfo()
+
+}
+
+func (m *ApiGroupScopeHttpLoadbalancer) GetHttpLoadbalancerDRefInfo() ([]db.DRefInfo, error) {
+
+	vref := m.GetHttpLoadbalancer()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("http_loadbalancer.Object")
+	dri := db.DRefInfo{
+		RefdType:   "http_loadbalancer.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "http_loadbalancer",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+
+}
+
+// GetHttpLoadbalancerDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *ApiGroupScopeHttpLoadbalancer) GetHttpLoadbalancerDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+	refdType, err := d.TypeForEntryKind("", "", "http_loadbalancer.Object")
+	if err != nil {
+		return nil, errors.Wrap(err, "Cannot find type for kind: http_loadbalancer")
+	}
+
+	vref := m.GetHttpLoadbalancer()
+	if vref == nil {
+		return nil, nil
+	}
+	ref := &ves_io_schema.ObjectRefType{
+		Kind:      "http_loadbalancer.Object",
+		Tenant:    vref.Tenant,
+		Namespace: vref.Namespace,
+		Name:      vref.Name,
+	}
+	refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+	if err != nil {
+		return nil, errors.Wrap(err, "Getting referred entry")
+	}
+	if refdEnt != nil {
+		entries = append(entries, refdEnt)
+	}
+
+	return entries, nil
+}
+
+type ValidateApiGroupScopeHttpLoadbalancer struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateApiGroupScopeHttpLoadbalancer) HttpLoadbalancerValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "MessageValidationRuleHandler for http_loadbalancer")
+	}
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		if err := ves_io_schema_views.ObjectRefTypeValidator().Validate(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateApiGroupScopeHttpLoadbalancer) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*ApiGroupScopeHttpLoadbalancer)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *ApiGroupScopeHttpLoadbalancer got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["http_loadbalancer"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("http_loadbalancer"))
+		if err := fv(ctx, m.GetHttpLoadbalancer(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultApiGroupScopeHttpLoadbalancerValidator = func() *ValidateApiGroupScopeHttpLoadbalancer {
+	v := &ValidateApiGroupScopeHttpLoadbalancer{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhHttpLoadbalancer := v.HttpLoadbalancerValidationRuleHandler
+	rulesHttpLoadbalancer := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhHttpLoadbalancer(rulesHttpLoadbalancer)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ApiGroupScopeHttpLoadbalancer.http_loadbalancer: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["http_loadbalancer"] = vFn
+
+	return v
+}()
+
+func ApiGroupScopeHttpLoadbalancerValidator() db.Validator {
+	return DefaultApiGroupScopeHttpLoadbalancerValidator
+}
 
 // augmented methods on protoc/std generated struct
 
@@ -63,8 +416,63 @@ func (m *CreateSpecType) Validate(ctx context.Context, opts ...db.ValidateOpt) e
 	return CreateSpecTypeValidator().Validate(ctx, m, opts...)
 }
 
+func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetScopeChoiceDRefInfo()
+
+}
+
+// GetDRefInfo for the field's type
+func (m *CreateSpecType) GetScopeChoiceDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetScopeChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetScopeChoice().(type) {
+	case *CreateSpecType_Generic:
+
+		return nil, nil
+
+	case *CreateSpecType_HttpLoadbalancer:
+		drInfos, err := m.GetHttpLoadbalancer().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetHttpLoadbalancer().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "http_loadbalancer." + dri.DRField
+		}
+		return drInfos, err
+
+	case *CreateSpecType_ApiDefinition:
+		drInfos, err := m.GetApiDefinition().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetApiDefinition().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "api_definition." + dri.DRField
+		}
+		return drInfos, err
+
+	default:
+		return nil, nil
+	}
+
+}
+
 type ValidateCreateSpecType struct {
 	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateCreateSpecType) ScopeChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for scope_choice")
+	}
+	return validatorFn, nil
 }
 
 func (v *ValidateCreateSpecType) ElementsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
@@ -129,10 +537,66 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 		return nil
 	}
 
+	if fv, exists := v.FldValidators["api_group_builder"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("api_group_builder"))
+		if err := fv(ctx, m.GetApiGroupBuilder(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["elements"]; exists {
 		vOpts := append(opts, db.WithValidateField("elements"))
 		if err := fv(ctx, m.GetElements(), vOpts...); err != nil {
 			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["scope_choice"]; exists {
+		val := m.GetScopeChoice()
+		vOpts := append(opts,
+			db.WithValidateField("scope_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetScopeChoice().(type) {
+	case *CreateSpecType_Generic:
+		if fv, exists := v.FldValidators["scope_choice.generic"]; exists {
+			val := m.GetScopeChoice().(*CreateSpecType_Generic).Generic
+			vOpts := append(opts,
+				db.WithValidateField("scope_choice"),
+				db.WithValidateField("generic"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CreateSpecType_HttpLoadbalancer:
+		if fv, exists := v.FldValidators["scope_choice.http_loadbalancer"]; exists {
+			val := m.GetScopeChoice().(*CreateSpecType_HttpLoadbalancer).HttpLoadbalancer
+			vOpts := append(opts,
+				db.WithValidateField("scope_choice"),
+				db.WithValidateField("http_loadbalancer"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CreateSpecType_ApiDefinition:
+		if fv, exists := v.FldValidators["scope_choice.api_definition"]; exists {
+			val := m.GetScopeChoice().(*CreateSpecType_ApiDefinition).ApiDefinition
+			vOpts := append(opts,
+				db.WithValidateField("scope_choice"),
+				db.WithValidateField("api_definition"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
 		}
 
 	}
@@ -152,6 +616,17 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
 
+	vrhScopeChoice := v.ScopeChoiceValidationRuleHandler
+	rulesScopeChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhScopeChoice(rulesScopeChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateSpecType.scope_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["scope_choice"] = vFn
+
 	vrhElements := v.ElementsValidationRuleHandler
 	rulesElements := map[string]string{
 		"ves.io.schema.rules.message.required":   "true",
@@ -163,6 +638,11 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["elements"] = vFn
+
+	v.FldValidators["scope_choice.http_loadbalancer"] = ApiGroupScopeHttpLoadbalancerValidator().Validate
+	v.FldValidators["scope_choice.api_definition"] = ApiGroupScopeApiDefinitionValidator().Validate
+
+	v.FldValidators["api_group_builder"] = ves_io_schema_views_api_definition.ApiGroupBuilderValidator().Validate
 
 	return v
 }()
@@ -208,8 +688,63 @@ func (m *GetSpecType) Validate(ctx context.Context, opts ...db.ValidateOpt) erro
 	return GetSpecTypeValidator().Validate(ctx, m, opts...)
 }
 
+func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetScopeChoiceDRefInfo()
+
+}
+
+// GetDRefInfo for the field's type
+func (m *GetSpecType) GetScopeChoiceDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetScopeChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetScopeChoice().(type) {
+	case *GetSpecType_Generic:
+
+		return nil, nil
+
+	case *GetSpecType_HttpLoadbalancer:
+		drInfos, err := m.GetHttpLoadbalancer().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetHttpLoadbalancer().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "http_loadbalancer." + dri.DRField
+		}
+		return drInfos, err
+
+	case *GetSpecType_ApiDefinition:
+		drInfos, err := m.GetApiDefinition().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetApiDefinition().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "api_definition." + dri.DRField
+		}
+		return drInfos, err
+
+	default:
+		return nil, nil
+	}
+
+}
+
 type ValidateGetSpecType struct {
 	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateGetSpecType) ScopeChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for scope_choice")
+	}
+	return validatorFn, nil
 }
 
 func (v *ValidateGetSpecType) ElementsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
@@ -274,10 +809,66 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 		return nil
 	}
 
+	if fv, exists := v.FldValidators["api_group_builder"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("api_group_builder"))
+		if err := fv(ctx, m.GetApiGroupBuilder(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["elements"]; exists {
 		vOpts := append(opts, db.WithValidateField("elements"))
 		if err := fv(ctx, m.GetElements(), vOpts...); err != nil {
 			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["scope_choice"]; exists {
+		val := m.GetScopeChoice()
+		vOpts := append(opts,
+			db.WithValidateField("scope_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetScopeChoice().(type) {
+	case *GetSpecType_Generic:
+		if fv, exists := v.FldValidators["scope_choice.generic"]; exists {
+			val := m.GetScopeChoice().(*GetSpecType_Generic).Generic
+			vOpts := append(opts,
+				db.WithValidateField("scope_choice"),
+				db.WithValidateField("generic"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GetSpecType_HttpLoadbalancer:
+		if fv, exists := v.FldValidators["scope_choice.http_loadbalancer"]; exists {
+			val := m.GetScopeChoice().(*GetSpecType_HttpLoadbalancer).HttpLoadbalancer
+			vOpts := append(opts,
+				db.WithValidateField("scope_choice"),
+				db.WithValidateField("http_loadbalancer"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GetSpecType_ApiDefinition:
+		if fv, exists := v.FldValidators["scope_choice.api_definition"]; exists {
+			val := m.GetScopeChoice().(*GetSpecType_ApiDefinition).ApiDefinition
+			vOpts := append(opts,
+				db.WithValidateField("scope_choice"),
+				db.WithValidateField("api_definition"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
 		}
 
 	}
@@ -297,6 +888,17 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
 
+	vrhScopeChoice := v.ScopeChoiceValidationRuleHandler
+	rulesScopeChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhScopeChoice(rulesScopeChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GetSpecType.scope_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["scope_choice"] = vFn
+
 	vrhElements := v.ElementsValidationRuleHandler
 	rulesElements := map[string]string{
 		"ves.io.schema.rules.message.required":   "true",
@@ -308,6 +910,11 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["elements"] = vFn
+
+	v.FldValidators["scope_choice.http_loadbalancer"] = ApiGroupScopeHttpLoadbalancerValidator().Validate
+	v.FldValidators["scope_choice.api_definition"] = ApiGroupScopeApiDefinitionValidator().Validate
+
+	v.FldValidators["api_group_builder"] = ves_io_schema_views_api_definition.ApiGroupBuilderValidator().Validate
 
 	return v
 }()
@@ -358,7 +965,58 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 	}
 
-	return m.GetViewInternalDRefInfo()
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetScopeChoiceDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetScopeChoiceDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	if fdrInfos, err := m.GetViewInternalDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetViewInternalDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	return drInfos, nil
+
+}
+
+// GetDRefInfo for the field's type
+func (m *GlobalSpecType) GetScopeChoiceDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetScopeChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetScopeChoice().(type) {
+	case *GlobalSpecType_Generic:
+
+		return nil, nil
+
+	case *GlobalSpecType_HttpLoadbalancer:
+		drInfos, err := m.GetHttpLoadbalancer().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetHttpLoadbalancer().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "http_loadbalancer." + dri.DRField
+		}
+		return drInfos, err
+
+	case *GlobalSpecType_ApiDefinition:
+		drInfos, err := m.GetApiDefinition().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetApiDefinition().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "api_definition." + dri.DRField
+		}
+		return drInfos, err
+
+	default:
+		return nil, nil
+	}
 
 }
 
@@ -413,6 +1071,14 @@ func (m *GlobalSpecType) GetViewInternalDBEntries(ctx context.Context, d db.Inte
 
 type ValidateGlobalSpecType struct {
 	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateGlobalSpecType) ScopeChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for scope_choice")
+	}
+	return validatorFn, nil
 }
 
 func (v *ValidateGlobalSpecType) ElementsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
@@ -477,10 +1143,66 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 		return nil
 	}
 
+	if fv, exists := v.FldValidators["api_group_builder"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("api_group_builder"))
+		if err := fv(ctx, m.GetApiGroupBuilder(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["elements"]; exists {
 		vOpts := append(opts, db.WithValidateField("elements"))
 		if err := fv(ctx, m.GetElements(), vOpts...); err != nil {
 			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["scope_choice"]; exists {
+		val := m.GetScopeChoice()
+		vOpts := append(opts,
+			db.WithValidateField("scope_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetScopeChoice().(type) {
+	case *GlobalSpecType_Generic:
+		if fv, exists := v.FldValidators["scope_choice.generic"]; exists {
+			val := m.GetScopeChoice().(*GlobalSpecType_Generic).Generic
+			vOpts := append(opts,
+				db.WithValidateField("scope_choice"),
+				db.WithValidateField("generic"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GlobalSpecType_HttpLoadbalancer:
+		if fv, exists := v.FldValidators["scope_choice.http_loadbalancer"]; exists {
+			val := m.GetScopeChoice().(*GlobalSpecType_HttpLoadbalancer).HttpLoadbalancer
+			vOpts := append(opts,
+				db.WithValidateField("scope_choice"),
+				db.WithValidateField("http_loadbalancer"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GlobalSpecType_ApiDefinition:
+		if fv, exists := v.FldValidators["scope_choice.api_definition"]; exists {
+			val := m.GetScopeChoice().(*GlobalSpecType_ApiDefinition).ApiDefinition
+			vOpts := append(opts,
+				db.WithValidateField("scope_choice"),
+				db.WithValidateField("api_definition"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
 		}
 
 	}
@@ -509,6 +1231,17 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
 
+	vrhScopeChoice := v.ScopeChoiceValidationRuleHandler
+	rulesScopeChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhScopeChoice(rulesScopeChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.scope_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["scope_choice"] = vFn
+
 	vrhElements := v.ElementsValidationRuleHandler
 	rulesElements := map[string]string{
 		"ves.io.schema.rules.message.required":   "true",
@@ -520,6 +1253,11 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["elements"] = vFn
+
+	v.FldValidators["scope_choice.http_loadbalancer"] = ApiGroupScopeHttpLoadbalancerValidator().Validate
+	v.FldValidators["scope_choice.api_definition"] = ApiGroupScopeApiDefinitionValidator().Validate
+
+	v.FldValidators["api_group_builder"] = ves_io_schema_views_api_definition.ApiGroupBuilderValidator().Validate
 
 	v.FldValidators["view_internal"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
@@ -567,8 +1305,63 @@ func (m *ReplaceSpecType) Validate(ctx context.Context, opts ...db.ValidateOpt) 
 	return ReplaceSpecTypeValidator().Validate(ctx, m, opts...)
 }
 
+func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetScopeChoiceDRefInfo()
+
+}
+
+// GetDRefInfo for the field's type
+func (m *ReplaceSpecType) GetScopeChoiceDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetScopeChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetScopeChoice().(type) {
+	case *ReplaceSpecType_Generic:
+
+		return nil, nil
+
+	case *ReplaceSpecType_HttpLoadbalancer:
+		drInfos, err := m.GetHttpLoadbalancer().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetHttpLoadbalancer().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "http_loadbalancer." + dri.DRField
+		}
+		return drInfos, err
+
+	case *ReplaceSpecType_ApiDefinition:
+		drInfos, err := m.GetApiDefinition().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetApiDefinition().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "api_definition." + dri.DRField
+		}
+		return drInfos, err
+
+	default:
+		return nil, nil
+	}
+
+}
+
 type ValidateReplaceSpecType struct {
 	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateReplaceSpecType) ScopeChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for scope_choice")
+	}
+	return validatorFn, nil
 }
 
 func (v *ValidateReplaceSpecType) ElementsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
@@ -633,10 +1426,66 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 		return nil
 	}
 
+	if fv, exists := v.FldValidators["api_group_builder"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("api_group_builder"))
+		if err := fv(ctx, m.GetApiGroupBuilder(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["elements"]; exists {
 		vOpts := append(opts, db.WithValidateField("elements"))
 		if err := fv(ctx, m.GetElements(), vOpts...); err != nil {
 			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["scope_choice"]; exists {
+		val := m.GetScopeChoice()
+		vOpts := append(opts,
+			db.WithValidateField("scope_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetScopeChoice().(type) {
+	case *ReplaceSpecType_Generic:
+		if fv, exists := v.FldValidators["scope_choice.generic"]; exists {
+			val := m.GetScopeChoice().(*ReplaceSpecType_Generic).Generic
+			vOpts := append(opts,
+				db.WithValidateField("scope_choice"),
+				db.WithValidateField("generic"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ReplaceSpecType_HttpLoadbalancer:
+		if fv, exists := v.FldValidators["scope_choice.http_loadbalancer"]; exists {
+			val := m.GetScopeChoice().(*ReplaceSpecType_HttpLoadbalancer).HttpLoadbalancer
+			vOpts := append(opts,
+				db.WithValidateField("scope_choice"),
+				db.WithValidateField("http_loadbalancer"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ReplaceSpecType_ApiDefinition:
+		if fv, exists := v.FldValidators["scope_choice.api_definition"]; exists {
+			val := m.GetScopeChoice().(*ReplaceSpecType_ApiDefinition).ApiDefinition
+			vOpts := append(opts,
+				db.WithValidateField("scope_choice"),
+				db.WithValidateField("api_definition"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
 		}
 
 	}
@@ -656,6 +1505,17 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
 
+	vrhScopeChoice := v.ScopeChoiceValidationRuleHandler
+	rulesScopeChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhScopeChoice(rulesScopeChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ReplaceSpecType.scope_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["scope_choice"] = vFn
+
 	vrhElements := v.ElementsValidationRuleHandler
 	rulesElements := map[string]string{
 		"ves.io.schema.rules.message.required":   "true",
@@ -668,6 +1528,11 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	}
 	v.FldValidators["elements"] = vFn
 
+	v.FldValidators["scope_choice.http_loadbalancer"] = ApiGroupScopeHttpLoadbalancerValidator().Validate
+	v.FldValidators["scope_choice.api_definition"] = ApiGroupScopeApiDefinitionValidator().Validate
+
+	v.FldValidators["api_group_builder"] = ves_io_schema_views_api_definition.ApiGroupBuilderValidator().Validate
+
 	return v
 }()
 
@@ -675,11 +1540,54 @@ func ReplaceSpecTypeValidator() db.Validator {
 	return DefaultReplaceSpecTypeValidator
 }
 
+// create setters in CreateSpecType from GlobalSpecType for oneof fields
+func (r *CreateSpecType) SetScopeChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.ScopeChoice.(type) {
+	case nil:
+		o.ScopeChoice = nil
+
+	case *CreateSpecType_ApiDefinition:
+		o.ScopeChoice = &GlobalSpecType_ApiDefinition{ApiDefinition: of.ApiDefinition}
+
+	case *CreateSpecType_Generic:
+		o.ScopeChoice = &GlobalSpecType_Generic{Generic: of.Generic}
+
+	case *CreateSpecType_HttpLoadbalancer:
+		o.ScopeChoice = &GlobalSpecType_HttpLoadbalancer{HttpLoadbalancer: of.HttpLoadbalancer}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *CreateSpecType) GetScopeChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.ScopeChoice.(type) {
+	case nil:
+		r.ScopeChoice = nil
+
+	case *GlobalSpecType_ApiDefinition:
+		r.ScopeChoice = &CreateSpecType_ApiDefinition{ApiDefinition: of.ApiDefinition}
+
+	case *GlobalSpecType_Generic:
+		r.ScopeChoice = &CreateSpecType_Generic{Generic: of.Generic}
+
+	case *GlobalSpecType_HttpLoadbalancer:
+		r.ScopeChoice = &CreateSpecType_HttpLoadbalancer{HttpLoadbalancer: of.HttpLoadbalancer}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
 func (m *CreateSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	if f == nil {
 		return
 	}
+	m.ApiGroupBuilder = f.GetApiGroupBuilder()
 	m.Elements = f.GetElements()
+	m.GetScopeChoiceFromGlobalSpecType(f)
 }
 
 func (m *CreateSpecType) FromGlobalSpecType(f *GlobalSpecType) {
@@ -697,7 +1605,9 @@ func (m *CreateSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) 
 	}
 	_ = m1
 
+	f.ApiGroupBuilder = m1.ApiGroupBuilder
 	f.Elements = m1.Elements
+	m1.SetScopeChoiceToGlobalSpecType(f)
 }
 
 func (m *CreateSpecType) ToGlobalSpecType(f *GlobalSpecType) {
@@ -708,11 +1618,54 @@ func (m *CreateSpecType) ToGlobalSpecTypeWithoutDeepCopy(f *GlobalSpecType) {
 	m.toGlobalSpecType(f, false)
 }
 
+// create setters in GetSpecType from GlobalSpecType for oneof fields
+func (r *GetSpecType) SetScopeChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.ScopeChoice.(type) {
+	case nil:
+		o.ScopeChoice = nil
+
+	case *GetSpecType_ApiDefinition:
+		o.ScopeChoice = &GlobalSpecType_ApiDefinition{ApiDefinition: of.ApiDefinition}
+
+	case *GetSpecType_Generic:
+		o.ScopeChoice = &GlobalSpecType_Generic{Generic: of.Generic}
+
+	case *GetSpecType_HttpLoadbalancer:
+		o.ScopeChoice = &GlobalSpecType_HttpLoadbalancer{HttpLoadbalancer: of.HttpLoadbalancer}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *GetSpecType) GetScopeChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.ScopeChoice.(type) {
+	case nil:
+		r.ScopeChoice = nil
+
+	case *GlobalSpecType_ApiDefinition:
+		r.ScopeChoice = &GetSpecType_ApiDefinition{ApiDefinition: of.ApiDefinition}
+
+	case *GlobalSpecType_Generic:
+		r.ScopeChoice = &GetSpecType_Generic{Generic: of.Generic}
+
+	case *GlobalSpecType_HttpLoadbalancer:
+		r.ScopeChoice = &GetSpecType_HttpLoadbalancer{HttpLoadbalancer: of.HttpLoadbalancer}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
 func (m *GetSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	if f == nil {
 		return
 	}
+	m.ApiGroupBuilder = f.GetApiGroupBuilder()
 	m.Elements = f.GetElements()
+	m.GetScopeChoiceFromGlobalSpecType(f)
 }
 
 func (m *GetSpecType) FromGlobalSpecType(f *GlobalSpecType) {
@@ -730,7 +1683,9 @@ func (m *GetSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	}
 	_ = m1
 
+	f.ApiGroupBuilder = m1.ApiGroupBuilder
 	f.Elements = m1.Elements
+	m1.SetScopeChoiceToGlobalSpecType(f)
 }
 
 func (m *GetSpecType) ToGlobalSpecType(f *GlobalSpecType) {
@@ -741,11 +1696,54 @@ func (m *GetSpecType) ToGlobalSpecTypeWithoutDeepCopy(f *GlobalSpecType) {
 	m.toGlobalSpecType(f, false)
 }
 
+// create setters in ReplaceSpecType from GlobalSpecType for oneof fields
+func (r *ReplaceSpecType) SetScopeChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.ScopeChoice.(type) {
+	case nil:
+		o.ScopeChoice = nil
+
+	case *ReplaceSpecType_ApiDefinition:
+		o.ScopeChoice = &GlobalSpecType_ApiDefinition{ApiDefinition: of.ApiDefinition}
+
+	case *ReplaceSpecType_Generic:
+		o.ScopeChoice = &GlobalSpecType_Generic{Generic: of.Generic}
+
+	case *ReplaceSpecType_HttpLoadbalancer:
+		o.ScopeChoice = &GlobalSpecType_HttpLoadbalancer{HttpLoadbalancer: of.HttpLoadbalancer}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *ReplaceSpecType) GetScopeChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.ScopeChoice.(type) {
+	case nil:
+		r.ScopeChoice = nil
+
+	case *GlobalSpecType_ApiDefinition:
+		r.ScopeChoice = &ReplaceSpecType_ApiDefinition{ApiDefinition: of.ApiDefinition}
+
+	case *GlobalSpecType_Generic:
+		r.ScopeChoice = &ReplaceSpecType_Generic{Generic: of.Generic}
+
+	case *GlobalSpecType_HttpLoadbalancer:
+		r.ScopeChoice = &ReplaceSpecType_HttpLoadbalancer{HttpLoadbalancer: of.HttpLoadbalancer}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
 func (m *ReplaceSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	if f == nil {
 		return
 	}
+	m.ApiGroupBuilder = f.GetApiGroupBuilder()
 	m.Elements = f.GetElements()
+	m.GetScopeChoiceFromGlobalSpecType(f)
 }
 
 func (m *ReplaceSpecType) FromGlobalSpecType(f *GlobalSpecType) {
@@ -763,7 +1761,9 @@ func (m *ReplaceSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool)
 	}
 	_ = m1
 
+	f.ApiGroupBuilder = m1.ApiGroupBuilder
 	f.Elements = m1.Elements
+	m1.SetScopeChoiceToGlobalSpecType(f)
 }
 
 func (m *ReplaceSpecType) ToGlobalSpecType(f *GlobalSpecType) {

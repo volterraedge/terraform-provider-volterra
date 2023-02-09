@@ -1657,8 +1657,8 @@ func RegisterGwAPIHandler(ctx context.Context, mux *runtime.ServeMux, svc interf
 var APISwaggerJSON string = `{
     "swagger": "2.0",
     "info": {
-        "title": "app api group object",
-        "description": "The app_api_group construct provides a mechanism to classify the universal set of request APIs into a much smaller number of logical groups in order\nto make it easier to author and maintain API level access control policies. The app_api_group holds api_group child object with the same content for\ninternal use by data path and other services.\n\nAn app_api_group object consists of an unordered list of api group elements. The method and path from the input request API are matched against all\nelements in an app_api_group to determine if the request API belongs to the api group in question. The request API belongs to an api group if it\nmatches at least one element in the api group.",
+        "title": "app_api_group object",
+        "description": "The app_api_group construct provides a mechanism to classify the universal set of request APIs into a much smaller number of logical groups in order\nto make it easier to author and maintain API level access control policies. The app_api_group holds api_group child object with the same content for\ninternal use by data path and other services.\n\nAn app_api_group object consists of an unordered list of api group elements. The method and path from the input request API are matched against all\nelements in an app_api_group to determine if the request API belongs to the api group in question. The request API belongs to an api group if it\nmatches at least one element in the api group.\n\nThe App API Group may be created using API Group Builder which defines path filter and label selectors to match\nAPI Endpoints from a referenced object, like HTTP Loadbalancer. For example, if there is a HTTP LB with API Discovery enabled\nthen all discovered API Endpoints serve as a base set and filters define which API Endpoints would be the group members.\n\n The view creates the following child objects:\n * api_group",
         "version": "version not set"
     },
     "schemes": [
@@ -2185,6 +2185,92 @@ var APISwaggerJSON string = `{
         }
     },
     "definitions": {
+        "api_definitionApiGroupBuilder": {
+            "type": "object",
+            "description": "x-displayName: \"API Group Builder\"\nDefine a group of application operations using path matching and label filtering.",
+            "title": "ApiGroupBuilder",
+            "properties": {
+                "excluded_operations": {
+                    "type": "array",
+                    "description": "x-displayName: \"Excluded Operations\"\nList of operations matched by the filters to be excluded from a group.\nThe list should only include operations matched by the filters.\nThe paths appear here with parameters as defined in OpenAPI spec file.",
+                    "title": "excluded_operations",
+                    "items": {
+                        "$ref": "#/definitions/api_definitionApiOperation"
+                    }
+                },
+                "included_operations": {
+                    "type": "array",
+                    "description": "x-displayName: \"Included Operations\"\nList of operations not matched by the filters to be included in a group.\nThe list should not include operations matched by the filters.\nThe paths appear here with parameters as defined in OpenAPI spec file.",
+                    "title": "included_operations",
+                    "items": {
+                        "$ref": "#/definitions/api_definitionApiOperation"
+                    }
+                },
+                "label_filter": {
+                    "description": "x-displayName: \"Label Filter\"\nx-example: \"method in (POST, DELETE), tag in (web, db)\"\nA group builder should include only labels selected by expression.\nIn the current context a label is a property of an OpenAPI operation or path.",
+                    "title": "label_filter",
+                    "$ref": "#/definitions/schemaLabelSelectorType"
+                },
+                "metadata": {
+                    "description": "x-displayName: \"Metadata\"\nx-required\nCommon attributes for the rule including name and description.",
+                    "title": "metadata",
+                    "$ref": "#/definitions/schemaMessageMetaType"
+                },
+                "path_filter": {
+                    "type": "string",
+                    "description": "x-displayName: \"Path Filter\"\nx-example: \"/api/config/.*/path[123]/$\"\nRegular expression to match the input request API path against.\nThe match is considered to succeed if the input request API path matches the specified path regex.",
+                    "title": "path_filter"
+                }
+            }
+        },
+        "api_definitionApiOperation": {
+            "type": "object",
+            "description": "x-displayName: \"API Operation\"\nAPI operation according to OpenAPI specification.",
+            "title": "ApiOperation",
+            "properties": {
+                "method": {
+                    "description": "x-displayName: \"HTTP Method\"\nx-required\nx-example: 'POST'\nMethod to match the input request API method against.",
+                    "title": "method",
+                    "$ref": "#/definitions/schemaHttpMethod"
+                },
+                "path": {
+                    "type": "string",
+                    "description": "x-displayName: \"Path\"\nx-required\nx-example: \"/api/users/{userid}\"\nAn endpoint path, as specified in OpenAPI, including parameters.\nThe path should comply with RFC 3986 and may have parameters according to OpenAPI specification",
+                    "title": "path"
+                }
+            }
+        },
+        "app_api_groupApiGroupScopeApiDefinition": {
+            "type": "object",
+            "description": "x-displayName: \"API Group Scope API Definition\"\nSet the scope of the API Group to a specific API Definition",
+            "title": "ApiGroupScopeApiDefinition",
+            "properties": {
+                "api_definition": {
+                    "description": "x-displayName: \"API Definition\"\nx-required\nReference to an API Definition object which defines a superset of API Endpoints for the API Group",
+                    "title": "API Definition Reference",
+                    "$ref": "#/definitions/schemaviewsObjectRefType"
+                }
+            }
+        },
+        "app_api_groupApiGroupScopeHttpLoadbalancer": {
+            "type": "object",
+            "description": "Set the scope of the API Group to a specific HTTP Loadbalancer",
+            "title": "ApiGroupScopeHttpLoadbalancer",
+            "x-displayname": "API Group Scope HTTP Loadbalancer",
+            "x-ves-proto-message": "ves.io.schema.views.app_api_group.ApiGroupScopeHttpLoadbalancer",
+            "properties": {
+                "http_loadbalancer": {
+                    "description": " Reference to an HTTP Loadbalancer object which defines a superset of API Endpoints for the API Group\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "HTTP Loadbalancer Reference",
+                    "$ref": "#/definitions/schemaviewsObjectRefType",
+                    "x-displayname": "HTTP Loadbalancer",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                }
+            }
+        },
         "app_api_groupCreateRequest": {
             "type": "object",
             "description": "This is the input message of the 'Create' RPC",
@@ -2564,6 +2650,11 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "ioschemaEmpty": {
+            "type": "object",
+            "description": "x-displayName: \"Empty\"\nThis can be used for messages where no values are needed",
+            "title": "Empty"
+        },
         "ioschemaObjectRefType": {
             "type": "object",
             "description": "This type establishes a 'direct reference' from one object(the referrer) to another(the referred).\nSuch a reference is in form of tenant/namespace/name for public API and Uid for private API\nThis type of reference is called direct because the relation is explicit and concrete (as opposed\nto selector reference which builds a group based on labels of selectee objects)",
@@ -2780,6 +2871,44 @@ var APISwaggerJSON string = `{
                     "title": "result",
                     "$ref": "#/definitions/schemaStatusType",
                     "x-displayname": "Result"
+                }
+            }
+        },
+        "schemaLabelSelectorType": {
+            "type": "object",
+            "description": "x-displayName: \"Label Selector\"\nThis type can be used to establish a 'selector reference' from one object(called selector) to\na set of other objects(called selectees) based on the value of expresssions.\nA label selector is a label query over a set of resources. An empty label selector matches all objects.\nA null label selector matches no objects. Label selector is immutable.\nexpressions is a list of strings of label selection expression.\nEach string has \",\" separated values which are \"AND\" and all strings are logically \"OR\".\nBNF for expression string\n\u003cselector-syntax\u003e         ::= \u003crequirement\u003e | \u003crequirement\u003e \",\" \u003cselector-syntax\u003e\n\u003crequirement\u003e             ::= [!] KEY [ \u003cset-based-restriction\u003e | \u003cexact-match-restriction\u003e ]\n\u003cset-based-restriction\u003e   ::= \"\" | \u003cinclusion-exclusion\u003e \u003cvalue-set\u003e\n\u003cinclusion-exclusion\u003e     ::= \u003cinclusion\u003e | \u003cexclusion\u003e\n\u003cexclusion\u003e               ::= \"notin\"\n\u003cinclusion\u003e               ::= \"in\"\n\u003cvalue-set\u003e               ::= \"(\" \u003cvalues\u003e \")\"\n\u003cvalues\u003e                  ::= VALUE | VALUE \",\" \u003cvalues\u003e\n\u003cexact-match-restriction\u003e ::= [\"=\"|\"==\"|\"!=\"] VALUE",
+            "title": "LabelSelectorType",
+            "properties": {
+                "expressions": {
+                    "type": "array",
+                    "description": "x-displayName: \"Selector Expression\"\nx-required\nx-example: \"region in (us-west1, us-west2),tier in (staging)\"\nexpressions contains the kubernetes style label expression for selections.",
+                    "title": "expressions",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "schemaMessageMetaType": {
+            "type": "object",
+            "description": "x-displayName: \"Message Metadata\"\nMessageMetaType is metadata (common attributes) of a message that only certain messages\nhave. This information is propagated to the metadata of a child object that gets created\nfrom the containing message during view processing.\nThe information in this type can be specified by user during create and replace APIs.",
+            "title": "MessageMetaType",
+            "properties": {
+                "description": {
+                    "type": "string",
+                    "description": "x-displayName: \"Description\"\nx-example: \"Virtual Host for acmecorp website\"\nHuman readable description.",
+                    "title": "description"
+                },
+                "disable": {
+                    "type": "boolean",
+                    "description": "x-displayName: \"Disable\"\nx-example: \"true\"\nA value of true will administratively disable the object that corresponds to the containing message.",
+                    "title": "disable",
+                    "format": "boolean"
+                },
+                "name": {
+                    "type": "string",
+                    "description": "x-displayName: \"Name\"\nx-example: \"acmecorp-web\"\nx-required\nThis is the name of the message.\nThe value of name has to follow DNS-1035 format.",
+                    "title": "name"
                 }
             }
         },
@@ -3459,31 +3588,56 @@ var APISwaggerJSON string = `{
         },
         "schemaviewsObjectRefType": {
             "type": "object",
-            "description": "x-displayName: \"Object reference\"\nThis type establishes a direct reference from one object(the referrer) to another(the referred).\nSuch a reference is in form of tenant/namespace/name",
+            "description": "This type establishes a direct reference from one object(the referrer) to another(the referred).\nSuch a reference is in form of tenant/namespace/name",
             "title": "ObjectRefType",
+            "x-displayname": "Object reference",
+            "x-ves-proto-message": "ves.io.schema.views.ObjectRefType",
             "properties": {
                 "name": {
                     "type": "string",
-                    "description": "x-displayName: \"Name\"\nx-example: \"contacts-route\"\nx-required\nWhen a configuration object(e.g. virtual_host) refers to another(e.g route)\nthen name will hold the referred object's(e.g. route's) name.",
-                    "title": "name"
+                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then name will hold the referred object's(e.g. route's) name.\n\nExample: - \"contacts-route\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_bytes: 64\n  ves.io.schema.rules.string.min_bytes: 1\n",
+                    "title": "name",
+                    "minLength": 1,
+                    "maxLength": 64,
+                    "x-displayname": "Name",
+                    "x-ves-example": "contacts-route",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.max_bytes": "64",
+                        "ves.io.schema.rules.string.min_bytes": "1"
+                    }
                 },
                 "namespace": {
                     "type": "string",
-                    "description": "x-displayName: \"Namespace\"\nx-example: \"ns1\"\nWhen a configuration object(e.g. virtual_host) refers to another(e.g route)\nthen namespace will hold the referred object's(e.g. route's) namespace.",
-                    "title": "namespace"
+                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then namespace will hold the referred object's(e.g. route's) namespace.\n\nExample: - \"ns1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 64\n",
+                    "title": "namespace",
+                    "maxLength": 64,
+                    "x-displayname": "Namespace",
+                    "x-ves-example": "ns1",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_bytes": "64"
+                    }
                 },
                 "tenant": {
                     "type": "string",
-                    "description": "x-displayName: \"Tenant\"\nx-example: \"acmecorp\"\nWhen a configuration object(e.g. virtual_host) refers to another(e.g route)\nthen tenant will hold the referred object's(e.g. route's) tenant.",
-                    "title": "tenant"
+                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then tenant will hold the referred object's(e.g. route's) tenant.\n\nExample: - \"acmecorp\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 64\n",
+                    "title": "tenant",
+                    "maxLength": 64,
+                    "x-displayname": "Tenant",
+                    "x-ves-example": "acmecorp",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_bytes": "64"
+                    }
                 }
             }
         },
         "viewsapp_api_groupCreateSpecType": {
             "type": "object",
             "description": "Create app_api_group creates a new object in the storage backend for metadata.namespace.",
-            "title": "Create app api group",
+            "title": "Create app_api_group",
             "x-displayname": "Create API Group",
+            "x-ves-oneof-field-scope_choice": "[\"http_loadbalancer\"]",
             "x-ves-proto-message": "ves.io.schema.views.app_api_group.CreateSpecType",
             "properties": {
                 "elements": {
@@ -3499,14 +3653,20 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.message.required": "true",
                         "ves.io.schema.rules.repeated.max_items": "1000"
                     }
+                },
+                "http_loadbalancer": {
+                    "description": "Exclusive with []\n Set scope to an HTTP Loadbalancer object to define the API endpoints list for API groups management",
+                    "$ref": "#/definitions/app_api_groupApiGroupScopeHttpLoadbalancer",
+                    "x-displayname": "HTTP Loadbalancer"
                 }
             }
         },
         "viewsapp_api_groupGetSpecType": {
             "type": "object",
             "description": "Get app_api_group reads a given object from storage backend for metadata.namespace.",
-            "title": "Get app api group",
+            "title": "Get app_api_group",
             "x-displayname": "Get API Group",
+            "x-ves-oneof-field-scope_choice": "[\"http_loadbalancer\"]",
             "x-ves-proto-message": "ves.io.schema.views.app_api_group.GetSpecType",
             "properties": {
                 "elements": {
@@ -3522,6 +3682,11 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.message.required": "true",
                         "ves.io.schema.rules.repeated.max_items": "1000"
                     }
+                },
+                "http_loadbalancer": {
+                    "description": "Exclusive with []\n Set scope to an HTTP Loadbalancer object to define the API endpoints list for API groups management",
+                    "$ref": "#/definitions/app_api_groupApiGroupScopeHttpLoadbalancer",
+                    "x-displayname": "HTTP Loadbalancer"
                 }
             }
         },
@@ -3530,6 +3695,7 @@ var APISwaggerJSON string = `{
             "description": "Shape of app_api_group in the storage backend.",
             "title": "GlobalSpecType",
             "x-displayname": "Specification",
+            "x-ves-oneof-field-scope_choice": "[\"http_loadbalancer\"]",
             "x-ves-proto-message": "ves.io.schema.views.app_api_group.GlobalSpecType",
             "properties": {
                 "elements": {
@@ -3546,14 +3712,21 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.message.required": "true",
                         "ves.io.schema.rules.repeated.max_items": "1000"
                     }
+                },
+                "http_loadbalancer": {
+                    "description": "Exclusive with []\n Set scope to an HTTP Loadbalancer object to define the API endpoints list for API groups management",
+                    "title": "HTTP Loadbalancer Scope",
+                    "$ref": "#/definitions/app_api_groupApiGroupScopeHttpLoadbalancer",
+                    "x-displayname": "HTTP Loadbalancer"
                 }
             }
         },
         "viewsapp_api_groupReplaceSpecType": {
             "type": "object",
             "description": "Replace app_api_group replaces an existing object in the storage backend for metadata.namespace.",
-            "title": "Replace app api group",
+            "title": "Replace app_api_group",
             "x-displayname": "Replace API Group",
+            "x-ves-oneof-field-scope_choice": "[\"http_loadbalancer\"]",
             "x-ves-proto-message": "ves.io.schema.views.app_api_group.ReplaceSpecType",
             "properties": {
                 "elements": {
@@ -3569,6 +3742,11 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.message.required": "true",
                         "ves.io.schema.rules.repeated.max_items": "1000"
                     }
+                },
+                "http_loadbalancer": {
+                    "description": "Exclusive with []\n Set scope to an HTTP Loadbalancer object to define the API endpoints list for API groups management",
+                    "$ref": "#/definitions/app_api_groupApiGroupScopeHttpLoadbalancer",
+                    "x-displayname": "HTTP Loadbalancer"
                 }
             }
         }

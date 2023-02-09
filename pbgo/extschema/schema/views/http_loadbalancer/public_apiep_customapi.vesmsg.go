@@ -24,6 +24,294 @@ var (
 
 // augmented methods on protoc/std generated struct
 
+func (m *APIGroupsApiep) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *APIGroupsApiep) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *APIGroupsApiep) DeepCopy() *APIGroupsApiep {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &APIGroupsApiep{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *APIGroupsApiep) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *APIGroupsApiep) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return APIGroupsApiepValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateAPIGroupsApiep struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateAPIGroupsApiep) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*APIGroupsApiep)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *APIGroupsApiep got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["category"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("category"))
+		for idx, item := range m.GetCategory() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["method"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("method"))
+		if err := fv(ctx, m.GetMethod(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["path"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("path"))
+		if err := fv(ctx, m.GetPath(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["sensitive_data"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("sensitive_data"))
+		for idx, item := range m.GetSensitiveData() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultAPIGroupsApiepValidator = func() *ValidateAPIGroupsApiep {
+	v := &ValidateAPIGroupsApiep{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func APIGroupsApiepValidator() db.Validator {
+	return DefaultAPIGroupsApiepValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *GetAPIEndpointsForGroupsReq) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *GetAPIEndpointsForGroupsReq) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *GetAPIEndpointsForGroupsReq) DeepCopy() *GetAPIEndpointsForGroupsReq {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &GetAPIEndpointsForGroupsReq{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *GetAPIEndpointsForGroupsReq) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *GetAPIEndpointsForGroupsReq) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return GetAPIEndpointsForGroupsReqValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateGetAPIEndpointsForGroupsReq struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateGetAPIEndpointsForGroupsReq) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*GetAPIEndpointsForGroupsReq)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *GetAPIEndpointsForGroupsReq got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("name"))
+		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["namespace"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("namespace"))
+		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultGetAPIEndpointsForGroupsReqValidator = func() *ValidateGetAPIEndpointsForGroupsReq {
+	v := &ValidateGetAPIEndpointsForGroupsReq{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func GetAPIEndpointsForGroupsReqValidator() db.Validator {
+	return DefaultGetAPIEndpointsForGroupsReqValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *GetAPIEndpointsForGroupsRsp) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *GetAPIEndpointsForGroupsRsp) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *GetAPIEndpointsForGroupsRsp) DeepCopy() *GetAPIEndpointsForGroupsRsp {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &GetAPIEndpointsForGroupsRsp{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *GetAPIEndpointsForGroupsRsp) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *GetAPIEndpointsForGroupsRsp) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return GetAPIEndpointsForGroupsRspValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateGetAPIEndpointsForGroupsRsp struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateGetAPIEndpointsForGroupsRsp) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*GetAPIEndpointsForGroupsRsp)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *GetAPIEndpointsForGroupsRsp got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["api_endpoints"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("api_endpoints"))
+		for idx, item := range m.GetApiEndpoints() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["apieps_timestamp"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("apieps_timestamp"))
+		if err := fv(ctx, m.GetApiepsTimestamp(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultGetAPIEndpointsForGroupsRspValidator = func() *ValidateGetAPIEndpointsForGroupsRsp {
+	v := &ValidateGetAPIEndpointsForGroupsRsp{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func GetAPIEndpointsForGroupsRspValidator() db.Validator {
+	return DefaultGetAPIEndpointsForGroupsRspValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *SwaggerSpecReq) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }

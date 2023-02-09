@@ -304,6 +304,18 @@ func resourceVolterraAwsVpcSite() *schema.Resource {
 				Required: true,
 			},
 
+			"disable_internet_vip": {
+
+				Type:     schema.TypeBool,
+				Optional: true,
+			},
+
+			"enable_internet_vip": {
+
+				Type:     schema.TypeBool,
+				Optional: true,
+			},
+
 			"log_receiver": {
 
 				Type:     schema.TypeSet,
@@ -1337,18 +1349,6 @@ func resourceVolterraAwsVpcSite() *schema.Resource {
 							Optional: true,
 						},
 
-						"disable_internet_vip": {
-
-							Type:     schema.TypeBool,
-							Optional: true,
-						},
-
-						"enable_internet_vip": {
-
-							Type:     schema.TypeBool,
-							Optional: true,
-						},
-
 						"active_enhanced_firewall_policies": {
 
 							Type:     schema.TypeSet,
@@ -1611,6 +1611,28 @@ func resourceVolterraAwsVpcSite() *schema.Resource {
 							},
 						},
 
+						"performance_enhancement_mode": {
+
+							Type:     schema.TypeSet,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"perf_mode_l3_enhanced": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+
+									"perf_mode_l7_enhanced": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+								},
+							},
+						},
+
 						"sm_connection_public_ip": {
 
 							Type:     schema.TypeBool,
@@ -1732,6 +1754,28 @@ func resourceVolterraAwsVpcSite() *schema.Resource {
 												},
 											},
 										},
+									},
+								},
+							},
+						},
+
+						"performance_enhancement_mode": {
+
+							Type:     schema.TypeSet,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"perf_mode_l3_enhanced": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+
+									"perf_mode_l7_enhanced": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
 									},
 								},
 							},
@@ -3264,6 +3308,34 @@ func resourceVolterraAwsVpcSiteCreate(d *schema.ResourceData, meta interface{}) 
 
 	}
 
+	//internet_vip_choice
+
+	internetVipChoiceTypeFound := false
+
+	if v, ok := d.GetOk("disable_internet_vip"); ok && !internetVipChoiceTypeFound {
+
+		internetVipChoiceTypeFound = true
+
+		if v.(bool) {
+			internetVipChoiceInt := &ves_io_schema_views_aws_vpc_site.CreateSpecType_DisableInternetVip{}
+			internetVipChoiceInt.DisableInternetVip = &ves_io_schema.Empty{}
+			createSpec.InternetVipChoice = internetVipChoiceInt
+		}
+
+	}
+
+	if v, ok := d.GetOk("enable_internet_vip"); ok && !internetVipChoiceTypeFound {
+
+		internetVipChoiceTypeFound = true
+
+		if v.(bool) {
+			internetVipChoiceInt := &ves_io_schema_views_aws_vpc_site.CreateSpecType_EnableInternetVip{}
+			internetVipChoiceInt.EnableInternetVip = &ves_io_schema.Empty{}
+			createSpec.InternetVipChoice = internetVipChoiceInt
+		}
+
+	}
+
 	//logs_receiver_choice
 
 	logsReceiverChoiceTypeFound := false
@@ -4760,32 +4832,6 @@ func resourceVolterraAwsVpcSiteCreate(d *schema.ResourceData, meta interface{}) 
 
 			}
 
-			internetVipChoiceTypeFound := false
-
-			if v, ok := cs["disable_internet_vip"]; ok && !isIntfNil(v) && !internetVipChoiceTypeFound {
-
-				internetVipChoiceTypeFound = true
-
-				if v.(bool) {
-					internetVipChoiceInt := &ves_io_schema_views_aws_vpc_site.AWSVPCIngressEgressGwType_DisableInternetVip{}
-					internetVipChoiceInt.DisableInternetVip = &ves_io_schema.Empty{}
-					siteTypeInt.IngressEgressGw.InternetVipChoice = internetVipChoiceInt
-				}
-
-			}
-
-			if v, ok := cs["enable_internet_vip"]; ok && !isIntfNil(v) && !internetVipChoiceTypeFound {
-
-				internetVipChoiceTypeFound = true
-
-				if v.(bool) {
-					internetVipChoiceInt := &ves_io_schema_views_aws_vpc_site.AWSVPCIngressEgressGwType_EnableInternetVip{}
-					internetVipChoiceInt.EnableInternetVip = &ves_io_schema.Empty{}
-					siteTypeInt.IngressEgressGw.InternetVipChoice = internetVipChoiceInt
-				}
-
-			}
-
 			networkPolicyChoiceTypeFound := false
 
 			if v, ok := cs["active_enhanced_firewall_policies"]; ok && !isIntfNil(v) && !networkPolicyChoiceTypeFound {
@@ -5146,6 +5192,44 @@ func resourceVolterraAwsVpcSiteCreate(d *schema.ResourceData, meta interface{}) 
 
 			}
 
+			if v, ok := cs["performance_enhancement_mode"]; ok && !isIntfNil(v) {
+
+				sl := v.(*schema.Set).List()
+				performanceEnhancementMode := &ves_io_schema_views.PerformanceEnhancementModeType{}
+				siteTypeInt.IngressEgressGw.PerformanceEnhancementMode = performanceEnhancementMode
+				for _, set := range sl {
+					performanceEnhancementModeMapStrToI := set.(map[string]interface{})
+
+					perfModeChoiceTypeFound := false
+
+					if v, ok := performanceEnhancementModeMapStrToI["perf_mode_l3_enhanced"]; ok && !isIntfNil(v) && !perfModeChoiceTypeFound {
+
+						perfModeChoiceTypeFound = true
+
+						if v.(bool) {
+							perfModeChoiceInt := &ves_io_schema_views.PerformanceEnhancementModeType_PerfModeL3Enhanced{}
+							perfModeChoiceInt.PerfModeL3Enhanced = &ves_io_schema.Empty{}
+							performanceEnhancementMode.PerfModeChoice = perfModeChoiceInt
+						}
+
+					}
+
+					if v, ok := performanceEnhancementModeMapStrToI["perf_mode_l7_enhanced"]; ok && !isIntfNil(v) && !perfModeChoiceTypeFound {
+
+						perfModeChoiceTypeFound = true
+
+						if v.(bool) {
+							perfModeChoiceInt := &ves_io_schema_views.PerformanceEnhancementModeType_PerfModeL7Enhanced{}
+							perfModeChoiceInt.PerfModeL7Enhanced = &ves_io_schema.Empty{}
+							performanceEnhancementMode.PerfModeChoice = perfModeChoiceInt
+						}
+
+					}
+
+				}
+
+			}
+
 			siteMeshGroupChoiceTypeFound := false
 
 			if v, ok := cs["sm_connection_public_ip"]; ok && !isIntfNil(v) && !siteMeshGroupChoiceTypeFound {
@@ -5329,6 +5413,44 @@ func resourceVolterraAwsVpcSiteCreate(d *schema.ResourceData, meta interface{}) 
 
 							}
 
+						}
+
+					}
+
+				}
+
+			}
+
+			if v, ok := cs["performance_enhancement_mode"]; ok && !isIntfNil(v) {
+
+				sl := v.(*schema.Set).List()
+				performanceEnhancementMode := &ves_io_schema_views.PerformanceEnhancementModeType{}
+				siteTypeInt.IngressGw.PerformanceEnhancementMode = performanceEnhancementMode
+				for _, set := range sl {
+					performanceEnhancementModeMapStrToI := set.(map[string]interface{})
+
+					perfModeChoiceTypeFound := false
+
+					if v, ok := performanceEnhancementModeMapStrToI["perf_mode_l3_enhanced"]; ok && !isIntfNil(v) && !perfModeChoiceTypeFound {
+
+						perfModeChoiceTypeFound = true
+
+						if v.(bool) {
+							perfModeChoiceInt := &ves_io_schema_views.PerformanceEnhancementModeType_PerfModeL3Enhanced{}
+							perfModeChoiceInt.PerfModeL3Enhanced = &ves_io_schema.Empty{}
+							performanceEnhancementMode.PerfModeChoice = perfModeChoiceInt
+						}
+
+					}
+
+					if v, ok := performanceEnhancementModeMapStrToI["perf_mode_l7_enhanced"]; ok && !isIntfNil(v) && !perfModeChoiceTypeFound {
+
+						perfModeChoiceTypeFound = true
+
+						if v.(bool) {
+							perfModeChoiceInt := &ves_io_schema_views.PerformanceEnhancementModeType_PerfModeL7Enhanced{}
+							perfModeChoiceInt.PerfModeL7Enhanced = &ves_io_schema.Empty{}
+							performanceEnhancementMode.PerfModeChoice = perfModeChoiceInt
 						}
 
 					}
@@ -7319,6 +7441,32 @@ func resourceVolterraAwsVpcSiteUpdate(d *schema.ResourceData, meta interface{}) 
 
 	}
 
+	internetVipChoiceTypeFound := false
+
+	if v, ok := d.GetOk("disable_internet_vip"); ok && !internetVipChoiceTypeFound {
+
+		internetVipChoiceTypeFound = true
+
+		if v.(bool) {
+			internetVipChoiceInt := &ves_io_schema_views_aws_vpc_site.ReplaceSpecType_DisableInternetVip{}
+			internetVipChoiceInt.DisableInternetVip = &ves_io_schema.Empty{}
+			updateSpec.InternetVipChoice = internetVipChoiceInt
+		}
+
+	}
+
+	if v, ok := d.GetOk("enable_internet_vip"); ok && !internetVipChoiceTypeFound {
+
+		internetVipChoiceTypeFound = true
+
+		if v.(bool) {
+			internetVipChoiceInt := &ves_io_schema_views_aws_vpc_site.ReplaceSpecType_EnableInternetVip{}
+			internetVipChoiceInt.EnableInternetVip = &ves_io_schema.Empty{}
+			updateSpec.InternetVipChoice = internetVipChoiceInt
+		}
+
+	}
+
 	logsReceiverChoiceTypeFound := false
 
 	if v, ok := d.GetOk("log_receiver"); ok && !logsReceiverChoiceTypeFound {
@@ -8932,6 +9080,44 @@ func resourceVolterraAwsVpcSiteUpdate(d *schema.ResourceData, meta interface{}) 
 
 			}
 
+			if v, ok := cs["performance_enhancement_mode"]; ok && !isIntfNil(v) {
+
+				sl := v.(*schema.Set).List()
+				performanceEnhancementMode := &ves_io_schema_views.PerformanceEnhancementModeType{}
+				siteTypeInt.IngressEgressGw.PerformanceEnhancementMode = performanceEnhancementMode
+				for _, set := range sl {
+					performanceEnhancementModeMapStrToI := set.(map[string]interface{})
+
+					perfModeChoiceTypeFound := false
+
+					if v, ok := performanceEnhancementModeMapStrToI["perf_mode_l3_enhanced"]; ok && !isIntfNil(v) && !perfModeChoiceTypeFound {
+
+						perfModeChoiceTypeFound = true
+
+						if v.(bool) {
+							perfModeChoiceInt := &ves_io_schema_views.PerformanceEnhancementModeType_PerfModeL3Enhanced{}
+							perfModeChoiceInt.PerfModeL3Enhanced = &ves_io_schema.Empty{}
+							performanceEnhancementMode.PerfModeChoice = perfModeChoiceInt
+						}
+
+					}
+
+					if v, ok := performanceEnhancementModeMapStrToI["perf_mode_l7_enhanced"]; ok && !isIntfNil(v) && !perfModeChoiceTypeFound {
+
+						perfModeChoiceTypeFound = true
+
+						if v.(bool) {
+							perfModeChoiceInt := &ves_io_schema_views.PerformanceEnhancementModeType_PerfModeL7Enhanced{}
+							perfModeChoiceInt.PerfModeL7Enhanced = &ves_io_schema.Empty{}
+							performanceEnhancementMode.PerfModeChoice = perfModeChoiceInt
+						}
+
+					}
+
+				}
+
+			}
+
 			siteMeshGroupChoiceTypeFound := false
 
 			if v, ok := cs["sm_connection_public_ip"]; ok && !isIntfNil(v) && !siteMeshGroupChoiceTypeFound {
@@ -9036,6 +9222,44 @@ func resourceVolterraAwsVpcSiteUpdate(d *schema.ResourceData, meta interface{}) 
 							portChoiceInt := &ves_io_schema_views.AllowedVIPPorts_UseHttpsPort{}
 							portChoiceInt.UseHttpsPort = &ves_io_schema.Empty{}
 							allowedVipPort.PortChoice = portChoiceInt
+						}
+
+					}
+
+				}
+
+			}
+
+			if v, ok := cs["performance_enhancement_mode"]; ok && !isIntfNil(v) {
+
+				sl := v.(*schema.Set).List()
+				performanceEnhancementMode := &ves_io_schema_views.PerformanceEnhancementModeType{}
+				siteTypeInt.IngressGw.PerformanceEnhancementMode = performanceEnhancementMode
+				for _, set := range sl {
+					performanceEnhancementModeMapStrToI := set.(map[string]interface{})
+
+					perfModeChoiceTypeFound := false
+
+					if v, ok := performanceEnhancementModeMapStrToI["perf_mode_l3_enhanced"]; ok && !isIntfNil(v) && !perfModeChoiceTypeFound {
+
+						perfModeChoiceTypeFound = true
+
+						if v.(bool) {
+							perfModeChoiceInt := &ves_io_schema_views.PerformanceEnhancementModeType_PerfModeL3Enhanced{}
+							perfModeChoiceInt.PerfModeL3Enhanced = &ves_io_schema.Empty{}
+							performanceEnhancementMode.PerfModeChoice = perfModeChoiceInt
+						}
+
+					}
+
+					if v, ok := performanceEnhancementModeMapStrToI["perf_mode_l7_enhanced"]; ok && !isIntfNil(v) && !perfModeChoiceTypeFound {
+
+						perfModeChoiceTypeFound = true
+
+						if v.(bool) {
+							perfModeChoiceInt := &ves_io_schema_views.PerformanceEnhancementModeType_PerfModeL7Enhanced{}
+							perfModeChoiceInt.PerfModeL7Enhanced = &ves_io_schema.Empty{}
+							performanceEnhancementMode.PerfModeChoice = perfModeChoiceInt
 						}
 
 					}

@@ -3069,7 +3069,7 @@ var CustomAPISwaggerJSON string = `{
         },
         "app_typeSensitiveDataType": {
             "type": "string",
-            "description": "List of possible types of sensitive data that can be discovered for an APIEP.\n\nThe Sensitive Data detected as credit card number.\nThe sensitive data detected as social security number.\nThe sensitive data detected as IP address.\nThe sensitive data detected as email address.\nThe sensitive data detected as phone number.\nThe sensitive data detected as authentication info(e.g password, auth token etc).\nThe sensitive data detected as information leakage.\nThe sensitive data detected as masked PII (CCN, SSN)",
+            "description": "List of possible types of sensitive data that can be discovered for an APIEP.\n\nThe Sensitive Data detected as credit card number.\nThe sensitive data detected as social security number.\nThe sensitive data detected as IP address.\nThe sensitive data detected as email address.\nThe sensitive data detected as phone number.\nThe sensitive data detected as authentication info(e.g password, auth token etc).\nThe sensitive data detected as information leakage.\nThe sensitive data detected as masked PII (CCN, SSN)\nThe sensitive data detected as Location.",
             "title": "SensitiveDataType",
             "enum": [
                 "SENSITIVE_DATA_TYPE_CCN",
@@ -3079,7 +3079,8 @@ var CustomAPISwaggerJSON string = `{
                 "SENSITIVE_DATA_TYPE_PHONE",
                 "SENSITIVE_DATA_TYPE_AUTHENTICATION",
                 "SENSITIVE_DATA_TYPE_APP_INFO_LEAKAGE",
-                "SENSITIVE_DATA_TYPE_MASKED_PII"
+                "SENSITIVE_DATA_TYPE_MASKED_PII",
+                "SENSITIVE_DATA_TYPE_LOCATION"
             ],
             "default": "SENSITIVE_DATA_TYPE_CCN",
             "x-displayname": "Sensitive Data Type",

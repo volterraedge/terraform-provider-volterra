@@ -1071,6 +1071,11 @@ func resourceVolterraRoute() *schema.Resource {
 										Optional: true,
 									},
 
+									"port_redirect": {
+										Type:     schema.TypeInt,
+										Optional: true,
+									},
+
 									"proto_redirect": {
 										Type:     schema.TypeString,
 										Optional: true,
@@ -1221,80 +1226,16 @@ func resourceVolterraRoute() *schema.Resource {
 										},
 									},
 
-									"waf": {
+									"disable_waf": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeBool,
 										Optional: true,
-										Elem: &schema.Resource{
-											Schema: map[string]*schema.Schema{
-
-												"waf": {
-
-													Type:     schema.TypeList,
-													Optional: true,
-													Elem: &schema.Resource{
-														Schema: map[string]*schema.Schema{
-
-															"kind": {
-																Type:     schema.TypeString,
-																Computed: true,
-															},
-
-															"name": {
-																Type:     schema.TypeString,
-																Optional: true,
-															},
-															"namespace": {
-																Type:     schema.TypeString,
-																Optional: true,
-															},
-															"tenant": {
-																Type:     schema.TypeString,
-																Optional: true,
-															},
-														},
-													},
-												},
-											},
-										},
 									},
 
-									"waf_rules": {
+									"inherit_waf": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeBool,
 										Optional: true,
-										Elem: &schema.Resource{
-											Schema: map[string]*schema.Schema{
-
-												"waf_rules": {
-
-													Type:     schema.TypeList,
-													Optional: true,
-													Elem: &schema.Resource{
-														Schema: map[string]*schema.Schema{
-
-															"kind": {
-																Type:     schema.TypeString,
-																Computed: true,
-															},
-
-															"name": {
-																Type:     schema.TypeString,
-																Optional: true,
-															},
-															"namespace": {
-																Type:     schema.TypeString,
-																Optional: true,
-															},
-															"tenant": {
-																Type:     schema.TypeString,
-																Optional: true,
-															},
-														},
-													},
-												},
-											},
-										},
 									},
 								},
 							},
@@ -2658,6 +2599,12 @@ func resourceVolterraRouteCreate(d *schema.ResourceData, meta interface{}) error
 
 					}
 
+					if v, ok := cs["port_redirect"]; ok && !isIntfNil(v) {
+
+						routeActionInt.RouteRedirect.PortRedirect = uint32(v.(int))
+
+					}
+
 					if v, ok := cs["proto_redirect"]; ok && !isIntfNil(v) {
 
 						routeActionInt.RouteRedirect.ProtoRedirect = v.(string)
@@ -2881,96 +2828,26 @@ func resourceVolterraRouteCreate(d *schema.ResourceData, meta interface{}) error
 
 					}
 
-					if v, ok := wafTypeMapStrToI["waf"]; ok && !isIntfNil(v) && !refTypeTypeFound {
+					if v, ok := wafTypeMapStrToI["disable_waf"]; ok && !isIntfNil(v) && !refTypeTypeFound {
 
 						refTypeTypeFound = true
-						refTypeInt := &ves_io_schema.WafType_Waf{}
-						refTypeInt.Waf = &ves_io_schema.WafRefType{}
-						wafType.RefType = refTypeInt
 
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["waf"]; ok && !isIntfNil(v) {
-
-								sl := v.([]interface{})
-								wafInt := make([]*ves_io_schema.ObjectRefType, len(sl))
-								refTypeInt.Waf.Waf = wafInt
-								for i, ps := range sl {
-
-									wMapToStrVal := ps.(map[string]interface{})
-									wafInt[i] = &ves_io_schema.ObjectRefType{}
-
-									wafInt[i].Kind = "waf"
-
-									if v, ok := wMapToStrVal["name"]; ok && !isIntfNil(v) {
-										wafInt[i].Name = v.(string)
-									}
-
-									if v, ok := wMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-										wafInt[i].Namespace = v.(string)
-									}
-
-									if v, ok := wMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-										wafInt[i].Tenant = v.(string)
-									}
-
-									if v, ok := wMapToStrVal["uid"]; ok && !isIntfNil(v) {
-										wafInt[i].Uid = v.(string)
-									}
-
-								}
-
-							}
-
+						if v.(bool) {
+							refTypeInt := &ves_io_schema.WafType_DisableWaf{}
+							refTypeInt.DisableWaf = &ves_io_schema.Empty{}
+							wafType.RefType = refTypeInt
 						}
 
 					}
 
-					if v, ok := wafTypeMapStrToI["waf_rules"]; ok && !isIntfNil(v) && !refTypeTypeFound {
+					if v, ok := wafTypeMapStrToI["inherit_waf"]; ok && !isIntfNil(v) && !refTypeTypeFound {
 
 						refTypeTypeFound = true
-						refTypeInt := &ves_io_schema.WafType_WafRules{}
-						refTypeInt.WafRules = &ves_io_schema.WafRulesRefType{}
-						wafType.RefType = refTypeInt
 
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["waf_rules"]; ok && !isIntfNil(v) {
-
-								sl := v.([]interface{})
-								wafRulesInt := make([]*ves_io_schema.ObjectRefType, len(sl))
-								refTypeInt.WafRules.WafRules = wafRulesInt
-								for i, ps := range sl {
-
-									wrMapToStrVal := ps.(map[string]interface{})
-									wafRulesInt[i] = &ves_io_schema.ObjectRefType{}
-
-									wafRulesInt[i].Kind = "waf_rules"
-
-									if v, ok := wrMapToStrVal["name"]; ok && !isIntfNil(v) {
-										wafRulesInt[i].Name = v.(string)
-									}
-
-									if v, ok := wrMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-										wafRulesInt[i].Namespace = v.(string)
-									}
-
-									if v, ok := wrMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-										wafRulesInt[i].Tenant = v.(string)
-									}
-
-									if v, ok := wrMapToStrVal["uid"]; ok && !isIntfNil(v) {
-										wafRulesInt[i].Uid = v.(string)
-									}
-
-								}
-
-							}
-
+						if v.(bool) {
+							refTypeInt := &ves_io_schema.WafType_InheritWaf{}
+							refTypeInt.InheritWaf = &ves_io_schema.Empty{}
+							wafType.RefType = refTypeInt
 						}
 
 					}
@@ -4379,6 +4256,12 @@ func resourceVolterraRouteUpdate(d *schema.ResourceData, meta interface{}) error
 
 					}
 
+					if v, ok := cs["port_redirect"]; ok && !isIntfNil(v) {
+
+						routeActionInt.RouteRedirect.PortRedirect = uint32(v.(int))
+
+					}
+
 					if v, ok := cs["proto_redirect"]; ok && !isIntfNil(v) {
 
 						routeActionInt.RouteRedirect.ProtoRedirect = v.(string)
@@ -4602,96 +4485,26 @@ func resourceVolterraRouteUpdate(d *schema.ResourceData, meta interface{}) error
 
 					}
 
-					if v, ok := wafTypeMapStrToI["waf"]; ok && !isIntfNil(v) && !refTypeTypeFound {
+					if v, ok := wafTypeMapStrToI["disable_waf"]; ok && !isIntfNil(v) && !refTypeTypeFound {
 
 						refTypeTypeFound = true
-						refTypeInt := &ves_io_schema.WafType_Waf{}
-						refTypeInt.Waf = &ves_io_schema.WafRefType{}
-						wafType.RefType = refTypeInt
 
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["waf"]; ok && !isIntfNil(v) {
-
-								sl := v.([]interface{})
-								wafInt := make([]*ves_io_schema.ObjectRefType, len(sl))
-								refTypeInt.Waf.Waf = wafInt
-								for i, ps := range sl {
-
-									wMapToStrVal := ps.(map[string]interface{})
-									wafInt[i] = &ves_io_schema.ObjectRefType{}
-
-									wafInt[i].Kind = "waf"
-
-									if v, ok := wMapToStrVal["name"]; ok && !isIntfNil(v) {
-										wafInt[i].Name = v.(string)
-									}
-
-									if v, ok := wMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-										wafInt[i].Namespace = v.(string)
-									}
-
-									if v, ok := wMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-										wafInt[i].Tenant = v.(string)
-									}
-
-									if v, ok := wMapToStrVal["uid"]; ok && !isIntfNil(v) {
-										wafInt[i].Uid = v.(string)
-									}
-
-								}
-
-							}
-
+						if v.(bool) {
+							refTypeInt := &ves_io_schema.WafType_DisableWaf{}
+							refTypeInt.DisableWaf = &ves_io_schema.Empty{}
+							wafType.RefType = refTypeInt
 						}
 
 					}
 
-					if v, ok := wafTypeMapStrToI["waf_rules"]; ok && !isIntfNil(v) && !refTypeTypeFound {
+					if v, ok := wafTypeMapStrToI["inherit_waf"]; ok && !isIntfNil(v) && !refTypeTypeFound {
 
 						refTypeTypeFound = true
-						refTypeInt := &ves_io_schema.WafType_WafRules{}
-						refTypeInt.WafRules = &ves_io_schema.WafRulesRefType{}
-						wafType.RefType = refTypeInt
 
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["waf_rules"]; ok && !isIntfNil(v) {
-
-								sl := v.([]interface{})
-								wafRulesInt := make([]*ves_io_schema.ObjectRefType, len(sl))
-								refTypeInt.WafRules.WafRules = wafRulesInt
-								for i, ps := range sl {
-
-									wrMapToStrVal := ps.(map[string]interface{})
-									wafRulesInt[i] = &ves_io_schema.ObjectRefType{}
-
-									wafRulesInt[i].Kind = "waf_rules"
-
-									if v, ok := wrMapToStrVal["name"]; ok && !isIntfNil(v) {
-										wafRulesInt[i].Name = v.(string)
-									}
-
-									if v, ok := wrMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-										wafRulesInt[i].Namespace = v.(string)
-									}
-
-									if v, ok := wrMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-										wafRulesInt[i].Tenant = v.(string)
-									}
-
-									if v, ok := wrMapToStrVal["uid"]; ok && !isIntfNil(v) {
-										wafRulesInt[i].Uid = v.(string)
-									}
-
-								}
-
-							}
-
+						if v.(bool) {
+							refTypeInt := &ves_io_schema.WafType_InheritWaf{}
+							refTypeInt.InheritWaf = &ves_io_schema.Empty{}
+							wafType.RefType = refTypeInt
 						}
 
 					}

@@ -35,6 +35,15 @@ type ApiepCustomAPIGrpcClient struct {
 	rpcFns map[string]func(context.Context, string, ...grpc.CallOption) (proto.Message, error)
 }
 
+func (c *ApiepCustomAPIGrpcClient) doRPCGetAPICallSummary(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
+	req := &GetAPICallSummaryReq{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.virtual_host.GetAPICallSummaryReq", yamlReq)
+	}
+	rsp, err := c.grpcClient.GetAPICallSummary(ctx, req, opts...)
+	return rsp, err
+}
+
 func (c *ApiepCustomAPIGrpcClient) doRPCGetAPIEndpoint(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &APIEndpointReq{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -137,6 +146,8 @@ func NewApiepCustomAPIGrpcClient(cc *grpc.ClientConn) server.CustomClient {
 		grpcClient: NewApiepCustomAPIClient(cc),
 	}
 	rpcFns := make(map[string]func(context.Context, string, ...grpc.CallOption) (proto.Message, error))
+	rpcFns["GetAPICallSummary"] = ccl.doRPCGetAPICallSummary
+
 	rpcFns["GetAPIEndpoint"] = ccl.doRPCGetAPIEndpoint
 
 	rpcFns["GetAPIEndpointLearntSchema"] = ccl.doRPCGetAPIEndpointLearntSchema
@@ -164,6 +175,91 @@ type ApiepCustomAPIRestClient struct {
 	client  http.Client
 	// map of rpc name to its invocation
 	rpcFns map[string]func(context.Context, *server.CustomCallOpts) (proto.Message, error)
+}
+
+func (c *ApiepCustomAPIRestClient) doRPCGetAPICallSummary(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
+	if callOpts.URI == "" {
+		return nil, fmt.Errorf("Error, URI should be specified, got empty")
+	}
+	url := fmt.Sprintf("%s%s", c.baseURL, callOpts.URI)
+
+	yamlReq := callOpts.YAMLReq
+	req := &GetAPICallSummaryReq{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.virtual_host.GetAPICallSummaryReq: %s", yamlReq, err)
+	}
+
+	var hReq *http.Request
+	hm := strings.ToLower(callOpts.HTTPMethod)
+	switch hm {
+	case "post", "put":
+		jsn, err := codec.ToJSON(req, codec.ToWithUseProtoFieldName())
+		if err != nil {
+			return nil, errors.Wrap(err, "Custom RestClient converting YAML to JSON")
+		}
+		var op string
+		if hm == "post" {
+			op = http.MethodPost
+		} else {
+			op = http.MethodPut
+		}
+		newReq, err := http.NewRequest(op, url, bytes.NewBuffer([]byte(jsn)))
+		if err != nil {
+			return nil, errors.Wrapf(err, "Creating new HTTP %s request for custom API", op)
+		}
+		hReq = newReq
+	case "get":
+		newReq, err := http.NewRequest(http.MethodGet, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP GET request for custom API")
+		}
+		hReq = newReq
+		q := hReq.URL.Query()
+		_ = q
+		q.Add("apiep_summary_filter", fmt.Sprintf("%v", req.ApiepSummaryFilter))
+		q.Add("name", fmt.Sprintf("%v", req.Name))
+		q.Add("namespace", fmt.Sprintf("%v", req.Namespace))
+
+		hReq.URL.RawQuery += q.Encode()
+	case "delete":
+		newReq, err := http.NewRequest(http.MethodDelete, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP DELETE request for custom API")
+		}
+		hReq = newReq
+	default:
+		return nil, fmt.Errorf("Error, invalid/empty HTTPMethod(%s) specified, should be POST|DELETE|GET", callOpts.HTTPMethod)
+	}
+	hReq = hReq.WithContext(ctx)
+	hReq.Header.Set("Content-Type", "application/json")
+	client.AddHdrsToReq(callOpts.Headers, hReq)
+
+	rsp, err := c.client.Do(hReq)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient")
+	}
+	defer rsp.Body.Close()
+
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
+		body, err := ioutil.ReadAll(rsp.Body)
+		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
+	}
+
+	body, err := ioutil.ReadAll(rsp.Body)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient read body")
+	}
+	pbRsp := &GetAPICallSummaryRsp{}
+	if err := codec.FromJSON(string(body), pbRsp); err != nil {
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.virtual_host.GetAPICallSummaryRsp", body)
+
+	}
+	if callOpts.OutCallResponse != nil {
+		callOpts.OutCallResponse.ProtoMsg = pbRsp
+		callOpts.OutCallResponse.JSON = string(body)
+	}
+	return pbRsp, nil
 }
 
 func (c *ApiepCustomAPIRestClient) doRPCGetAPIEndpoint(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
@@ -885,6 +981,8 @@ func NewApiepCustomAPIRestClient(baseURL string, hc http.Client) server.CustomCl
 	}
 
 	rpcFns := make(map[string]func(context.Context, *server.CustomCallOpts) (proto.Message, error))
+	rpcFns["GetAPICallSummary"] = ccl.doRPCGetAPICallSummary
+
 	rpcFns["GetAPIEndpoint"] = ccl.doRPCGetAPIEndpoint
 
 	rpcFns["GetAPIEndpointLearntSchema"] = ccl.doRPCGetAPIEndpointLearntSchema
@@ -913,6 +1011,9 @@ type apiepCustomAPIInprocClient struct {
 	ApiepCustomAPIServer
 }
 
+func (c *apiepCustomAPIInprocClient) GetAPICallSummary(ctx context.Context, in *GetAPICallSummaryReq, opts ...grpc.CallOption) (*GetAPICallSummaryRsp, error) {
+	return c.ApiepCustomAPIServer.GetAPICallSummary(ctx, in)
+}
 func (c *apiepCustomAPIInprocClient) GetAPIEndpoint(ctx context.Context, in *APIEndpointReq, opts ...grpc.CallOption) (*APIEndpointRsp, error) {
 	return c.ApiepCustomAPIServer.GetAPIEndpoint(ctx, in)
 }
@@ -959,6 +1060,55 @@ type apiepCustomAPISrv struct {
 	svc svcfw.Service
 }
 
+func (s *apiepCustomAPISrv) GetAPICallSummary(ctx context.Context, in *GetAPICallSummaryReq) (*GetAPICallSummaryRsp, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.virtual_host.ApiepCustomAPI")
+	cah, ok := ah.(ApiepCustomAPIServer)
+	if !ok {
+		return nil, fmt.Errorf("ah %v is not of type *ApiepCustomAPIServer", ah)
+	}
+
+	var (
+		rsp *GetAPICallSummaryRsp
+		err error
+	)
+
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.virtual_host.GetAPICallSummaryReq", in)
+	defer func() {
+		if len(bodyFields) > 0 {
+			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
+		}
+		userMsg := "The 'ApiepCustomAPI.GetAPICallSummary' operation on 'virtual_host'"
+		if err == nil {
+			userMsg += " was successfully performed."
+		} else {
+			userMsg += " failed to be performed."
+		}
+		server.AddUserMsgToAPIAudit(ctx, userMsg)
+	}()
+
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
+
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.virtual_host.ApiepCustomAPI.GetAPICallSummary"); rvFn != nil {
+			if verr := rvFn(ctx, in); verr != nil {
+				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
+				return nil, server.GRPCStatusFromError(err).Err()
+			}
+		}
+	}
+
+	rsp, err = cah.GetAPICallSummary(ctx, in)
+	if err != nil {
+		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
+	}
+
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.virtual_host.GetAPICallSummaryRsp", rsp)...)
+
+	return rsp, nil
+}
 func (s *apiepCustomAPISrv) GetAPIEndpoint(ctx context.Context, in *APIEndpointReq) (*APIEndpointRsp, error) {
 	ah := s.svc.GetAPIHandler("ves.io.schema.virtual_host.ApiepCustomAPI")
 	cah, ok := ah.(ApiepCustomAPIServer)
@@ -1945,6 +2095,106 @@ var ApiepCustomAPISwaggerJSON string = `{
             "x-ves-proto-service": "ves.io.schema.virtual_host.ApiepCustomAPI",
             "x-ves-proto-service-type": "CUSTOM_PUBLIC"
         },
+        "/public/namespaces/{namespace}/virtual_hosts/{name}/api_endpoints/summary/calls_by_response_code": {
+            "post": {
+                "summary": "Get Total API Calls for Virtual Host",
+                "description": "Get total api calls for the given Virtual Host",
+                "operationId": "ves.io.schema.virtual_host.ApiepCustomAPI.GetAPICallSummary",
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/virtual_hostGetAPICallSummaryRsp"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "namespace",
+                        "description": "Namespace\n\nx-example: \"blogging-app\"\nNamespace of the virtual host for current request",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "x-displayname": "Namespace"
+                    },
+                    {
+                        "name": "name",
+                        "description": "Virtual Host Name\n\nx-example: \"blogging-app-vhost\"\nVirtual Host name for current request",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "x-displayname": "Virtual Host Name"
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/virtual_hostGetAPICallSummaryReq"
+                        }
+                    }
+                ],
+                "tags": [
+                    "ApiepCustomAPI"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-virtual_host-apiepcustomapi-getapicallsummary"
+                },
+                "x-ves-proto-rpc": "ves.io.schema.virtual_host.ApiepCustomAPI.GetAPICallSummary"
+            },
+            "x-displayname": "API Endpoints by Virtual Host Custom API",
+            "x-ves-proto-service": "ves.io.schema.virtual_host.ApiepCustomAPI",
+            "x-ves-proto-service-type": "CUSTOM_PUBLIC"
+        },
         "/public/namespaces/{namespace}/virtual_hosts/{name}/api_endpoints/summary/top_active": {
             "post": {
                 "summary": "Get Top APIs Endpoints for Virtual Host",
@@ -2649,7 +2899,7 @@ var ApiepCustomAPISwaggerJSON string = `{
         },
         "app_typeSensitiveDataType": {
             "type": "string",
-            "description": "List of possible types of sensitive data that can be discovered for an APIEP.\n\nThe Sensitive Data detected as credit card number.\nThe sensitive data detected as social security number.\nThe sensitive data detected as IP address.\nThe sensitive data detected as email address.\nThe sensitive data detected as phone number.\nThe sensitive data detected as authentication info(e.g password, auth token etc).\nThe sensitive data detected as information leakage.\nThe sensitive data detected as masked PII (CCN, SSN)",
+            "description": "List of possible types of sensitive data that can be discovered for an APIEP.\n\nThe Sensitive Data detected as credit card number.\nThe sensitive data detected as social security number.\nThe sensitive data detected as IP address.\nThe sensitive data detected as email address.\nThe sensitive data detected as phone number.\nThe sensitive data detected as authentication info(e.g password, auth token etc).\nThe sensitive data detected as information leakage.\nThe sensitive data detected as masked PII (CCN, SSN)\nThe sensitive data detected as Location.",
             "title": "SensitiveDataType",
             "enum": [
                 "SENSITIVE_DATA_TYPE_CCN",
@@ -2659,7 +2909,8 @@ var ApiepCustomAPISwaggerJSON string = `{
                 "SENSITIVE_DATA_TYPE_PHONE",
                 "SENSITIVE_DATA_TYPE_AUTHENTICATION",
                 "SENSITIVE_DATA_TYPE_APP_INFO_LEAKAGE",
-                "SENSITIVE_DATA_TYPE_MASKED_PII"
+                "SENSITIVE_DATA_TYPE_MASKED_PII",
+                "SENSITIVE_DATA_TYPE_LOCATION"
             ],
             "default": "SENSITIVE_DATA_TYPE_CCN",
             "x-displayname": "Sensitive Data Type",
@@ -2699,6 +2950,22 @@ var ApiepCustomAPISwaggerJSON string = `{
             "default": "ANY",
             "x-displayname": "HTTP Method",
             "x-ves-proto-enum": "ves.io.schema.HttpMethod"
+        },
+        "schemaHttpResponseCodeClass": {
+            "type": "string",
+            "description": "Represents different http response classes(e.g 1XX, 2XX etc).\n\nResponse code is unknown.\nResponse code belongs to 1XX class.\nResponse code belongs to 2XX class.\nResponse code belongs to 3XX class.\nResponse code belongs to 4XX class.\nResponse code belongs to 5XX class.",
+            "title": "HttpResponseCodeClass",
+            "enum": [
+                "HTTP_RESPONSE_CODE_CLASS_UNKNOWN",
+                "HTTP_RESPONSE_CODE_CLASS_1XX",
+                "HTTP_RESPONSE_CODE_CLASS_2XX",
+                "HTTP_RESPONSE_CODE_CLASS_3XX",
+                "HTTP_RESPONSE_CODE_CLASS_4XX",
+                "HTTP_RESPONSE_CODE_CLASS_5XX"
+            ],
+            "default": "HTTP_RESPONSE_CODE_CLASS_UNKNOWN",
+            "x-displayname": "HTTP Response Code Class",
+            "x-ves-proto-enum": "ves.io.schema.HttpResponseCodeClass"
         },
         "virtual_hostAPIEPActivityMetricType": {
             "type": "string",
@@ -3009,6 +3276,60 @@ var ApiepCustomAPISwaggerJSON string = `{
                 }
             }
         },
+        "virtual_hostGetAPICallSummaryReq": {
+            "type": "object",
+            "description": "Request model for GetAPICallSummary API",
+            "title": "GetAPICallSummaryReq",
+            "x-displayname": "Get API Call Summary Request",
+            "x-ves-proto-message": "ves.io.schema.virtual_host.GetAPICallSummaryReq",
+            "properties": {
+                "apiep_summary_filter": {
+                    "description": " Filter object for summary block.",
+                    "title": "apiep_summary_filter",
+                    "$ref": "#/definitions/virtual_hostAPIEPSummaryFilter",
+                    "x-displayname": "Summary Block Filter"
+                },
+                "name": {
+                    "type": "string",
+                    "description": " Virtual Host name for current request\n\nExample: - \"blogging-app-vhost\"-",
+                    "title": "Virtual Host Name",
+                    "x-displayname": "Virtual Host Name",
+                    "x-ves-example": "blogging-app-vhost"
+                },
+                "namespace": {
+                    "type": "string",
+                    "description": " Namespace of the virtual host for current request\n\nExample: - \"blogging-app\"-",
+                    "title": "Namespace",
+                    "x-displayname": "Namespace",
+                    "x-ves-example": "blogging-app"
+                }
+            }
+        },
+        "virtual_hostGetAPICallSummaryRsp": {
+            "type": "object",
+            "description": "Response model for GetSensitiveDataSummaryRsp API.",
+            "title": "GetAPICallSummaryRsp",
+            "x-displayname": "GetAPICallSummary API Response",
+            "x-ves-proto-message": "ves.io.schema.virtual_host.GetAPICallSummaryRsp",
+            "properties": {
+                "request_count_per_rsp_code": {
+                    "type": "array",
+                    "description": " Number of API calls for each category of response.",
+                    "title": "request_count_per_rsp_code",
+                    "items": {
+                        "$ref": "#/definitions/virtual_hostRequestCountPerResponseClass"
+                    },
+                    "x-displayname": "API Calls Per Response Type"
+                },
+                "total_calls": {
+                    "type": "string",
+                    "description": " Total API calls.",
+                    "title": "total_calls",
+                    "format": "uint64",
+                    "x-displayname": "Total API Calls"
+                }
+            }
+        },
         "virtual_hostGetTopAPIEndpointsReq": {
             "type": "object",
             "description": "Request model for GetTopAPIEndpointsReq API",
@@ -3164,6 +3485,28 @@ var ApiepCustomAPISwaggerJSON string = `{
                         "$ref": "#/definitions/virtual_hostSensitiveDataCount"
                     },
                     "x-displayname": "Top Sensitive Data"
+                }
+            }
+        },
+        "virtual_hostRequestCountPerResponseClass": {
+            "type": "object",
+            "description": "Request count per response class.",
+            "title": "RequestCountPerResponseClass",
+            "x-displayname": "Request Count Per Response Class",
+            "x-ves-proto-message": "ves.io.schema.virtual_host.RequestCountPerResponseClass",
+            "properties": {
+                "count": {
+                    "type": "integer",
+                    "description": " Request count for this response code class/category.",
+                    "title": "count",
+                    "format": "int32",
+                    "x-displayname": "Request Count For Response Class."
+                },
+                "rsp_code_class": {
+                    "description": " The category of response code(e.g. 1XX, 2XX etc).",
+                    "title": "rsp_code",
+                    "$ref": "#/definitions/schemaHttpResponseCodeClass",
+                    "x-displayname": "Response Class"
                 }
             }
         },

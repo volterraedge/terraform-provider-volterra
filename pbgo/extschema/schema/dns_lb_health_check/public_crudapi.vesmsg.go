@@ -152,6 +152,33 @@ func (m *CreateResponse) Validate(ctx context.Context, opts ...db.ValidateOpt) e
 	return CreateResponseValidator().Validate(ctx, m, opts...)
 }
 
+func (m *CreateResponse) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetSpecDRefInfo()
+
+}
+
+// GetDRefInfo for the field's type
+func (m *CreateResponse) GetSpecDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetSpec() == nil {
+		return nil, nil
+	}
+
+	drInfos, err := m.GetSpec().GetDRefInfo()
+	if err != nil {
+		return nil, errors.Wrap(err, "GetSpec().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "spec." + dri.DRField
+	}
+	return drInfos, err
+
+}
+
 type ValidateCreateResponse struct {
 	FldValidators map[string]db.ValidatorFunc
 }
@@ -451,7 +478,31 @@ func (m *GetResponse) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	var drInfos []db.DRefInfo
 
+	if fdrInfos, err := m.GetSpecDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetSpecDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
 	return drInfos, nil
+
+}
+
+// GetDRefInfo for the field's type
+func (m *GetResponse) GetSpecDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetSpec() == nil {
+		return nil, nil
+	}
+
+	drInfos, err := m.GetSpec().GetDRefInfo()
+	if err != nil {
+		return nil, errors.Wrap(err, "GetSpec().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "spec." + dri.DRField
+	}
+	return drInfos, err
 
 }
 
@@ -866,8 +917,31 @@ func (m *ListResponseItem) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetGetSpecDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetGetSpecDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
 
 	return drInfos, nil
+
+}
+
+// GetDRefInfo for the field's type
+func (m *ListResponseItem) GetGetSpecDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetGetSpec() == nil {
+		return nil, nil
+	}
+
+	drInfos, err := m.GetGetSpec().GetDRefInfo()
+	if err != nil {
+		return nil, errors.Wrap(err, "GetGetSpec().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "get_spec." + dri.DRField
+	}
+	return drInfos, err
 
 }
 

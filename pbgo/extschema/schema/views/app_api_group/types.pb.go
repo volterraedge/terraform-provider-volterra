@@ -8,9 +8,10 @@ import (
 	_ "github.com/gogo/protobuf/gogoproto"
 	proto "github.com/gogo/protobuf/proto"
 	golang_proto "github.com/golang/protobuf/proto"
-	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+	schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
 	api_group_element "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/api_group_element"
 	views "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views"
+	api_definition "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/api_definition"
 	io "io"
 	math "math"
 	math_bits "math/bits"
@@ -41,6 +42,22 @@ type GlobalSpecType struct {
 	// x-required
 	// List of API group elements with methods and path regex for matching requests.
 	Elements []*api_group_element.GlobalSpecType `protobuf:"bytes,1,rep,name=elements,proto3" json:"elements,omitempty"`
+	// API Group Scope
+	//
+	// x-displayName: "API Group Scope"
+	// x-required
+	// The scope of the API Group which limits the superset of API endpoints which can be used to create an API Group
+	//
+	// Types that are valid to be assigned to ScopeChoice:
+	//	*GlobalSpecType_Generic
+	//	*GlobalSpecType_HttpLoadbalancer
+	//	*GlobalSpecType_ApiDefinition
+	ScopeChoice isGlobalSpecType_ScopeChoice `protobuf_oneof:"scope_choice"`
+	// API Group Builder
+	//
+	// x-displayName: "API Group Builder"
+	// API Group builder defines how to create API group from a list of endpoints
+	ApiGroupBuilder *api_definition.ApiGroupBuilder `protobuf:"bytes,9,opt,name=api_group_builder,json=apiGroupBuilder,proto3" json:"api_group_builder,omitempty"`
 	// view_internal
 	//
 	// x-displayName: "View Internal"
@@ -76,9 +93,65 @@ func (m *GlobalSpecType) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_GlobalSpecType proto.InternalMessageInfo
 
+type isGlobalSpecType_ScopeChoice interface {
+	isGlobalSpecType_ScopeChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
+
+type GlobalSpecType_Generic struct {
+	Generic *schema.Empty `protobuf:"bytes,4,opt,name=generic,proto3,oneof" json:"generic,omitempty"`
+}
+type GlobalSpecType_HttpLoadbalancer struct {
+	HttpLoadbalancer *ApiGroupScopeHttpLoadbalancer `protobuf:"bytes,5,opt,name=http_loadbalancer,json=httpLoadbalancer,proto3,oneof" json:"http_loadbalancer,omitempty"`
+}
+type GlobalSpecType_ApiDefinition struct {
+	ApiDefinition *ApiGroupScopeApiDefinition `protobuf:"bytes,6,opt,name=api_definition,json=apiDefinition,proto3,oneof" json:"api_definition,omitempty"`
+}
+
+func (*GlobalSpecType_Generic) isGlobalSpecType_ScopeChoice()          {}
+func (*GlobalSpecType_HttpLoadbalancer) isGlobalSpecType_ScopeChoice() {}
+func (*GlobalSpecType_ApiDefinition) isGlobalSpecType_ScopeChoice()    {}
+
+func (m *GlobalSpecType) GetScopeChoice() isGlobalSpecType_ScopeChoice {
+	if m != nil {
+		return m.ScopeChoice
+	}
+	return nil
+}
+
 func (m *GlobalSpecType) GetElements() []*api_group_element.GlobalSpecType {
 	if m != nil {
 		return m.Elements
+	}
+	return nil
+}
+
+func (m *GlobalSpecType) GetGeneric() *schema.Empty {
+	if x, ok := m.GetScopeChoice().(*GlobalSpecType_Generic); ok {
+		return x.Generic
+	}
+	return nil
+}
+
+func (m *GlobalSpecType) GetHttpLoadbalancer() *ApiGroupScopeHttpLoadbalancer {
+	if x, ok := m.GetScopeChoice().(*GlobalSpecType_HttpLoadbalancer); ok {
+		return x.HttpLoadbalancer
+	}
+	return nil
+}
+
+func (m *GlobalSpecType) GetApiDefinition() *ApiGroupScopeApiDefinition {
+	if x, ok := m.GetScopeChoice().(*GlobalSpecType_ApiDefinition); ok {
+		return x.ApiDefinition
+	}
+	return nil
+}
+
+func (m *GlobalSpecType) GetApiGroupBuilder() *api_definition.ApiGroupBuilder {
+	if m != nil {
+		return m.ApiGroupBuilder
 	}
 	return nil
 }
@@ -90,12 +163,27 @@ func (m *GlobalSpecType) GetViewInternal() *views.ObjectRefType {
 	return nil
 }
 
-// Create app api group
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*GlobalSpecType) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
+		(*GlobalSpecType_Generic)(nil),
+		(*GlobalSpecType_HttpLoadbalancer)(nil),
+		(*GlobalSpecType_ApiDefinition)(nil),
+	}
+}
+
+// Create app_api_group
 //
 // x-displayName: "Create API Group"
 // Create app_api_group creates a new object in the storage backend for metadata.namespace.
 type CreateSpecType struct {
 	Elements []*api_group_element.GlobalSpecType `protobuf:"bytes,1,rep,name=elements,proto3" json:"elements,omitempty"`
+	// Types that are valid to be assigned to ScopeChoice:
+	//	*CreateSpecType_Generic
+	//	*CreateSpecType_HttpLoadbalancer
+	//	*CreateSpecType_ApiDefinition
+	ScopeChoice     isCreateSpecType_ScopeChoice    `protobuf_oneof:"scope_choice"`
+	ApiGroupBuilder *api_definition.ApiGroupBuilder `protobuf:"bytes,9,opt,name=api_group_builder,json=apiGroupBuilder,proto3" json:"api_group_builder,omitempty"`
 }
 
 func (m *CreateSpecType) Reset()      { *m = CreateSpecType{} }
@@ -126,6 +214,34 @@ func (m *CreateSpecType) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_CreateSpecType proto.InternalMessageInfo
 
+type isCreateSpecType_ScopeChoice interface {
+	isCreateSpecType_ScopeChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
+
+type CreateSpecType_Generic struct {
+	Generic *schema.Empty `protobuf:"bytes,4,opt,name=generic,proto3,oneof" json:"generic,omitempty"`
+}
+type CreateSpecType_HttpLoadbalancer struct {
+	HttpLoadbalancer *ApiGroupScopeHttpLoadbalancer `protobuf:"bytes,5,opt,name=http_loadbalancer,json=httpLoadbalancer,proto3,oneof" json:"http_loadbalancer,omitempty"`
+}
+type CreateSpecType_ApiDefinition struct {
+	ApiDefinition *ApiGroupScopeApiDefinition `protobuf:"bytes,6,opt,name=api_definition,json=apiDefinition,proto3,oneof" json:"api_definition,omitempty"`
+}
+
+func (*CreateSpecType_Generic) isCreateSpecType_ScopeChoice()          {}
+func (*CreateSpecType_HttpLoadbalancer) isCreateSpecType_ScopeChoice() {}
+func (*CreateSpecType_ApiDefinition) isCreateSpecType_ScopeChoice()    {}
+
+func (m *CreateSpecType) GetScopeChoice() isCreateSpecType_ScopeChoice {
+	if m != nil {
+		return m.ScopeChoice
+	}
+	return nil
+}
+
 func (m *CreateSpecType) GetElements() []*api_group_element.GlobalSpecType {
 	if m != nil {
 		return m.Elements
@@ -133,12 +249,55 @@ func (m *CreateSpecType) GetElements() []*api_group_element.GlobalSpecType {
 	return nil
 }
 
-// Replace app api group
+func (m *CreateSpecType) GetGeneric() *schema.Empty {
+	if x, ok := m.GetScopeChoice().(*CreateSpecType_Generic); ok {
+		return x.Generic
+	}
+	return nil
+}
+
+func (m *CreateSpecType) GetHttpLoadbalancer() *ApiGroupScopeHttpLoadbalancer {
+	if x, ok := m.GetScopeChoice().(*CreateSpecType_HttpLoadbalancer); ok {
+		return x.HttpLoadbalancer
+	}
+	return nil
+}
+
+func (m *CreateSpecType) GetApiDefinition() *ApiGroupScopeApiDefinition {
+	if x, ok := m.GetScopeChoice().(*CreateSpecType_ApiDefinition); ok {
+		return x.ApiDefinition
+	}
+	return nil
+}
+
+func (m *CreateSpecType) GetApiGroupBuilder() *api_definition.ApiGroupBuilder {
+	if m != nil {
+		return m.ApiGroupBuilder
+	}
+	return nil
+}
+
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*CreateSpecType) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
+		(*CreateSpecType_Generic)(nil),
+		(*CreateSpecType_HttpLoadbalancer)(nil),
+		(*CreateSpecType_ApiDefinition)(nil),
+	}
+}
+
+// Replace app_api_group
 //
 // x-displayName: "Replace API Group"
 // Replace app_api_group replaces an existing object in the storage backend for metadata.namespace.
 type ReplaceSpecType struct {
 	Elements []*api_group_element.GlobalSpecType `protobuf:"bytes,1,rep,name=elements,proto3" json:"elements,omitempty"`
+	// Types that are valid to be assigned to ScopeChoice:
+	//	*ReplaceSpecType_Generic
+	//	*ReplaceSpecType_HttpLoadbalancer
+	//	*ReplaceSpecType_ApiDefinition
+	ScopeChoice     isReplaceSpecType_ScopeChoice   `protobuf_oneof:"scope_choice"`
+	ApiGroupBuilder *api_definition.ApiGroupBuilder `protobuf:"bytes,9,opt,name=api_group_builder,json=apiGroupBuilder,proto3" json:"api_group_builder,omitempty"`
 }
 
 func (m *ReplaceSpecType) Reset()      { *m = ReplaceSpecType{} }
@@ -169,6 +328,34 @@ func (m *ReplaceSpecType) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_ReplaceSpecType proto.InternalMessageInfo
 
+type isReplaceSpecType_ScopeChoice interface {
+	isReplaceSpecType_ScopeChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
+
+type ReplaceSpecType_Generic struct {
+	Generic *schema.Empty `protobuf:"bytes,4,opt,name=generic,proto3,oneof" json:"generic,omitempty"`
+}
+type ReplaceSpecType_HttpLoadbalancer struct {
+	HttpLoadbalancer *ApiGroupScopeHttpLoadbalancer `protobuf:"bytes,5,opt,name=http_loadbalancer,json=httpLoadbalancer,proto3,oneof" json:"http_loadbalancer,omitempty"`
+}
+type ReplaceSpecType_ApiDefinition struct {
+	ApiDefinition *ApiGroupScopeApiDefinition `protobuf:"bytes,6,opt,name=api_definition,json=apiDefinition,proto3,oneof" json:"api_definition,omitempty"`
+}
+
+func (*ReplaceSpecType_Generic) isReplaceSpecType_ScopeChoice()          {}
+func (*ReplaceSpecType_HttpLoadbalancer) isReplaceSpecType_ScopeChoice() {}
+func (*ReplaceSpecType_ApiDefinition) isReplaceSpecType_ScopeChoice()    {}
+
+func (m *ReplaceSpecType) GetScopeChoice() isReplaceSpecType_ScopeChoice {
+	if m != nil {
+		return m.ScopeChoice
+	}
+	return nil
+}
+
 func (m *ReplaceSpecType) GetElements() []*api_group_element.GlobalSpecType {
 	if m != nil {
 		return m.Elements
@@ -176,12 +363,55 @@ func (m *ReplaceSpecType) GetElements() []*api_group_element.GlobalSpecType {
 	return nil
 }
 
-// Get app api group
+func (m *ReplaceSpecType) GetGeneric() *schema.Empty {
+	if x, ok := m.GetScopeChoice().(*ReplaceSpecType_Generic); ok {
+		return x.Generic
+	}
+	return nil
+}
+
+func (m *ReplaceSpecType) GetHttpLoadbalancer() *ApiGroupScopeHttpLoadbalancer {
+	if x, ok := m.GetScopeChoice().(*ReplaceSpecType_HttpLoadbalancer); ok {
+		return x.HttpLoadbalancer
+	}
+	return nil
+}
+
+func (m *ReplaceSpecType) GetApiDefinition() *ApiGroupScopeApiDefinition {
+	if x, ok := m.GetScopeChoice().(*ReplaceSpecType_ApiDefinition); ok {
+		return x.ApiDefinition
+	}
+	return nil
+}
+
+func (m *ReplaceSpecType) GetApiGroupBuilder() *api_definition.ApiGroupBuilder {
+	if m != nil {
+		return m.ApiGroupBuilder
+	}
+	return nil
+}
+
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*ReplaceSpecType) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
+		(*ReplaceSpecType_Generic)(nil),
+		(*ReplaceSpecType_HttpLoadbalancer)(nil),
+		(*ReplaceSpecType_ApiDefinition)(nil),
+	}
+}
+
+// Get app_api_group
 //
 // x-displayName: "Get API Group"
 // Get app_api_group reads a given object from storage backend for metadata.namespace.
 type GetSpecType struct {
 	Elements []*api_group_element.GlobalSpecType `protobuf:"bytes,1,rep,name=elements,proto3" json:"elements,omitempty"`
+	// Types that are valid to be assigned to ScopeChoice:
+	//	*GetSpecType_Generic
+	//	*GetSpecType_HttpLoadbalancer
+	//	*GetSpecType_ApiDefinition
+	ScopeChoice     isGetSpecType_ScopeChoice       `protobuf_oneof:"scope_choice"`
+	ApiGroupBuilder *api_definition.ApiGroupBuilder `protobuf:"bytes,9,opt,name=api_group_builder,json=apiGroupBuilder,proto3" json:"api_group_builder,omitempty"`
 }
 
 func (m *GetSpecType) Reset()      { *m = GetSpecType{} }
@@ -212,9 +442,170 @@ func (m *GetSpecType) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_GetSpecType proto.InternalMessageInfo
 
+type isGetSpecType_ScopeChoice interface {
+	isGetSpecType_ScopeChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
+
+type GetSpecType_Generic struct {
+	Generic *schema.Empty `protobuf:"bytes,4,opt,name=generic,proto3,oneof" json:"generic,omitempty"`
+}
+type GetSpecType_HttpLoadbalancer struct {
+	HttpLoadbalancer *ApiGroupScopeHttpLoadbalancer `protobuf:"bytes,5,opt,name=http_loadbalancer,json=httpLoadbalancer,proto3,oneof" json:"http_loadbalancer,omitempty"`
+}
+type GetSpecType_ApiDefinition struct {
+	ApiDefinition *ApiGroupScopeApiDefinition `protobuf:"bytes,6,opt,name=api_definition,json=apiDefinition,proto3,oneof" json:"api_definition,omitempty"`
+}
+
+func (*GetSpecType_Generic) isGetSpecType_ScopeChoice()          {}
+func (*GetSpecType_HttpLoadbalancer) isGetSpecType_ScopeChoice() {}
+func (*GetSpecType_ApiDefinition) isGetSpecType_ScopeChoice()    {}
+
+func (m *GetSpecType) GetScopeChoice() isGetSpecType_ScopeChoice {
+	if m != nil {
+		return m.ScopeChoice
+	}
+	return nil
+}
+
 func (m *GetSpecType) GetElements() []*api_group_element.GlobalSpecType {
 	if m != nil {
 		return m.Elements
+	}
+	return nil
+}
+
+func (m *GetSpecType) GetGeneric() *schema.Empty {
+	if x, ok := m.GetScopeChoice().(*GetSpecType_Generic); ok {
+		return x.Generic
+	}
+	return nil
+}
+
+func (m *GetSpecType) GetHttpLoadbalancer() *ApiGroupScopeHttpLoadbalancer {
+	if x, ok := m.GetScopeChoice().(*GetSpecType_HttpLoadbalancer); ok {
+		return x.HttpLoadbalancer
+	}
+	return nil
+}
+
+func (m *GetSpecType) GetApiDefinition() *ApiGroupScopeApiDefinition {
+	if x, ok := m.GetScopeChoice().(*GetSpecType_ApiDefinition); ok {
+		return x.ApiDefinition
+	}
+	return nil
+}
+
+func (m *GetSpecType) GetApiGroupBuilder() *api_definition.ApiGroupBuilder {
+	if m != nil {
+		return m.ApiGroupBuilder
+	}
+	return nil
+}
+
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*GetSpecType) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
+		(*GetSpecType_Generic)(nil),
+		(*GetSpecType_HttpLoadbalancer)(nil),
+		(*GetSpecType_ApiDefinition)(nil),
+	}
+}
+
+// ApiGroupScopeHttpLoadbalancer
+//
+// x-displayName: "API Group Scope HTTP Loadbalancer"
+// Set the scope of the API Group to a specific HTTP Loadbalancer
+type ApiGroupScopeHttpLoadbalancer struct {
+	// HTTP Loadbalancer Reference
+	//
+	// x-displayName: "HTTP Loadbalancer"
+	// x-required
+	// Reference to an HTTP Loadbalancer object which defines a superset of API Endpoints for the API Group
+	HttpLoadbalancer *views.ObjectRefType `protobuf:"bytes,1,opt,name=http_loadbalancer,json=httpLoadbalancer,proto3" json:"http_loadbalancer,omitempty"`
+}
+
+func (m *ApiGroupScopeHttpLoadbalancer) Reset()      { *m = ApiGroupScopeHttpLoadbalancer{} }
+func (*ApiGroupScopeHttpLoadbalancer) ProtoMessage() {}
+func (*ApiGroupScopeHttpLoadbalancer) Descriptor() ([]byte, []int) {
+	return fileDescriptor_64d1d0b57abb1bf6, []int{4}
+}
+func (m *ApiGroupScopeHttpLoadbalancer) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *ApiGroupScopeHttpLoadbalancer) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *ApiGroupScopeHttpLoadbalancer) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ApiGroupScopeHttpLoadbalancer.Merge(m, src)
+}
+func (m *ApiGroupScopeHttpLoadbalancer) XXX_Size() int {
+	return m.Size()
+}
+func (m *ApiGroupScopeHttpLoadbalancer) XXX_DiscardUnknown() {
+	xxx_messageInfo_ApiGroupScopeHttpLoadbalancer.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ApiGroupScopeHttpLoadbalancer proto.InternalMessageInfo
+
+func (m *ApiGroupScopeHttpLoadbalancer) GetHttpLoadbalancer() *views.ObjectRefType {
+	if m != nil {
+		return m.HttpLoadbalancer
+	}
+	return nil
+}
+
+// ApiGroupScopeApiDefinition
+//
+// x-displayName: "API Group Scope API Definition"
+// Set the scope of the API Group to a specific API Definition
+type ApiGroupScopeApiDefinition struct {
+	// API Definition Reference
+	//
+	// x-displayName: "API Definition"
+	// x-required
+	// Reference to an API Definition object which defines a superset of API Endpoints for the API Group
+	ApiDefinition *views.ObjectRefType `protobuf:"bytes,1,opt,name=api_definition,json=apiDefinition,proto3" json:"api_definition,omitempty"`
+}
+
+func (m *ApiGroupScopeApiDefinition) Reset()      { *m = ApiGroupScopeApiDefinition{} }
+func (*ApiGroupScopeApiDefinition) ProtoMessage() {}
+func (*ApiGroupScopeApiDefinition) Descriptor() ([]byte, []int) {
+	return fileDescriptor_64d1d0b57abb1bf6, []int{5}
+}
+func (m *ApiGroupScopeApiDefinition) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *ApiGroupScopeApiDefinition) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *ApiGroupScopeApiDefinition) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ApiGroupScopeApiDefinition.Merge(m, src)
+}
+func (m *ApiGroupScopeApiDefinition) XXX_Size() int {
+	return m.Size()
+}
+func (m *ApiGroupScopeApiDefinition) XXX_DiscardUnknown() {
+	xxx_messageInfo_ApiGroupScopeApiDefinition.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ApiGroupScopeApiDefinition proto.InternalMessageInfo
+
+func (m *ApiGroupScopeApiDefinition) GetApiDefinition() *views.ObjectRefType {
+	if m != nil {
+		return m.ApiDefinition
 	}
 	return nil
 }
@@ -228,6 +619,10 @@ func init() {
 	golang_proto.RegisterType((*ReplaceSpecType)(nil), "ves.io.schema.views.app_api_group.ReplaceSpecType")
 	proto.RegisterType((*GetSpecType)(nil), "ves.io.schema.views.app_api_group.GetSpecType")
 	golang_proto.RegisterType((*GetSpecType)(nil), "ves.io.schema.views.app_api_group.GetSpecType")
+	proto.RegisterType((*ApiGroupScopeHttpLoadbalancer)(nil), "ves.io.schema.views.app_api_group.ApiGroupScopeHttpLoadbalancer")
+	golang_proto.RegisterType((*ApiGroupScopeHttpLoadbalancer)(nil), "ves.io.schema.views.app_api_group.ApiGroupScopeHttpLoadbalancer")
+	proto.RegisterType((*ApiGroupScopeApiDefinition)(nil), "ves.io.schema.views.app_api_group.ApiGroupScopeApiDefinition")
+	golang_proto.RegisterType((*ApiGroupScopeApiDefinition)(nil), "ves.io.schema.views.app_api_group.ApiGroupScopeApiDefinition")
 }
 
 func init() {
@@ -238,36 +633,55 @@ func init() {
 }
 
 var fileDescriptor_64d1d0b57abb1bf6 = []byte{
-	// 457 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xbc, 0x53, 0x31, 0x6f, 0x13, 0x31,
-	0x18, 0xbd, 0x8f, 0xa0, 0xb6, 0xba, 0x40, 0x29, 0x11, 0x43, 0x09, 0xc8, 0x84, 0x4c, 0x95, 0x50,
-	0x6c, 0xa9, 0x6c, 0x0c, 0x0c, 0x65, 0xa8, 0x80, 0x01, 0x29, 0x20, 0x81, 0x18, 0x88, 0x7c, 0xd7,
-	0x2f, 0x57, 0xc3, 0x25, 0xb6, 0x7c, 0xce, 0x95, 0x0e, 0x48, 0xfc, 0x04, 0x84, 0xc4, 0x7f, 0x40,
-	0xfc, 0x04, 0x58, 0x3a, 0x22, 0xa6, 0x8c, 0x19, 0x89, 0x6f, 0x39, 0xb6, 0xfe, 0x04, 0x84, 0x73,
-	0x0d, 0x71, 0x5b, 0x26, 0xa4, 0x6c, 0xb6, 0xdf, 0xfb, 0xde, 0xf3, 0x7b, 0xe7, 0x0b, 0x3b, 0x39,
-	0x66, 0x54, 0x48, 0x96, 0xc5, 0xfb, 0x38, 0xe0, 0x2c, 0x17, 0x78, 0x90, 0x31, 0xae, 0x54, 0x8f,
-	0x2b, 0xd1, 0x4b, 0xb4, 0x1c, 0x29, 0x66, 0x0e, 0x15, 0x66, 0x54, 0x69, 0x69, 0x64, 0xe3, 0xf6,
-	0x8c, 0x4e, 0x67, 0x74, 0xea, 0xe8, 0xd4, 0xa3, 0x37, 0x3b, 0x89, 0x30, 0xfb, 0xa3, 0x88, 0xc6,
-	0x72, 0xc0, 0x12, 0x99, 0x48, 0xe6, 0x26, 0xa3, 0x51, 0xdf, 0xed, 0xdc, 0xc6, 0xad, 0x66, 0x8a,
-	0xcd, 0x3b, 0xfe, 0x05, 0xe6, 0x3a, 0x3d, 0x4c, 0x71, 0x80, 0x43, 0xb3, 0x68, 0xdf, 0xbc, 0xe1,
-	0x93, 0xa5, 0x32, 0x42, 0x0e, 0x4f, 0xc0, 0xeb, 0x3e, 0xb8, 0x38, 0x77, 0xf3, 0x54, 0x4a, 0x9e,
-	0x8a, 0x3d, 0x6e, 0xb0, 0x42, 0x5b, 0x67, 0x3b, 0xe8, 0xf9, 0xd2, 0xb7, 0xce, 0x6b, 0x69, 0xc1,
-	0xa0, 0x3d, 0x86, 0x70, 0x7d, 0x37, 0x95, 0x11, 0x4f, 0x9f, 0x2a, 0x8c, 0x9f, 0x1d, 0x2a, 0x6c,
-	0xbc, 0x08, 0xd7, 0xaa, 0x08, 0xd9, 0x26, 0xb4, 0x6a, 0x5b, 0xf5, 0x6d, 0x46, 0xfd, 0xf6, 0xce,
-	0x64, 0xa5, 0xbe, 0xc4, 0x4e, 0xfd, 0xeb, 0xaf, 0xa3, 0xda, 0xca, 0x47, 0xa8, 0x6d, 0x94, 0xab,
-	0xdd, 0xb9, 0x5a, 0xe3, 0x55, 0x78, 0xd9, 0xdd, 0x51, 0x0c, 0x0d, 0xea, 0x21, 0x4f, 0x37, 0xcb,
-	0xd5, 0x16, 0x6c, 0xd5, 0xb7, 0xdb, 0xf4, 0xbc, 0xaf, 0xf3, 0x24, 0x7a, 0x8d, 0xb1, 0xe9, 0x62,
-	0xdf, 0x49, 0x5e, 0xfb, 0xf2, 0xce, 0x1f, 0x2e, 0xbf, 0x01, 0x74, 0x2f, 0xfd, 0x39, 0x7a, 0x58,
-	0x9d, 0x3c, 0xba, 0xb8, 0x76, 0x61, 0xa3, 0xd6, 0xce, 0xc3, 0xf5, 0x07, 0x1a, 0xb9, 0xc1, 0x79,
-	0xa2, 0xc7, 0xff, 0x9d, 0xe8, 0x6f, 0x88, 0x7b, 0x57, 0x7f, 0xdc, 0x3f, 0xd5, 0x58, 0xe5, 0x7b,
-	0x10, 0x5e, 0xe9, 0xa2, 0x4a, 0x79, 0xbc, 0x6c, 0xe3, 0x2c, 0xac, 0xef, 0xa2, 0x59, 0xae, 0xe9,
-	0xce, 0x27, 0x18, 0x4f, 0x49, 0x30, 0x99, 0x92, 0xe0, 0x78, 0x4a, 0xe0, 0xbd, 0x25, 0xf0, 0xd9,
-	0x12, 0xf8, 0x6e, 0x09, 0x8c, 0x2d, 0x81, 0x89, 0x25, 0xf0, 0xd3, 0x12, 0x28, 0x2d, 0x09, 0x8e,
-	0x2d, 0x81, 0x0f, 0x05, 0x09, 0x8e, 0x0a, 0x02, 0xe3, 0x82, 0x04, 0x93, 0x82, 0x04, 0x2f, 0x9f,
-	0x27, 0x52, 0xbd, 0x49, 0x68, 0x2e, 0x53, 0x83, 0x5a, 0x73, 0x3a, 0xca, 0x98, 0x5b, 0xf4, 0xa5,
-	0x1e, 0x74, 0x94, 0x96, 0xb9, 0xd8, 0x43, 0xdd, 0x39, 0x81, 0x99, 0x8a, 0x12, 0xc9, 0xf0, 0xad,
-	0xa9, 0xde, 0xf1, 0xbf, 0x7f, 0xfa, 0x68, 0xc5, 0xbd, 0xeb, 0xbb, 0xbf, 0x03, 0x00, 0x00, 0xff,
-	0xff, 0x7c, 0x81, 0xdc, 0xa8, 0x20, 0x04, 0x00, 0x00,
+	// 753 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x56, 0xbf, 0x6f, 0xd3, 0x40,
+	0x18, 0xf5, 0x11, 0xb7, 0x29, 0x97, 0xfe, 0x48, 0xad, 0x82, 0x42, 0x28, 0x26, 0x64, 0xaa, 0x04,
+	0xb1, 0x51, 0x3b, 0xb5, 0x12, 0x88, 0x06, 0xaa, 0xfe, 0x00, 0x09, 0x94, 0x22, 0x81, 0x18, 0x30,
+	0xb6, 0x73, 0x71, 0x0e, 0x1c, 0xdf, 0xc9, 0xb9, 0x04, 0x3a, 0x04, 0x55, 0x2c, 0x48, 0x65, 0x41,
+	0x08, 0xfe, 0x07, 0xd4, 0x3f, 0x81, 0x30, 0x54, 0x4c, 0x88, 0x29, 0x63, 0x46, 0xea, 0x2c, 0x61,
+	0xeb, 0xcc, 0x84, 0x72, 0x49, 0x83, 0x9d, 0xa4, 0x50, 0x04, 0x88, 0x81, 0x6e, 0xe7, 0xfb, 0xde,
+	0xf7, 0xde, 0xdd, 0xfb, 0x9e, 0x92, 0x83, 0xa9, 0x32, 0x2a, 0x2a, 0x98, 0xa8, 0x45, 0x33, 0x8f,
+	0x0a, 0xba, 0x5a, 0xc6, 0xe8, 0x71, 0x51, 0xd5, 0x29, 0xd5, 0x74, 0x8a, 0x35, 0xcb, 0x25, 0x25,
+	0xaa, 0xb2, 0x0d, 0x8a, 0x8a, 0x0a, 0x75, 0x09, 0x23, 0xd2, 0xb9, 0x36, 0x5c, 0x69, 0xc3, 0x15,
+	0x0e, 0x57, 0x02, 0xf0, 0x78, 0xca, 0xc2, 0x2c, 0x5f, 0x32, 0x14, 0x93, 0x14, 0x54, 0x8b, 0x58,
+	0x44, 0xe5, 0x9d, 0x46, 0x29, 0xc7, 0xbf, 0xf8, 0x07, 0x5f, 0xb5, 0x19, 0xe3, 0xe7, 0x83, 0x07,
+	0xe8, 0xf2, 0x68, 0xc8, 0x46, 0x05, 0xe4, 0x30, 0xbf, 0x7c, 0xfc, 0x74, 0x10, 0x4c, 0x28, 0xc3,
+	0xc4, 0xd9, 0x2f, 0x9e, 0x0a, 0x16, 0xfd, 0x7d, 0xd3, 0x3d, 0xb7, 0xd4, 0x6d, 0x9c, 0xd5, 0x19,
+	0xea, 0x54, 0x13, 0xfd, 0x1e, 0x68, 0x41, 0x6a, 0x65, 0xb0, 0x4b, 0x58, 0xcb, 0xa2, 0x1c, 0x76,
+	0x70, 0x0b, 0x1a, 0xd0, 0x3b, 0x3b, 0x08, 0xef, 0x03, 0x24, 0x5f, 0x0f, 0xc1, 0xf1, 0x65, 0x9b,
+	0x18, 0xba, 0xbd, 0x4e, 0x91, 0x79, 0x7b, 0x83, 0x22, 0xe9, 0x2e, 0x1c, 0xe9, 0x5c, 0xb9, 0x18,
+	0x03, 0x89, 0xd0, 0x4c, 0x64, 0x56, 0x55, 0x82, 0x6e, 0xf7, 0x79, 0xa3, 0x04, 0x29, 0xd2, 0x91,
+	0x77, 0x5f, 0x76, 0x42, 0xc3, 0xaf, 0x40, 0x28, 0xda, 0x0c, 0x67, 0xba, 0x6c, 0xd2, 0x3c, 0x0c,
+	0x5b, 0xc8, 0x41, 0x2e, 0x36, 0x63, 0x62, 0x02, 0xcc, 0x44, 0x66, 0xa7, 0x7a, 0x88, 0x97, 0x0a,
+	0x94, 0x6d, 0xa4, 0xc3, 0xf5, 0x0a, 0x68, 0x56, 0x01, 0x58, 0x11, 0x32, 0xfb, 0x78, 0x89, 0xc0,
+	0xc9, 0x3c, 0x63, 0x54, 0xb3, 0x89, 0x9e, 0x35, 0x74, 0x5b, 0x77, 0x4c, 0xe4, 0xc6, 0x86, 0x38,
+	0xc9, 0x15, 0xe5, 0xa7, 0x59, 0x50, 0x16, 0x29, 0x5e, 0x6e, 0x2d, 0xd6, 0x4d, 0x42, 0xd1, 0x0a,
+	0x63, 0xf4, 0x86, 0x8f, 0x67, 0x45, 0xc8, 0x44, 0xf3, 0x3d, 0x7b, 0x12, 0x81, 0xe3, 0x41, 0x5f,
+	0x63, 0xc3, 0x5c, 0xed, 0xd2, 0xaf, 0xaa, 0x2d, 0x52, 0x7c, 0xad, 0x4b, 0xe2, 0xbf, 0xdb, 0x98,
+	0xee, 0xaf, 0x48, 0x08, 0x4e, 0x7e, 0xf7, 0xd5, 0x28, 0x61, 0x3b, 0x8b, 0xdc, 0xd8, 0x71, 0xae,
+	0x39, 0x77, 0x80, 0xa6, 0xff, 0x78, 0x5d, 0xd1, 0x74, 0xbb, 0x35, 0x2d, 0xb6, 0x64, 0x32, 0x13,
+	0x7a, 0x70, 0x5b, 0xba, 0x0f, 0xc7, 0x78, 0xae, 0xb0, 0xc3, 0x90, 0xeb, 0xe8, 0x76, 0xac, 0x19,
+	0xe6, 0x1a, 0xc9, 0x81, 0x1a, 0x37, 0x8d, 0x87, 0xc8, 0x64, 0x19, 0x94, 0xe3, 0x63, 0x9d, 0xda,
+	0xae, 0x04, 0x9b, 0xb9, 0xc4, 0x68, 0x6b, 0x6b, 0xb5, 0xb3, 0xb3, 0x10, 0xff, 0x50, 0x05, 0x27,
+	0xe1, 0x14, 0x1c, 0x5b, 0xbc, 0xb5, 0x9a, 0x58, 0x72, 0xb2, 0x94, 0xe0, 0xd6, 0xe8, 0x43, 0x73,
+	0x17, 0xe6, 0xd3, 0xd3, 0x70, 0xb4, 0xd8, 0xb2, 0x44, 0x33, 0xf3, 0x04, 0x9b, 0x48, 0x1a, 0xdd,
+	0xa9, 0x02, 0xb1, 0x56, 0x05, 0xa1, 0x16, 0xcf, 0x9a, 0x38, 0x72, 0x2c, 0x1a, 0x5a, 0x13, 0x47,
+	0x42, 0x51, 0x31, 0xb9, 0x25, 0xc2, 0xf1, 0xab, 0x2e, 0xd2, 0x19, 0xea, 0xc6, 0xf2, 0xfa, 0x6f,
+	0xc7, 0xd2, 0x97, 0xc4, 0x8b, 0x87, 0x4a, 0xe2, 0x3f, 0x0d, 0x60, 0xee, 0xaf, 0x04, 0xb0, 0x3f,
+	0x77, 0xda, 0x9f, 0xcd, 0x5d, 0x5f, 0xe2, 0x16, 0x26, 0x3f, 0x5d, 0xee, 0xf9, 0x89, 0x49, 0x27,
+	0x7a, 0x82, 0x10, 0x7d, 0xf6, 0x15, 0x04, 0x76, 0x02, 0x61, 0x78, 0x21, 0xc2, 0x89, 0x0c, 0xa2,
+	0xb6, 0x6e, 0x1e, 0xa5, 0xe1, 0x28, 0x0d, 0xcf, 0x45, 0x18, 0x59, 0x46, 0xec, 0x28, 0x09, 0xff,
+	0x7d, 0x12, 0xb6, 0x00, 0x3c, 0xf3, 0x43, 0xff, 0x24, 0x3c, 0x68, 0x38, 0xe0, 0xd0, 0xff, 0x77,
+	0xb1, 0xed, 0x4a, 0x7f, 0xff, 0xe6, 0x7b, 0x00, 0xfa, 0xc7, 0x92, 0x7c, 0x0a, 0xe3, 0x07, 0xbb,
+	0x2b, 0x3d, 0xe8, 0x1b, 0xda, 0xe1, 0x4f, 0x71, 0x62, 0xbb, 0xd2, 0xd3, 0xcc, 0x8f, 0x10, 0x1c,
+	0x57, 0xfa, 0x0d, 0xa8, 0xed, 0xca, 0x42, 0x7d, 0x57, 0x16, 0xf6, 0x76, 0x65, 0xb0, 0xe9, 0xc9,
+	0xe0, 0xad, 0x27, 0x83, 0x8f, 0x9e, 0x0c, 0x6a, 0x9e, 0x0c, 0xea, 0x9e, 0x0c, 0x3e, 0x7b, 0x32,
+	0x68, 0x7a, 0xb2, 0xb0, 0xe7, 0xc9, 0xe0, 0x65, 0x43, 0x16, 0x76, 0x1a, 0x32, 0xa8, 0x35, 0x64,
+	0xa1, 0xde, 0x90, 0x85, 0x7b, 0x77, 0x2c, 0x42, 0x1f, 0x59, 0x4a, 0x99, 0xd8, 0x0c, 0xb9, 0xae,
+	0xae, 0x94, 0x8a, 0x2a, 0x5f, 0xe4, 0x88, 0x5b, 0x48, 0x51, 0x97, 0x94, 0x71, 0x16, 0xb9, 0xa9,
+	0xfd, 0xb2, 0x4a, 0x0d, 0x8b, 0xa8, 0xe8, 0x09, 0xeb, 0xbc, 0x2b, 0x0f, 0x7e, 0xb4, 0x1b, 0xc3,
+	0xfc, 0x9d, 0x39, 0xf7, 0x2d, 0x00, 0x00, 0xff, 0xff, 0xd0, 0x72, 0xba, 0x3c, 0xe0, 0x0b, 0x00,
+	0x00,
 }
 
 func (this *GlobalSpecType) Equal(that interface{}) bool {
@@ -297,7 +711,91 @@ func (this *GlobalSpecType) Equal(that interface{}) bool {
 			return false
 		}
 	}
+	if that1.ScopeChoice == nil {
+		if this.ScopeChoice != nil {
+			return false
+		}
+	} else if this.ScopeChoice == nil {
+		return false
+	} else if !this.ScopeChoice.Equal(that1.ScopeChoice) {
+		return false
+	}
+	if !this.ApiGroupBuilder.Equal(that1.ApiGroupBuilder) {
+		return false
+	}
 	if !this.ViewInternal.Equal(that1.ViewInternal) {
+		return false
+	}
+	return true
+}
+func (this *GlobalSpecType_Generic) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GlobalSpecType_Generic)
+	if !ok {
+		that2, ok := that.(GlobalSpecType_Generic)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.Generic.Equal(that1.Generic) {
+		return false
+	}
+	return true
+}
+func (this *GlobalSpecType_HttpLoadbalancer) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GlobalSpecType_HttpLoadbalancer)
+	if !ok {
+		that2, ok := that.(GlobalSpecType_HttpLoadbalancer)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.HttpLoadbalancer.Equal(that1.HttpLoadbalancer) {
+		return false
+	}
+	return true
+}
+func (this *GlobalSpecType_ApiDefinition) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GlobalSpecType_ApiDefinition)
+	if !ok {
+		that2, ok := that.(GlobalSpecType_ApiDefinition)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.ApiDefinition.Equal(that1.ApiDefinition) {
 		return false
 	}
 	return true
@@ -329,6 +827,90 @@ func (this *CreateSpecType) Equal(that interface{}) bool {
 			return false
 		}
 	}
+	if that1.ScopeChoice == nil {
+		if this.ScopeChoice != nil {
+			return false
+		}
+	} else if this.ScopeChoice == nil {
+		return false
+	} else if !this.ScopeChoice.Equal(that1.ScopeChoice) {
+		return false
+	}
+	if !this.ApiGroupBuilder.Equal(that1.ApiGroupBuilder) {
+		return false
+	}
+	return true
+}
+func (this *CreateSpecType_Generic) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CreateSpecType_Generic)
+	if !ok {
+		that2, ok := that.(CreateSpecType_Generic)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.Generic.Equal(that1.Generic) {
+		return false
+	}
+	return true
+}
+func (this *CreateSpecType_HttpLoadbalancer) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CreateSpecType_HttpLoadbalancer)
+	if !ok {
+		that2, ok := that.(CreateSpecType_HttpLoadbalancer)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.HttpLoadbalancer.Equal(that1.HttpLoadbalancer) {
+		return false
+	}
+	return true
+}
+func (this *CreateSpecType_ApiDefinition) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CreateSpecType_ApiDefinition)
+	if !ok {
+		that2, ok := that.(CreateSpecType_ApiDefinition)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.ApiDefinition.Equal(that1.ApiDefinition) {
+		return false
+	}
 	return true
 }
 func (this *ReplaceSpecType) Equal(that interface{}) bool {
@@ -357,6 +939,90 @@ func (this *ReplaceSpecType) Equal(that interface{}) bool {
 		if !this.Elements[i].Equal(that1.Elements[i]) {
 			return false
 		}
+	}
+	if that1.ScopeChoice == nil {
+		if this.ScopeChoice != nil {
+			return false
+		}
+	} else if this.ScopeChoice == nil {
+		return false
+	} else if !this.ScopeChoice.Equal(that1.ScopeChoice) {
+		return false
+	}
+	if !this.ApiGroupBuilder.Equal(that1.ApiGroupBuilder) {
+		return false
+	}
+	return true
+}
+func (this *ReplaceSpecType_Generic) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ReplaceSpecType_Generic)
+	if !ok {
+		that2, ok := that.(ReplaceSpecType_Generic)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.Generic.Equal(that1.Generic) {
+		return false
+	}
+	return true
+}
+func (this *ReplaceSpecType_HttpLoadbalancer) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ReplaceSpecType_HttpLoadbalancer)
+	if !ok {
+		that2, ok := that.(ReplaceSpecType_HttpLoadbalancer)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.HttpLoadbalancer.Equal(that1.HttpLoadbalancer) {
+		return false
+	}
+	return true
+}
+func (this *ReplaceSpecType_ApiDefinition) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ReplaceSpecType_ApiDefinition)
+	if !ok {
+		that2, ok := that.(ReplaceSpecType_ApiDefinition)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.ApiDefinition.Equal(that1.ApiDefinition) {
+		return false
 	}
 	return true
 }
@@ -387,16 +1053,154 @@ func (this *GetSpecType) Equal(that interface{}) bool {
 			return false
 		}
 	}
+	if that1.ScopeChoice == nil {
+		if this.ScopeChoice != nil {
+			return false
+		}
+	} else if this.ScopeChoice == nil {
+		return false
+	} else if !this.ScopeChoice.Equal(that1.ScopeChoice) {
+		return false
+	}
+	if !this.ApiGroupBuilder.Equal(that1.ApiGroupBuilder) {
+		return false
+	}
+	return true
+}
+func (this *GetSpecType_Generic) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GetSpecType_Generic)
+	if !ok {
+		that2, ok := that.(GetSpecType_Generic)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.Generic.Equal(that1.Generic) {
+		return false
+	}
+	return true
+}
+func (this *GetSpecType_HttpLoadbalancer) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GetSpecType_HttpLoadbalancer)
+	if !ok {
+		that2, ok := that.(GetSpecType_HttpLoadbalancer)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.HttpLoadbalancer.Equal(that1.HttpLoadbalancer) {
+		return false
+	}
+	return true
+}
+func (this *GetSpecType_ApiDefinition) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GetSpecType_ApiDefinition)
+	if !ok {
+		that2, ok := that.(GetSpecType_ApiDefinition)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.ApiDefinition.Equal(that1.ApiDefinition) {
+		return false
+	}
+	return true
+}
+func (this *ApiGroupScopeHttpLoadbalancer) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ApiGroupScopeHttpLoadbalancer)
+	if !ok {
+		that2, ok := that.(ApiGroupScopeHttpLoadbalancer)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.HttpLoadbalancer.Equal(that1.HttpLoadbalancer) {
+		return false
+	}
+	return true
+}
+func (this *ApiGroupScopeApiDefinition) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ApiGroupScopeApiDefinition)
+	if !ok {
+		that2, ok := that.(ApiGroupScopeApiDefinition)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.ApiDefinition.Equal(that1.ApiDefinition) {
+		return false
+	}
 	return true
 }
 func (this *GlobalSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 6)
+	s := make([]string, 0, 10)
 	s = append(s, "&app_api_group.GlobalSpecType{")
 	if this.Elements != nil {
 		s = append(s, "Elements: "+fmt.Sprintf("%#v", this.Elements)+",\n")
+	}
+	if this.ScopeChoice != nil {
+		s = append(s, "ScopeChoice: "+fmt.Sprintf("%#v", this.ScopeChoice)+",\n")
+	}
+	if this.ApiGroupBuilder != nil {
+		s = append(s, "ApiGroupBuilder: "+fmt.Sprintf("%#v", this.ApiGroupBuilder)+",\n")
 	}
 	if this.ViewInternal != nil {
 		s = append(s, "ViewInternal: "+fmt.Sprintf("%#v", this.ViewInternal)+",\n")
@@ -404,38 +1208,176 @@ func (this *GlobalSpecType) GoString() string {
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
+func (this *GlobalSpecType_Generic) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&app_api_group.GlobalSpecType_Generic{` +
+		`Generic:` + fmt.Sprintf("%#v", this.Generic) + `}`}, ", ")
+	return s
+}
+func (this *GlobalSpecType_HttpLoadbalancer) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&app_api_group.GlobalSpecType_HttpLoadbalancer{` +
+		`HttpLoadbalancer:` + fmt.Sprintf("%#v", this.HttpLoadbalancer) + `}`}, ", ")
+	return s
+}
+func (this *GlobalSpecType_ApiDefinition) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&app_api_group.GlobalSpecType_ApiDefinition{` +
+		`ApiDefinition:` + fmt.Sprintf("%#v", this.ApiDefinition) + `}`}, ", ")
+	return s
+}
 func (this *CreateSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 5)
+	s := make([]string, 0, 9)
 	s = append(s, "&app_api_group.CreateSpecType{")
 	if this.Elements != nil {
 		s = append(s, "Elements: "+fmt.Sprintf("%#v", this.Elements)+",\n")
 	}
+	if this.ScopeChoice != nil {
+		s = append(s, "ScopeChoice: "+fmt.Sprintf("%#v", this.ScopeChoice)+",\n")
+	}
+	if this.ApiGroupBuilder != nil {
+		s = append(s, "ApiGroupBuilder: "+fmt.Sprintf("%#v", this.ApiGroupBuilder)+",\n")
+	}
 	s = append(s, "}")
 	return strings.Join(s, "")
+}
+func (this *CreateSpecType_Generic) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&app_api_group.CreateSpecType_Generic{` +
+		`Generic:` + fmt.Sprintf("%#v", this.Generic) + `}`}, ", ")
+	return s
+}
+func (this *CreateSpecType_HttpLoadbalancer) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&app_api_group.CreateSpecType_HttpLoadbalancer{` +
+		`HttpLoadbalancer:` + fmt.Sprintf("%#v", this.HttpLoadbalancer) + `}`}, ", ")
+	return s
+}
+func (this *CreateSpecType_ApiDefinition) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&app_api_group.CreateSpecType_ApiDefinition{` +
+		`ApiDefinition:` + fmt.Sprintf("%#v", this.ApiDefinition) + `}`}, ", ")
+	return s
 }
 func (this *ReplaceSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 5)
+	s := make([]string, 0, 9)
 	s = append(s, "&app_api_group.ReplaceSpecType{")
 	if this.Elements != nil {
 		s = append(s, "Elements: "+fmt.Sprintf("%#v", this.Elements)+",\n")
 	}
+	if this.ScopeChoice != nil {
+		s = append(s, "ScopeChoice: "+fmt.Sprintf("%#v", this.ScopeChoice)+",\n")
+	}
+	if this.ApiGroupBuilder != nil {
+		s = append(s, "ApiGroupBuilder: "+fmt.Sprintf("%#v", this.ApiGroupBuilder)+",\n")
+	}
 	s = append(s, "}")
 	return strings.Join(s, "")
+}
+func (this *ReplaceSpecType_Generic) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&app_api_group.ReplaceSpecType_Generic{` +
+		`Generic:` + fmt.Sprintf("%#v", this.Generic) + `}`}, ", ")
+	return s
+}
+func (this *ReplaceSpecType_HttpLoadbalancer) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&app_api_group.ReplaceSpecType_HttpLoadbalancer{` +
+		`HttpLoadbalancer:` + fmt.Sprintf("%#v", this.HttpLoadbalancer) + `}`}, ", ")
+	return s
+}
+func (this *ReplaceSpecType_ApiDefinition) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&app_api_group.ReplaceSpecType_ApiDefinition{` +
+		`ApiDefinition:` + fmt.Sprintf("%#v", this.ApiDefinition) + `}`}, ", ")
+	return s
 }
 func (this *GetSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 5)
+	s := make([]string, 0, 9)
 	s = append(s, "&app_api_group.GetSpecType{")
 	if this.Elements != nil {
 		s = append(s, "Elements: "+fmt.Sprintf("%#v", this.Elements)+",\n")
+	}
+	if this.ScopeChoice != nil {
+		s = append(s, "ScopeChoice: "+fmt.Sprintf("%#v", this.ScopeChoice)+",\n")
+	}
+	if this.ApiGroupBuilder != nil {
+		s = append(s, "ApiGroupBuilder: "+fmt.Sprintf("%#v", this.ApiGroupBuilder)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *GetSpecType_Generic) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&app_api_group.GetSpecType_Generic{` +
+		`Generic:` + fmt.Sprintf("%#v", this.Generic) + `}`}, ", ")
+	return s
+}
+func (this *GetSpecType_HttpLoadbalancer) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&app_api_group.GetSpecType_HttpLoadbalancer{` +
+		`HttpLoadbalancer:` + fmt.Sprintf("%#v", this.HttpLoadbalancer) + `}`}, ", ")
+	return s
+}
+func (this *GetSpecType_ApiDefinition) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&app_api_group.GetSpecType_ApiDefinition{` +
+		`ApiDefinition:` + fmt.Sprintf("%#v", this.ApiDefinition) + `}`}, ", ")
+	return s
+}
+func (this *ApiGroupScopeHttpLoadbalancer) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 5)
+	s = append(s, "&app_api_group.ApiGroupScopeHttpLoadbalancer{")
+	if this.HttpLoadbalancer != nil {
+		s = append(s, "HttpLoadbalancer: "+fmt.Sprintf("%#v", this.HttpLoadbalancer)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *ApiGroupScopeApiDefinition) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 5)
+	s = append(s, "&app_api_group.ApiGroupScopeApiDefinition{")
+	if this.ApiDefinition != nil {
+		s = append(s, "ApiDefinition: "+fmt.Sprintf("%#v", this.ApiDefinition)+",\n")
 	}
 	s = append(s, "}")
 	return strings.Join(s, "")
@@ -482,6 +1424,27 @@ func (m *GlobalSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		i--
 		dAtA[i] = 0xc2
 	}
+	if m.ApiGroupBuilder != nil {
+		{
+			size, err := m.ApiGroupBuilder.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x4a
+	}
+	if m.ScopeChoice != nil {
+		{
+			size := m.ScopeChoice.Size()
+			i -= size
+			if _, err := m.ScopeChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
 	if len(m.Elements) > 0 {
 		for iNdEx := len(m.Elements) - 1; iNdEx >= 0; iNdEx-- {
 			{
@@ -499,6 +1462,69 @@ func (m *GlobalSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
+func (m *GlobalSpecType_Generic) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType_Generic) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.Generic != nil {
+		{
+			size, err := m.Generic.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x22
+	}
+	return len(dAtA) - i, nil
+}
+func (m *GlobalSpecType_HttpLoadbalancer) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType_HttpLoadbalancer) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.HttpLoadbalancer != nil {
+		{
+			size, err := m.HttpLoadbalancer.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x2a
+	}
+	return len(dAtA) - i, nil
+}
+func (m *GlobalSpecType_ApiDefinition) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType_ApiDefinition) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.ApiDefinition != nil {
+		{
+			size, err := m.ApiDefinition.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x32
+	}
+	return len(dAtA) - i, nil
+}
 func (m *CreateSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -519,6 +1545,27 @@ func (m *CreateSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	if m.ApiGroupBuilder != nil {
+		{
+			size, err := m.ApiGroupBuilder.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x4a
+	}
+	if m.ScopeChoice != nil {
+		{
+			size := m.ScopeChoice.Size()
+			i -= size
+			if _, err := m.ScopeChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
 	if len(m.Elements) > 0 {
 		for iNdEx := len(m.Elements) - 1; iNdEx >= 0; iNdEx-- {
 			{
@@ -536,6 +1583,69 @@ func (m *CreateSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
+func (m *CreateSpecType_Generic) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType_Generic) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.Generic != nil {
+		{
+			size, err := m.Generic.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x22
+	}
+	return len(dAtA) - i, nil
+}
+func (m *CreateSpecType_HttpLoadbalancer) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType_HttpLoadbalancer) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.HttpLoadbalancer != nil {
+		{
+			size, err := m.HttpLoadbalancer.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x2a
+	}
+	return len(dAtA) - i, nil
+}
+func (m *CreateSpecType_ApiDefinition) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType_ApiDefinition) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.ApiDefinition != nil {
+		{
+			size, err := m.ApiDefinition.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x32
+	}
+	return len(dAtA) - i, nil
+}
 func (m *ReplaceSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -556,6 +1666,27 @@ func (m *ReplaceSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	if m.ApiGroupBuilder != nil {
+		{
+			size, err := m.ApiGroupBuilder.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x4a
+	}
+	if m.ScopeChoice != nil {
+		{
+			size := m.ScopeChoice.Size()
+			i -= size
+			if _, err := m.ScopeChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
 	if len(m.Elements) > 0 {
 		for iNdEx := len(m.Elements) - 1; iNdEx >= 0; iNdEx-- {
 			{
@@ -573,6 +1704,69 @@ func (m *ReplaceSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
+func (m *ReplaceSpecType_Generic) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType_Generic) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.Generic != nil {
+		{
+			size, err := m.Generic.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x22
+	}
+	return len(dAtA) - i, nil
+}
+func (m *ReplaceSpecType_HttpLoadbalancer) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType_HttpLoadbalancer) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.HttpLoadbalancer != nil {
+		{
+			size, err := m.HttpLoadbalancer.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x2a
+	}
+	return len(dAtA) - i, nil
+}
+func (m *ReplaceSpecType_ApiDefinition) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType_ApiDefinition) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.ApiDefinition != nil {
+		{
+			size, err := m.ApiDefinition.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x32
+	}
+	return len(dAtA) - i, nil
+}
 func (m *GetSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -593,6 +1787,27 @@ func (m *GetSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	if m.ApiGroupBuilder != nil {
+		{
+			size, err := m.ApiGroupBuilder.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x4a
+	}
+	if m.ScopeChoice != nil {
+		{
+			size := m.ScopeChoice.Size()
+			i -= size
+			if _, err := m.ScopeChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
 	if len(m.Elements) > 0 {
 		for iNdEx := len(m.Elements) - 1; iNdEx >= 0; iNdEx-- {
 			{
@@ -606,6 +1821,139 @@ func (m *GetSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 			i--
 			dAtA[i] = 0xa
 		}
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *GetSpecType_Generic) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType_Generic) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.Generic != nil {
+		{
+			size, err := m.Generic.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x22
+	}
+	return len(dAtA) - i, nil
+}
+func (m *GetSpecType_HttpLoadbalancer) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType_HttpLoadbalancer) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.HttpLoadbalancer != nil {
+		{
+			size, err := m.HttpLoadbalancer.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x2a
+	}
+	return len(dAtA) - i, nil
+}
+func (m *GetSpecType_ApiDefinition) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType_ApiDefinition) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.ApiDefinition != nil {
+		{
+			size, err := m.ApiDefinition.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x32
+	}
+	return len(dAtA) - i, nil
+}
+func (m *ApiGroupScopeHttpLoadbalancer) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *ApiGroupScopeHttpLoadbalancer) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ApiGroupScopeHttpLoadbalancer) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.HttpLoadbalancer != nil {
+		{
+			size, err := m.HttpLoadbalancer.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *ApiGroupScopeApiDefinition) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *ApiGroupScopeApiDefinition) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ApiGroupScopeApiDefinition) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.ApiDefinition != nil {
+		{
+			size, err := m.ApiDefinition.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0xa
 	}
 	return len(dAtA) - i, nil
 }
@@ -633,6 +1981,13 @@ func (m *GlobalSpecType) Size() (n int) {
 			n += 1 + l + sovTypes(uint64(l))
 		}
 	}
+	if m.ScopeChoice != nil {
+		n += m.ScopeChoice.Size()
+	}
+	if m.ApiGroupBuilder != nil {
+		l = m.ApiGroupBuilder.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
 	if m.ViewInternal != nil {
 		l = m.ViewInternal.Size()
 		n += 2 + l + sovTypes(uint64(l))
@@ -640,6 +1995,42 @@ func (m *GlobalSpecType) Size() (n int) {
 	return n
 }
 
+func (m *GlobalSpecType_Generic) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Generic != nil {
+		l = m.Generic.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *GlobalSpecType_HttpLoadbalancer) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.HttpLoadbalancer != nil {
+		l = m.HttpLoadbalancer.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *GlobalSpecType_ApiDefinition) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.ApiDefinition != nil {
+		l = m.ApiDefinition.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
 func (m *CreateSpecType) Size() (n int) {
 	if m == nil {
 		return 0
@@ -652,9 +2043,52 @@ func (m *CreateSpecType) Size() (n int) {
 			n += 1 + l + sovTypes(uint64(l))
 		}
 	}
+	if m.ScopeChoice != nil {
+		n += m.ScopeChoice.Size()
+	}
+	if m.ApiGroupBuilder != nil {
+		l = m.ApiGroupBuilder.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
 	return n
 }
 
+func (m *CreateSpecType_Generic) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Generic != nil {
+		l = m.Generic.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *CreateSpecType_HttpLoadbalancer) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.HttpLoadbalancer != nil {
+		l = m.HttpLoadbalancer.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *CreateSpecType_ApiDefinition) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.ApiDefinition != nil {
+		l = m.ApiDefinition.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
 func (m *ReplaceSpecType) Size() (n int) {
 	if m == nil {
 		return 0
@@ -667,9 +2101,52 @@ func (m *ReplaceSpecType) Size() (n int) {
 			n += 1 + l + sovTypes(uint64(l))
 		}
 	}
+	if m.ScopeChoice != nil {
+		n += m.ScopeChoice.Size()
+	}
+	if m.ApiGroupBuilder != nil {
+		l = m.ApiGroupBuilder.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
 	return n
 }
 
+func (m *ReplaceSpecType_Generic) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Generic != nil {
+		l = m.Generic.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *ReplaceSpecType_HttpLoadbalancer) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.HttpLoadbalancer != nil {
+		l = m.HttpLoadbalancer.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *ReplaceSpecType_ApiDefinition) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.ApiDefinition != nil {
+		l = m.ApiDefinition.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
 func (m *GetSpecType) Size() (n int) {
 	if m == nil {
 		return 0
@@ -681,6 +2158,75 @@ func (m *GetSpecType) Size() (n int) {
 			l = e.Size()
 			n += 1 + l + sovTypes(uint64(l))
 		}
+	}
+	if m.ScopeChoice != nil {
+		n += m.ScopeChoice.Size()
+	}
+	if m.ApiGroupBuilder != nil {
+		l = m.ApiGroupBuilder.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+
+func (m *GetSpecType_Generic) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Generic != nil {
+		l = m.Generic.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *GetSpecType_HttpLoadbalancer) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.HttpLoadbalancer != nil {
+		l = m.HttpLoadbalancer.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *GetSpecType_ApiDefinition) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.ApiDefinition != nil {
+		l = m.ApiDefinition.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *ApiGroupScopeHttpLoadbalancer) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.HttpLoadbalancer != nil {
+		l = m.HttpLoadbalancer.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+
+func (m *ApiGroupScopeApiDefinition) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.ApiDefinition != nil {
+		l = m.ApiDefinition.Size()
+		n += 1 + l + sovTypes(uint64(l))
 	}
 	return n
 }
@@ -702,7 +2248,39 @@ func (this *GlobalSpecType) String() string {
 	repeatedStringForElements += "}"
 	s := strings.Join([]string{`&GlobalSpecType{`,
 		`Elements:` + repeatedStringForElements + `,`,
+		`ScopeChoice:` + fmt.Sprintf("%v", this.ScopeChoice) + `,`,
+		`ApiGroupBuilder:` + strings.Replace(fmt.Sprintf("%v", this.ApiGroupBuilder), "ApiGroupBuilder", "api_definition.ApiGroupBuilder", 1) + `,`,
 		`ViewInternal:` + strings.Replace(fmt.Sprintf("%v", this.ViewInternal), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GlobalSpecType_Generic) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GlobalSpecType_Generic{`,
+		`Generic:` + strings.Replace(fmt.Sprintf("%v", this.Generic), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GlobalSpecType_HttpLoadbalancer) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GlobalSpecType_HttpLoadbalancer{`,
+		`HttpLoadbalancer:` + strings.Replace(fmt.Sprintf("%v", this.HttpLoadbalancer), "ApiGroupScopeHttpLoadbalancer", "ApiGroupScopeHttpLoadbalancer", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GlobalSpecType_ApiDefinition) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GlobalSpecType_ApiDefinition{`,
+		`ApiDefinition:` + strings.Replace(fmt.Sprintf("%v", this.ApiDefinition), "ApiGroupScopeApiDefinition", "ApiGroupScopeApiDefinition", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -718,6 +2296,38 @@ func (this *CreateSpecType) String() string {
 	repeatedStringForElements += "}"
 	s := strings.Join([]string{`&CreateSpecType{`,
 		`Elements:` + repeatedStringForElements + `,`,
+		`ScopeChoice:` + fmt.Sprintf("%v", this.ScopeChoice) + `,`,
+		`ApiGroupBuilder:` + strings.Replace(fmt.Sprintf("%v", this.ApiGroupBuilder), "ApiGroupBuilder", "api_definition.ApiGroupBuilder", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *CreateSpecType_Generic) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&CreateSpecType_Generic{`,
+		`Generic:` + strings.Replace(fmt.Sprintf("%v", this.Generic), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *CreateSpecType_HttpLoadbalancer) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&CreateSpecType_HttpLoadbalancer{`,
+		`HttpLoadbalancer:` + strings.Replace(fmt.Sprintf("%v", this.HttpLoadbalancer), "ApiGroupScopeHttpLoadbalancer", "ApiGroupScopeHttpLoadbalancer", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *CreateSpecType_ApiDefinition) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&CreateSpecType_ApiDefinition{`,
+		`ApiDefinition:` + strings.Replace(fmt.Sprintf("%v", this.ApiDefinition), "ApiGroupScopeApiDefinition", "ApiGroupScopeApiDefinition", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -733,6 +2343,38 @@ func (this *ReplaceSpecType) String() string {
 	repeatedStringForElements += "}"
 	s := strings.Join([]string{`&ReplaceSpecType{`,
 		`Elements:` + repeatedStringForElements + `,`,
+		`ScopeChoice:` + fmt.Sprintf("%v", this.ScopeChoice) + `,`,
+		`ApiGroupBuilder:` + strings.Replace(fmt.Sprintf("%v", this.ApiGroupBuilder), "ApiGroupBuilder", "api_definition.ApiGroupBuilder", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ReplaceSpecType_Generic) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ReplaceSpecType_Generic{`,
+		`Generic:` + strings.Replace(fmt.Sprintf("%v", this.Generic), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ReplaceSpecType_HttpLoadbalancer) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ReplaceSpecType_HttpLoadbalancer{`,
+		`HttpLoadbalancer:` + strings.Replace(fmt.Sprintf("%v", this.HttpLoadbalancer), "ApiGroupScopeHttpLoadbalancer", "ApiGroupScopeHttpLoadbalancer", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ReplaceSpecType_ApiDefinition) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ReplaceSpecType_ApiDefinition{`,
+		`ApiDefinition:` + strings.Replace(fmt.Sprintf("%v", this.ApiDefinition), "ApiGroupScopeApiDefinition", "ApiGroupScopeApiDefinition", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -748,6 +2390,58 @@ func (this *GetSpecType) String() string {
 	repeatedStringForElements += "}"
 	s := strings.Join([]string{`&GetSpecType{`,
 		`Elements:` + repeatedStringForElements + `,`,
+		`ScopeChoice:` + fmt.Sprintf("%v", this.ScopeChoice) + `,`,
+		`ApiGroupBuilder:` + strings.Replace(fmt.Sprintf("%v", this.ApiGroupBuilder), "ApiGroupBuilder", "api_definition.ApiGroupBuilder", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GetSpecType_Generic) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GetSpecType_Generic{`,
+		`Generic:` + strings.Replace(fmt.Sprintf("%v", this.Generic), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GetSpecType_HttpLoadbalancer) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GetSpecType_HttpLoadbalancer{`,
+		`HttpLoadbalancer:` + strings.Replace(fmt.Sprintf("%v", this.HttpLoadbalancer), "ApiGroupScopeHttpLoadbalancer", "ApiGroupScopeHttpLoadbalancer", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GetSpecType_ApiDefinition) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GetSpecType_ApiDefinition{`,
+		`ApiDefinition:` + strings.Replace(fmt.Sprintf("%v", this.ApiDefinition), "ApiGroupScopeApiDefinition", "ApiGroupScopeApiDefinition", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ApiGroupScopeHttpLoadbalancer) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ApiGroupScopeHttpLoadbalancer{`,
+		`HttpLoadbalancer:` + strings.Replace(fmt.Sprintf("%v", this.HttpLoadbalancer), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ApiGroupScopeApiDefinition) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ApiGroupScopeApiDefinition{`,
+		`ApiDefinition:` + strings.Replace(fmt.Sprintf("%v", this.ApiDefinition), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -820,6 +2514,147 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 			}
 			m.Elements = append(m.Elements, &api_group_element.GlobalSpecType{})
 			if err := m.Elements[len(m.Elements)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Generic", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.ScopeChoice = &GlobalSpecType_Generic{v}
+			iNdEx = postIndex
+		case 5:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field HttpLoadbalancer", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &ApiGroupScopeHttpLoadbalancer{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.ScopeChoice = &GlobalSpecType_HttpLoadbalancer{v}
+			iNdEx = postIndex
+		case 6:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ApiDefinition", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &ApiGroupScopeApiDefinition{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.ScopeChoice = &GlobalSpecType_ApiDefinition{v}
+			iNdEx = postIndex
+		case 9:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ApiGroupBuilder", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.ApiGroupBuilder == nil {
+				m.ApiGroupBuilder = &api_definition.ApiGroupBuilder{}
+			}
+			if err := m.ApiGroupBuilder.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex
@@ -946,6 +2781,147 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Generic", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.ScopeChoice = &CreateSpecType_Generic{v}
+			iNdEx = postIndex
+		case 5:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field HttpLoadbalancer", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &ApiGroupScopeHttpLoadbalancer{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.ScopeChoice = &CreateSpecType_HttpLoadbalancer{v}
+			iNdEx = postIndex
+		case 6:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ApiDefinition", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &ApiGroupScopeApiDefinition{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.ScopeChoice = &CreateSpecType_ApiDefinition{v}
+			iNdEx = postIndex
+		case 9:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ApiGroupBuilder", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.ApiGroupBuilder == nil {
+				m.ApiGroupBuilder = &api_definition.ApiGroupBuilder{}
+			}
+			if err := m.ApiGroupBuilder.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipTypes(dAtA[iNdEx:])
@@ -1033,6 +3009,147 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Generic", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.ScopeChoice = &ReplaceSpecType_Generic{v}
+			iNdEx = postIndex
+		case 5:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field HttpLoadbalancer", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &ApiGroupScopeHttpLoadbalancer{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.ScopeChoice = &ReplaceSpecType_HttpLoadbalancer{v}
+			iNdEx = postIndex
+		case 6:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ApiDefinition", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &ApiGroupScopeApiDefinition{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.ScopeChoice = &ReplaceSpecType_ApiDefinition{v}
+			iNdEx = postIndex
+		case 9:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ApiGroupBuilder", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.ApiGroupBuilder == nil {
+				m.ApiGroupBuilder = &api_definition.ApiGroupBuilder{}
+			}
+			if err := m.ApiGroupBuilder.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipTypes(dAtA[iNdEx:])
@@ -1117,6 +3234,325 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 			}
 			m.Elements = append(m.Elements, &api_group_element.GlobalSpecType{})
 			if err := m.Elements[len(m.Elements)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Generic", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.ScopeChoice = &GetSpecType_Generic{v}
+			iNdEx = postIndex
+		case 5:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field HttpLoadbalancer", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &ApiGroupScopeHttpLoadbalancer{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.ScopeChoice = &GetSpecType_HttpLoadbalancer{v}
+			iNdEx = postIndex
+		case 6:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ApiDefinition", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &ApiGroupScopeApiDefinition{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.ScopeChoice = &GetSpecType_ApiDefinition{v}
+			iNdEx = postIndex
+		case 9:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ApiGroupBuilder", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.ApiGroupBuilder == nil {
+				m.ApiGroupBuilder = &api_definition.ApiGroupBuilder{}
+			}
+			if err := m.ApiGroupBuilder.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *ApiGroupScopeHttpLoadbalancer) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: ApiGroupScopeHttpLoadbalancer: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: ApiGroupScopeHttpLoadbalancer: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field HttpLoadbalancer", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.HttpLoadbalancer == nil {
+				m.HttpLoadbalancer = &views.ObjectRefType{}
+			}
+			if err := m.HttpLoadbalancer.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *ApiGroupScopeApiDefinition) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: ApiGroupScopeApiDefinition: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: ApiGroupScopeApiDefinition: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ApiDefinition", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.ApiDefinition == nil {
+				m.ApiDefinition = &views.ObjectRefType{}
+			}
+			if err := m.ApiDefinition.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex

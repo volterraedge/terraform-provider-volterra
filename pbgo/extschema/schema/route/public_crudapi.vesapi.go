@@ -3399,7 +3399,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Service Policy"
                 },
                 "waf_type": {
-                    "description": " WAF can be used to analyze inbound and outbound http/https traffic.\n WAF can be configured either in BLOCKing Mode or ALERTing Mode.\n In BLOCKing mode if WAF detects suspicious inbound/outbound traffic it blocks the request or response.\n In ALERTing mode if suspicious traffic is detected, WAF generates ALERTs with details on the\n suspicious traffic (instead of blocking traffic).\n\n waf_type can be either WAF or WAFRules.\n WAF Object allows to\n     Configure mode of the WAF (BLOCK/ALERT)\n     Configure language used by the application which is being protected by the WAF\n     Disable different high level security tags if required (e.g. SQLI_DETECTION, XSS_DETECTION etc)\n WAFRules allows to\n     Configure mode of the WAF (BLOCK/ALERT)\n     Enable/Disable individual WAF security rules\n\n waf_type specified at route level overrides waf configuration at VirtualHost level",
+                    "description": " WAF can be used to analyze inbound and outbound HTTP/HTTPS traffic.\n WAF can be configured either in BLOCKing Mode or ALERTing Mode.\n In BLOCKing mode if WAF detects suspicious inbound/outbound traffic it blocks the request or response.\n In ALERTing mode if suspicious traffic is detected, WAF generates ALERTs with details on the\n suspicious traffic (instead of blocking traffic).\n\n waf_type is the App Firewall profile to use.\n\n waf_type specified at route level overrides waf configuration at VirtualHost level",
                     "title": "Enable the WAF (Web Application Firewall) functionality for Route",
                     "$ref": "#/definitions/schemaWafType",
                     "x-displayname": "WAF"
@@ -3506,20 +3506,21 @@ var APISwaggerJSON string = `{
             "type": "object",
             "description": "A list of references to the app_firewall configuration objects",
             "title": "AppFirewallRefType",
-            "x-displayname": "WAF Rules Reference",
+            "x-displayname": "App Firewall Reference",
             "x-ves-proto-message": "ves.io.schema.AppFirewallRefType",
             "properties": {
                 "app_firewall": {
                     "type": "array",
-                    "description": " References to an Application Firewall configuration object\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 1\n",
+                    "description": " References to an Application Firewall configuration object\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.num_items: 1\n",
                     "title": "app_firewall",
-                    "maxItems": 1,
                     "items": {
                         "$ref": "#/definitions/schemaObjectRefType"
                     },
                     "x-displayname": "Application Firewall",
+                    "x-ves-required": "true",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.repeated.max_items": "1"
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.num_items": "1"
                     }
                 }
             }
@@ -4866,49 +4867,31 @@ var APISwaggerJSON string = `{
                 }
             }
         },
-        "schemaWafRefType": {
-            "type": "object",
-            "description": "x-displayName: \"WAF Reference\"\nA reference to the WAF configuration object",
-            "title": "WafRefType",
-            "properties": {
-                "waf": {
-                    "type": "array",
-                    "description": "x-displayName: \"WAF\"\nA direct reference to web application firewall configuration object",
-                    "title": "waf",
-                    "items": {
-                        "$ref": "#/definitions/schemaObjectRefType"
-                    }
-                }
-            }
-        },
-        "schemaWafRulesRefType": {
-            "type": "object",
-            "description": "x-displayName: \"WAF Rules Reference\"\nA list of references to the waf_rules configuration objects",
-            "title": "WafRulesRefType",
-            "properties": {
-                "waf_rules": {
-                    "type": "array",
-                    "description": "x-displayName: \"WAF Rules\"\nReferences to a set of WAF Rules configuration object",
-                    "title": "waf_rules",
-                    "items": {
-                        "$ref": "#/definitions/schemaObjectRefType"
-                    }
-                }
-            }
-        },
         "schemaWafType": {
             "type": "object",
-            "description": "WAF instance will be pointing to either Waf object (high level) or waf_rules Object",
+            "description": "WAF instance will be pointing to an app_firewall object",
             "title": "WafType",
             "x-displayname": "WAF Instance",
-            "x-ves-oneof-field-ref_type": "[\"app_firewall\"]",
+            "x-ves-oneof-field-ref_type": "[\"app_firewall\",\"disable_waf\",\"inherit_waf\"]",
             "x-ves-proto-message": "ves.io.schema.WafType",
             "properties": {
                 "app_firewall": {
-                    "description": "Exclusive with []\n A direct reference to an Application Firewall configuration object",
+                    "description": "Exclusive with [disable_waf inherit_waf]\n A direct reference to an Application Firewall configuration object",
                     "title": "app_firewall",
                     "$ref": "#/definitions/schemaAppFirewallRefType",
                     "x-displayname": "Application Firewall"
+                },
+                "disable_waf": {
+                    "description": "Exclusive with [app_firewall inherit_waf]\n Any Application Firewall configuration will not be enforced",
+                    "title": "disable app firewall",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disabled"
+                },
+                "inherit_waf": {
+                    "description": "Exclusive with [app_firewall disable_waf]\n Any Application Firewall configuration that was configured on a higher level will be enforced",
+                    "title": "inherit app firewall",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Inherit"
                 }
             }
         },

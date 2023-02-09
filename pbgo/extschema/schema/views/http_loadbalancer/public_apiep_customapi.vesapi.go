@@ -35,6 +35,15 @@ type ApiepLBCustomAPIGrpcClient struct {
 	rpcFns map[string]func(context.Context, string, ...grpc.CallOption) (proto.Message, error)
 }
 
+func (c *ApiepLBCustomAPIGrpcClient) doRPCGetAPIEndpointsForGroups(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
+	req := &GetAPIEndpointsForGroupsReq{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.views.http_loadbalancer.GetAPIEndpointsForGroupsReq", yamlReq)
+	}
+	rsp, err := c.grpcClient.GetAPIEndpointsForGroups(ctx, req, opts...)
+	return rsp, err
+}
+
 func (c *ApiepLBCustomAPIGrpcClient) doRPCGetSwaggerSpec(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &SwaggerSpecReq{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -74,6 +83,8 @@ func NewApiepLBCustomAPIGrpcClient(cc *grpc.ClientConn) server.CustomClient {
 		grpcClient: NewApiepLBCustomAPIClient(cc),
 	}
 	rpcFns := make(map[string]func(context.Context, string, ...grpc.CallOption) (proto.Message, error))
+	rpcFns["GetAPIEndpointsForGroups"] = ccl.doRPCGetAPIEndpointsForGroups
+
 	rpcFns["GetSwaggerSpec"] = ccl.doRPCGetSwaggerSpec
 
 	ccl.rpcFns = rpcFns
@@ -87,6 +98,90 @@ type ApiepLBCustomAPIRestClient struct {
 	client  http.Client
 	// map of rpc name to its invocation
 	rpcFns map[string]func(context.Context, *server.CustomCallOpts) (proto.Message, error)
+}
+
+func (c *ApiepLBCustomAPIRestClient) doRPCGetAPIEndpointsForGroups(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
+	if callOpts.URI == "" {
+		return nil, fmt.Errorf("Error, URI should be specified, got empty")
+	}
+	url := fmt.Sprintf("%s%s", c.baseURL, callOpts.URI)
+
+	yamlReq := callOpts.YAMLReq
+	req := &GetAPIEndpointsForGroupsReq{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.views.http_loadbalancer.GetAPIEndpointsForGroupsReq: %s", yamlReq, err)
+	}
+
+	var hReq *http.Request
+	hm := strings.ToLower(callOpts.HTTPMethod)
+	switch hm {
+	case "post", "put":
+		jsn, err := codec.ToJSON(req, codec.ToWithUseProtoFieldName())
+		if err != nil {
+			return nil, errors.Wrap(err, "Custom RestClient converting YAML to JSON")
+		}
+		var op string
+		if hm == "post" {
+			op = http.MethodPost
+		} else {
+			op = http.MethodPut
+		}
+		newReq, err := http.NewRequest(op, url, bytes.NewBuffer([]byte(jsn)))
+		if err != nil {
+			return nil, errors.Wrapf(err, "Creating new HTTP %s request for custom API", op)
+		}
+		hReq = newReq
+	case "get":
+		newReq, err := http.NewRequest(http.MethodGet, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP GET request for custom API")
+		}
+		hReq = newReq
+		q := hReq.URL.Query()
+		_ = q
+		q.Add("name", fmt.Sprintf("%v", req.Name))
+		q.Add("namespace", fmt.Sprintf("%v", req.Namespace))
+
+		hReq.URL.RawQuery += q.Encode()
+	case "delete":
+		newReq, err := http.NewRequest(http.MethodDelete, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP DELETE request for custom API")
+		}
+		hReq = newReq
+	default:
+		return nil, fmt.Errorf("Error, invalid/empty HTTPMethod(%s) specified, should be POST|DELETE|GET", callOpts.HTTPMethod)
+	}
+	hReq = hReq.WithContext(ctx)
+	hReq.Header.Set("Content-Type", "application/json")
+	client.AddHdrsToReq(callOpts.Headers, hReq)
+
+	rsp, err := c.client.Do(hReq)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient")
+	}
+	defer rsp.Body.Close()
+
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
+		body, err := ioutil.ReadAll(rsp.Body)
+		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
+	}
+
+	body, err := ioutil.ReadAll(rsp.Body)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient read body")
+	}
+	pbRsp := &GetAPIEndpointsForGroupsRsp{}
+	if err := codec.FromJSON(string(body), pbRsp); err != nil {
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.views.http_loadbalancer.GetAPIEndpointsForGroupsRsp", body)
+
+	}
+	if callOpts.OutCallResponse != nil {
+		callOpts.OutCallResponse.ProtoMsg = pbRsp
+		callOpts.OutCallResponse.JSON = string(body)
+	}
+	return pbRsp, nil
 }
 
 func (c *ApiepLBCustomAPIRestClient) doRPCGetSwaggerSpec(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
@@ -199,6 +294,8 @@ func NewApiepLBCustomAPIRestClient(baseURL string, hc http.Client) server.Custom
 	}
 
 	rpcFns := make(map[string]func(context.Context, *server.CustomCallOpts) (proto.Message, error))
+	rpcFns["GetAPIEndpointsForGroups"] = ccl.doRPCGetAPIEndpointsForGroups
+
 	rpcFns["GetSwaggerSpec"] = ccl.doRPCGetSwaggerSpec
 
 	ccl.rpcFns = rpcFns
@@ -213,6 +310,9 @@ type apiepLBCustomAPIInprocClient struct {
 	ApiepLBCustomAPIServer
 }
 
+func (c *apiepLBCustomAPIInprocClient) GetAPIEndpointsForGroups(ctx context.Context, in *GetAPIEndpointsForGroupsReq, opts ...grpc.CallOption) (*GetAPIEndpointsForGroupsRsp, error) {
+	return c.ApiepLBCustomAPIServer.GetAPIEndpointsForGroups(ctx, in)
+}
 func (c *apiepLBCustomAPIInprocClient) GetSwaggerSpec(ctx context.Context, in *SwaggerSpecReq, opts ...grpc.CallOption) (*google_api.HttpBody, error) {
 	return c.ApiepLBCustomAPIServer.GetSwaggerSpec(ctx, in)
 }
@@ -238,6 +338,55 @@ type apiepLBCustomAPISrv struct {
 	svc svcfw.Service
 }
 
+func (s *apiepLBCustomAPISrv) GetAPIEndpointsForGroups(ctx context.Context, in *GetAPIEndpointsForGroupsReq) (*GetAPIEndpointsForGroupsRsp, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.views.http_loadbalancer.ApiepLBCustomAPI")
+	cah, ok := ah.(ApiepLBCustomAPIServer)
+	if !ok {
+		return nil, fmt.Errorf("ah %v is not of type *ApiepLBCustomAPIServer", ah)
+	}
+
+	var (
+		rsp *GetAPIEndpointsForGroupsRsp
+		err error
+	)
+
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.views.http_loadbalancer.GetAPIEndpointsForGroupsReq", in)
+	defer func() {
+		if len(bodyFields) > 0 {
+			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
+		}
+		userMsg := "The 'ApiepLBCustomAPI.GetAPIEndpointsForGroups' operation on 'http_loadbalancer'"
+		if err == nil {
+			userMsg += " was successfully performed."
+		} else {
+			userMsg += " failed to be performed."
+		}
+		server.AddUserMsgToAPIAudit(ctx, userMsg)
+	}()
+
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
+
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.views.http_loadbalancer.ApiepLBCustomAPI.GetAPIEndpointsForGroups"); rvFn != nil {
+			if verr := rvFn(ctx, in); verr != nil {
+				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
+				return nil, server.GRPCStatusFromError(err).Err()
+			}
+		}
+	}
+
+	rsp, err = cah.GetAPIEndpointsForGroups(ctx, in)
+	if err != nil {
+		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
+	}
+
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.views.http_loadbalancer.GetAPIEndpointsForGroupsRsp", rsp)...)
+
+	return rsp, nil
+}
 func (s *apiepLBCustomAPISrv) GetSwaggerSpec(ctx context.Context, in *SwaggerSpecReq) (*google_api.HttpBody, error) {
 	ah := s.svc.GetAPIHandler("ves.io.schema.views.http_loadbalancer.ApiepLBCustomAPI")
 	cah, ok := ah.(ApiepLBCustomAPIServer)
@@ -311,6 +460,106 @@ var ApiepLBCustomAPISwaggerJSON string = `{
     ],
     "tags": [],
     "paths": {
+        "/public/namespaces/{namespace}/http_loadbalancers/{name}/api_endpoints": {
+            "post": {
+                "summary": "Get API Endpoints",
+                "description": "Get list of all API Endpoints associated with the HTTP loadbalancer in format suitable for API Groups management.",
+                "operationId": "ves.io.schema.views.http_loadbalancer.ApiepLBCustomAPI.GetAPIEndpointsForGroups",
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/http_loadbalancerGetAPIEndpointsForGroupsRsp"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "namespace",
+                        "description": "Namespace\n\nx-example: \"shared\"\nNamespace of the Http LoadBalancer for the current request",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "x-displayname": "Namespace"
+                    },
+                    {
+                        "name": "name",
+                        "description": "Http LoadBalancer Name\n\nx-example: \"blogging-app\"\nHttp LoadBalancer for the current request",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "x-displayname": "Http LoadBalancer Name"
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/http_loadbalancerGetAPIEndpointsForGroupsReq"
+                        }
+                    }
+                ],
+                "tags": [
+                    "ApiepLBCustomAPI"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-http_loadbalancer-apieplbcustomapi-getapiendpointsforgroups"
+                },
+                "x-ves-proto-rpc": "ves.io.schema.views.http_loadbalancer.ApiepLBCustomAPI.GetAPIEndpointsForGroups"
+            },
+            "x-displayname": "HTTP Load Balancer Custom API",
+            "x-ves-proto-service": "ves.io.schema.views.http_loadbalancer.ApiepLBCustomAPI",
+            "x-ves-proto-service-type": "CUSTOM_PUBLIC"
+        },
         "/public/namespaces/{namespace}/http_loadbalancers/{name}/api_endpoints/swagger_spec": {
             "get": {
                 "summary": "Get Swagger Spec for Http Load Balancer",
@@ -427,6 +676,129 @@ var ApiepLBCustomAPISwaggerJSON string = `{
                 }
             }
         },
+        "app_typeAPIEPCategory": {
+            "type": "string",
+            "description": "The category of an API endpoint.\n\nDiscovered API Endpoint.\nThe API Endpoint is imported from user swagger.\nThe API Endpoint is present at the API Inventory.\nThe API Endpoint is considered as part of Shadow API.",
+            "title": "APIEP Category",
+            "enum": [
+                "APIEP_CATEGORY_DISCOVERED",
+                "APIEP_CATEGORY_SWAGGER",
+                "APIEP_CATEGORY_INVENTORY",
+                "APIEP_CATEGORY_SHADOW"
+            ],
+            "default": "APIEP_CATEGORY_DISCOVERED",
+            "x-displayname": "Category of the API Endpoint",
+            "x-ves-proto-enum": "ves.io.schema.app_type.APIEPCategory"
+        },
+        "app_typeSensitiveDataType": {
+            "type": "string",
+            "description": "List of possible types of sensitive data that can be discovered for an APIEP.\n\nThe Sensitive Data detected as credit card number.\nThe sensitive data detected as social security number.\nThe sensitive data detected as IP address.\nThe sensitive data detected as email address.\nThe sensitive data detected as phone number.\nThe sensitive data detected as authentication info(e.g password, auth token etc).\nThe sensitive data detected as information leakage.\nThe sensitive data detected as masked PII (CCN, SSN)\nThe sensitive data detected as Location.",
+            "title": "SensitiveDataType",
+            "enum": [
+                "SENSITIVE_DATA_TYPE_CCN",
+                "SENSITIVE_DATA_TYPE_SSN",
+                "SENSITIVE_DATA_TYPE_IP",
+                "SENSITIVE_DATA_TYPE_EMAIL",
+                "SENSITIVE_DATA_TYPE_PHONE",
+                "SENSITIVE_DATA_TYPE_AUTHENTICATION",
+                "SENSITIVE_DATA_TYPE_APP_INFO_LEAKAGE",
+                "SENSITIVE_DATA_TYPE_MASKED_PII",
+                "SENSITIVE_DATA_TYPE_LOCATION"
+            ],
+            "default": "SENSITIVE_DATA_TYPE_CCN",
+            "x-displayname": "Sensitive Data Type",
+            "x-ves-proto-enum": "ves.io.schema.app_type.SensitiveDataType"
+        },
+        "http_loadbalancerAPIGroupsApiep": {
+            "type": "object",
+            "description": "Apiep for the Evaluate Api Group Builder response.",
+            "title": "API Endpoint for API Group Evaluation",
+            "x-displayname": "API Groups Endpoint",
+            "x-ves-proto-message": "ves.io.schema.views.http_loadbalancer.APIGroupsApiep",
+            "properties": {
+                "category": {
+                    "type": "array",
+                    "description": " The category of the API Endpoint relative to API Inventory.\n\nExample: - \"[APIEP_CATEGORY_DISCOVERED, APIEP_CATEGORY_INVENTORY]\"-",
+                    "title": "Category",
+                    "items": {
+                        "$ref": "#/definitions/app_typeAPIEPCategory"
+                    },
+                    "x-displayname": "Category",
+                    "x-ves-example": "[APIEP_CATEGORY_DISCOVERED, APIEP_CATEGORY_INVENTORY]"
+                },
+                "method": {
+                    "description": " API Endpoint method",
+                    "title": "Method",
+                    "$ref": "#/definitions/schemaHttpMethod",
+                    "x-displayname": "Method"
+                },
+                "path": {
+                    "type": "string",
+                    "description": " API Endpoint path\n\nExample: - \"/api/v1/users/{id}\"-",
+                    "title": "Path",
+                    "x-displayname": "Path",
+                    "x-ves-example": "/api/v1/users/{id}"
+                },
+                "sensitive_data": {
+                    "type": "array",
+                    "description": " Sensitive Data of the API endpoint\n\nExample: - \"[SENSITIVE_DATA_TYPE_CCN, SENSITIVE_DATA_TYPE_SSN]\"-",
+                    "title": "Sensitive Data",
+                    "items": {
+                        "$ref": "#/definitions/app_typeSensitiveDataType"
+                    },
+                    "x-displayname": "Sensitive Data",
+                    "x-ves-example": "[SENSITIVE_DATA_TYPE_CCN, SENSITIVE_DATA_TYPE_SSN]"
+                }
+            }
+        },
+        "http_loadbalancerGetAPIEndpointsForGroupsReq": {
+            "type": "object",
+            "description": "Request shape for Get API Endpoints For Groups",
+            "title": "Get API Endpoints For Groups Request",
+            "x-displayname": "Get API Endpoints For Groups",
+            "x-ves-proto-message": "ves.io.schema.views.http_loadbalancer.GetAPIEndpointsForGroupsReq",
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "description": " Http LoadBalancer for the current request\n\nExample: - \"blogging-app\"-",
+                    "title": "Http LoadBalancer Name",
+                    "x-displayname": "Http LoadBalancer Name",
+                    "x-ves-example": "blogging-app"
+                },
+                "namespace": {
+                    "type": "string",
+                    "description": " Namespace of the Http LoadBalancer for the current request\n\nExample: - \"shared\"-",
+                    "title": "Namespace",
+                    "x-displayname": "Namespace",
+                    "x-ves-example": "shared"
+                }
+            }
+        },
+        "http_loadbalancerGetAPIEndpointsForGroupsRsp": {
+            "type": "object",
+            "description": "Response shape for Get API Endpoints For Groups request",
+            "title": "Get API Endpoints For Groups Response",
+            "x-displayname": "Get API Endpoints For Groups Response",
+            "x-ves-proto-message": "ves.io.schema.views.http_loadbalancer.GetAPIEndpointsForGroupsRsp",
+            "properties": {
+                "api_endpoints": {
+                    "type": "array",
+                    "description": " A list of API endpoints associated with the HTTP Loadbalancer",
+                    "title": "API Endpoints",
+                    "items": {
+                        "$ref": "#/definitions/http_loadbalancerAPIGroupsApiep"
+                    },
+                    "x-displayname": "API Endpoints"
+                },
+                "apieps_timestamp": {
+                    "type": "string",
+                    "description": " The API endpoints timestamp indicates most recent update of API endpoints happened\n The API Discovery periodically updates the API endpoints list based on application's traffic",
+                    "title": "apieps_timestamp",
+                    "format": "date-time",
+                    "x-displayname": "API Endpoints Timestamp"
+                }
+            }
+        },
         "protobufAny": {
             "type": "object",
             "description": "-Any- contains an arbitrary serialized protocol buffer message along with a\nURL that describes the type of the serialized message.\n\nProtobuf library provides support to pack/unpack Any values in the form\nof utility functions or additional generated methods of the Any type.\n\nExample 1: Pack and unpack a message in C++.\n\n    Foo foo = ...;\n    Any any;\n    any.PackFrom(foo);\n    ...\n    if (any.UnpackTo(\u0026foo)) {\n      ...\n    }\n\nExample 2: Pack and unpack a message in Java.\n\n    Foo foo = ...;\n    Any any = Any.pack(foo);\n    ...\n    if (any.is(Foo.class)) {\n      foo = any.unpack(Foo.class);\n    }\n\n Example 3: Pack and unpack a message in Python.\n\n    foo = Foo(...)\n    any = Any()\n    any.Pack(foo)\n    ...\n    if any.Is(Foo.DESCRIPTOR):\n      any.Unpack(foo)\n      ...\n\n Example 4: Pack and unpack a message in Go\n\n     foo := \u0026pb.Foo{...}\n     any, err := ptypes.MarshalAny(foo)\n     ...\n     foo := \u0026pb.Foo{}\n     if err := ptypes.UnmarshalAny(any, foo); err != nil {\n       ...\n     }\n\nThe pack methods provided by protobuf library will by default use\n'type.googleapis.com/full.type.name' as the type URL and the unpack\nmethods only use the fully qualified type name after the last '/'\nin the type URL, for example \"foo.bar.com/x/y.z\" will yield type\nname \"y.z\".\n\n\nJSON\n====\nThe JSON representation of an -Any- value uses the regular\nrepresentation of the deserialized, embedded message, with an\nadditional field -@type- which contains the type URL. Example:\n\n    package google.profile;\n    message Person {\n      string first_name = 1;\n      string last_name = 2;\n    }\n\n    {\n      \"@type\": \"type.googleapis.com/google.profile.Person\",\n      \"firstName\": \u003cstring\u003e,\n      \"lastName\": \u003cstring\u003e\n    }\n\nIf the embedded message type is well-known and has a custom JSON\nrepresentation, that representation will be embedded adding a field\n-value- which holds the custom JSON in addition to the -@type-\nfield. Example (for message [google.protobuf.Duration][]):\n\n    {\n      \"@type\": \"type.googleapis.com/google.protobuf.Duration\",\n      \"value\": \"1.212s\"\n    }",
@@ -441,6 +813,26 @@ var ApiepLBCustomAPISwaggerJSON string = `{
                     "format": "byte"
                 }
             }
+        },
+        "schemaHttpMethod": {
+            "type": "string",
+            "description": "Specifies the HTTP method used to access a resource.\n\nAny HTTP Method",
+            "title": "HttpMethod",
+            "enum": [
+                "ANY",
+                "GET",
+                "HEAD",
+                "POST",
+                "PUT",
+                "DELETE",
+                "CONNECT",
+                "OPTIONS",
+                "TRACE",
+                "PATCH"
+            ],
+            "default": "ANY",
+            "x-displayname": "HTTP Method",
+            "x-ves-proto-enum": "ves.io.schema.HttpMethod"
         }
     },
     "x-displayname": "Configure HTTP Load Balancer",

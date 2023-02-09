@@ -18,7 +18,6 @@ import (
 	ves_io_schema_app_firewall "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/app_firewall"
 	ves_io_schema_policy "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/policy"
 	ves_io_schema_service_policy_rule "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/service_policy_rule"
-	ves_io_schema_waf_rule_list "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/waf_rule_list"
 )
 
 // resourceVolterraServicePolicyRule is implementation of Volterra's ServicePolicyRule resources
@@ -1509,6 +1508,76 @@ func resourceVolterraServicePolicyRule() *schema.Resource {
 							},
 						},
 
+						"transaction_result": {
+
+							Type:     schema.TypeSet,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"failure_conditions": {
+
+										Type:     schema.TypeList,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"name": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+
+												"regex_values": {
+
+													Type: schema.TypeList,
+
+													Optional: true,
+													Elem: &schema.Schema{
+														Type: schema.TypeString,
+													},
+												},
+
+												"status": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+											},
+										},
+									},
+
+									"success_conditions": {
+
+										Type:     schema.TypeList,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"name": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+
+												"regex_values": {
+
+													Type: schema.TypeList,
+
+													Optional: true,
+													Elem: &schema.Schema{
+														Type: schema.TypeString,
+													},
+												},
+
+												"status": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+											},
+										},
+									},
+								},
+							},
+						},
+
 						"web_scraping": {
 							Type:     schema.TypeBool,
 							Optional: true,
@@ -1693,6 +1762,16 @@ func resourceVolterraServicePolicyRule() *schema.Resource {
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
+												"context": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+
+												"context_name": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+
 												"signature_id": {
 													Type:     schema.TypeInt,
 													Optional: true,
@@ -1707,6 +1786,11 @@ func resourceVolterraServicePolicyRule() *schema.Resource {
 										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
+
+												"context": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
 
 												"exclude_violation": {
 													Type:     schema.TypeString,
@@ -1744,74 +1828,6 @@ func resourceVolterraServicePolicyRule() *schema.Resource {
 
 							Type:     schema.TypeBool,
 							Optional: true,
-						},
-
-						"waf_inline_rule_control": {
-
-							Type:     schema.TypeSet,
-							Optional: true,
-							Elem: &schema.Resource{
-								Schema: map[string]*schema.Schema{
-
-									"exclude_rule_ids": {
-
-										Type: schema.TypeList,
-
-										Optional: true,
-										Elem: &schema.Schema{
-											Type: schema.TypeString,
-										},
-									},
-
-									"monitoring_mode": {
-										Type:     schema.TypeBool,
-										Optional: true,
-									},
-								},
-							},
-						},
-
-						"waf_rule_control": {
-
-							Type:     schema.TypeSet,
-							Optional: true,
-							Elem: &schema.Resource{
-								Schema: map[string]*schema.Schema{
-
-									"exclude_rule_ids": {
-
-										Type:     schema.TypeList,
-										Optional: true,
-										Elem: &schema.Resource{
-											Schema: map[string]*schema.Schema{
-
-												"kind": {
-													Type:     schema.TypeString,
-													Computed: true,
-												},
-
-												"name": {
-													Type:     schema.TypeString,
-													Optional: true,
-												},
-												"namespace": {
-													Type:     schema.TypeString,
-													Optional: true,
-												},
-												"tenant": {
-													Type:     schema.TypeString,
-													Optional: true,
-												},
-											},
-										},
-									},
-
-									"monitoring_mode": {
-										Type:     schema.TypeBool,
-										Optional: true,
-									},
-								},
-							},
 						},
 
 						"waf_skip_processing": {
@@ -3881,6 +3897,80 @@ func resourceVolterraServicePolicyRuleCreate(d *schema.ResourceData, meta interf
 
 			}
 
+			if v, ok := shapeProtectedEndpointActionMapStrToI["transaction_result"]; ok && !isIntfNil(v) {
+
+				sl := v.(*schema.Set).List()
+				transactionResult := &ves_io_schema.BotDefenseTransactionResultType{}
+				shapeProtectedEndpointAction.TransactionResult = transactionResult
+				for _, set := range sl {
+					transactionResultMapStrToI := set.(map[string]interface{})
+
+					if v, ok := transactionResultMapStrToI["failure_conditions"]; ok && !isIntfNil(v) {
+
+						sl := v.([]interface{})
+						failureConditions := make([]*ves_io_schema.BotDefenseTransactionResultCondition, len(sl))
+						transactionResult.FailureConditions = failureConditions
+						for i, set := range sl {
+							failureConditions[i] = &ves_io_schema.BotDefenseTransactionResultCondition{}
+							failureConditionsMapStrToI := set.(map[string]interface{})
+
+							if w, ok := failureConditionsMapStrToI["name"]; ok && !isIntfNil(w) {
+								failureConditions[i].Name = w.(string)
+							}
+
+							if w, ok := failureConditionsMapStrToI["regex_values"]; ok && !isIntfNil(w) {
+								ls := make([]string, len(w.([]interface{})))
+								for i, v := range w.([]interface{}) {
+									ls[i] = v.(string)
+								}
+								failureConditions[i].RegexValues = ls
+							}
+
+							if v, ok := failureConditionsMapStrToI["status"]; ok && !isIntfNil(v) {
+
+								failureConditions[i].Status = ves_io_schema.HttpStatusCode(ves_io_schema.HttpStatusCode_value[v.(string)])
+
+							}
+
+						}
+
+					}
+
+					if v, ok := transactionResultMapStrToI["success_conditions"]; ok && !isIntfNil(v) {
+
+						sl := v.([]interface{})
+						successConditions := make([]*ves_io_schema.BotDefenseTransactionResultCondition, len(sl))
+						transactionResult.SuccessConditions = successConditions
+						for i, set := range sl {
+							successConditions[i] = &ves_io_schema.BotDefenseTransactionResultCondition{}
+							successConditionsMapStrToI := set.(map[string]interface{})
+
+							if w, ok := successConditionsMapStrToI["name"]; ok && !isIntfNil(w) {
+								successConditions[i].Name = w.(string)
+							}
+
+							if w, ok := successConditionsMapStrToI["regex_values"]; ok && !isIntfNil(w) {
+								ls := make([]string, len(w.([]interface{})))
+								for i, v := range w.([]interface{}) {
+									ls[i] = v.(string)
+								}
+								successConditions[i].RegexValues = ls
+							}
+
+							if v, ok := successConditionsMapStrToI["status"]; ok && !isIntfNil(v) {
+
+								successConditions[i].Status = ves_io_schema.HttpStatusCode(ves_io_schema.HttpStatusCode_value[v.(string)])
+
+							}
+
+						}
+
+					}
+
+				}
+
+			}
+
 			if w, ok := shapeProtectedEndpointActionMapStrToI["web_scraping"]; ok && !isIntfNil(w) {
 				shapeProtectedEndpointAction.WebScraping = w.(bool)
 			}
@@ -4113,6 +4203,16 @@ func resourceVolterraServicePolicyRuleCreate(d *schema.ResourceData, meta interf
 							excludeSignatureContexts[i] = &ves_io_schema_policy.AppFirewallSignatureContext{}
 							excludeSignatureContextsMapStrToI := set.(map[string]interface{})
 
+							if v, ok := excludeSignatureContextsMapStrToI["context"]; ok && !isIntfNil(v) {
+
+								excludeSignatureContexts[i].Context = ves_io_schema_policy.DetectionContext(ves_io_schema_policy.DetectionContext_value[v.(string)])
+
+							}
+
+							if w, ok := excludeSignatureContextsMapStrToI["context_name"]; ok && !isIntfNil(w) {
+								excludeSignatureContexts[i].ContextName = w.(string)
+							}
+
 							if w, ok := excludeSignatureContextsMapStrToI["signature_id"]; ok && !isIntfNil(w) {
 								excludeSignatureContexts[i].SignatureId = uint32(w.(int))
 							}
@@ -4129,6 +4229,12 @@ func resourceVolterraServicePolicyRuleCreate(d *schema.ResourceData, meta interf
 						for i, set := range sl {
 							excludeViolationContexts[i] = &ves_io_schema_policy.AppFirewallViolationContext{}
 							excludeViolationContextsMapStrToI := set.(map[string]interface{})
+
+							if v, ok := excludeViolationContextsMapStrToI["context"]; ok && !isIntfNil(v) {
+
+								excludeViolationContexts[i].Context = ves_io_schema_policy.DetectionContext(ves_io_schema_policy.DetectionContext_value[v.(string)])
+
+							}
 
 							if v, ok := excludeViolationContextsMapStrToI["exclude_violation"]; ok && !isIntfNil(v) {
 
@@ -4185,90 +4291,6 @@ func resourceVolterraServicePolicyRuleCreate(d *schema.ResourceData, meta interf
 					actionTypeInt := &ves_io_schema_policy.WafAction_WafInMonitoringMode{}
 					actionTypeInt.WafInMonitoringMode = &ves_io_schema.Empty{}
 					wafAction.ActionType = actionTypeInt
-				}
-
-			}
-
-			if v, ok := wafActionMapStrToI["waf_inline_rule_control"]; ok && !isIntfNil(v) && !actionTypeTypeFound {
-
-				actionTypeTypeFound = true
-				actionTypeInt := &ves_io_schema_policy.WafAction_WafInlineRuleControl{}
-				actionTypeInt.WafInlineRuleControl = &ves_io_schema_policy.WafInlineRuleControl{}
-				wafAction.ActionType = actionTypeInt
-
-				sl := v.(*schema.Set).List()
-				for _, set := range sl {
-					cs := set.(map[string]interface{})
-
-					if v, ok := cs["exclude_rule_ids"]; ok && !isIntfNil(v) {
-
-						exclude_rule_idsList := []ves_io_schema_waf_rule_list.WafRuleID{}
-						for _, j := range v.([]interface{}) {
-							exclude_rule_idsList = append(exclude_rule_idsList, ves_io_schema_waf_rule_list.WafRuleID(ves_io_schema_waf_rule_list.WafRuleID_value[j.(string)]))
-						}
-						actionTypeInt.WafInlineRuleControl.ExcludeRuleIds = exclude_rule_idsList
-
-					}
-
-					if v, ok := cs["monitoring_mode"]; ok && !isIntfNil(v) {
-
-						actionTypeInt.WafInlineRuleControl.MonitoringMode = v.(bool)
-
-					}
-
-				}
-
-			}
-
-			if v, ok := wafActionMapStrToI["waf_rule_control"]; ok && !isIntfNil(v) && !actionTypeTypeFound {
-
-				actionTypeTypeFound = true
-				actionTypeInt := &ves_io_schema_policy.WafAction_WafRuleControl{}
-				actionTypeInt.WafRuleControl = &ves_io_schema_policy.WafRuleControl{}
-				wafAction.ActionType = actionTypeInt
-
-				sl := v.(*schema.Set).List()
-				for _, set := range sl {
-					cs := set.(map[string]interface{})
-
-					if v, ok := cs["exclude_rule_ids"]; ok && !isIntfNil(v) {
-
-						sl := v.([]interface{})
-						excludeRuleIdsInt := make([]*ves_io_schema.ObjectRefType, len(sl))
-						actionTypeInt.WafRuleControl.ExcludeRuleIds = excludeRuleIdsInt
-						for i, ps := range sl {
-
-							eriMapToStrVal := ps.(map[string]interface{})
-							excludeRuleIdsInt[i] = &ves_io_schema.ObjectRefType{}
-
-							excludeRuleIdsInt[i].Kind = "waf_rule_list"
-
-							if v, ok := eriMapToStrVal["name"]; ok && !isIntfNil(v) {
-								excludeRuleIdsInt[i].Name = v.(string)
-							}
-
-							if v, ok := eriMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-								excludeRuleIdsInt[i].Namespace = v.(string)
-							}
-
-							if v, ok := eriMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-								excludeRuleIdsInt[i].Tenant = v.(string)
-							}
-
-							if v, ok := eriMapToStrVal["uid"]; ok && !isIntfNil(v) {
-								excludeRuleIdsInt[i].Uid = v.(string)
-							}
-
-						}
-
-					}
-
-					if v, ok := cs["monitoring_mode"]; ok && !isIntfNil(v) {
-
-						actionTypeInt.WafRuleControl.MonitoringMode = v.(bool)
-
-					}
-
 				}
 
 			}
@@ -6353,6 +6375,80 @@ func resourceVolterraServicePolicyRuleUpdate(d *schema.ResourceData, meta interf
 
 			}
 
+			if v, ok := shapeProtectedEndpointActionMapStrToI["transaction_result"]; ok && !isIntfNil(v) {
+
+				sl := v.(*schema.Set).List()
+				transactionResult := &ves_io_schema.BotDefenseTransactionResultType{}
+				shapeProtectedEndpointAction.TransactionResult = transactionResult
+				for _, set := range sl {
+					transactionResultMapStrToI := set.(map[string]interface{})
+
+					if v, ok := transactionResultMapStrToI["failure_conditions"]; ok && !isIntfNil(v) {
+
+						sl := v.([]interface{})
+						failureConditions := make([]*ves_io_schema.BotDefenseTransactionResultCondition, len(sl))
+						transactionResult.FailureConditions = failureConditions
+						for i, set := range sl {
+							failureConditions[i] = &ves_io_schema.BotDefenseTransactionResultCondition{}
+							failureConditionsMapStrToI := set.(map[string]interface{})
+
+							if w, ok := failureConditionsMapStrToI["name"]; ok && !isIntfNil(w) {
+								failureConditions[i].Name = w.(string)
+							}
+
+							if w, ok := failureConditionsMapStrToI["regex_values"]; ok && !isIntfNil(w) {
+								ls := make([]string, len(w.([]interface{})))
+								for i, v := range w.([]interface{}) {
+									ls[i] = v.(string)
+								}
+								failureConditions[i].RegexValues = ls
+							}
+
+							if v, ok := failureConditionsMapStrToI["status"]; ok && !isIntfNil(v) {
+
+								failureConditions[i].Status = ves_io_schema.HttpStatusCode(ves_io_schema.HttpStatusCode_value[v.(string)])
+
+							}
+
+						}
+
+					}
+
+					if v, ok := transactionResultMapStrToI["success_conditions"]; ok && !isIntfNil(v) {
+
+						sl := v.([]interface{})
+						successConditions := make([]*ves_io_schema.BotDefenseTransactionResultCondition, len(sl))
+						transactionResult.SuccessConditions = successConditions
+						for i, set := range sl {
+							successConditions[i] = &ves_io_schema.BotDefenseTransactionResultCondition{}
+							successConditionsMapStrToI := set.(map[string]interface{})
+
+							if w, ok := successConditionsMapStrToI["name"]; ok && !isIntfNil(w) {
+								successConditions[i].Name = w.(string)
+							}
+
+							if w, ok := successConditionsMapStrToI["regex_values"]; ok && !isIntfNil(w) {
+								ls := make([]string, len(w.([]interface{})))
+								for i, v := range w.([]interface{}) {
+									ls[i] = v.(string)
+								}
+								successConditions[i].RegexValues = ls
+							}
+
+							if v, ok := successConditionsMapStrToI["status"]; ok && !isIntfNil(v) {
+
+								successConditions[i].Status = ves_io_schema.HttpStatusCode(ves_io_schema.HttpStatusCode_value[v.(string)])
+
+							}
+
+						}
+
+					}
+
+				}
+
+			}
+
 			if w, ok := shapeProtectedEndpointActionMapStrToI["web_scraping"]; ok && !isIntfNil(w) {
 				shapeProtectedEndpointAction.WebScraping = w.(bool)
 			}
@@ -6581,6 +6677,16 @@ func resourceVolterraServicePolicyRuleUpdate(d *schema.ResourceData, meta interf
 							excludeSignatureContexts[i] = &ves_io_schema_policy.AppFirewallSignatureContext{}
 							excludeSignatureContextsMapStrToI := set.(map[string]interface{})
 
+							if v, ok := excludeSignatureContextsMapStrToI["context"]; ok && !isIntfNil(v) {
+
+								excludeSignatureContexts[i].Context = ves_io_schema_policy.DetectionContext(ves_io_schema_policy.DetectionContext_value[v.(string)])
+
+							}
+
+							if w, ok := excludeSignatureContextsMapStrToI["context_name"]; ok && !isIntfNil(w) {
+								excludeSignatureContexts[i].ContextName = w.(string)
+							}
+
 							if w, ok := excludeSignatureContextsMapStrToI["signature_id"]; ok && !isIntfNil(w) {
 								excludeSignatureContexts[i].SignatureId = uint32(w.(int))
 							}
@@ -6597,6 +6703,12 @@ func resourceVolterraServicePolicyRuleUpdate(d *schema.ResourceData, meta interf
 						for i, set := range sl {
 							excludeViolationContexts[i] = &ves_io_schema_policy.AppFirewallViolationContext{}
 							excludeViolationContextsMapStrToI := set.(map[string]interface{})
+
+							if v, ok := excludeViolationContextsMapStrToI["context"]; ok && !isIntfNil(v) {
+
+								excludeViolationContexts[i].Context = ves_io_schema_policy.DetectionContext(ves_io_schema_policy.DetectionContext_value[v.(string)])
+
+							}
 
 							if v, ok := excludeViolationContextsMapStrToI["exclude_violation"]; ok && !isIntfNil(v) {
 
@@ -6653,90 +6765,6 @@ func resourceVolterraServicePolicyRuleUpdate(d *schema.ResourceData, meta interf
 					actionTypeInt := &ves_io_schema_policy.WafAction_WafInMonitoringMode{}
 					actionTypeInt.WafInMonitoringMode = &ves_io_schema.Empty{}
 					wafAction.ActionType = actionTypeInt
-				}
-
-			}
-
-			if v, ok := wafActionMapStrToI["waf_inline_rule_control"]; ok && !isIntfNil(v) && !actionTypeTypeFound {
-
-				actionTypeTypeFound = true
-				actionTypeInt := &ves_io_schema_policy.WafAction_WafInlineRuleControl{}
-				actionTypeInt.WafInlineRuleControl = &ves_io_schema_policy.WafInlineRuleControl{}
-				wafAction.ActionType = actionTypeInt
-
-				sl := v.(*schema.Set).List()
-				for _, set := range sl {
-					cs := set.(map[string]interface{})
-
-					if v, ok := cs["exclude_rule_ids"]; ok && !isIntfNil(v) {
-
-						exclude_rule_idsList := []ves_io_schema_waf_rule_list.WafRuleID{}
-						for _, j := range v.([]interface{}) {
-							exclude_rule_idsList = append(exclude_rule_idsList, ves_io_schema_waf_rule_list.WafRuleID(ves_io_schema_waf_rule_list.WafRuleID_value[j.(string)]))
-						}
-						actionTypeInt.WafInlineRuleControl.ExcludeRuleIds = exclude_rule_idsList
-
-					}
-
-					if v, ok := cs["monitoring_mode"]; ok && !isIntfNil(v) {
-
-						actionTypeInt.WafInlineRuleControl.MonitoringMode = v.(bool)
-
-					}
-
-				}
-
-			}
-
-			if v, ok := wafActionMapStrToI["waf_rule_control"]; ok && !isIntfNil(v) && !actionTypeTypeFound {
-
-				actionTypeTypeFound = true
-				actionTypeInt := &ves_io_schema_policy.WafAction_WafRuleControl{}
-				actionTypeInt.WafRuleControl = &ves_io_schema_policy.WafRuleControl{}
-				wafAction.ActionType = actionTypeInt
-
-				sl := v.(*schema.Set).List()
-				for _, set := range sl {
-					cs := set.(map[string]interface{})
-
-					if v, ok := cs["exclude_rule_ids"]; ok && !isIntfNil(v) {
-
-						sl := v.([]interface{})
-						excludeRuleIdsInt := make([]*ves_io_schema.ObjectRefType, len(sl))
-						actionTypeInt.WafRuleControl.ExcludeRuleIds = excludeRuleIdsInt
-						for i, ps := range sl {
-
-							eriMapToStrVal := ps.(map[string]interface{})
-							excludeRuleIdsInt[i] = &ves_io_schema.ObjectRefType{}
-
-							excludeRuleIdsInt[i].Kind = "waf_rule_list"
-
-							if v, ok := eriMapToStrVal["name"]; ok && !isIntfNil(v) {
-								excludeRuleIdsInt[i].Name = v.(string)
-							}
-
-							if v, ok := eriMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-								excludeRuleIdsInt[i].Namespace = v.(string)
-							}
-
-							if v, ok := eriMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-								excludeRuleIdsInt[i].Tenant = v.(string)
-							}
-
-							if v, ok := eriMapToStrVal["uid"]; ok && !isIntfNil(v) {
-								excludeRuleIdsInt[i].Uid = v.(string)
-							}
-
-						}
-
-					}
-
-					if v, ok := cs["monitoring_mode"]; ok && !isIntfNil(v) {
-
-						actionTypeInt.WafRuleControl.MonitoringMode = v.(bool)
-
-					}
-
 				}
 
 			}

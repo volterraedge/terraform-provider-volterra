@@ -34,6 +34,8 @@ resource "volterra_aws_vpc_site" "example" {
   // One of the arguments from this list "direct_connect_disabled direct_connect_enabled" must be set
   direct_connect_disabled = true
   instance_type           = ["a1.xlarge"]
+  // One of the arguments from this list "disable_internet_vip enable_internet_vip" must be set
+  disable_internet_vip = true
   // One of the arguments from this list "logs_streaming_disabled log_receiver" must be set
   logs_streaming_disabled = true
 
@@ -60,8 +62,13 @@ resource "volterra_aws_vpc_site" "example" {
         }
       }
     }
+
+    performance_enhancement_mode {
+      // One of the arguments from this list "perf_mode_l7_enhanced perf_mode_l3_enhanced" must be set
+      perf_mode_l7_enhanced = true
+    }
   }
-  // One of the arguments from this list "nodes_per_az total_nodes no_worker_nodes" must be set
+  // One of the arguments from this list "no_worker_nodes nodes_per_az total_nodes" must be set
   nodes_per_az = "2"
 }
 
@@ -105,6 +112,10 @@ Argument Reference
 `disk_size` - (Optional) Disk size to be used for this instance in GiB. 80 is 80 GiB (`Int`).
 
 `instance_type` - (Required) Select Instance size based on performance needed (`String`).
+
+`disable_internet_vip` - (Optional) Do not create Internet VIP (bool).
+
+`enable_internet_vip` - (Optional) Enable Internet VIP (bool).
 
 `log_receiver` - (Optional) Select log receiver for logs streaming. See [ref](#ref) below for details.
 
@@ -332,10 +343,6 @@ Forward Proxy is disabled for this connector.
 
 Disable Interception.
 
-### Disable Internet Vip
-
-Do not create Internet VIP.
-
 ### Disable Ocsp Stapling
 
 This is the default behavior if no choice is selected..
@@ -377,10 +384,6 @@ Forward Proxy is enabled for this connector.
 ### Enable Interception
 
 Enable Interception.
-
-### Enable Internet Vip
-
-Enable Internet VIP..
 
 ### Enable Offline Survivability Mode
 
@@ -452,10 +455,6 @@ Two interface site is useful when site is used as ingress/egress gateway to the 
 
 `no_inside_static_routes` - (Optional) Static Routes disabled for inside network. (bool).
 
-`disable_internet_vip` - (Optional) Do not create Internet VIP (bool).
-
-`enable_internet_vip` - (Optional) Enable Internet VIP. (bool).
-
 `active_enhanced_firewall_policies` - (Optional) Enhanced Firewall Policies active for this site.. See [Active Enhanced Firewall Policies ](#active-enhanced-firewall-policies) below for details.
 
 `active_network_policies` - (Optional) Firewall Policies active for this site.. See [Active Network Policies ](#active-network-policies) below for details.
@@ -465,6 +464,8 @@ Two interface site is useful when site is used as ingress/egress gateway to the 
 `no_outside_static_routes` - (Optional) Static Routes disabled for outside network. (bool).
 
 `outside_static_routes` - (Optional) Manage static routes for outside network.. See [Outside Static Routes ](#outside-static-routes) below for details.
+
+`performance_enhancement_mode` - (Optional) Performance Enhancement Mode to optimize for L3 or L7 networking. See [Performance Enhancement Mode ](#performance-enhancement-mode) below for details.
 
 `sm_connection_public_ip` - (Optional) creating ipsec between two sites which are part of the site mesh group (bool).
 
@@ -479,6 +480,8 @@ One interface site is useful when site is only used as ingress gateway to the VP
 `aws_certified_hw` - (Required) Name for AWS certified hardware. (`String`).
 
 `az_nodes` - (Required) Only Single AZ or Three AZ(s) nodes are supported currently.. See [Az Nodes ](#az-nodes) below for details.
+
+`performance_enhancement_mode` - (Optional) Performance Enhancement Mode to optimize for L3 or L7 networking. See [Performance Enhancement Mode ](#performance-enhancement-mode) below for details.
 
 ### Inside Static Routes
 
@@ -623,6 +626,22 @@ Subnet for the outside interface of the node.
 `existing_subnet_id` - (Optional) Information about existing subnet ID (`String`).
 
 `subnet_param` - (Optional) Parameters for creating new subnet. See [Subnet Param ](#subnet-param) below for details.
+
+### Perf Mode L3 Enhanced
+
+Site optimized for L3 traffic processing.
+
+### Perf Mode L7 Enhanced
+
+Site optimized for L7 traffic processing.
+
+### Performance Enhancement Mode
+
+Performance Enhancement Mode to optimize for L3 or L7 networking.
+
+`perf_mode_l3_enhanced` - (Optional) Site optimized for L3 traffic processing (bool).
+
+`perf_mode_l7_enhanced` - (Optional) Site optimized for L7 traffic processing (bool).
 
 ### Policy
 

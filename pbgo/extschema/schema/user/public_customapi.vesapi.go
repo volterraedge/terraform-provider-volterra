@@ -4497,6 +4497,13 @@ var CustomAPISwaggerJSON string = `{
                     },
                     "x-displayname": "Billing flags"
                 },
+                "billing_plan_name": {
+                    "type": "string",
+                    "description": " Billing plan name of the plan template the tenant is subscribed to (Free plan, Teams Plan, Organization Plan, ...)\n\nExample: - \"Teams Plan\"-",
+                    "title": "Billing plan name",
+                    "x-displayname": "Billing plan name",
+                    "x-ves-example": "Teams Plan"
+                },
                 "cname": {
                     "type": "string",
                     "description": " CName via tenant will be accessed from url. \u003ccname\u003e.\u003cdomain\u003e\n\nExample: - \"web\"-",

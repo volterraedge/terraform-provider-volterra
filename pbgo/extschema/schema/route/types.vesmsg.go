@@ -3006,6 +3006,16 @@ func (v *ValidateRouteRedirect) ResponseCodeValidationRuleHandler(rules map[stri
 	return validatorFn, nil
 }
 
+func (v *ValidateRouteRedirect) PortRedirectValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for port_redirect")
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateRouteRedirect) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*RouteRedirect)
 	if !ok {
@@ -3024,6 +3034,15 @@ func (v *ValidateRouteRedirect) Validate(ctx context.Context, pm interface{}, op
 
 		vOpts := append(opts, db.WithValidateField("host_redirect"))
 		if err := fv(ctx, m.GetHostRedirect(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["port_redirect"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("port_redirect"))
+		if err := fv(ctx, m.GetPortRedirect(), vOpts...); err != nil {
 			return err
 		}
 
@@ -3205,6 +3224,17 @@ var DefaultRouteRedirectValidator = func() *ValidateRouteRedirect {
 		panic(errMsg)
 	}
 	v.FldValidators["response_code"] = vFn
+
+	vrhPortRedirect := v.PortRedirectValidationRuleHandler
+	rulesPortRedirect := map[string]string{
+		"ves.io.schema.rules.uint32.lte": "65535",
+	}
+	vFn, err = vrhPortRedirect(rulesPortRedirect)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for RouteRedirect.port_redirect: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["port_redirect"] = vFn
 
 	v.FldValidators["query_params.strip_query_params"] = RouteQueryParamsValidator().Validate
 

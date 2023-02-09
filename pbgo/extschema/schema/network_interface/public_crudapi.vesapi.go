@@ -4068,17 +4068,11 @@ var APISwaggerJSON string = `{
             "description": "Configure Static IP parameters",
             "title": "Static IP Parameters",
             "x-displayname": "Static IP Parameters",
-            "x-ves-oneof-field-network_prefix_choice": "[\"cluster_static_ip\",\"node_static_ip\"]",
+            "x-ves-oneof-field-network_prefix_choice": "[\"node_static_ip\"]",
             "x-ves-proto-message": "ves.io.schema.network_interface.StaticIPParametersType",
             "properties": {
-                "cluster_static_ip": {
-                    "description": "Exclusive with [node_static_ip]\n Static IP configuration for a specific node",
-                    "title": "Node Specific",
-                    "$ref": "#/definitions/network_interfaceStaticIpParametersClusterType",
-                    "x-displayname": "Cluster, All Nodes of the Site"
-                },
                 "node_static_ip": {
-                    "description": "Exclusive with [cluster_static_ip]\n Static IP configuration for the Node",
+                    "description": "Exclusive with []\n Static IP configuration for the Node",
                     "title": "Node",
                     "$ref": "#/definitions/network_interfaceStaticIpParametersNodeType",
                     "x-displayname": "Specific Node"
@@ -4087,21 +4081,13 @@ var APISwaggerJSON string = `{
         },
         "network_interfaceStaticIpParametersClusterType": {
             "type": "object",
-            "description": "Configure Static IP parameters  for cluster",
+            "description": "x-displayName: \"Cluster: Static IP Parameters\"\nConfigure Static IP parameters  for cluster",
             "title": "Static IP Parameters",
-            "x-displayname": "Cluster: Static IP Parameters",
-            "x-ves-proto-message": "ves.io.schema.network_interface.StaticIpParametersClusterType",
             "properties": {
                 "interface_ip_map": {
                     "type": "object",
-                    "description": " Map of Node to Static ip configuration value, Key:Node, Value:IP Address\n\nValidation Rules:\n  ves.io.schema.rules.map.keys.string.max_len: 128\n  ves.io.schema.rules.map.keys.string.min_len: 1\n  ves.io.schema.rules.map.max_pairs: 128\n",
-                    "title": "Site:Node to IP mapping",
-                    "x-displayname": "Node to IP Mapping",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.map.keys.string.max_len": "128",
-                        "ves.io.schema.rules.map.keys.string.min_len": "1",
-                        "ves.io.schema.rules.map.max_pairs": "128"
-                    }
+                    "description": "x-displayName: \"Node to IP Mapping\"\nMap of Node to Static ip configuration value, Key:Node, Value:IP Address",
+                    "title": "Site:Node to IP mapping"
                 }
             }
         },

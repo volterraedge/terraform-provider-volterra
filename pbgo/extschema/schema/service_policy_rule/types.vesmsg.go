@@ -815,12 +815,6 @@ func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
-	if fdrInfos, err := m.GetWafActionDRefInfo(); err != nil {
-		return nil, errors.Wrap(err, "GetWafActionDRefInfo() FAILED")
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
-	}
-
 	return drInfos, nil
 
 }
@@ -1037,24 +1031,6 @@ func (m *CreateSpecType) GetRateLimiterDBEntries(ctx context.Context, d db.Inter
 	}
 
 	return entries, nil
-}
-
-// GetDRefInfo for the field's type
-func (m *CreateSpecType) GetWafActionDRefInfo() ([]db.DRefInfo, error) {
-	if m.GetWafAction() == nil {
-		return nil, nil
-	}
-
-	drInfos, err := m.GetWafAction().GetDRefInfo()
-	if err != nil {
-		return nil, errors.Wrap(err, "GetWafAction().GetDRefInfo() FAILED")
-	}
-	for i := range drInfos {
-		dri := &drInfos[i]
-		dri.DRField = "waf_action." + dri.DRField
-	}
-	return drInfos, err
-
 }
 
 type ValidateCreateSpecType struct {
@@ -2302,12 +2278,6 @@ func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
-	if fdrInfos, err := m.GetWafActionDRefInfo(); err != nil {
-		return nil, errors.Wrap(err, "GetWafActionDRefInfo() FAILED")
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
-	}
-
 	return drInfos, nil
 
 }
@@ -2524,24 +2494,6 @@ func (m *GetSpecType) GetRateLimiterDBEntries(ctx context.Context, d db.Interfac
 	}
 
 	return entries, nil
-}
-
-// GetDRefInfo for the field's type
-func (m *GetSpecType) GetWafActionDRefInfo() ([]db.DRefInfo, error) {
-	if m.GetWafAction() == nil {
-		return nil, nil
-	}
-
-	drInfos, err := m.GetWafAction().GetDRefInfo()
-	if err != nil {
-		return nil, errors.Wrap(err, "GetWafAction().GetDRefInfo() FAILED")
-	}
-	for i := range drInfos {
-		dri := &drInfos[i]
-		dri.DRField = "waf_action." + dri.DRField
-	}
-	return drInfos, err
-
 }
 
 type ValidateGetSpecType struct {
@@ -3795,12 +3747,6 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
-	if fdrInfos, err := m.GetWafActionDRefInfo(); err != nil {
-		return nil, errors.Wrap(err, "GetWafActionDRefInfo() FAILED")
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
-	}
-
 	return drInfos, nil
 
 }
@@ -4062,24 +4008,6 @@ func (m *GlobalSpecType) GetRateLimiterDBEntries(ctx context.Context, d db.Inter
 	}
 
 	return entries, nil
-}
-
-// GetDRefInfo for the field's type
-func (m *GlobalSpecType) GetWafActionDRefInfo() ([]db.DRefInfo, error) {
-	if m.GetWafAction() == nil {
-		return nil, nil
-	}
-
-	drInfos, err := m.GetWafAction().GetDRefInfo()
-	if err != nil {
-		return nil, errors.Wrap(err, "GetWafAction().GetDRefInfo() FAILED")
-	}
-	for i := range drInfos {
-		dri := &drInfos[i]
-		dri.DRField = "waf_action." + dri.DRField
-	}
-	return drInfos, err
-
 }
 
 type ValidateGlobalSpecType struct {
@@ -4975,6 +4903,15 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["openapi_validation_action"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("openapi_validation_action"))
+		if err := fv(ctx, m.GetOpenapiValidationAction(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["path"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("path"))
@@ -5329,6 +5266,8 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v.FldValidators["request_constraints"] = ves_io_schema_policy.RequestConstraintTypeValidator().Validate
 
 	v.FldValidators["graphql_settings"] = ves_io_schema_policy.GraphQLSettingsTypeValidator().Validate
+
+	v.FldValidators["openapi_validation_action"] = ves_io_schema_policy.OpenApiValidationActionValidator().Validate
 
 	return v
 }()
@@ -6106,12 +6045,6 @@ func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
-	if fdrInfos, err := m.GetWafActionDRefInfo(); err != nil {
-		return nil, errors.Wrap(err, "GetWafActionDRefInfo() FAILED")
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
-	}
-
 	return drInfos, nil
 
 }
@@ -6328,24 +6261,6 @@ func (m *ReplaceSpecType) GetRateLimiterDBEntries(ctx context.Context, d db.Inte
 	}
 
 	return entries, nil
-}
-
-// GetDRefInfo for the field's type
-func (m *ReplaceSpecType) GetWafActionDRefInfo() ([]db.DRefInfo, error) {
-	if m.GetWafAction() == nil {
-		return nil, nil
-	}
-
-	drInfos, err := m.GetWafAction().GetDRefInfo()
-	if err != nil {
-		return nil, errors.Wrap(err, "GetWafAction().GetDRefInfo() FAILED")
-	}
-	for i := range drInfos {
-		dri := &drInfos[i]
-		dri.DRField = "waf_action." + dri.DRField
-	}
-	return drInfos, err
-
 }
 
 type ValidateReplaceSpecType struct {

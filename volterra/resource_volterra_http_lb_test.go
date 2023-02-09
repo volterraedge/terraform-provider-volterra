@@ -169,11 +169,11 @@ func TestHTTPLB(t *testing.T) {
 			{
 				// Test replace of http loadbalancer
 				Config: testConfigHTTPLB(name, "app-test", lbName, nsName, 600),
-				Check: resource.ComposeTestCheckFunc(
-					//resource.TestCheckResourceAttr(httpLbResourceName, "more_option.3270546385.request_headers_to_add.#", "1"),
-					//resource.TestCheckResourceAttr(httpLbResourceName, "more_option.3270546385.request_headers_to_add.0.append", "false"),
-					//resource.TestCheckResourceAttr(httpLbResourceName, "more_option.3270546385.request_headers_to_add.0.name", "X-real-ip"),
-					//resource.TestCheckResourceAttr(httpLbResourceName, "more_option.3270546385.request_headers_to_add.0.value", "$[client_address]"),
+				Check:  resource.ComposeTestCheckFunc(
+				//resource.TestCheckResourceAttr(httpLbResourceName, "more_option.3270546385.request_headers_to_add.#", "1"),
+				//resource.TestCheckResourceAttr(httpLbResourceName, "more_option.3270546385.request_headers_to_add.0.append", "false"),
+				//resource.TestCheckResourceAttr(httpLbResourceName, "more_option.3270546385.request_headers_to_add.0.name", "X-real-ip"),
+				//resource.TestCheckResourceAttr(httpLbResourceName, "more_option.3270546385.request_headers_to_add.0.value", "$[client_address]"),
 				),
 			},
 		},

@@ -848,6 +848,16 @@ var CustomDataAPISwaggerJSON string = `{
                         "$ref": "#/definitions/service_policyServicePolicyHits"
                     },
                     "x-displayname": "Service Policy Hits"
+                },
+                "step": {
+                    "type": "string",
+                    "description": " Actual step size used in the response. It could be higher than the requested step due to metric rollups and the query duration.\n Format: [0-9][smhd], where s - seconds, m - minutes, h - hours, d - days\n\nExample: - \"30m\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.time_interval: true\n",
+                    "title": "step",
+                    "x-displayname": "Step",
+                    "x-ves-example": "30m",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.time_interval": "true"
+                    }
                 }
             }
         },

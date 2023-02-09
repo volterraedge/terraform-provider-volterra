@@ -1336,8 +1336,76 @@ func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 	}
 
-	return m.GetPoolTypeChoiceDRefInfo()
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetDnsLoadBalancersDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetDnsLoadBalancersDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
 
+	if fdrInfos, err := m.GetPoolTypeChoiceDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetPoolTypeChoiceDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	return drInfos, nil
+
+}
+
+func (m *GetSpecType) GetDnsLoadBalancersDRefInfo() ([]db.DRefInfo, error) {
+	vrefs := m.GetDnsLoadBalancers()
+	if len(vrefs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(vrefs))
+	for i, vref := range vrefs {
+		if vref == nil {
+			return nil, fmt.Errorf("GetSpecType.dns_load_balancers[%d] has a nil value", i)
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("dns_load_balancer.Object")
+		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "dns_load_balancer.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "dns_load_balancers",
+			Ref:        vdRef,
+		})
+	}
+	return drInfos, nil
+
+}
+
+// GetDnsLoadBalancersDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *GetSpecType) GetDnsLoadBalancersDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+	refdType, err := d.TypeForEntryKind("", "", "dns_load_balancer.Object")
+	if err != nil {
+		return nil, errors.Wrap(err, "Cannot find type for kind: dns_load_balancer")
+	}
+	for i, vref := range m.GetDnsLoadBalancers() {
+		if vref == nil {
+			return nil, fmt.Errorf("GetSpecType.dns_load_balancers[%d] has a nil value", i)
+		}
+		ref := &ves_io_schema.ObjectRefType{
+			Kind:      "dns_load_balancer.Object",
+			Tenant:    vref.Tenant,
+			Namespace: vref.Namespace,
+			Name:      vref.Name,
+		}
+		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+		if err != nil {
+			return nil, errors.Wrap(err, "Getting referred entry")
+		}
+		if refdEnt != nil {
+			entries = append(entries, refdEnt)
+		}
+	}
+
+	return entries, nil
 }
 
 // GetDRefInfo for the field's type
@@ -1431,6 +1499,18 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 	}
 	if m == nil {
 		return nil
+	}
+
+	if fv, exists := v.FldValidators["dns_load_balancers"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("dns_load_balancers"))
+		for idx, item := range m.GetDnsLoadBalancers() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
 	}
 
 	if fv, exists := v.FldValidators["load_balancing_mode"]; exists {
@@ -1602,6 +1682,8 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v.FldValidators["pool_type_choice.cname_pool"] = CNAMEPoolValidator().Validate
 	v.FldValidators["pool_type_choice.mx_pool"] = MXPoolValidator().Validate
 
+	v.FldValidators["dns_load_balancers"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
+
 	return v
 }()
 
@@ -1651,8 +1733,76 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 	}
 
-	return m.GetPoolTypeChoiceDRefInfo()
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetDnsLoadBalancersDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetDnsLoadBalancersDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
 
+	if fdrInfos, err := m.GetPoolTypeChoiceDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetPoolTypeChoiceDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	return drInfos, nil
+
+}
+
+func (m *GlobalSpecType) GetDnsLoadBalancersDRefInfo() ([]db.DRefInfo, error) {
+	vrefs := m.GetDnsLoadBalancers()
+	if len(vrefs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(vrefs))
+	for i, vref := range vrefs {
+		if vref == nil {
+			return nil, fmt.Errorf("GlobalSpecType.dns_load_balancers[%d] has a nil value", i)
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("dns_load_balancer.Object")
+		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "dns_load_balancer.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "dns_load_balancers",
+			Ref:        vdRef,
+		})
+	}
+	return drInfos, nil
+
+}
+
+// GetDnsLoadBalancersDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *GlobalSpecType) GetDnsLoadBalancersDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+	refdType, err := d.TypeForEntryKind("", "", "dns_load_balancer.Object")
+	if err != nil {
+		return nil, errors.Wrap(err, "Cannot find type for kind: dns_load_balancer")
+	}
+	for i, vref := range m.GetDnsLoadBalancers() {
+		if vref == nil {
+			return nil, fmt.Errorf("GlobalSpecType.dns_load_balancers[%d] has a nil value", i)
+		}
+		ref := &ves_io_schema.ObjectRefType{
+			Kind:      "dns_load_balancer.Object",
+			Tenant:    vref.Tenant,
+			Namespace: vref.Namespace,
+			Name:      vref.Name,
+		}
+		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+		if err != nil {
+			return nil, errors.Wrap(err, "Getting referred entry")
+		}
+		if refdEnt != nil {
+			entries = append(entries, refdEnt)
+		}
+	}
+
+	return entries, nil
 }
 
 // GetDRefInfo for the field's type
@@ -1746,6 +1896,18 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 	}
 	if m == nil {
 		return nil
+	}
+
+	if fv, exists := v.FldValidators["dns_load_balancers"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("dns_load_balancers"))
+		for idx, item := range m.GetDnsLoadBalancers() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
 	}
 
 	if fv, exists := v.FldValidators["load_balancing_mode"]; exists {
@@ -1916,6 +2078,8 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v.FldValidators["pool_type_choice.aaaa_pool"] = AAAAPoolValidator().Validate
 	v.FldValidators["pool_type_choice.cname_pool"] = CNAMEPoolValidator().Validate
 	v.FldValidators["pool_type_choice.mx_pool"] = MXPoolValidator().Validate
+
+	v.FldValidators["dns_load_balancers"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	return v
 }()
@@ -2793,6 +2957,7 @@ func (m *GetSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	if f == nil {
 		return
 	}
+	m.DnsLoadBalancers = f.GetDnsLoadBalancers()
 	m.LoadBalancingMode = f.GetLoadBalancingMode()
 	m.GetPoolTypeChoiceFromGlobalSpecType(f)
 	m.GetTtlChoiceFromGlobalSpecType(f)
@@ -2813,6 +2978,7 @@ func (m *GetSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	}
 	_ = m1
 
+	f.DnsLoadBalancers = m1.DnsLoadBalancers
 	f.LoadBalancingMode = m1.LoadBalancingMode
 	m1.SetPoolTypeChoiceToGlobalSpecType(f)
 	m1.SetTtlChoiceToGlobalSpecType(f)

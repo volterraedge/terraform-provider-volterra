@@ -1845,6 +1845,28 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 							},
 						},
 
+						"performance_enhancement_mode": {
+
+							Type:     schema.TypeSet,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"perf_mode_l3_enhanced": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+
+									"perf_mode_l7_enhanced": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+								},
+							},
+						},
+
 						"sm_connection_public_ip": {
 
 							Type:     schema.TypeBool,
@@ -3449,6 +3471,28 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 							},
 						},
 
+						"performance_enhancement_mode": {
+
+							Type:     schema.TypeSet,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"perf_mode_l3_enhanced": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+
+									"perf_mode_l7_enhanced": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+								},
+							},
+						},
+
 						"sm_connection_public_ip": {
 
 							Type:     schema.TypeBool,
@@ -3552,6 +3596,28 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 							Type:     schema.TypeString,
 							Optional: true,
 						},
+
+						"performance_enhancement_mode": {
+
+							Type:     schema.TypeSet,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"perf_mode_l3_enhanced": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+
+									"perf_mode_l7_enhanced": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+								},
+							},
+						},
 					},
 				},
 			},
@@ -3644,6 +3710,28 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 
 									"update_domain": {
 										Type:     schema.TypeInt,
+										Optional: true,
+									},
+								},
+							},
+						},
+
+						"performance_enhancement_mode": {
+
+							Type:     schema.TypeSet,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"perf_mode_l3_enhanced": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+
+									"perf_mode_l7_enhanced": {
+
+										Type:     schema.TypeBool,
 										Optional: true,
 									},
 								},
@@ -8338,6 +8426,44 @@ func resourceVolterraAzureVnetSiteCreate(d *schema.ResourceData, meta interface{
 
 			}
 
+			if v, ok := cs["performance_enhancement_mode"]; ok && !isIntfNil(v) {
+
+				sl := v.(*schema.Set).List()
+				performanceEnhancementMode := &ves_io_schema_views.PerformanceEnhancementModeType{}
+				siteTypeInt.IngressEgressGw.PerformanceEnhancementMode = performanceEnhancementMode
+				for _, set := range sl {
+					performanceEnhancementModeMapStrToI := set.(map[string]interface{})
+
+					perfModeChoiceTypeFound := false
+
+					if v, ok := performanceEnhancementModeMapStrToI["perf_mode_l3_enhanced"]; ok && !isIntfNil(v) && !perfModeChoiceTypeFound {
+
+						perfModeChoiceTypeFound = true
+
+						if v.(bool) {
+							perfModeChoiceInt := &ves_io_schema_views.PerformanceEnhancementModeType_PerfModeL3Enhanced{}
+							perfModeChoiceInt.PerfModeL3Enhanced = &ves_io_schema.Empty{}
+							performanceEnhancementMode.PerfModeChoice = perfModeChoiceInt
+						}
+
+					}
+
+					if v, ok := performanceEnhancementModeMapStrToI["perf_mode_l7_enhanced"]; ok && !isIntfNil(v) && !perfModeChoiceTypeFound {
+
+						perfModeChoiceTypeFound = true
+
+						if v.(bool) {
+							perfModeChoiceInt := &ves_io_schema_views.PerformanceEnhancementModeType_PerfModeL7Enhanced{}
+							perfModeChoiceInt.PerfModeL7Enhanced = &ves_io_schema.Empty{}
+							performanceEnhancementMode.PerfModeChoice = perfModeChoiceInt
+						}
+
+					}
+
+				}
+
+			}
+
 			siteMeshGroupChoiceTypeFound := false
 
 			if v, ok := cs["sm_connection_public_ip"]; ok && !isIntfNil(v) && !siteMeshGroupChoiceTypeFound {
@@ -10622,6 +10748,44 @@ func resourceVolterraAzureVnetSiteCreate(d *schema.ResourceData, meta interface{
 
 			}
 
+			if v, ok := cs["performance_enhancement_mode"]; ok && !isIntfNil(v) {
+
+				sl := v.(*schema.Set).List()
+				performanceEnhancementMode := &ves_io_schema_views.PerformanceEnhancementModeType{}
+				siteTypeInt.IngressEgressGwAr.PerformanceEnhancementMode = performanceEnhancementMode
+				for _, set := range sl {
+					performanceEnhancementModeMapStrToI := set.(map[string]interface{})
+
+					perfModeChoiceTypeFound := false
+
+					if v, ok := performanceEnhancementModeMapStrToI["perf_mode_l3_enhanced"]; ok && !isIntfNil(v) && !perfModeChoiceTypeFound {
+
+						perfModeChoiceTypeFound = true
+
+						if v.(bool) {
+							perfModeChoiceInt := &ves_io_schema_views.PerformanceEnhancementModeType_PerfModeL3Enhanced{}
+							perfModeChoiceInt.PerfModeL3Enhanced = &ves_io_schema.Empty{}
+							performanceEnhancementMode.PerfModeChoice = perfModeChoiceInt
+						}
+
+					}
+
+					if v, ok := performanceEnhancementModeMapStrToI["perf_mode_l7_enhanced"]; ok && !isIntfNil(v) && !perfModeChoiceTypeFound {
+
+						perfModeChoiceTypeFound = true
+
+						if v.(bool) {
+							perfModeChoiceInt := &ves_io_schema_views.PerformanceEnhancementModeType_PerfModeL7Enhanced{}
+							perfModeChoiceInt.PerfModeL7Enhanced = &ves_io_schema.Empty{}
+							performanceEnhancementMode.PerfModeChoice = perfModeChoiceInt
+						}
+
+					}
+
+				}
+
+			}
+
 			siteMeshGroupChoiceTypeFound := false
 
 			if v, ok := cs["sm_connection_public_ip"]; ok && !isIntfNil(v) && !siteMeshGroupChoiceTypeFound {
@@ -10777,6 +10941,44 @@ func resourceVolterraAzureVnetSiteCreate(d *schema.ResourceData, meta interface{
 
 			}
 
+			if v, ok := cs["performance_enhancement_mode"]; ok && !isIntfNil(v) {
+
+				sl := v.(*schema.Set).List()
+				performanceEnhancementMode := &ves_io_schema_views.PerformanceEnhancementModeType{}
+				siteTypeInt.IngressGw.PerformanceEnhancementMode = performanceEnhancementMode
+				for _, set := range sl {
+					performanceEnhancementModeMapStrToI := set.(map[string]interface{})
+
+					perfModeChoiceTypeFound := false
+
+					if v, ok := performanceEnhancementModeMapStrToI["perf_mode_l3_enhanced"]; ok && !isIntfNil(v) && !perfModeChoiceTypeFound {
+
+						perfModeChoiceTypeFound = true
+
+						if v.(bool) {
+							perfModeChoiceInt := &ves_io_schema_views.PerformanceEnhancementModeType_PerfModeL3Enhanced{}
+							perfModeChoiceInt.PerfModeL3Enhanced = &ves_io_schema.Empty{}
+							performanceEnhancementMode.PerfModeChoice = perfModeChoiceInt
+						}
+
+					}
+
+					if v, ok := performanceEnhancementModeMapStrToI["perf_mode_l7_enhanced"]; ok && !isIntfNil(v) && !perfModeChoiceTypeFound {
+
+						perfModeChoiceTypeFound = true
+
+						if v.(bool) {
+							perfModeChoiceInt := &ves_io_schema_views.PerformanceEnhancementModeType_PerfModeL7Enhanced{}
+							perfModeChoiceInt.PerfModeL7Enhanced = &ves_io_schema.Empty{}
+							performanceEnhancementMode.PerfModeChoice = perfModeChoiceInt
+						}
+
+					}
+
+				}
+
+			}
+
 		}
 
 	}
@@ -10903,6 +11105,44 @@ func resourceVolterraAzureVnetSiteCreate(d *schema.ResourceData, meta interface{
 
 					if w, ok := nodeMapStrToI["update_domain"]; ok && !isIntfNil(w) {
 						node.UpdateDomain = uint32(w.(int))
+					}
+
+				}
+
+			}
+
+			if v, ok := cs["performance_enhancement_mode"]; ok && !isIntfNil(v) {
+
+				sl := v.(*schema.Set).List()
+				performanceEnhancementMode := &ves_io_schema_views.PerformanceEnhancementModeType{}
+				siteTypeInt.IngressGwAr.PerformanceEnhancementMode = performanceEnhancementMode
+				for _, set := range sl {
+					performanceEnhancementModeMapStrToI := set.(map[string]interface{})
+
+					perfModeChoiceTypeFound := false
+
+					if v, ok := performanceEnhancementModeMapStrToI["perf_mode_l3_enhanced"]; ok && !isIntfNil(v) && !perfModeChoiceTypeFound {
+
+						perfModeChoiceTypeFound = true
+
+						if v.(bool) {
+							perfModeChoiceInt := &ves_io_schema_views.PerformanceEnhancementModeType_PerfModeL3Enhanced{}
+							perfModeChoiceInt.PerfModeL3Enhanced = &ves_io_schema.Empty{}
+							performanceEnhancementMode.PerfModeChoice = perfModeChoiceInt
+						}
+
+					}
+
+					if v, ok := performanceEnhancementModeMapStrToI["perf_mode_l7_enhanced"]; ok && !isIntfNil(v) && !perfModeChoiceTypeFound {
+
+						perfModeChoiceTypeFound = true
+
+						if v.(bool) {
+							perfModeChoiceInt := &ves_io_schema_views.PerformanceEnhancementModeType_PerfModeL7Enhanced{}
+							perfModeChoiceInt.PerfModeL7Enhanced = &ves_io_schema.Empty{}
+							performanceEnhancementMode.PerfModeChoice = perfModeChoiceInt
+						}
+
 					}
 
 				}
@@ -16160,6 +16400,44 @@ func resourceVolterraAzureVnetSiteUpdate(d *schema.ResourceData, meta interface{
 
 			}
 
+			if v, ok := cs["performance_enhancement_mode"]; ok && !isIntfNil(v) {
+
+				sl := v.(*schema.Set).List()
+				performanceEnhancementMode := &ves_io_schema_views.PerformanceEnhancementModeType{}
+				siteTypeInt.IngressEgressGw.PerformanceEnhancementMode = performanceEnhancementMode
+				for _, set := range sl {
+					performanceEnhancementModeMapStrToI := set.(map[string]interface{})
+
+					perfModeChoiceTypeFound := false
+
+					if v, ok := performanceEnhancementModeMapStrToI["perf_mode_l3_enhanced"]; ok && !isIntfNil(v) && !perfModeChoiceTypeFound {
+
+						perfModeChoiceTypeFound = true
+
+						if v.(bool) {
+							perfModeChoiceInt := &ves_io_schema_views.PerformanceEnhancementModeType_PerfModeL3Enhanced{}
+							perfModeChoiceInt.PerfModeL3Enhanced = &ves_io_schema.Empty{}
+							performanceEnhancementMode.PerfModeChoice = perfModeChoiceInt
+						}
+
+					}
+
+					if v, ok := performanceEnhancementModeMapStrToI["perf_mode_l7_enhanced"]; ok && !isIntfNil(v) && !perfModeChoiceTypeFound {
+
+						perfModeChoiceTypeFound = true
+
+						if v.(bool) {
+							perfModeChoiceInt := &ves_io_schema_views.PerformanceEnhancementModeType_PerfModeL7Enhanced{}
+							perfModeChoiceInt.PerfModeL7Enhanced = &ves_io_schema.Empty{}
+							performanceEnhancementMode.PerfModeChoice = perfModeChoiceInt
+						}
+
+					}
+
+				}
+
+			}
+
 			siteMeshGroupChoiceTypeFound := false
 
 			if v, ok := cs["sm_connection_public_ip"]; ok && !isIntfNil(v) && !siteMeshGroupChoiceTypeFound {
@@ -18232,6 +18510,44 @@ func resourceVolterraAzureVnetSiteUpdate(d *schema.ResourceData, meta interface{
 
 							}
 
+						}
+
+					}
+
+				}
+
+			}
+
+			if v, ok := cs["performance_enhancement_mode"]; ok && !isIntfNil(v) {
+
+				sl := v.(*schema.Set).List()
+				performanceEnhancementMode := &ves_io_schema_views.PerformanceEnhancementModeType{}
+				siteTypeInt.IngressEgressGwAr.PerformanceEnhancementMode = performanceEnhancementMode
+				for _, set := range sl {
+					performanceEnhancementModeMapStrToI := set.(map[string]interface{})
+
+					perfModeChoiceTypeFound := false
+
+					if v, ok := performanceEnhancementModeMapStrToI["perf_mode_l3_enhanced"]; ok && !isIntfNil(v) && !perfModeChoiceTypeFound {
+
+						perfModeChoiceTypeFound = true
+
+						if v.(bool) {
+							perfModeChoiceInt := &ves_io_schema_views.PerformanceEnhancementModeType_PerfModeL3Enhanced{}
+							perfModeChoiceInt.PerfModeL3Enhanced = &ves_io_schema.Empty{}
+							performanceEnhancementMode.PerfModeChoice = perfModeChoiceInt
+						}
+
+					}
+
+					if v, ok := performanceEnhancementModeMapStrToI["perf_mode_l7_enhanced"]; ok && !isIntfNil(v) && !perfModeChoiceTypeFound {
+
+						perfModeChoiceTypeFound = true
+
+						if v.(bool) {
+							perfModeChoiceInt := &ves_io_schema_views.PerformanceEnhancementModeType_PerfModeL7Enhanced{}
+							perfModeChoiceInt.PerfModeL7Enhanced = &ves_io_schema.Empty{}
+							performanceEnhancementMode.PerfModeChoice = perfModeChoiceInt
 						}
 
 					}

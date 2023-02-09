@@ -1696,6 +1696,194 @@ func ApiEndpointsStatsRspValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *GetAPICallSummaryReq) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *GetAPICallSummaryReq) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *GetAPICallSummaryReq) DeepCopy() *GetAPICallSummaryReq {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &GetAPICallSummaryReq{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *GetAPICallSummaryReq) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *GetAPICallSummaryReq) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return GetAPICallSummaryReqValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateGetAPICallSummaryReq struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateGetAPICallSummaryReq) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*GetAPICallSummaryReq)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *GetAPICallSummaryReq got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["apiep_summary_filter"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("apiep_summary_filter"))
+		if err := fv(ctx, m.GetApiepSummaryFilter(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("name"))
+		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["namespace"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("namespace"))
+		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultGetAPICallSummaryReqValidator = func() *ValidateGetAPICallSummaryReq {
+	v := &ValidateGetAPICallSummaryReq{FldValidators: map[string]db.ValidatorFunc{}}
+
+	v.FldValidators["apiep_summary_filter"] = APIEPSummaryFilterValidator().Validate
+
+	return v
+}()
+
+func GetAPICallSummaryReqValidator() db.Validator {
+	return DefaultGetAPICallSummaryReqValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *GetAPICallSummaryRsp) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *GetAPICallSummaryRsp) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *GetAPICallSummaryRsp) DeepCopy() *GetAPICallSummaryRsp {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &GetAPICallSummaryRsp{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *GetAPICallSummaryRsp) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *GetAPICallSummaryRsp) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return GetAPICallSummaryRspValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateGetAPICallSummaryRsp struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateGetAPICallSummaryRsp) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*GetAPICallSummaryRsp)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *GetAPICallSummaryRsp got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["request_count_per_rsp_code"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("request_count_per_rsp_code"))
+		for idx, item := range m.GetRequestCountPerRspCode() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["total_calls"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("total_calls"))
+		if err := fv(ctx, m.GetTotalCalls(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultGetAPICallSummaryRspValidator = func() *ValidateGetAPICallSummaryRsp {
+	v := &ValidateGetAPICallSummaryRsp{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func GetAPICallSummaryRspValidator() db.Validator {
+	return DefaultGetAPICallSummaryRspValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *GetTopAPIEndpointsReq) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -2294,6 +2482,93 @@ var DefaultGetTopSensitiveDataRspValidator = func() *ValidateGetTopSensitiveData
 
 func GetTopSensitiveDataRspValidator() db.Validator {
 	return DefaultGetTopSensitiveDataRspValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *RequestCountPerResponseClass) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *RequestCountPerResponseClass) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *RequestCountPerResponseClass) DeepCopy() *RequestCountPerResponseClass {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &RequestCountPerResponseClass{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *RequestCountPerResponseClass) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *RequestCountPerResponseClass) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return RequestCountPerResponseClassValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateRequestCountPerResponseClass struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateRequestCountPerResponseClass) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*RequestCountPerResponseClass)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *RequestCountPerResponseClass got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["count"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("count"))
+		if err := fv(ctx, m.GetCount(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["rsp_code_class"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("rsp_code_class"))
+		if err := fv(ctx, m.GetRspCodeClass(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultRequestCountPerResponseClassValidator = func() *ValidateRequestCountPerResponseClass {
+	v := &ValidateRequestCountPerResponseClass{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func RequestCountPerResponseClassValidator() db.Validator {
+	return DefaultRequestCountPerResponseClassValidator
 }
 
 // augmented methods on protoc/std generated struct

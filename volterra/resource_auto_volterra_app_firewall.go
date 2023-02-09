@@ -299,6 +299,42 @@ func resourceVolterraAppFirewall() *schema.Resource {
 							},
 						},
 
+						"disable_staging": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+
+						"stage_new_and_updated_signatures": {
+
+							Type:     schema.TypeSet,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"staging_period": {
+										Type:     schema.TypeInt,
+										Optional: true,
+									},
+								},
+							},
+						},
+
+						"stage_new_signatures": {
+
+							Type:     schema.TypeSet,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"staging_period": {
+										Type:     schema.TypeInt,
+										Optional: true,
+									},
+								},
+							},
+						},
+
 						"disable_threat_campaigns": {
 
 							Type:     schema.TypeBool,
@@ -803,6 +839,62 @@ func resourceVolterraAppFirewallCreate(d *schema.ResourceData, meta interface{})
 							signatureSelectionByAccuracyInt.OnlyHighAccuracySignatures = &ves_io_schema.Empty{}
 							signatureSelectionSetting.SignatureSelectionByAccuracy = signatureSelectionByAccuracyInt
 						}
+
+					}
+
+				}
+
+			}
+
+			signaturesStagingSettingsTypeFound := false
+
+			if v, ok := cs["disable_staging"]; ok && !isIntfNil(v) && !signaturesStagingSettingsTypeFound {
+
+				signaturesStagingSettingsTypeFound = true
+
+				if v.(bool) {
+					signaturesStagingSettingsInt := &ves_io_schema_app_firewall.DetectionSetting_DisableStaging{}
+					signaturesStagingSettingsInt.DisableStaging = &ves_io_schema.Empty{}
+					detectionSettingChoiceInt.DetectionSettings.SignaturesStagingSettings = signaturesStagingSettingsInt
+				}
+
+			}
+
+			if v, ok := cs["stage_new_and_updated_signatures"]; ok && !isIntfNil(v) && !signaturesStagingSettingsTypeFound {
+
+				signaturesStagingSettingsTypeFound = true
+				signaturesStagingSettingsInt := &ves_io_schema_app_firewall.DetectionSetting_StageNewAndUpdatedSignatures{}
+				signaturesStagingSettingsInt.StageNewAndUpdatedSignatures = &ves_io_schema_app_firewall.SignaturesStagingSettings{}
+				detectionSettingChoiceInt.DetectionSettings.SignaturesStagingSettings = signaturesStagingSettingsInt
+
+				sl := v.(*schema.Set).List()
+				for _, set := range sl {
+					cs := set.(map[string]interface{})
+
+					if v, ok := cs["staging_period"]; ok && !isIntfNil(v) {
+
+						signaturesStagingSettingsInt.StageNewAndUpdatedSignatures.StagingPeriod = uint32(v.(int))
+
+					}
+
+				}
+
+			}
+
+			if v, ok := cs["stage_new_signatures"]; ok && !isIntfNil(v) && !signaturesStagingSettingsTypeFound {
+
+				signaturesStagingSettingsTypeFound = true
+				signaturesStagingSettingsInt := &ves_io_schema_app_firewall.DetectionSetting_StageNewSignatures{}
+				signaturesStagingSettingsInt.StageNewSignatures = &ves_io_schema_app_firewall.SignaturesStagingSettings{}
+				detectionSettingChoiceInt.DetectionSettings.SignaturesStagingSettings = signaturesStagingSettingsInt
+
+				sl := v.(*schema.Set).List()
+				for _, set := range sl {
+					cs := set.(map[string]interface{})
+
+					if v, ok := cs["staging_period"]; ok && !isIntfNil(v) {
+
+						signaturesStagingSettingsInt.StageNewSignatures.StagingPeriod = uint32(v.(int))
 
 					}
 
@@ -1396,6 +1488,62 @@ func resourceVolterraAppFirewallUpdate(d *schema.ResourceData, meta interface{})
 							signatureSelectionByAccuracyInt.OnlyHighAccuracySignatures = &ves_io_schema.Empty{}
 							signatureSelectionSetting.SignatureSelectionByAccuracy = signatureSelectionByAccuracyInt
 						}
+
+					}
+
+				}
+
+			}
+
+			signaturesStagingSettingsTypeFound := false
+
+			if v, ok := cs["disable_staging"]; ok && !isIntfNil(v) && !signaturesStagingSettingsTypeFound {
+
+				signaturesStagingSettingsTypeFound = true
+
+				if v.(bool) {
+					signaturesStagingSettingsInt := &ves_io_schema_app_firewall.DetectionSetting_DisableStaging{}
+					signaturesStagingSettingsInt.DisableStaging = &ves_io_schema.Empty{}
+					detectionSettingChoiceInt.DetectionSettings.SignaturesStagingSettings = signaturesStagingSettingsInt
+				}
+
+			}
+
+			if v, ok := cs["stage_new_and_updated_signatures"]; ok && !isIntfNil(v) && !signaturesStagingSettingsTypeFound {
+
+				signaturesStagingSettingsTypeFound = true
+				signaturesStagingSettingsInt := &ves_io_schema_app_firewall.DetectionSetting_StageNewAndUpdatedSignatures{}
+				signaturesStagingSettingsInt.StageNewAndUpdatedSignatures = &ves_io_schema_app_firewall.SignaturesStagingSettings{}
+				detectionSettingChoiceInt.DetectionSettings.SignaturesStagingSettings = signaturesStagingSettingsInt
+
+				sl := v.(*schema.Set).List()
+				for _, set := range sl {
+					cs := set.(map[string]interface{})
+
+					if v, ok := cs["staging_period"]; ok && !isIntfNil(v) {
+
+						signaturesStagingSettingsInt.StageNewAndUpdatedSignatures.StagingPeriod = uint32(v.(int))
+
+					}
+
+				}
+
+			}
+
+			if v, ok := cs["stage_new_signatures"]; ok && !isIntfNil(v) && !signaturesStagingSettingsTypeFound {
+
+				signaturesStagingSettingsTypeFound = true
+				signaturesStagingSettingsInt := &ves_io_schema_app_firewall.DetectionSetting_StageNewSignatures{}
+				signaturesStagingSettingsInt.StageNewSignatures = &ves_io_schema_app_firewall.SignaturesStagingSettings{}
+				detectionSettingChoiceInt.DetectionSettings.SignaturesStagingSettings = signaturesStagingSettingsInt
+
+				sl := v.(*schema.Set).List()
+				for _, set := range sl {
+					cs := set.(map[string]interface{})
+
+					if v, ok := cs["staging_period"]; ok && !isIntfNil(v) {
+
+						signaturesStagingSettingsInt.StageNewSignatures.StagingPeriod = uint32(v.(int))
 
 					}
 

@@ -95,6 +95,51 @@ func resourceVolterraVirtualHost() *schema.Resource {
 				},
 			},
 
+			"api_spec": {
+
+				Type:     schema.TypeSet,
+				Optional: true,
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+
+						"api_definition": {
+
+							Type:     schema.TypeSet,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"name": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+									"namespace": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+									"tenant": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+								},
+							},
+						},
+
+						"disable_open_api_validation": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+
+						"enable_open_api_validation": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+					},
+				},
+			},
+
 			"authentication": {
 
 				Type:     schema.TypeSet,
@@ -1505,6 +1550,26 @@ func resourceVolterraVirtualHost() *schema.Resource {
 				Optional: true,
 			},
 
+			"slow_ddos_mitigation": {
+
+				Type:     schema.TypeSet,
+				Optional: true,
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+
+						"request_headers_timeout": {
+							Type:     schema.TypeInt,
+							Optional: true,
+						},
+
+						"request_timeout": {
+							Type:     schema.TypeInt,
+							Optional: true,
+						},
+					},
+				},
+			},
+
 			"additional_domains": {
 
 				Type:     schema.TypeSet,
@@ -1925,80 +1990,16 @@ func resourceVolterraVirtualHost() *schema.Resource {
 							},
 						},
 
-						"waf": {
+						"disable_waf": {
 
-							Type:     schema.TypeSet,
+							Type:     schema.TypeBool,
 							Optional: true,
-							Elem: &schema.Resource{
-								Schema: map[string]*schema.Schema{
-
-									"waf": {
-
-										Type:     schema.TypeList,
-										Optional: true,
-										Elem: &schema.Resource{
-											Schema: map[string]*schema.Schema{
-
-												"kind": {
-													Type:     schema.TypeString,
-													Computed: true,
-												},
-
-												"name": {
-													Type:     schema.TypeString,
-													Optional: true,
-												},
-												"namespace": {
-													Type:     schema.TypeString,
-													Optional: true,
-												},
-												"tenant": {
-													Type:     schema.TypeString,
-													Optional: true,
-												},
-											},
-										},
-									},
-								},
-							},
 						},
 
-						"waf_rules": {
+						"inherit_waf": {
 
-							Type:     schema.TypeSet,
+							Type:     schema.TypeBool,
 							Optional: true,
-							Elem: &schema.Resource{
-								Schema: map[string]*schema.Schema{
-
-									"waf_rules": {
-
-										Type:     schema.TypeList,
-										Optional: true,
-										Elem: &schema.Resource{
-											Schema: map[string]*schema.Schema{
-
-												"kind": {
-													Type:     schema.TypeString,
-													Computed: true,
-												},
-
-												"name": {
-													Type:     schema.TypeString,
-													Optional: true,
-												},
-												"namespace": {
-													Type:     schema.TypeString,
-													Optional: true,
-												},
-												"tenant": {
-													Type:     schema.TypeString,
-													Optional: true,
-												},
-											},
-										},
-									},
-								},
-							},
 						},
 					},
 				},
@@ -2095,6 +2096,67 @@ func resourceVolterraVirtualHostCreate(d *schema.ResourceData, meta interface{})
 
 			if v, ok := apMapToStrVal["uid"]; ok && !isIntfNil(v) {
 				advertisePoliciesInt[i].Uid = v.(string)
+			}
+
+		}
+
+	}
+
+	//api_spec
+	if v, ok := d.GetOk("api_spec"); ok && !isIntfNil(v) {
+
+		sl := v.(*schema.Set).List()
+		apiSpec := &ves_io_schema_virtual_host.ApiSpec{}
+		createSpec.ApiSpec = apiSpec
+		for _, set := range sl {
+			apiSpecMapStrToI := set.(map[string]interface{})
+
+			if v, ok := apiSpecMapStrToI["api_definition"]; ok && !isIntfNil(v) {
+
+				sl := v.(*schema.Set).List()
+				apiDefinitionInt := &ves_io_schema_views.ObjectRefType{}
+				apiSpec.ApiDefinition = apiDefinitionInt
+
+				for _, set := range sl {
+					adMapToStrVal := set.(map[string]interface{})
+					if val, ok := adMapToStrVal["name"]; ok && !isIntfNil(v) {
+						apiDefinitionInt.Name = val.(string)
+					}
+					if val, ok := adMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+						apiDefinitionInt.Namespace = val.(string)
+					}
+
+					if val, ok := adMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+						apiDefinitionInt.Tenant = val.(string)
+					}
+				}
+
+			}
+
+			openApiValidationChoiceTypeFound := false
+
+			if v, ok := apiSpecMapStrToI["disable_open_api_validation"]; ok && !isIntfNil(v) && !openApiValidationChoiceTypeFound {
+
+				openApiValidationChoiceTypeFound = true
+
+				if v.(bool) {
+					openApiValidationChoiceInt := &ves_io_schema_virtual_host.ApiSpec_DisableOpenApiValidation{}
+					openApiValidationChoiceInt.DisableOpenApiValidation = &ves_io_schema.Empty{}
+					apiSpec.OpenApiValidationChoice = openApiValidationChoiceInt
+				}
+
+			}
+
+			if v, ok := apiSpecMapStrToI["enable_open_api_validation"]; ok && !isIntfNil(v) && !openApiValidationChoiceTypeFound {
+
+				openApiValidationChoiceTypeFound = true
+
+				if v.(bool) {
+					openApiValidationChoiceInt := &ves_io_schema_virtual_host.ApiSpec_EnableOpenApiValidation{}
+					openApiValidationChoiceInt.EnableOpenApiValidation = &ves_io_schema.Empty{}
+					apiSpec.OpenApiValidationChoice = openApiValidationChoiceInt
+				}
+
 			}
 
 		}
@@ -3987,6 +4049,27 @@ func resourceVolterraVirtualHostCreate(d *schema.ResourceData, meta interface{})
 
 	}
 
+	//slow_ddos_mitigation
+	if v, ok := d.GetOk("slow_ddos_mitigation"); ok && !isIntfNil(v) {
+
+		sl := v.(*schema.Set).List()
+		slowDdosMitigation := &ves_io_schema_virtual_host.SlowDDoSMitigation{}
+		createSpec.SlowDdosMitigation = slowDdosMitigation
+		for _, set := range sl {
+			slowDdosMitigationMapStrToI := set.(map[string]interface{})
+
+			if w, ok := slowDdosMitigationMapStrToI["request_headers_timeout"]; ok && !isIntfNil(w) {
+				slowDdosMitigation.RequestHeadersTimeout = uint32(w.(int))
+			}
+
+			if w, ok := slowDdosMitigationMapStrToI["request_timeout"]; ok && !isIntfNil(w) {
+				slowDdosMitigation.RequestTimeout = uint32(w.(int))
+			}
+
+		}
+
+	}
+
 	//strict_sni_host_header_check_choice
 
 	strictSniHostHeaderCheckChoiceTypeFound := false
@@ -4483,96 +4566,26 @@ func resourceVolterraVirtualHostCreate(d *schema.ResourceData, meta interface{})
 
 			}
 
-			if v, ok := wafTypeMapStrToI["waf"]; ok && !isIntfNil(v) && !refTypeTypeFound {
+			if v, ok := wafTypeMapStrToI["disable_waf"]; ok && !isIntfNil(v) && !refTypeTypeFound {
 
 				refTypeTypeFound = true
-				refTypeInt := &ves_io_schema.WafType_Waf{}
-				refTypeInt.Waf = &ves_io_schema.WafRefType{}
-				wafType.RefType = refTypeInt
 
-				sl := v.(*schema.Set).List()
-				for _, set := range sl {
-					cs := set.(map[string]interface{})
-
-					if v, ok := cs["waf"]; ok && !isIntfNil(v) {
-
-						sl := v.([]interface{})
-						wafInt := make([]*ves_io_schema.ObjectRefType, len(sl))
-						refTypeInt.Waf.Waf = wafInt
-						for i, ps := range sl {
-
-							wMapToStrVal := ps.(map[string]interface{})
-							wafInt[i] = &ves_io_schema.ObjectRefType{}
-
-							wafInt[i].Kind = "waf"
-
-							if v, ok := wMapToStrVal["name"]; ok && !isIntfNil(v) {
-								wafInt[i].Name = v.(string)
-							}
-
-							if v, ok := wMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-								wafInt[i].Namespace = v.(string)
-							}
-
-							if v, ok := wMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-								wafInt[i].Tenant = v.(string)
-							}
-
-							if v, ok := wMapToStrVal["uid"]; ok && !isIntfNil(v) {
-								wafInt[i].Uid = v.(string)
-							}
-
-						}
-
-					}
-
+				if v.(bool) {
+					refTypeInt := &ves_io_schema.WafType_DisableWaf{}
+					refTypeInt.DisableWaf = &ves_io_schema.Empty{}
+					wafType.RefType = refTypeInt
 				}
 
 			}
 
-			if v, ok := wafTypeMapStrToI["waf_rules"]; ok && !isIntfNil(v) && !refTypeTypeFound {
+			if v, ok := wafTypeMapStrToI["inherit_waf"]; ok && !isIntfNil(v) && !refTypeTypeFound {
 
 				refTypeTypeFound = true
-				refTypeInt := &ves_io_schema.WafType_WafRules{}
-				refTypeInt.WafRules = &ves_io_schema.WafRulesRefType{}
-				wafType.RefType = refTypeInt
 
-				sl := v.(*schema.Set).List()
-				for _, set := range sl {
-					cs := set.(map[string]interface{})
-
-					if v, ok := cs["waf_rules"]; ok && !isIntfNil(v) {
-
-						sl := v.([]interface{})
-						wafRulesInt := make([]*ves_io_schema.ObjectRefType, len(sl))
-						refTypeInt.WafRules.WafRules = wafRulesInt
-						for i, ps := range sl {
-
-							wrMapToStrVal := ps.(map[string]interface{})
-							wafRulesInt[i] = &ves_io_schema.ObjectRefType{}
-
-							wafRulesInt[i].Kind = "waf_rules"
-
-							if v, ok := wrMapToStrVal["name"]; ok && !isIntfNil(v) {
-								wafRulesInt[i].Name = v.(string)
-							}
-
-							if v, ok := wrMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-								wafRulesInt[i].Namespace = v.(string)
-							}
-
-							if v, ok := wrMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-								wafRulesInt[i].Tenant = v.(string)
-							}
-
-							if v, ok := wrMapToStrVal["uid"]; ok && !isIntfNil(v) {
-								wafRulesInt[i].Uid = v.(string)
-							}
-
-						}
-
-					}
-
+				if v.(bool) {
+					refTypeInt := &ves_io_schema.WafType_InheritWaf{}
+					refTypeInt.InheritWaf = &ves_io_schema.Empty{}
+					wafType.RefType = refTypeInt
 				}
 
 			}
@@ -4712,6 +4725,66 @@ func resourceVolterraVirtualHostUpdate(d *schema.ResourceData, meta interface{})
 
 			if v, ok := apMapToStrVal["uid"]; ok && !isIntfNil(v) {
 				advertisePoliciesInt[i].Uid = v.(string)
+			}
+
+		}
+
+	}
+
+	if v, ok := d.GetOk("api_spec"); ok && !isIntfNil(v) {
+
+		sl := v.(*schema.Set).List()
+		apiSpec := &ves_io_schema_virtual_host.ApiSpec{}
+		updateSpec.ApiSpec = apiSpec
+		for _, set := range sl {
+			apiSpecMapStrToI := set.(map[string]interface{})
+
+			if v, ok := apiSpecMapStrToI["api_definition"]; ok && !isIntfNil(v) {
+
+				sl := v.(*schema.Set).List()
+				apiDefinitionInt := &ves_io_schema_views.ObjectRefType{}
+				apiSpec.ApiDefinition = apiDefinitionInt
+
+				for _, set := range sl {
+					adMapToStrVal := set.(map[string]interface{})
+					if val, ok := adMapToStrVal["name"]; ok && !isIntfNil(v) {
+						apiDefinitionInt.Name = val.(string)
+					}
+					if val, ok := adMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+						apiDefinitionInt.Namespace = val.(string)
+					}
+
+					if val, ok := adMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+						apiDefinitionInt.Tenant = val.(string)
+					}
+				}
+
+			}
+
+			openApiValidationChoiceTypeFound := false
+
+			if v, ok := apiSpecMapStrToI["disable_open_api_validation"]; ok && !isIntfNil(v) && !openApiValidationChoiceTypeFound {
+
+				openApiValidationChoiceTypeFound = true
+
+				if v.(bool) {
+					openApiValidationChoiceInt := &ves_io_schema_virtual_host.ApiSpec_DisableOpenApiValidation{}
+					openApiValidationChoiceInt.DisableOpenApiValidation = &ves_io_schema.Empty{}
+					apiSpec.OpenApiValidationChoice = openApiValidationChoiceInt
+				}
+
+			}
+
+			if v, ok := apiSpecMapStrToI["enable_open_api_validation"]; ok && !isIntfNil(v) && !openApiValidationChoiceTypeFound {
+
+				openApiValidationChoiceTypeFound = true
+
+				if v.(bool) {
+					openApiValidationChoiceInt := &ves_io_schema_virtual_host.ApiSpec_EnableOpenApiValidation{}
+					openApiValidationChoiceInt.EnableOpenApiValidation = &ves_io_schema.Empty{}
+					apiSpec.OpenApiValidationChoice = openApiValidationChoiceInt
+				}
+
 			}
 
 		}
@@ -6569,6 +6642,26 @@ func resourceVolterraVirtualHostUpdate(d *schema.ResourceData, meta interface{})
 
 	}
 
+	if v, ok := d.GetOk("slow_ddos_mitigation"); ok && !isIntfNil(v) {
+
+		sl := v.(*schema.Set).List()
+		slowDdosMitigation := &ves_io_schema_virtual_host.SlowDDoSMitigation{}
+		updateSpec.SlowDdosMitigation = slowDdosMitigation
+		for _, set := range sl {
+			slowDdosMitigationMapStrToI := set.(map[string]interface{})
+
+			if w, ok := slowDdosMitigationMapStrToI["request_headers_timeout"]; ok && !isIntfNil(w) {
+				slowDdosMitigation.RequestHeadersTimeout = uint32(w.(int))
+			}
+
+			if w, ok := slowDdosMitigationMapStrToI["request_timeout"]; ok && !isIntfNil(w) {
+				slowDdosMitigation.RequestTimeout = uint32(w.(int))
+			}
+
+		}
+
+	}
+
 	strictSniHostHeaderCheckChoiceTypeFound := false
 
 	if v, ok := d.GetOk("additional_domains"); ok && !strictSniHostHeaderCheckChoiceTypeFound {
@@ -7059,96 +7152,26 @@ func resourceVolterraVirtualHostUpdate(d *schema.ResourceData, meta interface{})
 
 			}
 
-			if v, ok := wafTypeMapStrToI["waf"]; ok && !isIntfNil(v) && !refTypeTypeFound {
+			if v, ok := wafTypeMapStrToI["disable_waf"]; ok && !isIntfNil(v) && !refTypeTypeFound {
 
 				refTypeTypeFound = true
-				refTypeInt := &ves_io_schema.WafType_Waf{}
-				refTypeInt.Waf = &ves_io_schema.WafRefType{}
-				wafType.RefType = refTypeInt
 
-				sl := v.(*schema.Set).List()
-				for _, set := range sl {
-					cs := set.(map[string]interface{})
-
-					if v, ok := cs["waf"]; ok && !isIntfNil(v) {
-
-						sl := v.([]interface{})
-						wafInt := make([]*ves_io_schema.ObjectRefType, len(sl))
-						refTypeInt.Waf.Waf = wafInt
-						for i, ps := range sl {
-
-							wMapToStrVal := ps.(map[string]interface{})
-							wafInt[i] = &ves_io_schema.ObjectRefType{}
-
-							wafInt[i].Kind = "waf"
-
-							if v, ok := wMapToStrVal["name"]; ok && !isIntfNil(v) {
-								wafInt[i].Name = v.(string)
-							}
-
-							if v, ok := wMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-								wafInt[i].Namespace = v.(string)
-							}
-
-							if v, ok := wMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-								wafInt[i].Tenant = v.(string)
-							}
-
-							if v, ok := wMapToStrVal["uid"]; ok && !isIntfNil(v) {
-								wafInt[i].Uid = v.(string)
-							}
-
-						}
-
-					}
-
+				if v.(bool) {
+					refTypeInt := &ves_io_schema.WafType_DisableWaf{}
+					refTypeInt.DisableWaf = &ves_io_schema.Empty{}
+					wafType.RefType = refTypeInt
 				}
 
 			}
 
-			if v, ok := wafTypeMapStrToI["waf_rules"]; ok && !isIntfNil(v) && !refTypeTypeFound {
+			if v, ok := wafTypeMapStrToI["inherit_waf"]; ok && !isIntfNil(v) && !refTypeTypeFound {
 
 				refTypeTypeFound = true
-				refTypeInt := &ves_io_schema.WafType_WafRules{}
-				refTypeInt.WafRules = &ves_io_schema.WafRulesRefType{}
-				wafType.RefType = refTypeInt
 
-				sl := v.(*schema.Set).List()
-				for _, set := range sl {
-					cs := set.(map[string]interface{})
-
-					if v, ok := cs["waf_rules"]; ok && !isIntfNil(v) {
-
-						sl := v.([]interface{})
-						wafRulesInt := make([]*ves_io_schema.ObjectRefType, len(sl))
-						refTypeInt.WafRules.WafRules = wafRulesInt
-						for i, ps := range sl {
-
-							wrMapToStrVal := ps.(map[string]interface{})
-							wafRulesInt[i] = &ves_io_schema.ObjectRefType{}
-
-							wafRulesInt[i].Kind = "waf_rules"
-
-							if v, ok := wrMapToStrVal["name"]; ok && !isIntfNil(v) {
-								wafRulesInt[i].Name = v.(string)
-							}
-
-							if v, ok := wrMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-								wafRulesInt[i].Namespace = v.(string)
-							}
-
-							if v, ok := wrMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-								wafRulesInt[i].Tenant = v.(string)
-							}
-
-							if v, ok := wrMapToStrVal["uid"]; ok && !isIntfNil(v) {
-								wafRulesInt[i].Uid = v.(string)
-							}
-
-						}
-
-					}
-
+				if v.(bool) {
+					refTypeInt := &ves_io_schema.WafType_InheritWaf{}
+					refTypeInt.InheritWaf = &ves_io_schema.Empty{}
+					wafType.RefType = refTypeInt
 				}
 
 			}

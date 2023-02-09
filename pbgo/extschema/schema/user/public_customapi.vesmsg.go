@@ -1200,6 +1200,15 @@ func (v *ValidateGetUserRoleResponse) Validate(ctx context.Context, pm interface
 
 	}
 
+	if fv, exists := v.FldValidators["billing_plan_name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("billing_plan_name"))
+		if err := fv(ctx, m.GetBillingPlanName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["cname"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("cname"))

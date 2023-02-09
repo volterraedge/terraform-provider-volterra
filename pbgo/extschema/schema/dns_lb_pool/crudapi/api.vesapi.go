@@ -2993,6 +2993,15 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/dns_lb_poolCNAMEPool",
                     "x-displayname": "CNAME"
                 },
+                "dns_load_balancers": {
+                    "type": "array",
+                    "description": " a list of Load balancers associated with this load balancer pool",
+                    "title": "backref_objs",
+                    "items": {
+                        "$ref": "#/definitions/schemaviewsObjectRefType"
+                    },
+                    "x-displayname": "DNS Load balancers"
+                },
                 "load_balancing_mode": {
                     "description": "\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "Load Balancing Mode",

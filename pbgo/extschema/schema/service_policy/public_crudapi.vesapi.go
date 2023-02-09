@@ -2187,7 +2187,7 @@ var APISwaggerJSON string = `{
     "definitions": {
         "app_firewallAppFirewallViolationType": {
             "type": "string",
-            "description": "List of all supported Violation Types\n\nVIOL_NONE\nVIOL_FILETYPE\nVIOL_METHOD\nVIOL_MANDATORY_HEADER\nVIOL_HTTP_RESPONSE_STATUS\nVIOL_REQUEST_MAX_LENGTH\nVIOL_FILE_UPLOAD\nVIOL_FILE_UPLOAD_IN_BODY\nVIOL_XML_MALFORMED\nVIOL_JSON_MALFORMED\nVIOL_ASM_COOKIE_MODIFIED\nVIOL_HTTP_PROTOCOL_MULTIPLE_HOST_HEADERS\nVIOL_HTTP_PROTOCOL_BAD_HOST_HEADER_VALUE\nVIOL_HTTP_PROTOCOL_UNPARSABLE_REQUEST_CONTENT\nVIOL_HTTP_PROTOCOL_NULL_IN_REQUEST\nVIOL_HTTP_PROTOCOL_BAD_HTTP_VERSION\nVIOL_HTTP_PROTOCOL_CRLF_CHARACTERS_BEFORE_REQUEST_START\nVIOL_HTTP_PROTOCOL_NO_HOST_HEADER_IN_HTTP_1_1_REQUEST\nVIOL_HTTP_PROTOCOL_BAD_MULTIPART_PARAMETERS_PARSING\nVIOL_HTTP_PROTOCOL_SEVERAL_CONTENT_LENGTH_HEADERS\nVIOL_HTTP_PROTOCOL_CONTENT_LENGTH_SHOULD_BE_A_POSITIVE_NUMBER\nVIOL_EVASION_DIRECTORY_TRAVERSALS\nVIOL_MALFORMED_REQUEST\nVIOL_EVASION_MULTIPLE_DECODING\nVIOL_DATA_GUARD\nVIOL_EVASION_APACHE_WHITESPACE\nVIOL_COOKIE_MODIFIED\nVIOL_EVASION_IIS_UNICODE_CODEPOINTS\nVIOL_EVASION_IIS_BACKSLASHES\nVIOL_EVASION_PERCENT_U_DECODING\nVIOL_EVASION_BARE_BYTE_DECODING\nVIOL_EVASION_BAD_UNESCAPE\nVIOL_HTTP_PROTOCOL_BAD_MULTIPART_FORMDATA_REQUEST_PARSING\nVIOL_HTTP_PROTOCOL_BODY_IN_GET_OR_HEAD_REQUEST\nVIOL_HTTP_PROTOCOL_HIGH_ASCII_CHARACTERS_IN_HEADERS\nVIOL_ENCODING\nVIOL_COOKIE_MALFORMED",
+            "description": "List of all supported Violation Types\n\nVIOL_NONE\nVIOL_FILETYPE\nVIOL_METHOD\nVIOL_MANDATORY_HEADER\nVIOL_HTTP_RESPONSE_STATUS\nVIOL_REQUEST_MAX_LENGTH\nVIOL_FILE_UPLOAD\nVIOL_FILE_UPLOAD_IN_BODY\nVIOL_XML_MALFORMED\nVIOL_JSON_MALFORMED\nVIOL_ASM_COOKIE_MODIFIED\nVIOL_HTTP_PROTOCOL_MULTIPLE_HOST_HEADERS\nVIOL_HTTP_PROTOCOL_BAD_HOST_HEADER_VALUE\nVIOL_HTTP_PROTOCOL_UNPARSABLE_REQUEST_CONTENT\nVIOL_HTTP_PROTOCOL_NULL_IN_REQUEST\nVIOL_HTTP_PROTOCOL_BAD_HTTP_VERSION\nVIOL_HTTP_PROTOCOL_CRLF_CHARACTERS_BEFORE_REQUEST_START\nVIOL_HTTP_PROTOCOL_NO_HOST_HEADER_IN_HTTP_1_1_REQUEST\nVIOL_HTTP_PROTOCOL_BAD_MULTIPART_PARAMETERS_PARSING\nVIOL_HTTP_PROTOCOL_SEVERAL_CONTENT_LENGTH_HEADERS\nVIOL_HTTP_PROTOCOL_CONTENT_LENGTH_SHOULD_BE_A_POSITIVE_NUMBER\nVIOL_EVASION_DIRECTORY_TRAVERSALS\nVIOL_MALFORMED_REQUEST\nVIOL_EVASION_MULTIPLE_DECODING\nVIOL_DATA_GUARD\nVIOL_EVASION_APACHE_WHITESPACE\nVIOL_COOKIE_MODIFIED\nVIOL_EVASION_IIS_UNICODE_CODEPOINTS\nVIOL_EVASION_IIS_BACKSLASHES\nVIOL_EVASION_PERCENT_U_DECODING\nVIOL_EVASION_BARE_BYTE_DECODING\nVIOL_EVASION_BAD_UNESCAPE\nVIOL_HTTP_PROTOCOL_BAD_MULTIPART_FORMDATA_REQUEST_PARSING\nVIOL_HTTP_PROTOCOL_BODY_IN_GET_OR_HEAD_REQUEST\nVIOL_HTTP_PROTOCOL_HIGH_ASCII_CHARACTERS_IN_HEADERS\nVIOL_ENCODING\nVIOL_COOKIE_MALFORMED\nVIOL_GRAPHQL_FORMAT\nVIOL_GRAPHQL_MALFORMED\nVIOL_GRAPHQL_INTROSPECTION_QUERY",
             "title": "App Firewall Violation Type",
             "enum": [
                 "VIOL_NONE",
@@ -2226,7 +2226,10 @@ var APISwaggerJSON string = `{
                 "VIOL_HTTP_PROTOCOL_BODY_IN_GET_OR_HEAD_REQUEST",
                 "VIOL_HTTP_PROTOCOL_HIGH_ASCII_CHARACTERS_IN_HEADERS",
                 "VIOL_ENCODING",
-                "VIOL_COOKIE_MALFORMED"
+                "VIOL_COOKIE_MALFORMED",
+                "VIOL_GRAPHQL_FORMAT",
+                "VIOL_GRAPHQL_MALFORMED",
+                "VIOL_GRAPHQL_INTROSPECTION_QUERY"
             ],
             "default": "VIOL_NONE",
             "x-displayname": "App Firewall Violation Type",
@@ -2234,7 +2237,7 @@ var APISwaggerJSON string = `{
         },
         "app_firewallAttackType": {
             "type": "string",
-            "description": "List of all Attack Types\n\nATTACK_TYPE_NONE\nATTACK_TYPE_NON_BROWSER_CLIENT\nATTACK_TYPE_OTHER_APPLICATION_ATTACKS\nATTACK_TYPE_TROJAN_BACKDOOR_SPYWARE\nATTACK_TYPE_DETECTION_EVASION\nATTACK_TYPE_VULNERABILITY_SCAN\nATTACK_TYPE_ABUSE_OF_FUNCTIONALITY\nATTACK_TYPE_AUTHENTICATION_AUTHORIZATION_ATTACKS\nATTACK_TYPE_BUFFER_OVERFLOW\nATTACK_TYPE_PREDICTABLE_RESOURCE_LOCATION\nATTACK_TYPE_INFORMATION_LEAKAGE\nATTACK_TYPE_DIRECTORY_INDEXING\nATTACK_TYPE_PATH_TRAVERSAL\nATTACK_TYPE_XPATH_INJECTION\nATTACK_TYPE_LDAP_INJECTION\nATTACK_TYPE_SERVER_SIDE_CODE_INJECTION\nATTACK_TYPE_COMMAND_EXECUTION\nATTACK_TYPE_SQL_INJECTION\nATTACK_TYPE_CROSS_SITE_SCRIPTING\nATTACK_TYPE_DENIAL_OF_SERVICE\nATTACK_TYPE_HTTP_PARSER_ATTACK\nATTACK_TYPE_SESSION_HIJACKING\nATTACK_TYPE_HTTP_RESPONSE_SPLITTING\nATTACK_TYPE_FORCEFUL_BROWSING\nATTACK_TYPE_REMOTE_FILE_INCLUDE\nATTACK_TYPE_MALICIOUS_FILE_UPLOAD",
+            "description": "List of all Attack Types\n\nATTACK_TYPE_NONE\nATTACK_TYPE_NON_BROWSER_CLIENT\nATTACK_TYPE_OTHER_APPLICATION_ATTACKS\nATTACK_TYPE_TROJAN_BACKDOOR_SPYWARE\nATTACK_TYPE_DETECTION_EVASION\nATTACK_TYPE_VULNERABILITY_SCAN\nATTACK_TYPE_ABUSE_OF_FUNCTIONALITY\nATTACK_TYPE_AUTHENTICATION_AUTHORIZATION_ATTACKS\nATTACK_TYPE_BUFFER_OVERFLOW\nATTACK_TYPE_PREDICTABLE_RESOURCE_LOCATION\nATTACK_TYPE_INFORMATION_LEAKAGE\nATTACK_TYPE_DIRECTORY_INDEXING\nATTACK_TYPE_PATH_TRAVERSAL\nATTACK_TYPE_XPATH_INJECTION\nATTACK_TYPE_LDAP_INJECTION\nATTACK_TYPE_SERVER_SIDE_CODE_INJECTION\nATTACK_TYPE_COMMAND_EXECUTION\nATTACK_TYPE_SQL_INJECTION\nATTACK_TYPE_CROSS_SITE_SCRIPTING\nATTACK_TYPE_DENIAL_OF_SERVICE\nATTACK_TYPE_HTTP_PARSER_ATTACK\nATTACK_TYPE_SESSION_HIJACKING\nATTACK_TYPE_HTTP_RESPONSE_SPLITTING\nATTACK_TYPE_FORCEFUL_BROWSING\nATTACK_TYPE_REMOTE_FILE_INCLUDE\nATTACK_TYPE_MALICIOUS_FILE_UPLOAD\nATTACK_TYPE_GRAPHQL_PARSER_ATTACK",
             "title": "AttackType",
             "enum": [
                 "ATTACK_TYPE_NONE",
@@ -2262,7 +2265,8 @@ var APISwaggerJSON string = `{
                 "ATTACK_TYPE_HTTP_RESPONSE_SPLITTING",
                 "ATTACK_TYPE_FORCEFUL_BROWSING",
                 "ATTACK_TYPE_REMOTE_FILE_INCLUDE",
-                "ATTACK_TYPE_MALICIOUS_FILE_UPLOAD"
+                "ATTACK_TYPE_MALICIOUS_FILE_UPLOAD",
+                "ATTACK_TYPE_GRAPHQL_PARSER_ATTACK"
             ],
             "default": "ATTACK_TYPE_NONE",
             "x-displayname": "Attack Types",
@@ -2973,6 +2977,23 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "policyDetectionContext": {
+            "type": "string",
+            "description": "x-displayName: \"WAF Exclusion Context Options\"\nThe available contexts for Signature and Violation Exclusion rules.\n\n - CONTEXT_ANY: CONTEXT_ANY\n\nx-displayName: \"Any\"\nThe rule will work in all contexts in specified path, domain and method.\n - CONTEXT_BODY: CONTEXT_BODY\n\nx-displayName: \"Body\"\nDetection was found in request's body.\n - CONTEXT_REQUEST: CONTEXT_REQUEST\n\nx-displayName: \"Request\"\nDetection was found in request.\n - CONTEXT_RESPONSE: CONTEXT_RESPONSE\n\nx-displayName: \"Response\"\nDetection was found in request's response.\n - CONTEXT_PARAMETER: CONTEXT_PARAMETER\n\nx-displayName: \"Parameter\"\nDetection was found in one ore more of the request's parameter. When configure a Signature in WAF Exclusion rules, Parameter's name is required.\n - CONTEXT_HEADER: CONTEXT_HEADER\n\nx-displayName: \"Header\"\nDetection was found in one ore more of the request's headers. When configure a Signature in WAF Exclusion rules, header's name is required.\n - CONTEXT_COOKIE: CONTEXT_COOKIE\n\nx-displayName: \"Cookie\"\nDetection was found in one ore more of the request's cookies. When configure a Signature in WAF Exclusion rules, cookie's name is required.\n - CONTEXT_URL: CONTEXT_URL\n\nx-displayName: \"URL\"\nDetection was found in the request's URL.\n - CONTEXT_URI: CONTEXT_URI\n\nx-displayName: \"URI\"\nDetection was found in the request's URI.",
+            "title": "Detection Context",
+            "enum": [
+                "CONTEXT_ANY",
+                "CONTEXT_BODY",
+                "CONTEXT_REQUEST",
+                "CONTEXT_RESPONSE",
+                "CONTEXT_PARAMETER",
+                "CONTEXT_HEADER",
+                "CONTEXT_COOKIE",
+                "CONTEXT_URL",
+                "CONTEXT_URI"
+            ],
+            "default": "CONTEXT_ANY"
+        },
         "policyGraphQLSettingsType": {
             "type": "object",
             "description": "x-displayName: \"GraphQL Settings\"\nGraphQL configuration.",
@@ -3286,6 +3307,37 @@ var APISwaggerJSON string = `{
                     "title": "Skip Processing",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Skip Processing"
+                }
+            }
+        },
+        "policyOasValidationActionType": {
+            "type": "string",
+            "description": "x-displayName: \"OpenAPI Validation Action\"\nOpenAPI Validation Action Type\n\n - OAS_NONE: OAS_NONE\n\nx-displayName: \"No Operation\"\nAllow the request (don't validate OpenAPI specification)\n - OAS_REPORT_VIOLATION: OAS_REPORT_VIOLATION\n\nx-displayName: \"Report Violation\"\nIf OpenAPI violation occurs, allow the request and report it (API security event)\n - OAS_BLOCK_VIOLATION: OAS_BLOCK_VIOLATION\n\nx-displayName: \"Block Violation\"\nIf OpenAPI violation occurs, block the request and report it (API security event)",
+            "title": "OpenAPI Validation Action",
+            "enum": [
+                "OAS_NONE",
+                "OAS_REPORT_VIOLATION",
+                "OAS_BLOCK_VIOLATION"
+            ],
+            "default": "OAS_NONE"
+        },
+        "policyOpenApiValidationAction": {
+            "type": "object",
+            "description": "x-displayName: \"OpenAPI Validation Action\"\nOpenAPI Validation configuration",
+            "title": "OpenAPI Validation Action",
+            "properties": {
+                "oas_validation_action": {
+                    "description": "x-displayName: \"OpenAPI Validation Action\"\nx-required\nThe action to perform if OpenAPI validation fails",
+                    "title": "OpenApi Validation Action",
+                    "$ref": "#/definitions/policyOasValidationActionType"
+                },
+                "request_properties_selection": {
+                    "type": "array",
+                    "description": "x-displayName: \"Request Properties Selection\"\nList of properties of the request to validate according to the OpenAPI specification file (a.k.a. swagger)",
+                    "title": "Request Properties Selection",
+                    "items": {
+                        "$ref": "#/definitions/schemaOpenApiValidationProperties"
+                    }
                 }
             }
         },
@@ -3802,6 +3854,11 @@ var APISwaggerJSON string = `{
                     "title": "Mitigation",
                     "$ref": "#/definitions/policyShapeBotMitigationAction"
                 },
+                "transaction_result": {
+                    "description": "x-displayName: \"Transaction Result\"\nSuccess/failure Criteria for transaction result",
+                    "title": "Transaction Result",
+                    "$ref": "#/definitions/schemaBotDefenseTransactionResultType"
+                },
                 "web_scraping": {
                     "type": "boolean",
                     "description": "x-displayName: \"Web scraping\"\nx-required\nWeb scraping protection enabled for protected endpoint",
@@ -4003,48 +4060,6 @@ var APISwaggerJSON string = `{
                 }
             }
         },
-        "policyWafInlineRuleControl": {
-            "type": "object",
-            "description": "x-displayName: \"App Firewall Rule Control with inline Rule IDs\"\nApp Firewall rule changes to be applied for this request",
-            "title": "App Firewall Rule Control with inline Rule IDs",
-            "properties": {
-                "exclude_rule_ids": {
-                    "type": "array",
-                    "description": "x-displayName: \"Exclude App Firewall Rule IDs\"\nApp Firewall Rule IDs to be excluded for this request",
-                    "title": "Exclude Rule IDs",
-                    "items": {
-                        "$ref": "#/definitions/waf_rule_listWafRuleID"
-                    }
-                },
-                "monitoring_mode": {
-                    "type": "boolean",
-                    "description": "x-displayName: \"Set App Firewall in Monitoring Mode\"\nApp Firewall will run in monitoring mode without blocking the request",
-                    "title": "Set App Firewall in Monitoring Mode",
-                    "format": "boolean"
-                }
-            }
-        },
-        "policyWafRuleControl": {
-            "type": "object",
-            "description": "x-displayName: \"App Firewall Rule Control\"\nApp Firewall rule changes to be applied for this request",
-            "title": "App Firewall Rule Control",
-            "properties": {
-                "exclude_rule_ids": {
-                    "type": "array",
-                    "description": "x-displayName: \"Exclude App Firewall Rule List\"\nApp Firewall Rule List specifying the rule IDs to be excluded for this request",
-                    "title": "Exclude Rule IDs",
-                    "items": {
-                        "$ref": "#/definitions/ioschemaObjectRefType"
-                    }
-                },
-                "monitoring_mode": {
-                    "type": "boolean",
-                    "description": "x-displayName: \"Set App Firewall in Monitoring Mode\"\nApp Firewall will run in monitoring mode without blocking the request",
-                    "title": "Set App Firewall in Monitoring Mode",
-                    "format": "boolean"
-                }
-            }
-        },
         "protobufAny": {
             "type": "object",
             "description": "-Any- contains an arbitrary serialized protocol buffer message along with a\nURL that describes the type of the serialized message.\n\nProtobuf library provides support to pack/unpack Any values in the form\nof utility functions or additional generated methods of the Any type.\n\nExample 1: Pack and unpack a message in C++.\n\n    Foo foo = ...;\n    Any any;\n    any.PackFrom(foo);\n    ...\n    if (any.UnpackTo(\u0026foo)) {\n      ...\n    }\n\nExample 2: Pack and unpack a message in Java.\n\n    Foo foo = ...;\n    Any any = Any.pack(foo);\n    ...\n    if (any.is(Foo.class)) {\n      foo = any.unpack(Foo.class);\n    }\n\n Example 3: Pack and unpack a message in Python.\n\n    foo = Foo(...)\n    any = Any()\n    any.Pack(foo)\n    ...\n    if any.Is(Foo.DESCRIPTOR):\n      any.Unpack(foo)\n      ...\n\n Example 4: Pack and unpack a message in Go\n\n     foo := \u0026pb.Foo{...}\n     any, err := ptypes.MarshalAny(foo)\n     ...\n     foo := \u0026pb.Foo{}\n     if err := ptypes.UnmarshalAny(any, foo); err != nil {\n       ...\n     }\n\nThe pack methods provided by protobuf library will by default use\n'type.googleapis.com/full.type.name' as the type URL and the unpack\nmethods only use the fully qualified type name after the last '/'\nin the type URL, for example \"foo.bar.com/x/y.z\" will yield type\nname \"y.z\".\n\n\nJSON\n====\nThe JSON representation of an -Any- value uses the regular\nrepresentation of the deserialized, embedded message, with an\nadditional field -@type- which contains the type URL. Example:\n\n    package google.profile;\n    message Person {\n      string first_name = 1;\n      string last_name = 2;\n    }\n\n    {\n      \"@type\": \"type.googleapis.com/google.profile.Person\",\n      \"firstName\": \u003cstring\u003e,\n      \"lastName\": \u003cstring\u003e\n    }\n\nIf the embedded message type is well-known and has a custom JSON\nrepresentation, that representation will be embedded adding a field\n-value- which holds the custom JSON in addition to the -@type-\nfield. Example (for message [google.protobuf.Duration][]):\n\n    {\n      \"@type\": \"type.googleapis.com/google.protobuf.Duration\",\n      \"value\": \"1.212s\"\n    }",
@@ -4105,6 +4120,54 @@ var APISwaggerJSON string = `{
                 "RATE_LIMITER_MODE_SHARED"
             ],
             "default": "RATE_LIMITER_MODE_NOT_SHARED"
+        },
+        "schemaBotDefenseTransactionResultCondition": {
+            "type": "object",
+            "description": "x-displayName: \"Bot Defense Transaction Result Condition\"\nBot Defense Transaction Result Condition",
+            "title": "BotDefenseTransactionResultCondition",
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "description": "x-displayName: \"Header Name\"\nx-example: \"Accept-Encoding\"\nA case-insensitive HTTP header name.",
+                    "title": "name"
+                },
+                "regex_values": {
+                    "type": "array",
+                    "description": "x-displayName: \"Regex Values\"\nx-example: \"['^new .*$', 'san f.*', '.* del .*']\"\nA list of regular expressions to match the input against.",
+                    "title": "regex values",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "status": {
+                    "description": "x-displayName: \"HTTP Status code\"\nx-required\nHTTP Status code",
+                    "title": "HTTP Status code for response",
+                    "$ref": "#/definitions/schemaHttpStatusCode"
+                }
+            }
+        },
+        "schemaBotDefenseTransactionResultType": {
+            "type": "object",
+            "description": "x-displayName: \"Bot Defense Transaction Result Type\"\nBot Defense Transaction ResultType",
+            "title": "BotDefenseTransactionResultType",
+            "properties": {
+                "failure_conditions": {
+                    "type": "array",
+                    "description": "x-displayName: \"Failure Conditions\"\nFailure Conditions",
+                    "title": "Failure Conditions",
+                    "items": {
+                        "$ref": "#/definitions/schemaBotDefenseTransactionResultCondition"
+                    }
+                },
+                "success_conditions": {
+                    "type": "array",
+                    "description": "x-displayName: \"Success Conditions\"\nSuccess Conditions",
+                    "title": "Success Conditions",
+                    "items": {
+                        "$ref": "#/definitions/schemaBotDefenseTransactionResultCondition"
+                    }
+                }
+            }
         },
         "schemaConditionType": {
             "type": "object",
@@ -4688,6 +4751,20 @@ var APISwaggerJSON string = `{
                     "x-ves-example": "staging"
                 }
             }
+        },
+        "schemaOpenApiValidationProperties": {
+            "type": "string",
+            "description": "x-displayName: \"OpenAPI Validation Properties\"\nList of required properties to validate against the OpenAPI spec\n\n - PROPERTY_QUERY_PARAMETERS: x-displayName: \"Query Parameters\"\nValidate that all query parameters are according to the OpenAPI specification\n - PROPERTY_PATH_PARAMETERS: x-displayName: \"Path Parameters\"\nValidate that all path parameters are according to the OpenAPI specification\n - PROPERTY_CONTENT_TYPE: x-displayName: \"Content-type\"\nValidate that the content type of the request is according to the OpenAPI specification\n - PROPERTY_COOKIE_PARAMETERS: x-displayName: \"Cookie Parameters\"\nValidate that all cookies are according to the OpenAPI specification\n - PROPERTY_HTTP_HEADERS: x-displayName: \"HTTP Headers\"\nValidate that all HTTP headers are according to the OpenAPI specification\n - PROPERTY_HTTP_BODY: x-displayName: \"HTTP Body\"\nValidate that the request body is according to the OpenAPI specification",
+            "title": "OpenApiValidationProperties",
+            "enum": [
+                "PROPERTY_QUERY_PARAMETERS",
+                "PROPERTY_PATH_PARAMETERS",
+                "PROPERTY_CONTENT_TYPE",
+                "PROPERTY_COOKIE_PARAMETERS",
+                "PROPERTY_HTTP_HEADERS",
+                "PROPERTY_HTTP_BODY"
+            ],
+            "default": "PROPERTY_QUERY_PARAMETERS"
         },
         "schemaStatusMetaType": {
             "type": "object",
@@ -6459,6 +6536,11 @@ var APISwaggerJSON string = `{
                     "description": "x-displayName: \"Name\"\nName of the rule.",
                     "title": "name"
                 },
+                "openapi_validation_action": {
+                    "description": "x-displayName: \"OpenAPI Validation Action\"\nOpenAPI validation policy settings to be applied for this request",
+                    "title": "OpenAPI Validation Action",
+                    "$ref": "#/definitions/policyOpenApiValidationAction"
+                },
                 "path": {
                     "description": "x-displayName: \"HTTP Path\"\nA list of exact values, prefixes and regular expressions for the expected value of the HTTP path. The actual value of the HTTP path is the unescaped path\nvalue extracted from the HTTP URL Resource, excluding any query and fragment information.\nThe predicate evaluates to true if the actual path value matches any of the exact or prefix values or regular expressions in the path matcher.",
                     "title": "path",
@@ -6545,7 +6627,7 @@ var APISwaggerJSON string = `{
         },
         "service_policySourceList": {
             "type": "object",
-            "description": "List of sources. A request belongs to this list if it satifies any of the match criteria.",
+            "description": "List of sources. A request belongs to this list if it satisfies any of the match criteria.",
             "title": "source_list",
             "x-displayname": "Source List",
             "x-ves-displayorder": "2,3,4,5,6,7,8,10",
@@ -6733,227 +6815,6 @@ var APISwaggerJSON string = `{
                     }
                 }
             }
-        },
-        "waf_rule_listWafRuleID": {
-            "type": "string",
-            "description": "x-displayName: \"WAF Rule ID\"\nSupported WAF rule IDs\n\n - WAF_RULE_ALL: x-displayName: \"Skip All Rules (internal use only)\"\nUsed internally to instruct the modsec code in envoy to skip all rules\n - WAF_RULE_910000: x-displayName: \"910000\"\nRequest from Known Malicious Client (Based on previous traffic violations).\n - WAF_RULE_910100: x-displayName: \"910100\"\nClient IP is from a HIGH Risk Country Location.\n - WAF_RULE_910150: x-displayName: \"910150\"\nHTTP Blacklist match for search engine IP\n - WAF_RULE_910160: x-displayName: \"910160\"\nHTTP Blacklist match for spammer IP\n - WAF_RULE_910170: x-displayName: \"910170\"\nHTTP Blacklist match for suspicious IP\n - WAF_RULE_910180: x-displayName: \"910180\"\nHTTP Blacklist match for harvester IP\n - WAF_RULE_911100: x-displayName: \"911100\"\nMethod is not allowed by policy\n - WAF_RULE_912120: x-displayName: \"912120\"\nDenial of Service (DoS) attack identified from %{tx.real_ip} (%{tx.dos_block_counter} hits since last alert)\n - WAF_RULE_913100: x-displayName: \"913100\"\nFound User-Agent associated with security scanner\n - WAF_RULE_913101: x-displayName: \"913101\"\nFound User-Agent associated with scripting/generic HTTP client\n - WAF_RULE_913102: x-displayName: \"913102\"\nFound User-Agent associated with web crawler/bot\n - WAF_RULE_913110: x-displayName: \"913110\"\nFound request header associated with security scanner\n - WAF_RULE_913120: x-displayName: \"913120\"\nFound request filename/argument associated with security scanner\n - WAF_RULE_920100: x-displayName: \"920100\"\nInvalid HTTP Request Line\n - WAF_RULE_920120: x-displayName: \"920120\"\nAttempted multipart/form-data bypass\n - WAF_RULE_920121: x-displayName: \"920121\"\nAttempted multipart/form-data bypass\n - WAF_RULE_920130: x-displayName: \"920130\"\nFailed to parse request body.\n - WAF_RULE_920140: x-displayName: \"920140\"\nMultipart request body failed strict validation:PE %{REQBODY_PROCESSOR_ERROR},BQ %{MULTIPART_BOUNDARY_QUOTED},BW %{MULTIPART_BOUNDARY_WHITESPACE},DB %{MULTIPART_DATA_BEFORE},DA %{MULTIPART_DATA_AFTER},HF %{MULTIPART_HEADER_FOLDING},LF %{MULTIPART_LF_LINE},SM %{MULTIPART_MISSING_SEMICOLON},IQ %{MULTIPART_INVALID_QUOTING},IH %{MULTIPART_INVALID_HEADER_FOLDING},FLE %{MULTIPART_FILE_LIMIT_EXCEEDED}\n - WAF_RULE_920160: x-displayName: \"920160\"\nContent-Length HTTP header is not numeric.\n - WAF_RULE_920170: x-displayName: \"920170\"\nGET or HEAD Request with Body Content.\n - WAF_RULE_920171: x-displayName: \"920171\"\nGET or HEAD Request with Transfer-Encoding.\n - WAF_RULE_920180: x-displayName: \"920180\"\nPOST without Content-Length or Transfer-Encoding headers.\n - WAF_RULE_920190: x-displayName: \"920190\"\nRange: Invalid Last Byte Value.\n - WAF_RULE_920200: x-displayName: \"920200\"\nRange: Too many fields (6 or more)\n - WAF_RULE_920201: x-displayName: \"920201\"\nRange: Too many fields for pdf request (63 or more)\n - WAF_RULE_920202: x-displayName: \"920202\"\nRange: Too many fields for pdf request (6 or more)\n - WAF_RULE_920210: x-displayName: \"920210\"\nMultiple/Conflicting Connection Header Data Found.\n - WAF_RULE_920220: x-displayName: \"920220\"\nURL Encoding Abuse Attack Attempt\n - WAF_RULE_920230: x-displayName: \"920230\"\nMultiple URL Encoding Detected\n - WAF_RULE_920240: x-displayName: \"920240\"\nURL Encoding Abuse Attack Attempt\n - WAF_RULE_920250: x-displayName: \"920250\"\nUTF8 Encoding Abuse Attack Attempt\n - WAF_RULE_920260: x-displayName: \"920260\"\nUnicode Full/Half Width Abuse Attack Attempt\n - WAF_RULE_920270: x-displayName: \"920270\"\nInvalid character in request (null character)\n - WAF_RULE_920271: x-displayName: \"920271\"\nInvalid character in request (non printable characters)\n - WAF_RULE_920272: x-displayName: \"920272\"\nInvalid character in request (outside of printable chars below ascii 127)\n - WAF_RULE_920273: x-displayName: \"920273\"\nInvalid character in request (outside of very strict set)\n - WAF_RULE_920274: x-displayName: \"920274\"\nInvalid character in request headers (outside of very strict set)\n - WAF_RULE_920341: x-displayName: \"920341\"\nRequest Containing Content Requires Content-Type header\n - WAF_RULE_920350: x-displayName: \"920350\"\nHost header is a numeric IP address\n - WAF_RULE_920360: x-displayName: \"920360\"\nArgument name too long\n - WAF_RULE_920370: x-displayName: \"920370\"\nArgument value too long\n - WAF_RULE_920380: x-displayName: \"920380\"\nToo many arguments in request\n - WAF_RULE_920390: x-displayName: \"920390\"\nTotal arguments size exceeded\n - WAF_RULE_920400: x-displayName: \"920400\"\nUploaded file size too large\n - WAF_RULE_920410: x-displayName: \"920410\"\nTotal uploaded files size too large\n - WAF_RULE_920420: x-displayName: \"920420\"\nRequest content type is not allowed by policy\n - WAF_RULE_920430: x-displayName: \"920430\"\nHTTP protocol version is not allowed by policy\n - WAF_RULE_920440: x-displayName: \"920440\"\nURL file extension is restricted by policy\n - WAF_RULE_920450: x-displayName: \"920450\"\nHTTP header is restricted by policy (%{MATCHED_VAR})\n - WAF_RULE_920460: x-displayName: \"920460\"\nAbnormal character escapes in request\n - WAF_RULE_920470: x-displayName: \"920470\"\nIllegal Content-Type header\n - WAF_RULE_920480: x-displayName: \"920480\"\nRequest content type charset is not allowed by policy\n - WAF_RULE_921110: x-displayName: \"921110\"\nHTTP Request Smuggling Attack\n - WAF_RULE_921120: x-displayName: \"921120\"\nHTTP Response Splitting Attack\n - WAF_RULE_921130: x-displayName: \"921130\"\nHTTP Response Splitting Attack\n - WAF_RULE_921140: x-displayName: \"921140\"\nHTTP Header Injection Attack via headers\n - WAF_RULE_921150: x-displayName: \"921150\"\nHTTP Header Injection Attack via payload (CR/LF detected)\n - WAF_RULE_921151: x-displayName: \"921151\"\nHTTP Header Injection Attack via payload (CR/LF detected)\n - WAF_RULE_921160: x-displayName: \"921160\"\nHTTP Header Injection Attack via payload (CR/LF and header-name detected)\n - WAF_RULE_930100: x-displayName: \"930100\"\nPath Traversal Attack (/../)\n - WAF_RULE_930110: x-displayName: \"930110\"\nPath Traversal Attack (/../)\n - WAF_RULE_930120: x-displayName: \"930120\"\nOS File Access Attempt\n - WAF_RULE_930130: x-displayName: \"930130\"\nRestricted File Access Attempt\n - WAF_RULE_931100: x-displayName: \"931100\"\nPossible Remote File Inclusion (RFI) Attack: URL Parameter using IP Address\n - WAF_RULE_931110: x-displayName: \"931110\"\nPossible Remote File Inclusion (RFI) Attack: Common RFI Vulnerable Parameter Name used w/URL Payload\n - WAF_RULE_931120: x-displayName: \"931120\"\nPossible Remote File Inclusion (RFI) Attack: URL Payload Used w/Trailing Question Mark Character (?)\n - WAF_RULE_931130: x-displayName: \"931130\"\nPossible Remote File Inclusion (RFI) Attack: Off-Domain Reference/Link\n - WAF_RULE_932100: x-displayName: \"932100\"\nRemote Command Execution: Unix Command Injection\n - WAF_RULE_932105: x-displayName: \"932105\"\nRemote Command Execution: Unix Command Injection\n - WAF_RULE_932106: x-displayName: \"932106\"\nRemote Command Execution: Unix Command Injection\n - WAF_RULE_932110: x-displayName: \"932110\"\nRemote Command Execution: Windows Command Injection\n - WAF_RULE_932115: x-displayName: \"932115\"\nRemote Command Execution: Windows Command Injection\n - WAF_RULE_932120: x-displayName: \"932120\"\nRemote Command Execution: Windows PowerShell Command Found\n - WAF_RULE_932130: x-displayName: \"932130\"\nRemote Command Execution: Unix Shell Expression Found\n - WAF_RULE_932140: x-displayName: \"932140\"\nRemote Command Execution: Windows FOR/IF Command Found\n - WAF_RULE_932150: x-displayName: \"932150\"\nRemote Command Execution: Direct Unix Command Execution\n - WAF_RULE_932160: x-displayName: \"932160\"\nRemote Command Execution: Unix Shell Code Found\n - WAF_RULE_932170: x-displayName: \"932170\"\nRemote Command Execution: Shellshock (CVE-2014-6271)\n - WAF_RULE_932171: x-displayName: \"932171\"\nRemote Command Execution: Shellshock (CVE-2014-6271)\n - WAF_RULE_932180: x-displayName: \"932180\"\nRestricted File Upload Attempt\n - WAF_RULE_932190: x-displayName: \"932190\"\nRemote Command Execution: Wildcard bypass technique attempt\n - WAF_RULE_933100: x-displayName: \"933100\"\nPHP Injection Attack: PHP Open Tag Found\n - WAF_RULE_933110: x-displayName: \"933110\"\nPHP Injection Attack: PHP Script File Upload Found\n - WAF_RULE_933111: x-displayName: \"933111\"\nPHP Injection Attack: PHP Script File Upload Found\n - WAF_RULE_933120: x-displayName: \"933120\"\nPHP Injection Attack: Configuration Directive Found\n - WAF_RULE_933130: x-displayName: \"933130\"\nPHP Injection Attack: Variables Found\n - WAF_RULE_933131: x-displayName: \"933131\"\nPHP Injection Attack: Variables Found\n - WAF_RULE_933140: x-displayName: \"933140\"\nPHP Injection Attack: I/O Stream Found\n - WAF_RULE_933150: x-displayName: \"933150\"\nPHP Injection Attack: High-Risk PHP Function Name Found\n - WAF_RULE_933151: x-displayName: \"933151\"\nPHP Injection Attack: Medium-Risk PHP Function Name Found\n - WAF_RULE_933160: x-displayName: \"933160\"\nPHP Injection Attack: High-Risk PHP Function Call Found\n - WAF_RULE_933161: x-displayName: \"933161\"\nPHP Injection Attack: Low-Value PHP Function Call Found\n - WAF_RULE_933170: x-displayName: \"933170\"\nPHP Injection Attack: Serialized Object Injection\n - WAF_RULE_933180: x-displayName: \"933180\"\nPHP Injection Attack: Variable Function Call Found\n - WAF_RULE_933190: x-displayName: \"933190\"\nPHP Injection Attack: PHP Closing Tag Found\n - WAF_RULE_941100: x-displayName: \"941100\"\nXSS Attack Detected via libinjection\n - WAF_RULE_941101: x-displayName: \"941101\"\nXSS Attack Detected via libinjection\n - WAF_RULE_941110: x-displayName: \"941110\"\nXSS Filter - Category 1: Script Tag Vector\n - WAF_RULE_941120: x-displayName: \"941120\"\nXSS Filter - Category 2: Event Handler Vector\n - WAF_RULE_941130: x-displayName: \"941130\"\nXSS Filter - Category 3: Attribute Vector\n - WAF_RULE_941140: x-displayName: \"941140\"\nXSS Filter - Category 4: Javascript URI Vector\n - WAF_RULE_941150: x-displayName: \"941150\"\nXSS Filter - Category 5: Disallowed HTML Attributes\n - WAF_RULE_941160: x-displayName: \"941160\"\nNoScript XSS InjectionChecker: HTML Injection\n - WAF_RULE_941170: x-displayName: \"941170\"\nNoScript XSS InjectionChecker: Attribute Injection\n - WAF_RULE_941180: x-displayName: \"941180\"\nNode-Validator Blacklist Keywords\n - WAF_RULE_941190: x-displayName: \"941190\"\nIE XSS Filters - Attack Detected.\n - WAF_RULE_941200: x-displayName: \"941200\"\nIE XSS Filters - Attack Detected.\n - WAF_RULE_941210: x-displayName: \"941210\"\nIE XSS Filters - Attack Detected.\n - WAF_RULE_941220: x-displayName: \"941220\"\nIE XSS Filters - Attack Detected.\n - WAF_RULE_941230: x-displayName: \"941230\"\nIE XSS Filters - Attack Detected.\n - WAF_RULE_941240: x-displayName: \"941240\"\nIE XSS Filters - Attack Detected.\n - WAF_RULE_941250: x-displayName: \"941250\"\nIE XSS Filters - Attack Detected.\n - WAF_RULE_941260: x-displayName: \"941260\"\nIE XSS Filters - Attack Detected.\n - WAF_RULE_941270: x-displayName: \"941270\"\nIE XSS Filters - Attack Detected.\n - WAF_RULE_941280: x-displayName: \"941280\"\nIE XSS Filters - Attack Detected.\n - WAF_RULE_941290: x-displayName: \"941290\"\nIE XSS Filters - Attack Detected.\n - WAF_RULE_941300: x-displayName: \"941300\"\nIE XSS Filters - Attack Detected.\n - WAF_RULE_941310: x-displayName: \"941310\"\nUS-ASCII Malformed Encoding XSS Filter - Attack Detected.\n - WAF_RULE_941320: x-displayName: \"941320\"\nPossible XSS Attack Detected - HTML Tag Handler\n - WAF_RULE_941330: x-displayName: \"941330\"\nIE XSS Filters - Attack Detected.\n - WAF_RULE_941340: x-displayName: \"941340\"\nIE XSS Filters - Attack Detected.\n - WAF_RULE_941350: x-displayName: \"941350\"\nUTF-7 Encoding IE XSS - Attack Detected.\n - WAF_RULE_942100: x-displayName: \"942100\"\nSQL Injection Attack Detected via libinjection\n - WAF_RULE_942110: x-displayName: \"942110\"\nSQL Injection Attack: Common Injection Testing Detected\n - WAF_RULE_942120: x-displayName: \"942120\"\nSQL Injection Attack: SQL Operator Detected\n - WAF_RULE_942130: x-displayName: \"942130\"\nSQL Injection Attack: SQL Tautology Detected.\n - WAF_RULE_942140: x-displayName: \"942140\"\nSQL Injection Attack: Common DB Names Detected\n - WAF_RULE_942150: x-displayName: \"942150\"\nSQL Injection Attack\n - WAF_RULE_942160: x-displayName: \"942160\"\nDetects blind sqli tests using sleep() or benchmark().\n - WAF_RULE_942170: x-displayName: \"942170\"\nDetects SQL benchmark and sleep injection attempts including conditional queries\n - WAF_RULE_942180: x-displayName: \"942180\"\nDetects basic SQL authentication bypass attempts 1/3\n - WAF_RULE_942190: x-displayName: \"942190\"\nDetects MSSQL code execution and information gathering attempts\n - WAF_RULE_942200: x-displayName: \"942200\"\nDetects MySQL comment-/space-obfuscated injections and backtick termination\n - WAF_RULE_942210: x-displayName: \"942210\"\nDetects chained SQL injection attempts 1/2\n - WAF_RULE_942220: x-displayName: \"942220\"\nLooking for integer overflow attacks, these are taken from skipfish, except 3.0.00738585072007e-308 is the \\\n - WAF_RULE_942230: x-displayName: \"942230\"\nDetects conditional SQL injection attempts\n - WAF_RULE_942240: x-displayName: \"942240\"\nDetects MySQL charset switch and MSSQL DoS attempts\n - WAF_RULE_942250: x-displayName: \"942250\"\nDetects MATCH AGAINST, MERGE and EXECUTE IMMEDIATE injections\n - WAF_RULE_942251: x-displayName: \"942251\"\nDetects HAVING injections\n - WAF_RULE_942260: x-displayName: \"942260\"\nDetects basic SQL authentication bypass attempts 2/3\n - WAF_RULE_942270: x-displayName: \"942270\"\nLooking for basic sql injection. Common attack string for mysql, oracle and others.\n - WAF_RULE_942280: x-displayName: \"942280\"\nDetects Postgres pg_sleep injection, waitfor delay attacks and database shutdown attempts\n - WAF_RULE_942290: x-displayName: \"942290\"\nFinds basic MongoDB SQL injection attempts\n - WAF_RULE_942300: x-displayName: \"942300\"\nDetects MySQL comments, conditions and ch(a)r injections\n - WAF_RULE_942310: x-displayName: \"942310\"\nDetects chained SQL injection attempts 2/2\n - WAF_RULE_942320: x-displayName: \"942320\"\nDetects MySQL and PostgreSQL stored procedure/function injections\n - WAF_RULE_942330: x-displayName: \"942330\"\nDetects classic SQL injection probings 1/3\n - WAF_RULE_942340: x-displayName: \"942340\"\nDetects basic SQL authentication bypass attempts 3/3\n - WAF_RULE_942350: x-displayName: \"942350\"\nDetects MySQL UDF injection and other data/structure manipulation attempts\n - WAF_RULE_942360: x-displayName: \"942360\"\nDetects concatenated basic SQL injection and SQLLFI attempts\n - WAF_RULE_942361: x-displayName: \"942361\"\nDetects basic SQL injection based on keyword alter or union\n - WAF_RULE_942370: x-displayName: \"942370\"\nDetects classic SQL injection probings 2/3\n - WAF_RULE_942380: x-displayName: \"942380\"\nSQL Injection Attack\n - WAF_RULE_942390: x-displayName: \"942390\"\nSQL Injection Attack\n - WAF_RULE_942400: x-displayName: \"942400\"\nSQL Injection Attack\n - WAF_RULE_942410: x-displayName: \"942410\"\nSQL Injection Attack\n - WAF_RULE_942420: x-displayName: \"942420\"\nRestricted SQL Character Anomaly Detection (cookies): # of special characters exceeded (8)\n - WAF_RULE_942421: x-displayName: \"942421\"\nRestricted SQL Character Anomaly Detection (cookies): # of special characters exceeded (3)\n - WAF_RULE_942430: x-displayName: \"942430\"\nRestricted SQL Character Anomaly Detection (args): # of special characters exceeded (12)\n - WAF_RULE_942431: x-displayName: \"942431\"\nRestricted SQL Character Anomaly Detection (args): # of special characters exceeded (6)\n - WAF_RULE_942432: x-displayName: \"942432\"\nRestricted SQL Character Anomaly Detection (args): # of special characters exceeded (2)\n - WAF_RULE_942440: x-displayName: \"942440\"\nSQL Comment Sequence Detected.\n - WAF_RULE_942450: x-displayName: \"942450\"\nSQL Hex Encoding Identified\n - WAF_RULE_942460: x-displayName: \"942460\"\nMeta-Character Anomaly Detection Alert - Repetitive Non-Word Characters\n - WAF_RULE_942470: x-displayName: \"942470\"\nSQL Injection Attack\n - WAF_RULE_942480: x-displayName: \"942480\"\nSQL Injection Attack\n - WAF_RULE_942490: x-displayName: \"942490\"\nDetects classic SQL injection probings 3/3\n - WAF_RULE_943100: x-displayName: \"943100\"\nPossible Session Fixation Attack: Setting Cookie Values in HTML\n - WAF_RULE_943110: x-displayName: \"943110\"\nPossible Session Fixation Attack: SessionID Parameter Name with Off-Domain Referer\n - WAF_RULE_943120: x-displayName: \"943120\"\nPossible Session Fixation Attack: SessionID Parameter Name with No Referer\n - WAF_RULE_944100: x-displayName: \"944100\"\nRemote Command Execution: Suspicious Java class detected\n - WAF_RULE_944110: x-displayName: \"944110\"\nRemote Command Execution: Java process spawn (CVE-2017-9805)\n - WAF_RULE_944120: x-displayName: \"944120\"\nRemote Command Execution: Java serialization (CVE-2015-5842)\n - WAF_RULE_944130: x-displayName: \"944130\"\nSuspicious Java class detected\n - WAF_RULE_944200: x-displayName: \"944200\"\nMagic bytes Detected, probable java serialization in use\n - WAF_RULE_944210: x-displayName: \"944210\"\nMagic bytes Detected Base64 Encoded, probable java serialization in use\n - WAF_RULE_944240: x-displayName: \"944240\"\nRemote Command Execution: Java serialization (CVE-2015-5842)\n - WAF_RULE_944250: x-displayName: \"944250\"\nRemote Command Execution: Suspicious Java method detected\n - WAF_RULE_944300: x-displayName: \"944300\"\nBase64 encoded string matched suspicious keyword\n - WAF_RULE_950100: x-displayName: \"950100\"\nThe Application Returned a 500-Level Status Code\n - WAF_RULE_950130: x-displayName: \"950130\"\nDirectory Listing\n - WAF_RULE_951110: x-displayName: \"951110\"\nMicrosoft Access SQL Information Leakage\n - WAF_RULE_951120: x-displayName: \"951120\"\nOracle SQL Information Leakage\n - WAF_RULE_951130: x-displayName: \"951130\"\nDB2 SQL Information Leakage\n - WAF_RULE_951140: x-displayName: \"951140\"\nEMC SQL Information Leakage\n - WAF_RULE_951150: x-displayName: \"951150\"\nfirebird SQL Information Leakage\n - WAF_RULE_951160: x-displayName: \"951160\"\nFrontbase SQL Information Leakage\n - WAF_RULE_951170: x-displayName: \"951170\"\nhsqldb SQL Information Leakage\n - WAF_RULE_951180: x-displayName: \"951180\"\ninformix SQL Information Leakage\n - WAF_RULE_951190: x-displayName: \"951190\"\ningres SQL Information Leakage\n - WAF_RULE_951200: x-displayName: \"951200\"\ninterbase SQL Information Leakage\n - WAF_RULE_951210: x-displayName: \"951210\"\nmaxDB SQL Information Leakage\n - WAF_RULE_951220: x-displayName: \"951220\"\nmssql SQL Information Leakage\n - WAF_RULE_951230: x-displayName: \"951230\"\nmysql SQL Information Leakage\n - WAF_RULE_951240: x-displayName: \"951240\"\npostgres SQL Information Leakage\n - WAF_RULE_951250: x-displayName: \"951250\"\nsqlite SQL Information Leakage\n - WAF_RULE_951260: x-displayName: \"951260\"\nSybase SQL Information Leakage\n - WAF_RULE_952100: x-displayName: \"952100\"\nJava Source Code Leakage\n - WAF_RULE_952110: x-displayName: \"952110\"\nJava Errors\n - WAF_RULE_953100: x-displayName: \"953100\"\nPHP Information Leakage\n - WAF_RULE_953110: x-displayName: \"953110\"\nPHP source code leakage\n - WAF_RULE_953120: x-displayName: \"953120\"\nPHP source code leakage\n - WAF_RULE_954100: x-displayName: \"954100\"\nDisclosure of IIS install location\n - WAF_RULE_954110: x-displayName: \"954110\"\nApplication Availability Error\n - WAF_RULE_954120: x-displayName: \"954120\"\nIIS Information Leakage\n - WAF_RULE_954130: x-displayName: \"954130\"\nIIS Information Leakage\n - WAF_RULE_4295001: x-displayName: \"4295001\"\nEnable Drupal specific CRS exclusions\n - WAF_RULE_4295002: x-displayName: \"4295002\"\nEnable Wordpress specific CRS exclusions\n - WAF_RULE_4295003: x-displayName: \"4295003\"\nEnable Cpanel specific CRS exclusions\n - WAF_RULE_4295004: x-displayName: \"4295004\"\nEnable Dokuwiki specific CRS exclusions\n - WAF_RULE_4295005: x-displayName: \"4295005\"\nEnable Nextcloud specific CRS exclusions\n - WAF_RULE_4295006: x-displayName: \"4295006\"\nEnable Xenforo specific CRS exclusions",
-            "title": "WAF Rule ID",
-            "enum": [
-                "WAF_RULE_ALL",
-                "WAF_RULE_910000",
-                "WAF_RULE_910100",
-                "WAF_RULE_910150",
-                "WAF_RULE_910160",
-                "WAF_RULE_910170",
-                "WAF_RULE_910180",
-                "WAF_RULE_911100",
-                "WAF_RULE_912120",
-                "WAF_RULE_913100",
-                "WAF_RULE_913101",
-                "WAF_RULE_913102",
-                "WAF_RULE_913110",
-                "WAF_RULE_913120",
-                "WAF_RULE_920100",
-                "WAF_RULE_920120",
-                "WAF_RULE_920121",
-                "WAF_RULE_920130",
-                "WAF_RULE_920140",
-                "WAF_RULE_920160",
-                "WAF_RULE_920170",
-                "WAF_RULE_920171",
-                "WAF_RULE_920180",
-                "WAF_RULE_920190",
-                "WAF_RULE_920200",
-                "WAF_RULE_920201",
-                "WAF_RULE_920202",
-                "WAF_RULE_920210",
-                "WAF_RULE_920220",
-                "WAF_RULE_920230",
-                "WAF_RULE_920240",
-                "WAF_RULE_920250",
-                "WAF_RULE_920260",
-                "WAF_RULE_920270",
-                "WAF_RULE_920271",
-                "WAF_RULE_920272",
-                "WAF_RULE_920273",
-                "WAF_RULE_920274",
-                "WAF_RULE_920341",
-                "WAF_RULE_920350",
-                "WAF_RULE_920360",
-                "WAF_RULE_920370",
-                "WAF_RULE_920380",
-                "WAF_RULE_920390",
-                "WAF_RULE_920400",
-                "WAF_RULE_920410",
-                "WAF_RULE_920420",
-                "WAF_RULE_920430",
-                "WAF_RULE_920440",
-                "WAF_RULE_920450",
-                "WAF_RULE_920460",
-                "WAF_RULE_920470",
-                "WAF_RULE_920480",
-                "WAF_RULE_921110",
-                "WAF_RULE_921120",
-                "WAF_RULE_921130",
-                "WAF_RULE_921140",
-                "WAF_RULE_921150",
-                "WAF_RULE_921151",
-                "WAF_RULE_921160",
-                "WAF_RULE_930100",
-                "WAF_RULE_930110",
-                "WAF_RULE_930120",
-                "WAF_RULE_930130",
-                "WAF_RULE_931100",
-                "WAF_RULE_931110",
-                "WAF_RULE_931120",
-                "WAF_RULE_931130",
-                "WAF_RULE_932100",
-                "WAF_RULE_932105",
-                "WAF_RULE_932106",
-                "WAF_RULE_932110",
-                "WAF_RULE_932115",
-                "WAF_RULE_932120",
-                "WAF_RULE_932130",
-                "WAF_RULE_932140",
-                "WAF_RULE_932150",
-                "WAF_RULE_932160",
-                "WAF_RULE_932170",
-                "WAF_RULE_932171",
-                "WAF_RULE_932180",
-                "WAF_RULE_932190",
-                "WAF_RULE_933100",
-                "WAF_RULE_933110",
-                "WAF_RULE_933111",
-                "WAF_RULE_933120",
-                "WAF_RULE_933130",
-                "WAF_RULE_933131",
-                "WAF_RULE_933140",
-                "WAF_RULE_933150",
-                "WAF_RULE_933151",
-                "WAF_RULE_933160",
-                "WAF_RULE_933161",
-                "WAF_RULE_933170",
-                "WAF_RULE_933180",
-                "WAF_RULE_933190",
-                "WAF_RULE_941100",
-                "WAF_RULE_941101",
-                "WAF_RULE_941110",
-                "WAF_RULE_941120",
-                "WAF_RULE_941130",
-                "WAF_RULE_941140",
-                "WAF_RULE_941150",
-                "WAF_RULE_941160",
-                "WAF_RULE_941170",
-                "WAF_RULE_941180",
-                "WAF_RULE_941190",
-                "WAF_RULE_941200",
-                "WAF_RULE_941210",
-                "WAF_RULE_941220",
-                "WAF_RULE_941230",
-                "WAF_RULE_941240",
-                "WAF_RULE_941250",
-                "WAF_RULE_941260",
-                "WAF_RULE_941270",
-                "WAF_RULE_941280",
-                "WAF_RULE_941290",
-                "WAF_RULE_941300",
-                "WAF_RULE_941310",
-                "WAF_RULE_941320",
-                "WAF_RULE_941330",
-                "WAF_RULE_941340",
-                "WAF_RULE_941350",
-                "WAF_RULE_942100",
-                "WAF_RULE_942110",
-                "WAF_RULE_942120",
-                "WAF_RULE_942130",
-                "WAF_RULE_942140",
-                "WAF_RULE_942150",
-                "WAF_RULE_942160",
-                "WAF_RULE_942170",
-                "WAF_RULE_942180",
-                "WAF_RULE_942190",
-                "WAF_RULE_942200",
-                "WAF_RULE_942210",
-                "WAF_RULE_942220",
-                "WAF_RULE_942230",
-                "WAF_RULE_942240",
-                "WAF_RULE_942250",
-                "WAF_RULE_942251",
-                "WAF_RULE_942260",
-                "WAF_RULE_942270",
-                "WAF_RULE_942280",
-                "WAF_RULE_942290",
-                "WAF_RULE_942300",
-                "WAF_RULE_942310",
-                "WAF_RULE_942320",
-                "WAF_RULE_942330",
-                "WAF_RULE_942340",
-                "WAF_RULE_942350",
-                "WAF_RULE_942360",
-                "WAF_RULE_942361",
-                "WAF_RULE_942370",
-                "WAF_RULE_942380",
-                "WAF_RULE_942390",
-                "WAF_RULE_942400",
-                "WAF_RULE_942410",
-                "WAF_RULE_942420",
-                "WAF_RULE_942421",
-                "WAF_RULE_942430",
-                "WAF_RULE_942431",
-                "WAF_RULE_942432",
-                "WAF_RULE_942440",
-                "WAF_RULE_942450",
-                "WAF_RULE_942460",
-                "WAF_RULE_942470",
-                "WAF_RULE_942480",
-                "WAF_RULE_942490",
-                "WAF_RULE_943100",
-                "WAF_RULE_943110",
-                "WAF_RULE_943120",
-                "WAF_RULE_944100",
-                "WAF_RULE_944110",
-                "WAF_RULE_944120",
-                "WAF_RULE_944130",
-                "WAF_RULE_944200",
-                "WAF_RULE_944210",
-                "WAF_RULE_944240",
-                "WAF_RULE_944250",
-                "WAF_RULE_944300",
-                "WAF_RULE_950100",
-                "WAF_RULE_950130",
-                "WAF_RULE_951110",
-                "WAF_RULE_951120",
-                "WAF_RULE_951130",
-                "WAF_RULE_951140",
-                "WAF_RULE_951150",
-                "WAF_RULE_951160",
-                "WAF_RULE_951170",
-                "WAF_RULE_951180",
-                "WAF_RULE_951190",
-                "WAF_RULE_951200",
-                "WAF_RULE_951210",
-                "WAF_RULE_951220",
-                "WAF_RULE_951230",
-                "WAF_RULE_951240",
-                "WAF_RULE_951250",
-                "WAF_RULE_951260",
-                "WAF_RULE_952100",
-                "WAF_RULE_952110",
-                "WAF_RULE_953100",
-                "WAF_RULE_953110",
-                "WAF_RULE_953120",
-                "WAF_RULE_954100",
-                "WAF_RULE_954110",
-                "WAF_RULE_954120",
-                "WAF_RULE_954130",
-                "WAF_RULE_4295001",
-                "WAF_RULE_4295002",
-                "WAF_RULE_4295003",
-                "WAF_RULE_4295004",
-                "WAF_RULE_4295005",
-                "WAF_RULE_4295006"
-            ],
-            "default": "WAF_RULE_ALL"
         }
     },
     "x-displayname": "Service Policy",

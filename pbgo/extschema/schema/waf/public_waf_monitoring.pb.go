@@ -19,13 +19,14 @@ import (
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
-	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+	schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
 	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/log"
 	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/vesenv"
 	io "io"
 	math "math"
 	math_bits "math/bits"
 	reflect "reflect"
+	strconv "strconv"
 	strings "strings"
 )
 
@@ -40,6 +41,123 @@ var _ = math.Inf
 // A compilation error at this line likely means your copy of the
 // proto package needs to be updated.
 const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
+
+// WAF Metric Label Operator
+//
+// x-displayName: "WAF Metric Label Operator"
+// The operator to use when querying WAF metrics with labels.
+// Query can choose to either select a label if it matches a given value OR
+// if it done not match a given value. This is done by choosing the EQ or NEQ operator
+// in MetricLabelFilter
+type MetricLabelOp int32
+
+const (
+	// x-displayName: "Equal To"
+	// Equal to
+	EQ MetricLabelOp = 0
+	// x-displayName: "Not Equal To"
+	// Not Equal to
+	NEQ MetricLabelOp = 1
+)
+
+var MetricLabelOp_name = map[int32]string{
+	0: "EQ",
+	1: "NEQ",
+}
+
+var MetricLabelOp_value = map[string]int32{
+	"EQ":  0,
+	"NEQ": 1,
+}
+
+func (MetricLabelOp) EnumDescriptor() ([]byte, []int) {
+	return fileDescriptor_3c8c41ebe678456d, []int{0}
+}
+
+// Labels in the WAF metrics.
+//
+// x-displayName: "WAF Metric Label"
+// Rule hits counter and the security events counter can be sliced and diced based
+// on one or more labels listed below.
+type MetricLabel int32
+
+const (
+	// x-displayName: "Namespace"
+	// Namespace in which this WAF instance is running
+	NAMESPACE MetricLabel = 0
+	// x-displayName: "AppType"
+	// AppType configured on the virtual_host under which this WAF instance is running
+	APP_TYPE MetricLabel = 1
+	// x-displayName: "Virtual Host"
+	// Virtual host under which this WAF instance is running
+	VIRTUAL_HOST MetricLabel = 2
+	// x-displayName: "Site"
+	// Site from which this WAF instance is reporting the metrics
+	SITE MetricLabel = 3
+	// x-displayName: "Service"
+	// Service for which this WAF instance is reporting the metrics
+	SERVICE MetricLabel = 4
+	// x-displayName: "Instance"
+	// Region from which the client's accesses caused WAF metrics to be generated
+	INSTANCE MetricLabel = 5
+	// x-displayName: "WAF Instance ID"
+	// WAF instance ID
+	WAF_INSTANCE_ID MetricLabel = 6
+	// x-displayName: "Rule ID"
+	// RuleID of the rule that was hit to cause this metric to be generated
+	RULE_ID MetricLabel = 7
+	// x-displayName: "Rule Severity"
+	// Rule severity of the rule that was hit to cause this metric to be generated
+	RULE_SEVERITY MetricLabel = 8
+	// x-displayName: "Rule Tag"
+	// Rule tag of the rule that was hit to cause this metric to be generated
+	RULE_TAG MetricLabel = 9
+	// x-displayName: "WAF Mode"
+	// Block or AlertOnly
+	WAF_MODE MetricLabel = 10
+	// x-displayName: "Bot Type"
+	// Type of the Bot (crawler, scanner, script)
+	BOT_TYPE MetricLabel = 11
+	// x-displayName: "Bot Name"
+	// Name of the Bot associated with the waf rule
+	BOT_NAME MetricLabel = 12
+)
+
+var MetricLabel_name = map[int32]string{
+	0:  "NAMESPACE",
+	1:  "APP_TYPE",
+	2:  "VIRTUAL_HOST",
+	3:  "SITE",
+	4:  "SERVICE",
+	5:  "INSTANCE",
+	6:  "WAF_INSTANCE_ID",
+	7:  "RULE_ID",
+	8:  "RULE_SEVERITY",
+	9:  "RULE_TAG",
+	10: "WAF_MODE",
+	11: "BOT_TYPE",
+	12: "BOT_NAME",
+}
+
+var MetricLabel_value = map[string]int32{
+	"NAMESPACE":       0,
+	"APP_TYPE":        1,
+	"VIRTUAL_HOST":    2,
+	"SITE":            3,
+	"SERVICE":         4,
+	"INSTANCE":        5,
+	"WAF_INSTANCE_ID": 6,
+	"RULE_ID":         7,
+	"RULE_SEVERITY":   8,
+	"RULE_TAG":        9,
+	"WAF_MODE":        10,
+	"BOT_TYPE":        11,
+	"BOT_NAME":        12,
+}
+
+func (MetricLabel) EnumDescriptor() ([]byte, []int) {
+	return fileDescriptor_3c8c41ebe678456d, []int{1}
+}
 
 // RuleHitsCountRequest
 //
@@ -453,7 +571,584 @@ func (m *SecurityEventsCountResponse) GetData() []*SecurityEventsCounter {
 	return nil
 }
 
+// Label based filtering of WAF metrics.
+//
+// x-displayName: "WAF Metric Label Filter"
+// WAF metrics are tagged with labels mentioned in MetricLabel.
+// Metric label filter can be specified to query specific metrics based on label match
+type MetricLabelFilter struct {
+	// Label
+	//
+	// x-displayName: "Label"
+	// Label name which is one out of the labels defined in MetricLabel enum.
+	Label MetricLabel `protobuf:"varint,1,opt,name=label,proto3,enum=ves.io.schema.waf.MetricLabel" json:"label,omitempty"`
+	// Operator
+	//
+	// x-displayName: "Operator"
+	// Operator to evaluate the label in this filter
+	Op MetricLabelOp `protobuf:"varint,2,opt,name=op,proto3,enum=ves.io.schema.waf.MetricLabelOp" json:"op,omitempty"`
+	// Value
+	//
+	// x-displayName: "Value"
+	// x-example: "blogging-app-namespace-1"
+	// Value to be compared with
+	Value string `protobuf:"bytes,3,opt,name=value,proto3" json:"value,omitempty"`
+}
+
+func (m *MetricLabelFilter) Reset()      { *m = MetricLabelFilter{} }
+func (*MetricLabelFilter) ProtoMessage() {}
+func (*MetricLabelFilter) Descriptor() ([]byte, []int) {
+	return fileDescriptor_3c8c41ebe678456d, []int{4}
+}
+func (m *MetricLabelFilter) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MetricLabelFilter) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_MetricLabelFilter.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *MetricLabelFilter) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MetricLabelFilter.Merge(m, src)
+}
+func (m *MetricLabelFilter) XXX_Size() int {
+	return m.Size()
+}
+func (m *MetricLabelFilter) XXX_DiscardUnknown() {
+	xxx_messageInfo_MetricLabelFilter.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MetricLabelFilter proto.InternalMessageInfo
+
+func (m *MetricLabelFilter) GetLabel() MetricLabel {
+	if m != nil {
+		return m.Label
+	}
+	return NAMESPACE
+}
+
+func (m *MetricLabelFilter) GetOp() MetricLabelOp {
+	if m != nil {
+		return m.Op
+	}
+	return EQ
+}
+
+func (m *MetricLabelFilter) GetValue() string {
+	if m != nil {
+		return m.Value
+	}
+	return ""
+}
+
+// Rule Hits Counter
+//
+// x-displayName: "Rule Hits Counter"
+// RuleHitsCounter contains the timeseries data of rule hits counter.
+type RuleHitsCounter struct {
+	// Rule Hits ID
+	//
+	// x-displayName: "Rule Hits ID"
+	// Rule Hits ID is the associated info for rule hits count
+	Id *RuleHitsId `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	// Metric Values
+	//
+	// x-displayName: "Metric Values"
+	// List of metric values
+	Metric []*schema.MetricValue `protobuf:"bytes,2,rep,name=metric,proto3" json:"metric,omitempty"`
+}
+
+func (m *RuleHitsCounter) Reset()      { *m = RuleHitsCounter{} }
+func (*RuleHitsCounter) ProtoMessage() {}
+func (*RuleHitsCounter) Descriptor() ([]byte, []int) {
+	return fileDescriptor_3c8c41ebe678456d, []int{5}
+}
+func (m *RuleHitsCounter) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *RuleHitsCounter) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_RuleHitsCounter.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *RuleHitsCounter) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_RuleHitsCounter.Merge(m, src)
+}
+func (m *RuleHitsCounter) XXX_Size() int {
+	return m.Size()
+}
+func (m *RuleHitsCounter) XXX_DiscardUnknown() {
+	xxx_messageInfo_RuleHitsCounter.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_RuleHitsCounter proto.InternalMessageInfo
+
+func (m *RuleHitsCounter) GetId() *RuleHitsId {
+	if m != nil {
+		return m.Id
+	}
+	return nil
+}
+
+func (m *RuleHitsCounter) GetMetric() []*schema.MetricValue {
+	if m != nil {
+		return m.Metric
+	}
+	return nil
+}
+
+// Security Events Counter
+//
+// x-displayName: "Security Events Counter"
+// SecurityEventsCounter contains the timeseries data of security events counter.
+type SecurityEventsCounter struct {
+	// Security Events ID
+	//
+	// x-displayName: "Security Events ID"
+	// Security Event ID is the associated info for security events count
+	Id *SecurityEventsId `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	// Metric Values
+	//
+	// x-displayName: "Metric Values"
+	// List of metric values
+	Metric []*schema.MetricValue `protobuf:"bytes,2,rep,name=metric,proto3" json:"metric,omitempty"`
+}
+
+func (m *SecurityEventsCounter) Reset()      { *m = SecurityEventsCounter{} }
+func (*SecurityEventsCounter) ProtoMessage() {}
+func (*SecurityEventsCounter) Descriptor() ([]byte, []int) {
+	return fileDescriptor_3c8c41ebe678456d, []int{6}
+}
+func (m *SecurityEventsCounter) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *SecurityEventsCounter) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_SecurityEventsCounter.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *SecurityEventsCounter) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_SecurityEventsCounter.Merge(m, src)
+}
+func (m *SecurityEventsCounter) XXX_Size() int {
+	return m.Size()
+}
+func (m *SecurityEventsCounter) XXX_DiscardUnknown() {
+	xxx_messageInfo_SecurityEventsCounter.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_SecurityEventsCounter proto.InternalMessageInfo
+
+func (m *SecurityEventsCounter) GetId() *SecurityEventsId {
+	if m != nil {
+		return m.Id
+	}
+	return nil
+}
+
+func (m *SecurityEventsCounter) GetMetric() []*schema.MetricValue {
+	if m != nil {
+		return m.Metric
+	}
+	return nil
+}
+
+// SecurityEventsId
+//
+// x-displayName: "Security Events ID"
+// SecurityEventsId uniquely identifies an entry in the response for rule_hits metrics query.
+// security events counter is aggregated based on the MetricLabel specified in the group_by field in the request.
+// Therefore, only the fields that corresponds to the MetricLabel in the group_by will have non-empty
+// value in the response.
+type SecurityEventsId struct {
+	// Namespace
+	//
+	// x-displayName: "Namespace"
+	// x-example: "blogging-app-namespace-1"
+	// Namespace in which this WAF instance is running
+	Namespace string `protobuf:"bytes,1,opt,name=namespace,proto3" json:"namespace,omitempty"`
+	// AppType
+	//
+	// x-displayName: "AppType"
+	// x-example: "blogging-app"
+	// AppType configured on the vhost under which this WAF instance is running
+	AppType string `protobuf:"bytes,2,opt,name=app_type,json=appType,proto3" json:"app_type,omitempty"`
+	// Virtual Host
+	//
+	// x-displayName: "Virtual Host"
+	// x-example: "VS:greatblogs-vhost"
+	// Virtual host under which this WAF instance is running
+	VirtualHost string `protobuf:"bytes,3,opt,name=virtual_host,json=virtualHost,proto3" json:"virtual_host,omitempty"`
+	// Site
+	//
+	// x-displayName: "Site"
+	// x-example: "greatblogs-ce"
+	// Site from which this WAF instance is reporting the metrics
+	Site string `protobuf:"bytes,4,opt,name=site,proto3" json:"site,omitempty"`
+	// Service
+	//
+	// x-displayName: "Service"
+	// x-example: "N:greatblogs-ce"
+	// Service for which this WAF instance is reporting the metrics
+	Service string `protobuf:"bytes,5,opt,name=service,proto3" json:"service,omitempty"`
+	// Instance
+	//
+	// x-displayName: "Instance"
+	// x-example: "India"
+	// Region from which the client's accesses caused WAF metrics to be generated
+	Instance string `protobuf:"bytes,6,opt,name=instance,proto3" json:"instance,omitempty"`
+	// WAF Instance ID
+	//
+	// x-displayName: "WAF Instance ID"
+	// x-example: "blogging-app-namespace-1:generated-waf-rules-greatblogs-waf"
+	// WAF instance ID
+	WafInstanceId string `protobuf:"bytes,7,opt,name=waf_instance_id,json=wafInstanceId,proto3" json:"waf_instance_id,omitempty"`
+	// WAF Mode
+	//
+	// x-displayName: "WAF Mode"
+	// x-example: "Block"
+	// Block or AlertOnly
+	WafMode string `protobuf:"bytes,8,opt,name=waf_mode,json=wafMode,proto3" json:"waf_mode,omitempty"`
+	// Bot Type
+	//
+	// x-displayName: "Bot Type"
+	// x-example: "scanner"
+	// Type of Bot (crawler, scanner, script)
+	BotType string `protobuf:"bytes,9,opt,name=bot_type,json=botType,proto3" json:"bot_type,omitempty"`
+	// Bot Name
+	//
+	// x-displayName: "Bot Name"
+	// x-example: "whatweb"
+	// Name of the Bot associated with the waf rule
+	BotName string `protobuf:"bytes,10,opt,name=bot_name,json=botName,proto3" json:"bot_name,omitempty"`
+}
+
+func (m *SecurityEventsId) Reset()      { *m = SecurityEventsId{} }
+func (*SecurityEventsId) ProtoMessage() {}
+func (*SecurityEventsId) Descriptor() ([]byte, []int) {
+	return fileDescriptor_3c8c41ebe678456d, []int{7}
+}
+func (m *SecurityEventsId) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *SecurityEventsId) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_SecurityEventsId.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *SecurityEventsId) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_SecurityEventsId.Merge(m, src)
+}
+func (m *SecurityEventsId) XXX_Size() int {
+	return m.Size()
+}
+func (m *SecurityEventsId) XXX_DiscardUnknown() {
+	xxx_messageInfo_SecurityEventsId.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_SecurityEventsId proto.InternalMessageInfo
+
+func (m *SecurityEventsId) GetNamespace() string {
+	if m != nil {
+		return m.Namespace
+	}
+	return ""
+}
+
+func (m *SecurityEventsId) GetAppType() string {
+	if m != nil {
+		return m.AppType
+	}
+	return ""
+}
+
+func (m *SecurityEventsId) GetVirtualHost() string {
+	if m != nil {
+		return m.VirtualHost
+	}
+	return ""
+}
+
+func (m *SecurityEventsId) GetSite() string {
+	if m != nil {
+		return m.Site
+	}
+	return ""
+}
+
+func (m *SecurityEventsId) GetService() string {
+	if m != nil {
+		return m.Service
+	}
+	return ""
+}
+
+func (m *SecurityEventsId) GetInstance() string {
+	if m != nil {
+		return m.Instance
+	}
+	return ""
+}
+
+func (m *SecurityEventsId) GetWafInstanceId() string {
+	if m != nil {
+		return m.WafInstanceId
+	}
+	return ""
+}
+
+func (m *SecurityEventsId) GetWafMode() string {
+	if m != nil {
+		return m.WafMode
+	}
+	return ""
+}
+
+func (m *SecurityEventsId) GetBotType() string {
+	if m != nil {
+		return m.BotType
+	}
+	return ""
+}
+
+func (m *SecurityEventsId) GetBotName() string {
+	if m != nil {
+		return m.BotName
+	}
+	return ""
+}
+
+// RuleHitsId
+//
+// x-displayName: "Rule Hits ID"
+// RuleHitsId uniquely identifies an entry in the response for rule_hits metrics query.
+// Rule hits counter is aggregated based on the MetricLabel specified in the group_by field in the request.
+// Therefore, only the fields that corresponds to the MetricLabel in the group_by will have non-empty
+// value in the response.
+type RuleHitsId struct {
+	// Namespace
+	//
+	// x-displayName: "Namespace"
+	// x-example: "blogging-app-namespace-1"
+	// Namespace in which this WAF instance is running
+	Namespace string `protobuf:"bytes,1,opt,name=namespace,proto3" json:"namespace,omitempty"`
+	// AppType
+	//
+	// x-displayName: "AppType"
+	// x-example: "blogging-app"
+	// AppType configured on the virtual_host under which this WAF instance is running
+	AppType string `protobuf:"bytes,2,opt,name=app_type,json=appType,proto3" json:"app_type,omitempty"`
+	// Virtual Host
+	//
+	// x-displayName: "Virtual Host"
+	// x-example: "VS:greatblogs-vhost"
+	// Virtual host under which this WAF instance is running
+	VirtualHost string `protobuf:"bytes,3,opt,name=virtual_host,json=virtualHost,proto3" json:"virtual_host,omitempty"`
+	// Site
+	//
+	// x-displayName: "Site"
+	// x-example: "greatblogs-ce"
+	// Site from which this WAF instance is reporting the metrics
+	Site string `protobuf:"bytes,4,opt,name=site,proto3" json:"site,omitempty"`
+	// Service
+	//
+	// x-displayName: "Service"
+	// x-example: "N:greatblogs-ce"
+	// Service for which this WAF instance is reporting the metrics
+	Service string `protobuf:"bytes,5,opt,name=service,proto3" json:"service,omitempty"`
+	// Instance
+	//
+	// x-displayName: "Instance"
+	// x-example: "India"
+	// Region from which the client's accesses caused WAF metrics to be generated
+	Instance string `protobuf:"bytes,6,opt,name=instance,proto3" json:"instance,omitempty"`
+	// WAF Instance ID
+	//
+	// x-displayName: "WAF Instance ID"
+	// x-example: "blogging-app-namespace-1:generated-waf-rules-greatblogs-waf"
+	// WAF instance ID
+	WafInstanceId string `protobuf:"bytes,7,opt,name=waf_instance_id,json=wafInstanceId,proto3" json:"waf_instance_id,omitempty"`
+	// Rule ID
+	//
+	// x-displayName: "Rule ID"
+	// x-example: "941210"
+	// RuleID of the rule that was hit to cause this metric to be generated
+	RuleId string `protobuf:"bytes,8,opt,name=rule_id,json=ruleId,proto3" json:"rule_id,omitempty"`
+	// Rule Severity
+	//
+	// x-displayName: "Rule Severity"
+	// x-example: "CRITICAL"
+	// Rule severity of the rule that was hit to cause this metric to be generated
+	RuleSeverity string `protobuf:"bytes,9,opt,name=rule_severity,json=ruleSeverity,proto3" json:"rule_severity,omitempty"`
+	// Rule Tag
+	//
+	// x-displayName: "Rule Tag"
+	// x-example: "CAPEC-272"
+	// Rule tag of the rule that was hit to cause this metric to be generated
+	RuleTag string `protobuf:"bytes,10,opt,name=rule_tag,json=ruleTag,proto3" json:"rule_tag,omitempty"`
+	// Bot Type
+	//
+	// x-displayName: "Bot Type"
+	// x-example: "scanner"
+	// Type of Bot (crawler, scanner, script)
+	BotType string `protobuf:"bytes,11,opt,name=bot_type,json=botType,proto3" json:"bot_type,omitempty"`
+	// Bot Name
+	//
+	// x-displayName: "Bot Name"
+	// x-example: "whatweb"
+	// Name of the Bot associated with the waf rule
+	BotName string `protobuf:"bytes,12,opt,name=bot_name,json=botName,proto3" json:"bot_name,omitempty"`
+}
+
+func (m *RuleHitsId) Reset()      { *m = RuleHitsId{} }
+func (*RuleHitsId) ProtoMessage() {}
+func (*RuleHitsId) Descriptor() ([]byte, []int) {
+	return fileDescriptor_3c8c41ebe678456d, []int{8}
+}
+func (m *RuleHitsId) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *RuleHitsId) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_RuleHitsId.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *RuleHitsId) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_RuleHitsId.Merge(m, src)
+}
+func (m *RuleHitsId) XXX_Size() int {
+	return m.Size()
+}
+func (m *RuleHitsId) XXX_DiscardUnknown() {
+	xxx_messageInfo_RuleHitsId.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_RuleHitsId proto.InternalMessageInfo
+
+func (m *RuleHitsId) GetNamespace() string {
+	if m != nil {
+		return m.Namespace
+	}
+	return ""
+}
+
+func (m *RuleHitsId) GetAppType() string {
+	if m != nil {
+		return m.AppType
+	}
+	return ""
+}
+
+func (m *RuleHitsId) GetVirtualHost() string {
+	if m != nil {
+		return m.VirtualHost
+	}
+	return ""
+}
+
+func (m *RuleHitsId) GetSite() string {
+	if m != nil {
+		return m.Site
+	}
+	return ""
+}
+
+func (m *RuleHitsId) GetService() string {
+	if m != nil {
+		return m.Service
+	}
+	return ""
+}
+
+func (m *RuleHitsId) GetInstance() string {
+	if m != nil {
+		return m.Instance
+	}
+	return ""
+}
+
+func (m *RuleHitsId) GetWafInstanceId() string {
+	if m != nil {
+		return m.WafInstanceId
+	}
+	return ""
+}
+
+func (m *RuleHitsId) GetRuleId() string {
+	if m != nil {
+		return m.RuleId
+	}
+	return ""
+}
+
+func (m *RuleHitsId) GetRuleSeverity() string {
+	if m != nil {
+		return m.RuleSeverity
+	}
+	return ""
+}
+
+func (m *RuleHitsId) GetRuleTag() string {
+	if m != nil {
+		return m.RuleTag
+	}
+	return ""
+}
+
+func (m *RuleHitsId) GetBotType() string {
+	if m != nil {
+		return m.BotType
+	}
+	return ""
+}
+
+func (m *RuleHitsId) GetBotName() string {
+	if m != nil {
+		return m.BotName
+	}
+	return ""
+}
+
 func init() {
+	proto.RegisterEnum("ves.io.schema.waf.MetricLabelOp", MetricLabelOp_name, MetricLabelOp_value)
+	golang_proto.RegisterEnum("ves.io.schema.waf.MetricLabelOp", MetricLabelOp_name, MetricLabelOp_value)
+	proto.RegisterEnum("ves.io.schema.waf.MetricLabel", MetricLabel_name, MetricLabel_value)
+	golang_proto.RegisterEnum("ves.io.schema.waf.MetricLabel", MetricLabel_name, MetricLabel_value)
 	proto.RegisterType((*RuleHitsCountRequest)(nil), "ves.io.schema.waf.RuleHitsCountRequest")
 	golang_proto.RegisterType((*RuleHitsCountRequest)(nil), "ves.io.schema.waf.RuleHitsCountRequest")
 	proto.RegisterType((*RuleHitsCountResponse)(nil), "ves.io.schema.waf.RuleHitsCountResponse")
@@ -462,6 +1157,16 @@ func init() {
 	golang_proto.RegisterType((*SecurityEventsCountRequest)(nil), "ves.io.schema.waf.SecurityEventsCountRequest")
 	proto.RegisterType((*SecurityEventsCountResponse)(nil), "ves.io.schema.waf.SecurityEventsCountResponse")
 	golang_proto.RegisterType((*SecurityEventsCountResponse)(nil), "ves.io.schema.waf.SecurityEventsCountResponse")
+	proto.RegisterType((*MetricLabelFilter)(nil), "ves.io.schema.waf.MetricLabelFilter")
+	golang_proto.RegisterType((*MetricLabelFilter)(nil), "ves.io.schema.waf.MetricLabelFilter")
+	proto.RegisterType((*RuleHitsCounter)(nil), "ves.io.schema.waf.RuleHitsCounter")
+	golang_proto.RegisterType((*RuleHitsCounter)(nil), "ves.io.schema.waf.RuleHitsCounter")
+	proto.RegisterType((*SecurityEventsCounter)(nil), "ves.io.schema.waf.SecurityEventsCounter")
+	golang_proto.RegisterType((*SecurityEventsCounter)(nil), "ves.io.schema.waf.SecurityEventsCounter")
+	proto.RegisterType((*SecurityEventsId)(nil), "ves.io.schema.waf.SecurityEventsId")
+	golang_proto.RegisterType((*SecurityEventsId)(nil), "ves.io.schema.waf.SecurityEventsId")
+	proto.RegisterType((*RuleHitsId)(nil), "ves.io.schema.waf.RuleHitsId")
+	golang_proto.RegisterType((*RuleHitsId)(nil), "ves.io.schema.waf.RuleHitsId")
 }
 
 func init() {
@@ -472,59 +1177,103 @@ func init() {
 }
 
 var fileDescriptor_3c8c41ebe678456d = []byte{
-	// 799 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x55, 0x4f, 0x6b, 0x24, 0x45,
-	0x1c, 0x9d, 0x9a, 0x49, 0x36, 0x9b, 0x5a, 0x11, 0x6d, 0x8c, 0xb4, 0x93, 0x6c, 0x31, 0x0c, 0xfe,
-	0x19, 0xc5, 0xee, 0xc2, 0x08, 0x82, 0xb2, 0x08, 0xc9, 0xe2, 0x46, 0xc1, 0x65, 0xa5, 0x57, 0x10,
-	0xf4, 0x30, 0x54, 0xf7, 0xfc, 0xa6, 0x53, 0xda, 0xdd, 0xd5, 0x56, 0x55, 0xf7, 0xec, 0xa0, 0x82,
-	0x06, 0x3f, 0x80, 0xe0, 0xc5, 0x8f, 0xe0, 0x67, 0x70, 0x2f, 0xb9, 0xad, 0x07, 0x95, 0xb0, 0x5e,
-	0xf6, 0x68, 0x3a, 0x0a, 0xeb, 0x2d, 0x1f, 0x41, 0xba, 0xba, 0x27, 0x49, 0x67, 0x82, 0x59, 0x97,
-	0x45, 0x2f, 0xde, 0xaa, 0xfa, 0xbd, 0x5f, 0xcd, 0xef, 0xbd, 0x57, 0xf3, 0x2b, 0xec, 0xe4, 0xa0,
-	0x5c, 0x2e, 0xa8, 0x0a, 0xb6, 0x21, 0x66, 0x74, 0xc2, 0xc6, 0x34, 0xcd, 0xfc, 0x88, 0x07, 0xc3,
-	0x09, 0x1b, 0x0f, 0x63, 0x91, 0x70, 0x2d, 0x24, 0x4f, 0x42, 0x37, 0x95, 0x42, 0x0b, 0xeb, 0xc9,
-	0x8a, 0xee, 0x56, 0x74, 0x77, 0xc2, 0xc6, 0x5d, 0x27, 0xe4, 0x7a, 0x3b, 0xf3, 0xdd, 0x40, 0xc4,
-	0x34, 0x14, 0xa1, 0xa0, 0x86, 0xe9, 0x67, 0x63, 0xb3, 0x33, 0x1b, 0xb3, 0xaa, 0x4e, 0xe8, 0xae,
-	0x85, 0x42, 0x84, 0x11, 0x50, 0x96, 0x72, 0xca, 0x92, 0x44, 0x68, 0xa6, 0xb9, 0x48, 0x54, 0x8d,
-	0x5e, 0x6e, 0xb6, 0x13, 0x89, 0x90, 0xea, 0x69, 0x0a, 0x33, 0x78, 0xb5, 0x09, 0x8b, 0xf4, 0x64,
-	0xed, 0x33, 0x4d, 0xf0, 0x64, 0xdd, 0x5a, 0x13, 0xca, 0x59, 0xc4, 0x47, 0x4c, 0x43, 0x8d, 0xf6,
-	0x4f, 0xa1, 0xa0, 0x20, 0xc9, 0x4f, 0x1d, 0x7e, 0x79, 0xde, 0xa7, 0x13, 0x3f, 0xd0, 0xff, 0xa9,
-	0x8d, 0x9f, 0xf2, 0xb2, 0x08, 0xde, 0xe6, 0x5a, 0x5d, 0x15, 0x59, 0xa2, 0x3d, 0xf8, 0x34, 0x03,
-	0xa5, 0xad, 0x35, 0xbc, 0x9c, 0xb0, 0x18, 0x54, 0xca, 0x02, 0xb0, 0x51, 0x0f, 0x0d, 0x96, 0xbd,
-	0xe3, 0x0f, 0xd6, 0x16, 0x7e, 0x2c, 0x62, 0x3e, 0x44, 0xc3, 0x31, 0x8f, 0x34, 0x48, 0xbb, 0xdd,
-	0xeb, 0x0c, 0x2e, 0xad, 0x3f, 0xeb, 0xce, 0xb9, 0xec, 0x5e, 0x07, 0x2d, 0x79, 0xf0, 0x6e, 0x49,
-	0xbe, 0x66, 0xb8, 0xde, 0xa5, 0xe8, 0x78, 0x63, 0xbd, 0x8e, 0x2f, 0x86, 0x52, 0x64, 0xe9, 0xd0,
-	0x9f, 0xda, 0x9d, 0x5e, 0x67, 0xf0, 0xf8, 0x3a, 0xf9, 0xfb, 0x43, 0xbc, 0x25, 0xc3, 0xdf, 0x9c,
-	0x5a, 0x2f, 0x62, 0xac, 0x34, 0x93, 0x7a, 0xa8, 0x79, 0x0c, 0xf6, 0x42, 0xd9, 0xe2, 0x26, 0xfe,
-	0xe1, 0xcf, 0xdd, 0xce, 0xa2, 0xec, 0x7c, 0xb7, 0x80, 0xbc, 0x65, 0x83, 0xbe, 0xcf, 0x63, 0xb0,
-	0x9e, 0xc3, 0x17, 0x21, 0x19, 0x55, 0xc4, 0xc5, 0x39, 0xe2, 0x12, 0x24, 0x23, 0x43, 0x23, 0x78,
-	0x41, 0x69, 0x48, 0xed, 0x0b, 0x0d, 0xca, 0x61, 0x1b, 0x79, 0xe6, 0xbb, 0xd5, 0xc3, 0x8b, 0x92,
-	0x25, 0x21, 0xd8, 0x4b, 0x73, 0x84, 0x0a, 0xe8, 0xdf, 0xc0, 0x2b, 0xa7, 0xdc, 0x54, 0xa9, 0x48,
-	0x14, 0x58, 0xaf, 0xe1, 0x85, 0x11, 0xd3, 0xcc, 0x46, 0xc6, 0xa8, 0xfe, 0x19, 0x1a, 0x1b, 0x75,
-	0x20, 0x3d, 0xc3, 0xef, 0xdf, 0x6d, 0xe3, 0xee, 0x4d, 0x08, 0x32, 0xc9, 0xf5, 0xf4, 0xad, 0x1c,
-	0x92, 0xff, 0x53, 0x7a, 0x04, 0x29, 0x7d, 0x84, 0x57, 0xcf, 0xf4, 0xb4, 0xce, 0xea, 0x4a, 0x23,
-	0xab, 0xc1, 0x19, 0x4a, 0xcf, 0xa8, 0x9e, 0x25, 0xb6, 0xbe, 0xbf, 0x84, 0x9f, 0xf8, 0x60, 0xe3,
-	0xda, 0xf5, 0xa3, 0x09, 0xb4, 0xf1, 0xde, 0x3b, 0xd6, 0x7d, 0x84, 0x57, 0xae, 0x46, 0x1c, 0x12,
-	0x3d, 0x8b, 0xb9, 0x32, 0x4b, 0x59, 0x2f, 0x9c, 0x77, 0x15, 0xea, 0xa8, 0xbb, 0x83, 0xf3, 0x89,
-	0x55, 0xff, 0xfd, 0xcf, 0x8b, 0x3b, 0xf6, 0x2b, 0x39, 0x28, 0x87, 0x0b, 0x27, 0x95, 0xe2, 0xd6,
-	0xd4, 0xa9, 0xc7, 0xa1, 0x23, 0x81, 0x8d, 0x5e, 0xee, 0x35, 0xa0, 0x09, 0x1b, 0x3b, 0x13, 0xc9,
-	0x35, 0xec, 0xfc, 0xfa, 0xfb, 0xb7, 0xed, 0x8d, 0xfe, 0x95, 0x7a, 0x8c, 0xd2, 0xa3, 0x6b, 0xa4,
-	0xe8, 0x67, 0x47, 0xeb, 0x2f, 0xca, 0x01, 0xa2, 0x68, 0x5c, 0x35, 0x4f, 0x03, 0x23, 0x89, 0xca,
-	0x2c, 0x82, 0xe1, 0x36, 0xd7, 0xea, 0x0d, 0xf4, 0x92, 0xf5, 0x33, 0xc2, 0x2b, 0x37, 0x41, 0xe6,
-	0x20, 0xff, 0x05, 0xa9, 0xac, 0xb8, 0x63, 0x3f, 0xfd, 0xe8, 0xf4, 0x28, 0xd3, 0x77, 0x53, 0xcf,
-	0x57, 0x6d, 0xbc, 0x5a, 0x45, 0xd7, 0x4c, 0x7d, 0xa6, 0xca, 0x79, 0xb0, 0xfb, 0x31, 0xd3, 0xe6,
-	0x3e, 0x28, 0xbd, 0x56, 0xb8, 0x83, 0x1e, 0x3e, 0xcd, 0xad, 0xfe, 0xe6, 0x43, 0xa4, 0xa9, 0xea,
-	0x6e, 0x86, 0x60, 0xda, 0x29, 0x3d, 0xf8, 0x03, 0x95, 0xff, 0x98, 0xd2, 0x9b, 0xff, 0xc4, 0x83,
-	0xf0, 0x9c, 0x94, 0xff, 0xa1, 0xce, 0x3a, 0xe5, 0x79, 0x9d, 0xdd, 0xe7, 0x77, 0x6f, 0xa3, 0xce,
-	0xdd, 0xdb, 0xc8, 0x9e, 0xef, 0xef, 0x86, 0xff, 0x31, 0x04, 0x7a, 0xe7, 0x17, 0xbb, 0x6d, 0xa3,
-	0xcd, 0xaf, 0xd1, 0xee, 0x9b, 0xad, 0xbd, 0x7d, 0xd2, 0xba, 0xb7, 0x4f, 0x5a, 0x87, 0xfb, 0x04,
-	0x7d, 0x59, 0x10, 0xf4, 0x7d, 0x41, 0xd0, 0x8f, 0x05, 0x41, 0x7b, 0x05, 0x41, 0xbf, 0x15, 0x04,
-	0xdd, 0x2f, 0x48, 0xeb, 0xb0, 0x20, 0xe8, 0x9b, 0x03, 0xd2, 0xda, 0x3d, 0x20, 0x68, 0xef, 0x80,
-	0xb4, 0xee, 0x1d, 0x90, 0xd6, 0x87, 0x5b, 0xa1, 0x48, 0x3f, 0x09, 0xdd, 0x5c, 0x94, 0xb3, 0x55,
-	0x32, 0x37, 0x53, 0xd4, 0x2c, 0xc6, 0x42, 0xc6, 0xa5, 0xbe, 0x9c, 0x8f, 0x40, 0x3a, 0x33, 0x98,
-	0xa6, 0x7e, 0x28, 0x28, 0xdc, 0xd2, 0xf5, 0x0b, 0x7e, 0xfc, 0x90, 0xfb, 0x17, 0xcc, 0x1b, 0xfe,
-	0xea, 0x5f, 0x01, 0x00, 0x00, 0xff, 0xff, 0xe0, 0x65, 0xd2, 0x7b, 0x0c, 0x09, 0x00, 0x00,
+	// 1275 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x57, 0x4f, 0x6f, 0x1b, 0xc5,
+	0x1b, 0xf6, 0xac, 0x9d, 0xd8, 0x1e, 0x3b, 0xbf, 0x6e, 0xe7, 0xd7, 0xc2, 0xd6, 0x6d, 0x57, 0xc6,
+	0x85, 0x12, 0x2a, 0xec, 0x85, 0x14, 0x21, 0x81, 0x2a, 0x24, 0x27, 0x75, 0x53, 0x4b, 0xcd, 0x9f,
+	0xae, 0xdd, 0x54, 0x85, 0x83, 0x35, 0xf6, 0x8e, 0x37, 0x03, 0xeb, 0x9d, 0x65, 0x67, 0x6c, 0x37,
+	0x02, 0xa4, 0x52, 0xf1, 0x01, 0x40, 0x5c, 0xf8, 0x08, 0x5c, 0xb9, 0xd2, 0x4b, 0x6e, 0xe5, 0x00,
+	0x55, 0x55, 0x2e, 0x3d, 0x12, 0x07, 0xa4, 0xf6, 0xd6, 0x8f, 0x80, 0x76, 0x76, 0x9d, 0x64, 0x93,
+	0x90, 0x94, 0x52, 0x81, 0x84, 0xb8, 0xed, 0x3b, 0xcf, 0x33, 0xb3, 0xef, 0xf3, 0xbc, 0xef, 0xce,
+	0xcc, 0xc2, 0xf2, 0x80, 0xf0, 0x0a, 0x65, 0x06, 0xef, 0xac, 0x92, 0x1e, 0x36, 0x86, 0xb8, 0x6b,
+	0x78, 0xfd, 0xb6, 0x43, 0x3b, 0xad, 0x21, 0xee, 0xb6, 0x7a, 0xcc, 0xa5, 0x82, 0xf9, 0xd4, 0xb5,
+	0x2b, 0x9e, 0xcf, 0x04, 0x43, 0x47, 0x43, 0x7a, 0x25, 0xa4, 0x57, 0x86, 0xb8, 0x5b, 0x28, 0xdb,
+	0x54, 0xac, 0xf6, 0xdb, 0x95, 0x0e, 0xeb, 0x19, 0x36, 0xb3, 0x99, 0x21, 0x99, 0xed, 0x7e, 0x57,
+	0x46, 0x32, 0x90, 0x4f, 0xe1, 0x0a, 0x85, 0x53, 0x36, 0x63, 0xb6, 0x43, 0x0c, 0xec, 0x51, 0x03,
+	0xbb, 0x2e, 0x13, 0x58, 0x50, 0xe6, 0xf2, 0x08, 0x3d, 0x1d, 0x4f, 0xc7, 0x61, 0xb6, 0x21, 0xd6,
+	0x3c, 0x32, 0x86, 0x4f, 0xc6, 0x61, 0xe6, 0xed, 0x9c, 0x7b, 0x22, 0x0e, 0xee, 0x9c, 0x77, 0x2a,
+	0x0e, 0x0d, 0xb0, 0x43, 0x2d, 0x2c, 0x48, 0x84, 0x96, 0x76, 0xa1, 0x84, 0x13, 0x77, 0x10, 0x5f,
+	0xbc, 0xf4, 0xa3, 0x02, 0x8f, 0x99, 0x7d, 0x87, 0x5c, 0xa6, 0x82, 0xcf, 0xb1, 0xbe, 0x2b, 0x4c,
+	0xf2, 0x71, 0x9f, 0x70, 0x81, 0x4e, 0xc1, 0xac, 0x8b, 0x7b, 0x84, 0x7b, 0xb8, 0x43, 0x34, 0x50,
+	0x04, 0xd3, 0x59, 0x73, 0x7b, 0x00, 0xcd, 0xc3, 0xbc, 0x83, 0xdb, 0xc4, 0x69, 0x75, 0xa9, 0x23,
+	0x88, 0xaf, 0x29, 0xc5, 0xe4, 0x74, 0x6e, 0xe6, 0xe5, 0xca, 0x1e, 0x1b, 0x2b, 0x0b, 0x44, 0xf8,
+	0xb4, 0x73, 0x25, 0x20, 0x5f, 0x92, 0x5c, 0x33, 0xe7, 0x6c, 0x07, 0xe8, 0x1d, 0x98, 0xb1, 0x7d,
+	0xd6, 0xf7, 0x5a, 0xed, 0x35, 0x2d, 0x59, 0x4c, 0x4e, 0xff, 0x6f, 0x46, 0x3f, 0x78, 0x11, 0x33,
+	0x2d, 0xf9, 0xb3, 0x6b, 0xe8, 0x35, 0x08, 0xb9, 0xc0, 0xbe, 0x68, 0x09, 0xda, 0x23, 0x5a, 0x2a,
+	0x48, 0x71, 0x16, 0x7e, 0xff, 0x78, 0x3d, 0x39, 0xe1, 0x27, 0xbf, 0x49, 0x01, 0x33, 0x2b, 0xd1,
+	0x26, 0xed, 0x11, 0xf4, 0x0a, 0xcc, 0x10, 0xd7, 0x0a, 0x89, 0x13, 0x7b, 0x88, 0x69, 0xe2, 0x5a,
+	0x92, 0xa6, 0xc3, 0x14, 0x17, 0xc4, 0xd3, 0x26, 0x63, 0x94, 0x27, 0x0a, 0x30, 0xe5, 0x38, 0x2a,
+	0xc2, 0x09, 0x1f, 0xbb, 0x36, 0xd1, 0xd2, 0x7b, 0x08, 0x21, 0x50, 0x5a, 0x82, 0xc7, 0x77, 0xb9,
+	0xc9, 0x3d, 0xe6, 0x72, 0x82, 0xde, 0x86, 0x29, 0x0b, 0x0b, 0xac, 0x01, 0x69, 0x54, 0x69, 0x1f,
+	0x8d, 0xb1, 0x79, 0xc4, 0x37, 0x25, 0xbf, 0xf4, 0x40, 0x81, 0x85, 0x06, 0xe9, 0xf4, 0x7d, 0x2a,
+	0xd6, 0x6a, 0x03, 0xe2, 0xfe, 0x57, 0xa5, 0xe7, 0x50, 0xa5, 0x0f, 0xe0, 0xc9, 0x7d, 0x3d, 0x8d,
+	0x6a, 0x75, 0x21, 0x56, 0xab, 0xe9, 0x7d, 0x94, 0xee, 0x33, 0x7b, 0xab, 0x62, 0x5f, 0x01, 0x78,
+	0x74, 0x8f, 0x9d, 0xe8, 0x2d, 0x38, 0x21, 0x0d, 0x95, 0x45, 0x3a, 0xdc, 0xbe, 0x90, 0x8c, 0xde,
+	0x80, 0x0a, 0xf3, 0x34, 0x45, 0x4e, 0x29, 0x1e, 0x3c, 0x65, 0xc9, 0x33, 0x15, 0xe6, 0xa1, 0x63,
+	0x70, 0x62, 0x80, 0x9d, 0x3e, 0xd1, 0x92, 0xb2, 0x19, 0xc2, 0xa0, 0x24, 0xe0, 0x91, 0x5d, 0xed,
+	0x85, 0xca, 0x50, 0xa1, 0x96, 0xcc, 0x26, 0x37, 0x73, 0xfa, 0x80, 0x76, 0xac, 0x5b, 0xa6, 0x42,
+	0x2d, 0x34, 0x03, 0x27, 0x7b, 0xf2, 0x65, 0x51, 0x13, 0x15, 0x76, 0x4d, 0x09, 0x33, 0x59, 0x09,
+	0xde, 0x66, 0x46, 0xcc, 0xd2, 0x2d, 0x00, 0x8f, 0xef, 0xeb, 0x14, 0x3a, 0xbf, 0xe3, 0xe5, 0x67,
+	0x0e, 0xf5, 0xf7, 0x2f, 0xa4, 0xf0, 0x9d, 0x02, 0xd5, 0xdd, 0x8b, 0x1d, 0xf2, 0xd1, 0x9c, 0x80,
+	0x19, 0xec, 0x79, 0xad, 0x60, 0x9b, 0x95, 0xce, 0x67, 0xcd, 0x34, 0xf6, 0xbc, 0xe6, 0x9a, 0x47,
+	0xd0, 0x4b, 0x30, 0x3f, 0xa0, 0xbe, 0xe8, 0x63, 0xa7, 0xb5, 0xca, 0xb8, 0x88, 0x3c, 0xce, 0x45,
+	0x63, 0x97, 0x19, 0x17, 0x08, 0xc1, 0x14, 0xa7, 0x22, 0x6a, 0x74, 0x53, 0x3e, 0x23, 0x0d, 0xa6,
+	0x39, 0xf1, 0x07, 0xb4, 0x13, 0xb5, 0xb5, 0x39, 0x0e, 0x51, 0x01, 0x66, 0xa8, 0xcb, 0x05, 0x76,
+	0x3b, 0x24, 0x6c, 0x67, 0x73, 0x2b, 0x46, 0x67, 0xe1, 0x91, 0xe0, 0xa8, 0x1a, 0xc7, 0x2d, 0x6a,
+	0x85, 0x0d, 0x6d, 0x4e, 0x0d, 0x71, 0xb7, 0x1e, 0x8d, 0xd6, 0xad, 0x20, 0xdf, 0xf0, 0x48, 0xb3,
+	0x88, 0x96, 0x09, 0x97, 0x1f, 0xe2, 0xee, 0x02, 0xb3, 0xa4, 0x94, 0x36, 0x13, 0xa1, 0x94, 0x6c,
+	0x08, 0xb5, 0x99, 0x90, 0x52, 0x22, 0x28, 0x90, 0xad, 0xc1, 0x2d, 0x68, 0x11, 0xf7, 0x48, 0xe9,
+	0xb1, 0x02, 0xe1, 0x76, 0xf5, 0xff, 0x65, 0x6e, 0xbd, 0x08, 0xd3, 0x7e, 0xdf, 0x91, 0x78, 0x68,
+	0xd6, 0x64, 0x10, 0xd6, 0x2d, 0x74, 0x06, 0x4e, 0x49, 0x80, 0x93, 0x01, 0x09, 0xba, 0x25, 0x32,
+	0x2c, 0x1f, 0x0c, 0x36, 0xa2, 0xb1, 0x40, 0xad, 0x24, 0x09, 0x6c, 0x8f, 0x5d, 0x0b, 0xe2, 0x26,
+	0xb6, 0x63, 0x5e, 0xe7, 0xfe, 0xd8, 0xeb, 0x7c, 0xcc, 0xeb, 0x73, 0x45, 0x38, 0x15, 0xfb, 0x86,
+	0xd1, 0x24, 0x54, 0x6a, 0x57, 0xd5, 0x04, 0x4a, 0xc3, 0xe4, 0x62, 0xed, 0xaa, 0x0a, 0xce, 0xdd,
+	0x03, 0x30, 0xb7, 0x83, 0x82, 0xa6, 0x60, 0x76, 0xb1, 0xba, 0x50, 0x6b, 0x2c, 0x57, 0xe7, 0x6a,
+	0x6a, 0x02, 0xe5, 0x61, 0xa6, 0xba, 0xbc, 0xdc, 0x6a, 0xde, 0x58, 0xae, 0xa9, 0x00, 0xa9, 0x30,
+	0xbf, 0x52, 0x37, 0x9b, 0xd7, 0xaa, 0x57, 0x5a, 0x97, 0x97, 0x1a, 0x4d, 0x55, 0x41, 0x19, 0x98,
+	0x6a, 0xd4, 0x9b, 0x35, 0x35, 0x89, 0x72, 0x30, 0xdd, 0xa8, 0x99, 0x2b, 0xf5, 0xb9, 0x9a, 0x9a,
+	0x0a, 0xa6, 0xd5, 0x17, 0x1b, 0xcd, 0xea, 0xe2, 0x5c, 0x4d, 0x9d, 0x40, 0xff, 0x87, 0x47, 0xae,
+	0x57, 0x2f, 0xb5, 0xc6, 0x23, 0xad, 0xfa, 0x45, 0x75, 0x32, 0xe0, 0x9b, 0xd7, 0xae, 0xc8, 0x20,
+	0x8d, 0x8e, 0xc2, 0x29, 0x19, 0x34, 0x6a, 0x2b, 0x35, 0xb3, 0xde, 0xbc, 0xa1, 0x66, 0x82, 0x25,
+	0xe4, 0x50, 0xb3, 0x3a, 0xaf, 0x66, 0x83, 0x28, 0x58, 0x62, 0x61, 0xe9, 0x62, 0x4d, 0x85, 0x41,
+	0x34, 0xbb, 0xd4, 0x0c, 0xb3, 0xca, 0x8d, 0xa3, 0x20, 0x6d, 0x35, 0x3f, 0xb3, 0x91, 0x86, 0xea,
+	0xf5, 0xea, 0xa5, 0x85, 0xad, 0x2b, 0x58, 0x75, 0xb9, 0x8e, 0x1e, 0x01, 0x78, 0x7c, 0xce, 0xa1,
+	0xc4, 0x15, 0xe3, 0xce, 0x0b, 0x35, 0x73, 0xf4, 0xea, 0x61, 0x47, 0x65, 0x74, 0x14, 0x16, 0xa6,
+	0x0f, 0x27, 0x86, 0xfb, 0x7b, 0xe9, 0xd3, 0xd1, 0x5d, 0xed, 0xcd, 0x01, 0xe1, 0x65, 0xca, 0xca,
+	0x9e, 0xcf, 0x6e, 0xae, 0x95, 0xa3, 0xfb, 0x60, 0xd9, 0x27, 0xd8, 0x7a, 0xbd, 0x18, 0x83, 0x86,
+	0xb8, 0x5b, 0x1e, 0xfa, 0x54, 0x90, 0xdb, 0x3f, 0xff, 0xfa, 0xb5, 0x52, 0x2d, 0x5d, 0x88, 0xee,
+	0x91, 0xc6, 0xd6, 0x37, 0xc0, 0x8d, 0x4f, 0xb6, 0x9e, 0x3f, 0x0b, 0x6e, 0x9a, 0xdc, 0x08, 0x77,
+	0x1f, 0x6e, 0x74, 0xa4, 0x24, 0x43, 0xf6, 0xcc, 0x2a, 0x15, 0xfc, 0x5d, 0x70, 0x0e, 0xfd, 0x24,
+	0x77, 0x45, 0x7f, 0x40, 0xfc, 0xbf, 0x41, 0x2a, 0x1e, 0xdd, 0xd5, 0x5e, 0x78, 0x7e, 0x7a, 0xb8,
+	0xcc, 0x3b, 0xae, 0xe7, 0x73, 0x05, 0x9e, 0x0c, 0x4b, 0x17, 0xdf, 0x68, 0xc7, 0xaa, 0xca, 0x4f,
+	0x77, 0x7e, 0x8e, 0xb5, 0x55, 0x9e, 0x96, 0x1e, 0x29, 0xbc, 0x0d, 0x9e, 0xbd, 0x9a, 0xf3, 0xa5,
+	0xd9, 0x67, 0xa8, 0x26, 0x8f, 0xb2, 0x69, 0x11, 0x99, 0x4e, 0xe0, 0xc1, 0x6f, 0x20, 0xb8, 0x51,
+	0x04, 0xde, 0xfc, 0x23, 0x1e, 0xd8, 0x87, 0x54, 0xf9, 0x4f, 0xea, 0x8c, 0xaa, 0xbc, 0x57, 0x67,
+	0xe1, 0xec, 0xfa, 0x1d, 0x90, 0x7c, 0x70, 0x07, 0x68, 0x7b, 0xf3, 0x5b, 0x6a, 0x7f, 0x48, 0x3a,
+	0xe2, 0xf6, 0x3d, 0x4d, 0xd1, 0xc0, 0xec, 0x17, 0x60, 0xfd, 0xbd, 0xc4, 0xfd, 0x0d, 0x3d, 0xf1,
+	0x70, 0x43, 0x4f, 0x3c, 0xd9, 0xd0, 0xc1, 0xad, 0x91, 0x0e, 0xbe, 0x1d, 0xe9, 0xe0, 0x87, 0x91,
+	0x0e, 0xee, 0x8f, 0x74, 0xf0, 0xcb, 0x48, 0x07, 0x8f, 0x46, 0x7a, 0xe2, 0xc9, 0x48, 0x07, 0x5f,
+	0x6e, 0xea, 0x89, 0xf5, 0x4d, 0x1d, 0xdc, 0xdf, 0xd4, 0x13, 0x0f, 0x37, 0xf5, 0xc4, 0xfb, 0xf3,
+	0x36, 0xf3, 0x3e, 0xb2, 0x2b, 0x03, 0x16, 0xdc, 0x9c, 0x7c, 0x5c, 0xe9, 0x73, 0x43, 0x3e, 0x74,
+	0x99, 0xdf, 0x0b, 0xf4, 0x0d, 0xa8, 0x45, 0xfc, 0xf2, 0x18, 0x36, 0xbc, 0xb6, 0xcd, 0x0c, 0x72,
+	0x53, 0x44, 0xbf, 0x39, 0xdb, 0x7f, 0x7c, 0xed, 0x49, 0xf9, 0x8f, 0x73, 0xfe, 0xf7, 0x00, 0x00,
+	0x00, 0xff, 0xff, 0x7e, 0xbf, 0x2b, 0x12, 0x0d, 0x0e, 0x00, 0x00,
 }
 
+func (x MetricLabelOp) String() string {
+	s, ok := MetricLabelOp_name[int32(x)]
+	if ok {
+		return s
+	}
+	return strconv.Itoa(int(x))
+}
+func (x MetricLabel) String() string {
+	s, ok := MetricLabel_name[int32(x)]
+	if ok {
+		return s
+	}
+	return strconv.Itoa(int(x))
+}
 func (this *RuleHitsCountRequest) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -687,6 +1436,208 @@ func (this *SecurityEventsCountResponse) Equal(that interface{}) bool {
 	}
 	return true
 }
+func (this *MetricLabelFilter) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*MetricLabelFilter)
+	if !ok {
+		that2, ok := that.(MetricLabelFilter)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.Label != that1.Label {
+		return false
+	}
+	if this.Op != that1.Op {
+		return false
+	}
+	if this.Value != that1.Value {
+		return false
+	}
+	return true
+}
+func (this *RuleHitsCounter) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*RuleHitsCounter)
+	if !ok {
+		that2, ok := that.(RuleHitsCounter)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.Id.Equal(that1.Id) {
+		return false
+	}
+	if len(this.Metric) != len(that1.Metric) {
+		return false
+	}
+	for i := range this.Metric {
+		if !this.Metric[i].Equal(that1.Metric[i]) {
+			return false
+		}
+	}
+	return true
+}
+func (this *SecurityEventsCounter) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*SecurityEventsCounter)
+	if !ok {
+		that2, ok := that.(SecurityEventsCounter)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.Id.Equal(that1.Id) {
+		return false
+	}
+	if len(this.Metric) != len(that1.Metric) {
+		return false
+	}
+	for i := range this.Metric {
+		if !this.Metric[i].Equal(that1.Metric[i]) {
+			return false
+		}
+	}
+	return true
+}
+func (this *SecurityEventsId) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*SecurityEventsId)
+	if !ok {
+		that2, ok := that.(SecurityEventsId)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.Namespace != that1.Namespace {
+		return false
+	}
+	if this.AppType != that1.AppType {
+		return false
+	}
+	if this.VirtualHost != that1.VirtualHost {
+		return false
+	}
+	if this.Site != that1.Site {
+		return false
+	}
+	if this.Service != that1.Service {
+		return false
+	}
+	if this.Instance != that1.Instance {
+		return false
+	}
+	if this.WafInstanceId != that1.WafInstanceId {
+		return false
+	}
+	if this.WafMode != that1.WafMode {
+		return false
+	}
+	if this.BotType != that1.BotType {
+		return false
+	}
+	if this.BotName != that1.BotName {
+		return false
+	}
+	return true
+}
+func (this *RuleHitsId) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*RuleHitsId)
+	if !ok {
+		that2, ok := that.(RuleHitsId)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.Namespace != that1.Namespace {
+		return false
+	}
+	if this.AppType != that1.AppType {
+		return false
+	}
+	if this.VirtualHost != that1.VirtualHost {
+		return false
+	}
+	if this.Site != that1.Site {
+		return false
+	}
+	if this.Service != that1.Service {
+		return false
+	}
+	if this.Instance != that1.Instance {
+		return false
+	}
+	if this.WafInstanceId != that1.WafInstanceId {
+		return false
+	}
+	if this.RuleId != that1.RuleId {
+		return false
+	}
+	if this.RuleSeverity != that1.RuleSeverity {
+		return false
+	}
+	if this.RuleTag != that1.RuleTag {
+		return false
+	}
+	if this.BotType != that1.BotType {
+		return false
+	}
+	if this.BotName != that1.BotName {
+		return false
+	}
+	return true
+}
 func (this *RuleHitsCountRequest) GoString() string {
 	if this == nil {
 		return "nil"
@@ -744,6 +1695,88 @@ func (this *SecurityEventsCountResponse) GoString() string {
 	if this.Data != nil {
 		s = append(s, "Data: "+fmt.Sprintf("%#v", this.Data)+",\n")
 	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *MetricLabelFilter) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 7)
+	s = append(s, "&waf.MetricLabelFilter{")
+	s = append(s, "Label: "+fmt.Sprintf("%#v", this.Label)+",\n")
+	s = append(s, "Op: "+fmt.Sprintf("%#v", this.Op)+",\n")
+	s = append(s, "Value: "+fmt.Sprintf("%#v", this.Value)+",\n")
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *RuleHitsCounter) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 6)
+	s = append(s, "&waf.RuleHitsCounter{")
+	if this.Id != nil {
+		s = append(s, "Id: "+fmt.Sprintf("%#v", this.Id)+",\n")
+	}
+	if this.Metric != nil {
+		s = append(s, "Metric: "+fmt.Sprintf("%#v", this.Metric)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *SecurityEventsCounter) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 6)
+	s = append(s, "&waf.SecurityEventsCounter{")
+	if this.Id != nil {
+		s = append(s, "Id: "+fmt.Sprintf("%#v", this.Id)+",\n")
+	}
+	if this.Metric != nil {
+		s = append(s, "Metric: "+fmt.Sprintf("%#v", this.Metric)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *SecurityEventsId) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 14)
+	s = append(s, "&waf.SecurityEventsId{")
+	s = append(s, "Namespace: "+fmt.Sprintf("%#v", this.Namespace)+",\n")
+	s = append(s, "AppType: "+fmt.Sprintf("%#v", this.AppType)+",\n")
+	s = append(s, "VirtualHost: "+fmt.Sprintf("%#v", this.VirtualHost)+",\n")
+	s = append(s, "Site: "+fmt.Sprintf("%#v", this.Site)+",\n")
+	s = append(s, "Service: "+fmt.Sprintf("%#v", this.Service)+",\n")
+	s = append(s, "Instance: "+fmt.Sprintf("%#v", this.Instance)+",\n")
+	s = append(s, "WafInstanceId: "+fmt.Sprintf("%#v", this.WafInstanceId)+",\n")
+	s = append(s, "WafMode: "+fmt.Sprintf("%#v", this.WafMode)+",\n")
+	s = append(s, "BotType: "+fmt.Sprintf("%#v", this.BotType)+",\n")
+	s = append(s, "BotName: "+fmt.Sprintf("%#v", this.BotName)+",\n")
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *RuleHitsId) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 16)
+	s = append(s, "&waf.RuleHitsId{")
+	s = append(s, "Namespace: "+fmt.Sprintf("%#v", this.Namespace)+",\n")
+	s = append(s, "AppType: "+fmt.Sprintf("%#v", this.AppType)+",\n")
+	s = append(s, "VirtualHost: "+fmt.Sprintf("%#v", this.VirtualHost)+",\n")
+	s = append(s, "Site: "+fmt.Sprintf("%#v", this.Site)+",\n")
+	s = append(s, "Service: "+fmt.Sprintf("%#v", this.Service)+",\n")
+	s = append(s, "Instance: "+fmt.Sprintf("%#v", this.Instance)+",\n")
+	s = append(s, "WafInstanceId: "+fmt.Sprintf("%#v", this.WafInstanceId)+",\n")
+	s = append(s, "RuleId: "+fmt.Sprintf("%#v", this.RuleId)+",\n")
+	s = append(s, "RuleSeverity: "+fmt.Sprintf("%#v", this.RuleSeverity)+",\n")
+	s = append(s, "RuleTag: "+fmt.Sprintf("%#v", this.RuleTag)+",\n")
+	s = append(s, "BotType: "+fmt.Sprintf("%#v", this.BotType)+",\n")
+	s = append(s, "BotName: "+fmt.Sprintf("%#v", this.BotName)+",\n")
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
@@ -1246,6 +2279,344 @@ func (m *SecurityEventsCountResponse) MarshalToSizedBuffer(dAtA []byte) (int, er
 	return len(dAtA) - i, nil
 }
 
+func (m *MetricLabelFilter) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MetricLabelFilter) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MetricLabelFilter) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.Value) > 0 {
+		i -= len(m.Value)
+		copy(dAtA[i:], m.Value)
+		i = encodeVarintPublicWafMonitoring(dAtA, i, uint64(len(m.Value)))
+		i--
+		dAtA[i] = 0x1a
+	}
+	if m.Op != 0 {
+		i = encodeVarintPublicWafMonitoring(dAtA, i, uint64(m.Op))
+		i--
+		dAtA[i] = 0x10
+	}
+	if m.Label != 0 {
+		i = encodeVarintPublicWafMonitoring(dAtA, i, uint64(m.Label))
+		i--
+		dAtA[i] = 0x8
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *RuleHitsCounter) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *RuleHitsCounter) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *RuleHitsCounter) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.Metric) > 0 {
+		for iNdEx := len(m.Metric) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.Metric[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintPublicWafMonitoring(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x12
+		}
+	}
+	if m.Id != nil {
+		{
+			size, err := m.Id.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintPublicWafMonitoring(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *SecurityEventsCounter) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *SecurityEventsCounter) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *SecurityEventsCounter) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.Metric) > 0 {
+		for iNdEx := len(m.Metric) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.Metric[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintPublicWafMonitoring(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x12
+		}
+	}
+	if m.Id != nil {
+		{
+			size, err := m.Id.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintPublicWafMonitoring(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *SecurityEventsId) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *SecurityEventsId) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *SecurityEventsId) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.BotName) > 0 {
+		i -= len(m.BotName)
+		copy(dAtA[i:], m.BotName)
+		i = encodeVarintPublicWafMonitoring(dAtA, i, uint64(len(m.BotName)))
+		i--
+		dAtA[i] = 0x52
+	}
+	if len(m.BotType) > 0 {
+		i -= len(m.BotType)
+		copy(dAtA[i:], m.BotType)
+		i = encodeVarintPublicWafMonitoring(dAtA, i, uint64(len(m.BotType)))
+		i--
+		dAtA[i] = 0x4a
+	}
+	if len(m.WafMode) > 0 {
+		i -= len(m.WafMode)
+		copy(dAtA[i:], m.WafMode)
+		i = encodeVarintPublicWafMonitoring(dAtA, i, uint64(len(m.WafMode)))
+		i--
+		dAtA[i] = 0x42
+	}
+	if len(m.WafInstanceId) > 0 {
+		i -= len(m.WafInstanceId)
+		copy(dAtA[i:], m.WafInstanceId)
+		i = encodeVarintPublicWafMonitoring(dAtA, i, uint64(len(m.WafInstanceId)))
+		i--
+		dAtA[i] = 0x3a
+	}
+	if len(m.Instance) > 0 {
+		i -= len(m.Instance)
+		copy(dAtA[i:], m.Instance)
+		i = encodeVarintPublicWafMonitoring(dAtA, i, uint64(len(m.Instance)))
+		i--
+		dAtA[i] = 0x32
+	}
+	if len(m.Service) > 0 {
+		i -= len(m.Service)
+		copy(dAtA[i:], m.Service)
+		i = encodeVarintPublicWafMonitoring(dAtA, i, uint64(len(m.Service)))
+		i--
+		dAtA[i] = 0x2a
+	}
+	if len(m.Site) > 0 {
+		i -= len(m.Site)
+		copy(dAtA[i:], m.Site)
+		i = encodeVarintPublicWafMonitoring(dAtA, i, uint64(len(m.Site)))
+		i--
+		dAtA[i] = 0x22
+	}
+	if len(m.VirtualHost) > 0 {
+		i -= len(m.VirtualHost)
+		copy(dAtA[i:], m.VirtualHost)
+		i = encodeVarintPublicWafMonitoring(dAtA, i, uint64(len(m.VirtualHost)))
+		i--
+		dAtA[i] = 0x1a
+	}
+	if len(m.AppType) > 0 {
+		i -= len(m.AppType)
+		copy(dAtA[i:], m.AppType)
+		i = encodeVarintPublicWafMonitoring(dAtA, i, uint64(len(m.AppType)))
+		i--
+		dAtA[i] = 0x12
+	}
+	if len(m.Namespace) > 0 {
+		i -= len(m.Namespace)
+		copy(dAtA[i:], m.Namespace)
+		i = encodeVarintPublicWafMonitoring(dAtA, i, uint64(len(m.Namespace)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *RuleHitsId) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *RuleHitsId) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *RuleHitsId) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.BotName) > 0 {
+		i -= len(m.BotName)
+		copy(dAtA[i:], m.BotName)
+		i = encodeVarintPublicWafMonitoring(dAtA, i, uint64(len(m.BotName)))
+		i--
+		dAtA[i] = 0x62
+	}
+	if len(m.BotType) > 0 {
+		i -= len(m.BotType)
+		copy(dAtA[i:], m.BotType)
+		i = encodeVarintPublicWafMonitoring(dAtA, i, uint64(len(m.BotType)))
+		i--
+		dAtA[i] = 0x5a
+	}
+	if len(m.RuleTag) > 0 {
+		i -= len(m.RuleTag)
+		copy(dAtA[i:], m.RuleTag)
+		i = encodeVarintPublicWafMonitoring(dAtA, i, uint64(len(m.RuleTag)))
+		i--
+		dAtA[i] = 0x52
+	}
+	if len(m.RuleSeverity) > 0 {
+		i -= len(m.RuleSeverity)
+		copy(dAtA[i:], m.RuleSeverity)
+		i = encodeVarintPublicWafMonitoring(dAtA, i, uint64(len(m.RuleSeverity)))
+		i--
+		dAtA[i] = 0x4a
+	}
+	if len(m.RuleId) > 0 {
+		i -= len(m.RuleId)
+		copy(dAtA[i:], m.RuleId)
+		i = encodeVarintPublicWafMonitoring(dAtA, i, uint64(len(m.RuleId)))
+		i--
+		dAtA[i] = 0x42
+	}
+	if len(m.WafInstanceId) > 0 {
+		i -= len(m.WafInstanceId)
+		copy(dAtA[i:], m.WafInstanceId)
+		i = encodeVarintPublicWafMonitoring(dAtA, i, uint64(len(m.WafInstanceId)))
+		i--
+		dAtA[i] = 0x3a
+	}
+	if len(m.Instance) > 0 {
+		i -= len(m.Instance)
+		copy(dAtA[i:], m.Instance)
+		i = encodeVarintPublicWafMonitoring(dAtA, i, uint64(len(m.Instance)))
+		i--
+		dAtA[i] = 0x32
+	}
+	if len(m.Service) > 0 {
+		i -= len(m.Service)
+		copy(dAtA[i:], m.Service)
+		i = encodeVarintPublicWafMonitoring(dAtA, i, uint64(len(m.Service)))
+		i--
+		dAtA[i] = 0x2a
+	}
+	if len(m.Site) > 0 {
+		i -= len(m.Site)
+		copy(dAtA[i:], m.Site)
+		i = encodeVarintPublicWafMonitoring(dAtA, i, uint64(len(m.Site)))
+		i--
+		dAtA[i] = 0x22
+	}
+	if len(m.VirtualHost) > 0 {
+		i -= len(m.VirtualHost)
+		copy(dAtA[i:], m.VirtualHost)
+		i = encodeVarintPublicWafMonitoring(dAtA, i, uint64(len(m.VirtualHost)))
+		i--
+		dAtA[i] = 0x1a
+	}
+	if len(m.AppType) > 0 {
+		i -= len(m.AppType)
+		copy(dAtA[i:], m.AppType)
+		i = encodeVarintPublicWafMonitoring(dAtA, i, uint64(len(m.AppType)))
+		i--
+		dAtA[i] = 0x12
+	}
+	if len(m.Namespace) > 0 {
+		i -= len(m.Namespace)
+		copy(dAtA[i:], m.Namespace)
+		i = encodeVarintPublicWafMonitoring(dAtA, i, uint64(len(m.Namespace)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
 func encodeVarintPublicWafMonitoring(dAtA []byte, offset int, v uint64) int {
 	offset -= sovPublicWafMonitoring(v)
 	base := offset
@@ -1371,6 +2742,169 @@ func (m *SecurityEventsCountResponse) Size() (n int) {
 	return n
 }
 
+func (m *MetricLabelFilter) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Label != 0 {
+		n += 1 + sovPublicWafMonitoring(uint64(m.Label))
+	}
+	if m.Op != 0 {
+		n += 1 + sovPublicWafMonitoring(uint64(m.Op))
+	}
+	l = len(m.Value)
+	if l > 0 {
+		n += 1 + l + sovPublicWafMonitoring(uint64(l))
+	}
+	return n
+}
+
+func (m *RuleHitsCounter) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Id != nil {
+		l = m.Id.Size()
+		n += 1 + l + sovPublicWafMonitoring(uint64(l))
+	}
+	if len(m.Metric) > 0 {
+		for _, e := range m.Metric {
+			l = e.Size()
+			n += 1 + l + sovPublicWafMonitoring(uint64(l))
+		}
+	}
+	return n
+}
+
+func (m *SecurityEventsCounter) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Id != nil {
+		l = m.Id.Size()
+		n += 1 + l + sovPublicWafMonitoring(uint64(l))
+	}
+	if len(m.Metric) > 0 {
+		for _, e := range m.Metric {
+			l = e.Size()
+			n += 1 + l + sovPublicWafMonitoring(uint64(l))
+		}
+	}
+	return n
+}
+
+func (m *SecurityEventsId) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Namespace)
+	if l > 0 {
+		n += 1 + l + sovPublicWafMonitoring(uint64(l))
+	}
+	l = len(m.AppType)
+	if l > 0 {
+		n += 1 + l + sovPublicWafMonitoring(uint64(l))
+	}
+	l = len(m.VirtualHost)
+	if l > 0 {
+		n += 1 + l + sovPublicWafMonitoring(uint64(l))
+	}
+	l = len(m.Site)
+	if l > 0 {
+		n += 1 + l + sovPublicWafMonitoring(uint64(l))
+	}
+	l = len(m.Service)
+	if l > 0 {
+		n += 1 + l + sovPublicWafMonitoring(uint64(l))
+	}
+	l = len(m.Instance)
+	if l > 0 {
+		n += 1 + l + sovPublicWafMonitoring(uint64(l))
+	}
+	l = len(m.WafInstanceId)
+	if l > 0 {
+		n += 1 + l + sovPublicWafMonitoring(uint64(l))
+	}
+	l = len(m.WafMode)
+	if l > 0 {
+		n += 1 + l + sovPublicWafMonitoring(uint64(l))
+	}
+	l = len(m.BotType)
+	if l > 0 {
+		n += 1 + l + sovPublicWafMonitoring(uint64(l))
+	}
+	l = len(m.BotName)
+	if l > 0 {
+		n += 1 + l + sovPublicWafMonitoring(uint64(l))
+	}
+	return n
+}
+
+func (m *RuleHitsId) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Namespace)
+	if l > 0 {
+		n += 1 + l + sovPublicWafMonitoring(uint64(l))
+	}
+	l = len(m.AppType)
+	if l > 0 {
+		n += 1 + l + sovPublicWafMonitoring(uint64(l))
+	}
+	l = len(m.VirtualHost)
+	if l > 0 {
+		n += 1 + l + sovPublicWafMonitoring(uint64(l))
+	}
+	l = len(m.Site)
+	if l > 0 {
+		n += 1 + l + sovPublicWafMonitoring(uint64(l))
+	}
+	l = len(m.Service)
+	if l > 0 {
+		n += 1 + l + sovPublicWafMonitoring(uint64(l))
+	}
+	l = len(m.Instance)
+	if l > 0 {
+		n += 1 + l + sovPublicWafMonitoring(uint64(l))
+	}
+	l = len(m.WafInstanceId)
+	if l > 0 {
+		n += 1 + l + sovPublicWafMonitoring(uint64(l))
+	}
+	l = len(m.RuleId)
+	if l > 0 {
+		n += 1 + l + sovPublicWafMonitoring(uint64(l))
+	}
+	l = len(m.RuleSeverity)
+	if l > 0 {
+		n += 1 + l + sovPublicWafMonitoring(uint64(l))
+	}
+	l = len(m.RuleTag)
+	if l > 0 {
+		n += 1 + l + sovPublicWafMonitoring(uint64(l))
+	}
+	l = len(m.BotType)
+	if l > 0 {
+		n += 1 + l + sovPublicWafMonitoring(uint64(l))
+	}
+	l = len(m.BotName)
+	if l > 0 {
+		n += 1 + l + sovPublicWafMonitoring(uint64(l))
+	}
+	return n
+}
+
 func sovPublicWafMonitoring(x uint64) (n int) {
 	return (math_bits.Len64(x|1) + 6) / 7
 }
@@ -1383,7 +2917,7 @@ func (this *RuleHitsCountRequest) String() string {
 	}
 	repeatedStringForLabelFilter := "[]*MetricLabelFilter{"
 	for _, f := range this.LabelFilter {
-		repeatedStringForLabelFilter += strings.Replace(fmt.Sprintf("%v", f), "MetricLabelFilter", "MetricLabelFilter", 1) + ","
+		repeatedStringForLabelFilter += strings.Replace(f.String(), "MetricLabelFilter", "MetricLabelFilter", 1) + ","
 	}
 	repeatedStringForLabelFilter += "}"
 	s := strings.Join([]string{`&RuleHitsCountRequest{`,
@@ -1404,7 +2938,7 @@ func (this *RuleHitsCountResponse) String() string {
 	}
 	repeatedStringForData := "[]*RuleHitsCounter{"
 	for _, f := range this.Data {
-		repeatedStringForData += strings.Replace(fmt.Sprintf("%v", f), "RuleHitsCounter", "RuleHitsCounter", 1) + ","
+		repeatedStringForData += strings.Replace(f.String(), "RuleHitsCounter", "RuleHitsCounter", 1) + ","
 	}
 	repeatedStringForData += "}"
 	s := strings.Join([]string{`&RuleHitsCountResponse{`,
@@ -1419,7 +2953,7 @@ func (this *SecurityEventsCountRequest) String() string {
 	}
 	repeatedStringForLabelFilter := "[]*MetricLabelFilter{"
 	for _, f := range this.LabelFilter {
-		repeatedStringForLabelFilter += strings.Replace(fmt.Sprintf("%v", f), "MetricLabelFilter", "MetricLabelFilter", 1) + ","
+		repeatedStringForLabelFilter += strings.Replace(f.String(), "MetricLabelFilter", "MetricLabelFilter", 1) + ","
 	}
 	repeatedStringForLabelFilter += "}"
 	s := strings.Join([]string{`&SecurityEventsCountRequest{`,
@@ -1440,11 +2974,95 @@ func (this *SecurityEventsCountResponse) String() string {
 	}
 	repeatedStringForData := "[]*SecurityEventsCounter{"
 	for _, f := range this.Data {
-		repeatedStringForData += strings.Replace(fmt.Sprintf("%v", f), "SecurityEventsCounter", "SecurityEventsCounter", 1) + ","
+		repeatedStringForData += strings.Replace(f.String(), "SecurityEventsCounter", "SecurityEventsCounter", 1) + ","
 	}
 	repeatedStringForData += "}"
 	s := strings.Join([]string{`&SecurityEventsCountResponse{`,
 		`Data:` + repeatedStringForData + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *MetricLabelFilter) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&MetricLabelFilter{`,
+		`Label:` + fmt.Sprintf("%v", this.Label) + `,`,
+		`Op:` + fmt.Sprintf("%v", this.Op) + `,`,
+		`Value:` + fmt.Sprintf("%v", this.Value) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *RuleHitsCounter) String() string {
+	if this == nil {
+		return "nil"
+	}
+	repeatedStringForMetric := "[]*MetricValue{"
+	for _, f := range this.Metric {
+		repeatedStringForMetric += strings.Replace(fmt.Sprintf("%v", f), "MetricValue", "schema.MetricValue", 1) + ","
+	}
+	repeatedStringForMetric += "}"
+	s := strings.Join([]string{`&RuleHitsCounter{`,
+		`Id:` + strings.Replace(this.Id.String(), "RuleHitsId", "RuleHitsId", 1) + `,`,
+		`Metric:` + repeatedStringForMetric + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *SecurityEventsCounter) String() string {
+	if this == nil {
+		return "nil"
+	}
+	repeatedStringForMetric := "[]*MetricValue{"
+	for _, f := range this.Metric {
+		repeatedStringForMetric += strings.Replace(fmt.Sprintf("%v", f), "MetricValue", "schema.MetricValue", 1) + ","
+	}
+	repeatedStringForMetric += "}"
+	s := strings.Join([]string{`&SecurityEventsCounter{`,
+		`Id:` + strings.Replace(this.Id.String(), "SecurityEventsId", "SecurityEventsId", 1) + `,`,
+		`Metric:` + repeatedStringForMetric + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *SecurityEventsId) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&SecurityEventsId{`,
+		`Namespace:` + fmt.Sprintf("%v", this.Namespace) + `,`,
+		`AppType:` + fmt.Sprintf("%v", this.AppType) + `,`,
+		`VirtualHost:` + fmt.Sprintf("%v", this.VirtualHost) + `,`,
+		`Site:` + fmt.Sprintf("%v", this.Site) + `,`,
+		`Service:` + fmt.Sprintf("%v", this.Service) + `,`,
+		`Instance:` + fmt.Sprintf("%v", this.Instance) + `,`,
+		`WafInstanceId:` + fmt.Sprintf("%v", this.WafInstanceId) + `,`,
+		`WafMode:` + fmt.Sprintf("%v", this.WafMode) + `,`,
+		`BotType:` + fmt.Sprintf("%v", this.BotType) + `,`,
+		`BotName:` + fmt.Sprintf("%v", this.BotName) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *RuleHitsId) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&RuleHitsId{`,
+		`Namespace:` + fmt.Sprintf("%v", this.Namespace) + `,`,
+		`AppType:` + fmt.Sprintf("%v", this.AppType) + `,`,
+		`VirtualHost:` + fmt.Sprintf("%v", this.VirtualHost) + `,`,
+		`Site:` + fmt.Sprintf("%v", this.Site) + `,`,
+		`Service:` + fmt.Sprintf("%v", this.Service) + `,`,
+		`Instance:` + fmt.Sprintf("%v", this.Instance) + `,`,
+		`WafInstanceId:` + fmt.Sprintf("%v", this.WafInstanceId) + `,`,
+		`RuleId:` + fmt.Sprintf("%v", this.RuleId) + `,`,
+		`RuleSeverity:` + fmt.Sprintf("%v", this.RuleSeverity) + `,`,
+		`RuleTag:` + fmt.Sprintf("%v", this.RuleTag) + `,`,
+		`BotType:` + fmt.Sprintf("%v", this.BotType) + `,`,
+		`BotName:` + fmt.Sprintf("%v", this.BotName) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2238,6 +3856,1185 @@ func (m *SecurityEventsCountResponse) Unmarshal(dAtA []byte) error {
 			if err := m.Data[len(m.Data)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipPublicWafMonitoring(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthPublicWafMonitoring
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthPublicWafMonitoring
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MetricLabelFilter) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowPublicWafMonitoring
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MetricLabelFilter: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MetricLabelFilter: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Label", wireType)
+			}
+			m.Label = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicWafMonitoring
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.Label |= MetricLabel(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 2:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Op", wireType)
+			}
+			m.Op = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicWafMonitoring
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.Op |= MetricLabelOp(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Value", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicWafMonitoring
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPublicWafMonitoring
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicWafMonitoring
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Value = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipPublicWafMonitoring(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthPublicWafMonitoring
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthPublicWafMonitoring
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *RuleHitsCounter) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowPublicWafMonitoring
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: RuleHitsCounter: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: RuleHitsCounter: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Id", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicWafMonitoring
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthPublicWafMonitoring
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicWafMonitoring
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Id == nil {
+				m.Id = &RuleHitsId{}
+			}
+			if err := m.Id.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Metric", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicWafMonitoring
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthPublicWafMonitoring
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicWafMonitoring
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Metric = append(m.Metric, &schema.MetricValue{})
+			if err := m.Metric[len(m.Metric)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipPublicWafMonitoring(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthPublicWafMonitoring
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthPublicWafMonitoring
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *SecurityEventsCounter) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowPublicWafMonitoring
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: SecurityEventsCounter: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: SecurityEventsCounter: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Id", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicWafMonitoring
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthPublicWafMonitoring
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicWafMonitoring
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Id == nil {
+				m.Id = &SecurityEventsId{}
+			}
+			if err := m.Id.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Metric", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicWafMonitoring
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthPublicWafMonitoring
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicWafMonitoring
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Metric = append(m.Metric, &schema.MetricValue{})
+			if err := m.Metric[len(m.Metric)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipPublicWafMonitoring(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthPublicWafMonitoring
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthPublicWafMonitoring
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *SecurityEventsId) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowPublicWafMonitoring
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: SecurityEventsId: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: SecurityEventsId: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Namespace", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicWafMonitoring
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPublicWafMonitoring
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicWafMonitoring
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Namespace = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field AppType", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicWafMonitoring
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPublicWafMonitoring
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicWafMonitoring
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.AppType = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field VirtualHost", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicWafMonitoring
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPublicWafMonitoring
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicWafMonitoring
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.VirtualHost = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Site", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicWafMonitoring
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPublicWafMonitoring
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicWafMonitoring
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Site = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 5:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Service", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicWafMonitoring
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPublicWafMonitoring
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicWafMonitoring
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Service = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 6:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Instance", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicWafMonitoring
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPublicWafMonitoring
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicWafMonitoring
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Instance = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 7:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field WafInstanceId", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicWafMonitoring
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPublicWafMonitoring
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicWafMonitoring
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.WafInstanceId = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 8:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field WafMode", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicWafMonitoring
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPublicWafMonitoring
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicWafMonitoring
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.WafMode = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 9:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field BotType", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicWafMonitoring
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPublicWafMonitoring
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicWafMonitoring
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.BotType = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 10:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field BotName", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicWafMonitoring
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPublicWafMonitoring
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicWafMonitoring
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.BotName = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipPublicWafMonitoring(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthPublicWafMonitoring
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthPublicWafMonitoring
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *RuleHitsId) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowPublicWafMonitoring
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: RuleHitsId: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: RuleHitsId: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Namespace", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicWafMonitoring
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPublicWafMonitoring
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicWafMonitoring
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Namespace = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field AppType", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicWafMonitoring
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPublicWafMonitoring
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicWafMonitoring
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.AppType = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field VirtualHost", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicWafMonitoring
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPublicWafMonitoring
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicWafMonitoring
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.VirtualHost = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Site", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicWafMonitoring
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPublicWafMonitoring
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicWafMonitoring
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Site = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 5:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Service", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicWafMonitoring
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPublicWafMonitoring
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicWafMonitoring
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Service = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 6:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Instance", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicWafMonitoring
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPublicWafMonitoring
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicWafMonitoring
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Instance = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 7:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field WafInstanceId", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicWafMonitoring
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPublicWafMonitoring
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicWafMonitoring
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.WafInstanceId = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 8:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field RuleId", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicWafMonitoring
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPublicWafMonitoring
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicWafMonitoring
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.RuleId = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 9:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field RuleSeverity", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicWafMonitoring
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPublicWafMonitoring
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicWafMonitoring
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.RuleSeverity = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 10:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field RuleTag", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicWafMonitoring
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPublicWafMonitoring
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicWafMonitoring
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.RuleTag = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 11:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field BotType", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicWafMonitoring
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPublicWafMonitoring
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicWafMonitoring
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.BotType = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 12:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field BotName", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicWafMonitoring
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPublicWafMonitoring
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicWafMonitoring
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.BotName = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex

@@ -205,7 +205,8 @@ var DefaultAppFirewallRefTypeValidator = func() *ValidateAppFirewallRefType {
 
 	vrhAppFirewall := v.AppFirewallValidationRuleHandler
 	rulesAppFirewall := map[string]string{
-		"ves.io.schema.rules.repeated.max_items": "1",
+		"ves.io.schema.rules.message.required":   "true",
+		"ves.io.schema.rules.repeated.num_items": "1",
 	}
 	vFn, err = vrhAppFirewall(rulesAppFirewall)
 	if err != nil {
@@ -1151,6 +1152,8 @@ var DefaultBotDefenseFlowLabelAuthenticationChoiceTypeValidator = func() *Valida
 	}
 	v.FldValidators["label_choice"] = vFn
 
+	v.FldValidators["label_choice.login"] = BotDefenseTransactionResultValidator().Validate
+
 	return v
 }()
 
@@ -2067,6 +2070,526 @@ var DefaultBotDefenseFlowLabelShoppingGiftCardsChoiceTypeValidator = func() *Val
 
 func BotDefenseFlowLabelShoppingGiftCardsChoiceTypeValidator() db.Validator {
 	return DefaultBotDefenseFlowLabelShoppingGiftCardsChoiceTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *BotDefenseTransactionResult) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *BotDefenseTransactionResult) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *BotDefenseTransactionResult) DeepCopy() *BotDefenseTransactionResult {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &BotDefenseTransactionResult{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *BotDefenseTransactionResult) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *BotDefenseTransactionResult) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return BotDefenseTransactionResultValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateBotDefenseTransactionResult struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateBotDefenseTransactionResult) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*BotDefenseTransactionResult)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *BotDefenseTransactionResult got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	switch m.GetTransactionResultChoice().(type) {
+	case *BotDefenseTransactionResult_DisableTransactionResult:
+		if fv, exists := v.FldValidators["transaction_result_choice.disable_transaction_result"]; exists {
+			val := m.GetTransactionResultChoice().(*BotDefenseTransactionResult_DisableTransactionResult).DisableTransactionResult
+			vOpts := append(opts,
+				db.WithValidateField("transaction_result_choice"),
+				db.WithValidateField("disable_transaction_result"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *BotDefenseTransactionResult_TransactionResult:
+		if fv, exists := v.FldValidators["transaction_result_choice.transaction_result"]; exists {
+			val := m.GetTransactionResultChoice().(*BotDefenseTransactionResult_TransactionResult).TransactionResult
+			vOpts := append(opts,
+				db.WithValidateField("transaction_result_choice"),
+				db.WithValidateField("transaction_result"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultBotDefenseTransactionResultValidator = func() *ValidateBotDefenseTransactionResult {
+	v := &ValidateBotDefenseTransactionResult{FldValidators: map[string]db.ValidatorFunc{}}
+
+	v.FldValidators["transaction_result_choice.transaction_result"] = BotDefenseTransactionResultTypeValidator().Validate
+
+	return v
+}()
+
+func BotDefenseTransactionResultValidator() db.Validator {
+	return DefaultBotDefenseTransactionResultValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *BotDefenseTransactionResultCondition) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *BotDefenseTransactionResultCondition) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *BotDefenseTransactionResultCondition) DeepCopy() *BotDefenseTransactionResultCondition {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &BotDefenseTransactionResultCondition{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *BotDefenseTransactionResultCondition) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *BotDefenseTransactionResultCondition) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return BotDefenseTransactionResultConditionValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateBotDefenseTransactionResultCondition struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateBotDefenseTransactionResultCondition) NameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for name")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateBotDefenseTransactionResultCondition) RegexValuesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepStringItemRules(rules)
+	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Item ValidationRuleHandler for regex_values")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []string, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for regex_values")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]string)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []string, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal := fmt.Sprintf("%v", elem)
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated regex_values")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items regex_values")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateBotDefenseTransactionResultCondition) StatusValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	var conv db.EnumConvFn
+	conv = func(v interface{}) int32 {
+		i := v.(HttpStatusCode)
+		return int32(i)
+	}
+	// HttpStatusCode_name is generated in .pb.go
+	validatorFn, err := db.NewEnumValidationRuleHandler(rules, HttpStatusCode_name, conv)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for status")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateBotDefenseTransactionResultCondition) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*BotDefenseTransactionResultCondition)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *BotDefenseTransactionResultCondition got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("name"))
+		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["regex_values"]; exists {
+		vOpts := append(opts, db.WithValidateField("regex_values"))
+		if err := fv(ctx, m.GetRegexValues(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["status"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("status"))
+		if err := fv(ctx, m.GetStatus(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultBotDefenseTransactionResultConditionValidator = func() *ValidateBotDefenseTransactionResultCondition {
+	v := &ValidateBotDefenseTransactionResultCondition{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhName := v.NameValidationRuleHandler
+	rulesName := map[string]string{
+		"ves.io.schema.rules.string.http_header_field": "true",
+		"ves.io.schema.rules.string.max_bytes":         "256",
+	}
+	vFn, err = vrhName(rulesName)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for BotDefenseTransactionResultCondition.name: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["name"] = vFn
+
+	vrhRegexValues := v.RegexValuesValidationRuleHandler
+	rulesRegexValues := map[string]string{
+		"ves.io.schema.rules.repeated.items.string.max_bytes": "256",
+		"ves.io.schema.rules.repeated.items.string.not_empty": "true",
+		"ves.io.schema.rules.repeated.items.string.regex":     "true",
+		"ves.io.schema.rules.repeated.max_items":              "16",
+		"ves.io.schema.rules.repeated.unique":                 "true",
+	}
+	vFn, err = vrhRegexValues(rulesRegexValues)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for BotDefenseTransactionResultCondition.regex_values: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["regex_values"] = vFn
+
+	vrhStatus := v.StatusValidationRuleHandler
+	rulesStatus := map[string]string{
+		"ves.io.schema.rules.enum.defined_only": "true",
+		"ves.io.schema.rules.message.required":  "true",
+	}
+	vFn, err = vrhStatus(rulesStatus)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for BotDefenseTransactionResultCondition.status: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["status"] = vFn
+
+	return v
+}()
+
+func BotDefenseTransactionResultConditionValidator() db.Validator {
+	return DefaultBotDefenseTransactionResultConditionValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *BotDefenseTransactionResultType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *BotDefenseTransactionResultType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *BotDefenseTransactionResultType) DeepCopy() *BotDefenseTransactionResultType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &BotDefenseTransactionResultType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *BotDefenseTransactionResultType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *BotDefenseTransactionResultType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return BotDefenseTransactionResultTypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateBotDefenseTransactionResultType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateBotDefenseTransactionResultType) SuccessConditionsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for success_conditions")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*BotDefenseTransactionResultCondition, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := BotDefenseTransactionResultConditionValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for success_conditions")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*BotDefenseTransactionResultCondition)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*BotDefenseTransactionResultCondition, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated success_conditions")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items success_conditions")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateBotDefenseTransactionResultType) FailureConditionsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for failure_conditions")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*BotDefenseTransactionResultCondition, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := BotDefenseTransactionResultConditionValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for failure_conditions")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*BotDefenseTransactionResultCondition)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*BotDefenseTransactionResultCondition, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated failure_conditions")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items failure_conditions")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateBotDefenseTransactionResultType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*BotDefenseTransactionResultType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *BotDefenseTransactionResultType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["failure_conditions"]; exists {
+		vOpts := append(opts, db.WithValidateField("failure_conditions"))
+		if err := fv(ctx, m.GetFailureConditions(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["success_conditions"]; exists {
+		vOpts := append(opts, db.WithValidateField("success_conditions"))
+		if err := fv(ctx, m.GetSuccessConditions(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultBotDefenseTransactionResultTypeValidator = func() *ValidateBotDefenseTransactionResultType {
+	v := &ValidateBotDefenseTransactionResultType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhSuccessConditions := v.SuccessConditionsValidationRuleHandler
+	rulesSuccessConditions := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "3",
+		"ves.io.schema.rules.repeated.unique":    "true",
+	}
+	vFn, err = vrhSuccessConditions(rulesSuccessConditions)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for BotDefenseTransactionResultType.success_conditions: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["success_conditions"] = vFn
+
+	vrhFailureConditions := v.FailureConditionsValidationRuleHandler
+	rulesFailureConditions := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "3",
+		"ves.io.schema.rules.repeated.unique":    "true",
+	}
+	vFn, err = vrhFailureConditions(rulesFailureConditions)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for BotDefenseTransactionResultType.failure_conditions: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["failure_conditions"] = vFn
+
+	return v
+}()
+
+func BotDefenseTransactionResultTypeValidator() db.Validator {
+	return DefaultBotDefenseTransactionResultTypeValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -16047,402 +16570,6 @@ func VolterraSecretTypeValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
-func (m *WafRefType) ToJSON() (string, error) {
-	return codec.ToJSON(m)
-}
-
-func (m *WafRefType) ToYAML() (string, error) {
-	return codec.ToYAML(m)
-}
-
-func (m *WafRefType) DeepCopy() *WafRefType {
-	if m == nil {
-		return nil
-	}
-	ser, err := m.Marshal()
-	if err != nil {
-		return nil
-	}
-	c := &WafRefType{}
-	err = c.Unmarshal(ser)
-	if err != nil {
-		return nil
-	}
-	return c
-}
-
-func (m *WafRefType) DeepCopyProto() proto.Message {
-	if m == nil {
-		return nil
-	}
-	return m.DeepCopy()
-}
-
-func (m *WafRefType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
-	return WafRefTypeValidator().Validate(ctx, m, opts...)
-}
-
-func (m *WafRefType) GetDRefInfo() ([]db.DRefInfo, error) {
-	if m == nil {
-		return nil, nil
-	}
-
-	return m.GetWafDRefInfo()
-
-}
-
-func (m *WafRefType) GetWafDRefInfo() ([]db.DRefInfo, error) {
-	refs := m.GetWaf()
-	if len(refs) == 0 {
-		return nil, nil
-	}
-	drInfos := make([]db.DRefInfo, 0, len(refs))
-	for i, ref := range refs {
-		if ref == nil {
-			return nil, fmt.Errorf("WafRefType.waf[%d] has a nil value", i)
-		}
-		// resolve kind to type if needed at DBObject.GetDRefInfo()
-		drInfos = append(drInfos, db.DRefInfo{
-			RefdType:   "waf.Object",
-			RefdUID:    ref.Uid,
-			RefdTenant: ref.Tenant,
-			RefdNS:     ref.Namespace,
-			RefdName:   ref.Name,
-			DRField:    "waf",
-			Ref:        ref,
-		})
-	}
-	return drInfos, nil
-
-}
-
-// GetWafDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
-func (m *WafRefType) GetWafDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
-	var entries []db.Entry
-	refdType, err := d.TypeForEntryKind("", "", "waf.Object")
-	if err != nil {
-		return nil, errors.Wrap(err, "Cannot find type for kind: waf")
-	}
-	for _, ref := range m.GetWaf() {
-		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
-		if err != nil {
-			return nil, errors.Wrap(err, "Getting referred entry")
-		}
-		if refdEnt != nil {
-			entries = append(entries, refdEnt)
-		}
-	}
-
-	return entries, nil
-}
-
-type ValidateWafRefType struct {
-	FldValidators map[string]db.ValidatorFunc
-}
-
-func (v *ValidateWafRefType) WafValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	itemRules := db.GetRepMessageItemRules(rules)
-	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
-	if err != nil {
-		return nil, errors.Wrap(err, "Message ValidationRuleHandler for waf")
-	}
-	itemsValidatorFn := func(ctx context.Context, elems []*ObjectRefType, opts ...db.ValidateOpt) error {
-		for i, el := range elems {
-			if err := itemValFn(ctx, el, opts...); err != nil {
-				return errors.Wrap(err, fmt.Sprintf("element %d", i))
-			}
-			if err := ObjectRefTypeValidator().Validate(ctx, el, opts...); err != nil {
-				return errors.Wrap(err, fmt.Sprintf("element %d", i))
-			}
-		}
-		return nil
-	}
-	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for waf")
-	}
-
-	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
-		elems, ok := val.([]*ObjectRefType)
-		if !ok {
-			return fmt.Errorf("Repeated validation expected []*ObjectRefType, got %T", val)
-		}
-		l := []string{}
-		for _, elem := range elems {
-			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
-			if err != nil {
-				return errors.Wrapf(err, "Converting %v to JSON", elem)
-			}
-			l = append(l, strVal)
-		}
-		if err := repValFn(ctx, l, opts...); err != nil {
-			return errors.Wrap(err, "repeated waf")
-		}
-		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
-			return errors.Wrap(err, "items waf")
-		}
-		return nil
-	}
-
-	return validatorFn, nil
-}
-
-func (v *ValidateWafRefType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
-	m, ok := pm.(*WafRefType)
-	if !ok {
-		switch t := pm.(type) {
-		case nil:
-			return nil
-		default:
-			return fmt.Errorf("Expected type *WafRefType got type %s", t)
-		}
-	}
-	if m == nil {
-		return nil
-	}
-
-	if fv, exists := v.FldValidators["waf"]; exists {
-		vOpts := append(opts, db.WithValidateField("waf"))
-		if err := fv(ctx, m.GetWaf(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
-	return nil
-}
-
-// Well-known symbol for default validator implementation
-var DefaultWafRefTypeValidator = func() *ValidateWafRefType {
-	v := &ValidateWafRefType{FldValidators: map[string]db.ValidatorFunc{}}
-
-	var (
-		err error
-		vFn db.ValidatorFunc
-	)
-	_, _ = err, vFn
-	vFnMap := map[string]db.ValidatorFunc{}
-	_ = vFnMap
-
-	vrhWaf := v.WafValidationRuleHandler
-	rulesWaf := map[string]string{
-		"ves.io.schema.rules.repeated.max_items": "1",
-	}
-	vFn, err = vrhWaf(rulesWaf)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for WafRefType.waf: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["waf"] = vFn
-
-	return v
-}()
-
-func WafRefTypeValidator() db.Validator {
-	return DefaultWafRefTypeValidator
-}
-
-// augmented methods on protoc/std generated struct
-
-func (m *WafRulesRefType) ToJSON() (string, error) {
-	return codec.ToJSON(m)
-}
-
-func (m *WafRulesRefType) ToYAML() (string, error) {
-	return codec.ToYAML(m)
-}
-
-func (m *WafRulesRefType) DeepCopy() *WafRulesRefType {
-	if m == nil {
-		return nil
-	}
-	ser, err := m.Marshal()
-	if err != nil {
-		return nil
-	}
-	c := &WafRulesRefType{}
-	err = c.Unmarshal(ser)
-	if err != nil {
-		return nil
-	}
-	return c
-}
-
-func (m *WafRulesRefType) DeepCopyProto() proto.Message {
-	if m == nil {
-		return nil
-	}
-	return m.DeepCopy()
-}
-
-func (m *WafRulesRefType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
-	return WafRulesRefTypeValidator().Validate(ctx, m, opts...)
-}
-
-func (m *WafRulesRefType) GetDRefInfo() ([]db.DRefInfo, error) {
-	if m == nil {
-		return nil, nil
-	}
-
-	return m.GetWafRulesDRefInfo()
-
-}
-
-func (m *WafRulesRefType) GetWafRulesDRefInfo() ([]db.DRefInfo, error) {
-	refs := m.GetWafRules()
-	if len(refs) == 0 {
-		return nil, nil
-	}
-	drInfos := make([]db.DRefInfo, 0, len(refs))
-	for i, ref := range refs {
-		if ref == nil {
-			return nil, fmt.Errorf("WafRulesRefType.waf_rules[%d] has a nil value", i)
-		}
-		// resolve kind to type if needed at DBObject.GetDRefInfo()
-		drInfos = append(drInfos, db.DRefInfo{
-			RefdType:   "waf_rules.Object",
-			RefdUID:    ref.Uid,
-			RefdTenant: ref.Tenant,
-			RefdNS:     ref.Namespace,
-			RefdName:   ref.Name,
-			DRField:    "waf_rules",
-			Ref:        ref,
-		})
-	}
-	return drInfos, nil
-
-}
-
-// GetWafRulesDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
-func (m *WafRulesRefType) GetWafRulesDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
-	var entries []db.Entry
-	refdType, err := d.TypeForEntryKind("", "", "waf_rules.Object")
-	if err != nil {
-		return nil, errors.Wrap(err, "Cannot find type for kind: waf_rules")
-	}
-	for _, ref := range m.GetWafRules() {
-		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
-		if err != nil {
-			return nil, errors.Wrap(err, "Getting referred entry")
-		}
-		if refdEnt != nil {
-			entries = append(entries, refdEnt)
-		}
-	}
-
-	return entries, nil
-}
-
-type ValidateWafRulesRefType struct {
-	FldValidators map[string]db.ValidatorFunc
-}
-
-func (v *ValidateWafRulesRefType) WafRulesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	itemRules := db.GetRepMessageItemRules(rules)
-	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
-	if err != nil {
-		return nil, errors.Wrap(err, "Message ValidationRuleHandler for waf_rules")
-	}
-	itemsValidatorFn := func(ctx context.Context, elems []*ObjectRefType, opts ...db.ValidateOpt) error {
-		for i, el := range elems {
-			if err := itemValFn(ctx, el, opts...); err != nil {
-				return errors.Wrap(err, fmt.Sprintf("element %d", i))
-			}
-			if err := ObjectRefTypeValidator().Validate(ctx, el, opts...); err != nil {
-				return errors.Wrap(err, fmt.Sprintf("element %d", i))
-			}
-		}
-		return nil
-	}
-	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for waf_rules")
-	}
-
-	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
-		elems, ok := val.([]*ObjectRefType)
-		if !ok {
-			return fmt.Errorf("Repeated validation expected []*ObjectRefType, got %T", val)
-		}
-		l := []string{}
-		for _, elem := range elems {
-			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
-			if err != nil {
-				return errors.Wrapf(err, "Converting %v to JSON", elem)
-			}
-			l = append(l, strVal)
-		}
-		if err := repValFn(ctx, l, opts...); err != nil {
-			return errors.Wrap(err, "repeated waf_rules")
-		}
-		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
-			return errors.Wrap(err, "items waf_rules")
-		}
-		return nil
-	}
-
-	return validatorFn, nil
-}
-
-func (v *ValidateWafRulesRefType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
-	m, ok := pm.(*WafRulesRefType)
-	if !ok {
-		switch t := pm.(type) {
-		case nil:
-			return nil
-		default:
-			return fmt.Errorf("Expected type *WafRulesRefType got type %s", t)
-		}
-	}
-	if m == nil {
-		return nil
-	}
-
-	if fv, exists := v.FldValidators["waf_rules"]; exists {
-		vOpts := append(opts, db.WithValidateField("waf_rules"))
-		if err := fv(ctx, m.GetWafRules(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
-	return nil
-}
-
-// Well-known symbol for default validator implementation
-var DefaultWafRulesRefTypeValidator = func() *ValidateWafRulesRefType {
-	v := &ValidateWafRulesRefType{FldValidators: map[string]db.ValidatorFunc{}}
-
-	var (
-		err error
-		vFn db.ValidatorFunc
-	)
-	_, _ = err, vFn
-	vFnMap := map[string]db.ValidatorFunc{}
-	_ = vFnMap
-
-	vrhWafRules := v.WafRulesValidationRuleHandler
-	rulesWafRules := map[string]string{
-		"ves.io.schema.rules.repeated.max_items": "1",
-	}
-	vFn, err = vrhWafRules(rulesWafRules)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for WafRulesRefType.waf_rules: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["waf_rules"] = vFn
-
-	return v
-}()
-
-func WafRulesRefTypeValidator() db.Validator {
-	return DefaultWafRulesRefTypeValidator
-}
-
-// augmented methods on protoc/std generated struct
-
 func (m *WafType) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -16493,28 +16620,6 @@ func (m *WafType) GetRefTypeDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 	}
 	switch m.GetRefType().(type) {
-	case *WafType_Waf:
-		drInfos, err := m.GetWaf().GetDRefInfo()
-		if err != nil {
-			return nil, errors.Wrap(err, "GetWaf().GetDRefInfo() FAILED")
-		}
-		for i := range drInfos {
-			dri := &drInfos[i]
-			dri.DRField = "waf." + dri.DRField
-		}
-		return drInfos, err
-
-	case *WafType_WafRules:
-		drInfos, err := m.GetWafRules().GetDRefInfo()
-		if err != nil {
-			return nil, errors.Wrap(err, "GetWafRules().GetDRefInfo() FAILED")
-		}
-		for i := range drInfos {
-			dri := &drInfos[i]
-			dri.DRField = "waf_rules." + dri.DRField
-		}
-		return drInfos, err
-
 	case *WafType_AppFirewall:
 		drInfos, err := m.GetAppFirewall().GetDRefInfo()
 		if err != nil {
@@ -16525,6 +16630,14 @@ func (m *WafType) GetRefTypeDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "app_firewall." + dri.DRField
 		}
 		return drInfos, err
+
+	case *WafType_DisableWaf:
+
+		return nil, nil
+
+	case *WafType_InheritWaf:
+
+		return nil, nil
 
 	default:
 		return nil, nil
@@ -16551,34 +16664,34 @@ func (v *ValidateWafType) Validate(ctx context.Context, pm interface{}, opts ...
 	}
 
 	switch m.GetRefType().(type) {
-	case *WafType_Waf:
-		if fv, exists := v.FldValidators["ref_type.waf"]; exists {
-			val := m.GetRefType().(*WafType_Waf).Waf
-			vOpts := append(opts,
-				db.WithValidateField("ref_type"),
-				db.WithValidateField("waf"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	case *WafType_WafRules:
-		if fv, exists := v.FldValidators["ref_type.waf_rules"]; exists {
-			val := m.GetRefType().(*WafType_WafRules).WafRules
-			vOpts := append(opts,
-				db.WithValidateField("ref_type"),
-				db.WithValidateField("waf_rules"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
 	case *WafType_AppFirewall:
 		if fv, exists := v.FldValidators["ref_type.app_firewall"]; exists {
 			val := m.GetRefType().(*WafType_AppFirewall).AppFirewall
 			vOpts := append(opts,
 				db.WithValidateField("ref_type"),
 				db.WithValidateField("app_firewall"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *WafType_DisableWaf:
+		if fv, exists := v.FldValidators["ref_type.disable_waf"]; exists {
+			val := m.GetRefType().(*WafType_DisableWaf).DisableWaf
+			vOpts := append(opts,
+				db.WithValidateField("ref_type"),
+				db.WithValidateField("disable_waf"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *WafType_InheritWaf:
+		if fv, exists := v.FldValidators["ref_type.inherit_waf"]; exists {
+			val := m.GetRefType().(*WafType_InheritWaf).InheritWaf
+			vOpts := append(opts,
+				db.WithValidateField("ref_type"),
+				db.WithValidateField("inherit_waf"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
@@ -16594,8 +16707,6 @@ func (v *ValidateWafType) Validate(ctx context.Context, pm interface{}, opts ...
 var DefaultWafTypeValidator = func() *ValidateWafType {
 	v := &ValidateWafType{FldValidators: map[string]db.ValidatorFunc{}}
 
-	v.FldValidators["ref_type.waf"] = WafRefTypeValidator().Validate
-	v.FldValidators["ref_type.waf_rules"] = WafRulesRefTypeValidator().Validate
 	v.FldValidators["ref_type.app_firewall"] = AppFirewallRefTypeValidator().Validate
 
 	return v

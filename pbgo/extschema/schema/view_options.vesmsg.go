@@ -2199,6 +2199,87 @@ func LabelKeyClassListValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *LabelSelectorOperatorList) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *LabelSelectorOperatorList) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *LabelSelectorOperatorList) DeepCopy() *LabelSelectorOperatorList {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &LabelSelectorOperatorList{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *LabelSelectorOperatorList) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *LabelSelectorOperatorList) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return LabelSelectorOperatorListValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateLabelSelectorOperatorList struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateLabelSelectorOperatorList) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*LabelSelectorOperatorList)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *LabelSelectorOperatorList got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["operators"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("operators"))
+		for idx, item := range m.GetOperators() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultLabelSelectorOperatorListValidator = func() *ValidateLabelSelectorOperatorList {
+	v := &ValidateLabelSelectorOperatorList{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func LabelSelectorOperatorListValidator() db.Validator {
+	return DefaultLabelSelectorOperatorListValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *MapOptions) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }

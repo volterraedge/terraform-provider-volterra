@@ -723,6 +723,15 @@ func (v *ValidateAWSVPCIngressEgressGwReplaceType) Validate(ctx context.Context,
 
 	}
 
+	if fv, exists := v.FldValidators["performance_enhancement_mode"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("performance_enhancement_mode"))
+		if err := fv(ctx, m.GetPerformanceEnhancementMode(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["site_mesh_group_choice"]; exists {
 		val := m.GetSiteMeshGroupChoice()
 		vOpts := append(opts,
@@ -868,6 +877,8 @@ var DefaultAWSVPCIngressEgressGwReplaceTypeValidator = func() *ValidateAWSVPCIng
 	v.FldValidators["allowed_vip_port"] = ves_io_schema_views.AllowedVIPPortsValidator().Validate
 
 	v.FldValidators["allowed_vip_port_sli"] = ves_io_schema_views.AllowedVIPPortsValidator().Validate
+
+	v.FldValidators["performance_enhancement_mode"] = ves_io_schema_views.PerformanceEnhancementModeTypeValidator().Validate
 
 	return v
 }()
@@ -1266,14 +1277,6 @@ func (v *ValidateAWSVPCIngressEgressGwType) InsideStaticRouteChoiceValidationRul
 	return validatorFn, nil
 }
 
-func (v *ValidateAWSVPCIngressEgressGwType) InternetVipChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for internet_vip_choice")
-	}
-	return validatorFn, nil
-}
-
 func (v *ValidateAWSVPCIngressEgressGwType) NetworkPolicyChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -1571,42 +1574,6 @@ func (v *ValidateAWSVPCIngressEgressGwType) Validate(ctx context.Context, pm int
 
 	}
 
-	if fv, exists := v.FldValidators["internet_vip_choice"]; exists {
-		val := m.GetInternetVipChoice()
-		vOpts := append(opts,
-			db.WithValidateField("internet_vip_choice"),
-		)
-		if err := fv(ctx, val, vOpts...); err != nil {
-			return err
-		}
-	}
-
-	switch m.GetInternetVipChoice().(type) {
-	case *AWSVPCIngressEgressGwType_DisableInternetVip:
-		if fv, exists := v.FldValidators["internet_vip_choice.disable_internet_vip"]; exists {
-			val := m.GetInternetVipChoice().(*AWSVPCIngressEgressGwType_DisableInternetVip).DisableInternetVip
-			vOpts := append(opts,
-				db.WithValidateField("internet_vip_choice"),
-				db.WithValidateField("disable_internet_vip"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	case *AWSVPCIngressEgressGwType_EnableInternetVip:
-		if fv, exists := v.FldValidators["internet_vip_choice.enable_internet_vip"]; exists {
-			val := m.GetInternetVipChoice().(*AWSVPCIngressEgressGwType_EnableInternetVip).EnableInternetVip
-			vOpts := append(opts,
-				db.WithValidateField("internet_vip_choice"),
-				db.WithValidateField("enable_internet_vip"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-
-	}
-
 	if fv, exists := v.FldValidators["network_policy_choice"]; exists {
 		val := m.GetNetworkPolicyChoice()
 		vOpts := append(opts,
@@ -1686,6 +1653,15 @@ func (v *ValidateAWSVPCIngressEgressGwType) Validate(ctx context.Context, pm int
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
 			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["performance_enhancement_mode"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("performance_enhancement_mode"))
+		if err := fv(ctx, m.GetPerformanceEnhancementMode(), vOpts...); err != nil {
+			return err
 		}
 
 	}
@@ -1785,17 +1761,6 @@ var DefaultAWSVPCIngressEgressGwTypeValidator = func() *ValidateAWSVPCIngressEgr
 	}
 	v.FldValidators["inside_static_route_choice"] = vFn
 
-	vrhInternetVipChoice := v.InternetVipChoiceValidationRuleHandler
-	rulesInternetVipChoice := map[string]string{
-		"ves.io.schema.rules.message.required_oneof": "true",
-	}
-	vFn, err = vrhInternetVipChoice(rulesInternetVipChoice)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for AWSVPCIngressEgressGwType.internet_vip_choice: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["internet_vip_choice"] = vFn
-
 	vrhNetworkPolicyChoice := v.NetworkPolicyChoiceValidationRuleHandler
 	rulesNetworkPolicyChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -1872,6 +1837,8 @@ var DefaultAWSVPCIngressEgressGwTypeValidator = func() *ValidateAWSVPCIngressEgr
 
 	v.FldValidators["allowed_vip_port_sli"] = ves_io_schema_views.AllowedVIPPortsValidator().Validate
 
+	v.FldValidators["performance_enhancement_mode"] = ves_io_schema_views.PerformanceEnhancementModeTypeValidator().Validate
+
 	return v
 }()
 
@@ -1943,6 +1910,15 @@ func (v *ValidateAWSVPCIngressGwReplaceType) Validate(ctx context.Context, pm in
 
 	}
 
+	if fv, exists := v.FldValidators["performance_enhancement_mode"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("performance_enhancement_mode"))
+		if err := fv(ctx, m.GetPerformanceEnhancementMode(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	return nil
 }
 
@@ -1951,6 +1927,8 @@ var DefaultAWSVPCIngressGwReplaceTypeValidator = func() *ValidateAWSVPCIngressGw
 	v := &ValidateAWSVPCIngressGwReplaceType{FldValidators: map[string]db.ValidatorFunc{}}
 
 	v.FldValidators["allowed_vip_port"] = ves_io_schema_views.AllowedVIPPortsValidator().Validate
+
+	v.FldValidators["performance_enhancement_mode"] = ves_io_schema_views.PerformanceEnhancementModeTypeValidator().Validate
 
 	return v
 }()
@@ -2098,6 +2076,15 @@ func (v *ValidateAWSVPCIngressGwType) Validate(ctx context.Context, pm interface
 
 	}
 
+	if fv, exists := v.FldValidators["performance_enhancement_mode"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("performance_enhancement_mode"))
+		if err := fv(ctx, m.GetPerformanceEnhancementMode(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	return nil
 }
 
@@ -2139,6 +2126,8 @@ var DefaultAWSVPCIngressGwTypeValidator = func() *ValidateAWSVPCIngressGwType {
 	v.FldValidators["aws_certified_hw"] = vFn
 
 	v.FldValidators["allowed_vip_port"] = ves_io_schema_views.AllowedVIPPortsValidator().Validate
+
+	v.FldValidators["performance_enhancement_mode"] = ves_io_schema_views.PerformanceEnhancementModeTypeValidator().Validate
 
 	return v
 }()
@@ -4394,6 +4383,14 @@ func (v *ValidateCreateSpecType) DirectConnectChoiceValidationRuleHandler(rules 
 	return validatorFn, nil
 }
 
+func (v *ValidateCreateSpecType) InternetVipChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for internet_vip_choice")
+	}
+	return validatorFn, nil
+}
+
 func (v *ValidateCreateSpecType) LogsReceiverChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -4684,6 +4681,42 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["internet_vip_choice"]; exists {
+		val := m.GetInternetVipChoice()
+		vOpts := append(opts,
+			db.WithValidateField("internet_vip_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetInternetVipChoice().(type) {
+	case *CreateSpecType_DisableInternetVip:
+		if fv, exists := v.FldValidators["internet_vip_choice.disable_internet_vip"]; exists {
+			val := m.GetInternetVipChoice().(*CreateSpecType_DisableInternetVip).DisableInternetVip
+			vOpts := append(opts,
+				db.WithValidateField("internet_vip_choice"),
+				db.WithValidateField("disable_internet_vip"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CreateSpecType_EnableInternetVip:
+		if fv, exists := v.FldValidators["internet_vip_choice.enable_internet_vip"]; exists {
+			val := m.GetInternetVipChoice().(*CreateSpecType_EnableInternetVip).EnableInternetVip
+			vOpts := append(opts,
+				db.WithValidateField("internet_vip_choice"),
+				db.WithValidateField("enable_internet_vip"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["logs_receiver_choice"]; exists {
 		val := m.GetLogsReceiverChoice()
 		vOpts := append(opts,
@@ -4914,6 +4947,17 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["direct_connect_choice"] = vFn
+
+	vrhInternetVipChoice := v.InternetVipChoiceValidationRuleHandler
+	rulesInternetVipChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhInternetVipChoice(rulesInternetVipChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateSpecType.internet_vip_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["internet_vip_choice"] = vFn
 
 	vrhLogsReceiverChoice := v.LogsReceiverChoiceValidationRuleHandler
 	rulesLogsReceiverChoice := map[string]string{
@@ -5350,6 +5394,14 @@ func (v *ValidateGetSpecType) DirectConnectChoiceValidationRuleHandler(rules map
 	return validatorFn, nil
 }
 
+func (v *ValidateGetSpecType) InternetVipChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for internet_vip_choice")
+	}
+	return validatorFn, nil
+}
+
 func (v *ValidateGetSpecType) LogsReceiverChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -5737,6 +5789,42 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 
 	}
 
+	if fv, exists := v.FldValidators["internet_vip_choice"]; exists {
+		val := m.GetInternetVipChoice()
+		vOpts := append(opts,
+			db.WithValidateField("internet_vip_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetInternetVipChoice().(type) {
+	case *GetSpecType_DisableInternetVip:
+		if fv, exists := v.FldValidators["internet_vip_choice.disable_internet_vip"]; exists {
+			val := m.GetInternetVipChoice().(*GetSpecType_DisableInternetVip).DisableInternetVip
+			vOpts := append(opts,
+				db.WithValidateField("internet_vip_choice"),
+				db.WithValidateField("disable_internet_vip"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GetSpecType_EnableInternetVip:
+		if fv, exists := v.FldValidators["internet_vip_choice.enable_internet_vip"]; exists {
+			val := m.GetInternetVipChoice().(*GetSpecType_EnableInternetVip).EnableInternetVip
+			vOpts := append(opts,
+				db.WithValidateField("internet_vip_choice"),
+				db.WithValidateField("enable_internet_vip"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["logs_receiver_choice"]; exists {
 		val := m.GetLogsReceiverChoice()
 		vOpts := append(opts,
@@ -5993,6 +6081,17 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["direct_connect_choice"] = vFn
+
+	vrhInternetVipChoice := v.InternetVipChoiceValidationRuleHandler
+	rulesInternetVipChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhInternetVipChoice(rulesInternetVipChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GetSpecType.internet_vip_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["internet_vip_choice"] = vFn
 
 	vrhLogsReceiverChoice := v.LogsReceiverChoiceValidationRuleHandler
 	rulesLogsReceiverChoice := map[string]string{
@@ -6573,6 +6672,14 @@ func (v *ValidateGlobalSpecType) DirectConnectChoiceValidationRuleHandler(rules 
 	return validatorFn, nil
 }
 
+func (v *ValidateGlobalSpecType) InternetVipChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for internet_vip_choice")
+	}
+	return validatorFn, nil
+}
+
 func (v *ValidateGlobalSpecType) LogsReceiverChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -6960,6 +7067,42 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["internet_vip_choice"]; exists {
+		val := m.GetInternetVipChoice()
+		vOpts := append(opts,
+			db.WithValidateField("internet_vip_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetInternetVipChoice().(type) {
+	case *GlobalSpecType_DisableInternetVip:
+		if fv, exists := v.FldValidators["internet_vip_choice.disable_internet_vip"]; exists {
+			val := m.GetInternetVipChoice().(*GlobalSpecType_DisableInternetVip).DisableInternetVip
+			vOpts := append(opts,
+				db.WithValidateField("internet_vip_choice"),
+				db.WithValidateField("disable_internet_vip"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GlobalSpecType_EnableInternetVip:
+		if fv, exists := v.FldValidators["internet_vip_choice.enable_internet_vip"]; exists {
+			val := m.GetInternetVipChoice().(*GlobalSpecType_EnableInternetVip).EnableInternetVip
+			vOpts := append(opts,
+				db.WithValidateField("internet_vip_choice"),
+				db.WithValidateField("enable_internet_vip"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["logs_receiver_choice"]; exists {
 		val := m.GetLogsReceiverChoice()
 		vOpts := append(opts,
@@ -7252,6 +7395,17 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["direct_connect_choice"] = vFn
+
+	vrhInternetVipChoice := v.InternetVipChoiceValidationRuleHandler
+	rulesInternetVipChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhInternetVipChoice(rulesInternetVipChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.internet_vip_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["internet_vip_choice"] = vFn
 
 	vrhLogsReceiverChoice := v.LogsReceiverChoiceValidationRuleHandler
 	rulesLogsReceiverChoice := map[string]string{
@@ -7651,6 +7805,14 @@ func (v *ValidateReplaceSpecType) DirectConnectChoiceValidationRuleHandler(rules
 	return validatorFn, nil
 }
 
+func (v *ValidateReplaceSpecType) InternetVipChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for internet_vip_choice")
+	}
+	return validatorFn, nil
+}
+
 func (v *ValidateReplaceSpecType) LogsReceiverChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -7796,6 +7958,42 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 			vOpts := append(opts,
 				db.WithValidateField("direct_connect_choice"),
 				db.WithValidateField("direct_connect_enabled"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["internet_vip_choice"]; exists {
+		val := m.GetInternetVipChoice()
+		vOpts := append(opts,
+			db.WithValidateField("internet_vip_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetInternetVipChoice().(type) {
+	case *ReplaceSpecType_DisableInternetVip:
+		if fv, exists := v.FldValidators["internet_vip_choice.disable_internet_vip"]; exists {
+			val := m.GetInternetVipChoice().(*ReplaceSpecType_DisableInternetVip).DisableInternetVip
+			vOpts := append(opts,
+				db.WithValidateField("internet_vip_choice"),
+				db.WithValidateField("disable_internet_vip"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ReplaceSpecType_EnableInternetVip:
+		if fv, exists := v.FldValidators["internet_vip_choice.enable_internet_vip"]; exists {
+			val := m.GetInternetVipChoice().(*ReplaceSpecType_EnableInternetVip).EnableInternetVip
+			vOpts := append(opts,
+				db.WithValidateField("internet_vip_choice"),
+				db.WithValidateField("enable_internet_vip"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
@@ -7979,6 +8177,17 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["direct_connect_choice"] = vFn
+
+	vrhInternetVipChoice := v.InternetVipChoiceValidationRuleHandler
+	rulesInternetVipChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhInternetVipChoice(rulesInternetVipChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ReplaceSpecType.internet_vip_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["internet_vip_choice"] = vFn
 
 	vrhLogsReceiverChoice := v.LogsReceiverChoiceValidationRuleHandler
 	rulesLogsReceiverChoice := map[string]string{
@@ -8344,6 +8553,7 @@ func (m *AWSVPCIngressEgressGwReplaceType) fromAWSVPCIngressEgressGwType(f *AWSV
 	m.GetInsideStaticRouteChoiceFromAWSVPCIngressEgressGwType(f)
 	m.GetNetworkPolicyChoiceFromAWSVPCIngressEgressGwType(f)
 	m.GetOutsideStaticRouteChoiceFromAWSVPCIngressEgressGwType(f)
+	m.PerformanceEnhancementMode = f.GetPerformanceEnhancementMode()
 	m.GetSiteMeshGroupChoiceFromAWSVPCIngressEgressGwType(f)
 }
 
@@ -8370,6 +8580,7 @@ func (m *AWSVPCIngressEgressGwReplaceType) toAWSVPCIngressEgressGwType(f *AWSVPC
 	m1.SetInsideStaticRouteChoiceToAWSVPCIngressEgressGwType(f)
 	m1.SetNetworkPolicyChoiceToAWSVPCIngressEgressGwType(f)
 	m1.SetOutsideStaticRouteChoiceToAWSVPCIngressEgressGwType(f)
+	f.PerformanceEnhancementMode = m1.PerformanceEnhancementMode
 	m1.SetSiteMeshGroupChoiceToAWSVPCIngressEgressGwType(f)
 }
 
@@ -8386,6 +8597,7 @@ func (m *AWSVPCIngressGwReplaceType) fromAWSVPCIngressGwType(f *AWSVPCIngressGwT
 		return
 	}
 	m.AllowedVipPort = f.GetAllowedVipPort()
+	m.PerformanceEnhancementMode = f.GetPerformanceEnhancementMode()
 }
 
 func (m *AWSVPCIngressGwReplaceType) FromAWSVPCIngressGwType(f *AWSVPCIngressGwType) {
@@ -8404,6 +8616,7 @@ func (m *AWSVPCIngressGwReplaceType) toAWSVPCIngressGwType(f *AWSVPCIngressGwTyp
 	_ = m1
 
 	f.AllowedVipPort = m1.AllowedVipPort
+	f.PerformanceEnhancementMode = m1.PerformanceEnhancementMode
 }
 
 func (m *AWSVPCIngressGwReplaceType) ToAWSVPCIngressGwType(f *AWSVPCIngressGwType) {
@@ -8781,6 +8994,41 @@ func (r *CreateSpecType) GetDirectConnectChoiceFromGlobalSpecType(o *GlobalSpecT
 }
 
 // create setters in CreateSpecType from GlobalSpecType for oneof fields
+func (r *CreateSpecType) SetInternetVipChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.InternetVipChoice.(type) {
+	case nil:
+		o.InternetVipChoice = nil
+
+	case *CreateSpecType_DisableInternetVip:
+		o.InternetVipChoice = &GlobalSpecType_DisableInternetVip{DisableInternetVip: of.DisableInternetVip}
+
+	case *CreateSpecType_EnableInternetVip:
+		o.InternetVipChoice = &GlobalSpecType_EnableInternetVip{EnableInternetVip: of.EnableInternetVip}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *CreateSpecType) GetInternetVipChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.InternetVipChoice.(type) {
+	case nil:
+		r.InternetVipChoice = nil
+
+	case *GlobalSpecType_DisableInternetVip:
+		r.InternetVipChoice = &CreateSpecType_DisableInternetVip{DisableInternetVip: of.DisableInternetVip}
+
+	case *GlobalSpecType_EnableInternetVip:
+		r.InternetVipChoice = &CreateSpecType_EnableInternetVip{EnableInternetVip: of.EnableInternetVip}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+// create setters in CreateSpecType from GlobalSpecType for oneof fields
 func (r *CreateSpecType) SetLogsReceiverChoiceToGlobalSpecType(o *GlobalSpecType) error {
 	switch of := r.LogsReceiverChoice.(type) {
 	case nil:
@@ -8909,6 +9157,7 @@ func (m *CreateSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool
 	m.GetDirectConnectChoiceFromGlobalSpecType(f)
 	m.DiskSize = f.GetDiskSize()
 	m.InstanceType = f.GetInstanceType()
+	m.GetInternetVipChoiceFromGlobalSpecType(f)
 	m.GetLogsReceiverChoiceFromGlobalSpecType(f)
 	m.OfflineSurvivabilityMode = f.GetOfflineSurvivabilityMode()
 	m.Os = f.GetOs()
@@ -8943,6 +9192,7 @@ func (m *CreateSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) 
 	m1.SetDirectConnectChoiceToGlobalSpecType(f)
 	f.DiskSize = m1.DiskSize
 	f.InstanceType = m1.InstanceType
+	m1.SetInternetVipChoiceToGlobalSpecType(f)
 	m1.SetLogsReceiverChoiceToGlobalSpecType(f)
 	f.OfflineSurvivabilityMode = m1.OfflineSurvivabilityMode
 	f.Os = m1.Os
@@ -9060,6 +9310,41 @@ func (r *GetSpecType) GetDirectConnectChoiceFromGlobalSpecType(o *GlobalSpecType
 
 	case *GlobalSpecType_DirectConnectEnabled:
 		r.DirectConnectChoice = &GetSpecType_DirectConnectEnabled{DirectConnectEnabled: of.DirectConnectEnabled}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+// create setters in GetSpecType from GlobalSpecType for oneof fields
+func (r *GetSpecType) SetInternetVipChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.InternetVipChoice.(type) {
+	case nil:
+		o.InternetVipChoice = nil
+
+	case *GetSpecType_DisableInternetVip:
+		o.InternetVipChoice = &GlobalSpecType_DisableInternetVip{DisableInternetVip: of.DisableInternetVip}
+
+	case *GetSpecType_EnableInternetVip:
+		o.InternetVipChoice = &GlobalSpecType_EnableInternetVip{EnableInternetVip: of.EnableInternetVip}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *GetSpecType) GetInternetVipChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.InternetVipChoice.(type) {
+	case nil:
+		r.InternetVipChoice = nil
+
+	case *GlobalSpecType_DisableInternetVip:
+		r.InternetVipChoice = &GetSpecType_DisableInternetVip{DisableInternetVip: of.DisableInternetVip}
+
+	case *GlobalSpecType_EnableInternetVip:
+		r.InternetVipChoice = &GetSpecType_EnableInternetVip{EnableInternetVip: of.EnableInternetVip}
 
 	default:
 		return fmt.Errorf("Unknown oneof field %T", of)
@@ -9198,6 +9483,7 @@ func (m *GetSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	m.DirectConnectInfo = f.GetDirectConnectInfo()
 	m.DiskSize = f.GetDiskSize()
 	m.InstanceType = f.GetInstanceType()
+	m.GetInternetVipChoiceFromGlobalSpecType(f)
 	m.GetLogsReceiverChoiceFromGlobalSpecType(f)
 	m.OfflineSurvivabilityMode = f.GetOfflineSurvivabilityMode()
 	m.OperatingSystemVersion = f.GetOperatingSystemVersion()
@@ -9237,6 +9523,7 @@ func (m *GetSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	f.DirectConnectInfo = m1.DirectConnectInfo
 	f.DiskSize = m1.DiskSize
 	f.InstanceType = m1.InstanceType
+	m1.SetInternetVipChoiceToGlobalSpecType(f)
 	m1.SetLogsReceiverChoiceToGlobalSpecType(f)
 	f.OfflineSurvivabilityMode = m1.OfflineSurvivabilityMode
 	f.OperatingSystemVersion = m1.OperatingSystemVersion
@@ -9322,6 +9609,41 @@ func (r *ReplaceSpecType) GetDirectConnectChoiceFromGlobalSpecType(o *GlobalSpec
 
 	case *GlobalSpecType_DirectConnectEnabled:
 		r.DirectConnectChoice = &ReplaceSpecType_DirectConnectEnabled{DirectConnectEnabled: of.DirectConnectEnabled}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+// create setters in ReplaceSpecType from GlobalSpecType for oneof fields
+func (r *ReplaceSpecType) SetInternetVipChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.InternetVipChoice.(type) {
+	case nil:
+		o.InternetVipChoice = nil
+
+	case *ReplaceSpecType_DisableInternetVip:
+		o.InternetVipChoice = &GlobalSpecType_DisableInternetVip{DisableInternetVip: of.DisableInternetVip}
+
+	case *ReplaceSpecType_EnableInternetVip:
+		o.InternetVipChoice = &GlobalSpecType_EnableInternetVip{EnableInternetVip: of.EnableInternetVip}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *ReplaceSpecType) GetInternetVipChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.InternetVipChoice.(type) {
+	case nil:
+		r.InternetVipChoice = nil
+
+	case *GlobalSpecType_DisableInternetVip:
+		r.InternetVipChoice = &ReplaceSpecType_DisableInternetVip{DisableInternetVip: of.DisableInternetVip}
+
+	case *GlobalSpecType_EnableInternetVip:
+		r.InternetVipChoice = &ReplaceSpecType_EnableInternetVip{EnableInternetVip: of.EnableInternetVip}
 
 	default:
 		return fmt.Errorf("Unknown oneof field %T", of)
@@ -9481,6 +9803,7 @@ func (m *ReplaceSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy boo
 	m.GetBlockedServicesChoiceFromGlobalSpecType(f)
 	m.Coordinates = f.GetCoordinates()
 	m.GetDirectConnectChoiceFromGlobalSpecType(f)
+	m.GetInternetVipChoiceFromGlobalSpecType(f)
 	m.GetLogsReceiverChoiceFromGlobalSpecType(f)
 	m.OfflineSurvivabilityMode = f.GetOfflineSurvivabilityMode()
 	m.GetSiteTypeFromGlobalSpecType(f)
@@ -9506,6 +9829,7 @@ func (m *ReplaceSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool)
 	m1.SetBlockedServicesChoiceToGlobalSpecType(f)
 	f.Coordinates = m1.Coordinates
 	m1.SetDirectConnectChoiceToGlobalSpecType(f)
+	m1.SetInternetVipChoiceToGlobalSpecType(f)
 	m1.SetLogsReceiverChoiceToGlobalSpecType(f)
 	f.OfflineSurvivabilityMode = m1.OfflineSurvivabilityMode
 	m1.SetSiteTypeToGlobalSpecType(f)

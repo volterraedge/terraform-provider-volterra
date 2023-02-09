@@ -259,8 +259,76 @@ func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 	}
 
-	return m.GetRuleListDRefInfo()
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetDnsZonesDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetDnsZonesDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
 
+	if fdrInfos, err := m.GetRuleListDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetRuleListDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	return drInfos, nil
+
+}
+
+func (m *GetSpecType) GetDnsZonesDRefInfo() ([]db.DRefInfo, error) {
+	vrefs := m.GetDnsZones()
+	if len(vrefs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(vrefs))
+	for i, vref := range vrefs {
+		if vref == nil {
+			return nil, fmt.Errorf("GetSpecType.dns_zones[%d] has a nil value", i)
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("dns_zone.Object")
+		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "dns_zone.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "dns_zones",
+			Ref:        vdRef,
+		})
+	}
+	return drInfos, nil
+
+}
+
+// GetDnsZonesDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *GetSpecType) GetDnsZonesDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+	refdType, err := d.TypeForEntryKind("", "", "dns_zone.Object")
+	if err != nil {
+		return nil, errors.Wrap(err, "Cannot find type for kind: dns_zone")
+	}
+	for i, vref := range m.GetDnsZones() {
+		if vref == nil {
+			return nil, fmt.Errorf("GetSpecType.dns_zones[%d] has a nil value", i)
+		}
+		ref := &ves_io_schema.ObjectRefType{
+			Kind:      "dns_zone.Object",
+			Tenant:    vref.Tenant,
+			Namespace: vref.Namespace,
+			Name:      vref.Name,
+		}
+		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+		if err != nil {
+			return nil, errors.Wrap(err, "Getting referred entry")
+		}
+		if refdEnt != nil {
+			entries = append(entries, refdEnt)
+		}
+	}
+
+	return entries, nil
 }
 
 // GetDRefInfo for the field's type
@@ -336,6 +404,18 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 		return nil
 	}
 
+	if fv, exists := v.FldValidators["dns_zones"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("dns_zones"))
+		for idx, item := range m.GetDnsZones() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["record_type"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("record_type"))
@@ -402,6 +482,8 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 
 	v.FldValidators["response_cache"] = ResponseCacheValidator().Validate
 
+	v.FldValidators["dns_zones"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
+
 	return v
 }()
 
@@ -451,8 +533,76 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 	}
 
-	return m.GetRuleListDRefInfo()
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetDnsZonesDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetDnsZonesDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
 
+	if fdrInfos, err := m.GetRuleListDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetRuleListDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	return drInfos, nil
+
+}
+
+func (m *GlobalSpecType) GetDnsZonesDRefInfo() ([]db.DRefInfo, error) {
+	vrefs := m.GetDnsZones()
+	if len(vrefs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(vrefs))
+	for i, vref := range vrefs {
+		if vref == nil {
+			return nil, fmt.Errorf("GlobalSpecType.dns_zones[%d] has a nil value", i)
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("dns_zone.Object")
+		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "dns_zone.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "dns_zones",
+			Ref:        vdRef,
+		})
+	}
+	return drInfos, nil
+
+}
+
+// GetDnsZonesDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *GlobalSpecType) GetDnsZonesDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+	refdType, err := d.TypeForEntryKind("", "", "dns_zone.Object")
+	if err != nil {
+		return nil, errors.Wrap(err, "Cannot find type for kind: dns_zone")
+	}
+	for i, vref := range m.GetDnsZones() {
+		if vref == nil {
+			return nil, fmt.Errorf("GlobalSpecType.dns_zones[%d] has a nil value", i)
+		}
+		ref := &ves_io_schema.ObjectRefType{
+			Kind:      "dns_zone.Object",
+			Tenant:    vref.Tenant,
+			Namespace: vref.Namespace,
+			Name:      vref.Name,
+		}
+		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+		if err != nil {
+			return nil, errors.Wrap(err, "Getting referred entry")
+		}
+		if refdEnt != nil {
+			entries = append(entries, refdEnt)
+		}
+	}
+
+	return entries, nil
 }
 
 // GetDRefInfo for the field's type
@@ -528,6 +678,18 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 		return nil
 	}
 
+	if fv, exists := v.FldValidators["dns_zones"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("dns_zones"))
+		for idx, item := range m.GetDnsZones() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["record_type"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("record_type"))
@@ -593,6 +755,8 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v.FldValidators["rule_list"] = vFn
 
 	v.FldValidators["response_cache"] = ResponseCacheValidator().Validate
+
+	v.FldValidators["dns_zones"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	return v
 }()
@@ -1136,7 +1300,7 @@ var DefaultLoadBalancingRuleListValidator = func() *ValidateLoadBalancingRuleLis
 	vrhRules := v.RulesValidationRuleHandler
 	rulesRules := map[string]string{
 		"ves.io.schema.rules.message.required":   "true",
-		"ves.io.schema.rules.repeated.max_items": "32",
+		"ves.io.schema.rules.repeated.max_items": "64",
 		"ves.io.schema.rules.repeated.min_items": "1",
 		"ves.io.schema.rules.repeated.unique":    "true",
 	}
@@ -1701,6 +1865,7 @@ func (m *GetSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	if f == nil {
 		return
 	}
+	m.DnsZones = f.GetDnsZones()
 	m.RecordType = f.GetRecordType()
 	m.ResponseCache = f.GetResponseCache()
 	m.RuleList = f.GetRuleList()
@@ -1721,6 +1886,7 @@ func (m *GetSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	}
 	_ = m1
 
+	f.DnsZones = m1.DnsZones
 	f.RecordType = m1.RecordType
 	f.ResponseCache = m1.ResponseCache
 	f.RuleList = m1.RuleList

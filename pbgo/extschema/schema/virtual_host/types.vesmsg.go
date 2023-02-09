@@ -29,6 +29,237 @@ var (
 
 // augmented methods on protoc/std generated struct
 
+func (m *ApiSpec) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *ApiSpec) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *ApiSpec) DeepCopy() *ApiSpec {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &ApiSpec{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *ApiSpec) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *ApiSpec) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return ApiSpecValidator().Validate(ctx, m, opts...)
+}
+
+func (m *ApiSpec) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetApiDefinitionDRefInfo()
+
+}
+
+func (m *ApiSpec) GetApiDefinitionDRefInfo() ([]db.DRefInfo, error) {
+
+	vref := m.GetApiDefinition()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("api_definition.Object")
+	dri := db.DRefInfo{
+		RefdType:   "api_definition.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "api_definition",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+
+}
+
+// GetApiDefinitionDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *ApiSpec) GetApiDefinitionDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+	refdType, err := d.TypeForEntryKind("", "", "api_definition.Object")
+	if err != nil {
+		return nil, errors.Wrap(err, "Cannot find type for kind: api_definition")
+	}
+
+	vref := m.GetApiDefinition()
+	if vref == nil {
+		return nil, nil
+	}
+	ref := &ves_io_schema.ObjectRefType{
+		Kind:      "api_definition.Object",
+		Tenant:    vref.Tenant,
+		Namespace: vref.Namespace,
+		Name:      vref.Name,
+	}
+	refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+	if err != nil {
+		return nil, errors.Wrap(err, "Getting referred entry")
+	}
+	if refdEnt != nil {
+		entries = append(entries, refdEnt)
+	}
+
+	return entries, nil
+}
+
+type ValidateApiSpec struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateApiSpec) OpenApiValidationChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for open_api_validation_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateApiSpec) ApiDefinitionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "MessageValidationRuleHandler for api_definition")
+	}
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		if err := ves_io_schema_views.ObjectRefTypeValidator().Validate(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateApiSpec) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*ApiSpec)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *ApiSpec got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["api_definition"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("api_definition"))
+		if err := fv(ctx, m.GetApiDefinition(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["open_api_validation_choice"]; exists {
+		val := m.GetOpenApiValidationChoice()
+		vOpts := append(opts,
+			db.WithValidateField("open_api_validation_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetOpenApiValidationChoice().(type) {
+	case *ApiSpec_DisableOpenApiValidation:
+		if fv, exists := v.FldValidators["open_api_validation_choice.disable_open_api_validation"]; exists {
+			val := m.GetOpenApiValidationChoice().(*ApiSpec_DisableOpenApiValidation).DisableOpenApiValidation
+			vOpts := append(opts,
+				db.WithValidateField("open_api_validation_choice"),
+				db.WithValidateField("disable_open_api_validation"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ApiSpec_EnableOpenApiValidation:
+		if fv, exists := v.FldValidators["open_api_validation_choice.enable_open_api_validation"]; exists {
+			val := m.GetOpenApiValidationChoice().(*ApiSpec_EnableOpenApiValidation).EnableOpenApiValidation
+			vOpts := append(opts,
+				db.WithValidateField("open_api_validation_choice"),
+				db.WithValidateField("enable_open_api_validation"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultApiSpecValidator = func() *ValidateApiSpec {
+	v := &ValidateApiSpec{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhOpenApiValidationChoice := v.OpenApiValidationChoiceValidationRuleHandler
+	rulesOpenApiValidationChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhOpenApiValidationChoice(rulesOpenApiValidationChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ApiSpec.open_api_validation_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["open_api_validation_choice"] = vFn
+
+	vrhApiDefinition := v.ApiDefinitionValidationRuleHandler
+	rulesApiDefinition := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhApiDefinition(rulesApiDefinition)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ApiSpec.api_definition: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["api_definition"] = vFn
+
+	return v
+}()
+
+func ApiSpecValidator() db.Validator {
+	return DefaultApiSpecValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *AuthenticationDetails) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -484,6 +715,15 @@ func (v *ValidateAutoCertInfoType) Validate(ctx context.Context, pm interface{},
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["state_start_time"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("state_start_time"))
+		if err := fv(ctx, m.GetStateStartTime(), vOpts...); err != nil {
+			return err
 		}
 
 	}
@@ -1203,6 +1443,12 @@ func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
+	if fdrInfos, err := m.GetApiSpecDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetApiSpecDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
 	if fdrInfos, err := m.GetAuthenticationChoiceDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetAuthenticationChoiceDRefInfo() FAILED")
 	} else {
@@ -1298,6 +1544,24 @@ func (m *CreateSpecType) GetAdvertisePoliciesDBEntries(ctx context.Context, d db
 	}
 
 	return entries, nil
+}
+
+// GetDRefInfo for the field's type
+func (m *CreateSpecType) GetApiSpecDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetApiSpec() == nil {
+		return nil, nil
+	}
+
+	drInfos, err := m.GetApiSpec().GetDRefInfo()
+	if err != nil {
+		return nil, errors.Wrap(err, "GetApiSpec().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "api_spec." + dri.DRField
+	}
+	return drInfos, err
+
 }
 
 // GetDRefInfo for the field's type
@@ -2166,6 +2430,15 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["api_spec"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("api_spec"))
+		if err := fv(ctx, m.GetApiSpec(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	switch m.GetAuthenticationChoice().(type) {
 	case *CreateSpecType_NoAuthentication:
 		if fv, exists := v.FldValidators["authentication_choice.no_authentication"]; exists {
@@ -2545,6 +2818,15 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["slow_ddos_mitigation"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("slow_ddos_mitigation"))
+		if err := fv(ctx, m.GetSlowDdosMitigation(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	switch m.GetStrictSniHostHeaderCheckChoice().(type) {
 	case *CreateSpecType_EnableStrictSniHostHeaderCheck:
 		if fv, exists := v.FldValidators["strict_sni_host_header_check_choice.enable_strict_sni_host_header_check"]; exists {
@@ -2847,6 +3129,10 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	v.FldValidators["header_transformation_type"] = ves_io_schema.HeaderTransformationTypeValidator().Validate
 
 	v.FldValidators["csrf_policy"] = ves_io_schema.CsrfPolicyValidator().Validate
+
+	v.FldValidators["slow_ddos_mitigation"] = SlowDDoSMitigationValidator().Validate
+
+	v.FldValidators["api_spec"] = ApiSpecValidator().Validate
 
 	v.FldValidators["dns_proxy_configuration"] = DNSProxyConfigurationValidator().Validate
 
@@ -3575,6 +3861,12 @@ func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
+	if fdrInfos, err := m.GetApiSpecDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetApiSpecDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
 	if fdrInfos, err := m.GetAuthenticationChoiceDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetAuthenticationChoiceDRefInfo() FAILED")
 	} else {
@@ -3670,6 +3962,24 @@ func (m *GetSpecType) GetAdvertisePoliciesDBEntries(ctx context.Context, d db.In
 	}
 
 	return entries, nil
+}
+
+// GetDRefInfo for the field's type
+func (m *GetSpecType) GetApiSpecDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetApiSpec() == nil {
+		return nil, nil
+	}
+
+	drInfos, err := m.GetApiSpec().GetDRefInfo()
+	if err != nil {
+		return nil, errors.Wrap(err, "GetApiSpec().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "api_spec." + dri.DRField
+	}
+	return drInfos, err
+
 }
 
 // GetDRefInfo for the field's type
@@ -4522,6 +4832,15 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 
 	}
 
+	if fv, exists := v.FldValidators["api_spec"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("api_spec"))
+		if err := fv(ctx, m.GetApiSpec(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	switch m.GetAuthenticationChoice().(type) {
 	case *GetSpecType_NoAuthentication:
 		if fv, exists := v.FldValidators["authentication_choice.no_authentication"]; exists {
@@ -4966,6 +5285,15 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 
 	}
 
+	if fv, exists := v.FldValidators["slow_ddos_mitigation"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("slow_ddos_mitigation"))
+		if err := fv(ctx, m.GetSlowDdosMitigation(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["state"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("state"))
@@ -5278,6 +5606,10 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 
 	v.FldValidators["csrf_policy"] = ves_io_schema.CsrfPolicyValidator().Validate
 
+	v.FldValidators["slow_ddos_mitigation"] = SlowDDoSMitigationValidator().Validate
+
+	v.FldValidators["api_spec"] = ApiSpecValidator().Validate
+
 	v.FldValidators["dns_info"] = ves_io_schema_virtual_host_dns_info.DnsInfoValidator().Validate
 
 	v.FldValidators["dns_proxy_configuration"] = DNSProxyConfigurationValidator().Validate
@@ -5372,6 +5704,12 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	var drInfos []db.DRefInfo
 	if fdrInfos, err := m.GetAdvertisePoliciesDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetAdvertisePoliciesDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	if fdrInfos, err := m.GetApiSpecDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetApiSpecDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
@@ -5525,6 +5863,24 @@ func (m *GlobalSpecType) GetAdvertisePoliciesDBEntries(ctx context.Context, d db
 	}
 
 	return entries, nil
+}
+
+// GetDRefInfo for the field's type
+func (m *GlobalSpecType) GetApiSpecDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetApiSpec() == nil {
+		return nil, nil
+	}
+
+	drInfos, err := m.GetApiSpec().GetDRefInfo()
+	if err != nil {
+		return nil, errors.Wrap(err, "GetApiSpec().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "api_spec." + dri.DRField
+	}
+	return drInfos, err
+
 }
 
 // GetDRefInfo for the field's type
@@ -7092,6 +7448,15 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["api_spec"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("api_spec"))
+		if err := fv(ctx, m.GetApiSpec(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	switch m.GetAuthenticationChoice().(type) {
 	case *GlobalSpecType_NoAuthentication:
 		if fv, exists := v.FldValidators["authentication_choice.no_authentication"]; exists {
@@ -7696,6 +8061,15 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["slow_ddos_mitigation"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("slow_ddos_mitigation"))
+		if err := fv(ctx, m.GetSlowDdosMitigation(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["state"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("state"))
@@ -8166,6 +8540,10 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v.FldValidators["header_transformation_type"] = ves_io_schema.HeaderTransformationTypeValidator().Validate
 
 	v.FldValidators["csrf_policy"] = ves_io_schema.CsrfPolicyValidator().Validate
+
+	v.FldValidators["slow_ddos_mitigation"] = SlowDDoSMitigationValidator().Validate
+
+	v.FldValidators["api_spec"] = ApiSpecValidator().Validate
 
 	v.FldValidators["dns_info"] = ves_io_schema_virtual_host_dns_info.DnsInfoValidator().Validate
 
@@ -8820,6 +9198,12 @@ func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
+	if fdrInfos, err := m.GetApiSpecDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetApiSpecDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
 	if fdrInfos, err := m.GetAuthenticationChoiceDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetAuthenticationChoiceDRefInfo() FAILED")
 	} else {
@@ -8915,6 +9299,24 @@ func (m *ReplaceSpecType) GetAdvertisePoliciesDBEntries(ctx context.Context, d d
 	}
 
 	return entries, nil
+}
+
+// GetDRefInfo for the field's type
+func (m *ReplaceSpecType) GetApiSpecDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetApiSpec() == nil {
+		return nil, nil
+	}
+
+	drInfos, err := m.GetApiSpec().GetDRefInfo()
+	if err != nil {
+		return nil, errors.Wrap(err, "GetApiSpec().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "api_spec." + dri.DRField
+	}
+	return drInfos, err
+
 }
 
 // GetDRefInfo for the field's type
@@ -9783,6 +10185,15 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 
 	}
 
+	if fv, exists := v.FldValidators["api_spec"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("api_spec"))
+		if err := fv(ctx, m.GetApiSpec(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	switch m.GetAuthenticationChoice().(type) {
 	case *ReplaceSpecType_NoAuthentication:
 		if fv, exists := v.FldValidators["authentication_choice.no_authentication"]; exists {
@@ -10162,6 +10573,15 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 
 	}
 
+	if fv, exists := v.FldValidators["slow_ddos_mitigation"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("slow_ddos_mitigation"))
+		if err := fv(ctx, m.GetSlowDdosMitigation(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	switch m.GetStrictSniHostHeaderCheckChoice().(type) {
 	case *ReplaceSpecType_EnableStrictSniHostHeaderCheck:
 		if fv, exists := v.FldValidators["strict_sni_host_header_check_choice.enable_strict_sni_host_header_check"]; exists {
@@ -10464,6 +10884,10 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	v.FldValidators["header_transformation_type"] = ves_io_schema.HeaderTransformationTypeValidator().Validate
 
 	v.FldValidators["csrf_policy"] = ves_io_schema.CsrfPolicyValidator().Validate
+
+	v.FldValidators["slow_ddos_mitigation"] = SlowDDoSMitigationValidator().Validate
+
+	v.FldValidators["api_spec"] = ApiSpecValidator().Validate
 
 	v.FldValidators["dns_proxy_configuration"] = DNSProxyConfigurationValidator().Validate
 
@@ -10874,6 +11298,145 @@ var DefaultShapeBotDefenseConfigTypeValidator = func() *ValidateShapeBotDefenseC
 
 func ShapeBotDefenseConfigTypeValidator() db.Validator {
 	return DefaultShapeBotDefenseConfigTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *SlowDDoSMitigation) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *SlowDDoSMitigation) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *SlowDDoSMitigation) DeepCopy() *SlowDDoSMitigation {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &SlowDDoSMitigation{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *SlowDDoSMitigation) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *SlowDDoSMitigation) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return SlowDDoSMitigationValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateSlowDDoSMitigation struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateSlowDDoSMitigation) RequestTimeoutValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for request_timeout")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateSlowDDoSMitigation) RequestHeadersTimeoutValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for request_headers_timeout")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateSlowDDoSMitigation) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*SlowDDoSMitigation)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *SlowDDoSMitigation got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["request_headers_timeout"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("request_headers_timeout"))
+		if err := fv(ctx, m.GetRequestHeadersTimeout(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["request_timeout"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("request_timeout"))
+		if err := fv(ctx, m.GetRequestTimeout(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultSlowDDoSMitigationValidator = func() *ValidateSlowDDoSMitigation {
+	v := &ValidateSlowDDoSMitigation{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhRequestTimeout := v.RequestTimeoutValidationRuleHandler
+	rulesRequestTimeout := map[string]string{
+		"ves.io.schema.rules.uint32.gte": "2000",
+		"ves.io.schema.rules.uint32.lte": "300000",
+	}
+	vFn, err = vrhRequestTimeout(rulesRequestTimeout)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for SlowDDoSMitigation.request_timeout: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["request_timeout"] = vFn
+
+	vrhRequestHeadersTimeout := v.RequestHeadersTimeoutValidationRuleHandler
+	rulesRequestHeadersTimeout := map[string]string{
+		"ves.io.schema.rules.uint32.gte": "2000",
+		"ves.io.schema.rules.uint32.lte": "30000",
+	}
+	vFn, err = vrhRequestHeadersTimeout(rulesRequestHeadersTimeout)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for SlowDDoSMitigation.request_headers_timeout: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["request_headers_timeout"] = vFn
+
+	return v
+}()
+
+func SlowDDoSMitigationValidator() db.Validator {
+	return DefaultSlowDDoSMitigationValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -11669,6 +12232,7 @@ func (m *CreateSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool
 	}
 	m.AddLocation = f.GetAddLocation()
 	m.AdvertisePolicies = f.GetAdvertisePolicies()
+	m.ApiSpec = f.GetApiSpec()
 	m.GetAuthenticationChoiceFromGlobalSpecType(f)
 	m.BufferPolicy = f.GetBufferPolicy()
 	m.GetChallengeTypeFromGlobalSpecType(f)
@@ -11698,6 +12262,7 @@ func (m *CreateSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool
 	m.RetryPolicy = f.GetRetryPolicy()
 	m.Routes = f.GetRoutes()
 	m.GetServerHeaderChoiceFromGlobalSpecType(f)
+	m.SlowDdosMitigation = f.GetSlowDdosMitigation()
 	m.GetStrictSniHostHeaderCheckChoiceFromGlobalSpecType(f)
 	m.TemporaryUserBlocking = f.GetTemporaryUserBlocking()
 	m.TlsParameters = f.GetTlsParameters()
@@ -11722,6 +12287,7 @@ func (m *CreateSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) 
 
 	f.AddLocation = m1.AddLocation
 	f.AdvertisePolicies = m1.AdvertisePolicies
+	f.ApiSpec = m1.ApiSpec
 	m1.SetAuthenticationChoiceToGlobalSpecType(f)
 	f.BufferPolicy = m1.BufferPolicy
 	m1.SetChallengeTypeToGlobalSpecType(f)
@@ -11751,6 +12317,7 @@ func (m *CreateSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) 
 	f.RetryPolicy = m1.RetryPolicy
 	f.Routes = m1.Routes
 	m1.SetServerHeaderChoiceToGlobalSpecType(f)
+	f.SlowDdosMitigation = m1.SlowDdosMitigation
 	m1.SetStrictSniHostHeaderCheckChoiceToGlobalSpecType(f)
 	f.TemporaryUserBlocking = m1.TemporaryUserBlocking
 	f.TlsParameters = m1.TlsParameters
@@ -12035,6 +12602,7 @@ func (m *GetSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	}
 	m.AddLocation = f.GetAddLocation()
 	m.AdvertisePolicies = f.GetAdvertisePolicies()
+	m.ApiSpec = f.GetApiSpec()
 	m.GetAuthenticationChoiceFromGlobalSpecType(f)
 	m.AutoCertInfo = f.GetAutoCertInfo()
 	m.BufferPolicy = f.GetBufferPolicy()
@@ -12069,6 +12637,7 @@ func (m *GetSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	m.RetryPolicy = f.GetRetryPolicy()
 	m.Routes = f.GetRoutes()
 	m.GetServerHeaderChoiceFromGlobalSpecType(f)
+	m.SlowDdosMitigation = f.GetSlowDdosMitigation()
 	m.State = f.GetState()
 	m.GetStrictSniHostHeaderCheckChoiceFromGlobalSpecType(f)
 	m.TemporaryUserBlocking = f.GetTemporaryUserBlocking()
@@ -12095,6 +12664,7 @@ func (m *GetSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 
 	f.AddLocation = m1.AddLocation
 	f.AdvertisePolicies = m1.AdvertisePolicies
+	f.ApiSpec = m1.ApiSpec
 	m1.SetAuthenticationChoiceToGlobalSpecType(f)
 	f.AutoCertInfo = m1.AutoCertInfo
 	f.BufferPolicy = m1.BufferPolicy
@@ -12129,6 +12699,7 @@ func (m *GetSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	f.RetryPolicy = m1.RetryPolicy
 	f.Routes = m1.Routes
 	m1.SetServerHeaderChoiceToGlobalSpecType(f)
+	f.SlowDdosMitigation = m1.SlowDdosMitigation
 	f.State = m1.State
 	m1.SetStrictSniHostHeaderCheckChoiceToGlobalSpecType(f)
 	f.TemporaryUserBlocking = m1.TemporaryUserBlocking
@@ -12380,6 +12951,7 @@ func (m *ReplaceSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy boo
 	}
 	m.AddLocation = f.GetAddLocation()
 	m.AdvertisePolicies = f.GetAdvertisePolicies()
+	m.ApiSpec = f.GetApiSpec()
 	m.GetAuthenticationChoiceFromGlobalSpecType(f)
 	m.BufferPolicy = f.GetBufferPolicy()
 	m.GetChallengeTypeFromGlobalSpecType(f)
@@ -12409,6 +12981,7 @@ func (m *ReplaceSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy boo
 	m.RetryPolicy = f.GetRetryPolicy()
 	m.Routes = f.GetRoutes()
 	m.GetServerHeaderChoiceFromGlobalSpecType(f)
+	m.SlowDdosMitigation = f.GetSlowDdosMitigation()
 	m.GetStrictSniHostHeaderCheckChoiceFromGlobalSpecType(f)
 	m.TemporaryUserBlocking = f.GetTemporaryUserBlocking()
 	m.TlsParameters = f.GetTlsParameters()
@@ -12433,6 +13006,7 @@ func (m *ReplaceSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool)
 
 	f.AddLocation = m1.AddLocation
 	f.AdvertisePolicies = m1.AdvertisePolicies
+	f.ApiSpec = m1.ApiSpec
 	m1.SetAuthenticationChoiceToGlobalSpecType(f)
 	f.BufferPolicy = m1.BufferPolicy
 	m1.SetChallengeTypeToGlobalSpecType(f)
@@ -12462,6 +13036,7 @@ func (m *ReplaceSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool)
 	f.RetryPolicy = m1.RetryPolicy
 	f.Routes = m1.Routes
 	m1.SetServerHeaderChoiceToGlobalSpecType(f)
+	f.SlowDdosMitigation = m1.SlowDdosMitigation
 	m1.SetStrictSniHostHeaderCheckChoiceToGlobalSpecType(f)
 	f.TemporaryUserBlocking = m1.TemporaryUserBlocking
 	f.TlsParameters = m1.TlsParameters

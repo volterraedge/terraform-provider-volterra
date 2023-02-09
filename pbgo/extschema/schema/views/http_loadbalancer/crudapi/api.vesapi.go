@@ -2576,7 +2576,7 @@ var APISwaggerJSON string = `{
     "definitions": {
         "app_firewallAppFirewallViolationType": {
             "type": "string",
-            "description": "List of all supported Violation Types\n\nVIOL_NONE\nVIOL_FILETYPE\nVIOL_METHOD\nVIOL_MANDATORY_HEADER\nVIOL_HTTP_RESPONSE_STATUS\nVIOL_REQUEST_MAX_LENGTH\nVIOL_FILE_UPLOAD\nVIOL_FILE_UPLOAD_IN_BODY\nVIOL_XML_MALFORMED\nVIOL_JSON_MALFORMED\nVIOL_ASM_COOKIE_MODIFIED\nVIOL_HTTP_PROTOCOL_MULTIPLE_HOST_HEADERS\nVIOL_HTTP_PROTOCOL_BAD_HOST_HEADER_VALUE\nVIOL_HTTP_PROTOCOL_UNPARSABLE_REQUEST_CONTENT\nVIOL_HTTP_PROTOCOL_NULL_IN_REQUEST\nVIOL_HTTP_PROTOCOL_BAD_HTTP_VERSION\nVIOL_HTTP_PROTOCOL_CRLF_CHARACTERS_BEFORE_REQUEST_START\nVIOL_HTTP_PROTOCOL_NO_HOST_HEADER_IN_HTTP_1_1_REQUEST\nVIOL_HTTP_PROTOCOL_BAD_MULTIPART_PARAMETERS_PARSING\nVIOL_HTTP_PROTOCOL_SEVERAL_CONTENT_LENGTH_HEADERS\nVIOL_HTTP_PROTOCOL_CONTENT_LENGTH_SHOULD_BE_A_POSITIVE_NUMBER\nVIOL_EVASION_DIRECTORY_TRAVERSALS\nVIOL_MALFORMED_REQUEST\nVIOL_EVASION_MULTIPLE_DECODING\nVIOL_DATA_GUARD\nVIOL_EVASION_APACHE_WHITESPACE\nVIOL_COOKIE_MODIFIED\nVIOL_EVASION_IIS_UNICODE_CODEPOINTS\nVIOL_EVASION_IIS_BACKSLASHES\nVIOL_EVASION_PERCENT_U_DECODING\nVIOL_EVASION_BARE_BYTE_DECODING\nVIOL_EVASION_BAD_UNESCAPE\nVIOL_HTTP_PROTOCOL_BAD_MULTIPART_FORMDATA_REQUEST_PARSING\nVIOL_HTTP_PROTOCOL_BODY_IN_GET_OR_HEAD_REQUEST\nVIOL_HTTP_PROTOCOL_HIGH_ASCII_CHARACTERS_IN_HEADERS\nVIOL_ENCODING\nVIOL_COOKIE_MALFORMED",
+            "description": "List of all supported Violation Types\n\nVIOL_NONE\nVIOL_FILETYPE\nVIOL_METHOD\nVIOL_MANDATORY_HEADER\nVIOL_HTTP_RESPONSE_STATUS\nVIOL_REQUEST_MAX_LENGTH\nVIOL_FILE_UPLOAD\nVIOL_FILE_UPLOAD_IN_BODY\nVIOL_XML_MALFORMED\nVIOL_JSON_MALFORMED\nVIOL_ASM_COOKIE_MODIFIED\nVIOL_HTTP_PROTOCOL_MULTIPLE_HOST_HEADERS\nVIOL_HTTP_PROTOCOL_BAD_HOST_HEADER_VALUE\nVIOL_HTTP_PROTOCOL_UNPARSABLE_REQUEST_CONTENT\nVIOL_HTTP_PROTOCOL_NULL_IN_REQUEST\nVIOL_HTTP_PROTOCOL_BAD_HTTP_VERSION\nVIOL_HTTP_PROTOCOL_CRLF_CHARACTERS_BEFORE_REQUEST_START\nVIOL_HTTP_PROTOCOL_NO_HOST_HEADER_IN_HTTP_1_1_REQUEST\nVIOL_HTTP_PROTOCOL_BAD_MULTIPART_PARAMETERS_PARSING\nVIOL_HTTP_PROTOCOL_SEVERAL_CONTENT_LENGTH_HEADERS\nVIOL_HTTP_PROTOCOL_CONTENT_LENGTH_SHOULD_BE_A_POSITIVE_NUMBER\nVIOL_EVASION_DIRECTORY_TRAVERSALS\nVIOL_MALFORMED_REQUEST\nVIOL_EVASION_MULTIPLE_DECODING\nVIOL_DATA_GUARD\nVIOL_EVASION_APACHE_WHITESPACE\nVIOL_COOKIE_MODIFIED\nVIOL_EVASION_IIS_UNICODE_CODEPOINTS\nVIOL_EVASION_IIS_BACKSLASHES\nVIOL_EVASION_PERCENT_U_DECODING\nVIOL_EVASION_BARE_BYTE_DECODING\nVIOL_EVASION_BAD_UNESCAPE\nVIOL_HTTP_PROTOCOL_BAD_MULTIPART_FORMDATA_REQUEST_PARSING\nVIOL_HTTP_PROTOCOL_BODY_IN_GET_OR_HEAD_REQUEST\nVIOL_HTTP_PROTOCOL_HIGH_ASCII_CHARACTERS_IN_HEADERS\nVIOL_ENCODING\nVIOL_COOKIE_MALFORMED\nVIOL_GRAPHQL_FORMAT\nVIOL_GRAPHQL_MALFORMED\nVIOL_GRAPHQL_INTROSPECTION_QUERY",
             "title": "App Firewall Violation Type",
             "enum": [
                 "VIOL_NONE",
@@ -2615,7 +2615,10 @@ var APISwaggerJSON string = `{
                 "VIOL_HTTP_PROTOCOL_BODY_IN_GET_OR_HEAD_REQUEST",
                 "VIOL_HTTP_PROTOCOL_HIGH_ASCII_CHARACTERS_IN_HEADERS",
                 "VIOL_ENCODING",
-                "VIOL_COOKIE_MALFORMED"
+                "VIOL_COOKIE_MALFORMED",
+                "VIOL_GRAPHQL_FORMAT",
+                "VIOL_GRAPHQL_MALFORMED",
+                "VIOL_GRAPHQL_INTROSPECTION_QUERY"
             ],
             "default": "VIOL_NONE",
             "x-displayname": "App Firewall Violation Type",
@@ -2623,7 +2626,7 @@ var APISwaggerJSON string = `{
         },
         "app_firewallAttackType": {
             "type": "string",
-            "description": "List of all Attack Types\n\nATTACK_TYPE_NONE\nATTACK_TYPE_NON_BROWSER_CLIENT\nATTACK_TYPE_OTHER_APPLICATION_ATTACKS\nATTACK_TYPE_TROJAN_BACKDOOR_SPYWARE\nATTACK_TYPE_DETECTION_EVASION\nATTACK_TYPE_VULNERABILITY_SCAN\nATTACK_TYPE_ABUSE_OF_FUNCTIONALITY\nATTACK_TYPE_AUTHENTICATION_AUTHORIZATION_ATTACKS\nATTACK_TYPE_BUFFER_OVERFLOW\nATTACK_TYPE_PREDICTABLE_RESOURCE_LOCATION\nATTACK_TYPE_INFORMATION_LEAKAGE\nATTACK_TYPE_DIRECTORY_INDEXING\nATTACK_TYPE_PATH_TRAVERSAL\nATTACK_TYPE_XPATH_INJECTION\nATTACK_TYPE_LDAP_INJECTION\nATTACK_TYPE_SERVER_SIDE_CODE_INJECTION\nATTACK_TYPE_COMMAND_EXECUTION\nATTACK_TYPE_SQL_INJECTION\nATTACK_TYPE_CROSS_SITE_SCRIPTING\nATTACK_TYPE_DENIAL_OF_SERVICE\nATTACK_TYPE_HTTP_PARSER_ATTACK\nATTACK_TYPE_SESSION_HIJACKING\nATTACK_TYPE_HTTP_RESPONSE_SPLITTING\nATTACK_TYPE_FORCEFUL_BROWSING\nATTACK_TYPE_REMOTE_FILE_INCLUDE\nATTACK_TYPE_MALICIOUS_FILE_UPLOAD",
+            "description": "List of all Attack Types\n\nATTACK_TYPE_NONE\nATTACK_TYPE_NON_BROWSER_CLIENT\nATTACK_TYPE_OTHER_APPLICATION_ATTACKS\nATTACK_TYPE_TROJAN_BACKDOOR_SPYWARE\nATTACK_TYPE_DETECTION_EVASION\nATTACK_TYPE_VULNERABILITY_SCAN\nATTACK_TYPE_ABUSE_OF_FUNCTIONALITY\nATTACK_TYPE_AUTHENTICATION_AUTHORIZATION_ATTACKS\nATTACK_TYPE_BUFFER_OVERFLOW\nATTACK_TYPE_PREDICTABLE_RESOURCE_LOCATION\nATTACK_TYPE_INFORMATION_LEAKAGE\nATTACK_TYPE_DIRECTORY_INDEXING\nATTACK_TYPE_PATH_TRAVERSAL\nATTACK_TYPE_XPATH_INJECTION\nATTACK_TYPE_LDAP_INJECTION\nATTACK_TYPE_SERVER_SIDE_CODE_INJECTION\nATTACK_TYPE_COMMAND_EXECUTION\nATTACK_TYPE_SQL_INJECTION\nATTACK_TYPE_CROSS_SITE_SCRIPTING\nATTACK_TYPE_DENIAL_OF_SERVICE\nATTACK_TYPE_HTTP_PARSER_ATTACK\nATTACK_TYPE_SESSION_HIJACKING\nATTACK_TYPE_HTTP_RESPONSE_SPLITTING\nATTACK_TYPE_FORCEFUL_BROWSING\nATTACK_TYPE_REMOTE_FILE_INCLUDE\nATTACK_TYPE_MALICIOUS_FILE_UPLOAD\nATTACK_TYPE_GRAPHQL_PARSER_ATTACK",
             "title": "AttackType",
             "enum": [
                 "ATTACK_TYPE_NONE",
@@ -2651,7 +2654,8 @@ var APISwaggerJSON string = `{
                 "ATTACK_TYPE_HTTP_RESPONSE_SPLITTING",
                 "ATTACK_TYPE_FORCEFUL_BROWSING",
                 "ATTACK_TYPE_REMOTE_FILE_INCLUDE",
-                "ATTACK_TYPE_MALICIOUS_FILE_UPLOAD"
+                "ATTACK_TYPE_MALICIOUS_FILE_UPLOAD",
+                "ATTACK_TYPE_GRAPHQL_PARSER_ATTACK"
             ],
             "default": "ATTACK_TYPE_NONE",
             "x-displayname": "Attack Types",
@@ -3320,6 +3324,33 @@ var APISwaggerJSON string = `{
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.repeated.max_items": "20"
                     }
+                }
+            }
+        },
+        "http_loadbalancerAPISpecificationSettings": {
+            "type": "object",
+            "description": "x-displayName: \"API Specification and Validation\"\nSettings for api specification (api definition, OpenAPI validation, etc.)",
+            "title": "APISpecificationSettings",
+            "properties": {
+                "api_definition": {
+                    "description": "x-displayName: \"API Definition\"\nx-required\nSpecify API definition which includes application API paths and methods derived from swagger files.",
+                    "title": "Use API Definition",
+                    "$ref": "#/definitions/schemaviewsObjectRefType"
+                },
+                "validation_all_spec_endpoints": {
+                    "description": "x-displayName: \"All Endpoints\"\nValidate all api-endpoints listed in the OpenAPI specification file (a.k.a. swagger).\n Any other end-points not listed will act according to \"Fall Through Mode\"",
+                    "title": "All endpoints",
+                    "$ref": "#/definitions/http_loadbalancerOpenApiValidationAllSpecEndpointsSettings"
+                },
+                "validation_custom_list": {
+                    "description": "x-displayName: \"Custom List\"\nDefine API groups, base paths, or API endpoints and their OpenAPI validation modes.\n Any other end-points not listed will act according to \"Fall Through Mode\"",
+                    "title": "Custom list",
+                    "$ref": "#/definitions/http_loadbalancerValidateApiBySpecRule"
+                },
+                "validation_disabled": {
+                    "description": "x-displayName: \"Disabled\"\nDon't run OpenAPI validation",
+                    "title": "Disabled",
+                    "$ref": "#/definitions/schemaEmpty"
                 }
             }
         },
@@ -4144,6 +4175,129 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "http_loadbalancerOpenApiFallThroughMode": {
+            "type": "object",
+            "description": "x-displayName: \"Fall Through Mode\"\nx-required\nDetermine what to do with unprotected endpoints (not in the OpenAPI specification file (a.k.a. swagger) or doesn't have a specific rule in custom rules)",
+            "title": "Fall Through Mode",
+            "properties": {
+                "fall_through_mode_allow": {
+                    "description": "x-displayName: \"Allow\"\nAllow the request",
+                    "title": "Allow",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "fall_through_mode_block": {
+                    "description": "x-displayName: \"Block\"\nBlock any request and trigger an API security event",
+                    "title": "Block",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "fall_through_mode_report": {
+                    "description": "x-displayName: \"Report\"\nAllow the request but trigger an API security event",
+                    "title": "Report",
+                    "$ref": "#/definitions/schemaEmpty"
+                }
+            }
+        },
+        "http_loadbalancerOpenApiValidationAllSpecEndpointsSettings": {
+            "type": "object",
+            "description": "x-displayName: \"All Endpoints\"\nSettings for all endpoints validation",
+            "title": "OpenAPI Validation All Endpoints Settings",
+            "properties": {
+                "fall_through_mode": {
+                    "description": "x-displayName: \"Fall Through Mode\"\nx-required\nDetermine what to do with unprotected endpoints (not in the OpenAPI specification file (a.k.a. swagger) or doesn't have a specific rule in custom rules)",
+                    "title": "Fall Through Mode",
+                    "$ref": "#/definitions/http_loadbalancerOpenApiFallThroughMode"
+                },
+                "validation_mode": {
+                    "description": "x-displayName: \"Validation Mode\"\nx-required\nValidation mode of OpenAPI specification.\n When a validation mismatch occurs on a request to one of the endpoints listed on the OpenAPI specification file (a.k.a. swagger)",
+                    "title": "Validation Mode",
+                    "$ref": "#/definitions/http_loadbalancerOpenApiValidationMode"
+                }
+            }
+        },
+        "http_loadbalancerOpenApiValidationMode": {
+            "type": "object",
+            "description": "x-displayName: \"Validation Mode\"\nx-required\nValidation mode of OpenAPI specification.\n When a validation mismatch occurs on a request to one of the endpoints listed on the OpenAPI specification file (a.k.a. swagger)",
+            "title": "Validation Mode",
+            "properties": {
+                "skip_validation": {
+                    "description": "x-displayName: \"Skip\"\nSkip OpenAPI validation processing for this event",
+                    "title": "Skip",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "validation_mode_active": {
+                    "description": "x-displayName: \"Validate\"\nEnforce OpenAPI validation processing for this event",
+                    "title": "Validate",
+                    "$ref": "#/definitions/http_loadbalancerOpenApiValidationModeActive"
+                }
+            }
+        },
+        "http_loadbalancerOpenApiValidationModeActive": {
+            "type": "object",
+            "description": "x-displayName: \"Open API Validation Mode Active\"\nValidation Mode properties",
+            "title": "Open API Validation Mode Active",
+            "properties": {
+                "enforcement_block": {
+                    "description": "x-displayName: \"Block\"\nBlock the request, trigger an API security event",
+                    "title": "Block",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "enforcement_report": {
+                    "description": "x-displayName: \"Report\"\nAllow the request, trigger an API security event",
+                    "title": "Report",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "request_validation_properties": {
+                    "type": "array",
+                    "description": "x-displayName: \"Request Validation Properties\"\nx-required\nList of properties of the request to validate according to the OpenAPI specification file (a.k.a. swagger)",
+                    "title": "Request Validation Properties",
+                    "items": {
+                        "$ref": "#/definitions/schemaOpenApiValidationProperties"
+                    }
+                }
+            }
+        },
+        "http_loadbalancerOpenApiValidationRule": {
+            "type": "object",
+            "description": "x-displayName: \"OpenAPI Validation Rule\"\nOpenAPI Validation Rule for a specific endpoint, base-path, or API group",
+            "title": "OpenAPI Validation Rule",
+            "properties": {
+                "any_domain": {
+                    "description": "x-required\nx-displayName: \"Any Domain\"\nThe rule will apply for all domains.",
+                    "title": "any domain",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "api_endpoint_path": {
+                    "type": "string",
+                    "description": "x-displayName: \"API Endpoint\"\nx-example: \"/api/v1/login\"\nThe API endpoint which this validation applies to",
+                    "title": "API Endpoint"
+                },
+                "api_group": {
+                    "type": "string",
+                    "description": "x-displayName: \"API Group\"\nx-example: \"oas-all-operations\"\nThe API group which this validation applies to",
+                    "title": "api_group"
+                },
+                "base_path": {
+                    "type": "string",
+                    "description": "x-displayName: \"Base Path\"\nx-example: \"/api/v1\"\nThe base path which this validation applies to",
+                    "title": "base path"
+                },
+                "metadata": {
+                    "description": "x-displayName: \"Metadata\"\nx-required\nCommon attributes for the rule including name and description.",
+                    "title": "metadata",
+                    "$ref": "#/definitions/schemaMessageMetaType"
+                },
+                "specific_domain": {
+                    "type": "string",
+                    "description": "x-required\nx-displayName: \"Specific Domain\"\nThe rule will apply for a specific domain.",
+                    "title": "domain"
+                },
+                "validation_mode": {
+                    "description": "x-displayName: \"Validation Mode\"\nx-required\nValidation mode of OpenAPI specification.\n When a validation mismatch occurs on a request to one of the endpoints listed on the OpenAPI specification file (a.k.a. swagger)",
+                    "title": "Validation Mode",
+                    "$ref": "#/definitions/http_loadbalancerOpenApiValidationMode"
+                }
+            }
+        },
         "http_loadbalancerProxyTypeHttp": {
             "type": "object",
             "description": "Choice for selecting HTTP proxy",
@@ -4471,12 +4625,12 @@ var APISwaggerJSON string = `{
             "x-ves-oneof-field-retry_policy_choice": "[\"default_retry_policy\",\"retry_policy\"]",
             "x-ves-oneof-field-rewrite_choice": "[\"disable_prefix_rewrite\",\"prefix_rewrite\"]",
             "x-ves-oneof-field-spdy_choice": "[\"disable_spdy\",\"enable_spdy\"]",
-            "x-ves-oneof-field-waf_choice": "[\"app_firewall\",\"inherited_waf\"]",
+            "x-ves-oneof-field-waf_choice": "[\"app_firewall\",\"disable_waf\",\"inherited_waf\"]",
             "x-ves-oneof-field-websocket_choice": "[\"disable_web_socket_config\",\"web_socket_config\"]",
             "x-ves-proto-message": "ves.io.schema.views.http_loadbalancer.RouteSimpleAdvancedOptions",
             "properties": {
                 "app_firewall": {
-                    "description": "Exclusive with [inherited_waf]\n Reference to App Firewall configuration object",
+                    "description": "Exclusive with [disable_waf inherited_waf]\n Reference to App Firewall configuration object",
                     "title": "app_firewall",
                     "$ref": "#/definitions/schemaviewsObjectRefType",
                     "x-displayname": "App Firewall"
@@ -4542,6 +4696,12 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/schemaEmpty",
                     "x-displayname": "Disable SPDY"
                 },
+                "disable_waf": {
+                    "description": "Exclusive with [app_firewall inherited_waf]\n App Firewall configuration that is configured in the Load Balancer will not be enforced on this route",
+                    "title": "disable_app_firewall",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Disable App Firewall"
+                },
                 "disable_web_socket_config": {
                     "description": "Exclusive with [web_socket_config]\n Websocket upgrade is disabled",
                     "title": "Disable Websocket",
@@ -4577,7 +4737,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Inherit Bot Defense Javascript Injection"
                 },
                 "inherited_waf": {
-                    "description": "Exclusive with [app_firewall]\n App Firewall configuration is taken from Load Balancer.\n Hence no custom configuration is applied on the route",
+                    "description": "Exclusive with [app_firewall disable_waf]\n App Firewall configuration is taken from Load Balancer.\n Hence no custom configuration is applied on the route",
                     "title": "Inherited WAF",
                     "$ref": "#/definitions/schemaEmpty",
                     "x-displayname": "Inherit App Firewall"
@@ -4890,7 +5050,7 @@ var APISwaggerJSON string = `{
         "http_loadbalancerServerUrlRule": {
             "type": "object",
             "title": "ServerUrlRule",
-            "x-displayname": "ServerUrlRule",
+            "x-displayname": "Server URL",
             "x-ves-oneof-field-domain_choice": "[\"any_domain\",\"specific_domain\"]",
             "x-ves-oneof-field-rate_limiter_choice": "[\"inline_rate_limiter\",\"ref_rate_limiter\"]",
             "x-ves-proto-message": "ves.io.schema.views.http_loadbalancer.ServerUrlRule",
@@ -5389,6 +5549,26 @@ var APISwaggerJSON string = `{
                 "HTTPS"
             ],
             "default": "BOTH"
+        },
+        "http_loadbalancerValidateApiBySpecRule": {
+            "type": "object",
+            "description": "x-displayName: \"Custom List\"\nDefine API groups, base paths, or API endpoints and their OpenAPI validation modes.\n Any other api-endpoint not listed will act according to \"Fall Through Mode\".",
+            "title": "ValidateApiBySpecRule",
+            "properties": {
+                "fall_through_mode": {
+                    "description": "x-displayName: \"Fall Through Mode\"\nx-required\nDetermine what to do with unprotected endpoints (not in the OpenAPI specification file (a.k.a. swagger) or doesn't have a specific rule in custom rules)",
+                    "title": "Fall Through Mode",
+                    "$ref": "#/definitions/http_loadbalancerOpenApiFallThroughMode"
+                },
+                "open_api_validation_rules": {
+                    "type": "array",
+                    "description": "x-required\nx-displayName: \"Validation List\"",
+                    "title": "Validation List",
+                    "items": {
+                        "$ref": "#/definitions/http_loadbalancerOpenApiValidationRule"
+                    }
+                }
+            }
         },
         "http_loadbalancerWebMobileTrafficType": {
             "type": "object",
@@ -6894,86 +7074,186 @@ var APISwaggerJSON string = `{
             "x-displayname": "Country Code",
             "x-ves-proto-enum": "ves.io.schema.policy.CountryCode"
         },
+        "policyDetectionContext": {
+            "type": "string",
+            "description": "x-displayName: \"WAF Exclusion Context Options\"\nThe available contexts for Signature and Violation Exclusion rules.\n\n - CONTEXT_ANY: CONTEXT_ANY\n\nx-displayName: \"Any\"\nThe rule will work in all contexts in specified path, domain and method.\n - CONTEXT_BODY: CONTEXT_BODY\n\nx-displayName: \"Body\"\nDetection was found in request's body.\n - CONTEXT_REQUEST: CONTEXT_REQUEST\n\nx-displayName: \"Request\"\nDetection was found in request.\n - CONTEXT_RESPONSE: CONTEXT_RESPONSE\n\nx-displayName: \"Response\"\nDetection was found in request's response.\n - CONTEXT_PARAMETER: CONTEXT_PARAMETER\n\nx-displayName: \"Parameter\"\nDetection was found in one ore more of the request's parameter. When configure a Signature in WAF Exclusion rules, Parameter's name is required.\n - CONTEXT_HEADER: CONTEXT_HEADER\n\nx-displayName: \"Header\"\nDetection was found in one ore more of the request's headers. When configure a Signature in WAF Exclusion rules, header's name is required.\n - CONTEXT_COOKIE: CONTEXT_COOKIE\n\nx-displayName: \"Cookie\"\nDetection was found in one ore more of the request's cookies. When configure a Signature in WAF Exclusion rules, cookie's name is required.\n - CONTEXT_URL: CONTEXT_URL\n\nx-displayName: \"URL\"\nDetection was found in the request's URL.\n - CONTEXT_URI: CONTEXT_URI\n\nx-displayName: \"URI\"\nDetection was found in the request's URI.",
+            "title": "Detection Context",
+            "enum": [
+                "CONTEXT_ANY",
+                "CONTEXT_BODY",
+                "CONTEXT_REQUEST",
+                "CONTEXT_RESPONSE",
+                "CONTEXT_PARAMETER",
+                "CONTEXT_HEADER",
+                "CONTEXT_COOKIE",
+                "CONTEXT_URL",
+                "CONTEXT_URI"
+            ],
+            "default": "CONTEXT_ANY"
+        },
         "policyGraphQLRule": {
             "type": "object",
-            "description": "x-displayName: \"GraphQL\"\nThis section defines various configuration options for GraphQL inspection.",
+            "description": "This section defines various configuration options for GraphQL inspection.",
             "title": "GraphQL Rule",
+            "x-displayname": "GraphQL",
+            "x-ves-displayorder": "1,2,6,8,7",
+            "x-ves-oneof-field-domain_choice": "[\"any_domain\",\"exact_value\",\"suffix_value\"]",
+            "x-ves-oneof-field-method_choice": "[\"method_get\",\"method_post\"]",
+            "x-ves-proto-message": "ves.io.schema.policy.GraphQLRule",
             "properties": {
                 "any_domain": {
-                    "description": "x-displayName: \"Any Domain\"\nEnable GraphQL inspection for any domain",
+                    "description": "Exclusive with [exact_value suffix_value]\n Enable GraphQL inspection for any domain",
                     "title": "Any domain",
-                    "$ref": "#/definitions/schemaEmpty"
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Any Domain"
                 },
                 "exact_path": {
                     "type": "string",
-                    "description": "x-displayName: \"Path\"\nx-example: \"/graphql\"\nx-required\nGraphQL endpoint. Default value is /graphql.",
-                    "title": "Path"
+                    "description": " Specifies the exact path to GraphQL endpoint. Default value is /graphql.\n\nExample: - \"/graphql\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.http_path: true\n  ves.io.schema.rules.string.max_len: 256\n",
+                    "title": "Path",
+                    "maxLength": 256,
+                    "x-displayname": "Path",
+                    "x-ves-example": "/graphql",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.http_path": "true",
+                        "ves.io.schema.rules.string.max_len": "256"
+                    }
                 },
                 "exact_value": {
                     "type": "string",
-                    "description": "x-displayName: \"Exact Value\"\nx-example: \"abc.zyz.com\"\nExact domain name",
-                    "title": "exact value"
+                    "description": "Exclusive with [any_domain suffix_value]\n Exact domain name\n\nExample: - \"abc.zyz.com\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.hostname: true\n  ves.io.schema.rules.string.max_len: 256\n  ves.io.schema.rules.string.min_len: 1\n",
+                    "title": "exact value",
+                    "minLength": 1,
+                    "maxLength": 256,
+                    "x-displayname": "Exact Value",
+                    "x-ves-example": "abc.zyz.com",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.hostname": "true",
+                        "ves.io.schema.rules.string.max_len": "256",
+                        "ves.io.schema.rules.string.min_len": "1"
+                    }
                 },
                 "graphql_settings": {
-                    "description": "x-displayName: \"GraphQL Settings\"\nGraphQL configuration.",
+                    "description": " GraphQL configuration.",
                     "title": "GraphQL Settings",
-                    "$ref": "#/definitions/policyGraphQLSettingsType"
+                    "$ref": "#/definitions/policyGraphQLSettingsType",
+                    "x-displayname": "GraphQL Settings"
                 },
                 "metadata": {
-                    "description": "x-displayName: \"Metadata\"\nx-required\nCommon attributes for the rule including name and description.",
+                    "description": " Common attributes for the rule including name and description.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "metadata",
-                    "$ref": "#/definitions/schemaMessageMetaType"
+                    "$ref": "#/definitions/schemaMessageMetaType",
+                    "x-displayname": "Metadata",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                },
+                "method_get": {
+                    "description": "Exclusive with [method_post]\n",
+                    "title": "Get",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "GET"
+                },
+                "method_post": {
+                    "description": "Exclusive with [method_get]\n",
+                    "title": "Post",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "POST"
                 },
                 "suffix_value": {
                     "type": "string",
-                    "description": "x-displayName: \"Suffix Value\"\nx-example: \"xyz.com\"\nSuffix of domain name e.g \"xyz.com\" will match \"*.xyz.com\" and \"xyz.com\"",
-                    "title": "suffix value"
+                    "description": "Exclusive with [any_domain exact_value]\n Suffix of domain name e.g \"xyz.com\" will match \"*.xyz.com\" and \"xyz.com\"\n\nExample: - \"xyz.com\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.hostname: true\n  ves.io.schema.rules.string.max_len: 256\n  ves.io.schema.rules.string.min_len: 1\n",
+                    "title": "suffix value",
+                    "minLength": 1,
+                    "maxLength": 256,
+                    "x-displayname": "Suffix Value",
+                    "x-ves-example": "xyz.com",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.hostname": "true",
+                        "ves.io.schema.rules.string.max_len": "256",
+                        "ves.io.schema.rules.string.min_len": "1"
+                    }
                 }
             }
         },
         "policyGraphQLSettingsType": {
             "type": "object",
-            "description": "x-displayName: \"GraphQL Settings\"\nGraphQL configuration.",
+            "description": "GraphQL configuration.",
             "title": "GraphQL Settings",
+            "x-displayname": "GraphQL Settings",
+            "x-ves-oneof-field-allow_introspection_queries_choice": "[\"disable_introspection\",\"enable_introspection\"]",
+            "x-ves-proto-message": "ves.io.schema.policy.GraphQLSettingsType",
             "properties": {
                 "disable_introspection": {
-                    "description": "x-displayName: \"Disable\"\nDisable introspection queries for the load balancer.",
+                    "description": "Exclusive with [enable_introspection]\n Disable introspection queries for the load balancer.",
                     "title": "Disable Introspection Queries",
-                    "$ref": "#/definitions/schemaEmpty"
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Disable"
                 },
                 "enable_introspection": {
-                    "description": "x-displayName: \"Enable\"\nEnable introspection queries for the load balancer.",
+                    "description": "Exclusive with [disable_introspection]\n Enable introspection queries for the load balancer.",
                     "title": "Enable Introspection Queries",
-                    "$ref": "#/definitions/schemaEmpty"
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Enable"
                 },
                 "max_batched_queries": {
                     "type": "integer",
-                    "description": "x-displayName: \"Maximum Batched Queries\"\nx-example: \"10\"\nx-required\nSpecify maximum number of queries in a single batched request.",
+                    "description": " Specify maximum number of queries in a single batched request.\n\nExample: - \"10\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.uint32.gte: 0\n  ves.io.schema.rules.uint32.lte: 20\n",
                     "title": "Max Batched Queries",
-                    "format": "int64"
+                    "format": "int64",
+                    "x-displayname": "Maximum Batched Queries",
+                    "x-ves-example": "10",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.uint32.gte": "0",
+                        "ves.io.schema.rules.uint32.lte": "20"
+                    }
                 },
                 "max_depth": {
                     "type": "integer",
-                    "description": "x-displayName: \"Maximum Structure Depth\"\nx-example: \"10\"\nx-required\nSpecify maximum depth for the GraphQL query.",
+                    "description": " Specify maximum depth for the GraphQL query.\n\nExample: - \"10\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.uint32.gte: 0\n  ves.io.schema.rules.uint32.lte: 20\n",
                     "title": "Max Depth",
-                    "format": "int64"
+                    "format": "int64",
+                    "x-displayname": "Maximum Structure Depth",
+                    "x-ves-example": "10",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.uint32.gte": "0",
+                        "ves.io.schema.rules.uint32.lte": "20"
+                    }
                 },
                 "max_total_length": {
                     "type": "integer",
-                    "description": "x-displayName: \"Maximum Total Length\"\nx-example: \"5000\"\nx-required\nSpecify maximum length in bytes for the GraphQL query.",
+                    "description": " Specify maximum length in bytes for the GraphQL query.\n\nExample: - \"5000\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.uint32.gte: 0\n  ves.io.schema.rules.uint32.lte: 8096\n",
                     "title": "Max Total Length",
-                    "format": "int64"
+                    "format": "int64",
+                    "x-displayname": "Maximum Total Length",
+                    "x-ves-example": "5000",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.uint32.gte": "0",
+                        "ves.io.schema.rules.uint32.lte": "8096"
+                    }
                 },
                 "max_value_length": {
                     "type": "integer",
-                    "description": "x-displayName: \"Maximum Value Length\"\nx-example: \"1024\"\nx-required\nSpecify maximum value length in bytes for the GraphQL query.",
+                    "description": " Specify maximum value length in bytes for the GraphQL query.\n\nExample: - \"1024\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.uint32.gte: 0\n  ves.io.schema.rules.uint32.lte: 4096\n",
                     "title": "Max Value Length",
-                    "format": "int64"
-                },
-                "policy_name": {
-                    "type": "string",
-                    "description": "x-displayName: \"Policy Name\"\nx-example: \"graphql\"\nSets the BD Policy to use",
-                    "title": "Set BD Policy name"
+                    "format": "int64",
+                    "x-displayname": "Maximum Value Length",
+                    "x-ves-example": "1024",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.uint32.gte": "0",
+                        "ves.io.schema.rules.uint32.lte": "4096"
+                    }
                 }
             }
         },
@@ -7478,7 +7758,7 @@ var APISwaggerJSON string = `{
         },
         "policySimpleWafExclusionRule": {
             "type": "object",
-            "description": "Simple WAF exclusion rule specifies a simple set of match conditions to be matched to skip a list of WAF rule ids",
+            "description": "Simple WAF exclusion rule specifies a simple set of match conditions to be matched to skip a list of WAF detections",
             "title": "SimpleWafExclusionRule",
             "x-displayname": "WAF Exclusion Rule",
             "x-ves-displayorder": "10,3,16,7,14,9",
@@ -8178,7 +8458,7 @@ var APISwaggerJSON string = `{
                 "login": {
                     "description": "x-displayName: \"Login\"",
                     "title": "Login",
-                    "$ref": "#/definitions/schemaEmpty"
+                    "$ref": "#/definitions/schemaBotDefenseTransactionResult"
                 },
                 "login_mfa": {
                     "description": "x-displayName: \"Login MFA\"",
@@ -8389,6 +8669,71 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "schemaBotDefenseTransactionResult": {
+            "type": "object",
+            "description": "x-displayName: \"Bot Defense Transaction Result\"\nBot Defense Transaction Result",
+            "title": "BotDefenseTransactionResult",
+            "properties": {
+                "disable_transaction_result": {
+                    "description": "x-displayName: \"Disable\"\nDisable collection of transaction result.",
+                    "title": "Disable",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "transaction_result": {
+                    "description": "x-displayName: \"Transaction result\"\nCollect transaction result.",
+                    "title": "Transaction result",
+                    "$ref": "#/definitions/schemaBotDefenseTransactionResultType"
+                }
+            }
+        },
+        "schemaBotDefenseTransactionResultCondition": {
+            "type": "object",
+            "description": "x-displayName: \"Bot Defense Transaction Result Condition\"\nBot Defense Transaction Result Condition",
+            "title": "BotDefenseTransactionResultCondition",
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "description": "x-displayName: \"Header Name\"\nx-example: \"Accept-Encoding\"\nA case-insensitive HTTP header name.",
+                    "title": "name"
+                },
+                "regex_values": {
+                    "type": "array",
+                    "description": "x-displayName: \"Regex Values\"\nx-example: \"['^new .*$', 'san f.*', '.* del .*']\"\nA list of regular expressions to match the input against.",
+                    "title": "regex values",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "status": {
+                    "description": "x-displayName: \"HTTP Status code\"\nx-required\nHTTP Status code",
+                    "title": "HTTP Status code for response",
+                    "$ref": "#/definitions/schemaHttpStatusCode"
+                }
+            }
+        },
+        "schemaBotDefenseTransactionResultType": {
+            "type": "object",
+            "description": "x-displayName: \"Bot Defense Transaction Result Type\"\nBot Defense Transaction ResultType",
+            "title": "BotDefenseTransactionResultType",
+            "properties": {
+                "failure_conditions": {
+                    "type": "array",
+                    "description": "x-displayName: \"Failure Conditions\"\nFailure Conditions",
+                    "title": "Failure Conditions",
+                    "items": {
+                        "$ref": "#/definitions/schemaBotDefenseTransactionResultCondition"
+                    }
+                },
+                "success_conditions": {
+                    "type": "array",
+                    "description": "x-displayName: \"Success Conditions\"\nSuccess Conditions",
+                    "title": "Success Conditions",
+                    "items": {
+                        "$ref": "#/definitions/schemaBotDefenseTransactionResultCondition"
+                    }
+                }
+            }
+        },
         "schemaBotHttpMethod": {
             "type": "string",
             "description": "x-displayName: \"HTTP Method\"\nSpecifies the HTTP method used to access a resource.\n\n - METHOD_ANY: x-displayName: \"ANY\"\nAny HTTP Method\n - METHOD_GET: x-displayName: \"GET(XHR/Fetch)\"\nGET method for XMLHttpRequest or Fetch\n - METHOD_POST: x-displayName: \"POST\"\nPOST method\n - METHOD_PUT: x-displayName: \"PUT\"\nPUT method\n - METHOD_GET_DOCUMENT: x-displayName: \"GET(Document)\"\nGET method for HTML document",
@@ -8518,64 +8863,91 @@ var APISwaggerJSON string = `{
         },
         "schemaCookieManipulationOptionType": {
             "type": "object",
-            "description": "x-displayName: \"Cookie Manipulation Option\"\nCookie manipulation option.",
+            "description": "Set Cookie protection attributes.",
             "title": "CookieManipulationOptionType",
+            "x-displayname": "Cookie Protection",
+            "x-ves-oneof-field-httponly": "[\"add_httponly\",\"ignore_httponly\"]",
+            "x-ves-oneof-field-max_age": "[\"ignore_max_age\",\"max_age_value\"]",
+            "x-ves-oneof-field-samesite": "[\"ignore_samesite\",\"samesite_lax\",\"samesite_none\",\"samesite_strict\"]",
+            "x-ves-oneof-field-secure": "[\"add_secure\",\"ignore_secure\"]",
+            "x-ves-proto-message": "ves.io.schema.CookieManipulationOptionType",
             "properties": {
                 "add_httponly": {
-                    "description": "x-displayName: \"Add HttpOnly\"\nAdd httponly attribute",
+                    "description": "Exclusive with [ignore_httponly]\n",
                     "title": "add_httponly",
-                    "$ref": "#/definitions/schemaEmpty"
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Add"
                 },
                 "add_secure": {
-                    "description": "x-displayName: \"Add Secure\"\nAdd secure attribute",
+                    "description": "Exclusive with [ignore_secure]\n",
                     "title": "add_secure",
-                    "$ref": "#/definitions/schemaEmpty"
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Add"
                 },
                 "ignore_httponly": {
-                    "description": "x-displayName: \"Ignore HttpOnly\"\nIgnore httponly attribute",
+                    "description": "Exclusive with [add_httponly]\n",
                     "title": "ignore_httponly",
-                    "$ref": "#/definitions/schemaEmpty"
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Ignore"
                 },
                 "ignore_max_age": {
-                    "description": "x-displayName: \"Ignore Max Age\"\nIgnore max age attribute",
+                    "description": "Exclusive with [max_age_value]\n Ignore max age attribute",
                     "title": "ignore_max_age",
-                    "$ref": "#/definitions/schemaEmpty"
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Ignore Max Age"
                 },
                 "ignore_samesite": {
-                    "description": "x-displayName: \"Ignore Samesite\"\nIgnore Samesite attribute",
+                    "description": "Exclusive with [samesite_lax samesite_none samesite_strict]\n Ignore Samesite attribute",
                     "title": "ignore_samesite",
-                    "$ref": "#/definitions/schemaEmpty"
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Ignore"
                 },
                 "ignore_secure": {
-                    "description": "x-displayName: \"Ignore Secure\"\nIgnore secure attribute",
+                    "description": "Exclusive with [add_secure]\n",
                     "title": "ignore_secure",
-                    "$ref": "#/definitions/schemaEmpty"
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Ignore"
                 },
                 "max_age_value": {
                     "type": "integer",
-                    "description": "x-displayName: \"Add Max Age\"\nAdd max age attribute",
+                    "description": "Exclusive with [ignore_max_age]\n Add max age attribute\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 34560000\n",
                     "title": "add_max_age",
-                    "format": "int32"
+                    "format": "int32",
+                    "x-displayname": "Add Max Age",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.lte": "34560000"
+                    }
                 },
                 "name": {
                     "type": "string",
-                    "description": "x-displayName: \"Cookie Name\"\nx-example: \"value\"\nx-required\nName of the Cookie",
-                    "title": "name"
+                    "description": " Name of the Cookie\n\nExample: - \"value\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 256\n",
+                    "title": "name",
+                    "maxLength": 256,
+                    "x-displayname": "Cookie Name",
+                    "x-ves-example": "value",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.max_len": "256"
+                    }
                 },
                 "samesite_lax": {
-                    "description": "x-displayName: \"Lax\"\nAdd Samesite attribute with Lax. Means that the cookie is not sent on cross-site requests",
+                    "description": "Exclusive with [ignore_samesite samesite_none samesite_strict]\n Add Samesite attribute with Lax. Means that the cookie is not sent on cross-site requests",
                     "title": "lax",
-                    "$ref": "#/definitions/schemaEmpty"
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Lax"
                 },
                 "samesite_none": {
-                    "description": "x-displayName: \"None\"\nAdd Samesite attribute with None. Means that the browser sends the cookie with both cross-site and same-site requests",
+                    "description": "Exclusive with [ignore_samesite samesite_lax samesite_strict]\n Add Samesite attribute with None. Means that the browser sends the cookie with both cross-site and same-site requests",
                     "title": "none",
-                    "$ref": "#/definitions/schemaEmpty"
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "None"
                 },
                 "samesite_strict": {
-                    "description": "x-displayName: \"Strict\"\nAdd Samesite attribute with Strict. Means that the browser sends the cookie only for same-site requests",
+                    "description": "Exclusive with [ignore_samesite samesite_lax samesite_none]\n Add Samesite attribute with Strict. Means that the browser sends the cookie only for same-site requests",
                     "title": "strict",
-                    "$ref": "#/definitions/schemaEmpty"
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Strict"
                 }
             }
         },
@@ -9204,6 +9576,20 @@ var APISwaggerJSON string = `{
                     "x-ves-example": "d15f1fad-4d37-48c0-8706-df1824d76d31"
                 }
             }
+        },
+        "schemaOpenApiValidationProperties": {
+            "type": "string",
+            "description": "x-displayName: \"OpenAPI Validation Properties\"\nList of required properties to validate against the OpenAPI spec\n\n - PROPERTY_QUERY_PARAMETERS: x-displayName: \"Query Parameters\"\nValidate that all query parameters are according to the OpenAPI specification\n - PROPERTY_PATH_PARAMETERS: x-displayName: \"Path Parameters\"\nValidate that all path parameters are according to the OpenAPI specification\n - PROPERTY_CONTENT_TYPE: x-displayName: \"Content-type\"\nValidate that the content type of the request is according to the OpenAPI specification\n - PROPERTY_COOKIE_PARAMETERS: x-displayName: \"Cookie Parameters\"\nValidate that all cookies are according to the OpenAPI specification\n - PROPERTY_HTTP_HEADERS: x-displayName: \"HTTP Headers\"\nValidate that all HTTP headers are according to the OpenAPI specification\n - PROPERTY_HTTP_BODY: x-displayName: \"HTTP Body\"\nValidate that the request body is according to the OpenAPI specification",
+            "title": "OpenApiValidationProperties",
+            "enum": [
+                "PROPERTY_QUERY_PARAMETERS",
+                "PROPERTY_PATH_PARAMETERS",
+                "PROPERTY_CONTENT_TYPE",
+                "PROPERTY_COOKIE_PARAMETERS",
+                "PROPERTY_HTTP_HEADERS",
+                "PROPERTY_HTTP_BODY"
+            ],
+            "default": "PROPERTY_QUERY_PARAMETERS"
         },
         "schemaRetryBackOff": {
             "type": "object",
@@ -10334,6 +10720,163 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "viewsInternetVIPInfo": {
+            "type": "object",
+            "description": "Internet VIP Info",
+            "title": "Internet VIP Info",
+            "x-displayname": "Internet VIP Info",
+            "x-ves-proto-message": "ves.io.schema.views.InternetVIPInfo",
+            "properties": {
+                "site_name": {
+                    "type": "string",
+                    "description": " Site Name where Internet VIP is installed",
+                    "title": "Site Name",
+                    "x-displayname": "Site Name"
+                },
+                "site_network_type": {
+                    "description": " Network Type of the site where Internet VIP is installed",
+                    "title": "Site Network Type",
+                    "$ref": "#/definitions/viewsSiteNetwork",
+                    "x-displayname": "Site Network Type"
+                },
+                "status": {
+                    "description": " Detailed status for internet VIP",
+                    "title": "Internet VIP Status",
+                    "$ref": "#/definitions/viewsInternetVIPStatus",
+                    "x-displayname": "Status"
+                }
+            }
+        },
+        "viewsInternetVIPListenerStatusType": {
+            "type": "object",
+            "x-ves-proto-message": "ves.io.schema.views.InternetVIPListenerStatusType",
+            "properties": {
+                "arn": {
+                    "type": "string",
+                    "description": " Name",
+                    "title": "Name",
+                    "x-displayname": "Name"
+                },
+                "port": {
+                    "type": "integer",
+                    "description": " Port",
+                    "title": "Port",
+                    "format": "int64",
+                    "x-displayname": "Port"
+                },
+                "protocol": {
+                    "type": "string",
+                    "description": " Protocol",
+                    "title": "Protocol",
+                    "x-displayname": "Protocol"
+                },
+                "reason": {
+                    "type": "string",
+                    "description": " Reason",
+                    "title": "Reason",
+                    "x-displayname": "reason"
+                },
+                "status": {
+                    "type": "string",
+                    "description": " Status",
+                    "title": "Status",
+                    "x-displayname": "Status"
+                }
+            }
+        },
+        "viewsInternetVIPStatus": {
+            "type": "object",
+            "description": "CName and installation info",
+            "title": "Internet VIP Status",
+            "x-displayname": "Internet VIP Status",
+            "x-ves-proto-message": "ves.io.schema.views.InternetVIPStatus",
+            "properties": {
+                "arn": {
+                    "type": "string",
+                    "description": " ARN",
+                    "title": "ARN",
+                    "x-displayname": "ARN"
+                },
+                "name": {
+                    "type": "string",
+                    "description": " Name",
+                    "title": "Name",
+                    "x-displayname": "Name"
+                },
+                "nlb_cname": {
+                    "type": "string",
+                    "description": " NLB CNAME",
+                    "title": "NLB CNAME",
+                    "x-displayname": "NLB CNAME"
+                },
+                "nlb_status": {
+                    "type": "string",
+                    "description": " NLB Status",
+                    "title": "NLB Status",
+                    "x-displayname": "NLB Status"
+                },
+                "reason": {
+                    "type": "string",
+                    "description": " Reason",
+                    "title": "Reason",
+                    "x-displayname": "reason"
+                },
+                "target_group_status": {
+                    "type": "array",
+                    "description": " Target Group Status",
+                    "title": "Target Group Status",
+                    "items": {
+                        "$ref": "#/definitions/viewsInternetVIPTargetGroupStatusType"
+                    },
+                    "x-displayname": "Target Group Status"
+                }
+            }
+        },
+        "viewsInternetVIPTargetGroupStatusType": {
+            "type": "object",
+            "x-ves-proto-message": "ves.io.schema.views.InternetVIPTargetGroupStatusType",
+            "properties": {
+                "arn": {
+                    "type": "string",
+                    "description": " ARN",
+                    "title": "ARN",
+                    "x-displayname": "ARN"
+                },
+                "listener_status": {
+                    "type": "array",
+                    "description": " Listener status",
+                    "title": "Listener status",
+                    "items": {
+                        "$ref": "#/definitions/viewsInternetVIPListenerStatusType"
+                    },
+                    "x-displayname": "Listener status"
+                },
+                "name": {
+                    "type": "string",
+                    "description": " Name",
+                    "title": "Name",
+                    "x-displayname": "Name"
+                },
+                "protocol": {
+                    "type": "string",
+                    "description": " Protocol",
+                    "title": "Protocol",
+                    "x-displayname": "Protocol"
+                },
+                "reason": {
+                    "type": "string",
+                    "description": " Reason",
+                    "title": "Reason",
+                    "x-displayname": "reason"
+                },
+                "status": {
+                    "type": "string",
+                    "description": " Status",
+                    "title": "Status",
+                    "x-displayname": "Status"
+                }
+            }
+        },
         "viewsOriginPoolListType": {
             "type": "object",
             "description": "List of Origin Pools",
@@ -10821,7 +11364,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Enable"
                 },
                 "cookie_stickiness": {
-                    "description": "Exclusive with [least_active random ring_hash round_robin source_ip_stickiness]\n Request are sent to all eligible origin servers using hash of cookie. Cookie can be passive(present in the cookies header) or \n generated(hashing the source and destination ports and addresses).\n Consistent hashing algorithm, ring hash, is used to select origin server",
+                    "description": "Exclusive with [least_active random ring_hash round_robin source_ip_stickiness]\n Request are sent to all eligible origin servers using hash of cookie. Cookie can be passive(present in the cookies header) or\n generated(hashing the source and destination ports and addresses).\n Consistent hashing algorithm, ring hash, is used to select origin server",
                     "title": "Cookie Based Stickiness",
                     "$ref": "#/definitions/routeCookieForHashing",
                     "x-displayname": "Cookie Based Stickiness"
@@ -11021,6 +11564,20 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/virtual_hostClientIPHeaders",
                     "x-displayname": "Enable"
                 },
+                "graphql_rules": {
+                    "type": "array",
+                    "description": " GraphQL is a query language and server-side runtime for APIs which provides a complete and understandable\n description of the data in API. GraphQL gives clients the power to ask for exactly what they need, makes it\n easier to evolve APIs over time, and enables powerful developer tools. Policy configuration to analyze GraphQL\n queries and prevent GraphQL tailored attacks.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 64\n  ves.io.schema.rules.repeated.unique_metadata_name: true\n",
+                    "title": "GraphQL Inspection",
+                    "maxItems": 64,
+                    "items": {
+                        "$ref": "#/definitions/policyGraphQLRule"
+                    },
+                    "x-displayname": "GraphQL Inspection",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "64",
+                        "ves.io.schema.rules.repeated.unique_metadata_name": "true"
+                    }
+                },
                 "host_name": {
                     "type": "string",
                     "description": " Internally generated host name to be used for the virtual host\n\nExample: - \"ves-io-cf8684b9-a18f-4843-a24f-1f9ee8ea2776.ac.vh.ves.io\"-",
@@ -11055,6 +11612,15 @@ var APISwaggerJSON string = `{
                     "title": "HTTPS",
                     "$ref": "#/definitions/http_loadbalancerProxyTypeHttpsAutoCerts",
                     "x-displayname": "HTTPS with Automatic Certificate"
+                },
+                "internet_vip_info": {
+                    "type": "array",
+                    "description": " Internet VIP Info",
+                    "title": "Internet VIP Info",
+                    "items": {
+                        "$ref": "#/definitions/viewsInternetVIPInfo"
+                    },
+                    "x-displayname": "Internet VIP Info"
                 },
                 "js_challenge": {
                     "description": "Exclusive with [captcha_challenge no_challenge policy_based_challenge]\n Configure Javascript challenge on this load balancer",
@@ -11097,6 +11663,20 @@ var APISwaggerJSON string = `{
                     "title": "policy based challenge",
                     "$ref": "#/definitions/viewshttp_loadbalancerPolicyBasedChallenge",
                     "x-displayname": "Policy Based Challenge"
+                },
+                "protected_cookies": {
+                    "type": "array",
+                    "description": " List of cookies to be modified from the HTTP response being sent towards downstream.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 16\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "title": "Cookie protection",
+                    "maxItems": 16,
+                    "items": {
+                        "$ref": "#/definitions/schemaCookieManipulationOptionType"
+                    },
+                    "x-displayname": "Cookie Protection",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "16",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
                 },
                 "random": {
                     "description": "Exclusive with [cookie_stickiness least_active ring_hash round_robin source_ip_stickiness]\n Request are sent to all eligible origin servers in random fashion",
@@ -11147,6 +11727,12 @@ var APISwaggerJSON string = `{
                     "title": "Single load balancer application",
                     "$ref": "#/definitions/http_loadbalancerSingleLoadBalancerAppSetting",
                     "x-displayname": "Default"
+                },
+                "slow_ddos_mitigation": {
+                    "description": " \"Slow and low\" attacks tie up server resources, leaving none available for servicing\n requests from actual users.",
+                    "title": "Slow DDoS Mitigation",
+                    "$ref": "#/definitions/virtual_hostSlowDDoSMitigation",
+                    "x-displayname": "Slow DDoS Mitigation"
                 },
                 "source_ip_stickiness": {
                     "description": "Exclusive with [cookie_stickiness least_active random ring_hash round_robin]\n Request are sent to all eligible origin servers using hash of source ip. Consistent hashing algorithm, ring hash, is used to select origin server",
@@ -11795,6 +12381,39 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "virtual_hostSlowDDoSMitigation": {
+            "type": "object",
+            "description": "\"Slow and low\" attacks tie up server resources, leaving none available for servicing\nrequests from actual users.",
+            "title": "Slow DDoS Mitigation",
+            "x-displayname": "Slow DDoS Mitigation",
+            "x-ves-proto-message": "ves.io.schema.virtual_host.SlowDDoSMitigation",
+            "properties": {
+                "request_headers_timeout": {
+                    "type": "integer",
+                    "description": " The amount of time the client has to send only the headers on the request stream before\n the stream is cancelled. The default value is 10000 milliseconds. This setting\n provides protection against Slowloris attacks.\n\nExample: - \"60000\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 2000\n  ves.io.schema.rules.uint32.lte: 30000\n",
+                    "title": "Request Headers Timeout",
+                    "format": "int64",
+                    "x-displayname": "Request Headers Timeout",
+                    "x-ves-example": "60000",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.gte": "2000",
+                        "ves.io.schema.rules.uint32.lte": "30000"
+                    }
+                },
+                "request_timeout": {
+                    "type": "integer",
+                    "description": " The amount of time allowed for the entire request stream to be received from the client,\n in milliseconds. The stream is terminated with a HTTP 408 (Request Timeout) error code\n if request has not been completed. The default value is 60000 milliseconds. This setting\n provides protection against Slow POST attacks.\n\nExample: - \"60000\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 2000\n  ves.io.schema.rules.uint32.lte: 300000\n",
+                    "title": "Request Timeout",
+                    "format": "int64",
+                    "x-displayname": "Request Timeout",
+                    "x-ves-example": "60000",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.gte": "2000",
+                        "ves.io.schema.rules.uint32.lte": "300000"
+                    }
+                }
+            }
+        },
         "virtual_hostTemporaryUserBlockingType": {
             "type": "object",
             "description": "\nSpecifies configuration for temporary user blocking resulting from user behavior analysis.\n\nWhen Malicious User Mitigation is enabled from service policy rules, users' accessing the application will be analyzed for\nmalicious activity and the configured mitigation actions will be taken on identified malicious users.\nThese mitigation actions include setting up temporary blocking on that user.\nThis configuration specifies settings on how that blocking should be done by the loadbalancer.",
@@ -11849,227 +12468,6 @@ var APISwaggerJSON string = `{
                     }
                 }
             }
-        },
-        "waf_rule_listWafRuleID": {
-            "type": "string",
-            "description": "x-displayName: \"WAF Rule ID\"\nSupported WAF rule IDs\n\n - WAF_RULE_ALL: x-displayName: \"Skip All Rules (internal use only)\"\nUsed internally to instruct the modsec code in envoy to skip all rules\n - WAF_RULE_910000: x-displayName: \"910000\"\nRequest from Known Malicious Client (Based on previous traffic violations).\n - WAF_RULE_910100: x-displayName: \"910100\"\nClient IP is from a HIGH Risk Country Location.\n - WAF_RULE_910150: x-displayName: \"910150\"\nHTTP Blacklist match for search engine IP\n - WAF_RULE_910160: x-displayName: \"910160\"\nHTTP Blacklist match for spammer IP\n - WAF_RULE_910170: x-displayName: \"910170\"\nHTTP Blacklist match for suspicious IP\n - WAF_RULE_910180: x-displayName: \"910180\"\nHTTP Blacklist match for harvester IP\n - WAF_RULE_911100: x-displayName: \"911100\"\nMethod is not allowed by policy\n - WAF_RULE_912120: x-displayName: \"912120\"\nDenial of Service (DoS) attack identified from %{tx.real_ip} (%{tx.dos_block_counter} hits since last alert)\n - WAF_RULE_913100: x-displayName: \"913100\"\nFound User-Agent associated with security scanner\n - WAF_RULE_913101: x-displayName: \"913101\"\nFound User-Agent associated with scripting/generic HTTP client\n - WAF_RULE_913102: x-displayName: \"913102\"\nFound User-Agent associated with web crawler/bot\n - WAF_RULE_913110: x-displayName: \"913110\"\nFound request header associated with security scanner\n - WAF_RULE_913120: x-displayName: \"913120\"\nFound request filename/argument associated with security scanner\n - WAF_RULE_920100: x-displayName: \"920100\"\nInvalid HTTP Request Line\n - WAF_RULE_920120: x-displayName: \"920120\"\nAttempted multipart/form-data bypass\n - WAF_RULE_920121: x-displayName: \"920121\"\nAttempted multipart/form-data bypass\n - WAF_RULE_920130: x-displayName: \"920130\"\nFailed to parse request body.\n - WAF_RULE_920140: x-displayName: \"920140\"\nMultipart request body failed strict validation:PE %{REQBODY_PROCESSOR_ERROR},BQ %{MULTIPART_BOUNDARY_QUOTED},BW %{MULTIPART_BOUNDARY_WHITESPACE},DB %{MULTIPART_DATA_BEFORE},DA %{MULTIPART_DATA_AFTER},HF %{MULTIPART_HEADER_FOLDING},LF %{MULTIPART_LF_LINE},SM %{MULTIPART_MISSING_SEMICOLON},IQ %{MULTIPART_INVALID_QUOTING},IH %{MULTIPART_INVALID_HEADER_FOLDING},FLE %{MULTIPART_FILE_LIMIT_EXCEEDED}\n - WAF_RULE_920160: x-displayName: \"920160\"\nContent-Length HTTP header is not numeric.\n - WAF_RULE_920170: x-displayName: \"920170\"\nGET or HEAD Request with Body Content.\n - WAF_RULE_920171: x-displayName: \"920171\"\nGET or HEAD Request with Transfer-Encoding.\n - WAF_RULE_920180: x-displayName: \"920180\"\nPOST without Content-Length or Transfer-Encoding headers.\n - WAF_RULE_920190: x-displayName: \"920190\"\nRange: Invalid Last Byte Value.\n - WAF_RULE_920200: x-displayName: \"920200\"\nRange: Too many fields (6 or more)\n - WAF_RULE_920201: x-displayName: \"920201\"\nRange: Too many fields for pdf request (63 or more)\n - WAF_RULE_920202: x-displayName: \"920202\"\nRange: Too many fields for pdf request (6 or more)\n - WAF_RULE_920210: x-displayName: \"920210\"\nMultiple/Conflicting Connection Header Data Found.\n - WAF_RULE_920220: x-displayName: \"920220\"\nURL Encoding Abuse Attack Attempt\n - WAF_RULE_920230: x-displayName: \"920230\"\nMultiple URL Encoding Detected\n - WAF_RULE_920240: x-displayName: \"920240\"\nURL Encoding Abuse Attack Attempt\n - WAF_RULE_920250: x-displayName: \"920250\"\nUTF8 Encoding Abuse Attack Attempt\n - WAF_RULE_920260: x-displayName: \"920260\"\nUnicode Full/Half Width Abuse Attack Attempt\n - WAF_RULE_920270: x-displayName: \"920270\"\nInvalid character in request (null character)\n - WAF_RULE_920271: x-displayName: \"920271\"\nInvalid character in request (non printable characters)\n - WAF_RULE_920272: x-displayName: \"920272\"\nInvalid character in request (outside of printable chars below ascii 127)\n - WAF_RULE_920273: x-displayName: \"920273\"\nInvalid character in request (outside of very strict set)\n - WAF_RULE_920274: x-displayName: \"920274\"\nInvalid character in request headers (outside of very strict set)\n - WAF_RULE_920341: x-displayName: \"920341\"\nRequest Containing Content Requires Content-Type header\n - WAF_RULE_920350: x-displayName: \"920350\"\nHost header is a numeric IP address\n - WAF_RULE_920360: x-displayName: \"920360\"\nArgument name too long\n - WAF_RULE_920370: x-displayName: \"920370\"\nArgument value too long\n - WAF_RULE_920380: x-displayName: \"920380\"\nToo many arguments in request\n - WAF_RULE_920390: x-displayName: \"920390\"\nTotal arguments size exceeded\n - WAF_RULE_920400: x-displayName: \"920400\"\nUploaded file size too large\n - WAF_RULE_920410: x-displayName: \"920410\"\nTotal uploaded files size too large\n - WAF_RULE_920420: x-displayName: \"920420\"\nRequest content type is not allowed by policy\n - WAF_RULE_920430: x-displayName: \"920430\"\nHTTP protocol version is not allowed by policy\n - WAF_RULE_920440: x-displayName: \"920440\"\nURL file extension is restricted by policy\n - WAF_RULE_920450: x-displayName: \"920450\"\nHTTP header is restricted by policy (%{MATCHED_VAR})\n - WAF_RULE_920460: x-displayName: \"920460\"\nAbnormal character escapes in request\n - WAF_RULE_920470: x-displayName: \"920470\"\nIllegal Content-Type header\n - WAF_RULE_920480: x-displayName: \"920480\"\nRequest content type charset is not allowed by policy\n - WAF_RULE_921110: x-displayName: \"921110\"\nHTTP Request Smuggling Attack\n - WAF_RULE_921120: x-displayName: \"921120\"\nHTTP Response Splitting Attack\n - WAF_RULE_921130: x-displayName: \"921130\"\nHTTP Response Splitting Attack\n - WAF_RULE_921140: x-displayName: \"921140\"\nHTTP Header Injection Attack via headers\n - WAF_RULE_921150: x-displayName: \"921150\"\nHTTP Header Injection Attack via payload (CR/LF detected)\n - WAF_RULE_921151: x-displayName: \"921151\"\nHTTP Header Injection Attack via payload (CR/LF detected)\n - WAF_RULE_921160: x-displayName: \"921160\"\nHTTP Header Injection Attack via payload (CR/LF and header-name detected)\n - WAF_RULE_930100: x-displayName: \"930100\"\nPath Traversal Attack (/../)\n - WAF_RULE_930110: x-displayName: \"930110\"\nPath Traversal Attack (/../)\n - WAF_RULE_930120: x-displayName: \"930120\"\nOS File Access Attempt\n - WAF_RULE_930130: x-displayName: \"930130\"\nRestricted File Access Attempt\n - WAF_RULE_931100: x-displayName: \"931100\"\nPossible Remote File Inclusion (RFI) Attack: URL Parameter using IP Address\n - WAF_RULE_931110: x-displayName: \"931110\"\nPossible Remote File Inclusion (RFI) Attack: Common RFI Vulnerable Parameter Name used w/URL Payload\n - WAF_RULE_931120: x-displayName: \"931120\"\nPossible Remote File Inclusion (RFI) Attack: URL Payload Used w/Trailing Question Mark Character (?)\n - WAF_RULE_931130: x-displayName: \"931130\"\nPossible Remote File Inclusion (RFI) Attack: Off-Domain Reference/Link\n - WAF_RULE_932100: x-displayName: \"932100\"\nRemote Command Execution: Unix Command Injection\n - WAF_RULE_932105: x-displayName: \"932105\"\nRemote Command Execution: Unix Command Injection\n - WAF_RULE_932106: x-displayName: \"932106\"\nRemote Command Execution: Unix Command Injection\n - WAF_RULE_932110: x-displayName: \"932110\"\nRemote Command Execution: Windows Command Injection\n - WAF_RULE_932115: x-displayName: \"932115\"\nRemote Command Execution: Windows Command Injection\n - WAF_RULE_932120: x-displayName: \"932120\"\nRemote Command Execution: Windows PowerShell Command Found\n - WAF_RULE_932130: x-displayName: \"932130\"\nRemote Command Execution: Unix Shell Expression Found\n - WAF_RULE_932140: x-displayName: \"932140\"\nRemote Command Execution: Windows FOR/IF Command Found\n - WAF_RULE_932150: x-displayName: \"932150\"\nRemote Command Execution: Direct Unix Command Execution\n - WAF_RULE_932160: x-displayName: \"932160\"\nRemote Command Execution: Unix Shell Code Found\n - WAF_RULE_932170: x-displayName: \"932170\"\nRemote Command Execution: Shellshock (CVE-2014-6271)\n - WAF_RULE_932171: x-displayName: \"932171\"\nRemote Command Execution: Shellshock (CVE-2014-6271)\n - WAF_RULE_932180: x-displayName: \"932180\"\nRestricted File Upload Attempt\n - WAF_RULE_932190: x-displayName: \"932190\"\nRemote Command Execution: Wildcard bypass technique attempt\n - WAF_RULE_933100: x-displayName: \"933100\"\nPHP Injection Attack: PHP Open Tag Found\n - WAF_RULE_933110: x-displayName: \"933110\"\nPHP Injection Attack: PHP Script File Upload Found\n - WAF_RULE_933111: x-displayName: \"933111\"\nPHP Injection Attack: PHP Script File Upload Found\n - WAF_RULE_933120: x-displayName: \"933120\"\nPHP Injection Attack: Configuration Directive Found\n - WAF_RULE_933130: x-displayName: \"933130\"\nPHP Injection Attack: Variables Found\n - WAF_RULE_933131: x-displayName: \"933131\"\nPHP Injection Attack: Variables Found\n - WAF_RULE_933140: x-displayName: \"933140\"\nPHP Injection Attack: I/O Stream Found\n - WAF_RULE_933150: x-displayName: \"933150\"\nPHP Injection Attack: High-Risk PHP Function Name Found\n - WAF_RULE_933151: x-displayName: \"933151\"\nPHP Injection Attack: Medium-Risk PHP Function Name Found\n - WAF_RULE_933160: x-displayName: \"933160\"\nPHP Injection Attack: High-Risk PHP Function Call Found\n - WAF_RULE_933161: x-displayName: \"933161\"\nPHP Injection Attack: Low-Value PHP Function Call Found\n - WAF_RULE_933170: x-displayName: \"933170\"\nPHP Injection Attack: Serialized Object Injection\n - WAF_RULE_933180: x-displayName: \"933180\"\nPHP Injection Attack: Variable Function Call Found\n - WAF_RULE_933190: x-displayName: \"933190\"\nPHP Injection Attack: PHP Closing Tag Found\n - WAF_RULE_941100: x-displayName: \"941100\"\nXSS Attack Detected via libinjection\n - WAF_RULE_941101: x-displayName: \"941101\"\nXSS Attack Detected via libinjection\n - WAF_RULE_941110: x-displayName: \"941110\"\nXSS Filter - Category 1: Script Tag Vector\n - WAF_RULE_941120: x-displayName: \"941120\"\nXSS Filter - Category 2: Event Handler Vector\n - WAF_RULE_941130: x-displayName: \"941130\"\nXSS Filter - Category 3: Attribute Vector\n - WAF_RULE_941140: x-displayName: \"941140\"\nXSS Filter - Category 4: Javascript URI Vector\n - WAF_RULE_941150: x-displayName: \"941150\"\nXSS Filter - Category 5: Disallowed HTML Attributes\n - WAF_RULE_941160: x-displayName: \"941160\"\nNoScript XSS InjectionChecker: HTML Injection\n - WAF_RULE_941170: x-displayName: \"941170\"\nNoScript XSS InjectionChecker: Attribute Injection\n - WAF_RULE_941180: x-displayName: \"941180\"\nNode-Validator Blacklist Keywords\n - WAF_RULE_941190: x-displayName: \"941190\"\nIE XSS Filters - Attack Detected.\n - WAF_RULE_941200: x-displayName: \"941200\"\nIE XSS Filters - Attack Detected.\n - WAF_RULE_941210: x-displayName: \"941210\"\nIE XSS Filters - Attack Detected.\n - WAF_RULE_941220: x-displayName: \"941220\"\nIE XSS Filters - Attack Detected.\n - WAF_RULE_941230: x-displayName: \"941230\"\nIE XSS Filters - Attack Detected.\n - WAF_RULE_941240: x-displayName: \"941240\"\nIE XSS Filters - Attack Detected.\n - WAF_RULE_941250: x-displayName: \"941250\"\nIE XSS Filters - Attack Detected.\n - WAF_RULE_941260: x-displayName: \"941260\"\nIE XSS Filters - Attack Detected.\n - WAF_RULE_941270: x-displayName: \"941270\"\nIE XSS Filters - Attack Detected.\n - WAF_RULE_941280: x-displayName: \"941280\"\nIE XSS Filters - Attack Detected.\n - WAF_RULE_941290: x-displayName: \"941290\"\nIE XSS Filters - Attack Detected.\n - WAF_RULE_941300: x-displayName: \"941300\"\nIE XSS Filters - Attack Detected.\n - WAF_RULE_941310: x-displayName: \"941310\"\nUS-ASCII Malformed Encoding XSS Filter - Attack Detected.\n - WAF_RULE_941320: x-displayName: \"941320\"\nPossible XSS Attack Detected - HTML Tag Handler\n - WAF_RULE_941330: x-displayName: \"941330\"\nIE XSS Filters - Attack Detected.\n - WAF_RULE_941340: x-displayName: \"941340\"\nIE XSS Filters - Attack Detected.\n - WAF_RULE_941350: x-displayName: \"941350\"\nUTF-7 Encoding IE XSS - Attack Detected.\n - WAF_RULE_942100: x-displayName: \"942100\"\nSQL Injection Attack Detected via libinjection\n - WAF_RULE_942110: x-displayName: \"942110\"\nSQL Injection Attack: Common Injection Testing Detected\n - WAF_RULE_942120: x-displayName: \"942120\"\nSQL Injection Attack: SQL Operator Detected\n - WAF_RULE_942130: x-displayName: \"942130\"\nSQL Injection Attack: SQL Tautology Detected.\n - WAF_RULE_942140: x-displayName: \"942140\"\nSQL Injection Attack: Common DB Names Detected\n - WAF_RULE_942150: x-displayName: \"942150\"\nSQL Injection Attack\n - WAF_RULE_942160: x-displayName: \"942160\"\nDetects blind sqli tests using sleep() or benchmark().\n - WAF_RULE_942170: x-displayName: \"942170\"\nDetects SQL benchmark and sleep injection attempts including conditional queries\n - WAF_RULE_942180: x-displayName: \"942180\"\nDetects basic SQL authentication bypass attempts 1/3\n - WAF_RULE_942190: x-displayName: \"942190\"\nDetects MSSQL code execution and information gathering attempts\n - WAF_RULE_942200: x-displayName: \"942200\"\nDetects MySQL comment-/space-obfuscated injections and backtick termination\n - WAF_RULE_942210: x-displayName: \"942210\"\nDetects chained SQL injection attempts 1/2\n - WAF_RULE_942220: x-displayName: \"942220\"\nLooking for integer overflow attacks, these are taken from skipfish, except 3.0.00738585072007e-308 is the \\\n - WAF_RULE_942230: x-displayName: \"942230\"\nDetects conditional SQL injection attempts\n - WAF_RULE_942240: x-displayName: \"942240\"\nDetects MySQL charset switch and MSSQL DoS attempts\n - WAF_RULE_942250: x-displayName: \"942250\"\nDetects MATCH AGAINST, MERGE and EXECUTE IMMEDIATE injections\n - WAF_RULE_942251: x-displayName: \"942251\"\nDetects HAVING injections\n - WAF_RULE_942260: x-displayName: \"942260\"\nDetects basic SQL authentication bypass attempts 2/3\n - WAF_RULE_942270: x-displayName: \"942270\"\nLooking for basic sql injection. Common attack string for mysql, oracle and others.\n - WAF_RULE_942280: x-displayName: \"942280\"\nDetects Postgres pg_sleep injection, waitfor delay attacks and database shutdown attempts\n - WAF_RULE_942290: x-displayName: \"942290\"\nFinds basic MongoDB SQL injection attempts\n - WAF_RULE_942300: x-displayName: \"942300\"\nDetects MySQL comments, conditions and ch(a)r injections\n - WAF_RULE_942310: x-displayName: \"942310\"\nDetects chained SQL injection attempts 2/2\n - WAF_RULE_942320: x-displayName: \"942320\"\nDetects MySQL and PostgreSQL stored procedure/function injections\n - WAF_RULE_942330: x-displayName: \"942330\"\nDetects classic SQL injection probings 1/3\n - WAF_RULE_942340: x-displayName: \"942340\"\nDetects basic SQL authentication bypass attempts 3/3\n - WAF_RULE_942350: x-displayName: \"942350\"\nDetects MySQL UDF injection and other data/structure manipulation attempts\n - WAF_RULE_942360: x-displayName: \"942360\"\nDetects concatenated basic SQL injection and SQLLFI attempts\n - WAF_RULE_942361: x-displayName: \"942361\"\nDetects basic SQL injection based on keyword alter or union\n - WAF_RULE_942370: x-displayName: \"942370\"\nDetects classic SQL injection probings 2/3\n - WAF_RULE_942380: x-displayName: \"942380\"\nSQL Injection Attack\n - WAF_RULE_942390: x-displayName: \"942390\"\nSQL Injection Attack\n - WAF_RULE_942400: x-displayName: \"942400\"\nSQL Injection Attack\n - WAF_RULE_942410: x-displayName: \"942410\"\nSQL Injection Attack\n - WAF_RULE_942420: x-displayName: \"942420\"\nRestricted SQL Character Anomaly Detection (cookies): # of special characters exceeded (8)\n - WAF_RULE_942421: x-displayName: \"942421\"\nRestricted SQL Character Anomaly Detection (cookies): # of special characters exceeded (3)\n - WAF_RULE_942430: x-displayName: \"942430\"\nRestricted SQL Character Anomaly Detection (args): # of special characters exceeded (12)\n - WAF_RULE_942431: x-displayName: \"942431\"\nRestricted SQL Character Anomaly Detection (args): # of special characters exceeded (6)\n - WAF_RULE_942432: x-displayName: \"942432\"\nRestricted SQL Character Anomaly Detection (args): # of special characters exceeded (2)\n - WAF_RULE_942440: x-displayName: \"942440\"\nSQL Comment Sequence Detected.\n - WAF_RULE_942450: x-displayName: \"942450\"\nSQL Hex Encoding Identified\n - WAF_RULE_942460: x-displayName: \"942460\"\nMeta-Character Anomaly Detection Alert - Repetitive Non-Word Characters\n - WAF_RULE_942470: x-displayName: \"942470\"\nSQL Injection Attack\n - WAF_RULE_942480: x-displayName: \"942480\"\nSQL Injection Attack\n - WAF_RULE_942490: x-displayName: \"942490\"\nDetects classic SQL injection probings 3/3\n - WAF_RULE_943100: x-displayName: \"943100\"\nPossible Session Fixation Attack: Setting Cookie Values in HTML\n - WAF_RULE_943110: x-displayName: \"943110\"\nPossible Session Fixation Attack: SessionID Parameter Name with Off-Domain Referer\n - WAF_RULE_943120: x-displayName: \"943120\"\nPossible Session Fixation Attack: SessionID Parameter Name with No Referer\n - WAF_RULE_944100: x-displayName: \"944100\"\nRemote Command Execution: Suspicious Java class detected\n - WAF_RULE_944110: x-displayName: \"944110\"\nRemote Command Execution: Java process spawn (CVE-2017-9805)\n - WAF_RULE_944120: x-displayName: \"944120\"\nRemote Command Execution: Java serialization (CVE-2015-5842)\n - WAF_RULE_944130: x-displayName: \"944130\"\nSuspicious Java class detected\n - WAF_RULE_944200: x-displayName: \"944200\"\nMagic bytes Detected, probable java serialization in use\n - WAF_RULE_944210: x-displayName: \"944210\"\nMagic bytes Detected Base64 Encoded, probable java serialization in use\n - WAF_RULE_944240: x-displayName: \"944240\"\nRemote Command Execution: Java serialization (CVE-2015-5842)\n - WAF_RULE_944250: x-displayName: \"944250\"\nRemote Command Execution: Suspicious Java method detected\n - WAF_RULE_944300: x-displayName: \"944300\"\nBase64 encoded string matched suspicious keyword\n - WAF_RULE_950100: x-displayName: \"950100\"\nThe Application Returned a 500-Level Status Code\n - WAF_RULE_950130: x-displayName: \"950130\"\nDirectory Listing\n - WAF_RULE_951110: x-displayName: \"951110\"\nMicrosoft Access SQL Information Leakage\n - WAF_RULE_951120: x-displayName: \"951120\"\nOracle SQL Information Leakage\n - WAF_RULE_951130: x-displayName: \"951130\"\nDB2 SQL Information Leakage\n - WAF_RULE_951140: x-displayName: \"951140\"\nEMC SQL Information Leakage\n - WAF_RULE_951150: x-displayName: \"951150\"\nfirebird SQL Information Leakage\n - WAF_RULE_951160: x-displayName: \"951160\"\nFrontbase SQL Information Leakage\n - WAF_RULE_951170: x-displayName: \"951170\"\nhsqldb SQL Information Leakage\n - WAF_RULE_951180: x-displayName: \"951180\"\ninformix SQL Information Leakage\n - WAF_RULE_951190: x-displayName: \"951190\"\ningres SQL Information Leakage\n - WAF_RULE_951200: x-displayName: \"951200\"\ninterbase SQL Information Leakage\n - WAF_RULE_951210: x-displayName: \"951210\"\nmaxDB SQL Information Leakage\n - WAF_RULE_951220: x-displayName: \"951220\"\nmssql SQL Information Leakage\n - WAF_RULE_951230: x-displayName: \"951230\"\nmysql SQL Information Leakage\n - WAF_RULE_951240: x-displayName: \"951240\"\npostgres SQL Information Leakage\n - WAF_RULE_951250: x-displayName: \"951250\"\nsqlite SQL Information Leakage\n - WAF_RULE_951260: x-displayName: \"951260\"\nSybase SQL Information Leakage\n - WAF_RULE_952100: x-displayName: \"952100\"\nJava Source Code Leakage\n - WAF_RULE_952110: x-displayName: \"952110\"\nJava Errors\n - WAF_RULE_953100: x-displayName: \"953100\"\nPHP Information Leakage\n - WAF_RULE_953110: x-displayName: \"953110\"\nPHP source code leakage\n - WAF_RULE_953120: x-displayName: \"953120\"\nPHP source code leakage\n - WAF_RULE_954100: x-displayName: \"954100\"\nDisclosure of IIS install location\n - WAF_RULE_954110: x-displayName: \"954110\"\nApplication Availability Error\n - WAF_RULE_954120: x-displayName: \"954120\"\nIIS Information Leakage\n - WAF_RULE_954130: x-displayName: \"954130\"\nIIS Information Leakage\n - WAF_RULE_4295001: x-displayName: \"4295001\"\nEnable Drupal specific CRS exclusions\n - WAF_RULE_4295002: x-displayName: \"4295002\"\nEnable Wordpress specific CRS exclusions\n - WAF_RULE_4295003: x-displayName: \"4295003\"\nEnable Cpanel specific CRS exclusions\n - WAF_RULE_4295004: x-displayName: \"4295004\"\nEnable Dokuwiki specific CRS exclusions\n - WAF_RULE_4295005: x-displayName: \"4295005\"\nEnable Nextcloud specific CRS exclusions\n - WAF_RULE_4295006: x-displayName: \"4295006\"\nEnable Xenforo specific CRS exclusions",
-            "title": "WAF Rule ID",
-            "enum": [
-                "WAF_RULE_ALL",
-                "WAF_RULE_910000",
-                "WAF_RULE_910100",
-                "WAF_RULE_910150",
-                "WAF_RULE_910160",
-                "WAF_RULE_910170",
-                "WAF_RULE_910180",
-                "WAF_RULE_911100",
-                "WAF_RULE_912120",
-                "WAF_RULE_913100",
-                "WAF_RULE_913101",
-                "WAF_RULE_913102",
-                "WAF_RULE_913110",
-                "WAF_RULE_913120",
-                "WAF_RULE_920100",
-                "WAF_RULE_920120",
-                "WAF_RULE_920121",
-                "WAF_RULE_920130",
-                "WAF_RULE_920140",
-                "WAF_RULE_920160",
-                "WAF_RULE_920170",
-                "WAF_RULE_920171",
-                "WAF_RULE_920180",
-                "WAF_RULE_920190",
-                "WAF_RULE_920200",
-                "WAF_RULE_920201",
-                "WAF_RULE_920202",
-                "WAF_RULE_920210",
-                "WAF_RULE_920220",
-                "WAF_RULE_920230",
-                "WAF_RULE_920240",
-                "WAF_RULE_920250",
-                "WAF_RULE_920260",
-                "WAF_RULE_920270",
-                "WAF_RULE_920271",
-                "WAF_RULE_920272",
-                "WAF_RULE_920273",
-                "WAF_RULE_920274",
-                "WAF_RULE_920341",
-                "WAF_RULE_920350",
-                "WAF_RULE_920360",
-                "WAF_RULE_920370",
-                "WAF_RULE_920380",
-                "WAF_RULE_920390",
-                "WAF_RULE_920400",
-                "WAF_RULE_920410",
-                "WAF_RULE_920420",
-                "WAF_RULE_920430",
-                "WAF_RULE_920440",
-                "WAF_RULE_920450",
-                "WAF_RULE_920460",
-                "WAF_RULE_920470",
-                "WAF_RULE_920480",
-                "WAF_RULE_921110",
-                "WAF_RULE_921120",
-                "WAF_RULE_921130",
-                "WAF_RULE_921140",
-                "WAF_RULE_921150",
-                "WAF_RULE_921151",
-                "WAF_RULE_921160",
-                "WAF_RULE_930100",
-                "WAF_RULE_930110",
-                "WAF_RULE_930120",
-                "WAF_RULE_930130",
-                "WAF_RULE_931100",
-                "WAF_RULE_931110",
-                "WAF_RULE_931120",
-                "WAF_RULE_931130",
-                "WAF_RULE_932100",
-                "WAF_RULE_932105",
-                "WAF_RULE_932106",
-                "WAF_RULE_932110",
-                "WAF_RULE_932115",
-                "WAF_RULE_932120",
-                "WAF_RULE_932130",
-                "WAF_RULE_932140",
-                "WAF_RULE_932150",
-                "WAF_RULE_932160",
-                "WAF_RULE_932170",
-                "WAF_RULE_932171",
-                "WAF_RULE_932180",
-                "WAF_RULE_932190",
-                "WAF_RULE_933100",
-                "WAF_RULE_933110",
-                "WAF_RULE_933111",
-                "WAF_RULE_933120",
-                "WAF_RULE_933130",
-                "WAF_RULE_933131",
-                "WAF_RULE_933140",
-                "WAF_RULE_933150",
-                "WAF_RULE_933151",
-                "WAF_RULE_933160",
-                "WAF_RULE_933161",
-                "WAF_RULE_933170",
-                "WAF_RULE_933180",
-                "WAF_RULE_933190",
-                "WAF_RULE_941100",
-                "WAF_RULE_941101",
-                "WAF_RULE_941110",
-                "WAF_RULE_941120",
-                "WAF_RULE_941130",
-                "WAF_RULE_941140",
-                "WAF_RULE_941150",
-                "WAF_RULE_941160",
-                "WAF_RULE_941170",
-                "WAF_RULE_941180",
-                "WAF_RULE_941190",
-                "WAF_RULE_941200",
-                "WAF_RULE_941210",
-                "WAF_RULE_941220",
-                "WAF_RULE_941230",
-                "WAF_RULE_941240",
-                "WAF_RULE_941250",
-                "WAF_RULE_941260",
-                "WAF_RULE_941270",
-                "WAF_RULE_941280",
-                "WAF_RULE_941290",
-                "WAF_RULE_941300",
-                "WAF_RULE_941310",
-                "WAF_RULE_941320",
-                "WAF_RULE_941330",
-                "WAF_RULE_941340",
-                "WAF_RULE_941350",
-                "WAF_RULE_942100",
-                "WAF_RULE_942110",
-                "WAF_RULE_942120",
-                "WAF_RULE_942130",
-                "WAF_RULE_942140",
-                "WAF_RULE_942150",
-                "WAF_RULE_942160",
-                "WAF_RULE_942170",
-                "WAF_RULE_942180",
-                "WAF_RULE_942190",
-                "WAF_RULE_942200",
-                "WAF_RULE_942210",
-                "WAF_RULE_942220",
-                "WAF_RULE_942230",
-                "WAF_RULE_942240",
-                "WAF_RULE_942250",
-                "WAF_RULE_942251",
-                "WAF_RULE_942260",
-                "WAF_RULE_942270",
-                "WAF_RULE_942280",
-                "WAF_RULE_942290",
-                "WAF_RULE_942300",
-                "WAF_RULE_942310",
-                "WAF_RULE_942320",
-                "WAF_RULE_942330",
-                "WAF_RULE_942340",
-                "WAF_RULE_942350",
-                "WAF_RULE_942360",
-                "WAF_RULE_942361",
-                "WAF_RULE_942370",
-                "WAF_RULE_942380",
-                "WAF_RULE_942390",
-                "WAF_RULE_942400",
-                "WAF_RULE_942410",
-                "WAF_RULE_942420",
-                "WAF_RULE_942421",
-                "WAF_RULE_942430",
-                "WAF_RULE_942431",
-                "WAF_RULE_942432",
-                "WAF_RULE_942440",
-                "WAF_RULE_942450",
-                "WAF_RULE_942460",
-                "WAF_RULE_942470",
-                "WAF_RULE_942480",
-                "WAF_RULE_942490",
-                "WAF_RULE_943100",
-                "WAF_RULE_943110",
-                "WAF_RULE_943120",
-                "WAF_RULE_944100",
-                "WAF_RULE_944110",
-                "WAF_RULE_944120",
-                "WAF_RULE_944130",
-                "WAF_RULE_944200",
-                "WAF_RULE_944210",
-                "WAF_RULE_944240",
-                "WAF_RULE_944250",
-                "WAF_RULE_944300",
-                "WAF_RULE_950100",
-                "WAF_RULE_950130",
-                "WAF_RULE_951110",
-                "WAF_RULE_951120",
-                "WAF_RULE_951130",
-                "WAF_RULE_951140",
-                "WAF_RULE_951150",
-                "WAF_RULE_951160",
-                "WAF_RULE_951170",
-                "WAF_RULE_951180",
-                "WAF_RULE_951190",
-                "WAF_RULE_951200",
-                "WAF_RULE_951210",
-                "WAF_RULE_951220",
-                "WAF_RULE_951230",
-                "WAF_RULE_951240",
-                "WAF_RULE_951250",
-                "WAF_RULE_951260",
-                "WAF_RULE_952100",
-                "WAF_RULE_952110",
-                "WAF_RULE_953100",
-                "WAF_RULE_953110",
-                "WAF_RULE_953120",
-                "WAF_RULE_954100",
-                "WAF_RULE_954110",
-                "WAF_RULE_954120",
-                "WAF_RULE_954130",
-                "WAF_RULE_4295001",
-                "WAF_RULE_4295002",
-                "WAF_RULE_4295003",
-                "WAF_RULE_4295004",
-                "WAF_RULE_4295005",
-                "WAF_RULE_4295006"
-            ],
-            "default": "WAF_RULE_ALL"
         }
     },
     "x-displayname": "",
