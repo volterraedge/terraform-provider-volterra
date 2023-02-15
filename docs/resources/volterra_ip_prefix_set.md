@@ -20,7 +20,7 @@ resource "volterra_ip_prefix_set" "example" {
   name      = "acmecorp-web"
   namespace = "staging"
 
-  prefix = ["['10.2.1.0/24', '192.168.8.0/29', '10.7.64.160/27']"]
+  prefix = ['10.2.1.0/24', '192.168.8.0/29', '10.7.64.160/27']
 }
 
 ```
