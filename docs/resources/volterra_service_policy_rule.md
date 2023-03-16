@@ -25,35 +25,24 @@ resource "volterra_service_policy_rule" "example" {
   any_asn          = true
   challenge_action = ["challenge_action"]
 
-  // One of the arguments from this list "client_selector client_name_matcher any_client client_name ip_threat_category_list" must be set
-  client_name = "backend.production.customer.volterra.us"
+  // One of the arguments from this list "any_client client_name ip_threat_category_list client_selector client_name_matcher" must be set
+
+  client_name_matcher {
+    exact_values = ["['new york', 'london', 'sydney', 'tokyo', 'cairo']"]
+
+    regex_values = ["['^new .*$', 'san f.*', '.* del .*']"]
+  }
 
   // One of the arguments from this list "any_ip ip_prefix_list ip_matcher" must be set
-  any_ip = true
 
+  ip_prefix_list {
+    invert_match = true
+
+    ip_prefixes = ["192.168.20.0/24"]
+  }
   waf_action {
     // One of the arguments from this list "none waf_skip_processing waf_in_monitoring_mode app_firewall_detection_control data_guard_control" must be set
-
-    app_firewall_detection_control {
-      exclude_attack_type_contexts {
-        exclude_attack_type = "ATTACK_TYPE_SQL_INJECTION"
-      }
-
-      exclude_bot_name_contexts {
-        bot_name = "Hydra"
-      }
-
-      exclude_signature_contexts {
-        context      = "context"
-        context_name = "example: user-agent for Header"
-        signature_id = "10000001"
-      }
-
-      exclude_violation_contexts {
-        context           = "context"
-        exclude_violation = "VIOL_MANDATORY_HEADER"
-      }
-    }
+    none = true
   }
 }
 
@@ -390,6 +379,8 @@ Violations to be excluded for the defined match criteria.
 
 `context` - (Required) x-required (`String`).
 
+`context_name` - (Optional) Relevant only for contexts: Header, Cookie and Parameter. Name of the Context that the WAF Exclusion Rules will check. (`String`).
+
 `exclude_violation` - (Required) x-required (`String`).
 
 ### Failure Conditions
@@ -715,6 +706,8 @@ Shape Protected Endpoint Action that include application traffic type and mitiga
 `app_traffic_type` - (Required) Traffic type (`String`).
 
 `flow_label` - (Required) Flow label (`String`).
+
+`good_bot` - (Required) Good bot (`String`).
 
 `mitigation` - (Required) Mitigation action for protected endpoint. See [Mitigation ](#mitigation) below for details.
 

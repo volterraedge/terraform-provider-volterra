@@ -30,6 +30,7 @@ import (
 	ves_io_schema_dns_load_balancer "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/dns_load_balancer"
 	ves_io_schema_dns_zone "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/dns_zone"
 	ves_io_schema_endpoint "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/endpoint"
+	ves_io_schema_enhanced_firewall_policy "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/enhanced_firewall_policy"
 	ves_io_schema_fast_acl "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/fast_acl"
 	ves_io_schema_fast_acl_rule "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/fast_acl_rule"
 	ves_io_schema_fleet "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/fleet"
@@ -46,6 +47,7 @@ import (
 	ves_io_schema_network_firewall "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/network_firewall"
 	ves_io_schema_network_policy "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/network_policy"
 	ves_io_schema_network_policy_rule "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/network_policy_rule"
+	ves_io_schema_nfv_service "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/nfv_service"
 	ves_io_schema_policer "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/policer"
 	ves_io_schema_protocol_policer "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/protocol_policer"
 	ves_io_schema_rate_limiter "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/rate_limiter"
@@ -98,6 +100,7 @@ func getVolterraResourceMap() map[string]*schema.Resource {
 		"volterra_dns_load_balancer":         resourceVolterraDnsLoadBalancer(),
 		"volterra_dns_zone":                  resourceVolterraDnsZone(),
 		"volterra_endpoint":                  resourceVolterraEndpoint(),
+		"volterra_enhanced_firewall_policy":  resourceVolterraEnhancedFirewallPolicy(),
 		"volterra_fast_acl":                  resourceVolterraFastAcl(),
 		"volterra_fast_acl_rule":             resourceVolterraFastAclRule(),
 		"volterra_fleet":                     resourceVolterraFleet(),
@@ -114,6 +117,7 @@ func getVolterraResourceMap() map[string]*schema.Resource {
 		"volterra_network_firewall":          resourceVolterraNetworkFirewall(),
 		"volterra_network_policy":            resourceVolterraNetworkPolicy(),
 		"volterra_network_policy_rule":       resourceVolterraNetworkPolicyRule(),
+		"volterra_nfv_service":               resourceVolterraNfvService(),
 		"volterra_policer":                   resourceVolterraPolicer(),
 		"volterra_protocol_policer":          resourceVolterraProtocolPolicer(),
 		"volterra_rate_limiter":              resourceVolterraRateLimiter(),
@@ -168,6 +172,7 @@ func getAllAkarObjectTypes() sets.String {
 		ves_io_schema_dns_load_balancer.ObjectType,
 		ves_io_schema_dns_zone.ObjectType,
 		ves_io_schema_endpoint.ObjectType,
+		ves_io_schema_enhanced_firewall_policy.ObjectType,
 		ves_io_schema_fast_acl.ObjectType,
 		ves_io_schema_fast_acl_rule.ObjectType,
 		ves_io_schema_fleet.ObjectType,
@@ -184,6 +189,7 @@ func getAllAkarObjectTypes() sets.String {
 		ves_io_schema_network_firewall.ObjectType,
 		ves_io_schema_network_policy.ObjectType,
 		ves_io_schema_network_policy_rule.ObjectType,
+		ves_io_schema_nfv_service.ObjectType,
 		ves_io_schema_policer.ObjectType,
 		ves_io_schema_protocol_policer.ObjectType,
 		ves_io_schema_rate_limiter.ObjectType,

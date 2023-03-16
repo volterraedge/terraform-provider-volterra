@@ -1485,8 +1485,24 @@ func resourceVolterraGcpVpcSite() *schema.Resource {
 
 									"perf_mode_l3_enhanced": {
 
-										Type:     schema.TypeBool,
+										Type:     schema.TypeSet,
 										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"jumbo": {
+
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
+
+												"no_jumbo": {
+
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
+											},
+										},
 									},
 
 									"perf_mode_l7_enhanced": {
@@ -1649,8 +1665,24 @@ func resourceVolterraGcpVpcSite() *schema.Resource {
 
 									"perf_mode_l3_enhanced": {
 
-										Type:     schema.TypeBool,
+										Type:     schema.TypeSet,
 										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"jumbo": {
+
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
+
+												"no_jumbo": {
+
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
+											},
+										},
 									},
 
 									"perf_mode_l7_enhanced": {
@@ -4775,11 +4807,40 @@ func resourceVolterraGcpVpcSiteCreate(d *schema.ResourceData, meta interface{}) 
 					if v, ok := performanceEnhancementModeMapStrToI["perf_mode_l3_enhanced"]; ok && !isIntfNil(v) && !perfModeChoiceTypeFound {
 
 						perfModeChoiceTypeFound = true
+						perfModeChoiceInt := &ves_io_schema_views.PerformanceEnhancementModeType_PerfModeL3Enhanced{}
+						perfModeChoiceInt.PerfModeL3Enhanced = &ves_io_schema_views.L3PerformanceEnhancementType{}
+						performanceEnhancementMode.PerfModeChoice = perfModeChoiceInt
 
-						if v.(bool) {
-							perfModeChoiceInt := &ves_io_schema_views.PerformanceEnhancementModeType_PerfModeL3Enhanced{}
-							perfModeChoiceInt.PerfModeL3Enhanced = &ves_io_schema.Empty{}
-							performanceEnhancementMode.PerfModeChoice = perfModeChoiceInt
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							perfModeChoiceTypeFound := false
+
+							if v, ok := cs["jumbo"]; ok && !isIntfNil(v) && !perfModeChoiceTypeFound {
+
+								perfModeChoiceTypeFound = true
+
+								if v.(bool) {
+									perfModeChoiceIntNew := &ves_io_schema_views.L3PerformanceEnhancementType_Jumbo{}
+									perfModeChoiceIntNew.Jumbo = &ves_io_schema.Empty{}
+									perfModeChoiceInt.PerfModeL3Enhanced.PerfModeChoice = perfModeChoiceIntNew
+								}
+
+							}
+
+							if v, ok := cs["no_jumbo"]; ok && !isIntfNil(v) && !perfModeChoiceTypeFound {
+
+								perfModeChoiceTypeFound = true
+
+								if v.(bool) {
+									perfModeChoiceIntNew := &ves_io_schema_views.L3PerformanceEnhancementType_NoJumbo{}
+									perfModeChoiceIntNew.NoJumbo = &ves_io_schema.Empty{}
+									perfModeChoiceInt.PerfModeL3Enhanced.PerfModeChoice = perfModeChoiceIntNew
+								}
+
+							}
+
 						}
 
 					}
@@ -5015,11 +5076,40 @@ func resourceVolterraGcpVpcSiteCreate(d *schema.ResourceData, meta interface{}) 
 					if v, ok := performanceEnhancementModeMapStrToI["perf_mode_l3_enhanced"]; ok && !isIntfNil(v) && !perfModeChoiceTypeFound {
 
 						perfModeChoiceTypeFound = true
+						perfModeChoiceInt := &ves_io_schema_views.PerformanceEnhancementModeType_PerfModeL3Enhanced{}
+						perfModeChoiceInt.PerfModeL3Enhanced = &ves_io_schema_views.L3PerformanceEnhancementType{}
+						performanceEnhancementMode.PerfModeChoice = perfModeChoiceInt
 
-						if v.(bool) {
-							perfModeChoiceInt := &ves_io_schema_views.PerformanceEnhancementModeType_PerfModeL3Enhanced{}
-							perfModeChoiceInt.PerfModeL3Enhanced = &ves_io_schema.Empty{}
-							performanceEnhancementMode.PerfModeChoice = perfModeChoiceInt
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							perfModeChoiceTypeFound := false
+
+							if v, ok := cs["jumbo"]; ok && !isIntfNil(v) && !perfModeChoiceTypeFound {
+
+								perfModeChoiceTypeFound = true
+
+								if v.(bool) {
+									perfModeChoiceIntNew := &ves_io_schema_views.L3PerformanceEnhancementType_Jumbo{}
+									perfModeChoiceIntNew.Jumbo = &ves_io_schema.Empty{}
+									perfModeChoiceInt.PerfModeL3Enhanced.PerfModeChoice = perfModeChoiceIntNew
+								}
+
+							}
+
+							if v, ok := cs["no_jumbo"]; ok && !isIntfNil(v) && !perfModeChoiceTypeFound {
+
+								perfModeChoiceTypeFound = true
+
+								if v.(bool) {
+									perfModeChoiceIntNew := &ves_io_schema_views.L3PerformanceEnhancementType_NoJumbo{}
+									perfModeChoiceIntNew.NoJumbo = &ves_io_schema.Empty{}
+									perfModeChoiceInt.PerfModeL3Enhanced.PerfModeChoice = perfModeChoiceIntNew
+								}
+
+							}
+
 						}
 
 					}
@@ -8189,11 +8279,40 @@ func resourceVolterraGcpVpcSiteUpdate(d *schema.ResourceData, meta interface{}) 
 					if v, ok := performanceEnhancementModeMapStrToI["perf_mode_l3_enhanced"]; ok && !isIntfNil(v) && !perfModeChoiceTypeFound {
 
 						perfModeChoiceTypeFound = true
+						perfModeChoiceInt := &ves_io_schema_views.PerformanceEnhancementModeType_PerfModeL3Enhanced{}
+						perfModeChoiceInt.PerfModeL3Enhanced = &ves_io_schema_views.L3PerformanceEnhancementType{}
+						performanceEnhancementMode.PerfModeChoice = perfModeChoiceInt
 
-						if v.(bool) {
-							perfModeChoiceInt := &ves_io_schema_views.PerformanceEnhancementModeType_PerfModeL3Enhanced{}
-							perfModeChoiceInt.PerfModeL3Enhanced = &ves_io_schema.Empty{}
-							performanceEnhancementMode.PerfModeChoice = perfModeChoiceInt
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							perfModeChoiceTypeFound := false
+
+							if v, ok := cs["jumbo"]; ok && !isIntfNil(v) && !perfModeChoiceTypeFound {
+
+								perfModeChoiceTypeFound = true
+
+								if v.(bool) {
+									perfModeChoiceIntNew := &ves_io_schema_views.L3PerformanceEnhancementType_Jumbo{}
+									perfModeChoiceIntNew.Jumbo = &ves_io_schema.Empty{}
+									perfModeChoiceInt.PerfModeL3Enhanced.PerfModeChoice = perfModeChoiceIntNew
+								}
+
+							}
+
+							if v, ok := cs["no_jumbo"]; ok && !isIntfNil(v) && !perfModeChoiceTypeFound {
+
+								perfModeChoiceTypeFound = true
+
+								if v.(bool) {
+									perfModeChoiceIntNew := &ves_io_schema_views.L3PerformanceEnhancementType_NoJumbo{}
+									perfModeChoiceIntNew.NoJumbo = &ves_io_schema.Empty{}
+									perfModeChoiceInt.PerfModeL3Enhanced.PerfModeChoice = perfModeChoiceIntNew
+								}
+
+							}
+
 						}
 
 					}
@@ -8268,11 +8387,40 @@ func resourceVolterraGcpVpcSiteUpdate(d *schema.ResourceData, meta interface{}) 
 					if v, ok := performanceEnhancementModeMapStrToI["perf_mode_l3_enhanced"]; ok && !isIntfNil(v) && !perfModeChoiceTypeFound {
 
 						perfModeChoiceTypeFound = true
+						perfModeChoiceInt := &ves_io_schema_views.PerformanceEnhancementModeType_PerfModeL3Enhanced{}
+						perfModeChoiceInt.PerfModeL3Enhanced = &ves_io_schema_views.L3PerformanceEnhancementType{}
+						performanceEnhancementMode.PerfModeChoice = perfModeChoiceInt
 
-						if v.(bool) {
-							perfModeChoiceInt := &ves_io_schema_views.PerformanceEnhancementModeType_PerfModeL3Enhanced{}
-							perfModeChoiceInt.PerfModeL3Enhanced = &ves_io_schema.Empty{}
-							performanceEnhancementMode.PerfModeChoice = perfModeChoiceInt
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							perfModeChoiceTypeFound := false
+
+							if v, ok := cs["jumbo"]; ok && !isIntfNil(v) && !perfModeChoiceTypeFound {
+
+								perfModeChoiceTypeFound = true
+
+								if v.(bool) {
+									perfModeChoiceIntNew := &ves_io_schema_views.L3PerformanceEnhancementType_Jumbo{}
+									perfModeChoiceIntNew.Jumbo = &ves_io_schema.Empty{}
+									perfModeChoiceInt.PerfModeL3Enhanced.PerfModeChoice = perfModeChoiceIntNew
+								}
+
+							}
+
+							if v, ok := cs["no_jumbo"]; ok && !isIntfNil(v) && !perfModeChoiceTypeFound {
+
+								perfModeChoiceTypeFound = true
+
+								if v.(bool) {
+									perfModeChoiceIntNew := &ves_io_schema_views.L3PerformanceEnhancementType_NoJumbo{}
+									perfModeChoiceIntNew.NoJumbo = &ves_io_schema.Empty{}
+									perfModeChoiceInt.PerfModeL3Enhanced.PerfModeChoice = perfModeChoiceIntNew
+								}
+
+							}
+
 						}
 
 					}

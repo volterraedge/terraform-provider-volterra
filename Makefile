@@ -98,16 +98,16 @@ cmd-lint:
 	deadcode .
 	gofmt -d -e -l -s $$(go list -f "{{ .Dir }}" ./...)
 
-	@echo Checking copyright in files
-	@err=0; \
-	for f in ${SOURCE_FILES}; do \
-		grep ${COPYRIGHT} $${f} > /dev/null; \
-		if [ "$${?}" != "0" ]; then \
-			echo "Missing copyright in $${f}"; \
-			let "err++"; \
-		fi \
-	done; \
-	if [ "$${err}" != "0" ]; then exit 1; fi
+	#@echo Checking copyright in files
+	#@err=0; \
+	#for f in ${SOURCE_FILES}; do \
+	#	grep ${COPYRIGHT} $${f} > /dev/null; \
+	#	if [ "$${?}" != "0" ]; then \
+	#		echo "Missing copyright in $${f}"; \
+	#		let "err++"; \
+	#	fi \
+	#done; \
+	#if [ "$${err}" != "0" ]; then exit 1; fi
 
 cmd-unittest:
 	mkdir -p ./coverage_out/

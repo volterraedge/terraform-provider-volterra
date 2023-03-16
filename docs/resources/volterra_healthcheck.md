@@ -20,21 +20,11 @@ resource "volterra_healthcheck" "example" {
   name      = "acmecorp-web"
   namespace = "staging"
 
-  // One of the arguments from this list "http_health_check tcp_health_check" must be set
+  // One of the arguments from this list "http_health_check tcp_health_check dns_proxy_tcp_health_check dns_proxy_udp_health_check dns_health_check dns_proxy_icmp_health_check" must be set
 
-  http_health_check {
-    expected_status_codes = ["200-250"]
-
-    headers = {
-      "key1" = "value1"
-    }
-
-    // One of the arguments from this list "use_origin_server_name host_header" must be set
-    use_origin_server_name = true
-    path                   = "/healthcheck"
-
-    request_headers_to_remove = ["user-agent"]
-    use_http2                 = true
+  tcp_health_check {
+    expected_response = "00000034"
+    send_payload      = "000000FF"
   }
   healthy_threshold   = ["2"]
   interval            = ["10"]
@@ -63,6 +53,14 @@ Argument Reference
 
 ### Spec Argument Reference
 
+`dns_health_check` - (Optional) 4. Expected IP Address. See [Dns Health Check ](#dns-health-check) below for details.
+
+`dns_proxy_icmp_health_check` - (Optional) Specifies ICMP HealthCheck (bool).
+
+`dns_proxy_tcp_health_check` - (Optional) Specifies send string and expected response payload pattern for TCP health Check. See [Dns Proxy Tcp Health Check ](#dns-proxy-tcp-health-check) below for details.
+
+`dns_proxy_udp_health_check` - (Optional) Specifies send string and expected response payload pattern for UDP health Check. See [Dns Proxy Udp Health Check ](#dns-proxy-udp-health-check) below for details.
+
 `http_health_check` - (Optional) 4. Request headers to remove. See [Http Health Check ](#http-health-check) below for details.
 
 `tcp_health_check` - (Optional) Specifies send payload and expected response payload. See [Tcp Health Check ](#tcp-health-check) below for details.
@@ -76,6 +74,38 @@ Argument Reference
 `timeout` - (Required) health check attempt will be considered a failure. (`Int`).
 
 `unhealthy_threshold` - (Required) this threshold is ignored and the host is considered unhealthy immediately. (`Int`).
+
+### Dns Health Check
+
+1.	Expected IP Address.
+
+`expected_rcode` - (Required) Specifies an expected Rcode in the answer section of DNS Response, option [no-error, any](`String`).
+
+`expected_record_type` - (Required) options: [REQUESTED_QUERY_TYPE, RECORD_TYPE_ANY] when REQUESTED_QUERY_TYPE is set, health monitor expects record type same as requested query type (`String`).
+
+`expected_response` - (Required) Specifies an IPv4 or IPv6 address in the answer section of DNS Response (`String`).
+
+`query_name` - (Required) The query name that the monitor sends a DNS query for. (`String`).
+
+`query_type` - (Required) The DNS query type that the monitor sends. Supported types are: [a, aaaa] default: a (`String`).
+
+`reverse` - (Optional) string match marks the monitored object down instead of up. (`Bool`).
+
+### Dns Proxy Tcp Health Check
+
+Specifies send string and expected response payload pattern for TCP health Check.
+
+`expected_response` - (Required) Specifies a regular expression pattern which will be matched against response payload (`String`).
+
+`send_payload` - (Required) Text string sent in the request (`String`).
+
+### Dns Proxy Udp Health Check
+
+Specifies send string and expected response payload pattern for UDP health Check.
+
+`expected_response` - (Required) Specifies a regular expression pattern which will be matched against response payload (`String`).
+
+`send_payload` - (Required) Text string sent in the request (`String`).
 
 ### Http Health Check
 

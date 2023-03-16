@@ -20,34 +20,22 @@ resource "volterra_tcp_loadbalancer" "example" {
   name      = "acmecorp-web"
   namespace = "staging"
 
-  // One of the arguments from this list "advertise_on_public advertise_custom do_not_advertise advertise_on_public_default_vip" must be set
+  // One of the arguments from this list "advertise_on_public_default_vip advertise_on_public advertise_custom do_not_advertise" must be set
+  do_not_advertise = true
 
-  advertise_custom {
-    advertise_where {
-      // One of the arguments from this list "site virtual_site vk8s_service virtual_network" must be set
-
-      site {
-        ip      = "8.8.8.8"
-        network = "network"
-
-        site {
-          name      = "test1"
-          namespace = "staging"
-          tenant    = "acmecorp"
-        }
-      }
-
-      // One of the arguments from this list "use_default_port port" must be set
-      use_default_port = true
-    }
-  }
   // One of the arguments from this list "retract_cluster do_not_retract_cluster" must be set
   retract_cluster = true
+
   // One of the arguments from this list "hash_policy_choice_round_robin hash_policy_choice_least_active hash_policy_choice_random hash_policy_choice_source_ip_stickiness" must be set
   hash_policy_choice_round_robin = true
+
   // One of the arguments from this list "tls_tcp tcp tls_tcp_auto_cert" must be set
   tcp = true
-  // One of the arguments from this list "no_sni sni default_lb_with_sni" must be set
+
+  // One of the arguments from this list "active_service_policies service_policies_from_namespace no_service_policies" must be set
+  service_policies_from_namespace = true
+
+  // One of the arguments from this list "default_lb_with_sni no_sni sni" must be set
   no_sni = true
 }
 
@@ -84,7 +72,7 @@ Argument Reference
 
 `retract_cluster` - (Optional) for route (bool).
 
-`dns_volterra_managed` - (Optional) This requires the domain to be delegated to Volterra using the Delegated Domain feature. (`Bool`).
+`dns_volterra_managed` - (Optional) This requires the domain to be delegated to F5XC using the Delegated Domain feature. (`Bool`).
 
 `domains` - (Optional) Domains also indicate the list of names for which DNS resolution will be done by VER (`List of String`).
 
@@ -108,11 +96,23 @@ Argument Reference
 
 `origin_pools_weights` - (Optional) Origin pools and weights used for this load balancer.. See [Origin Pools Weights ](#origin-pools-weights) below for details.
 
+`active_service_policies` - (Optional) Apply the specified list of service policies and bypass the namespace service policy set. See [Active Service Policies ](#active-service-policies) below for details.
+
+`no_service_policies` - (Optional) Do not apply any service policies i.e. bypass the namespace service policy set (bool).
+
+`service_policies_from_namespace` - (Optional) Apply the active service policies configured as part of the namespace service policy set (bool).
+
 `default_lb_with_sni` - (Optional) Also enables usage as Default LB for Non SNI Clients (bool).
 
 `no_sni` - (Optional) Loadbalancer without Server Name Indication support (bool).
 
 `sni` - (Optional) Enables Server Name Indication for Loadbalancer (bool).
+
+### Active Service Policies
+
+Apply the specified list of service policies and bypass the namespace service policy set.
+
+`policies` - (Required) If all policies are evaluated and none match, then the request will be denied by default.. See [ref](#ref) below for details.
 
 ### Advertise Custom
 
@@ -144,7 +144,7 @@ Where should this load balancer be available.
 
 ### Blindfold Secret Info
 
-Blindfold Secret is used for the secrets managed by Volterra Secret Management Service.
+Blindfold Secret is used for the secrets managed by F5XC Secret Management Service.
 
 `decryption_provider` - (Optional) Name of the Secret Management Access object that contains information about the backend Secret Management service. (`String`).
 
@@ -172,7 +172,7 @@ Clear Secret is used for the secrets that are not encrypted.
 
 ### Custom Hash Algorithms
 
-Use hash algorithms in the custom order. Volterra will try to fetch ocsp response from the CA in the given order. Additionally, LoadBalancer will not become active until ocspResponse cannot be fetched if the certificate has MustStaple extension set..
+Use hash algorithms in the custom order. F5XC will try to fetch ocsp response from the CA in the given order. Additionally, LoadBalancer will not become active until ocspResponse cannot be fetched if the certificate has MustStaple extension set..
 
 `hash_algorithms` - (Required) Ordered list of hash algorithms to be used. (`List of Strings`).
 
@@ -236,13 +236,13 @@ TLS Private Key data in unencrypted PEM format including the PEM headers. The da
 
 `secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).
 
-`blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by Volterra Secret Management Service. See [Blindfold Secret Info ](#blindfold-secret-info) below for details.
+`blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Blindfold Secret Info ](#blindfold-secret-info) below for details.
 
 `clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Clear Secret Info ](#clear-secret-info) below for details.
 
 `vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Vault Secret Info ](#vault-secret-info) below for details.
 
-`wingman_secret_info` - (Optional) Secret is given as bootstrap secret in Volterra Security Sidecar. See [Wingman Secret Info ](#wingman-secret-info) below for details.
+`wingman_secret_info` - (Optional) Secret is given as bootstrap secret in F5XC Security Sidecar. See [Wingman Secret Info ](#wingman-secret-info) below for details.
 
 ### Ref
 
@@ -264,19 +264,31 @@ Advertise on a customer site and a given network..
 
 `site` - (Required) Reference to site object. See [ref](#ref) below for details.
 
+### Tls Cert Params
+
+TLS Parameters and selected Certificates for downstream connections (RE sites only).
+
+`certificates` - (Required) Select one or more certificates with any domain names.. See [ref](#ref) below for details.
+
+`no_mtls` - (Optional) x-displayName: "Disable" (bool).
+
+`use_mtls` - (Optional) x-displayName: "Enable". See [Use Mtls ](#use-mtls) below for details.
+
+`tls_config` - (Optional) Configuration of TLS settings such as min/max TLS version and ciphersuites. See [Tls Config ](#tls-config) below for details.
+
 ### Tls Certificates
 
-Set of TLS certificates.
+for example, domain.com and *.domain.com - but use different signature algorithms.
 
 `certificate_url` - (Required) Certificate or certificate chain in PEM format including the PEM headers. (`String`).
 
 `description` - (Optional) Description for the certificate (`String`).
 
-`custom_hash_algorithms` - (Optional) Use hash algorithms in the custom order. Volterra will try to fetch ocsp response from the CA in the given order. Additionally, LoadBalancer will not become active until ocspResponse cannot be fetched if the certificate has MustStaple extension set.. See [Custom Hash Algorithms ](#custom-hash-algorithms) below for details.
+`custom_hash_algorithms` - (Optional) Use hash algorithms in the custom order. F5XC will try to fetch ocsp response from the CA in the given order. Additionally, LoadBalancer will not become active until ocspResponse cannot be fetched if the certificate has MustStaple extension set.. See [Custom Hash Algorithms ](#custom-hash-algorithms) below for details.
 
 `disable_ocsp_stapling` - (Optional) This is the default behavior if no choice is selected.. See [Disable Ocsp Stapling ](#disable-ocsp-stapling) below for details.
 
-`use_system_defaults` - (Optional) Volterra will try to fetch OCSPResponse with sha256 and sha1 as HashAlgorithm, in that order.. See [Use System Defaults ](#use-system-defaults) below for details.
+`use_system_defaults` - (Optional) F5XC will try to fetch OCSPResponse with sha256 and sha1 as HashAlgorithm, in that order.. See [Use System Defaults ](#use-system-defaults) below for details.
 
 `private_key` - (Required) TLS Private Key data in unencrypted PEM format including the PEM headers. The data may be optionally secured using BlindFold. TLS key has to match the accompanying certificate.. See [Private Key ](#private-key) below for details.
 
@@ -294,13 +306,13 @@ Configuration of TLS settings such as min/max TLS version and ciphersuites.
 
 ### Tls Parameters
 
-TLS parameters for downstream connections..
+Inline TLS parameters for downstream connections..
 
 `no_mtls` - (Optional) x-displayName: "Disable" (bool).
 
 `use_mtls` - (Optional) x-displayName: "Enable". See [Use Mtls ](#use-mtls) below for details.
 
-`tls_certificates` - (Required) Set of TLS certificates. See [Tls Certificates ](#tls-certificates) below for details.
+`tls_certificates` - (Required) for example, domain.com and *.domain.com - but use different signature algorithms. See [Tls Certificates ](#tls-certificates) below for details.
 
 `tls_config` - (Optional) Configuration of TLS settings such as min/max TLS version and ciphersuites. See [Tls Config ](#tls-config) below for details.
 
@@ -308,7 +320,9 @@ TLS parameters for downstream connections..
 
 User is responsible for managing DNS to this load balancer..
 
-`tls_parameters` - (Optional) TLS parameters for downstream connections.. See [Tls Parameters ](#tls-parameters) below for details.
+`tls_cert_params` - (Optional) TLS Parameters and selected Certificates for downstream connections (RE sites only). See [Tls Cert Params ](#tls-cert-params) below for details.
+
+`tls_parameters` - (Optional) Inline TLS parameters for downstream connections.. See [Tls Parameters ](#tls-parameters) below for details.
 
 ### Tls Tcp Auto Cert
 
@@ -336,7 +350,7 @@ x-displayName: "Enable".
 
 ### Use System Defaults
 
-Volterra will try to fetch OCSPResponse with sha256 and sha1 as HashAlgorithm, in that order..
+F5XC will try to fetch OCSPResponse with sha256 and sha1 as HashAlgorithm, in that order..
 
 ### Vault Secret Info
 
@@ -380,7 +394,7 @@ Advertise on vK8s Service Network on RE..
 
 ### Wingman Secret Info
 
-Secret is given as bootstrap secret in Volterra Security Sidecar.
+Secret is given as bootstrap secret in F5XC Security Sidecar.
 
 `name` - (Required) Name of the secret. (`String`).
 

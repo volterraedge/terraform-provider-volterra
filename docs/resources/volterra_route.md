@@ -39,13 +39,13 @@ resource "volterra_route" "example" {
         name         = "Content-Type"
 
         // One of the arguments from this list "exact regex presence" must be set
-        presence = true
+        regex = "regex"
       }
 
       http_method = "http_method"
 
       path {
-        // One of the arguments from this list "path regex prefix" must be set
+        // One of the arguments from this list "prefix path regex" must be set
         prefix = "/register/"
       }
 
@@ -53,7 +53,7 @@ resource "volterra_route" "example" {
         key = "assignee_username"
 
         // One of the arguments from this list "exact regex" must be set
-        exact = "exact"
+        regex = "regex"
       }
     }
 
@@ -62,24 +62,7 @@ resource "volterra_route" "example" {
       name   = "value"
 
       // One of the arguments from this list "value secret_value" must be set
-
-      secret_value {
-        blindfold_secret_info_internal {
-          decryption_provider = "value"
-          location            = "string:///U2VjcmV0SW5mb3JtYXRpb24="
-          store_provider      = "value"
-        }
-
-        secret_encoding_type = "secret_encoding_type"
-
-        // One of the arguments from this list "blindfold_secret_info vault_secret_info clear_secret_info wingman_secret_info" must be set
-
-        blindfold_secret_info {
-          decryption_provider = "value"
-          location            = "string:///U2VjcmV0SW5mb3JtYXRpb24="
-          store_provider      = "value"
-        }
-      }
+      value = "value"
     }
 
     request_headers_to_remove = ["host"]
@@ -88,25 +71,8 @@ resource "volterra_route" "example" {
       append = true
       name   = "value"
 
-      // One of the arguments from this list "secret_value value" must be set
-
-      secret_value {
-        blindfold_secret_info_internal {
-          decryption_provider = "value"
-          location            = "string:///U2VjcmV0SW5mb3JtYXRpb24="
-          store_provider      = "value"
-        }
-
-        secret_encoding_type = "secret_encoding_type"
-
-        // One of the arguments from this list "blindfold_secret_info vault_secret_info clear_secret_info wingman_secret_info" must be set
-
-        blindfold_secret_info {
-          decryption_provider = "value"
-          location            = "string:///U2VjcmV0SW5mb3JtYXRpb24="
-          store_provider      = "value"
-        }
-      }
+      // One of the arguments from this list "value secret_value" must be set
+      value = "value"
     }
 
     response_headers_to_remove = ["host"]
@@ -120,7 +86,7 @@ resource "volterra_route" "example" {
         max_request_time  = "30"
       }
 
-      // One of the arguments from this list "retract_cluster do_not_retract_cluster" must be set
+      // One of the arguments from this list "do_not_retract_cluster retract_cluster" must be set
       retract_cluster = true
 
       cors_policy {
@@ -157,21 +123,8 @@ resource "volterra_route" "example" {
       }
 
       hash_policy {
-        // One of the arguments from this list "source_ip header_name cookie" must be set
-
-        cookie {
-          // One of the arguments from this list "ignore_httponly add_httponly" must be set
-          add_httponly = true
-          name         = "userid"
-          path         = "/Users/userid/browser/cookies"
-
-          // One of the arguments from this list "samesite_none ignore_samesite samesite_strict samesite_lax" must be set
-          ignore_samesite = true
-
-          // One of the arguments from this list "ignore_secure add_secure" must be set
-          ignore_secure = true
-          ttl           = "5000"
-        }
+        // One of the arguments from this list "header_name cookie source_ip" must be set
+        header_name = "host"
 
         terminal = true
       }
@@ -224,19 +177,14 @@ resource "volterra_route" "example" {
     }
     service_policy {
       // One of the arguments from this list "disable context_extensions" must be set
-
-      context_extensions {
-        context_extensions = {
-          "key1" = "value1"
-        }
-      }
+      disable = true
     }
     skip_lb_override = true
     waf_type {
-      // One of the arguments from this list "app_firewall disable_waf inherit_waf" must be set
+      // One of the arguments from this list "waf waf_rules app_firewall" must be set
 
-      app_firewall {
-        app_firewall {
+      waf {
+        waf {
           name      = "test1"
           namespace = "staging"
           tenant    = "acmecorp"
@@ -281,7 +229,7 @@ Add secure attribute.
 
 A direct reference to an Application Firewall configuration object.
 
-`app_firewall` - (Required) References to an Application Firewall configuration object. See [ref](#ref) below for details.
+`app_firewall` - (Optional) References to an Application Firewall configuration object. See [ref](#ref) below for details.
 
 ### Back Off
 
@@ -413,10 +361,6 @@ sent to the cluster specified in the destination.
 
 `weight` - (Optional) sent to the cluster specified in the destination (`Int`).
 
-### Disable Waf
-
-Any Application Firewall configuration will not be enforced.
-
 ### Do Not Retract Cluster
 
 configuration..
@@ -458,10 +402,6 @@ Ignore Samesite attribute.
 ### Ignore Secure
 
 Ignore secure attribute.
-
-### Inherit Waf
-
-Any Application Firewall configuration that was configured on a higher level will be enforced.
 
 ### Inherited Bot Defense Javascript Injection
 
@@ -627,8 +567,6 @@ Send redirect response.
 
 `host_redirect` - (Optional) swap host part of incoming URL in redirect URL (`String`).
 
-`port_redirect` - (Optional) Specify the port value to redirect to a URL with non default port(443) (`Int`).
-
 `proto_redirect` - (Optional) When incoming-proto option is specified, swapping of protocol is not done. (`String`).
 
 `all_params` - (Optional) be removed. Default value is false, which means query portion of the URL will NOT be removed (`Bool`).
@@ -745,15 +683,27 @@ Vault Secret is used for the secrets managed by Hashicorp Vault.
 
 `version` - (Optional) If not provided latest version will be returned. (`Int`).
 
+### Waf
+
+A WAF object direct reference.
+
+`waf` - (Optional) A direct reference to web application firewall configuration object. See [ref](#ref) below for details.
+
+### Waf Rules
+
+A set of direct references of WAF Rules objects.
+
+`waf_rules` - (Optional) References to a set of WAF Rules configuration object. See [ref](#ref) below for details.
+
 ### Waf Type
 
 waf_type specified at route level overrides waf configuration at VirtualHost level.
 
 `app_firewall` - (Optional) A direct reference to an Application Firewall configuration object. See [App Firewall ](#app-firewall) below for details.
 
-`disable_waf` - (Optional) Any Application Firewall configuration will not be enforced (bool).
+`waf` - (Optional) A WAF object direct reference. See [Waf ](#waf) below for details.
 
-`inherit_waf` - (Optional) Any Application Firewall configuration that was configured on a higher level will be enforced (bool).
+`waf_rules` - (Optional) A set of direct references of WAF Rules objects. See [Waf Rules ](#waf-rules) below for details.
 
 ### Web Socket Config
 

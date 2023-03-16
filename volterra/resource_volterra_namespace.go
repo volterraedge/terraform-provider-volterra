@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2020 Volterra, Inc. Licensed under APACHE LICENSE, VERSION 2.0
+// Copyright (c) 2023 F5 Inc. All rights reserved.
 //
 
 package volterra

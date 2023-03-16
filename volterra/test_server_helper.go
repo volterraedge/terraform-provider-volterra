@@ -1,6 +1,4 @@
-//
-// Copyright (c) 2020 Volterra, Inc. Licensed under APACHE LICENSE, VERSION 2.0
-//
+// Copyright (c) 2023 F5 Inc. All rights reserved.
 package volterra
 
 import (
@@ -388,6 +386,10 @@ func (t *namespaceCustomAPIServer) CascadeDelete(ctx context.Context, req *ves_i
 
 func (t *namespaceCustomAPIServer) SuggestValues(ctx context.Context, req *ves_io_schema_ns.SuggestValuesReq) (*ves_io_schema_ns.SuggestValuesResp, error) {
 	return &ves_io_schema_ns.SuggestValuesResp{}, nil
+}
+
+func (t *namespaceCustomAPIServer) ValidateRules(ctx context.Context, req *ves_io_schema_ns.ValidateRulesReq) (*ves_io_schema_ns.ValidateRulesResponse, error) {
+	return &ves_io_schema_ns.ValidateRulesResponse{}, nil
 }
 
 func (n *namespaceCustomAPIServer) UpdateAllowAdvertiseOnPublic(context.Context,

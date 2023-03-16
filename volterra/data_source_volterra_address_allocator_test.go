@@ -1,8 +1,6 @@
-//
 // data_source_volterra_address_allocator_test.go
 //
-// Copyright (c) 2020 Volterra, Inc. All rights reserved.
-//
+// Copyright (c) 2023 F5 Inc. All rights reserved.
 package volterra
 
 import (
