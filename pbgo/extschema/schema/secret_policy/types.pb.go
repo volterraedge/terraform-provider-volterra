@@ -240,7 +240,6 @@ type GlobalSpecType struct {
 	// rule choice
 	//
 	// x-displayName: "Select Policy Rules"
-	// x-required
 	// Allowed/Denied Sources rules provide the ability to allow/deny lists of IP addresses, countries, TLS fingerprints and ASNs.
 	// Custom rules provide more flexibility to define your own logic to control incoming requests.
 	//

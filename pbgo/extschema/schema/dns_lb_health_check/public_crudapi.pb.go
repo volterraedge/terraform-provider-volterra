@@ -3,7 +3,7 @@
 
 // DNS Load Balancer Health Check
 //
-// x-displayName: "Health Check"
+// x-displayName: "DNS Load Balancer Health Check"
 // DNS Load Balancer Health Check object is used for configuring DNS Load Balancer Health Checks
 
 package dns_lb_health_check
@@ -1780,7 +1780,7 @@ type APIClient interface {
 	Get(ctx context.Context, in *GetRequest, opts ...grpc.CallOption) (*GetResponse, error)
 	// List
 	//
-	// x-displayName: "List Health Check"
+	// x-displayName: "List DNS Load Balancer Health Check"
 	// List the set of dns_lb_health_check in a namespace
 	List(ctx context.Context, in *ListRequest, opts ...grpc.CallOption) (*ListResponse, error)
 	// Replace DNS Load Balancer Health Check
@@ -1790,7 +1790,7 @@ type APIClient interface {
 	Replace(ctx context.Context, in *ReplaceRequest, opts ...grpc.CallOption) (*ReplaceResponse, error)
 	// Delete
 	//
-	// x-displayName: "Delete Health Check"
+	// x-displayName: "Delete DNS Load Balancer Health Check"
 	// Delete the specified dns_lb_health_check
 	Delete(ctx context.Context, in *DeleteRequest, opts ...grpc.CallOption) (*types.Empty, error)
 }
@@ -1862,7 +1862,7 @@ type APIServer interface {
 	Get(context.Context, *GetRequest) (*GetResponse, error)
 	// List
 	//
-	// x-displayName: "List Health Check"
+	// x-displayName: "List DNS Load Balancer Health Check"
 	// List the set of dns_lb_health_check in a namespace
 	List(context.Context, *ListRequest) (*ListResponse, error)
 	// Replace DNS Load Balancer Health Check
@@ -1872,7 +1872,7 @@ type APIServer interface {
 	Replace(context.Context, *ReplaceRequest) (*ReplaceResponse, error)
 	// Delete
 	//
-	// x-displayName: "Delete Health Check"
+	// x-displayName: "Delete DNS Load Balancer Health Check"
 	// Delete the specified dns_lb_health_check
 	Delete(context.Context, *DeleteRequest) (*types.Empty, error)
 }

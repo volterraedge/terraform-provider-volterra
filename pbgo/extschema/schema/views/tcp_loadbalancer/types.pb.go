@@ -37,11 +37,15 @@ const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 // x-displayName: "BYOC TLS over TCP Choice"
 // Choice for selecting TLS over TCP proxy with bring your own certificates
 type ProxyTypeTLSTCP struct {
-	// TLS parameters.
+	// TLS Configuration
 	//
-	// x-displayName: "TLS Parameters"
-	// TLS parameters for downstream connections.
-	TlsParameters *views.DownstreamTlsParamsType `protobuf:"bytes,1,opt,name=tls_parameters,json=tlsParameters,proto3" json:"tls_parameters,omitempty"`
+	// x-displayName: "TLS Configuration"
+	// TLS Certificate Parameters for downstream connections
+	//
+	// Types that are valid to be assigned to TlsCertificatesChoice:
+	//	*ProxyTypeTLSTCP_TlsParameters
+	//	*ProxyTypeTLSTCP_TlsCertParams
+	TlsCertificatesChoice isProxyTypeTLSTCP_TlsCertificatesChoice `protobuf_oneof:"tls_certificates_choice"`
 }
 
 func (m *ProxyTypeTLSTCP) Reset()      { *m = ProxyTypeTLSTCP{} }
@@ -72,11 +76,50 @@ func (m *ProxyTypeTLSTCP) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_ProxyTypeTLSTCP proto.InternalMessageInfo
 
-func (m *ProxyTypeTLSTCP) GetTlsParameters() *views.DownstreamTlsParamsType {
+type isProxyTypeTLSTCP_TlsCertificatesChoice interface {
+	isProxyTypeTLSTCP_TlsCertificatesChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
+
+type ProxyTypeTLSTCP_TlsParameters struct {
+	TlsParameters *views.DownstreamTlsParamsType `protobuf:"bytes,1,opt,name=tls_parameters,json=tlsParameters,proto3,oneof" json:"tls_parameters,omitempty"`
+}
+type ProxyTypeTLSTCP_TlsCertParams struct {
+	TlsCertParams *views.DownstreamTLSCertsParams `protobuf:"bytes,3,opt,name=tls_cert_params,json=tlsCertParams,proto3,oneof" json:"tls_cert_params,omitempty"`
+}
+
+func (*ProxyTypeTLSTCP_TlsParameters) isProxyTypeTLSTCP_TlsCertificatesChoice() {}
+func (*ProxyTypeTLSTCP_TlsCertParams) isProxyTypeTLSTCP_TlsCertificatesChoice() {}
+
+func (m *ProxyTypeTLSTCP) GetTlsCertificatesChoice() isProxyTypeTLSTCP_TlsCertificatesChoice {
 	if m != nil {
-		return m.TlsParameters
+		return m.TlsCertificatesChoice
 	}
 	return nil
+}
+
+func (m *ProxyTypeTLSTCP) GetTlsParameters() *views.DownstreamTlsParamsType {
+	if x, ok := m.GetTlsCertificatesChoice().(*ProxyTypeTLSTCP_TlsParameters); ok {
+		return x.TlsParameters
+	}
+	return nil
+}
+
+func (m *ProxyTypeTLSTCP) GetTlsCertParams() *views.DownstreamTLSCertsParams {
+	if x, ok := m.GetTlsCertificatesChoice().(*ProxyTypeTLSTCP_TlsCertParams); ok {
+		return x.TlsCertParams
+	}
+	return nil
+}
+
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*ProxyTypeTLSTCP) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
+		(*ProxyTypeTLSTCP_TlsParameters)(nil),
+		(*ProxyTypeTLSTCP_TlsCertParams)(nil),
+	}
 }
 
 // TLS over TCP with Auto Certs Choice
@@ -180,6 +223,58 @@ func (*ProxyTypeTLSTCPAutoCerts) XXX_OneofWrappers() []interface{} {
 		(*ProxyTypeTLSTCPAutoCerts_NoMtls)(nil),
 		(*ProxyTypeTLSTCPAutoCerts_UseMtls)(nil),
 	}
+}
+
+// service policy list
+//
+// x-displayName: "Service Policy List"
+// List of service policies.
+type ServicePolicyList struct {
+	// policies
+	//
+	// x-displayName: "Policies"
+	// x-required
+	// Service Policies is a sequential engine where policies (and rules within the policy) are evaluated one after the other. It's important to define the
+	// correct order (policies evaluated from top to bottom in the list) for service policies, to get the intended result.
+	// For each request, its characteristics are evaluated based on the match criteria in each service policy starting at the top. If there is a match in the
+	// current policy, then the policy takes effect, and no more policies are evaluated. Otherwise, the next policy is evaluated.
+	// If all policies are evaluated and none match, then the request will be denied by default.
+	Policies []*views.ObjectRefType `protobuf:"bytes,1,rep,name=policies,proto3" json:"policies,omitempty"`
+}
+
+func (m *ServicePolicyList) Reset()      { *m = ServicePolicyList{} }
+func (*ServicePolicyList) ProtoMessage() {}
+func (*ServicePolicyList) Descriptor() ([]byte, []int) {
+	return fileDescriptor_af54a43838ffcca9, []int{2}
+}
+func (m *ServicePolicyList) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *ServicePolicyList) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *ServicePolicyList) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ServicePolicyList.Merge(m, src)
+}
+func (m *ServicePolicyList) XXX_Size() int {
+	return m.Size()
+}
+func (m *ServicePolicyList) XXX_DiscardUnknown() {
+	xxx_messageInfo_ServicePolicyList.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ServicePolicyList proto.InternalMessageInfo
+
+func (m *ServicePolicyList) GetPolicies() []*views.ObjectRefType {
+	if m != nil {
+		return m.Policies
+	}
+	return nil
 }
 
 // GlobalSpecType
@@ -287,6 +382,17 @@ type GlobalSpecType struct {
 	//	*GlobalSpecType_TlsTcpAutoCert
 	//	*GlobalSpecType_TlsTcp
 	LoadbalancerType isGlobalSpecType_LoadbalancerType `protobuf_oneof:"loadbalancer_type"`
+	// Service Policies
+	//
+	// x-displayName: "Service Policies"
+	// x-required
+	// Service policies provide the ability to configure security controls such as IP Allow/Deny lists, Geo IP filtering and Custom rules
+	//
+	// Types that are valid to be assigned to ServicePolicyChoice:
+	//	*GlobalSpecType_ServicePoliciesFromNamespace
+	//	*GlobalSpecType_NoServicePolicies
+	//	*GlobalSpecType_ActiveServicePolicies
+	ServicePolicyChoice isGlobalSpecType_ServicePolicyChoice `protobuf_oneof:"service_policy_choice"`
 	// view_internal
 	//
 	// x-displayName: "View Internal"
@@ -326,7 +432,7 @@ type GlobalSpecType struct {
 func (m *GlobalSpecType) Reset()      { *m = GlobalSpecType{} }
 func (*GlobalSpecType) ProtoMessage() {}
 func (*GlobalSpecType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_af54a43838ffcca9, []int{2}
+	return fileDescriptor_af54a43838ffcca9, []int{3}
 }
 func (m *GlobalSpecType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -381,6 +487,12 @@ type isGlobalSpecType_LoadbalancerType interface {
 	MarshalTo([]byte) (int, error)
 	Size() int
 }
+type isGlobalSpecType_ServicePolicyChoice interface {
+	isGlobalSpecType_ServicePolicyChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
 
 type GlobalSpecType_NoSni struct {
 	NoSni *schema.Empty `protobuf:"bytes,26,opt,name=no_sni,json=noSni,proto3,oneof" json:"no_sni,omitempty"`
@@ -430,6 +542,15 @@ type GlobalSpecType_TlsTcpAutoCert struct {
 type GlobalSpecType_TlsTcp struct {
 	TlsTcp *ProxyTypeTLSTCP `protobuf:"bytes,24,opt,name=tls_tcp,json=tlsTcp,proto3,oneof" json:"tls_tcp,omitempty"`
 }
+type GlobalSpecType_ServicePoliciesFromNamespace struct {
+	ServicePoliciesFromNamespace *schema.Empty `protobuf:"bytes,31,opt,name=service_policies_from_namespace,json=servicePoliciesFromNamespace,proto3,oneof" json:"service_policies_from_namespace,omitempty"`
+}
+type GlobalSpecType_NoServicePolicies struct {
+	NoServicePolicies *schema.Empty `protobuf:"bytes,32,opt,name=no_service_policies,json=noServicePolicies,proto3,oneof" json:"no_service_policies,omitempty"`
+}
+type GlobalSpecType_ActiveServicePolicies struct {
+	ActiveServicePolicies *ServicePolicyList `protobuf:"bytes,33,opt,name=active_service_policies,json=activeServicePolicies,proto3,oneof" json:"active_service_policies,omitempty"`
+}
 
 func (*GlobalSpecType_NoSni) isGlobalSpecType_SniDefaultLbChoice()                            {}
 func (*GlobalSpecType_Sni) isGlobalSpecType_SniDefaultLbChoice()                              {}
@@ -447,6 +568,9 @@ func (*GlobalSpecType_DoNotRetractCluster) isGlobalSpecType_ClusterRetractChoice
 func (*GlobalSpecType_Tcp) isGlobalSpecType_LoadbalancerType()                                {}
 func (*GlobalSpecType_TlsTcpAutoCert) isGlobalSpecType_LoadbalancerType()                     {}
 func (*GlobalSpecType_TlsTcp) isGlobalSpecType_LoadbalancerType()                             {}
+func (*GlobalSpecType_ServicePoliciesFromNamespace) isGlobalSpecType_ServicePolicyChoice()    {}
+func (*GlobalSpecType_NoServicePolicies) isGlobalSpecType_ServicePolicyChoice()               {}
+func (*GlobalSpecType_ActiveServicePolicies) isGlobalSpecType_ServicePolicyChoice()           {}
 
 func (m *GlobalSpecType) GetSniDefaultLbChoice() isGlobalSpecType_SniDefaultLbChoice {
 	if m != nil {
@@ -475,6 +599,12 @@ func (m *GlobalSpecType) GetClusterRetractChoice() isGlobalSpecType_ClusterRetra
 func (m *GlobalSpecType) GetLoadbalancerType() isGlobalSpecType_LoadbalancerType {
 	if m != nil {
 		return m.LoadbalancerType
+	}
+	return nil
+}
+func (m *GlobalSpecType) GetServicePolicyChoice() isGlobalSpecType_ServicePolicyChoice {
+	if m != nil {
+		return m.ServicePolicyChoice
 	}
 	return nil
 }
@@ -641,6 +771,27 @@ func (m *GlobalSpecType) GetTlsTcp() *ProxyTypeTLSTCP {
 	return nil
 }
 
+func (m *GlobalSpecType) GetServicePoliciesFromNamespace() *schema.Empty {
+	if x, ok := m.GetServicePolicyChoice().(*GlobalSpecType_ServicePoliciesFromNamespace); ok {
+		return x.ServicePoliciesFromNamespace
+	}
+	return nil
+}
+
+func (m *GlobalSpecType) GetNoServicePolicies() *schema.Empty {
+	if x, ok := m.GetServicePolicyChoice().(*GlobalSpecType_NoServicePolicies); ok {
+		return x.NoServicePolicies
+	}
+	return nil
+}
+
+func (m *GlobalSpecType) GetActiveServicePolicies() *ServicePolicyList {
+	if x, ok := m.GetServicePolicyChoice().(*GlobalSpecType_ActiveServicePolicies); ok {
+		return x.ActiveServicePolicies
+	}
+	return nil
+}
+
 func (m *GlobalSpecType) GetViewInternal() *views.ObjectRefType {
 	if m != nil {
 		return m.ViewInternal
@@ -702,6 +853,9 @@ func (*GlobalSpecType) XXX_OneofWrappers() []interface{} {
 		(*GlobalSpecType_Tcp)(nil),
 		(*GlobalSpecType_TlsTcpAutoCert)(nil),
 		(*GlobalSpecType_TlsTcp)(nil),
+		(*GlobalSpecType_ServicePoliciesFromNamespace)(nil),
+		(*GlobalSpecType_NoServicePolicies)(nil),
+		(*GlobalSpecType_ActiveServicePolicies)(nil),
 	}
 }
 
@@ -741,12 +895,17 @@ type CreateSpecType struct {
 	//	*CreateSpecType_TlsTcpAutoCert
 	//	*CreateSpecType_TlsTcp
 	LoadbalancerType isCreateSpecType_LoadbalancerType `protobuf_oneof:"loadbalancer_type"`
+	// Types that are valid to be assigned to ServicePolicyChoice:
+	//	*CreateSpecType_ServicePoliciesFromNamespace
+	//	*CreateSpecType_NoServicePolicies
+	//	*CreateSpecType_ActiveServicePolicies
+	ServicePolicyChoice isCreateSpecType_ServicePolicyChoice `protobuf_oneof:"service_policy_choice"`
 }
 
 func (m *CreateSpecType) Reset()      { *m = CreateSpecType{} }
 func (*CreateSpecType) ProtoMessage() {}
 func (*CreateSpecType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_af54a43838ffcca9, []int{3}
+	return fileDescriptor_af54a43838ffcca9, []int{4}
 }
 func (m *CreateSpecType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -801,6 +960,12 @@ type isCreateSpecType_LoadbalancerType interface {
 	MarshalTo([]byte) (int, error)
 	Size() int
 }
+type isCreateSpecType_ServicePolicyChoice interface {
+	isCreateSpecType_ServicePolicyChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
 
 type CreateSpecType_NoSni struct {
 	NoSni *schema.Empty `protobuf:"bytes,26,opt,name=no_sni,json=noSni,proto3,oneof" json:"no_sni,omitempty"`
@@ -850,6 +1015,15 @@ type CreateSpecType_TlsTcpAutoCert struct {
 type CreateSpecType_TlsTcp struct {
 	TlsTcp *ProxyTypeTLSTCP `protobuf:"bytes,24,opt,name=tls_tcp,json=tlsTcp,proto3,oneof" json:"tls_tcp,omitempty"`
 }
+type CreateSpecType_ServicePoliciesFromNamespace struct {
+	ServicePoliciesFromNamespace *schema.Empty `protobuf:"bytes,31,opt,name=service_policies_from_namespace,json=servicePoliciesFromNamespace,proto3,oneof" json:"service_policies_from_namespace,omitempty"`
+}
+type CreateSpecType_NoServicePolicies struct {
+	NoServicePolicies *schema.Empty `protobuf:"bytes,32,opt,name=no_service_policies,json=noServicePolicies,proto3,oneof" json:"no_service_policies,omitempty"`
+}
+type CreateSpecType_ActiveServicePolicies struct {
+	ActiveServicePolicies *ServicePolicyList `protobuf:"bytes,33,opt,name=active_service_policies,json=activeServicePolicies,proto3,oneof" json:"active_service_policies,omitempty"`
+}
 
 func (*CreateSpecType_NoSni) isCreateSpecType_SniDefaultLbChoice()                            {}
 func (*CreateSpecType_Sni) isCreateSpecType_SniDefaultLbChoice()                              {}
@@ -867,6 +1041,9 @@ func (*CreateSpecType_DoNotRetractCluster) isCreateSpecType_ClusterRetractChoice
 func (*CreateSpecType_Tcp) isCreateSpecType_LoadbalancerType()                                {}
 func (*CreateSpecType_TlsTcpAutoCert) isCreateSpecType_LoadbalancerType()                     {}
 func (*CreateSpecType_TlsTcp) isCreateSpecType_LoadbalancerType()                             {}
+func (*CreateSpecType_ServicePoliciesFromNamespace) isCreateSpecType_ServicePolicyChoice()    {}
+func (*CreateSpecType_NoServicePolicies) isCreateSpecType_ServicePolicyChoice()               {}
+func (*CreateSpecType_ActiveServicePolicies) isCreateSpecType_ServicePolicyChoice()           {}
 
 func (m *CreateSpecType) GetSniDefaultLbChoice() isCreateSpecType_SniDefaultLbChoice {
 	if m != nil {
@@ -895,6 +1072,12 @@ func (m *CreateSpecType) GetClusterRetractChoice() isCreateSpecType_ClusterRetra
 func (m *CreateSpecType) GetLoadbalancerType() isCreateSpecType_LoadbalancerType {
 	if m != nil {
 		return m.LoadbalancerType
+	}
+	return nil
+}
+func (m *CreateSpecType) GetServicePolicyChoice() isCreateSpecType_ServicePolicyChoice {
+	if m != nil {
+		return m.ServicePolicyChoice
 	}
 	return nil
 }
@@ -1046,6 +1229,27 @@ func (m *CreateSpecType) GetTlsTcp() *ProxyTypeTLSTCP {
 	return nil
 }
 
+func (m *CreateSpecType) GetServicePoliciesFromNamespace() *schema.Empty {
+	if x, ok := m.GetServicePolicyChoice().(*CreateSpecType_ServicePoliciesFromNamespace); ok {
+		return x.ServicePoliciesFromNamespace
+	}
+	return nil
+}
+
+func (m *CreateSpecType) GetNoServicePolicies() *schema.Empty {
+	if x, ok := m.GetServicePolicyChoice().(*CreateSpecType_NoServicePolicies); ok {
+		return x.NoServicePolicies
+	}
+	return nil
+}
+
+func (m *CreateSpecType) GetActiveServicePolicies() *ServicePolicyList {
+	if x, ok := m.GetServicePolicyChoice().(*CreateSpecType_ActiveServicePolicies); ok {
+		return x.ActiveServicePolicies
+	}
+	return nil
+}
+
 // XXX_OneofWrappers is for the internal use of the proto package.
 func (*CreateSpecType) XXX_OneofWrappers() []interface{} {
 	return []interface{}{
@@ -1065,6 +1269,9 @@ func (*CreateSpecType) XXX_OneofWrappers() []interface{} {
 		(*CreateSpecType_Tcp)(nil),
 		(*CreateSpecType_TlsTcpAutoCert)(nil),
 		(*CreateSpecType_TlsTcp)(nil),
+		(*CreateSpecType_ServicePoliciesFromNamespace)(nil),
+		(*CreateSpecType_NoServicePolicies)(nil),
+		(*CreateSpecType_ActiveServicePolicies)(nil),
 	}
 }
 
@@ -1105,12 +1312,17 @@ type ReplaceSpecType struct {
 	//	*ReplaceSpecType_TlsTcpAutoCert
 	//	*ReplaceSpecType_TlsTcp
 	LoadbalancerType isReplaceSpecType_LoadbalancerType `protobuf_oneof:"loadbalancer_type"`
+	// Types that are valid to be assigned to ServicePolicyChoice:
+	//	*ReplaceSpecType_ServicePoliciesFromNamespace
+	//	*ReplaceSpecType_NoServicePolicies
+	//	*ReplaceSpecType_ActiveServicePolicies
+	ServicePolicyChoice isReplaceSpecType_ServicePolicyChoice `protobuf_oneof:"service_policy_choice"`
 }
 
 func (m *ReplaceSpecType) Reset()      { *m = ReplaceSpecType{} }
 func (*ReplaceSpecType) ProtoMessage() {}
 func (*ReplaceSpecType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_af54a43838ffcca9, []int{4}
+	return fileDescriptor_af54a43838ffcca9, []int{5}
 }
 func (m *ReplaceSpecType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1165,6 +1377,12 @@ type isReplaceSpecType_LoadbalancerType interface {
 	MarshalTo([]byte) (int, error)
 	Size() int
 }
+type isReplaceSpecType_ServicePolicyChoice interface {
+	isReplaceSpecType_ServicePolicyChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
 
 type ReplaceSpecType_NoSni struct {
 	NoSni *schema.Empty `protobuf:"bytes,26,opt,name=no_sni,json=noSni,proto3,oneof" json:"no_sni,omitempty"`
@@ -1214,6 +1432,15 @@ type ReplaceSpecType_TlsTcpAutoCert struct {
 type ReplaceSpecType_TlsTcp struct {
 	TlsTcp *ProxyTypeTLSTCP `protobuf:"bytes,24,opt,name=tls_tcp,json=tlsTcp,proto3,oneof" json:"tls_tcp,omitempty"`
 }
+type ReplaceSpecType_ServicePoliciesFromNamespace struct {
+	ServicePoliciesFromNamespace *schema.Empty `protobuf:"bytes,31,opt,name=service_policies_from_namespace,json=servicePoliciesFromNamespace,proto3,oneof" json:"service_policies_from_namespace,omitempty"`
+}
+type ReplaceSpecType_NoServicePolicies struct {
+	NoServicePolicies *schema.Empty `protobuf:"bytes,32,opt,name=no_service_policies,json=noServicePolicies,proto3,oneof" json:"no_service_policies,omitempty"`
+}
+type ReplaceSpecType_ActiveServicePolicies struct {
+	ActiveServicePolicies *ServicePolicyList `protobuf:"bytes,33,opt,name=active_service_policies,json=activeServicePolicies,proto3,oneof" json:"active_service_policies,omitempty"`
+}
 
 func (*ReplaceSpecType_NoSni) isReplaceSpecType_SniDefaultLbChoice()                            {}
 func (*ReplaceSpecType_Sni) isReplaceSpecType_SniDefaultLbChoice()                              {}
@@ -1231,6 +1458,9 @@ func (*ReplaceSpecType_DoNotRetractCluster) isReplaceSpecType_ClusterRetractChoi
 func (*ReplaceSpecType_Tcp) isReplaceSpecType_LoadbalancerType()                                {}
 func (*ReplaceSpecType_TlsTcpAutoCert) isReplaceSpecType_LoadbalancerType()                     {}
 func (*ReplaceSpecType_TlsTcp) isReplaceSpecType_LoadbalancerType()                             {}
+func (*ReplaceSpecType_ServicePoliciesFromNamespace) isReplaceSpecType_ServicePolicyChoice()    {}
+func (*ReplaceSpecType_NoServicePolicies) isReplaceSpecType_ServicePolicyChoice()               {}
+func (*ReplaceSpecType_ActiveServicePolicies) isReplaceSpecType_ServicePolicyChoice()           {}
 
 func (m *ReplaceSpecType) GetSniDefaultLbChoice() isReplaceSpecType_SniDefaultLbChoice {
 	if m != nil {
@@ -1259,6 +1489,12 @@ func (m *ReplaceSpecType) GetClusterRetractChoice() isReplaceSpecType_ClusterRet
 func (m *ReplaceSpecType) GetLoadbalancerType() isReplaceSpecType_LoadbalancerType {
 	if m != nil {
 		return m.LoadbalancerType
+	}
+	return nil
+}
+func (m *ReplaceSpecType) GetServicePolicyChoice() isReplaceSpecType_ServicePolicyChoice {
+	if m != nil {
+		return m.ServicePolicyChoice
 	}
 	return nil
 }
@@ -1417,6 +1653,27 @@ func (m *ReplaceSpecType) GetTlsTcp() *ProxyTypeTLSTCP {
 	return nil
 }
 
+func (m *ReplaceSpecType) GetServicePoliciesFromNamespace() *schema.Empty {
+	if x, ok := m.GetServicePolicyChoice().(*ReplaceSpecType_ServicePoliciesFromNamespace); ok {
+		return x.ServicePoliciesFromNamespace
+	}
+	return nil
+}
+
+func (m *ReplaceSpecType) GetNoServicePolicies() *schema.Empty {
+	if x, ok := m.GetServicePolicyChoice().(*ReplaceSpecType_NoServicePolicies); ok {
+		return x.NoServicePolicies
+	}
+	return nil
+}
+
+func (m *ReplaceSpecType) GetActiveServicePolicies() *ServicePolicyList {
+	if x, ok := m.GetServicePolicyChoice().(*ReplaceSpecType_ActiveServicePolicies); ok {
+		return x.ActiveServicePolicies
+	}
+	return nil
+}
+
 // XXX_OneofWrappers is for the internal use of the proto package.
 func (*ReplaceSpecType) XXX_OneofWrappers() []interface{} {
 	return []interface{}{
@@ -1436,6 +1693,9 @@ func (*ReplaceSpecType) XXX_OneofWrappers() []interface{} {
 		(*ReplaceSpecType_Tcp)(nil),
 		(*ReplaceSpecType_TlsTcpAutoCert)(nil),
 		(*ReplaceSpecType_TlsTcp)(nil),
+		(*ReplaceSpecType_ServicePoliciesFromNamespace)(nil),
+		(*ReplaceSpecType_NoServicePolicies)(nil),
+		(*ReplaceSpecType_ActiveServicePolicies)(nil),
 	}
 }
 
@@ -1475,18 +1735,23 @@ type GetSpecType struct {
 	//	*GetSpecType_Tcp
 	//	*GetSpecType_TlsTcpAutoCert
 	//	*GetSpecType_TlsTcp
-	LoadbalancerType                             isGetSpecType_LoadbalancerType   `protobuf_oneof:"loadbalancer_type"`
-	HostName                                     string                           `protobuf:"bytes,1001,opt,name=host_name,json=hostName,proto3" json:"host_name,omitempty"`
-	DnsInfo                                      []*virtual_host_dns_info.DnsInfo `protobuf:"bytes,1002,rep,name=dns_info,json=dnsInfo,proto3" json:"dns_info,omitempty"`
-	AutoCertInfo                                 *virtual_host.AutoCertInfoType   `protobuf:"bytes,1003,opt,name=auto_cert_info,json=autoCertInfo,proto3" json:"auto_cert_info,omitempty"`
-	DownstreamTlsCertificateExpirationTimestamps []*types.Timestamp               `protobuf:"bytes,1004,rep,name=downstream_tls_certificate_expiration_timestamps,json=downstreamTlsCertificateExpirationTimestamps,proto3" json:"downstream_tls_certificate_expiration_timestamps,omitempty"`
-	InternetVipInfo                              []*views.InternetVIPInfo         `protobuf:"bytes,1100,rep,name=internet_vip_info,json=internetVipInfo,proto3" json:"internet_vip_info,omitempty"`
+	LoadbalancerType isGetSpecType_LoadbalancerType `protobuf_oneof:"loadbalancer_type"`
+	// Types that are valid to be assigned to ServicePolicyChoice:
+	//	*GetSpecType_ServicePoliciesFromNamespace
+	//	*GetSpecType_NoServicePolicies
+	//	*GetSpecType_ActiveServicePolicies
+	ServicePolicyChoice                          isGetSpecType_ServicePolicyChoice `protobuf_oneof:"service_policy_choice"`
+	HostName                                     string                            `protobuf:"bytes,1001,opt,name=host_name,json=hostName,proto3" json:"host_name,omitempty"`
+	DnsInfo                                      []*virtual_host_dns_info.DnsInfo  `protobuf:"bytes,1002,rep,name=dns_info,json=dnsInfo,proto3" json:"dns_info,omitempty"`
+	AutoCertInfo                                 *virtual_host.AutoCertInfoType    `protobuf:"bytes,1003,opt,name=auto_cert_info,json=autoCertInfo,proto3" json:"auto_cert_info,omitempty"`
+	DownstreamTlsCertificateExpirationTimestamps []*types.Timestamp                `protobuf:"bytes,1004,rep,name=downstream_tls_certificate_expiration_timestamps,json=downstreamTlsCertificateExpirationTimestamps,proto3" json:"downstream_tls_certificate_expiration_timestamps,omitempty"`
+	InternetVipInfo                              []*views.InternetVIPInfo          `protobuf:"bytes,1100,rep,name=internet_vip_info,json=internetVipInfo,proto3" json:"internet_vip_info,omitempty"`
 }
 
 func (m *GetSpecType) Reset()      { *m = GetSpecType{} }
 func (*GetSpecType) ProtoMessage() {}
 func (*GetSpecType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_af54a43838ffcca9, []int{5}
+	return fileDescriptor_af54a43838ffcca9, []int{6}
 }
 func (m *GetSpecType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1541,6 +1806,12 @@ type isGetSpecType_LoadbalancerType interface {
 	MarshalTo([]byte) (int, error)
 	Size() int
 }
+type isGetSpecType_ServicePolicyChoice interface {
+	isGetSpecType_ServicePolicyChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
 
 type GetSpecType_NoSni struct {
 	NoSni *schema.Empty `protobuf:"bytes,26,opt,name=no_sni,json=noSni,proto3,oneof" json:"no_sni,omitempty"`
@@ -1590,6 +1861,15 @@ type GetSpecType_TlsTcpAutoCert struct {
 type GetSpecType_TlsTcp struct {
 	TlsTcp *ProxyTypeTLSTCP `protobuf:"bytes,24,opt,name=tls_tcp,json=tlsTcp,proto3,oneof" json:"tls_tcp,omitempty"`
 }
+type GetSpecType_ServicePoliciesFromNamespace struct {
+	ServicePoliciesFromNamespace *schema.Empty `protobuf:"bytes,31,opt,name=service_policies_from_namespace,json=servicePoliciesFromNamespace,proto3,oneof" json:"service_policies_from_namespace,omitempty"`
+}
+type GetSpecType_NoServicePolicies struct {
+	NoServicePolicies *schema.Empty `protobuf:"bytes,32,opt,name=no_service_policies,json=noServicePolicies,proto3,oneof" json:"no_service_policies,omitempty"`
+}
+type GetSpecType_ActiveServicePolicies struct {
+	ActiveServicePolicies *ServicePolicyList `protobuf:"bytes,33,opt,name=active_service_policies,json=activeServicePolicies,proto3,oneof" json:"active_service_policies,omitempty"`
+}
 
 func (*GetSpecType_NoSni) isGetSpecType_SniDefaultLbChoice()                            {}
 func (*GetSpecType_Sni) isGetSpecType_SniDefaultLbChoice()                              {}
@@ -1607,6 +1887,9 @@ func (*GetSpecType_DoNotRetractCluster) isGetSpecType_ClusterRetractChoice()    
 func (*GetSpecType_Tcp) isGetSpecType_LoadbalancerType()                                {}
 func (*GetSpecType_TlsTcpAutoCert) isGetSpecType_LoadbalancerType()                     {}
 func (*GetSpecType_TlsTcp) isGetSpecType_LoadbalancerType()                             {}
+func (*GetSpecType_ServicePoliciesFromNamespace) isGetSpecType_ServicePolicyChoice()    {}
+func (*GetSpecType_NoServicePolicies) isGetSpecType_ServicePolicyChoice()               {}
+func (*GetSpecType_ActiveServicePolicies) isGetSpecType_ServicePolicyChoice()           {}
 
 func (m *GetSpecType) GetSniDefaultLbChoice() isGetSpecType_SniDefaultLbChoice {
 	if m != nil {
@@ -1635,6 +1918,12 @@ func (m *GetSpecType) GetClusterRetractChoice() isGetSpecType_ClusterRetractChoi
 func (m *GetSpecType) GetLoadbalancerType() isGetSpecType_LoadbalancerType {
 	if m != nil {
 		return m.LoadbalancerType
+	}
+	return nil
+}
+func (m *GetSpecType) GetServicePolicyChoice() isGetSpecType_ServicePolicyChoice {
+	if m != nil {
+		return m.ServicePolicyChoice
 	}
 	return nil
 }
@@ -1793,6 +2082,27 @@ func (m *GetSpecType) GetTlsTcp() *ProxyTypeTLSTCP {
 	return nil
 }
 
+func (m *GetSpecType) GetServicePoliciesFromNamespace() *schema.Empty {
+	if x, ok := m.GetServicePolicyChoice().(*GetSpecType_ServicePoliciesFromNamespace); ok {
+		return x.ServicePoliciesFromNamespace
+	}
+	return nil
+}
+
+func (m *GetSpecType) GetNoServicePolicies() *schema.Empty {
+	if x, ok := m.GetServicePolicyChoice().(*GetSpecType_NoServicePolicies); ok {
+		return x.NoServicePolicies
+	}
+	return nil
+}
+
+func (m *GetSpecType) GetActiveServicePolicies() *ServicePolicyList {
+	if x, ok := m.GetServicePolicyChoice().(*GetSpecType_ActiveServicePolicies); ok {
+		return x.ActiveServicePolicies
+	}
+	return nil
+}
+
 func (m *GetSpecType) GetHostName() string {
 	if m != nil {
 		return m.HostName
@@ -1847,6 +2157,9 @@ func (*GetSpecType) XXX_OneofWrappers() []interface{} {
 		(*GetSpecType_Tcp)(nil),
 		(*GetSpecType_TlsTcpAutoCert)(nil),
 		(*GetSpecType_TlsTcp)(nil),
+		(*GetSpecType_ServicePoliciesFromNamespace)(nil),
+		(*GetSpecType_NoServicePolicies)(nil),
+		(*GetSpecType_ActiveServicePolicies)(nil),
 	}
 }
 
@@ -1855,6 +2168,8 @@ func init() {
 	golang_proto.RegisterType((*ProxyTypeTLSTCP)(nil), "ves.io.schema.views.tcp_loadbalancer.ProxyTypeTLSTCP")
 	proto.RegisterType((*ProxyTypeTLSTCPAutoCerts)(nil), "ves.io.schema.views.tcp_loadbalancer.ProxyTypeTLSTCPAutoCerts")
 	golang_proto.RegisterType((*ProxyTypeTLSTCPAutoCerts)(nil), "ves.io.schema.views.tcp_loadbalancer.ProxyTypeTLSTCPAutoCerts")
+	proto.RegisterType((*ServicePolicyList)(nil), "ves.io.schema.views.tcp_loadbalancer.ServicePolicyList")
+	golang_proto.RegisterType((*ServicePolicyList)(nil), "ves.io.schema.views.tcp_loadbalancer.ServicePolicyList")
 	proto.RegisterType((*GlobalSpecType)(nil), "ves.io.schema.views.tcp_loadbalancer.GlobalSpecType")
 	golang_proto.RegisterType((*GlobalSpecType)(nil), "ves.io.schema.views.tcp_loadbalancer.GlobalSpecType")
 	proto.RegisterType((*CreateSpecType)(nil), "ves.io.schema.views.tcp_loadbalancer.CreateSpecType")
@@ -1873,127 +2188,143 @@ func init() {
 }
 
 var fileDescriptor_af54a43838ffcca9 = []byte{
-	// 1910 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x5a, 0xcf, 0x6f, 0xdb, 0xc8,
-	0x19, 0xd5, 0x44, 0xb2, 0x24, 0x8f, 0x6c, 0x59, 0x1e, 0x3b, 0x5e, 0x46, 0x49, 0x15, 0xaf, 0x91,
-	0xed, 0x7a, 0x03, 0x5a, 0xb2, 0x94, 0x38, 0xbf, 0x50, 0xa4, 0x08, 0x95, 0x6d, 0x1c, 0x6f, 0x76,
-	0xd7, 0x4b, 0xbb, 0x0e, 0x9a, 0x2e, 0x40, 0x50, 0xe4, 0x58, 0x66, 0x43, 0x71, 0x58, 0xce, 0xc8,
-	0x89, 0x0f, 0x01, 0x02, 0xf7, 0xd2, 0x43, 0x0f, 0xed, 0x9e, 0x7a, 0xec, 0xad, 0xc5, 0xfe, 0x07,
-	0x2d, 0x7b, 0x30, 0x0a, 0x14, 0x58, 0x14, 0x3d, 0x18, 0xe8, 0x25, 0xe8, 0xa9, 0x51, 0x2e, 0xd9,
-	0xb6, 0x87, 0xa0, 0xa7, 0xc2, 0x97, 0x14, 0x33, 0xa4, 0x64, 0x49, 0xa6, 0x95, 0x20, 0x68, 0xb1,
-	0xe8, 0xae, 0x7c, 0x22, 0x67, 0xbe, 0xf7, 0xbe, 0x99, 0x6f, 0x38, 0xf3, 0x1e, 0xc6, 0x82, 0x8b,
-	0xdb, 0x98, 0x16, 0x2d, 0x52, 0xa2, 0xc6, 0x16, 0x6e, 0xe8, 0xa5, 0x6d, 0x0b, 0x3f, 0xa0, 0x25,
-	0x66, 0xb8, 0x9a, 0x4d, 0x74, 0xb3, 0xa6, 0xdb, 0xba, 0x63, 0x60, 0xaf, 0xc4, 0x76, 0x5c, 0x4c,
-	0x8b, 0xae, 0x47, 0x18, 0x41, 0xe7, 0x02, 0x44, 0x31, 0x40, 0x14, 0x05, 0xa2, 0xd8, 0x8f, 0xc8,
-	0x2f, 0xd4, 0x2d, 0xb6, 0xd5, 0xac, 0x15, 0x0d, 0xd2, 0x28, 0xd5, 0x49, 0x9d, 0x94, 0x04, 0xb8,
-	0xd6, 0xdc, 0x14, 0x6f, 0xe2, 0x45, 0x3c, 0x05, 0xa4, 0xf9, 0xb3, 0x75, 0x42, 0xea, 0x36, 0x3e,
-	0x8c, 0x62, 0x56, 0x03, 0x53, 0xa6, 0x37, 0xdc, 0x30, 0xe0, 0x74, 0xef, 0x38, 0x89, 0xcb, 0x2c,
-	0xe2, 0x84, 0x43, 0xca, 0x9f, 0xea, 0xed, 0xec, 0x1a, 0x6d, 0xfe, 0x4c, 0xdf, 0xfc, 0x74, 0xdb,
-	0x32, 0x75, 0x86, 0xc3, 0xde, 0xd9, 0xa3, 0xb3, 0xd7, 0x7a, 0xa9, 0xcf, 0x46, 0xd6, 0xa7, 0x2b,
-	0xc1, 0xb7, 0xfb, 0x03, 0x3c, 0xd6, 0xd4, 0x6d, 0x6d, 0x8b, 0x50, 0xd6, 0x13, 0xb7, 0x78, 0x7c,
-	0x9c, 0x66, 0x3a, 0x54, 0xb3, 0x9c, 0x4d, 0x52, 0x22, 0xb5, 0x1f, 0x61, 0x83, 0x05, 0x88, 0x39,
-	0x1b, 0x4e, 0xac, 0x7a, 0xe4, 0xe1, 0xce, 0xfa, 0x8e, 0x8b, 0xd7, 0xef, 0xac, 0xad, 0x57, 0x57,
-	0xd1, 0x0f, 0x60, 0x96, 0xd9, 0x54, 0x73, 0x75, 0x4f, 0x6f, 0x60, 0x86, 0x3d, 0x2a, 0x81, 0x59,
-	0x30, 0x9f, 0xa9, 0xc8, 0xc5, 0xa8, 0x45, 0xb9, 0x49, 0x1e, 0x38, 0x94, 0x79, 0x58, 0x6f, 0xac,
-	0xdb, 0x74, 0x95, 0x63, 0x28, 0xe7, 0x52, 0x12, 0xfb, 0x3e, 0x00, 0xea, 0x38, 0x0b, 0x1b, 0x05,
-	0xd1, 0xdc, 0xaf, 0x4e, 0x40, 0xa9, 0x2f, 0xdd, 0x8d, 0x26, 0x23, 0x55, 0xec, 0x31, 0x8a, 0xaa,
-	0x10, 0xf2, 0xbc, 0x06, 0x71, 0x36, 0xad, 0xba, 0x14, 0x17, 0x39, 0x0b, 0x91, 0x39, 0xd7, 0x6d,
-	0x5a, 0x15, 0x51, 0x4a, 0xe2, 0x05, 0xcf, 0x32, 0xca, 0xda, 0x0d, 0x68, 0x09, 0xa6, 0x1c, 0xa2,
-	0x35, 0x98, 0x4d, 0xa5, 0x11, 0xc1, 0x30, 0xdd, 0xc7, 0xf0, 0x7e, 0xc3, 0x65, 0x3b, 0x4a, 0x62,
-	0xcf, 0x07, 0x60, 0x39, 0xa6, 0x26, 0x1d, 0xf2, 0x21, 0xb3, 0x29, 0xda, 0x80, 0xe9, 0x26, 0xc5,
-	0x01, 0x2e, 0x29, 0x70, 0x17, 0x5e, 0x3d, 0xdb, 0x8d, 0x60, 0x9d, 0x2d, 0xe2, 0x54, 0x89, 0xc3,
-	0xf0, 0x43, 0xd6, 0xa1, 0x4d, 0x35, 0x29, 0xe6, 0xbc, 0xd7, 0x92, 0xff, 0xba, 0x1e, 0xbf, 0x20,
-	0x5f, 0x54, 0xe6, 0x60, 0xa6, 0x21, 0x26, 0xb7, 0x45, 0x2c, 0x03, 0xa3, 0xa9, 0x3d, 0x1f, 0x8c,
-	0x7c, 0xe1, 0x03, 0xb0, 0xef, 0x83, 0x44, 0xcb, 0x07, 0xf1, 0x25, 0xf9, 0xd2, 0x4a, 0x22, 0x9d,
-	0xc8, 0x8d, 0xcc, 0xfd, 0x65, 0x1a, 0x66, 0x6f, 0xd9, 0xa4, 0xa6, 0xdb, 0x6b, 0x2e, 0x36, 0x78,
-	0x9d, 0xd0, 0x77, 0x60, 0xca, 0x24, 0x0d, 0xdd, 0x72, 0xf8, 0x4a, 0xc4, 0xe7, 0x47, 0x95, 0xb9,
-	0xdf, 0x7d, 0xb9, 0x17, 0x1f, 0xfd, 0x0c, 0x24, 0xe7, 0x12, 0xde, 0x89, 0x2d, 0xc0, 0xdf, 0x46,
-	0x3e, 0x03, 0x27, 0x72, 0xb3, 0xed, 0x27, 0x09, 0xa8, 0x6d, 0x08, 0x92, 0x61, 0xc6, 0xb6, 0x28,
-	0xc3, 0x8e, 0xe6, 0x12, 0x8f, 0x49, 0x27, 0x66, 0xc1, 0xfc, 0xb8, 0x92, 0xe1, 0x91, 0xc9, 0xf3,
-	0x09, 0xe9, 0xe5, 0xcb, 0xb8, 0x0a, 0x83, 0xfe, 0x55, 0xe2, 0x31, 0xf4, 0x36, 0x4c, 0x3f, 0xb0,
-	0xd8, 0x96, 0x46, 0x1d, 0x4b, 0x2c, 0x41, 0x5a, 0x49, 0x3e, 0xf7, 0x01, 0xe0, 0x84, 0xbc, 0x7d,
-	0xcd, 0xb1, 0xd0, 0x02, 0x4c, 0x3a, 0x44, 0x04, 0xe4, 0x8f, 0xaf, 0xf0, 0x72, 0x4c, 0x1d, 0x71,
-	0x08, 0x0f, 0x9f, 0x87, 0x71, 0x1e, 0x7b, 0x7a, 0x60, 0x2c, 0x0f, 0x41, 0x1f, 0xc0, 0x29, 0x13,
-	0x6f, 0xea, 0x4d, 0x9b, 0x69, 0x76, 0x4d, 0xeb, 0x0c, 0xe3, 0xcc, 0x6b, 0xac, 0x63, 0x2e, 0x04,
-	0xde, 0xa9, 0xdd, 0x0d, 0x47, 0xb9, 0x08, 0xa7, 0xf9, 0x17, 0xbf, 0x4d, 0x6c, 0x86, 0x3d, 0x4f,
-	0xd7, 0x1a, 0xba, 0xa3, 0xd7, 0xb1, 0x29, 0x65, 0xf8, 0xa4, 0x54, 0x64, 0x3a, 0x74, 0x23, 0xec,
-	0xfa, 0x30, 0xe8, 0x41, 0x2e, 0x1c, 0x23, 0x9e, 0x55, 0xb7, 0x78, 0xa1, 0x88, 0x4d, 0xa5, 0xc4,
-	0x6c, 0x7c, 0x3e, 0x53, 0x99, 0x8b, 0xfc, 0x0e, 0x3e, 0x16, 0x7b, 0x48, 0xc5, 0x9b, 0xe2, 0x5b,
-	0x7f, 0xef, 0xf3, 0x47, 0x99, 0x2e, 0xe8, 0x93, 0x47, 0x80, 0xd7, 0xac, 0xb3, 0x2c, 0xb9, 0xae,
-	0x65, 0x09, 0xe3, 0x56, 0x79, 0x06, 0xf4, 0x63, 0x38, 0xdd, 0x9d, 0x51, 0x7b, 0x80, 0xad, 0xfa,
-	0x16, 0xa3, 0x12, 0x14, 0x99, 0xdf, 0x8b, 0xce, 0xdc, 0xc1, 0xf3, 0x99, 0xde, 0x15, 0x08, 0x65,
-	0x3a, 0x32, 0x17, 0xea, 0xca, 0x15, 0x04, 0x52, 0xf4, 0x3d, 0x98, 0x33, 0x89, 0xe6, 0x10, 0xa6,
-	0xe9, 0xe6, 0x36, 0xf6, 0x98, 0x45, 0xb1, 0x94, 0x7a, 0x65, 0x81, 0x81, 0x9a, 0x35, 0xc9, 0x47,
-	0x84, 0xdd, 0x68, 0x63, 0xd0, 0xa7, 0xf0, 0x6c, 0x87, 0x40, 0x23, 0x8e, 0xe6, 0x36, 0x6b, 0xb6,
-	0x65, 0x68, 0xed, 0xf5, 0xdb, 0xb6, 0x5c, 0x29, 0x3d, 0x60, 0xc5, 0x81, 0x7a, 0xba, 0x03, 0xff,
-	0xd8, 0x59, 0x15, 0xe0, 0x9b, 0x01, 0x76, 0xc3, 0x72, 0xd1, 0xa7, 0x70, 0x2a, 0x82, 0x3d, 0xdc,
-	0xd1, 0xe7, 0x22, 0xeb, 0xd2, 0x19, 0x5a, 0x40, 0xd6, 0x19, 0xf8, 0xe4, 0x91, 0x3c, 0xe8, 0x2e,
-	0xcc, 0x1d, 0xb2, 0x1b, 0x4d, 0xca, 0x48, 0x23, 0xdc, 0xf4, 0xaf, 0xa0, 0xae, 0x8a, 0xd8, 0xe0,
-	0x68, 0x5b, 0x06, 0xea, 0x84, 0xde, 0xdb, 0x81, 0xee, 0xc1, 0xc2, 0x96, 0x4e, 0xb7, 0x34, 0x97,
-	0xd8, 0x96, 0xb1, 0x13, 0x6e, 0x76, 0xcd, 0x23, 0x4d, 0xc7, 0xd4, 0x3c, 0x52, 0xb3, 0x1c, 0x69,
-	0x7c, 0x40, 0x4d, 0x4e, 0xa8, 0x79, 0x8e, 0x5e, 0x15, 0xe0, 0xaa, 0xc0, 0xaa, 0x1c, 0xaa, 0x72,
-	0x24, 0x2f, 0x78, 0x04, 0xb7, 0x8d, 0x75, 0xca, 0x34, 0xdd, 0x60, 0xd6, 0x36, 0x96, 0xb2, 0x03,
-	0xc9, 0x4f, 0xf7, 0x93, 0xdf, 0xe1, 0xd8, 0x1b, 0x02, 0x8a, 0x3e, 0x81, 0xa7, 0xa2, 0x46, 0xae,
-	0x3b, 0x26, 0x69, 0x48, 0x13, 0x03, 0x79, 0x67, 0x8e, 0x0c, 0x5a, 0xa0, 0xd0, 0x7d, 0xf8, 0x6e,
-	0x04, 0x25, 0x25, 0x4d, 0xcf, 0xc0, 0x9a, 0xe5, 0x6a, 0x94, 0x59, 0xc6, 0x7d, 0xcb, 0xc1, 0x94,
-	0x4a, 0xb9, 0x81, 0x09, 0xe6, 0xfa, 0x13, 0xac, 0x09, 0x8e, 0xdb, 0xee, 0x5a, 0x87, 0x01, 0xdd,
-	0x82, 0x63, 0x96, 0x69, 0x63, 0x8d, 0x2b, 0x3a, 0x69, 0x32, 0x69, 0x52, 0x9c, 0x72, 0xe7, 0xf8,
-	0x37, 0xf0, 0x57, 0x1f, 0xa4, 0x2e, 0x5c, 0x5a, 0xe4, 0x7f, 0xff, 0xf6, 0x41, 0xec, 0xa7, 0xbf,
-	0x07, 0x31, 0xbe, 0x47, 0xd2, 0xe7, 0x93, 0xd2, 0xe3, 0xc7, 0x7f, 0xfc, 0xed, 0x84, 0x9a, 0xe1,
-	0xc8, 0xf5, 0x00, 0x88, 0xbe, 0x0b, 0x27, 0x3c, 0xcc, 0x3c, 0xdd, 0x60, 0x9a, 0x61, 0x37, 0x29,
-	0xc3, 0x9e, 0x34, 0x35, 0x60, 0x74, 0x71, 0x35, 0x1b, 0x86, 0x57, 0x83, 0x68, 0xf4, 0x01, 0x9c,
-	0x09, 0x37, 0x58, 0x3f, 0xcf, 0xf4, 0x40, 0x9e, 0x29, 0xb1, 0xc1, 0xd4, 0x5e, 0xb2, 0x79, 0x18,
-	0x67, 0x86, 0x2b, 0xcd, 0x0c, 0x40, 0x26, 0x54, 0x1e, 0x82, 0xee, 0xc3, 0x49, 0xae, 0x2f, 0xdc,
-	0x22, 0xe9, 0x4d, 0x46, 0x34, 0x03, 0x7b, 0x4c, 0x7a, 0x4b, 0xe0, 0xae, 0x17, 0x5f, 0xc7, 0x4c,
-	0x15, 0x8f, 0xd3, 0xe5, 0xe5, 0x84, 0xca, 0xfd, 0xc0, 0xba, 0xe1, 0xb6, 0x9b, 0xd0, 0x2a, 0x4c,
-	0x85, 0xc9, 0x24, 0x49, 0xa4, 0x58, 0x7a, 0xa3, 0x14, 0xcb, 0x09, 0x35, 0x19, 0x30, 0xa3, 0x7b,
-	0x70, 0x5c, 0xf8, 0x22, 0xcb, 0x61, 0xd8, 0x73, 0x74, 0x5b, 0x7a, 0x1e, 0x1c, 0x4a, 0xaf, 0x73,
-	0xfa, 0xe6, 0x3e, 0x7f, 0xd4, 0x0b, 0x56, 0xc7, 0xf8, 0xeb, 0xed, 0xf0, 0x0d, 0x9d, 0x81, 0xa3,
-	0xc2, 0x00, 0x39, 0x7a, 0x03, 0x4b, 0x5f, 0x72, 0xde, 0x51, 0x35, 0xcd, 0x5b, 0x3e, 0xd2, 0x1b,
-	0x18, 0x2d, 0xc3, 0x74, 0xdb, 0x19, 0x49, 0x7f, 0x4f, 0x89, 0x83, 0xf7, 0xa8, 0xd1, 0x89, 0xb0,
-	0x51, 0xc5, 0x9b, 0x0e, 0xbd, 0xed, 0x6c, 0x12, 0x35, 0x65, 0x06, 0x0f, 0x68, 0x0d, 0x66, 0x3b,
-	0xa5, 0x0f, 0xf8, 0xfe, 0x91, 0x3a, 0xc6, 0x38, 0x1d, 0xf2, 0x15, 0xdb, 0x45, 0xe5, 0x14, 0x7c,
-	0x3a, 0xea, 0x98, 0xde, 0xd5, 0x82, 0x7e, 0x06, 0xe0, 0xa2, 0xd9, 0x31, 0x1d, 0x9a, 0xf0, 0x10,
-	0xfc, 0xcc, 0xd9, 0xb4, 0x0c, 0x9d, 0x61, 0x0d, 0x3f, 0x74, 0x2d, 0x4f, 0x58, 0x10, 0xad, 0x63,
-	0x66, 0xa9, 0xf4, 0xcf, 0x60, 0x1e, 0xf9, 0x62, 0x60, 0x78, 0x8b, 0x6d, 0xc3, 0x5b, 0x5c, 0x6f,
-	0xc7, 0x28, 0xa9, 0x50, 0xa4, 0x54, 0xd9, 0xec, 0xb6, 0x34, 0xd5, 0x43, 0xee, 0xf7, 0x3b, 0xd4,
-	0x1d, 0x14, 0x45, 0x9f, 0xc0, 0xc9, 0xa0, 0xca, 0x58, 0x9c, 0xf1, 0xc1, 0x34, 0xff, 0x9c, 0x16,
-	0xe9, 0xa2, 0x0f, 0xcf, 0xdb, 0x61, 0xf8, 0xc6, 0xed, 0x55, 0x51, 0xae, 0x89, 0x36, 0x7e, 0xc3,
-	0x72, 0x79, 0xc3, 0xb5, 0xc6, 0x1f, 0x7c, 0x60, 0xc1, 0x77, 0xe0, 0x94, 0xa2, 0x53, 0xcb, 0x98,
-	0x0d, 0x7c, 0x5c, 0x33, 0xc8, 0x8c, 0xb2, 0x65, 0xb9, 0x22, 0x57, 0x96, 0xe4, 0x72, 0x59, 0x2e,
-	0x2f, 0xca, 0x57, 0xe1, 0x59, 0x38, 0x73, 0x87, 0xe8, 0xe6, 0xac, 0x22, 0x3e, 0x29, 0xcb, 0xa9,
-	0xf3, 0x78, 0xe6, 0x11, 0x1b, 0x8d, 0x54, 0xca, 0x72, 0xb9, 0xc2, 0x03, 0x6e, 0x98, 0xdb, 0xfc,
-	0x73, 0x33, 0xfb, 0xa8, 0x46, 0xca, 0x97, 0xe5, 0xf2, 0x15, 0x65, 0x01, 0x9e, 0xa4, 0x8e, 0xa5,
-	0x75, 0x19, 0x8d, 0xd0, 0x93, 0x4d, 0xef, 0xf9, 0x20, 0xbf, 0xef, 0x83, 0x53, 0x2d, 0x1f, 0xa4,
-	0x2b, 0x97, 0xe4, 0xca, 0x65, 0xb9, 0x72, 0x45, 0x79, 0xb7, 0x47, 0x2b, 0x0e, 0xdd, 0x5b, 0x7a,
-	0xdf, 0x07, 0xa3, 0x2d, 0x1f, 0xa4, 0xae, 0xc8, 0x4b, 0xf2, 0x65, 0xf9, 0x92, 0xb2, 0x00, 0xd1,
-	0xd1, 0xe3, 0x0e, 0xbd, 0xb5, 0xe7, 0x83, 0xf1, 0x7d, 0x1f, 0x8c, 0xb5, 0x7c, 0x90, 0x29, 0x5f,
-	0x90, 0xcb, 0x17, 0xe5, 0xf2, 0x92, 0x5c, 0xbe, 0xa4, 0x2c, 0xc2, 0x99, 0xf0, 0x5c, 0x38, 0x3c,
-	0x27, 0x02, 0xc8, 0xcc, 0x9e, 0x0f, 0xa6, 0x42, 0x6f, 0x88, 0x5a, 0x3e, 0x48, 0x96, 0xaf, 0xca,
-	0xb3, 0x95, 0x45, 0xe5, 0x5b, 0x70, 0xb2, 0x7b, 0x33, 0x69, 0xdc, 0xf7, 0xa3, 0xf4, 0x9e, 0x0f,
-	0x66, 0xf6, 0x7d, 0x70, 0x72, 0x25, 0x91, 0x3e, 0x95, 0xcb, 0xaf, 0x24, 0xd2, 0xa3, 0x39, 0xb8,
-	0x92, 0x48, 0x8f, 0xe5, 0xc6, 0x57, 0x12, 0x69, 0x94, 0x9b, 0x5a, 0x49, 0xa4, 0x4f, 0xe6, 0x66,
-	0xe6, 0x7e, 0x9d, 0x85, 0xd9, 0xaa, 0x87, 0x75, 0x86, 0x3b, 0xae, 0x52, 0xea, 0x73, 0x95, 0x87,
-	0x8e, 0xf1, 0x6c, 0x84, 0x63, 0xec, 0x31, 0x89, 0x5f, 0x57, 0x07, 0xf8, 0xc3, 0xff, 0x92, 0x1f,
-	0x1b, 0x3a, 0xaf, 0xa1, 0xf3, 0xfa, 0xa6, 0x38, 0xaf, 0xb7, 0xa3, 0x9c, 0xd7, 0xd0, 0x53, 0x7d,
-	0xf5, 0x9e, 0xea, 0xda, 0xe4, 0x9f, 0xae, 0xf7, 0xdd, 0x24, 0x28, 0x95, 0xe3, 0xc4, 0xef, 0xd4,
-	0xee, 0x01, 0x88, 0xee, 0x52, 0xae, 0x46, 0x28, 0xe0, 0x3b, 0x5d, 0x0a, 0x38, 0x22, 0xf4, 0x6f,
-	0xf7, 0x00, 0x1c, 0x09, 0x53, 0xe4, 0x48, 0x4d, 0x9c, 0xd9, 0x3d, 0x00, 0x11, 0xed, 0xca, 0xc5,
-	0x63, 0x25, 0x31, 0xbf, 0x7b, 0x00, 0x8e, 0xe9, 0x53, 0xce, 0x47, 0xc9, 0xe2, 0xc9, 0xdd, 0x03,
-	0x70, 0xb4, 0x79, 0x25, 0x91, 0x8e, 0xe7, 0x12, 0xaf, 0x50, 0xca, 0x97, 0x59, 0x38, 0xa1, 0x62,
-	0xd7, 0xd6, 0x8d, 0xa1, 0x54, 0x0e, 0x90, 0xca, 0xef, 0xbf, 0xf1, 0x65, 0x49, 0xb6, 0xf7, 0xb2,
-	0xa4, 0xf7, 0x46, 0x64, 0xa8, 0xc0, 0x43, 0x05, 0x1e, 0x2a, 0xf0, 0x50, 0x81, 0x87, 0x0a, 0xfc,
-	0xcd, 0x55, 0xe0, 0x5f, 0x20, 0x98, 0xb9, 0x85, 0xd9, 0x50, 0x7d, 0x87, 0xea, 0x3b, 0x54, 0xdf,
-	0xa1, 0xfa, 0x0e, 0xd5, 0x77, 0xa8, 0xbe, 0x6f, 0xf4, 0x3f, 0x85, 0xff, 0xeb, 0x7b, 0xff, 0x9f,
-	0xfc, 0x6f, 0xee, 0xfd, 0xbf, 0xfa, 0xeb, 0xfe, 0xa1, 0x27, 0x7a, 0x03, 0x4f, 0xa4, 0xfc, 0x12,
-	0xec, 0x3f, 0x2d, 0xc4, 0x9e, 0x3c, 0x2d, 0xc4, 0x5e, 0x3c, 0x2d, 0x80, 0xc7, 0xad, 0x02, 0xf8,
-	0x4d, 0xab, 0x00, 0xbe, 0x68, 0x15, 0xc0, 0x7e, 0xab, 0x00, 0x9e, 0xb4, 0x0a, 0xe0, 0x6f, 0xad,
-	0x02, 0x78, 0xde, 0x2a, 0xc4, 0x5e, 0xb4, 0x0a, 0xe0, 0xe7, 0xcf, 0x0a, 0xb1, 0xbd, 0x67, 0x05,
-	0xb0, 0xff, 0xac, 0x10, 0x7b, 0xf2, 0xac, 0x10, 0xbb, 0x77, 0xaf, 0x4e, 0xdc, 0xfb, 0xf5, 0x62,
-	0xdb, 0x61, 0x14, 0x9b, 0xb4, 0x24, 0x1e, 0x36, 0x89, 0xd7, 0x58, 0x70, 0x3d, 0xb2, 0x6d, 0x99,
-	0xd8, 0x5b, 0x68, 0x77, 0x97, 0xdc, 0x5a, 0x9d, 0x94, 0xf0, 0x43, 0x16, 0xfe, 0x8c, 0x68, 0xe0,
-	0xcf, 0xb6, 0x6a, 0x49, 0xf1, 0x95, 0x5d, 0xf8, 0x4f, 0x00, 0x00, 0x00, 0xff, 0xff, 0x15, 0xbe,
-	0x8e, 0xc5, 0xe5, 0x25, 0x00, 0x00,
+	// 2162 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x9a, 0xcd, 0x6f, 0x1b, 0xc7,
+	0x19, 0xc6, 0x35, 0x22, 0x45, 0x52, 0xa3, 0x2f, 0x6a, 0x24, 0xcb, 0x6b, 0xd9, 0xa5, 0x14, 0x22,
+	0x69, 0x14, 0x63, 0x45, 0x89, 0x54, 0xe4, 0x2f, 0x14, 0x2e, 0xbc, 0x72, 0xfc, 0xa1, 0x28, 0x89,
+	0xb2, 0x52, 0x65, 0xc0, 0x49, 0xb0, 0x58, 0x2e, 0x47, 0xd4, 0xd4, 0xcb, 0x9d, 0xcd, 0xce, 0x50,
+	0xb6, 0x0a, 0x18, 0x30, 0x9c, 0x4b, 0x0e, 0x05, 0x5a, 0xf8, 0xd4, 0x63, 0x8f, 0x85, 0xff, 0x83,
+	0x76, 0x73, 0x10, 0x8a, 0x06, 0x08, 0x8a, 0x16, 0xd0, 0xd1, 0xe8, 0xa5, 0x31, 0x7d, 0x71, 0xda,
+	0x1e, 0x8c, 0x02, 0x05, 0x0a, 0x5f, 0x5c, 0xcc, 0xec, 0x92, 0x22, 0xa9, 0x15, 0x2d, 0x04, 0x4e,
+	0x8b, 0xb6, 0xd4, 0x89, 0x3b, 0xf3, 0x3e, 0xcf, 0x3b, 0xf3, 0xee, 0xec, 0xcc, 0x6f, 0x49, 0xc1,
+	0xf9, 0x6d, 0xcc, 0x72, 0x84, 0xce, 0x31, 0x6b, 0x0b, 0x57, 0xcc, 0xb9, 0x6d, 0x82, 0x6f, 0xb3,
+	0x39, 0x6e, 0xb9, 0x86, 0x4d, 0xcd, 0x52, 0xd1, 0xb4, 0x4d, 0xc7, 0xc2, 0xde, 0x1c, 0xdf, 0x71,
+	0x31, 0xcb, 0xb9, 0x1e, 0xe5, 0x14, 0xbd, 0x1e, 0x28, 0x72, 0x81, 0x22, 0x27, 0x15, 0xb9, 0x76,
+	0xc5, 0xe4, 0x6c, 0x99, 0xf0, 0xad, 0x6a, 0x31, 0x67, 0xd1, 0xca, 0x5c, 0x99, 0x96, 0xe9, 0x9c,
+	0x14, 0x17, 0xab, 0x9b, 0xf2, 0x4a, 0x5e, 0xc8, 0x4f, 0x81, 0xe9, 0xe4, 0x54, 0x99, 0xd2, 0xb2,
+	0x8d, 0xf7, 0xa3, 0x38, 0xa9, 0x60, 0xc6, 0xcd, 0x8a, 0x1b, 0x06, 0x9c, 0x6c, 0x1d, 0x27, 0x75,
+	0x39, 0xa1, 0x4e, 0x38, 0xa4, 0xc9, 0x13, 0xad, 0x9d, 0x4d, 0xa3, 0x9d, 0x3c, 0xd5, 0x36, 0x3f,
+	0xd3, 0x26, 0x25, 0x93, 0xe3, 0xb0, 0x77, 0xfa, 0xe0, 0xec, 0x8d, 0x56, 0xeb, 0xa9, 0xc8, 0xfa,
+	0x34, 0x25, 0xf8, 0x7e, 0x7b, 0x80, 0xc7, 0xab, 0xa6, 0x6d, 0x6c, 0x51, 0xc6, 0x5b, 0xe2, 0xe6,
+	0x0f, 0x8f, 0x33, 0x4a, 0x0e, 0x33, 0x88, 0xb3, 0x49, 0xe7, 0x68, 0xf1, 0xc7, 0xd8, 0xe2, 0x81,
+	0x22, 0xfb, 0x02, 0xc0, 0x91, 0x55, 0x8f, 0xde, 0xd9, 0x59, 0xdf, 0x71, 0xf1, 0xfa, 0xca, 0xda,
+	0xfa, 0xd2, 0x2a, 0xfa, 0x08, 0x0e, 0x73, 0x9b, 0x19, 0xae, 0xe9, 0x99, 0x15, 0xcc, 0xb1, 0xc7,
+	0x14, 0x30, 0x0d, 0x66, 0x06, 0x0a, 0x6a, 0x2e, 0xea, 0xae, 0x5c, 0xa6, 0xb7, 0x1d, 0xc6, 0x3d,
+	0x6c, 0x56, 0xd6, 0x6d, 0xb6, 0x2a, 0x34, 0x4c, 0x78, 0x69, 0xf1, 0x3d, 0x1f, 0x80, 0x6b, 0x3d,
+	0xfa, 0x10, 0x0f, 0x9b, 0xa5, 0x15, 0xfa, 0x04, 0x8e, 0x08, 0x73, 0x0b, 0x7b, 0x3c, 0xc8, 0xc0,
+	0x94, 0x98, 0x74, 0x9f, 0x7d, 0x99, 0xfb, 0xca, 0xda, 0x12, 0xf6, 0x78, 0x98, 0xa2, 0xc5, 0x5e,
+	0xb4, 0x87, 0xcd, 0xa7, 0xe1, 0xf1, 0xba, 0x3d, 0xd9, 0x24, 0x96, 0xc9, 0x31, 0x33, 0xac, 0x2d,
+	0x4a, 0x2c, 0x8c, 0x46, 0x76, 0x7d, 0x00, 0xf6, 0x7c, 0xd0, 0x5b, 0xf3, 0x41, 0x2c, 0xaf, 0x2e,
+	0x2c, 0xc7, 0x53, 0xbd, 0xe9, 0x58, 0xf6, 0x97, 0xbd, 0x50, 0x69, 0xab, 0xc0, 0xa5, 0x2a, 0xa7,
+	0x32, 0x17, 0x5a, 0x82, 0x50, 0xda, 0x51, 0x67, 0x93, 0x94, 0xc3, 0x81, 0x66, 0x22, 0x07, 0xba,
+	0x6e, 0xb3, 0x25, 0x19, 0xa5, 0xc5, 0x9f, 0xf9, 0x00, 0xe8, 0xfd, 0xbc, 0xde, 0x80, 0x16, 0x61,
+	0xd2, 0xa1, 0x46, 0x85, 0xdb, 0x4c, 0xe9, 0x93, 0x0e, 0xe3, 0x6d, 0x0e, 0xef, 0x54, 0x5c, 0xbe,
+	0xa3, 0xc5, 0x77, 0x83, 0x19, 0x25, 0x1c, 0xfa, 0x1e, 0xb7, 0x19, 0xda, 0x80, 0xa9, 0x2a, 0xc3,
+	0x81, 0x2e, 0x21, 0x75, 0x0b, 0x2f, 0xbf, 0x01, 0x1b, 0xc1, 0xda, 0x23, 0xd4, 0x59, 0xa2, 0x0e,
+	0xc7, 0x77, 0x78, 0xc3, 0x36, 0x59, 0x65, 0x58, 0xf8, 0x5e, 0x48, 0xfc, 0xfd, 0x62, 0x6c, 0x41,
+	0x7d, 0x5b, 0xcb, 0xc2, 0x81, 0x8a, 0x9c, 0x5c, 0x50, 0x9e, 0xb1, 0x5d, 0x1f, 0xf4, 0x7d, 0x15,
+	0x94, 0x28, 0x2e, 0x4a, 0xb4, 0xa8, 0x9e, 0x59, 0x8e, 0xa7, 0xe2, 0xe9, 0xbe, 0xec, 0xcf, 0x00,
+	0x1c, 0x5d, 0xc3, 0xde, 0x36, 0xb1, 0xf0, 0x2a, 0xb5, 0x89, 0xb5, 0xb3, 0x42, 0x18, 0x47, 0x3f,
+	0x81, 0x29, 0x57, 0x5c, 0x11, 0x2c, 0x16, 0x48, 0x6c, 0x66, 0xa0, 0x90, 0x8d, 0x1c, 0xdf, 0x07,
+	0x72, 0xbd, 0xe9, 0x78, 0x53, 0x2e, 0x8b, 0x0b, 0x0f, 0xef, 0x0e, 0xb3, 0xc0, 0xcb, 0x90, 0xf2,
+	0x9d, 0xdf, 0x7c, 0xb3, 0x1b, 0xeb, 0x7b, 0x00, 0x7a, 0xd3, 0xe9, 0xfa, 0xa7, 0x14, 0xa8, 0x7f,
+	0x52, 0x40, 0xed, 0xeb, 0x2f, 0x63, 0x89, 0x07, 0x5f, 0x80, 0xde, 0x34, 0xd0, 0x1b, 0xf9, 0xb2,
+	0xbf, 0x3b, 0x0e, 0x87, 0xaf, 0xda, 0xb4, 0x68, 0xda, 0x6b, 0x2e, 0xb6, 0x84, 0x31, 0xfa, 0x01,
+	0x4c, 0x96, 0x68, 0xc5, 0x24, 0x4e, 0x30, 0x9a, 0x7e, 0x2d, 0x2b, 0x4c, 0xfa, 0x1f, 0x80, 0x44,
+	0x36, 0xee, 0xf5, 0x6e, 0x35, 0x2c, 0xd3, 0xd3, 0xfb, 0xe6, 0x7a, 0x5d, 0x82, 0x54, 0x38, 0x60,
+	0x13, 0xc6, 0xb1, 0x63, 0xb8, 0xd4, 0xe3, 0x4a, 0xef, 0x34, 0x98, 0x19, 0xd2, 0x06, 0x44, 0x64,
+	0xe2, 0x74, 0x5c, 0x79, 0xf1, 0x22, 0xa6, 0xc3, 0xa0, 0x7f, 0x95, 0x7a, 0x1c, 0xbd, 0x06, 0x53,
+	0xb7, 0x09, 0xdf, 0x32, 0x98, 0x43, 0xe4, 0xa2, 0x48, 0x69, 0x89, 0xa7, 0x3e, 0x00, 0xc2, 0x50,
+	0xb4, 0xaf, 0x39, 0x04, 0xcd, 0xc2, 0x84, 0x43, 0x65, 0xc0, 0xe4, 0xe1, 0xf7, 0xfc, 0x5a, 0x8f,
+	0xde, 0xe7, 0x50, 0x11, 0x3e, 0x03, 0x63, 0x22, 0xf6, 0x64, 0xc7, 0x58, 0x11, 0x82, 0xde, 0x85,
+	0x63, 0x25, 0xbc, 0x69, 0x56, 0x6d, 0x6e, 0xd8, 0x45, 0xa3, 0x31, 0x8c, 0x53, 0x47, 0x58, 0x59,
+	0xe9, 0x50, 0xb8, 0x52, 0xbc, 0x11, 0x8e, 0x72, 0x1e, 0x8e, 0x8b, 0x7d, 0x61, 0x9b, 0xda, 0x1c,
+	0x7b, 0x9e, 0x69, 0x54, 0x4c, 0xc7, 0x2c, 0xe3, 0x92, 0x32, 0x20, 0x26, 0xa5, 0xa3, 0x92, 0xc3,
+	0x36, 0xc2, 0xae, 0xf7, 0x82, 0x1e, 0xe4, 0xc2, 0x41, 0xea, 0x91, 0x32, 0x11, 0x85, 0xa2, 0x36,
+	0x53, 0xe2, 0x47, 0xbe, 0xf3, 0x6f, 0x3d, 0xbc, 0x3b, 0xd0, 0x24, 0x7d, 0x74, 0x17, 0x88, 0x9a,
+	0x1d, 0xbc, 0xfb, 0x0a, 0xd0, 0xc3, 0xb8, 0x55, 0x91, 0x01, 0x7d, 0x0a, 0xc7, 0x9b, 0x33, 0x1a,
+	0xb7, 0x31, 0x29, 0x6f, 0x71, 0xa6, 0x40, 0x99, 0xf9, 0xad, 0xe8, 0xcc, 0x0d, 0xbd, 0x98, 0xe9,
+	0x0d, 0xa9, 0xd0, 0xc6, 0x23, 0x73, 0xa1, 0xa6, 0x5c, 0x41, 0x20, 0x43, 0x57, 0x60, 0xba, 0x44,
+	0x0d, 0x87, 0x72, 0xc3, 0x2c, 0x6d, 0x8b, 0xad, 0x84, 0x61, 0x25, 0xf9, 0xd2, 0x02, 0x03, 0x7d,
+	0xb8, 0x44, 0xdf, 0xa7, 0xfc, 0x52, 0x5d, 0x83, 0x3e, 0x86, 0x53, 0x0d, 0x03, 0x83, 0x3a, 0x86,
+	0x5b, 0x2d, 0xda, 0xc4, 0x32, 0xea, 0xf7, 0x6f, 0x9b, 0xb8, 0x4a, 0xaa, 0xc3, 0x1d, 0x07, 0xfa,
+	0xc9, 0x86, 0xfc, 0x03, 0x67, 0x55, 0x8a, 0x2f, 0x07, 0xda, 0x0d, 0xe2, 0xa2, 0x8f, 0xe1, 0x58,
+	0x84, 0x7b, 0xb8, 0xc7, 0xbc, 0x1e, 0x59, 0x97, 0xc6, 0xd0, 0x02, 0xb3, 0xc6, 0xc0, 0x47, 0x0f,
+	0xe4, 0x41, 0x37, 0x60, 0x7a, 0xdf, 0xdd, 0xaa, 0x32, 0x4e, 0x2b, 0xe1, 0x36, 0xf4, 0x12, 0xeb,
+	0x25, 0x19, 0x1b, 0x6e, 0xd0, 0x40, 0x1f, 0x31, 0x5b, 0x3b, 0xd0, 0x4d, 0x98, 0xd9, 0x32, 0xd9,
+	0x56, 0xf8, 0xf4, 0x87, 0xdb, 0x8f, 0xe1, 0xd1, 0xaa, 0x53, 0x32, 0x3c, 0x5a, 0x24, 0x8e, 0x32,
+	0xd4, 0xa1, 0x26, 0xbd, 0xfa, 0xa4, 0x50, 0x07, 0xfb, 0xd0, 0x92, 0xd4, 0xea, 0x42, 0xaa, 0x0b,
+	0xa5, 0x28, 0x78, 0x84, 0xb7, 0x8d, 0x4d, 0xc6, 0x0d, 0xd3, 0xe2, 0x64, 0x1b, 0x2b, 0xc3, 0x1d,
+	0xcd, 0x4f, 0xb6, 0x9b, 0xaf, 0x08, 0xed, 0x25, 0x29, 0x45, 0x1f, 0xc2, 0x13, 0x51, 0x23, 0x37,
+	0x9d, 0x12, 0xad, 0x28, 0x23, 0x1d, 0x7d, 0x27, 0x0e, 0x0c, 0x5a, 0xaa, 0xd0, 0x2d, 0xf8, 0x66,
+	0x84, 0x25, 0xa3, 0x55, 0xcf, 0xc2, 0x06, 0x71, 0x0d, 0xc6, 0x89, 0x75, 0x8b, 0x38, 0x98, 0x31,
+	0x25, 0xdd, 0x31, 0x41, 0xb6, 0x3d, 0xc1, 0x9a, 0xf4, 0xb8, 0xee, 0xae, 0x35, 0x1c, 0xd0, 0x55,
+	0x38, 0x48, 0x4a, 0x36, 0x36, 0x04, 0xf7, 0xd0, 0x2a, 0x57, 0x46, 0xe5, 0x2e, 0xf7, 0xba, 0x58,
+	0x03, 0x7f, 0xf2, 0x41, 0x72, 0xe1, 0xcc, 0xbc, 0xf8, 0xfb, 0xa7, 0x0f, 0x7a, 0x3e, 0xff, 0x02,
+	0xf4, 0x88, 0x67, 0x24, 0x75, 0x3a, 0xa1, 0xdc, 0xbb, 0xf7, 0xe5, 0xaf, 0x47, 0xf4, 0x01, 0xa1,
+	0x5c, 0x0f, 0x84, 0xe8, 0x87, 0x70, 0xc4, 0xc3, 0xdc, 0x33, 0x2d, 0x6e, 0x58, 0x76, 0x95, 0x71,
+	0xec, 0x29, 0x63, 0x1d, 0x46, 0x17, 0xd3, 0x87, 0xc3, 0xf0, 0xa5, 0x20, 0x1a, 0xbd, 0x0b, 0x27,
+	0xc2, 0x07, 0xac, 0xdd, 0x67, 0xbc, 0xa3, 0xcf, 0x98, 0x7c, 0xc0, 0xf4, 0x56, 0xb3, 0x19, 0x18,
+	0xe3, 0x96, 0xab, 0x4c, 0x74, 0x50, 0xc6, 0x75, 0x11, 0x82, 0x6e, 0xc1, 0x51, 0x71, 0xe2, 0x09,
+	0x90, 0x34, 0xab, 0x9c, 0x4a, 0x4c, 0x50, 0x8e, 0x4b, 0xdd, 0xc5, 0xdc, 0x51, 0x90, 0x33, 0x77,
+	0x18, 0x29, 0x5c, 0x8b, 0xeb, 0x02, 0x9a, 0xd6, 0x2d, 0xb7, 0xde, 0x84, 0x56, 0x61, 0x32, 0x4c,
+	0xa6, 0x28, 0x32, 0xc5, 0xe2, 0xb7, 0x4a, 0x71, 0x2d, 0xae, 0x27, 0x02, 0x67, 0xf4, 0x09, 0x9c,
+	0x6a, 0x39, 0x3a, 0x09, 0x66, 0xc6, 0xa6, 0x47, 0x2b, 0x86, 0x63, 0x56, 0x30, 0x73, 0x4d, 0x0b,
+	0x2b, 0x53, 0x1d, 0x8a, 0xd0, 0xa7, 0x9f, 0x62, 0x4d, 0xa7, 0x38, 0xc1, 0xec, 0x8a, 0x47, 0x2b,
+	0xef, 0xd7, 0xb5, 0xe8, 0x0a, 0x1c, 0x13, 0x47, 0x56, 0x5b, 0x06, 0x65, 0xba, 0xa3, 0xe5, 0xa8,
+	0x43, 0xd7, 0x5a, 0x4d, 0xd1, 0x6d, 0x78, 0x3c, 0x78, 0xd6, 0x0e, 0x7a, 0xbd, 0x26, 0xbd, 0xce,
+	0x1e, 0xad, 0x10, 0x07, 0x90, 0x23, 0xdc, 0x53, 0xfa, 0xf4, 0x63, 0x81, 0x7f, 0x7b, 0xe2, 0x9b,
+	0x70, 0x48, 0xd2, 0x35, 0x71, 0x38, 0xf6, 0x1c, 0xd3, 0x56, 0x9e, 0x06, 0x9b, 0xf6, 0x51, 0x4e,
+	0xa7, 0xf4, 0xc3, 0xbb, 0xad, 0x62, 0x7d, 0x50, 0x5c, 0x5e, 0x0f, 0xaf, 0xd0, 0x29, 0xd8, 0x2f,
+	0x31, 0x5a, 0x94, 0x5a, 0xf9, 0x46, 0xf8, 0xf6, 0xeb, 0x29, 0xd1, 0x22, 0xea, 0x87, 0xae, 0xc1,
+	0x54, 0x9d, 0xaf, 0x95, 0xbf, 0x24, 0xe5, 0xc1, 0x74, 0x90, 0x96, 0x23, 0x60, 0x3c, 0x77, 0xd9,
+	0x61, 0xd7, 0x9d, 0x4d, 0xaa, 0x27, 0x4b, 0xc1, 0x07, 0xb4, 0x06, 0x87, 0x1b, 0x4b, 0x33, 0xf0,
+	0xfb, 0x6b, 0xf2, 0x10, 0xfa, 0xde, 0xf7, 0xcb, 0xd5, 0x17, 0x9d, 0xb0, 0x10, 0xd3, 0xd1, 0x07,
+	0xcd, 0xa6, 0x16, 0xf4, 0x53, 0x00, 0xe7, 0x4b, 0x0d, 0x4c, 0x34, 0xda, 0x08, 0xd9, 0xc0, 0x77,
+	0x5c, 0xe2, 0x49, 0x68, 0x34, 0x1a, 0xaf, 0x44, 0x4c, 0xf9, 0x5b, 0x30, 0x8f, 0xc9, 0x5c, 0xf0,
+	0xda, 0x94, 0xab, 0xbf, 0x36, 0xe5, 0xd6, 0xeb, 0x31, 0x5a, 0x32, 0x3c, 0xc4, 0x75, 0xb5, 0xd4,
+	0x0c, 0xa1, 0x4b, 0xfb, 0xde, 0xef, 0x34, 0xac, 0x1b, 0x2a, 0x86, 0x3e, 0x84, 0xa3, 0x41, 0x95,
+	0xb1, 0x3c, 0x03, 0x83, 0x69, 0xfe, 0x21, 0x25, 0xd3, 0x45, 0x1f, 0x2e, 0xd7, 0xc3, 0xf0, 0x8d,
+	0xeb, 0xab, 0xb2, 0x5c, 0x23, 0x75, 0xfd, 0x06, 0x71, 0x45, 0xc3, 0x85, 0xcf, 0xc1, 0x6f, 0x7d,
+	0xf0, 0x19, 0x80, 0x6f, 0xc0, 0x31, 0xcd, 0x64, 0xc4, 0x9a, 0x0e, 0xd8, 0xbb, 0x1a, 0xe4, 0x46,
+	0xc3, 0x79, 0xb5, 0xa0, 0x16, 0x16, 0xd5, 0x7c, 0x5e, 0xcd, 0xcf, 0xab, 0xe7, 0xe1, 0x14, 0x9c,
+	0x58, 0xa1, 0x66, 0x69, 0x5a, 0x93, 0x6b, 0x8d, 0x38, 0x65, 0x11, 0xcf, 0x3d, 0x6a, 0xa3, 0xbe,
+	0x42, 0x5e, 0xcd, 0x17, 0xa0, 0x02, 0xd3, 0xe1, 0xea, 0x9a, 0x6e, 0x2c, 0xaf, 0xde, 0x85, 0xf9,
+	0x19, 0x20, 0xa4, 0x97, 0x4a, 0xdb, 0x62, 0x85, 0x96, 0xda, 0x92, 0xf4, 0xe5, 0xcf, 0xaa, 0xf9,
+	0x73, 0xda, 0x2c, 0x3c, 0xc6, 0x1c, 0x62, 0x34, 0x41, 0x5a, 0x48, 0xd8, 0xe3, 0xbb, 0x3e, 0x98,
+	0xdc, 0xf3, 0xc1, 0x89, 0x9a, 0x0f, 0x52, 0x85, 0x33, 0x6a, 0xe1, 0xac, 0x5a, 0x38, 0xa7, 0xbd,
+	0xd9, 0x72, 0xce, 0xee, 0xb3, 0x78, 0x6a, 0xcf, 0x07, 0xfd, 0x35, 0x1f, 0x24, 0xcf, 0xa9, 0x8b,
+	0xea, 0x59, 0xf5, 0x8c, 0x36, 0x0b, 0xd1, 0xc1, 0xa3, 0x02, 0x1d, 0xdf, 0xf5, 0xc1, 0xd0, 0x9e,
+	0x0f, 0x06, 0x6b, 0x3e, 0x18, 0xc8, 0x2f, 0xa8, 0xf9, 0xb7, 0xd5, 0xfc, 0xa2, 0x9a, 0x3f, 0xa3,
+	0xcd, 0xc3, 0x89, 0x70, 0x4f, 0xdd, 0xdf, 0x63, 0x03, 0xc9, 0xc4, 0xae, 0x0f, 0xc6, 0x42, 0xd2,
+	0x47, 0x35, 0x1f, 0x24, 0xf2, 0xe7, 0xd5, 0xe9, 0xc2, 0xbc, 0xf6, 0x3d, 0x38, 0xda, 0xfc, 0xfc,
+	0x19, 0xe2, 0xcd, 0x12, 0xa5, 0x76, 0x7d, 0x30, 0xb1, 0xe7, 0x83, 0x63, 0x72, 0x5e, 0x2d, 0xe0,
+	0xde, 0x3c, 0xaf, 0xa9, 0x3d, 0x1f, 0x64, 0xc4, 0xbc, 0x16, 0xf2, 0xea, 0x42, 0x41, 0x5d, 0x10,
+	0x6f, 0x57, 0x27, 0xd2, 0x93, 0xcb, 0xf1, 0x54, 0x7f, 0x1a, 0x2e, 0xc7, 0x53, 0x83, 0xe9, 0xa1,
+	0xe5, 0x78, 0x0a, 0xa5, 0xc7, 0x96, 0xe3, 0xa9, 0x63, 0xe9, 0x89, 0xe5, 0x78, 0x2a, 0x93, 0x9e,
+	0xca, 0xfe, 0x23, 0x0d, 0x87, 0x97, 0x3c, 0x6c, 0x72, 0xdc, 0xc0, 0x78, 0xa5, 0x0d, 0xe3, 0xf7,
+	0x11, 0x7d, 0x2a, 0x02, 0xd1, 0x5b, 0xa8, 0xfc, 0x7f, 0x15, 0xb9, 0x3f, 0x7a, 0x45, 0x00, 0xdc,
+	0x45, 0xdd, 0x2e, 0xea, 0xfe, 0xbf, 0xa0, 0xee, 0x6b, 0x51, 0xa8, 0xdb, 0x85, 0xd8, 0x2e, 0xc4,
+	0x1e, 0x15, 0x62, 0x3f, 0xfd, 0xae, 0x20, 0xf6, 0x50, 0x7c, 0xbd, 0x30, 0xfa, 0xfb, 0x8b, 0x6d,
+	0x5f, 0x6a, 0x69, 0x85, 0xc3, 0x58, 0xe2, 0xc4, 0xfd, 0xe7, 0x20, 0xba, 0x4b, 0x3b, 0x1f, 0x01,
+	0x14, 0x6f, 0x34, 0x01, 0x45, 0x9f, 0xc4, 0x89, 0xfb, 0xcf, 0xc1, 0x81, 0x30, 0x4d, 0x8d, 0x44,
+	0x8c, 0x89, 0xfb, 0xcf, 0x41, 0x44, 0xbb, 0xf6, 0xf6, 0xa1, 0x84, 0x31, 0x79, 0xff, 0x39, 0x38,
+	0xa4, 0x4f, 0x3b, 0x1d, 0x45, 0x19, 0xc7, 0xee, 0x3f, 0x07, 0x07, 0x9b, 0xe5, 0xf4, 0x23, 0x91,
+	0x23, 0x98, 0x7e, 0x54, 0xd7, 0x72, 0x3c, 0x15, 0x4b, 0xc7, 0x3b, 0xd3, 0x47, 0xf6, 0x8f, 0xa3,
+	0x70, 0x44, 0xc7, 0xae, 0x6d, 0x5a, 0x5d, 0xf0, 0xe8, 0x00, 0x1e, 0x3f, 0xfa, 0xd6, 0xdf, 0xf5,
+	0x0d, 0xb7, 0x7e, 0xd7, 0xd7, 0xfa, 0x85, 0x5e, 0x97, 0x67, 0xba, 0x3c, 0xd3, 0xe5, 0x99, 0x2e,
+	0xcf, 0x74, 0x79, 0xa6, 0xcb, 0x33, 0x5d, 0x9e, 0x79, 0x15, 0x3c, 0xf3, 0xe7, 0x71, 0x38, 0x70,
+	0x15, 0xf3, 0x2e, 0xcb, 0x74, 0x59, 0xa6, 0xcb, 0x32, 0x5d, 0x96, 0xe9, 0xb2, 0x4c, 0x97, 0x65,
+	0xba, 0x2c, 0xf3, 0x2a, 0x59, 0xe6, 0xbf, 0xfb, 0xe7, 0xbf, 0xcf, 0xbe, 0x9b, 0x9f, 0xff, 0xfe,
+	0xf3, 0xbf, 0xfa, 0x75, 0x09, 0xf3, 0xdf, 0x44, 0x98, 0xda, 0x2f, 0xc0, 0xde, 0xe3, 0x4c, 0xcf,
+	0xa3, 0xc7, 0x99, 0x9e, 0x67, 0x8f, 0x33, 0xe0, 0x5e, 0x2d, 0x03, 0x7e, 0x55, 0xcb, 0x80, 0xaf,
+	0x6a, 0x19, 0xb0, 0x57, 0xcb, 0x80, 0x47, 0xb5, 0x0c, 0xf8, 0xba, 0x96, 0x01, 0x4f, 0x6b, 0x99,
+	0x9e, 0x67, 0xb5, 0x0c, 0xf8, 0xf9, 0x93, 0x4c, 0xcf, 0xee, 0x93, 0x0c, 0xd8, 0x7b, 0x92, 0xe9,
+	0x79, 0xf4, 0x24, 0xd3, 0x73, 0xf3, 0x66, 0x99, 0xba, 0xb7, 0xca, 0xb9, 0x3a, 0xaf, 0xe5, 0xaa,
+	0x6c, 0x4e, 0x7e, 0xd8, 0xa4, 0x5e, 0x65, 0xd6, 0xf5, 0xe8, 0x36, 0x29, 0x61, 0x6f, 0xb6, 0xde,
+	0x3d, 0xe7, 0x16, 0xcb, 0x74, 0x0e, 0xdf, 0xe1, 0xe1, 0xff, 0xb1, 0x76, 0xfc, 0xbf, 0xe1, 0x62,
+	0x42, 0xae, 0xcc, 0x85, 0x7f, 0x05, 0x00, 0x00, 0xff, 0xff, 0x41, 0x6e, 0x50, 0x97, 0x66, 0x2c,
+	0x00, 0x00,
 }
 
 func (this *ProxyTypeTLSTCP) Equal(that interface{}) bool {
@@ -2015,7 +2346,61 @@ func (this *ProxyTypeTLSTCP) Equal(that interface{}) bool {
 	} else if this == nil {
 		return false
 	}
+	if that1.TlsCertificatesChoice == nil {
+		if this.TlsCertificatesChoice != nil {
+			return false
+		}
+	} else if this.TlsCertificatesChoice == nil {
+		return false
+	} else if !this.TlsCertificatesChoice.Equal(that1.TlsCertificatesChoice) {
+		return false
+	}
+	return true
+}
+func (this *ProxyTypeTLSTCP_TlsParameters) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ProxyTypeTLSTCP_TlsParameters)
+	if !ok {
+		that2, ok := that.(ProxyTypeTLSTCP_TlsParameters)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
 	if !this.TlsParameters.Equal(that1.TlsParameters) {
+		return false
+	}
+	return true
+}
+func (this *ProxyTypeTLSTCP_TlsCertParams) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ProxyTypeTLSTCP_TlsCertParams)
+	if !ok {
+		that2, ok := that.(ProxyTypeTLSTCP_TlsCertParams)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.TlsCertParams.Equal(that1.TlsCertParams) {
 		return false
 	}
 	return true
@@ -2098,6 +2483,35 @@ func (this *ProxyTypeTLSTCPAutoCerts_UseMtls) Equal(that interface{}) bool {
 	}
 	if !this.UseMtls.Equal(that1.UseMtls) {
 		return false
+	}
+	return true
+}
+func (this *ServicePolicyList) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ServicePolicyList)
+	if !ok {
+		that2, ok := that.(ServicePolicyList)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if len(this.Policies) != len(that1.Policies) {
+		return false
+	}
+	for i := range this.Policies {
+		if !this.Policies[i].Equal(that1.Policies[i]) {
+			return false
+		}
 	}
 	return true
 }
@@ -2199,6 +2613,15 @@ func (this *GlobalSpecType) Equal(that interface{}) bool {
 	} else if this.LoadbalancerType == nil {
 		return false
 	} else if !this.LoadbalancerType.Equal(that1.LoadbalancerType) {
+		return false
+	}
+	if that1.ServicePolicyChoice == nil {
+		if this.ServicePolicyChoice != nil {
+			return false
+		}
+	} else if this.ServicePolicyChoice == nil {
+		return false
+	} else if !this.ServicePolicyChoice.Equal(that1.ServicePolicyChoice) {
 		return false
 	}
 	if !this.ViewInternal.Equal(that1.ViewInternal) {
@@ -2620,6 +3043,78 @@ func (this *GlobalSpecType_TlsTcp) Equal(that interface{}) bool {
 	}
 	return true
 }
+func (this *GlobalSpecType_ServicePoliciesFromNamespace) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GlobalSpecType_ServicePoliciesFromNamespace)
+	if !ok {
+		that2, ok := that.(GlobalSpecType_ServicePoliciesFromNamespace)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.ServicePoliciesFromNamespace.Equal(that1.ServicePoliciesFromNamespace) {
+		return false
+	}
+	return true
+}
+func (this *GlobalSpecType_NoServicePolicies) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GlobalSpecType_NoServicePolicies)
+	if !ok {
+		that2, ok := that.(GlobalSpecType_NoServicePolicies)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.NoServicePolicies.Equal(that1.NoServicePolicies) {
+		return false
+	}
+	return true
+}
+func (this *GlobalSpecType_ActiveServicePolicies) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GlobalSpecType_ActiveServicePolicies)
+	if !ok {
+		that2, ok := that.(GlobalSpecType_ActiveServicePolicies)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.ActiveServicePolicies.Equal(that1.ActiveServicePolicies) {
+		return false
+	}
+	return true
+}
 func (this *CreateSpecType) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -2707,6 +3202,15 @@ func (this *CreateSpecType) Equal(that interface{}) bool {
 	} else if this.LoadbalancerType == nil {
 		return false
 	} else if !this.LoadbalancerType.Equal(that1.LoadbalancerType) {
+		return false
+	}
+	if that1.ServicePolicyChoice == nil {
+		if this.ServicePolicyChoice != nil {
+			return false
+		}
+	} else if this.ServicePolicyChoice == nil {
+		return false
+	} else if !this.ServicePolicyChoice.Equal(that1.ServicePolicyChoice) {
 		return false
 	}
 	return true
@@ -3095,6 +3599,78 @@ func (this *CreateSpecType_TlsTcp) Equal(that interface{}) bool {
 	}
 	return true
 }
+func (this *CreateSpecType_ServicePoliciesFromNamespace) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CreateSpecType_ServicePoliciesFromNamespace)
+	if !ok {
+		that2, ok := that.(CreateSpecType_ServicePoliciesFromNamespace)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.ServicePoliciesFromNamespace.Equal(that1.ServicePoliciesFromNamespace) {
+		return false
+	}
+	return true
+}
+func (this *CreateSpecType_NoServicePolicies) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CreateSpecType_NoServicePolicies)
+	if !ok {
+		that2, ok := that.(CreateSpecType_NoServicePolicies)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.NoServicePolicies.Equal(that1.NoServicePolicies) {
+		return false
+	}
+	return true
+}
+func (this *CreateSpecType_ActiveServicePolicies) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CreateSpecType_ActiveServicePolicies)
+	if !ok {
+		that2, ok := that.(CreateSpecType_ActiveServicePolicies)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.ActiveServicePolicies.Equal(that1.ActiveServicePolicies) {
+		return false
+	}
+	return true
+}
 func (this *ReplaceSpecType) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -3190,6 +3766,15 @@ func (this *ReplaceSpecType) Equal(that interface{}) bool {
 	} else if this.LoadbalancerType == nil {
 		return false
 	} else if !this.LoadbalancerType.Equal(that1.LoadbalancerType) {
+		return false
+	}
+	if that1.ServicePolicyChoice == nil {
+		if this.ServicePolicyChoice != nil {
+			return false
+		}
+	} else if this.ServicePolicyChoice == nil {
+		return false
+	} else if !this.ServicePolicyChoice.Equal(that1.ServicePolicyChoice) {
 		return false
 	}
 	return true
@@ -3578,6 +4163,78 @@ func (this *ReplaceSpecType_TlsTcp) Equal(that interface{}) bool {
 	}
 	return true
 }
+func (this *ReplaceSpecType_ServicePoliciesFromNamespace) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ReplaceSpecType_ServicePoliciesFromNamespace)
+	if !ok {
+		that2, ok := that.(ReplaceSpecType_ServicePoliciesFromNamespace)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.ServicePoliciesFromNamespace.Equal(that1.ServicePoliciesFromNamespace) {
+		return false
+	}
+	return true
+}
+func (this *ReplaceSpecType_NoServicePolicies) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ReplaceSpecType_NoServicePolicies)
+	if !ok {
+		that2, ok := that.(ReplaceSpecType_NoServicePolicies)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.NoServicePolicies.Equal(that1.NoServicePolicies) {
+		return false
+	}
+	return true
+}
+func (this *ReplaceSpecType_ActiveServicePolicies) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ReplaceSpecType_ActiveServicePolicies)
+	if !ok {
+		that2, ok := that.(ReplaceSpecType_ActiveServicePolicies)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.ActiveServicePolicies.Equal(that1.ActiveServicePolicies) {
+		return false
+	}
+	return true
+}
 func (this *GetSpecType) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -3673,6 +4330,15 @@ func (this *GetSpecType) Equal(that interface{}) bool {
 	} else if this.LoadbalancerType == nil {
 		return false
 	} else if !this.LoadbalancerType.Equal(that1.LoadbalancerType) {
+		return false
+	}
+	if that1.ServicePolicyChoice == nil {
+		if this.ServicePolicyChoice != nil {
+			return false
+		}
+	} else if this.ServicePolicyChoice == nil {
+		return false
+	} else if !this.ServicePolicyChoice.Equal(that1.ServicePolicyChoice) {
 		return false
 	}
 	if this.HostName != that1.HostName {
@@ -4091,17 +4757,105 @@ func (this *GetSpecType_TlsTcp) Equal(that interface{}) bool {
 	}
 	return true
 }
+func (this *GetSpecType_ServicePoliciesFromNamespace) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GetSpecType_ServicePoliciesFromNamespace)
+	if !ok {
+		that2, ok := that.(GetSpecType_ServicePoliciesFromNamespace)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.ServicePoliciesFromNamespace.Equal(that1.ServicePoliciesFromNamespace) {
+		return false
+	}
+	return true
+}
+func (this *GetSpecType_NoServicePolicies) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GetSpecType_NoServicePolicies)
+	if !ok {
+		that2, ok := that.(GetSpecType_NoServicePolicies)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.NoServicePolicies.Equal(that1.NoServicePolicies) {
+		return false
+	}
+	return true
+}
+func (this *GetSpecType_ActiveServicePolicies) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GetSpecType_ActiveServicePolicies)
+	if !ok {
+		that2, ok := that.(GetSpecType_ActiveServicePolicies)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.ActiveServicePolicies.Equal(that1.ActiveServicePolicies) {
+		return false
+	}
+	return true
+}
 func (this *ProxyTypeTLSTCP) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 5)
+	s := make([]string, 0, 6)
 	s = append(s, "&tcp_loadbalancer.ProxyTypeTLSTCP{")
-	if this.TlsParameters != nil {
-		s = append(s, "TlsParameters: "+fmt.Sprintf("%#v", this.TlsParameters)+",\n")
+	if this.TlsCertificatesChoice != nil {
+		s = append(s, "TlsCertificatesChoice: "+fmt.Sprintf("%#v", this.TlsCertificatesChoice)+",\n")
 	}
 	s = append(s, "}")
 	return strings.Join(s, "")
+}
+func (this *ProxyTypeTLSTCP_TlsParameters) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&tcp_loadbalancer.ProxyTypeTLSTCP_TlsParameters{` +
+		`TlsParameters:` + fmt.Sprintf("%#v", this.TlsParameters) + `}`}, ", ")
+	return s
+}
+func (this *ProxyTypeTLSTCP_TlsCertParams) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&tcp_loadbalancer.ProxyTypeTLSTCP_TlsCertParams{` +
+		`TlsCertParams:` + fmt.Sprintf("%#v", this.TlsCertParams) + `}`}, ", ")
+	return s
 }
 func (this *ProxyTypeTLSTCPAutoCerts) GoString() string {
 	if this == nil {
@@ -4134,11 +4888,23 @@ func (this *ProxyTypeTLSTCPAutoCerts_UseMtls) GoString() string {
 		`UseMtls:` + fmt.Sprintf("%#v", this.UseMtls) + `}`}, ", ")
 	return s
 }
+func (this *ServicePolicyList) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 5)
+	s = append(s, "&tcp_loadbalancer.ServicePolicyList{")
+	if this.Policies != nil {
+		s = append(s, "Policies: "+fmt.Sprintf("%#v", this.Policies)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
 func (this *GlobalSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 33)
+	s := make([]string, 0, 36)
 	s = append(s, "&tcp_loadbalancer.GlobalSpecType{")
 	s = append(s, "Domains: "+fmt.Sprintf("%#v", this.Domains)+",\n")
 	s = append(s, "ListenPort: "+fmt.Sprintf("%#v", this.ListenPort)+",\n")
@@ -4165,6 +4931,9 @@ func (this *GlobalSpecType) GoString() string {
 	}
 	if this.LoadbalancerType != nil {
 		s = append(s, "LoadbalancerType: "+fmt.Sprintf("%#v", this.LoadbalancerType)+",\n")
+	}
+	if this.ServicePolicyChoice != nil {
+		s = append(s, "ServicePolicyChoice: "+fmt.Sprintf("%#v", this.ServicePolicyChoice)+",\n")
 	}
 	if this.ViewInternal != nil {
 		s = append(s, "ViewInternal: "+fmt.Sprintf("%#v", this.ViewInternal)+",\n")
@@ -4313,11 +5082,35 @@ func (this *GlobalSpecType_TlsTcp) GoString() string {
 		`TlsTcp:` + fmt.Sprintf("%#v", this.TlsTcp) + `}`}, ", ")
 	return s
 }
+func (this *GlobalSpecType_ServicePoliciesFromNamespace) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&tcp_loadbalancer.GlobalSpecType_ServicePoliciesFromNamespace{` +
+		`ServicePoliciesFromNamespace:` + fmt.Sprintf("%#v", this.ServicePoliciesFromNamespace) + `}`}, ", ")
+	return s
+}
+func (this *GlobalSpecType_NoServicePolicies) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&tcp_loadbalancer.GlobalSpecType_NoServicePolicies{` +
+		`NoServicePolicies:` + fmt.Sprintf("%#v", this.NoServicePolicies) + `}`}, ", ")
+	return s
+}
+func (this *GlobalSpecType_ActiveServicePolicies) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&tcp_loadbalancer.GlobalSpecType_ActiveServicePolicies{` +
+		`ActiveServicePolicies:` + fmt.Sprintf("%#v", this.ActiveServicePolicies) + `}`}, ", ")
+	return s
+}
 func (this *CreateSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 25)
+	s := make([]string, 0, 28)
 	s = append(s, "&tcp_loadbalancer.CreateSpecType{")
 	s = append(s, "Domains: "+fmt.Sprintf("%#v", this.Domains)+",\n")
 	s = append(s, "ListenPort: "+fmt.Sprintf("%#v", this.ListenPort)+",\n")
@@ -4340,6 +5133,9 @@ func (this *CreateSpecType) GoString() string {
 	}
 	if this.LoadbalancerType != nil {
 		s = append(s, "LoadbalancerType: "+fmt.Sprintf("%#v", this.LoadbalancerType)+",\n")
+	}
+	if this.ServicePolicyChoice != nil {
+		s = append(s, "ServicePolicyChoice: "+fmt.Sprintf("%#v", this.ServicePolicyChoice)+",\n")
 	}
 	s = append(s, "}")
 	return strings.Join(s, "")
@@ -4472,11 +5268,35 @@ func (this *CreateSpecType_TlsTcp) GoString() string {
 		`TlsTcp:` + fmt.Sprintf("%#v", this.TlsTcp) + `}`}, ", ")
 	return s
 }
+func (this *CreateSpecType_ServicePoliciesFromNamespace) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&tcp_loadbalancer.CreateSpecType_ServicePoliciesFromNamespace{` +
+		`ServicePoliciesFromNamespace:` + fmt.Sprintf("%#v", this.ServicePoliciesFromNamespace) + `}`}, ", ")
+	return s
+}
+func (this *CreateSpecType_NoServicePolicies) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&tcp_loadbalancer.CreateSpecType_NoServicePolicies{` +
+		`NoServicePolicies:` + fmt.Sprintf("%#v", this.NoServicePolicies) + `}`}, ", ")
+	return s
+}
+func (this *CreateSpecType_ActiveServicePolicies) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&tcp_loadbalancer.CreateSpecType_ActiveServicePolicies{` +
+		`ActiveServicePolicies:` + fmt.Sprintf("%#v", this.ActiveServicePolicies) + `}`}, ", ")
+	return s
+}
 func (this *ReplaceSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 26)
+	s := make([]string, 0, 29)
 	s = append(s, "&tcp_loadbalancer.ReplaceSpecType{")
 	s = append(s, "Domains: "+fmt.Sprintf("%#v", this.Domains)+",\n")
 	s = append(s, "ListenPort: "+fmt.Sprintf("%#v", this.ListenPort)+",\n")
@@ -4502,6 +5322,9 @@ func (this *ReplaceSpecType) GoString() string {
 	}
 	if this.LoadbalancerType != nil {
 		s = append(s, "LoadbalancerType: "+fmt.Sprintf("%#v", this.LoadbalancerType)+",\n")
+	}
+	if this.ServicePolicyChoice != nil {
+		s = append(s, "ServicePolicyChoice: "+fmt.Sprintf("%#v", this.ServicePolicyChoice)+",\n")
 	}
 	s = append(s, "}")
 	return strings.Join(s, "")
@@ -4634,11 +5457,35 @@ func (this *ReplaceSpecType_TlsTcp) GoString() string {
 		`TlsTcp:` + fmt.Sprintf("%#v", this.TlsTcp) + `}`}, ", ")
 	return s
 }
+func (this *ReplaceSpecType_ServicePoliciesFromNamespace) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&tcp_loadbalancer.ReplaceSpecType_ServicePoliciesFromNamespace{` +
+		`ServicePoliciesFromNamespace:` + fmt.Sprintf("%#v", this.ServicePoliciesFromNamespace) + `}`}, ", ")
+	return s
+}
+func (this *ReplaceSpecType_NoServicePolicies) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&tcp_loadbalancer.ReplaceSpecType_NoServicePolicies{` +
+		`NoServicePolicies:` + fmt.Sprintf("%#v", this.NoServicePolicies) + `}`}, ", ")
+	return s
+}
+func (this *ReplaceSpecType_ActiveServicePolicies) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&tcp_loadbalancer.ReplaceSpecType_ActiveServicePolicies{` +
+		`ActiveServicePolicies:` + fmt.Sprintf("%#v", this.ActiveServicePolicies) + `}`}, ", ")
+	return s
+}
 func (this *GetSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 31)
+	s := make([]string, 0, 34)
 	s = append(s, "&tcp_loadbalancer.GetSpecType{")
 	s = append(s, "Domains: "+fmt.Sprintf("%#v", this.Domains)+",\n")
 	s = append(s, "ListenPort: "+fmt.Sprintf("%#v", this.ListenPort)+",\n")
@@ -4664,6 +5511,9 @@ func (this *GetSpecType) GoString() string {
 	}
 	if this.LoadbalancerType != nil {
 		s = append(s, "LoadbalancerType: "+fmt.Sprintf("%#v", this.LoadbalancerType)+",\n")
+	}
+	if this.ServicePolicyChoice != nil {
+		s = append(s, "ServicePolicyChoice: "+fmt.Sprintf("%#v", this.ServicePolicyChoice)+",\n")
 	}
 	s = append(s, "HostName: "+fmt.Sprintf("%#v", this.HostName)+",\n")
 	if this.DnsInfo != nil {
@@ -4809,6 +5659,30 @@ func (this *GetSpecType_TlsTcp) GoString() string {
 		`TlsTcp:` + fmt.Sprintf("%#v", this.TlsTcp) + `}`}, ", ")
 	return s
 }
+func (this *GetSpecType_ServicePoliciesFromNamespace) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&tcp_loadbalancer.GetSpecType_ServicePoliciesFromNamespace{` +
+		`ServicePoliciesFromNamespace:` + fmt.Sprintf("%#v", this.ServicePoliciesFromNamespace) + `}`}, ", ")
+	return s
+}
+func (this *GetSpecType_NoServicePolicies) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&tcp_loadbalancer.GetSpecType_NoServicePolicies{` +
+		`NoServicePolicies:` + fmt.Sprintf("%#v", this.NoServicePolicies) + `}`}, ", ")
+	return s
+}
+func (this *GetSpecType_ActiveServicePolicies) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&tcp_loadbalancer.GetSpecType_ActiveServicePolicies{` +
+		`ActiveServicePolicies:` + fmt.Sprintf("%#v", this.ActiveServicePolicies) + `}`}, ", ")
+	return s
+}
 func valueToGoStringTypes(v interface{}, typ string) string {
 	rv := reflect.ValueOf(v)
 	if rv.IsNil() {
@@ -4837,6 +5711,25 @@ func (m *ProxyTypeTLSTCP) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	if m.TlsCertificatesChoice != nil {
+		{
+			size := m.TlsCertificatesChoice.Size()
+			i -= size
+			if _, err := m.TlsCertificatesChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *ProxyTypeTLSTCP_TlsParameters) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ProxyTypeTLSTCP_TlsParameters) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	if m.TlsParameters != nil {
 		{
 			size, err := m.TlsParameters.MarshalToSizedBuffer(dAtA[:i])
@@ -4851,7 +5744,27 @@ func (m *ProxyTypeTLSTCP) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	}
 	return len(dAtA) - i, nil
 }
+func (m *ProxyTypeTLSTCP_TlsCertParams) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
 
+func (m *ProxyTypeTLSTCP_TlsCertParams) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.TlsCertParams != nil {
+		{
+			size, err := m.TlsCertParams.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1a
+	}
+	return len(dAtA) - i, nil
+}
 func (m *ProxyTypeTLSTCPAutoCerts) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -4938,6 +5851,43 @@ func (m *ProxyTypeTLSTCPAutoCerts_UseMtls) MarshalToSizedBuffer(dAtA []byte) (in
 	}
 	return len(dAtA) - i, nil
 }
+func (m *ServicePolicyList) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *ServicePolicyList) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ServicePolicyList) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.Policies) > 0 {
+		for iNdEx := len(m.Policies) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.Policies[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0xa
+		}
+	}
+	return len(dAtA) - i, nil
+}
+
 func (m *GlobalSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -5042,6 +5992,15 @@ func (m *GlobalSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		dAtA[i] = 0x3e
 		i--
 		dAtA[i] = 0xc2
+	}
+	if m.ServicePolicyChoice != nil {
+		{
+			size := m.ServicePolicyChoice.Size()
+			i -= size
+			if _, err := m.ServicePolicyChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
 	}
 	if m.SniDefaultLbChoice != nil {
 		{
@@ -5514,6 +6473,75 @@ func (m *GlobalSpecType_DefaultLbWithSni) MarshalToSizedBuffer(dAtA []byte) (int
 	}
 	return len(dAtA) - i, nil
 }
+func (m *GlobalSpecType_ServicePoliciesFromNamespace) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType_ServicePoliciesFromNamespace) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.ServicePoliciesFromNamespace != nil {
+		{
+			size, err := m.ServicePoliciesFromNamespace.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xfa
+	}
+	return len(dAtA) - i, nil
+}
+func (m *GlobalSpecType_NoServicePolicies) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType_NoServicePolicies) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.NoServicePolicies != nil {
+		{
+			size, err := m.NoServicePolicies.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x2
+		i--
+		dAtA[i] = 0x82
+	}
+	return len(dAtA) - i, nil
+}
+func (m *GlobalSpecType_ActiveServicePolicies) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType_ActiveServicePolicies) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.ActiveServicePolicies != nil {
+		{
+			size, err := m.ActiveServicePolicies.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x2
+		i--
+		dAtA[i] = 0x8a
+	}
+	return len(dAtA) - i, nil
+}
 func (m *CreateSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -5534,6 +6562,15 @@ func (m *CreateSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	if m.ServicePolicyChoice != nil {
+		{
+			size := m.ServicePolicyChoice.Size()
+			i -= size
+			if _, err := m.ServicePolicyChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
 	if m.SniDefaultLbChoice != nil {
 		{
 			size := m.SniDefaultLbChoice.Size()
@@ -5981,6 +7018,75 @@ func (m *CreateSpecType_DefaultLbWithSni) MarshalToSizedBuffer(dAtA []byte) (int
 	}
 	return len(dAtA) - i, nil
 }
+func (m *CreateSpecType_ServicePoliciesFromNamespace) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType_ServicePoliciesFromNamespace) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.ServicePoliciesFromNamespace != nil {
+		{
+			size, err := m.ServicePoliciesFromNamespace.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xfa
+	}
+	return len(dAtA) - i, nil
+}
+func (m *CreateSpecType_NoServicePolicies) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType_NoServicePolicies) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.NoServicePolicies != nil {
+		{
+			size, err := m.NoServicePolicies.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x2
+		i--
+		dAtA[i] = 0x82
+	}
+	return len(dAtA) - i, nil
+}
+func (m *CreateSpecType_ActiveServicePolicies) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType_ActiveServicePolicies) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.ActiveServicePolicies != nil {
+		{
+			size, err := m.ActiveServicePolicies.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x2
+		i--
+		dAtA[i] = 0x8a
+	}
+	return len(dAtA) - i, nil
+}
 func (m *ReplaceSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -6001,6 +7107,15 @@ func (m *ReplaceSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	if m.ServicePolicyChoice != nil {
+		{
+			size := m.ServicePolicyChoice.Size()
+			i -= size
+			if _, err := m.ServicePolicyChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
 	if m.SniDefaultLbChoice != nil {
 		{
 			size := m.SniDefaultLbChoice.Size()
@@ -6462,6 +7577,75 @@ func (m *ReplaceSpecType_DefaultLbWithSni) MarshalToSizedBuffer(dAtA []byte) (in
 	}
 	return len(dAtA) - i, nil
 }
+func (m *ReplaceSpecType_ServicePoliciesFromNamespace) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType_ServicePoliciesFromNamespace) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.ServicePoliciesFromNamespace != nil {
+		{
+			size, err := m.ServicePoliciesFromNamespace.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xfa
+	}
+	return len(dAtA) - i, nil
+}
+func (m *ReplaceSpecType_NoServicePolicies) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType_NoServicePolicies) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.NoServicePolicies != nil {
+		{
+			size, err := m.NoServicePolicies.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x2
+		i--
+		dAtA[i] = 0x82
+	}
+	return len(dAtA) - i, nil
+}
+func (m *ReplaceSpecType_ActiveServicePolicies) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType_ActiveServicePolicies) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.ActiveServicePolicies != nil {
+		{
+			size, err := m.ActiveServicePolicies.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x2
+		i--
+		dAtA[i] = 0x8a
+	}
+	return len(dAtA) - i, nil
+}
 func (m *GetSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -6552,6 +7736,15 @@ func (m *GetSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		dAtA[i] = 0x3e
 		i--
 		dAtA[i] = 0xca
+	}
+	if m.ServicePolicyChoice != nil {
+		{
+			size := m.ServicePolicyChoice.Size()
+			i -= size
+			if _, err := m.ServicePolicyChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
 	}
 	if m.SniDefaultLbChoice != nil {
 		{
@@ -7014,6 +8207,75 @@ func (m *GetSpecType_DefaultLbWithSni) MarshalToSizedBuffer(dAtA []byte) (int, e
 	}
 	return len(dAtA) - i, nil
 }
+func (m *GetSpecType_ServicePoliciesFromNamespace) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType_ServicePoliciesFromNamespace) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.ServicePoliciesFromNamespace != nil {
+		{
+			size, err := m.ServicePoliciesFromNamespace.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xfa
+	}
+	return len(dAtA) - i, nil
+}
+func (m *GetSpecType_NoServicePolicies) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType_NoServicePolicies) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.NoServicePolicies != nil {
+		{
+			size, err := m.NoServicePolicies.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x2
+		i--
+		dAtA[i] = 0x82
+	}
+	return len(dAtA) - i, nil
+}
+func (m *GetSpecType_ActiveServicePolicies) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType_ActiveServicePolicies) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.ActiveServicePolicies != nil {
+		{
+			size, err := m.ActiveServicePolicies.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x2
+		i--
+		dAtA[i] = 0x8a
+	}
+	return len(dAtA) - i, nil
+}
 func encodeVarintTypes(dAtA []byte, offset int, v uint64) int {
 	offset -= sovTypes(v)
 	base := offset
@@ -7031,13 +8293,36 @@ func (m *ProxyTypeTLSTCP) Size() (n int) {
 	}
 	var l int
 	_ = l
+	if m.TlsCertificatesChoice != nil {
+		n += m.TlsCertificatesChoice.Size()
+	}
+	return n
+}
+
+func (m *ProxyTypeTLSTCP_TlsParameters) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
 	if m.TlsParameters != nil {
 		l = m.TlsParameters.Size()
 		n += 1 + l + sovTypes(uint64(l))
 	}
 	return n
 }
-
+func (m *ProxyTypeTLSTCP_TlsCertParams) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.TlsCertParams != nil {
+		l = m.TlsCertParams.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
 func (m *ProxyTypeTLSTCPAutoCerts) Size() (n int) {
 	if m == nil {
 		return 0
@@ -7078,6 +8363,21 @@ func (m *ProxyTypeTLSTCPAutoCerts_UseMtls) Size() (n int) {
 	}
 	return n
 }
+func (m *ServicePolicyList) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if len(m.Policies) > 0 {
+		for _, e := range m.Policies {
+			l = e.Size()
+			n += 1 + l + sovTypes(uint64(l))
+		}
+	}
+	return n
+}
+
 func (m *GlobalSpecType) Size() (n int) {
 	if m == nil {
 		return 0
@@ -7128,6 +8428,9 @@ func (m *GlobalSpecType) Size() (n int) {
 	}
 	if m.SniDefaultLbChoice != nil {
 		n += m.SniDefaultLbChoice.Size()
+	}
+	if m.ServicePolicyChoice != nil {
+		n += m.ServicePolicyChoice.Size()
 	}
 	if m.ViewInternal != nil {
 		l = m.ViewInternal.Size()
@@ -7354,6 +8657,42 @@ func (m *GlobalSpecType_DefaultLbWithSni) Size() (n int) {
 	}
 	return n
 }
+func (m *GlobalSpecType_ServicePoliciesFromNamespace) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.ServicePoliciesFromNamespace != nil {
+		l = m.ServicePoliciesFromNamespace.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *GlobalSpecType_NoServicePolicies) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.NoServicePolicies != nil {
+		l = m.NoServicePolicies.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *GlobalSpecType_ActiveServicePolicies) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.ActiveServicePolicies != nil {
+		l = m.ActiveServicePolicies.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
 func (m *CreateSpecType) Size() (n int) {
 	if m == nil {
 		return 0
@@ -7395,6 +8734,9 @@ func (m *CreateSpecType) Size() (n int) {
 	}
 	if m.SniDefaultLbChoice != nil {
 		n += m.SniDefaultLbChoice.Size()
+	}
+	if m.ServicePolicyChoice != nil {
+		n += m.ServicePolicyChoice.Size()
 	}
 	return n
 }
@@ -7591,6 +8933,42 @@ func (m *CreateSpecType_DefaultLbWithSni) Size() (n int) {
 	}
 	return n
 }
+func (m *CreateSpecType_ServicePoliciesFromNamespace) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.ServicePoliciesFromNamespace != nil {
+		l = m.ServicePoliciesFromNamespace.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *CreateSpecType_NoServicePolicies) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.NoServicePolicies != nil {
+		l = m.NoServicePolicies.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *CreateSpecType_ActiveServicePolicies) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.ActiveServicePolicies != nil {
+		l = m.ActiveServicePolicies.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
 func (m *ReplaceSpecType) Size() (n int) {
 	if m == nil {
 		return 0
@@ -7638,6 +9016,9 @@ func (m *ReplaceSpecType) Size() (n int) {
 	}
 	if m.SniDefaultLbChoice != nil {
 		n += m.SniDefaultLbChoice.Size()
+	}
+	if m.ServicePolicyChoice != nil {
+		n += m.ServicePolicyChoice.Size()
 	}
 	return n
 }
@@ -7834,6 +9215,42 @@ func (m *ReplaceSpecType_DefaultLbWithSni) Size() (n int) {
 	}
 	return n
 }
+func (m *ReplaceSpecType_ServicePoliciesFromNamespace) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.ServicePoliciesFromNamespace != nil {
+		l = m.ServicePoliciesFromNamespace.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *ReplaceSpecType_NoServicePolicies) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.NoServicePolicies != nil {
+		l = m.NoServicePolicies.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *ReplaceSpecType_ActiveServicePolicies) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.ActiveServicePolicies != nil {
+		l = m.ActiveServicePolicies.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
 func (m *GetSpecType) Size() (n int) {
 	if m == nil {
 		return 0
@@ -7881,6 +9298,9 @@ func (m *GetSpecType) Size() (n int) {
 	}
 	if m.SniDefaultLbChoice != nil {
 		n += m.SniDefaultLbChoice.Size()
+	}
+	if m.ServicePolicyChoice != nil {
+		n += m.ServicePolicyChoice.Size()
 	}
 	l = len(m.HostName)
 	if l > 0 {
@@ -8103,6 +9523,42 @@ func (m *GetSpecType_DefaultLbWithSni) Size() (n int) {
 	}
 	return n
 }
+func (m *GetSpecType_ServicePoliciesFromNamespace) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.ServicePoliciesFromNamespace != nil {
+		l = m.ServicePoliciesFromNamespace.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *GetSpecType_NoServicePolicies) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.NoServicePolicies != nil {
+		l = m.NoServicePolicies.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *GetSpecType_ActiveServicePolicies) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.ActiveServicePolicies != nil {
+		l = m.ActiveServicePolicies.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
 
 func sovTypes(x uint64) (n int) {
 	return (math_bits.Len64(x|1) + 6) / 7
@@ -8115,7 +9571,27 @@ func (this *ProxyTypeTLSTCP) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&ProxyTypeTLSTCP{`,
+		`TlsCertificatesChoice:` + fmt.Sprintf("%v", this.TlsCertificatesChoice) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ProxyTypeTLSTCP_TlsParameters) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ProxyTypeTLSTCP_TlsParameters{`,
 		`TlsParameters:` + strings.Replace(fmt.Sprintf("%v", this.TlsParameters), "DownstreamTlsParamsType", "views.DownstreamTlsParamsType", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ProxyTypeTLSTCP_TlsCertParams) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ProxyTypeTLSTCP_TlsCertParams{`,
+		`TlsCertParams:` + strings.Replace(fmt.Sprintf("%v", this.TlsCertParams), "DownstreamTLSCertsParams", "views.DownstreamTLSCertsParams", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -8147,6 +9623,21 @@ func (this *ProxyTypeTLSTCPAutoCerts_UseMtls) String() string {
 	}
 	s := strings.Join([]string{`&ProxyTypeTLSTCPAutoCerts_UseMtls{`,
 		`UseMtls:` + strings.Replace(fmt.Sprintf("%v", this.UseMtls), "DownstreamTlsValidationContext", "views.DownstreamTlsValidationContext", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ServicePolicyList) String() string {
+	if this == nil {
+		return "nil"
+	}
+	repeatedStringForPolicies := "[]*ObjectRefType{"
+	for _, f := range this.Policies {
+		repeatedStringForPolicies += strings.Replace(fmt.Sprintf("%v", f), "ObjectRefType", "views.ObjectRefType", 1) + ","
+	}
+	repeatedStringForPolicies += "}"
+	s := strings.Join([]string{`&ServicePolicyList{`,
+		`Policies:` + repeatedStringForPolicies + `,`,
 		`}`,
 	}, "")
 	return s
@@ -8193,6 +9684,7 @@ func (this *GlobalSpecType) String() string {
 		`ClusterRetractChoice:` + fmt.Sprintf("%v", this.ClusterRetractChoice) + `,`,
 		`LoadbalancerType:` + fmt.Sprintf("%v", this.LoadbalancerType) + `,`,
 		`SniDefaultLbChoice:` + fmt.Sprintf("%v", this.SniDefaultLbChoice) + `,`,
+		`ServicePolicyChoice:` + fmt.Sprintf("%v", this.ServicePolicyChoice) + `,`,
 		`ViewInternal:` + strings.Replace(fmt.Sprintf("%v", this.ViewInternal), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
 		`HostName:` + fmt.Sprintf("%v", this.HostName) + `,`,
 		`DnsInfo:` + repeatedStringForDnsInfo + `,`,
@@ -8363,6 +9855,36 @@ func (this *GlobalSpecType_DefaultLbWithSni) String() string {
 	}, "")
 	return s
 }
+func (this *GlobalSpecType_ServicePoliciesFromNamespace) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GlobalSpecType_ServicePoliciesFromNamespace{`,
+		`ServicePoliciesFromNamespace:` + strings.Replace(fmt.Sprintf("%v", this.ServicePoliciesFromNamespace), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GlobalSpecType_NoServicePolicies) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GlobalSpecType_NoServicePolicies{`,
+		`NoServicePolicies:` + strings.Replace(fmt.Sprintf("%v", this.NoServicePolicies), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GlobalSpecType_ActiveServicePolicies) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GlobalSpecType_ActiveServicePolicies{`,
+		`ActiveServicePolicies:` + strings.Replace(fmt.Sprintf("%v", this.ActiveServicePolicies), "ServicePolicyList", "ServicePolicyList", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
 func (this *CreateSpecType) String() string {
 	if this == nil {
 		return "nil"
@@ -8383,6 +9905,7 @@ func (this *CreateSpecType) String() string {
 		`ClusterRetractChoice:` + fmt.Sprintf("%v", this.ClusterRetractChoice) + `,`,
 		`LoadbalancerType:` + fmt.Sprintf("%v", this.LoadbalancerType) + `,`,
 		`SniDefaultLbChoice:` + fmt.Sprintf("%v", this.SniDefaultLbChoice) + `,`,
+		`ServicePolicyChoice:` + fmt.Sprintf("%v", this.ServicePolicyChoice) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -8547,6 +10070,36 @@ func (this *CreateSpecType_DefaultLbWithSni) String() string {
 	}, "")
 	return s
 }
+func (this *CreateSpecType_ServicePoliciesFromNamespace) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&CreateSpecType_ServicePoliciesFromNamespace{`,
+		`ServicePoliciesFromNamespace:` + strings.Replace(fmt.Sprintf("%v", this.ServicePoliciesFromNamespace), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *CreateSpecType_NoServicePolicies) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&CreateSpecType_NoServicePolicies{`,
+		`NoServicePolicies:` + strings.Replace(fmt.Sprintf("%v", this.NoServicePolicies), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *CreateSpecType_ActiveServicePolicies) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&CreateSpecType_ActiveServicePolicies{`,
+		`ActiveServicePolicies:` + strings.Replace(fmt.Sprintf("%v", this.ActiveServicePolicies), "ServicePolicyList", "ServicePolicyList", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
 func (this *ReplaceSpecType) String() string {
 	if this == nil {
 		return "nil"
@@ -8573,6 +10126,7 @@ func (this *ReplaceSpecType) String() string {
 		`ClusterRetractChoice:` + fmt.Sprintf("%v", this.ClusterRetractChoice) + `,`,
 		`LoadbalancerType:` + fmt.Sprintf("%v", this.LoadbalancerType) + `,`,
 		`SniDefaultLbChoice:` + fmt.Sprintf("%v", this.SniDefaultLbChoice) + `,`,
+		`ServicePolicyChoice:` + fmt.Sprintf("%v", this.ServicePolicyChoice) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -8737,6 +10291,36 @@ func (this *ReplaceSpecType_DefaultLbWithSni) String() string {
 	}, "")
 	return s
 }
+func (this *ReplaceSpecType_ServicePoliciesFromNamespace) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ReplaceSpecType_ServicePoliciesFromNamespace{`,
+		`ServicePoliciesFromNamespace:` + strings.Replace(fmt.Sprintf("%v", this.ServicePoliciesFromNamespace), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ReplaceSpecType_NoServicePolicies) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ReplaceSpecType_NoServicePolicies{`,
+		`NoServicePolicies:` + strings.Replace(fmt.Sprintf("%v", this.NoServicePolicies), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ReplaceSpecType_ActiveServicePolicies) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ReplaceSpecType_ActiveServicePolicies{`,
+		`ActiveServicePolicies:` + strings.Replace(fmt.Sprintf("%v", this.ActiveServicePolicies), "ServicePolicyList", "ServicePolicyList", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
 func (this *GetSpecType) String() string {
 	if this == nil {
 		return "nil"
@@ -8778,6 +10362,7 @@ func (this *GetSpecType) String() string {
 		`ClusterRetractChoice:` + fmt.Sprintf("%v", this.ClusterRetractChoice) + `,`,
 		`LoadbalancerType:` + fmt.Sprintf("%v", this.LoadbalancerType) + `,`,
 		`SniDefaultLbChoice:` + fmt.Sprintf("%v", this.SniDefaultLbChoice) + `,`,
+		`ServicePolicyChoice:` + fmt.Sprintf("%v", this.ServicePolicyChoice) + `,`,
 		`HostName:` + fmt.Sprintf("%v", this.HostName) + `,`,
 		`DnsInfo:` + repeatedStringForDnsInfo + `,`,
 		`AutoCertInfo:` + strings.Replace(fmt.Sprintf("%v", this.AutoCertInfo), "AutoCertInfoType", "virtual_host.AutoCertInfoType", 1) + `,`,
@@ -8947,6 +10532,36 @@ func (this *GetSpecType_DefaultLbWithSni) String() string {
 	}, "")
 	return s
 }
+func (this *GetSpecType_ServicePoliciesFromNamespace) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GetSpecType_ServicePoliciesFromNamespace{`,
+		`ServicePoliciesFromNamespace:` + strings.Replace(fmt.Sprintf("%v", this.ServicePoliciesFromNamespace), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GetSpecType_NoServicePolicies) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GetSpecType_NoServicePolicies{`,
+		`NoServicePolicies:` + strings.Replace(fmt.Sprintf("%v", this.NoServicePolicies), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GetSpecType_ActiveServicePolicies) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GetSpecType_ActiveServicePolicies{`,
+		`ActiveServicePolicies:` + strings.Replace(fmt.Sprintf("%v", this.ActiveServicePolicies), "ServicePolicyList", "ServicePolicyList", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
 func valueToStringTypes(v interface{}) string {
 	rv := reflect.ValueOf(v)
 	if rv.IsNil() {
@@ -9013,12 +10628,46 @@ func (m *ProxyTypeTLSTCP) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			if m.TlsParameters == nil {
-				m.TlsParameters = &views.DownstreamTlsParamsType{}
-			}
-			if err := m.TlsParameters.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+			v := &views.DownstreamTlsParamsType{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
+			m.TlsCertificatesChoice = &ProxyTypeTLSTCP_TlsParameters{v}
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field TlsCertParams", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &views.DownstreamTLSCertsParams{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.TlsCertificatesChoice = &ProxyTypeTLSTCP_TlsCertParams{v}
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
@@ -9178,6 +10827,93 @@ func (m *ProxyTypeTLSTCPAutoCerts) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			m.MtlsChoice = &ProxyTypeTLSTCPAutoCerts_UseMtls{v}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *ServicePolicyList) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: ServicePolicyList: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: ServicePolicyList: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Policies", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Policies = append(m.Policies, &views.ObjectRefType{})
+			if err := m.Policies[len(m.Policies)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
@@ -9969,6 +11705,111 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			m.SniDefaultLbChoice = &GlobalSpecType_DefaultLbWithSni{v}
+			iNdEx = postIndex
+		case 31:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ServicePoliciesFromNamespace", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.ServicePolicyChoice = &GlobalSpecType_ServicePoliciesFromNamespace{v}
+			iNdEx = postIndex
+		case 32:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field NoServicePolicies", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.ServicePolicyChoice = &GlobalSpecType_NoServicePolicies{v}
+			iNdEx = postIndex
+		case 33:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ActiveServicePolicies", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &ServicePolicyList{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.ServicePolicyChoice = &GlobalSpecType_ActiveServicePolicies{v}
 			iNdEx = postIndex
 		case 1000:
 			if wireType != 2 {
@@ -10913,6 +12754,111 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 			}
 			m.SniDefaultLbChoice = &CreateSpecType_DefaultLbWithSni{v}
 			iNdEx = postIndex
+		case 31:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ServicePoliciesFromNamespace", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.ServicePolicyChoice = &CreateSpecType_ServicePoliciesFromNamespace{v}
+			iNdEx = postIndex
+		case 32:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field NoServicePolicies", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.ServicePolicyChoice = &CreateSpecType_NoServicePolicies{v}
+			iNdEx = postIndex
+		case 33:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ActiveServicePolicies", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &ServicePolicyList{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.ServicePolicyChoice = &CreateSpecType_ActiveServicePolicies{v}
+			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipTypes(dAtA[iNdEx:])
@@ -11684,6 +13630,111 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 			}
 			m.SniDefaultLbChoice = &ReplaceSpecType_DefaultLbWithSni{v}
 			iNdEx = postIndex
+		case 31:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ServicePoliciesFromNamespace", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.ServicePolicyChoice = &ReplaceSpecType_ServicePoliciesFromNamespace{v}
+			iNdEx = postIndex
+		case 32:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field NoServicePolicies", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.ServicePolicyChoice = &ReplaceSpecType_NoServicePolicies{v}
+			iNdEx = postIndex
+		case 33:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ActiveServicePolicies", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &ServicePolicyList{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.ServicePolicyChoice = &ReplaceSpecType_ActiveServicePolicies{v}
+			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipTypes(dAtA[iNdEx:])
@@ -12454,6 +14505,111 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			m.SniDefaultLbChoice = &GetSpecType_DefaultLbWithSni{v}
+			iNdEx = postIndex
+		case 31:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ServicePoliciesFromNamespace", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.ServicePolicyChoice = &GetSpecType_ServicePoliciesFromNamespace{v}
+			iNdEx = postIndex
+		case 32:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field NoServicePolicies", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.ServicePolicyChoice = &GetSpecType_NoServicePolicies{v}
+			iNdEx = postIndex
+		case 33:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ActiveServicePolicies", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &ServicePolicyList{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.ServicePolicyChoice = &GetSpecType_ActiveServicePolicies{v}
 			iNdEx = postIndex
 		case 1001:
 			if wireType != 2 {

@@ -424,6 +424,250 @@ func (m *ImportAXFRResponse) GetConfiguration() *PrimaryDNSGetSpecType {
 	return nil
 }
 
+// Get remote zone file Request
+//
+// x-displayName: "Get remote zone file Request"
+// Get remote zone file Request
+type GetRemoteZoneFileRequest struct {
+	// Namespace
+	//
+	// x-displayName: "Namespace"
+	// x-example: "system"
+	// Namespace is always system for dns_zone
+	Namespace string `protobuf:"bytes,1,opt,name=namespace,proto3" json:"namespace,omitempty"`
+	// Name
+	//
+	// x-displayName: "Name"
+	// x-example: "example.com"
+	// Name dns_zone object which is also the DNS zone
+	DnsZoneName string `protobuf:"bytes,2,opt,name=dns_zone_name,json=dnsZoneName,proto3" json:"dns_zone_name,omitempty"`
+}
+
+func (m *GetRemoteZoneFileRequest) Reset()      { *m = GetRemoteZoneFileRequest{} }
+func (*GetRemoteZoneFileRequest) ProtoMessage() {}
+func (*GetRemoteZoneFileRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_8810baad339dc204, []int{5}
+}
+func (m *GetRemoteZoneFileRequest) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *GetRemoteZoneFileRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_GetRemoteZoneFileRequest.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *GetRemoteZoneFileRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GetRemoteZoneFileRequest.Merge(m, src)
+}
+func (m *GetRemoteZoneFileRequest) XXX_Size() int {
+	return m.Size()
+}
+func (m *GetRemoteZoneFileRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_GetRemoteZoneFileRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_GetRemoteZoneFileRequest proto.InternalMessageInfo
+
+func (m *GetRemoteZoneFileRequest) GetNamespace() string {
+	if m != nil {
+		return m.Namespace
+	}
+	return ""
+}
+
+func (m *GetRemoteZoneFileRequest) GetDnsZoneName() string {
+	if m != nil {
+		return m.DnsZoneName
+	}
+	return ""
+}
+
+// Get remote zone file Response
+//
+// x-displayName: "Get remote zone file Response"
+// Get remote zone file Response
+type GetRemoteZoneFileResponse struct {
+	// Remote zone file
+	//
+	// x-displayName: "Remote zone file"
+	// Remote zone file from primary dns
+	ZoneFile string `protobuf:"bytes,1,opt,name=zone_file,json=zoneFile,proto3" json:"zone_file,omitempty"`
+}
+
+func (m *GetRemoteZoneFileResponse) Reset()      { *m = GetRemoteZoneFileResponse{} }
+func (*GetRemoteZoneFileResponse) ProtoMessage() {}
+func (*GetRemoteZoneFileResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_8810baad339dc204, []int{6}
+}
+func (m *GetRemoteZoneFileResponse) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *GetRemoteZoneFileResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_GetRemoteZoneFileResponse.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *GetRemoteZoneFileResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GetRemoteZoneFileResponse.Merge(m, src)
+}
+func (m *GetRemoteZoneFileResponse) XXX_Size() int {
+	return m.Size()
+}
+func (m *GetRemoteZoneFileResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_GetRemoteZoneFileResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_GetRemoteZoneFileResponse proto.InternalMessageInfo
+
+func (m *GetRemoteZoneFileResponse) GetZoneFile() string {
+	if m != nil {
+		return m.ZoneFile
+	}
+	return ""
+}
+
+// Get local zone file Request
+//
+// x-displayName: "Get local zone file Request"
+// Get local zone file Request
+type GetLocalZoneFileRequest struct {
+	// Namespace
+	//
+	// x-displayName: "Namespace"
+	// x-example: "system"
+	// Namespace is always system for dns_zone
+	Namespace string `protobuf:"bytes,1,opt,name=namespace,proto3" json:"namespace,omitempty"`
+	// Name
+	//
+	// x-displayName: "Name"
+	// x-example: "example.com"
+	// Name dns_zone object which is also the DNS zone
+	DnsZoneName string `protobuf:"bytes,2,opt,name=dns_zone_name,json=dnsZoneName,proto3" json:"dns_zone_name,omitempty"`
+}
+
+func (m *GetLocalZoneFileRequest) Reset()      { *m = GetLocalZoneFileRequest{} }
+func (*GetLocalZoneFileRequest) ProtoMessage() {}
+func (*GetLocalZoneFileRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_8810baad339dc204, []int{7}
+}
+func (m *GetLocalZoneFileRequest) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *GetLocalZoneFileRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_GetLocalZoneFileRequest.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *GetLocalZoneFileRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GetLocalZoneFileRequest.Merge(m, src)
+}
+func (m *GetLocalZoneFileRequest) XXX_Size() int {
+	return m.Size()
+}
+func (m *GetLocalZoneFileRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_GetLocalZoneFileRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_GetLocalZoneFileRequest proto.InternalMessageInfo
+
+func (m *GetLocalZoneFileRequest) GetNamespace() string {
+	if m != nil {
+		return m.Namespace
+	}
+	return ""
+}
+
+func (m *GetLocalZoneFileRequest) GetDnsZoneName() string {
+	if m != nil {
+		return m.DnsZoneName
+	}
+	return ""
+}
+
+// Get local zone file Response
+//
+// x-displayName: "Get local zone file Response"
+// Get local zone file Response
+type GetLocalZoneFileResponse struct {
+	// Last AXFR timestamp
+	//
+	// x-displayName: "Last successful AXFR timestamp"
+	// Last successful zone transfer timestamp.
+	LastAxfrTimestamp *types.Timestamp `protobuf:"bytes,9,opt,name=last_axfr_timestamp,json=lastAxfrTimestamp,proto3" json:"last_axfr_timestamp,omitempty"`
+	// Local zone file
+	//
+	// x-displayName: "Local zone file"
+	// Local zone file from secondary dns
+	ZoneFile string `protobuf:"bytes,2,opt,name=zone_file,json=zoneFile,proto3" json:"zone_file,omitempty"`
+}
+
+func (m *GetLocalZoneFileResponse) Reset()      { *m = GetLocalZoneFileResponse{} }
+func (*GetLocalZoneFileResponse) ProtoMessage() {}
+func (*GetLocalZoneFileResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_8810baad339dc204, []int{8}
+}
+func (m *GetLocalZoneFileResponse) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *GetLocalZoneFileResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_GetLocalZoneFileResponse.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *GetLocalZoneFileResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GetLocalZoneFileResponse.Merge(m, src)
+}
+func (m *GetLocalZoneFileResponse) XXX_Size() int {
+	return m.Size()
+}
+func (m *GetLocalZoneFileResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_GetLocalZoneFileResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_GetLocalZoneFileResponse proto.InternalMessageInfo
+
+func (m *GetLocalZoneFileResponse) GetLastAxfrTimestamp() *types.Timestamp {
+	if m != nil {
+		return m.LastAxfrTimestamp
+	}
+	return nil
+}
+
+func (m *GetLocalZoneFileResponse) GetZoneFile() string {
+	if m != nil {
+		return m.ZoneFile
+	}
+	return ""
+}
+
 func init() {
 	proto.RegisterType((*ImportF5CSZoneRequest)(nil), "ves.io.schema.dns_zone.ImportF5CSZoneRequest")
 	golang_proto.RegisterType((*ImportF5CSZoneRequest)(nil), "ves.io.schema.dns_zone.ImportF5CSZoneRequest")
@@ -435,6 +679,14 @@ func init() {
 	golang_proto.RegisterType((*ImportAXFRRequest)(nil), "ves.io.schema.dns_zone.ImportAXFRRequest")
 	proto.RegisterType((*ImportAXFRResponse)(nil), "ves.io.schema.dns_zone.ImportAXFRResponse")
 	golang_proto.RegisterType((*ImportAXFRResponse)(nil), "ves.io.schema.dns_zone.ImportAXFRResponse")
+	proto.RegisterType((*GetRemoteZoneFileRequest)(nil), "ves.io.schema.dns_zone.GetRemoteZoneFileRequest")
+	golang_proto.RegisterType((*GetRemoteZoneFileRequest)(nil), "ves.io.schema.dns_zone.GetRemoteZoneFileRequest")
+	proto.RegisterType((*GetRemoteZoneFileResponse)(nil), "ves.io.schema.dns_zone.GetRemoteZoneFileResponse")
+	golang_proto.RegisterType((*GetRemoteZoneFileResponse)(nil), "ves.io.schema.dns_zone.GetRemoteZoneFileResponse")
+	proto.RegisterType((*GetLocalZoneFileRequest)(nil), "ves.io.schema.dns_zone.GetLocalZoneFileRequest")
+	golang_proto.RegisterType((*GetLocalZoneFileRequest)(nil), "ves.io.schema.dns_zone.GetLocalZoneFileRequest")
+	proto.RegisterType((*GetLocalZoneFileResponse)(nil), "ves.io.schema.dns_zone.GetLocalZoneFileResponse")
+	golang_proto.RegisterType((*GetLocalZoneFileResponse)(nil), "ves.io.schema.dns_zone.GetLocalZoneFileResponse")
 }
 
 func init() {
@@ -445,65 +697,78 @@ func init() {
 }
 
 var fileDescriptor_8810baad339dc204 = []byte{
-	// 918 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x8c, 0x55, 0x41, 0x6f, 0x1b, 0x45,
-	0x14, 0xf6, 0xd8, 0x6e, 0x14, 0x4f, 0x12, 0x37, 0x8c, 0x44, 0x71, 0x4d, 0x58, 0x45, 0xae, 0x84,
-	0xd2, 0x08, 0xef, 0x96, 0x54, 0x48, 0x28, 0xaa, 0x40, 0x49, 0xaa, 0xa6, 0xa1, 0x34, 0xad, 0x76,
-	0xab, 0x08, 0xf5, 0x62, 0x8d, 0xd7, 0xcf, 0x9b, 0xa1, 0xde, 0x9d, 0x65, 0x66, 0xd6, 0x8d, 0x41,
-	0x95, 0x50, 0x0f, 0x9c, 0x91, 0xb8, 0x71, 0xe2, 0xc8, 0x81, 0x1f, 0x80, 0xc8, 0x81, 0x1c, 0x90,
-	0x40, 0x20, 0x55, 0x11, 0x5c, 0x7a, 0x24, 0x0e, 0x07, 0xb8, 0xf5, 0x07, 0x70, 0x40, 0x3b, 0xbb,
-	0x76, 0xec, 0xc5, 0x86, 0x9c, 0x3c, 0xe3, 0xf7, 0x7d, 0xdf, 0x7b, 0xf3, 0xe6, 0x9b, 0xb7, 0xb8,
-	0xde, 0x05, 0x69, 0x32, 0x6e, 0x49, 0x77, 0x1f, 0x7c, 0x6a, 0xb5, 0x02, 0xd9, 0xf8, 0x98, 0x07,
-	0x60, 0x85, 0x51, 0xb3, 0xc3, 0xdc, 0x86, 0x1b, 0x49, 0xc5, 0x7d, 0x1a, 0x32, 0x33, 0x14, 0x5c,
-	0x71, 0x72, 0x29, 0x81, 0x9b, 0x09, 0xdc, 0x1c, 0xc0, 0xab, 0x75, 0x8f, 0xa9, 0xfd, 0xa8, 0x69,
-	0xba, 0xdc, 0xb7, 0x3c, 0xee, 0x71, 0x4b, 0xc3, 0x9b, 0x51, 0x5b, 0xef, 0xf4, 0x46, 0xaf, 0x12,
-	0x99, 0xea, 0x92, 0xc7, 0xb9, 0xd7, 0x01, 0x8b, 0x86, 0xcc, 0xa2, 0x41, 0xc0, 0x15, 0x55, 0x8c,
-	0x07, 0x32, 0x13, 0x1d, 0x6a, 0x48, 0x25, 0x22, 0x57, 0xa5, 0xd1, 0x2b, 0x53, 0x2a, 0xe6, 0xcd,
-	0x0f, 0x61, 0x08, 0xaa, 0x4d, 0x01, 0xa9, 0x5e, 0x08, 0x83, 0x34, 0xaf, 0x8e, 0x63, 0x78, 0x38,
-	0x5a, 0xc3, 0xe5, 0xf1, 0xe0, 0x28, 0x6f, 0x69, 0x3c, 0xd4, 0xa5, 0x1d, 0xd6, 0xa2, 0x0a, 0x26,
-	0x67, 0xee, 0x82, 0x84, 0xa0, 0x9b, 0x11, 0x5f, 0xce, 0x60, 0x18, 0x3c, 0x6e, 0x8c, 0x21, 0x6a,
-	0x1c, 0xbf, 0xbc, 0xe3, 0x87, 0x5c, 0xa8, 0x5b, 0x6f, 0x6d, 0x39, 0x0f, 0x79, 0x00, 0x36, 0x7c,
-	0x14, 0x81, 0x54, 0x64, 0x0f, 0x2f, 0xb8, 0x3c, 0x68, 0x33, 0x2f, 0x12, 0xba, 0x67, 0x15, 0xb4,
-	0x8c, 0x56, 0xe6, 0xd6, 0xae, 0x99, 0x93, 0x2f, 0xc6, 0x8c, 0xf9, 0x37, 0x77, 0xb5, 0xc4, 0xd6,
-	0x28, 0xcf, 0x1e, 0x97, 0xa9, 0xfd, 0x8d, 0xf0, 0xa5, 0x6c, 0x46, 0x19, 0xf2, 0x40, 0x02, 0xb9,
-	0x81, 0x67, 0x7d, 0x50, 0xb4, 0x45, 0x15, 0x4d, 0xb3, 0x2d, 0x67, 0xb2, 0xdd, 0xd3, 0xad, 0xdf,
-	0x06, 0x75, 0x17, 0x14, 0x7d, 0xd0, 0x0b, 0xc1, 0x1e, 0x32, 0xc8, 0x3d, 0x7c, 0x51, 0xf6, 0xa4,
-	0x02, 0xbf, 0x31, 0x14, 0x29, 0x68, 0x91, 0xd7, 0x33, 0x22, 0x8e, 0x46, 0xfd, 0x5b, 0xaa, 0x9c,
-	0xd0, 0xef, 0x0e, 0x04, 0x6f, 0xe3, 0xa2, 0x0c, 0xc1, 0xad, 0xe4, 0xb5, 0xca, 0x95, 0x69, 0x07,
-	0xdf, 0x06, 0xe5, 0x84, 0xe0, 0xc6, 0x12, 0x9b, 0x17, 0xbf, 0x7c, 0x32, 0x1f, 0x73, 0x4c, 0xcf,
-	0x6d, 0xc4, 0xbf, 0xb6, 0x56, 0x58, 0x2f, 0xfd, 0xfc, 0xce, 0x4c, 0x92, 0xaf, 0xf6, 0x0d, 0xc2,
-	0x95, 0x69, 0xad, 0x22, 0xeb, 0x78, 0x2e, 0x96, 0x95, 0x20, 0xba, 0xcc, 0x85, 0x34, 0xf1, 0x2b,
-	0x66, 0xe2, 0x52, 0x73, 0xe0, 0x52, 0xd3, 0xd1, 0x2e, 0xbd, 0x9d, 0xb3, 0x71, 0x2b, 0x90, 0x4e,
-	0x02, 0x26, 0x37, 0xf0, 0x3c, 0x1d, 0x25, 0x17, 0xfe, 0x8f, 0x3c, 0x47, 0xcf, 0xd8, 0x9b, 0x8b,
-	0x78, 0x36, 0x26, 0xc7, 0xee, 0x23, 0xc5, 0xe3, 0x43, 0x84, 0xde, 0x2b, 0xce, 0xa2, 0xc5, 0x7c,
-	0xed, 0xfb, 0x3c, 0x7e, 0x29, 0xb9, 0xad, 0x8d, 0x0f, 0x6e, 0xd9, 0x03, 0x6f, 0x2c, 0xe1, 0x52,
-	0x40, 0x7d, 0x90, 0x21, 0x75, 0x41, 0xdf, 0x54, 0xc9, 0x3e, 0xfb, 0x83, 0x10, 0x5c, 0x8c, 0x37,
-	0xba, 0xfc, 0x92, 0xad, 0xd7, 0xe4, 0x1a, 0x2e, 0x87, 0x82, 0xf9, 0x54, 0xf4, 0x74, 0x81, 0x20,
-	0x74, 0x7d, 0xa5, 0xcd, 0xd2, 0x77, 0x7f, 0x1d, 0x15, 0x8a, 0x22, 0x7f, 0x80, 0xec, 0x85, 0x14,
-	0xe0, 0xe8, 0x38, 0xa9, 0xe3, 0x05, 0x25, 0x99, 0xd7, 0x78, 0x04, 0xbd, 0x86, 0x96, 0x2b, 0x8e,
-	0x11, 0xf6, 0x91, 0x3d, 0x17, 0xc7, 0xef, 0x40, 0x6f, 0x37, 0x4e, 0xb0, 0x87, 0xc9, 0x10, 0x4e,
-	0x3b, 0x1e, 0x17, 0x4c, 0xed, 0xfb, 0x95, 0x0b, 0xcb, 0x68, 0xa5, 0xbc, 0xb6, 0x32, 0xed, 0xea,
-	0x1e, 0x38, 0x3b, 0xdb, 0x77, 0xa0, 0xb7, 0x31, 0xc0, 0xdb, 0x8b, 0xa9, 0xe4, 0xf0, 0x1f, 0xf2,
-	0x2e, 0x2e, 0x0f, 0x75, 0xbb, 0xb4, 0x13, 0x41, 0x65, 0x46, 0x37, 0xf6, 0x72, 0xd6, 0x54, 0xe0,
-	0x0a, 0x50, 0xda, 0x47, 0xf3, 0xa9, 0xc8, 0x5e, 0x0c, 0xaf, 0x31, 0x4c, 0x46, 0x1b, 0x98, 0x5a,
-	0xdd, 0x99, 0xfc, 0xba, 0xea, 0xd3, 0x2a, 0xbd, 0x9f, 0xf4, 0xe6, 0xe6, 0xae, 0x33, 0x62, 0xb7,
-	0xcc, 0xd3, 0x5a, 0x7b, 0x56, 0xc0, 0xa5, 0x2d, 0x3d, 0x47, 0x37, 0xee, 0xef, 0x90, 0x1f, 0x10,
-	0x2e, 0x8f, 0x3f, 0x34, 0x32, 0x55, 0x7e, 0xe2, 0x08, 0xa8, 0x9a, 0xe7, 0x85, 0x27, 0x87, 0xaa,
-	0x39, 0xfd, 0x1f, 0x2b, 0xf1, 0xac, 0xab, 0x33, 0x5e, 0x67, 0x41, 0x5b, 0xd0, 0x64, 0x9c, 0x46,
-	0x02, 0xea, 0x8f, 0x05, 0x53, 0xf0, 0xf4, 0xb7, 0x3f, 0xbe, 0xc8, 0x9b, 0xb5, 0xab, 0xe9, 0xcc,
-	0xb7, 0x86, 0x96, 0x91, 0x56, 0xf2, 0xf4, 0xce, 0xc6, 0x27, 0xd3, 0x19, 0xd6, 0xd1, 0x2a, 0xf9,
-	0x05, 0x61, 0x7c, 0xd6, 0x40, 0x72, 0xf5, 0xbf, 0x6b, 0x1a, 0x71, 0x69, 0x75, 0xf5, 0x3c, 0xd0,
-	0xb4, 0xf4, 0x76, 0xff, 0xdb, 0xfc, 0x85, 0x16, 0xf8, 0xfc, 0xcd, 0xf3, 0x9c, 0xe1, 0xed, 0xda,
-	0xf5, 0x09, 0x67, 0xf8, 0x64, 0xb8, 0x7e, 0x92, 0x3d, 0x48, 0x83, 0x1e, 0xb4, 0xc5, 0x3a, 0x5a,
-	0xad, 0xbe, 0x71, 0x74, 0x88, 0x0a, 0xbf, 0x1e, 0xa2, 0xd7, 0xa6, 0x94, 0x96, 0x4c, 0x89, 0xa7,
-	0xcf, 0x2a, 0x85, 0xaf, 0x10, 0xda, 0xfc, 0x0c, 0x1d, 0x9f, 0x18, 0xb9, 0xe7, 0x27, 0x46, 0xee,
-	0xc5, 0x89, 0x81, 0x3e, 0xed, 0x1b, 0xe8, 0xeb, 0xbe, 0x81, 0x7e, 0xea, 0x1b, 0xe8, 0xb8, 0x6f,
-	0xa0, 0xdf, 0xfb, 0x06, 0xfa, 0xb3, 0x6f, 0xe4, 0x5e, 0xf4, 0x0d, 0xf4, 0xf9, 0xa9, 0x91, 0x3b,
-	0x3a, 0x35, 0xd0, 0xf1, 0xa9, 0x91, 0x7b, 0x7e, 0x6a, 0xe4, 0x1e, 0xbe, 0xef, 0xf1, 0xf0, 0x91,
-	0x67, 0x76, 0x79, 0x47, 0x81, 0x10, 0xd4, 0x8c, 0xa4, 0xa5, 0x17, 0x6d, 0x2e, 0xfc, 0x7a, 0x28,
-	0x78, 0x97, 0xb5, 0x40, 0xd4, 0x07, 0x61, 0x2b, 0x6c, 0x7a, 0xdc, 0x82, 0x03, 0x95, 0x7e, 0x28,
-	0x32, 0x5f, 0xb3, 0xe6, 0x8c, 0x1e, 0x1f, 0xd7, 0xff, 0x09, 0x00, 0x00, 0xff, 0xff, 0x1a, 0xb3,
-	0xf4, 0x98, 0xc5, 0x07, 0x00, 0x00,
+	// 1130 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xac, 0x56, 0x41, 0x6b, 0x1b, 0x47,
+	0x14, 0xd6, 0xc8, 0x4a, 0x6a, 0x8d, 0x63, 0xc7, 0x99, 0xd2, 0x44, 0x51, 0xd2, 0xad, 0xd9, 0x40,
+	0x49, 0x42, 0xb5, 0xeb, 0x38, 0x14, 0x82, 0x09, 0x2d, 0xb6, 0x83, 0x65, 0x3b, 0x89, 0x13, 0x56,
+	0xc6, 0x94, 0xb4, 0x20, 0x46, 0xab, 0xa7, 0xf5, 0x36, 0xda, 0x9d, 0xcd, 0xec, 0x48, 0xb1, 0x12,
+	0x0c, 0x25, 0x85, 0x9e, 0x0b, 0xbd, 0xf5, 0xd4, 0x63, 0x0e, 0xfd, 0x01, 0xa1, 0x3e, 0xd4, 0x87,
+	0x42, 0x42, 0x0b, 0xc5, 0xb4, 0x97, 0x1c, 0x6b, 0xb9, 0x87, 0x14, 0x7a, 0xc8, 0x0f, 0xe8, 0xa1,
+	0xec, 0xec, 0x6a, 0x2d, 0xad, 0x25, 0x57, 0x2d, 0x3d, 0x69, 0x77, 0xe7, 0xfb, 0xbe, 0xf7, 0xbe,
+	0xf7, 0xde, 0xcc, 0x08, 0x17, 0x9a, 0xe0, 0x6b, 0x36, 0xd3, 0x7d, 0x73, 0x03, 0x1c, 0xaa, 0x57,
+	0x5d, 0xbf, 0xfc, 0x88, 0xb9, 0xa0, 0x7b, 0x8d, 0x4a, 0xdd, 0x36, 0xcb, 0x66, 0xc3, 0x17, 0xcc,
+	0xa1, 0x9e, 0xad, 0x79, 0x9c, 0x09, 0x46, 0x4e, 0x87, 0x70, 0x2d, 0x84, 0x6b, 0x1d, 0x78, 0xbe,
+	0x60, 0xd9, 0x62, 0xa3, 0x51, 0xd1, 0x4c, 0xe6, 0xe8, 0x16, 0xb3, 0x98, 0x2e, 0xe1, 0x95, 0x46,
+	0x4d, 0xbe, 0xc9, 0x17, 0xf9, 0x14, 0xca, 0xe4, 0xcf, 0x5b, 0x8c, 0x59, 0x75, 0xd0, 0xa9, 0x67,
+	0xeb, 0xd4, 0x75, 0x99, 0xa0, 0xc2, 0x66, 0xae, 0x9f, 0x58, 0x8d, 0x35, 0x7c, 0xc1, 0x1b, 0xa6,
+	0x88, 0x56, 0xdf, 0x49, 0xae, 0x0a, 0xdb, 0x01, 0x5f, 0x50, 0xc7, 0x8b, 0x00, 0x17, 0x06, 0x58,
+	0x62, 0x95, 0x4f, 0x21, 0x56, 0x51, 0x07, 0x80, 0x44, 0xcb, 0x83, 0x4e, 0x1e, 0xe7, 0x7a, 0x31,
+	0xcc, 0xeb, 0x4e, 0xf2, 0x6c, 0xef, 0x62, 0x37, 0xef, 0x7c, 0xef, 0x52, 0x93, 0xd6, 0xed, 0x2a,
+	0x15, 0xd0, 0x3f, 0x72, 0x13, 0x7c, 0x70, 0x9b, 0x09, 0xf1, 0xa9, 0x04, 0xc6, 0x86, 0x87, 0xe5,
+	0x1e, 0x84, 0xca, 0xf0, 0x5b, 0xcb, 0x8e, 0xc7, 0xb8, 0x58, 0x7c, 0x7f, 0xa1, 0x74, 0x8f, 0xb9,
+	0x60, 0xc0, 0x83, 0x06, 0xf8, 0x82, 0xac, 0xe3, 0x71, 0x93, 0xb9, 0x35, 0xdb, 0x6a, 0x70, 0x59,
+	0xd4, 0x1c, 0x9a, 0x42, 0x17, 0xc7, 0x66, 0xa6, 0xb5, 0xfe, 0x9d, 0xd3, 0x02, 0xfe, 0x8d, 0x55,
+	0x29, 0xb1, 0xd0, 0xcd, 0x33, 0x7a, 0x65, 0xd4, 0xbf, 0x10, 0x3e, 0x9d, 0x8c, 0xe8, 0x7b, 0xcc,
+	0xf5, 0x81, 0x5c, 0xc7, 0xa3, 0x0e, 0x08, 0x5a, 0xa5, 0x82, 0x46, 0xd1, 0xa6, 0x12, 0xd1, 0xee,
+	0xc8, 0xd2, 0x17, 0x41, 0xdc, 0x06, 0x41, 0xd7, 0x5a, 0x1e, 0x18, 0x31, 0x83, 0xdc, 0xc1, 0x27,
+	0xfd, 0x96, 0x2f, 0xc0, 0x29, 0xc7, 0x22, 0x23, 0x52, 0xe4, 0xdd, 0x84, 0x48, 0x49, 0xa2, 0x0e,
+	0x4b, 0x4d, 0x84, 0xf4, 0xdb, 0x1d, 0xc1, 0x25, 0x9c, 0xf1, 0x3d, 0x30, 0x73, 0x69, 0xa9, 0x72,
+	0x61, 0x90, 0xf1, 0x22, 0x88, 0x92, 0x07, 0x66, 0x20, 0x31, 0x7f, 0xf2, 0xeb, 0xad, 0x13, 0x01,
+	0x47, 0xb3, 0xcc, 0x72, 0xf0, 0x6b, 0x48, 0x85, 0xd9, 0xec, 0x8f, 0x1f, 0x1c, 0x0f, 0xe3, 0xa9,
+	0xdf, 0x22, 0x9c, 0x1b, 0x54, 0x2a, 0x32, 0x8b, 0xc7, 0x02, 0x59, 0x1f, 0x78, 0xd3, 0x36, 0x21,
+	0x0a, 0x7c, 0x46, 0x0b, 0x07, 0x55, 0xeb, 0x0c, 0xaa, 0x56, 0x92, 0x63, 0xbc, 0x94, 0x32, 0x70,
+	0xd5, 0xf5, 0x4b, 0x21, 0x98, 0x5c, 0xc7, 0x27, 0x68, 0x37, 0x79, 0xe4, 0x9f, 0xc8, 0x63, 0xf4,
+	0x80, 0x3d, 0x3f, 0x89, 0x47, 0x03, 0x72, 0x30, 0x7d, 0x24, 0xb3, 0xbb, 0x8d, 0xd0, 0x4a, 0x66,
+	0x14, 0x4d, 0xa6, 0xd5, 0xef, 0xd3, 0xf8, 0x54, 0xd8, 0xad, 0xb9, 0x8f, 0x16, 0x8d, 0xce, 0x6c,
+	0x9c, 0xc7, 0x59, 0x97, 0x3a, 0xe0, 0x7b, 0xd4, 0x04, 0xd9, 0xa9, 0xac, 0x71, 0xf0, 0x81, 0x10,
+	0x9c, 0x09, 0x5e, 0x64, 0xfa, 0x59, 0x43, 0x3e, 0x93, 0x69, 0x3c, 0xe1, 0x71, 0xdb, 0xa1, 0xbc,
+	0x25, 0x13, 0x04, 0x2e, 0xf3, 0xcb, 0xce, 0x67, 0xbf, 0xfb, 0x63, 0x67, 0x24, 0xc3, 0xd3, 0x9b,
+	0xc8, 0x18, 0x8f, 0x00, 0x25, 0xb9, 0x4e, 0x0a, 0x78, 0x5c, 0xf8, 0xb6, 0x55, 0xbe, 0x0f, 0xad,
+	0xb2, 0x94, 0xcb, 0xf4, 0x10, 0x36, 0x90, 0x31, 0x16, 0xac, 0xdf, 0x84, 0xd6, 0x6a, 0x10, 0x60,
+	0x1d, 0x93, 0x18, 0x4e, 0xeb, 0x16, 0xe3, 0xb6, 0xd8, 0x70, 0x72, 0xc7, 0xa6, 0xd0, 0xc5, 0x89,
+	0x99, 0x8b, 0x83, 0x5a, 0xb7, 0x56, 0x5a, 0x2e, 0xde, 0x84, 0xd6, 0x5c, 0x07, 0x6f, 0x4c, 0x46,
+	0x92, 0xf1, 0x17, 0xf2, 0x21, 0x9e, 0x88, 0x75, 0x9b, 0xb4, 0xde, 0x80, 0xdc, 0x71, 0x59, 0xd8,
+	0xb3, 0xc9, 0xa1, 0x02, 0x93, 0x83, 0x90, 0x73, 0x74, 0x22, 0x12, 0x59, 0x0f, 0xe0, 0xaa, 0x8d,
+	0x49, 0x77, 0x01, 0xa3, 0x51, 0x2f, 0xf5, 0xdf, 0x5d, 0x85, 0x41, 0x99, 0xde, 0x0d, 0x6b, 0x73,
+	0x63, 0xb5, 0xd4, 0x35, 0x6e, 0xc9, 0xad, 0xf5, 0x09, 0xce, 0x15, 0x41, 0x18, 0xe0, 0x30, 0x01,
+	0xc1, 0x70, 0x2d, 0xda, 0x75, 0x18, 0xae, 0x65, 0x2a, 0x1e, 0xef, 0x84, 0x2a, 0x77, 0xf5, 0x2e,
+	0x98, 0xc6, 0x40, 0x28, 0xa8, 0xb0, 0x7a, 0x0d, 0x9f, 0xed, 0xa3, 0x1e, 0xf9, 0x39, 0x87, 0xb3,
+	0x92, 0x5c, 0xb3, 0xeb, 0x1d, 0xf9, 0xd1, 0x47, 0x11, 0x48, 0xfd, 0x18, 0x9f, 0x29, 0x82, 0xb8,
+	0xc5, 0x4c, 0x5a, 0xff, 0xff, 0xd3, 0xfa, 0x1c, 0x49, 0xd7, 0x09, 0xf5, 0x28, 0xad, 0x15, 0xfc,
+	0x66, 0x9d, 0xfa, 0xa2, 0x4c, 0x37, 0x6b, 0xbc, 0x1c, 0x9f, 0xef, 0xb9, 0xac, 0x2c, 0x76, 0xfe,
+	0xd0, 0xde, 0x58, 0xeb, 0x20, 0x8c, 0x53, 0x01, 0x6d, 0x6e, 0xb3, 0xc6, 0xe3, 0x4f, 0xbd, 0x16,
+	0xd3, 0xbd, 0x16, 0x67, 0x9e, 0xbe, 0x81, 0xb3, 0x0b, 0xf2, 0x8e, 0x9b, 0xbb, 0xbb, 0x4c, 0x7e,
+	0x40, 0x78, 0xa2, 0xf7, 0x8c, 0x23, 0x03, 0x3b, 0xdb, 0xf7, 0xf4, 0xcd, 0x6b, 0xc3, 0xc2, 0x43,
+	0xa3, 0x6a, 0xa9, 0xfd, 0x3c, 0x17, 0x5c, 0x33, 0x05, 0x9b, 0x15, 0x6c, 0xb7, 0xc6, 0x69, 0x78,
+	0xd5, 0x35, 0x38, 0x14, 0x1e, 0x72, 0x5b, 0xc0, 0x93, 0x5f, 0x7f, 0xff, 0x2a, 0xad, 0xa9, 0x97,
+	0xa2, 0xfb, 0x58, 0x8f, 0x6b, 0xec, 0xeb, 0xe1, 0xa9, 0x77, 0x70, 0x73, 0xd9, 0x32, 0xc2, 0x2c,
+	0xba, 0x4c, 0x7e, 0x42, 0x18, 0x1f, 0xcc, 0x2e, 0xb9, 0x74, 0x74, 0x4e, 0x5d, 0x07, 0x44, 0xfe,
+	0xf2, 0x30, 0xd0, 0x28, 0xf5, 0x5a, 0xfb, 0x59, 0xfa, 0x58, 0x15, 0x1c, 0x76, 0x65, 0x18, 0x0f,
+	0xd7, 0xd4, 0xab, 0x7d, 0x3c, 0x3c, 0x8e, 0x9f, 0xb7, 0x92, 0x46, 0x64, 0xef, 0x03, 0x37, 0x7f,
+	0x22, 0x7c, 0xea, 0xd0, 0x00, 0x93, 0xe9, 0x23, 0x8e, 0xf5, 0xbe, 0x3b, 0x29, 0x7f, 0xe5, 0x5f,
+	0x30, 0x22, 0x8b, 0xfc, 0xc5, 0xb3, 0x34, 0x6a, 0x3f, 0xcf, 0xe5, 0xfb, 0xbb, 0xe3, 0x40, 0xab,
+	0xd2, 0xdc, 0x0a, 0x59, 0x1a, 0xd6, 0xdc, 0xe3, 0x9e, 0x8d, 0xb1, 0xa5, 0x73, 0x19, 0xb9, 0x1c,
+	0x4f, 0x28, 0x79, 0x85, 0xf0, 0x64, 0x72, 0x5f, 0x10, 0xfd, 0x88, 0xdc, 0xfb, 0xed, 0xcf, 0xfc,
+	0xf4, 0xf0, 0x84, 0xc8, 0xeb, 0x83, 0x21, 0xbd, 0x2e, 0x93, 0xe2, 0x7f, 0xf5, 0x5a, 0x0f, 0x02,
+	0x1f, 0x58, 0xcd, 0xbf, 0xb7, 0xb3, 0x8d, 0x46, 0x7e, 0xd9, 0x46, 0x6f, 0x0f, 0xc8, 0x35, 0xbc,
+	0x7a, 0x9f, 0xfc, 0x9c, 0x1b, 0xf9, 0x06, 0xa1, 0xf9, 0x2f, 0xd0, 0xee, 0x9e, 0x92, 0x7a, 0xb9,
+	0xa7, 0xa4, 0x5e, 0xef, 0x29, 0xe8, 0xb3, 0xb6, 0x82, 0x9e, 0xb6, 0x15, 0xf4, 0xa2, 0xad, 0xa0,
+	0xdd, 0xb6, 0x82, 0x7e, 0x6b, 0x2b, 0xe8, 0x55, 0x5b, 0x49, 0xbd, 0x6e, 0x2b, 0xe8, 0xcb, 0x7d,
+	0x25, 0xb5, 0xb3, 0xaf, 0xa0, 0xdd, 0x7d, 0x25, 0xf5, 0x72, 0x5f, 0x49, 0xdd, 0xbb, 0x65, 0x31,
+	0xef, 0xbe, 0xa5, 0x35, 0x59, 0x5d, 0x00, 0xe7, 0x54, 0x6b, 0xf8, 0xba, 0x7c, 0xa8, 0x31, 0xee,
+	0x14, 0x3c, 0xce, 0x9a, 0x76, 0x15, 0x78, 0xa1, 0xb3, 0xac, 0x7b, 0x15, 0x8b, 0xe9, 0xb0, 0x29,
+	0xa2, 0x7f, 0x5f, 0x89, 0xbf, 0x88, 0x95, 0xe3, 0xf2, 0xdc, 0xb9, 0xfa, 0x77, 0x00, 0x00, 0x00,
+	0xff, 0xff, 0xfc, 0x9d, 0xd4, 0x9b, 0x3b, 0x0b, 0x00, 0x00,
 }
 
 func (this *ImportF5CSZoneRequest) Equal(that interface{}) bool {
@@ -701,6 +966,111 @@ func (this *ImportAXFRResponse) Equal(that interface{}) bool {
 	}
 	return true
 }
+func (this *GetRemoteZoneFileRequest) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GetRemoteZoneFileRequest)
+	if !ok {
+		that2, ok := that.(GetRemoteZoneFileRequest)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.Namespace != that1.Namespace {
+		return false
+	}
+	if this.DnsZoneName != that1.DnsZoneName {
+		return false
+	}
+	return true
+}
+func (this *GetRemoteZoneFileResponse) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GetRemoteZoneFileResponse)
+	if !ok {
+		that2, ok := that.(GetRemoteZoneFileResponse)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.ZoneFile != that1.ZoneFile {
+		return false
+	}
+	return true
+}
+func (this *GetLocalZoneFileRequest) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GetLocalZoneFileRequest)
+	if !ok {
+		that2, ok := that.(GetLocalZoneFileRequest)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.Namespace != that1.Namespace {
+		return false
+	}
+	if this.DnsZoneName != that1.DnsZoneName {
+		return false
+	}
+	return true
+}
+func (this *GetLocalZoneFileResponse) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GetLocalZoneFileResponse)
+	if !ok {
+		that2, ok := that.(GetLocalZoneFileResponse)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.LastAxfrTimestamp.Equal(that1.LastAxfrTimestamp) {
+		return false
+	}
+	if this.ZoneFile != that1.ZoneFile {
+		return false
+	}
+	return true
+}
 func (this *ImportF5CSZoneRequest) GoString() string {
 	if this == nil {
 		return "nil"
@@ -788,6 +1158,51 @@ func (this *ImportAXFRResponse) GoString() string {
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
+func (this *GetRemoteZoneFileRequest) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 6)
+	s = append(s, "&dns_zone.GetRemoteZoneFileRequest{")
+	s = append(s, "Namespace: "+fmt.Sprintf("%#v", this.Namespace)+",\n")
+	s = append(s, "DnsZoneName: "+fmt.Sprintf("%#v", this.DnsZoneName)+",\n")
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *GetRemoteZoneFileResponse) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 5)
+	s = append(s, "&dns_zone.GetRemoteZoneFileResponse{")
+	s = append(s, "ZoneFile: "+fmt.Sprintf("%#v", this.ZoneFile)+",\n")
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *GetLocalZoneFileRequest) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 6)
+	s = append(s, "&dns_zone.GetLocalZoneFileRequest{")
+	s = append(s, "Namespace: "+fmt.Sprintf("%#v", this.Namespace)+",\n")
+	s = append(s, "DnsZoneName: "+fmt.Sprintf("%#v", this.DnsZoneName)+",\n")
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *GetLocalZoneFileResponse) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 6)
+	s = append(s, "&dns_zone.GetLocalZoneFileResponse{")
+	if this.LastAxfrTimestamp != nil {
+		s = append(s, "LastAxfrTimestamp: "+fmt.Sprintf("%#v", this.LastAxfrTimestamp)+",\n")
+	}
+	s = append(s, "ZoneFile: "+fmt.Sprintf("%#v", this.ZoneFile)+",\n")
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
 func valueToGoStringPublicCustomapi(v interface{}, typ string) string {
 	rv := reflect.ValueOf(v)
 	if rv.IsNil() {
@@ -819,6 +1234,16 @@ type CustomAPIClient interface {
 	// x-displayName: "Import DNS Zone"
 	// Import DNS Zone via AXFR
 	ImportAXFR(ctx context.Context, in *ImportAXFRRequest, opts ...grpc.CallOption) (*ImportAXFRResponse, error)
+	// Get remote zone file
+	//
+	// x-displayName: "Get remote zone file"
+	// get remote zone file from primary dns
+	GetRemoteZoneFile(ctx context.Context, in *GetRemoteZoneFileRequest, opts ...grpc.CallOption) (*GetRemoteZoneFileResponse, error)
+	// Get local zone file
+	//
+	// x-displayName: "Get local zone file"
+	// get local zone file from secondary dns
+	GetLocalZoneFile(ctx context.Context, in *GetLocalZoneFileRequest, opts ...grpc.CallOption) (*GetLocalZoneFileResponse, error)
 }
 
 type customAPIClient struct {
@@ -847,6 +1272,24 @@ func (c *customAPIClient) ImportAXFR(ctx context.Context, in *ImportAXFRRequest,
 	return out, nil
 }
 
+func (c *customAPIClient) GetRemoteZoneFile(ctx context.Context, in *GetRemoteZoneFileRequest, opts ...grpc.CallOption) (*GetRemoteZoneFileResponse, error) {
+	out := new(GetRemoteZoneFileResponse)
+	err := c.cc.Invoke(ctx, "/ves.io.schema.dns_zone.CustomAPI/GetRemoteZoneFile", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *customAPIClient) GetLocalZoneFile(ctx context.Context, in *GetLocalZoneFileRequest, opts ...grpc.CallOption) (*GetLocalZoneFileResponse, error) {
+	out := new(GetLocalZoneFileResponse)
+	err := c.cc.Invoke(ctx, "/ves.io.schema.dns_zone.CustomAPI/GetLocalZoneFile", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // CustomAPIServer is the server API for CustomAPI service.
 type CustomAPIServer interface {
 	// Import F5 Cloud Services DNS Zone
@@ -859,6 +1302,16 @@ type CustomAPIServer interface {
 	// x-displayName: "Import DNS Zone"
 	// Import DNS Zone via AXFR
 	ImportAXFR(context.Context, *ImportAXFRRequest) (*ImportAXFRResponse, error)
+	// Get remote zone file
+	//
+	// x-displayName: "Get remote zone file"
+	// get remote zone file from primary dns
+	GetRemoteZoneFile(context.Context, *GetRemoteZoneFileRequest) (*GetRemoteZoneFileResponse, error)
+	// Get local zone file
+	//
+	// x-displayName: "Get local zone file"
+	// get local zone file from secondary dns
+	GetLocalZoneFile(context.Context, *GetLocalZoneFileRequest) (*GetLocalZoneFileResponse, error)
 }
 
 // UnimplementedCustomAPIServer can be embedded to have forward compatible implementations.
@@ -870,6 +1323,12 @@ func (*UnimplementedCustomAPIServer) ImportF5CSZone(ctx context.Context, req *Im
 }
 func (*UnimplementedCustomAPIServer) ImportAXFR(ctx context.Context, req *ImportAXFRRequest) (*ImportAXFRResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ImportAXFR not implemented")
+}
+func (*UnimplementedCustomAPIServer) GetRemoteZoneFile(ctx context.Context, req *GetRemoteZoneFileRequest) (*GetRemoteZoneFileResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetRemoteZoneFile not implemented")
+}
+func (*UnimplementedCustomAPIServer) GetLocalZoneFile(ctx context.Context, req *GetLocalZoneFileRequest) (*GetLocalZoneFileResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetLocalZoneFile not implemented")
 }
 
 func RegisterCustomAPIServer(s *grpc.Server, srv CustomAPIServer) {
@@ -912,6 +1371,42 @@ func _CustomAPI_ImportAXFR_Handler(srv interface{}, ctx context.Context, dec fun
 	return interceptor(ctx, in, info, handler)
 }
 
+func _CustomAPI_GetRemoteZoneFile_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetRemoteZoneFileRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CustomAPIServer).GetRemoteZoneFile(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/ves.io.schema.dns_zone.CustomAPI/GetRemoteZoneFile",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CustomAPIServer).GetRemoteZoneFile(ctx, req.(*GetRemoteZoneFileRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _CustomAPI_GetLocalZoneFile_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetLocalZoneFileRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CustomAPIServer).GetLocalZoneFile(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/ves.io.schema.dns_zone.CustomAPI/GetLocalZoneFile",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CustomAPIServer).GetLocalZoneFile(ctx, req.(*GetLocalZoneFileRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 var _CustomAPI_serviceDesc = grpc.ServiceDesc{
 	ServiceName: "ves.io.schema.dns_zone.CustomAPI",
 	HandlerType: (*CustomAPIServer)(nil),
@@ -923,6 +1418,14 @@ var _CustomAPI_serviceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "ImportAXFR",
 			Handler:    _CustomAPI_ImportAXFR_Handler,
+		},
+		{
+			MethodName: "GetRemoteZoneFile",
+			Handler:    _CustomAPI_GetRemoteZoneFile_Handler,
+		},
+		{
+			MethodName: "GetLocalZoneFile",
+			Handler:    _CustomAPI_GetLocalZoneFile_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
@@ -1200,6 +1703,152 @@ func (m *ImportAXFRResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
+func (m *GetRemoteZoneFileRequest) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *GetRemoteZoneFileRequest) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetRemoteZoneFileRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.DnsZoneName) > 0 {
+		i -= len(m.DnsZoneName)
+		copy(dAtA[i:], m.DnsZoneName)
+		i = encodeVarintPublicCustomapi(dAtA, i, uint64(len(m.DnsZoneName)))
+		i--
+		dAtA[i] = 0x12
+	}
+	if len(m.Namespace) > 0 {
+		i -= len(m.Namespace)
+		copy(dAtA[i:], m.Namespace)
+		i = encodeVarintPublicCustomapi(dAtA, i, uint64(len(m.Namespace)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *GetRemoteZoneFileResponse) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *GetRemoteZoneFileResponse) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetRemoteZoneFileResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.ZoneFile) > 0 {
+		i -= len(m.ZoneFile)
+		copy(dAtA[i:], m.ZoneFile)
+		i = encodeVarintPublicCustomapi(dAtA, i, uint64(len(m.ZoneFile)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *GetLocalZoneFileRequest) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *GetLocalZoneFileRequest) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetLocalZoneFileRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.DnsZoneName) > 0 {
+		i -= len(m.DnsZoneName)
+		copy(dAtA[i:], m.DnsZoneName)
+		i = encodeVarintPublicCustomapi(dAtA, i, uint64(len(m.DnsZoneName)))
+		i--
+		dAtA[i] = 0x12
+	}
+	if len(m.Namespace) > 0 {
+		i -= len(m.Namespace)
+		copy(dAtA[i:], m.Namespace)
+		i = encodeVarintPublicCustomapi(dAtA, i, uint64(len(m.Namespace)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *GetLocalZoneFileResponse) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *GetLocalZoneFileResponse) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetLocalZoneFileResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.LastAxfrTimestamp != nil {
+		{
+			size, err := m.LastAxfrTimestamp.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintPublicCustomapi(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x4a
+	}
+	if len(m.ZoneFile) > 0 {
+		i -= len(m.ZoneFile)
+		copy(dAtA[i:], m.ZoneFile)
+		i = encodeVarintPublicCustomapi(dAtA, i, uint64(len(m.ZoneFile)))
+		i--
+		dAtA[i] = 0x12
+	}
+	return len(dAtA) - i, nil
+}
+
 func encodeVarintPublicCustomapi(dAtA []byte, offset int, v uint64) int {
 	offset -= sovPublicCustomapi(v)
 	base := offset
@@ -1326,6 +1975,70 @@ func (m *ImportAXFRResponse) Size() (n int) {
 	return n
 }
 
+func (m *GetRemoteZoneFileRequest) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Namespace)
+	if l > 0 {
+		n += 1 + l + sovPublicCustomapi(uint64(l))
+	}
+	l = len(m.DnsZoneName)
+	if l > 0 {
+		n += 1 + l + sovPublicCustomapi(uint64(l))
+	}
+	return n
+}
+
+func (m *GetRemoteZoneFileResponse) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.ZoneFile)
+	if l > 0 {
+		n += 1 + l + sovPublicCustomapi(uint64(l))
+	}
+	return n
+}
+
+func (m *GetLocalZoneFileRequest) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Namespace)
+	if l > 0 {
+		n += 1 + l + sovPublicCustomapi(uint64(l))
+	}
+	l = len(m.DnsZoneName)
+	if l > 0 {
+		n += 1 + l + sovPublicCustomapi(uint64(l))
+	}
+	return n
+}
+
+func (m *GetLocalZoneFileResponse) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.ZoneFile)
+	if l > 0 {
+		n += 1 + l + sovPublicCustomapi(uint64(l))
+	}
+	if m.LastAxfrTimestamp != nil {
+		l = m.LastAxfrTimestamp.Size()
+		n += 1 + l + sovPublicCustomapi(uint64(l))
+	}
+	return n
+}
+
 func sovPublicCustomapi(x uint64) (n int) {
 	return (math_bits.Len64(x|1) + 6) / 7
 }
@@ -1405,6 +2118,49 @@ func (this *ImportAXFRResponse) String() string {
 	}
 	s := strings.Join([]string{`&ImportAXFRResponse{`,
 		`Configuration:` + strings.Replace(fmt.Sprintf("%v", this.Configuration), "PrimaryDNSGetSpecType", "PrimaryDNSGetSpecType", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GetRemoteZoneFileRequest) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GetRemoteZoneFileRequest{`,
+		`Namespace:` + fmt.Sprintf("%v", this.Namespace) + `,`,
+		`DnsZoneName:` + fmt.Sprintf("%v", this.DnsZoneName) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GetRemoteZoneFileResponse) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GetRemoteZoneFileResponse{`,
+		`ZoneFile:` + fmt.Sprintf("%v", this.ZoneFile) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GetLocalZoneFileRequest) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GetLocalZoneFileRequest{`,
+		`Namespace:` + fmt.Sprintf("%v", this.Namespace) + `,`,
+		`DnsZoneName:` + fmt.Sprintf("%v", this.DnsZoneName) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GetLocalZoneFileResponse) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GetLocalZoneFileResponse{`,
+		`ZoneFile:` + fmt.Sprintf("%v", this.ZoneFile) + `,`,
+		`LastAxfrTimestamp:` + strings.Replace(fmt.Sprintf("%v", this.LastAxfrTimestamp), "Timestamp", "types.Timestamp", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2088,6 +2844,446 @@ func (m *ImportAXFRResponse) Unmarshal(dAtA []byte) error {
 				m.Configuration = &PrimaryDNSGetSpecType{}
 			}
 			if err := m.Configuration.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipPublicCustomapi(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *GetRemoteZoneFileRequest) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowPublicCustomapi
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: GetRemoteZoneFileRequest: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: GetRemoteZoneFileRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Namespace", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Namespace = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DnsZoneName", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.DnsZoneName = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipPublicCustomapi(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *GetRemoteZoneFileResponse) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowPublicCustomapi
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: GetRemoteZoneFileResponse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: GetRemoteZoneFileResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ZoneFile", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.ZoneFile = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipPublicCustomapi(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *GetLocalZoneFileRequest) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowPublicCustomapi
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: GetLocalZoneFileRequest: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: GetLocalZoneFileRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Namespace", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Namespace = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DnsZoneName", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.DnsZoneName = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipPublicCustomapi(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *GetLocalZoneFileResponse) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowPublicCustomapi
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: GetLocalZoneFileResponse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: GetLocalZoneFileResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ZoneFile", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.ZoneFile = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 9:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field LastAxfrTimestamp", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.LastAxfrTimestamp == nil {
+				m.LastAxfrTimestamp = &types.Timestamp{}
+			}
+			if err := m.LastAxfrTimestamp.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex

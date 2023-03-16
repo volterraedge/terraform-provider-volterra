@@ -456,7 +456,7 @@ type UdpHealthCheck struct {
 	// Health check port
 	//
 	// x-required
-	// x-displayName: "Health check port"
+	// x-displayName: "Health Check Port"
 	// Port used for performing health check
 	// x-example: "80"
 	HealthCheckPort uint32 `protobuf:"varint,3,opt,name=health_check_port,json=healthCheckPort,proto3" json:"health_check_port,omitempty"`

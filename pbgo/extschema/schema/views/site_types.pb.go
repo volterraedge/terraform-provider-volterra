@@ -2758,7 +2758,7 @@ func (m *CustomPorts) GetPortRanges() string {
 type OfflineSurvivabilityModeType struct {
 	// offline_survivability_mode_choice
 	//
-	// x-displayName: "Offline Survivability Mode Choice"
+	// x-displayName: "Offline Survivability Mode"
 	// x-required
 	// Enable/Disable offline survivability mode.
 	// When this feature is enabled/disabled on an existing site, the pods/services on this site will be restarted.

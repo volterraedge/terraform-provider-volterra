@@ -17,6 +17,7 @@ package virtual_host
 
 import (
 	context "context"
+	encoding_binary "encoding/binary"
 	fmt "fmt"
 	_ "github.com/gogo/googleapis/google/api"
 	_ "github.com/gogo/protobuf/gogoproto"
@@ -79,6 +80,147 @@ var APIEPActivityMetricType_value = map[string]int32{
 
 func (APIEPActivityMetricType) EnumDescriptor() ([]byte, []int) {
 	return fileDescriptor_6ff43449ad67ea61, []int{0}
+}
+
+// Risk Level
+//
+// x-displayName: "Risk Level"
+// Risk level of the vulnerability found
+type VulnRiskLevel int32
+
+const (
+	// x-displayName: "Vulnerability has No Risk level"
+	// Risk level is not detected (for example, when no traffic).
+	RISK_LEVEL_NONE VulnRiskLevel = 0
+	// x-displayName: "Vulnerability has Low Risk"
+	// Vulnerability has low security risk.
+	RISK_LEVEL_LOW VulnRiskLevel = 1
+	// x-displayName: "Vulnerability has Medium Risk"
+	// Vulnerability has medium security risk.
+	RISK_LEVEL_MED VulnRiskLevel = 2
+	// x-displayName: "Vulnerability has High Risk"
+	// Vulnerability has high security risk.
+	RISK_LEVEL_HIGH VulnRiskLevel = 3
+	// x-displayName: "Vulnerability has Critical Risk"
+	// Vulnerability has critical security risk.
+	RISK_LEVEL_CRITICAL VulnRiskLevel = 4
+)
+
+var VulnRiskLevel_name = map[int32]string{
+	0: "RISK_LEVEL_NONE",
+	1: "RISK_LEVEL_LOW",
+	2: "RISK_LEVEL_MED",
+	3: "RISK_LEVEL_HIGH",
+	4: "RISK_LEVEL_CRITICAL",
+}
+
+var VulnRiskLevel_value = map[string]int32{
+	"RISK_LEVEL_NONE":     0,
+	"RISK_LEVEL_LOW":      1,
+	"RISK_LEVEL_MED":      2,
+	"RISK_LEVEL_HIGH":     3,
+	"RISK_LEVEL_CRITICAL": 4,
+}
+
+func (VulnRiskLevel) EnumDescriptor() ([]byte, []int) {
+	return fileDescriptor_6ff43449ad67ea61, []int{1}
+}
+
+// EvidenceType
+//
+// x-displayName: "Evidence Type"
+// Evidence Type where vulnerability found
+type VulnEvidenceType int32
+
+const (
+	// x-displayName: "Vulnerability has evidence in requests"
+	// Vulnerability has been identified in requests.
+	EVIDENCE_TYPE_REQUESTS VulnEvidenceType = 0
+	// x-displayName: "Vulnerability has evidence in sec-events"
+	// Vulnerability has been identified in sec-events.
+	EVIDENCE_TYPE_SEC_EVENTS VulnEvidenceType = 1
+)
+
+var VulnEvidenceType_name = map[int32]string{
+	0: "EVIDENCE_TYPE_REQUESTS",
+	1: "EVIDENCE_TYPE_SEC_EVENTS",
+}
+
+var VulnEvidenceType_value = map[string]int32{
+	"EVIDENCE_TYPE_REQUESTS":   0,
+	"EVIDENCE_TYPE_SEC_EVENTS": 1,
+}
+
+func (VulnEvidenceType) EnumDescriptor() ([]byte, []int) {
+	return fileDescriptor_6ff43449ad67ea61, []int{2}
+}
+
+// Context
+//
+// x-displayName: "Context"
+// Context of where vulnerability found
+type VulnContext int32
+
+const (
+	// x-displayName: "Vulnerability has API Endpoint Context"
+	// Vulnerability has been identified at API Endpoint level.
+	CONTEXT_API_ENDPOINT VulnContext = 0
+	// x-displayName: "Vulnerability has API BasePath Context"
+	// Vulnerability has been identified at API BasePath level.
+	CONTEXT_API_BASEPATH VulnContext = 1
+	// x-displayName: "Vulnerability has Domain Context"
+	// Vulnerability has been identified at Domain level.
+	CONTEXT_API_DOMAIN VulnContext = 2
+)
+
+var VulnContext_name = map[int32]string{
+	0: "CONTEXT_API_ENDPOINT",
+	1: "CONTEXT_API_BASEPATH",
+	2: "CONTEXT_API_DOMAIN",
+}
+
+var VulnContext_value = map[string]int32{
+	"CONTEXT_API_ENDPOINT": 0,
+	"CONTEXT_API_BASEPATH": 1,
+	"CONTEXT_API_DOMAIN":   2,
+}
+
+func (VulnContext) EnumDescriptor() ([]byte, []int) {
+	return fileDescriptor_6ff43449ad67ea61, []int{3}
+}
+
+// Status
+//
+// x-displayName: "Status"
+// Status of vulnerability found
+type VulnStatus int32
+
+const (
+	// x-displayName: "No Status"
+	// Vulnerability has no status
+	STATUS_NONE VulnStatus = 0
+	// x-displayName: "Vulnerability has Open Status"
+	// Vulnerability has no status
+	STATUS_OPEN VulnStatus = 1
+	// x-displayName: "Vulnerability has Resolution Confirmed Status"
+	// Vulnerability has resolution confirmed status
+	STATUS_RESOLUTION_CONFIRMED VulnStatus = 3
+)
+
+var VulnStatus_name = map[int32]string{
+	0: "STATUS_NONE",
+	1: "STATUS_OPEN",
+	3: "STATUS_RESOLUTION_CONFIRMED",
+}
+
+var VulnStatus_value = map[string]int32{
+	"STATUS_NONE":                 0,
+	"STATUS_OPEN":                 1,
+	"STATUS_RESOLUTION_CONFIRMED": 3,
+}
+
+func (VulnStatus) EnumDescriptor() ([]byte, []int) {
+	return fileDescriptor_6ff43449ad67ea61, []int{4}
 }
 
 // Api Endpoints stats request
@@ -640,6 +782,11 @@ type APIEndpointLearntSchemaReq struct {
 	// List of domains that needs to be sent as part of the request
 	// Optional filter by domains. If absent, all domains are considered.
 	Domains []string `protobuf:"bytes,5,rep,name=domains,proto3" json:"domains,omitempty"`
+	// Api Endpoint Info Request
+	//
+	// x-displayName: "Api Endpoint Info Request"
+	// List of additional things that needs to be sent as part of the request
+	ApiEndpointInfoRequest []app_type.ApiEndpointInfoRequest `protobuf:"varint,6,rep,packed,name=api_endpoint_info_request,json=apiEndpointInfoRequest,proto3,enum=ves.io.schema.app_type.ApiEndpointInfoRequest" json:"api_endpoint_info_request,omitempty"`
 }
 
 func (m *APIEndpointLearntSchemaReq) Reset()      { *m = APIEndpointLearntSchemaReq{} }
@@ -709,6 +856,13 @@ func (m *APIEndpointLearntSchemaReq) GetDomains() []string {
 	return nil
 }
 
+func (m *APIEndpointLearntSchemaReq) GetApiEndpointInfoRequest() []app_type.ApiEndpointInfoRequest {
+	if m != nil {
+		return m.ApiEndpointInfoRequest
+	}
+	return nil
+}
+
 // API endpoints GET response
 //
 // x-displayName: "API Endpoints Response"
@@ -768,7 +922,7 @@ type APIEndpointPDFRsp struct {
 	// PDF data
 	//
 	// x-displayName: "PDF Data"
-	//PDF data for request API endpoint.
+	// PDF data for request API endpoint.
 	PdfInfo *app_type.APIEPPDFInfo `protobuf:"bytes,1,opt,name=pdf_info,json=pdfInfo,proto3" json:"pdf_info,omitempty"`
 }
 
@@ -816,36 +970,40 @@ func (m *APIEndpointPDFRsp) GetPdfInfo() *app_type.APIEPPDFInfo {
 // x-displayName: "Req Body Schema Response"
 // shape of response to get req body schema for a given API endpoint.
 type APIEndpointLearntSchemaRsp struct {
-	// Learnt Schema
+	// Discovered Schema
 	//
-	// x-displayName: "Learnt Schema"
-	// x-example: "{\"example\":\"{\\\"country\\\": \\\"dummy\\\", \\\"fullName\\\": \\\"dummy\\\", \\\"mobileNum\\\": 1234567890, \\\"zipCode\\\": \\\"121\\\", \\\"streetAddress\\\": \\\"dummy\\\", \\\"city\\\": \\\"dummy\\\", \\\"state\\\": \\\"dummy\\\", \\\"test\\\": \\\"Hello, \\\\u4e16\\\\u754c\\\"}\",\"properties\":{\"city\":{\"description\":\"Word\",\"pattern\":\"[a-z0-9-]+\",\"type\":\"string\"},\"country\":{\"description\":\"Word\",\"pattern\":\"[a-z0-9-]+\",\"type\":\"string\"},\"fullName\":{\"description\":\"Word\",\"pattern\":\"[a-z0-9-]+\",\"type\":\"string\"},\"mobileNum\":{\"type\":\"integer\"},\"state\":{\"description\":\"Word\",\"pattern\":\"[a-z0-9-]+\",\"type\":\"string\"},\"streetAddress\":{\"description\":\"Word\",\"pattern\":\"[a-z0-9-]+\",\"type\":\"string\"},\"test\":{\"type\":\"string\"},\"zipCode\":{\"description\":\"Integer\",\"pattern\":\"-?\\\\d+\",\"type\":\"string\"}},\"required\":[\"fullName\",\"mobileNum\",\"city\",\"test\",\"zipCode\",\"state\",\"streetAddress\",\"country\"],\"type\":\"object\"}"
-	//Learnt Schema for request API endpoint.
-	LearntSchema string `protobuf:"bytes,1,opt,name=learnt_schema,json=learntSchema,proto3" json:"learnt_schema,omitempty"`
-	// Swagger Spec
+	// x-displayName: "Discovered Schema"
+	// Discovered Schema for request API endpoint.
+	DiscoveredSchema *app_type.DiscoveredSchema `protobuf:"bytes,6,opt,name=discovered_schema,json=discoveredSchema,proto3" json:"discovered_schema,omitempty"`
+	// Discovered OpenAPI Spec
 	//
-	// x-displayName: "Swagger Spec"
+	// x-displayName: "Discovered OpenAPI Spec"
 	// x-example: "{\"info\":{\"description\":\"\",\"title\":\"\",\"version\":\"\"},\"paths\":{\"\/api\/Addresss\":{\"get\":{\"consumes\":[\"application\/json\"],\"description\":\"Swagger auto-generated from learnt schema\",\"parameters\":[{\"description\":\"\",\"in\":\"query\",\"name\":\"test\",\"type\":\"string\"},{\"description\":\"\",\"in\":\"query\",\"name\":\"test1\",\"type\":\"string\"}],\"responses\":{\"200\":{\"description\":\"\"}}}}},\"schemes\":[\"https\",\"http\"],\"swagger\":\"2.0\"}"
-	//Swagger spec for request API endpoint.
-	SwaggerSpec string `protobuf:"bytes,2,opt,name=swagger_spec,json=swaggerSpec,proto3" json:"swagger_spec,omitempty"`
-	// Last Updated Time
+	// Discovered OpenAPI spec for request API endpoint.
+	DiscoveredOpenapiSpec string `protobuf:"bytes,2,opt,name=discovered_openapi_spec,json=discoveredOpenapiSpec,proto3" json:"discovered_openapi_spec,omitempty"`
+	// List of sensitive data
 	//
-	// x-displayName: "Last Updated Time"
-	// x-example: "2021-01-22 15:46:23.767649"
-	//Last Updated Time for request API endpoint. The time updated when the APIEP file is uploaded to Azure/AWS.
-	LastUpdatedTime *types.Timestamp `protobuf:"bytes,3,opt,name=last_updated_time,json=lastUpdatedTime,proto3" json:"last_updated_time,omitempty"`
-	// API Inventory Schema
+	// x-displayName: "List of Sensitive Data"
+	// List of sensitive data for request API endpoint.
+	SensitiveData []*app_type.SensitiveData `protobuf:"bytes,7,rep,name=sensitive_data,json=sensitiveData,proto3" json:"sensitive_data,omitempty"`
+	// Inventory OpenAPI Spec
 	//
-	// x-displayName: "API Inventory Schema"
-	// x-example: "{\"example\":\"{\\\"country\\\": \\\"dummy\\\", \\\"fullName\\\": \\\"dummy\\\", \\\"mobileNum\\\": 1234567890, \\\"zipCode\\\": \\\"121\\\", \\\"streetAddress\\\": \\\"dummy\\\", \\\"city\\\": \\\"dummy\\\", \\\"state\\\": \\\"dummy\\\", \\\"test\\\": \\\"Hello, \\\\u4e16\\\\u754c\\\"}\",\"properties\":{\"city\":{\"description\":\"Word\",\"pattern\":\"[a-z0-9-]+\",\"type\":\"string\"},\"country\":{\"description\":\"Word\",\"pattern\":\"[a-z0-9-]+\",\"type\":\"string\"},\"fullName\":{\"description\":\"Word\",\"pattern\":\"[a-z0-9-]+\",\"type\":\"string\"},\"mobileNum\":{\"type\":\"integer\"},\"state\":{\"description\":\"Word\",\"pattern\":\"[a-z0-9-]+\",\"type\":\"string\"},\"streetAddress\":{\"description\":\"Word\",\"pattern\":\"[a-z0-9-]+\",\"type\":\"string\"},\"test\":{\"type\":\"string\"},\"zipCode\":{\"description\":\"Integer\",\"pattern\":\"-?\\\\d+\",\"type\":\"string\"}},\"required\":[\"fullName\",\"mobileNum\",\"city\",\"test\",\"zipCode\",\"state\",\"streetAddress\",\"country\"],\"type\":\"object\"}"
-	// API Inventory Schema for request API endpoint.
-	ApiInventorySchema string `protobuf:"bytes,4,opt,name=api_inventory_schema,json=apiInventorySchema,proto3" json:"api_inventory_schema,omitempty"`
-	// API Inventory Swagger Spec
-	//
-	// x-displayName: "API Inventory Swagger Spec"
+	// x-displayName: "Inventory OpenAPI Spec"
 	// x-example: "{\"info\":{\"description\":\"\",\"title\":\"\",\"version\":\"\"},\"paths\":{\"\/api\/Addresss\":{\"get\":{\"consumes\":[\"application\/json\"],\"description\":\"Swagger auto-generated from learnt schema\",\"parameters\":[{\"description\":\"\",\"in\":\"query\",\"name\":\"test\",\"type\":\"string\"},{\"description\":\"\",\"in\":\"query\",\"name\":\"test1\",\"type\":\"string\"}],\"responses\":{\"200\":{\"description\":\"\"}}}}},\"schemes\":[\"https\",\"http\"],\"swagger\":\"2.0\"}"
-	// API Inventory Swagger spec for request API endpoint.
-	ApiInventorySwaggerSpec string `protobuf:"bytes,5,opt,name=api_inventory_swagger_spec,json=apiInventorySwaggerSpec,proto3" json:"api_inventory_swagger_spec,omitempty"`
+	// Inventory OpenAPI spec for request API endpoint.
+	InventoryOpenapiSpec string `protobuf:"bytes,5,opt,name=inventory_openapi_spec,json=inventoryOpenapiSpec,proto3" json:"inventory_openapi_spec,omitempty"`
+	// Probability Density Function
+	//
+	// x-displayName: "PDF(Value)"
+	// Metrics supported currently are request_size response_size latency_with_data, latency_no_data, request_rate, error_rate, response_throughput.
+	// PDF is calculated for each combination of (Tenant, App type, API endpoint).
+	// API endpoint is determined from automatically identified API (collapsed_url) and method.
+	PdfInfo *app_type.APIEPPDFInfo `protobuf:"bytes,8,opt,name=pdf_info,json=pdfInfo,proto3" json:"pdf_info,omitempty"`
+	// Authentication
+	//
+	// x-displayName: "Authentication"
+	// Authentication data for request API endpoint.
+	Authentication *app_type.Authentication `protobuf:"bytes,9,opt,name=authentication,proto3" json:"authentication,omitempty"`
 }
 
 func (m *APIEndpointLearntSchemaRsp) Reset()      { *m = APIEndpointLearntSchemaRsp{} }
@@ -880,39 +1038,46 @@ func (m *APIEndpointLearntSchemaRsp) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_APIEndpointLearntSchemaRsp proto.InternalMessageInfo
 
-func (m *APIEndpointLearntSchemaRsp) GetLearntSchema() string {
+func (m *APIEndpointLearntSchemaRsp) GetDiscoveredSchema() *app_type.DiscoveredSchema {
 	if m != nil {
-		return m.LearntSchema
-	}
-	return ""
-}
-
-func (m *APIEndpointLearntSchemaRsp) GetSwaggerSpec() string {
-	if m != nil {
-		return m.SwaggerSpec
-	}
-	return ""
-}
-
-func (m *APIEndpointLearntSchemaRsp) GetLastUpdatedTime() *types.Timestamp {
-	if m != nil {
-		return m.LastUpdatedTime
+		return m.DiscoveredSchema
 	}
 	return nil
 }
 
-func (m *APIEndpointLearntSchemaRsp) GetApiInventorySchema() string {
+func (m *APIEndpointLearntSchemaRsp) GetDiscoveredOpenapiSpec() string {
 	if m != nil {
-		return m.ApiInventorySchema
+		return m.DiscoveredOpenapiSpec
 	}
 	return ""
 }
 
-func (m *APIEndpointLearntSchemaRsp) GetApiInventorySwaggerSpec() string {
+func (m *APIEndpointLearntSchemaRsp) GetSensitiveData() []*app_type.SensitiveData {
 	if m != nil {
-		return m.ApiInventorySwaggerSpec
+		return m.SensitiveData
+	}
+	return nil
+}
+
+func (m *APIEndpointLearntSchemaRsp) GetInventoryOpenapiSpec() string {
+	if m != nil {
+		return m.InventoryOpenapiSpec
 	}
 	return ""
+}
+
+func (m *APIEndpointLearntSchemaRsp) GetPdfInfo() *app_type.APIEPPDFInfo {
+	if m != nil {
+		return m.PdfInfo
+	}
+	return nil
+}
+
+func (m *APIEndpointLearntSchemaRsp) GetAuthentication() *app_type.Authentication {
+	if m != nil {
+		return m.Authentication
+	}
+	return nil
 }
 
 // API endpoint GET request Per Virtual Host
@@ -1838,9 +2003,608 @@ func (m *APIEPSummaryFilter) GetApiepCategory() []app_type.APIEPCategory {
 	return nil
 }
 
+// GetVulnerabilitiesReq
+//
+// x-displayName: "Get Vulnerabilities Request"
+// Request model for GetVulnerabilitiesReq API
+type GetVulnerabilitiesReq struct {
+	// Namespace
+	//
+	// x-displayName: "Namespace"
+	// x-example: "blogging-app"
+	// Namespace of the virtual host for current request
+	Namespace string `protobuf:"bytes,1,opt,name=namespace,proto3" json:"namespace,omitempty"`
+	// Virtual Host Name
+	//
+	// x-displayName: "Virtual Host Name"
+	// x-example: "blogging-app-vhost"
+	// Virtual Host name for current request
+	Name string `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
+	// List of Domain
+	//
+	// x-displayName: "List of Domain"
+	// x-example: "www.example.com"
+	// List of domains for which vulnerabilities should be returned.
+	// Optional filter by domains. If absent, vulnerabilities for all domains are considered.
+	Domains []string `protobuf:"bytes,3,rep,name=domains,proto3" json:"domains,omitempty"`
+	// Context
+	//
+	// x-displayName: "Context of vulnerability appeared"
+	// Context of the vulnerability appeared
+	//
+	// Types that are valid to be assigned to Context:
+	//	*GetVulnerabilitiesReq_ApiEndpoint
+	Context isGetVulnerabilitiesReq_Context `protobuf_oneof:"context"`
+}
+
+func (m *GetVulnerabilitiesReq) Reset()      { *m = GetVulnerabilitiesReq{} }
+func (*GetVulnerabilitiesReq) ProtoMessage() {}
+func (*GetVulnerabilitiesReq) Descriptor() ([]byte, []int) {
+	return fileDescriptor_6ff43449ad67ea61, []int{22}
+}
+func (m *GetVulnerabilitiesReq) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *GetVulnerabilitiesReq) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_GetVulnerabilitiesReq.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *GetVulnerabilitiesReq) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GetVulnerabilitiesReq.Merge(m, src)
+}
+func (m *GetVulnerabilitiesReq) XXX_Size() int {
+	return m.Size()
+}
+func (m *GetVulnerabilitiesReq) XXX_DiscardUnknown() {
+	xxx_messageInfo_GetVulnerabilitiesReq.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_GetVulnerabilitiesReq proto.InternalMessageInfo
+
+type isGetVulnerabilitiesReq_Context interface {
+	isGetVulnerabilitiesReq_Context()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
+
+type GetVulnerabilitiesReq_ApiEndpoint struct {
+	ApiEndpoint *APIEndpoint `protobuf:"bytes,5,opt,name=api_endpoint,json=apiEndpoint,proto3,oneof" json:"api_endpoint,omitempty"`
+}
+
+func (*GetVulnerabilitiesReq_ApiEndpoint) isGetVulnerabilitiesReq_Context() {}
+
+func (m *GetVulnerabilitiesReq) GetContext() isGetVulnerabilitiesReq_Context {
+	if m != nil {
+		return m.Context
+	}
+	return nil
+}
+
+func (m *GetVulnerabilitiesReq) GetNamespace() string {
+	if m != nil {
+		return m.Namespace
+	}
+	return ""
+}
+
+func (m *GetVulnerabilitiesReq) GetName() string {
+	if m != nil {
+		return m.Name
+	}
+	return ""
+}
+
+func (m *GetVulnerabilitiesReq) GetDomains() []string {
+	if m != nil {
+		return m.Domains
+	}
+	return nil
+}
+
+func (m *GetVulnerabilitiesReq) GetApiEndpoint() *APIEndpoint {
+	if x, ok := m.GetContext().(*GetVulnerabilitiesReq_ApiEndpoint); ok {
+		return x.ApiEndpoint
+	}
+	return nil
+}
+
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*GetVulnerabilitiesReq) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
+		(*GetVulnerabilitiesReq_ApiEndpoint)(nil),
+	}
+}
+
+// APIEndpoint
+//
+// x-displayName: "API Endpoint"
+// APIEndpoint Object.
+type APIEndpoint struct {
+	// API URL
+	//
+	// x-displayName: "API URL"
+	// x-example: "api/v1/user_id/DYN/vehicle_id/DYN"
+	// Requested API endPoint for api url.
+	CollapsedUrl string `protobuf:"bytes,1,opt,name=collapsed_url,json=collapsedUrl,proto3" json:"collapsed_url,omitempty"`
+	// Method of current API URL
+	//
+	// x-displayName: "Method"
+	// x-example: "GET"
+	// Requested API endPoint for method.
+	Method string `protobuf:"bytes,2,opt,name=method,proto3" json:"method,omitempty"`
+}
+
+func (m *APIEndpoint) Reset()      { *m = APIEndpoint{} }
+func (*APIEndpoint) ProtoMessage() {}
+func (*APIEndpoint) Descriptor() ([]byte, []int) {
+	return fileDescriptor_6ff43449ad67ea61, []int{23}
+}
+func (m *APIEndpoint) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *APIEndpoint) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_APIEndpoint.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *APIEndpoint) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_APIEndpoint.Merge(m, src)
+}
+func (m *APIEndpoint) XXX_Size() int {
+	return m.Size()
+}
+func (m *APIEndpoint) XXX_DiscardUnknown() {
+	xxx_messageInfo_APIEndpoint.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_APIEndpoint proto.InternalMessageInfo
+
+func (m *APIEndpoint) GetCollapsedUrl() string {
+	if m != nil {
+		return m.CollapsedUrl
+	}
+	return ""
+}
+
+func (m *APIEndpoint) GetMethod() string {
+	if m != nil {
+		return m.Method
+	}
+	return ""
+}
+
+// GetVulnerabilitiesRsp
+//
+// x-displayName: "GetVulnerabilitiesRsp API Response"
+// Response model for GetVulnerabilitiesRsp API.
+type GetVulnerabilitiesRsp struct {
+	// vulnerabilities
+	//
+	// x-displayName: "List of vulnerabilities"
+	// List of vulnerabilities found in context.
+	Vulnerabilities []*Vulnerability `protobuf:"bytes,1,rep,name=vulnerabilities,proto3" json:"vulnerabilities,omitempty"`
+}
+
+func (m *GetVulnerabilitiesRsp) Reset()      { *m = GetVulnerabilitiesRsp{} }
+func (*GetVulnerabilitiesRsp) ProtoMessage() {}
+func (*GetVulnerabilitiesRsp) Descriptor() ([]byte, []int) {
+	return fileDescriptor_6ff43449ad67ea61, []int{24}
+}
+func (m *GetVulnerabilitiesRsp) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *GetVulnerabilitiesRsp) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_GetVulnerabilitiesRsp.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *GetVulnerabilitiesRsp) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GetVulnerabilitiesRsp.Merge(m, src)
+}
+func (m *GetVulnerabilitiesRsp) XXX_Size() int {
+	return m.Size()
+}
+func (m *GetVulnerabilitiesRsp) XXX_DiscardUnknown() {
+	xxx_messageInfo_GetVulnerabilitiesRsp.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_GetVulnerabilitiesRsp proto.InternalMessageInfo
+
+func (m *GetVulnerabilitiesRsp) GetVulnerabilities() []*Vulnerability {
+	if m != nil {
+		return m.Vulnerabilities
+	}
+	return nil
+}
+
+// Vulnerability
+//
+// x-displayName: "Vulnerability"
+// Vulnerability object.
+type Vulnerability struct {
+	// title
+	//
+	// x-displayName: "Title"
+	// Title of the vulnerability found.
+	Title string `protobuf:"bytes,1,opt,name=title,proto3" json:"title,omitempty"`
+	// category
+	//
+	// x-displayName: "Category"
+	// Category of the vulnerability found.
+	Category string `protobuf:"bytes,2,opt,name=category,proto3" json:"category,omitempty"`
+	// Context
+	//
+	// x-displayName: "Context"
+	// Context of the vulnerability found.
+	Context VulnContext `protobuf:"varint,3,opt,name=context,proto3,enum=ves.io.schema.virtual_host.VulnContext" json:"context,omitempty"`
+	// description
+	//
+	// x-displayName: "Description"
+	// Description of the vulnerability found.
+	Description string `protobuf:"bytes,4,opt,name=description,proto3" json:"description,omitempty"`
+	// status
+	//
+	// x-displayName: "Status"
+	// Status of the vulnerability found.
+	Status VulnStatus `protobuf:"varint,5,opt,name=status,proto3,enum=ves.io.schema.virtual_host.VulnStatus" json:"status,omitempty"`
+	// status_change_time
+	//
+	// x-displayName: "Status Change Time"
+	// status_change_time is the time when the vulnerability
+	// status was updated by the discovery mechanism.
+	// It is the UTC time and represented in RFC3339 form.
+	StatusChangeTime *types.Timestamp `protobuf:"bytes,6,opt,name=status_change_time,json=statusChangeTime,proto3" json:"status_change_time,omitempty"`
+	// creation_time
+	//
+	// x-displayName: "Creation Time"
+	// creation_time is the time when the vulnerability
+	// was created by the discovery mechanism.
+	// It is the UTC time and represented in RFC3339 form.
+	CreationTime *types.Timestamp `protobuf:"bytes,7,opt,name=creation_time,json=creationTime,proto3" json:"creation_time,omitempty"`
+	// last_observed_time
+	//
+	// x-displayName: "Last Observed Time"
+	// last_observed_time is the time when the vulnerability
+	// was last observed by the discovery mechanism.
+	// It is the UTC time and represented in RFC3339 form.
+	LastObservedTime *types.Timestamp `protobuf:"bytes,8,opt,name=last_observed_time,json=lastObservedTime,proto3" json:"last_observed_time,omitempty"`
+	// risk
+	//
+	// x-displayName: "Risk"
+	// Risk of the vulnerability found.
+	Risk *VulnRisk `protobuf:"bytes,9,opt,name=risk,proto3" json:"risk,omitempty"`
+	// evidence
+	//
+	// x-displayName: "Evidence"
+	// Evidence of the vulnerability found.
+	Evidence *VulnEvidence `protobuf:"bytes,10,opt,name=evidence,proto3" json:"evidence,omitempty"`
+}
+
+func (m *Vulnerability) Reset()      { *m = Vulnerability{} }
+func (*Vulnerability) ProtoMessage() {}
+func (*Vulnerability) Descriptor() ([]byte, []int) {
+	return fileDescriptor_6ff43449ad67ea61, []int{25}
+}
+func (m *Vulnerability) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *Vulnerability) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_Vulnerability.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *Vulnerability) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Vulnerability.Merge(m, src)
+}
+func (m *Vulnerability) XXX_Size() int {
+	return m.Size()
+}
+func (m *Vulnerability) XXX_DiscardUnknown() {
+	xxx_messageInfo_Vulnerability.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_Vulnerability proto.InternalMessageInfo
+
+func (m *Vulnerability) GetTitle() string {
+	if m != nil {
+		return m.Title
+	}
+	return ""
+}
+
+func (m *Vulnerability) GetCategory() string {
+	if m != nil {
+		return m.Category
+	}
+	return ""
+}
+
+func (m *Vulnerability) GetContext() VulnContext {
+	if m != nil {
+		return m.Context
+	}
+	return CONTEXT_API_ENDPOINT
+}
+
+func (m *Vulnerability) GetDescription() string {
+	if m != nil {
+		return m.Description
+	}
+	return ""
+}
+
+func (m *Vulnerability) GetStatus() VulnStatus {
+	if m != nil {
+		return m.Status
+	}
+	return STATUS_NONE
+}
+
+func (m *Vulnerability) GetStatusChangeTime() *types.Timestamp {
+	if m != nil {
+		return m.StatusChangeTime
+	}
+	return nil
+}
+
+func (m *Vulnerability) GetCreationTime() *types.Timestamp {
+	if m != nil {
+		return m.CreationTime
+	}
+	return nil
+}
+
+func (m *Vulnerability) GetLastObservedTime() *types.Timestamp {
+	if m != nil {
+		return m.LastObservedTime
+	}
+	return nil
+}
+
+func (m *Vulnerability) GetRisk() *VulnRisk {
+	if m != nil {
+		return m.Risk
+	}
+	return nil
+}
+
+func (m *Vulnerability) GetEvidence() *VulnEvidence {
+	if m != nil {
+		return m.Evidence
+	}
+	return nil
+}
+
+// Risk
+//
+// x-displayName: "Risk"
+// Risk of the vulnerability found.
+type VulnRisk struct {
+	// score
+	//
+	// x-displayName: "Score"
+	// Risk score of the vulnerability found.
+	Score float32 `protobuf:"fixed32,1,opt,name=score,proto3" json:"score,omitempty"`
+	// level
+	//
+	// x-displayName: "Level"
+	// Risk level of the vulnerability found.
+	Level VulnRiskLevel `protobuf:"varint,2,opt,name=level,proto3,enum=ves.io.schema.virtual_host.VulnRiskLevel" json:"level,omitempty"`
+}
+
+func (m *VulnRisk) Reset()      { *m = VulnRisk{} }
+func (*VulnRisk) ProtoMessage() {}
+func (*VulnRisk) Descriptor() ([]byte, []int) {
+	return fileDescriptor_6ff43449ad67ea61, []int{26}
+}
+func (m *VulnRisk) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *VulnRisk) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_VulnRisk.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *VulnRisk) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_VulnRisk.Merge(m, src)
+}
+func (m *VulnRisk) XXX_Size() int {
+	return m.Size()
+}
+func (m *VulnRisk) XXX_DiscardUnknown() {
+	xxx_messageInfo_VulnRisk.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_VulnRisk proto.InternalMessageInfo
+
+func (m *VulnRisk) GetScore() float32 {
+	if m != nil {
+		return m.Score
+	}
+	return 0
+}
+
+func (m *VulnRisk) GetLevel() VulnRiskLevel {
+	if m != nil {
+		return m.Level
+	}
+	return RISK_LEVEL_NONE
+}
+
+// Evidence
+//
+// x-displayName: "Evidence"
+// Evidence of the vulnerability found.
+type VulnEvidence struct {
+	// samples
+	//
+	// x-displayName: "Samples"
+	// Samples due to which vulnerability was found.
+	Samples []*VulnEvidenceSample `protobuf:"bytes,1,rep,name=samples,proto3" json:"samples,omitempty"`
+	// evidence_type
+	//
+	// x-displayName: "Evidence type"
+	// Type of evidence where vulnerability was found.
+	EvidenceType VulnEvidenceType `protobuf:"varint,3,opt,name=evidence_type,json=evidenceType,proto3,enum=ves.io.schema.virtual_host.VulnEvidenceType" json:"evidence_type,omitempty"`
+}
+
+func (m *VulnEvidence) Reset()      { *m = VulnEvidence{} }
+func (*VulnEvidence) ProtoMessage() {}
+func (*VulnEvidence) Descriptor() ([]byte, []int) {
+	return fileDescriptor_6ff43449ad67ea61, []int{27}
+}
+func (m *VulnEvidence) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *VulnEvidence) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_VulnEvidence.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *VulnEvidence) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_VulnEvidence.Merge(m, src)
+}
+func (m *VulnEvidence) XXX_Size() int {
+	return m.Size()
+}
+func (m *VulnEvidence) XXX_DiscardUnknown() {
+	xxx_messageInfo_VulnEvidence.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_VulnEvidence proto.InternalMessageInfo
+
+func (m *VulnEvidence) GetSamples() []*VulnEvidenceSample {
+	if m != nil {
+		return m.Samples
+	}
+	return nil
+}
+
+func (m *VulnEvidence) GetEvidenceType() VulnEvidenceType {
+	if m != nil {
+		return m.EvidenceType
+	}
+	return EVIDENCE_TYPE_REQUESTS
+}
+
+// VulnEvidenceSample
+//
+// x-displayName: "Vulnerability evidence sample"
+// Vulnerability evidence sample due to which vulnerability was found
+type VulnEvidenceSample struct {
+	// req_id
+	//
+	// x-displayName: "Request id"
+	// Request id where vulnerability was found.
+	ReqId string `protobuf:"bytes,1,opt,name=req_id,json=reqId,proto3" json:"req_id,omitempty"`
+	// details
+	//
+	// x-displayName: "List of details"
+	// List of details due to which vulnerability was found.
+	Details []string `protobuf:"bytes,2,rep,name=details,proto3" json:"details,omitempty"`
+}
+
+func (m *VulnEvidenceSample) Reset()      { *m = VulnEvidenceSample{} }
+func (*VulnEvidenceSample) ProtoMessage() {}
+func (*VulnEvidenceSample) Descriptor() ([]byte, []int) {
+	return fileDescriptor_6ff43449ad67ea61, []int{28}
+}
+func (m *VulnEvidenceSample) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *VulnEvidenceSample) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_VulnEvidenceSample.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *VulnEvidenceSample) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_VulnEvidenceSample.Merge(m, src)
+}
+func (m *VulnEvidenceSample) XXX_Size() int {
+	return m.Size()
+}
+func (m *VulnEvidenceSample) XXX_DiscardUnknown() {
+	xxx_messageInfo_VulnEvidenceSample.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_VulnEvidenceSample proto.InternalMessageInfo
+
+func (m *VulnEvidenceSample) GetReqId() string {
+	if m != nil {
+		return m.ReqId
+	}
+	return ""
+}
+
+func (m *VulnEvidenceSample) GetDetails() []string {
+	if m != nil {
+		return m.Details
+	}
+	return nil
+}
+
 func init() {
 	proto.RegisterEnum("ves.io.schema.virtual_host.APIEPActivityMetricType", APIEPActivityMetricType_name, APIEPActivityMetricType_value)
 	golang_proto.RegisterEnum("ves.io.schema.virtual_host.APIEPActivityMetricType", APIEPActivityMetricType_name, APIEPActivityMetricType_value)
+	proto.RegisterEnum("ves.io.schema.virtual_host.VulnRiskLevel", VulnRiskLevel_name, VulnRiskLevel_value)
+	golang_proto.RegisterEnum("ves.io.schema.virtual_host.VulnRiskLevel", VulnRiskLevel_name, VulnRiskLevel_value)
+	proto.RegisterEnum("ves.io.schema.virtual_host.VulnEvidenceType", VulnEvidenceType_name, VulnEvidenceType_value)
+	golang_proto.RegisterEnum("ves.io.schema.virtual_host.VulnEvidenceType", VulnEvidenceType_name, VulnEvidenceType_value)
+	proto.RegisterEnum("ves.io.schema.virtual_host.VulnContext", VulnContext_name, VulnContext_value)
+	golang_proto.RegisterEnum("ves.io.schema.virtual_host.VulnContext", VulnContext_name, VulnContext_value)
+	proto.RegisterEnum("ves.io.schema.virtual_host.VulnStatus", VulnStatus_name, VulnStatus_value)
+	golang_proto.RegisterEnum("ves.io.schema.virtual_host.VulnStatus", VulnStatus_name, VulnStatus_value)
 	proto.RegisterType((*ApiEndpointsStatsReq)(nil), "ves.io.schema.virtual_host.ApiEndpointsStatsReq")
 	golang_proto.RegisterType((*ApiEndpointsStatsReq)(nil), "ves.io.schema.virtual_host.ApiEndpointsStatsReq")
 	proto.RegisterType((*ApiEndpointsStatsRsp)(nil), "ves.io.schema.virtual_host.ApiEndpointsStatsRsp")
@@ -1885,6 +2649,20 @@ func init() {
 	golang_proto.RegisterType((*SensitiveDataCount)(nil), "ves.io.schema.virtual_host.SensitiveDataCount")
 	proto.RegisterType((*APIEPSummaryFilter)(nil), "ves.io.schema.virtual_host.APIEPSummaryFilter")
 	golang_proto.RegisterType((*APIEPSummaryFilter)(nil), "ves.io.schema.virtual_host.APIEPSummaryFilter")
+	proto.RegisterType((*GetVulnerabilitiesReq)(nil), "ves.io.schema.virtual_host.GetVulnerabilitiesReq")
+	golang_proto.RegisterType((*GetVulnerabilitiesReq)(nil), "ves.io.schema.virtual_host.GetVulnerabilitiesReq")
+	proto.RegisterType((*APIEndpoint)(nil), "ves.io.schema.virtual_host.APIEndpoint")
+	golang_proto.RegisterType((*APIEndpoint)(nil), "ves.io.schema.virtual_host.APIEndpoint")
+	proto.RegisterType((*GetVulnerabilitiesRsp)(nil), "ves.io.schema.virtual_host.GetVulnerabilitiesRsp")
+	golang_proto.RegisterType((*GetVulnerabilitiesRsp)(nil), "ves.io.schema.virtual_host.GetVulnerabilitiesRsp")
+	proto.RegisterType((*Vulnerability)(nil), "ves.io.schema.virtual_host.Vulnerability")
+	golang_proto.RegisterType((*Vulnerability)(nil), "ves.io.schema.virtual_host.Vulnerability")
+	proto.RegisterType((*VulnRisk)(nil), "ves.io.schema.virtual_host.VulnRisk")
+	golang_proto.RegisterType((*VulnRisk)(nil), "ves.io.schema.virtual_host.VulnRisk")
+	proto.RegisterType((*VulnEvidence)(nil), "ves.io.schema.virtual_host.VulnEvidence")
+	golang_proto.RegisterType((*VulnEvidence)(nil), "ves.io.schema.virtual_host.VulnEvidence")
+	proto.RegisterType((*VulnEvidenceSample)(nil), "ves.io.schema.virtual_host.VulnEvidenceSample")
+	golang_proto.RegisterType((*VulnEvidenceSample)(nil), "ves.io.schema.virtual_host.VulnEvidenceSample")
 }
 
 func init() {
@@ -1895,132 +2673,210 @@ func init() {
 }
 
 var fileDescriptor_6ff43449ad67ea61 = []byte{
-	// 1933 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xd4, 0x59, 0x4d, 0x6c, 0x23, 0x49,
-	0x15, 0x4e, 0xb5, 0xe3, 0x64, 0x5c, 0x99, 0xf1, 0x64, 0x6a, 0xc2, 0xac, 0xc7, 0xcc, 0x78, 0x33,
-	0xbd, 0x8b, 0x36, 0x04, 0xc5, 0x3d, 0x9b, 0x91, 0x58, 0x34, 0x1c, 0x76, 0x1d, 0xc7, 0x99, 0x35,
-	0x9a, 0x19, 0x4c, 0xdb, 0x3b, 0x28, 0x68, 0xa5, 0xde, 0x4a, 0x77, 0xd9, 0xa9, 0xdd, 0x76, 0x57,
-	0x4d, 0x57, 0xd9, 0x4b, 0x40, 0x8b, 0xa2, 0x48, 0x70, 0xe0, 0xb4, 0x1a, 0x8e, 0xc0, 0x89, 0x0b,
-	0x42, 0xe2, 0x80, 0xc4, 0x61, 0xc5, 0x5e, 0xe6, 0x82, 0xd8, 0x13, 0x1a, 0xe0, 0xb2, 0xe2, 0xc4,
-	0x64, 0x10, 0x82, 0xdb, 0x9e, 0x40, 0x9c, 0x40, 0x5d, 0xdd, 0x76, 0xba, 0x6d, 0xc7, 0xce, 0x1f,
-	0x2b, 0xf6, 0x92, 0x74, 0xbf, 0x57, 0xef, 0xd5, 0x7b, 0x5f, 0x7d, 0xaf, 0xea, 0x55, 0x1b, 0xbe,
-	0xd2, 0x25, 0xa2, 0x48, 0x99, 0x21, 0xec, 0x6d, 0xd2, 0xc6, 0x46, 0x97, 0xfa, 0xb2, 0x83, 0x5d,
-	0x6b, 0x9b, 0x09, 0x69, 0xf0, 0xce, 0x96, 0x4b, 0x6d, 0x0b, 0x73, 0x4a, 0xb8, 0x65, 0x77, 0x84,
-	0x64, 0x6d, 0xcc, 0x69, 0x91, 0xfb, 0x4c, 0x32, 0x94, 0x0f, 0x0d, 0x8b, 0xa1, 0x61, 0x31, 0x6e,
-	0x98, 0x5f, 0x69, 0x51, 0xb9, 0xdd, 0xd9, 0x2a, 0xda, 0xac, 0x6d, 0xb4, 0x58, 0x8b, 0x19, 0xca,
-	0x64, 0xab, 0xd3, 0x54, 0x6f, 0xea, 0x45, 0x3d, 0x85, 0xae, 0xf2, 0xd7, 0x5a, 0x8c, 0xb5, 0x5c,
-	0x62, 0x60, 0x4e, 0x0d, 0xec, 0x79, 0x4c, 0x62, 0x49, 0x99, 0x27, 0x22, 0xed, 0xd5, 0x98, 0x76,
-	0x5b, 0x4a, 0xbe, 0xc5, 0x9c, 0x9d, 0x48, 0xf5, 0x7c, 0xa4, 0xea, 0xbb, 0x97, 0xb4, 0x4d, 0x84,
-	0xc4, 0x6d, 0x1e, 0x0d, 0xd0, 0x93, 0xd9, 0x61, 0xce, 0x2d, 0xb9, 0xc3, 0x89, 0x11, 0xfc, 0xe9,
-	0xf9, 0xff, 0x7c, 0x72, 0x0c, 0xe3, 0x89, 0xc9, 0x93, 0xca, 0xb8, 0xdd, 0xb5, 0x01, 0xe4, 0xb0,
-	0x4b, 0x1d, 0x2c, 0xc9, 0xe8, 0x99, 0xbb, 0x44, 0x10, 0xaf, 0x9b, 0x74, 0xae, 0xbf, 0x0e, 0x17,
-	0x4a, 0x9c, 0x56, 0x3c, 0x87, 0x33, 0xea, 0x49, 0x51, 0x97, 0x58, 0x0a, 0x93, 0x3c, 0x44, 0x08,
-	0x4e, 0x7b, 0xb8, 0x4d, 0x72, 0x60, 0x11, 0x2c, 0x65, 0x4c, 0xf5, 0x8c, 0xae, 0xc1, 0x4c, 0xf0,
-	0x5f, 0x70, 0x6c, 0x93, 0x9c, 0xa6, 0x14, 0x07, 0x02, 0xfd, 0x03, 0x30, 0xca, 0x95, 0xe0, 0xe8,
-	0x25, 0x78, 0x51, 0x32, 0x89, 0x5d, 0x8b, 0xf4, 0x54, 0xca, 0x6b, 0xda, 0xcc, 0x2a, 0x71, 0xdf,
-	0x00, 0x15, 0x20, 0x74, 0xa8, 0xb0, 0x59, 0x97, 0xf8, 0xc4, 0x51, 0x13, 0xa4, 0xcd, 0x98, 0x24,
-	0x98, 0x9f, 0x7a, 0x5d, 0xe2, 0x49, 0xe6, 0xef, 0xe4, 0x52, 0x4a, 0x7d, 0x20, 0x40, 0x57, 0xe0,
-	0x8c, 0xd8, 0xc6, 0x0e, 0x7b, 0x37, 0x37, 0xad, 0x54, 0xd1, 0x1b, 0xba, 0x01, 0xcf, 0x73, 0x4a,
-	0x2d, 0x87, 0x48, 0x62, 0x4b, 0xe2, 0xe4, 0xd2, 0x4a, 0x3b, 0xc7, 0x29, 0x5d, 0x8f, 0x44, 0xfa,
-	0x4f, 0x53, 0xf0, 0x62, 0xa9, 0x56, 0xed, 0x47, 0x12, 0x00, 0x90, 0x48, 0x16, 0x0c, 0x24, 0xdb,
-	0x87, 0x47, 0x8b, 0xc1, 0xd3, 0x81, 0x57, 0x31, 0xa7, 0xfd, 0x2c, 0x2d, 0xea, 0x35, 0x99, 0xe5,
-	0x93, 0x87, 0x1d, 0x22, 0x64, 0x2e, 0xb5, 0x98, 0x5a, 0xca, 0xae, 0x16, 0x8b, 0x49, 0xc6, 0xf6,
-	0xc8, 0x50, 0x8c, 0x01, 0x57, 0xf5, 0x9a, 0xcc, 0x0c, 0xad, 0xd6, 0xe0, 0x6f, 0xfe, 0xf1, 0x38,
-	0x95, 0x7e, 0x04, 0xb4, 0x1c, 0x30, 0xaf, 0xe0, 0x91, 0x63, 0xd0, 0x26, 0x9c, 0x75, 0x58, 0x1b,
-	0x53, 0x4f, 0xe4, 0xa6, 0x17, 0x53, 0x4b, 0x99, 0xb5, 0x57, 0x03, 0xa3, 0xcc, 0x23, 0x30, 0xa3,
-	0x4f, 0xfb, 0xda, 0x36, 0x08, 0xde, 0xe0, 0x23, 0x30, 0xab, 0xa7, 0xfd, 0x54, 0x6e, 0x57, 0x8b,
-	0x2b, 0xe7, 0x41, 0xcf, 0xff, 0x7c, 0x3a, 0x36, 0x53, 0xcf, 0x1f, 0xba, 0x0e, 0xa1, 0x90, 0xd8,
-	0x97, 0x56, 0xc0, 0x69, 0x05, 0x5c, 0xc6, 0xcc, 0x28, 0x49, 0x83, 0xb6, 0x09, 0xba, 0x0a, 0xcf,
-	0x11, 0xcf, 0x09, 0x95, 0x33, 0x4a, 0x39, 0x4b, 0x3c, 0x47, 0xa9, 0xee, 0xc2, 0x6c, 0x54, 0xb2,
-	0x58, 0x92, 0x56, 0xb0, 0x5e, 0xb3, 0x0a, 0x80, 0x2f, 0x1c, 0x0a, 0x40, 0xad, 0x5a, 0xa9, 0x95,
-	0xa3, 0xc1, 0xe6, 0x05, 0x65, 0xdc, 0x7b, 0xd5, 0xb7, 0x61, 0xb6, 0xfe, 0x2e, 0x6e, 0xb5, 0x88,
-	0x5f, 0xe7, 0xc4, 0x3e, 0x11, 0x3d, 0xd1, 0x8b, 0x07, 0x30, 0xa5, 0x14, 0x4c, 0x70, 0x44, 0xc6,
-	0xfa, 0xad, 0xe4, 0x4c, 0x82, 0x07, 0xf4, 0x11, 0xa1, 0xc4, 0x12, 0x9c, 0xd8, 0xd1, 0x8c, 0x73,
-	0xe2, 0x60, 0x94, 0xbe, 0x07, 0xe0, 0xa5, 0x18, 0x7d, 0x6a, 0xeb, 0x1b, 0x27, 0x23, 0xd0, 0x0b,
-	0xf0, 0x82, 0xcd, 0x5c, 0x17, 0x73, 0x41, 0x1c, 0xab, 0xe3, 0xbb, 0x8a, 0xe3, 0x19, 0xf3, 0x7c,
-	0x5f, 0xf8, 0x86, 0xef, 0x06, 0x34, 0x6f, 0x13, 0xb9, 0xcd, 0x1c, 0x45, 0xf3, 0x8c, 0x19, 0xbd,
-	0xe9, 0xbf, 0x02, 0x30, 0x1f, 0x0b, 0xe2, 0x2e, 0xc1, 0xbe, 0x27, 0xeb, 0x0a, 0xe5, 0x4f, 0x3f,
-	0x9a, 0x38, 0xda, 0xe9, 0xc3, 0xd1, 0xae, 0x0f, 0x94, 0x9d, 0xe0, 0xe8, 0x35, 0x08, 0x43, 0xe2,
-	0xb8, 0x54, 0xc8, 0x1c, 0x58, 0x4c, 0x2d, 0xcd, 0xad, 0xde, 0x18, 0x4b, 0x1a, 0x55, 0x0b, 0x19,
-	0x65, 0x74, 0x97, 0x0a, 0xa9, 0x37, 0x86, 0x16, 0x43, 0x70, 0xf4, 0x2a, 0x3c, 0xc7, 0x9d, 0xa6,
-	0x2a, 0x49, 0x95, 0xfd, 0xdc, 0xea, 0x8b, 0x63, 0x9d, 0xd6, 0xd6, 0x37, 0x94, 0xdf, 0x59, 0xee,
-	0x34, 0x83, 0x07, 0xfd, 0xc7, 0xda, 0xe1, 0xf0, 0x0a, 0x1e, 0x80, 0xe5, 0x2a, 0x91, 0x15, 0xba,
-	0x8b, 0x20, 0x3e, 0xef, 0xc6, 0xc6, 0x0d, 0x51, 0x49, 0x1b, 0xa2, 0x12, 0xda, 0x80, 0x97, 0x5c,
-	0x2c, 0xa4, 0xd5, 0xe1, 0xc1, 0x3e, 0x1e, 0xd5, 0x56, 0x4a, 0x05, 0x9c, 0x2f, 0x86, 0x27, 0x4d,
-	0xb1, 0x77, 0xd2, 0x14, 0x1b, 0xbd, 0x93, 0xc6, 0xbc, 0x18, 0x18, 0xbd, 0x11, 0xda, 0xa8, 0xfa,
-	0xbb, 0x09, 0x17, 0x82, 0xbd, 0xa8, 0xbf, 0x3b, 0xf6, 0xc2, 0x0a, 0x57, 0x09, 0x61, 0x4e, 0xab,
-	0x3d, 0x55, 0x14, 0xdc, 0x57, 0x61, 0x7e, 0xc0, 0x22, 0x1e, 0x6a, 0x58, 0xfb, 0xcf, 0x25, 0xec,
-	0x62, 0x15, 0xf0, 0x13, 0x0d, 0x66, 0x63, 0xe8, 0x7c, 0xa6, 0xf6, 0xcf, 0x21, 0x9e, 0x4f, 0x8f,
-	0xe5, 0x79, 0xfa, 0x30, 0x9e, 0xcf, 0x1c, 0xce, 0xf3, 0x6a, 0x12, 0x1d, 0xc1, 0xd1, 0x2b, 0x30,
-	0xad, 0x18, 0x1b, 0x91, 0xf1, 0x08, 0x0c, 0x0f, 0xc7, 0xeb, 0x3f, 0xd3, 0xe0, 0xe7, 0xee, 0x10,
-	0xd9, 0x60, 0xfc, 0xf4, 0x07, 0xd6, 0x5b, 0x8a, 0x24, 0x84, 0x5b, 0xa2, 0xd3, 0x6e, 0x63, 0x7f,
-	0xc7, 0x6a, 0x52, 0x57, 0x12, 0x3f, 0xe2, 0xdb, 0x20, 0xd6, 0xf1, 0xee, 0x2a, 0x8c, 0xab, 0x1e,
-	0x9a, 0x6d, 0x28, 0x2b, 0x45, 0x2a, 0xc2, 0x13, 0x32, 0xf4, 0x4d, 0x78, 0x41, 0x32, 0x6e, 0x6d,
-	0xed, 0x58, 0x6d, 0x22, 0x7d, 0x6a, 0x2b, 0x6c, 0xb3, 0xab, 0xb7, 0x26, 0xba, 0x2e, 0xd9, 0x92,
-	0x76, 0xa9, 0xdc, 0xb9, 0xa7, 0xcc, 0x1a, 0x3b, 0x9c, 0x98, 0x73, 0x92, 0xf1, 0xb5, 0x48, 0x80,
-	0xae, 0xc3, 0x69, 0xc9, 0xf8, 0x3b, 0x6a, 0x35, 0x2e, 0xac, 0x65, 0x02, 0xd0, 0xa7, 0x97, 0xb5,
-	0x1c, 0x34, 0x95, 0x58, 0xff, 0xde, 0x48, 0x90, 0x04, 0x47, 0x04, 0xc2, 0x20, 0x20, 0x15, 0xaa,
-	0x88, 0xb6, 0x97, 0x9b, 0xc7, 0x8c, 0x46, 0xac, 0x2d, 0xf4, 0x8f, 0xcd, 0xf8, 0x72, 0x67, 0x24,
-	0xe3, 0x25, 0xe5, 0x58, 0xff, 0x75, 0xd0, 0x0b, 0x8d, 0xb0, 0x44, 0xb7, 0x61, 0xb8, 0x53, 0x29,
-	0xa2, 0xa9, 0x45, 0x5a, 0xbb, 0xae, 0x5c, 0xf8, 0xa9, 0xa5, 0xdd, 0x73, 0x2a, 0x0d, 0x5f, 0x5b,
-	0x04, 0x91, 0xe8, 0xfd, 0x14, 0x30, 0xcf, 0xa9, 0xf1, 0x01, 0x07, 0x5f, 0xee, 0x73, 0x50, 0x53,
-	0x28, 0x5e, 0x1d, 0x88, 0xfb, 0x75, 0x29, 0xf9, 0x3d, 0x35, 0xa0, 0x4f, 0xcf, 0x15, 0x78, 0x39,
-	0x81, 0xbf, 0xd5, 0xc5, 0x6e, 0x87, 0x44, 0xbd, 0xd3, 0x7c, 0x0c, 0xd0, 0x07, 0x81, 0x5c, 0x7f,
-	0xa4, 0xc1, 0x2b, 0x21, 0x6e, 0x75, 0xe2, 0x09, 0x2a, 0x69, 0x97, 0xac, 0x63, 0x79, 0xc2, 0xf3,
-	0x63, 0x73, 0xf0, 0xc0, 0x3d, 0xbb, 0xbe, 0x64, 0xb8, 0xbb, 0x98, 0x3e, 0x79, 0x77, 0x31, 0x89,
-	0x4b, 0xdd, 0xd1, 0x98, 0x08, 0x8e, 0xde, 0x84, 0x28, 0x40, 0x57, 0xf4, 0xe4, 0x96, 0x83, 0x25,
-	0x8e, 0x48, 0x35, 0xb6, 0x7a, 0x12, 0x9e, 0xca, 0xac, 0xe3, 0x49, 0xb5, 0x18, 0x09, 0xb1, 0xfe,
-	0x0b, 0x00, 0x17, 0xee, 0x10, 0x59, 0xaa, 0x55, 0xcb, 0xd8, 0x75, 0xa3, 0xba, 0xfa, 0x3f, 0x2d,
-	0x74, 0xfd, 0x97, 0x23, 0x83, 0x15, 0x1c, 0x3d, 0x0f, 0xe7, 0xc2, 0xe6, 0xdf, 0xc6, 0xae, 0x1b,
-	0x36, 0xfe, 0xd3, 0x26, 0x54, 0xa2, 0x60, 0xa4, 0x40, 0x12, 0xe6, 0xa3, 0x3d, 0xde, 0xb2, 0x03,
-	0x24, 0x2c, 0x4e, 0x7c, 0xcb, 0x17, 0xdc, 0xb2, 0x99, 0x13, 0x64, 0x11, 0x80, 0xf9, 0x95, 0x71,
-	0x11, 0x46, 0xfb, 0xb8, 0x82, 0xb1, 0x46, 0x7c, 0x93, 0x08, 0xce, 0x3c, 0x41, 0xca, 0x2e, 0x16,
-	0xc2, 0xbc, 0xe2, 0x0f, 0x68, 0x05, 0x2f, 0x33, 0x87, 0xe8, 0xbb, 0x00, 0x5e, 0x1b, 0x67, 0x88,
-	0xbe, 0x06, 0xb3, 0xbd, 0x20, 0x2c, 0x3b, 0x90, 0xa8, 0xd0, 0xb3, 0x43, 0x6d, 0x43, 0x50, 0x74,
-	0x7d, 0x4b, 0xe6, 0x44, 0xd3, 0x9e, 0xf7, 0xc3, 0x79, 0x42, 0x5f, 0x0b, 0x30, 0xad, 0x52, 0x8b,
-	0xae, 0x34, 0xe1, 0x8b, 0xfe, 0x7d, 0x00, 0xd1, 0x30, 0x11, 0xd0, 0x26, 0xbc, 0x9c, 0x24, 0x94,
-	0x62, 0x70, 0x34, 0xfb, 0x17, 0x0f, 0x23, 0x78, 0xc2, 0x91, 0xda, 0x2e, 0x2f, 0x89, 0x41, 0xd1,
-	0x21, 0x71, 0xfc, 0x0b, 0x40, 0x34, 0xbc, 0xca, 0xf1, 0xf2, 0x05, 0xff, 0xd3, 0x6b, 0x85, 0x36,
-	0xee, 0x5a, 0x91, 0x9a, 0x74, 0xad, 0x38, 0x45, 0xe1, 0x2f, 0xfb, 0xf0, 0xb9, 0x43, 0x0e, 0x1b,
-	0x54, 0x84, 0xcb, 0xa5, 0x72, 0xa3, 0xfa, 0xa0, 0xda, 0xd8, 0xb4, 0xee, 0x55, 0x1a, 0x66, 0xb5,
-	0x6c, 0x35, 0x36, 0x6b, 0x15, 0xab, 0x5e, 0x29, 0x5b, 0x95, 0x07, 0x95, 0xfb, 0x8d, 0xba, 0x55,
-	0xab, 0x98, 0xe5, 0xca, 0xfd, 0x46, 0xe9, 0x4e, 0x65, 0x7e, 0x0a, 0xbd, 0x04, 0x5f, 0x18, 0x39,
-	0xde, 0xac, 0x7c, 0x23, 0x3e, 0x10, 0xac, 0xfe, 0x7b, 0x1e, 0x66, 0xd5, 0x21, 0x51, 0x56, 0xdf,
-	0x32, 0x4a, 0xb5, 0x2a, 0xfa, 0x03, 0x80, 0x17, 0xc3, 0xda, 0x39, 0xb8, 0x0a, 0x7f, 0x69, 0x52,
-	0x4d, 0xc6, 0x4e, 0xfe, 0xfc, 0xd1, 0x07, 0x0b, 0xae, 0x3b, 0x1f, 0x7d, 0xa0, 0x81, 0xfd, 0xdf,
-	0xe5, 0x2e, 0x77, 0x89, 0x58, 0xa1, 0x6c, 0xa5, 0x45, 0x3c, 0xe2, 0x63, 0x77, 0xc5, 0x27, 0xd8,
-	0xd9, 0xfb, 0xd3, 0x5f, 0x7f, 0xa4, 0x95, 0x51, 0x29, 0xfa, 0xea, 0x62, 0xf4, 0x77, 0x15, 0x61,
-	0x7c, 0xb7, 0xff, 0xfc, 0x5e, 0xe2, 0x03, 0x4d, 0xa4, 0x79, 0xcf, 0x88, 0xb7, 0x6e, 0x02, 0x3d,
-	0x01, 0x30, 0x9b, 0xcc, 0x09, 0x2d, 0x1f, 0x31, 0xca, 0x20, 0xa3, 0x23, 0x8f, 0x15, 0x5c, 0x6f,
-	0x4e, 0x4a, 0xa8, 0xa2, 0xbf, 0x76, 0xda, 0x84, 0x6e, 0x83, 0x65, 0xf4, 0x67, 0x00, 0x2f, 0x25,
-	0x53, 0xaa, 0xad, 0x6f, 0xa0, 0x95, 0x23, 0x46, 0x1a, 0x5e, 0x0a, 0xf3, 0xc7, 0x19, 0x2e, 0xb8,
-	0xde, 0x9a, 0x94, 0xdb, 0x06, 0x5a, 0x3f, 0x6d, 0x6e, 0x06, 0x77, 0x9a, 0xe8, 0x3f, 0x00, 0xe6,
-	0x93, 0xc9, 0xc5, 0x6f, 0x38, 0xe8, 0xcb, 0x47, 0x0c, 0x7b, 0xe0, 0xd6, 0x99, 0x3f, 0x91, 0x9d,
-	0xe0, 0xfa, 0xc3, 0x49, 0x79, 0xd7, 0xd0, 0xfd, 0x53, 0xe7, 0x9d, 0xb8, 0xb0, 0xa1, 0xdf, 0x86,
-	0x8c, 0x8d, 0xdd, 0x6a, 0xc6, 0x33, 0x36, 0xf9, 0x41, 0x22, 0xbf, 0xd0, 0xbb, 0x9d, 0x61, 0x4e,
-	0xd5, 0xa1, 0xb0, 0xc6, 0x9c, 0x9d, 0x4f, 0x25, 0x0f, 0x61, 0xc4, 0x6f, 0x6a, 0xe8, 0x6f, 0xd1,
-	0x49, 0x3c, 0xf8, 0x25, 0x0e, 0x8d, 0x6f, 0x73, 0x47, 0x7c, 0x03, 0xcc, 0x1f, 0xd3, 0x42, 0x70,
-	0xfd, 0xed, 0x49, 0xf9, 0x56, 0xd1, 0x9d, 0x33, 0xc8, 0x57, 0xe5, 0xf3, 0x4f, 0x00, 0xd1, 0x70,
-	0x93, 0x8f, 0x5e, 0x1e, 0x17, 0xf4, 0xc8, 0x9b, 0x53, 0xfe, 0xb8, 0x26, 0x82, 0xeb, 0xdf, 0x99,
-	0x94, 0xe8, 0xa6, 0xde, 0x38, 0x83, 0x44, 0xc3, 0x13, 0xd9, 0x50, 0x57, 0x96, 0xe0, 0x90, 0x22,
-	0xc1, 0x46, 0xb4, 0xa7, 0xc1, 0xcb, 0x23, 0x3a, 0x52, 0xb4, 0x3a, 0x39, 0x8d, 0xc1, 0xb6, 0x3e,
-	0x7f, 0x6c, 0x1b, 0xc1, 0xf5, 0x3d, 0x30, 0x29, 0x79, 0xac, 0xbf, 0x79, 0xb6, 0xc9, 0x27, 0x3b,
-	0xa2, 0x00, 0x84, 0x5d, 0xad, 0xb7, 0x1b, 0xc7, 0x1a, 0xce, 0xf1, 0x1c, 0x1f, 0xd5, 0x4c, 0xe7,
-	0x8f, 0x69, 0x21, 0xb8, 0xfe, 0x83, 0x89, 0xe9, 0x13, 0xfd, 0xad, 0xb3, 0x4b, 0x5f, 0xf5, 0xcd,
-	0xc1, 0x0d, 0xce, 0x8f, 0xba, 0x4c, 0xd5, 0x93, 0xde, 0x06, 0xcb, 0x79, 0xe3, 0xf1, 0x87, 0x20,
-	0xf5, 0xc7, 0x0f, 0xc1, 0x8d, 0x31, 0x19, 0x7c, 0x7d, 0xeb, 0x6d, 0x62, 0xcb, 0xbd, 0xdf, 0xe7,
-	0xb4, 0x9b, 0x60, 0xed, 0x87, 0xe0, 0xc9, 0xd3, 0xc2, 0xd4, 0xc7, 0x4f, 0x0b, 0x53, 0x9f, 0x3c,
-	0x2d, 0x80, 0xdd, 0xfd, 0x02, 0xf8, 0xf9, 0x7e, 0x01, 0x7c, 0xb4, 0x5f, 0x00, 0x4f, 0xf6, 0x0b,
-	0xe0, 0x2f, 0xfb, 0x05, 0xf0, 0xf7, 0xfd, 0xc2, 0xd4, 0x27, 0xfb, 0x05, 0xf0, 0xfe, 0xb3, 0xc2,
-	0xd4, 0xe3, 0x67, 0x05, 0xf0, 0xe4, 0x59, 0x61, 0xea, 0xe3, 0x67, 0x85, 0xa9, 0x6f, 0xd5, 0x5a,
-	0x8c, 0xbf, 0xd3, 0x2a, 0x76, 0x59, 0xd0, 0x1b, 0xfa, 0xb8, 0xd8, 0x11, 0x86, 0x7a, 0x68, 0x32,
-	0xbf, 0xbd, 0xc2, 0x7d, 0xd6, 0xa5, 0x0e, 0xf1, 0x57, 0x7a, 0x6a, 0x83, 0x6f, 0xb5, 0x98, 0x41,
-	0xbe, 0x2d, 0xa3, 0x5f, 0x1e, 0x46, 0xfc, 0xb0, 0xb3, 0x35, 0xa3, 0x3e, 0x63, 0xdd, 0xfa, 0x6f,
-	0x00, 0x00, 0x00, 0xff, 0xff, 0xd7, 0x0f, 0x46, 0x5b, 0xfd, 0x19, 0x00, 0x00,
+	// 2731 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xd4, 0x1a, 0x4b, 0x6c, 0xe3, 0xc6,
+	0xd5, 0xa3, 0x8f, 0x6d, 0x8d, 0x6c, 0xad, 0x76, 0xec, 0x38, 0x5a, 0x65, 0xa3, 0x38, 0x4c, 0xda,
+	0x6c, 0xdc, 0x58, 0x4a, 0x9c, 0x22, 0x09, 0x72, 0x68, 0xa2, 0x0f, 0x6d, 0x2b, 0xb5, 0x25, 0x85,
+	0xa2, 0x37, 0x71, 0x9b, 0x82, 0xa1, 0xc5, 0xb1, 0xcc, 0x2c, 0x25, 0xce, 0x72, 0x46, 0x4a, 0x9c,
+	0x22, 0xc5, 0x62, 0xd1, 0x0f, 0x10, 0xa0, 0x40, 0xb0, 0xbd, 0xb6, 0xa7, 0x5e, 0xd2, 0x16, 0xbd,
+	0xf5, 0x10, 0x74, 0x2f, 0x7b, 0x29, 0x1a, 0xf4, 0x50, 0x6c, 0xdb, 0x4b, 0xd0, 0x53, 0xd7, 0xdb,
+	0x16, 0xed, 0x2d, 0x40, 0x81, 0xf6, 0xd8, 0x82, 0x43, 0x4a, 0x26, 0x29, 0x59, 0x92, 0xbd, 0x9b,
+	0x20, 0xbd, 0xd8, 0x9c, 0xf7, 0x9b, 0xf7, 0x1e, 0xdf, 0x7b, 0xf3, 0xe6, 0x51, 0xf0, 0xf9, 0x2e,
+	0xa6, 0x59, 0xdd, 0xcc, 0xd1, 0xc6, 0x01, 0x6e, 0xa9, 0xb9, 0xae, 0x6e, 0xb1, 0x8e, 0x6a, 0x28,
+	0x07, 0x26, 0x65, 0x39, 0xd2, 0xd9, 0x33, 0xf4, 0x86, 0xa2, 0x12, 0x1d, 0x13, 0xa5, 0xd1, 0xa1,
+	0xcc, 0x6c, 0xa9, 0x44, 0xcf, 0x12, 0xcb, 0x64, 0x26, 0x4a, 0x3b, 0x8c, 0x59, 0x87, 0x31, 0xeb,
+	0x65, 0x4c, 0xaf, 0x36, 0x75, 0x76, 0xd0, 0xd9, 0xcb, 0x36, 0xcc, 0x56, 0xae, 0x69, 0x36, 0xcd,
+	0x1c, 0x67, 0xd9, 0xeb, 0xec, 0xf3, 0x15, 0x5f, 0xf0, 0x27, 0x47, 0x54, 0xfa, 0x62, 0xd3, 0x34,
+	0x9b, 0x06, 0xce, 0xa9, 0x44, 0xcf, 0xa9, 0xed, 0xb6, 0xc9, 0x54, 0xa6, 0x9b, 0x6d, 0xea, 0x62,
+	0x2f, 0x78, 0xb0, 0x07, 0x8c, 0x91, 0x3d, 0x53, 0x3b, 0x74, 0x51, 0x8f, 0xb8, 0xa8, 0xbe, 0x78,
+	0xa6, 0xb7, 0x30, 0x65, 0x6a, 0x8b, 0xb8, 0x04, 0x82, 0xdf, 0x3a, 0x95, 0x10, 0x85, 0x1d, 0x12,
+	0x9c, 0xb3, 0xff, 0xf4, 0xe4, 0x3f, 0xe4, 0xa7, 0x31, 0x89, 0x6f, 0x73, 0x3f, 0xd2, 0xcb, 0x77,
+	0x31, 0xe0, 0x39, 0xd5, 0xd0, 0x35, 0x95, 0xe1, 0xe1, 0x3b, 0x77, 0x31, 0xc5, 0xed, 0x6e, 0x40,
+	0xf8, 0x72, 0xd0, 0xf7, 0xf8, 0x6d, 0xc5, 0x47, 0x21, 0x6c, 0xc2, 0xc5, 0x3c, 0xd1, 0xc5, 0xb6,
+	0x46, 0x4c, 0xbd, 0xcd, 0x68, 0x9d, 0xa9, 0x8c, 0x4a, 0xf8, 0x2a, 0x42, 0x30, 0xd2, 0x56, 0x5b,
+	0x38, 0x05, 0x96, 0xc1, 0xa5, 0x98, 0xc4, 0x9f, 0xd1, 0x45, 0x18, 0xb3, 0xff, 0x53, 0xa2, 0x36,
+	0x70, 0x2a, 0xc4, 0x11, 0xc7, 0x00, 0xe1, 0x23, 0x30, 0x4c, 0x14, 0x25, 0xe8, 0x09, 0x78, 0x8e,
+	0x99, 0x4c, 0x35, 0x14, 0xdc, 0x43, 0x71, 0xa9, 0x51, 0x29, 0xc1, 0xc1, 0x7d, 0x06, 0x94, 0x81,
+	0x50, 0xd3, 0x69, 0xc3, 0xec, 0x62, 0x0b, 0x6b, 0x7c, 0x83, 0xa8, 0xe4, 0x81, 0xd8, 0xfb, 0xeb,
+	0xed, 0x2e, 0x6e, 0x33, 0xd3, 0x3a, 0x4c, 0x85, 0x39, 0xfa, 0x18, 0x80, 0x96, 0xe0, 0x34, 0x3d,
+	0x50, 0x35, 0xf3, 0xed, 0x54, 0x84, 0xa3, 0xdc, 0x15, 0x7a, 0x14, 0xce, 0x11, 0x5d, 0x57, 0x34,
+	0xcc, 0x70, 0x83, 0x61, 0x2d, 0x15, 0xe5, 0xd8, 0x38, 0xd1, 0xf5, 0x92, 0x0b, 0x12, 0x7e, 0x12,
+	0x86, 0xe7, 0xf2, 0xb5, 0x72, 0x5f, 0x13, 0xdb, 0x01, 0x3e, 0x63, 0x41, 0xc0, 0xd8, 0xbe, 0x7b,
+	0x42, 0x1e, 0xf7, 0x74, 0xe0, 0x05, 0x95, 0xe8, 0x7d, 0x2b, 0x15, 0xbd, 0xbd, 0x6f, 0x2a, 0x16,
+	0xbe, 0xda, 0xc1, 0x94, 0xa5, 0xc2, 0xcb, 0xe1, 0x4b, 0x89, 0xb5, 0x6c, 0xd6, 0x1f, 0xd3, 0xbd,
+	0x70, 0xc9, 0x7a, 0x1c, 0x57, 0x6e, 0xef, 0x9b, 0x92, 0xc3, 0x55, 0x80, 0xbf, 0xfe, 0xe7, 0xad,
+	0x70, 0xf4, 0x06, 0x08, 0xa5, 0x80, 0xb4, 0xa4, 0x0e, 0xa5, 0x41, 0xbb, 0x70, 0x46, 0x33, 0x5b,
+	0xaa, 0xde, 0xa6, 0xa9, 0xc8, 0x72, 0xf8, 0x52, 0xac, 0xf0, 0x92, 0xcd, 0x14, 0xbb, 0x01, 0xa6,
+	0x85, 0x88, 0x15, 0x3a, 0x00, 0xf6, 0x0a, 0xde, 0x00, 0x33, 0x42, 0xd4, 0x0a, 0xa7, 0xae, 0x85,
+	0xbc, 0xc8, 0x24, 0xe8, 0xc9, 0x4f, 0x46, 0x3d, 0x3b, 0xf5, 0xe4, 0xa1, 0x87, 0x21, 0xa4, 0x4c,
+	0xb5, 0x98, 0x62, 0x47, 0x3d, 0x77, 0x5c, 0x4c, 0x8a, 0x71, 0x88, 0xac, 0xb7, 0x30, 0xba, 0x00,
+	0x67, 0x71, 0x5b, 0x73, 0x90, 0xd3, 0x1c, 0x39, 0x83, 0xdb, 0x1a, 0x47, 0x6d, 0xc1, 0x84, 0x9b,
+	0xd4, 0x2a, 0xc3, 0x4d, 0xfb, 0x7d, 0xcd, 0x70, 0x07, 0x7c, 0xe9, 0x44, 0x07, 0xd4, 0xca, 0x62,
+	0xad, 0xe8, 0x12, 0x4b, 0xf3, 0x9c, 0xb9, 0xb7, 0x14, 0x0e, 0x60, 0xa2, 0xfe, 0xb6, 0xda, 0x6c,
+	0x62, 0xab, 0x4e, 0x70, 0xe3, 0x4c, 0xe1, 0x89, 0x1e, 0x3f, 0x76, 0x53, 0x98, 0xbb, 0x09, 0x0e,
+	0xb1, 0x58, 0x78, 0xd6, 0xbf, 0x13, 0x25, 0x76, 0xf8, 0x50, 0x07, 0xa2, 0x50, 0x82, 0x1b, 0xee,
+	0x8e, 0x71, 0x7a, 0x4c, 0x25, 0x5c, 0x07, 0xf0, 0xbc, 0x27, 0x7c, 0x6a, 0xa5, 0xf5, 0xb3, 0x05,
+	0xd0, 0x63, 0x70, 0xbe, 0x61, 0x1a, 0x86, 0x4a, 0x28, 0xd6, 0x94, 0x8e, 0x65, 0xf0, 0x18, 0x8f,
+	0x49, 0x73, 0x7d, 0xe0, 0x8e, 0x65, 0xd8, 0x61, 0xde, 0xc2, 0xec, 0xc0, 0xd4, 0x78, 0x98, 0xc7,
+	0x24, 0x77, 0x25, 0x7c, 0x18, 0x82, 0x69, 0x8f, 0x12, 0x5b, 0x58, 0xb5, 0xda, 0xac, 0xce, 0xbd,
+	0xfc, 0xf9, 0x6b, 0xe3, 0xf5, 0x76, 0xf4, 0x44, 0x6f, 0x8f, 0xce, 0x98, 0xe9, 0xcf, 0x2a, 0x63,
+	0x84, 0x7a, 0x20, 0xdb, 0x29, 0x41, 0x2f, 0x43, 0xe8, 0xc4, 0xab, 0xa1, 0x53, 0x96, 0x02, 0xcb,
+	0xe1, 0x4b, 0xf1, 0xb5, 0x47, 0x47, 0xc6, 0x2a, 0x17, 0x18, 0xe3, 0x4c, 0x5b, 0x3a, 0x65, 0x82,
+	0x3c, 0x10, 0x03, 0x94, 0xa0, 0x97, 0xe0, 0x2c, 0xd1, 0xf6, 0xb9, 0x5d, 0xdc, 0xe9, 0xf1, 0xb5,
+	0xc7, 0x47, 0x0a, 0xad, 0x95, 0xd6, 0xb9, 0xdc, 0x19, 0xa2, 0xed, 0xdb, 0x0f, 0xc2, 0xad, 0xf0,
+	0xc9, 0x6f, 0x95, 0x12, 0xb4, 0x03, 0xcf, 0x1f, 0xd7, 0x47, 0xc5, 0x11, 0xc9, 0x53, 0x31, 0xbe,
+	0x76, 0xe9, 0xa4, 0x8d, 0x4a, 0x7d, 0x06, 0x57, 0x4e, 0x52, 0x0b, 0x40, 0xd0, 0x73, 0xf0, 0x41,
+	0x8f, 0x58, 0x93, 0xe0, 0xb6, 0xfd, 0x9a, 0x78, 0xf8, 0x3b, 0x11, 0xf2, 0xc0, 0x31, 0xba, 0xea,
+	0x60, 0xed, 0x44, 0xb0, 0xb3, 0x9e, 0xe2, 0x36, 0xd5, 0x99, 0xde, 0xc5, 0x8a, 0xa6, 0x32, 0x95,
+	0x67, 0x7d, 0xfc, 0xe4, 0xac, 0xaf, 0xf7, 0xa8, 0x4b, 0x2a, 0x53, 0xa5, 0x79, 0xea, 0x5d, 0xa2,
+	0xaf, 0xc2, 0xa5, 0x7e, 0x75, 0xf7, 0x2b, 0xe1, 0x54, 0xa2, 0xc5, 0x3e, 0xd6, 0xab, 0x83, 0xd7,
+	0xe5, 0xb3, 0x67, 0x70, 0x39, 0xaa, 0xc0, 0x84, 0xda, 0x61, 0x07, 0xb8, 0xcd, 0xf4, 0x06, 0x6f,
+	0x13, 0x52, 0x31, 0x2e, 0xe6, 0xcb, 0x27, 0x8a, 0xf1, 0x51, 0x4b, 0x01, 0x6e, 0xe1, 0xc7, 0x21,
+	0x98, 0xf0, 0xbc, 0xc2, 0xff, 0xab, 0xb3, 0x65, 0xa0, 0x06, 0x44, 0x46, 0xd6, 0x80, 0xe8, 0x49,
+	0x35, 0x60, 0xfa, 0xe4, 0x8a, 0x5b, 0xf6, 0x7b, 0x87, 0x12, 0xf4, 0x3c, 0x8c, 0xf2, 0xb4, 0x72,
+	0x33, 0x66, 0x82, 0x34, 0x74, 0xe8, 0x85, 0x9f, 0x86, 0xe0, 0x03, 0x1b, 0x98, 0xc9, 0x26, 0xb9,
+	0xf7, 0xc3, 0xfc, 0x4d, 0xb8, 0xe8, 0x14, 0x04, 0xda, 0x69, 0xb5, 0x54, 0xeb, 0x50, 0xd9, 0xd7,
+	0x0d, 0x86, 0x2d, 0x5e, 0x04, 0xe3, 0x03, 0xbe, 0xf6, 0xf6, 0xa6, 0x8e, 0x5e, 0x75, 0x87, 0x6d,
+	0x9d, 0x73, 0x49, 0x88, 0xcb, 0xf2, 0xc1, 0xd0, 0x6b, 0x70, 0x9e, 0x99, 0x44, 0xd9, 0x3b, 0x54,
+	0x5a, 0x98, 0x59, 0x7a, 0x83, 0xfb, 0x36, 0xb1, 0xf6, 0xec, 0x58, 0xd1, 0xf9, 0x06, 0xd3, 0xbb,
+	0x3a, 0x3b, 0xdc, 0xe6, 0x6c, 0xf2, 0x21, 0xc1, 0x52, 0x9c, 0x99, 0xa4, 0xe0, 0x02, 0xd0, 0xc3,
+	0x30, 0xc2, 0x4c, 0x72, 0x85, 0xbf, 0x8d, 0xf9, 0x42, 0xcc, 0x76, 0x7a, 0x64, 0x25, 0x94, 0x82,
+	0x12, 0x07, 0x0b, 0xdf, 0x19, 0xea, 0x24, 0x4a, 0x10, 0x86, 0xd0, 0x56, 0x88, 0xab, 0x4a, 0xdd,
+	0x1a, 0xf8, 0xf4, 0x29, 0xb5, 0xa1, 0x85, 0xc5, 0x7e, 0x4b, 0xe1, 0x7d, 0xdd, 0x31, 0x66, 0x92,
+	0x3c, 0x17, 0x2c, 0xfc, 0xca, 0xee, 0x13, 0x87, 0x70, 0xa2, 0x17, 0xa1, 0x53, 0x4e, 0x79, 0xa0,
+	0xf1, 0x97, 0x54, 0x78, 0x98, 0x8b, 0xb0, 0xc2, 0x97, 0xae, 0xcd, 0x72, 0x33, 0xac, 0xd0, 0x32,
+	0x70, 0x41, 0x1f, 0x84, 0x81, 0x34, 0xcb, 0xe9, 0xed, 0x18, 0x7c, 0xa6, 0x1f, 0x83, 0x21, 0xee,
+	0xc5, 0x0b, 0x01, 0xbd, 0x37, 0x19, 0x23, 0xdb, 0x9c, 0xa0, 0x1f, 0x9e, 0xab, 0x70, 0xc1, 0xe7,
+	0x7f, 0xa5, 0xab, 0x1a, 0x1d, 0xec, 0xf6, 0x95, 0x49, 0x8f, 0x43, 0x2f, 0xdb, 0x70, 0xe1, 0x46,
+	0x08, 0x2e, 0x39, 0x7e, 0xf3, 0x17, 0xad, 0x33, 0x45, 0xd7, 0x6e, 0xb0, 0x19, 0xb9, 0x7f, 0x3d,
+	0xdb, 0x60, 0xe7, 0x15, 0x39, 0x7b, 0xe7, 0x35, 0x2e, 0x96, 0xba, 0xc3, 0x7d, 0x42, 0x09, 0x7a,
+	0x03, 0x22, 0xdb, 0xbb, 0x81, 0xe3, 0xc0, 0x09, 0xaa, 0x91, 0xd9, 0xe3, 0x93, 0x54, 0x34, 0x3b,
+	0x6d, 0xc6, 0x5f, 0x86, 0x0f, 0x2c, 0xfc, 0x1c, 0xc0, 0xc5, 0x0d, 0xcc, 0xf2, 0xb5, 0x72, 0x51,
+	0x35, 0x0c, 0x37, 0xaf, 0xbe, 0xa0, 0x89, 0x2e, 0xfc, 0x72, 0xa8, 0xb2, 0x94, 0xa0, 0x47, 0x60,
+	0xdc, 0xb9, 0x18, 0x35, 0x54, 0xc3, 0x70, 0x2e, 0x45, 0x11, 0x09, 0x72, 0x90, 0x4d, 0x49, 0x11,
+	0x83, 0x69, 0xb7, 0xc6, 0x2b, 0x0d, 0xdb, 0x13, 0x0a, 0xc1, 0x96, 0x62, 0x51, 0xa2, 0x34, 0x4c,
+	0xcd, 0xb6, 0xc2, 0x76, 0xe6, 0x0b, 0xa3, 0x34, 0x74, 0xeb, 0x38, 0x77, 0x63, 0x0d, 0x5b, 0x12,
+	0xa6, 0xc4, 0x6c, 0x53, 0x5c, 0x34, 0x54, 0x4a, 0xa5, 0x25, 0x2b, 0x80, 0xa5, 0xa4, 0x68, 0x6a,
+	0x58, 0xb8, 0x06, 0xe0, 0xc5, 0x51, 0x8c, 0xe8, 0x15, 0x98, 0xe8, 0x29, 0xa1, 0x34, 0x6c, 0x08,
+	0x57, 0x3d, 0x31, 0x70, 0xd0, 0xda, 0x49, 0xd7, 0xe7, 0x34, 0x35, 0x77, 0xdb, 0x39, 0xcb, 0xd9,
+	0xc7, 0x91, 0xb5, 0x08, 0xa3, 0xdc, 0x34, 0xf7, 0xba, 0xe7, 0x2c, 0x84, 0xef, 0x01, 0x88, 0x06,
+	0x03, 0x01, 0xed, 0xc2, 0x05, 0x7f, 0x40, 0xf1, 0x08, 0x76, 0x77, 0x7f, 0x72, 0xa2, 0x26, 0x83,
+	0x97, 0xcb, 0xf3, 0x34, 0x08, 0x3a, 0x41, 0x8f, 0xff, 0x00, 0x88, 0x06, 0xdf, 0xb2, 0x37, 0x7d,
+	0xc1, 0x67, 0x7a, 0xe5, 0x0a, 0x8d, 0xba, 0x72, 0x85, 0xc7, 0x5d, 0xb9, 0xee, 0x21, 0xf1, 0x85,
+	0x1f, 0x3a, 0x67, 0xe9, 0xe5, 0x8e, 0xd1, 0xc6, 0x96, 0xba, 0xa7, 0x1b, 0x3a, 0xd3, 0x31, 0xfd,
+	0x02, 0x56, 0xbb, 0x39, 0x6f, 0x5f, 0xc4, 0xeb, 0x54, 0x7c, 0xed, 0x89, 0x71, 0x59, 0xeb, 0x92,
+	0x6f, 0x4e, 0x49, 0x71, 0x4f, 0xe7, 0x53, 0x58, 0x80, 0x33, 0x0d, 0xb3, 0xcd, 0xf0, 0x3b, 0x0c,
+	0xcd, 0xde, 0xba, 0x09, 0xa2, 0xb7, 0x6f, 0x82, 0xc8, 0x2b, 0x91, 0xd9, 0x48, 0x32, 0x2a, 0xfc,
+	0x0b, 0xc0, 0xb8, 0x87, 0x13, 0xbd, 0x10, 0xec, 0x8c, 0x9c, 0x03, 0x6b, 0xc1, 0x3d, 0x9d, 0x5c,
+	0x33, 0xb8, 0x05, 0x81, 0x76, 0xe9, 0x67, 0xc0, 0x77, 0x56, 0xc5, 0x0a, 0x1f, 0x70, 0x1b, 0xdf,
+	0x07, 0xd6, 0x0f, 0x80, 0xf4, 0x5d, 0xf0, 0x4d, 0x61, 0x43, 0x94, 0x85, 0xa7, 0x96, 0x85, 0x5a,
+	0xb5, 0xce, 0xff, 0x6f, 0x8a, 0xf9, 0x12, 0x5f, 0xef, 0xf0, 0x65, 0x49, 0xdc, 0x12, 0x65, 0xd1,
+	0x7e, 0xaa, 0xd6, 0xe4, 0x72, 0xb5, 0x52, 0xb7, 0x1f, 0x25, 0x71, 0xa3, 0x5c, 0x97, 0x45, 0xc9,
+	0x21, 0x28, 0xec, 0x6c, 0x70, 0x06, 0xa9, 0x5a, 0x5b, 0x2f, 0x57, 0x1c, 0xe6, 0xbc, 0x5c, 0xdc,
+	0xb4, 0x1f, 0x8a, 0xd5, 0x4a, 0x45, 0x2c, 0x72, 0x49, 0x75, 0x31, 0x2f, 0x39, 0xc0, 0x72, 0xa5,
+	0x24, 0xbe, 0x6e, 0x3f, 0xc8, 0x52, 0xbe, 0x28, 0x0a, 0xdf, 0xea, 0x5f, 0x2a, 0x8d, 0xa1, 0x41,
+	0x40, 0x09, 0xaa, 0xc3, 0x73, 0x5d, 0x3f, 0xd4, 0xad, 0xed, 0x4f, 0x8e, 0x72, 0xbd, 0x57, 0xd0,
+	0xa1, 0x14, 0x94, 0x20, 0xfc, 0x2e, 0x02, 0xe7, 0x7d, 0x24, 0x76, 0x56, 0x32, 0x9d, 0x19, 0xbd,
+	0x38, 0x73, 0x16, 0x28, 0x0d, 0x67, 0xfb, 0x31, 0xee, 0xc4, 0x59, 0x7f, 0x8d, 0xf2, 0xfd, 0x57,
+	0xc8, 0xf3, 0x23, 0x31, 0x3a, 0x16, 0xec, 0xdd, 0x8a, 0x0e, 0xb9, 0xd4, 0x7f, 0xf5, 0xcb, 0x30,
+	0xae, 0x61, 0xda, 0xb0, 0x74, 0x3e, 0x28, 0x73, 0x5b, 0x5e, 0x2f, 0x08, 0x7d, 0x0d, 0x4e, 0x53,
+	0xa6, 0xb2, 0x0e, 0xe5, 0xf1, 0x96, 0x18, 0xb8, 0x1a, 0x0c, 0xec, 0x51, 0xe7, 0xd4, 0x92, 0xcb,
+	0x85, 0xb6, 0x21, 0x72, 0x9e, 0x94, 0xc6, 0x81, 0xda, 0x6e, 0xe2, 0xe3, 0x11, 0x4a, 0x7c, 0x2d,
+	0x9d, 0x75, 0x46, 0x8e, 0xd9, 0xde, 0xc8, 0x31, 0x2b, 0xf7, 0x46, 0x8e, 0x85, 0xf0, 0xed, 0xf7,
+	0x80, 0x94, 0x74, 0x58, 0x8b, 0x9c, 0x93, 0x67, 0x7e, 0x09, 0xce, 0x37, 0x2c, 0xcc, 0x6f, 0x1b,
+	0x8e, 0xa4, 0x99, 0xc9, 0x24, 0xcd, 0xf5, 0xb8, 0xb8, 0x94, 0x6d, 0x88, 0x0c, 0x95, 0x32, 0xc5,
+	0xdc, 0xa3, 0xd8, 0xea, 0x62, 0xb7, 0xc8, 0xcc, 0x4e, 0xa8, 0x94, 0xcd, 0x5a, 0x75, 0x39, 0xb9,
+	0xb8, 0x17, 0x60, 0xc4, 0xd2, 0xe9, 0x15, 0xf7, 0xf2, 0xf4, 0xf8, 0x38, 0x0f, 0x49, 0x3a, 0xbd,
+	0x22, 0x71, 0x0e, 0x54, 0x82, 0xb3, 0xb8, 0xab, 0x6b, 0xb8, 0xdd, 0xc0, 0x29, 0x38, 0xf4, 0x2e,
+	0x3b, 0xc0, 0x2d, 0xba, 0xf4, 0x52, 0x9f, 0x53, 0x50, 0xe1, 0x6c, 0x4f, 0xae, 0x1d, 0x46, 0xb4,
+	0x61, 0x5a, 0x4e, 0x18, 0x85, 0x24, 0x67, 0x81, 0x5e, 0x82, 0x51, 0x03, 0x77, 0xb1, 0xe1, 0xb6,
+	0x8c, 0x4f, 0x4e, 0xa2, 0xe2, 0x96, 0xcd, 0x20, 0x39, 0x7c, 0xc2, 0x2f, 0x00, 0x9c, 0xf3, 0xee,
+	0x8e, 0x36, 0xe1, 0x0c, 0x55, 0x5b, 0xc4, 0xe8, 0x67, 0x43, 0x76, 0x52, 0xc5, 0xeb, 0x9c, 0x4d,
+	0xea, 0xb1, 0xa3, 0x57, 0xe1, 0x7c, 0xcf, 0x12, 0xe7, 0x8c, 0x73, 0x82, 0xf9, 0xa9, 0x49, 0xe5,
+	0xf1, 0x63, 0x6e, 0x0e, 0x7b, 0x56, 0x82, 0x08, 0xd1, 0xe0, 0x8e, 0xe8, 0x01, 0x38, 0x6d, 0xe1,
+	0xab, 0x8a, 0xae, 0xf5, 0x52, 0xcc, 0xc2, 0x57, 0xcb, 0x1a, 0x4a, 0xc1, 0x19, 0x0d, 0x33, 0x55,
+	0x37, 0x28, 0x6f, 0x33, 0x62, 0x52, 0x6f, 0xb9, 0x62, 0xc1, 0x07, 0x4f, 0xb8, 0x85, 0xa0, 0x2c,
+	0x5c, 0xc9, 0x17, 0xe5, 0xf2, 0xe5, 0xb2, 0xbc, 0xab, 0x6c, 0x8b, 0xb2, 0x54, 0x2e, 0x2a, 0xf2,
+	0x6e, 0x4d, 0x54, 0xea, 0x62, 0x51, 0x11, 0x2f, 0x8b, 0x15, 0xb9, 0xae, 0xd4, 0x44, 0xa9, 0x28,
+	0x56, 0xe4, 0xfc, 0x86, 0x98, 0x9c, 0x42, 0x4f, 0xc0, 0xc7, 0x86, 0xd2, 0x4b, 0xe2, 0xab, 0x5e,
+	0x42, 0xb0, 0xf2, 0xae, 0x53, 0x17, 0xfa, 0x2f, 0x00, 0x2d, 0xc0, 0x73, 0x52, 0xb9, 0xfe, 0x75,
+	0x65, 0x4b, 0xbc, 0x2c, 0x6e, 0x29, 0x95, 0x6a, 0xc5, 0x16, 0x87, 0x60, 0xc2, 0x03, 0xdc, 0xaa,
+	0xbe, 0x96, 0x04, 0x01, 0xd8, 0xb6, 0x58, 0x4a, 0x86, 0x02, 0xcc, 0x9b, 0xe5, 0x8d, 0xcd, 0x64,
+	0x18, 0x3d, 0x08, 0x17, 0x3c, 0xc0, 0xa2, 0x54, 0x96, 0xcb, 0xc5, 0xfc, 0x56, 0x32, 0xb2, 0xb2,
+	0x05, 0x93, 0x41, 0xc7, 0xa2, 0x34, 0x5c, 0x12, 0x2f, 0x97, 0x4b, 0x62, 0xa5, 0x28, 0xf6, 0x35,
+	0xde, 0x11, 0xeb, 0x72, 0x3d, 0x39, 0x85, 0x2e, 0xc2, 0x94, 0x1f, 0x77, 0x6c, 0x7d, 0x12, 0xac,
+	0xec, 0xc2, 0xb8, 0xa7, 0xe6, 0xa0, 0x14, 0x5c, 0x2c, 0x56, 0x2b, 0xb2, 0xf8, 0xba, 0xac, 0xe4,
+	0x6b, 0x65, 0x45, 0xac, 0x94, 0x6a, 0xd5, 0x72, 0x45, 0x4e, 0x4e, 0x05, 0x31, 0x85, 0x7c, 0x5d,
+	0xac, 0xe5, 0xe5, 0xcd, 0x24, 0x40, 0x4b, 0x10, 0x79, 0x31, 0xa5, 0xea, 0x76, 0xbe, 0x5c, 0x49,
+	0x86, 0x56, 0xaa, 0x10, 0x1e, 0x97, 0x1a, 0x74, 0x0e, 0xc6, 0xeb, 0x72, 0x5e, 0xde, 0xa9, 0xf7,
+	0xbc, 0x73, 0x0c, 0xa8, 0xd6, 0xc4, 0x4a, 0x12, 0xa0, 0x47, 0xe0, 0x43, 0x2e, 0x40, 0x12, 0xeb,
+	0xd5, 0xad, 0x1d, 0xfb, 0x30, 0x51, 0x8a, 0xd5, 0xca, 0x7a, 0x59, 0xb2, 0xfd, 0x14, 0x5e, 0xbb,
+	0x83, 0x60, 0x82, 0xdf, 0xd9, 0x8a, 0xfc, 0xc3, 0x4c, 0xbe, 0x56, 0x46, 0x7f, 0x00, 0xf0, 0x9c,
+	0xd3, 0xca, 0x1e, 0x4f, 0xed, 0xbf, 0x32, 0xe1, 0x61, 0x6b, 0x37, 0x0f, 0xe9, 0xc9, 0x89, 0x29,
+	0x11, 0xb4, 0x8f, 0x3f, 0x0a, 0x81, 0xa3, 0xdf, 0xa6, 0x16, 0xba, 0x98, 0xae, 0xea, 0xe6, 0x6a,
+	0x13, 0xdb, 0x47, 0x83, 0xb1, 0x6a, 0x61, 0x55, 0xbb, 0xfe, 0xa7, 0xbf, 0xfe, 0x28, 0x54, 0x44,
+	0x79, 0xf7, 0x13, 0x52, 0xae, 0xdf, 0x81, 0xd0, 0xdc, 0xb7, 0xfb, 0xcf, 0xef, 0xf9, 0xbe, 0x36,
+	0xb9, 0x98, 0xf7, 0x72, 0xde, 0x8e, 0x81, 0xa2, 0xdb, 0x00, 0x26, 0xfc, 0x36, 0xa1, 0x95, 0x09,
+	0xb5, 0xb4, 0x2d, 0x9a, 0x98, 0x96, 0x12, 0x61, 0x7f, 0x9c, 0x41, 0xa2, 0xf0, 0xf2, 0xbd, 0x1a,
+	0xf4, 0x22, 0x58, 0x41, 0x7f, 0x06, 0xf0, 0xbc, 0xdf, 0xa4, 0x5a, 0x69, 0x1d, 0xad, 0x4e, 0xa8,
+	0xa9, 0x33, 0xbf, 0x4e, 0x9f, 0x86, 0x9c, 0x12, 0xa1, 0x39, 0xce, 0xb6, 0x75, 0x54, 0xba, 0x57,
+	0xdb, 0x72, 0x44, 0xdb, 0x47, 0xff, 0x05, 0x30, 0xed, 0x37, 0xce, 0x3b, 0x15, 0x45, 0xcf, 0x4d,
+	0xa8, 0x76, 0x60, 0x40, 0x9e, 0x3e, 0x13, 0x1f, 0x25, 0xc2, 0xd5, 0x71, 0x76, 0xd7, 0x50, 0xe5,
+	0x9e, 0xed, 0x36, 0xf8, 0xa6, 0xee, 0x80, 0x17, 0xfd, 0xc6, 0x89, 0x58, 0xcf, 0x87, 0x8a, 0xd1,
+	0x11, 0xeb, 0xff, 0x76, 0x92, 0x5e, 0xec, 0x1d, 0xe6, 0x2a, 0xd1, 0xf9, 0x1d, 0xad, 0x60, 0x6a,
+	0x87, 0x9f, 0x8b, 0x1d, 0x34, 0xe7, 0xfd, 0x94, 0x82, 0xfe, 0xee, 0x5e, 0x8c, 0x83, 0x1f, 0x0d,
+	0xd1, 0xe8, 0xa9, 0xd3, 0x90, 0xcf, 0x95, 0xe9, 0x53, 0x72, 0x50, 0x22, 0xbc, 0x35, 0xce, 0xde,
+	0x32, 0xda, 0xb8, 0x0f, 0xf6, 0x72, 0x7b, 0xfe, 0x0d, 0x20, 0x1a, 0x9c, 0xb9, 0xa1, 0x67, 0x46,
+	0x29, 0x3d, 0x74, 0x90, 0x99, 0x3e, 0x2d, 0x0b, 0x25, 0xc2, 0xbb, 0xe3, 0x0c, 0xdd, 0x15, 0xe4,
+	0xfb, 0x60, 0xa8, 0x73, 0x41, 0xce, 0xf1, 0x09, 0xa2, 0xdd, 0x1a, 0x60, 0xbb, 0x10, 0x5d, 0x0f,
+	0xc1, 0x85, 0x21, 0x03, 0x22, 0xb4, 0x36, 0xde, 0x8c, 0xe0, 0x94, 0x2d, 0x7d, 0x6a, 0x1e, 0x4a,
+	0x84, 0xeb, 0x60, 0x9c, 0xf1, 0xaa, 0xf0, 0xc6, 0xfd, 0x35, 0xde, 0x3f, 0xa0, 0xb0, 0x9d, 0x70,
+	0x2d, 0xd4, 0xab, 0xc6, 0x9e, 0xf9, 0xcf, 0xe8, 0x18, 0x1f, 0x36, 0xdb, 0x4a, 0x9f, 0x92, 0x83,
+	0x12, 0xe1, 0xfb, 0x63, 0xcd, 0xc7, 0xc2, 0x9b, 0xf7, 0xcf, 0x7c, 0x3e, 0xc6, 0x52, 0xf6, 0x0e,
+	0x15, 0xcb, 0x1d, 0xfa, 0xf0, 0x11, 0x91, 0xed, 0x82, 0xbf, 0x39, 0x09, 0x10, 0xb8, 0x48, 0x8e,
+	0x4d, 0x80, 0xc1, 0xe9, 0x43, 0xfa, 0xb4, 0x2c, 0x94, 0x08, 0xfa, 0x38, 0x27, 0x6c, 0x0a, 0xc5,
+	0xb3, 0x38, 0x21, 0x70, 0x7d, 0x7d, 0x11, 0xac, 0xa4, 0x73, 0xb7, 0x6e, 0x82, 0xf0, 0x1f, 0x6f,
+	0x82, 0x47, 0x47, 0x28, 0x59, 0xdd, 0x7b, 0x0b, 0x37, 0xd8, 0xf5, 0xdf, 0xa7, 0x42, 0x4f, 0x83,
+	0xc2, 0xfb, 0xe0, 0xf6, 0x9d, 0xcc, 0xd4, 0x27, 0x77, 0x32, 0x53, 0x9f, 0xde, 0xc9, 0x80, 0x6b,
+	0x47, 0x19, 0xf0, 0xe1, 0x51, 0x06, 0x7c, 0x7c, 0x94, 0x01, 0xb7, 0x8f, 0x32, 0xe0, 0x2f, 0x47,
+	0x19, 0xf0, 0x8f, 0xa3, 0xcc, 0xd4, 0xa7, 0x47, 0x19, 0xf0, 0xc1, 0xdd, 0xcc, 0xd4, 0xad, 0xbb,
+	0x19, 0x70, 0xfb, 0x6e, 0x66, 0xea, 0x93, 0xbb, 0x99, 0xa9, 0x6f, 0xd4, 0x9a, 0x26, 0xb9, 0xd2,
+	0xcc, 0x76, 0x4d, 0x83, 0x61, 0xcb, 0x52, 0xb3, 0x1d, 0x9a, 0xe3, 0x0f, 0xfb, 0xa6, 0xd5, 0x5a,
+	0x25, 0x96, 0x69, 0x37, 0xac, 0xd6, 0x6a, 0x0f, 0x9d, 0x23, 0x7b, 0x4d, 0x33, 0x87, 0xdf, 0x61,
+	0xee, 0x4f, 0x41, 0x86, 0xfc, 0x1a, 0x67, 0x6f, 0x9a, 0xdf, 0xee, 0x9e, 0xfd, 0x5f, 0x00, 0x00,
+	0x00, 0xff, 0xff, 0x98, 0xa2, 0x94, 0x50, 0xb2, 0x23, 0x00, 0x00,
 }
 
 func (x APIEPActivityMetricType) String() string {
 	s, ok := APIEPActivityMetricType_name[int32(x)]
+	if ok {
+		return s
+	}
+	return strconv.Itoa(int(x))
+}
+func (x VulnRiskLevel) String() string {
+	s, ok := VulnRiskLevel_name[int32(x)]
+	if ok {
+		return s
+	}
+	return strconv.Itoa(int(x))
+}
+func (x VulnEvidenceType) String() string {
+	s, ok := VulnEvidenceType_name[int32(x)]
+	if ok {
+		return s
+	}
+	return strconv.Itoa(int(x))
+}
+func (x VulnContext) String() string {
+	s, ok := VulnContext_name[int32(x)]
+	if ok {
+		return s
+	}
+	return strconv.Itoa(int(x))
+}
+func (x VulnStatus) String() string {
+	s, ok := VulnStatus_name[int32(x)]
 	if ok {
 		return s
 	}
@@ -2277,6 +3133,14 @@ func (this *APIEndpointLearntSchemaReq) Equal(that interface{}) bool {
 			return false
 		}
 	}
+	if len(this.ApiEndpointInfoRequest) != len(that1.ApiEndpointInfoRequest) {
+		return false
+	}
+	for i := range this.ApiEndpointInfoRequest {
+		if this.ApiEndpointInfoRequest[i] != that1.ApiEndpointInfoRequest[i] {
+			return false
+		}
+	}
 	return true
 }
 func (this *APIEndpointsRsp) Equal(that interface{}) bool {
@@ -2351,19 +3215,27 @@ func (this *APIEndpointLearntSchemaRsp) Equal(that interface{}) bool {
 	} else if this == nil {
 		return false
 	}
-	if this.LearntSchema != that1.LearntSchema {
+	if !this.DiscoveredSchema.Equal(that1.DiscoveredSchema) {
 		return false
 	}
-	if this.SwaggerSpec != that1.SwaggerSpec {
+	if this.DiscoveredOpenapiSpec != that1.DiscoveredOpenapiSpec {
 		return false
 	}
-	if !this.LastUpdatedTime.Equal(that1.LastUpdatedTime) {
+	if len(this.SensitiveData) != len(that1.SensitiveData) {
 		return false
 	}
-	if this.ApiInventorySchema != that1.ApiInventorySchema {
+	for i := range this.SensitiveData {
+		if !this.SensitiveData[i].Equal(that1.SensitiveData[i]) {
+			return false
+		}
+	}
+	if this.InventoryOpenapiSpec != that1.InventoryOpenapiSpec {
 		return false
 	}
-	if this.ApiInventorySwaggerSpec != that1.ApiInventorySwaggerSpec {
+	if !this.PdfInfo.Equal(that1.PdfInfo) {
+		return false
+	}
+	if !this.Authentication.Equal(that1.Authentication) {
 		return false
 	}
 	return true
@@ -2770,6 +3642,272 @@ func (this *APIEPSummaryFilter) Equal(that interface{}) bool {
 	}
 	return true
 }
+func (this *GetVulnerabilitiesReq) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GetVulnerabilitiesReq)
+	if !ok {
+		that2, ok := that.(GetVulnerabilitiesReq)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.Namespace != that1.Namespace {
+		return false
+	}
+	if this.Name != that1.Name {
+		return false
+	}
+	if len(this.Domains) != len(that1.Domains) {
+		return false
+	}
+	for i := range this.Domains {
+		if this.Domains[i] != that1.Domains[i] {
+			return false
+		}
+	}
+	if that1.Context == nil {
+		if this.Context != nil {
+			return false
+		}
+	} else if this.Context == nil {
+		return false
+	} else if !this.Context.Equal(that1.Context) {
+		return false
+	}
+	return true
+}
+func (this *GetVulnerabilitiesReq_ApiEndpoint) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GetVulnerabilitiesReq_ApiEndpoint)
+	if !ok {
+		that2, ok := that.(GetVulnerabilitiesReq_ApiEndpoint)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.ApiEndpoint.Equal(that1.ApiEndpoint) {
+		return false
+	}
+	return true
+}
+func (this *APIEndpoint) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*APIEndpoint)
+	if !ok {
+		that2, ok := that.(APIEndpoint)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.CollapsedUrl != that1.CollapsedUrl {
+		return false
+	}
+	if this.Method != that1.Method {
+		return false
+	}
+	return true
+}
+func (this *GetVulnerabilitiesRsp) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GetVulnerabilitiesRsp)
+	if !ok {
+		that2, ok := that.(GetVulnerabilitiesRsp)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if len(this.Vulnerabilities) != len(that1.Vulnerabilities) {
+		return false
+	}
+	for i := range this.Vulnerabilities {
+		if !this.Vulnerabilities[i].Equal(that1.Vulnerabilities[i]) {
+			return false
+		}
+	}
+	return true
+}
+func (this *Vulnerability) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*Vulnerability)
+	if !ok {
+		that2, ok := that.(Vulnerability)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.Title != that1.Title {
+		return false
+	}
+	if this.Category != that1.Category {
+		return false
+	}
+	if this.Context != that1.Context {
+		return false
+	}
+	if this.Description != that1.Description {
+		return false
+	}
+	if this.Status != that1.Status {
+		return false
+	}
+	if !this.StatusChangeTime.Equal(that1.StatusChangeTime) {
+		return false
+	}
+	if !this.CreationTime.Equal(that1.CreationTime) {
+		return false
+	}
+	if !this.LastObservedTime.Equal(that1.LastObservedTime) {
+		return false
+	}
+	if !this.Risk.Equal(that1.Risk) {
+		return false
+	}
+	if !this.Evidence.Equal(that1.Evidence) {
+		return false
+	}
+	return true
+}
+func (this *VulnRisk) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*VulnRisk)
+	if !ok {
+		that2, ok := that.(VulnRisk)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.Score != that1.Score {
+		return false
+	}
+	if this.Level != that1.Level {
+		return false
+	}
+	return true
+}
+func (this *VulnEvidence) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*VulnEvidence)
+	if !ok {
+		that2, ok := that.(VulnEvidence)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if len(this.Samples) != len(that1.Samples) {
+		return false
+	}
+	for i := range this.Samples {
+		if !this.Samples[i].Equal(that1.Samples[i]) {
+			return false
+		}
+	}
+	if this.EvidenceType != that1.EvidenceType {
+		return false
+	}
+	return true
+}
+func (this *VulnEvidenceSample) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*VulnEvidenceSample)
+	if !ok {
+		that2, ok := that.(VulnEvidenceSample)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.ReqId != that1.ReqId {
+		return false
+	}
+	if len(this.Details) != len(that1.Details) {
+		return false
+	}
+	for i := range this.Details {
+		if this.Details[i] != that1.Details[i] {
+			return false
+		}
+	}
+	return true
+}
 func (this *ApiEndpointsStatsReq) GoString() string {
 	if this == nil {
 		return "nil"
@@ -2850,13 +3988,14 @@ func (this *APIEndpointLearntSchemaReq) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 9)
+	s := make([]string, 0, 10)
 	s = append(s, "&virtual_host.APIEndpointLearntSchemaReq{")
 	s = append(s, "Namespace: "+fmt.Sprintf("%#v", this.Namespace)+",\n")
 	s = append(s, "Name: "+fmt.Sprintf("%#v", this.Name)+",\n")
 	s = append(s, "CollapsedUrl: "+fmt.Sprintf("%#v", this.CollapsedUrl)+",\n")
 	s = append(s, "Method: "+fmt.Sprintf("%#v", this.Method)+",\n")
 	s = append(s, "Domains: "+fmt.Sprintf("%#v", this.Domains)+",\n")
+	s = append(s, "ApiEndpointInfoRequest: "+fmt.Sprintf("%#v", this.ApiEndpointInfoRequest)+",\n")
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
@@ -2888,15 +4027,22 @@ func (this *APIEndpointLearntSchemaRsp) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 9)
+	s := make([]string, 0, 10)
 	s = append(s, "&virtual_host.APIEndpointLearntSchemaRsp{")
-	s = append(s, "LearntSchema: "+fmt.Sprintf("%#v", this.LearntSchema)+",\n")
-	s = append(s, "SwaggerSpec: "+fmt.Sprintf("%#v", this.SwaggerSpec)+",\n")
-	if this.LastUpdatedTime != nil {
-		s = append(s, "LastUpdatedTime: "+fmt.Sprintf("%#v", this.LastUpdatedTime)+",\n")
+	if this.DiscoveredSchema != nil {
+		s = append(s, "DiscoveredSchema: "+fmt.Sprintf("%#v", this.DiscoveredSchema)+",\n")
 	}
-	s = append(s, "ApiInventorySchema: "+fmt.Sprintf("%#v", this.ApiInventorySchema)+",\n")
-	s = append(s, "ApiInventorySwaggerSpec: "+fmt.Sprintf("%#v", this.ApiInventorySwaggerSpec)+",\n")
+	s = append(s, "DiscoveredOpenapiSpec: "+fmt.Sprintf("%#v", this.DiscoveredOpenapiSpec)+",\n")
+	if this.SensitiveData != nil {
+		s = append(s, "SensitiveData: "+fmt.Sprintf("%#v", this.SensitiveData)+",\n")
+	}
+	s = append(s, "InventoryOpenapiSpec: "+fmt.Sprintf("%#v", this.InventoryOpenapiSpec)+",\n")
+	if this.PdfInfo != nil {
+		s = append(s, "PdfInfo: "+fmt.Sprintf("%#v", this.PdfInfo)+",\n")
+	}
+	if this.Authentication != nil {
+		s = append(s, "Authentication: "+fmt.Sprintf("%#v", this.Authentication)+",\n")
+	}
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
@@ -3055,6 +4201,116 @@ func (this *APIEPSummaryFilter) GoString() string {
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
+func (this *GetVulnerabilitiesReq) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 8)
+	s = append(s, "&virtual_host.GetVulnerabilitiesReq{")
+	s = append(s, "Namespace: "+fmt.Sprintf("%#v", this.Namespace)+",\n")
+	s = append(s, "Name: "+fmt.Sprintf("%#v", this.Name)+",\n")
+	s = append(s, "Domains: "+fmt.Sprintf("%#v", this.Domains)+",\n")
+	if this.Context != nil {
+		s = append(s, "Context: "+fmt.Sprintf("%#v", this.Context)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *GetVulnerabilitiesReq_ApiEndpoint) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&virtual_host.GetVulnerabilitiesReq_ApiEndpoint{` +
+		`ApiEndpoint:` + fmt.Sprintf("%#v", this.ApiEndpoint) + `}`}, ", ")
+	return s
+}
+func (this *APIEndpoint) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 6)
+	s = append(s, "&virtual_host.APIEndpoint{")
+	s = append(s, "CollapsedUrl: "+fmt.Sprintf("%#v", this.CollapsedUrl)+",\n")
+	s = append(s, "Method: "+fmt.Sprintf("%#v", this.Method)+",\n")
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *GetVulnerabilitiesRsp) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 5)
+	s = append(s, "&virtual_host.GetVulnerabilitiesRsp{")
+	if this.Vulnerabilities != nil {
+		s = append(s, "Vulnerabilities: "+fmt.Sprintf("%#v", this.Vulnerabilities)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *Vulnerability) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 14)
+	s = append(s, "&virtual_host.Vulnerability{")
+	s = append(s, "Title: "+fmt.Sprintf("%#v", this.Title)+",\n")
+	s = append(s, "Category: "+fmt.Sprintf("%#v", this.Category)+",\n")
+	s = append(s, "Context: "+fmt.Sprintf("%#v", this.Context)+",\n")
+	s = append(s, "Description: "+fmt.Sprintf("%#v", this.Description)+",\n")
+	s = append(s, "Status: "+fmt.Sprintf("%#v", this.Status)+",\n")
+	if this.StatusChangeTime != nil {
+		s = append(s, "StatusChangeTime: "+fmt.Sprintf("%#v", this.StatusChangeTime)+",\n")
+	}
+	if this.CreationTime != nil {
+		s = append(s, "CreationTime: "+fmt.Sprintf("%#v", this.CreationTime)+",\n")
+	}
+	if this.LastObservedTime != nil {
+		s = append(s, "LastObservedTime: "+fmt.Sprintf("%#v", this.LastObservedTime)+",\n")
+	}
+	if this.Risk != nil {
+		s = append(s, "Risk: "+fmt.Sprintf("%#v", this.Risk)+",\n")
+	}
+	if this.Evidence != nil {
+		s = append(s, "Evidence: "+fmt.Sprintf("%#v", this.Evidence)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *VulnRisk) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 6)
+	s = append(s, "&virtual_host.VulnRisk{")
+	s = append(s, "Score: "+fmt.Sprintf("%#v", this.Score)+",\n")
+	s = append(s, "Level: "+fmt.Sprintf("%#v", this.Level)+",\n")
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *VulnEvidence) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 6)
+	s = append(s, "&virtual_host.VulnEvidence{")
+	if this.Samples != nil {
+		s = append(s, "Samples: "+fmt.Sprintf("%#v", this.Samples)+",\n")
+	}
+	s = append(s, "EvidenceType: "+fmt.Sprintf("%#v", this.EvidenceType)+",\n")
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *VulnEvidenceSample) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 6)
+	s = append(s, "&virtual_host.VulnEvidenceSample{")
+	s = append(s, "ReqId: "+fmt.Sprintf("%#v", this.ReqId)+",\n")
+	s = append(s, "Details: "+fmt.Sprintf("%#v", this.Details)+",\n")
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
 func valueToGoStringPublicApiepCustomapi(v interface{}, typ string) string {
 	rv := reflect.ValueOf(v)
 	if rv.IsNil() {
@@ -3123,6 +4379,11 @@ type ApiepCustomAPIClient interface {
 	// x-displayName: "Get Total API Calls for Virtual Host"
 	// Get total api calls for the given Virtual Host
 	GetAPICallSummary(ctx context.Context, in *GetAPICallSummaryReq, opts ...grpc.CallOption) (*GetAPICallSummaryRsp, error)
+	// GetVulnerabilities
+	//
+	// x-displayName: "Get Vulnerabilities for Virtual Host"
+	// Get vulnerabilities for the given Virtual Host
+	GetVulnerabilities(ctx context.Context, in *GetVulnerabilitiesReq, opts ...grpc.CallOption) (*GetVulnerabilitiesRsp, error)
 }
 
 type apiepCustomAPIClient struct {
@@ -3214,6 +4475,15 @@ func (c *apiepCustomAPIClient) GetAPICallSummary(ctx context.Context, in *GetAPI
 	return out, nil
 }
 
+func (c *apiepCustomAPIClient) GetVulnerabilities(ctx context.Context, in *GetVulnerabilitiesReq, opts ...grpc.CallOption) (*GetVulnerabilitiesRsp, error) {
+	out := new(GetVulnerabilitiesRsp)
+	err := c.cc.Invoke(ctx, "/ves.io.schema.virtual_host.ApiepCustomAPI/GetVulnerabilities", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // ApiepCustomAPIServer is the server API for ApiepCustomAPI service.
 type ApiepCustomAPIServer interface {
 	// Get API endpoints Per Virtual Host
@@ -3263,6 +4533,11 @@ type ApiepCustomAPIServer interface {
 	// x-displayName: "Get Total API Calls for Virtual Host"
 	// Get total api calls for the given Virtual Host
 	GetAPICallSummary(context.Context, *GetAPICallSummaryReq) (*GetAPICallSummaryRsp, error)
+	// GetVulnerabilities
+	//
+	// x-displayName: "Get Vulnerabilities for Virtual Host"
+	// Get vulnerabilities for the given Virtual Host
+	GetVulnerabilities(context.Context, *GetVulnerabilitiesReq) (*GetVulnerabilitiesRsp, error)
 }
 
 // UnimplementedApiepCustomAPIServer can be embedded to have forward compatible implementations.
@@ -3295,6 +4570,9 @@ func (*UnimplementedApiepCustomAPIServer) GetTopSensitiveData(ctx context.Contex
 }
 func (*UnimplementedApiepCustomAPIServer) GetAPICallSummary(ctx context.Context, req *GetAPICallSummaryReq) (*GetAPICallSummaryRsp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetAPICallSummary not implemented")
+}
+func (*UnimplementedApiepCustomAPIServer) GetVulnerabilities(ctx context.Context, req *GetVulnerabilitiesReq) (*GetVulnerabilitiesRsp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetVulnerabilities not implemented")
 }
 
 func RegisterApiepCustomAPIServer(s *grpc.Server, srv ApiepCustomAPIServer) {
@@ -3463,6 +4741,24 @@ func _ApiepCustomAPI_GetAPICallSummary_Handler(srv interface{}, ctx context.Cont
 	return interceptor(ctx, in, info, handler)
 }
 
+func _ApiepCustomAPI_GetVulnerabilities_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetVulnerabilitiesReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ApiepCustomAPIServer).GetVulnerabilities(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/ves.io.schema.virtual_host.ApiepCustomAPI/GetVulnerabilities",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ApiepCustomAPIServer).GetVulnerabilities(ctx, req.(*GetVulnerabilitiesReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 var _ApiepCustomAPI_serviceDesc = grpc.ServiceDesc{
 	ServiceName: "ves.io.schema.virtual_host.ApiepCustomAPI",
 	HandlerType: (*ApiepCustomAPIServer)(nil),
@@ -3502,6 +4798,10 @@ var _ApiepCustomAPI_serviceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetAPICallSummary",
 			Handler:    _ApiepCustomAPI_GetAPICallSummary_Handler,
+		},
+		{
+			MethodName: "GetVulnerabilities",
+			Handler:    _ApiepCustomAPI_GetVulnerabilities_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
@@ -3836,6 +5136,24 @@ func (m *APIEndpointLearntSchemaReq) MarshalToSizedBuffer(dAtA []byte) (int, err
 	_ = i
 	var l int
 	_ = l
+	if len(m.ApiEndpointInfoRequest) > 0 {
+		dAtA6 := make([]byte, len(m.ApiEndpointInfoRequest)*10)
+		var j5 int
+		for _, num := range m.ApiEndpointInfoRequest {
+			for num >= 1<<7 {
+				dAtA6[j5] = uint8(uint64(num)&0x7f | 0x80)
+				num >>= 7
+				j5++
+			}
+			dAtA6[j5] = uint8(num)
+			j5++
+		}
+		i -= j5
+		copy(dAtA[i:], dAtA6[:j5])
+		i = encodeVarintPublicApiepCustomapi(dAtA, i, uint64(j5))
+		i--
+		dAtA[i] = 0x32
+	}
 	if len(m.Domains) > 0 {
 		for iNdEx := len(m.Domains) - 1; iNdEx >= 0; iNdEx-- {
 			i -= len(m.Domains[iNdEx])
@@ -3968,23 +5286,9 @@ func (m *APIEndpointLearntSchemaRsp) MarshalToSizedBuffer(dAtA []byte) (int, err
 	_ = i
 	var l int
 	_ = l
-	if len(m.ApiInventorySwaggerSpec) > 0 {
-		i -= len(m.ApiInventorySwaggerSpec)
-		copy(dAtA[i:], m.ApiInventorySwaggerSpec)
-		i = encodeVarintPublicApiepCustomapi(dAtA, i, uint64(len(m.ApiInventorySwaggerSpec)))
-		i--
-		dAtA[i] = 0x2a
-	}
-	if len(m.ApiInventorySchema) > 0 {
-		i -= len(m.ApiInventorySchema)
-		copy(dAtA[i:], m.ApiInventorySchema)
-		i = encodeVarintPublicApiepCustomapi(dAtA, i, uint64(len(m.ApiInventorySchema)))
-		i--
-		dAtA[i] = 0x22
-	}
-	if m.LastUpdatedTime != nil {
+	if m.Authentication != nil {
 		{
-			size, err := m.LastUpdatedTime.MarshalToSizedBuffer(dAtA[:i])
+			size, err := m.Authentication.MarshalToSizedBuffer(dAtA[:i])
 			if err != nil {
 				return 0, err
 			}
@@ -3992,21 +5296,59 @@ func (m *APIEndpointLearntSchemaRsp) MarshalToSizedBuffer(dAtA []byte) (int, err
 			i = encodeVarintPublicApiepCustomapi(dAtA, i, uint64(size))
 		}
 		i--
-		dAtA[i] = 0x1a
+		dAtA[i] = 0x4a
 	}
-	if len(m.SwaggerSpec) > 0 {
-		i -= len(m.SwaggerSpec)
-		copy(dAtA[i:], m.SwaggerSpec)
-		i = encodeVarintPublicApiepCustomapi(dAtA, i, uint64(len(m.SwaggerSpec)))
+	if m.PdfInfo != nil {
+		{
+			size, err := m.PdfInfo.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintPublicApiepCustomapi(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x42
+	}
+	if len(m.SensitiveData) > 0 {
+		for iNdEx := len(m.SensitiveData) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.SensitiveData[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintPublicApiepCustomapi(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x3a
+		}
+	}
+	if m.DiscoveredSchema != nil {
+		{
+			size, err := m.DiscoveredSchema.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintPublicApiepCustomapi(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x32
+	}
+	if len(m.InventoryOpenapiSpec) > 0 {
+		i -= len(m.InventoryOpenapiSpec)
+		copy(dAtA[i:], m.InventoryOpenapiSpec)
+		i = encodeVarintPublicApiepCustomapi(dAtA, i, uint64(len(m.InventoryOpenapiSpec)))
+		i--
+		dAtA[i] = 0x2a
+	}
+	if len(m.DiscoveredOpenapiSpec) > 0 {
+		i -= len(m.DiscoveredOpenapiSpec)
+		copy(dAtA[i:], m.DiscoveredOpenapiSpec)
+		i = encodeVarintPublicApiepCustomapi(dAtA, i, uint64(len(m.DiscoveredOpenapiSpec)))
 		i--
 		dAtA[i] = 0x12
-	}
-	if len(m.LearntSchema) > 0 {
-		i -= len(m.LearntSchema)
-		copy(dAtA[i:], m.LearntSchema)
-		i = encodeVarintPublicApiepCustomapi(dAtA, i, uint64(len(m.LearntSchema)))
-		i--
-		dAtA[i] = 0xa
 	}
 	return len(dAtA) - i, nil
 }
@@ -4055,20 +5397,20 @@ func (m *APIEndpointReq) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		dAtA[i] = 0x22
 	}
 	if len(m.ApiEndpointInfoRequest) > 0 {
-		dAtA8 := make([]byte, len(m.ApiEndpointInfoRequest)*10)
-		var j7 int
+		dAtA12 := make([]byte, len(m.ApiEndpointInfoRequest)*10)
+		var j11 int
 		for _, num := range m.ApiEndpointInfoRequest {
 			for num >= 1<<7 {
-				dAtA8[j7] = uint8(uint64(num)&0x7f | 0x80)
+				dAtA12[j11] = uint8(uint64(num)&0x7f | 0x80)
 				num >>= 7
-				j7++
+				j11++
 			}
-			dAtA8[j7] = uint8(num)
-			j7++
+			dAtA12[j11] = uint8(num)
+			j11++
 		}
-		i -= j7
-		copy(dAtA[i:], dAtA8[:j7])
-		i = encodeVarintPublicApiepCustomapi(dAtA, i, uint64(j7))
+		i -= j11
+		copy(dAtA[i:], dAtA12[:j11])
+		i = encodeVarintPublicApiepCustomapi(dAtA, i, uint64(j11))
 		i--
 		dAtA[i] = 0x1a
 	}
@@ -4286,20 +5628,20 @@ func (m *GetTopSensitiveDataReq) MarshalToSizedBuffer(dAtA []byte) (int, error) 
 		dAtA[i] = 0x28
 	}
 	if len(m.ApiepCategory) > 0 {
-		dAtA12 := make([]byte, len(m.ApiepCategory)*10)
-		var j11 int
+		dAtA16 := make([]byte, len(m.ApiepCategory)*10)
+		var j15 int
 		for _, num := range m.ApiepCategory {
 			for num >= 1<<7 {
-				dAtA12[j11] = uint8(uint64(num)&0x7f | 0x80)
+				dAtA16[j15] = uint8(uint64(num)&0x7f | 0x80)
 				num >>= 7
-				j11++
+				j15++
 			}
-			dAtA12[j11] = uint8(num)
-			j11++
+			dAtA16[j15] = uint8(num)
+			j15++
 		}
-		i -= j11
-		copy(dAtA[i:], dAtA12[:j11])
-		i = encodeVarintPublicApiepCustomapi(dAtA, i, uint64(j11))
+		i -= j15
+		copy(dAtA[i:], dAtA16[:j15])
+		i = encodeVarintPublicApiepCustomapi(dAtA, i, uint64(j15))
 		i--
 		dAtA[i] = 0x22
 	}
@@ -4544,20 +5886,20 @@ func (m *APIEPSummaryFilter) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	var l int
 	_ = l
 	if len(m.ApiepCategory) > 0 {
-		dAtA15 := make([]byte, len(m.ApiepCategory)*10)
-		var j14 int
+		dAtA19 := make([]byte, len(m.ApiepCategory)*10)
+		var j18 int
 		for _, num := range m.ApiepCategory {
 			for num >= 1<<7 {
-				dAtA15[j14] = uint8(uint64(num)&0x7f | 0x80)
+				dAtA19[j18] = uint8(uint64(num)&0x7f | 0x80)
 				num >>= 7
-				j14++
+				j18++
 			}
-			dAtA15[j14] = uint8(num)
-			j14++
+			dAtA19[j18] = uint8(num)
+			j18++
 		}
-		i -= j14
-		copy(dAtA[i:], dAtA15[:j14])
-		i = encodeVarintPublicApiepCustomapi(dAtA, i, uint64(j14))
+		i -= j18
+		copy(dAtA[i:], dAtA19[:j18])
+		i = encodeVarintPublicApiepCustomapi(dAtA, i, uint64(j18))
 		i--
 		dAtA[i] = 0x22
 	}
@@ -4583,6 +5925,385 @@ func (m *APIEPSummaryFilter) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 			i--
 			dAtA[i] = 0xa
 		}
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *GetVulnerabilitiesReq) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *GetVulnerabilitiesReq) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetVulnerabilitiesReq) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.Context != nil {
+		{
+			size := m.Context.Size()
+			i -= size
+			if _, err := m.Context.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	if len(m.Domains) > 0 {
+		for iNdEx := len(m.Domains) - 1; iNdEx >= 0; iNdEx-- {
+			i -= len(m.Domains[iNdEx])
+			copy(dAtA[i:], m.Domains[iNdEx])
+			i = encodeVarintPublicApiepCustomapi(dAtA, i, uint64(len(m.Domains[iNdEx])))
+			i--
+			dAtA[i] = 0x1a
+		}
+	}
+	if len(m.Name) > 0 {
+		i -= len(m.Name)
+		copy(dAtA[i:], m.Name)
+		i = encodeVarintPublicApiepCustomapi(dAtA, i, uint64(len(m.Name)))
+		i--
+		dAtA[i] = 0x12
+	}
+	if len(m.Namespace) > 0 {
+		i -= len(m.Namespace)
+		copy(dAtA[i:], m.Namespace)
+		i = encodeVarintPublicApiepCustomapi(dAtA, i, uint64(len(m.Namespace)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *GetVulnerabilitiesReq_ApiEndpoint) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetVulnerabilitiesReq_ApiEndpoint) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.ApiEndpoint != nil {
+		{
+			size, err := m.ApiEndpoint.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintPublicApiepCustomapi(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x2a
+	}
+	return len(dAtA) - i, nil
+}
+func (m *APIEndpoint) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *APIEndpoint) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *APIEndpoint) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.Method) > 0 {
+		i -= len(m.Method)
+		copy(dAtA[i:], m.Method)
+		i = encodeVarintPublicApiepCustomapi(dAtA, i, uint64(len(m.Method)))
+		i--
+		dAtA[i] = 0x12
+	}
+	if len(m.CollapsedUrl) > 0 {
+		i -= len(m.CollapsedUrl)
+		copy(dAtA[i:], m.CollapsedUrl)
+		i = encodeVarintPublicApiepCustomapi(dAtA, i, uint64(len(m.CollapsedUrl)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *GetVulnerabilitiesRsp) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *GetVulnerabilitiesRsp) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetVulnerabilitiesRsp) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.Vulnerabilities) > 0 {
+		for iNdEx := len(m.Vulnerabilities) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.Vulnerabilities[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintPublicApiepCustomapi(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0xa
+		}
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *Vulnerability) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *Vulnerability) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *Vulnerability) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.Evidence != nil {
+		{
+			size, err := m.Evidence.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintPublicApiepCustomapi(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x52
+	}
+	if m.Risk != nil {
+		{
+			size, err := m.Risk.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintPublicApiepCustomapi(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x4a
+	}
+	if m.LastObservedTime != nil {
+		{
+			size, err := m.LastObservedTime.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintPublicApiepCustomapi(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x42
+	}
+	if m.CreationTime != nil {
+		{
+			size, err := m.CreationTime.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintPublicApiepCustomapi(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x3a
+	}
+	if m.StatusChangeTime != nil {
+		{
+			size, err := m.StatusChangeTime.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintPublicApiepCustomapi(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x32
+	}
+	if m.Status != 0 {
+		i = encodeVarintPublicApiepCustomapi(dAtA, i, uint64(m.Status))
+		i--
+		dAtA[i] = 0x28
+	}
+	if len(m.Description) > 0 {
+		i -= len(m.Description)
+		copy(dAtA[i:], m.Description)
+		i = encodeVarintPublicApiepCustomapi(dAtA, i, uint64(len(m.Description)))
+		i--
+		dAtA[i] = 0x22
+	}
+	if m.Context != 0 {
+		i = encodeVarintPublicApiepCustomapi(dAtA, i, uint64(m.Context))
+		i--
+		dAtA[i] = 0x18
+	}
+	if len(m.Category) > 0 {
+		i -= len(m.Category)
+		copy(dAtA[i:], m.Category)
+		i = encodeVarintPublicApiepCustomapi(dAtA, i, uint64(len(m.Category)))
+		i--
+		dAtA[i] = 0x12
+	}
+	if len(m.Title) > 0 {
+		i -= len(m.Title)
+		copy(dAtA[i:], m.Title)
+		i = encodeVarintPublicApiepCustomapi(dAtA, i, uint64(len(m.Title)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *VulnRisk) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *VulnRisk) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *VulnRisk) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.Level != 0 {
+		i = encodeVarintPublicApiepCustomapi(dAtA, i, uint64(m.Level))
+		i--
+		dAtA[i] = 0x10
+	}
+	if m.Score != 0 {
+		i -= 4
+		encoding_binary.LittleEndian.PutUint32(dAtA[i:], uint32(math.Float32bits(float32(m.Score))))
+		i--
+		dAtA[i] = 0xd
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *VulnEvidence) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *VulnEvidence) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *VulnEvidence) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.EvidenceType != 0 {
+		i = encodeVarintPublicApiepCustomapi(dAtA, i, uint64(m.EvidenceType))
+		i--
+		dAtA[i] = 0x18
+	}
+	if len(m.Samples) > 0 {
+		for iNdEx := len(m.Samples) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.Samples[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintPublicApiepCustomapi(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0xa
+		}
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *VulnEvidenceSample) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *VulnEvidenceSample) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *VulnEvidenceSample) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.Details) > 0 {
+		for iNdEx := len(m.Details) - 1; iNdEx >= 0; iNdEx-- {
+			i -= len(m.Details[iNdEx])
+			copy(dAtA[i:], m.Details[iNdEx])
+			i = encodeVarintPublicApiepCustomapi(dAtA, i, uint64(len(m.Details[iNdEx])))
+			i--
+			dAtA[i] = 0x12
+		}
+	}
+	if len(m.ReqId) > 0 {
+		i -= len(m.ReqId)
+		copy(dAtA[i:], m.ReqId)
+		i = encodeVarintPublicApiepCustomapi(dAtA, i, uint64(len(m.ReqId)))
+		i--
+		dAtA[i] = 0xa
 	}
 	return len(dAtA) - i, nil
 }
@@ -4773,6 +6494,13 @@ func (m *APIEndpointLearntSchemaReq) Size() (n int) {
 			n += 1 + l + sovPublicApiepCustomapi(uint64(l))
 		}
 	}
+	if len(m.ApiEndpointInfoRequest) > 0 {
+		l = 0
+		for _, e := range m.ApiEndpointInfoRequest {
+			l += sovPublicApiepCustomapi(uint64(e))
+		}
+		n += 1 + sovPublicApiepCustomapi(uint64(l)) + l
+	}
 	return n
 }
 
@@ -4810,24 +6538,30 @@ func (m *APIEndpointLearntSchemaRsp) Size() (n int) {
 	}
 	var l int
 	_ = l
-	l = len(m.LearntSchema)
+	l = len(m.DiscoveredOpenapiSpec)
 	if l > 0 {
 		n += 1 + l + sovPublicApiepCustomapi(uint64(l))
 	}
-	l = len(m.SwaggerSpec)
+	l = len(m.InventoryOpenapiSpec)
 	if l > 0 {
 		n += 1 + l + sovPublicApiepCustomapi(uint64(l))
 	}
-	if m.LastUpdatedTime != nil {
-		l = m.LastUpdatedTime.Size()
+	if m.DiscoveredSchema != nil {
+		l = m.DiscoveredSchema.Size()
 		n += 1 + l + sovPublicApiepCustomapi(uint64(l))
 	}
-	l = len(m.ApiInventorySchema)
-	if l > 0 {
+	if len(m.SensitiveData) > 0 {
+		for _, e := range m.SensitiveData {
+			l = e.Size()
+			n += 1 + l + sovPublicApiepCustomapi(uint64(l))
+		}
+	}
+	if m.PdfInfo != nil {
+		l = m.PdfInfo.Size()
 		n += 1 + l + sovPublicApiepCustomapi(uint64(l))
 	}
-	l = len(m.ApiInventorySwaggerSpec)
-	if l > 0 {
+	if m.Authentication != nil {
+		l = m.Authentication.Size()
 		n += 1 + l + sovPublicApiepCustomapi(uint64(l))
 	}
 	return n
@@ -5092,6 +6826,175 @@ func (m *APIEPSummaryFilter) Size() (n int) {
 	return n
 }
 
+func (m *GetVulnerabilitiesReq) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Namespace)
+	if l > 0 {
+		n += 1 + l + sovPublicApiepCustomapi(uint64(l))
+	}
+	l = len(m.Name)
+	if l > 0 {
+		n += 1 + l + sovPublicApiepCustomapi(uint64(l))
+	}
+	if len(m.Domains) > 0 {
+		for _, s := range m.Domains {
+			l = len(s)
+			n += 1 + l + sovPublicApiepCustomapi(uint64(l))
+		}
+	}
+	if m.Context != nil {
+		n += m.Context.Size()
+	}
+	return n
+}
+
+func (m *GetVulnerabilitiesReq_ApiEndpoint) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.ApiEndpoint != nil {
+		l = m.ApiEndpoint.Size()
+		n += 1 + l + sovPublicApiepCustomapi(uint64(l))
+	}
+	return n
+}
+func (m *APIEndpoint) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.CollapsedUrl)
+	if l > 0 {
+		n += 1 + l + sovPublicApiepCustomapi(uint64(l))
+	}
+	l = len(m.Method)
+	if l > 0 {
+		n += 1 + l + sovPublicApiepCustomapi(uint64(l))
+	}
+	return n
+}
+
+func (m *GetVulnerabilitiesRsp) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if len(m.Vulnerabilities) > 0 {
+		for _, e := range m.Vulnerabilities {
+			l = e.Size()
+			n += 1 + l + sovPublicApiepCustomapi(uint64(l))
+		}
+	}
+	return n
+}
+
+func (m *Vulnerability) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Title)
+	if l > 0 {
+		n += 1 + l + sovPublicApiepCustomapi(uint64(l))
+	}
+	l = len(m.Category)
+	if l > 0 {
+		n += 1 + l + sovPublicApiepCustomapi(uint64(l))
+	}
+	if m.Context != 0 {
+		n += 1 + sovPublicApiepCustomapi(uint64(m.Context))
+	}
+	l = len(m.Description)
+	if l > 0 {
+		n += 1 + l + sovPublicApiepCustomapi(uint64(l))
+	}
+	if m.Status != 0 {
+		n += 1 + sovPublicApiepCustomapi(uint64(m.Status))
+	}
+	if m.StatusChangeTime != nil {
+		l = m.StatusChangeTime.Size()
+		n += 1 + l + sovPublicApiepCustomapi(uint64(l))
+	}
+	if m.CreationTime != nil {
+		l = m.CreationTime.Size()
+		n += 1 + l + sovPublicApiepCustomapi(uint64(l))
+	}
+	if m.LastObservedTime != nil {
+		l = m.LastObservedTime.Size()
+		n += 1 + l + sovPublicApiepCustomapi(uint64(l))
+	}
+	if m.Risk != nil {
+		l = m.Risk.Size()
+		n += 1 + l + sovPublicApiepCustomapi(uint64(l))
+	}
+	if m.Evidence != nil {
+		l = m.Evidence.Size()
+		n += 1 + l + sovPublicApiepCustomapi(uint64(l))
+	}
+	return n
+}
+
+func (m *VulnRisk) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Score != 0 {
+		n += 5
+	}
+	if m.Level != 0 {
+		n += 1 + sovPublicApiepCustomapi(uint64(m.Level))
+	}
+	return n
+}
+
+func (m *VulnEvidence) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if len(m.Samples) > 0 {
+		for _, e := range m.Samples {
+			l = e.Size()
+			n += 1 + l + sovPublicApiepCustomapi(uint64(l))
+		}
+	}
+	if m.EvidenceType != 0 {
+		n += 1 + sovPublicApiepCustomapi(uint64(m.EvidenceType))
+	}
+	return n
+}
+
+func (m *VulnEvidenceSample) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.ReqId)
+	if l > 0 {
+		n += 1 + l + sovPublicApiepCustomapi(uint64(l))
+	}
+	if len(m.Details) > 0 {
+		for _, s := range m.Details {
+			l = len(s)
+			n += 1 + l + sovPublicApiepCustomapi(uint64(l))
+		}
+	}
+	return n
+}
+
 func sovPublicApiepCustomapi(x uint64) (n int) {
 	return (math_bits.Len64(x|1) + 6) / 7
 }
@@ -5184,6 +7087,7 @@ func (this *APIEndpointLearntSchemaReq) String() string {
 		`CollapsedUrl:` + fmt.Sprintf("%v", this.CollapsedUrl) + `,`,
 		`Method:` + fmt.Sprintf("%v", this.Method) + `,`,
 		`Domains:` + fmt.Sprintf("%v", this.Domains) + `,`,
+		`ApiEndpointInfoRequest:` + fmt.Sprintf("%v", this.ApiEndpointInfoRequest) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -5217,12 +7121,18 @@ func (this *APIEndpointLearntSchemaRsp) String() string {
 	if this == nil {
 		return "nil"
 	}
+	repeatedStringForSensitiveData := "[]*SensitiveData{"
+	for _, f := range this.SensitiveData {
+		repeatedStringForSensitiveData += strings.Replace(fmt.Sprintf("%v", f), "SensitiveData", "app_type.SensitiveData", 1) + ","
+	}
+	repeatedStringForSensitiveData += "}"
 	s := strings.Join([]string{`&APIEndpointLearntSchemaRsp{`,
-		`LearntSchema:` + fmt.Sprintf("%v", this.LearntSchema) + `,`,
-		`SwaggerSpec:` + fmt.Sprintf("%v", this.SwaggerSpec) + `,`,
-		`LastUpdatedTime:` + strings.Replace(fmt.Sprintf("%v", this.LastUpdatedTime), "Timestamp", "types.Timestamp", 1) + `,`,
-		`ApiInventorySchema:` + fmt.Sprintf("%v", this.ApiInventorySchema) + `,`,
-		`ApiInventorySwaggerSpec:` + fmt.Sprintf("%v", this.ApiInventorySwaggerSpec) + `,`,
+		`DiscoveredOpenapiSpec:` + fmt.Sprintf("%v", this.DiscoveredOpenapiSpec) + `,`,
+		`InventoryOpenapiSpec:` + fmt.Sprintf("%v", this.InventoryOpenapiSpec) + `,`,
+		`DiscoveredSchema:` + strings.Replace(fmt.Sprintf("%v", this.DiscoveredSchema), "DiscoveredSchema", "app_type.DiscoveredSchema", 1) + `,`,
+		`SensitiveData:` + repeatedStringForSensitiveData + `,`,
+		`PdfInfo:` + strings.Replace(fmt.Sprintf("%v", this.PdfInfo), "APIEPPDFInfo", "app_type.APIEPPDFInfo", 1) + `,`,
+		`Authentication:` + strings.Replace(fmt.Sprintf("%v", this.Authentication), "Authentication", "app_type.Authentication", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -5381,6 +7291,112 @@ func (this *APIEPSummaryFilter) String() string {
 		`StartTime:` + fmt.Sprintf("%v", this.StartTime) + `,`,
 		`EndTime:` + fmt.Sprintf("%v", this.EndTime) + `,`,
 		`ApiepCategory:` + fmt.Sprintf("%v", this.ApiepCategory) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GetVulnerabilitiesReq) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GetVulnerabilitiesReq{`,
+		`Namespace:` + fmt.Sprintf("%v", this.Namespace) + `,`,
+		`Name:` + fmt.Sprintf("%v", this.Name) + `,`,
+		`Domains:` + fmt.Sprintf("%v", this.Domains) + `,`,
+		`Context:` + fmt.Sprintf("%v", this.Context) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GetVulnerabilitiesReq_ApiEndpoint) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GetVulnerabilitiesReq_ApiEndpoint{`,
+		`ApiEndpoint:` + strings.Replace(fmt.Sprintf("%v", this.ApiEndpoint), "APIEndpoint", "APIEndpoint", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *APIEndpoint) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&APIEndpoint{`,
+		`CollapsedUrl:` + fmt.Sprintf("%v", this.CollapsedUrl) + `,`,
+		`Method:` + fmt.Sprintf("%v", this.Method) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GetVulnerabilitiesRsp) String() string {
+	if this == nil {
+		return "nil"
+	}
+	repeatedStringForVulnerabilities := "[]*Vulnerability{"
+	for _, f := range this.Vulnerabilities {
+		repeatedStringForVulnerabilities += strings.Replace(f.String(), "Vulnerability", "Vulnerability", 1) + ","
+	}
+	repeatedStringForVulnerabilities += "}"
+	s := strings.Join([]string{`&GetVulnerabilitiesRsp{`,
+		`Vulnerabilities:` + repeatedStringForVulnerabilities + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *Vulnerability) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&Vulnerability{`,
+		`Title:` + fmt.Sprintf("%v", this.Title) + `,`,
+		`Category:` + fmt.Sprintf("%v", this.Category) + `,`,
+		`Context:` + fmt.Sprintf("%v", this.Context) + `,`,
+		`Description:` + fmt.Sprintf("%v", this.Description) + `,`,
+		`Status:` + fmt.Sprintf("%v", this.Status) + `,`,
+		`StatusChangeTime:` + strings.Replace(fmt.Sprintf("%v", this.StatusChangeTime), "Timestamp", "types.Timestamp", 1) + `,`,
+		`CreationTime:` + strings.Replace(fmt.Sprintf("%v", this.CreationTime), "Timestamp", "types.Timestamp", 1) + `,`,
+		`LastObservedTime:` + strings.Replace(fmt.Sprintf("%v", this.LastObservedTime), "Timestamp", "types.Timestamp", 1) + `,`,
+		`Risk:` + strings.Replace(this.Risk.String(), "VulnRisk", "VulnRisk", 1) + `,`,
+		`Evidence:` + strings.Replace(this.Evidence.String(), "VulnEvidence", "VulnEvidence", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *VulnRisk) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&VulnRisk{`,
+		`Score:` + fmt.Sprintf("%v", this.Score) + `,`,
+		`Level:` + fmt.Sprintf("%v", this.Level) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *VulnEvidence) String() string {
+	if this == nil {
+		return "nil"
+	}
+	repeatedStringForSamples := "[]*VulnEvidenceSample{"
+	for _, f := range this.Samples {
+		repeatedStringForSamples += strings.Replace(f.String(), "VulnEvidenceSample", "VulnEvidenceSample", 1) + ","
+	}
+	repeatedStringForSamples += "}"
+	s := strings.Join([]string{`&VulnEvidence{`,
+		`Samples:` + repeatedStringForSamples + `,`,
+		`EvidenceType:` + fmt.Sprintf("%v", this.EvidenceType) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *VulnEvidenceSample) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&VulnEvidenceSample{`,
+		`ReqId:` + fmt.Sprintf("%v", this.ReqId) + `,`,
+		`Details:` + fmt.Sprintf("%v", this.Details) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -6613,6 +8629,75 @@ func (m *APIEndpointLearntSchemaReq) Unmarshal(dAtA []byte) error {
 			}
 			m.Domains = append(m.Domains, string(dAtA[iNdEx:postIndex]))
 			iNdEx = postIndex
+		case 6:
+			if wireType == 0 {
+				var v app_type.ApiEndpointInfoRequest
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return ErrIntOverflowPublicApiepCustomapi
+					}
+					if iNdEx >= l {
+						return io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					v |= app_type.ApiEndpointInfoRequest(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				m.ApiEndpointInfoRequest = append(m.ApiEndpointInfoRequest, v)
+			} else if wireType == 2 {
+				var packedLen int
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return ErrIntOverflowPublicApiepCustomapi
+					}
+					if iNdEx >= l {
+						return io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					packedLen |= int(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				if packedLen < 0 {
+					return ErrInvalidLengthPublicApiepCustomapi
+				}
+				postIndex := iNdEx + packedLen
+				if postIndex < 0 {
+					return ErrInvalidLengthPublicApiepCustomapi
+				}
+				if postIndex > l {
+					return io.ErrUnexpectedEOF
+				}
+				var elementCount int
+				if elementCount != 0 && len(m.ApiEndpointInfoRequest) == 0 {
+					m.ApiEndpointInfoRequest = make([]app_type.ApiEndpointInfoRequest, 0, elementCount)
+				}
+				for iNdEx < postIndex {
+					var v app_type.ApiEndpointInfoRequest
+					for shift := uint(0); ; shift += 7 {
+						if shift >= 64 {
+							return ErrIntOverflowPublicApiepCustomapi
+						}
+						if iNdEx >= l {
+							return io.ErrUnexpectedEOF
+						}
+						b := dAtA[iNdEx]
+						iNdEx++
+						v |= app_type.ApiEndpointInfoRequest(b&0x7F) << shift
+						if b < 0x80 {
+							break
+						}
+					}
+					m.ApiEndpointInfoRequest = append(m.ApiEndpointInfoRequest, v)
+				}
+			} else {
+				return fmt.Errorf("proto: wrong wireType = %d for field ApiEndpointInfoRequest", wireType)
+			}
 		default:
 			iNdEx = preIndex
 			skippy, err := skipPublicApiepCustomapi(dAtA[iNdEx:])
@@ -6842,41 +8927,9 @@ func (m *APIEndpointLearntSchemaRsp) Unmarshal(dAtA []byte) error {
 			return fmt.Errorf("proto: APIEndpointLearntSchemaRsp: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field LearntSchema", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowPublicApiepCustomapi
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthPublicApiepCustomapi
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthPublicApiepCustomapi
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.LearntSchema = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
 		case 2:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field SwaggerSpec", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field DiscoveredOpenapiSpec", wireType)
 			}
 			var stringLen uint64
 			for shift := uint(0); ; shift += 7 {
@@ -6904,11 +8957,43 @@ func (m *APIEndpointLearntSchemaRsp) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.SwaggerSpec = string(dAtA[iNdEx:postIndex])
+			m.DiscoveredOpenapiSpec = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
-		case 3:
+		case 5:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field LastUpdatedTime", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field InventoryOpenapiSpec", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicApiepCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPublicApiepCustomapi
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicApiepCustomapi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.InventoryOpenapiSpec = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 6:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DiscoveredSchema", wireType)
 			}
 			var msglen int
 			for shift := uint(0); ; shift += 7 {
@@ -6935,18 +9020,18 @@ func (m *APIEndpointLearntSchemaRsp) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			if m.LastUpdatedTime == nil {
-				m.LastUpdatedTime = &types.Timestamp{}
+			if m.DiscoveredSchema == nil {
+				m.DiscoveredSchema = &app_type.DiscoveredSchema{}
 			}
-			if err := m.LastUpdatedTime.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+			if err := m.DiscoveredSchema.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex
-		case 4:
+		case 7:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ApiInventorySchema", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field SensitiveData", wireType)
 			}
-			var stringLen uint64
+			var msglen int
 			for shift := uint(0); ; shift += 7 {
 				if shift >= 64 {
 					return ErrIntOverflowPublicApiepCustomapi
@@ -6956,29 +9041,31 @@ func (m *APIEndpointLearntSchemaRsp) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
 			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
+			if msglen < 0 {
 				return ErrInvalidLengthPublicApiepCustomapi
 			}
-			postIndex := iNdEx + intStringLen
+			postIndex := iNdEx + msglen
 			if postIndex < 0 {
 				return ErrInvalidLengthPublicApiepCustomapi
 			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.ApiInventorySchema = string(dAtA[iNdEx:postIndex])
+			m.SensitiveData = append(m.SensitiveData, &app_type.SensitiveData{})
+			if err := m.SensitiveData[len(m.SensitiveData)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
 			iNdEx = postIndex
-		case 5:
+		case 8:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ApiInventorySwaggerSpec", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field PdfInfo", wireType)
 			}
-			var stringLen uint64
+			var msglen int
 			for shift := uint(0); ; shift += 7 {
 				if shift >= 64 {
 					return ErrIntOverflowPublicApiepCustomapi
@@ -6988,23 +9075,63 @@ func (m *APIEndpointLearntSchemaRsp) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
 			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
+			if msglen < 0 {
 				return ErrInvalidLengthPublicApiepCustomapi
 			}
-			postIndex := iNdEx + intStringLen
+			postIndex := iNdEx + msglen
 			if postIndex < 0 {
 				return ErrInvalidLengthPublicApiepCustomapi
 			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.ApiInventorySwaggerSpec = string(dAtA[iNdEx:postIndex])
+			if m.PdfInfo == nil {
+				m.PdfInfo = &app_type.APIEPPDFInfo{}
+			}
+			if err := m.PdfInfo.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 9:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Authentication", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicApiepCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthPublicApiepCustomapi
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicApiepCustomapi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Authentication == nil {
+				m.Authentication = &app_type.Authentication{}
+			}
+			if err := m.Authentication.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
@@ -8761,6 +10888,1067 @@ func (m *APIEPSummaryFilter) Unmarshal(dAtA []byte) error {
 			} else {
 				return fmt.Errorf("proto: wrong wireType = %d for field ApiepCategory", wireType)
 			}
+		default:
+			iNdEx = preIndex
+			skippy, err := skipPublicApiepCustomapi(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthPublicApiepCustomapi
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthPublicApiepCustomapi
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *GetVulnerabilitiesReq) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowPublicApiepCustomapi
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: GetVulnerabilitiesReq: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: GetVulnerabilitiesReq: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Namespace", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicApiepCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPublicApiepCustomapi
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicApiepCustomapi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Namespace = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Name", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicApiepCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPublicApiepCustomapi
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicApiepCustomapi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Name = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Domains", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicApiepCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPublicApiepCustomapi
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicApiepCustomapi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Domains = append(m.Domains, string(dAtA[iNdEx:postIndex]))
+			iNdEx = postIndex
+		case 5:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ApiEndpoint", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicApiepCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthPublicApiepCustomapi
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicApiepCustomapi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &APIEndpoint{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.Context = &GetVulnerabilitiesReq_ApiEndpoint{v}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipPublicApiepCustomapi(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthPublicApiepCustomapi
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthPublicApiepCustomapi
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *APIEndpoint) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowPublicApiepCustomapi
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: APIEndpoint: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: APIEndpoint: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field CollapsedUrl", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicApiepCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPublicApiepCustomapi
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicApiepCustomapi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.CollapsedUrl = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Method", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicApiepCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPublicApiepCustomapi
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicApiepCustomapi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Method = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipPublicApiepCustomapi(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthPublicApiepCustomapi
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthPublicApiepCustomapi
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *GetVulnerabilitiesRsp) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowPublicApiepCustomapi
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: GetVulnerabilitiesRsp: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: GetVulnerabilitiesRsp: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Vulnerabilities", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicApiepCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthPublicApiepCustomapi
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicApiepCustomapi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Vulnerabilities = append(m.Vulnerabilities, &Vulnerability{})
+			if err := m.Vulnerabilities[len(m.Vulnerabilities)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipPublicApiepCustomapi(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthPublicApiepCustomapi
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthPublicApiepCustomapi
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *Vulnerability) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowPublicApiepCustomapi
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: Vulnerability: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: Vulnerability: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Title", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicApiepCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPublicApiepCustomapi
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicApiepCustomapi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Title = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Category", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicApiepCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPublicApiepCustomapi
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicApiepCustomapi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Category = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 3:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Context", wireType)
+			}
+			m.Context = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicApiepCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.Context |= VulnContext(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Description", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicApiepCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPublicApiepCustomapi
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicApiepCustomapi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Description = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 5:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Status", wireType)
+			}
+			m.Status = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicApiepCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.Status |= VulnStatus(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 6:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field StatusChangeTime", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicApiepCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthPublicApiepCustomapi
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicApiepCustomapi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.StatusChangeTime == nil {
+				m.StatusChangeTime = &types.Timestamp{}
+			}
+			if err := m.StatusChangeTime.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 7:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field CreationTime", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicApiepCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthPublicApiepCustomapi
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicApiepCustomapi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.CreationTime == nil {
+				m.CreationTime = &types.Timestamp{}
+			}
+			if err := m.CreationTime.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 8:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field LastObservedTime", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicApiepCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthPublicApiepCustomapi
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicApiepCustomapi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.LastObservedTime == nil {
+				m.LastObservedTime = &types.Timestamp{}
+			}
+			if err := m.LastObservedTime.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 9:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Risk", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicApiepCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthPublicApiepCustomapi
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicApiepCustomapi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Risk == nil {
+				m.Risk = &VulnRisk{}
+			}
+			if err := m.Risk.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 10:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Evidence", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicApiepCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthPublicApiepCustomapi
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicApiepCustomapi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Evidence == nil {
+				m.Evidence = &VulnEvidence{}
+			}
+			if err := m.Evidence.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipPublicApiepCustomapi(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthPublicApiepCustomapi
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthPublicApiepCustomapi
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *VulnRisk) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowPublicApiepCustomapi
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: VulnRisk: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: VulnRisk: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 5 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Score", wireType)
+			}
+			var v uint32
+			if (iNdEx + 4) > l {
+				return io.ErrUnexpectedEOF
+			}
+			v = uint32(encoding_binary.LittleEndian.Uint32(dAtA[iNdEx:]))
+			iNdEx += 4
+			m.Score = float32(math.Float32frombits(v))
+		case 2:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Level", wireType)
+			}
+			m.Level = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicApiepCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.Level |= VulnRiskLevel(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		default:
+			iNdEx = preIndex
+			skippy, err := skipPublicApiepCustomapi(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthPublicApiepCustomapi
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthPublicApiepCustomapi
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *VulnEvidence) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowPublicApiepCustomapi
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: VulnEvidence: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: VulnEvidence: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Samples", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicApiepCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthPublicApiepCustomapi
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicApiepCustomapi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Samples = append(m.Samples, &VulnEvidenceSample{})
+			if err := m.Samples[len(m.Samples)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 3:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field EvidenceType", wireType)
+			}
+			m.EvidenceType = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicApiepCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.EvidenceType |= VulnEvidenceType(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		default:
+			iNdEx = preIndex
+			skippy, err := skipPublicApiepCustomapi(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthPublicApiepCustomapi
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthPublicApiepCustomapi
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *VulnEvidenceSample) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowPublicApiepCustomapi
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: VulnEvidenceSample: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: VulnEvidenceSample: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ReqId", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicApiepCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPublicApiepCustomapi
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicApiepCustomapi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.ReqId = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Details", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicApiepCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPublicApiepCustomapi
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicApiepCustomapi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Details = append(m.Details, string(dAtA[iNdEx:postIndex]))
+			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipPublicApiepCustomapi(dAtA[iNdEx:])

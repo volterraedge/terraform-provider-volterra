@@ -265,6 +265,290 @@ func (m *ApiEndpoint) GetPath() string {
 	return ""
 }
 
+// API Groups Stats Request
+//
+// x-displayName: "API Groups Stats Request"
+// Request shape for API Groups Stats
+type GetApiGroupsStatsReq struct {
+	// Namespace
+	//
+	// x-displayName: "Namespace"
+	// x-example: "shared"
+	// Namespace of the API Group for the current request
+	Namespace string `protobuf:"bytes,1,opt,name=namespace,proto3" json:"namespace,omitempty"`
+}
+
+func (m *GetApiGroupsStatsReq) Reset()      { *m = GetApiGroupsStatsReq{} }
+func (*GetApiGroupsStatsReq) ProtoMessage() {}
+func (*GetApiGroupsStatsReq) Descriptor() ([]byte, []int) {
+	return fileDescriptor_c56144eaf2997be3, []int{3}
+}
+func (m *GetApiGroupsStatsReq) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *GetApiGroupsStatsReq) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_GetApiGroupsStatsReq.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *GetApiGroupsStatsReq) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GetApiGroupsStatsReq.Merge(m, src)
+}
+func (m *GetApiGroupsStatsReq) XXX_Size() int {
+	return m.Size()
+}
+func (m *GetApiGroupsStatsReq) XXX_DiscardUnknown() {
+	xxx_messageInfo_GetApiGroupsStatsReq.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_GetApiGroupsStatsReq proto.InternalMessageInfo
+
+func (m *GetApiGroupsStatsReq) GetNamespace() string {
+	if m != nil {
+		return m.Namespace
+	}
+	return ""
+}
+
+// API Group ID
+//
+// x-displayName: "API Group ID"
+// The API Group ID for the API Groups stats response
+type ApiGroupId struct {
+	// Namespace
+	//
+	// x-displayName: "Namespace"
+	// x-example: "shared"
+	// Namespace of the API Group
+	Namespace string `protobuf:"bytes,1,opt,name=namespace,proto3" json:"namespace,omitempty"`
+	// Name
+	//
+	// x-displayName: "Name"
+	// x-example: "sensitive"
+	// Name of the API Group
+	Name string `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
+}
+
+func (m *ApiGroupId) Reset()      { *m = ApiGroupId{} }
+func (*ApiGroupId) ProtoMessage() {}
+func (*ApiGroupId) Descriptor() ([]byte, []int) {
+	return fileDescriptor_c56144eaf2997be3, []int{4}
+}
+func (m *ApiGroupId) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *ApiGroupId) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_ApiGroupId.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *ApiGroupId) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ApiGroupId.Merge(m, src)
+}
+func (m *ApiGroupId) XXX_Size() int {
+	return m.Size()
+}
+func (m *ApiGroupId) XXX_DiscardUnknown() {
+	xxx_messageInfo_ApiGroupId.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ApiGroupId proto.InternalMessageInfo
+
+func (m *ApiGroupId) GetNamespace() string {
+	if m != nil {
+		return m.Namespace
+	}
+	return ""
+}
+
+func (m *ApiGroupId) GetName() string {
+	if m != nil {
+		return m.Name
+	}
+	return ""
+}
+
+// API Group Stats
+//
+// x-displayName: "API Group Stats"
+// The API Group Stats for the API Groups stats response
+type ApiGroupStats struct {
+	// outdated_api_endpoints_count
+	//
+	// x-displayName: "Outdated API Endpoints Count"
+	// x-example: "5"
+	// Number of outdated API Endpoints is the difference in the stored API Group contents and
+	// the contents if it be evaluated against current state
+	OutdatedApiEndpointsCount uint32 `protobuf:"varint,1,opt,name=outdated_api_endpoints_count,json=outdatedApiEndpointsCount,proto3" json:"outdated_api_endpoints_count,omitempty"`
+}
+
+func (m *ApiGroupStats) Reset()      { *m = ApiGroupStats{} }
+func (*ApiGroupStats) ProtoMessage() {}
+func (*ApiGroupStats) Descriptor() ([]byte, []int) {
+	return fileDescriptor_c56144eaf2997be3, []int{5}
+}
+func (m *ApiGroupStats) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *ApiGroupStats) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_ApiGroupStats.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *ApiGroupStats) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ApiGroupStats.Merge(m, src)
+}
+func (m *ApiGroupStats) XXX_Size() int {
+	return m.Size()
+}
+func (m *ApiGroupStats) XXX_DiscardUnknown() {
+	xxx_messageInfo_ApiGroupStats.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ApiGroupStats proto.InternalMessageInfo
+
+func (m *ApiGroupStats) GetOutdatedApiEndpointsCount() uint32 {
+	if m != nil {
+		return m.OutdatedApiEndpointsCount
+	}
+	return 0
+}
+
+// API Groups Stats Item
+//
+// x-displayName: "API Groups Stats Item"
+// API Groups Stats Item
+type ApiGroupsStatsItem struct {
+	// id
+	//
+	// x-displayName: "API Group ID"
+	// The API Group ID for unique identification of the API Group
+	Id *ApiGroupId `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	// stats
+	//
+	// x-displayName: "API Group Stats"
+	// The API Group stats
+	Stats *ApiGroupStats `protobuf:"bytes,2,opt,name=stats,proto3" json:"stats,omitempty"`
+}
+
+func (m *ApiGroupsStatsItem) Reset()      { *m = ApiGroupsStatsItem{} }
+func (*ApiGroupsStatsItem) ProtoMessage() {}
+func (*ApiGroupsStatsItem) Descriptor() ([]byte, []int) {
+	return fileDescriptor_c56144eaf2997be3, []int{6}
+}
+func (m *ApiGroupsStatsItem) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *ApiGroupsStatsItem) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_ApiGroupsStatsItem.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *ApiGroupsStatsItem) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ApiGroupsStatsItem.Merge(m, src)
+}
+func (m *ApiGroupsStatsItem) XXX_Size() int {
+	return m.Size()
+}
+func (m *ApiGroupsStatsItem) XXX_DiscardUnknown() {
+	xxx_messageInfo_ApiGroupsStatsItem.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ApiGroupsStatsItem proto.InternalMessageInfo
+
+func (m *ApiGroupsStatsItem) GetId() *ApiGroupId {
+	if m != nil {
+		return m.Id
+	}
+	return nil
+}
+
+func (m *ApiGroupsStatsItem) GetStats() *ApiGroupStats {
+	if m != nil {
+		return m.Stats
+	}
+	return nil
+}
+
+// API Groups Stats Response
+//
+// x-displayName: "API Groups Stats Response"
+// Response for the API Groups Stats request
+type GetApiGroupsStatsRsp struct {
+	// items
+	//
+	// x-displayName: "API Groups Stats"
+	// A list of API Groups stats, where each item contains an API Group ID and stats
+	Items []*ApiGroupsStatsItem `protobuf:"bytes,1,rep,name=items,proto3" json:"items,omitempty"`
+}
+
+func (m *GetApiGroupsStatsRsp) Reset()      { *m = GetApiGroupsStatsRsp{} }
+func (*GetApiGroupsStatsRsp) ProtoMessage() {}
+func (*GetApiGroupsStatsRsp) Descriptor() ([]byte, []int) {
+	return fileDescriptor_c56144eaf2997be3, []int{7}
+}
+func (m *GetApiGroupsStatsRsp) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *GetApiGroupsStatsRsp) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_GetApiGroupsStatsRsp.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *GetApiGroupsStatsRsp) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GetApiGroupsStatsRsp.Merge(m, src)
+}
+func (m *GetApiGroupsStatsRsp) XXX_Size() int {
+	return m.Size()
+}
+func (m *GetApiGroupsStatsRsp) XXX_DiscardUnknown() {
+	xxx_messageInfo_GetApiGroupsStatsRsp.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_GetApiGroupsStatsRsp proto.InternalMessageInfo
+
+func (m *GetApiGroupsStatsRsp) GetItems() []*ApiGroupsStatsItem {
+	if m != nil {
+		return m.Items
+	}
+	return nil
+}
+
 func init() {
 	proto.RegisterType((*EvaluateApiGroupReq)(nil), "ves.io.schema.views.app_api_group.EvaluateApiGroupReq")
 	golang_proto.RegisterType((*EvaluateApiGroupReq)(nil), "ves.io.schema.views.app_api_group.EvaluateApiGroupReq")
@@ -272,6 +556,16 @@ func init() {
 	golang_proto.RegisterType((*EvaluateApiGroupRsp)(nil), "ves.io.schema.views.app_api_group.EvaluateApiGroupRsp")
 	proto.RegisterType((*ApiEndpoint)(nil), "ves.io.schema.views.app_api_group.ApiEndpoint")
 	golang_proto.RegisterType((*ApiEndpoint)(nil), "ves.io.schema.views.app_api_group.ApiEndpoint")
+	proto.RegisterType((*GetApiGroupsStatsReq)(nil), "ves.io.schema.views.app_api_group.GetApiGroupsStatsReq")
+	golang_proto.RegisterType((*GetApiGroupsStatsReq)(nil), "ves.io.schema.views.app_api_group.GetApiGroupsStatsReq")
+	proto.RegisterType((*ApiGroupId)(nil), "ves.io.schema.views.app_api_group.ApiGroupId")
+	golang_proto.RegisterType((*ApiGroupId)(nil), "ves.io.schema.views.app_api_group.ApiGroupId")
+	proto.RegisterType((*ApiGroupStats)(nil), "ves.io.schema.views.app_api_group.ApiGroupStats")
+	golang_proto.RegisterType((*ApiGroupStats)(nil), "ves.io.schema.views.app_api_group.ApiGroupStats")
+	proto.RegisterType((*ApiGroupsStatsItem)(nil), "ves.io.schema.views.app_api_group.ApiGroupsStatsItem")
+	golang_proto.RegisterType((*ApiGroupsStatsItem)(nil), "ves.io.schema.views.app_api_group.ApiGroupsStatsItem")
+	proto.RegisterType((*GetApiGroupsStatsRsp)(nil), "ves.io.schema.views.app_api_group.GetApiGroupsStatsRsp")
+	golang_proto.RegisterType((*GetApiGroupsStatsRsp)(nil), "ves.io.schema.views.app_api_group.GetApiGroupsStatsRsp")
 }
 
 func init() {
@@ -282,49 +576,60 @@ func init() {
 }
 
 var fileDescriptor_c56144eaf2997be3 = []byte{
-	// 666 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xa4, 0x54, 0x4d, 0x6b, 0x13, 0x4f,
-	0x18, 0xcf, 0x24, 0x7f, 0x4a, 0xb3, 0x85, 0x7f, 0xcb, 0x2a, 0x92, 0xc6, 0x32, 0xc6, 0x78, 0x09,
-	0x42, 0x66, 0x6c, 0x84, 0x22, 0x7a, 0x6a, 0xa5, 0x54, 0x0f, 0xbe, 0x10, 0x0b, 0x82, 0x97, 0x30,
-	0xd9, 0x3c, 0xdd, 0x8c, 0xee, 0xee, 0x8c, 0x3b, 0xb3, 0x6b, 0x83, 0x08, 0xa5, 0x7e, 0x81, 0xaa,
-	0x5f, 0xc2, 0x8b, 0x77, 0xb1, 0x97, 0xde, 0xec, 0x49, 0x8a, 0x5e, 0x7a, 0xb4, 0x1b, 0x41, 0xbd,
-	0xf5, 0x23, 0x48, 0x27, 0x9b, 0x98, 0x84, 0x4a, 0x8b, 0xde, 0x66, 0xe7, 0xf7, 0xf2, 0x3c, 0xf3,
-	0xcc, 0x6f, 0xd6, 0xba, 0x16, 0x83, 0x22, 0x5c, 0x50, 0xe5, 0xb4, 0xc1, 0x67, 0x34, 0xe6, 0xf0,
-	0x4c, 0x51, 0x26, 0x65, 0x83, 0x49, 0xde, 0x70, 0x43, 0x11, 0x49, 0x2a, 0xa3, 0xa6, 0xc7, 0x9d,
-	0x86, 0x13, 0x29, 0x2d, 0x7c, 0x26, 0x39, 0x91, 0xa1, 0xd0, 0xc2, 0xbe, 0xd8, 0x53, 0x92, 0x9e,
-	0x92, 0x18, 0x25, 0x19, 0x51, 0x16, 0xab, 0x2e, 0xd7, 0xed, 0xa8, 0x49, 0x1c, 0xe1, 0x53, 0x57,
-	0xb8, 0x82, 0x1a, 0x65, 0x33, 0x5a, 0x33, 0x5f, 0xe6, 0xc3, 0xac, 0x7a, 0x8e, 0xc5, 0x39, 0x57,
-	0x08, 0xd7, 0x03, 0xca, 0x24, 0xa7, 0x2c, 0x08, 0x84, 0x66, 0x9a, 0x8b, 0x40, 0xa5, 0xe8, 0x85,
-	0x14, 0x1d, 0x78, 0x68, 0xee, 0x83, 0xd2, 0xcc, 0x97, 0x29, 0xe1, 0xfc, 0xe8, 0x51, 0x84, 0x1c,
-	0x56, 0xcf, 0x8e, 0x82, 0xba, 0x23, 0xa1, 0x0f, 0xcd, 0x8d, 0x8d, 0x80, 0x79, 0xbc, 0xc5, 0x34,
-	0xa4, 0x68, 0x79, 0x0c, 0x05, 0x05, 0x41, 0x3c, 0x66, 0x4e, 0x8e, 0x1f, 0x22, 0x6f, 0xb4, 0x60,
-	0x8d, 0x07, 0xfc, 0x88, 0x3a, 0x52, 0xb1, 0x7a, 0xf2, 0xd0, 0x87, 0xe8, 0xe5, 0x97, 0xc8, 0x3a,
-	0xb3, 0x1c, 0x33, 0x2f, 0x62, 0x1a, 0x16, 0x25, 0x5f, 0x39, 0x22, 0xd4, 0xe1, 0xa9, 0x3d, 0x67,
-	0xe5, 0x03, 0xe6, 0x83, 0x92, 0xcc, 0x81, 0x02, 0x2a, 0xa1, 0x4a, 0xbe, 0xfe, 0x7b, 0xc3, 0xbe,
-	0x6b, 0xe5, 0x07, 0x76, 0x85, 0x6c, 0x09, 0x55, 0xa6, 0x6a, 0xf3, 0xe4, 0xc4, 0x3b, 0x23, 0x2b,
-	0x9e, 0x68, 0x32, 0xef, 0x81, 0x04, 0x67, 0xb5, 0x23, 0xa1, 0x3e, 0xc9, 0xd2, 0x82, 0xe5, 0xd7,
-	0xd9, 0x63, 0xba, 0x50, 0x72, 0xb4, 0x0e, 0xfa, 0xe7, 0x3a, 0x76, 0xcb, 0x3a, 0xe7, 0x33, 0xed,
-	0xb4, 0x79, 0xe0, 0x1a, 0x3a, 0x04, 0x2d, 0x29, 0x78, 0xa0, 0x55, 0x21, 0x5b, 0xca, 0x55, 0xa6,
-	0x6a, 0xe4, 0x14, 0xe6, 0x8b, 0x92, 0x2f, 0xa7, 0xb2, 0xfa, 0xd9, 0xbe, 0xdb, 0xd0, 0xa6, 0xb2,
-	0x97, 0xad, 0x19, 0x26, 0x39, 0x48, 0xd5, 0x18, 0xc4, 0xa8, 0x90, 0x33, 0xcd, 0x17, 0x49, 0x2f,
-	0x68, 0xa4, 0x1f, 0x34, 0xb2, 0xda, 0x67, 0xd4, 0xa7, 0x7b, 0x9a, 0xc1, 0x46, 0x19, 0xac, 0xa9,
-	0x21, 0x5b, 0x7b, 0xde, 0x9a, 0xf0, 0x41, 0xb7, 0x45, 0xcb, 0x0c, 0xe2, 0xff, 0xda, 0xec, 0x58,
-	0xaf, 0xb7, 0xb4, 0x96, 0x77, 0x0c, 0xa1, 0x9e, 0x12, 0xed, 0x4b, 0xd6, 0x7f, 0x92, 0xe9, 0xb6,
-	0xb9, 0xa1, 0xfc, 0xd2, 0xf4, 0x87, 0x9f, 0x3b, 0x39, 0x2b, 0x9c, 0x2c, 0xa1, 0xca, 0xc6, 0xe4,
-	0x56, 0x0e, 0xd5, 0x0d, 0x58, 0x7b, 0x97, 0xb5, 0xf2, 0x37, 0xcd, 0xfb, 0x5b, 0xbc, 0x7f, 0xdb,
-	0xfe, 0x8e, 0xac, 0x99, 0xf1, 0x9b, 0xb0, 0x17, 0x4e, 0x31, 0x96, 0x63, 0x42, 0x54, 0xfc, 0x2b,
-	0x9d, 0x92, 0x65, 0x67, 0xf7, 0x7d, 0x16, 0x25, 0x1f, 0x0b, 0xc5, 0x18, 0x54, 0x95, 0x8b, 0xaa,
-	0x0c, 0xc5, 0x7a, 0xa7, 0xaa, 0xc0, 0x89, 0x42, 0xae, 0x3b, 0xd5, 0x10, 0x58, 0x6b, 0xf3, 0xcb,
-	0xb7, 0x37, 0xd9, 0x1b, 0xe5, 0x85, 0xf4, 0x0f, 0x42, 0x07, 0xd9, 0x54, 0xf4, 0xf9, 0x60, 0xfd,
-	0x62, 0x34, 0xf8, 0x8a, 0x42, 0x5a, 0xec, 0x3a, 0xba, 0x5c, 0x5c, 0xd8, 0xd9, 0x46, 0xb9, 0xcf,
-	0xdb, 0xa8, 0x72, 0x72, 0x8f, 0xf7, 0x9a, 0x8f, 0xc1, 0xd1, 0x9b, 0x9f, 0x0a, 0xd9, 0x2b, 0x68,
-	0xe9, 0x15, 0xda, 0x3b, 0xc0, 0x99, 0xfd, 0x03, 0x9c, 0x39, 0x3c, 0xc0, 0x68, 0x23, 0xc1, 0xe8,
-	0x6d, 0x82, 0xd1, 0x6e, 0x82, 0xd1, 0x5e, 0x82, 0xd1, 0xd7, 0x04, 0xa3, 0x1f, 0x09, 0xce, 0x1c,
-	0x26, 0x18, 0x6d, 0x75, 0x71, 0x66, 0xa7, 0x8b, 0xd1, 0x5e, 0x17, 0x67, 0xf6, 0xbb, 0x38, 0xf3,
-	0xe8, 0xa1, 0x2b, 0xe4, 0x13, 0x97, 0xc4, 0xc2, 0xd3, 0x10, 0x86, 0x8c, 0x44, 0x8a, 0x9a, 0xc5,
-	0x9a, 0x08, 0xfd, 0xa3, 0x43, 0xc6, 0xbc, 0x05, 0x61, 0xb5, 0x0f, 0x53, 0xd9, 0x74, 0x05, 0x85,
-	0x75, 0x9d, 0x3e, 0xe5, 0x3f, 0xbf, 0xe8, 0xe6, 0x84, 0xc9, 0xd3, 0xd5, 0x5f, 0x01, 0x00, 0x00,
-	0xff, 0xff, 0x1c, 0x5b, 0x6a, 0xcd, 0x72, 0x05, 0x00, 0x00,
+	// 844 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xa4, 0x55, 0x41, 0x6f, 0xe3, 0x44,
+	0x14, 0xce, 0x38, 0xdd, 0x55, 0x33, 0xd5, 0xb2, 0xcb, 0xb0, 0x42, 0x69, 0x88, 0x4c, 0x30, 0x97,
+	0x68, 0x25, 0xdb, 0xbb, 0x59, 0x28, 0xab, 0x45, 0x80, 0xba, 0xab, 0x52, 0x2a, 0x04, 0xac, 0xbc,
+	0x2b, 0x21, 0x71, 0x09, 0x13, 0x7b, 0xea, 0x0c, 0xc4, 0x9e, 0xc1, 0x33, 0x0e, 0x1b, 0x21, 0xa4,
+	0xd5, 0xf2, 0x07, 0x0a, 0x1c, 0x38, 0xf0, 0x07, 0xf8, 0x09, 0x88, 0x5e, 0x7a, 0xa3, 0x27, 0x54,
+	0xc1, 0xa5, 0x47, 0xea, 0x20, 0x01, 0xb7, 0xfe, 0x04, 0xe4, 0xb1, 0x9d, 0xc6, 0x21, 0x28, 0x69,
+	0xb9, 0x8d, 0xe7, 0x7d, 0xdf, 0xf7, 0xe6, 0xbd, 0xf9, 0xfc, 0x06, 0xde, 0x19, 0x12, 0x61, 0x51,
+	0x66, 0x0b, 0xb7, 0x4f, 0x02, 0x6c, 0x0f, 0x29, 0xf9, 0x5c, 0xd8, 0x98, 0xf3, 0x2e, 0xe6, 0xb4,
+	0xeb, 0x47, 0x2c, 0xe6, 0x36, 0x8f, 0x7b, 0x03, 0xea, 0x76, 0xdd, 0x58, 0x48, 0x16, 0x60, 0x4e,
+	0x2d, 0x1e, 0x31, 0xc9, 0xd0, 0x4b, 0x19, 0xd3, 0xca, 0x98, 0x96, 0x62, 0x5a, 0x25, 0x66, 0xc3,
+	0xf4, 0xa9, 0xec, 0xc7, 0x3d, 0xcb, 0x65, 0x81, 0xed, 0x33, 0x9f, 0xd9, 0x8a, 0xd9, 0x8b, 0x77,
+	0xd5, 0x97, 0xfa, 0x50, 0xab, 0x4c, 0xb1, 0xd1, 0xf4, 0x19, 0xf3, 0x07, 0xc4, 0xc6, 0x9c, 0xda,
+	0x38, 0x0c, 0x99, 0xc4, 0x92, 0xb2, 0x50, 0xe4, 0xd1, 0x17, 0xf3, 0xe8, 0x44, 0x43, 0xd2, 0x80,
+	0x08, 0x89, 0x03, 0x9e, 0x03, 0x5e, 0x28, 0x97, 0xc2, 0xf8, 0x34, 0x7b, 0xbd, 0x1c, 0x94, 0x23,
+	0x4e, 0x8a, 0x50, 0x73, 0xa6, 0x05, 0x78, 0x40, 0x3d, 0x2c, 0x49, 0x1e, 0x35, 0x66, 0xa2, 0x44,
+	0x90, 0x70, 0x38, 0x23, 0x6e, 0xcd, 0x6f, 0x22, 0xed, 0x7a, 0x64, 0x97, 0x86, 0x34, 0x85, 0x96,
+	0x32, 0x9a, 0x8b, 0x9b, 0x3e, 0x05, 0x37, 0xbe, 0x02, 0xf0, 0xb9, 0xad, 0x21, 0x1e, 0xc4, 0x58,
+	0x92, 0x4d, 0x4e, 0xb7, 0x53, 0x80, 0x43, 0x3e, 0x43, 0x4d, 0x58, 0x0b, 0x71, 0x40, 0x04, 0xc7,
+	0x2e, 0xa9, 0x83, 0x16, 0x68, 0xd7, 0x9c, 0xb3, 0x0d, 0xf4, 0x3e, 0xac, 0x4d, 0xe4, 0xea, 0x5a,
+	0x0b, 0xb4, 0xd7, 0x3a, 0xb7, 0xac, 0x85, 0x77, 0x66, 0x6d, 0x0f, 0x58, 0x0f, 0x0f, 0x1e, 0x72,
+	0xe2, 0x3e, 0x1a, 0x71, 0xe2, 0xac, 0xe2, 0x3c, 0xa1, 0xf1, 0x8d, 0x36, 0xe7, 0x14, 0x82, 0x97,
+	0xf3, 0x80, 0xff, 0x9d, 0x07, 0x79, 0xf0, 0xf9, 0x00, 0x4b, 0xb7, 0x4f, 0x43, 0x5f, 0xc1, 0x49,
+	0xe8, 0x71, 0x46, 0x43, 0x29, 0xea, 0x5a, 0xab, 0xda, 0x5e, 0xeb, 0x58, 0x4b, 0x88, 0x6f, 0x72,
+	0xba, 0x95, 0xd3, 0x9c, 0xeb, 0x85, 0xda, 0xd4, 0xa6, 0x40, 0x5b, 0xf0, 0x1a, 0xe6, 0x94, 0x70,
+	0xd1, 0x9d, 0xd8, 0xa8, 0x5e, 0x55, 0x87, 0x6f, 0x58, 0x99, 0xd1, 0xac, 0xc2, 0x68, 0xd6, 0xa3,
+	0x02, 0xe1, 0x5c, 0xcd, 0x38, 0x93, 0x0d, 0x83, 0xc0, 0xb5, 0x29, 0x59, 0x74, 0x0b, 0x5e, 0x0e,
+	0x88, 0xec, 0x33, 0x4f, 0x35, 0xe2, 0x99, 0xce, 0xfa, 0xcc, 0x59, 0xdf, 0x91, 0x92, 0xbf, 0xa7,
+	0x00, 0x4e, 0x0e, 0x44, 0x2f, 0xc3, 0x15, 0x8e, 0x65, 0x5f, 0xdd, 0x50, 0xed, 0xde, 0xd5, 0x9f,
+	0xfe, 0x3e, 0xa8, 0xc2, 0x68, 0xb5, 0x05, 0xda, 0x4f, 0x56, 0xf7, 0xaa, 0xc0, 0x51, 0x41, 0xe3,
+	0x15, 0x78, 0x7d, 0x9b, 0xc8, 0xa2, 0xeb, 0xe2, 0xa1, 0xc4, 0x52, 0x2c, 0x74, 0x80, 0xf1, 0x26,
+	0x84, 0x05, 0x65, 0xc7, 0x5b, 0xe0, 0x16, 0x04, 0x57, 0xd2, 0x8f, 0xec, 0x18, 0x8e, 0x5a, 0x1b,
+	0x0f, 0xe0, 0x95, 0x82, 0xaf, 0x32, 0xa2, 0xb7, 0x60, 0x93, 0xc5, 0x32, 0xfd, 0x39, 0xbc, 0xf2,
+	0xd5, 0x74, 0x5d, 0x16, 0x87, 0x52, 0xa9, 0x5e, 0x71, 0xd6, 0x0b, 0xcc, 0x74, 0xc3, 0xef, 0xa7,
+	0x00, 0xe3, 0x7b, 0x00, 0x51, 0xb9, 0x8a, 0x1d, 0x49, 0x02, 0xf4, 0x06, 0xd4, 0xa8, 0x97, 0x7b,
+	0xc7, 0x5c, 0xee, 0x7a, 0xf3, 0xaa, 0x1c, 0x8d, 0x7a, 0xe8, 0x6d, 0x78, 0x49, 0xa4, 0x5a, 0xb9,
+	0xcb, 0x6f, 0x9e, 0x43, 0x21, 0xeb, 0x64, 0x46, 0x37, 0xdc, 0x79, 0x5d, 0x16, 0x1c, 0xbd, 0x0b,
+	0x2f, 0x51, 0x49, 0x02, 0x51, 0x07, 0xca, 0x80, 0xaf, 0x9e, 0x43, 0xff, 0xac, 0x48, 0x27, 0xd3,
+	0xe8, 0x7c, 0xb7, 0x02, 0x6b, 0xf7, 0xd5, 0x28, 0xdd, 0x7c, 0xb0, 0x83, 0xfe, 0x04, 0xf0, 0xda,
+	0xec, 0x4f, 0x85, 0x36, 0x96, 0x48, 0x30, 0x67, 0x1e, 0x34, 0x2e, 0xc4, 0x13, 0xdc, 0x70, 0x0f,
+	0x7f, 0xd4, 0x40, 0xf2, 0x73, 0xbd, 0x31, 0x24, 0xc2, 0xa4, 0xcc, 0xe4, 0x11, 0x7b, 0x3c, 0x32,
+	0x05, 0x71, 0xe3, 0x88, 0xca, 0x91, 0x19, 0x11, 0xec, 0x3d, 0xfd, 0xed, 0x8f, 0x6f, 0xb5, 0xd7,
+	0x8d, 0x8d, 0xfc, 0x31, 0xb0, 0x27, 0xc6, 0x11, 0xf6, 0x17, 0x93, 0xf5, 0x97, 0xe5, 0x19, 0x26,
+	0x6c, 0x92, 0x27, 0xbb, 0x0b, 0x6e, 0xa4, 0x95, 0x3e, 0xfb, 0xaf, 0xee, 0xa2, 0xd7, 0x96, 0x99,
+	0x14, 0x73, 0x9c, 0xdf, 0xb8, 0x18, 0x51, 0x70, 0xe3, 0xe3, 0x25, 0x8b, 0xbd, 0x63, 0xdc, 0x3e,
+	0x5f, 0xb1, 0xca, 0x43, 0x77, 0xc1, 0x8d, 0xc6, 0xc6, 0xc1, 0x3e, 0xa8, 0xfe, 0xba, 0x0f, 0xda,
+	0x8b, 0x4f, 0xf8, 0x41, 0xef, 0x13, 0xe2, 0xca, 0xa7, 0xbf, 0xd4, 0xb5, 0x9b, 0xe0, 0xde, 0xd7,
+	0xe0, 0xe8, 0x44, 0xaf, 0x1c, 0x9f, 0xe8, 0x95, 0xd3, 0x13, 0x1d, 0x3c, 0x49, 0x74, 0xf0, 0x43,
+	0xa2, 0x83, 0xc3, 0x44, 0x07, 0x47, 0x89, 0x0e, 0x7e, 0x4f, 0x74, 0xf0, 0x57, 0xa2, 0x57, 0x4e,
+	0x13, 0x1d, 0xec, 0x8d, 0xf5, 0xca, 0xc1, 0x58, 0x07, 0x47, 0x63, 0xbd, 0x72, 0x3c, 0xd6, 0x2b,
+	0x1f, 0x7d, 0xe8, 0x33, 0xfe, 0xa9, 0x6f, 0x0d, 0xd9, 0x40, 0x92, 0x28, 0xc2, 0x56, 0x2c, 0x6c,
+	0xb5, 0xd8, 0x65, 0x51, 0x90, 0x56, 0x38, 0xa4, 0x1e, 0x89, 0xcc, 0x22, 0x6c, 0xf3, 0x9e, 0xcf,
+	0x6c, 0xf2, 0x58, 0xe6, 0xef, 0xcf, 0x7f, 0x3f, 0x43, 0xbd, 0xcb, 0x6a, 0x08, 0xde, 0xfe, 0x27,
+	0x00, 0x00, 0xff, 0xff, 0xab, 0xda, 0x80, 0x2b, 0x27, 0x08, 0x00, 0x00,
 }
 
 func (this *EvaluateApiGroupReq) Equal(that interface{}) bool {
@@ -416,6 +721,137 @@ func (this *ApiEndpoint) Equal(that interface{}) bool {
 	}
 	return true
 }
+func (this *GetApiGroupsStatsReq) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GetApiGroupsStatsReq)
+	if !ok {
+		that2, ok := that.(GetApiGroupsStatsReq)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.Namespace != that1.Namespace {
+		return false
+	}
+	return true
+}
+func (this *ApiGroupId) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ApiGroupId)
+	if !ok {
+		that2, ok := that.(ApiGroupId)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.Namespace != that1.Namespace {
+		return false
+	}
+	if this.Name != that1.Name {
+		return false
+	}
+	return true
+}
+func (this *ApiGroupStats) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ApiGroupStats)
+	if !ok {
+		that2, ok := that.(ApiGroupStats)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.OutdatedApiEndpointsCount != that1.OutdatedApiEndpointsCount {
+		return false
+	}
+	return true
+}
+func (this *ApiGroupsStatsItem) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ApiGroupsStatsItem)
+	if !ok {
+		that2, ok := that.(ApiGroupsStatsItem)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.Id.Equal(that1.Id) {
+		return false
+	}
+	if !this.Stats.Equal(that1.Stats) {
+		return false
+	}
+	return true
+}
+func (this *GetApiGroupsStatsRsp) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GetApiGroupsStatsRsp)
+	if !ok {
+		that2, ok := that.(GetApiGroupsStatsRsp)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if len(this.Items) != len(that1.Items) {
+		return false
+	}
+	for i := range this.Items {
+		if !this.Items[i].Equal(that1.Items[i]) {
+			return false
+		}
+	}
+	return true
+}
 func (this *EvaluateApiGroupReq) GoString() string {
 	if this == nil {
 		return "nil"
@@ -458,6 +894,64 @@ func (this *ApiEndpoint) GoString() string {
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
+func (this *GetApiGroupsStatsReq) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 5)
+	s = append(s, "&app_api_group.GetApiGroupsStatsReq{")
+	s = append(s, "Namespace: "+fmt.Sprintf("%#v", this.Namespace)+",\n")
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *ApiGroupId) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 6)
+	s = append(s, "&app_api_group.ApiGroupId{")
+	s = append(s, "Namespace: "+fmt.Sprintf("%#v", this.Namespace)+",\n")
+	s = append(s, "Name: "+fmt.Sprintf("%#v", this.Name)+",\n")
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *ApiGroupStats) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 5)
+	s = append(s, "&app_api_group.ApiGroupStats{")
+	s = append(s, "OutdatedApiEndpointsCount: "+fmt.Sprintf("%#v", this.OutdatedApiEndpointsCount)+",\n")
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *ApiGroupsStatsItem) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 6)
+	s = append(s, "&app_api_group.ApiGroupsStatsItem{")
+	if this.Id != nil {
+		s = append(s, "Id: "+fmt.Sprintf("%#v", this.Id)+",\n")
+	}
+	if this.Stats != nil {
+		s = append(s, "Stats: "+fmt.Sprintf("%#v", this.Stats)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *GetApiGroupsStatsRsp) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 5)
+	s = append(s, "&app_api_group.GetApiGroupsStatsRsp{")
+	if this.Items != nil {
+		s = append(s, "Items: "+fmt.Sprintf("%#v", this.Items)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
 func valueToGoStringPublicCustomapi(v interface{}, typ string) string {
 	rv := reflect.ValueOf(v)
 	if rv.IsNil() {
@@ -485,6 +979,11 @@ type CustomAPIClient interface {
 	// Evaluate API Group Builder against all API endpoints associated with the referenced object and return the resulting API Group.
 	// For example, if the referenced object is an HTTP LB then all discovered and imported endpoints are associated with it.
 	EvaluateApiGroup(ctx context.Context, in *EvaluateApiGroupReq, opts ...grpc.CallOption) (*EvaluateApiGroupRsp, error)
+	// API Group Stats
+	//
+	// x-displayName: "Evaluate API Group"
+	// Check if there are any changes happened to the API Groups, and return number of API Endpoints updated for each API Group.
+	GetApiGroupsStats(ctx context.Context, in *GetApiGroupsStatsReq, opts ...grpc.CallOption) (*GetApiGroupsStatsRsp, error)
 }
 
 type customAPIClient struct {
@@ -504,6 +1003,15 @@ func (c *customAPIClient) EvaluateApiGroup(ctx context.Context, in *EvaluateApiG
 	return out, nil
 }
 
+func (c *customAPIClient) GetApiGroupsStats(ctx context.Context, in *GetApiGroupsStatsReq, opts ...grpc.CallOption) (*GetApiGroupsStatsRsp, error) {
+	out := new(GetApiGroupsStatsRsp)
+	err := c.cc.Invoke(ctx, "/ves.io.schema.views.app_api_group.CustomAPI/GetApiGroupsStats", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // CustomAPIServer is the server API for CustomAPI service.
 type CustomAPIServer interface {
 	// Evaluate API Group
@@ -512,6 +1020,11 @@ type CustomAPIServer interface {
 	// Evaluate API Group Builder against all API endpoints associated with the referenced object and return the resulting API Group.
 	// For example, if the referenced object is an HTTP LB then all discovered and imported endpoints are associated with it.
 	EvaluateApiGroup(context.Context, *EvaluateApiGroupReq) (*EvaluateApiGroupRsp, error)
+	// API Group Stats
+	//
+	// x-displayName: "Evaluate API Group"
+	// Check if there are any changes happened to the API Groups, and return number of API Endpoints updated for each API Group.
+	GetApiGroupsStats(context.Context, *GetApiGroupsStatsReq) (*GetApiGroupsStatsRsp, error)
 }
 
 // UnimplementedCustomAPIServer can be embedded to have forward compatible implementations.
@@ -520,6 +1033,9 @@ type UnimplementedCustomAPIServer struct {
 
 func (*UnimplementedCustomAPIServer) EvaluateApiGroup(ctx context.Context, req *EvaluateApiGroupReq) (*EvaluateApiGroupRsp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method EvaluateApiGroup not implemented")
+}
+func (*UnimplementedCustomAPIServer) GetApiGroupsStats(ctx context.Context, req *GetApiGroupsStatsReq) (*GetApiGroupsStatsRsp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetApiGroupsStats not implemented")
 }
 
 func RegisterCustomAPIServer(s *grpc.Server, srv CustomAPIServer) {
@@ -544,6 +1060,24 @@ func _CustomAPI_EvaluateApiGroup_Handler(srv interface{}, ctx context.Context, d
 	return interceptor(ctx, in, info, handler)
 }
 
+func _CustomAPI_GetApiGroupsStats_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetApiGroupsStatsReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CustomAPIServer).GetApiGroupsStats(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/ves.io.schema.views.app_api_group.CustomAPI/GetApiGroupsStats",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CustomAPIServer).GetApiGroupsStats(ctx, req.(*GetApiGroupsStatsReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 var _CustomAPI_serviceDesc = grpc.ServiceDesc{
 	ServiceName: "ves.io.schema.views.app_api_group.CustomAPI",
 	HandlerType: (*CustomAPIServer)(nil),
@@ -551,6 +1085,10 @@ var _CustomAPI_serviceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "EvaluateApiGroup",
 			Handler:    _CustomAPI_EvaluateApiGroup_Handler,
+		},
+		{
+			MethodName: "GetApiGroupsStats",
+			Handler:    _CustomAPI_GetApiGroupsStats_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
@@ -695,6 +1233,185 @@ func (m *ApiEndpoint) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
+func (m *GetApiGroupsStatsReq) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *GetApiGroupsStatsReq) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetApiGroupsStatsReq) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.Namespace) > 0 {
+		i -= len(m.Namespace)
+		copy(dAtA[i:], m.Namespace)
+		i = encodeVarintPublicCustomapi(dAtA, i, uint64(len(m.Namespace)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *ApiGroupId) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *ApiGroupId) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ApiGroupId) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.Name) > 0 {
+		i -= len(m.Name)
+		copy(dAtA[i:], m.Name)
+		i = encodeVarintPublicCustomapi(dAtA, i, uint64(len(m.Name)))
+		i--
+		dAtA[i] = 0x12
+	}
+	if len(m.Namespace) > 0 {
+		i -= len(m.Namespace)
+		copy(dAtA[i:], m.Namespace)
+		i = encodeVarintPublicCustomapi(dAtA, i, uint64(len(m.Namespace)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *ApiGroupStats) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *ApiGroupStats) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ApiGroupStats) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.OutdatedApiEndpointsCount != 0 {
+		i = encodeVarintPublicCustomapi(dAtA, i, uint64(m.OutdatedApiEndpointsCount))
+		i--
+		dAtA[i] = 0x8
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *ApiGroupsStatsItem) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *ApiGroupsStatsItem) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ApiGroupsStatsItem) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.Stats != nil {
+		{
+			size, err := m.Stats.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintPublicCustomapi(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x12
+	}
+	if m.Id != nil {
+		{
+			size, err := m.Id.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintPublicCustomapi(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *GetApiGroupsStatsRsp) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *GetApiGroupsStatsRsp) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetApiGroupsStatsRsp) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.Items) > 0 {
+		for iNdEx := len(m.Items) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.Items[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintPublicCustomapi(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0xa
+		}
+	}
+	return len(dAtA) - i, nil
+}
+
 func encodeVarintPublicCustomapi(dAtA []byte, offset int, v uint64) int {
 	offset -= sovPublicCustomapi(v)
 	base := offset
@@ -762,6 +1479,80 @@ func (m *ApiEndpoint) Size() (n int) {
 	return n
 }
 
+func (m *GetApiGroupsStatsReq) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Namespace)
+	if l > 0 {
+		n += 1 + l + sovPublicCustomapi(uint64(l))
+	}
+	return n
+}
+
+func (m *ApiGroupId) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Namespace)
+	if l > 0 {
+		n += 1 + l + sovPublicCustomapi(uint64(l))
+	}
+	l = len(m.Name)
+	if l > 0 {
+		n += 1 + l + sovPublicCustomapi(uint64(l))
+	}
+	return n
+}
+
+func (m *ApiGroupStats) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.OutdatedApiEndpointsCount != 0 {
+		n += 1 + sovPublicCustomapi(uint64(m.OutdatedApiEndpointsCount))
+	}
+	return n
+}
+
+func (m *ApiGroupsStatsItem) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Id != nil {
+		l = m.Id.Size()
+		n += 1 + l + sovPublicCustomapi(uint64(l))
+	}
+	if m.Stats != nil {
+		l = m.Stats.Size()
+		n += 1 + l + sovPublicCustomapi(uint64(l))
+	}
+	return n
+}
+
+func (m *GetApiGroupsStatsRsp) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if len(m.Items) > 0 {
+		for _, e := range m.Items {
+			l = e.Size()
+			n += 1 + l + sovPublicCustomapi(uint64(l))
+		}
+	}
+	return n
+}
+
 func sovPublicCustomapi(x uint64) (n int) {
 	return (math_bits.Len64(x|1) + 6) / 7
 }
@@ -803,6 +1594,63 @@ func (this *ApiEndpoint) String() string {
 	s := strings.Join([]string{`&ApiEndpoint{`,
 		`Method:` + fmt.Sprintf("%v", this.Method) + `,`,
 		`Path:` + fmt.Sprintf("%v", this.Path) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GetApiGroupsStatsReq) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GetApiGroupsStatsReq{`,
+		`Namespace:` + fmt.Sprintf("%v", this.Namespace) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ApiGroupId) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ApiGroupId{`,
+		`Namespace:` + fmt.Sprintf("%v", this.Namespace) + `,`,
+		`Name:` + fmt.Sprintf("%v", this.Name) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ApiGroupStats) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ApiGroupStats{`,
+		`OutdatedApiEndpointsCount:` + fmt.Sprintf("%v", this.OutdatedApiEndpointsCount) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ApiGroupsStatsItem) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ApiGroupsStatsItem{`,
+		`Id:` + strings.Replace(this.Id.String(), "ApiGroupId", "ApiGroupId", 1) + `,`,
+		`Stats:` + strings.Replace(this.Stats.String(), "ApiGroupStats", "ApiGroupStats", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GetApiGroupsStatsRsp) String() string {
+	if this == nil {
+		return "nil"
+	}
+	repeatedStringForItems := "[]*ApiGroupsStatsItem{"
+	for _, f := range this.Items {
+		repeatedStringForItems += strings.Replace(f.String(), "ApiGroupsStatsItem", "ApiGroupsStatsItem", 1) + ","
+	}
+	repeatedStringForItems += "}"
+	s := strings.Join([]string{`&GetApiGroupsStatsRsp{`,
+		`Items:` + repeatedStringForItems + `,`,
 		`}`,
 	}, "")
 	return s
@@ -1174,6 +2022,492 @@ func (m *ApiEndpoint) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			m.Path = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipPublicCustomapi(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *GetApiGroupsStatsReq) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowPublicCustomapi
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: GetApiGroupsStatsReq: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: GetApiGroupsStatsReq: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Namespace", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Namespace = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipPublicCustomapi(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *ApiGroupId) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowPublicCustomapi
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: ApiGroupId: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: ApiGroupId: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Namespace", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Namespace = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Name", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Name = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipPublicCustomapi(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *ApiGroupStats) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowPublicCustomapi
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: ApiGroupStats: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: ApiGroupStats: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field OutdatedApiEndpointsCount", wireType)
+			}
+			m.OutdatedApiEndpointsCount = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.OutdatedApiEndpointsCount |= uint32(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		default:
+			iNdEx = preIndex
+			skippy, err := skipPublicCustomapi(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *ApiGroupsStatsItem) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowPublicCustomapi
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: ApiGroupsStatsItem: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: ApiGroupsStatsItem: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Id", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Id == nil {
+				m.Id = &ApiGroupId{}
+			}
+			if err := m.Id.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Stats", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Stats == nil {
+				m.Stats = &ApiGroupStats{}
+			}
+			if err := m.Stats.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipPublicCustomapi(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *GetApiGroupsStatsRsp) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowPublicCustomapi
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: GetApiGroupsStatsRsp: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: GetApiGroupsStatsRsp: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Items", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Items = append(m.Items, &ApiGroupsStatsItem{})
+			if err := m.Items[len(m.Items)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
