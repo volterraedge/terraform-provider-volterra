@@ -14,6 +14,7 @@ import (
 	math "math"
 	math_bits "math/bits"
 	reflect "reflect"
+	strconv "strconv"
 	strings "strings"
 )
 
@@ -28,6 +29,99 @@ var _ = math.Inf
 // A compilation error at this line likely means your copy of the
 // proto package needs to be updated.
 const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
+
+// DNS Query Type
+//
+// x-displayName: "DNS Query Type"
+// DNS Query Type
+type DNSQueryType int32
+
+const (
+	// Query Type A
+	//
+	// x-displayName: "Query Type A"
+	DNS_QTYPE_A DNSQueryType = 0
+	// Query Type AAAA
+	//
+	// x-displayName: "Query Type AAAA"
+	DNS_QTYPE_AAAA DNSQueryType = 1
+)
+
+var DNSQueryType_name = map[int32]string{
+	0: "DNS_QTYPE_A",
+	1: "DNS_QTYPE_AAAA",
+}
+
+var DNSQueryType_value = map[string]int32{
+	"DNS_QTYPE_A":    0,
+	"DNS_QTYPE_AAAA": 1,
+}
+
+func (DNSQueryType) EnumDescriptor() ([]byte, []int) {
+	return fileDescriptor_1d9419355153b697, []int{0}
+}
+
+// Expected DNS Response Rcode Type
+//
+// x-displayName: "DNS Response Rcode Type"
+// Expected DNS Response Rcode Type
+type DNSResponseRcodeType int32
+
+const (
+	// Rcode NOERROR
+	//
+	// x-displayName: "Rcode NOERROR"
+	DNS_RES_RCODE_NOERROR DNSResponseRcodeType = 0
+	// RCODE ANY
+	//
+	// x-displayName: "Any Rcode"
+	DNS_RES_RCODE_ANY DNSResponseRcodeType = 1
+)
+
+var DNSResponseRcodeType_name = map[int32]string{
+	0: "DNS_RES_RCODE_NOERROR",
+	1: "DNS_RES_RCODE_ANY",
+}
+
+var DNSResponseRcodeType_value = map[string]int32{
+	"DNS_RES_RCODE_NOERROR": 0,
+	"DNS_RES_RCODE_ANY":     1,
+}
+
+func (DNSResponseRcodeType) EnumDescriptor() ([]byte, []int) {
+	return fileDescriptor_1d9419355153b697, []int{1}
+}
+
+// DNS Response Record Type
+//
+// x-displayName: "DNS Response Record Type"
+// DNS Response Record Type
+type DNSResponseRecordType int32
+
+const (
+	// Requested Query Type
+	//
+	// x-displayName: "Same as Requested Query Type"
+	DNS_REQUESTED_QUERY_TYPE DNSResponseRecordType = 0
+	// Any Record Type
+	//
+	// x-displayName: "Any Record Type"
+	DNS_RES_RECORD_TYPE_ANY DNSResponseRecordType = 1
+)
+
+var DNSResponseRecordType_name = map[int32]string{
+	0: "DNS_REQUESTED_QUERY_TYPE",
+	1: "DNS_RES_RECORD_TYPE_ANY",
+}
+
+var DNSResponseRecordType_value = map[string]int32{
+	"DNS_REQUESTED_QUERY_TYPE": 0,
+	"DNS_RES_RECORD_TYPE_ANY":  1,
+}
+
+func (DNSResponseRecordType) EnumDescriptor() ([]byte, []int) {
+	return fileDescriptor_1d9419355153b697, []int{2}
+}
 
 // HttpHealthCheck
 //
@@ -191,6 +285,253 @@ func (*HttpHealthCheck) XXX_OneofWrappers() []interface{} {
 	}
 }
 
+// DNS Health Check
+//
+// x-displayName: "DNS Health Check"
+// DNS health check reports healthy if DNS query is successful and response header and answer matches the given value
+type DnsHealthCheck struct {
+	// Use Reverse mode
+	//
+	// x-displayName: "Use Reverse mode"
+	// x-example: false
+	// Enable the monitor operation in reverse mode.
+	// When the monitor is in reverse mode, a successful receive
+	// string match marks the monitored object down instead of up.
+	Reverse bool `protobuf:"varint,2,opt,name=reverse,proto3" json:"reverse,omitempty"`
+	// Query Name
+	//
+	// x-displayName: "Query Name"
+	// x-example: "www.example.com"
+	// x-required
+	// The query name that the monitor sends a DNS query for.
+	QueryName string `protobuf:"bytes,3,opt,name=query_name,json=queryName,proto3" json:"query_name,omitempty"`
+	// Query Type
+	//
+	// x-displayName: "Query Type"
+	// x-example: "A"
+	// x-required
+	// The DNS query type that the monitor sends. Supported types are: [a, aaaa] default: a
+	QueryType DNSQueryType `protobuf:"varint,4,opt,name=query_type,json=queryType,proto3,enum=ves.io.schema.healthcheck.DNSQueryType" json:"query_type,omitempty"`
+	// Expected Response Record Type
+	//
+	// x-displayName: "Expected Response Record Type"
+	// x-example: "REQUESTED_QUERY_TYPE"
+	// x-required
+	// Specifies an expected record type in the answer section of DNS Response
+	// options: [REQUESTED_QUERY_TYPE, RECORD_TYPE_ANY] when REQUESTED_QUERY_TYPE is set, health monitor expects record type same as requested query type
+	ExpectedRecordType DNSResponseRecordType `protobuf:"varint,5,opt,name=expected_record_type,json=expectedRecordType,proto3,enum=ves.io.schema.healthcheck.DNSResponseRecordType" json:"expected_record_type,omitempty"`
+	// Expected Response Rcode
+	//
+	// x-displayName: "Expected Response Rcode"
+	// x-example: "no-error"
+	// x-required
+	// Specifies an expected Rcode in the answer section of DNS Response, option [no-error, any]
+	ExpectedRcode DNSResponseRcodeType `protobuf:"varint,6,opt,name=expected_rcode,json=expectedRcode,proto3,enum=ves.io.schema.healthcheck.DNSResponseRcodeType" json:"expected_rcode,omitempty"`
+	// Expected Response Content
+	//
+	// x-displayName: "Expected Response Content"
+	// x-example: "10.0.0.1"
+	// x-required
+	// Specifies an IPv4 or IPv6 address in the answer section of DNS Response
+	ExpectedResponse string `protobuf:"bytes,7,opt,name=expected_response,json=expectedResponse,proto3" json:"expected_response,omitempty"`
+}
+
+func (m *DnsHealthCheck) Reset()      { *m = DnsHealthCheck{} }
+func (*DnsHealthCheck) ProtoMessage() {}
+func (*DnsHealthCheck) Descriptor() ([]byte, []int) {
+	return fileDescriptor_1d9419355153b697, []int{1}
+}
+func (m *DnsHealthCheck) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *DnsHealthCheck) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *DnsHealthCheck) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_DnsHealthCheck.Merge(m, src)
+}
+func (m *DnsHealthCheck) XXX_Size() int {
+	return m.Size()
+}
+func (m *DnsHealthCheck) XXX_DiscardUnknown() {
+	xxx_messageInfo_DnsHealthCheck.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_DnsHealthCheck proto.InternalMessageInfo
+
+func (m *DnsHealthCheck) GetReverse() bool {
+	if m != nil {
+		return m.Reverse
+	}
+	return false
+}
+
+func (m *DnsHealthCheck) GetQueryName() string {
+	if m != nil {
+		return m.QueryName
+	}
+	return ""
+}
+
+func (m *DnsHealthCheck) GetQueryType() DNSQueryType {
+	if m != nil {
+		return m.QueryType
+	}
+	return DNS_QTYPE_A
+}
+
+func (m *DnsHealthCheck) GetExpectedRecordType() DNSResponseRecordType {
+	if m != nil {
+		return m.ExpectedRecordType
+	}
+	return DNS_REQUESTED_QUERY_TYPE
+}
+
+func (m *DnsHealthCheck) GetExpectedRcode() DNSResponseRcodeType {
+	if m != nil {
+		return m.ExpectedRcode
+	}
+	return DNS_RES_RCODE_NOERROR
+}
+
+func (m *DnsHealthCheck) GetExpectedResponse() string {
+	if m != nil {
+		return m.ExpectedResponse
+	}
+	return ""
+}
+
+// DnsProxyUdpHealthCheck
+//
+// x-displayName: "UDP Health Check"
+// Monitor reports healthy status if TCP connection is successful and response payload matches expected response pattern
+type DnsProxyUdpHealthCheck struct {
+	// send string
+	//
+	// x-displayName: "Send string"
+	// x-example: ""
+	// x-required
+	// Text string sent in the request
+	SendPayload string `protobuf:"bytes,1,opt,name=send_payload,json=sendPayload,proto3" json:"send_payload,omitempty"`
+	// expected response
+	//
+	// x-displayName: "Expected Response pattern"
+	// x-example: ".*"
+	// x-required
+	// Specifies a regular expression pattern which will be matched against response payload
+	ExpectedResponse string `protobuf:"bytes,2,opt,name=expected_response,json=expectedResponse,proto3" json:"expected_response,omitempty"`
+}
+
+func (m *DnsProxyUdpHealthCheck) Reset()      { *m = DnsProxyUdpHealthCheck{} }
+func (*DnsProxyUdpHealthCheck) ProtoMessage() {}
+func (*DnsProxyUdpHealthCheck) Descriptor() ([]byte, []int) {
+	return fileDescriptor_1d9419355153b697, []int{2}
+}
+func (m *DnsProxyUdpHealthCheck) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *DnsProxyUdpHealthCheck) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *DnsProxyUdpHealthCheck) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_DnsProxyUdpHealthCheck.Merge(m, src)
+}
+func (m *DnsProxyUdpHealthCheck) XXX_Size() int {
+	return m.Size()
+}
+func (m *DnsProxyUdpHealthCheck) XXX_DiscardUnknown() {
+	xxx_messageInfo_DnsProxyUdpHealthCheck.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_DnsProxyUdpHealthCheck proto.InternalMessageInfo
+
+func (m *DnsProxyUdpHealthCheck) GetSendPayload() string {
+	if m != nil {
+		return m.SendPayload
+	}
+	return ""
+}
+
+func (m *DnsProxyUdpHealthCheck) GetExpectedResponse() string {
+	if m != nil {
+		return m.ExpectedResponse
+	}
+	return ""
+}
+
+// DnsProxyTcpHealthCheck
+//
+// x-displayName: "TCP Health Check"
+// Monitor reports healthy status if UDP connection is successful and response payload matches expected response pattern
+type DnsProxyTcpHealthCheck struct {
+	// send string
+	//
+	// x-displayName: "Send string"
+	// x-example: ""
+	// x-required
+	// Text string sent in the request
+	SendPayload string `protobuf:"bytes,1,opt,name=send_payload,json=sendPayload,proto3" json:"send_payload,omitempty"`
+	// expected response
+	//
+	// x-displayName: "Expected Response pattern"
+	// x-example: ".*"
+	// x-required
+	// Specifies a regular expression pattern which will be matched against response payload
+	ExpectedResponse string `protobuf:"bytes,2,opt,name=expected_response,json=expectedResponse,proto3" json:"expected_response,omitempty"`
+}
+
+func (m *DnsProxyTcpHealthCheck) Reset()      { *m = DnsProxyTcpHealthCheck{} }
+func (*DnsProxyTcpHealthCheck) ProtoMessage() {}
+func (*DnsProxyTcpHealthCheck) Descriptor() ([]byte, []int) {
+	return fileDescriptor_1d9419355153b697, []int{3}
+}
+func (m *DnsProxyTcpHealthCheck) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *DnsProxyTcpHealthCheck) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *DnsProxyTcpHealthCheck) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_DnsProxyTcpHealthCheck.Merge(m, src)
+}
+func (m *DnsProxyTcpHealthCheck) XXX_Size() int {
+	return m.Size()
+}
+func (m *DnsProxyTcpHealthCheck) XXX_DiscardUnknown() {
+	xxx_messageInfo_DnsProxyTcpHealthCheck.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_DnsProxyTcpHealthCheck proto.InternalMessageInfo
+
+func (m *DnsProxyTcpHealthCheck) GetSendPayload() string {
+	if m != nil {
+		return m.SendPayload
+	}
+	return ""
+}
+
+func (m *DnsProxyTcpHealthCheck) GetExpectedResponse() string {
+	if m != nil {
+		return m.ExpectedResponse
+	}
+	return ""
+}
+
 // TcpHealthCheck
 //
 // x-displayName: "TCP Health Check"
@@ -216,7 +557,7 @@ type TcpHealthCheck struct {
 func (m *TcpHealthCheck) Reset()      { *m = TcpHealthCheck{} }
 func (*TcpHealthCheck) ProtoMessage() {}
 func (*TcpHealthCheck) Descriptor() ([]byte, []int) {
-	return fileDescriptor_1d9419355153b697, []int{1}
+	return fileDescriptor_1d9419355153b697, []int{4}
 }
 func (m *TcpHealthCheck) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -269,6 +610,10 @@ type GlobalSpecType struct {
 	// Types that are valid to be assigned to HealthCheck:
 	//	*GlobalSpecType_HttpHealthCheck
 	//	*GlobalSpecType_TcpHealthCheck
+	//	*GlobalSpecType_DnsProxyTcpHealthCheck
+	//	*GlobalSpecType_DnsProxyUdpHealthCheck
+	//	*GlobalSpecType_DnsHealthCheck
+	//	*GlobalSpecType_DnsProxyIcmpHealthCheck
 	HealthCheck isGlobalSpecType_HealthCheck `protobuf_oneof:"health_check"`
 	// timeout
 	//
@@ -325,7 +670,7 @@ type GlobalSpecType struct {
 func (m *GlobalSpecType) Reset()      { *m = GlobalSpecType{} }
 func (*GlobalSpecType) ProtoMessage() {}
 func (*GlobalSpecType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_1d9419355153b697, []int{2}
+	return fileDescriptor_1d9419355153b697, []int{5}
 }
 func (m *GlobalSpecType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -363,9 +708,25 @@ type GlobalSpecType_HttpHealthCheck struct {
 type GlobalSpecType_TcpHealthCheck struct {
 	TcpHealthCheck *TcpHealthCheck `protobuf:"bytes,2,opt,name=tcp_health_check,json=tcpHealthCheck,proto3,oneof" json:"tcp_health_check,omitempty"`
 }
+type GlobalSpecType_DnsProxyTcpHealthCheck struct {
+	DnsProxyTcpHealthCheck *DnsProxyTcpHealthCheck `protobuf:"bytes,10,opt,name=dns_proxy_tcp_health_check,json=dnsProxyTcpHealthCheck,proto3,oneof" json:"dns_proxy_tcp_health_check,omitempty"`
+}
+type GlobalSpecType_DnsProxyUdpHealthCheck struct {
+	DnsProxyUdpHealthCheck *DnsProxyUdpHealthCheck `protobuf:"bytes,11,opt,name=dns_proxy_udp_health_check,json=dnsProxyUdpHealthCheck,proto3,oneof" json:"dns_proxy_udp_health_check,omitempty"`
+}
+type GlobalSpecType_DnsHealthCheck struct {
+	DnsHealthCheck *DnsHealthCheck `protobuf:"bytes,12,opt,name=dns_health_check,json=dnsHealthCheck,proto3,oneof" json:"dns_health_check,omitempty"`
+}
+type GlobalSpecType_DnsProxyIcmpHealthCheck struct {
+	DnsProxyIcmpHealthCheck *schema.Empty `protobuf:"bytes,13,opt,name=dns_proxy_icmp_health_check,json=dnsProxyIcmpHealthCheck,proto3,oneof" json:"dns_proxy_icmp_health_check,omitempty"`
+}
 
-func (*GlobalSpecType_HttpHealthCheck) isGlobalSpecType_HealthCheck() {}
-func (*GlobalSpecType_TcpHealthCheck) isGlobalSpecType_HealthCheck()  {}
+func (*GlobalSpecType_HttpHealthCheck) isGlobalSpecType_HealthCheck()         {}
+func (*GlobalSpecType_TcpHealthCheck) isGlobalSpecType_HealthCheck()          {}
+func (*GlobalSpecType_DnsProxyTcpHealthCheck) isGlobalSpecType_HealthCheck()  {}
+func (*GlobalSpecType_DnsProxyUdpHealthCheck) isGlobalSpecType_HealthCheck()  {}
+func (*GlobalSpecType_DnsHealthCheck) isGlobalSpecType_HealthCheck()          {}
+func (*GlobalSpecType_DnsProxyIcmpHealthCheck) isGlobalSpecType_HealthCheck() {}
 
 func (m *GlobalSpecType) GetHealthCheck() isGlobalSpecType_HealthCheck {
 	if m != nil {
@@ -384,6 +745,34 @@ func (m *GlobalSpecType) GetHttpHealthCheck() *HttpHealthCheck {
 func (m *GlobalSpecType) GetTcpHealthCheck() *TcpHealthCheck {
 	if x, ok := m.GetHealthCheck().(*GlobalSpecType_TcpHealthCheck); ok {
 		return x.TcpHealthCheck
+	}
+	return nil
+}
+
+func (m *GlobalSpecType) GetDnsProxyTcpHealthCheck() *DnsProxyTcpHealthCheck {
+	if x, ok := m.GetHealthCheck().(*GlobalSpecType_DnsProxyTcpHealthCheck); ok {
+		return x.DnsProxyTcpHealthCheck
+	}
+	return nil
+}
+
+func (m *GlobalSpecType) GetDnsProxyUdpHealthCheck() *DnsProxyUdpHealthCheck {
+	if x, ok := m.GetHealthCheck().(*GlobalSpecType_DnsProxyUdpHealthCheck); ok {
+		return x.DnsProxyUdpHealthCheck
+	}
+	return nil
+}
+
+func (m *GlobalSpecType) GetDnsHealthCheck() *DnsHealthCheck {
+	if x, ok := m.GetHealthCheck().(*GlobalSpecType_DnsHealthCheck); ok {
+		return x.DnsHealthCheck
+	}
+	return nil
+}
+
+func (m *GlobalSpecType) GetDnsProxyIcmpHealthCheck() *schema.Empty {
+	if x, ok := m.GetHealthCheck().(*GlobalSpecType_DnsProxyIcmpHealthCheck); ok {
+		return x.DnsProxyIcmpHealthCheck
 	}
 	return nil
 }
@@ -435,6 +824,10 @@ func (*GlobalSpecType) XXX_OneofWrappers() []interface{} {
 	return []interface{}{
 		(*GlobalSpecType_HttpHealthCheck)(nil),
 		(*GlobalSpecType_TcpHealthCheck)(nil),
+		(*GlobalSpecType_DnsProxyTcpHealthCheck)(nil),
+		(*GlobalSpecType_DnsProxyUdpHealthCheck)(nil),
+		(*GlobalSpecType_DnsHealthCheck)(nil),
+		(*GlobalSpecType_DnsProxyIcmpHealthCheck)(nil),
 	}
 }
 
@@ -447,6 +840,10 @@ type CreateSpecType struct {
 	// Types that are valid to be assigned to HealthCheck:
 	//	*CreateSpecType_HttpHealthCheck
 	//	*CreateSpecType_TcpHealthCheck
+	//	*CreateSpecType_DnsProxyTcpHealthCheck
+	//	*CreateSpecType_DnsProxyUdpHealthCheck
+	//	*CreateSpecType_DnsHealthCheck
+	//	*CreateSpecType_DnsProxyIcmpHealthCheck
 	HealthCheck        isCreateSpecType_HealthCheck `protobuf_oneof:"health_check"`
 	Timeout            uint32                       `protobuf:"varint,3,opt,name=timeout,proto3" json:"timeout,omitempty"`
 	Interval           uint32                       `protobuf:"varint,4,opt,name=interval,proto3" json:"interval,omitempty"`
@@ -458,7 +855,7 @@ type CreateSpecType struct {
 func (m *CreateSpecType) Reset()      { *m = CreateSpecType{} }
 func (*CreateSpecType) ProtoMessage() {}
 func (*CreateSpecType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_1d9419355153b697, []int{3}
+	return fileDescriptor_1d9419355153b697, []int{6}
 }
 func (m *CreateSpecType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -496,9 +893,25 @@ type CreateSpecType_HttpHealthCheck struct {
 type CreateSpecType_TcpHealthCheck struct {
 	TcpHealthCheck *TcpHealthCheck `protobuf:"bytes,2,opt,name=tcp_health_check,json=tcpHealthCheck,proto3,oneof" json:"tcp_health_check,omitempty"`
 }
+type CreateSpecType_DnsProxyTcpHealthCheck struct {
+	DnsProxyTcpHealthCheck *DnsProxyTcpHealthCheck `protobuf:"bytes,10,opt,name=dns_proxy_tcp_health_check,json=dnsProxyTcpHealthCheck,proto3,oneof" json:"dns_proxy_tcp_health_check,omitempty"`
+}
+type CreateSpecType_DnsProxyUdpHealthCheck struct {
+	DnsProxyUdpHealthCheck *DnsProxyUdpHealthCheck `protobuf:"bytes,11,opt,name=dns_proxy_udp_health_check,json=dnsProxyUdpHealthCheck,proto3,oneof" json:"dns_proxy_udp_health_check,omitempty"`
+}
+type CreateSpecType_DnsHealthCheck struct {
+	DnsHealthCheck *DnsHealthCheck `protobuf:"bytes,12,opt,name=dns_health_check,json=dnsHealthCheck,proto3,oneof" json:"dns_health_check,omitempty"`
+}
+type CreateSpecType_DnsProxyIcmpHealthCheck struct {
+	DnsProxyIcmpHealthCheck *schema.Empty `protobuf:"bytes,13,opt,name=dns_proxy_icmp_health_check,json=dnsProxyIcmpHealthCheck,proto3,oneof" json:"dns_proxy_icmp_health_check,omitempty"`
+}
 
-func (*CreateSpecType_HttpHealthCheck) isCreateSpecType_HealthCheck() {}
-func (*CreateSpecType_TcpHealthCheck) isCreateSpecType_HealthCheck()  {}
+func (*CreateSpecType_HttpHealthCheck) isCreateSpecType_HealthCheck()         {}
+func (*CreateSpecType_TcpHealthCheck) isCreateSpecType_HealthCheck()          {}
+func (*CreateSpecType_DnsProxyTcpHealthCheck) isCreateSpecType_HealthCheck()  {}
+func (*CreateSpecType_DnsProxyUdpHealthCheck) isCreateSpecType_HealthCheck()  {}
+func (*CreateSpecType_DnsHealthCheck) isCreateSpecType_HealthCheck()          {}
+func (*CreateSpecType_DnsProxyIcmpHealthCheck) isCreateSpecType_HealthCheck() {}
 
 func (m *CreateSpecType) GetHealthCheck() isCreateSpecType_HealthCheck {
 	if m != nil {
@@ -517,6 +930,34 @@ func (m *CreateSpecType) GetHttpHealthCheck() *HttpHealthCheck {
 func (m *CreateSpecType) GetTcpHealthCheck() *TcpHealthCheck {
 	if x, ok := m.GetHealthCheck().(*CreateSpecType_TcpHealthCheck); ok {
 		return x.TcpHealthCheck
+	}
+	return nil
+}
+
+func (m *CreateSpecType) GetDnsProxyTcpHealthCheck() *DnsProxyTcpHealthCheck {
+	if x, ok := m.GetHealthCheck().(*CreateSpecType_DnsProxyTcpHealthCheck); ok {
+		return x.DnsProxyTcpHealthCheck
+	}
+	return nil
+}
+
+func (m *CreateSpecType) GetDnsProxyUdpHealthCheck() *DnsProxyUdpHealthCheck {
+	if x, ok := m.GetHealthCheck().(*CreateSpecType_DnsProxyUdpHealthCheck); ok {
+		return x.DnsProxyUdpHealthCheck
+	}
+	return nil
+}
+
+func (m *CreateSpecType) GetDnsHealthCheck() *DnsHealthCheck {
+	if x, ok := m.GetHealthCheck().(*CreateSpecType_DnsHealthCheck); ok {
+		return x.DnsHealthCheck
+	}
+	return nil
+}
+
+func (m *CreateSpecType) GetDnsProxyIcmpHealthCheck() *schema.Empty {
+	if x, ok := m.GetHealthCheck().(*CreateSpecType_DnsProxyIcmpHealthCheck); ok {
+		return x.DnsProxyIcmpHealthCheck
 	}
 	return nil
 }
@@ -561,6 +1002,10 @@ func (*CreateSpecType) XXX_OneofWrappers() []interface{} {
 	return []interface{}{
 		(*CreateSpecType_HttpHealthCheck)(nil),
 		(*CreateSpecType_TcpHealthCheck)(nil),
+		(*CreateSpecType_DnsProxyTcpHealthCheck)(nil),
+		(*CreateSpecType_DnsProxyUdpHealthCheck)(nil),
+		(*CreateSpecType_DnsHealthCheck)(nil),
+		(*CreateSpecType_DnsProxyIcmpHealthCheck)(nil),
 	}
 }
 
@@ -573,6 +1018,10 @@ type ReplaceSpecType struct {
 	// Types that are valid to be assigned to HealthCheck:
 	//	*ReplaceSpecType_HttpHealthCheck
 	//	*ReplaceSpecType_TcpHealthCheck
+	//	*ReplaceSpecType_DnsProxyTcpHealthCheck
+	//	*ReplaceSpecType_DnsProxyUdpHealthCheck
+	//	*ReplaceSpecType_DnsHealthCheck
+	//	*ReplaceSpecType_DnsProxyIcmpHealthCheck
 	HealthCheck        isReplaceSpecType_HealthCheck `protobuf_oneof:"health_check"`
 	Timeout            uint32                        `protobuf:"varint,3,opt,name=timeout,proto3" json:"timeout,omitempty"`
 	Interval           uint32                        `protobuf:"varint,4,opt,name=interval,proto3" json:"interval,omitempty"`
@@ -584,7 +1033,7 @@ type ReplaceSpecType struct {
 func (m *ReplaceSpecType) Reset()      { *m = ReplaceSpecType{} }
 func (*ReplaceSpecType) ProtoMessage() {}
 func (*ReplaceSpecType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_1d9419355153b697, []int{4}
+	return fileDescriptor_1d9419355153b697, []int{7}
 }
 func (m *ReplaceSpecType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -622,9 +1071,25 @@ type ReplaceSpecType_HttpHealthCheck struct {
 type ReplaceSpecType_TcpHealthCheck struct {
 	TcpHealthCheck *TcpHealthCheck `protobuf:"bytes,2,opt,name=tcp_health_check,json=tcpHealthCheck,proto3,oneof" json:"tcp_health_check,omitempty"`
 }
+type ReplaceSpecType_DnsProxyTcpHealthCheck struct {
+	DnsProxyTcpHealthCheck *DnsProxyTcpHealthCheck `protobuf:"bytes,10,opt,name=dns_proxy_tcp_health_check,json=dnsProxyTcpHealthCheck,proto3,oneof" json:"dns_proxy_tcp_health_check,omitempty"`
+}
+type ReplaceSpecType_DnsProxyUdpHealthCheck struct {
+	DnsProxyUdpHealthCheck *DnsProxyUdpHealthCheck `protobuf:"bytes,11,opt,name=dns_proxy_udp_health_check,json=dnsProxyUdpHealthCheck,proto3,oneof" json:"dns_proxy_udp_health_check,omitempty"`
+}
+type ReplaceSpecType_DnsHealthCheck struct {
+	DnsHealthCheck *DnsHealthCheck `protobuf:"bytes,12,opt,name=dns_health_check,json=dnsHealthCheck,proto3,oneof" json:"dns_health_check,omitempty"`
+}
+type ReplaceSpecType_DnsProxyIcmpHealthCheck struct {
+	DnsProxyIcmpHealthCheck *schema.Empty `protobuf:"bytes,13,opt,name=dns_proxy_icmp_health_check,json=dnsProxyIcmpHealthCheck,proto3,oneof" json:"dns_proxy_icmp_health_check,omitempty"`
+}
 
-func (*ReplaceSpecType_HttpHealthCheck) isReplaceSpecType_HealthCheck() {}
-func (*ReplaceSpecType_TcpHealthCheck) isReplaceSpecType_HealthCheck()  {}
+func (*ReplaceSpecType_HttpHealthCheck) isReplaceSpecType_HealthCheck()         {}
+func (*ReplaceSpecType_TcpHealthCheck) isReplaceSpecType_HealthCheck()          {}
+func (*ReplaceSpecType_DnsProxyTcpHealthCheck) isReplaceSpecType_HealthCheck()  {}
+func (*ReplaceSpecType_DnsProxyUdpHealthCheck) isReplaceSpecType_HealthCheck()  {}
+func (*ReplaceSpecType_DnsHealthCheck) isReplaceSpecType_HealthCheck()          {}
+func (*ReplaceSpecType_DnsProxyIcmpHealthCheck) isReplaceSpecType_HealthCheck() {}
 
 func (m *ReplaceSpecType) GetHealthCheck() isReplaceSpecType_HealthCheck {
 	if m != nil {
@@ -643,6 +1108,34 @@ func (m *ReplaceSpecType) GetHttpHealthCheck() *HttpHealthCheck {
 func (m *ReplaceSpecType) GetTcpHealthCheck() *TcpHealthCheck {
 	if x, ok := m.GetHealthCheck().(*ReplaceSpecType_TcpHealthCheck); ok {
 		return x.TcpHealthCheck
+	}
+	return nil
+}
+
+func (m *ReplaceSpecType) GetDnsProxyTcpHealthCheck() *DnsProxyTcpHealthCheck {
+	if x, ok := m.GetHealthCheck().(*ReplaceSpecType_DnsProxyTcpHealthCheck); ok {
+		return x.DnsProxyTcpHealthCheck
+	}
+	return nil
+}
+
+func (m *ReplaceSpecType) GetDnsProxyUdpHealthCheck() *DnsProxyUdpHealthCheck {
+	if x, ok := m.GetHealthCheck().(*ReplaceSpecType_DnsProxyUdpHealthCheck); ok {
+		return x.DnsProxyUdpHealthCheck
+	}
+	return nil
+}
+
+func (m *ReplaceSpecType) GetDnsHealthCheck() *DnsHealthCheck {
+	if x, ok := m.GetHealthCheck().(*ReplaceSpecType_DnsHealthCheck); ok {
+		return x.DnsHealthCheck
+	}
+	return nil
+}
+
+func (m *ReplaceSpecType) GetDnsProxyIcmpHealthCheck() *schema.Empty {
+	if x, ok := m.GetHealthCheck().(*ReplaceSpecType_DnsProxyIcmpHealthCheck); ok {
+		return x.DnsProxyIcmpHealthCheck
 	}
 	return nil
 }
@@ -687,6 +1180,10 @@ func (*ReplaceSpecType) XXX_OneofWrappers() []interface{} {
 	return []interface{}{
 		(*ReplaceSpecType_HttpHealthCheck)(nil),
 		(*ReplaceSpecType_TcpHealthCheck)(nil),
+		(*ReplaceSpecType_DnsProxyTcpHealthCheck)(nil),
+		(*ReplaceSpecType_DnsProxyUdpHealthCheck)(nil),
+		(*ReplaceSpecType_DnsHealthCheck)(nil),
+		(*ReplaceSpecType_DnsProxyIcmpHealthCheck)(nil),
 	}
 }
 
@@ -699,6 +1196,10 @@ type GetSpecType struct {
 	// Types that are valid to be assigned to HealthCheck:
 	//	*GetSpecType_HttpHealthCheck
 	//	*GetSpecType_TcpHealthCheck
+	//	*GetSpecType_DnsProxyTcpHealthCheck
+	//	*GetSpecType_DnsProxyUdpHealthCheck
+	//	*GetSpecType_DnsHealthCheck
+	//	*GetSpecType_DnsProxyIcmpHealthCheck
 	HealthCheck        isGetSpecType_HealthCheck `protobuf_oneof:"health_check"`
 	Timeout            uint32                    `protobuf:"varint,3,opt,name=timeout,proto3" json:"timeout,omitempty"`
 	Interval           uint32                    `protobuf:"varint,4,opt,name=interval,proto3" json:"interval,omitempty"`
@@ -711,7 +1212,7 @@ type GetSpecType struct {
 func (m *GetSpecType) Reset()      { *m = GetSpecType{} }
 func (*GetSpecType) ProtoMessage() {}
 func (*GetSpecType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_1d9419355153b697, []int{5}
+	return fileDescriptor_1d9419355153b697, []int{8}
 }
 func (m *GetSpecType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -749,9 +1250,25 @@ type GetSpecType_HttpHealthCheck struct {
 type GetSpecType_TcpHealthCheck struct {
 	TcpHealthCheck *TcpHealthCheck `protobuf:"bytes,2,opt,name=tcp_health_check,json=tcpHealthCheck,proto3,oneof" json:"tcp_health_check,omitempty"`
 }
+type GetSpecType_DnsProxyTcpHealthCheck struct {
+	DnsProxyTcpHealthCheck *DnsProxyTcpHealthCheck `protobuf:"bytes,10,opt,name=dns_proxy_tcp_health_check,json=dnsProxyTcpHealthCheck,proto3,oneof" json:"dns_proxy_tcp_health_check,omitempty"`
+}
+type GetSpecType_DnsProxyUdpHealthCheck struct {
+	DnsProxyUdpHealthCheck *DnsProxyUdpHealthCheck `protobuf:"bytes,11,opt,name=dns_proxy_udp_health_check,json=dnsProxyUdpHealthCheck,proto3,oneof" json:"dns_proxy_udp_health_check,omitempty"`
+}
+type GetSpecType_DnsHealthCheck struct {
+	DnsHealthCheck *DnsHealthCheck `protobuf:"bytes,12,opt,name=dns_health_check,json=dnsHealthCheck,proto3,oneof" json:"dns_health_check,omitempty"`
+}
+type GetSpecType_DnsProxyIcmpHealthCheck struct {
+	DnsProxyIcmpHealthCheck *schema.Empty `protobuf:"bytes,13,opt,name=dns_proxy_icmp_health_check,json=dnsProxyIcmpHealthCheck,proto3,oneof" json:"dns_proxy_icmp_health_check,omitempty"`
+}
 
-func (*GetSpecType_HttpHealthCheck) isGetSpecType_HealthCheck() {}
-func (*GetSpecType_TcpHealthCheck) isGetSpecType_HealthCheck()  {}
+func (*GetSpecType_HttpHealthCheck) isGetSpecType_HealthCheck()         {}
+func (*GetSpecType_TcpHealthCheck) isGetSpecType_HealthCheck()          {}
+func (*GetSpecType_DnsProxyTcpHealthCheck) isGetSpecType_HealthCheck()  {}
+func (*GetSpecType_DnsProxyUdpHealthCheck) isGetSpecType_HealthCheck()  {}
+func (*GetSpecType_DnsHealthCheck) isGetSpecType_HealthCheck()          {}
+func (*GetSpecType_DnsProxyIcmpHealthCheck) isGetSpecType_HealthCheck() {}
 
 func (m *GetSpecType) GetHealthCheck() isGetSpecType_HealthCheck {
 	if m != nil {
@@ -770,6 +1287,34 @@ func (m *GetSpecType) GetHttpHealthCheck() *HttpHealthCheck {
 func (m *GetSpecType) GetTcpHealthCheck() *TcpHealthCheck {
 	if x, ok := m.GetHealthCheck().(*GetSpecType_TcpHealthCheck); ok {
 		return x.TcpHealthCheck
+	}
+	return nil
+}
+
+func (m *GetSpecType) GetDnsProxyTcpHealthCheck() *DnsProxyTcpHealthCheck {
+	if x, ok := m.GetHealthCheck().(*GetSpecType_DnsProxyTcpHealthCheck); ok {
+		return x.DnsProxyTcpHealthCheck
+	}
+	return nil
+}
+
+func (m *GetSpecType) GetDnsProxyUdpHealthCheck() *DnsProxyUdpHealthCheck {
+	if x, ok := m.GetHealthCheck().(*GetSpecType_DnsProxyUdpHealthCheck); ok {
+		return x.DnsProxyUdpHealthCheck
+	}
+	return nil
+}
+
+func (m *GetSpecType) GetDnsHealthCheck() *DnsHealthCheck {
+	if x, ok := m.GetHealthCheck().(*GetSpecType_DnsHealthCheck); ok {
+		return x.DnsHealthCheck
+	}
+	return nil
+}
+
+func (m *GetSpecType) GetDnsProxyIcmpHealthCheck() *schema.Empty {
+	if x, ok := m.GetHealthCheck().(*GetSpecType_DnsProxyIcmpHealthCheck); ok {
+		return x.DnsProxyIcmpHealthCheck
 	}
 	return nil
 }
@@ -821,14 +1366,30 @@ func (*GetSpecType) XXX_OneofWrappers() []interface{} {
 	return []interface{}{
 		(*GetSpecType_HttpHealthCheck)(nil),
 		(*GetSpecType_TcpHealthCheck)(nil),
+		(*GetSpecType_DnsProxyTcpHealthCheck)(nil),
+		(*GetSpecType_DnsProxyUdpHealthCheck)(nil),
+		(*GetSpecType_DnsHealthCheck)(nil),
+		(*GetSpecType_DnsProxyIcmpHealthCheck)(nil),
 	}
 }
 
 func init() {
+	proto.RegisterEnum("ves.io.schema.healthcheck.DNSQueryType", DNSQueryType_name, DNSQueryType_value)
+	golang_proto.RegisterEnum("ves.io.schema.healthcheck.DNSQueryType", DNSQueryType_name, DNSQueryType_value)
+	proto.RegisterEnum("ves.io.schema.healthcheck.DNSResponseRcodeType", DNSResponseRcodeType_name, DNSResponseRcodeType_value)
+	golang_proto.RegisterEnum("ves.io.schema.healthcheck.DNSResponseRcodeType", DNSResponseRcodeType_name, DNSResponseRcodeType_value)
+	proto.RegisterEnum("ves.io.schema.healthcheck.DNSResponseRecordType", DNSResponseRecordType_name, DNSResponseRecordType_value)
+	golang_proto.RegisterEnum("ves.io.schema.healthcheck.DNSResponseRecordType", DNSResponseRecordType_name, DNSResponseRecordType_value)
 	proto.RegisterType((*HttpHealthCheck)(nil), "ves.io.schema.healthcheck.HttpHealthCheck")
 	golang_proto.RegisterType((*HttpHealthCheck)(nil), "ves.io.schema.healthcheck.HttpHealthCheck")
 	proto.RegisterMapType((map[string]string)(nil), "ves.io.schema.healthcheck.HttpHealthCheck.HeadersEntry")
 	golang_proto.RegisterMapType((map[string]string)(nil), "ves.io.schema.healthcheck.HttpHealthCheck.HeadersEntry")
+	proto.RegisterType((*DnsHealthCheck)(nil), "ves.io.schema.healthcheck.DnsHealthCheck")
+	golang_proto.RegisterType((*DnsHealthCheck)(nil), "ves.io.schema.healthcheck.DnsHealthCheck")
+	proto.RegisterType((*DnsProxyUdpHealthCheck)(nil), "ves.io.schema.healthcheck.DnsProxyUdpHealthCheck")
+	golang_proto.RegisterType((*DnsProxyUdpHealthCheck)(nil), "ves.io.schema.healthcheck.DnsProxyUdpHealthCheck")
+	proto.RegisterType((*DnsProxyTcpHealthCheck)(nil), "ves.io.schema.healthcheck.DnsProxyTcpHealthCheck")
+	golang_proto.RegisterType((*DnsProxyTcpHealthCheck)(nil), "ves.io.schema.healthcheck.DnsProxyTcpHealthCheck")
 	proto.RegisterType((*TcpHealthCheck)(nil), "ves.io.schema.healthcheck.TcpHealthCheck")
 	golang_proto.RegisterType((*TcpHealthCheck)(nil), "ves.io.schema.healthcheck.TcpHealthCheck")
 	proto.RegisterType((*GlobalSpecType)(nil), "ves.io.schema.healthcheck.GlobalSpecType")
@@ -849,96 +1410,147 @@ func init() {
 }
 
 var fileDescriptor_1d9419355153b697 = []byte{
-	// 1387 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x57, 0xd1, 0x6b, 0xdb, 0x56,
-	0x17, 0xf7, 0xb1, 0x1c, 0xdb, 0xb9, 0x4e, 0x13, 0x45, 0x69, 0x53, 0xc5, 0x2d, 0xfa, 0x54, 0xf3,
-	0xe5, 0xc3, 0xcd, 0xe7, 0xd8, 0x89, 0xd3, 0xb4, 0x59, 0x0a, 0x85, 0x39, 0x84, 0x86, 0x16, 0xd6,
-	0xa0, 0x64, 0x63, 0x8c, 0x31, 0xa1, 0xc8, 0xb7, 0xb6, 0x16, 0xdb, 0xd2, 0xa4, 0x6b, 0xaf, 0x2e,
-	0x0c, 0xc2, 0x60, 0x63, 0x04, 0x36, 0x4a, 0x1f, 0xfb, 0x17, 0xec, 0x75, 0x7b, 0x9c, 0xf2, 0x10,
-	0x0a, 0x1b, 0x65, 0x4f, 0x79, 0x0c, 0x7d, 0x6a, 0x95, 0x97, 0xae, 0x4f, 0x65, 0x4f, 0x63, 0x4f,
-	0xe3, 0x5e, 0x49, 0x8e, 0xec, 0xa6, 0x65, 0x0f, 0x63, 0x50, 0xb6, 0xb7, 0x7b, 0x75, 0xce, 0xf9,
-	0x9d, 0x73, 0xcf, 0xef, 0x77, 0x0e, 0x08, 0x4d, 0x77, 0xb0, 0x53, 0x34, 0xcc, 0x92, 0xa3, 0xd7,
-	0x71, 0x53, 0x2b, 0xd5, 0xb1, 0xd6, 0x20, 0x75, 0xbd, 0x8e, 0xf5, 0xed, 0x12, 0xe9, 0x5a, 0xd8,
-	0x29, 0x5a, 0xb6, 0x49, 0x4c, 0x61, 0xca, 0x77, 0x2b, 0xfa, 0x6e, 0xc5, 0x88, 0x5b, 0x76, 0xb6,
-	0x66, 0x90, 0x7a, 0x7b, 0xab, 0xa8, 0x9b, 0xcd, 0x52, 0xcd, 0xac, 0x99, 0x25, 0x16, 0xb1, 0xd5,
-	0xbe, 0xcd, 0x6e, 0xec, 0xc2, 0x4e, 0x3e, 0x52, 0xf6, 0x5c, 0x7f, 0x42, 0xd3, 0x22, 0x86, 0xd9,
-	0x0a, 0xd2, 0x64, 0xa7, 0xfa, 0x8d, 0x91, 0x0a, 0xb2, 0xe7, 0xfb, 0x4d, 0x1d, 0xad, 0x61, 0x54,
-	0x35, 0x82, 0x03, 0xab, 0x3c, 0x60, 0x35, 0xf0, 0xa7, 0x6a, 0x1f, 0x74, 0xee, 0x5e, 0x1a, 0x8d,
-	0xad, 0x11, 0x62, 0xad, 0xb1, 0xd2, 0x57, 0x68, 0xe9, 0xc2, 0x4d, 0x34, 0xd9, 0x76, 0xb0, 0x6a,
-	0xda, 0x46, 0xcd, 0x68, 0xa9, 0x0e, 0xb6, 0x3b, 0xd8, 0x56, 0x5b, 0x5a, 0x13, 0x8b, 0x29, 0x19,
-	0xf2, 0x99, 0xf2, 0xe9, 0x62, 0xff, 0xb3, 0x57, 0x9b, 0x16, 0xe9, 0xae, 0xc5, 0x94, 0x89, 0xb6,
-	0x83, 0x6f, 0xb1, 0xa0, 0x0d, 0x16, 0xf3, 0x8e, 0xd6, 0xc4, 0xc2, 0x55, 0x94, 0xa9, 0x9b, 0x0e,
-	0x51, 0xeb, 0x58, 0xab, 0x62, 0x5b, 0x04, 0x19, 0xf2, 0xc3, 0x15, 0xf1, 0x37, 0x17, 0x62, 0x3f,
-	0xfc, 0xb2, 0xcf, 0x0d, 0xd9, 0x9c, 0xf8, 0x65, 0x3c, 0x38, 0x3d, 0x01, 0x58, 0x8b, 0x29, 0x88,
-	0xba, 0xaf, 0x31, 0x6f, 0x41, 0x47, 0x09, 0x4b, 0x23, 0x75, 0x31, 0xce, 0xa2, 0x6e, 0x3d, 0x76,
-	0x01, 0x4a, 0x9e, 0x0b, 0x8b, 0x08, 0x4a, 0x28, 0x15, 0xb0, 0x82, 0x46, 0xa2, 0xf4, 0xa0, 0x74,
-	0x70, 0xbb, 0x8b, 0x92, 0xa5, 0x86, 0xd1, 0xc1, 0x77, 0x51, 0xaa, 0x64, 0x63, 0xad, 0xda, 0xbd,
-	0x1b, 0xe6, 0x4c, 0xdb, 0x49, 0x71, 0x87, 0x7f, 0x16, 0x07, 0x85, 0x81, 0x0b, 0x5e, 0x1c, 0xa5,
-	0xfc, 0xea, 0x1c, 0x91, 0x93, 0xb9, 0x7c, 0xa6, 0x7c, 0xa5, 0xf8, 0x4a, 0x5e, 0x8b, 0x03, 0xcd,
-	0x2a, 0xfa, 0x95, 0x3a, 0xab, 0x2d, 0x62, 0x77, 0x2b, 0xdf, 0xc4, 0xf7, 0x5d, 0x00, 0x9a, 0x64,
-	0xe4, 0x01, 0x0c, 0xe7, 0x52, 0xf6, 0x10, 0x0f, 0xe2, 0x8e, 0xff, 0xbe, 0x07, 0x10, 0xe7, 0xf9,
-	0xd0, 0x34, 0x13, 0x98, 0x78, 0xef, 0xc9, 0x8f, 0x9c, 0xbc, 0xbb, 0x07, 0xe7, 0x85, 0xec, 0x73,
-	0x17, 0x26, 0xd7, 0x36, 0x37, 0xd7, 0x65, 0xbf, 0x18, 0x79, 0x1b, 0x77, 0x65, 0x87, 0xd8, 0x46,
-	0xab, 0x46, 0x9d, 0xa6, 0x76, 0xf7, 0xe0, 0x8c, 0x30, 0xe1, 0xb9, 0x30, 0xc6, 0x9c, 0xfc, 0xbc,
-	0xf2, 0x4d, 0xdc, 0xa5, 0x56, 0xb4, 0xbb, 0x07, 0x49, 0x21, 0xf1, 0xc8, 0x85, 0x18, 0xbd, 0x26,
-	0x77, 0xf7, 0x20, 0x9e, 0x06, 0x7a, 0xbc, 0xb6, 0xbb, 0x07, 0xcb, 0xd9, 0xa5, 0xe7, 0x2e, 0x5c,
-	0xda, 0x60, 0x60, 0xb2, 0x79, 0x5b, 0xd6, 0xcd, 0x66, 0x53, 0x93, 0x1d, 0x6c, 0x69, 0xb6, 0x46,
-	0x70, 0x55, 0x6e, 0x18, 0x0e, 0xa1, 0xdf, 0xa3, 0xe9, 0x3b, 0x5a, 0xa3, 0x8d, 0x1d, 0x0a, 0x71,
-	0x6e, 0x77, 0x0f, 0xce, 0x66, 0xcf, 0x78, 0x2e, 0x8c, 0x47, 0x53, 0xbf, 0x47, 0x1d, 0x7a, 0xc9,
-	0xb3, 0x34, 0x39, 0x17, 0xb9, 0xd2, 0x4e, 0x28, 0x61, 0x63, 0x85, 0x0f, 0xd1, 0x94, 0x8d, 0x3f,
-	0x69, 0xe3, 0x9e, 0x12, 0x1c, 0x95, 0x98, 0xaa, 0x8d, 0x9b, 0x66, 0x07, 0x8b, 0x09, 0x99, 0xcb,
-	0x0f, 0x57, 0x2e, 0xd0, 0x88, 0x90, 0x24, 0x74, 0x1f, 0x52, 0x39, 0xaa, 0x8e, 0xa0, 0x7b, 0xf7,
-	0x69, 0xf7, 0x94, 0xc9, 0x00, 0x23, 0x68, 0xfa, 0xa6, 0xa9, 0x30, 0x00, 0xe1, 0x02, 0x1a, 0xa6,
-	0x8a, 0xad, 0x13, 0x62, 0x95, 0xc5, 0x21, 0x19, 0xf2, 0xe9, 0x4a, 0x82, 0x22, 0x29, 0xe9, 0xb6,
-	0x83, 0x29, 0x63, 0x65, 0xa1, 0x83, 0xce, 0xe0, 0x3b, 0x16, 0xd6, 0x09, 0xae, 0xaa, 0x0e, 0xd1,
-	0x48, 0xdb, 0x51, 0x75, 0xb3, 0x8a, 0x1d, 0x31, 0xcd, 0x92, 0x57, 0x68, 0xf2, 0xc7, 0x2e, 0x70,
-	0xe5, 0xb9, 0xb9, 0xb0, 0x86, 0xcc, 0x7d, 0x48, 0xe7, 0x92, 0x76, 0x82, 0xe7, 0x44, 0x14, 0xad,
-	0xe9, 0x5e, 0x02, 0x8e, 0x6b, 0x0a, 0x4f, 0x22, 0x28, 0x13, 0x61, 0x82, 0x0d, 0x86, 0xbf, 0x42,
-	0xe1, 0xb3, 0xcb, 0x68, 0x24, 0x2a, 0x11, 0x81, 0x47, 0xdc, 0x36, 0xee, 0xfa, 0x73, 0xa0, 0xd0,
-	0xa3, 0x70, 0x1a, 0x0d, 0xb1, 0x5e, 0xfb, 0x2a, 0x57, 0xfc, 0xcb, 0x72, 0x7c, 0x09, 0x96, 0xaf,
-	0xff, 0x7a, 0x2d, 0x73, 0xb9, 0x50, 0x2e, 0x2c, 0x16, 0x16, 0x0a, 0x97, 0x0a, 0x4b, 0x0f, 0xa9,
-	0xf2, 0x17, 0xd0, 0x7f, 0x7d, 0xf9, 0xc9, 0x4c, 0x7f, 0x3e, 0x65, 0x8a, 0xdf, 0x16, 0x79, 0x5d,
-	0xb3, 0xb5, 0x26, 0x26, 0xb4, 0xe1, 0xd1, 0xc0, 0xca, 0x34, 0x12, 0x22, 0x43, 0xa8, 0xea, 0x75,
-	0xd3, 0xd0, 0xb1, 0x30, 0xb6, 0xef, 0x42, 0xea, 0xc0, 0x85, 0xa4, 0xe7, 0x02, 0x77, 0xa5, 0x30,
-	0x7f, 0x23, 0x91, 0x4e, 0xf2, 0xa9, 0xdc, 0x23, 0x40, 0xa3, 0x9b, 0x7a, 0xdf, 0x46, 0xb8, 0x8a,
-	0x46, 0x1c, 0xdc, 0xaa, 0xaa, 0x96, 0xd6, 0x6d, 0x98, 0x5a, 0x35, 0x32, 0xc5, 0x5c, 0x38, 0xc5,
-	0x3b, 0x7c, 0x70, 0x7a, 0x01, 0xa0, 0x64, 0xa8, 0xf7, 0xba, 0xef, 0x2c, 0xac, 0xa2, 0xf1, 0x5e,
-	0xe7, 0x6d, 0xec, 0x58, 0x66, 0xcb, 0x09, 0xde, 0xfa, 0x1a, 0x04, 0x3e, 0x0c, 0x51, 0x82, 0x88,
-	0xe5, 0xf2, 0x43, 0x17, 0x8a, 0xa8, 0x80, 0xa6, 0xfb, 0x9e, 0xbf, 0xb9, 0x72, 0xfc, 0x7a, 0xad,
-	0x55, 0x95, 0x43, 0x77, 0x81, 0x9b, 0x2f, 0x94, 0x73, 0x5f, 0x0c, 0xa1, 0xd1, 0xeb, 0x0d, 0x73,
-	0x4b, 0x6b, 0x6c, 0x58, 0x58, 0xdf, 0xec, 0x5a, 0x58, 0xf8, 0x08, 0x8d, 0x53, 0x99, 0xa8, 0xfe,
-	0x4c, 0xab, 0x6c, 0xa8, 0xd9, 0x7b, 0x32, 0xe5, 0x99, 0x3f, 0x3f, 0xf6, 0x95, 0xc4, 0x81, 0xcb,
-	0xb6, 0xd5, 0x58, 0x7d, 0x60, 0x79, 0xbe, 0x8b, 0x78, 0xa2, 0x0f, 0xc0, 0xc7, 0x19, 0xfc, 0xc5,
-	0xd7, 0xc0, 0xf7, 0xf7, 0x7b, 0x2d, 0xa6, 0x8c, 0x92, 0x7e, 0x06, 0x16, 0x50, 0x8a, 0x18, 0x4d,
-	0x6c, 0xb6, 0x89, 0xc8, 0xc9, 0x90, 0x3f, 0x55, 0x99, 0xa2, 0xcb, 0x70, 0x81, 0x4a, 0xf5, 0xab,
-	0x3d, 0x7f, 0xe5, 0xa4, 0x66, 0x86, 0xc4, 0xc3, 0x44, 0x1e, 0x94, 0xd0, 0x53, 0xb8, 0x8c, 0xd2,
-	0x46, 0x8b, 0x60, 0xbb, 0xa3, 0x35, 0xc4, 0x04, 0x8b, 0xca, 0x3e, 0x76, 0x21, 0x3e, 0xbf, 0x78,
-	0x62, 0x58, 0xcf, 0x57, 0xb8, 0x88, 0x92, 0x1f, 0x1b, 0x84, 0x60, 0x9b, 0xcd, 0xd2, 0xa9, 0xca,
-	0xf8, 0xe1, 0x67, 0xf0, 0x2c, 0x58, 0x6c, 0x43, 0x33, 0x9c, 0x78, 0x98, 0x50, 0x02, 0x07, 0x61,
-	0x15, 0x4d, 0xb4, 0x5b, 0xfe, 0x4b, 0xba, 0x2a, 0xa9, 0xdb, 0xd8, 0xa9, 0x9b, 0x8d, 0xaa, 0x98,
-	0x64, 0x71, 0xa7, 0x69, 0x8d, 0xf3, 0xe1, 0x38, 0x25, 0x67, 0x12, 0x22, 0x9f, 0x07, 0x45, 0xe8,
-	0x05, 0x6c, 0x86, 0xfe, 0xc2, 0xdb, 0x68, 0xfc, 0x65, 0x90, 0xd4, 0x31, 0xc8, 0xc2, 0x20, 0x08,
-	0xff, 0x12, 0xc4, 0x2a, 0x1a, 0xf5, 0x6b, 0x52, 0x2d, 0x6c, 0xeb, 0xb8, 0x45, 0xc4, 0x61, 0x16,
-	0x2f, 0x05, 0x93, 0x1d, 0x5f, 0x38, 0x1e, 0xec, 0x99, 0xe1, 0x4a, 0x6a, 0xae, 0x30, 0x3f, 0x37,
-	0xbb, 0x38, 0xa7, 0x9c, 0xf2, 0xa3, 0xd6, 0xfd, 0xa0, 0xe5, 0xc2, 0x43, 0x17, 0xf2, 0xe8, 0x7f,
-	0xe8, 0x6c, 0x9f, 0xcc, 0xa2, 0x83, 0xb5, 0xc4, 0x86, 0xea, 0x72, 0xe1, 0x4a, 0xe1, 0xad, 0xca,
-	0x7f, 0xd0, 0x48, 0x94, 0x69, 0x36, 0x52, 0x70, 0xe0, 0x42, 0x9a, 0x8e, 0xd4, 0x7c, 0xa1, 0x7c,
-	0x23, 0x91, 0x4e, 0xf3, 0xc3, 0xb9, 0xef, 0x38, 0x34, 0xba, 0x62, 0x63, 0x8d, 0xe0, 0x9e, 0x0e,
-	0xdf, 0xff, 0x4b, 0x74, 0xf8, 0x37, 0x2a, 0x50, 0x1c, 0x50, 0xe0, 0xb1, 0xcc, 0xb2, 0x83, 0x32,
-	0x8b, 0x48, 0xa9, 0xf4, 0x1a, 0x7d, 0x9c, 0xa8, 0x84, 0xff, 0xbf, 0x52, 0x09, 0x27, 0x70, 0x3e,
-	0x7d, 0x32, 0xe7, 0x83, 0x9c, 0x8e, 0xff, 0x7c, 0x6d, 0x60, 0x0d, 0x54, 0xe4, 0x01, 0xe2, 0xf8,
-	0xcf, 0x7f, 0x87, 0xbe, 0x2f, 0xb9, 0xef, 0x39, 0x34, 0xa6, 0x60, 0xab, 0xa1, 0xe9, 0xff, 0x92,
-	0xf6, 0xc6, 0x90, 0xf6, 0x13, 0x87, 0x32, 0xd7, 0x31, 0xf9, 0xa7, 0x11, 0x36, 0xd9, 0xbf, 0xb0,
-	0x7b, 0xdb, 0xf9, 0x8d, 0x25, 0xb2, 0xf2, 0x35, 0x1c, 0x3c, 0x95, 0x62, 0x87, 0x4f, 0xa5, 0xd8,
-	0x8b, 0xa7, 0x12, 0xec, 0x78, 0x12, 0x7c, 0xeb, 0x49, 0xf0, 0xc8, 0x93, 0xe0, 0xc0, 0x93, 0xe0,
-	0xd0, 0x93, 0xe0, 0x89, 0x27, 0xc1, 0x33, 0x4f, 0x8a, 0xbd, 0xf0, 0x24, 0xb8, 0x77, 0x24, 0xc5,
-	0xf6, 0x8f, 0x24, 0x38, 0x38, 0x92, 0x62, 0x87, 0x47, 0x52, 0xec, 0x83, 0x5b, 0x35, 0xd3, 0xda,
-	0xae, 0x15, 0x3b, 0x66, 0x83, 0x60, 0xdb, 0xd6, 0x8a, 0x6d, 0xa7, 0xc4, 0x0e, 0xb7, 0x4d, 0xbb,
-	0x39, 0x6b, 0xd9, 0x66, 0xc7, 0xa8, 0x62, 0x7b, 0x36, 0x34, 0x97, 0xac, 0xad, 0x9a, 0x59, 0xc2,
-	0x77, 0x48, 0xf0, 0x9f, 0xf4, 0xf2, 0x5f, 0xdf, 0x56, 0x92, 0xfd, 0x2e, 0x2d, 0xfc, 0x11, 0x00,
-	0x00, 0xff, 0xff, 0x75, 0x82, 0x85, 0xe5, 0x19, 0x0e, 0x00, 0x00,
+	// 1860 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x59, 0xcf, 0x6f, 0xdb, 0xc8,
+	0x15, 0xd6, 0x48, 0xb2, 0x7e, 0x8c, 0x6c, 0x99, 0x9e, 0xf8, 0x07, 0xad, 0x04, 0x2a, 0xd7, 0x68,
+	0x5a, 0xad, 0x56, 0x91, 0x6c, 0x79, 0x9d, 0x64, 0x1d, 0x20, 0x80, 0x69, 0xab, 0x71, 0x77, 0x01,
+	0xdb, 0xa1, 0xe5, 0x62, 0x53, 0x6c, 0x97, 0xa0, 0xc9, 0x89, 0xa5, 0x46, 0x12, 0xb9, 0xe4, 0x48,
+	0x8d, 0x02, 0x14, 0x08, 0x7a, 0x28, 0x0a, 0x03, 0x2d, 0x82, 0x1c, 0xf7, 0x2f, 0xe8, 0x9f, 0x50,
+	0x94, 0x3e, 0xb8, 0x41, 0x0b, 0x04, 0x3d, 0xf9, 0x52, 0xc0, 0xd8, 0x53, 0xa2, 0x5c, 0xd2, 0x3d,
+	0x05, 0x7b, 0x5a, 0xf4, 0xd2, 0x62, 0x86, 0x94, 0x44, 0xca, 0xb2, 0x1a, 0x2c, 0x76, 0x5b, 0x2c,
+	0xe0, 0x1b, 0xa9, 0xf7, 0xde, 0xf7, 0xbd, 0x37, 0xf3, 0xbe, 0x37, 0x03, 0x0a, 0x5e, 0x6d, 0x61,
+	0x2b, 0x5f, 0xd5, 0x0b, 0x96, 0x5a, 0xc1, 0x75, 0xa5, 0x50, 0xc1, 0x4a, 0x8d, 0x54, 0xd4, 0x0a,
+	0x56, 0x1f, 0x14, 0x48, 0xdb, 0xc0, 0x56, 0xde, 0x30, 0x75, 0xa2, 0xa3, 0x79, 0xc7, 0x2d, 0xef,
+	0xb8, 0xe5, 0x3d, 0x6e, 0xa9, 0x6b, 0x07, 0x55, 0x52, 0x69, 0xee, 0xe7, 0x55, 0xbd, 0x5e, 0x38,
+	0xd0, 0x0f, 0xf4, 0x02, 0x8b, 0xd8, 0x6f, 0xde, 0x67, 0x6f, 0xec, 0x85, 0x3d, 0x39, 0x48, 0xa9,
+	0x39, 0x3f, 0x61, 0x03, 0x13, 0xd7, 0x70, 0xd9, 0x6f, 0xd0, 0x0d, 0x52, 0xd5, 0x1b, 0x2e, 0x7f,
+	0x6a, 0xde, 0x6f, 0xf4, 0xa4, 0x96, 0xba, 0xe2, 0x37, 0xb5, 0x94, 0x5a, 0x55, 0x53, 0x08, 0x76,
+	0xad, 0xc2, 0x80, 0xb5, 0x8a, 0x7f, 0x25, 0xfb, 0xa0, 0x17, 0x9e, 0xc4, 0xe0, 0xe4, 0x26, 0x21,
+	0xc6, 0x26, 0xab, 0x69, 0x9d, 0xd6, 0x84, 0x3e, 0x82, 0xb3, 0x4d, 0x0b, 0xcb, 0xba, 0x59, 0x3d,
+	0xa8, 0x36, 0x64, 0x0b, 0x9b, 0x2d, 0x6c, 0xca, 0x0d, 0xa5, 0x8e, 0xf9, 0xa8, 0x00, 0x32, 0x89,
+	0xe2, 0x74, 0xde, 0xbf, 0x1e, 0xa5, 0xba, 0x41, 0xda, 0x9b, 0x01, 0xe9, 0x52, 0xd3, 0xc2, 0xdb,
+	0x2c, 0x68, 0x97, 0xc5, 0x6c, 0x29, 0x75, 0x8c, 0x6e, 0xc1, 0x44, 0x45, 0xb7, 0x88, 0x5c, 0xc1,
+	0x8a, 0x86, 0x4d, 0x1e, 0x08, 0x20, 0x13, 0x17, 0xf9, 0xaf, 0x6d, 0x10, 0xf8, 0xf3, 0x3f, 0x8f,
+	0x43, 0x63, 0x66, 0x88, 0xff, 0x6d, 0xd0, 0x7d, 0x7a, 0x01, 0xc0, 0x66, 0x40, 0x82, 0xd4, 0x7d,
+	0x93, 0x79, 0x23, 0x15, 0x86, 0x0d, 0x85, 0x54, 0xf8, 0x20, 0x8b, 0xda, 0xfe, 0xc2, 0x06, 0xa0,
+	0xd0, 0xb1, 0xc1, 0x0a, 0x04, 0x05, 0x18, 0x75, 0xb7, 0x0b, 0x8e, 0x7b, 0xf7, 0x0d, 0xc6, 0xdc,
+	0xb7, 0x47, 0x30, 0x52, 0xa8, 0x55, 0x5b, 0xf8, 0x11, 0x8c, 0x16, 0x4c, 0xac, 0x68, 0xed, 0x47,
+	0x5d, 0xce, 0x98, 0x19, 0xe1, 0x1f, 0x73, 0xaf, 0x83, 0x40, 0x62, 0xe0, 0xa8, 0x13, 0x84, 0x51,
+	0x27, 0x3b, 0x8b, 0x0f, 0x09, 0xa1, 0x4c, 0xa2, 0x78, 0x23, 0x7f, 0xee, 0x86, 0xe7, 0x07, 0x16,
+	0x2b, 0xef, 0x64, 0x6a, 0x95, 0x1a, 0xc4, 0x6c, 0x8b, 0x7f, 0x08, 0x1e, 0xdb, 0x00, 0x50, 0x92,
+	0xf1, 0xcf, 0x41, 0x7c, 0x21, 0x6a, 0x8e, 0x71, 0x80, 0x7f, 0xec, 0xd4, 0xf7, 0x39, 0x08, 0x72,
+	0x5c, 0xd7, 0x94, 0x75, 0x4d, 0x5c, 0xe7, 0xc5, 0xdf, 0x42, 0xc2, 0xe1, 0x11, 0xb8, 0x82, 0x52,
+	0x5f, 0xda, 0x60, 0x76, 0xb3, 0x5c, 0xde, 0x11, 0x9c, 0x64, 0x84, 0x07, 0xb8, 0x2d, 0x58, 0xc4,
+	0xac, 0x36, 0x0e, 0xa8, 0xd3, 0xfc, 0xe1, 0x11, 0x98, 0x41, 0x97, 0x3a, 0x36, 0x98, 0x64, 0x4e,
+	0x0e, 0xaf, 0xf0, 0x11, 0x6e, 0x53, 0x2b, 0x3c, 0x3c, 0x02, 0x11, 0x14, 0x7e, 0x6e, 0x83, 0x00,
+	0x7d, 0x8d, 0x1c, 0x1e, 0x81, 0x60, 0x0c, 0xd0, 0xc7, 0xdb, 0x87, 0x47, 0x60, 0x35, 0x75, 0xf3,
+	0x4b, 0x1b, 0xbc, 0xbf, 0xcb, 0xc0, 0x04, 0xfd, 0xbe, 0xa0, 0xea, 0xf5, 0xba, 0x22, 0x58, 0xd8,
+	0x50, 0x4c, 0x85, 0x60, 0x4d, 0xa8, 0x55, 0x2d, 0x42, 0x7f, 0xf7, 0xd2, 0xb7, 0x94, 0x5a, 0x13,
+	0x5b, 0x14, 0xe2, 0xf2, 0xe1, 0x11, 0x98, 0x4b, 0xcd, 0x74, 0x6c, 0x30, 0xe5, 0xa5, 0xfe, 0x19,
+	0x75, 0xe8, 0x91, 0xa7, 0x28, 0x79, 0xc8, 0xf3, 0x4a, 0x57, 0x42, 0xea, 0x2e, 0x2c, 0xfa, 0x04,
+	0xce, 0x9b, 0xf8, 0xb3, 0x26, 0xee, 0x75, 0x82, 0x25, 0x13, 0x5d, 0x36, 0x71, 0x5d, 0x6f, 0x61,
+	0x3e, 0x2c, 0x84, 0x32, 0x71, 0xf1, 0x1d, 0x1a, 0xd1, 0xdd, 0x24, 0xf8, 0x14, 0x44, 0x17, 0x68,
+	0x77, 0xb8, 0xab, 0xf7, 0x94, 0xae, 0x9e, 0x34, 0xeb, 0x62, 0xb8, 0x8b, 0x5e, 0xd6, 0x25, 0x06,
+	0x80, 0xde, 0x81, 0x71, 0xda, 0xb1, 0x15, 0x42, 0x8c, 0x22, 0x3f, 0x26, 0x80, 0x4c, 0x4c, 0x0c,
+	0x53, 0x24, 0x29, 0xd6, 0xb4, 0x30, 0xdd, 0xb1, 0x22, 0x6a, 0xc1, 0x19, 0xfc, 0xd0, 0xc0, 0x2a,
+	0xc1, 0x9a, 0x6c, 0x11, 0x85, 0x34, 0x2d, 0x59, 0xd5, 0x35, 0x6c, 0xf1, 0x31, 0x46, 0x2e, 0x52,
+	0xf2, 0x2f, 0x6c, 0x10, 0x2a, 0x2e, 0x2e, 0x76, 0x73, 0x48, 0x3c, 0x05, 0xb1, 0x85, 0x88, 0x19,
+	0xe6, 0x42, 0x3c, 0xf4, 0xe6, 0xf4, 0x24, 0x0c, 0xfa, 0x39, 0x75, 0x9f, 0x78, 0x20, 0x5d, 0xea,
+	0x12, 0xec, 0x32, 0xfc, 0x75, 0x0a, 0x9f, 0x5a, 0x85, 0xe3, 0xde, 0x16, 0x41, 0x1c, 0x0c, 0x3d,
+	0xc0, 0x6d, 0x47, 0x07, 0x12, 0x7d, 0x44, 0xd3, 0x70, 0x8c, 0xad, 0xb5, 0xd3, 0xe5, 0x92, 0xf3,
+	0xb2, 0x1a, 0xbc, 0x09, 0x56, 0xef, 0x7c, 0x75, 0x3b, 0x71, 0x3d, 0x57, 0xcc, 0xad, 0xe4, 0x96,
+	0x73, 0xef, 0xe7, 0x6e, 0x3e, 0xa3, 0x9d, 0xbf, 0x0c, 0x7f, 0xe8, 0xb4, 0x9f, 0xc0, 0xfa, 0xcf,
+	0xd9, 0x32, 0xc9, 0x59, 0x16, 0x61, 0x47, 0x31, 0x95, 0x3a, 0x26, 0x74, 0xc1, 0xbd, 0x81, 0xe2,
+	0x55, 0x88, 0x3c, 0x22, 0x94, 0xd5, 0x8a, 0x5e, 0x55, 0x31, 0x9a, 0x3c, 0xb6, 0x41, 0xf4, 0xc4,
+	0x06, 0x91, 0x8e, 0x0d, 0x42, 0x37, 0x72, 0x4b, 0x1f, 0x86, 0x63, 0x11, 0x2e, 0xba, 0xf0, 0xd7,
+	0x10, 0x4c, 0x6e, 0x34, 0x2c, 0xef, 0x44, 0x48, 0xc3, 0xa8, 0x89, 0x5b, 0xd8, 0xb4, 0x9c, 0x24,
+	0x63, 0xa2, 0xbb, 0xbb, 0xee, 0x8f, 0xe8, 0x3d, 0x08, 0x3f, 0x6b, 0x62, 0xb3, 0xed, 0x4c, 0x89,
+	0x10, 0x53, 0xeb, 0x38, 0x5d, 0x19, 0xa7, 0xcd, 0xff, 0x0d, 0xa4, 0x38, 0xb3, 0xb3, 0x89, 0xf0,
+	0x93, 0xae, 0x33, 0x9d, 0x63, 0x7c, 0x58, 0x00, 0x99, 0x64, 0xf1, 0xc7, 0x23, 0x14, 0xb7, 0xb1,
+	0xb5, 0x7b, 0x97, 0xfa, 0x97, 0xdb, 0x06, 0x76, 0x71, 0xe8, 0x23, 0xaa, 0xc0, 0xe9, 0xde, 0x8e,
+	0x9a, 0x58, 0xd5, 0x4d, 0xcd, 0x41, 0x1c, 0x63, 0x88, 0x8b, 0xa3, 0x11, 0x25, 0x6c, 0x19, 0x7a,
+	0xc3, 0xc2, 0x12, 0x0b, 0xa4, 0x78, 0x6e, 0x4d, 0xa8, 0x8b, 0xd9, 0xb7, 0xa0, 0x4f, 0x60, 0xb2,
+	0xcf, 0x44, 0xbb, 0x86, 0x8f, 0x30, 0x8e, 0xc2, 0x5b, 0x72, 0xd0, 0x10, 0x0f, 0xc5, 0x44, 0x8f,
+	0x82, 0x1a, 0x50, 0x09, 0x4e, 0x79, 0xea, 0x70, 0x42, 0xd8, 0xa4, 0x8d, 0x8b, 0xbc, 0xdb, 0x95,
+	0xc1, 0x7c, 0xd6, 0x3b, 0x31, 0x1f, 0xc7, 0x24, 0xae, 0x9f, 0xa6, 0x13, 0xb1, 0x9a, 0xfc, 0xea,
+	0x76, 0xa2, 0xc8, 0xf6, 0x7b, 0x25, 0x77, 0x3d, 0x77, 0x63, 0xe1, 0x08, 0xc0, 0xd9, 0x8d, 0x86,
+	0xb5, 0x63, 0xea, 0x0f, 0xdb, 0x7b, 0x9a, 0x6f, 0xc0, 0x2f, 0xc1, 0x71, 0x0b, 0x37, 0x34, 0xd9,
+	0x50, 0xda, 0x35, 0x5d, 0xd1, 0xdc, 0xa1, 0x9c, 0xfc, 0xda, 0x06, 0xa1, 0x1e, 0x05, 0x27, 0x25,
+	0xa8, 0xcf, 0x8e, 0xe3, 0x82, 0x6e, 0x0d, 0x4b, 0x32, 0x38, 0x34, 0xee, 0x6c, 0x6a, 0xc5, 0x67,
+	0x36, 0xc8, 0xc3, 0x1c, 0xbc, 0xea, 0xeb, 0xdc, 0xbd, 0x8d, 0x7e, 0xe3, 0x2a, 0x0d, 0x4d, 0xe8,
+	0xba, 0xa3, 0xd0, 0x52, 0xae, 0xe8, 0x4b, 0xbf, 0xac, 0x7e, 0xef, 0xd2, 0x7f, 0x0e, 0x60, 0x72,
+	0x20, 0xed, 0x5b, 0x43, 0xd3, 0xe6, 0xfd, 0xf4, 0xee, 0xd3, 0x1b, 0x00, 0xfc, 0x05, 0x94, 0xce,
+	0x2f, 0xe0, 0x7c, 0x84, 0xb7, 0x2d, 0xa5, 0xbc, 0x3e, 0xaa, 0x94, 0x3f, 0xc5, 0x60, 0xf2, 0x4e,
+	0x4d, 0xdf, 0x57, 0x6a, 0xbb, 0x06, 0x56, 0x99, 0x20, 0x3e, 0x85, 0x53, 0x74, 0xd6, 0xca, 0x4e,
+	0xc3, 0xcb, 0xac, 0xe3, 0x59, 0x3d, 0x89, 0x62, 0xf6, 0xed, 0xcf, 0x4e, 0x31, 0x7c, 0x62, 0xb3,
+	0x23, 0x7f, 0xb2, 0x32, 0x70, 0x03, 0xd9, 0x83, 0x1c, 0x51, 0x07, 0xe0, 0x83, 0x0c, 0xfe, 0xdd,
+	0x11, 0xf0, 0xfe, 0xf5, 0xde, 0x0c, 0x48, 0x49, 0xe2, 0xdf, 0x81, 0x87, 0x30, 0xa5, 0x35, 0x2c,
+	0xd9, 0xa0, 0x3d, 0x25, 0x9f, 0x21, 0x80, 0x8c, 0x60, 0x69, 0x94, 0xa6, 0x87, 0xf6, 0xa3, 0x18,
+	0x3d, 0xfd, 0x35, 0x78, 0xed, 0x54, 0x32, 0xab, 0x0d, 0x6f, 0x59, 0x1f, 0x73, 0x53, 0x1b, 0x60,
+	0x4e, 0xbc, 0x35, 0xb3, 0x5f, 0xc8, 0x43, 0x99, 0x07, 0xb4, 0xfe, 0x29, 0xe4, 0x28, 0xb3, 0x8f,
+	0x6f, 0xfc, 0xbf, 0x2e, 0xa5, 0x7f, 0xfe, 0x7b, 0x79, 0x92, 0x9a, 0xff, 0x68, 0xf8, 0x05, 0xbc,
+	0xdc, 0xaf, 0xac, 0xaa, 0xd6, 0x07, 0x4a, 0x9b, 0x38, 0xff, 0xc6, 0xe8, 0x45, 0x9d, 0xeb, 0x66,
+	0xff, 0x53, 0xb5, 0xee, 0x4b, 0x7f, 0x19, 0x46, 0x49, 0xb5, 0x8e, 0xf5, 0x26, 0x61, 0xc7, 0xca,
+	0x84, 0x38, 0x4f, 0x2f, 0x81, 0xcb, 0x74, 0x1a, 0xfe, 0xee, 0xc8, 0xb9, 0x6a, 0x45, 0xb3, 0x63,
+	0xfc, 0x69, 0x38, 0x03, 0xa4, 0xae, 0x27, 0xba, 0x0e, 0x63, 0xd5, 0x06, 0xc1, 0x66, 0x4b, 0xa9,
+	0xb1, 0xf3, 0x65, 0x42, 0x4c, 0xd1, 0x21, 0xba, 0xb4, 0x32, 0x34, 0xac, 0xe7, 0x8b, 0xde, 0x85,
+	0x91, 0x5f, 0x56, 0x09, 0xc1, 0x26, 0x3b, 0x43, 0x26, 0xc4, 0x29, 0x37, 0x41, 0x26, 0xa9, 0x6c,
+	0x88, 0x3f, 0x0d, 0x4b, 0xae, 0x03, 0x2a, 0xc1, 0x4b, 0xcd, 0x86, 0x53, 0x69, 0x5b, 0x26, 0x15,
+	0x13, 0x5b, 0x15, 0xbd, 0xa6, 0xb1, 0x73, 0x61, 0x42, 0x9c, 0xa6, 0x39, 0x2e, 0x75, 0x27, 0x76,
+	0x24, 0x1b, 0xe6, 0xb9, 0x0c, 0x90, 0x50, 0x2f, 0xa0, 0xdc, 0xf5, 0x47, 0x6b, 0x70, 0xea, 0x2c,
+	0x48, 0xb4, 0x0f, 0xb2, 0x3c, 0x08, 0xc2, 0x9d, 0x81, 0x28, 0xc1, 0xa4, 0x93, 0x93, 0x6c, 0x60,
+	0x53, 0xc5, 0x0d, 0xc2, 0xc7, 0x59, 0x7c, 0xba, 0x7b, 0x76, 0x2c, 0xf7, 0x2f, 0x34, 0xd9, 0xb8,
+	0x18, 0x5d, 0xcc, 0x2d, 0x2d, 0x5e, 0x5b, 0x59, 0x94, 0x26, 0x9c, 0xa8, 0x1d, 0x27, 0x68, 0x35,
+	0xf7, 0xcc, 0x06, 0x19, 0xf8, 0x23, 0x38, 0xe7, 0x9b, 0x0c, 0xde, 0x0b, 0xc5, 0x4d, 0x76, 0xb8,
+	0x5c, 0xcf, 0xdd, 0xc8, 0x7d, 0x20, 0xfe, 0x00, 0x8e, 0x7b, 0xb7, 0x99, 0x5d, 0x25, 0xc0, 0x89,
+	0x0d, 0x62, 0xf4, 0x2a, 0xb1, 0x94, 0x2b, 0x7e, 0x18, 0x8e, 0xc5, 0xb8, 0xf8, 0xc2, 0x71, 0x04,
+	0x26, 0xd7, 0x4d, 0xac, 0x10, 0xdc, 0x1b, 0x1d, 0x1f, 0x7f, 0x2b, 0xa3, 0xe3, 0x7f, 0x38, 0x34,
+	0xf4, 0xef, 0x64, 0x68, 0x8c, 0x98, 0x15, 0xfa, 0x77, 0x32, 0x2b, 0x46, 0x8c, 0x88, 0xbd, 0x6f,
+	0x61, 0x44, 0x0c, 0x99, 0x0c, 0xe5, 0x6f, 0x3c, 0x19, 0x46, 0x0d, 0x04, 0x7e, 0x60, 0x20, 0xf4,
+	0x55, 0x9f, 0x1a, 0x54, 0xbd, 0x47, 0xd9, 0x85, 0x11, 0x72, 0x1d, 0x2a, 0xcc, 0xf7, 0xce, 0x15,
+	0xe6, 0x10, 0x09, 0x5e, 0x1d, 0x2e, 0xc1, 0x41, 0x89, 0x4d, 0xfd, 0xfd, 0xf6, 0xc0, 0x41, 0x2a,
+	0x0a, 0x03, 0x3a, 0xe2, 0x7e, 0xf3, 0x2f, 0xe0, 0xfb, 0x65, 0xe1, 0x2f, 0x11, 0x38, 0x29, 0x61,
+	0xa3, 0xa6, 0xa8, 0x17, 0x1a, 0xba, 0xd0, 0xd0, 0x85, 0x86, 0xbe, 0x89, 0x86, 0xfe, 0x11, 0x81,
+	0x89, 0x3b, 0x98, 0x5c, 0xe8, 0xe7, 0x42, 0x3f, 0xff, 0x47, 0xfd, 0xcc, 0xfa, 0x6f, 0x97, 0xbd,
+	0xab, 0xe4, 0xf7, 0x56, 0x57, 0xd9, 0x0f, 0xe0, 0xb8, 0xf7, 0xe3, 0x0c, 0x9a, 0x84, 0x89, 0x8d,
+	0xad, 0x5d, 0xf9, 0x6e, 0xf9, 0xde, 0x4e, 0x49, 0x5e, 0xe3, 0x02, 0x08, 0xc1, 0xa4, 0xe7, 0x87,
+	0xb5, 0xb5, 0x35, 0x0e, 0xb0, 0x0f, 0x83, 0x81, 0xec, 0x16, 0x9c, 0x1e, 0xf6, 0x85, 0x04, 0xcd,
+	0xc3, 0x19, 0x1a, 0x21, 0x95, 0x76, 0x65, 0x69, 0x7d, 0x7b, 0xa3, 0x24, 0x6f, 0x6d, 0x97, 0x24,
+	0x69, 0x5b, 0xe2, 0x02, 0x68, 0x06, 0x4e, 0xf9, 0x4d, 0x6b, 0x5b, 0xf7, 0x7a, 0x78, 0x1f, 0xb3,
+	0xb8, 0xb3, 0x5f, 0x75, 0xd0, 0x15, 0xc8, 0x3b, 0x51, 0x77, 0xf7, 0x4a, 0xbb, 0xe5, 0xd2, 0x86,
+	0x7c, 0x77, 0xaf, 0x24, 0xdd, 0x93, 0x69, 0x46, 0x5c, 0x00, 0x5d, 0x86, 0x73, 0x3d, 0xcc, 0xd2,
+	0xfa, 0xb6, 0xb4, 0x21, 0x3b, 0xa9, 0xf6, 0x91, 0xc5, 0xdf, 0x83, 0x93, 0x97, 0xe9, 0xc0, 0xe9,
+	0xcb, 0x74, 0xe0, 0xcd, 0xcb, 0x34, 0x78, 0xdc, 0x49, 0x83, 0x3f, 0x76, 0xd2, 0xe0, 0x79, 0x27,
+	0x0d, 0x4e, 0x3a, 0x69, 0x70, 0xda, 0x49, 0x83, 0x17, 0x9d, 0x34, 0x78, 0xdd, 0x49, 0x07, 0xde,
+	0x74, 0xd2, 0xe0, 0xc9, 0xab, 0x74, 0xe0, 0xf8, 0x55, 0x1a, 0x9c, 0xbc, 0x4a, 0x07, 0x4e, 0x5f,
+	0xa5, 0x03, 0x3f, 0xdf, 0x3e, 0xd0, 0x8d, 0x07, 0x07, 0xf9, 0x96, 0x5e, 0x23, 0xd8, 0x34, 0x95,
+	0x7c, 0xd3, 0x2a, 0xb0, 0x87, 0xfb, 0xba, 0x59, 0xbf, 0x66, 0x98, 0x7a, 0xab, 0xaa, 0x61, 0xf3,
+	0x5a, 0xd7, 0x5c, 0x30, 0xf6, 0x0f, 0xf4, 0x02, 0x7e, 0x48, 0xdc, 0x2f, 0xf6, 0x67, 0xff, 0x98,
+	0xd8, 0x8f, 0xb0, 0x0f, 0xf7, 0xcb, 0xff, 0x09, 0x00, 0x00, 0xff, 0xff, 0x9a, 0xb0, 0x1b, 0xc8,
+	0xbc, 0x18, 0x00, 0x00,
 }
 
+func (x DNSQueryType) String() string {
+	s, ok := DNSQueryType_name[int32(x)]
+	if ok {
+		return s
+	}
+	return strconv.Itoa(int(x))
+}
+func (x DNSResponseRcodeType) String() string {
+	s, ok := DNSResponseRcodeType_name[int32(x)]
+	if ok {
+		return s
+	}
+	return strconv.Itoa(int(x))
+}
+func (x DNSResponseRecordType) String() string {
+	s, ok := DNSResponseRecordType_name[int32(x)]
+	if ok {
+		return s
+	}
+	return strconv.Itoa(int(x))
+}
 func (this *HttpHealthCheck) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -1043,6 +1655,99 @@ func (this *HttpHealthCheck_HostHeader) Equal(that interface{}) bool {
 		return false
 	}
 	if this.HostHeader != that1.HostHeader {
+		return false
+	}
+	return true
+}
+func (this *DnsHealthCheck) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*DnsHealthCheck)
+	if !ok {
+		that2, ok := that.(DnsHealthCheck)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.Reverse != that1.Reverse {
+		return false
+	}
+	if this.QueryName != that1.QueryName {
+		return false
+	}
+	if this.QueryType != that1.QueryType {
+		return false
+	}
+	if this.ExpectedRecordType != that1.ExpectedRecordType {
+		return false
+	}
+	if this.ExpectedRcode != that1.ExpectedRcode {
+		return false
+	}
+	if this.ExpectedResponse != that1.ExpectedResponse {
+		return false
+	}
+	return true
+}
+func (this *DnsProxyUdpHealthCheck) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*DnsProxyUdpHealthCheck)
+	if !ok {
+		that2, ok := that.(DnsProxyUdpHealthCheck)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.SendPayload != that1.SendPayload {
+		return false
+	}
+	if this.ExpectedResponse != that1.ExpectedResponse {
+		return false
+	}
+	return true
+}
+func (this *DnsProxyTcpHealthCheck) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*DnsProxyTcpHealthCheck)
+	if !ok {
+		that2, ok := that.(DnsProxyTcpHealthCheck)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.SendPayload != that1.SendPayload {
+		return false
+	}
+	if this.ExpectedResponse != that1.ExpectedResponse {
 		return false
 	}
 	return true
@@ -1170,6 +1875,102 @@ func (this *GlobalSpecType_TcpHealthCheck) Equal(that interface{}) bool {
 	}
 	return true
 }
+func (this *GlobalSpecType_DnsProxyTcpHealthCheck) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GlobalSpecType_DnsProxyTcpHealthCheck)
+	if !ok {
+		that2, ok := that.(GlobalSpecType_DnsProxyTcpHealthCheck)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.DnsProxyTcpHealthCheck.Equal(that1.DnsProxyTcpHealthCheck) {
+		return false
+	}
+	return true
+}
+func (this *GlobalSpecType_DnsProxyUdpHealthCheck) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GlobalSpecType_DnsProxyUdpHealthCheck)
+	if !ok {
+		that2, ok := that.(GlobalSpecType_DnsProxyUdpHealthCheck)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.DnsProxyUdpHealthCheck.Equal(that1.DnsProxyUdpHealthCheck) {
+		return false
+	}
+	return true
+}
+func (this *GlobalSpecType_DnsHealthCheck) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GlobalSpecType_DnsHealthCheck)
+	if !ok {
+		that2, ok := that.(GlobalSpecType_DnsHealthCheck)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.DnsHealthCheck.Equal(that1.DnsHealthCheck) {
+		return false
+	}
+	return true
+}
+func (this *GlobalSpecType_DnsProxyIcmpHealthCheck) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GlobalSpecType_DnsProxyIcmpHealthCheck)
+	if !ok {
+		that2, ok := that.(GlobalSpecType_DnsProxyIcmpHealthCheck)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.DnsProxyIcmpHealthCheck.Equal(that1.DnsProxyIcmpHealthCheck) {
+		return false
+	}
+	return true
+}
 func (this *CreateSpecType) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -1263,6 +2064,102 @@ func (this *CreateSpecType_TcpHealthCheck) Equal(that interface{}) bool {
 	}
 	return true
 }
+func (this *CreateSpecType_DnsProxyTcpHealthCheck) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CreateSpecType_DnsProxyTcpHealthCheck)
+	if !ok {
+		that2, ok := that.(CreateSpecType_DnsProxyTcpHealthCheck)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.DnsProxyTcpHealthCheck.Equal(that1.DnsProxyTcpHealthCheck) {
+		return false
+	}
+	return true
+}
+func (this *CreateSpecType_DnsProxyUdpHealthCheck) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CreateSpecType_DnsProxyUdpHealthCheck)
+	if !ok {
+		that2, ok := that.(CreateSpecType_DnsProxyUdpHealthCheck)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.DnsProxyUdpHealthCheck.Equal(that1.DnsProxyUdpHealthCheck) {
+		return false
+	}
+	return true
+}
+func (this *CreateSpecType_DnsHealthCheck) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CreateSpecType_DnsHealthCheck)
+	if !ok {
+		that2, ok := that.(CreateSpecType_DnsHealthCheck)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.DnsHealthCheck.Equal(that1.DnsHealthCheck) {
+		return false
+	}
+	return true
+}
+func (this *CreateSpecType_DnsProxyIcmpHealthCheck) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CreateSpecType_DnsProxyIcmpHealthCheck)
+	if !ok {
+		that2, ok := that.(CreateSpecType_DnsProxyIcmpHealthCheck)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.DnsProxyIcmpHealthCheck.Equal(that1.DnsProxyIcmpHealthCheck) {
+		return false
+	}
+	return true
+}
 func (this *ReplaceSpecType) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -1352,6 +2249,102 @@ func (this *ReplaceSpecType_TcpHealthCheck) Equal(that interface{}) bool {
 		return false
 	}
 	if !this.TcpHealthCheck.Equal(that1.TcpHealthCheck) {
+		return false
+	}
+	return true
+}
+func (this *ReplaceSpecType_DnsProxyTcpHealthCheck) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ReplaceSpecType_DnsProxyTcpHealthCheck)
+	if !ok {
+		that2, ok := that.(ReplaceSpecType_DnsProxyTcpHealthCheck)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.DnsProxyTcpHealthCheck.Equal(that1.DnsProxyTcpHealthCheck) {
+		return false
+	}
+	return true
+}
+func (this *ReplaceSpecType_DnsProxyUdpHealthCheck) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ReplaceSpecType_DnsProxyUdpHealthCheck)
+	if !ok {
+		that2, ok := that.(ReplaceSpecType_DnsProxyUdpHealthCheck)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.DnsProxyUdpHealthCheck.Equal(that1.DnsProxyUdpHealthCheck) {
+		return false
+	}
+	return true
+}
+func (this *ReplaceSpecType_DnsHealthCheck) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ReplaceSpecType_DnsHealthCheck)
+	if !ok {
+		that2, ok := that.(ReplaceSpecType_DnsHealthCheck)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.DnsHealthCheck.Equal(that1.DnsHealthCheck) {
+		return false
+	}
+	return true
+}
+func (this *ReplaceSpecType_DnsProxyIcmpHealthCheck) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ReplaceSpecType_DnsProxyIcmpHealthCheck)
+	if !ok {
+		that2, ok := that.(ReplaceSpecType_DnsProxyIcmpHealthCheck)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.DnsProxyIcmpHealthCheck.Equal(that1.DnsProxyIcmpHealthCheck) {
 		return false
 	}
 	return true
@@ -1452,6 +2445,102 @@ func (this *GetSpecType_TcpHealthCheck) Equal(that interface{}) bool {
 	}
 	return true
 }
+func (this *GetSpecType_DnsProxyTcpHealthCheck) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GetSpecType_DnsProxyTcpHealthCheck)
+	if !ok {
+		that2, ok := that.(GetSpecType_DnsProxyTcpHealthCheck)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.DnsProxyTcpHealthCheck.Equal(that1.DnsProxyTcpHealthCheck) {
+		return false
+	}
+	return true
+}
+func (this *GetSpecType_DnsProxyUdpHealthCheck) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GetSpecType_DnsProxyUdpHealthCheck)
+	if !ok {
+		that2, ok := that.(GetSpecType_DnsProxyUdpHealthCheck)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.DnsProxyUdpHealthCheck.Equal(that1.DnsProxyUdpHealthCheck) {
+		return false
+	}
+	return true
+}
+func (this *GetSpecType_DnsHealthCheck) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GetSpecType_DnsHealthCheck)
+	if !ok {
+		that2, ok := that.(GetSpecType_DnsHealthCheck)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.DnsHealthCheck.Equal(that1.DnsHealthCheck) {
+		return false
+	}
+	return true
+}
+func (this *GetSpecType_DnsProxyIcmpHealthCheck) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GetSpecType_DnsProxyIcmpHealthCheck)
+	if !ok {
+		that2, ok := that.(GetSpecType_DnsProxyIcmpHealthCheck)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.DnsProxyIcmpHealthCheck.Equal(that1.DnsProxyIcmpHealthCheck) {
+		return false
+	}
+	return true
+}
 func (this *HttpHealthCheck) GoString() string {
 	if this == nil {
 		return "nil"
@@ -1497,6 +2586,43 @@ func (this *HttpHealthCheck_HostHeader) GoString() string {
 		`HostHeader:` + fmt.Sprintf("%#v", this.HostHeader) + `}`}, ", ")
 	return s
 }
+func (this *DnsHealthCheck) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 10)
+	s = append(s, "&healthcheck.DnsHealthCheck{")
+	s = append(s, "Reverse: "+fmt.Sprintf("%#v", this.Reverse)+",\n")
+	s = append(s, "QueryName: "+fmt.Sprintf("%#v", this.QueryName)+",\n")
+	s = append(s, "QueryType: "+fmt.Sprintf("%#v", this.QueryType)+",\n")
+	s = append(s, "ExpectedRecordType: "+fmt.Sprintf("%#v", this.ExpectedRecordType)+",\n")
+	s = append(s, "ExpectedRcode: "+fmt.Sprintf("%#v", this.ExpectedRcode)+",\n")
+	s = append(s, "ExpectedResponse: "+fmt.Sprintf("%#v", this.ExpectedResponse)+",\n")
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *DnsProxyUdpHealthCheck) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 6)
+	s = append(s, "&healthcheck.DnsProxyUdpHealthCheck{")
+	s = append(s, "SendPayload: "+fmt.Sprintf("%#v", this.SendPayload)+",\n")
+	s = append(s, "ExpectedResponse: "+fmt.Sprintf("%#v", this.ExpectedResponse)+",\n")
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *DnsProxyTcpHealthCheck) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 6)
+	s = append(s, "&healthcheck.DnsProxyTcpHealthCheck{")
+	s = append(s, "SendPayload: "+fmt.Sprintf("%#v", this.SendPayload)+",\n")
+	s = append(s, "ExpectedResponse: "+fmt.Sprintf("%#v", this.ExpectedResponse)+",\n")
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
 func (this *TcpHealthCheck) GoString() string {
 	if this == nil {
 		return "nil"
@@ -1512,7 +2638,7 @@ func (this *GlobalSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 12)
+	s := make([]string, 0, 16)
 	s = append(s, "&healthcheck.GlobalSpecType{")
 	if this.HealthCheck != nil {
 		s = append(s, "HealthCheck: "+fmt.Sprintf("%#v", this.HealthCheck)+",\n")
@@ -1542,11 +2668,43 @@ func (this *GlobalSpecType_TcpHealthCheck) GoString() string {
 		`TcpHealthCheck:` + fmt.Sprintf("%#v", this.TcpHealthCheck) + `}`}, ", ")
 	return s
 }
+func (this *GlobalSpecType_DnsProxyTcpHealthCheck) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&healthcheck.GlobalSpecType_DnsProxyTcpHealthCheck{` +
+		`DnsProxyTcpHealthCheck:` + fmt.Sprintf("%#v", this.DnsProxyTcpHealthCheck) + `}`}, ", ")
+	return s
+}
+func (this *GlobalSpecType_DnsProxyUdpHealthCheck) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&healthcheck.GlobalSpecType_DnsProxyUdpHealthCheck{` +
+		`DnsProxyUdpHealthCheck:` + fmt.Sprintf("%#v", this.DnsProxyUdpHealthCheck) + `}`}, ", ")
+	return s
+}
+func (this *GlobalSpecType_DnsHealthCheck) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&healthcheck.GlobalSpecType_DnsHealthCheck{` +
+		`DnsHealthCheck:` + fmt.Sprintf("%#v", this.DnsHealthCheck) + `}`}, ", ")
+	return s
+}
+func (this *GlobalSpecType_DnsProxyIcmpHealthCheck) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&healthcheck.GlobalSpecType_DnsProxyIcmpHealthCheck{` +
+		`DnsProxyIcmpHealthCheck:` + fmt.Sprintf("%#v", this.DnsProxyIcmpHealthCheck) + `}`}, ", ")
+	return s
+}
 func (this *CreateSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 11)
+	s := make([]string, 0, 15)
 	s = append(s, "&healthcheck.CreateSpecType{")
 	if this.HealthCheck != nil {
 		s = append(s, "HealthCheck: "+fmt.Sprintf("%#v", this.HealthCheck)+",\n")
@@ -1575,11 +2733,43 @@ func (this *CreateSpecType_TcpHealthCheck) GoString() string {
 		`TcpHealthCheck:` + fmt.Sprintf("%#v", this.TcpHealthCheck) + `}`}, ", ")
 	return s
 }
+func (this *CreateSpecType_DnsProxyTcpHealthCheck) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&healthcheck.CreateSpecType_DnsProxyTcpHealthCheck{` +
+		`DnsProxyTcpHealthCheck:` + fmt.Sprintf("%#v", this.DnsProxyTcpHealthCheck) + `}`}, ", ")
+	return s
+}
+func (this *CreateSpecType_DnsProxyUdpHealthCheck) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&healthcheck.CreateSpecType_DnsProxyUdpHealthCheck{` +
+		`DnsProxyUdpHealthCheck:` + fmt.Sprintf("%#v", this.DnsProxyUdpHealthCheck) + `}`}, ", ")
+	return s
+}
+func (this *CreateSpecType_DnsHealthCheck) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&healthcheck.CreateSpecType_DnsHealthCheck{` +
+		`DnsHealthCheck:` + fmt.Sprintf("%#v", this.DnsHealthCheck) + `}`}, ", ")
+	return s
+}
+func (this *CreateSpecType_DnsProxyIcmpHealthCheck) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&healthcheck.CreateSpecType_DnsProxyIcmpHealthCheck{` +
+		`DnsProxyIcmpHealthCheck:` + fmt.Sprintf("%#v", this.DnsProxyIcmpHealthCheck) + `}`}, ", ")
+	return s
+}
 func (this *ReplaceSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 11)
+	s := make([]string, 0, 15)
 	s = append(s, "&healthcheck.ReplaceSpecType{")
 	if this.HealthCheck != nil {
 		s = append(s, "HealthCheck: "+fmt.Sprintf("%#v", this.HealthCheck)+",\n")
@@ -1608,11 +2798,43 @@ func (this *ReplaceSpecType_TcpHealthCheck) GoString() string {
 		`TcpHealthCheck:` + fmt.Sprintf("%#v", this.TcpHealthCheck) + `}`}, ", ")
 	return s
 }
+func (this *ReplaceSpecType_DnsProxyTcpHealthCheck) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&healthcheck.ReplaceSpecType_DnsProxyTcpHealthCheck{` +
+		`DnsProxyTcpHealthCheck:` + fmt.Sprintf("%#v", this.DnsProxyTcpHealthCheck) + `}`}, ", ")
+	return s
+}
+func (this *ReplaceSpecType_DnsProxyUdpHealthCheck) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&healthcheck.ReplaceSpecType_DnsProxyUdpHealthCheck{` +
+		`DnsProxyUdpHealthCheck:` + fmt.Sprintf("%#v", this.DnsProxyUdpHealthCheck) + `}`}, ", ")
+	return s
+}
+func (this *ReplaceSpecType_DnsHealthCheck) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&healthcheck.ReplaceSpecType_DnsHealthCheck{` +
+		`DnsHealthCheck:` + fmt.Sprintf("%#v", this.DnsHealthCheck) + `}`}, ", ")
+	return s
+}
+func (this *ReplaceSpecType_DnsProxyIcmpHealthCheck) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&healthcheck.ReplaceSpecType_DnsProxyIcmpHealthCheck{` +
+		`DnsProxyIcmpHealthCheck:` + fmt.Sprintf("%#v", this.DnsProxyIcmpHealthCheck) + `}`}, ", ")
+	return s
+}
 func (this *GetSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 12)
+	s := make([]string, 0, 16)
 	s = append(s, "&healthcheck.GetSpecType{")
 	if this.HealthCheck != nil {
 		s = append(s, "HealthCheck: "+fmt.Sprintf("%#v", this.HealthCheck)+",\n")
@@ -1640,6 +2862,38 @@ func (this *GetSpecType_TcpHealthCheck) GoString() string {
 	}
 	s := strings.Join([]string{`&healthcheck.GetSpecType_TcpHealthCheck{` +
 		`TcpHealthCheck:` + fmt.Sprintf("%#v", this.TcpHealthCheck) + `}`}, ", ")
+	return s
+}
+func (this *GetSpecType_DnsProxyTcpHealthCheck) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&healthcheck.GetSpecType_DnsProxyTcpHealthCheck{` +
+		`DnsProxyTcpHealthCheck:` + fmt.Sprintf("%#v", this.DnsProxyTcpHealthCheck) + `}`}, ", ")
+	return s
+}
+func (this *GetSpecType_DnsProxyUdpHealthCheck) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&healthcheck.GetSpecType_DnsProxyUdpHealthCheck{` +
+		`DnsProxyUdpHealthCheck:` + fmt.Sprintf("%#v", this.DnsProxyUdpHealthCheck) + `}`}, ", ")
+	return s
+}
+func (this *GetSpecType_DnsHealthCheck) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&healthcheck.GetSpecType_DnsHealthCheck{` +
+		`DnsHealthCheck:` + fmt.Sprintf("%#v", this.DnsHealthCheck) + `}`}, ", ")
+	return s
+}
+func (this *GetSpecType_DnsProxyIcmpHealthCheck) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&healthcheck.GetSpecType_DnsProxyIcmpHealthCheck{` +
+		`DnsProxyIcmpHealthCheck:` + fmt.Sprintf("%#v", this.DnsProxyIcmpHealthCheck) + `}`}, ", ")
 	return s
 }
 func valueToGoStringTypes(v interface{}, typ string) string {
@@ -1776,6 +3030,142 @@ func (m *HttpHealthCheck_UseOriginServerName) MarshalToSizedBuffer(dAtA []byte) 
 	}
 	return len(dAtA) - i, nil
 }
+func (m *DnsHealthCheck) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *DnsHealthCheck) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *DnsHealthCheck) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.ExpectedResponse) > 0 {
+		i -= len(m.ExpectedResponse)
+		copy(dAtA[i:], m.ExpectedResponse)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.ExpectedResponse)))
+		i--
+		dAtA[i] = 0x3a
+	}
+	if m.ExpectedRcode != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.ExpectedRcode))
+		i--
+		dAtA[i] = 0x30
+	}
+	if m.ExpectedRecordType != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.ExpectedRecordType))
+		i--
+		dAtA[i] = 0x28
+	}
+	if m.QueryType != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.QueryType))
+		i--
+		dAtA[i] = 0x20
+	}
+	if len(m.QueryName) > 0 {
+		i -= len(m.QueryName)
+		copy(dAtA[i:], m.QueryName)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.QueryName)))
+		i--
+		dAtA[i] = 0x1a
+	}
+	if m.Reverse {
+		i--
+		if m.Reverse {
+			dAtA[i] = 1
+		} else {
+			dAtA[i] = 0
+		}
+		i--
+		dAtA[i] = 0x10
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *DnsProxyUdpHealthCheck) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *DnsProxyUdpHealthCheck) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *DnsProxyUdpHealthCheck) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.ExpectedResponse) > 0 {
+		i -= len(m.ExpectedResponse)
+		copy(dAtA[i:], m.ExpectedResponse)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.ExpectedResponse)))
+		i--
+		dAtA[i] = 0x12
+	}
+	if len(m.SendPayload) > 0 {
+		i -= len(m.SendPayload)
+		copy(dAtA[i:], m.SendPayload)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.SendPayload)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *DnsProxyTcpHealthCheck) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *DnsProxyTcpHealthCheck) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *DnsProxyTcpHealthCheck) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.ExpectedResponse) > 0 {
+		i -= len(m.ExpectedResponse)
+		copy(dAtA[i:], m.ExpectedResponse)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.ExpectedResponse)))
+		i--
+		dAtA[i] = 0x12
+	}
+	if len(m.SendPayload) > 0 {
+		i -= len(m.SendPayload)
+		copy(dAtA[i:], m.SendPayload)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.SendPayload)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
 func (m *TcpHealthCheck) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -1833,6 +3223,15 @@ func (m *GlobalSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	if m.HealthCheck != nil {
+		{
+			size := m.HealthCheck.Size()
+			i -= size
+			if _, err := m.HealthCheck.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
 	if m.JitterPercent != 0 {
 		i = encodeVarintTypes(dAtA, i, uint64(m.JitterPercent))
 		i--
@@ -1862,15 +3261,6 @@ func (m *GlobalSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		i = encodeVarintTypes(dAtA, i, uint64(m.Timeout))
 		i--
 		dAtA[i] = 0x18
-	}
-	if m.HealthCheck != nil {
-		{
-			size := m.HealthCheck.Size()
-			i -= size
-			if _, err := m.HealthCheck.MarshalTo(dAtA[i:]); err != nil {
-				return 0, err
-			}
-		}
 	}
 	return len(dAtA) - i, nil
 }
@@ -1917,6 +3307,90 @@ func (m *GlobalSpecType_TcpHealthCheck) MarshalToSizedBuffer(dAtA []byte) (int, 
 	}
 	return len(dAtA) - i, nil
 }
+func (m *GlobalSpecType_DnsProxyTcpHealthCheck) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType_DnsProxyTcpHealthCheck) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.DnsProxyTcpHealthCheck != nil {
+		{
+			size, err := m.DnsProxyTcpHealthCheck.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x52
+	}
+	return len(dAtA) - i, nil
+}
+func (m *GlobalSpecType_DnsProxyUdpHealthCheck) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType_DnsProxyUdpHealthCheck) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.DnsProxyUdpHealthCheck != nil {
+		{
+			size, err := m.DnsProxyUdpHealthCheck.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x5a
+	}
+	return len(dAtA) - i, nil
+}
+func (m *GlobalSpecType_DnsHealthCheck) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType_DnsHealthCheck) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.DnsHealthCheck != nil {
+		{
+			size, err := m.DnsHealthCheck.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x62
+	}
+	return len(dAtA) - i, nil
+}
+func (m *GlobalSpecType_DnsProxyIcmpHealthCheck) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType_DnsProxyIcmpHealthCheck) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.DnsProxyIcmpHealthCheck != nil {
+		{
+			size, err := m.DnsProxyIcmpHealthCheck.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x6a
+	}
+	return len(dAtA) - i, nil
+}
 func (m *CreateSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -1937,6 +3411,15 @@ func (m *CreateSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	if m.HealthCheck != nil {
+		{
+			size := m.HealthCheck.Size()
+			i -= size
+			if _, err := m.HealthCheck.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
 	if m.JitterPercent != 0 {
 		i = encodeVarintTypes(dAtA, i, uint64(m.JitterPercent))
 		i--
@@ -1961,15 +3444,6 @@ func (m *CreateSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		i = encodeVarintTypes(dAtA, i, uint64(m.Timeout))
 		i--
 		dAtA[i] = 0x18
-	}
-	if m.HealthCheck != nil {
-		{
-			size := m.HealthCheck.Size()
-			i -= size
-			if _, err := m.HealthCheck.MarshalTo(dAtA[i:]); err != nil {
-				return 0, err
-			}
-		}
 	}
 	return len(dAtA) - i, nil
 }
@@ -2016,6 +3490,90 @@ func (m *CreateSpecType_TcpHealthCheck) MarshalToSizedBuffer(dAtA []byte) (int, 
 	}
 	return len(dAtA) - i, nil
 }
+func (m *CreateSpecType_DnsProxyTcpHealthCheck) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType_DnsProxyTcpHealthCheck) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.DnsProxyTcpHealthCheck != nil {
+		{
+			size, err := m.DnsProxyTcpHealthCheck.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x52
+	}
+	return len(dAtA) - i, nil
+}
+func (m *CreateSpecType_DnsProxyUdpHealthCheck) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType_DnsProxyUdpHealthCheck) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.DnsProxyUdpHealthCheck != nil {
+		{
+			size, err := m.DnsProxyUdpHealthCheck.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x5a
+	}
+	return len(dAtA) - i, nil
+}
+func (m *CreateSpecType_DnsHealthCheck) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType_DnsHealthCheck) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.DnsHealthCheck != nil {
+		{
+			size, err := m.DnsHealthCheck.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x62
+	}
+	return len(dAtA) - i, nil
+}
+func (m *CreateSpecType_DnsProxyIcmpHealthCheck) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType_DnsProxyIcmpHealthCheck) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.DnsProxyIcmpHealthCheck != nil {
+		{
+			size, err := m.DnsProxyIcmpHealthCheck.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x6a
+	}
+	return len(dAtA) - i, nil
+}
 func (m *ReplaceSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -2036,6 +3594,15 @@ func (m *ReplaceSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	if m.HealthCheck != nil {
+		{
+			size := m.HealthCheck.Size()
+			i -= size
+			if _, err := m.HealthCheck.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
 	if m.JitterPercent != 0 {
 		i = encodeVarintTypes(dAtA, i, uint64(m.JitterPercent))
 		i--
@@ -2060,15 +3627,6 @@ func (m *ReplaceSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		i = encodeVarintTypes(dAtA, i, uint64(m.Timeout))
 		i--
 		dAtA[i] = 0x18
-	}
-	if m.HealthCheck != nil {
-		{
-			size := m.HealthCheck.Size()
-			i -= size
-			if _, err := m.HealthCheck.MarshalTo(dAtA[i:]); err != nil {
-				return 0, err
-			}
-		}
 	}
 	return len(dAtA) - i, nil
 }
@@ -2115,6 +3673,90 @@ func (m *ReplaceSpecType_TcpHealthCheck) MarshalToSizedBuffer(dAtA []byte) (int,
 	}
 	return len(dAtA) - i, nil
 }
+func (m *ReplaceSpecType_DnsProxyTcpHealthCheck) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType_DnsProxyTcpHealthCheck) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.DnsProxyTcpHealthCheck != nil {
+		{
+			size, err := m.DnsProxyTcpHealthCheck.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x52
+	}
+	return len(dAtA) - i, nil
+}
+func (m *ReplaceSpecType_DnsProxyUdpHealthCheck) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType_DnsProxyUdpHealthCheck) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.DnsProxyUdpHealthCheck != nil {
+		{
+			size, err := m.DnsProxyUdpHealthCheck.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x5a
+	}
+	return len(dAtA) - i, nil
+}
+func (m *ReplaceSpecType_DnsHealthCheck) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType_DnsHealthCheck) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.DnsHealthCheck != nil {
+		{
+			size, err := m.DnsHealthCheck.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x62
+	}
+	return len(dAtA) - i, nil
+}
+func (m *ReplaceSpecType_DnsProxyIcmpHealthCheck) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType_DnsProxyIcmpHealthCheck) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.DnsProxyIcmpHealthCheck != nil {
+		{
+			size, err := m.DnsProxyIcmpHealthCheck.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x6a
+	}
+	return len(dAtA) - i, nil
+}
 func (m *GetSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -2135,6 +3777,15 @@ func (m *GetSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	if m.HealthCheck != nil {
+		{
+			size := m.HealthCheck.Size()
+			i -= size
+			if _, err := m.HealthCheck.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
 	if m.JitterPercent != 0 {
 		i = encodeVarintTypes(dAtA, i, uint64(m.JitterPercent))
 		i--
@@ -2164,15 +3815,6 @@ func (m *GetSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		i = encodeVarintTypes(dAtA, i, uint64(m.Timeout))
 		i--
 		dAtA[i] = 0x18
-	}
-	if m.HealthCheck != nil {
-		{
-			size := m.HealthCheck.Size()
-			i -= size
-			if _, err := m.HealthCheck.MarshalTo(dAtA[i:]); err != nil {
-				return 0, err
-			}
-		}
 	}
 	return len(dAtA) - i, nil
 }
@@ -2216,6 +3858,90 @@ func (m *GetSpecType_TcpHealthCheck) MarshalToSizedBuffer(dAtA []byte) (int, err
 		}
 		i--
 		dAtA[i] = 0x12
+	}
+	return len(dAtA) - i, nil
+}
+func (m *GetSpecType_DnsProxyTcpHealthCheck) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType_DnsProxyTcpHealthCheck) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.DnsProxyTcpHealthCheck != nil {
+		{
+			size, err := m.DnsProxyTcpHealthCheck.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x52
+	}
+	return len(dAtA) - i, nil
+}
+func (m *GetSpecType_DnsProxyUdpHealthCheck) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType_DnsProxyUdpHealthCheck) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.DnsProxyUdpHealthCheck != nil {
+		{
+			size, err := m.DnsProxyUdpHealthCheck.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x5a
+	}
+	return len(dAtA) - i, nil
+}
+func (m *GetSpecType_DnsHealthCheck) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType_DnsHealthCheck) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.DnsHealthCheck != nil {
+		{
+			size, err := m.DnsHealthCheck.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x62
+	}
+	return len(dAtA) - i, nil
+}
+func (m *GetSpecType_DnsProxyIcmpHealthCheck) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType_DnsProxyIcmpHealthCheck) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.DnsProxyIcmpHealthCheck != nil {
+		{
+			size, err := m.DnsProxyIcmpHealthCheck.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x6a
 	}
 	return len(dAtA) - i, nil
 }
@@ -2291,6 +4017,69 @@ func (m *HttpHealthCheck_UseOriginServerName) Size() (n int) {
 	}
 	return n
 }
+func (m *DnsHealthCheck) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Reverse {
+		n += 2
+	}
+	l = len(m.QueryName)
+	if l > 0 {
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.QueryType != 0 {
+		n += 1 + sovTypes(uint64(m.QueryType))
+	}
+	if m.ExpectedRecordType != 0 {
+		n += 1 + sovTypes(uint64(m.ExpectedRecordType))
+	}
+	if m.ExpectedRcode != 0 {
+		n += 1 + sovTypes(uint64(m.ExpectedRcode))
+	}
+	l = len(m.ExpectedResponse)
+	if l > 0 {
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+
+func (m *DnsProxyUdpHealthCheck) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.SendPayload)
+	if l > 0 {
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	l = len(m.ExpectedResponse)
+	if l > 0 {
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+
+func (m *DnsProxyTcpHealthCheck) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.SendPayload)
+	if l > 0 {
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	l = len(m.ExpectedResponse)
+	if l > 0 {
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+
 func (m *TcpHealthCheck) Size() (n int) {
 	if m == nil {
 		return 0
@@ -2362,6 +4151,54 @@ func (m *GlobalSpecType_TcpHealthCheck) Size() (n int) {
 	}
 	return n
 }
+func (m *GlobalSpecType_DnsProxyTcpHealthCheck) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.DnsProxyTcpHealthCheck != nil {
+		l = m.DnsProxyTcpHealthCheck.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *GlobalSpecType_DnsProxyUdpHealthCheck) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.DnsProxyUdpHealthCheck != nil {
+		l = m.DnsProxyUdpHealthCheck.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *GlobalSpecType_DnsHealthCheck) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.DnsHealthCheck != nil {
+		l = m.DnsHealthCheck.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *GlobalSpecType_DnsProxyIcmpHealthCheck) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.DnsProxyIcmpHealthCheck != nil {
+		l = m.DnsProxyIcmpHealthCheck.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
 func (m *CreateSpecType) Size() (n int) {
 	if m == nil {
 		return 0
@@ -2413,6 +4250,54 @@ func (m *CreateSpecType_TcpHealthCheck) Size() (n int) {
 	}
 	return n
 }
+func (m *CreateSpecType_DnsProxyTcpHealthCheck) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.DnsProxyTcpHealthCheck != nil {
+		l = m.DnsProxyTcpHealthCheck.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *CreateSpecType_DnsProxyUdpHealthCheck) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.DnsProxyUdpHealthCheck != nil {
+		l = m.DnsProxyUdpHealthCheck.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *CreateSpecType_DnsHealthCheck) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.DnsHealthCheck != nil {
+		l = m.DnsHealthCheck.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *CreateSpecType_DnsProxyIcmpHealthCheck) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.DnsProxyIcmpHealthCheck != nil {
+		l = m.DnsProxyIcmpHealthCheck.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
 func (m *ReplaceSpecType) Size() (n int) {
 	if m == nil {
 		return 0
@@ -2460,6 +4345,54 @@ func (m *ReplaceSpecType_TcpHealthCheck) Size() (n int) {
 	_ = l
 	if m.TcpHealthCheck != nil {
 		l = m.TcpHealthCheck.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *ReplaceSpecType_DnsProxyTcpHealthCheck) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.DnsProxyTcpHealthCheck != nil {
+		l = m.DnsProxyTcpHealthCheck.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *ReplaceSpecType_DnsProxyUdpHealthCheck) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.DnsProxyUdpHealthCheck != nil {
+		l = m.DnsProxyUdpHealthCheck.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *ReplaceSpecType_DnsHealthCheck) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.DnsHealthCheck != nil {
+		l = m.DnsHealthCheck.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *ReplaceSpecType_DnsProxyIcmpHealthCheck) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.DnsProxyIcmpHealthCheck != nil {
+		l = m.DnsProxyIcmpHealthCheck.Size()
 		n += 1 + l + sovTypes(uint64(l))
 	}
 	return n
@@ -2518,6 +4451,54 @@ func (m *GetSpecType_TcpHealthCheck) Size() (n int) {
 	}
 	return n
 }
+func (m *GetSpecType_DnsProxyTcpHealthCheck) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.DnsProxyTcpHealthCheck != nil {
+		l = m.DnsProxyTcpHealthCheck.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *GetSpecType_DnsProxyUdpHealthCheck) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.DnsProxyUdpHealthCheck != nil {
+		l = m.DnsProxyUdpHealthCheck.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *GetSpecType_DnsHealthCheck) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.DnsHealthCheck != nil {
+		l = m.DnsHealthCheck.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *GetSpecType_DnsProxyIcmpHealthCheck) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.DnsProxyIcmpHealthCheck != nil {
+		l = m.DnsProxyIcmpHealthCheck.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
 
 func sovTypes(x uint64) (n int) {
 	return (math_bits.Len64(x|1) + 6) / 7
@@ -2570,6 +4551,43 @@ func (this *HttpHealthCheck_UseOriginServerName) String() string {
 	}, "")
 	return s
 }
+func (this *DnsHealthCheck) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&DnsHealthCheck{`,
+		`Reverse:` + fmt.Sprintf("%v", this.Reverse) + `,`,
+		`QueryName:` + fmt.Sprintf("%v", this.QueryName) + `,`,
+		`QueryType:` + fmt.Sprintf("%v", this.QueryType) + `,`,
+		`ExpectedRecordType:` + fmt.Sprintf("%v", this.ExpectedRecordType) + `,`,
+		`ExpectedRcode:` + fmt.Sprintf("%v", this.ExpectedRcode) + `,`,
+		`ExpectedResponse:` + fmt.Sprintf("%v", this.ExpectedResponse) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *DnsProxyUdpHealthCheck) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&DnsProxyUdpHealthCheck{`,
+		`SendPayload:` + fmt.Sprintf("%v", this.SendPayload) + `,`,
+		`ExpectedResponse:` + fmt.Sprintf("%v", this.ExpectedResponse) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *DnsProxyTcpHealthCheck) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&DnsProxyTcpHealthCheck{`,
+		`SendPayload:` + fmt.Sprintf("%v", this.SendPayload) + `,`,
+		`ExpectedResponse:` + fmt.Sprintf("%v", this.ExpectedResponse) + `,`,
+		`}`,
+	}, "")
+	return s
+}
 func (this *TcpHealthCheck) String() string {
 	if this == nil {
 		return "nil"
@@ -2617,6 +4635,46 @@ func (this *GlobalSpecType_TcpHealthCheck) String() string {
 	}, "")
 	return s
 }
+func (this *GlobalSpecType_DnsProxyTcpHealthCheck) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GlobalSpecType_DnsProxyTcpHealthCheck{`,
+		`DnsProxyTcpHealthCheck:` + strings.Replace(fmt.Sprintf("%v", this.DnsProxyTcpHealthCheck), "DnsProxyTcpHealthCheck", "DnsProxyTcpHealthCheck", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GlobalSpecType_DnsProxyUdpHealthCheck) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GlobalSpecType_DnsProxyUdpHealthCheck{`,
+		`DnsProxyUdpHealthCheck:` + strings.Replace(fmt.Sprintf("%v", this.DnsProxyUdpHealthCheck), "DnsProxyUdpHealthCheck", "DnsProxyUdpHealthCheck", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GlobalSpecType_DnsHealthCheck) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GlobalSpecType_DnsHealthCheck{`,
+		`DnsHealthCheck:` + strings.Replace(fmt.Sprintf("%v", this.DnsHealthCheck), "DnsHealthCheck", "DnsHealthCheck", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GlobalSpecType_DnsProxyIcmpHealthCheck) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GlobalSpecType_DnsProxyIcmpHealthCheck{`,
+		`DnsProxyIcmpHealthCheck:` + strings.Replace(fmt.Sprintf("%v", this.DnsProxyIcmpHealthCheck), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
 func (this *CreateSpecType) String() string {
 	if this == nil {
 		return "nil"
@@ -2648,6 +4706,46 @@ func (this *CreateSpecType_TcpHealthCheck) String() string {
 	}
 	s := strings.Join([]string{`&CreateSpecType_TcpHealthCheck{`,
 		`TcpHealthCheck:` + strings.Replace(fmt.Sprintf("%v", this.TcpHealthCheck), "TcpHealthCheck", "TcpHealthCheck", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *CreateSpecType_DnsProxyTcpHealthCheck) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&CreateSpecType_DnsProxyTcpHealthCheck{`,
+		`DnsProxyTcpHealthCheck:` + strings.Replace(fmt.Sprintf("%v", this.DnsProxyTcpHealthCheck), "DnsProxyTcpHealthCheck", "DnsProxyTcpHealthCheck", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *CreateSpecType_DnsProxyUdpHealthCheck) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&CreateSpecType_DnsProxyUdpHealthCheck{`,
+		`DnsProxyUdpHealthCheck:` + strings.Replace(fmt.Sprintf("%v", this.DnsProxyUdpHealthCheck), "DnsProxyUdpHealthCheck", "DnsProxyUdpHealthCheck", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *CreateSpecType_DnsHealthCheck) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&CreateSpecType_DnsHealthCheck{`,
+		`DnsHealthCheck:` + strings.Replace(fmt.Sprintf("%v", this.DnsHealthCheck), "DnsHealthCheck", "DnsHealthCheck", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *CreateSpecType_DnsProxyIcmpHealthCheck) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&CreateSpecType_DnsProxyIcmpHealthCheck{`,
+		`DnsProxyIcmpHealthCheck:` + strings.Replace(fmt.Sprintf("%v", this.DnsProxyIcmpHealthCheck), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2687,6 +4785,46 @@ func (this *ReplaceSpecType_TcpHealthCheck) String() string {
 	}, "")
 	return s
 }
+func (this *ReplaceSpecType_DnsProxyTcpHealthCheck) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ReplaceSpecType_DnsProxyTcpHealthCheck{`,
+		`DnsProxyTcpHealthCheck:` + strings.Replace(fmt.Sprintf("%v", this.DnsProxyTcpHealthCheck), "DnsProxyTcpHealthCheck", "DnsProxyTcpHealthCheck", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ReplaceSpecType_DnsProxyUdpHealthCheck) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ReplaceSpecType_DnsProxyUdpHealthCheck{`,
+		`DnsProxyUdpHealthCheck:` + strings.Replace(fmt.Sprintf("%v", this.DnsProxyUdpHealthCheck), "DnsProxyUdpHealthCheck", "DnsProxyUdpHealthCheck", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ReplaceSpecType_DnsHealthCheck) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ReplaceSpecType_DnsHealthCheck{`,
+		`DnsHealthCheck:` + strings.Replace(fmt.Sprintf("%v", this.DnsHealthCheck), "DnsHealthCheck", "DnsHealthCheck", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ReplaceSpecType_DnsProxyIcmpHealthCheck) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ReplaceSpecType_DnsProxyIcmpHealthCheck{`,
+		`DnsProxyIcmpHealthCheck:` + strings.Replace(fmt.Sprintf("%v", this.DnsProxyIcmpHealthCheck), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
 func (this *GetSpecType) String() string {
 	if this == nil {
 		return "nil"
@@ -2719,6 +4857,46 @@ func (this *GetSpecType_TcpHealthCheck) String() string {
 	}
 	s := strings.Join([]string{`&GetSpecType_TcpHealthCheck{`,
 		`TcpHealthCheck:` + strings.Replace(fmt.Sprintf("%v", this.TcpHealthCheck), "TcpHealthCheck", "TcpHealthCheck", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GetSpecType_DnsProxyTcpHealthCheck) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GetSpecType_DnsProxyTcpHealthCheck{`,
+		`DnsProxyTcpHealthCheck:` + strings.Replace(fmt.Sprintf("%v", this.DnsProxyTcpHealthCheck), "DnsProxyTcpHealthCheck", "DnsProxyTcpHealthCheck", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GetSpecType_DnsProxyUdpHealthCheck) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GetSpecType_DnsProxyUdpHealthCheck{`,
+		`DnsProxyUdpHealthCheck:` + strings.Replace(fmt.Sprintf("%v", this.DnsProxyUdpHealthCheck), "DnsProxyUdpHealthCheck", "DnsProxyUdpHealthCheck", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GetSpecType_DnsHealthCheck) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GetSpecType_DnsHealthCheck{`,
+		`DnsHealthCheck:` + strings.Replace(fmt.Sprintf("%v", this.DnsHealthCheck), "DnsHealthCheck", "DnsHealthCheck", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GetSpecType_DnsProxyIcmpHealthCheck) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GetSpecType_DnsProxyIcmpHealthCheck{`,
+		`DnsProxyIcmpHealthCheck:` + strings.Replace(fmt.Sprintf("%v", this.DnsProxyIcmpHealthCheck), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -3094,6 +5272,434 @@ func (m *HttpHealthCheck) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
+func (m *DnsHealthCheck) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: DnsHealthCheck: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: DnsHealthCheck: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 2:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Reverse", wireType)
+			}
+			var v int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				v |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			m.Reverse = bool(v != 0)
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field QueryName", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.QueryName = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 4:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field QueryType", wireType)
+			}
+			m.QueryType = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.QueryType |= DNSQueryType(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 5:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ExpectedRecordType", wireType)
+			}
+			m.ExpectedRecordType = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.ExpectedRecordType |= DNSResponseRecordType(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 6:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ExpectedRcode", wireType)
+			}
+			m.ExpectedRcode = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.ExpectedRcode |= DNSResponseRcodeType(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 7:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ExpectedResponse", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.ExpectedResponse = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *DnsProxyUdpHealthCheck) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: DnsProxyUdpHealthCheck: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: DnsProxyUdpHealthCheck: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field SendPayload", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.SendPayload = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ExpectedResponse", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.ExpectedResponse = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *DnsProxyTcpHealthCheck) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: DnsProxyTcpHealthCheck: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: DnsProxyTcpHealthCheck: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field SendPayload", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.SendPayload = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ExpectedResponse", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.ExpectedResponse = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
 func (m *TcpHealthCheck) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
@@ -3424,6 +6030,146 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 					break
 				}
 			}
+		case 10:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DnsProxyTcpHealthCheck", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &DnsProxyTcpHealthCheck{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.HealthCheck = &GlobalSpecType_DnsProxyTcpHealthCheck{v}
+			iNdEx = postIndex
+		case 11:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DnsProxyUdpHealthCheck", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &DnsProxyUdpHealthCheck{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.HealthCheck = &GlobalSpecType_DnsProxyUdpHealthCheck{v}
+			iNdEx = postIndex
+		case 12:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DnsHealthCheck", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &DnsHealthCheck{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.HealthCheck = &GlobalSpecType_DnsHealthCheck{v}
+			iNdEx = postIndex
+		case 13:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DnsProxyIcmpHealthCheck", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.HealthCheck = &GlobalSpecType_DnsProxyIcmpHealthCheck{v}
+			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipTypes(dAtA[iNdEx:])
@@ -3642,6 +6388,146 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 					break
 				}
 			}
+		case 10:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DnsProxyTcpHealthCheck", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &DnsProxyTcpHealthCheck{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.HealthCheck = &CreateSpecType_DnsProxyTcpHealthCheck{v}
+			iNdEx = postIndex
+		case 11:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DnsProxyUdpHealthCheck", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &DnsProxyUdpHealthCheck{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.HealthCheck = &CreateSpecType_DnsProxyUdpHealthCheck{v}
+			iNdEx = postIndex
+		case 12:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DnsHealthCheck", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &DnsHealthCheck{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.HealthCheck = &CreateSpecType_DnsHealthCheck{v}
+			iNdEx = postIndex
+		case 13:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DnsProxyIcmpHealthCheck", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.HealthCheck = &CreateSpecType_DnsProxyIcmpHealthCheck{v}
+			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipTypes(dAtA[iNdEx:])
@@ -3860,6 +6746,146 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 					break
 				}
 			}
+		case 10:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DnsProxyTcpHealthCheck", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &DnsProxyTcpHealthCheck{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.HealthCheck = &ReplaceSpecType_DnsProxyTcpHealthCheck{v}
+			iNdEx = postIndex
+		case 11:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DnsProxyUdpHealthCheck", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &DnsProxyUdpHealthCheck{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.HealthCheck = &ReplaceSpecType_DnsProxyUdpHealthCheck{v}
+			iNdEx = postIndex
+		case 12:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DnsHealthCheck", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &DnsHealthCheck{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.HealthCheck = &ReplaceSpecType_DnsHealthCheck{v}
+			iNdEx = postIndex
+		case 13:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DnsProxyIcmpHealthCheck", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.HealthCheck = &ReplaceSpecType_DnsProxyIcmpHealthCheck{v}
+			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipTypes(dAtA[iNdEx:])
@@ -4097,6 +7123,146 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 					break
 				}
 			}
+		case 10:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DnsProxyTcpHealthCheck", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &DnsProxyTcpHealthCheck{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.HealthCheck = &GetSpecType_DnsProxyTcpHealthCheck{v}
+			iNdEx = postIndex
+		case 11:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DnsProxyUdpHealthCheck", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &DnsProxyUdpHealthCheck{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.HealthCheck = &GetSpecType_DnsProxyUdpHealthCheck{v}
+			iNdEx = postIndex
+		case 12:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DnsHealthCheck", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &DnsHealthCheck{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.HealthCheck = &GetSpecType_DnsHealthCheck{v}
+			iNdEx = postIndex
+		case 13:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DnsProxyIcmpHealthCheck", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.HealthCheck = &GetSpecType_DnsProxyIcmpHealthCheck{v}
+			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipTypes(dAtA[iNdEx:])

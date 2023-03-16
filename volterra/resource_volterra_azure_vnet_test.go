@@ -1,6 +1,4 @@
-//
-// Copyright (c) 2020 Volterra, Inc. Licensed under APACHE LICENSE, VERSION 2.0
-//
+// Copyright (c) 2023 F5 Inc. All rights reserved.
 package volterra
 
 import (
@@ -167,6 +165,10 @@ func testAzureVNETSiteConfig(resourceName, name string) string {
 			node_info {
 				node_instance_name = "name2"
 				node_id = "id2"
+			}
+			vnet {
+				vnet_name = "net1"
+				resource_id = "account1/test1/net1"
 			}
 
 		}`, resourceName, name)

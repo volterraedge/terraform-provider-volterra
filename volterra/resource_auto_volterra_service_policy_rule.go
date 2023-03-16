@@ -1416,6 +1416,16 @@ func resourceVolterraServicePolicyRule() *schema.Resource {
 							Optional: true,
 						},
 
+						"good_bot": {
+
+							Type: schema.TypeList,
+
+							Required: true,
+							Elem: &schema.Schema{
+								Type: schema.TypeString,
+							},
+						},
+
 						"mitigation": {
 
 							Type:     schema.TypeSet,
@@ -1788,6 +1798,11 @@ func resourceVolterraServicePolicyRule() *schema.Resource {
 											Schema: map[string]*schema.Schema{
 
 												"context": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+
+												"context_name": {
 													Type:     schema.TypeString,
 													Optional: true,
 												},
@@ -3761,6 +3776,14 @@ func resourceVolterraServicePolicyRuleCreate(d *schema.ResourceData, meta interf
 				shapeProtectedEndpointAction.FlowLabel = w.(string)
 			}
 
+			if w, ok := shapeProtectedEndpointActionMapStrToI["good_bot"]; ok && !isIntfNil(w) {
+				ls := make([]string, len(w.([]interface{})))
+				for i, v := range w.([]interface{}) {
+					ls[i] = v.(string)
+				}
+				shapeProtectedEndpointAction.GoodBot = ls
+			}
+
 			if v, ok := shapeProtectedEndpointActionMapStrToI["mitigation"]; ok && !isIntfNil(v) {
 
 				sl := v.(*schema.Set).List()
@@ -4234,6 +4257,10 @@ func resourceVolterraServicePolicyRuleCreate(d *schema.ResourceData, meta interf
 
 								excludeViolationContexts[i].Context = ves_io_schema_policy.DetectionContext(ves_io_schema_policy.DetectionContext_value[v.(string)])
 
+							}
+
+							if w, ok := excludeViolationContextsMapStrToI["context_name"]; ok && !isIntfNil(w) {
+								excludeViolationContexts[i].ContextName = w.(string)
 							}
 
 							if v, ok := excludeViolationContextsMapStrToI["exclude_violation"]; ok && !isIntfNil(v) {
@@ -6239,6 +6266,14 @@ func resourceVolterraServicePolicyRuleUpdate(d *schema.ResourceData, meta interf
 				shapeProtectedEndpointAction.FlowLabel = w.(string)
 			}
 
+			if w, ok := shapeProtectedEndpointActionMapStrToI["good_bot"]; ok && !isIntfNil(w) {
+				ls := make([]string, len(w.([]interface{})))
+				for i, v := range w.([]interface{}) {
+					ls[i] = v.(string)
+				}
+				shapeProtectedEndpointAction.GoodBot = ls
+			}
+
 			if v, ok := shapeProtectedEndpointActionMapStrToI["mitigation"]; ok && !isIntfNil(v) {
 
 				sl := v.(*schema.Set).List()
@@ -6708,6 +6743,10 @@ func resourceVolterraServicePolicyRuleUpdate(d *schema.ResourceData, meta interf
 
 								excludeViolationContexts[i].Context = ves_io_schema_policy.DetectionContext(ves_io_schema_policy.DetectionContext_value[v.(string)])
 
+							}
+
+							if w, ok := excludeViolationContextsMapStrToI["context_name"]; ok && !isIntfNil(w) {
+								excludeViolationContexts[i].ContextName = w.(string)
 							}
 
 							if v, ok := excludeViolationContextsMapStrToI["exclude_violation"]; ok && !isIntfNil(v) {

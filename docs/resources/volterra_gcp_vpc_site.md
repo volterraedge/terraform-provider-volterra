@@ -21,14 +21,7 @@ resource "volterra_gcp_vpc_site" "example" {
   namespace = "staging"
 
   // One of the arguments from this list "default_blocked_services blocked_services" must be set
-
-  blocked_services {
-    blocked_sevice {
-      // One of the arguments from this list "dns ssh web_user_interface" must be set
-      ssh          = true
-      network_type = "network_type"
-    }
-  }
+  default_blocked_services = true
 
   // One of the arguments from this list "cloud_credentials" must be set
 
@@ -44,12 +37,30 @@ resource "volterra_gcp_vpc_site" "example" {
 
   // One of the arguments from this list "ingress_gw ingress_egress_gw voltstack_cluster" must be set
 
-  ingress_gw {
-    gcp_certified_hw = "gcp-byol-voltmesh"
+  voltstack_cluster {
+    // One of the arguments from this list "no_dc_cluster_group dc_cluster_group" must be set
+    no_dc_cluster_group = true
+
+    // One of the arguments from this list "no_forward_proxy active_forward_proxy_policies forward_proxy_allow_all" must be set
+    no_forward_proxy = true
+    gcp_certified_hw = "gcp-byol-voltstack-combo"
 
     gcp_zone_names = ["us-west1-a, us-west1-b, us-west1-c"]
 
-    local_network {
+    // One of the arguments from this list "no_global_network global_network_list" must be set
+    no_global_network = true
+
+    // One of the arguments from this list "no_k8s_cluster k8s_cluster" must be set
+    no_k8s_cluster = true
+
+    // One of the arguments from this list "no_network_policy active_network_policies active_enhanced_firewall_policies" must be set
+    no_network_policy = true
+    node_number       = "1"
+
+    // One of the arguments from this list "no_outside_static_routes outside_static_routes" must be set
+    no_outside_static_routes = true
+
+    site_local_network {
       // One of the arguments from this list "existing_network new_network_autogenerate new_network" must be set
 
       new_network_autogenerate {
@@ -57,7 +68,7 @@ resource "volterra_gcp_vpc_site" "example" {
       }
     }
 
-    local_subnet {
+    site_local_subnet {
       // One of the arguments from this list "new_subnet existing_subnet" must be set
 
       new_subnet {
@@ -66,12 +77,11 @@ resource "volterra_gcp_vpc_site" "example" {
       }
     }
 
-    node_number = "1"
+    // One of the arguments from this list "sm_connection_public_ip sm_connection_pvt_ip" must be set
+    sm_connection_public_ip = true
 
-    performance_enhancement_mode {
-      // One of the arguments from this list "perf_mode_l7_enhanced perf_mode_l3_enhanced" must be set
-      perf_mode_l7_enhanced = true
-    }
+    // One of the arguments from this list "default_storage storage_class_list" must be set
+    default_storage = true
   }
 }
 
@@ -456,6 +466,10 @@ IPv6 Address.
 
 `addr` - (Optional) e.g. '2001:db8:0:0:0:0:2:1' becomes '2001:db8::2:1' or '2001:db8:0:0:0:2:0:0' becomes '2001:db8::2::' (`String`).
 
+### Jumbo
+
+L3 performance mode enhancement to use jumbo frame.
+
 ### Local Network
 
 Network for the local interface of the node.
@@ -532,6 +546,10 @@ Static Routes disabled for inside network..
 
 No TLS interception is enabled for this network connector.
 
+### No Jumbo
+
+L3 performance mode enhancement without jumbo frame.
+
 ### No K8s Cluster
 
 Site Local K8s API access is disabled.
@@ -600,6 +618,10 @@ Subnet for the outside interface of the node..
 
 Site optimized for L3 traffic processing.
 
+`jumbo` - (Optional) L3 performance mode enhancement to use jumbo frame (bool).
+
+`no_jumbo` - (Optional) L3 performance mode enhancement without jumbo frame (bool).
+
 ### Perf Mode L7 Enhanced
 
 Site optimized for L7 traffic processing.
@@ -608,7 +630,7 @@ Site optimized for L7 traffic processing.
 
 Performance Enhancement Mode to optimize for L3 or L7 networking.
 
-`perf_mode_l3_enhanced` - (Optional) Site optimized for L3 traffic processing (bool).
+`perf_mode_l3_enhanced` - (Optional) Site optimized for L3 traffic processing. See [Perf Mode L3 Enhanced ](#perf-mode-l3-enhanced) below for details.
 
 `perf_mode_l7_enhanced` - (Optional) Site optimized for L7 traffic processing (bool).
 

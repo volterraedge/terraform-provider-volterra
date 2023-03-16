@@ -20,15 +20,8 @@ resource "volterra_azure_vnet_site" "example" {
   name      = "acmecorp-web"
   namespace = "staging"
 
-  // One of the arguments from this list "default_blocked_services blocked_services" must be set
-
-  blocked_services {
-    blocked_sevice {
-      // One of the arguments from this list "web_user_interface dns ssh" must be set
-      web_user_interface = true
-      network_type       = "network_type"
-    }
-  }
+  // One of the arguments from this list "blocked_services default_blocked_services" must be set
+  default_blocked_services = true
 
   // One of the arguments from this list "azure_cred" must be set
 
@@ -40,18 +33,18 @@ resource "volterra_azure_vnet_site" "example" {
   // One of the arguments from this list "logs_streaming_disabled log_receiver" must be set
   logs_streaming_disabled = true
   // One of the arguments from this list "azure_region alternate_region" must be set
-  alternate_region = "northcentralus"
+  azure_region = "eastus"
   resource_group = ["my-resources"]
 
-  // One of the arguments from this list "ingress_egress_gw_ar voltstack_cluster_ar ingress_gw ingress_egress_gw voltstack_cluster ingress_gw_ar" must be set
+  // One of the arguments from this list "ingress_egress_gw voltstack_cluster ingress_gw_ar ingress_egress_gw_ar voltstack_cluster_ar ingress_gw" must be set
 
-  ingress_gw {
+  voltstack_cluster {
     az_nodes {
       azure_az  = "1"
       disk_size = "80"
 
       local_subnet {
-        // One of the arguments from this list "subnet subnet_param" must be set
+        // One of the arguments from this list "subnet_param subnet" must be set
 
         subnet_param {
           ipv4 = "10.1.2.0/24"
@@ -60,15 +53,38 @@ resource "volterra_azure_vnet_site" "example" {
       }
     }
 
-    azure_certified_hw = "azure-byol-voltmesh"
+    azure_certified_hw = "azure-byol-voltstack-combo"
 
-    performance_enhancement_mode {
-      // One of the arguments from this list "perf_mode_l7_enhanced perf_mode_l3_enhanced" must be set
-      perf_mode_l7_enhanced = true
+    // One of the arguments from this list "no_dc_cluster_group dc_cluster_group" must be set
+    no_dc_cluster_group = true
+
+    // One of the arguments from this list "active_forward_proxy_policies forward_proxy_allow_all no_forward_proxy" must be set
+    no_forward_proxy = true
+
+    // One of the arguments from this list "no_global_network global_network_list" must be set
+    no_global_network = true
+
+    // One of the arguments from this list "k8s_cluster no_k8s_cluster" must be set
+    no_k8s_cluster = true
+
+    // One of the arguments from this list "no_network_policy active_network_policies active_enhanced_firewall_policies" must be set
+    no_network_policy = true
+
+    // One of the arguments from this list "no_outside_static_routes outside_static_routes" must be set
+
+    outside_static_routes {
+      static_route_list {
+        // One of the arguments from this list "simple_static_route custom_static_route" must be set
+        simple_static_route = "10.5.1.0/24"
+      }
     }
+    // One of the arguments from this list "sm_connection_public_ip sm_connection_pvt_ip" must be set
+    sm_connection_public_ip = true
+    // One of the arguments from this list "storage_class_list default_storage" must be set
+    default_storage = true
   }
   vnet {
-    // One of the arguments from this list "new_vnet existing_vnet" must be set
+    // One of the arguments from this list "existing_vnet new_vnet" must be set
 
     new_vnet {
       // One of the arguments from this list "name autogenerate" must be set
@@ -77,7 +93,7 @@ resource "volterra_azure_vnet_site" "example" {
       primary_ipv4 = "10.1.0.0/16"
     }
   }
-  // One of the arguments from this list "total_nodes no_worker_nodes nodes_per_az" must be set
+  // One of the arguments from this list "nodes_per_az total_nodes no_worker_nodes" must be set
   nodes_per_az = "2"
 }
 
@@ -612,6 +628,10 @@ IPv6 Address.
 
 `addr` - (Optional) e.g. '2001:db8:0:0:0:0:2:1' becomes '2001:db8::2:1' or '2001:db8:0:0:0:2:0:0' becomes '2001:db8::2::' (`String`).
 
+### Jumbo
+
+L3 performance mode enhancement to use jumbo frame.
+
 ### Manual
 
 Manually setup routing on spoke VNet.
@@ -673,6 +693,10 @@ Static Routes disabled for inside network..
 ### No Interception
 
 No TLS interception is enabled for this network connector.
+
+### No Jumbo
+
+L3 performance mode enhancement without jumbo frame.
 
 ### No K8s Cluster
 
@@ -758,6 +782,10 @@ Subnets for the outside interface of the node.
 
 Site optimized for L3 traffic processing.
 
+`jumbo` - (Optional) L3 performance mode enhancement to use jumbo frame (bool).
+
+`no_jumbo` - (Optional) L3 performance mode enhancement without jumbo frame (bool).
+
 ### Perf Mode L7 Enhanced
 
 Site optimized for L7 traffic processing.
@@ -766,7 +794,7 @@ Site optimized for L7 traffic processing.
 
 Performance Enhancement Mode to optimize for L3 or L7 networking.
 
-`perf_mode_l3_enhanced` - (Optional) Site optimized for L3 traffic processing (bool).
+`perf_mode_l3_enhanced` - (Optional) Site optimized for L3 traffic processing. See [Perf Mode L3 Enhanced ](#perf-mode-l3-enhanced) below for details.
 
 `perf_mode_l7_enhanced` - (Optional) Site optimized for L7 traffic processing (bool).
 

@@ -33,15 +33,11 @@ resource "volterra_aws_tgw_site" "example" {
 
       outside_subnet {
         // One of the arguments from this list "subnet_param existing_subnet_id" must be set
-
-        subnet_param {
-          ipv4 = "10.1.2.0/24"
-          ipv6 = "1234:568:abcd:9100::/64"
-        }
+        existing_subnet_id = "subnet-12345678901234567"
       }
 
       workload_subnet {
-        // One of the arguments from this list "subnet_param existing_subnet_id" must be set
+        // One of the arguments from this list "existing_subnet_id subnet_param" must be set
 
         subnet_param {
           ipv4 = "10.1.2.0/24"
@@ -59,8 +55,8 @@ resource "volterra_aws_tgw_site" "example" {
     }
     disk_size     = "80"
     instance_type = "a1.xlarge"
-    // One of the arguments from this list "enable_internet_vip disable_internet_vip" must be set
-    disable_internet_vip = true
+    // One of the arguments from this list "disable_internet_vip enable_internet_vip" must be set
+    enable_internet_vip = true
 
     // One of the arguments from this list "new_vpc vpc_id" must be set
 
@@ -68,7 +64,8 @@ resource "volterra_aws_tgw_site" "example" {
       allocate_ipv6 = true
 
       // One of the arguments from this list "name_tag autogenerate" must be set
-      autogenerate = true
+      name_tag = "name_tag"
+
       primary_ipv4 = "10.1.0.0/16"
     }
     ssh_key = "ssh-rsa AAAAB..."
@@ -79,29 +76,18 @@ resource "volterra_aws_tgw_site" "example" {
       // One of the arguments from this list "system_generated user_assigned" must be set
       system_generated = true
     }
-    // One of the arguments from this list "total_nodes no_worker_nodes nodes_per_az" must be set
-    nodes_per_az = "2"
+    // One of the arguments from this list "nodes_per_az total_nodes no_worker_nodes" must be set
+    no_worker_nodes = true
   }
 
   // One of the arguments from this list "default_blocked_services blocked_services" must be set
+  default_blocked_services = true
 
-  blocked_services {
-    blocked_sevice {
-      // One of the arguments from this list "ssh web_user_interface dns" must be set
-      web_user_interface = true
-      network_type       = "network_type"
-    }
-  }
   // One of the arguments from this list "direct_connect_disabled direct_connect_enabled" must be set
   direct_connect_disabled = true
 
   // One of the arguments from this list "logs_streaming_disabled log_receiver" must be set
-
-  log_receiver {
-    name      = "test1"
-    namespace = "staging"
-    tenant    = "acmecorp"
-  }
+  logs_streaming_disabled = true
 }
 
 ```
@@ -125,9 +111,7 @@ Argument Reference
 
 ### Spec Argument Reference
 
-`address` - (Optional) Site's geographical address that can be used determine its latitude and longitude. (`String`).
-
-`aws_parameters` - (Required) Configure AWS TGW, services VPC and site nodes parameters.. See [Aws Parameters ](#aws-parameters) below for details.
+`aws_parameters` - (Required) Example of the managed AWS resources to name few are VPC, TGW, Route Tables etc. See [Aws Parameters ](#aws-parameters) below for details.
 
 `blocked_services` - (Optional) Use custom blocked services configuration. See [Blocked Services ](#blocked-services) below for details.
 
@@ -135,9 +119,9 @@ Argument Reference
 
 `coordinates` - (Optional) Site longitude and latitude co-ordinates. See [Coordinates ](#coordinates) below for details.
 
-`direct_connect_disabled` - (Optional) Direct Connect feature is disabled (bool).
+`direct_connect_disabled` - (Optional) Direct Connect Connection to Site is disabled (bool).
 
-`direct_connect_enabled` - (Optional) Direct Connect feature is enabled. See [Direct Connect Enabled ](#direct-connect-enabled) below for details.
+`direct_connect_enabled` - (Optional) Direct Connect Connection to Site is enabled. See [Direct Connect Enabled ](#direct-connect-enabled) below for details.
 
 `log_receiver` - (Optional) Select log receiver for logs streaming. See [ref](#ref) below for details.
 
@@ -155,9 +139,9 @@ Argument Reference
 
 `tgw_security` - (Optional) Security Configuration for transit gateway. See [Tgw Security ](#tgw-security) below for details.
 
-`vn_config` - (Optional) Virtual Network Configuration for transit gateway. See [Vn Config ](#vn-config) below for details.
+`vn_config` - (Optional) Site Network related details will be configured. See [Vn Config ](#vn-config) below for details.
 
-`vpc_attachments` - (Optional) VPC attachments to transit gateway. See [Vpc Attachments ](#vpc-attachments) below for details.
+`vpc_attachments` - (Optional) Spoke VPCs to be attached to the AWS TGW Site. See [Vpc Attachments ](#vpc-attachments) below for details.
 
 ### Active East West Service Policies
 
@@ -221,35 +205,35 @@ Autogenerate the VPC Name.
 
 ### Aws Parameters
 
-Configure AWS TGW, services VPC and site nodes parameters..
+Example of the managed AWS resources to name few are VPC, TGW, Route Tables etc.
 
-`aws_certified_hw` - (Required) Name for AWS certified hardware. (`String`).
+`aws_certified_hw` - (Optional) Name for AWS certified hardware. (`String`).
 
-`aws_region` - (Required) Name for AWS Region. (`String`).
+`aws_region` - (Required) AWS Region of your services vpc, where F5XC site will be deployed. (`String`).
 
 `az_nodes` - (Required) Only Single AZ or Three AZ(s) nodes are supported currently.. See [Az Nodes ](#az-nodes) below for details.
 
 `assisted` - (Optional) In assisted deployment get AWS parameters generated in status of this objects and run volterra provided terraform script. (bool).
 
-`aws_cred` - (Optional) Reference to AWS credentials for automatic deployment. See [ref](#ref) below for details.
+`aws_cred` - (Optional) Reference to AWS cloud credential object used to deploy cloud resources. See [ref](#ref) below for details.
 
-`disk_size` - (Optional) Disk size to be used for this instance in GiB. 80 is 80 GiB (`Int`).
+`disk_size` - (Optional) Node disk size for all node in the F5XC site. Unit is GiB (`Int`).
 
-`instance_type` - (Required) Select Instance size based on performance needed (`String`).
+`instance_type` - (Required) Instance size based on the performance. (`String`).
 
-`disable_internet_vip` - (Optional) Do not create Internet VIP (bool).
+`disable_internet_vip` - (Optional) VIPs cannot be advertised to the internet directly on this Site (bool).
 
-`enable_internet_vip` - (Optional) Enable Internet VIP. (bool).
+`enable_internet_vip` - (Optional) VIPs can be advertised to the internet directly on this Site (bool).
 
-`new_vpc` - (Optional) Parameters for creating new VPC. See [New Vpc ](#new-vpc) below for details.
+`new_vpc` - (Optional) Details needed to create new VPC. See [New Vpc ](#new-vpc) below for details.
 
-`vpc_id` - (Optional) Information about existing VPC (`String`).
+`vpc_id` - (Optional) Existing VPC ID (`String`).
 
 `ssh_key` - (Optional) Public SSH key for accessing nodes of the site. (`String`).
 
 `existing_tgw` - (Optional) Information about existing TGW. See [Existing Tgw ](#existing-tgw) below for details.
 
-`new_tgw` - (Optional) Parameters for creating new TGW. See [New Tgw ](#new-tgw) below for details.
+`new_tgw` - (Optional) Details needed to create new TGW. See [New Tgw ](#new-tgw) below for details.
 
 `no_worker_nodes` - (Optional) Worker nodes is set to zero (bool).
 
@@ -377,7 +361,7 @@ Will assign latest available SW version.
 
 ### Direct Connect Enabled
 
-Direct Connect feature is enabled.
+Direct Connect Connection to Site is enabled.
 
 `auto_asn` - (Optional) Automatically set ASN (bool).
 
@@ -403,7 +387,7 @@ Disable Interception.
 
 ### Disable Internet Vip
 
-Do not create Internet VIP.
+VIPs cannot be advertised to the internet directly on this Site.
 
 ### Disable Ocsp Stapling
 
@@ -453,7 +437,7 @@ Enable Interception.
 
 ### Enable Internet Vip
 
-Enable Internet VIP..
+VIPs can be advertised to the internet directly on this Site.
 
 ### Enable Offline Survivability Mode
 
@@ -539,13 +523,17 @@ IPv6 Address.
 
 `addr` - (Optional) e.g. '2001:db8:0:0:0:0:2:1' becomes '2001:db8::2:1' or '2001:db8:0:0:0:2:0:0' becomes '2001:db8::2::' (`String`).
 
+### Jumbo
+
+L3 performance mode enhancement to use jumbo frame.
+
 ### Manual Gw
 
 and a user associate AWS DirectConnect Gateway with it..
 
 ### New Tgw
 
-Parameters for creating new TGW.
+Details needed to create new TGW.
 
 `system_generated` - (Optional) F5XC will automatically assign a private ASN for TGW and F5XC Site (bool).
 
@@ -553,7 +541,7 @@ Parameters for creating new TGW.
 
 ### New Vpc
 
-Parameters for creating new VPC.
+Details needed to create new VPC.
 
 `allocate_ipv6` - (Optional) Allocate IPv6 CIDR block from AWS (`Bool`).
 
@@ -605,6 +593,10 @@ Static Routes disabled for inside network..
 
 No TLS interception is enabled for this network connector.
 
+### No Jumbo
+
+L3 performance mode enhancement without jumbo frame.
+
 ### No Network Policy
 
 Firewall Policy is disabled for this site..
@@ -655,6 +647,10 @@ Subnet for the outside interface of the node.
 
 Site optimized for L3 traffic processing.
 
+`jumbo` - (Optional) L3 performance mode enhancement to use jumbo frame (bool).
+
+`no_jumbo` - (Optional) L3 performance mode enhancement without jumbo frame (bool).
+
 ### Perf Mode L7 Enhanced
 
 Site optimized for L7 traffic processing.
@@ -663,7 +659,7 @@ Site optimized for L7 traffic processing.
 
 Performance Enhancement Mode to optimize for L3 or L7 networking.
 
-`perf_mode_l3_enhanced` - (Optional) Site optimized for L3 traffic processing (bool).
+`perf_mode_l3_enhanced` - (Optional) Site optimized for L3 traffic processing. See [Perf Mode L3 Enhanced ](#perf-mode-l3-enhanced) below for details.
 
 `perf_mode_l7_enhanced` - (Optional) Site optimized for L7 traffic processing (bool).
 
@@ -869,7 +865,7 @@ List of Hosted VIF Config.
 
 ### Vn Config
 
-Virtual Network Configuration for transit gateway.
+Site Network related details will be configured.
 
 `allowed_vip_port` - (Optional) Allowed VIP Port Configuration. See [Allowed Vip Port ](#allowed-vip-port) below for details.
 
@@ -907,7 +903,7 @@ Default volterra trusted CA list for validating upstream server certificate.
 
 ### Vpc Attachments
 
-VPC attachments to transit gateway.
+Spoke VPCs to be attached to the AWS TGW Site.
 
 `vpc_list` - (Optional) List of VPC attachments to transit gateway. See [Vpc List ](#vpc-list) below for details.
 

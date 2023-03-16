@@ -21,7 +21,7 @@ resource "volterra_aws_vpc_site" "example" {
   namespace  = "staging"
   aws_region = ["us-east-1"]
 
-  // One of the arguments from this list "default_blocked_services blocked_services" must be set
+  // One of the arguments from this list "blocked_services default_blocked_services" must be set
   default_blocked_services = true
 
   // One of the arguments from this list "aws_cred" must be set
@@ -43,7 +43,7 @@ resource "volterra_aws_vpc_site" "example" {
 
   ingress_gw {
     allowed_vip_port {
-      // One of the arguments from this list "use_http_port use_https_port use_http_https_port custom_ports" must be set
+      // One of the arguments from this list "use_http_https_port custom_ports use_http_port use_https_port" must be set
       use_http_port = true
     }
 
@@ -68,8 +68,8 @@ resource "volterra_aws_vpc_site" "example" {
       perf_mode_l7_enhanced = true
     }
   }
-  // One of the arguments from this list "no_worker_nodes nodes_per_az total_nodes" must be set
-  nodes_per_az = "2"
+  // One of the arguments from this list "total_nodes no_worker_nodes nodes_per_az" must be set
+  total_nodes = "1"
 }
 
 ```
@@ -113,9 +113,9 @@ Argument Reference
 
 `instance_type` - (Required) Select Instance size based on performance needed (`String`).
 
-`disable_internet_vip` - (Optional) Do not create Internet VIP (bool).
+`disable_internet_vip` - (Optional) VIPs cannot be advertised to the internet directly on this Site (bool).
 
-`enable_internet_vip` - (Optional) Enable Internet VIP (bool).
+`enable_internet_vip` - (Optional) VIPs can be advertised to the internet directly on this Site (bool).
 
 `log_receiver` - (Optional) Select log receiver for logs streaming. See [ref](#ref) below for details.
 
@@ -519,6 +519,10 @@ IPv6 Address.
 
 `addr` - (Optional) e.g. '2001:db8:0:0:0:0:2:1' becomes '2001:db8::2:1' or '2001:db8:0:0:0:2:0:0' becomes '2001:db8::2::' (`String`).
 
+### Jumbo
+
+L3 performance mode enhancement to use jumbo frame.
+
 ### Manual Gw
 
 and a user associate AWS DirectConnect Gateway with it..
@@ -572,6 +576,10 @@ Static Routes disabled for inside network..
 ### No Interception
 
 No TLS interception is enabled for this network connector.
+
+### No Jumbo
+
+L3 performance mode enhancement without jumbo frame.
 
 ### No K8s Cluster
 
@@ -631,6 +639,10 @@ Subnet for the outside interface of the node.
 
 Site optimized for L3 traffic processing.
 
+`jumbo` - (Optional) L3 performance mode enhancement to use jumbo frame (bool).
+
+`no_jumbo` - (Optional) L3 performance mode enhancement without jumbo frame (bool).
+
 ### Perf Mode L7 Enhanced
 
 Site optimized for L7 traffic processing.
@@ -639,7 +651,7 @@ Site optimized for L7 traffic processing.
 
 Performance Enhancement Mode to optimize for L3 or L7 networking.
 
-`perf_mode_l3_enhanced` - (Optional) Site optimized for L3 traffic processing (bool).
+`perf_mode_l3_enhanced` - (Optional) Site optimized for L3 traffic processing. See [Perf Mode L3 Enhanced ](#perf-mode-l3-enhanced) below for details.
 
 `perf_mode_l7_enhanced` - (Optional) Site optimized for L7 traffic processing (bool).
 

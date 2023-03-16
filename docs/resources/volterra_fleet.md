@@ -20,27 +20,46 @@ resource "volterra_fleet" "example" {
   name      = "acmecorp-web"
   namespace = "staging"
 
-  // One of the arguments from this list "no_bond_devices bond_device_list" must be set
-  no_bond_devices = true
+  // One of the arguments from this list "bond_device_list no_bond_devices" must be set
 
-  // One of the arguments from this list "dc_cluster_group dc_cluster_group_inside no_dc_cluster_group" must be set
+  bond_device_list {
+    bond_devices {
+      devices = ["eth0"]
 
-  dc_cluster_group_inside {
-    name      = "test1"
-    namespace = "staging"
-    tenant    = "acmecorp"
+      // One of the arguments from this list "lacp active_backup" must be set
+
+      lacp {
+        rate = "30"
+      }
+      link_polling_interval = "1000"
+      link_up_delay         = "200"
+      name                  = "bond0"
+    }
   }
-  fleet_label = ["sfo"]
+  // One of the arguments from this list "no_dc_cluster_group dc_cluster_group dc_cluster_group_inside" must be set
+  no_dc_cluster_group = true
+  fleet_label         = ["sfo"]
   // One of the arguments from this list "disable_gpu enable_gpu enable_vgpu" must be set
   disable_gpu = true
 
   // One of the arguments from this list "interface_list default_config device_list" must be set
 
-  interface_list {
-    interfaces {
-      name      = "test1"
-      namespace = "staging"
-      tenant    = "acmecorp"
+  device_list {
+    devices {
+      // One of the arguments from this list "network_device" must be set
+
+      network_device {
+        interface {
+          name      = "test1"
+          namespace = "staging"
+          tenant    = "acmecorp"
+        }
+
+        use = "use"
+      }
+
+      name  = "eth0"
+      owner = "owner"
     }
   }
   // One of the arguments from this list "logs_streaming_disabled log_receiver" must be set
@@ -53,7 +72,7 @@ resource "volterra_fleet" "example" {
   no_storage_interfaces = true
   // One of the arguments from this list "no_storage_static_routes storage_static_routes" must be set
   no_storage_static_routes = true
-  // One of the arguments from this list "deny_all_usb allow_all_usb usb_policy" must be set
+  // One of the arguments from this list "allow_all_usb usb_policy deny_all_usb" must be set
   deny_all_usb = true
 }
 
@@ -282,6 +301,10 @@ IPv6 Address.
 
 `addr` - (Optional) e.g. '2001:db8:0:0:0:0:2:1' becomes '2001:db8::2:1' or '2001:db8:0:0:0:2:0:0' becomes '2001:db8::2::' (`String`).
 
+### Jumbo
+
+L3 performance mode enhancement to use jumbo frame.
+
 ### Lacp
 
 Configure LACP (802.3ad) based bond device.
@@ -332,6 +355,10 @@ Nexthop address when type is "Use-Configured".
 
 `ipv6` - (Optional) IPv6 Address. See [Ipv6 ](#ipv6) below for details.
 
+### No Jumbo
+
+L3 performance mode enhancement without jumbo frame.
+
 ### Openebs Enterprise
 
 Device configuration for Pure Storage Service Orchestrator.
@@ -342,6 +369,10 @@ Device configuration for Pure Storage Service Orchestrator.
 
 Site optimized for L3 traffic processing.
 
+`jumbo` - (Optional) L3 performance mode enhancement to use jumbo frame (bool).
+
+`no_jumbo` - (Optional) L3 performance mode enhancement without jumbo frame (bool).
+
 ### Perf Mode L7 Enhanced
 
 Site optimized for L7 traffic processing.
@@ -350,7 +381,7 @@ Site optimized for L7 traffic processing.
 
 Performance Enhancement Mode to optimize for L3 or L7 networking.
 
-`perf_mode_l3_enhanced` - (Optional) Site optimized for L3 traffic processing (bool).
+`perf_mode_l3_enhanced` - (Optional) Site optimized for L3 traffic processing. See [Perf Mode L3 Enhanced ](#perf-mode-l3-enhanced) below for details.
 
 `perf_mode_l7_enhanced` - (Optional) Site optimized for L7 traffic processing (bool).
 

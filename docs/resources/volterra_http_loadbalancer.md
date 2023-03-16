@@ -21,37 +21,36 @@ resource "volterra_http_loadbalancer" "example" {
   namespace = "staging"
 
   // One of the arguments from this list "do_not_advertise advertise_on_public_default_vip advertise_on_public advertise_custom" must be set
+  do_not_advertise = true
 
-  advertise_on_public {
-    public_ip {
-      name      = "test1"
-      namespace = "staging"
-      tenant    = "acmecorp"
-    }
+  // One of the arguments from this list "disable_api_definition api_definition api_specification api_definitions" must be set
+
+  api_definition {
+    name      = "test1"
+    namespace = "staging"
+    tenant    = "acmecorp"
   }
-  // One of the arguments from this list "api_definition api_specification api_definitions disable_api_definition" must be set
-  disable_api_definition = true
 
   // One of the arguments from this list "enable_api_discovery disable_api_discovery" must be set
 
   enable_api_discovery {
     // One of the arguments from this list "disable_learn_from_redirect_traffic enable_learn_from_redirect_traffic" must be set
-    disable_learn_from_redirect_traffic = true
+    enable_learn_from_redirect_traffic = true
   }
-  // One of the arguments from this list "no_challenge js_challenge captcha_challenge policy_based_challenge" must be set
+  // One of the arguments from this list "no_challenge enable_challenge js_challenge captcha_challenge policy_based_challenge" must be set
   no_challenge = true
 
   // One of the arguments from this list "enable_ddos_detection disable_ddos_detection" must be set
 
   enable_ddos_detection {
-    // One of the arguments from this list "disable_auto_mitigation enable_auto_mitigation" must be set
+    // One of the arguments from this list "enable_auto_mitigation disable_auto_mitigation" must be set
     enable_auto_mitigation = true
   }
   domains = ["www.foo.com"]
   // One of the arguments from this list "random source_ip_stickiness cookie_stickiness ring_hash round_robin least_active" must be set
   round_robin = true
 
-  // One of the arguments from this list "https_auto_cert https http" must be set
+  // One of the arguments from this list "http https_auto_cert https" must be set
 
   http {
     dns_volterra_managed = true
@@ -59,37 +58,12 @@ resource "volterra_http_loadbalancer" "example" {
   }
   // One of the arguments from this list "enable_malicious_user_detection disable_malicious_user_detection" must be set
   enable_malicious_user_detection = true
-
   // One of the arguments from this list "disable_rate_limit api_rate_limit rate_limit" must be set
-
-  rate_limit {
-    // One of the arguments from this list "no_ip_allowed_list ip_allowed_list custom_ip_allowed_list" must be set
-
-    custom_ip_allowed_list {
-      rate_limiter_allowed_prefixes {
-        name      = "test1"
-        namespace = "staging"
-        tenant    = "acmecorp"
-      }
-    }
-
-    // One of the arguments from this list "no_policies policies" must be set
-    no_policies = true
-
-    rate_limiter {
-      burst_multiplier = "1"
-      total_number     = "1"
-      unit             = "unit"
-    }
-  }
+  disable_rate_limit = true
   // One of the arguments from this list "service_policies_from_namespace no_service_policies active_service_policies" must be set
-  service_policies_from_namespace = true
-
+  no_service_policies = true
   // One of the arguments from this list "disable_trust_client_ip_headers enable_trust_client_ip_headers" must be set
-
-  enable_trust_client_ip_headers {
-    client_ip_headers = ["Client-IP-Header"]
-  }
+  disable_trust_client_ip_headers = true
   // One of the arguments from this list "user_id_client_ip user_identification" must be set
   user_id_client_ip = true
   // One of the arguments from this list "disable_waf app_firewall" must be set
@@ -148,6 +122,8 @@ Argument Reference
 `disable_bot_defense` - (Optional) No Bot Defense configuration for this load balancer (bool).
 
 `captcha_challenge` - (Optional) Configure Captcha challenge on this load balancer. See [Captcha Challenge ](#captcha-challenge) below for details.
+
+`enable_challenge` - (Optional) Configure auto mitigation i.e risk based challenges for malicious users. See [Enable Challenge ](#enable-challenge) below for details.
 
 `js_challenge` - (Optional) Configure Javascript challenge on this load balancer. See [Js Challenge ](#js-challenge) below for details.
 
@@ -215,7 +191,7 @@ Argument Reference
 
 `default_pool_list` - (Optional) Multiple Origin Pools with weights and priorities. See [Default Pool List ](#default-pool-list) below for details.
 
-`protected_cookies` - (Optional) List of cookies to be modified from the HTTP response being sent towards downstream.. See [Protected Cookies ](#protected-cookies) below for details.
+`protected_cookies` - (Optional) Note: We recommend enabling Secure and HttpOnly attributes along with cookie tampering protection.. See [Protected Cookies ](#protected-cookies) below for details.
 
 `api_rate_limit` - (Optional) Define rate limiting for one or more API endpoints. See [Api Rate Limit ](#api-rate-limit) below for details.
 
@@ -231,7 +207,9 @@ Argument Reference
 
 `service_policies_from_namespace` - (Optional) Apply the active service policies configured as part of the namespace service policy set (bool).
 
-`slow_ddos_mitigation` - (Optional) requests from actual users.. See [Slow Ddos Mitigation ](#slow-ddos-mitigation) below for details.
+`slow_ddos_mitigation` - (Optional) Custom Settings for Slow DDoS Mitigation. See [Slow Ddos Mitigation ](#slow-ddos-mitigation) below for details.
+
+`system_default_timeouts` - (Optional) Default Settings for Slow DDoS Mitigation (bool).
 
 `disable_trust_client_ip_headers` - (Optional) x-displayName: "Disable" (bool).
 
@@ -265,6 +243,18 @@ The action to take if the input request matches the rule..
 
 `deny` - (Optional) Deny the request. (bool).
 
+### Action Block
+
+Block the request and issue an API security event.
+
+### Action Report
+
+Continue processing the request and issue an API security event.
+
+### Action Skip
+
+Continue processing the request.
+
 ### Active Service Policies
 
 Apply the specified list of service policies and bypass the namespace service policy set.
@@ -283,7 +273,7 @@ Add secure attribute.
 
 Wildcard names are supported in the suffix or prefix form.
 
-`domains` - (Optional) Wildcard names are supported in the suffix or prefix form. (`String`).
+`domains` - (Required) Wildcard names are supported in the suffix or prefix form. (`String`).
 
 ### Advanced Options
 
@@ -354,6 +344,10 @@ Add All load balancer domains to source origin (allow) list..
 ### Allow
 
 Allow the request to proceed..
+
+### Allow Good Bots
+
+System flags Good Bot traffic and allow it to continue to the origin.
 
 ### Always Enable Captcha Challenge
 
@@ -785,6 +779,10 @@ Consistent hashing algorithm, ring hash, is used to select origin server.
 
 List of cookies to be modified from the HTTP response being sent towards downstream..
 
+`disable_tampering_protection` - (Optional) x-displayName: "Disable" (bool).
+
+`enable_tampering_protection` - (Optional) x-displayName: "Enable" (bool).
+
 `add_httponly` - (Optional) x-displayName: "Add" (bool).
 
 `ignore_httponly` - (Optional) x-displayName: "Ignore" (bool).
@@ -845,7 +843,7 @@ Because CSRF attacks specifically target state-changing requests, the policy onl
 
 Add one or more domains to source origin (allow) list..
 
-`domains` - (Optional) Wildcard names are supported in the suffix or prefix form. (`String`).
+`domains` - (Required) Wildcard names are supported in the suffix or prefix form. (`String`).
 
 ### Custom Endpoint Object
 
@@ -1093,6 +1091,10 @@ Do not use SNI..
 
 Subset load balancing is disabled. All eligible origin servers will be considered for load balancing..
 
+### Disable Tampering Protection
+
+x-displayName: "Disable".
+
 ### Disable Transaction Result
 
 Disable collection of transaction result..
@@ -1118,6 +1120,22 @@ x-displayName: "Enable".
 ### Enable Auto Mitigation
 
 x-displayName: "Enable".
+
+### Enable Challenge
+
+Configure auto mitigation i.e risk based challenges for malicious users.
+
+`captcha_challenge_parameters` - (Optional) Configure captcha challenge parameters. See [Captcha Challenge Parameters ](#captcha-challenge-parameters) below for details.
+
+`default_captcha_challenge_parameters` - (Optional) Use default parameters (bool).
+
+`default_js_challenge_parameters` - (Optional) Use default parameters (bool).
+
+`js_challenge_parameters` - (Optional) Configure Javascript challenge parameters. See [Js Challenge Parameters ](#js-challenge-parameters) below for details.
+
+`default_mitigation_settings` - (Optional) For high level, users will be temporarily blocked. (bool).
+
+`malicious_user_mitigation` - (Optional) Define the mitigation actions to be taken for different threat levels. See [ref](#ref) below for details.
 
 ### Enable Ddos Detection
 
@@ -1172,6 +1190,10 @@ Subset load balancing is enabled. Based on route, subset of origin servers will 
 `default_subset` - (Optional) Use the default subset provided here. Select endpoints matching default subset.. See [Default Subset ](#default-subset) below for details.
 
 `fail_request` - (Optional) Request will be failed and error returned, as if cluster has no origin servers. (bool).
+
+### Enable Tampering Protection
+
+x-displayName: "Enable".
 
 ### Enable Trust Client Ip Headers
 
@@ -1231,6 +1253,8 @@ Violations to be excluded for the defined match criteria.
 
 `context` - (Required) x-required (`String`).
 
+`context_name` - (Optional) Relevant only for contexts: Header, Cookie and Parameter. Name of the Context that the WAF Exclusion Rules will check. (`String`).
+
 `exclude_violation` - (Required) x-required (`String`).
 
 ### Fail Request
@@ -1251,23 +1275,19 @@ Failure Conditions.
 
 Determine what to do with unprotected endpoints (not in the OpenAPI specification file (a.k.a. swagger) or doesn't have a specific rule in custom rules).
 
-`fall_through_mode_allow` - (Optional) Allow the request (bool).
+`fall_through_mode_allow` - (Optional) Allow any unprotected end point (bool).
 
-`fall_through_mode_block` - (Optional) Block any request and trigger an API security event (bool).
-
-`fall_through_mode_report` - (Optional) Allow the request but trigger an API security event (bool).
+`fall_through_mode_custom` - (Optional) Custom rules for any unprotected end point. See [Fall Through Mode Custom ](#fall-through-mode-custom) below for details.
 
 ### Fall Through Mode Allow
 
-Allow the request.
+Allow any unprotected end point.
 
-### Fall Through Mode Block
+### Fall Through Mode Custom
 
-Block any request and trigger an API security event.
+Custom rules for any unprotected end point.
 
-### Fall Through Mode Report
-
-Allow the request but trigger an API security event.
+`open_api_validation_rules` - (Required) x-displayName: "Custom Fall Through Rule List". See [Open Api Validation Rules ](#open-api-validation-rules) below for details.
 
 ### Financial Services
 
@@ -1459,7 +1479,9 @@ User is responsible for managing DNS to this load balancer..
 
 `server_name` - (Optional) This will overwrite existing values, if any, for the server header. (`String`).
 
-`tls_parameters` - (Optional) TLS parameters for downstream connections.. See [Tls Parameters ](#tls-parameters) below for details.
+`tls_cert_params` - (Optional) TLS Parameters and selected Certificates for downstream connections (RE sites only). See [Tls Cert Params ](#tls-cert-params) below for details.
+
+`tls_parameters` - (Optional) Inline TLS parameters for downstream connections.. See [Tls Parameters ](#tls-parameters) below for details.
 
 ### Https Auto Cert
 
@@ -1681,6 +1703,10 @@ x-displayName: "GET".
 
 x-displayName: "POST".
 
+### Mitigate Good Bots
+
+System flags Good Bot Traffic, but mitigation is handled in the same manner as malicious automated traffic defined above.
+
 ### Mitigation
 
 Mitigation action..
@@ -1795,7 +1821,13 @@ No mitigation actions..
 
 ### Open Api Validation Rules
 
-x-displayName: "Validation List".
+x-displayName: "Custom Fall Through Rule List".
+
+`action_block` - (Required) Block the request and issue an API security event (bool).
+
+`action_report` - (Required) Continue processing the request and issue an API security event (bool).
+
+`action_skip` - (Required) Continue processing the request (bool).
 
 `api_endpoint_path` - (Optional) The API endpoint which this validation applies to (`String`).
 
@@ -1803,13 +1835,7 @@ x-displayName: "Validation List".
 
 `base_path` - (Optional) The base path which this validation applies to (`String`).
 
-`any_domain` - (Required) The rule will apply for all domains. (bool).
-
-`specific_domain` - (Required) The rule will apply for a specific domain. (`String`).
-
 `metadata` - (Required) Common attributes for the rule including name and description.. See [Metadata ](#metadata) below for details.
-
-`validation_mode` - (Required) When a validation mismatch occurs on a request to one of the endpoints listed on the OpenAPI specification file (a.k.a. swagger). See [Validation Mode ](#validation-mode) below for details.
 
 ### Origin Pools
 
@@ -1892,6 +1918,8 @@ Bot Defense Policy..
 `js_insert_all_pages_except` - (Optional) Insert Bot Defense JavaScript in all pages with the exceptions.. See [Js Insert All Pages Except ](#js-insert-all-pages-except) below for details.
 
 `js_insertion_rules` - (Optional) Specify custom JavaScript insertion rules.. See [Js Insertion Rules ](#js-insertion-rules) below for details.
+
+`javascript_mode` - (Required) The larger chunk can be loaded asynchronously or synchronously. It can also be cacheable or non-cacheable on the browser. (`String`).
 
 `js_download_path` - (Optional) Customize Bot Defense Client JavaScript path. If not specified, default `/common.js` (`String`).
 
@@ -2019,6 +2047,10 @@ List of protected application endpoints (max 128 items)..
 
 `undefined_flow_label` - (Optional) x-displayName: "Undefined" (bool).
 
+`allow_good_bots` - (Optional) System flags Good Bot traffic and allow it to continue to the origin (bool).
+
+`mitigate_good_bots` - (Optional) System flags Good Bot Traffic, but mitigation is handled in the same manner as malicious automated traffic defined above (bool).
+
 `http_methods` - (Required) List of HTTP methods. (`List of Strings`).
 
 `metadata` - (Required) Common attributes for the rule including name and description.. See [Metadata ](#metadata) below for details.
@@ -2031,7 +2063,11 @@ List of protected application endpoints (max 128 items)..
 
 ### Protected Cookies
 
-List of cookies to be modified from the HTTP response being sent towards downstream..
+Note: We recommend enabling Secure and HttpOnly attributes along with cookie tampering protection..
+
+`disable_tampering_protection` - (Optional) x-displayName: "Disable" (bool).
+
+`enable_tampering_protection` - (Optional) x-displayName: "Enable" (bool).
 
 `add_httponly` - (Optional) x-displayName: "Add" (bool).
 
@@ -2463,7 +2499,7 @@ Skip OpenAPI validation processing for this event.
 
 ### Slow Ddos Mitigation
 
-requests from actual users..
+Custom Settings for Slow DDoS Mitigation.
 
 `request_headers_timeout` - (Optional) provides protection against Slowloris attacks. (`Int`).
 
@@ -2490,6 +2526,18 @@ Success Conditions.
 Specifies configuration for temporary user blocking resulting from malicious user detection.
 
 `custom_page` - (Optional) E.g. "<p> Blocked </p>". Base64 encoded string for this html is "PHA+IFBsZWFzZSBXYWl0IDwvcD4=" (`String`).
+
+### Tls Cert Params
+
+TLS Parameters and selected Certificates for downstream connections (RE sites only).
+
+`certificates` - (Required) Select one or more certificates with any domain names.. See [ref](#ref) below for details.
+
+`no_mtls` - (Optional) x-displayName: "Disable" (bool).
+
+`use_mtls` - (Optional) x-displayName: "Enable". See [Use Mtls ](#use-mtls) below for details.
+
+`tls_config` - (Optional) Configuration of TLS settings such as min/max TLS version and ciphersuites. See [Tls Config ](#tls-config) below for details.
 
 ### Tls Certificates
 
@@ -2531,7 +2579,7 @@ The predicate evaluates to true if the TLS fingerprint matches any of the exact 
 
 ### Tls Parameters
 
-TLS parameters for downstream connections..
+Inline TLS parameters for downstream connections..
 
 `no_mtls` - (Optional) x-displayName: "Disable" (bool).
 

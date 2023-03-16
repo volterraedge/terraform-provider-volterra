@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2020 Volterra, Inc. Licensed under APACHE LICENSE, VERSION 2.0
+// Copyright (c) 2023 F5 Inc. All rights reserved.
 //
 
 package volterra
@@ -221,6 +221,22 @@ func resourceVolterraSetCloudSiteInfo() *schema.Resource {
 					},
 				},
 			},
+			"vnet": {
+				Type:     schema.TypeSet,
+				Optional: true,
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+						"vnet_name": {
+							Type:     schema.TypeString,
+							Required: true,
+						},
+						"resource_id": {
+							Type:     schema.TypeString,
+							Required: true,
+						},
+					},
+				},
+			},
 			"node_info": {
 				Type:     schema.TypeList,
 				Optional: true,
@@ -304,6 +320,9 @@ func resourceVolterraSetCloudSiteInfoCreate(d *schema.ResourceData, meta interfa
 		}
 		if expressRouteInfo := getExpressRouteInfo(d); expressRouteInfo != nil {
 			req.AzureVnetInfo.ExpressRouteInfo = expressRouteInfo
+		}
+		if vnetInfo := getVnetInfo(d); vnetInfo != nil {
+			req.AzureVnetInfo.Vnet = vnetInfo
 		}
 		if nodeInstanceNames := getNodeInstanceNames(d); nodeInstanceNames != nil {
 			req.AzureVnetInfo.NodeInfo = nodeInstanceNames
@@ -455,6 +474,25 @@ func getExpressRouteInfo(d *schema.ResourceData) *azure_vnet_site.ExpressRouteIn
 			}
 		}
 		return erInfo
+
+	}
+	return nil
+}
+
+func getVnetInfo(d *schema.ResourceData) *azure_vnet_site.VNETInfoType {
+	if v, ok := d.GetOk("vnet"); ok && !isIntfNil(v) {
+		sl := v.(*schema.Set).List()
+		vnetInfo := &azure_vnet_site.VNETInfoType{}
+		for _, set := range sl {
+			mapStrToIntf := set.(map[string]interface{})
+			if val, ok := mapStrToIntf["vnet_name"]; ok && !isIntfNil(val) {
+				vnetInfo.VnetName = val.(string)
+			}
+			if val, ok := mapStrToIntf["resource_id"]; ok && !isIntfNil(val) {
+				vnetInfo.ResourceId = val.(string)
+			}
+		}
+		return vnetInfo
 
 	}
 	return nil

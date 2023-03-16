@@ -21,29 +21,30 @@ resource "volterra_voltstack_site" "example" {
   namespace = "staging"
 
   // One of the arguments from this list "default_blocked_services blocked_services" must be set
+  default_blocked_services = true
 
-  blocked_services {
-    blocked_sevice {
-      // One of the arguments from this list "dns ssh web_user_interface" must be set
-      web_user_interface = true
-      network_type       = "network_type"
-    }
-  }
   // One of the arguments from this list "no_bond_devices bond_device_list" must be set
   no_bond_devices = true
-  // One of the arguments from this list "enable_vgpu disable_gpu enable_gpu" must be set
-  enable_gpu = true
+
+  // One of the arguments from this list "disable_gpu enable_gpu enable_vgpu" must be set
+  disable_gpu = true
+
   // One of the arguments from this list "no_k8s_cluster k8s_cluster" must be set
   no_k8s_cluster = true
+
   // One of the arguments from this list "logs_streaming_disabled log_receiver" must be set
   logs_streaming_disabled = true
+
   master_nodes = ["master-0"]
+
   // One of the arguments from this list "default_network_config custom_network_config" must be set
   default_network_config = true
+
   // One of the arguments from this list "default_storage_config custom_storage_config" must be set
   default_storage_config = true
-  // One of the arguments from this list "deny_all_usb allow_all_usb usb_policy" must be set
-  allow_all_usb         = true
+
+  // One of the arguments from this list "usb_policy deny_all_usb allow_all_usb" must be set
+  deny_all_usb          = true
   volterra_certified_hw = ["isv-8000-series-voltstack-combo"]
 }
 
@@ -72,7 +73,7 @@ Argument Reference
 
 `blocked_services` - (Optional) Use custom blocked services configuration. See [Blocked Services ](#blocked-services) below for details.
 
-`default_blocked_services` - (Optional) Use default behavior of allowing ports mentioned in blocked services (bool).
+`default_blocked_services` - (Optional) Use default dehavior of allowing ports mentioned in blocked services (bool).
 
 `bond_device_list` - (Optional) Configure Bond Devices for this App Stack site. See [Bond Device List ](#bond-device-list) below for details.
 
@@ -598,42 +599,6 @@ List of global network connections.
 
 `global_network_connections` - (Required) Global network connections. See [Global Network Connections ](#global-network-connections) below for details.
 
-### Hpe Storage
-
-Storage configuration for HPE Storage.
-
-`allow_mutations` - (Optional) mutation can override specified parameters (`String`).
-
-`allow_overrides` - (Optional) PVC can override specified parameters (`String`).
-
-`dedupe_enabled` - (Optional) Indicates that the volume should enable deduplication. (`Bool`).
-
-`description` - (Optional) The SecretName parameter is used to identify name of secret to identify backend storage's auth information (`String`).
-
-`destroy_on_delete` - (Optional) Indicates the backing Nimble volume (including snapshots) should be destroyed when the PVC is deleted (`Bool`).
-
-`encrypted` - (Optional) Indicates that the volume should be encrypted. (`Bool`).
-
-`folder` - (Optional) The name of the folder in which to place the volume. (`String`).
-
-`limit_iops` - (Optional) The IOPS limit of the volume. (`Int`).
-
-`limit_mbps` - (Optional) The IOPS limit of the volume. (`Int`).
-
-`performance_policy` - (Optional) The name of the performance policy to assign to the volume. (`String`).
-
-`pool` - (Optional) The name of the pool in which to place the volume. (`String`).
-
-`protection_template` - (Optional) The name of the performance policy to assign to the volume. (`String`).
-
-`secret_name` - (Optional) The SecretName parameter is used to identify name of secret to identify backend storage's auth information (`String`).
-
-`secret_namespace` - (Optional) The SecretNamespace parameter is used to identify name of namespace where secret resides (`String`).
-
-`sync_on_detach` - (Optional) Indicates that a snapshot of the volume should be synced to the replication partner each time it is detached from a node. (`Bool`).
-
-`thick` - (Optional) Indicates that the volume should be thick provisioned. (`Bool`).
-
 ### Inside Vn
 
 Local control plane will work on inside network.
@@ -994,8 +959,6 @@ List of custom storage classes.
 
 `custom_storage` - (Optional) Storage configuration for Custom Storage. See [Custom Storage ](#custom-storage) below for details.
 
-`hpe_storage` - (Optional) Storage configuration for HPE Storage. See [Hpe Storage ](#hpe-storage) below for details.
-
 `netapp_trident` - (Optional) Storage class Device configuration for NetApp Trident. See [Netapp Trident ](#netapp-trident) below for details.
 
 `pure_service_orchestrator` - (Optional) Storage class Device configuration for Pure Service Orchestrator. See [Pure Service Orchestrator ](#pure-service-orchestrator) below for details.
@@ -1019,8 +982,6 @@ List of custom storage devices.
 `advanced_advanced_parameters` - (Optional) Map of parameter name and string value (`String`).
 
 `custom_storage` - (Optional) Device configuration for Custom Storage (bool).
-
-`hpe_storage` - (Optional) Device configuration for HPE Storage. See [Hpe Storage ](#hpe-storage) below for details.
 
 `netapp_trident` - (Optional) Device configuration for NetApp Trident. See [Netapp Trident ](#netapp-trident) below for details.
 

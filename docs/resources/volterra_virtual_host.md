@@ -20,7 +20,7 @@ resource "volterra_virtual_host" "example" {
   name      = "acmecorp-web"
   namespace = "staging"
 
-  // One of the arguments from this list "captcha_challenge no_challenge js_challenge" must be set
+  // One of the arguments from this list "no_challenge js_challenge captcha_challenge" must be set
   no_challenge = true
 }
 
@@ -85,6 +85,8 @@ Argument Reference
 
 `dns_proxy_configuration` - (Optional) Advanced DNS Proxy Configurations like DDoS, Cache are mapped to DNSProxyConfiguration for internal use. See [Dns Proxy Configuration ](#dns-proxy-configuration) below for details.
 
+`domain_cert_map` - (Optional) which contains repeated Certificate refs). See [Domain Cert Map ](#domain-cert-map) below for details.
+
 `domains` - (Optional) Domains also indicate the list of names for which DNS resolution will be done by VER (`List of String`).
 
 `dynamic_reverse_proxy` - (Optional) request. The DNS response is cached for 60s by default.. See [Dynamic Reverse Proxy ](#dynamic-reverse-proxy) below for details.
@@ -133,6 +135,8 @@ Argument Reference
 
 `temporary_user_blocking` - (Optional) Specifies configuration for temporary user blocking resulting from malicious user detection. See [Temporary User Blocking ](#temporary-user-blocking) below for details.
 
+`tls_cert_params` - (Optional) in advertise policy. See [Tls Cert Params ](#tls-cert-params) below for details.
+
 `tls_parameters` - (Optional) in advertise policy. See [Tls Parameters ](#tls-parameters) below for details.
 
 `user_identification` - (Optional) The rules in the user_identification object are evaluated to determine the user identifier to be rate limited.. See [ref](#ref) below for details.
@@ -151,7 +155,7 @@ x-displayName: "Add".
 
 Wildcard names are supported in the suffix or prefix form.
 
-`domains` - (Optional) Wildcard names are supported in the suffix or prefix form. (`String`).
+`domains` - (Required) Wildcard names are supported in the suffix or prefix form. (`String`).
 
 ### All Load Balancer Domains
 
@@ -307,6 +311,10 @@ Configure all Cookie params.
 
 List of cookies to be modified from the HTTP response being sent towards downstream..
 
+`disable_tampering_protection` - (Optional) x-displayName: "Disable" (bool).
+
+`enable_tampering_protection` - (Optional) x-displayName: "Enable" (bool).
+
 `add_httponly` - (Optional) x-displayName: "Add" (bool).
 
 `ignore_httponly` - (Optional) x-displayName: "Ignore" (bool).
@@ -363,7 +371,7 @@ CSRF is a mechanism that checks if request received at the server is from legiti
 
 Add one or more domains to source origin (allow) list..
 
-`domains` - (Optional) Wildcard names are supported in the suffix or prefix form. (`String`).
+`domains` - (Required) Wildcard names are supported in the suffix or prefix form. (`String`).
 
 ### Custom Hash Algorithms
 
@@ -399,6 +407,10 @@ This is the default behavior if no choice is selected..
 
 No OpenApi Validation configuration for this VH.
 
+### Disable Tampering Protection
+
+x-displayName: "Disable".
+
 ### Disable Waf
 
 Any Application Firewall configuration will not be enforced.
@@ -410,6 +422,14 @@ Advanced DNS Proxy Configurations like DDoS, Cache are mapped to DNSProxyConfigu
 `cache_profile` - (Optional) which caches DNS replies from the origin DNS servers.. See [Cache Profile ](#cache-profile) below for details.
 
 `ddos_profile` - (Required) to protect the origin DNS servers from external DDoS attacks.. See [Ddos Profile ](#ddos-profile) below for details.
+
+### Domain Cert Map
+
+which contains repeated Certificate refs).
+
+`ecdsa_certificates` - (Optional) the ECDSA certificate for the domain, if any. See [Ecdsa Certificates ](#ecdsa-certificates) below for details.
+
+`rsa_certificates` - (Optional) the RSA certificate for the domain, if any. See [Rsa Certificates ](#rsa-certificates) below for details.
 
 ### Dynamic Reverse Proxy
 
@@ -423,6 +443,20 @@ request. The DNS response is cached for 60s by default..
 
 `resolve_endpoint_dynamically` - (Optional) request. The DNS response is cached for 60s by default. (`Bool`).
 
+### Ecdsa Certificates
+
+the ECDSA certificate for the domain, if any.
+
+`kind` - (Optional) then kind will hold the referred object's kind (e.g. "route") (`String`).
+
+`name` - (Optional) then name will hold the referred object's(e.g. route's) name. (`String`).
+
+`namespace` - (Optional) then namespace will hold the referred object's(e.g. route's) namespace. (`String`).
+
+`tenant` - (Optional) then tenant will hold the referred object's(e.g. route's) tenant. (`String`).
+
+`uid` - (Optional) then uid will hold the referred object's(e.g. route's) uid. (`String`).
+
 ### Enable Cache Profile
 
 x-displayName: "Enable".
@@ -434,6 +468,10 @@ x-displayName: "Enable".
 ### Enable Open Api Validation
 
 OpenApi Validation configuration object.
+
+### Enable Tampering Protection
+
+x-displayName: "Enable".
 
 ### Header Transformation Type
 
@@ -569,6 +607,20 @@ Indicates that the virtual_host has a retry policy..
 
 `retry_on` - (Optional) matching one defined in retriable_status_codes field (`String`).
 
+### Rsa Certificates
+
+the RSA certificate for the domain, if any.
+
+`kind` - (Optional) then kind will hold the referred object's kind (e.g. "route") (`String`).
+
+`name` - (Optional) then name will hold the referred object's(e.g. route's) name. (`String`).
+
+`namespace` - (Optional) then namespace will hold the referred object's(e.g. route's) namespace. (`String`).
+
+`tenant` - (Optional) then tenant will hold the referred object's(e.g. route's) tenant. (`String`).
+
+`uid` - (Optional) then uid will hold the referred object's(e.g. route's) uid. (`String`).
+
 ### Samesite Lax
 
 Add Samesite attribute with Lax. Means that the cookie is not sent on cross-site requests.
@@ -626,6 +678,24 @@ This configuration helps to mitigate such type of attacks..
 Specifies configuration for temporary user blocking resulting from malicious user detection.
 
 `custom_page` - (Optional) E.g. "<p> Blocked </p>". Base64 encoded string for this html is "PHA+IFBsZWFzZSBXYWl0IDwvcD4=" (`String`).
+
+### Tls Cert Params
+
+in advertise policy.
+
+`certificates` - (Required) Set of certificates. See [ref](#ref) below for details.
+
+`cipher_suites` - (Optional) will be used. (`String`).
+
+`crl` - (Optional) Used to ensure that the client presented certificate is not revoked as per the CRL. See [ref](#ref) below for details.
+
+`maximum_protocol_version` - (Optional) Maximum TLS protocol version. (`String`).
+
+`minimum_protocol_version` - (Optional) Minimum TLS protocol version. (`String`).
+
+`require_client_certificate` - (Optional) certificate. (`Bool`).
+
+`validation_params` - (Optional) and list of Subject Alt Names for verification. See [Validation Params ](#validation-params) below for details.
 
 ### Tls Certificates
 
