@@ -21,7 +21,11 @@ resource "volterra_virtual_host" "example" {
   namespace = "staging"
 
   // One of the arguments from this list "no_challenge js_challenge captcha_challenge" must be set
-  no_challenge = true
+
+  captcha_challenge {
+    cookie_expiry = "1000"
+    custom_page   = "string:///PHA+IFBsZWFzZSBXYWl0IDwvcD4="
+  }
 }
 
 ```
@@ -697,6 +701,8 @@ in advertise policy.
 
 `validation_params` - (Optional) and list of Subject Alt Names for verification. See [Validation Params ](#validation-params) below for details.
 
+`xfcc_header_elements` - (Optional) If none are defined, the header will not be added. (`List of Strings`).
+
 ### Tls Certificates
 
 Set of TLS certificates.
@@ -722,6 +728,8 @@ in advertise policy.
 `crl` - (Optional) Used to ensure that the client presented certificate is not revoked as per the CRL. See [ref](#ref) below for details.
 
 `require_client_certificate` - (Optional) certificate. (`Bool`).
+
+`xfcc_header_elements` - (Optional) If none are defined, the header will not be added. (`List of Strings`).
 
 ### Use Auth Object Config
 

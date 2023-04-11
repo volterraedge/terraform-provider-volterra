@@ -25,30 +25,145 @@ resource "volterra_http_loadbalancer" "example" {
 
   // One of the arguments from this list "disable_api_definition api_definition api_specification api_definitions" must be set
 
-  api_definition {
-    name      = "test1"
-    namespace = "staging"
-    tenant    = "acmecorp"
+  api_definitions {
+    api_definitions {
+      name      = "test1"
+      namespace = "staging"
+      tenant    = "acmecorp"
+    }
   }
-
   // One of the arguments from this list "enable_api_discovery disable_api_discovery" must be set
+  disable_api_discovery = true
 
-  enable_api_discovery {
-    // One of the arguments from this list "disable_learn_from_redirect_traffic enable_learn_from_redirect_traffic" must be set
-    enable_learn_from_redirect_traffic = true
+  // One of the arguments from this list "js_challenge captcha_challenge policy_based_challenge no_challenge enable_challenge" must be set
+
+  policy_based_challenge {
+    // One of the arguments from this list "default_captcha_challenge_parameters captcha_challenge_parameters" must be set
+    default_captcha_challenge_parameters = true
+
+    // One of the arguments from this list "no_challenge always_enable_js_challenge always_enable_captcha_challenge" must be set
+    no_challenge = true
+
+    // One of the arguments from this list "default_js_challenge_parameters js_challenge_parameters" must be set
+    default_js_challenge_parameters = true
+
+    // One of the arguments from this list "default_mitigation_settings malicious_user_mitigation" must be set
+    default_mitigation_settings = true
+
+    rule_list {
+      rules {
+        metadata {
+          description = "Virtual Host for acmecorp website"
+          disable     = true
+          name        = "acmecorp-web"
+        }
+
+        spec {
+          arg_matchers {
+            invert_matcher = true
+
+            // One of the arguments from this list "presence check_present check_not_present item" must be set
+
+            item {
+              exact_values = ["['new york', 'london', 'sydney', 'tokyo', 'cairo']"]
+
+              regex_values = ["['^new .*$', 'san f.*', '.* del .*']"]
+
+              transformers = ["transformers"]
+            }
+            name = "name"
+          }
+
+          // One of the arguments from this list "any_asn asn_list asn_matcher" must be set
+          any_asn = true
+
+          body_matcher {
+            exact_values = ["['new york', 'london', 'sydney', 'tokyo', 'cairo']"]
+
+            regex_values = ["['^new .*$', 'san f.*', '.* del .*']"]
+
+            transformers = ["transformers"]
+          }
+
+          // One of the arguments from this list "disable_challenge enable_javascript_challenge enable_captcha_challenge" must be set
+          disable_challenge = true
+
+          // One of the arguments from this list "client_name client_selector client_name_matcher any_client" must be set
+
+          client_selector {
+            expressions = ["region in (us-west1, us-west2),tier in (staging)"]
+          }
+          cookie_matchers {
+            invert_matcher = true
+
+            // One of the arguments from this list "presence check_present check_not_present item" must be set
+            presence = true
+
+            name = "Session"
+          }
+          domain_matcher {
+            exact_values = ["['new york', 'london', 'sydney', 'tokyo', 'cairo']"]
+
+            regex_values = ["['^new .*$', 'san f.*', '.* del .*']"]
+          }
+          expiration_timestamp = "0001-01-01T00:00:00Z"
+          headers {
+            invert_matcher = true
+
+            // One of the arguments from this list "item presence check_present check_not_present" must be set
+            presence = true
+
+            name = "Accept-Encoding"
+          }
+          http_method {
+            invert_matcher = true
+
+            methods = ["['GET', 'POST', 'DELETE']"]
+          }
+          // One of the arguments from this list "any_ip ip_prefix_list ip_matcher" must be set
+          any_ip = true
+          path {
+            exact_values = ["['/api/web/namespaces/project179/users/user1', '/api/config/namespaces/accounting/bgps', '/api/data/namespaces/project443/virtual_host_101']"]
+
+            prefix_values = ["['/api/web/namespaces/project179/users/', '/api/config/namespaces/', '/api/data/namespaces/']"]
+
+            regex_values = ["['^/api/web/namespaces/abc/users/([a-z]([-a-z0-9]*[a-z0-9])?)$', '/api/data/namespaces/proj404/virtual_hosts/([a-z]([-a-z0-9]*[a-z0-9])?)$']"]
+
+            suffix_values = ["['.exe', '.shtml', '.wmz']"]
+
+            transformers = ["transformers"]
+          }
+          query_params {
+            invert_matcher = true
+            key            = "sourceid"
+
+            // One of the arguments from this list "presence check_present check_not_present item" must be set
+            presence = true
+          }
+          tls_fingerprint_matcher {
+            classes = ["classes"]
+
+            exact_values = ["['ed6dfd54b01ebe31b7a65b88abfa7297', '16efcf0e00504ddfedde13bfea997952', 'de364c46b0dfc283b5e38c79ceae3f8f']"]
+
+            excluded_values = ["['fb00055a1196aeea8d1bc609885ba953', 'b386946a5a44d1ddcc843bc75336dfce']"]
+          }
+        }
+      }
+    }
+
+    // One of the arguments from this list "default_temporary_blocking_parameters temporary_user_blocking" must be set
+    default_temporary_blocking_parameters = true
   }
-  // One of the arguments from this list "no_challenge enable_challenge js_challenge captcha_challenge policy_based_challenge" must be set
-  no_challenge = true
 
   // One of the arguments from this list "enable_ddos_detection disable_ddos_detection" must be set
 
   enable_ddos_detection {
-    // One of the arguments from this list "enable_auto_mitigation disable_auto_mitigation" must be set
+    // One of the arguments from this list "disable_auto_mitigation enable_auto_mitigation" must be set
     enable_auto_mitigation = true
   }
   domains = ["www.foo.com"]
-  // One of the arguments from this list "random source_ip_stickiness cookie_stickiness ring_hash round_robin least_active" must be set
-  round_robin = true
+  // One of the arguments from this list "round_robin least_active random source_ip_stickiness cookie_stickiness ring_hash" must be set
+  random = true
 
   // One of the arguments from this list "http https_auto_cert https" must be set
 
@@ -58,10 +173,59 @@ resource "volterra_http_loadbalancer" "example" {
   }
   // One of the arguments from this list "enable_malicious_user_detection disable_malicious_user_detection" must be set
   enable_malicious_user_detection = true
+
   // One of the arguments from this list "disable_rate_limit api_rate_limit rate_limit" must be set
-  disable_rate_limit = true
+
+  api_rate_limit {
+    api_endpoint_rules {
+      api_endpoint_method {
+        invert_matcher = true
+
+        methods = ["['GET', 'POST', 'DELETE']"]
+      }
+
+      api_endpoint_path = "value"
+      base_path         = "/"
+
+      // One of the arguments from this list "any_domain specific_domain" must be set
+      any_domain = true
+
+      // One of the arguments from this list "inline_rate_limiter ref_rate_limiter" must be set
+
+      ref_rate_limiter {
+        name      = "test1"
+        namespace = "staging"
+        tenant    = "acmecorp"
+      }
+    }
+
+    // One of the arguments from this list "custom_ip_allowed_list no_ip_allowed_list ip_allowed_list" must be set
+
+    custom_ip_allowed_list {
+      rate_limiter_allowed_prefixes {
+        name      = "test1"
+        namespace = "staging"
+        tenant    = "acmecorp"
+      }
+    }
+    server_url_rules {
+      base_path = "/"
+
+      // One of the arguments from this list "any_domain specific_domain" must be set
+      any_domain = true
+
+      // One of the arguments from this list "inline_rate_limiter ref_rate_limiter" must be set
+
+      inline_rate_limiter {
+        // One of the arguments from this list "use_http_lb_user_id ref_user_id" must be set
+        use_http_lb_user_id = true
+        threshold           = "1"
+        unit                = "unit"
+      }
+    }
+  }
   // One of the arguments from this list "service_policies_from_namespace no_service_policies active_service_policies" must be set
-  no_service_policies = true
+  service_policies_from_namespace = true
   // One of the arguments from this list "disable_trust_client_ip_headers enable_trust_client_ip_headers" must be set
   disable_trust_client_ip_headers = true
   // One of the arguments from this list "user_id_client_ip user_identification" must be set
@@ -344,10 +508,6 @@ Add All load balancer domains to source origin (allow) list..
 ### Allow
 
 Allow the request to proceed..
-
-### Allow Good Bots
-
-System flags Good Bot traffic and allow it to continue to the origin.
 
 ### Always Enable Captcha Challenge
 
@@ -1479,9 +1639,9 @@ User is responsible for managing DNS to this load balancer..
 
 `server_name` - (Optional) This will overwrite existing values, if any, for the server header. (`String`).
 
-`tls_cert_params` - (Optional) TLS Parameters and selected Certificates for downstream connections (RE sites only). See [Tls Cert Params ](#tls-cert-params) below for details.
+`tls_cert_params` - (Optional) Multiple domains with separate TLS certificates on this load balancer. See [Tls Cert Params ](#tls-cert-params) below for details.
 
-`tls_parameters` - (Optional) Inline TLS parameters for downstream connections.. See [Tls Parameters ](#tls-parameters) below for details.
+`tls_parameters` - (Optional) Single RSA and/or ECDSA TLS certificate for all domains on this load balancer. See [Tls Parameters ](#tls-parameters) below for details.
 
 ### Https Auto Cert
 
@@ -1491,7 +1651,7 @@ or a DNS CNAME record should be created in your DNS provider's portal..
 
 `connection_idle_timeout` - (Optional) This is specified in milliseconds. The default value is 2 minutes. (`Int`).
 
-`default_loadbalancer` - (Optional) x-displayName: "Yes" (bool).
+`default_loadbalancer` - (Optional) For traffic terminating at this load balancer, the certificate associated with the first configured domain will be used for TLS termination. (bool).
 
 `non_default_loadbalancer` - (Optional) x-displayName: "No" (bool).
 
@@ -1702,10 +1862,6 @@ x-displayName: "GET".
 ### Method Post
 
 x-displayName: "POST".
-
-### Mitigate Good Bots
-
-System flags Good Bot Traffic, but mitigation is handled in the same manner as malicious automated traffic defined above.
 
 ### Mitigation
 
@@ -2046,10 +2202,6 @@ List of protected application endpoints (max 128 items)..
 `flow_label` - (Optional) x-displayName: "Specify Endpoint label category". See [Flow Label ](#flow-label) below for details.
 
 `undefined_flow_label` - (Optional) x-displayName: "Undefined" (bool).
-
-`allow_good_bots` - (Optional) System flags Good Bot traffic and allow it to continue to the origin (bool).
-
-`mitigate_good_bots` - (Optional) System flags Good Bot Traffic, but mitigation is handled in the same manner as malicious automated traffic defined above (bool).
 
 `http_methods` - (Required) List of HTTP methods. (`List of Strings`).
 
@@ -2529,7 +2681,7 @@ Specifies configuration for temporary user blocking resulting from malicious use
 
 ### Tls Cert Params
 
-TLS Parameters and selected Certificates for downstream connections (RE sites only).
+Multiple domains with separate TLS certificates on this load balancer.
 
 `certificates` - (Required) Select one or more certificates with any domain names.. See [ref](#ref) below for details.
 
@@ -2579,7 +2731,7 @@ The predicate evaluates to true if the TLS fingerprint matches any of the exact 
 
 ### Tls Parameters
 
-Inline TLS parameters for downstream connections..
+Single RSA and/or ECDSA TLS certificate for all domains on this load balancer.
 
 `no_mtls` - (Optional) x-displayName: "Disable" (bool).
 
@@ -2654,6 +2806,10 @@ x-displayName: "Enable".
 `no_crl` - (Optional) Client certificate revocation status is not verified (bool).
 
 `trusted_ca_url` - (Required) The URL for a trust store (`String`).
+
+`xfcc_disabled` - (Optional) No X-Forwarded-Client-Cert header will be added (bool).
+
+`xfcc_options` - (Optional) X-Forwarded-Client-Cert header will be added with the configured fields. See [Xfcc Options ](#xfcc-options) below for details.
 
 ### Use Server Verification
 
@@ -2842,6 +2998,16 @@ Web and mobile traffic channel..
 Secret is given as bootstrap secret in F5XC Security Sidecar.
 
 `name` - (Required) Name of the secret. (`String`).
+
+### Xfcc Disabled
+
+No X-Forwarded-Client-Cert header will be added.
+
+### Xfcc Options
+
+X-Forwarded-Client-Cert header will be added with the configured fields.
+
+`xfcc_header_elements` - (Required) X-Forwarded-Client-Cert header elements to be added to requests (`List of Strings`).
 
 Attribute Reference
 -------------------

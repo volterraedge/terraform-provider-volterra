@@ -154,7 +154,7 @@ Direct reference to site object.
 
 `network_type` - (Optional) The type of network on the referred site (`String`).
 
-`ref` - (Optional) A site direct reference. See [ref](#ref) below for details.
+`ref` - (Required) A site direct reference. See [ref](#ref) below for details.
 
 ### Tls Certificates
 
@@ -181,6 +181,8 @@ Optional. TLS parameters to use. If not specified, will take from Virtual Host c
 `crl` - (Optional) Used to ensure that the client presented certificate is not revoked as per the CRL. See [ref](#ref) below for details.
 
 `require_client_certificate` - (Optional) certificate. (`Bool`).
+
+`xfcc_header_elements` - (Optional) If none are defined, the header will not be added. (`List of Strings`).
 
 ### Use System Defaults
 
@@ -216,7 +218,7 @@ Vault Secret is used for the secrets managed by Hashicorp Vault.
 
 Direct reference to virtual network object.
 
-`ref` - (Optional) A virtual network direct reference. See [ref](#ref) below for details.
+`ref` - (Required) A virtual network direct reference. See [ref](#ref) below for details.
 
 ### Virtual Site
 
@@ -228,7 +230,7 @@ Direct reference to virtual site object.
 
 `network_type` - (Optional) The type of network on the referred virtual_site (`String`).
 
-`ref` - (Optional) A virtual_site direct reference. See [ref](#ref) below for details.
+`ref` - (Required) A virtual_site direct reference. See [ref](#ref) below for details.
 
 ### Where
 

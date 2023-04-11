@@ -21,21 +21,35 @@ resource "volterra_tcp_loadbalancer" "example" {
   namespace = "staging"
 
   // One of the arguments from this list "advertise_on_public_default_vip advertise_on_public advertise_custom do_not_advertise" must be set
-  do_not_advertise = true
 
+  advertise_custom {
+    advertise_where {
+      // One of the arguments from this list "site virtual_site vk8s_service virtual_network" must be set
+
+      site {
+        ip      = "8.8.8.8"
+        network = "network"
+
+        site {
+          name      = "test1"
+          namespace = "staging"
+          tenant    = "acmecorp"
+        }
+      }
+
+      // One of the arguments from this list "use_default_port port" must be set
+      use_default_port = true
+    }
+  }
   // One of the arguments from this list "retract_cluster do_not_retract_cluster" must be set
   retract_cluster = true
-
   // One of the arguments from this list "hash_policy_choice_round_robin hash_policy_choice_least_active hash_policy_choice_random hash_policy_choice_source_ip_stickiness" must be set
-  hash_policy_choice_round_robin = true
-
-  // One of the arguments from this list "tls_tcp tcp tls_tcp_auto_cert" must be set
+  hash_policy_choice_source_ip_stickiness = true
+  // One of the arguments from this list "tcp tls_tcp_auto_cert tls_tcp" must be set
   tcp = true
-
-  // One of the arguments from this list "active_service_policies service_policies_from_namespace no_service_policies" must be set
+  // One of the arguments from this list "service_policies_from_namespace no_service_policies active_service_policies" must be set
   service_policies_from_namespace = true
-
-  // One of the arguments from this list "default_lb_with_sni no_sni sni" must be set
+  // One of the arguments from this list "no_sni sni default_lb_with_sni" must be set
   no_sni = true
 }
 
@@ -266,7 +280,7 @@ Advertise on a customer site and a given network..
 
 ### Tls Cert Params
 
-TLS Parameters and selected Certificates for downstream connections (RE sites only).
+Multiple domains with separate TLS certificates on this load balancer.
 
 `certificates` - (Required) Select one or more certificates with any domain names.. See [ref](#ref) below for details.
 
@@ -306,7 +320,7 @@ Configuration of TLS settings such as min/max TLS version and ciphersuites.
 
 ### Tls Parameters
 
-Inline TLS parameters for downstream connections..
+Single RSA and/or ECDSA TLS certificate for all domains on this load balancer.
 
 `no_mtls` - (Optional) x-displayName: "Disable" (bool).
 
@@ -320,9 +334,9 @@ Inline TLS parameters for downstream connections..
 
 User is responsible for managing DNS to this load balancer..
 
-`tls_cert_params` - (Optional) TLS Parameters and selected Certificates for downstream connections (RE sites only). See [Tls Cert Params ](#tls-cert-params) below for details.
+`tls_cert_params` - (Optional) Multiple domains with separate TLS certificates on this load balancer. See [Tls Cert Params ](#tls-cert-params) below for details.
 
-`tls_parameters` - (Optional) Inline TLS parameters for downstream connections.. See [Tls Parameters ](#tls-parameters) below for details.
+`tls_parameters` - (Optional) Single RSA and/or ECDSA TLS certificate for all domains on this load balancer. See [Tls Parameters ](#tls-parameters) below for details.
 
 ### Tls Tcp Auto Cert
 
@@ -347,6 +361,10 @@ x-displayName: "Enable".
 `no_crl` - (Optional) Client certificate revocation status is not verified (bool).
 
 `trusted_ca_url` - (Required) The URL for a trust store (`String`).
+
+`xfcc_disabled` - (Optional) No X-Forwarded-Client-Cert header will be added (bool).
+
+`xfcc_options` - (Optional) X-Forwarded-Client-Cert header will be added with the configured fields. See [Xfcc Options ](#xfcc-options) below for details.
 
 ### Use System Defaults
 
@@ -397,6 +415,16 @@ Advertise on vK8s Service Network on RE..
 Secret is given as bootstrap secret in F5XC Security Sidecar.
 
 `name` - (Required) Name of the secret. (`String`).
+
+### Xfcc Disabled
+
+No X-Forwarded-Client-Cert header will be added.
+
+### Xfcc Options
+
+X-Forwarded-Client-Cert header will be added with the configured fields.
+
+`xfcc_header_elements` - (Required) X-Forwarded-Client-Cert header elements to be added to requests (`List of Strings`).
 
 Attribute Reference
 -------------------
