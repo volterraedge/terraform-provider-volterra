@@ -1838,6 +1838,16 @@ func resourceVolterraVirtualHost() *schema.Resource {
 								},
 							},
 						},
+
+						"xfcc_header_elements": {
+
+							Type: schema.TypeList,
+
+							Optional: true,
+							Elem: &schema.Schema{
+								Type: schema.TypeString,
+							},
+						},
 					},
 				},
 			},
@@ -2143,6 +2153,16 @@ func resourceVolterraVirtualHost() *schema.Resource {
 						"require_client_certificate": {
 							Type:     schema.TypeBool,
 							Optional: true,
+						},
+
+						"xfcc_header_elements": {
+
+							Type: schema.TypeList,
+
+							Optional: true,
+							Elem: &schema.Schema{
+								Type: schema.TypeString,
+							},
 						},
 					},
 				},
@@ -4558,6 +4578,16 @@ func resourceVolterraVirtualHostCreate(d *schema.ResourceData, meta interface{})
 
 			}
 
+			if v, ok := cs["xfcc_header_elements"]; ok && !isIntfNil(v) {
+
+				xfcc_header_elementsList := []ves_io_schema.XfccElement{}
+				for _, j := range v.([]interface{}) {
+					xfcc_header_elementsList = append(xfcc_header_elementsList, ves_io_schema.XfccElement(ves_io_schema.XfccElement_value[j.(string)]))
+				}
+				tlsCertificatesChoiceInt.TlsCertParams.XfccHeaderElements = xfcc_header_elementsList
+
+			}
+
 		}
 
 	}
@@ -4906,6 +4936,16 @@ func resourceVolterraVirtualHostCreate(d *schema.ResourceData, meta interface{})
 			if v, ok := cs["require_client_certificate"]; ok && !isIntfNil(v) {
 
 				tlsCertificatesChoiceInt.TlsParameters.RequireClientCertificate = v.(bool)
+
+			}
+
+			if v, ok := cs["xfcc_header_elements"]; ok && !isIntfNil(v) {
+
+				xfcc_header_elementsList := []ves_io_schema.XfccElement{}
+				for _, j := range v.([]interface{}) {
+					xfcc_header_elementsList = append(xfcc_header_elementsList, ves_io_schema.XfccElement(ves_io_schema.XfccElement_value[j.(string)]))
+				}
+				tlsCertificatesChoiceInt.TlsParameters.XfccHeaderElements = xfcc_header_elementsList
 
 			}
 
@@ -7351,6 +7391,16 @@ func resourceVolterraVirtualHostUpdate(d *schema.ResourceData, meta interface{})
 
 			}
 
+			if v, ok := cs["xfcc_header_elements"]; ok && !isIntfNil(v) {
+
+				xfcc_header_elementsList := []ves_io_schema.XfccElement{}
+				for _, j := range v.([]interface{}) {
+					xfcc_header_elementsList = append(xfcc_header_elementsList, ves_io_schema.XfccElement(ves_io_schema.XfccElement_value[j.(string)]))
+				}
+				tlsCertificatesChoiceInt.TlsCertParams.XfccHeaderElements = xfcc_header_elementsList
+
+			}
+
 		}
 
 	}
@@ -7699,6 +7749,16 @@ func resourceVolterraVirtualHostUpdate(d *schema.ResourceData, meta interface{})
 			if v, ok := cs["require_client_certificate"]; ok && !isIntfNil(v) {
 
 				tlsCertificatesChoiceInt.TlsParameters.RequireClientCertificate = v.(bool)
+
+			}
+
+			if v, ok := cs["xfcc_header_elements"]; ok && !isIntfNil(v) {
+
+				xfcc_header_elementsList := []ves_io_schema.XfccElement{}
+				for _, j := range v.([]interface{}) {
+					xfcc_header_elementsList = append(xfcc_header_elementsList, ves_io_schema.XfccElement(ves_io_schema.XfccElement_value[j.(string)]))
+				}
+				tlsCertificatesChoiceInt.TlsParameters.XfccHeaderElements = xfcc_header_elementsList
 
 			}
 
