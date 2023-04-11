@@ -3142,18 +3142,6 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 													Optional: true,
 												},
 
-												"allow_good_bots": {
-
-													Type:     schema.TypeBool,
-													Optional: true,
-												},
-
-												"mitigate_good_bots": {
-
-													Type:     schema.TypeBool,
-													Optional: true,
-												},
-
 												"http_methods": {
 
 													Type: schema.TypeList,
@@ -5782,6 +5770,32 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 													Type:     schema.TypeString,
 													Optional: true,
 												},
+
+												"xfcc_disabled": {
+
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
+
+												"xfcc_options": {
+
+													Type:     schema.TypeSet,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"xfcc_header_elements": {
+
+																Type: schema.TypeList,
+
+																Required: true,
+																Elem: &schema.Schema{
+																	Type: schema.TypeString,
+																},
+															},
+														},
+													},
+												},
 											},
 										},
 									},
@@ -5904,6 +5918,32 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 												"trusted_ca_url": {
 													Type:     schema.TypeString,
 													Optional: true,
+												},
+
+												"xfcc_disabled": {
+
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
+
+												"xfcc_options": {
+
+													Type:     schema.TypeSet,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"xfcc_header_elements": {
+
+																Type: schema.TypeList,
+
+																Required: true,
+																Elem: &schema.Schema{
+																	Type: schema.TypeString,
+																},
+															},
+														},
+													},
 												},
 											},
 										},
@@ -6272,6 +6312,32 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 									"trusted_ca_url": {
 										Type:     schema.TypeString,
 										Optional: true,
+									},
+
+									"xfcc_disabled": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+
+									"xfcc_options": {
+
+										Type:     schema.TypeSet,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"xfcc_header_elements": {
+
+													Type: schema.TypeList,
+
+													Required: true,
+													Elem: &schema.Schema{
+														Type: schema.TypeString,
+													},
+												},
+											},
+										},
 									},
 								},
 							},
@@ -15102,32 +15168,6 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 
 							}
 
-							goodbotChoiceTypeFound := false
-
-							if v, ok := protectedAppEndpointsMapStrToI["allow_good_bots"]; ok && !isIntfNil(v) && !goodbotChoiceTypeFound {
-
-								goodbotChoiceTypeFound = true
-
-								if v.(bool) {
-									goodbotChoiceInt := &ves_io_schema_views_http_loadbalancer.AppEndpointType_AllowGoodBots{}
-									goodbotChoiceInt.AllowGoodBots = &ves_io_schema.Empty{}
-									protectedAppEndpoints[i].GoodbotChoice = goodbotChoiceInt
-								}
-
-							}
-
-							if v, ok := protectedAppEndpointsMapStrToI["mitigate_good_bots"]; ok && !isIntfNil(v) && !goodbotChoiceTypeFound {
-
-								goodbotChoiceTypeFound = true
-
-								if v.(bool) {
-									goodbotChoiceInt := &ves_io_schema_views_http_loadbalancer.AppEndpointType_MitigateGoodBots{}
-									goodbotChoiceInt.MitigateGoodBots = &ves_io_schema.Empty{}
-									protectedAppEndpoints[i].GoodbotChoice = goodbotChoiceInt
-								}
-
-							}
-
 							if v, ok := protectedAppEndpointsMapStrToI["http_methods"]; ok && !isIntfNil(v) {
 
 								http_methodsList := []ves_io_schema.BotHttpMethod{}
@@ -18861,6 +18901,45 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 
 							}
 
+							xfccHeaderTypeFound := false
+
+							if v, ok := cs["xfcc_disabled"]; ok && !isIntfNil(v) && !xfccHeaderTypeFound {
+
+								xfccHeaderTypeFound = true
+
+								if v.(bool) {
+									xfccHeaderInt := &ves_io_schema_views.DownstreamTlsValidationContext_XfccDisabled{}
+									xfccHeaderInt.XfccDisabled = &ves_io_schema.Empty{}
+									mtlsChoiceInt.UseMtls.XfccHeader = xfccHeaderInt
+								}
+
+							}
+
+							if v, ok := cs["xfcc_options"]; ok && !isIntfNil(v) && !xfccHeaderTypeFound {
+
+								xfccHeaderTypeFound = true
+								xfccHeaderInt := &ves_io_schema_views.DownstreamTlsValidationContext_XfccOptions{}
+								xfccHeaderInt.XfccOptions = &ves_io_schema_views.XfccHeaderKeys{}
+								mtlsChoiceInt.UseMtls.XfccHeader = xfccHeaderInt
+
+								sl := v.(*schema.Set).List()
+								for _, set := range sl {
+									cs := set.(map[string]interface{})
+
+									if v, ok := cs["xfcc_header_elements"]; ok && !isIntfNil(v) {
+
+										xfcc_header_elementsList := []ves_io_schema.XfccElement{}
+										for _, j := range v.([]interface{}) {
+											xfcc_header_elementsList = append(xfcc_header_elementsList, ves_io_schema.XfccElement(ves_io_schema.XfccElement_value[j.(string)]))
+										}
+										xfccHeaderInt.XfccOptions.XfccHeaderElements = xfcc_header_elementsList
+
+									}
+
+								}
+
+							}
+
 						}
 
 					}
@@ -19042,6 +19121,45 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 							if v, ok := cs["trusted_ca_url"]; ok && !isIntfNil(v) {
 
 								mtlsChoiceInt.UseMtls.TrustedCaUrl = v.(string)
+
+							}
+
+							xfccHeaderTypeFound := false
+
+							if v, ok := cs["xfcc_disabled"]; ok && !isIntfNil(v) && !xfccHeaderTypeFound {
+
+								xfccHeaderTypeFound = true
+
+								if v.(bool) {
+									xfccHeaderInt := &ves_io_schema_views.DownstreamTlsValidationContext_XfccDisabled{}
+									xfccHeaderInt.XfccDisabled = &ves_io_schema.Empty{}
+									mtlsChoiceInt.UseMtls.XfccHeader = xfccHeaderInt
+								}
+
+							}
+
+							if v, ok := cs["xfcc_options"]; ok && !isIntfNil(v) && !xfccHeaderTypeFound {
+
+								xfccHeaderTypeFound = true
+								xfccHeaderInt := &ves_io_schema_views.DownstreamTlsValidationContext_XfccOptions{}
+								xfccHeaderInt.XfccOptions = &ves_io_schema_views.XfccHeaderKeys{}
+								mtlsChoiceInt.UseMtls.XfccHeader = xfccHeaderInt
+
+								sl := v.(*schema.Set).List()
+								for _, set := range sl {
+									cs := set.(map[string]interface{})
+
+									if v, ok := cs["xfcc_header_elements"]; ok && !isIntfNil(v) {
+
+										xfcc_header_elementsList := []ves_io_schema.XfccElement{}
+										for _, j := range v.([]interface{}) {
+											xfcc_header_elementsList = append(xfcc_header_elementsList, ves_io_schema.XfccElement(ves_io_schema.XfccElement_value[j.(string)]))
+										}
+										xfccHeaderInt.XfccOptions.XfccHeaderElements = xfcc_header_elementsList
+
+									}
+
+								}
 
 							}
 
@@ -19542,6 +19660,45 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 					if v, ok := cs["trusted_ca_url"]; ok && !isIntfNil(v) {
 
 						mtlsChoiceInt.UseMtls.TrustedCaUrl = v.(string)
+
+					}
+
+					xfccHeaderTypeFound := false
+
+					if v, ok := cs["xfcc_disabled"]; ok && !isIntfNil(v) && !xfccHeaderTypeFound {
+
+						xfccHeaderTypeFound = true
+
+						if v.(bool) {
+							xfccHeaderInt := &ves_io_schema_views.DownstreamTlsValidationContext_XfccDisabled{}
+							xfccHeaderInt.XfccDisabled = &ves_io_schema.Empty{}
+							mtlsChoiceInt.UseMtls.XfccHeader = xfccHeaderInt
+						}
+
+					}
+
+					if v, ok := cs["xfcc_options"]; ok && !isIntfNil(v) && !xfccHeaderTypeFound {
+
+						xfccHeaderTypeFound = true
+						xfccHeaderInt := &ves_io_schema_views.DownstreamTlsValidationContext_XfccOptions{}
+						xfccHeaderInt.XfccOptions = &ves_io_schema_views.XfccHeaderKeys{}
+						mtlsChoiceInt.UseMtls.XfccHeader = xfccHeaderInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["xfcc_header_elements"]; ok && !isIntfNil(v) {
+
+								xfcc_header_elementsList := []ves_io_schema.XfccElement{}
+								for _, j := range v.([]interface{}) {
+									xfcc_header_elementsList = append(xfcc_header_elementsList, ves_io_schema.XfccElement(ves_io_schema.XfccElement_value[j.(string)]))
+								}
+								xfccHeaderInt.XfccOptions.XfccHeaderElements = xfcc_header_elementsList
+
+							}
+
+						}
 
 					}
 
@@ -20959,11 +21116,11 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 								sl := v.([]interface{})
 								endpointSubsets := make([]*ves_io_schema_cluster.EndpointSubsetSelectorType, len(sl))
 								subsetChoiceInt.EnableSubsets.EndpointSubsets = endpointSubsets
-								for i, set := range sl {
-									endpointSubsets[i] = &ves_io_schema_cluster.EndpointSubsetSelectorType{}
-									_ = set.(map[string]interface{})
+								//for i, set := range sl {
+								//	endpointSubsets[i] = &ves_io_schema_cluster.EndpointSubsetSelectorType{}
+									//endpointSubsetsMapStrToI := set.(map[string]interface{})
 
-								}
+								//}
 
 							}
 
@@ -30278,32 +30435,6 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 
 							}
 
-							goodbotChoiceTypeFound := false
-
-							if v, ok := protectedAppEndpointsMapStrToI["allow_good_bots"]; ok && !isIntfNil(v) && !goodbotChoiceTypeFound {
-
-								goodbotChoiceTypeFound = true
-
-								if v.(bool) {
-									goodbotChoiceInt := &ves_io_schema_views_http_loadbalancer.AppEndpointType_AllowGoodBots{}
-									goodbotChoiceInt.AllowGoodBots = &ves_io_schema.Empty{}
-									protectedAppEndpoints[i].GoodbotChoice = goodbotChoiceInt
-								}
-
-							}
-
-							if v, ok := protectedAppEndpointsMapStrToI["mitigate_good_bots"]; ok && !isIntfNil(v) && !goodbotChoiceTypeFound {
-
-								goodbotChoiceTypeFound = true
-
-								if v.(bool) {
-									goodbotChoiceInt := &ves_io_schema_views_http_loadbalancer.AppEndpointType_MitigateGoodBots{}
-									goodbotChoiceInt.MitigateGoodBots = &ves_io_schema.Empty{}
-									protectedAppEndpoints[i].GoodbotChoice = goodbotChoiceInt
-								}
-
-							}
-
 							if v, ok := protectedAppEndpointsMapStrToI["http_methods"]; ok && !isIntfNil(v) {
 
 								http_methodsList := []ves_io_schema.BotHttpMethod{}
@@ -34018,6 +34149,45 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 
 							}
 
+							xfccHeaderTypeFound := false
+
+							if v, ok := cs["xfcc_disabled"]; ok && !isIntfNil(v) && !xfccHeaderTypeFound {
+
+								xfccHeaderTypeFound = true
+
+								if v.(bool) {
+									xfccHeaderInt := &ves_io_schema_views.DownstreamTlsValidationContext_XfccDisabled{}
+									xfccHeaderInt.XfccDisabled = &ves_io_schema.Empty{}
+									mtlsChoiceInt.UseMtls.XfccHeader = xfccHeaderInt
+								}
+
+							}
+
+							if v, ok := cs["xfcc_options"]; ok && !isIntfNil(v) && !xfccHeaderTypeFound {
+
+								xfccHeaderTypeFound = true
+								xfccHeaderInt := &ves_io_schema_views.DownstreamTlsValidationContext_XfccOptions{}
+								xfccHeaderInt.XfccOptions = &ves_io_schema_views.XfccHeaderKeys{}
+								mtlsChoiceInt.UseMtls.XfccHeader = xfccHeaderInt
+
+								sl := v.(*schema.Set).List()
+								for _, set := range sl {
+									cs := set.(map[string]interface{})
+
+									if v, ok := cs["xfcc_header_elements"]; ok && !isIntfNil(v) {
+
+										xfcc_header_elementsList := []ves_io_schema.XfccElement{}
+										for _, j := range v.([]interface{}) {
+											xfcc_header_elementsList = append(xfcc_header_elementsList, ves_io_schema.XfccElement(ves_io_schema.XfccElement_value[j.(string)]))
+										}
+										xfccHeaderInt.XfccOptions.XfccHeaderElements = xfcc_header_elementsList
+
+									}
+
+								}
+
+							}
+
 						}
 
 					}
@@ -34199,6 +34369,45 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 							if v, ok := cs["trusted_ca_url"]; ok && !isIntfNil(v) {
 
 								mtlsChoiceInt.UseMtls.TrustedCaUrl = v.(string)
+
+							}
+
+							xfccHeaderTypeFound := false
+
+							if v, ok := cs["xfcc_disabled"]; ok && !isIntfNil(v) && !xfccHeaderTypeFound {
+
+								xfccHeaderTypeFound = true
+
+								if v.(bool) {
+									xfccHeaderInt := &ves_io_schema_views.DownstreamTlsValidationContext_XfccDisabled{}
+									xfccHeaderInt.XfccDisabled = &ves_io_schema.Empty{}
+									mtlsChoiceInt.UseMtls.XfccHeader = xfccHeaderInt
+								}
+
+							}
+
+							if v, ok := cs["xfcc_options"]; ok && !isIntfNil(v) && !xfccHeaderTypeFound {
+
+								xfccHeaderTypeFound = true
+								xfccHeaderInt := &ves_io_schema_views.DownstreamTlsValidationContext_XfccOptions{}
+								xfccHeaderInt.XfccOptions = &ves_io_schema_views.XfccHeaderKeys{}
+								mtlsChoiceInt.UseMtls.XfccHeader = xfccHeaderInt
+
+								sl := v.(*schema.Set).List()
+								for _, set := range sl {
+									cs := set.(map[string]interface{})
+
+									if v, ok := cs["xfcc_header_elements"]; ok && !isIntfNil(v) {
+
+										xfcc_header_elementsList := []ves_io_schema.XfccElement{}
+										for _, j := range v.([]interface{}) {
+											xfcc_header_elementsList = append(xfcc_header_elementsList, ves_io_schema.XfccElement(ves_io_schema.XfccElement_value[j.(string)]))
+										}
+										xfccHeaderInt.XfccOptions.XfccHeaderElements = xfcc_header_elementsList
+
+									}
+
+								}
 
 							}
 
@@ -34699,6 +34908,45 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 					if v, ok := cs["trusted_ca_url"]; ok && !isIntfNil(v) {
 
 						mtlsChoiceInt.UseMtls.TrustedCaUrl = v.(string)
+
+					}
+
+					xfccHeaderTypeFound := false
+
+					if v, ok := cs["xfcc_disabled"]; ok && !isIntfNil(v) && !xfccHeaderTypeFound {
+
+						xfccHeaderTypeFound = true
+
+						if v.(bool) {
+							xfccHeaderInt := &ves_io_schema_views.DownstreamTlsValidationContext_XfccDisabled{}
+							xfccHeaderInt.XfccDisabled = &ves_io_schema.Empty{}
+							mtlsChoiceInt.UseMtls.XfccHeader = xfccHeaderInt
+						}
+
+					}
+
+					if v, ok := cs["xfcc_options"]; ok && !isIntfNil(v) && !xfccHeaderTypeFound {
+
+						xfccHeaderTypeFound = true
+						xfccHeaderInt := &ves_io_schema_views.DownstreamTlsValidationContext_XfccOptions{}
+						xfccHeaderInt.XfccOptions = &ves_io_schema_views.XfccHeaderKeys{}
+						mtlsChoiceInt.UseMtls.XfccHeader = xfccHeaderInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["xfcc_header_elements"]; ok && !isIntfNil(v) {
+
+								xfcc_header_elementsList := []ves_io_schema.XfccElement{}
+								for _, j := range v.([]interface{}) {
+									xfcc_header_elementsList = append(xfcc_header_elementsList, ves_io_schema.XfccElement(ves_io_schema.XfccElement_value[j.(string)]))
+								}
+								xfccHeaderInt.XfccOptions.XfccHeaderElements = xfcc_header_elementsList
+
+							}
+
+						}
 
 					}
 
@@ -36108,11 +36356,11 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 								sl := v.([]interface{})
 								endpointSubsets := make([]*ves_io_schema_cluster.EndpointSubsetSelectorType, len(sl))
 								subsetChoiceInt.EnableSubsets.EndpointSubsets = endpointSubsets
-								for i, set := range sl {
-									endpointSubsets[i] = &ves_io_schema_cluster.EndpointSubsetSelectorType{}
-									_ = set.(map[string]interface{})
+								//for i, set := range sl {
+								//	endpointSubsets[i] = &ves_io_schema_cluster.EndpointSubsetSelectorType{}
+									//endpointSubsetsMapStrToI := set.(map[string]interface{})
 
-								}
+								//}
 
 							}
 

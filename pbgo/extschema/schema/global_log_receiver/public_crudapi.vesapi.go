@@ -2517,7 +2517,7 @@ var APISwaggerJSON string = `{
             "x-displayname": "Create Global Log Receiver",
             "x-ves-oneof-field-filter_choice": "[\"ns_all\",\"ns_current\",\"ns_list\"]",
             "x-ves-oneof-field-log_type": "[\"audit_logs\",\"request_logs\",\"security_events\"]",
-            "x-ves-oneof-field-receiver": "[\"aws_cloud_watch_receiver\",\"azure_event_hubs_receiver\",\"azure_receiver\",\"datadog_receiver\",\"http_receiver\",\"kafka_receiver\",\"s3_receiver\",\"splunk_receiver\"]",
+            "x-ves-oneof-field-receiver": "[\"aws_cloud_watch_receiver\",\"azure_event_hubs_receiver\",\"azure_receiver\",\"datadog_receiver\",\"http_receiver\",\"kafka_receiver\",\"new_relic_receiver\",\"s3_receiver\",\"splunk_receiver\",\"sumo_logic_receiver\"]",
             "x-ves-proto-message": "ves.io.schema.global_log_receiver.CreateSpecType",
             "properties": {
                 "audit_logs": {
@@ -2526,34 +2526,39 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Audit Logs"
                 },
                 "aws_cloud_watch_receiver": {
-                    "description": "Exclusive with [azure_event_hubs_receiver azure_receiver datadog_receiver http_receiver kafka_receiver s3_receiver splunk_receiver]\n Send logs to AWS Cloudwatch",
+                    "description": "Exclusive with [azure_event_hubs_receiver azure_receiver datadog_receiver http_receiver kafka_receiver new_relic_receiver s3_receiver splunk_receiver sumo_logic_receiver]\n Send logs to AWS Cloudwatch",
                     "$ref": "#/definitions/global_log_receiverAWSCloudwatchConfig",
                     "x-displayname": "AWS Cloudwatch Receiver"
                 },
                 "azure_event_hubs_receiver": {
-                    "description": "Exclusive with [aws_cloud_watch_receiver azure_receiver datadog_receiver http_receiver kafka_receiver s3_receiver splunk_receiver]\n Send logs to Azure Event Hubs",
+                    "description": "Exclusive with [aws_cloud_watch_receiver azure_receiver datadog_receiver http_receiver kafka_receiver new_relic_receiver s3_receiver splunk_receiver sumo_logic_receiver]\n Send logs to Azure Event Hubs",
                     "$ref": "#/definitions/global_log_receiverAzureEventHubsConfig",
                     "x-displayname": "Azure Event Hubs"
                 },
                 "azure_receiver": {
-                    "description": "Exclusive with [aws_cloud_watch_receiver azure_event_hubs_receiver datadog_receiver http_receiver kafka_receiver s3_receiver splunk_receiver]\n Send logs to Azure Blob Storage",
+                    "description": "Exclusive with [aws_cloud_watch_receiver azure_event_hubs_receiver datadog_receiver http_receiver kafka_receiver new_relic_receiver s3_receiver splunk_receiver sumo_logic_receiver]\n Send logs to Azure Blob Storage",
                     "$ref": "#/definitions/global_log_receiverAzureBlobConfig",
                     "x-displayname": "Azure Blob Storage"
                 },
                 "datadog_receiver": {
-                    "description": "Exclusive with [aws_cloud_watch_receiver azure_event_hubs_receiver azure_receiver http_receiver kafka_receiver s3_receiver splunk_receiver]\n Send logs to a Datadog service",
+                    "description": "Exclusive with [aws_cloud_watch_receiver azure_event_hubs_receiver azure_receiver http_receiver kafka_receiver new_relic_receiver s3_receiver splunk_receiver sumo_logic_receiver]\n Send logs to a Datadog service",
                     "$ref": "#/definitions/global_log_receiverDatadogConfig",
                     "x-displayname": "Datadog Receiver"
                 },
                 "http_receiver": {
-                    "description": "Exclusive with [aws_cloud_watch_receiver azure_event_hubs_receiver azure_receiver datadog_receiver kafka_receiver s3_receiver splunk_receiver]\n Send logs to a generic HTTP(s) server",
+                    "description": "Exclusive with [aws_cloud_watch_receiver azure_event_hubs_receiver azure_receiver datadog_receiver kafka_receiver new_relic_receiver s3_receiver splunk_receiver sumo_logic_receiver]\n Send logs to a generic HTTP(s) server",
                     "$ref": "#/definitions/global_log_receiverHTTPConfig",
                     "x-displayname": "HTTP Receiver"
                 },
                 "kafka_receiver": {
-                    "description": "Exclusive with [aws_cloud_watch_receiver azure_event_hubs_receiver azure_receiver datadog_receiver http_receiver s3_receiver splunk_receiver]\n Send logs to a Kafka cluster",
+                    "description": "Exclusive with [aws_cloud_watch_receiver azure_event_hubs_receiver azure_receiver datadog_receiver http_receiver new_relic_receiver s3_receiver splunk_receiver sumo_logic_receiver]\n Send logs to a Kafka cluster",
                     "$ref": "#/definitions/global_log_receiverKafkaConfig",
                     "x-displayname": "Kafka Receiver"
+                },
+                "new_relic_receiver": {
+                    "description": "Exclusive with [aws_cloud_watch_receiver azure_event_hubs_receiver azure_receiver datadog_receiver http_receiver kafka_receiver s3_receiver splunk_receiver sumo_logic_receiver]\n Send logs to NewRelic",
+                    "$ref": "#/definitions/global_log_receiverNewRelicConfig",
+                    "x-displayname": "NewRelic Receiver"
                 },
                 "ns_all": {
                     "description": "Exclusive with [ns_current ns_list]\n",
@@ -2576,7 +2581,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Request Logs"
                 },
                 "s3_receiver": {
-                    "description": "Exclusive with [aws_cloud_watch_receiver azure_event_hubs_receiver azure_receiver datadog_receiver http_receiver kafka_receiver splunk_receiver]\n Send logs to an AWS S3 bucket",
+                    "description": "Exclusive with [aws_cloud_watch_receiver azure_event_hubs_receiver azure_receiver datadog_receiver http_receiver kafka_receiver new_relic_receiver splunk_receiver sumo_logic_receiver]\n Send logs to an AWS S3 bucket",
                     "$ref": "#/definitions/global_log_receiverS3Config",
                     "x-displayname": "S3 Receiver"
                 },
@@ -2586,9 +2591,14 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Security Events"
                 },
                 "splunk_receiver": {
-                    "description": "Exclusive with [aws_cloud_watch_receiver azure_event_hubs_receiver azure_receiver datadog_receiver http_receiver kafka_receiver s3_receiver]\n Send logs to a Splunk HEC Logs service",
+                    "description": "Exclusive with [aws_cloud_watch_receiver azure_event_hubs_receiver azure_receiver datadog_receiver http_receiver kafka_receiver new_relic_receiver s3_receiver sumo_logic_receiver]\n Send logs to a Splunk HEC Logs service",
                     "$ref": "#/definitions/global_log_receiverSplunkConfig",
                     "x-displayname": "Splunk Receiver"
+                },
+                "sumo_logic_receiver": {
+                    "description": "Exclusive with [aws_cloud_watch_receiver azure_event_hubs_receiver azure_receiver datadog_receiver http_receiver kafka_receiver new_relic_receiver s3_receiver splunk_receiver]\n Send logs to SumoLogic",
+                    "$ref": "#/definitions/global_log_receiverSumoLogicConfig",
+                    "x-displayname": "SumoLogic Receiver"
                 }
             }
         },
@@ -2815,7 +2825,7 @@ var APISwaggerJSON string = `{
             "x-displayname": "Get Global Log Receiver",
             "x-ves-oneof-field-filter_choice": "[\"ns_all\",\"ns_current\",\"ns_list\"]",
             "x-ves-oneof-field-log_type": "[\"audit_logs\",\"request_logs\",\"security_events\"]",
-            "x-ves-oneof-field-receiver": "[\"aws_cloud_watch_receiver\",\"azure_event_hubs_receiver\",\"azure_receiver\",\"datadog_receiver\",\"http_receiver\",\"kafka_receiver\",\"s3_receiver\",\"splunk_receiver\"]",
+            "x-ves-oneof-field-receiver": "[\"aws_cloud_watch_receiver\",\"azure_event_hubs_receiver\",\"azure_receiver\",\"datadog_receiver\",\"http_receiver\",\"kafka_receiver\",\"new_relic_receiver\",\"s3_receiver\",\"splunk_receiver\",\"sumo_logic_receiver\"]",
             "x-ves-proto-message": "ves.io.schema.global_log_receiver.GetSpecType",
             "properties": {
                 "audit_logs": {
@@ -2824,34 +2834,39 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Audit Logs"
                 },
                 "aws_cloud_watch_receiver": {
-                    "description": "Exclusive with [azure_event_hubs_receiver azure_receiver datadog_receiver http_receiver kafka_receiver s3_receiver splunk_receiver]\n Send logs to AWS Cloudwatch",
+                    "description": "Exclusive with [azure_event_hubs_receiver azure_receiver datadog_receiver http_receiver kafka_receiver new_relic_receiver s3_receiver splunk_receiver sumo_logic_receiver]\n Send logs to AWS Cloudwatch",
                     "$ref": "#/definitions/global_log_receiverAWSCloudwatchConfig",
                     "x-displayname": "AWS Cloudwatch Receiver"
                 },
                 "azure_event_hubs_receiver": {
-                    "description": "Exclusive with [aws_cloud_watch_receiver azure_receiver datadog_receiver http_receiver kafka_receiver s3_receiver splunk_receiver]\n Send logs to Azure Event Hubs",
+                    "description": "Exclusive with [aws_cloud_watch_receiver azure_receiver datadog_receiver http_receiver kafka_receiver new_relic_receiver s3_receiver splunk_receiver sumo_logic_receiver]\n Send logs to Azure Event Hubs",
                     "$ref": "#/definitions/global_log_receiverAzureEventHubsConfig",
                     "x-displayname": "Azure Event Hubs"
                 },
                 "azure_receiver": {
-                    "description": "Exclusive with [aws_cloud_watch_receiver azure_event_hubs_receiver datadog_receiver http_receiver kafka_receiver s3_receiver splunk_receiver]\n Send logs to Azure Blob Storage",
+                    "description": "Exclusive with [aws_cloud_watch_receiver azure_event_hubs_receiver datadog_receiver http_receiver kafka_receiver new_relic_receiver s3_receiver splunk_receiver sumo_logic_receiver]\n Send logs to Azure Blob Storage",
                     "$ref": "#/definitions/global_log_receiverAzureBlobConfig",
                     "x-displayname": "Azure Blob Storage"
                 },
                 "datadog_receiver": {
-                    "description": "Exclusive with [aws_cloud_watch_receiver azure_event_hubs_receiver azure_receiver http_receiver kafka_receiver s3_receiver splunk_receiver]\n Send logs to a Datadog service",
+                    "description": "Exclusive with [aws_cloud_watch_receiver azure_event_hubs_receiver azure_receiver http_receiver kafka_receiver new_relic_receiver s3_receiver splunk_receiver sumo_logic_receiver]\n Send logs to a Datadog service",
                     "$ref": "#/definitions/global_log_receiverDatadogConfig",
                     "x-displayname": "Datadog Receiver"
                 },
                 "http_receiver": {
-                    "description": "Exclusive with [aws_cloud_watch_receiver azure_event_hubs_receiver azure_receiver datadog_receiver kafka_receiver s3_receiver splunk_receiver]\n Send logs to a generic HTTP(s) server",
+                    "description": "Exclusive with [aws_cloud_watch_receiver azure_event_hubs_receiver azure_receiver datadog_receiver kafka_receiver new_relic_receiver s3_receiver splunk_receiver sumo_logic_receiver]\n Send logs to a generic HTTP(s) server",
                     "$ref": "#/definitions/global_log_receiverHTTPConfig",
                     "x-displayname": "HTTP Receiver"
                 },
                 "kafka_receiver": {
-                    "description": "Exclusive with [aws_cloud_watch_receiver azure_event_hubs_receiver azure_receiver datadog_receiver http_receiver s3_receiver splunk_receiver]\n Send logs to a Kafka cluster",
+                    "description": "Exclusive with [aws_cloud_watch_receiver azure_event_hubs_receiver azure_receiver datadog_receiver http_receiver new_relic_receiver s3_receiver splunk_receiver sumo_logic_receiver]\n Send logs to a Kafka cluster",
                     "$ref": "#/definitions/global_log_receiverKafkaConfig",
                     "x-displayname": "Kafka Receiver"
+                },
+                "new_relic_receiver": {
+                    "description": "Exclusive with [aws_cloud_watch_receiver azure_event_hubs_receiver azure_receiver datadog_receiver http_receiver kafka_receiver s3_receiver splunk_receiver sumo_logic_receiver]\n Send logs to NewRelic",
+                    "$ref": "#/definitions/global_log_receiverNewRelicConfig",
+                    "x-displayname": "NewRelic Receiver"
                 },
                 "ns_all": {
                     "description": "Exclusive with [ns_current ns_list]\n",
@@ -2874,7 +2889,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Request Logs"
                 },
                 "s3_receiver": {
-                    "description": "Exclusive with [aws_cloud_watch_receiver azure_event_hubs_receiver azure_receiver datadog_receiver http_receiver kafka_receiver splunk_receiver]\n Send logs to an AWS S3 bucket",
+                    "description": "Exclusive with [aws_cloud_watch_receiver azure_event_hubs_receiver azure_receiver datadog_receiver http_receiver kafka_receiver new_relic_receiver splunk_receiver sumo_logic_receiver]\n Send logs to an AWS S3 bucket",
                     "$ref": "#/definitions/global_log_receiverS3Config",
                     "x-displayname": "S3 Receiver"
                 },
@@ -2884,9 +2899,14 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Security Events"
                 },
                 "splunk_receiver": {
-                    "description": "Exclusive with [aws_cloud_watch_receiver azure_event_hubs_receiver azure_receiver datadog_receiver http_receiver kafka_receiver s3_receiver]\n Send logs to a Splunk HEC Logs service",
+                    "description": "Exclusive with [aws_cloud_watch_receiver azure_event_hubs_receiver azure_receiver datadog_receiver http_receiver kafka_receiver new_relic_receiver s3_receiver sumo_logic_receiver]\n Send logs to a Splunk HEC Logs service",
                     "$ref": "#/definitions/global_log_receiverSplunkConfig",
                     "x-displayname": "Splunk Receiver"
+                },
+                "sumo_logic_receiver": {
+                    "description": "Exclusive with [aws_cloud_watch_receiver azure_event_hubs_receiver azure_receiver datadog_receiver http_receiver kafka_receiver new_relic_receiver s3_receiver splunk_receiver]\n Send logs to SumoLogic",
+                    "$ref": "#/definitions/global_log_receiverSumoLogicConfig",
+                    "x-displayname": "SumoLogic Receiver"
                 }
             }
         },
@@ -2898,7 +2918,7 @@ var APISwaggerJSON string = `{
             "x-ves-displayorder": "14,1,6",
             "x-ves-oneof-field-filter_choice": "[\"ns_all\",\"ns_current\",\"ns_list\"]",
             "x-ves-oneof-field-log_type": "[\"audit_logs\",\"request_logs\",\"security_events\"]",
-            "x-ves-oneof-field-receiver": "[\"aws_cloud_watch_receiver\",\"azure_event_hubs_receiver\",\"azure_receiver\",\"datadog_receiver\",\"http_receiver\",\"kafka_receiver\",\"s3_receiver\",\"splunk_receiver\"]",
+            "x-ves-oneof-field-receiver": "[\"aws_cloud_watch_receiver\",\"azure_event_hubs_receiver\",\"azure_receiver\",\"datadog_receiver\",\"http_receiver\",\"kafka_receiver\",\"new_relic_receiver\",\"s3_receiver\",\"splunk_receiver\",\"sumo_logic_receiver\"]",
             "x-ves-proto-message": "ves.io.schema.global_log_receiver.GlobalSpecType",
             "properties": {
                 "audit_logs": {
@@ -2908,40 +2928,46 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Audit Logs"
                 },
                 "aws_cloud_watch_receiver": {
-                    "description": "Exclusive with [azure_event_hubs_receiver azure_receiver datadog_receiver http_receiver kafka_receiver s3_receiver splunk_receiver]\n Send logs to AWS Cloudwatch",
+                    "description": "Exclusive with [azure_event_hubs_receiver azure_receiver datadog_receiver http_receiver kafka_receiver new_relic_receiver s3_receiver splunk_receiver sumo_logic_receiver]\n Send logs to AWS Cloudwatch",
                     "title": "AWS Cloudwatch Receiver",
                     "$ref": "#/definitions/global_log_receiverAWSCloudwatchConfig",
                     "x-displayname": "AWS Cloudwatch Receiver"
                 },
                 "azure_event_hubs_receiver": {
-                    "description": "Exclusive with [aws_cloud_watch_receiver azure_receiver datadog_receiver http_receiver kafka_receiver s3_receiver splunk_receiver]\n Send logs to Azure Event Hubs",
+                    "description": "Exclusive with [aws_cloud_watch_receiver azure_receiver datadog_receiver http_receiver kafka_receiver new_relic_receiver s3_receiver splunk_receiver sumo_logic_receiver]\n Send logs to Azure Event Hubs",
                     "title": "Azure Event Hubs Receiver",
                     "$ref": "#/definitions/global_log_receiverAzureEventHubsConfig",
                     "x-displayname": "Azure Event Hubs"
                 },
                 "azure_receiver": {
-                    "description": "Exclusive with [aws_cloud_watch_receiver azure_event_hubs_receiver datadog_receiver http_receiver kafka_receiver s3_receiver splunk_receiver]\n Send logs to Azure Blob Storage",
+                    "description": "Exclusive with [aws_cloud_watch_receiver azure_event_hubs_receiver datadog_receiver http_receiver kafka_receiver new_relic_receiver s3_receiver splunk_receiver sumo_logic_receiver]\n Send logs to Azure Blob Storage",
                     "title": "Azure Blob Storage Receiver",
                     "$ref": "#/definitions/global_log_receiverAzureBlobConfig",
                     "x-displayname": "Azure Blob Storage"
                 },
                 "datadog_receiver": {
-                    "description": "Exclusive with [aws_cloud_watch_receiver azure_event_hubs_receiver azure_receiver http_receiver kafka_receiver s3_receiver splunk_receiver]\n Send logs to a Datadog service",
+                    "description": "Exclusive with [aws_cloud_watch_receiver azure_event_hubs_receiver azure_receiver http_receiver kafka_receiver new_relic_receiver s3_receiver splunk_receiver sumo_logic_receiver]\n Send logs to a Datadog service",
                     "title": "Datadog Receiver",
                     "$ref": "#/definitions/global_log_receiverDatadogConfig",
                     "x-displayname": "Datadog Receiver"
                 },
                 "http_receiver": {
-                    "description": "Exclusive with [aws_cloud_watch_receiver azure_event_hubs_receiver azure_receiver datadog_receiver kafka_receiver s3_receiver splunk_receiver]\n Send logs to a generic HTTP(s) server",
+                    "description": "Exclusive with [aws_cloud_watch_receiver azure_event_hubs_receiver azure_receiver datadog_receiver kafka_receiver new_relic_receiver s3_receiver splunk_receiver sumo_logic_receiver]\n Send logs to a generic HTTP(s) server",
                     "title": "HTTP Receiver",
                     "$ref": "#/definitions/global_log_receiverHTTPConfig",
                     "x-displayname": "HTTP Receiver"
                 },
                 "kafka_receiver": {
-                    "description": "Exclusive with [aws_cloud_watch_receiver azure_event_hubs_receiver azure_receiver datadog_receiver http_receiver s3_receiver splunk_receiver]\n Send logs to a Kafka cluster",
+                    "description": "Exclusive with [aws_cloud_watch_receiver azure_event_hubs_receiver azure_receiver datadog_receiver http_receiver new_relic_receiver s3_receiver splunk_receiver sumo_logic_receiver]\n Send logs to a Kafka cluster",
                     "title": "Kafka Receiver",
                     "$ref": "#/definitions/global_log_receiverKafkaConfig",
                     "x-displayname": "Kafka Receiver"
+                },
+                "new_relic_receiver": {
+                    "description": "Exclusive with [aws_cloud_watch_receiver azure_event_hubs_receiver azure_receiver datadog_receiver http_receiver kafka_receiver s3_receiver splunk_receiver sumo_logic_receiver]\n Send logs to NewRelic",
+                    "title": "NewRelic Receiver",
+                    "$ref": "#/definitions/global_log_receiverNewRelicConfig",
+                    "x-displayname": "NewRelic Receiver"
                 },
                 "ns_all": {
                     "description": "Exclusive with [ns_current ns_list]\n",
@@ -2968,7 +2994,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Request Logs"
                 },
                 "s3_receiver": {
-                    "description": "Exclusive with [aws_cloud_watch_receiver azure_event_hubs_receiver azure_receiver datadog_receiver http_receiver kafka_receiver splunk_receiver]\n Send logs to an AWS S3 bucket",
+                    "description": "Exclusive with [aws_cloud_watch_receiver azure_event_hubs_receiver azure_receiver datadog_receiver http_receiver kafka_receiver new_relic_receiver splunk_receiver sumo_logic_receiver]\n Send logs to an AWS S3 bucket",
                     "title": "S3 Receiver",
                     "$ref": "#/definitions/global_log_receiverS3Config",
                     "x-displayname": "S3 Receiver"
@@ -2980,10 +3006,16 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Security Events"
                 },
                 "splunk_receiver": {
-                    "description": "Exclusive with [aws_cloud_watch_receiver azure_event_hubs_receiver azure_receiver datadog_receiver http_receiver kafka_receiver s3_receiver]\n Send logs to a Splunk HEC Logs service",
+                    "description": "Exclusive with [aws_cloud_watch_receiver azure_event_hubs_receiver azure_receiver datadog_receiver http_receiver kafka_receiver new_relic_receiver s3_receiver sumo_logic_receiver]\n Send logs to a Splunk HEC Logs service",
                     "title": "Splunk Receiver",
                     "$ref": "#/definitions/global_log_receiverSplunkConfig",
                     "x-displayname": "Splunk Receiver"
+                },
+                "sumo_logic_receiver": {
+                    "description": "Exclusive with [aws_cloud_watch_receiver azure_event_hubs_receiver azure_receiver datadog_receiver http_receiver kafka_receiver new_relic_receiver s3_receiver splunk_receiver]\n Send logs to SumoLogic",
+                    "title": "SumoLogic Receiver",
+                    "$ref": "#/definitions/global_log_receiverSumoLogicConfig",
+                    "x-displayname": "SumoLogic Receiver"
                 }
             }
         },
@@ -3303,6 +3335,38 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "global_log_receiverNewRelicConfig": {
+            "type": "object",
+            "description": "Configuration for NewRelic endpoint",
+            "title": "NewRelic Configuration",
+            "x-displayname": "NewRelic Configuration",
+            "x-ves-oneof-field-endpoint_choice": "[\"eu\",\"us\"]",
+            "x-ves-proto-message": "ves.io.schema.global_log_receiver.NewRelicConfig",
+            "properties": {
+                "api_key": {
+                    "description": " A New Relic License Key\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "License Key",
+                    "$ref": "#/definitions/schemaSecretType",
+                    "x-displayname": "License Key",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                },
+                "eu": {
+                    "description": "Exclusive with [us]\n EU Endpoint",
+                    "title": "EU Endpoint",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "EU"
+                },
+                "us": {
+                    "description": "Exclusive with [eu]\n US Endpoint",
+                    "title": "US Endpoint",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "US"
+                }
+            }
+        },
         "global_log_receiverObject": {
             "type": "object",
             "description": "Global Log Receiver Object to configure Log streaming",
@@ -3362,7 +3426,7 @@ var APISwaggerJSON string = `{
             "x-displayname": "Replace Global Log Receiver",
             "x-ves-oneof-field-filter_choice": "[\"ns_all\",\"ns_current\",\"ns_list\"]",
             "x-ves-oneof-field-log_type": "[\"audit_logs\",\"request_logs\",\"security_events\"]",
-            "x-ves-oneof-field-receiver": "[\"aws_cloud_watch_receiver\",\"azure_event_hubs_receiver\",\"azure_receiver\",\"datadog_receiver\",\"http_receiver\",\"kafka_receiver\",\"s3_receiver\",\"splunk_receiver\"]",
+            "x-ves-oneof-field-receiver": "[\"aws_cloud_watch_receiver\",\"azure_event_hubs_receiver\",\"azure_receiver\",\"datadog_receiver\",\"http_receiver\",\"kafka_receiver\",\"new_relic_receiver\",\"s3_receiver\",\"splunk_receiver\",\"sumo_logic_receiver\"]",
             "x-ves-proto-message": "ves.io.schema.global_log_receiver.ReplaceSpecType",
             "properties": {
                 "audit_logs": {
@@ -3371,34 +3435,39 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Audit Logs"
                 },
                 "aws_cloud_watch_receiver": {
-                    "description": "Exclusive with [azure_event_hubs_receiver azure_receiver datadog_receiver http_receiver kafka_receiver s3_receiver splunk_receiver]\n Send logs to AWS Cloudwatch",
+                    "description": "Exclusive with [azure_event_hubs_receiver azure_receiver datadog_receiver http_receiver kafka_receiver new_relic_receiver s3_receiver splunk_receiver sumo_logic_receiver]\n Send logs to AWS Cloudwatch",
                     "$ref": "#/definitions/global_log_receiverAWSCloudwatchConfig",
                     "x-displayname": "AWS Cloudwatch Receiver"
                 },
                 "azure_event_hubs_receiver": {
-                    "description": "Exclusive with [aws_cloud_watch_receiver azure_receiver datadog_receiver http_receiver kafka_receiver s3_receiver splunk_receiver]\n Send logs to Azure Event Hubs",
+                    "description": "Exclusive with [aws_cloud_watch_receiver azure_receiver datadog_receiver http_receiver kafka_receiver new_relic_receiver s3_receiver splunk_receiver sumo_logic_receiver]\n Send logs to Azure Event Hubs",
                     "$ref": "#/definitions/global_log_receiverAzureEventHubsConfig",
                     "x-displayname": "Azure Event Hubs"
                 },
                 "azure_receiver": {
-                    "description": "Exclusive with [aws_cloud_watch_receiver azure_event_hubs_receiver datadog_receiver http_receiver kafka_receiver s3_receiver splunk_receiver]\n Send logs to Azure Blob Storage",
+                    "description": "Exclusive with [aws_cloud_watch_receiver azure_event_hubs_receiver datadog_receiver http_receiver kafka_receiver new_relic_receiver s3_receiver splunk_receiver sumo_logic_receiver]\n Send logs to Azure Blob Storage",
                     "$ref": "#/definitions/global_log_receiverAzureBlobConfig",
                     "x-displayname": "Azure Blob Storage"
                 },
                 "datadog_receiver": {
-                    "description": "Exclusive with [aws_cloud_watch_receiver azure_event_hubs_receiver azure_receiver http_receiver kafka_receiver s3_receiver splunk_receiver]\n Send logs to a Datadog service",
+                    "description": "Exclusive with [aws_cloud_watch_receiver azure_event_hubs_receiver azure_receiver http_receiver kafka_receiver new_relic_receiver s3_receiver splunk_receiver sumo_logic_receiver]\n Send logs to a Datadog service",
                     "$ref": "#/definitions/global_log_receiverDatadogConfig",
                     "x-displayname": "Datadog Receiver"
                 },
                 "http_receiver": {
-                    "description": "Exclusive with [aws_cloud_watch_receiver azure_event_hubs_receiver azure_receiver datadog_receiver kafka_receiver s3_receiver splunk_receiver]\n Send logs to a generic HTTP(s) server",
+                    "description": "Exclusive with [aws_cloud_watch_receiver azure_event_hubs_receiver azure_receiver datadog_receiver kafka_receiver new_relic_receiver s3_receiver splunk_receiver sumo_logic_receiver]\n Send logs to a generic HTTP(s) server",
                     "$ref": "#/definitions/global_log_receiverHTTPConfig",
                     "x-displayname": "HTTP Receiver"
                 },
                 "kafka_receiver": {
-                    "description": "Exclusive with [aws_cloud_watch_receiver azure_event_hubs_receiver azure_receiver datadog_receiver http_receiver s3_receiver splunk_receiver]\n Send logs to a Kafka cluster",
+                    "description": "Exclusive with [aws_cloud_watch_receiver azure_event_hubs_receiver azure_receiver datadog_receiver http_receiver new_relic_receiver s3_receiver splunk_receiver sumo_logic_receiver]\n Send logs to a Kafka cluster",
                     "$ref": "#/definitions/global_log_receiverKafkaConfig",
                     "x-displayname": "Kafka Receiver"
+                },
+                "new_relic_receiver": {
+                    "description": "Exclusive with [aws_cloud_watch_receiver azure_event_hubs_receiver azure_receiver datadog_receiver http_receiver kafka_receiver s3_receiver splunk_receiver sumo_logic_receiver]\n Send logs to NewRelic",
+                    "$ref": "#/definitions/global_log_receiverNewRelicConfig",
+                    "x-displayname": "NewRelic Receiver"
                 },
                 "ns_all": {
                     "description": "Exclusive with [ns_current ns_list]\n",
@@ -3421,7 +3490,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Request Logs"
                 },
                 "s3_receiver": {
-                    "description": "Exclusive with [aws_cloud_watch_receiver azure_event_hubs_receiver azure_receiver datadog_receiver http_receiver kafka_receiver splunk_receiver]\n Send logs to an AWS S3 bucket",
+                    "description": "Exclusive with [aws_cloud_watch_receiver azure_event_hubs_receiver azure_receiver datadog_receiver http_receiver kafka_receiver new_relic_receiver splunk_receiver sumo_logic_receiver]\n Send logs to an AWS S3 bucket",
                     "$ref": "#/definitions/global_log_receiverS3Config",
                     "x-displayname": "S3 Receiver"
                 },
@@ -3431,9 +3500,14 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Security Events"
                 },
                 "splunk_receiver": {
-                    "description": "Exclusive with [aws_cloud_watch_receiver azure_event_hubs_receiver azure_receiver datadog_receiver http_receiver kafka_receiver s3_receiver]\n Send logs to a Splunk HEC Logs service",
+                    "description": "Exclusive with [aws_cloud_watch_receiver azure_event_hubs_receiver azure_receiver datadog_receiver http_receiver kafka_receiver new_relic_receiver s3_receiver sumo_logic_receiver]\n Send logs to a Splunk HEC Logs service",
                     "$ref": "#/definitions/global_log_receiverSplunkConfig",
                     "x-displayname": "Splunk Receiver"
+                },
+                "sumo_logic_receiver": {
+                    "description": "Exclusive with [aws_cloud_watch_receiver azure_event_hubs_receiver azure_receiver datadog_receiver http_receiver kafka_receiver new_relic_receiver s3_receiver splunk_receiver]\n Send logs to SumoLogic",
+                    "$ref": "#/definitions/global_log_receiverSumoLogicConfig",
+                    "x-displayname": "SumoLogic Receiver"
                 }
             }
         },
@@ -3595,6 +3669,27 @@ var APISwaggerJSON string = `{
                         "$ref": "#/definitions/ioschemaObjectRefType"
                     },
                     "x-displayname": "Config Object"
+                }
+            }
+        },
+        "global_log_receiverSumoLogicConfig": {
+            "type": "object",
+            "description": "Configuration for SumoLogic endpoint",
+            "title": "SumoLogic Configuration",
+            "x-displayname": "SumoLogic Configuration",
+            "x-ves-proto-message": "ves.io.schema.global_log_receiver.SumoLogicConfig",
+            "properties": {
+                "url": {
+                    "description": " The HTTP Source Address URL for the desired SumoLogic HTTP Collector\n\nExample: - \"https://endpoint4.collection.sumologic.com/receiver/v1/http/[UniqueHTTPCollectorCode]\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.uri_ref: true\n",
+                    "title": "HTTP Source Address URL",
+                    "$ref": "#/definitions/schemaSecretType",
+                    "x-displayname": "HTTP Source Address URL",
+                    "x-ves-example": "https://endpoint4.collection.sumologic.com/receiver/v1/http/[UniqueHTTPCollectorCode]",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.uri_ref": "true"
+                    }
                 }
             }
         },
@@ -4679,16 +4774,16 @@ var APISwaggerJSON string = `{
             "properties": {
                 "name": {
                     "type": "string",
-                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then name will hold the referred object's(e.g. route's) name.\n\nExample: - \"contacts-route\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_bytes: 64\n  ves.io.schema.rules.string.min_bytes: 1\n",
+                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then name will hold the referred object's(e.g. route's) name.\n\nExample: - \"contacts-route\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_bytes: 128\n  ves.io.schema.rules.string.min_bytes: 1\n",
                     "title": "name",
                     "minLength": 1,
-                    "maxLength": 64,
+                    "maxLength": 128,
                     "x-displayname": "Name",
                     "x-ves-example": "contacts-route",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true",
-                        "ves.io.schema.rules.string.max_bytes": "64",
+                        "ves.io.schema.rules.string.max_bytes": "128",
                         "ves.io.schema.rules.string.min_bytes": "1"
                     }
                 },

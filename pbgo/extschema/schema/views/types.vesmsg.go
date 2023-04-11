@@ -1473,6 +1473,32 @@ func (v *ValidateDownstreamTlsValidationContext) Validate(ctx context.Context, p
 
 	}
 
+	switch m.GetXfccHeader().(type) {
+	case *DownstreamTlsValidationContext_XfccDisabled:
+		if fv, exists := v.FldValidators["xfcc_header.xfcc_disabled"]; exists {
+			val := m.GetXfccHeader().(*DownstreamTlsValidationContext_XfccDisabled).XfccDisabled
+			vOpts := append(opts,
+				db.WithValidateField("xfcc_header"),
+				db.WithValidateField("xfcc_disabled"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *DownstreamTlsValidationContext_XfccOptions:
+		if fv, exists := v.FldValidators["xfcc_header.xfcc_options"]; exists {
+			val := m.GetXfccHeader().(*DownstreamTlsValidationContext_XfccOptions).XfccOptions
+			vOpts := append(opts,
+				db.WithValidateField("xfcc_header"),
+				db.WithValidateField("xfcc_options"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	return nil
 }
 
@@ -1503,6 +1529,8 @@ var DefaultDownstreamTlsValidationContextValidator = func() *ValidateDownstreamT
 	v.FldValidators["trusted_ca_url"] = vFn
 
 	v.FldValidators["crl_choice.crl"] = ObjectRefTypeValidator().Validate
+
+	v.FldValidators["xfcc_header.xfcc_options"] = XfccHeaderKeysValidator().Validate
 
 	return v
 }()
@@ -2724,7 +2752,7 @@ var DefaultObjectRefTypeValidator = func() *ValidateObjectRefType {
 	vrhName := v.NameValidationRuleHandler
 	rulesName := map[string]string{
 		"ves.io.schema.rules.message.required": "true",
-		"ves.io.schema.rules.string.max_bytes": "64",
+		"ves.io.schema.rules.string.max_bytes": "128",
 		"ves.io.schema.rules.string.min_bytes": "1",
 	}
 	vFn, err = vrhName(rulesName)
@@ -5745,4 +5773,150 @@ var DefaultWhereVirtualSiteValidator = func() *ValidateWhereVirtualSite {
 
 func WhereVirtualSiteValidator() db.Validator {
 	return DefaultWhereVirtualSiteValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *XfccHeaderKeys) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *XfccHeaderKeys) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *XfccHeaderKeys) DeepCopy() *XfccHeaderKeys {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &XfccHeaderKeys{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *XfccHeaderKeys) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *XfccHeaderKeys) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return XfccHeaderKeysValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateXfccHeaderKeys struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateXfccHeaderKeys) XfccHeaderElementsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepEnumItemRules(rules)
+	var conv db.EnumConvFn
+	conv = func(v interface{}) int32 {
+		i := v.(ves_io_schema.XfccElement)
+		return int32(i)
+	}
+	// ves_io_schema.XfccElement_name is generated in .pb.go
+	itemValFn, err := db.NewEnumValidationRuleHandler(itemRules, ves_io_schema.XfccElement_name, conv)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for xfcc_header_elements")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []ves_io_schema.XfccElement, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for xfcc_header_elements")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]ves_io_schema.XfccElement)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []ves_io_schema.XfccElement, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal := fmt.Sprintf("%v", elem)
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated xfcc_header_elements")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items xfcc_header_elements")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateXfccHeaderKeys) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*XfccHeaderKeys)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *XfccHeaderKeys got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["xfcc_header_elements"]; exists {
+		vOpts := append(opts, db.WithValidateField("xfcc_header_elements"))
+		if err := fv(ctx, m.GetXfccHeaderElements(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultXfccHeaderKeysValidator = func() *ValidateXfccHeaderKeys {
+	v := &ValidateXfccHeaderKeys{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhXfccHeaderElements := v.XfccHeaderElementsValidationRuleHandler
+	rulesXfccHeaderElements := map[string]string{
+		"ves.io.schema.rules.message.required":                 "true",
+		"ves.io.schema.rules.repeated.items.enum.defined_only": "true",
+		"ves.io.schema.rules.repeated.items.enum.not_in":       "[0]",
+	}
+	vFn, err = vrhXfccHeaderElements(rulesXfccHeaderElements)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for XfccHeaderKeys.xfcc_header_elements: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["xfcc_header_elements"] = vFn
+
+	return v
+}()
+
+func XfccHeaderKeysValidator() db.Validator {
+	return DefaultXfccHeaderKeysValidator
 }

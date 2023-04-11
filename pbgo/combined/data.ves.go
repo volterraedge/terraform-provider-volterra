@@ -18857,6 +18857,14 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		PolicyID:       uint64(1000009),
 		WKTenantPrefix: "",
 	}
+	oInfo.ReEncryptSecrets["ves.io.schema.global_log_receiver.Object.spec.gc_spec.receiver.new_relic_receiver.api_key"] = &svcfw.ReEncryptBFSecretInfo{
+		PolicyID:       uint64(1000009),
+		WKTenantPrefix: "",
+	}
+	oInfo.ReEncryptSecrets["ves.io.schema.global_log_receiver.Object.spec.gc_spec.receiver.sumo_logic_receiver.url"] = &svcfw.ReEncryptBFSecretInfo{
+		PolicyID:       uint64(1000009),
+		WKTenantPrefix: "",
+	}
 
 	fInfo.ObjsInfo[svcfw.ObjType("Object")] = oInfo
 	if mdr.ObjIdx != nil {
@@ -19236,6 +19244,13 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		mdr.MsgIdx["ves.io.schema.global_log_receiver.NSList"] = mInfo
 	}
 	mInfo = &svcfw.MsgInfo{
+		Name:     "NewRelicConfig",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.global_log_receiver.NewRelicConfig"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
 		Name:     "ReplaceSpecType",
 		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
 	}
@@ -19255,6 +19270,13 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	}
 	if mdr.MsgIdx != nil {
 		mdr.MsgIdx["ves.io.schema.global_log_receiver.SplunkConfig"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "SumoLogicConfig",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.global_log_receiver.SumoLogicConfig"] = mInfo
 	}
 	mInfo = &svcfw.MsgInfo{
 		Name:     "TLSClientConfigType",
@@ -41660,6 +41682,13 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		mdr.MsgIdx["ves.io.schema.user.ListUserRoleResponseItem"] = mInfo
 	}
 	mInfo = &svcfw.MsgInfo{
+		Name:     "MSPManaged",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.user.MSPManaged"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
 		Name:     "NamespacesRoleType",
 		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
 	}
@@ -43646,6 +43675,13 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	}
 	if mdr.MsgIdx != nil {
 		mdr.MsgIdx["ves.io.schema.views.WhereVirtualSite"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "XfccHeaderKeys",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.views.XfccHeaderKeys"] = mInfo
 	}
 
 	pInfo = &svcfw.PkgInfo{

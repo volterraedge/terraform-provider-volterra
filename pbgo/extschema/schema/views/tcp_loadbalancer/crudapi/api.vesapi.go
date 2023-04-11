@@ -3569,6 +3569,24 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "schemaXfccElement": {
+            "type": "string",
+            "description": "X-Forwarded-Client-Cert custom cookie elements\n\nThe Subject Alternative Name (URI type) of the current proxy’s certificate.\nThe current proxy’s certificate may contain multiple URI type Subject Alternative Names,\neach will be a separate key-value pair.\nThe SHA 256 digest of the current client certificate.\nThe entire client certificate in URL encoded PEM format.\nThe entire client certificate chain (including the leaf certificate) in URL encoded PEM format.\nThe Subject field of the current client certificate. The value is always double-quoted.\nThe URI type Subject Alternative Name field of the current client certificate.\nA client certificate may contain multiple URI type Subject Alternative Names,\neach will be a separate key-value pair.\nThe DNS type Subject Alternative Name field of the current client certificate.\nA client certificate may contain multiple DNS type Subject Alternative Names,\neach will be a separate key-value pair.",
+            "title": "XfccElement",
+            "enum": [
+                "XFCC_NONE",
+                "XFCC_BY",
+                "XFCC_HASH",
+                "XFCC_CERT",
+                "XFCC_CHAIN",
+                "XFCC_SUBJECT",
+                "XFCC_URI",
+                "XFCC_DNS"
+            ],
+            "default": "XFCC_NONE",
+            "x-displayname": "XFCC Elements",
+            "x-ves-proto-enum": "ves.io.schema.XfccElement"
+        },
         "schemaviewsDownstreamTlsParamsType": {
             "type": "object",
             "description": "Inline TLS parameters",
@@ -3623,16 +3641,16 @@ var APISwaggerJSON string = `{
             "properties": {
                 "name": {
                     "type": "string",
-                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then name will hold the referred object's(e.g. route's) name.\n\nExample: - \"contacts-route\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_bytes: 64\n  ves.io.schema.rules.string.min_bytes: 1\n",
+                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then name will hold the referred object's(e.g. route's) name.\n\nExample: - \"contacts-route\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_bytes: 128\n  ves.io.schema.rules.string.min_bytes: 1\n",
                     "title": "name",
                     "minLength": 1,
-                    "maxLength": 64,
+                    "maxLength": 128,
                     "x-displayname": "Name",
                     "x-ves-example": "contacts-route",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true",
-                        "ves.io.schema.rules.string.max_bytes": "64",
+                        "ves.io.schema.rules.string.max_bytes": "128",
                         "ves.io.schema.rules.string.min_bytes": "1"
                     }
                 },
@@ -3669,16 +3687,16 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.views.tcp_loadbalancer.ProxyTypeTLSTCP",
             "properties": {
                 "tls_cert_params": {
-                    "description": "Exclusive with [tls_parameters]\n TLS Parameters and selected Certificates for downstream connections (RE sites only)",
+                    "description": "Exclusive with [tls_parameters]\n Multiple domains with separate TLS certificates on this load balancer",
                     "title": "TLS Parameters With Certificates",
                     "$ref": "#/definitions/viewsDownstreamTLSCertsParams",
-                    "x-displayname": "TLS Parameters With Certificates"
+                    "x-displayname": "Multiple Certificates"
                 },
                 "tls_parameters": {
-                    "description": "Exclusive with [tls_cert_params]\n Inline TLS parameters for downstream connections.",
+                    "description": "Exclusive with [tls_cert_params]\n Single RSA and/or ECDSA TLS certificate for all domains on this load balancer",
                     "title": "TLS Parameters With Inline Certificates",
                     "$ref": "#/definitions/schemaviewsDownstreamTlsParamsType",
-                    "x-displayname": "TLS Parameters With Inline Certificates"
+                    "x-displayname": "Single Certificate"
                 }
             }
         },
@@ -3859,7 +3877,7 @@ var APISwaggerJSON string = `{
             "type": "object",
             "description": "Select TLS Parameters and Certificates",
             "title": "DownstreamTLSCertsParams",
-            "x-displayname": "TLS Parameters and Certificates",
+            "x-displayname": "TLS Parameters",
             "x-ves-oneof-field-mtls_choice": "[\"no_mtls\",\"use_mtls\"]",
             "x-ves-proto-message": "ves.io.schema.views.DownstreamTLSCertsParams",
             "properties": {
@@ -3905,6 +3923,7 @@ var APISwaggerJSON string = `{
             "title": "DownstreamTlsValidationContext",
             "x-displayname": "Clients TLS validation context",
             "x-ves-oneof-field-crl_choice": "[\"crl\",\"no_crl\"]",
+            "x-ves-oneof-field-xfcc_header": "[\"xfcc_disabled\",\"xfcc_options\"]",
             "x-ves-proto-message": "ves.io.schema.views.DownstreamTlsValidationContext",
             "properties": {
                 "crl": {
@@ -3934,6 +3953,18 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.string.min_bytes": "1",
                         "ves.io.schema.rules.string.truststore_url": "true"
                     }
+                },
+                "xfcc_disabled": {
+                    "description": "Exclusive with [xfcc_options]\n No X-Forwarded-Client-Cert header will be added",
+                    "title": "No XFCC header",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Disabled"
+                },
+                "xfcc_options": {
+                    "description": "Exclusive with [xfcc_disabled]\n X-Forwarded-Client-Cert header will be added with the configured fields",
+                    "title": "Add XFCC header",
+                    "$ref": "#/definitions/viewsXfccHeaderKeys",
+                    "x-displayname": "Enabled"
                 }
             }
         },
@@ -4382,6 +4413,30 @@ var APISwaggerJSON string = `{
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true"
+                    }
+                }
+            }
+        },
+        "viewsXfccHeaderKeys": {
+            "type": "object",
+            "description": "X-Forwarded-Client-Cert header elements to be added to requests",
+            "title": "XfccHeaderKeys",
+            "x-displayname": "XFCC Header Elements",
+            "x-ves-proto-message": "ves.io.schema.views.XfccHeaderKeys",
+            "properties": {
+                "xfcc_header_elements": {
+                    "type": "array",
+                    "description": " X-Forwarded-Client-Cert header elements to be added to requests\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.items.enum.defined_only: true\n  ves.io.schema.rules.repeated.items.enum.not_in: [0]\n",
+                    "title": "XFCC Header",
+                    "items": {
+                        "$ref": "#/definitions/schemaXfccElement"
+                    },
+                    "x-displayname": "XFCC Header Elements",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.items.enum.defined_only": "true",
+                        "ves.io.schema.rules.repeated.items.enum.not_in": "[0]"
                     }
                 }
             }

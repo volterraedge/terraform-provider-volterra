@@ -410,6 +410,16 @@ func resourceVolterraAdvertisePolicy() *schema.Resource {
 							Type:     schema.TypeBool,
 							Optional: true,
 						},
+
+						"xfcc_header_elements": {
+
+							Type: schema.TypeList,
+
+							Optional: true,
+							Elem: &schema.Schema{
+								Type: schema.TypeString,
+							},
+						},
 					},
 				},
 			},
@@ -1034,6 +1044,16 @@ func resourceVolterraAdvertisePolicyCreate(d *schema.ResourceData, meta interfac
 
 			if w, ok := tlsParametersMapStrToI["require_client_certificate"]; ok && !isIntfNil(w) {
 				tlsParameters.RequireClientCertificate = w.(bool)
+			}
+
+			if v, ok := tlsParametersMapStrToI["xfcc_header_elements"]; ok && !isIntfNil(v) {
+
+				xfcc_header_elementsList := []ves_io_schema.XfccElement{}
+				for _, j := range v.([]interface{}) {
+					xfcc_header_elementsList = append(xfcc_header_elementsList, ves_io_schema.XfccElement(ves_io_schema.XfccElement_value[j.(string)]))
+				}
+				tlsParameters.XfccHeaderElements = xfcc_header_elementsList
+
 			}
 
 		}
@@ -1758,6 +1778,16 @@ func resourceVolterraAdvertisePolicyUpdate(d *schema.ResourceData, meta interfac
 
 			if w, ok := tlsParametersMapStrToI["require_client_certificate"]; ok && !isIntfNil(w) {
 				tlsParameters.RequireClientCertificate = w.(bool)
+			}
+
+			if v, ok := tlsParametersMapStrToI["xfcc_header_elements"]; ok && !isIntfNil(v) {
+
+				xfcc_header_elementsList := []ves_io_schema.XfccElement{}
+				for _, j := range v.([]interface{}) {
+					xfcc_header_elementsList = append(xfcc_header_elementsList, ves_io_schema.XfccElement(ves_io_schema.XfccElement_value[j.(string)]))
+				}
+				tlsParameters.XfccHeaderElements = xfcc_header_elementsList
+
 			}
 
 		}

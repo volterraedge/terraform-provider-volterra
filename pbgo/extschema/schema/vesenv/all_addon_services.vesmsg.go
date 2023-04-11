@@ -90,12 +90,12 @@ func (v *ValidateAddonServiceChoice) Validate(ctx context.Context, pm interface{
 				return err
 			}
 		}
-	case *AddonServiceChoice_F5XcPartnerManagement:
-		if fv, exists := v.FldValidators["choice.f5xc_partner_management"]; exists {
-			val := m.GetChoice().(*AddonServiceChoice_F5XcPartnerManagement).F5XcPartnerManagement
+	case *AddonServiceChoice_F5XcChildManagement:
+		if fv, exists := v.FldValidators["choice.f5xc_child_management"]; exists {
+			val := m.GetChoice().(*AddonServiceChoice_F5XcChildManagement).F5XcChildManagement
 			vOpts := append(opts,
 				db.WithValidateField("choice"),
-				db.WithValidateField("f5xc_partner_management"),
+				db.WithValidateField("f5xc_child_management"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err

@@ -1701,9 +1701,11 @@ func init() {
 	MDR.ValidatorRegistry["ves.io.schema.global_log_receiver.HttpAuthBasic"] = ves_io_schema_global_log_receiver.HttpAuthBasicValidator()
 	MDR.ValidatorRegistry["ves.io.schema.global_log_receiver.KafkaConfig"] = ves_io_schema_global_log_receiver.KafkaConfigValidator()
 	MDR.ValidatorRegistry["ves.io.schema.global_log_receiver.NSList"] = ves_io_schema_global_log_receiver.NSListValidator()
+	MDR.ValidatorRegistry["ves.io.schema.global_log_receiver.NewRelicConfig"] = ves_io_schema_global_log_receiver.NewRelicConfigValidator()
 	MDR.ValidatorRegistry["ves.io.schema.global_log_receiver.ReplaceSpecType"] = ves_io_schema_global_log_receiver.ReplaceSpecTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.global_log_receiver.S3Config"] = ves_io_schema_global_log_receiver.S3ConfigValidator()
 	MDR.ValidatorRegistry["ves.io.schema.global_log_receiver.SplunkConfig"] = ves_io_schema_global_log_receiver.SplunkConfigValidator()
+	MDR.ValidatorRegistry["ves.io.schema.global_log_receiver.SumoLogicConfig"] = ves_io_schema_global_log_receiver.SumoLogicConfigValidator()
 	MDR.ValidatorRegistry["ves.io.schema.global_log_receiver.TLSClientConfigType"] = ves_io_schema_global_log_receiver.TLSClientConfigTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.global_log_receiver.TLSConfigType"] = ves_io_schema_global_log_receiver.TLSConfigTypeValidator()
 
@@ -3246,6 +3248,7 @@ func init() {
 	MDR.ValidatorRegistry["ves.io.schema.user.ListUserRoleRequest"] = ves_io_schema_user.ListUserRoleRequestValidator()
 	MDR.ValidatorRegistry["ves.io.schema.user.ListUserRoleResponse"] = ves_io_schema_user.ListUserRoleResponseValidator()
 	MDR.ValidatorRegistry["ves.io.schema.user.ListUserRoleResponseItem"] = ves_io_schema_user.ListUserRoleResponseItemValidator()
+	MDR.ValidatorRegistry["ves.io.schema.user.MSPManaged"] = ves_io_schema_user.MSPManagedValidator()
 	MDR.ValidatorRegistry["ves.io.schema.user.NamespacesRoleType"] = ves_io_schema_user.NamespacesRoleTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.user.ResetPasswordByAdminRequest"] = ves_io_schema_user.ResetPasswordByAdminRequestValidator()
 	MDR.ValidatorRegistry["ves.io.schema.user.SendPasswordEmailRequest"] = ves_io_schema_user.SendPasswordEmailRequestValidator()
@@ -3420,6 +3423,7 @@ func init() {
 	MDR.ValidatorRegistry["ves.io.schema.views.WhereVK8SService"] = ves_io_schema_views.WhereVK8SServiceValidator()
 	MDR.ValidatorRegistry["ves.io.schema.views.WhereVirtualNetwork"] = ves_io_schema_views.WhereVirtualNetworkValidator()
 	MDR.ValidatorRegistry["ves.io.schema.views.WhereVirtualSite"] = ves_io_schema_views.WhereVirtualSiteValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.XfccHeaderKeys"] = ves_io_schema_views.XfccHeaderKeysValidator()
 
 	MDR.ValidatorRegistry["ves.io.schema.views.api_definition.GetApiEndpointPathsSuggestionsRequest"] = ves_io_schema_views_api_definition.GetApiEndpointPathsSuggestionsRequestValidator()
 	MDR.ValidatorRegistry["ves.io.schema.views.api_definition.GetBasePathSuggestionsRequest"] = ves_io_schema_views_api_definition.GetBasePathSuggestionsRequestValidator()
@@ -6932,7 +6936,7 @@ func init() {
 		FieldsByAncestor: map[string][]sets.String{
 			"spec": []sets.String{
 				sets.NewString([]string{"audit_logs", "request_logs", "security_events"}...),
-				sets.NewString([]string{"aws_cloud_watch_receiver", "azure_event_hubs_receiver", "azure_receiver", "datadog_receiver", "elastic_receiver", "http_receiver", "kafka_receiver", "s3_receiver", "splunk_receiver"}...),
+				sets.NewString([]string{"aws_cloud_watch_receiver", "azure_event_hubs_receiver", "azure_receiver", "datadog_receiver", "elastic_receiver", "http_receiver", "kafka_receiver", "new_relic_receiver", "s3_receiver", "splunk_receiver", "sumo_logic_receiver"}...),
 				sets.NewString([]string{"ns_all", "ns_current", "ns_list", "ns_system"}...),
 			},
 			"spec.aws_cloud_watch_receiver.batch": []sets.String{
@@ -7052,6 +7056,12 @@ func init() {
 			"spec.kafka_receiver.use_tls.mtls_enable.key_url": []sets.String{
 				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
 			},
+			"spec.new_relic_receiver": []sets.String{
+				sets.NewString([]string{"eu", "us"}...),
+			},
+			"spec.new_relic_receiver.api_key": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
 			"spec.s3_receiver.batch": []sets.String{
 				sets.NewString([]string{"max_bytes", "max_bytes_disabled"}...),
 				sets.NewString([]string{"max_events", "max_events_disabled"}...),
@@ -7081,6 +7091,9 @@ func init() {
 				sets.NewString([]string{"no_ca", "trusted_ca_url"}...),
 			},
 			"spec.splunk_receiver.use_tls.mtls_enable.key_url": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.sumo_logic_receiver.url": []sets.String{
 				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
 			},
 		},
@@ -7090,7 +7103,7 @@ func init() {
 		FieldsByAncestor: map[string][]sets.String{
 			"spec": []sets.String{
 				sets.NewString([]string{"audit_logs", "request_logs", "security_events"}...),
-				sets.NewString([]string{"aws_cloud_watch_receiver", "azure_event_hubs_receiver", "azure_receiver", "datadog_receiver", "elastic_receiver", "http_receiver", "kafka_receiver", "s3_receiver", "splunk_receiver"}...),
+				sets.NewString([]string{"aws_cloud_watch_receiver", "azure_event_hubs_receiver", "azure_receiver", "datadog_receiver", "elastic_receiver", "http_receiver", "kafka_receiver", "new_relic_receiver", "s3_receiver", "splunk_receiver", "sumo_logic_receiver"}...),
 				sets.NewString([]string{"ns_all", "ns_current", "ns_list", "ns_system"}...),
 			},
 			"spec.aws_cloud_watch_receiver.batch": []sets.String{
@@ -7210,6 +7223,12 @@ func init() {
 			"spec.kafka_receiver.use_tls.mtls_enable.key_url": []sets.String{
 				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
 			},
+			"spec.new_relic_receiver": []sets.String{
+				sets.NewString([]string{"eu", "us"}...),
+			},
+			"spec.new_relic_receiver.api_key": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
 			"spec.s3_receiver.batch": []sets.String{
 				sets.NewString([]string{"max_bytes", "max_bytes_disabled"}...),
 				sets.NewString([]string{"max_events", "max_events_disabled"}...),
@@ -7241,6 +7260,9 @@ func init() {
 			"spec.splunk_receiver.use_tls.mtls_enable.key_url": []sets.String{
 				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
 			},
+			"spec.sumo_logic_receiver.url": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
 		},
 	}
 
@@ -7248,7 +7270,7 @@ func init() {
 		FieldsByAncestor: map[string][]sets.String{
 			"spec.gc_spec": []sets.String{
 				sets.NewString([]string{"audit_logs", "request_logs", "security_events"}...),
-				sets.NewString([]string{"aws_cloud_watch_receiver", "azure_event_hubs_receiver", "azure_receiver", "datadog_receiver", "elastic_receiver", "http_receiver", "kafka_receiver", "s3_receiver", "splunk_receiver"}...),
+				sets.NewString([]string{"aws_cloud_watch_receiver", "azure_event_hubs_receiver", "azure_receiver", "datadog_receiver", "elastic_receiver", "http_receiver", "kafka_receiver", "new_relic_receiver", "s3_receiver", "splunk_receiver", "sumo_logic_receiver"}...),
 				sets.NewString([]string{"ns_all", "ns_current", "ns_list", "ns_system"}...),
 			},
 			"spec.gc_spec.aws_cloud_watch_receiver.batch": []sets.String{
@@ -7368,6 +7390,12 @@ func init() {
 			"spec.gc_spec.kafka_receiver.use_tls.mtls_enable.key_url": []sets.String{
 				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
 			},
+			"spec.gc_spec.new_relic_receiver": []sets.String{
+				sets.NewString([]string{"eu", "us"}...),
+			},
+			"spec.gc_spec.new_relic_receiver.api_key": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
 			"spec.gc_spec.s3_receiver.batch": []sets.String{
 				sets.NewString([]string{"max_bytes", "max_bytes_disabled"}...),
 				sets.NewString([]string{"max_events", "max_events_disabled"}...),
@@ -7397,6 +7425,9 @@ func init() {
 				sets.NewString([]string{"no_ca", "trusted_ca_url"}...),
 			},
 			"spec.gc_spec.splunk_receiver.use_tls.mtls_enable.key_url": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.gc_spec.sumo_logic_receiver.url": []sets.String{
 				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
 			},
 		},
@@ -7406,7 +7437,7 @@ func init() {
 		FieldsByAncestor: map[string][]sets.String{
 			"spec.gc_spec": []sets.String{
 				sets.NewString([]string{"audit_logs", "request_logs", "security_events"}...),
-				sets.NewString([]string{"aws_cloud_watch_receiver", "azure_event_hubs_receiver", "azure_receiver", "datadog_receiver", "elastic_receiver", "http_receiver", "kafka_receiver", "s3_receiver", "splunk_receiver"}...),
+				sets.NewString([]string{"aws_cloud_watch_receiver", "azure_event_hubs_receiver", "azure_receiver", "datadog_receiver", "elastic_receiver", "http_receiver", "kafka_receiver", "new_relic_receiver", "s3_receiver", "splunk_receiver", "sumo_logic_receiver"}...),
 				sets.NewString([]string{"ns_all", "ns_current", "ns_list", "ns_system"}...),
 			},
 			"spec.gc_spec.aws_cloud_watch_receiver.batch": []sets.String{
@@ -7526,6 +7557,12 @@ func init() {
 			"spec.gc_spec.kafka_receiver.use_tls.mtls_enable.key_url": []sets.String{
 				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
 			},
+			"spec.gc_spec.new_relic_receiver": []sets.String{
+				sets.NewString([]string{"eu", "us"}...),
+			},
+			"spec.gc_spec.new_relic_receiver.api_key": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
 			"spec.gc_spec.s3_receiver.batch": []sets.String{
 				sets.NewString([]string{"max_bytes", "max_bytes_disabled"}...),
 				sets.NewString([]string{"max_events", "max_events_disabled"}...),
@@ -7555,6 +7592,9 @@ func init() {
 				sets.NewString([]string{"no_ca", "trusted_ca_url"}...),
 			},
 			"spec.gc_spec.splunk_receiver.use_tls.mtls_enable.key_url": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.gc_spec.sumo_logic_receiver.url": []sets.String{
 				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
 			},
 		},
@@ -8805,6 +8845,7 @@ func init() {
 			},
 			"spec.enabled_ssh_access.advertise_on_sli_vip.use_mtls": []sets.String{
 				sets.NewString([]string{"crl", "no_crl"}...),
+				sets.NewString([]string{"xfcc_disabled", "xfcc_options"}...),
 			},
 			"spec.enabled_ssh_access.advertise_on_slo_internet_vip": []sets.String{
 				sets.NewString([]string{"no_mtls", "use_mtls"}...),
@@ -8820,6 +8861,7 @@ func init() {
 			},
 			"spec.enabled_ssh_access.advertise_on_slo_internet_vip.use_mtls": []sets.String{
 				sets.NewString([]string{"crl", "no_crl"}...),
+				sets.NewString([]string{"xfcc_disabled", "xfcc_options"}...),
 			},
 			"spec.enabled_ssh_access.advertise_on_slo_sli": []sets.String{
 				sets.NewString([]string{"no_mtls", "use_mtls"}...),
@@ -8835,6 +8877,7 @@ func init() {
 			},
 			"spec.enabled_ssh_access.advertise_on_slo_sli.use_mtls": []sets.String{
 				sets.NewString([]string{"crl", "no_crl"}...),
+				sets.NewString([]string{"xfcc_disabled", "xfcc_options"}...),
 			},
 			"spec.enabled_ssh_access.advertise_on_slo_vip": []sets.String{
 				sets.NewString([]string{"no_mtls", "use_mtls"}...),
@@ -8850,6 +8893,7 @@ func init() {
 			},
 			"spec.enabled_ssh_access.advertise_on_slo_vip.use_mtls": []sets.String{
 				sets.NewString([]string{"crl", "no_crl"}...),
+				sets.NewString([]string{"xfcc_disabled", "xfcc_options"}...),
 			},
 			"spec.f5_big_ip_aws_service": []sets.String{
 				sets.NewString([]string{"aws_tgw_site_params", "aws_vpc_site_params"}...),
@@ -8896,6 +8940,7 @@ func init() {
 			},
 			"spec.https_management.advertise_on_sli_vip.use_mtls": []sets.String{
 				sets.NewString([]string{"crl", "no_crl"}...),
+				sets.NewString([]string{"xfcc_disabled", "xfcc_options"}...),
 			},
 			"spec.https_management.advertise_on_slo_internet_vip": []sets.String{
 				sets.NewString([]string{"no_mtls", "use_mtls"}...),
@@ -8911,6 +8956,7 @@ func init() {
 			},
 			"spec.https_management.advertise_on_slo_internet_vip.use_mtls": []sets.String{
 				sets.NewString([]string{"crl", "no_crl"}...),
+				sets.NewString([]string{"xfcc_disabled", "xfcc_options"}...),
 			},
 			"spec.https_management.advertise_on_slo_sli": []sets.String{
 				sets.NewString([]string{"no_mtls", "use_mtls"}...),
@@ -8926,6 +8972,7 @@ func init() {
 			},
 			"spec.https_management.advertise_on_slo_sli.use_mtls": []sets.String{
 				sets.NewString([]string{"crl", "no_crl"}...),
+				sets.NewString([]string{"xfcc_disabled", "xfcc_options"}...),
 			},
 			"spec.https_management.advertise_on_slo_vip": []sets.String{
 				sets.NewString([]string{"no_mtls", "use_mtls"}...),
@@ -8941,6 +8988,7 @@ func init() {
 			},
 			"spec.https_management.advertise_on_slo_vip.use_mtls": []sets.String{
 				sets.NewString([]string{"crl", "no_crl"}...),
+				sets.NewString([]string{"xfcc_disabled", "xfcc_options"}...),
 			},
 			"spec.palo_alto_fw_service": []sets.String{
 				sets.NewString([]string{"auto_setup", "ssh_key"}...),
@@ -8992,6 +9040,7 @@ func init() {
 			},
 			"spec.enabled_ssh_access.advertise_on_sli_vip.use_mtls": []sets.String{
 				sets.NewString([]string{"crl", "no_crl"}...),
+				sets.NewString([]string{"xfcc_disabled", "xfcc_options"}...),
 			},
 			"spec.enabled_ssh_access.advertise_on_slo_internet_vip": []sets.String{
 				sets.NewString([]string{"no_mtls", "use_mtls"}...),
@@ -9007,6 +9056,7 @@ func init() {
 			},
 			"spec.enabled_ssh_access.advertise_on_slo_internet_vip.use_mtls": []sets.String{
 				sets.NewString([]string{"crl", "no_crl"}...),
+				sets.NewString([]string{"xfcc_disabled", "xfcc_options"}...),
 			},
 			"spec.enabled_ssh_access.advertise_on_slo_sli": []sets.String{
 				sets.NewString([]string{"no_mtls", "use_mtls"}...),
@@ -9022,6 +9072,7 @@ func init() {
 			},
 			"spec.enabled_ssh_access.advertise_on_slo_sli.use_mtls": []sets.String{
 				sets.NewString([]string{"crl", "no_crl"}...),
+				sets.NewString([]string{"xfcc_disabled", "xfcc_options"}...),
 			},
 			"spec.enabled_ssh_access.advertise_on_slo_vip": []sets.String{
 				sets.NewString([]string{"no_mtls", "use_mtls"}...),
@@ -9037,6 +9088,7 @@ func init() {
 			},
 			"spec.enabled_ssh_access.advertise_on_slo_vip.use_mtls": []sets.String{
 				sets.NewString([]string{"crl", "no_crl"}...),
+				sets.NewString([]string{"xfcc_disabled", "xfcc_options"}...),
 			},
 			"spec.f5_big_ip_aws_service.endpoint_service": []sets.String{
 				sets.NewString([]string{"advertise_on_slo_ip", "advertise_on_slo_ip_external", "disable_advertise_on_slo_ip"}...),
@@ -9062,6 +9114,7 @@ func init() {
 			},
 			"spec.https_management.advertise_on_sli_vip.use_mtls": []sets.String{
 				sets.NewString([]string{"crl", "no_crl"}...),
+				sets.NewString([]string{"xfcc_disabled", "xfcc_options"}...),
 			},
 			"spec.https_management.advertise_on_slo_internet_vip": []sets.String{
 				sets.NewString([]string{"no_mtls", "use_mtls"}...),
@@ -9077,6 +9130,7 @@ func init() {
 			},
 			"spec.https_management.advertise_on_slo_internet_vip.use_mtls": []sets.String{
 				sets.NewString([]string{"crl", "no_crl"}...),
+				sets.NewString([]string{"xfcc_disabled", "xfcc_options"}...),
 			},
 			"spec.https_management.advertise_on_slo_sli": []sets.String{
 				sets.NewString([]string{"no_mtls", "use_mtls"}...),
@@ -9092,6 +9146,7 @@ func init() {
 			},
 			"spec.https_management.advertise_on_slo_sli.use_mtls": []sets.String{
 				sets.NewString([]string{"crl", "no_crl"}...),
+				sets.NewString([]string{"xfcc_disabled", "xfcc_options"}...),
 			},
 			"spec.https_management.advertise_on_slo_vip": []sets.String{
 				sets.NewString([]string{"no_mtls", "use_mtls"}...),
@@ -9107,6 +9162,7 @@ func init() {
 			},
 			"spec.https_management.advertise_on_slo_vip.use_mtls": []sets.String{
 				sets.NewString([]string{"crl", "no_crl"}...),
+				sets.NewString([]string{"xfcc_disabled", "xfcc_options"}...),
 			},
 		},
 	}
@@ -9136,6 +9192,7 @@ func init() {
 			},
 			"spec.gc_spec.enabled_ssh_access.advertise_on_sli_vip.use_mtls": []sets.String{
 				sets.NewString([]string{"crl", "no_crl"}...),
+				sets.NewString([]string{"xfcc_disabled", "xfcc_options"}...),
 			},
 			"spec.gc_spec.enabled_ssh_access.advertise_on_slo_internet_vip": []sets.String{
 				sets.NewString([]string{"no_mtls", "use_mtls"}...),
@@ -9151,6 +9208,7 @@ func init() {
 			},
 			"spec.gc_spec.enabled_ssh_access.advertise_on_slo_internet_vip.use_mtls": []sets.String{
 				sets.NewString([]string{"crl", "no_crl"}...),
+				sets.NewString([]string{"xfcc_disabled", "xfcc_options"}...),
 			},
 			"spec.gc_spec.enabled_ssh_access.advertise_on_slo_sli": []sets.String{
 				sets.NewString([]string{"no_mtls", "use_mtls"}...),
@@ -9166,6 +9224,7 @@ func init() {
 			},
 			"spec.gc_spec.enabled_ssh_access.advertise_on_slo_sli.use_mtls": []sets.String{
 				sets.NewString([]string{"crl", "no_crl"}...),
+				sets.NewString([]string{"xfcc_disabled", "xfcc_options"}...),
 			},
 			"spec.gc_spec.enabled_ssh_access.advertise_on_slo_vip": []sets.String{
 				sets.NewString([]string{"no_mtls", "use_mtls"}...),
@@ -9181,6 +9240,7 @@ func init() {
 			},
 			"spec.gc_spec.enabled_ssh_access.advertise_on_slo_vip.use_mtls": []sets.String{
 				sets.NewString([]string{"crl", "no_crl"}...),
+				sets.NewString([]string{"xfcc_disabled", "xfcc_options"}...),
 			},
 			"spec.gc_spec.endpoint_service": []sets.String{
 				sets.NewString([]string{"advertise_on_slo_ip", "advertise_on_slo_ip_external", "disable_advertise_on_slo_ip"}...),
@@ -9233,6 +9293,7 @@ func init() {
 			},
 			"spec.gc_spec.https_management.advertise_on_sli_vip.use_mtls": []sets.String{
 				sets.NewString([]string{"crl", "no_crl"}...),
+				sets.NewString([]string{"xfcc_disabled", "xfcc_options"}...),
 			},
 			"spec.gc_spec.https_management.advertise_on_slo_internet_vip": []sets.String{
 				sets.NewString([]string{"no_mtls", "use_mtls"}...),
@@ -9248,6 +9309,7 @@ func init() {
 			},
 			"spec.gc_spec.https_management.advertise_on_slo_internet_vip.use_mtls": []sets.String{
 				sets.NewString([]string{"crl", "no_crl"}...),
+				sets.NewString([]string{"xfcc_disabled", "xfcc_options"}...),
 			},
 			"spec.gc_spec.https_management.advertise_on_slo_sli": []sets.String{
 				sets.NewString([]string{"no_mtls", "use_mtls"}...),
@@ -9263,6 +9325,7 @@ func init() {
 			},
 			"spec.gc_spec.https_management.advertise_on_slo_sli.use_mtls": []sets.String{
 				sets.NewString([]string{"crl", "no_crl"}...),
+				sets.NewString([]string{"xfcc_disabled", "xfcc_options"}...),
 			},
 			"spec.gc_spec.https_management.advertise_on_slo_vip": []sets.String{
 				sets.NewString([]string{"no_mtls", "use_mtls"}...),
@@ -9278,6 +9341,7 @@ func init() {
 			},
 			"spec.gc_spec.https_management.advertise_on_slo_vip.use_mtls": []sets.String{
 				sets.NewString([]string{"crl", "no_crl"}...),
+				sets.NewString([]string{"xfcc_disabled", "xfcc_options"}...),
 			},
 			"spec.gc_spec.palo_alto_fw_service": []sets.String{
 				sets.NewString([]string{"auto_setup", "ssh_key"}...),
@@ -9330,6 +9394,7 @@ func init() {
 			},
 			"spec.gc_spec.enabled_ssh_access.advertise_on_sli_vip.use_mtls": []sets.String{
 				sets.NewString([]string{"crl", "no_crl"}...),
+				sets.NewString([]string{"xfcc_disabled", "xfcc_options"}...),
 			},
 			"spec.gc_spec.enabled_ssh_access.advertise_on_slo_internet_vip": []sets.String{
 				sets.NewString([]string{"no_mtls", "use_mtls"}...),
@@ -9345,6 +9410,7 @@ func init() {
 			},
 			"spec.gc_spec.enabled_ssh_access.advertise_on_slo_internet_vip.use_mtls": []sets.String{
 				sets.NewString([]string{"crl", "no_crl"}...),
+				sets.NewString([]string{"xfcc_disabled", "xfcc_options"}...),
 			},
 			"spec.gc_spec.enabled_ssh_access.advertise_on_slo_sli": []sets.String{
 				sets.NewString([]string{"no_mtls", "use_mtls"}...),
@@ -9360,6 +9426,7 @@ func init() {
 			},
 			"spec.gc_spec.enabled_ssh_access.advertise_on_slo_sli.use_mtls": []sets.String{
 				sets.NewString([]string{"crl", "no_crl"}...),
+				sets.NewString([]string{"xfcc_disabled", "xfcc_options"}...),
 			},
 			"spec.gc_spec.enabled_ssh_access.advertise_on_slo_vip": []sets.String{
 				sets.NewString([]string{"no_mtls", "use_mtls"}...),
@@ -9375,6 +9442,7 @@ func init() {
 			},
 			"spec.gc_spec.enabled_ssh_access.advertise_on_slo_vip.use_mtls": []sets.String{
 				sets.NewString([]string{"crl", "no_crl"}...),
+				sets.NewString([]string{"xfcc_disabled", "xfcc_options"}...),
 			},
 			"spec.gc_spec.endpoint_service": []sets.String{
 				sets.NewString([]string{"advertise_on_slo_ip", "advertise_on_slo_ip_external", "disable_advertise_on_slo_ip"}...),
@@ -9427,6 +9495,7 @@ func init() {
 			},
 			"spec.gc_spec.https_management.advertise_on_sli_vip.use_mtls": []sets.String{
 				sets.NewString([]string{"crl", "no_crl"}...),
+				sets.NewString([]string{"xfcc_disabled", "xfcc_options"}...),
 			},
 			"spec.gc_spec.https_management.advertise_on_slo_internet_vip": []sets.String{
 				sets.NewString([]string{"no_mtls", "use_mtls"}...),
@@ -9442,6 +9511,7 @@ func init() {
 			},
 			"spec.gc_spec.https_management.advertise_on_slo_internet_vip.use_mtls": []sets.String{
 				sets.NewString([]string{"crl", "no_crl"}...),
+				sets.NewString([]string{"xfcc_disabled", "xfcc_options"}...),
 			},
 			"spec.gc_spec.https_management.advertise_on_slo_sli": []sets.String{
 				sets.NewString([]string{"no_mtls", "use_mtls"}...),
@@ -9457,6 +9527,7 @@ func init() {
 			},
 			"spec.gc_spec.https_management.advertise_on_slo_sli.use_mtls": []sets.String{
 				sets.NewString([]string{"crl", "no_crl"}...),
+				sets.NewString([]string{"xfcc_disabled", "xfcc_options"}...),
 			},
 			"spec.gc_spec.https_management.advertise_on_slo_vip": []sets.String{
 				sets.NewString([]string{"no_mtls", "use_mtls"}...),
@@ -9472,6 +9543,7 @@ func init() {
 			},
 			"spec.gc_spec.https_management.advertise_on_slo_vip.use_mtls": []sets.String{
 				sets.NewString([]string{"crl", "no_crl"}...),
+				sets.NewString([]string{"xfcc_disabled", "xfcc_options"}...),
 			},
 			"spec.gc_spec.palo_alto_fw_service": []sets.String{
 				sets.NewString([]string{"auto_setup", "ssh_key"}...),
@@ -14302,7 +14374,6 @@ func init() {
 				sets.NewString([]string{"check_not_present", "check_present", "item"}...),
 			},
 			"spec.bot_defense.policy.protected_app_endpoints": []sets.String{
-				sets.NewString([]string{"allow_good_bots", "mitigate_good_bots"}...),
 				sets.NewString([]string{"any_domain", "domain"}...),
 				sets.NewString([]string{"flow_label", "undefined_flow_label"}...),
 				sets.NewString([]string{"mobile", "web", "web_mobile"}...),
@@ -14502,6 +14573,7 @@ func init() {
 			},
 			"spec.https.tls_cert_params.use_mtls": []sets.String{
 				sets.NewString([]string{"crl", "no_crl"}...),
+				sets.NewString([]string{"xfcc_disabled", "xfcc_options"}...),
 			},
 			"spec.https.tls_parameters": []sets.String{
 				sets.NewString([]string{"no_mtls", "use_mtls"}...),
@@ -14517,6 +14589,7 @@ func init() {
 			},
 			"spec.https.tls_parameters.use_mtls": []sets.String{
 				sets.NewString([]string{"crl", "no_crl"}...),
+				sets.NewString([]string{"xfcc_disabled", "xfcc_options"}...),
 			},
 			"spec.https_auto_cert": []sets.String{
 				sets.NewString([]string{"append_server_name", "default_header", "pass_through", "server_name"}...),
@@ -14532,6 +14605,7 @@ func init() {
 			},
 			"spec.https_auto_cert.use_mtls": []sets.String{
 				sets.NewString([]string{"crl", "no_crl"}...),
+				sets.NewString([]string{"xfcc_disabled", "xfcc_options"}...),
 			},
 			"spec.more_option": []sets.String{
 				sets.NewString([]string{"additional_domains", "enable_strict_sni_host_header_check"}...),
@@ -14852,7 +14926,6 @@ func init() {
 				sets.NewString([]string{"check_not_present", "check_present", "item"}...),
 			},
 			"spec.bot_defense.policy.protected_app_endpoints": []sets.String{
-				sets.NewString([]string{"allow_good_bots", "mitigate_good_bots"}...),
 				sets.NewString([]string{"any_domain", "domain"}...),
 				sets.NewString([]string{"flow_label", "undefined_flow_label"}...),
 				sets.NewString([]string{"mobile", "web", "web_mobile"}...),
@@ -15052,6 +15125,7 @@ func init() {
 			},
 			"spec.https.tls_cert_params.use_mtls": []sets.String{
 				sets.NewString([]string{"crl", "no_crl"}...),
+				sets.NewString([]string{"xfcc_disabled", "xfcc_options"}...),
 			},
 			"spec.https.tls_parameters": []sets.String{
 				sets.NewString([]string{"no_mtls", "use_mtls"}...),
@@ -15067,6 +15141,7 @@ func init() {
 			},
 			"spec.https.tls_parameters.use_mtls": []sets.String{
 				sets.NewString([]string{"crl", "no_crl"}...),
+				sets.NewString([]string{"xfcc_disabled", "xfcc_options"}...),
 			},
 			"spec.https_auto_cert": []sets.String{
 				sets.NewString([]string{"append_server_name", "default_header", "pass_through", "server_name"}...),
@@ -15082,6 +15157,7 @@ func init() {
 			},
 			"spec.https_auto_cert.use_mtls": []sets.String{
 				sets.NewString([]string{"crl", "no_crl"}...),
+				sets.NewString([]string{"xfcc_disabled", "xfcc_options"}...),
 			},
 			"spec.more_option": []sets.String{
 				sets.NewString([]string{"additional_domains", "enable_strict_sni_host_header_check"}...),
@@ -15411,7 +15487,6 @@ func init() {
 				sets.NewString([]string{"check_not_present", "check_present", "item"}...),
 			},
 			"spec.gc_spec.bot_defense.policy.protected_app_endpoints": []sets.String{
-				sets.NewString([]string{"allow_good_bots", "mitigate_good_bots"}...),
 				sets.NewString([]string{"any_domain", "domain"}...),
 				sets.NewString([]string{"flow_label", "undefined_flow_label"}...),
 				sets.NewString([]string{"mobile", "web", "web_mobile"}...),
@@ -15611,6 +15686,7 @@ func init() {
 			},
 			"spec.gc_spec.https.tls_cert_params.use_mtls": []sets.String{
 				sets.NewString([]string{"crl", "no_crl"}...),
+				sets.NewString([]string{"xfcc_disabled", "xfcc_options"}...),
 			},
 			"spec.gc_spec.https.tls_parameters": []sets.String{
 				sets.NewString([]string{"no_mtls", "use_mtls"}...),
@@ -15626,6 +15702,7 @@ func init() {
 			},
 			"spec.gc_spec.https.tls_parameters.use_mtls": []sets.String{
 				sets.NewString([]string{"crl", "no_crl"}...),
+				sets.NewString([]string{"xfcc_disabled", "xfcc_options"}...),
 			},
 			"spec.gc_spec.https_auto_cert": []sets.String{
 				sets.NewString([]string{"append_server_name", "default_header", "pass_through", "server_name"}...),
@@ -15641,6 +15718,7 @@ func init() {
 			},
 			"spec.gc_spec.https_auto_cert.use_mtls": []sets.String{
 				sets.NewString([]string{"crl", "no_crl"}...),
+				sets.NewString([]string{"xfcc_disabled", "xfcc_options"}...),
 			},
 			"spec.gc_spec.more_option": []sets.String{
 				sets.NewString([]string{"additional_domains", "enable_strict_sni_host_header_check"}...),
@@ -15962,7 +16040,6 @@ func init() {
 				sets.NewString([]string{"check_not_present", "check_present", "item"}...),
 			},
 			"spec.gc_spec.bot_defense.policy.protected_app_endpoints": []sets.String{
-				sets.NewString([]string{"allow_good_bots", "mitigate_good_bots"}...),
 				sets.NewString([]string{"any_domain", "domain"}...),
 				sets.NewString([]string{"flow_label", "undefined_flow_label"}...),
 				sets.NewString([]string{"mobile", "web", "web_mobile"}...),
@@ -16162,6 +16239,7 @@ func init() {
 			},
 			"spec.gc_spec.https.tls_cert_params.use_mtls": []sets.String{
 				sets.NewString([]string{"crl", "no_crl"}...),
+				sets.NewString([]string{"xfcc_disabled", "xfcc_options"}...),
 			},
 			"spec.gc_spec.https.tls_parameters": []sets.String{
 				sets.NewString([]string{"no_mtls", "use_mtls"}...),
@@ -16177,6 +16255,7 @@ func init() {
 			},
 			"spec.gc_spec.https.tls_parameters.use_mtls": []sets.String{
 				sets.NewString([]string{"crl", "no_crl"}...),
+				sets.NewString([]string{"xfcc_disabled", "xfcc_options"}...),
 			},
 			"spec.gc_spec.https_auto_cert": []sets.String{
 				sets.NewString([]string{"append_server_name", "default_header", "pass_through", "server_name"}...),
@@ -16192,6 +16271,7 @@ func init() {
 			},
 			"spec.gc_spec.https_auto_cert.use_mtls": []sets.String{
 				sets.NewString([]string{"crl", "no_crl"}...),
+				sets.NewString([]string{"xfcc_disabled", "xfcc_options"}...),
 			},
 			"spec.gc_spec.more_option": []sets.String{
 				sets.NewString([]string{"additional_domains", "enable_strict_sni_host_header_check"}...),
@@ -16775,6 +16855,7 @@ func init() {
 			},
 			"spec.tls_tcp.tls_cert_params.use_mtls": []sets.String{
 				sets.NewString([]string{"crl", "no_crl"}...),
+				sets.NewString([]string{"xfcc_disabled", "xfcc_options"}...),
 			},
 			"spec.tls_tcp.tls_parameters": []sets.String{
 				sets.NewString([]string{"no_mtls", "use_mtls"}...),
@@ -16790,6 +16871,7 @@ func init() {
 			},
 			"spec.tls_tcp.tls_parameters.use_mtls": []sets.String{
 				sets.NewString([]string{"crl", "no_crl"}...),
+				sets.NewString([]string{"xfcc_disabled", "xfcc_options"}...),
 			},
 			"spec.tls_tcp_auto_cert": []sets.String{
 				sets.NewString([]string{"no_mtls", "use_mtls"}...),
@@ -16799,6 +16881,7 @@ func init() {
 			},
 			"spec.tls_tcp_auto_cert.use_mtls": []sets.String{
 				sets.NewString([]string{"crl", "no_crl"}...),
+				sets.NewString([]string{"xfcc_disabled", "xfcc_options"}...),
 			},
 		},
 	}
@@ -16837,6 +16920,7 @@ func init() {
 			},
 			"spec.tls_tcp.tls_cert_params.use_mtls": []sets.String{
 				sets.NewString([]string{"crl", "no_crl"}...),
+				sets.NewString([]string{"xfcc_disabled", "xfcc_options"}...),
 			},
 			"spec.tls_tcp.tls_parameters": []sets.String{
 				sets.NewString([]string{"no_mtls", "use_mtls"}...),
@@ -16852,6 +16936,7 @@ func init() {
 			},
 			"spec.tls_tcp.tls_parameters.use_mtls": []sets.String{
 				sets.NewString([]string{"crl", "no_crl"}...),
+				sets.NewString([]string{"xfcc_disabled", "xfcc_options"}...),
 			},
 			"spec.tls_tcp_auto_cert": []sets.String{
 				sets.NewString([]string{"no_mtls", "use_mtls"}...),
@@ -16861,6 +16946,7 @@ func init() {
 			},
 			"spec.tls_tcp_auto_cert.use_mtls": []sets.String{
 				sets.NewString([]string{"crl", "no_crl"}...),
+				sets.NewString([]string{"xfcc_disabled", "xfcc_options"}...),
 			},
 		},
 	}
@@ -16899,6 +16985,7 @@ func init() {
 			},
 			"spec.gc_spec.tls_tcp.tls_cert_params.use_mtls": []sets.String{
 				sets.NewString([]string{"crl", "no_crl"}...),
+				sets.NewString([]string{"xfcc_disabled", "xfcc_options"}...),
 			},
 			"spec.gc_spec.tls_tcp.tls_parameters": []sets.String{
 				sets.NewString([]string{"no_mtls", "use_mtls"}...),
@@ -16914,6 +17001,7 @@ func init() {
 			},
 			"spec.gc_spec.tls_tcp.tls_parameters.use_mtls": []sets.String{
 				sets.NewString([]string{"crl", "no_crl"}...),
+				sets.NewString([]string{"xfcc_disabled", "xfcc_options"}...),
 			},
 			"spec.gc_spec.tls_tcp_auto_cert": []sets.String{
 				sets.NewString([]string{"no_mtls", "use_mtls"}...),
@@ -16923,6 +17011,7 @@ func init() {
 			},
 			"spec.gc_spec.tls_tcp_auto_cert.use_mtls": []sets.String{
 				sets.NewString([]string{"crl", "no_crl"}...),
+				sets.NewString([]string{"xfcc_disabled", "xfcc_options"}...),
 			},
 		},
 	}
@@ -16961,6 +17050,7 @@ func init() {
 			},
 			"spec.gc_spec.tls_tcp.tls_cert_params.use_mtls": []sets.String{
 				sets.NewString([]string{"crl", "no_crl"}...),
+				sets.NewString([]string{"xfcc_disabled", "xfcc_options"}...),
 			},
 			"spec.gc_spec.tls_tcp.tls_parameters": []sets.String{
 				sets.NewString([]string{"no_mtls", "use_mtls"}...),
@@ -16976,6 +17066,7 @@ func init() {
 			},
 			"spec.gc_spec.tls_tcp.tls_parameters.use_mtls": []sets.String{
 				sets.NewString([]string{"crl", "no_crl"}...),
+				sets.NewString([]string{"xfcc_disabled", "xfcc_options"}...),
 			},
 			"spec.gc_spec.tls_tcp_auto_cert": []sets.String{
 				sets.NewString([]string{"no_mtls", "use_mtls"}...),
@@ -16985,6 +17076,7 @@ func init() {
 			},
 			"spec.gc_spec.tls_tcp_auto_cert.use_mtls": []sets.String{
 				sets.NewString([]string{"crl", "no_crl"}...),
+				sets.NewString([]string{"xfcc_disabled", "xfcc_options"}...),
 			},
 		},
 	}
@@ -20496,6 +20588,10 @@ func init() {
 			GoType:    reflect.TypeOf(ves_io_schema_global_log_receiver.TLSConfigType_MtlsDisabled{}),
 		},
 		{
+			FieldPath: "ves.io.schema.global_log_receiver.CreateRequest.spec.receiver.new_relic_receiver.endpoint_choice.us",
+			GoType:    reflect.TypeOf(ves_io_schema_global_log_receiver.NewRelicConfig_Us{}),
+		},
+		{
 			FieldPath: "ves.io.schema.global_log_receiver.CreateRequest.spec.receiver.splunk_receiver.tls_choice.no_tls",
 			GoType:    reflect.TypeOf(ves_io_schema_global_log_receiver.SplunkConfig_NoTls{}),
 		},
@@ -20550,6 +20646,10 @@ func init() {
 		"spec.kafka_receiver.use_tls.mtls_enable.key_url.secret_encoding_type",
 		"spec.kafka_receiver.use_tls.mtls_enable.key_url.vault_secret_info",
 		"spec.kafka_receiver.use_tls.mtls_enable.key_url.wingman_secret_info",
+		"spec.new_relic_receiver.api_key.blindfold_secret_info_internal",
+		"spec.new_relic_receiver.api_key.secret_encoding_type",
+		"spec.new_relic_receiver.api_key.vault_secret_info",
+		"spec.new_relic_receiver.api_key.wingman_secret_info",
 		"spec.splunk_receiver.splunk_hec_token.blindfold_secret_info_internal",
 		"spec.splunk_receiver.splunk_hec_token.secret_encoding_type",
 		"spec.splunk_receiver.splunk_hec_token.vault_secret_info",
@@ -20558,6 +20658,10 @@ func init() {
 		"spec.splunk_receiver.use_tls.mtls_enable.key_url.secret_encoding_type",
 		"spec.splunk_receiver.use_tls.mtls_enable.key_url.vault_secret_info",
 		"spec.splunk_receiver.use_tls.mtls_enable.key_url.wingman_secret_info",
+		"spec.sumo_logic_receiver.url.blindfold_secret_info_internal",
+		"spec.sumo_logic_receiver.url.secret_encoding_type",
+		"spec.sumo_logic_receiver.url.vault_secret_info",
+		"spec.sumo_logic_receiver.url.wingman_secret_info",
 	}
 
 	MDR.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.global_log_receiver.API.Get"] = []string{
@@ -20630,6 +20734,10 @@ func init() {
 			GoType:    reflect.TypeOf(ves_io_schema_global_log_receiver.TLSConfigType_MtlsDisabled{}),
 		},
 		{
+			FieldPath: "ves.io.schema.global_log_receiver.ReplaceRequest.spec.receiver.new_relic_receiver.endpoint_choice.us",
+			GoType:    reflect.TypeOf(ves_io_schema_global_log_receiver.NewRelicConfig_Us{}),
+		},
+		{
 			FieldPath: "ves.io.schema.global_log_receiver.ReplaceRequest.spec.receiver.splunk_receiver.tls_choice.no_tls",
 			GoType:    reflect.TypeOf(ves_io_schema_global_log_receiver.SplunkConfig_NoTls{}),
 		},
@@ -20684,6 +20792,10 @@ func init() {
 		"spec.kafka_receiver.use_tls.mtls_enable.key_url.secret_encoding_type",
 		"spec.kafka_receiver.use_tls.mtls_enable.key_url.vault_secret_info",
 		"spec.kafka_receiver.use_tls.mtls_enable.key_url.wingman_secret_info",
+		"spec.new_relic_receiver.api_key.blindfold_secret_info_internal",
+		"spec.new_relic_receiver.api_key.secret_encoding_type",
+		"spec.new_relic_receiver.api_key.vault_secret_info",
+		"spec.new_relic_receiver.api_key.wingman_secret_info",
 		"spec.splunk_receiver.splunk_hec_token.blindfold_secret_info_internal",
 		"spec.splunk_receiver.splunk_hec_token.secret_encoding_type",
 		"spec.splunk_receiver.splunk_hec_token.vault_secret_info",
@@ -20692,6 +20804,10 @@ func init() {
 		"spec.splunk_receiver.use_tls.mtls_enable.key_url.secret_encoding_type",
 		"spec.splunk_receiver.use_tls.mtls_enable.key_url.vault_secret_info",
 		"spec.splunk_receiver.use_tls.mtls_enable.key_url.wingman_secret_info",
+		"spec.sumo_logic_receiver.url.blindfold_secret_info_internal",
+		"spec.sumo_logic_receiver.url.secret_encoding_type",
+		"spec.sumo_logic_receiver.url.vault_secret_info",
+		"spec.sumo_logic_receiver.url.wingman_secret_info",
 	}
 
 	MDR.RPCOneofDefaultChoiceFieldsRegistry["ves.io.schema.global_log_receiver.crudapi.API.Create"] = []svcfw.OneofDefaultChoiceField{
@@ -20758,6 +20874,10 @@ func init() {
 		{
 			FieldPath: "ves.io.schema.global_log_receiver.crudapi.ObjectCreateReq.spec.gc_spec.receiver.kafka_receiver.tls_choice.use_tls.mtls_choice.mtls_disabled",
 			GoType:    reflect.TypeOf(ves_io_schema_global_log_receiver.TLSConfigType_MtlsDisabled{}),
+		},
+		{
+			FieldPath: "ves.io.schema.global_log_receiver.crudapi.ObjectCreateReq.spec.gc_spec.receiver.new_relic_receiver.endpoint_choice.us",
+			GoType:    reflect.TypeOf(ves_io_schema_global_log_receiver.NewRelicConfig_Us{}),
 		},
 		{
 			FieldPath: "ves.io.schema.global_log_receiver.crudapi.ObjectCreateReq.spec.gc_spec.receiver.splunk_receiver.tls_choice.no_tls",
@@ -20837,6 +20957,10 @@ func init() {
 		{
 			FieldPath: "ves.io.schema.global_log_receiver.crudapi.ObjectReplaceReq.spec.gc_spec.receiver.kafka_receiver.tls_choice.use_tls.mtls_choice.mtls_disabled",
 			GoType:    reflect.TypeOf(ves_io_schema_global_log_receiver.TLSConfigType_MtlsDisabled{}),
+		},
+		{
+			FieldPath: "ves.io.schema.global_log_receiver.crudapi.ObjectReplaceReq.spec.gc_spec.receiver.new_relic_receiver.endpoint_choice.us",
+			GoType:    reflect.TypeOf(ves_io_schema_global_log_receiver.NewRelicConfig_Us{}),
 		},
 		{
 			FieldPath: "ves.io.schema.global_log_receiver.crudapi.ObjectReplaceReq.spec.gc_spec.receiver.splunk_receiver.tls_choice.no_tls",
@@ -26873,8 +26997,8 @@ func init() {
 			GoType:    reflect.TypeOf(ves_io_schema_views_http_loadbalancer.OpenApiFallThroughMode_FallThroughModeAllow{}),
 		},
 		{
-			FieldPath: "ves.io.schema.views.http_loadbalancer.CreateRequest.spec.api_definition_choice.api_specification.validation_target_choice.validation_all_spec_endpoints.fall_through_mode.fall_through_mode_choice.fall_through_mode_custom.open_api_validation_rules.action_choice.action_skip",
-			GoType:    reflect.TypeOf(ves_io_schema_views_http_loadbalancer.FallThroughRule_ActionSkip{}),
+			FieldPath: "ves.io.schema.views.http_loadbalancer.CreateRequest.spec.api_definition_choice.api_specification.validation_target_choice.validation_all_spec_endpoints.fall_through_mode.fall_through_mode_choice.fall_through_mode_custom.open_api_validation_rules.action_choice.action_report",
+			GoType:    reflect.TypeOf(ves_io_schema_views_http_loadbalancer.FallThroughRule_ActionReport{}),
 		},
 		{
 			FieldPath: "ves.io.schema.views.http_loadbalancer.CreateRequest.spec.api_definition_choice.api_specification.validation_target_choice.validation_all_spec_endpoints.validation_mode.validation_mode_choice.validation_mode_active.validation_enforcement_type.enforcement_report",
@@ -26885,8 +27009,8 @@ func init() {
 			GoType:    reflect.TypeOf(ves_io_schema_views_http_loadbalancer.OpenApiFallThroughMode_FallThroughModeAllow{}),
 		},
 		{
-			FieldPath: "ves.io.schema.views.http_loadbalancer.CreateRequest.spec.api_definition_choice.api_specification.validation_target_choice.validation_custom_list.fall_through_mode.fall_through_mode_choice.fall_through_mode_custom.open_api_validation_rules.action_choice.action_skip",
-			GoType:    reflect.TypeOf(ves_io_schema_views_http_loadbalancer.FallThroughRule_ActionSkip{}),
+			FieldPath: "ves.io.schema.views.http_loadbalancer.CreateRequest.spec.api_definition_choice.api_specification.validation_target_choice.validation_custom_list.fall_through_mode.fall_through_mode_choice.fall_through_mode_custom.open_api_validation_rules.action_choice.action_report",
+			GoType:    reflect.TypeOf(ves_io_schema_views_http_loadbalancer.FallThroughRule_ActionReport{}),
 		},
 		{
 			FieldPath: "ves.io.schema.views.http_loadbalancer.CreateRequest.spec.api_definition_choice.api_specification.validation_target_choice.validation_custom_list.open_api_validation_rules.domain_choice.any_domain",
@@ -26967,10 +27091,6 @@ func init() {
 		{
 			FieldPath: "ves.io.schema.views.http_loadbalancer.CreateRequest.spec.bot_defense_choice.bot_defense.policy.protected_app_endpoints.flow_label_choice.flow_label.flow_label_choice.flight.label_choice.checkin",
 			GoType:    reflect.TypeOf(ves_io_schema.BotDefenseFlowLabelFlightChoiceType_Checkin{}),
-		},
-		{
-			FieldPath: "ves.io.schema.views.http_loadbalancer.CreateRequest.spec.bot_defense_choice.bot_defense.policy.protected_app_endpoints.goodbot_choice.mitigate_good_bots",
-			GoType:    reflect.TypeOf(ves_io_schema_views_http_loadbalancer.AppEndpointType_MitigateGoodBots{}),
 		},
 		{
 			FieldPath: "ves.io.schema.views.http_loadbalancer.CreateRequest.spec.challenge_type.no_challenge",
@@ -27255,9 +27375,7 @@ func init() {
 		"spec.api_protection_rules.api_endpoint_rules.#.metadata.disable",
 		"spec.api_protection_rules.api_groups_rules.#.metadata.disable",
 		"spec.api_rate_limit.api_endpoint_rules.#.base_path",
-		"spec.api_specification.validation_all_spec_endpoints.fall_through_mode.fall_through_mode_custom.open_api_validation_rules.#.metadata.disable",
-		"spec.api_specification.validation_custom_list.fall_through_mode.fall_through_mode_custom.open_api_validation_rules.#.metadata.disable",
-		"spec.api_specification.validation_custom_list.open_api_validation_rules.#.metadata.disable",
+		"spec.api_specification",
 		"spec.blocked_clients.#.metadata.disable",
 		"spec.bot_defense",
 		"spec.client_side_defense.policy.js_insert_all_pages_except.exclude_list.#.metadata.disable",
@@ -27348,8 +27466,8 @@ func init() {
 			GoType:    reflect.TypeOf(ves_io_schema_views_http_loadbalancer.OpenApiFallThroughMode_FallThroughModeAllow{}),
 		},
 		{
-			FieldPath: "ves.io.schema.views.http_loadbalancer.ReplaceRequest.spec.api_definition_choice.api_specification.validation_target_choice.validation_all_spec_endpoints.fall_through_mode.fall_through_mode_choice.fall_through_mode_custom.open_api_validation_rules.action_choice.action_skip",
-			GoType:    reflect.TypeOf(ves_io_schema_views_http_loadbalancer.FallThroughRule_ActionSkip{}),
+			FieldPath: "ves.io.schema.views.http_loadbalancer.ReplaceRequest.spec.api_definition_choice.api_specification.validation_target_choice.validation_all_spec_endpoints.fall_through_mode.fall_through_mode_choice.fall_through_mode_custom.open_api_validation_rules.action_choice.action_report",
+			GoType:    reflect.TypeOf(ves_io_schema_views_http_loadbalancer.FallThroughRule_ActionReport{}),
 		},
 		{
 			FieldPath: "ves.io.schema.views.http_loadbalancer.ReplaceRequest.spec.api_definition_choice.api_specification.validation_target_choice.validation_all_spec_endpoints.validation_mode.validation_mode_choice.validation_mode_active.validation_enforcement_type.enforcement_report",
@@ -27360,8 +27478,8 @@ func init() {
 			GoType:    reflect.TypeOf(ves_io_schema_views_http_loadbalancer.OpenApiFallThroughMode_FallThroughModeAllow{}),
 		},
 		{
-			FieldPath: "ves.io.schema.views.http_loadbalancer.ReplaceRequest.spec.api_definition_choice.api_specification.validation_target_choice.validation_custom_list.fall_through_mode.fall_through_mode_choice.fall_through_mode_custom.open_api_validation_rules.action_choice.action_skip",
-			GoType:    reflect.TypeOf(ves_io_schema_views_http_loadbalancer.FallThroughRule_ActionSkip{}),
+			FieldPath: "ves.io.schema.views.http_loadbalancer.ReplaceRequest.spec.api_definition_choice.api_specification.validation_target_choice.validation_custom_list.fall_through_mode.fall_through_mode_choice.fall_through_mode_custom.open_api_validation_rules.action_choice.action_report",
+			GoType:    reflect.TypeOf(ves_io_schema_views_http_loadbalancer.FallThroughRule_ActionReport{}),
 		},
 		{
 			FieldPath: "ves.io.schema.views.http_loadbalancer.ReplaceRequest.spec.api_definition_choice.api_specification.validation_target_choice.validation_custom_list.open_api_validation_rules.domain_choice.any_domain",
@@ -27442,10 +27560,6 @@ func init() {
 		{
 			FieldPath: "ves.io.schema.views.http_loadbalancer.ReplaceRequest.spec.bot_defense_choice.bot_defense.policy.protected_app_endpoints.flow_label_choice.flow_label.flow_label_choice.flight.label_choice.checkin",
 			GoType:    reflect.TypeOf(ves_io_schema.BotDefenseFlowLabelFlightChoiceType_Checkin{}),
-		},
-		{
-			FieldPath: "ves.io.schema.views.http_loadbalancer.ReplaceRequest.spec.bot_defense_choice.bot_defense.policy.protected_app_endpoints.goodbot_choice.mitigate_good_bots",
-			GoType:    reflect.TypeOf(ves_io_schema_views_http_loadbalancer.AppEndpointType_MitigateGoodBots{}),
 		},
 		{
 			FieldPath: "ves.io.schema.views.http_loadbalancer.ReplaceRequest.spec.challenge_type.no_challenge",
@@ -27730,9 +27844,7 @@ func init() {
 		"spec.api_protection_rules.api_endpoint_rules.#.metadata.disable",
 		"spec.api_protection_rules.api_groups_rules.#.metadata.disable",
 		"spec.api_rate_limit.api_endpoint_rules.#.base_path",
-		"spec.api_specification.validation_all_spec_endpoints.fall_through_mode.fall_through_mode_custom.open_api_validation_rules.#.metadata.disable",
-		"spec.api_specification.validation_custom_list.fall_through_mode.fall_through_mode_custom.open_api_validation_rules.#.metadata.disable",
-		"spec.api_specification.validation_custom_list.open_api_validation_rules.#.metadata.disable",
+		"spec.api_specification",
 		"spec.blocked_clients.#.metadata.disable",
 		"spec.bot_defense",
 		"spec.client_side_defense.policy.js_insert_all_pages_except.exclude_list.#.metadata.disable",
@@ -27808,8 +27920,8 @@ func init() {
 			GoType:    reflect.TypeOf(ves_io_schema_views_http_loadbalancer.OpenApiFallThroughMode_FallThroughModeAllow{}),
 		},
 		{
-			FieldPath: "ves.io.schema.views.http_loadbalancer.crudapi.ObjectCreateReq.spec.gc_spec.api_definition_choice.api_specification.validation_target_choice.validation_all_spec_endpoints.fall_through_mode.fall_through_mode_choice.fall_through_mode_custom.open_api_validation_rules.action_choice.action_skip",
-			GoType:    reflect.TypeOf(ves_io_schema_views_http_loadbalancer.FallThroughRule_ActionSkip{}),
+			FieldPath: "ves.io.schema.views.http_loadbalancer.crudapi.ObjectCreateReq.spec.gc_spec.api_definition_choice.api_specification.validation_target_choice.validation_all_spec_endpoints.fall_through_mode.fall_through_mode_choice.fall_through_mode_custom.open_api_validation_rules.action_choice.action_report",
+			GoType:    reflect.TypeOf(ves_io_schema_views_http_loadbalancer.FallThroughRule_ActionReport{}),
 		},
 		{
 			FieldPath: "ves.io.schema.views.http_loadbalancer.crudapi.ObjectCreateReq.spec.gc_spec.api_definition_choice.api_specification.validation_target_choice.validation_all_spec_endpoints.validation_mode.validation_mode_choice.validation_mode_active.validation_enforcement_type.enforcement_report",
@@ -27820,8 +27932,8 @@ func init() {
 			GoType:    reflect.TypeOf(ves_io_schema_views_http_loadbalancer.OpenApiFallThroughMode_FallThroughModeAllow{}),
 		},
 		{
-			FieldPath: "ves.io.schema.views.http_loadbalancer.crudapi.ObjectCreateReq.spec.gc_spec.api_definition_choice.api_specification.validation_target_choice.validation_custom_list.fall_through_mode.fall_through_mode_choice.fall_through_mode_custom.open_api_validation_rules.action_choice.action_skip",
-			GoType:    reflect.TypeOf(ves_io_schema_views_http_loadbalancer.FallThroughRule_ActionSkip{}),
+			FieldPath: "ves.io.schema.views.http_loadbalancer.crudapi.ObjectCreateReq.spec.gc_spec.api_definition_choice.api_specification.validation_target_choice.validation_custom_list.fall_through_mode.fall_through_mode_choice.fall_through_mode_custom.open_api_validation_rules.action_choice.action_report",
+			GoType:    reflect.TypeOf(ves_io_schema_views_http_loadbalancer.FallThroughRule_ActionReport{}),
 		},
 		{
 			FieldPath: "ves.io.schema.views.http_loadbalancer.crudapi.ObjectCreateReq.spec.gc_spec.api_definition_choice.api_specification.validation_target_choice.validation_custom_list.open_api_validation_rules.domain_choice.any_domain",
@@ -27902,10 +28014,6 @@ func init() {
 		{
 			FieldPath: "ves.io.schema.views.http_loadbalancer.crudapi.ObjectCreateReq.spec.gc_spec.bot_defense_choice.bot_defense.policy.protected_app_endpoints.flow_label_choice.flow_label.flow_label_choice.flight.label_choice.checkin",
 			GoType:    reflect.TypeOf(ves_io_schema.BotDefenseFlowLabelFlightChoiceType_Checkin{}),
-		},
-		{
-			FieldPath: "ves.io.schema.views.http_loadbalancer.crudapi.ObjectCreateReq.spec.gc_spec.bot_defense_choice.bot_defense.policy.protected_app_endpoints.goodbot_choice.mitigate_good_bots",
-			GoType:    reflect.TypeOf(ves_io_schema_views_http_loadbalancer.AppEndpointType_MitigateGoodBots{}),
 		},
 		{
 			FieldPath: "ves.io.schema.views.http_loadbalancer.crudapi.ObjectCreateReq.spec.gc_spec.challenge_type.no_challenge",
@@ -28203,8 +28311,8 @@ func init() {
 			GoType:    reflect.TypeOf(ves_io_schema_views_http_loadbalancer.OpenApiFallThroughMode_FallThroughModeAllow{}),
 		},
 		{
-			FieldPath: "ves.io.schema.views.http_loadbalancer.crudapi.ObjectReplaceReq.spec.gc_spec.api_definition_choice.api_specification.validation_target_choice.validation_all_spec_endpoints.fall_through_mode.fall_through_mode_choice.fall_through_mode_custom.open_api_validation_rules.action_choice.action_skip",
-			GoType:    reflect.TypeOf(ves_io_schema_views_http_loadbalancer.FallThroughRule_ActionSkip{}),
+			FieldPath: "ves.io.schema.views.http_loadbalancer.crudapi.ObjectReplaceReq.spec.gc_spec.api_definition_choice.api_specification.validation_target_choice.validation_all_spec_endpoints.fall_through_mode.fall_through_mode_choice.fall_through_mode_custom.open_api_validation_rules.action_choice.action_report",
+			GoType:    reflect.TypeOf(ves_io_schema_views_http_loadbalancer.FallThroughRule_ActionReport{}),
 		},
 		{
 			FieldPath: "ves.io.schema.views.http_loadbalancer.crudapi.ObjectReplaceReq.spec.gc_spec.api_definition_choice.api_specification.validation_target_choice.validation_all_spec_endpoints.validation_mode.validation_mode_choice.validation_mode_active.validation_enforcement_type.enforcement_report",
@@ -28215,8 +28323,8 @@ func init() {
 			GoType:    reflect.TypeOf(ves_io_schema_views_http_loadbalancer.OpenApiFallThroughMode_FallThroughModeAllow{}),
 		},
 		{
-			FieldPath: "ves.io.schema.views.http_loadbalancer.crudapi.ObjectReplaceReq.spec.gc_spec.api_definition_choice.api_specification.validation_target_choice.validation_custom_list.fall_through_mode.fall_through_mode_choice.fall_through_mode_custom.open_api_validation_rules.action_choice.action_skip",
-			GoType:    reflect.TypeOf(ves_io_schema_views_http_loadbalancer.FallThroughRule_ActionSkip{}),
+			FieldPath: "ves.io.schema.views.http_loadbalancer.crudapi.ObjectReplaceReq.spec.gc_spec.api_definition_choice.api_specification.validation_target_choice.validation_custom_list.fall_through_mode.fall_through_mode_choice.fall_through_mode_custom.open_api_validation_rules.action_choice.action_report",
+			GoType:    reflect.TypeOf(ves_io_schema_views_http_loadbalancer.FallThroughRule_ActionReport{}),
 		},
 		{
 			FieldPath: "ves.io.schema.views.http_loadbalancer.crudapi.ObjectReplaceReq.spec.gc_spec.api_definition_choice.api_specification.validation_target_choice.validation_custom_list.open_api_validation_rules.domain_choice.any_domain",
@@ -28297,10 +28405,6 @@ func init() {
 		{
 			FieldPath: "ves.io.schema.views.http_loadbalancer.crudapi.ObjectReplaceReq.spec.gc_spec.bot_defense_choice.bot_defense.policy.protected_app_endpoints.flow_label_choice.flow_label.flow_label_choice.flight.label_choice.checkin",
 			GoType:    reflect.TypeOf(ves_io_schema.BotDefenseFlowLabelFlightChoiceType_Checkin{}),
-		},
-		{
-			FieldPath: "ves.io.schema.views.http_loadbalancer.crudapi.ObjectReplaceReq.spec.gc_spec.bot_defense_choice.bot_defense.policy.protected_app_endpoints.goodbot_choice.mitigate_good_bots",
-			GoType:    reflect.TypeOf(ves_io_schema_views_http_loadbalancer.AppEndpointType_MitigateGoodBots{}),
 		},
 		{
 			FieldPath: "ves.io.schema.views.http_loadbalancer.crudapi.ObjectReplaceReq.spec.gc_spec.challenge_type.no_challenge",

@@ -4606,16 +4606,16 @@ var APISwaggerJSON string = `{
             "properties": {
                 "name": {
                     "type": "string",
-                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then name will hold the referred object's(e.g. route's) name.\n\nExample: - \"contacts-route\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_bytes: 64\n  ves.io.schema.rules.string.min_bytes: 1\n",
+                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then name will hold the referred object's(e.g. route's) name.\n\nExample: - \"contacts-route\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_bytes: 128\n  ves.io.schema.rules.string.min_bytes: 1\n",
                     "title": "name",
                     "minLength": 1,
-                    "maxLength": 64,
+                    "maxLength": 128,
                     "x-displayname": "Name",
                     "x-ves-example": "contacts-route",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true",
-                        "ves.io.schema.rules.string.max_bytes": "64",
+                        "ves.io.schema.rules.string.max_bytes": "128",
                         "ves.io.schema.rules.string.min_bytes": "1"
                     }
                 },
@@ -5125,17 +5125,11 @@ var APISwaggerJSON string = `{
             "title": "L3 Mode Enhanced Performance options",
             "x-displayname": "L3 Mode Enhanced Performance",
             "x-ves-displayorder": "1",
-            "x-ves-oneof-field-perf_mode_choice": "[\"jumbo\",\"no_jumbo\"]",
+            "x-ves-oneof-field-perf_mode_choice": "[\"no_jumbo\"]",
             "x-ves-proto-message": "ves.io.schema.views.L3PerformanceEnhancementType",
             "properties": {
-                "jumbo": {
-                    "description": "Exclusive with [no_jumbo]\n L3 performance mode enhancement to use jumbo frame",
-                    "title": "L3 Mode Enhanced Performance with jumbo frame support(9000)",
-                    "$ref": "#/definitions/schemaEmpty",
-                    "x-displayname": "L3 Mode Enhanced Performance with jumbo frame"
-                },
                 "no_jumbo": {
-                    "description": "Exclusive with [jumbo]\n L3 performance mode enhancement without jumbo frame",
+                    "description": "Exclusive with []\n L3 performance mode enhancement without jumbo frame",
                     "title": "L3 Mode Enhanced Performance with no jumbo frame support",
                     "$ref": "#/definitions/schemaEmpty",
                     "x-displayname": "L3 Mode Enhanced Performance without jumbo frame"
@@ -5202,13 +5196,13 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.views.PerformanceEnhancementModeType",
             "properties": {
                 "perf_mode_l3_enhanced": {
-                    "description": "Exclusive with [perf_mode_l7_enhanced]\n Site optimized for L3 traffic processing",
+                    "description": "Exclusive with [perf_mode_l7_enhanced]\n Site optimized for L3 traffic processing\n When the mode is toggled to l3 enhanced, traffic disruption will be seen",
                     "title": "L3 Mode Enhanced Performance",
                     "$ref": "#/definitions/viewsL3PerformanceEnhancementType",
                     "x-displayname": "L3 Mode Enhanced Performance"
                 },
                 "perf_mode_l7_enhanced": {
-                    "description": "Exclusive with [perf_mode_l3_enhanced]\n Site optimized for L7 traffic processing",
+                    "description": "Exclusive with [perf_mode_l3_enhanced]\n Site optimized for L7 traffic processing\n When the mode is toggled to l7 enhanced, traffic disruption will be seen",
                     "title": "Default Performance Mode",
                     "$ref": "#/definitions/schemaEmpty",
                     "x-displayname": "L7 Enhanced"

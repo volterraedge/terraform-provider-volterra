@@ -1154,6 +1154,14 @@ func (m *CreateSpecType) Redact(ctx context.Context) error {
 		return errors.Wrapf(err, "Redacting CreateSpecType.kafka_receiver")
 	}
 
+	if err := m.GetNewRelicReceiver().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting CreateSpecType.new_relic_receiver")
+	}
+
+	if err := m.GetSumoLogicReceiver().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting CreateSpecType.sumo_logic_receiver")
+	}
+
 	return nil
 }
 
@@ -1253,6 +1261,14 @@ func (m *CreateSpecType) GetReceiverDRefInfo() ([]db.DRefInfo, error) {
 		return drInfos, err
 
 	case *CreateSpecType_KafkaReceiver:
+
+		return nil, nil
+
+	case *CreateSpecType_NewRelicReceiver:
+
+		return nil, nil
+
+	case *CreateSpecType_SumoLogicReceiver:
 
 		return nil, nil
 
@@ -1519,6 +1535,28 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
+	case *CreateSpecType_NewRelicReceiver:
+		if fv, exists := v.FldValidators["receiver.new_relic_receiver"]; exists {
+			val := m.GetReceiver().(*CreateSpecType_NewRelicReceiver).NewRelicReceiver
+			vOpts := append(opts,
+				db.WithValidateField("receiver"),
+				db.WithValidateField("new_relic_receiver"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CreateSpecType_SumoLogicReceiver:
+		if fv, exists := v.FldValidators["receiver.sumo_logic_receiver"]; exists {
+			val := m.GetReceiver().(*CreateSpecType_SumoLogicReceiver).SumoLogicReceiver
+			vOpts := append(opts,
+				db.WithValidateField("receiver"),
+				db.WithValidateField("sumo_logic_receiver"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 
@@ -1581,6 +1619,8 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	v.FldValidators["receiver.azure_event_hubs_receiver"] = AzureEventHubsConfigValidator().Validate
 	v.FldValidators["receiver.aws_cloud_watch_receiver"] = AWSCloudwatchConfigValidator().Validate
 	v.FldValidators["receiver.kafka_receiver"] = KafkaConfigValidator().Validate
+	v.FldValidators["receiver.new_relic_receiver"] = NewRelicConfigValidator().Validate
+	v.FldValidators["receiver.sumo_logic_receiver"] = SumoLogicConfigValidator().Validate
 
 	return v
 }()
@@ -2273,6 +2313,14 @@ func (m *GetSpecType) Redact(ctx context.Context) error {
 		return errors.Wrapf(err, "Redacting GetSpecType.kafka_receiver")
 	}
 
+	if err := m.GetNewRelicReceiver().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting GetSpecType.new_relic_receiver")
+	}
+
+	if err := m.GetSumoLogicReceiver().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting GetSpecType.sumo_logic_receiver")
+	}
+
 	return nil
 }
 
@@ -2372,6 +2420,14 @@ func (m *GetSpecType) GetReceiverDRefInfo() ([]db.DRefInfo, error) {
 		return drInfos, err
 
 	case *GetSpecType_KafkaReceiver:
+
+		return nil, nil
+
+	case *GetSpecType_NewRelicReceiver:
+
+		return nil, nil
+
+	case *GetSpecType_SumoLogicReceiver:
 
 		return nil, nil
 
@@ -2638,6 +2694,28 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
+	case *GetSpecType_NewRelicReceiver:
+		if fv, exists := v.FldValidators["receiver.new_relic_receiver"]; exists {
+			val := m.GetReceiver().(*GetSpecType_NewRelicReceiver).NewRelicReceiver
+			vOpts := append(opts,
+				db.WithValidateField("receiver"),
+				db.WithValidateField("new_relic_receiver"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GetSpecType_SumoLogicReceiver:
+		if fv, exists := v.FldValidators["receiver.sumo_logic_receiver"]; exists {
+			val := m.GetReceiver().(*GetSpecType_SumoLogicReceiver).SumoLogicReceiver
+			vOpts := append(opts,
+				db.WithValidateField("receiver"),
+				db.WithValidateField("sumo_logic_receiver"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 
@@ -2700,6 +2778,8 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v.FldValidators["receiver.azure_event_hubs_receiver"] = AzureEventHubsConfigValidator().Validate
 	v.FldValidators["receiver.aws_cloud_watch_receiver"] = AWSCloudwatchConfigValidator().Validate
 	v.FldValidators["receiver.kafka_receiver"] = KafkaConfigValidator().Validate
+	v.FldValidators["receiver.new_relic_receiver"] = NewRelicConfigValidator().Validate
+	v.FldValidators["receiver.sumo_logic_receiver"] = SumoLogicConfigValidator().Validate
 
 	return v
 }()
@@ -2751,6 +2831,14 @@ func (m *GlobalSpecType) Redact(ctx context.Context) error {
 
 	if err := m.GetKafkaReceiver().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting GlobalSpecType.kafka_receiver")
+	}
+
+	if err := m.GetNewRelicReceiver().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting GlobalSpecType.new_relic_receiver")
+	}
+
+	if err := m.GetSumoLogicReceiver().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting GlobalSpecType.sumo_logic_receiver")
 	}
 
 	return nil
@@ -2865,6 +2953,14 @@ func (m *GlobalSpecType) GetReceiverDRefInfo() ([]db.DRefInfo, error) {
 		return drInfos, err
 
 	case *GlobalSpecType_KafkaReceiver:
+
+		return nil, nil
+
+	case *GlobalSpecType_NewRelicReceiver:
+
+		return nil, nil
+
+	case *GlobalSpecType_SumoLogicReceiver:
 
 		return nil, nil
 
@@ -3180,6 +3276,28 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
+	case *GlobalSpecType_NewRelicReceiver:
+		if fv, exists := v.FldValidators["receiver.new_relic_receiver"]; exists {
+			val := m.GetReceiver().(*GlobalSpecType_NewRelicReceiver).NewRelicReceiver
+			vOpts := append(opts,
+				db.WithValidateField("receiver"),
+				db.WithValidateField("new_relic_receiver"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GlobalSpecType_SumoLogicReceiver:
+		if fv, exists := v.FldValidators["receiver.sumo_logic_receiver"]; exists {
+			val := m.GetReceiver().(*GlobalSpecType_SumoLogicReceiver).SumoLogicReceiver
+			vOpts := append(opts,
+				db.WithValidateField("receiver"),
+				db.WithValidateField("sumo_logic_receiver"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 
@@ -3251,6 +3369,8 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v.FldValidators["receiver.azure_event_hubs_receiver"] = AzureEventHubsConfigValidator().Validate
 	v.FldValidators["receiver.aws_cloud_watch_receiver"] = AWSCloudwatchConfigValidator().Validate
 	v.FldValidators["receiver.kafka_receiver"] = KafkaConfigValidator().Validate
+	v.FldValidators["receiver.new_relic_receiver"] = NewRelicConfigValidator().Validate
+	v.FldValidators["receiver.sumo_logic_receiver"] = SumoLogicConfigValidator().Validate
 
 	v.FldValidators["view_internal"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
@@ -4077,6 +4197,193 @@ func NSListValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *NewRelicConfig) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *NewRelicConfig) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+// Redact squashes sensitive info in m (in-place)
+func (m *NewRelicConfig) Redact(ctx context.Context) error {
+	// clear fields with confidential option set (at message or field level)
+	if m == nil {
+		return nil
+	}
+
+	if err := m.GetApiKey().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting NewRelicConfig.api_key")
+	}
+
+	return nil
+}
+
+func (m *NewRelicConfig) DeepCopy() *NewRelicConfig {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &NewRelicConfig{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *NewRelicConfig) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *NewRelicConfig) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return NewRelicConfigValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateNewRelicConfig struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateNewRelicConfig) EndpointChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for endpoint_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateNewRelicConfig) ApiKeyValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "MessageValidationRuleHandler for api_key")
+	}
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		if err := ves_io_schema.SecretTypeValidator().Validate(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateNewRelicConfig) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*NewRelicConfig)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *NewRelicConfig got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["api_key"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("api_key"))
+		if err := fv(ctx, m.GetApiKey(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["endpoint_choice"]; exists {
+		val := m.GetEndpointChoice()
+		vOpts := append(opts,
+			db.WithValidateField("endpoint_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetEndpointChoice().(type) {
+	case *NewRelicConfig_Us:
+		if fv, exists := v.FldValidators["endpoint_choice.us"]; exists {
+			val := m.GetEndpointChoice().(*NewRelicConfig_Us).Us
+			vOpts := append(opts,
+				db.WithValidateField("endpoint_choice"),
+				db.WithValidateField("us"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *NewRelicConfig_Eu:
+		if fv, exists := v.FldValidators["endpoint_choice.eu"]; exists {
+			val := m.GetEndpointChoice().(*NewRelicConfig_Eu).Eu
+			vOpts := append(opts,
+				db.WithValidateField("endpoint_choice"),
+				db.WithValidateField("eu"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultNewRelicConfigValidator = func() *ValidateNewRelicConfig {
+	v := &ValidateNewRelicConfig{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhEndpointChoice := v.EndpointChoiceValidationRuleHandler
+	rulesEndpointChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhEndpointChoice(rulesEndpointChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for NewRelicConfig.endpoint_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["endpoint_choice"] = vFn
+
+	vrhApiKey := v.ApiKeyValidationRuleHandler
+	rulesApiKey := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhApiKey(rulesApiKey)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for NewRelicConfig.api_key: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["api_key"] = vFn
+
+	return v
+}()
+
+func NewRelicConfigValidator() db.Validator {
+	return DefaultNewRelicConfigValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *ReplaceSpecType) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -4118,6 +4425,14 @@ func (m *ReplaceSpecType) Redact(ctx context.Context) error {
 
 	if err := m.GetKafkaReceiver().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting ReplaceSpecType.kafka_receiver")
+	}
+
+	if err := m.GetNewRelicReceiver().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting ReplaceSpecType.new_relic_receiver")
+	}
+
+	if err := m.GetSumoLogicReceiver().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting ReplaceSpecType.sumo_logic_receiver")
 	}
 
 	return nil
@@ -4219,6 +4534,14 @@ func (m *ReplaceSpecType) GetReceiverDRefInfo() ([]db.DRefInfo, error) {
 		return drInfos, err
 
 	case *ReplaceSpecType_KafkaReceiver:
+
+		return nil, nil
+
+	case *ReplaceSpecType_NewRelicReceiver:
+
+		return nil, nil
+
+	case *ReplaceSpecType_SumoLogicReceiver:
 
 		return nil, nil
 
@@ -4485,6 +4808,28 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
+	case *ReplaceSpecType_NewRelicReceiver:
+		if fv, exists := v.FldValidators["receiver.new_relic_receiver"]; exists {
+			val := m.GetReceiver().(*ReplaceSpecType_NewRelicReceiver).NewRelicReceiver
+			vOpts := append(opts,
+				db.WithValidateField("receiver"),
+				db.WithValidateField("new_relic_receiver"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ReplaceSpecType_SumoLogicReceiver:
+		if fv, exists := v.FldValidators["receiver.sumo_logic_receiver"]; exists {
+			val := m.GetReceiver().(*ReplaceSpecType_SumoLogicReceiver).SumoLogicReceiver
+			vOpts := append(opts,
+				db.WithValidateField("receiver"),
+				db.WithValidateField("sumo_logic_receiver"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 
@@ -4547,6 +4892,8 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	v.FldValidators["receiver.azure_event_hubs_receiver"] = AzureEventHubsConfigValidator().Validate
 	v.FldValidators["receiver.aws_cloud_watch_receiver"] = AWSCloudwatchConfigValidator().Validate
 	v.FldValidators["receiver.kafka_receiver"] = KafkaConfigValidator().Validate
+	v.FldValidators["receiver.new_relic_receiver"] = NewRelicConfigValidator().Validate
+	v.FldValidators["receiver.sumo_logic_receiver"] = SumoLogicConfigValidator().Validate
 
 	return v
 }()
@@ -5056,6 +5403,139 @@ var DefaultSplunkConfigValidator = func() *ValidateSplunkConfig {
 
 func SplunkConfigValidator() db.Validator {
 	return DefaultSplunkConfigValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *SumoLogicConfig) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *SumoLogicConfig) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+// Redact squashes sensitive info in m (in-place)
+func (m *SumoLogicConfig) Redact(ctx context.Context) error {
+	// clear fields with confidential option set (at message or field level)
+	if m == nil {
+		return nil
+	}
+
+	if err := m.GetUrl().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting SumoLogicConfig.url")
+	}
+
+	return nil
+}
+
+func (m *SumoLogicConfig) DeepCopy() *SumoLogicConfig {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &SumoLogicConfig{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *SumoLogicConfig) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *SumoLogicConfig) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return SumoLogicConfigValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateSumoLogicConfig struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateSumoLogicConfig) UrlValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "MessageValidationRuleHandler for url")
+	}
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		if err := ves_io_schema.SecretTypeValidator().Validate(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateSumoLogicConfig) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*SumoLogicConfig)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *SumoLogicConfig got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["url"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("url"))
+		if err := fv(ctx, m.GetUrl(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultSumoLogicConfigValidator = func() *ValidateSumoLogicConfig {
+	v := &ValidateSumoLogicConfig{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhUrl := v.UrlValidationRuleHandler
+	rulesUrl := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.uri_ref":   "true",
+	}
+	vFn, err = vrhUrl(rulesUrl)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for SumoLogicConfig.url: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["url"] = vFn
+
+	return v
+}()
+
+func SumoLogicConfigValidator() db.Validator {
+	return DefaultSumoLogicConfigValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -5582,11 +6062,17 @@ func (r *CreateSpecType) SetReceiverToGlobalSpecType(o *GlobalSpecType) error {
 	case *CreateSpecType_KafkaReceiver:
 		o.Receiver = &GlobalSpecType_KafkaReceiver{KafkaReceiver: of.KafkaReceiver}
 
+	case *CreateSpecType_NewRelicReceiver:
+		o.Receiver = &GlobalSpecType_NewRelicReceiver{NewRelicReceiver: of.NewRelicReceiver}
+
 	case *CreateSpecType_S3Receiver:
 		o.Receiver = &GlobalSpecType_S3Receiver{S3Receiver: of.S3Receiver}
 
 	case *CreateSpecType_SplunkReceiver:
 		o.Receiver = &GlobalSpecType_SplunkReceiver{SplunkReceiver: of.SplunkReceiver}
+
+	case *CreateSpecType_SumoLogicReceiver:
+		o.Receiver = &GlobalSpecType_SumoLogicReceiver{SumoLogicReceiver: of.SumoLogicReceiver}
 
 	default:
 		return fmt.Errorf("Unknown oneof field %T", of)
@@ -5620,11 +6106,17 @@ func (r *CreateSpecType) GetReceiverFromGlobalSpecType(o *GlobalSpecType) error 
 	case *GlobalSpecType_KafkaReceiver:
 		r.Receiver = &CreateSpecType_KafkaReceiver{KafkaReceiver: of.KafkaReceiver}
 
+	case *GlobalSpecType_NewRelicReceiver:
+		r.Receiver = &CreateSpecType_NewRelicReceiver{NewRelicReceiver: of.NewRelicReceiver}
+
 	case *GlobalSpecType_S3Receiver:
 		r.Receiver = &CreateSpecType_S3Receiver{S3Receiver: of.S3Receiver}
 
 	case *GlobalSpecType_SplunkReceiver:
 		r.Receiver = &CreateSpecType_SplunkReceiver{SplunkReceiver: of.SplunkReceiver}
+
+	case *GlobalSpecType_SumoLogicReceiver:
+		r.Receiver = &CreateSpecType_SumoLogicReceiver{SumoLogicReceiver: of.SumoLogicReceiver}
 
 	default:
 		return fmt.Errorf("Unknown oneof field %T", of)
@@ -5784,11 +6276,17 @@ func (r *GetSpecType) SetReceiverToGlobalSpecType(o *GlobalSpecType) error {
 	case *GetSpecType_KafkaReceiver:
 		o.Receiver = &GlobalSpecType_KafkaReceiver{KafkaReceiver: of.KafkaReceiver}
 
+	case *GetSpecType_NewRelicReceiver:
+		o.Receiver = &GlobalSpecType_NewRelicReceiver{NewRelicReceiver: of.NewRelicReceiver}
+
 	case *GetSpecType_S3Receiver:
 		o.Receiver = &GlobalSpecType_S3Receiver{S3Receiver: of.S3Receiver}
 
 	case *GetSpecType_SplunkReceiver:
 		o.Receiver = &GlobalSpecType_SplunkReceiver{SplunkReceiver: of.SplunkReceiver}
+
+	case *GetSpecType_SumoLogicReceiver:
+		o.Receiver = &GlobalSpecType_SumoLogicReceiver{SumoLogicReceiver: of.SumoLogicReceiver}
 
 	default:
 		return fmt.Errorf("Unknown oneof field %T", of)
@@ -5822,11 +6320,17 @@ func (r *GetSpecType) GetReceiverFromGlobalSpecType(o *GlobalSpecType) error {
 	case *GlobalSpecType_KafkaReceiver:
 		r.Receiver = &GetSpecType_KafkaReceiver{KafkaReceiver: of.KafkaReceiver}
 
+	case *GlobalSpecType_NewRelicReceiver:
+		r.Receiver = &GetSpecType_NewRelicReceiver{NewRelicReceiver: of.NewRelicReceiver}
+
 	case *GlobalSpecType_S3Receiver:
 		r.Receiver = &GetSpecType_S3Receiver{S3Receiver: of.S3Receiver}
 
 	case *GlobalSpecType_SplunkReceiver:
 		r.Receiver = &GetSpecType_SplunkReceiver{SplunkReceiver: of.SplunkReceiver}
+
+	case *GlobalSpecType_SumoLogicReceiver:
+		r.Receiver = &GetSpecType_SumoLogicReceiver{SumoLogicReceiver: of.SumoLogicReceiver}
 
 	default:
 		return fmt.Errorf("Unknown oneof field %T", of)
@@ -5986,11 +6490,17 @@ func (r *ReplaceSpecType) SetReceiverToGlobalSpecType(o *GlobalSpecType) error {
 	case *ReplaceSpecType_KafkaReceiver:
 		o.Receiver = &GlobalSpecType_KafkaReceiver{KafkaReceiver: of.KafkaReceiver}
 
+	case *ReplaceSpecType_NewRelicReceiver:
+		o.Receiver = &GlobalSpecType_NewRelicReceiver{NewRelicReceiver: of.NewRelicReceiver}
+
 	case *ReplaceSpecType_S3Receiver:
 		o.Receiver = &GlobalSpecType_S3Receiver{S3Receiver: of.S3Receiver}
 
 	case *ReplaceSpecType_SplunkReceiver:
 		o.Receiver = &GlobalSpecType_SplunkReceiver{SplunkReceiver: of.SplunkReceiver}
+
+	case *ReplaceSpecType_SumoLogicReceiver:
+		o.Receiver = &GlobalSpecType_SumoLogicReceiver{SumoLogicReceiver: of.SumoLogicReceiver}
 
 	default:
 		return fmt.Errorf("Unknown oneof field %T", of)
@@ -6024,11 +6534,17 @@ func (r *ReplaceSpecType) GetReceiverFromGlobalSpecType(o *GlobalSpecType) error
 	case *GlobalSpecType_KafkaReceiver:
 		r.Receiver = &ReplaceSpecType_KafkaReceiver{KafkaReceiver: of.KafkaReceiver}
 
+	case *GlobalSpecType_NewRelicReceiver:
+		r.Receiver = &ReplaceSpecType_NewRelicReceiver{NewRelicReceiver: of.NewRelicReceiver}
+
 	case *GlobalSpecType_S3Receiver:
 		r.Receiver = &ReplaceSpecType_S3Receiver{S3Receiver: of.S3Receiver}
 
 	case *GlobalSpecType_SplunkReceiver:
 		r.Receiver = &ReplaceSpecType_SplunkReceiver{SplunkReceiver: of.SplunkReceiver}
+
+	case *GlobalSpecType_SumoLogicReceiver:
+		r.Receiver = &ReplaceSpecType_SumoLogicReceiver{SumoLogicReceiver: of.SumoLogicReceiver}
 
 	default:
 		return fmt.Errorf("Unknown oneof field %T", of)
