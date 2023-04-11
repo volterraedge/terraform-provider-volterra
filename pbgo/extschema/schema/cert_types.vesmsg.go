@@ -440,6 +440,54 @@ func (v *ValidateCertificateParamsType) CrlValidationRuleHandler(rules map[strin
 	return validatorFn, nil
 }
 
+func (v *ValidateCertificateParamsType) XfccHeaderElementsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepEnumItemRules(rules)
+	var conv db.EnumConvFn
+	conv = func(v interface{}) int32 {
+		i := v.(XfccElement)
+		return int32(i)
+	}
+	// XfccElement_name is generated in .pb.go
+	itemValFn, err := db.NewEnumValidationRuleHandler(itemRules, XfccElement_name, conv)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for xfcc_header_elements")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []XfccElement, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for xfcc_header_elements")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]XfccElement)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []XfccElement, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal := fmt.Sprintf("%v", elem)
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated xfcc_header_elements")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items xfcc_header_elements")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateCertificateParamsType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*CertificateParamsType)
 	if !ok {
@@ -514,6 +562,14 @@ func (v *ValidateCertificateParamsType) Validate(ctx context.Context, pm interfa
 
 	}
 
+	if fv, exists := v.FldValidators["xfcc_header_elements"]; exists {
+		vOpts := append(opts, db.WithValidateField("xfcc_header_elements"))
+		if err := fv(ctx, m.GetXfccHeaderElements(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	return nil
 }
 
@@ -564,6 +620,19 @@ var DefaultCertificateParamsTypeValidator = func() *ValidateCertificateParamsTyp
 		panic(errMsg)
 	}
 	v.FldValidators["crl"] = vFn
+
+	vrhXfccHeaderElements := v.XfccHeaderElementsValidationRuleHandler
+	rulesXfccHeaderElements := map[string]string{
+		"ves.io.schema.rules.repeated.items.enum.defined_only": "true",
+		"ves.io.schema.rules.repeated.items.enum.not_in":       "[0]",
+		"ves.io.schema.rules.repeated.unique":                  "true",
+	}
+	vFn, err = vrhXfccHeaderElements(rulesXfccHeaderElements)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CertificateParamsType.xfcc_header_elements: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["xfcc_header_elements"] = vFn
 
 	v.FldValidators["validation_params"] = TlsValidationParamsTypeValidator().Validate
 

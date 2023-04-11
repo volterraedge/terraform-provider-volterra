@@ -3426,6 +3426,17 @@ func (v *ValidateStringRules) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
+	case *StringRules_IntermediateCertificateChainUrl:
+		if fv, exists := v.FldValidators["well_known.intermediate_certificate_chain_url"]; exists {
+			val := m.GetWellKnown().(*StringRules_IntermediateCertificateChainUrl).IntermediateCertificateChainUrl
+			vOpts := append(opts,
+				db.WithValidateField("well_known"),
+				db.WithValidateField("intermediate_certificate_chain_url"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 

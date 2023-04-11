@@ -3264,14 +3264,6 @@ func (v *ValidateAppEndpointType) AppTrafficTypeChoiceValidationRuleHandler(rule
 	return validatorFn, nil
 }
 
-func (v *ValidateAppEndpointType) GoodbotChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for goodbot_choice")
-	}
-	return validatorFn, nil
-}
-
 func (v *ValidateAppEndpointType) MetadataValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
@@ -3492,42 +3484,6 @@ func (v *ValidateAppEndpointType) Validate(ctx context.Context, pm interface{}, 
 
 	}
 
-	if fv, exists := v.FldValidators["goodbot_choice"]; exists {
-		val := m.GetGoodbotChoice()
-		vOpts := append(opts,
-			db.WithValidateField("goodbot_choice"),
-		)
-		if err := fv(ctx, val, vOpts...); err != nil {
-			return err
-		}
-	}
-
-	switch m.GetGoodbotChoice().(type) {
-	case *AppEndpointType_MitigateGoodBots:
-		if fv, exists := v.FldValidators["goodbot_choice.mitigate_good_bots"]; exists {
-			val := m.GetGoodbotChoice().(*AppEndpointType_MitigateGoodBots).MitigateGoodBots
-			vOpts := append(opts,
-				db.WithValidateField("goodbot_choice"),
-				db.WithValidateField("mitigate_good_bots"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	case *AppEndpointType_AllowGoodBots:
-		if fv, exists := v.FldValidators["goodbot_choice.allow_good_bots"]; exists {
-			val := m.GetGoodbotChoice().(*AppEndpointType_AllowGoodBots).AllowGoodBots
-			vOpts := append(opts,
-				db.WithValidateField("goodbot_choice"),
-				db.WithValidateField("allow_good_bots"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-
-	}
-
 	if fv, exists := v.FldValidators["http_methods"]; exists {
 		vOpts := append(opts, db.WithValidateField("http_methods"))
 		if err := fv(ctx, m.GetHttpMethods(), vOpts...); err != nil {
@@ -3597,17 +3553,6 @@ var DefaultAppEndpointTypeValidator = func() *ValidateAppEndpointType {
 		panic(errMsg)
 	}
 	v.FldValidators["app_traffic_type_choice"] = vFn
-
-	vrhGoodbotChoice := v.GoodbotChoiceValidationRuleHandler
-	rulesGoodbotChoice := map[string]string{
-		"ves.io.schema.rules.message.required_oneof": "true",
-	}
-	vFn, err = vrhGoodbotChoice(rulesGoodbotChoice)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for AppEndpointType.goodbot_choice: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["goodbot_choice"] = vFn
 
 	vrhMetadata := v.MetadataValidationRuleHandler
 	rulesMetadata := map[string]string{

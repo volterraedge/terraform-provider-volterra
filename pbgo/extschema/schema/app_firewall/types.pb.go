@@ -801,10 +801,12 @@ type DetectionSetting struct {
 	ViolationDetectionSetting isDetectionSetting_ViolationDetectionSetting `protobuf_oneof:"violation_detection_setting"`
 	// Attack Signatures Staging Settings
 	//
-	// x-displayName: "Attack Signatures Staging Settings"
-	// Enables/disables staging process for new and modified attack signatures. Staging means that if AppFirewall is
-	// working in the blocking mode WAF applies the attack signature to the web application traffic, but does not block
-	// an incoming request if it triggers this attack signature. The default staging period is 7 days.
+	// x-displayName: "Attack Signatures Staging"
+	// Attack signatures are added/updated on the Distributed cloud platform on a regular cadence. This setting
+	// enables/disables staging process for new and modified attack signatures. Staging means that, when new signatures
+	// are added or existing signatures are updated on the platform, WAF applies the attack signature to web application
+	// traffic, but does not block an incoming request if it triggers this attack signature. The default staging period
+	// is 7 days
 	//
 	// Types that are valid to be assigned to SignaturesStagingSettings:
 	//	*DetectionSetting_DisableStaging
@@ -1025,8 +1027,8 @@ type SignaturesStagingSettings struct {
 	// x-displayName: "Staging Period"
 	// x-example: "7"
 	// x-required
-	// Defines staging period in days. WAF doesn't support staging period longer than 20 days.
-	// The default staging period is 7 days.
+	// Define staging period in days. The default staging period is 7 days and the max supported staging period is
+	// 20 days.
 	StagingPeriod uint32 `protobuf:"varint,1,opt,name=staging_period,json=stagingPeriod,proto3" json:"staging_period,omitempty"`
 }
 

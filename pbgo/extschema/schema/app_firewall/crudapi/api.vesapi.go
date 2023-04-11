@@ -2928,7 +2928,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Default"
                 },
                 "disable_staging": {
-                    "description": "Exclusive with [stage_new_and_updated_signatures stage_new_signatures]\n Enforce new and modified attack signatures.",
+                    "description": "Exclusive with [stage_new_and_updated_signatures stage_new_signatures]\n Enforce new and updated attack signatures",
                     "title": "Disable Attack Signatures Staging",
                     "$ref": "#/definitions/schemaEmpty",
                     "x-displayname": "Disable"
@@ -2964,13 +2964,13 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Attack Signatures"
                 },
                 "stage_new_and_updated_signatures": {
-                    "description": "Exclusive with [disable_staging stage_new_signatures]\n WAF supports only one set of attack signatures which means each signature can be either enforced or staged.\n If signature is updated the user must decide whether to stage it and potentially reduce protection level\n because that signature was enforced before or continue enforcing it despite the change which may lead to\n false positive detections.",
+                    "description": "Exclusive with [disable_staging stage_new_signatures]\n Stage both new and updated attack signatures. Note: Staging updated signatures may lead to change in\n behaviour of those signatures and reduce the protection level of the App firewall policy. For example,\n if AppFirewall was in blocking mode and a signature was updated in a recent release, staging this signature\n would not enforce it i.e signature would be in monitoring mode for staging period (instead of blocking mode)",
                     "title": "New and Updated Signatures Staging Settings",
                     "$ref": "#/definitions/app_firewallSignaturesStagingSettings",
                     "x-displayname": "Stage new and updated attack signatures"
                 },
                 "stage_new_signatures": {
-                    "description": "Exclusive with [disable_staging stage_new_and_updated_signatures]\n Stage new attack signatures only. Updated signatures will be enforced.",
+                    "description": "Exclusive with [disable_staging stage_new_and_updated_signatures]\n Stage new attack signatures only. Updated signatures will be enforced",
                     "title": "New Signatures Staging Settings",
                     "$ref": "#/definitions/app_firewallSignaturesStagingSettings",
                     "x-displayname": "Stage new attack signatures"
@@ -3130,7 +3130,7 @@ var APISwaggerJSON string = `{
             "properties": {
                 "staging_period": {
                     "type": "integer",
-                    "description": " Defines staging period in days. WAF doesn't support staging period longer than 20 days.\n The default staging period is 7 days.\n\nExample: - \"7\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.uint32.gte: 1\n  ves.io.schema.rules.uint32.lte: 20\n",
+                    "description": " Define staging period in days. The default staging period is 7 days and the max supported staging period is\n 20 days.\n\nExample: - \"7\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.uint32.gte: 1\n  ves.io.schema.rules.uint32.lte: 20\n",
                     "title": "Staging Period",
                     "format": "int64",
                     "x-displayname": "Staging Period",

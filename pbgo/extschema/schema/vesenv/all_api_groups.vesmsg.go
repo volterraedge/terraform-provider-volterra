@@ -1322,34 +1322,34 @@ func (v *ValidateAPIGroupChoice) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-	case *APIGroupChoice_F5XcPartnerManagementAdmin:
-		if fv, exists := v.FldValidators["choice.f5xc_partner_management_admin"]; exists {
-			val := m.GetChoice().(*APIGroupChoice_F5XcPartnerManagementAdmin).F5XcPartnerManagementAdmin
+	case *APIGroupChoice_F5XcChildManagementAdmin:
+		if fv, exists := v.FldValidators["choice.f5xc_child_management_admin"]; exists {
+			val := m.GetChoice().(*APIGroupChoice_F5XcChildManagementAdmin).F5XcChildManagementAdmin
 			vOpts := append(opts,
 				db.WithValidateField("choice"),
-				db.WithValidateField("f5xc_partner_management_admin"),
+				db.WithValidateField("f5xc_child_management_admin"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
 			}
 		}
-	case *APIGroupChoice_F5XcPartnerManagementUser:
-		if fv, exists := v.FldValidators["choice.f5xc_partner_management_user"]; exists {
-			val := m.GetChoice().(*APIGroupChoice_F5XcPartnerManagementUser).F5XcPartnerManagementUser
+	case *APIGroupChoice_F5XcChildManagementUser:
+		if fv, exists := v.FldValidators["choice.f5xc_child_management_user"]; exists {
+			val := m.GetChoice().(*APIGroupChoice_F5XcChildManagementUser).F5XcChildManagementUser
 			vOpts := append(opts,
 				db.WithValidateField("choice"),
-				db.WithValidateField("f5xc_partner_management_user"),
+				db.WithValidateField("f5xc_child_management_user"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
 			}
 		}
-	case *APIGroupChoice_F5XcPartnerManagementMonitor:
-		if fv, exists := v.FldValidators["choice.f5xc_partner_management_monitor"]; exists {
-			val := m.GetChoice().(*APIGroupChoice_F5XcPartnerManagementMonitor).F5XcPartnerManagementMonitor
+	case *APIGroupChoice_F5XcChildManagementMonitor:
+		if fv, exists := v.FldValidators["choice.f5xc_child_management_monitor"]; exists {
+			val := m.GetChoice().(*APIGroupChoice_F5XcChildManagementMonitor).F5XcChildManagementMonitor
 			vOpts := append(opts,
 				db.WithValidateField("choice"),
-				db.WithValidateField("f5xc_partner_management_monitor"),
+				db.WithValidateField("f5xc_child_management_monitor"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err

@@ -40,7 +40,7 @@ type ProxyTypeTLSTCP struct {
 	// TLS Configuration
 	//
 	// x-displayName: "TLS Configuration"
-	// TLS Certificate Parameters for downstream connections
+	// TLS Certificate Configuration for downstream connections
 	//
 	// Types that are valid to be assigned to TlsCertificatesChoice:
 	//	*ProxyTypeTLSTCP_TlsParameters

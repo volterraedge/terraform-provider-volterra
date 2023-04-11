@@ -3020,6 +3020,20 @@ var APISwaggerJSON string = `{
                     "title": "require_client_certificate",
                     "format": "boolean",
                     "x-displayname": "Require Client Certificate(enable mTLS)"
+                },
+                "xfcc_header_elements": {
+                    "type": "array",
+                    "description": " X-Forwarded-Client-Cert header elements to be set in an mTLS enabled connections.\n If none are defined, the header will not be added.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.enum.defined_only: true\n  ves.io.schema.rules.repeated.items.enum.not_in: [0]\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "title": "XFCC Header",
+                    "items": {
+                        "$ref": "#/definitions/schemaXfccElement"
+                    },
+                    "x-displayname": "XFCC Header",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.items.enum.defined_only": "true",
+                        "ves.io.schema.rules.repeated.items.enum.not_in": "[0]",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
                 }
             }
         },
@@ -4223,6 +4237,24 @@ var APISwaggerJSON string = `{
                     "title": "Name"
                 }
             }
+        },
+        "schemaXfccElement": {
+            "type": "string",
+            "description": "X-Forwarded-Client-Cert custom cookie elements\n\nThe Subject Alternative Name (URI type) of the current proxy’s certificate.\nThe current proxy’s certificate may contain multiple URI type Subject Alternative Names,\neach will be a separate key-value pair.\nThe SHA 256 digest of the current client certificate.\nThe entire client certificate in URL encoded PEM format.\nThe entire client certificate chain (including the leaf certificate) in URL encoded PEM format.\nThe Subject field of the current client certificate. The value is always double-quoted.\nThe URI type Subject Alternative Name field of the current client certificate.\nA client certificate may contain multiple URI type Subject Alternative Names,\neach will be a separate key-value pair.\nThe DNS type Subject Alternative Name field of the current client certificate.\nA client certificate may contain multiple DNS type Subject Alternative Names,\neach will be a separate key-value pair.",
+            "title": "XfccElement",
+            "enum": [
+                "XFCC_NONE",
+                "XFCC_BY",
+                "XFCC_HASH",
+                "XFCC_CERT",
+                "XFCC_CHAIN",
+                "XFCC_SUBJECT",
+                "XFCC_URI",
+                "XFCC_DNS"
+            ],
+            "default": "XFCC_NONE",
+            "x-displayname": "XFCC Elements",
+            "x-ves-proto-enum": "ves.io.schema.XfccElement"
         }
     },
     "x-displayname": "Advertise Policy",

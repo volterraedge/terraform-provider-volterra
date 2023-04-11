@@ -1333,6 +1333,32 @@ func (v *ValidateGetUserRoleResponse) Validate(ctx context.Context, pm interface
 
 	}
 
+	switch m.GetManagedAccessInfo().(type) {
+	case *GetUserRoleResponse_SelfManaged:
+		if fv, exists := v.FldValidators["managed_access_info.self_managed"]; exists {
+			val := m.GetManagedAccessInfo().(*GetUserRoleResponse_SelfManaged).SelfManaged
+			vOpts := append(opts,
+				db.WithValidateField("managed_access_info"),
+				db.WithValidateField("self_managed"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GetUserRoleResponse_MspManaged:
+		if fv, exists := v.FldValidators["managed_access_info.msp_managed"]; exists {
+			val := m.GetManagedAccessInfo().(*GetUserRoleResponse_MspManaged).MspManaged
+			vOpts := append(opts,
+				db.WithValidateField("managed_access_info"),
+				db.WithValidateField("msp_managed"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["name"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("name"))
@@ -1924,6 +1950,111 @@ var DefaultListUserRoleResponseItemValidator = func() *ValidateListUserRoleRespo
 
 func ListUserRoleResponseItemValidator() db.Validator {
 	return DefaultListUserRoleResponseItemValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *MSPManaged) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *MSPManaged) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *MSPManaged) DeepCopy() *MSPManaged {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &MSPManaged{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *MSPManaged) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *MSPManaged) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return MSPManagedValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateMSPManaged struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateMSPManaged) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*MSPManaged)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *MSPManaged got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["msp_id"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("msp_id"))
+		if err := fv(ctx, m.GetMspId(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["node_type"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("node_type"))
+		if err := fv(ctx, m.GetNodeType(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["parent_tenant_id"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("parent_tenant_id"))
+		if err := fv(ctx, m.GetParentTenantId(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["tier"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("tier"))
+		if err := fv(ctx, m.GetTier(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultMSPManagedValidator = func() *ValidateMSPManaged {
+	v := &ValidateMSPManaged{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func MSPManagedValidator() db.Validator {
+	return DefaultMSPManagedValidator
 }
 
 // augmented methods on protoc/std generated struct

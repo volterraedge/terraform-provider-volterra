@@ -1701,9 +1701,11 @@ func init() {
 	MDR.ValidatorRegistry["ves.io.schema.global_log_receiver.HttpAuthBasic"] = ves_io_schema_global_log_receiver.HttpAuthBasicValidator()
 	MDR.ValidatorRegistry["ves.io.schema.global_log_receiver.KafkaConfig"] = ves_io_schema_global_log_receiver.KafkaConfigValidator()
 	MDR.ValidatorRegistry["ves.io.schema.global_log_receiver.NSList"] = ves_io_schema_global_log_receiver.NSListValidator()
+	MDR.ValidatorRegistry["ves.io.schema.global_log_receiver.NewRelicConfig"] = ves_io_schema_global_log_receiver.NewRelicConfigValidator()
 	MDR.ValidatorRegistry["ves.io.schema.global_log_receiver.ReplaceSpecType"] = ves_io_schema_global_log_receiver.ReplaceSpecTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.global_log_receiver.S3Config"] = ves_io_schema_global_log_receiver.S3ConfigValidator()
 	MDR.ValidatorRegistry["ves.io.schema.global_log_receiver.SplunkConfig"] = ves_io_schema_global_log_receiver.SplunkConfigValidator()
+	MDR.ValidatorRegistry["ves.io.schema.global_log_receiver.SumoLogicConfig"] = ves_io_schema_global_log_receiver.SumoLogicConfigValidator()
 	MDR.ValidatorRegistry["ves.io.schema.global_log_receiver.TLSClientConfigType"] = ves_io_schema_global_log_receiver.TLSClientConfigTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.global_log_receiver.TLSConfigType"] = ves_io_schema_global_log_receiver.TLSConfigTypeValidator()
 
@@ -3246,6 +3248,7 @@ func init() {
 	MDR.ValidatorRegistry["ves.io.schema.user.ListUserRoleRequest"] = ves_io_schema_user.ListUserRoleRequestValidator()
 	MDR.ValidatorRegistry["ves.io.schema.user.ListUserRoleResponse"] = ves_io_schema_user.ListUserRoleResponseValidator()
 	MDR.ValidatorRegistry["ves.io.schema.user.ListUserRoleResponseItem"] = ves_io_schema_user.ListUserRoleResponseItemValidator()
+	MDR.ValidatorRegistry["ves.io.schema.user.MSPManaged"] = ves_io_schema_user.MSPManagedValidator()
 	MDR.ValidatorRegistry["ves.io.schema.user.NamespacesRoleType"] = ves_io_schema_user.NamespacesRoleTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.user.ResetPasswordByAdminRequest"] = ves_io_schema_user.ResetPasswordByAdminRequestValidator()
 	MDR.ValidatorRegistry["ves.io.schema.user.SendPasswordEmailRequest"] = ves_io_schema_user.SendPasswordEmailRequestValidator()
@@ -3420,6 +3423,7 @@ func init() {
 	MDR.ValidatorRegistry["ves.io.schema.views.WhereVK8SService"] = ves_io_schema_views.WhereVK8SServiceValidator()
 	MDR.ValidatorRegistry["ves.io.schema.views.WhereVirtualNetwork"] = ves_io_schema_views.WhereVirtualNetworkValidator()
 	MDR.ValidatorRegistry["ves.io.schema.views.WhereVirtualSite"] = ves_io_schema_views.WhereVirtualSiteValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.XfccHeaderKeys"] = ves_io_schema_views.XfccHeaderKeysValidator()
 
 	MDR.ValidatorRegistry["ves.io.schema.views.api_definition.GetApiEndpointPathsSuggestionsRequest"] = ves_io_schema_views_api_definition.GetApiEndpointPathsSuggestionsRequestValidator()
 	MDR.ValidatorRegistry["ves.io.schema.views.api_definition.GetBasePathSuggestionsRequest"] = ves_io_schema_views_api_definition.GetBasePathSuggestionsRequestValidator()

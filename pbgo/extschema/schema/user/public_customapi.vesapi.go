@@ -3572,6 +3572,13 @@ var CustomAPISwaggerJSON string = `{
         }
     },
     "definitions": {
+        "ioschemaEmpty": {
+            "type": "object",
+            "description": "This can be used for messages where no values are needed",
+            "title": "Empty",
+            "x-displayname": "Empty",
+            "x-ves-proto-message": "ves.io.schema.Empty"
+        },
         "protobufAny": {
             "type": "object",
             "description": "-Any- contains an arbitrary serialized protocol buffer message along with a\nURL that describes the type of the serialized message.\n\nProtobuf library provides support to pack/unpack Any values in the form\nof utility functions or additional generated methods of the Any type.\n\nExample 1: Pack and unpack a message in C++.\n\n    Foo foo = ...;\n    Any any;\n    any.PackFrom(foo);\n    ...\n    if (any.UnpackTo(\u0026foo)) {\n      ...\n    }\n\nExample 2: Pack and unpack a message in Java.\n\n    Foo foo = ...;\n    Any any = Any.pack(foo);\n    ...\n    if (any.is(Foo.class)) {\n      foo = any.unpack(Foo.class);\n    }\n\n Example 3: Pack and unpack a message in Python.\n\n    foo = Foo(...)\n    any = Any()\n    any.Pack(foo)\n    ...\n    if any.Is(Foo.DESCRIPTOR):\n      any.Unpack(foo)\n      ...\n\n Example 4: Pack and unpack a message in Go\n\n     foo := \u0026pb.Foo{...}\n     any, err := ptypes.MarshalAny(foo)\n     ...\n     foo := \u0026pb.Foo{}\n     if err := ptypes.UnmarshalAny(any, foo); err != nil {\n       ...\n     }\n\nThe pack methods provided by protobuf library will by default use\n'type.googleapis.com/full.type.name' as the type URL and the unpack\nmethods only use the fully qualified type name after the last '/'\nin the type URL, for example \"foo.bar.com/x/y.z\" will yield type\nname \"y.z\".\n\n\nJSON\n====\nThe JSON representation of an -Any- value uses the regular\nrepresentation of the deserialized, embedded message, with an\nadditional field -@type- which contains the type URL. Example:\n\n    package google.profile;\n    message Person {\n      string first_name = 1;\n      string last_name = 2;\n    }\n\n    {\n      \"@type\": \"type.googleapis.com/google.profile.Person\",\n      \"firstName\": \u003cstring\u003e,\n      \"lastName\": \u003cstring\u003e\n    }\n\nIf the embedded message type is well-known and has a custom JSON\nrepresentation, that representation will be embedded adding a field\n-value- which holds the custom JSON in addition to the -@type-\nfield. Example (for message [google.protobuf.Duration][]):\n\n    {\n      \"@type\": \"type.googleapis.com/google.protobuf.Duration\",\n      \"value\": \"1.212s\"\n    }",
@@ -4477,6 +4484,7 @@ var CustomAPISwaggerJSON string = `{
             "description": "Detailed information about user including role assigments and other details for tenant.",
             "title": "Get User Detail Response",
             "x-displayname": "User Detail Response",
+            "x-ves-oneof-field-managed_access_info": "[\"msp_managed\",\"self_managed\"]",
             "x-ves-proto-message": "ves.io.schema.user.GetUserRoleResponse",
             "properties": {
                 "active_plan_transition_uid": {
@@ -4601,6 +4609,11 @@ var CustomAPISwaggerJSON string = `{
                     "x-displayname": "Last Name",
                     "x-ves-example": "value"
                 },
+                "msp_managed": {
+                    "description": "Exclusive with [self_managed]\n x-displayName: \"MSP Managed\n MSP information of tenants that are managed by an MSP",
+                    "title": "MSP Managed",
+                    "$ref": "#/definitions/userMSPManaged"
+                },
                 "name": {
                     "type": "string",
                     "description": " Username of the user\n\nExample: - \"value\"-",
@@ -4642,6 +4655,12 @@ var CustomAPISwaggerJSON string = `{
                     "title": "Plan type",
                     "$ref": "#/definitions/schemaPlanType",
                     "x-displayname": "Plan Type"
+                },
+                "self_managed": {
+                    "description": "Exclusive with [msp_managed]\n Tenant is not managed",
+                    "title": "Self managed tenant",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Self managed tenant"
                 },
                 "state": {
                     "description": " Contains information about current user state.",
@@ -5007,6 +5026,56 @@ var CustomAPISwaggerJSON string = `{
                     "x-displayname": "User Type"
                 }
             }
+        },
+        "userMSPManaged": {
+            "type": "object",
+            "description": "MSP information for tenant.",
+            "title": "MSP Managed",
+            "x-displayname": "MSP Managed",
+            "x-ves-proto-message": "ves.io.schema.user.MSPManaged",
+            "properties": {
+                "msp_id": {
+                    "type": "string",
+                    "description": " msp Id for the tenant.\n\nExample: - \"value\"-",
+                    "title": "msp_id",
+                    "x-displayname": "msp_id",
+                    "x-ves-example": "value"
+                },
+                "node_type": {
+                    "description": " Hold parent tenant id",
+                    "title": "MSP Node type",
+                    "$ref": "#/definitions/userMSPNodeType",
+                    "x-displayname": "MSP node type"
+                },
+                "parent_tenant_id": {
+                    "type": "string",
+                    "description": " Hold parent tenant id\n\nExample: - \"volterra-abc\"-",
+                    "title": "Parent Tenant ID",
+                    "x-displayname": "Parent Tenant ID",
+                    "x-ves-example": "volterra-abc"
+                },
+                "tier": {
+                    "type": "integer",
+                    "description": " tier of tenant in MSP tree.\n\nExample: - \"1\"-",
+                    "title": "tier",
+                    "format": "int64",
+                    "x-displayname": "Tier",
+                    "x-ves-example": "1"
+                }
+            }
+        },
+        "userMSPNodeType": {
+            "type": "string",
+            "description": "Managed services node type. This is used to determine if the tenant is a parent or a child or not set at all.\n\n - MspNodeTypeUnknown: MspUnknown\n\nManaged services status is unknown or not set\n - MspNodeTypeChild: MspChild\n\nTenant acts as a child for another tenant. In other words, the tenant has a parent tenant that is managing it.\n - MspNodeTypeParent: MspParent\n\nTenant acts as a parent for another tenant(s). In other words, the tenant has child tenants that are managed by it.",
+            "title": "Managed services node type",
+            "enum": [
+                "MspNodeTypeUnknown",
+                "MspNodeTypeChild",
+                "MspNodeTypeParent"
+            ],
+            "default": "MspNodeTypeUnknown",
+            "x-displayname": "Managed services node type",
+            "x-ves-proto-enum": "ves.io.schema.user.MSPNodeType"
         },
         "userNamespacesRoleType": {
             "type": "object",

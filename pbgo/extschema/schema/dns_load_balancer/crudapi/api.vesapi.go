@@ -3592,16 +3592,16 @@ var APISwaggerJSON string = `{
             "properties": {
                 "name": {
                     "type": "string",
-                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then name will hold the referred object's(e.g. route's) name.\n\nExample: - \"contacts-route\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_bytes: 64\n  ves.io.schema.rules.string.min_bytes: 1\n",
+                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then name will hold the referred object's(e.g. route's) name.\n\nExample: - \"contacts-route\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_bytes: 128\n  ves.io.schema.rules.string.min_bytes: 1\n",
                     "title": "name",
                     "minLength": 1,
-                    "maxLength": 64,
+                    "maxLength": 128,
                     "x-displayname": "Name",
                     "x-ves-example": "contacts-route",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true",
-                        "ves.io.schema.rules.string.max_bytes": "64",
+                        "ves.io.schema.rules.string.max_bytes": "128",
                         "ves.io.schema.rules.string.min_bytes": "1"
                     }
                 },
