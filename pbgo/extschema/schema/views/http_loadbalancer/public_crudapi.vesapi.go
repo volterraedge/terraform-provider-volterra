@@ -2755,28 +2755,39 @@ var APISwaggerJSON string = `{
         },
         "http_loadbalancerAPISpecificationSettings": {
             "type": "object",
-            "description": "x-displayName: \"API Specification and Validation\"\nSettings for api specification (api definition, OpenAPI validation, etc.)",
+            "description": "Settings for api specification (api definition, OpenAPI validation, etc.)",
             "title": "APISpecificationSettings",
+            "x-displayname": "API Specification and Validation",
+            "x-ves-oneof-field-validation_target_choice": "[\"validation_all_spec_endpoints\",\"validation_custom_list\",\"validation_disabled\"]",
+            "x-ves-proto-message": "ves.io.schema.views.http_loadbalancer.APISpecificationSettings",
             "properties": {
                 "api_definition": {
-                    "description": "x-displayName: \"API Definition\"\nx-required\nSpecify API definition which includes application API paths and methods derived from swagger files.",
+                    "description": " Specify API definition which includes application API paths and methods derived from swagger files.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "Use API Definition",
-                    "$ref": "#/definitions/schemaviewsObjectRefType"
+                    "$ref": "#/definitions/schemaviewsObjectRefType",
+                    "x-displayname": "API Definition",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 },
                 "validation_all_spec_endpoints": {
-                    "description": "x-displayName: \"All Endpoints\"\nValidate all api-endpoints listed in the OpenAPI specification file (a.k.a. swagger).\n Any other end-points not listed will act according to \"Fall Through Mode\"",
+                    "description": "Exclusive with [validation_custom_list validation_disabled]\n Validate all api-endpoints listed in the OpenAPI specification file (a.k.a. swagger).\n  Any other end-points not listed will act according to \"Fall Through Mode\"",
                     "title": "All endpoints",
-                    "$ref": "#/definitions/http_loadbalancerOpenApiValidationAllSpecEndpointsSettings"
+                    "$ref": "#/definitions/http_loadbalancerOpenApiValidationAllSpecEndpointsSettings",
+                    "x-displayname": "All Endpoints"
                 },
                 "validation_custom_list": {
-                    "description": "x-displayName: \"Custom List\"\nDefine API groups, base paths, or API endpoints and their OpenAPI validation modes.\n Any other end-points not listed will act according to \"Fall Through Mode\"",
+                    "description": "Exclusive with [validation_all_spec_endpoints validation_disabled]\n Define API groups, base paths, or API endpoints and their OpenAPI validation modes.\n  Any other end-points not listed will act according to \"Fall Through Mode\"",
                     "title": "Custom list",
-                    "$ref": "#/definitions/http_loadbalancerValidateApiBySpecRule"
+                    "$ref": "#/definitions/http_loadbalancerValidateApiBySpecRule",
+                    "x-displayname": "Custom List"
                 },
                 "validation_disabled": {
-                    "description": "x-displayName: \"Disabled\"\nDon't run OpenAPI validation",
+                    "description": "Exclusive with [validation_all_spec_endpoints validation_custom_list]\n Don't run OpenAPI validation",
                     "title": "Disabled",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disabled"
                 }
             }
         },
@@ -2957,6 +2968,45 @@ var APISwaggerJSON string = `{
                     "title": "Enable learning from redirected request traffic",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Enable Learning From Redirect Traffic"
+                }
+            }
+        },
+        "http_loadbalancerApiEndpointDetails": {
+            "type": "object",
+            "description": "This defines api endpoint",
+            "title": "ApiEndpointDetails",
+            "x-displayname": "API Endpoint",
+            "x-ves-proto-message": "ves.io.schema.views.http_loadbalancer.ApiEndpointDetails",
+            "properties": {
+                "methods": {
+                    "type": "array",
+                    "description": " methods to be matched\n\nExample: - \"GET\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.enum.defined_only: true\n  ves.io.schema.rules.repeated.max_items: 16\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "title": "Methods",
+                    "maxItems": 16,
+                    "items": {
+                        "$ref": "#/definitions/schemaHttpMethod"
+                    },
+                    "x-displayname": "Methods",
+                    "x-ves-example": "GET",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.items.enum.defined_only": "true",
+                        "ves.io.schema.rules.repeated.max_items": "16",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
+                },
+                "path": {
+                    "type": "string",
+                    "description": " path to be matched\n\nExample: - \"/api/v1/login\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 1024\n  ves.io.schema.rules.string.templated_http_path: true\n",
+                    "title": "Path",
+                    "maxLength": 1024,
+                    "x-displayname": "Path",
+                    "x-ves-example": "/api/v1/login",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.max_len": "1024",
+                        "ves.io.schema.rules.string.templated_http_path": "true"
+                    }
                 }
             }
         },
@@ -3368,15 +3418,25 @@ var APISwaggerJSON string = `{
         },
         "http_loadbalancerCustomFallThroughMode": {
             "type": "object",
-            "description": "x-displayName: \"Custom Fall Through Mode\"\nDefine the fall through settings",
+            "description": "Define the fall through settings",
             "title": "Custom Fall Through Mode",
+            "x-displayname": "Custom Fall Through Mode",
+            "x-ves-proto-message": "ves.io.schema.views.http_loadbalancer.CustomFallThroughMode",
             "properties": {
                 "open_api_validation_rules": {
                     "type": "array",
-                    "description": "x-required\nx-displayName: \"Custom Fall Through Rule List\"",
+                    "description": "\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 15\n  ves.io.schema.rules.repeated.unique_metadata_name: true\n",
                     "title": "Custom Fall Through Rule List",
+                    "maxItems": 15,
                     "items": {
                         "$ref": "#/definitions/http_loadbalancerFallThroughRule"
+                    },
+                    "x-displayname": "Custom Fall Through Rule List",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.max_items": "15",
+                        "ves.io.schema.rules.repeated.unique_metadata_name": "true"
                     }
                 }
             }
@@ -3606,43 +3666,81 @@ var APISwaggerJSON string = `{
         },
         "http_loadbalancerFallThroughRule": {
             "type": "object",
-            "description": "x-displayName: \"Fall Through Rule\"\nFall Through Rule for a specific endpoint, base-path, or API group",
+            "description": "Fall Through Rule for a specific endpoint, base-path, or API group",
             "title": "Fall Through Rule",
+            "x-displayname": "Fall Through Rule",
+            "x-ves-oneof-field-action_choice": "[\"action_block\",\"action_report\",\"action_skip\"]",
+            "x-ves-oneof-field-condition_type_choice": "[\"api_endpoint\",\"api_group\",\"base_path\"]",
+            "x-ves-proto-message": "ves.io.schema.views.http_loadbalancer.FallThroughRule",
             "properties": {
                 "action_block": {
-                    "description": "x-required\nx-displayName: \"Block\"\nBlock the request and issue an API security event",
+                    "description": "Exclusive with [action_report action_skip]\n Block the request and issue an API security event\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "block",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Block",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 },
                 "action_report": {
-                    "description": "x-required\nx-displayName: \"Report\"\nContinue processing the request and issue an API security event",
+                    "description": "Exclusive with [action_block action_skip]\n Continue processing the request and issue an API security event\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "report",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Report",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 },
                 "action_skip": {
-                    "description": "x-required\nx-displayName: \"Skip\"\nContinue processing the request",
+                    "description": "Exclusive with [action_block action_report]\n Continue processing the request\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "skip",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Skip",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 },
-                "api_endpoint_path": {
-                    "type": "string",
-                    "description": "x-displayName: \"API Endpoint\"\nx-example: \"/api/v1/login\"\nThe API endpoint which this validation applies to",
-                    "title": "API Endpoint"
+                "api_endpoint": {
+                    "description": "Exclusive with [api_group base_path]\n The API endpoint (Path + Method) which this validation applies to",
+                    "title": "API Endpoint Details",
+                    "$ref": "#/definitions/http_loadbalancerApiEndpointDetails",
+                    "x-displayname": "API Endpoint"
                 },
                 "api_group": {
                     "type": "string",
-                    "description": "x-displayName: \"API Group\"\nx-example: \"oas-all-operations\"\nThe API group which this validation applies to",
-                    "title": "api_group"
+                    "description": "Exclusive with [api_endpoint base_path]\n The API group which this validation applies to\n\nExample: - \"oas-all-operations\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 128\n",
+                    "title": "api_group",
+                    "maxLength": 128,
+                    "x-displayname": "API Group",
+                    "x-ves-example": "oas-all-operations",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "128"
+                    }
                 },
                 "base_path": {
                     "type": "string",
-                    "description": "x-displayName: \"Base Path\"\nx-example: \"/api/v1\"\nThe base path which this validation applies to",
-                    "title": "base path"
+                    "description": "Exclusive with [api_endpoint api_group]\n The base path which this validation applies to\n\nExample: - \"/api/v1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.http_path: true\n  ves.io.schema.rules.string.max_len: 128\n",
+                    "title": "base path",
+                    "maxLength": 128,
+                    "x-displayname": "Base Path",
+                    "x-ves-example": "/api/v1",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.http_path": "true",
+                        "ves.io.schema.rules.string.max_len": "128"
+                    }
                 },
                 "metadata": {
-                    "description": "x-displayName: \"Metadata\"\nx-required\nCommon attributes for the rule including name and description.",
+                    "description": " Common attributes for the rule including name and description.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "metadata",
-                    "$ref": "#/definitions/schemaMessageMetaType"
+                    "$ref": "#/definitions/schemaMessageMetaType",
+                    "x-displayname": "Metadata",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 }
             }
         },
@@ -3988,119 +4086,211 @@ var APISwaggerJSON string = `{
         },
         "http_loadbalancerOpenApiFallThroughMode": {
             "type": "object",
-            "description": "x-displayName: \"Fall Through Mode\"\nx-required\nDetermine what to do with unprotected endpoints (not in the OpenAPI specification file (a.k.a. swagger) or doesn't have a specific rule in custom rules)",
+            "description": "x-required\nDetermine what to do with unprotected endpoints (not in the OpenAPI specification file (a.k.a. swagger) or doesn't have a specific rule in custom rules)",
             "title": "Fall Through Mode",
+            "x-displayname": "Fall Through Mode",
+            "x-ves-oneof-field-fall_through_mode_choice": "[\"fall_through_mode_allow\",\"fall_through_mode_custom\"]",
+            "x-ves-proto-message": "ves.io.schema.views.http_loadbalancer.OpenApiFallThroughMode",
             "properties": {
                 "fall_through_mode_allow": {
-                    "description": "x-displayName: \"Allow\"\nAllow any unprotected end point",
+                    "description": "Exclusive with [fall_through_mode_custom]\n Allow any unprotected end point",
                     "title": "Allow",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Allow"
                 },
                 "fall_through_mode_custom": {
-                    "description": "x-displayName: \"Custom\"\nCustom rules for any unprotected end point",
+                    "description": "Exclusive with [fall_through_mode_allow]\n Custom rules for any unprotected end point",
                     "title": "Custom",
-                    "$ref": "#/definitions/http_loadbalancerCustomFallThroughMode"
+                    "$ref": "#/definitions/http_loadbalancerCustomFallThroughMode",
+                    "x-displayname": "Custom"
                 }
             }
         },
         "http_loadbalancerOpenApiValidationAllSpecEndpointsSettings": {
             "type": "object",
-            "description": "x-displayName: \"All Endpoints\"\nSettings for all endpoints validation",
+            "description": "Settings for all endpoints validation",
             "title": "OpenAPI Validation All Endpoints Settings",
+            "x-displayname": "All Endpoints",
+            "x-ves-proto-message": "ves.io.schema.views.http_loadbalancer.OpenApiValidationAllSpecEndpointsSettings",
             "properties": {
                 "fall_through_mode": {
-                    "description": "x-displayName: \"Fall Through Mode\"\nx-required\nDetermine what to do with unprotected endpoints (not in the OpenAPI specification file (a.k.a. swagger) or doesn't have a specific rule in custom rules)",
+                    "description": " Determine what to do with unprotected endpoints (not in the OpenAPI specification file (a.k.a. swagger) or doesn't have a specific rule in custom rules)\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "Fall Through Mode",
-                    "$ref": "#/definitions/http_loadbalancerOpenApiFallThroughMode"
+                    "$ref": "#/definitions/http_loadbalancerOpenApiFallThroughMode",
+                    "x-displayname": "Fall Through Mode",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 },
                 "validation_mode": {
-                    "description": "x-displayName: \"Validation Mode\"\nx-required\nValidation mode of OpenAPI specification.\n When a validation mismatch occurs on a request to one of the endpoints listed on the OpenAPI specification file (a.k.a. swagger)",
+                    "description": " Validation mode of OpenAPI specification.\n  When a validation mismatch occurs on a request to one of the endpoints listed on the OpenAPI specification file (a.k.a. swagger)\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "Validation Mode",
-                    "$ref": "#/definitions/http_loadbalancerOpenApiValidationMode"
+                    "$ref": "#/definitions/http_loadbalancerOpenApiValidationMode",
+                    "x-displayname": "Validation Mode",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 }
             }
         },
         "http_loadbalancerOpenApiValidationMode": {
             "type": "object",
-            "description": "x-displayName: \"Validation Mode\"\nx-required\nValidation mode of OpenAPI specification.\n When a validation mismatch occurs on a request to one of the endpoints listed on the OpenAPI specification file (a.k.a. swagger)",
+            "description": "x-required\nValidation mode of OpenAPI specification.\n When a validation mismatch occurs on a request to one of the endpoints listed on the OpenAPI specification file (a.k.a. swagger)",
             "title": "Validation Mode",
+            "x-displayname": "Validation Mode",
+            "x-ves-oneof-field-validation_mode_choice": "[\"skip_validation\",\"validation_mode_active\"]",
+            "x-ves-proto-message": "ves.io.schema.views.http_loadbalancer.OpenApiValidationMode",
             "properties": {
                 "skip_validation": {
-                    "description": "x-displayName: \"Skip\"\nSkip OpenAPI validation processing for this event",
+                    "description": "Exclusive with [validation_mode_active]\n Skip OpenAPI validation processing for this event",
                     "title": "Skip",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Skip"
                 },
                 "validation_mode_active": {
-                    "description": "x-displayName: \"Validate\"\nEnforce OpenAPI validation processing for this event",
+                    "description": "Exclusive with [skip_validation]\n Enforce OpenAPI validation processing for this event",
                     "title": "Validate",
-                    "$ref": "#/definitions/http_loadbalancerOpenApiValidationModeActive"
+                    "$ref": "#/definitions/http_loadbalancerOpenApiValidationModeActive",
+                    "x-displayname": "Validate"
                 }
             }
         },
         "http_loadbalancerOpenApiValidationModeActive": {
             "type": "object",
-            "description": "x-displayName: \"Open API Validation Mode Active\"\nValidation Mode properties",
+            "description": "Validation Mode properties",
             "title": "Open API Validation Mode Active",
+            "x-displayname": "Open API Validation Mode Active",
+            "x-ves-oneof-field-validation_enforcement_type": "[\"enforcement_block\",\"enforcement_report\"]",
+            "x-ves-proto-message": "ves.io.schema.views.http_loadbalancer.OpenApiValidationModeActive",
             "properties": {
                 "enforcement_block": {
-                    "description": "x-displayName: \"Block\"\nBlock the request, trigger an API security event",
+                    "description": "Exclusive with [enforcement_report]\n Block the request, trigger an API security event",
                     "title": "Block",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Block"
                 },
                 "enforcement_report": {
-                    "description": "x-displayName: \"Report\"\nAllow the request, trigger an API security event",
+                    "description": "Exclusive with [enforcement_block]\n Allow the request, trigger an API security event",
                     "title": "Report",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Report"
                 },
                 "request_validation_properties": {
                     "type": "array",
-                    "description": "x-displayName: \"Request Validation Properties\"\nx-required\nList of properties of the request to validate according to the OpenAPI specification file (a.k.a. swagger)",
+                    "description": " List of properties of the request to validate according to the OpenAPI specification file (a.k.a. swagger)\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.items.enum.defined_only: true\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "Request Validation Properties",
+                    "minItems": 1,
                     "items": {
                         "$ref": "#/definitions/schemaOpenApiValidationProperties"
+                    },
+                    "x-displayname": "Request Validation Properties",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.items.enum.defined_only": "true",
+                        "ves.io.schema.rules.repeated.min_items": "1",
+                        "ves.io.schema.rules.repeated.unique": "true"
                     }
                 }
             }
         },
         "http_loadbalancerOpenApiValidationRule": {
             "type": "object",
-            "description": "x-displayName: \"OpenAPI Validation Rule\"\nOpenAPI Validation Rule for a specific endpoint, base-path, or API group",
+            "description": "OpenAPI Validation Rule for a specific endpoint, base-path, or API group",
             "title": "OpenAPI Validation Rule",
+            "x-displayname": "OpenAPI Validation Rule",
+            "x-ves-oneof-field-condition_type_choice": "[\"api_endpoint\",\"api_group\",\"base_path\"]",
+            "x-ves-oneof-field-domain_choice": "[\"any_domain\",\"specific_domain\"]",
+            "x-ves-proto-message": "ves.io.schema.views.http_loadbalancer.OpenApiValidationRule",
             "properties": {
                 "any_domain": {
-                    "description": "x-required\nx-displayName: \"Any Domain\"\nThe rule will apply for all domains.",
+                    "description": "Exclusive with [specific_domain]\n The rule will apply for all domains.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "any domain",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Any Domain",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 },
-                "api_endpoint_path": {
-                    "type": "string",
-                    "description": "x-displayName: \"API Endpoint\"\nx-example: \"/api/v1/login\"\nThe API endpoint which this validation applies to",
-                    "title": "API Endpoint"
+                "api_endpoint": {
+                    "description": "Exclusive with [api_group base_path]\n The API endpoint (Path + Method) which this validation applies to",
+                    "title": "API Endpoint Details",
+                    "$ref": "#/definitions/http_loadbalancerApiEndpointDetails",
+                    "x-displayname": "API Endpoint"
                 },
                 "api_group": {
                     "type": "string",
-                    "description": "x-displayName: \"API Group\"\nx-example: \"oas-all-operations\"\nThe API group which this validation applies to",
-                    "title": "api_group"
+                    "description": "Exclusive with [api_endpoint base_path]\n The API group which this validation applies to\n\nExample: - \"oas-all-operations\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 128\n",
+                    "title": "api_group",
+                    "maxLength": 128,
+                    "x-displayname": "API Group",
+                    "x-ves-example": "oas-all-operations",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "128"
+                    }
                 },
                 "base_path": {
                     "type": "string",
-                    "description": "x-displayName: \"Base Path\"\nx-example: \"/api/v1\"\nThe base path which this validation applies to",
-                    "title": "base path"
+                    "description": "Exclusive with [api_endpoint api_group]\n The base path which this validation applies to\n\nExample: - \"/api/v1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.http_path: true\n  ves.io.schema.rules.string.max_len: 128\n",
+                    "title": "base path",
+                    "maxLength": 128,
+                    "x-displayname": "Base Path",
+                    "x-ves-example": "/api/v1",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.http_path": "true",
+                        "ves.io.schema.rules.string.max_len": "128"
+                    }
                 },
                 "metadata": {
-                    "description": "x-displayName: \"Metadata\"\nx-required\nCommon attributes for the rule including name and description.",
+                    "description": " Common attributes for the rule including name and description.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "metadata",
-                    "$ref": "#/definitions/schemaMessageMetaType"
+                    "$ref": "#/definitions/schemaMessageMetaType",
+                    "x-displayname": "Metadata",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 },
                 "specific_domain": {
                     "type": "string",
-                    "description": "x-required\nx-displayName: \"Specific Domain\"\nThe rule will apply for a specific domain.",
-                    "title": "domain"
+                    "description": "Exclusive with [any_domain]\n The rule will apply for a specific domain.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 128\n  ves.io.schema.rules.string.vh_domain: true\n",
+                    "title": "domain",
+                    "maxLength": 128,
+                    "x-displayname": "Specific Domain",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.max_len": "128",
+                        "ves.io.schema.rules.string.vh_domain": "true"
+                    }
                 },
                 "validation_mode": {
-                    "description": "x-displayName: \"Validation Mode\"\nx-required\nValidation mode of OpenAPI specification.\n When a validation mismatch occurs on a request to one of the endpoints listed on the OpenAPI specification file (a.k.a. swagger)",
+                    "description": " Validation mode of OpenAPI specification.\n  When a validation mismatch occurs on a request to one of the endpoints listed on the OpenAPI specification file (a.k.a. swagger)\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "Validation Mode",
-                    "$ref": "#/definitions/http_loadbalancerOpenApiValidationMode"
+                    "$ref": "#/definitions/http_loadbalancerOpenApiValidationMode",
+                    "x-displayname": "Validation Mode",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                }
+            }
+        },
+        "http_loadbalancerOriginServerSubsetRuleListType": {
+            "type": "object",
+            "description": "x-displayName: \"Origin Server Subset Rule List Type\"\nList of Origin Pools",
+            "title": "OriginServerSubsetRuleListType",
+            "properties": {
+                "origin_server_subset_rules": {
+                    "type": "array",
+                    "description": "x-displayName: \"Origin Server Subset \"\nDefine the list of labels for subset selection of origin servers on specific match criteria.\nThe match criteria include label selector expression, IP and ASN ranges.\nOrigin Server Subset  is a sequential engine where rules are evaluated one after the other.\nIt's important to define the correct order for Origin Server Subset  to get the intended result, rules are evaluated from top to bottom in the list.\nWhen an Origin server subset rule is matched, then this selection rule takes effect and no more rules are evaluated.",
+                    "title": "Origin Server Subset",
+                    "items": {
+                        "$ref": "#/definitions/policyOriginServerSubsetRule"
+                    }
                 }
             }
         },
@@ -4318,7 +4508,7 @@ var APISwaggerJSON string = `{
                     "description": " Header transformation options for response headers to the client",
                     "title": "Header transformation",
                     "$ref": "#/definitions/schemaHeaderTransformationType",
-                    "x-displayname": "Header Transformation Configuration"
+                    "x-displayname": "Header Transformation"
                 },
                 "http_redirect": {
                     "type": "boolean",
@@ -5396,20 +5586,35 @@ var APISwaggerJSON string = `{
         },
         "http_loadbalancerValidateApiBySpecRule": {
             "type": "object",
-            "description": "x-displayName: \"Custom List\"\nDefine API groups, base paths, or API endpoints and their OpenAPI validation modes.\n Any other api-endpoint not listed will act according to \"Fall Through Mode\".",
+            "description": "Define API groups, base paths, or API endpoints and their OpenAPI validation modes.\n Any other api-endpoint not listed will act according to \"Fall Through Mode\".",
             "title": "ValidateApiBySpecRule",
+            "x-displayname": "Custom List",
+            "x-ves-proto-message": "ves.io.schema.views.http_loadbalancer.ValidateApiBySpecRule",
             "properties": {
                 "fall_through_mode": {
-                    "description": "x-displayName: \"Fall Through Mode\"\nx-required\nDetermine what to do with unprotected endpoints (not in the OpenAPI specification file (a.k.a. swagger) or doesn't have a specific rule in custom rules)",
+                    "description": " Determine what to do with unprotected endpoints (not in the OpenAPI specification file (a.k.a. swagger) or doesn't have a specific rule in custom rules)\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "Fall Through Mode",
-                    "$ref": "#/definitions/http_loadbalancerOpenApiFallThroughMode"
+                    "$ref": "#/definitions/http_loadbalancerOpenApiFallThroughMode",
+                    "x-displayname": "Fall Through Mode",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 },
                 "open_api_validation_rules": {
                     "type": "array",
-                    "description": "x-required\nx-displayName: \"Validation List\"",
+                    "description": "\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 15\n  ves.io.schema.rules.repeated.unique_metadata_name: true\n",
                     "title": "Validation List",
+                    "maxItems": 15,
                     "items": {
                         "$ref": "#/definitions/http_loadbalancerOpenApiValidationRule"
+                    },
+                    "x-displayname": "Validation List",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.max_items": "15",
+                        "ves.io.schema.rules.repeated.unique_metadata_name": "true"
                     }
                 }
             }
@@ -6629,16 +6834,16 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Group of Clients by Label Selector"
                 },
                 "ip_matcher": {
-                    "description": "Exclusive with [any_ip asn_list asn_matcher ip_prefix_list]\n List of references to IP Prefix Set objects.\n The predicate evaluates to true if the client IPv4 Address is covered by one or more of the IPv4 Prefixes in the IP Prefix Sets.",
+                    "description": "Exclusive with [any_ip asn_list asn_matcher ip_prefix_list]\n List of references to IP Prefix Set objects.\n The predicate evaluates to true if the client IP Address is covered by one or more of the IP Prefixes in the IP Prefix Sets.",
                     "title": "ip matcher",
                     "$ref": "#/definitions/policyIpMatcherType",
                     "x-displayname": "IP Prefix Sets"
                 },
                 "ip_prefix_list": {
-                    "description": "Exclusive with [any_ip asn_list asn_matcher ip_matcher]\n List of IPv4 Prefixes values.\n The predicate evaluates to true if the client IPv4 Address is covered by one or more of the IPv4 Prefixes from the list.",
+                    "description": "Exclusive with [any_ip asn_list asn_matcher ip_matcher]\n List of IP Prefixes values.\n The predicate evaluates to true if the client IP Address is covered by one or more of the IP Prefixes from the list.",
                     "title": "ip prefix list",
                     "$ref": "#/definitions/policyPrefixMatchList",
-                    "x-displayname": "IPv4 Prefix List"
+                    "x-displayname": "IP Prefix List"
                 },
                 "ip_threat_category_list": {
                     "description": "Exclusive with [any_client client_selector]\n IP threat categories to choose from",
@@ -7380,10 +7585,83 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "policyOriginServerSubsetRule": {
+            "type": "object",
+            "description": "x-displayName: \"Origin Server Subset Rule\"\n\"Origin Server Subset rule specifies a simple set of match conditions to be matched to select a list of origin server key/val pairs",
+            "title": "OriginServerSubsetRule",
+            "properties": {
+                "any_asn": {
+                    "description": "x-displayName: \"Any Source ASN\"\nAny origin ASN.",
+                    "title": "any asn",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "any_ip": {
+                    "description": "x-displayName: \"Any Source IP\"\nAny Source IP",
+                    "title": "any ip",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "asn_list": {
+                    "description": "x-displayName: \"ASN List\"\nList of 4-byte ASN values.\nThe predicate evaluates to true if the origin ASN is present in the ASN list.",
+                    "title": "asn list",
+                    "$ref": "#/definitions/policyAsnMatchList"
+                },
+                "asn_matcher": {
+                    "description": "x-displayName: \"BGP ASN Sets\"\nList of references to BGP ASN Set objects.\nThe predicate evaluates to true if the origin ASN is present in one of the BGP ASN Set objects.",
+                    "title": "asn matcher",
+                    "$ref": "#/definitions/policyAsnMatcherType"
+                },
+                "body_matcher": {
+                    "description": "x-displayName: \"Request Body Matcher\"\nPredicate for matching the request body string. The criteria for matching the request body is described in MatcherType.\nThe actual request body value is extracted from the request API as a string.",
+                    "title": "request body matcher",
+                    "$ref": "#/definitions/policyMatcherType"
+                },
+                "client_selector": {
+                    "description": "x-displayName: \"Group of Clients by Label Selector\"\nA label selector that describes the expected set of clients. The labels associated with the client making the API request are used to evaluate the label\nexpressions in the selector. These labels can be derived from the client TLS certificate or from the volterra internal control plane.\nThis is a more flexible and powerful version of the client name matcher predicate that allows a given rule to be applicable to a set of clients based on the\nclient labels rather than being limited to relying on patterns in the client name.\nThe predicate evaluates to true if the expressions in the label selector are true for the client labels.",
+                    "title": "client selector",
+                    "$ref": "#/definitions/schemaLabelSelectorType"
+                },
+                "country_codes": {
+                    "type": "array",
+                    "description": "x-displayName: \"Country Codes List\"\nx-example: \"IN, DE\"\nList of Country Codes",
+                    "title": "country codes",
+                    "items": {
+                        "$ref": "#/definitions/policyCountryCode"
+                    }
+                },
+                "ip_matcher": {
+                    "description": "x-displayName: \"IP Prefix Sets\"\nList of references to IP Prefix Set objects.\nThe predicate evaluates to true if the client IPv4 Address is covered by one or more of the IPv4 Prefixes in the IP Prefix Sets.",
+                    "title": "ip matcher",
+                    "$ref": "#/definitions/policyIpMatcherType"
+                },
+                "ip_prefix_list": {
+                    "description": "x-displayName: \"IPv4 Prefix List\"\nList of IPv4 Prefixes values.\nThe predicate evaluates to true if the client IPv4 Address is covered by one or more of the IPv4 Prefixes from the list.",
+                    "title": "ip prefix list",
+                    "$ref": "#/definitions/policyPrefixMatchList"
+                },
+                "metadata": {
+                    "description": "x-displayName: \"Metadata\"\nx-required\nCommon attributes for the rule including name and description.",
+                    "title": "metadata",
+                    "$ref": "#/definitions/schemaMessageMetaType"
+                },
+                "origin_server_subsets_action": {
+                    "type": "object",
+                    "description": "x-displayName: \"Origin Server Labels Action\"\nx-required\nx-example: \"value\"\nAdd Labels for this origin server, these labels can be used to form subset.",
+                    "title": "Origin Server Labels Action"
+                },
+                "re_name_list": {
+                    "type": "array",
+                    "description": "x-displayName: \"RE Names\"\nx-example: \"region-sj\"\nList of RE names for match",
+                    "title": "RE Name list",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
         "policyPrefixMatchList": {
             "type": "object",
-            "description": "List of IPv4 Prefix strings to match against.",
-            "title": "Prefix Match List",
+            "description": "List of IP Prefix strings to match against.",
+            "title": "IP Prefix Match List",
             "x-displayname": "IP Prefix Match List",
             "x-ves-proto-message": "ves.io.schema.policy.PrefixMatchList",
             "properties": {
@@ -7396,21 +7674,17 @@ var APISwaggerJSON string = `{
                 },
                 "ip_prefixes": {
                     "type": "array",
-                    "description": " List of IPv4 prefix strings.\n\nExample: - \"192.168.20.0/24\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.items.string.ipv4_prefix: true\n  ves.io.schema.rules.repeated.max_items: 128\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " List of IPv4 prefix strings.\n\nExample: - \"192.168.20.0/24\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.ipv4_prefix: true\n  ves.io.schema.rules.repeated.max_items: 128\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "ip prefixes",
-                    "minItems": 1,
                     "maxItems": 128,
                     "items": {
                         "type": "string"
                     },
-                    "x-displayname": "IP Prefix List",
+                    "x-displayname": "IPv4 Prefix List",
                     "x-ves-example": "192.168.20.0/24",
-                    "x-ves-required": "true",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true",
                         "ves.io.schema.rules.repeated.items.string.ipv4_prefix": "true",
                         "ves.io.schema.rules.repeated.max_items": "128",
-                        "ves.io.schema.rules.repeated.min_items": "1",
                         "ves.io.schema.rules.repeated.unique": "true"
                     }
                 }
@@ -9677,7 +9951,7 @@ var APISwaggerJSON string = `{
         },
         "schemaOpenApiValidationProperties": {
             "type": "string",
-            "description": "x-displayName: \"OpenAPI Validation Properties\"\nList of required properties to validate against the OpenAPI spec\n\n - PROPERTY_QUERY_PARAMETERS: x-displayName: \"Query Parameters\"\nValidate that all query parameters are according to the OpenAPI specification\n - PROPERTY_PATH_PARAMETERS: x-displayName: \"Path Parameters\"\nValidate that all path parameters are according to the OpenAPI specification\n - PROPERTY_CONTENT_TYPE: x-displayName: \"Content-type\"\nValidate that the content type of the request is according to the OpenAPI specification\n - PROPERTY_COOKIE_PARAMETERS: x-displayName: \"Cookie Parameters\"\nValidate that all cookies are according to the OpenAPI specification\n - PROPERTY_HTTP_HEADERS: x-displayName: \"HTTP Headers\"\nValidate that all HTTP headers are according to the OpenAPI specification\n - PROPERTY_HTTP_BODY: x-displayName: \"HTTP Body\"\nValidate that the request body is according to the OpenAPI specification",
+            "description": "List of required properties to validate against the OpenAPI spec\n\nValidate that all query parameters are according to the OpenAPI specification\nValidate that all path parameters are according to the OpenAPI specification\nValidate that the content type of the request is according to the OpenAPI specification\nValidate that all cookies are according to the OpenAPI specification\nValidate that all HTTP headers are according to the OpenAPI specification\nValidate that the request body is according to the OpenAPI specification",
             "title": "OpenApiValidationProperties",
             "enum": [
                 "PROPERTY_QUERY_PARAMETERS",
@@ -9687,7 +9961,9 @@ var APISwaggerJSON string = `{
                 "PROPERTY_HTTP_HEADERS",
                 "PROPERTY_HTTP_BODY"
             ],
-            "default": "PROPERTY_QUERY_PARAMETERS"
+            "default": "PROPERTY_QUERY_PARAMETERS",
+            "x-displayname": "OpenAPI Validation Properties",
+            "x-ves-proto-enum": "ves.io.schema.OpenApiValidationProperties"
         },
         "schemaRetryBackOff": {
             "type": "object",
@@ -10335,12 +10611,10 @@ var APISwaggerJSON string = `{
         },
         "schemaXfccElement": {
             "type": "string",
-            "description": "X-Forwarded-Client-Cert custom cookie elements\n\nThe Subject Alternative Name (URI type) of the current proxy’s certificate.\nThe current proxy’s certificate may contain multiple URI type Subject Alternative Names,\neach will be a separate key-value pair.\nThe SHA 256 digest of the current client certificate.\nThe entire client certificate in URL encoded PEM format.\nThe entire client certificate chain (including the leaf certificate) in URL encoded PEM format.\nThe Subject field of the current client certificate. The value is always double-quoted.\nThe URI type Subject Alternative Name field of the current client certificate.\nA client certificate may contain multiple URI type Subject Alternative Names,\neach will be a separate key-value pair.\nThe DNS type Subject Alternative Name field of the current client certificate.\nA client certificate may contain multiple DNS type Subject Alternative Names,\neach will be a separate key-value pair.",
+            "description": "X-Forwarded-Client-Cert custom cookie elements\n\nThe entire client certificate in URL encoded PEM format.\nThe entire client certificate chain (including the leaf certificate) in URL encoded PEM format.\nThe Subject field of the current client certificate. The value is always double-quoted.\nThe URI type Subject Alternative Name field of the current client certificate.\nA client certificate may contain multiple URI type Subject Alternative Names,\neach will be a separate key-value pair.\nThe DNS type Subject Alternative Name field of the current client certificate.\nA client certificate may contain multiple DNS type Subject Alternative Names,\neach will be a separate key-value pair.",
             "title": "XfccElement",
             "enum": [
                 "XFCC_NONE",
-                "XFCC_BY",
-                "XFCC_HASH",
                 "XFCC_CERT",
                 "XFCC_CHAIN",
                 "XFCC_SUBJECT",
@@ -10781,11 +11055,11 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/policyHttpMethodMatcherType"
                 },
                 "ip_matcher": {
-                    "description": "Exclusive with [any_ip ip_prefix_list]\n List of references to IP Prefix Set objects.\n The predicate evaluates to true if the client IPv4 Address is covered by one or more of the IPv4 Prefixes in the IP Prefix Sets.",
+                    "description": "Exclusive with [any_ip ip_prefix_list]\n List of references to IP Prefix Set objects.\n The predicate evaluates to true if the client IP Address is covered by one or more of the IP Prefixes in the IP Prefix Sets.",
                     "$ref": "#/definitions/policyIpMatcherType"
                 },
                 "ip_prefix_list": {
-                    "description": "Exclusive with [any_ip ip_matcher]\n List of IPv4 Prefixes values.\n The predicate evaluates to true if the client IPv4 Address is covered by one or more of the IPv4 Prefixes from the list.",
+                    "description": "Exclusive with [any_ip ip_matcher]\n List of IP Prefixes values.\n The predicate evaluates to true if the client IP Address is covered by one or more of the IP Prefixes from the list.",
                     "$ref": "#/definitions/policyPrefixMatchList"
                 },
                 "path": {
@@ -11541,7 +11815,7 @@ var APISwaggerJSON string = `{
             "title": "CreateSpecType",
             "x-displayname": "Create HTTP Load Balancer",
             "x-ves-oneof-field-advertise_choice": "[\"advertise_custom\",\"advertise_on_public\",\"advertise_on_public_default_vip\",\"do_not_advertise\"]",
-            "x-ves-oneof-field-api_definition_choice": "[\"api_definition\",\"disable_api_definition\"]",
+            "x-ves-oneof-field-api_definition_choice": "[\"api_specification\",\"disable_api_definition\"]",
             "x-ves-oneof-field-api_discovery_choice": "[\"disable_api_discovery\",\"enable_api_discovery\"]",
             "x-ves-oneof-field-bot_defense_choice": "[]",
             "x-ves-oneof-field-challenge_type": "[\"captcha_challenge\",\"enable_challenge\",\"js_challenge\",\"no_challenge\",\"policy_based_challenge\"]",
@@ -11588,11 +11862,6 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Internet"
                 },
-                "api_definition": {
-                    "description": "Exclusive with [disable_api_definition]\n Specify API definition which includes application API paths and methods derived from swagger files.",
-                    "$ref": "#/definitions/schemaviewsObjectRefType",
-                    "x-displayname": "Use API Definition"
-                },
                 "api_protection_rules": {
                     "description": " API Protection Rules can be defined in two categories.\n The first category includes fine-grained rules, per API path and methods.\n The second category includes rules per API groups or Server URLs.\n If request matches any rule in the first category, second category rules are not evaluated.\n Rules can also include additional conditions, for example specific clients can access certain API endpoint or API group.",
                     "$ref": "#/definitions/http_loadbalancerAPIProtectionRules",
@@ -11602,6 +11871,11 @@ var APISwaggerJSON string = `{
                     "description": "Exclusive with [disable_rate_limit rate_limit]\n Define rate limiting for one or more API endpoints",
                     "$ref": "#/definitions/http_loadbalancerAPIRateLimit",
                     "x-displayname": "API Rate Limit"
+                },
+                "api_specification": {
+                    "description": "Exclusive with [disable_api_definition]\n Specify API definition and OpenAPI Validation",
+                    "$ref": "#/definitions/http_loadbalancerAPISpecificationSettings",
+                    "x-displayname": "Enable"
                 },
                 "app_firewall": {
                     "description": "Exclusive with [disable_waf]\n Reference to App Firewall configuration object",
@@ -11696,7 +11970,7 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "disable_api_definition": {
-                    "description": "Exclusive with [api_definition]\n API Definition is not currently used for this load balancer",
+                    "description": "Exclusive with [api_specification]\n API Definition is not currently used for this load balancer",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Disable"
                 },
@@ -11976,7 +12250,7 @@ var APISwaggerJSON string = `{
             "title": "GetSpecType",
             "x-displayname": "Get HTTP Load Balancer",
             "x-ves-oneof-field-advertise_choice": "[\"advertise_custom\",\"advertise_on_public\",\"advertise_on_public_default_vip\",\"do_not_advertise\"]",
-            "x-ves-oneof-field-api_definition_choice": "[\"api_definition\",\"disable_api_definition\"]",
+            "x-ves-oneof-field-api_definition_choice": "[\"api_specification\",\"disable_api_definition\"]",
             "x-ves-oneof-field-api_discovery_choice": "[\"disable_api_discovery\",\"enable_api_discovery\"]",
             "x-ves-oneof-field-bot_defense_choice": "[]",
             "x-ves-oneof-field-challenge_type": "[\"captcha_challenge\",\"enable_challenge\",\"js_challenge\",\"no_challenge\",\"policy_based_challenge\"]",
@@ -12023,11 +12297,6 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Internet"
                 },
-                "api_definition": {
-                    "description": "Exclusive with [disable_api_definition]\n Specify API definition which includes application API paths and methods derived from swagger files.",
-                    "$ref": "#/definitions/schemaviewsObjectRefType",
-                    "x-displayname": "Use API Definition"
-                },
                 "api_protection_rules": {
                     "description": " API Protection Rules can be defined in two categories.\n The first category includes fine-grained rules, per API path and methods.\n The second category includes rules per API groups or Server URLs.\n If request matches any rule in the first category, second category rules are not evaluated.\n Rules can also include additional conditions, for example specific clients can access certain API endpoint or API group.",
                     "$ref": "#/definitions/http_loadbalancerAPIProtectionRules",
@@ -12037,6 +12306,11 @@ var APISwaggerJSON string = `{
                     "description": "Exclusive with [disable_rate_limit rate_limit]\n Define rate limiting for one or more API endpoints",
                     "$ref": "#/definitions/http_loadbalancerAPIRateLimit",
                     "x-displayname": "API Rate Limit"
+                },
+                "api_specification": {
+                    "description": "Exclusive with [disable_api_definition]\n Specify API definition and OpenAPI Validation",
+                    "$ref": "#/definitions/http_loadbalancerAPISpecificationSettings",
+                    "x-displayname": "Enable"
                 },
                 "app_firewall": {
                     "description": "Exclusive with [disable_waf]\n Reference to App Firewall configuration object",
@@ -12136,7 +12410,7 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "disable_api_definition": {
-                    "description": "Exclusive with [api_definition]\n API Definition is not currently used for this load balancer",
+                    "description": "Exclusive with [api_specification]\n API Definition is not currently used for this load balancer",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Disable"
                 },
@@ -12443,7 +12717,7 @@ var APISwaggerJSON string = `{
             "title": "GlobalSpecType",
             "x-displayname": "Global Specification",
             "x-ves-oneof-field-advertise_choice": "[\"advertise_custom\",\"advertise_on_public\",\"advertise_on_public_default_vip\",\"do_not_advertise\"]",
-            "x-ves-oneof-field-api_definition_choice": "[\"api_definition\",\"disable_api_definition\"]",
+            "x-ves-oneof-field-api_definition_choice": "[\"api_specification\",\"disable_api_definition\"]",
             "x-ves-oneof-field-api_discovery_choice": "[\"disable_api_discovery\",\"enable_api_discovery\"]",
             "x-ves-oneof-field-bot_defense_choice": "[]",
             "x-ves-oneof-field-challenge_type": "[\"captcha_challenge\",\"enable_challenge\",\"js_challenge\",\"no_challenge\",\"policy_based_challenge\"]",
@@ -12496,12 +12770,6 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Internet"
                 },
-                "api_definition": {
-                    "description": "Exclusive with [disable_api_definition]\n Specify API definition which includes application API paths and methods derived from swagger files.",
-                    "title": "Use API Definition",
-                    "$ref": "#/definitions/schemaviewsObjectRefType",
-                    "x-displayname": "Use API Definition"
-                },
                 "api_protection_rules": {
                     "description": " API Protection Rules can be defined in two categories.\n The first category includes fine-grained rules, per API path and methods.\n The second category includes rules per API groups or Server URLs.\n If request matches any rule in the first category, second category rules are not evaluated.\n Rules can also include additional conditions, for example specific clients can access certain API endpoint or API group.",
                     "title": "API Protection rules",
@@ -12513,6 +12781,12 @@ var APISwaggerJSON string = `{
                     "title": "Rate Limiting Parameters",
                     "$ref": "#/definitions/http_loadbalancerAPIRateLimit",
                     "x-displayname": "API Rate Limit"
+                },
+                "api_specification": {
+                    "description": "Exclusive with [disable_api_definition]\n Specify API definition and OpenAPI Validation",
+                    "title": "API Specification",
+                    "$ref": "#/definitions/http_loadbalancerAPISpecificationSettings",
+                    "x-displayname": "Enable"
                 },
                 "app_firewall": {
                     "description": "Exclusive with [disable_waf]\n Reference to App Firewall configuration object",
@@ -12631,7 +12905,7 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "disable_api_definition": {
-                    "description": "Exclusive with [api_definition]\n API Definition is not currently used for this load balancer",
+                    "description": "Exclusive with [api_specification]\n API Definition is not currently used for this load balancer",
                     "title": "Don not use API Definition",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Disable"
@@ -13179,7 +13453,7 @@ var APISwaggerJSON string = `{
             "title": "ReplaceSpecType",
             "x-displayname": "Replace HTTP Load Balancer",
             "x-ves-oneof-field-advertise_choice": "[\"advertise_custom\",\"advertise_on_public\",\"advertise_on_public_default_vip\",\"do_not_advertise\"]",
-            "x-ves-oneof-field-api_definition_choice": "[\"api_definition\",\"disable_api_definition\"]",
+            "x-ves-oneof-field-api_definition_choice": "[\"api_specification\",\"disable_api_definition\"]",
             "x-ves-oneof-field-api_discovery_choice": "[\"disable_api_discovery\",\"enable_api_discovery\"]",
             "x-ves-oneof-field-bot_defense_choice": "[]",
             "x-ves-oneof-field-challenge_type": "[\"captcha_challenge\",\"enable_challenge\",\"js_challenge\",\"no_challenge\",\"policy_based_challenge\"]",
@@ -13226,11 +13500,6 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Internet"
                 },
-                "api_definition": {
-                    "description": "Exclusive with [disable_api_definition]\n Specify API definition which includes application API paths and methods derived from swagger files.",
-                    "$ref": "#/definitions/schemaviewsObjectRefType",
-                    "x-displayname": "Use API Definition"
-                },
                 "api_protection_rules": {
                     "description": " API Protection Rules can be defined in two categories.\n The first category includes fine-grained rules, per API path and methods.\n The second category includes rules per API groups or Server URLs.\n If request matches any rule in the first category, second category rules are not evaluated.\n Rules can also include additional conditions, for example specific clients can access certain API endpoint or API group.",
                     "$ref": "#/definitions/http_loadbalancerAPIProtectionRules",
@@ -13240,6 +13509,11 @@ var APISwaggerJSON string = `{
                     "description": "Exclusive with [disable_rate_limit rate_limit]\n Define rate limiting for one or more API endpoints",
                     "$ref": "#/definitions/http_loadbalancerAPIRateLimit",
                     "x-displayname": "API Rate Limit"
+                },
+                "api_specification": {
+                    "description": "Exclusive with [disable_api_definition]\n Specify API definition and OpenAPI Validation",
+                    "$ref": "#/definitions/http_loadbalancerAPISpecificationSettings",
+                    "x-displayname": "Enable"
                 },
                 "app_firewall": {
                     "description": "Exclusive with [disable_waf]\n Reference to App Firewall configuration object",
@@ -13334,7 +13608,7 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "disable_api_definition": {
-                    "description": "Exclusive with [api_definition]\n API Definition is not currently used for this load balancer",
+                    "description": "Exclusive with [api_specification]\n API Definition is not currently used for this load balancer",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Disable"
                 },
@@ -13983,6 +14257,28 @@ var APISwaggerJSON string = `{
                     "description": " DNS record Value",
                     "title": "Value",
                     "x-displayname": "Value"
+                }
+            }
+        },
+        "virtual_hostHttpProtocolOptions": {
+            "type": "object",
+            "description": "x-displayName: \"HTTP Protocol Configuration Options\"\nHTTP protocol configuration options for downstream connections",
+            "title": "HttpProtocolOptions",
+            "properties": {
+                "http_protocol_enable_v1_only": {
+                    "description": "x-displayName: \"HTTP/1.1\"\nEnable HTTP/1.1 for downstream connections",
+                    "title": "http_protocol_enable_v1_only",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "http_protocol_enable_v1_v2": {
+                    "description": "x-displayName: \"HTTP/1.1 and HTTP/2\"\nEnable both HTTP/1.1 and HTTP/2 for downstream connections",
+                    "title": "http_protocol_enable_v1_v2",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "http_protocol_enable_v2_only": {
+                    "description": "x-displayName: \"HTTP/2\"\nEnable HTTP/2 for downstream connections",
+                    "title": "http_protocol_enable_v2_only",
+                    "$ref": "#/definitions/ioschemaEmpty"
                 }
             }
         },

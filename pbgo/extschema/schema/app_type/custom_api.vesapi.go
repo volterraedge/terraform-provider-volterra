@@ -2507,6 +2507,15 @@ var CustomAPISwaggerJSON string = `{
                     "format": "date-time",
                     "x-displayname": "Access Discovery Time"
                 },
+                "api_groups": {
+                    "type": "array",
+                    "description": " List of API Groups the API Endpoint is a member of.\n\nExample: - [\"sensitive\", \"read-only\"]-",
+                    "title": "API Groups membership",
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-displayname": "API Groups membership"
+                },
                 "authentication_state": {
                     "description": " The authentication state of the endpoint.\n\nExample: - AUTH_STATE_AUTHENTICATED, AUTH_STATE_UNAUTHENTICATED, AUTH_STATE_UNKNOWN-",
                     "title": "authentication_state",
@@ -2607,6 +2616,12 @@ var CustomAPISwaggerJSON string = `{
                     "x-displayname": "Number Of Total Requests",
                     "x-ves-example": "1234"
                 },
+                "risk_score": {
+                    "description": " Risk score for this API Endpoint.",
+                    "title": "risk_score",
+                    "$ref": "#/definitions/app_typeRiskScore",
+                    "x-displayname": "Risk score"
+                },
                 "sec_events_count": {
                     "type": "integer",
                     "description": " Number of sec_events seen for this API Endpoint for the specified time-range.\n\nExample: - \"1234\"-",
@@ -2630,6 +2645,16 @@ var CustomAPISwaggerJSON string = `{
                     },
                     "x-displayname": "List of Sensitive Data",
                     "x-ves-example": "[SENSITIVE_DATA_TYPE_CCN, SENSITIVE_DATA_TYPE_SSN, SENSITIVE_DATA_TYPE_IP]"
+                },
+                "sensitive_data_types": {
+                    "type": "array",
+                    "description": " List of Sensitive Data found in the API endpoint\n\nExample: - \"[Social-Security-Number, Credit-Card-Number]\"-",
+                    "title": "List of Sensitive Data",
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-displayname": "List of Sensitive Data",
+                    "x-ves-example": "[Social-Security-Number, Credit-Card-Number]"
                 }
             }
         },
@@ -2769,13 +2794,14 @@ var CustomAPISwaggerJSON string = `{
         },
         "app_typeAPIEPSecurityRisk": {
             "type": "string",
-            "description": "Signifies API Endpoint Security Risk Level\n\nSecurity risk is not detected (for example, when no traffic).\nAPI Endpoint has low security risk.\nAPI Endpoint has medium security risk.\nAPI Endpoint has high security risk.",
+            "description": "Signifies API Endpoint Security Risk Level\n\nSecurity risk is not detected (for example, when no traffic).\nAPI Endpoint has low security risk.\nAPI Endpoint has medium security risk.\nAPI Endpoint has high security risk.\nAPI Endpoint has critical security risk.",
             "title": "APIEP Security Risk",
             "enum": [
                 "APIEP_SEC_RISK_NONE",
                 "APIEP_SEC_RISK_LOW",
                 "APIEP_SEC_RISK_MED",
-                "APIEP_SEC_RISK_HIGH"
+                "APIEP_SEC_RISK_HIGH",
+                "APIEP_SEC_RISK_CRITICAL"
             ],
             "default": "APIEP_SEC_RISK_NONE",
             "x-displayname": "API Endpoint Security Risk",
@@ -2948,13 +2974,16 @@ var CustomAPISwaggerJSON string = `{
         },
         "app_typeAuthenticationType": {
             "type": "string",
-            "description": "x-displayName: API EP Authentication Type\nAPI Endpoint's Authentication Type.\n\nThe API Endpoint authentication type is Basic.\nThe API Endpoint authentication type is Bearer.\nThe API Endpoint authentication type is JWT.\nThe API Endpoint authentication type is API Key.",
+            "description": "x-displayName: API EP Authentication Type\nAPI Endpoint's Authentication Type.\n\nThe API Endpoint authentication type is Basic.\nThe API Endpoint authentication type is Bearer.\nThe API Endpoint authentication type is JWT.\nThe API Endpoint authentication type is API Key.\nThe API Endpoint authentication type is OAuth 2.0.\nThe API Endpoint authentication type is OpenID Connect Discovery.\nThe API Endpoint authentication type is HTTP.",
             "title": "APIEP Authentication Type",
             "enum": [
                 "AUTH_TYPE_BASIC",
                 "AUTH_TYPE_BEARER",
                 "AUTH_TYPE_JWT",
-                "AUTH_TYPE_API_KEY"
+                "AUTH_TYPE_API_KEY",
+                "AUTH_TYPE_OAUTH2",
+                "AUTH_TYPE_OPENID",
+                "AUTH_TYPE_HTTP"
             ],
             "default": "AUTH_TYPE_BASIC",
             "x-displayname": "",
@@ -3251,6 +3280,28 @@ var CustomAPISwaggerJSON string = `{
                 }
             }
         },
+        "app_typeRiskScore": {
+            "type": "object",
+            "description": "Risk score of the vulnerabilities found for this API Endpoint.",
+            "title": "RiskScore",
+            "x-displayname": "Risk score",
+            "x-ves-proto-message": "ves.io.schema.app_type.RiskScore",
+            "properties": {
+                "score": {
+                    "type": "number",
+                    "description": " Score of the vulnerabilities found for this API Endpoint.",
+                    "title": "score",
+                    "format": "float",
+                    "x-displayname": "Score"
+                },
+                "severity": {
+                    "description": " Severity of the vulnerabilities found for this API Endpoint.",
+                    "title": "severity",
+                    "$ref": "#/definitions/app_typeAPIEPSecurityRisk",
+                    "x-displayname": "Severity"
+                }
+            }
+        },
         "app_typeSchemaStruct": {
             "type": "object",
             "description": "Schema structure for a given API endpoint.",
@@ -3302,6 +3353,12 @@ var CustomAPISwaggerJSON string = `{
                     "description": " Section of sensitive data.\n\nExample: - req_body-",
                     "title": "Section",
                     "x-displayname": "Section"
+                },
+                "sensitive_data_type": {
+                    "type": "string",
+                    "description": " Type of sensitive data.\n\nExample: - EMAIL-",
+                    "title": "Sensitive Data Type",
+                    "x-displayname": "Type"
                 },
                 "type": {
                     "description": " Type of sensitive data.\n\nExample: - SENSITIVE_DATA_TYPE_EMAIL-",

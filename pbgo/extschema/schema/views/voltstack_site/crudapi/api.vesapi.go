@@ -5053,7 +5053,7 @@ var APISwaggerJSON string = `{
         },
         "network_firewallActiveEnhancedFirewallPoliciesType": {
             "type": "object",
-            "description": "List of Enhanced Firewall Policies",
+            "description": "List of Enhanced Firewall Policies\nThese policies use session-based rules and provide all options available under firewall policies\nwith an additional option for service insertion.",
             "title": "Active Enhanced Firewall Policies Type",
             "x-displayname": "Active Enhanced Network Policies Type",
             "x-ves-proto-message": "ves.io.schema.network_firewall.ActiveEnhancedFirewallPoliciesType",
@@ -7724,7 +7724,7 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.views.voltstack_site.VssNetworkConfiguration",
             "properties": {
                 "active_enhanced_firewall_policies": {
-                    "description": "Exclusive with [active_network_policies no_network_policy]\n Enhanced Firewall Policies active for this site.",
+                    "description": "Exclusive with [active_network_policies no_network_policy]\n Enhanced Firewall Policies active for this site.\n These policies use session-based rules and provide all options available under firewall policies\n with an additional option for service insertion.",
                     "title": "Manage Enhanced Firewall Policy",
                     "$ref": "#/definitions/network_firewallActiveEnhancedFirewallPoliciesType",
                     "x-displayname": "Active Enhanced Firewall Policies"

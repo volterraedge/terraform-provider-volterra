@@ -2836,7 +2836,7 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.views.gcp_vpc_site.GCPVPCIngressEgressGwType",
             "properties": {
                 "active_enhanced_firewall_policies": {
-                    "description": "Exclusive with [active_network_policies no_network_policy]\n Enhanced Firewall Policies active for this site.",
+                    "description": "Exclusive with [active_network_policies no_network_policy]\n Enhanced Firewall Policies active for this site.\n These policies use session-based rules and provide all options available under firewall policies\n with an additional option for service insertion.",
                     "title": "Manage Firewall Policy (V2)",
                     "$ref": "#/definitions/network_firewallActiveEnhancedFirewallPoliciesType",
                     "x-displayname": "Active Enhanced Firewall Policies"
@@ -3143,7 +3143,7 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.views.gcp_vpc_site.GCPVPCVoltstackClusterType",
             "properties": {
                 "active_enhanced_firewall_policies": {
-                    "description": "Exclusive with [active_network_policies no_network_policy]\n Enhanced Firewall Policies active for this site.",
+                    "description": "Exclusive with [active_network_policies no_network_policy]\n Enhanced Firewall Policies active for this site.\n These policies use session-based rules and provide all options available under firewall policies\n with an additional option for service insertion.",
                     "title": "Manage Firewall Policy (V2)",
                     "$ref": "#/definitions/network_firewallActiveEnhancedFirewallPoliciesType",
                     "x-displayname": "Active Enhanced Firewall Policies"
@@ -3404,7 +3404,7 @@ var APISwaggerJSON string = `{
         },
         "network_firewallActiveEnhancedFirewallPoliciesType": {
             "type": "object",
-            "description": "List of Enhanced Firewall Policies",
+            "description": "List of Enhanced Firewall Policies\nThese policies use session-based rules and provide all options available under firewall policies\nwith an additional option for service insertion.",
             "title": "Active Enhanced Firewall Policies Type",
             "x-displayname": "Active Enhanced Network Policies Type",
             "x-ves-proto-message": "ves.io.schema.network_firewall.ActiveEnhancedFirewallPoliciesType",
@@ -5352,7 +5352,7 @@ var APISwaggerJSON string = `{
             "description": "Shape of the GCP VPC site specification",
             "title": "GlobalSpecType",
             "x-displayname": "Global Specification",
-            "x-ves-oneof-field-blocked_services_choice": "[\"blocked_services\",\"default_blocked_services\"]",
+            "x-ves-oneof-field-blocked_services_choice": "[\"block_all_services\",\"blocked_services\",\"default_blocked_services\"]",
             "x-ves-oneof-field-deployment": "[\"cloud_credentials\"]",
             "x-ves-oneof-field-logs_receiver_choice": "[\"log_receiver\",\"logs_streaming_disabled\"]",
             "x-ves-oneof-field-site_type": "[\"ingress_egress_gw\",\"ingress_gw\",\"voltstack_cluster\"]",
@@ -5369,8 +5369,14 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.string.max_len": "256"
                     }
                 },
+                "block_all_services": {
+                    "description": "Exclusive with [blocked_services default_blocked_services]\n Block DNS, SSH \u0026 WebUI services on Site",
+                    "title": "Block DNS, SSH \u0026 WebUI services on Site",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": " Block DNS, SSH \u0026 WebUI services on Site"
+                },
                 "blocked_services": {
-                    "description": "Exclusive with [default_blocked_services]\n Use custom blocked services configuration",
+                    "description": "Exclusive with [block_all_services default_blocked_services]\n Use custom blocked services configuration",
                     "title": "Custom Blocked Services Configuration",
                     "$ref": "#/definitions/fleetBlockedServicesListType",
                     "x-displayname": "Custom Blocked Services Configuration"
@@ -5394,10 +5400,10 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Co-ordinates"
                 },
                 "default_blocked_services": {
-                    "description": "Exclusive with [blocked_services]\n Use default behavior of allowing ports mentioned in blocked services",
-                    "title": "Default Blocked Service Configuration",
+                    "description": "Exclusive with [block_all_services blocked_services]\n Allow access to DNS, SSH services on Site",
+                    "title": "Allow access to DNS, SSH services on Site",
                     "$ref": "#/definitions/schemaEmpty",
-                    "x-displayname": "Default Blocked Service Configuration"
+                    "x-displayname": "Allow access to DNS, SSH services on Site"
                 },
                 "disk_size": {
                     "type": "integer",
@@ -5412,13 +5418,13 @@ var APISwaggerJSON string = `{
                 },
                 "gcp_labels": {
                     "type": "object",
-                    "description": " GCP Label is a label consisting of a user-defined key and value.\n It helps to manage, identify, organize, search for, and filter resources in GCP console.\n\nExample: - \"devstaging\"-\n\nValidation Rules:\n  ves.io.schema.rules.map.keys.string.max_len: 127\n  ves.io.schema.rules.map.max_pairs: 10\n  ves.io.schema.rules.map.values.string.max_len: 255\n",
+                    "description": " GCP Label is a label consisting of a user-defined key and value.\n It helps to manage, identify, organize, search for, and filter resources in GCP console.\n\nExample: - \"devstaging\"-\n\nValidation Rules:\n  ves.io.schema.rules.map.keys.string.max_len: 127\n  ves.io.schema.rules.map.max_pairs: 40\n  ves.io.schema.rules.map.values.string.max_len: 255\n",
                     "title": "GCP Labels",
                     "x-displayname": "GCP Labels",
                     "x-ves-example": "dev: staging",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.map.keys.string.max_len": "127",
-                        "ves.io.schema.rules.map.max_pairs": "10",
+                        "ves.io.schema.rules.map.max_pairs": "40",
                         "ves.io.schema.rules.map.values.string.max_len": "255"
                     }
                 },

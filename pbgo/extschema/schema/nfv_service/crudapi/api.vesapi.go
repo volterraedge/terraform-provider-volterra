@@ -2946,13 +2946,13 @@ var APISwaggerJSON string = `{
         },
         "nfv_serviceF5BigIpAWSBYOLImageType": {
             "type": "object",
-            "description": "x-displayName: \"F5 BigIP AWS BYOL Image\"\nF5 BigIP AWS VPC site specification",
-            "title": "F5 BigIP AWS BYOL Image",
+            "description": "x-displayName: \"BIG-IP AWS BYOL Image\"\nBIG-IP AWS VPC site specification",
+            "title": "BIG-IP AWS BYOL Image",
             "properties": {
                 "image": {
                     "type": "string",
-                    "description": "x-displayName: \"BigIp AWS Image\"\nx-required\nx-example: \"image1\"\nSelect the BigIp pay as you go image to be used for this service",
-                    "title": "BigIp AWS Image"
+                    "description": "x-displayName: \"BIG-IP AWS Image\"\nx-required\nx-example: \"image1\"\nSelect the BIG-IP pay as you go image to be used for this service",
+                    "title": "BIG-IP AWS Image"
                 },
                 "license": {
                     "description": "x-displayName: \"License\"\nSecret License data",
@@ -2963,27 +2963,27 @@ var APISwaggerJSON string = `{
         },
         "nfv_serviceF5BigIpAWSMarketPlaceImageType": {
             "type": "object",
-            "description": "BigIp AWS Pay as You Go Image Selection",
-            "title": "BigIp AWS PayG Image",
-            "x-displayname": "BigIp AWS Pay as You Go Image",
-            "x-ves-oneof-field-ami_choice": "[\"AWAFPayG200Mbps\",\"AWAFPayG3Gbps\"]",
+            "description": "BIG-IP AWS Pay as You Go Image Selection",
+            "title": "BIG-IP AWS PayG Image",
+            "x-displayname": "BIG-IP AWS Pay as You Go Image",
+            "x-ves-oneof-field-ami_choice": "[\"AWAFPayG200Mbps\",\"AWAFPayG3Gbps\",\"BestPlusPayG200Mbps\"]",
             "x-ves-proto-message": "ves.io.schema.nfv_service.F5BigIpAWSMarketPlaceImageType",
             "properties": {
                 "AWAFPayG200Mbps": {
-                    "description": "Exclusive with [AWAFPayG3Gbps]\n F5 Advanced WAF with LTM, IPI, and Threat Campaigns (PAYG, 200Mbps)\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
-                    "title": "F5 BigIp Advanced WAF (PAYG, 200Mbps)",
+                    "description": "Exclusive with [AWAFPayG3Gbps BestPlusPayG200Mbps]\n F5 Advanced WAF with LTM, IPI, and Threat Campaigns (PAYG, 200Mbps)\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "BIG-IP Advanced WAF (PAYG, 200Mbps)",
                     "$ref": "#/definitions/schemaEmpty",
-                    "x-displayname": "F5 BigIp Advanced WAF (PAYG, 200Mbps)",
+                    "x-displayname": "BIG-IP Advanced WAF (PAYG, 200Mbps)",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true"
                     }
                 },
                 "AWAFPayG3Gbps": {
-                    "description": "Exclusive with [AWAFPayG200Mbps]\n F5 Advanced WAF with LTM, IPI, and Threat Campaigns (PAYG, 3Gbps)\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
-                    "title": "F5 BigIp Advanced WAF (PAYG, 3Gbps)",
+                    "description": "Exclusive with [AWAFPayG200Mbps BestPlusPayG200Mbps]\n F5 Advanced WAF with LTM, IPI, and Threat Campaigns (PAYG, 3Gbps)\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "BIG-IP Advanced WAF (PAYG, 3Gbps)",
                     "$ref": "#/definitions/schemaEmpty",
-                    "x-displayname": "F5 BigIp Advanced WAF (PAYG, 3Gbps)",
+                    "x-displayname": "BIG-IP Advanced WAF (PAYG, 3Gbps)",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true"
@@ -2993,9 +2993,9 @@ var APISwaggerJSON string = `{
         },
         "nfv_serviceF5BigIpAWSTGWSiteType": {
             "type": "object",
-            "description": "F5 BigIP AWS TGW site specification",
-            "title": "F5 BigIP AWS TGW Site",
-            "x-displayname": "F5 BigIP AWS TGW Site",
+            "description": "BIG-IP AWS TGW site specification",
+            "title": "BIG-IP AWS TGW Site",
+            "x-displayname": "BIG-IP AWS TGW Site",
             "x-ves-proto-message": "ves.io.schema.nfv_service.F5BigIpAWSTGWSiteType",
             "properties": {
                 "aws_tgw_site": {
@@ -3012,9 +3012,9 @@ var APISwaggerJSON string = `{
         },
         "nfv_serviceF5BigIpAWSType": {
             "type": "object",
-            "description": "Virtual F5 BigIP specification for AWS",
-            "title": "Virtual F5 BigIP AWS",
-            "x-displayname": "Virtual F5 BigIP AWS",
+            "description": "Virtual BIG-IP specification for AWS",
+            "title": "Virtual BIG-IP AWS",
+            "x-displayname": "Virtual BIG-IP AWS",
             "x-ves-oneof-field-image_choice": "[\"market_place_image\"]",
             "x-ves-oneof-field-site_type_choice": "[\"aws_tgw_site_params\"]",
             "x-ves-proto-message": "ves.io.schema.nfv_service.F5BigIpAWSType",
@@ -3055,10 +3055,10 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Endpoint Service"
                 },
                 "market_place_image": {
-                    "description": "Exclusive with []\n Select the BigIp pay as you go image to be used for this service\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
-                    "title": "BigIp Pay as You Go Image",
+                    "description": "Exclusive with []\n Select the BIG-IP pay as you go image to be used for this service\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "BIG-IP Pay as You Go Image",
                     "$ref": "#/definitions/nfv_serviceF5BigIpAWSMarketPlaceImageType",
-                    "x-displayname": "BigIp Pay as You Go Image",
+                    "x-displayname": "BIG-IP Pay as You Go Image",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true"
@@ -3098,13 +3098,13 @@ var APISwaggerJSON string = `{
                 },
                 "tags": {
                     "type": "object",
-                    "description": " AWS Tags is a label consisting of a user-defined key and value.\n It helps to manage, identify, organize, search for, and filter resources in AWS console.\n\nExample: - \"devstaging\"-\n\nValidation Rules:\n  ves.io.schema.rules.map.keys.string.max_len: 127\n  ves.io.schema.rules.map.max_pairs: 5\n  ves.io.schema.rules.map.values.string.max_len: 255\n",
+                    "description": " AWS Tags is a label consisting of a user-defined key and value.\n It helps to manage, identify, organize, search for, and filter resources in AWS console.\n\nExample: - \"devstaging\"-\n\nValidation Rules:\n  ves.io.schema.rules.map.keys.string.max_len: 127\n  ves.io.schema.rules.map.max_pairs: 40\n  ves.io.schema.rules.map.values.string.max_len: 255\n",
                     "title": "AWS Tags",
                     "x-displayname": "AWS Tags",
                     "x-ves-example": "dev: staging",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.map.keys.string.max_len": "127",
-                        "ves.io.schema.rules.map.max_pairs": "5",
+                        "ves.io.schema.rules.map.max_pairs": "40",
                         "ves.io.schema.rules.map.values.string.max_len": "255"
                     }
                 }
@@ -3112,8 +3112,8 @@ var APISwaggerJSON string = `{
         },
         "nfv_serviceF5BigIpAWSVPCSiteType": {
             "type": "object",
-            "description": "x-displayName: \"F5 BigIP AWS VPC Site\"\nF5 BigIP AWS VPC site specification",
-            "title": "F5 BigIP AWS VPC Site",
+            "description": "x-displayName: \"BIG-IP AWS VPC Site\"\nBIG-IP AWS VPC site specification",
+            "title": "BIG-IP AWS VPC Site",
             "properties": {
                 "aws_vpc_site": {
                     "description": "x-displayName: \"AWS VPC Site\"\nx-required\nReference to AWS VPC site",
@@ -4538,12 +4538,10 @@ var APISwaggerJSON string = `{
         },
         "schemaXfccElement": {
             "type": "string",
-            "description": "X-Forwarded-Client-Cert custom cookie elements\n\nThe Subject Alternative Name (URI type) of the current proxy’s certificate.\nThe current proxy’s certificate may contain multiple URI type Subject Alternative Names,\neach will be a separate key-value pair.\nThe SHA 256 digest of the current client certificate.\nThe entire client certificate in URL encoded PEM format.\nThe entire client certificate chain (including the leaf certificate) in URL encoded PEM format.\nThe Subject field of the current client certificate. The value is always double-quoted.\nThe URI type Subject Alternative Name field of the current client certificate.\nA client certificate may contain multiple URI type Subject Alternative Names,\neach will be a separate key-value pair.\nThe DNS type Subject Alternative Name field of the current client certificate.\nA client certificate may contain multiple DNS type Subject Alternative Names,\neach will be a separate key-value pair.",
+            "description": "X-Forwarded-Client-Cert custom cookie elements\n\nThe entire client certificate in URL encoded PEM format.\nThe entire client certificate chain (including the leaf certificate) in URL encoded PEM format.\nThe Subject field of the current client certificate. The value is always double-quoted.\nThe URI type Subject Alternative Name field of the current client certificate.\nA client certificate may contain multiple URI type Subject Alternative Names,\neach will be a separate key-value pair.\nThe DNS type Subject Alternative Name field of the current client certificate.\nA client certificate may contain multiple DNS type Subject Alternative Names,\neach will be a separate key-value pair.",
             "title": "XfccElement",
             "enum": [
                 "XFCC_NONE",
-                "XFCC_BY",
-                "XFCC_HASH",
                 "XFCC_CERT",
                 "XFCC_CHAIN",
                 "XFCC_SUBJECT",
@@ -4590,10 +4588,10 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Endpoint Service NFV"
                 },
                 "f5_big_ip_aws_service": {
-                    "description": "Exclusive with [palo_alto_fw_service]\n Virtual F5 BigIP service to be deployed on AWS",
-                    "title": "Virtual F5 BigIP on AWS",
+                    "description": "Exclusive with [palo_alto_fw_service]\n Virtual BIG-IP service to be deployed on AWS",
+                    "title": "Virtual BIG-IP on AWS",
                     "$ref": "#/definitions/nfv_serviceF5BigIpAWSType",
-                    "x-displayname": "Virtual F5 BigIP on AWS"
+                    "x-displayname": "Virtual BIG-IP on AWS"
                 },
                 "forwarding_service": {
                     "description": "Exclusive with [endpoint_service transparent_service]\n NFV service type is Forwarding NFV service",

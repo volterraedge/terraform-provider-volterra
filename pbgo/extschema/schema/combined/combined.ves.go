@@ -45,6 +45,10 @@ import (
 	ves_io_schema_bgp_crudapi "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/bgp/crudapi"
 	ves_io_schema_bgp_asn_set "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/bgp_asn_set"
 	ves_io_schema_bgp_asn_set_crudapi "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/bgp_asn_set/crudapi"
+	ves_io_schema_certificate "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/certificate"
+	ves_io_schema_certificate_crudapi "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/certificate/crudapi"
+	ves_io_schema_certificate_chain "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/certificate_chain"
+	ves_io_schema_certificate_chain_crudapi "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/certificate_chain/crudapi"
 	ves_io_schema_certified_hardware "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/certified_hardware"
 	ves_io_schema_certified_hardware_crudapi "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/certified_hardware/crudapi"
 	ves_io_schema_cloud_credentials "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/cloud_credentials"
@@ -164,6 +168,8 @@ import (
 	ves_io_schema_tenant_crudapi "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/tenant/crudapi"
 	ves_io_schema_token "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/token"
 	ves_io_schema_token_crudapi "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/token/crudapi"
+	ves_io_schema_trusted_ca_list "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/trusted_ca_list"
+	ves_io_schema_trusted_ca_list_crudapi "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/trusted_ca_list/crudapi"
 	ves_io_schema_tunnel "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/tunnel"
 	ves_io_schema_tunnel_crudapi "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/tunnel/crudapi"
 	ves_io_schema_usb_policy "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/usb_policy"
@@ -187,6 +193,8 @@ import (
 	ves_io_schema_views_aws_vpc_site_crudapi "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/aws_vpc_site/crudapi"
 	ves_io_schema_views_azure_vnet_site "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/azure_vnet_site"
 	ves_io_schema_views_azure_vnet_site_crudapi "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/azure_vnet_site/crudapi"
+	ves_io_schema_views_cdn_loadbalancer "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/cdn_loadbalancer"
+	ves_io_schema_views_cdn_loadbalancer_crudapi "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/cdn_loadbalancer/crudapi"
 	ves_io_schema_views_forward_proxy_policy "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/forward_proxy_policy"
 	ves_io_schema_views_forward_proxy_policy_crudapi "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/forward_proxy_policy/crudapi"
 	ves_io_schema_views_gcp_vpc_site "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/gcp_vpc_site"
@@ -199,6 +207,8 @@ import (
 	ves_io_schema_views_origin_pool_crudapi "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/origin_pool/crudapi"
 	ves_io_schema_views_rate_limiter_policy "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/rate_limiter_policy"
 	ves_io_schema_views_rate_limiter_policy_crudapi "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/rate_limiter_policy/crudapi"
+	ves_io_schema_views_securemesh_site "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/securemesh_site"
+	ves_io_schema_views_securemesh_site_crudapi "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/securemesh_site/crudapi"
 	ves_io_schema_views_tcp_loadbalancer "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/tcp_loadbalancer"
 	ves_io_schema_views_tcp_loadbalancer_crudapi "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/tcp_loadbalancer/crudapi"
 	ves_io_schema_views_tenant_configuration "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/tenant_configuration"
@@ -277,6 +287,7 @@ func init() {
 	MDR.ValidatorRegistry["ves.io.schema.LogField"] = ves_io_schema.LogFieldValidator()
 	MDR.ValidatorRegistry["ves.io.schema.MetricDef"] = ves_io_schema.MetricDefValidator()
 	MDR.ValidatorRegistry["ves.io.schema.On"] = ves_io_schema.OnValidator()
+	MDR.ValidatorRegistry["ves.io.schema.ThreatLevelInfo"] = ves_io_schema.ThreatLevelInfoValidator()
 	MDR.ValidatorRegistry["ves.io.schema.Via"] = ves_io_schema.ViaValidator()
 
 	MDR.ValidatorRegistry["ves.io.schema.DaemonEnvironmentType"] = ves_io_schema.DaemonEnvironmentTypeValidator()
@@ -789,6 +800,7 @@ func init() {
 	MDR.ValidatorRegistry["ves.io.schema.app_type.ReplaceSpecType"] = ves_io_schema_app_type.ReplaceSpecTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.app_type.RequestSchema"] = ves_io_schema_app_type.RequestSchemaValidator()
 	MDR.ValidatorRegistry["ves.io.schema.app_type.ResponseSchema"] = ves_io_schema_app_type.ResponseSchemaValidator()
+	MDR.ValidatorRegistry["ves.io.schema.app_type.RiskScore"] = ves_io_schema_app_type.RiskScoreValidator()
 	MDR.ValidatorRegistry["ves.io.schema.app_type.SchemaStruct"] = ves_io_schema_app_type.SchemaStructValidator()
 	MDR.ValidatorRegistry["ves.io.schema.app_type.SensitiveData"] = ves_io_schema_app_type.SensitiveDataValidator()
 
@@ -913,6 +925,66 @@ func init() {
 	MDR.ValidatorRegistry["ves.io.schema.bgp_asn_set.crudapi.ObjectListRspItem"] = ves_io_schema_bgp_asn_set_crudapi.ObjectListRspItemValidator()
 	MDR.ValidatorRegistry["ves.io.schema.bgp_asn_set.crudapi.ObjectReplaceReq"] = ves_io_schema_bgp_asn_set_crudapi.ObjectReplaceReqValidator()
 	MDR.ValidatorRegistry["ves.io.schema.bgp_asn_set.crudapi.ObjectReplaceRsp"] = ves_io_schema_bgp_asn_set_crudapi.ObjectReplaceRspValidator()
+
+	MDR.ValidatorRegistry["ves.io.schema.certificate.SpecType"] = ves_io_schema_certificate.SpecTypeValidator()
+
+	MDR.ValidatorRegistry["ves.io.schema.certificate.CreateRequest"] = ves_io_schema_certificate.CreateRequestValidator()
+	MDR.ValidatorRegistry["ves.io.schema.certificate.CreateResponse"] = ves_io_schema_certificate.CreateResponseValidator()
+	MDR.ValidatorRegistry["ves.io.schema.certificate.DeleteRequest"] = ves_io_schema_certificate.DeleteRequestValidator()
+	MDR.ValidatorRegistry["ves.io.schema.certificate.GetRequest"] = ves_io_schema_certificate.GetRequestValidator()
+	MDR.ValidatorRegistry["ves.io.schema.certificate.GetResponse"] = ves_io_schema_certificate.GetResponseValidator()
+	MDR.ValidatorRegistry["ves.io.schema.certificate.ListRequest"] = ves_io_schema_certificate.ListRequestValidator()
+	MDR.ValidatorRegistry["ves.io.schema.certificate.ListResponse"] = ves_io_schema_certificate.ListResponseValidator()
+	MDR.ValidatorRegistry["ves.io.schema.certificate.ListResponseItem"] = ves_io_schema_certificate.ListResponseItemValidator()
+	MDR.ValidatorRegistry["ves.io.schema.certificate.ReplaceRequest"] = ves_io_schema_certificate.ReplaceRequestValidator()
+	MDR.ValidatorRegistry["ves.io.schema.certificate.ReplaceResponse"] = ves_io_schema_certificate.ReplaceResponseValidator()
+
+	MDR.ValidatorRegistry["ves.io.schema.certificate.CreateSpecType"] = ves_io_schema_certificate.CreateSpecTypeValidator()
+	MDR.ValidatorRegistry["ves.io.schema.certificate.GetSpecType"] = ves_io_schema_certificate.GetSpecTypeValidator()
+	MDR.ValidatorRegistry["ves.io.schema.certificate.GlobalSpecType"] = ves_io_schema_certificate.GlobalSpecTypeValidator()
+	MDR.ValidatorRegistry["ves.io.schema.certificate.ReplaceSpecType"] = ves_io_schema_certificate.ReplaceSpecTypeValidator()
+
+	MDR.ValidatorRegistry["ves.io.schema.certificate.crudapi.ObjectCreateReq"] = ves_io_schema_certificate_crudapi.ObjectCreateReqValidator()
+	MDR.ValidatorRegistry["ves.io.schema.certificate.crudapi.ObjectCreateRsp"] = ves_io_schema_certificate_crudapi.ObjectCreateRspValidator()
+	MDR.ValidatorRegistry["ves.io.schema.certificate.crudapi.ObjectDeleteReq"] = ves_io_schema_certificate_crudapi.ObjectDeleteReqValidator()
+	MDR.ValidatorRegistry["ves.io.schema.certificate.crudapi.ObjectDeleteRsp"] = ves_io_schema_certificate_crudapi.ObjectDeleteRspValidator()
+	MDR.ValidatorRegistry["ves.io.schema.certificate.crudapi.ObjectGetReq"] = ves_io_schema_certificate_crudapi.ObjectGetReqValidator()
+	MDR.ValidatorRegistry["ves.io.schema.certificate.crudapi.ObjectGetRsp"] = ves_io_schema_certificate_crudapi.ObjectGetRspValidator()
+	MDR.ValidatorRegistry["ves.io.schema.certificate.crudapi.ObjectListReq"] = ves_io_schema_certificate_crudapi.ObjectListReqValidator()
+	MDR.ValidatorRegistry["ves.io.schema.certificate.crudapi.ObjectListRsp"] = ves_io_schema_certificate_crudapi.ObjectListRspValidator()
+	MDR.ValidatorRegistry["ves.io.schema.certificate.crudapi.ObjectListRspItem"] = ves_io_schema_certificate_crudapi.ObjectListRspItemValidator()
+	MDR.ValidatorRegistry["ves.io.schema.certificate.crudapi.ObjectReplaceReq"] = ves_io_schema_certificate_crudapi.ObjectReplaceReqValidator()
+	MDR.ValidatorRegistry["ves.io.schema.certificate.crudapi.ObjectReplaceRsp"] = ves_io_schema_certificate_crudapi.ObjectReplaceRspValidator()
+
+	MDR.ValidatorRegistry["ves.io.schema.certificate_chain.SpecType"] = ves_io_schema_certificate_chain.SpecTypeValidator()
+
+	MDR.ValidatorRegistry["ves.io.schema.certificate_chain.CreateRequest"] = ves_io_schema_certificate_chain.CreateRequestValidator()
+	MDR.ValidatorRegistry["ves.io.schema.certificate_chain.CreateResponse"] = ves_io_schema_certificate_chain.CreateResponseValidator()
+	MDR.ValidatorRegistry["ves.io.schema.certificate_chain.DeleteRequest"] = ves_io_schema_certificate_chain.DeleteRequestValidator()
+	MDR.ValidatorRegistry["ves.io.schema.certificate_chain.GetRequest"] = ves_io_schema_certificate_chain.GetRequestValidator()
+	MDR.ValidatorRegistry["ves.io.schema.certificate_chain.GetResponse"] = ves_io_schema_certificate_chain.GetResponseValidator()
+	MDR.ValidatorRegistry["ves.io.schema.certificate_chain.ListRequest"] = ves_io_schema_certificate_chain.ListRequestValidator()
+	MDR.ValidatorRegistry["ves.io.schema.certificate_chain.ListResponse"] = ves_io_schema_certificate_chain.ListResponseValidator()
+	MDR.ValidatorRegistry["ves.io.schema.certificate_chain.ListResponseItem"] = ves_io_schema_certificate_chain.ListResponseItemValidator()
+	MDR.ValidatorRegistry["ves.io.schema.certificate_chain.ReplaceRequest"] = ves_io_schema_certificate_chain.ReplaceRequestValidator()
+	MDR.ValidatorRegistry["ves.io.schema.certificate_chain.ReplaceResponse"] = ves_io_schema_certificate_chain.ReplaceResponseValidator()
+
+	MDR.ValidatorRegistry["ves.io.schema.certificate_chain.CreateSpecType"] = ves_io_schema_certificate_chain.CreateSpecTypeValidator()
+	MDR.ValidatorRegistry["ves.io.schema.certificate_chain.GetSpecType"] = ves_io_schema_certificate_chain.GetSpecTypeValidator()
+	MDR.ValidatorRegistry["ves.io.schema.certificate_chain.GlobalSpecType"] = ves_io_schema_certificate_chain.GlobalSpecTypeValidator()
+	MDR.ValidatorRegistry["ves.io.schema.certificate_chain.ReplaceSpecType"] = ves_io_schema_certificate_chain.ReplaceSpecTypeValidator()
+
+	MDR.ValidatorRegistry["ves.io.schema.certificate_chain.crudapi.ObjectCreateReq"] = ves_io_schema_certificate_chain_crudapi.ObjectCreateReqValidator()
+	MDR.ValidatorRegistry["ves.io.schema.certificate_chain.crudapi.ObjectCreateRsp"] = ves_io_schema_certificate_chain_crudapi.ObjectCreateRspValidator()
+	MDR.ValidatorRegistry["ves.io.schema.certificate_chain.crudapi.ObjectDeleteReq"] = ves_io_schema_certificate_chain_crudapi.ObjectDeleteReqValidator()
+	MDR.ValidatorRegistry["ves.io.schema.certificate_chain.crudapi.ObjectDeleteRsp"] = ves_io_schema_certificate_chain_crudapi.ObjectDeleteRspValidator()
+	MDR.ValidatorRegistry["ves.io.schema.certificate_chain.crudapi.ObjectGetReq"] = ves_io_schema_certificate_chain_crudapi.ObjectGetReqValidator()
+	MDR.ValidatorRegistry["ves.io.schema.certificate_chain.crudapi.ObjectGetRsp"] = ves_io_schema_certificate_chain_crudapi.ObjectGetRspValidator()
+	MDR.ValidatorRegistry["ves.io.schema.certificate_chain.crudapi.ObjectListReq"] = ves_io_schema_certificate_chain_crudapi.ObjectListReqValidator()
+	MDR.ValidatorRegistry["ves.io.schema.certificate_chain.crudapi.ObjectListRsp"] = ves_io_schema_certificate_chain_crudapi.ObjectListRspValidator()
+	MDR.ValidatorRegistry["ves.io.schema.certificate_chain.crudapi.ObjectListRspItem"] = ves_io_schema_certificate_chain_crudapi.ObjectListRspItemValidator()
+	MDR.ValidatorRegistry["ves.io.schema.certificate_chain.crudapi.ObjectReplaceReq"] = ves_io_schema_certificate_chain_crudapi.ObjectReplaceReqValidator()
+	MDR.ValidatorRegistry["ves.io.schema.certificate_chain.crudapi.ObjectReplaceRsp"] = ves_io_schema_certificate_chain_crudapi.ObjectReplaceRspValidator()
 
 	MDR.ValidatorRegistry["ves.io.schema.certified_hardware.SpecType"] = ves_io_schema_certified_hardware.SpecTypeValidator()
 
@@ -2118,6 +2190,8 @@ func init() {
 	MDR.ValidatorRegistry["ves.io.schema.namespace.GetActiveServicePoliciesResponse"] = ves_io_schema_namespace.GetActiveServicePoliciesResponseValidator()
 	MDR.ValidatorRegistry["ves.io.schema.namespace.GetFastACLsForInternetVIPsRequest"] = ves_io_schema_namespace.GetFastACLsForInternetVIPsRequestValidator()
 	MDR.ValidatorRegistry["ves.io.schema.namespace.GetFastACLsForInternetVIPsResponse"] = ves_io_schema_namespace.GetFastACLsForInternetVIPsResponseValidator()
+	MDR.ValidatorRegistry["ves.io.schema.namespace.NetworkingInventoryRequest"] = ves_io_schema_namespace.NetworkingInventoryRequestValidator()
+	MDR.ValidatorRegistry["ves.io.schema.namespace.NetworkingInventoryResponse"] = ves_io_schema_namespace.NetworkingInventoryResponseValidator()
 	MDR.ValidatorRegistry["ves.io.schema.namespace.SetActiveAlertPoliciesRequest"] = ves_io_schema_namespace.SetActiveAlertPoliciesRequestValidator()
 	MDR.ValidatorRegistry["ves.io.schema.namespace.SetActiveAlertPoliciesResponse"] = ves_io_schema_namespace.SetActiveAlertPoliciesResponseValidator()
 	MDR.ValidatorRegistry["ves.io.schema.namespace.SetActiveNetworkPoliciesRequest"] = ves_io_schema_namespace.SetActiveNetworkPoliciesRequestValidator()
@@ -2508,6 +2582,7 @@ func init() {
 	MDR.ValidatorRegistry["ves.io.schema.policy.MatcherTypeBasic"] = ves_io_schema_policy.MatcherTypeBasicValidator()
 	MDR.ValidatorRegistry["ves.io.schema.policy.ModifyAction"] = ves_io_schema_policy.ModifyActionValidator()
 	MDR.ValidatorRegistry["ves.io.schema.policy.OpenApiValidationAction"] = ves_io_schema_policy.OpenApiValidationActionValidator()
+	MDR.ValidatorRegistry["ves.io.schema.policy.OriginServerSubsetRule"] = ves_io_schema_policy.OriginServerSubsetRuleValidator()
 	MDR.ValidatorRegistry["ves.io.schema.policy.PathMatcherType"] = ves_io_schema_policy.PathMatcherTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.policy.PortMatcherType"] = ves_io_schema_policy.PortMatcherTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.policy.PrefixMatchList"] = ves_io_schema_policy.PrefixMatchListValidator()
@@ -3157,6 +3232,36 @@ func init() {
 	MDR.ValidatorRegistry["ves.io.schema.token.crudapi.ObjectReplaceReq"] = ves_io_schema_token_crudapi.ObjectReplaceReqValidator()
 	MDR.ValidatorRegistry["ves.io.schema.token.crudapi.ObjectReplaceRsp"] = ves_io_schema_token_crudapi.ObjectReplaceRspValidator()
 
+	MDR.ValidatorRegistry["ves.io.schema.trusted_ca_list.SpecType"] = ves_io_schema_trusted_ca_list.SpecTypeValidator()
+
+	MDR.ValidatorRegistry["ves.io.schema.trusted_ca_list.CreateRequest"] = ves_io_schema_trusted_ca_list.CreateRequestValidator()
+	MDR.ValidatorRegistry["ves.io.schema.trusted_ca_list.CreateResponse"] = ves_io_schema_trusted_ca_list.CreateResponseValidator()
+	MDR.ValidatorRegistry["ves.io.schema.trusted_ca_list.DeleteRequest"] = ves_io_schema_trusted_ca_list.DeleteRequestValidator()
+	MDR.ValidatorRegistry["ves.io.schema.trusted_ca_list.GetRequest"] = ves_io_schema_trusted_ca_list.GetRequestValidator()
+	MDR.ValidatorRegistry["ves.io.schema.trusted_ca_list.GetResponse"] = ves_io_schema_trusted_ca_list.GetResponseValidator()
+	MDR.ValidatorRegistry["ves.io.schema.trusted_ca_list.ListRequest"] = ves_io_schema_trusted_ca_list.ListRequestValidator()
+	MDR.ValidatorRegistry["ves.io.schema.trusted_ca_list.ListResponse"] = ves_io_schema_trusted_ca_list.ListResponseValidator()
+	MDR.ValidatorRegistry["ves.io.schema.trusted_ca_list.ListResponseItem"] = ves_io_schema_trusted_ca_list.ListResponseItemValidator()
+	MDR.ValidatorRegistry["ves.io.schema.trusted_ca_list.ReplaceRequest"] = ves_io_schema_trusted_ca_list.ReplaceRequestValidator()
+	MDR.ValidatorRegistry["ves.io.schema.trusted_ca_list.ReplaceResponse"] = ves_io_schema_trusted_ca_list.ReplaceResponseValidator()
+
+	MDR.ValidatorRegistry["ves.io.schema.trusted_ca_list.CreateSpecType"] = ves_io_schema_trusted_ca_list.CreateSpecTypeValidator()
+	MDR.ValidatorRegistry["ves.io.schema.trusted_ca_list.GetSpecType"] = ves_io_schema_trusted_ca_list.GetSpecTypeValidator()
+	MDR.ValidatorRegistry["ves.io.schema.trusted_ca_list.GlobalSpecType"] = ves_io_schema_trusted_ca_list.GlobalSpecTypeValidator()
+	MDR.ValidatorRegistry["ves.io.schema.trusted_ca_list.ReplaceSpecType"] = ves_io_schema_trusted_ca_list.ReplaceSpecTypeValidator()
+
+	MDR.ValidatorRegistry["ves.io.schema.trusted_ca_list.crudapi.ObjectCreateReq"] = ves_io_schema_trusted_ca_list_crudapi.ObjectCreateReqValidator()
+	MDR.ValidatorRegistry["ves.io.schema.trusted_ca_list.crudapi.ObjectCreateRsp"] = ves_io_schema_trusted_ca_list_crudapi.ObjectCreateRspValidator()
+	MDR.ValidatorRegistry["ves.io.schema.trusted_ca_list.crudapi.ObjectDeleteReq"] = ves_io_schema_trusted_ca_list_crudapi.ObjectDeleteReqValidator()
+	MDR.ValidatorRegistry["ves.io.schema.trusted_ca_list.crudapi.ObjectDeleteRsp"] = ves_io_schema_trusted_ca_list_crudapi.ObjectDeleteRspValidator()
+	MDR.ValidatorRegistry["ves.io.schema.trusted_ca_list.crudapi.ObjectGetReq"] = ves_io_schema_trusted_ca_list_crudapi.ObjectGetReqValidator()
+	MDR.ValidatorRegistry["ves.io.schema.trusted_ca_list.crudapi.ObjectGetRsp"] = ves_io_schema_trusted_ca_list_crudapi.ObjectGetRspValidator()
+	MDR.ValidatorRegistry["ves.io.schema.trusted_ca_list.crudapi.ObjectListReq"] = ves_io_schema_trusted_ca_list_crudapi.ObjectListReqValidator()
+	MDR.ValidatorRegistry["ves.io.schema.trusted_ca_list.crudapi.ObjectListRsp"] = ves_io_schema_trusted_ca_list_crudapi.ObjectListRspValidator()
+	MDR.ValidatorRegistry["ves.io.schema.trusted_ca_list.crudapi.ObjectListRspItem"] = ves_io_schema_trusted_ca_list_crudapi.ObjectListRspItemValidator()
+	MDR.ValidatorRegistry["ves.io.schema.trusted_ca_list.crudapi.ObjectReplaceReq"] = ves_io_schema_trusted_ca_list_crudapi.ObjectReplaceReqValidator()
+	MDR.ValidatorRegistry["ves.io.schema.trusted_ca_list.crudapi.ObjectReplaceRsp"] = ves_io_schema_trusted_ca_list_crudapi.ObjectReplaceRspValidator()
+
 	MDR.ValidatorRegistry["ves.io.schema.tunnel.SpecType"] = ves_io_schema_tunnel.SpecTypeValidator()
 
 	MDR.ValidatorRegistry["ves.io.schema.tunnel.CreateRequest"] = ves_io_schema_tunnel.CreateRequestValidator()
@@ -3674,6 +3779,81 @@ func init() {
 	MDR.ValidatorRegistry["ves.io.schema.views.azure_vnet_site.crudapi.ObjectReplaceReq"] = ves_io_schema_views_azure_vnet_site_crudapi.ObjectReplaceReqValidator()
 	MDR.ValidatorRegistry["ves.io.schema.views.azure_vnet_site.crudapi.ObjectReplaceRsp"] = ves_io_schema_views_azure_vnet_site_crudapi.ObjectReplaceRspValidator()
 
+	MDR.ValidatorRegistry["ves.io.schema.views.cdn_loadbalancer.CDNLbStatusType"] = ves_io_schema_views_cdn_loadbalancer.CDNLbStatusTypeValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.cdn_loadbalancer.CDNLoadbalancerStatus"] = ves_io_schema_views_cdn_loadbalancer.CDNLoadbalancerStatusValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.cdn_loadbalancer.SpecType"] = ves_io_schema_views_cdn_loadbalancer.SpecTypeValidator()
+
+	MDR.ValidatorRegistry["ves.io.schema.views.cdn_loadbalancer.UpdateServiceDomainsRequest"] = ves_io_schema_views_cdn_loadbalancer.UpdateServiceDomainsRequestValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.cdn_loadbalancer.UpdateServiceDomainsResponse"] = ves_io_schema_views_cdn_loadbalancer.UpdateServiceDomainsResponseValidator()
+
+	MDR.ValidatorRegistry["ves.io.schema.views.cdn_loadbalancer.CreateRequest"] = ves_io_schema_views_cdn_loadbalancer.CreateRequestValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.cdn_loadbalancer.CreateResponse"] = ves_io_schema_views_cdn_loadbalancer.CreateResponseValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.cdn_loadbalancer.DeleteRequest"] = ves_io_schema_views_cdn_loadbalancer.DeleteRequestValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.cdn_loadbalancer.GetRequest"] = ves_io_schema_views_cdn_loadbalancer.GetRequestValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.cdn_loadbalancer.GetResponse"] = ves_io_schema_views_cdn_loadbalancer.GetResponseValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.cdn_loadbalancer.ListRequest"] = ves_io_schema_views_cdn_loadbalancer.ListRequestValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.cdn_loadbalancer.ListResponse"] = ves_io_schema_views_cdn_loadbalancer.ListResponseValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.cdn_loadbalancer.ListResponseItem"] = ves_io_schema_views_cdn_loadbalancer.ListResponseItemValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.cdn_loadbalancer.ReplaceRequest"] = ves_io_schema_views_cdn_loadbalancer.ReplaceRequestValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.cdn_loadbalancer.ReplaceResponse"] = ves_io_schema_views_cdn_loadbalancer.ReplaceResponseValidator()
+
+	MDR.ValidatorRegistry["ves.io.schema.views.cdn_loadbalancer.CDNAccessLogAggregationRequest"] = ves_io_schema_views_cdn_loadbalancer.CDNAccessLogAggregationRequestValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.cdn_loadbalancer.CDNAccessLogFilter"] = ves_io_schema_views_cdn_loadbalancer.CDNAccessLogFilterValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.cdn_loadbalancer.CDNAccessLogRequest"] = ves_io_schema_views_cdn_loadbalancer.CDNAccessLogRequestValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.cdn_loadbalancer.CDNAggregationRequest"] = ves_io_schema_views_cdn_loadbalancer.CDNAggregationRequestValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.cdn_loadbalancer.CDNDateAggregation"] = ves_io_schema_views_cdn_loadbalancer.CDNDateAggregationValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.cdn_loadbalancer.CDNDateSubAggregation"] = ves_io_schema_views_cdn_loadbalancer.CDNDateSubAggregationValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.cdn_loadbalancer.CDNFieldAggregation"] = ves_io_schema_views_cdn_loadbalancer.CDNFieldAggregationValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.cdn_loadbalancer.CDNLogAggregationResponse"] = ves_io_schema_views_cdn_loadbalancer.CDNLogAggregationResponseValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.cdn_loadbalancer.CDNLogResponse"] = ves_io_schema_views_cdn_loadbalancer.CDNLogResponseValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.cdn_loadbalancer.LilacCDNAccessLogsResponseData"] = ves_io_schema_views_cdn_loadbalancer.LilacCDNAccessLogsResponseDataValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.cdn_loadbalancer.LilacCDNCachePurgeRequest"] = ves_io_schema_views_cdn_loadbalancer.LilacCDNCachePurgeRequestValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.cdn_loadbalancer.LilacCDNCachePurgeResponse"] = ves_io_schema_views_cdn_loadbalancer.LilacCDNCachePurgeResponseValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.cdn_loadbalancer.LilacCDNMetricsRequest"] = ves_io_schema_views_cdn_loadbalancer.LilacCDNMetricsRequestValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.cdn_loadbalancer.LilacCDNMetricsResponse"] = ves_io_schema_views_cdn_loadbalancer.LilacCDNMetricsResponseValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.cdn_loadbalancer.SubscribeRequest"] = ves_io_schema_views_cdn_loadbalancer.SubscribeRequestValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.cdn_loadbalancer.SubscribeResponse"] = ves_io_schema_views_cdn_loadbalancer.SubscribeResponseValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.cdn_loadbalancer.UnsubscribeRequest"] = ves_io_schema_views_cdn_loadbalancer.UnsubscribeRequestValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.cdn_loadbalancer.UnsubscribeResponse"] = ves_io_schema_views_cdn_loadbalancer.UnsubscribeResponseValidator()
+
+	MDR.ValidatorRegistry["ves.io.schema.views.cdn_loadbalancer.AdvancedOptionsType"] = ves_io_schema_views_cdn_loadbalancer.AdvancedOptionsTypeValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.cdn_loadbalancer.AuthenticationOptions"] = ves_io_schema_views_cdn_loadbalancer.AuthenticationOptionsValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.cdn_loadbalancer.CDNDownstreamTlsParamsType"] = ves_io_schema_views_cdn_loadbalancer.CDNDownstreamTlsParamsTypeValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.cdn_loadbalancer.CDNHTTPSAutoCertsType"] = ves_io_schema_views_cdn_loadbalancer.CDNHTTPSAutoCertsTypeValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.cdn_loadbalancer.CDNHTTPSCustomCertsType"] = ves_io_schema_views_cdn_loadbalancer.CDNHTTPSCustomCertsTypeValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.cdn_loadbalancer.CDNOriginServerType"] = ves_io_schema_views_cdn_loadbalancer.CDNOriginServerTypeValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.cdn_loadbalancer.CDNTLSConfig"] = ves_io_schema_views_cdn_loadbalancer.CDNTLSConfigValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.cdn_loadbalancer.CacheTTLOptionsType"] = ves_io_schema_views_cdn_loadbalancer.CacheTTLOptionsTypeValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.cdn_loadbalancer.CdnOriginPoolType"] = ves_io_schema_views_cdn_loadbalancer.CdnOriginPoolTypeValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.cdn_loadbalancer.CreateSpecType"] = ves_io_schema_views_cdn_loadbalancer.CreateSpecTypeValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.cdn_loadbalancer.GeoFilteringOptions"] = ves_io_schema_views_cdn_loadbalancer.GeoFilteringOptionsValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.cdn_loadbalancer.GetSpecType"] = ves_io_schema_views_cdn_loadbalancer.GetSpecTypeValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.cdn_loadbalancer.GlobalSpecType"] = ves_io_schema_views_cdn_loadbalancer.GlobalSpecTypeValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.cdn_loadbalancer.HeaderControlType"] = ves_io_schema_views_cdn_loadbalancer.HeaderControlTypeValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.cdn_loadbalancer.IpFilteringOptions"] = ves_io_schema_views_cdn_loadbalancer.IpFilteringOptionsValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.cdn_loadbalancer.LilacCDNMetricsFilter"] = ves_io_schema_views_cdn_loadbalancer.LilacCDNMetricsFilterValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.cdn_loadbalancer.LilacCDNMetricsResponseData"] = ves_io_schema_views_cdn_loadbalancer.LilacCDNMetricsResponseDataValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.cdn_loadbalancer.LilacCDNMetricsResponseGroupBy"] = ves_io_schema_views_cdn_loadbalancer.LilacCDNMetricsResponseGroupByValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.cdn_loadbalancer.LilacCDNMetricsResponseSeries"] = ves_io_schema_views_cdn_loadbalancer.LilacCDNMetricsResponseSeriesValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.cdn_loadbalancer.LilacCDNMetricsResponseValue"] = ves_io_schema_views_cdn_loadbalancer.LilacCDNMetricsResponseValueValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.cdn_loadbalancer.LogHeaderOptions"] = ves_io_schema_views_cdn_loadbalancer.LogHeaderOptionsValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.cdn_loadbalancer.LoggingOptionsType"] = ves_io_schema_views_cdn_loadbalancer.LoggingOptionsTypeValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.cdn_loadbalancer.ProxyTypeHttpsAutoCerts"] = ves_io_schema_views_cdn_loadbalancer.ProxyTypeHttpsAutoCertsValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.cdn_loadbalancer.ReplaceSpecType"] = ves_io_schema_views_cdn_loadbalancer.ReplaceSpecTypeValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.cdn_loadbalancer.SecurityOptionsType"] = ves_io_schema_views_cdn_loadbalancer.SecurityOptionsTypeValidator()
+
+	MDR.ValidatorRegistry["ves.io.schema.views.cdn_loadbalancer.crudapi.ObjectCreateReq"] = ves_io_schema_views_cdn_loadbalancer_crudapi.ObjectCreateReqValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.cdn_loadbalancer.crudapi.ObjectCreateRsp"] = ves_io_schema_views_cdn_loadbalancer_crudapi.ObjectCreateRspValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.cdn_loadbalancer.crudapi.ObjectDeleteReq"] = ves_io_schema_views_cdn_loadbalancer_crudapi.ObjectDeleteReqValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.cdn_loadbalancer.crudapi.ObjectDeleteRsp"] = ves_io_schema_views_cdn_loadbalancer_crudapi.ObjectDeleteRspValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.cdn_loadbalancer.crudapi.ObjectGetReq"] = ves_io_schema_views_cdn_loadbalancer_crudapi.ObjectGetReqValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.cdn_loadbalancer.crudapi.ObjectGetRsp"] = ves_io_schema_views_cdn_loadbalancer_crudapi.ObjectGetRspValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.cdn_loadbalancer.crudapi.ObjectListReq"] = ves_io_schema_views_cdn_loadbalancer_crudapi.ObjectListReqValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.cdn_loadbalancer.crudapi.ObjectListRsp"] = ves_io_schema_views_cdn_loadbalancer_crudapi.ObjectListRspValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.cdn_loadbalancer.crudapi.ObjectListRspItem"] = ves_io_schema_views_cdn_loadbalancer_crudapi.ObjectListRspItemValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.cdn_loadbalancer.crudapi.ObjectReplaceReq"] = ves_io_schema_views_cdn_loadbalancer_crudapi.ObjectReplaceReqValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.cdn_loadbalancer.crudapi.ObjectReplaceRsp"] = ves_io_schema_views_cdn_loadbalancer_crudapi.ObjectReplaceRspValidator()
+
 	MDR.ValidatorRegistry["ves.io.schema.views.forward_proxy_policy.SpecType"] = ves_io_schema_views_forward_proxy_policy.SpecTypeValidator()
 
 	MDR.ValidatorRegistry["ves.io.schema.views.forward_proxy_policy.CreateRequest"] = ves_io_schema_views_forward_proxy_policy.CreateRequestValidator()
@@ -3795,6 +3975,7 @@ func init() {
 	MDR.ValidatorRegistry["ves.io.schema.views.http_loadbalancer.AdvancedOptionsType"] = ves_io_schema_views_http_loadbalancer.AdvancedOptionsTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.views.http_loadbalancer.ApiDefinitionList"] = ves_io_schema_views_http_loadbalancer.ApiDefinitionListValidator()
 	MDR.ValidatorRegistry["ves.io.schema.views.http_loadbalancer.ApiDiscoverySetting"] = ves_io_schema_views_http_loadbalancer.ApiDiscoverySettingValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.http_loadbalancer.ApiEndpointDetails"] = ves_io_schema_views_http_loadbalancer.ApiEndpointDetailsValidator()
 	MDR.ValidatorRegistry["ves.io.schema.views.http_loadbalancer.ApiEndpointRule"] = ves_io_schema_views_http_loadbalancer.ApiEndpointRuleValidator()
 	MDR.ValidatorRegistry["ves.io.schema.views.http_loadbalancer.AppEndpointType"] = ves_io_schema_views_http_loadbalancer.AppEndpointTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.views.http_loadbalancer.CSDJavaScriptInsertAllWithExceptionsType"] = ves_io_schema_views_http_loadbalancer.CSDJavaScriptInsertAllWithExceptionsTypeValidator()
@@ -3826,6 +4007,7 @@ func init() {
 	MDR.ValidatorRegistry["ves.io.schema.views.http_loadbalancer.OpenApiValidationMode"] = ves_io_schema_views_http_loadbalancer.OpenApiValidationModeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.views.http_loadbalancer.OpenApiValidationModeActive"] = ves_io_schema_views_http_loadbalancer.OpenApiValidationModeActiveValidator()
 	MDR.ValidatorRegistry["ves.io.schema.views.http_loadbalancer.OpenApiValidationRule"] = ves_io_schema_views_http_loadbalancer.OpenApiValidationRuleValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.http_loadbalancer.OriginServerSubsetRuleListType"] = ves_io_schema_views_http_loadbalancer.OriginServerSubsetRuleListTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.views.http_loadbalancer.PolicyBasedChallenge"] = ves_io_schema_views_http_loadbalancer.PolicyBasedChallengeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.views.http_loadbalancer.ProxyTypeHttp"] = ves_io_schema_views_http_loadbalancer.ProxyTypeHttpValidator()
 	MDR.ValidatorRegistry["ves.io.schema.views.http_loadbalancer.ProxyTypeHttps"] = ves_io_schema_views_http_loadbalancer.ProxyTypeHttpsValidator()
@@ -3978,6 +4160,41 @@ func init() {
 	MDR.ValidatorRegistry["ves.io.schema.views.rate_limiter_policy.crudapi.ObjectListRspItem"] = ves_io_schema_views_rate_limiter_policy_crudapi.ObjectListRspItemValidator()
 	MDR.ValidatorRegistry["ves.io.schema.views.rate_limiter_policy.crudapi.ObjectReplaceReq"] = ves_io_schema_views_rate_limiter_policy_crudapi.ObjectReplaceReqValidator()
 	MDR.ValidatorRegistry["ves.io.schema.views.rate_limiter_policy.crudapi.ObjectReplaceRsp"] = ves_io_schema_views_rate_limiter_policy_crudapi.ObjectReplaceRspValidator()
+
+	MDR.ValidatorRegistry["ves.io.schema.views.securemesh_site.SpecType"] = ves_io_schema_views_securemesh_site.SpecTypeValidator()
+
+	MDR.ValidatorRegistry["ves.io.schema.views.securemesh_site.CreateRequest"] = ves_io_schema_views_securemesh_site.CreateRequestValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.securemesh_site.CreateResponse"] = ves_io_schema_views_securemesh_site.CreateResponseValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.securemesh_site.DeleteRequest"] = ves_io_schema_views_securemesh_site.DeleteRequestValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.securemesh_site.GetRequest"] = ves_io_schema_views_securemesh_site.GetRequestValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.securemesh_site.GetResponse"] = ves_io_schema_views_securemesh_site.GetResponseValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.securemesh_site.ListRequest"] = ves_io_schema_views_securemesh_site.ListRequestValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.securemesh_site.ListResponse"] = ves_io_schema_views_securemesh_site.ListResponseValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.securemesh_site.ListResponseItem"] = ves_io_schema_views_securemesh_site.ListResponseItemValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.securemesh_site.ReplaceRequest"] = ves_io_schema_views_securemesh_site.ReplaceRequestValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.securemesh_site.ReplaceResponse"] = ves_io_schema_views_securemesh_site.ReplaceResponseValidator()
+
+	MDR.ValidatorRegistry["ves.io.schema.views.securemesh_site.CreateSpecType"] = ves_io_schema_views_securemesh_site.CreateSpecTypeValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.securemesh_site.GetSpecType"] = ves_io_schema_views_securemesh_site.GetSpecTypeValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.securemesh_site.GlobalSpecType"] = ves_io_schema_views_securemesh_site.GlobalSpecTypeValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.securemesh_site.Interface"] = ves_io_schema_views_securemesh_site.InterfaceValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.securemesh_site.InterfaceListType"] = ves_io_schema_views_securemesh_site.InterfaceListTypeValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.securemesh_site.ReplaceSpecType"] = ves_io_schema_views_securemesh_site.ReplaceSpecTypeValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.securemesh_site.SmsNetworkConfiguration"] = ves_io_schema_views_securemesh_site.SmsNetworkConfigurationValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.securemesh_site.StaticRoutesListType"] = ves_io_schema_views_securemesh_site.StaticRoutesListTypeValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.securemesh_site.VnConfiguration"] = ves_io_schema_views_securemesh_site.VnConfigurationValidator()
+
+	MDR.ValidatorRegistry["ves.io.schema.views.securemesh_site.crudapi.ObjectCreateReq"] = ves_io_schema_views_securemesh_site_crudapi.ObjectCreateReqValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.securemesh_site.crudapi.ObjectCreateRsp"] = ves_io_schema_views_securemesh_site_crudapi.ObjectCreateRspValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.securemesh_site.crudapi.ObjectDeleteReq"] = ves_io_schema_views_securemesh_site_crudapi.ObjectDeleteReqValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.securemesh_site.crudapi.ObjectDeleteRsp"] = ves_io_schema_views_securemesh_site_crudapi.ObjectDeleteRspValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.securemesh_site.crudapi.ObjectGetReq"] = ves_io_schema_views_securemesh_site_crudapi.ObjectGetReqValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.securemesh_site.crudapi.ObjectGetRsp"] = ves_io_schema_views_securemesh_site_crudapi.ObjectGetRspValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.securemesh_site.crudapi.ObjectListReq"] = ves_io_schema_views_securemesh_site_crudapi.ObjectListReqValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.securemesh_site.crudapi.ObjectListRsp"] = ves_io_schema_views_securemesh_site_crudapi.ObjectListRspValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.securemesh_site.crudapi.ObjectListRspItem"] = ves_io_schema_views_securemesh_site_crudapi.ObjectListRspItemValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.securemesh_site.crudapi.ObjectReplaceReq"] = ves_io_schema_views_securemesh_site_crudapi.ObjectReplaceReqValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.securemesh_site.crudapi.ObjectReplaceRsp"] = ves_io_schema_views_securemesh_site_crudapi.ObjectReplaceRspValidator()
 
 	MDR.ValidatorRegistry["ves.io.schema.views.tcp_loadbalancer.SpecType"] = ves_io_schema_views_tcp_loadbalancer.SpecTypeValidator()
 
@@ -4220,6 +4437,7 @@ func init() {
 	MDR.ValidatorRegistry["ves.io.schema.virtual_host.DynamicReverseProxyType"] = ves_io_schema_virtual_host.DynamicReverseProxyTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.virtual_host.GetSpecType"] = ves_io_schema_virtual_host.GetSpecTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.virtual_host.GlobalSpecType"] = ves_io_schema_virtual_host.GlobalSpecTypeValidator()
+	MDR.ValidatorRegistry["ves.io.schema.virtual_host.HttpProtocolOptions"] = ves_io_schema_virtual_host.HttpProtocolOptionsValidator()
 	MDR.ValidatorRegistry["ves.io.schema.virtual_host.JavaScriptConfigType"] = ves_io_schema_virtual_host.JavaScriptConfigTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.virtual_host.JavascriptChallengeType"] = ves_io_schema_virtual_host.JavascriptChallengeTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.virtual_host.PolicyBasedChallenge"] = ves_io_schema_virtual_host.PolicyBasedChallengeValidator()
@@ -5192,6 +5410,50 @@ func init() {
 			},
 			"spec.gc_spec.where.virtual_site": []sets.String{
 				sets.NewString([]string{"disable_internet_vip", "enable_internet_vip"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.certificate.API.Create"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec": []sets.String{
+				sets.NewString([]string{"custom_hash_algorithms", "disable_ocsp_stapling", "use_system_defaults"}...),
+			},
+			"spec.private_key": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.certificate.API.Replace"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec": []sets.String{
+				sets.NewString([]string{"custom_hash_algorithms", "disable_ocsp_stapling", "use_system_defaults"}...),
+			},
+			"spec.private_key": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.certificate.crudapi.API.Create"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec.gc_spec": []sets.String{
+				sets.NewString([]string{"custom_hash_algorithms", "disable_ocsp_stapling", "use_system_defaults"}...),
+			},
+			"spec.gc_spec.private_key": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.certificate.crudapi.API.Replace"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec.gc_spec": []sets.String{
+				sets.NewString([]string{"custom_hash_algorithms", "disable_ocsp_stapling", "use_system_defaults"}...),
+			},
+			"spec.gc_spec.private_key": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
 			},
 		},
 	}
@@ -8912,7 +9174,7 @@ func init() {
 				sets.NewString([]string{"custom_udp_ports", "no_udp_ports"}...),
 			},
 			"spec.f5_big_ip_aws_service.market_place_image": []sets.String{
-				sets.NewString([]string{"AWAFPayG200Mbps", "AWAFPayG3Gbps"}...),
+				sets.NewString([]string{"AWAFPayG200Mbps", "AWAFPayG3Gbps", "BestPlusPayG200Mbps"}...),
 			},
 			"spec.f5_big_ip_aws_service.nodes": []sets.String{
 				sets.NewString([]string{"automatic_prefix", "tunnel_prefix"}...),
@@ -9265,7 +9527,7 @@ func init() {
 				sets.NewString([]string{"custom_udp_ports", "no_udp_ports"}...),
 			},
 			"spec.gc_spec.f5_big_ip_aws_service.market_place_image": []sets.String{
-				sets.NewString([]string{"AWAFPayG200Mbps", "AWAFPayG3Gbps"}...),
+				sets.NewString([]string{"AWAFPayG200Mbps", "AWAFPayG3Gbps", "BestPlusPayG200Mbps"}...),
 			},
 			"spec.gc_spec.f5_big_ip_aws_service.nodes": []sets.String{
 				sets.NewString([]string{"automatic_prefix", "tunnel_prefix"}...),
@@ -9467,7 +9729,7 @@ func init() {
 				sets.NewString([]string{"custom_udp_ports", "no_udp_ports"}...),
 			},
 			"spec.gc_spec.f5_big_ip_aws_service.market_place_image": []sets.String{
-				sets.NewString([]string{"AWAFPayG200Mbps", "AWAFPayG3Gbps"}...),
+				sets.NewString([]string{"AWAFPayG200Mbps", "AWAFPayG3Gbps", "BestPlusPayG200Mbps"}...),
 			},
 			"spec.gc_spec.f5_big_ip_aws_service.nodes": []sets.String{
 				sets.NewString([]string{"automatic_prefix", "tunnel_prefix"}...),
@@ -10965,7 +11227,7 @@ func init() {
 	MDR.RPCOneofExclusiveRegistry["ves.io.schema.views.aws_tgw_site.API.Create"] = svcfw.OOExclusiveSet{
 		FieldsByAncestor: map[string][]sets.String{
 			"spec": []sets.String{
-				sets.NewString([]string{"blocked_services", "default_blocked_services"}...),
+				sets.NewString([]string{"block_all_services", "blocked_services", "default_blocked_services"}...),
 				sets.NewString([]string{"direct_connect_disabled", "direct_connect_enabled"}...),
 				sets.NewString([]string{"log_receiver", "logs_streaming_disabled"}...),
 			},
@@ -11088,7 +11350,7 @@ func init() {
 	MDR.RPCOneofExclusiveRegistry["ves.io.schema.views.aws_tgw_site.API.Replace"] = svcfw.OOExclusiveSet{
 		FieldsByAncestor: map[string][]sets.String{
 			"spec": []sets.String{
-				sets.NewString([]string{"blocked_services", "default_blocked_services"}...),
+				sets.NewString([]string{"block_all_services", "blocked_services", "default_blocked_services"}...),
 				sets.NewString([]string{"direct_connect_disabled", "direct_connect_enabled"}...),
 				sets.NewString([]string{"log_receiver", "logs_streaming_disabled"}...),
 			},
@@ -11184,7 +11446,7 @@ func init() {
 	MDR.RPCOneofExclusiveRegistry["ves.io.schema.views.aws_tgw_site.crudapi.API.Create"] = svcfw.OOExclusiveSet{
 		FieldsByAncestor: map[string][]sets.String{
 			"spec.gc_spec": []sets.String{
-				sets.NewString([]string{"blocked_services", "default_blocked_services"}...),
+				sets.NewString([]string{"block_all_services", "blocked_services", "default_blocked_services"}...),
 				sets.NewString([]string{"direct_connect_disabled", "direct_connect_enabled"}...),
 				sets.NewString([]string{"log_receiver", "logs_streaming_disabled"}...),
 			},
@@ -11307,7 +11569,7 @@ func init() {
 	MDR.RPCOneofExclusiveRegistry["ves.io.schema.views.aws_tgw_site.crudapi.API.Replace"] = svcfw.OOExclusiveSet{
 		FieldsByAncestor: map[string][]sets.String{
 			"spec.gc_spec": []sets.String{
-				sets.NewString([]string{"blocked_services", "default_blocked_services"}...),
+				sets.NewString([]string{"block_all_services", "blocked_services", "default_blocked_services"}...),
 				sets.NewString([]string{"direct_connect_disabled", "direct_connect_enabled"}...),
 				sets.NewString([]string{"log_receiver", "logs_streaming_disabled"}...),
 			},
@@ -11431,7 +11693,7 @@ func init() {
 		FieldsByAncestor: map[string][]sets.String{
 			"spec": []sets.String{
 				sets.NewString([]string{"aws_cred"}...),
-				sets.NewString([]string{"blocked_services", "default_blocked_services"}...),
+				sets.NewString([]string{"block_all_services", "blocked_services", "default_blocked_services"}...),
 				sets.NewString([]string{"direct_connect_disabled", "direct_connect_enabled"}...),
 				sets.NewString([]string{"disable_internet_vip", "enable_internet_vip"}...),
 				sets.NewString([]string{"ingress_egress_gw", "ingress_gw", "voltstack_cluster"}...),
@@ -11611,7 +11873,7 @@ func init() {
 	MDR.RPCOneofExclusiveRegistry["ves.io.schema.views.aws_vpc_site.API.Replace"] = svcfw.OOExclusiveSet{
 		FieldsByAncestor: map[string][]sets.String{
 			"spec": []sets.String{
-				sets.NewString([]string{"blocked_services", "default_blocked_services"}...),
+				sets.NewString([]string{"block_all_services", "blocked_services", "default_blocked_services"}...),
 				sets.NewString([]string{"direct_connect_disabled", "direct_connect_enabled"}...),
 				sets.NewString([]string{"disable_internet_vip", "enable_internet_vip"}...),
 				sets.NewString([]string{"ingress_egress_gw", "ingress_gw", "voltstack_cluster"}...),
@@ -11757,7 +12019,7 @@ func init() {
 		FieldsByAncestor: map[string][]sets.String{
 			"spec.gc_spec": []sets.String{
 				sets.NewString([]string{"assisted", "aws_cred"}...),
-				sets.NewString([]string{"blocked_services", "default_blocked_services"}...),
+				sets.NewString([]string{"block_all_services", "blocked_services", "default_blocked_services"}...),
 				sets.NewString([]string{"direct_connect_disabled", "direct_connect_enabled"}...),
 				sets.NewString([]string{"disable_internet_vip", "enable_internet_vip"}...),
 				sets.NewString([]string{"ingress_egress_gw", "ingress_gw", "voltstack_cluster"}...),
@@ -11938,7 +12200,7 @@ func init() {
 		FieldsByAncestor: map[string][]sets.String{
 			"spec.gc_spec": []sets.String{
 				sets.NewString([]string{"assisted", "aws_cred"}...),
-				sets.NewString([]string{"blocked_services", "default_blocked_services"}...),
+				sets.NewString([]string{"block_all_services", "blocked_services", "default_blocked_services"}...),
 				sets.NewString([]string{"direct_connect_disabled", "direct_connect_enabled"}...),
 				sets.NewString([]string{"disable_internet_vip", "enable_internet_vip"}...),
 				sets.NewString([]string{"ingress_egress_gw", "ingress_gw", "voltstack_cluster"}...),
@@ -12120,7 +12382,7 @@ func init() {
 			"spec": []sets.String{
 				sets.NewString([]string{"alternate_region", "azure_region"}...),
 				sets.NewString([]string{"azure_cred"}...),
-				sets.NewString([]string{"blocked_services", "default_blocked_services"}...),
+				sets.NewString([]string{"block_all_services", "blocked_services", "default_blocked_services"}...),
 				sets.NewString([]string{"ingress_egress_gw", "ingress_egress_gw_ar", "ingress_gw", "ingress_gw_ar", "voltstack_cluster", "voltstack_cluster_ar"}...),
 				sets.NewString([]string{"log_receiver", "logs_streaming_disabled"}...),
 				sets.NewString([]string{"no_worker_nodes", "nodes_per_az", "total_nodes"}...),
@@ -12178,6 +12440,7 @@ func init() {
 				sets.NewString([]string{"express_route_disabled", "express_route_enabled"}...),
 			},
 			"spec.ingress_egress_gw.hub.express_route_enabled": []sets.String{
+				sets.NewString([]string{"advertise_to_route_server", "do_not_advertise_to_route_server"}...),
 				sets.NewString([]string{"auto_asn", "custom_asn"}...),
 				sets.NewString([]string{"site_registration_over_express_route", "site_registration_over_internet"}...),
 				sets.NewString([]string{"sku_ergw1az", "sku_ergw2az", "sku_high_perf", "sku_standard"}...),
@@ -12265,6 +12528,7 @@ func init() {
 				sets.NewString([]string{"express_route_disabled", "express_route_enabled"}...),
 			},
 			"spec.ingress_egress_gw_ar.hub.express_route_enabled": []sets.String{
+				sets.NewString([]string{"advertise_to_route_server", "do_not_advertise_to_route_server"}...),
 				sets.NewString([]string{"auto_asn", "custom_asn"}...),
 				sets.NewString([]string{"site_registration_over_express_route", "site_registration_over_internet"}...),
 				sets.NewString([]string{"sku_ergw1az", "sku_ergw2az", "sku_high_perf", "sku_standard"}...),
@@ -12475,7 +12739,7 @@ func init() {
 	MDR.RPCOneofExclusiveRegistry["ves.io.schema.views.azure_vnet_site.API.Replace"] = svcfw.OOExclusiveSet{
 		FieldsByAncestor: map[string][]sets.String{
 			"spec": []sets.String{
-				sets.NewString([]string{"blocked_services", "default_blocked_services"}...),
+				sets.NewString([]string{"block_all_services", "blocked_services", "default_blocked_services"}...),
 				sets.NewString([]string{"ingress_egress_gw", "ingress_egress_gw_ar", "ingress_gw", "ingress_gw_ar", "voltstack_cluster", "voltstack_cluster_ar"}...),
 				sets.NewString([]string{"log_receiver", "logs_streaming_disabled"}...),
 				sets.NewString([]string{"no_worker_nodes", "nodes_per_az", "total_nodes"}...),
@@ -12521,6 +12785,7 @@ func init() {
 				sets.NewString([]string{"express_route_disabled", "express_route_enabled"}...),
 			},
 			"spec.ingress_egress_gw.hub.express_route_enabled": []sets.String{
+				sets.NewString([]string{"advertise_to_route_server", "do_not_advertise_to_route_server"}...),
 				sets.NewString([]string{"auto_asn", "custom_asn"}...),
 				sets.NewString([]string{"site_registration_over_express_route", "site_registration_over_internet"}...),
 				sets.NewString([]string{"sku_ergw1az", "sku_ergw2az", "sku_high_perf", "sku_standard"}...),
@@ -12608,6 +12873,7 @@ func init() {
 				sets.NewString([]string{"express_route_disabled", "express_route_enabled"}...),
 			},
 			"spec.ingress_egress_gw_ar.hub.express_route_enabled": []sets.String{
+				sets.NewString([]string{"advertise_to_route_server", "do_not_advertise_to_route_server"}...),
 				sets.NewString([]string{"auto_asn", "custom_asn"}...),
 				sets.NewString([]string{"site_registration_over_express_route", "site_registration_over_internet"}...),
 				sets.NewString([]string{"sku_ergw1az", "sku_ergw2az", "sku_high_perf", "sku_standard"}...),
@@ -12750,7 +13016,7 @@ func init() {
 			"spec.gc_spec": []sets.String{
 				sets.NewString([]string{"alternate_region", "azure_region"}...),
 				sets.NewString([]string{"assisted", "azure_cred"}...),
-				sets.NewString([]string{"blocked_services", "default_blocked_services"}...),
+				sets.NewString([]string{"block_all_services", "blocked_services", "default_blocked_services"}...),
 				sets.NewString([]string{"ingress_egress_gw", "ingress_egress_gw_ar", "ingress_gw", "ingress_gw_ar", "voltstack_cluster", "voltstack_cluster_ar"}...),
 				sets.NewString([]string{"log_receiver", "logs_streaming_disabled"}...),
 				sets.NewString([]string{"no_worker_nodes", "nodes_per_az", "total_nodes"}...),
@@ -12808,6 +13074,7 @@ func init() {
 				sets.NewString([]string{"express_route_disabled", "express_route_enabled"}...),
 			},
 			"spec.gc_spec.ingress_egress_gw.hub.express_route_enabled": []sets.String{
+				sets.NewString([]string{"advertise_to_route_server", "do_not_advertise_to_route_server"}...),
 				sets.NewString([]string{"auto_asn", "custom_asn"}...),
 				sets.NewString([]string{"site_registration_over_express_route", "site_registration_over_internet"}...),
 				sets.NewString([]string{"sku_ergw1az", "sku_ergw2az", "sku_high_perf", "sku_standard"}...),
@@ -12895,6 +13162,7 @@ func init() {
 				sets.NewString([]string{"express_route_disabled", "express_route_enabled"}...),
 			},
 			"spec.gc_spec.ingress_egress_gw_ar.hub.express_route_enabled": []sets.String{
+				sets.NewString([]string{"advertise_to_route_server", "do_not_advertise_to_route_server"}...),
 				sets.NewString([]string{"auto_asn", "custom_asn"}...),
 				sets.NewString([]string{"site_registration_over_express_route", "site_registration_over_internet"}...),
 				sets.NewString([]string{"sku_ergw1az", "sku_ergw2az", "sku_high_perf", "sku_standard"}...),
@@ -13107,7 +13375,7 @@ func init() {
 			"spec.gc_spec": []sets.String{
 				sets.NewString([]string{"alternate_region", "azure_region"}...),
 				sets.NewString([]string{"assisted", "azure_cred"}...),
-				sets.NewString([]string{"blocked_services", "default_blocked_services"}...),
+				sets.NewString([]string{"block_all_services", "blocked_services", "default_blocked_services"}...),
 				sets.NewString([]string{"ingress_egress_gw", "ingress_egress_gw_ar", "ingress_gw", "ingress_gw_ar", "voltstack_cluster", "voltstack_cluster_ar"}...),
 				sets.NewString([]string{"log_receiver", "logs_streaming_disabled"}...),
 				sets.NewString([]string{"no_worker_nodes", "nodes_per_az", "total_nodes"}...),
@@ -13165,6 +13433,7 @@ func init() {
 				sets.NewString([]string{"express_route_disabled", "express_route_enabled"}...),
 			},
 			"spec.gc_spec.ingress_egress_gw.hub.express_route_enabled": []sets.String{
+				sets.NewString([]string{"advertise_to_route_server", "do_not_advertise_to_route_server"}...),
 				sets.NewString([]string{"auto_asn", "custom_asn"}...),
 				sets.NewString([]string{"site_registration_over_express_route", "site_registration_over_internet"}...),
 				sets.NewString([]string{"sku_ergw1az", "sku_ergw2az", "sku_high_perf", "sku_standard"}...),
@@ -13252,6 +13521,7 @@ func init() {
 				sets.NewString([]string{"express_route_disabled", "express_route_enabled"}...),
 			},
 			"spec.gc_spec.ingress_egress_gw_ar.hub.express_route_enabled": []sets.String{
+				sets.NewString([]string{"advertise_to_route_server", "do_not_advertise_to_route_server"}...),
 				sets.NewString([]string{"auto_asn", "custom_asn"}...),
 				sets.NewString([]string{"site_registration_over_express_route", "site_registration_over_internet"}...),
 				sets.NewString([]string{"sku_ergw1az", "sku_ergw2az", "sku_high_perf", "sku_standard"}...),
@@ -13459,6 +13729,316 @@ func init() {
 		},
 	}
 
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.views.cdn_loadbalancer.API.Create"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec": []sets.String{
+				sets.NewString([]string{"http", "https", "https_auto_cert"}...),
+			},
+			"spec.https.tls_parameters.tls_certificates": []sets.String{
+				sets.NewString([]string{"custom_hash_algorithms", "disable_ocsp_stapling", "use_system_defaults"}...),
+			},
+			"spec.https.tls_parameters.tls_certificates.private_key": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.https.tls_parameters.tls_config": []sets.String{
+				sets.NewString([]string{"tls_11_plus", "tls_12_plus"}...),
+			},
+			"spec.https_auto_cert.tls_config": []sets.String{
+				sets.NewString([]string{"tls_11_plus", "tls_12_plus"}...),
+			},
+			"spec.more_option.cache_ttl_options": []sets.String{
+				sets.NewString([]string{"cache_disabled", "cache_ttl_default", "cache_ttl_override"}...),
+			},
+			"spec.more_option.header_options.request_headers_to_add": []sets.String{
+				sets.NewString([]string{"secret_value", "value"}...),
+			},
+			"spec.more_option.header_options.request_headers_to_add.secret_value": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.more_option.header_options.response_headers_to_add": []sets.String{
+				sets.NewString([]string{"secret_value", "value"}...),
+			},
+			"spec.more_option.header_options.response_headers_to_add.secret_value": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.more_option.security_options.auth_options": []sets.String{
+				sets.NewString([]string{"disable_auth", "jwt"}...),
+			},
+			"spec.more_option.security_options.auth_options.jwt": []sets.String{
+				sets.NewString([]string{"bearer_token", "cookie", "header", "query_param"}...),
+			},
+			"spec.more_option.security_options.auth_options.jwt.secret_key": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.more_option.security_options.geo_filtering": []sets.String{
+				sets.NewString([]string{"allow_list", "block_list"}...),
+			},
+			"spec.more_option.security_options.ip_filtering": []sets.String{
+				sets.NewString([]string{"allow_list", "block_list"}...),
+			},
+			"spec.origin_pool": []sets.String{
+				sets.NewString([]string{"no_tls", "use_tls"}...),
+			},
+			"spec.origin_pool.origin_servers": []sets.String{
+				sets.NewString([]string{"public_ip", "public_name"}...),
+			},
+			"spec.origin_pool.use_tls": []sets.String{
+				sets.NewString([]string{"disable_sni", "sni", "use_host_header_as_sni"}...),
+				sets.NewString([]string{"no_mtls", "use_mtls"}...),
+				sets.NewString([]string{"skip_server_verification", "use_server_verification", "volterra_trusted_ca"}...),
+			},
+			"spec.origin_pool.use_tls.tls_config": []sets.String{
+				sets.NewString([]string{"custom_security", "default_security", "low_security", "medium_security"}...),
+			},
+			"spec.origin_pool.use_tls.use_mtls.tls_certificates": []sets.String{
+				sets.NewString([]string{"custom_hash_algorithms", "disable_ocsp_stapling", "use_system_defaults"}...),
+			},
+			"spec.origin_pool.use_tls.use_mtls.tls_certificates.private_key": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.views.cdn_loadbalancer.API.Replace"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec": []sets.String{
+				sets.NewString([]string{"http", "https", "https_auto_cert"}...),
+			},
+			"spec.https.tls_parameters.tls_certificates": []sets.String{
+				sets.NewString([]string{"custom_hash_algorithms", "disable_ocsp_stapling", "use_system_defaults"}...),
+			},
+			"spec.https.tls_parameters.tls_certificates.private_key": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.https.tls_parameters.tls_config": []sets.String{
+				sets.NewString([]string{"tls_11_plus", "tls_12_plus"}...),
+			},
+			"spec.https_auto_cert.tls_config": []sets.String{
+				sets.NewString([]string{"tls_11_plus", "tls_12_plus"}...),
+			},
+			"spec.more_option.cache_ttl_options": []sets.String{
+				sets.NewString([]string{"cache_disabled", "cache_ttl_default", "cache_ttl_override"}...),
+			},
+			"spec.more_option.header_options.request_headers_to_add": []sets.String{
+				sets.NewString([]string{"secret_value", "value"}...),
+			},
+			"spec.more_option.header_options.request_headers_to_add.secret_value": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.more_option.header_options.response_headers_to_add": []sets.String{
+				sets.NewString([]string{"secret_value", "value"}...),
+			},
+			"spec.more_option.header_options.response_headers_to_add.secret_value": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.more_option.security_options.auth_options": []sets.String{
+				sets.NewString([]string{"disable_auth", "jwt"}...),
+			},
+			"spec.more_option.security_options.auth_options.jwt": []sets.String{
+				sets.NewString([]string{"bearer_token", "cookie", "header", "query_param"}...),
+			},
+			"spec.more_option.security_options.auth_options.jwt.secret_key": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.more_option.security_options.geo_filtering": []sets.String{
+				sets.NewString([]string{"allow_list", "block_list"}...),
+			},
+			"spec.more_option.security_options.ip_filtering": []sets.String{
+				sets.NewString([]string{"allow_list", "block_list"}...),
+			},
+			"spec.origin_pool": []sets.String{
+				sets.NewString([]string{"no_tls", "use_tls"}...),
+			},
+			"spec.origin_pool.origin_servers": []sets.String{
+				sets.NewString([]string{"public_ip", "public_name"}...),
+			},
+			"spec.origin_pool.use_tls": []sets.String{
+				sets.NewString([]string{"disable_sni", "sni", "use_host_header_as_sni"}...),
+				sets.NewString([]string{"no_mtls", "use_mtls"}...),
+				sets.NewString([]string{"skip_server_verification", "use_server_verification", "volterra_trusted_ca"}...),
+			},
+			"spec.origin_pool.use_tls.tls_config": []sets.String{
+				sets.NewString([]string{"custom_security", "default_security", "low_security", "medium_security"}...),
+			},
+			"spec.origin_pool.use_tls.use_mtls.tls_certificates": []sets.String{
+				sets.NewString([]string{"custom_hash_algorithms", "disable_ocsp_stapling", "use_system_defaults"}...),
+			},
+			"spec.origin_pool.use_tls.use_mtls.tls_certificates.private_key": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.views.cdn_loadbalancer.CustomAPI.CDNAccessLogAggregationQuery"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"aggs": []sets.String{
+				sets.NewString([]string{"date_aggregation", "field_aggregation"}...),
+			},
+			"aggs.date_aggregation.sub_aggs": []sets.String{
+				sets.NewString([]string{"field_aggregation"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.views.cdn_loadbalancer.CustomAPI.CDNAccessLogs"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"aggs": []sets.String{
+				sets.NewString([]string{"date_aggregation", "field_aggregation"}...),
+			},
+			"aggs.date_aggregation.sub_aggs": []sets.String{
+				sets.NewString([]string{"field_aggregation"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.views.cdn_loadbalancer.CustomAPI.CDNCachePurge"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"": []sets.String{
+				sets.NewString([]string{"hard_purge", "soft_purge"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.views.cdn_loadbalancer.crudapi.API.Create"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec.gc_spec": []sets.String{
+				sets.NewString([]string{"http", "https", "https_auto_cert"}...),
+			},
+			"spec.gc_spec.https.tls_parameters.tls_certificates": []sets.String{
+				sets.NewString([]string{"custom_hash_algorithms", "disable_ocsp_stapling", "use_system_defaults"}...),
+			},
+			"spec.gc_spec.https.tls_parameters.tls_certificates.private_key": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.gc_spec.https.tls_parameters.tls_config": []sets.String{
+				sets.NewString([]string{"tls_11_plus", "tls_12_plus"}...),
+			},
+			"spec.gc_spec.https_auto_cert.tls_config": []sets.String{
+				sets.NewString([]string{"tls_11_plus", "tls_12_plus"}...),
+			},
+			"spec.gc_spec.more_option.cache_ttl_options": []sets.String{
+				sets.NewString([]string{"cache_disabled", "cache_ttl_default", "cache_ttl_override"}...),
+			},
+			"spec.gc_spec.more_option.header_options.request_headers_to_add": []sets.String{
+				sets.NewString([]string{"secret_value", "value"}...),
+			},
+			"spec.gc_spec.more_option.header_options.request_headers_to_add.secret_value": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.gc_spec.more_option.header_options.response_headers_to_add": []sets.String{
+				sets.NewString([]string{"secret_value", "value"}...),
+			},
+			"spec.gc_spec.more_option.header_options.response_headers_to_add.secret_value": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.gc_spec.more_option.security_options.auth_options": []sets.String{
+				sets.NewString([]string{"disable_auth", "jwt"}...),
+			},
+			"spec.gc_spec.more_option.security_options.auth_options.jwt": []sets.String{
+				sets.NewString([]string{"bearer_token", "cookie", "header", "query_param"}...),
+			},
+			"spec.gc_spec.more_option.security_options.auth_options.jwt.secret_key": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.gc_spec.more_option.security_options.geo_filtering": []sets.String{
+				sets.NewString([]string{"allow_list", "block_list"}...),
+			},
+			"spec.gc_spec.more_option.security_options.ip_filtering": []sets.String{
+				sets.NewString([]string{"allow_list", "block_list"}...),
+			},
+			"spec.gc_spec.origin_pool": []sets.String{
+				sets.NewString([]string{"no_tls", "use_tls"}...),
+			},
+			"spec.gc_spec.origin_pool.origin_servers": []sets.String{
+				sets.NewString([]string{"public_ip", "public_name"}...),
+			},
+			"spec.gc_spec.origin_pool.use_tls": []sets.String{
+				sets.NewString([]string{"disable_sni", "sni", "use_host_header_as_sni"}...),
+				sets.NewString([]string{"no_mtls", "use_mtls"}...),
+				sets.NewString([]string{"skip_server_verification", "use_server_verification", "volterra_trusted_ca"}...),
+			},
+			"spec.gc_spec.origin_pool.use_tls.tls_config": []sets.String{
+				sets.NewString([]string{"custom_security", "default_security", "low_security", "medium_security"}...),
+			},
+			"spec.gc_spec.origin_pool.use_tls.use_mtls.tls_certificates": []sets.String{
+				sets.NewString([]string{"custom_hash_algorithms", "disable_ocsp_stapling", "use_system_defaults"}...),
+			},
+			"spec.gc_spec.origin_pool.use_tls.use_mtls.tls_certificates.private_key": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.views.cdn_loadbalancer.crudapi.API.Replace"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec.gc_spec": []sets.String{
+				sets.NewString([]string{"http", "https", "https_auto_cert"}...),
+			},
+			"spec.gc_spec.https.tls_parameters.tls_certificates": []sets.String{
+				sets.NewString([]string{"custom_hash_algorithms", "disable_ocsp_stapling", "use_system_defaults"}...),
+			},
+			"spec.gc_spec.https.tls_parameters.tls_certificates.private_key": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.gc_spec.https.tls_parameters.tls_config": []sets.String{
+				sets.NewString([]string{"tls_11_plus", "tls_12_plus"}...),
+			},
+			"spec.gc_spec.https_auto_cert.tls_config": []sets.String{
+				sets.NewString([]string{"tls_11_plus", "tls_12_plus"}...),
+			},
+			"spec.gc_spec.more_option.cache_ttl_options": []sets.String{
+				sets.NewString([]string{"cache_disabled", "cache_ttl_default", "cache_ttl_override"}...),
+			},
+			"spec.gc_spec.more_option.header_options.request_headers_to_add": []sets.String{
+				sets.NewString([]string{"secret_value", "value"}...),
+			},
+			"spec.gc_spec.more_option.header_options.request_headers_to_add.secret_value": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.gc_spec.more_option.header_options.response_headers_to_add": []sets.String{
+				sets.NewString([]string{"secret_value", "value"}...),
+			},
+			"spec.gc_spec.more_option.header_options.response_headers_to_add.secret_value": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.gc_spec.more_option.security_options.auth_options": []sets.String{
+				sets.NewString([]string{"disable_auth", "jwt"}...),
+			},
+			"spec.gc_spec.more_option.security_options.auth_options.jwt": []sets.String{
+				sets.NewString([]string{"bearer_token", "cookie", "header", "query_param"}...),
+			},
+			"spec.gc_spec.more_option.security_options.auth_options.jwt.secret_key": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.gc_spec.more_option.security_options.geo_filtering": []sets.String{
+				sets.NewString([]string{"allow_list", "block_list"}...),
+			},
+			"spec.gc_spec.more_option.security_options.ip_filtering": []sets.String{
+				sets.NewString([]string{"allow_list", "block_list"}...),
+			},
+			"spec.gc_spec.origin_pool": []sets.String{
+				sets.NewString([]string{"no_tls", "use_tls"}...),
+			},
+			"spec.gc_spec.origin_pool.origin_servers": []sets.String{
+				sets.NewString([]string{"public_ip", "public_name"}...),
+			},
+			"spec.gc_spec.origin_pool.use_tls": []sets.String{
+				sets.NewString([]string{"disable_sni", "sni", "use_host_header_as_sni"}...),
+				sets.NewString([]string{"no_mtls", "use_mtls"}...),
+				sets.NewString([]string{"skip_server_verification", "use_server_verification", "volterra_trusted_ca"}...),
+			},
+			"spec.gc_spec.origin_pool.use_tls.tls_config": []sets.String{
+				sets.NewString([]string{"custom_security", "default_security", "low_security", "medium_security"}...),
+			},
+			"spec.gc_spec.origin_pool.use_tls.use_mtls.tls_certificates": []sets.String{
+				sets.NewString([]string{"custom_hash_algorithms", "disable_ocsp_stapling", "use_system_defaults"}...),
+			},
+			"spec.gc_spec.origin_pool.use_tls.use_mtls.tls_certificates.private_key": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+		},
+	}
+
 	MDR.RPCOneofExclusiveRegistry["ves.io.schema.views.forward_proxy_policy.API.Create"] = svcfw.OOExclusiveSet{
 		FieldsByAncestor: map[string][]sets.String{
 			"spec": []sets.String{
@@ -13626,7 +14206,7 @@ func init() {
 	MDR.RPCOneofExclusiveRegistry["ves.io.schema.views.gcp_vpc_site.API.Create"] = svcfw.OOExclusiveSet{
 		FieldsByAncestor: map[string][]sets.String{
 			"spec": []sets.String{
-				sets.NewString([]string{"blocked_services", "default_blocked_services"}...),
+				sets.NewString([]string{"block_all_services", "blocked_services", "default_blocked_services"}...),
 				sets.NewString([]string{"cloud_credentials"}...),
 				sets.NewString([]string{"ingress_egress_gw", "ingress_gw", "voltstack_cluster"}...),
 				sets.NewString([]string{"log_receiver", "logs_streaming_disabled"}...),
@@ -13782,7 +14362,7 @@ func init() {
 	MDR.RPCOneofExclusiveRegistry["ves.io.schema.views.gcp_vpc_site.API.Replace"] = svcfw.OOExclusiveSet{
 		FieldsByAncestor: map[string][]sets.String{
 			"spec": []sets.String{
-				sets.NewString([]string{"blocked_services", "default_blocked_services"}...),
+				sets.NewString([]string{"block_all_services", "blocked_services", "default_blocked_services"}...),
 				sets.NewString([]string{"ingress_egress_gw", "ingress_gw", "voltstack_cluster"}...),
 				sets.NewString([]string{"log_receiver", "logs_streaming_disabled"}...),
 			},
@@ -13903,7 +14483,7 @@ func init() {
 		FieldsByAncestor: map[string][]sets.String{
 			"spec.gc_spec": []sets.String{
 				sets.NewString([]string{"assisted", "cloud_credentials"}...),
-				sets.NewString([]string{"blocked_services", "default_blocked_services"}...),
+				sets.NewString([]string{"block_all_services", "blocked_services", "default_blocked_services"}...),
 				sets.NewString([]string{"ingress_egress_gw", "ingress_gw", "voltstack_cluster"}...),
 				sets.NewString([]string{"log_receiver", "logs_streaming_disabled"}...),
 			},
@@ -14059,7 +14639,7 @@ func init() {
 		FieldsByAncestor: map[string][]sets.String{
 			"spec.gc_spec": []sets.String{
 				sets.NewString([]string{"assisted", "cloud_credentials"}...),
-				sets.NewString([]string{"blocked_services", "default_blocked_services"}...),
+				sets.NewString([]string{"block_all_services", "blocked_services", "default_blocked_services"}...),
 				sets.NewString([]string{"ingress_egress_gw", "ingress_gw", "voltstack_cluster"}...),
 				sets.NewString([]string{"log_receiver", "logs_streaming_disabled"}...),
 			},
@@ -14307,7 +14887,7 @@ func init() {
 			},
 			"spec.api_specification.validation_all_spec_endpoints.fall_through_mode.fall_through_mode_custom.open_api_validation_rules": []sets.String{
 				sets.NewString([]string{"action_block", "action_report", "action_skip"}...),
-				sets.NewString([]string{"api_endpoint_path", "api_group", "base_path"}...),
+				sets.NewString([]string{"api_endpoint", "api_endpoint_path", "api_group", "base_path"}...),
 			},
 			"spec.api_specification.validation_all_spec_endpoints.validation_mode": []sets.String{
 				sets.NewString([]string{"skip_validation", "validation_mode_active"}...),
@@ -14320,11 +14900,11 @@ func init() {
 			},
 			"spec.api_specification.validation_custom_list.fall_through_mode.fall_through_mode_custom.open_api_validation_rules": []sets.String{
 				sets.NewString([]string{"action_block", "action_report", "action_skip"}...),
-				sets.NewString([]string{"api_endpoint_path", "api_group", "base_path"}...),
+				sets.NewString([]string{"api_endpoint", "api_endpoint_path", "api_group", "base_path"}...),
 			},
 			"spec.api_specification.validation_custom_list.open_api_validation_rules": []sets.String{
 				sets.NewString([]string{"any_domain", "specific_domain"}...),
-				sets.NewString([]string{"api_endpoint_path", "api_group", "base_path"}...),
+				sets.NewString([]string{"api_endpoint", "api_endpoint_path", "api_group", "base_path"}...),
 			},
 			"spec.api_specification.validation_custom_list.open_api_validation_rules.validation_mode": []sets.String{
 				sets.NewString([]string{"skip_validation", "validation_mode_active"}...),
@@ -14565,6 +15145,9 @@ func init() {
 			"spec.https.header_transformation_type": []sets.String{
 				sets.NewString([]string{"default_header_transformation", "proper_case_header_transformation"}...),
 			},
+			"spec.https.http_protocol_options": []sets.String{
+				sets.NewString([]string{"http_protocol_enable_v1_only", "http_protocol_enable_v1_v2", "http_protocol_enable_v2_only"}...),
+			},
 			"spec.https.tls_cert_params": []sets.String{
 				sets.NewString([]string{"no_mtls", "use_mtls"}...),
 			},
@@ -14600,6 +15183,9 @@ func init() {
 			"spec.https_auto_cert.header_transformation_type": []sets.String{
 				sets.NewString([]string{"default_header_transformation", "proper_case_header_transformation"}...),
 			},
+			"spec.https_auto_cert.http_protocol_options": []sets.String{
+				sets.NewString([]string{"http_protocol_enable_v1_only", "http_protocol_enable_v1_v2", "http_protocol_enable_v2_only"}...),
+			},
 			"spec.https_auto_cert.tls_config": []sets.String{
 				sets.NewString([]string{"custom_security", "default_security", "low_security", "medium_security"}...),
 			},
@@ -14629,6 +15215,10 @@ func init() {
 			},
 			"spec.more_option.response_headers_to_add.secret_value": []sets.String{
 				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.origin_server_subset_rule_list.origin_server_subset_rules": []sets.String{
+				sets.NewString([]string{"any_asn", "asn_list", "asn_matcher"}...),
+				sets.NewString([]string{"any_ip", "ip_matcher", "ip_prefix_list"}...),
 			},
 			"spec.policy_based_challenge": []sets.String{
 				sets.NewString([]string{"always_enable_captcha_challenge", "always_enable_js_challenge", "no_challenge"}...),
@@ -14859,7 +15449,7 @@ func init() {
 			},
 			"spec.api_specification.validation_all_spec_endpoints.fall_through_mode.fall_through_mode_custom.open_api_validation_rules": []sets.String{
 				sets.NewString([]string{"action_block", "action_report", "action_skip"}...),
-				sets.NewString([]string{"api_endpoint_path", "api_group", "base_path"}...),
+				sets.NewString([]string{"api_endpoint", "api_endpoint_path", "api_group", "base_path"}...),
 			},
 			"spec.api_specification.validation_all_spec_endpoints.validation_mode": []sets.String{
 				sets.NewString([]string{"skip_validation", "validation_mode_active"}...),
@@ -14872,11 +15462,11 @@ func init() {
 			},
 			"spec.api_specification.validation_custom_list.fall_through_mode.fall_through_mode_custom.open_api_validation_rules": []sets.String{
 				sets.NewString([]string{"action_block", "action_report", "action_skip"}...),
-				sets.NewString([]string{"api_endpoint_path", "api_group", "base_path"}...),
+				sets.NewString([]string{"api_endpoint", "api_endpoint_path", "api_group", "base_path"}...),
 			},
 			"spec.api_specification.validation_custom_list.open_api_validation_rules": []sets.String{
 				sets.NewString([]string{"any_domain", "specific_domain"}...),
-				sets.NewString([]string{"api_endpoint_path", "api_group", "base_path"}...),
+				sets.NewString([]string{"api_endpoint", "api_endpoint_path", "api_group", "base_path"}...),
 			},
 			"spec.api_specification.validation_custom_list.open_api_validation_rules.validation_mode": []sets.String{
 				sets.NewString([]string{"skip_validation", "validation_mode_active"}...),
@@ -15117,6 +15707,9 @@ func init() {
 			"spec.https.header_transformation_type": []sets.String{
 				sets.NewString([]string{"default_header_transformation", "proper_case_header_transformation"}...),
 			},
+			"spec.https.http_protocol_options": []sets.String{
+				sets.NewString([]string{"http_protocol_enable_v1_only", "http_protocol_enable_v1_v2", "http_protocol_enable_v2_only"}...),
+			},
 			"spec.https.tls_cert_params": []sets.String{
 				sets.NewString([]string{"no_mtls", "use_mtls"}...),
 			},
@@ -15152,6 +15745,9 @@ func init() {
 			"spec.https_auto_cert.header_transformation_type": []sets.String{
 				sets.NewString([]string{"default_header_transformation", "proper_case_header_transformation"}...),
 			},
+			"spec.https_auto_cert.http_protocol_options": []sets.String{
+				sets.NewString([]string{"http_protocol_enable_v1_only", "http_protocol_enable_v1_v2", "http_protocol_enable_v2_only"}...),
+			},
 			"spec.https_auto_cert.tls_config": []sets.String{
 				sets.NewString([]string{"custom_security", "default_security", "low_security", "medium_security"}...),
 			},
@@ -15181,6 +15777,10 @@ func init() {
 			},
 			"spec.more_option.response_headers_to_add.secret_value": []sets.String{
 				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.origin_server_subset_rule_list.origin_server_subset_rules": []sets.String{
+				sets.NewString([]string{"any_asn", "asn_list", "asn_matcher"}...),
+				sets.NewString([]string{"any_ip", "ip_matcher", "ip_prefix_list"}...),
 			},
 			"spec.policy_based_challenge": []sets.String{
 				sets.NewString([]string{"always_enable_captcha_challenge", "always_enable_js_challenge", "no_challenge"}...),
@@ -15420,7 +16020,7 @@ func init() {
 			},
 			"spec.gc_spec.api_specification.validation_all_spec_endpoints.fall_through_mode.fall_through_mode_custom.open_api_validation_rules": []sets.String{
 				sets.NewString([]string{"action_block", "action_report", "action_skip"}...),
-				sets.NewString([]string{"api_endpoint_path", "api_group", "base_path"}...),
+				sets.NewString([]string{"api_endpoint", "api_endpoint_path", "api_group", "base_path"}...),
 			},
 			"spec.gc_spec.api_specification.validation_all_spec_endpoints.validation_mode": []sets.String{
 				sets.NewString([]string{"skip_validation", "validation_mode_active"}...),
@@ -15433,11 +16033,11 @@ func init() {
 			},
 			"spec.gc_spec.api_specification.validation_custom_list.fall_through_mode.fall_through_mode_custom.open_api_validation_rules": []sets.String{
 				sets.NewString([]string{"action_block", "action_report", "action_skip"}...),
-				sets.NewString([]string{"api_endpoint_path", "api_group", "base_path"}...),
+				sets.NewString([]string{"api_endpoint", "api_endpoint_path", "api_group", "base_path"}...),
 			},
 			"spec.gc_spec.api_specification.validation_custom_list.open_api_validation_rules": []sets.String{
 				sets.NewString([]string{"any_domain", "specific_domain"}...),
-				sets.NewString([]string{"api_endpoint_path", "api_group", "base_path"}...),
+				sets.NewString([]string{"api_endpoint", "api_endpoint_path", "api_group", "base_path"}...),
 			},
 			"spec.gc_spec.api_specification.validation_custom_list.open_api_validation_rules.validation_mode": []sets.String{
 				sets.NewString([]string{"skip_validation", "validation_mode_active"}...),
@@ -15678,6 +16278,9 @@ func init() {
 			"spec.gc_spec.https.header_transformation_type": []sets.String{
 				sets.NewString([]string{"default_header_transformation", "proper_case_header_transformation"}...),
 			},
+			"spec.gc_spec.https.http_protocol_options": []sets.String{
+				sets.NewString([]string{"http_protocol_enable_v1_only", "http_protocol_enable_v1_v2", "http_protocol_enable_v2_only"}...),
+			},
 			"spec.gc_spec.https.tls_cert_params": []sets.String{
 				sets.NewString([]string{"no_mtls", "use_mtls"}...),
 			},
@@ -15713,6 +16316,9 @@ func init() {
 			"spec.gc_spec.https_auto_cert.header_transformation_type": []sets.String{
 				sets.NewString([]string{"default_header_transformation", "proper_case_header_transformation"}...),
 			},
+			"spec.gc_spec.https_auto_cert.http_protocol_options": []sets.String{
+				sets.NewString([]string{"http_protocol_enable_v1_only", "http_protocol_enable_v1_v2", "http_protocol_enable_v2_only"}...),
+			},
 			"spec.gc_spec.https_auto_cert.tls_config": []sets.String{
 				sets.NewString([]string{"custom_security", "default_security", "low_security", "medium_security"}...),
 			},
@@ -15742,6 +16348,10 @@ func init() {
 			},
 			"spec.gc_spec.more_option.response_headers_to_add.secret_value": []sets.String{
 				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.gc_spec.origin_server_subset_rule_list.origin_server_subset_rules": []sets.String{
+				sets.NewString([]string{"any_asn", "asn_list", "asn_matcher"}...),
+				sets.NewString([]string{"any_ip", "ip_matcher", "ip_prefix_list"}...),
 			},
 			"spec.gc_spec.policy_based_challenge": []sets.String{
 				sets.NewString([]string{"always_enable_captcha_challenge", "always_enable_js_challenge", "no_challenge"}...),
@@ -15973,7 +16583,7 @@ func init() {
 			},
 			"spec.gc_spec.api_specification.validation_all_spec_endpoints.fall_through_mode.fall_through_mode_custom.open_api_validation_rules": []sets.String{
 				sets.NewString([]string{"action_block", "action_report", "action_skip"}...),
-				sets.NewString([]string{"api_endpoint_path", "api_group", "base_path"}...),
+				sets.NewString([]string{"api_endpoint", "api_endpoint_path", "api_group", "base_path"}...),
 			},
 			"spec.gc_spec.api_specification.validation_all_spec_endpoints.validation_mode": []sets.String{
 				sets.NewString([]string{"skip_validation", "validation_mode_active"}...),
@@ -15986,11 +16596,11 @@ func init() {
 			},
 			"spec.gc_spec.api_specification.validation_custom_list.fall_through_mode.fall_through_mode_custom.open_api_validation_rules": []sets.String{
 				sets.NewString([]string{"action_block", "action_report", "action_skip"}...),
-				sets.NewString([]string{"api_endpoint_path", "api_group", "base_path"}...),
+				sets.NewString([]string{"api_endpoint", "api_endpoint_path", "api_group", "base_path"}...),
 			},
 			"spec.gc_spec.api_specification.validation_custom_list.open_api_validation_rules": []sets.String{
 				sets.NewString([]string{"any_domain", "specific_domain"}...),
-				sets.NewString([]string{"api_endpoint_path", "api_group", "base_path"}...),
+				sets.NewString([]string{"api_endpoint", "api_endpoint_path", "api_group", "base_path"}...),
 			},
 			"spec.gc_spec.api_specification.validation_custom_list.open_api_validation_rules.validation_mode": []sets.String{
 				sets.NewString([]string{"skip_validation", "validation_mode_active"}...),
@@ -16231,6 +16841,9 @@ func init() {
 			"spec.gc_spec.https.header_transformation_type": []sets.String{
 				sets.NewString([]string{"default_header_transformation", "proper_case_header_transformation"}...),
 			},
+			"spec.gc_spec.https.http_protocol_options": []sets.String{
+				sets.NewString([]string{"http_protocol_enable_v1_only", "http_protocol_enable_v1_v2", "http_protocol_enable_v2_only"}...),
+			},
 			"spec.gc_spec.https.tls_cert_params": []sets.String{
 				sets.NewString([]string{"no_mtls", "use_mtls"}...),
 			},
@@ -16266,6 +16879,9 @@ func init() {
 			"spec.gc_spec.https_auto_cert.header_transformation_type": []sets.String{
 				sets.NewString([]string{"default_header_transformation", "proper_case_header_transformation"}...),
 			},
+			"spec.gc_spec.https_auto_cert.http_protocol_options": []sets.String{
+				sets.NewString([]string{"http_protocol_enable_v1_only", "http_protocol_enable_v1_v2", "http_protocol_enable_v2_only"}...),
+			},
 			"spec.gc_spec.https_auto_cert.tls_config": []sets.String{
 				sets.NewString([]string{"custom_security", "default_security", "low_security", "medium_security"}...),
 			},
@@ -16295,6 +16911,10 @@ func init() {
 			},
 			"spec.gc_spec.more_option.response_headers_to_add.secret_value": []sets.String{
 				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.gc_spec.origin_server_subset_rule_list.origin_server_subset_rules": []sets.String{
+				sets.NewString([]string{"any_asn", "asn_list", "asn_matcher"}...),
+				sets.NewString([]string{"any_ip", "ip_matcher", "ip_prefix_list"}...),
 			},
 			"spec.gc_spec.policy_based_challenge": []sets.String{
 				sets.NewString([]string{"always_enable_captcha_challenge", "always_enable_js_challenge", "no_challenge"}...),
@@ -16817,6 +17437,532 @@ func init() {
 			},
 			"spec.gc_spec.rules.spec.headers": []sets.String{
 				sets.NewString([]string{"check_not_present", "check_present", "item", "presence"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.views.securemesh_site.API.Create"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec": []sets.String{
+				sets.NewString([]string{"blocked_services", "default_blocked_services"}...),
+				sets.NewString([]string{"bond_device_list", "no_bond_devices"}...),
+				sets.NewString([]string{"custom_network_config", "default_network_config"}...),
+				sets.NewString([]string{"log_receiver", "logs_streaming_disabled"}...),
+			},
+			"spec.blocked_services.blocked_sevice": []sets.String{
+				sets.NewString([]string{"dns", "ssh", "web_user_interface"}...),
+			},
+			"spec.bond_device_list.bond_devices": []sets.String{
+				sets.NewString([]string{"active_backup", "lacp"}...),
+			},
+			"spec.custom_network_config": []sets.String{
+				sets.NewString([]string{"active_enhanced_firewall_policies", "active_network_policies", "no_network_policy"}...),
+				sets.NewString([]string{"active_forward_proxy_policies", "forward_proxy_allow_all", "no_forward_proxy"}...),
+				sets.NewString([]string{"default_config", "slo_config"}...),
+				sets.NewString([]string{"default_interface_config", "interface_list"}...),
+				sets.NewString([]string{"default_sli_config", "sli_config"}...),
+				sets.NewString([]string{"global_network_list", "no_global_network"}...),
+				sets.NewString([]string{"sm_connection_public_ip", "sm_connection_pvt_ip"}...),
+			},
+			"spec.custom_network_config.global_network_list.global_network_connections": []sets.String{
+				sets.NewString([]string{"disable_forward_proxy", "enable_forward_proxy"}...),
+				sets.NewString([]string{"sli_to_global_dr", "slo_to_global_dr"}...),
+			},
+			"spec.custom_network_config.global_network_list.global_network_connections.enable_forward_proxy": []sets.String{
+				sets.NewString([]string{"no_interception", "tls_intercept"}...),
+			},
+			"spec.custom_network_config.global_network_list.global_network_connections.enable_forward_proxy.tls_intercept": []sets.String{
+				sets.NewString([]string{"custom_certificate", "volterra_certificate"}...),
+				sets.NewString([]string{"enable_for_all_domains", "policy"}...),
+				sets.NewString([]string{"trusted_ca_url", "volterra_trusted_ca"}...),
+			},
+			"spec.custom_network_config.global_network_list.global_network_connections.enable_forward_proxy.tls_intercept.custom_certificate": []sets.String{
+				sets.NewString([]string{"custom_hash_algorithms", "disable_ocsp_stapling", "use_system_defaults"}...),
+			},
+			"spec.custom_network_config.global_network_list.global_network_connections.enable_forward_proxy.tls_intercept.custom_certificate.private_key": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.custom_network_config.global_network_list.global_network_connections.enable_forward_proxy.tls_intercept.policy.interception_rules": []sets.String{
+				sets.NewString([]string{"disable_interception", "enable_interception"}...),
+			},
+			"spec.custom_network_config.global_network_list.global_network_connections.enable_forward_proxy.tls_intercept.policy.interception_rules.domain_match": []sets.String{
+				sets.NewString([]string{"exact_value", "regex_value", "suffix_value"}...),
+			},
+			"spec.custom_network_config.interface_list.interfaces": []sets.String{
+				sets.NewString([]string{"dedicated_interface", "dedicated_management_interface", "ethernet_interface", "loopback_interface"}...),
+			},
+			"spec.custom_network_config.interface_list.interfaces.dedicated_interface": []sets.String{
+				sets.NewString([]string{"cluster", "node"}...),
+				sets.NewString([]string{"is_primary", "not_primary"}...),
+				sets.NewString([]string{"monitor", "monitor_disabled"}...),
+			},
+			"spec.custom_network_config.interface_list.interfaces.dedicated_management_interface": []sets.String{
+				sets.NewString([]string{"cluster", "node"}...),
+			},
+			"spec.custom_network_config.interface_list.interfaces.ethernet_interface": []sets.String{
+				sets.NewString([]string{"cluster", "node"}...),
+				sets.NewString([]string{"dhcp_client", "dhcp_server", "static_ip"}...),
+				sets.NewString([]string{"inside_network", "ip_fabric_network", "site_local_inside_network", "site_local_network", "srv6_network", "storage_network"}...),
+				sets.NewString([]string{"is_primary", "not_primary"}...),
+				sets.NewString([]string{"monitor", "monitor_disabled"}...),
+				sets.NewString([]string{"no_ipv6_address", "static_ipv6_address"}...),
+				sets.NewString([]string{"untagged", "vlan_id"}...),
+			},
+			"spec.custom_network_config.interface_list.interfaces.ethernet_interface.dhcp_server": []sets.String{
+				sets.NewString([]string{"automatic_from_end", "automatic_from_start", "interface_ip_map"}...),
+			},
+			"spec.custom_network_config.interface_list.interfaces.ethernet_interface.dhcp_server.dhcp_networks": []sets.String{
+				sets.NewString([]string{"dgw_address", "first_address", "last_address"}...),
+				sets.NewString([]string{"dns_address", "same_as_dgw"}...),
+				sets.NewString([]string{"network_prefix", "network_prefix_allocator"}...),
+			},
+			"spec.custom_network_config.interface_list.interfaces.ethernet_interface.static_ip": []sets.String{
+				sets.NewString([]string{"cluster_static_ip", "fleet_static_ip", "node_static_ip"}...),
+			},
+			"spec.custom_network_config.interface_list.interfaces.ethernet_interface.static_ipv6_address": []sets.String{
+				sets.NewString([]string{"cluster_static_ip", "fleet_static_ip", "node_static_ip"}...),
+			},
+			"spec.custom_network_config.interface_list.interfaces.loopback_interface": []sets.String{
+				sets.NewString([]string{"cluster", "node"}...),
+				sets.NewString([]string{"dhcp_client", "dhcp_server", "static_ip"}...),
+				sets.NewString([]string{"ip_fabric_network", "site_local_inside_network", "site_local_network"}...),
+				sets.NewString([]string{"no_ipv6_address", "static_ipv6_address"}...),
+			},
+			"spec.custom_network_config.interface_list.interfaces.loopback_interface.dhcp_server": []sets.String{
+				sets.NewString([]string{"automatic_from_end", "automatic_from_start", "interface_ip_map"}...),
+			},
+			"spec.custom_network_config.interface_list.interfaces.loopback_interface.dhcp_server.dhcp_networks": []sets.String{
+				sets.NewString([]string{"dgw_address", "first_address", "last_address"}...),
+				sets.NewString([]string{"dns_address", "same_as_dgw"}...),
+				sets.NewString([]string{"network_prefix", "network_prefix_allocator"}...),
+			},
+			"spec.custom_network_config.interface_list.interfaces.loopback_interface.static_ip": []sets.String{
+				sets.NewString([]string{"cluster_static_ip", "fleet_static_ip", "node_static_ip"}...),
+			},
+			"spec.custom_network_config.interface_list.interfaces.loopback_interface.static_ipv6_address": []sets.String{
+				sets.NewString([]string{"cluster_static_ip", "fleet_static_ip", "node_static_ip"}...),
+			},
+			"spec.custom_network_config.sli_config": []sets.String{
+				sets.NewString([]string{"dc_cluster_group", "no_dc_cluster_group"}...),
+				sets.NewString([]string{"no_static_routes", "static_routes"}...),
+			},
+			"spec.custom_network_config.sli_config.static_routes.static_routes": []sets.String{
+				sets.NewString([]string{"default_gateway", "interface", "ip_address"}...),
+			},
+			"spec.custom_network_config.slo_config": []sets.String{
+				sets.NewString([]string{"dc_cluster_group", "no_dc_cluster_group"}...),
+				sets.NewString([]string{"no_static_routes", "static_routes"}...),
+			},
+			"spec.custom_network_config.slo_config.static_routes.static_routes": []sets.String{
+				sets.NewString([]string{"default_gateway", "interface", "ip_address"}...),
+			},
+			"spec.offline_survivability_mode": []sets.String{
+				sets.NewString([]string{"enable_offline_survivability_mode", "no_offline_survivability_mode"}...),
+			},
+			"spec.os": []sets.String{
+				sets.NewString([]string{"default_os_version", "operating_system_version"}...),
+			},
+			"spec.performance_enhancement_mode": []sets.String{
+				sets.NewString([]string{"perf_mode_l3_enhanced", "perf_mode_l7_enhanced"}...),
+			},
+			"spec.performance_enhancement_mode.perf_mode_l3_enhanced": []sets.String{
+				sets.NewString([]string{"jumbo", "no_jumbo"}...),
+			},
+			"spec.sw": []sets.String{
+				sets.NewString([]string{"default_sw_version", "volterra_software_version"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.views.securemesh_site.API.Replace"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec": []sets.String{
+				sets.NewString([]string{"blocked_services", "default_blocked_services"}...),
+				sets.NewString([]string{"bond_device_list", "no_bond_devices"}...),
+				sets.NewString([]string{"custom_network_config", "default_network_config"}...),
+				sets.NewString([]string{"log_receiver", "logs_streaming_disabled"}...),
+			},
+			"spec.blocked_services.blocked_sevice": []sets.String{
+				sets.NewString([]string{"dns", "ssh", "web_user_interface"}...),
+			},
+			"spec.bond_device_list.bond_devices": []sets.String{
+				sets.NewString([]string{"active_backup", "lacp"}...),
+			},
+			"spec.custom_network_config": []sets.String{
+				sets.NewString([]string{"active_enhanced_firewall_policies", "active_network_policies", "no_network_policy"}...),
+				sets.NewString([]string{"active_forward_proxy_policies", "forward_proxy_allow_all", "no_forward_proxy"}...),
+				sets.NewString([]string{"default_config", "slo_config"}...),
+				sets.NewString([]string{"default_interface_config", "interface_list"}...),
+				sets.NewString([]string{"default_sli_config", "sli_config"}...),
+				sets.NewString([]string{"global_network_list", "no_global_network"}...),
+				sets.NewString([]string{"sm_connection_public_ip", "sm_connection_pvt_ip"}...),
+			},
+			"spec.custom_network_config.global_network_list.global_network_connections": []sets.String{
+				sets.NewString([]string{"disable_forward_proxy", "enable_forward_proxy"}...),
+				sets.NewString([]string{"sli_to_global_dr", "slo_to_global_dr"}...),
+			},
+			"spec.custom_network_config.global_network_list.global_network_connections.enable_forward_proxy": []sets.String{
+				sets.NewString([]string{"no_interception", "tls_intercept"}...),
+			},
+			"spec.custom_network_config.global_network_list.global_network_connections.enable_forward_proxy.tls_intercept": []sets.String{
+				sets.NewString([]string{"custom_certificate", "volterra_certificate"}...),
+				sets.NewString([]string{"enable_for_all_domains", "policy"}...),
+				sets.NewString([]string{"trusted_ca_url", "volterra_trusted_ca"}...),
+			},
+			"spec.custom_network_config.global_network_list.global_network_connections.enable_forward_proxy.tls_intercept.custom_certificate": []sets.String{
+				sets.NewString([]string{"custom_hash_algorithms", "disable_ocsp_stapling", "use_system_defaults"}...),
+			},
+			"spec.custom_network_config.global_network_list.global_network_connections.enable_forward_proxy.tls_intercept.custom_certificate.private_key": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.custom_network_config.global_network_list.global_network_connections.enable_forward_proxy.tls_intercept.policy.interception_rules": []sets.String{
+				sets.NewString([]string{"disable_interception", "enable_interception"}...),
+			},
+			"spec.custom_network_config.global_network_list.global_network_connections.enable_forward_proxy.tls_intercept.policy.interception_rules.domain_match": []sets.String{
+				sets.NewString([]string{"exact_value", "regex_value", "suffix_value"}...),
+			},
+			"spec.custom_network_config.interface_list.interfaces": []sets.String{
+				sets.NewString([]string{"dedicated_interface", "dedicated_management_interface", "ethernet_interface", "loopback_interface"}...),
+			},
+			"spec.custom_network_config.interface_list.interfaces.dedicated_interface": []sets.String{
+				sets.NewString([]string{"cluster", "node"}...),
+				sets.NewString([]string{"is_primary", "not_primary"}...),
+				sets.NewString([]string{"monitor", "monitor_disabled"}...),
+			},
+			"spec.custom_network_config.interface_list.interfaces.dedicated_management_interface": []sets.String{
+				sets.NewString([]string{"cluster", "node"}...),
+			},
+			"spec.custom_network_config.interface_list.interfaces.ethernet_interface": []sets.String{
+				sets.NewString([]string{"cluster", "node"}...),
+				sets.NewString([]string{"dhcp_client", "dhcp_server", "static_ip"}...),
+				sets.NewString([]string{"inside_network", "ip_fabric_network", "site_local_inside_network", "site_local_network", "srv6_network", "storage_network"}...),
+				sets.NewString([]string{"is_primary", "not_primary"}...),
+				sets.NewString([]string{"monitor", "monitor_disabled"}...),
+				sets.NewString([]string{"no_ipv6_address", "static_ipv6_address"}...),
+				sets.NewString([]string{"untagged", "vlan_id"}...),
+			},
+			"spec.custom_network_config.interface_list.interfaces.ethernet_interface.dhcp_server": []sets.String{
+				sets.NewString([]string{"automatic_from_end", "automatic_from_start", "interface_ip_map"}...),
+			},
+			"spec.custom_network_config.interface_list.interfaces.ethernet_interface.dhcp_server.dhcp_networks": []sets.String{
+				sets.NewString([]string{"dgw_address", "first_address", "last_address"}...),
+				sets.NewString([]string{"dns_address", "same_as_dgw"}...),
+				sets.NewString([]string{"network_prefix", "network_prefix_allocator"}...),
+			},
+			"spec.custom_network_config.interface_list.interfaces.ethernet_interface.static_ip": []sets.String{
+				sets.NewString([]string{"cluster_static_ip", "fleet_static_ip", "node_static_ip"}...),
+			},
+			"spec.custom_network_config.interface_list.interfaces.ethernet_interface.static_ipv6_address": []sets.String{
+				sets.NewString([]string{"cluster_static_ip", "fleet_static_ip", "node_static_ip"}...),
+			},
+			"spec.custom_network_config.interface_list.interfaces.loopback_interface": []sets.String{
+				sets.NewString([]string{"cluster", "node"}...),
+				sets.NewString([]string{"dhcp_client", "dhcp_server", "static_ip"}...),
+				sets.NewString([]string{"ip_fabric_network", "site_local_inside_network", "site_local_network"}...),
+				sets.NewString([]string{"no_ipv6_address", "static_ipv6_address"}...),
+			},
+			"spec.custom_network_config.interface_list.interfaces.loopback_interface.dhcp_server": []sets.String{
+				sets.NewString([]string{"automatic_from_end", "automatic_from_start", "interface_ip_map"}...),
+			},
+			"spec.custom_network_config.interface_list.interfaces.loopback_interface.dhcp_server.dhcp_networks": []sets.String{
+				sets.NewString([]string{"dgw_address", "first_address", "last_address"}...),
+				sets.NewString([]string{"dns_address", "same_as_dgw"}...),
+				sets.NewString([]string{"network_prefix", "network_prefix_allocator"}...),
+			},
+			"spec.custom_network_config.interface_list.interfaces.loopback_interface.static_ip": []sets.String{
+				sets.NewString([]string{"cluster_static_ip", "fleet_static_ip", "node_static_ip"}...),
+			},
+			"spec.custom_network_config.interface_list.interfaces.loopback_interface.static_ipv6_address": []sets.String{
+				sets.NewString([]string{"cluster_static_ip", "fleet_static_ip", "node_static_ip"}...),
+			},
+			"spec.custom_network_config.sli_config": []sets.String{
+				sets.NewString([]string{"dc_cluster_group", "no_dc_cluster_group"}...),
+				sets.NewString([]string{"no_static_routes", "static_routes"}...),
+			},
+			"spec.custom_network_config.sli_config.static_routes.static_routes": []sets.String{
+				sets.NewString([]string{"default_gateway", "interface", "ip_address"}...),
+			},
+			"spec.custom_network_config.slo_config": []sets.String{
+				sets.NewString([]string{"dc_cluster_group", "no_dc_cluster_group"}...),
+				sets.NewString([]string{"no_static_routes", "static_routes"}...),
+			},
+			"spec.custom_network_config.slo_config.static_routes.static_routes": []sets.String{
+				sets.NewString([]string{"default_gateway", "interface", "ip_address"}...),
+			},
+			"spec.offline_survivability_mode": []sets.String{
+				sets.NewString([]string{"enable_offline_survivability_mode", "no_offline_survivability_mode"}...),
+			},
+			"spec.os": []sets.String{
+				sets.NewString([]string{"default_os_version", "operating_system_version"}...),
+			},
+			"spec.sw": []sets.String{
+				sets.NewString([]string{"default_sw_version", "volterra_software_version"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.views.securemesh_site.crudapi.API.Create"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec.gc_spec": []sets.String{
+				sets.NewString([]string{"blocked_services", "default_blocked_services"}...),
+				sets.NewString([]string{"bond_device_list", "no_bond_devices"}...),
+				sets.NewString([]string{"custom_network_config", "default_network_config"}...),
+				sets.NewString([]string{"log_receiver", "logs_streaming_disabled"}...),
+			},
+			"spec.gc_spec.blocked_services.blocked_sevice": []sets.String{
+				sets.NewString([]string{"dns", "ssh", "web_user_interface"}...),
+			},
+			"spec.gc_spec.bond_device_list.bond_devices": []sets.String{
+				sets.NewString([]string{"active_backup", "lacp"}...),
+			},
+			"spec.gc_spec.custom_network_config": []sets.String{
+				sets.NewString([]string{"active_enhanced_firewall_policies", "active_network_policies", "no_network_policy"}...),
+				sets.NewString([]string{"active_forward_proxy_policies", "forward_proxy_allow_all", "no_forward_proxy"}...),
+				sets.NewString([]string{"default_config", "slo_config"}...),
+				sets.NewString([]string{"default_interface_config", "interface_list"}...),
+				sets.NewString([]string{"default_sli_config", "sli_config"}...),
+				sets.NewString([]string{"global_network_list", "no_global_network"}...),
+				sets.NewString([]string{"sm_connection_public_ip", "sm_connection_pvt_ip"}...),
+			},
+			"spec.gc_spec.custom_network_config.global_network_list.global_network_connections": []sets.String{
+				sets.NewString([]string{"disable_forward_proxy", "enable_forward_proxy"}...),
+				sets.NewString([]string{"sli_to_global_dr", "slo_to_global_dr"}...),
+			},
+			"spec.gc_spec.custom_network_config.global_network_list.global_network_connections.enable_forward_proxy": []sets.String{
+				sets.NewString([]string{"no_interception", "tls_intercept"}...),
+			},
+			"spec.gc_spec.custom_network_config.global_network_list.global_network_connections.enable_forward_proxy.tls_intercept": []sets.String{
+				sets.NewString([]string{"custom_certificate", "volterra_certificate"}...),
+				sets.NewString([]string{"enable_for_all_domains", "policy"}...),
+				sets.NewString([]string{"trusted_ca_url", "volterra_trusted_ca"}...),
+			},
+			"spec.gc_spec.custom_network_config.global_network_list.global_network_connections.enable_forward_proxy.tls_intercept.custom_certificate": []sets.String{
+				sets.NewString([]string{"custom_hash_algorithms", "disable_ocsp_stapling", "use_system_defaults"}...),
+			},
+			"spec.gc_spec.custom_network_config.global_network_list.global_network_connections.enable_forward_proxy.tls_intercept.custom_certificate.private_key": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.gc_spec.custom_network_config.global_network_list.global_network_connections.enable_forward_proxy.tls_intercept.policy.interception_rules": []sets.String{
+				sets.NewString([]string{"disable_interception", "enable_interception"}...),
+			},
+			"spec.gc_spec.custom_network_config.global_network_list.global_network_connections.enable_forward_proxy.tls_intercept.policy.interception_rules.domain_match": []sets.String{
+				sets.NewString([]string{"exact_value", "regex_value", "suffix_value"}...),
+			},
+			"spec.gc_spec.custom_network_config.interface_list.interfaces": []sets.String{
+				sets.NewString([]string{"dedicated_interface", "dedicated_management_interface", "ethernet_interface", "loopback_interface"}...),
+			},
+			"spec.gc_spec.custom_network_config.interface_list.interfaces.dedicated_interface": []sets.String{
+				sets.NewString([]string{"cluster", "node"}...),
+				sets.NewString([]string{"is_primary", "not_primary"}...),
+				sets.NewString([]string{"monitor", "monitor_disabled"}...),
+			},
+			"spec.gc_spec.custom_network_config.interface_list.interfaces.dedicated_management_interface": []sets.String{
+				sets.NewString([]string{"cluster", "node"}...),
+			},
+			"spec.gc_spec.custom_network_config.interface_list.interfaces.ethernet_interface": []sets.String{
+				sets.NewString([]string{"cluster", "node"}...),
+				sets.NewString([]string{"dhcp_client", "dhcp_server", "static_ip"}...),
+				sets.NewString([]string{"inside_network", "ip_fabric_network", "site_local_inside_network", "site_local_network", "srv6_network", "storage_network"}...),
+				sets.NewString([]string{"is_primary", "not_primary"}...),
+				sets.NewString([]string{"monitor", "monitor_disabled"}...),
+				sets.NewString([]string{"no_ipv6_address", "static_ipv6_address"}...),
+				sets.NewString([]string{"untagged", "vlan_id"}...),
+			},
+			"spec.gc_spec.custom_network_config.interface_list.interfaces.ethernet_interface.dhcp_server": []sets.String{
+				sets.NewString([]string{"automatic_from_end", "automatic_from_start", "interface_ip_map"}...),
+			},
+			"spec.gc_spec.custom_network_config.interface_list.interfaces.ethernet_interface.dhcp_server.dhcp_networks": []sets.String{
+				sets.NewString([]string{"dgw_address", "first_address", "last_address"}...),
+				sets.NewString([]string{"dns_address", "same_as_dgw"}...),
+				sets.NewString([]string{"network_prefix", "network_prefix_allocator"}...),
+			},
+			"spec.gc_spec.custom_network_config.interface_list.interfaces.ethernet_interface.static_ip": []sets.String{
+				sets.NewString([]string{"cluster_static_ip", "fleet_static_ip", "node_static_ip"}...),
+			},
+			"spec.gc_spec.custom_network_config.interface_list.interfaces.ethernet_interface.static_ipv6_address": []sets.String{
+				sets.NewString([]string{"cluster_static_ip", "fleet_static_ip", "node_static_ip"}...),
+			},
+			"spec.gc_spec.custom_network_config.interface_list.interfaces.loopback_interface": []sets.String{
+				sets.NewString([]string{"cluster", "node"}...),
+				sets.NewString([]string{"dhcp_client", "dhcp_server", "static_ip"}...),
+				sets.NewString([]string{"ip_fabric_network", "site_local_inside_network", "site_local_network"}...),
+				sets.NewString([]string{"no_ipv6_address", "static_ipv6_address"}...),
+			},
+			"spec.gc_spec.custom_network_config.interface_list.interfaces.loopback_interface.dhcp_server": []sets.String{
+				sets.NewString([]string{"automatic_from_end", "automatic_from_start", "interface_ip_map"}...),
+			},
+			"spec.gc_spec.custom_network_config.interface_list.interfaces.loopback_interface.dhcp_server.dhcp_networks": []sets.String{
+				sets.NewString([]string{"dgw_address", "first_address", "last_address"}...),
+				sets.NewString([]string{"dns_address", "same_as_dgw"}...),
+				sets.NewString([]string{"network_prefix", "network_prefix_allocator"}...),
+			},
+			"spec.gc_spec.custom_network_config.interface_list.interfaces.loopback_interface.static_ip": []sets.String{
+				sets.NewString([]string{"cluster_static_ip", "fleet_static_ip", "node_static_ip"}...),
+			},
+			"spec.gc_spec.custom_network_config.interface_list.interfaces.loopback_interface.static_ipv6_address": []sets.String{
+				sets.NewString([]string{"cluster_static_ip", "fleet_static_ip", "node_static_ip"}...),
+			},
+			"spec.gc_spec.custom_network_config.sli_config": []sets.String{
+				sets.NewString([]string{"dc_cluster_group", "no_dc_cluster_group"}...),
+				sets.NewString([]string{"no_static_routes", "static_routes"}...),
+			},
+			"spec.gc_spec.custom_network_config.sli_config.static_routes.static_routes": []sets.String{
+				sets.NewString([]string{"default_gateway", "interface", "ip_address"}...),
+			},
+			"spec.gc_spec.custom_network_config.slo_config": []sets.String{
+				sets.NewString([]string{"dc_cluster_group", "no_dc_cluster_group"}...),
+				sets.NewString([]string{"no_static_routes", "static_routes"}...),
+			},
+			"spec.gc_spec.custom_network_config.slo_config.static_routes.static_routes": []sets.String{
+				sets.NewString([]string{"default_gateway", "interface", "ip_address"}...),
+			},
+			"spec.gc_spec.offline_survivability_mode": []sets.String{
+				sets.NewString([]string{"enable_offline_survivability_mode", "no_offline_survivability_mode"}...),
+			},
+			"spec.gc_spec.os": []sets.String{
+				sets.NewString([]string{"default_os_version", "operating_system_version"}...),
+			},
+			"spec.gc_spec.performance_enhancement_mode": []sets.String{
+				sets.NewString([]string{"perf_mode_l3_enhanced", "perf_mode_l7_enhanced"}...),
+			},
+			"spec.gc_spec.performance_enhancement_mode.perf_mode_l3_enhanced": []sets.String{
+				sets.NewString([]string{"jumbo", "no_jumbo"}...),
+			},
+			"spec.gc_spec.sw": []sets.String{
+				sets.NewString([]string{"default_sw_version", "volterra_software_version"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.views.securemesh_site.crudapi.API.Replace"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec.gc_spec": []sets.String{
+				sets.NewString([]string{"blocked_services", "default_blocked_services"}...),
+				sets.NewString([]string{"bond_device_list", "no_bond_devices"}...),
+				sets.NewString([]string{"custom_network_config", "default_network_config"}...),
+				sets.NewString([]string{"log_receiver", "logs_streaming_disabled"}...),
+			},
+			"spec.gc_spec.blocked_services.blocked_sevice": []sets.String{
+				sets.NewString([]string{"dns", "ssh", "web_user_interface"}...),
+			},
+			"spec.gc_spec.bond_device_list.bond_devices": []sets.String{
+				sets.NewString([]string{"active_backup", "lacp"}...),
+			},
+			"spec.gc_spec.custom_network_config": []sets.String{
+				sets.NewString([]string{"active_enhanced_firewall_policies", "active_network_policies", "no_network_policy"}...),
+				sets.NewString([]string{"active_forward_proxy_policies", "forward_proxy_allow_all", "no_forward_proxy"}...),
+				sets.NewString([]string{"default_config", "slo_config"}...),
+				sets.NewString([]string{"default_interface_config", "interface_list"}...),
+				sets.NewString([]string{"default_sli_config", "sli_config"}...),
+				sets.NewString([]string{"global_network_list", "no_global_network"}...),
+				sets.NewString([]string{"sm_connection_public_ip", "sm_connection_pvt_ip"}...),
+			},
+			"spec.gc_spec.custom_network_config.global_network_list.global_network_connections": []sets.String{
+				sets.NewString([]string{"disable_forward_proxy", "enable_forward_proxy"}...),
+				sets.NewString([]string{"sli_to_global_dr", "slo_to_global_dr"}...),
+			},
+			"spec.gc_spec.custom_network_config.global_network_list.global_network_connections.enable_forward_proxy": []sets.String{
+				sets.NewString([]string{"no_interception", "tls_intercept"}...),
+			},
+			"spec.gc_spec.custom_network_config.global_network_list.global_network_connections.enable_forward_proxy.tls_intercept": []sets.String{
+				sets.NewString([]string{"custom_certificate", "volterra_certificate"}...),
+				sets.NewString([]string{"enable_for_all_domains", "policy"}...),
+				sets.NewString([]string{"trusted_ca_url", "volterra_trusted_ca"}...),
+			},
+			"spec.gc_spec.custom_network_config.global_network_list.global_network_connections.enable_forward_proxy.tls_intercept.custom_certificate": []sets.String{
+				sets.NewString([]string{"custom_hash_algorithms", "disable_ocsp_stapling", "use_system_defaults"}...),
+			},
+			"spec.gc_spec.custom_network_config.global_network_list.global_network_connections.enable_forward_proxy.tls_intercept.custom_certificate.private_key": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.gc_spec.custom_network_config.global_network_list.global_network_connections.enable_forward_proxy.tls_intercept.policy.interception_rules": []sets.String{
+				sets.NewString([]string{"disable_interception", "enable_interception"}...),
+			},
+			"spec.gc_spec.custom_network_config.global_network_list.global_network_connections.enable_forward_proxy.tls_intercept.policy.interception_rules.domain_match": []sets.String{
+				sets.NewString([]string{"exact_value", "regex_value", "suffix_value"}...),
+			},
+			"spec.gc_spec.custom_network_config.interface_list.interfaces": []sets.String{
+				sets.NewString([]string{"dedicated_interface", "dedicated_management_interface", "ethernet_interface", "loopback_interface"}...),
+			},
+			"spec.gc_spec.custom_network_config.interface_list.interfaces.dedicated_interface": []sets.String{
+				sets.NewString([]string{"cluster", "node"}...),
+				sets.NewString([]string{"is_primary", "not_primary"}...),
+				sets.NewString([]string{"monitor", "monitor_disabled"}...),
+			},
+			"spec.gc_spec.custom_network_config.interface_list.interfaces.dedicated_management_interface": []sets.String{
+				sets.NewString([]string{"cluster", "node"}...),
+			},
+			"spec.gc_spec.custom_network_config.interface_list.interfaces.ethernet_interface": []sets.String{
+				sets.NewString([]string{"cluster", "node"}...),
+				sets.NewString([]string{"dhcp_client", "dhcp_server", "static_ip"}...),
+				sets.NewString([]string{"inside_network", "ip_fabric_network", "site_local_inside_network", "site_local_network", "srv6_network", "storage_network"}...),
+				sets.NewString([]string{"is_primary", "not_primary"}...),
+				sets.NewString([]string{"monitor", "monitor_disabled"}...),
+				sets.NewString([]string{"no_ipv6_address", "static_ipv6_address"}...),
+				sets.NewString([]string{"untagged", "vlan_id"}...),
+			},
+			"spec.gc_spec.custom_network_config.interface_list.interfaces.ethernet_interface.dhcp_server": []sets.String{
+				sets.NewString([]string{"automatic_from_end", "automatic_from_start", "interface_ip_map"}...),
+			},
+			"spec.gc_spec.custom_network_config.interface_list.interfaces.ethernet_interface.dhcp_server.dhcp_networks": []sets.String{
+				sets.NewString([]string{"dgw_address", "first_address", "last_address"}...),
+				sets.NewString([]string{"dns_address", "same_as_dgw"}...),
+				sets.NewString([]string{"network_prefix", "network_prefix_allocator"}...),
+			},
+			"spec.gc_spec.custom_network_config.interface_list.interfaces.ethernet_interface.static_ip": []sets.String{
+				sets.NewString([]string{"cluster_static_ip", "fleet_static_ip", "node_static_ip"}...),
+			},
+			"spec.gc_spec.custom_network_config.interface_list.interfaces.ethernet_interface.static_ipv6_address": []sets.String{
+				sets.NewString([]string{"cluster_static_ip", "fleet_static_ip", "node_static_ip"}...),
+			},
+			"spec.gc_spec.custom_network_config.interface_list.interfaces.loopback_interface": []sets.String{
+				sets.NewString([]string{"cluster", "node"}...),
+				sets.NewString([]string{"dhcp_client", "dhcp_server", "static_ip"}...),
+				sets.NewString([]string{"ip_fabric_network", "site_local_inside_network", "site_local_network"}...),
+				sets.NewString([]string{"no_ipv6_address", "static_ipv6_address"}...),
+			},
+			"spec.gc_spec.custom_network_config.interface_list.interfaces.loopback_interface.dhcp_server": []sets.String{
+				sets.NewString([]string{"automatic_from_end", "automatic_from_start", "interface_ip_map"}...),
+			},
+			"spec.gc_spec.custom_network_config.interface_list.interfaces.loopback_interface.dhcp_server.dhcp_networks": []sets.String{
+				sets.NewString([]string{"dgw_address", "first_address", "last_address"}...),
+				sets.NewString([]string{"dns_address", "same_as_dgw"}...),
+				sets.NewString([]string{"network_prefix", "network_prefix_allocator"}...),
+			},
+			"spec.gc_spec.custom_network_config.interface_list.interfaces.loopback_interface.static_ip": []sets.String{
+				sets.NewString([]string{"cluster_static_ip", "fleet_static_ip", "node_static_ip"}...),
+			},
+			"spec.gc_spec.custom_network_config.interface_list.interfaces.loopback_interface.static_ipv6_address": []sets.String{
+				sets.NewString([]string{"cluster_static_ip", "fleet_static_ip", "node_static_ip"}...),
+			},
+			"spec.gc_spec.custom_network_config.sli_config": []sets.String{
+				sets.NewString([]string{"dc_cluster_group", "no_dc_cluster_group"}...),
+				sets.NewString([]string{"no_static_routes", "static_routes"}...),
+			},
+			"spec.gc_spec.custom_network_config.sli_config.static_routes.static_routes": []sets.String{
+				sets.NewString([]string{"default_gateway", "interface", "ip_address"}...),
+			},
+			"spec.gc_spec.custom_network_config.slo_config": []sets.String{
+				sets.NewString([]string{"dc_cluster_group", "no_dc_cluster_group"}...),
+				sets.NewString([]string{"no_static_routes", "static_routes"}...),
+			},
+			"spec.gc_spec.custom_network_config.slo_config.static_routes.static_routes": []sets.String{
+				sets.NewString([]string{"default_gateway", "interface", "ip_address"}...),
+			},
+			"spec.gc_spec.offline_survivability_mode": []sets.String{
+				sets.NewString([]string{"enable_offline_survivability_mode", "no_offline_survivability_mode"}...),
+			},
+			"spec.gc_spec.os": []sets.String{
+				sets.NewString([]string{"default_os_version", "operating_system_version"}...),
+			},
+			"spec.gc_spec.performance_enhancement_mode": []sets.String{
+				sets.NewString([]string{"perf_mode_l3_enhanced", "perf_mode_l7_enhanced"}...),
+			},
+			"spec.gc_spec.performance_enhancement_mode.perf_mode_l3_enhanced": []sets.String{
+				sets.NewString([]string{"jumbo", "no_jumbo"}...),
+			},
+			"spec.gc_spec.sw": []sets.String{
+				sets.NewString([]string{"default_sw_version", "volterra_software_version"}...),
 			},
 		},
 	}
@@ -18207,7 +19353,7 @@ func init() {
 				sets.NewString([]string{"all_load_balancer_domains", "custom_domain_list"}...),
 			},
 			"spec.dns_proxy_configuration.cache_profile": []sets.String{
-				sets.NewString([]string{"disable_cache_profile", "enable_cache_profile"}...),
+				sets.NewString([]string{"cache_size", "disable_cache_profile"}...),
 			},
 			"spec.dns_proxy_configuration.ddos_profile": []sets.String{
 				sets.NewString([]string{"disable_ddos_mitigation", "enable_ddos_mitigation"}...),
@@ -18277,7 +19423,7 @@ func init() {
 				sets.NewString([]string{"all_load_balancer_domains", "custom_domain_list"}...),
 			},
 			"spec.dns_proxy_configuration.cache_profile": []sets.String{
-				sets.NewString([]string{"disable_cache_profile", "enable_cache_profile"}...),
+				sets.NewString([]string{"cache_size", "disable_cache_profile"}...),
 			},
 			"spec.dns_proxy_configuration.ddos_profile": []sets.String{
 				sets.NewString([]string{"disable_ddos_mitigation", "enable_ddos_mitigation"}...),
@@ -18356,13 +19502,16 @@ func init() {
 				sets.NewString([]string{"all_load_balancer_domains", "custom_domain_list"}...),
 			},
 			"spec.gc_spec.dns_proxy_configuration.cache_profile": []sets.String{
-				sets.NewString([]string{"disable_cache_profile", "enable_cache_profile"}...),
+				sets.NewString([]string{"cache_size", "disable_cache_profile"}...),
 			},
 			"spec.gc_spec.dns_proxy_configuration.ddos_profile": []sets.String{
 				sets.NewString([]string{"disable_ddos_mitigation", "enable_ddos_mitigation"}...),
 			},
 			"spec.gc_spec.header_transformation_type": []sets.String{
 				sets.NewString([]string{"default_header_transformation", "proper_case_header_transformation"}...),
+			},
+			"spec.gc_spec.http_protocol_options": []sets.String{
+				sets.NewString([]string{"http_protocol_enable_v1_only", "http_protocol_enable_v1_v2", "http_protocol_enable_v2_only"}...),
 			},
 			"spec.gc_spec.policy_based_challenge": []sets.String{
 				sets.NewString([]string{"always_enable_captcha_challenge", "always_enable_js_challenge", "no_challenge"}...),
@@ -18455,13 +19604,16 @@ func init() {
 				sets.NewString([]string{"all_load_balancer_domains", "custom_domain_list"}...),
 			},
 			"spec.gc_spec.dns_proxy_configuration.cache_profile": []sets.String{
-				sets.NewString([]string{"disable_cache_profile", "enable_cache_profile"}...),
+				sets.NewString([]string{"cache_size", "disable_cache_profile"}...),
 			},
 			"spec.gc_spec.dns_proxy_configuration.ddos_profile": []sets.String{
 				sets.NewString([]string{"disable_ddos_mitigation", "enable_ddos_mitigation"}...),
 			},
 			"spec.gc_spec.header_transformation_type": []sets.String{
 				sets.NewString([]string{"default_header_transformation", "proper_case_header_transformation"}...),
+			},
+			"spec.gc_spec.http_protocol_options": []sets.String{
+				sets.NewString([]string{"http_protocol_enable_v1_only", "http_protocol_enable_v1_v2", "http_protocol_enable_v2_only"}...),
 			},
 			"spec.gc_spec.policy_based_challenge": []sets.String{
 				sets.NewString([]string{"always_enable_captcha_challenge", "always_enable_js_challenge", "no_challenge"}...),
@@ -19367,6 +20519,28 @@ func init() {
 		"object",
 	}
 
+	MDR.RPCHiddenInternalFieldsRegistry["ves.io.schema.certificate.API.Create"] = []string{
+		"spec.private_key.blindfold_secret_info_internal",
+		"spec.private_key.secret_encoding_type",
+		"spec.private_key.vault_secret_info",
+		"spec.private_key.wingman_secret_info",
+	}
+
+	MDR.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.certificate.API.Get"] = []string{
+		"object",
+	}
+
+	MDR.RPCHiddenInternalFieldsRegistry["ves.io.schema.certificate.API.Replace"] = []string{
+		"spec.private_key.blindfold_secret_info_internal",
+		"spec.private_key.secret_encoding_type",
+		"spec.private_key.vault_secret_info",
+		"spec.private_key.wingman_secret_info",
+	}
+
+	MDR.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.certificate_chain.API.Get"] = []string{
+		"object",
+	}
+
 	MDR.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.certified_hardware.API.Get"] = []string{
 		"object",
 	}
@@ -19924,12 +21098,8 @@ func init() {
 	}
 
 	MDR.RPCHiddenInternalFieldsRegistry["ves.io.schema.enhanced_firewall_policy.API.Create"] = []string{
-		"spec.rule_list.rules.#.all_sli_vips",
-		"spec.rule_list.rules.#.all_slo_vips",
 		"spec.rule_list.rules.#.destination_namespace",
-		"spec.rule_list.rules.#.inside_destinations",
 		"spec.rule_list.rules.#.metadata.disable",
-		"spec.rule_list.rules.#.outside_destinations",
 		"spec.rule_list.rules.#.source_namespace",
 	}
 
@@ -19961,12 +21131,8 @@ func init() {
 	}
 
 	MDR.RPCHiddenInternalFieldsRegistry["ves.io.schema.enhanced_firewall_policy.API.Replace"] = []string{
-		"spec.rule_list.rules.#.all_sli_vips",
-		"spec.rule_list.rules.#.all_slo_vips",
 		"spec.rule_list.rules.#.destination_namespace",
-		"spec.rule_list.rules.#.inside_destinations",
 		"spec.rule_list.rules.#.metadata.disable",
-		"spec.rule_list.rules.#.outside_destinations",
 		"spec.rule_list.rules.#.source_namespace",
 	}
 
@@ -21022,8 +22188,16 @@ func init() {
 		},
 	}
 
+	MDR.RPCHiddenInternalFieldsRegistry["ves.io.schema.ip_prefix_set.API.Create"] = []string{
+		"spec.ipv6_prefix.#",
+	}
+
 	MDR.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.ip_prefix_set.API.Get"] = []string{
 		"object",
+	}
+
+	MDR.RPCHiddenInternalFieldsRegistry["ves.io.schema.ip_prefix_set.API.Replace"] = []string{
+		"spec.ipv6_prefix.#",
 	}
 
 	MDR.RPCOneofDefaultChoiceFieldsRegistry["ves.io.schema.k8s_cluster.API.Create"] = []svcfw.OneofDefaultChoiceField{
@@ -22997,9 +24171,11 @@ func init() {
 		"spec.rule_list.rules.#.spec.forwarding_class.#",
 		"spec.rule_list.rules.#.spec.goto_policy.#",
 		"spec.rule_list.rules.#.spec.graphql_settings",
+		"spec.rule_list.rules.#.spec.ip_prefix_list.ipv6_prefixes.#",
 		"spec.rule_list.rules.#.spec.ip_reputation_action",
 		"spec.rule_list.rules.#.spec.l4_dest_matcher",
 		"spec.rule_list.rules.#.spec.openapi_validation_action",
+		"spec.rule_list.rules.#.spec.origin_server_subsets_action",
 		"spec.rule_list.rules.#.spec.rate_limiter.#",
 		"spec.rule_list.rules.#.spec.scheme.#",
 		"spec.rule_list.rules.#.spec.server_selector",
@@ -23139,9 +24315,11 @@ func init() {
 		"spec.rule_list.rules.#.spec.forwarding_class.#",
 		"spec.rule_list.rules.#.spec.goto_policy.#",
 		"spec.rule_list.rules.#.spec.graphql_settings",
+		"spec.rule_list.rules.#.spec.ip_prefix_list.ipv6_prefixes.#",
 		"spec.rule_list.rules.#.spec.ip_reputation_action",
 		"spec.rule_list.rules.#.spec.l4_dest_matcher",
 		"spec.rule_list.rules.#.spec.openapi_validation_action",
+		"spec.rule_list.rules.#.spec.origin_server_subsets_action",
 		"spec.rule_list.rules.#.spec.rate_limiter.#",
 		"spec.rule_list.rules.#.spec.scheme.#",
 		"spec.rule_list.rules.#.spec.server_selector",
@@ -23628,8 +24806,10 @@ func init() {
 		"spec.dst_ip_matcher",
 		"spec.dst_ip_prefix_list",
 		"spec.goto_policy.#",
+		"spec.ip_prefix_list.ipv6_prefixes.#",
 		"spec.ip_reputation_action",
 		"spec.l4_dest_matcher",
+		"spec.origin_server_subsets_action",
 		"spec.rate_limiter.#",
 		"spec.scheme.#",
 		"spec.server_selector",
@@ -23746,8 +24926,10 @@ func init() {
 		"spec.dst_ip_matcher",
 		"spec.dst_ip_prefix_list",
 		"spec.goto_policy.#",
+		"spec.ip_prefix_list.ipv6_prefixes.#",
 		"spec.ip_reputation_action",
 		"spec.l4_dest_matcher",
+		"spec.origin_server_subsets_action",
 		"spec.rate_limiter.#",
 		"spec.scheme.#",
 		"spec.server_selector",
@@ -23981,6 +25163,10 @@ func init() {
 		"object",
 	}
 
+	MDR.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.trusted_ca_list.API.Get"] = []string{
+		"object",
+	}
+
 	MDR.RPCHiddenInternalFieldsRegistry["ves.io.schema.tunnel.API.Create"] = []string{
 		"spec.params.ipsec.ipsec_psk.blindfold_secret_info_internal",
 		"spec.params.ipsec.ipsec_psk.secret_encoding_type",
@@ -24132,8 +25318,8 @@ func init() {
 			GoType:    reflect.TypeOf(ves_io_schema_views_aws_tgw_site.ServicesVPCType_NoWorkerNodes{}),
 		},
 		{
-			FieldPath: "ves.io.schema.views.aws_tgw_site.CreateRequest.spec.blocked_services_choice.default_blocked_services",
-			GoType:    reflect.TypeOf(ves_io_schema_views_aws_tgw_site.CreateSpecType_DefaultBlockedServices{}),
+			FieldPath: "ves.io.schema.views.aws_tgw_site.CreateRequest.spec.blocked_services_choice.block_all_services",
+			GoType:    reflect.TypeOf(ves_io_schema_views_aws_tgw_site.CreateSpecType_BlockAllServices{}),
 		},
 		{
 			FieldPath: "ves.io.schema.views.aws_tgw_site.CreateRequest.spec.direct_connect_choice.direct_connect_disabled",
@@ -24240,8 +25426,8 @@ func init() {
 			GoType:    reflect.TypeOf(ves_io_schema_views_aws_tgw_site.ServicesVPCReplaceType_NoWorkerNodes{}),
 		},
 		{
-			FieldPath: "ves.io.schema.views.aws_tgw_site.ReplaceRequest.spec.blocked_services_choice.default_blocked_services",
-			GoType:    reflect.TypeOf(ves_io_schema_views_aws_tgw_site.ReplaceSpecType_DefaultBlockedServices{}),
+			FieldPath: "ves.io.schema.views.aws_tgw_site.ReplaceRequest.spec.blocked_services_choice.block_all_services",
+			GoType:    reflect.TypeOf(ves_io_schema_views_aws_tgw_site.ReplaceSpecType_BlockAllServices{}),
 		},
 		{
 			FieldPath: "ves.io.schema.views.aws_tgw_site.ReplaceRequest.spec.direct_connect_choice.direct_connect_disabled",
@@ -24350,8 +25536,8 @@ func init() {
 			GoType:    reflect.TypeOf(ves_io_schema_views_aws_tgw_site.ServicesVPCType_NoWorkerNodes{}),
 		},
 		{
-			FieldPath: "ves.io.schema.views.aws_tgw_site.crudapi.ObjectCreateReq.spec.gc_spec.blocked_services_choice.default_blocked_services",
-			GoType:    reflect.TypeOf(ves_io_schema_views_aws_tgw_site.GlobalSpecType_DefaultBlockedServices{}),
+			FieldPath: "ves.io.schema.views.aws_tgw_site.crudapi.ObjectCreateReq.spec.gc_spec.blocked_services_choice.block_all_services",
+			GoType:    reflect.TypeOf(ves_io_schema_views_aws_tgw_site.GlobalSpecType_BlockAllServices{}),
 		},
 		{
 			FieldPath: "ves.io.schema.views.aws_tgw_site.crudapi.ObjectCreateReq.spec.gc_spec.direct_connect_choice.direct_connect_disabled",
@@ -24457,8 +25643,8 @@ func init() {
 			GoType:    reflect.TypeOf(ves_io_schema_views_aws_tgw_site.ServicesVPCType_NoWorkerNodes{}),
 		},
 		{
-			FieldPath: "ves.io.schema.views.aws_tgw_site.crudapi.ObjectReplaceReq.spec.gc_spec.blocked_services_choice.default_blocked_services",
-			GoType:    reflect.TypeOf(ves_io_schema_views_aws_tgw_site.GlobalSpecType_DefaultBlockedServices{}),
+			FieldPath: "ves.io.schema.views.aws_tgw_site.crudapi.ObjectReplaceReq.spec.gc_spec.blocked_services_choice.block_all_services",
+			GoType:    reflect.TypeOf(ves_io_schema_views_aws_tgw_site.GlobalSpecType_BlockAllServices{}),
 		},
 		{
 			FieldPath: "ves.io.schema.views.aws_tgw_site.crudapi.ObjectReplaceReq.spec.gc_spec.direct_connect_choice.direct_connect_disabled",
@@ -24544,8 +25730,8 @@ func init() {
 
 	MDR.RPCOneofDefaultChoiceFieldsRegistry["ves.io.schema.views.aws_vpc_site.API.Create"] = []svcfw.OneofDefaultChoiceField{
 		{
-			FieldPath: "ves.io.schema.views.aws_vpc_site.CreateRequest.spec.blocked_services_choice.default_blocked_services",
-			GoType:    reflect.TypeOf(ves_io_schema_views_aws_vpc_site.CreateSpecType_DefaultBlockedServices{}),
+			FieldPath: "ves.io.schema.views.aws_vpc_site.CreateRequest.spec.blocked_services_choice.block_all_services",
+			GoType:    reflect.TypeOf(ves_io_schema_views_aws_vpc_site.CreateSpecType_BlockAllServices{}),
 		},
 		{
 			FieldPath: "ves.io.schema.views.aws_vpc_site.CreateRequest.spec.direct_connect_choice.direct_connect_disabled",
@@ -24713,8 +25899,8 @@ func init() {
 
 	MDR.RPCOneofDefaultChoiceFieldsRegistry["ves.io.schema.views.aws_vpc_site.API.Replace"] = []svcfw.OneofDefaultChoiceField{
 		{
-			FieldPath: "ves.io.schema.views.aws_vpc_site.ReplaceRequest.spec.blocked_services_choice.default_blocked_services",
-			GoType:    reflect.TypeOf(ves_io_schema_views_aws_vpc_site.ReplaceSpecType_DefaultBlockedServices{}),
+			FieldPath: "ves.io.schema.views.aws_vpc_site.ReplaceRequest.spec.blocked_services_choice.block_all_services",
+			GoType:    reflect.TypeOf(ves_io_schema_views_aws_vpc_site.ReplaceSpecType_BlockAllServices{}),
 		},
 		{
 			FieldPath: "ves.io.schema.views.aws_vpc_site.ReplaceRequest.spec.direct_connect_choice.direct_connect_disabled",
@@ -24851,8 +26037,8 @@ func init() {
 
 	MDR.RPCOneofDefaultChoiceFieldsRegistry["ves.io.schema.views.aws_vpc_site.crudapi.API.Create"] = []svcfw.OneofDefaultChoiceField{
 		{
-			FieldPath: "ves.io.schema.views.aws_vpc_site.crudapi.ObjectCreateReq.spec.gc_spec.blocked_services_choice.default_blocked_services",
-			GoType:    reflect.TypeOf(ves_io_schema_views_aws_vpc_site.GlobalSpecType_DefaultBlockedServices{}),
+			FieldPath: "ves.io.schema.views.aws_vpc_site.crudapi.ObjectCreateReq.spec.gc_spec.blocked_services_choice.block_all_services",
+			GoType:    reflect.TypeOf(ves_io_schema_views_aws_vpc_site.GlobalSpecType_BlockAllServices{}),
 		},
 		{
 			FieldPath: "ves.io.schema.views.aws_vpc_site.crudapi.ObjectCreateReq.spec.gc_spec.direct_connect_choice.direct_connect_disabled",
@@ -25002,8 +26188,8 @@ func init() {
 
 	MDR.RPCOneofDefaultChoiceFieldsRegistry["ves.io.schema.views.aws_vpc_site.crudapi.API.Replace"] = []svcfw.OneofDefaultChoiceField{
 		{
-			FieldPath: "ves.io.schema.views.aws_vpc_site.crudapi.ObjectReplaceReq.spec.gc_spec.blocked_services_choice.default_blocked_services",
-			GoType:    reflect.TypeOf(ves_io_schema_views_aws_vpc_site.GlobalSpecType_DefaultBlockedServices{}),
+			FieldPath: "ves.io.schema.views.aws_vpc_site.crudapi.ObjectReplaceReq.spec.gc_spec.blocked_services_choice.block_all_services",
+			GoType:    reflect.TypeOf(ves_io_schema_views_aws_vpc_site.GlobalSpecType_BlockAllServices{}),
 		},
 		{
 			FieldPath: "ves.io.schema.views.aws_vpc_site.crudapi.ObjectReplaceReq.spec.gc_spec.direct_connect_choice.direct_connect_disabled",
@@ -25153,8 +26339,8 @@ func init() {
 
 	MDR.RPCOneofDefaultChoiceFieldsRegistry["ves.io.schema.views.azure_vnet_site.API.Create"] = []svcfw.OneofDefaultChoiceField{
 		{
-			FieldPath: "ves.io.schema.views.azure_vnet_site.CreateRequest.spec.blocked_services_choice.default_blocked_services",
-			GoType:    reflect.TypeOf(ves_io_schema_views_azure_vnet_site.CreateSpecType_DefaultBlockedServices{}),
+			FieldPath: "ves.io.schema.views.azure_vnet_site.CreateRequest.spec.blocked_services_choice.block_all_services",
+			GoType:    reflect.TypeOf(ves_io_schema_views_azure_vnet_site.CreateSpecType_BlockAllServices{}),
 		},
 		{
 			FieldPath: "ves.io.schema.views.azure_vnet_site.CreateRequest.spec.logs_receiver_choice.logs_streaming_disabled",
@@ -25468,8 +26654,8 @@ func init() {
 
 	MDR.RPCOneofDefaultChoiceFieldsRegistry["ves.io.schema.views.azure_vnet_site.API.Replace"] = []svcfw.OneofDefaultChoiceField{
 		{
-			FieldPath: "ves.io.schema.views.azure_vnet_site.ReplaceRequest.spec.blocked_services_choice.default_blocked_services",
-			GoType:    reflect.TypeOf(ves_io_schema_views_azure_vnet_site.ReplaceSpecType_DefaultBlockedServices{}),
+			FieldPath: "ves.io.schema.views.azure_vnet_site.ReplaceRequest.spec.blocked_services_choice.block_all_services",
+			GoType:    reflect.TypeOf(ves_io_schema_views_azure_vnet_site.ReplaceSpecType_BlockAllServices{}),
 		},
 		{
 			FieldPath: "ves.io.schema.views.azure_vnet_site.ReplaceRequest.spec.logs_receiver_choice.logs_streaming_disabled",
@@ -25732,8 +26918,8 @@ func init() {
 
 	MDR.RPCOneofDefaultChoiceFieldsRegistry["ves.io.schema.views.azure_vnet_site.crudapi.API.Create"] = []svcfw.OneofDefaultChoiceField{
 		{
-			FieldPath: "ves.io.schema.views.azure_vnet_site.crudapi.ObjectCreateReq.spec.gc_spec.blocked_services_choice.default_blocked_services",
-			GoType:    reflect.TypeOf(ves_io_schema_views_azure_vnet_site.GlobalSpecType_DefaultBlockedServices{}),
+			FieldPath: "ves.io.schema.views.azure_vnet_site.crudapi.ObjectCreateReq.spec.gc_spec.blocked_services_choice.block_all_services",
+			GoType:    reflect.TypeOf(ves_io_schema_views_azure_vnet_site.GlobalSpecType_BlockAllServices{}),
 		},
 		{
 			FieldPath: "ves.io.schema.views.azure_vnet_site.crudapi.ObjectCreateReq.spec.gc_spec.logs_receiver_choice.logs_streaming_disabled",
@@ -26011,8 +27197,8 @@ func init() {
 
 	MDR.RPCOneofDefaultChoiceFieldsRegistry["ves.io.schema.views.azure_vnet_site.crudapi.API.Replace"] = []svcfw.OneofDefaultChoiceField{
 		{
-			FieldPath: "ves.io.schema.views.azure_vnet_site.crudapi.ObjectReplaceReq.spec.gc_spec.blocked_services_choice.default_blocked_services",
-			GoType:    reflect.TypeOf(ves_io_schema_views_azure_vnet_site.GlobalSpecType_DefaultBlockedServices{}),
+			FieldPath: "ves.io.schema.views.azure_vnet_site.crudapi.ObjectReplaceReq.spec.gc_spec.blocked_services_choice.block_all_services",
+			GoType:    reflect.TypeOf(ves_io_schema_views_azure_vnet_site.GlobalSpecType_BlockAllServices{}),
 		},
 		{
 			FieldPath: "ves.io.schema.views.azure_vnet_site.crudapi.ObjectReplaceReq.spec.gc_spec.logs_receiver_choice.logs_streaming_disabled",
@@ -26288,6 +27474,175 @@ func init() {
 		},
 	}
 
+	MDR.RPCOneofDefaultChoiceFieldsRegistry["ves.io.schema.views.cdn_loadbalancer.API.Create"] = []svcfw.OneofDefaultChoiceField{
+		{
+			FieldPath: "ves.io.schema.views.cdn_loadbalancer.CreateRequest.spec.loadbalancer_type.https.tls_parameters.tls_config.choice.tls_12_plus",
+			GoType:    reflect.TypeOf(ves_io_schema_views_cdn_loadbalancer.CDNTLSConfig_Tls_12Plus{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.cdn_loadbalancer.CreateRequest.spec.loadbalancer_type.https_auto_cert.tls_config.choice.tls_12_plus",
+			GoType:    reflect.TypeOf(ves_io_schema_views_cdn_loadbalancer.CDNTLSConfig_Tls_12Plus{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.cdn_loadbalancer.CreateRequest.spec.origin_pool.tls_choice.use_tls.mtls_choice.no_mtls",
+			GoType:    reflect.TypeOf(ves_io_schema_views_origin_pool.UpstreamTlsParameters_NoMtls{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.cdn_loadbalancer.CreateRequest.spec.origin_pool.tls_choice.use_tls.server_validation_choice.volterra_trusted_ca",
+			GoType:    reflect.TypeOf(ves_io_schema_views_origin_pool.UpstreamTlsParameters_VolterraTrustedCa{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.cdn_loadbalancer.CreateRequest.spec.origin_pool.tls_choice.use_tls.sni_choice.use_host_header_as_sni",
+			GoType:    reflect.TypeOf(ves_io_schema_views_origin_pool.UpstreamTlsParameters_UseHostHeaderAsSni{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.cdn_loadbalancer.CreateRequest.spec.origin_pool.tls_choice.use_tls.tls_config.choice.default_security",
+			GoType:    reflect.TypeOf(ves_io_schema_views.TlsConfig_DefaultSecurity{}),
+		},
+	}
+
+	MDR.RPCHiddenInternalFieldsRegistry["ves.io.schema.views.cdn_loadbalancer.API.Create"] = []string{
+		"spec.https.tls_parameters.tls_certificates.#.private_key.blindfold_secret_info_internal",
+		"spec.https.tls_parameters.tls_certificates.#.private_key.secret_encoding_type",
+		"spec.https.tls_parameters.tls_certificates.#.private_key.vault_secret_info",
+		"spec.https.tls_parameters.tls_certificates.#.private_key.wingman_secret_info",
+		"spec.more_option.header_options.request_headers_to_add.#.secret_value.blindfold_secret_info_internal",
+		"spec.more_option.header_options.request_headers_to_add.#.secret_value.secret_encoding_type",
+		"spec.more_option.header_options.request_headers_to_add.#.secret_value.vault_secret_info",
+		"spec.more_option.header_options.request_headers_to_add.#.secret_value.wingman_secret_info",
+		"spec.more_option.header_options.response_headers_to_add.#.secret_value.blindfold_secret_info_internal",
+		"spec.more_option.header_options.response_headers_to_add.#.secret_value.secret_encoding_type",
+		"spec.more_option.header_options.response_headers_to_add.#.secret_value.vault_secret_info",
+		"spec.more_option.header_options.response_headers_to_add.#.secret_value.wingman_secret_info",
+		"spec.more_option.security_options.auth_options.jwt.secret_key.blindfold_secret_info_internal",
+		"spec.more_option.security_options.auth_options.jwt.secret_key.secret_encoding_type",
+		"spec.more_option.security_options.auth_options.jwt.secret_key.vault_secret_info",
+		"spec.more_option.security_options.auth_options.jwt.secret_key.wingman_secret_info",
+		"spec.more_option.security_options.ip_filtering.allow_list.ipv6_prefixes.#",
+		"spec.more_option.security_options.ip_filtering.block_list.ipv6_prefixes.#",
+		"spec.origin_pool.use_tls.use_mtls.tls_certificates.#.private_key.blindfold_secret_info_internal",
+		"spec.origin_pool.use_tls.use_mtls.tls_certificates.#.private_key.secret_encoding_type",
+		"spec.origin_pool.use_tls.use_mtls.tls_certificates.#.private_key.vault_secret_info",
+		"spec.origin_pool.use_tls.use_mtls.tls_certificates.#.private_key.wingman_secret_info",
+	}
+
+	MDR.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.views.cdn_loadbalancer.API.Get"] = []string{
+		"object",
+	}
+
+	MDR.RPCOneofDefaultChoiceFieldsRegistry["ves.io.schema.views.cdn_loadbalancer.API.Replace"] = []svcfw.OneofDefaultChoiceField{
+		{
+			FieldPath: "ves.io.schema.views.cdn_loadbalancer.ReplaceRequest.spec.loadbalancer_type.https.tls_parameters.tls_config.choice.tls_12_plus",
+			GoType:    reflect.TypeOf(ves_io_schema_views_cdn_loadbalancer.CDNTLSConfig_Tls_12Plus{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.cdn_loadbalancer.ReplaceRequest.spec.loadbalancer_type.https_auto_cert.tls_config.choice.tls_12_plus",
+			GoType:    reflect.TypeOf(ves_io_schema_views_cdn_loadbalancer.CDNTLSConfig_Tls_12Plus{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.cdn_loadbalancer.ReplaceRequest.spec.origin_pool.tls_choice.use_tls.mtls_choice.no_mtls",
+			GoType:    reflect.TypeOf(ves_io_schema_views_origin_pool.UpstreamTlsParameters_NoMtls{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.cdn_loadbalancer.ReplaceRequest.spec.origin_pool.tls_choice.use_tls.server_validation_choice.volterra_trusted_ca",
+			GoType:    reflect.TypeOf(ves_io_schema_views_origin_pool.UpstreamTlsParameters_VolterraTrustedCa{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.cdn_loadbalancer.ReplaceRequest.spec.origin_pool.tls_choice.use_tls.sni_choice.use_host_header_as_sni",
+			GoType:    reflect.TypeOf(ves_io_schema_views_origin_pool.UpstreamTlsParameters_UseHostHeaderAsSni{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.cdn_loadbalancer.ReplaceRequest.spec.origin_pool.tls_choice.use_tls.tls_config.choice.default_security",
+			GoType:    reflect.TypeOf(ves_io_schema_views.TlsConfig_DefaultSecurity{}),
+		},
+	}
+
+	MDR.RPCHiddenInternalFieldsRegistry["ves.io.schema.views.cdn_loadbalancer.API.Replace"] = []string{
+		"spec.https.tls_parameters.tls_certificates.#.private_key.blindfold_secret_info_internal",
+		"spec.https.tls_parameters.tls_certificates.#.private_key.secret_encoding_type",
+		"spec.https.tls_parameters.tls_certificates.#.private_key.vault_secret_info",
+		"spec.https.tls_parameters.tls_certificates.#.private_key.wingman_secret_info",
+		"spec.more_option.header_options.request_headers_to_add.#.secret_value.blindfold_secret_info_internal",
+		"spec.more_option.header_options.request_headers_to_add.#.secret_value.secret_encoding_type",
+		"spec.more_option.header_options.request_headers_to_add.#.secret_value.vault_secret_info",
+		"spec.more_option.header_options.request_headers_to_add.#.secret_value.wingman_secret_info",
+		"spec.more_option.header_options.response_headers_to_add.#.secret_value.blindfold_secret_info_internal",
+		"spec.more_option.header_options.response_headers_to_add.#.secret_value.secret_encoding_type",
+		"spec.more_option.header_options.response_headers_to_add.#.secret_value.vault_secret_info",
+		"spec.more_option.header_options.response_headers_to_add.#.secret_value.wingman_secret_info",
+		"spec.more_option.security_options.auth_options.jwt.secret_key.blindfold_secret_info_internal",
+		"spec.more_option.security_options.auth_options.jwt.secret_key.secret_encoding_type",
+		"spec.more_option.security_options.auth_options.jwt.secret_key.vault_secret_info",
+		"spec.more_option.security_options.auth_options.jwt.secret_key.wingman_secret_info",
+		"spec.more_option.security_options.ip_filtering.allow_list.ipv6_prefixes.#",
+		"spec.more_option.security_options.ip_filtering.block_list.ipv6_prefixes.#",
+		"spec.origin_pool.use_tls.use_mtls.tls_certificates.#.private_key.blindfold_secret_info_internal",
+		"spec.origin_pool.use_tls.use_mtls.tls_certificates.#.private_key.secret_encoding_type",
+		"spec.origin_pool.use_tls.use_mtls.tls_certificates.#.private_key.vault_secret_info",
+		"spec.origin_pool.use_tls.use_mtls.tls_certificates.#.private_key.wingman_secret_info",
+	}
+
+	MDR.RPCOneofDefaultChoiceFieldsRegistry["ves.io.schema.views.cdn_loadbalancer.CustomAPI.CDNCachePurge"] = []svcfw.OneofDefaultChoiceField{
+		{
+			FieldPath: "ves.io.schema.views.cdn_loadbalancer.LilacCDNCachePurgeRequest.purge_type.soft_purge",
+			GoType:    reflect.TypeOf(ves_io_schema_views_cdn_loadbalancer.LilacCDNCachePurgeRequest_SoftPurge{}),
+		},
+	}
+
+	MDR.RPCOneofDefaultChoiceFieldsRegistry["ves.io.schema.views.cdn_loadbalancer.crudapi.API.Create"] = []svcfw.OneofDefaultChoiceField{
+		{
+			FieldPath: "ves.io.schema.views.cdn_loadbalancer.crudapi.ObjectCreateReq.spec.gc_spec.loadbalancer_type.https.tls_parameters.tls_config.choice.tls_12_plus",
+			GoType:    reflect.TypeOf(ves_io_schema_views_cdn_loadbalancer.CDNTLSConfig_Tls_12Plus{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.cdn_loadbalancer.crudapi.ObjectCreateReq.spec.gc_spec.loadbalancer_type.https_auto_cert.tls_config.choice.tls_12_plus",
+			GoType:    reflect.TypeOf(ves_io_schema_views_cdn_loadbalancer.CDNTLSConfig_Tls_12Plus{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.cdn_loadbalancer.crudapi.ObjectCreateReq.spec.gc_spec.origin_pool.tls_choice.use_tls.mtls_choice.no_mtls",
+			GoType:    reflect.TypeOf(ves_io_schema_views_origin_pool.UpstreamTlsParameters_NoMtls{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.cdn_loadbalancer.crudapi.ObjectCreateReq.spec.gc_spec.origin_pool.tls_choice.use_tls.server_validation_choice.volterra_trusted_ca",
+			GoType:    reflect.TypeOf(ves_io_schema_views_origin_pool.UpstreamTlsParameters_VolterraTrustedCa{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.cdn_loadbalancer.crudapi.ObjectCreateReq.spec.gc_spec.origin_pool.tls_choice.use_tls.sni_choice.use_host_header_as_sni",
+			GoType:    reflect.TypeOf(ves_io_schema_views_origin_pool.UpstreamTlsParameters_UseHostHeaderAsSni{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.cdn_loadbalancer.crudapi.ObjectCreateReq.spec.gc_spec.origin_pool.tls_choice.use_tls.tls_config.choice.default_security",
+			GoType:    reflect.TypeOf(ves_io_schema_views.TlsConfig_DefaultSecurity{}),
+		},
+	}
+
+	MDR.RPCOneofDefaultChoiceFieldsRegistry["ves.io.schema.views.cdn_loadbalancer.crudapi.API.Replace"] = []svcfw.OneofDefaultChoiceField{
+		{
+			FieldPath: "ves.io.schema.views.cdn_loadbalancer.crudapi.ObjectReplaceReq.spec.gc_spec.loadbalancer_type.https.tls_parameters.tls_config.choice.tls_12_plus",
+			GoType:    reflect.TypeOf(ves_io_schema_views_cdn_loadbalancer.CDNTLSConfig_Tls_12Plus{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.cdn_loadbalancer.crudapi.ObjectReplaceReq.spec.gc_spec.loadbalancer_type.https_auto_cert.tls_config.choice.tls_12_plus",
+			GoType:    reflect.TypeOf(ves_io_schema_views_cdn_loadbalancer.CDNTLSConfig_Tls_12Plus{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.cdn_loadbalancer.crudapi.ObjectReplaceReq.spec.gc_spec.origin_pool.tls_choice.use_tls.mtls_choice.no_mtls",
+			GoType:    reflect.TypeOf(ves_io_schema_views_origin_pool.UpstreamTlsParameters_NoMtls{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.cdn_loadbalancer.crudapi.ObjectReplaceReq.spec.gc_spec.origin_pool.tls_choice.use_tls.server_validation_choice.volterra_trusted_ca",
+			GoType:    reflect.TypeOf(ves_io_schema_views_origin_pool.UpstreamTlsParameters_VolterraTrustedCa{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.cdn_loadbalancer.crudapi.ObjectReplaceReq.spec.gc_spec.origin_pool.tls_choice.use_tls.sni_choice.use_host_header_as_sni",
+			GoType:    reflect.TypeOf(ves_io_schema_views_origin_pool.UpstreamTlsParameters_UseHostHeaderAsSni{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.cdn_loadbalancer.crudapi.ObjectReplaceReq.spec.gc_spec.origin_pool.tls_choice.use_tls.tls_config.choice.default_security",
+			GoType:    reflect.TypeOf(ves_io_schema_views.TlsConfig_DefaultSecurity{}),
+		},
+	}
+
 	MDR.RPCOneofDefaultChoiceFieldsRegistry["ves.io.schema.views.forward_proxy_policy.API.Create"] = []svcfw.OneofDefaultChoiceField{
 		{
 			FieldPath: "ves.io.schema.views.forward_proxy_policy.CreateRequest.spec.proxy_choice.any_proxy",
@@ -26468,8 +27823,8 @@ func init() {
 
 	MDR.RPCOneofDefaultChoiceFieldsRegistry["ves.io.schema.views.gcp_vpc_site.API.Create"] = []svcfw.OneofDefaultChoiceField{
 		{
-			FieldPath: "ves.io.schema.views.gcp_vpc_site.CreateRequest.spec.blocked_services_choice.default_blocked_services",
-			GoType:    reflect.TypeOf(ves_io_schema_views_gcp_vpc_site.CreateSpecType_DefaultBlockedServices{}),
+			FieldPath: "ves.io.schema.views.gcp_vpc_site.CreateRequest.spec.blocked_services_choice.block_all_services",
+			GoType:    reflect.TypeOf(ves_io_schema_views_gcp_vpc_site.CreateSpecType_BlockAllServices{}),
 		},
 		{
 			FieldPath: "ves.io.schema.views.gcp_vpc_site.CreateRequest.spec.logs_receiver_choice.logs_streaming_disabled",
@@ -26606,8 +27961,8 @@ func init() {
 
 	MDR.RPCOneofDefaultChoiceFieldsRegistry["ves.io.schema.views.gcp_vpc_site.API.Replace"] = []svcfw.OneofDefaultChoiceField{
 		{
-			FieldPath: "ves.io.schema.views.gcp_vpc_site.ReplaceRequest.spec.blocked_services_choice.default_blocked_services",
-			GoType:    reflect.TypeOf(ves_io_schema_views_gcp_vpc_site.ReplaceSpecType_DefaultBlockedServices{}),
+			FieldPath: "ves.io.schema.views.gcp_vpc_site.ReplaceRequest.spec.blocked_services_choice.block_all_services",
+			GoType:    reflect.TypeOf(ves_io_schema_views_gcp_vpc_site.ReplaceSpecType_BlockAllServices{}),
 		},
 		{
 			FieldPath: "ves.io.schema.views.gcp_vpc_site.ReplaceRequest.spec.logs_receiver_choice.logs_streaming_disabled",
@@ -26724,8 +28079,8 @@ func init() {
 
 	MDR.RPCOneofDefaultChoiceFieldsRegistry["ves.io.schema.views.gcp_vpc_site.crudapi.API.Create"] = []svcfw.OneofDefaultChoiceField{
 		{
-			FieldPath: "ves.io.schema.views.gcp_vpc_site.crudapi.ObjectCreateReq.spec.gc_spec.blocked_services_choice.default_blocked_services",
-			GoType:    reflect.TypeOf(ves_io_schema_views_gcp_vpc_site.GlobalSpecType_DefaultBlockedServices{}),
+			FieldPath: "ves.io.schema.views.gcp_vpc_site.crudapi.ObjectCreateReq.spec.gc_spec.blocked_services_choice.block_all_services",
+			GoType:    reflect.TypeOf(ves_io_schema_views_gcp_vpc_site.GlobalSpecType_BlockAllServices{}),
 		},
 		{
 			FieldPath: "ves.io.schema.views.gcp_vpc_site.crudapi.ObjectCreateReq.spec.gc_spec.logs_receiver_choice.logs_streaming_disabled",
@@ -26847,8 +28202,8 @@ func init() {
 
 	MDR.RPCOneofDefaultChoiceFieldsRegistry["ves.io.schema.views.gcp_vpc_site.crudapi.API.Replace"] = []svcfw.OneofDefaultChoiceField{
 		{
-			FieldPath: "ves.io.schema.views.gcp_vpc_site.crudapi.ObjectReplaceReq.spec.gc_spec.blocked_services_choice.default_blocked_services",
-			GoType:    reflect.TypeOf(ves_io_schema_views_gcp_vpc_site.GlobalSpecType_DefaultBlockedServices{}),
+			FieldPath: "ves.io.schema.views.gcp_vpc_site.crudapi.ObjectReplaceReq.spec.gc_spec.blocked_services_choice.block_all_services",
+			GoType:    reflect.TypeOf(ves_io_schema_views_gcp_vpc_site.GlobalSpecType_BlockAllServices{}),
 		},
 		{
 			FieldPath: "ves.io.schema.views.gcp_vpc_site.crudapi.ObjectReplaceReq.spec.gc_spec.logs_receiver_choice.logs_streaming_disabled",
@@ -27157,6 +28512,10 @@ func init() {
 			GoType:    reflect.TypeOf(ves_io_schema.HeaderTransformationType_DefaultHeaderTransformation{}),
 		},
 		{
+			FieldPath: "ves.io.schema.views.http_loadbalancer.CreateRequest.spec.loadbalancer_type.https.http_protocol_options.http_protocol_choice.http_protocol_enable_v1_v2",
+			GoType:    reflect.TypeOf(ves_io_schema_virtual_host.HttpProtocolOptions_HttpProtocolEnableV1V2{}),
+		},
+		{
 			FieldPath: "ves.io.schema.views.http_loadbalancer.CreateRequest.spec.loadbalancer_type.https.path_normalize_choice.enable_path_normalize",
 			GoType:    reflect.TypeOf(ves_io_schema_views_http_loadbalancer.ProxyTypeHttps_EnablePathNormalize{}),
 		},
@@ -27179,6 +28538,10 @@ func init() {
 		{
 			FieldPath: "ves.io.schema.views.http_loadbalancer.CreateRequest.spec.loadbalancer_type.https_auto_cert.header_transformation_type.header_transformation_choice.default_header_transformation",
 			GoType:    reflect.TypeOf(ves_io_schema.HeaderTransformationType_DefaultHeaderTransformation{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.http_loadbalancer.CreateRequest.spec.loadbalancer_type.https_auto_cert.http_protocol_options.http_protocol_choice.http_protocol_enable_v1_v2",
+			GoType:    reflect.TypeOf(ves_io_schema_virtual_host.HttpProtocolOptions_HttpProtocolEnableV1V2{}),
 		},
 		{
 			FieldPath: "ves.io.schema.views.http_loadbalancer.CreateRequest.spec.loadbalancer_type.https_auto_cert.mtls_choice.no_mtls",
@@ -27271,6 +28634,14 @@ func init() {
 		{
 			FieldPath: "ves.io.schema.views.http_loadbalancer.CreateRequest.spec.origin_pool_choice.default_pool.tls_choice.use_tls.tls_config.choice.default_security",
 			GoType:    reflect.TypeOf(ves_io_schema_views.TlsConfig_DefaultSecurity{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.http_loadbalancer.CreateRequest.spec.origin_server_subset_rule_list.origin_server_subset_rules.asn_choice.any_asn",
+			GoType:    reflect.TypeOf(ves_io_schema_policy.OriginServerSubsetRule_AnyAsn{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.http_loadbalancer.CreateRequest.spec.origin_server_subset_rule_list.origin_server_subset_rules.ip_choice.any_ip",
+			GoType:    reflect.TypeOf(ves_io_schema_policy.OriginServerSubsetRule_AnyIp{}),
 		},
 		{
 			FieldPath: "ves.io.schema.views.http_loadbalancer.CreateRequest.spec.protected_cookies.cookie_tampering.disable_tampering_protection",
@@ -27371,11 +28742,16 @@ func init() {
 	}
 
 	MDR.RPCHiddenInternalFieldsRegistry["ves.io.schema.views.http_loadbalancer.API.Create"] = []string{
+		"spec.api_definition",
 		"spec.api_definitions",
+		"spec.api_protection_rules.api_endpoint_rules.#.client_matcher.ip_prefix_list.ipv6_prefixes.#",
 		"spec.api_protection_rules.api_endpoint_rules.#.metadata.disable",
+		"spec.api_protection_rules.api_groups_rules.#.client_matcher.ip_prefix_list.ipv6_prefixes.#",
 		"spec.api_protection_rules.api_groups_rules.#.metadata.disable",
 		"spec.api_rate_limit.api_endpoint_rules.#.base_path",
-		"spec.api_specification",
+		"spec.api_specification.validation_all_spec_endpoints.fall_through_mode.fall_through_mode_custom.open_api_validation_rules.#.metadata.disable",
+		"spec.api_specification.validation_custom_list.fall_through_mode.fall_through_mode_custom.open_api_validation_rules.#.metadata.disable",
+		"spec.api_specification.validation_custom_list.open_api_validation_rules.#.metadata.disable",
 		"spec.blocked_clients.#.metadata.disable",
 		"spec.bot_defense",
 		"spec.client_side_defense.policy.js_insert_all_pages_except.exclude_list.#.metadata.disable",
@@ -27383,6 +28759,7 @@ func init() {
 		"spec.client_side_defense.policy.js_insertion_rules.rules.#.metadata.disable",
 		"spec.cors_policy.max_age",
 		"spec.data_guard_rules.#.metadata.disable",
+		"spec.ddos_mitigation_rules.#.ip_prefix_list.ipv6_prefixes.#",
 		"spec.ddos_mitigation_rules.#.metadata.disable",
 		"spec.default_pool.origin_servers.#.k8s_service.service_selector",
 		"spec.default_pool.use_tls.use_mtls.tls_certificates.#.private_key.blindfold_secret_info_internal",
@@ -27393,10 +28770,12 @@ func init() {
 		"spec.graphql_rules.#.graphql_settings.max_value_length",
 		"spec.graphql_rules.#.graphql_settings.policy_name",
 		"spec.graphql_rules.#.metadata.disable",
+		"spec.https.http_protocol_options",
 		"spec.https.tls_parameters.tls_certificates.#.private_key.blindfold_secret_info_internal",
 		"spec.https.tls_parameters.tls_certificates.#.private_key.secret_encoding_type",
 		"spec.https.tls_parameters.tls_certificates.#.private_key.vault_secret_info",
 		"spec.https.tls_parameters.tls_certificates.#.private_key.wingman_secret_info",
+		"spec.https_auto_cert.http_protocol_options",
 		"spec.malicious_user_mitigation",
 		"spec.more_option.buffer_policy.max_request_time",
 		"spec.more_option.cookies_to_modify.#",
@@ -27410,9 +28789,11 @@ func init() {
 		"spec.more_option.response_headers_to_add.#.secret_value.secret_encoding_type",
 		"spec.more_option.response_headers_to_add.#.secret_value.vault_secret_info",
 		"spec.more_option.response_headers_to_add.#.secret_value.wingman_secret_info",
+		"spec.origin_server_subset_rule_list",
 		"spec.policy_based_challenge.rule_list.rules.#.metadata.disable",
 		"spec.policy_based_challenge.rule_list.rules.#.spec.client_name",
 		"spec.policy_based_challenge.rule_list.rules.#.spec.client_name_matcher",
+		"spec.policy_based_challenge.rule_list.rules.#.spec.ip_prefix_list.ipv6_prefixes.#",
 		"spec.routes.#.redirect_route.route_redirect.all_params",
 		"spec.routes.#.redirect_route.route_redirect.port_redirect",
 		"spec.routes.#.redirect_route.route_redirect.strip_query_params",
@@ -27626,6 +29007,10 @@ func init() {
 			GoType:    reflect.TypeOf(ves_io_schema.HeaderTransformationType_DefaultHeaderTransformation{}),
 		},
 		{
+			FieldPath: "ves.io.schema.views.http_loadbalancer.ReplaceRequest.spec.loadbalancer_type.https.http_protocol_options.http_protocol_choice.http_protocol_enable_v1_v2",
+			GoType:    reflect.TypeOf(ves_io_schema_virtual_host.HttpProtocolOptions_HttpProtocolEnableV1V2{}),
+		},
+		{
 			FieldPath: "ves.io.schema.views.http_loadbalancer.ReplaceRequest.spec.loadbalancer_type.https.path_normalize_choice.enable_path_normalize",
 			GoType:    reflect.TypeOf(ves_io_schema_views_http_loadbalancer.ProxyTypeHttps_EnablePathNormalize{}),
 		},
@@ -27648,6 +29033,10 @@ func init() {
 		{
 			FieldPath: "ves.io.schema.views.http_loadbalancer.ReplaceRequest.spec.loadbalancer_type.https_auto_cert.header_transformation_type.header_transformation_choice.default_header_transformation",
 			GoType:    reflect.TypeOf(ves_io_schema.HeaderTransformationType_DefaultHeaderTransformation{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.http_loadbalancer.ReplaceRequest.spec.loadbalancer_type.https_auto_cert.http_protocol_options.http_protocol_choice.http_protocol_enable_v1_v2",
+			GoType:    reflect.TypeOf(ves_io_schema_virtual_host.HttpProtocolOptions_HttpProtocolEnableV1V2{}),
 		},
 		{
 			FieldPath: "ves.io.schema.views.http_loadbalancer.ReplaceRequest.spec.loadbalancer_type.https_auto_cert.mtls_choice.no_mtls",
@@ -27740,6 +29129,14 @@ func init() {
 		{
 			FieldPath: "ves.io.schema.views.http_loadbalancer.ReplaceRequest.spec.origin_pool_choice.default_pool.tls_choice.use_tls.tls_config.choice.default_security",
 			GoType:    reflect.TypeOf(ves_io_schema_views.TlsConfig_DefaultSecurity{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.http_loadbalancer.ReplaceRequest.spec.origin_server_subset_rule_list.origin_server_subset_rules.asn_choice.any_asn",
+			GoType:    reflect.TypeOf(ves_io_schema_policy.OriginServerSubsetRule_AnyAsn{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.http_loadbalancer.ReplaceRequest.spec.origin_server_subset_rule_list.origin_server_subset_rules.ip_choice.any_ip",
+			GoType:    reflect.TypeOf(ves_io_schema_policy.OriginServerSubsetRule_AnyIp{}),
 		},
 		{
 			FieldPath: "ves.io.schema.views.http_loadbalancer.ReplaceRequest.spec.protected_cookies.cookie_tampering.disable_tampering_protection",
@@ -27840,11 +29237,16 @@ func init() {
 	}
 
 	MDR.RPCHiddenInternalFieldsRegistry["ves.io.schema.views.http_loadbalancer.API.Replace"] = []string{
+		"spec.api_definition",
 		"spec.api_definitions",
+		"spec.api_protection_rules.api_endpoint_rules.#.client_matcher.ip_prefix_list.ipv6_prefixes.#",
 		"spec.api_protection_rules.api_endpoint_rules.#.metadata.disable",
+		"spec.api_protection_rules.api_groups_rules.#.client_matcher.ip_prefix_list.ipv6_prefixes.#",
 		"spec.api_protection_rules.api_groups_rules.#.metadata.disable",
 		"spec.api_rate_limit.api_endpoint_rules.#.base_path",
-		"spec.api_specification",
+		"spec.api_specification.validation_all_spec_endpoints.fall_through_mode.fall_through_mode_custom.open_api_validation_rules.#.metadata.disable",
+		"spec.api_specification.validation_custom_list.fall_through_mode.fall_through_mode_custom.open_api_validation_rules.#.metadata.disable",
+		"spec.api_specification.validation_custom_list.open_api_validation_rules.#.metadata.disable",
 		"spec.blocked_clients.#.metadata.disable",
 		"spec.bot_defense",
 		"spec.client_side_defense.policy.js_insert_all_pages_except.exclude_list.#.metadata.disable",
@@ -27852,6 +29254,7 @@ func init() {
 		"spec.client_side_defense.policy.js_insertion_rules.rules.#.metadata.disable",
 		"spec.cors_policy.max_age",
 		"spec.data_guard_rules.#.metadata.disable",
+		"spec.ddos_mitigation_rules.#.ip_prefix_list.ipv6_prefixes.#",
 		"spec.ddos_mitigation_rules.#.metadata.disable",
 		"spec.default_pool.origin_servers.#.k8s_service.service_selector",
 		"spec.default_pool.use_tls.use_mtls.tls_certificates.#.private_key.blindfold_secret_info_internal",
@@ -27862,10 +29265,12 @@ func init() {
 		"spec.graphql_rules.#.graphql_settings.max_value_length",
 		"spec.graphql_rules.#.graphql_settings.policy_name",
 		"spec.graphql_rules.#.metadata.disable",
+		"spec.https.http_protocol_options",
 		"spec.https.tls_parameters.tls_certificates.#.private_key.blindfold_secret_info_internal",
 		"spec.https.tls_parameters.tls_certificates.#.private_key.secret_encoding_type",
 		"spec.https.tls_parameters.tls_certificates.#.private_key.vault_secret_info",
 		"spec.https.tls_parameters.tls_certificates.#.private_key.wingman_secret_info",
+		"spec.https_auto_cert.http_protocol_options",
 		"spec.malicious_user_mitigation",
 		"spec.more_option.buffer_policy.max_request_time",
 		"spec.more_option.cookies_to_modify.#",
@@ -27879,9 +29284,11 @@ func init() {
 		"spec.more_option.response_headers_to_add.#.secret_value.secret_encoding_type",
 		"spec.more_option.response_headers_to_add.#.secret_value.vault_secret_info",
 		"spec.more_option.response_headers_to_add.#.secret_value.wingman_secret_info",
+		"spec.origin_server_subset_rule_list",
 		"spec.policy_based_challenge.rule_list.rules.#.metadata.disable",
 		"spec.policy_based_challenge.rule_list.rules.#.spec.client_name",
 		"spec.policy_based_challenge.rule_list.rules.#.spec.client_name_matcher",
+		"spec.policy_based_challenge.rule_list.rules.#.spec.ip_prefix_list.ipv6_prefixes.#",
 		"spec.routes.#.redirect_route.route_redirect.all_params",
 		"spec.routes.#.redirect_route.route_redirect.port_redirect",
 		"spec.routes.#.redirect_route.route_redirect.strip_query_params",
@@ -28080,6 +29487,10 @@ func init() {
 			GoType:    reflect.TypeOf(ves_io_schema.HeaderTransformationType_DefaultHeaderTransformation{}),
 		},
 		{
+			FieldPath: "ves.io.schema.views.http_loadbalancer.crudapi.ObjectCreateReq.spec.gc_spec.loadbalancer_type.https.http_protocol_options.http_protocol_choice.http_protocol_enable_v1_v2",
+			GoType:    reflect.TypeOf(ves_io_schema_virtual_host.HttpProtocolOptions_HttpProtocolEnableV1V2{}),
+		},
+		{
 			FieldPath: "ves.io.schema.views.http_loadbalancer.crudapi.ObjectCreateReq.spec.gc_spec.loadbalancer_type.https.path_normalize_choice.enable_path_normalize",
 			GoType:    reflect.TypeOf(ves_io_schema_views_http_loadbalancer.ProxyTypeHttps_EnablePathNormalize{}),
 		},
@@ -28102,6 +29513,10 @@ func init() {
 		{
 			FieldPath: "ves.io.schema.views.http_loadbalancer.crudapi.ObjectCreateReq.spec.gc_spec.loadbalancer_type.https_auto_cert.header_transformation_type.header_transformation_choice.default_header_transformation",
 			GoType:    reflect.TypeOf(ves_io_schema.HeaderTransformationType_DefaultHeaderTransformation{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.http_loadbalancer.crudapi.ObjectCreateReq.spec.gc_spec.loadbalancer_type.https_auto_cert.http_protocol_options.http_protocol_choice.http_protocol_enable_v1_v2",
+			GoType:    reflect.TypeOf(ves_io_schema_virtual_host.HttpProtocolOptions_HttpProtocolEnableV1V2{}),
 		},
 		{
 			FieldPath: "ves.io.schema.views.http_loadbalancer.crudapi.ObjectCreateReq.spec.gc_spec.loadbalancer_type.https_auto_cert.mtls_choice.no_mtls",
@@ -28194,6 +29609,14 @@ func init() {
 		{
 			FieldPath: "ves.io.schema.views.http_loadbalancer.crudapi.ObjectCreateReq.spec.gc_spec.origin_pool_choice.default_pool.tls_choice.use_tls.tls_config.choice.default_security",
 			GoType:    reflect.TypeOf(ves_io_schema_views.TlsConfig_DefaultSecurity{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.http_loadbalancer.crudapi.ObjectCreateReq.spec.gc_spec.origin_server_subset_rule_list.origin_server_subset_rules.asn_choice.any_asn",
+			GoType:    reflect.TypeOf(ves_io_schema_policy.OriginServerSubsetRule_AnyAsn{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.http_loadbalancer.crudapi.ObjectCreateReq.spec.gc_spec.origin_server_subset_rule_list.origin_server_subset_rules.ip_choice.any_ip",
+			GoType:    reflect.TypeOf(ves_io_schema_policy.OriginServerSubsetRule_AnyIp{}),
 		},
 		{
 			FieldPath: "ves.io.schema.views.http_loadbalancer.crudapi.ObjectCreateReq.spec.gc_spec.protected_cookies.cookie_tampering.disable_tampering_protection",
@@ -28471,6 +29894,10 @@ func init() {
 			GoType:    reflect.TypeOf(ves_io_schema.HeaderTransformationType_DefaultHeaderTransformation{}),
 		},
 		{
+			FieldPath: "ves.io.schema.views.http_loadbalancer.crudapi.ObjectReplaceReq.spec.gc_spec.loadbalancer_type.https.http_protocol_options.http_protocol_choice.http_protocol_enable_v1_v2",
+			GoType:    reflect.TypeOf(ves_io_schema_virtual_host.HttpProtocolOptions_HttpProtocolEnableV1V2{}),
+		},
+		{
 			FieldPath: "ves.io.schema.views.http_loadbalancer.crudapi.ObjectReplaceReq.spec.gc_spec.loadbalancer_type.https.path_normalize_choice.enable_path_normalize",
 			GoType:    reflect.TypeOf(ves_io_schema_views_http_loadbalancer.ProxyTypeHttps_EnablePathNormalize{}),
 		},
@@ -28493,6 +29920,10 @@ func init() {
 		{
 			FieldPath: "ves.io.schema.views.http_loadbalancer.crudapi.ObjectReplaceReq.spec.gc_spec.loadbalancer_type.https_auto_cert.header_transformation_type.header_transformation_choice.default_header_transformation",
 			GoType:    reflect.TypeOf(ves_io_schema.HeaderTransformationType_DefaultHeaderTransformation{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.http_loadbalancer.crudapi.ObjectReplaceReq.spec.gc_spec.loadbalancer_type.https_auto_cert.http_protocol_options.http_protocol_choice.http_protocol_enable_v1_v2",
+			GoType:    reflect.TypeOf(ves_io_schema_virtual_host.HttpProtocolOptions_HttpProtocolEnableV1V2{}),
 		},
 		{
 			FieldPath: "ves.io.schema.views.http_loadbalancer.crudapi.ObjectReplaceReq.spec.gc_spec.loadbalancer_type.https_auto_cert.mtls_choice.no_mtls",
@@ -28585,6 +30016,14 @@ func init() {
 		{
 			FieldPath: "ves.io.schema.views.http_loadbalancer.crudapi.ObjectReplaceReq.spec.gc_spec.origin_pool_choice.default_pool.tls_choice.use_tls.tls_config.choice.default_security",
 			GoType:    reflect.TypeOf(ves_io_schema_views.TlsConfig_DefaultSecurity{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.http_loadbalancer.crudapi.ObjectReplaceReq.spec.gc_spec.origin_server_subset_rule_list.origin_server_subset_rules.asn_choice.any_asn",
+			GoType:    reflect.TypeOf(ves_io_schema_policy.OriginServerSubsetRule_AnyAsn{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.http_loadbalancer.crudapi.ObjectReplaceReq.spec.gc_spec.origin_server_subset_rule_list.origin_server_subset_rules.ip_choice.any_ip",
+			GoType:    reflect.TypeOf(ves_io_schema_policy.OriginServerSubsetRule_AnyIp{}),
 		},
 		{
 			FieldPath: "ves.io.schema.views.http_loadbalancer.crudapi.ObjectReplaceReq.spec.gc_spec.protected_cookies.cookie_tampering.disable_tampering_protection",
@@ -29011,6 +30450,7 @@ func init() {
 
 	MDR.RPCHiddenInternalFieldsRegistry["ves.io.schema.views.rate_limiter_policy.API.Create"] = []string{
 		"spec.rules.#.metadata.disable",
+		"spec.rules.#.spec.ip_prefix_list.ipv6_prefixes.#",
 	}
 
 	MDR.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.views.rate_limiter_policy.API.Get"] = []string{
@@ -29030,6 +30470,7 @@ func init() {
 
 	MDR.RPCHiddenInternalFieldsRegistry["ves.io.schema.views.rate_limiter_policy.API.Replace"] = []string{
 		"spec.rules.#.metadata.disable",
+		"spec.rules.#.spec.ip_prefix_list.ipv6_prefixes.#",
 	}
 
 	MDR.RPCOneofDefaultChoiceFieldsRegistry["ves.io.schema.views.rate_limiter_policy.crudapi.API.Create"] = []svcfw.OneofDefaultChoiceField{
@@ -29051,6 +30492,670 @@ func init() {
 		{
 			FieldPath: "ves.io.schema.views.rate_limiter_policy.crudapi.ObjectReplaceReq.spec.gc_spec.rules.spec.country_choice.any_country",
 			GoType:    reflect.TypeOf(ves_io_schema_service_policy_rule.RateLimiterRuleSpec_AnyCountry{}),
+		},
+	}
+
+	MDR.RPCOneofDefaultChoiceFieldsRegistry["ves.io.schema.views.securemesh_site.API.Create"] = []svcfw.OneofDefaultChoiceField{
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site.CreateRequest.spec.blocked_services_choice.default_blocked_services",
+			GoType:    reflect.TypeOf(ves_io_schema_views_securemesh_site.CreateSpecType_DefaultBlockedServices{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site.CreateRequest.spec.bond_choice.no_bond_devices",
+			GoType:    reflect.TypeOf(ves_io_schema_views_securemesh_site.CreateSpecType_NoBondDevices{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site.CreateRequest.spec.logs_receiver_choice.logs_streaming_disabled",
+			GoType:    reflect.TypeOf(ves_io_schema_views_securemesh_site.CreateSpecType_LogsStreamingDisabled{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site.CreateRequest.spec.network_cfg_choice.custom_network_config.forward_proxy_choice.no_forward_proxy",
+			GoType:    reflect.TypeOf(ves_io_schema_views_securemesh_site.SmsNetworkConfiguration_NoForwardProxy{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site.CreateRequest.spec.network_cfg_choice.custom_network_config.global_network_choice.global_network_list.global_network_connections.forward_proxy_choice.enable_forward_proxy.tls_interception_choice.tls_intercept.interception_policy_choice.enable_for_all_domains",
+			GoType:    reflect.TypeOf(ves_io_schema.TlsInterceptionType_EnableForAllDomains{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site.CreateRequest.spec.network_cfg_choice.custom_network_config.global_network_choice.global_network_list.global_network_connections.forward_proxy_choice.enable_forward_proxy.tls_interception_choice.tls_intercept.interception_policy_choice.policy.interception_rules.enable_disable_choice.disable_interception",
+			GoType:    reflect.TypeOf(ves_io_schema.TlsInterceptionRule_DisableInterception{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site.CreateRequest.spec.network_cfg_choice.custom_network_config.global_network_choice.global_network_list.global_network_connections.forward_proxy_choice.enable_forward_proxy.tls_interception_choice.tls_intercept.trusted_ca_choice.volterra_trusted_ca",
+			GoType:    reflect.TypeOf(ves_io_schema.TlsInterceptionType_VolterraTrustedCa{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site.CreateRequest.spec.network_cfg_choice.custom_network_config.global_network_choice.no_global_network",
+			GoType:    reflect.TypeOf(ves_io_schema_views_securemesh_site.SmsNetworkConfiguration_NoGlobalNetwork{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site.CreateRequest.spec.network_cfg_choice.custom_network_config.interface_choice.default_interface_config",
+			GoType:    reflect.TypeOf(ves_io_schema_views_securemesh_site.SmsNetworkConfiguration_DefaultInterfaceConfig{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site.CreateRequest.spec.network_cfg_choice.custom_network_config.interface_choice.interface_list.interfaces.interface_choice.dedicated_interface.node_choice.cluster",
+			GoType:    reflect.TypeOf(ves_io_schema_network_interface.DedicatedInterfaceType_Cluster{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site.CreateRequest.spec.network_cfg_choice.custom_network_config.interface_choice.interface_list.interfaces.interface_choice.dedicated_interface.primary_choice.not_primary",
+			GoType:    reflect.TypeOf(ves_io_schema_network_interface.DedicatedInterfaceType_NotPrimary{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site.CreateRequest.spec.network_cfg_choice.custom_network_config.interface_choice.interface_list.interfaces.interface_choice.dedicated_management_interface.node_choice.cluster",
+			GoType:    reflect.TypeOf(ves_io_schema_network_interface.DedicatedManagementInterfaceType_Cluster{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site.CreateRequest.spec.network_cfg_choice.custom_network_config.interface_choice.interface_list.interfaces.interface_choice.ethernet_interface.address_choice.dhcp_client",
+			GoType:    reflect.TypeOf(ves_io_schema_network_interface.EthernetInterfaceType_DhcpClient{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site.CreateRequest.spec.network_cfg_choice.custom_network_config.interface_choice.interface_list.interfaces.interface_choice.ethernet_interface.address_choice.dhcp_server.dhcp_networks.dns_choice.same_as_dgw",
+			GoType:    reflect.TypeOf(ves_io_schema_network_interface.DHCPNetworkType_SameAsDgw{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site.CreateRequest.spec.network_cfg_choice.custom_network_config.interface_choice.interface_list.interfaces.interface_choice.ethernet_interface.address_choice.dhcp_server.dhcp_networks.gateway_choice.first_address",
+			GoType:    reflect.TypeOf(ves_io_schema_network_interface.DHCPNetworkType_FirstAddress{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site.CreateRequest.spec.network_cfg_choice.custom_network_config.interface_choice.interface_list.interfaces.interface_choice.ethernet_interface.address_choice.dhcp_server.interfaces_addressing_choice.automatic_from_start",
+			GoType:    reflect.TypeOf(ves_io_schema_network_interface.DHCPServerParametersType_AutomaticFromStart{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site.CreateRequest.spec.network_cfg_choice.custom_network_config.interface_choice.interface_list.interfaces.interface_choice.ethernet_interface.network_choice.site_local_network",
+			GoType:    reflect.TypeOf(ves_io_schema_network_interface.EthernetInterfaceType_SiteLocalNetwork{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site.CreateRequest.spec.network_cfg_choice.custom_network_config.interface_choice.interface_list.interfaces.interface_choice.ethernet_interface.node_choice.cluster",
+			GoType:    reflect.TypeOf(ves_io_schema_network_interface.EthernetInterfaceType_Cluster{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site.CreateRequest.spec.network_cfg_choice.custom_network_config.interface_choice.interface_list.interfaces.interface_choice.ethernet_interface.primary_choice.not_primary",
+			GoType:    reflect.TypeOf(ves_io_schema_network_interface.EthernetInterfaceType_NotPrimary{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site.CreateRequest.spec.network_cfg_choice.custom_network_config.interface_choice.interface_list.interfaces.interface_choice.ethernet_interface.vlan_choice.untagged",
+			GoType:    reflect.TypeOf(ves_io_schema_network_interface.EthernetInterfaceType_Untagged{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site.CreateRequest.spec.network_cfg_choice.custom_network_config.interface_choice.interface_list.interfaces.interface_choice.loopback_interface.address_choice.dhcp_client",
+			GoType:    reflect.TypeOf(ves_io_schema_network_interface.LoopbackInterfaceType_DhcpClient{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site.CreateRequest.spec.network_cfg_choice.custom_network_config.interface_choice.interface_list.interfaces.interface_choice.loopback_interface.address_choice.dhcp_server.dhcp_networks.dns_choice.same_as_dgw",
+			GoType:    reflect.TypeOf(ves_io_schema_network_interface.DHCPNetworkType_SameAsDgw{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site.CreateRequest.spec.network_cfg_choice.custom_network_config.interface_choice.interface_list.interfaces.interface_choice.loopback_interface.address_choice.dhcp_server.dhcp_networks.gateway_choice.first_address",
+			GoType:    reflect.TypeOf(ves_io_schema_network_interface.DHCPNetworkType_FirstAddress{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site.CreateRequest.spec.network_cfg_choice.custom_network_config.interface_choice.interface_list.interfaces.interface_choice.loopback_interface.address_choice.dhcp_server.interfaces_addressing_choice.automatic_from_start",
+			GoType:    reflect.TypeOf(ves_io_schema_network_interface.DHCPServerParametersType_AutomaticFromStart{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site.CreateRequest.spec.network_cfg_choice.custom_network_config.interface_choice.interface_list.interfaces.interface_choice.loopback_interface.network_choice.site_local_network",
+			GoType:    reflect.TypeOf(ves_io_schema_network_interface.LoopbackInterfaceType_SiteLocalNetwork{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site.CreateRequest.spec.network_cfg_choice.custom_network_config.interface_choice.interface_list.interfaces.interface_choice.loopback_interface.node_choice.cluster",
+			GoType:    reflect.TypeOf(ves_io_schema_network_interface.LoopbackInterfaceType_Cluster{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site.CreateRequest.spec.network_cfg_choice.custom_network_config.network_policy_choice.no_network_policy",
+			GoType:    reflect.TypeOf(ves_io_schema_views_securemesh_site.SmsNetworkConfiguration_NoNetworkPolicy{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site.CreateRequest.spec.network_cfg_choice.custom_network_config.site_mesh_group_choice.sm_connection_pvt_ip",
+			GoType:    reflect.TypeOf(ves_io_schema_views_securemesh_site.SmsNetworkConfiguration_SmConnectionPvtIp{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site.CreateRequest.spec.network_cfg_choice.custom_network_config.sli_choice.sli_config.dc_cluster_group_choice.no_dc_cluster_group",
+			GoType:    reflect.TypeOf(ves_io_schema_views_securemesh_site.VnConfiguration_NoDcClusterGroup{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site.CreateRequest.spec.network_cfg_choice.custom_network_config.sli_choice.sli_config.static_route_choice.no_static_routes",
+			GoType:    reflect.TypeOf(ves_io_schema_views_securemesh_site.VnConfiguration_NoStaticRoutes{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site.CreateRequest.spec.network_cfg_choice.custom_network_config.slo_choice.default_config",
+			GoType:    reflect.TypeOf(ves_io_schema_views_securemesh_site.SmsNetworkConfiguration_DefaultConfig{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site.CreateRequest.spec.network_cfg_choice.custom_network_config.slo_choice.slo_config.dc_cluster_group_choice.no_dc_cluster_group",
+			GoType:    reflect.TypeOf(ves_io_schema_views_securemesh_site.VnConfiguration_NoDcClusterGroup{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site.CreateRequest.spec.network_cfg_choice.custom_network_config.slo_choice.slo_config.static_route_choice.no_static_routes",
+			GoType:    reflect.TypeOf(ves_io_schema_views_securemesh_site.VnConfiguration_NoStaticRoutes{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site.CreateRequest.spec.network_cfg_choice.default_network_config",
+			GoType:    reflect.TypeOf(ves_io_schema_views_securemesh_site.CreateSpecType_DefaultNetworkConfig{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site.CreateRequest.spec.offline_survivability_mode.offline_survivability_mode_choice.no_offline_survivability_mode",
+			GoType:    reflect.TypeOf(ves_io_schema_views.OfflineSurvivabilityModeType_NoOfflineSurvivabilityMode{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site.CreateRequest.spec.os.operating_system_version_choice.default_os_version",
+			GoType:    reflect.TypeOf(ves_io_schema_views.OperatingSystemType_DefaultOsVersion{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site.CreateRequest.spec.performance_enhancement_mode.perf_mode_choice.perf_mode_l3_enhanced.perf_mode_choice.no_jumbo",
+			GoType:    reflect.TypeOf(ves_io_schema_views.L3PerformanceEnhancementType_NoJumbo{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site.CreateRequest.spec.performance_enhancement_mode.perf_mode_choice.perf_mode_l7_enhanced",
+			GoType:    reflect.TypeOf(ves_io_schema_views.PerformanceEnhancementModeType_PerfModeL7Enhanced{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site.CreateRequest.spec.sw.volterra_sw_version_choice.default_sw_version",
+			GoType:    reflect.TypeOf(ves_io_schema_views.VolterraSoftwareType_DefaultSwVersion{}),
+		},
+	}
+
+	MDR.RPCHiddenInternalFieldsRegistry["ves.io.schema.views.securemesh_site.API.Create"] = []string{
+		"spec.custom_network_config.global_network_list.global_network_connections.#.enable_forward_proxy.tls_intercept.custom_certificate.private_key.blindfold_secret_info_internal",
+		"spec.custom_network_config.global_network_list.global_network_connections.#.enable_forward_proxy.tls_intercept.custom_certificate.private_key.secret_encoding_type",
+		"spec.custom_network_config.global_network_list.global_network_connections.#.enable_forward_proxy.tls_intercept.custom_certificate.private_key.vault_secret_info",
+		"spec.custom_network_config.global_network_list.global_network_connections.#.enable_forward_proxy.tls_intercept.custom_certificate.private_key.wingman_secret_info",
+		"spec.custom_network_config.interface_list.interfaces.#.ethernet_interface.dhcp_server.dhcp_networks.#.network_prefix_allocator",
+		"spec.custom_network_config.interface_list.interfaces.#.ethernet_interface.dhcp_server.dhcp_networks.#.pools.#.exclude",
+		"spec.custom_network_config.interface_list.interfaces.#.ethernet_interface.dhcp_server.dhcp_option82_tag",
+		"spec.custom_network_config.interface_list.interfaces.#.ethernet_interface.inside_network",
+		"spec.custom_network_config.interface_list.interfaces.#.ethernet_interface.ip_fabric_network",
+		"spec.custom_network_config.interface_list.interfaces.#.ethernet_interface.srv6_network",
+		"spec.custom_network_config.interface_list.interfaces.#.ethernet_interface.static_ip.fleet_static_ip",
+		"spec.custom_network_config.interface_list.interfaces.#.ethernet_interface.static_ipv6_address.fleet_static_ip",
+		"spec.custom_network_config.interface_list.interfaces.#.loopback_interface",
+	}
+
+	MDR.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.views.securemesh_site.API.Get"] = []string{
+		"object",
+	}
+
+	MDR.RPCOneofDefaultChoiceFieldsRegistry["ves.io.schema.views.securemesh_site.API.Replace"] = []svcfw.OneofDefaultChoiceField{
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site.ReplaceRequest.spec.blocked_services_choice.default_blocked_services",
+			GoType:    reflect.TypeOf(ves_io_schema_views_securemesh_site.ReplaceSpecType_DefaultBlockedServices{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site.ReplaceRequest.spec.bond_choice.no_bond_devices",
+			GoType:    reflect.TypeOf(ves_io_schema_views_securemesh_site.ReplaceSpecType_NoBondDevices{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site.ReplaceRequest.spec.logs_receiver_choice.logs_streaming_disabled",
+			GoType:    reflect.TypeOf(ves_io_schema_views_securemesh_site.ReplaceSpecType_LogsStreamingDisabled{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site.ReplaceRequest.spec.network_cfg_choice.custom_network_config.forward_proxy_choice.no_forward_proxy",
+			GoType:    reflect.TypeOf(ves_io_schema_views_securemesh_site.SmsNetworkConfiguration_NoForwardProxy{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site.ReplaceRequest.spec.network_cfg_choice.custom_network_config.global_network_choice.global_network_list.global_network_connections.forward_proxy_choice.enable_forward_proxy.tls_interception_choice.tls_intercept.interception_policy_choice.enable_for_all_domains",
+			GoType:    reflect.TypeOf(ves_io_schema.TlsInterceptionType_EnableForAllDomains{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site.ReplaceRequest.spec.network_cfg_choice.custom_network_config.global_network_choice.global_network_list.global_network_connections.forward_proxy_choice.enable_forward_proxy.tls_interception_choice.tls_intercept.interception_policy_choice.policy.interception_rules.enable_disable_choice.disable_interception",
+			GoType:    reflect.TypeOf(ves_io_schema.TlsInterceptionRule_DisableInterception{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site.ReplaceRequest.spec.network_cfg_choice.custom_network_config.global_network_choice.global_network_list.global_network_connections.forward_proxy_choice.enable_forward_proxy.tls_interception_choice.tls_intercept.trusted_ca_choice.volterra_trusted_ca",
+			GoType:    reflect.TypeOf(ves_io_schema.TlsInterceptionType_VolterraTrustedCa{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site.ReplaceRequest.spec.network_cfg_choice.custom_network_config.global_network_choice.no_global_network",
+			GoType:    reflect.TypeOf(ves_io_schema_views_securemesh_site.SmsNetworkConfiguration_NoGlobalNetwork{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site.ReplaceRequest.spec.network_cfg_choice.custom_network_config.interface_choice.default_interface_config",
+			GoType:    reflect.TypeOf(ves_io_schema_views_securemesh_site.SmsNetworkConfiguration_DefaultInterfaceConfig{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site.ReplaceRequest.spec.network_cfg_choice.custom_network_config.interface_choice.interface_list.interfaces.interface_choice.dedicated_interface.node_choice.cluster",
+			GoType:    reflect.TypeOf(ves_io_schema_network_interface.DedicatedInterfaceType_Cluster{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site.ReplaceRequest.spec.network_cfg_choice.custom_network_config.interface_choice.interface_list.interfaces.interface_choice.dedicated_interface.primary_choice.not_primary",
+			GoType:    reflect.TypeOf(ves_io_schema_network_interface.DedicatedInterfaceType_NotPrimary{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site.ReplaceRequest.spec.network_cfg_choice.custom_network_config.interface_choice.interface_list.interfaces.interface_choice.dedicated_management_interface.node_choice.cluster",
+			GoType:    reflect.TypeOf(ves_io_schema_network_interface.DedicatedManagementInterfaceType_Cluster{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site.ReplaceRequest.spec.network_cfg_choice.custom_network_config.interface_choice.interface_list.interfaces.interface_choice.ethernet_interface.address_choice.dhcp_client",
+			GoType:    reflect.TypeOf(ves_io_schema_network_interface.EthernetInterfaceType_DhcpClient{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site.ReplaceRequest.spec.network_cfg_choice.custom_network_config.interface_choice.interface_list.interfaces.interface_choice.ethernet_interface.address_choice.dhcp_server.dhcp_networks.dns_choice.same_as_dgw",
+			GoType:    reflect.TypeOf(ves_io_schema_network_interface.DHCPNetworkType_SameAsDgw{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site.ReplaceRequest.spec.network_cfg_choice.custom_network_config.interface_choice.interface_list.interfaces.interface_choice.ethernet_interface.address_choice.dhcp_server.dhcp_networks.gateway_choice.first_address",
+			GoType:    reflect.TypeOf(ves_io_schema_network_interface.DHCPNetworkType_FirstAddress{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site.ReplaceRequest.spec.network_cfg_choice.custom_network_config.interface_choice.interface_list.interfaces.interface_choice.ethernet_interface.address_choice.dhcp_server.interfaces_addressing_choice.automatic_from_start",
+			GoType:    reflect.TypeOf(ves_io_schema_network_interface.DHCPServerParametersType_AutomaticFromStart{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site.ReplaceRequest.spec.network_cfg_choice.custom_network_config.interface_choice.interface_list.interfaces.interface_choice.ethernet_interface.network_choice.site_local_network",
+			GoType:    reflect.TypeOf(ves_io_schema_network_interface.EthernetInterfaceType_SiteLocalNetwork{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site.ReplaceRequest.spec.network_cfg_choice.custom_network_config.interface_choice.interface_list.interfaces.interface_choice.ethernet_interface.node_choice.cluster",
+			GoType:    reflect.TypeOf(ves_io_schema_network_interface.EthernetInterfaceType_Cluster{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site.ReplaceRequest.spec.network_cfg_choice.custom_network_config.interface_choice.interface_list.interfaces.interface_choice.ethernet_interface.primary_choice.not_primary",
+			GoType:    reflect.TypeOf(ves_io_schema_network_interface.EthernetInterfaceType_NotPrimary{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site.ReplaceRequest.spec.network_cfg_choice.custom_network_config.interface_choice.interface_list.interfaces.interface_choice.ethernet_interface.vlan_choice.untagged",
+			GoType:    reflect.TypeOf(ves_io_schema_network_interface.EthernetInterfaceType_Untagged{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site.ReplaceRequest.spec.network_cfg_choice.custom_network_config.interface_choice.interface_list.interfaces.interface_choice.loopback_interface.address_choice.dhcp_client",
+			GoType:    reflect.TypeOf(ves_io_schema_network_interface.LoopbackInterfaceType_DhcpClient{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site.ReplaceRequest.spec.network_cfg_choice.custom_network_config.interface_choice.interface_list.interfaces.interface_choice.loopback_interface.address_choice.dhcp_server.dhcp_networks.dns_choice.same_as_dgw",
+			GoType:    reflect.TypeOf(ves_io_schema_network_interface.DHCPNetworkType_SameAsDgw{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site.ReplaceRequest.spec.network_cfg_choice.custom_network_config.interface_choice.interface_list.interfaces.interface_choice.loopback_interface.address_choice.dhcp_server.dhcp_networks.gateway_choice.first_address",
+			GoType:    reflect.TypeOf(ves_io_schema_network_interface.DHCPNetworkType_FirstAddress{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site.ReplaceRequest.spec.network_cfg_choice.custom_network_config.interface_choice.interface_list.interfaces.interface_choice.loopback_interface.address_choice.dhcp_server.interfaces_addressing_choice.automatic_from_start",
+			GoType:    reflect.TypeOf(ves_io_schema_network_interface.DHCPServerParametersType_AutomaticFromStart{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site.ReplaceRequest.spec.network_cfg_choice.custom_network_config.interface_choice.interface_list.interfaces.interface_choice.loopback_interface.network_choice.site_local_network",
+			GoType:    reflect.TypeOf(ves_io_schema_network_interface.LoopbackInterfaceType_SiteLocalNetwork{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site.ReplaceRequest.spec.network_cfg_choice.custom_network_config.interface_choice.interface_list.interfaces.interface_choice.loopback_interface.node_choice.cluster",
+			GoType:    reflect.TypeOf(ves_io_schema_network_interface.LoopbackInterfaceType_Cluster{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site.ReplaceRequest.spec.network_cfg_choice.custom_network_config.network_policy_choice.no_network_policy",
+			GoType:    reflect.TypeOf(ves_io_schema_views_securemesh_site.SmsNetworkConfiguration_NoNetworkPolicy{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site.ReplaceRequest.spec.network_cfg_choice.custom_network_config.site_mesh_group_choice.sm_connection_pvt_ip",
+			GoType:    reflect.TypeOf(ves_io_schema_views_securemesh_site.SmsNetworkConfiguration_SmConnectionPvtIp{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site.ReplaceRequest.spec.network_cfg_choice.custom_network_config.sli_choice.sli_config.dc_cluster_group_choice.no_dc_cluster_group",
+			GoType:    reflect.TypeOf(ves_io_schema_views_securemesh_site.VnConfiguration_NoDcClusterGroup{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site.ReplaceRequest.spec.network_cfg_choice.custom_network_config.sli_choice.sli_config.static_route_choice.no_static_routes",
+			GoType:    reflect.TypeOf(ves_io_schema_views_securemesh_site.VnConfiguration_NoStaticRoutes{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site.ReplaceRequest.spec.network_cfg_choice.custom_network_config.slo_choice.default_config",
+			GoType:    reflect.TypeOf(ves_io_schema_views_securemesh_site.SmsNetworkConfiguration_DefaultConfig{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site.ReplaceRequest.spec.network_cfg_choice.custom_network_config.slo_choice.slo_config.dc_cluster_group_choice.no_dc_cluster_group",
+			GoType:    reflect.TypeOf(ves_io_schema_views_securemesh_site.VnConfiguration_NoDcClusterGroup{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site.ReplaceRequest.spec.network_cfg_choice.custom_network_config.slo_choice.slo_config.static_route_choice.no_static_routes",
+			GoType:    reflect.TypeOf(ves_io_schema_views_securemesh_site.VnConfiguration_NoStaticRoutes{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site.ReplaceRequest.spec.network_cfg_choice.default_network_config",
+			GoType:    reflect.TypeOf(ves_io_schema_views_securemesh_site.ReplaceSpecType_DefaultNetworkConfig{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site.ReplaceRequest.spec.offline_survivability_mode.offline_survivability_mode_choice.no_offline_survivability_mode",
+			GoType:    reflect.TypeOf(ves_io_schema_views.OfflineSurvivabilityModeType_NoOfflineSurvivabilityMode{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site.ReplaceRequest.spec.os.operating_system_version_choice.default_os_version",
+			GoType:    reflect.TypeOf(ves_io_schema_views.OperatingSystemType_DefaultOsVersion{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site.ReplaceRequest.spec.sw.volterra_sw_version_choice.default_sw_version",
+			GoType:    reflect.TypeOf(ves_io_schema_views.VolterraSoftwareType_DefaultSwVersion{}),
+		},
+	}
+
+	MDR.RPCHiddenInternalFieldsRegistry["ves.io.schema.views.securemesh_site.API.Replace"] = []string{
+		"spec.custom_network_config.global_network_list.global_network_connections.#.enable_forward_proxy.tls_intercept.custom_certificate.private_key.blindfold_secret_info_internal",
+		"spec.custom_network_config.global_network_list.global_network_connections.#.enable_forward_proxy.tls_intercept.custom_certificate.private_key.secret_encoding_type",
+		"spec.custom_network_config.global_network_list.global_network_connections.#.enable_forward_proxy.tls_intercept.custom_certificate.private_key.vault_secret_info",
+		"spec.custom_network_config.global_network_list.global_network_connections.#.enable_forward_proxy.tls_intercept.custom_certificate.private_key.wingman_secret_info",
+		"spec.custom_network_config.interface_list.interfaces.#.ethernet_interface.dhcp_server.dhcp_networks.#.network_prefix_allocator",
+		"spec.custom_network_config.interface_list.interfaces.#.ethernet_interface.dhcp_server.dhcp_networks.#.pools.#.exclude",
+		"spec.custom_network_config.interface_list.interfaces.#.ethernet_interface.dhcp_server.dhcp_option82_tag",
+		"spec.custom_network_config.interface_list.interfaces.#.ethernet_interface.inside_network",
+		"spec.custom_network_config.interface_list.interfaces.#.ethernet_interface.ip_fabric_network",
+		"spec.custom_network_config.interface_list.interfaces.#.ethernet_interface.srv6_network",
+		"spec.custom_network_config.interface_list.interfaces.#.ethernet_interface.static_ip.fleet_static_ip",
+		"spec.custom_network_config.interface_list.interfaces.#.ethernet_interface.static_ipv6_address.fleet_static_ip",
+		"spec.custom_network_config.interface_list.interfaces.#.loopback_interface",
+	}
+
+	MDR.RPCOneofDefaultChoiceFieldsRegistry["ves.io.schema.views.securemesh_site.crudapi.API.Create"] = []svcfw.OneofDefaultChoiceField{
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site.crudapi.ObjectCreateReq.spec.gc_spec.blocked_services_choice.default_blocked_services",
+			GoType:    reflect.TypeOf(ves_io_schema_views_securemesh_site.GlobalSpecType_DefaultBlockedServices{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site.crudapi.ObjectCreateReq.spec.gc_spec.bond_choice.no_bond_devices",
+			GoType:    reflect.TypeOf(ves_io_schema_views_securemesh_site.GlobalSpecType_NoBondDevices{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site.crudapi.ObjectCreateReq.spec.gc_spec.logs_receiver_choice.logs_streaming_disabled",
+			GoType:    reflect.TypeOf(ves_io_schema_views_securemesh_site.GlobalSpecType_LogsStreamingDisabled{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site.crudapi.ObjectCreateReq.spec.gc_spec.network_cfg_choice.custom_network_config.forward_proxy_choice.no_forward_proxy",
+			GoType:    reflect.TypeOf(ves_io_schema_views_securemesh_site.SmsNetworkConfiguration_NoForwardProxy{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site.crudapi.ObjectCreateReq.spec.gc_spec.network_cfg_choice.custom_network_config.global_network_choice.global_network_list.global_network_connections.forward_proxy_choice.enable_forward_proxy.tls_interception_choice.tls_intercept.interception_policy_choice.enable_for_all_domains",
+			GoType:    reflect.TypeOf(ves_io_schema.TlsInterceptionType_EnableForAllDomains{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site.crudapi.ObjectCreateReq.spec.gc_spec.network_cfg_choice.custom_network_config.global_network_choice.global_network_list.global_network_connections.forward_proxy_choice.enable_forward_proxy.tls_interception_choice.tls_intercept.interception_policy_choice.policy.interception_rules.enable_disable_choice.disable_interception",
+			GoType:    reflect.TypeOf(ves_io_schema.TlsInterceptionRule_DisableInterception{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site.crudapi.ObjectCreateReq.spec.gc_spec.network_cfg_choice.custom_network_config.global_network_choice.global_network_list.global_network_connections.forward_proxy_choice.enable_forward_proxy.tls_interception_choice.tls_intercept.trusted_ca_choice.volterra_trusted_ca",
+			GoType:    reflect.TypeOf(ves_io_schema.TlsInterceptionType_VolterraTrustedCa{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site.crudapi.ObjectCreateReq.spec.gc_spec.network_cfg_choice.custom_network_config.global_network_choice.no_global_network",
+			GoType:    reflect.TypeOf(ves_io_schema_views_securemesh_site.SmsNetworkConfiguration_NoGlobalNetwork{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site.crudapi.ObjectCreateReq.spec.gc_spec.network_cfg_choice.custom_network_config.interface_choice.default_interface_config",
+			GoType:    reflect.TypeOf(ves_io_schema_views_securemesh_site.SmsNetworkConfiguration_DefaultInterfaceConfig{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site.crudapi.ObjectCreateReq.spec.gc_spec.network_cfg_choice.custom_network_config.interface_choice.interface_list.interfaces.interface_choice.dedicated_interface.node_choice.cluster",
+			GoType:    reflect.TypeOf(ves_io_schema_network_interface.DedicatedInterfaceType_Cluster{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site.crudapi.ObjectCreateReq.spec.gc_spec.network_cfg_choice.custom_network_config.interface_choice.interface_list.interfaces.interface_choice.dedicated_interface.primary_choice.not_primary",
+			GoType:    reflect.TypeOf(ves_io_schema_network_interface.DedicatedInterfaceType_NotPrimary{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site.crudapi.ObjectCreateReq.spec.gc_spec.network_cfg_choice.custom_network_config.interface_choice.interface_list.interfaces.interface_choice.dedicated_management_interface.node_choice.cluster",
+			GoType:    reflect.TypeOf(ves_io_schema_network_interface.DedicatedManagementInterfaceType_Cluster{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site.crudapi.ObjectCreateReq.spec.gc_spec.network_cfg_choice.custom_network_config.interface_choice.interface_list.interfaces.interface_choice.ethernet_interface.address_choice.dhcp_client",
+			GoType:    reflect.TypeOf(ves_io_schema_network_interface.EthernetInterfaceType_DhcpClient{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site.crudapi.ObjectCreateReq.spec.gc_spec.network_cfg_choice.custom_network_config.interface_choice.interface_list.interfaces.interface_choice.ethernet_interface.address_choice.dhcp_server.dhcp_networks.dns_choice.same_as_dgw",
+			GoType:    reflect.TypeOf(ves_io_schema_network_interface.DHCPNetworkType_SameAsDgw{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site.crudapi.ObjectCreateReq.spec.gc_spec.network_cfg_choice.custom_network_config.interface_choice.interface_list.interfaces.interface_choice.ethernet_interface.address_choice.dhcp_server.dhcp_networks.gateway_choice.first_address",
+			GoType:    reflect.TypeOf(ves_io_schema_network_interface.DHCPNetworkType_FirstAddress{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site.crudapi.ObjectCreateReq.spec.gc_spec.network_cfg_choice.custom_network_config.interface_choice.interface_list.interfaces.interface_choice.ethernet_interface.address_choice.dhcp_server.interfaces_addressing_choice.automatic_from_start",
+			GoType:    reflect.TypeOf(ves_io_schema_network_interface.DHCPServerParametersType_AutomaticFromStart{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site.crudapi.ObjectCreateReq.spec.gc_spec.network_cfg_choice.custom_network_config.interface_choice.interface_list.interfaces.interface_choice.ethernet_interface.network_choice.site_local_network",
+			GoType:    reflect.TypeOf(ves_io_schema_network_interface.EthernetInterfaceType_SiteLocalNetwork{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site.crudapi.ObjectCreateReq.spec.gc_spec.network_cfg_choice.custom_network_config.interface_choice.interface_list.interfaces.interface_choice.ethernet_interface.node_choice.cluster",
+			GoType:    reflect.TypeOf(ves_io_schema_network_interface.EthernetInterfaceType_Cluster{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site.crudapi.ObjectCreateReq.spec.gc_spec.network_cfg_choice.custom_network_config.interface_choice.interface_list.interfaces.interface_choice.ethernet_interface.primary_choice.not_primary",
+			GoType:    reflect.TypeOf(ves_io_schema_network_interface.EthernetInterfaceType_NotPrimary{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site.crudapi.ObjectCreateReq.spec.gc_spec.network_cfg_choice.custom_network_config.interface_choice.interface_list.interfaces.interface_choice.ethernet_interface.vlan_choice.untagged",
+			GoType:    reflect.TypeOf(ves_io_schema_network_interface.EthernetInterfaceType_Untagged{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site.crudapi.ObjectCreateReq.spec.gc_spec.network_cfg_choice.custom_network_config.interface_choice.interface_list.interfaces.interface_choice.loopback_interface.address_choice.dhcp_client",
+			GoType:    reflect.TypeOf(ves_io_schema_network_interface.LoopbackInterfaceType_DhcpClient{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site.crudapi.ObjectCreateReq.spec.gc_spec.network_cfg_choice.custom_network_config.interface_choice.interface_list.interfaces.interface_choice.loopback_interface.address_choice.dhcp_server.dhcp_networks.dns_choice.same_as_dgw",
+			GoType:    reflect.TypeOf(ves_io_schema_network_interface.DHCPNetworkType_SameAsDgw{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site.crudapi.ObjectCreateReq.spec.gc_spec.network_cfg_choice.custom_network_config.interface_choice.interface_list.interfaces.interface_choice.loopback_interface.address_choice.dhcp_server.dhcp_networks.gateway_choice.first_address",
+			GoType:    reflect.TypeOf(ves_io_schema_network_interface.DHCPNetworkType_FirstAddress{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site.crudapi.ObjectCreateReq.spec.gc_spec.network_cfg_choice.custom_network_config.interface_choice.interface_list.interfaces.interface_choice.loopback_interface.address_choice.dhcp_server.interfaces_addressing_choice.automatic_from_start",
+			GoType:    reflect.TypeOf(ves_io_schema_network_interface.DHCPServerParametersType_AutomaticFromStart{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site.crudapi.ObjectCreateReq.spec.gc_spec.network_cfg_choice.custom_network_config.interface_choice.interface_list.interfaces.interface_choice.loopback_interface.network_choice.site_local_network",
+			GoType:    reflect.TypeOf(ves_io_schema_network_interface.LoopbackInterfaceType_SiteLocalNetwork{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site.crudapi.ObjectCreateReq.spec.gc_spec.network_cfg_choice.custom_network_config.interface_choice.interface_list.interfaces.interface_choice.loopback_interface.node_choice.cluster",
+			GoType:    reflect.TypeOf(ves_io_schema_network_interface.LoopbackInterfaceType_Cluster{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site.crudapi.ObjectCreateReq.spec.gc_spec.network_cfg_choice.custom_network_config.network_policy_choice.no_network_policy",
+			GoType:    reflect.TypeOf(ves_io_schema_views_securemesh_site.SmsNetworkConfiguration_NoNetworkPolicy{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site.crudapi.ObjectCreateReq.spec.gc_spec.network_cfg_choice.custom_network_config.site_mesh_group_choice.sm_connection_pvt_ip",
+			GoType:    reflect.TypeOf(ves_io_schema_views_securemesh_site.SmsNetworkConfiguration_SmConnectionPvtIp{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site.crudapi.ObjectCreateReq.spec.gc_spec.network_cfg_choice.custom_network_config.sli_choice.sli_config.dc_cluster_group_choice.no_dc_cluster_group",
+			GoType:    reflect.TypeOf(ves_io_schema_views_securemesh_site.VnConfiguration_NoDcClusterGroup{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site.crudapi.ObjectCreateReq.spec.gc_spec.network_cfg_choice.custom_network_config.sli_choice.sli_config.static_route_choice.no_static_routes",
+			GoType:    reflect.TypeOf(ves_io_schema_views_securemesh_site.VnConfiguration_NoStaticRoutes{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site.crudapi.ObjectCreateReq.spec.gc_spec.network_cfg_choice.custom_network_config.slo_choice.default_config",
+			GoType:    reflect.TypeOf(ves_io_schema_views_securemesh_site.SmsNetworkConfiguration_DefaultConfig{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site.crudapi.ObjectCreateReq.spec.gc_spec.network_cfg_choice.custom_network_config.slo_choice.slo_config.dc_cluster_group_choice.no_dc_cluster_group",
+			GoType:    reflect.TypeOf(ves_io_schema_views_securemesh_site.VnConfiguration_NoDcClusterGroup{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site.crudapi.ObjectCreateReq.spec.gc_spec.network_cfg_choice.custom_network_config.slo_choice.slo_config.static_route_choice.no_static_routes",
+			GoType:    reflect.TypeOf(ves_io_schema_views_securemesh_site.VnConfiguration_NoStaticRoutes{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site.crudapi.ObjectCreateReq.spec.gc_spec.network_cfg_choice.default_network_config",
+			GoType:    reflect.TypeOf(ves_io_schema_views_securemesh_site.GlobalSpecType_DefaultNetworkConfig{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site.crudapi.ObjectCreateReq.spec.gc_spec.offline_survivability_mode.offline_survivability_mode_choice.no_offline_survivability_mode",
+			GoType:    reflect.TypeOf(ves_io_schema_views.OfflineSurvivabilityModeType_NoOfflineSurvivabilityMode{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site.crudapi.ObjectCreateReq.spec.gc_spec.os.operating_system_version_choice.default_os_version",
+			GoType:    reflect.TypeOf(ves_io_schema_views.OperatingSystemType_DefaultOsVersion{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site.crudapi.ObjectCreateReq.spec.gc_spec.performance_enhancement_mode.perf_mode_choice.perf_mode_l3_enhanced.perf_mode_choice.no_jumbo",
+			GoType:    reflect.TypeOf(ves_io_schema_views.L3PerformanceEnhancementType_NoJumbo{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site.crudapi.ObjectCreateReq.spec.gc_spec.performance_enhancement_mode.perf_mode_choice.perf_mode_l7_enhanced",
+			GoType:    reflect.TypeOf(ves_io_schema_views.PerformanceEnhancementModeType_PerfModeL7Enhanced{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site.crudapi.ObjectCreateReq.spec.gc_spec.sw.volterra_sw_version_choice.default_sw_version",
+			GoType:    reflect.TypeOf(ves_io_schema_views.VolterraSoftwareType_DefaultSwVersion{}),
+		},
+	}
+
+	MDR.RPCOneofDefaultChoiceFieldsRegistry["ves.io.schema.views.securemesh_site.crudapi.API.Replace"] = []svcfw.OneofDefaultChoiceField{
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site.crudapi.ObjectReplaceReq.spec.gc_spec.blocked_services_choice.default_blocked_services",
+			GoType:    reflect.TypeOf(ves_io_schema_views_securemesh_site.GlobalSpecType_DefaultBlockedServices{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site.crudapi.ObjectReplaceReq.spec.gc_spec.bond_choice.no_bond_devices",
+			GoType:    reflect.TypeOf(ves_io_schema_views_securemesh_site.GlobalSpecType_NoBondDevices{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site.crudapi.ObjectReplaceReq.spec.gc_spec.logs_receiver_choice.logs_streaming_disabled",
+			GoType:    reflect.TypeOf(ves_io_schema_views_securemesh_site.GlobalSpecType_LogsStreamingDisabled{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site.crudapi.ObjectReplaceReq.spec.gc_spec.network_cfg_choice.custom_network_config.forward_proxy_choice.no_forward_proxy",
+			GoType:    reflect.TypeOf(ves_io_schema_views_securemesh_site.SmsNetworkConfiguration_NoForwardProxy{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site.crudapi.ObjectReplaceReq.spec.gc_spec.network_cfg_choice.custom_network_config.global_network_choice.global_network_list.global_network_connections.forward_proxy_choice.enable_forward_proxy.tls_interception_choice.tls_intercept.interception_policy_choice.enable_for_all_domains",
+			GoType:    reflect.TypeOf(ves_io_schema.TlsInterceptionType_EnableForAllDomains{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site.crudapi.ObjectReplaceReq.spec.gc_spec.network_cfg_choice.custom_network_config.global_network_choice.global_network_list.global_network_connections.forward_proxy_choice.enable_forward_proxy.tls_interception_choice.tls_intercept.interception_policy_choice.policy.interception_rules.enable_disable_choice.disable_interception",
+			GoType:    reflect.TypeOf(ves_io_schema.TlsInterceptionRule_DisableInterception{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site.crudapi.ObjectReplaceReq.spec.gc_spec.network_cfg_choice.custom_network_config.global_network_choice.global_network_list.global_network_connections.forward_proxy_choice.enable_forward_proxy.tls_interception_choice.tls_intercept.trusted_ca_choice.volterra_trusted_ca",
+			GoType:    reflect.TypeOf(ves_io_schema.TlsInterceptionType_VolterraTrustedCa{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site.crudapi.ObjectReplaceReq.spec.gc_spec.network_cfg_choice.custom_network_config.global_network_choice.no_global_network",
+			GoType:    reflect.TypeOf(ves_io_schema_views_securemesh_site.SmsNetworkConfiguration_NoGlobalNetwork{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site.crudapi.ObjectReplaceReq.spec.gc_spec.network_cfg_choice.custom_network_config.interface_choice.default_interface_config",
+			GoType:    reflect.TypeOf(ves_io_schema_views_securemesh_site.SmsNetworkConfiguration_DefaultInterfaceConfig{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site.crudapi.ObjectReplaceReq.spec.gc_spec.network_cfg_choice.custom_network_config.interface_choice.interface_list.interfaces.interface_choice.dedicated_interface.node_choice.cluster",
+			GoType:    reflect.TypeOf(ves_io_schema_network_interface.DedicatedInterfaceType_Cluster{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site.crudapi.ObjectReplaceReq.spec.gc_spec.network_cfg_choice.custom_network_config.interface_choice.interface_list.interfaces.interface_choice.dedicated_interface.primary_choice.not_primary",
+			GoType:    reflect.TypeOf(ves_io_schema_network_interface.DedicatedInterfaceType_NotPrimary{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site.crudapi.ObjectReplaceReq.spec.gc_spec.network_cfg_choice.custom_network_config.interface_choice.interface_list.interfaces.interface_choice.dedicated_management_interface.node_choice.cluster",
+			GoType:    reflect.TypeOf(ves_io_schema_network_interface.DedicatedManagementInterfaceType_Cluster{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site.crudapi.ObjectReplaceReq.spec.gc_spec.network_cfg_choice.custom_network_config.interface_choice.interface_list.interfaces.interface_choice.ethernet_interface.address_choice.dhcp_client",
+			GoType:    reflect.TypeOf(ves_io_schema_network_interface.EthernetInterfaceType_DhcpClient{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site.crudapi.ObjectReplaceReq.spec.gc_spec.network_cfg_choice.custom_network_config.interface_choice.interface_list.interfaces.interface_choice.ethernet_interface.address_choice.dhcp_server.dhcp_networks.dns_choice.same_as_dgw",
+			GoType:    reflect.TypeOf(ves_io_schema_network_interface.DHCPNetworkType_SameAsDgw{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site.crudapi.ObjectReplaceReq.spec.gc_spec.network_cfg_choice.custom_network_config.interface_choice.interface_list.interfaces.interface_choice.ethernet_interface.address_choice.dhcp_server.dhcp_networks.gateway_choice.first_address",
+			GoType:    reflect.TypeOf(ves_io_schema_network_interface.DHCPNetworkType_FirstAddress{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site.crudapi.ObjectReplaceReq.spec.gc_spec.network_cfg_choice.custom_network_config.interface_choice.interface_list.interfaces.interface_choice.ethernet_interface.address_choice.dhcp_server.interfaces_addressing_choice.automatic_from_start",
+			GoType:    reflect.TypeOf(ves_io_schema_network_interface.DHCPServerParametersType_AutomaticFromStart{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site.crudapi.ObjectReplaceReq.spec.gc_spec.network_cfg_choice.custom_network_config.interface_choice.interface_list.interfaces.interface_choice.ethernet_interface.network_choice.site_local_network",
+			GoType:    reflect.TypeOf(ves_io_schema_network_interface.EthernetInterfaceType_SiteLocalNetwork{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site.crudapi.ObjectReplaceReq.spec.gc_spec.network_cfg_choice.custom_network_config.interface_choice.interface_list.interfaces.interface_choice.ethernet_interface.node_choice.cluster",
+			GoType:    reflect.TypeOf(ves_io_schema_network_interface.EthernetInterfaceType_Cluster{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site.crudapi.ObjectReplaceReq.spec.gc_spec.network_cfg_choice.custom_network_config.interface_choice.interface_list.interfaces.interface_choice.ethernet_interface.primary_choice.not_primary",
+			GoType:    reflect.TypeOf(ves_io_schema_network_interface.EthernetInterfaceType_NotPrimary{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site.crudapi.ObjectReplaceReq.spec.gc_spec.network_cfg_choice.custom_network_config.interface_choice.interface_list.interfaces.interface_choice.ethernet_interface.vlan_choice.untagged",
+			GoType:    reflect.TypeOf(ves_io_schema_network_interface.EthernetInterfaceType_Untagged{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site.crudapi.ObjectReplaceReq.spec.gc_spec.network_cfg_choice.custom_network_config.interface_choice.interface_list.interfaces.interface_choice.loopback_interface.address_choice.dhcp_client",
+			GoType:    reflect.TypeOf(ves_io_schema_network_interface.LoopbackInterfaceType_DhcpClient{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site.crudapi.ObjectReplaceReq.spec.gc_spec.network_cfg_choice.custom_network_config.interface_choice.interface_list.interfaces.interface_choice.loopback_interface.address_choice.dhcp_server.dhcp_networks.dns_choice.same_as_dgw",
+			GoType:    reflect.TypeOf(ves_io_schema_network_interface.DHCPNetworkType_SameAsDgw{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site.crudapi.ObjectReplaceReq.spec.gc_spec.network_cfg_choice.custom_network_config.interface_choice.interface_list.interfaces.interface_choice.loopback_interface.address_choice.dhcp_server.dhcp_networks.gateway_choice.first_address",
+			GoType:    reflect.TypeOf(ves_io_schema_network_interface.DHCPNetworkType_FirstAddress{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site.crudapi.ObjectReplaceReq.spec.gc_spec.network_cfg_choice.custom_network_config.interface_choice.interface_list.interfaces.interface_choice.loopback_interface.address_choice.dhcp_server.interfaces_addressing_choice.automatic_from_start",
+			GoType:    reflect.TypeOf(ves_io_schema_network_interface.DHCPServerParametersType_AutomaticFromStart{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site.crudapi.ObjectReplaceReq.spec.gc_spec.network_cfg_choice.custom_network_config.interface_choice.interface_list.interfaces.interface_choice.loopback_interface.network_choice.site_local_network",
+			GoType:    reflect.TypeOf(ves_io_schema_network_interface.LoopbackInterfaceType_SiteLocalNetwork{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site.crudapi.ObjectReplaceReq.spec.gc_spec.network_cfg_choice.custom_network_config.interface_choice.interface_list.interfaces.interface_choice.loopback_interface.node_choice.cluster",
+			GoType:    reflect.TypeOf(ves_io_schema_network_interface.LoopbackInterfaceType_Cluster{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site.crudapi.ObjectReplaceReq.spec.gc_spec.network_cfg_choice.custom_network_config.network_policy_choice.no_network_policy",
+			GoType:    reflect.TypeOf(ves_io_schema_views_securemesh_site.SmsNetworkConfiguration_NoNetworkPolicy{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site.crudapi.ObjectReplaceReq.spec.gc_spec.network_cfg_choice.custom_network_config.site_mesh_group_choice.sm_connection_pvt_ip",
+			GoType:    reflect.TypeOf(ves_io_schema_views_securemesh_site.SmsNetworkConfiguration_SmConnectionPvtIp{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site.crudapi.ObjectReplaceReq.spec.gc_spec.network_cfg_choice.custom_network_config.sli_choice.sli_config.dc_cluster_group_choice.no_dc_cluster_group",
+			GoType:    reflect.TypeOf(ves_io_schema_views_securemesh_site.VnConfiguration_NoDcClusterGroup{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site.crudapi.ObjectReplaceReq.spec.gc_spec.network_cfg_choice.custom_network_config.sli_choice.sli_config.static_route_choice.no_static_routes",
+			GoType:    reflect.TypeOf(ves_io_schema_views_securemesh_site.VnConfiguration_NoStaticRoutes{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site.crudapi.ObjectReplaceReq.spec.gc_spec.network_cfg_choice.custom_network_config.slo_choice.default_config",
+			GoType:    reflect.TypeOf(ves_io_schema_views_securemesh_site.SmsNetworkConfiguration_DefaultConfig{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site.crudapi.ObjectReplaceReq.spec.gc_spec.network_cfg_choice.custom_network_config.slo_choice.slo_config.dc_cluster_group_choice.no_dc_cluster_group",
+			GoType:    reflect.TypeOf(ves_io_schema_views_securemesh_site.VnConfiguration_NoDcClusterGroup{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site.crudapi.ObjectReplaceReq.spec.gc_spec.network_cfg_choice.custom_network_config.slo_choice.slo_config.static_route_choice.no_static_routes",
+			GoType:    reflect.TypeOf(ves_io_schema_views_securemesh_site.VnConfiguration_NoStaticRoutes{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site.crudapi.ObjectReplaceReq.spec.gc_spec.network_cfg_choice.default_network_config",
+			GoType:    reflect.TypeOf(ves_io_schema_views_securemesh_site.GlobalSpecType_DefaultNetworkConfig{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site.crudapi.ObjectReplaceReq.spec.gc_spec.offline_survivability_mode.offline_survivability_mode_choice.no_offline_survivability_mode",
+			GoType:    reflect.TypeOf(ves_io_schema_views.OfflineSurvivabilityModeType_NoOfflineSurvivabilityMode{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site.crudapi.ObjectReplaceReq.spec.gc_spec.os.operating_system_version_choice.default_os_version",
+			GoType:    reflect.TypeOf(ves_io_schema_views.OperatingSystemType_DefaultOsVersion{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site.crudapi.ObjectReplaceReq.spec.gc_spec.performance_enhancement_mode.perf_mode_choice.perf_mode_l3_enhanced.perf_mode_choice.no_jumbo",
+			GoType:    reflect.TypeOf(ves_io_schema_views.L3PerformanceEnhancementType_NoJumbo{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site.crudapi.ObjectReplaceReq.spec.gc_spec.performance_enhancement_mode.perf_mode_choice.perf_mode_l7_enhanced",
+			GoType:    reflect.TypeOf(ves_io_schema_views.PerformanceEnhancementModeType_PerfModeL7Enhanced{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site.crudapi.ObjectReplaceReq.spec.gc_spec.sw.volterra_sw_version_choice.default_sw_version",
+			GoType:    reflect.TypeOf(ves_io_schema_views.VolterraSoftwareType_DefaultSwVersion{}),
 		},
 	}
 
@@ -30625,6 +32730,10 @@ func init() {
 			GoType:    reflect.TypeOf(ves_io_schema.HeaderTransformationType_DefaultHeaderTransformation{}),
 		},
 		{
+			FieldPath: "ves.io.schema.virtual_host.crudapi.ObjectCreateReq.spec.gc_spec.http_protocol_options.http_protocol_choice.http_protocol_enable_v1_v2",
+			GoType:    reflect.TypeOf(ves_io_schema_virtual_host.HttpProtocolOptions_HttpProtocolEnableV1V2{}),
+		},
+		{
 			FieldPath: "ves.io.schema.virtual_host.crudapi.ObjectCreateReq.spec.gc_spec.tls_intercept.interception_policy_choice.enable_for_all_domains",
 			GoType:    reflect.TypeOf(ves_io_schema.TlsInterceptionType_EnableForAllDomains{}),
 		},
@@ -30670,6 +32779,10 @@ func init() {
 		{
 			FieldPath: "ves.io.schema.virtual_host.crudapi.ObjectReplaceReq.spec.gc_spec.header_transformation_type.header_transformation_choice.default_header_transformation",
 			GoType:    reflect.TypeOf(ves_io_schema.HeaderTransformationType_DefaultHeaderTransformation{}),
+		},
+		{
+			FieldPath: "ves.io.schema.virtual_host.crudapi.ObjectReplaceReq.spec.gc_spec.http_protocol_options.http_protocol_choice.http_protocol_enable_v1_v2",
+			GoType:    reflect.TypeOf(ves_io_schema_virtual_host.HttpProtocolOptions_HttpProtocolEnableV1V2{}),
 		},
 		{
 			FieldPath: "ves.io.schema.virtual_host.crudapi.ObjectReplaceReq.spec.gc_spec.tls_intercept.interception_policy_choice.enable_for_all_domains",
@@ -30827,6 +32940,8 @@ func init() {
 	APIGwServiceSlugs["ves.io.schema.authentication.API"] = "config"
 	APIGwServiceSlugs["ves.io.schema.bgp.API"] = "config"
 	APIGwServiceSlugs["ves.io.schema.bgp_asn_set.API"] = "config"
+	APIGwServiceSlugs["ves.io.schema.certificate.API"] = "config"
+	APIGwServiceSlugs["ves.io.schema.certificate_chain.API"] = "config"
 	APIGwServiceSlugs["ves.io.schema.certified_hardware.API"] = "config"
 	APIGwServiceSlugs["ves.io.schema.cloud_credentials.API"] = "config"
 	APIGwServiceSlugs["ves.io.schema.cluster.API"] = "config"
@@ -30904,6 +33019,7 @@ func init() {
 	APIGwServiceSlugs["ves.io.schema.tenant.CustomAPI"] = "web"
 	APIGwServiceSlugs["ves.io.schema.token.API"] = "register"
 	APIGwServiceSlugs["ves.io.schema.token.CustomAPI"] = "register"
+	APIGwServiceSlugs["ves.io.schema.trusted_ca_list.API"] = "config"
 	APIGwServiceSlugs["ves.io.schema.tunnel.API"] = "config"
 	APIGwServiceSlugs["ves.io.schema.usb_policy.API"] = "config"
 	APIGwServiceSlugs["ves.io.schema.user.CustomAPI"] = "web"
@@ -30918,6 +33034,8 @@ func init() {
 	APIGwServiceSlugs["ves.io.schema.views.aws_vpc_site.CustomAPI"] = "config"
 	APIGwServiceSlugs["ves.io.schema.views.azure_vnet_site.API"] = "config"
 	APIGwServiceSlugs["ves.io.schema.views.azure_vnet_site.CustomAPI"] = "config"
+	APIGwServiceSlugs["ves.io.schema.views.cdn_loadbalancer.API"] = "config"
+	APIGwServiceSlugs["ves.io.schema.views.cdn_loadbalancer.CustomAPI"] = "cdn"
 	APIGwServiceSlugs["ves.io.schema.views.forward_proxy_policy.API"] = "config"
 	APIGwServiceSlugs["ves.io.schema.views.forward_proxy_policy.CustomDataAPI"] = "data"
 	APIGwServiceSlugs["ves.io.schema.views.gcp_vpc_site.API"] = "config"
@@ -30929,6 +33047,7 @@ func init() {
 	APIGwServiceSlugs["ves.io.schema.views.network_policy_view.CustomDataAPI"] = "data"
 	APIGwServiceSlugs["ves.io.schema.views.origin_pool.API"] = "config"
 	APIGwServiceSlugs["ves.io.schema.views.rate_limiter_policy.API"] = "config"
+	APIGwServiceSlugs["ves.io.schema.views.securemesh_site.API"] = "config"
 	APIGwServiceSlugs["ves.io.schema.views.tcp_loadbalancer.API"] = "config"
 	APIGwServiceSlugs["ves.io.schema.views.tcp_loadbalancer.CustomAPI"] = "config"
 	APIGwServiceSlugs["ves.io.schema.views.tenant_configuration.API"] = "config"
@@ -31503,6 +33622,88 @@ func init() {
 	csr.AllowedInNSTypes["ves.io.schema.bgp_asn_set.Object"] = nil
 
 	csr.CRUDSwaggerRegistry["ves.io.schema.bgp_asn_set.Object"] = ves_io_schema_bgp_asn_set_crudapi.APISwaggerJSON
+
+	// Generate Entry registry and factory
+	MDR.EntryFactory["ves.io.schema.certificate.Object"] = ves_io_schema_certificate.NewEntryObject
+	MDR.EntryStoreMap["ves.io.schema.certificate.Object"] = store.InMemory
+	MDR.EntryRegistry["ves.io.schema.certificate.Object"] = reflect.TypeOf(&ves_io_schema_certificate.DBObject{})
+	MDR.EntryIndexers["ves.io.schema.certificate.Object"] = ves_io_schema_certificate.GetObjectIndexers
+	MDR.ValidatorRegistry["ves.io.schema.certificate.Object"] = ves_io_schema_certificate.ObjectValidator()
+	// Generate Entry registry and factory
+	MDR.EntryFactory["ves.io.schema.certificate.StatusObject"] = ves_io_schema_certificate.NewEntryStatusObject
+	MDR.EntryStoreMap["ves.io.schema.certificate.StatusObject"] = store.InMemory
+	MDR.EntryRegistry["ves.io.schema.certificate.StatusObject"] = reflect.TypeOf(&ves_io_schema_certificate.DBStatusObject{})
+	MDR.EntryIndexers["ves.io.schema.certificate.StatusObject"] = ves_io_schema_certificate.GetStatusObjectIndexers
+	MDR.ValidatorRegistry["ves.io.schema.certificate.StatusObject"] = ves_io_schema_certificate.StatusObjectValidator()
+
+	csr = MDR.PubCRUDServiceRegistry
+
+	// Generate Service register handlers
+	MDR.SvcRegisterHandlers["ves.io.schema.certificate.API"] = ves_io_schema_certificate.RegisterAPIServer
+	MDR.SvcGwRegisterHandlers["ves.io.schema.certificate.API"] = ves_io_schema_certificate.RegisterGwAPIHandler
+
+	csr.CRUDGrpcClientRegistry["ves.io.schema.certificate.Object"] = ves_io_schema_certificate.NewCRUDAPIGrpcClient
+	csr.CRUDRestClientRegistry["ves.io.schema.certificate.Object"] = ves_io_schema_certificate.NewCRUDAPIRestClient
+	csr.CRUDInprocClientRegistry["ves.io.schema.certificate.Object"] = ves_io_schema_certificate.NewCRUDAPIInprocClient
+	csr.CRUDServerRegistry["ves.io.schema.certificate.Object"] = ves_io_schema_certificate.NewCRUDAPIServer
+	csr.AllowedInNSTypes["ves.io.schema.certificate.Object"] = nil
+
+	csr.CRUDSwaggerRegistry["ves.io.schema.certificate.Object"] = ves_io_schema_certificate.APISwaggerJSON
+
+	csr = MDR.PvtCRUDServiceRegistry
+
+	// Generate Service register handlers
+	MDR.SvcRegisterHandlers["ves.io.schema.certificate.crudapi.API"] = ves_io_schema_certificate_crudapi.RegisterAPIServer
+	MDR.SvcGwRegisterHandlers["ves.io.schema.certificate.crudapi.API"] = ves_io_schema_certificate_crudapi.RegisterGwAPIHandler
+
+	csr.CRUDGrpcClientRegistry["ves.io.schema.certificate.Object"] = ves_io_schema_certificate_crudapi.NewCRUDAPIGrpcClient
+	csr.CRUDRestClientRegistry["ves.io.schema.certificate.Object"] = ves_io_schema_certificate_crudapi.NewCRUDAPIRestClient
+	csr.CRUDInprocClientRegistry["ves.io.schema.certificate.Object"] = ves_io_schema_certificate_crudapi.NewCRUDAPIInprocClient
+	csr.CRUDServerRegistry["ves.io.schema.certificate.Object"] = ves_io_schema_certificate_crudapi.NewCRUDAPIServer
+	csr.AllowedInNSTypes["ves.io.schema.certificate.Object"] = nil
+
+	csr.CRUDSwaggerRegistry["ves.io.schema.certificate.Object"] = ves_io_schema_certificate_crudapi.APISwaggerJSON
+
+	// Generate Entry registry and factory
+	MDR.EntryFactory["ves.io.schema.certificate_chain.Object"] = ves_io_schema_certificate_chain.NewEntryObject
+	MDR.EntryStoreMap["ves.io.schema.certificate_chain.Object"] = store.InMemory
+	MDR.EntryRegistry["ves.io.schema.certificate_chain.Object"] = reflect.TypeOf(&ves_io_schema_certificate_chain.DBObject{})
+	MDR.EntryIndexers["ves.io.schema.certificate_chain.Object"] = ves_io_schema_certificate_chain.GetObjectIndexers
+	MDR.ValidatorRegistry["ves.io.schema.certificate_chain.Object"] = ves_io_schema_certificate_chain.ObjectValidator()
+	// Generate Entry registry and factory
+	MDR.EntryFactory["ves.io.schema.certificate_chain.StatusObject"] = ves_io_schema_certificate_chain.NewEntryStatusObject
+	MDR.EntryStoreMap["ves.io.schema.certificate_chain.StatusObject"] = store.InMemory
+	MDR.EntryRegistry["ves.io.schema.certificate_chain.StatusObject"] = reflect.TypeOf(&ves_io_schema_certificate_chain.DBStatusObject{})
+	MDR.EntryIndexers["ves.io.schema.certificate_chain.StatusObject"] = ves_io_schema_certificate_chain.GetStatusObjectIndexers
+	MDR.ValidatorRegistry["ves.io.schema.certificate_chain.StatusObject"] = ves_io_schema_certificate_chain.StatusObjectValidator()
+
+	csr = MDR.PubCRUDServiceRegistry
+
+	// Generate Service register handlers
+	MDR.SvcRegisterHandlers["ves.io.schema.certificate_chain.API"] = ves_io_schema_certificate_chain.RegisterAPIServer
+	MDR.SvcGwRegisterHandlers["ves.io.schema.certificate_chain.API"] = ves_io_schema_certificate_chain.RegisterGwAPIHandler
+
+	csr.CRUDGrpcClientRegistry["ves.io.schema.certificate_chain.Object"] = ves_io_schema_certificate_chain.NewCRUDAPIGrpcClient
+	csr.CRUDRestClientRegistry["ves.io.schema.certificate_chain.Object"] = ves_io_schema_certificate_chain.NewCRUDAPIRestClient
+	csr.CRUDInprocClientRegistry["ves.io.schema.certificate_chain.Object"] = ves_io_schema_certificate_chain.NewCRUDAPIInprocClient
+	csr.CRUDServerRegistry["ves.io.schema.certificate_chain.Object"] = ves_io_schema_certificate_chain.NewCRUDAPIServer
+	csr.AllowedInNSTypes["ves.io.schema.certificate_chain.Object"] = nil
+
+	csr.CRUDSwaggerRegistry["ves.io.schema.certificate_chain.Object"] = ves_io_schema_certificate_chain.APISwaggerJSON
+
+	csr = MDR.PvtCRUDServiceRegistry
+
+	// Generate Service register handlers
+	MDR.SvcRegisterHandlers["ves.io.schema.certificate_chain.crudapi.API"] = ves_io_schema_certificate_chain_crudapi.RegisterAPIServer
+	MDR.SvcGwRegisterHandlers["ves.io.schema.certificate_chain.crudapi.API"] = ves_io_schema_certificate_chain_crudapi.RegisterGwAPIHandler
+
+	csr.CRUDGrpcClientRegistry["ves.io.schema.certificate_chain.Object"] = ves_io_schema_certificate_chain_crudapi.NewCRUDAPIGrpcClient
+	csr.CRUDRestClientRegistry["ves.io.schema.certificate_chain.Object"] = ves_io_schema_certificate_chain_crudapi.NewCRUDAPIRestClient
+	csr.CRUDInprocClientRegistry["ves.io.schema.certificate_chain.Object"] = ves_io_schema_certificate_chain_crudapi.NewCRUDAPIInprocClient
+	csr.CRUDServerRegistry["ves.io.schema.certificate_chain.Object"] = ves_io_schema_certificate_chain_crudapi.NewCRUDAPIServer
+	csr.AllowedInNSTypes["ves.io.schema.certificate_chain.Object"] = nil
+
+	csr.CRUDSwaggerRegistry["ves.io.schema.certificate_chain.Object"] = ves_io_schema_certificate_chain_crudapi.APISwaggerJSON
 
 	// Generate Entry registry and factory
 	MDR.EntryFactory["ves.io.schema.certified_hardware.Object"] = ves_io_schema_certified_hardware.NewEntryObject
@@ -34032,6 +36233,47 @@ func init() {
 	csr.CRUDSwaggerRegistry["ves.io.schema.token.Object"] = ves_io_schema_token_crudapi.APISwaggerJSON
 
 	// Generate Entry registry and factory
+	MDR.EntryFactory["ves.io.schema.trusted_ca_list.Object"] = ves_io_schema_trusted_ca_list.NewEntryObject
+	MDR.EntryStoreMap["ves.io.schema.trusted_ca_list.Object"] = store.InMemory
+	MDR.EntryRegistry["ves.io.schema.trusted_ca_list.Object"] = reflect.TypeOf(&ves_io_schema_trusted_ca_list.DBObject{})
+	MDR.EntryIndexers["ves.io.schema.trusted_ca_list.Object"] = ves_io_schema_trusted_ca_list.GetObjectIndexers
+	MDR.ValidatorRegistry["ves.io.schema.trusted_ca_list.Object"] = ves_io_schema_trusted_ca_list.ObjectValidator()
+	// Generate Entry registry and factory
+	MDR.EntryFactory["ves.io.schema.trusted_ca_list.StatusObject"] = ves_io_schema_trusted_ca_list.NewEntryStatusObject
+	MDR.EntryStoreMap["ves.io.schema.trusted_ca_list.StatusObject"] = store.InMemory
+	MDR.EntryRegistry["ves.io.schema.trusted_ca_list.StatusObject"] = reflect.TypeOf(&ves_io_schema_trusted_ca_list.DBStatusObject{})
+	MDR.EntryIndexers["ves.io.schema.trusted_ca_list.StatusObject"] = ves_io_schema_trusted_ca_list.GetStatusObjectIndexers
+	MDR.ValidatorRegistry["ves.io.schema.trusted_ca_list.StatusObject"] = ves_io_schema_trusted_ca_list.StatusObjectValidator()
+
+	csr = MDR.PubCRUDServiceRegistry
+
+	// Generate Service register handlers
+	MDR.SvcRegisterHandlers["ves.io.schema.trusted_ca_list.API"] = ves_io_schema_trusted_ca_list.RegisterAPIServer
+	MDR.SvcGwRegisterHandlers["ves.io.schema.trusted_ca_list.API"] = ves_io_schema_trusted_ca_list.RegisterGwAPIHandler
+
+	csr.CRUDGrpcClientRegistry["ves.io.schema.trusted_ca_list.Object"] = ves_io_schema_trusted_ca_list.NewCRUDAPIGrpcClient
+	csr.CRUDRestClientRegistry["ves.io.schema.trusted_ca_list.Object"] = ves_io_schema_trusted_ca_list.NewCRUDAPIRestClient
+	csr.CRUDInprocClientRegistry["ves.io.schema.trusted_ca_list.Object"] = ves_io_schema_trusted_ca_list.NewCRUDAPIInprocClient
+	csr.CRUDServerRegistry["ves.io.schema.trusted_ca_list.Object"] = ves_io_schema_trusted_ca_list.NewCRUDAPIServer
+	csr.AllowedInNSTypes["ves.io.schema.trusted_ca_list.Object"] = nil
+
+	csr.CRUDSwaggerRegistry["ves.io.schema.trusted_ca_list.Object"] = ves_io_schema_trusted_ca_list.APISwaggerJSON
+
+	csr = MDR.PvtCRUDServiceRegistry
+
+	// Generate Service register handlers
+	MDR.SvcRegisterHandlers["ves.io.schema.trusted_ca_list.crudapi.API"] = ves_io_schema_trusted_ca_list_crudapi.RegisterAPIServer
+	MDR.SvcGwRegisterHandlers["ves.io.schema.trusted_ca_list.crudapi.API"] = ves_io_schema_trusted_ca_list_crudapi.RegisterGwAPIHandler
+
+	csr.CRUDGrpcClientRegistry["ves.io.schema.trusted_ca_list.Object"] = ves_io_schema_trusted_ca_list_crudapi.NewCRUDAPIGrpcClient
+	csr.CRUDRestClientRegistry["ves.io.schema.trusted_ca_list.Object"] = ves_io_schema_trusted_ca_list_crudapi.NewCRUDAPIRestClient
+	csr.CRUDInprocClientRegistry["ves.io.schema.trusted_ca_list.Object"] = ves_io_schema_trusted_ca_list_crudapi.NewCRUDAPIInprocClient
+	csr.CRUDServerRegistry["ves.io.schema.trusted_ca_list.Object"] = ves_io_schema_trusted_ca_list_crudapi.NewCRUDAPIServer
+	csr.AllowedInNSTypes["ves.io.schema.trusted_ca_list.Object"] = nil
+
+	csr.CRUDSwaggerRegistry["ves.io.schema.trusted_ca_list.Object"] = ves_io_schema_trusted_ca_list_crudapi.APISwaggerJSON
+
+	// Generate Entry registry and factory
 	MDR.EntryFactory["ves.io.schema.tunnel.Object"] = ves_io_schema_tunnel.NewEntryObject
 	MDR.EntryStoreMap["ves.io.schema.tunnel.Object"] = store.InMemory
 	MDR.EntryRegistry["ves.io.schema.tunnel.Object"] = reflect.TypeOf(&ves_io_schema_tunnel.DBObject{})
@@ -34531,6 +36773,73 @@ func init() {
 	csr.CRUDSwaggerRegistry["ves.io.schema.views.azure_vnet_site.Object"] = ves_io_schema_views_azure_vnet_site_crudapi.APISwaggerJSON
 
 	// Generate Entry registry and factory
+	MDR.EntryFactory["ves.io.schema.views.cdn_loadbalancer.Object"] = ves_io_schema_views_cdn_loadbalancer.NewEntryObject
+	MDR.EntryStoreMap["ves.io.schema.views.cdn_loadbalancer.Object"] = store.InMemory
+	MDR.EntryRegistry["ves.io.schema.views.cdn_loadbalancer.Object"] = reflect.TypeOf(&ves_io_schema_views_cdn_loadbalancer.DBObject{})
+	MDR.EntryIndexers["ves.io.schema.views.cdn_loadbalancer.Object"] = ves_io_schema_views_cdn_loadbalancer.GetObjectIndexers
+	MDR.ValidatorRegistry["ves.io.schema.views.cdn_loadbalancer.Object"] = ves_io_schema_views_cdn_loadbalancer.ObjectValidator()
+	// Generate Entry registry and factory
+	MDR.EntryFactory["ves.io.schema.views.cdn_loadbalancer.StatusObject"] = ves_io_schema_views_cdn_loadbalancer.NewEntryStatusObject
+	MDR.EntryStoreMap["ves.io.schema.views.cdn_loadbalancer.StatusObject"] = store.InMemory
+	MDR.EntryRegistry["ves.io.schema.views.cdn_loadbalancer.StatusObject"] = reflect.TypeOf(&ves_io_schema_views_cdn_loadbalancer.DBStatusObject{})
+	MDR.EntryIndexers["ves.io.schema.views.cdn_loadbalancer.StatusObject"] = ves_io_schema_views_cdn_loadbalancer.GetStatusObjectIndexers
+	MDR.ValidatorRegistry["ves.io.schema.views.cdn_loadbalancer.StatusObject"] = ves_io_schema_views_cdn_loadbalancer.StatusObjectValidator()
+
+	customCSR = MDR.PvtCustomServiceRegistry
+	customCSR.GrpcClientRegistry["ves.io.schema.views.cdn_loadbalancer.PrivateCustomAPI"] = ves_io_schema_views_cdn_loadbalancer.NewPrivateCustomAPIGrpcClient
+	customCSR.RestClientRegistry["ves.io.schema.views.cdn_loadbalancer.PrivateCustomAPI"] = ves_io_schema_views_cdn_loadbalancer.NewPrivateCustomAPIRestClient
+	customCSR.ServerRegistry["ves.io.schema.views.cdn_loadbalancer.PrivateCustomAPI"] = func(svc svcfw.Service) server.APIHandler {
+		return ves_io_schema_views_cdn_loadbalancer.NewPrivateCustomAPIServer(svc)
+	}
+
+	// Generate Service register handlers
+	MDR.SvcRegisterHandlers["ves.io.schema.views.cdn_loadbalancer.PrivateCustomAPI"] = ves_io_schema_views_cdn_loadbalancer.RegisterPrivateCustomAPIServer
+	MDR.SvcGwRegisterHandlers["ves.io.schema.views.cdn_loadbalancer.PrivateCustomAPI"] = ves_io_schema_views_cdn_loadbalancer.RegisterGwPrivateCustomAPIHandler
+
+	customCSR.SwaggerRegistry["ves.io.schema.views.cdn_loadbalancer.Object"] = ves_io_schema_views_cdn_loadbalancer.PrivateCustomAPISwaggerJSON
+
+	csr = MDR.PubCRUDServiceRegistry
+
+	// Generate Service register handlers
+	MDR.SvcRegisterHandlers["ves.io.schema.views.cdn_loadbalancer.API"] = ves_io_schema_views_cdn_loadbalancer.RegisterAPIServer
+	MDR.SvcGwRegisterHandlers["ves.io.schema.views.cdn_loadbalancer.API"] = ves_io_schema_views_cdn_loadbalancer.RegisterGwAPIHandler
+
+	csr.CRUDGrpcClientRegistry["ves.io.schema.views.cdn_loadbalancer.Object"] = ves_io_schema_views_cdn_loadbalancer.NewCRUDAPIGrpcClient
+	csr.CRUDRestClientRegistry["ves.io.schema.views.cdn_loadbalancer.Object"] = ves_io_schema_views_cdn_loadbalancer.NewCRUDAPIRestClient
+	csr.CRUDInprocClientRegistry["ves.io.schema.views.cdn_loadbalancer.Object"] = ves_io_schema_views_cdn_loadbalancer.NewCRUDAPIInprocClient
+	csr.CRUDServerRegistry["ves.io.schema.views.cdn_loadbalancer.Object"] = ves_io_schema_views_cdn_loadbalancer.NewCRUDAPIServer
+	csr.AllowedInNSTypes["ves.io.schema.views.cdn_loadbalancer.Object"] = nil
+
+	csr.CRUDSwaggerRegistry["ves.io.schema.views.cdn_loadbalancer.Object"] = ves_io_schema_views_cdn_loadbalancer.APISwaggerJSON
+
+	customCSR = MDR.PubCustomServiceRegistry
+	customCSR.GrpcClientRegistry["ves.io.schema.views.cdn_loadbalancer.CustomAPI"] = ves_io_schema_views_cdn_loadbalancer.NewCustomAPIGrpcClient
+	customCSR.RestClientRegistry["ves.io.schema.views.cdn_loadbalancer.CustomAPI"] = ves_io_schema_views_cdn_loadbalancer.NewCustomAPIRestClient
+	customCSR.ServerRegistry["ves.io.schema.views.cdn_loadbalancer.CustomAPI"] = func(svc svcfw.Service) server.APIHandler {
+		return ves_io_schema_views_cdn_loadbalancer.NewCustomAPIServer(svc)
+	}
+
+	// Generate Service register handlers
+	MDR.SvcRegisterHandlers["ves.io.schema.views.cdn_loadbalancer.CustomAPI"] = ves_io_schema_views_cdn_loadbalancer.RegisterCustomAPIServer
+	MDR.SvcGwRegisterHandlers["ves.io.schema.views.cdn_loadbalancer.CustomAPI"] = ves_io_schema_views_cdn_loadbalancer.RegisterGwCustomAPIHandler
+
+	customCSR.SwaggerRegistry["ves.io.schema.views.cdn_loadbalancer.Object"] = ves_io_schema_views_cdn_loadbalancer.CustomAPISwaggerJSON
+
+	csr = MDR.PvtCRUDServiceRegistry
+
+	// Generate Service register handlers
+	MDR.SvcRegisterHandlers["ves.io.schema.views.cdn_loadbalancer.crudapi.API"] = ves_io_schema_views_cdn_loadbalancer_crudapi.RegisterAPIServer
+	MDR.SvcGwRegisterHandlers["ves.io.schema.views.cdn_loadbalancer.crudapi.API"] = ves_io_schema_views_cdn_loadbalancer_crudapi.RegisterGwAPIHandler
+
+	csr.CRUDGrpcClientRegistry["ves.io.schema.views.cdn_loadbalancer.Object"] = ves_io_schema_views_cdn_loadbalancer_crudapi.NewCRUDAPIGrpcClient
+	csr.CRUDRestClientRegistry["ves.io.schema.views.cdn_loadbalancer.Object"] = ves_io_schema_views_cdn_loadbalancer_crudapi.NewCRUDAPIRestClient
+	csr.CRUDInprocClientRegistry["ves.io.schema.views.cdn_loadbalancer.Object"] = ves_io_schema_views_cdn_loadbalancer_crudapi.NewCRUDAPIInprocClient
+	csr.CRUDServerRegistry["ves.io.schema.views.cdn_loadbalancer.Object"] = ves_io_schema_views_cdn_loadbalancer_crudapi.NewCRUDAPIServer
+	csr.AllowedInNSTypes["ves.io.schema.views.cdn_loadbalancer.Object"] = nil
+
+	csr.CRUDSwaggerRegistry["ves.io.schema.views.cdn_loadbalancer.Object"] = ves_io_schema_views_cdn_loadbalancer_crudapi.APISwaggerJSON
+
+	// Generate Entry registry and factory
 	MDR.EntryFactory["ves.io.schema.views.forward_proxy_policy.Object"] = ves_io_schema_views_forward_proxy_policy.NewEntryObject
 	MDR.EntryStoreMap["ves.io.schema.views.forward_proxy_policy.Object"] = store.InMemory
 	MDR.EntryRegistry["ves.io.schema.views.forward_proxy_policy.Object"] = reflect.TypeOf(&ves_io_schema_views_forward_proxy_policy.DBObject{})
@@ -34834,6 +37143,47 @@ func init() {
 	csr.AllowedInNSTypes["ves.io.schema.views.rate_limiter_policy.Object"] = []svcfw.NamespaceType{svcfw.SharedNSType, svcfw.UserNSType}
 
 	csr.CRUDSwaggerRegistry["ves.io.schema.views.rate_limiter_policy.Object"] = ves_io_schema_views_rate_limiter_policy_crudapi.APISwaggerJSON
+
+	// Generate Entry registry and factory
+	MDR.EntryFactory["ves.io.schema.views.securemesh_site.Object"] = ves_io_schema_views_securemesh_site.NewEntryObject
+	MDR.EntryStoreMap["ves.io.schema.views.securemesh_site.Object"] = store.InMemory
+	MDR.EntryRegistry["ves.io.schema.views.securemesh_site.Object"] = reflect.TypeOf(&ves_io_schema_views_securemesh_site.DBObject{})
+	MDR.EntryIndexers["ves.io.schema.views.securemesh_site.Object"] = ves_io_schema_views_securemesh_site.GetObjectIndexers
+	MDR.ValidatorRegistry["ves.io.schema.views.securemesh_site.Object"] = ves_io_schema_views_securemesh_site.ObjectValidator()
+	// Generate Entry registry and factory
+	MDR.EntryFactory["ves.io.schema.views.securemesh_site.StatusObject"] = ves_io_schema_views_securemesh_site.NewEntryStatusObject
+	MDR.EntryStoreMap["ves.io.schema.views.securemesh_site.StatusObject"] = store.InMemory
+	MDR.EntryRegistry["ves.io.schema.views.securemesh_site.StatusObject"] = reflect.TypeOf(&ves_io_schema_views_securemesh_site.DBStatusObject{})
+	MDR.EntryIndexers["ves.io.schema.views.securemesh_site.StatusObject"] = ves_io_schema_views_securemesh_site.GetStatusObjectIndexers
+	MDR.ValidatorRegistry["ves.io.schema.views.securemesh_site.StatusObject"] = ves_io_schema_views_securemesh_site.StatusObjectValidator()
+
+	csr = MDR.PubCRUDServiceRegistry
+
+	// Generate Service register handlers
+	MDR.SvcRegisterHandlers["ves.io.schema.views.securemesh_site.API"] = ves_io_schema_views_securemesh_site.RegisterAPIServer
+	MDR.SvcGwRegisterHandlers["ves.io.schema.views.securemesh_site.API"] = ves_io_schema_views_securemesh_site.RegisterGwAPIHandler
+
+	csr.CRUDGrpcClientRegistry["ves.io.schema.views.securemesh_site.Object"] = ves_io_schema_views_securemesh_site.NewCRUDAPIGrpcClient
+	csr.CRUDRestClientRegistry["ves.io.schema.views.securemesh_site.Object"] = ves_io_schema_views_securemesh_site.NewCRUDAPIRestClient
+	csr.CRUDInprocClientRegistry["ves.io.schema.views.securemesh_site.Object"] = ves_io_schema_views_securemesh_site.NewCRUDAPIInprocClient
+	csr.CRUDServerRegistry["ves.io.schema.views.securemesh_site.Object"] = ves_io_schema_views_securemesh_site.NewCRUDAPIServer
+	csr.AllowedInNSTypes["ves.io.schema.views.securemesh_site.Object"] = []svcfw.NamespaceType{svcfw.SystemNSType}
+
+	csr.CRUDSwaggerRegistry["ves.io.schema.views.securemesh_site.Object"] = ves_io_schema_views_securemesh_site.APISwaggerJSON
+
+	csr = MDR.PvtCRUDServiceRegistry
+
+	// Generate Service register handlers
+	MDR.SvcRegisterHandlers["ves.io.schema.views.securemesh_site.crudapi.API"] = ves_io_schema_views_securemesh_site_crudapi.RegisterAPIServer
+	MDR.SvcGwRegisterHandlers["ves.io.schema.views.securemesh_site.crudapi.API"] = ves_io_schema_views_securemesh_site_crudapi.RegisterGwAPIHandler
+
+	csr.CRUDGrpcClientRegistry["ves.io.schema.views.securemesh_site.Object"] = ves_io_schema_views_securemesh_site_crudapi.NewCRUDAPIGrpcClient
+	csr.CRUDRestClientRegistry["ves.io.schema.views.securemesh_site.Object"] = ves_io_schema_views_securemesh_site_crudapi.NewCRUDAPIRestClient
+	csr.CRUDInprocClientRegistry["ves.io.schema.views.securemesh_site.Object"] = ves_io_schema_views_securemesh_site_crudapi.NewCRUDAPIInprocClient
+	csr.CRUDServerRegistry["ves.io.schema.views.securemesh_site.Object"] = ves_io_schema_views_securemesh_site_crudapi.NewCRUDAPIServer
+	csr.AllowedInNSTypes["ves.io.schema.views.securemesh_site.Object"] = []svcfw.NamespaceType{svcfw.SystemNSType}
+
+	csr.CRUDSwaggerRegistry["ves.io.schema.views.securemesh_site.Object"] = ves_io_schema_views_securemesh_site_crudapi.APISwaggerJSON
 
 	// Generate Entry registry and factory
 	MDR.EntryFactory["ves.io.schema.views.tcp_loadbalancer.Object"] = ves_io_schema_views_tcp_loadbalancer.NewEntryObject
@@ -35710,6 +38060,54 @@ func RegisterGrpcAPI(api string, gSrv *grpc.Server, srv interface{}) error {
 		s, ok := srv.(ves_io_schema_bgp_asn_set_crudapi.APIServer)
 		if !ok {
 			panic(fmt.Sprintf("%T does not satisfy interface ves_io_schema_bgp_asn_set_crudapi.APIServer", srv))
+		}
+		h(gSrv, s)
+
+	case "ves.io.schema.certificate.API":
+		gh, _ := MDR.SvcRegisterHandlers[api]
+		h, ok := gh.(func(*grpc.Server, ves_io_schema_certificate.APIServer))
+		if !ok {
+			return fmt.Errorf("gRPC API reg expected func(*grpc.Server, ves_io_schema_certificate.APIServer), got %T", gh)
+		}
+		s, ok := srv.(ves_io_schema_certificate.APIServer)
+		if !ok {
+			panic(fmt.Sprintf("%T does not satisfy interface ves_io_schema_certificate.APIServer", srv))
+		}
+		h(gSrv, s)
+
+	case "ves.io.schema.certificate.crudapi.API":
+		gh, _ := MDR.SvcRegisterHandlers[api]
+		h, ok := gh.(func(*grpc.Server, ves_io_schema_certificate_crudapi.APIServer))
+		if !ok {
+			return fmt.Errorf("gRPC API reg expected func(*grpc.Server, ves_io_schema_certificate_crudapi.APIServer), got %T", gh)
+		}
+		s, ok := srv.(ves_io_schema_certificate_crudapi.APIServer)
+		if !ok {
+			panic(fmt.Sprintf("%T does not satisfy interface ves_io_schema_certificate_crudapi.APIServer", srv))
+		}
+		h(gSrv, s)
+
+	case "ves.io.schema.certificate_chain.API":
+		gh, _ := MDR.SvcRegisterHandlers[api]
+		h, ok := gh.(func(*grpc.Server, ves_io_schema_certificate_chain.APIServer))
+		if !ok {
+			return fmt.Errorf("gRPC API reg expected func(*grpc.Server, ves_io_schema_certificate_chain.APIServer), got %T", gh)
+		}
+		s, ok := srv.(ves_io_schema_certificate_chain.APIServer)
+		if !ok {
+			panic(fmt.Sprintf("%T does not satisfy interface ves_io_schema_certificate_chain.APIServer", srv))
+		}
+		h(gSrv, s)
+
+	case "ves.io.schema.certificate_chain.crudapi.API":
+		gh, _ := MDR.SvcRegisterHandlers[api]
+		h, ok := gh.(func(*grpc.Server, ves_io_schema_certificate_chain_crudapi.APIServer))
+		if !ok {
+			return fmt.Errorf("gRPC API reg expected func(*grpc.Server, ves_io_schema_certificate_chain_crudapi.APIServer), got %T", gh)
+		}
+		s, ok := srv.(ves_io_schema_certificate_chain_crudapi.APIServer)
+		if !ok {
+			panic(fmt.Sprintf("%T does not satisfy interface ves_io_schema_certificate_chain_crudapi.APIServer", srv))
 		}
 		h(gSrv, s)
 
@@ -37309,6 +39707,30 @@ func RegisterGrpcAPI(api string, gSrv *grpc.Server, srv interface{}) error {
 		}
 		h(gSrv, s)
 
+	case "ves.io.schema.trusted_ca_list.API":
+		gh, _ := MDR.SvcRegisterHandlers[api]
+		h, ok := gh.(func(*grpc.Server, ves_io_schema_trusted_ca_list.APIServer))
+		if !ok {
+			return fmt.Errorf("gRPC API reg expected func(*grpc.Server, ves_io_schema_trusted_ca_list.APIServer), got %T", gh)
+		}
+		s, ok := srv.(ves_io_schema_trusted_ca_list.APIServer)
+		if !ok {
+			panic(fmt.Sprintf("%T does not satisfy interface ves_io_schema_trusted_ca_list.APIServer", srv))
+		}
+		h(gSrv, s)
+
+	case "ves.io.schema.trusted_ca_list.crudapi.API":
+		gh, _ := MDR.SvcRegisterHandlers[api]
+		h, ok := gh.(func(*grpc.Server, ves_io_schema_trusted_ca_list_crudapi.APIServer))
+		if !ok {
+			return fmt.Errorf("gRPC API reg expected func(*grpc.Server, ves_io_schema_trusted_ca_list_crudapi.APIServer), got %T", gh)
+		}
+		s, ok := srv.(ves_io_schema_trusted_ca_list_crudapi.APIServer)
+		if !ok {
+			panic(fmt.Sprintf("%T does not satisfy interface ves_io_schema_trusted_ca_list_crudapi.APIServer", srv))
+		}
+		h(gSrv, s)
+
 	case "ves.io.schema.tunnel.API":
 		gh, _ := MDR.SvcRegisterHandlers[api]
 		h, ok := gh.(func(*grpc.Server, ves_io_schema_tunnel.APIServer))
@@ -37633,6 +40055,54 @@ func RegisterGrpcAPI(api string, gSrv *grpc.Server, srv interface{}) error {
 		}
 		h(gSrv, s)
 
+	case "ves.io.schema.views.cdn_loadbalancer.PrivateCustomAPI":
+		gh, _ := MDR.SvcRegisterHandlers[api]
+		h, ok := gh.(func(*grpc.Server, ves_io_schema_views_cdn_loadbalancer.PrivateCustomAPIServer))
+		if !ok {
+			return fmt.Errorf("gRPC API reg expected func(*grpc.Server, ves_io_schema_views_cdn_loadbalancer.PrivateCustomAPIServer), got %T", gh)
+		}
+		s, ok := srv.(ves_io_schema_views_cdn_loadbalancer.PrivateCustomAPIServer)
+		if !ok {
+			panic(fmt.Sprintf("%T does not satisfy interface ves_io_schema_views_cdn_loadbalancer.PrivateCustomAPIServer", srv))
+		}
+		h(gSrv, s)
+
+	case "ves.io.schema.views.cdn_loadbalancer.API":
+		gh, _ := MDR.SvcRegisterHandlers[api]
+		h, ok := gh.(func(*grpc.Server, ves_io_schema_views_cdn_loadbalancer.APIServer))
+		if !ok {
+			return fmt.Errorf("gRPC API reg expected func(*grpc.Server, ves_io_schema_views_cdn_loadbalancer.APIServer), got %T", gh)
+		}
+		s, ok := srv.(ves_io_schema_views_cdn_loadbalancer.APIServer)
+		if !ok {
+			panic(fmt.Sprintf("%T does not satisfy interface ves_io_schema_views_cdn_loadbalancer.APIServer", srv))
+		}
+		h(gSrv, s)
+
+	case "ves.io.schema.views.cdn_loadbalancer.CustomAPI":
+		gh, _ := MDR.SvcRegisterHandlers[api]
+		h, ok := gh.(func(*grpc.Server, ves_io_schema_views_cdn_loadbalancer.CustomAPIServer))
+		if !ok {
+			return fmt.Errorf("gRPC API reg expected func(*grpc.Server, ves_io_schema_views_cdn_loadbalancer.CustomAPIServer), got %T", gh)
+		}
+		s, ok := srv.(ves_io_schema_views_cdn_loadbalancer.CustomAPIServer)
+		if !ok {
+			panic(fmt.Sprintf("%T does not satisfy interface ves_io_schema_views_cdn_loadbalancer.CustomAPIServer", srv))
+		}
+		h(gSrv, s)
+
+	case "ves.io.schema.views.cdn_loadbalancer.crudapi.API":
+		gh, _ := MDR.SvcRegisterHandlers[api]
+		h, ok := gh.(func(*grpc.Server, ves_io_schema_views_cdn_loadbalancer_crudapi.APIServer))
+		if !ok {
+			return fmt.Errorf("gRPC API reg expected func(*grpc.Server, ves_io_schema_views_cdn_loadbalancer_crudapi.APIServer), got %T", gh)
+		}
+		s, ok := srv.(ves_io_schema_views_cdn_loadbalancer_crudapi.APIServer)
+		if !ok {
+			panic(fmt.Sprintf("%T does not satisfy interface ves_io_schema_views_cdn_loadbalancer_crudapi.APIServer", srv))
+		}
+		h(gSrv, s)
+
 	case "ves.io.schema.views.forward_proxy_policy.API":
 		gh, _ := MDR.SvcRegisterHandlers[api]
 		h, ok := gh.(func(*grpc.Server, ves_io_schema_views_forward_proxy_policy.APIServer))
@@ -37834,6 +40304,30 @@ func RegisterGrpcAPI(api string, gSrv *grpc.Server, srv interface{}) error {
 		s, ok := srv.(ves_io_schema_views_rate_limiter_policy_crudapi.APIServer)
 		if !ok {
 			panic(fmt.Sprintf("%T does not satisfy interface ves_io_schema_views_rate_limiter_policy_crudapi.APIServer", srv))
+		}
+		h(gSrv, s)
+
+	case "ves.io.schema.views.securemesh_site.API":
+		gh, _ := MDR.SvcRegisterHandlers[api]
+		h, ok := gh.(func(*grpc.Server, ves_io_schema_views_securemesh_site.APIServer))
+		if !ok {
+			return fmt.Errorf("gRPC API reg expected func(*grpc.Server, ves_io_schema_views_securemesh_site.APIServer), got %T", gh)
+		}
+		s, ok := srv.(ves_io_schema_views_securemesh_site.APIServer)
+		if !ok {
+			panic(fmt.Sprintf("%T does not satisfy interface ves_io_schema_views_securemesh_site.APIServer", srv))
+		}
+		h(gSrv, s)
+
+	case "ves.io.schema.views.securemesh_site.crudapi.API":
+		gh, _ := MDR.SvcRegisterHandlers[api]
+		h, ok := gh.(func(*grpc.Server, ves_io_schema_views_securemesh_site_crudapi.APIServer))
+		if !ok {
+			return fmt.Errorf("gRPC API reg expected func(*grpc.Server, ves_io_schema_views_securemesh_site_crudapi.APIServer), got %T", gh)
+		}
+		s, ok := srv.(ves_io_schema_views_securemesh_site_crudapi.APIServer)
+		if !ok {
+			panic(fmt.Sprintf("%T does not satisfy interface ves_io_schema_views_securemesh_site_crudapi.APIServer", srv))
 		}
 		h(gSrv, s)
 

@@ -3702,8 +3702,8 @@ var APISwaggerJSON string = `{
         },
         "policyPrefixMatchList": {
             "type": "object",
-            "description": "List of IPv4 Prefix strings to match against.",
-            "title": "Prefix Match List",
+            "description": "List of IP Prefix strings to match against.",
+            "title": "IP Prefix Match List",
             "x-displayname": "IP Prefix Match List",
             "x-ves-proto-message": "ves.io.schema.policy.PrefixMatchList",
             "properties": {
@@ -3716,21 +3716,17 @@ var APISwaggerJSON string = `{
                 },
                 "ip_prefixes": {
                     "type": "array",
-                    "description": " List of IPv4 prefix strings.\n\nExample: - \"192.168.20.0/24\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.items.string.ipv4_prefix: true\n  ves.io.schema.rules.repeated.max_items: 128\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " List of IPv4 prefix strings.\n\nExample: - \"192.168.20.0/24\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.ipv4_prefix: true\n  ves.io.schema.rules.repeated.max_items: 128\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "ip prefixes",
-                    "minItems": 1,
                     "maxItems": 128,
                     "items": {
                         "type": "string"
                     },
-                    "x-displayname": "IP Prefix List",
+                    "x-displayname": "IPv4 Prefix List",
                     "x-ves-example": "192.168.20.0/24",
-                    "x-ves-required": "true",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true",
                         "ves.io.schema.rules.repeated.items.string.ipv4_prefix": "true",
                         "ves.io.schema.rules.repeated.max_items": "128",
-                        "ves.io.schema.rules.repeated.min_items": "1",
                         "ves.io.schema.rules.repeated.unique": "true"
                     }
                 }
@@ -4162,14 +4158,6 @@ var APISwaggerJSON string = `{
                     "type": "string",
                     "description": "x-displayName: \"Flow Label\"\nx-example: \"Flight.CheckIn\"\nx-required\nFlow label",
                     "title": "Flow label"
-                },
-                "good_bot": {
-                    "type": "array",
-                    "description": "x-displayName: \"Good bot\"\nx-example: \"Allow\"\nx-required\nGood bot",
-                    "title": "GoodBot",
-                    "items": {
-                        "type": "string"
-                    }
                 },
                 "mitigation": {
                     "description": "x-displayName: \"Mitigation\"\nx-required\nMitigation action for protected endpoint",
@@ -5481,16 +5469,16 @@ var APISwaggerJSON string = `{
                     "x-displayname": "HTTP Method"
                 },
                 "ip_matcher": {
-                    "description": "Exclusive with [any_ip ip_prefix_list]\n List of references to IP Prefix Set objects.\n The predicate evaluates to true if the client IPv4 Address is covered by one or more of the IPv4 Prefixes in the IP Prefix Sets.",
+                    "description": "Exclusive with [any_ip ip_prefix_list]\n List of references to IP Prefix Set objects.\n The predicate evaluates to true if the client IP Address is covered by one or more of the IP Prefixes in the IP Prefix Sets.",
                     "title": "ip matcher",
                     "$ref": "#/definitions/policyIpMatcherType",
                     "x-displayname": "IP Prefix Sets"
                 },
                 "ip_prefix_list": {
-                    "description": "Exclusive with [any_ip ip_matcher]\n List of IPv4 Prefixes values.\n The predicate evaluates to true if the client IPv4 Address is covered by one or more of the IPv4 Prefixes from the list.",
+                    "description": "Exclusive with [any_ip ip_matcher]\n List of IP Prefixes values.\n The predicate evaluates to true if the client IP Address is covered by one or more of the IP Prefixes from the list.",
                     "title": "ip prefix list",
                     "$ref": "#/definitions/policyPrefixMatchList",
-                    "x-displayname": "IPv4 Prefix List"
+                    "x-displayname": "IP Prefix List"
                 },
                 "ip_threat_category_list": {
                     "description": "Exclusive with [any_client client_name client_name_matcher client_selector]\n IP threat categories to choose from",

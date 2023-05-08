@@ -4277,12 +4277,10 @@ var APISwaggerJSON string = `{
         },
         "schemaXfccElement": {
             "type": "string",
-            "description": "X-Forwarded-Client-Cert custom cookie elements\n\nThe Subject Alternative Name (URI type) of the current proxy’s certificate.\nThe current proxy’s certificate may contain multiple URI type Subject Alternative Names,\neach will be a separate key-value pair.\nThe SHA 256 digest of the current client certificate.\nThe entire client certificate in URL encoded PEM format.\nThe entire client certificate chain (including the leaf certificate) in URL encoded PEM format.\nThe Subject field of the current client certificate. The value is always double-quoted.\nThe URI type Subject Alternative Name field of the current client certificate.\nA client certificate may contain multiple URI type Subject Alternative Names,\neach will be a separate key-value pair.\nThe DNS type Subject Alternative Name field of the current client certificate.\nA client certificate may contain multiple DNS type Subject Alternative Names,\neach will be a separate key-value pair.",
+            "description": "X-Forwarded-Client-Cert custom cookie elements\n\nThe entire client certificate in URL encoded PEM format.\nThe entire client certificate chain (including the leaf certificate) in URL encoded PEM format.\nThe Subject field of the current client certificate. The value is always double-quoted.\nThe URI type Subject Alternative Name field of the current client certificate.\nA client certificate may contain multiple URI type Subject Alternative Names,\neach will be a separate key-value pair.\nThe DNS type Subject Alternative Name field of the current client certificate.\nA client certificate may contain multiple DNS type Subject Alternative Names,\neach will be a separate key-value pair.",
             "title": "XfccElement",
             "enum": [
                 "XFCC_NONE",
-                "XFCC_BY",
-                "XFCC_HASH",
                 "XFCC_CERT",
                 "XFCC_CHAIN",
                 "XFCC_SUBJECT",
@@ -4558,55 +4556,55 @@ var APISwaggerJSON string = `{
                 },
                 "request_headers_to_add": {
                     "type": "array",
-                    "description": " Headers are key-value pairs to be added to HTTP request being routed towards upstream.\n Headers specified at this level are applied after headers from matched Route are applied\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 8\n  ves.io.schema.rules.repeated.unique: true\n",
-                    "maxItems": 8,
+                    "description": " Headers are key-value pairs to be added to HTTP request being routed towards upstream.\n Headers specified at this level are applied after headers from matched Route are applied\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 32\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "maxItems": 32,
                     "items": {
                         "$ref": "#/definitions/schemaHeaderManipulationOptionType"
                     },
                     "x-displayname": "Add Request Headers",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.repeated.max_items": "8",
+                        "ves.io.schema.rules.repeated.max_items": "32",
                         "ves.io.schema.rules.repeated.unique": "true"
                     }
                 },
                 "request_headers_to_remove": {
                     "type": "array",
-                    "description": " List of keys of Headers to be removed from the HTTP request being sent towards upstream.\n\nExample: - \"host\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 8\n  ves.io.schema.rules.repeated.unique: true\n",
-                    "maxItems": 8,
+                    "description": " List of keys of Headers to be removed from the HTTP request being sent towards upstream.\n\nExample: - \"host\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 32\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "maxItems": 32,
                     "items": {
                         "type": "string"
                     },
                     "x-displayname": "Remove Request Headers",
                     "x-ves-example": "host",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.repeated.max_items": "8",
+                        "ves.io.schema.rules.repeated.max_items": "32",
                         "ves.io.schema.rules.repeated.unique": "true"
                     }
                 },
                 "response_headers_to_add": {
                     "type": "array",
-                    "description": " Headers are key-value pairs to be added to HTTP response being sent towards downstream.\n Headers specified at this level are applied after headers from matched Route are applied\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 8\n  ves.io.schema.rules.repeated.unique: true\n",
-                    "maxItems": 8,
+                    "description": " Headers are key-value pairs to be added to HTTP response being sent towards downstream.\n Headers specified at this level are applied after headers from matched Route are applied\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 32\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "maxItems": 32,
                     "items": {
                         "$ref": "#/definitions/schemaHeaderManipulationOptionType"
                     },
                     "x-displayname": "Add Response Headers",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.repeated.max_items": "8",
+                        "ves.io.schema.rules.repeated.max_items": "32",
                         "ves.io.schema.rules.repeated.unique": "true"
                     }
                 },
                 "response_headers_to_remove": {
                     "type": "array",
-                    "description": " List of keys of Headers to be removed from the HTTP response being sent towards downstream.\n\nExample: - \"host\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 8\n  ves.io.schema.rules.repeated.unique: true\n",
-                    "maxItems": 8,
+                    "description": " List of keys of Headers to be removed from the HTTP response being sent towards downstream.\n\nExample: - \"host\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 32\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "maxItems": 32,
                     "items": {
                         "type": "string"
                     },
                     "x-displayname": "Remove Response Headers",
                     "x-ves-example": "host",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.repeated.max_items": "8",
+                        "ves.io.schema.rules.repeated.max_items": "32",
                         "ves.io.schema.rules.repeated.unique": "true"
                     }
                 },
@@ -4929,55 +4927,55 @@ var APISwaggerJSON string = `{
                 },
                 "request_headers_to_add": {
                     "type": "array",
-                    "description": " Headers are key-value pairs to be added to HTTP request being routed towards upstream.\n Headers specified at this level are applied after headers from matched Route are applied\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 8\n  ves.io.schema.rules.repeated.unique: true\n",
-                    "maxItems": 8,
+                    "description": " Headers are key-value pairs to be added to HTTP request being routed towards upstream.\n Headers specified at this level are applied after headers from matched Route are applied\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 32\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "maxItems": 32,
                     "items": {
                         "$ref": "#/definitions/schemaHeaderManipulationOptionType"
                     },
                     "x-displayname": "Add Request Headers",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.repeated.max_items": "8",
+                        "ves.io.schema.rules.repeated.max_items": "32",
                         "ves.io.schema.rules.repeated.unique": "true"
                     }
                 },
                 "request_headers_to_remove": {
                     "type": "array",
-                    "description": " List of keys of Headers to be removed from the HTTP request being sent towards upstream.\n\nExample: - \"host\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 8\n  ves.io.schema.rules.repeated.unique: true\n",
-                    "maxItems": 8,
+                    "description": " List of keys of Headers to be removed from the HTTP request being sent towards upstream.\n\nExample: - \"host\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 32\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "maxItems": 32,
                     "items": {
                         "type": "string"
                     },
                     "x-displayname": "Remove Request Headers",
                     "x-ves-example": "host",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.repeated.max_items": "8",
+                        "ves.io.schema.rules.repeated.max_items": "32",
                         "ves.io.schema.rules.repeated.unique": "true"
                     }
                 },
                 "response_headers_to_add": {
                     "type": "array",
-                    "description": " Headers are key-value pairs to be added to HTTP response being sent towards downstream.\n Headers specified at this level are applied after headers from matched Route are applied\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 8\n  ves.io.schema.rules.repeated.unique: true\n",
-                    "maxItems": 8,
+                    "description": " Headers are key-value pairs to be added to HTTP response being sent towards downstream.\n Headers specified at this level are applied after headers from matched Route are applied\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 32\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "maxItems": 32,
                     "items": {
                         "$ref": "#/definitions/schemaHeaderManipulationOptionType"
                     },
                     "x-displayname": "Add Response Headers",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.repeated.max_items": "8",
+                        "ves.io.schema.rules.repeated.max_items": "32",
                         "ves.io.schema.rules.repeated.unique": "true"
                     }
                 },
                 "response_headers_to_remove": {
                     "type": "array",
-                    "description": " List of keys of Headers to be removed from the HTTP response being sent towards downstream.\n\nExample: - \"host\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 8\n  ves.io.schema.rules.repeated.unique: true\n",
-                    "maxItems": 8,
+                    "description": " List of keys of Headers to be removed from the HTTP response being sent towards downstream.\n\nExample: - \"host\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 32\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "maxItems": 32,
                     "items": {
                         "type": "string"
                     },
                     "x-displayname": "Remove Response Headers",
                     "x-ves-example": "host",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.repeated.max_items": "8",
+                        "ves.io.schema.rules.repeated.max_items": "32",
                         "ves.io.schema.rules.repeated.unique": "true"
                     }
                 },
@@ -5420,59 +5418,59 @@ var APISwaggerJSON string = `{
                 },
                 "request_headers_to_add": {
                     "type": "array",
-                    "description": " Headers are key-value pairs to be added to HTTP request being routed towards upstream.\n Headers specified at this level are applied after headers from matched Route are applied\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 8\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " Headers are key-value pairs to be added to HTTP request being routed towards upstream.\n Headers specified at this level are applied after headers from matched Route are applied\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 32\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "Headers to add in request",
-                    "maxItems": 8,
+                    "maxItems": 32,
                     "items": {
                         "$ref": "#/definitions/schemaHeaderManipulationOptionType"
                     },
                     "x-displayname": "Add Request Headers",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.repeated.max_items": "8",
+                        "ves.io.schema.rules.repeated.max_items": "32",
                         "ves.io.schema.rules.repeated.unique": "true"
                     }
                 },
                 "request_headers_to_remove": {
                     "type": "array",
-                    "description": " List of keys of Headers to be removed from the HTTP request being sent towards upstream.\n\nExample: - \"host\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 8\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " List of keys of Headers to be removed from the HTTP request being sent towards upstream.\n\nExample: - \"host\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 32\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "Header to be removed from request",
-                    "maxItems": 8,
+                    "maxItems": 32,
                     "items": {
                         "type": "string"
                     },
                     "x-displayname": "Remove Request Headers",
                     "x-ves-example": "host",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.repeated.max_items": "8",
+                        "ves.io.schema.rules.repeated.max_items": "32",
                         "ves.io.schema.rules.repeated.unique": "true"
                     }
                 },
                 "response_headers_to_add": {
                     "type": "array",
-                    "description": " Headers are key-value pairs to be added to HTTP response being sent towards downstream.\n Headers specified at this level are applied after headers from matched Route are applied\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 8\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " Headers are key-value pairs to be added to HTTP response being sent towards downstream.\n Headers specified at this level are applied after headers from matched Route are applied\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 32\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "Headers to add in response",
-                    "maxItems": 8,
+                    "maxItems": 32,
                     "items": {
                         "$ref": "#/definitions/schemaHeaderManipulationOptionType"
                     },
                     "x-displayname": "Add Response Headers",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.repeated.max_items": "8",
+                        "ves.io.schema.rules.repeated.max_items": "32",
                         "ves.io.schema.rules.repeated.unique": "true"
                     }
                 },
                 "response_headers_to_remove": {
                     "type": "array",
-                    "description": " List of keys of Headers to be removed from the HTTP response being sent towards downstream.\n\nExample: - \"host\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 8\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " List of keys of Headers to be removed from the HTTP response being sent towards downstream.\n\nExample: - \"host\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 32\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "Header to be removed from response",
-                    "maxItems": 8,
+                    "maxItems": 32,
                     "items": {
                         "type": "string"
                     },
                     "x-displayname": "Remove Response Headers",
                     "x-ves-example": "host",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.repeated.max_items": "8",
+                        "ves.io.schema.rules.repeated.max_items": "32",
                         "ves.io.schema.rules.repeated.unique": "true"
                     }
                 },
@@ -5829,55 +5827,55 @@ var APISwaggerJSON string = `{
                 },
                 "request_headers_to_add": {
                     "type": "array",
-                    "description": " Headers are key-value pairs to be added to HTTP request being routed towards upstream.\n Headers specified at this level are applied after headers from matched Route are applied\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 8\n  ves.io.schema.rules.repeated.unique: true\n",
-                    "maxItems": 8,
+                    "description": " Headers are key-value pairs to be added to HTTP request being routed towards upstream.\n Headers specified at this level are applied after headers from matched Route are applied\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 32\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "maxItems": 32,
                     "items": {
                         "$ref": "#/definitions/schemaHeaderManipulationOptionType"
                     },
                     "x-displayname": "Add Request Headers",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.repeated.max_items": "8",
+                        "ves.io.schema.rules.repeated.max_items": "32",
                         "ves.io.schema.rules.repeated.unique": "true"
                     }
                 },
                 "request_headers_to_remove": {
                     "type": "array",
-                    "description": " List of keys of Headers to be removed from the HTTP request being sent towards upstream.\n\nExample: - \"host\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 8\n  ves.io.schema.rules.repeated.unique: true\n",
-                    "maxItems": 8,
+                    "description": " List of keys of Headers to be removed from the HTTP request being sent towards upstream.\n\nExample: - \"host\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 32\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "maxItems": 32,
                     "items": {
                         "type": "string"
                     },
                     "x-displayname": "Remove Request Headers",
                     "x-ves-example": "host",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.repeated.max_items": "8",
+                        "ves.io.schema.rules.repeated.max_items": "32",
                         "ves.io.schema.rules.repeated.unique": "true"
                     }
                 },
                 "response_headers_to_add": {
                     "type": "array",
-                    "description": " Headers are key-value pairs to be added to HTTP response being sent towards downstream.\n Headers specified at this level are applied after headers from matched Route are applied\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 8\n  ves.io.schema.rules.repeated.unique: true\n",
-                    "maxItems": 8,
+                    "description": " Headers are key-value pairs to be added to HTTP response being sent towards downstream.\n Headers specified at this level are applied after headers from matched Route are applied\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 32\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "maxItems": 32,
                     "items": {
                         "$ref": "#/definitions/schemaHeaderManipulationOptionType"
                     },
                     "x-displayname": "Add Response Headers",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.repeated.max_items": "8",
+                        "ves.io.schema.rules.repeated.max_items": "32",
                         "ves.io.schema.rules.repeated.unique": "true"
                     }
                 },
                 "response_headers_to_remove": {
                     "type": "array",
-                    "description": " List of keys of Headers to be removed from the HTTP response being sent towards downstream.\n\nExample: - \"host\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 8\n  ves.io.schema.rules.repeated.unique: true\n",
-                    "maxItems": 8,
+                    "description": " List of keys of Headers to be removed from the HTTP response being sent towards downstream.\n\nExample: - \"host\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 32\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "maxItems": 32,
                     "items": {
                         "type": "string"
                     },
                     "x-displayname": "Remove Response Headers",
                     "x-ves-example": "host",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.repeated.max_items": "8",
+                        "ves.io.schema.rules.repeated.max_items": "32",
                         "ves.io.schema.rules.repeated.unique": "true"
                     }
                 },
@@ -6304,14 +6302,15 @@ var APISwaggerJSON string = `{
             "description": "x-displayName: \"DNS Cache\"\nDNS Cache specifies cache configuration",
             "title": "DNS Cache",
             "properties": {
+                "cache_size": {
+                    "type": "integer",
+                    "description": "x-displayName: \"cache size\"\nx-example: \"1000\"\ncache size",
+                    "title": "Cache size",
+                    "format": "int64"
+                },
                 "disable_cache_profile": {
                     "description": "x-displayName: \"Disable\"",
                     "title": "Disable DNS Cache",
-                    "$ref": "#/definitions/ioschemaEmpty"
-                },
-                "enable_cache_profile": {
-                    "description": "x-displayName: \"Enable\"",
-                    "title": "Enable DNS Cache",
                     "$ref": "#/definitions/ioschemaEmpty"
                 }
             }
@@ -6549,6 +6548,28 @@ var APISwaggerJSON string = `{
                 "GET_RSP_FORMAT_REFERRING_OBJECTS"
             ],
             "default": "GET_RSP_FORMAT_DEFAULT"
+        },
+        "virtual_hostHttpProtocolOptions": {
+            "type": "object",
+            "description": "x-displayName: \"HTTP Protocol Configuration Options\"\nHTTP protocol configuration options for downstream connections",
+            "title": "HttpProtocolOptions",
+            "properties": {
+                "http_protocol_enable_v1_only": {
+                    "description": "x-displayName: \"HTTP/1.1\"\nEnable HTTP/1.1 for downstream connections",
+                    "title": "http_protocol_enable_v1_only",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "http_protocol_enable_v1_v2": {
+                    "description": "x-displayName: \"HTTP/1.1 and HTTP/2\"\nEnable both HTTP/1.1 and HTTP/2 for downstream connections",
+                    "title": "http_protocol_enable_v1_v2",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "http_protocol_enable_v2_only": {
+                    "description": "x-displayName: \"HTTP/2\"\nEnable HTTP/2 for downstream connections",
+                    "title": "http_protocol_enable_v2_only",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                }
+            }
         },
         "virtual_hostJavaScriptConfigType": {
             "type": "object",
