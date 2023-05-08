@@ -21,11 +21,7 @@ resource "volterra_virtual_host" "example" {
   namespace = "staging"
 
   // One of the arguments from this list "no_challenge js_challenge captcha_challenge" must be set
-
-  captcha_challenge {
-    cookie_expiry = "1000"
-    custom_page   = "string:///PHA+IFBsZWFzZSBXYWl0IDwvcD4="
-  }
+  no_challenge = true
 }
 
 ```
@@ -249,9 +245,9 @@ specify the maximum buffer size and buffer interval with this config..
 
 which caches DNS replies from the origin DNS servers..
 
-`disable_cache_profile` - (Optional) x-displayName: "Disable" (bool).
+`cache_size` - (Optional) cache size (`Int`).
 
-`enable_cache_profile` - (Optional) x-displayName: "Enable" (bool).
+`disable_cache_profile` - (Optional) x-displayName: "Disable" (bool).
 
 ### Captcha Challenge
 
@@ -460,10 +456,6 @@ the ECDSA certificate for the domain, if any.
 `tenant` - (Optional) then tenant will hold the referred object's(e.g. route's) tenant. (`String`).
 
 `uid` - (Optional) then uid will hold the referred object's(e.g. route's) uid. (`String`).
-
-### Enable Cache Profile
-
-x-displayName: "Enable".
 
 ### Enable Ddos Mitigation
 

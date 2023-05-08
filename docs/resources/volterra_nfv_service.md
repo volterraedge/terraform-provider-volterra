@@ -20,7 +20,7 @@ resource "volterra_nfv_service" "example" {
   name      = "acmecorp-web"
   namespace = "staging"
 
-  // One of the arguments from this list "https_management disable_https_management" must be set
+  // One of the arguments from this list "disable_https_management https_management" must be set
   disable_https_management = true
 
   // One of the arguments from this list "f5_big_ip_aws_service palo_alto_fw_service" must be set
@@ -35,12 +35,10 @@ resource "volterra_nfv_service" "example" {
 
       secret_encoding_type = "secret_encoding_type"
 
-      // One of the arguments from this list "wingman_secret_info blindfold_secret_info vault_secret_info clear_secret_info" must be set
+      // One of the arguments from this list "blindfold_secret_info vault_secret_info clear_secret_info wingman_secret_info" must be set
 
-      blindfold_secret_info {
-        decryption_provider = "value"
-        location            = "string:///U2VjcmV0SW5mb3JtYXRpb24="
-        store_provider      = "value"
+      wingman_secret_info {
+        name = "ChargeBack-API-Key"
       }
     }
 
@@ -48,13 +46,13 @@ resource "volterra_nfv_service" "example" {
 
     endpoint_service {
       // One of the arguments from this list "disable_advertise_on_slo_ip advertise_on_slo_ip advertise_on_slo_ip_external" must be set
-      disable_advertise_on_slo_ip = true
+      advertise_on_slo_ip_external = true
 
       // One of the arguments from this list "automatic_vip configured_vip" must be set
-      configured_vip = "10.1.2.6/32"
+      automatic_vip = true
 
       // One of the arguments from this list "default_tcp_ports http_port https_port custom_tcp_ports no_tcp_ports" must be set
-      https_port = true
+      default_tcp_ports = true
 
       // One of the arguments from this list "no_udp_ports custom_udp_ports" must be set
       no_udp_ports = true
@@ -76,12 +74,10 @@ resource "volterra_nfv_service" "example" {
 
         // One of the arguments from this list "blindfold_secret_info vault_secret_info clear_secret_info wingman_secret_info" must be set
 
-        vault_secret_info {
-          key             = "key_pem"
-          location        = "v1/data/vhost_key"
-          provider        = "vault-vh-provider"
-          secret_encoding = "secret_encoding"
-          version         = "1"
+        blindfold_secret_info {
+          decryption_provider = "value"
+          location            = "string:///U2VjcmV0SW5mb3JtYXRpb24="
+          store_provider      = "value"
         }
       }
     }
@@ -93,7 +89,7 @@ resource "volterra_nfv_service" "example" {
       node_name            = "node1"
 
       // One of the arguments from this list "automatic_prefix tunnel_prefix" must be set
-      tunnel_prefix = "10.1.2.4/30"
+      automatic_prefix = true
     }
 
     // One of the arguments from this list "aws_tgw_site_params aws_vpc_site_params" must be set
@@ -110,7 +106,7 @@ resource "volterra_nfv_service" "example" {
       "key1" = "value1"
     }
   }
-  // One of the arguments from this list "disable_ssh_access enabled_ssh_access" must be set
+  // One of the arguments from this list "enabled_ssh_access disable_ssh_access" must be set
   disable_ssh_access = true
 }
 
@@ -139,7 +135,7 @@ Argument Reference
 
 `https_management` - (Optional) Enable HTTPS based management. See [Https Management ](#https-management) below for details.
 
-`f5_big_ip_aws_service` - (Optional) Virtual F5 BigIP service to be deployed on AWS. See [F5 Big Ip Aws Service ](#f5-big-ip-aws-service) below for details.
+`f5_big_ip_aws_service` - (Optional) Virtual BIG-IP service to be deployed on AWS. See [F5 Big Ip Aws Service ](#f5-big-ip-aws-service) below for details.
 
 `palo_alto_fw_service` - (Optional) Palo Alto Networks VM-Series Firewall to be deployed on AWS Cloud. See [Palo Alto Fw Service ](#palo-alto-fw-service) below for details.
 
@@ -154,6 +150,10 @@ F5 Advanced WAF with LTM, IPI, and Threat Campaigns (PAYG, 200Mbps).
 ### AWAFPayG3Gbps
 
 F5 Advanced WAF with LTM, IPI, and Threat Campaigns (PAYG, 3Gbps).
+
+### BestPlusPayG200Mbps
+
+F5 Best Plus with all modules (PAYG, 200mbps).
 
 ### Admin Password
 
@@ -321,9 +321,9 @@ Blindfold Secret Internal is used for the putting re-encrypted blindfold secret.
 
 ### Byol Image
 
-Select the BigIp bring your own license image to be used for this service.
+Select the BIG-IP bring your own license image to be used for this service.
 
-`image` - (Required) Select the BigIp pay as you go image to be used for this service (`String`).
+`image` - (Required) Select the BIG-IP pay as you go image to be used for this service (`String`).
 
 `license` - (Optional) Secret License data. See [License ](#license) below for details.
 
@@ -447,7 +447,7 @@ External service type is Endpoint service.
 
 ### F5 Big Ip Aws Service
 
-Virtual F5 BigIP service to be deployed on AWS.
+Virtual BIG-IP service to be deployed on AWS.
 
 `admin_password` - (Required) Secret admin password for BIG ip. See [Admin Password ](#admin-password) below for details.
 
@@ -455,9 +455,9 @@ Virtual F5 BigIP service to be deployed on AWS.
 
 `endpoint_service` - (Optional) External service type is Endpoint service. See [Endpoint Service ](#endpoint-service) below for details.
 
-`byol_image` - (Required) Select the BigIp bring your own license image to be used for this service. See [Byol Image ](#byol-image) below for details.
+`byol_image` - (Required) Select the BIG-IP bring your own license image to be used for this service. See [Byol Image ](#byol-image) below for details.
 
-`market_place_image` - (Required) Select the BigIp pay as you go image to be used for this service. See [Market Place Image ](#market-place-image) below for details.
+`market_place_image` - (Required) Select the BIG-IP pay as you go image to be used for this service. See [Market Place Image ](#market-place-image) below for details.
 
 `nodes` - (Required) Specify how and where the service nodes are spawned. See [Nodes ](#nodes) below for details.
 
@@ -539,11 +539,13 @@ User given public and private SSH keys.
 
 ### Market Place Image
 
-Select the BigIp pay as you go image to be used for this service.
+Select the BIG-IP pay as you go image to be used for this service.
 
 `AWAFPayG200Mbps` - (Required) F5 Advanced WAF with LTM, IPI, and Threat Campaigns (PAYG, 200Mbps) (bool).
 
 `AWAFPayG3Gbps` - (Required) F5 Advanced WAF with LTM, IPI, and Threat Campaigns (PAYG, 3Gbps) (bool).
+
+`BestPlusPayG200Mbps` - (Required) F5 Best Plus with all modules (PAYG, 200mbps) (bool).
 
 ### Medium Security
 

@@ -20,7 +20,7 @@ resource "volterra_azure_vnet_site" "example" {
   name      = "acmecorp-web"
   namespace = "staging"
 
-  // One of the arguments from this list "blocked_services default_blocked_services" must be set
+  // One of the arguments from this list "default_blocked_services block_all_services blocked_services" must be set
   default_blocked_services = true
 
   // One of the arguments from this list "azure_cred" must be set
@@ -36,7 +36,7 @@ resource "volterra_azure_vnet_site" "example" {
   azure_region = "eastus"
   resource_group = ["my-resources"]
 
-  // One of the arguments from this list "ingress_egress_gw voltstack_cluster ingress_gw_ar ingress_egress_gw_ar voltstack_cluster_ar ingress_gw" must be set
+  // One of the arguments from this list "ingress_gw ingress_egress_gw voltstack_cluster ingress_gw_ar ingress_egress_gw_ar voltstack_cluster_ar" must be set
 
   voltstack_cluster {
     az_nodes {
@@ -58,33 +58,48 @@ resource "volterra_azure_vnet_site" "example" {
     // One of the arguments from this list "no_dc_cluster_group dc_cluster_group" must be set
     no_dc_cluster_group = true
 
-    // One of the arguments from this list "active_forward_proxy_policies forward_proxy_allow_all no_forward_proxy" must be set
+    // One of the arguments from this list "no_forward_proxy active_forward_proxy_policies forward_proxy_allow_all" must be set
     no_forward_proxy = true
 
     // One of the arguments from this list "no_global_network global_network_list" must be set
-    no_global_network = true
 
-    // One of the arguments from this list "k8s_cluster no_k8s_cluster" must be set
+    global_network_list {
+      global_network_connections {
+        // One of the arguments from this list "sli_to_global_dr slo_to_global_dr" must be set
+
+        slo_to_global_dr {
+          global_vn {
+            name      = "test1"
+            namespace = "staging"
+            tenant    = "acmecorp"
+          }
+        }
+
+        // One of the arguments from this list "disable_forward_proxy enable_forward_proxy" must be set
+        disable_forward_proxy = true
+      }
+    }
+    // One of the arguments from this list "no_k8s_cluster k8s_cluster" must be set
     no_k8s_cluster = true
 
     // One of the arguments from this list "no_network_policy active_network_policies active_enhanced_firewall_policies" must be set
-    no_network_policy = true
 
-    // One of the arguments from this list "no_outside_static_routes outside_static_routes" must be set
-
-    outside_static_routes {
-      static_route_list {
-        // One of the arguments from this list "simple_static_route custom_static_route" must be set
-        simple_static_route = "10.5.1.0/24"
+    active_enhanced_firewall_policies {
+      enhanced_firewall_policies {
+        name      = "test1"
+        namespace = "staging"
+        tenant    = "acmecorp"
       }
     }
+    // One of the arguments from this list "no_outside_static_routes outside_static_routes" must be set
+    no_outside_static_routes = true
     // One of the arguments from this list "sm_connection_public_ip sm_connection_pvt_ip" must be set
     sm_connection_public_ip = true
-    // One of the arguments from this list "storage_class_list default_storage" must be set
+    // One of the arguments from this list "default_storage storage_class_list" must be set
     default_storage = true
   }
   vnet {
-    // One of the arguments from this list "existing_vnet new_vnet" must be set
+    // One of the arguments from this list "new_vnet existing_vnet" must be set
 
     new_vnet {
       // One of the arguments from this list "name autogenerate" must be set
@@ -93,7 +108,7 @@ resource "volterra_azure_vnet_site" "example" {
       primary_ipv4 = "10.1.0.0/16"
     }
   }
-  // One of the arguments from this list "nodes_per_az total_nodes no_worker_nodes" must be set
+  // One of the arguments from this list "total_nodes no_worker_nodes nodes_per_az" must be set
   nodes_per_az = "2"
 }
 
@@ -120,9 +135,11 @@ Argument Reference
 
 `address` - (Optional) Site's geographical address that can be used determine its latitude and longitude. (`String`).
 
+`block_all_services` - (Optional) Block DNS, SSH & WebUI services on Site (bool).
+
 `blocked_services` - (Optional) Use custom blocked services configuration. See [Blocked Services ](#blocked-services) below for details.
 
-`default_blocked_services` - (Optional) Use default behavior of allowing ports mentioned in blocked services (bool).
+`default_blocked_services` - (Optional) Allow access to DNS, SSH services on Site (bool).
 
 `coordinates` - (Optional) Site longitude and latitude co-ordinates. See [Coordinates ](#coordinates) below for details.
 
@@ -174,7 +191,7 @@ Argument Reference
 
 ### Active Enhanced Firewall Policies
 
-Enhanced Firewall Policies active for this site..
+with an additional option for service insertion..
 
 `enhanced_firewall_policies` - (Required) Ordered List of Enhaned Firewall Policy active for this network firewall. See [ref](#ref) below for details.
 
@@ -189,6 +206,10 @@ Enable Forward Proxy for this site and manage policies.
 Firewall Policies active for this site..
 
 `network_policies` - (Required) Ordered List of Firewall Policies active for this network firewall. See [ref](#ref) below for details.
+
+### Advertise To Route Server
+
+Advertise Spoke Vnet CIDR Routes To Azure Route Server via BGP.
 
 ### Authorized Key
 
@@ -212,7 +233,7 @@ The subnet CIDR is autogenerated..
 
 ### Auto Asn
 
-(Recommended) Automatically set ASN for BGP between Site and Azure Route Servers.
+(Recommended) Automatically set ASN for F5XC Site.
 
 ### Autogenerate
 
@@ -358,6 +379,10 @@ This is the default behavior if no choice is selected..
 
 Matches ssh port 53.
 
+### Do Not Advertise To Route Server
+
+Do Not Advertise Spoke Vnet CIDR Routes To Azure Route Server via BGP.
+
 ### Domain Match
 
 Domain value or regular expression to match.
@@ -412,9 +437,9 @@ Express Route is disabled on this site.
 
 Express Route is enabled on this site.
 
-`auto_asn` - (Optional) (Recommended) Automatically set ASN for BGP between Site and Azure Route Servers (bool).
+`auto_asn` - (Optional) (Recommended) Automatically set ASN for F5XC Site (bool).
 
-`custom_asn` - (Optional) Set custom ASN for BGP between Site and Azure Route Servers (`Int`).
+`custom_asn` - (Optional) Set custom ASN for F5XC Site (`Int`).
 
 `connections` - (Required) Add the ExpressRoute Circuit Connections to this site. See [Connections ](#connections) below for details.
 
@@ -433,6 +458,10 @@ Express Route is enabled on this site.
 `sku_high_perf` - (Optional) High Perf SKU (bool).
 
 `sku_standard` - (Optional) Standard SKU (bool).
+
+`advertise_to_route_server` - (Optional) Advertise Spoke Vnet CIDR Routes To Azure Route Server via BGP (bool).
+
+`do_not_advertise_to_route_server` - (Optional) Do Not Advertise Spoke Vnet CIDR Routes To Azure Route Server via BGP (bool).
 
 ### Forward Proxy Allow All
 
@@ -508,7 +537,7 @@ Two interface site is useful when site is used as ingress/egress gateway to the 
 
 `no_inside_static_routes` - (Optional) Static Routes disabled for inside network. (bool).
 
-`active_enhanced_firewall_policies` - (Optional) Enhanced Firewall Policies active for this site.. See [Active Enhanced Firewall Policies ](#active-enhanced-firewall-policies) below for details.
+`active_enhanced_firewall_policies` - (Optional) with an additional option for service insertion.. See [Active Enhanced Firewall Policies ](#active-enhanced-firewall-policies) below for details.
 
 `active_network_policies` - (Optional) Firewall Policies active for this site.. See [Active Network Policies ](#active-network-policies) below for details.
 
@@ -554,7 +583,7 @@ Two interface site is useful when site is used as ingress/egress gateway to the 
 
 `no_inside_static_routes` - (Optional) Static Routes disabled for inside network. (bool).
 
-`active_enhanced_firewall_policies` - (Optional) Enhanced Firewall Policies active for this site.. See [Active Enhanced Firewall Policies ](#active-enhanced-firewall-policies) below for details.
+`active_enhanced_firewall_policies` - (Optional) with an additional option for service insertion.. See [Active Enhanced Firewall Policies ](#active-enhanced-firewall-policies) below for details.
 
 `active_network_policies` - (Optional) Firewall Policies active for this site.. See [Active Network Policies ](#active-network-policies) below for details.
 
@@ -780,7 +809,7 @@ Subnets for the outside interface of the node.
 
 ### Perf Mode L3 Enhanced
 
-Site optimized for L3 traffic processing.
+When the mode is toggled to l3 enhanced, traffic disruption will be seen.
 
 `jumbo` - (Optional) L3 performance mode enhancement to use jumbo frame (bool).
 
@@ -788,15 +817,15 @@ Site optimized for L3 traffic processing.
 
 ### Perf Mode L7 Enhanced
 
-Site optimized for L7 traffic processing.
+When the mode is toggled to l7 enhanced, traffic disruption will be seen.
 
 ### Performance Enhancement Mode
 
 Performance Enhancement Mode to optimize for L3 or L7 networking.
 
-`perf_mode_l3_enhanced` - (Optional) Site optimized for L3 traffic processing. See [Perf Mode L3 Enhanced ](#perf-mode-l3-enhanced) below for details.
+`perf_mode_l3_enhanced` - (Optional) When the mode is toggled to l3 enhanced, traffic disruption will be seen. See [Perf Mode L3 Enhanced ](#perf-mode-l3-enhanced) below for details.
 
-`perf_mode_l7_enhanced` - (Optional) Site optimized for L7 traffic processing (bool).
+`perf_mode_l7_enhanced` - (Optional) When the mode is toggled to l7 enhanced, traffic disruption will be seen (bool).
 
 ### Policy
 
@@ -1040,7 +1069,7 @@ App Stack Cluster using single interface, useful for deploying K8s cluster..
 
 `no_k8s_cluster` - (Optional) Site Local K8s API access is disabled (bool).
 
-`active_enhanced_firewall_policies` - (Optional) Enhanced Firewall Policies active for this site.. See [Active Enhanced Firewall Policies ](#active-enhanced-firewall-policies) below for details.
+`active_enhanced_firewall_policies` - (Optional) with an additional option for service insertion.. See [Active Enhanced Firewall Policies ](#active-enhanced-firewall-policies) below for details.
 
 `active_network_policies` - (Optional) Firewall Policies active for this site.. See [Active Network Policies ](#active-network-policies) below for details.
 
@@ -1082,7 +1111,7 @@ App Stack Cluster using single interface, useful for deploying K8s cluster..
 
 `no_k8s_cluster` - (Optional) Site Local K8s API access is disabled (bool).
 
-`active_enhanced_firewall_policies` - (Optional) Enhanced Firewall Policies active for this site.. See [Active Enhanced Firewall Policies ](#active-enhanced-firewall-policies) below for details.
+`active_enhanced_firewall_policies` - (Optional) with an additional option for service insertion.. See [Active Enhanced Firewall Policies ](#active-enhanced-firewall-policies) below for details.
 
 `active_network_policies` - (Optional) Firewall Policies active for this site.. See [Active Network Policies ](#active-network-policies) below for details.
 

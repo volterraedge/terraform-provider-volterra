@@ -20,8 +20,8 @@ resource "volterra_gcp_vpc_site" "example" {
   name      = "acmecorp-web"
   namespace = "staging"
 
-  // One of the arguments from this list "default_blocked_services blocked_services" must be set
-  default_blocked_services = true
+  // One of the arguments from this list "block_all_services blocked_services default_blocked_services" must be set
+  block_all_services = true
 
   // One of the arguments from this list "cloud_credentials" must be set
 
@@ -32,43 +32,25 @@ resource "volterra_gcp_vpc_site" "example" {
   }
   gcp_region    = ["us-west1"]
   instance_type = ["n1-standard-4"]
-  // One of the arguments from this list "logs_streaming_disabled log_receiver" must be set
+  // One of the arguments from this list "log_receiver logs_streaming_disabled" must be set
   logs_streaming_disabled = true
 
   // One of the arguments from this list "ingress_gw ingress_egress_gw voltstack_cluster" must be set
 
-  voltstack_cluster {
-    // One of the arguments from this list "no_dc_cluster_group dc_cluster_group" must be set
-    no_dc_cluster_group = true
-
-    // One of the arguments from this list "no_forward_proxy active_forward_proxy_policies forward_proxy_allow_all" must be set
-    no_forward_proxy = true
-    gcp_certified_hw = "gcp-byol-voltstack-combo"
+  ingress_gw {
+    gcp_certified_hw = "gcp-byol-voltmesh"
 
     gcp_zone_names = ["us-west1-a, us-west1-b, us-west1-c"]
 
-    // One of the arguments from this list "no_global_network global_network_list" must be set
-    no_global_network = true
-
-    // One of the arguments from this list "no_k8s_cluster k8s_cluster" must be set
-    no_k8s_cluster = true
-
-    // One of the arguments from this list "no_network_policy active_network_policies active_enhanced_firewall_policies" must be set
-    no_network_policy = true
-    node_number       = "1"
-
-    // One of the arguments from this list "no_outside_static_routes outside_static_routes" must be set
-    no_outside_static_routes = true
-
-    site_local_network {
-      // One of the arguments from this list "existing_network new_network_autogenerate new_network" must be set
+    local_network {
+      // One of the arguments from this list "new_network_autogenerate new_network existing_network" must be set
 
       new_network_autogenerate {
         autogenerate = true
       }
     }
 
-    site_local_subnet {
+    local_subnet {
       // One of the arguments from this list "new_subnet existing_subnet" must be set
 
       new_subnet {
@@ -77,11 +59,12 @@ resource "volterra_gcp_vpc_site" "example" {
       }
     }
 
-    // One of the arguments from this list "sm_connection_public_ip sm_connection_pvt_ip" must be set
-    sm_connection_public_ip = true
+    node_number = "1"
 
-    // One of the arguments from this list "default_storage storage_class_list" must be set
-    default_storage = true
+    performance_enhancement_mode {
+      // One of the arguments from this list "perf_mode_l7_enhanced perf_mode_l3_enhanced" must be set
+      perf_mode_l7_enhanced = true
+    }
   }
 }
 
@@ -108,9 +91,11 @@ Argument Reference
 
 `address` - (Optional) Site's geographical address that can be used determine its latitude and longitude. (`String`).
 
+`block_all_services` - (Optional) Block DNS, SSH & WebUI services on Site (bool).
+
 `blocked_services` - (Optional) Use custom blocked services configuration. See [Blocked Services ](#blocked-services) below for details.
 
-`default_blocked_services` - (Optional) Use default behavior of allowing ports mentioned in blocked services (bool).
+`default_blocked_services` - (Optional) Allow access to DNS, SSH services on Site (bool).
 
 `coordinates` - (Optional) Site longitude and latitude co-ordinates. See [Coordinates ](#coordinates) below for details.
 
@@ -146,7 +131,7 @@ Argument Reference
 
 ### Active Enhanced Firewall Policies
 
-Enhanced Firewall Policies active for this site..
+with an additional option for service insertion..
 
 `enhanced_firewall_policies` - (Required) Ordered List of Enhaned Firewall Policy active for this network firewall. See [ref](#ref) below for details.
 
@@ -382,7 +367,7 @@ Two interface site is useful when site is used as ingress/egress gateway to the 
 
 `inside_subnet` - (Optional) Subnet for the inside interface of the node.. See [Inside Subnet ](#inside-subnet) below for details.
 
-`active_enhanced_firewall_policies` - (Optional) Enhanced Firewall Policies active for this site.. See [Active Enhanced Firewall Policies ](#active-enhanced-firewall-policies) below for details.
+`active_enhanced_firewall_policies` - (Optional) with an additional option for service insertion.. See [Active Enhanced Firewall Policies ](#active-enhanced-firewall-policies) below for details.
 
 `active_network_policies` - (Optional) Firewall Policies active for this site.. See [Active Network Policies ](#active-network-policies) below for details.
 
@@ -616,7 +601,7 @@ Subnet for the outside interface of the node..
 
 ### Perf Mode L3 Enhanced
 
-Site optimized for L3 traffic processing.
+When the mode is toggled to l3 enhanced, traffic disruption will be seen.
 
 `jumbo` - (Optional) L3 performance mode enhancement to use jumbo frame (bool).
 
@@ -624,15 +609,15 @@ Site optimized for L3 traffic processing.
 
 ### Perf Mode L7 Enhanced
 
-Site optimized for L7 traffic processing.
+When the mode is toggled to l7 enhanced, traffic disruption will be seen.
 
 ### Performance Enhancement Mode
 
 Performance Enhancement Mode to optimize for L3 or L7 networking.
 
-`perf_mode_l3_enhanced` - (Optional) Site optimized for L3 traffic processing. See [Perf Mode L3 Enhanced ](#perf-mode-l3-enhanced) below for details.
+`perf_mode_l3_enhanced` - (Optional) When the mode is toggled to l3 enhanced, traffic disruption will be seen. See [Perf Mode L3 Enhanced ](#perf-mode-l3-enhanced) below for details.
 
-`perf_mode_l7_enhanced` - (Optional) Site optimized for L7 traffic processing (bool).
+`perf_mode_l7_enhanced` - (Optional) When the mode is toggled to l7 enhanced, traffic disruption will be seen (bool).
 
 ### Policy
 
@@ -816,7 +801,7 @@ App Stack Cluster using single interface, useful for deploying K8s cluster..
 
 `no_k8s_cluster` - (Optional) Site Local K8s API access is disabled (bool).
 
-`active_enhanced_firewall_policies` - (Optional) Enhanced Firewall Policies active for this site.. See [Active Enhanced Firewall Policies ](#active-enhanced-firewall-policies) below for details.
+`active_enhanced_firewall_policies` - (Optional) with an additional option for service insertion.. See [Active Enhanced Firewall Policies ](#active-enhanced-firewall-policies) below for details.
 
 `active_network_policies` - (Optional) Firewall Policies active for this site.. See [Active Network Policies ](#active-network-policies) below for details.
 

@@ -37,7 +37,7 @@ resource "volterra_aws_tgw_site" "example" {
       }
 
       workload_subnet {
-        // One of the arguments from this list "existing_subnet_id subnet_param" must be set
+        // One of the arguments from this list "subnet_param existing_subnet_id" must be set
 
         subnet_param {
           ipv4 = "10.1.2.0/24"
@@ -46,7 +46,7 @@ resource "volterra_aws_tgw_site" "example" {
       }
     }
 
-    // One of the arguments from this list "assisted aws_cred" must be set
+    // One of the arguments from this list "aws_cred assisted" must be set
 
     aws_cred {
       name      = "test1"
@@ -56,7 +56,7 @@ resource "volterra_aws_tgw_site" "example" {
     disk_size     = "80"
     instance_type = "a1.xlarge"
     // One of the arguments from this list "disable_internet_vip enable_internet_vip" must be set
-    enable_internet_vip = true
+    disable_internet_vip = true
 
     // One of the arguments from this list "new_vpc vpc_id" must be set
 
@@ -76,11 +76,11 @@ resource "volterra_aws_tgw_site" "example" {
       // One of the arguments from this list "system_generated user_assigned" must be set
       system_generated = true
     }
-    // One of the arguments from this list "nodes_per_az total_nodes no_worker_nodes" must be set
-    no_worker_nodes = true
+    // One of the arguments from this list "no_worker_nodes nodes_per_az total_nodes" must be set
+    nodes_per_az = "2"
   }
 
-  // One of the arguments from this list "default_blocked_services blocked_services" must be set
+  // One of the arguments from this list "default_blocked_services block_all_services blocked_services" must be set
   default_blocked_services = true
 
   // One of the arguments from this list "direct_connect_disabled direct_connect_enabled" must be set
@@ -113,9 +113,11 @@ Argument Reference
 
 `aws_parameters` - (Required) Example of the managed AWS resources to name few are VPC, TGW, Route Tables etc. See [Aws Parameters ](#aws-parameters) below for details.
 
-`blocked_services` - (Optional) Use custom blocked services configuration. See [Blocked Services ](#blocked-services) below for details.
+`block_all_services` - (Optional) Block DNS, SSH & WebUI services on Site (bool).
 
-`default_blocked_services` - (Optional) Use default behavior of allowing ports mentioned in blocked services (bool).
+`blocked_services` - (Optional) Use custom blocked services configuration, to list the services which need to be blocked. See [Blocked Services ](#blocked-services) below for details.
+
+`default_blocked_services` - (Optional) Allow access to DNS, SSH services on Site (bool).
 
 `coordinates` - (Optional) Site longitude and latitude co-ordinates. See [Coordinates ](#coordinates) below for details.
 
@@ -151,7 +153,7 @@ Enable service policy so east-west traffic goes via proxy.
 
 ### Active Enhanced Firewall Policies
 
-Enhanced Firewall Policies active for this site..
+with an additional option for service insertion..
 
 `enhanced_firewall_policies` - (Required) Ordered List of Enhaned Firewall Policy active for this network firewall. See [ref](#ref) below for details.
 
@@ -279,7 +281,7 @@ Blindfold Secret Internal is used for the putting re-encrypted blindfold secret.
 
 ### Blocked Services
 
-Use custom blocked services configuration.
+Use custom blocked services configuration, to list the services which need to be blocked.
 
 `blocked_sevice` - (Optional) Use custom blocked services configuration. See [Blocked Sevice ](#blocked-sevice) below for details.
 
@@ -645,7 +647,7 @@ Subnet for the outside interface of the node.
 
 ### Perf Mode L3 Enhanced
 
-Site optimized for L3 traffic processing.
+When the mode is toggled to l3 enhanced, traffic disruption will be seen.
 
 `jumbo` - (Optional) L3 performance mode enhancement to use jumbo frame (bool).
 
@@ -653,15 +655,15 @@ Site optimized for L3 traffic processing.
 
 ### Perf Mode L7 Enhanced
 
-Site optimized for L7 traffic processing.
+When the mode is toggled to l7 enhanced, traffic disruption will be seen.
 
 ### Performance Enhancement Mode
 
 Performance Enhancement Mode to optimize for L3 or L7 networking.
 
-`perf_mode_l3_enhanced` - (Optional) Site optimized for L3 traffic processing. See [Perf Mode L3 Enhanced ](#perf-mode-l3-enhanced) below for details.
+`perf_mode_l3_enhanced` - (Optional) When the mode is toggled to l3 enhanced, traffic disruption will be seen. See [Perf Mode L3 Enhanced ](#perf-mode-l3-enhanced) below for details.
 
-`perf_mode_l7_enhanced` - (Optional) Site optimized for L7 traffic processing (bool).
+`perf_mode_l7_enhanced` - (Optional) When the mode is toggled to l7 enhanced, traffic disruption will be seen (bool).
 
 ### Policy
 
@@ -793,7 +795,7 @@ Security Configuration for transit gateway.
 
 `no_forward_proxy` - (Optional) Disable Forward Proxy for this site (bool).
 
-`active_enhanced_firewall_policies` - (Optional) Enhanced Firewall Policies active for this site.. See [Active Enhanced Firewall Policies ](#active-enhanced-firewall-policies) below for details.
+`active_enhanced_firewall_policies` - (Optional) with an additional option for service insertion.. See [Active Enhanced Firewall Policies ](#active-enhanced-firewall-policies) below for details.
 
 `active_network_policies` - (Optional) Firewall Policies active for this site.. See [Active Network Policies ](#active-network-policies) below for details.
 
@@ -911,7 +913,7 @@ Spoke VPCs to be attached to the AWS TGW Site.
 
 List of VPC attachments to transit gateway.
 
-`labels` - (Optional) These labels used must be from known key and label defined in shared namespace (`String`).
+`labels` - (Optional) These labels used must be from known key, label defined in shared namespace and unknown key. (`String`).
 
 `vpc_id` - (Optional) Information about existing VPC (`String`).
 
