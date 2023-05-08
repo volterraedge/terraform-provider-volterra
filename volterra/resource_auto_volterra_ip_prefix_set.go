@@ -60,11 +60,21 @@ func resourceVolterraIpPrefixSet() *schema.Resource {
 				ForceNew: true,
 			},
 
+			"ipv6_prefix": {
+
+				Type: schema.TypeList,
+
+				Optional: true,
+				Elem: &schema.Schema{
+					Type: schema.TypeString,
+				},
+			},
+
 			"prefix": {
 
 				Type: schema.TypeList,
 
-				Required: true,
+				Optional: true,
 				Elem: &schema.Schema{
 					Type: schema.TypeString,
 				},
@@ -124,6 +134,17 @@ func resourceVolterraIpPrefixSetCreate(d *schema.ResourceData, meta interface{})
 	if v, ok := d.GetOk("namespace"); ok && !isIntfNil(v) {
 		createMeta.Namespace =
 			v.(string)
+	}
+
+	//ipv6_prefix
+	if v, ok := d.GetOk("ipv6_prefix"); ok && !isIntfNil(v) {
+
+		ls := make([]string, len(v.([]interface{})))
+		for i, v := range v.([]interface{}) {
+			ls[i] = v.(string)
+		}
+		createSpec.Ipv6Prefix = ls
+
 	}
 
 	//prefix
@@ -233,6 +254,16 @@ func resourceVolterraIpPrefixSetUpdate(d *schema.ResourceData, meta interface{})
 	if v, ok := d.GetOk("namespace"); ok && !isIntfNil(v) {
 		updateMeta.Namespace =
 			v.(string)
+	}
+
+	if v, ok := d.GetOk("ipv6_prefix"); ok && !isIntfNil(v) {
+
+		ls := make([]string, len(v.([]interface{})))
+		for i, v := range v.([]interface{}) {
+			ls[i] = v.(string)
+		}
+		updateSpec.Ipv6Prefix = ls
+
 	}
 
 	if v, ok := d.GetOk("prefix"); ok && !isIntfNil(v) {

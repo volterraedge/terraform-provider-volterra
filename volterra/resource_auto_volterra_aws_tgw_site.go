@@ -391,6 +391,12 @@ func resourceVolterraAwsTgwSite() *schema.Resource {
 				},
 			},
 
+			"block_all_services": {
+
+				Type:     schema.TypeBool,
+				Optional: true,
+			},
+
 			"blocked_services": {
 
 				Type:     schema.TypeSet,
@@ -2460,6 +2466,18 @@ func resourceVolterraAwsTgwSiteCreate(d *schema.ResourceData, meta interface{}) 
 	//blocked_services_choice
 
 	blockedServicesChoiceTypeFound := false
+
+	if v, ok := d.GetOk("block_all_services"); ok && !blockedServicesChoiceTypeFound {
+
+		blockedServicesChoiceTypeFound = true
+
+		if v.(bool) {
+			blockedServicesChoiceInt := &ves_io_schema_views_aws_tgw_site.CreateSpecType_BlockAllServices{}
+			blockedServicesChoiceInt.BlockAllServices = &ves_io_schema.Empty{}
+			createSpec.BlockedServicesChoice = blockedServicesChoiceInt
+		}
+
+	}
 
 	if v, ok := d.GetOk("blocked_services"); ok && !blockedServicesChoiceTypeFound {
 
@@ -4857,6 +4875,18 @@ func resourceVolterraAwsTgwSiteUpdate(d *schema.ResourceData, meta interface{}) 
 	}
 
 	blockedServicesChoiceTypeFound := false
+
+	if v, ok := d.GetOk("block_all_services"); ok && !blockedServicesChoiceTypeFound {
+
+		blockedServicesChoiceTypeFound = true
+
+		if v.(bool) {
+			blockedServicesChoiceInt := &ves_io_schema_views_aws_tgw_site.ReplaceSpecType_BlockAllServices{}
+			blockedServicesChoiceInt.BlockAllServices = &ves_io_schema.Empty{}
+			updateSpec.BlockedServicesChoice = blockedServicesChoiceInt
+		}
+
+	}
 
 	if v, ok := d.GetOk("blocked_services"); ok && !blockedServicesChoiceTypeFound {
 
