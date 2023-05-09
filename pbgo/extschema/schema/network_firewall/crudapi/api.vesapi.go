@@ -2809,7 +2809,7 @@ var APISwaggerJSON string = `{
         },
         "network_firewallActiveEnhancedFirewallPoliciesType": {
             "type": "object",
-            "description": "List of Enhanced Firewall Policies",
+            "description": "List of Enhanced Firewall Policies\nThese policies use session-based rules and provide all options available under firewall policies\nwith an additional option for service insertion.",
             "title": "Active Enhanced Firewall Policies Type",
             "x-displayname": "Active Enhanced Network Policies Type",
             "x-ves-proto-message": "ves.io.schema.network_firewall.ActiveEnhancedFirewallPoliciesType",
@@ -2889,7 +2889,7 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.network_firewall.GlobalSpecType",
             "properties": {
                 "active_enhanced_firewall_policies": {
-                    "description": "Exclusive with []\n L3/L4 Enhanced Firewall polices\n Active Enhanced Firewall Policies for this network firewall\n Enhanced Firewall Policies set to be used as firewall for the fleet where this firewall is attached\n Currently, Enhanced Firewall Policy is applied for following Virtual Networks in a site,\n    - Site Local Inside\n    - Site Local",
+                    "description": "Exclusive with []\n L3/L4 Enhanced Firewall polices\n Active Enhanced Firewall Policies for this network firewall\n These policies use session-based rules and provide all options available under firewall policies\n with an additional option for service insertion.\n Enhanced Firewall Policies set to be used as firewall for the fleet where this firewall is attached\n Currently, Enhanced Firewall Policy is applied for following Virtual Networks in a site,\n    - Site Local Inside\n    - Site Local",
                     "title": "Active Enhanced Firewall Policies",
                     "$ref": "#/definitions/network_firewallActiveEnhancedFirewallPoliciesType",
                     "x-displayname": "Active Enhanced Firwall Policies"

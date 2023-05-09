@@ -69,6 +69,12 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 				Optional: true,
 			},
 
+			"block_all_services": {
+
+				Type:     schema.TypeBool,
+				Optional: true,
+			},
+
 			"blocked_services": {
 
 				Type:     schema.TypeSet,
@@ -1329,6 +1335,18 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 												},
 
 												"sku_standard": {
+
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
+
+												"advertise_to_route_server": {
+
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
+
+												"do_not_advertise_to_route_server": {
 
 													Type:     schema.TypeBool,
 													Optional: true,
@@ -2832,6 +2850,18 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 												},
 
 												"sku_standard": {
+
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
+
+												"advertise_to_route_server": {
+
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
+
+												"do_not_advertise_to_route_server": {
 
 													Type:     schema.TypeBool,
 													Optional: true,
@@ -5917,6 +5947,18 @@ func resourceVolterraAzureVnetSiteCreate(d *schema.ResourceData, meta interface{
 
 	blockedServicesChoiceTypeFound := false
 
+	if v, ok := d.GetOk("block_all_services"); ok && !blockedServicesChoiceTypeFound {
+
+		blockedServicesChoiceTypeFound = true
+
+		if v.(bool) {
+			blockedServicesChoiceInt := &ves_io_schema_views_azure_vnet_site.CreateSpecType_BlockAllServices{}
+			blockedServicesChoiceInt.BlockAllServices = &ves_io_schema.Empty{}
+			createSpec.BlockedServicesChoice = blockedServicesChoiceInt
+		}
+
+	}
+
 	if v, ok := d.GetOk("blocked_services"); ok && !blockedServicesChoiceTypeFound {
 
 		blockedServicesChoiceTypeFound = true
@@ -7775,6 +7817,32 @@ func resourceVolterraAzureVnetSiteCreate(d *schema.ResourceData, meta interface{
 									skuChoiceInt := &ves_io_schema_views_azure_vnet_site.ExpressRouteConfigType_SkuStandard{}
 									skuChoiceInt.SkuStandard = &ves_io_schema.Empty{}
 									expressRouteChoiceInt.ExpressRouteEnabled.SkuChoice = skuChoiceInt
+								}
+
+							}
+
+							spokeVnetRoutesTypeFound := false
+
+							if v, ok := cs["advertise_to_route_server"]; ok && !isIntfNil(v) && !spokeVnetRoutesTypeFound {
+
+								spokeVnetRoutesTypeFound = true
+
+								if v.(bool) {
+									spokeVnetRoutesInt := &ves_io_schema_views_azure_vnet_site.ExpressRouteConfigType_AdvertiseToRouteServer{}
+									spokeVnetRoutesInt.AdvertiseToRouteServer = &ves_io_schema.Empty{}
+									expressRouteChoiceInt.ExpressRouteEnabled.SpokeVnetRoutes = spokeVnetRoutesInt
+								}
+
+							}
+
+							if v, ok := cs["do_not_advertise_to_route_server"]; ok && !isIntfNil(v) && !spokeVnetRoutesTypeFound {
+
+								spokeVnetRoutesTypeFound = true
+
+								if v.(bool) {
+									spokeVnetRoutesInt := &ves_io_schema_views_azure_vnet_site.ExpressRouteConfigType_DoNotAdvertiseToRouteServer{}
+									spokeVnetRoutesInt.DoNotAdvertiseToRouteServer = &ves_io_schema.Empty{}
+									expressRouteChoiceInt.ExpressRouteEnabled.SpokeVnetRoutes = spokeVnetRoutesInt
 								}
 
 							}
@@ -9928,6 +9996,32 @@ func resourceVolterraAzureVnetSiteCreate(d *schema.ResourceData, meta interface{
 									skuChoiceInt := &ves_io_schema_views_azure_vnet_site.ExpressRouteConfigType_SkuStandard{}
 									skuChoiceInt.SkuStandard = &ves_io_schema.Empty{}
 									expressRouteChoiceInt.ExpressRouteEnabled.SkuChoice = skuChoiceInt
+								}
+
+							}
+
+							spokeVnetRoutesTypeFound := false
+
+							if v, ok := cs["advertise_to_route_server"]; ok && !isIntfNil(v) && !spokeVnetRoutesTypeFound {
+
+								spokeVnetRoutesTypeFound = true
+
+								if v.(bool) {
+									spokeVnetRoutesInt := &ves_io_schema_views_azure_vnet_site.ExpressRouteConfigType_AdvertiseToRouteServer{}
+									spokeVnetRoutesInt.AdvertiseToRouteServer = &ves_io_schema.Empty{}
+									expressRouteChoiceInt.ExpressRouteEnabled.SpokeVnetRoutes = spokeVnetRoutesInt
+								}
+
+							}
+
+							if v, ok := cs["do_not_advertise_to_route_server"]; ok && !isIntfNil(v) && !spokeVnetRoutesTypeFound {
+
+								spokeVnetRoutesTypeFound = true
+
+								if v.(bool) {
+									spokeVnetRoutesInt := &ves_io_schema_views_azure_vnet_site.ExpressRouteConfigType_DoNotAdvertiseToRouteServer{}
+									spokeVnetRoutesInt.DoNotAdvertiseToRouteServer = &ves_io_schema.Empty{}
+									expressRouteChoiceInt.ExpressRouteEnabled.SpokeVnetRoutes = spokeVnetRoutesInt
 								}
 
 							}
@@ -14339,6 +14433,18 @@ func resourceVolterraAzureVnetSiteUpdate(d *schema.ResourceData, meta interface{
 
 	blockedServicesChoiceTypeFound := false
 
+	if v, ok := d.GetOk("block_all_services"); ok && !blockedServicesChoiceTypeFound {
+
+		blockedServicesChoiceTypeFound = true
+
+		if v.(bool) {
+			blockedServicesChoiceInt := &ves_io_schema_views_azure_vnet_site.ReplaceSpecType_BlockAllServices{}
+			blockedServicesChoiceInt.BlockAllServices = &ves_io_schema.Empty{}
+			updateSpec.BlockedServicesChoice = blockedServicesChoiceInt
+		}
+
+	}
+
 	if v, ok := d.GetOk("blocked_services"); ok && !blockedServicesChoiceTypeFound {
 
 		blockedServicesChoiceTypeFound = true
@@ -15865,6 +15971,32 @@ func resourceVolterraAzureVnetSiteUpdate(d *schema.ResourceData, meta interface{
 									skuChoiceInt := &ves_io_schema_views_azure_vnet_site.ExpressRouteConfigType_SkuStandard{}
 									skuChoiceInt.SkuStandard = &ves_io_schema.Empty{}
 									expressRouteChoiceInt.ExpressRouteEnabled.SkuChoice = skuChoiceInt
+								}
+
+							}
+
+							spokeVnetRoutesTypeFound := false
+
+							if v, ok := cs["advertise_to_route_server"]; ok && !isIntfNil(v) && !spokeVnetRoutesTypeFound {
+
+								spokeVnetRoutesTypeFound = true
+
+								if v.(bool) {
+									spokeVnetRoutesInt := &ves_io_schema_views_azure_vnet_site.ExpressRouteConfigType_AdvertiseToRouteServer{}
+									spokeVnetRoutesInt.AdvertiseToRouteServer = &ves_io_schema.Empty{}
+									expressRouteChoiceInt.ExpressRouteEnabled.SpokeVnetRoutes = spokeVnetRoutesInt
+								}
+
+							}
+
+							if v, ok := cs["do_not_advertise_to_route_server"]; ok && !isIntfNil(v) && !spokeVnetRoutesTypeFound {
+
+								spokeVnetRoutesTypeFound = true
+
+								if v.(bool) {
+									spokeVnetRoutesInt := &ves_io_schema_views_azure_vnet_site.ExpressRouteConfigType_DoNotAdvertiseToRouteServer{}
+									spokeVnetRoutesInt.DoNotAdvertiseToRouteServer = &ves_io_schema.Empty{}
+									expressRouteChoiceInt.ExpressRouteEnabled.SpokeVnetRoutes = spokeVnetRoutesInt
 								}
 
 							}
@@ -18012,6 +18144,32 @@ func resourceVolterraAzureVnetSiteUpdate(d *schema.ResourceData, meta interface{
 									skuChoiceInt := &ves_io_schema_views_azure_vnet_site.ExpressRouteConfigType_SkuStandard{}
 									skuChoiceInt.SkuStandard = &ves_io_schema.Empty{}
 									expressRouteChoiceInt.ExpressRouteEnabled.SkuChoice = skuChoiceInt
+								}
+
+							}
+
+							spokeVnetRoutesTypeFound := false
+
+							if v, ok := cs["advertise_to_route_server"]; ok && !isIntfNil(v) && !spokeVnetRoutesTypeFound {
+
+								spokeVnetRoutesTypeFound = true
+
+								if v.(bool) {
+									spokeVnetRoutesInt := &ves_io_schema_views_azure_vnet_site.ExpressRouteConfigType_AdvertiseToRouteServer{}
+									spokeVnetRoutesInt.AdvertiseToRouteServer = &ves_io_schema.Empty{}
+									expressRouteChoiceInt.ExpressRouteEnabled.SpokeVnetRoutes = spokeVnetRoutesInt
+								}
+
+							}
+
+							if v, ok := cs["do_not_advertise_to_route_server"]; ok && !isIntfNil(v) && !spokeVnetRoutesTypeFound {
+
+								spokeVnetRoutesTypeFound = true
+
+								if v.(bool) {
+									spokeVnetRoutesInt := &ves_io_schema_views_azure_vnet_site.ExpressRouteConfigType_DoNotAdvertiseToRouteServer{}
+									spokeVnetRoutesInt.DoNotAdvertiseToRouteServer = &ves_io_schema.Empty{}
+									expressRouteChoiceInt.ExpressRouteEnabled.SpokeVnetRoutes = spokeVnetRoutesInt
 								}
 
 							}

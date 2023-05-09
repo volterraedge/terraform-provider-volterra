@@ -895,13 +895,13 @@ func resourceVolterraVirtualHost() *schema.Resource {
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
-									"disable_cache_profile": {
+									"cache_size": {
 
-										Type:     schema.TypeBool,
+										Type:     schema.TypeInt,
 										Optional: true,
 									},
 
-									"enable_cache_profile": {
+									"disable_cache_profile": {
 
 										Type:     schema.TypeBool,
 										Optional: true,
@@ -3448,6 +3448,17 @@ func resourceVolterraVirtualHostCreate(d *schema.ResourceData, meta interface{})
 
 					cacheProfileChoiceTypeFound := false
 
+					if v, ok := cacheProfileMapStrToI["cache_size"]; ok && !isIntfNil(v) && !cacheProfileChoiceTypeFound {
+
+						cacheProfileChoiceTypeFound = true
+						cacheProfileChoiceInt := &ves_io_schema_virtual_host.DNSCacheProfile_CacheSize{}
+
+						cacheProfile.CacheProfileChoice = cacheProfileChoiceInt
+
+						cacheProfileChoiceInt.CacheSize = uint32(v.(int))
+
+					}
+
 					if v, ok := cacheProfileMapStrToI["disable_cache_profile"]; ok && !isIntfNil(v) && !cacheProfileChoiceTypeFound {
 
 						cacheProfileChoiceTypeFound = true
@@ -3455,18 +3466,6 @@ func resourceVolterraVirtualHostCreate(d *schema.ResourceData, meta interface{})
 						if v.(bool) {
 							cacheProfileChoiceInt := &ves_io_schema_virtual_host.DNSCacheProfile_DisableCacheProfile{}
 							cacheProfileChoiceInt.DisableCacheProfile = &ves_io_schema.Empty{}
-							cacheProfile.CacheProfileChoice = cacheProfileChoiceInt
-						}
-
-					}
-
-					if v, ok := cacheProfileMapStrToI["enable_cache_profile"]; ok && !isIntfNil(v) && !cacheProfileChoiceTypeFound {
-
-						cacheProfileChoiceTypeFound = true
-
-						if v.(bool) {
-							cacheProfileChoiceInt := &ves_io_schema_virtual_host.DNSCacheProfile_EnableCacheProfile{}
-							cacheProfileChoiceInt.EnableCacheProfile = &ves_io_schema.Empty{}
 							cacheProfile.CacheProfileChoice = cacheProfileChoiceInt
 						}
 
@@ -3534,15 +3533,15 @@ func resourceVolterraVirtualHostCreate(d *schema.ResourceData, meta interface{})
 				domainCertMapVals := val.(*schema.Set).List()
 				for _, intVal := range domainCertMapVals {
 
-					_ = intVal.(map[string]interface{})
+					domainCertMapStaticMap := intVal.(map[string]interface{})
 
-					//if w, ok := domainCertMapStaticMap["ecdsa_certificates"]; ok && !isIntfNil(w) {
-					//	domainCertMap[key.(string)].EcdsaCertificates = w.(string)
-					//}
+					if w, ok := domainCertMapStaticMap["ecdsa_certificates"]; ok && !isIntfNil(w) {
+						domainCertMap[key.(string)].EcdsaCertificates = nil
+					}
 
-					//if w, ok := domainCertMapStaticMap["rsa_certificates"]; ok && !isIntfNil(w) {
-					//	domainCertMap[key.(string)].RsaCertificates = w.(string)
-					//}
+					if w, ok := domainCertMapStaticMap["rsa_certificates"]; ok && !isIntfNil(w) {
+						domainCertMap[key.(string)].RsaCertificates = nil
+					}
 
 					// break after one loop
 					break
@@ -6286,6 +6285,17 @@ func resourceVolterraVirtualHostUpdate(d *schema.ResourceData, meta interface{})
 
 					cacheProfileChoiceTypeFound := false
 
+					if v, ok := cacheProfileMapStrToI["cache_size"]; ok && !isIntfNil(v) && !cacheProfileChoiceTypeFound {
+
+						cacheProfileChoiceTypeFound = true
+						cacheProfileChoiceInt := &ves_io_schema_virtual_host.DNSCacheProfile_CacheSize{}
+
+						cacheProfile.CacheProfileChoice = cacheProfileChoiceInt
+
+						cacheProfileChoiceInt.CacheSize = uint32(v.(int))
+
+					}
+
 					if v, ok := cacheProfileMapStrToI["disable_cache_profile"]; ok && !isIntfNil(v) && !cacheProfileChoiceTypeFound {
 
 						cacheProfileChoiceTypeFound = true
@@ -6293,18 +6303,6 @@ func resourceVolterraVirtualHostUpdate(d *schema.ResourceData, meta interface{})
 						if v.(bool) {
 							cacheProfileChoiceInt := &ves_io_schema_virtual_host.DNSCacheProfile_DisableCacheProfile{}
 							cacheProfileChoiceInt.DisableCacheProfile = &ves_io_schema.Empty{}
-							cacheProfile.CacheProfileChoice = cacheProfileChoiceInt
-						}
-
-					}
-
-					if v, ok := cacheProfileMapStrToI["enable_cache_profile"]; ok && !isIntfNil(v) && !cacheProfileChoiceTypeFound {
-
-						cacheProfileChoiceTypeFound = true
-
-						if v.(bool) {
-							cacheProfileChoiceInt := &ves_io_schema_virtual_host.DNSCacheProfile_EnableCacheProfile{}
-							cacheProfileChoiceInt.EnableCacheProfile = &ves_io_schema.Empty{}
 							cacheProfile.CacheProfileChoice = cacheProfileChoiceInt
 						}
 
@@ -6371,15 +6369,15 @@ func resourceVolterraVirtualHostUpdate(d *schema.ResourceData, meta interface{})
 				domainCertMapVals := val.(*schema.Set).List()
 				for _, intVal := range domainCertMapVals {
 
-					_ = intVal.(map[string]interface{})
+					domainCertMapStaticMap := intVal.(map[string]interface{})
 
-					//if w, ok := domainCertMapStaticMap["ecdsa_certificates"]; ok && !isIntfNil(w) {
-					//	domainCertMap[key.(string)].EcdsaCertificates = w.(string)
-					//}
+					if w, ok := domainCertMapStaticMap["ecdsa_certificates"]; ok && !isIntfNil(w) {
+						domainCertMap[key.(string)].EcdsaCertificates = nil
+					}
 
-					//if w, ok := domainCertMapStaticMap["rsa_certificates"]; ok && !isIntfNil(w) {
-					//	domainCertMap[key.(string)].RsaCertificates = w.(string)
-					//}
+					if w, ok := domainCertMapStaticMap["rsa_certificates"]; ok && !isIntfNil(w) {
+						domainCertMap[key.(string)].RsaCertificates = nil
+					}
 
 					// break after one loop
 					break

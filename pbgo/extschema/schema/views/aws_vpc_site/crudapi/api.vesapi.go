@@ -2591,7 +2591,7 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.views.aws_vpc_site.AWSVPCIngressEgressGwType",
             "properties": {
                 "active_enhanced_firewall_policies": {
-                    "description": "Exclusive with [active_network_policies no_network_policy]\n Enhanced Firewall Policies active for this site.",
+                    "description": "Exclusive with [active_network_policies no_network_policy]\n Enhanced Firewall Policies active for this site.\n These policies use session-based rules and provide all options available under firewall policies\n with an additional option for service insertion.",
                     "title": "Manage Enhanced Firewall Policy",
                     "$ref": "#/definitions/network_firewallActiveEnhancedFirewallPoliciesType",
                     "x-displayname": "Active Enhanced Firewall Policies"
@@ -2872,7 +2872,7 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.views.aws_vpc_site.AWSVPCVoltstackClusterType",
             "properties": {
                 "active_enhanced_firewall_policies": {
-                    "description": "Exclusive with [active_network_policies no_network_policy]\n Enhanced Firewall Policies active for this site.",
+                    "description": "Exclusive with [active_network_policies no_network_policy]\n Enhanced Firewall Policies active for this site.\n These policies use session-based rules and provide all options available under firewall policies\n with an additional option for service insertion.",
                     "title": "Manage Enhanced Firewall Policy",
                     "$ref": "#/definitions/network_firewallActiveEnhancedFirewallPoliciesType",
                     "x-displayname": "Active Enhanced Firewall Policies"
@@ -3357,7 +3357,7 @@ var APISwaggerJSON string = `{
         },
         "network_firewallActiveEnhancedFirewallPoliciesType": {
             "type": "object",
-            "description": "List of Enhanced Firewall Policies",
+            "description": "List of Enhanced Firewall Policies\nThese policies use session-based rules and provide all options available under firewall policies\nwith an additional option for service insertion.",
             "title": "Active Enhanced Firewall Policies Type",
             "x-displayname": "Active Enhanced Network Policies Type",
             "x-ves-proto-message": "ves.io.schema.network_firewall.ActiveEnhancedFirewallPoliciesType",
@@ -5715,7 +5715,7 @@ var APISwaggerJSON string = `{
             "description": "Shape of the AWS VPC site specification",
             "title": "GlobalSpecType",
             "x-displayname": "Global Specification",
-            "x-ves-oneof-field-blocked_services_choice": "[\"blocked_services\",\"default_blocked_services\"]",
+            "x-ves-oneof-field-blocked_services_choice": "[\"block_all_services\",\"blocked_services\",\"default_blocked_services\"]",
             "x-ves-oneof-field-deployment": "[\"aws_cred\"]",
             "x-ves-oneof-field-direct_connect_choice": "[\"direct_connect_disabled\",\"direct_connect_enabled\"]",
             "x-ves-oneof-field-internet_vip_choice": "[\"disable_internet_vip\",\"enable_internet_vip\"]",
@@ -5753,8 +5753,14 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.string.in": "[\\\"af-south-1\\\",\\\"ap-east-1\\\",\\\"ap-northeast-1\\\",\\\"ap-northeast-2\\\",\\\"ap-south-1\\\",\\\"ap-southeast-1\\\",\\\"ap-southeast-2\\\",\\\"ap-southeast-3\\\",\\\"ca-central-1\\\",\\\"eu-central-1\\\",\\\"eu-north-1\\\",\\\"eu-south-1\\\",\\\"eu-west-1\\\",\\\"eu-west-2\\\",\\\"eu-west-3\\\",\\\"me-south-1\\\",\\\"sa-east-1\\\",\\\"us-east-1\\\",\\\"us-east-2\\\",\\\"us-west-1\\\",\\\"us-west-2\\\"]"
                     }
                 },
+                "block_all_services": {
+                    "description": "Exclusive with [blocked_services default_blocked_services]\n Block DNS, SSH \u0026 WebUI services on Site",
+                    "title": "Block DNS, SSH \u0026 WebUI services on Site",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": " Block DNS, SSH \u0026 WebUI services on Site"
+                },
                 "blocked_services": {
-                    "description": "Exclusive with [default_blocked_services]\n Use custom blocked services configuration",
+                    "description": "Exclusive with [block_all_services default_blocked_services]\n Use custom blocked services configuration",
                     "title": "Custom Blocked Services Configuration",
                     "$ref": "#/definitions/fleetBlockedServicesListType",
                     "x-displayname": "Custom Blocked Services Configuration"
@@ -5772,10 +5778,10 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Co-ordinates"
                 },
                 "default_blocked_services": {
-                    "description": "Exclusive with [blocked_services]\n Use default behavior of allowing ports mentioned in blocked services",
-                    "title": "Default Blocked Service Configuration",
+                    "description": "Exclusive with [block_all_services blocked_services]\n Allow access to DNS, SSH services on Site",
+                    "title": "Allow access to DNS, SSH services on Site",
                     "$ref": "#/definitions/schemaEmpty",
-                    "x-displayname": "Default Blocked Service Configuration"
+                    "x-displayname": "Allow access to DNS, SSH services on Site"
                 },
                 "direct_connect_disabled": {
                     "description": "Exclusive with [direct_connect_enabled]\n Direct Connect feature is disabled",
@@ -5904,13 +5910,13 @@ var APISwaggerJSON string = `{
                 },
                 "tags": {
                     "type": "object",
-                    "description": " AWS Tags is a label consisting of a user-defined key and value.\n It helps to manage, identify, organize, search for, and filter resources in AWS console.\n\nExample: - \"devstaging\"-\n\nValidation Rules:\n  ves.io.schema.rules.map.keys.string.max_len: 127\n  ves.io.schema.rules.map.max_pairs: 10\n  ves.io.schema.rules.map.values.string.max_len: 255\n",
+                    "description": " AWS Tags is a label consisting of a user-defined key and value.\n It helps to manage, identify, organize, search for, and filter resources in AWS console.\n\nExample: - \"devstaging\"-\n\nValidation Rules:\n  ves.io.schema.rules.map.keys.string.max_len: 127\n  ves.io.schema.rules.map.max_pairs: 40\n  ves.io.schema.rules.map.values.string.max_len: 255\n",
                     "title": "AWS Tags",
                     "x-displayname": "AWS Tags",
                     "x-ves-example": "dev: staging",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.map.keys.string.max_len": "127",
-                        "ves.io.schema.rules.map.max_pairs": "10",
+                        "ves.io.schema.rules.map.max_pairs": "40",
                         "ves.io.schema.rules.map.values.string.max_len": "255"
                     }
                 },

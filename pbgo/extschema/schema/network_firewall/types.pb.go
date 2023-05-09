@@ -82,6 +82,8 @@ func (m *ActiveNetworkPoliciesType) GetNetworkPolicies() []*views.ObjectRefType 
 //
 // x-displayName: "Active Enhanced Network Policies Type"
 // List of Enhanced Firewall Policies
+// These policies use session-based rules and provide all options available under firewall policies
+// with an additional option for service insertion.
 type ActiveEnhancedFirewallPoliciesType struct {
 	// Enhanced Firewall Policy
 	//

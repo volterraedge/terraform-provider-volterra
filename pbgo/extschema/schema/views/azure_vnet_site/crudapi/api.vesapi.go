@@ -2628,7 +2628,7 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.views.azure_vnet_site.AzureVnetIngressEgressGwARType",
             "properties": {
                 "active_enhanced_firewall_policies": {
-                    "description": "Exclusive with [active_network_policies no_network_policy]\n Enhanced Firewall Policies active for this site.",
+                    "description": "Exclusive with [active_network_policies no_network_policy]\n Enhanced Firewall Policies active for this site.\n These policies use session-based rules and provide all options available under firewall policies\n with an additional option for service insertion.",
                     "title": "Manage Enhanced Firewall Policy",
                     "$ref": "#/definitions/network_firewallActiveEnhancedFirewallPoliciesType",
                     "x-displayname": "Active Enhanced Firewall Policies"
@@ -2785,7 +2785,7 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.views.azure_vnet_site.AzureVnetIngressEgressGwType",
             "properties": {
                 "active_enhanced_firewall_policies": {
-                    "description": "Exclusive with [active_network_policies no_network_policy]\n Enhanced Firewall Policies active for this site.",
+                    "description": "Exclusive with [active_network_policies no_network_policy]\n Enhanced Firewall Policies active for this site.\n These policies use session-based rules and provide all options available under firewall policies\n with an additional option for service insertion.",
                     "title": "Manage Enhanced Firewall Policy",
                     "$ref": "#/definitions/network_firewallActiveEnhancedFirewallPoliciesType",
                     "x-displayname": "Active Enhanced Firewall Policies"
@@ -3105,7 +3105,7 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.views.azure_vnet_site.AzureVnetVoltstackClusterARType",
             "properties": {
                 "active_enhanced_firewall_policies": {
-                    "description": "Exclusive with [active_network_policies no_network_policy]\n Enhanced Firewall Policies active for this site.",
+                    "description": "Exclusive with [active_network_policies no_network_policy]\n Enhanced Firewall Policies active for this site.\n These policies use session-based rules and provide all options available under firewall policies\n with an additional option for service insertion.",
                     "title": "Manage Enhanced Firewall Policy",
                     "$ref": "#/definitions/network_firewallActiveEnhancedFirewallPoliciesType",
                     "x-displayname": "Active Enhanced Firewall Policies"
@@ -3250,7 +3250,7 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.views.azure_vnet_site.AzureVnetVoltstackClusterType",
             "properties": {
                 "active_enhanced_firewall_policies": {
-                    "description": "Exclusive with [active_network_policies no_network_policy]\n Enhanced Firewall Policies active for this site.",
+                    "description": "Exclusive with [active_network_policies no_network_policy]\n Enhanced Firewall Policies active for this site.\n These policies use session-based rules and provide all options available under firewall policies\n with an additional option for service insertion.",
                     "title": "Manage Enhanced Firewall Policy",
                     "$ref": "#/definitions/network_firewallActiveEnhancedFirewallPoliciesType",
                     "x-displayname": "Active Enhanced Firewall Policies"
@@ -3395,11 +3395,18 @@ var APISwaggerJSON string = `{
             "x-ves-oneof-field-asn_choice": "[\"auto_asn\",\"custom_asn\"]",
             "x-ves-oneof-field-connectivity_options": "[\"site_registration_over_express_route\",\"site_registration_over_internet\"]",
             "x-ves-oneof-field-sku_choice": "[\"sku_ergw1az\",\"sku_ergw2az\",\"sku_high_perf\",\"sku_standard\"]",
+            "x-ves-oneof-field-spoke_vnet_routes": "[\"advertise_to_route_server\",\"do_not_advertise_to_route_server\"]",
             "x-ves-proto-message": "ves.io.schema.views.azure_vnet_site.ExpressRouteConfigType",
             "properties": {
+                "advertise_to_route_server": {
+                    "description": "Exclusive with [do_not_advertise_to_route_server]\n Advertise Spoke Vnet CIDR Routes To  Azure Route Server via BGP",
+                    "title": "Advertise Spoke Vnet CIDR Routes To Route Server",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Advertise"
+                },
                 "auto_asn": {
-                    "description": "Exclusive with [custom_asn]\n (Recommended) Automatically set ASN for BGP between Site and Azure Route Servers",
-                    "title": "Auto",
+                    "description": "Exclusive with [custom_asn]\n (Recommended) Automatically set ASN for F5XC Site",
+                    "title": "Auto ASN",
                     "$ref": "#/definitions/schemaEmpty",
                     "x-displayname": "Automatically set ASN"
                 },
@@ -3422,16 +3429,22 @@ var APISwaggerJSON string = `{
                 },
                 "custom_asn": {
                     "type": "integer",
-                    "description": "Exclusive with [auto_asn]\n Set custom ASN for BGP between Site and Azure Route Servers\n\nExample: - \"64512\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gt: 1\n  ves.io.schema.rules.uint32.lte: 65535\n  ves.io.schema.rules.uint32.not_in_ranges: 65515,65517,65518,65519,65520,8074,8075,12076,23456\n",
+                    "description": "Exclusive with [auto_asn]\n Set custom ASN for F5XC Site\n\nExample: - \"64512\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gt: 1\n  ves.io.schema.rules.uint32.lte: 65535\n  ves.io.schema.rules.uint32.not_in_ranges: 65515,65517,65518,65519,65520,8074,8075,12076,23456\n",
                     "title": "Custom ASN",
                     "format": "int64",
-                    "x-displayname": "Custom Autonomous System Number",
+                    "x-displayname": "Custom ASN",
                     "x-ves-example": "64512",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.uint32.gt": "1",
                         "ves.io.schema.rules.uint32.lte": "65535",
                         "ves.io.schema.rules.uint32.not_in_ranges": "65515,65517,65518,65519,65520,8074,8075,12076,23456"
                     }
+                },
+                "do_not_advertise_to_route_server": {
+                    "description": "Exclusive with [advertise_to_route_server]\n Do Not Advertise Spoke Vnet CIDR Routes To  Azure Route Server via BGP",
+                    "title": "Do Not Advertise Spoke Vnet CIDR Routes To Route Server",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Do Not Advertise"
                 },
                 "gateway_subnet": {
                     "description": " Select the type of subnet to be used for VNet Gateway",
@@ -4054,7 +4067,7 @@ var APISwaggerJSON string = `{
         },
         "network_firewallActiveEnhancedFirewallPoliciesType": {
             "type": "object",
-            "description": "List of Enhanced Firewall Policies",
+            "description": "List of Enhanced Firewall Policies\nThese policies use session-based rules and provide all options available under firewall policies\nwith an additional option for service insertion.",
             "title": "Active Enhanced Firewall Policies Type",
             "x-displayname": "Active Enhanced Network Policies Type",
             "x-ves-proto-message": "ves.io.schema.network_firewall.ActiveEnhancedFirewallPoliciesType",
@@ -6366,7 +6379,7 @@ var APISwaggerJSON string = `{
             "description": "Shape of the Azure VNet site specification",
             "title": "GlobalSpecType",
             "x-displayname": "Global Specification",
-            "x-ves-oneof-field-blocked_services_choice": "[\"blocked_services\",\"default_blocked_services\"]",
+            "x-ves-oneof-field-blocked_services_choice": "[\"block_all_services\",\"blocked_services\",\"default_blocked_services\"]",
             "x-ves-oneof-field-deployment": "[\"azure_cred\"]",
             "x-ves-oneof-field-logs_receiver_choice": "[\"log_receiver\",\"logs_streaming_disabled\"]",
             "x-ves-oneof-field-region_choice": "[\"alternate_region\",\"azure_region\"]",
@@ -6413,8 +6426,14 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.string.max_len": "64"
                     }
                 },
+                "block_all_services": {
+                    "description": "Exclusive with [blocked_services default_blocked_services]\n Block DNS, SSH \u0026 WebUI services on Site",
+                    "title": "Block DNS, SSH \u0026 WebUI services on Site",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": " Block DNS, SSH \u0026 WebUI services on Site"
+                },
                 "blocked_services": {
-                    "description": "Exclusive with [default_blocked_services]\n Use custom blocked services configuration",
+                    "description": "Exclusive with [block_all_services default_blocked_services]\n Use custom blocked services configuration",
                     "title": "Custom Blocked Services Configuration",
                     "$ref": "#/definitions/fleetBlockedServicesListType",
                     "x-displayname": "Custom Blocked Services Configuration"
@@ -6432,10 +6451,10 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Co-ordinates"
                 },
                 "default_blocked_services": {
-                    "description": "Exclusive with [blocked_services]\n Use default behavior of allowing ports mentioned in blocked services",
-                    "title": "Default Blocked Service Configuration",
+                    "description": "Exclusive with [block_all_services blocked_services]\n Allow access to DNS, SSH services on Site",
+                    "title": "Allow access to DNS, SSH services on Site",
                     "$ref": "#/definitions/schemaEmpty",
-                    "x-displayname": "Default Blocked Service Configuration"
+                    "x-displayname": "Allow access to DNS, SSH services on Site"
                 },
                 "disk_size": {
                     "type": "integer",
@@ -6559,13 +6578,13 @@ var APISwaggerJSON string = `{
                 },
                 "tags": {
                     "type": "object",
-                    "description": " Azure Tags is a label consisting of a user-defined key and value.\n It helps to manage, identify, organize, search for, and filter resources in Azure console.\n\nExample: - \"devstaging\"-\n\nValidation Rules:\n  ves.io.schema.rules.map.keys.string.max_len: 127\n  ves.io.schema.rules.map.max_pairs: 10\n  ves.io.schema.rules.map.values.string.max_len: 255\n",
+                    "description": " Azure Tags is a label consisting of a user-defined key and value.\n It helps to manage, identify, organize, search for, and filter resources in Azure console.\n\nExample: - \"devstaging\"-\n\nValidation Rules:\n  ves.io.schema.rules.map.keys.string.max_len: 127\n  ves.io.schema.rules.map.max_pairs: 40\n  ves.io.schema.rules.map.values.string.max_len: 255\n",
                     "title": "Azure Tags",
                     "x-displayname": "Azure Tags",
                     "x-ves-example": "dev: staging",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.map.keys.string.max_len": "127",
-                        "ves.io.schema.rules.map.max_pairs": "10",
+                        "ves.io.schema.rules.map.max_pairs": "40",
                         "ves.io.schema.rules.map.values.string.max_len": "255"
                     }
                 },

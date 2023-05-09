@@ -2293,7 +2293,7 @@ var APISwaggerJSON string = `{
             "title": "Enhanced Firewall Policy Rule",
             "x-displayname": "Enhanced Firewall Policy Rule",
             "x-ves-oneof-field-action_choice": "[\"allow\",\"deny\",\"insert_service\"]",
-            "x-ves-oneof-field-destination_choice": "[\"all_destinations\",\"destination_aws_vpc_ids\",\"destination_ip_prefix_set\",\"destination_label_selector\",\"destination_prefix_list\"]",
+            "x-ves-oneof-field-destination_choice": "[\"all_destinations\",\"all_sli_vips\",\"all_slo_vips\",\"destination_aws_vpc_ids\",\"destination_ip_prefix_set\",\"destination_label_selector\",\"destination_prefix_list\",\"inside_destinations\",\"outside_destinations\"]",
             "x-ves-oneof-field-source_choice": "[\"all_sources\",\"inside_sources\",\"outside_sources\",\"source_aws_vpc_ids\",\"source_ip_prefix_set\",\"source_label_selector\",\"source_prefix_list\"]",
             "x-ves-oneof-field-traffic_choice": "[\"all_tcp_traffic\",\"all_traffic\",\"all_udp_traffic\",\"applications\",\"protocol_port_range\"]",
             "x-ves-proto-message": "ves.io.schema.enhanced_firewall_policy.EnhancedFirewallPolicyRuleType",
@@ -2305,10 +2305,22 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Logging Action"
                 },
                 "all_destinations": {
-                    "description": "Exclusive with [destination_aws_vpc_ids destination_ip_prefix_set destination_label_selector destination_prefix_list]\n Any address that matches 0/0 ip prefix",
+                    "description": "Exclusive with [all_sli_vips all_slo_vips destination_aws_vpc_ids destination_ip_prefix_set destination_label_selector destination_prefix_list inside_destinations outside_destinations]\n Any address that matches 0/0 ip prefix",
                     "title": "All Destinations",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "All Destinations"
+                },
+                "all_sli_vips": {
+                    "description": "Exclusive with [all_destinations all_slo_vips destination_aws_vpc_ids destination_ip_prefix_set destination_label_selector destination_prefix_list inside_destinations outside_destinations]\n Destination is virtual-ip of all loadbalancer on site-local-inside network",
+                    "title": "All VIP address on Site Local Inside Network",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "All Inside VIPs"
+                },
+                "all_slo_vips": {
+                    "description": "Exclusive with [all_destinations all_sli_vips destination_aws_vpc_ids destination_ip_prefix_set destination_label_selector destination_prefix_list inside_destinations outside_destinations]\n Destination is virtual-ip of all loadbalancer on site-local-outside network",
+                    "title": "All VIP address on Site Local Outside Network",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "All Outside VIPs"
                 },
                 "all_sources": {
                     "description": "Exclusive with [inside_sources outside_sources source_aws_vpc_ids source_ip_prefix_set source_label_selector source_prefix_list]\n Any address that matches 0/0 ip prefix",
@@ -2353,26 +2365,26 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Deny"
                 },
                 "destination_aws_vpc_ids": {
-                    "description": "Exclusive with [all_destinations destination_ip_prefix_set destination_label_selector destination_prefix_list]\n Destination is any address in list of AWS VPCs",
+                    "description": "Exclusive with [all_destinations all_sli_vips all_slo_vips destination_ip_prefix_set destination_label_selector destination_prefix_list inside_destinations outside_destinations]\n Destination is any address in list of AWS VPCs",
                     "title": "AWS VPC Identifier",
                     "$ref": "#/definitions/schemaAwsVpcList",
                     "x-displayname": "AWS VPC Identifier"
                 },
                 "destination_ip_prefix_set": {
-                    "description": "Exclusive with [all_destinations destination_aws_vpc_ids destination_label_selector destination_prefix_list]\n Addresses that match one of the prefix in the ip-prefix-set",
+                    "description": "Exclusive with [all_destinations all_sli_vips all_slo_vips destination_aws_vpc_ids destination_label_selector destination_prefix_list inside_destinations outside_destinations]\n Addresses that match one of the prefix in the ip-prefix-set",
                     "title": "IP Prefix Set",
                     "$ref": "#/definitions/schemaIpPrefixSetRefType",
                     "x-displayname": "IP Prefix Set"
                 },
                 "destination_label_selector": {
-                    "description": "Exclusive with [all_destinations destination_aws_vpc_ids destination_ip_prefix_set destination_prefix_list]\n Destination is a set of addresses determined by label selector expression\n These labels can be cloud tags defined on the vpc resource, labels on the global network or others.\n\nExample: - \"app != web\"-",
+                    "description": "Exclusive with [all_destinations all_sli_vips all_slo_vips destination_aws_vpc_ids destination_ip_prefix_set destination_prefix_list inside_destinations outside_destinations]\n Destination is a set of addresses determined by label selector expression\n These labels can be cloud tags defined on the vpc resource, labels on the global network or others.\n\nExample: - \"app != web\"-",
                     "title": "Destination Label selector",
                     "$ref": "#/definitions/schemaLabelSelectorType",
                     "x-displayname": "Destination Label Selector",
                     "x-ves-example": "app != web"
                 },
                 "destination_prefix_list": {
-                    "description": "Exclusive with [all_destinations destination_aws_vpc_ids destination_ip_prefix_set destination_label_selector]\n Addresses that match one of the prefix in the list\n\nExample: - \"192.168.20.0/24\"-",
+                    "description": "Exclusive with [all_destinations all_sli_vips all_slo_vips destination_aws_vpc_ids destination_ip_prefix_set destination_label_selector inside_destinations outside_destinations]\n Addresses that match one of the prefix in the list\n\nExample: - \"192.168.20.0/24\"-",
                     "title": "ipv4 prefix list",
                     "$ref": "#/definitions/viewsPrefixStringListType",
                     "x-displayname": "IPv4 Prefix List",
@@ -2383,6 +2395,12 @@ var APISwaggerJSON string = `{
                     "title": "Service",
                     "$ref": "#/definitions/enhanced_firewall_policyServiceActionType",
                     "x-displayname": "Insert an External Service"
+                },
+                "inside_destinations": {
+                    "description": "Exclusive with [all_destinations all_sli_vips all_slo_vips destination_aws_vpc_ids destination_ip_prefix_set destination_label_selector destination_prefix_list outside_destinations]\n All addresses reachable in site-local inside interfaces",
+                    "title": "All Destination Reachable via all inside interfaces",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Addresses Reachable On Inside Network"
                 },
                 "inside_sources": {
                     "description": "Exclusive with [all_sources outside_sources source_aws_vpc_ids source_ip_prefix_set source_label_selector source_prefix_list]\n All addresses reachable in site-local inside interfaces",
@@ -2405,6 +2423,12 @@ var APISwaggerJSON string = `{
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true"
                     }
+                },
+                "outside_destinations": {
+                    "description": "Exclusive with [all_destinations all_sli_vips all_slo_vips destination_aws_vpc_ids destination_ip_prefix_set destination_label_selector destination_prefix_list inside_destinations]\n All addresses reachable in site-local outside interfaces",
+                    "title": "All Destination Reachable via all outside interfaces",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Addresses Reachable On Outside Network"
                 },
                 "outside_sources": {
                     "description": "Exclusive with [all_sources inside_sources source_aws_vpc_ids source_ip_prefix_set source_label_selector source_prefix_list]\n All addresses reachable in site-local outside interfaces",

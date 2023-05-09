@@ -36,10 +36,15 @@ type GlobalSpecType struct {
 	// prefix
 	//
 	// x-displayName: "Prefix"
-	// x-required
 	// x-example: "['10.2.1.0/24', '192.168.8.0/29', '10.7.64.160/27']"
-	// An unordered list of IP prefixes.
+	// An unordered list of IPv4 prefixes.
 	Prefix []string `protobuf:"bytes,1,rep,name=prefix,proto3" json:"prefix,omitempty"`
+	// ipv6_prefix
+	//
+	// x-displayName: "IPv6 Prefix"
+	// x-example: "['2001:db8:abcd:0012::0/64', 'fd48:fa09:d9d4::/48', 'fdd8:3a62:45c7:98a5::/64']"
+	// An unordered list of IPv6 prefixes.
+	Ipv6Prefix []string `protobuf:"bytes,2,rep,name=ipv6_prefix,json=ipv6Prefix,proto3" json:"ipv6_prefix,omitempty"`
 }
 
 func (m *GlobalSpecType) Reset()      { *m = GlobalSpecType{} }
@@ -77,12 +82,20 @@ func (m *GlobalSpecType) GetPrefix() []string {
 	return nil
 }
 
+func (m *GlobalSpecType) GetIpv6Prefix() []string {
+	if m != nil {
+		return m.Ipv6Prefix
+	}
+	return nil
+}
+
 // Create ip prefix set
 //
 // x-displayName: "Create IP Prefix Set"
 // Create ip_prefix_set creates a new object in the storage backend for metadata.namespace.
 type CreateSpecType struct {
-	Prefix []string `protobuf:"bytes,1,rep,name=prefix,proto3" json:"prefix,omitempty"`
+	Prefix     []string `protobuf:"bytes,1,rep,name=prefix,proto3" json:"prefix,omitempty"`
+	Ipv6Prefix []string `protobuf:"bytes,2,rep,name=ipv6_prefix,json=ipv6Prefix,proto3" json:"ipv6_prefix,omitempty"`
 }
 
 func (m *CreateSpecType) Reset()      { *m = CreateSpecType{} }
@@ -120,12 +133,20 @@ func (m *CreateSpecType) GetPrefix() []string {
 	return nil
 }
 
+func (m *CreateSpecType) GetIpv6Prefix() []string {
+	if m != nil {
+		return m.Ipv6Prefix
+	}
+	return nil
+}
+
 // Replace ip prefix set
 //
 // x-displayName: "Replace IP Prefix Set"
 // Replace ip_prefix_set replaces an existing object in the storage backend for metadata.namespace.
 type ReplaceSpecType struct {
-	Prefix []string `protobuf:"bytes,1,rep,name=prefix,proto3" json:"prefix,omitempty"`
+	Prefix     []string `protobuf:"bytes,1,rep,name=prefix,proto3" json:"prefix,omitempty"`
+	Ipv6Prefix []string `protobuf:"bytes,2,rep,name=ipv6_prefix,json=ipv6Prefix,proto3" json:"ipv6_prefix,omitempty"`
 }
 
 func (m *ReplaceSpecType) Reset()      { *m = ReplaceSpecType{} }
@@ -163,12 +184,20 @@ func (m *ReplaceSpecType) GetPrefix() []string {
 	return nil
 }
 
+func (m *ReplaceSpecType) GetIpv6Prefix() []string {
+	if m != nil {
+		return m.Ipv6Prefix
+	}
+	return nil
+}
+
 // Get ip prefix set
 //
 // x-displayName: "Get IP Prefix Set"
 // Get ip_prefix_set reads a given object from storage backend for metadata.namespace.
 type GetSpecType struct {
-	Prefix []string `protobuf:"bytes,1,rep,name=prefix,proto3" json:"prefix,omitempty"`
+	Prefix     []string `protobuf:"bytes,1,rep,name=prefix,proto3" json:"prefix,omitempty"`
+	Ipv6Prefix []string `protobuf:"bytes,2,rep,name=ipv6_prefix,json=ipv6Prefix,proto3" json:"ipv6_prefix,omitempty"`
 }
 
 func (m *GetSpecType) Reset()      { *m = GetSpecType{} }
@@ -206,6 +235,13 @@ func (m *GetSpecType) GetPrefix() []string {
 	return nil
 }
 
+func (m *GetSpecType) GetIpv6Prefix() []string {
+	if m != nil {
+		return m.Ipv6Prefix
+	}
+	return nil
+}
+
 func init() {
 	proto.RegisterType((*GlobalSpecType)(nil), "ves.io.schema.ip_prefix_set.GlobalSpecType")
 	golang_proto.RegisterType((*GlobalSpecType)(nil), "ves.io.schema.ip_prefix_set.GlobalSpecType")
@@ -225,31 +261,34 @@ func init() {
 }
 
 var fileDescriptor_c8c0501fe04dc928 = []byte{
-	// 381 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x9c, 0x92, 0xb1, 0x6f, 0xd3, 0x40,
-	0x14, 0xc6, 0xfd, 0xb0, 0x12, 0x82, 0x91, 0x02, 0x64, 0x80, 0xe0, 0xa0, 0x13, 0xf2, 0x02, 0x4b,
-	0xee, 0x06, 0x16, 0x04, 0x88, 0x21, 0x48, 0x64, 0x26, 0x30, 0x20, 0x96, 0xc8, 0x76, 0x5e, 0x1c,
-	0x0b, 0x27, 0x77, 0x3a, 0x5f, 0xac, 0x64, 0xcb, 0x7f, 0x00, 0xca, 0x5f, 0xd1, 0xbf, 0xa1, 0x53,
-	0xc6, 0xaa, 0x53, 0xc6, 0x8c, 0xcd, 0x79, 0x69, 0xb7, 0x8c, 0x1d, 0xab, 0xd8, 0x4e, 0x55, 0x57,
-	0x9d, 0xb2, 0x7d, 0x4f, 0xbf, 0xef, 0x7b, 0xf7, 0x49, 0xef, 0xac, 0x77, 0x09, 0xc6, 0x34, 0xe4,
-	0x2c, 0xf6, 0x47, 0x38, 0x76, 0x59, 0x28, 0xfa, 0x42, 0xe2, 0x30, 0x9c, 0xf5, 0x63, 0x54, 0x4c,
-	0xcd, 0x05, 0xc6, 0x54, 0x48, 0xae, 0x78, 0xa3, 0x95, 0x1b, 0x69, 0x6e, 0xa4, 0x25, 0xa3, 0xdd,
-	0x0e, 0x42, 0x35, 0x9a, 0x7a, 0xd4, 0xe7, 0x63, 0x16, 0xf0, 0x80, 0xb3, 0x2c, 0xe3, 0x4d, 0x87,
-	0xd9, 0x94, 0x0d, 0x99, 0xca, 0x77, 0xd9, 0xaf, 0xca, 0x8f, 0x4e, 0x50, 0x15, 0xa0, 0x55, 0x06,
-	0x5c, 0xa8, 0x90, 0x4f, 0x8a, 0x06, 0xf6, 0xeb, 0x32, 0xbc, 0x53, 0xce, 0x7e, 0x53, 0x46, 0x89,
-	0x1b, 0x85, 0x03, 0x57, 0x61, 0x4e, 0x9d, 0xdf, 0x56, 0xbd, 0x1b, 0x71, 0xcf, 0x8d, 0x7e, 0x0a,
-	0xf4, 0x7f, 0xcd, 0x05, 0x36, 0xbe, 0x5b, 0xd5, 0xbc, 0x7d, 0x13, 0xde, 0x9a, 0xef, 0x9f, 0x74,
-	0xe8, 0xe9, 0xd5, 0xca, 0xb4, 0x96, 0xf0, 0xd8, 0xa9, 0x48, 0xf3, 0x1a, 0x60, 0x3f, 0x56, 0x97,
-	0x60, 0x3e, 0x5f, 0xd4, 0xf6, 0xb2, 0xb2, 0x84, 0x47, 0x35, 0x38, 0xa8, 0x26, 0xf4, 0x8a, 0xb4,
-	0xf3, 0xd9, 0xaa, 0x7f, 0x93, 0xe8, 0x2a, 0xbc, 0xdd, 0xfc, 0xb2, 0xbc, 0xf9, 0xe0, 0xfc, 0xf4,
-	0xe2, 0xfc, 0xeb, 0xbd, 0x12, 0xce, 0x17, 0xeb, 0x59, 0x0f, 0x45, 0xe4, 0xfa, 0x47, 0xa5, 0x3f,
-	0x5a, 0x4f, 0xbb, 0xa8, 0x8e, 0x48, 0x76, 0xfe, 0xc1, 0x7a, 0x4b, 0x8c, 0xcd, 0x96, 0x18, 0xbb,
-	0x2d, 0x81, 0x85, 0x26, 0x70, 0xa2, 0x09, 0x9c, 0x69, 0x02, 0x6b, 0x4d, 0x60, 0xa3, 0x09, 0x5c,
-	0x68, 0x02, 0x97, 0x9a, 0x18, 0x3b, 0x4d, 0xe0, 0x7f, 0x4a, 0x8c, 0x55, 0x4a, 0x60, 0x9d, 0x12,
-	0x63, 0x93, 0x12, 0xe3, 0xcf, 0x8f, 0x80, 0x8b, 0xbf, 0x01, 0x4d, 0x78, 0xa4, 0x50, 0x4a, 0x97,
-	0x4e, 0x63, 0x96, 0x89, 0x21, 0x97, 0xe3, 0xb6, 0x90, 0x3c, 0x09, 0x07, 0x28, 0xdb, 0x07, 0xcc,
-	0x84, 0x17, 0x70, 0x86, 0x33, 0x55, 0x9c, 0xe6, 0xa1, 0x7f, 0xe6, 0x55, 0xb3, 0x3b, 0x7d, 0xb8,
-	0x09, 0x00, 0x00, 0xff, 0xff, 0x42, 0x96, 0xa5, 0x39, 0x8d, 0x02, 0x00, 0x00,
+	// 432 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xb4, 0x93, 0x31, 0x6f, 0xd3, 0x40,
+	0x14, 0xc7, 0xfd, 0x62, 0x35, 0xc0, 0x55, 0x2a, 0x90, 0x01, 0x82, 0x8b, 0x8e, 0xca, 0x42, 0x02,
+	0x09, 0xc5, 0x37, 0x20, 0x31, 0x20, 0xc4, 0x50, 0x86, 0x2e, 0x0c, 0x50, 0x58, 0x40, 0xa0, 0xc8,
+	0x76, 0x5f, 0xdc, 0x13, 0x4e, 0xef, 0x74, 0xbe, 0x98, 0x76, 0x40, 0xca, 0x37, 0x00, 0x65, 0xe6,
+	0x03, 0xf0, 0x19, 0x60, 0xe9, 0x88, 0x98, 0x32, 0x7a, 0x24, 0xe7, 0xa5, 0x6c, 0x1d, 0x19, 0x51,
+	0xce, 0x6e, 0x55, 0x47, 0x61, 0xcc, 0xf6, 0x9e, 0xfe, 0xef, 0xff, 0x7b, 0xff, 0xb3, 0x9e, 0xc9,
+	0xbd, 0x1c, 0xb3, 0x80, 0x0b, 0x96, 0xc5, 0xfb, 0x38, 0x0c, 0x19, 0x97, 0x7d, 0xa9, 0x70, 0xc0,
+	0x0f, 0xfb, 0x19, 0x6a, 0xa6, 0x8f, 0x24, 0x66, 0x81, 0x54, 0x42, 0x8b, 0xce, 0x66, 0x35, 0x18,
+	0x54, 0x83, 0x41, 0x63, 0xd0, 0xeb, 0x25, 0x5c, 0xef, 0x8f, 0xa2, 0x20, 0x16, 0x43, 0x96, 0x88,
+	0x44, 0x30, 0xeb, 0x89, 0x46, 0x03, 0xdb, 0xd9, 0xc6, 0x56, 0x15, 0xcb, 0xbb, 0xd9, 0x5c, 0x7a,
+	0x80, 0xba, 0x16, 0x36, 0x9b, 0x82, 0x90, 0x9a, 0x8b, 0x83, 0x3a, 0x81, 0x77, 0xab, 0x29, 0x5e,
+	0x08, 0xe7, 0xdd, 0x6e, 0x4a, 0x79, 0x98, 0xf2, 0xbd, 0x50, 0x63, 0xad, 0x6e, 0x2d, 0xa8, 0x1c,
+	0x3f, 0xf6, 0x1b, 0x68, 0xff, 0x2b, 0x90, 0x8d, 0x9d, 0x54, 0x44, 0x61, 0xfa, 0x4a, 0x62, 0xfc,
+	0xfa, 0x48, 0x62, 0xe7, 0x09, 0x69, 0x57, 0x0f, 0xec, 0xc2, 0x96, 0x7b, 0xff, 0xca, 0xf6, 0xdd,
+	0xef, 0x7f, 0x8e, 0x5d, 0x32, 0x81, 0x4b, 0xfe, 0x9a, 0x72, 0xff, 0x02, 0xcc, 0xdb, 0xf6, 0x04,
+	0xdc, 0x6b, 0xe3, 0xcb, 0xf3, 0x72, 0x6d, 0x02, 0xad, 0x2e, 0xec, 0xd6, 0x9e, 0xce, 0x73, 0xb2,
+	0xce, 0x65, 0xfe, 0xa8, 0xfe, 0x46, 0xdd, 0x96, 0x45, 0x3c, 0x28, 0x3e, 0xc1, 0xc9, 0x8f, 0xca,
+	0x7a, 0x46, 0x1a, 0xb7, 0xfe, 0x43, 0x22, 0x73, 0xff, 0x0b, 0x6b, 0xf7, 0xdf, 0x91, 0x8d, 0x67,
+	0x0a, 0x43, 0x8d, 0xe7, 0xe9, 0x6e, 0x34, 0xd3, 0x9d, 0xef, 0xbd, 0xb3, 0x64, 0xef, 0x45, 0xd4,
+	0xe3, 0xeb, 0xbf, 0x9e, 0x2e, 0xbc, 0xd4, 0x7f, 0x4f, 0xae, 0xee, 0xa2, 0x4c, 0xc3, 0x78, 0x35,
+	0xf8, 0x37, 0x64, 0x7d, 0x07, 0xf5, 0x2a, 0xd0, 0xdb, 0x9f, 0x61, 0x3a, 0xa3, 0x4e, 0x31, 0xa3,
+	0xce, 0xe9, 0x8c, 0xc2, 0xd8, 0x50, 0xf8, 0x66, 0x28, 0xfc, 0x34, 0x14, 0xa6, 0x86, 0x42, 0x61,
+	0x28, 0xfc, 0x36, 0x14, 0x4e, 0x0c, 0x75, 0x4e, 0x0d, 0x85, 0x2f, 0x25, 0x75, 0x8e, 0x4b, 0x0a,
+	0xd3, 0x92, 0x3a, 0x45, 0x49, 0x9d, 0xb7, 0x2f, 0x13, 0x21, 0x3f, 0x24, 0x41, 0x2e, 0x52, 0x8d,
+	0x4a, 0x85, 0xc1, 0x28, 0x63, 0xb6, 0x18, 0x08, 0x35, 0xec, 0x49, 0x25, 0x72, 0xbe, 0x87, 0xaa,
+	0x77, 0x26, 0x33, 0x19, 0x25, 0x82, 0xe1, 0xa1, 0xae, 0xcf, 0x68, 0xd9, 0x1f, 0x13, 0xb5, 0xed,
+	0x3d, 0x3d, 0xfc, 0x17, 0x00, 0x00, 0xff, 0xff, 0xd8, 0x3f, 0xc9, 0x03, 0x57, 0x03, 0x00, 0x00,
 }
 
 func (this *GlobalSpecType) Equal(that interface{}) bool {
@@ -276,6 +315,14 @@ func (this *GlobalSpecType) Equal(that interface{}) bool {
 	}
 	for i := range this.Prefix {
 		if this.Prefix[i] != that1.Prefix[i] {
+			return false
+		}
+	}
+	if len(this.Ipv6Prefix) != len(that1.Ipv6Prefix) {
+		return false
+	}
+	for i := range this.Ipv6Prefix {
+		if this.Ipv6Prefix[i] != that1.Ipv6Prefix[i] {
 			return false
 		}
 	}
@@ -308,6 +355,14 @@ func (this *CreateSpecType) Equal(that interface{}) bool {
 			return false
 		}
 	}
+	if len(this.Ipv6Prefix) != len(that1.Ipv6Prefix) {
+		return false
+	}
+	for i := range this.Ipv6Prefix {
+		if this.Ipv6Prefix[i] != that1.Ipv6Prefix[i] {
+			return false
+		}
+	}
 	return true
 }
 func (this *ReplaceSpecType) Equal(that interface{}) bool {
@@ -334,6 +389,14 @@ func (this *ReplaceSpecType) Equal(that interface{}) bool {
 	}
 	for i := range this.Prefix {
 		if this.Prefix[i] != that1.Prefix[i] {
+			return false
+		}
+	}
+	if len(this.Ipv6Prefix) != len(that1.Ipv6Prefix) {
+		return false
+	}
+	for i := range this.Ipv6Prefix {
+		if this.Ipv6Prefix[i] != that1.Ipv6Prefix[i] {
 			return false
 		}
 	}
@@ -366,15 +429,24 @@ func (this *GetSpecType) Equal(that interface{}) bool {
 			return false
 		}
 	}
+	if len(this.Ipv6Prefix) != len(that1.Ipv6Prefix) {
+		return false
+	}
+	for i := range this.Ipv6Prefix {
+		if this.Ipv6Prefix[i] != that1.Ipv6Prefix[i] {
+			return false
+		}
+	}
 	return true
 }
 func (this *GlobalSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 5)
+	s := make([]string, 0, 6)
 	s = append(s, "&ip_prefix_set.GlobalSpecType{")
 	s = append(s, "Prefix: "+fmt.Sprintf("%#v", this.Prefix)+",\n")
+	s = append(s, "Ipv6Prefix: "+fmt.Sprintf("%#v", this.Ipv6Prefix)+",\n")
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
@@ -382,9 +454,10 @@ func (this *CreateSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 5)
+	s := make([]string, 0, 6)
 	s = append(s, "&ip_prefix_set.CreateSpecType{")
 	s = append(s, "Prefix: "+fmt.Sprintf("%#v", this.Prefix)+",\n")
+	s = append(s, "Ipv6Prefix: "+fmt.Sprintf("%#v", this.Ipv6Prefix)+",\n")
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
@@ -392,9 +465,10 @@ func (this *ReplaceSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 5)
+	s := make([]string, 0, 6)
 	s = append(s, "&ip_prefix_set.ReplaceSpecType{")
 	s = append(s, "Prefix: "+fmt.Sprintf("%#v", this.Prefix)+",\n")
+	s = append(s, "Ipv6Prefix: "+fmt.Sprintf("%#v", this.Ipv6Prefix)+",\n")
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
@@ -402,9 +476,10 @@ func (this *GetSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 5)
+	s := make([]string, 0, 6)
 	s = append(s, "&ip_prefix_set.GetSpecType{")
 	s = append(s, "Prefix: "+fmt.Sprintf("%#v", this.Prefix)+",\n")
+	s = append(s, "Ipv6Prefix: "+fmt.Sprintf("%#v", this.Ipv6Prefix)+",\n")
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
@@ -436,6 +511,15 @@ func (m *GlobalSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	if len(m.Ipv6Prefix) > 0 {
+		for iNdEx := len(m.Ipv6Prefix) - 1; iNdEx >= 0; iNdEx-- {
+			i -= len(m.Ipv6Prefix[iNdEx])
+			copy(dAtA[i:], m.Ipv6Prefix[iNdEx])
+			i = encodeVarintTypes(dAtA, i, uint64(len(m.Ipv6Prefix[iNdEx])))
+			i--
+			dAtA[i] = 0x12
+		}
+	}
 	if len(m.Prefix) > 0 {
 		for iNdEx := len(m.Prefix) - 1; iNdEx >= 0; iNdEx-- {
 			i -= len(m.Prefix[iNdEx])
@@ -468,6 +552,15 @@ func (m *CreateSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	if len(m.Ipv6Prefix) > 0 {
+		for iNdEx := len(m.Ipv6Prefix) - 1; iNdEx >= 0; iNdEx-- {
+			i -= len(m.Ipv6Prefix[iNdEx])
+			copy(dAtA[i:], m.Ipv6Prefix[iNdEx])
+			i = encodeVarintTypes(dAtA, i, uint64(len(m.Ipv6Prefix[iNdEx])))
+			i--
+			dAtA[i] = 0x12
+		}
+	}
 	if len(m.Prefix) > 0 {
 		for iNdEx := len(m.Prefix) - 1; iNdEx >= 0; iNdEx-- {
 			i -= len(m.Prefix[iNdEx])
@@ -500,6 +593,15 @@ func (m *ReplaceSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	if len(m.Ipv6Prefix) > 0 {
+		for iNdEx := len(m.Ipv6Prefix) - 1; iNdEx >= 0; iNdEx-- {
+			i -= len(m.Ipv6Prefix[iNdEx])
+			copy(dAtA[i:], m.Ipv6Prefix[iNdEx])
+			i = encodeVarintTypes(dAtA, i, uint64(len(m.Ipv6Prefix[iNdEx])))
+			i--
+			dAtA[i] = 0x12
+		}
+	}
 	if len(m.Prefix) > 0 {
 		for iNdEx := len(m.Prefix) - 1; iNdEx >= 0; iNdEx-- {
 			i -= len(m.Prefix[iNdEx])
@@ -532,6 +634,15 @@ func (m *GetSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	if len(m.Ipv6Prefix) > 0 {
+		for iNdEx := len(m.Ipv6Prefix) - 1; iNdEx >= 0; iNdEx-- {
+			i -= len(m.Ipv6Prefix[iNdEx])
+			copy(dAtA[i:], m.Ipv6Prefix[iNdEx])
+			i = encodeVarintTypes(dAtA, i, uint64(len(m.Ipv6Prefix[iNdEx])))
+			i--
+			dAtA[i] = 0x12
+		}
+	}
 	if len(m.Prefix) > 0 {
 		for iNdEx := len(m.Prefix) - 1; iNdEx >= 0; iNdEx-- {
 			i -= len(m.Prefix[iNdEx])
@@ -567,6 +678,12 @@ func (m *GlobalSpecType) Size() (n int) {
 			n += 1 + l + sovTypes(uint64(l))
 		}
 	}
+	if len(m.Ipv6Prefix) > 0 {
+		for _, s := range m.Ipv6Prefix {
+			l = len(s)
+			n += 1 + l + sovTypes(uint64(l))
+		}
+	}
 	return n
 }
 
@@ -578,6 +695,12 @@ func (m *CreateSpecType) Size() (n int) {
 	_ = l
 	if len(m.Prefix) > 0 {
 		for _, s := range m.Prefix {
+			l = len(s)
+			n += 1 + l + sovTypes(uint64(l))
+		}
+	}
+	if len(m.Ipv6Prefix) > 0 {
+		for _, s := range m.Ipv6Prefix {
 			l = len(s)
 			n += 1 + l + sovTypes(uint64(l))
 		}
@@ -597,6 +720,12 @@ func (m *ReplaceSpecType) Size() (n int) {
 			n += 1 + l + sovTypes(uint64(l))
 		}
 	}
+	if len(m.Ipv6Prefix) > 0 {
+		for _, s := range m.Ipv6Prefix {
+			l = len(s)
+			n += 1 + l + sovTypes(uint64(l))
+		}
+	}
 	return n
 }
 
@@ -608,6 +737,12 @@ func (m *GetSpecType) Size() (n int) {
 	_ = l
 	if len(m.Prefix) > 0 {
 		for _, s := range m.Prefix {
+			l = len(s)
+			n += 1 + l + sovTypes(uint64(l))
+		}
+	}
+	if len(m.Ipv6Prefix) > 0 {
+		for _, s := range m.Ipv6Prefix {
 			l = len(s)
 			n += 1 + l + sovTypes(uint64(l))
 		}
@@ -627,6 +762,7 @@ func (this *GlobalSpecType) String() string {
 	}
 	s := strings.Join([]string{`&GlobalSpecType{`,
 		`Prefix:` + fmt.Sprintf("%v", this.Prefix) + `,`,
+		`Ipv6Prefix:` + fmt.Sprintf("%v", this.Ipv6Prefix) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -637,6 +773,7 @@ func (this *CreateSpecType) String() string {
 	}
 	s := strings.Join([]string{`&CreateSpecType{`,
 		`Prefix:` + fmt.Sprintf("%v", this.Prefix) + `,`,
+		`Ipv6Prefix:` + fmt.Sprintf("%v", this.Ipv6Prefix) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -647,6 +784,7 @@ func (this *ReplaceSpecType) String() string {
 	}
 	s := strings.Join([]string{`&ReplaceSpecType{`,
 		`Prefix:` + fmt.Sprintf("%v", this.Prefix) + `,`,
+		`Ipv6Prefix:` + fmt.Sprintf("%v", this.Ipv6Prefix) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -657,6 +795,7 @@ func (this *GetSpecType) String() string {
 	}
 	s := strings.Join([]string{`&GetSpecType{`,
 		`Prefix:` + fmt.Sprintf("%v", this.Prefix) + `,`,
+		`Ipv6Prefix:` + fmt.Sprintf("%v", this.Ipv6Prefix) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -729,6 +868,38 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			m.Prefix = append(m.Prefix, string(dAtA[iNdEx:postIndex]))
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Ipv6Prefix", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Ipv6Prefix = append(m.Ipv6Prefix, string(dAtA[iNdEx:postIndex]))
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
@@ -815,6 +986,38 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 			}
 			m.Prefix = append(m.Prefix, string(dAtA[iNdEx:postIndex]))
 			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Ipv6Prefix", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Ipv6Prefix = append(m.Ipv6Prefix, string(dAtA[iNdEx:postIndex]))
+			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipTypes(dAtA[iNdEx:])
@@ -900,6 +1103,38 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 			}
 			m.Prefix = append(m.Prefix, string(dAtA[iNdEx:postIndex]))
 			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Ipv6Prefix", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Ipv6Prefix = append(m.Ipv6Prefix, string(dAtA[iNdEx:postIndex]))
+			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipTypes(dAtA[iNdEx:])
@@ -984,6 +1219,38 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			m.Prefix = append(m.Prefix, string(dAtA[iNdEx:postIndex]))
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Ipv6Prefix", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Ipv6Prefix = append(m.Ipv6Prefix, string(dAtA[iNdEx:postIndex]))
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex

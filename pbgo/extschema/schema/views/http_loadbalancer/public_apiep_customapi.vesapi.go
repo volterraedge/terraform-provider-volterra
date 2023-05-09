@@ -750,6 +750,16 @@ var ApiepLBCustomAPISwaggerJSON string = `{
                     },
                     "x-displayname": "Sensitive Data",
                     "x-ves-example": "[SENSITIVE_DATA_TYPE_CCN, SENSITIVE_DATA_TYPE_SSN]"
+                },
+                "sensitive_data_types": {
+                    "type": "array",
+                    "description": " Sensitive Data of the API endpoint\n\nExample: - \"[Social-Security-Number, Credit-Card-Number]\"-",
+                    "title": "Sensitive Data",
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-displayname": "Sensitive Data",
+                    "x-ves-example": "[Social-Security-Number, Credit-Card-Number]"
                 }
             }
         },

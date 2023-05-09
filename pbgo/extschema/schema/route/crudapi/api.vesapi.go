@@ -4872,9 +4872,9 @@ var APISwaggerJSON string = `{
             "properties": {
                 "routes": {
                     "type": "array",
-                    "description": " List of routes to match for incoming request\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 64\n",
+                    "description": " List of routes to match for incoming request\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 257\n",
                     "title": "routes",
-                    "maxItems": 64,
+                    "maxItems": 257,
                     "items": {
                         "$ref": "#/definitions/routeRouteType"
                     },
@@ -4882,7 +4882,7 @@ var APISwaggerJSON string = `{
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true",
-                        "ves.io.schema.rules.repeated.max_items": "64"
+                        "ves.io.schema.rules.repeated.max_items": "257"
                     }
                 }
             }

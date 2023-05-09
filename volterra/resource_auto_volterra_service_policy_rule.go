@@ -665,7 +665,17 @@ func resourceVolterraServicePolicyRule() *schema.Resource {
 
 							Type: schema.TypeList,
 
-							Required: true,
+							Optional: true,
+							Elem: &schema.Schema{
+								Type: schema.TypeString,
+							},
+						},
+
+						"ipv6_prefixes": {
+
+							Type: schema.TypeList,
+
+							Optional: true,
 							Elem: &schema.Schema{
 								Type: schema.TypeString,
 							},
@@ -875,7 +885,17 @@ func resourceVolterraServicePolicyRule() *schema.Resource {
 
 							Type: schema.TypeList,
 
-							Required: true,
+							Optional: true,
+							Elem: &schema.Schema{
+								Type: schema.TypeString,
+							},
+						},
+
+						"ipv6_prefixes": {
+
+							Type: schema.TypeList,
+
+							Optional: true,
 							Elem: &schema.Schema{
 								Type: schema.TypeString,
 							},
@@ -986,6 +1006,11 @@ func resourceVolterraServicePolicyRule() *schema.Resource {
 						},
 					},
 				},
+			},
+
+			"origin_server_subsets_action": {
+				Type:     schema.TypeMap,
+				Optional: true,
 			},
 
 			"path": {
@@ -1414,16 +1439,6 @@ func resourceVolterraServicePolicyRule() *schema.Resource {
 						"flow_label": {
 							Type:     schema.TypeString,
 							Optional: true,
-						},
-
-						"good_bot": {
-
-							Type: schema.TypeList,
-
-							Required: true,
-							Elem: &schema.Schema{
-								Type: schema.TypeString,
-							},
 						},
 
 						"mitigation": {
@@ -2700,6 +2715,16 @@ func resourceVolterraServicePolicyRuleCreate(d *schema.ResourceData, meta interf
 
 			}
 
+			if v, ok := cs["ipv6_prefixes"]; ok && !isIntfNil(v) {
+
+				ls := make([]string, len(v.([]interface{})))
+				for i, v := range v.([]interface{}) {
+					ls[i] = v.(string)
+				}
+				dstIpChoiceInt.DstIpPrefixList.Ipv6Prefixes = ls
+
+			}
+
 		}
 
 	}
@@ -2975,6 +3000,16 @@ func resourceVolterraServicePolicyRuleCreate(d *schema.ResourceData, meta interf
 
 			}
 
+			if v, ok := cs["ipv6_prefixes"]; ok && !isIntfNil(v) {
+
+				ls := make([]string, len(v.([]interface{})))
+				for i, v := range v.([]interface{}) {
+					ls[i] = v.(string)
+				}
+				ipChoiceInt.IpPrefixList.Ipv6Prefixes = ls
+
+			}
+
 		}
 
 	}
@@ -3118,6 +3153,16 @@ func resourceVolterraServicePolicyRuleCreate(d *schema.ResourceData, meta interf
 
 		}
 
+	}
+
+	//origin_server_subsets_action
+	if v, ok := d.GetOk("origin_server_subsets_action"); ok && !isIntfNil(v) {
+
+		ms := map[string]string{}
+		for k, v := range v.(map[string]interface{}) {
+			ms[k] = v.(string)
+		}
+		createSpec.OriginServerSubsetsAction = ms
 	}
 
 	//path
@@ -3774,14 +3819,6 @@ func resourceVolterraServicePolicyRuleCreate(d *schema.ResourceData, meta interf
 
 			if w, ok := shapeProtectedEndpointActionMapStrToI["flow_label"]; ok && !isIntfNil(w) {
 				shapeProtectedEndpointAction.FlowLabel = w.(string)
-			}
-
-			if w, ok := shapeProtectedEndpointActionMapStrToI["good_bot"]; ok && !isIntfNil(w) {
-				ls := make([]string, len(w.([]interface{})))
-				for i, v := range w.([]interface{}) {
-					ls[i] = v.(string)
-				}
-				shapeProtectedEndpointAction.GoodBot = ls
 			}
 
 			if v, ok := shapeProtectedEndpointActionMapStrToI["mitigation"]; ok && !isIntfNil(v) {
@@ -5208,6 +5245,16 @@ func resourceVolterraServicePolicyRuleUpdate(d *schema.ResourceData, meta interf
 
 			}
 
+			if v, ok := cs["ipv6_prefixes"]; ok && !isIntfNil(v) {
+
+				ls := make([]string, len(v.([]interface{})))
+				for i, v := range v.([]interface{}) {
+					ls[i] = v.(string)
+				}
+				dstIpChoiceInt.DstIpPrefixList.Ipv6Prefixes = ls
+
+			}
+
 		}
 
 	}
@@ -5477,6 +5524,16 @@ func resourceVolterraServicePolicyRuleUpdate(d *schema.ResourceData, meta interf
 
 			}
 
+			if v, ok := cs["ipv6_prefixes"]; ok && !isIntfNil(v) {
+
+				ls := make([]string, len(v.([]interface{})))
+				for i, v := range v.([]interface{}) {
+					ls[i] = v.(string)
+				}
+				ipChoiceInt.IpPrefixList.Ipv6Prefixes = ls
+
+			}
+
 		}
 
 	}
@@ -5616,6 +5673,15 @@ func resourceVolterraServicePolicyRuleUpdate(d *schema.ResourceData, meta interf
 
 		}
 
+	}
+
+	if v, ok := d.GetOk("origin_server_subsets_action"); ok && !isIntfNil(v) {
+
+		ms := map[string]string{}
+		for k, v := range v.(map[string]interface{}) {
+			ms[k] = v.(string)
+		}
+		updateSpec.OriginServerSubsetsAction = ms
 	}
 
 	if v, ok := d.GetOk("path"); ok && !isIntfNil(v) {
@@ -6264,14 +6330,6 @@ func resourceVolterraServicePolicyRuleUpdate(d *schema.ResourceData, meta interf
 
 			if w, ok := shapeProtectedEndpointActionMapStrToI["flow_label"]; ok && !isIntfNil(w) {
 				shapeProtectedEndpointAction.FlowLabel = w.(string)
-			}
-
-			if w, ok := shapeProtectedEndpointActionMapStrToI["good_bot"]; ok && !isIntfNil(w) {
-				ls := make([]string, len(w.([]interface{})))
-				for i, v := range w.([]interface{}) {
-					ls[i] = v.(string)
-				}
-				shapeProtectedEndpointAction.GoodBot = ls
 			}
 
 			if v, ok := shapeProtectedEndpointActionMapStrToI["mitigation"]; ok && !isIntfNil(v) {

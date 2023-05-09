@@ -20,140 +20,20 @@ resource "volterra_http_loadbalancer" "example" {
   name      = "acmecorp-web"
   namespace = "staging"
 
-  // One of the arguments from this list "do_not_advertise advertise_on_public_default_vip advertise_on_public advertise_custom" must be set
+  // One of the arguments from this list "advertise_on_public_default_vip advertise_on_public advertise_custom do_not_advertise" must be set
   do_not_advertise = true
 
-  // One of the arguments from this list "disable_api_definition api_definition api_specification api_definitions" must be set
+  // One of the arguments from this list "api_definition api_specification api_definitions disable_api_definition" must be set
+  disable_api_definition = true
 
-  api_definitions {
-    api_definitions {
-      name      = "test1"
-      namespace = "staging"
-      tenant    = "acmecorp"
-    }
-  }
   // One of the arguments from this list "enable_api_discovery disable_api_discovery" must be set
-  disable_api_discovery = true
 
-  // One of the arguments from this list "js_challenge captcha_challenge policy_based_challenge no_challenge enable_challenge" must be set
-
-  policy_based_challenge {
-    // One of the arguments from this list "default_captcha_challenge_parameters captcha_challenge_parameters" must be set
-    default_captcha_challenge_parameters = true
-
-    // One of the arguments from this list "no_challenge always_enable_js_challenge always_enable_captcha_challenge" must be set
-    no_challenge = true
-
-    // One of the arguments from this list "default_js_challenge_parameters js_challenge_parameters" must be set
-    default_js_challenge_parameters = true
-
-    // One of the arguments from this list "default_mitigation_settings malicious_user_mitigation" must be set
-    default_mitigation_settings = true
-
-    rule_list {
-      rules {
-        metadata {
-          description = "Virtual Host for acmecorp website"
-          disable     = true
-          name        = "acmecorp-web"
-        }
-
-        spec {
-          arg_matchers {
-            invert_matcher = true
-
-            // One of the arguments from this list "presence check_present check_not_present item" must be set
-
-            item {
-              exact_values = ["['new york', 'london', 'sydney', 'tokyo', 'cairo']"]
-
-              regex_values = ["['^new .*$', 'san f.*', '.* del .*']"]
-
-              transformers = ["transformers"]
-            }
-            name = "name"
-          }
-
-          // One of the arguments from this list "any_asn asn_list asn_matcher" must be set
-          any_asn = true
-
-          body_matcher {
-            exact_values = ["['new york', 'london', 'sydney', 'tokyo', 'cairo']"]
-
-            regex_values = ["['^new .*$', 'san f.*', '.* del .*']"]
-
-            transformers = ["transformers"]
-          }
-
-          // One of the arguments from this list "disable_challenge enable_javascript_challenge enable_captcha_challenge" must be set
-          disable_challenge = true
-
-          // One of the arguments from this list "client_name client_selector client_name_matcher any_client" must be set
-
-          client_selector {
-            expressions = ["region in (us-west1, us-west2),tier in (staging)"]
-          }
-          cookie_matchers {
-            invert_matcher = true
-
-            // One of the arguments from this list "presence check_present check_not_present item" must be set
-            presence = true
-
-            name = "Session"
-          }
-          domain_matcher {
-            exact_values = ["['new york', 'london', 'sydney', 'tokyo', 'cairo']"]
-
-            regex_values = ["['^new .*$', 'san f.*', '.* del .*']"]
-          }
-          expiration_timestamp = "0001-01-01T00:00:00Z"
-          headers {
-            invert_matcher = true
-
-            // One of the arguments from this list "item presence check_present check_not_present" must be set
-            presence = true
-
-            name = "Accept-Encoding"
-          }
-          http_method {
-            invert_matcher = true
-
-            methods = ["['GET', 'POST', 'DELETE']"]
-          }
-          // One of the arguments from this list "any_ip ip_prefix_list ip_matcher" must be set
-          any_ip = true
-          path {
-            exact_values = ["['/api/web/namespaces/project179/users/user1', '/api/config/namespaces/accounting/bgps', '/api/data/namespaces/project443/virtual_host_101']"]
-
-            prefix_values = ["['/api/web/namespaces/project179/users/', '/api/config/namespaces/', '/api/data/namespaces/']"]
-
-            regex_values = ["['^/api/web/namespaces/abc/users/([a-z]([-a-z0-9]*[a-z0-9])?)$', '/api/data/namespaces/proj404/virtual_hosts/([a-z]([-a-z0-9]*[a-z0-9])?)$']"]
-
-            suffix_values = ["['.exe', '.shtml', '.wmz']"]
-
-            transformers = ["transformers"]
-          }
-          query_params {
-            invert_matcher = true
-            key            = "sourceid"
-
-            // One of the arguments from this list "presence check_present check_not_present item" must be set
-            presence = true
-          }
-          tls_fingerprint_matcher {
-            classes = ["classes"]
-
-            exact_values = ["['ed6dfd54b01ebe31b7a65b88abfa7297', '16efcf0e00504ddfedde13bfea997952', 'de364c46b0dfc283b5e38c79ceae3f8f']"]
-
-            excluded_values = ["['fb00055a1196aeea8d1bc609885ba953', 'b386946a5a44d1ddcc843bc75336dfce']"]
-          }
-        }
-      }
-    }
-
-    // One of the arguments from this list "default_temporary_blocking_parameters temporary_user_blocking" must be set
-    default_temporary_blocking_parameters = true
+  enable_api_discovery {
+    // One of the arguments from this list "disable_learn_from_redirect_traffic enable_learn_from_redirect_traffic" must be set
+    disable_learn_from_redirect_traffic = true
   }
+  // One of the arguments from this list "no_challenge enable_challenge js_challenge captcha_challenge policy_based_challenge" must be set
+  no_challenge = true
 
   // One of the arguments from this list "enable_ddos_detection disable_ddos_detection" must be set
 
@@ -162,8 +42,22 @@ resource "volterra_http_loadbalancer" "example" {
     enable_auto_mitigation = true
   }
   domains = ["www.foo.com"]
+
   // One of the arguments from this list "round_robin least_active random source_ip_stickiness cookie_stickiness ring_hash" must be set
-  random = true
+
+  cookie_stickiness {
+    // One of the arguments from this list "ignore_httponly add_httponly" must be set
+    ignore_httponly = true
+    name            = "userid"
+    path            = "/Users/userid/browser/cookies"
+
+    // One of the arguments from this list "ignore_samesite samesite_strict samesite_lax samesite_none" must be set
+    ignore_samesite = true
+
+    // One of the arguments from this list "ignore_secure add_secure" must be set
+    ignore_secure = true
+    ttl           = "5000"
+  }
 
   // One of the arguments from this list "http https_auto_cert https" must be set
 
@@ -173,60 +67,11 @@ resource "volterra_http_loadbalancer" "example" {
   }
   // One of the arguments from this list "enable_malicious_user_detection disable_malicious_user_detection" must be set
   enable_malicious_user_detection = true
-
   // One of the arguments from this list "disable_rate_limit api_rate_limit rate_limit" must be set
-
-  api_rate_limit {
-    api_endpoint_rules {
-      api_endpoint_method {
-        invert_matcher = true
-
-        methods = ["['GET', 'POST', 'DELETE']"]
-      }
-
-      api_endpoint_path = "value"
-      base_path         = "/"
-
-      // One of the arguments from this list "any_domain specific_domain" must be set
-      any_domain = true
-
-      // One of the arguments from this list "inline_rate_limiter ref_rate_limiter" must be set
-
-      ref_rate_limiter {
-        name      = "test1"
-        namespace = "staging"
-        tenant    = "acmecorp"
-      }
-    }
-
-    // One of the arguments from this list "custom_ip_allowed_list no_ip_allowed_list ip_allowed_list" must be set
-
-    custom_ip_allowed_list {
-      rate_limiter_allowed_prefixes {
-        name      = "test1"
-        namespace = "staging"
-        tenant    = "acmecorp"
-      }
-    }
-    server_url_rules {
-      base_path = "/"
-
-      // One of the arguments from this list "any_domain specific_domain" must be set
-      any_domain = true
-
-      // One of the arguments from this list "inline_rate_limiter ref_rate_limiter" must be set
-
-      inline_rate_limiter {
-        // One of the arguments from this list "use_http_lb_user_id ref_user_id" must be set
-        use_http_lb_user_id = true
-        threshold           = "1"
-        unit                = "unit"
-      }
-    }
-  }
-  // One of the arguments from this list "service_policies_from_namespace no_service_policies active_service_policies" must be set
+  disable_rate_limit = true
+  // One of the arguments from this list "active_service_policies service_policies_from_namespace no_service_policies" must be set
   service_policies_from_namespace = true
-  // One of the arguments from this list "disable_trust_client_ip_headers enable_trust_client_ip_headers" must be set
+  // One of the arguments from this list "enable_trust_client_ip_headers disable_trust_client_ip_headers" must be set
   disable_trust_client_ip_headers = true
   // One of the arguments from this list "user_id_client_ip user_identification" must be set
   user_id_client_ip = true
@@ -265,7 +110,7 @@ Argument Reference
 
 `do_not_advertise` - (Optional) Do not advertise this load balancer (bool).
 
-`api_definition` - (Optional) Specify API definition which includes application API paths and methods derived from swagger files.. See [ref](#ref) below for details.
+`api_definition` - (Optional) DEPRECATED by 'api_specification'. See [ref](#ref) below for details.
 
 `api_definitions` - (Optional) DEPRECATED by 'api_definition'. See [Api Definitions ](#api-definitions) below for details.
 
@@ -354,6 +199,8 @@ Argument Reference
 `default_pool` - (Optional) Single Origin Pool. See [Default Pool ](#default-pool) below for details.
 
 `default_pool_list` - (Optional) Multiple Origin Pools with weights and priorities. See [Default Pool List ](#default-pool-list) below for details.
+
+`origin_server_subset_rule_list` - (Optional) Origin Server Subset Selection Rules. See [Origin Server Subset Rule List ](#origin-server-subset-rule-list) below for details.
 
 `protected_cookies` - (Optional) Note: We recommend enabling Secure and HttpOnly attributes along with cookie tampering protection.. See [Protected Cookies ](#protected-cookies) below for details.
 
@@ -517,6 +364,10 @@ Challenge rules can be used to selectively disable Captcha challenge or enable J
 
 Challenge rules can be used to selectively disable Javascript challenge or enable Captcha challenge for some requests..
 
+### Any Asn
+
+Any origin ASN..
+
 ### Any Client
 
 Any Client.
@@ -542,6 +393,14 @@ Match all paths.
 DEPRECATED by 'api_definition'.
 
 `api_definitions` - (Optional) API Definitions using OpenAPI specification files. See [ref](#ref) below for details.
+
+### Api Endpoint
+
+The API endpoint (Path + Method) which this validation applies to.
+
+`methods` - (Optional) methods to be matched (`List of Strings`).
+
+`path` - (Required) path to be matched (`String`).
 
 ### Api Endpoint Method
 
@@ -745,6 +604,16 @@ Define rules to block IP Prefixes or AS numbers..
 
 `metadata` - (Required) Common attributes for the rule including name and description.. See [Metadata ](#metadata) below for details.
 
+### Body Matcher
+
+The actual request body value is extracted from the request API as a string..
+
+`exact_values` - (Optional) A list of exact values to match the input against. (`String`).
+
+`regex_values` - (Optional) A list of regular expressions to match the input against. (`String`).
+
+`transformers` - (Optional) An ordered list of transformers (starting from index 0) to be applied to the path before matching. (`List of Strings`).
+
 ### Bot Defense
 
 Bot Defense configuration for Protected App endpoints and JavaScript insertion.
@@ -825,9 +694,9 @@ Conditions related to the origin of the request, such as client IP, TLS fingerpr
 
 `asn_matcher` - (Optional) The predicate evaluates to true if the origin ASN is present in one of the BGP ASN Set objects.. See [Asn Matcher ](#asn-matcher) below for details.
 
-`ip_matcher` - (Optional) The predicate evaluates to true if the client IPv4 Address is covered by one or more of the IPv4 Prefixes in the IP Prefix Sets.. See [Ip Matcher ](#ip-matcher) below for details.
+`ip_matcher` - (Optional) The predicate evaluates to true if the client IP Address is covered by one or more of the IP Prefixes in the IP Prefix Sets.. See [Ip Matcher ](#ip-matcher) below for details.
 
-`ip_prefix_list` - (Optional) The predicate evaluates to true if the client IPv4 Address is covered by one or more of the IPv4 Prefixes from the list.. See [Ip Prefix List ](#ip-prefix-list) below for details.
+`ip_prefix_list` - (Optional) The predicate evaluates to true if the client IP Address is covered by one or more of the IP Prefixes from the list.. See [Ip Prefix List ](#ip-prefix-list) below for details.
 
 `tls_fingerprint_matcher` - (Optional) The predicate evaluates to true if the TLS fingerprint matches any of the exact values or classes of known TLS fingerprints.. See [Tls Fingerprint Matcher ](#tls-fingerprint-matcher) below for details.
 
@@ -1609,6 +1478,28 @@ Request header name and value pairs.
 
 `headers` - (Required) List of HTTP header name and value pairs. See [Headers ](#headers) below for details.
 
+### Http Protocol Enable V1 Only
+
+Enable HTTP/1.1 for downstream connections.
+
+### Http Protocol Enable V1 V2
+
+Enable both HTTP/1.1 and HTTP/2 for downstream connections.
+
+### Http Protocol Enable V2 Only
+
+Enable HTTP/2 for downstream connections.
+
+### Http Protocol Options
+
+HTTP protocol configuration options for downstream connections..
+
+`http_protocol_enable_v1_only` - (Optional) Enable HTTP/1.1 for downstream connections (bool).
+
+`http_protocol_enable_v1_v2` - (Optional) Enable both HTTP/1.1 and HTTP/2 for downstream connections (bool).
+
+`http_protocol_enable_v2_only` - (Optional) Enable HTTP/2 for downstream connections (bool).
+
 ### Https
 
 User is responsible for managing DNS to this load balancer..
@@ -1622,6 +1513,8 @@ User is responsible for managing DNS to this load balancer..
 `non_default_loadbalancer` - (Optional) x-displayName: "No" (bool).
 
 `header_transformation_type` - (Optional) Header transformation options for response headers to the client. See [Header Transformation Type ](#header-transformation-type) below for details.
+
+`http_protocol_options` - (Optional) HTTP protocol configuration options for downstream connections.. See [Http Protocol Options ](#http-protocol-options) below for details.
 
 `http_redirect` - (Optional) Redirect HTTP traffic to HTTPS (`Bool`).
 
@@ -1656,6 +1549,8 @@ or a DNS CNAME record should be created in your DNS provider's portal..
 `non_default_loadbalancer` - (Optional) x-displayName: "No" (bool).
 
 `header_transformation_type` - (Optional) Header transformation options for response headers to the client. See [Header Transformation Type ](#header-transformation-type) below for details.
+
+`http_protocol_options` - (Optional) HTTP protocol configuration options for downstream connections.. See [Http Protocol Options ](#http-protocol-options) below for details.
 
 `http_redirect` - (Optional) Redirect HTTP traffic to HTTPS (`Bool`).
 
@@ -1719,7 +1614,7 @@ List of IP(s) for which rate limiting will be disabled..
 
 ### Ip Matcher
 
-The predicate evaluates to true if the client IPv4 Address is covered by one or more of the IPv4 Prefixes in the IP Prefix Sets..
+The predicate evaluates to true if the client IP Address is covered by one or more of the IP Prefixes in the IP Prefix Sets..
 
 `invert_matcher` - (Optional) Invert the match result. (`Bool`).
 
@@ -1727,11 +1622,13 @@ The predicate evaluates to true if the client IPv4 Address is covered by one or 
 
 ### Ip Prefix List
 
-The predicate evaluates to true if the client IPv4 Address is covered by one or more of the IPv4 Prefixes from the list..
+The predicate evaluates to true if the client IP Address is covered by one or more of the IP Prefixes from the list..
 
 `invert_match` - (Optional) Invert the match result. (`Bool`).
 
-`ip_prefixes` - (Required) List of IPv4 prefix strings. (`String`).
+`ip_prefixes` - (Optional) List of IPv4 prefix strings. (`String`).
+
+`ipv6_prefixes` - (Optional) List of IPv6 prefix strings. (`String`).
 
 ### Ip Threat Category List
 
@@ -1985,6 +1882,8 @@ x-displayName: "Custom Fall Through Rule List".
 
 `action_skip` - (Required) Continue processing the request (bool).
 
+`api_endpoint` - (Optional) The API endpoint (Path + Method) which this validation applies to. See [Api Endpoint ](#api-endpoint) below for details.
+
 `api_endpoint_path` - (Optional) The API endpoint which this validation applies to (`String`).
 
 `api_group` - (Optional) The API group which this validation applies to (`String`).
@@ -2006,6 +1905,40 @@ Origin Pools for this route.
 `priority` - (Optional) made active as per the increasing priority. (`Int`).
 
 `weight` - (Optional) Weight of this origin pool, valid only with multiple origin pool. Value of 0 will disable the pool (`Int`).
+
+### Origin Server Subset Rule List
+
+Origin Server Subset Selection Rules.
+
+`origin_server_subset_rules` - (Optional) When an Origin server subset rule is matched, then this selection rule takes effect and no more rules are evaluated.. See [Origin Server Subset Rules ](#origin-server-subset-rules) below for details.
+
+### Origin Server Subset Rules
+
+When an Origin server subset rule is matched, then this selection rule takes effect and no more rules are evaluated..
+
+`any_asn` - (Optional) Any origin ASN. (bool).
+
+`asn_list` - (Optional) The predicate evaluates to true if the origin ASN is present in the ASN list.. See [Asn List ](#asn-list) below for details.
+
+`asn_matcher` - (Optional) The predicate evaluates to true if the origin ASN is present in one of the BGP ASN Set objects.. See [Asn Matcher ](#asn-matcher) below for details.
+
+`body_matcher` - (Optional) The actual request body value is extracted from the request API as a string.. See [Body Matcher ](#body-matcher) below for details.
+
+`client_selector` - (Optional) The predicate evaluates to true if the expressions in the label selector are true for the client labels.. See [Client Selector ](#client-selector) below for details.
+
+`country_codes` - (Optional) List of Country Codes (`List of Strings`).
+
+`any_ip` - (Optional) Any Source IP (bool).
+
+`ip_matcher` - (Optional) The predicate evaluates to true if the client IPv4 Address is covered by one or more of the IPv4 Prefixes in the IP Prefix Sets.. See [Ip Matcher ](#ip-matcher) below for details.
+
+`ip_prefix_list` - (Optional) The predicate evaluates to true if the client IPv4 Address is covered by one or more of the IPv4 Prefixes from the list.. See [Ip Prefix List ](#ip-prefix-list) below for details.
+
+`metadata` - (Required) Common attributes for the rule including name and description.. See [Metadata ](#metadata) below for details.
+
+`origin_server_subsets_action` - (Required) Add Labels for this origin server, these labels can be used to form subset. (`String`).
+
+`re_name_list` - (Optional) List of RE names for match (`String`).
 
 ### Origin Servers
 

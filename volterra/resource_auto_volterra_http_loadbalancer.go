@@ -504,6 +504,31 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 																			Optional: true,
 																		},
 
+																		"api_endpoint": {
+
+																			Type:     schema.TypeSet,
+																			Optional: true,
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{
+
+																					"methods": {
+
+																						Type: schema.TypeList,
+
+																						Optional: true,
+																						Elem: &schema.Schema{
+																							Type: schema.TypeString,
+																						},
+																					},
+
+																					"path": {
+																						Type:     schema.TypeString,
+																						Optional: true,
+																					},
+																				},
+																			},
+																		},
+
 																		"api_endpoint_path": {
 
 																			Type:     schema.TypeString,
@@ -659,6 +684,31 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 																			Optional: true,
 																		},
 
+																		"api_endpoint": {
+
+																			Type:     schema.TypeSet,
+																			Optional: true,
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{
+
+																					"methods": {
+
+																						Type: schema.TypeList,
+
+																						Optional: true,
+																						Elem: &schema.Schema{
+																							Type: schema.TypeString,
+																						},
+																					},
+
+																					"path": {
+																						Type:     schema.TypeString,
+																						Optional: true,
+																					},
+																				},
+																			},
+																		},
+
 																		"api_endpoint_path": {
 
 																			Type:     schema.TypeString,
@@ -717,6 +767,31 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
+
+												"api_endpoint": {
+
+													Type:     schema.TypeSet,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"methods": {
+
+																Type: schema.TypeList,
+
+																Optional: true,
+																Elem: &schema.Schema{
+																	Type: schema.TypeString,
+																},
+															},
+
+															"path": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+														},
+													},
+												},
 
 												"api_endpoint_path": {
 
@@ -1112,7 +1187,17 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 
 																Type: schema.TypeList,
 
-																Required: true,
+																Optional: true,
+																Elem: &schema.Schema{
+																	Type: schema.TypeString,
+																},
+															},
+
+															"ipv6_prefixes": {
+
+																Type: schema.TypeList,
+
+																Optional: true,
 																Elem: &schema.Schema{
 																	Type: schema.TypeString,
 																},
@@ -1663,7 +1748,17 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 
 																Type: schema.TypeList,
 
-																Required: true,
+																Optional: true,
+																Elem: &schema.Schema{
+																	Type: schema.TypeString,
+																},
+															},
+
+															"ipv6_prefixes": {
+
+																Type: schema.TypeList,
+
+																Optional: true,
 																Elem: &schema.Schema{
 																	Type: schema.TypeString,
 																},
@@ -4184,7 +4279,17 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 
 																			Type: schema.TypeList,
 
-																			Required: true,
+																			Optional: true,
+																			Elem: &schema.Schema{
+																				Type: schema.TypeString,
+																			},
+																		},
+
+																		"ipv6_prefixes": {
+
+																			Type: schema.TypeList,
+
+																			Optional: true,
 																			Elem: &schema.Schema{
 																				Type: schema.TypeString,
 																			},
@@ -5114,7 +5219,17 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 
 										Type: schema.TypeList,
 
-										Required: true,
+										Optional: true,
+										Elem: &schema.Schema{
+											Type: schema.TypeString,
+										},
+									},
+
+									"ipv6_prefixes": {
+
+										Type: schema.TypeList,
+
+										Optional: true,
 										Elem: &schema.Schema{
 											Type: schema.TypeString,
 										},
@@ -5630,6 +5745,34 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 									},
 
 									"proper_case_header_transformation": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+								},
+							},
+						},
+
+						"http_protocol_options": {
+
+							Type:     schema.TypeSet,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"http_protocol_enable_v1_only": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+
+									"http_protocol_enable_v1_v2": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+
+									"http_protocol_enable_v2_only": {
 
 										Type:     schema.TypeBool,
 										Optional: true,
@@ -6249,6 +6392,34 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 									},
 
 									"proper_case_header_transformation": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+								},
+							},
+						},
+
+						"http_protocol_options": {
+
+							Type:     schema.TypeSet,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"http_protocol_enable_v1_only": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+
+									"http_protocol_enable_v1_v2": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+
+									"http_protocol_enable_v2_only": {
 
 										Type:     schema.TypeBool,
 										Optional: true,
@@ -8386,6 +8557,284 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 									"weight": {
 										Type:     schema.TypeInt,
 										Optional: true,
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+
+			"origin_server_subset_rule_list": {
+
+				Type:     schema.TypeSet,
+				Optional: true,
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+
+						"origin_server_subset_rules": {
+
+							Type:     schema.TypeList,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"any_asn": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+
+									"asn_list": {
+
+										Type:     schema.TypeSet,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"as_numbers": {
+
+													Type: schema.TypeList,
+
+													Required: true,
+													Elem: &schema.Schema{
+														Type: schema.TypeInt,
+													},
+												},
+											},
+										},
+									},
+
+									"asn_matcher": {
+
+										Type:     schema.TypeSet,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"asn_sets": {
+
+													Type:     schema.TypeList,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"kind": {
+																Type:     schema.TypeString,
+																Computed: true,
+															},
+
+															"name": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+															"namespace": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+															"tenant": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+														},
+													},
+												},
+											},
+										},
+									},
+
+									"body_matcher": {
+
+										Type:     schema.TypeSet,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"exact_values": {
+
+													Type: schema.TypeList,
+
+													Optional: true,
+													Elem: &schema.Schema{
+														Type: schema.TypeString,
+													},
+												},
+
+												"regex_values": {
+
+													Type: schema.TypeList,
+
+													Optional: true,
+													Elem: &schema.Schema{
+														Type: schema.TypeString,
+													},
+												},
+
+												"transformers": {
+
+													Type: schema.TypeList,
+
+													Optional: true,
+													Elem: &schema.Schema{
+														Type: schema.TypeString,
+													},
+												},
+											},
+										},
+									},
+
+									"client_selector": {
+
+										Type:     schema.TypeSet,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"expressions": {
+
+													Type: schema.TypeList,
+
+													Required: true,
+													Elem: &schema.Schema{
+														Type: schema.TypeString,
+													},
+												},
+											},
+										},
+									},
+
+									"country_codes": {
+
+										Type: schema.TypeList,
+
+										Optional: true,
+										Elem: &schema.Schema{
+											Type: schema.TypeString,
+										},
+									},
+
+									"any_ip": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+
+									"ip_matcher": {
+
+										Type:     schema.TypeSet,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"invert_matcher": {
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
+
+												"prefix_sets": {
+
+													Type:     schema.TypeList,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"kind": {
+																Type:     schema.TypeString,
+																Computed: true,
+															},
+
+															"name": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+															"namespace": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+															"tenant": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+														},
+													},
+												},
+											},
+										},
+									},
+
+									"ip_prefix_list": {
+
+										Type:     schema.TypeSet,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"invert_match": {
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
+
+												"ip_prefixes": {
+
+													Type: schema.TypeList,
+
+													Optional: true,
+													Elem: &schema.Schema{
+														Type: schema.TypeString,
+													},
+												},
+
+												"ipv6_prefixes": {
+
+													Type: schema.TypeList,
+
+													Optional: true,
+													Elem: &schema.Schema{
+														Type: schema.TypeString,
+													},
+												},
+											},
+										},
+									},
+
+									"metadata": {
+
+										Type:     schema.TypeSet,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"description": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+
+												"disable": {
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
+
+												"name": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+											},
+										},
+									},
+
+									"origin_server_subsets_action": {
+										Type:     schema.TypeMap,
+										Optional: true,
+									},
+
+									"re_name_list": {
+
+										Type: schema.TypeList,
+
+										Optional: true,
+										Elem: &schema.Schema{
+											Type: schema.TypeString,
+										},
 									},
 								},
 							},
@@ -11356,6 +11805,37 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 
 											conditionTypeChoiceTypeFound := false
 
+											if v, ok := openApiValidationRulesMapStrToI["api_endpoint"]; ok && !isIntfNil(v) && !conditionTypeChoiceTypeFound {
+
+												conditionTypeChoiceTypeFound = true
+												conditionTypeChoiceInt := &ves_io_schema_views_http_loadbalancer.FallThroughRule_ApiEndpoint{}
+												conditionTypeChoiceInt.ApiEndpoint = &ves_io_schema_views_http_loadbalancer.ApiEndpointDetails{}
+												openApiValidationRules[i].ConditionTypeChoice = conditionTypeChoiceInt
+
+												sl := v.(*schema.Set).List()
+												for _, set := range sl {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["methods"]; ok && !isIntfNil(v) {
+
+														methodsList := []ves_io_schema.HttpMethod{}
+														for _, j := range v.([]interface{}) {
+															methodsList = append(methodsList, ves_io_schema.HttpMethod(ves_io_schema.HttpMethod_value[j.(string)]))
+														}
+														conditionTypeChoiceInt.ApiEndpoint.Methods = methodsList
+
+													}
+
+													if v, ok := cs["path"]; ok && !isIntfNil(v) {
+
+														conditionTypeChoiceInt.ApiEndpoint.Path = v.(string)
+
+													}
+
+												}
+
+											}
+
 											if v, ok := openApiValidationRulesMapStrToI["api_endpoint_path"]; ok && !isIntfNil(v) && !conditionTypeChoiceTypeFound {
 
 												conditionTypeChoiceTypeFound = true
@@ -11599,6 +12079,37 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 
 											conditionTypeChoiceTypeFound := false
 
+											if v, ok := openApiValidationRulesMapStrToI["api_endpoint"]; ok && !isIntfNil(v) && !conditionTypeChoiceTypeFound {
+
+												conditionTypeChoiceTypeFound = true
+												conditionTypeChoiceInt := &ves_io_schema_views_http_loadbalancer.FallThroughRule_ApiEndpoint{}
+												conditionTypeChoiceInt.ApiEndpoint = &ves_io_schema_views_http_loadbalancer.ApiEndpointDetails{}
+												openApiValidationRules[i].ConditionTypeChoice = conditionTypeChoiceInt
+
+												sl := v.(*schema.Set).List()
+												for _, set := range sl {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["methods"]; ok && !isIntfNil(v) {
+
+														methodsList := []ves_io_schema.HttpMethod{}
+														for _, j := range v.([]interface{}) {
+															methodsList = append(methodsList, ves_io_schema.HttpMethod(ves_io_schema.HttpMethod_value[j.(string)]))
+														}
+														conditionTypeChoiceInt.ApiEndpoint.Methods = methodsList
+
+													}
+
+													if v, ok := cs["path"]; ok && !isIntfNil(v) {
+
+														conditionTypeChoiceInt.ApiEndpoint.Path = v.(string)
+
+													}
+
+												}
+
+											}
+
 											if v, ok := openApiValidationRulesMapStrToI["api_endpoint_path"]; ok && !isIntfNil(v) && !conditionTypeChoiceTypeFound {
 
 												conditionTypeChoiceTypeFound = true
@@ -11678,6 +12189,37 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 							openApiValidationRulesMapStrToI := set.(map[string]interface{})
 
 							conditionTypeChoiceTypeFound := false
+
+							if v, ok := openApiValidationRulesMapStrToI["api_endpoint"]; ok && !isIntfNil(v) && !conditionTypeChoiceTypeFound {
+
+								conditionTypeChoiceTypeFound = true
+								conditionTypeChoiceInt := &ves_io_schema_views_http_loadbalancer.OpenApiValidationRule_ApiEndpoint{}
+								conditionTypeChoiceInt.ApiEndpoint = &ves_io_schema_views_http_loadbalancer.ApiEndpointDetails{}
+								openApiValidationRules[i].ConditionTypeChoice = conditionTypeChoiceInt
+
+								sl := v.(*schema.Set).List()
+								for _, set := range sl {
+									cs := set.(map[string]interface{})
+
+									if v, ok := cs["methods"]; ok && !isIntfNil(v) {
+
+										methodsList := []ves_io_schema.HttpMethod{}
+										for _, j := range v.([]interface{}) {
+											methodsList = append(methodsList, ves_io_schema.HttpMethod(ves_io_schema.HttpMethod_value[j.(string)]))
+										}
+										conditionTypeChoiceInt.ApiEndpoint.Methods = methodsList
+
+									}
+
+									if v, ok := cs["path"]; ok && !isIntfNil(v) {
+
+										conditionTypeChoiceInt.ApiEndpoint.Path = v.(string)
+
+									}
+
+								}
+
+							}
 
 							if v, ok := openApiValidationRulesMapStrToI["api_endpoint_path"]; ok && !isIntfNil(v) && !conditionTypeChoiceTypeFound {
 
@@ -12252,6 +12794,16 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 											ls[i] = v.(string)
 										}
 										ipAsnChoiceInt.IpPrefixList.IpPrefixes = ls
+
+									}
+
+									if v, ok := cs["ipv6_prefixes"]; ok && !isIntfNil(v) {
+
+										ls := make([]string, len(v.([]interface{})))
+										for i, v := range v.([]interface{}) {
+											ls[i] = v.(string)
+										}
+										ipAsnChoiceInt.IpPrefixList.Ipv6Prefixes = ls
 
 									}
 
@@ -12965,6 +13517,16 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 											ls[i] = v.(string)
 										}
 										ipAsnChoiceInt.IpPrefixList.IpPrefixes = ls
+
+									}
+
+									if v, ok := cs["ipv6_prefixes"]; ok && !isIntfNil(v) {
+
+										ls := make([]string, len(v.([]interface{})))
+										for i, v := range v.([]interface{}) {
+											ls[i] = v.(string)
+										}
+										ipAsnChoiceInt.IpPrefixList.Ipv6Prefixes = ls
 
 									}
 
@@ -16608,6 +17170,16 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 
 											}
 
+											if v, ok := cs["ipv6_prefixes"]; ok && !isIntfNil(v) {
+
+												ls := make([]string, len(v.([]interface{})))
+												for i, v := range v.([]interface{}) {
+													ls[i] = v.(string)
+												}
+												ipChoiceInt.IpPrefixList.Ipv6Prefixes = ls
+
+											}
+
 										}
 
 									}
@@ -17882,6 +18454,16 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 
 					}
 
+					if v, ok := cs["ipv6_prefixes"]; ok && !isIntfNil(v) {
+
+						ls := make([]string, len(v.([]interface{})))
+						for i, v := range v.([]interface{}) {
+							ls[i] = v.(string)
+						}
+						mitigationChoiceInt.IpPrefixList.Ipv6Prefixes = ls
+
+					}
+
 				}
 
 			}
@@ -18690,6 +19272,56 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 							headerTransformationChoiceInt := &ves_io_schema.HeaderTransformationType_ProperCaseHeaderTransformation{}
 							headerTransformationChoiceInt.ProperCaseHeaderTransformation = &ves_io_schema.Empty{}
 							headerTransformationType.HeaderTransformationChoice = headerTransformationChoiceInt
+						}
+
+					}
+
+				}
+
+			}
+
+			if v, ok := cs["http_protocol_options"]; ok && !isIntfNil(v) {
+
+				sl := v.(*schema.Set).List()
+				httpProtocolOptions := &ves_io_schema_virtual_host.HttpProtocolOptions{}
+				loadbalancerTypeInt.Https.HttpProtocolOptions = httpProtocolOptions
+				for _, set := range sl {
+					httpProtocolOptionsMapStrToI := set.(map[string]interface{})
+
+					httpProtocolChoiceTypeFound := false
+
+					if v, ok := httpProtocolOptionsMapStrToI["http_protocol_enable_v1_only"]; ok && !isIntfNil(v) && !httpProtocolChoiceTypeFound {
+
+						httpProtocolChoiceTypeFound = true
+
+						if v.(bool) {
+							httpProtocolChoiceInt := &ves_io_schema_virtual_host.HttpProtocolOptions_HttpProtocolEnableV1Only{}
+							httpProtocolChoiceInt.HttpProtocolEnableV1Only = &ves_io_schema.Empty{}
+							httpProtocolOptions.HttpProtocolChoice = httpProtocolChoiceInt
+						}
+
+					}
+
+					if v, ok := httpProtocolOptionsMapStrToI["http_protocol_enable_v1_v2"]; ok && !isIntfNil(v) && !httpProtocolChoiceTypeFound {
+
+						httpProtocolChoiceTypeFound = true
+
+						if v.(bool) {
+							httpProtocolChoiceInt := &ves_io_schema_virtual_host.HttpProtocolOptions_HttpProtocolEnableV1V2{}
+							httpProtocolChoiceInt.HttpProtocolEnableV1V2 = &ves_io_schema.Empty{}
+							httpProtocolOptions.HttpProtocolChoice = httpProtocolChoiceInt
+						}
+
+					}
+
+					if v, ok := httpProtocolOptionsMapStrToI["http_protocol_enable_v2_only"]; ok && !isIntfNil(v) && !httpProtocolChoiceTypeFound {
+
+						httpProtocolChoiceTypeFound = true
+
+						if v.(bool) {
+							httpProtocolChoiceInt := &ves_io_schema_virtual_host.HttpProtocolOptions_HttpProtocolEnableV2Only{}
+							httpProtocolChoiceInt.HttpProtocolEnableV2Only = &ves_io_schema.Empty{}
+							httpProtocolOptions.HttpProtocolChoice = httpProtocolChoiceInt
 						}
 
 					}
@@ -19571,6 +20203,56 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 							headerTransformationChoiceInt := &ves_io_schema.HeaderTransformationType_ProperCaseHeaderTransformation{}
 							headerTransformationChoiceInt.ProperCaseHeaderTransformation = &ves_io_schema.Empty{}
 							headerTransformationType.HeaderTransformationChoice = headerTransformationChoiceInt
+						}
+
+					}
+
+				}
+
+			}
+
+			if v, ok := cs["http_protocol_options"]; ok && !isIntfNil(v) {
+
+				sl := v.(*schema.Set).List()
+				httpProtocolOptions := &ves_io_schema_virtual_host.HttpProtocolOptions{}
+				loadbalancerTypeInt.HttpsAutoCert.HttpProtocolOptions = httpProtocolOptions
+				for _, set := range sl {
+					httpProtocolOptionsMapStrToI := set.(map[string]interface{})
+
+					httpProtocolChoiceTypeFound := false
+
+					if v, ok := httpProtocolOptionsMapStrToI["http_protocol_enable_v1_only"]; ok && !isIntfNil(v) && !httpProtocolChoiceTypeFound {
+
+						httpProtocolChoiceTypeFound = true
+
+						if v.(bool) {
+							httpProtocolChoiceInt := &ves_io_schema_virtual_host.HttpProtocolOptions_HttpProtocolEnableV1Only{}
+							httpProtocolChoiceInt.HttpProtocolEnableV1Only = &ves_io_schema.Empty{}
+							httpProtocolOptions.HttpProtocolChoice = httpProtocolChoiceInt
+						}
+
+					}
+
+					if v, ok := httpProtocolOptionsMapStrToI["http_protocol_enable_v1_v2"]; ok && !isIntfNil(v) && !httpProtocolChoiceTypeFound {
+
+						httpProtocolChoiceTypeFound = true
+
+						if v.(bool) {
+							httpProtocolChoiceInt := &ves_io_schema_virtual_host.HttpProtocolOptions_HttpProtocolEnableV1V2{}
+							httpProtocolChoiceInt.HttpProtocolEnableV1V2 = &ves_io_schema.Empty{}
+							httpProtocolOptions.HttpProtocolChoice = httpProtocolChoiceInt
+						}
+
+					}
+
+					if v, ok := httpProtocolOptionsMapStrToI["http_protocol_enable_v2_only"]; ok && !isIntfNil(v) && !httpProtocolChoiceTypeFound {
+
+						httpProtocolChoiceTypeFound = true
+
+						if v.(bool) {
+							httpProtocolChoiceInt := &ves_io_schema_virtual_host.HttpProtocolOptions_HttpProtocolEnableV2Only{}
+							httpProtocolChoiceInt.HttpProtocolEnableV2Only = &ves_io_schema.Empty{}
+							httpProtocolOptions.HttpProtocolChoice = httpProtocolChoiceInt
 						}
 
 					}
@@ -21116,11 +21798,11 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 								sl := v.([]interface{})
 								endpointSubsets := make([]*ves_io_schema_cluster.EndpointSubsetSelectorType, len(sl))
 								subsetChoiceInt.EnableSubsets.EndpointSubsets = endpointSubsets
-								//for i, set := range sl {
-								//	endpointSubsets[i] = &ves_io_schema_cluster.EndpointSubsetSelectorType{}
-									//endpointSubsetsMapStrToI := set.(map[string]interface{})
+								for i, set := range sl {
+									endpointSubsets[i] = &ves_io_schema_cluster.EndpointSubsetSelectorType{}
+									_ = set.(map[string]interface{})
 
-								//}
+								}
 
 							}
 
@@ -22597,6 +23279,334 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 
 					if w, ok := poolsMapStrToI["weight"]; ok && !isIntfNil(w) {
 						pools[i].Weight = uint32(w.(int))
+					}
+
+				}
+
+			}
+
+		}
+
+	}
+
+	//origin_server_subset_rule_list
+	if v, ok := d.GetOk("origin_server_subset_rule_list"); ok && !isIntfNil(v) {
+
+		sl := v.(*schema.Set).List()
+		originServerSubsetRuleList := &ves_io_schema_views_http_loadbalancer.OriginServerSubsetRuleListType{}
+		createSpec.OriginServerSubsetRuleList = originServerSubsetRuleList
+		for _, set := range sl {
+			originServerSubsetRuleListMapStrToI := set.(map[string]interface{})
+
+			if v, ok := originServerSubsetRuleListMapStrToI["origin_server_subset_rules"]; ok && !isIntfNil(v) {
+
+				sl := v.([]interface{})
+				originServerSubsetRules := make([]*ves_io_schema_policy.OriginServerSubsetRule, len(sl))
+				originServerSubsetRuleList.OriginServerSubsetRules = originServerSubsetRules
+				for i, set := range sl {
+					originServerSubsetRules[i] = &ves_io_schema_policy.OriginServerSubsetRule{}
+					originServerSubsetRulesMapStrToI := set.(map[string]interface{})
+
+					asnChoiceTypeFound := false
+
+					if v, ok := originServerSubsetRulesMapStrToI["any_asn"]; ok && !isIntfNil(v) && !asnChoiceTypeFound {
+
+						asnChoiceTypeFound = true
+
+						if v.(bool) {
+							asnChoiceInt := &ves_io_schema_policy.OriginServerSubsetRule_AnyAsn{}
+							asnChoiceInt.AnyAsn = &ves_io_schema.Empty{}
+							originServerSubsetRules[i].AsnChoice = asnChoiceInt
+						}
+
+					}
+
+					if v, ok := originServerSubsetRulesMapStrToI["asn_list"]; ok && !isIntfNil(v) && !asnChoiceTypeFound {
+
+						asnChoiceTypeFound = true
+						asnChoiceInt := &ves_io_schema_policy.OriginServerSubsetRule_AsnList{}
+						asnChoiceInt.AsnList = &ves_io_schema_policy.AsnMatchList{}
+						originServerSubsetRules[i].AsnChoice = asnChoiceInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["as_numbers"]; ok && !isIntfNil(v) {
+
+								ls := make([]uint32, len(v.([]interface{})))
+								for i, v := range v.([]interface{}) {
+									ls[i] = uint32(v.(int))
+								}
+								asnChoiceInt.AsnList.AsNumbers = ls
+
+							}
+
+						}
+
+					}
+
+					if v, ok := originServerSubsetRulesMapStrToI["asn_matcher"]; ok && !isIntfNil(v) && !asnChoiceTypeFound {
+
+						asnChoiceTypeFound = true
+						asnChoiceInt := &ves_io_schema_policy.OriginServerSubsetRule_AsnMatcher{}
+						asnChoiceInt.AsnMatcher = &ves_io_schema_policy.AsnMatcherType{}
+						originServerSubsetRules[i].AsnChoice = asnChoiceInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["asn_sets"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								asnSetsInt := make([]*ves_io_schema.ObjectRefType, len(sl))
+								asnChoiceInt.AsnMatcher.AsnSets = asnSetsInt
+								for i, ps := range sl {
+
+									asMapToStrVal := ps.(map[string]interface{})
+									asnSetsInt[i] = &ves_io_schema.ObjectRefType{}
+
+									asnSetsInt[i].Kind = "bgp_asn_set"
+
+									if v, ok := asMapToStrVal["name"]; ok && !isIntfNil(v) {
+										asnSetsInt[i].Name = v.(string)
+									}
+
+									if v, ok := asMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+										asnSetsInt[i].Namespace = v.(string)
+									}
+
+									if v, ok := asMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+										asnSetsInt[i].Tenant = v.(string)
+									}
+
+									if v, ok := asMapToStrVal["uid"]; ok && !isIntfNil(v) {
+										asnSetsInt[i].Uid = v.(string)
+									}
+
+								}
+
+							}
+
+						}
+
+					}
+
+					if v, ok := originServerSubsetRulesMapStrToI["body_matcher"]; ok && !isIntfNil(v) {
+
+						sl := v.(*schema.Set).List()
+						bodyMatcher := &ves_io_schema_policy.MatcherType{}
+						originServerSubsetRules[i].BodyMatcher = bodyMatcher
+						for _, set := range sl {
+							bodyMatcherMapStrToI := set.(map[string]interface{})
+
+							if w, ok := bodyMatcherMapStrToI["exact_values"]; ok && !isIntfNil(w) {
+								ls := make([]string, len(w.([]interface{})))
+								for i, v := range w.([]interface{}) {
+									ls[i] = v.(string)
+								}
+								bodyMatcher.ExactValues = ls
+							}
+
+							if w, ok := bodyMatcherMapStrToI["regex_values"]; ok && !isIntfNil(w) {
+								ls := make([]string, len(w.([]interface{})))
+								for i, v := range w.([]interface{}) {
+									ls[i] = v.(string)
+								}
+								bodyMatcher.RegexValues = ls
+							}
+
+							if v, ok := bodyMatcherMapStrToI["transformers"]; ok && !isIntfNil(v) {
+
+								transformersList := []ves_io_schema_policy.Transformer{}
+								for _, j := range v.([]interface{}) {
+									transformersList = append(transformersList, ves_io_schema_policy.Transformer(ves_io_schema_policy.Transformer_value[j.(string)]))
+								}
+								bodyMatcher.Transformers = transformersList
+
+							}
+
+						}
+
+					}
+
+					if v, ok := originServerSubsetRulesMapStrToI["client_selector"]; ok && !isIntfNil(v) {
+
+						sl := v.(*schema.Set).List()
+						clientSelector := &ves_io_schema.LabelSelectorType{}
+						originServerSubsetRules[i].ClientSelector = clientSelector
+						for _, set := range sl {
+							clientSelectorMapStrToI := set.(map[string]interface{})
+
+							if w, ok := clientSelectorMapStrToI["expressions"]; ok && !isIntfNil(w) {
+								ls := make([]string, len(w.([]interface{})))
+								for i, v := range w.([]interface{}) {
+									ls[i] = v.(string)
+								}
+								clientSelector.Expressions = ls
+							}
+
+						}
+
+					}
+
+					if v, ok := originServerSubsetRulesMapStrToI["country_codes"]; ok && !isIntfNil(v) {
+
+						country_codesList := []ves_io_schema_policy.CountryCode{}
+						for _, j := range v.([]interface{}) {
+							country_codesList = append(country_codesList, ves_io_schema_policy.CountryCode(ves_io_schema_policy.CountryCode_value[j.(string)]))
+						}
+						originServerSubsetRules[i].CountryCodes = country_codesList
+
+					}
+
+					ipChoiceTypeFound := false
+
+					if v, ok := originServerSubsetRulesMapStrToI["any_ip"]; ok && !isIntfNil(v) && !ipChoiceTypeFound {
+
+						ipChoiceTypeFound = true
+
+						if v.(bool) {
+							ipChoiceInt := &ves_io_schema_policy.OriginServerSubsetRule_AnyIp{}
+							ipChoiceInt.AnyIp = &ves_io_schema.Empty{}
+							originServerSubsetRules[i].IpChoice = ipChoiceInt
+						}
+
+					}
+
+					if v, ok := originServerSubsetRulesMapStrToI["ip_matcher"]; ok && !isIntfNil(v) && !ipChoiceTypeFound {
+
+						ipChoiceTypeFound = true
+						ipChoiceInt := &ves_io_schema_policy.OriginServerSubsetRule_IpMatcher{}
+						ipChoiceInt.IpMatcher = &ves_io_schema_policy.IpMatcherType{}
+						originServerSubsetRules[i].IpChoice = ipChoiceInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["invert_matcher"]; ok && !isIntfNil(v) {
+
+								ipChoiceInt.IpMatcher.InvertMatcher = v.(bool)
+
+							}
+
+							if v, ok := cs["prefix_sets"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								prefixSetsInt := make([]*ves_io_schema.ObjectRefType, len(sl))
+								ipChoiceInt.IpMatcher.PrefixSets = prefixSetsInt
+								for i, ps := range sl {
+
+									psMapToStrVal := ps.(map[string]interface{})
+									prefixSetsInt[i] = &ves_io_schema.ObjectRefType{}
+
+									prefixSetsInt[i].Kind = "ip_prefix_set"
+
+									if v, ok := psMapToStrVal["name"]; ok && !isIntfNil(v) {
+										prefixSetsInt[i].Name = v.(string)
+									}
+
+									if v, ok := psMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+										prefixSetsInt[i].Namespace = v.(string)
+									}
+
+									if v, ok := psMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+										prefixSetsInt[i].Tenant = v.(string)
+									}
+
+									if v, ok := psMapToStrVal["uid"]; ok && !isIntfNil(v) {
+										prefixSetsInt[i].Uid = v.(string)
+									}
+
+								}
+
+							}
+
+						}
+
+					}
+
+					if v, ok := originServerSubsetRulesMapStrToI["ip_prefix_list"]; ok && !isIntfNil(v) && !ipChoiceTypeFound {
+
+						ipChoiceTypeFound = true
+						ipChoiceInt := &ves_io_schema_policy.OriginServerSubsetRule_IpPrefixList{}
+						ipChoiceInt.IpPrefixList = &ves_io_schema_policy.PrefixMatchList{}
+						originServerSubsetRules[i].IpChoice = ipChoiceInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["invert_match"]; ok && !isIntfNil(v) {
+
+								ipChoiceInt.IpPrefixList.InvertMatch = v.(bool)
+
+							}
+
+							if v, ok := cs["ip_prefixes"]; ok && !isIntfNil(v) {
+
+								ls := make([]string, len(v.([]interface{})))
+								for i, v := range v.([]interface{}) {
+									ls[i] = v.(string)
+								}
+								ipChoiceInt.IpPrefixList.IpPrefixes = ls
+
+							}
+
+							if v, ok := cs["ipv6_prefixes"]; ok && !isIntfNil(v) {
+
+								ls := make([]string, len(v.([]interface{})))
+								for i, v := range v.([]interface{}) {
+									ls[i] = v.(string)
+								}
+								ipChoiceInt.IpPrefixList.Ipv6Prefixes = ls
+
+							}
+
+						}
+
+					}
+
+					if v, ok := originServerSubsetRulesMapStrToI["metadata"]; ok && !isIntfNil(v) {
+
+						sl := v.(*schema.Set).List()
+						metadata := &ves_io_schema.MessageMetaType{}
+						originServerSubsetRules[i].Metadata = metadata
+						for _, set := range sl {
+							metadataMapStrToI := set.(map[string]interface{})
+
+							if w, ok := metadataMapStrToI["description"]; ok && !isIntfNil(w) {
+								metadata.Description = w.(string)
+							}
+
+							if w, ok := metadataMapStrToI["disable"]; ok && !isIntfNil(w) {
+								metadata.Disable = w.(bool)
+							}
+
+							if w, ok := metadataMapStrToI["name"]; ok && !isIntfNil(w) {
+								metadata.Name = w.(string)
+							}
+
+						}
+
+					}
+
+					if w, ok := originServerSubsetRulesMapStrToI["origin_server_subsets_action"]; ok && !isIntfNil(w) {
+						ms := map[string]string{}
+						for k, v := range w.(map[string]interface{}) {
+							ms[k] = v.(string)
+						}
+						originServerSubsetRules[i].OriginServerSubsetsAction = ms
+					}
+
+					if w, ok := originServerSubsetRulesMapStrToI["re_name_list"]; ok && !isIntfNil(w) {
+						ls := make([]string, len(w.([]interface{})))
+						for i, v := range w.([]interface{}) {
+							ls[i] = v.(string)
+						}
+						originServerSubsetRules[i].ReNameList = ls
 					}
 
 				}
@@ -26629,6 +27639,37 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 
 											conditionTypeChoiceTypeFound := false
 
+											if v, ok := openApiValidationRulesMapStrToI["api_endpoint"]; ok && !isIntfNil(v) && !conditionTypeChoiceTypeFound {
+
+												conditionTypeChoiceTypeFound = true
+												conditionTypeChoiceInt := &ves_io_schema_views_http_loadbalancer.FallThroughRule_ApiEndpoint{}
+												conditionTypeChoiceInt.ApiEndpoint = &ves_io_schema_views_http_loadbalancer.ApiEndpointDetails{}
+												openApiValidationRules[i].ConditionTypeChoice = conditionTypeChoiceInt
+
+												sl := v.(*schema.Set).List()
+												for _, set := range sl {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["methods"]; ok && !isIntfNil(v) {
+
+														methodsList := []ves_io_schema.HttpMethod{}
+														for _, j := range v.([]interface{}) {
+															methodsList = append(methodsList, ves_io_schema.HttpMethod(ves_io_schema.HttpMethod_value[j.(string)]))
+														}
+														conditionTypeChoiceInt.ApiEndpoint.Methods = methodsList
+
+													}
+
+													if v, ok := cs["path"]; ok && !isIntfNil(v) {
+
+														conditionTypeChoiceInt.ApiEndpoint.Path = v.(string)
+
+													}
+
+												}
+
+											}
+
 											if v, ok := openApiValidationRulesMapStrToI["api_endpoint_path"]; ok && !isIntfNil(v) && !conditionTypeChoiceTypeFound {
 
 												conditionTypeChoiceTypeFound = true
@@ -26872,6 +27913,37 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 
 											conditionTypeChoiceTypeFound := false
 
+											if v, ok := openApiValidationRulesMapStrToI["api_endpoint"]; ok && !isIntfNil(v) && !conditionTypeChoiceTypeFound {
+
+												conditionTypeChoiceTypeFound = true
+												conditionTypeChoiceInt := &ves_io_schema_views_http_loadbalancer.FallThroughRule_ApiEndpoint{}
+												conditionTypeChoiceInt.ApiEndpoint = &ves_io_schema_views_http_loadbalancer.ApiEndpointDetails{}
+												openApiValidationRules[i].ConditionTypeChoice = conditionTypeChoiceInt
+
+												sl := v.(*schema.Set).List()
+												for _, set := range sl {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["methods"]; ok && !isIntfNil(v) {
+
+														methodsList := []ves_io_schema.HttpMethod{}
+														for _, j := range v.([]interface{}) {
+															methodsList = append(methodsList, ves_io_schema.HttpMethod(ves_io_schema.HttpMethod_value[j.(string)]))
+														}
+														conditionTypeChoiceInt.ApiEndpoint.Methods = methodsList
+
+													}
+
+													if v, ok := cs["path"]; ok && !isIntfNil(v) {
+
+														conditionTypeChoiceInt.ApiEndpoint.Path = v.(string)
+
+													}
+
+												}
+
+											}
+
 											if v, ok := openApiValidationRulesMapStrToI["api_endpoint_path"]; ok && !isIntfNil(v) && !conditionTypeChoiceTypeFound {
 
 												conditionTypeChoiceTypeFound = true
@@ -26951,6 +28023,37 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 							openApiValidationRulesMapStrToI := set.(map[string]interface{})
 
 							conditionTypeChoiceTypeFound := false
+
+							if v, ok := openApiValidationRulesMapStrToI["api_endpoint"]; ok && !isIntfNil(v) && !conditionTypeChoiceTypeFound {
+
+								conditionTypeChoiceTypeFound = true
+								conditionTypeChoiceInt := &ves_io_schema_views_http_loadbalancer.OpenApiValidationRule_ApiEndpoint{}
+								conditionTypeChoiceInt.ApiEndpoint = &ves_io_schema_views_http_loadbalancer.ApiEndpointDetails{}
+								openApiValidationRules[i].ConditionTypeChoice = conditionTypeChoiceInt
+
+								sl := v.(*schema.Set).List()
+								for _, set := range sl {
+									cs := set.(map[string]interface{})
+
+									if v, ok := cs["methods"]; ok && !isIntfNil(v) {
+
+										methodsList := []ves_io_schema.HttpMethod{}
+										for _, j := range v.([]interface{}) {
+											methodsList = append(methodsList, ves_io_schema.HttpMethod(ves_io_schema.HttpMethod_value[j.(string)]))
+										}
+										conditionTypeChoiceInt.ApiEndpoint.Methods = methodsList
+
+									}
+
+									if v, ok := cs["path"]; ok && !isIntfNil(v) {
+
+										conditionTypeChoiceInt.ApiEndpoint.Path = v.(string)
+
+									}
+
+								}
+
+							}
 
 							if v, ok := openApiValidationRulesMapStrToI["api_endpoint_path"]; ok && !isIntfNil(v) && !conditionTypeChoiceTypeFound {
 
@@ -27522,6 +28625,16 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 											ls[i] = v.(string)
 										}
 										ipAsnChoiceInt.IpPrefixList.IpPrefixes = ls
+
+									}
+
+									if v, ok := cs["ipv6_prefixes"]; ok && !isIntfNil(v) {
+
+										ls := make([]string, len(v.([]interface{})))
+										for i, v := range v.([]interface{}) {
+											ls[i] = v.(string)
+										}
+										ipAsnChoiceInt.IpPrefixList.Ipv6Prefixes = ls
 
 									}
 
@@ -28235,6 +29348,16 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 											ls[i] = v.(string)
 										}
 										ipAsnChoiceInt.IpPrefixList.IpPrefixes = ls
+
+									}
+
+									if v, ok := cs["ipv6_prefixes"]; ok && !isIntfNil(v) {
+
+										ls := make([]string, len(v.([]interface{})))
+										for i, v := range v.([]interface{}) {
+											ls[i] = v.(string)
+										}
+										ipAsnChoiceInt.IpPrefixList.Ipv6Prefixes = ls
 
 									}
 
@@ -31873,6 +32996,16 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 
 											}
 
+											if v, ok := cs["ipv6_prefixes"]; ok && !isIntfNil(v) {
+
+												ls := make([]string, len(v.([]interface{})))
+												for i, v := range v.([]interface{}) {
+													ls[i] = v.(string)
+												}
+												ipChoiceInt.IpPrefixList.Ipv6Prefixes = ls
+
+											}
+
 										}
 
 									}
@@ -33139,6 +34272,16 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 
 					}
 
+					if v, ok := cs["ipv6_prefixes"]; ok && !isIntfNil(v) {
+
+						ls := make([]string, len(v.([]interface{})))
+						for i, v := range v.([]interface{}) {
+							ls[i] = v.(string)
+						}
+						mitigationChoiceInt.IpPrefixList.Ipv6Prefixes = ls
+
+					}
+
 				}
 
 			}
@@ -33938,6 +35081,56 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 							headerTransformationChoiceInt := &ves_io_schema.HeaderTransformationType_ProperCaseHeaderTransformation{}
 							headerTransformationChoiceInt.ProperCaseHeaderTransformation = &ves_io_schema.Empty{}
 							headerTransformationType.HeaderTransformationChoice = headerTransformationChoiceInt
+						}
+
+					}
+
+				}
+
+			}
+
+			if v, ok := cs["http_protocol_options"]; ok && !isIntfNil(v) {
+
+				sl := v.(*schema.Set).List()
+				httpProtocolOptions := &ves_io_schema_virtual_host.HttpProtocolOptions{}
+				loadbalancerTypeInt.Https.HttpProtocolOptions = httpProtocolOptions
+				for _, set := range sl {
+					httpProtocolOptionsMapStrToI := set.(map[string]interface{})
+
+					httpProtocolChoiceTypeFound := false
+
+					if v, ok := httpProtocolOptionsMapStrToI["http_protocol_enable_v1_only"]; ok && !isIntfNil(v) && !httpProtocolChoiceTypeFound {
+
+						httpProtocolChoiceTypeFound = true
+
+						if v.(bool) {
+							httpProtocolChoiceInt := &ves_io_schema_virtual_host.HttpProtocolOptions_HttpProtocolEnableV1Only{}
+							httpProtocolChoiceInt.HttpProtocolEnableV1Only = &ves_io_schema.Empty{}
+							httpProtocolOptions.HttpProtocolChoice = httpProtocolChoiceInt
+						}
+
+					}
+
+					if v, ok := httpProtocolOptionsMapStrToI["http_protocol_enable_v1_v2"]; ok && !isIntfNil(v) && !httpProtocolChoiceTypeFound {
+
+						httpProtocolChoiceTypeFound = true
+
+						if v.(bool) {
+							httpProtocolChoiceInt := &ves_io_schema_virtual_host.HttpProtocolOptions_HttpProtocolEnableV1V2{}
+							httpProtocolChoiceInt.HttpProtocolEnableV1V2 = &ves_io_schema.Empty{}
+							httpProtocolOptions.HttpProtocolChoice = httpProtocolChoiceInt
+						}
+
+					}
+
+					if v, ok := httpProtocolOptionsMapStrToI["http_protocol_enable_v2_only"]; ok && !isIntfNil(v) && !httpProtocolChoiceTypeFound {
+
+						httpProtocolChoiceTypeFound = true
+
+						if v.(bool) {
+							httpProtocolChoiceInt := &ves_io_schema_virtual_host.HttpProtocolOptions_HttpProtocolEnableV2Only{}
+							httpProtocolChoiceInt.HttpProtocolEnableV2Only = &ves_io_schema.Empty{}
+							httpProtocolOptions.HttpProtocolChoice = httpProtocolChoiceInt
 						}
 
 					}
@@ -34819,6 +36012,56 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 							headerTransformationChoiceInt := &ves_io_schema.HeaderTransformationType_ProperCaseHeaderTransformation{}
 							headerTransformationChoiceInt.ProperCaseHeaderTransformation = &ves_io_schema.Empty{}
 							headerTransformationType.HeaderTransformationChoice = headerTransformationChoiceInt
+						}
+
+					}
+
+				}
+
+			}
+
+			if v, ok := cs["http_protocol_options"]; ok && !isIntfNil(v) {
+
+				sl := v.(*schema.Set).List()
+				httpProtocolOptions := &ves_io_schema_virtual_host.HttpProtocolOptions{}
+				loadbalancerTypeInt.HttpsAutoCert.HttpProtocolOptions = httpProtocolOptions
+				for _, set := range sl {
+					httpProtocolOptionsMapStrToI := set.(map[string]interface{})
+
+					httpProtocolChoiceTypeFound := false
+
+					if v, ok := httpProtocolOptionsMapStrToI["http_protocol_enable_v1_only"]; ok && !isIntfNil(v) && !httpProtocolChoiceTypeFound {
+
+						httpProtocolChoiceTypeFound = true
+
+						if v.(bool) {
+							httpProtocolChoiceInt := &ves_io_schema_virtual_host.HttpProtocolOptions_HttpProtocolEnableV1Only{}
+							httpProtocolChoiceInt.HttpProtocolEnableV1Only = &ves_io_schema.Empty{}
+							httpProtocolOptions.HttpProtocolChoice = httpProtocolChoiceInt
+						}
+
+					}
+
+					if v, ok := httpProtocolOptionsMapStrToI["http_protocol_enable_v1_v2"]; ok && !isIntfNil(v) && !httpProtocolChoiceTypeFound {
+
+						httpProtocolChoiceTypeFound = true
+
+						if v.(bool) {
+							httpProtocolChoiceInt := &ves_io_schema_virtual_host.HttpProtocolOptions_HttpProtocolEnableV1V2{}
+							httpProtocolChoiceInt.HttpProtocolEnableV1V2 = &ves_io_schema.Empty{}
+							httpProtocolOptions.HttpProtocolChoice = httpProtocolChoiceInt
+						}
+
+					}
+
+					if v, ok := httpProtocolOptionsMapStrToI["http_protocol_enable_v2_only"]; ok && !isIntfNil(v) && !httpProtocolChoiceTypeFound {
+
+						httpProtocolChoiceTypeFound = true
+
+						if v.(bool) {
+							httpProtocolChoiceInt := &ves_io_schema_virtual_host.HttpProtocolOptions_HttpProtocolEnableV2Only{}
+							httpProtocolChoiceInt.HttpProtocolEnableV2Only = &ves_io_schema.Empty{}
+							httpProtocolOptions.HttpProtocolChoice = httpProtocolChoiceInt
 						}
 
 					}
@@ -36356,11 +37599,11 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 								sl := v.([]interface{})
 								endpointSubsets := make([]*ves_io_schema_cluster.EndpointSubsetSelectorType, len(sl))
 								subsetChoiceInt.EnableSubsets.EndpointSubsets = endpointSubsets
-								//for i, set := range sl {
-								//	endpointSubsets[i] = &ves_io_schema_cluster.EndpointSubsetSelectorType{}
-									//endpointSubsetsMapStrToI := set.(map[string]interface{})
+								for i, set := range sl {
+									endpointSubsets[i] = &ves_io_schema_cluster.EndpointSubsetSelectorType{}
+									_ = set.(map[string]interface{})
 
-								//}
+								}
 
 							}
 
@@ -37837,6 +39080,333 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 
 					if w, ok := poolsMapStrToI["weight"]; ok && !isIntfNil(w) {
 						pools[i].Weight = uint32(w.(int))
+					}
+
+				}
+
+			}
+
+		}
+
+	}
+
+	if v, ok := d.GetOk("origin_server_subset_rule_list"); ok && !isIntfNil(v) {
+
+		sl := v.(*schema.Set).List()
+		originServerSubsetRuleList := &ves_io_schema_views_http_loadbalancer.OriginServerSubsetRuleListType{}
+		updateSpec.OriginServerSubsetRuleList = originServerSubsetRuleList
+		for _, set := range sl {
+			originServerSubsetRuleListMapStrToI := set.(map[string]interface{})
+
+			if v, ok := originServerSubsetRuleListMapStrToI["origin_server_subset_rules"]; ok && !isIntfNil(v) {
+
+				sl := v.([]interface{})
+				originServerSubsetRules := make([]*ves_io_schema_policy.OriginServerSubsetRule, len(sl))
+				originServerSubsetRuleList.OriginServerSubsetRules = originServerSubsetRules
+				for i, set := range sl {
+					originServerSubsetRules[i] = &ves_io_schema_policy.OriginServerSubsetRule{}
+					originServerSubsetRulesMapStrToI := set.(map[string]interface{})
+
+					asnChoiceTypeFound := false
+
+					if v, ok := originServerSubsetRulesMapStrToI["any_asn"]; ok && !isIntfNil(v) && !asnChoiceTypeFound {
+
+						asnChoiceTypeFound = true
+
+						if v.(bool) {
+							asnChoiceInt := &ves_io_schema_policy.OriginServerSubsetRule_AnyAsn{}
+							asnChoiceInt.AnyAsn = &ves_io_schema.Empty{}
+							originServerSubsetRules[i].AsnChoice = asnChoiceInt
+						}
+
+					}
+
+					if v, ok := originServerSubsetRulesMapStrToI["asn_list"]; ok && !isIntfNil(v) && !asnChoiceTypeFound {
+
+						asnChoiceTypeFound = true
+						asnChoiceInt := &ves_io_schema_policy.OriginServerSubsetRule_AsnList{}
+						asnChoiceInt.AsnList = &ves_io_schema_policy.AsnMatchList{}
+						originServerSubsetRules[i].AsnChoice = asnChoiceInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["as_numbers"]; ok && !isIntfNil(v) {
+
+								ls := make([]uint32, len(v.([]interface{})))
+								for i, v := range v.([]interface{}) {
+									ls[i] = uint32(v.(int))
+								}
+								asnChoiceInt.AsnList.AsNumbers = ls
+
+							}
+
+						}
+
+					}
+
+					if v, ok := originServerSubsetRulesMapStrToI["asn_matcher"]; ok && !isIntfNil(v) && !asnChoiceTypeFound {
+
+						asnChoiceTypeFound = true
+						asnChoiceInt := &ves_io_schema_policy.OriginServerSubsetRule_AsnMatcher{}
+						asnChoiceInt.AsnMatcher = &ves_io_schema_policy.AsnMatcherType{}
+						originServerSubsetRules[i].AsnChoice = asnChoiceInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["asn_sets"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								asnSetsInt := make([]*ves_io_schema.ObjectRefType, len(sl))
+								asnChoiceInt.AsnMatcher.AsnSets = asnSetsInt
+								for i, ps := range sl {
+
+									asMapToStrVal := ps.(map[string]interface{})
+									asnSetsInt[i] = &ves_io_schema.ObjectRefType{}
+
+									asnSetsInt[i].Kind = "bgp_asn_set"
+
+									if v, ok := asMapToStrVal["name"]; ok && !isIntfNil(v) {
+										asnSetsInt[i].Name = v.(string)
+									}
+
+									if v, ok := asMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+										asnSetsInt[i].Namespace = v.(string)
+									}
+
+									if v, ok := asMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+										asnSetsInt[i].Tenant = v.(string)
+									}
+
+									if v, ok := asMapToStrVal["uid"]; ok && !isIntfNil(v) {
+										asnSetsInt[i].Uid = v.(string)
+									}
+
+								}
+
+							}
+
+						}
+
+					}
+
+					if v, ok := originServerSubsetRulesMapStrToI["body_matcher"]; ok && !isIntfNil(v) {
+
+						sl := v.(*schema.Set).List()
+						bodyMatcher := &ves_io_schema_policy.MatcherType{}
+						originServerSubsetRules[i].BodyMatcher = bodyMatcher
+						for _, set := range sl {
+							bodyMatcherMapStrToI := set.(map[string]interface{})
+
+							if w, ok := bodyMatcherMapStrToI["exact_values"]; ok && !isIntfNil(w) {
+								ls := make([]string, len(w.([]interface{})))
+								for i, v := range w.([]interface{}) {
+									ls[i] = v.(string)
+								}
+								bodyMatcher.ExactValues = ls
+							}
+
+							if w, ok := bodyMatcherMapStrToI["regex_values"]; ok && !isIntfNil(w) {
+								ls := make([]string, len(w.([]interface{})))
+								for i, v := range w.([]interface{}) {
+									ls[i] = v.(string)
+								}
+								bodyMatcher.RegexValues = ls
+							}
+
+							if v, ok := bodyMatcherMapStrToI["transformers"]; ok && !isIntfNil(v) {
+
+								transformersList := []ves_io_schema_policy.Transformer{}
+								for _, j := range v.([]interface{}) {
+									transformersList = append(transformersList, ves_io_schema_policy.Transformer(ves_io_schema_policy.Transformer_value[j.(string)]))
+								}
+								bodyMatcher.Transformers = transformersList
+
+							}
+
+						}
+
+					}
+
+					if v, ok := originServerSubsetRulesMapStrToI["client_selector"]; ok && !isIntfNil(v) {
+
+						sl := v.(*schema.Set).List()
+						clientSelector := &ves_io_schema.LabelSelectorType{}
+						originServerSubsetRules[i].ClientSelector = clientSelector
+						for _, set := range sl {
+							clientSelectorMapStrToI := set.(map[string]interface{})
+
+							if w, ok := clientSelectorMapStrToI["expressions"]; ok && !isIntfNil(w) {
+								ls := make([]string, len(w.([]interface{})))
+								for i, v := range w.([]interface{}) {
+									ls[i] = v.(string)
+								}
+								clientSelector.Expressions = ls
+							}
+
+						}
+
+					}
+
+					if v, ok := originServerSubsetRulesMapStrToI["country_codes"]; ok && !isIntfNil(v) {
+
+						country_codesList := []ves_io_schema_policy.CountryCode{}
+						for _, j := range v.([]interface{}) {
+							country_codesList = append(country_codesList, ves_io_schema_policy.CountryCode(ves_io_schema_policy.CountryCode_value[j.(string)]))
+						}
+						originServerSubsetRules[i].CountryCodes = country_codesList
+
+					}
+
+					ipChoiceTypeFound := false
+
+					if v, ok := originServerSubsetRulesMapStrToI["any_ip"]; ok && !isIntfNil(v) && !ipChoiceTypeFound {
+
+						ipChoiceTypeFound = true
+
+						if v.(bool) {
+							ipChoiceInt := &ves_io_schema_policy.OriginServerSubsetRule_AnyIp{}
+							ipChoiceInt.AnyIp = &ves_io_schema.Empty{}
+							originServerSubsetRules[i].IpChoice = ipChoiceInt
+						}
+
+					}
+
+					if v, ok := originServerSubsetRulesMapStrToI["ip_matcher"]; ok && !isIntfNil(v) && !ipChoiceTypeFound {
+
+						ipChoiceTypeFound = true
+						ipChoiceInt := &ves_io_schema_policy.OriginServerSubsetRule_IpMatcher{}
+						ipChoiceInt.IpMatcher = &ves_io_schema_policy.IpMatcherType{}
+						originServerSubsetRules[i].IpChoice = ipChoiceInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["invert_matcher"]; ok && !isIntfNil(v) {
+
+								ipChoiceInt.IpMatcher.InvertMatcher = v.(bool)
+
+							}
+
+							if v, ok := cs["prefix_sets"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								prefixSetsInt := make([]*ves_io_schema.ObjectRefType, len(sl))
+								ipChoiceInt.IpMatcher.PrefixSets = prefixSetsInt
+								for i, ps := range sl {
+
+									psMapToStrVal := ps.(map[string]interface{})
+									prefixSetsInt[i] = &ves_io_schema.ObjectRefType{}
+
+									prefixSetsInt[i].Kind = "ip_prefix_set"
+
+									if v, ok := psMapToStrVal["name"]; ok && !isIntfNil(v) {
+										prefixSetsInt[i].Name = v.(string)
+									}
+
+									if v, ok := psMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+										prefixSetsInt[i].Namespace = v.(string)
+									}
+
+									if v, ok := psMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+										prefixSetsInt[i].Tenant = v.(string)
+									}
+
+									if v, ok := psMapToStrVal["uid"]; ok && !isIntfNil(v) {
+										prefixSetsInt[i].Uid = v.(string)
+									}
+
+								}
+
+							}
+
+						}
+
+					}
+
+					if v, ok := originServerSubsetRulesMapStrToI["ip_prefix_list"]; ok && !isIntfNil(v) && !ipChoiceTypeFound {
+
+						ipChoiceTypeFound = true
+						ipChoiceInt := &ves_io_schema_policy.OriginServerSubsetRule_IpPrefixList{}
+						ipChoiceInt.IpPrefixList = &ves_io_schema_policy.PrefixMatchList{}
+						originServerSubsetRules[i].IpChoice = ipChoiceInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["invert_match"]; ok && !isIntfNil(v) {
+
+								ipChoiceInt.IpPrefixList.InvertMatch = v.(bool)
+
+							}
+
+							if v, ok := cs["ip_prefixes"]; ok && !isIntfNil(v) {
+
+								ls := make([]string, len(v.([]interface{})))
+								for i, v := range v.([]interface{}) {
+									ls[i] = v.(string)
+								}
+								ipChoiceInt.IpPrefixList.IpPrefixes = ls
+
+							}
+
+							if v, ok := cs["ipv6_prefixes"]; ok && !isIntfNil(v) {
+
+								ls := make([]string, len(v.([]interface{})))
+								for i, v := range v.([]interface{}) {
+									ls[i] = v.(string)
+								}
+								ipChoiceInt.IpPrefixList.Ipv6Prefixes = ls
+
+							}
+
+						}
+
+					}
+
+					if v, ok := originServerSubsetRulesMapStrToI["metadata"]; ok && !isIntfNil(v) {
+
+						sl := v.(*schema.Set).List()
+						metadata := &ves_io_schema.MessageMetaType{}
+						originServerSubsetRules[i].Metadata = metadata
+						for _, set := range sl {
+							metadataMapStrToI := set.(map[string]interface{})
+
+							if w, ok := metadataMapStrToI["description"]; ok && !isIntfNil(w) {
+								metadata.Description = w.(string)
+							}
+
+							if w, ok := metadataMapStrToI["disable"]; ok && !isIntfNil(w) {
+								metadata.Disable = w.(bool)
+							}
+
+							if w, ok := metadataMapStrToI["name"]; ok && !isIntfNil(w) {
+								metadata.Name = w.(string)
+							}
+
+						}
+
+					}
+
+					if w, ok := originServerSubsetRulesMapStrToI["origin_server_subsets_action"]; ok && !isIntfNil(w) {
+						ms := map[string]string{}
+						for k, v := range w.(map[string]interface{}) {
+							ms[k] = v.(string)
+						}
+						originServerSubsetRules[i].OriginServerSubsetsAction = ms
+					}
+
+					if w, ok := originServerSubsetRulesMapStrToI["re_name_list"]; ok && !isIntfNil(w) {
+						ls := make([]string, len(w.([]interface{})))
+						for i, v := range w.([]interface{}) {
+							ls[i] = v.(string)
+						}
+						originServerSubsetRules[i].ReNameList = ls
 					}
 
 				}

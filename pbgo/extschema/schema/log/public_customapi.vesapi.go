@@ -6993,6 +6993,11 @@ var CustomAPISwaggerJSON string = `{
                     "description": "x-displayName: \"Description\"\nx-example: \"Trend was calculated by comparing the avg of window size intervals of end-start Time and last window time interval\"\ndescription of the method used to calculate trend.",
                     "title": "Description"
                 },
+                "previous_value": {
+                    "type": "string",
+                    "description": "x-displayName: \"Previous Value\"\nx-example: \"200.00\"",
+                    "title": "Previous Value"
+                },
                 "sentiment": {
                     "description": "x-displayName: \"Sentiment\"\nx-example: \"Positive\"",
                     "title": "Sentiment",

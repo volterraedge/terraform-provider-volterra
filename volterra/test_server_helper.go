@@ -397,6 +397,11 @@ func (n *namespaceCustomAPIServer) UpdateAllowAdvertiseOnPublic(context.Context,
 	return &ves_io_schema_ns.UpdateAllowAdvertiseOnPublicResp{}, nil
 }
 
+func (n *namespaceCustomAPIServer) NetworkingInventory(context.Context,
+	*ves_io_schema_ns.NetworkingInventoryRequest) (*ves_io_schema_ns.NetworkingInventoryResponse, error) {
+	return &ves_io_schema_ns.NetworkingInventoryResponse{}, nil
+}
+
 var _ ves_io_schema_ns.NamespaceCustomAPIServer = &namespaceCustomAPIServer{}
 
 // ves.io.schema.views.gcp_vpc_site.CustomAPI handling - start

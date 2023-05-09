@@ -4007,12 +4007,10 @@ var APISwaggerJSON string = `{
         },
         "schemaXfccElement": {
             "type": "string",
-            "description": "X-Forwarded-Client-Cert custom cookie elements\n\nThe Subject Alternative Name (URI type) of the current proxy’s certificate.\nThe current proxy’s certificate may contain multiple URI type Subject Alternative Names,\neach will be a separate key-value pair.\nThe SHA 256 digest of the current client certificate.\nThe entire client certificate in URL encoded PEM format.\nThe entire client certificate chain (including the leaf certificate) in URL encoded PEM format.\nThe Subject field of the current client certificate. The value is always double-quoted.\nThe URI type Subject Alternative Name field of the current client certificate.\nA client certificate may contain multiple URI type Subject Alternative Names,\neach will be a separate key-value pair.\nThe DNS type Subject Alternative Name field of the current client certificate.\nA client certificate may contain multiple DNS type Subject Alternative Names,\neach will be a separate key-value pair.",
+            "description": "X-Forwarded-Client-Cert custom cookie elements\n\nThe entire client certificate in URL encoded PEM format.\nThe entire client certificate chain (including the leaf certificate) in URL encoded PEM format.\nThe Subject field of the current client certificate. The value is always double-quoted.\nThe URI type Subject Alternative Name field of the current client certificate.\nA client certificate may contain multiple URI type Subject Alternative Names,\neach will be a separate key-value pair.\nThe DNS type Subject Alternative Name field of the current client certificate.\nA client certificate may contain multiple DNS type Subject Alternative Names,\neach will be a separate key-value pair.",
             "title": "XfccElement",
             "enum": [
                 "XFCC_NONE",
-                "XFCC_BY",
-                "XFCC_HASH",
                 "XFCC_CERT",
                 "XFCC_CHAIN",
                 "XFCC_SUBJECT",

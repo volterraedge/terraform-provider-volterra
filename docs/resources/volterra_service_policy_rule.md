@@ -21,28 +21,19 @@ resource "volterra_service_policy_rule" "example" {
   namespace = "staging"
   action    = ["action"]
 
-  // One of the arguments from this list "any_asn asn_list asn_matcher" must be set
+  // One of the arguments from this list "asn_matcher any_asn asn_list" must be set
   any_asn          = true
   challenge_action = ["challenge_action"]
 
-  // One of the arguments from this list "any_client client_name ip_threat_category_list client_selector client_name_matcher" must be set
-
-  client_name_matcher {
-    exact_values = ["['new york', 'london', 'sydney', 'tokyo', 'cairo']"]
-
-    regex_values = ["['^new .*$', 'san f.*', '.* del .*']"]
-  }
+  // One of the arguments from this list "client_name ip_threat_category_list client_selector client_name_matcher any_client" must be set
+  any_client = true
 
   // One of the arguments from this list "any_ip ip_prefix_list ip_matcher" must be set
+  any_ip = true
 
-  ip_prefix_list {
-    invert_match = true
-
-    ip_prefixes = ["192.168.20.0/24"]
-  }
   waf_action {
     // One of the arguments from this list "none waf_skip_processing waf_in_monitoring_mode app_firewall_detection_control data_guard_control" must be set
-    none = true
+    waf_in_monitoring_mode = true
   }
 }
 
@@ -111,9 +102,9 @@ Argument Reference
 
 `any_dst_ip` - (Optional) Any Destination IP (bool).
 
-`dst_ip_matcher` - (Optional) The predicate evaluates to true if the client IPv4 Address is covered by one or more of the IPv4 Prefixes in the IP Prefix Sets.. See [Dst Ip Matcher ](#dst-ip-matcher) below for details.
+`dst_ip_matcher` - (Optional) The predicate evaluates to true if the client IP Address is covered by one or more of the IP Prefixes in the IP Prefix Sets.. See [Dst Ip Matcher ](#dst-ip-matcher) below for details.
 
-`dst_ip_prefix_list` - (Optional) The predicate evaluates to true if the destination address is covered by one or more of the IPv4 Prefixes from the list.. See [Dst Ip Prefix List ](#dst-ip-prefix-list) below for details.
+`dst_ip_prefix_list` - (Optional) The predicate evaluates to true if the destination address is covered by one or more of the IP Prefixes from the list.. See [Dst Ip Prefix List ](#dst-ip-prefix-list) below for details.
 
 `expiration_timestamp` - (Optional) the configuration but is not applied anymore. (`String`).
 
@@ -125,9 +116,9 @@ Argument Reference
 
 `any_ip` - (Optional) Any Source IP (bool).
 
-`ip_matcher` - (Optional) The predicate evaluates to true if the client IPv4 Address is covered by one or more of the IPv4 Prefixes in the IP Prefix Sets.. See [Ip Matcher ](#ip-matcher) below for details.
+`ip_matcher` - (Optional) The predicate evaluates to true if the client IP Address is covered by one or more of the IP Prefixes in the IP Prefix Sets.. See [Ip Matcher ](#ip-matcher) below for details.
 
-`ip_prefix_list` - (Optional) The predicate evaluates to true if the client IPv4 Address is covered by one or more of the IPv4 Prefixes from the list.. See [Ip Prefix List ](#ip-prefix-list) below for details.
+`ip_prefix_list` - (Optional) The predicate evaluates to true if the client IP Address is covered by one or more of the IP Prefixes from the list.. See [Ip Prefix List ](#ip-prefix-list) below for details.
 
 `ip_reputation_action` - (Optional) Specifies how IP Reputation is handled. See [Ip Reputation Action ](#ip-reputation-action) below for details.
 
@@ -136,6 +127,8 @@ Argument Reference
 `label_matcher` - (Optional) other labels do not matter.. See [Label Matcher ](#label-matcher) below for details.
 
 `mum_action` - (Optional) Specifies how Malicious User Mitigation is handled. See [Mum Action ](#mum-action) below for details.
+
+`origin_server_subsets_action` - (Optional) Add Labels for this origin server, these labels can be used to form subset. (`String`).
 
 `path` - (Optional) The predicate evaluates to true if the actual path value matches any of the exact or prefix values or regular expressions in the path matcher.. See [Path ](#path) below for details.
 
@@ -337,7 +330,7 @@ The predicate evaluates to true if the destination ASN is present in one of the 
 
 ### Dst Ip Matcher
 
-The predicate evaluates to true if the client IPv4 Address is covered by one or more of the IPv4 Prefixes in the IP Prefix Sets..
+The predicate evaluates to true if the client IP Address is covered by one or more of the IP Prefixes in the IP Prefix Sets..
 
 `invert_matcher` - (Optional) Invert the match result. (`Bool`).
 
@@ -345,11 +338,13 @@ The predicate evaluates to true if the client IPv4 Address is covered by one or 
 
 ### Dst Ip Prefix List
 
-The predicate evaluates to true if the destination address is covered by one or more of the IPv4 Prefixes from the list..
+The predicate evaluates to true if the destination address is covered by one or more of the IP Prefixes from the list..
 
 `invert_match` - (Optional) Invert the match result. (`Bool`).
 
-`ip_prefixes` - (Required) List of IPv4 prefix strings. (`String`).
+`ip_prefixes` - (Optional) List of IPv4 prefix strings. (`String`).
+
+`ipv6_prefixes` - (Optional) List of IPv6 prefix strings. (`String`).
 
 ### Exclude Attack Type Contexts
 
@@ -427,7 +422,7 @@ The predicate evaluates to true if the actual HTTP method belongs is present in 
 
 ### Ip Matcher
 
-The predicate evaluates to true if the client IPv4 Address is covered by one or more of the IPv4 Prefixes in the IP Prefix Sets..
+The predicate evaluates to true if the client IP Address is covered by one or more of the IP Prefixes in the IP Prefix Sets..
 
 `invert_matcher` - (Optional) Invert the match result. (`Bool`).
 
@@ -435,11 +430,13 @@ The predicate evaluates to true if the client IPv4 Address is covered by one or 
 
 ### Ip Prefix List
 
-The predicate evaluates to true if the client IPv4 Address is covered by one or more of the IPv4 Prefixes from the list..
+The predicate evaluates to true if the client IP Address is covered by one or more of the IP Prefixes from the list..
 
 `invert_match` - (Optional) Invert the match result. (`Bool`).
 
-`ip_prefixes` - (Required) List of IPv4 prefix strings. (`String`).
+`ip_prefixes` - (Optional) List of IPv4 prefix strings. (`String`).
+
+`ipv6_prefixes` - (Optional) List of IPv6 prefix strings. (`String`).
 
 ### Ip Reputation Action
 
@@ -706,8 +703,6 @@ Shape Protected Endpoint Action that include application traffic type and mitiga
 `app_traffic_type` - (Required) Traffic type (`String`).
 
 `flow_label` - (Required) Flow label (`String`).
-
-`good_bot` - (Required) Good bot (`String`).
 
 `mitigation` - (Required) Mitigation action for protected endpoint. See [Mitigation ](#mitigation) below for details.
 

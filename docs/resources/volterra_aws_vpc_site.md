@@ -21,7 +21,7 @@ resource "volterra_aws_vpc_site" "example" {
   namespace  = "staging"
   aws_region = ["us-east-1"]
 
-  // One of the arguments from this list "blocked_services default_blocked_services" must be set
+  // One of the arguments from this list "default_blocked_services block_all_services blocked_services" must be set
   default_blocked_services = true
 
   // One of the arguments from this list "aws_cred" must be set
@@ -43,7 +43,7 @@ resource "volterra_aws_vpc_site" "example" {
 
   ingress_gw {
     allowed_vip_port {
-      // One of the arguments from this list "use_http_https_port custom_ports use_http_port use_https_port" must be set
+      // One of the arguments from this list "use_http_port use_https_port use_http_https_port custom_ports" must be set
       use_http_port = true
     }
 
@@ -68,8 +68,8 @@ resource "volterra_aws_vpc_site" "example" {
       perf_mode_l7_enhanced = true
     }
   }
-  // One of the arguments from this list "total_nodes no_worker_nodes nodes_per_az" must be set
-  total_nodes = "1"
+  // One of the arguments from this list "nodes_per_az total_nodes no_worker_nodes" must be set
+  nodes_per_az = "2"
 }
 
 ```
@@ -97,9 +97,11 @@ Argument Reference
 
 `aws_region` - (Required) Name for AWS Region. (`String`).
 
+`block_all_services` - (Optional) Block DNS, SSH & WebUI services on Site (bool).
+
 `blocked_services` - (Optional) Use custom blocked services configuration. See [Blocked Services ](#blocked-services) below for details.
 
-`default_blocked_services` - (Optional) Use default behavior of allowing ports mentioned in blocked services (bool).
+`default_blocked_services` - (Optional) Allow access to DNS, SSH services on Site (bool).
 
 `coordinates` - (Optional) Site longitude and latitude co-ordinates. See [Coordinates ](#coordinates) below for details.
 
@@ -147,7 +149,7 @@ Argument Reference
 
 ### Active Enhanced Firewall Policies
 
-Enhanced Firewall Policies active for this site..
+with an additional option for service insertion..
 
 `enhanced_firewall_policies` - (Required) Ordered List of Enhaned Firewall Policy active for this network firewall. See [ref](#ref) below for details.
 
@@ -455,7 +457,7 @@ Two interface site is useful when site is used as ingress/egress gateway to the 
 
 `no_inside_static_routes` - (Optional) Static Routes disabled for inside network. (bool).
 
-`active_enhanced_firewall_policies` - (Optional) Enhanced Firewall Policies active for this site.. See [Active Enhanced Firewall Policies ](#active-enhanced-firewall-policies) below for details.
+`active_enhanced_firewall_policies` - (Optional) with an additional option for service insertion.. See [Active Enhanced Firewall Policies ](#active-enhanced-firewall-policies) below for details.
 
 `active_network_policies` - (Optional) Firewall Policies active for this site.. See [Active Network Policies ](#active-network-policies) below for details.
 
@@ -637,7 +639,7 @@ Subnet for the outside interface of the node.
 
 ### Perf Mode L3 Enhanced
 
-Site optimized for L3 traffic processing.
+When the mode is toggled to l3 enhanced, traffic disruption will be seen.
 
 `jumbo` - (Optional) L3 performance mode enhancement to use jumbo frame (bool).
 
@@ -645,15 +647,15 @@ Site optimized for L3 traffic processing.
 
 ### Perf Mode L7 Enhanced
 
-Site optimized for L7 traffic processing.
+When the mode is toggled to l7 enhanced, traffic disruption will be seen.
 
 ### Performance Enhancement Mode
 
 Performance Enhancement Mode to optimize for L3 or L7 networking.
 
-`perf_mode_l3_enhanced` - (Optional) Site optimized for L3 traffic processing. See [Perf Mode L3 Enhanced ](#perf-mode-l3-enhanced) below for details.
+`perf_mode_l3_enhanced` - (Optional) When the mode is toggled to l3 enhanced, traffic disruption will be seen. See [Perf Mode L3 Enhanced ](#perf-mode-l3-enhanced) below for details.
 
-`perf_mode_l7_enhanced` - (Optional) Site optimized for L7 traffic processing (bool).
+`perf_mode_l7_enhanced` - (Optional) When the mode is toggled to l7 enhanced, traffic disruption will be seen (bool).
 
 ### Policy
 
@@ -873,7 +875,7 @@ App Stack Cluster using single interface, useful for deploying K8s cluster..
 
 `no_k8s_cluster` - (Optional) Site Local K8s API access is disabled (bool).
 
-`active_enhanced_firewall_policies` - (Optional) Enhanced Firewall Policies active for this site.. See [Active Enhanced Firewall Policies ](#active-enhanced-firewall-policies) below for details.
+`active_enhanced_firewall_policies` - (Optional) with an additional option for service insertion.. See [Active Enhanced Firewall Policies ](#active-enhanced-firewall-policies) below for details.
 
 `active_network_policies` - (Optional) Firewall Policies active for this site.. See [Active Network Policies ](#active-network-policies) below for details.
 
